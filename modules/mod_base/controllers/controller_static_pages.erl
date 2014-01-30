@@ -25,7 +25,7 @@
 	 expires/2,
 	 content_types_provided/2,
 	 charsets_provided/2,
-	 encodings_provided/2,
+	 content_encodings_provided/2,
 	 provide_content/2,
 	 finish_request/2,
 	 previously_existed/2,
@@ -40,7 +40,7 @@
         root=undefined,                 % Preconfigured media preview directory
         config=[],
         use_cache=false,
-        encode_data=false,
+        multiple_encodings=false,
         path=undefined,
         fullpath=undefined,
         is_cached=false,
@@ -102,27 +102,27 @@ content_types_provided(ReqData, State) ->
             {[{Mime, provide_content}], ReqData1, State1}
     end.
 
-encodings_provided(ReqData, State) ->
+content_encodings_provided(ReqData, State) ->
     {ReqData1, State1} = check_resource(ReqData, State),
     Encodings = case filename:extension(State1#state.fullpath) of
         ".tpl" ->
-            [{"identity", fun(Data) -> decode_data(identity, Data) end}];
+            ["identity"];
         _ ->
             case State#state.mime of
-                "image/"++_ ->
-                    [{"identity", fun(Data) -> decode_data(identity, Data) end}];
-                _ -> 
-                    [{"identity", fun(Data) -> decode_data(identity, Data) end},
-                     {"gzip",     fun(Data) -> decode_data(gzip, Data) end}]
+                "image/"++_ -> ["identity"];
+                "audio/"++_ -> ["identity"];
+                "video/"++_ -> ["identity"];
+                "application/x-gzip" ++ _ -> ["identity"];
+                "application/zip" ++ _ -> ["identity"];
+                _ -> ["identity", "gzip"]
             end
     end,
-    EncodeData = length(Encodings) > 1,
-    {Encodings, ReqData1, State1#state{encode_data=EncodeData}}.
+    {Encodings, ReqData1, State1#state{multiple_encodings=length(Encodings) > 1}}.
 
 
 charsets_provided(ReqData, State) ->
     case is_text(State#state.mime) of
-        true -> {[{"utf-8", fun(X) -> X end}], ReqData, State};
+        true -> {["utf-8"], ReqData, State};
         _ -> {no_charset, ReqData, State}
     end.
     
@@ -165,7 +165,7 @@ provide_content(ReqData, State) ->
                     Html = z_template:render("directory_index.tpl", directory_index_vars(FullPath, State#state.root, Context) ++ State#state.config, Context1),
                     {Html1, Context2} = z_context:output(Html, Context1),
                     ReqData1 = z_context:get_reqdata(Context2),
-                    State1 = State#state{context=Context2, use_cache=false, encode_data=false},
+                    State1 = State#state{context=Context2, use_cache=false, multiple_encodings=false},
                     {iolist_to_binary(Html1), ReqData1, State1};
                 false ->
                     case filename:extension(FullPath) of
@@ -177,21 +177,22 @@ provide_content(ReqData, State) ->
                             Html = z_template:render({abs, FullPath}, Vars, Context1),
                             {Html1, Context2} = z_context:output(Html, Context1),
                             ReqData1 = z_context:get_reqdata(Context2),
-                            State1 = State#state{context=Context2, use_cache=false, encode_data=false},
+                            State1 = State#state{context=Context2, use_cache=false, multiple_encodings=false},
                             {iolist_to_binary(Html1), ReqData1, State1};
-                        _ -> 
-                            %% Fetch file, allow caching
-                            file:read_file(FullPath),
-                            {ok, Data} = file:read_file(State#state.fullpath),
-                            Body = case State#state.encode_data of 
-                                       true -> encode_data(Data);
-                                       false -> Data
-                                   end,
-                            {Body, ReqData, State#state{body=Body}}
+                        _ ->
+                            case State#state.multiple_encodings of
+                                true ->
+                                    file:read_file(FullPath),
+                                    {ok, Data} = file:read_file(State#state.fullpath),
+                                    Body = encode_data(Data),
+                                    {select_encoding(Body, ReqData), ReqData, State#state{body=Body}};
+                                false ->
+                                    {{file, FullPath}, ReqData, State}
+                            end
                     end
             end;
         Body ->
-            {Body, ReqData, State}
+            {select_encoding(Body, ReqData), ReqData, State}
     end.
 
     
@@ -202,7 +203,7 @@ finish_request(ReqData, State) ->
                 undefined ->  
                     {ok, ReqData, State};
                 _ ->
-                    case State#state.use_cache andalso State#state.encode_data of
+                    case State#state.use_cache andalso State#state.multiple_encodings of
                         true ->
                             % Cache the served file in the depcache.  Cache it for 3600 secs.
                             Cache = #cache{
@@ -339,17 +340,21 @@ is_text("application/xml") -> true;
 is_text(_Mime) -> false.
 
 
+
+select_encoding(Data, ReqData) ->
+    decode_data(wrq:resp_content_encoding(ReqData), Data).
+
 %% Encode the data so that the identity variant comes first and then the gzip'ed variant
 encode_data(Data) when is_binary(Data) ->
     {encoded, Data, zlib:gzip(Data)}.
 
-decode_data(identity, Data) when is_binary(Data) ->
+decode_data("identity", Data) when is_binary(Data) ->
     Data;
-decode_data(gzip, Data) when is_binary(Data) ->
+decode_data("gzip", Data) when is_binary(Data) ->
     zlib:gzip(Data);
-decode_data(identity, {encoded, Data, _Gzip}) ->
+decode_data("identity", {encoded, Data, _Gzip}) ->
     Data;
-decode_data(gzip, {encoded, _Data, Gzip}) ->
+decode_data("gzip", {encoded, _Data, Gzip}) ->
     Gzip.
 
 abs_root(Root, Context) ->

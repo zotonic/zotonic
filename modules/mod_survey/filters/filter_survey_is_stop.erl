@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @doc 'capfirst' filter, capitalize the first character
+%% @copyright 2013 Marc Worrell
+%% @doc Check if there is a 'stop' question in list of (survey) blocks
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2013 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,17 +16,14 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_capfirst).
--export([capfirst/2]).
+-module(filter_survey_is_stop).
 
+-export([
+    survey_is_stop/2
+]).
 
-capfirst(undefined, _Context) ->
-    undefined;
-capfirst([H|T], _Context) when H >= $a andalso H =< $z ->
-    [H + $A - $a | T];
-capfirst(<<Byte:8/integer, Binary/binary>>, _Context) when Byte >= $a andalso Byte =< $z ->
-    [<<(Byte + $A - $a)>>, Binary];
-capfirst({trans, _} = In, Context) ->
-    capfirst(z_trans:lookup_fallback(In, Context), Context);
-capfirst(A, _Context) ->
-	A.
+survey_is_stop(Qs, _Context) ->
+	lists:any(fun is_stop/1, Qs).
+
+is_stop(Blk) ->
+	proplists:get_value(type, Blk) =:= <<"survey_stop">>.

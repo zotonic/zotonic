@@ -39,11 +39,13 @@ In those case the argument `is_result_render` must be added. Example::
      {% lazy action={moreresults result=result 
                                  target="results" 
                                  template="_items.tpl"
-                                 is_result_render}
+                                 is_result_render
+                                 visible}
      %}
    {% endwith %}
 
 Note that here we use the `lazy` scomp, which will perform the action if it is scrolled into view.
+Because we are using the `lazy` scomp we have to add the `visible` argument so that the re-loaded `moreresults` action will be wired for visibility and not on for a click.
 In this way the page loads automatically more results if the user is scrolls down.
 
 Where `_items.tpl` displays the found pages in rows of four elements::

@@ -43,8 +43,8 @@
    mod_seo_google,
    mod_seo_sitemap,
 
-   mod_authentication,
    mod_acl_adminonly,
+   mod_authentication,
 
    mod_admin,
    mod_admin_category,

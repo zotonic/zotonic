@@ -14,7 +14,7 @@
                placeholder="{_ Button text _} ({{ lang_code }})" />
     </div>
 
-    <div class="control-group">
+    <div class="control-group view-expanded">
        <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
               class="input-block-level" rows="2"
               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-<div class="control-group">
+<div class="control-group view-expanded">
     <label class="control-label" for="block-{{name}}-style">{_ Button style _}</label>
     <div class="controls">
       <select id="block-{{name}}-style" name="block-{{name}}-style">
@@ -42,10 +42,11 @@
     </div>
 </div>
 
-<div class="control-group">
-    <label class="control-label" for="block-{{name}}-target">{_ Name of target question _}</label>
+<div class="control-group view-expanded">
+    <label class="control-label" for="block-{{name}}-target">{_ question _}</label>
     <div class="controls">
       <input type="text" id="block-{{name}}-target" name="block-{{name}}-target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
+      <p class="help-block">{_ Jump to a question on a next page. _}</p>
     </div>
 </div>
 {% endblock %}

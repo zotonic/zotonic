@@ -14,7 +14,7 @@
                placeholder="{_ Do you like pea soup? _} ({{ lang_code }})" />
     </div>
 
-    <div class="control-group">
+    <div class="control-group view-expanded">
        <div class="controls">
            <label class="radio inline"><input type="radio" name="{{ name }}" class="nosubmit" />
                <input type="text" id="block-{{name}}-yes{{ lang_code_for_id }}" name="block-{{name}}-yes{{ lang_code_with_dollar }}" 
@@ -29,7 +29,7 @@
        </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group view-expanded">
        <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
               class="input-block-level" rows="2"
               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
@@ -42,7 +42,7 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-    <div class="control-group">
+    <div class="control-group view-expanded">
         <label class="checkbox">
             <input type="checkbox" id="block-{{name}}-input_type" name="block-{{name}}-input_type" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />
             {_ Submit on clicking an option _}

@@ -49,7 +49,16 @@
 	    class="flush btn btn-mini" 
 	    title=_"Flush and reload all settings, templates etc." 
 	    postback={site_flush site=name} %}
-	    
+
+	    {% with name|get_admin_url as url %}
+            {% if url %}
+	            {% button 
+	                text=_"admin"
+	                class="admin btn btn-mini" 
+	                title=_"Visit the admin page for this site." 
+                    action={redirect location=url} %}
+            {% endif %}
+        {% endwith %}
 	    {% all include "_z_status_button.tpl" %}
 	</td>
 	{% endif %}

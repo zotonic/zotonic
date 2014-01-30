@@ -28,6 +28,9 @@
 #}
 
 	<div class="control-group">
+		{% if explanation %}
+			<p class="help-block">{{ explanation }}</p>
+		{% endif %}
 		{% with is_i18n|if:r.translation[lang_code].body:r.body	 as	 body %}
 		{% if r.is_editable %}
 			<textarea rows="10" cols="10" id="rsc-body{{ lang_code_for_id }}" name="body{{ lang_code_with_dollar }}" class="body tinymce-init input-block-level" {% include "_language_attrs.tpl" language=lang_code %}>{{ body|escape }}</textarea>
