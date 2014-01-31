@@ -1,8 +1,8 @@
 {% include "_survey_block_name_check.tpl" %}
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
 {% with m.search[{all_bytitle cat=blk.category}] as list %}
-<div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }}">
-    <label>{{ blk.prompt }}</label>
+<div class="control-group survey-category type-{{ blk.input_type|default:'single' }} question-{{ nr }}">
+    <label class="control-label">{{ blk.prompt }}</label>
     <div class="controls">
 {% if blk.explanation %}
         <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
