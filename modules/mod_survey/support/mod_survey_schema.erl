@@ -40,6 +40,7 @@ manage_schema(install, Context) ->
                         #column_def{name=survey_id, type="integer", is_nullable=false},
                         #column_def{name=user_id, type="integer", is_nullable=true},
                         #column_def{name=persistent, type="character varying", length=32, is_nullable=true},
+                        #column_def{name=is_anonymous, type="boolean", is_nullable=false, default="false"},
                         #column_def{name=question, type="character varying", length=32, is_nullable=false},
                         #column_def{name=name, type="character varying", length=32, is_nullable=false},
                         #column_def{name=value, type="character varying", length=80, is_nullable=true},
@@ -66,15 +67,12 @@ manage_schema(install, Context) ->
         true ->
             ok
     end,
-    z_datamodel:manage(
-      mod_survey,
-      #datamodel{categories=
-                 [
-                  {survey, undefined, [{title, "Survey"}]},
-                  {poll, survey, [{title, "Poll"}]}
-                 ]}, Context),
+    #datamodel{
+        categories=[
+            {survey, undefined, [{title, <<"Survey">>}]},
+            {poll, survey, [{title, <<"Poll">>}]}
+        ]};
 
-    ok;
 manage_schema({upgrade, 2}, Context) ->
     % Replace all survey properties with blocks
     {Low, High} = m_category:get_range_by_name(survey, Context),
@@ -82,6 +80,10 @@ manage_schema({upgrade, 2}, Context) ->
     [
         survey_to_blocks(Id, Context) || {Id} <- Ids
     ],
+    ok;
+
+manage_schema({upgrade, 3}, Context) ->
+    [] = z_db:q("alter table survey_answer add column is_anonymous boolean not null default false", Context),
     ok.
 
 

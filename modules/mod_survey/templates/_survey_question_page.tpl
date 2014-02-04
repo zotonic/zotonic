@@ -6,7 +6,7 @@
 	<fieldset>
 		{% if not id.is_a.poll and pages > 1 %}
 			{% if id.survey_progress == 'nr' %}
-				<legend>{_ Question _} <span>{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
+				<legend>{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
 			{% elseif id.survey_progress == 'bar' %}
 				<div class="progress">
 				  <div class="bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
@@ -37,7 +37,7 @@
 		{% endif %}
 		{% with questions|last as last_q %}
 		{% if not questions|survey_is_submit and last_q.type /= "survey_stop" %}
-			<button type="submit" class="btn btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next Question _}{% endif %}</button>
+			<button type="submit" class="btn btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
 		{% endif %}
 		{% endwith %}
 	</div>
