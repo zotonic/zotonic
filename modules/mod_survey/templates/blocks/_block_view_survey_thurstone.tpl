@@ -4,9 +4,6 @@
 <div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }}">
     <label class="control-label">{{ blk.prompt }}</label>
     <div class="controls">
-{% if blk.explanation %}
-        <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
-{% endif %}
 {% if blk.input_type == 'multi' %}
     {% for val,item in props.answers %}
         {% with forloop.counter as index %}
@@ -48,6 +45,9 @@
     {% endfor %}
 {% endif %}
     </div>
+{% if blk.explanation %}
+    <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+{% endif %}
 </div>
 {% endwith %}
 {% endwith %}

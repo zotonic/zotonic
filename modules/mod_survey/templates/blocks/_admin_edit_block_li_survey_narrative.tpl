@@ -8,6 +8,11 @@
 {% block widget_content %}
 {% with m.rsc[id] as r %}
     {% if is_editable %}
+    <div class="control-group">
+        <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
+               class="input-block-level" value="{{ blk.prompt[lang_code]  }}"
+               placeholder="{_ Fill in the missing parts. _} ({{ lang_code }})" />
+    </div>
     <div class="control-group view-expanded">
        <textarea id="block-{{name}}-narrative{{ lang_code_for_id }}" name="block-{{name}}-narrative{{ lang_code_with_dollar }}" 
               class="input-block-level" rows="4"
