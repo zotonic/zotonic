@@ -440,9 +440,6 @@ is_page_end(Block) ->
         _ -> false
     end.
 
-is_button(Block) ->
-    proplists:get_value(type, Block) =:= <<"survey_button">>.
-
 
 %% @doc Collect all answers per question, save to the database.
 %% @todo Check if we are missing any answers
