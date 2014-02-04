@@ -1,5 +1,5 @@
-{% if blk.explanation %}
-     <p class="help-block">{{ blk.explanation }}</p>
+{% if blk.prompt %}
+    <label class="control-label" for="{{ #id }}">{{ blk.prompt }}</label>
 {% endif %}
 <p class="survey-narrative question-{{ nr }}">
 {% with blk|survey_prepare_narrative as props %}
@@ -25,3 +25,6 @@
 {% endfor %}
 {% endwith %}
 </p>
+{% if blk.explanation %}
+     <p class="help-block">{{ blk.explanation }}</p>
+{% endif %}

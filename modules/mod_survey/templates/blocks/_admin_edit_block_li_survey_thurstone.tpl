@@ -15,16 +15,16 @@
     </div>
 
     <div class="control-group view-expanded">
-       <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
-              class="input-block-level" rows="2"
-              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
-    </div>
-
-    <div class="control-group view-expanded">
        <label>{_ List of possible answers, one per line. Use <em>value#answer</em> for selecting values. _}</label>
        <textarea id="block-{{name}}-answers{{ lang_code_for_id }}" name="block-{{name}}-answers{{ lang_code_with_dollar }}" 
               class="input-block-level" rows="6"
               placeholder="{_ Answers, one per line _} ({{ lang_code }})" >{{ blk.answers[lang_code]  }}</textarea>
+    </div>
+
+    <div class="control-group view-expanded">
+       <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
+              class="input-block-level" rows="2"
+              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
     </div>
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
