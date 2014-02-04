@@ -1,7 +1,7 @@
 {% include "_survey_block_name_check.tpl" %}
 
 <div class="control-group survey-short-answer question-{{ nr }}">
-    <label for="{{ #id }}">{{ blk.prompt }}</label>
+    <label class="control-label" for="{{ #id }}">{{ blk.prompt }}</label>
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
@@ -9,7 +9,13 @@
     {% if blk.validation == "date" %}
         {% include "blocks/_block_view_survey_short_answer_date.tpl" %}
     {% else %}
-        <input type="text" class="{% if blk.validation == 'numericality' %}input-small{% elseif blk.validation == 'phone' %}input-medium{% else %}span6{% endif %}" name="{{ blk.name }}" id="{{ #id }}" value="{{ answers[blk.name]|escape }}" {% if blk.placeholder %}placeholder="{{ blk.placeholder|escape }}"{% endif %}/>
+        <input type="text" 
+                class="{% if blk.validation == 'numericality' %}input-small{% elseif blk.validation == 'phone' %}input-medium{% else %}span6{% endif %}" 
+                name="{{ blk.name }}" 
+                id="{{ #id }}" 
+                value="{% if answers[blk.name]|is_defined %}{{ answers[blk.name]|escape }}{% elseif blk.validation == 'phone' %}{{ m.acl.user.phone }}{% elseif blk.validation == 'email' %}{{ m.acl.user.email }}{% elseif blk.name == 'name' %}{{ m.acl.user.name_first }} {% if m.acl.user.name_surname_prefix %}{{ m.acl.user.name_surname_prefix }}{% endif %}{{ m.acl.user.name_surname }}{% endif %}" 
+                {% if blk.placeholder %}placeholder="{{ blk.placeholder|escape }}"{% endif %}
+        />
         {% if blk.is_required %}
             {% if blk.validation == "email" %}
                 {% validate id=#id name=blk.name type={presence} type={email failure_message=_"must be an e-mail address"} %}

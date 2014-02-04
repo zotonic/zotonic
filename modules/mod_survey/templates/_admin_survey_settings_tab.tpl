@@ -27,6 +27,9 @@
 				<input type="checkbox" name="survey_multiple" id="survey_multiple" value="1" {% if id.survey_multiple %}checked="checked"{% endif %} />
 			{_ Allow multiple entries per user/browser _}
 			</label>
+			<label class="checkbox">
+				<input type="checkbox" name="survey_anonymous" id="survey_anonymous" value="1" {% if id.survey_anonymous %}checked="checked"{% endif %} /> {_ Hide the user’s id or browser-id from result exports _}
+			</label>
 		</div>
 	</fieldset>
 

@@ -2,7 +2,7 @@
 {% with blk|survey_prepare_thurstone as props %}
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
 <div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }}">
-    <label>{{ blk.prompt }}</label>
+    <label class="control-label">{{ blk.prompt }}</label>
     <div class="controls">
 {% if blk.explanation %}
         <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
@@ -19,6 +19,13 @@
             {% endif %}
         {% endwith %}
     {% endfor %}
+{% elseif blk.input_type == 'select' %}
+    <select id="{{ #id }}" name="{{ blk.name }}">
+    {% for val,item in props.answers %}
+        <option value="{{ val }}" {% if val|member:ans %}selected="selected"{% endif %}>{{ item }}</option>
+    {% endfor %}
+    </select>
+    {% if blk.is_required %}{% validate id=#id name=blk.name type={presence} %}{% endif %}
 {% elseif blk.input_type == 'submit' %}
     {% for val,item in props.answers %}
         {% with forloop.counter as index %}

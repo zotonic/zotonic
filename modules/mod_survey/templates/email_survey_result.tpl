@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<p>{_ The following survey has been filled in: _} <a href="http://{{ m.site.hostname }}{{ id.page_url }}">{{ id.title }}</a></p>
+<p>{_ The following survey has been filled in: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
 
 <table>
 	<tr>
@@ -29,6 +29,8 @@
 {% endfor %}
 </table>
 
-<p><a href="http://{{ m.site.hostname }}{% url admin_edit_rsc id=id %}">{_ Check the answer in the admin. _}</a></p>
+{% block edit_answer %}
+	<p><a href="{% url admin_edit_rsc id=id use_absolute_url %}">{_ Check the answer in the admin. _}</a></p>
+{% endblock %}
 
 {% endblock %}

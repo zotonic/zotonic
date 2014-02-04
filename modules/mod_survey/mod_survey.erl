@@ -22,7 +22,7 @@
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
 -mod_prio(400).
--mod_schema(2).
+-mod_schema(3).
 -mod_depends([admin]).
 -mod_provides([survey, poll]).
 
