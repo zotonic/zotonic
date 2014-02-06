@@ -108,9 +108,9 @@ log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
 %% Some helper functions.
 
 update_metric(#counter{op=incr, value=Value}=Stat, From) ->
-    folsom_metrics:notify(key(Stat, From), Value);
+    folsom_metrics:safely_notify(key(Stat, From), Value);
 update_metric(#histogram{value=Value}=Stat, From) ->
-    folsom_metrics:notify({key(Stat, From), Value}).
+    folsom_metrics:safely_notify({key(Stat, From), Value}).
   
 key(#counter{name=Name}, #stats_from{host=Host, system=System}) ->
 	{Host, System, Name};
