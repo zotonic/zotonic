@@ -62,3 +62,14 @@ msgstr "Guardar configuración de SEO"
 #: modules/mod_seo/templates/admin_seo.tpl:12
 msgid "Search Engine Optimization"
 msgstr "Optimización de Motor de Búsquedas"
+
+#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:6 
+msgid ""
+"Google Analytics tracking id"
+msgstr "Identificador de seguimiento de Google Analytics"
+
+#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:17 
+msgid ""
+"Google Webmaster Tools"
+msgstr ""
+"Herramientas de Google Webmaster"

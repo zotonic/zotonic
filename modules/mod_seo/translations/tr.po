@@ -54,3 +54,11 @@ msgstr "SEO ayarlarını kaydet"
 msgid "Search Engine Optimization"
 msgstr "Arama Motoru Optimizasyonu"
 
+#: modules/mod_seo_google/templates/_admin_seo_config.tpl:6
+msgid "Google Analytics tracking id"
+msgstr "Google Analytics tracking id"
+
+#: modules/mod_seo_google/templates/_admin_seo_config.tpl:17
+msgid "Google Webmaster Tools"
+msgstr "Google Webmaster Araçları"
+

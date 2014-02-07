@@ -62,3 +62,11 @@ msgstr "Zapisz ustawienia"
 #: modules/mod_seo/templates/admin_seo.tpl:12
 msgid "Search Engine Optimization"
 msgstr "Optymalizacja dla wyszukiwarek internetowych"
+
+#: modules/mod_seo_google/templates/_admin_seo_config.tpl:6
+msgid "Google Analytics tracking id"
+msgstr "Identyfikator Google Analytics"
+
+#: modules/mod_seo_google/templates/_admin_seo_config.tpl:17
+msgid "Google Webmaster Tools"
+msgstr "Narzędzia Google dla webmasterów"
