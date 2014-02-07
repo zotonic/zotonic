@@ -57,3 +57,11 @@ msgstr "保存 SEO 设置"
 #: modules/mod_seo/templates/admin_seo.tpl:12
 msgid "Search Engine Optimization"
 msgstr "搜索引擎优化"
+
+#: modules/mod_seo_google/templates/_admin_seo_config.tpl:6
+msgid "Google Analytics tracking id"
+msgstr "Google Analytics 跟踪 id"
+
+#: modules/mod_seo_google/templates/_admin_seo_config.tpl:17
+msgid "Google Webmaster Tools"
+msgstr "Google 站长工具"

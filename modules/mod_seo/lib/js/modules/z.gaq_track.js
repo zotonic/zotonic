@@ -39,10 +39,10 @@ $.widget("ui.gaq_track", {
 		var args = ["_trackEvent"];
 		args.push(this.options.category);
 		args.push(action);
-		if (this.options.label != undefined) {
-			args.push(this.options.label)
-			if (this.options.value != undefined) {
-				args.push(this.options.value)
+		if (this.options.label !== undefined) {
+			args.push(this.options.label);
+			if (this.options.value !== undefined) {
+				args.push(this.options.value);
 			}
 		}
 		if (typeof _gaq == "object") {

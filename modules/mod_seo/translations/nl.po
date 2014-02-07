@@ -62,3 +62,14 @@ msgstr "Bewaar SEO instellingen"
 msgid ""
 "Search Engine Optimization"
 msgstr "Zoekmachineoptimalisatie"
+
+#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:6 
+msgid ""
+"Google Analytics tracking id"
+msgstr "Google Analytics tracking code"
+
+#: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:17 
+msgid ""
+"Google Webmaster Tools"
+msgstr ""
+
