@@ -27,6 +27,4 @@ capfirst([H|T], _Context) when H >= $a andalso H =< $z ->
 capfirst(<<Byte:8/integer, Binary/binary>>, _Context) when Byte >= $a andalso Byte =< $z ->
     [<<(Byte + $A - $a)>>, Binary];
 capfirst({trans, _} = In, Context) ->
-    capfirst(z_trans:lookup_fallback(In, Context), Context);
-capfirst(A, _Context) ->
-	A.
+    capfirst(erlydtl_runtime:to_list(In, Context), Context).

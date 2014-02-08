@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
-%% @doc Check if there is a 'stop' question in list of (survey) blocks
+%% @copyright 2009 Marc Worrell
+%% Date: 2009-08-16
+%% @doc Search engine optimization for Google. Support for Google Analytics and Webmaster tools.
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2009 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,14 +17,11 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_survey_is_stop).
+-module(mod_seo_google).
+-author("Marc Worrell <marc@worrell.nl>").
 
--export([
-    survey_is_stop/2
-]).
-
-survey_is_stop(Qs, _Context) ->
-	lists:any(fun is_stop/1, Qs).
-
-is_stop(Blk) ->
-	proplists:get_value(type, Blk) =:= <<"survey_stop">>.
+-mod_title("SEO Google").
+-mod_description("Support for Google Analytics and Webmaster tools.").
+-mod_prio(600).
+-mod_depends([seo]).
+-mod_provides([seo_google]).

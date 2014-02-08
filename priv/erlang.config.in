@@ -50,10 +50,7 @@
    %% {perf_log_dir, "priv/log/perf/"},
 
 %%% Location of wmtrace logs (defaults to "priv/wmtrace" if not specified).
-   {wmtrace_dir, "priv/log/wmtrace/"},
-
-%%% Which sendfile command to use: disable, yaws, erlang
-   {use_sendfile, yaws}
+   {wmtrace_dir, "priv/log/wmtrace/"}
 
   ]}
 ].
