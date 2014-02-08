@@ -174,15 +174,12 @@ insert_questions(SurveyId, UserId, PersistentId, [{QuestionId, Answers}|Rest], C
 insert_answers(_SurveyId, _UserId, _PersistentId, _QuestionId, [], _Created, _Context) ->
     ok;
 insert_answers(SurveyId, UserId, PersistentId, QuestionId, [{Name, Answer}|As], Created, Context) ->
-    IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
     Args = case Answer of
-               {text, Text} -> 
-                  [SurveyId, UserId, PersistentId, IsAnonymous, QuestionId, Name, undefined, Text, Created];
-               Value ->
-                  [SurveyId, UserId, PersistentId, IsAnonymous, QuestionId, Name, z_convert:to_list(Value), undefined, Created]
+               {text, Text} -> [SurveyId, UserId, PersistentId, QuestionId, Name, undefined, Text, Created];
+               Value -> [SurveyId, UserId, PersistentId, QuestionId, Name, z_convert:to_list(Value), undefined, Created]
            end,
-    z_db:q("insert into survey_answer (survey_id, user_id, persistent, is_anonymous, question, name, value, text, created) 
-                values ($1, $2, $3, $4, $5, $6, $7, $8, $9)", 
+    z_db:q("insert into survey_answer (survey_id, user_id, persistent, question, name, value, text, created) 
+                values ($1, $2, $3, $4, $5, $6, $7, $8)", 
                Args,
            Context),
     insert_answers(SurveyId, UserId, PersistentId, QuestionId, As, Created, Context).
@@ -290,13 +287,12 @@ get_questions(SurveyId, Context) ->
 survey_results(SurveyId, Context) ->
     case get_questions(SurveyId, Context) of
         NQs when is_list(NQs) ->
-            Rows = z_db:q("select user_id, persistent, is_anonymous, question, name, value, text, created
+            Rows = z_db:q("select user_id, persistent, question, name, value, text, created
                            from survey_answer 
                            where survey_id = $1
                            order by user_id, persistent", [SurveyId], Context),
             Grouped = group_users(Rows),
-            IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)), 
-            UnSorted = [ user_answer_row(IsAnonymous, User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
+            UnSorted = [ user_answer_row(User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
             Sorted = lists:sort(fun([_,_,A|_], [_,_,B|_]) -> A < B end, UnSorted), %% sort by created date
             [
                  lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
@@ -333,34 +329,23 @@ question_prepare(B, Context) ->
     end.
 
 %% @doc private
-unpack_user_row({UserId, Persistent, IsAnonymous, Question, Name, Value, Text, Created}) ->
+unpack_user_row({UserId, Persistent, Question, Name, Value, Text, Created}) ->
     {
-      {user, UserId, Persistent, IsAnonymous},
+      {user, UserId, Persistent},
       {Question, {Name, {Value, Text}}},
       Created
     }.
 
 %% @doc private
-user_answer_row(false, {user, User, Persistent, false}, Created, Answers, Questions, Context) ->
+user_answer_row({user, User, Persistent}, Created, Answers, Questions, Context) ->
     [
-        User,
-        Persistent
-        | user_answer_row_1(Created, Answers, Questions, Context)
-    ];
-user_answer_row(_IsAnonymous, {user, _User, _Persistent, _UserAnonymous}, Created, Answers, Questions, Context) ->
-    [
-        undefined,
-        undefined
-        | user_answer_row_1(Created, Answers, Questions, Context)
-    ].
-
-user_answer_row_1(Created, Answers, Questions, Context) ->
-    [
-        case Created of 
-           undefined -> <<>>;
-           _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
-        end
-        | answer_row(Answers, Questions, Created, Context)
+     User,
+     Persistent,
+     case Created of 
+         undefined -> <<>>;
+         _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
+     end
+     | answer_row(Answers, Questions, Created, Context)
     ].
 
 %% @doc private
@@ -443,8 +428,12 @@ survey_captions(Id, Context) ->
 %% @private
 survey_totals(Id, Context) ->
     Stats = survey_stats(Id, Context),
+    lager:warning("Stats: ~p", [Stats]),
+    
     case m_rsc:p(Id, blocks, Context) of
         Blocks when is_list(Blocks) ->
+            lager:warning("Blocks: ~p", [Blocks]),
+
             All = lists:map(fun(Block) ->
                                     Name = proplists:get_value(name, Block),
                                     Type = proplists:get_value(type, Block),

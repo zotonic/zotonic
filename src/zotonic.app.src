@@ -15,6 +15,5 @@
   {env, []},
   {applications, [kernel, stdlib, crypto, mnesia,
                   bert, dh_date, eiconv, lager, folsom,
-                  mimetypes, webzmachine, z_stdlib,
-                  sendfile]}
+                  mimetypes, webzmachine, z_stdlib]}
  ]}.

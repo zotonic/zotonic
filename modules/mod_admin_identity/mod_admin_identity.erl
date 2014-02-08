@@ -29,7 +29,7 @@
 -export([
     observe_identity_verified/2,
     observe_identity_password_match/2,
-    observe_rsc_update/3,
+    observe_rsc_update_done/2,
     observe_search_query/2,
     observe_admin_menu/3,
     event/2
@@ -52,18 +52,16 @@ observe_identity_password_match(#identity_password_match{password=Password, hash
     end.
     
 
-observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {_Modified, Post} = Acc, Context) 
+observe_rsc_update_done(#rsc_update_done{action=Action, id=RscId, pre_props=Pre, post_props=Post}, Context) 
     when Action =:= insert; Action =:= update ->
     case {proplists:get_value(email, Pre), proplists:get_value(email, Post)} of
-        {A, A} -> Acc;
-        {_Old, undefined} -> Acc;
-        {_Old, <<>>} -> Acc;
-        {_Old, New} -> 
-            ensure(RscId, email, New, Context),
-            Acc
+        {A, A} -> ok;
+        {_Old, undefined} -> ok;
+        {_Old, <<>>} -> ok;
+        {_Old, New} -> ensure(RscId, email, New, Context)
     end;
-observe_rsc_update(#rsc_update{}, Acc, _Context) ->
-    Acc.
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    undefined.
 
 
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->

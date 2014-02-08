@@ -23,7 +23,6 @@
 -mod_title("Admin Frontend").
 -mod_description("Edit pages on a web site; subset of admin module for Bootstrap based web sites.").
 -mod_depends([mod_admin, mod_mqtt]).
--mod_prio(500).
 
 -export([
 	event/2

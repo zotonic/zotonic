@@ -48,13 +48,8 @@
 %%% --------------------------------------------------------------------
 
 parse_po(Fname) ->
-    case file:read_file(Fname) of
-        {ok, Bin} -> 
-            parse_po_bin(Bin);
-        {error, _} = Error ->
-            lager:error("Error reading po file ~p: ~p", [Fname, Error]),
-            []
-    end.
+    {ok,Bin} = file:read_file(Fname),
+    parse_po_bin(Bin).
 
 parse_po_bin(Bin) ->
     parse_po_file(to_list(Bin)).

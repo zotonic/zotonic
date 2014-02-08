@@ -115,6 +115,7 @@ get_skeleton_modules(blog) ->
      mod_logging,
 
      mod_seo,
+     mod_seo_google,
      mod_seo_sitemap,
 
      mod_authentication,

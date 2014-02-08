@@ -24,7 +24,7 @@
     init/1,
     service_available/2,
     allowed_methods/2,
-    content_encodings_provided/2,
+    encodings_provided/2,
 	expires/2,
 	content_types_provided/2,
 	charsets_provided/2,
@@ -56,8 +56,11 @@ charsets_provided(ReqData, Context) ->
     {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
 
 
-content_encodings_provided(ReqData, Context) ->
-    {["identity", "gzip"], ReqData, Context}.
+encodings_provided(ReqData, Context) ->
+    {[
+        {"identity", fun(X) -> X end}, 
+        {"gzip", fun(X) -> zlib:gzip(X) end}
+    ], ReqData, Context}.
 
 
 content_types_provided(ReqData, Context) ->
@@ -93,16 +96,15 @@ provide_content(ReqData, Context) ->
                     Content
             end,
         Content = z_depcache:memo(F, {atom_feed_search, Q}, ?MAX_AGE, [], Context),
-        Content1 = wrq:encode_content(Content, ReqData),
-        {Content1, ReqData, Context}
+        {Content, ReqData, Context}
 
     catch
         _: {error, {unknown_query_term, E}} ->
-            ReqData1 = wrq:set_resp_body(wrq:encode_content("Unknown query term: " ++ E, ReqData), ReqData),
+            ReqData1 = wrq:set_resp_body("Unknown query term: " ++ E, ReqData),
             {{halt, 400}, ReqData1, Context};
 
         _: {case_clause, {error, {error, error, _, _E, _}}} ->
-            ReqData1 = wrq:set_resp_body(wrq:encode_content("Unknown error.", ReqData), ReqData),
+            ReqData1 = wrq:set_resp_body("Unknown error.", ReqData),
             {{halt, 400}, ReqData1, Context}
     end.
 

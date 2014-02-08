@@ -24,7 +24,6 @@
 menu_rsc(RscId, Context) ->
 	case z_notifier:first(#menu_rsc{id=RscId}, Context) of
 		undefined -> m_rsc:rid(main_menu, Context);
-		none -> undefined;
 		MenuId -> m_rsc:rid(MenuId, Context)
 	end.
 
