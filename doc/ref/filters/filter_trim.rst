@@ -1,5 +1,5 @@
 .. highlight:: django
-.. include:: meta-escapejs.rst
+.. include:: meta-trim.rst
 
 Removes whitespace at the start and end of a string.
 
