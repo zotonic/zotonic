@@ -7,7 +7,7 @@ For example::
 
   {{ value|trim }}
 
-When the value is ``___hello___`` then the output is ``hello``.
+When the value is ``"   hello   "`` then the output is ``"hello"``.
 
 Internally, this calls ``z_string:trim/1`` to perform the
 trimming.
