@@ -111,7 +111,20 @@ event(#postback{message={site_stop, [{site, Site}]}}, Context) ->
 event(#postback{message={site_flush, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z:flush(z_context:new(Site)),
-    notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context).
+    notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context);
+event(#postback{message={site_admin, [{site,Site}]}}, Context) ->
+    try
+        SiteContext = z_context:new(Site),
+        case z_dispatcher:url_for(admin, SiteContext) of
+            undefined ->
+                z_render:growl_error("This site does not have an admin url.", Context);
+            U -> 
+                Url = z_dispatcher:abs_url(U, SiteContext),
+                z_render:wire({redirect, [{location,Url}]}, Context)
+        end
+    catch
+        _:_ -> z_render:growl_error("Could not fetch the admin url, the site might not be running.", Context) 
+    end.
 
 
 %% -----------------------------------------------------------------------------------------------

@@ -122,14 +122,14 @@ span.stopped {
 }
 
 .retrying button.restart,
+.retrying button.admin, 
 .retrying button.flush,
-.stopped button.stop,
-.stopped button.restart,
-.stopped button.flush,
 .failed button.restart, 
+.failed button.admin, 
 .failed button.flush,
 .stopped button.stop, 
 .stopped button.restart, 
+.stopped button.admin, 
 .stopped button.flush {
 	display: none;
 }
