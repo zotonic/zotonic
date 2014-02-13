@@ -193,11 +193,13 @@ handle_cast({restart, Site}, State) ->
 %% @doc A site started - report
 handle_cast({supervisor_child_started, Child, SitePid}, State) ->
     lager:info("Site started: ~p (~p)", [Child#child_spec.name, SitePid]),
+    z_sites_dispatcher:update_dispatchinfo(),
     {noreply, State};
 
 %% @doc A site stopped - report
 handle_cast({supervisor_child_stopped, Child, SitePid}, State) ->
     lager:info("Site stopped: ~p (~p)", [Child#child_spec.name, SitePid]),
+    z_sites_dispatcher:update_dispatchinfo(),
     {noreply, State};
 
 
