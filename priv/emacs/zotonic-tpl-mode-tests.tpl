@@ -110,6 +110,13 @@ Like this <strong>interesting</strong> word,
 should not indent the following line.
 
 
+12. endif tag on same line as ending self close soup tag
+<input
+    type="foo"
+    {% if test %}
+        bar="foo"
+    {% endif %} />
+Baz
 
 {# Don't add tests below this point... #}
 {# The test results are updated automatically by the test routine #}
