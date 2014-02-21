@@ -1,4 +1,4 @@
 [
-	{admin_frontend_edit, ["edit"], controller_page, [{template, "page_admin_frontend_edit.tpl"}]},
-	{admin_frontend_edit, ["edit", id], controller_page, [{template, {cat, "page_admin_frontend_edit.tpl"}}]}
+	{admin_frontend_edit, ["edit"], controller_page, [{acl, is_auth}, {template, "page_admin_frontend_edit.tpl"}]},
+	{admin_frontend_edit, ["edit", id], controller_page, [{acl, edit}, {template, {cat, "page_admin_frontend_edit.tpl"}}]}
 ].
