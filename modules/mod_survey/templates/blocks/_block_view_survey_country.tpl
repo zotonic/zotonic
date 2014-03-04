@@ -8,7 +8,7 @@
         <select name="{{ blk.name }}" id="{{ #id }}">
             <option value="">{_ Select country _}</option>
             <option disabled></option>
-            {% include "_l10n_country_options.tpl" country=answers[blk.name] %}
+            {% include "_l10n_country_options.tpl" country=answers[blk.name]|default_if_none:m.acl.user.address_country %}
         </select>
     </div>
 </div>
