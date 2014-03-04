@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 [
  {survey_results_download,  ["survey", "results", "download", id],   controller_survey_results, []},
- {survey_results_printable, ["survey", "results", "printable", id],  controller_page, [ {acl, edit}, {template, "survey_results_printable.tpl"} ]},
+ {survey_results_printable, ["survey", "results", "printable", id],  controller_page, [ {acl_action, edit}, {template, "survey_results_printable.tpl"} ]},
  
  {survey_results, ["survey", "results", id],       controller_page, [ {template, "survey_results.tpl"} ]},
  {survey_results, ["survey", "results", id, slug], controller_page, [ {template, "survey_results.tpl"} ]},

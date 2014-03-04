@@ -68,7 +68,7 @@ prep_chart(Block, [{_, Vals}], Context) ->
 
 prep_answer_header(Q, _Context) ->
     Name = proplists:get_value(name, Q),
-    case z_convert:to_bool(proplists:get_value(is_multiple, Q)) of
+    case is_multiple(Q) of
         true -> [ <<Name/binary, $:, K/binary>> || {K,_} <- proplists:get_value(answers, Q) ];
         false -> Name
     end.
@@ -80,19 +80,33 @@ prep_answer(Q, [{_Name, {undefined, Text}}], _Context) ->
 prep_answer(Q, [{_Name, {Value, _Text}}], _Context) ->
     prep(Q, [Value]).
 
-    prep(Q, Vs) ->
-        case z_convert:to_bool(proplists:get_value(is_multiple, Q)) of
-            false ->
-                case Vs of [] -> undefined; _ -> hd(Vs) end;
-            true ->
-                [
-                    case lists:member(K, Vs) of
-                        true -> K;
-                        false -> <<>>
-                    end
-                    || {K, _} <- proplists:get_value(answers, Q)
-                ]
-        end.
+prep(Q, Vs) ->
+    case is_multiple(Q) of
+        false ->
+            case Vs of 
+                [V|_] -> V;
+                [] -> undefined
+            end;
+        true ->
+            [
+                case lists:member(K, Vs) of
+                    true -> K;
+                    false -> <<>>
+                end
+                || {K, _} <- proplists:get_value(answers, Q)
+            ]
+    end.
+
+is_multiple(Q) ->
+    case proplists:get_value(input_type, Q) of
+        <<"multi">> -> 
+            true;
+        undefined ->
+            % Older surveys had the is_multiple property
+            z_convert:to_bool(proplists:get_value(is_multiple, Q));
+        _ ->    
+            false
+    end.
     
     
 prep_block(Block, Context) ->
