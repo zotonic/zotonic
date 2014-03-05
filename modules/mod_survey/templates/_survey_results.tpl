@@ -1,7 +1,7 @@
 {% if inline %}
-	<h2>{_ Results _}</h2>
-
 	{% include "_survey_end.tpl" %}
+
+	<h2>{_ Results _}</h2>
 {% endif %}
 
 {% if m.survey.is_allowed_results_download[id] %}
