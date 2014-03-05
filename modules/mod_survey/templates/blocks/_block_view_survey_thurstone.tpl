@@ -1,7 +1,7 @@
 {% include "_survey_block_name_check.tpl" %}
 {% with blk|survey_prepare_thurstone as props %}
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
-<div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }}">
+<div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
     <div class="controls">
 {% if blk.input_type == 'multi' %}

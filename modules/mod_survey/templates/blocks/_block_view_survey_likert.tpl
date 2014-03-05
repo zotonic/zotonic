@@ -1,6 +1,6 @@
 {% include "_survey_block_name_check.tpl" %}
 {% with answers[blk.name] as value %}
-<div class="control-group survey-likert question-{{ nr }}">
+<div class="control-group survey-likert question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
 
 {% if blk.explanation %}

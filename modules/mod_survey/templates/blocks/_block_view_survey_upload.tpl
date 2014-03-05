@@ -1,5 +1,5 @@
 {% include "_survey_block_name_check.tpl" %}
-<div class="control-group survey-truefalse question-{{ nr }}">
+<div class="control-group survey-truefalse question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
     <div class="controls">
 {% if blk.is_image %}

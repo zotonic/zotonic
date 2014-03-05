@@ -1,6 +1,6 @@
 {% include "_survey_block_name_check.tpl" %}
 {% with blk|survey_prepare_matching as props %}
-<div class="control-group survey-matching question-{{ nr }}">
+<div class="control-group survey-matching question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
