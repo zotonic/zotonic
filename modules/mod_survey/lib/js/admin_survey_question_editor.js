@@ -103,6 +103,14 @@ ZSurveyEditor.prototype.action = function(e) {
 			$("#survey-questions").toggleClass("hide-expanded");
 			e.preventDefault();
 			break;
+		case '#page-preview':
+		case '#question-preview':
+			// Collect args
+			// Send to server
+			// Server puts args in session, loads iframe.
+			// Server opens iframe
+			e.preventDefault();
+			break;
 		default:
 			break;
 	}
@@ -243,7 +251,7 @@ ZSurveyEditor.prototype.jump_new = function(e) {
 		.removeClass('nosubmit');
 	$("input.jump-target", g)
 		.attr('name', 'jump-target-'+id)
-		.attr('id', 'jump-condition-'+id)
+		.attr('id', 'jump-target-'+id)
 		.removeClass('nosubmit');
 	$(e.target)
 		.closest('.jumps')

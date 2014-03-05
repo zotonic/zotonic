@@ -60,18 +60,18 @@ combine_conditions([], Acc) ->
     lists:reverse(Acc);
 combine_conditions([{"is_stop_page", []}], Acc) ->
     combine_conditions([], Acc);
-combine_conditions([{"is_stop_page", []}, {"jump-condition", _} = JC|Bs], Acc) ->
+combine_conditions([{"is_stop_page", []}, {"jump-condition-" ++ _, _} = JC|Bs], Acc) ->
     combine_conditions([JC|Bs], Acc);
 combine_conditions([{"is_stop_page", []}|Bs], Acc) ->
     combine_conditions(Bs, break_block("","","","")++Acc);
 combine_conditions([{"is_stop_page", _IsChecked}|Bs], Acc) ->
     combine_conditions(Bs, stop_block()++Acc);
 combine_conditions([
-            {"jump-condition", Cond1}, {"jump-target", Target1},
-            {"jump-condition", Cond2}, {"jump-target", Target2}|Bs], Acc) ->
+            {"jump-condition-" ++ _, Cond1}, {"jump-target-" ++ _, Target1},
+            {"jump-condition-" ++ _, Cond2}, {"jump-target-" ++ _, Target2}|Bs], Acc) ->
     combine_conditions(Bs, break_block(Cond1,Target1,Cond2,Target2)++Acc);
 combine_conditions([
-            {"jump-condition", Cond}, {"jump-target", Target}|Bs], Acc) ->
+            {"jump-condition-" ++ _, Cond}, {"jump-target-" ++ _, Target}|Bs], Acc) ->
     combine_conditions(Bs, break_block(Cond,Target,"","")++Acc);
 combine_conditions([B|Bs], Acc) ->
     combine_conditions(Bs, [B|Acc]).
