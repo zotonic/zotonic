@@ -276,6 +276,15 @@ startable(Module, Dependencies) when is_list(Dependencies) ->
     end.
 
 
+get_start_error_reason({error, not_found}) ->
+    "Module not found";
+get_start_error_reason({error, {missing_dependencies, Missing}}) ->
+    "Missing dependencies: " ++ binary_to_list(iolist_to_binary(io_lib:format("~p", [Missing])));
+get_start_error_reason({error, could_not_derive_dependencies}) ->
+    "Could not derive dependencies".
+
+
+
 
 %% @doc Check if the code of a module exists. The database can hold module references to non-existing modules.
 module_exists(M) ->
@@ -485,12 +494,12 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
     case lists:filter(fun(M) -> is_startable(M, Provided) end, Starting) of
         [] ->
             [
-                ?ERROR("[~p] Error starting module ~p: ~p~n", 
-                        [ z_context:site(Context), 
-                          M, 
-                          startable(M, Provided)
-                        ])
-                || M <- Starting
+             begin
+                 StartErrorReason = get_start_error_reason(startable(M, Provided)),
+                 Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
+                 z_session_manager:broadcast(#broadcast{type="error", message=Msg, title="Module manager", stay=false}, z_acl:sudo(Context)),
+                 ?ERROR("[~p] ~s", [z_context:site(Context), Msg])
+             end || M <- Starting
             ],
             
             % Add non-started modules to the list with errors.
