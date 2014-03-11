@@ -232,11 +232,7 @@ auth({$R, <<M:?int32, _/binary>>}, State) ->
 
 %% ErrorResponse
 auth({$E, Bin}, State) ->
-    Error = decode_error(Bin),
-    case Error#error.code of
-        <<"28000">> -> Why = invalid_authorization_specification;
-        Any         -> Why = Any
-    end,
+    #error{ code=Why } = decode_error(Bin),
     gen_fsm:reply(State#state.reply_to, {error, Why}),
     {stop, normal, State}.
 
@@ -247,11 +243,7 @@ initializing({$K, <<Pid:?int32, Key:?int32>>}, State) ->
 
 %% ErrorResponse
 initializing({$E, Bin}, State) ->
-    Error = decode_error(Bin),
-    case Error#error.code of
-        <<"28000">> -> Why = invalid_authorization_specification;
-        Any         -> Why = Any
-    end,
+    #error{ code=Why } = decode_error(Bin),
     gen_fsm:reply(State#state.reply_to, {error, Why}),
     {stop, normal, State};
 
@@ -581,7 +573,7 @@ decode_error(Bin) ->
     Fields = decode_fields(Bin),
     Error = #error{
       severity = lower_atom(proplists:get_value($S, Fields)),
-      code     = proplists:get_value($C, Fields),
+      code     = pgsql_errors:describe_code(proplists:get_value($C, Fields)),
       message  = proplists:get_value($M, Fields),
       extra    = decode_error_extra(Fields)},
     Error.
