@@ -96,37 +96,50 @@ collapsed_paths(Files) ->
     
 
 %% @doc Given the filepath of the request, return all files collapsed in the path.
-%% @spec uncollapse(string()) -> list()
-uncollapse(Path) ->
-    Parts = string:tokens(Path, [?SEP]),
-    case uncollapse_dirs(Parts) of
-        [] -> 
-            [];
-        [File] ->
-            [File];
-        [TimestampExt | Files] ->
-            Extension = filename:extension(TimestampExt),
-            lists:foldl(fun(F, Acc) -> [F++Extension|Acc] end, [], Files)
-    end.
+%% @spec uncollapse(string()|binary()) -> list()
+uncollapse(Path) when is_binary(Path) ->
+    add_extension(uncollapse_dirs(binary:split(Path, <<?SEP>>, [global])));
+uncollapse(Path) when is_list(Path) ->
+    add_extension(uncollapse_dirs(string:tokens(Path, [?SEP]))).
+
+add_extension([]) ->
+    [];
+add_extension([File]) ->
+    [File];
+add_extension([TimestampExt | Files]) ->
+    Extension = filename:extension(TimestampExt),
+    lists:foldl(fun(F, Acc) -> [add_extension_1(F,Extension)|Acc] end, [], Files).
     
+add_extension_1(F, Ext) when is_binary(F) ->
+    Ext1 = z_convert:to_binary(Ext),
+    <<F/binary, Ext1/binary>>;
+add_extension_1(F, Ext) when is_list(F) ->
+    F ++ Ext.
 
-    uncollapse_dirs([]) ->
-        [];
-    uncollapse_dirs([File|Rest]) ->
-        case filename:dirname(File) of
-            [X] when X =:= $. orelse X =:= $/ ->
-                uncollapse_dirs(Rest, [], [File]);
-            N ->
-                uncollapse_dirs(Rest, N, [File])
-        end.
+uncollapse_dirs([]) ->
+    [];
+uncollapse_dirs([File|Rest]) ->
+    case filename:dirname(File) of
+        [X] when X =:= $. orelse X =:= $/ ->
+            uncollapse_dirs(Rest, [], [File]);
+        <<X>> when X =:= $. orelse X =:= $/ ->
+            uncollapse_dirs(Rest, [], [File]);
+        N ->
+            uncollapse_dirs(Rest, N, [File])
+    end.
 
-        uncollapse_dirs([], _Dirname, Acc) ->
-            Acc;
-        uncollapse_dirs([[$/|_]=File|Rest], _Dirname, Acc) ->
-            uncollapse_dirs(Rest, filename:dirname(File), [File|Acc]);
-        uncollapse_dirs([File|Rest], Dirname, Acc) ->
-            File1 = Dirname ++ [$/ | File],
-            uncollapse_dirs(Rest, filename:dirname(File1), [File1|Acc]).
+uncollapse_dirs([], _Dirname, Acc) ->
+    Acc;
+uncollapse_dirs([[$/|_]=File|Rest], _Dirname, Acc) ->
+    uncollapse_dirs(Rest, filename:dirname(File), [File|Acc]);
+uncollapse_dirs([<<$/,_/binary>>=File|Rest], _Dirname, Acc) ->
+    uncollapse_dirs(Rest, filename:dirname(File), [File|Acc]);
+uncollapse_dirs([File|Rest], Dirname, Acc) when is_list(File) ->
+    File1 = Dirname ++ [$/ | File],
+    uncollapse_dirs(Rest, filename:dirname(File1), [File1|Acc]);
+uncollapse_dirs([File|Rest], Dirname, Acc) when is_binary(File) ->
+    File1 = <<Dirname/binary, $/, File/binary>>,
+    uncollapse_dirs(Rest, filename:dirname(File1), [File1|Acc]).
 
 
 %% @doc Try to remove directory names that are the same as the directory of the previous file in the list.
