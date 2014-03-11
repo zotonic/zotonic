@@ -400,7 +400,9 @@ only_digits([]) ->
 only_digits(L) when is_list(L) ->
     only_digits1(L);
 only_digits(B) when is_binary(B) ->
-    only_digits(binary_to_list(B)).
+    only_digits(binary_to_list(B));
+only_digits(_) -> false.
+
 
 only_digits1([]) ->
     true;

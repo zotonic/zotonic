@@ -114,7 +114,7 @@ m_value(#m{value=V}, _Context) ->
 %% @doc Return the id of the resource with the name
 % @spec name_to_id(NameString, Context) -> {ok, int()} | {error, Reason}
 name_to_id(Name, Context) ->
-    case is_list(Name) andalso z_utils:only_digits(Name) of
+    case z_utils:only_digits(Name) of
         true ->
             {ok, z_convert:to_integer(Name)};
         false when is_integer(Name) -> {ok, Name};
@@ -267,20 +267,6 @@ touch(Id, Context) when is_integer(Id) ->
     end.
     
 
-exists([C|_] = Name, Context) when is_list(Name) and is_integer(C) ->
-    case name_lookup(Name, Context) of
-        undefined -> 
-            case z_utils:only_digits(Name) of
-                true -> exists(list_to_integer(Name), Context);
-                false -> false
-            end;
-        _ -> true
-    end;
-exists(Name, Context) when is_binary(Name) ->
-    case name_lookup(Name, Context) of
-        undefined -> false;
-        _ -> true
-    end;
 exists(Id, Context) -> 
     case rid(Id, Context) of
         Rid when is_integer(Rid) ->
@@ -344,8 +330,8 @@ is_published_date(Id, Context) ->
 %% @doc Fetch a property from a resource. When the rsc does not exist, the property does not
 %% exist or the user does not have access rights to the property then return 'undefined'.
 %% p(ResourceId, atom(), Context) -> term() | undefined
-p(Id, Property, Context) when is_list(Property) ->
-    p(Id, list_to_atom(Property), Context);
+p(Id, Property, Context) when is_list(Property); is_binary(Property) ->
+    p(Id, z_convert:to_atom(Property), Context);
 p(Id, Property, Context) 
     when   Property =:= category_id 
     orelse Property =:= page_url 
@@ -571,21 +557,18 @@ rid(#rsc_list{list=[R|_]}, _Context) ->
     R;
 rid(#rsc_list{list=[]}, _Context) ->
     undefined;
-rid([C|_] = UniqueName, Context) when is_integer(C) ->
-    case z_utils:only_digits(UniqueName) of
-        true -> list_to_integer(UniqueName);
-        false -> name_lookup(UniqueName, Context)
-    end;
-rid(UniqueName, Context) when is_binary(UniqueName) ->
-    name_lookup(binary_to_list(UniqueName), Context);
 rid(undefined, _Context) -> 
     undefined;
-rid(UniqueName, Context) when is_atom(UniqueName) -> 
-    name_lookup(atom_to_list(UniqueName), Context);
 rid(<<>>, _Context) -> 
     undefined;
 rid([], _Context) -> 
-    undefined.
+    undefined;
+rid(UniqueName, Context) ->
+    case z_utils:only_digits(UniqueName) of
+        true -> z_convert:to_integer(UniqueName);
+        false -> name_lookup(UniqueName, Context)
+    end.
+
 
 %% @doc Return the id of the resource with a certain unique name.
 %% name_lookup(Name, Context) -> int() | undefined
