@@ -25,7 +25,6 @@
 	 expires/2,
 	 content_types_provided/2,
 	 charsets_provided/2,
-	 content_encodings_provided/2,
 	 provide_content/2,
 	 finish_request/2,
 	 previously_existed/2,
@@ -101,24 +100,6 @@ content_types_provided(ReqData, State) ->
         Mime -> 
             {[{Mime, provide_content}], ReqData1, State1}
     end.
-
-content_encodings_provided(ReqData, State) ->
-    {ReqData1, State1} = check_resource(ReqData, State),
-    Encodings = case filename:extension(State1#state.fullpath) of
-        ".tpl" ->
-            ["identity"];
-        _ ->
-            case State#state.mime of
-                "image/"++_ -> ["identity"];
-                "audio/"++_ -> ["identity"];
-                "video/"++_ -> ["identity"];
-                "application/x-gzip" ++ _ -> ["identity"];
-                "application/zip" ++ _ -> ["identity"];
-                _ -> ["identity", "gzip"]
-            end
-    end,
-    {Encodings, ReqData1, State1#state{multiple_encodings=length(Encodings) > 1}}.
-
 
 charsets_provided(ReqData, State) ->
     case is_text(State#state.mime) of
