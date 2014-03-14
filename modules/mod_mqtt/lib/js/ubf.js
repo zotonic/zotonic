@@ -60,14 +60,16 @@ limitations under the License.
     //
     function encode_as_list(value, buffer) {
         var buf = buffer || [];
+        var tmp = [];
 
         buf.push("#");
         $.each(value, function(_i, v) {
-            encode(v, buf);
-            buffer.push("&");
+            encode(v, tmp);
         });
+        tmp.reverse(); // in ubf list elements are given in reversed order
+        buf.push(tmp.join("&")+"&");
 
-        if(!buf) {
+        if(!buffer) {
             buf.push("$");
             return buf.join("");
         }
