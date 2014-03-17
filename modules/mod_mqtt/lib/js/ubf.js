@@ -160,6 +160,8 @@ limitations under the License.
                     buf.push(_utf8len(value.valueOf)+"~"+value.valueOf()+"~");
                 } else if(typeof(value) == "boolean") {
                     encode_as_constant((value)?"true":"false", buf);
+                } else if(value === null) {
+                    encode_as_constant("undefined", buf);
                 } else {
                     throw("ubf encode: unknown value");
                 }
