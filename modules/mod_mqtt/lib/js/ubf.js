@@ -148,7 +148,7 @@ limitations under the License.
             default:
                 if($.isArray(value)) {
                     encode_as_list(value, buf);
-                } else if($.isNumeric(value)) {
+                } else if(typeof(value) == "number") {
                     // floats are not possible in UBF...
                     buf.push(Math.floor(value));
                 } else if(typeof(value) == "string") {
