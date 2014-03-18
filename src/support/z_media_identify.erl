@@ -163,6 +163,11 @@ identify_file_os(unix, File, OriginalFilename) ->
                         "application/msword" -> {ok, [{mime,"application/msword"}]};
                         _ -> {ok, [{mime, "application/vnd.ms-office"}]}
                     end;
+                "audio/x-wav" ->
+                    case guess_mime(OriginalFilename) of
+                        "audio/" ++ _ = M -> {ok, [{mime,M}]};
+                        _ -> {ok, [{mime, "audio/x-wav"}]}
+                    end;
                 _ ->
                     {ok, [{mime, Mime}]}
             end
