@@ -130,7 +130,7 @@ handle_call(get_connection, From, #state{connections = Connections, waiting = Wa
                                     {reply, Error, State}
                             end
                     end;
-                false ->
+                _TooManyMonitors ->
                     %% Reached max connections, let the requestor wait
                     {noreply, State#state{waiting = queue:in(From, Waiting)}}
             end
