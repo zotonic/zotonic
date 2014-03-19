@@ -24,8 +24,8 @@
 				{_ Show results to user after completion of survey _}
 			</label>
 			<label class="checkbox">
-				<input type="checkbox" name="survey_multiple" id="survey_multiple" value="1" {% if id.survey_multiple %}checked="checked"{% endif %} />
-			{_ Allow multiple entries per user/browser _}
+				<input type="checkbox" name="survey_multiple" id="survey_multiple" value="1" {% if id.survey_multiple or id.survey_multiple|is_undefined %}checked="checked"{% endif %} />
+				{_ Allow multiple entries per user/browser _}
 			</label>
 		</div>
 	</div>
