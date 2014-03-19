@@ -133,6 +133,8 @@ incr(Key, Value, Pid) ->
 persistent_id(Context) ->
     gen_server:call(Context#context.session_pid, persistent_id).
 
+set_persistent(_Key, _Value, #context{session_pid=undefined} = Context) ->
+    Context;
 set_persistent(Key, Value, Context) ->
     case gen_server:call(Context#context.session_pid, {set_persistent, Key, Value}) of
         {new_persist_id, NewPersistCookieId} ->
@@ -148,6 +150,8 @@ set_persistent(Key, Value, Context) ->
 get_persistent(Key, Context) ->
    get_persistent(Key, Context, undefined).
 
+get_persistent(_Key, #context{session_pid=undefined}, DefaultValue) ->
+    DefaultValue;
 get_persistent(Key, Context, DefaultValue) ->
     gen_server:call(Context#context.session_pid, {get_persistent, Key, DefaultValue}).
 
