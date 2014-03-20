@@ -257,7 +257,7 @@ foreach(Category, F, Context) ->
     case name_to_id(Category, Context) of
         {ok, Id} ->
             {From,To} = get_range(Id, Context),
-            Ids = z_db:q("select id from rsc where pivot_category_nr <= $1 and pivot_category_nr >= $2", [From,To], Context),
+            Ids = z_db:q("select id from rsc where pivot_category_nr >= $1 and pivot_category_nr <= $2", [From,To], Context),
             lists:foreach(fun({RscId}) ->
                               F(RscId, Context)
                           end,
@@ -273,7 +273,7 @@ fold(Category, F, Acc0, Context) ->
     case name_to_id(Category, Context) of
         {ok, Id} ->
             {From,To} = get_range(Id, Context),
-            Ids = z_db:q("select id from rsc where pivot_category_nr <= $1 and pivot_category_nr >= $2", [From,To], Context),
+            Ids = z_db:q("select id from rsc where pivot_category_nr >= $1 and pivot_category_nr <= $2", [From,To], Context),
             lists:foldl(fun({RscId}, Acc) ->
                               F(RscId, Acc, Context)
                         end,
