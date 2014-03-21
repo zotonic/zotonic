@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-08-05
+%% @copyright 2009-2014 Marc Worrell
 %% @doc Defines all paths for files and directories of a site.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +23,7 @@
     site_dir/1,
     media_preview/1,
     media_archive/1,
+    abspath/2,
     files_subdir/2,
     files_subdir_ensure/2
 ]).
@@ -45,10 +45,14 @@ media_preview(Context) ->
 media_archive(Context) ->
     files_subdir("archive", Context).
 
+%% @doc Return the absolute path to a file in the 'file' directory
+abspath(Path, Context) ->
+    files_subdir(Path, Context).
+
 %% @doc Return the path to a files subdirectory
 %% @spec files_subdir(SubDir::filename(), #context{}) -> filename()
 files_subdir(SubDir, #context{host=Host}) ->
-        filename:join([z_utils:lib_dir(priv), "sites", Host, "files", z_convert:to_list(SubDir)]).
+        filename:join([z_utils:lib_dir(priv), "sites", Host, "files", SubDir]).
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
 %% @spec files_subdir_ensure(SubDir::filename(), #context{}) -> filename()
