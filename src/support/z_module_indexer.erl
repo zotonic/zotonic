@@ -84,6 +84,8 @@ find(template, Name, Context) ->
 find(What, Name, Context) ->
     find_ua_class(What, generic, Name, Context).
 
+find_ua_class(What, Class, Name, Context) when is_binary(Name) ->
+    find_ua_class(What, Class, binary_to_list(Name), Context);
 find_ua_class(template, Class, Name, Context) ->
     case ets:lookup(?MODULE_INDEX,
                     #module_index_key{
