@@ -149,7 +149,6 @@ tag(Filename, Options, Context, _Visited) when is_list(Filename) ->
 tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
     tag1(FilePath, Filename, Options, Context).
 
-    
 
     tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
         tag1(FilePath, Filename, Options, Context);
@@ -187,38 +186,21 @@ tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
                 {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
         end.
 
+get_link(Media, true, Context) ->
+    Id = media_id(Media),
+    case m_rsc:p(Id, website, Context) of
+        Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
+            m_rsc:p(Id, page_url, Context);
+        Website ->
+            Website
+    end;
+get_link(_Media, Id, Context) when is_integer(Id) ->
+    m_rsc:p(Id, page_url, Context);
+get_link(_Media, HRef, _Context) when is_binary(HRef); is_list(HRef) ->
+    HRef.
 
-    % Given the media properties of an id, find the depicting file
-    mediaprops_filename(Id, undefined, Context) ->
-        case z_notifier:first({media_stillimage, Id, []}, Context) of
-            {ok, Filename} -> Filename;
-            undefined -> undefined
-        end;
-    mediaprops_filename(Id, Props, Context) ->
-        case z_notifier:first({media_stillimage, Id, Props}, Context) of
-            {ok, Filename} -> Filename;
-            _ -> case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-                     [] -> z_convert:to_list(proplists:get_value(filename, Props));
-                     Filename -> Filename
-                 end
-        end.
-
-
-    get_link(Media, true, Context) ->
-        Id = media_id(Media),
-        case m_rsc:p(Id, website, Context) of
-            Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
-                m_rsc:p(Id, page_url, Context);
-            Website ->
-                Website
-        end;
-    get_link(_Media, Id, Context) when is_integer(Id) ->
-        m_rsc:p(Id, page_url, Context);
-    get_link(_Media, HRef, _Context) when is_binary(HRef); is_list(HRef) ->
-        HRef.
-
-    media_id([{_,_}|_] = List) ->
-        proplists:get_value(id, List).
+media_id([{_,_}|_] = List) ->
+    proplists:get_value(id, List).
 
 %% @doc Give the filepath for the filename being served.
 %% @todo Ensure the file is really in the given directory (ie. no ..'s)
@@ -256,20 +238,18 @@ url(Id, Options0, Context) when is_integer(Id) ->
                 {ok, Filename} ->
                     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
                     {ok, Url};
-                _ -> {ok, <<>>}
+                _ ->
+                    {ok, <<>>}
             end
     end;
 url([{_Prop, _Value}|_] = Props, Options, Context) ->
-    case z_convert:to_list(proplists:get_value(filename, Props)) of
-        None when None == undefined; None == <<>>; None == [] -> 
-            case z_notifier:first({media_stillimage, proplists:get_value(id, Props), Props}, Context) of
-                {ok, Filename} ->
-                    {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
-                    {ok, Url};
-                _ ->
-                    {ok, <<>>}
-            end;
-        Filename -> 
+    Id = proplists:get_value(id, Props),
+    case mediaprops_filename(Id, Props, Context) of
+        [] ->
+            {ok, []};
+        <<>> ->
+            {ok, []};
+        Filename ->
             {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
             {ok, Url}
     end;
@@ -288,6 +268,26 @@ url1(File, Options, Context) ->
             {url, z_dispatcher:abs_url(Url, Context), TagOpts, ImageOpts};
         false -> 
             UrlAndOpts
+    end.
+
+% Given the media properties of an id, find the depicting file
+mediaprops_filename(Id, undefined, Context) ->
+    case z_notifier:first({media_stillimage, Id, []}, Context) of
+        {ok, Filename} -> Filename;
+        undefined -> undefined
+    end;
+mediaprops_filename(undefined, Props, _Context) ->
+    case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
+        [] -> z_convert:to_list(proplists:get_value(filename, Props));
+        Filename -> Filename
+    end;
+mediaprops_filename(Id, Props, Context) ->
+    case z_notifier:first({media_stillimage, Id, Props}, Context) of
+        {ok, Filename} -> Filename;
+        _ -> case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
+                 [] -> z_convert:to_list(proplists:get_value(filename, Props));
+                 Filename -> Filename
+             end
     end.
 
 use_absolute_url(Options, Context) ->
