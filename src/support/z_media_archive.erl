@@ -32,6 +32,7 @@
     archive_copy/3,
     archive_copy_opt/2,
     archive_copy_opt/3,
+    archive_delete/2,
     archive_filename/2,
     rel_archive/2,
     safe_filename/1
@@ -79,7 +80,8 @@ archive_file(Filename, NewBasename, Context) ->
                 {error, exdev} ->
                     {ok, _BytesCopied} = file:copy(Fileabs, AbsPath),
                     ok = file:delete(Fileabs);
-                ok -> ok
+                ok -> 
+                    ok
             end,
             NewFile
     end.
@@ -114,6 +116,12 @@ archive_copy_opt(Filename, NewBasename, Context) ->
         true ->
             rel_archive(Fileabs, Context)
     end.
+
+%% @doc Delete a filename in the archive
+archive_delete(Filename, Context) ->
+    AbsPath = abspath(Filename, Context),
+    file:delete(AbsPath). 
+
 
 %% Return an unique filename for archiving the file
 archive_filename(Filename, Context) ->
