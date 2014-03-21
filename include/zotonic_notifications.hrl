@@ -17,13 +17,13 @@
 %% limitations under the License.
 
 %% @doc Try to find the site for the request z_notifier:first/2
-%%		Called when the request Host doesn't match any active site.
-%%		Result:   {ok, #dispatch_redirect{}}
-%%				| undefined.
+%%      Called when the request Host doesn't match any active site.
+%%      Result:   {ok, #dispatch_redirect{}}
+%%              | undefined.
 -record(dispatch_host, {host, path=[], method='GET', protocol=http}).
 
 %% @doc Final try for dispatch, try to match the request. Called with z_notifier:first/2
-%%		Called when the site is known, but no match is found for the path
+%%      Called when the site is known, but no match is found for the path
 %%      Result:   {ok, RscId::integer()} 
 %%              | {ok, #dispatch_match{}} 
 %%              | {ok, #dispatch_redirect{}}
@@ -151,7 +151,7 @@
 
 %% @doc Notification sent to a site when e-mail for that site is received
 -record(email_received, {to, from, localpart, localtags, domain, reference, email, 
-						 headers, is_bulk=false, is_auto=false, decoded, raw}).
+                         headers, is_bulk=false, is_auto=false, decoded, raw}).
 
 % E-mail received notification:
 % {z_convert:to_atom(Notification), received, UserId, ResourceId, Received}
@@ -220,7 +220,7 @@
 -record(rsc_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
 
 %% @doc Upload and replace the the resource with the given data. The data is in the given format.
-%%		Return {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
+%%      Return {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
 -record(rsc_upload, {id, format :: json|bert, data}).
 
 
@@ -331,9 +331,23 @@
 %% @doc Notification that a site configuration's property is changed (notify)
 -record(m_config_update_prop, {module, key, prop, value}).
 
+%% @doc Notification to translate or map a file after upload, before insertion into the database (first)
+%% Used in mod_video to queue movies for conversion to mp4.
+%% Your handler should return a modified version of this record.
+%% You can set the post_insert_fun to something like fun(Id, Medium, Context) to receive the 
+%% medium record as it is inserted.
+-record(media_upload_preprocess, {
+            id :: integer() | 'insert_rsc', 
+            mime :: binary(), 
+            file :: file:filename(), 
+            original_filename :: file:filename(),
+            medium :: list(),
+            post_insert_fun :: function()
+        }).
+
 %% @doc Notification that a medium file has been uploaded.
 %%      This is the moment to change properties, modify the file etc. 
-%%		The medium record properties are folded over all observers. (foldl)
+%%      The medium record properties are folded over all observers. (foldl)
 -record(media_upload_props, {id, mime, archive_file, options}).
 
 %% @doc Notification that a medium file has been changed (notify)
@@ -406,7 +420,7 @@
 
 %% @doc Subscribe a function to a QMTT topic.
 %%      The function will be called from a temporary process, and must be of the form:
-%%		m:f(#emqtt_msg{}, A, Context)
+%%      m:f(#emqtt_msg{}, A, Context)
 -record(mqtt_subscribe, {topic, qos=0, mfa}).
 
 %% @doc Unsubscribe a function from a QMTT topic.
@@ -414,14 +428,14 @@
 -record(mqtt_unsubscribe, {topic, mfa}).
 
 %% @doc MQTT acl check, called via the normal acl notifications.
-%%		Actions for these checks: subscribe, publish
+%%      Actions for these checks: subscribe, publish
 -record(acl_mqtt, {
-		type :: 'wildcard' | 'direct',
-		topic :: binary(),
-		words :: list(binary() | integer()),
-		site :: binary(),
-		page_id :: 'undefined' | binary()	
-	}).
+        type :: 'wildcard' | 'direct',
+        topic :: binary(),
+        words :: list(binary() | integer()),
+        site :: binary(),
+        page_id :: 'undefined' | binary()   
+    }).
 
 %% @doc Broadcast notification.
 -record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
@@ -438,60 +452,60 @@
 
 %% @doc mod_export - Check if the resource or dispatch is visible for export.
 -record(export_resource_visible, {
-			dispatch :: atom(),
-			id :: integer()
- 		}).
+            dispatch :: atom(),
+            id :: integer()
+        }).
 
 %% @doc mod_export - return the content type (like {ok, "text/csv"}) for the dispatch rule/id export.
 -record(export_resource_content_type, {
-		dispatch :: atom(),
-		id :: integer()
-	}).
+        dispatch :: atom(),
+        id :: integer()
+    }).
 
 %% @doc mod_export - return the {ok, Filename} for the content disposition.
 -record(export_resource_filename, {
-		dispatch :: atom(),
-		id :: integer(),
-		content_type :: string()
-	}).
+        dispatch :: atom(),
+        id :: integer(),
+        content_type :: string()
+    }).
 
 %% @doc mod_export - Fetch the header for the export.
 %% The 'first' notification should return: {ok, list()|binary()} | {ok, list()|binary(), ContinuationState} | {error, Reason}.
 -record(export_resource_header, {
-		dispatch :: atom(),
-		id :: integer(),
-		content_type :: string()
-	}).
+        dispatch :: atom(),
+        id :: integer(),
+        content_type :: string()
+    }).
 
 %% @doc mod_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
 %% The 'first' notification should return: {ok, Values|binary()} | {ok, Values|binary(), ContinuationState} | {error, Reason}.
 %% Where Values is [ term() ], i.e. a list of opaque values, to be formatted with #export_resource_format.
 %% Return the empty list of values to signify the end of the data stream.
 -record(export_resource_data, {
-		dispatch :: atom(),
-		id :: integer(),
-		content_type :: string(),
-		state :: term()
-	}).
+        dispatch :: atom(),
+        id :: integer(),
+        content_type :: string(),
+        state :: term()
+    }).
 
 %% @doc mod_export - Encode a single data element.
 %% The 'first' notification should return: {ok, binary()} | {ok, binary(), ContinuationState} | {error, Reason}.
 -record(export_resource_encode, {
-		dispatch :: atom(),
-		id :: integer(),
-		content_type :: string(),
-		data :: term(),
-		state :: term()
-	}).
+        dispatch :: atom(),
+        id :: integer(),
+        content_type :: string(),
+        data :: term(),
+        state :: term()
+    }).
 
 %% @doc mod_export - Fetch the footer for the export. Should cleanup the continuation state, if needed.
 %% The 'first' notification should return: {ok, binary()} | {error, Reason}.
 -record(export_resource_footer, {
-		dispatch :: atom(),
-		id :: integer(),
-		content_type :: string(),
-		state :: term()
-	}).
+        dispatch :: atom(),
+        id :: integer(),
+        content_type :: string(),
+        state :: term()
+    }).
 
 
 % Simple mod_development notifications:
