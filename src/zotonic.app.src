@@ -16,5 +16,8 @@
   {applications, [kernel, stdlib, crypto, mnesia,
                   bert, dh_date, eiconv, lager, folsom,
                   mimetypes, webzmachine, z_stdlib,
-                  sendfile]}
+                  sendfile, public_key, ssl,
+                  jobs, gproc 
+                  % , filezcache, s3filez
+  ]}
  ]}.

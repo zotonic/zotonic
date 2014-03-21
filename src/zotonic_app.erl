@@ -43,6 +43,8 @@ start(_Type, _StartArgs) ->
     zotonic_deps:ensure(),
     ensure_started(mimetypes),
     ensure_started(emqtt),
+    ensure_started(gproc),
+    ensure_started(jobs),
     zotonic_sup:start_link().
 
 %% @spec stop(_State) -> ServerRet
