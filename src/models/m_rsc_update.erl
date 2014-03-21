@@ -32,6 +32,8 @@
 
     flush/2,
     
+    normalize_props/2,
+
     delete_nocheck/2,
     props_filter/3,
 
@@ -168,12 +170,10 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
 
     case IsEditable of
         true ->
-            DateProps = recombine_dates(Props),
-            TextProps = recombine_languages(DateProps, Context),
-            BlockProps = recombine_blocks(TextProps, Props),
-            AtomProps = [ {map_property_name(P), V} || {P, V} <- BlockProps ],
-            FilteredProps = props_filter(props_trim(AtomProps), [], Context),
-            EditableProps = props_filter_protected(FilteredProps),
+            AtomProps = normalize_props(Props, Context),
+            EditableProps = props_filter_protected(
+                                props_filter(
+                                    props_trim(AtomProps), [], Context)),
             AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
                 L when is_list(L) -> L;
                 {error, Reason} -> throw({error, Reason})
@@ -350,12 +350,20 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
             throw(E)
     end.
 
+%% @doc Recombine all properties from the ones that are posted by a form.
+%% @todo Move this one layer up, to the routines receiving the posted data.
+normalize_props(Props, Context) ->
+    DateProps = recombine_dates(Props),
+    TextProps = recombine_languages(DateProps, Context),
+    BlockProps = recombine_blocks(TextProps, Props),
+    [ {map_property_name(P), V} || {P, V} <- BlockProps ].
 
-    imported_prop(false, _, _, Default) ->
-        Default;
-    imported_prop(true, Prop, Props, Default) ->
-        proplists:get_value(Prop, Props, Default).
-        
+
+imported_prop(false, _, _, Default) ->
+    Default;
+imported_prop(true, Prop, Props, Default) ->
+    proplists:get_value(Prop, Props, Default).
+
 
 %% @doc Check if the update will change the data in the database
 %% @spec is_changed(Current, Props) -> bool()
