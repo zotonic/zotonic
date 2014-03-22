@@ -21,7 +21,7 @@ How
 
 This is how the main template will look::
 
-  {% wire id="node_customer" type="change" action={ update target="mydiv" template="_items_list.tpl" %} 
+  {% wire id="node_customer" type="change" action={ update target="mydiv" template="_items_list.tpl" }%} 
   <select name="node_customer" id="node_customer"> <option value="">--Select a Customer--</option> 
   {% for cid in m.search[{query cat="customer" sort='+rsc.pivot_title'}] %} 
       <option value="{{cid}}"> {{ m.rsc[cid].title }}</option> 
