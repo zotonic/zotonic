@@ -1,11 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
-%% Date: 2009-03-02
+%% @copyright 2009-2014 Marc Worrell
 %%
 %% @doc Identify files, fetch metadata about an image
 %% @todo Recognize more files based on magic number, think of office files etc.
 
-%% Copyright 2009-2012 Marc Worrell, Konstantin Nikiforov
+%% Copyright 2009-2014 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -69,13 +68,15 @@ identify_file(File, OriginalFilename, Context) ->
         {ok, Props} ->
 			{ok, Props};
         undefined -> 
-			identify_file_direct(File, OriginalFilename)
+            identify_file_direct(File, OriginalFilename)
 	end.
-
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
 -spec identify_file_direct(File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
 identify_file_direct(File, OriginalFilename) ->
+    maybe_identify_extension(identify_file_direct_1(File, OriginalFilename), OriginalFilename).
+
+identify_file_direct_1(File, OriginalFilename) ->
     {OsFamily, _} = os:type(),
 	case identify_file_os(OsFamily, File, OriginalFilename) of
 		{error, _} ->
@@ -91,6 +92,10 @@ identify_file_direct(File, OriginalFilename) ->
 			end
 	end.
 
+maybe_identify_extension({error, "identify error: "++_}, OriginalFilename) ->
+    {ok, [ {mime, guess_mime(OriginalFilename)} ]};
+maybe_identify_extension(Result, _OriginalFilename) ->
+    Result.
 
 %% @doc Identify the mime type of a file using the unix "file" command.
 -spec identify_file_os(win32|unix, File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
