@@ -39,8 +39,20 @@ date(Input, FormatStr, Context) when is_binary(FormatStr) ->
 date(Input, FormatStr, Context) when is_binary(Input) ->
     z_convert:to_binary(date(binary_to_list(Input), FormatStr, Context));
 date({{_,_,_} = Date,{_,_,_} = Time}, FormatStr, Context) ->
-     erlydtl_dateformat:format({Date, Time}, FormatStr, Context);
+    try
+        erlydtl_dateformat:format({Date, Time}, FormatStr, Context)
+    catch
+        error:_ ->
+            lager:warning("Date format on illegal date ~p (format ~p)", [Date, FormatStr]),
+            undefined
+    end;
 date({_,_,_} = Date, FormatStr, Context) ->
-    erlydtl_dateformat:format(Date, FormatStr, Context);
+    try
+        erlydtl_dateformat:format(Date, FormatStr, Context)
+    catch
+        error:_ ->
+            lager:warning("Date format on illegal date ~p (format ~p)", [Date, FormatStr]),
+            undefined
+    end;
 date(_Input, _FormatStr, _Context) ->
     undefined.
