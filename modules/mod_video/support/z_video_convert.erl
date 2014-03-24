@@ -129,10 +129,12 @@ video_convert_1(QueuePath, Orientation, _Mime) ->
     FfmpegCmd = lists:flatten([
             "ffmpeg -i ", z_utils:os_filename(QueuePath),
             " -vcodec libx264 ",
-            " -loglevel error ",
+            " -loglevel fatal ",
             " -f mp4 ",
             " -strict -2 ",
             " -y ",
+            " -movflags +faststart ",
+            " -preset medium ",
             " -metadata:s:v:0 rotate=0 ",
             mod_video:orientation_to_transpose(Orientation),
             z_utils:os_filename(TmpFile) 
@@ -142,8 +144,15 @@ video_convert_1(QueuePath, Orientation, _Mime) ->
                 lager:debug("Video convert: ~p", [FfmpegCmd]),
                 case os:cmd(FfmpegCmd) of
                     [] ->
-                        {ok, TmpFile};
+                        case filelib:file_size(TmpFile) of
+                            0 ->
+                                lager:warning("Video convert error: (empty result file)  [queue: ~p]", [QueuePath]),
+                                {error, convert};
+                            _ ->
+                                {ok, TmpFile}
+                        end; 
                     Other ->
+                        lager:warning("Video convert error: ~p [queue: ~p]", [Other, QueuePath]),
                         {error, Other}
                 end
             end).
