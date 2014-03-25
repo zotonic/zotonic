@@ -415,14 +415,21 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     PreferExtension = z_convert:to_binary(filename:extension(PreProc#media_upload_preprocess.original_filename)),
     Mime = PreProc#media_upload_preprocess.mime,
     SafeFilename = SafeRootName ++ z_media_identify:extension(Mime, PreferExtension),
-    ArchiveFile = z_media_archive:archive_copy_opt(PreProc#media_upload_preprocess.file, SafeFilename, Context),
-    RootName = filename:rootname(filename:basename(ArchiveFile)),
-    Medium = [
+    ArchiveFile = case PreProc#media_upload_preprocess.file of
+                    undefined -> undefined;
+                    UploadFile -> z_media_archive:archive_copy_opt(UploadFile, SafeFilename, Context)
+                  end,
+    RootName = case ArchiveFile of
+                    undefined -> undefined;
+                    _ -> filename:rootname(filename:basename(ArchiveFile))
+               end,
+    Medium0 = [
+        {mime, PreProc#media_upload_preprocess.mime},
         {filename, ArchiveFile}, 
         {rootname, RootName}, 
-        {is_deletable_file, not z_media_archive:is_archived(PreProc#media_upload_preprocess.file, Context)}
-        | PreProc#media_upload_preprocess.medium
+        {is_deletable_file, is_deletable_file(PreProc#media_upload_preprocess.file, Context)}
     ],
+    Medium = z_utils:props_merge(PreProc#media_upload_preprocess.medium, Medium0),
     Medium1 = z_notifier:foldl(
                             #media_upload_props{
                                     id=RscId,
@@ -490,6 +497,10 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     z_notifier:notify(#media_replace_file{id=Id, medium=get(Id, Context)}, Context),
     {ok, Id}.
 
+is_deletable_file(undefined, _Context) ->
+    false;
+is_deletable_file(File, Context) ->
+    not z_media_archive:is_archived(File, Context).
 
 replace_url(Url, RscId, Props, Context) ->
     replace_url(Url, RscId, Props, [], Context).
