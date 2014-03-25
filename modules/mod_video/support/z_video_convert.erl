@@ -42,7 +42,7 @@
     }).
 
 start_link({convert_v1, _Id, _Medium, _Upload, QueueFilename, _PickledContext} = Args, Context) ->
-    gen_server:start_link({via, gproc, {n,l,{video_convert, QueueFilename}}}, 
+    gen_server:start_link({via, gproc, {n,l,{video_convert, z_convert:to_binary(QueueFilename)}}}, 
                           ?MODULE, 
                           [Args, z_context:site(Context)],
                           []).
@@ -98,7 +98,10 @@ do_convert(QueuePath, State) ->
 insert_movie(Filename, State) ->
     Context = z_context:depickle(State#state.pickled_context),
     OrgFile = original_filename(State#state.upload),
-    m_media:replace_file(#upload{filename=OrgFile, tmpfile=Filename}, State#state.id, [], [no_touch], Context).
+    PropsMedia = [
+        {is_video_ok, true}
+    ],
+    m_media:replace_file(#upload{filename=OrgFile, tmpfile=Filename}, State#state.id, [], PropsMedia, [no_touch], Context).
 
 original_filename(#media_upload_preprocess{original_filename=undefined}) ->
     "movie.mp4";
@@ -120,8 +123,6 @@ video_convert(QueuePath, Mime) ->
     Info = mod_video:video_info(QueuePath),
     video_convert_1(QueuePath, proplists:get_value(orientation, Info), Mime).
 
-video_convert_1(QueuePath, 1, "video/mp4") ->
-    {ok, QueuePath};
 video_convert_1(QueuePath, Orientation, _Mime) ->
     TmpFile = z_tempfile:new(),
     FfmpegCmd = lists:flatten([

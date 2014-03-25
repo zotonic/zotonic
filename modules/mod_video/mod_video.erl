@@ -57,17 +57,18 @@
     ]).
 
 %% @doc If a video file is uploaded, queue it for conversion to video/mp4
-observe_media_upload_preprocess(#media_upload_preprocess{mime="video/mp4", file=File} = Upload, Context) ->
-    Info = video_info(File),
-    case proplists:get_value(orientation, Info) of
-        undefined -> undefined;
-        1 -> undefined;
-        _ -> do_media_upload_preprocess(Upload, Context)
-    end;
+observe_media_upload_preprocess(#media_upload_preprocess{mime="video/mp4", file=undefined}, _Context) ->
+    ?DEBUG(a),
+    undefined;
 observe_media_upload_preprocess(#media_upload_preprocess{mime="video/x-mp4-broken"}, Context) ->
     do_media_upload_broken(Context);
-observe_media_upload_preprocess(#media_upload_preprocess{mime="video/"++_} = Upload, Context) ->
-    do_media_upload_preprocess(Upload, Context);
+observe_media_upload_preprocess(#media_upload_preprocess{mime="video/"++_, medium=Medium} = Upload, Context) ->
+    case proplists:get_value(is_video_ok, Medium) of
+        true ->
+            undefined;
+        undefined ->
+            do_media_upload_preprocess(Upload, Context)
+    end;
 observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
     undefined.
 

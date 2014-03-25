@@ -2,6 +2,7 @@
 {% if props.is_video_processing %}
 	<div id="{{ #video }}" class="video-processing">
 		<img src="/lib/images/processing.gif" />
+		<span>{_ Converting _} …</span>
 	</div>
 	{% javascript %}
 		{% wire action={connect 
@@ -20,7 +21,7 @@
 		<object style="max-width: 100%; height: auto;" 
 				width="{{ props.width }}" height="{{ props.height }}" 
 				type="application/x-shockwave-flash" 
-				data="flashmediaelement.swf">
+				data="{% url lib star='me/flashmediaelement.swf' %}">
 			<param name="movie" value="{% url lib star='me/flashmediaelement.swf' %}" />
 			<param name="flashvars" value="controls=true&amp;file={% url media_inline star=props.filename %}" />
 			<img src="{% image_url props.id width=props.width height=props.height %}" width="{{ props.width }}" height="{{ props.height }}" title="{_ No video playback capabilities _}" />
