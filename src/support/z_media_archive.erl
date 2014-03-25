@@ -169,6 +169,8 @@ make_unique(Archive, Rootname, Extension, Nr) ->
 
 
 %% @doc Check if the file is archived (ie. in the archive directory)
+is_archived(undefined, _Context) ->
+    false;
 is_archived(Filename, Context) ->
     Fileabs = filename:absname(Filename),
     Archive = z_path:media_archive(Context) ++ "/",
