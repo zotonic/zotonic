@@ -41,8 +41,6 @@
         pickled_context
     }).
 
--define(BROKEN_IMAGE, "images/broken.png").
-
 start_link({convert_v1, _Id, _Medium, _Upload, QueueFilename, _PickledContext} = Args, Context) ->
     gen_server:start_link({via, gproc, {n,l,{video_convert, QueueFilename}}}, 
                           ?MODULE, 
@@ -93,7 +91,9 @@ do_convert(QueuePath, State) ->
         Error ->
             lager:warning("ffmpeg conversion error on ~p: ~p", [State#state.id, Error]),
             insert_broken(State)
-    end.
+    end,
+    Context = z_context:depickle(State#state.pickled_context),
+    mod_signal:emit({medium_update, [{id,State#state.id}]}, Context).
 
 insert_movie(Filename, State) ->
     Context = z_context:depickle(State#state.pickled_context),
@@ -107,12 +107,10 @@ original_filename(#media_upload_preprocess{original_filename=OrgFile}) ->
 
 insert_broken(State) ->
     Context = z_context:depickle(State#state.pickled_context),
-    case z_module_indexer:find(lib, ?BROKEN_IMAGE, Context) of
-        {ok, #module_index{filepath=Filename}} ->
-            m_media:replace_file(Filename, State#state.id, [], [no_touch], Context);
-        {error, enoent} ->
-            lager:warning("No broken image for failed ffmpeg converts: ~p", [?BROKEN_IMAGE])
-    end.
+    PropsMedia = [
+        {mime, "video/x-mp4-broken"}
+    ],
+    m_media:replace_file(undefined, State#state.id, [], PropsMedia, [no_touch], Context).
 
 remove_task(State) ->
     Context = z_context:new(State#state.site),

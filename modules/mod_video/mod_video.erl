@@ -30,8 +30,9 @@
 
 -define(SERVER, ?MODULE).
 
--define(TEMP_IMAGE, "images/processing.png").
+-define(TEMP_IMAGE, "images/processing.gif").
 -define(POSTER_IMAGE, "images/poster.png").
+-define(BROKEN_IMAGE, "images/broken.png").
 
 -define(TASK_DELAY, 3600).
 
@@ -55,6 +56,7 @@
 	orientation_to_transpose/1
 	]).
 
+%% @doc If a video file is uploaded, queue it for conversion to video/mp4
 observe_media_upload_preprocess(#media_upload_preprocess{mime="video/mp4", file=File} = Upload, Context) ->
 	Info = video_info(File),
 	case proplists:get_value(orientation, Info) of
@@ -62,6 +64,8 @@ observe_media_upload_preprocess(#media_upload_preprocess{mime="video/mp4", file=
 		1 -> undefined;
 		_ -> do_media_upload_preprocess(Upload, Context)
 	end;
+observe_media_upload_preprocess(#media_upload_preprocess{mime="video/x-mp4-broken"}, Context) ->
+	do_media_upload_broken(Context);
 observe_media_upload_preprocess(#media_upload_preprocess{mime="video/"++_} = Upload, Context) ->
 	do_media_upload_preprocess(Upload, Context);
 observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
@@ -75,19 +79,49 @@ do_media_upload_preprocess(Upload, Context) ->
 					  end,
 			{ok, MInfo} = z_media_identify:identify_file(Filename, Context),
 			#media_upload_preprocess{
-				mime = proplists:get_value(mime, MInfo),
-				file = Filename,
+				mime = "video/mp4",
+				file = undefined,
 				post_insert_fun = PostFun,
-				original_filename = filename:basename(?TEMP_IMAGE), 
+				original_filename = undefined, 
 				medium = [
-					{size, filelib:file_size(Filename) }
-					| MInfo
+			 		{preview_filename, "lib/"++?TEMP_IMAGE},
+					{preview_width, proplists:get_value(width, MInfo)},
+					{preview_height, proplists:get_value(height, MInfo)},
+					{width, proplists:get_value(width, MInfo)},
+					{height, proplists:get_value(height, MInfo)},
+					{is_deletable_preview, false},
+					{is_video_processing, true}
 				]
 			};
 		{error, enoent} ->
 			undefined
 	end.
 
+do_media_upload_broken(Context) ->
+	case z_module_indexer:find(lib, ?BROKEN_IMAGE, Context) of
+		{ok, #module_index{filepath=Filename}} ->
+			{ok, MInfo} = z_media_identify:identify_file(Filename, Context),
+			#media_upload_preprocess{
+				mime = "video/mp4",
+				file = undefined,
+				original_filename = undefined, 
+				medium = [
+			 		{preview_filename, "lib/"++?BROKEN_IMAGE},
+					{preview_width, proplists:get_value(width, MInfo)},
+					{preview_height, proplists:get_value(height, MInfo)},
+					{width, proplists:get_value(width, MInfo)},
+					{height, proplists:get_value(height, MInfo)},
+					{is_deletable_preview, false},
+					{is_video_broken, true}
+				]
+			};
+		{error, enoent} ->
+			undefined
+	end.
+
+%% @doc After a video file is processed, generate a preview image.
+observe_media_upload_props(#media_upload_props{archive_file=undefined, mime="video/" ++ _}, Medium, _Context) ->
+	Medium;
 observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime="video/" ++ _}, Medium, Context) ->
 	FileAbs = z_media_archive:abspath(File, Context),
 	Info = video_info(FileAbs),
@@ -114,10 +148,10 @@ observe_media_upload_props(#media_upload_props{}, Medium, _Context) ->
 
 %% @doc Return the media viewer for the mp4 video
 -spec observe_media_viewer(#media_viewer{}, #context{}) -> undefined | {ok, list()|binary()}.
-observe_media_viewer(#media_viewer{props=Props}, Context) ->
+observe_media_viewer(#media_viewer{props=Props, options=Options}, Context) ->
     case proplists:get_value(mime, Props) of
         <<"video/mp4">> ->
-        	{ok, z_template:render(#render{template="_video_viewer.tpl", vars=[{props,Props}]}, Context)};
+        	{ok, z_template:render(#render{template="_video_viewer.tpl", vars=[{props,Props},{options,Options}]}, Context)};
         _ ->
             undefined
     end.
@@ -190,6 +224,7 @@ init([]) ->
 
 %% @doc The medium record has been inserted, queue a conversion
 post_insert_fun(Id, Medium, Upload, Context) ->
+	io:format("~p~n", [Medium]),
 	% Move the temp file to the video_queue in the files folder
 	UploadedFile = Upload#media_upload_preprocess.file,
 	QueueFilename = lists:flatten([integer_to_list(Id), $-, z_ids:identifier(20)]),
