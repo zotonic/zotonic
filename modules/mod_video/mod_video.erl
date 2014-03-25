@@ -224,7 +224,6 @@ init([]) ->
 
 %% @doc The medium record has been inserted, queue a conversion
 post_insert_fun(Id, Medium, Upload, Context) ->
-    io:format("~p~n", [Medium]),
     % Move the temp file to the video_queue in the files folder
     UploadedFile = Upload#media_upload_preprocess.file,
     QueueFilename = lists:flatten([integer_to_list(Id), $-, z_ids:identifier(20)]),
