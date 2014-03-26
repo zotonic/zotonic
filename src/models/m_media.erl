@@ -363,20 +363,22 @@ replace_file(File, RscId, Context) ->
 replace_file(File, RscId, Props, Context) ->
     replace_file(File, RscId, Props, [], Context).
 
+replace_file(File, RscId, Props, Opts, Context) ->
+    replace_file(File, RscId, Props, [], Opts, Context).
 
-replace_file(#upload{filename=OriginalFilename, data=Data, tmpfile=undefined}, RscId, Props, Opts, Context) when Data /= undefined ->
+replace_file(#upload{filename=OriginalFilename, data=Data, tmpfile=undefined}, RscId, Props, MInfo, Opts, Context) when Data /= undefined ->
     TmpFile = z_tempfile:new(),
     ok = file:write_file(TmpFile, Data),
-    replace_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, RscId, Props, Opts, Context);
-replace_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, RscId, Props, Opts, Context) ->
-    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-    replace_file(TmpFile, RscId, [{original_filename, OriginalFilename}|Props], PropsMedia, Opts, Context);
-replace_file(File, RscId, Props, Opts, Context) ->
+    replace_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, RscId, Props, MInfo, Opts, Context);
+replace_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, RscId, Props, MInfo, Opts, Context) ->
+    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}|MInfo], Context),
+    replace_file_mime_check(TmpFile, RscId, [{original_filename, OriginalFilename}|Props], PropsMedia, Opts, Context);
+replace_file(File, RscId, Props, MInfo, Opts, Context) ->
     OriginalFilename = proplists:get_value(original_filename, Props, File),
-    PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-    replace_file(File, RscId, Props, PropsMedia, Opts, Context).
+    PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}|MInfo], Context),
+    replace_file_mime_check(File, RscId, Props, PropsMedia, Opts, Context).
 
-replace_file(File, RscId, Props, PropsMedia, Opts, Context) ->
+replace_file_mime_check(File, RscId, Props, PropsMedia, Opts, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
     case z_acl:is_allowed(insert, #acl_rsc{category=mime_to_category(Mime)}, Context) andalso
          z_acl:is_allowed(insert, #acl_media{mime=Mime, size=filelib:file_size(File)}, Context) of
