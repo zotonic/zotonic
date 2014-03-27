@@ -472,12 +472,6 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                            end,
                 case medium_insert(Id, [{id, Id} | Medium1], Ctx) of
                     {ok, _MediaId} ->
-                        case PreProc#media_upload_preprocess.post_insert_fun of
-                            undefined ->
-                                ok;
-                            F when is_function(F, 3) ->
-                                F(Id, Medium1, Ctx)
-                        end, 
                         {ok, Id};
                     Error ->
                         % TODO: remove the created
@@ -495,6 +489,13 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
     
     m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
+
+    % Run possible post insertion function.
+    case PreProc#media_upload_preprocess.post_insert_fun of
+        undefined -> ok;
+        PostFun when is_function(PostFun, 3) -> PostFun(Id, Medium1, Context)
+    end, 
+
     %% Pass the medium record along in the notification; this also fills the depcache (side effect).
     z_notifier:notify(#media_replace_file{id=Id, medium=get(Id, Context)}, Context),
     {ok, Id}.
