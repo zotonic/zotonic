@@ -23,7 +23,7 @@
 		</div>
 		<div class="tab-content widget-content">
 			{% for lang_code, lang in m.config.i18n.language_list.list|default:[[z_language,[]]] %}
-			{# to define some helper vars that will be usefull in widget_content: #}
+			{# to define some helper vars that will be useful in widget_content: #}
 			{% with ["$", lang_code]|join, 
 					["(", lang_code, ")"]|join,
 					["--", lang_code]|join  
