@@ -381,6 +381,7 @@ spawn_send(Id, Recipient, Email, Context, State) ->
                 props=[{reason, illegal_address}],
                 message_nr=Id,
                 envelop_to=Recipient,
+                envelop_from="",
                 to_id=proplists:get_value(recipient_id, Email#email.vars),
                 from_id=z_acl:user(Context),
                 content_id=proplists:get_value(id, Email#email.vars),
