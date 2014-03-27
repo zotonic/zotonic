@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014 Marc Worrell
-%% @doc Simple temporary file handling, deletes the file when the calling process stops or crashes.
+%% @doc Video support for Zotonic. Converts all video files to mp4 and extracts a previes image.
 
 %% Copyright 2014 Marc Worrell
 %%
@@ -45,7 +45,7 @@
     observe_media_viewer/2,
     observe_media_stillimage/2,
 
-    post_insert_fun/4,
+    post_insert_fun/5,
     remove_task/2,
     convert_task/2,
     queue_path/2,
@@ -58,7 +58,6 @@
 
 %% @doc If a video file is uploaded, queue it for conversion to video/mp4
 observe_media_upload_preprocess(#media_upload_preprocess{mime="video/mp4", file=undefined}, _Context) ->
-    ?DEBUG(a),
     undefined;
 observe_media_upload_preprocess(#media_upload_preprocess{mime="video/x-mp4-broken"}, Context) ->
     do_media_upload_broken(Context);
@@ -75,8 +74,9 @@ observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
 do_media_upload_preprocess(Upload, Context) ->
     case z_module_indexer:find(lib, ?TEMP_IMAGE, Context) of
         {ok, #module_index{filepath=Filename}} ->
+            ProcessNr = z_convert:to_binary(z_ids:identifier(20)),
             PostFun = fun(InsId, InsMedium, InsContext) ->
-                            ?MODULE:post_insert_fun(InsId, InsMedium, Upload, InsContext)
+                            ?MODULE:post_insert_fun(InsId, InsMedium, Upload, ProcessNr, InsContext)
                       end,
             {ok, MInfo} = z_media_identify:identify_file(Filename, Context),
             #media_upload_preprocess{
@@ -91,7 +91,8 @@ do_media_upload_preprocess(Upload, Context) ->
                     {width, proplists:get_value(width, MInfo)},
                     {height, proplists:get_value(height, MInfo)},
                     {is_deletable_preview, false},
-                    {is_video_processing, true}
+                    {is_video_processing, true},
+                    {video_processing_nr, ProcessNr}
                 ]
             };
         {error, enoent} ->
@@ -180,9 +181,10 @@ observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
     end.
 
 
-start_link(_Args) ->
+start_link(Args) ->
+    {context, Context} = proplists:lookup(context, Args), 
     ensure_job_queues(),
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+    supervisor:start_link({local, z_utils:name_for_host(?SERVER, Context)}, ?MODULE, []).
 
 ensure_job_queues() ->
     case jobs:queue_info(video_jobs) of
@@ -190,7 +192,6 @@ ensure_job_queues() ->
             jobs:add_queue(video_jobs, [
                     {regulators, [
                           {counter, [
-                                {name, resizers},
                                 {limit, 1},
                                 {modifiers, [{cpu, 1}]}
                           ]}
@@ -204,7 +205,6 @@ ensure_job_queues() ->
             jobs:add_queue(media_preview_jobs, [
                     {regulators, [
                           {counter, [
-                                {name, resizers},
                                 {limit, 3},
                                 {modifiers, [{cpu, 1}]}
                           ]}
@@ -224,10 +224,10 @@ init([]) ->
 
 
 %% @doc The medium record has been inserted, queue a conversion
-post_insert_fun(Id, Medium, Upload, Context) ->
+post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
     % Move the temp file to the video_queue in the files folder
     UploadedFile = Upload#media_upload_preprocess.file,
-    QueueFilename = lists:flatten([integer_to_list(Id), $-, z_ids:identifier(20)]),
+    QueueFilename = lists:flatten([integer_to_list(Id), $-, z_convert:to_list(ProcessNr)]),
     QueuePath = queue_path(QueueFilename, Context),
     ok = filelib:ensure_dir(QueuePath),
     case z_tempfile:is_tempfile(UploadedFile) of
@@ -243,16 +243,16 @@ post_insert_fun(Id, Medium, Upload, Context) ->
         false ->
             {ok, _BytesCopied} = file:copy(UploadedFile, QueuePath)
     end,
-    Task = {convert_v1, Id, Medium, Upload, QueueFilename, z_context:pickle(Context)},
+    Task = {convert_v2, Id, Medium, Upload, QueueFilename, ProcessNr, z_context:pickle(Context)},
     z_pivot_rsc:insert_task_after(?TASK_DELAY, ?MODULE, convert_task, QueueFilename, [Task], Context),
-    supervisor:start_child(?SERVER, [Task, z_context:prune_for_async(Context)]),
+    supervisor:start_child(z_utils:name_for_host(?SERVER, Context), [Task, z_context:prune_for_async(Context)]),
     ok.
 
 remove_task(QueueFilename, Context) ->
     z_pivot_rsc:delete_task(?MODULE, convert_task, QueueFilename, Context).
 
 convert_task(Task, Context) ->
-    _ = supervisor:start_child(?SERVER, [Task, Context]),
+    _ = supervisor:start_child(z_utils:name_for_host(?SERVER, Context), [Task, Context]),
     {delay, ?TASK_DELAY}.
 
 queue_path(Filename, Context) ->

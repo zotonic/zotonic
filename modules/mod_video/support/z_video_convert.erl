@@ -37,23 +37,28 @@
         medium,
         upload,
         queue_filename,
+        process_nr,
         site,
         pickled_context
     }).
 
-start_link({convert_v1, _Id, _Medium, _Upload, QueueFilename, _PickledContext} = Args, Context) ->
+start_link({convert_v1, _Id, _Medium, _Upload, _QueueFilename, _PickledContext}, _Context) ->
+    % Flush old convert queue
+    ok;
+start_link({convert_v2, _Id, _Medium, _Upload, QueueFilename, _ProcessNr, _PickledContext} = Args, Context) ->
     gen_server:start_link({via, gproc, {n,l,{video_convert, z_convert:to_binary(QueueFilename)}}}, 
                           ?MODULE, 
                           [Args, z_context:site(Context)],
                           []).
 
-init([{convert_v1, Id, Medium, Upload, QueueFilename, PickledContext}, Site]) ->
+init([{convert_v2, Id, Medium, Upload, QueueFilename, ProcessNr, PickledContext}, Site]) ->
     gen_server:cast(self(), convert),
     {ok, #state{
         id = Id,
         medium = Medium,
         upload = Upload,
         queue_filename = QueueFilename,
+        process_nr = ProcessNr,
         site = Site,
         pickled_context = PickledContext
     }}.
@@ -62,14 +67,16 @@ handle_call(_Msg, _From, State) ->
     {reply, {error, uknown_msg}, State}.
 
 handle_cast(convert, State) ->
-    QueuePath = mod_video:queue_path(State#state.queue_filename, z_context:depickle(State#state.pickled_context)),
-    case filelib:is_regular(QueuePath) of
+    Context = z_context:depickle(State#state.pickled_context),
+    QueuePath = mod_video:queue_path(State#state.queue_filename, Context),
+    case is_current_upload(State, Context) andalso filelib:is_regular(QueuePath) of
         true ->
             do_convert(QueuePath, State),
             file:delete(QueuePath),
             remove_task(State);
         false ->
             % Queue file was deleted, remove our task
+            lager:debug("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)", [State#state.id, State#state.queue_filename]),
             remove_task(State)
     end,
     {stop, normal, State}.
@@ -97,11 +104,16 @@ do_convert(QueuePath, State) ->
 
 insert_movie(Filename, State) ->
     Context = z_context:depickle(State#state.pickled_context),
-    OrgFile = original_filename(State#state.upload),
-    PropsMedia = [
-        {is_video_ok, true}
-    ],
-    m_media:replace_file(#upload{filename=OrgFile, tmpfile=Filename}, State#state.id, [], PropsMedia, [no_touch], Context).
+    case is_current_upload(State, Context) of
+        true ->
+            OrgFile = original_filename(State#state.upload),
+            PropsMedia = [
+                {is_video_ok, true}
+            ],
+            m_media:replace_file(#upload{filename=OrgFile, tmpfile=Filename}, State#state.id, [], PropsMedia, [no_touch], Context);
+        false ->
+            lager:debug("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
+    end.
 
 original_filename(#media_upload_preprocess{original_filename=undefined}) ->
     "movie.mp4";
@@ -110,10 +122,28 @@ original_filename(#media_upload_preprocess{original_filename=OrgFile}) ->
 
 insert_broken(State) ->
     Context = z_context:depickle(State#state.pickled_context),
-    PropsMedia = [
-        {mime, "video/x-mp4-broken"}
-    ],
-    m_media:replace_file(undefined, State#state.id, [], PropsMedia, [no_touch], Context).
+    case is_current_upload(State, Context) of
+        true ->
+            PropsMedia = [
+                {mime, "video/x-mp4-broken"}
+            ],
+            m_media:replace_file(undefined, State#state.id, [], PropsMedia, [no_touch], Context);
+        false ->
+            lager:debug("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
+    end.
+
+is_current_upload(State, Context) ->
+    case m_rsc:exists(State#state.id, Context) of
+        true ->
+            case m_media:get(State#state.id, Context) of
+                undefined ->
+                    false;
+                Props ->
+                    proplists:get_value(video_processing_nr, Props) =:= State#state.process_nr
+            end;
+        false ->
+            false
+    end.
 
 remove_task(State) ->
     Context = z_context:new(State#state.site),
