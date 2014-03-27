@@ -33,7 +33,7 @@ Site-specific settings
 +----------+----------------------+-----------------------------------------+
 |site      |email_override        |If set, all e-mail messages that get sent|
 |          |                      |from Zotonic will arrive at this         |
-|          |                      |address. Usefull if you are testing but  |
+|          |                      |address. Useful if you are testing but   |
 |          |                      |don't want to confuse other people with  |
 |          |                      |your test e-mails.                       |
 +----------+----------------------+-----------------------------------------+
