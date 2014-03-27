@@ -829,7 +829,7 @@ function z_on_visible(CssSelector, Func)
 
 function z_on_visible_check()
 {
-    for (var i = z_on_visible_checks.length-1; i>=0; i--) {
+    for (var i = 0; i < z_on_visible_checks.length; i++) {
         var elt = $(z_on_visible_checks[i].selector).get(0);
         if (elt != undefined) {
             if ($(elt).is(":visible") && isScrolledIntoView(elt)) {
