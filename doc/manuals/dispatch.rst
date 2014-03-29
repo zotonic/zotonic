@@ -175,6 +175,10 @@ top-to-bottom in the file.  Are any rules above your rule capturing
 the cases you are trying to match.  If so, move your rule up, but bear
 in mind that you don't want to break those rules either.
 
+**View which values are passed to the template** using tag `debug`:
+
+  {% debug %}
+
 
 .. _manual-dispatch-rewriting:
 
