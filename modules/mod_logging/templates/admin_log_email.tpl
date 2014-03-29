@@ -132,7 +132,8 @@
                 </td>
             </tr>
         </tfoot>
-    </div>
-    {% endwith %}
+    </table>
+</form>
+{% endwith %}
 
     {% endblock %}
