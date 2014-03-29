@@ -8,7 +8,7 @@
 	    {% if result_row.severity == 4 %}Debug{% endif %}
 	</a>
     </td>
-    <td title="{{ result_row.mailer_message }} [{{ result_row.mailer_host }}]">
+    <td title="{{ result_row.mailer_message|make_list }} [{{ result_row.mailer_host }}]">
 	<a href="{% url admin_log_email severity=q.severity status=result_row.mailer_status %}">
 	    {{ result_row.mailer_status|escape }}
 	</a>
