@@ -175,7 +175,7 @@ handle_info(_Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 terminate(_Reason, State) ->
-    z_notifier:observe(restart_twitter, self(), State#state.context),
+    catch z_notifier:observe(restart_twitter, self(), State#state.context),
     ok.
 
 
