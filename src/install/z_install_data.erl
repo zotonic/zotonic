@@ -23,8 +23,9 @@
 
 %% interface functions
 -export([
-    install/2,
-    install_category/1
+         install/2,
+         install_category/1,
+         install_modules/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -33,8 +34,6 @@
 %% @spec install(Host::atom(), Connection) -> ok
 install(Host, C) ->
     ?DEBUG({Host, "Install start."}),
-    ok = install_config(C),
-    ok = install_modules(Host, C),
     ok = install_category(C),
     ok = install_rsc(C),
     ok = install_identity(C),
@@ -42,15 +41,9 @@ install(Host, C) ->
     ?DEBUG({Host, "Install done."}),
     ok.
 
-%% @doc Install all configuration parameters with default values
-%% @spec install_config(Connection) -> ok
-install_config(_C) ->
-    ?DEBUG("Inserting config keys"),
-    %% {ok, 1} = pgsql:equery(C, 
-    %%     "insert into config (module, key, value, props, modified) values ($1, $2, $3, $4, now())", 
-    %%     ["mod_foo", "bar", "baz", []]),
-    %% pgsql:reset_id(C, "config"),
-    ok.
+install_modules(Context = #context{}) ->
+    {ok, C} = pgsql_pool:get_connection(Context#context.host),
+    install_modules(Context#context.host, C).
 
 %% @doc Install all modules for the site.
 %% The list of modules is read from either the site config file, 
@@ -59,7 +52,6 @@ install_config(_C) ->
 %% on the skeleton used to create the site.
 -spec install_modules(Host::atom(), Connection::any()) -> ok.
 install_modules(Host, C) ->
-    ?DEBUG("Inserting modules"),
     Config = z_sites_manager:get_site_config(Host),
     Modules = [Host
                |proplists:get_value(
@@ -75,10 +67,12 @@ install_modules(Host, C) ->
 install_module({skeleton, S}, C) ->
     [install_module(M, C) || M <- get_skeleton_modules(S)];
 install_module(M, C) ->
-    {ok, 1} = pgsql:equery(
-                C, 
-                "insert into module (name, is_active) values ($1, true)", 
-                [M]).
+    case catch pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", [M]) of
+        {ok, 1}=R ->
+            R;
+        _ ->
+            {ok, 1} = pgsql:equery(C, "update module set is_active = true where name = $1", [M])
+    end.
 
 -spec get_skeleton_modules(Skeleton::atom()) -> list().
 get_skeleton_modules(empty) ->
