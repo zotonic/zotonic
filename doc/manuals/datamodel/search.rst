@@ -154,9 +154,11 @@ Specifying 'upcoming' means that you only want to select things that have a star
 
 **query_id**
 
-  Load the query arguments from the saved ``query`` resource.
+  Load the query arguments from the saved ``query`` resource. 
 
   ``query_id=331``
+
+  .. seealso:: :ref:`manual-query-resources`
 
 **publication_month**
 
@@ -194,3 +196,31 @@ Specifying 'upcoming' means that you only want to select things that have a star
 
   ``date_end_year=2012``
 
+
+Filter behaviour
+----------------
+
+All of the filters works as ``AND`` filter. The only exception to this
+is the ``cat=`` filter: if you specify multiple categories, those
+categories are "OR"'ed together, to allow to search in multiple
+distinct categories with a single search query.
+
+
+
+.. _manual-query-resources:
+
+Query resources
+---------------
+
+Query resources are, as the name implies,
+:ref:`manual-datamodel-resources` of the special category `query`. In
+the admin this category is called "search query". it is basically a
+stored (and thus content manageable) search query. You create an
+editable search query in an admin page that then is invoked from a
+template.
+
+When creating such a resource in the page, you will see on the admin
+edit page an extra text field in which you can add search terms. Each
+search term goes on its own line, and the possible search terms are
+equal to the ones described on this page (the `Query-model
+arguments`).
