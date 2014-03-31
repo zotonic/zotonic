@@ -32,6 +32,8 @@
     logoff/1,
     logon_from_session/1,
 
+    switch_user/2,
+         
     user_from_page/1,
     user_from_session/1,
 
@@ -101,6 +103,16 @@ logon(UserId, Context) ->
         false ->
             {error, user_not_enabled}
     end.
+
+
+%% @doc Continue the current session as a different user.
+switch_user(UserId, Context) ->
+    Context1 = z_acl:logon(UserId, Context),
+    z_context:set_session(auth_user_id, UserId, Context1),
+    z_context:set_session(auth_timestamp, calendar:universal_time(), Context1),
+    Context2 = z_notifier:foldl(auth_logon, Context1, Context1),
+    z_notifier:notify(auth_logon_done, Context2),
+    {ok, Context2}.
 
 
 %% @doc Forget about the user being logged on.

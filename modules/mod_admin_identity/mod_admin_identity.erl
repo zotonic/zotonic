@@ -217,7 +217,26 @@ event(#postback{message={identity_add, Args}}, Context) ->
             end;
         false ->
             z_render:growl_error(?__("You are not allowed to edit identities.", Context), Context)
+    end;
+
+%% Log on as this user
+event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {ok, NewContext} = z_auth:switch_user(Id, Context),
+            %% find out redirect URL, if we can stay in the admin or not.
+            Url = case z_acl:is_allowed(use, mod_admin, NewContext) of
+                      true ->
+                          z_dispatcher:url_for(admin, NewContext);
+                      false ->
+                          <<"/">>
+                  end,
+            z_render:wire({redirect, [{location, Url}]}, NewContext);
+        false ->
+            z_render:growl_error(?__("You are not allowed to switch users.", Context), Context)
     end.
+
+
 
 
 is_existing_key(RscId, Type, Key, Context) ->
