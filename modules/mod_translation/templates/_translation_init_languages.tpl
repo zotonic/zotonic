@@ -1,7 +1,7 @@
 {# initialize the translation tabs, select correct language #}
 {% javascript %}
 if ($(".translations").length) {
-	$(".translations ul li a").live('show', function(event) {
+	$(".translations").on('show', 'ul li a', function(event) {
 			var panel = $($(event.currentTarget).attr("href"));
 			$(".tinymce-init", panel).each(function() { 
 				var self = $(this);
