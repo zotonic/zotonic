@@ -42,8 +42,12 @@ install(Host, C) ->
     ok.
 
 install_modules(Context = #context{}) ->
-    {ok, C} = pgsql_pool:get_connection(Context#context.host),
-    install_modules(Context#context.host, C).
+    case pgsql_pool:get_connection(Context#context.host) of
+        {ok, C} ->
+            install_modules(Context#context.host, C);
+        {error, noproc} ->
+            ok
+    end.
 
 %% @doc Install all modules for the site.
 %% The list of modules is read from either the site config file, 
