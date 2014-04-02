@@ -25,5 +25,4 @@ upper(undefined, _Context) ->
 upper(Input, _Context) when is_list(Input) or is_binary(Input) ->
     z_string:to_upper(Input);
 upper(Input, Context) ->
-    upper(z_convert:to_list(Input), Context).
-
+    upper(erlydtl_runtime:to_list(Input, Context), Context).
