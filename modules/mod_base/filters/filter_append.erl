@@ -24,7 +24,7 @@ append(Input, undefined, _Context) ->
     Input;
 append(undefined, Append, _Context) ->
     Append;
-append(Input, Append, _Context) ->
-    z_convert:to_list(Input) ++ z_convert:to_list(Append).
+append(Input, Append, Context) ->
+    erlydtl_runtime:to_list(Input, Context) ++ erlydtl_runtime:to_list(Append, Context).
 
 
