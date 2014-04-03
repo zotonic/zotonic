@@ -129,7 +129,7 @@ observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime="v
     Info = video_info(FileAbs),
     Info2 = case video_preview(FileAbs, Info) of
              {ok, TmpFile} ->
-                PreviewFilename = preview_filename(Id, File),
+                PreviewFilename = preview_filename(Id, File, Context),
                 PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
                 ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
                 _ = file:delete(TmpFile), 
@@ -372,14 +372,22 @@ orientation_to_transpose(3) -> " -vf 'transpose=2,transpose=2' ";
 orientation_to_transpose(6) -> " -vf 'transpose=1' ";
 orientation_to_transpose(_) -> "".
 
-preview_filename(Id, File) ->
+preview_filename(Id, File, Context) ->
     {{Y,M,D},_} = calendar:local_time(),
-    Basename = filename:basename(File) ++ "-" ++ z_ids:identifier(10) ++ ".jpg",
-    filename:join([ "preview",
+    m_media:make_preview_unique(
+        filename:join([ "preview",
                     integer_to_list(Y),
                     integer_to_list(M),
                     integer_to_list(D),
-                    id_to_list(Id) ++ "-" ++ Basename]).
+                    lists:flatten([
+                        id_to_list(Id),
+                        $-,
+                        filename:basename(File),
+                        $-,
+                        integer_to_list(z_ids:number()),
+                        ".jpg"])
+                    ]), 
+        Context).
 
 id_to_list(N) when is_integer(N) -> integer_to_list(N);
 id_to_list(insert_rsc) -> "video".

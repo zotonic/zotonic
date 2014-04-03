@@ -125,12 +125,11 @@ archive_delete(Filename, Context) ->
 
 %% Return an unique filename for archiving the file
 archive_filename(Filename, Context) ->
-    Archive = z_path:media_archive(Context),
     {{Y,M,D}, _} = calendar:local_time(),
     Rootname = filename:rootname(filename:basename(Filename)),
     Extension = filename:extension(Filename),
     RelRoot = filename:join([integer_to_list(Y),integer_to_list(M),integer_to_list(D),safe_filename(Rootname)]),
-    make_unique(Archive, RelRoot, Extension).
+    make_unique(RelRoot, Extension, Context).
 
 
 safe_filename([$.|Rest]) ->
@@ -149,22 +148,21 @@ safe_filename([_|Rest], Acc) ->
     
 
 %% @doc Make sure that the filename is unique by appending a number on filename clashes
-make_unique(Archive, Rootname, Extension) ->
-    File = filename:join([Archive, Rootname]) ++ Extension,
-    case filelib:is_file(File) of
+make_unique(Rootname, Extension, Context) ->
+    case m_media:is_unique_file(Rootname ++ Extension, Context) of
         true ->
-            make_unique(Archive, Rootname, Extension, 1);
+            Rootname ++ Extension;
         false -> 
-            filename:join([Rootname]) ++ Extension
+            make_unique(Rootname, Extension, z_ids:number(), Context)
     end.
 
-make_unique(Archive, Rootname, Extension, Nr) ->
-    File = filename:join([Archive, Rootname ++ [$-|integer_to_list(Nr)]]) ++ Extension,
-    case filelib:is_file(File) of
+make_unique(Rootname, Extension, Nr, Context) ->
+    File = Rootname ++ [$-|integer_to_list(Nr)] ++ Extension,
+    case m_media:is_unique_file(File, Context) of
         true ->
-            make_unique(Archive, Rootname, Extension, Nr+1);
+            File;
         false -> 
-            filename:join([Rootname ++ [$-|integer_to_list(Nr)]]) ++ Extension
+            make_unique(Rootname, Extension, z_ids:number(), Context)
     end.
 
 
@@ -174,7 +172,7 @@ is_archived(undefined, _Context) ->
 is_archived(Filename, Context) ->
     Fileabs = filename:absname(Filename),
     Archive = z_path:media_archive(Context) ++ "/",
-    lists:prefix(Archive, Fileabs).
+    lists:prefix(Archive, z_convert:to_list(Fileabs)).
     
 
 %% @doc Remove the path to the archive directory, return a filename relative to the archive directory

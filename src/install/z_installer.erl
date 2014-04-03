@@ -129,6 +129,7 @@ upgrade(C, Database, Schema) ->
     ok = install_geocode(C, Database, Schema),
     ok = install_rsc_gone(C, Database, Schema),
     ok = upgrade_config_schema(C, Database, Schema),
+    ok = install_medium_log(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -306,6 +307,36 @@ install_rsc_gone_1(C) ->
     {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)"),
     {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)"),
     ok.
+
+% Table with all uploaded filenames, used to ensure unique filenames in the upload archive
+install_medium_log(C, Database, Schema) ->
+    case has_table(C, "medium_log", Database, Schema) of
+        false ->
+            {ok,[],[]} = pgsql:squery(C, z_install:medium_log_table()),
+            {ok,[],[]} = pgsql:squery(C, z_install:medium_update_function()),
+            {ok,[],[]} = pgsql:squery(C, z_install:medium_update_trigger()),
+            {ok, _} = pgsql:squery(C,
+                                "
+                                insert into medium_log (usr_id, filename, created)
+                                select r.creator_id, m.filename, m.created
+                                from medium m join rsc r on r.id = m.id
+                                where m.filename is not null
+                                  and m.filename <> ''
+                                  and m.is_deletable_file
+                                "),
+            {ok, _} = pgsql:squery(C,
+                                "
+                                insert into medium_log (usr_id, filename, created)
+                                select r.creator_id, m.preview_filename, m.created
+                                from medium m join rsc r on r.id = m.id
+                                where m.preview_filename is not null
+                                  and m.preview_filename <> ''
+                                  and m.is_deletable_preview
+                                "),
+            ok;
+        true ->
+            ok
+    end.
 
 
 % Perform some simple sanity checks

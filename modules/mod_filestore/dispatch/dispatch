@@ -1,0 +1,3 @@
+[
+    {admin_filestore, ["admin", "filestore"], controller_admin, [{template, "admin_filestore.tpl"}]}
+].

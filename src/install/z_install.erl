@@ -28,7 +28,11 @@
 %% interface functions
 -export([
     pre_install/2,
-    install/1
+    install/1,
+
+    medium_log_table/0,
+    medium_update_function/0,
+    medium_update_trigger/0
 ]).
 
 -include_lib("zotonic.hrl").
@@ -554,9 +558,74 @@ model_pgsql() ->
     "
     CREATE TRIGGER medium_deleted_trigger AFTER DELETE
     ON medium FOR EACH ROW EXECUTE PROCEDURE medium_delete()
-    "
+    ",
+
+    % Table with all uploaded filenames, used to ensure unique filenames in the upload archive
+    medium_log_table(),
+
+    % Update/insert trigger on medium to fill the deleted files queue
+    medium_update_function(),
+    medium_update_trigger()
 
     ].
+
+medium_log_table() ->
+    "CREATE TABLE medium_log
+    (
+        id serial NOT NULL,
+        usr_id int,
+        filename character varying (400) NOT NULL,
+        created timestamp NOT NULL default now(),
+        
+        CONSTRAINT medium_log_pkey PRIMARY KEY (id),
+        CONSTRAINT medium_log_filename_key UNIQUE (filename)
+    )".
+
+
+medium_update_function() ->
+    "
+    CREATE FUNCTION medium_update() RETURNS trigger AS $$
+    declare
+        usr_id integer;
+    begin
+        select into usr_id r.creator_id from rsc r where r.id = new.id;
+        if (tg_op = 'INSERT') then
+            if (new.filename <> '' and new.filename is not null and new.is_deletable_file) then
+                insert into medium_log (filename, usr_id)
+                values (new.filename, usr_id);
+            end if;
+            if (new.preview_filename <> '' and new.preview_filename is not null and new.is_deletable_preview) then
+                insert into medium_log (filename, usr_id)
+                values (new.preview_filename, usr_id);
+            end if;
+        elseif (tg_op = 'UPDATE') then
+            if (new.filename <> '' and new.filename is not null and new.is_deletable_file and new.filename != old.filename) then
+                insert into medium_log (filename, usr_id)
+                values (new.filename, usr_id);
+            end if;
+            if (new.preview_filename <> '' and new.preview_filename is not null and new.is_deletable_preview and new.preview_filename != old.preview_filename) then
+                insert into medium_log (filename, usr_id)
+                values (new.preview_filename, usr_id);
+            end if;
+            -- Insert files into the medium_deleted queue table
+            if (old.filename <> '' and old.filename is not null and old.is_deletable_file and new.filename != old.filename) then
+                insert into medium_deleted (filename) values (old.filename);
+            end if;
+            if (old.preview_filename <> '' and old.preview_filename is not null and old.is_deletable_preview and new.preview_filename != old.preview_filename) then
+                insert into medium_deleted (filename) values (old.preview_filename);
+            end if;
+        end if;
+        return null;
+    end;
+    $$ LANGUAGE plpgsql
+    ".
+
+medium_update_trigger() ->
+    "
+    CREATE TRIGGER medium_update_trigger AFTER INSERT OR UPDATE
+    ON medium FOR EACH ROW EXECUTE PROCEDURE medium_update()
+    ".
+
 
 
 %    -- Fulltext index of products

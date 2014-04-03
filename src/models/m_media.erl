@@ -48,7 +48,9 @@
     insert_url/4,
     replace_url/4,
     replace_url/5,
-	save_preview/4
+	save_preview/4,
+    make_preview_unique/2,
+    is_unique_file/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -155,6 +157,7 @@ get_by_filename(Filename, Context) ->
         {ok, Row} ->
             Row
     end.
+
 
 %% @doc Get the medium record that depicts the resource id. "depiction" Predicates are preferred, when 
 %% they are missing then the attached medium record itself is returned.  We must be able to generate a preview
@@ -286,9 +289,14 @@ maybe_duplicate_preview(Ms, Context) ->
 
 
 duplicate_file(Filename, Context) ->
-    File = z_media_archive:abspath(Filename, Context),
-    ArchiveFile = z_media_archive:archive_copy(File, Context),
-    {ok, ArchiveFile}.
+    case z_file_request:lookup_file(Filename, Context) of
+        {ok, FileInfo} ->
+            {ok, File} = z_file_request:content_file(FileInfo, Context),
+            ArchiveFile = z_media_archive:archive_copy(File, filename:basename(Filename), Context),
+            {ok, ArchiveFile};
+        {error, _} = Error ->
+            Error
+    end.
 
 
 %% @doc Make a new resource for the file, when the file is not in the archive dir then a copy is made in the archive dir
@@ -616,11 +624,11 @@ save_preview(RscId, Data, Mime, Context) ->
 	case z_acl:rsc_editable(RscId, Context) of
     	true ->
 			Filename = data2filepath(RscId, Data, z_media_identify:extension(Mime)),
-			{OldPreviewFilename, OldIsDeletablePreview} = z_db:q_row("select preview_filename, is_deletable_preview from medium where id = $1", [RscId], Context),
+			OldPreviewFilename = z_db:q1("select preview_filename from medium where id = $1", [RscId], Context),
 			case z_convert:to_list(OldPreviewFilename) of
 				Filename -> 
 					ok;
-				OldFile ->
+				_OldFile ->
 					FileUnique = make_preview_unique(Filename, Context),
 					FileUniqueAbs = z_media_archive:abspath(FileUnique, Context),
 					ok = filelib:ensure_dir(FileUniqueAbs),
@@ -639,19 +647,6 @@ save_preview(RscId, Data, Mime, Context) ->
 						],
 						{ok,1} = z_db:update(medium, RscId, UpdateProps, Context),
 						z_depcache:flush({medium, RscId}, Context),
-						
-						case {OldIsDeletablePreview, OldFile} of 
-							{_,[]} -> ok;
-							{false,_} -> ok;
-							{true,_} ->
-								OldFileAbs = z_media_archive:abspath(OldFile, Context),
-								case filelib:is_file(OldFileAbs) of
-									true -> 
-										file:delete(OldFileAbs),
-										z_db:q("insert into medium_deleted (filename) values ($1)", [OldFile]);
-									false -> ok
-								end
-						end,
 						{ok, FileUnique}
 					catch 
 						Error -> 
@@ -663,24 +658,26 @@ save_preview(RscId, Data, Mime, Context) ->
 			{error, eacces}
 	end.
 
-	data2filepath(RscId, Data, Extension) ->
-		<<A:8, B:8, Rest/binary>> = crypto:sha(Data),
-		filename:join([ "preview", mochihex:to_hex(A), mochihex:to_hex(B), 
-						integer_to_list(RscId) ++ [$-|mochihex:to_hex(Rest)] ++ Extension ]).
+data2filepath(RscId, Data, Extension) ->
+	<<A:8, B:8, Rest/binary>> = crypto:sha(Data),
+	filename:join([ "preview", mochihex:to_hex(A), mochihex:to_hex(B), 
+					integer_to_list(RscId) ++ [$-|mochihex:to_hex(Rest)] ++ Extension ]).
 
-	make_preview_unique(Filename, Context) ->
-		case filelib:is_file(z_media_archive:abspath(Filename, Context)) of
-			false -> 
-				Filename;
-			true ->
-				Dirname = filename:dirname(Filename),
-				Basename = filename:basename(Filename),
-				Rootname = filename:rootname(Basename),
-				Rootname1 = Rootname ++ [$-|z_ids:identifier()],
-				Filename1 = filename:join([Dirname, Rootname1 ++ filename:extension(Basename)]),
-				make_preview_unique(Filename1, Context)
-		end.
+make_preview_unique(Filename, Context) ->
+    case is_unique_file(Filename, Context) of
+        true ->
+            Filename;
+        false ->
+			Dirname = filename:dirname(Filename),
+			Basename = filename:basename(Filename),
+			Rootname = filename:rootname(Basename),
+			Rootname1 = Rootname ++ [$-|integer_to_list(z_ids:number())],
+			Filename1 = filename:join([Dirname, Rootname1 ++ filename:extension(Basename)]),
+			make_preview_unique(Filename1, Context)
+	end.
 
+is_unique_file(Filename, Context) ->
+    z_db:q1("select count(*) from medium_log where filename = $1", [Filename], Context) =:= 0.
 
 medium_insert(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),

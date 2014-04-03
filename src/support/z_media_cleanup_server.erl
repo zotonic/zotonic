@@ -29,6 +29,8 @@
     cleanup/1
 ]).
 
+-include_lib("zotonic_file.hrl").
+
 % Check every 10 minutes if we have anything to delete.
 % Check every 10 seconds when working through a backlog. 
 -define(CLEANUP_TIMEOUT_LONG, 600000).
@@ -145,10 +147,18 @@ do_cleanup_1(Rs, Context) ->
     {ok, length(Rs)}.
 
 do_cleanup_file({_Id, Filename, Date}, Context) ->
-    BasePreview = filename:join(z_path:media_preview(Context), Filename),
+    PreviewPath = z_path:media_preview(Context),
+    ArchivePath = z_path:media_archive(Context),
+    % Remove from the file system
+    BasePreview = filename:join(PreviewPath, Filename),
     Previews = filelib:wildcard(binary_to_list(iolist_to_binary([BasePreview, "(*"]))),
     [ file:delete(Preview) || Preview <- Previews ],
-    Res = file:delete(z_media_archive:abspath(Filename, Context)),
-    lager:debug("Medium cleanup: ~p (from ~p) result ~p", [Filename, Date, Res]),
+    file:delete(filename:join(ArchivePath, Filename)),
+    % Remove from the file store
+    PreviewStore = iolist_to_binary([filename:basename(PreviewPath), $/, Filename, $( ]),
+    ArchiveStore = iolist_to_binary([filename:basename(ArchivePath), $/, Filename ]), 
+    z_notifier:first(#filestore{action=delete, path={prefix, PreviewStore}}, Context),
+    z_notifier:first(#filestore{action=delete, path=ArchiveStore}, Context),
+    lager:debug("Medium cleanup: ~p (from ~p)", [Filename, Date]),
     ok.
 

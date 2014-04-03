@@ -31,6 +31,7 @@
 %% interface functions
 -export([
     reindex/1,
+    index_ref/1,
     translations/1,
     find/3,
     find_ua_class/4,
@@ -68,6 +69,9 @@ start_link(SiteProps) ->
 %% @doc Reindex the list of all scomps, etc for the site in the context.
 reindex(Context) ->
     gen_server:cast(Context#context.module_indexer, {module_ready, Context}).
+
+index_ref(#context{} = Context) ->
+    z_depcache:get(module_index_ref, Context).
 
 
 %% @doc Find all .po files in all modules and the active site.
@@ -219,8 +223,9 @@ handle_cast({scanned_items, Scanned}, State) ->
             reindex_ets_lookup(NewState),
 
             % Reset the template server (and others) when there the index is changed.
+            z_depcache:set(module_index_ref, erlang:make_ref(), NewState#state.context),
             z_notifier:notify(module_reindexed, NewState#state.context),
-            z_depcache:flush(module_index, NewState#state.context),
+            z_depcache:flush(module_index, NewState#state.context), 
             {noreply, NewState};
         false ->
             {noreply, State1}

@@ -17,67 +17,25 @@
  {close_connection, ["close-connection"],  controller_close_connection, [{ssl, any}, {no_session, true}]},
  
  %% The id controller redirects depending on the accept header sent by the user agent.
- {id,        ["id", id],             controller_id, [{ssl, any}]},
+ {id, ["id", id], controller_id, [ {ssl, any} ]},
  
- %% CSS and Javascript files from the "lib" module folder. Possibly more than one file combined in one request.
- {lib,       ["lib",'*'],            controller_lib, [ {use_cache, false}, {ssl, any} ]},
+ %% CSS, Javascript and images from the "lib" module folders. Possibly more than one file combined in a single request.
+ {lib, ["lib",'*'], controller_file, [ {root,[lib]}, {ssl, any} ]},
  
- %% Resized images, expects resize parameters and a checksum. Places resized images in the root folder.
- %% The original images must be present in the media_path.
- {image,     ["image",'*'],          controller_file_readonly,
-  [ 
-    {use_cache, false},
-    {is_media_preview, true},
-    {ssl, any}
-  ]},
+ {image, ["image",'*'], controller_file, [ {ssl, any} ]},
  
- %% Download of an image, attached to a media rsc
- {media_attachment, ["media","attachment","id",id], controller_file_readonly,
-  [
-   {path, id},
-   {use_cache, false},
-   {content_disposition, attachment},
-   {ssl, any}
-  ]},
+ {media_attachment, ["media","attachment","id",id], controller_file_id, [ {dispatch, media_attachment}, {ssl, any} ]},
+ {media_attachment, ["media","attachment",'*'], controller_file, [ {content_disposition, attachment}, {ssl, any} ]},
  
- %% Download of an image, attached to a media rsc
- {media_inline,     ["media","inline","id",id],     controller_file_readonly,
-  [
-   {path, id},
-   {use_cache, false},
-   {content_disposition, inline},
-   {ssl, any}
-  ]},
- 
- %% Inline display of original uploaded files. Assumes the files are in the root folder.
- {media_inline,     ["media","inline",'*'],         controller_file_readonly,
-  [
-   {use_cache, false},
-   {content_disposition, inline},
-   {ssl, any}
-  ]},
- 
- %% Download of original uploaded files. Assumes the files are in the root folder.
- {media_attachment, ["media","attachment",'*'],     controller_file_readonly,
-  [
-   {use_cache, false},
-   {content_disposition, attachment},
-   {ssl, any}
-  ]},
+ {media_inline, ["media","inline","id",id], controller_file_id, [ {dispatch, media_inline}, {ssl, any} ]},
+ {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}, {ssl, any} ]},
  
  %% API access
  {api,     ["api",module,method], controller_api, [{ssl, any}]},
  {api,     ["api",module],        controller_api, [{ssl, any}]},
  
  %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
- {favicon, ["favicon.ico"],       controller_file_readonly,
-  [
-   {path, "images/favicon.ico"},
-   {root,[lib]}, 
-   {use_cache, false},
-   {content_disposition, inline},
-   {ssl, any}
-  ]},
+ {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}, {ssl, any} ]},
  
  %% User Agent handling
  {ua_probe,   ["useragent","probe.js"],         controller_user_agent_probe, [{ssl, any}]},
@@ -88,11 +46,5 @@
  {session_cookies, ["z_session", "cookies"], controller_cookies, [{ssl, any}]},
  
  %% robots.txt - simple allow all file
- {robots_txt, ["robots.txt"],                   controller_file_readonly,
-  [
-   {path, "misc/robots.txt"},
-   {root,[lib]}, 
-   {use_cache, false},
-   {content_disposition, inline}
-  ]}
+ {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]}
 ].
