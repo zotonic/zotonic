@@ -13,11 +13,13 @@ $(function() {
             }
 
             var el = this;
-            var img = el.find("img");
+            el.find("img").one('load', function() {
 
-            if (img.length > 0) {
+                // do stuff
+                var img = $(this);
+
                 var scale = parseInt(el.attr("data-original-width"), 10) / img.width();
-                
+
                 var guide_h = $("<div>").attr("class", "cropguide horiz").hide();
                 var guide_v = $("<div>").attr("class", "cropguide vert").hide();
 
@@ -76,7 +78,10 @@ $(function() {
 
                 $(config.removeButton).click(removeCrop);
                 setCropFromValue($(config.hiddenInput).val());
-            }
+            }).each(function() {
+                if(this.complete) $(this).load();
+            });
+                         
         }
     });
 

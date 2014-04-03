@@ -183,7 +183,7 @@ is_true(#rsc_list{list=[]}) -> false;
 is_true(#m_search_result{result=V}) -> is_true(V);
 is_true(#search_result{result=[]}) -> false;
 is_true(A) ->
-    z_convert:to_bool(A).
+    z_convert:to_bool_strict(A).
 
 init_counter_stats(List) ->
     init_counter_stats(List, undefined).

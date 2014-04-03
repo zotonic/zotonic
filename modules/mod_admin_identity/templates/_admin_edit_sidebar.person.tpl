@@ -13,9 +13,10 @@
 
 {% if m.acl.is_allowed.use.mod_admin_identity or id == m.acl.user %}
 <div class="control-group">
-    <div class="controls">
 	{% button class="btn" action={dialog_set_username_password id=id} text=_"Set username / password" %}
-    </div>
+    {% if m.acl.is_admin and m.identity[id].is_user and id != m.acl.user %}
+	    {% button class="btn" action={confirm text=_"Click OK to log on as this user. You will be redirected to the home page if this user has no rights to access the admin system." postback={switch_user id=id} delegate=`mod_admin_identity`} text=_"Log on as this user" %}
+    {% endif %}
 </div>
 {% endif %}
 

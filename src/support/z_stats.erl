@@ -23,10 +23,11 @@
 -include_lib("webzmachine/include/webmachine_logger.hrl").
 
 -export([
-    init/0,
-    new/2,
-    update/2,
-    timed_update/3, timed_update/4, timed_update/5]).
+         init/0,
+         init_site/1,
+         new/2,
+         update/2,
+         timed_update/3, timed_update/4, timed_update/5]).
 
 %% Act as a webmachine logger.
 -export([log_access/1]).
@@ -37,6 +38,15 @@
 init() ->
     folsom:start(),
     webmachine_sup:start_logger(webmachine_logger).
+
+init_site(Host) ->
+    HostStats = #stats_from{host=Host},
+    z_stats:new(#counter{name=requests}, HostStats#stats_from{system=webzmachine}),
+    z_stats:new(#counter{name=requests}, HostStats#stats_from{system=db}),
+    z_stats:new(#counter{name=out}, HostStats#stats_from{system=webzmachine}),
+    z_stats:new(#histogram{name=duration}, HostStats#stats_from{system=webzmachine}),
+    z_stats:new(#histogram{name=duration}, HostStats#stats_from{system=db}),
+    ok.
 
 %% @doc Create a new counters and histograms.
 %%
@@ -91,27 +101,27 @@ log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
 
         %% The request has already been counted by z_sites_dispatcher.
         For = case webmachine_logger:get_metadata(zotonic_host, LogData) of
-            undefined -> 
-                System;
-            Host -> 
-                [System, System#stats_from{host=Host}]
-        end,
+                  undefined -> 
+                      System;
+                  Host -> 
+                      [System, System#stats_from{host=Host}]
+              end,
 
         update(Duration, For),
         update(Out, For)
     after 
-        % Pass it to the default webmachine logger.
+                                                % Pass it to the default webmachine logger.
         webmachine_logger:log_access(LogData)
     end.
 
-    
+
 %% Some helper functions.
 
 update_metric(#counter{op=incr, value=Value}=Stat, From) ->
     folsom_metrics:safely_notify(key(Stat, From), Value);
 update_metric(#histogram{value=Value}=Stat, From) ->
     folsom_metrics:safely_notify({key(Stat, From), Value}).
-  
+
 key(#counter{name=Name}, #stats_from{host=Host, system=System}) ->
 	{Host, System, Name};
 key(#histogram{name=Name}, #stats_from{host=Host, system=System}) ->

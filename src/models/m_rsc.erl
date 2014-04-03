@@ -239,7 +239,7 @@ insert(Props, Context) ->
     m_rsc_update:insert(Props, Context).
 
 %% @doc Delete a resource
-%% @spec delete(Props, Context) -> ok | {error, Reason}
+%% @spec delete(Id, Context) -> ok | {error, Reason}
 delete(Id, Context) when is_integer(Id) ->
     m_rsc_update:delete(Id, Context).
 

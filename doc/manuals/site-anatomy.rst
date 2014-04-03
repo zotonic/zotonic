@@ -130,6 +130,10 @@ The following options can be configured:
    <name>}`` and it will install the list of modules from that skeleton
    as well.
 
+  The list of installed modules will be updated on each site start,
+  e.g. when you add a module to the ``install_modules`` list, it will
+  be installed automatically when you restart the site.
+
 ``{smtphost, "..."}``
   Hostname you want e-mail messages to appear from. See :ref:`manual-email`.
 

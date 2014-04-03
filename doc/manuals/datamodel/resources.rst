@@ -3,6 +3,99 @@
 Resources
 ---------
 
+Resources are the main building block of Zotonic's :ref:`data model
+<manual-datamodel>`. For simplicity of communication, a resource is
+often referred to as a page. Every resource usually has its own page
+on the web site.
+
+Common resource properties
+..........................
+
+Resources are very flexible data units: they can have any property
+that the developer needs them to have. However, by default, Zotonic's
+admin is designed to edit a common set of properties.
+
+The following properties are common to all resources:
+
+``id``
+  Each resource has an id. This is the unique number identifying the resource within the Zotonic site.
+
+``title``
+  The main title of a resource. 
+
+``summary``
+  A short summary. Can not contain HTML, just plain text.  
+
+``short_title``
+  A short version of the title, for use in menu navigation and other places where an abbreviated title is required.  
+
+``is_featured``
+  A boolean flag indicating whether the resource is "featured". Can be used in galleries or to highlight certain items on a site.
+
+``is_published``
+  The resource's published state dictates whether or not the resource is visible to the general public.
+
+``publication_start`` / ``publication_end``
+  Publication start and end times of the resource. Together with `is_published`, these properties define the resource's published status. 
+
+``modified``  
+  Timestamp of last modification (in local time)
+
+``modifier_id``
+  id of the person who last modified this resource  
+
+``name``
+  The resource's `unique name`. A unique name is used to uniquely identify a resource in the site. There can be just one resource with the same name. On places where one would normally use a resource ID, it is also possible to use the resource's unique name.
+  
+``page_path``
+  This property can be used to override the resource's page URL. The page_path needs to be unique among all resources.
+
+``slug``
+  The slug component that can be used in the resource's page URL. This is normally automatically derived from the resource title.
+
+``version``
+  Every time a resource is updated, its version is increased. `version` is an increasing number, starting at 1. A resource itself does not maintain its version history, but the :ref:`mod_backup` module can record changes in resources.
+
+``visible_for``
+  Access check on the resource. 0 = world, 1 = logged in users, 2 = groups. Level 2 (groups) is a legacy setting and is not implemented.
+
+``name_first``, ``name_middle``, ``name_surname_prefix``, ``name_surname``
+  For a modelling persons as resources, these fields are used for given names.
+
+``email``, ``website``
+  Self-explanatory
+
+``address_state``, ``address_postcode``, ``address_city``, ``address_street_1``, ``address_street_2``, ``address_country``
+  Properties for the primary address of the resource, if any
+
+``mail_state``, ``mail_postcode``, ``mail_city``, ``mail_street_1``, ``mail_street_2``, ``mail_country``
+  Properties for the mailing address of the resource, if any
+
+``phone``, ``phone_mobile``, ``phone_alt``, ``phone_emergency``
+  Phone numbers for a person.
+
+``blocks``
+  These hold a list of all the `blocks` that are added to the resource, see the section below for more information about blocks.
+
+``seo_desc``
+  SEO description for the web page of the source. This text usually goes into the meta `description` tag.
+
+``seo_keywords``
+  SEO keywords for the web page of the source. This text usually goes into the meta `keywords` tag.
+
+``seo_title``
+  An alternative title for the `title` tag of the web page of the resource, for SEO purposes.
+
+``seo_noindex``
+  A boolean flag that, if set, sets the robots `noindex` meta-tag in the web page of the resource so that the resource is excluded from indexing by search engines.
+
+Besides this list, one can add any other properties to a resource, as
+they are stored in a serialized fashion.
+
+  
+How resources are stored
+........................
+
 Each :term:`resource` on a site is stored in the ``rsc`` table.  Some
 properties are present as columns and other properties are serialized
 in a binary blob column. The properties having their own column are

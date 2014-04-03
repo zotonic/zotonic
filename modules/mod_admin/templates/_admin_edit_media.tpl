@@ -16,9 +16,9 @@
     {% if medium.width and medium.height %}
     <div class="edit-media {% if id.is_a.image %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
         {% if medium.width < 597 and medium.height < 597 %}
-            {% media medium %}
+            {% media medium mediaclass="admin-media-cropcenter" %}
         {% else %}
-            {% media medium width=597 height=597 %}
+            {% media medium mediaclass="admin-media" %}
         {% endif %}   
     </div>
     {% endif %}
