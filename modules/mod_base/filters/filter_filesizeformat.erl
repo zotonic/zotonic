@@ -21,6 +21,7 @@
 
 -define(KB, 1024).
 -define(MB, 1048576).
+-define(GB, 1073741824).
 
 filesizeformat(N, _Context) when is_integer(N), N < 2*?KB ->
     [integer_to_list(N), " bytes"];
@@ -31,12 +32,19 @@ filesizeformat(N, _Context) when is_integer(N), N < ?MB ->
         0 -> [integer_to_list(N1), " KB"];
         _ -> [integer_to_list(N1),$.,integer_to_list(N2), " KB"]
     end;
-filesizeformat(N, _Context) when is_integer(N) ->
+filesizeformat(N, _Context) when is_integer(N), N < ?GB ->
     N1 = trunc(N div ?MB),
     N2 = round(((N / ?MB) - N1)*10),
     case N2 of
         0 -> [integer_to_list(N1), " MB"];
         _ -> [integer_to_list(N1),$.,integer_to_list(N2), " MB"]
+    end;
+filesizeformat(N, _Context) when is_integer(N) ->
+    N1 = trunc(N div ?GB),
+    N2 = round(((N / ?GB) - N1)*10),
+    case N2 of
+        0 -> [integer_to_list(N1), " GB"];
+        _ -> [integer_to_list(N1),$.,integer_to_list(N2), " GB"]
     end;
 filesizeformat(_, _Context) ->
     undefined.
