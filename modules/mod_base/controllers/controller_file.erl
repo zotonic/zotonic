@@ -77,7 +77,7 @@ resource_exists(ReqData, {#z_file_info{acls=Acls}, Context} = State) ->
 
 %% @TODO: merge this into the forbidden check?
 is_authorized(ReqData, {{error,enoent},_Context} = State) ->
-    {false, ReqData, State};
+    {true, ReqData, State};
 is_authorized(ReqData, {FInfo,Context}) ->
     {Ret, RD1, Context1} = controller_template:is_authorized(ReqData, Context),
     {Ret, RD1, {FInfo, Context1}}.
