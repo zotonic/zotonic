@@ -88,8 +88,13 @@ convert_1(InFile, OutFile, Mime, FileProps, Filters) ->
     case run_cmd(Cmd, OutFile) of
         ok ->
             case filelib:is_regular(OutFile) of
-                true -> ok;
-                false -> {error, convert_error}
+                true ->
+                    ok;
+                false -> 
+                    case filelib:is_regular(InFile) of
+                        false -> {error, enoent};
+                        true -> {error, convert_error}
+                    end
             end;
         {error, _} = Error ->
             lager:error("convert cmd ~p failed, result ~p", [Cmd, Error]),

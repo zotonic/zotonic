@@ -20,7 +20,6 @@
 
 %% TODO:
 %% - Keep medium-filename for content-disposition (also other meta info?)
-%% - On resizing, if source image was gone, retry with new lookup (also check after resize-error if source image was still present)
 
 -module(z_file_entry).
 
@@ -195,7 +194,9 @@ locate(timeout, State) ->
         error:checksum_invalid ->
             locate_enoent(State, IndexRef, Mime);
         throw:enoent ->
-            locate_enoent(State, IndexRef, Mime)
+            locate_enoent(State, IndexRef, Mime);
+        throw:preview_source_gone ->
+            {next_state, locate, State, 0}
     end.
 
 locate_enoent(State, IndexRef, Mime) ->
@@ -205,6 +206,7 @@ locate_enoent(State, IndexRef, Mime) ->
         parts=[],
         index_ref=IndexRef
     },
+    lager:debug("~p: File not found ~p", [State#state.site, State#state.request_path]),
     {next_state, serving, reply_waiting(State1), ?SERVING_ENOENT_TIMEOUT}.
 
 %% Add and cache the gzip content-encoded data (for now in memory)
@@ -246,7 +248,6 @@ handle_sync_event(lookup, From, StateName, State) ->
                     {reply, Reply, StateName, State1, Timeout}
             end;
         stale ->
-            lager:debug("Stale file entry ~p:~p (relocating)", [State#state.site, State#state.request_path]),
             State1 = State#state{waiting=[From|State#state.waiting]},
             {next_state, locate, State1, 0}
     end;
@@ -403,6 +404,8 @@ locate_source(NoRoots, Path, <<"lib/",OriginalFile/binary>>, Filters, Context) w
     locate_source([lib], Path, OriginalFile, Filters, Context);
 locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
     case locate_source_uploaded(Path, OriginalFile, Filters, Context) of
+        {error, preview_source_gone} ->
+            throw(preview_source_gone);
         {error, _} = Error->
             lager:debug("Could not find ~p, error ~p", [Path, Error]),
             throw(enoent);
@@ -562,6 +565,9 @@ generate_preview(true, _Mime, Path, OriginalFile, Filters, Medium, Context) ->
                         RscId ->
                             part_file(PreviewFilePath, [{acl,RscId}])
                     end;
+                {error, enoent} ->
+                    lager:warning("Convert error: input file disappeared, restarting ~p (~p)", [Path, Filename]),
+                    {error, preview_source_gone};
                 {error, _} = Error ->
                     lager:warning("Convert error: ~p for path ~p", [Error, Path]),
                     Error

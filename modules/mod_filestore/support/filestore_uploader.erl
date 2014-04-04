@@ -27,7 +27,9 @@
     handle_cast/2,
     handle_info/2,
     code_change/3,
-    terminate/2
+    terminate/2,
+
+    force_stale/2
     ]).
 
 -include_lib("zotonic.hrl").
@@ -128,16 +130,12 @@ do_upload(#filestore_credentials{service= <<"s3">>, location=Location, credentia
 finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, location=Location}, Context) ->
     lager:debug("Moved ~p to ~p : ~p", [Path, Service, Location]),
     Key = {z_context:site(Context), Path},
-    FzCache = filezcache:insert_wait(Key),
+    FzCache = start_empty_cache_entry(Key),
     {ok, _} = m_filestore:store(Path, Size, Service, Location, Context),
     case FzCache of
         {ok, Pid} ->
-            force_stale(file_entry_path(AbsPath), Context),
+            force_stale(Path, Context),
             filezcache_entry:store(Pid, {tmpfile, AbsPath});
-        {error, {already_started, _Pid}} ->
-            lager:warning("Duplicate cache entry ~p (tried to move ~p)", [Key, Path]),
-            file:delete(AbsPath),
-            ok;
         {error, _} = Error ->
             lager:warning("Error moving to cache entry ~p (moving ~p): ~p", [Key, Path, Error]),
             file:delete(AbsPath),
@@ -147,8 +145,20 @@ finish_upload({error, _} = Error, Path, _AbsPath, _Size, #filestore_credentials{
     lager:error("Filestore upload error to ~p : ~p of ~p error ~p", [Service, Location, Path, Error]),
     retry.
 
+start_empty_cache_entry(Key) ->
+    case filezcache:insert_wait(Key) of
+        {ok, _Pid} = OK ->
+            OK;
+        {error, {already_started, Pid}} ->
+            lager:warning("Duplicate cache entry ~p (will stop & restart)", [Key]),
+            ok = filezcache_entry:delete(Pid),
+            start_empty_cache_entry(Key);
+        {error, _} = Error ->
+            Error
+    end.
+
 force_stale(Path, Context) ->
-    z_file_request:force_stale(Path, Context).
+    z_file_request:force_stale(file_entry_path(Path), Context).
 
 file_entry_path(<<"archive/", Path/binary>>) ->
     Path;

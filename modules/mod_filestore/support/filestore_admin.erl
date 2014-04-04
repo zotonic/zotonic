@@ -54,7 +54,12 @@ event(#submit{message=admin_filestore}, Context) ->
 event(#submit{message=admin_filestore_queue}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            queue_all(Context);
+            case z_context:get_q("queue-local", Context) of
+                [] ->
+                    queue_local_all(Context);
+                undefined ->
+                    queue_upload_all(Context)
+            end;
         false ->
             z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context) 
     end.
@@ -95,22 +100,35 @@ noslash(B) ->
     end.
 
 
-queue_all(Context) ->
+queue_upload_all(Context) ->
     S3Url = m_config:get_value(mod_filestore, s3url, Context),
     S3Key = m_config:get_value(mod_filestore, s3key, Context),
     S3Secret = m_config:get_value(mod_filestore, s3secret, Context),
     case testcred(S3Url, S3Key, S3Secret) of
         ok ->
             mod_filestore:queue_all(Context),
+            m_filestore:unmark_move_to_local(Context),
             QueueCt = z_db:q1("select count(*) from filestore_queue", Context),
             z_render:wire([
                     {update, [{target, "s3queue"}, {text, z_convert:to_binary(QueueCt)}]},
                     {hide, [{target, "s3error-queue"}]},
+                    {hide, [{target, "s3ok-queue-local"}]},
                     {fade_in, [{target, "s3ok-queue"}]}
                 ], Context);
         {error, _} ->
             z_render:wire([
                     {hide, [{target, "s3ok-queue"}]},
+                    {hide, [{target, "s3ok-queue-local"}]},
                     {fade_in, [{target, "s3error-queue"}]}
                 ], Context) 
     end.
+
+queue_local_all(Context) ->
+    m_filestore:mark_move_to_local(Context),
+    QueueCt = z_db:q1("select count(*) from filestore_queue where is_move_to_local and not is_delete", Context),
+    z_render:wire([
+            {update, [{target, "s3queue-local"}, {text, z_convert:to_binary(QueueCt)}]},
+            {hide, [{target, "s3error-queue"}]},
+            {hide, [{target, "s3ok-queue"}]},
+            {fade_in, [{target, "s3ok-queue-local"}]}
+        ], Context).

@@ -81,41 +81,64 @@
             <h3 class="widget-header">{_ S3 Cloud Utilities and Statistics _}</h3>
             <div class="widget-content">
                 {% wire id="admin_filestore_queue"
-                    type='submit'
+                    type="submit"
                     postback=`admin_filestore_queue`
                     delegate=`filestore_admin`
                 %}
                 <form name="admin_filestore_queue" id="admin_filestore_queue" method="POST" action="postback">
 
-                    {% with m.filestore.stats as stats %}
-                    <table class="table condensed" style="width: auto">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>{_ Uploaded _}</th>
-                                <th>{_ Local _}</th>
-                                <th>{_ Cloud _}</th>
-                                <th>{_ Queued _}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>{_ Files _}</th>
-                                <td>{{ stats.archived }}</td>
-                                <td>{{ stats.local }}</td>
-                                <td>{{ stats.cloud }}</td>
-                                <td id="s3queue">{{ stats.queued }}</td>
-                            </tr>
-                            <tr>
-                                <th>{_ Storage _}</th>
-                                <td>{{ stats.archive_size|filesizeformat }}</td>
-                                <td>{{ stats.local_size|filesizeformat }}</td>
-                                <td>{{ stats.cloud_size|filesizeformat }}</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {% endwith %}
+                    <div class="row-fluid">
+                        {% with m.filestore.stats as stats %}
+                        <div class="pull-left">
+                            <table class="table condensed" style="width: auto">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>{_ Media _}</th>
+                                        <th>{_ Local Files _}</th>
+                                        <th>{_ Cloud Files _}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>{_ Files _}</th>
+                                        <td>{{ stats.archived }}</td>
+                                        <td>{{ stats.local }}</td>
+                                        <td>{{ stats.cloud }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{_ Storage _}</th>
+                                        <td>{{ stats.archive_size|filesizeformat }}</td>
+                                        <td>{{ stats.local_size|filesizeformat }}</td>
+                                        <td>{{ stats.cloud_size|filesizeformat }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pull-left">
+                            <table class="table condensed" style="width: auto">
+                                <thead>
+                                    <tr>
+                                        <th>{_ Upload Queue _}</th>
+                                        <th>{_ Dowload Queue _}</th>
+                                        <th>{_ Delete Queue_}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="s3queue">{{ stats.queued }}</td>
+                                        <td id="s3queue-local">{{ stats.queued_local }}</td>
+                                        <td>{{ stats.queued_deleted }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {% endwith %}
+                    </div>
+
+                    <h3>{_ Actions _}</h3>
 
                     <p class="help-block">
                         {_ All local uploaded and preview files can be moved to the cloud. _}<br/>
@@ -124,10 +147,12 @@
 
                     <p id="s3error-queue" class="alert alert-error" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
                     <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ Queued all uploaded files, uploads will be done in the background. _}</p>
+                    <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ Marked all cloud files to be downloaded. _}</p>
 
                     <div class="control-group">
                         <div class="controls">
-                            <button id="queue-all" type="submit" class="btn btn-danger">{_ Move all files to S3 _}</button>
+                            <button name="queue-all" type="submit" class="btn btn-danger">{_ Move all local files to S3 _}</button>
+                            <button name="queue-local" type="submit" class="btn">{_ Move all S3 files to local _}</button>
                         </div>
                     </div>
                 </form>

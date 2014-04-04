@@ -24,13 +24,22 @@
     queue/3,
     fetch_queue/1,
     dequeue/2,
-
+    mark_error/3,
     mark_deleted/2,
     fetch_deleted/1,
     purge_deleted/2,
 
+    mark_move_to_local/1,
+    mark_move_to_local/2,
+    unmark_move_to_local/1,
+    unmark_move_to_local/2,
+    fetch_move_to_local/1,
+    purge_move_to_local/2,
+
     store/5,
     lookup/2,
+
+    stats/1,
 
     install/2
     ]).
@@ -52,8 +61,12 @@ queue(Path, Props, Context) ->
             end
         end, Context).
 
+%% @doc Fetch the next batch of queued uploads, at least 10 minutes old.
 fetch_queue(Context) ->
-    z_db:assoc("select * from filestore_queue order by id asc limit 100", Context).
+    z_db:assoc("select * 
+                from filestore_queue
+                where created < now() - interval '10 min'
+                limit 200", Context).
 
 dequeue(Id, Context) ->
     z_db:q("delete from filestore_queue where id = $1", [Id], Context).
@@ -82,27 +95,71 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
         end, Context).
 
 lookup(Path, Context) ->
-    z_db:assoc_row("select * from filestore where path = $1", [Path], Context).
+    z_db:assoc_row("select *
+                    from filestore 
+                    where path = $1 
+                      and error is null
+                      and not is_deleted",
+                   [Path], Context).
 
+mark_error(Id, Error, Context) ->
+    z_db:q("update filestore
+            set error = $1,
+                modified = now()
+            where id = $2",
+          [Error, Id], Context).
 
 mark_deleted({prefix, Path}, Context) when is_binary(Path) ->
     z_db:q("update filestore
-            set is_deleted = true
+            set is_deleted = true,
+                modified = now()
             where path like $1",
             [<<Path/binary, $%>>],
             Context);
 mark_deleted(Path, Context) when is_binary(Path) ->
     z_db:q("update filestore
-            set is_deleted = true
+            set is_deleted = true,
+                modified = now()
             where path = $1",
             [Path],
             Context).
 
 fetch_deleted(Context) ->
-    z_db:assoc("select * from filestore where is_deleted order by id asc limit 100", Context).
+    z_db:assoc("select * from filestore where is_deleted limit 200", Context).
 
 purge_deleted(Id, Context) ->
     z_db:q("delete from filestore where id = $1 and is_deleted", [Id], Context).
+
+mark_move_to_local(Context) ->
+    z_db:q("update filestore
+            set is_move_to_local = true
+            where not is_move_to_local
+              and not is_deleted
+              and error is null", Context).
+
+mark_move_to_local(Id, Context) ->
+    z_db:q("update filestore
+            set is_move_to_local = true
+            where id = $1", [Id], Context).
+
+unmark_move_to_local(Context) ->
+    z_db:q("update filestore
+            set is_move_to_local = false
+            where is_move_to_local", Context).
+
+unmark_move_to_local(Id, Context) ->
+    z_db:q("update filestore
+            set is_move_to_local = false
+            where id = $1", [Id], Context).
+
+fetch_move_to_local(Context) ->
+    z_db:assoc("select * from filestore where is_move_to_local and not is_deleted and error is null limit 200", Context).
+
+purge_move_to_local(Id, Context) ->
+    z_db:q("update filestore
+            set is_move_to_local = false,
+                is_deleted = true
+            where id = $1", [Id], Context).
 
 stats(Context) ->
     {Archived, ArchiveSize} = z_db:q_row("
@@ -112,8 +169,9 @@ stats(Context) ->
                               and filename <> ''
                               and is_deletable_file", Context),
     Queued = z_db:q1("select count(*) from filestore_queue", Context),
-    {Cloud, CloudSize} = z_db:q_row("
-                            select count(*), sum(size) 
+    {Cloud, CloudSize, ToLocal, Deleted} = z_db:q_row("
+                            select count(*), sum(size), 
+                                   sum(is_move_to_local::integer), sum(is_deleted::integer)
                             from filestore", Context),
 
     % TODO: we need a separate index for this lookup
@@ -129,6 +187,8 @@ stats(Context) ->
         {archived, Archived},
         {archive_size, ArchiveSize},
         {queued, Queued},
+        {queued_local, ToLocal},
+        {queued_deleted, Deleted},
         {cloud, Cloud},
         {cloud_size, CloudSize},
         {local, Archived - InCloud},
@@ -148,6 +208,8 @@ install_filestore(Context) ->
                 create table filestore (
                     id serial not null,
                     is_deleted boolean not null default false,
+                    is_move_to_local boolean not null default false,
+                    error character varying(32),
                     path character varying(255) not null,
                     service character varying(16) not null,
                     location character varying(400) not null,
@@ -161,6 +223,7 @@ install_filestore(Context) ->
                 )
                 ", Context),
             {ok, _, _} = z_db:equery("create index filestore_is_deleted_key on filestore(is_deleted) where is_deleted", Context),
+            {ok, _, _} = z_db:equery("create index filestore_is_move_to_local_key on filestore(is_move_to_local) where is_move_to_local", Context),
             z_db:flush(Context), 
             ok;
         true ->
