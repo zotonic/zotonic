@@ -432,7 +432,7 @@ locate_source([{module, Module} = M|Rs], Path, OriginalFile, Filters, Context) -
             locate_source(Rs, Path, OriginalFile, Filters, Context)
     end;
 locate_source([DirName|Rs], Path, OriginalFile, Filters, Context) ->
-    NamePath = filename:join([DirName,Path]),
+    NamePath = make_abs(filename:join([DirName,Path]), Context),
     case part_file(NamePath) of
         {ok, Loc} ->
             Loc;
@@ -440,6 +440,9 @@ locate_source([DirName|Rs], Path, OriginalFile, Filters, Context) ->
             locate_source(Rs, Path, OriginalFile, Filters, Context)
     end.
 
+make_abs([$/|_] = Path, _Context) -> Path;
+make_abs(<<$/, _/binary>> = Path, _Context) -> Path;
+make_abs(Path, Context) -> z_path:files_subdir(Path, Context). 
 
 %% @doc Source file is located in the lib, template or some other index-category (mostly css, js or static images)
 %%      Resized images are located in files/preview.
