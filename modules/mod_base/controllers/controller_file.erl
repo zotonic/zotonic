@@ -29,6 +29,7 @@
     service_available/2,
     allowed_methods/2,
     resource_exists/2,
+    is_authorized/2,
     forbidden/2,
     last_modified/2,
     expires/2,
@@ -73,6 +74,13 @@ resource_exists(ReqData, {#z_file_info{acls=Acls}, Context} = State) ->
                             false
                    end,
                    Acls), ReqData, State}.
+
+%% @TODO: merge this into the forbidden check?
+is_authorized(ReqData, {{error,enoent},_Context} = State) ->
+    {false, ReqData, State};
+is_authorized(ReqData, {FInfo,Context}) ->
+    {Ret, RD1, Context1} = controller_template:is_authorized(ReqData, Context),
+    {Ret, RD1, {FInfo, Context1}}.
 
 forbidden(ReqData, {{error,_},_Context} = State) ->
     {false, ReqData, State};
