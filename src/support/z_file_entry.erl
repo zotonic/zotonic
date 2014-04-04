@@ -502,7 +502,7 @@ locate_in_filestore(Path, InDir, Medium, Context) ->
             {ok, #part_cache{
                 cache_pid=Pid,
                 cache_monitor=erlang:monitor(process, Pid), 
-                modified=proplists:get_value(modified, Opts),
+                modified=proplists:get_value(created, Opts),
                 acl=proplists:get_value(id, Medium),
                 size=proplists:get_value(size, Opts)
             }};
