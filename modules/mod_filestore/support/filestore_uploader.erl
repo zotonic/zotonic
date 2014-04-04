@@ -36,7 +36,7 @@
 -include_lib("zotonic_file.hrl").
 -include_lib("kernel/include/file.hrl").
 
--define(RETRY_DELAY, 3600000).   % Retry after 30 minutes
+-define(RETRY_DELAY, 1800000).   % Retry after 30 minutes
 
 -record(state, {
         id,
@@ -48,7 +48,7 @@
 start_link(Id, Path, Props, Context) ->
     Site = z_context:site(Context), 
     Path1 = z_convert:to_binary(Path), 
-    gen_server:start_link({via, gproc, {n,l,{Site, Path1}}}, ?MODULE, [Id, Path1, Props, Context], []).
+    gen_server:start_link({via, gproc, {n,l,{upload, Site, Path1}}}, ?MODULE, [Id, Path1, Props, Context], []).
 
 init([Id, Path, Props, Context]) ->
     lager:debug("Started uploader for ~p : ~p", [Path, z_context:site(Context)]),
@@ -78,10 +78,9 @@ handle_cast(start, #state{id=Id, path=Path, context=Context, props=Props} = Stat
                             m_filestore:dequeue(Id, Context),
                             {stop, normal, State};
                         retry -> 
-                            lager:debug("Filestore upload of ~p, sleeping 1h for retry.", [Path]),
-                            erlang:garbage_collect(),
-                            timer:send_after(?RETRY_DELAY, stop),
-                            {noreply, State}
+                            lager:debug("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
+                            timer:send_after(?RETRY_DELAY, restart),
+                            {noreply, State, hibernate}
                     end;
                 undefined ->
                     lager:debug("Filestore no credentials found for ~p", [Path]),
@@ -98,6 +97,9 @@ handle_cast(Msg, State) ->
     lager:error("Unknown cast: ~p", [Msg]),
     {noreply, State}.
 
+handle_info(restart, State) ->
+    gen_server:cast(self(), start),
+    {noreply, State}; 
 handle_info(_Info, State) ->
     {noreply, State}.
 
