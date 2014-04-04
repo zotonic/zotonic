@@ -11,12 +11,12 @@ manipulations on the request of visitors, which might result in a
 denial of service due to processing- or disk space limitations.
 
 This controller serves all files with a very long client side caching
-time and handles if-modifies-since checks. Files with gzip
-compression are served if the user-agent supports it.
+time and handles if-modified-since checks. Text files are served with gzip
+compression if the user-agent supports it.
 
-Multiple files can be served as one file; the controller can combine them in one single
-request. See the :ref:`tag-lib` tag for more information. All files are concatenated
-as-is, the creators of the files have to ensure that they can be properly concatenated.
+Multiple files can be served in a single request; the controller concatenates them
+into a single file. See the :ref:`tag-lib` tag for more information. 
+The creators of the files have to ensure that they can be properly concatenated.
 
 Dispatch rules and options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
