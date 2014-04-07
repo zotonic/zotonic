@@ -49,7 +49,7 @@
                 <td>{{ m.rsc[id].modified|date:_"d M, H:i" }}</td>
                 <td>
                     <div class="pull-right">
-                        {% button class="btn btn-mini" action={dialog_set_username_password id=id} text=_"set username/ password" on_delete={slide_fade_out target=#tr.id} %}
+                        {% button class="btn btn-mini" action={dialog_set_username_password id=id} text=_"set username / password" on_delete={slide_fade_out target=#tr.id} %}
                         {% if id /= 1 %}
                         {% button class="btn btn-mini" text=_"delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#tr.id}} %}
                         {% endif %}
