@@ -152,12 +152,24 @@ name_to_id_cat_check(Name, Cat, Context) ->
     {ok, Id} = name_to_id_cat(Name, Cat, Context),
     Id.
 
+%% @doc Given a page path, return {ok, Id} with the id of the found
+%% resource. When the resource does not have the page path, but did so
+%% once, this function will return {redirect, Id} to indicate that the
+%% page path was found but is no longer the current page path for the
+%% resource.
 page_path_to_id(Path, Context) ->
     Path1 = [ $/, string:strip(Path, both, $/)],
     case catch z_db:q1("select id from rsc where page_path = $1", [Path1], Context) of
         Id when is_integer(Id) -> {ok, Id};
-        undefined -> {error, {unknown_page_path, Path1}};
-        Other -> {error, {illegal_page_path, Path1, Other}}
+        undefined ->
+            case z_db:q1("select id from rsc_page_path_log where page_path = $1", [Path1], Context) of
+                OtherId when is_integer(OtherId) ->
+                    {redirect, OtherId};
+                undefined ->
+                    {error, {unknown_page_path, Path1}}
+            end;
+        Other ->
+            {error, {illegal_page_path, Path1, Other}}
     end.
 
 

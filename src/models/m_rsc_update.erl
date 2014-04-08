@@ -326,6 +326,8 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     NewCatList = m_rsc:is_a(NewId, Context),
                     [ z_depcache:flush(Cat, Context) || Cat <- lists:usort(NewCatList ++ OldCatList) ],
 
+                    check_page_path_log(NewId, OldProps, NewProps, Context),
+                    
                      % Notify that a new resource has been inserted, or that an existing one is updated
                     Note = #rsc_update_done{
                         action= case Id of insert_rsc -> insert; _ -> update end,
@@ -950,6 +952,22 @@ config_langs(Context) ->
     end.
 
 
+check_page_path_log(NewId, OldProps, NewProps, Context) ->
+    Old = proplists:get_value(page_path, OldProps),
+    New = proplists:get_value(page_path, NewProps, not_updated),
+    case {Old, New} of
+        {_, not_updated} ->
+            nop;
+        {Old, Old} ->
+            %% not changed
+            nop;
+        {Old, New} ->
+            %% update!
+            z_db:q("DELETE FROM rsc_page_path_log WHERE page_path = $1 or page_path = $2", [Old, New], Context),
+            z_db:q("INSERT INTO rsc_page_path_log(id, page_path) VALUES ($1, $2)", [NewId, Old], Context)
+    end.
+
+
 test() ->
     [{"publication_start",{{2009,7,9},{0,0,0}}},
           {"publication_end",?ST_JUTTEMIS},
@@ -964,4 +982,5 @@ test() ->
         {"plop", "hello"}
     ]),
     ok.
+
 
