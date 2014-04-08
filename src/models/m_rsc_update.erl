@@ -294,6 +294,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     true ->
                         UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(RscId, UpdatePropsN1, RawProps, Context),
                         {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsPrePivoted, Ctx),
+                        ok = update_page_path_log(RscId, BeforeProps, UpdatePropsN, Ctx),
                         {ok, RscId, BeforeProps, UpdatePropsN, BeforeCatList, RenumberCats};
                     false ->
                         {ok, RscId, notchanged}
@@ -326,8 +327,6 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     NewCatList = m_rsc:is_a(NewId, Context),
                     [ z_depcache:flush(Cat, Context) || Cat <- lists:usort(NewCatList ++ OldCatList) ],
 
-                    check_page_path_log(NewId, OldProps, NewProps, Context),
-                    
                      % Notify that a new resource has been inserted, or that an existing one is updated
                     Note = #rsc_update_done{
                         action= case Id of insert_rsc -> insert; _ -> update end,
@@ -952,19 +951,23 @@ config_langs(Context) ->
     end.
 
 
-check_page_path_log(NewId, OldProps, NewProps, Context) ->
+update_page_path_log(RscId, OldProps, NewProps, Context) ->
     Old = proplists:get_value(page_path, OldProps),
     New = proplists:get_value(page_path, NewProps, not_updated),
     case {Old, New} of
         {_, not_updated} ->
-            nop;
+            ok;
         {Old, Old} ->
             %% not changed
-            nop;
+            ok;
+        {undefined, _} ->
+            %% no old page path
+            ok;
         {Old, New} ->
-            %% update!
-            z_db:q("DELETE FROM rsc_page_path_log WHERE page_path = $1 or page_path = $2", [Old, New], Context),
-            z_db:q("INSERT INTO rsc_page_path_log(id, page_path) VALUES ($1, $2)", [NewId, Old], Context)
+            %% update
+            z_db:q("DELETE FROM rsc_page_path_log WHERE page_path = $1 OR page_path = $2", [New, Old], Context),
+            z_db:q("INSERT INTO rsc_page_path_log(id, page_path) VALUES ($1, $2)", [RscId, Old], Context),
+            ok
     end.
 
 
