@@ -238,6 +238,7 @@ mime("PNG") -> "image/png";
 mime("PNG8") -> "image/png";
 mime("PNG24") -> "image/png";
 mime("PNG32") -> "image/png";
+mime("SVG") -> "image/svg+xml";
 mime(Type) -> "image/" ++ string:to_lower(Type).
 
 
