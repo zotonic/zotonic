@@ -54,20 +54,36 @@ Currently, the following subcommands are implemented:
   following variables: ``SKEL``, ``DBHOST``, ``DBPORT``, ``DBUSER``, ``DBPASSWORD``,
   ``DBDATABASE``, ``DBSCHEMA``, ``ADMINPASSWORD``, ``DO_LINK``.
 
-``zotonic installmodule <module_name>``
-  Installs a module from the modules.zotonic.com repository into your Zotonic instance. The module will be checked out using source control (either git or hg) into the priv/modules folder::
+``zotonic modules <subcommand> [options]``
+  Manages modules. It has the following subcommands:
+  
+  ``install <module> [module2, ...]``  Installs a module from the http://modules.zotonic.com repository into your Zotonic instance. The module will be checked out using source control (either git or hg) into the priv/modules folder.
 
-    ~$ zotonic installmodule mod_openid
-    Getting module index
-    ** Installing mod_openid ...
-    requesting all changes
-    adding changesets
-    adding manifests
-    adding file changes
-    added 11 changesets with 21 changes to 15 files
-    updating to branch default
-    14 files updated, 0 files merged, 0 files removed, 0 files unresolved
-    ** mod_openid OK
+  ``uninstall <module> [module2, ...]``  Uninstall a module
+
+  ``activate <module> [module2, ...]``  Activate a module
+
+  ``deactivate <module> [module2, ...]``  Deactivate a module
+
+  ``update <module> [module2, ...]``  Update a module
+
+  ``restart <module> [module2, ...]``  Restart a module
+
+  ``reinstall <module> [module2, ...]``  Reinstall a module
+
+  ``list``  List all modules available on the Zotonic Module Repository
+
+  ``search <query>``  Search for a module
+
+  subcommand options:
+
+  --version     show program's version number and exit
+  -h, --help    show this help message and exit
+  -z ZMR, --zmr=ZMR  Zotonic modules repository
+  -s SITE, --site=SITE  affected Zotonic site
+  -d, --debug   enable debugging
+  -n NODE, --node=NODE  Zotonic Erlang node
+  
 
 ``zotonic copysite [site_name] [source_server]``
   Copy [site_name] and its database content from the [source_server] over SSH and load its content into the filesystem and database of the local machine. You will need to have created the database zotonic_[site_name] for this to work.
