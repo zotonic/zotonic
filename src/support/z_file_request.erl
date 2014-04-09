@@ -67,7 +67,12 @@ content_file(#z_file_info{encodings=Encs}, Context) ->
 content_file_part([#part_file{filepath=File}], _Context) ->
     {ok, File};
 content_file_part([#part_cache{cache_pid=Pid}], _Context) ->
-    filezcache:lookup_file(Pid).
+    case filezcache:lookup_file(Pid) of
+        {ok, {file, _Size, File}} ->
+            {ok, File};
+        {error, _} = Error ->
+            Error
+    end.
 
 
 content_data(Info, Enc) ->

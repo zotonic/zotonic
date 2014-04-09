@@ -129,7 +129,7 @@ archive_filename(Filename, Context) ->
     Rootname = filename:rootname(filename:basename(Filename)),
     Extension = filename:extension(Filename),
     RelRoot = filename:join([integer_to_list(Y),integer_to_list(M),integer_to_list(D),safe_filename(Rootname)]),
-    make_unique(RelRoot, Extension, Context).
+    make_unique(RelRoot, z_convert:to_list(Extension), Context).
 
 
 safe_filename([$.|Rest]) ->
