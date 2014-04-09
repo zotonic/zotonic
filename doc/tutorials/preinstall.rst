@@ -8,7 +8,7 @@ Before running Zotonic, you must make sure your system meets the
 minimum requirements to do so. Zotonic needs the following software
 installed:
 
-1. **R15B03-1** or newer. Build it from source, or use
+1. **R15B03** or newer. Build it from source, or use
    packages.    
 
 2. **ImageMagick** (version 6.5 or higher) for the ``convert`` and
@@ -43,7 +43,7 @@ The output should be something like::
 
 (Press ctrl+c twice to exit)
 
-If your version is below release **R15B03-1**, you need to upgrade.
+If your version is below release **R15B03**, you need to upgrade.
 
 
 ImageMagick
