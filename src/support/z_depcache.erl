@@ -323,16 +323,9 @@ get_now() ->
 init(SiteProps) ->
     Host      = proplists:get_value(host, SiteProps),
     Depcache  = z_utils:name_for_host(?MODULE, Host),
-    case erlang:system_info(otp_release) of
-        MinR14B when MinR14B >= "R14B" ->
-            MetaTable = ets:new(?META_TABLE, [set, {keypos, 2}, protected, {read_concurrency, true}]),
-            DepsTable = ets:new(?DEPS_TABLE, [set, {keypos, 2}, protected, {read_concurrency, true}]),
-            DataTable = ets:new(?DATA_TABLE, [set, {keypos, 1}, protected, {read_concurrency, true}]);
-        _Older ->
-            MetaTable = ets:new(?META_TABLE, [set, {keypos, 2}, protected]),
-            DepsTable = ets:new(?DEPS_TABLE, [set, {keypos, 2}, protected]),
-            DataTable = ets:new(?DATA_TABLE, [set, {keypos, 1}, protected])
-    end,
+    MetaTable = ets:new(?META_TABLE, [set, {keypos, 2}, protected, {read_concurrency, true}]),
+    DepsTable = ets:new(?DEPS_TABLE, [set, {keypos, 2}, protected, {read_concurrency, true}]),
+    DataTable = ets:new(?DATA_TABLE, [set, {keypos, 1}, protected, {read_concurrency, true}]),
     MemoryMax = case proplists:get_value(depcache_memory_max, SiteProps) of
 	undefined -> ?MEMORY_MAX;
         Mbs -> Mbs * 1024 * 1024

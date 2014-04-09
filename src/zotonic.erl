@@ -24,7 +24,7 @@
 
 -compile([{parse_transform, lager_transform}]).
 
--define(MIN_OTP_VERSION, "R14B03").
+-define(MIN_OTP_VERSION, "R15B03-1").
 
 
 ensure_started(App) ->
