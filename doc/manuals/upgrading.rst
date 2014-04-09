@@ -12,11 +12,31 @@ incompatible ways or get deprecated.
 Upgrading to Zotonic 0.10
 -------------------------
 
-Config changes
-..............
+Site config changes
+...................
+
+The site `hostalias` option has been changed to be a list of host
+aliases instead of multiple pairs of hostalias attributes. Change your
+site's configuration from this::
+
+  {hostalias, "www.example.com"},
+  {hostalias, "www.example.net"},
+  {hostalias, "example.org"},
+
+To this::
+
+  {hostalias, ["www.example.com", "www.example.net", "example.org"]},
+
+Besides this change, a site's config file can now also be split into
+multiple files living under the ``config.d/`` folder within a site.
+
+  
+Misc changes
+............
 
 All configuration options regarding logging are now in set in the ``priv/erlang.config`` file,
 which is created by default if misssing from ``priv/erlang.config.in``.
+
 
 
 Upgrading to Zotonic 0.9
