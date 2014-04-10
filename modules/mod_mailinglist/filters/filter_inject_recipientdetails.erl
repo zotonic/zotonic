@@ -25,21 +25,26 @@
 
 -include("zotonic.hrl").
 
-
 inject_recipientdetails(Body, undefined, _Context) ->
     Body;
 inject_recipientdetails(Body, Recipient, _Context) ->
-    Val = case proplists:get_value(props, Recipient, []) of
-              Props when is_list(Props) ->
-                  [{email, proplists:get_value(email, Recipient)},
-                   {name_first, proplists:get_value(name_first, Props)},
-                   {name_surname, proplists:get_value(name_surname, Props)},
-                   {name_surname_prefix, proplists:get_value(name_surname_prefix, Props)}];
-              _ ->
-                  [{email, proplists:get_value(email, Recipient)}]
-          end,
-    Val1 = lists:filter(fun({_, V}) -> not(z_utils:is_empty(V)) end, Val),
-    Part = [$?, [ [z_utils:url_encode(z_convert:to_list(K)), $=, z_utils:url_encode(z_convert:to_list(V)), $\\, $&] || {K, V} <- Val1] ],
-    Part1 = lists:flatten(Part),
-    Part2 = lists:reverse(tl(lists:reverse(Part1))),
-    iolist_to_binary(re:replace(Body, "##\"", Part2 ++ "\"", [global])).
+    case z_utils:is_empty(Body) of
+        false ->
+            Val = case proplists:get_value(props, Recipient, []) of
+                      Props when is_list(Props) ->
+                          [{email, proplists:get_value(email, Recipient)},
+                           {name_first, proplists:get_value(name_first, Props)},
+                           {name_surname, proplists:get_value(name_surname, Props)},
+                           {name_surname_prefix, proplists:get_value(name_surname_prefix, Props)}];
+                      _ ->
+                          [{email, proplists:get_value(email, Recipient)}]
+                  end,
+            Val1 = lists:filter(fun({_, V}) -> not(z_utils:is_empty(V)) end, Val),
+            Part = [$?, [ [z_utils:url_encode(z_convert:to_list(K)), $=, z_utils:url_encode(z_convert:to_list(V)), $\\, $&] || {K, V} <- Val1] ],
+            Part1 = lists:flatten(Part),
+            Part2 = lists:reverse(tl(lists:reverse(Part1))),
+            iolist_to_binary(re:replace(Body, "##\"", Part2 ++ "\"", [global]));
+        true ->
+            Body
+    end.
+
