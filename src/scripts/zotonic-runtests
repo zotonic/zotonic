@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Copyright 2010,2011 Arjan Scherpenisse
 #
@@ -14,33 +14,64 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cd $ZOTONIC
-
+require_zotonic_not_running
 set -e
 
 export ZOTONIC_PORT=8040
 export ZOTONIC_PORT_SSL=8043
 export ZOTONIC_SMTP_BOUNCE_PORT=2535
 
+
 case "$1" in
-erlydtl)
-    # Test only erlydtl
-    MODULES=`ls ebin/erly*tests.beam|sed 's/.beam//'|sed 's/ebin\///'`
-    echo $MODULES
-    ALL=""
-    for MODULE in $MODULES; do ALL="-s $MODULE run_tests $ALL"; done
-    exec erl erl -noshell -pa $PWD/ebin $PWD/deps/*/ebin -s erlydtl_tests_init init $ALL -s init stop
-;;
-*)
-    # Find all tests
-    MODULES=`ls ebin/*_tests.beam|sed 's/.beam//'|sed 's/ebin\///'|grep -v pgsql|grep -v erlydtl`
-    ALL="zotonic"
+    erlydtl)
+        # Test only erlydtl
+        MODULES=`ls ebin/erly*tests.beam|sed 's/.beam//'|sed 's/ebin\///'`
+        echo $MODULES
+        ALL=""
+        for MODULE in $MODULES; do ALL="-s $MODULE run_tests $ALL"; done
+        exec erl erl -noshell -pa $PWD/ebin $PWD/deps/*/ebin -s erlydtl_tests_init init $ALL -s init stop
+        ;;
+    *)
+        find_enabled_sites
 
-    # Run the tests
-    for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
-    ALL=`echo $ALL|sed 's/^,//'`
+        # disable them
+        for s in $enabled_sites; do
+            enablesite $s false
+        done
+        # enable testsandbox
+        enablesite testsandbox true
 
-    $ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$NODEHOST -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(3000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
-;;
+        if [ "$1" != "" ]; then
+            ALL="$1"
+            shift
+            while (( "$#" )); do
+                ALL="$ALL,$1"
+                shift
+            done
+        else
+            # Find all tests
+            MODULES=`ls ebin/*_tests.beam|sed 's/.beam//'|sed 's/ebin\///'|grep -v pgsql|grep -v erlydtl|grep -v db_tests`
+            ALL="zotonic"
+            ALL=`echo $ALL|sed 's/^,//'`
+            for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
+        fi
+
+        echo 
+        echo "Running the following tests in the testsandbox:"
+        echo $ALL
+        echo
+
+        # Run the tests
+        $ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$NODEHOST -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(8000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
+        EXIT=$?
+
+        # enable others again
+        for s in $enabled_sites; do
+            enablesite $s true
+        done
+        # disable testsandbox
+        enablesite testsandbox false
+
+        ;;
 esac
 

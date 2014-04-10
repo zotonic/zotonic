@@ -18,6 +18,5 @@
                   mimetypes, webzmachine, z_stdlib,
                   sendfile, public_key, ssl,
                   jobs, gproc 
-                  % , filezcache, s3filez
   ]}
  ]}.

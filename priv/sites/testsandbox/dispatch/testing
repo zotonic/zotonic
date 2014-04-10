@@ -1,6 +1,12 @@
 %% -*- mode: erlang -*-
 [
  %% Just for testing
- {helloworld, ["helloworld"], resource_template,               [{template, "helloworld.tpl"}, {anonymous, true}]},
- {test,       ["test"],       resource_test_helloworld,        []}
+ {home,       [],             controller_template,               [{template, "home.tpl"}]},
+ {helloworld, ["helloworld"], controller_template,               [{template, "helloworld.tpl"}, {anonymous, true}]},
+ {test,       ["test"],       controller_test_helloworld,        []},
+
+ %% Normal page to show a resource.
+ {page, ["page", id],       controller_page, [ {template, {cat, "page.tpl"}} ]},
+ {page, ["page", id, slug], controller_page, [ {template, {cat, "page.tpl"}} ]}
+ 
 ].

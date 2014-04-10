@@ -37,6 +37,30 @@ function require_zotonic_not_running {
 }
 export -f require_zotonic_not_running
 
+function enablesite {
+    config="priv/sites/$1/config"
+    expr="s/enabled, \(true\|false\)/enabled, $2/"
+    sed -e "$expr" -i $config
+    #echo sed -e "$expr" -i $config
+    echo "$1 enabled: $2"
+}
+export -f enablesite
+
+function find_enabled_sites {
+    # find enabled sites
+    enabled_sites=""
+    for sitedir in priv/sites/*; do
+        if [ -f $sitedir/config ]; then
+            if grep -q 'enabled, true' $sitedir/config; then
+                site=$(basename $sitedir)
+                enabled_sites="$enabled_sites $site"
+            fi
+        fi
+    done
+}
+export -f find_enabled_sites
+
+
 export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
 export SITES=${SITES:=$ZOTONIC/priv/sites}
 

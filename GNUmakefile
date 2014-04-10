@@ -11,7 +11,7 @@ REBAR_URL := https://github.com/rebar/rebar/wiki/rebar
 
 # Default target - update sources and call all compile rules in succession
 .PHONY: all
-all: get-deps update-deps compile
+all: get-deps compile
 
 
 ./rebar:
@@ -21,8 +21,6 @@ all: get-deps update-deps compile
 	chmod +x ./rebar
 
 DEPS = $(shell find deps -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
-LAGER = deps/lager
-Compile = (cd $(1) && $(REBAR_DEPS) deps_dir=.. compile)
 
 # Helper targets
 .PHONY: erl
@@ -46,13 +44,11 @@ update-deps: $(REBAR)
 	$(REBAR) update-deps
 
 compile-deps: $(REBAR)
-	if [ -d $(LAGER) ]; then $(call Compile, $(LAGER)); fi
-	for i in $(DEPS); do $(call Compile, $$i); done
+	$(REBAR) compile
 
 compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
 
 compile: compile-deps compile-zotonic
-
 
 # Generate documentation
 .PHONY: docs edocs

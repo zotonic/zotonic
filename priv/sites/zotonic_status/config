@@ -8,7 +8,7 @@
 
 [
  %% This site is always enabled.
- {enabled, true},
+ {enabled, false},
  {host, zotonic_status},
 
  %% This is the fallback site for all non-matching hostnames (or disabled sites).

@@ -33,7 +33,7 @@ tag_test() ->
     ?assertEqual([[], <<"<script src=\"/lib/js/a~b~62167258800.js\" type=\"text/javascript\"></script>">>],
                  z_lib_include:tag(["/js/a.js", "/js/b.js"], C)),
 
-    ?assertEqual([<<"<link href=\"/lib/css/a~62167258800.css\" type=\"text/css\" media=\"all\" rel=\"stylesheet\" />">>, 
+    ?assertEqual([<<"<link href=\"/lib/css/a~62167258800.css\" type=\"text/css\" media=\"all\" rel=\"stylesheet\"/>">>, 
                   <<"<script src=\"/lib/js/b~62167258800.js\" type=\"text/javascript\"></script>">>],
                  z_lib_include:tag(["/css/a.css", "/js/b.js"], C)).
 

@@ -126,7 +126,7 @@ observe(Event, Observer, Priority, Host) when is_atom(Host) ->
 
 %% @doc Detach all observers and delete the event
 detach_all(Event, #context{notifier=Notifier}) ->
-    gen_server:cast(Notifier, {'detach_all', Event}).
+    gen_server:call(Notifier, {'detach_all', Event}).
 
 %% @doc Unsubscribe from an event. Observer is a {M,F} or pid()
 detach(Event, Observer, #context{notifier=Notifier}) ->
@@ -268,6 +268,13 @@ handle_call({'detach', Event, Observer}, _From, State) ->
     end,
     {reply, ok, State};
 
+%% @doc Detach all observer from an event
+handle_call({'detach_all', Event}, _From, State) ->
+    Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
+    ets:delete(State#state.observers, Event1),  
+    {reply, ok, State};
+
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -275,12 +282,6 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-%% @doc Detach all observer from an event
-handle_cast({'detach_all', Event}, State) ->
-    Event1 = case is_tuple(Event) of true -> element(1,Event); false -> Event end,
-    ets:delete(State#state.observers, Event1),  
-    {noreply, State};
-
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
