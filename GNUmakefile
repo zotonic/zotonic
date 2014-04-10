@@ -21,6 +21,8 @@ all: get-deps compile
 	chmod +x ./rebar
 
 DEPS = $(shell find deps -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
+LAGER = deps/lager
+Compile = (cd $(1) && $(REBAR_DEPS) deps_dir=.. compile)
 
 # Helper targets
 .PHONY: erl
@@ -44,11 +46,13 @@ update-deps: $(REBAR)
 	$(REBAR) update-deps
 
 compile-deps: $(REBAR)
-	$(REBAR) compile
+	if [ -d $(LAGER) ]; then $(call Compile, $(LAGER)); fi
+	for i in $(DEPS); do $(call Compile, $$i); done
 
 compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
 
 compile: compile-deps compile-zotonic
+
 
 # Generate documentation
 .PHONY: docs edocs
