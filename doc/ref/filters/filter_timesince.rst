@@ -18,4 +18,4 @@ a string like "in X minutes".
 
 This function does not take daylight saving changes into account.
 
-.. seealso:: :ref:`filter-date`
+.. seealso:: :ref:`filter-date`, :ref:`tag-now`

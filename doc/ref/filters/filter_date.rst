@@ -13,6 +13,10 @@ An example::
 
 When mydate is ``{2009,6,1}`` this returns ``2009-06-01`` as output.
 
+To show the year of the current date::
+
+  {{ now|date:"Y" }}
+
 See also the :ref:`filter-timesince` filter to display a human
 readable `relative` time like `10 hours ago`.
 
@@ -138,4 +142,4 @@ Will output `10 October 1990`. This also works with datetimes::
 Will output `10 October 1990 - 10:11:12`.
 
 
-.. seealso:: :ref:`filter-date_range`, :ref:`filter-datediff`, :ref:`filter-timesince`
+.. seealso:: :ref:`filter-date_range`, :ref:`filter-datediff`, :ref:`filter-timesince`, :ref:`tag-now`
