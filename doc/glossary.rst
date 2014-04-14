@@ -19,7 +19,7 @@ Glossary
    Action
       An action is functionality that can be attached to a HTML element or event. Actions are wired to an element or event. Think of showing dialogs, posting forms, hiding elements etc.
 
-      See also the section on :ref:`manual-actions` in the templates manual.
+      See also the section on :ref:`manual-template-actions` in the templates manual.
 
    Tag
       The template systems provides tags which function as simple programming constructs. For instance, the if tag can be used for boolean tests and the for tag allows looping. The Zotonic templating system compiles the tags found in a template to Erlang byte code which will be called when the template is rendered. This is very efficient.
@@ -53,8 +53,11 @@ Glossary
       The context is the current request context. It contains all the request data, the current site, the handle to the database and the results (scripts or templates) you will be sending back. The context is commonly passed along in Zotonic as the last argument of a function.
 
    Session
-      The session is an Erlang process. It is connected to the session cookie id on the browser. The session contains the id of the current user and more key/value pairs, called session variables. The session is also linked to page processes. For every open page on the browser we have a process on the server. This page process is used for the communication between the server and the user-agent (browser).
+      The session is an Erlang process. It is connected to the :term:`session cookie` id on the browser. The session contains the id of the current user and more key/value pairs, called session variables. The session is also linked to page processes. For every open page on the browser we have a process on the server. This page process is used for the communication between the server and the user-agent (browser).
 
+   Session cookie
+      A cookie is a small piece of data sent from a website and stored in a user’s web browser while the user is browsing that website. In contrast to perisistent cookies, session cookies are created and kept only during the user’s visit to the website, and deleted from the browser’s cache when the user closes the session.
+   
    Category
       The data model has a hierarchical tree for the categorization of resources. Every resource is part of one category. The categorization is used amongst others to decide which template to show when displaying a resource. A category is a :term:`resource` of the category `category`. For more information, see :ref:`manual-datamodel-categories`.
 
