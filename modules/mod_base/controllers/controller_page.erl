@@ -35,33 +35,43 @@ resource_exists(ReqData, Context) ->
     ContextQs = z_context:ensure_qs(Context1),
     try
         Id = get_id(ContextQs),
-        ReqPath = wrq:raw_path(ReqData),
-
-        %% Check if we need to be at a different URL. When the page
-        %% path of a resource is set, we need to redirect there if the
-        %% current request's path is not equal to the resource's path.
-        WrongReqPath = case z_convert:to_list(m_rsc:p(Id, page_path, ContextQs)) of
-                           [] -> false;
-                           ReqPath -> false;
-                           _ -> true
-                       end,
-        case WrongReqPath andalso z_context:get(is_canonical, ContextQs, true) of
-            false ->
-                case {m_rsc:exists(Id, ContextQs), z_context:get(cat, ContextQs)} of
-                    {Exists, undefined} ->
-                        ?WM_REPLY(Exists, ContextQs);
-                    {true, Cat} ->
-                        ?WM_REPLY(m_rsc:is_a(Id, Cat, ContextQs), ContextQs);
-                    {false, _} ->
-                        ?WM_REPLY(false, ContextQs)
-                end;
-            true ->
-                ContextRedirect = z_context:set_resp_header("Location", m_rsc:p(Id, page_path, ContextQs), ContextQs),
-                ?WM_REPLY({halt, 301}, ContextRedirect)
-        end
+        maybe_redirect(m_rsc:p_no_acl(Id, page_path, ContextQs), Id, ContextQs)
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
     end.
+
+maybe_redirect(Empty, Id, Context) when Empty =:= <<>>; Empty =:= undefined ->
+    maybe_exists(Id, Context);
+maybe_redirect(PagePath, Id, Context) ->
+    case z_context:get(is_canonical, Context, true) of
+        false ->
+            maybe_exists(Id, Context);
+        true ->
+            %% Check if we need to be at a different URL. When the page
+            %% path of a resource is set, we need to redirect there if the
+            %% current request's path is not equal to the resource's path.
+            DispatchPath = z_context:get_q(zotonic_dispatch_path, Context),
+            DispatchBin = z_convert:to_binary([[ $/, P ] || P <- DispatchPath ]),
+            if
+                DispatchBin =:= PagePath ->
+                    maybe_exists(Id, Context);
+                true ->
+                    AbsUrl = m_rsc:p(Id, page_url_abs, Context),
+                    ContextRedirect = z_context:set_resp_header("Location", AbsUrl, Context),
+                    ?WM_REPLY({halt, 301}, ContextRedirect)
+            end
+    end.
+
+maybe_exists(Id, Context) ->
+    case {m_rsc:exists(Id, Context), z_context:get(cat, Context)} of
+        {Exists, undefined} ->
+            ?WM_REPLY(Exists, Context);
+        {true, Cat} ->
+            ?WM_REPLY(m_rsc:is_a(Id, Cat, Context), Context);
+        {false, _} ->
+            ?WM_REPLY(false, Context)
+    end.
+
 
 %% @doc Check if the resource used to exist
 previously_existed(ReqData, Context) ->

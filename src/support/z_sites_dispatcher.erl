@@ -570,7 +570,11 @@ wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList) ->
     Path = string:tokens(PathAsString, [?SEPARATOR]),
     IsDir = lists:last(PathAsString) == ?SEPARATOR,
     {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{is_dir=IsDir, path=PathAsString, host=HostAsString}, {Path, []}, Context),
-    try_path_binding(Protocol, HostAsString, Host, DispatchList, Path1, Bindings, extra_depth(Path1, IsDir), Context).
+    Bindings1 = [
+        {zotonic_dispatch_path, Path1}
+        | Bindings
+    ],
+    try_path_binding(Protocol, HostAsString, Host, DispatchList, Path1, Bindings1, extra_depth(Path1, IsDir), Context).
 
 % URIs that end with a trailing slash are implicitly one token
 % "deeper" than we otherwise might think as we are "inside"
