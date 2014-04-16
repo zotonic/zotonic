@@ -42,3 +42,7 @@ table.docutils td, table.docutils th {
     border-style: none none dotted;
     padding: 5px 8px 6px 5px;
 }
+
+.section img {
+    max-width: 100%;
+}

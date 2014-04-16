@@ -565,9 +565,19 @@ model_pgsql() ->
 
     % Update/insert trigger on medium to fill the deleted files queue
     medium_update_function(),
-    medium_update_trigger()
+    medium_update_trigger(),
+
+    %% Holds administration of previous page paths
+     "CREATE TABLE rsc_page_path_log ( 
+        id int not null,
+        page_path character varying(80),
+        created timestamp with time zone NOT NULL DEFAULT now(),
+        CONSTRAINT rsc_page_path_log_pkey PRIMARY KEY (page_path),
+        CONSTRAINT rsc_page_path_log_fkey FOREIGN KEY (id) REFERENCES rsc(id)
+      )"
 
     ].
+
 
 medium_log_table() ->
     "CREATE TABLE medium_log
@@ -625,8 +635,6 @@ medium_update_trigger() ->
     CREATE TRIGGER medium_update_trigger AFTER INSERT OR UPDATE
     ON medium FOR EACH ROW EXECUTE PROCEDURE medium_update()
     ".
-
-
 
 %    -- Fulltext index of products
 %    -- TODO: Also mix in the shop product id, brand, group and properties

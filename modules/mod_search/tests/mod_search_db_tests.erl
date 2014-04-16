@@ -1,4 +1,4 @@
--module(mod_search_tests).
+-module(mod_search_db_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic.hrl").
@@ -20,7 +20,7 @@ wait_for(QueryId, ItemId) ->
 
 
 query_hooks_test() ->
-    C = z_acl:sudo(z_context:new(testsandbox)),
+    C = z_acl:sudo(z_context:new(testsandboxdb)),
 
     z_notifier:observe(rsc_query_item, self(), C),
     

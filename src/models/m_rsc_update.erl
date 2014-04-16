@@ -159,6 +159,7 @@ update(Id, Props, true, Context) ->
 %% @doc Resource updater function
 %% @spec update(Id, Props, Options, Context)
 %% [Options]: {escape_texts, true|false (default: true}, {acl_check: true|false (default: true)}
+%% {escape_texts, false} checks if the texts are escaped, and if not then it will escape. This prevents "double-escaping" of texts.
 update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc ->
     EscapeTexts = proplists:get_value(escape_texts, Options, true),
     AclCheck = proplists:get_value(acl_check, Options, true),
@@ -294,6 +295,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     true ->
                         UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(RscId, UpdatePropsN1, RawProps, Context),
                         {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsPrePivoted, Ctx),
+                        ok = update_page_path_log(RscId, BeforeProps, UpdatePropsN, Ctx),
                         {ok, RscId, BeforeProps, UpdatePropsN, BeforeCatList, RenumberCats};
                     false ->
                         {ok, RscId, notchanged}
@@ -950,6 +952,26 @@ config_langs(Context) ->
     end.
 
 
+update_page_path_log(RscId, OldProps, NewProps, Context) ->
+    Old = proplists:get_value(page_path, OldProps),
+    New = proplists:get_value(page_path, NewProps, not_updated),
+    case {Old, New} of
+        {_, not_updated} ->
+            ok;
+        {Old, Old} ->
+            %% not changed
+            ok;
+        {undefined, _} ->
+            %% no old page path
+            ok;
+        {Old, New} ->
+            %% update
+            z_db:q("DELETE FROM rsc_page_path_log WHERE page_path = $1 OR page_path = $2", [New, Old], Context),
+            z_db:q("INSERT INTO rsc_page_path_log(id, page_path) VALUES ($1, $2)", [RscId, Old], Context),
+            ok
+    end.
+
+
 test() ->
     [{"publication_start",{{2009,7,9},{0,0,0}}},
           {"publication_end",?ST_JUTTEMIS},
@@ -964,4 +986,5 @@ test() ->
         {"plop", "hello"}
     ]),
     ok.
+
 

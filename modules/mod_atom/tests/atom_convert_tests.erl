@@ -100,7 +100,7 @@ atom_to_resource_test() ->
     ?assertEqual(<<"http://www.mediamatic.net/id/22661">>, proplists:get_value(uri, ImportedRsc)),
 
     Rsc = proplists:get_value(rsc, ImportedRsc),
-    ?assertEqual(<<"Arjan  Scherpenisse ">>, proplists:get_value(title, Rsc)), %% note the strange spaces; z_html:strip gives use these..
+    ?assertEqual(<<"Arjan  Scherpenisse">>, proplists:get_value(title, Rsc)),
     ?assertEqual(calendar:universal_time_to_local_time({{2010,1,19},{17,29,39}}), proplists:get_value(modified, Rsc)),
 
     Medium = proplists:get_value(medium, ImportedRsc),

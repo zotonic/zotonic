@@ -128,6 +128,7 @@ upgrade(C, Database, Schema) ->
     ok = install_module_schema_version(C, Database, Schema),
     ok = install_geocode(C, Database, Schema),
     ok = install_rsc_gone(C, Database, Schema),
+    ok = install_rsc_page_path_log(C, Database, Schema),
     ok = upgrade_config_schema(C, Database, Schema),
     ok = install_medium_log(C, Database, Schema),
     ok.
@@ -169,6 +170,21 @@ install_persist(C, Database, Schema) ->
                             "  modified timestamp with time zone NOT NULL DEFAULT now(),"
                             "  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
                             ")"),
+            ok;
+        true ->
+            ok
+    end.
+
+install_rsc_page_path_log(C, Database, Schema) ->
+    case has_table(C, "rsc_page_path_log", Database, Schema) of
+        false ->
+            {ok, [], []} = pgsql:squery(
+                             C, "CREATE TABLE rsc_page_path_log ( 
+                                id int not null,
+                                page_path character varying(80),
+                                created timestamp with time zone NOT NULL DEFAULT now(),
+                                CONSTRAINT rsc_page_path_log_pkey PRIMARY KEY (page_path),
+                                CONSTRAINT rsc_page_path_log_fkey FOREIGN KEY (id) REFERENCES rsc(id))"),
             ok;
         true ->
             ok

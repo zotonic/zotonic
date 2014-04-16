@@ -1,20 +1,22 @@
 language: erlang
 otp_release:
   - R16B
-  - R15B01
-  - R14B04
-  - R14B03
-script: make all edocs
-before_install: git submodule update --init --recursive
-env:
-  - DB=postgres
+  - R15B03
+script: make all edocs && bin/zotonic runtests
 branches:
   only:
     - master
-    - release-0.9.x
 notifications:
   email:
     recipients:
       - zotonic-commits@googlegroups.com
     on_success: change #[always|never|change] # default: change
     on_failure: always #[always|never|change] # default: always
+  irc:
+    channels:
+      - "chat.freenode.net#zotonic"
+    on_success: always #[always|never|change] # default: change
+    on_failure: always #[always|never|change] # default: always
+    template:
+      - "New commit on %{repository_name}/%{branch} by %{author}:  %{message} (%{commit}) "
+      - "Build details: %{build_url}"

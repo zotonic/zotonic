@@ -30,6 +30,7 @@
 	identify_file_direct/2,
     extension/1,
     extension/2,
+    extension/3,
 	guess_mime/1,
     is_mime_compressed/1
 ]).
@@ -64,12 +65,23 @@ identify_file(File, Context) ->
 
 -spec identify_file(File::string(), OriginalFilename::string(), #context{}) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, OriginalFilename, Context) ->
-    case z_notifier:first(#media_identify_file{filename=File}, Context) of
+    Extension = maybe_extension(File, OriginalFilename),
+    case z_notifier:first(#media_identify_file{filename=File, original_filename=OriginalFilename, extension=Extension}, Context) of
         {ok, Props} ->
 			{ok, Props};
         undefined -> 
             identify_file_direct(File, OriginalFilename)
 	end.
+
+maybe_extension(File, undefined) ->
+    maybe_extension(File);
+maybe_extension(_File, OriginalFilename) ->
+    maybe_extension(OriginalFilename).
+
+maybe_extension(undefined) ->
+    "";
+maybe_extension(Filename) ->
+    z_string:to_lower(filename:extension(Filename)). 
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
 -spec identify_file_direct(File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
@@ -248,21 +260,31 @@ mime("PNG") -> "image/png";
 mime("PNG8") -> "image/png";
 mime("PNG24") -> "image/png";
 mime("PNG32") -> "image/png";
+mime("SVG") -> "image/svg+xml";
 mime(Type) -> "image/" ++ string:to_lower(Type).
 
 
 
 %% @doc Return the extension for a known mime type (eg. ".mov").
 -spec extension(string()|binary()) -> string().
-extension("image/jpeg") -> ".jpg";
-extension(<<"image/jpeg">>) -> ".jpg";
 extension(Mime) -> extension(Mime, undefined).
 
 %% @doc Return the extension for a known mime type (eg. ".mov"). When
 %% multiple extensions are found for the given mime type, returns the
 %% one that is given as the preferred extension. Otherwise, it returns
 %% the first extension.
+-spec extension(string()|binary(), string()|binary()|undefined, #context{}) -> string().
+extension(Mime, PreferExtension, Context) ->
+    case z_notifier:first(#media_identify_extension{mime=Mime, preferred=PreferExtension}, Context) of
+        undefined ->
+            extension(Mime, PreferExtension);
+        Extension ->
+            z_convert:to_list(Extension)
+    end.
+
 -spec extension(string()|binary(), string()|binary()|undefined) -> string().
+extension("image/jpeg", _PreferExtension) -> ".jpg";
+extension(<<"image/jpeg">>, _PreferExtension) -> ".jpg";
 extension(Mime, PreferExtension) ->
     Extensions = mimetypes:extensions(z_convert:to_binary(Mime)),
     case PreferExtension of

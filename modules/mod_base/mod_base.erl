@@ -83,6 +83,10 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
     case m_rsc:page_path_to_id(z_utils:url_path_encode(Path), Context) of
         {ok, Id} ->
             {ok, Id};
+        {redirect, Id} ->
+            {ok, #dispatch_match{
+                    mod=controller_redirect,
+                    mod_opts=[{id, Id}, {is_permanent, true}]}};
         {error, _} ->
             Last = last(Path),
             Template= case Last of

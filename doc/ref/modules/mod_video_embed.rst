@@ -12,6 +12,6 @@ This module is the predecessor to :ref:`mod_oembed` but still can be
 used when integrating with services that do not have oEmbed support
 but do provide HTML embed-code functionality.
 
-.. seealso:: :ref:`mod_oembed`, :ref:`tag-media`
+.. seealso:: :ref:`mod_oembed`, :ref:`mod_video`, :ref:`tag-media`
              
 .. todo:: Add more documentation

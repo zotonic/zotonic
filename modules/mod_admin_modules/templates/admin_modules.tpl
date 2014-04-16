@@ -13,7 +13,8 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th width="20%">{_ Title _}</th>
+                <th width="1%"></th>
+                <th width="19%">{_ Title _}</th>
                 <th width="45%">{_ Description _}</th>
                 <th width="5%">{_ Prio _}</th>
                 <th width="30%">{_ Author _}</th>
@@ -23,7 +24,13 @@
         <tbody>
             {% for sort, prio, module, props in modules %}
             <tr id="{{ #li.module }}" class="{% if not props.is_active %}unpublished{% endif %}">
-                <td>{% include "_icon_status.tpl" status_title=status[module] status=status[module] status_id=#status.module %} {{ props.mod_title|default:props.title }}</td>
+                <td>
+                    {% include "_icon_status.tpl" status_title=status[module] status=status[module] status_id=#status.module %}
+                </td>
+                <td>
+                    <strong>{{ props.mod_title|default:props.title }}</strong><br />
+                    <span class="muted">{{ module }}</span>
+                </td>
                 <td>{{ props.mod_description|default:"-" }}</td>
                 <td>{{ prio }}</td>
                 <td>

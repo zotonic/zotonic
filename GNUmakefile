@@ -11,7 +11,7 @@ REBAR_URL := https://github.com/rebar/rebar/wiki/rebar
 
 # Default target - update sources and call all compile rules in succession
 .PHONY: all
-all: get-deps update-deps compile
+all: get-deps compile
 
 
 ./rebar:

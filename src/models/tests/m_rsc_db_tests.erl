@@ -1,14 +1,13 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @hidden
 
--module(m_rsc_tests).
+-module(m_rsc_db_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic.hrl").
 
-
 modify_rsc_test() ->
-    C = z_context:new(testsandbox),
+    C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     CatId = m_rsc:rid(text, C),
 

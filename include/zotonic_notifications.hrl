@@ -384,7 +384,10 @@
 -record(dropbox_file, {filename}).
 
 %% @doc Try to identify a file, returning a list of file properties. (first)
--record(media_identify_file, {filename}).
+-record(media_identify_file, {filename, original_filename, extension}).
+
+%% @doc Try to find a filename extension for a mime type (example: ".jpg") (first)
+-record(media_identify_extension, {mime, preferred}).
 
 %% @doc Request to generate a HTML media viewer for a resource (first)
 % Return {ok, Html} or undefined

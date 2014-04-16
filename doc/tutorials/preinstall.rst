@@ -8,7 +8,7 @@ Before running Zotonic, you must make sure your system meets the
 minimum requirements to do so. Zotonic needs the following software
 installed:
 
-1. **Erlang R14B03** or newer. Build it from source, or use
+1. **R15B03** or newer. Build it from source, or use
    packages.    
 
 2. **ImageMagick** (version 6.5 or higher) for the ``convert`` and
@@ -37,13 +37,13 @@ command in a terminal::
 
 The output should be something like::
 
-  Erlang R15B02 (erts-5.9.2) [source] [64-bit] [smp:4:4] [async-threads:0] [hipe] [kernel-poll:false]
+  Erlang R16B03 (erts-5.9.2) [source] [64-bit] [smp:4:4] [async-threads:0] [hipe] [kernel-poll:false]
   Eshell V5.9.2  (abort with ^G)
   1>
 
 (Press ctrl+c twice to exit)
 
-If your version is below release **R14B03**, you need to upgrade.
+If your version is below release **R15B03**, you need to upgrade.
 
 
 ImageMagick
