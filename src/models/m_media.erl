@@ -416,7 +416,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     SafeRootName = z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),
     PreferExtension = z_convert:to_binary(filename:extension(PreProc#media_upload_preprocess.original_filename)),
     Mime = PreProc#media_upload_preprocess.mime,
-    SafeFilename = SafeRootName ++ z_media_identify:extension(Mime, PreferExtension),
+    SafeFilename = SafeRootName ++ z_media_identify:extension(Mime, PreferExtension, Context),
     ArchiveFile = case PreProc#media_upload_preprocess.file of
                     undefined -> undefined;
                     UploadFile -> z_media_archive:archive_copy_opt(UploadFile, SafeFilename, Context)
