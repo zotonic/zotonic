@@ -360,12 +360,23 @@ props2url([{mediaclass, _}] = Props, Context) ->
     {no_checksum, iolist_to_binary([$(,Acc,$)])};
 props2url(Props, Context) -> 
     {Width, Height, Acc} = props2url(Props, undefined, undefined, [], Context),
-    Size =  case {Width,Height} of
-                {undefined,undefined} -> [];
-                {_W,undefined} -> [integer_to_list(Width)] ++ "x";
-                {undefined,_H} -> [$x|integer_to_list(Height)];
-                {_W,_H} -> integer_to_list(Width) ++ [$x|integer_to_list(Height)]
-            end,
+    case {Width,Height} of
+        {undefined,undefined} -> 
+            case Acc of
+                [[<<"mediaclass-">>|_]] ->
+                    {no_checksum, iolist_to_binary([$(,Acc,$)])};
+                _ ->
+                    with_checksum([], Acc)
+            end;
+        {_W,undefined} -> 
+            with_checksum([integer_to_list(Width)] ++ "x", Acc);
+        {undefined,_H} -> 
+            with_checksum([$x|integer_to_list(Height)], Acc);
+        {_W,_H} ->
+            with_checksum(integer_to_list(Width) ++ [$x|integer_to_list(Height)], Acc)
+    end.
+
+with_checksum(Size, Acc) ->
     {checksum, iolist_to_binary([$(, z_utils:combine(")(", [Size|lists:reverse(Acc)]), $)])}.
 
 props2url([], Width, Height, Acc, _Context) ->
