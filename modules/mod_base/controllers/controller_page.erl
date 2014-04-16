@@ -57,10 +57,16 @@ maybe_redirect(PagePath, Id, Context) ->
                     maybe_exists(Id, Context);
                 true ->
                     AbsUrl = m_rsc:p(Id, page_url_abs, Context),
-                    ContextRedirect = z_context:set_resp_header("Location", AbsUrl, Context),
+                    AbsUrlQs = append_qs(AbsUrl, wrq:req_qs(z_context:get_reqdata(Context))),
+                    ContextRedirect = z_context:set_resp_header("Location", AbsUrlQs, Context),
                     ?WM_REPLY({halt, 301}, ContextRedirect)
             end
     end.
+
+append_qs(AbsUrl, []) ->
+    AbsUrl;
+append_qs(AbsUrl, Qs) ->
+    iolist_to_binary([AbsUrl, $?, mochiweb_util:urlencode(Qs)]).
 
 maybe_exists(Id, Context) ->
     case {m_rsc:exists(Id, Context), z_context:get(cat, Context)} of
