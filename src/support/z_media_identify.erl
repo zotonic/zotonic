@@ -275,12 +275,15 @@ extension(Mime) -> extension(Mime, undefined).
 %% the first extension.
 -spec extension(string()|binary(), string()|binary()|undefined, #context{}) -> string().
 extension(Mime, PreferExtension, Context) ->
-    case z_notifier:first(#media_identify_extension{mime=Mime, preferred=PreferExtension}, Context) of
+    case z_notifier:first(#media_identify_extension{mime=maybe_binary(Mime), preferred=maybe_binary(PreferExtension)}, Context) of
         undefined ->
             extension(Mime, PreferExtension);
         Extension ->
             z_convert:to_list(Extension)
     end.
+
+maybe_binary(undefined) -> undefined;
+maybe_binary(L) -> z_convert:to_binary(L). 
 
 -spec extension(string()|binary(), string()|binary()|undefined) -> string().
 extension("image/jpeg", _PreferExtension) -> ".jpg";
