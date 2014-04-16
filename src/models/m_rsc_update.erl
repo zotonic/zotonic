@@ -159,6 +159,7 @@ update(Id, Props, true, Context) ->
 %% @doc Resource updater function
 %% @spec update(Id, Props, Options, Context)
 %% [Options]: {escape_texts, true|false (default: true}, {acl_check: true|false (default: true)}
+%% {escape_texts, false} checks if the texts are escaped, and if not then it will escape. This prevents "double-escaping" of texts.
 update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc ->
     EscapeTexts = proplists:get_value(escape_texts, Options, true),
     AclCheck = proplists:get_value(acl_check, Options, true),
