@@ -329,8 +329,16 @@ do_poll(Context) ->
                         [ {Id, catch pivot_resource(Id, Ctx)} || {Id,_Serial} <- Qs]
                 end,
             case z_db:transaction(F, Context) of
-                {rollback, PivotError} -> ?ERROR("Pivot error: ~p: ~p~n", [PivotError, Qs]);
+                {rollback, PivotError} -> 
+                    ?ERROR("Pivot error: ~p: ~p~n", [PivotError, Qs]);
                 L when is_list(L) -> 
+                    lists:map(fun({Id, _Serial}) ->
+                                    IsA = m_rsc:is_a(Id, Context),
+                                    z_notifier:notify(#rsc_pivot_done{id=Id, is_a=IsA}, Context),
+                                    % Flush the resource, as some synthesized attributes might depend on the pivoted fields.
+                                    % @todo Only do this if some fields are changed
+                                    m_rsc_update:flush(Id, Context)
+                              end, Qs),
                     lists:map(fun({_Id, ok}) -> ok; 
                                  ({Id,Error}) -> log_error(Id, Error, Context) end, 
                               L),
@@ -467,13 +475,6 @@ pivot_resource(Id, Context) ->
     
     CustomPivots = z_notifier:map(#custom_pivot{id=Id}, Context),
     [ ok = update_custom_pivot(Id, Res, Context) || Res <- CustomPivots ],
-
-    IsA = m_rsc:is_a(Id, Context),
-    z_notifier:notify(#rsc_pivot_done{id=Id, is_a=IsA}, Context),
-
-    % Flush the resource, as some synthesized attributes might depend on the pivoted fields.
-    % @todo Make this a callback, which should check on the KVsChanged
-    m_rsc_update:flush(Id, Context),
     ok.
 
 
