@@ -33,7 +33,9 @@
 
 %% @doc Install tables used for storing survey results
 manage_schema(install, Context) ->
+    %% This is a workaround for async initialization of the database tables; see github issues #734, #497
     spawn(fun() -> timer:sleep(4000), install_survey_answer_table(Context) end),
+    
     #datamodel{
         categories=[
             {survey, undefined, [{title, <<"Survey">>}]},
