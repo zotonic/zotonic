@@ -12,6 +12,13 @@ div.note {
     border: 0;
 }
 
+div.body {
+    padding-top: 10px;
+}
+div.sphinxsidebarwrapper {
+    padding-bottom: 20px;
+}
+
 div.body h1, div.body h2, div.body h3,
 div.body h4, div.body h5, div.body h6 {
     background: inherit;
@@ -45,4 +52,110 @@ table.docutils td, table.docutils th {
 
 .section img {
     max-width: 100%;
+}
+
+div.sphinxsidebar p.logo {
+    margin: 10px 0 20px 0;
+}
+div.sphinxsidebar p.logo img {
+    height: 24px;
+}
+
+div.sphinxsidebar ul,
+div.sphinxsidebar p.topless {
+    margin: 1em 0;
+}
+
+div.sphinxsidebar h3,
+div.sphinxsidebar h4 {
+    font-size: 1.2em;
+}
+
+div.sphinxsidebar h3,
+div.sphinxsidebar #searchbox {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+div.sphinxsidebar h3:first-of-type {
+    border: none;
+    padding-top: 0;
+}
+
+div.sphinxsidebar #searchbox form {
+    font-size: 0;
+}
+
+input[type=submit],
+div.sphinxsidebar #searchbox input[type=submit],
+button {
+    -webkit-appearance: none;
+    -webkit-user-select: none;
+    background-color: #039ed4;
+    background-image: none;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #039ed4;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: inherit;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 18px;
+    margin: 0;
+    padding: 4px 9px;
+    text-align: center;
+    vertical-align: top;
+    white-space: nowrap;
+    width: auto;
+}
+div.sphinxsidebar #searchbox input[type=submit] {
+    margin-left: 4px;
+}
+
+input[type=text],
+div.sphinxsidebar input[type=text] {
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    -webkit-transition-delay: 0s, 0s;
+    -webkit-transition-duration: 0.15s, 0.15s;
+    -webkit-transition-property: border-color, box-shadow;
+    -webkit-transition-timing-function: ease-in-out, ease-in-out;
+    background-color: #fff;
+    border-color: rgb(204, 204, 204);
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    box-sizing: border-box;
+    color: rgb(85, 85, 85);
+    display: inline-block;
+    font-family: inherit;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 18px;
+    margin: 0;
+    padding: 4px 10px;
+    transition-delay: 0s, 0s;
+    transition-duration: 0.15s, 0.15s;
+    transition-property: border-color, box-shadow;
+    transition-timing-function: ease-in-out, ease-in-out;
+}
+
+input[type=text]:focus,
+div.sphinxsidebar input[type=text]:focus {
+    border-color: #66afe9;
+    outline: 0;
+}
+
+div.sphinxsidebar p.searchtip {
+    color: #aaa;
+}
+
+div.footer,
+div.footer a {
+    color: #aaa;
 }
