@@ -554,8 +554,7 @@ model_pgsql() ->
     "
     CREATE TRIGGER medium_deleted_trigger AFTER DELETE
     ON medium FOR EACH ROW EXECUTE PROCEDURE medium_delete()
-    "
-
+    ",
 
      %% Holds administration of previous page paths
      "CREATE TABLE rsc_page_path_log ( 
