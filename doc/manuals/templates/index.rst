@@ -45,6 +45,6 @@ specific template-related topic.
    models
    calling-zotonic
    bestpractices
-
+   magicvalues
 
 
