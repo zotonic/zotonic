@@ -22,7 +22,7 @@
 -mod_title("Admin category support").
 -mod_description("Support editing and changing the category hierarchy.").
 -mod_prio(600).
--mod_depends([admin]).
+-mod_depends([admin, menu]).
 -mod_provides([]).
 
 -export([
