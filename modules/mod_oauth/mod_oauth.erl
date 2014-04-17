@@ -38,6 +38,7 @@
          to_oauth_consumer/2,
          str_value/2,
          test/0,
+         authenticate/3,
          observe_service_authorize/2,
          observe_admin_menu/3
 ]).
@@ -196,7 +197,7 @@ to_oauth_params(ReqData) ->
                      Req;
                  true ->
                      H = string:substr(AuthHeader, 7),
-                     oauth_uri:params_from_header_string(H) ++ Req
+                     oauth:header_params_decode(H) ++ Req
              end,
     strip_params(Params).
 
@@ -211,7 +212,7 @@ oauth_param_auth_header(Param, AuthHeader) ->
         nomatch ->
             undefined;
         {match, [_All, {Start, Len}]} ->
-            oauth_uri:decode(string:substr(AuthHeader, Start+1, Len))
+            z_url:url_decode(string:substr(AuthHeader, Start+1, Len))
     end.
 
 oauth_param(Param, ReqData) ->

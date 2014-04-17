@@ -1,0 +1,3 @@
+OAuth is from https://github.com/tim/erlang-oauth/
+
+commit 3ad509d487a72f9437fef31a379bf3cfeeb166a2 (1.4.0)

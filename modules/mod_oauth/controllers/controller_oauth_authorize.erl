@@ -65,6 +65,6 @@ process_post(ReqData, Context) ->
                    X when is_binary(X) ->
                        binary_to_list(X)
                end,
-    Redirect1 = Redirect ++ "?oauth_token=" ++ oauth_uri:encode(binary_to_list(z_db:get(token, Token))),
+    Redirect1 = Redirect ++ "?oauth_token=" ++ z_url:url_encode(binary_to_list(z_db:get(token, Token))),
     ReqData1 = wrq:set_resp_header("Location", Redirect1, ReqData),
     {{halt, 301}, ReqData1, Context}.
