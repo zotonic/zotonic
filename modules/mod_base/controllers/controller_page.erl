@@ -51,7 +51,10 @@ maybe_redirect(PagePath, Id, Context) ->
             %% path of a resource is set, we need to redirect there if the
             %% current request's path is not equal to the resource's path.
             DispatchPath = z_context:get_q(zotonic_dispatch_path, Context),
-            DispatchBin = z_convert:to_binary([[ $/, P ] || P <- DispatchPath ]),
+            DispatchBin = case DispatchPath of
+                              [] -> <<"/">>;
+                              _ -> z_convert:to_binary([[ $/, P ] || P <- DispatchPath ])
+                          end,
             if
                 DispatchBin =:= PagePath ->
                     maybe_exists(Id, Context);
