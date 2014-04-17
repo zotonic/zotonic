@@ -317,6 +317,17 @@ header {
 }
 
 
+/* Nav
+   ---------------------------------------------------------- */
+
+#navigation li a, .navbar a.brand {
+    text-shadow: none;
+}
+
+.navbar .nav>li>a:hover {
+    color: #ddd;
+}
+
 /* Images
    ---------------------------------------------------------- */
 
