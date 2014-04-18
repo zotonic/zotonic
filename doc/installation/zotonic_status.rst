@@ -1,4 +1,4 @@
-.. _tutorial-zotonic_status:
+.. _installation-zotonic_status:
 
 The Zotonic "status" site
 =========================

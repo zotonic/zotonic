@@ -1,11 +1,11 @@
-.. _tutorial-install-addsite:
+.. _installation-install-addsite:
 
 Adding your first site
 ======================
 
 Before adding your first site, make sure you got Zotonic running and
 are looking at the nice `Powered by Zotonic` web page, as described in
-:ref:`tutorial-install`.
+:ref:`installation-install`.
 
 Now that you got Zotonic running, it is time to create your first
 website with it. In this example, the site we are going to add is
