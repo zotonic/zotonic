@@ -1,5 +1,5 @@
 .. highlight:: sh
-.. _install-requirements:
+.. _installation-preinstall:
 
 Installation requirements
 =========================
@@ -26,7 +26,7 @@ installed:
 5. **git** Zotonic comes with a few subprojects which are pulled from
    the web with the ``git`` command.
 
-If you meet these requirements, head straight on to :ref:`tutorial-install`,
+If you meet these requirements, head straight on to :ref:`installation-install`,
 otherwise, read on below for the specifics on these.
    
 Erlang

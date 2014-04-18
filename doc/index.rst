@@ -14,7 +14,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   tutorials/index
+   installation/index
    manuals/maintenance
    manuals/in-depth
    ref/index

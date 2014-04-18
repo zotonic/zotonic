@@ -1,3 +1,5 @@
+.. _installation-install-troubleshooting:
+
 Installation troubleshooting
 ============================
 
