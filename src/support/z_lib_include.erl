@@ -81,9 +81,9 @@ url_for_args(Files, JoinedPath, Extension, Args, Context) ->
         false -> [];
         true -> [use_absolute_url]
     end,
-    Modified = newest(Files, {{1970,1,1},{12,0,0}}, Context),
+    Checksum = checksum(Files, Context),
     [$/|Path] = JoinedPath,
-    [{star, [Path, ?SEP, integer_to_list(Modified), Extension]} | Args1].
+    [{star, [Path, ?SEP, integer_to_list(Checksum), Extension]} | Args1].
 
 %% @doc Make the collapsed paths for the js and the css files.
 collapsed_paths(Files) ->
@@ -182,24 +182,34 @@ collapse_dirs([File|Files]) ->
         [$/ | File].
 
 
-%% @doc Get the newest mod time of the list of files.
-newest([], Mod, _Context) ->
-	[ModUTC|_] = calendar:local_time_to_universal_time_dst(Mod),
-    calendar:datetime_to_gregorian_seconds(ModUTC);
-newest([File|Files], Mod, Context) ->
+%% @doc Calculate a checksum of the mod times of the list of files.
+checksum(Files, Context) ->
+    checksum(Files, {0, 0}, Context).
+
+checksum([], State, _Context) ->
+    fletcher_final(State);
+checksum([File|Files], State, Context) ->
     case z_module_indexer:find(lib, File, Context) of
         {ok, #module_index{filepath=FilePath}} ->
-            FileMod = filelib:last_modified(FilePath),
-            case FileMod > Mod of
-                true -> newest(Files, FileMod, Context);
-                false -> newest(Files, Mod, Context)
-            end;
+	    State1 = dt_checksum(filelib:last_modified(FilePath), State),
+	    checksum(Files, State1, Context);
         {error, enoent} ->
             %% Not found, skip the file
             ?zWarning("lib file not found: ~s", [File], Context),
-            newest(Files, Mod, Context)
+            checksum(Files, State, Context)
     end.
 
+dt_checksum({{Year, Month, Day}, {Hour, Minute, Second}}, State) ->
+    fletcher_sum(Year, fletcher_sum(Month, fletcher_sum(Day, 
+        fletcher_sum(Hour, fletcher_sum(Minute, fletcher_sum(Second, State)))))).
+
+%% Calculation of Fletcher32 checksum
+fletcher_final({Sum1, Sum2}) ->
+    (Sum2 bsl 16) bor Sum1.
+
+fletcher_sum(Val, {Sum1, Sum2}) ->
+    Sum1_1 = (Sum1 + Val) rem 16#FFFF,
+    {Sum1_1, (Sum2 + Sum1_1) rem 16#FFFF}.
 
 %% @doc Split the list of files in js and css files, remove leading '/'
 split_css_js(Files) ->
