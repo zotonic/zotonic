@@ -142,9 +142,9 @@ last_modified(ReqData, State) ->
         end.
 
         
-expires(ReqData, State) ->
+expires(ReqData, #state{max_age=MaxAge}=State) ->
     NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
-    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), ReqData, State}.
+    {calendar:gregorian_seconds_to_datetime(NowSecs + MaxAge), ReqData, State}.
 
 provide_content(ReqData, State) ->
 	State1 = lookup_path(ReqData, State),
