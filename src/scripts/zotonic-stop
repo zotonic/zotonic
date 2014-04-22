@@ -19,6 +19,13 @@
 #
 require_zotonic_running
 
-echo "Stopping Zotonic $NODENAME@$NODEHOST"
-$ZOTONIC_CALL -a "init stop" 2>&1
-echo
+echo -n "Stopping Zotonic $NODENAME@$NODEHOST"
+$ZOTONIC_CALL -a "init stop" 2>&1 > /dev/null
+
+PONG=$($ZOTONIC_CALL -a "zotonic ping" 2>&1)
+while [ "$PONG" = "pong" ]; do
+    sleep 0.5
+    echo -n .
+    PONG=$($ZOTONIC_CALL -a "zotonic ping" 2>&1)
+done
+echo "OK"

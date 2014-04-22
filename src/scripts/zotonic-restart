@@ -18,6 +18,6 @@
 # usage zotonic-restart
 #
 
-echo "Restarting zotonic"
+echo "Restarting Zotonic"
 $ZOTONIC_BIN/zotonic stop
 $ZOTONIC_BIN/zotonic start
