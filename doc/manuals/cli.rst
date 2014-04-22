@@ -32,27 +32,7 @@ Currently, the following subcommands are implemented:
   Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
 
 ``zotonic addsite [options] <site_name>``
-  Create a new site with [site_name] as its name.  This new site will be based on a so-called skeleton site. Currently there are two skeletons: 'blog' and 'empty'. "blog" is the default.
-
-``zotonic addsite -s empty yoursite``
-  creates a new site called "yoursite" based on the skeleton called "empty". It has the following options:
-
-  -s <skel>    Skeleton site ('blog' or 'empty'; default: blog)
-
-  -h <host>    Database host (default: 127.0.0.1)
-  -p <port>    Database port (default: 5432)
-  -u <user>    Database user (default: zotonic)
-  -P <pass>    Database password (default: zotonic)
-  -d <name>    Database name (default: zotonic)
-  -n <schema>  Database schema (default: public)
-  -a <pass>    Admin password (default: admin)
-  -L           Create the site in the current directory instead of in `zotonic/priv/sites`.
-  
-  The "addsite" subcommand checks a file called
-  $HOME/.zotonic-defaults for the default values to these
-  options. This file is a file in bash-syntax which can define the
-  following variables: ``SKEL``, ``DBHOST``, ``DBPORT``, ``DBUSER``, ``DBPASSWORD``,
-  ``DBDATABASE``, ``DBSCHEMA``, ``ADMINPASSWORD``, ``DO_LINK``.
+  Creates a new site with [site_name] as its name.  See :ref:`manual-cli-addsite` for a full overview of this command.
 
 ``zotonic modules <subcommand> [options]``
   Manages modules. It has the following subcommands:
