@@ -76,7 +76,7 @@ function do_addsite {
 
     # simple key-value replace
     seds=""
-    for var in SITE SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA ADMINPASSWORD YEAR DATE; do
+    for var in SITE SITEHOSTNAME SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA ADMINPASSWORD YEAR DATE; do
         seds="s/%%$var%%/${!var}/g;$seds"
     done
     sed -i -e "$seds" $SITE.erl config
