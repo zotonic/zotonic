@@ -41,6 +41,6 @@ PASSWORD=`cat $CONFIG | grep password | sed -E 's/^\s\{\s*password\s*,\s*"(.*?)"
 echo "
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Zotonic has been successfully installed:
-- Visit http://locahost:8000/ to see the Sites administration page
+- Visit http://localhost:8000/ to see the sites administration page.
 - The password for login to this page is $PASSWORD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

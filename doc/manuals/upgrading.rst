@@ -30,12 +30,19 @@ To this::
 Besides this change, a site's config file can now also be split into
 multiple files living under the ``config.d/`` folder within a site.
 
+Build process
+.............
+
+The ``git`` tool is now **required** to build Zotonic, even when you
+downloaded the release zip file. This is due to Zotonic's external
+dependencies now being managed with the ``rebar`` tool.
+
   
 Misc changes
 ............
 
 All configuration options regarding logging are now in set in the ``priv/erlang.config`` file,
-which is created by default if misssing from ``priv/erlang.config.in``.
+which is created by default if missing from ``priv/erlang.config.in``.
 
 
 

@@ -31,7 +31,7 @@ download page. This installation method gets you the officially
 supported version.
 
 1. Download the latest release as a `.zip` from
-   http://code.google.com/p/zotonic/downloads/list, and unzip it in a
+   https://github.com/zotonic/zotonic/releases, and unzip it in a
    folder called ``zotonic``.
 
 .. include:: _make_common.rst
