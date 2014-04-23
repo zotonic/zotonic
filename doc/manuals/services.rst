@@ -5,27 +5,34 @@ API Services
 
 Services provide a generalized way to create API
 calls. These calls automatically use the authentication mechanism
-(session id or OAuth) to perform access checks.
+(session id or :ref:`OAuth <module-mod_oauth>`) to perform access checks.
 
-Serving services
-----------------
+A Zotonic service is created in a separate service (sub)module. Here you typically define the method name, the type of access (GET or POST) and if  authentication is required.
 
-In a default Zotonic install, there is a single URL namespace under which all API services can be accessed. :ref:`controller-api` by default intercepts all URLs according to the
-following patterns::
+
+How service names are mapped to URLs
+------------------------------------
+
+The URL to call an API service is defined by the module and the method name.
+
+In a vanilla Zotonic install, there is one single URL namespace under which all API services can be accessed. :ref:`controller-api` by default intercepts all URLs according to the following patterns::
 
   /api/:module/:method
-  /api/:module``
+  /api/:module
 
+On these URLs, a lookup is done to find the corresponding Zotonic module inside the services subdirectory of the module::
 
-On these URL, a lookup is done to the Zotonic module named ``mod_:module``
-in its ``services/`` directory, for a Erlang file called
-`service_:module_:method.erl`. If method is left empty (at the
-``/api/:module`` URL), the method name equals the module name.
+  mod_modulename/
+    mod_modulename.erl
+    services/
+      service_modulename_methodname.erl
 
-So for example the following lookups result in the following service handlers:
+If no method name is used in the ``/api/:module`` URL, the method name will be equal to the module name - see ``/api/search`` in the table below.
+
+Examples of URLs that correspond to service handlers:
 
 =================  ==========   ========   ====================================
-URL                Module       Method     Found service .erl file
+URL                Module       Method     Located in service .erl file
 =================  ==========   ========   ====================================
 /api/base/export   mod_base     export     mod_base/services/service_base_export.erl
 /api/base/info     mod_base     info       mod_base/services/service_base_info.erl
@@ -40,16 +47,16 @@ documentation.
 Service naming in detail
 ........................
 
-As stated above, a service module is defined like this::
+As stated above, a service module is defined as::
 
   service_<modulename>_<processname>.erl
     
 And is then reachable on the URL
-``http://<hostname>/api/<module_name>/<process_name>``. Important: the
-module that the service is in needs to be has to be activated.
+``http://<hostname>/api/<module_name>/<process_name>``. 
 
-Say you have a module named `mod_something`, and it is activated and
-you want a service to return stats.  Your directory would look like
+The module *module_name* to be activated for the API call to work.
+
+If you have a module named `mod_something` that needs a service to return stats, your directory would look like
 this::
 
   mod_something/
@@ -57,7 +64,7 @@ this::
     services/
       service_something_stats.erl
 
-And the url for this service ``http://<site_addr>/api/something/stats``
+The url for this service will be ``http://<site_addr>/api/something/stats``
 
 The key is that an activated module (minus the ``mod_`` prefix if you use
 them!) should be part of the service name. Zotonic parses the service
