@@ -251,7 +251,7 @@ language_from_bindings_1(false) ->
 
 
 %% Handle possible request rewrite; used when no dispatch rule matched
-handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, ReqDataHost, Context) when is_integer(Id) ->
+handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, ReqDataHost, Context) when is_integer(Id) ->
     %% Retry with the resource's default page uri
     case m_rsc:p_no_acl(Id, default_page_url, Context) of
         undefined ->
@@ -267,7 +267,9 @@ handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, 
                 {no_host_match} ->
                     {{no_dispatch_match, undefined, undefined, []}, undefined};
                 OtherDispatchMatch ->
-                    handle_dispatch(OtherDispatchMatch, DispReq, ReqDataHost)
+                    set_dispatch_path(
+                        handle_dispatch(OtherDispatchMatch, DispReq, ReqDataHost),
+                        proplists:get_value(zotonic_dispatch_path, Bindings)) 
             end
     end;
 handle_rewrite({ok, #dispatch_match{
@@ -291,6 +293,18 @@ handle_rewrite({ok, #dispatch_redirect{location=Location, is_permanent=IsPermane
 handle_rewrite(undefined, _DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, ReqDataHost, _Context) ->
     {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost}.
 
+
+set_dispatch_path(Match, undefined) ->
+    Match;
+set_dispatch_path({{Mod, ModOpts, X, Y, PathTokens, Bindings, AppRoot, StringPath}, Host}, DispatchPath) ->
+    Bindings1 = [
+        {zotonic_dispatch_path, DispatchPath},
+        {zotonic_dispatch_path_rewrite, proplists:get_value(zotonic_dispatch_path, Bindings)}
+        | proplists:delete(zotonic_dispatch_path, Bindings)
+    ],
+    {{Mod, ModOpts, X, Y, PathTokens, Bindings1, AppRoot, StringPath}, Host};
+set_dispatch_path(Match, _DispatchPath) ->
+    Match.
 
 %% @doc Try to find a site which says it can handle the host.
 %%      This enables to have special (short) urls for deep pages.
