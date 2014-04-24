@@ -1,3 +1,10 @@
+Release 0.10.0p1
+================
+
+This patch release fixes a problem where a request for a resource with a
+`page_path` could result in a redirect loop.
+
+
 Release 0.10.0
 ==============
 
