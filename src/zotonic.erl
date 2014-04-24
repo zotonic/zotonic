@@ -24,7 +24,7 @@
 
 -compile([{parse_transform, lager_transform}]).
 
--define(MIN_OTP_VERSION, "R15B03").
+-define(MIN_OTP_VERSION, "15B03"). %% note -- *without* the initial R (since OTP 17.0 the R is dropped)
 
 
 ensure_started(App) ->
@@ -122,13 +122,19 @@ update([Node]) ->
 
 
 test_erlang_version() ->
-    Version = erlang:system_info(otp_release),
-    if
-        Version < ?MIN_OTP_VERSION ->
-            lager:error("Zotonic needs at least Erlang release ~p; this is ~p", [?MIN_OTP_VERSION, Version]),
+    case otp_version() of
+        Version when Version < ?MIN_OTP_VERSION ->
+            io:format("Zotonic needs at least Erlang release ~p; this is ~p~n", [?MIN_OTP_VERSION, erlang:system_info(otp_release)]),
             erlang:exit({minimal_otp_version, ?MIN_OTP_VERSION});
-        true ->
+        _ ->
             ok
+    end.
+
+%% @doc Strip the optional "R" from the OTP release because from 17.0 onwards it is unused
+otp_version() ->
+    case erlang:system_info(otp_release) of
+        [$R | V] -> V;
+        V -> V
     end.
 
 run_tests() ->

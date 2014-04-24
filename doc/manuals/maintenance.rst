@@ -6,4 +6,5 @@ Maintenance
 
    deployment/index
    cli
+   cli-addsite
    upgrading

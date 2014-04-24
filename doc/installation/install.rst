@@ -1,8 +1,8 @@
 .. highlight:: sh
-.. _tutorial-install:
+.. _installation-install:
   
-Installation
-============
+Installing Zotonic
+==================
 
    
 Before beginning installation, please be sure your system meets the
@@ -13,15 +13,15 @@ without any sites in it.
 
 There are multiple ways of installing Zotonic, depending on what you want and 
 
-1. :ref:`tutorial-install-release`
-2. :ref:`tutorial-install-git`
-3. :ref:`tutorial-install-deb`
-4. :ref:`tutorial-install-script`
+1. :ref:`installation-install-release`
+2. :ref:`installation-install-git`
+3. :ref:`installation-install-deb`
+4. :ref:`installation-install-script`
 
-For most people, :ref:`tutorial-install-release` should be the best option.
+For most people, :ref:`installation-install-release` should be the best option.
    
 
-.. _tutorial-install-release:
+.. _installation-install-release:
    
 Installing from a release .zip archive
 --------------------------------------
@@ -31,12 +31,12 @@ download page. This installation method gets you the officially
 supported version.
 
 1. Download the latest release as a `.zip` from
-   http://code.google.com/p/zotonic/downloads/list, and unzip it in a
+   https://github.com/zotonic/zotonic/releases, and unzip it in a
    folder called ``zotonic``.
 
 .. include:: _make_common.rst
 
-.. _tutorial-install-git:
+.. _installation_install-git:
 
 Installing the development version using `git`
 ----------------------------------------------
@@ -52,7 +52,7 @@ source tree from github.com and run the `master` branch of Zotonic.
 .. include:: _make_common.rst
 
              
-.. _tutorial-install-deb:
+.. _installation-install-deb:
 
 Installing from the Debian package
 ----------------------------------             
@@ -78,10 +78,10 @@ Then, run::
   
 Now, point your browser to http://localhost:8000/ and make sure
 you see the `Powered by Zotonic` welcome screen. Then, head on to
-:ref:`tutorial-install-addsite`.
+:ref:`installation-install-addsite`.
 
   
-.. _tutorial-install-script:
+.. _installation-install-script:
 
 Installation with the one-line script for Debian-based systems
 --------------------------------------------------------------
@@ -100,4 +100,4 @@ permissions, and compile and start Zotonic.
 
 Now, point your browser to http://localhost:8000/ and make sure
 you see the `Powered by Zotonic` welcome screen. Then, head on to
-:ref:`tutorial-install-addsite`.
+:ref:`installation-install-addsite`.

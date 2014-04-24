@@ -32,3 +32,13 @@ protocol, hostname and port of the website (as seen by the user agent)::
    {% url admin_edit_rsc id=42 foo="bar" use_absolute_url %}
 
 Will return an url like “http://example.com/admin/edit/42?foo=bar”.
+
+
+Finding out the current dispatch rule
+-------------------------------------
+
+The name of the current dispatch rule is always available in a
+template under the name ``zotonic_dispatch``.
+
+Check :ref:`template-magicvalues` for a full overview of variables
+that are always available in the templates.

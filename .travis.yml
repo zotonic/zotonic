@@ -6,6 +6,7 @@ script: make all edocs && bin/zotonic runtests
 branches:
   only:
     - master
+    - release-0.10.x
 notifications:
   email:
     recipients:
@@ -15,7 +16,7 @@ notifications:
   irc:
     channels:
       - "chat.freenode.net#zotonic"
-    on_success: always #[always|never|change] # default: change
+    on_success: change #[always|never|change] # default: change
     on_failure: always #[always|never|change] # default: always
     template:
       - "New commit on %{repository_name}/%{branch} by %{author}:  %{message} (%{commit}) "

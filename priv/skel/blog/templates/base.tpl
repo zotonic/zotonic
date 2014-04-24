@@ -12,7 +12,7 @@
 		-->
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="author" content="YOUR NAME HERE &copy; 2013" />
+		<meta name="author" content="YOUR NAME HERE &copy; 2014" />
 
 		{% all include "_html_head.tpl" %}
 

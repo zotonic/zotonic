@@ -33,6 +33,30 @@
 
 %% @doc Install tables used for storing survey results
 manage_schema(install, Context) ->
+    %% This is a workaround for async initialization of the database tables; see github issues #734, #497
+    install_survey_answer_table(z_context:prune_for_spawn(Context)),
+    
+    #datamodel{
+        categories=[
+            {survey, undefined, [{title, <<"Survey">>}]},
+            {poll, survey, [{title, <<"Poll">>}]}
+        ]};
+
+manage_schema({upgrade, 2}, Context) ->
+    % Replace all survey properties with blocks
+    {Low, High} = m_category:get_range_by_name(survey, Context),
+    Ids = z_db:q("select id from rsc where pivot_category_nr >= $1 and pivot_category_nr <= $2", [Low, High], Context),
+    [
+        survey_to_blocks(Id, Context) || {Id} <- Ids
+    ],
+    ok;
+
+manage_schema({upgrade, 3}, Context) ->
+    [] = z_db:q("alter table survey_answer add column is_anonymous boolean not null default false", Context),
+    ok.
+
+
+install_survey_answer_table(Context) ->
     case z_db:table_exists(survey_answer, Context) of
         false ->
             z_db:create_table(survey_answer, [
@@ -64,28 +88,12 @@ manage_schema(install, Context) ->
             z_db:equery("create index survey_answer_survey_question_key on survey_answer(survey_id, question)", Context),
             z_db:equery("create index survey_answer_survey_user_key on survey_answer(survey_id, user_id)", Context),
             z_db:equery("create index survey_answer_survey_persistent_key on survey_answer(survey_id, persistent)", Context);
+                        
         true ->
             ok
-    end,
-    #datamodel{
-        categories=[
-            {survey, undefined, [{title, <<"Survey">>}]},
-            {poll, survey, [{title, <<"Poll">>}]}
-        ]};
-
-manage_schema({upgrade, 2}, Context) ->
-    % Replace all survey properties with blocks
-    {Low, High} = m_category:get_range_by_name(survey, Context),
-    Ids = z_db:q("select id from rsc where pivot_category_nr >= $1 and pivot_category_nr <= $2", [Low, High], Context),
-    [
-        survey_to_blocks(Id, Context) || {Id} <- Ids
-    ],
-    ok;
-
-manage_schema({upgrade, 3}, Context) ->
-    [] = z_db:q("alter table survey_answer add column is_anonymous boolean not null default false", Context),
-    ok.
-
+    end.
+    
+    
 
 survey_to_blocks(Id, Context) ->
     case m_rsc:p_no_acl(Id, survey, Context) of

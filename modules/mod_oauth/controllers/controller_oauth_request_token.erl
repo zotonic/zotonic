@@ -70,7 +70,7 @@ response(ReqData, Context) ->
                                                     Params, mod_oauth:to_oauth_consumer(Consumer, SigMethod), "") of
                                       true ->
                                           {ok, Token} = m_oauth_app:request_token(Consumer, Context),
-                                          ReqData1 = wrq:set_resp_body(oauth_uri:params_to_string(
+                                          ReqData1 = wrq:set_resp_body(oauth:uri_params_encode(
                                                                          [{"oauth_token", binary_to_list(z_db:get(token, Token))},
                                                                           {"oauth_token_secret", binary_to_list(z_db:get(token_secret, Token))}]), ReqData),
                                           {{halt, 200}, ReqData1, Context};

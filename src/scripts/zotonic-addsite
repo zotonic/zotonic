@@ -21,8 +21,14 @@
 function usage {
     echo "Usage: `basename $0` [options] <site_name>" 1>&2
     echo 1>&2
-    echo "  -s <skel>    Skeleton site ('blog' or 'empty'; default: $SKEL)" 1>&2
-    echo "  -L           Create site in current directory and symlink it into Zotonic" 1>&2
+    echo "  -s <skel>    Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: $SKEL)" 1>&2
+    if [ "$SITEHOSTNAME" == "" ]; then
+        echo "  -H <host>    Site's hostname (default: <sitename>.dev)" 1>&2
+    else 
+        echo "  -H <host>    Site's hostname (default: $SITEHOSTNAME)" 1>&2
+    fi
+    echo "  -T <dir>     Target directory (default: $TARGETDIR)" 1>&2
+    echo "  -l           Create the site directly under Zotonic's priv/sites directory (instead of using a symlink)" 1>&2
     echo 1>&2
     echo "  -h <host>    Database host (default: $DBHOST)" 1>&2
     echo "  -p <port>    Database port (default: $DBPORT)" 1>&2
@@ -70,7 +76,7 @@ function do_addsite {
 
     # simple key-value replace
     seds=""
-    for var in SITE SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA ADMINPASSWORD YEAR DATE; do
+    for var in SITE SITEHOSTNAME SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA ADMINPASSWORD YEAR DATE; do
         seds="s/%%$var%%/${!var}/g;$seds"
     done
     sed -i -e "$seds" $SITE.erl config
@@ -79,7 +85,7 @@ function do_addsite {
 
     if [ "$DO_LINK" = "1" ]; then
         # symlink site into zotonic
-        mv $SITES/$SITE .
+        mv $SITES/$SITE $TARGETDIR
         ln -s $PWD/$SITE $SITES/$SITE
     fi
 
@@ -87,16 +93,14 @@ function do_addsite {
     echo "Building site..."
     $ZOTONIC_CALL -a "make all [[load]]"  > /dev/null
 
-    URL="http://$SITE:${ZOTONIC_PORT:=8000}/"
-    
     echo "Starting..."
-    curl -s $URL > /dev/null
+    curl -s $TARGETURL > /dev/null
     sleep 1
     
     $ZOTONIC_CALL -a "z_sites_manager start [$SITE]" > /dev/null
     
     echo
-    echo "Added site $SITE. Now go to $URL to view it."
+    echo "Added site $SITE. Now go to $TARGETURL to view it."
 }
 
 
@@ -121,9 +125,10 @@ function check_options {
     DBDATABASE=${DBDATABASE:=zotonic}
     DBSCHEMA=${DBSCHEMA:=public}
     ADMINPASSWORD=${ADMINPASSWORD:=admin}
-    DO_LINK=0
+    TARGETDIR=${TARGETDIR:=$PWD}
+    DO_LINK=1
 
-    while getopts "s:d:h:p:u:P:n:a:L" optionName; do
+    while getopts "s:d:h:p:u:P:n:a:lH:T:" optionName; do
         case "$optionName" in
             s) SKEL="$OPTARG";;
             h) DBHOST="$OPTARG";;
@@ -133,14 +138,18 @@ function check_options {
             d) DBDATABASE="$OPTARG";;
             n) DBSCHEMA="$OPTARG";;
             a) ADMINPASSWORD="$OPTARG";;
-            L) DO_LINK=1;;
+            H) SITEHOSTNAME="$OPTARG";;
+            T) TARGETDIR="$OPTARG";;
+            l) DO_LINK=0;;
             [?]) exit
         esac
-
     done
 
     SITE=${!OPTIND}
+}
 
+function check_preconditions {
+    
     if [ "$SITE" == "" ]; then
         usage
     fi
@@ -150,23 +159,30 @@ function check_options {
         exit 1
     fi
 
-    if ! ping -c 1 -q $SITE &>/dev/null; then
-
-        echo "Warning!"
-        echo "Site: '$SITE' cannot be reached."
-        echo "Command 'host $SITE' must resolve to an IP address,"
-        echo "otherwise you won't be able to reach it after installing the site."
-        echo "You can fix that by adding the following line to /etc/hosts:"
-        echo
-        echo "127.0.0.1         $SITE"
-        echo
+    if [ "$SITEHOSTNAME" == "" ]; then
+        SITEHOSTNAME="${SITE}.dev"
     fi
     
     
-    # allow %%SITE%% syntax in db name and schema
-    DBDATABASE=`echo $DBDATABASE|sed "s/%%SITE%%/$SITE/g"`
+    # allow %%SITE%% syntax in some values
+    DBDATABASE=`echo $DBDATABASE|sed "s/%%SITE%%/$SITE/g"` 
     DBSCHEMA=`echo $DBSCHEMA|sed "s/%%SITE%%/$SITE/g"`
+    SITEHOSTNAME=`echo $SITEHOSTNAME|sed "s/%%SITE%%/$SITE/g"`
 
+    if ! ping -c 1 -q $SITEHOSTNAME &>/dev/null; then
+
+        echo "************"
+        echo "  Warning!"
+        echo "************"
+        echo "Site: '$SITEHOSTNAME' cannot be reached."
+        echo "Command 'host $SITEHOSTNAME' must resolve to an IP address,"
+        echo "otherwise you won't be able to reach it after installing the site."
+        echo "You can fix that by adding the following line to /etc/hosts:"
+        echo
+        echo "127.0.0.1         $SITEHOSTNAME"
+        echo
+    fi
+    
     if [ -e $SITES/$SITE ]; then
         echo `basename $0`: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2
         exit 1
@@ -178,12 +194,31 @@ function check_options {
         exit 1
     fi
 
+    if [ ! -e $TARGETDIR -o ! -d $TARGETDIR ]; then
+        echo `basename $0`: cannot add site "\`$SITE'": Target directory $TARGETDIR does not exist or is not a directory. 1>&2
+        exit 1
+    fi
+
+    if [ ! -w $TARGETDIR ]; then
+        echo `basename $0`: cannot add site "\`$SITE'": Target directory $TARGETDIR is not writeable 1>&2
+        exit 1
+    fi
+    
+    if [ "$ZOTONIC_PORT" == "80" ]; then
+        TARGETURL="http://$SITEHOSTNAME/"
+    else
+        TARGETURL="http://$SITEHOSTNAME:${ZOTONIC_PORT:=8000}/"
+    fi
+    
     echo 1>&2
     echo "==== Add site ====" 1>&2
     echo 1>&2
     echo " Site name: $SITE" 1>&2
-    echo " Site directory: $SITES/$SITE" 1>&2
+    echo " Site URL: $TARGETURL" 1>&2
+    echo 1>&2
     echo " Skeleton site: $SKEL" 1>&2
+    echo " Site directory: $TARGETDIR/$SITE" 1>&2
+    echo " Admin password: $ADMINPASSWORD" 1>&2
     echo 1>&2
     echo " Database host: $DBHOST" 1>&2
     echo " Database port: $DBPORT" 1>&2
@@ -191,7 +226,6 @@ function check_options {
     echo " Database password: $DBPASSWORD" 1>&2
     echo " Database name: $DBDATABASE" 1>&2
     echo " Database schema: $DBSCHEMA" 1>&2
-    echo " Admin password: $ADMINPASSWORD" 1>&2
     echo 1>&2
 
     read -p '>>> Hit return to proceed...'
@@ -199,5 +233,6 @@ function check_options {
 
 
 check_options $*
+check_preconditions
 do_addsite
 
