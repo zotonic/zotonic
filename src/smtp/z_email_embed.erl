@@ -81,7 +81,17 @@ embed_image([Path, LibImg, SubPath], {Parts, Html, Context} = Acc) ->
 
 lookup(Where, Path, Context) ->
     SafePath = mochiweb_util:safe_relative_path(mochiweb_util:unquote(Path)),
-    lookup_decoded(Where, SafePath, Context).
+    if_visible(lookup_decoded(Where, SafePath, Context), Context).
+
+if_visible({ok, #z_file_info{} = Info} = OK, Context) ->
+    case z_file_request:is_visible(Info, Context) of
+        true ->
+            OK;
+        false ->
+            {error, eacces}
+    end;
+if_visible({error, _} = Error, _Context) ->
+    Error.
 
 lookup_decoded(<<"lib">>, Path, Context) ->
     z_file_request:lookup_lib(Path, Context);

@@ -84,13 +84,8 @@ is_authorized(ReqData, {FInfo,Context}) ->
 
 forbidden(ReqData, {{error,_},_Context} = State) ->
     {false, ReqData, State};
-forbidden(ReqData, {#z_file_info{acls=Acls},Context} = State) ->
-    {lists:any(fun(Id) when is_integer(Id) ->
-                        not z_acl:rsc_visible(Id, Context);
-                  ({module, Module}) ->
-                        Module:file_forbidden(z_context:get(path, Context), Context)
-               end, 
-               Acls), ReqData, State}.
+forbidden(ReqData, {#z_file_info{} = Info,Context} = State) ->
+    {not z_file_request:is_visible(Info, Context), ReqData, State}.
 
 last_modified(ReqData, {{error, _},_} = State) ->
     {calendar:universal_time(), ReqData, State};

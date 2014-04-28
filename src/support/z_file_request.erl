@@ -29,6 +29,7 @@
     content_data/2,
     content_stream/2,
     content_file/2,
+    is_visible/2,
 
     %% Exported for webzmachine streaming
     stream_many_parts/1,
@@ -76,6 +77,13 @@ content_file_part([#part_cache{cache_pid=Pid}], _Context) ->
             Error
     end.
 
+is_visible(#z_file_info{acls=Acls}, Context) ->
+    lists:all(fun(Id) when is_integer(Id) ->
+                    z_acl:rsc_visible(Id, Context);
+                 ({module, Module}) ->
+                    not Module:file_forbidden(z_context:get(path, Context), Context)
+              end, 
+              Acls).
 
 content_data(Info, Enc) ->
     concatenate_stream(content_stream(Info, Enc), <<>>).
