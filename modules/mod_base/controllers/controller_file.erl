@@ -97,9 +97,16 @@ last_modified(ReqData, {{error, _},_} = State) ->
 last_modified(ReqData, {#z_file_info{modifiedUTC=LModUTC},_Context} = State) ->
     {LModUTC, ReqData, State}.
 
-expires(ReqData, State) ->
-    {{Y,M,D},HIS} = calendar:universal_time(),
-    {{{Y+1,M,D},HIS}, ReqData, State}.
+expires(ReqData, {_Info,Context} = State) ->
+    Date = calendar:universal_time(),
+    case z_context:get(max_age, Context, ?MAX_AGE) of
+        N when N >= ?MAX_AGE ->
+            {{Y,M,D},HIS} = Date,
+            {{{Y+1,M,D},HIS}, ReqData, State};
+        MaxAge ->
+            NowSecs = calendar:datetime_to_gregorian_seconds(Date),
+            {calendar:gregorian_seconds_to_datetime(NowSecs + MaxAge), ReqData, State}
+    end.
 
 charsets_provided(ReqData, {{error, _},_Context} = State) ->
     {no_charset, ReqData, State};
@@ -125,7 +132,8 @@ provide_content(ReqData, {{error, _}, _} = State) ->
     {<<>>, ReqData, State};
 provide_content(ReqData,  {Info,Context} = State) ->
     RD1 = set_content_dispostion(z_context:get(content_disposition, Context), ReqData),
-    RD2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context), RD1),
+    MaxAge = z_context:get(max_age, Context, ?MAX_AGE),
+    RD2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context), MaxAge, RD1),
     {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD2)), RD2, State}.
 
 
@@ -144,9 +152,9 @@ is_public(Ids, Context) ->
     ContextAnon = z_context:new(Context),
     not lists:any(fun(Id) -> not z_acl:rsc_visible(Id, ContextAnon) end, Ids).
 
-set_cache_control_public(true, ReqData) ->
-    wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData);
-set_cache_control_public(false, ReqData) ->
+set_cache_control_public(true, MaxAge, ReqData) ->
+    wrq:set_resp_header("Cache-Control", "public, max-age="++z_convert:to_list(MaxAge), ReqData);
+set_cache_control_public(false, _MaxAge, ReqData) ->
     wrq:set_resp_header("Cache-Control", "private, max-age=0, must-revalidate, post-check=0, pre-check=0", ReqData).
 
 get_file_info(ConfigProps, Context) ->

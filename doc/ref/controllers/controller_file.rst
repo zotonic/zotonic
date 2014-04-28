@@ -51,6 +51,9 @@ controller_file has the following dispatch options:
 |acl                  |Extra authorization checks to be     |See `ACL options`_.     |
 |                     |performed.                           |                        |
 +---------------------+-------------------------------------+------------------------+
+|max_age              |Max age, used for Cache and Expires. |{max_age,3600}          |
+|                     |Value is an integer, number of secs. |                        |
++---------------------+-------------------------------------+------------------------+
 
 .. include:: acl_options.rst
 
