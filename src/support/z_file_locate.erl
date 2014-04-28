@@ -36,31 +36,26 @@
 
 
 locate_file(File, Context) ->
-    try
-        locate_sources([], [], [z_convert:to_binary(File)], Context)
-    catch
-        throw:enoent ->
-            {error, enoent}
-    end.
+    maybe_enoent(locate_sources([], [], [z_convert:to_binary(File)], Context)).
 
 locate_lib(File, Context) ->
-    try
-        locate_sources([lib], [], [z_convert:to_binary(File)], Context)
-    catch
-        throw:enoent ->
-            {error, enoent}
-    end.
+    maybe_enoent(locate_sources([lib], [], [z_convert:to_binary(File)], Context)).
 
 
 locate_sources(Root, ImageFilters, Files, Context) ->
     FilesFilters = [ extract_filters(F, ImageFilters, Context) || F <- Files ],
     [ locate_source(Root, Path, OriginalFile, Filters, Context) || {Path, OriginalFile, Filters} <- FilesFilters ].
 
+maybe_enoent([#part_missing{}]) ->
+    {error, enoent};
+maybe_enoent(Parts) ->
+    Parts.
+
 extract_filters(Path, OptFilters, Context) ->
     case safe_path(Path) of
         undefined ->
             lager:warning("Unsafe path ~p", Path),
-            throw(enoent);
+            part_missing(Path);
         SafePath ->
             case binary:match(SafePath, <<"(">>) of
                 nomatch ->
@@ -82,8 +77,8 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
         {error, preview_source_gone} ->
             throw(preview_source_gone);
         {error, _} = Error->
-            lager:debug("Could not find ~p, error ~p", [Path, Error]),
-            throw(enoent);
+            lager:debug("Could not find ~p, error ~p, original ~p", [Path, Error, OriginalFile]),
+            #part_missing{file = Path};
         {ok, Loc} ->
             Loc
     end;
@@ -151,7 +146,6 @@ locate_source_uploaded(<<"preview/", _/binary>> = Path, OriginalFile, Filters, C
 locate_source_uploaded(Path, OriginalFile, Filters, Context) -> 
     case m_media:get_by_filename(OriginalFile, Context) of
         undefined ->
-            lager:debug("Unknown medium file ~p", [OriginalFile]),
             {error, enoent};
         Medium ->
             locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context)
@@ -190,6 +184,10 @@ locate_in_filestore(Path, InDir, Medium, Context) ->
             part_file(filename:join(InDir, Path))
     end.
 
+part_missing(Filename) ->
+    {ok, #part_missing{
+        file = Filename
+    }}.
 
 part_file(Filename) ->
     part_file(Filename, []).

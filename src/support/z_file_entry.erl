@@ -176,23 +176,27 @@ locate(timeout, State) ->
     Files = z_lib_include:uncollapse(State#state.request_path),
     try
         Sources = z_file_locate:locate_sources(State#state.root, State#state.image_filters, Files, Context),
-        Modified = newest_part(Sources, State#state.modified),
-        Size = total_size(Sources),
-        ModifiedUTC = hd(calendar:local_time_to_universal_time_dst(Modified)),
-        State1 = State#state{
-            is_found=true,
-            mime=Mime,
-            size=Size,
-            parts=Sources,
-            modified=Modified,
-            modifiedUTC=ModifiedUTC,
-            index_ref=IndexRef
-        },
-        {next_state, content_encoding_gzip, reply_waiting(State1), 0}
+        AllMissing = lists:all(fun(#part_missing{}) -> true; (_) -> false end, Sources),
+        if
+            AllMissing ->
+                locate_enoent(State, IndexRef, Mime);
+            true ->
+                Modified = newest_part(Sources, State#state.modified),
+                Size = total_size(Sources),
+                ModifiedUTC = hd(calendar:local_time_to_universal_time_dst(Modified)),
+                State1 = State#state{
+                    is_found=true,
+                    mime=Mime,
+                    size=Size,
+                    parts=Sources,
+                    modified=Modified,
+                    modifiedUTC=ModifiedUTC,
+                    index_ref=IndexRef
+                },
+                {next_state, content_encoding_gzip, reply_waiting(State1), 0}
+        end
     catch
         error:checksum_invalid ->
-            locate_enoent(State, IndexRef, Mime);
-        throw:enoent ->
             locate_enoent(State, IndexRef, Mime);
         throw:preview_source_gone ->
             {next_state, locate, State, 0}
@@ -374,7 +378,9 @@ lookup_acls([#part_file{acl=Acl}|Ps], Acc) ->
 lookup_acls([#part_data{acl=Acl}|Ps], Acc) ->
     lookup_acls(Ps, [Acl|Acc]);
 lookup_acls([#part_cache{acl=Acl}|Ps], Acc) ->
-    lookup_acls(Ps, [Acl|Acc]).
+    lookup_acls(Ps, [Acl|Acc]);
+lookup_acls([#part_missing{}|Ps], Acc) ->
+    lookup_acls(Ps, Acc).
 
 
 newest_part([], M) ->
@@ -435,7 +441,9 @@ gzip_compress_1([#part_file{filepath=Filename}|Ps], Z, Acc) ->
 gzip_compress_1([#part_cache{cache_pid=Pid}|Ps], Z, Acc) ->
     {ok, {filename, _, Filename}} = filezcache:lookup_file(Pid),
     Acc1 = compress_file(Filename, Z, Acc),
-    gzip_compress_1(Ps, Z, Acc1).
+    gzip_compress_1(Ps, Z, Acc1);
+gzip_compress_1([#part_missing{}|Ps], Z, Acc) ->
+    gzip_compress_1(Ps, Z, Acc).
 
 
 % We read 512K at once for compressing files.

@@ -71,3 +71,7 @@
         modified,               % modification time for this entry
         data                    % binary data
     }).
+
+-record(part_missing, {
+        file
+    }).

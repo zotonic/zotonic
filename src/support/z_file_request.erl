@@ -64,6 +64,8 @@ content_file(#z_file_info{encodings=Encs}, Context) ->
     {identity, Parts} = proplists:lookup(identity, Encs),
     content_file_part(Parts, Context).
 
+content_file_part([#part_missing{}], _Context) ->
+    {error, enoent};
 content_file_part([#part_file{filepath=File}], _Context) ->
     {ok, File};
 content_file_part([#part_cache{cache_pid=Pid}], _Context) ->
@@ -103,7 +105,9 @@ stream_single_part(#part_cache{cache_pid=Pid}) ->
         Other ->
             lager:warning("Unexpected result from the filezcache: ~p", [Other]),
             <<>>
-    end.
+    end;
+stream_single_part(#part_missing{}) ->
+    <<>>.
 
 stream_many_parts([]) ->
     {<<>>, done};
@@ -120,7 +124,9 @@ stream_many_parts([#part_cache{cache_pid=Pid}|Parts]) ->
         Other ->
             lager:warning("Unexpected result from the filezcache: ~p", [Other]),
             stream_many_parts(Parts)
-    end.
+    end;
+stream_many_parts([#part_missing{}|Parts]) ->
+    stream_many_parts(Parts).
 
 stream_sub_stream(Fun, Parts) ->
     case Fun() of
