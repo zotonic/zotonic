@@ -9,6 +9,29 @@ that require attetion for site developers when things change in
 incompatible ways or get deprecated.
 
 
+Upgrading to Zotonic 0.11
+-------------------------
+
+Controller changes
+..................
+
+The ``controller_lib`` and ``controller_file_readonly`` have been replaced
+by the ``controller_file``. This controller uses the new *filestore* system 
+in Zotonic. This enables the storage of files on remote services like S3.
+
+If you have added your own ``controller_lib`` or ``controller_file_readonly``
+dispatch rules then you have to change them to use ``controller_file`` instead.
+
+The following options have been **removed**:
+
+ * media_path
+ * is_media_preview
+ * use_cache
+ * use of an *id* argument, use ``controller_file_id`` instead
+
+See the the documentation for :ref:`controller-file` and :ref:`controller-file_id`.
+
+
 Upgrading to Zotonic 0.10
 -------------------------
 
