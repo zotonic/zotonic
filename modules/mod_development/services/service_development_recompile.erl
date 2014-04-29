@@ -28,11 +28,16 @@
 -include_lib("zotonic.hrl").
 
 
-process_get(_ReqData, _Context) ->
-    try
-        z:m()
-    catch
-        _:_ ->
-            undefined
-    end,
-    "OK".
+process_get(_ReqData, Context) ->
+    case z_convert:to_bool(m_config:get_value(mod_development, enable_api, Context)) of
+        false ->
+            "DISABLED";
+        true ->
+            try
+                z:m()
+            catch
+                _:_ ->
+                    undefined
+            end,
+            "OK"
+    end.
