@@ -176,7 +176,7 @@ stats(Context) ->
 
     % TODO: we need a separate index for this lookup
     {InCloud, InCloudSize} = z_db:q_row("
-                            select count(*), sum(m.size) 
+                            select count(*), coalesce(sum(m.size), 0)
                             from medium m
                                     join filestore f
                                     on f.path = 'archive/' || m.filename
