@@ -48,15 +48,15 @@
                     <div class="control-group">
                         <label class="control-label" for="s3secret">{_ API Secret _}</label>
                         <div class="controls">
-                            <input type="text" id="s3secret" name="s3secret" value="{{ m.config.mod_filestore.s3secret.value|default:'email'|escape }}" class="span6" />
+                            <input type="text" id="s3secret" name="s3secret" value="{{ m.config.mod_filestore.s3secret.value|escape }}" class="span6" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <div class="controls">
                             <label class="checkbox" for="is_upload_enabled">
-                                <input type="checkbox" id="is_upload_enabled" name="is_upload_enabled" {% if m.config.mod_filestore.is_upload_enabled.value %}checked{% endif %} />
-                                {_ Upload new files to the cloud _}
+                                <input type="checkbox" id="is_upload_enabled" name="is_upload_enabled" {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
+                                {_ Upload new media files to the cloud by default _}
                             </label>
                         </div>
                     </div>
