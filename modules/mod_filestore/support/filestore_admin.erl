@@ -68,7 +68,7 @@ event(#submit{message=admin_filestore_queue}, Context) ->
 -define(DATA, <<"Geen wolkje aan de lucht.">>).
 
 % Try a put, get, and delete sequence
-testcred(S3Url, S3Key, S3Secret) ->
+testcred(S3Url, S3Key, S3Secret) when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
     Cred = {S3Key, S3Secret},
     Url = <<S3Url/binary, $/, "-zotonic-filestore-test-file-">>,
     Data = iolist_to_binary([?DATA, " ", z_ids:identifier()]),
@@ -87,7 +87,10 @@ testcred(S3Url, S3Key, S3Secret) ->
         Error ->
             lager:warning("S3 put error ~p", [Error]),
             Error
-    end.
+    end;
+testcred(_, _, _) ->
+    {error, filestore_unconfigured}.
+
 
 noslash(<<>>) ->
     <<>>;
