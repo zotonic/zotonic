@@ -118,16 +118,15 @@ Every cache entry is managed by its own process, which can stream newly received
 processes.
 
 The filezcache keeps a presistent *disk_log* with a description of all files in the cache. This log is read on startup
-to repopulate the cache with files already present. For each file the size and a hash is stored to check cache
+to repopulate the cache with already present files. For each file the size and a hash is stored to check cache
 consistency.
 
 The filezcache has a garbage collector. It keeps a pool of randomly selected cache entries, from which it will 
-elect randomly processed to be garbage collected. The processes themselves will decide if they will be garbage collected
-or not.
+elect randomly processes to be garbage-collected. The processes themselves will decide if they will stop or not.
 
-After a cache process is garbage collected it will keep running for a short period to handle late incoming requests.
+After a cache process stops it will keep running for a short period to handle late incoming requests.
 
-Filezcache entries are started by the `mod_filestore` and filled by either moving a local uploaded file to the cache
+Filezcache entries are started by the `mod_filestore` and filled by either moving a local file to the cache
 or by s3filez donwload processes.
 
 
