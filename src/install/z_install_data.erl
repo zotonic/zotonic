@@ -126,7 +126,6 @@ get_skeleton_modules(blog) ->
      mod_admin_predicate,
 
      mod_l10n,
-     mod_geomap,
 
      mod_comment,
      mod_bootstrap
