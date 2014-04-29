@@ -41,6 +41,17 @@
     {% endif %}
 </div>
 
+{% if `mod_filestore`|member:m.modules.enabled  %}
+    {% if m.filestore.stats.cloud > 0 %}
+        <div class="alert alert-warning">
+            <strong>{_ Warning _}</strong>
+
+            {{ _"This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"|replace_args:[m.filestore.stats.cloud|make_list] }}
+        </div>
+    {% endif %}
+{% endif %}
+
+
 <div class="row">
     <div class="span8">
         <h3>{_ Backups _}</h3>
