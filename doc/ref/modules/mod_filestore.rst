@@ -71,6 +71,10 @@ to the local file system. This is useful when starting or changing the cloud sto
 If a file is moved to the cloud then it is first placed in the filezcache. The filezcache will start purging the 
 files if the cache is bigger than configurated in the filezcache application (default 10GB for all sites combined).
 
+The system waits 10 minutes before a queued file is uploaded. This period is meant for a *cool down* of the file, as
+in the first moments after an upload some resize and preview operations will take place. The delay makes it less
+probable that a freshly uploaded file vanishes (to the cache) whilst a preview-generation is starting.
+
 
 Notifications
 -------------
@@ -132,3 +136,4 @@ or by s3filez download processes.
 
 .. todo:: The statistics are generated dynamically, which is not a good idea with many files. This will be changed.
 
+.. seealso:: :ref:`model-filestore`.
