@@ -42,6 +42,16 @@
                     {_ Download css and javascript files as separate files (ie. don’t combine them in one url). _}
                 </label>
             </div>
+
+            <div>
+                {% wire id="devapi" 
+                    action={config_toggle module="mod_development" key="enable_api"}
+                %}
+                <label class="checkbox inline">
+                    <input type="checkbox" id="devapi" value="1" {% if m.config.mod_development.enable_api.value %}checked="checked"{% endif %} />
+                    {_ Enable API to recompile &amp; build Zotonic _}
+                </label>
+            </div>
         </div>
         
         <p><a class="btn btn-mini" href="{% url admin_development_templates %}">Show which files are included in a template compilation</a></p>
