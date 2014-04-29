@@ -33,6 +33,7 @@
 %% interface functions
 -export([
          dispatch/3,
+         dispatch/4,
          get_fallback_site/0,
          get_host_for_domain/1,
          update_dispatchinfo/0
@@ -70,6 +71,9 @@ update_dispatchinfo() ->
 %%                  | {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath}
 %%                  | handled
 dispatch(Host, Path, ReqData) ->
+    dispatch(Host, Path, ReqData, undefined).
+
+dispatch(Host, Path, ReqData, TracerPid) ->
     % Classify the user agent
     {ok, ReqDataUA} = z_user_agent:set_class(ReqData),
     Protocol = case wrq:is_ssl(ReqData) of true -> https; false -> http end,
@@ -77,7 +81,8 @@ dispatch(Host, Path, ReqData) ->
                     host=Host, 
                     path=Path, 
                     method=wrq:method(ReqData), 
-                    protocol=Protocol
+                    protocol=Protocol,
+                    tracer_pid=TracerPid
               },
     z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine}),
     handle_dispatch(gen_server:call(?MODULE, DispReq), DispReq, ReqDataUA).
@@ -185,8 +190,8 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-handle_host_dispatch(Host, DispatchList, #dispatch{host=HostAsString, path=PathAsString, protocol=Protocol}) ->
-    case wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList) of
+handle_host_dispatch(Host, DispatchList, #dispatch{host=HostAsString, path=PathAsString, protocol=Protocol, tracer_pid=TracerPid}) ->
+    case wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList, TracerPid) of
         {redirect_protocol, _ProtocolAsString, _Hostname} = R ->
             R;
         {no_dispatch_match, UnmatchedPathTokens, Bindings} ->
@@ -204,16 +209,18 @@ handle_dispatch({Match, MatchedHost}, _DispReq, ReqDataUA) when is_tuple(Match) 
     z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine, host=MatchedHost}),
     {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, MatchedHost, ReqDataUA),
     {Match, ReqDataHost};
-handle_dispatch({redirect, MatchedHost}, _DispReq, ReqDataUA) when is_atom(MatchedHost) ->
+handle_dispatch({redirect, MatchedHost}, DispReq, ReqDataUA) when is_atom(MatchedHost) ->
     % Redirect to other host, same path
     z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine, host=MatchedHost}),
     RawPath = wrq:raw_path(ReqDataUA),
-    Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)), 
+    Uri = z_context:abs_url(RawPath, z_context:new(MatchedHost)),
+    trace(DispReq#dispatch.tracer_pid, undefined, redirect, [{location, Uri},{permanent,true}]),
     {handled, redirect(true, z_convert:to_list(Uri), ReqDataUA)};
-handle_dispatch({redirect, MatchedHost, NewPathOrURI, IsPermanent}, _DispReq, ReqDataUA) when is_atom(MatchedHost) ->
+handle_dispatch({redirect, MatchedHost, NewPathOrURI, IsPermanent}, DispReq, ReqDataUA) when is_atom(MatchedHost) ->
     % Redirect to some site, new path or uri
     z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine, host=MatchedHost}),
     AbsURI = z_context:abs_url(NewPathOrURI, z_context:new(MatchedHost)),
+    trace(DispReq#dispatch.tracer_pid, undefined, redirect, [{location, AbsURI},{permanent,IsPermanent}]),
     {handled, redirect(IsPermanent, z_convert:to_list(AbsURI), ReqDataUA)};
 handle_dispatch({redirect_protocol, NewProtocol, NewHost}, _DispReq, ReqDataUA) ->
     % Switch protocols (mostly http/https switch)
@@ -226,6 +233,7 @@ handle_dispatch({no_dispatch_match, MatchedHost, NonMatchedPathTokens, Bindings}
                         undefined -> DispReq#dispatch.path;
                         _ -> string:join(NonMatchedPathTokens, "/")
                     end,
+    trace(DispReq#dispatch.tracer_pid, RewrittenPath, notify_dispatch, []),
     Redirect = z_notifier:first(DispReq#dispatch{path=RewrittenPath}, Context#context{wm_reqdata=ReqDataHost}),
     handle_rewrite(Redirect, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, ReqDataHost, Context);
 handle_dispatch(no_host_match, DispReq, ReqDataUA) ->
@@ -255,10 +263,12 @@ handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, R
     %% Retry with the resource's default page uri
     case m_rsc:p_no_acl(Id, default_page_url, Context) of
         undefined ->
+            trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id}]),
             z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine, host=MatchedHost}),
             {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost};
         DefaultPagePathBin ->
             DefaultPagePath = binary_to_list(DefaultPagePathBin),
+            trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id},{path,DefaultPagePath}]),
             case gen_server:call(?MODULE, DispReq#dispatch{path=DefaultPagePath}) of
                 {no_dispatch_match, MatchedHost1, NonMatchedPathTokens1, _} ->
                     z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine, host=MatchedHost1}),
@@ -280,17 +290,27 @@ handle_rewrite({ok, #dispatch_match{
                             bindings=SBindings,
                             app_root=SAppRoot,
                             string_path=SStringPath}},
-                _DispReq, MatchedHost, _NonMatchedPathTokens, Bindings, ReqDataHost, _Context) ->
+                DispReq, MatchedHost, _NonMatchedPathTokens, Bindings, ReqDataHost, _Context) ->
+    trace(DispReq#dispatch.tracer_pid, 
+          SPathTokens, 
+          rewrite_match, 
+          [ {dispatch,SDispatchName},
+            {controller,SMod},
+            {controller_args,SModOpts},
+            {bindings,SBindings}
+          ]),
     {{SMod, SModOpts, 
       [], none, % Host info
       SPathTokens, [{zotonic_dispatch, SDispatchName},{zotonic_host, MatchedHost}|SBindings] ++ Bindings, 
       SAppRoot, SStringPath}, 
      ReqDataHost};
 handle_rewrite({ok, #dispatch_redirect{location=Location, is_permanent=IsPermanent}},
-               _DispReq, _MatchedHost, _NonMatchedPathTokens, _Bindings, ReqDataHost, Context) ->
+               DispReq, _MatchedHost, _NonMatchedPathTokens, _Bindings, ReqDataHost, Context) ->
     AbsURI = z_context:abs_url(Location, Context),
+    trace(DispReq#dispatch.tracer_pid, undefined, rewrite_redirect, [{location,AbsURI},{permanent,IsPermanent}]),
     {handled, redirect(IsPermanent, AbsURI, ReqDataHost)};
-handle_rewrite(undefined, _DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, ReqDataHost, _Context) ->
+handle_rewrite(undefined, DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, ReqDataHost, _Context) ->
+    trace(DispReq#dispatch.tracer_pid, undefined, rewrite_nomatch, []),
     {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost}.
 
 
@@ -371,13 +391,20 @@ redirect(IsPermanent, ProtocolAsString, Hostname, ReqData) ->
     redirect(IsPermanent, Uri, ReqData).
 
 redirect(IsPermanent, Location, ReqData) -> 
-    RD1 = wrq:set_resp_header("Location", Location, ReqData),
-    RespCode = case IsPermanent of true -> 301; false -> 302 end,
-    {ok, RD2} = webmachine_request:send_response(RD1#wm_reqdata{response_code = RespCode}),
-    LogData = webmachine_request:log_data(RD2),
-    {ok, LogModule} = application:get_env(webzmachine, webmachine_logger_module),
-    spawn(LogModule, log_access, [LogData]),
-    handled.
+    case wrq:port(ReqData) of
+        undefined -> 
+            handled;
+        {ssl, undefined} ->
+            handled;
+        _Port ->
+            RD1 = wrq:set_resp_header("Location", Location, ReqData),
+            RespCode = case IsPermanent of true -> 301; false -> 302 end,
+            {ok, RD2} = webmachine_request:send_response(RD1#wm_reqdata{response_code = RespCode}),
+            LogData = webmachine_request:log_data(RD2),
+            {ok, LogModule} = application:get_env(webzmachine, webmachine_logger_module),
+            spawn(LogModule, log_access, [LogData]),
+            handled
+    end.
 
 
 %% @doc Fetch the host for the given domain
@@ -575,20 +602,25 @@ filter_rules(Rules, Site) ->
 -define(SEPARATOR, $\/).
 -define(MATCH_ALL, '*').
 
-%% @spec wm_dispatch(Protocol, HostAsString, Host::atom(), Path::string(), DispatchList::[matchterm()]) ->
+%% @spec wm_dispatch(Protocol, HostAsString, Host::atom(), Path::string(), DispatchList::[matchterm()], TracerPid::pid()|undefined) ->
 %%                                            dispterm() | dispfail()
 %% @doc Interface for URL dispatching.
 %% See also http://bitbucket.org/justin/webmachine/wiki/DispatchConfiguration
-wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList) ->
+wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList, TracerPid) ->
     Context = z_context:new(Host),
     Path = string:tokens(PathAsString, [?SEPARATOR]),
     IsDir = lists:last(PathAsString) == ?SEPARATOR,
     {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{is_dir=IsDir, path=PathAsString, host=HostAsString}, {Path, []}, Context),
+    case Path1 of
+        Path -> ok;
+        _ -> trace(TracerPid, Path, dispatch_rewrite, [{path,Path1},{bindings,Bindings}])
+    end,
     Bindings1 = [
         {zotonic_dispatch_path, Path1}
         | Bindings
     ],
-    try_path_binding(Protocol, HostAsString, Host, DispatchList, Path1, Bindings1, extra_depth(Path1, IsDir), Context).
+    trace(TracerPid, Path1, try_match, [{bindings,Bindings1}]),
+    try_path_binding(Protocol, HostAsString, Host, DispatchList, Path1, Bindings1, extra_depth(Path1, IsDir), TracerPid, Context).
 
 % URIs that end with a trailing slash are implicitly one token
 % "deeper" than we otherwise might think as we are "inside"
@@ -598,22 +630,38 @@ extra_depth(_Path, true) -> 1;
 extra_depth(_, _) -> 0.
 
 
-try_path_binding(_Protocol, _HostAsString, _Host, [], PathTokens, Bindings, _ExtraDepth, _Context) ->
+trace(undefined, _PathTokens, _What, _Args) ->
+    ok;
+trace(TracerPid, PathTokens, What, Args) ->
+    TracerPid ! {trace, PathTokens, What, Args}.
+
+try_path_binding(_Protocol, _HostAsString, _Host, [], PathTokens, Bindings, _ExtraDepth, TracerPid, _Context) ->
+    trace(TracerPid, PathTokens, no_dispatch_match, []),
     {no_dispatch_match, PathTokens, Bindings};
-try_path_binding(Protocol, HostAsString, Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth, Context) ->
+try_path_binding(Protocol, HostAsString, Host, [{DispatchName, PathSchema, Mod, Props}|Rest], PathTokens, Bindings, ExtraDepth, TracerPid, Context) ->
     case bind(Host, PathSchema, PathTokens, Bindings, 0, Context) of
         {ok, Remainder, NewBindings, Depth} ->
+            trace(TracerPid, 
+                  PathTokens,
+                  match,
+                  [ {dispatch, DispatchName},
+                    {controller, Mod},
+                    {controller_args, Props},
+                    {bindings, NewBindings}
+                  ]),
             case proplists:get_value(protocol, Props) of
                 % Force switch to normal http protocol
                 undefined when Protocol =/= http ->
                     {Host1, HostPort} = split_host(z_context:hostname_port(Context)),
                     Host2 = add_port(http, Host1, HostPort),
+                    trace(TracerPid, PathTokens, protocol_switch, [{protocol, http}, {host,Host2}]),
                     {redirect_protocol, "http", Host2};
 
                 % Force switch to other (eg. https) protocol
                 {NewProtocol, NewPort} when NewProtocol =/= Protocol ->
                     {Host1, _Port} = split_host(HostAsString),
                     Host2 = add_port(NewProtocol, Host1, NewPort),
+                    trace(TracerPid, PathTokens, forced_protocol_switch, [{protocol, NewProtocol}, {host,Host2}]),
                     {redirect_protocol, z_convert:to_list(NewProtocol), Host2};
 
                 % 'keep' or correct protocol
@@ -623,7 +671,7 @@ try_path_binding(Protocol, HostAsString, Host, [{DispatchName, PathSchema, Mod, 
                         reconstitute(Remainder)}
             end;
         fail -> 
-            try_path_binding(Protocol, HostAsString, Host, Rest, PathTokens, Bindings, ExtraDepth, Context)
+            try_path_binding(Protocol, HostAsString, Host, Rest, PathTokens, Bindings, ExtraDepth, TracerPid, Context)
     end.
     
 add_port(http, Host, 80) -> Host;
