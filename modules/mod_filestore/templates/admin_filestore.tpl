@@ -146,8 +146,8 @@
                     </p>
 
                     <p id="s3error-queue" class="alert alert-error" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
-                    <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ Queued all uploaded files, uploads will be done in the background. _}</p>
-                    <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ Marked all cloud files to be downloaded. _}</p>
+                    <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ All files has been queued, uploads will be done in the background within 10 minutes. _}</p>
+                    <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ All cloud files have been queued for download. _}</p>
 
                     <div class="control-group">
                         <div class="controls">
