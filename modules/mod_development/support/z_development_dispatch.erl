@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014 Marc Worrell
-%% @doc Match & explain request dispatching.
+%% @doc Match &amp; explain request dispatching.
 
 %% Copyright 2014 Marc Worrell
 %%
