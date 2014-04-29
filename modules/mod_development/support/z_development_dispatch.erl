@@ -26,27 +26,32 @@
 -include_lib("wm_host_dispatch_list.hrl").
 
 event(#submit{message=explain_dispatch}, Context) ->
-	Req = ensure_abs(z_convert:to_list(z_string:trim(z_context:get_q("explain_req", Context)))),
-	Protocol = list_to_existing_atom(z_context:get_q("explain_protocol", Context)),
-	TracerPid = erlang:spawn_link(fun tracer/0),
-	z_sites_dispatcher:dispatch(
-						z_context:hostname(Context),
-						Req,
-						make_reqdata(Protocol, Req),
-						TracerPid),
-	TracerPid ! {fetch, self()},
-	receive
-		{trace, Trace} ->
-			Vars = [
-				{trace, Trace},
-				{path, Req},
-				{protocol, Protocol}
-			],
-			Context1 = z_render:update(
-							"explain-dispatch-output", 
-							#render{template="_development_dispatch_trace.tpl", vars=Vars}, 
-							Context),
-			z_render:wire({fade_in, [{target, "explain-dispatch-output"}]}, Context1)
+	case z_acl:is_allowed(use, mod_development, Context) of
+		true ->
+			Req = ensure_abs(z_convert:to_list(z_string:trim(z_context:get_q("explain_req", Context)))),
+			Protocol = list_to_existing_atom(z_context:get_q("explain_protocol", Context)),
+			TracerPid = erlang:spawn_link(fun tracer/0),
+			z_sites_dispatcher:dispatch(
+								z_context:hostname(Context),
+								Req,
+								make_reqdata(Protocol, Req),
+								TracerPid),
+			TracerPid ! {fetch, self()},
+			receive
+				{trace, Trace} ->
+					Vars = [
+						{trace, Trace},
+						{path, Req},
+						{protocol, Protocol}
+					],
+					Context1 = z_render:update(
+									"explain-dispatch-output", 
+									#render{template="_development_dispatch_trace.tpl", vars=Vars}, 
+									Context),
+					z_render:wire({fade_in, [{target, "explain-dispatch-output"}]}, Context1)
+			end;
+		false ->
+			z_render:growl(?__("You are not allowed to use the dispatch debugging.", Context), Context) 
 	end.
 
 ensure_abs([]) -> [$/];
