@@ -35,7 +35,12 @@ zotonic_dispatch
    The name of the current dispatch rule, see also above.
 
 zotonic_dispatch_path
-   A list containing the request path used for matching the dispatch rule. The path is split on ``/`` and after an optional rewrite. This means that the list doesn’t contain the language prefix. For example, the path ``/en/foo/bar?a=b`` will give the list ``["foo", "bar"]``.
+   A list containing the request path used as initial input for the dispatcher. The path is split on ``/`` and after an optional rewrite. This means that the list doesn’t contain the language prefix. For example, the path ``/en/foo/bar?a=b`` will give the list ``["foo", "bar"]``.
+
+zotonic_dispatch_path_rewrite
+  Same as zotonic_dispatch_path, but set to the path after an optional internal request rewrite inside the dispatcher. For example if a resource has its
+  `page_path` set to ``/foo`` and the requested path is ``/en/foo`` then the ``zotonic_dispatch_path`` will be set to ``["foo"]`` and 
+  the ``zotonic_dispatch_path_rewrite`` could be set to something like ``["page", "1234", "foo-slug"]``.
 
 z_language
    The current language, matched from the request path.
