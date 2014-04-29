@@ -9,6 +9,14 @@ that require attetion for site developers when things change in
 incompatible ways or get deprecated.
 
 
+Upgrading to Zotonic 0.11
+-------------------------
+
+The ``mod_geomap`` repository has moved to its own dedicated
+repository. To keep using this module, you'll now need to install it
+as an external module: ``zotonic modules install mod_geomap``
+
+
 Upgrading to Zotonic 0.10
 -------------------------
 
