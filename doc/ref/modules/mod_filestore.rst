@@ -127,7 +127,7 @@ elect randomly processes to be garbage-collected. The processes themselves will 
 After a cache process stops it will keep running for a short period to handle late incoming requests.
 
 Filezcache entries are started by the `mod_filestore` and filled by either moving a local file to the cache
-or by s3filez donwload processes.
+or by s3filez download processes.
 
 
 .. todo:: The statistics are generated dynamically, which is not a good idea with many files. This will be changed.

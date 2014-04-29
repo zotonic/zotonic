@@ -111,7 +111,7 @@ properties (usually in the form of checkboxes) that decide what to
 show or hide on certain pages in the admin. To use this, create a
 ``_admin_features.category.tpl`` in your module.
 
-For instance, :ref:`mod_geomap` defines the following
+For instance, the module `mod_geomap` defines the following
 ``_admin_features.category.tpl`` to create an extra checkbox so that
 per category can be defined whether or not the geodata box should be
 shown::
