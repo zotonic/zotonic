@@ -559,7 +559,7 @@ update_sequence(Id, Pred, ObjectIds, Context) ->
 
 
 %% @doc Set edges order so that the specified object ids are in given order.
-%% Any extra edges not speicified will be deleted, and any missing edges will be inserted.
+%% Any extra edges not specified will be deleted, and any missing edges will be inserted.
 %% @spec set_sequence(Id, Predicate, ObjectIds, Context) -> ok | {error, Reason}
 set_sequence(Id, Pred, ObjectIds, Context) ->
     case z_acl:rsc_editable(Id, Context) of
