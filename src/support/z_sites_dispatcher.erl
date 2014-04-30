@@ -277,9 +277,11 @@ handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, R
                 {no_host_match} ->
                     {{no_dispatch_match, undefined, undefined, []}, undefined};
                 OtherDispatchMatch ->
-                    set_dispatch_path(
-                        handle_dispatch(OtherDispatchMatch, DispReq, ReqDataHost),
-                        proplists:get_value(zotonic_dispatch_path, Bindings)) 
+                    trace_final(
+                        DispReq#dispatch.tracer_pid,
+                        set_dispatch_path(
+                            handle_dispatch(OtherDispatchMatch, DispReq, ReqDataHost),
+                            proplists:get_value(zotonic_dispatch_path, Bindings)))
             end
     end;
 handle_rewrite({ok, #dispatch_match{
@@ -579,6 +581,23 @@ filter_rules(Rules, Site) ->
     z_notifier:foldl(dispatch_rules, Rules, z_context:new(Site)).
 
 
+trace(undefined, _PathTokens, _What, _Args) ->
+    ok;
+trace(TracerPid, PathTokens, What, Args) ->
+    TracerPid ! {trace, PathTokens, What, Args}.
+
+trace_final(undefined, Match) ->
+    Match;
+trace_final(TracerPid, {{Mod, ModOpts, _X, _Y, _PathTokens, Bindings, _AppRoot, _StringPath}, _Host} = Match) ->
+    trace(TracerPid, 
+          undefined,
+          dispatch,
+          [ {controller, Mod},
+            {controller_args, ModOpts},
+            {bindings, Bindings}
+          ]),
+    Match.
+
 %%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
 % Main difference is that we want to know which dispatch rule was choosen.
 % We also added check functions and regular expressions to match vars.
@@ -628,12 +647,6 @@ wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList, TracerPid)
 extra_depth([], _IsDir) -> 1;
 extra_depth(_Path, true) -> 1;
 extra_depth(_, _) -> 0.
-
-
-trace(undefined, _PathTokens, _What, _Args) ->
-    ok;
-trace(TracerPid, PathTokens, What, Args) ->
-    TracerPid ! {trace, PathTokens, What, Args}.
 
 try_path_binding(_Protocol, _HostAsString, _Host, [], PathTokens, Bindings, _ExtraDepth, TracerPid, _Context) ->
     trace(TracerPid, PathTokens, no_dispatch_match, []),

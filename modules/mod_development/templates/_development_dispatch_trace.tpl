@@ -26,6 +26,13 @@
 					<br/>{_ Options _}:
 					{% print args.controller_args %}
 				{% endif %}
+			{% elseif what == `dispatch` %}
+				{_ Final dispatch_}<br/>
+				{_ Controller _}: <tt>{{ args.controller }}</tt>
+				{% if args.controller_args %}
+					<br/>{_ Options _}:
+					{% print args.controller_args %}
+				{% endif %}
 			{% elseif what == `protocol_switch` %}
 				{_ Switch protocol to _}: {{ args.protocol }}<br/>
 				{_ New host _}: {{ args.host|escape }}
