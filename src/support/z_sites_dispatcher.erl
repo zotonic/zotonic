@@ -85,7 +85,7 @@ dispatch(Host, Path, ReqData, TracerPid) ->
                     tracer_pid=TracerPid
               },
     z_stats:update(#counter{name=requests}, #stats_from{system=webzmachine}),
-    handle_dispatch(gen_server:call(?MODULE, DispReq), DispReq, ReqDataUA).
+    trace_final(TracerPid, handle_dispatch(gen_server:call(?MODULE, DispReq), DispReq, ReqDataUA)).
 
 %% @doc Retrieve the fallback site.
 get_fallback_site() ->
@@ -596,7 +596,10 @@ trace_final(TracerPid, {{Mod, ModOpts, _X, _Y, _PathTokens, Bindings, _AppRoot, 
             {controller_args, ModOpts},
             {bindings, Bindings}
           ]),
-    Match.
+    Match;
+trace_final(_TracerPid, RedirectOrHandled) ->
+    RedirectOrHandled.
+
 
 %%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
 % Main difference is that we want to know which dispatch rule was choosen.

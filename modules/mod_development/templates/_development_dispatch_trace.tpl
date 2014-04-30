@@ -60,6 +60,8 @@
 					<br/>{_ Options _}:
 					{% print args.controller_args %}
 				{% endif %}
+			{% elseif what == `rewrite_nomatch` %}
+				<tt>#dispatch{}</tt> {_ found no match _}
 			{% elseif what == `rewrite_redirect` %}
 				<tt>#dispatch{}</tt> {_ redirects _}<br/>
 				{_ Location _}: <tt>{{ args.location|escape }}</tt>
