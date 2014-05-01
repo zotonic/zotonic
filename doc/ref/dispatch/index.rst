@@ -1,10 +1,9 @@
-
 All dispatch rules
 ==================
 
-This table lists all the dispatch rules in one big table.
+All the dispatch rules from all modules. For a background on dispatch rules, see :ref:`The URL dispatch system <manual-dispatch>`.
 
-.. csv-table:: The Big List of Dispatch rules
+.. csv-table::
    :delim: tab
    :header: Name, Path, Resource, Args
    :file: meta-all-dispatch.csv
