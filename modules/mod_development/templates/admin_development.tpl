@@ -57,9 +57,33 @@
 
     <h3>{_ Template debugging _}</h2>
     <div class="well">
+        <p>{_ Find a template, check which template will be selected _}</p>
+
+        {% wire id="explain-tpl" type="submit"
+                postback=`explain_tpl`
+                delegate=`z_development_template`
+        %}
+        <form id="explain-tpl" class="form-inline" method="GET" action="postback">
+            <select name="tpl_cat">
+                <option value="">{_ Optional category for catinclude _}</option>
+                <option disabled></option>
+                {% for id, level, indent, name in m.category.all_flat %}
+                    <option value="{{name}}">{{ indent }}{{ name }}</option>
+                {% endfor%}
+            </select>
+            <input type="text" name="tpl_name" placeholder="foo.tpl" value="" />
+            <button class="btn" type="submit">{_ Find _}</button>
+        </form>
+
+        <div id="explain-tpl-output" style="display:none"></div>
+
+        <hr/>
+
         <p><a href="{% url admin_development_templates %}">Show which files are included in a template compilation</a></p>
         <p class="help-block">At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template.</p>
+
     </div>
+
 
     
     <h3>{_ Dispatch rule debugging _}</h3>
@@ -71,7 +95,7 @@
                 postback=`explain_dispatch`
                 delegate=`z_development_dispatch`
         %}
-        <form id="explain-dispatch" class="form-inline" action="postback">
+        <form id="explain-dispatch" class="form-inline" method="GET" action="postback">
             <select id="explain_protocol" name="explain_protocol" class="input-small">
                 <option>http</option>
                 <option>https</option>

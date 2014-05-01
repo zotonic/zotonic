@@ -39,7 +39,16 @@ Enable API to recompile & build Zotonic
 Template debugging
 ..................
 
-This opens a page with a live display of all templates being compiled.
+The template selection mechanism is quite complicated. It takes into account all modules, their priority,
+the user-agent class (desktop, tablet, phone or text) and optionally the category of a resource.
+
+With this debugging tool you can optionally select a category, and fill in the name of the template.
+Per user-agent class the selected template will be shown.
+
+.. image:: /img/development_template_debug.png
+
+
+The second debug option is a page with a live display of all templates being compiled.
 With this it is possible to get greater insight in the template selection and compilation.
 
 
