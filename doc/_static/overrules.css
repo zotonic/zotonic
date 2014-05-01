@@ -159,3 +159,12 @@ div.footer,
 div.footer a {
     color: #aaa;
 }
+
+dt:target, .highlighted {
+    background-color: #FFF9BD;
+}
+
+div.seealso {
+    background-color: #DDF5DB;
+    border: none;
+}
