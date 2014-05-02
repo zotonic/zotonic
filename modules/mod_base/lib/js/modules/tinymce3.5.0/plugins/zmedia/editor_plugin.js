@@ -9,45 +9,39 @@
 
 
 (function() {
-     window.tinyMCEzMedia =
-     {
-         toHTML: function(id, opts) {
-             var cls = "z-tinymce-media ";
-             cls += "z-tinymce-media-align-" + (opts.align || 'block');
-             
-             var html = '<img class="' + cls + '" '
-                 + 'data-zmedia-id="' +id + '" '
-                 + 'data-zmedia-opts="' + JSON.stringify(opts).replace(/\"/g, '&quot;') + '" '
-                 + ' src="/admin/media/preview/' + id + '" />';
-             return html;
-         }
-         
+     window.tinyMCEzMedia = {
+        toHTML: function(id, opts) {
+            var cls = "z-tinymce-media ";
+            cls += "z-tinymce-media-align-" + (opts.align || 'block');
+            var html = '<img class="'
+                + cls + '" '
+                + 'data-zmedia-id="' +id + '" '
+                + 'data-zmedia-opts="' + JSON.stringify(opts).replace(/\"/g, '&quot;') + '" '
+                + ' src="/admin/media/preview/' + id + '" />';
+            return html;
+        }
+    };
 
-     };
 	tinymce.create('tinymce.plugins.ZotonicMediaPlugin', {
-
         init : function(ed, url) {
                 var self = this;
                 
                 // Register commands
                 ed.addCommand('mceZotonicMedia', function() {
-                        var n = ed.selection.getNode();
-
-                        if (n && self._domIsZMedia(n)) 
-                        {
-                            // Open properties dialog
-                            self.propertiesDialog(n);
-                        } 
-                        else {
-                            // Open "insert" dialog
-                            window.z_choose_zmedia = function(id) {
-                                if (!id) return;
-                                var html = window.tinyMCEzMedia.toHTML(id, {align: "block", size: "middle", crop: '', link: ''});
-                                ed.execCommand('mceInsertContent', false, html, {});
-                            };
-                            z_event('zmedia', {language: window.zEditLanguage(), is_zmedia: 1});
-                        }
-                    });
+                    var n = ed.selection.getNode();
+                    if (n && self._domIsZMedia(n)) {
+                        // Open properties dialog
+                        self.propertiesDialog(n);
+                    } else {
+                        // Open "insert" dialog
+                        window.z_choose_zmedia = function(id) {
+                            if (!id) return;
+                            var html = window.tinyMCEzMedia.toHTML(id, {align: "block", size: "middle", crop: '', link: ''});
+                            ed.execCommand('mceInsertContent', false, html, {});
+                        };
+                        z_event('zmedia', {language: window.zEditLanguage(), is_zmedia: 1});
+                    }
+                });
 
                 ed.onPostProcess.add(function(ed, o) {
                     o.content = self._MediaHtmlToMarkers(o.content);
@@ -64,9 +58,9 @@
                 // Register buttons
                 ed.addButton('zmedia', {
                     title : 'Insert a Zotonic media item.',
-                            cmd : 'mceZotonicMedia',
-                            'class': 'mce_image'
-                            });
+                    cmd : 'mceZotonicMedia',
+                    'class': 'mce_image'
+                });
             },
 
             propertiesDialog: function(node) {
@@ -74,35 +68,62 @@
                 var opts = this._zMediaOptsFromDOM(node);
 
                 z_dialog_open({
-                            title: 'Media properties',
-                            text: 
-                             '<form id="zmedia-props-form">'
-                            +'<fieldset>'
-                            +'<div class="row">'
-                            +'<div class="span2"><img src="/admin/media/preview/' + id + '" class="z-tinymce-media-left" /></div>' 
-                            +'<div class="span2">'
-                            +'<label class="radio"><input type="radio" name="align" ' + (opts.align=='block'?'checked="checked"':'') + ' value="block" id="a-block"> Between text</label>'
-                            +'<label class="radio"><input type="radio" name="align" ' + (opts.align=='left'?'checked="checked"':'') + 'value="left" id="a-left"> Aligned left</label>'
-                            +'<label class="radio"><input type="radio" name="align" ' + (opts.align=='right'?'checked="checked"':'') + 'value="right" id="a-right"> Aligned right</label>'
-                            +'</div>'
-                            +'<div class="span1">'
-                            +'<label class="radio"><input type="radio" name="size" ' + (opts.size=='small'?'checked="checked"':'') + ' value="small" id="a-small"> Small</label>'
-                            +'<label class="radio"><input type="radio" name="size" ' + (opts.size=='middle' || opts.size == undefined?'checked="checked"':'') + 'value="middle" id="a-middle"> Middle</label>'
-                            +'<label class="radio"><input type="radio" name="size" ' + (opts.size=='large'?'checked="checked"':'') + 'value="large" id="a-large"> Large</label>'
-                            +'</div>'
-                            +'<div class="span2">'
-                            +'<label class="checkbox"><input type="checkbox" name="crop" ' + (opts.crop=='crop'?'checked="checked"':'') + ' value="crop" id="a-crop"> Crop image</label>'
-                            +'<label class="checkbox"><input type="checkbox" name="link" ' + (opts.link=='link'?'checked="checked"':'') + ' value="crop" id="a-link"> Make link</label>'
-                            +'</div>'
-                            +'</div>'
-
-                            +'<div class="modal-footer">'
-                            +'<button class="btn" id="zmedia-props-cancel">Cancel</button>'
-                            +'<button class="btn btn-primary" type="submit">Save Properties</button>'
-                            +'</div>'
-                            +'</fieldset>'
-                            +'</form>'
-                        });
+                    title: 'Media properties',
+                    text: 
+ '<form id="zmedia-props-form" class="form">'
++'  <div class="row">'
++'      <div class="span3">'
++'          <img src="/admin/media/preview/' + id + '" class="z-tinymce-media-left" />'
++'      </div>' 
++'      <div class="span6">'
++'          <div class="row">'
++'              <div class="span3">'
++'                  <div class="control-group">'
++'                      <label class="control-label">Alignment</label>'
++'                      <div class="controls">'
++'                          <label class="radio"><input type="radio" name="align" ' + (opts.align=='block'?'checked="checked"':'') + ' value="block" id="a-block"> Between text</label>'
++'                          <label class="radio"><input type="radio" name="align" ' + (opts.align=='left'?'checked="checked"':'') + 'value="left" id="a-left"> Aligned left</label>'
++'                          <label class="radio"><input type="radio" name="align" ' + (opts.align=='right'?'checked="checked"':'') + 'value="right" id="a-right"> Aligned right</label>'
++'                      </div>'
++'                  </div>'
++'              </div>'
++'              <div class="span3">'
++'                  <div class="control-group">'
++'                      <label class="control-label">Size</label>'
++'                      <div class="controls">'
++'                          <label class="radio"><input type="radio" name="size" ' + (opts.size=='small'?'checked="checked"':'') + ' value="small" id="a-small"> Small</label>'
++'                          <label class="radio"><input type="radio" name="size" ' + (opts.size=='middle' || opts.size == undefined?'checked="checked"':'') + 'value="middle" id="a-middle"> Middle</label>'
++'                          <label class="radio"><input type="radio" name="size" ' + (opts.size=='large'?'checked="checked"':'') + 'value="large" id="a-large"> Large</label>'
++'                      </div>'
++'                  </div>'
++'              </div>'
++'          </div>'
++'          <div class="row">'
++'              <div class="span3">'
++'                  <div class="control-group">'
++'                      <label class="control-label">Crop</label>'
++'                      <div class="controls">'
++'                          <label class="checkbox"><input type="checkbox" name="crop" ' + (opts.crop=='crop'?'checked="checked"':'') + ' value="crop" id="a-crop"> Crop image</label>'
++'                      </div>'
++'                  </div>'
++'              </div>' 
++'              <div class="span3">'
++'                  <div class="control-group">'
++'                      <label class="control-label">Link</label>'
++'                      <div class="controls">'
++'                          <label class="checkbox"><input type="checkbox" name="link" ' + (opts.link=='link'?'checked="checked"':'') + ' value="crop" id="a-link"> Make link</label>'
++'                      </div>'
++'                  </div>'
++'              </div>'
++'          </div>'
++'      </div>' 
++'  </div>'
++'  <div class="modal-footer">'
++'      <button class="btn" id="zmedia-props-cancel">Cancel</button>'
++'      <button class="btn btn-primary" type="submit">Save Properties</button>'
++'  </div>'
++'</form>'
+                });
                 
                 $('#zmedia-props-form').submit(function() {
                     var new_opts = {
@@ -116,7 +137,6 @@
                     $(node)
                         .attr("data-zmedia-opts", el.attr("data-zmedia-opts"))
                         .attr("data-zmedia-id", el.attr("data-zmedia-id"));
-
                     z_dialog_close();
                     return false;
                 });
@@ -128,14 +148,13 @@
                 
             getInfo : function() {
                 return {
-                longname : 'Zotonic Media Plugin',
-                        author : 'Arjan Scherpenisse',
-                        authorurl : 'http://www.zotonic.com',
-                        infourl : 'http://www.zotonic.com',
-                        version : tinymce.majorVersion + "." + tinymce.minorVersion
-                        };
+                    longname : 'Zotonic Media Plugin',
+                    author : 'Arjan Scherpenisse',
+                    authorurl : 'http://www.zotonic.com',
+                    infourl : 'http://www.zotonic.com',
+                    version : tinymce.majorVersion + "." + tinymce.minorVersion
+                };
             },
-                
                 
             // Private methods //
 
@@ -182,8 +201,7 @@
             _zMarkersToMediaHtml: function (html) {
                 var re = new RegExp('<!-- z-media (.*?) (.*?)-->', 'g');
                 var m;
-                while ( (m = re.exec(html)) )
-                {
+                while (m = re.exec(html)) {
                     var id = m[1];
                     var opts = eval("(" + m[2] + ")");
                     var part = window.tinyMCEzMedia.toHTML(id, opts);
@@ -192,10 +210,8 @@
                 }
                 return html;
             }
-
         }
-
-        );
+    );
 
 	// Register plugin
 	tinymce.PluginManager.add('zmedia', tinymce.plugins.ZotonicMediaPlugin);

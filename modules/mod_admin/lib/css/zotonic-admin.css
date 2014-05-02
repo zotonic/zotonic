@@ -579,14 +579,16 @@ table.mceLayout, textarea.tinyMCE {
 	background: url(/lib/images/toolbars.gif) !important;
 }
 
+#zmedia-props-form [class*="span"] {
+    margin-bottom: 20px;
+}
+
+#zmedia-props-form .control-label {
+    font-weight: bold;
+}
+
 .z-tinymce-media-left {
-	float: left;
-	margin: 4px 6px 0 0;
-	-moz-border-radius-bottomleft:3px;
-	-moz-border-radius-bottomright:3px;
-	-moz-border-radius-topleft:3px;
-	-moz-border-radius-topright:3px;
-	border: 4px solid #CCCCCC;
+    border: 1px solid #eee;
 }
 
 .dialog .z-tinymce-media-options label {
