@@ -596,26 +596,26 @@ medium_update_function() ->
     "
     CREATE FUNCTION medium_update() RETURNS trigger AS $$
     declare
-        usr_id integer;
+        user_id integer;
     begin
-        select into usr_id r.creator_id from rsc r where r.id = new.id;
+        select into user_id r.creator_id from rsc r where r.id = new.id;
         if (tg_op = 'INSERT') then
             if (new.filename <> '' and new.filename is not null and new.is_deletable_file) then
                 insert into medium_log (filename, usr_id)
-                values (new.filename, usr_id);
+                values (new.filename, user_id);
             end if;
             if (new.preview_filename <> '' and new.preview_filename is not null and new.is_deletable_preview) then
                 insert into medium_log (filename, usr_id)
-                values (new.preview_filename, usr_id);
+                values (new.preview_filename, user_id);
             end if;
         elseif (tg_op = 'UPDATE') then
             if (new.filename <> '' and new.filename is not null and new.is_deletable_file and new.filename != old.filename) then
                 insert into medium_log (filename, usr_id)
-                values (new.filename, usr_id);
+                values (new.filename, user_id);
             end if;
             if (new.preview_filename <> '' and new.preview_filename is not null and new.is_deletable_preview and new.preview_filename != old.preview_filename) then
                 insert into medium_log (filename, usr_id)
-                values (new.preview_filename, usr_id);
+                values (new.preview_filename, user_id);
             end if;
             -- Insert files into the medium_deleted queue table
             if (old.filename <> '' and old.filename is not null and old.is_deletable_file and new.filename != old.filename) then
