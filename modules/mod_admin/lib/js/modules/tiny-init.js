@@ -43,7 +43,7 @@ tinyInit = {
 	tab_focus: ":prev,:next", 
 	content_css: "/lib/js/modules/tinymce3.5.0/zotonic.css", 
 	wpeditimage_disable_captions: "", 
-	plugins: "codemagic,paste,table,zlink,zmedia,autosave,directionality,zbdo,inlinepopups,autoresize",
+	plugins: "codemagic,paste,table,zlink,zmedia,autosave,directionality,zbdo,inlinepopups",
 	table_row_limit: 100,
 	table_col_limit: 10,
 
