@@ -299,6 +299,7 @@ download_stream(Id, Path, LocalPath, Context, eof) ->
     lager:debug("Download remote file ~p ready (~p)", [LocalPath, z_context:site(Context)]),
     ok = file:rename(temp_path(LocalPath), LocalPath), 
     m_filestore:purge_move_to_local(Id, Context),
+    filezcache:delete({z_context:site(Context), Path}), 
     filestore_uploader:force_stale(Path, Context);
 download_stream(Id, _Path, LocalPath, Context, {error, _} = Error) ->
     lager:debug("Download error ~p file ~p (~p)", [Error, LocalPath, z_context:site(Context)]),

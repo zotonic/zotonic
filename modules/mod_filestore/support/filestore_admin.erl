@@ -128,7 +128,7 @@ queue_upload_all(Context) ->
 
 queue_local_all(Context) ->
     m_filestore:mark_move_to_local(Context),
-    QueueCt = z_db:q1("select count(*) from filestore where is_move_to_local and not is_delete", Context),
+    QueueCt = z_db:q1("select count(*) from filestore where is_move_to_local and not is_deleted", Context),
     z_render:wire([
             {update, [{target, "s3queue-local"}, {text, z_convert:to_binary(QueueCt)}]},
             {hide, [{target, "s3error-queue"}]},

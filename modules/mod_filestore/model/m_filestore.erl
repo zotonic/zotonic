@@ -86,6 +86,9 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
                             set location = $1,
                                 service = $2,
                                 size = $3,
+                                is_deleted = false,
+                                is_move_to_local = false,
+                                error = null,
                                 modified = now()
                             where id = $4", 
                             [Location, Service, Size, Id],
