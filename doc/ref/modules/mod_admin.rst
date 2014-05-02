@@ -40,7 +40,7 @@ admin.
 
 .. highlight:: javascript
    
-The template must contain Javascript which modifies the `tinyInit`
+The template must contain JavasSript which modifies the `tinyInit`
 variable just before the editor is started. For example, to tweak the
 "paste" options you can put the following in the template::
 
@@ -51,6 +51,18 @@ variable just before the editor is started. For example, to tweak the
   tinyInit.paste_strip_class_attributes = true;
   tinyInit.paste_text_sticky = true;
   tinyInit.paste_text_sticky_default = true;
+
+
+TinyMCE Zotonic options
+```````````````````````
+
+Zotonic provides extra init options:
+
+``z_insert_dialog_enabled``
+  Set this to false to prevent the insert media dialog from showing. Default `true`.
+
+``z_properties_dialog_enabled``
+  Set this to false to prevent the media properties dialog from showing. Default `true`.
 
 
 Writing admin widget templates
