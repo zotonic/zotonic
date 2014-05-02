@@ -88,14 +88,17 @@ identify(ImageFile, Context) ->
     case z_media_archive:is_archived(ImageFile, Context) of
         true ->
             RelFile = z_media_archive:rel_archive(ImageFile, Context),
-            case z_db:assoc_row("select id, mime, width, height, orientation from medium where filename = $1", [RelFile], Context) of
-                undefined ->
-                    {error, enoent};
-                Props ->
-                    {ok, Props}
-            end;
+            identify_medium_filename(RelFile, Context);
         false ->
-            {error, enoent}
+            identify_medium_filename(ImageFile, Context)
+    end.
+
+identify_medium_filename(MediumFilename, Context) ->
+    case z_db:assoc_row("select id, mime, width, height, orientation from medium where filename = $1", [MediumFilename], Context) of
+        undefined ->
+            {error, enoent};
+        Props ->
+            {ok, Props}
     end.
 
 

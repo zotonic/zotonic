@@ -26,6 +26,7 @@
 %% interface functions
 -export([
     convert/4,
+    convert/5,
     size/3,
     can_generate_preview/1,
     out_mime/3,
@@ -52,7 +53,11 @@ convert(InFile, InFile, _, _Context) ->
     lager:error("convert will overwrite input file ~p", [InFile]),
     {error, will_overwrite_infile};
 convert(InFile, OutFile, Filters, Context) ->
-    case z_media_identify:identify(InFile, Context) of
+    convert(InFile, InFile, OutFile, Filters, Context).
+
+
+convert(InFile, MediumFilename, OutFile, Filters, Context) ->
+    case z_media_identify:identify(InFile, MediumFilename, MediumFilename, Context) of
         {ok, FileProps} ->
             {mime, Mime} = proplists:lookup(mime, FileProps),
             case can_generate_preview(Mime) of

@@ -25,6 +25,7 @@
 -export([
     identify/2,
 	identify/3,
+    identify/4,
 	identify_file/2,
 	identify_file/3,
 	identify_file_direct/2,
@@ -47,13 +48,16 @@ identify(File, Context) ->
 
 -spec identify(#upload{}|string(), string(), #context{}) -> {ok, Props::list()} | {error, term()}.
 identify(File, OriginalFilename, Context) ->
+    identify(File, File, OriginalFilename, Context).
+
+identify(File, MediumFilename, OriginalFilename, Context) ->
     F = fun() ->
-            case m_media:identify(File, Context) of
+            case m_media:identify(MediumFilename, Context) of
                 {ok, _Props} = Result -> Result;
                 {error, _Reason} -> identify_file(File, OriginalFilename, Context)
             end
     end,
-    z_depcache:memo(F, {media_identify, File}, ?DAY, [media_identify], Context).
+    z_depcache:memo(F, {media_identify, MediumFilename}, ?DAY, [media_identify], Context).
     
 
 

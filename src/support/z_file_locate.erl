@@ -228,7 +228,7 @@ generate_preview(true, _Mime, Path, OriginalFile, Filters, Medium, Context) ->
         {ok, Filename} ->
             PreviewDir = z_path:media_preview(Context),
             PreviewFilePath = filename:join(PreviewDir, Path),
-            case z_media_preview:convert(z_convert:to_list(Filename), z_convert:to_list(PreviewFilePath), Filters, Context) of
+            case z_media_preview:convert(z_convert:to_list(Filename), OriginalFile, z_convert:to_list(PreviewFilePath), Filters, Context) of
                 ok ->
                     FileStorePath = filename:join([filename:basename(PreviewDir), Path]),
                     z_notifier:first(#filestore{action=upload, path=FileStorePath}, Context),
