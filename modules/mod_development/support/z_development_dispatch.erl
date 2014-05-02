@@ -59,9 +59,9 @@ ensure_abs([$/|_] = P) -> P;
 ensure_abs(P) -> [$/|P].
 
 make_reqdata(https, Path) ->
-	wrq:create({ssl, undefined}, 'GET', https, {1,1}, Path, gb_trees:empty());
+	wrq:create({ssl, debug}, 'GET', https, {1,1}, Path, gb_trees:empty());
 make_reqdata(http, Path) ->
-	wrq:create(undefined, 'GET', http, {1,1}, Path, gb_trees:empty()).
+	wrq:create(debug, 'GET', http, {1,1}, Path, gb_trees:empty()).
 
 tracer() ->
 	tracer_loop([]).
