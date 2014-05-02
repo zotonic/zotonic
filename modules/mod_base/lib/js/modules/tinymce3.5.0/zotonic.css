@@ -95,7 +95,7 @@ img.z-tinymce-media {
     width: 270px;
 }
 
-img.z-tinymce-media:hover {
+img.z-tinymce-media.z-active:hover {
     border: 1px solid #039ed4;
 }
 

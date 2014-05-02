@@ -11,9 +11,9 @@
     "use strict";
     window.tinyMCEzMedia = {
         toHTML: function (id, opts) {
-            var cls = "z-tinymce-media ",
+            var cls,
                 html;
-            cls += "z-tinymce-media-align-" + (opts.align || "block");
+            cls = "z-tinymce-media z-tinymce-media-align-" + (opts.align || "block");
             html = '<img class="'
                 + cls + '" '
                 + 'data-zmedia-id="' + id + '" '
@@ -26,31 +26,43 @@
     tinymce.create("tinymce.plugins.ZotonicMediaPlugin", {
         init : function (ed, url) {
             var self = this,
-                html,
-                n;
+                properties_dialog_enabled,
+                insert_dialog_enabled,
+                DEFAULT_ATTRIBUTES = {
+                    align: "block",
+                    size: "middle",
+                    crop: "",
+                    link: ""
+                };
+
+            // Zotonic settings
+            properties_dialog_enabled = ed.getParam("z_properties_dialog_enabled", true);
+            insert_dialog_enabled = ed.getParam("z_insert_dialog_enabled", true);
 
             // Register commands
+
+            ed.onSetContent.add(function (ed, o) {
+                if (properties_dialog_enabled) {
+                    // show hover state
+                    var $iframe = $(ed.getContainer()).find("iframe");
+                    $iframe.contents().find("img.z-tinymce-media").addClass("z-active");
+                }
+            });
+
             ed.addCommand("mceZotonicMedia", function (ui) {
-                n = ui || ed.selection.getNode();
+                var n = ui || ed.selection.getNode();
                 if (n && self._domIsZMedia(n)) {
-                    // Open properties dialog
-                    self.propertiesDialog(n);
-                } else {
-                    // Open "insert" dialog
-                    window.z_choose_zmedia = function (id) {
-                        if (!id) {
-                            return;
-                        }
-                        html = window.tinyMCEzMedia.toHTML(id, {align: "block", size: "middle", crop: "", link: ""});
-                        ed.execCommand("mceInsertContent", false, html, {});
-                    };
-                    z_event("zmedia", {language: window.zEditLanguage(), is_zmedia: 1});
+                    if (properties_dialog_enabled) {
+                        self._openPropertiesDialog(n);
+                    }
+                } else if (insert_dialog_enabled) {
+                    self._openInsertDialog(ed, DEFAULT_ATTRIBUTES);
                 }
             });
 
             ed.onClick.add(function (ed, o) {
                 if (o.srcElement.nodeName === "IMG") {
-                    tinymce.activeEditor.execCommand("mceZotonicMedia", o.srcElement);
+                    ed.execCommand("mceZotonicMedia", o.srcElement);
                 }
             });
 
@@ -74,7 +86,19 @@
             });
         },
 
-        propertiesDialog: function (node) {
+        getInfo : function () {
+            return {
+                longname : "Zotonic Media Plugin",
+                author : "Arjan Scherpenisse",
+                authorurl : "http://www.zotonic.com",
+                infourl : "http://www.zotonic.com",
+                version : tinymce.majorVersion + "." + tinymce.minorVersion
+            };
+        },
+
+        // Private methods //
+
+        _openPropertiesDialog: function (node) {
             var id = this._zMediaIdFromDOM(node),
                 opts = this._zMediaOptsFromDOM(node);
 
@@ -158,17 +182,20 @@
             });
         },
 
-        getInfo : function () {
-            return {
-                longname : "Zotonic Media Plugin",
-                author : "Arjan Scherpenisse",
-                authorurl : "http://www.zotonic.com",
-                infourl : "http://www.zotonic.com",
-                version : tinymce.majorVersion + "." + tinymce.minorVersion
+        _openInsertDialog: function (editor, attributes) {
+            window.z_choose_zmedia = function (id) {
+                var html;
+                if (!id) {
+                    return;
+                }
+                html = window.tinyMCEzMedia.toHTML(id, attributes);
+                editor.execCommand("mceInsertContent", false, html, {});
             };
+            z_event("zmedia", {
+                language: window.zEditLanguage(),
+                is_zmedia: 1
+            });
         },
-
-        // Private methods //
 
         _domIsZMedia: function (el) {
             return this._zMediaIdFromDOM(el) !== null;
@@ -179,7 +206,7 @@
         },
 
         _zMediaOptsFromDOM: function (el) {
-            return $.parseJSON(el.getAttribute("data-zmedia-opts"));
+            return JSON.parse(el.getAttribute("data-zmedia-opts"));
         },
 
         _zMediaClass: function () {
@@ -210,7 +237,7 @@
                 if (!optsmatch) {
                     return html;
                 }
-                opts = $.parseJSON(optsmatch[1].replace(/&quot;/g, '"'));
+                opts = JSON.parse(optsmatch[1].replace(/&quot;/g, '"'));
                 newtag = this._zMediaMarker(id, opts);
                 html = html.substr(0, re.lastIndex - img.length) + newtag + html.substr(re.lastIndex);
                 re.lastIndex = re.lastIndex - img.length + newtag.length;
@@ -234,7 +261,7 @@
                     break;
                 }
                 id = m[1];
-                opts = $.parseJSON(m[2]);
+                opts = JSON.parse(m[2]);
                 part = window.tinyMCEzMedia.toHTML(id, opts);
                 html = html.substr(0, re.lastIndex - m[0].length) + part + html.substr(re.lastIndex);
                 re.lastIndex = re.lastIndex - m[0].length + part.length;
@@ -247,4 +274,8 @@
     tinymce.PluginManager.add("zmedia", tinymce.plugins.ZotonicMediaPlugin);
 }());
 
+/* jslint globals:
+tinymce z_event tinyMCE z_dialog_open $ z_dialog_close console
+*/
+/* jslint options: */
 /*jslint browser: true, nomen: true, unparam: true */
