@@ -178,6 +178,18 @@ The following options for your site config specify how it connects to the databa
 - dbpassword
 - dbdatabase
 - dbschema
+- dbdriver
+
+These properties mostly speak for themselves, hopefully.
+
+The `dbschema` is the name of the database schema (which is kind of a
+namespace for tables in Postgres); see `Tip: multiple sites using one
+database` below for an explanation. By default, ``public`` is used as
+the schema name.
+  
+The `dbdriver` is the name of the database driver module. Currently
+this defaults to ``z_db_pgsql``. Other driver options are not yet
+implemented.
 
 
 Setting module-specific config values in the site config

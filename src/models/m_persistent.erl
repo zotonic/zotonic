@@ -78,7 +78,7 @@ get_props(Id, Context) ->
 put(undefined, _Props, _Context) ->
     {error, undefined};
 put(Id, Props, Context) ->
-    z_db:q("UPDATE " ++ ?T_PERSISTENT ++ " SET props = $2, modified = now() WHERE id = $1", [Id, Props], Context) == 1
-    orelse z_db:q("INSERT INTO " ++ ?T_PERSISTENT ++ " (id, props) VALUES ($1, $2)", [Id, Props], Context),
+    z_db:q("UPDATE " ++ ?T_PERSISTENT ++ " SET props = $2, modified = now() WHERE id = $1", [Id, {term, Props}], Context) == 1
+    orelse z_db:q("INSERT INTO " ++ ?T_PERSISTENT ++ " (id, props) VALUES ($1, $2)", [Id, ?DB_PROPS(Props)], Context),
     ok.
 

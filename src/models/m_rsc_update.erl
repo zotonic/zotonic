@@ -551,6 +551,8 @@ props_filter([{is_authoritative, P}|T], Acc, Context) ->
     end;
 props_filter([{is_featured, P}|T], Acc, Context) ->
     props_filter(T, [{is_featured, z_convert:to_bool(P)} | Acc], Context);
+props_filter([{is_protected, P}|T], Acc, Context) ->
+    props_filter(T, [{is_protected, z_convert:to_bool(P)} | Acc], Context);
 props_filter([{is_query_live, P}|T], Acc, Context) ->
     props_filter(T, [{is_query_live, z_convert:to_bool(P)} | Acc], Context);
 props_filter([{visible_for, Vis}|T], Acc, Context) ->

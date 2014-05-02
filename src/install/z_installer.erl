@@ -33,88 +33,78 @@
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Install zotonic on the databases in the PoolOpts, skips when already installed.
 start_link(SiteProps) when is_list(SiteProps) ->
-    install_check(SiteProps),
-    ignore.
+    install_check(SiteProps).
 
 install_check(SiteProps) ->
     %% Check if the config table exists, if so then assume that all is ok
-    Name     = proplists:get_value(host, SiteProps),
-    Database = case proplists:get_value(dbdatabase, SiteProps, inherit) of
-                   inherit ->
-                       pgsql_pool:get_database_opt(database, Name);
-                   Db ->
-                       Db
-               end,
-
-    case Database of
-        none ->
-            ignore;
-        _ ->
-            {ok, Schema} = pgsql_pool:get_database_opt(schema, Name),
-            {ok, C} = pgsql_pool:get_connection(Name),
-            {ok, [], []} = pgsql:squery(C, "BEGIN"),
-
-            ok = z_install:pre_install(Name, SiteProps),
-
-            case has_table(C, "config", Database, Schema) of
-                false ->
-                    {ok, [], []} = pgsql:squery(C, "COMMIT"),
-                    pgsql_pool:return_connection(Name, C),
-
-                    {ok, User} = pgsql_pool:get_database_opt(username, Name),
-                    {ok, Host} = pgsql_pool:get_database_opt(host, Name),
-                    {ok, Port} = pgsql_pool:get_database_opt(port, Name),
-                    lager:warning("~p: Installing database ~s.~s at ~s@~s:~s", 
-                                  [
-                                   Name,
-                                   z_convert:to_list(Database),
-                                   z_convert:to_list(Schema),
-                                   z_convert:to_list(User),
-                                   z_convert:to_list(Host),
-                                   z_convert:to_list(Port)
-                                  ]),
-                    z_install:install(Name);
-                true -> 
-                    ok = upgrade(C, Database, Schema),
-                    sanity_check(C, Database, Schema),
-
-                    {ok, [], []} = pgsql:squery(C, "COMMIT"),
-                    pgsql_pool:return_connection(Name, C)
-            end
+    Context = z_context:new(proplists:get_value(host, SiteProps)),
+    case z_db:has_connection(Context) of
+        true ->
+            case z_db_pool:test_connection(Context) of
+                ok ->
+                    Options0 = z_db_pool:get_database_options(Context),
+                    Options = lists:filter(fun({dbpassword,_}) -> false; (_) -> true end, Options0),
+                    case z_db:table_exists(config, Context) of
+                        false ->
+                            %% Install database
+                            lager:warning("~p: Installing database with db options: ~p", [z_context:site(Context), Options]),
+                            z_install:install(Context),
+                            lager:warning("okay: ~p", [okay]),
+                            ignore;
+                        true ->
+                            %% Normal startup, do upgrade / check
+                            ok = z_db:transaction(
+                                   fun(Context1) ->
+                                           C = z_db_pgsql:get_raw_connection(Context1),
+                                           Database = proplists:get_value(dbdatabase, Options),
+                                           Schema = proplists:get_value(dbschema, Options),
+                                           ok = upgrade(C, Database, Schema),
+                                           ok = sanity_check(C, Database, Schema)
+                                   end,
+                                   Context),
+                            ignore
+                    end;
+                {error, Reason} ->
+                    lager:warning("~p: Database connection failure!", [z_context:site (Context)]),
+                    lager:warning("~p", [Reason]),
+                    stop
+            end;
+        false ->
+            ignore
     end.
 
 has_table(C, Table, Database, Schema) ->    
-    {ok, HasTable} = pgsql:equery1(C, "
+    {ok, _, [{HasTable}]} = pgsql:equery(C, "
             select count(*) 
-            from information_schema.tables 
-            where table_catalog = $1 
-              and table_name = $3 
-              and table_schema = $2
-              and table_type = 'BASE TABLE'", [Database, Schema, Table]),
+                                         from information_schema.tables 
+                                         where table_catalog = $1 
+                                         and table_name = $3 
+                                         and table_schema = $2
+                                         and table_type = 'BASE TABLE'", [Database, Schema, Table]),
     HasTable =:= 1.
 
 
 %% Check if a column in a table exists by querying the information schema.
 has_column(C, Table, Column, Database, Schema) ->
-    {ok, HasColumn} = pgsql:equery1(C, "
+    {ok, _, [{HasColumn}]} = pgsql:equery(C, "
             select count(*) 
-            from information_schema.columns 
-            where table_catalog = $1 
-              and table_schema = $2
-              and table_name = $3 
-              and column_name = $4", [Database, Schema, Table, Column]),
+                                          from information_schema.columns 
+                                          where table_catalog = $1 
+                                          and table_schema = $2
+                                          and table_name = $3 
+                                          and column_name = $4", [Database, Schema, Table, Column]),
     HasColumn =:= 1.
 
 get_column_type(C, Table, Column, Database, Schema) ->
-    {ok, ColumnType} = pgsql:equery1(C, "
+    {ok, _, [{ColumnType}]} = pgsql:equery(C, "
             select data_type
-            from information_schema.columns 
-            where table_catalog = $1 
-              and table_schema = $2
-              and table_name = $3 
-              and column_name = $4", [Database, Schema, Table, Column]),
+                                           from information_schema.columns 
+                                           where table_catalog = $1 
+                                           and table_schema = $2
+                                           and table_name = $3 
+                                           and column_name = $4", [Database, Schema, Table, Column]),
     ColumnType.
-    
+
 
 %% Upgrade older Zotonic versions.
 upgrade(C, Database, Schema) ->
@@ -164,12 +154,12 @@ install_persist(C, Database, Schema) ->
     case has_table(C, "persistent", Database, Schema) of
         false ->
             {ok,[],[]} = pgsql:squery(C, "create table persistent ( "
-                            "  id character varying(32) not null,"
-                            "  props bytea,"
-                            "  created timestamp with time zone NOT NULL DEFAULT now(),"
-                            "  modified timestamp with time zone NOT NULL DEFAULT now(),"
-                            "  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
-                            ")"),
+                                      "  id character varying(32) not null,"
+                                      "  props bytea,"
+                                      "  created timestamp with time zone NOT NULL DEFAULT now(),"
+                                      "  modified timestamp with time zone NOT NULL DEFAULT now(),"
+                                      "  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
+                                      ")"),
             ok;
         true ->
             ok
@@ -181,10 +171,10 @@ install_rsc_page_path_log(C, Database, Schema) ->
             {ok, [], []} = pgsql:squery(
                              C, "CREATE TABLE rsc_page_path_log ( 
                                 id int not null,
-                                page_path character varying(80),
-                                created timestamp with time zone NOT NULL DEFAULT now(),
-                                CONSTRAINT rsc_page_path_log_pkey PRIMARY KEY (page_path),
-                                CONSTRAINT rsc_page_path_log_fkey FOREIGN KEY (id) REFERENCES rsc(id))"),
+                             page_path character varying(80),
+                             created timestamp with time zone NOT NULL DEFAULT now(),
+                             CONSTRAINT rsc_page_path_log_pkey PRIMARY KEY (page_path),
+                             CONSTRAINT rsc_page_path_log_fkey FOREIGN KEY (id) REFERENCES rsc(id))"),
             ok;
         true ->
             ok
@@ -195,8 +185,8 @@ drop_visitor(C, Database, Schema) ->
     case has_table(C, "visitor_cookie", Database, Schema) of
         true ->
             {ok, _N} = pgsql:squery(C, 
-                    "insert into persistent (id,props) "
-                    "select c.cookie, v.props from visitor_cookie c join visitor v on c.visitor_id = v.id"),
+                                    "insert into persistent (id,props) "
+                                    "select c.cookie, v.props from visitor_cookie c join visitor v on c.visitor_id = v.id"),
             pgsql:squery(C, "drop table visitor_cookie cascade"),
             pgsql:squery(C, "drop table visitor cascade"),
             ok;
@@ -206,21 +196,21 @@ drop_visitor(C, Database, Schema) ->
 
 
 extent_mime(C, Database, Schema) ->
-    {ok, Length} = pgsql:equery1(C, "
+    {ok, _, [{Length}]} = pgsql:equery(C, "
             select character_maximum_length 
-            from information_schema.columns 
-            where table_catalog = $1 
-              and table_schema = $2
-              and table_name = $3 
-              and column_name = $4", [Database, Schema, "medium", "mime"]),
+                                       from information_schema.columns 
+                                       where table_catalog = $1 
+                                       and table_schema = $2
+                                       and table_name = $3 
+                                       and column_name = $4", [Database, Schema, "medium", "mime"]),
     case Length < 128 of
         true ->
             {ok, [], []} = pgsql:squery(C, "alter table medium alter column mime type character varying(128)");
         false ->
             nop
     end,
-    ok.
-    
+                                       ok.
+
 
 install_identity_is_verified(C, Database, Schema) ->
     case has_column(C, "identity", "is_verified", Database, Schema) of
@@ -228,7 +218,7 @@ install_identity_is_verified(C, Database, Schema) ->
             ok;
         false ->
             {ok, [], []} = pgsql:squery(C, "alter table identity "
-                                           "add column is_verified boolean not null default false"),
+                                        "add column is_verified boolean not null default false"),
             {ok, [], []} = pgsql:squery(C, "update identity set is_verified = true where key = 'username_pw'"),
             ok
     end.
@@ -239,8 +229,8 @@ install_identity_verify_key(C, Database, Schema) ->
             ok;
         false ->
             {ok, [], []} = pgsql:squery(C, "alter table identity "
-                                           "add column verify_key character varying(32), "
-                                           "add constraint identity_verify_key_unique UNIQUE (verify_key)"),
+                                        "add column verify_key character varying(32), "
+                                        "add constraint identity_verify_key_unique UNIQUE (verify_key)"),
             ok
     end.
 
@@ -263,7 +253,7 @@ install_module_schema_version(C, Database, Schema) ->
             {ok, [], []} = pgsql:squery(C, "alter table module add column schema_version int "),
             Predefined = ["mod_twitter", "mod_mailinglist", "mod_menu", "mod_survey", "mod_acl_simple_roles", "mod_contact"],
             [
-                {ok, _} = pgsql:equery(C, "UPDATE module SET schema_version=1 WHERE name=$1 AND is_active=true", [M]) || M <- Predefined
+             {ok, _} = pgsql:equery(C, "UPDATE module SET schema_version=1 WHERE name=$1 AND is_active=true", [M]) || M <- Predefined
             ],
             ok
     end.
@@ -274,11 +264,11 @@ install_geocode(C, Database, Schema) ->
         <<"character varying">> ->
             {ok, [], []} = pgsql:squery(C, "alter table rsc drop column pivot_geocode"),
             {ok, [], []} = pgsql:squery(C, "alter table rsc add column pivot_geocode bigint,"
-                                                          " add column pivot_geocode_qhash bytea"),
+                                        " add column pivot_geocode_qhash bytea"),
             {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_pivot_geocode_key ON rsc (pivot_geocode)"),
             ok;
         <<"bigint">> ->
-            % 0.9dev was missing a column definition in the z_install.erl
+                                                % 0.9dev was missing a column definition in the z_install.erl
             case has_column(C, "rsc", "pivot_geocode_qhash", Database, Schema) of
                 true -> 
                     ok;
@@ -288,7 +278,7 @@ install_geocode(C, Database, Schema) ->
             end
     end.
 
-% Install the table tracking deleted (or moved) resources
+                                                % Install the table tracking deleted (or moved) resources
 install_rsc_gone(C, Database, Schema) ->
     case has_table(C, "rsc_gone", Database, Schema) of
         false ->
@@ -305,26 +295,26 @@ install_rsc_gone(C, Database, Schema) ->
 
 install_rsc_gone_1(C) ->
     {ok,[],[]} = pgsql:squery(C, "create table rsc_gone ( "
-                    "  id bigint not null,"
-                    "  new_id bigint,"
-                    "  new_uri character varying(250),"
-                    "  version int not null, "
-                    "  uri character varying(250),"
-                    "  name character varying(80),"
-                    "  page_path character varying(80),"
-                    "  is_authoritative boolean NOT NULL DEFAULT true,"
-                    "  creator_id bigint,"
-                    "  modifier_id bigint,"
-                    "  created timestamp with time zone NOT NULL DEFAULT now(),"
-                    "  modified timestamp with time zone NOT NULL DEFAULT now(),"
-                    "  CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)"
-                    ")"),
+                              "  id bigint not null,"
+                              "  new_id bigint,"
+                              "  new_uri character varying(250),"
+                              "  version int not null, "
+                              "  uri character varying(250),"
+                              "  name character varying(80),"
+                              "  page_path character varying(80),"
+                              "  is_authoritative boolean NOT NULL DEFAULT true,"
+                              "  creator_id bigint,"
+                              "  modifier_id bigint,"
+                              "  created timestamp with time zone NOT NULL DEFAULT now(),"
+                              "  modified timestamp with time zone NOT NULL DEFAULT now(),"
+                              "  CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)"
+                              ")"),
     {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_name ON rsc_gone(name)"),
     {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)"),
     {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)"),
     ok.
 
-% Table with all uploaded filenames, used to ensure unique filenames in the upload archive
+                                                % Table with all uploaded filenames, used to ensure unique filenames in the upload archive
 install_medium_log(C, Database, Schema) ->
     case has_table(C, "medium_log", Database, Schema) of
         false ->
@@ -332,30 +322,30 @@ install_medium_log(C, Database, Schema) ->
             {ok,[],[]} = pgsql:squery(C, z_install:medium_update_function()),
             {ok,[],[]} = pgsql:squery(C, z_install:medium_update_trigger()),
             {ok, _} = pgsql:squery(C,
-                                "
+                                   "
                                 insert into medium_log (usr_id, filename, created)
-                                select r.creator_id, m.filename, m.created
-                                from medium m join rsc r on r.id = m.id
-                                where m.filename is not null
-                                  and m.filename <> ''
-                                  and m.is_deletable_file
-                                "),
+                                   select r.creator_id, m.filename, m.created
+                                   from medium m join rsc r on r.id = m.id
+                                   where m.filename is not null
+                                   and m.filename <> ''
+                                   and m.is_deletable_file
+                                   "),
             {ok, _} = pgsql:squery(C,
-                                "
+                                   "
                                 insert into medium_log (usr_id, filename, created)
-                                select r.creator_id, m.preview_filename, m.created
-                                from medium m join rsc r on r.id = m.id
-                                where m.preview_filename is not null
-                                  and m.preview_filename <> ''
-                                  and m.is_deletable_preview
-                                "),
+                                   select r.creator_id, m.preview_filename, m.created
+                                   from medium m join rsc r on r.id = m.id
+                                   where m.preview_filename is not null
+                                   and m.preview_filename <> ''
+                                   and m.is_deletable_preview
+                                   "),
             ok;
-        true ->
-            ok
-    end.
+                                       true ->
+                                          ok
+                                  end.
 
 
-% Perform some simple sanity checks
+                                                % Perform some simple sanity checks
 sanity_check(C, _Database, _Schema) ->
     ensure_module_active(C, "mod_authentication"),
     ok.

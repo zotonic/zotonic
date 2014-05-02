@@ -106,7 +106,7 @@ secrets_for_verify(none, Consumer, _Token, Context) ->
         SELECT id, consumer_key, consumer_secret, callback_uri
                 FROM oauth_application_registry
                 WHERE consumer_key	= $1
-                AND enabled = true", [z_db:get(consumer_key, Consumer)], Context);
+                AND enabled = true", [proplists:get_value(consumer_key, Consumer)], Context);
 
 secrets_for_verify(Type, Consumer, Token, Context) ->
     z_db:assoc_props_row("
@@ -125,13 +125,13 @@ secrets_for_verify(Type, Consumer, Token, Context) ->
                  AND consumer_key	= $2
                  AND token			= $3
 				 AND enabled		= true
-                 AND token_ttl     >= NOW()", [Type, z_db:get(consumer_key, Consumer), Token], Context).
+                 AND token_ttl     >= NOW()", [Type, proplists:get_value(consumer_key, Consumer), Token], Context).
 
 
 check_nonce(Consumer, Token, Timestamp, Nonce, Context) ->
 
-    CKey = z_db:get(consumer_key, Consumer),
-    TK = z_db:get(token, Token),
+    CKey = proplists:get_value(consumer_key, Consumer),
+    TK = proplists:get_value(token, Token),
     TS = z_convert:to_integer(Timestamp),
     z_db:transaction(fun (C) -> check_nonce1(CKey, TK, TS, Nonce, C) end, Context).
 
@@ -166,8 +166,7 @@ check_nonce1(CKey, TK, TS, Nonce, Context) ->
 
 
 generate_key() ->
-    base64:encode_to_string(crypto:sha(crypto:rand_bytes(100))).
-    %%lists:flatten([io_lib:format("~2.16.0b",[N])||N<-binary_to_list(crypto:sha(crypto:rand_bytes(100)))]).
+    base64:encode_to_string(crypto:hash(sha, crypto:rand_bytes(100))).
 
 
 %%
@@ -175,12 +174,12 @@ generate_key() ->
 %%
 request_token(Consumer, Context) ->
     case z_db:insert("oauth_application_token", 
-                [ {application_id, z_db:get(id, Consumer)},
+                [ {application_id, proplists:get_value(id, Consumer)},
                   {user_id, 1},
                   {token, generate_key()},
                   {token_secret, generate_key()},
                   {token_type, "request"},
-                  {callback_uri, z_db:get(callback_uri, Consumer)}], Context) of
+                  {callback_uri, proplists:get_value(callback_uri, Consumer)}], Context) of
         {ok, Id} ->
             z_db:select("oauth_application_token", Id, Context);
         _ ->
@@ -189,16 +188,16 @@ request_token(Consumer, Context) ->
 
 
 authorize_request_token(Token, UserId, Context) ->
-    z_db:update("oauth_application_token", z_db:get(id, Token), [{authorized, true}, {user_id, UserId}], Context).
+    z_db:update("oauth_application_token", proplists:get_value(id, Token), [{authorized, true}, {user_id, UserId}], Context).
 
 
 exchange_request_for_access(Token, Context) ->
-    TokenId = z_db:get(id, Token),
+    TokenId = proplists:get_value(id, Token),
     case z_db:assoc_props_row("SELECT id FROM oauth_application_token WHERE
                                 application_id = $1 AND
                                 token = $2 AND
                                 token_type = 'request' AND
-                                authorized = true", [z_db:get(application_id, Token), z_db:get(token, Token)], Context) of
+                                authorized = true", [proplists:get_value(application_id, Token), proplists:get_value(token, Token)], Context) of
         [{id, TokenId}] ->
             z_db:update("oauth_application_token", TokenId, 
                         [{token, generate_key()},

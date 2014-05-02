@@ -30,6 +30,9 @@
     hostname_port/1,
     site_protocol/1,
 
+    db_pool/1,
+    db_driver/1,
+         
     is_request/1,
 
     prune_for_spawn/1,
@@ -145,6 +148,7 @@ new(#context{} = C) ->
         dropbox_server=C#context.dropbox_server,
         pivot_server=C#context.pivot_server,
         module_indexer=C#context.module_indexer,
+        db=C#context.db,
         translation_table=C#context.translation_table
     };
 new(undefined) ->
@@ -197,8 +201,9 @@ set_dispatch_from_path(Context) ->
 %% @spec set_server_names(Context1) -> Context2
 set_server_names(#context{host=Host} = Context) ->
     HostAsList = [$$ | atom_to_list(Host)],
+    Depcache = list_to_atom("z_depcache"++HostAsList),
     Context#context{
-        depcache=list_to_atom("z_depcache"++HostAsList),
+        depcache=Depcache,
         notifier=list_to_atom("z_notifier"++HostAsList),
         session_manager=list_to_atom("z_session_manager"++HostAsList),
         dispatcher=list_to_atom("z_dispatcher"++HostAsList),
@@ -207,6 +212,7 @@ set_server_names(#context{host=Host} = Context) ->
         dropbox_server=list_to_atom("z_dropbox"++HostAsList),
         pivot_server=list_to_atom("z_pivot_rsc"++HostAsList),
         module_indexer=list_to_atom("z_module_indexer"++HostAsList),
+        db={z_db_pool:db_pool_name(Host), z_db_pool:db_driver(Context#context{depcache=Depcache})},
         translation_table=z_trans_server:table(Host)
     }.
 
@@ -275,6 +281,7 @@ prune_for_async(#context{} = Context) ->
         dropbox_server=Context#context.dropbox_server,
         pivot_server=Context#context.pivot_server,
         module_indexer=Context#context.module_indexer,
+        db=Context#context.db,
         translation_table=Context#context.translation_table,
         language=Context#context.language
     }.
@@ -309,7 +316,8 @@ prune_for_database(Context) ->
         scomp_server=Context#context.scomp_server,
         dropbox_server=Context#context.dropbox_server,
         pivot_server=Context#context.pivot_server,
-        module_indexer=Context#context.module_indexer
+        module_indexer=Context#context.module_indexer,
+        db=Context#context.db
     }.
 
 
@@ -349,6 +357,15 @@ abs_url(Url, Context) ->
         true;
     has_url_protocol(_) ->
         false.
+
+
+%% @doc Fetch the pid of the database worker pool for this site
+db_pool(#context{db={Pool, _Driver}}) ->
+    Pool.
+
+%% @doc Fetch the database driver module for this site
+db_driver(#context{db={_Pool, Driver}}) ->
+    Driver.
 
 %% @doc Fetch the protocol for absolute urls referring to the site (defaults to http).
 %%      Useful when the site is behind a https proxy.

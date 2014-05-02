@@ -103,7 +103,7 @@ set(Id, Perms, Context) ->
 %% TODO: Refactor: Should be done via z_notifier
 all_services_for(Id, Context) ->
     F = fun() ->
-                All = [ binary_to_list(z_db:get(perm, R)) || R <- get(Id, Context)],
+                All = [ binary_to_list(proplists:get_value(perm, R)) || R <- get(Id, Context)],
                 lists:filter(fun(S) -> z_service:applies(All, proplists:get_value(method, S)) end, z_service:all(info, Context))
         end,
     z_depcache:memo(F, {z_services_for, Id}, ?WEEK, [z_services, {oauth_consumer, Id}], Context).

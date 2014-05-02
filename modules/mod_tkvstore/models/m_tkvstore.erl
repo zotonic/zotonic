@@ -65,9 +65,9 @@ put(Type, Key, Data, Context) ->
     F = fun(Ctx) ->
         case z_db:q1("select count(*) from tkvstore where type = $1 and key = $2", [Type, Key], Ctx) of
             0 ->
-                z_db:q("insert into tkvstore (type, key, props) values ($1, $2, $3)", [Type, Key, Data], Ctx);
+                z_db:q("insert into tkvstore (type, key, props) values ($1, $2, $3)", [Type, Key, ?DB_PROPS(Data)], Ctx);
             1 ->
-                z_db:q("update tkvstore set props = $3 where type = $1 and key = $2", [Type, Key, Data], Ctx)
+                z_db:q("update tkvstore set props = $3 where type = $1 and key = $2", [Type, Key, ?DB_PROPS(Data)], Ctx)
         end
     end,
     z_db:transaction(F, Context).

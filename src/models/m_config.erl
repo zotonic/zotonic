@@ -71,7 +71,12 @@ all(Context) ->
             Cs;
         undefined ->
             Cs = case z_db:has_connection(Context) of
-                     true -> z_db:assoc_props("select * from config order by module, key", Context);
+                     true -> try
+                                 z_db:assoc_props("select * from config order by module, key", Context)
+                             catch
+                                 %% When Zotonic has not yet been installed, there is no config table yet
+                                 _:_ -> []
+                             end;
                      false -> []
                  end,
             Indexed = [ {M, z_utils:index_proplist(key, CMs)} || {M,CMs} <- z_utils:group_proplists(module, Cs) ],

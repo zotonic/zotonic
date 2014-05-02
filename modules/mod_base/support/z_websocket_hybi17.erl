@@ -41,7 +41,7 @@
 start(ReqData, Context) ->
     Socket = webmachine_request:socket(ReqData),
     WsKey = z_string:trim(z_context:get_req_header("sec-websocket-key", Context)),
-    Accept = base64:encode(crypto:sha(WsKey++"258EAFA5-E914-47DA-95CA-C5AB0DC85B11")),
+    Accept = base64:encode(crypto:hash(sha, WsKey++"258EAFA5-E914-47DA-95CA-C5AB0DC85B11")),
 
     %% Send the handshake
     Data = ["HTTP/1.1 101 Switching Protocols", 13, 10,

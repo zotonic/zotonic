@@ -77,7 +77,7 @@ event(#submit{message={user_add, Props}}, Context) ->
                         Username = z_context:get_q_validated("new_username", Ctx),
                         Password = z_context:get_q_validated("new_password", Ctx),
                         case m_identity:set_username_pw(PersonId, Username, Password, Ctx) of
-                            ok -> {ok, PersonId};
+                            ok -> ok;
                             {error, PWReason} -> throw({error, PWReason})
                         end,
                         case z_convert:to_bool(z_context:get_q("send_welcome", Context)) of

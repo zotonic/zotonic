@@ -42,7 +42,7 @@ start(WsKey1, ReqData, Context1) ->
     Key1 = process_key(WsKey1),
     Key2 = process_key(z_context:get_req_header("sec-websocket-key2", Context1)),
     {ok, Body} = mochiweb_socket:recv(Socket, 8, infinity),
-    SignKey = crypto:md5(<<Key1:32/integer, Key2:32/integer, Body/binary>>),
+    SignKey = crypto:hash(md5, <<Key1:32/integer, Key2:32/integer, Body/binary>>),
     WSProtocol = case wrq:is_ssl(ReqData) of true -> "wss"; _ -> "ws" end,
 
     %% Send the handshake

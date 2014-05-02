@@ -12,6 +12,16 @@ incompatible ways or get deprecated.
 Upgrading to Zotonic 0.11
 -------------------------
 
+Database changes
+................
+
+The behaviour of automatically serializing Erlang terms into the
+database (on ``bytea`` columns) as been made explicit. To enable
+serialization of database values, you have to tag them with the new
+``?DB_PROPS(...)`` macro. Unserialization of terms is still done
+automatically.
+
+
 Controller changes
 ..................
 

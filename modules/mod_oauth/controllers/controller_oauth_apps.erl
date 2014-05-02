@@ -74,7 +74,7 @@ event(#submit{message={consumer_save, Arg}}, Context) ->
     Context1 = case proplists:get_value(id, Arg) of
                    undefined ->
                        Consumer = m_oauth_app:create_consumer(Title, URL, Descr, Callback, Context),
-                       m_oauth_perms:set(z_db:get(id, Consumer), Perms, Context),
+                       m_oauth_perms:set(proplists:get_value(id, Consumer), Perms, Context),
                        z_render:wire({growl, [{text, ?__("Created new application.", Context)}]}, Context);
                    
                    Id ->

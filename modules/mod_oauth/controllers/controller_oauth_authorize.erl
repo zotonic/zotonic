@@ -59,12 +59,12 @@ process_post(ReqData, Context) ->
     Token = z_context:get("token", Context),
     ?DEBUG(Token),
     m_oauth_app:authorize_request_token(Token, Context#context.user_id, Context),
-    Redirect = case z_db:get(callback_uri, Token) of
+    Redirect = case proplists:get_value(callback_uri, Token) of
                    <<>> ->
                        "/oauth/authorize/finished";
                    X when is_binary(X) ->
                        binary_to_list(X)
                end,
-    Redirect1 = Redirect ++ "?oauth_token=" ++ z_url:url_encode(binary_to_list(z_db:get(token, Token))),
+    Redirect1 = Redirect ++ "?oauth_token=" ++ z_url:url_encode(binary_to_list(proplists:get_value(token, Token))),
     ReqData1 = wrq:set_resp_header("Location", Redirect1, ReqData),
     {{halt, 301}, ReqData1, Context}.

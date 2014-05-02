@@ -275,7 +275,7 @@ insert_mcs(UAClass, MCs, Tag, Site) ->
             {z_convert:to_binary(MediaClass),
              Props1,
              z_convert:to_binary(
-                z_string:to_lower(iolist_to_binary(z_utils:hex_encode(crypto:sha(term_to_binary(Props1)))))
+                z_string:to_lower(iolist_to_binary(z_utils:hex_encode(crypto:hash(sha, term_to_binary(Props1)))))
              )}
         end
         || {MediaClass, Props} <- lists:flatten(MCs)

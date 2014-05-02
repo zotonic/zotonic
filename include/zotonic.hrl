@@ -53,9 +53,12 @@
         pivot_server,
         module_indexer,
         translation_table,
-        
+
         %% The database connection used for (nested) transactions, see z_db
         dbc=undefined :: pid() | undefined,
+
+        %% The pid of the database pool of this site and the db driver in use (usually z_db_pgsql)
+        db=undefined :: {pid(), atom()} | undefined,
 
         %% The language selected, used by z_trans and others
         language=en :: atom(),
@@ -218,6 +221,8 @@
 %% Notifier defines
 -define(NOTIFIER_DEFAULT_PRIORITY, 500).
 
+-define(DB_PROPS(N), {term, N}).
+
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
 %%% LOGGING %%%
@@ -225,6 +230,9 @@
 -define(PRINT(Var), error_logger:info_msg("DEBUG: ~p:~p - ~p: ~p~n", [?MODULE, ?LINE, ??Var, Var])).
 -define(LOG(Msg, Args), error_logger:info_msg(Msg, Args)).
 -define(ERROR(Msg, Args), error_logger:error_msg("~p:~p "++Msg, [?MODULE, ?LINE|Args])).
+
+-define(STACKTRACE, erlang:display(try throw(a) of _ -> a catch _:_ -> erlang:get_stacktrace() end)).
+
 
 -define(zDebug(Msg, Context), z:debug(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
 -define(zInfo(Msg, Context), z:info(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).

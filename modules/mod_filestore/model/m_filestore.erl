@@ -54,7 +54,7 @@ queue(Path, Props, Context) ->
     z_db:transaction(fun(Ctx) ->
             case z_db:q1("select count(*) from filestore_queue where path = $1", [Path], Ctx) of
                 0 ->
-                    1 = z_db:q("insert into filestore_queue (path, props) values ($1,$2)", [Path, Props], Ctx),
+                    1 = z_db:q("insert into filestore_queue (path, props) values ($1,$2)", [Path, ?DB_PROPS(Props)], Ctx),
                     ok;
                 1 ->
                     {error, duplicate}

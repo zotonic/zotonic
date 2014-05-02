@@ -104,35 +104,14 @@ init(Host) ->
 
     Processes = [
             Notifier, Depcache, Translation, Installer, Session, 
-            Dispatcher, Template, MediaClass, DropBox, Pivot, MediaCleanup,
+            Dispatcher, Template, MediaClass, Pivot, DropBox, MediaCleanup,
             ModuleIndexer, Modules,
             PostStartup
-    ],
-    {ok, {{one_for_all, 2, 1}, add_db_pool(Host, Processes, SiteProps)}}.
+        ],
 
-
-%% @doc Optionally add the db pool connection
-add_db_pool(Host, Processes, SiteProps) ->
-    DefaultDatabase = case Host of 
-                          default -> "zotonic";
-                          _ -> atom_to_list(Host) 
-                      end,
-    case proplists:get_value(dbdatabase, SiteProps, DefaultDatabase) of
-        none -> 
-            %% No database connection needed
-            Processes;
-        DbDatabase ->
-            % Add a db pool to the site's processes
-            DbHost     = proplists:get_value(dbhost,     SiteProps, z_config:get(dbhost)),
-            DbPort     = proplists:get_value(dbport,     SiteProps, z_config:get(dbport)),
-            DbUser     = proplists:get_value(dbuser,     SiteProps, z_config:get(dbuser)),
-            DbPassword = proplists:get_value(dbpassword, SiteProps, z_config:get(dbpassword)),
-            DbSchema   = proplists:get_value(dbschema,   SiteProps, z_config:get(dbschema)),
-            DbOpts     = [ {host, DbHost}, {port, DbPort}, 
-                           {username, DbUser}, {password, DbPassword}, 
-                           {database, DbDatabase}, {schema, DbSchema} ],
-
-            [ {Host, 
-                {pgsql_pool, start_link, [Host, 10, DbOpts]},
-                permanent, 5000, worker, dynamic} ] ++ Processes
-    end.
+    Processes1 = case z_db_pool:child_spec(Host, SiteProps) of
+                     undefined -> Processes;
+                     DbSpec when is_tuple(DbSpec) ->
+                         [DbSpec | Processes ]
+                 end,
+    {ok, {{one_for_all, 2, 1}, Processes1}}.

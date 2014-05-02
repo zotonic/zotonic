@@ -702,7 +702,7 @@ renumber_transaction(Context) ->
                     rght = $5,
                     props = $6
                 where id = $1", 
-                [CatId, Nr, Level, Left, Right, [{path, {ok, Path}}]]
+                [CatId, Nr, Level, Left, Right, ?DB_PROPS([{path, {ok, Path}}])]
                 , Context)
         || {CatId, Nr, Level, Left, Right, Path} <- Enums
     ],

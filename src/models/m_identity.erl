@@ -177,13 +177,13 @@ set_username_pw(Id, Username, Password, Context) ->
                                 propb = $3,
                                 is_verified = true,
                                 modified = now()
-                            where type = 'username_pw' and rsc_id = $1", [Id, Username1, Hash], Ctx),
+                            where type = 'username_pw' and rsc_id = $1", [Id, Username1, {term, Hash}], Ctx),
                 case Rupd of
                     0 ->
                         UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [Username1], Ctx),
                         case UniqueTest of
                             0 ->
-                                Rows = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) values ($1, true, true, 'username_pw', $2, $3)", [Id, Username1, Hash], Ctx),
+                                Rows = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) values ($1, true, true, 'username_pw', $2, $3)", [Id, Username1, {term, Hash}], Ctx),
                                 z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Ctx),
                                 Rows;
                             _Other ->
@@ -286,14 +286,14 @@ get_rsc(Id, Type, Context) ->
 %% @spec hash(Password) -> tuple()
 hash(Pw) ->
     Salt = z_ids:id(10),
-    Hash = crypto:sha([Salt,Pw]),
+    Hash = crypto:hash(sha, [Salt,Pw]),
     {hash, Salt, Hash}.
 
 
 %% @doc Compare if a password is the same as a hash.
 %% @spec hash_is_equal(Password, Hash) -> bool()
 hash_is_equal(Pw, {hash, Salt, Hash}) ->
-    NewHash = crypto:sha([Salt, Pw]),
+    NewHash = crypto:hash(sha, [Salt, Pw]),
     Hash =:= NewHash;
 hash_is_equal(_, _) ->
     false.
@@ -407,8 +407,8 @@ set_by_type(RscId, Type, Key, Context) ->
     set_by_type(RscId, Type, Key, [], Context).
 set_by_type(RscId, Type, Key, Props, Context) ->
 	F = fun(Ctx) -> 
-		case z_db:q("update identity set key = $3, propb = $4 where rsc_id = $1 and type = $2", [RscId, Type, Key, Props], Ctx) of
-			0 -> z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)", [RscId, Type, Key, Props], Ctx);
+		case z_db:q("update identity set key = $3, propb = $4 where rsc_id = $1 and type = $2", [RscId, Type, Key, {term, Props}], Ctx) of
+			0 -> z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)", [RscId, Type, Key, {term, Props}], Ctx);
             N when N > 0 -> ok
 		end
 	end,

@@ -634,5 +634,5 @@ rsc_checksum(Id, PropKeys, Context) ->
     checksum(lists:sort(Values)).
 
 checksum(X) ->
-    crypto:sha(term_to_binary(X)).
+    crypto:hash(sha, term_to_binary(X)).
 
