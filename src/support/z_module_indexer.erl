@@ -55,6 +55,8 @@
 
 -include("zotonic.hrl").
 
+-define(TIMEOUT, infinity).
+
 %%====================================================================
 %% API
 %%====================================================================
@@ -123,7 +125,7 @@ find_all(What, Name, Context) ->
     find_ua_class_all(What, generic, Name, Context).
 
 find_ua_class_all(What, Class, Name, Context) ->
-    gen_server:call(Context#context.module_indexer, {find_all, What, Name, Class}).
+    gen_server:call(Context#context.module_indexer, {find_all, What, Name, Class}, ?TIMEOUT).
 
 %% @doc Return a list of all templates, scomps etc per module
 all(What, Context) ->
