@@ -97,7 +97,7 @@ noslash(<<>>) ->
 noslash(B) ->
     case binary:last(B) of
         $/ ->
-            noslash(binary:part(B, size(B)-1));
+            noslash(binary:part(B, 0, size(B)-1));
         _ ->
             B
     end.
