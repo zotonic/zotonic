@@ -26,11 +26,9 @@ On the Zotonic EShell: Activate a module::
 
   z_module_manager:activate(mod_modulename, z:c(yoursitename)). 
 
-Or do both of these, when you want to restart your module::
+On the Zotonic EShell: Restart a module::
 
-  Context = z:c(yoursitename),
-  z_module_manager:deactivate(mod_modulename, Context),
-  z_module_manager:activate(mod_modulename, Context).
+  z_module_manager:restart(mod_modulename, z:c(yoursitename)). 
 
 Where `mod_modulename` is the name of your module and `yoursitename` is the name of your site.
 
