@@ -394,9 +394,9 @@ redirect(IsPermanent, ProtocolAsString, Hostname, ReqData) ->
 
 redirect(IsPermanent, Location, ReqData) -> 
     case wrq:port(ReqData) of
-        undefined -> 
+        debug -> 
             handled;
-        {ssl, undefined} ->
+        {ssl, debug} ->
             handled;
         _Port ->
             RD1 = wrq:set_resp_header("Location", Location, ReqData),
