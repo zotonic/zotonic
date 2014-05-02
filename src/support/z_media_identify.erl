@@ -233,7 +233,8 @@ identify_file_imagemagick(OsFamily, ImageFile) ->
                 Props2 = case Mime of
                              "image/" ++ _ ->
                                  [{orientation, exif_orientation(ImageFile)} | Props1];
-                             _ -> Props1
+                             _ -> 
+                                Props1
                          end,
                 {ok, Props2}
             catch

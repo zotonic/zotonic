@@ -168,7 +168,7 @@ size(InFile, Filters, Context) ->
             true ->
                 {width, ImageWidth}   = proplists:lookup(width, FileProps),
                 {height, ImageHeight} = proplists:lookup(height, FileProps),
-                {orientation, Orientation} = proplists:lookup(orientation, FileProps),
+                Orientation = proplists:get_value(orientation, FileProps, 1),
                 
                 ReqWidth   = z_convert:to_integer(proplists:get_value(width, Filters)),
                 ReqHeight  = z_convert:to_integer(proplists:get_value(height, Filters)),
@@ -204,7 +204,7 @@ cmd_args(FileProps, Filters, OutMime) ->
     {height, ImageHeight} = proplists:lookup(height, FileProps),
     {mime, Mime0} = proplists:lookup(mime, FileProps),
     Mime = z_convert:to_list(Mime0),
-    {orientation, Orientation} = proplists:lookup(orientation, FileProps),
+    Orientation = proplists:get_value(orientation, FileProps, 1),
     ReqWidth   = proplists:get_value(width, Filters),
     ReqHeight  = proplists:get_value(height, Filters),
     {CropPar,Filters1} = fetch_crop(Filters),
