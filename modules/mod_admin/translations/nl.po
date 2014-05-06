@@ -93,7 +93,7 @@ msgstr "Alle categorieën"
 #: modules/mod_admin/templates/admin.tpl:24
 #: modules/mod_admin/templates/admin_overview.tpl:51
 msgid "All media"
-msgstr "Gekoppelde media"
+msgstr "Alle media"
 
 #: modules/mod_admin/templates/admin_media.tpl:23
 #: modules/mod_admin/templates/admin.tpl:23
