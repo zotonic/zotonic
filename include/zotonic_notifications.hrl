@@ -291,8 +291,9 @@
 % 'auth_autologon' - (first) check if there is an automatic log on enabled for this session/user-agent
 %                    returns {ok, UserId} when an user should be logged on.
 %                    Called for every single request!
+% 'request_context' - Called after parsing the query arguments (by z_context:ensure_qs/1) (foldl)
 % 'session_context' - Initialize a context from the current session (foldl).
-%                     Called on every request.
+%                     Called on every request with a session.
 % 'session_init'    - Notification that a new session has been initialized (session_pid is in the context)
 % 'session_init_fold' - foldl over the context containing a new session (after session_init)
 

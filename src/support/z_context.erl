@@ -559,7 +559,8 @@ ensure_qs(Context) ->
             QPropsUrl = z_utils:prop_replace('q', PathArgs++Query, Context#context.props),
             {Body, ContextParsed} = parse_form_urlencoded(Context#context{props=QPropsUrl}),
             QPropsAll = z_utils:prop_replace('q', PathArgs++Body++Query, ContextParsed#context.props),
-            ContextParsed#context{props=QPropsAll}
+            ContextQs = ContextParsed#context{props=QPropsAll},
+            z_notifier:foldl(request_context, ContextQs, ContextQs)
     end.
 
 
