@@ -51,13 +51,11 @@ test_connection(Context) ->
     DbDriver:test_connection(get_database_options(Context)).
 
 
+%% @doc Get all configuration options for this site which are related
+%% to the database configuration.
 get_database_options(Context) ->
-    z_depcache:memo(
-      fun() ->
-              SiteProps = z_sites_manager:get_site_config(Context#context.host),
-              db_opts(SiteProps)
-      end,
-      {z_db_pool, database_options}, ?HOUR, Context).
+    db_opts(m_site:all(Context)).
+
 
 %% @doc Optionally add the db pool connection
 child_spec(Host, SiteProps) ->
