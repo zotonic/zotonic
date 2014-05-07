@@ -529,8 +529,7 @@ split_props(Props, Cols) ->
 columns(Table, Context) when is_atom(Table) ->
     columns(atom_to_list(Table), Context);
 columns(Table, Context) ->
-    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
-    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
+    {ok, Db, Schema} = get_database_schema(Context),
     case z_depcache:get({columns, Db, Schema, Table}, Context) of
         {ok, Cols} -> 
             Cols;
@@ -542,7 +541,7 @@ columns(Table, Context) ->
                           and table_name = $3
                         order by ordinal_position", [Db, Schema, Table], Context),
             Cols1 = [ columns1(Col) || Col <- Cols ],
-            z_depcache:set({columns, Db, Schema, Table}, Cols1, ?YEAR, [{database, Db}], Context),
+            z_depcache:set({columns, Db, Schema, Table}, Cols1, ?YEAR, [{database, Db, Schema}], Context),
             Cols1
     end.
     
@@ -578,9 +577,14 @@ column_names(Table, Context) ->
 
 %% @doc Flush all cached information about the database.
 flush(Context) ->
-    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
-    z_depcache:flush({database, Db}, Context).
+    {ok, Db, Schema} = get_database_schema(Context),
+    z_depcache:flush({database, Db, Schema}, Context).
 
+%% @doc Fetch the configured database and schema
+get_database_schema(Context) ->
+    Db = m_site:get(dbdatabase, Context),
+    Schema = m_site:get(dbschema, Context),
+    {ok, Db, Schema}.
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
 %% @spec update_sequence(Table, IdList, Context) -> void()
@@ -602,8 +606,7 @@ update_sequence(Table, Ids, Context) ->
 %% @doc Check the information schema if a certain table exists in the context database.
 %% @spec table_exists(TableName, Context) -> bool()
 table_exists(Table, Context) ->
-    {ok, Db} = pgsql_pool:get_database(?HOST(Context)),
-    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
+    {ok, Db, Schema} = get_database_schema(Context),
     case q1("   select count(*) 
                 from information_schema.tables 
                 where table_catalog = $1 
