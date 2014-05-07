@@ -1,14 +1,29 @@
 .. highlight:: django
 .. include:: meta-filter.rst
 
-Filters a list on the value of a property.
+Filters a list on the value of a property, either on presence or equality.
 
-There are two ways to filter a list of values with this filter::
+Testing presence
+----------------
+
+To filter a list of values::
 
   {% print somelist|filter:`p` %}
 
-This results in a list where all elements have the property ``p`` defined and
+Results in a list where all elements have the property ``p`` defined and
 where the property (after conversion to boolean) is ``true``.
+
+This can be used to filter a list of resource ids on the presence of a property. For example, to see all published elements in a list of resource ids::
+
+  {% print [1,2,3,4,5,6]|filter:`is_published` %}
+  
+To find all pages from page connection ``hasdocument`` that have an image::
+
+  {% print id.o.hasdocument|filter:`depiction` %}
+
+
+Testing equality
+----------------
 
 A second argument can be added to test on equality::
 
@@ -16,11 +31,7 @@ A second argument can be added to test on equality::
 
 Shows all elements whose ``title`` property is "Untitled".
 
-This can also be used to filter a list of resource ids on the presence of a property.
 
-For example, see all published elements in a list of resource ids::
-
-  {% print [1,2,3,4,5,6]|filter:`is_published` %}
 
 .. seealso:: :ref:`filter-is_visible`, :ref:`filter-is_a`
 
