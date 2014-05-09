@@ -1,7 +1,7 @@
 .. _manual-cli:
 
-The Zotonic shell command
-=========================
+The zotonic command
+===================
 
 The ``zotonic`` command runs a number of utility commands which all
 operate on a Zotonic instance.
@@ -23,13 +23,16 @@ Currently, the following subcommands are implemented:
   Stop the background Zotonic server instance.
 
 ``zotonic debug``
-  Launch the Zotonic server interactively and get an EShell on the running instance.  There is a "start.sh" command in the root folder which is a shortcut for this command.
+  Launch the Zotonic server interactively and get an EShell on the running instance. See :ref:`manual-cli-shell`. The ``start.sh`` command in the root folder is a shortcut for this command.
 
 ``zotonic restart``
   Restart the background Zotonic server instance.
 
 ``zotonic update``
   Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
+  
+``zotonic shell``
+  Get an EShell on the running instance. See :ref:`manual-cli-shell`.
 
 ``zotonic addsite [options] <site_name>``
   Creates a new site with [site_name] as its name.  See :ref:`manual-cli-addsite` for a full overview of this command.
@@ -109,7 +112,7 @@ Currently, the following subcommands are implemented:
 
              
 Legacy zotonic.sh script
-------------------------
+++++++++++++++++++++++++
 
 For archival purposes, the ``zotonic.sh`` script that was used before
 release 0.8 is listed here.

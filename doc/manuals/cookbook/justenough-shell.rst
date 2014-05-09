@@ -99,5 +99,5 @@ http://www.erlang.org/doc/man/shell.html
 http://www.erlang.org/doc/getting_started/seq_prog.html
 
 Erlang: Starting Out:
-http://claystuart.com/
+http://learnyousomeerlang.com/starting-out
 
