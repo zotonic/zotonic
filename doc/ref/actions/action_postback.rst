@@ -6,7 +6,7 @@ This action sends a message to the event handler on the server.
 
 Example::
 
-   {% button title="Go" action={postback postback="go" action={growl text="sent message"}} %}
+   {% button text="Go" action={postback postback="go" action={growl text="sent message"}} %}
 
 .. note::
    The :ref:`scomp-button` scomp can also take a postback argument directly.

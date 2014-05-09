@@ -6,7 +6,7 @@ This action logs off the current user and reloads the current page as the anonym
 
 Example::
 
-   {% button title="Log off" action={logoff} %}
+   {% button text="Log off" action={logoff} %}
 
 After clicking the button the page will reload and the current user will be signed out.
 
