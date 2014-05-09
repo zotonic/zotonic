@@ -66,15 +66,20 @@ find_images(Html) ->
             sets:to_list(sets:from_list(Matches))
     end.
 
-%% TODO: access control on the found #z_file_info{} entry
 embed_image([Path, LibImg, SubPath], {Parts, Html, Context} = Acc) ->
     case lookup(LibImg, SubPath, Context) of
         {ok, #z_file_info{mime=Mime} = Info} ->
-            Data = z_file_request:content_data(Info, identity),
-            {Part, Cid} = create_attachment(Data, Mime, filename:basename(SubPath)),
-            NewPath = iolist_to_binary([$", "cid:", Cid, $"]),
-            Html1 = re:replace(Html, Path, NewPath, [global, {return, binary}]),
-            {[Part|Parts], Html1, Context};
+            try
+                Data = z_file_request:content_data(Info, identity),
+                {Part, Cid} = create_attachment(Data, Mime, filename:basename(SubPath)),
+                NewPath = iolist_to_binary([$", "cid:", Cid, $"]),
+                Html1 = re:replace(Html, Path, NewPath, [global, {return, binary}]),
+                {[Part|Parts], Html1, Context}
+            catch
+                error:Error ->
+                    lager:error("email embed_image error ~p on embedding ~p~n~p", [Error, Info, erlang:get_stacktrace()]),
+                    Acc
+            end;
         {error, _} ->
             Acc
     end.
