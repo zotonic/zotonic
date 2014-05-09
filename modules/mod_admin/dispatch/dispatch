@@ -10,5 +10,7 @@
  {admin_referrers,     ["admin", "referrer", id],         controller_admin_referrers,     []},
  {admin_media_preview, ["admin", "media", "preview", id], controller_admin_media_preview, []},
  
- {admin_status,        ["admin", "status"],               controller_admin,               [{template, "admin_status.tpl"}, {selected, "status"}]}
+ {admin_status,        ["admin", "status"],               controller_admin,               [{template, "admin_status.tpl"}, {selected, "status"}]},
+ 
+ {api,                 ["api", module, method],           controller_api, [{ssl, any}]}
 ].
