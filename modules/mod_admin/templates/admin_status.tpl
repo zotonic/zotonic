@@ -22,6 +22,7 @@
             <div class="controls">
                 {% button
                    class="btn"
+                   id="btn-rebuild-indices"
                    text=_"Rebuild search indices"
                    action={
                        admin_tasks
@@ -29,13 +30,13 @@
                    }
                    action={
                        script
-                       script="queueCountInfo('#pivot-queue-count')"
+                       script="queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices')"
                    }
                  %}
                 <span id="pivot-queue-count">
                     {% if m.admin_rsc.pivot_queue_count %}
                         {% javascript %}
-                            queueCountInfo('#pivot-queue-count');
+                            queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices');
                         {% endjavascript %}
                     {% endif %}
                 </span>
