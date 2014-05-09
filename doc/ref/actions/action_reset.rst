@@ -7,18 +7,18 @@ Resets the enclosing form, a specifically targeted form or the closest form to a
 Example::
 
    <form method="get" action="/search">
-     <input type="text" name="q" value="" />
-     {% button title="search" action={submit} %}
-     {% button title="cancel" action={reset} %} 
+       <input type="text" name="q" value="" />
+       {% button text="search" action={submit} %}
+       {% button text="cancel" action={reset} %} 
    </form>
 
 Another example::
 
    <form id="search-form" method="get" action="/search">
-     <input type="text" id="q" name="q" value="" />
+      <input type="text" id="q" name="q" value="" />
    </form>
-   {% button title="search" action={submit closest="q"}
-   {% button title="cancel" action={reset closest="q"} %}
+   {% button text="search" action={submit closest="q"}
+   {% button text="cancel" action={reset closest="q"} %}
 
 Clicking on the button will reset the form `search-form` as it is the closest form to the element with id `q`.
 

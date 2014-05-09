@@ -6,19 +6,19 @@ This action redirects the browser to another page or back to the previous page.
 
 Example::
 
-   {% button title="home" action={redirect location="/"} %}
+   {% button text="home" action={redirect location="/"} %}
 
 Redirects back to the home page when the button is clicked.
 
 Back in history example::
 
-   {% button title="Back" action={redirect back} %}
+   {% button text="Back" action={redirect back} %}
 
 After clicking the button the browser will go back to the last page using the Javascript history.
 
 Example of using dispatch rules for the redirect location::
 
-   {% button title="edit" action={redirect dispatch="admin_edit_rsc" id=my_id} %}
+   {% button text="edit" action={redirect dispatch="admin_edit_rsc" id=my_id} %}
 
 When clicked the browser is redirected to the admin edit page for the :term:`resource` with the id of `my_id`.
 

@@ -8,7 +8,7 @@ Example::
 
    <form method="get" action="/search">
      <input type="text" name="q" value="" />
-     {% button title="search" action={submit} %}
+     {% button text="search" action={submit} %}
    </form>
 
 Another example::
@@ -16,7 +16,7 @@ Another example::
    <form id="search-form" method="get" action="/search">
      <input type="text" id="q" name="q" value="" />
    </form>
-   {% button title="search" action={submit closest="q"} %}
+   {% button text="search" action={submit closest="q"} %}
 
 Clicking on the button will submit the form `search-form` as it is the closest form to the element with id `q`.
 

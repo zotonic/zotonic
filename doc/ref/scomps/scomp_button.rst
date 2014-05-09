@@ -16,21 +16,19 @@ the text “Hello World!”.
 
 Another example::
 
-  {% button text="Postback"  postback={my_postback arg1=1 arg2=2} %}
+  {% button text="Postback" postback={my_postback arg1=1 arg2=2} %}
   
 .. highlight:: erlang
 
 When clicked it will call the ``event/2`` function in the controller
 that served the page. The function will be called as::
 
-  event(#postback{message={mypostback, [{arg1,1},{arg2,2}]},
-                          trigger=TriggerId,
-                          target=TargetId},
-        Context)
+    event(#postback{message={mypostback, [{arg1,1}, {arg2,2}]},
+        trigger=TriggerId, target=TargetId}, Context)
 
 Where TriggerId and TargetId are both the HTML id of the button.
 
-`button` accepts the following arguments:
+``button`` accepts the following arguments:
 
 +----------+-------------------------------+-------------------------------+
 |Argument  |Description                    |Example                        |

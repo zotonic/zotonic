@@ -7,7 +7,7 @@ Set the value of a form field.
 Example::
 
    <input type="text" id="x" name="xyz" value="" />
-   {% button title="fill" action={set_value target="x" value="etaoinstrdlu"} %}
+   {% button text="fill" action={set_value target="x" value="etaoinstrdlu"} %}
 
 Clicking on the button will set the value of the input element to the most interesting string `etaoinstrdlu`.
 
