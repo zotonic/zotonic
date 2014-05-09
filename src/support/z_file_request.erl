@@ -28,12 +28,12 @@
     content_encodings/1,
     content_data/2,
     content_stream/2,
+    content_stream/3,
     content_file/2,
     is_visible/2,
 
     %% Exported for webzmachine streaming
-    stream_many_parts/1,
-    stream_sub_stream/2
+    stream_many_parts/2
     ]).
 
 -include_lib("zotonic.hrl").
@@ -86,63 +86,58 @@ is_visible(#z_file_info{acls=Acls}, Context) ->
               Acls).
 
 content_data(Info, Enc) ->
-    concatenate_stream(content_stream(Info, Enc), <<>>).
+    concatenate_stream(content_stream(Info, Enc, lookup_file), <<>>).
 
-content_stream(Info, undefined) ->
-    content_stream(Info, identity);
-content_stream(#z_file_info{encodings=Encs}, ContentEncoding) ->
+content_stream(Info, Enc) ->
+    content_stream(Info, Enc, lookup).
+
+content_stream(Info, undefined, FzLookup) ->
+    content_stream(Info, identity, FzLookup);
+content_stream(#z_file_info{encodings=Encs}, ContentEncoding, FzLookup) ->
     CE = z_convert:to_atom(ContentEncoding),
     {CE, Parts} = proplists:lookup(CE, Encs),
-    content_stream_parts(Parts).
+    content_stream_parts(Parts, FzLookup).
 
-content_stream_parts([]) ->
+content_stream_parts([], _FzLookup) ->
     <<>>;
-content_stream_parts([Part]) ->
-    stream_single_part(Part);
-content_stream_parts(Parts) ->
-    {stream, stream_many_parts(Parts)}.
+content_stream_parts([Part], FzLookup) ->
+    stream_single_part(Part, FzLookup);
+content_stream_parts(Parts, FzLookup) ->
+    {stream, stream_many_parts(Parts, FzLookup)}.
 
-stream_single_part(#part_data{data=Data}) ->
+stream_single_part(#part_data{data=Data}, _FzLookup) ->
     Data;
-stream_single_part(#part_file{filepath=File, size=Size}) ->
+stream_single_part(#part_file{filepath=File, size=Size}, _FzLookup) ->
     {file, Size, File};
-stream_single_part(#part_cache{cache_pid=Pid}) ->
-    case filezcache:lookup(Pid) of
+stream_single_part(#part_cache{cache_pid=Pid}, FzLookup) ->
+    case filezcache:FzLookup(Pid) of
         {ok, Data} ->
             Data;
         Other ->
             lager:warning("Unexpected result from the filezcache: ~p", [Other]),
             <<>>
     end;
-stream_single_part(#part_missing{}) ->
+stream_single_part(#part_missing{}, _FzLookup) ->
     <<>>.
 
-stream_many_parts([]) ->
+stream_many_parts([], _FzLookup) ->
     {<<>>, done};
-stream_many_parts([#part_data{data=Data}|Parts]) ->
-    {Data, fun() -> ?MODULE:stream_many_parts(Parts) end};
-stream_many_parts([#part_file{filepath=File, size=Size}|Parts]) ->
-    {{file, Size, File}, fun() -> ?MODULE:stream_many_parts(Parts) end};
-stream_many_parts([#part_cache{cache_pid=Pid}|Parts]) ->
-    case filezcache:lookup(Pid) of
+stream_many_parts([#part_data{data=Data}|Parts], FzLookup) ->
+    {Data, fun() -> ?MODULE:stream_many_parts(Parts, FzLookup) end};
+stream_many_parts([#part_file{filepath=File, size=Size}|Parts], FzLookup) ->
+    {{file, Size, File}, fun() -> ?MODULE:stream_many_parts(Parts, FzLookup) end};
+stream_many_parts([#part_cache{cache_pid=Pid}|Parts], FzLookup) ->
+    case filezcache:FzLookup(Pid) of
         {ok, {file, _Size, _File} = FileRef} ->
-            {FileRef, fun() -> ?MODULE:stream_many_parts(Parts) end};
-        {ok, {stream, Fun}} ->
-            stream_sub_stream(Fun, Parts);
+            {FileRef, fun() -> ?MODULE:stream_many_parts(Parts, FzLookup) end};
+        {ok, {device, _DevicePid} = Device} ->
+            {Device, fun() -> ?MODULE:stream_many_parts(Parts, FzLookup) end};
         Other ->
             lager:warning("Unexpected result from the filezcache: ~p", [Other]),
-            stream_many_parts(Parts)
+            stream_many_parts(Parts, FzLookup)
     end;
-stream_many_parts([#part_missing{}|Parts]) ->
-    stream_many_parts(Parts).
-
-stream_sub_stream(Fun, Parts) ->
-    case Fun() of
-        {DataOrFile, done} ->
-            {DataOrFile, fun() -> ?MODULE:stream_many_parts(Parts) end};
-        {DataOrFile, Next} ->
-            {DataOrFile, fun() -> ?MODULE:stream_sub_stream(Next, Parts) end}
-    end.
+stream_many_parts([#part_missing{}|Parts], FzLookup) ->
+    stream_many_parts(Parts, FzLookup).
 
 
 concatenate_stream(B, Acc) when is_binary(B) ->
@@ -154,6 +149,5 @@ concatenate_stream({file, Size, Filename}, Acc) ->
     <<Acc/binary, Data/binary>>;
 concatenate_stream({B, done}, Acc) ->
     <<Acc/binary, B/binary>>;
-concatenate_stream({B, Fun}, Acc) ->
+concatenate_stream({B, Fun}, Acc) when is_function(Fun) ->
     concatenate_stream(Fun(), <<Acc/binary, B/binary>>).
-
