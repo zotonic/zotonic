@@ -1,12 +1,13 @@
 {% javascript %}
-function queueCountInfo(selector) {
+function queueCountInfo(feedbackSelector, invokeSelector) {
     "use strict";
 
     var RETRIES = 5,
         RETRY_REPEAT_MS = 1000,
         UPDATE_REPEAT_MS = 1000,
 
-        $feedback = $(selector),
+        $feedback = $(feedbackSelector),
+        $btn = $(invokeSelector),
         isUpdating = false,
         retryIvalId,
         retryCount = RETRIES,
@@ -51,11 +52,14 @@ function queueCountInfo(selector) {
             if (isUpdating) {
                 isUpdating = false;
                 $feedback.fadeOut("slow");
+                $btn.removeAttr("disabled");
                 z_growl_add("{_ Search indices rebuilt. _}");
             }
         }
     };
 
+    $btn.attr("disabled", "disabled");
+    
     // it make take a short while before the info is available
     // so we try a couple of times
     retryIvalId = setInterval(function () {
