@@ -22,8 +22,8 @@ serialization of database values, you have to tag them with the new
 automatically.
 
 
-Controller changes
-..................
+Dispatch rules for files
+........................
 
 The ``controller_lib`` and ``controller_file_readonly`` have been replaced
 by the ``controller_file``. This controller uses the new *filestore* system 
