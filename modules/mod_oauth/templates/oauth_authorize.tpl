@@ -26,8 +26,8 @@
         <!-- FIXME: Show information about how this application will use your account. -->
 
         <form method="post">
-            <button type="submit">{_ Allow! _}</button>
-            <button type="reset">{_ Disallow _}</button>
+            <button type="submit" class="btn btn-primary">{_ Allow! _}</button>
+            <button type="reset" class="btn">{_ Disallow _}</button>
         </form>
 
 	</div>
