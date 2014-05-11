@@ -1,0 +1,1 @@
+{% include "_editor_" ++ m.config.mod_editor_tinymce.version.value ++ ".tpl" %}

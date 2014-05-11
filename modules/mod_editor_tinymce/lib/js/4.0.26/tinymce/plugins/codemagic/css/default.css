@@ -1,0 +1,28 @@
+span.css-at {color: #0000ff;}
+span.css-unit {color: #0000ff;}
+span.css-value {color: #0000ff;}
+span.css-identifier {color: #800000; font-weight: bold;}
+span.css-selector {color: #ff00ff;}
+span.css-important {color: #00F;}
+span.css-colorcode {color: #0000ff;}
+span.css-comment {color: gray;}
+span.css-string {color: #008000;}
+
+
+span.js-keyword {color: #000000; font-weight: bold;}
+span.js-variable {color: #0000FF;}
+span.js-property {color: #0000FF; font-weight: bold;}
+span.js-atom {color: #ff0000;}
+span.js-variabledef {color: #0000FF;}
+span.js-localvariable {color: #0000FF;}
+span.js-comment {color: #008000;}
+span.js-string {color: #b70000;}
+
+
+span.xml-tag {color: #800080; font-weight: bold;}
+span.xml-attribute {color: #8080ff;}
+span.xml-attname {color: #008080;}
+span.xml-comment {color: #008000;}
+span.xml-cdata {color: #48a;}
+span.xml-processing {color: #999;}
+span.xml-entity {color: #008000; font-weight: bold;}

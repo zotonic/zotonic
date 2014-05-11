@@ -69,7 +69,7 @@
 
 {% endblock %}
 
-{% block tinymce %}
-	{% include "_admin_tinymce.tpl" %}
+{% block editor %}
+	{% include "_editor.tpl" %}
 {% endblock %}
 

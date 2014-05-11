@@ -50,7 +50,7 @@
     {% stream %}
     {% script %}
 
-    {% block tinymce %}{% endblock %}
+    {% block editor %}{% endblock %}
         
     {% block html_body_admin %}{% all include "_html_body_admin.tpl" %}{% endblock %}
 

@@ -7,7 +7,7 @@
     "js/modules/jquery.hotkeys.js"
 
     "js/apps/admin-common.js"
-    "js/modules/tiny-init.js"
+
     "js/modules/z.adminwidget.js"
     
     "js/jquery.ui.nestedSortable.js"

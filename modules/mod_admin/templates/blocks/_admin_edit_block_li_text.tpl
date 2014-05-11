@@ -13,7 +13,7 @@
 			<textarea rows="10" 
 			    id="block-{{name}}-body{{ lang_code_for_id }}" 
 			    name="block-{{name}}-body{{ lang_code_with_dollar }}" 
-			    class="input-block-level body tinymce-init" 
+			    class="input-block-level body z_editor-init" 
 			    {% include "_language_attrs.tpl" language=lang_code %}>{{ blk.body[lang_code] |escape }}</textarea>
 		{% else %}
 			{{ blk.body[lang_code]  }}
