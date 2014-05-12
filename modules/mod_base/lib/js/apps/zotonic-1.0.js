@@ -445,7 +445,6 @@ function z_text_to_nodes(text)
 /* Initialize all non-initialized tinymce controls */
 function z_tinymce_init()
 {
-console.log("z_tinymce_init");
     if (z_editor !== undefined) {
         z_editor.init();
     }

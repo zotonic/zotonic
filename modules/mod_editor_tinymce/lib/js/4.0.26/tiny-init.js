@@ -1,17 +1,43 @@
 tinyInit = {
+    selector: "textarea",
 	mode: "none",
 	theme: "modern",
-	theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,cleanup,codemagic,|,formatselect,|,zlink,zmedia",
-	theme_advanced_buttons2: "tablecontrols,outdent,indent",
-	theme_advanced_buttons3: "",
-	theme_advanced_buttons4: "",
-	theme_advanced_toolbar_location: "top", 
-	theme_advanced_toolbar_align: "left", 
-	theme_advanced_statusbar_location: "bottom", 
-	theme_advanced_resizing: "1", 
-	theme_advanced_resize_horizontal: "",
-	theme_advanced_blockformats: "p,h1,h2,h3,h4,pre",
-	dialog_type: "modal", 
+	plugins: "compat3x,codemirror,paste,table,zlink,zmedia,autosave,directionality,zbdo",
+	menubar: "edit format table tools insert",
+	toolbar: "styleselect | bold italic | alignleft aligncenter alignright | " +
+		"bullist numlist outdent indent | ltr rtl | zlink zmedia | code",
+
+    codemirror: {
+        indentOnInit: true, // Whether or not to indent code on init. 
+        path: 'codemirror-4.1', // Path to CodeMirror distribution
+    },
+    
+    content_css: "/lib/js/4.0.26/zotonic.css", 
+    language : 'en',
+    
+	/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
+	/* See: http://www.tinymce.com/wiki.php/Configuration:valid_elements */
+	valid_elements : "@[class|style|title|dir<ltr?rtl|lang|xml::lang],"
+	+ "a[rel|rev|charset|hreflang|tabindex|accesskey|type|name|href|target|title],"
+	+ "strong/b,em/i,strike,u,"
+	+ "#p,-ol[type|compact],-ul[type|compact],-li,br,img[longdesc|usemap|"
+	+ "src|border|alt=|title|hspace|vspace|width|height|align],-sub,-sup,"
+	+ "-blockquote,-table[border=0|cellspacing|cellpadding|width|frame|rules|"
+	+ "height|align|summary|bgcolor|background|bordercolor],-tr[rowspan|width|"
+	+ "height|align|valign|bgcolor|background|bordercolor],tbody,thead,tfoot,"
+	+ "#td[colspan|rowspan|width|height|align|valign|bgcolor|background|bordercolor|scope],"
+	+ "#th[colspan|rowspan|width|height|align|valign|scope],caption,-div,"
+	+ "-span,-code,-pre,address,-h1,-h2,-h3,-h4,-h5,-h6,hr[size|noshade],"
+	+ "dd,dl,dt,cite,abbr,del[datetime|cite],ins[datetime|cite],"
+	+ "map[name],area[shape|coords|href|alt|target],bdo,"
+	+ "col[align|char|charoff|span|valign|width],colgroup[align|char|charoff|span|valign|width],"
+	+ "dfn,kbd,legend,"
+	+ "q[cite],samp,small,"
+	+ "tt,var,big,"
+	+ "section,header,nav,article,footer,audio,video",
+	
+	/* Rest of init config to sort out */
+	 
 	relative_urls: "", 
 	remove_script_host: "", 
 	convert_urls: "", 
@@ -40,30 +66,7 @@ tinyInit = {
 
 	accessibility_focus: "1", 
 	tab_focus: ":prev,:next", 
-	content_css: "/lib/js/4.0.26/zotonic.css", 
 	wpeditimage_disable_captions: "", 
-	plugins: "compat3x,codemagic,paste,table,zlink,zmedia,autosave,directionality,zbdo",
 	table_row_limit: 100,
-	table_col_limit: 10,
-
-	/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
-	/* See: http://www.tinymce.com/wiki.php/Configuration:valid_elements */
-	valid_elements : "@[class|style|title|dir<ltr?rtl|lang|xml::lang],"
-	+ "a[rel|rev|charset|hreflang|tabindex|accesskey|type|name|href|target|title],"
-	+ "strong/b,em/i,strike,u,"
-	+ "#p,-ol[type|compact],-ul[type|compact],-li,br,img[longdesc|usemap|"
-	+ "src|border|alt=|title|hspace|vspace|width|height|align],-sub,-sup,"
-	+ "-blockquote,-table[border=0|cellspacing|cellpadding|width|frame|rules|"
-	+ "height|align|summary|bgcolor|background|bordercolor],-tr[rowspan|width|"
-	+ "height|align|valign|bgcolor|background|bordercolor],tbody,thead,tfoot,"
-	+ "#td[colspan|rowspan|width|height|align|valign|bgcolor|background|bordercolor|scope],"
-	+ "#th[colspan|rowspan|width|height|align|valign|scope],caption,-div,"
-	+ "-span,-code,-pre,address,-h1,-h2,-h3,-h4,-h5,-h6,hr[size|noshade],"
-	+ "dd,dl,dt,cite,abbr,del[datetime|cite],ins[datetime|cite],"
-	+ "map[name],area[shape|coords|href|alt|target],bdo,"
-	+ "col[align|char|charoff|span|valign|width],colgroup[align|char|charoff|span|valign|width],"
-	+ "dfn,kbd,legend,"
-	+ "q[cite],samp,small,"
-	+ "tt,var,big,"
-	+ "section,header,nav,article,footer,audio,video"
+	table_col_limit: 10
 };
