@@ -6,6 +6,6 @@
 	<meta property="og:description" content="{{ id|summary:160 }}"/>
 	<meta property="og:url" content="http://{{ m.site.hostname }}{{ id.page_url }}"/>
 	{% if id.depiction %}
-	<meta property="og:image" content="http://{{ m.site.hostname }}{% image_url id.depiction mediaclass="facebook-og" %}"/>
+	    <meta property="og:image" content="http://{{ m.site.hostname }}{% image_url id.depiction width=200 height=200 crop upscale %}"/>
 	{% endif %}
 {% endif %}
