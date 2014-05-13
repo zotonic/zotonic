@@ -54,7 +54,7 @@ test_connection(Context) ->
 %% @doc Get all configuration options for this site which are related
 %% to the database configuration.
 get_database_options(Context) ->
-    db_opts(m_site:all(Context)).
+    z_depcache:memo(fun() -> db_opts(m_site:all(Context)) end, z_db_opts, ?WEEK, Context).
 
 
 %% @doc Optionally add the db pool connection
@@ -64,14 +64,14 @@ child_spec(Host, SiteProps) ->
             %% No database connection needed
             undefined;
         _ ->
-            % Add a db pool to the site's processes
+            %% Add a db pool to the site's processes
             PoolSize    = proplists:get_value(db_max_connections, SiteProps, 10),
 
             Name = db_pool_name(Host),
 
             WorkerModule = db_driver(SiteProps),
             WorkerArgs = db_opts(SiteProps),
-            
+
             PoolArgs = [{name, {local, Name}},
                         {worker_module, WorkerModule},
                         {size, PoolSize},
@@ -83,13 +83,27 @@ child_spec(Host, SiteProps) ->
 %% argument and those are the only arguments that are given to the
 %% database pool worker processes.
 db_opts(SiteProps) ->
-    lists:filter(fun({K, _}) ->
-                         case atom_to_list(K) of
-                             "db"++_ -> true;
-                             _ -> false
-                         end
-                 end,
-                 SiteProps).
+    Kvs = lists:filter(fun({K, _}) ->
+                               case atom_to_list(K) of
+                                   "db"++_ -> true;
+                                   _ -> false
+                               end
+                       end,
+                       SiteProps),
+    Defaults = [{dbhost, z_config:get(dbhost, "localhost")},
+                {dbport, z_config:get(dbport, 5432)},
+                {dbpassword, z_config:get(dbpassword, "")},
+                {dbusername, z_config:get(dbusername, "zotonic")},
+                {dbdatabase, z_config:get(dbdatabase, "zotonic")},
+                {dbschema, z_config:get(dbschema, "public")}],
+    lists:foldl(fun({K, V}, Acc) ->
+                        case proplists:lookup(K, Acc) of
+                            {K, _} -> Acc;
+                            none -> [{K,V}|Acc]
+                        end
+                end,
+                [],
+                Kvs ++ Defaults).
 
 get_connection(#context{db={Pool,_}}) ->
     poolboy:checkout(Pool).
