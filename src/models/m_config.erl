@@ -162,8 +162,8 @@ set_value(Module, Key, Value, Context) ->
 %% @spec set_prop(Module::atom(), Key::atom(), Prop::atom(), PropValue::any(), #context{}) -> ok
 set_prop(Module, Key, Prop, PropValue, Context) ->
     case get_id(Module, Key, Context) of
-        undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {props, [{Prop,PropValue}]}], Context);
-        Id -> z_db:update(config, Id, [{props, [{Prop,PropValue}]}], Context)
+        undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Context);
+        Id -> z_db:update(config, Id, [{Prop,PropValue}], Context)
     end,
     z_depcache:flush(config, Context),
     z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=Prop, value=PropValue}, Context),
