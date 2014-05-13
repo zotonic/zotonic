@@ -582,9 +582,18 @@ flush(Context) ->
 
 %% @doc Fetch the configured database and schema
 get_database_schema(Context) ->
-    Db = m_site:get(dbdatabase, Context),
-    Schema = m_site:get(dbschema, Context),
+    Db = db_config(dbdatabase, "zotonic", Context),
+    Schema = db_config(dbschema, "public", Context),
     {ok, Db, Schema}.
+
+db_config(Key, Default, Context) ->
+    case m_site:get(Key, Context) of
+        undefined ->
+            z_config:get(Key, Default);
+        V ->
+            V
+    end.
+
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
 %% @spec update_sequence(Table, IdList, Context) -> void()
