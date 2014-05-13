@@ -228,7 +228,8 @@ ensure_utc_dates(Props, Context) ->
             DateStart = lists:keyfind(date_start, 1, Props),
             DateEnd = lists:keyfind(date_end, 1, Props),
             IsAllDay = case {DateStart,DateEnd} of
-                {{_, {0,0,_StartSec}},{_,{23,59,_EndSec}}} ->
+                {{date_start, {_, { 0, 0,_StartSec}}},
+                 {date_end,   {_, {23,59,_EndSec}}}} ->
                     true;
                 _ ->
                     false
