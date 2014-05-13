@@ -354,7 +354,7 @@ is_view_level(Id, Level, Context) ->
                 false ->
                     false;
                 true ->
-                    Date = calendar:local_time(),
+                    Date = calendar:universal_time(),
                     Acl#acl_props.publication_start =< Date andalso Acl#acl_props.publication_end >= Date
             end
     end.

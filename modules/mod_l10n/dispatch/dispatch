@@ -1,0 +1,3 @@
+[
+ {admin_l10n,     ["admin", "localization"],     controller_admin, [{template, "admin_l10n.tpl"}, {ssl,true}]}
+].

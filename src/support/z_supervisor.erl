@@ -132,7 +132,7 @@ init(InitialChildren) ->
     process_flag(trap_exit, true),
     {ok, TimerRef} = timer:apply_interval(?INTERVAL, ?MODULE, check_children, [self()]),
     {ok, #state{
-            waiting=[ #child_state{name=C#child_spec.name, child=C, state=starting, time=erlang:localtime()}
+            waiting=[ #child_state{name=C#child_spec.name, child=C, state=starting, time=erlang:universaltime()}
                         || C <- InitialChildren ], 
             timer_ref=TimerRef
         }
@@ -148,7 +148,7 @@ init(InitialChildren) ->
 handle_call({add_child, ChildSpec}, _From, State) ->
     case exists(ChildSpec#child_spec.name, State) of
         false ->
-            CS = #child_state{name=ChildSpec#child_spec.name, child=ChildSpec, state=starting, time=erlang:localtime()},
+            CS = #child_state{name=ChildSpec#child_spec.name, child=ChildSpec, state=starting, time=erlang:universaltime()},
             {reply, ok, State#state{stopped=[CS|State#state.stopped]}};
         true ->
             {reply, {error, duplicate_name}, State}
@@ -212,7 +212,7 @@ handle_call(Message, _From, State) ->
 handle_cast({add_child, ChildSpec}, State) ->
     case exists(ChildSpec#child_spec.name, State) of
         false ->
-            CS = #child_state{name=ChildSpec#child_spec.name, child=ChildSpec, state=starting, time=erlang:localtime()},
+            CS = #child_state{name=ChildSpec#child_spec.name, child=ChildSpec, state=starting, time=erlang:universaltime()},
             {noreply, State#state{stopped=[CS|State#state.stopped]}};
         true ->
             {noreply, State}
@@ -223,7 +223,7 @@ handle_cast({stop_child, Name}, State) ->
     case do_remove_child(Name, State) of
         {CS,State1} ->
             shutdown_child(CS, State1),
-            CS1 = CS#child_state{state=stopped, time=erlang:localtime(), pid=undefined},
+            CS1 = CS#child_state{state=stopped, time=erlang:universaltime(), pid=undefined},
             {noreply, State1#state{stopped=[CS1|State1#state.stopped]}};
         error ->
             %% Unknown child
@@ -308,13 +308,13 @@ handle_retrying_children(#state{retrying=Retrying} = State) ->
     lists:foldl(fun(#child_state{child=Child} = CS, S) ->
                     case start_child_mfa(Child#child_spec.mfa) of
                         {ok, Pid} ->
-                            CS1 = CS#child_state{state=running_from_retry, pid=Pid, time=erlang:localtime()},
+                            CS1 = CS#child_state{state=running_from_retry, pid=Pid, time=erlang:universaltime()},
                             S#state{running=[CS1|S#state.running]};
                         {error, _What} ->
                             % Move the child to the failed state when it crashed too often
                             case CS#child_state.retries >= Child#child_spec.period_retries of
                                 true ->
-                                    CS1 = CS#child_state{state=failed, time=erlang:localtime(), fail_time=Now},
+                                    CS1 = CS#child_state{state=failed, time=erlang:universaltime(), fail_time=Now},
                                     S#state{failed=[CS1|S#state.failed]};
                                 false ->
                                     CS1 = CS#child_state{retries=CS#child_state.retries+1, retry_time=Now},
@@ -336,10 +336,10 @@ handle_failed_children(#state{failed=Failed} = State) ->
     lists:foldl(fun(#child_state{child=Child} = CS, S) ->
                     case start_child_mfa(Child#child_spec.mfa) of
                         {ok, Pid} ->
-                            CS1 = CS#child_state{state=running_from_failed, pid=Pid, time=erlang:localtime()},
+                            CS1 = CS#child_state{state=running_from_failed, pid=Pid, time=erlang:universaltime()},
                             S#state{running=[CS1|S#state.running]};
                         {error, _What} ->
-                            CS1 = CS#child_state{state=failed, time=erlang:localtime(), fail_time=Now},
+                            CS1 = CS#child_state{state=failed, time=erlang:universaltime(), fail_time=Now},
                             S#state{failed=[CS1|S#state.failed]}
                     end
                 end,
@@ -369,11 +369,11 @@ do_start_child(#child_state{child=Child} = CS, State) ->
     #child_spec{mfa=MFA} = Child,
     case start_child_mfa(MFA) of
         {ok, Pid} ->
-            CS1 = CS#child_state{state=running, pid=Pid, time=erlang:localtime()},
+            CS1 = CS#child_state{state=running, pid=Pid, time=erlang:universaltime()},
             notify_start(CS1, State),
             State#state{running=[CS1|State#state.running]};
         {error, {already_started, Pid}} ->
-            CS1 = CS#child_state{state=running, pid=Pid, time=erlang:localtime()},
+            CS1 = CS#child_state{state=running, pid=Pid, time=erlang:universaltime()},
             State#state{running=[CS1|State#state.running]};
         {error, _What} ->
             do_maybe_restart(CS, State)
@@ -383,23 +383,23 @@ do_start_child(#child_state{child=Child} = CS, State) ->
 do_maybe_restart(CS, State) ->
     case may_restart(CS) of
         first_restart ->
-            CS1 = CS#child_state{state=crashed, time=erlang:localtime(), 
+            CS1 = CS#child_state{state=crashed, time=erlang:universaltime(), 
                             crashes=1, crash_time=z_utils:now(), retries=0},
             do_start_child(CS1, State);
         restart ->
-            CS1 = CS#child_state{state=crashed, time=erlang:localtime(),
+            CS1 = CS#child_state{state=crashed, time=erlang:universaltime(),
                             crashes=CS#child_state.crashes+1, retries=0},
             do_start_child(CS1, State);
         first_retry ->
-            CS1 = CS#child_state{state=retrying, time=erlang:localtime(),
+            CS1 = CS#child_state{state=retrying, time=erlang:universaltime(),
                             retries=1, retry_time=z_utils:now()},
             State#state{retrying=[CS1|State#state.retrying]};
         retry ->
-            CS1 = CS#child_state{state=retrying, time=erlang:localtime(),
+            CS1 = CS#child_state{state=retrying, time=erlang:universaltime(),
                             retries=CS#child_state.retries+1, retry_time=z_utils:now()},
             State#state{retrying=[CS1|State#state.retrying]};
         fail ->
-            CS1 = CS#child_state{state=failed, time=erlang:localtime(), fail_time=z_utils:now()},
+            CS1 = CS#child_state{state=failed, time=erlang:universaltime(), fail_time=z_utils:now()},
             State#state{failed=[CS1|State#state.failed]}
     end.
 
@@ -484,7 +484,7 @@ may_restart(#child_state{crash_time=CrashTime, crashes=Crashes, child=Child}) ->
 
 %% @doc Append a child to the stopped queue
 append_stopped(CS, State) ->
-    CS1 = CS#child_state{state=stopped, time=erlang:localtime()},
+    CS1 = CS#child_state{state=stopped, time=erlang:universaltime()},
     State#state{stopped=[CS1|State#state.stopped]}.
 
 

@@ -30,7 +30,7 @@ datediff(_X, undefined, _Context) ->
 datediff( {_Y,_M,_D} = Date, DatePart, Context) ->
     datediff( [Date,{0,0,0}], DatePart, Context );
 datediff( {{_Y,_M,_D},{_H,_I,_S}} = DateTime, DatePart, Context) ->
-    datediff( [ DateTime, calendar:local_time() ], DatePart, Context );
+    datediff( [ DateTime, calendar:universal_time() ], DatePart, Context );
 datediff( [ {{_Y,_M,_D},{_H,_I,_S}} = DateTimeA, {_YB,_MB,_DB} = DateB ], DatePart, Context) ->
     datediff( [ DateTimeA, {DateB,{0,0,0}} ], DatePart, Context );
 datediff( [ {{_YA,_MA,_DA},{_HA,_IA,_SA}} = DateTimeA, {{_YB,_MB,_DB},{_HB,_IB,_SB}} = DateTimeB ], DatePart, _Context ) ->

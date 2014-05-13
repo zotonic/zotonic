@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
-%% @doc Localization of Zotonic.  Country, and other lookups.
+%% @copyright 2011-2014 Marc Worrell
+%% @doc Localization of Zotonic.  Country, timezone, and other lookups.
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,13 +21,135 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Localization").
--mod_description("Localization support and translations for country names etc.").
+-mod_description("Localization, timezones, translations for country names etc.").
 
 -export([
-    observe_pivot_rsc_data/3
+    observe_session_init_fold/3,
+    observe_session_context/3,
+    observe_auth_logon/3,
+    observe_pivot_rsc_data/3,
+    observe_rsc_update_done/2,
+    observe_admin_menu/3,
+
+    set_user_timezone/2
 ]).
 
 -include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
+
+
+%% @doc Check if the user has a prefered timezone (in the user's persistent data).
+observe_session_init_fold(session_init_fold, Context, _Context) ->
+    case get_q_timezone(Context) of
+        undefined ->
+            case z_context:get_persistent(tz, Context) of
+                undefined -> Context;
+                Tz -> set_timezone(Tz, Context)
+            end;
+        QTz ->
+            try_set_timezone(QTz, Context)
+    end.
+
+get_q_timezone(Context) ->
+    case z_context:get_q_all("z_timezone", Context) of
+        [] -> undefined;
+        L -> z_convert:to_binary(lists:last(L))
+    end.
+
+
+observe_session_context(session_context, Context, _Context) ->
+    Context1 = case z_context:get_session(tz, Context) of
+                    undefined -> Context;
+                    Tz -> z_context:set_tz(Tz, Context)
+               end,
+    case get_q_timezone(Context1) of
+        undefined -> Context1;
+        QTz -> try_set_timezone(QTz, Context1)
+    end.
+
+observe_auth_logon(auth_logon, Context, _Context) ->
+    UserId = z_acl:user(Context),
+    case m_rsc:p_no_acl(UserId, pref_tz, Context) of
+        undefined ->
+            % Ensure that the user has a default timezone
+            catch m_rsc:update(UserId, [{pref_tz, z_context:tz(Context)}], Context),
+            Context;
+        Tz -> 
+            % Switch the session to the default timezone of the user
+            Context1 = try_set_timezone(Tz, Context),
+            z_context:set_persistent(tz, z_context:tz(Context1), Context1),
+            Context1
+    end.
+
+observe_rsc_update_done(#rsc_update_done{id=Id, pre_props=Pre, post_props=Post}, Context) ->
+    case z_acl:user(Context) of
+        Id ->
+            PreTz = z_convert:to_binary(proplists:get_value(pref_tz, Pre)), 
+            PostTz = z_convert:to_binary(proplists:get_value(pref_tz, Post)),
+            case PostTz of
+                PreTz ->
+                    ok;
+                <<>> ->
+                    ok;
+                _NewTz ->
+                    z_context:set_session(tz, PostTz, Context),
+                    z_context:set_persistent(tz, PostTz, Context)
+            end;
+        _Other ->
+            ok
+    end.
+
+
+%% @doc Set the timezone, as selected by the user. Persist this choice.
+set_user_timezone(Tz, Context) ->
+    Context1 = try_set_timezone(Tz, Context),
+    z_context:set_persistent(tz, z_context:tz(Context1), Context1),
+    case z_acl:user(Context1) of
+        undefined -> 
+            nop;
+        UserId ->
+            case m_rsc:p_no_acl(UserId, pref_tz, Context1) of
+                Tz -> nop;
+                _ -> catch m_rsc:update(UserId, [{pref_tz, z_context:tz(Context1)}], Context1)
+            end
+    end,
+    Context1.
+
+
+%% @doc Set the timezone of the user. Only done when the found timezone is a known timezone.
+try_set_timezone(Tz, Context) ->
+    case localtime:tz_name({{2008,12,10},{15,30,0}}, z_convert:to_list(Tz)) of
+        {error, _} ->
+            lager:warning("~p: Unknown timezone ~p", [z_context:site(Context), Tz]),
+            Context;
+        Tz when is_list(Tz) ->
+            set_timezone(Tz, Context);
+        {Tz1, Tz2} when is_list(Tz1), is_list(Tz2) ->
+            set_timezone(Tz, Context)
+    end.
+
+
+%% @doc Set the timezone of the current context/session
+set_timezone(Tz, Context) ->
+    case z_context:tz(Context) of
+        Tz -> 
+            Context;
+        _ ->
+            Context1 = z_context:set_tz(Tz, Context),
+            z_context:set_session(tz, Tz, Context1),
+            Context1
+    end.
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_l10n,
+                parent=admin_modules,
+                label=?__("Localization", Context),
+                url={admin_l10n},
+                visiblecheck={acl, use, mod_config}}
+     
+     |Acc].
 
 %% @doc Expand the two letter iso code country depending on the languages in the resource.
 observe_pivot_rsc_data(pivot_rsc_data, Rsc, Context) ->

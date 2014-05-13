@@ -205,7 +205,7 @@ ensure_config() ->
 write_config(Key, Value) ->
     {ok, Config} = ensure_config(),
     Config1 = lists:keystore(Key, 1, Config, {Key, Value}),
-    Config2 = lists:keystore(modify_date, 1, Config1, {modify_date, erlang:localtime()}),
+    Config2 = lists:keystore(modify_date, 1, Config1, {modify_date, erlang:universaltime()}),
     write_config(Config2).
 
 write_config(Config) ->

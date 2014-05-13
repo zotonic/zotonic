@@ -29,12 +29,13 @@
     
     countries/1,
     country_name/2,
-    country_name/3
+    country_name/3,
+
+    timezones/0
 ]).
 
--include("zotonic.hrl").
-
-% m.l10n.countries
+-include_lib("zotonic.hrl").
+-include_lib("erlang_localtime/include/tz_database.hrl").
 
 % @doc Return a list of countries in the current language
 m_find_value(countries, #m{value=undefined}, Context) ->
@@ -42,7 +43,9 @@ m_find_value(countries, #m{value=undefined}, Context) ->
 m_find_value(country_name, #m{value=undefined} = M, _Context) ->
     M#m{value=country_name};
 m_find_value(Code, #m{value=country_name}, Context) ->
-    country_name(Code, Context).
+    country_name(Code, Context);
+m_find_value(timezones, #m{value=undefined}, _Context) ->
+    timezones().
 
 m_value(#m{}, _Context) ->
     undefined.
@@ -70,4 +73,79 @@ country_name(Code, Language, Context) ->
 			z_trans:lookup_fallback(z_trans:translations(CountryEN, Context), Language, Context)
     end.
 	
+%% Extracted from the timezone javascript.
+timezones() ->
+    [
+        <<"UTC">>,
+        <<"Africa/Johannesburg">>,
+        <<"Africa/Lagos">>,
+        <<"Africa/Windhoek">>,
+        <<"America/Adak">>,
+        <<"America/Anchorage">>,
+        <<"America/Argentina/Buenos_Aires">>,
+        <<"America/Bogota">>,
+        <<"America/Caracas">>,
+        <<"America/Chicago">>,
+        <<"America/Denver">>,
+        <<"America/Godthab">>,
+        <<"America/Guatemala">>,
+        <<"America/Halifax">>,
+        <<"America/Los_Angeles">>,
+        <<"America/Montevideo">>,
+        <<"America/New_York">>,
+        <<"America/Noronha">>,
+        <<"America/Noronha">>,
+        <<"America/Phoenix">>,
+        <<"America/Santiago">>,
+        <<"America/Santo_Domingo">>,
+        <<"America/St_Johns">>,
+        <<"Asia/Baghdad">>,
+        <<"Asia/Baku">>,
+        <<"Asia/Beirut">>,
+        <<"Asia/Dhaka">>,
+        <<"Asia/Dubai">>,
+        <<"Asia/Irkutsk">>,
+        <<"Asia/Jakarta">>,
+        <<"Asia/Kabul">>,
+        <<"Asia/Kamchatka">>,
+        <<"Asia/Karachi">>,
+        <<"Asia/Kathmandu">>,
+        <<"Asia/Kolkata">>,
+        <<"Asia/Krasnoyarsk">>,
+        <<"Asia/Omsk">>,
+        <<"Asia/Rangoon">>,
+        <<"Asia/Shanghai">>,
+        <<"Asia/Tehran">>,
+        <<"Asia/Tokyo">>,
+        <<"Asia/Vladivostok">>,
+        <<"Asia/Yakutsk">>,
+        <<"Asia/Yekaterinburg">>,
+        <<"Atlantic/Azores">>,
+        <<"Atlantic/Cape_Verde">>,
+        <<"Australia/Adelaide">>,
+        <<"Australia/Brisbane">>,
+        <<"Australia/Darwin">>,
+        <<"Australia/Eucla">>,
+        <<"Australia/Eucla">>,
+        <<"Australia/Lord_Howe">>,
+        <<"Australia/Sydney">>,
+        <<"Europe/Berlin">>,
+        <<"Europe/London">>,
+        <<"Europe/Moscow">>,
+        <<"Pacific/Apia">>,
+        <<"Pacific/Auckland">>,
+        <<"Pacific/Chatham">>,
+        <<"Pacific/Easter">>,
+        <<"Pacific/Gambier">>,
+        <<"Pacific/Honolulu">>,
+        <<"Pacific/Kiritimati">>,
+        <<"Pacific/Majuro">>,
+        <<"Pacific/Marquesas">>,
+        <<"Pacific/Norfolk">>,
+        <<"Pacific/Noumea">>,
+        <<"Pacific/Pago_Pago">>,
+        <<"Pacific/Pitcairn">>,
+        <<"Pacific/Tarawa">>,
+        <<"Pacific/Tongatapu">>
+    ].
 

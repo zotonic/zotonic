@@ -38,7 +38,7 @@
 %% This function is run as a spawned process.  The Context should have the right permissions for inserting
 %% or updating the resources.
 import(Def, IsReset, Context) ->
-    StartDate = erlang:localtime(),
+    StartDate = erlang:universaltime(),
     %% Read all rows
     {ok, Device} = file:open(Def#filedef.filename, [read, binary, {encoding, utf8}]),
     Rows = parse_csv:scan_lines(Device, Def#filedef.colsep),
@@ -56,7 +56,7 @@ import(Def, IsReset, Context) ->
     R = State#importstate.result,
     [ {file, filename:basename(Def#filedef.filename)},
       {date_start, StartDate},
-      {date_end, erlang:localtime()},
+      {date_end, erlang:universaltime()},
       {seen, R#importresult.seen},
       {new,  R#importresult.new},
       {updated, R#importresult.updated},

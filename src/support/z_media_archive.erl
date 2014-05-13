@@ -125,7 +125,7 @@ archive_delete(Filename, Context) ->
 
 %% Return an unique filename for archiving the file
 archive_filename(Filename, Context) ->
-    {{Y,M,D}, _} = calendar:local_time(),
+    {{Y,M,D}, _} = z_datetime:to_local(calendar:universal_time(), Context),
     Rootname = filename:rootname(filename:basename(Filename)),
     Extension = filename:extension(Filename),
     RelRoot = filename:join([integer_to_list(Y),integer_to_list(M),integer_to_list(D),safe_filename(Rootname)]),

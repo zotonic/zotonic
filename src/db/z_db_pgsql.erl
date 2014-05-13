@@ -169,7 +169,7 @@ get_arg(K, Args) ->
 
 %% Notable differences:
 %% - Input values {term, ...} (use the ?DB_PROPS(...) macro!) are term_to_binary encoded and decoded
-%% - null <-> undefind
+%% - null <-> undefined
 %% - date/datetimes have a floating-point second argument in epgsql, in Zotonic they don't.
 
 encode_values(L) when is_list(L) ->

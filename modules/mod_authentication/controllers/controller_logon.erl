@@ -293,7 +293,7 @@ get_rememberme_cookie(Context) ->
 
 %% @doc Set the 'rememberme' cookie.  Let it expire after some days.
 set_rememberme_cookie(UserId, Context) ->
-    Expire = add_days(?LOGON_REMEMBERME_DAYS, calendar:local_time()),
+    Expire = add_days(?LOGON_REMEMBERME_DAYS, calendar:universal_time()),
     Value = z_utils:url_encode(z_convert:to_list(z_utils:encode_value_expire(UserId, Expire, Context))),
     RD = z_context:get_reqdata(Context),
     Options = [

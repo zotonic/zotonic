@@ -157,7 +157,7 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
                     undefined;
                 N when is_integer(N) ->
                     calendar:gregorian_seconds_to_datetime(
-                        calendar:datetime_to_gregorian_seconds(calendar:local_time()) + N);
+                        calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + N);
                 {Y,M,D} = YMD when is_integer(Y), is_integer(M), is_integer(D) ->
                     {YMD,{0,0,0}};
                 {{Y,M,D},{H,I,S}} when is_integer(Y), is_integer(M), is_integer(D), is_integer(H), is_integer(I), is_integer(S) ->
@@ -301,7 +301,7 @@ do_poll(Context) ->
                 case erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context]) of
                     {delay, Seconds} ->
                         Due = calendar:gregorian_seconds_to_datetime(
-                                calendar:datetime_to_gregorian_seconds(calendar:local_time()) + Seconds
+                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Seconds
                               ),
                         z_db:q("update pivot_task_queue set due = $1 where id = $2", [Due, TaskId], Context);
                     _OK ->

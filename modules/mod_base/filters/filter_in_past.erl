@@ -21,10 +21,10 @@
 
 
 in_past({_,_,_} = Date, _Context) ->
-	{LocalDate, _} = erlang:localtime(),
+	{LocalDate, _} = erlang:universaltime(),
 	Date < LocalDate;
 in_past({{_,_,_}, {_,_,_}} = DateTime, _Context) ->
-	DateTime < erlang:localtime();
+	DateTime < erlang:universaltime();
 in_past(_, _Context) ->
 	undefined.
 

@@ -25,19 +25,16 @@
         <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Help about date ranges."|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone’s life."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
     </div>
 
-    {% with id.date_start|date:"H:i" as start_hi %}
-    {% with id.date_end|date:"H:i" as end_hi %}
-    {% with (not start_hi or start_hi=='00:00') and (not end_hi or end_hi == '23:59') as is_whole_day %}
     <div class="date-range">
         <div class="control-group">
             <div class="controls">
                 <label class="checkbox">
-                    <input id="{{ #whole_day }}" type="checkbox" {% if is_whole_day %}checked{% endif %} /> {_ Whole day _}
+                    <input name="date_is_all_day" id="{{ #all_day }}" type="checkbox" {% if id.date_is_all_day %}checked{% endif %} /> {_ All day _}
                 </label>
             </div>
         </div>
         {% javascript %}
-            $("#{{ #whole_day }}").on('change', function() {
+            $("#{{ #all_day }}").on('change', function() {
                 var $times = $(this).closest('.date-range').find('.do_timepicker');
                 if ($(this).is(":checked"))
                     $times.fadeOut("fast").val('');
@@ -49,17 +46,14 @@
         <div class="control-group">
             <label class="control-label">{_ From _}</label>
             <div class="controls">
-        	{% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 is_whole_day=is_whole_day %}
+        	{% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day %}
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">{_ Till _}</label>
             <div class="controls">
-                {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 is_whole_day=is_whole_day %}
+                {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day %}
             </div>
         </div>
     </div>
-    {% endwith %}
-    {% endwith %}
-    {% endwith %}
 {% endblock %}

@@ -79,7 +79,8 @@
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(Id, #m{value=undefined} = M, Context) ->
     case rid(Id, Context) of
-        undefined -> undefined;
+        undefined -> 
+            undefined;
         RId ->
             case z_acl:rsc_visible(RId, Context) of
                 true ->
@@ -180,8 +181,10 @@ get(Id, Context) ->
         Rid when is_integer(Rid) ->
             z_depcache:memo(fun() -> 
                                 case get_raw(Rid, Context) of
-                                    undefined -> undefined;
-                                    Props -> z_notifier:foldr(#rsc_get{id=Rid}, Props, Context) 
+                                    undefined ->
+                                        undefined;
+                                    Props ->
+                                        z_notifier:foldr(#rsc_get{id=Rid}, Props, Context) 
                                 end
                             end,
                             Rid,
@@ -209,10 +212,51 @@ get_raw(Id, Context) when is_integer(Id) ->
                 Memo
           end,
     case z_db:assoc_props_row(SQL, [Id], Context) of
-        undefined -> [];
-        Raw -> Raw
+        undefined -> 
+            [];
+        Raw -> 
+            ensure_utc_dates(Raw, Context)
     end.
-             
+
+%% Fix old records which had serialized data in localtime and no date_is_all_day flag
+ensure_utc_dates(Props, Context) ->
+    case lists:keymember(tz, 1, Props) of
+        true ->
+            Props;
+        false ->
+            % Convert dates, assuming the system's default timezone
+            DateStart = lists:keyfind(date_start, 1, Props),
+            DateEnd = lists:keyfind(date_end, 1, Props),
+            IsAllDay = case {DateStart,DateEnd} of
+                {{_, {0,0,_StartSec}},{_,{23,59,_EndSec}}} ->
+                    true;
+                _ ->
+                    false
+            end,
+            [
+                {tz, z_context:tz(Context)},
+                {date_is_all_day, IsAllDay}
+                | [ ensure_utc_date(P, IsAllDay) || P <- Props ]
+            ]
+    end.
+
+% publication_start, publication_end, created, and modified are already in UTC
+ensure_utc_date(Date, IsAllDay) ->
+    try
+        ensure_utc_date_1(Date, IsAllDay)
+    catch
+        error:badarg ->
+            {element(1, Date), undefined}
+    end.
+
+ensure_utc_date_1({date_start, DT}, false) when is_tuple(DT) ->
+    {date_start, hd(calendar:local_time_to_universal_time_dst(DT))};
+ensure_utc_date_1({date_end, DT}, false) when is_tuple(DT) ->
+    {date_end, hd(calendar:local_time_to_universal_time_dst(DT))};
+ensure_utc_date_1({org_pubdate, DT}, _IsAllDay) when is_tuple(DT) ->
+    {org_pubdate, hd(calendar:local_time_to_universal_time_dst(DT))};
+ensure_utc_date_1(P, _IsAllDay) ->
+    P.
 
 
 %% @doc Get the ACL fields for the resource with the id.
@@ -326,7 +370,7 @@ is_published_date(Id, Context) ->
         RscId when is_integer(RscId) ->
             case m_rsc:p_no_acl(RscId, is_published, Context) of
                 true ->
-                    Date = calendar:local_time(),
+                    Date = erlang:universaltime(),
                     m_rsc:p_no_acl(RscId, publication_start, Context) =< Date 
                       andalso m_rsc:p_no_acl(RscId, publication_end, Context) >= Date;
                 false ->

@@ -306,7 +306,7 @@ insert_recipients(ListId, Recipients, IsTruncate, Context) ->
     end.
     
     insert_recipients1(ListId, Recipients, Context) ->
-        Now = erlang:localtime(),
+        Now = erlang:universaltime(),
         [ replace_recipient(ListId, R, Now, Context) || R <- Recipients ],
         {ok, Now}.
         

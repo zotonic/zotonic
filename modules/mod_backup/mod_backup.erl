@@ -159,7 +159,7 @@ handle_call(start_backup, _From, State) ->
             %% @doc Return the base name of the dump files. The base name is composed of the date and time.
             %% @todo keep the backup page updated with the state of the current backup.
             Pid = do_backup(name(State#state.context), State),
-            {reply, ok, State#state{backup_pid=Pid, backup_start=calendar:local_time()}};
+            {reply, ok, State#state{backup_pid=Pid, backup_start=calendar:universal_time()}};
         _Pid ->
             {reply, {error, in_progress}, State}
     end;
@@ -261,7 +261,7 @@ cleanup(Context) ->
 
 
 maybe_daily_dump(State) ->
-    {Date, Time} = calendar:local_time(),
+    {Date, Time} = calendar:universal_time(),
     case Time >= {3,0,0} andalso Time =< {7,0,0} of
         true ->
             DoStart = case list_backup_files(State#state.context) of
@@ -303,7 +303,7 @@ dir(Context) ->
 
 %% @doc Return the base name of the backup files.
 name(Context) ->
-    Now = calendar:local_time(),
+    Now = calendar:universal_time(),
     iolist_to_binary(
       [atom_to_list(z_context:site(Context)), "-",
        erlydtl_dateformat:format(Now, "Ymd-His", Context)]).

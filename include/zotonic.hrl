@@ -62,6 +62,9 @@
 
         %% The language selected, used by z_trans and others
         language=en :: atom(),
+
+        %% The timezone for this request
+        tz= <<"UTC">> :: string()|binary(),
         
         %% The current logged on person, derived from the session and visitor
         acl=undefined,      %% opaque placeholder managed by the z_acl module

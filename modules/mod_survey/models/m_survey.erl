@@ -153,7 +153,7 @@ insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
 
 %% @doc Save or replace a survey, resetting the created if needed.
 insert_survey_submission(SurveyId, UserId, PersistentId, Answers, undefined, Context) ->
-    insert_survey_submission(SurveyId, UserId, PersistentId, Answers, calendar:local_time(), Context);
+    insert_survey_submission(SurveyId, UserId, PersistentId, Answers, calendar:universal_time(), Context);
 insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Created, Context) ->
     case UserId of
         undefined ->

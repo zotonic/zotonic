@@ -20,6 +20,41 @@ To show the year of the current date::
 See also the :ref:`filter-timesince` filter to display a human
 readable `relative` time like `10 hours ago`.
 
+
+Timezones
+---------
+
+Dates in Zotonic are stored in UTC. If a date is displayed then it is converted to the timezone of the current request context.
+This timezone can be one of the following, in order of preference:
+
+  * Preferred timezone set by the user
+  * Timezone of the user-agent
+  * Default timezone of the site
+  * Default timezone of the Zotonic server
+  * UTC
+
+A specific timezone can be enforced by adding a second parameter to the date-filter.
+For example, to display a date in UTC::
+
+    {{ mydate|date:"Y-m-d H:i T":"UTC" }}
+
+
+Timezone and *all day* date ranges
+----------------------------------
+
+If a resource’s date range is set with the *date_is_all_day* flag then the dates are not converted to or from UTC but stored as-is.
+This needs to be taken into account when displaying those dates, otherwise a conversion from (assumed) UTC to the current timezone is
+performed and the wrong date might be displayed.
+
+The timezone conversion can be prevented by adding the *date_is_all_day* flag to the date-filter as the timezone.
+Example, for displaying the start date of a resource::
+
+    {{ id.date_start|date:"Y-m-d":id.date_is_all_day }}
+
+
+Date formatting characters
+--------------------------
+
 Date uses the same format as PHP’s date function with some extensions
 and some omissions.
 
@@ -68,6 +103,9 @@ All supported formatting characters are listed below:
 |i         |Minutes with leading zero, i.e. “00” to|“00”, “46”                 |
 |          |“59”                                   |                           |
 +----------+---------------------------------------+---------------------------+
+|i         |Daylight saving time flag. “1” if DST  |“0”                        |
+|          |is in effect, “0” if no DST            |                           |
++----------+---------------------------------------+---------------------------+
 |j         |Day of the month without leading zeros,|“1”, “28”                  |
 |          |i.e. “1” to “31”                       |                           |
 +----------+---------------------------------------+---------------------------+
@@ -113,6 +151,8 @@ All supported formatting characters are listed below:
 |t         |Number of days in the given month,     |“30”                       |
 |          |i.e. “28” to “31”                      |                           |
 +----------+---------------------------------------+---------------------------+
+|T         |Timezone used for displaying the date  |“CEST”                     |
++----------+---------------------------------------+---------------------------+
 |U         |Seconds since the Unix epoch of January|1254911050                 |
 |          |1, 00:00:00 GMT.                       |                           |
 +----------+---------------------------------------+---------------------------+
@@ -140,6 +180,8 @@ Will output `10 October 1990`. This also works with datetimes::
   {{ [[1990,10,10],[10,11,12]]|date:"j F Y - H:i:s" }}
 
 Will output `10 October 1990 - 10:11:12`.
+
+
 
 
 .. seealso:: :ref:`filter-date_range`, :ref:`filter-datediff`, :ref:`filter-timesince`, :ref:`tag-now`

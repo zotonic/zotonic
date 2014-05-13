@@ -56,6 +56,9 @@ get(ua_class, #context{} = Context) ->
 get(ua_props, #context{} = Context) ->
     z_user_agent:get_props(Context);
 
+get(timezone, #context{} = Context) ->
+    z_context:tz(Context);
+
 get(What, #context{} = Context) -> get(What, z_context:get_reqdata(Context));
 get(_What, undefined) -> undefined;
 get(method, RD) -> wrq:method(RD);

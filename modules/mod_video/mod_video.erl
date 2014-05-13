@@ -373,7 +373,7 @@ orientation_to_transpose(6) -> " -vf 'transpose=1' ";
 orientation_to_transpose(_) -> "".
 
 preview_filename(Id, File, Context) ->
-    {{Y,M,D},_} = calendar:local_time(),
+    {{Y,M,D},_} = z_datetime:to_local(calendar:universal_time(), Context),
     m_media:make_preview_unique(
         filename:join([ "preview",
                     integer_to_list(Y),

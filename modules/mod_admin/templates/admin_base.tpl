@@ -53,5 +53,9 @@
     {% block tinymce %}{% endblock %}
         
     {% block html_body_admin %}{% all include "_html_body_admin.tpl" %}{% endblock %}
+
+    {% block ua_probe %}
+        {% include "_ua_probe.tpl"%}
+    {% endblock %}
 </body>
 </html>

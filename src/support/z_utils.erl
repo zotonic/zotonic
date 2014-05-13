@@ -167,7 +167,7 @@ encode_value_expire(Value, Date, Context) ->
 
 decode_value_expire(Data, Context) ->
     {Value, Expire} = decode_value(Data, Context),
-    case Expire >= calendar:local_time() of
+    case Expire >= calendar:universal_time() of
         false -> {error, expired};
         true -> {ok, Value}
     end.

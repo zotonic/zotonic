@@ -21,9 +21,9 @@
 
 
 in_future({_,_,_} = Date, _Context) ->
-	{LocalDate, _} = erlang:localtime(),
+	{LocalDate, _} = erlang:universaltime(),
 	Date > LocalDate;
 in_future({{_,_,_}, {_,_,_}} = DateTime, _Context) ->
-	DateTime > erlang:localtime();
+	DateTime > erlang:universaltime();
 in_future(_, _Context) ->
 	undefined.

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2013  Marc Worrell
+%% @copyright 2009-2014  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
 
-%% Copyright 2009-2013 Marc Worrell
+%% Copyright 2009-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -102,6 +102,9 @@
     language/1,
     set_language/2,
 
+    tz/1,
+    set_tz/2,
+
     merge_scripts/2,
     copy_scripts/2,
     clean_scripts/1,
@@ -139,6 +142,7 @@ new(#context{} = C) ->
         host=C#context.host,
         ua_class=C#context.ua_class,
         language=C#context.language,
+        tz=C#context.tz,
         depcache=C#context.depcache,
         notifier=C#context.notifier,
         session_manager=C#context.session_manager,
@@ -157,8 +161,8 @@ new(undefined) ->
         Site -> new(Site)
     end;
 new(Host) when is_atom(Host) ->
-    Context = set_server_names(#context{host=Host}),
-    Context#context{language=z_trans:default_language(Context)};
+    set_default_language_tz(
+        set_server_names(#context{host=Host}));
 new(ReqData) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
@@ -169,25 +173,49 @@ new(ReqData) ->
                         wm_reqdata=ReqData,
                         ua_class=z_user_agent:get_class(ReqData)
                     }),
-    set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
-
+    set_dispatch_from_path(set_default_language_tz(Context)).
 
 %% @doc Create a new context record for a host with a certain language.
 new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
     Context = set_server_names(#context{host=Host}),
-    Context#context{language=Lang};
+    Context#context{
+        language=Lang,
+        tz=timezone_config(Context)
+    };
 %% @doc Create a new context record for the current request and resource module
 new(ReqData, Module) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
     z_depcache:in_process(true),
     Context = set_server_names(#context{wm_reqdata=ReqData, controller_module=Module, host=site(ReqData)}),
-    set_dispatch_from_path(Context#context{language=z_trans:default_language(Context)}).
+    set_dispatch_from_path(
+        set_default_language_tz(Context)).
+
+
+set_default_language_tz(Context) ->
+    Context#context{
+        language=z_trans:default_language(Context),
+        tz=timezone_config(Context)
+    }.
+
+timezone_config(Context) ->
+    case m_config:get_value(site, timezone, Context) of
+        undefined ->
+            z_config:get(timezone, Context#context.tz);
+        TZ ->
+            TZ
+    end.
 
 
 % @doc Create a new context used when testing parts of zotonic
 new_tests() ->
-    z_trans_server:set_context_table(#context{host=test, language=en, notifier='z_notifier$test'}).
+    z_trans_server:set_context_table(
+            #context{
+                host=test,
+                language=en,
+                tz= <<"UTC">>,
+                notifier='z_notifier$test'
+            }).
 
 
 %% @doc Set the dispatch rule for this request to the context var 'zotonic_dispatch'
@@ -283,7 +311,8 @@ prune_for_async(#context{} = Context) ->
         module_indexer=Context#context.module_indexer,
         db=Context#context.db,
         translation_table=Context#context.translation_table,
-        language=Context#context.language
+        language=Context#context.language,
+        tz=Context#context.tz
     }.
 
 
@@ -384,12 +413,19 @@ site_protocol(Context) ->
 %% @todo pickle/depickle the visitor id (when any)
 %% @spec pickle(Context) -> tuple()
 pickle(Context) ->
-    {pickled_context, Context#context.host, Context#context.user_id, Context#context.language, undefined}.
+    {pickled_context,
+        Context#context.host, 
+        Context#context.user_id,
+        Context#context.language,
+        Context#context.tz,
+        undefined}.
 
 %% @doc Depickle a context for restoring from a database
 %% @todo pickle/depickle the visitor id (when any)
 depickle({pickled_context, Host, UserId, Language, _VisitorId}) ->
-    Context = set_server_names(#context{host=Host, language=Language}),
+    depickle({pickled_context, Host, UserId, Language, 0, _VisitorId});
+depickle({pickled_context, Host, UserId, Language, Tz, _VisitorId}) ->
+    Context = set_server_names(#context{host=Host, language=Language, tz=Tz}),
     case UserId of
         undefined -> Context;
         _ -> z_acl:logon(UserId, Context)
@@ -878,6 +914,15 @@ set_language(Lang, Context) ->
         true -> set_language(list_to_atom(Lang1), Context);
         false -> Context
     end.
+
+%% @doc Return the selected timezone of the Context
+tz(#context{tz=Tz}) ->
+    Tz.
+
+%% @doc Set the timezone of the context.
+-spec set_tz(string()|binary(), #context{}) -> #context{}.
+set_tz(Tz, Context) when is_list(Tz); is_binary(Tz) ->
+    Context#context{tz=z_convert:to_binary(Tz)}.
 
 %% @doc Set a response header for the request in the context.
 %% @spec set_resp_header(Header, Value, Context) -> NewContext

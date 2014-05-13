@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2014 Marc Worrell
 %% @doc 'date' filter, display a date
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,8 +17,23 @@
 %% limitations under the License.
 
 -module(filter_date).
--export([date/3]).
+-export([
+  date/3,
+  date/4
+]).
 
+date(Date, Format, true, Context) ->
+    date(Date, Format, z_context:set_tz(<<>>,Context));
+date(Date, Format, false, Context) ->
+    date(Date, Format, Context);
+date(Date, Format, undefined, Context) ->
+    date(Date, Format, Context);
+date(Date, Format, [], Context) ->
+    date(Date, Format, Context);
+date(Date, Format, <<>>, Context) ->
+    date(Date, Format, Context);
+date(Date, Format, Tz, Context) ->
+    date(Date, Format, z_context:set_tz(Tz,Context)).
 
 date(undefined, _FormatStr, _Context) ->
     undefined;
@@ -38,20 +53,20 @@ date(Input, FormatStr, Context) when is_binary(FormatStr) ->
     date(Input, binary_to_list(FormatStr), Context);
 date(Input, FormatStr, Context) when is_binary(Input) ->
     z_convert:to_binary(date(binary_to_list(Input), FormatStr, Context));
-date({{_,_,_} = Date,{_,_,_} = Time}, FormatStr, Context) ->
+date({{_,_,_} = Date,{_,_,_} = Time} = DT, FormatStr, Context) ->
     try
         erlydtl_dateformat:format({Date, Time}, FormatStr, Context)
     catch
-        error:_ ->
-            lager:warning("Date format on illegal date ~p (format ~p)", [Date, FormatStr]),
+        error:Error ->
+            lager:warning("Date format on illegal date ~p (format ~p), error: ~p", [DT, FormatStr, Error]),
             undefined
     end;
 date({_,_,_} = Date, FormatStr, Context) ->
     try
         erlydtl_dateformat:format(Date, FormatStr, Context)
     catch
-        error:_ ->
-            lager:warning("Date format on illegal date ~p (format ~p)", [Date, FormatStr]),
+        error:Error ->
+            lager:warning("Date format on illegal date ~p (format ~p), error: ~p", [Date, FormatStr, Error]),
             undefined
     end;
 date(_Input, _FormatStr, _Context) ->

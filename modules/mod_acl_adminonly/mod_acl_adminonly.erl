@@ -50,7 +50,7 @@ observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id
                 false ->
                     false;
                 true ->
-                    Date = calendar:local_time(),
+                    Date = calendar:universal_time(),
                     Acl#acl_props.publication_start =< Date andalso Acl#acl_props.publication_end >= Date
             end
     end;	

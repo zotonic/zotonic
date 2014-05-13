@@ -24,6 +24,9 @@
 %% Be careful with the comma after each option, exclude it after the last option.
 
 [
+%%% Default timezone (for example: <<"Europe/Berlin">>)
+ {timezone, <<"UTC">>},
+
 %%% PostgreSQL database defaults.
 %%% These are the defaults for the equally named options in your site's config file.
  {dbschema, "public"},

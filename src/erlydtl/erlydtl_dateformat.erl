@@ -3,17 +3,30 @@
 -module(erlydtl_dateformat).
 
 -export([
-	format/2,
-	format/3
-	]).
+    format/2,
+    format/3,
 
--include("zotonic.hrl").
+    format_utc/2,
+    format_utc/3
+    ]).
 
-format(Format, #context{} = Context) ->
-	z_dateformat:format(Format, opts(Context)).
+-include_lib("zotonic.hrl").
+
+format(Format, Context) ->
+    format(calendar:universal_time(), Format, Context).
 
 format(Date, Format, #context{} = Context) ->
-	z_dateformat:format(Date, Format, opts(Context)).
+    z_dateformat:format(z_datetime:to_local(Date, Context), Format, opts(Date, z_context:tz(Context), Context)).
 
-opts(Context) ->
-	[{tr, {l10n_date, [Context]}}].
+format_utc(Format, Context) ->
+    format_utc(calendar:universal_time(), Format, Context).
+
+format_utc(Date, Format, #context{} = Context) ->
+    z_dateformat:format(Date, Format, opts(Date, "GMT", Context)).
+
+opts(Date, Tz, Context) ->
+	[
+        {utc, Date},
+        {tz, z_convert:to_list(Tz)},
+        {tr, {l10n_date, [Context]}}
+    ].

@@ -306,7 +306,7 @@ verify(IdnId, VerifyKey, Context) ->
             case catch z_convert:to_integer(IdnId) of
                 N when is_integer(N) ->
                     case m_identity:get(N, Context) of
-                        undefinded ->
+                        undefined ->
                             {error, notfound};
                         Idn ->
                             case z_convert:to_bool(proplists:get_value(is_verified, Idn)) of
