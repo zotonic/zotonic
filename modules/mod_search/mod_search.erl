@@ -194,7 +194,7 @@ search_prevnext(Type, Args, Context) ->
                  where="(" ++ MapField(Field) ++ " " ++ Operator(Type) ++ " $1) and r.id <> $2",
                  tables=[{rsc, "r"}],
                  cats=[{"r", Cat}],
-                 args=[FieldValue, Id, Limit],
+                 args=[FieldValue, z_convert:to_integer(Id), Limit],
                  order=MapField(Field) ++ " " ++ Order(Type) ++ ", id " ++ Order(Type),
                  limit="limit $3"
                }.
@@ -268,7 +268,7 @@ search({match_objects, [{id,Id}]}, _OffsetLimit, Context) ->
 		        from="rsc r, to_tsquery($1) query",
 		        where=" query @@ pivot_rtsv and id <> $2",
 		        order="rank desc",
-		        args=[TsQuery, Id],
+		        args=[TsQuery, z_convert:to_integer(Id)],
 		        tables=[{rsc,"r"}]
 		    }
 	end;
@@ -294,7 +294,7 @@ search({match_objects_cats, [{id,Id}]}, _OffsetLimit, Context) ->
 		        from="rsc r, to_tsquery($1) query",
 		        where=" query @@ pivot_rtsv and id <> $2",
 		        order="rank desc",
-		        args=[TsQuery, Id],
+		        args=[TsQuery, z_convert:to_integer(Id)],
 		        tables=[{rsc,"r"}]
 		    }
 	end;
@@ -347,7 +347,7 @@ search({latest, [{creator_id,CreatorId}]}, _OffsetLimit, _Context) ->
         from="rsc r",
         where="r.creator_id = $1",
         order="r.modified desc",
-        args=[CreatorId],
+        args=[z_convert:to_integer(CreatorId)],
         tables=[{rsc,"r"}]
     };
 
@@ -357,7 +357,7 @@ search({latest, [{cat, Cat}, {creator_id,CreatorId}]}, _OffsetLimit, _Context) -
         from="rsc r",
         where="r.creator_id = $1",
         order="r.modified desc",
-        args=[CreatorId],
+        args=[z_convert:to_integer(CreatorId)],
         cats=[{"r", Cat}],
         tables=[{rsc,"r"}]
     };
@@ -447,7 +447,7 @@ search({referrers, [{id,Id}]}, _OffsetLimit, _Context) ->
         from="edge e join rsc o on o.id = e.subject_id",
         where="e.object_id = $1",
         order="e.id desc",
-        args=[Id],
+        args=[z_convert:to_integer(Id)],
         tables=[{rsc,"o"}]
     };
 
