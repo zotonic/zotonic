@@ -82,6 +82,7 @@ get_skeleton_modules(empty) ->
      mod_oembed,
      mod_signal,
      mod_logging,
+     mod_l10n,
 
      mod_authentication,
      mod_acl_adminonly,
@@ -105,6 +106,7 @@ get_skeleton_modules(blog) ->
      mod_translation,
      mod_signal,
      mod_logging,
+     mod_l10n,
 
      mod_seo,
      mod_seo_sitemap,
@@ -118,8 +120,6 @@ get_skeleton_modules(blog) ->
      mod_admin_identity,
      mod_admin_modules,
      mod_admin_predicate,
-
-     mod_l10n,
 
      mod_comment,
      mod_bootstrap
