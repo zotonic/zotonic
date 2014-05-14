@@ -64,6 +64,10 @@ urlencode1(Input, Index) when is_binary(Input) ->
     end;
 urlencode1([], Acc) ->
     lists:reverse(Acc);
+urlencode1([L | Rest], Acc) when is_list(L) ->
+    urlencode1(Rest, [urlencode1(L, []) | Acc]);
+urlencode1([B | Rest], Acc) when is_binary(B) ->
+    urlencode1(Rest, [urlencode1(B, 0) | Acc]);
 urlencode1([C | Rest], Acc) when ?NO_ENCODE(C) ->
     urlencode1(Rest, [C | Acc]);
 urlencode1([$\s | Rest], Acc) ->
