@@ -49,7 +49,6 @@ install_check(SiteProps) ->
                             %% Install database
                             lager:warning("~p: Installing database with db options: ~p", [z_context:site(Context), Options]),
                             z_install:install(Context),
-                            lager:warning("okay: ~p", [okay]),
                             ignore;
                         true ->
                             %% Normal startup, do upgrade / check
