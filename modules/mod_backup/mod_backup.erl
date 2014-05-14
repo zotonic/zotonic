@@ -291,7 +291,9 @@ do_backup_process(Name, Context) ->
     case proplists:get_value(ok, Cfg) of
         true ->
             ok = pg_dump(Name, Context),
-            ok = archive(Name, Context);
+            ok = archive(Name, Context),
+            z_session_manager:broadcast(#broadcast{type="info", message="Backup completed.", title="mod_backup", stay=false}, Context),
+            ok;
         false ->
             {error, not_configured}
     end.
@@ -343,7 +345,6 @@ pg_dump(Name, Context) ->
 
     Result = case os:cmd(binary_to_list(iolist_to_binary(Command))) of
                  [] ->
-                     z_session_manager:broadcast(#broadcast{type="info", message="Backup completed.", title="mod_backup", stay=false}, Context),
                      ok;
                  Output ->
                      ?zWarning(Output, Context),
