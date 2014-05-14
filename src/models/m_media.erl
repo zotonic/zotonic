@@ -662,7 +662,7 @@ save_preview(RscId, Data, Mime, Context) ->
 	end.
 
 data2filepath(RscId, Data, Extension) ->
-	<<A:8, B:8, Rest/binary>> = crypto:sha(Data),
+	<<A:8, B:8, Rest/binary>> = crypto:hash(sha, Data),
 	filename:join([ "preview", mochihex:to_hex(A), mochihex:to_hex(B), 
 					integer_to_list(RscId) ++ [$-|mochihex:to_hex(Rest)] ++ Extension ]).
 
