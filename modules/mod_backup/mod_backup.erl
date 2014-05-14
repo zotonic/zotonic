@@ -311,12 +311,14 @@ name(Context) ->
 
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.
 pg_dump(Name, Context) ->
-    {ok, Host} = pgsql_pool:get_database_opt(host, ?HOST(Context)),
-    {ok, Port} = pgsql_pool:get_database_opt(port, ?HOST(Context)),
-    {ok, User} = pgsql_pool:get_database_opt(username, ?HOST(Context)),
-    {ok, Password} = pgsql_pool:get_database_opt(password, ?HOST(Context)),
-    {ok, Database} = pgsql_pool:get_database_opt(database, ?HOST(Context)),
-    {ok, Schema} = pgsql_pool:get_database_opt(schema, ?HOST(Context)),
+    All = z_db_pool:get_database_options(Context),
+    Host = proplists:get_value(dbhost, All),
+    Port = proplists:get_value(dbport, All),
+    User = proplists:get_value(dbuser, All),
+    Password = proplists:get_value(dbpassword, All),
+    Database = proplists:get_value(dbdatabase, All),
+    Schema = proplists:get_value(dbschema, All),
+    
     DumpFile = filename:join([dir(Context), z_convert:to_list(Name) ++ ".sql"]),
     PgPass = filename:join([dir(Context), ".pgpass"]),
     ok = file:write_file(PgPass, z_convert:to_list(Host)
@@ -338,12 +340,15 @@ pg_dump(Name, Context) ->
                    false -> [" -n '", Schema, "' "]
                end,
                Database],
+
     Result = case os:cmd(binary_to_list(iolist_to_binary(Command))) of
                  [] ->
+                     z_session_manager:broadcast(#broadcast{type="info", message="Backup completed.", title="mod_backup", stay=false}, Context),
                      ok;
-                 _Output ->
-                     ?zWarning(_Output, Context),
-                     {error, _Output}
+                 Output ->
+                     ?zWarning(Output, Context),
+                     z_session_manager:broadcast(#broadcast{type="error", message=Output, title="mod_backup", stay=false}, Context),
+                     {error, Output}
              end,
     ok = file:delete(PgPass),
     Result.
