@@ -18,6 +18,8 @@ The addsite command is highly configurable and takes the following options:
   -H <host>    Site's hostname (default: <site_name>.dev)
   -T <dir>     Target directory (default: /home/arjan)
   -l           Create the site directly under Zotonic's priv/sites directory (instead of using a symlink)
+  -T <dir>     Target directory (default: /home/arjan)
+  -g <remote>  Create a git repository in the site and push it to the given remote
 
   -h <host>    Database host (default: localhost)
   -p <port>    Database port (default: 5432)
