@@ -14,9 +14,15 @@
             <h2>{_ Dashboard _}</h2>
 
             <div class="well">
-                {% button   class="btn btn-primary" 
-                        text=_"Make a new page or media" 
-                        action={dialog_new_rsc title=""} %}
+                {% button
+                    class="btn btn-primary" 
+                    text=_"Make a new page or media" 
+                    action={
+                        dialog_new_rsc
+                        title=""
+                        cat=q.qcat
+                    }
+                %}
 
                 {% all include "_admin_make_page_buttons.tpl" %}
 
