@@ -31,7 +31,7 @@
 
 to_block(Q) ->
     [
-        {type, survey_matching},
+        {type, survey_likert},
         {is_required, Q#survey_question.is_required},
         {name, z_convert:to_binary(Q#survey_question.name)},
         {prompt, z_convert:to_binary(Q#survey_question.question)}
@@ -44,12 +44,19 @@ answer(Block, Answers, _Context) ->
         undefined -> {error, missing}
     end.
 
-
 prep_chart(_Block, [], _Context) ->
     undefined;
 prep_chart(Block, [{_, Vals}], Context) ->
-    Labels = [<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>],
-    LabelsDisplay = [<<"Strongly agree">>,<<"Agree">>,<<"Neutral">>,<<"Disagree">>,<<"Strongly disagree">>],
+    Labels = [
+        <<"5">>,<<"4">>,<<"3">>,<<"2">>,<<"1">>
+    ],
+    LabelsDisplay = [
+        <<"Strongly agree">>,
+        <<"Agree">>,
+        <<"Neutral">>,
+        <<"Disagree">>,
+        <<"Strongly disagree">>
+    ],
 
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
