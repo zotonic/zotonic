@@ -37,7 +37,9 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, z_context:ensure_qs(Context)),
+    Context1 = z_context:set(DispatchArgs, 
+    				z_context:continue_session(
+    					z_context:ensure_qs(Context))),
     Id = get_id(DispatchArgs, Context1),
     Medium = m_media:get(Id, Context1),
     {true, ReqData, {Id, Medium, Context1}}.
