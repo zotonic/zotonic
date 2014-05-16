@@ -56,6 +56,8 @@ is_authorized(ReqData, Context) ->
     case z_context:get(acl, Context1) of
         undefined -> 
             is_authorized_action(Context1);
+        ignore ->
+            ?WM_REPLY(true, Context1);
         is_auth -> 
             case z_auth:is_auth(Context1) of
                 true -> is_authorized_action(Context1);

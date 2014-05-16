@@ -22,3 +22,8 @@ option, and accepts the following options:
 |                      |                                             |                             |
 |                      |                                             |                             |
 +----------------------+---------------------------------------------+-----------------------------+
+|ignore                |Don’t peform any access control checks.      |{acl, ignore}                |
+|                      |Be careful to add your own checks in the     |                             |
+|                      |rendered template and all its included       |                             |
+|                      |templates.                                   |                             |
++----------------------+---------------------------------------------+-----------------------------+
