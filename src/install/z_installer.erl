@@ -130,6 +130,7 @@ upgrade(C, Database, Schema) ->
     ok = install_rsc_gone(C, Database, Schema),
     ok = install_rsc_page_path_log(C, Database, Schema),
     ok = upgrade_config_schema(C, Database, Schema),
+    ok = install_pivot_location(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -219,7 +220,6 @@ extent_mime(C, Database, Schema) ->
             nop
     end,
     ok.
-    
 
 install_identity_is_verified(C, Database, Schema) ->
     case has_column(C, "identity", "is_verified", Database, Schema) of
@@ -277,7 +277,7 @@ install_geocode(C, Database, Schema) ->
             {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_pivot_geocode_key ON rsc (pivot_geocode)"),
             ok;
         <<"bigint">> ->
-            % 0.9dev was missing a column definition in the z_install.erl
+            %% 0.9dev was missing a column definition in the z_install.erl
             case has_column(C, "rsc", "pivot_geocode_qhash", Database, Schema) of
                 true -> 
                     ok;
@@ -287,7 +287,7 @@ install_geocode(C, Database, Schema) ->
             end
     end.
 
-% Install the table tracking deleted (or moved) resources
+%% Install the table tracking deleted (or moved) resources
 install_rsc_gone(C, Database, Schema) ->
     case has_table(C, "rsc_gone", Database, Schema) of
         false ->
@@ -323,8 +323,27 @@ install_rsc_gone_1(C) ->
     {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)"),
     ok.
 
+install_pivot_location(C, Database, Schema) ->
+    Added = lists:foldl(fun(Col, Acc) ->
+                          case has_column(C, "rsc", Col, Database, Schema) of
+                              true -> 
+                                  Acc;
+                              false ->
+                                  {ok, [], []} = pgsql:squery(C, "alter table rsc add column " ++ Col ++ " float"),
+                                  true
+                          end
+                        end,
+                        false,
+                        ["pivot_location_lat", "pivot_location_lng"]),
+    case Added of
+        true ->
+            {ok, [], []} = pgsql:squery(C, "CREATE INDEX rsc_pivot_location_key ON rsc (pivot_location_lat, pivot_location_lng)"),
+            ok;
+        false ->
+            ok
+    end.
 
-% Perform some simple sanity checks
+%% Perform some simple sanity checks
 sanity_check(C, _Database, _Schema) ->
     ensure_module_active(C, "mod_authentication"),
     ok.
