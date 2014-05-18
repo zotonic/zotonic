@@ -439,7 +439,9 @@ pivot_resource(Id, Context) ->
         {pivot_date_end, proplists:get_value(pivot_date_end, PropsPrePivoted)},
         {pivot_date_start_month_day, proplists:get_value(pivot_date_start_month_day, PropsPrePivoted)},
         {pivot_date_end_month_day, proplists:get_value(pivot_date_end_month_day, PropsPrePivoted)},
-        {pivot_title, proplists:get_value(pivot_title, PropsPrePivoted)}
+        {pivot_title, proplists:get_value(pivot_title, PropsPrePivoted)},
+        {pivot_location_lat, z_convert:to_float(proplists:get_value(location_lat, R))},
+        {pivot_location_lng, z_convert:to_float(proplists:get_value(location_lng, R))}
     ],
     
     KVsFolded = z_notifier:foldr(#pivot_fields{id=Id, rsc=R}, KVs, Context),

@@ -153,6 +153,9 @@ model_pgsql() ->
       pivot_geocode_qhash bytea,
       pivot_title character varying(100),
 
+      pivot_location_lat float,
+      pivot_location_lng float,
+
       CONSTRAINT rsc_pkey PRIMARY KEY (id),
       CONSTRAINT rsc_uri_key UNIQUE (uri),
       CONSTRAINT rsc_name_key UNIQUE (name),
@@ -188,6 +191,7 @@ model_pgsql() ->
      "CREATE INDEX rsc_pivot_postcode_key ON rsc (pivot_postcode)",
      "CREATE INDEX rsc_pivot_geocode_key ON rsc (pivot_geocode)",
      "CREATE INDEX rsc_pivot_title_key ON rsc (pivot_title)",
+     "CREATE INDEX rsc_pivot_location_key ON rsc (pivot_location_lat, pivot_location_lng)",
 
                                                 % Table: rsc_gone
                                                 % Tracks deleted or moved resources, adding "410 gone" support
