@@ -52,7 +52,7 @@ malformed_request(ReqData, Context) ->
                             {is_touch, z_convert:to_bool(z_context:get_q("t", C1))}
                            ],
                            C1),
-        maybe_set_tz(?DEBUG(z_context:get_q("tz", C2)), C2),
+        maybe_set_tz(z_context:get_q("tz", C2), C2),
         ?WM_REPLY(false, C2)
     catch
         _:_ -> {true, ReqData, Context}
