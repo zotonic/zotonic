@@ -29,7 +29,7 @@
 -include_lib("include/zotonic.hrl").
 
 -define(LOGON_REMEMBERME_COOKIE, "z_logon").
--define(LOGON_REMEMBERME_DAYS, 3650).
+-define(LOGON_REMEMBERME_DAYS, 365).
 
 
 init(DispatchArgs) -> {ok, DispatchArgs}.
@@ -279,11 +279,23 @@ get_rememberme_cookie(Context) ->
                 case z_utils:decode_value_expire(Value1, Context) of
                     {error, expired} -> 
                         undefined;
-                    {ok, UserId} when is_integer(UserId) ->
-						case z_auth:is_enabled(UserId, Context) of
-							true -> {ok, UserId};
-							false -> undefined
-						end
+                    {ok, Cookie} ->
+                        case check_rememberme_cookie_value(Cookie, Context) of
+                            {ok, UserId} ->
+                                case z_auth:is_enabled(UserId, Context) of
+                                    true -> {ok, UserId};
+                                    false -> undefined
+                                end;
+                            {error, expired} ->
+                                lager:debug("Expired rememberme cookie value ~p", [Cookie]),
+                                undefined;
+                            {error, enoent} ->
+                                lager:debug("Unknown rememberme cookie value ~p", [Cookie]),
+                                undefined;
+                            {error, Error} ->
+                                lager:warning("Illegal rememberme cookie value ~p (~p)", [Cookie, Error]),
+                                undefined
+                        end
                 end
             catch
                 _:_ -> undefined
@@ -294,7 +306,8 @@ get_rememberme_cookie(Context) ->
 %% @doc Set the 'rememberme' cookie.  Let it expire after some days.
 set_rememberme_cookie(UserId, Context) ->
     Expire = add_days(?LOGON_REMEMBERME_DAYS, calendar:universal_time()),
-    Value = z_utils:url_encode(z_convert:to_list(z_utils:encode_value_expire(UserId, Expire, Context))),
+    ToEncode = make_rememberme_cookie_value(UserId, Context),
+    Value = z_utils:url_encode(z_convert:to_list(z_utils:encode_value_expire(ToEncode, Expire, Context))),
     RD = z_context:get_reqdata(Context),
     Options = [
         {max_age, ?LOGON_REMEMBERME_DAYS*3600*24},
@@ -324,6 +337,20 @@ reset_rememberme_cookie(Context) ->
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).
 
+
+check_rememberme_cookie_value({ok, UserId}, _Context) when is_integer(UserId) ->
+    {error, expired};
+check_rememberme_cookie_value({ok, {v1, Token}}, Context) ->
+    case m_identity:lookup_by_rememberme_token(Token, Context) of
+        {ok, UserId} ->
+            {ok, UserId};
+        {error, _} = Error ->
+            Error
+    end.
+
+make_rememberme_cookie_value(UserId, Context) ->
+    {ok, Token} = m_identity:get_rememberme_token(UserId, Context),
+    {ok, {v1, Token}}.
 
 % @doc Find all identities with the given handle.  The handle is either an e-mail address or an username.
 lookup_identities(Handle, Context) ->

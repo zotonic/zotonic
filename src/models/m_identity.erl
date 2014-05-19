@@ -50,6 +50,10 @@
     lookup_by_type_and_key/3,
     lookup_by_type_and_key_multi/3,
 
+    lookup_by_rememberme_token/2,
+    get_rememberme_token/2,
+    reset_rememberme_token/2,
+
 	set_by_type/4,
 	set_by_type/5,
 	delete_by_type/3,
@@ -195,6 +199,7 @@ set_username_pw(Id, Username, Password, Context) ->
             end,
             case z_db:transaction(F, Context) of
                 1 ->
+                    reset_rememberme_token(Id, Context),
                     z_depcache:flush(Id, Context),
                     ok;
                 R ->
@@ -261,6 +266,55 @@ check_email_pw_1([Idn|Rest], Email, Password, Context) ->
                 {error, password} ->
                     check_email_pw_1(Rest, Email, Password, Context)
             end
+    end.
+
+%% @doc Find the user id connected to the 'rememberme' cookie value.
+-spec lookup_by_rememberme_token(binary(), #context{}) -> {ok, pos_integer()} | {error, enoent}.
+lookup_by_rememberme_token(Token, Context) ->
+    case z_db:q1("select rsc_id from identity where key = $1", [Token], Context) of
+        undefined ->
+            {error, enoent};
+        Id when is_integer(Id) ->
+            {ok, Id}
+    end.
+
+%% @doc Find the 'rememberme' cookie value for the user, generate a new one if not found.
+-spec get_rememberme_token(pos_integer(), #context{}) -> {ok, binary()}.
+get_rememberme_token(UserId, Context) ->
+    case z_db:q1("select key from identity
+                  where type = 'rememberme'
+                    and rsc_id = $1", [UserId], Context) of
+        undefined ->
+            reset_rememberme_token(UserId, Context);
+        Token ->
+            {ok, Token}
+    end.
+
+%% @doc Reset the 'rememberme' cookie value. Needed if an user's password is changed.
+-spec reset_rememberme_token(pos_integer(), #context{}) -> {ok, binary()}.
+reset_rememberme_token(UserId, Context) ->
+    z_db:transaction(
+        fun(Ctx) ->
+            delete_by_type(UserId, rememberme, Ctx),
+            Token = new_unique_key(rememberme, Ctx),
+            {ok, _} = insert_unique(UserId, rememberme, Token, Ctx),
+            {ok, Token}
+        end,
+        Context).
+
+new_unique_key(Type, Context) ->
+    Key = z_convert:to_binary(z_ids:id()),
+    case z_db:q1("select id
+                  from identity
+                  where type = $1
+                    and key = $2",
+                 [Type, Key],
+                 Context)
+    of
+        undefined ->
+            Key;
+        _Id ->
+            new_unique_key(Type, Context)
     end.
 
 
