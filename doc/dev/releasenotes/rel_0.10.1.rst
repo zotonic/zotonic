@@ -8,6 +8,10 @@ mod_development
   Added dispatch debugging and explanation.
   Added checkbox to disable the api-service ``/api/development/recompile``
 
+mod_admin_modules  
+  Add "configure" button in the module manager for modules which contain a template called ``_admin_configure_module.tpl``.
+
+
 New notification
 ----------------
 
