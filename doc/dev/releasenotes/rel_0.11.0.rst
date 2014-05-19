@@ -46,3 +46,12 @@ New notification
 Added the notification ``request_context``. This is a foldl with the `Context` and is 
 called after the request’s query arguments are parsed using ``z_context:ensure_qs/1``.
 It can be used to perform transformations or actions based on the query arguments.
+
+
+Misc
+----
+
+Rememberme cookie changes
+    The *rememberme* cookie (used for automatic logon) is now based on a token instead of
+    the user-id. The token is reset if the user’s password is changed.
+    Cookies set using the previous scheme are invalidated.
