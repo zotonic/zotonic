@@ -259,7 +259,7 @@ function z_do_postback(triggerID, postback, extraParams)
     var params =
         "postback=" + urlencode(postback) +
         "&z_trigger_id=" + urlencode(triggerID) +
-        "&z_pageid=" + urlencode(z_pageid) +
+        "&" + z_stream_args() +
         "&" + $.param(extraParams);
 
     // logon_form and .setcookie forms are always posted, as they will set cookies.
@@ -581,7 +581,7 @@ function z_websocket_start()
     }
 
     try {
-        z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?z_pageid="+z_pageid+"&z_ua="+z_ua);
+        z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?" + z_stream_args("websocket"));
     } catch (e) {
         z_ws_pong_count = 0;
     }
@@ -656,6 +656,21 @@ function z_websocket_restart()
         z_ws_pong_count = 0;
         z_websocket_start();
     }
+}
+
+function z_stream_args(stream_type)
+{
+    var args = "z_pageid=" + urlencode(z_pageid);
+
+    // Set the z_ua because we can't derive it from the ws handshake.
+    if(stream_type == "websocket")
+        args += "&z_ua=" + urlencode(z_ua);
+
+    // Set z_sid when it is available. Can be used if there are problems with cookies.
+    if(window.z_sid)
+        args += "&z_sid=" + urlencode(z_sid);
+
+    return args;
 }
 
 /* Utility functions

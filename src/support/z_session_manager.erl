@@ -427,14 +427,11 @@ start_session(Action, CurrentSessionId, Context) ->
 get_session_cookie(Context) ->
     case z_context:get_cookie(?SESSION_COOKIE, Context) of
         undefined ->
-            % Check the z_sid query args
-            ReqData = z_context:get_reqdata(Context),
-            case wrq:get_qs_value("z_sid", ReqData) of
+            % Check the z_sid in query or dispatch args
+            case z_context:get_q(z_sid, Context) of
                 undefined ->
-                    case dict:find(z_sid, wrq:path_info(ReqData)) of
-                        {ok, SessionId} -> SessionId;
-                        error -> undefined
-                    end;
+                    % and as last resort check the context to support custom mechanisms
+                    z_context:get(z_sid, Context);
                 SessionId ->
                     SessionId
             end;
