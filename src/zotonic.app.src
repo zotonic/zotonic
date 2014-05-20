@@ -15,7 +15,7 @@
   {env, []},
   {applications, [kernel, stdlib, crypto, mnesia,
                   bert, dh_date, eiconv, lager, folsom,
-                  mimetypes, webzmachine, z_stdlib,
+                  depcache, mimetypes, webzmachine, z_stdlib,
                   poolboy, sendfile, public_key, ssl,
                   jobs, gproc, filezcache, s3filez,
                   qdate
