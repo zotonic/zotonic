@@ -7,7 +7,7 @@
 {% if not is_tinymce_include %}
 <script type="text/javascript">
 $(document).ready(function(){
-	{% all catinclude "_admin_tinymce_overrides_js.tpl" id %}
+{% all include overrides_tpl id %}
     z_tinymce_init();
 });
 </script>

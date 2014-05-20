@@ -39,7 +39,7 @@ tinymce.PluginManager.add('codemirror', function(editor, url) {
 
 	// Add a button to the button bar
 	editor.addButton('code', {
-		title: 'Source code',
+		tooltip: 'Source code',
 		icon: 'code',
 		onclick: showSourceEditor
 	});

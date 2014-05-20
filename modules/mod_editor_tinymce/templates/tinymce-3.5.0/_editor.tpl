@@ -6,8 +6,8 @@
 <script type="text/javascript" src="/lib/js/3.5.0/tinymce/jquery.tinymce.js"></script>
 {% if not is_tinymce_include %}
 <script type="text/javascript">
-$(document).ready(function(){
-	{% all catinclude "_admin_tinymce_overrides_js.tpl" id %}
+$(document).ready(function() {
+{% all include overrides_tpl id %}
     z_tinymce_init();
 });
 </script>

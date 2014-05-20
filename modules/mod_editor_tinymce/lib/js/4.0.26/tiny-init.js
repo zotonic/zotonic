@@ -2,7 +2,7 @@ tinyInit = {
     selector: "textarea",
 	mode: "none",
 	theme: "modern",
-	plugins: "compat3x,codemirror,paste,table,zlink,zmedia,autosave,directionality,zbdo",
+	plugins: "compat3x,codemirror,paste,table,zlink,zmedia,autosave,directionality",
 	menubar: "edit format table tools insert",
 	toolbar: "styleselect | bold italic | alignleft aligncenter alignright | " +
 		"bullist numlist outdent indent | ltr rtl | zlink zmedia | code",
@@ -13,7 +13,7 @@ tinyInit = {
     },
     
     content_css: "/lib/js/4.0.26/zotonic.css", 
-    language : 'en',
+//    language : "en", // set in _admin_tinymce_overrides_js.tpl
     
 	/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
 	/* See: http://www.tinymce.com/wiki.php/Configuration:valid_elements */
@@ -35,9 +35,7 @@ tinyInit = {
 	+ "q[cite],samp,small,"
 	+ "tt,var,big,"
 	+ "section,header,nav,article,footer,audio,video",
-	
-	/* Rest of init config to sort out */
-	 
+		 
 	relative_urls: "", 
 	remove_script_host: "", 
 	convert_urls: "", 

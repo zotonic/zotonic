@@ -1,1 +1,4 @@
-{% include "_editor_" ++ m.config.mod_editor_tinymce.version.value ++ ".tpl" %}
+{% include
+    "tinymce-" ++ m.config.mod_editor_tinymce.version.value ++ "/_editor.tpl"
+    overrides_tpl="_admin_tinymce_overrides_js.tpl"
+%}

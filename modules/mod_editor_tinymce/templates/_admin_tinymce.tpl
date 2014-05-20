@@ -1,1 +1,1 @@
-{% include "_editor.tpl" %}
+{% extends "_editor.tpl" %}

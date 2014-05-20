@@ -7,6 +7,8 @@
  * @copyright Copyright 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
+tinymce.PluginManager.requireLangPack('zmedia');
+
 (function () {
     "use strict";
     window.tinyMCEzMedia = {
@@ -81,7 +83,7 @@
             // Register buttons
             ed.addButton("zmedia", {
                 icon: 'image',
-                title : "Insert a Zotonic media item.",
+                title : "Insert a Zotonic media item",
                 cmd : "mceZotonicMedia",
                 "class": "mce_image"
             });
@@ -94,6 +96,7 @@
                 cmd : "mceZotonicMedia",
                 "class": "mce_image"
             });
+            
         },
 
         getInfo : function () {

@@ -23,7 +23,7 @@ tinymce.PluginManager.add('zlink', function(editor, url) {
     
     // Add a button to the button bar
 	editor.addButton('zlink', {
-		title: 'Insert internal link',
+		title: 'Insert an internal link',
 		icon: 'link',
 		onclick: showLinkDialog
 	});
