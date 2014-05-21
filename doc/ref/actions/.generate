@@ -27,7 +27,7 @@ ${action//?/=}
 
 EOF
 
-    if [ ! -e $doc ]; then 
+    if [ ! -e $doc -a "$base" != "" ]; then 
         echo "New doc: $doc"
         cat <<EOF > $doc
 
