@@ -45,6 +45,7 @@
 
    mod_acl_adminonly,
    mod_authentication,
+   mod_editor_tinymce,
 
    mod_admin,
    mod_admin_category,

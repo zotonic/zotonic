@@ -86,6 +86,7 @@ get_skeleton_modules(empty) ->
 
      mod_authentication,
      mod_acl_adminonly,
+     mod_editor_tinymce,
 
      mod_admin,
      mod_admin_category,
@@ -113,6 +114,7 @@ get_skeleton_modules(blog) ->
 
      mod_authentication,
      mod_acl_adminonly,
+     mod_editor_tinymce,
 
      mod_admin,
      mod_admin_category,
