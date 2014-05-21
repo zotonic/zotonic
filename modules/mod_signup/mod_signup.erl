@@ -252,7 +252,7 @@ manage_schema(install, _Context) ->
                             {visible_for, 0},
                             {page_path, "/terms"},
                             {title, "Terms of Service"},
-                            {summary, "These Terms of Service (“Terms”) govern your access to and use of the services and COMPANY’s web sites (the “Services”), and any information, text, graphics, or other materials uploaded, downloaded or appearing on the Services (collectively referred to as “Content”). Your access to and use of the Services is conditioned on your acceptance of and compliance with these Terms. By accessing or using the Services you agree to be bound by these Terms."},
+                            {summary, <<"These Terms of Service (“Terms”) govern your access to and use of the services and COMPANY’s web sites (the “Services”), and any information, text, graphics, or other materials uploaded, downloaded or appearing on the Services (collectively referred to as “Content”). Your access to and use of the Services is conditioned on your acceptance of and compliance with these Terms. By accessing or using the Services you agree to be bound by these Terms.">>},
                             {body, "<h2>INSERT YOUR TERMS OF SERVICE HERE</h2>"}
                         ]},
             {signup_privacy, text, [
