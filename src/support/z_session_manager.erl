@@ -388,7 +388,6 @@ start_session(Action, CurrentSessionId, Context) ->
             Context3 = case SessionState of
                            new ->
                                Props = [
-                                   {auth_user_id, z_acl:user(Context2)},
                                    {remote_ip, m_req:get(peer, Context2)},
                                    {ua_class, z_user_agent:get_class(Context2)},
                                    {ua_props, z_user_agent:get_props(Context2)}
@@ -398,7 +397,6 @@ start_session(Action, CurrentSessionId, Context) ->
                                z_notifier:foldl(session_init_fold, Context2, Context2);
                            restart -> 
                                Props = [
-                                   {auth_user_id, z_acl:user(Context2)},
                                    {remote_ip, m_req:get(peer, Context2)},
                                    {ua_class, z_user_agent:get_class(Context2)},
                                    {ua_props, z_user_agent:get_props(Context2)}
