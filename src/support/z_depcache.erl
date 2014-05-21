@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2010  Marc Worrell
-%% @copyright 2014 Arjan Scherpenisse
+%% @copyright 2009-2010  Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% @doc z_depcache interface file for handing depcache functions from
 %% the Zotonic context.
