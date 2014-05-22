@@ -614,7 +614,7 @@ update_sequence(Table, Ids, Context) ->
     F = fun(C) when C =:= none -> 
 		[];
 	   (C) -> 
-		[ {ok, _} = equery1(DbDriver, C, "update \""++Table++"\" set seq = $2 where id = $1", Arg) || Arg <- Args ]
+		[ {ok, _} = equery1(DbDriver, C, "update \""++Table++"\" set seq = $2 where id = $1", tuple_to_list(Arg)) || Arg <- Args ]
 	   end,
     with_connection(F, Context).
 
