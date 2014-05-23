@@ -67,7 +67,10 @@
                     dialog.css({top: ($(window).scrollTop() + 10) + "px"});
                  } else if (dialog.height() > 0.8 * $(window).height()) {
                     dialog.addClass('high');
+                 } else {
+                   dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
                  }
+
                  if (typeof($.widgetManager) != 'undefined') {
                      dialog.widgetManager();
                  }
