@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% Date: 2010-11-22
-%% @doc Add tinyMCE controls to all textarea.tinymce in the target
+%% @doc Add WYSIWYG editor controls to all textarea.z_editor in the target
 
 %% Copyright 2010 Marc Worrell
 %%
@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(action_base_tinymce_add).
+-module(action_base_editor_remove).
 -include("zotonic.hrl").
 -export([
     render_action/4
@@ -25,5 +25,4 @@
 
 render_action(_TriggerId, TargetId, Args, Context) ->
     CssSelector = z_render:css_selector(proplists:get_value(id, Args, TargetId), Args),
-    {[ <<"z_tinymce_add(\"">>, z_utils:js_escape(CssSelector), $", $), $;], Context}.
-    
+    {[ <<"z_editor_remove(\"">>, z_utils:js_escape(CssSelector), $", $), $;], Context}.
