@@ -153,10 +153,12 @@ do_scan(State) ->
     SafeDropFiles = lists:foldl(fun(F, Acc)-> min_age_check(F, MinAge, Acc) end,
                                 [],
                                 AllDropFiles), 
-    Moved      = lists:map(fun(F) -> move_file(DropDir, F, false, ProcDir) end, SafeDropFiles),
+    Moved      = lists:map(fun(F) -> {F,move_file(DropDir, F, false, ProcDir)} end, SafeDropFiles),
     ToProcess1 = lists:foldl(   fun
-                                    ({ok, File}, Acc) -> [File|Acc];
-                                    ({error, _Reason}, Acc) -> Acc
+                                    ({_, {ok, File}}, Acc) -> [File|Acc];
+                                    ({F, {error, Reason}}, Acc) ->
+                                        lager:warning("z_dropbox: Failed to move file: ~p to ~p: ~p", [F, ProcDir, Reason]),
+                                        Acc
                                 end,
                                 ToProcess,
                                 Moved),
