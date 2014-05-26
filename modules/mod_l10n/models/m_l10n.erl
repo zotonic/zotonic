@@ -126,7 +126,6 @@ timezones() ->
         <<"Australia/Brisbane">>,
         <<"Australia/Darwin">>,
         <<"Australia/Eucla">>,
-        <<"Australia/Eucla">>,
         <<"Australia/Lord_Howe">>,
         <<"Australia/Sydney">>,
         <<"Europe/Berlin">>,

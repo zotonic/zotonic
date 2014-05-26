@@ -30,6 +30,7 @@
     observe_session_init_fold/3,
     observe_session_context/3,
     observe_auth_logon/3,
+    observe_user_context/3,
     observe_set_user_language/3,
     observe_url_rewrite/3,
     observe_dispatch_rewrite/3,
@@ -114,7 +115,14 @@ observe_session_context(session_context, Context, _Context) ->
         undefined -> Context1;
         QsLang -> try_set_language(QsLang, Context1)
     end.
-    
+
+observe_user_context(#user_context{id=UserId}, Context, _Context) ->
+    case m_rsc:p_no_acl(UserId, pref_language, Context) of
+        Code when is_atom(Code), Code /= undefined -> 
+            z_context:set_language(Code, Context);
+        _ ->
+            Context
+    end.
 
 observe_auth_logon(auth_logon, Context, _Context) ->
     UserId = z_acl:user(Context),

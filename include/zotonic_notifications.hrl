@@ -301,6 +301,8 @@
 %% Return true, false or undefined
 -record(user_is_enabled, {id}).
 
+%% @doc Set #context fields depending on the user and/or the preferences of the user. (foldl)
+-record(user_context, {id}).
 
 %% @doc Request API logon
 -record(service_authorize, {service_module}).

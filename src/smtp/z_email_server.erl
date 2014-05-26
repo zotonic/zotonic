@@ -499,7 +499,7 @@ encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw
 encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
     %% Optionally render the text and html body
     Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
-    ContextRender = set_render_language(Vars, Context),
+    ContextRender = set_recipient_prefs(Vars, Context),
     Text = optional_render(Email#email.text, Email#email.text_tpl, Vars, ContextRender),
     Html = optional_render(Email#email.html, Email#email.html_tpl, Vars, ContextRender),
 
@@ -766,19 +766,13 @@ optional_render(undefined, Template, Vars, Context) ->
     {Output, _Context} = z_template:render_to_iolist(Template, Vars, Context),
     binary_to_list(iolist_to_binary(Output)).
 
-set_render_language(Vars, Context) ->
+set_recipient_prefs(Vars, Context) ->
     case proplists:get_value(recipient_id, Vars) of
         UserId when is_integer(UserId) ->
-            case m_rsc:p_no_acl(UserId, pref_language, Context) of
-                Code when is_atom(Code), Code /= undefined -> 
-                    z_context:set_language(Code, Context);
-                _ ->
-                    Context
-            end;
+            z_notifier:foldl(#user_context{id=UserId}, Context, Context);
         _Other ->
             Context
-   end.
-    
+    end.    
 
 %% @doc Mark email as sent by adding the 'sent' timestamp. 
 %%      This will schedule it for deletion as well.

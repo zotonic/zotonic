@@ -40,6 +40,7 @@
          anondo/1,
          anondo/2,
          logon/2,
+         logon_prefs/2,
          logoff/1,
 
          wm_is_authorized/2,
@@ -269,6 +270,7 @@ is_admin(_) -> false.
 
 %% @doc Call a function as the anonymous user.
 %% @spec anondo(FuncDef, #context{}) -> FuncResult
+-spec anondo({atom(),atom()}|{atom(),atom(),list()}|function(), #context{}) -> any().
 anondo({M,F}, Context) ->
     erlang:apply(M, F, [set_anonymous(Context)]);
 anondo({M,F,A}, Context) ->
@@ -279,21 +281,27 @@ anondo(F, Context) when is_function(F, 1) ->
 anondo(Context) ->
     set_anonymous(Context).
 
+-spec set_anonymous(#context{}) -> #context{}.
 set_anonymous(Context) ->
     Context#context{acl=undefined, user_id=undefined}.
 
 
 %% @doc Log the user with the id on, fill the acl field of the context
-%% @spec logon(integer(), #context{}) -> #context{}
+-spec logon(pos_integer(), #context{}) -> #context{}.
 logon(Id, Context) ->
     case z_notifier:first(#acl_logon{id=Id}, Context) of
         undefined -> Context#context{acl=undefined, user_id=Id};
         #context{} = NewContext -> NewContext
     end.
 
+%% @doc Log the user with the id on, fill acl and set all user preferences (like timezone and language)
+-spec logon_prefs(pos_integer(), #context{}) -> #context{}.
+logon_prefs(Id, Context) ->
+    z_notifier:foldl(#user_context{id=Id}, z_acl:logon(Id, Context), Context).
+
 
 %% @doc Log off, reset the acl field of the context
-%% @spec logoff(#context{}) -> #context{}
+-spec logoff(#context{}) -> #context{}.
 logoff(Context) ->
     case z_notifier:first(#acl_logoff{}, Context) of
         undefined -> Context#context{user_id=undefined, acl=undefined};

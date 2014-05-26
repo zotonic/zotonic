@@ -103,6 +103,7 @@
     set_language/2,
 
     tz/1,
+    tz_config/1,
     set_tz/2,
 
     merge_scripts/2,
@@ -180,7 +181,7 @@ new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
     Context = set_server_names(#context{host=Host}),
     Context#context{
         language=Lang,
-        tz=timezone_config(Context)
+        tz=tz_config(Context)
     };
 %% @doc Create a new context record for the current request and resource module
 new(ReqData, Module) ->
@@ -195,17 +196,8 @@ new(ReqData, Module) ->
 set_default_language_tz(Context) ->
     Context#context{
         language=z_trans:default_language(Context),
-        tz=timezone_config(Context)
+        tz=tz_config(Context)
     }.
-
-timezone_config(Context) ->
-    case m_config:get_value(site, timezone, Context) of
-        undefined ->
-            z_config:get(timezone, Context#context.tz);
-        TZ ->
-            TZ
-    end.
-
 
 % @doc Create a new context used when testing parts of zotonic
 new_tests() ->
@@ -901,11 +893,12 @@ incr(Key, Value, Context) ->
 
 
 %% @doc Return the selected language of the Context
+-spec language(#context{}) -> atom().
 language(Context) ->
     Context#context.language.
 
 %% @doc Set the language of the context.
-%% @spec set_language(atom(), context()) -> context()
+-spec set_language(atom()|binary()|string(), #context{}) -> #context{}.
 set_language(Lang, Context) when is_atom(Lang) ->
     Context#context{language=Lang};
 set_language(Lang, Context) ->
@@ -915,9 +908,22 @@ set_language(Lang, Context) ->
         false -> Context
     end.
 
-%% @doc Return the selected timezone of the Context
-tz(#context{tz=Tz}) ->
-    Tz.
+%% @doc Return the selected timezone of the Context; defaults to the site's timezone
+-spec tz(#context{}) -> binary().
+tz(#context{tz=TZ}) when TZ =/= undefined; TZ =/= <<>> ->
+    TZ;
+tz(Context) ->
+    tz_config(Context).
+
+%% @doc Return the site's configured timezone.
+-spec tz_config(#context{}) -> binary().
+tz_config(Context) ->
+    case m_config:get_value(mod_l10n, timezone, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            z_config:get(timezone, <<"UTC">>);
+        TZ ->
+            TZ
+    end.
 
 %% @doc Set the timezone of the context.
 -spec set_tz(string()|binary(), #context{}) -> #context{}.
