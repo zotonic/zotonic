@@ -687,7 +687,7 @@ object_predicates(Id, Context) ->
     end,
     z_depcache:memo(F, {object_preds, Id}, ?DAY, [Id], Context).
 
-%% @doc Return the list of predicates is use by edges from subjects to the id
+%% @doc Return the list of predicates in use by edges from subjects to the id
 %% @spec subject_predicates(Id, Context) -> List
 subject_predicates(Id, Context) ->
     F = fun() ->
