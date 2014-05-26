@@ -74,5 +74,5 @@
 {% endblock %}
 
 {% javascript %}
-    z_tinymce_init();
+    z_editor_init();
 {% endjavascript %}

@@ -74,7 +74,7 @@
                  if (typeof($.widgetManager) != 'undefined') {
                      dialog.widgetManager();
                  }
-                 z_tinymce_add(dialog);
+                 z_editor_add(dialog);
              },
 
              dialogClose: function()
@@ -85,7 +85,7 @@
              dialogRemove: function(obj)
              {
                  obj = obj || $('#zmodal');
-                 z_tinymce_remove(obj);
+                 z_editor_remove(obj);
                  obj.draggable('destroy').resizable('destroy').fadeOut(300, function()
                                                                        {
                                                                            $(this).remove();

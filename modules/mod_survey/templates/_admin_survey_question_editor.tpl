@@ -1,5 +1,5 @@
 <div id="tinyinit">
-	{% lazy action={script script="z_tinymce_init();"} action={remove target="tinyinit"} %}
+	{% lazy action={script script="z_editor_init();"} action={remove target="tinyinit"} %}
 </div>
 
 {% with id.blocks|survey_as_pages as pages %}

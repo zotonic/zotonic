@@ -8,7 +8,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 {% all include overrides_tpl id %}
-    z_tinymce_init();
+    z_editor_init();
 });
 </script>
 {% endif %}

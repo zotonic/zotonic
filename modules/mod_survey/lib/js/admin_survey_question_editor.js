@@ -21,11 +21,11 @@ function ZSurveyEditor() {
 		revert: 'invalid',
 		axis: 'y',
 		start: function(event, ui) {
-			z_tinymce_save(ui.item);
-			z_tinymce_remove(ui.item);
+			z_editor_save(ui.item);
+			z_editor_remove(ui.item);
 		},
 		stop: function(event, ui) {
-			z_tinymce_add(ui.item);
+			z_editor_add(ui.item);
 		}
 	});
 
@@ -172,7 +172,7 @@ ZSurveyEditor.prototype.question_delete = function(id) {
 		on_confirm: function() {
 					$('#'+id).fadeOut('fast',
 							function() {
-								z_tinymce_remove($(this));
+								z_editor_remove($(this));
 								this.remove();
 							});
 					}
@@ -210,11 +210,11 @@ ZSurveyEditor.prototype.set_page_sorters = function(p) {
 		axis: 'y',
 		connectWith: ".question-list",
 		start: function(event, ui) {
-			z_tinymce_save(ui.item);
-			z_tinymce_remove(ui.item);
+			z_editor_save(ui.item);
+			z_editor_remove(ui.item);
 		},
 		stop: function(event, ui) {
-			z_tinymce_add(ui.item);
+			z_editor_add(ui.item);
 		}
 	});
 	$(".jump-list", p).sortable({
@@ -233,7 +233,7 @@ ZSurveyEditor.prototype.page_delete = function(id) {
 		on_confirm: function() {
 					$('#'+id).fadeOut('fast',
 							function() {
-								z_tinymce_remove($(this));
+								z_editor_remove($(this));
 								this.remove();
 							});
 					}

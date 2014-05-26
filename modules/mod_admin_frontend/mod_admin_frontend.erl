@@ -48,5 +48,5 @@ maybe_load_edit_panel(Args, Context) ->
 				{tree_id, m_rsc:rid(z_context:get_q("tree_id", Context), Context)}
 			],
 			Context1 = z_render:update("editcol", #render{template={cat, "_admin_frontend_edit.tpl"}, vars=Vars}, Context),
-			z_script:add_script(<<"setTimeout(function() { z_tinymce_init(); }, 100);">>, Context1)
+			z_script:add_script(<<"setTimeout(function() { z_editor_init(); }, 100);">>, Context1)
 	end.

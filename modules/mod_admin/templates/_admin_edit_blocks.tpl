@@ -17,11 +17,11 @@ $('#edit-blocks').sortable({
     revert: 'invalid',
     axis: 'y',
     start: function(event, ui) {
-        z_tinymce_save($(this));
-        z_tinymce_remove($(this));
+        z_editor_save($(this));
+        z_editor_remove($(this));
     },
     stop: function(event, ui) {
-        z_tinymce_add($(this));
+        z_editor_add($(this));
     }
 })
 .on('click', '.icon-remove', function(event) { 
@@ -36,7 +36,7 @@ $('#edit-blocks').sortable({
                         $(block).fadeTo('fast', 0.0)
                                 .slideUp('normal', 0.0, 
                                  function() { 
-                                    z_tinymce_remove($(this)); 
+                                    z_editor_remove($(this)); 
                                     $(this).remove(); 
                                 });
                     }

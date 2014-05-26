@@ -12,7 +12,7 @@
     </div>
     {% if is_new %}
         {% javascript %}
-            z_tinymce_init();
+            z_editor_init();
         {% endjavascript %}
     {% endif %}
     

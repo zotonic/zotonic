@@ -439,38 +439,58 @@ function z_text_to_nodes(text)
     }
 }
 
-/* tinyMCE stuff
+/* WYSYWIG editor
 ---------------------------------------------------------- */
 
-/* Initialize all non-initialized tinymce controls */
-function z_tinymce_init()
+function z_editor_init()
 {
     if (z_editor !== undefined) {
         z_editor.init();
     }
 }
 
-function z_tinymce_add($element)
+function z_editor_add($element)
 {
     if (z_editor !== undefined) {
         z_editor.add($element);
     }
 }
 
-function z_tinymce_save($element)
+function z_editor_save($element)
 {
     if (z_editor !== undefined) {
         z_editor.save($element);
     }
 }
 
-function z_tinymce_remove(element)
+function z_editor_remove($element)
 {
     if (z_editor !== undefined) {
         z_editor.remove($element);
     }
 }
 
+/* Support legacy code */
+
+function z_tinymce_init()
+{
+    z_editor_init();
+}
+
+function z_tinymce_add($element)
+{
+    z_editor_add($element);
+}
+
+function z_tinymce_save($element)
+{
+    z_editor_save($element);
+}
+
+function z_tinymce_remove($element)
+{
+    z_editor_remove($element);
+}
 
 /* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
@@ -889,7 +909,7 @@ function z_init_postback_forms()
     .submit(function(event)
     {
         theForm = this;
-        z_tinymce_save(theForm);
+        z_editor_save(theForm);
 
         submitFunction = function(ev) {
             var arguments = $(theForm).formToArray();

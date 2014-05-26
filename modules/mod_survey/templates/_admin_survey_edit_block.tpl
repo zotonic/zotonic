@@ -10,7 +10,7 @@
         .attr('id', 'block-{{#s}}-name');
 
     setTimeout(function() { 
-        z_tinymce_init();
+        z_editor_init();
         z_admin_ensure_block_names();
     }, 100);
 {% endjavascript %}

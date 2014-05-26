@@ -25,7 +25,7 @@ $('#{{ #copy }}').click(function(e) {
 	if (selected.length > 0) {
 		var from = selected.attr('value');
 
-		z_tinymce_save($('body'));
+		z_editor_save($('body'));
 
 		// Copy language to the active language
 		$('.tab-pane.language-'+active).each(function() {

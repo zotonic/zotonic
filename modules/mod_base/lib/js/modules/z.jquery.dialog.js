@@ -47,7 +47,7 @@ limitations under the License.
 		dialogRemove: function(obj)
 		{
                         if(!$d) return;
-                        z_tinymce_remove($d);
+                        z_editor_remove($d);
                         $d.hide();
                         if($d.dialog) $d.dialog('destroy');
                         $d.remove();
