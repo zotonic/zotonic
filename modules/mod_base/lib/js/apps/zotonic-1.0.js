@@ -41,7 +41,7 @@ var z_unique_id_counter		= 0;
 var z_language				= "en";
 var z_ua					= "desktop";
 var z_pageid				= '';
-
+var z_editor;
 
 function z_set_page_id( page_id )
 {
@@ -439,61 +439,57 @@ function z_text_to_nodes(text)
     }
 }
 
-/* tinyMCE stuff
+/* WYSYWIG editor
 ---------------------------------------------------------- */
 
-/* Initialize all non-initialized tinymce controls */
-function z_tinymce_init()
+function z_editor_init()
 {
-    $(".tinymce-init:visible").each(function() {
-        var self = $(this);
-        setTimeout(function() {
-            var ti = jQuery.extend({}, tinyInit);
-            if (self.attr('dir')) {
-                ti.directionality = self.attr('dir');
-            }
-            self.tinymce(ti);
-        }, 200);
-    }).removeClass('tinymce-init').addClass('tinymce');
-}
-
-function z_tinymce_add(element)
-{
-    $("textarea.tinymce", element).each(function() {
-        if (typeof $(this).tinymce == 'function') {
-            var self = $(this);
-            setTimeout(function() {
-                if (typeof tinyInit == 'object') self.tinymce(tinyInit);
-                else self.tinymce({});
-            }, 200);
-        } else if (typeof tinyMCE == 'object') {
-            var mce_id = $(this).attr('id');
-            setTimeout(function() { tinyMCE.execCommand('mceAddControl',false, mce_id); }, 200);
-        }
-    });
-}
-
-function z_tinymce_save(element)
-{
-    var tiny = $("textarea.tinymce", element);
-    if (tiny.length > 0) {
-        if (typeof tiny.tinymce == "function") {
-            tiny.each(function() { $(this).tinymce().save(); });
-        } else if (typeof tinyMCE == 'object') {
-            tinyMCE.triggerSave(true,true);
-        }
+    if (z_editor !== undefined) {
+        z_editor.init();
     }
 }
 
-function z_tinymce_remove(element)
+function z_editor_add($element)
 {
-    $("textarea.tinymce", element).each( function() {
-        if (typeof(tinyMCE) != 'undefined') {
-            tinyMCE.execCommand('mceRemoveControl',false, $(this).attr('id'));
-        } else if (typeof $(this).tinymce == 'function') {
-            $(this).tinymce().remove();
-        }
-    });
+    if (z_editor !== undefined) {
+        z_editor.add($element);
+    }
+}
+
+function z_editor_save($element)
+{
+    if (z_editor !== undefined) {
+        z_editor.save($element);
+    }
+}
+
+function z_editor_remove($element)
+{
+    if (z_editor !== undefined) {
+        z_editor.remove($element);
+    }
+}
+
+/* Support legacy code */
+
+function z_tinymce_init()
+{
+    z_editor_init();
+}
+
+function z_tinymce_add($element)
+{
+    z_editor_add($element);
+}
+
+function z_tinymce_save($element)
+{
+    z_editor_save($element);
+}
+
+function z_tinymce_remove($element)
+{
+    z_editor_remove($element);
 }
 
 

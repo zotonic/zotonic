@@ -8,6 +8,7 @@
 
     "js/apps/admin-common.js"
     "js/modules/tiny-init.js"
+    "js/modules/tinymce3.5.0/z_editor.js"
     "js/modules/z.adminwidget.js"
     
     "js/jquery.ui.nestedSortable.js"
