@@ -23,7 +23,9 @@
 	{_ You are not allowed to edit the _} {{ m.rsc[r.category_id].title|lower }} “<span {% include "_language_attrs.tpl" %}>{{ r.title|striptags }}</span>”
 	</h2>
 	{% else %}
-	<p class="admin-chapeau">
+	    <p class="admin-chapeau">
+            {% include "_admin_edit_leader_image.tpl" %}
+            
 		{_ editing _}
 		{% if m.acl.insert[r.category.name|as_atom] and not r.is_a.category and not r.is_a.predicate %}
 		<a	href="javascript:;" id="changecategory" title="{_ Change category _}">{{ m.rsc[r.category_id].title|lower }}</a>:

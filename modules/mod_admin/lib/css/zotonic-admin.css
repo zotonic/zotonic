@@ -558,6 +558,21 @@ ul.suggestions-list li a:hover {
         margin-right: 4px;
     }
 
+
+/* small image in admin edit */
+.leader {
+    float: left;
+    margin-right: 10px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+}
+
+span.leader {
+    background: #eee;
+}
+
+
 /* growl message */
 .notice-wrap {
 	position: fixed;
@@ -741,4 +756,5 @@ span.icon_status_starting {
 div.modal div.tab-content {
     overflow: visible;
 }
+
 
