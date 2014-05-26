@@ -2,7 +2,7 @@ tinyInit = {
     selector: "textarea",
 	mode: "none",
 	theme: "modern",
-	plugins: "compat3x,codemirror,paste,table,zlink,zmedia,autosave,directionality",
+	plugins: "compat3x advlist codemirror paste table zlink zmedia autosave directionality",
 	menubar: "edit format table tools insert",
 	toolbar: "styleselect | bold italic | alignleft aligncenter alignright | " +
 		"bullist numlist outdent indent | ltr rtl | zlink zmedia | code",
@@ -48,6 +48,10 @@ tinyInit = {
 		bdo_ltr : {inline : 'bdo', attributes : {dir: 'ltr'}}
 	},
 
+    setup: function(editor) {
+        // setup code here
+    },
+    
 	/* Cleanup pasted html code */
 	paste_auto_cleanup_on_paste : true,
 	paste_convert_middot_lists: true, 
