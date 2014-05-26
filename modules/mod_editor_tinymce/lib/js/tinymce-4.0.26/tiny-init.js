@@ -12,7 +12,7 @@ tinyInit = {
         path: 'codemirror-4.1', // Path to CodeMirror distribution
     },
     
-    content_css: "/lib/js/4.0.26/zotonic.css", 
+    content_css: "/lib/js/tinymce-4.0.26/zotonic.css", 
 //    language : "en", // set in _admin_tinymce_overrides_js.tpl
     
 	/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
@@ -49,7 +49,7 @@ tinyInit = {
 	},
 
     setup: function(editor) {
-        // setup code here
+        // setup code here; override in _admin_tinymce_overrides_js.tpl
     },
     
 	/* Cleanup pasted html code */
