@@ -12,6 +12,16 @@ incompatible ways or get deprecated.
 Upgrading to Zotonic 0.11
 -------------------------
 
+Configuration change
+....................
+
+The global file ``priv/config`` has been obsoleted in place of a new file, ``priv/zotonic.config``. To upgrade, do the following:
+
+ * Copy ``priv/zotonic.config.in`` to ``priv/zotonic.config``
+ * Copy any settings from ``priv/config`` into the new ``priv/zotonic.config`` (IP addresses, etc)
+ * Then, remove the old file ``priv/config``, as it is no longer in use.
+
+
 Database changes
 ................
 
@@ -47,7 +57,10 @@ Modules moved out of core
 
 The ``mod_geomap`` repository has moved to its own dedicated
 repository. To keep using this module, you'll now need to install it
-as an external module: ``zotonic modules install mod_geomap``
+as an external module: ``zotonic modules install
+mod_geomap``. Alternatively, you can try the module ``mod_geo``
+(``zotonic modules install mod_geomap``) , which uses Google Maps in
+the admin.
 
 
 Upgrading to Zotonic 0.10

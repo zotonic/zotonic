@@ -71,33 +71,10 @@ init([]) ->
            {z_ids, start_link, []}, 
            permanent, 5000, worker, dynamic},
 
-    %% File based configuration, manages the file priv/config
-    Config = {z_config,
-              {z_config, start_link, []},
-              permanent, 5000, worker, dynamic},
-
     %% SMTP gen_servers: one for encoding and sending mails, the other for bounces
     SmtpServer = {z_email_server,
                   {z_email_server, start_link, []},
                   permanent, 5000, worker, dynamic},
-
-    %% Smtp listen to IP address, Domain and Port
-    SmtpListenDomain = case os:getenv("ZOTONIC_SMTP_LISTEN_DOMAIN") of
-                           false -> z_config:get_dirty(smtp_listen_domain);
-                           SmtpListenDomain_ -> SmtpListenDomain_
-                       end,
-    SmtpListenIp = case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
-                       false -> z_config:get_dirty(smtp_listen_ip);
-                       SmtpListenAny when SmtpListenAny == []; SmtpListenAny == "*"; SmtpListenAny == "any" -> any;
-                       SmtpListenIp_-> SmtpListenIp_
-                   end,   
-    SmtpListenPort = case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
-                         false -> z_config:get_dirty(smtp_listen_port);
-                         SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
-                     end,
-    z_config:set_dirty(smtp_listen_domain, SmtpListenDomain),
-    z_config:set_dirty(smtp_listen_ip, SmtpListenIp),
-    z_config:set_dirty(smtp_listen_port, SmtpListenPort),
 
     SmtpBounceServer = {z_email_receive_server,
                         {z_email_receive_server, start_link, []},
@@ -113,7 +90,7 @@ init([]) ->
                 permanent, 10100, supervisor, dynamic},
 
     Processes = [
-                 Ids, Config,
+                 Ids,
                  SmtpServer, SmtpBounceServer,
                  FilesSup, 
                  SitesSup | get_extensions()
@@ -121,22 +98,19 @@ init([]) ->
 
     %% Listen to IP address and Port
     WebIp = case os:getenv("ZOTONIC_IP") of
-                false -> z_config:get_dirty(listen_ip);
+                false -> z_config:get(listen_ip);
                 Any when Any == []; Any == "*"; Any == "any" -> any;
                 ConfIP -> ConfIP 
             end,   
     WebPort = case os:getenv("ZOTONIC_PORT") of
-                  false -> z_config:get_dirty(listen_port); 
+                  false -> z_config:get(listen_port); 
                   Anyport -> list_to_integer(Anyport) 
               end,
-
-    z_config:set_dirty(listen_ip, WebIp),
-    z_config:set_dirty(listen_port, WebPort),
 
     WebConfig = [ 
                   {dispatcher, z_sites_dispatcher},
                   {dispatch_list, []},
-                  {backlog, z_config:get_dirty(inet_backlog)}
+                  {backlog, z_config:get(inet_backlog)}
                 ],
 
     %% Listen to the ip address and port for all sites.
@@ -194,7 +168,7 @@ init_stats() ->
 %% @doc Initializes the ua classifier. When it is enabled it is loaded and 
 %% tested if it works.
 init_ua_classifier() ->
-    case z_config:get_dirty(use_ua_classifier) of
+    case z_config:get(use_ua_classifier) of
         true ->
             case ua_classifier:classify("") of
                 {error, ua_classifier_nif_not_loaded} = Error ->

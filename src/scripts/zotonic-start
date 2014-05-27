@@ -67,7 +67,7 @@ ENV=`which env`
 HEART_COMMAND="${ENV} HEART=true ZOTONIC_HEART_RESTARTS=$restarts ZOTONIC_HEART_START=$starttime $ZOTONIC_BIN/zotonic start"
 export HEART_COMMAND
 
-$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl -config $ZOTONIC/priv/erlang.config -heart -detached -s zotonic
+$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl -config $ZOTONIC/priv/erlang.config -config $ZOTONIC/priv/zotonic.config -heart -detached -s zotonic
 ERLEXIT=$?
 
 MAXTRIES=20

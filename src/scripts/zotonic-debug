@@ -21,4 +21,4 @@
 require_zotonic_not_running
 
 cd $ZOTONIC
-$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl -config $ZOTONIC/priv/erlang.config -sasl errlog_type error -s zotonic 
+$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl -config $ZOTONIC/priv/erlang.config -config $ZOTONIC/priv/zotonic.config -sasl errlog_type error -s zotonic 

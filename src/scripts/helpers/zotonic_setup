@@ -133,6 +133,17 @@ if [ ! -e "$ZOTONIC/priv/erlang.config" -a -e "$ZOTONIC/priv/erlang.config.in" ]
     cp "$ZOTONIC/priv/erlang.config.in" "$ZOTONIC/priv/erlang.config"
 fi
 
+# Make sure the zotonic.config file exists
+if [ ! -e "$ZOTONIC/priv/zotonic.config" -a -e "$ZOTONIC/priv/zotonic.config.in" ]; then
+    echo "Installing global Zotonic config file"
+    cp "$ZOTONIC/priv/zotonic.config.in" "$ZOTONIC/priv/zotonic.config"
+
+    # Generate a password for zotonic_status
+    PW=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
+    sed -e "s/%%GENERATED%%/$PW/" -i "$ZOTONIC/priv/zotonic.config"
+    echo "Password for zotonic_status site is: $PW"
+fi
+
 # Make sure Zotonic is built
 if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
     echo "Building Zotonic for the first time."

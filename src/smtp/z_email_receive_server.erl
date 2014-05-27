@@ -41,18 +41,18 @@
 
 start_link() ->
     %% Collect the configuration args of the bounce server 
-    Args1 = case z_config:get(smtp_listen_domain) of
+    Args1 = case get_listen_domain() of
         undefined -> [];
         ListenDomain -> [{domain, ListenDomain}]
     end,    
-    Args2 = case z_config:get(smtp_listen_ip) of
+    Args2 = case get_listen_ip() of
         undefined -> [];
         any -> [{address, {0,0,0,0}} | Args1];
         ListenIp -> 
             {ok, Address} = inet:getaddr(ListenIp, inet),
             [{address, Address} | Args1]
     end,    
-    Args3 = case z_config:get(smtp_listen_port) of
+    Args3 = case get_listen_port() of
         undefined -> Args2;
         ListenPort -> [{port, ListenPort} | Args2]
     end,
@@ -199,3 +199,23 @@ find_bounce_email([To|Other]) ->
         false -> find_bounce_email(Other)
     end.
 
+    %% Smtp listen to IP address, Domain and Port
+
+get_listen_domain() ->
+    case os:getenv("ZOTONIC_SMTP_LISTEN_DOMAIN") of
+        false -> z_config:get(smtp_listen_domain);
+        SmtpListenDomain_ -> SmtpListenDomain_
+    end.
+
+get_listen_ip() ->
+    case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
+        false -> z_config:get(smtp_listen_ip);
+        SmtpListenAny when SmtpListenAny == []; SmtpListenAny == "*"; SmtpListenAny == "any" -> any;
+        SmtpListenIp_-> SmtpListenIp_
+    end.
+
+get_listen_port() ->
+    case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
+        false -> z_config:get(smtp_listen_port);
+        SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
+    end.
