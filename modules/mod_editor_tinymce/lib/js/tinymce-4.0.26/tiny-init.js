@@ -2,7 +2,7 @@ tinyInit = {
     selector: "textarea",
 	mode: "none",
 	theme: "modern",
-	plugins: "compat3x advlist codemirror paste table zlink zmedia autosave directionality",
+	plugins: "compat3x advlist codemirror paste table zlink zmedia autosave directionality autoresize",
 	menubar: "edit format table tools insert",
 	toolbar: "styleselect | bold italic | alignleft aligncenter alignright | " +
 		"bullist numlist outdent indent | ltr rtl | zlink zmedia | code",

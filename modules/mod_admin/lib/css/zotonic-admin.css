@@ -620,6 +620,16 @@ table.mceLayout, textarea.tinyMCE {
     overflow: hidden;
 }
 
+div.widget-content .mce-tinymce.mce-container {
+    border: 0;
+    margin: -8px; /* makes it fill the whole widget-content area */
+}
+
+/* sets tinyMCE font size in admin */
+div.widget-content .mce-container, div.widget-content .mce-container *, div.widget-content .mce-widget, div.widget-content .mce-widget *, div.widget-content .mce-reset {
+    font-size: 13px;
+}
+
 
 /* ajax interaction 
 -------------------------------------------------------------- */
