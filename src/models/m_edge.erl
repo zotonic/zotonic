@@ -169,9 +169,12 @@ insert(Subject, Pred, Object, Opts, Context) ->
                             true -> skip;
                             false -> m_rsc:touch(SubjectId, Ctx)
                         end,
-                        z_db:insert(edge, [{subject_id, SubjectId}, {object_id, ObjectId}, {predicate_id, PredId}], Ctx)
+                        Seq = case proplists:get_value(seq, Opts) of
+                                  S when is_integer(S) -> S;
+                                  _ -> undefined
+                              end,
+                        z_db:insert(edge, [{subject_id, SubjectId}, {object_id, ObjectId}, {predicate_id, PredId}, {seq, Seq}], Ctx)
                     end,
-                
                 {ok, PredName} = m_predicate:id_to_name(PredId, Context),
                 case z_acl:is_allowed(insert, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of
                     true ->

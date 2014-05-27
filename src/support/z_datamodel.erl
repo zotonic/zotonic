@@ -271,14 +271,15 @@ map_prop({to_id, Name}, Context) ->
 map_prop(Value, _Context) ->
     Value.
 
-
 manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, _Options, Context) ->
+    manage_edge(_Module, {SubjectName, PredicateName, ObjectName, []}, _Options, Context);
+manage_edge(_Module, {SubjectName, PredicateName, ObjectName, EdgeOptions}, _Options, Context) ->
     Subject = m_rsc:name_to_id(SubjectName, Context),
     Predicate = m_predicate:name_to_id(PredicateName, Context),
     Object = m_rsc:name_to_id(ObjectName, Context),
     case {Subject, Predicate, Object} of
         {{ok, SubjectId}, {ok, PredicateId}, {ok,ObjectId}} ->
-            m_edge:insert(SubjectId, PredicateId, ObjectId, Context);
+            m_edge:insert(SubjectId, PredicateId, ObjectId, EdgeOptions, Context);
         _ ->
             skip %% One part of the triple was MIA
     end.
