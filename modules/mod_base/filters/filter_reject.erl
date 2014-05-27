@@ -1,6 +1,6 @@
 %% @author Mawuli Adzaku <mawuli@mawuli.me>
 %% @copyright 2014 Mawuli Adzaku
-%% @doc 'filter_not' filter_not, filters a list to only display elements without a certain property
+%% @doc 'filter_reject' filter_reject, filters a list to only display elements without a certain property
 
 %% Copyright 2014 Mawuli Adzaku
 %%
@@ -16,24 +16,24 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_filter_not).
+-module(filter_reject).
 -export([
-	filter_not/3,
-	filter_not/4
+	reject/3,
+	reject/4
 	]).
 
 
-filter_not(_, undefined, _Context) -> [];
-filter_not(undefined, _, _Context) -> [];
-filter_not(In, Prop, Context) ->
+reject(_, undefined, _Context) -> [];
+reject(undefined, _, _Context) -> [];
+reject(In, Prop, Context) ->
     lists:filter(fun(Elt) -> 
                          z_convert:to_bool(find_value(Prop, Elt, Context)) =:= false
                  end,
                  erlydtl_runtime:to_list(In, Context)).
 
-filter_not(_, undefined, _, _Context) -> [];
-filter_not(undefined, _, _, _Context) -> [];
-filter_not(In, Prop, Value, Context) ->
+reject(_, undefined, _, _Context) -> [];
+reject(undefined, _, _, _Context) -> [];
+reject(In, Prop, Value, Context) ->
     lists:filter(fun(Elt) -> 
                          erlydtl_operators:ne(find_value(Prop, Elt, Context), Value, Context)
                  end,
