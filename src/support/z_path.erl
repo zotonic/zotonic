@@ -36,27 +36,28 @@
 %% @doc Return the path to the site folder of the given context.
 %% @spec site_dir(#context{}) -> filename()
 site_dir(Context=#context{host=Host}) ->
-    F = fun() ->
-                find_first_path(
-                  [
-                   filename:join([z_path:user_sites_dir(), Host]),
-                   filename:join([z_utils:lib_dir(priv), "sites", Host])
-                  ])
-        end,
-    z_depcache:memo(F, {site_dir, Host}, ?HOUR, Context).
+    F = fun() -> site_dir(Host) end,
+    z_depcache:memo(F, {site_dir, Host}, ?HOUR, Context);
+site_dir(Host) when is_atom(Host) ->
+    find_first_path(
+      [
+       filename:join([z_path:user_sites_dir(), Host]),
+       filename:join([z_utils:lib_dir(priv), "sites", Host])
+      ]).
 
 %% @doc Return the path to the given module in the given context.
 %% @spec site_dir(#context{}) -> filename()
 module_dir(Module, Context=#context{host=Host}) ->
-    F = fun() ->
-                find_first_path(
-                  [
-                   filename:join([z_path:user_sites_dir(), Host, "modules", Module]),
-                   filename:join([z_path:user_modules_dir(), Module]),
-                   filename:join([z_utils:lib_dir(modules)])
-                  ])
-        end,
-    z_depcache:memo(F, {module_dir, Module}, ?HOUR, Context).
+    F = fun() -> module_dir(Module, Host) end,
+    z_depcache:memo(F, {module_dir, Module}, ?HOUR, Context);
+module_dir(Module, Host) when is_atom(Host) ->
+    find_first_path(
+      [
+       filename:join([z_path:user_sites_dir(), Host, "modules", Module]),
+       filename:join([z_path:user_modules_dir(), Module]),
+       filename:join([z_utils:lib_dir(modules)])
+      ]).
+
 
 find_first_path(Paths) ->
     lists:foldl(fun(Dir, undefined) ->

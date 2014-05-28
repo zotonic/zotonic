@@ -99,7 +99,7 @@ observe_zotonic_status_init(zotonic_status_init, Vars, _Context) ->
     
 % @doc Check if the site directory has a mercurial .hg subdirectory
 has_vcs(Site) ->
-    has_vcs_dir(z_path:site_dir(z_context:new(Site))).
+    has_vcs_dir(z_path:site_dir(Site)).
 
 %% @doc Check if zotonic itself has a .hg directory
 has_vcs() ->
