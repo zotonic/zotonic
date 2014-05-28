@@ -152,8 +152,8 @@ start_inotify(State=#state{executable=Executable}) ->
             filename:join(os:getenv("ZOTONIC"), "priv/sites"),
             filename:join(os:getenv("ZOTONIC"), "priv/modules"),
             
-            filename:join(z_path:user_dir(), "sites"),
-            filename:join(z_path:user_dir(), "modules")
+            z_path:user_sites_dir(),
+            z_path:user_modules_dir()
             |
             string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n")],
     Port = erlang:open_port({spawn_executable, Executable}, [{args, Args}, {line, 1024}]),

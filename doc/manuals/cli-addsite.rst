@@ -16,9 +16,7 @@ The addsite command is highly configurable and takes the following options:
 
   -s <skel>    Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: blog)
   -H <host>    Site's hostname (default: <site_name>.dev)
-  -T <dir>     Target directory (default: /home/arjan)
-  -l           Create the site directly under Zotonic's priv/sites directory (instead of using a symlink)
-  -T <dir>     Target directory (default: /home/arjan)
+  -L           Create the site in the current directory and symlink it into the user sites directory
   -g <remote>  Create a git repository in the site and push it to the given remote
 
   -h <host>    Database host (default: localhost)
@@ -33,11 +31,13 @@ The addsite command is highly configurable and takes the following options:
 Adding a site
 -------------
 
-When adding a site, the site will be created in the current directory
-(unless the ``-T`` option is given to set a target directory), and
-will be symlinked into Zotonic's priv/sites directory. Before adding
-the site, the command will print out an overview of what it will do
-before continuing.
+When adding a site, the site will be created in the Zotonic user sites
+directory. When ``-L`` is used, the site will be created in the
+current directory (from which the ``addsite`` command is ran), and a
+symlink into the Zotonic user sites directory will be made.
+
+Before adding the site, the command will print out an
+overview of what it will do before continuing.
 
 For instance, consider the following addsite command::
 
@@ -62,7 +62,7 @@ Will print out the following::
   Site URL: http://myfirstblog.dev:8000/
   
   Skeleton site: blog
-  Site directory: /home/user/sites/myfirstblog
+  Site directory: /home/user/zotonic/user/sites/myfirstblog
   Admin password: admin
   
   Database host: 127.0.0.1

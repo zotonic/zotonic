@@ -26,7 +26,8 @@
     abspath/2,
     files_subdir/2,
     files_subdir_ensure/2,
-    user_dir/0
+    user_sites_dir/0,
+    user_modules_dir/0
 ]).
 
 -include("zotonic.hrl").
@@ -62,6 +63,11 @@ files_subdir_ensure(SubDir, Context) ->
     ok = filelib:ensure_dir(filename:join([Dir, ".empty"])),
     Dir.
 
-%% @doc The directory of the user-defined modules and sites
-user_dir() ->
-    z_utils:lib_dir(user).
+%% @doc The directory of the user-defined sites
+user_sites_dir() ->
+    z_config:get(user_sites_dir).
+
+%% @doc The directory of the user-defined modules
+user_modules_dir() ->
+    z_config:get(user_modules_dir).
+

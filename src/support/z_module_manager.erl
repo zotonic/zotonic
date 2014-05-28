@@ -200,13 +200,15 @@ scan(#context{host=Host}) ->
 
            %% Backward compatibility
            [z_utils:lib_dir(priv), "sites", Host, "modules", "mod_*"],
-           [z_utils:lib_dir(priv), "modules", "mod_*"],
            [z_utils:lib_dir(priv), "sites", Host],
+           [z_utils:lib_dir(priv), "modules", "mod_*"],
 
-           %% User-installed Zotonic sites and global modules
-           [z_path:user_dir(), "sites", Host, "modules", "mod_*"],
-           [z_path:user_dir(), "modules", "mod_*"],
-           [z_path:user_dir(), "sites", Host]
+           %% User-installed Zotonic sites
+           [z_path:user_sites_dir(), Host, "modules", "mod_*"],
+           [z_path:user_sites_dir(), Host],
+
+           %% User-installed modules
+           [z_path:user_modules_dir(), "mod_*"]
           ],
     Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [filelib:wildcard(filename:join(P)) || P <- All]),
     [ {z_convert:to_atom(filename:basename(F)), F} ||  F <- Files ].

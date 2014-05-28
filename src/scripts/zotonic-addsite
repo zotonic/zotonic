@@ -27,8 +27,7 @@ function usage {
     else 
         echo "  -H <host>    Site's hostname (default: $SITEHOSTNAME)" 1>&2
     fi
-    echo "  -T <dir>     Target directory (default: $TARGETDIR)" 1>&2
-    echo "  -l           Create the site directly under Zotonic's priv/sites directory (instead of using a symlink)" 1>&2
+    echo "  -L           Create the site in the current directory and symlink it into $SITES" 1>&2
     echo "  -g <remote>  Create a git repository in the site and push it to the given remote" 1>&2
     echo 1>&2
     echo "  -h <host>    Database host (default: $DBHOST)" 1>&2
@@ -138,11 +137,11 @@ function check_options {
     DBDATABASE=${DBDATABASE:=zotonic}
     DBSCHEMA=${DBSCHEMA:=public}
     ADMINPASSWORD=${ADMINPASSWORD:=admin}
-    TARGETDIR=${TARGETDIR:=$PWD}
+    TARGETDIR=${TARGETDIR:=$SITES}
     GITREMOTE=${GITREMOTE:=}
-    DO_LINK=1
+    DO_LINK=0
 
-    while getopts "s:d:h:p:u:P:n:a:lH:T:g:" optionName; do
+    while getopts "s:d:h:p:u:P:n:a:LH:T:g:" optionName; do
         case "$optionName" in
             s) SKEL="$OPTARG";;
             h) DBHOST="$OPTARG";;
@@ -153,8 +152,9 @@ function check_options {
             n) DBSCHEMA="$OPTARG";;
             a) ADMINPASSWORD="$OPTARG";;
             H) SITEHOSTNAME="$OPTARG";;
-            T) TARGETDIR="$OPTARG";;
-            l) DO_LINK=0;;
+            L) DO_LINK=1
+                TARGETDIR=$PWD
+                ;;
             g) GITREMOTE="$OPTARG";;
             [?]) exit
         esac
