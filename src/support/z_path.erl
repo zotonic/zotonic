@@ -87,7 +87,7 @@ abspath(Path, Context) ->
 %% @doc Return the path to a files subdirectory
 %% @spec files_subdir(SubDir::filename(), #context{}) -> filename()
 files_subdir(SubDir, #context{host=Host}) ->
-    filename:join([z_utils:lib_dir(priv), "sites", Host, "files", SubDir]).
+    filename:join([z_path:site_dir(Host), "files", SubDir]).
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
 %% @spec files_subdir_ensure(SubDir::filename(), #context{}) -> filename()
