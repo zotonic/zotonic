@@ -46,9 +46,8 @@
     }).
 
 start_link(Id, Path, Props, Context) ->
-    Site = z_context:site(Context), 
     Path1 = z_convert:to_binary(Path), 
-    gen_server:start_link({via, gproc, {n,l,{upload, Site, Path1}}}, ?MODULE, [Id, Path1, Props, Context], []).
+    gen_server:start_link({via, z_proc, {{upload, Path1}, Context}}, ?MODULE, [Id, Path1, Props, Context], []).
 
 init([Id, Path, Props, Context]) ->
     lager:debug("Started uploader for ~p : ~p", [Path, z_context:site(Context)]),

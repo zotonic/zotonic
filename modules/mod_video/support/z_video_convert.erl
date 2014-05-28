@@ -46,7 +46,7 @@ start_link({convert_v1, _Id, _Medium, _Upload, _QueueFilename, _PickledContext},
     % Flush old convert queue
     ok;
 start_link({convert_v2, _Id, _Medium, _Upload, QueueFilename, _ProcessNr, _PickledContext} = Args, Context) ->
-    gen_server:start_link({via, gproc, {n,l,{video_convert, z_convert:to_binary(QueueFilename)}}}, 
+    gen_server:start_link({via, z_proc, {video_convert, z_convert:to_binary(QueueFilename)}}, 
                           ?MODULE, 
                           [Args, z_context:site(Context)],
                           []).

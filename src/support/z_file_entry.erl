@@ -31,7 +31,6 @@
 
 %% API
 -export([
-    reg_name/2,
     where/2,
     lookup/1,
     lookup/2,
@@ -104,15 +103,13 @@
 
 start_link(RequestPath, Root, OptFilterProps, Context) when is_binary(RequestPath) ->
     Args = [ RequestPath, Root, OptFilterProps, z_context:site(Context) ],
-    gen_fsm:start_link({via, gproc, {n,l,reg_name(RequestPath, Context)}}, ?MODULE, Args, []).
+    gen_fsm:start_link({via, z_proc, {reg_name(RequestPath), Context}}, ?MODULE, Args, []).
 
-reg_name(Path, #context{} = Context) ->
-    reg_name(Path, z_context:site(Context));
-reg_name(Path, Site) when is_binary(Path), is_atom(Site) ->
-    {?MODULE, Site, Path}.
+reg_name(RequestPath) ->
+    {?MODULE, RequestPath}.
 
-where(Path, ContextOrSite) ->
-    gproc:where({n,l,reg_name(Path,ContextOrSite)}).
+where(Path, Context) ->
+    z_proc:whereis(reg_name(Path), Context).
 
 stop(Pid) when is_pid(Pid) ->
     gen_fsm:send_all_state_event(Pid, stop);
@@ -120,7 +117,7 @@ stop(undefined) ->
     ok.
 
 stop(RequestPath, Context) when is_binary(RequestPath) ->
-    stop(gproc:where({n,l,reg_name(RequestPath, Context)})).
+    stop(where(RequestPath, Context)).
 
 force_stale(undefined) -> 
     {error, noproc};
@@ -133,7 +130,7 @@ force_stale(Pid) ->
     end.
 
 force_stale(RequestPath, Context) when is_binary(RequestPath) ->
-    force_stale(gproc:where({n,l,reg_name(RequestPath, Context)})).
+    force_stale(where(RequestPath, Context)).
 
 lookup(Pid) when is_pid(Pid) ->
     try
@@ -146,7 +143,7 @@ lookup(undefined) ->
     {error, noproc}.
 
 lookup(RequestPath, Context) when is_binary(RequestPath) ->
-    lookup(gproc:where({n,l,reg_name(RequestPath, Context)})).
+    lookup(where(RequestPath, Context)).
 
 %%% ------------------------------------------------------------------------------------
 %%% gen_fsm callbacks
@@ -310,7 +307,7 @@ timeout(_State, _IsFound) ->
     undefined.
 
 unreg(State) ->
-    gproc:unreg({n,l,reg_name(State#state.request_path, State#state.site)}).
+    z_proc:unregister(reg_name(State#state.request_path), State#state.site).
 
 is_mref_part(MRef, Parts) ->
     lists:any(fun(#part_cache{cache_monitor=Ref}) -> Ref =:= MRef ; (_) -> false end, Parts).
