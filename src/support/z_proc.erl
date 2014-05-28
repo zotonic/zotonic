@@ -42,7 +42,6 @@
 
 % @doc Lookup the pid of the process.
 %
-% @spec whereis(term(), ContextOrSite) -> pid() | undefined.
 whereis(Name, Site) when is_atom(Site) ->
     whereis_name(name(Name, Site));
 whereis(Name, Context) ->
@@ -50,7 +49,6 @@ whereis(Name, Context) ->
 
 % @doc Register a Pid under Name. Name can be any erlang term.
 %
-% @spec register(term(), pid(), ContextOrSite) -> ok | {error, _}.
 register(Name, Pid, Site) when is_atom(Site) ->
     register_name(name(Name, Site), Pid);
 register(Name, Pid, Context) ->
@@ -59,7 +57,6 @@ register(Name, Pid, Context) ->
 
 % @doc Unregister a process
 %
-% @spec unregister(term(), ContexOrSite) -> _.
 unregister(Name, Site) when is_atom(Site) ->
     unregister_name(name(Name, Site));
 unregister(Name, Context) ->
