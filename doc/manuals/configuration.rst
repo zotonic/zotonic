@@ -20,7 +20,7 @@ places for these files:
  - ``/etc/zotonic/``
 
 Where `(version)` is the `minor` version number of Zotonic,
-e.g. ``0.11`` for all Zotonic ``0.11.1`` variants. This way, you can
+e.g. ``0.11`` for all Zotonic ``0.11.x`` variants. This way, you can
 have separate configuration files for different versions of Zotonic
 which are running simultaneously.
    
