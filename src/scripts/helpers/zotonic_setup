@@ -189,9 +189,3 @@ if [ "$(find_config zotonic.config)" == "" ]; then
 fi
 
 export SITES=$(get_user_sites_dir)
-
-# Make sure Zotonic is built
-if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
-    echo "Building Zotonic for the first time."
-    $MAKE
-fi

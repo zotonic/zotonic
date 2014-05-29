@@ -91,6 +91,14 @@ Currently, the following subcommands are implemented:
 ``zotonic update``
   Update the server. Compiles and loads any new code, flushes caches and rescans all modules.
 
+``zotonic compile``
+  Compiles all the Zotonic Erlang source files, modules and sites,
+  including those in the user sites directory and user modules
+  directory (see :ref:`manual-configuration`). This command is mainly
+  called from the Makefile when building Zotonic. It does *not*
+  compile Zotonic's dependencies (the Erlang files under the ``deps/``
+  folder). This command can only be run when Zotonic is not running; for hot code reloads, use ``zotonic update``.
+  
 ``zotonic compilefile [files...]``
   Compiles and reloads a single :term:`Erlang module` within the
   Zotonic folder. This runs very fast and works very well on a

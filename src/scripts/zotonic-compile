@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-#
-# Copyright 2011 Lloyd R. Prentice
+# Copyright 2014 Arjan Scherpenisse
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,18 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# usage zotonic-debug
-#
-
-# Make sure Zotonic is built
-if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
-    echo "Building Zotonic for the first time."
-    $MAKE
-fi
-
 require_zotonic_not_running
 
-cd $ZOTONIC
-
-$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -sasl errlog_type error -s zotonic 
+$ERL -pa $PA $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -noinput +B \
+    -eval 'case zotonic_compile:all() of ok -> halt(0); error -> halt(1) end.'

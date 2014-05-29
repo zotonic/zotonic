@@ -23,7 +23,14 @@
 # For more information see: http://steve.vinoski.net/blog/2009/02/22/controlling-erlangs-heart/
 #
 
+# Make sure Zotonic is built
+if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
+    echo "Building Zotonic for the first time."
+    $MAKE
+fi
+
 require_zotonic_not_running
+
 
 cd $ZOTONIC
 
