@@ -20,27 +20,54 @@
 -module(zotonic_compile).
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
--export([all/0, all/1, unglob/1]).
+-export([all/0, all/1, d/0]).
 
 all() ->
     all([]).
 
 
 %% @doc Does a parallel compile of the files in the different Zotonic directories.
-all(Options) ->
+all(Options0) ->
+    Options = Options0 ++ compile_options(),
     Parent = self(),
-    Workers = [spawn(fun() -> Parent ! make:files(filelib:wildcard(D), Options ++ compile_options()) end) || D <- unglob(compile_dirs())],
-    lists:foldl(fun(Worker, error) ->
-                        %% We've errored, kill remaining compile processes
-                        exit(Worker, kill), error;
-                   (_Worker, Result) ->
-                        receive
-                            error -> error;
-                            _ -> Result
-                        end
-                end,
-                ok,
-                Workers).
+    Workers = [spawn(fun() -> compile_worker_process(Options, Parent) end) || _ <- lists:seq(1,erlang:system_info(schedulers_online)*2)],
+    case serve_queue(unglob(compile_dirs())) of
+        error -> [exit(W, kill) || W <- Workers],
+                 error;
+        ok ->
+            [W ! done || W <- Workers],
+            [receive done -> nop end || _ <- Workers],
+            ok
+    end.
+                      
+
+serve_queue(Queue) ->
+    serve_queue(Queue, ok).
+
+serve_queue(_, error) ->
+    error;
+serve_queue([], _) ->
+    ok;
+serve_queue([Q | Rest], Result) ->
+    receive
+        {want_file, W} ->
+            W ! {work, Q},
+            serve_queue(Rest, Result);
+        {result, R} ->
+            serve_queue([Q | Rest], R)
+    end.
+
+compile_worker_process(Options, Parent) ->
+    Parent ! {want_file, self()},
+    receive
+        done ->
+            Parent ! done,
+            ok;
+        {work, Wildcard} ->
+            Parent ! {result, make:files(filelib:wildcard(Wildcard), Options)},
+            compile_worker_process(Options, Parent)
+    end.
+
 
 compile_dirs() ->
     application:load(zotonic),
@@ -49,10 +76,7 @@ compile_dirs() ->
     [
      "*.erl",
      "src/*.erl",
-     "src/behaviours/*.erl",
      "src/*/*.erl",
-     "src/*/*/*.erl",
-     "src/*/*/*/*.erl",
      "modules/*/*.erl",
      "modules/*/*/*.erl",
      "modules/*/deps/*/src/*.erl",
@@ -100,3 +124,6 @@ unglob(Patterns) ->
                 end,
                 [],
                 Patterns).
+
+d() ->
+    unglob(compile_dirs()).

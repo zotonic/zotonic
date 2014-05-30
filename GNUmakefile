@@ -21,6 +21,7 @@ all: get-deps compile
 	chmod +x ./rebar
 
 DEPS = $(shell find deps -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
+LAGER = deps/lager
 Compile = (cd $(1) && $(REBAR_DEPS) deps_dir=.. compile)
 
 # Helper targets
@@ -28,7 +29,7 @@ Compile = (cd $(1) && $(REBAR_DEPS) deps_dir=.. compile)
 
 # First compile zotonic_compile, so that we can call "zotonic compile" to compile ourselves, then just call 'zotonic compile'.
 erl:
-	@$(ERL) -pa $(wildcard deps/*/ebin) -noinput -eval 'case make:files(["src/zotonic_compile.erl"], []) of up_to_date -> halt(0); error -> halt(1) end.'
+	@$(ERL) -pa $(wildcard deps/*/ebin) -noinput -eval 'case make:files(["src/zotonic_compile.erl"], [{outdir, "ebin"}]) of up_to_date -> halt(0); error -> halt(1) end.'
 	bin/zotonic compile
 
 $(PARSER).erl: $(PARSER).yrl
@@ -47,11 +48,10 @@ update-deps: $(REBAR)
 	$(REBAR) update-deps
 
 compile-deps: $(REBAR)
-	if [ -d deps/lager ]; then $(call Compile, deps/lager); fi
-	if [ -d deps/mimetypes ]; then $(call Compile, deps/mimetypes); fi
-	$(REBAR) compile
+	if [ -d $(LAGER) ]; then $(call Compile, $(LAGER)); fi
+	for i in $(DEPS); do $(call Compile, $$i); done
 
-compile-zotonic: ebin/$(APP).app $(PARSER).erl erl 
+compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
 
 compile: compile-deps compile-zotonic
 
