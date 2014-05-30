@@ -16,7 +16,7 @@ where the property (after conversion to boolean) is ``true``.
 This can be used to filter a list of resource ids on the presence of a property. For example, to see all published elements in a list of resource ids::
 
   {% print [1,2,3,4,5,6]|filter:`is_published` %}
-  
+
 To find all pages from page connection ``hasdocument`` that have an image::
 
   {% print id.o.hasdocument|filter:`depiction` %}
@@ -33,5 +33,4 @@ Shows all elements whose ``title`` property is "Untitled".
 
 
 
-.. seealso:: :ref:`filter-is_visible`, :ref:`filter-is_a`
-
+.. seealso:: :ref:`filter-is_visible`, :ref:`filter-is_a`, :ref:`filter-exclude`
