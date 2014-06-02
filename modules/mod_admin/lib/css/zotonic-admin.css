@@ -375,6 +375,10 @@ div.edit-media {
     height: 29px;
 }
 
+input.do_datepicker {
+    width: 80px;
+}
+
 .do_menuedit {
     min-height:100px;
 }
@@ -766,5 +770,6 @@ span.icon_status_starting {
 div.modal div.tab-content {
     overflow: visible;
 }
+
 
 
