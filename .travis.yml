@@ -1,6 +1,6 @@
 language: erlang
 otp_release:
-  - 17.0
+  - 17.0  # experimental
   - R16B
   - R15B03
 script: make all edocs && bin/zotonic runtests
