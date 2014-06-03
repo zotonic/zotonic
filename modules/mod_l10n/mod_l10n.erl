@@ -1,3 +1,7 @@
+% -*- coding: utf-8; Mode: erlang; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil -*-
+% ex: set softtabstop=4 tabstop=4 shiftwidth=4 expandtab fileencoding=utf-8:
+%% coding: utf-8
+
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2014 Marc Worrell
 %% @doc Localization of Zotonic.  Country, timezone, and other lookups.
@@ -216,7 +220,7 @@ expand_country(Prop, Rsc, Languages, Context) ->
     add_alias(<<"nl">>, R) ->
         [{extra_pivot_data, <<"Holland">>} | R];
     add_alias(<<"be">>, R) ->
-        [{extra_pivot_data, <<"België">>}, {extra_pivot_data, "Belgique"} | R];
+        [{extra_pivot_data, <<"België"/utf8>>}, {extra_pivot_data, "Belgique"} | R];
     add_alias(_, R) ->
         R.
 
@@ -228,17 +232,18 @@ map_country(Prop, Rsc) ->
         <<A,B>> when A =< $Z orelse B =< $Z ->
             [{Prop, z_convert:to_binary(z_string:to_lower([A,B]))} | Rsc];
         Country ->
-            case z_string:to_lower(Country) of
-                "usa" -> [{Prop, <<"us">>} | Rsc];
-                "holland" -> [{Prop, <<"nl">>} | Rsc];
-                "nederland" -> [{Prop, <<"nl">>} | Rsc];
-                "netherlands" -> [{Prop, <<"nl">>} | Rsc];
-                "the netherlands" -> [{Prop, <<"nl">>} | Rsc];
-                "belgië" -> [{Prop, <<"be">>} | Rsc];
-                "belgie" -> [{Prop, <<"be">>} | Rsc];
-                "belgique" -> [{Prop, <<"be">>} | Rsc];
+            case z_convert:to_binary(z_string:to_lower(Country)) of
+                <<"usa">> -> [{Prop, <<"us">>} | Rsc];
+                <<"holland">> -> [{Prop, <<"nl">>} | Rsc];
+                <<"nederland">> -> [{Prop, <<"nl">>} | Rsc];
+                <<"netherlands">> -> [{Prop, <<"nl">>} | Rsc];
+                <<"the netherlands">> -> [{Prop, <<"nl">>} | Rsc];
+                <<"netherlands, the">> -> [{Prop, <<"nl">>} | Rsc];
+                <<"belgië"/utf8>> -> [{Prop, <<"be">>} | Rsc];
+                <<"belgie">> -> [{Prop, <<"be">>} | Rsc];
+                <<"belgique">> -> [{Prop, <<"be">>} | Rsc];
                 % typos
-                "nethlerlands" -> [{Prop, <<"nl">>} | Rsc];
+                <<"nethlerlands">> -> [{Prop, <<"nl">>} | Rsc];
                 % just keep as-is
                 _ -> Rsc
             end

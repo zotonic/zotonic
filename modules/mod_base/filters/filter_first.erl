@@ -26,7 +26,7 @@
 
 first(undefined, _Context) ->
     undefined;
-first(<<First, _/binary>>, _Context) ->
+first(<<First/utf8, _/binary>>, _Context) ->
     First;
 first(Other, Context) ->
     case erlydtl_runtime:to_list(Other, Context) of

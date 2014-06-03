@@ -17,13 +17,31 @@
 %% limitations under the License.
 
 -module(filter_truncate).
--export([truncate/2, truncate/3]).
+-export([truncate/2, truncate/3, truncate/4]).
 
 truncate(In, Context) ->
-	truncate(In, 20, Context).
+    truncate(In, 20, Context).
 
-truncate(undefined, _N, _Context) ->
-	undefined;
 truncate(In, N, Context) ->
-	z_string:truncate(erlydtl_runtime:to_list(In, Context), z_convert:to_integer(N)).
+    truncate(In, N, <<"...">>, Context).
+
+truncate(undefined, _N, _Append, _Context) ->
+    undefined;
+truncate(S, N, Append, Context) when not is_integer(N) ->
+    truncate(S, z_convert:to_integer(N), Append, Context);
+truncate({tr, _} = Tr, N, Append, Context) ->
+    truncate(z_trans:lookup_fallback(Tr, Context), N, Append, Context);
+truncate(In, N, Append, _Context) when is_binary(In) ->
+    z_string:truncate(In, N, Append);
+truncate(In, N, Append, _Context) when is_list(In) ->
+    z_string:truncate(iolist_to_binary(In), N, Append);
+truncate(In, N, Append, Context) ->
+    case erlydtl_runtime:to_value(In, Context) of
+        L when is_list(L) ->
+            truncate(L, N, Append, Context);
+        B when is_binary(B) ->
+            truncate(B, N, Append, Context);
+        _ ->
+            undefined
+    end.
 

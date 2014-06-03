@@ -327,7 +327,7 @@ replace_recipient(ListId, Recipient, Now, Context) ->
 
 replace_recipient(ListId, Email, Props, Now, Context) ->
     case z_string:trim(z_string:to_lower(Email)) of
-        "" ->
+        Empty when Empty =:= ""; Empty =:= <<>>; Empty =:= undefined ->
             skip;
         Email1 ->
             case z_db:q1("select id from mailinglist_recipient where mailinglist_id = $1 and email = $2", 
@@ -459,7 +459,7 @@ recipient_set_operation(Op, IdA, IdB, Context) when Op =:= union; Op =:= subtrac
 
 
 get_email_set(ListId, Context) ->
-    sets:from_list([list_to_binary(z_string:trim(z_string:to_lower(Email)))
+    sets:from_list([z_convert:to_binary(z_string:trim(z_string:to_lower(Email)))
                     || {Email} <- z_db:q("SELECT email FROM mailinglist_recipient WHERE mailinglist_id = $1", [ListId], Context)]).
 
 bounce_reason(Email, Context) ->
