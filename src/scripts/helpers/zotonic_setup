@@ -178,7 +178,7 @@ if [ "$(find_config zotonic.config)" == "" ]; then
     cp "$ZOTONIC/priv/zotonic.config.in" "$ZOTONIC_CONFIG_DIR/zotonic.config"
 
     # Generate a password for zotonic_status
-    PW=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
+    PW=$(env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/urandom | head -c 10)
     sed -e "s/%%GENERATED%%/$PW/" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
     echo "Password for zotonic_status site is: $PW"
 
