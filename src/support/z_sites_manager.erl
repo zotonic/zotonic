@@ -238,9 +238,13 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Scan all sites subdirectories for the site configurations.
 %% @spec scan_sites() -> [ SiteProps ]
 scan_sites() ->
-    SitesDir = filename:join([z_utils:lib_dir(priv), "sites", "*", "config"]),
-    Configs = [ parse_config(C) || C <- filelib:wildcard(SitesDir) ],
-    [ C || C <- Configs, is_list(C) ].
+    SitesMatches =
+        [
+         filename:join([z_utils:lib_dir(priv), "sites", "*", "config"]),
+         filename:join([z_path:user_sites_dir(), "*", "config"])
+        ],
+    Configs = lists:flatten([[ {parse_config(C)} || C <- filelib:wildcard(Glob)] || Glob <- SitesMatches ]),
+    [ C || {C} <- Configs, is_list(C) ].
 
 parse_config(C) ->
     %% store host in site config
@@ -283,8 +287,11 @@ config_d_files(SitePath) ->
 
 %% @doc Fetch the configuration of a specific site.
 %% @spec get_site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
+get_site_config(BuiltinSite) when BuiltinSite =:= zotonic_status; BuiltinSite =:= testsandbox ->
+    ConfigFile = filename:join([z_utils:lib_dir(priv), "sites", BuiltinSite, "config"]),
+    parse_config(ConfigFile);
 get_site_config(Site) ->
-    ConfigFile = filename:join([z_utils:lib_dir(priv), "sites", Site, "config"]),
+    ConfigFile = filename:join([z_path:user_sites_dir(), Site, "config"]),
     parse_config(ConfigFile).
 
 has_zotonic_site([]) ->

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-#
-# Copyright 2011 Lloyd R. Prentice
+# Copyright 2014 Arjan Scherpenisse
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# usage zotonic-examplecommand [args...]
-#
+require_zotonic_not_running
 
-echo "Example command does nothing"
+$ERL -pa $PA $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -noinput +B \
+    -eval 'case zotonic_compile:all() of ok -> halt(0); error -> halt(1) end.'

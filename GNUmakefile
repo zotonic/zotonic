@@ -26,9 +26,11 @@ Compile = (cd $(1) && $(REBAR_DEPS) deps_dir=.. compile)
 
 # Helper targets
 .PHONY: erl
-erl:
-	@$(ERL) -pa $(wildcard deps/*/ebin) -pa ebin -noinput +B \
-	  -eval 'case make:all() of up_to_date -> halt(0); error -> halt(1) end.'
+
+# First compile zotonic_compile, so that we can call "zotonic compile" to compile ourselves, then just call 'zotonic compile'.
+erl: ebin/$(APP).app
+	@$(ERL) -pa $(wildcard deps/*/ebin) -noinput -eval 'case make:files(["src/zotonic_compile.erl"], [{outdir, "ebin"}]) of up_to_date -> halt(0); error -> halt(1) end.'
+	bin/zotonic compile
 
 $(PARSER).erl: $(PARSER).yrl
 	$(ERLC) -o src/erlydtl $(PARSER).yrl
@@ -49,7 +51,7 @@ compile-deps: $(REBAR)
 	if [ -d $(LAGER) ]; then $(call Compile, $(LAGER)); fi
 	for i in $(DEPS); do $(call Compile, $$i); done
 
-compile-zotonic: $(PARSER).erl erl ebin/$(APP).app
+compile-zotonic: $(PARSER).erl erl
 
 compile: compile-deps compile-zotonic
 

@@ -46,6 +46,11 @@ function enablesite {
 }
 export -f enablesite
 
+function major_version {
+    cat $ZOTONIC/src/zotonic.app.src |grep vsn,|sed 's/.*"\([0-9].[0-9]\+\).*/\1/'
+}
+export -f major_version
+
 function find_enabled_sites {
     # find enabled sites
     enabled_sites=""
@@ -60,9 +65,38 @@ function find_enabled_sites {
 }
 export -f find_enabled_sites
 
+function find_config {
+    filename="$1"
+    vsn=$(major_version)
+    for file in "$HOME/.zotonic/$vsn/$filename" "$HOME/.zotonic/$filename" "/etc/zotonic/$vsn/$filename" "/etc/zotonic/$filename"; do
+        if [ -e $file ]; then
+            echo "$file"
+            break
+        fi
+    done
+}
+export -f find_config 
 
+function find_config_arg {
+    file=$(find_config $1)
+    if [ "$file" == "" ]; then
+        break
+    fi
+    echo "-config $file"
+}
+export -f find_config_arg
+
+function get_user_sites_dir {
+    cat $(find_config zotonic.config) | grep {user_sites_dir|sed 's/.*"\(.*\)".*/\1/'
+}
+export -f get_user_sites_dir
+
+function get_user_modules_dir {
+    cat $(find_config zotonic.config) | grep {user_modules_dir|sed 's/.*"\(.*\)".*/\1/'
+}
+export -f get_user_modules_dir
+    
 export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
-export SITES=${SITES:=$ZOTONIC/priv/sites}
 
 # Path to the Erlang VM
 export ERL=${ERL:=erl}
@@ -127,25 +161,40 @@ export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
 ERL_CALL=$($ERL -noshell -noinput  -eval "io:format(\"~s\", [code:priv_dir(erl_interface)])" -s erlang halt|sed 's~priv$~bin/erl_call~')
 export ZOTONIC_CALL="$ERL_CALL $NAME_ARG $NODENAME@$NODEHOST"
 
+
+ZOTONIC_CONFIG_DIR=${ZOTONIC_CONFIG_DIR:=$HOME/.zotonic/$(major_version)}
+
 # Make sure the erlang.config file exists
-if [ ! -e "$ZOTONIC/priv/erlang.config" -a -e "$ZOTONIC/priv/erlang.config.in" ]; then
+if [ "$(find_config erlang.config)" == "" ]; then
     echo "Installing default erlang.config file"
-    cp "$ZOTONIC/priv/erlang.config.in" "$ZOTONIC/priv/erlang.config"
+    mkdir -p $ZOTONIC_CONFIG_DIR
+    cp "$ZOTONIC/priv/erlang.config.in" "$ZOTONIC_CONFIG_DIR/erlang.config"
 fi
 
 # Make sure the zotonic.config file exists
-if [ ! -e "$ZOTONIC/priv/zotonic.config" -a -e "$ZOTONIC/priv/zotonic.config.in" ]; then
+if [ "$(find_config zotonic.config)" == "" ]; then
     echo "Installing global Zotonic config file"
-    cp "$ZOTONIC/priv/zotonic.config.in" "$ZOTONIC/priv/zotonic.config"
+    mkdir -p $ZOTONIC_CONFIG_DIR
+    cp "$ZOTONIC/priv/zotonic.config.in" "$ZOTONIC_CONFIG_DIR/zotonic.config"
 
     # Generate a password for zotonic_status
-    PW=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
-    sed -e "s/%%GENERATED%%/$PW/" -i "$ZOTONIC/priv/zotonic.config"
+    PW=$(env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/urandom | head -c 10)
+    sed -e "s/%%GENERATED%%/$PW/" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
     echo "Password for zotonic_status site is: $PW"
+
+    sed -e "s~%%USER_SITES_DIR%%~$ZOTONIC/user/sites~" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
+    sed -e "s~%%USER_MODULES_DIR%%~$ZOTONIC/user/modules~" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
 fi
 
-# Make sure Zotonic is built
-if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
-    echo "Building Zotonic for the first time."
-    $MAKE
+MODULES=$(get_user_modules_dir)
+export SITES=$(get_user_sites_dir)
+
+if [ ! -d "$SITES" ]; then
+    # Try to make the user sites directory
+    mkdir -p "$SITES" 2>/dev/null
+fi
+
+if [ ! -d "$MODULES" ]; then
+    # Try to make the user modules directory
+    mkdir -p "$MODULES" 2>/dev/null
 fi

@@ -147,9 +147,13 @@ start_inotify(State=#state{executable=Executable}) ->
     os:cmd("killall inotifywait"),
     Args = ["-q", "-e", "modify,create", "-m", "-r", 
             filename:join(os:getenv("ZOTONIC"), "src"),
+            filename:join(os:getenv("ZOTONIC"), "modules"),
+            
             filename:join(os:getenv("ZOTONIC"), "priv/sites"),
             filename:join(os:getenv("ZOTONIC"), "priv/modules"),
-            filename:join(os:getenv("ZOTONIC"), "modules")
+            
+            z_path:user_sites_dir(),
+            z_path:user_modules_dir()
             |
             string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n")],
     Port = erlang:open_port({spawn_executable, Executable}, [{args, Args}, {line, 1024}]),

@@ -32,30 +32,30 @@
 
 %% API exports
 -export([
-    upgrade/1,
-    deactivate/2,
-    activate/2,
-    restart/2,
-    active/1,
-    active/2,
-    active_dir/1,
-    get_provided/1,
-    get_modules/1,
-    get_modules_status/1,
-    whereis/2,
-    all/1,
-    scan/1,
-    prio/1,
-    prio_sort/1,
-    dependency_sort/1,
-    dependencies/1,
-    startable/2,
-    module_exists/1,
-    title/1,
-    add_observers/3,
-    remove_observers/3,
-    reinstall/2
-]).
+         upgrade/1,
+         deactivate/2,
+         activate/2,
+         restart/2,
+         active/1,
+         active/2,
+         active_dir/1,
+         get_provided/1,
+         get_modules/1,
+         get_modules_status/1,
+         whereis/2,
+         all/1,
+         scan/1,
+         prio/1,
+         prio_sort/1,
+         dependency_sort/1,
+         dependencies/1,
+         startable/2,
+         module_exists/1,
+         title/1,
+         add_observers/3,
+         remove_observers/3,
+         reinstall/2
+        ]).
 
 -include_lib("zotonic.hrl").
 
@@ -104,11 +104,11 @@ activate(Module, Context) ->
     Scanned = scan(Context),
     {Module, _Dirname} = proplists:lookup(Module, Scanned),
     F = fun(Ctx) ->
-        case z_db:q("update module set is_active = true, modified = now() where name = $1", [Module], Ctx) of
-            0 -> z_db:q("insert into module (name, is_active) values ($1, true)", [Module], Ctx);
-            1 -> 1
-        end
-    end,
+                case z_db:q("update module set is_active = true, modified = now() where name = $1", [Module], Ctx) of
+                    0 -> z_db:q("insert into module (name, is_active) values ($1, true)", [Module], Ctx);
+                    1 -> 1
+                end
+        end,
     1 = z_db:transaction(F, Context),
     upgrade(Context).
 
@@ -125,9 +125,9 @@ active(Context) ->
     case z_db:has_connection(Context) of
         true ->
             F = fun() -> 
-                Modules = z_db:q("select name from module where is_active = true order by name", Context),
-                [ z_convert:to_atom(M) || {M} <- Modules ]
-            end,
+                        Modules = z_db:q("select name from module where is_active = true order by name", Context),
+                        [ z_convert:to_atom(M) || {M} <- Modules ]
+                end,
             z_depcache:memo(F, {?MODULE, active, Context#context.host}, Context);
         false ->
             case m_site:get(modules, Context) of
@@ -144,10 +144,10 @@ active(Module, Context) ->
     case z_db:has_connection(Context) of
         true ->
             F = fun() ->
-                    case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
-                        [{true}] -> true;
-                        _ -> false
-                    end
+                        case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
+                            [{true}] -> true;
+                            _ -> false
+                        end
                 end,
             z_depcache:memo(F, {?MODULE, {active, Module}, Context#context.host}, Context);
         false ->
@@ -186,19 +186,32 @@ whereis(Module, Context) ->
 %% @doc Return the list of all modules in the database.
 %% @spec all(#context{}) -> [ atom() ]
 all(Context) ->
-   Modules = z_db:q("select name from module order by name", Context),
-   [ z_convert:to_atom(M) || {M} <- Modules ].
+    Modules = z_db:q("select name from module order by name", Context),
+    [ z_convert:to_atom(M) || {M} <- Modules ].
 
 
 %% @doc Scan for a list of modules present in the site's module directories. A module is always a directory,
 %% the name of the directory is the same as the name of the module.
 %% @spec scan(#context{}) -> [ {atom(), dirname()} ]
 scan(#context{host=Host}) ->
-    Sites  = filename:join([z_utils:lib_dir(priv), "sites", Host, "modules", "mod_*"]),
-    Priv  = filename:join([z_utils:lib_dir(priv), "modules", "mod_*"]),
-    Src   = filename:join([z_utils:lib_dir(modules), "mod_*"]),
-    Site  = filename:join([z_utils:lib_dir(priv), "sites", Host]),
-    Files = filelib:wildcard(Sites) ++ filelib:wildcard(Priv) ++ filelib:wildcard(Src) ++ [Site],
+    All = [
+           %% Zotonic modules
+           [z_utils:lib_dir(modules), "mod_*"],
+
+           %% User-installed Zotonic sites
+           [z_path:user_sites_dir(), Host, "modules", "mod_*"],
+           [z_path:user_sites_dir(), Host],
+
+           %% User-installed modules
+           [z_path:user_modules_dir(), "mod_*"],
+
+           %% Backward compatibility
+           [z_utils:lib_dir(priv), "sites", Host, "modules", "mod_*"],
+           [z_utils:lib_dir(priv), "sites", Host],
+           [z_utils:lib_dir(priv), "modules", "mod_*"]
+           
+          ],
+    Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [filelib:wildcard(filename:join(P)) || P <- All]),
     [ {z_convert:to_atom(filename:basename(F)), F} ||  F <- Files ].
 
 
@@ -266,10 +279,10 @@ startable(Module, Dependencies) when is_list(Dependencies) ->
             case dependencies(Module) of
                 {Module, Depends, _Provides} ->
                     Missing = lists:foldl(fun(Dep, Ms) ->
-                                            case lists:member(Dep, Dependencies) of
-                                                true -> Ms;
-                                                false -> [Dep|Ms]
-                                            end
+                                                  case lists:member(Dep, Dependencies) of
+                                                      true -> Ms;
+                                                      false -> [Dep|Ms]
+                                                  end
                                           end,
                                           [],
                                           Depends),
@@ -371,9 +384,9 @@ handle_call(get_modules_status, _From, State) ->
 handle_call({whereis, Module}, _From, State) ->
     Running = proplists:get_value(running, z_supervisor:which_children(State#state.sup)),
     Ret = case lists:keysearch(Module, 1, Running) of
-        {value, {Module, _, Pid, _}} -> {ok, Pid};
-        false -> {error, not_running}
-    end,
+              {value, {Module, _, Pid, _}} -> {ok, Pid};
+              false -> {error, not_running}
+          end,
     {reply, Ret, State};
 
 %% @doc Trap unknown calls
@@ -467,25 +480,25 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     New  = sets:from_list(ValidModules),
     Kill = sets:subtract(Old, New),
     Create = sets:subtract(New, Old),
-    
+
     Running = z_supervisor:running_children(State#state.sup),
     Start = sets:to_list(sets:subtract(New, sets:from_list(Running))),
     {ok, StartList} = dependency_sort(Start),
 
     sets:fold(fun (Module, ok) ->
-              z_supervisor:delete_child(ModuleSup, Module),
-              ok
-          end, ok, Kill),
+                      z_supervisor:delete_child(ModuleSup, Module),
+                      ok
+              end, ok, Kill),
 
     sets:fold(fun (Module, ok) ->
-            z_supervisor:add_child_async(ModuleSup, module_spec(Module, Context)),
-            ok
-        end, ok, Create),
+                      z_supervisor:add_child_async(ModuleSup, module_spec(Module, Context)),
+                      ok
+              end, ok, Create),
 
-    % 1. Put all to be started modules into a start list (add to State)
-    % 2. Let the module manager start them one by one (if startable)
-    % 3. Log any start errors, suppress modules that have errors.
-    % 4. Log non startable modules (remaining after all startable modules have started)
+                                                % 1. Put all to be started modules into a start list (add to State)
+                                                % 2. Let the module manager start them one by one (if startable)
+                                                % 3. Log any start errors, suppress modules that have errors.
+                                                % 4. Log non startable modules (remaining after all startable modules have started)
     case {StartList, sets:size(Kill)} of
         {[], 0} -> 
             State#state{start_queue=[]};
@@ -495,12 +508,12 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     end.
 
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
-    % Signal modules are loaded, and load all translations.
+                                                % Signal modules are loaded, and load all translations.
     z_notifier:notify(module_ready, Context),
     spawn_link(fun() -> z_trans_server:load_translations(Context) end),
     State;
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
-    % Filter all children on the capabilities of the loaded modules.
+                                                % Filter all children on the capabilities of the loaded modules.
     Provided = handle_get_provided(State),
     case lists:filter(fun(M) -> is_startable(M, Provided) end, Starting) of
         [] ->
@@ -512,94 +525,94 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
                  lager:error("[~p] ~s", [z_context:site(Context), Msg])
              end || M <- Starting
             ],
-            
-            % Add non-started modules to the list with errors.
+
+                                                % Add non-started modules to the list with errors.
             CleanedUpErrors = lists:foldl(fun(M,Acc) -> 
-                                            proplists:delete(M,Acc) 
+                                                  proplists:delete(M,Acc) 
                                           end,
                                           State#state.start_error,
                                           Starting),
-            
+
             handle_start_next(State#state{
-                start_error=[ {M, case is_module(M) of false -> not_found; true -> dependencies_error end} 
-                              || M <- Starting 
-                            ] ++ CleanedUpErrors,
-                start_queue=[]
-            });
+                                start_error=[ {M, case is_module(M) of false -> not_found; true -> dependencies_error end} 
+                                              || M <- Starting 
+                                            ] ++ CleanedUpErrors,
+                                start_queue=[]
+                               });
         [C|_] ->
             case start_child(self(), C, ModuleSup, module_spec(C, Context), Context) of
                 {ok, StartHelperPid} -> 
                     State#state{
-                        start_error=proplists:delete(C, State#state.start_error),
-                        start_wait={C, StartHelperPid, now()},
-                        start_queue=lists:delete(C, Starting)
-                    };
+                      start_error=proplists:delete(C, State#state.start_error),
+                      start_wait={C, StartHelperPid, now()},
+                      start_queue=lists:delete(C, Starting)
+                     };
                 {error, Reason} -> 
                     handle_start_next(
-                        State#state{
-                            start_error=[ {C, Reason} | proplists:delete(C, State#state.start_error) ],
-                            start_queue=lists:delete(C, Starting)
-                        })
+                      State#state{
+                        start_error=[ {C, Reason} | proplists:delete(C, State#state.start_error) ],
+                        start_queue=lists:delete(C, Starting)
+                       })
             end
     end.
 
-    %% @doc Check if all module dependencies are running.
-    is_startable(Module, Dependencies) ->
-        startable(Module, Dependencies) =:= ok.
+%% @doc Check if all module dependencies are running.
+is_startable(Module, Dependencies) ->
+    startable(Module, Dependencies) =:= ok.
 
-    %% @doc Check if we can load the module
-    is_module(Module) ->
-        try 
-            {ok, _} = z_utils:ensure_existing_module(Module),
-            true
-        catch 
-            M:E -> 
-                ?ERROR("Can not fetch module info for module ~p, error: ~p:~p", [Module, M, E]),
-                false
-        end.
+%% @doc Check if we can load the module
+is_module(Module) ->
+    try 
+        {ok, _} = z_utils:ensure_existing_module(Module),
+        true
+    catch 
+        M:E -> 
+            ?ERROR("Can not fetch module info for module ~p, error: ~p:~p", [Module, M, E]),
+            false
+    end.
 
-    %% @doc Try to add and start the child, do not crash on missing modules. Run as a separate process.
-    %% @todo Add some preflight tests
-    start_child(ManagerPid, Module, ModuleSup, Spec, Context) ->
-        StartPid = spawn_link(
-            fun() ->
-                Result = case catch manage_schema(Module, Context) of
-                            ok ->
-                                % Try to start it
-                                z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
-                            Error ->
-                                ?ERROR("[~p] Error starting module ~p, Schema initialization error:~n~p~n", 
-                                        [z_context:site(Context), Module, Error]),
-                                {error, {schema_init, Error}}
-                         end,
-                gen_server:cast(ManagerPid, {start_child_result, Module, Result})
-            end
-        ),
-        {ok, StartPid}.
+%% @doc Try to add and start the child, do not crash on missing modules. Run as a separate process.
+%% @todo Add some preflight tests
+start_child(ManagerPid, Module, ModuleSup, Spec, Context) ->
+    StartPid = spawn_link(
+                 fun() ->
+                         Result = case catch manage_schema(Module, Context) of
+                                      ok ->
+                                                % Try to start it
+                                          z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
+                                      Error ->
+                                          ?ERROR("[~p] Error starting module ~p, Schema initialization error:~n~p~n", 
+                                                 [z_context:site(Context), Module, Error]),
+                                          {error, {schema_init, Error}}
+                                  end,
+                         gen_server:cast(ManagerPid, {start_child_result, Module, Result})
+                 end
+                ),
+    {ok, StartPid}.
 
 
 
 handle_start_child_result(Module, Result, State) ->
-    % Where we waiting for this child? If so, start the next.
+                                                % Where we waiting for this child? If so, start the next.
     {State1,IsWaiting} = case State#state.start_wait of
-                            {Module, _Pid, _NowStarted} ->
-                                {State#state{start_wait=none}, true};
-                            _Other ->
-                                {State, false}
+                             {Module, _Pid, _NowStarted} ->
+                                 {State#state{start_wait=none}, true};
+                             _Other ->
+                                 {State, false}
                          end,
     ReturnState = case Result of
-                    {ok, Pid} ->
-                        % Remove any registered errors for the started module
-                        State2 = State1#state{start_error=lists:keydelete(Module, 1, State1#state.start_error)},
-                        add_observers(Module, Pid, State2#state.context),
-                        z_notifier:notify(#module_activate{module=Module, pid=Pid}, State2#state.context),
-                        State2;
-                    {error, _Reason} = Error ->
-                        % Add a start error for this module
-                        State1#state{
+                      {ok, Pid} ->
+                                                % Remove any registered errors for the started module
+                          State2 = State1#state{start_error=lists:keydelete(Module, 1, State1#state.start_error)},
+                          add_observers(Module, Pid, State2#state.context),
+                          z_notifier:notify(#module_activate{module=Module, pid=Pid}, State2#state.context),
+                          State2;
+                      {error, _Reason} = Error ->
+                                                % Add a start error for this module
+                          State1#state{
                             start_error=[ {Module, Error} | lists:keydelete(Module, 1, State1#state.start_error) ]
-                        }
-                   end,
+                           }
+                  end,
     case IsWaiting of
         true -> gen_server:cast(self(), start_next);
         false -> ok
@@ -613,11 +626,11 @@ handle_get_provided(State) ->
 
 get_provided_for_modules(Modules) ->
     lists:flatten(
-        [ case dependencies(M) of
-                {_, _, Provides} -> Provides;
-                _ -> []
-           end
-           || M <- Modules ]).    
+      [ case dependencies(M) of
+            {_, _, Provides} -> Provides;
+            _ -> []
+        end
+        || M <- Modules ]).    
 
 
 stop_children_with_missing_depends(State) ->
@@ -638,25 +651,25 @@ handle_get_running(State) ->
 %% @doc Return the list of module names and their pid currently managed by the z_supervisor.
 handle_get_modules_pid(State) ->
     lists:flatten(
-              lists:map(fun({_State,Children}) ->
-                          [ {Name,Pid} || {Name,_Spec,Pid,_Time} <- Children ]
-                        end,
-                        z_supervisor:which_children(State#state.sup))).
+      lists:map(fun({_State,Children}) ->
+                        [ {Name,Pid} || {Name,_Spec,Pid,_Time} <- Children ]
+                end,
+                z_supervisor:which_children(State#state.sup))).
 
 %% @doc Get a list of all valid modules
 valid_modules(Context) ->
     Ms0 = lists:filter(fun module_exists/1, active(Context)),
     lists:filter(fun(Mod) -> valid(Mod, Context) end, Ms0).
-    
+
 
 %% @doc Return the z_supervisor child spec for a module
 module_spec(ModuleName, Context) ->
     Args = [ {context, Context}, {module, ModuleName} | z_sites_manager:get_site_config(z_context:site(Context))],
     ChildModule = gen_server_module(ModuleName),
     #child_spec{
-        name=ModuleName,
-        mfa={ChildModule, start_link, [Args]}
-    }.
+       name=ModuleName,
+       mfa={ChildModule, start_link, [Args]}
+      }.
 
 
 %% When a module does not implement a gen_server then we use a dummy gen_server.
@@ -758,20 +771,20 @@ remove_observers(Module, Pid, Context) ->
 %% @spec observes(atom(), pid()) -> [{atom(), Handler}]
 observes(Module, Pid) ->
     observes(Module, Pid, erlang:get_module_info(Module, exports), []).
-    
-    observes(_Module, _Pid, [], Acc) ->
-        Acc;
-    observes(Module, Pid, [{F,Arity}|Rest], Acc) ->
-        case atom_to_list(F) of
-            "observe_" ++ Message when Arity == 2; Arity == 3 ->
-                observes(Module, Pid, Rest, [{list_to_atom(Message), {Module,F}}|Acc]);
-            "pid_observe_" ++ Message when Arity == 3; Arity == 4 ->
-                observes(Module, Pid, Rest, [{list_to_atom(Message), {Module,F,[Pid]}}|Acc]);
-            _ -> 
-                observes(Module, Pid, Rest, Acc)
-        end;
-    observes(Module, Pid, [_|Rest], Acc) -> 
-        observes(Module, Pid, Rest, Acc).
+
+observes(_Module, _Pid, [], Acc) ->
+    Acc;
+observes(Module, Pid, [{F,Arity}|Rest], Acc) ->
+    case atom_to_list(F) of
+        "observe_" ++ Message when Arity == 2; Arity == 3 ->
+            observes(Module, Pid, Rest, [{list_to_atom(Message), {Module,F}}|Acc]);
+        "pid_observe_" ++ Message when Arity == 3; Arity == 4 ->
+            observes(Module, Pid, Rest, [{list_to_atom(Message), {Module,F,[Pid]}}|Acc]);
+        _ -> 
+            observes(Module, Pid, Rest, Acc)
+    end;
+observes(Module, Pid, [_|Rest], Acc) -> 
+    observes(Module, Pid, Rest, Acc).
 
 
 

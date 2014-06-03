@@ -18,7 +18,14 @@
 # usage zotonic-debug
 #
 
+# Make sure Zotonic is built
+if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
+    echo "Building Zotonic for the first time."
+    $MAKE
+fi
+
 require_zotonic_not_running
 
 cd $ZOTONIC
-$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl -config $ZOTONIC/priv/erlang.config -config $ZOTONIC/priv/zotonic.config -sasl errlog_type error -s zotonic 
+
+$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -sasl errlog_type error -s zotonic 

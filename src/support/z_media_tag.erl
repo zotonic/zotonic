@@ -214,7 +214,7 @@ filename_to_filepath(Filename, #context{host=Host} = Context) ->
                 _ -> Filename
             end;
         _ ->
-            filename:join([z_utils:lib_dir(priv), "sites", Host, "files", "archive", Filename])
+            filename:join([z_path:site_dir(Host), "files", "archive", Filename])
     end.
 
 

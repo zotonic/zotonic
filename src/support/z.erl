@@ -22,39 +22,39 @@
 
 %% interface functions
 -export([
-    c/1,
-    
-    n/2,
-    n1/2,
-    m/0,
-    m/1,
-    flush/0,
-    flush/1,
-    restart/0,
-    restart/1,
+         c/1,
 
-    ld/0,
-    ld/1,
+         n/2,
+         n1/2,
+         m/0,
+         m/1,
+         flush/0,
+         flush/1,
+         restart/0,
+         restart/1,
 
-    log_level/1,
-    
-    debug_msg/3,
+         ld/0,
+         ld/1,
 
-    debug/2,
-    debug/3,
-    debug/4,
-    info/2,
-    info/3,
-    info/4,
-    warning/2,
-    warning/3,
-    warning/4
-]).
+         log_level/1,
+
+         debug_msg/3,
+
+         debug/2,
+         debug/3,
+         debug/4,
+         info/2,
+         info/3,
+         info/4,
+         warning/2,
+         warning/3,
+         warning/4
+        ]).
 
 -include("zotonic.hrl").
 -include("zotonic_log.hrl").
 
-% @doc Return a new context
+                                                % @doc Return a new context
 c(Site) ->
     z_context:new(Site).
 
@@ -73,8 +73,10 @@ m() ->
 %% @doc (Re)make all erlang source modules with the supplied compile 
 %% options and reset the caches.
 m(Options) ->
-    make:all([load | Options]), 
-    flush().
+    case zotonic_compile:all(Options) of
+        ok -> flush();
+        error -> error
+    end.
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
 flush() ->
@@ -143,4 +145,3 @@ log(Type, Msg, Props, Context) ->
     Module = proplists:get_value(module, Props, unknown),
     lager:log(Type, Props, "[~p] ~p @ ~p:~p  ~s~n", [Context#context.host, Type, Module, Line, binary_to_list(Msg1)]),
     z_notifier:notify({log, #log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}}, Context).
-

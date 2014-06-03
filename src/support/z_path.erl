@@ -20,20 +20,55 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([
-    site_dir/1,
-    media_preview/1,
-    media_archive/1,
-    abspath/2,
-    files_subdir/2,
-    files_subdir_ensure/2
-]).
+         site_dir/1,
+         module_dir/2,
+         media_preview/1,
+         media_archive/1,
+         abspath/2,
+         files_subdir/2,
+         files_subdir_ensure/2,
+         user_sites_dir/0,
+         user_modules_dir/0
+        ]).
 
 -include("zotonic.hrl").
 
 %% @doc Return the path to the site folder of the given context.
 %% @spec site_dir(#context{}) -> filename()
-site_dir(#context{host=Host}) ->
-        filename:join([z_utils:lib_dir(priv), "sites", Host]).
+site_dir(Context=#context{host=Host}) ->
+    F = fun() -> site_dir(Host) end,
+    z_depcache:memo(F, {site_dir, Host}, ?HOUR, Context);
+site_dir(Host) when is_atom(Host) ->
+    find_first_path(
+      [
+       filename:join([z_path:user_sites_dir(), Host]),
+       filename:join([z_utils:lib_dir(priv), "sites", Host])
+      ]).
+
+%% @doc Return the path to the given module in the given context.
+%% @spec module_dir(atom(), #context{}) -> string()
+module_dir(Module, Context=#context{host=Host}) ->
+    F = fun() -> module_dir(Module, Host) end,
+    z_depcache:memo(F, {module_dir, Module}, ?HOUR, Context);
+module_dir(Module, Host) when is_atom(Host) ->
+    find_first_path(
+      [
+       filename:join([z_path:user_sites_dir(), Host, "modules", Module]),
+       filename:join([z_path:user_modules_dir(), Module]),
+       filename:join([z_utils:lib_dir(modules)])
+      ]).
+
+
+find_first_path(Paths) ->
+    lists:foldl(fun(Dir, undefined) ->
+                        case filelib:is_dir(Dir) of
+                            true -> Dir;
+                            false -> undefined
+                        end;
+                   (_, Acc) -> Acc
+                end,
+                undefined,
+                Paths).
 
 %% @doc Return the path to the media preview directory
 %% @spec media_preview(#context{}) -> filename()
@@ -52,7 +87,7 @@ abspath(Path, Context) ->
 %% @doc Return the path to a files subdirectory
 %% @spec files_subdir(SubDir::filename(), #context{}) -> filename()
 files_subdir(SubDir, #context{host=Host}) ->
-        filename:join([z_utils:lib_dir(priv), "sites", Host, "files", SubDir]).
+    filename:join([z_path:site_dir(Host), "files", SubDir]).
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
 %% @spec files_subdir_ensure(SubDir::filename(), #context{}) -> filename()
@@ -60,3 +95,12 @@ files_subdir_ensure(SubDir, Context) ->
     Dir = files_subdir(SubDir, Context),
     ok = filelib:ensure_dir(filename:join([Dir, ".empty"])),
     Dir.
+
+%% @doc The directory of the user-defined sites
+user_sites_dir() ->
+    z_config:get(user_sites_dir).
+
+%% @doc The directory of the user-defined modules
+user_modules_dir() ->
+    z_config:get(user_modules_dir).
+

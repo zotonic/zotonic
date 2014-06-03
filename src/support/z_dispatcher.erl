@@ -306,7 +306,7 @@ reload_dispatch_list(#state{context=Context} = State) ->
 
 %% @doc Collect all dispatch lists.  Checks priv/dispatch for all dispatch list definitions.
 collect_dispatch_lists(Context) ->
-    Files      = filelib:wildcard(filename:join([z_utils:lib_dir(priv), "sites", Context#context.host, "dispatch", "*"])),
+    Files      = filelib:wildcard(filename:join([z_path:site_dir(Context), "dispatch", "*"])),
     Modules    = z_module_manager:active(Context),
     ModuleDirs = z_module_manager:scan(Context),
     ModDisp    = [ {M, filelib:wildcard(filename:join([proplists:get_value(M, ModuleDirs), "dispatch", "*"]))} || M <- Modules ],

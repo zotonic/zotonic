@@ -36,3 +36,6 @@ deps/
 /priv/modules/
 
 /modules/*/translations/template/*.pot
+
+/user
+/user/*
