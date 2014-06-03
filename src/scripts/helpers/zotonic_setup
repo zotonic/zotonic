@@ -184,8 +184,17 @@ if [ "$(find_config zotonic.config)" == "" ]; then
 
     sed -e "s~%%USER_SITES_DIR%%~$ZOTONIC/user/sites~" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
     sed -e "s~%%USER_MODULES_DIR%%~$ZOTONIC/user/modules~" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
-    
-    
 fi
 
+MODULES=$(get_user_modules_dir)
 export SITES=$(get_user_sites_dir)
+
+if [ ! -d "$SITES" ]; then
+    # Try to make the user sites directory
+    mkdir -p "$SITES" 2>/dev/null
+fi
+
+if [ ! -d "$MODULES" ]; then
+    # Try to make the user modules directory
+    mkdir -p "$MODULES" 2>/dev/null
+fi
