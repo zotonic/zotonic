@@ -40,7 +40,12 @@ get(Key) ->
 
 %% @doc Get value from config file, returning default value when not set (cached)
 get(Key, Default) ->
-    application:get_env(zotonic, Key, Default).
+	case application:get_env(zotonic, Key) of
+		undefined ->
+			Default;
+		{ok, Value} ->
+			Value
+	end.
 
 default(timezone) -> <<"UTC">>;
 default(listen_port) -> 8000;
