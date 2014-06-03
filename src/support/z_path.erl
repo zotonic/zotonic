@@ -46,7 +46,7 @@ site_dir(Host) when is_atom(Host) ->
       ]).
 
 %% @doc Return the path to the given module in the given context.
-%% @spec site_dir(#context{}) -> filename()
+%% @spec module_dir(atom(), #context{}) -> string()
 module_dir(Module, Context=#context{host=Host}) ->
     F = fun() -> module_dir(Module, Host) end,
     z_depcache:memo(F, {module_dir, Module}, ?HOUR, Context);
