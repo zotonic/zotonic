@@ -14,15 +14,21 @@ Zotonic depends on two global config files, called ``zotonic.config``
 and ``erlang.config``. On startup, Zotonic looks in the following
 places for these files:
 
+ - ``$HOME/.zotonic/(nodename)/``
  - ``$HOME/.zotonic/(version)/``
  - ``$HOME/.zotonic/``
+ - ``/etc/zotonic/(nodename)/``
  - ``/etc/zotonic/(version)/``
  - ``/etc/zotonic/``
 
-Where `(version)` is the `minor` version number of Zotonic,
-e.g. ``0.11`` for all Zotonic ``0.11.x`` variants. This way, you can
-have separate configuration files for different versions of Zotonic
-which are running simultaneously.
+Where `(nodename)` is the name of the Zotonic Erlang node, which
+defaults to `zotonic001` (and can be set with `$NODENAME` environment
+variable).
+
+`(version)` is the `minor` version number of Zotonic, e.g. ``0.11``
+for all Zotonic ``0.11.x`` variants. This way, you can have separate
+configuration files for different versions of Zotonic which are
+running simultaneously.
    
 When the Zotonic startup script finds a config file in one of the
 directories, it stops looking, so files in the other directories are

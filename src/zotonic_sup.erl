@@ -148,6 +148,9 @@ init([]) ->
                   lager:info(""),
                   lager:info("Zotonic started"),
                   lager:info("==============="),
+                  lager:info("Config files used:"),
+                  [lager:info("- ~s", [Cfg]) || [Cfg] <- proplists:get_all_values(config, init:get_arguments())],
+                  lager:info(""),
                   lager:info("Web server listening on IPv4 ~p:~p", [WebIp, WebPort]),
                   case EnableIPv6 of
                       true -> lager:info("Web server listening on IPv6 ::~p", [WebPort]);

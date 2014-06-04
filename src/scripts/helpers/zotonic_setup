@@ -68,7 +68,7 @@ export -f find_enabled_sites
 function find_config {
     filename="$1"
     vsn=$(major_version)
-    for file in "$HOME/.zotonic/$vsn/$filename" "$HOME/.zotonic/$filename" "/etc/zotonic/$vsn/$filename" "/etc/zotonic/$filename"; do
+    for file in "$HOME/.zotonic/$NODENAME/$filename" "$HOME/.zotonic/$vsn/$filename" "$HOME/.zotonic/$filename" "/etc/zotonic/$NODENAME/$filename" "/etc/zotonic/$vsn/$filename" "/etc/zotonic/$filename"; do
         if [ -e $file ]; then
             echo "$file"
             break
