@@ -202,10 +202,10 @@ start_following(Context) ->
                     binary_to_list(LP);
                 P -> P
             end,
-    lager:info("Twitter: (~p) Username = ~p", [z_context:site(Context), Login]),
+    lager:info("[~p] Twitter: Username = ~p", [z_context:site(Context), Login]),
     case Login of
         false ->
-            lager:warning("Twitter: (~p) No username/password configuration.", [z_context:site(Context)]),
+            lager:warning("[~p] Twitter: No username/password configuration.", [z_context:site(Context)]),
             not_configured;
         _ ->
             %% Get list of twitter ids to follow
@@ -213,7 +213,7 @@ start_following(Context) ->
 
             case Follow1 of
                 [] ->
-                    lager:info("Twitter: (~p) No follow configuration for mod_twitter.", [z_context:site(Context)]),
+                    lager:info("[~p] Twitter: No follow configuration for mod_twitter.", [z_context:site(Context)]),
                     undefined;
                 _ ->
                     URL = "https://" ++ Login ++ ":" ++ Pass ++ "@stream.twitter.com/1/statuses/filter.json",
@@ -267,7 +267,7 @@ process_data(Data, Context) ->
                     AsyncContext = z_context:prune_for_async(Context),
                     spawn(fun() -> import_tweet(Tweet, AsyncContext) end);
                 {struct, _} ->
-                    lager:info("Twitter: ignored delete request."),
+                    lager:info("[~p] Twitter: ignored delete request.", [z_context:site(Context)]),
                     % {"delete":{"status":{"user_id":42,"user_id_str":"42","id_str":"1234","id":1234}}}
                     ok
             end;
@@ -286,7 +286,7 @@ process_data(Data, Context) ->
         TweeterId = proplists:get_value(<<"id">>, User),
         case m_identity:lookup_by_type_and_key("twitter_id", TweeterId, Context) of
             undefined ->
-                lager:warning("Twitter: Received a tweet for an unknown user (~p)", [TweeterId]),
+                lager:warning("[~p] Twitter: Received a tweet for an unknown user (~p)", [z_context:site(Context), TweeterId]),
                 skip;
             Row ->
                 UserId = proplists:get_value(rsc_id, Row),
@@ -311,7 +311,7 @@ process_data(Data, Context) ->
 
                 AdminContext = z_acl:sudo(Context),
                 {ok, TweetId} = m_rsc:insert(Props, AdminContext),
-                lager:info("Twitter: imported tweet ~p for user_id ~p", [TweetId, UserId]),
+                lager:debug("[~p] Twitter: imported tweet ~p for user_id ~p", [z_context:site(Context), TweetId, UserId]),
 
                 {ok, _} = m_edge:insert(TweetId, author, UserId, AdminContext),
 
@@ -327,18 +327,18 @@ process_data(Data, Context) ->
 receive_chunk(RequestId, Context) ->
     receive
         {http, {RequestId, {error, Reason}}} when(Reason =:= etimedout) orelse(Reason =:= timeout) ->
-            lager:error("Twitter: closed stream due to http timeout."),
+            lager:error("[~p] Twitter: closed stream due to http timeout.", [z_context:site(Context)]),
             exit({error, timeout});
         {http, {RequestId, {{_, 401, _} = Status, Headers, _}}} ->
-            lager:error("Twitter: username/password not accepted."),
+            lager:error("[~p] Twitter: username/password not accepted.", [z_context:site(Context)]),
             exit({error, {unauthorized, {Status, Headers}}});
         {http, {RequestId, Result}} ->
-            lager:error("Twitter: unknown stream result (~p)", [Result]),
+            lager:error("[~p] Twitter: unknown stream result (~p)", [z_context:site(Context), Result]),
             exit({error, Result});
 
         %% start of streaming data
         {http,{RequestId, stream_start, Headers}} ->
-            error_logger:info_msg("Streaming data start ~p ~n",[Headers]),
+            lager:debug("[~p] Streaming data start ~p ~n",[z_context:site(Context), Headers]),
             ?MODULE:receive_chunk(RequestId, Context);
 
         %% streaming chunk of data
@@ -350,12 +350,12 @@ receive_chunk(RequestId, Context) ->
 
         %% end of streaming data
         {http,{RequestId, stream_end, Headers}} ->
-            error_logger:info_msg("Streaming data end ~p ~n", [Headers]),
+            lager:debug("[~p] Streaming data end ~p ~n", [z_context:site(Context), Headers]),
             {ok, RequestId}
 
     after 120 * 1000 ->
             %% Timeout; respawn.
-            lager:error("Twitter: closed stream due to our own timeout."),
+            lager:error("[~p] Twitter: closed stream due to our own timeout.", [z_context:site(Context)]),
             exit({error, timeout})
     end.
 
@@ -385,7 +385,7 @@ handle_author_edges_upgrade(C) ->
     Context = z_acl:sudo(C),
     case m_rsc:name_to_id_cat(tweeted, predicate, Context) of
         {ok, Tweeted} ->
-            lager:info("Twitter: Found old 'tweeted' predicate, upgrading..."),
+            lager:info("[~p] Twitter: Found old 'tweeted' predicate, upgrading...", [z_context:site(Context)]),
             Author = m_rsc:name_to_id_cat_check(author, predicate, Context),
             z_db:q("update edge set subject_id = object_id, object_id = subject_id, predicate_id = $1 where predicate_id = $2", [Author, Tweeted], Context),
             m_rsc:delete(Tweeted, Context),
@@ -432,7 +432,6 @@ import_oembed(OriginalUrl, Props, Context) ->
         undefined ->
             undefined;
         Category ->
-            lager:info("Twitter: "),
             RscProps = [{category, Category},
                         {title, proplists:get_value(<<"title">>, Props)},
                         {summary, proplists:get_value(<<"description">>, Props)},

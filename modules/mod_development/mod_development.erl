@@ -88,7 +88,7 @@ observe_debug_stream(#debug_stream{target=TargetId, what=What}, Context) ->
 observe_module_activate(#module_activate{module=Module}, Context) ->
     case z_module_manager:reinstall(Module, Context) of
         ok ->
-            lager:warning("Reinstalled module: ~p", [Module]);
+            lager:info("[~p] Reinstalled module: ~p", [z_context:site(Context), Module]);
         nop ->
             nop
     end.
