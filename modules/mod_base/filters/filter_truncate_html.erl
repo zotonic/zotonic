@@ -32,9 +32,9 @@ truncate_html(S, N, Append, Context) when not is_integer(N) ->
 truncate_html({tr, _} = Tr, N, Append, Context) ->
     truncate_html(z_trans:lookup_fallback(Tr, Context), N, Append, Context);
 truncate_html(In, N, Append, _Context) when is_binary(In) ->
-    z_html:truncate(In, N, Append);
+    z_html:truncate(In, N, z_convert:to_binary(Append));
 truncate_html(In, N, Append, _Context) when is_list(In) ->
-    z_html:truncate(iolist_to_binary(In), N, Append);
+    z_html:truncate(iolist_to_binary(In), N, z_convert:to_binary(Append));
 truncate_html(In, N, Append, Context) ->
     case erlydtl_runtime:to_value(In, Context) of
         L when is_list(L) ->

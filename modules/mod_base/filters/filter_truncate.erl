@@ -32,9 +32,9 @@ truncate(S, N, Append, Context) when not is_integer(N) ->
 truncate({tr, _} = Tr, N, Append, Context) ->
     truncate(z_trans:lookup_fallback(Tr, Context), N, Append, Context);
 truncate(In, N, Append, _Context) when is_binary(In) ->
-    z_string:truncate(In, N, Append);
+    z_string:truncate(In, N, z_convert:to_binary(Append));
 truncate(In, N, Append, _Context) when is_list(In) ->
-    z_string:truncate(iolist_to_binary(In), N, Append);
+    z_string:truncate(iolist_to_binary(In), N, z_convert:to_binary(Append));
 truncate(In, N, Append, Context) ->
     case erlydtl_runtime:to_value(In, Context) of
         L when is_list(L) ->
