@@ -70,7 +70,7 @@ compile_worker_process(Options, Parent) ->
 
 
 compile_dirs() ->
-    ok = application:load(zotonic),
+    application:load(zotonic),
     {ok, Sites} = application:get_env(zotonic, user_sites_dir),
     {ok, Modules} = application:get_env(zotonic, user_modules_dir),
     [
