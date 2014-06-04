@@ -23,7 +23,7 @@ truncate(In, Context) ->
     truncate(In, 20, Context).
 
 truncate(In, N, Context) ->
-    truncate(In, N, <<"...">>, Context).
+    truncate(In, N, <<226,128,166>>, Context).
 
 truncate(undefined, _N, _Append, _Context) ->
     undefined;
