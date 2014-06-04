@@ -30,14 +30,22 @@ mod_development
   Added checkbox to disable the api-service ``/api/development/recompile``
 
 
-Updated filters
----------------
+New an updated filters
+----------------------
 
 date
     An optional second argument for the timezone has been added.
 
 date_range
     An optional third argument for the timezone has been added.
+
+truncate
+	An optional second argument is added to specify the text added where
+	the text is truncated.
+
+truncate_html
+	Truncates a HTML text to a specific length, ensures that all open
+	tags are properly closed.
 
 
 New notification

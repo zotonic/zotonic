@@ -14,6 +14,6 @@ For example::
 
   {{ value|force_escape }}
 
-When the value is ``hel&lo`` then the output is ``hel&amp;lo``.
+If the value is ``hel&lo`` then the output is ``hel&amp;lo``.
 
 .. seealso:: :ref:`filter-escape`

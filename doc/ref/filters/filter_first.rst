@@ -10,10 +10,10 @@ For example::
 
   {{ value|first }}
 
-When the value is ``hello`` then the output is ``h``.
+If the value is ``hello`` then the output is ``h``.
 
-**Note:** This function is not safe to use with multibyte character
-values, use with care.
+**Note:** This function is safe to use with multibyte character
+values, if the input is a binary.
 
 For a regular list::
 

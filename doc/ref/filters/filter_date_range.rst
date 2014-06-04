@@ -11,12 +11,12 @@ Take the following code::
 
   {{ [fromdate, todate]|date_range:[format_ne, sep, format_eq] }}
 
-When the `dates` of fromdate and todate are equal then the output will
+If the ``dates`` of fromdate and todate are equal then the output will
 be as if the following were written::
 
   {{ fromdate|date:format_ne }}{{ sep }}{{ todate|date:format_eq }}
 
-However, when the dates are equal then the output will be as if the
+However, if the dates are equal then the output will be as if the
 following were written::
 
   {{ fromdate|date:format_ne }}{{ sep }}{{ todate|date:format_ne }}

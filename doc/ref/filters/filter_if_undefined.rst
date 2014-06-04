@@ -15,6 +15,6 @@ For example::
 
   {% if value|if_undefined:`true` %}The value is true or undefined{% endif %}
 
-When the value is ``undefined``, the output “The value is true or undefined”.
+If the value is ``undefined``, the output will be “The value is true or undefined”.
 
 .. seealso:: :ref:`filter-is_defined`, :ref:`filter-is_undefined`

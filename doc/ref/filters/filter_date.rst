@@ -11,7 +11,7 @@ An example::
 
   {{ mydate|date:"Y-m-d" }}
 
-When mydate is ``{2009,6,1}`` this returns ``2009-06-01`` as output.
+If mydate is ``{2009,6,1}`` this returns ``2009-06-01`` as output.
 
 To show the year of the current date::
 
