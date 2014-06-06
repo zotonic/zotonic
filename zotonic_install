@@ -1,46 +1,64 @@
 #!/bin/bash
-ZOTONIC=/home/zotonic && \
-SHELL=/bin/bash && \
+set -e
+
+ZOTONIC=/home/zotonic
+SHELL=/bin/bash
+
+wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
+dpkg -i erlang-solutions_1.0_all.deb
+
+apt-get update
+
 apt-get install -y \
-        erlang \
-        erlang-src \
-        build-essential \
-        postgresql \
-        imagemagick \
-        exif \
-        git && \
+    build-essential \
+    postgresql \
+    imagemagick \
+    erlang \
+    exif \
+    wget \
+    git
+
 
 echo "CREATE USER zotonic WITH PASSWORD 'zotonic';
 ALTER ROLE zotonic WITH CREATEDB;
 CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
 \c zotonic
-CREATE LANGUAGE \"plpgsql\";" | su -l postgres -c psql && \
+CREATE LANGUAGE \"plpgsql\";" | su -l postgres -c psql
 echo "# Zotonic settings
 local   all         zotonic                           ident
 host    all         zotonic     127.0.0.1/32          md5
-host    all         zotonic     ::1/128               md5" >> /etc/postgresql/*.*/main/pg_hba.conf && \
-/etc/init.d/postgresql reload && \
+host    all         zotonic     ::1/128               md5" >> /etc/postgresql/*.*/main/pg_hba.conf
+/etc/init.d/postgresql reload
 
-mkdir /home/zotonic &&\
-useradd -d $ZOTONIC -s /bin/bash zotonic && \
-chown -R zotonic:zotonic $ZOTONIC && \
+mkdir -p $ZOTONIC
+grep zotonic /etc/passwd || useradd -d $ZOTONIC -s /bin/bash zotonic
+chown -R zotonic:zotonic $ZOTONIC
 
-echo "git clone git://github.com/zotonic/zotonic.git zotonic && \
+if [ ! -d $ZOTONIC/zotonic ]; then 
+    echo "git clone git://github.com/zotonic/zotonic.git zotonic && \
 cd zotonic/ && \
 make && \
 echo export PATH=\$PATH:\$HOME/zotonic/bin > \$HOME/.profile && \
-. \$HOME/.profile && \
-zotonic start" | su -l zotonic && \
+. \$HOME/.profile" | su -l zotonic
+fi
+echo "zotonic start" | su -l zotonic
 
-CONFIG=$ZOTONIC/zotonic/priv/config && \
+CONFIG=$(find $ZOTONIC/.zotonic -name zotonic.config | head -n 1)
 while [ ! -f $CONFIG ]
 do
-  sleep 2
-done && \
-PASSWORD=`cat $CONFIG | grep password | sed -E 's/^\s\{\s*password\s*,\s*"(.*?)".*/\1/'` && \
-echo "
+    sleep 2
+done
+PASSWORD=`cat $CONFIG | grep {password | sed -E 's/^\s\{\s*password\s*,\s*"(.*?)".*/\1/'`
+
+if wget -q -O /dev/null http://localhost:8000/; then
+    echo "
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Zotonic has been successfully installed:
 - Visit http://localhost:8000/ to see the sites administration page.
 - The password for login to this page is $PASSWORD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+else
+    echo "Error running Zotonic!"
+    # run debug mode to see whats going on
+    echo "zotonic debug" | su -l zotonic
+fi
