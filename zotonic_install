@@ -4,20 +4,18 @@ set -e
 ZOTONIC=/home/zotonic
 SHELL=/bin/bash
 
-wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
-dpkg -i erlang-solutions_1.0_all.deb
-
 apt-get update
 
 apt-get install -y \
     build-essential \
     postgresql \
     imagemagick \
-    erlang \
     exif \
     wget \
     git
 
+wget http://packages.erlang-solutions.com/site/esl/esl-erlang/FLAVOUR_1_general/esl-erlang_16.b.3-1~debian~wheezy_amd64.deb
+dpkg -i esl-erlang_16.b.3-1~debian~wheezy_amd64.deb
 
 echo "CREATE USER zotonic WITH PASSWORD 'zotonic';
 ALTER ROLE zotonic WITH CREATEDB;
