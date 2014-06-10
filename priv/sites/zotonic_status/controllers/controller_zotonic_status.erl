@@ -66,10 +66,10 @@ logon_page(Context) ->
 
 status_page(Context) ->
     Template = z_context:get(template, Context),
-    SitesStatus = z_sites_manager:get_sites_status(),
+    SitesStatus = get_sites_status(),
     Vars = [
         {has_user, z_acl:user(Context)},
-        {configs, [ {Site, site_config(Site)} || Site <- z_sites_manager:get_sites_all(), Site /= zotonic_status ]},
+        {configs, site_configs()},
         {sites, SitesStatus}
         | z_context:get_all(Context)
     ],
@@ -79,12 +79,6 @@ status_page(Context) ->
     start_stream(SitesStatus, OutputContext),
     ?WM_REPLY(Output, OutputContext).
 
-
-site_config(Site) ->
-    case z_sites_manager:get_site_config(Site) of
-        {ok, Config} -> Config;
-        {error, _} = Error -> [{host,Site}, Error]
-    end.
 
 %% -----------------------------------------------------------------------------------------------
 %% Handle all events
@@ -146,7 +140,7 @@ updater(SitesStatus, Context) ->
     Context1 = z_auth:logon_from_session(Context),
     timer:sleep(1000),
     z_sites_manager:upgrade(),
-    NewStatus = z_sites_manager:get_sites_status(),
+    NewStatus = get_sites_status(),
     case NewStatus /= SitesStatus of
         true ->
             Context2 = render_update(NewStatus, Context1),
@@ -159,7 +153,7 @@ updater(SitesStatus, Context) ->
 render_update(SitesStatus, Context) ->
     Vars = [
         {has_user, z_acl:user(Context)},
-        {configs, [ {Site, site_config(Site)} || Site <- z_sites_manager:get_sites_all(), Site /= zotonic_status ]},
+        {configs, site_configs()},
         {sites, SitesStatus}
     ],
     Vars1 = z_notifier:foldl(zotonic_status_init, Vars, Context),
@@ -168,3 +162,26 @@ render_update(SitesStatus, Context) ->
     
 notice(SiteName, Text, Context) ->
      mod_zotonic_status_vcs:notice(SiteName, Text, Context).
+
+
+site_configs() ->
+    [ {Site, site_config(Site)} || Site <- get_sites() ].
+
+site_config(Site) ->
+    case z_sites_manager:get_site_config(Site) of
+        {ok, Config} -> Config;
+        {error, _} = Error -> [{host,Site}, Error]
+    end.
+
+get_sites() ->
+    lists:filter(fun(Site) -> 
+                    not lists:member(Site, z_sites_manager:get_builtin_sites())
+                 end,
+                 z_sites_manager:get_sites_all()).
+
+get_sites_status() ->
+    SitesStatus = z_sites_manager:get_sites_status(),
+    lists:filter(fun(Status) ->
+                    not lists:member(hd(Status), z_sites_manager:get_builtin_sites())
+                 end,
+                 SitesStatus).
