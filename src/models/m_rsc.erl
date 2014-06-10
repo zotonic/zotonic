@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2014 Marc Worrell
 %%
 %% @doc Model for resource data. Interfaces between zotonic, templates and the database.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@
 
     page_path_to_id/2,
     
+    get_visible/2,
     get/2,
     get_raw/2,
     get_acl_props/2,
@@ -77,6 +78,7 @@
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
+-spec m_find_value(resource()|atom(), #m{}, #context{}) -> #m{} | undefined | any().
 m_find_value(Id, #m{value=undefined} = M, Context) ->
     case rid(Id, Context) of
         undefined -> 
@@ -99,18 +101,25 @@ m_find_value(Key, #m{value=Id}, Context) when is_integer(Id) ->
     p(Id, Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
+-spec m_to_list(#m{}, #context{}) -> list().
 m_to_list(#m{value=#rsc_list{list=List}}, _Context) ->
     List;
-m_to_list(#m{}, _Context) ->
-    [].
+m_to_list(#m{value=undefined}, _Context) ->
+    [];
+m_to_list(#m{value=Id}, Context) ->
+    case get_visible(Id, Context) of
+        undefined ->
+            [];
+        L when is_list(L) ->
+            L
+    end.
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
+-spec m_value(#m{}, #context{}) -> undefined | any().
 m_value(#m{value=undefined}, _Context) ->
     undefined;
-m_value(#m{value=V}, _Context) ->
-    V.
+m_value(#m{value=Id}, Context) ->
+    get_visible(Id, Context).
 
 %% @doc Return the id of the resource with the name
 % @spec name_to_id(NameString, Context) -> {ok, int()} | {error, Reason}
@@ -174,8 +183,32 @@ page_path_to_id(Path, Context) ->
     end.
 
 
+%% @doc Read a whole resource, check all properties for access rights
+-spec get_visible(resource(), #context{}) -> list() | undefined.
+get_visible(RId, Context) ->
+    case rid(RId, Context) of
+        undefined ->
+            undefined;
+        Id ->
+            case z_acl:rsc_visible(Id, Context) of
+                true ->
+                    case get(Id, Context) of
+                        undefined ->
+                            undefined;
+                        Props ->
+                            {id,Id} = proplists:lookup(id, Props),
+                            lists:filter(fun({K,_V}) ->
+                                            z_acl:rsc_prop_visible(Id, K, Context) 
+                                         end,
+                                         Props)
+                    end;
+                false ->
+                    undefined
+            end
+    end.
+
 %% @doc Read a whole resource
-%% @spec get(Id, Context) -> PropList | undefined
+-spec get(resource(), #context{}) -> list() | undefined.
 get(Id, Context) ->
     case rid(Id, Context) of
         Rid when is_integer(Rid) ->
