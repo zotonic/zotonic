@@ -15,13 +15,21 @@ Upgrading to Zotonic 0.11
 Configuration change
 ....................
 
-The global file ``priv/config`` has been obsoleted in place of a new file, ``priv/zotonic.config``. To upgrade, do the following:
+The global file ``priv/config`` has been obsoleted in place of a new global configuration file, ``~/.zotonic/zotonic.config``. To upgrade, do the following:
 
- * Copy ``priv/zotonic.config.in`` to ``priv/zotonic.config``
+ * Make a directory in your home folder, called ``~/.zotonic``.
+ * Copy ``priv/zotonic.config.in`` to ``~/.zotonic/zotonic.config``
  * Copy any settings from ``priv/config`` into the new ``priv/zotonic.config`` (IP addresses, etc)
- * Then, remove the old file ``priv/config``, as it is no longer in use.
+ * Remove the old file ``priv/config``, as it is no longer in use.
+ * Also, move ``priv/erlang.config`` to ``~/.zotonic/erlang.config``.
 
-
+These configuration files can also be put in other places
+(``/etc/zotonic``, most notably), or can contain Zotonic's version
+number or node name when running multiple Zotonic versions side by
+side. See :ref:`manual-configuration` for all information on this
+topic.
+   
+   
 Database changes
 ................
 

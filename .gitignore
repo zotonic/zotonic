@@ -34,3 +34,5 @@ deps/
 
 /user
 /user/*
+
+.rebar

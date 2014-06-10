@@ -23,7 +23,8 @@ places for these files:
 
 Where `(nodename)` is the name of the Zotonic Erlang node, which
 defaults to `zotonic001` (and can be set with `$NODENAME` environment
-variable).
+variable). Using the node name in the configuration path comes in
+handy when you want to run multiple Zotonic instances simultaneously.
 
 `(version)` is the `minor` version number of Zotonic, e.g. ``0.11``
 for all Zotonic ``0.11.x`` variants. This way, you can have separate
