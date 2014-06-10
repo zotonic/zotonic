@@ -25,14 +25,9 @@ deps/
 /src/tests/erlydtl/rendered_output/
 
 /priv/*.config
-/priv/sites/*/config
 
 /priv/log/
 /priv/sites/default/files/
-/priv/sites/*/files/dropbox/
-/priv/sites/*/files/preview/
-/priv/sites/*/files/processing/
-/priv/sites/*/files/unhandled/
 /priv/modules/
 
 /modules/*/translations/template/*.pot
