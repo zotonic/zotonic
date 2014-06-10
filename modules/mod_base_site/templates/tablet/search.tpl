@@ -46,7 +46,7 @@
 	<div id="subnavbar" class="span4">
 		{% include "_subnav.tpl" %}
 	</div>
-</divv>
+</div>
 {% endif %}
 
 {% endblock %}
