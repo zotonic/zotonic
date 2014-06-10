@@ -60,7 +60,8 @@ m_value(#m{value=undefined}, Context) ->
 %% @doc Return the complete site configuration
 all(Context) ->
     F = fun() ->
-        z_sites_manager:get_site_config(Context#context.host)
+        {ok, Cfg} = z_sites_manager:get_site_config(Context#context.host),
+        Cfg
     end,
     z_depcache:memo(F, site_config, Context).
 

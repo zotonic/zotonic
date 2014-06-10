@@ -69,7 +69,7 @@ status_page(Context) ->
     SitesStatus = z_sites_manager:get_sites_status(),
     Vars = [
         {has_user, z_acl:user(Context)},
-        {configs, [ {Site, z_sites_manager:get_site_config(Site)} || Site <- z_sites_manager:get_sites_all(), Site /= zotonic_status ]},
+        {configs, [ {Site, site_config(Site)} || Site <- z_sites_manager:get_sites_all(), Site /= zotonic_status ]},
         {sites, SitesStatus}
         | z_context:get_all(Context)
     ],
@@ -79,6 +79,12 @@ status_page(Context) ->
     start_stream(SitesStatus, OutputContext),
     ?WM_REPLY(Output, OutputContext).
 
+
+site_config(Site) ->
+    case z_sites_manager:get_site_config(Site) of
+        {ok, Config} -> Config;
+        {error, _} = Error -> [{host,Site}, Error]
+    end.
 
 %% -----------------------------------------------------------------------------------------------
 %% Handle all events
@@ -153,7 +159,7 @@ updater(SitesStatus, Context) ->
 render_update(SitesStatus, Context) ->
     Vars = [
         {has_user, z_acl:user(Context)},
-        {configs, [ {Site, z_sites_manager:get_site_config(Site)} || Site <- z_sites_manager:get_sites_all(), Site /= zotonic_status ]},
+        {configs, [ {Site, site_config(Site)} || Site <- z_sites_manager:get_sites_all(), Site /= zotonic_status ]},
         {sites, SitesStatus}
     ],
     Vars1 = z_notifier:foldl(zotonic_status_init, Vars, Context),

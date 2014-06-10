@@ -664,7 +664,8 @@ valid_modules(Context) ->
 
 %% @doc Return the z_supervisor child spec for a module
 module_spec(ModuleName, Context) ->
-    Args = [ {context, Context}, {module, ModuleName} | z_sites_manager:get_site_config(z_context:site(Context))],
+    {ok, Cfg} = z_sites_manager:get_site_config(z_context:site(Context)),
+    Args = [ {context, Context}, {module, ModuleName} | Cfg ],
     ChildModule = gen_server_module(ModuleName),
     #child_spec{
        name=ModuleName,

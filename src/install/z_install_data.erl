@@ -50,7 +50,7 @@ install(Host, Context) ->
 -spec install_modules(#context{}) -> ok.
 install_modules(Context) ->
     Host = Context#context.host,
-    Config = z_sites_manager:get_site_config(Host),
+    {ok, Config} = z_sites_manager:get_site_config(Host),
     Modules = [Host
                |proplists:get_value(
                   install_modules, 

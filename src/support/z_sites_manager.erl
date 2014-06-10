@@ -34,7 +34,8 @@
     get_site_contexts/0,
     get_site_config/1,
     get_fallback_site/0,
-    
+    get_builtin_sites/0,
+
     stop/1,
     start/1,
     restart/1
@@ -64,36 +65,45 @@ upgrade() ->
 
 
 %% @doc Return a list of active site names.
-%% @spec get_sites() -> [ atom() ]
+-spec get_sites() -> [ atom() ].
 get_sites() ->
     gen_server:call(?MODULE, get_sites). 
 
 %% @doc Return a list of all site names.
-%% @spec get_sites_all() -> [ atom() ]
+-spec get_sites_all() -> [ atom() ].
 get_sites_all() ->
     gen_server:call(?MODULE, get_sites_all). 
 
 %% @doc Return a list of all sites and their status.
-%% @spec get_sites_status() -> PropList
+-spec get_sites_status() -> list().
 get_sites_status() ->
     gen_server:call(?MODULE, get_sites_status). 
 
 
 %% @doc Return a list of contexts initialized for all active sites.
-%% @spec get_site_contexts() -> [ Context ]
+-spec get_site_contexts() -> [ #context{} ].
 get_site_contexts() ->
     [ z_context:new(Name) || Name <- get_sites() ].
 
+%% @doc Fetch the configuration of a specific site.
+-spec get_site_config(atom()) -> {ok, list()} | {error, term()}.
+get_site_config(Site) ->
+    parse_config(get_site_config_file(Site)).
 
 %% @doc Return the name of the site to handle unknown Host requests
-%% @spec get_fallback_site() -> atom() | undefined
+-spec get_fallback_site() -> atom() | undefined.
 get_fallback_site() ->
     Sites = scan_sites(),
     case has_zotonic_site(Sites) of
         true -> zotonic_status;
         false -> get_fallback_site(Sites)
     end.
-    
+
+%% @doc The list of builtin sites, they are located in the priv/sites directory.
+-spec get_builtin_sites() -> [ atom() ].
+get_builtin_sites() ->
+    [ zotonic_status, testsandbox ].
+
 %% @doc Stop a site or multiple sites.
 stop([Node, Site]) ->
     rpc:call(Node, ?MODULE, stop, [Site]);
@@ -235,45 +245,46 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-%% @doc Scan all sites subdirectories for the site configurations.
-%% @spec scan_sites() -> [ SiteProps ]
-scan_sites() ->
-    SitesMatches =
-        [
-         filename:join([z_utils:lib_dir(priv), "sites", "*", "config"]),
-         filename:join([z_path:user_sites_dir(), "*", "config"])
-        ],
-    Configs = lists:flatten([[ {parse_config(C)} || C <- filelib:wildcard(Glob)] || Glob <- SitesMatches ]),
-    [ C || {C} <- Configs, is_list(C) ].
-
-parse_config(C) ->
-    %% store host in site config
-    SitePath = filename:dirname(C),
-    Host = list_to_atom(
-             hd(lists:reverse(
-                  filename:split(
-                    SitePath
-                   )))),
-    case parse_config([C], [{host, Host}]) of
-        {error, _}=Error ->
-            Error;
-        SiteConfig ->
-            parse_config(config_d_files(SitePath), SiteConfig)
+%% @doc Get the file path of the config file for a site.
+get_site_config_file(Site) ->
+    case lists:member(Site, get_builtin_sites()) of
+        true ->
+            filename:join([z_utils:lib_dir(priv), "sites", Site, "config"]);
+        false ->
+            filename:join([z_path:user_sites_dir(), Site, "config"])
     end.
+
+
+%% @doc Scan all sites subdirectories for the site configurations.
+-spec scan_sites() -> [ list() ].
+scan_sites() ->
+    Builtin = [ parse_config(get_site_config_file(Builtin)) || Builtin <- get_builtin_sites() ],
+    [ BuiltinCfg || {ok, BuiltinCfg} <- Builtin ] ++ scan_sites(z_path:user_sites_dir()).
+
+scan_sites(Directory) ->
+    ConfigFiles = filelib:wildcard(filename:join([Directory, "*", "config"])),
+    ParsedConfigs = [ parse_config(CfgFile) || CfgFile <- ConfigFiles ],
+    [ SiteConfig || {ok, SiteConfig} <- ParsedConfigs ].
+
+parse_config(CfgFile) ->
+    SitePath = filename:dirname(CfgFile),
+    Host = z_convert:to_atom(filename:basename(SitePath)),
+    ConfigFiles = [ CfgFile | config_d_files(SitePath) ],
+    parse_config(ConfigFiles, [{host,Host}]).
 
 %% @doc Parse configurations from multiple files, merging results. The last file wins.
 parse_config([], SiteConfig) ->
-    SiteConfig;
+    {ok, SiteConfig};
 parse_config([C|T], SiteConfig) ->
     case file:consult(C) of
         {ok, [NewSiteConfig|_]} ->
             SortedNewConfig = lists:ukeysort(1, NewSiteConfig),
             MergedConfig = lists:ukeymerge(1, SortedNewConfig, SiteConfig),
             parse_config(T, MergedConfig);
-        {error, Reason} ->
-            Message = io_lib:format("Could not consult site config: ~s: ~s", [C, file:format_error(Reason)]),
-            ?ERROR("~s~n", [Message]),
-            {error, Message}
+        {error, Reason} = Error ->
+            ?ERROR("Could not consult site config: ~s: ~s", 
+                   [C, unicode:characters_to_binary(file:format_error(Reason))]),
+            Error
     end.
 
 %% @doc Get site config.d contents in alphabetical order.
@@ -285,14 +296,6 @@ config_d_files(SitePath) ->
                       lists:nth(1, filename:basename(F)) =/= $.,
                       lists:last(filename:basename(F)) =/= $~ ]).
 
-%% @doc Fetch the configuration of a specific site.
-%% @spec get_site_config(Site::atom()) -> SiteProps::list() | {error, Reason}
-get_site_config(BuiltinSite) when BuiltinSite =:= zotonic_status; BuiltinSite =:= testsandbox ->
-    ConfigFile = filename:join([z_utils:lib_dir(priv), "sites", BuiltinSite, "config"]),
-    parse_config(ConfigFile);
-get_site_config(Site) ->
-    ConfigFile = filename:join([z_path:user_sites_dir(), Site, "config"]),
-    parse_config(ConfigFile).
 
 has_zotonic_site([]) ->
     false;

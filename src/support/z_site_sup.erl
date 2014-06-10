@@ -39,9 +39,7 @@ start_link(Host) ->
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
 init(Host) ->
     ok = z_stats:init_site(Host),
-
-    % On (re)start we use the newest site config.
-    SiteProps = z_sites_manager:get_site_config(Host),
+    {ok, SiteProps} = z_sites_manager:get_site_config(Host),
 
     Notifier = {z_notifier,
                 {z_notifier, start_link, [SiteProps]}, 
