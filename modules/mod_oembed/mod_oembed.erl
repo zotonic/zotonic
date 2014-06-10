@@ -124,7 +124,7 @@ observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, option
                        {oembed, OEmbed} ->
                            case proplists:lookup(provider_name, OEmbed) of
                                {provider_name, N} ->
-                                   Tpl = "_oembed_embeddable_" ++ z_string:to_name(N) ++ ".tpl",
+                                   Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
                                    case z_template:find_template(Tpl, Context) of
                                        {ok, _} ->
                                            z_template:render(Tpl, TplOpts, Context);
