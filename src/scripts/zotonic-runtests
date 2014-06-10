@@ -32,15 +32,6 @@ case "$1" in
         exec erl erl -noshell -pa $PWD/ebin $PWD/deps/*/ebin -s erlydtl_tests_init init $ALL -s init stop
         ;;
     *)
-        find_enabled_sites
-
-        # disable them
-        for s in $enabled_sites; do
-            enablesite $s false
-        done
-        # enable testsandbox
-        enablesite testsandbox true
-
         if [ "$1" != "" ]; then
             ALL="$1"
             shift
@@ -64,14 +55,6 @@ case "$1" in
         # Run the tests
         $ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$NODEHOST -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(8000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
         EXIT=$?
-
-        # enable others again
-        for s in $enabled_sites; do
-            enablesite $s true
-        done
-        # disable testsandbox
-        enablesite testsandbox false
-
         ;;
 esac
 

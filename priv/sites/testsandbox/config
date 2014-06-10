@@ -1,8 +1,8 @@
 %% Configuration of the test sandbox, used for unit testing. See
+%% The testsandbox is only started for testing and ignored otherwise.
 %% doc/UnitTesting.txt on how to use this.
 [
- %% Enable the testsandbox? Defaults to false.
- {enabled, false},
+ {enabled, true},
 
  %% Atomic hostname, MUST be equal to the directory name of this site.
  {host, testsandbox},

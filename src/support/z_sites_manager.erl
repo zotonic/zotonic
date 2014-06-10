@@ -102,7 +102,7 @@ get_fallback_site() ->
 %% @doc The list of builtin sites, they are located in the priv/sites directory.
 -spec get_builtin_sites() -> [ atom() ].
 get_builtin_sites() ->
-    [ zotonic_status, testsandbox ].
+    [ zotonic_status ].
 
 %% @doc Stop a site or multiple sites.
 stop([Node, Site]) ->
@@ -258,10 +258,16 @@ get_site_config_file(Site) ->
 %% @doc Scan all sites subdirectories for the site configurations.
 -spec scan_sites() -> [ list() ].
 scan_sites() ->
-    Builtin = [ parse_config(get_site_config_file(Builtin)) || Builtin <- get_builtin_sites() ],
-    [ BuiltinCfg || {ok, BuiltinCfg} <- Builtin ] ++ scan_sites(z_path:user_sites_dir()).
+    scan_sites(is_testsandbox()).
 
-scan_sites(Directory) ->
+scan_sites(true) ->
+    {ok, Config} = parse_config(get_site_config_file(testsandbox)),
+    [ Config ];
+scan_sites(false) ->
+    Builtin = [ parse_config(get_site_config_file(Builtin)) || Builtin <- get_builtin_sites() ],
+    [ BuiltinCfg || {ok, BuiltinCfg} <- Builtin ] ++ scan_directory(z_path:user_sites_dir()).
+
+scan_directory(Directory) ->
     ConfigFiles = filelib:wildcard(filename:join([Directory, "*", "config"])),
     ParsedConfigs = [ parse_config(CfgFile) || CfgFile <- ConfigFiles ],
     [ SiteConfig || {ok, SiteConfig} <- ParsedConfigs ].
@@ -369,4 +375,13 @@ supervised_sites(Sup) ->
 hosted_sites(SiteProps) ->
     L = [ proplists:get_value(host, Props) || Props <- SiteProps ],
     [ Name || Name <- L, Name /= undefined ].
+
+
+%% @doc Check if the current beam is running the testsandbox
+is_testsandbox() ->
+    [Base|_] = string:tokens(atom_to_list(node()), "@"),
+    case lists:last(string:tokens(Base, "_")) of
+        "testsandbox" -> true;
+        _ -> false
+    end.
 
