@@ -40,14 +40,14 @@ export -f require_zotonic_not_running
 function enablesite {
     config="priv/sites/$1/config"
     expr="s/enabled, \(true\|false\)/enabled, $2/"
-    sed -e "$expr" -i $config
+    perl -e "$expr" -pi $config
     #echo sed -e "$expr" -i $config
     echo "$1 enabled: $2"
 }
 export -f enablesite
 
 function major_version {
-    cat $ZOTONIC/src/zotonic.app.src |grep vsn,|sed 's/.*"\([0-9].[0-9]\+\).*/\1/'
+    cat $ZOTONIC/src/zotonic.app.src |grep vsn,|sed 's/[^"]*\"\([0-9]\.[0-9]*\).*/\1/'
 }
 export -f major_version
 
@@ -69,7 +69,7 @@ function find_config {
     filename="$1"
     vsn=$(major_version)
     for file in "$HOME/.zotonic/$NODENAME/$filename" "$HOME/.zotonic/$vsn/$filename" "$HOME/.zotonic/$filename" "/etc/zotonic/$NODENAME/$filename" "/etc/zotonic/$vsn/$filename" "/etc/zotonic/$filename"; do
-        if [ -e $file ]; then
+        if [ -e "$file" ]; then
             echo "$file"
             break
         fi
@@ -179,11 +179,14 @@ if [ "$(find_config zotonic.config)" == "" ]; then
 
     # Generate a password for zotonic_status
     PW=$(env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/urandom | head -c 10)
-    sed -e "s/%%GENERATED%%/$PW/" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
+    perl -e "s/%%GENERATED%%/$PW/" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
     echo "Password for zotonic_status site is: $PW"
 
-    sed -e "s~%%USER_SITES_DIR%%~$ZOTONIC/user/sites~" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
-    sed -e "s~%%USER_MODULES_DIR%%~$ZOTONIC/user/modules~" -i "$ZOTONIC_CONFIG_DIR/zotonic.config"
+    echo "$ZOTONIC_CONFIG_DIR/zotonic.config"
+    echo "$ZOTONIC"
+
+    perl -e "s|\%\%USER_SITES_DIR\%\%|$ZOTONIC/user/sites|" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
+    perl -e "s|\%\%USER_MODULES_DIR\%\%|$ZOTONIC/user/modules|" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
 fi
 
 MODULES=$(get_user_modules_dir)
