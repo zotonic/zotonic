@@ -6,15 +6,8 @@ interface to all resource ("page") information. It also provides an
 easy way to fetch edges from pages without needing to use the
 :ref:`model-edge` model.
 
-Properties
-----------
-
-All stored texts are `HTML escaped`, except for the body text which is
-stored as-is and assumed to be valid XHTML. Retrieved texts are always
-binaries. Dates are stored as a standard Erlang date time tuple, for
-example {{2008,12,10},{15,30,00}}. Retrieved dates are in the local
-time of the server.
-
+Properties of the resource model
+--------------------------------
 
 A resource has the following properties accessible from the templates:
 
@@ -246,5 +239,44 @@ A resource has the following properties accessible from the templates:
 |name_surname       |Surname or family name of person. Returns a binary or|                                |
 |                   |undefined.                                           |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
+
+
+Escaping
+--------
+
+All strings that are stored inside resources are automatically `HTML
+escaped`. This means that these texts do not require any processing
+when they are being displayed in the browser, which causes major
+performance gains.
+
+There are some fields in the resource that are exceptions to these
+rule, namely, the ``body`` field and any fields whose name ends in
+``_html``. These fields are assumed to contain HTML text and are
+sanitized on save instead of escaped.
+
+Dates
+-----
+
+Dates are stored as a standard Erlang date time tuple, for example
+``{{2008,12,10},{15,30,00}}``. Dates are stored and retrieved in UTC
+(universal time). When displaying a date, (e.g. with the
+:ref:`filter_date` filter), the date is automatically converted into
+the time zone of the site or that of the user.
+
+
+Printing all properties of a resource
+-------------------------------------
+
+In your templates, you can loop over the properties of a resource like this::
+
+  {% for k,v in m.rsc[id] %}
+    {{ k }} - {{ v }} <br/>
+  {% endfor %}
+
+And also using the :ref:`tag-print` tag::
+
+   {% print m.rsc[id] %}
+
+
 
 .. seealso:: :ref:`manual-datamodel`, :ref:`model-edge`, :ref:`model-media`, :ref:`model-rsc_gone`.

@@ -1,6 +1,12 @@
 Release 0.10.1 (unreleased)
 ===========================
 
+New core features
+-----------------
+
+The properties of the resource model (m_rsc) can now be easily be
+inspected with the 'print tag' and iterated over.
+
 Updated modules
 ---------------
 
