@@ -17,6 +17,12 @@ up Zotonic to serve from those ports without running as superuser
 presents a problem, as \*nix considers all ports below 1024 to be
 "privileged", requiring special access.
 
+Other webservers (like nginx) typically do not have this problem, as
+they usually run their main unix process as root, but forking off
+child processes as non-privileged workers. Zotonic cannot be made to
+work like that because it is just one unix process, and running
+Zotonic entirely as the root user is considered harmful.
+
 This manual outlines three different methods to let Zotonic listen on
 port 80. All of them are for \*nix based systems only.
 
