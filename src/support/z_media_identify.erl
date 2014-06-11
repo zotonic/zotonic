@@ -233,7 +233,8 @@ identify_file_imagemagick(OsFamily, ImageFile) ->
                          end,
                 {ok, Props2}
             catch
-                _:_ ->
+                X:B ->
+                    ?DEBUG({X,B, erlang:get_stacktrace()}),
                     ?LOG("identify of ~p failed - ~p", [CleanedImageFile, Line1]),
                     {error, "unknown result from 'identify': '"++Line1++"'"}
             end
@@ -333,8 +334,8 @@ exif_orientation(InFile) ->
         [] -> 
             1;
         [Line|_] -> 
-            FirstLine = z_string:to_lower(Line),
-            case [z_string:trim(X) || X <- string:tokens(FirstLine, "-")] of
+            FirstLine = z_convert:to_list(z_string:to_lower(Line)),
+            case [z_convert:to_list(z_string:trim(X)) || X <- string:tokens(FirstLine, "-")] of
                 ["top", "left"] -> 1;
                 ["top", "right"] -> 2;
                 ["bottom", "right"] -> 3;

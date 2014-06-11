@@ -133,38 +133,44 @@ archive_filename(Filename, Context) ->
     make_unique(Archive, RelRoot, Extension).
 
 
-safe_filename([$.|Rest]) ->
-    safe_filename([$_|Rest]);
-safe_filename(Filename) ->
-    safe_filename(z_string:to_name(Filename), []).
-safe_filename([], Acc) ->
-    lists:reverse(Acc);
-safe_filename([C|Rest], Acc) 
+safe_filename(<<$.,Rest/binary>>) ->
+    safe_filename(<<$_, Rest/binary>>);
+safe_filename(B) when is_binary(B) ->
+    AsName = z_convert:to_binary(z_string:to_name(B)),
+    safe_filename_1(AsName, <<>>);
+safe_filename(L) when is_list(L) ->
+    safe_filename(iolist_to_binary(L)).
+
+safe_filename_1(<<>>, Acc) ->
+    Acc;
+safe_filename_1(<<C/utf8, Rest/binary>>, Acc) 
     when (C >= $a andalso C =< $z) 
         orelse (C >= $0 andalso C =< $9)
         orelse C == $. orelse C == $- orelse C == $_ ->
-    safe_filename(Rest, [C|Acc]);
-safe_filename([_|Rest], Acc) ->
-    safe_filename(Rest, [$_|Acc]).
+    safe_filename_1(Rest, <<Acc/binary,C>>);
+safe_filename_1(<<_/utf8, Rest/binary>>, Acc) ->
+    safe_filename_1(Rest, <<Acc/binary, $_>>).
     
 
 %% @doc Make sure that the filename is unique by appending a number on filename clashes
 make_unique(Archive, Rootname, Extension) ->
-    File = filename:join([Archive, Rootname]) ++ Extension,
+    Basename = iolist_to_binary([Rootname, Extension]),
+    File = filename:join([Archive, Basename]),
     case filelib:is_file(File) of
         true ->
             make_unique(Archive, Rootname, Extension, 1);
         false -> 
-            filename:join([Rootname]) ++ Extension
+            Basename
     end.
 
 make_unique(Archive, Rootname, Extension, Nr) ->
-    File = filename:join([Archive, Rootname ++ [$-|integer_to_list(Nr)]]) ++ Extension,
+    Basename = iolist_to_binary([Rootname, $-, integer_to_list(Nr), Extension]),
+    File = filename:join([Archive, Basename]),
     case filelib:is_file(File) of
         true ->
             make_unique(Archive, Rootname, Extension, Nr+1);
         false -> 
-            filename:join([Rootname ++ [$-|integer_to_list(Nr)]]) ++ Extension
+            Basename
     end.
 
 
@@ -172,15 +178,15 @@ make_unique(Archive, Rootname, Extension, Nr) ->
 is_archived(undefined, _Context) ->
     false;
 is_archived(Filename, Context) ->
-    Fileabs = filename:absname(Filename),
-    Archive = z_path:media_archive(Context) ++ "/",
+    Fileabs = z_convert:to_list(filename:absname(Filename)),
+    Archive = z_convert:to_list(z_path:media_archive(Context)) ++ "/",
     lists:prefix(Archive, Fileabs).
     
 
 %% @doc Remove the path to the archive directory, return a filename relative to the archive directory
 rel_archive(Filename, Context) ->
-    Fileabs = filename:absname(Filename),
-    Archive = z_path:media_archive(Context) ++ "/",
+    Fileabs = z_convert:to_list(filename:absname(Filename)),
+    Archive = z_convert:to_list(z_path:media_archive(Context)) ++ "/",
     true = lists:prefix(Archive, Fileabs),
     lists:nthtail(length(Archive), Fileabs).
 	
