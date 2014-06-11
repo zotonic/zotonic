@@ -663,8 +663,8 @@ save_preview(RscId, Data, Mime, Context) ->
 
 data2filepath(RscId, Data, Extension) ->
 	<<A:8, B:8, Rest/binary>> = crypto:hash(sha, Data),
-	filename:join([ "preview", mochihex:to_hex(A), mochihex:to_hex(B), 
-					integer_to_list(RscId) ++ [$-|mochihex:to_hex(Rest)] ++ Extension ]).
+    Basename = iolist_to_binary([integer_to_list(RscId), $-, mochihex:to_hex(Rest), Extension]), 
+	filename:join([ "preview", mochihex:to_hex(A), mochihex:to_hex(B), Basename ]).
 
 make_preview_unique(Filename, Context) ->
     case is_unique_file(Filename, Context) of
@@ -674,8 +674,11 @@ make_preview_unique(Filename, Context) ->
 			Dirname = filename:dirname(Filename),
 			Basename = filename:basename(Filename),
 			Rootname = filename:rootname(Basename),
-			Rootname1 = Rootname ++ [$-|integer_to_list(z_ids:number())],
-			Filename1 = filename:join([Dirname, Rootname1 ++ filename:extension(Basename)]),
+			Rootname1 = iolist_to_binary([
+                                Rootname, $-, integer_to_list(z_ids:number()),
+                                filename:extension(Basename)
+                            ]),
+			Filename1 = filename:join([Dirname, Rootname1]),
 			make_preview_unique(Filename1, Context)
 	end.
 
