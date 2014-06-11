@@ -470,9 +470,9 @@ pivot_resource(Id, Context) ->
                                       {"update rsc set ",[]},
                                       KVsChanged),
 
-            1 = z_db:q1(iolist_to_binary([Sql, " where id = $", integer_to_list(length(Args)+1)]),
-                        lists:reverse([Id|Args]),
-                        Context)
+            z_db:q1(iolist_to_binary([Sql, " where id = $", integer_to_list(length(Args)+1)]),
+                    lists:reverse([Id|Args]),
+                    Context)
     end,
     
     CustomPivots = z_notifier:map(#custom_pivot{id=Id}, Context),
