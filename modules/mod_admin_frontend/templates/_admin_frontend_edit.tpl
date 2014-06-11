@@ -31,6 +31,8 @@
 					{% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 %}
 					{_ till _} 
 					{% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 %}
+
+					{{ m.req.timezone }}
 				</span>
 			</p>
 		</div>
