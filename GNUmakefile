@@ -20,7 +20,7 @@ all: get-deps compile
 	  -s init stop
 	chmod +x ./rebar
 
-DEPS = $(shell find deps -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
+DEPS = $(shell find deps -maxdepth 1 -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
 LAGER = deps/lager
 Compile = (cd $(1) && $(REBAR_DEPS) deps_dir=.. compile)
 
