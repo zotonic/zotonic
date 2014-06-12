@@ -69,6 +69,8 @@
 -spec to_local(calendar:datetime(), string()|binary()|#context{}) -> calendar:datetime().
 to_local(undefined, _Tz) ->
     undefined;
+to_local({_Y, _M, _D} = Date, Tz) ->
+    to_local({Date, {0,0,0}}, Tz);
 to_local({{9999, _, _}, _} = DT, _Tz) ->
     DT;
 to_local(DT, <<"UTC">>) ->
@@ -92,6 +94,8 @@ to_local(DT, Tz) ->
 -spec to_utc(calendar:datetime(), string()|binary()|#context{}) -> calendar:datetime().
 to_utc(undefined, _Tz) ->
     undefined;
+to_utc({_Y, _M, _D} = Date, Tz) ->
+    to_utc({Date, {0,0,0}}, Tz);
 to_utc({{9999, _, _}, _} = DT, _Tz) ->
     DT;
 to_utc(DT, <<"UTC">>) ->
