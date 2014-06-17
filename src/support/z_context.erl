@@ -1001,7 +1001,12 @@ document_domain(Context) ->
 streamhost(Context) ->
     case m_site:get(streamhost, Context) of
         Empty when Empty == undefined; Empty == []; Empty == <<>> ->
-            hostname_port(Context);
+            case m_site:get(redirect, Context) of
+                false ->
+                    wrq:get_req_header_lc("host", Context#context.wm_reqdata);
+                _ -> 
+                    hostname_port(Context)
+            end;
         Domain ->
             Domain
     end.
