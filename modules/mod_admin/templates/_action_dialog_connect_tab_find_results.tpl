@@ -11,5 +11,6 @@
 						catinclude 
 						visible}
 	%}
+    {% javascript %}$.dialogReposition();{% endjavascript %}
 {% endwith %}
 </div>

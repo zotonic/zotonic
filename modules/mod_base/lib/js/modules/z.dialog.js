@@ -25,6 +25,12 @@
  {
      $.extend(
          {
+             // center the dialog vertically again
+             dialogReposition: function() {
+                 var dialog = $("#zmodal");
+                 dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
+             },
+
              dialogAdd: function(options)
              {
                  $('#zmodal').remove();
@@ -68,7 +74,7 @@
                  } else if (dialog.height() > 0.8 * $(window).height()) {
                     dialog.addClass('high');
                  } else {
-                   dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
+                     dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
                  }
 
                  if (typeof($.widgetManager) != 'undefined') {
