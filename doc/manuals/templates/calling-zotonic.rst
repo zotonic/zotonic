@@ -1,3 +1,4 @@
+.. _manual-template-calling-zotonic:
 
 Interactivity: Calling Zotonic from Javascript
 ----------------------------------------------
@@ -6,7 +7,7 @@ There are three main ways to call Zotonic from Javascript: wired events, notific
 
 Javascript is the lingua franca of web scripting.  Having a mechanism
 of directly integrating Zotonic backend calls into a flow with JQuery
-has great potential.  This guide provides some pointers on how Zotonic
+has great potential. This guide provides some pointers on how Zotonic
 integrates with Javascript and jQuery.
 
 You can use three ways to call Zotonic from JavaScript:
@@ -14,8 +15,8 @@ You can use three ways to call Zotonic from JavaScript:
 Wired events
 ^^^^^^^^^^^^
 
-Use ``{% wire %}`` (the :ref:`scomp-wire` scomp) to defined a named
-action and trigger it from js with ``z_event("myname", { foo: bar,
+Use ``{% wire %}`` (see :ref:`scomp-wire`) to define a named
+action and trigger it from Javascript with ``z_event("myname", { foo: bar,
 ... })``. 'foo' and other arguments will become query args (access
 with z_context:get_q/2 and friends). For example::
 

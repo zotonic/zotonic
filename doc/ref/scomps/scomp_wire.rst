@@ -88,6 +88,13 @@ The type “unload” will execute all actions and/or postback when leaving the 
    {% wire type="unload" action={alert text="Bye."} %}
 
 
+Call a wire action from Javascript
+----------------------------------
+Use ``{% wire name="myname" %}`` to define a named
+action and trigger it from Javascript with ``z_event("myname")``. See: :ref:`manual-template-calling-zotonic`.
+
+
+
 Arguments
 ---------
 
