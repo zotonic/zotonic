@@ -680,7 +680,7 @@ is_a_id(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     [ RscCatId | m_category:get_path(RscCatId, Context)].
 
-%% @doc Check if the resource is in a categorie.
+%% @doc Check if the resource is in a category.
 %% @spec is_a(int(), atom(), Context) -> bool()
 is_a(Id, Cat, Context) ->
     RscCatId = p(Id, category_id, Context),

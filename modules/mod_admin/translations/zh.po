@@ -819,7 +819,7 @@ msgid "Something went wrong. Sorry."
 msgstr "出错了。"
 
 #: modules/mod_admin/mod_admin.erl:317
-msgid "Sorry, you have no permission to add the connection."
+msgid "Sorry, you don't have permission to add the connection."
 msgstr "对不起，你没有添加连接的权限。"
 
 #: modules/mod_admin/mod_admin.erl:132
