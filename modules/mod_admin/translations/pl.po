@@ -801,7 +801,7 @@ msgid "Something went wrong. Sorry."
 msgstr "Coś poszło nie tak. Wybacz."
 
 #: modules/mod_admin/mod_admin.erl:317
-msgid "Sorry, you have no permission to add the connection."
+msgid "Sorry, you don't have permission to add the connection."
 msgstr "Nie posiadasz uprawnień by dodać odnośnik."
 
 #: modules/mod_admin/mod_admin.erl:132

@@ -416,7 +416,7 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
     end.
 
 
-%% @doc Return the Nth object with a certaing predicate of a subject.
+%% @doc Return the Nth object with a certain predicate of a subject.
 object(Id, Pred, N, Context) ->
     Ids = objects(Id, Pred, Context),
     try
@@ -425,7 +425,7 @@ object(Id, Pred, N, Context) ->
         _:_ -> undefined
     end.
 
-%% @doc Return the Nth subject with a certaing predicate of an object.
+%% @doc Return the Nth subject with a certain predicate of an object.
 subject(Id, Pred, N, Context) ->
     Ids = subjects(Id, Pred, Context),
     try
@@ -434,7 +434,7 @@ subject(Id, Pred, N, Context) ->
         _:_ -> undefined
     end.
 
-%% @doc Return all object ids of an id with a certain predicate.  The order of the ids is deterministic.
+%% @doc Return all object ids of an id with a certain predicate. The order of the ids is deterministic.
 %% @spec objects(Id, Pred, Context) -> List
 objects(_Id, undefined, _Context) ->
     [];

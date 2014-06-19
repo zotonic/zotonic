@@ -822,7 +822,7 @@ msgid "Something went wrong. Sorry."
 msgstr "Что-то пошло не так. Извините."
 
 #: modules/mod_admin/mod_admin.erl:317
-msgid "Sorry, you have no permission to add the connection."
+msgid "Sorry, you don't have permission to add the connection."
 msgstr "Извините, у вас отсутствуют права для добавление связи."
 
 #: modules/mod_admin/mod_admin.erl:132

@@ -853,7 +853,7 @@ msgid "Something went wrong. Sorry."
 msgstr "Er ging iets mis, onze excuses."
 
 #: modules/mod_admin/mod_admin.erl:317
-msgid "Sorry, you have no permission to add the connection."
+msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
 #: modules/mod_admin/mod_admin.erl:132
@@ -1008,7 +1008,7 @@ msgstr "Upload een bestand van je computer"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:4
 msgid "Upload a file which is already on the internet."
-msgstr "Upload een bestand wat al op internet staat."
+msgstr "Upload een bestand van het internet."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
 msgid "Upload file"

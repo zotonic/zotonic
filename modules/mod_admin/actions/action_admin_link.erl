@@ -78,9 +78,9 @@ do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Actions, Contex
                     z_render:wire([{growl, [{text, [?__("Added the connection to", Context), <<"“">>, Title, <<"”.">>]}]}
                                              | Actions], Context1);
                 _ ->
-                    z_render:growl_error(?__("This connection does already exist.", Context), Context)
+                    z_render:growl_error(?__("This connection already exists.", Context), Context)
             end;
         false ->
-            z_render:growl_error(?__("Sorry, you have no permission to add the connection.", Context), Context)
+            z_render:growl_error(?__("Sorry, you don't have permission to add the connection.", Context), Context)
     end.
     
