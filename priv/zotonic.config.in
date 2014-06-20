@@ -77,6 +77,11 @@
    %% {smtp_listen_ip, "127.0.0.1"},
    %% {smtp_listen_port, 2525},
 
+%%% SMTP Spamassassin options
+%%% Enable SMTP incoming message filtering by setting the listening address of spamd
+   %% {smtp_spamd_ip, {127,0,0,1}},
+   %% {smtp_spamd_port, 783},
+
 %%% Password for the sites administration site (zotonic_status). Will
 %%% be generated on first Zotonic startup, if the config file does not yet exist.
    {password, "%%GENERATED%%"}

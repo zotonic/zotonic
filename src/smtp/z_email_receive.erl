@@ -71,7 +71,7 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
              z_notifier:first(Email1, Context);
          undefined ->
              error_logger:info_msg("SMTP Dropping message, unknown host for recipient: ~p", [Recipient]),
-             skip
+             {error, unknown_host}
      end
      || Recipient <- Recipients
     ].

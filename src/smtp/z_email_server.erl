@@ -41,8 +41,6 @@
 
 % Maximum times we retry to send a message before we mark it as failed.
 -define(MAX_RETRY, 7).
-% Timeout value for the connection of the spamassassin daemon
--define(SPAMD_TIMEOUT, 10000).
 
 % Max number of e-mails being sent at the same time
 -define(EMAIL_MAX_SENDING, 30).
@@ -50,8 +48,7 @@
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override, 
-                smtp_spamd_ip, smtp_spamd_port, sending=[],
-                delete_sent_after}).
+                sending=[], delete_sent_after}).
 -record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0, 
                       recipient, email, created=os:timestamp(), sent, 
                       pickled_context}).
@@ -258,8 +255,6 @@ update_config(State) ->
     SmtpVerpAsFrom = z_config:get(smtp_verp_as_from),
     SmtpBcc = z_config:get(smtp_bcc),
     Override = z_config:get(email_override),
-    SmtpSpamdIp = z_config:get(smtp_spamd_ip),
-    SmtpSpamdPort = z_config:get(smtp_spamd_port),
     DeleteSentAfter = z_config:get(smtp_delete_sent_after),
     State#state{smtp_relay=SmtpRelay,
                 smtp_relay_opts=SmtpRelayOpts,
@@ -267,8 +262,6 @@ update_config(State) ->
                 smtp_verp_as_from=SmtpVerpAsFrom,
                 smtp_bcc=SmtpBcc,
                 override=Override,
-                smtp_spamd_ip=SmtpSpamdIp,
-                smtp_spamd_port=SmtpSpamdPort,
                 delete_sent_after=DeleteSentAfter}.
 
 
@@ -476,14 +469,6 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
                             ok;
                         false -> 
                             catch gen_smtp_client:send({VERP, [State#state.smtp_bcc], EncodedMail}, SmtpOpts)
-                    end,
-                    %% check SpamAssassin spamscore
-                    case {State#state.smtp_spamd_ip, State#state.smtp_spamd_port} of
-                        {Addr, _Port} when Addr =:= [] orelse Addr =:= undefined ->
-                            ok;
-                        {Addr, Port} ->
-                            SpamStatus = spamcheck(EncodedMail, Addr, Port),
-                            z_notifier:first({email_spamstatus, Id, SpamStatus}, Context)
                     end
             end
         end,
@@ -662,77 +647,6 @@ expand_cr(B) -> expand_cr(B, <<>>).
     expand_cr(<<C, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C>>).
 
 
-spamcheck(EncodedMail, SpamDServer, SpamDPort) ->
-    Email = binary_to_list(EncodedMail),
-    
-    {ok, Socket} = gen_tcp:connect(SpamDServer, SpamDPort, [list]),
-    gen_tcp:send(Socket, "HEADERS SPAMC/1.2\r\n"),
-    ContLen = integer_to_list(length(Email) + 2),
-    gen_tcp:send(Socket, "Content-length: " ++ ContLen ++ "\r\n"),
-    gen_tcp:send(Socket, "User: spamd\r\n"),
-    gen_tcp:send(Socket, "\r\n"),
-    gen_tcp:send(Socket, Email),
-    gen_tcp:send(Socket, "\r\n"),
-    
-    Response = recv_spamd(Socket, []),
-    gen_tcp:close(Socket),
-    
-    ParsedRes = parse_spamd_headers(Response),
-    SpamStatus = proplists:get_value("X-Spam-Status", ParsedRes),
-    IsSpam = case SpamStatus of
-        "Yes, " ++ RestStatus -> true;
-        "No, " ++ RestStatus -> false
-    end,
-    Results = [{is_spam, IsSpam} | [{list_to_atom(Field), Value} || [Field, Value] <- [string:tokens(Field, "=") || Field <- string:tokens(RestStatus, " ")]]],
-    
-    Results.
-
-parse_spamd_headers(L) ->
-    parse_spamd_headers(L, [], undefined).
-parse_spamd_headers([], Acc, _) ->
-    lists:reverse(Acc);
-parse_spamd_headers(L, Acc, undefined) ->
-    {FieldName, Rest} = parse_spamd_field_name(L, []),
-    parse_spamd_headers(Rest, Acc, FieldName);
-parse_spamd_headers(L, Acc, FieldName) ->
-    {FieldValue, Rest} = parse_spamd_field_value(L, [], empty),
-    parse_spamd_headers(Rest, [{FieldName, FieldValue} | Acc], undefined).
-
-
-parse_spamd_field_name([], _) -> % ignore trailing characters
-    {[], []};
-parse_spamd_field_name([$: | Rest], Acc) ->
-    {string:strip(lists:reverse(Acc)), Rest};
-parse_spamd_field_name([C | Rest], Acc) ->
-    parse_spamd_field_name(Rest, [C | Acc]).
-
-parse_spamd_field_value([$\r | [$\n | Rest]], Acc, rn) -> % omit multiple \r\n-s
-    parse_spamd_field_value(Rest, Acc, rn);
-parse_spamd_field_value([$\r | Rest], Acc, empty) -> % put \r to the stack
-    parse_spamd_field_value(Rest, Acc, r);
-parse_spamd_field_value([$\n | Rest], Acc, r) -> % put \n to the stack
-    parse_spamd_field_value(Rest, Acc, rn);
-parse_spamd_field_value([$\t | Rest], Acc, rn) -> % read-ahead rule for \t
-    parse_spamd_field_value(Rest, Acc, empty); % omit tabulator characters
-parse_spamd_field_value([C | Rest], Acc, r) -> % read-ahead rule for non \n chars after \r
-    parse_spamd_field_value(Rest, [C | [$\r | Acc]], empty);
-parse_spamd_field_value([C | Rest], Acc, empty) ->
-    parse_spamd_field_value(Rest, [C | Acc], empty);
-parse_spamd_field_value(Rest, Acc, rn) -> % terminate
-    {string:strip(lists:reverse(Acc)), Rest}.
-    
-recv_spamd(Socket, Res) ->
-    receive
-        {tcp, Socket, "SPAMD/1.1 0 EX_OK\r\n" ++ Data} ->
-            recv_spamd(Socket, Res ++ Data);
-        {tcp, Socket, Data} ->
-            recv_spamd(Socket, Res ++ Data);
-        {tcp_closed, Socket} ->
-            Res
-    after ?SPAMD_TIMEOUT ->
-            io:format("spamassassin timeout~n"),
-            Res
-    end.
    
 check_override(EmailAddr, _SiteOverride, _State) when EmailAddr == undefined; EmailAddr == []; EmailAddr == <<>> ->
     undefined;
