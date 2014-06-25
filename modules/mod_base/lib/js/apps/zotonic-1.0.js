@@ -29,6 +29,7 @@ var z_ws_ping_timeout;
 var z_stream_host;
 var z_websocket_host;
 var z_doing_postback		= false;
+var z_comet_reconnect_timeout   = 1000;
 var z_spinner_show_ct		= 0;
 var z_postbacks				= [];
 var z_default_form_postback = false;
@@ -535,21 +536,46 @@ function z_comet_poll_ajax()
 	        type:'post',
 	        data: "z_pageid=" + urlencode(z_pageid),
 	        dataType: 'text',
-	        success: function(data, textStatus)
-	        {
-	            z_comet_data(data);
-	            setTimeout(function() { z_comet_poll_ajax(); }, 500);
-	        },
+                statusCode: {
+                    200: function(data, textStatus) 
+                    {
+                        z_comet_data(data);
+                        z_timeout_comet_poll_ajax(100);
+                    },
+                    204: function(data, textStatus) 
+                    {
+                        z_comet_data(data);
+                        z_timeout_comet_poll_ajax(1000);
+                    },
+                    403: function() 
+                    {
+                        /* Reload the page when get a forbidden response. */
+                        setTimeout(function() { 
+                            window.location.reload(); 
+                        }, 10000);
+                    }
+                },
 	        error: function(xmlHttpRequest, textStatus, errorThrown)
 	        {
-	            setTimeout(function() { z_comet_poll_ajax(); }, 1000);
+                    setTimeout(function() { z_comet_poll_ajax(); }, z_comet_reconnect_timeout);
+                    if(z_comet_reconnect_timeout < 60000)
+                        z_comet_reconnect_timeout = z_comet_reconnect_timeout * 2;
 	        }
 	    });
     }
     else
     {
-        setTimeout(function() { z_comet_poll_ajax(); }, 5000);
+        z_timeout_comet_poll_ajax(5000);
     }
+}
+
+
+function z_timeout_comet_poll_ajax(timeout) 
+{
+    setTimeout(function() {
+        z_comet_reconnect_timeout = 1000;
+        z_comet_poll_ajax();
+    }, timeout);
 }
 
 

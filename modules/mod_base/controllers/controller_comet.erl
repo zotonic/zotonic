@@ -46,10 +46,11 @@ malformed_request(ReqData, _Context) ->
     ?WM_REPLY(false, Context).
 
 forbidden(ReqData, Context) ->
-    %% TODO: prevent that we make a new ua session or a new page session, fail when a new session is needed
     Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
-    ?WM_REPLY(false, Context2).
+    Context2 = z_context:ensure_qs(Context1),
+    Context3 = z_context:continue_session(Context2),
+    ?WM_REPLY(not z_context:has_session(Context3) andalso
+        z_context:get(require_session, Context3, true), Context3).
 
 allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
