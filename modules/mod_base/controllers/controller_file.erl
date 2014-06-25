@@ -53,6 +53,7 @@ init(ConfigProps) ->
 service_available(ReqData, ConfigProps) ->
     Context = z_context:set_noindex_header(z_context:set(ConfigProps, z_context:new(ReqData))),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
+
     case get_file_info(ConfigProps, Context1) of
         {ok, Info} ->
             {true, ReqData, {Info, Context1}};
@@ -79,8 +80,9 @@ resource_exists(ReqData, {#z_file_info{acls=Acls}, Context} = State) ->
 is_authorized(ReqData, {{error,enoent},_Context} = State) ->
     {true, ReqData, State};
 is_authorized(ReqData, {FInfo,Context}) ->
-    {Ret, RD1, Context1} = controller_template:is_authorized(ReqData, Context),
-    {Ret, RD1, {FInfo, Context1}}.
+    Context1 = ?WM_REQ(ReqData, Context),
+    {Ret, RD1, Context2} = z_controller_helper:is_authorized(Context1),
+    {Ret, RD1, {FInfo, Context2}}.
 
 forbidden(ReqData, {{error,_},_Context} = State) ->
     {false, ReqData, State};

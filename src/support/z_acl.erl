@@ -328,8 +328,7 @@ wm_is_authorized(false, Redirect, Context) ->
     ContextLocation = wm_set_location(Redirect, Context),
     ?WM_REPLY({halt, 302}, ContextLocation);
 wm_is_authorized(ACLs, Redirect, Context) when is_list(ACLs), is_atom(Redirect) ->
-    ContextEnsured = z_context:ensure_all(Context),
-    wm_is_authorized(wm_is_allowed(ACLs, ContextEnsured), Redirect, ContextEnsured);
+    wm_is_authorized(wm_is_allowed(ACLs, Context), Redirect, Context);
 wm_is_authorized(ACLs, ReqData, Context) when is_list(ACLs) ->
     wm_is_authorized(ACLs, ?WM_REQ(ReqData, Context));
 wm_is_authorized(Action, Object, Context) ->

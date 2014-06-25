@@ -23,8 +23,7 @@
     resource_exists/2,
     previously_existed/2,
     is_authorized/2,
-    html/1,
-    get_id/1
+    html/1
 ]).
 
 -include_lib("controller_html_helper.hrl").
@@ -34,7 +33,7 @@ resource_exists(ReqData, Context) ->
     Context1  = ?WM_REQ(ReqData, Context),
     ContextQs = z_context:ensure_qs(Context1),
     try
-        Id = get_id(ContextQs),
+        Id = z_controller_helper:get_id(ContextQs),
         maybe_redirect(m_rsc:p_no_acl(Id, page_path, ContextQs), Id, ContextQs)
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
@@ -85,7 +84,7 @@ maybe_exists(Id, Context) ->
 %% @doc Check if the resource used to exist
 previously_existed(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    IsGone = case get_id(Context1) of
+    IsGone = case z_controller_helper:get_id(Context1) of
                  Id when is_integer(Id) ->
                      m_rsc_gone:is_gone(Id, Context1);
                  _ -> false
@@ -99,7 +98,7 @@ is_authorized(ReqData, Context) ->
 
 %% @doc Show the page.  Add a noindex header when requested by the editor.
 html(Context) ->
-    Id = get_id(Context),
+    Id = z_controller_helper:get_id(Context),
     Context1 = z_context:set_noindex_header(m_rsc:p(Id, seo_noindex, Context), Context),
 
 	%% EXPERIMENTAL:
@@ -127,16 +126,3 @@ html(Context) ->
 	%% End experimental.
 
 	z_context:output(Html, Context1).
-
-
-%% @doc Fetch the id from the request or the dispatch configuration.
-%% @spec get_id(Context) -> int() | false
-get_id(Context) ->
-    ReqId = case z_context:get(id, Context) of
-        undefined -> z_context:get_q("id", Context);
-        ConfId -> ConfId
-    end,
-    case m_rsc:name_to_id(ReqId, Context) of
-        {ok, RscId} -> RscId;
-        _ -> undefined
-    end.
