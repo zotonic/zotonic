@@ -36,6 +36,7 @@ init(DispatchArgs) ->
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
+    z_context:lager_md(Context1),
     ?WM_REPLY(true, Context1).
 
 charsets_provided(ReqData, Context) ->
@@ -44,5 +45,6 @@ charsets_provided(ReqData, Context) ->
 to_html(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
+    z_context:lager_md(Context2),
     {Result, ResultContext} = html(Context2),
     ?WM_REPLY(Result, ResultContext).

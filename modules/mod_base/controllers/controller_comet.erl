@@ -42,7 +42,8 @@
 init(_Args) -> {ok, []}.
 
 malformed_request(ReqData, _Context) ->
-    Context = z_context:new(ReqData),
+    Context = z_context:new(ReqData, ?MODULE),
+    z_context:lager_md(Context),
     ?WM_REPLY(false, Context).
 
 forbidden(ReqData, Context) ->
@@ -50,6 +51,7 @@ forbidden(ReqData, Context) ->
     %% Ensure all, but don't start a new session
     Context2 = z_context:set(no_session, true, Context1),
     Context3 = z_context:ensure_all(Context2),
+    z_context:lager_md(Context3),
     ?WM_REPLY(not z_context:has_session(Context3), Context3).
 
 allowed_methods(ReqData, Context) ->

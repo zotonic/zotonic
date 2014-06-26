@@ -34,11 +34,13 @@ init(_Args) -> {ok, []}.
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
+    z_context:lager_md(Context1),
     ?WM_REPLY(true, Context1).
 
 resource_exists(ReqData, Context0) ->
     ContextReq = ?WM_REQ(ReqData, Context0),
     Context = z_context:ensure_all(ContextReq), 
+    z_context:lager_md(Context),
     case z_context:get_q("id", Context) of
         undefined ->
             ?WM_REPLY(false, Context);

@@ -41,6 +41,7 @@ init(_Args) ->
 
 resource_exists(ReqData, _Context) ->
     Context  = z_context:new(ReqData, ?MODULE),
+    z_context:lager_md(Context),
     Context1 = z_context:ensure_qs(Context),
     {true, ReqData, Context1}.
 

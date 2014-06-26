@@ -38,12 +38,14 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
+    z_context:lager_md(Context),
     Context1 = z_context:set(DispatchArgs, Context),
     ?WM_REPLY(true, Context1).
 
 forbidden(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
+    z_context:lager_md(Context2),
 	Id = z_convert:to_integer(z_context:get_q(id, Context2)),
 	Allowed = z_acl:rsc_editable(Id, Context2),
 	?WM_REPLY(not Allowed, Context2).

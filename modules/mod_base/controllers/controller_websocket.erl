@@ -46,9 +46,10 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 %% @doc The request must have a valid session cookie.
 forbidden(ReqData, DispatchArgs) ->
-    Context = z_context:new(ReqData),
+    Context = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_context:continue_session(Context1),
+    z_context:lager_md(Context2),
     ?WM_REPLY(not z_context:has_session(Context2) andalso
               z_context:get(require_session, Context2, true), Context2).
 
@@ -76,6 +77,7 @@ provide_content(ReqData, Context) ->
 websocket_start(ReqData, Context) ->
     ContextReq = ?WM_REQ(ReqData, Context),
     Context1 = z_context:ensure_all(ContextReq),
+    z_context:lager_md(Context1),
     Context2 = case z_context:get(ws_handler, Context1) of
         undefined ->
             z_context:set(ws_handler, ?MODULE, Context1);

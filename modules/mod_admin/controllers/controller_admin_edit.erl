@@ -62,6 +62,7 @@ ensure_id(Context) ->
             {Context2, N};
         undefined ->
             try
+                z_context:lager_md(Context2),
                 {ok, IdN} = m_rsc:name_to_id(z_context:get_q("id", Context2), Context2),
                 {z_context:set(id, IdN, Context2), IdN}
             catch

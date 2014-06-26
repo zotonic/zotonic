@@ -105,7 +105,7 @@ rename_session(#context{session_manager=SessionManager, session_pid=SessionPid} 
             % Rename the session id, set a new session cookie.
             case gen_server:call(SessionManager, {rename_session, SessionPid}) of
                 {ok, NewSessionId} ->
-                    {ok, set_session_cookie(NewSessionId, Context)};
+                    {ok, set_session_cookie(NewSessionId, Context#context{session_id=NewSessionId})};
                 ignore ->
                     {ok, Context};
                 {error, _} = Error ->
@@ -142,7 +142,7 @@ dump(#context{session_manager=SessionManager}) ->
 %% @doc Fetch the session id
 -spec get_session_id(#context{}) -> undefined | session_id().
 get_session_id(Context) ->
-    case z_context:get(session_id, Context) of
+    case Context#context.session_id of
         undefined -> get_session_cookie(Context);
         SessionId -> SessionId
     end.
@@ -377,8 +377,8 @@ start_session(Action, CurrentSessionId, Context) ->
     case gen_server:call(Context#context.session_manager, {start_session, Action, CurrentSessionId, PersistId}) of
         {ok, SessionState, SessionPid, NewSessionId} ->
             Context1 = Context#context{
-                            session_pid=SessionPid, 
-                            props=[{session_id, NewSessionId}|Context#context.props]
+                            session_pid=SessionPid,
+                            session_id=NewSessionId
                        },
             Context2 = case NewSessionId of
                            CurrentSessionId -> Context1;
@@ -443,7 +443,11 @@ get_session_cookie(Context) ->
 set_session_cookie(SessionId, Context) ->
     Options = [{path, "/"},
                {http_only, true}],
-    z_context:set([{set_session_id, true}, {session_id, SessionId}], z_context:set_cookie(?SESSION_COOKIE, SessionId, Options, Context)).
+    z_context:set_cookie(
+                    ?SESSION_COOKIE, 
+                    SessionId,
+                    Options,
+                    z_context:set(set_session_id, true, Context)).
 
 
 %% @doc Remove the session id from the user agent and clear the session pid in the context
@@ -453,4 +457,4 @@ clear_session_cookie(Context) ->
                {path, "/"}, 
                {http_only, true}],
     Context1 = z_context:set_cookie(?SESSION_COOKIE, "", Options, Context),
-    Context1#context{session_pid=undefined}.
+    Context1#context{session_id=undefined, session_pid=undefined}.

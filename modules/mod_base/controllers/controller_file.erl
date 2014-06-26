@@ -51,8 +51,11 @@ init(ConfigProps) ->
 
 %% @doc Initialize the context for the request. Optionally continue the user's session.
 service_available(ReqData, ConfigProps) ->
-    Context = z_context:set_noindex_header(z_context:set(ConfigProps, z_context:new(ReqData))),
+    Context = z_context:set_noindex_header(
+                    z_context:set(ConfigProps,
+                        z_context:new(ReqData, ?MODULE))),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
+    z_context:lager_md(Context1),
 
     case get_file_info(ConfigProps, Context1) of
         {ok, Info} ->

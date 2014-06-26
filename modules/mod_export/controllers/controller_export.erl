@@ -36,12 +36,14 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
+    z_context:lager_md(Context),
     Context1 = z_context:set(DispatchArgs, Context),
     ?WM_REPLY(true, Context1).
 
 forbidden(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_qs(z_context:continue_session(Context1)),
+    z_context:lager_md(Context2),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_notifier:first(#export_resource_visible{dispatch=Dispatch}, Context2) of
         undefined -> ?WM_REPLY(false, Context2);

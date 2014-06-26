@@ -39,6 +39,7 @@ init(_Args) ->
 resource_exists(ReqData, _Context) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:ensure_all(Context),
+    z_context:lager_md(Context1),
     {true, ReqData, Context1}.
 
 allowed_methods(ReqData, Context) ->

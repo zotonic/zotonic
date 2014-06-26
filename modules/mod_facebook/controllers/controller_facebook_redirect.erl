@@ -31,6 +31,7 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
+    z_context:lager_md(Context),
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_context:ensure_all(Context1),
     ?WM_REPLY(true, Context2).
@@ -156,7 +157,6 @@ logon_fb_user(FacebookProps, Args, Context) ->
                                           {z_dispatcher:url_for(logon, [{error_uid,UserId}], Context), Context}
                                   end,
             LocationAbs = z_convert:to_list(z_context:abs_url(Location, Context1)),
-            ?DEBUG(LocationAbs),
             ?WM_REPLY({true, LocationAbs}, Context1)
     end.
 

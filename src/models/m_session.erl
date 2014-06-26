@@ -35,7 +35,7 @@
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(session_id, #m{value=undefined}, Context) ->
-    z_context:get(session_id, Context);
+    Context#context.session_id;
 m_find_value(Key, #m{value=undefined}, Context) ->
     z_context:get_session(Key, Context).
 

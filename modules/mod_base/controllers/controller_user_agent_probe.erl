@@ -38,6 +38,7 @@ service_available(ReqData, DispatchArgs) ->
     ContextArgs = z_context:set(DispatchArgs, Context),
     ContextSession = z_context:continue_session(ContextArgs),
     ContextQs = z_context:ensure_qs(ContextSession),
+    z_context:lager_md(ContextQs),
     ?WM_REPLY(true, ContextQs).
 
 allowed_methods(ReqData, Context) ->

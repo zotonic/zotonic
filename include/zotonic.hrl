@@ -26,7 +26,7 @@
 %% @doc The request context, session information and other
 -record(context, {
         %% The host
-        host=default,
+        host=default :: atom(),
 
         %% Webmachine request data (only set when this context is used because of a request)
         wm_reqdata=undefined :: #wm_reqdata{} | undefined,
@@ -36,6 +36,7 @@
         
         %% The page and session processes associated with the current request
         session_pid=undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
+        session_id=undefined :: string() | undefined,
         page_pid=undefined :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
         page_id=undefined :: string() | undefined,
 

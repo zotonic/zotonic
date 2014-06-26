@@ -39,6 +39,7 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
+    z_context:lager_md(Context1),
     ?WM_REPLY(true, Context1).
 
 
@@ -54,8 +55,8 @@ malformed_request(ReqData, Context) ->
 
 forbidden(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
     Context2 = z_context:continue_session(Context1),
+    z_context:lager_md(Context2),
     ?WM_REPLY(not z_context:has_session(Context2), Context2).
 
 allowed_methods(ReqData, Context) ->

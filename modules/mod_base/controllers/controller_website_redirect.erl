@@ -33,6 +33,7 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
+    z_context:lager_md(Context),
     Context1 = z_context:set(DispatchArgs, Context),
     ?WM_REPLY(true, Context1).
 
@@ -43,6 +44,7 @@ previously_existed(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     ContextQs = z_context:ensure_qs(
                     z_context:continue_session(Context1)),
+    z_context:lager_md(ContextQs),
     Id = m_rsc:rid(z_context:get_q("id", ContextQs), ContextQs),
     Exists = m_rsc:exists(Id, ContextQs)
              andalso z_acl:rsc_visible(Id, ContextQs),

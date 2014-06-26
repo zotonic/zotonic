@@ -27,19 +27,16 @@
 -include_lib("controller_html_helper.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_admin, admin_logon, ReqData, Context).
+    Context1 = ?WM_REQ(ReqData, Context),
+    Context2 = z_context:ensure_all(Context1),
+    z_context:lager_md(Context2), 
+    z_acl:wm_is_authorized([{use, mod_admin}], admin_logon, Context2).
 
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
-    Id = z_context:get_q("id", Context2),
-    try
-        IdN = list_to_integer(Id),
-        Context3 = z_context:set(id, IdN, Context2),
-        ?WM_REPLY(m_rsc:exists(IdN, Context3), Context3)
-    catch
-        _:_ -> ?WM_REPLY(false, Context2)
-    end.
+    Id = m_rsc:rid(z_context:get_q("id", Context1), Context1),
+    Context2 = z_context:set(id, Id, Context1),
+    ?WM_REPLY(m_rsc:exists(Id, Context2), Context2).
 
 html(Context) ->
     Vars = [

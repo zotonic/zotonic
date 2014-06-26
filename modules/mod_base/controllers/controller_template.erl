@@ -36,6 +36,7 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
+    z_context:lager_md(Context),
     Context1 = z_context:set(DispatchArgs, Context),
     ?WM_REPLY(true, Context1).
 
@@ -52,16 +53,20 @@ content_types_provided(ReqData, Context) ->
 
 %% @doc Check if the current user is allowed to view the resource. 
 is_authorized(ReqData, Context) ->
-    Context1 = z_context:ensure_all(?WM_REQ(ReqData, Context)),
-    z_controller_helper:is_authorized(Context1).
+    Context1 = ?WM_REQ(ReqData, Context),
+    case z_context:get(anonymous, Context1) of
+        true ->
+            ContextQs = z_context:ensure_qs(Context1),
+            ?WM_REPLY(true, ContextQs);
+        _ ->
+            Context2 = z_context:ensure_all(Context1),
+            z_context:lager_md(Context2),
+            z_controller_helper:is_authorized(Context2)
+    end.
 
 
 provide_content(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = case z_context:get(anonymous, Context) of
-        true -> z_context:ensure_qs(Context1);
-        _ -> z_context:ensure_all(Context1)
-    end,
+    Context2 = ?WM_REQ(ReqData, Context),
     Context3 = z_context:set_noindex_header(Context2),
     Context4 = set_optional_cache_header(Context3),
     Template = z_context:get(template, Context4),

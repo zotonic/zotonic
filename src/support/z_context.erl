@@ -77,6 +77,9 @@
     spawn_link_session/4,
     spawn_link_page/4,
 
+    lager_md/1,
+    lager_md/2,
+
     get_value/2,
 
     set_session/3,
@@ -132,7 +135,6 @@
 ]).
 
 -include_lib("zotonic.hrl").
-
 
 %% @doc Return a new empty context, no request is initialized.
 %% @spec new(HostDescr) -> Context2
@@ -753,6 +755,44 @@ spawn_link_session(Module, Func, Args, Context) ->
 spawn_link_page(Module, Func, Args, Context) ->
     z_session_page:spawn_link(Module, Func, Args, Context).
 
+
+%% ------------------------------------------------------------------------------------
+%% Set lager metadata for the current process
+%% ------------------------------------------------------------------------------------
+
+lager_md(ContextOrReqData) ->
+    lager_md([], ContextOrReqData).
+
+lager_md(MD, #context{} = Context) when is_list(MD) ->
+    RD = get_reqdata(Context),
+    lager:md([
+            {site, site(Context)},
+            {user_id, Context#context.user_id},
+            {controller, Context#context.controller_module},
+            {dispatch, get(zotonic_dispatch, Context)},
+            {method, m_req:get(method, RD)},
+            {remote_ip, m_req:get(peer, RD)},
+            {is_ssl, m_req:get(is_ssl, RD)},
+            {ua_class, Context#context.ua_class},
+            {session_id, Context#context.session_id},
+            {page_id, Context#context.page_id},
+            {req_id, m_req:get(req_id, RD)}
+            | MD
+        ]);
+lager_md(MD, #wm_reqdata{} = RD) when is_list(MD) ->
+    DispRule = case dict:find(zotonic_dispatch, wrq:path_info(RD)) of
+                    {ok, Dispatch} -> Dispatch;
+                    error -> undefined
+               end,
+    lager:md([
+            {site, z_context:site(RD)},
+            {dispatch, DispRule},
+            {method, m_req:get(method, RD)},
+            {remote_ip, m_req:get(peer, RD)},
+            {is_ssl, m_req:get(is_ssl, RD)},
+            {req_id, m_req:get(req_id, RD)}
+            | MD
+        ]).
 
 %% ------------------------------------------------------------------------------------
 %% Set/get/modify state properties

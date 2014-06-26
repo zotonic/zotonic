@@ -19,7 +19,9 @@
 
 -module(controller_static_pages).
 -export([init/1]).
--export([allowed_methods/2,
+-export([
+     service_available/2,
+     allowed_methods/2,
 	 resource_exists/2,
 	 last_modified/2,
 	 expires/2,
@@ -66,6 +68,11 @@ init(ConfigProps) ->
     DirIndex = z_convert:to_bool(proplists:get_value(allow_directory_index, ConfigProps)),
     UseCache = proplists:get_value(use_cache, ConfigProps, false),
     {ok, #state{root=Root, use_cache=UseCache, config=ConfigProps, allow_directory_index=DirIndex}}.
+
+
+service_available(ReqData, State) ->
+    z_context:lager_md([{controller, ?MODULE}], ReqData),
+    {true, State}.
     
 allowed_methods(ReqData, State) ->
     {['HEAD', 'GET'], ReqData, State}.

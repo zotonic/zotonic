@@ -46,6 +46,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_context:ensure_all(Context1),
+    z_context:lager_md(Context2),
     ?WM_REPLY(true, Context2).
 
 

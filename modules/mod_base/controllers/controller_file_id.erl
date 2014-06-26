@@ -40,6 +40,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context1 = z_context:set(DispatchArgs, 
                     z_context:continue_session(
                         z_context:ensure_qs(Context))),
+    z_context:lager_md(Context1),
     Id = get_id(DispatchArgs, Context1),
     Medium = m_media:get(Id, Context1),
     {true, ReqData, {Id, Medium, Context1}}.
