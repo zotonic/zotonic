@@ -79,7 +79,12 @@ local_topic(Topic) -> Topic.
 start_link(Args) ->
     supervisor:start_link(?MODULE, Args).
 
-init(_Args) ->
+init(Args) ->
+    {context, Context} = proplists:lookup(context, Args),
+    lager:md([
+        {site, z_context:site(Context)},
+        {module, ?MODULE}
+      ]),
     {ok, {{one_for_one, 20, 10}, []}}.
 
 

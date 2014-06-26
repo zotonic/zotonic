@@ -41,6 +41,10 @@ start_link(SiteProps) ->
 
 init(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
     Context = z_context:new(Host),
     {ok, #state{context=Context}, 0}.
 

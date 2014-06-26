@@ -194,6 +194,10 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
+    lager:md([
+        {site, z_context:site(Context)},
+        {module, ?MODULE}
+      ]),
     z_notifier:observe(mailinglist_mailing, self(), Context),
     z_notifier:observe(dropbox_file, self(), 100, Context),
     timer:send_interval(180000, poll),

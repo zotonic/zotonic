@@ -189,6 +189,10 @@ broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, st
 %%      so that crashes in sessions are isolated from each other.
 init(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
     State = #session_srv{
                     context=z_acl:sudo(z_context:new(Host)),
                     key2pid=dict:new(), 

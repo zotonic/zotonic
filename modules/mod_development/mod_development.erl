@@ -50,7 +50,7 @@
 -include_lib("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
--record(state, {context}).
+-record(state, {host}).
 
 % Interval for checking for new and/or changed files.
 -define(DEV_POLL_INTERVAL, 10000).
@@ -242,10 +242,12 @@ init(Args) ->
                            true
                    end,
     z_code_reloader:start_link(NeedPeriodic),
-
-    {ok, #state{
-        context  = z_context:new(Context)
-    }}.
+    Host = z_context:site(Context),
+    lager:md([
+            {site, Host},
+            {module, ?MODULE}
+        ]),
+    {ok, #state{host=Host}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

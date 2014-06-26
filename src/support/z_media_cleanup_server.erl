@@ -68,6 +68,10 @@ start_link(Args) when is_list(Args) ->
 %% @doc Initiates the server.
 init(Args) ->
     {host, Host} = proplists:lookup(host, Args),
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
     {ok, #state{host=Host}, ?CLEANUP_TIMEOUT_LONG}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

@@ -355,6 +355,10 @@ set_db_schema_version(M, V, Context) ->
 %% @doc Initiates the server.
 init(Args) ->
     Context = proplists:get_value(context, Args),
+    lager:md([
+        {site, z_context:site(Context)},
+        {module, ?MODULE}
+      ]),
     {ok, Sup} = z_supervisor:start_link([]),
     z_supervisor:set_manager_pid(Sup, self()),
     {ok, #state{context=Context, sup=Sup}}.

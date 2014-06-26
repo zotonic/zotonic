@@ -27,11 +27,9 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 
-%% interface functions
--export([
-]).
+-record(state, {module, host}).
 
--record(state, {module, context}).
+-include("zotonic.hrl").
 
 %%====================================================================
 %% API
@@ -57,7 +55,12 @@ init(Args) ->
     process_flag(trap_exit, true),
     {module, Module} = proplists:lookup(module, Args),
     {context, Context} = proplists:lookup(context, Args),
-    {ok, #state{module=Module, context=z_context:new(Context)}}.
+    Host = z_context:site(Context),
+    lager:md([
+            {site, Host},
+            {module, Module}
+        ]),
+    {ok, #state{module=Module, host=Host}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -74,8 +77,8 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Handle the next step in the module initialization.
-handle_cast(init, #state{module=Module, context=Context}=State) ->
-    dummy_module_init(Module, Context),
+handle_cast(init, #state{module=Module, host=Host}=State) ->
+    dummy_module_init(Module, z_context:new(Host)),
     {noreply, State};
     
 %% @doc Trap unknown casts
@@ -96,8 +99,8 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(Reason, #state{module=Module, context=Context}) ->
-    dummy_module_terminate(Reason, Module, Context),
+terminate(Reason, #state{module=Module, host=Host}) ->
+    dummy_module_terminate(Reason, Module, z_context:new(Host)),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -128,5 +131,3 @@ dummy_module_terminate(Reason, Module, Context) ->
         false -> nop
     end.
     
-
-

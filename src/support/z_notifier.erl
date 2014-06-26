@@ -231,6 +231,10 @@ foldr(Msg, Acc0, Context) ->
 %% @doc Initiates the server, creates a new observer list
 init(Args) ->
     {host, Host} = proplists:lookup(host, Args),
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
     Timers = [ timer:send_interval(Time * 1000, {tick, Msg}) || {Time, Msg} <- ?TIMER_INTERVAL ],
     State = #state{observers=undefined, timers=Timers, host=Host},
     {ok, State}.

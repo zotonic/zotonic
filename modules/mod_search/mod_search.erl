@@ -73,6 +73,10 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
+    lager:md([
+        {site, z_context:site(Context)},
+        {module, ?MODULE}
+      ]),
 
     %% Watch for changes to resources
     z_notifier:observe(rsc_update_done, self(), Context),

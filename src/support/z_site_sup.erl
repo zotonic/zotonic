@@ -38,6 +38,10 @@ start_link(Host) ->
 %% @spec init(Host) -> SupervisorTree
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
 init(Host) ->
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
     ok = z_stats:init_site(Host),
     {ok, SiteProps} = z_sites_manager:get_site_config(Host),
 

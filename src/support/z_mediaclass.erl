@@ -160,7 +160,12 @@ module_reindexed(module_reindexed, Context) ->
 %% @doc Initiates the server.
 init(SiteProps) ->
     process_flag(trap_exit, true),
-    Context = z_context:new(proplists:get_value(host, SiteProps)),
+    {host, Host} = proplists:lookup(host, SiteProps),
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
+    Context = z_context:new(Host),
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, Context),
     {ok, #state{context=Context}}.
 

@@ -92,6 +92,10 @@ observe_module_ready(module_ready, Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Host) ->
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
     process_flag(trap_exit, true),
     z_notifier:observe(module_ready, {?MODULE, observe_module_ready}, Host),
     Table = ets:new(translations, [set, protected]),

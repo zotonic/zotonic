@@ -186,6 +186,10 @@ check_timeout(Pid) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server, initialises the pid lookup dicts
 init({SessionPid, PageId, Site}) ->
+    lager:md([
+        {site, Site},
+        {module, ?MODULE}
+      ]),
     trigger_check_timeout(),
     {ok, #page_state{
             session_pid=SessionPid,

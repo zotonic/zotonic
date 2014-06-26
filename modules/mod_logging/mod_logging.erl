@@ -38,7 +38,7 @@
 -include("zotonic_log.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
--record(state, {context, admin_log_pages=[]}).
+-record(state, {host, admin_log_pages=[]}).
 
 %% interface functions
 
@@ -76,7 +76,12 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Context1 = z_acl:sudo(z_context:new(Context)),
     install_check(Context1),
-    {ok, #state{context=Context1}}.
+    Host = z_context:site(Context1),
+    lager:md([
+            {site, Host},
+            {module, ?MODULE}
+        ]),
+    {ok, #state{host=Host}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -151,29 +156,31 @@ search(_, _, _) ->
 
 %% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
 handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Props}, State) ->
+    Context = z_acl:sudo(z_context:new(State#state.host)),
     {ok, Id} = z_db:insert(log, [
                     {user_id, UserId},
                     {type, Type},
                     {message, Msg}
-                ] ++ Props, State#state.context),
-    mod_signal:emit({log_message, [{log_id, Id}, {user_id, UserId}, {type, Type}, {message, Msg}, {props, Props}]}, State#state.context).
+                ] ++ Props, Context),
+    mod_signal:emit({log_message, [{log_id, Id}, {user_id, UserId}, {type, Type}, {message, Msg}, {props, Props}]}, Context).
 
 
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
 % it is also sent to the main log.  
 handle_other_log(Record, State) ->
+    Context = z_acl:sudo(z_context:new(State#state.host)),
     LogType = element(1, Record),
     Fields = record_to_proplist(Record),
-    case z_db:table_exists(LogType, State#state.context) of
+    case z_db:table_exists(LogType, Context) of
         true ->
-            {ok, Id} = z_db:insert(LogType, Fields, State#state.context),
+            {ok, Id} = z_db:insert(LogType, Fields, Context),
             Log = record_to_log_message(Record, Fields, LogType, Id),
             case proplists:get_value(severity, Fields) of
                 ?LOG_FATAL -> handle_simple_log(Log#log_message{type=fatal}, State);
                 ?LOG_ERROR -> handle_simple_log(Log#log_message{type=error}, State);
                 _Other -> nop
             end,
-            mod_signal:emit({LogType, [{log_id, Id}|Fields]}, State#state.context);
+            mod_signal:emit({LogType, [{log_id, Id}|Fields]}, Context);
         false ->
             Log = #log_message{
                 message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),

@@ -225,7 +225,12 @@ start_link(SiteProps) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(SiteProps) ->
-    Context = z_context:new(proplists:get_value(host, SiteProps)),
+    {host, Host} = proplists:lookup(host, SiteProps), 
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
+    Context = z_context:new(Host),
     Timer = timer:apply_interval(?PIVOT_POLL_INTERVAL * 1000, ?MODULE, poll, [Context]),
     {ok, #state{timer=Timer, context=Context}}.
 

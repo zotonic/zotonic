@@ -108,6 +108,10 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
+    lager:md([
+        {site, z_context:site(Context)},
+        {module, ?MODULE}
+      ]),
     handle_author_edges_upgrade(Context),
 
     z_notifier:observe(restart_twitter, self(), Context),

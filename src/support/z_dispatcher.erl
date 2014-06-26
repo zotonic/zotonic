@@ -192,6 +192,10 @@ to_bool(N) -> z_convert:to_bool(N).
 init(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     {hostname, Hostname} = proplists:lookup(hostname, SiteProps),
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
     Streamhost = proplists:get_value(streamhost, SiteProps),
     Smtphost = proplists:get_value(smtphost, SiteProps),
     HostAlias = proplists:get_value(hostalias, SiteProps, []),

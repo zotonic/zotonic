@@ -68,8 +68,12 @@ scan(Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.  Options are: dropbox_dir, processing_dir, unhandled_dir, interval, max_age and min_age
 init(SiteProps) ->
-    Host     = proplists:get_value(host, SiteProps),
-    Context  = z_context:new(Host),
+    Host = proplists:get_value(host, SiteProps),
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
+    Context = z_context:new(Host),
 	DefaultDropBoxDir = z_path:files_subdir_ensure("dropbox", Context),
 	DefaultProcessingDir = z_path:files_subdir_ensure("processing", Context),
 	DefaultUnhandledDir = z_path:files_subdir_ensure("unhandled", Context),

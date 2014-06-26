@@ -37,7 +37,12 @@ start_link(SiteProps) when is_list(SiteProps) ->
 
 install_check(SiteProps) ->
     %% Check if the config table exists, if so then assume that all is ok
-    Context = z_context:new(proplists:get_value(host, SiteProps)),
+    {host, Host} = proplists:lookup(host, SiteProps),
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
+    Context = z_context:new(Host),
     case z_db:has_connection(Context) of
         true ->
             case z_db_pool:test_connection(Context) of

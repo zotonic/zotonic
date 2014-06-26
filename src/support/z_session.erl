@@ -242,6 +242,10 @@ spawn_link(Module, Func, Args, Context) ->
 %%====================================================================
 
 init({Host, PersistId}) ->
+    lager:md([
+        {site, Host},
+        {module, ?MODULE}
+      ]),
     {ok, new_session(Host, PersistId)}.
 
 handle_cast(stop, Session) ->
