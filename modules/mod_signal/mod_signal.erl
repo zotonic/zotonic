@@ -167,9 +167,9 @@ start_link(Args) when is_list(Args) ->
 
 %% Gen server stuff.
 init(Args) ->
-    {context, Context} = proplists:lookup(context, Args),
+    {host, Host} = proplists:lookup(host, Args),
     lager:md([
-        {site, z_context:site(Context)},
+        {site, Host},
         {module, ?MODULE}
       ]),
     {ok, #state{slots=[]}}.
