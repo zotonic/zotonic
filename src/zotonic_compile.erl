@@ -22,6 +22,8 @@
 
 -export([all/0, all/1, d/0]).
 
+-include_lib("include/zotonic.hrl").
+
 all() ->
     all([]).
 
@@ -29,17 +31,25 @@ all() ->
 %% @doc Does a parallel compile of the files in the different Zotonic directories.
 all(Options0) ->
     Options = Options0 ++ compile_options(),
-    Parent = self(),
-    Workers = [spawn(fun() -> compile_worker_process(Options, Parent) end) || _ <- lists:seq(1,erlang:system_info(schedulers_online)*2)],
+
+    flush_messages(),
+    Workers = spawn_compile_workers(Options, self()),
+
     case serve_queue(unglob(compile_dirs())) of
-        error -> [exit(W, kill) || W <- Workers],
-                 error;
+        error ->
+            killall(Workers),
+            error;
         ok ->
-            [W ! done || W <- Workers],
-            [receive done -> nop end || _ <- Workers],
-            ok
+            case wait_for_results(Workers) of
+                up_to_date -> ok;
+                error -> error
+            end
     end.
-                      
+
+spawn_compile_workers(Options, Parent) ->
+    NoWorkers = min(8, erlang:system_info(schedulers_online)*2),
+    [spawn_link(fun() -> compile_worker_process(Options, Parent) end) || _ <- lists:seq(1, NoWorkers)].
+
 
 serve_queue(Queue) ->
     serve_queue(Queue, ok).
@@ -48,24 +58,59 @@ serve_queue(_, error) ->
     error;
 serve_queue([], _) ->
     ok;
-serve_queue([Q | Rest], Result) ->
+serve_queue([Work | Rest]=WorkQueue, Result) ->
     receive
-        {want_file, W} ->
-            W ! {work, Q},
+        {want_file, Worker} ->
+            Worker ! {work, Work},
             serve_queue(Rest, Result);
         {result, R} ->
-            serve_queue([Q | Rest], R)
+            serve_queue(WorkQueue, R)
+    end.
+
+
+wait_for_results(Workers) ->
+    wait_for_results(Workers, ok).
+
+wait_for_results([], Result) ->
+    Result;
+wait_for_results(Workers, error) ->
+    killall(Workers),
+    error;
+wait_for_results(Workers, Result) ->
+    receive 
+        {want_file, Worker} ->
+            Worker ! done,
+            wait_for_results(Workers, Result);
+        {done, Worker} ->
+            wait_for_results(lists:delete(Worker, Workers), Result);
+        {result, R} ->
+            wait_for_results(Workers, R)
     end.
 
 compile_worker_process(Options, Parent) ->
     Parent ! {want_file, self()},
     receive
+        {work, Work} ->
+            Result = make:files(filelib:wildcard(Work), Options),
+            Parent ! {result, Result},
+            compile_worker_process(Options, Parent);
         done ->
-            Parent ! done,
-            ok;
-        {work, Wildcard} ->
-            Parent ! {result, make:files(filelib:wildcard(Wildcard), Options)},
-            compile_worker_process(Options, Parent)
+            Parent ! {done, self()},
+            ok
+    end.
+
+
+killall(Pids) ->
+    [exit(Pid, normal) || Pid <- Pids].
+
+
+flush_messages() ->
+    receive 
+        {want_file, _} -> flush_messages();
+        {done, _} -> flush_messages();
+        {result, _} -> flush_messages()
+    after 0 ->
+            ok
     end.
 
 

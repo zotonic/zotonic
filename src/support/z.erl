@@ -73,7 +73,7 @@ m() ->
 %% @doc (Re)make all erlang source modules with the supplied compile 
 %% options and reset the caches.
 m(Options) ->
-    case zotonic_compile:all(Options) of
+    case zotonic_compile:all([load|Options]) of
         ok -> flush();
         error -> error
     end.
