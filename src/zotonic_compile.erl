@@ -31,61 +31,58 @@ all() ->
 %% @doc Does a parallel compile of the files in the different Zotonic directories.
 all(Options0) ->
     Options = Options0 ++ compile_options(),
+    Work = d(),
+    Ref = make_ref(),
+    Self = self(),
 
-    flush_messages(),
-    Workers = spawn_compile_workers(Options, self()),
-
-    case serve_queue(unglob(compile_dirs())) of
-        error ->
-            killall(Workers),
-            error;
-        ok ->
-            case wait_for_results(Workers) of
-                up_to_date -> ok;
-                error -> error
-            end
+    spawn_link(fun() -> compile(Self, Ref, Work, Options) end),
+    receive
+        {Ref, Result} -> Result
     end.
+
+compile(Parent, Ref, Work, Options) ->
+    Workers = spawn_compile_workers(Options, self()),
+    Parent ! {Ref, compile_loop(Work, Workers, ok)}.
+
+%% No work, and no workers, we are done.
+compile_loop([], [], Result) ->
+    case Result of
+        up_to_date -> ok;
+        error -> error
+    end;
+
+%% Error found, stop all workers.
+compile_loop(_WorkQueue, Workers, error) ->
+    [exit(Worker, normal) || Worker <- Workers],
+    error;
+
+%% No more work, but workers are still busy compiling.
+compile_loop([], Workers, Result) ->
+    receive 
+        {want_file, Worker} ->
+            Worker ! done,
+            compile_loop([], Workers, Result);
+        {done, Worker} ->
+            compile_loop([], lists:delete(Worker, Workers), Result);
+        {result, R} ->
+            compile_loop([], Workers, R)
+    end;
+
+%% Hand out work to the workers.
+compile_loop([Work|Rest]=WorkQueue, Workers, Result) ->
+    receive
+        {want_file, Worker} ->
+            Worker ! {work, Work},
+            compile_loop(Rest, Workers, Result);
+        {result, R} ->
+            compile_loop(WorkQueue, Workers, R)
+    end.
+
 
 spawn_compile_workers(Options, Parent) ->
     NoWorkers = min(8, erlang:system_info(schedulers_online)*2),
     [spawn_link(fun() -> compile_worker_process(Options, Parent) end) || _ <- lists:seq(1, NoWorkers)].
 
-
-serve_queue(Queue) ->
-    serve_queue(Queue, ok).
-
-serve_queue(_, error) ->
-    error;
-serve_queue([], _) ->
-    ok;
-serve_queue([Work | Rest]=WorkQueue, Result) ->
-    receive
-        {want_file, Worker} ->
-            Worker ! {work, Work},
-            serve_queue(Rest, Result);
-        {result, R} ->
-            serve_queue(WorkQueue, R)
-    end.
-
-
-wait_for_results(Workers) ->
-    wait_for_results(Workers, ok).
-
-wait_for_results([], Result) ->
-    Result;
-wait_for_results(Workers, error) ->
-    killall(Workers),
-    error;
-wait_for_results(Workers, Result) ->
-    receive 
-        {want_file, Worker} ->
-            Worker ! done,
-            wait_for_results(Workers, Result);
-        {done, Worker} ->
-            wait_for_results(lists:delete(Worker, Workers), Result);
-        {result, R} ->
-            wait_for_results(Workers, R)
-    end.
 
 compile_worker_process(Options, Parent) ->
     Parent ! {want_file, self()},
@@ -96,20 +93,6 @@ compile_worker_process(Options, Parent) ->
             compile_worker_process(Options, Parent);
         done ->
             Parent ! {done, self()},
-            ok
-    end.
-
-
-killall(Pids) ->
-    [exit(Pid, normal) || Pid <- Pids].
-
-
-flush_messages() ->
-    receive 
-        {want_file, _} -> flush_messages();
-        {done, _} -> flush_messages();
-        {result, _} -> flush_messages()
-    after 0 ->
             ok
     end.
 
