@@ -229,7 +229,7 @@ preview_youtube(MediaId, InsertProps, Context) ->
     case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
         [] -> nop;
         Embed ->
-            case re:run(Embed, "youtube(\-nocookie)?\\.com/(v|embed)/([^\?\"'&]+)", [{capture,[3],list}]) of
+            case re:run(Embed, "youtube(\-nocookie)?\\.com/(v|embed)/([^\?\"'&#]+)", [{capture,[3],list}]) of
                 {match, [Code]} ->
                     Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
                     case httpc:request(Url) of
@@ -288,7 +288,7 @@ preview_yandex(MediaId, InsertProps, Context) ->
     case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
         [] -> nop;
         Embed ->
-            case re:run(Embed, "flv\\.video\\.yandex\\.ru/lite/([^/]+)/([^\"'&/]+)", [{capture, [1, 2], list}]) of
+            case re:run(Embed, "flv\\.video\\.yandex\\.ru/lite/([^/]+)/([^\"'&/#]+)", [{capture, [1, 2], list}]) of
                 {match, [User, Code]} ->
                     Url = lists:flatten(["http://static.video.yandex.ru/get/", User, $/, Code, "/1.m450x334.jpg"]),
                     case httpc:request(Url) of
