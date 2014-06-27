@@ -967,8 +967,13 @@ tz_config(Context) ->
 
 %% @doc Set the timezone of the context.
 -spec set_tz(string()|binary(), #context{}) -> #context{}.
-set_tz(Tz, Context) when is_list(Tz); is_binary(Tz) ->
-    Context#context{tz=z_convert:to_binary(Tz)}.
+set_tz(Tz, Context) when is_list(Tz) ->
+    set_tz(z_convert:to_binary(Tz), Context);
+set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
+    Context#context{tz=z_convert:to_binary(Tz)};
+set_tz(Tz, Context) ->
+    lager:error("Unknown timezone ~p", [Tz]),
+    Context.
 
 %% @doc Set a response header for the request in the context.
 %% @spec set_resp_header(Header, Value, Context) -> NewContext
