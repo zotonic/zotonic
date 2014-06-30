@@ -348,12 +348,16 @@ preview_create_from_json(MediaId, Json, Context) ->
         undefined -> 
             nop;
         ThumbUrl ->
-            {CT, ImageData} = thumbnail_request(ThumbUrl, Context),
-            {ok, _} = m_media:save_preview(MediaId, ImageData, CT, Context),
-            %% move to correct category if rsc is a 'media'
-            case m_rsc:is_a(MediaId, media, Context) of
-                true -> m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
-                false -> m_rsc:touch(MediaId, Context)
+            case thumbnail_request(ThumbUrl, Context) of
+                {ok, {CT, ImageData}} ->
+                    {ok, _} = m_media:save_preview(MediaId, ImageData, CT, Context),
+                    %% move to correct category if rsc is a 'media'
+                    case m_rsc:is_a(MediaId, media, Context) of
+                        true -> m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
+                        false -> m_rsc:touch(MediaId, Context)
+                    end;
+                {eror, _} ->
+                    nop
             end
     end.
 
@@ -370,12 +374,19 @@ oembed_request(Url, Context) ->
 %% @doc Given a thumbnail URL, download it and return the content type plus image data pair.
 thumbnail_request(ThumbUrl, Context) ->
     F = fun() ->
-                {ok, {{_, 200, _}, Headers, ImageData}} = httpc:request(get, {z_convert:to_list(ThumbUrl), []}, [], []),
-                CT = case proplists:lookup("content-type", Headers) of
-                         {"content-type", C} -> C;
-                         _ -> "image/jpeg"
-                     end,
-                {CT, ImageData}
+            case httpc:request(get, {z_convert:to_list(ThumbUrl), []}, [], []) of
+                {ok, {{_, 200, _}, Headers, ImageData}} ->
+                    CT = case proplists:lookup("content-type", Headers) of
+                             {"content-type", C} -> C;
+                             _ -> "image/jpeg"
+                         end,
+                    {ok, {CT, ImageData}};
+                {ok, {{_, 404, _}, _Headers, _ImageData}} ->
+                    {error, notfound};
+                Other ->
+                    lager:warning("mod_oembed: unexpected result for ~p: ~p", [ThumbUrl, Other]),
+                    {error, httpc}
+            end
         end,
     z_depcache:memo(F, {oembed_thumbnail, ThumbUrl}, 3600, Context).
 
