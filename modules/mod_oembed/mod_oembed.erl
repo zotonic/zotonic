@@ -356,7 +356,7 @@ preview_create_from_json(MediaId, Json, Context) ->
                         true -> m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
                         false -> m_rsc:touch(MediaId, Context)
                     end;
-                {eror, _} ->
+                {error, _} ->
                     nop
             end
     end.
