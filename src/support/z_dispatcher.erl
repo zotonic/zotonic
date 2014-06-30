@@ -27,6 +27,7 @@
 
 %% z_dispatch exports
 -export([
+    dispatcher_args/0,
 	url_for/2,
 	url_for/3,
 	url_for/4,
@@ -51,6 +52,13 @@
 %%====================================================================
 %% API
 %%====================================================================
+
+%% @doc A list of dispatch rule arguments that shouldn't be considered with redirects.
+%%      Used by controller_file_id and controller_redirect
+%% TODO: this behaviour should be changed to an _inclusive_ list instead of a filter list 
+dispatcher_args() ->
+    [ is_permanent, dispatch, q, qargs, zotonic_dispatch, ssl, protocol ].
+
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the dispatch server
 start_link(SiteProps) ->

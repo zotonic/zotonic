@@ -105,7 +105,7 @@ do_redirect(Id, Medium, ReqData, Context) ->
                                     proplists:delete(K, Acc) 
                                 end,
                                 Args1,
-                                [id, is_permanent, dispatch, q, qargs, zotonic_dispatch, star, ssl]),
+                                [id, star | z_dispatcher:dispatcher_args()]),
             Location = z_dispatcher:url_for(Dispatch, [{star, Filename}|Args2], Context),
             {{true, z_context:abs_url(Location, Context)}, ReqData, {Id, Medium, Context}}
     end.
