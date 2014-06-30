@@ -33,7 +33,9 @@
     observe_rsc_update/3,
     observe_media_viewer/2,
     observe_media_stillimage/2,
-    event/2
+    event/2,
+
+    spawn_preview_create/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -74,7 +76,7 @@ observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
                     case m_media:get(Id, Context) of
                         undefined ->
                             ok = m_media:replace(Id, MediaProps, Context),
-                            preview_create(Id, MediaProps, Context),
+                            spawn_preview_create(Id, MediaProps, Context),
                             true;
                         OldMediaProps ->
                             case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?EMBED_MIME)
@@ -87,7 +89,7 @@ observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
                                 false -> 
                                     %% Changed, update the medium record
                                     ok = m_media:replace(Id, MediaProps, Context),
-                                    preview_create(Id, MediaProps, Context),
+                                    spawn_preview_create(Id, MediaProps, Context),
                                     true
                             end
                     end
@@ -169,7 +171,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 
             case m_rsc:insert(Props, Context) of
                 {ok, MediaId} ->
-                    spawn(fun() -> preview_create(MediaId, Props, Context) end),
+                    spawn_preview_create(MediaId, Props, Context),
 
                     {_, ContextLink} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, 
                                                          MediaId, Callback, Context),
@@ -211,8 +213,9 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 %% support functions
 %%====================================================================
 
+
 %% Fetch or create a preview for the movie
-preview_create(MediaId, InsertProps, Context) ->
+spawn_preview_create(MediaId, InsertProps, Context) ->
     case z_convert:to_list(proplists:get_value(video_embed_service, InsertProps)) of
         "youtube" -> 
             spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);

@@ -29,7 +29,9 @@
     observe_rsc_update/3,
     observe_media_viewer/2,
     observe_media_stillimage/2,
-    event/2
+    event/2,
+
+    preview_create/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -294,6 +296,25 @@ event(#postback{message=fix_missing}, Context) ->
     end.
 
 
+%% @doc (Re)create a preview from the stored oembed information
+preview_create(Id, Context) ->
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            case m_media:get(Id, Context) of
+                Ms when is_list(Ms) ->
+                    case proplists:get_value(oembed, Ms) of
+                        Json when is_list(Json) ->
+                            preview_create_from_json(Id, Json, Context);
+                        undefined ->
+                            {error, notoembed}
+                    end;
+                undefined ->
+                    {error, notfound}
+            end;
+        false ->
+            {error, eacces}
+    end.
+
 %%====================================================================
 %% support functions
 %%====================================================================
@@ -302,24 +323,14 @@ event(#postback{message=fix_missing}, Context) ->
 %% that need to be set on the rsc when the rsc as no title.
 preview_create(MediaId, MediaProps, Context) ->
     case z_convert:to_list(proplists:get_value(oembed_url, MediaProps)) of
-        [] -> undefined;
+        [] -> 
+            undefined;
         Url -> 
             case oembed_request(Url, Context) of
                 {ok, Json} ->
                     %% store found properties in the media part of the rsc
                     ok = m_media:replace(MediaId, [{oembed, Json} | MediaProps], Context),
-                    Type = proplists:get_value(type, Json),
-                    case preview_url_from_json(Type, Json) of
-                        undefined -> nop;
-                        ThumbUrl ->
-                            {CT, ImageData} = thumbnail_request(ThumbUrl, Context),
-                            {ok, _} = m_media:save_preview(MediaId, ImageData, CT, Context),
-                            %% move to correct category if rsc is a 'media'
-                            case m_rsc:is_a(MediaId, media, Context) of
-                                true -> m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
-                                false -> m_rsc:touch(MediaId, Context)
-                            end
-                    end,
+                    _ = preview_create_from_json(MediaId, Json, Context),
                     proplists:get_value(title, Json);
                 {error, {http, Code, Body}} ->
                     Err = [{error, http_error}, {code, Code}, {body, Body}],
@@ -330,6 +341,21 @@ preview_create(MediaId, MediaProps, Context) ->
             end
     end.
 
+
+preview_create_from_json(MediaId, Json, Context) ->
+    Type = proplists:get_value(type, Json),
+    case preview_url_from_json(Type, Json) of
+        undefined -> 
+            nop;
+        ThumbUrl ->
+            {CT, ImageData} = thumbnail_request(ThumbUrl, Context),
+            {ok, _} = m_media:save_preview(MediaId, ImageData, CT, Context),
+            %% move to correct category if rsc is a 'media'
+            case m_rsc:is_a(MediaId, media, Context) of
+                true -> m_rsc:update(MediaId, [{category, type_to_category(Type)}], Context);
+                false -> m_rsc:touch(MediaId, Context)
+            end
+    end.
 
 %% @doc Perform OEmbed discovery on a given URL.
 %% @spec oembed_request(string(), #context{}) -> [{Key, Value}]
