@@ -370,25 +370,22 @@ oembed_request(Url, Context) ->
     z_depcache:memo(F, {oembed, Url}, 3600, Context).
 
 
-
 %% @doc Given a thumbnail URL, download it and return the content type plus image data pair.
-thumbnail_request(ThumbUrl, Context) ->
-    F = fun() ->
-            case httpc:request(get, {z_convert:to_list(ThumbUrl), []}, [], []) of
-                {ok, {{_, 200, _}, Headers, ImageData}} ->
-                    CT = case proplists:lookup("content-type", Headers) of
-                             {"content-type", C} -> C;
-                             _ -> "image/jpeg"
-                         end,
-                    {ok, {CT, ImageData}};
-                {ok, {{_, 404, _}, _Headers, _ImageData}} ->
-                    {error, notfound};
-                Other ->
-                    lager:warning("mod_oembed: unexpected result for ~p: ~p", [ThumbUrl, Other]),
-                    {error, httpc}
-            end
-        end,
-    z_depcache:memo(F, {oembed_thumbnail, ThumbUrl}, 3600, Context).
+thumbnail_request(ThumbUrl, _Context) ->
+    case httpc:request(get, {z_convert:to_list(ThumbUrl), []}, [], []) of
+        {ok, {{_, 200, _}, Headers, ImageData}} ->
+            CT = case proplists:lookup("content-type", Headers) of
+                     {"content-type", C} -> C;
+                     _ -> "image/jpeg"
+                 end,
+            {ok, {CT, ImageData}};
+        {ok, {{_, 404, _}, _Headers, _ImageData}} ->
+            lager:info("mod_oembed: 404 on thumbnail url ~p", [ThumbUrl]),
+            {error, notfound};
+        Other ->
+            lager:warning("mod_oembed: unexpected result for ~p: ~p", [ThumbUrl, Other]),
+            {error, httpc}
+    end.
 
 
 %% @doc Get the preview URL from JSON structure. Either the thumbnail
