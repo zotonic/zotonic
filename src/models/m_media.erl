@@ -170,7 +170,12 @@ depiction(Id, Context) when is_integer(Id) ->
     F = fun() ->
         find_previewable(m_edge:objects(Id, depiction, Context) ++ [Id], Context)
     end,
-    z_depcache:memo(F, {depiction, Id}, ?WEEK, [Id], Context).
+    try
+        z_depcache:memo(F, {depiction, Id}, ?WEEK, [Id], Context)
+    catch
+        exit:{timeout, _} ->
+            undefined
+    end.
 
     %% @doc Find the first image in the the list of depictions that can be used to generate a preview.
     find_previewable([], _Context) ->
