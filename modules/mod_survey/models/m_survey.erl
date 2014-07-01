@@ -128,7 +128,7 @@ did_survey(SurveyId, Context) ->
 
 %% @doc Save a survey, connect to the current user (if any)
 insert_survey_submission(SurveyId, Answers, Context) ->
-    {UserId, PersistentId} = case z_convert:to_bool(m_rsc:p(SurveyId, survey_multiple, Context)) of
+    {UserId, SubmissionId} = case z_convert:to_bool(m_rsc:p(SurveyId, survey_multiple, Context)) of
                                  true ->
                                      {undefined, z_ids:id(30)};
                                  false ->
@@ -139,7 +139,7 @@ insert_survey_submission(SurveyId, Answers, Context) ->
                                              {U, undefined}
                                      end
                              end,
-    insert_survey_submission(SurveyId, UserId, PersistentId, Answers, undefined, Context).
+    insert_survey_submission(SurveyId, UserId, SubmissionId, Answers, undefined, Context).
 
 %% @doc Replace a survey for the given userid/persistent_id combination
 insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
@@ -161,7 +161,8 @@ insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Created, Conte
         _Other ->
             z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [SurveyId, UserId], Context)
     end,
-    insert_questions(SurveyId, UserId, PersistentId, Answers, Created, Context).
+    insert_questions(SurveyId, UserId, PersistentId, Answers, Created, Context),
+    {ok, PersistentId}.
 
 %% @private
 insert_questions(_SurveyId, _UserId, _PersistentId, [], _Created, _Context) ->
