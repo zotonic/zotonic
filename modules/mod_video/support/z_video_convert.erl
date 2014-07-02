@@ -118,7 +118,7 @@ insert_movie(Filename, State) ->
 original_filename(#media_upload_preprocess{original_filename=undefined}) ->
     "movie.mp4";
 original_filename(#media_upload_preprocess{original_filename=OrgFile}) ->
-    z_string:to_rootname(OrgFile) ++ ".mp4".    
+    z_convert:to_list(z_string:to_rootname(OrgFile))++".mp4".
 
 insert_broken(State) ->
     Context = z_context:depickle(State#state.pickled_context),
@@ -155,19 +155,20 @@ video_convert(QueuePath, Mime) ->
 
 video_convert_1(QueuePath, Orientation, _Mime) ->
     TmpFile = z_tempfile:new(),
-    FfmpegCmd = lists:flatten([
-            "ffmpeg -i ", z_utils:os_filename(QueuePath),
-            " -vcodec libx264 ",
-            " -loglevel fatal ",
-            " -f mp4 ",
-            " -strict -2 ",
-            " -y ",
-            " -movflags +faststart ",
-            " -preset medium ",
-            " -metadata:s:v:0 rotate=0 ",
-            mod_video:orientation_to_transpose(Orientation),
-            z_utils:os_filename(TmpFile) 
-        ]),
+    FfmpegCmd = z_convert:to_list(
+                    iolist_to_binary([
+                        "ffmpeg -i ", z_utils:os_filename(QueuePath),
+                        " -vcodec libx264 ",
+                        " -loglevel fatal ",
+                        " -f mp4 ",
+                        " -strict -2 ",
+                        " -y ",
+                        " -movflags +faststart ",
+                        " -preset medium ",
+                        " -metadata:s:v:0 rotate=0 ",
+                        mod_video:orientation_to_transpose(Orientation),
+                        z_utils:os_filename(TmpFile) 
+                    ])),
     jobs:run(video_jobs,
             fun() ->
                 lager:debug("Video convert: ~p", [FfmpegCmd]),

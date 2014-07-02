@@ -379,7 +379,7 @@ preview_filename(Id, File, Context) ->
                     integer_to_list(Y),
                     integer_to_list(M),
                     integer_to_list(D),
-                    lists:flatten([
+                    iolist_to_binary([
                         id_to_list(Id),
                         $-,
                         filename:basename(File),
