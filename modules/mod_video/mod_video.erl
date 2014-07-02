@@ -374,12 +374,18 @@ orientation_to_transpose(_) -> "".
 
 preview_filename(Id, File) ->
     {{Y,M,D},_} = calendar:local_time(),
-    Basename = filename:basename(File) ++ "-" ++ z_ids:identifier(10) ++ ".jpg",
     filename:join([ "preview",
                     integer_to_list(Y),
                     integer_to_list(M),
                     integer_to_list(D),
-                    id_to_list(Id) ++ "-" ++ Basename]).
+                    iolist_to_binary([
+                        id_to_list(Id),
+                        $-,
+                        filename:basename(File),
+                        $-,
+                        integer_to_list(z_ids:number()),
+                        ".jpg"])
+                    ]).
 
 id_to_list(N) when is_integer(N) -> integer_to_list(N);
 id_to_list(insert_rsc) -> "video".
