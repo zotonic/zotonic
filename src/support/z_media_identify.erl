@@ -81,7 +81,7 @@ maybe_extension(_File, OriginalFilename) ->
 maybe_extension(undefined) ->
     "";
 maybe_extension(Filename) ->
-    z_string:to_lower(filename:extension(Filename)). 
+    z_convert:to_list(z_string:to_lower(filename:extension(Filename))). 
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
 -spec identify_file_direct(File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
@@ -105,6 +105,8 @@ identify_file_direct_1(File, OriginalFilename) ->
 	end.
 
 maybe_identify_extension({error, "identify error: "++_}, OriginalFilename) ->
+    {ok, [ {mime, guess_mime(OriginalFilename)} ]};
+maybe_identify_extension({ok, [{mime,"application/octet-stream"}]}, OriginalFilename) ->
     {ok, [ {mime, guess_mime(OriginalFilename)} ]};
 maybe_identify_extension(Result, _OriginalFilename) ->
     Result.
