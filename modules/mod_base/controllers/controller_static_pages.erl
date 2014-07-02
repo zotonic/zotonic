@@ -72,7 +72,7 @@ init(ConfigProps) ->
 
 service_available(ReqData, State) ->
     z_context:lager_md([{controller, ?MODULE}], ReqData),
-    {true, State}.
+    {true, ReqData, State}.
     
 allowed_methods(ReqData, State) ->
     {['HEAD', 'GET'], ReqData, State}.
