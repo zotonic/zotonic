@@ -18,9 +18,7 @@
 				    <li><a href="#" data-where="after">&darr; {_ Add after _}</a></li>
 				    <li class="divider"></li>
 				    <li><a href="#" data-where="copy">{_ Copy _}</a></li>
-				    {% if not id.is_protected %}
 				    <li><a href="#" data-where="remove">{_ Remove _}</a></li>
-				    {% endif %}
 				</ul>
 		    </span>
 		  </span>
