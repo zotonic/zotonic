@@ -1,6 +1,6 @@
 {% if menu %}
 {% with id|menu_trail:menu_id as parents %}
-    <ul id="{{ id_prefix }}navigation" class="nav">
+    <ul id="{{ id_prefix }}navigation" class="{{ class }}">
     {% for mid, path, action in menu %}
         {% if mid %}
             {% if action==`down` %}

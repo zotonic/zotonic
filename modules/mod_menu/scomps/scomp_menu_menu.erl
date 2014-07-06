@@ -25,14 +25,14 @@
 
 % Menu structure is a like:
 %
-% <ul id="navigation" class="at-menu">
-% 	<li id="nav-item-1" class="first">
-% 		<a href="" class="home-page current">home</a>
+% <ul id="navigation" class="nav">
+% 	<li>
+% 		<a href="" class="home-page active">home</a>
 % 	</li>
-% 	<li id="nav-item-2">
+% 	<li>
 % 		<a href="" class="about-page">about</a>
 % 	</li>
-% 	<li id="nav-item-3" class="last">
+% 	<li>
 % 		<a href="" class="contact-page">contact</a>
 % 	</li>
 % </ul>
@@ -40,17 +40,27 @@
 
 vary(_Params, _Context) -> default.
 
+% Params:
+% menu_id
+% is_superfish
+% maxdepth
+% class (used in template)
+% id_prefix (used in template)
 render(Params, _Vars, Context) ->
     MenuId = m_rsc:rid(get_menu_id(Params, Context), Context),
-    Template = case proplists:get_value(is_superfish, Params, false) of
+    Template = case z_convert:to_bool(proplists:get_value(is_superfish, Params, false)) of
                     true -> proplists:get_value(template, Params, "_menu_superfish.tpl");
                     false -> proplists:get_value(template, Params, "_menu.tpl")
                end,
+    IdPrefix = proplists:get_value(id_prefix, Params, ""),
+    Class = proplists:get_value(class, Params, "nav"),
     MaxDepth = proplists:get_value(maxdepth, Params, 999),
     Menu = mod_menu:get_menu(MenuId, Context),
     Vars = [
         {menu, mod_menu:menu_flat(Menu, MaxDepth, Context)},
-        {menu_id, MenuId}
+        {menu_id, MenuId},
+        {id_prefix, IdPrefix},
+        {class, Class}
         | Params
     ],
     {ok, z_template:render(Template, Vars, Context)}.
