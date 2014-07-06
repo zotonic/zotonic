@@ -30,8 +30,8 @@ Generates something like::
 The menu has the following features:
 
 * The menu is a unordered list.
-* The id of the menu is ``navigation``.
-* The class of the menu is always ``nav``.
+* The id of the menu is ``navigation`` and can be prepended with param ``id_prefix``.
+* The class of the menu is set with param ``class`` (default ``nav``).
 * Menu items are a <li> with a single <a>
 * The link of the menu item referring to the current page has the class ``active``.
 * Every link also gets the unique name of the target as a class.
@@ -46,4 +46,10 @@ The menu has the following features:
 |menu_id        |The id of the menu that you want to           |               |
 |               |display. If left empty, the main menu is      |               |
 |               |shown.                                        |               |
++---------------+----------------------------------------------+---------------+
+|id_prefix      |String prepended to menu id.                  |               |
++---------------+----------------------------------------------+---------------+
+|class          |HTML class for the list; default "nav".       |               |
++---------------+----------------------------------------------+---------------+
+|maxdepth       |Maximum depth of the menu; default 999.       |               |
 +---------------+----------------------------------------------+---------------+
