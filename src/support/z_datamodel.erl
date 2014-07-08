@@ -111,7 +111,8 @@ manage_category(Module, {Name, ParentCategory, Props}, Options, Context) ->
                         _ -> throw({error, {nonexisting_parent_category, ParentCategory}})
                     end
             end
-    end.
+    end,
+    z_depcache:flush(Context).
 
 
 manage_predicate(Module, {Name, Uri, Props, ValidFor}, Options, Context) ->
