@@ -25,10 +25,10 @@
 ]).
 
 -include_lib("controller_html_helper.hrl").
+-include_lib("modules/mod_admin/include/controller_admin_helper.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_admin_config, ReqData, Context).
-
+    admin_controller_is_authorized(mod_admin_config, ReqData, Context).
 
 html(Context) ->
     All = m_config:all(Context),

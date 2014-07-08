@@ -24,10 +24,10 @@
 ]).
 
 -include_lib("controller_html_helper.hrl").
+-include_lib("modules/mod_admin/include/controller_admin_helper.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_admin_category, ReqData, Context).
-
+    admin_controller_is_authorized(mod_admin_category, ReqData, Context).
 
 html(Context) ->
     Html = z_template:render("admin_category_sorter.tpl", [{page_admin_category_sorter, true}], Context),
