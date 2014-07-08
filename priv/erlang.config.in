@@ -53,7 +53,7 @@
    {wmtrace_dir, "priv/log/wmtrace/"},
 
 %%% Which sendfile command to use: disable, yaws, erlang
-   {use_sendfile, yaws}
+   {use_sendfile, erlang}
 
   ]}
 ].
