@@ -33,17 +33,12 @@
 
 
 get_request_token(Context) ->
-  case oauth_get("https://api.twitter.com/oauth/request_token", [], get_consumer(Context), "", "") of
-    {ok, Response} ->
-      case oauth_http:response_code(Response) of
-        200 ->
-              P = oauth_http:response_params(Response),
-              {ok, {oauth:token(P), oauth:token_secret(P)}};
-        _ ->
-          Response
-      end;
-    Error ->
-      Error
+  case oauth:get("https://api.twitter.com/oauth/request_token", [], get_consumer(Context), "", "") of
+      {ok, Response = { {_, 200, _}, _, _}} ->
+          P = oauth:params_decode(Response),
+          {ok, {oauth:token(P), oauth:token_secret(P)}};
+      Error ->
+          Error
   end.
 
 
@@ -57,15 +52,10 @@ get_access_token({RequestToken, RequestSecret}, Context) ->
                  false -> [{"oauth_verifier", Verifier}];
                  true -> []
              end,
-    case oauth_get("https://api.twitter.com/oauth/access_token", Params, get_consumer(Context), RequestToken, RequestSecret) of
-        {ok, Response} ->
-            case oauth_http:response_code(Response) of
-                200 ->
-                    P = oauth_http:response_params(Response),
-                    {ok, {oauth:token(P), oauth:token_secret(P)}};
-                _ ->
-                    Response
-            end;
+    case oauth:get("https://api.twitter.com/oauth/access_token", Params, get_consumer(Context), RequestToken, RequestSecret) of
+        {ok, Response = { {_, 200, _}, _, _}} ->
+            P = oauth:params_decode(Response),
+            {ok, {oauth:token(P), oauth:token_secret(P)}};
         Error ->
             Error
     end.
@@ -74,25 +64,19 @@ get_access_token({RequestToken, RequestSecret}, Context) ->
 request(get, ApiCall, {AccessToken, AccessSecret}, Context) ->
     request(get, ApiCall, [], {AccessToken, AccessSecret}, Context).
 request(get, ApiCall, Params, {AccessToken, AccessSecret}, Context) ->
-  case oauth_get("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret) of
+  case oauth:get("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret) of
       {ok, {{_, 200, _}, _Headers, Body}} ->
           {ok, z_convert:convert_json(mochijson2:decode(Body))};
     {ok, {{_, 401, _}, _Headers, _Body}} ->
           {error, unauthorized}
   end;
 request(post, ApiCall, Params, {AccessToken, AccessSecret}, Context) ->
-  case oauth_post("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret) of
+  case oauth:post("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret) of
       {ok, {{_, 200, _}, _Headers, Body}} ->
           {ok, z_convert:convert_json(mochijson2:decode(Body))};
       {ok, {{_, 401, _}, _Headers, _Body}} ->
           {error, unauthorized}
   end.
-
-
-%% get_direct_messages(Client) ->
-%%   URL = "http://twitter.com/direct_messages.xml",
-%%   oauth_client:get(Client, URL, []).
-
 
 get_consumer(Context) ->
     case {m_config:get_value(mod_twitter, consumer_key, undefined, Context), m_config:get_value(mod_twitter, consumer_secret, undefined, Context)} of
@@ -101,18 +85,3 @@ get_consumer(Context) ->
         {CKey, CSec} ->
             {z_convert:to_list(CKey), z_convert:to_list(CSec), hmac_sha1}
     end.
-
-
-
-
-oauth_get(URL, Params, Consumer, Token, TokenSecret) ->
-  Signed = oauth:signed_params("GET", URL, Params, Consumer, Token, TokenSecret),
-  {AuthorizationParams, QueryParams} = lists:partition(fun({K, _}) -> lists:prefix("oauth_", K) end, Signed),
-  Request = {oauth:uri(URL, QueryParams), [oauth:header(AuthorizationParams)]},
-  httpc:request(get, Request, [{autoredirect, false}], []).
-
-oauth_post(URL, Params, Consumer, Token, TokenSecret) ->
-    Signed = oauth:signed_params("POST", URL, Params, Consumer, Token, TokenSecret),
-    Body = oauth_uri:params_to_string(Signed),
-    Request = {URL, [], "application/x-www-form-urlencoded", Body},
-    httpc:request(post, Request, [{autoredirect, false}], []).
