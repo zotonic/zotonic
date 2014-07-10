@@ -15,8 +15,13 @@ tinymce.PluginManager.add('zlink', function(editor, url) {
                     href: url,
                     title: title
                 },
-                dom = editor.dom;
-            editor.insertContent(dom.createHTML('a', linkAttrs, dom.encode(title)));
+                dom = editor.dom,
+                selection = editor.selection;
+            if (selection.getContent()) {
+                editor.execCommand('mceInsertLink', false, linkAttrs);
+            } else {
+                editor.insertContent(dom.createHTML('a', linkAttrs, dom.encode(title)));
+            }
         }
         z_event('zlink', {language: window.zEditLanguage()});
     };

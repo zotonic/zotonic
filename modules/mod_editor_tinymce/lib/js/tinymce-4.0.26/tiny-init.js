@@ -2,10 +2,12 @@ tinyInit = {
     selector: "textarea",
 	mode: "none",
 	theme: "modern",
-	plugins: "compat3x advlist codemirror paste table zlink zmedia autosave directionality autoresize",
+	plugins: "compat3x advlist codemirror paste table link zlink zmedia autosave directionality autoresize",
 	menubar: "edit format table tools insert",
-	toolbar: "styleselect | bold italic | alignleft aligncenter alignright | " +
-		"bullist numlist outdent indent | ltr rtl | zlink zmedia | code",
+	toolbar: [
+	    "styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | ltr rtl | removeformat",
+		"link unlink | zlink zmedia | code"
+	],
 
     codemirror: {
         indentOnInit: true, // Whether or not to indent code on init. 
@@ -35,7 +37,7 @@ tinyInit = {
 	+ "q[cite],samp,small,"
 	+ "tt,var,big,"
 	+ "section,header,nav,article,footer,audio,video",
-		 
+	
 	relative_urls: "", 
 	remove_script_host: "", 
 	convert_urls: "", 
@@ -47,7 +49,7 @@ tinyInit = {
 		bdo_rtl : {inline : 'bdo', attributes : {dir: 'rtl'}},
 		bdo_ltr : {inline : 'bdo', attributes : {dir: 'ltr'}}
 	},
-
+    
     setup: function(editor) {
         // setup code here; override in _admin_tinymce_overrides_js.tpl
     },
