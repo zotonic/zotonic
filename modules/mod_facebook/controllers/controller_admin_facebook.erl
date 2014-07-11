@@ -28,7 +28,7 @@
 -include_lib("controller_html_helper.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_facebook, ReqData, Context).
+    z_admin_controller_helper:is_authorized(mod_facebook, ReqData, Context).
 
 html(Context) ->
     Vars = [

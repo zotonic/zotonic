@@ -28,12 +28,11 @@
 -include_lib("controller_html_helper.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_comment, ReqData, Context).
-
+    z_admin_controller_helper:is_authorized(mod_comment, ReqData, Context).
 
 html(Context) ->
-	Html = z_template:render("admin_comments.tpl", [{page_admin_comments, true}], Context),
-	z_context:output(Html, Context).
+    Html = z_template:render("admin_comments.tpl", [{page_admin_comments, true}], Context),
+    z_context:output(Html, Context).
 
 event(#postback{message={comment_delete, Args}}, Context) ->
     CommentId = proplists:get_value(id, Args),

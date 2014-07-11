@@ -34,29 +34,28 @@ init(_Args) -> {ok, []}.
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
-    z_context:lager_md(Context1),
+    Context2 = z_admin_controller_helper:init_session(Context1),
     ?WM_REPLY(true, Context1).
 
-resource_exists(ReqData, Context0) ->
-    ContextReq = ?WM_REQ(ReqData, Context0),
-    Context = z_context:ensure_all(ContextReq), 
-    z_context:lager_md(Context),
-    case z_context:get_q("id", Context) of
+resource_exists(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    Context2 = z_admin_controller_helper:init_session(Context1),
+    case z_context:get_q("id", Context2) of
         undefined ->
-            ?WM_REPLY(false, Context);
+            ?WM_REPLY(false, Context2);
         [] ->
-            ?WM_REPLY(false, Context);
+            ?WM_REPLY(false, Context2);
         Id ->
-            case m_rsc:rid(Id, Context) of
+            case m_rsc:rid(Id, Context2) of
                 undefined -> 
-                    ?WM_REPLY(false, Context);
+                    ?WM_REPLY(false, Context2);
                 RscId -> 
-                    case m_rsc:exists(RscId, Context) andalso m_rsc:is_visible(RscId, Context) of 
+                    case m_rsc:exists(RscId, Context2) andalso m_rsc:is_visible(RscId, Context2) of 
                         true ->
-                            Context2 = z_context:set(id, RscId, Context),
-                            ?WM_REPLY(true, Context2);
+                            Context3 = z_context:set(id, RscId, Context2),
+                            ?WM_REPLY(true, Context3);
                         false ->
-                            ?WM_REPLY(true, Context)
+                            ?WM_REPLY(true, Context2)
                     end
             end
     end.

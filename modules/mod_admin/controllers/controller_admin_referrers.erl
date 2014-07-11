@@ -25,10 +25,9 @@
         ]).
 
 -include_lib("controller_html_helper.hrl").
--include_lib("modules/mod_admin/include/controller_admin_helper.hrl").
 
 is_authorized(ReqData, Context) ->
-    admin_controller_is_authorized(mod_admin, ReqData, Context).
+    z_admin_controller_helper:is_authorized(mod_admin, ReqData, Context).
 
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),

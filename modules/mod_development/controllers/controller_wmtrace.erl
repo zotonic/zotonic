@@ -32,7 +32,7 @@
 -include_lib("webzmachine/include/webmachine_logger.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_development, ReqData, Context).
+    z_admin_controller_helper:is_authorized(mod_development, ReqData, Context).
 
 resource_exists(RD, Ctx) ->
     case wrq:disp_path(RD) of

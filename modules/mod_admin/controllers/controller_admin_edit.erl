@@ -30,7 +30,8 @@
 
 %% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(ReqData, Context) ->
-    {Context2, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+    Context1 = z_admin_controller_helper:init_session(?WM_REQ(ReqData, Context)),
+    {Context2, Id} = ensure_id(Context1),
     z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], admin_logon, Context2).
 
 
@@ -56,17 +57,15 @@ html(Context) ->
 
 %% @doc Fetch the (numerical) page id from the request
 ensure_id(Context) ->
-    Context2 = z_context:ensure_all(Context),
-    case z_context:get(id, Context2) of
+    case z_context:get(id, Context) of
         N when is_integer(N) ->
-            {Context2, N};
+            {Context, N};
         undefined ->
             try
-                z_context:lager_md(Context2),
-                {ok, IdN} = m_rsc:name_to_id(z_context:get_q("id", Context2), Context2),
-                {z_context:set(id, IdN, Context2), IdN}
+                {ok, IdN} = m_rsc:name_to_id(z_context:get_q("id", Context), Context),
+                {z_context:set(id, IdN, Context), IdN}
             catch
-                _:_ -> {Context2, undefined}
+                _:_ -> {Context, undefined}
             end
     end.
 
