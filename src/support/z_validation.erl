@@ -95,7 +95,8 @@ validate_query_args(Context) ->
                        end,
             GetValue = fun
                             ({Id, {ok, Value}}) when is_tuple(Value) -> {Id, Value};
-                            ({Id, {ok, Value}}) -> {Id, lists:flatten(Value)}
+                            ({Id, {ok, Value}}) when is_list(Value) -> {Id, lists:flatten(Value)};
+                            ({Id, {ok, Value}}) when is_binary(Value) -> {Id, z_convert:to_list(Value)}
                        end,
 
             {Errors,Values} = lists:partition(IsError, Validated),
