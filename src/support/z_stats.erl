@@ -43,6 +43,8 @@ init_site(Host) ->
     HostStats = #stats_from{host=Host},
     z_stats:new(#counter{name=requests}, HostStats#stats_from{system=webzmachine}),
     z_stats:new(#counter{name=requests}, HostStats#stats_from{system=db}),
+    z_stats:new(#gauge{name=sessions}, HostStats#stats_from{system=session}),
+    z_stats:new(#counter{name=page_processes}, HostStats#stats_from{system=session}),
     z_stats:new(#counter{name=out}, HostStats#stats_from{system=webzmachine}),
     z_stats:new(#histogram{name=duration}, HostStats#stats_from{system=webzmachine}),
     z_stats:new(#histogram{name=duration}, HostStats#stats_from{system=db}),
@@ -54,7 +56,9 @@ new(Stat, From) ->
     Key = key(Stat, From),
     case Stat of
         #counter{} ->
-            folsom_metrics:new_meter(Key);
+            folsom_metrics:new_counter(Key);
+        #gauge{} ->
+            folsom_metrics:new_gauge(Key);
         #histogram{} ->
             folsom_metrics:new_histogram(Key, slide)
     end,
@@ -117,15 +121,19 @@ log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
 
 %% Some helper functions.
 
-update_metric(#counter{op=incr, value=Value}=Stat, From) ->
-    folsom_metrics:safely_notify(key(Stat, From), Value);
+update_metric(#counter{op=Op, value=Value}=Stat, From) when Op =:= inc; Op =:= dec ->
+    folsom_metrics:safely_notify({key(Stat, From), {Op, Value}});
 update_metric(#histogram{value=Value}=Stat, From) ->
+    folsom_metrics:safely_notify({key(Stat, From), Value});
+update_metric(#gauge{value=Value}=Stat, From) ->
     folsom_metrics:safely_notify({key(Stat, From), Value}).
 
 key(#counter{name=Name}, #stats_from{host=Host, system=System}) ->
 	{Host, System, Name};
 key(#histogram{name=Name}, #stats_from{host=Host, system=System}) ->
-	{Host, System, Name}.    
+	{Host, System, Name};
+key(#gauge{name=Name}, #stats_from{host=Host, system=System}) ->
+	{Host, System, Name}.
 
 tag(#stats_from{host=Host}) ->
     Host.

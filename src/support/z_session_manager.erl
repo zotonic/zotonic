@@ -197,7 +197,8 @@ init(SiteProps) ->
                     context=z_acl:sudo(z_context:new(Host)),
                     key2pid=dict:new(), 
                     pid2key=dict:new()
-            },
+              },
+    update_session_metrics(State),
     timer:apply_interval(?SESSION_CHECK_EXPIRE * 1000, ?MODULE, tick, [self()]),
     process_flag(trap_exit, true),
     {ok, State}.
@@ -284,6 +285,7 @@ handle_cast(_Msg, State) ->
 %% Handle the down message from a stopped session, remove it from the session admin
 handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
     State1 = erase_session_pid(Pid, State),
+    update_session_metrics(State1),
     {noreply, State1};
 handle_info(_Msg, State) -> 
     {noreply, State}.
@@ -302,6 +304,7 @@ ensure_session1(SessionId, SessionPid, PersistId, State) when SessionId =:= unde
     NewSessionPid = spawn_session(PersistId, State#session_srv.context),
     NewSessionId = z_ids:id(),
     State1 = store_session_pid(NewSessionId, NewSessionPid, State),
+    update_session_metrics(State1),
     {ok, new, NewSessionPid, NewSessionId, State1};
 ensure_session1(SessionId, SessionPid, _PersistId, State) ->
     {ok, alive, SessionPid, SessionId, State}.
@@ -462,3 +465,9 @@ clear_session_cookie(Context) ->
                {http_only, true}],
     Context1 = z_context:set_cookie(?SESSION_COOKIE, "", Options, Context),
     Context1#context{session_id=undefined, session_pid=undefined}.
+
+
+%% @doc Update the metrics of the session count
+update_session_metrics(State) ->
+    Value = dict:size(State#session_srv.pid2key),
+    z_stats:update(#gauge{name=sessions, value=Value}, #stats_from{system=session, host=State#session_srv.context#context.host}).    
