@@ -24,4 +24,4 @@ Will output "**".
 
 **Note:** This option only works for positive integers.
 
-.. seealso:: :ref:`filter-format_number`, :ref:`filter-format_price`
+.. seealso:: :ref:`filter-to_integer`, :ref:`filter-format_number`, :ref:`filter-format_price`
