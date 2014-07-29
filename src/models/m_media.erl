@@ -49,7 +49,7 @@
     replace_url/4,
     replace_url/5,
 	save_preview/4,
-    make_preview_unique/2,
+    make_preview_unique/3,
     is_unique_file/2
 ]).
 
@@ -631,60 +631,46 @@ add_medium_info(File, OriginalFilename, Props, Context) ->
 save_preview(RscId, Data, Mime, Context) ->
 	case z_acl:rsc_editable(RscId, Context) of
     	true ->
-			Filename = data2filepath(RscId, Data, z_media_identify:extension(Mime)),
-			OldPreviewFilename = z_db:q1("select preview_filename from medium where id = $1", [RscId], Context),
-			case z_convert:to_list(OldPreviewFilename) of
-				Filename -> 
-					ok;
-				_OldFile ->
-					FileUnique = make_preview_unique(Filename, Context),
-					FileUniqueAbs = z_media_archive:abspath(FileUnique, Context),
-					ok = filelib:ensure_dir(FileUniqueAbs),
-					ok = file:write_file(FileUniqueAbs, Data),
-					
-					try
-						{ok, MediaInfo} = z_media_identify:identify(FileUniqueAbs, Context),
-						{width, Width} = proplists:lookup(width, MediaInfo),
-						{height, Height} = proplists:lookup(height, MediaInfo),
-					
-						UpdateProps = [
-							{preview_filename, FileUnique},
-							{preview_width, Width},
-							{preview_height, Height},
-							{is_deletable_preview, true}
-						],
-						{ok,1} = z_db:update(medium, RscId, UpdateProps, Context),
-						z_depcache:flush({medium, RscId}, Context),
-						{ok, FileUnique}
-					catch 
-						Error -> 
-							file:delete(FileUniqueAbs), 
-							Error
-					end
+			FileUnique = make_preview_unique(RscId, z_media_identify:extension(Mime), Context),
+			FileUniqueAbs = z_media_archive:abspath(FileUnique, Context),
+			ok = filelib:ensure_dir(FileUniqueAbs),
+			ok = file:write_file(FileUniqueAbs, Data),
+			
+			try
+				{ok, MediaInfo} = z_media_identify:identify(FileUniqueAbs, Context),
+				{width, Width} = proplists:lookup(width, MediaInfo),
+				{height, Height} = proplists:lookup(height, MediaInfo),
+			
+				UpdateProps = [
+					{preview_filename, FileUnique},
+					{preview_width, Width},
+					{preview_height, Height},
+					{is_deletable_preview, true}
+				],
+				{ok,1} = z_db:update(medium, RscId, UpdateProps, Context),
+				z_depcache:flush({medium, RscId}, Context),
+				{ok, FileUnique}
+			catch 
+				Error -> 
+					file:delete(FileUniqueAbs), 
+					Error
 			end;
 		false ->
 			{error, eacces}
 	end.
 
-data2filepath(RscId, Data, Extension) ->
-	<<A:8, B:8, Rest/binary>> = crypto:hash(sha, Data),
-    Basename = iolist_to_binary([integer_to_list(RscId), $-, mochihex:to_hex(Rest), Extension]), 
-	filename:join([ "preview", mochihex:to_hex(A), mochihex:to_hex(B), Basename ]).
-
-make_preview_unique(Filename, Context) ->
+make_preview_unique(RscId, Extension, Context) ->
+    Basename = iolist_to_binary([integer_to_list(RscId), $-, z_ids:identifier(16), Extension]), 
+    Filename = filename:join([
+                    "preview", 
+                    z_ids:identifier(2),
+                    z_ids:identifier(2),
+                    Basename ]),
     case is_unique_file(Filename, Context) of
         true ->
             Filename;
         false ->
-			Dirname = filename:dirname(Filename),
-			Basename = filename:basename(Filename),
-			Rootname = filename:rootname(Basename),
-			Rootname1 = iolist_to_binary([
-                                Rootname, $-, integer_to_list(z_ids:number()),
-                                filename:extension(Basename)
-                            ]),
-			Filename1 = filename:join([Dirname, Rootname1]),
-			make_preview_unique(Filename1, Context)
+            make_preview_unique(RscId, Extension, Context)
 	end.
 
 is_unique_file(Filename, Context) ->
