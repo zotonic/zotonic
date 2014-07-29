@@ -375,5 +375,3 @@ orientation_to_transpose(_) -> "".
 preview_filename(Id, Context) ->
     m_media:make_preview_unique(Id, ".jpg", Context).
 
-id_to_list(N) when is_integer(N) -> integer_to_list(N);
-id_to_list(insert_rsc) -> "video".

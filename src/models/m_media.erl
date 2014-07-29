@@ -659,8 +659,9 @@ save_preview(RscId, Data, Mime, Context) ->
 			{error, eacces}
 	end.
 
+-spec make_preview_unique(integer()|insert_rsc, string(), #context{}) -> file:filename().
 make_preview_unique(RscId, Extension, Context) ->
-    Basename = iolist_to_binary([integer_to_list(RscId), $-, z_ids:identifier(16), Extension]), 
+    Basename = iolist_to_binary([id_to_list(RscId), $-, z_ids:identifier(16), Extension]), 
     Filename = filename:join([
                     "preview", 
                     z_ids:identifier(2),
@@ -672,6 +673,9 @@ make_preview_unique(RscId, Extension, Context) ->
         false ->
             make_preview_unique(RscId, Extension, Context)
 	end.
+
+id_to_list(N) when is_integer(N) -> integer_to_list(N);
+id_to_list(insert_rsc) -> "video".
 
 is_unique_file(Filename, Context) ->
     z_db:q1("select count(*) from medium_log where filename = $1", [Filename], Context) =:= 0.
