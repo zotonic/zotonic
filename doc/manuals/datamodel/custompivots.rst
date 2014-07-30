@@ -27,7 +27,7 @@ table with data when a resource gets saved, create a notification
 listener function ``observe_custom_pivot/2``::
 
   observe_custom_pivot({custom_pivot, Id}, Context) ->
-      Requestor = m_rsc:p(requestor, Id, Context),
+      Requestor = m_rsc:p(Id, requestor, Context),
       {pivotname, [{requestor, Requestor}]}.
 
 This will fill the 'requestor' property for every entry in your
