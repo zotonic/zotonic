@@ -10,6 +10,7 @@ setTimeout(function() {
 		if (e.target != e.relatedTarget) {
 			var lang = $(e.target).parent().attr('lang');
 			$("li[lang='"+lang+"']:visible > a").tab('show');
+			z_editor.init();
 		}
 });
 {% endjavascript %}
