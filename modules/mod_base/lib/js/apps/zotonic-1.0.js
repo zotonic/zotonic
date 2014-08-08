@@ -1,11 +1,11 @@
 /* Zotonic basic Javascript library
 ----------------------------------------------------------
 
-@package:	Zotonic 2009
-@Author:	Tim Benniks <tim@timbenniks.nl>
-@Author:	Marc Worrell <marc@worrell.nl>
+@package:   Zotonic 2009
+@Author:    Tim Benniks <tim@timbenniks.nl>
+@Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2013 Tim Benniks, Marc Worrell
+Copyright 2009-2014 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,35 +23,67 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 ---------------------------------------------------------- */
 
-var z_ws					= false;
+// Client state
+var z_language              = "en";
+var z_ua                    = "desktop";
+var z_pageid                = '';
+var z_editor;
+
+// Transport to/from server
+var z_ws                    = false;
 var z_ws_pong_count         = 0;
 var z_ws_ping_timeout;
 var z_stream_host;
 var z_websocket_host;
-var z_doing_postback		= false;
-var z_comet_reconnect_timeout   = 1000;
-var z_spinner_show_ct		= 0;
-var z_postbacks				= [];
 var z_default_form_postback = false;
-var z_input_updater			= false;
-var z_drag_tag				= [];
-var z_registered_events		= {};
-var z_on_visible_checks		= [];
+var z_doing_postback        = false;
+var z_comet_reconnect_timeout = 1000;
+var z_transport_queue       = [];
+var z_transport_acks        = [];
+var z_transport_delegates   = {
+    javascript: function (data, _msg) { eval(data); }
+};
+
+var TRANSPORT_TIMEOUT       = 30000;
+var TRANSPORT_TRIES         = 3;
+
+// Misc state
+var z_spinner_show_ct       = 0;
+var z_input_updater         = false;
+var z_drag_tag              = [];
+var z_registered_events     = {};
+var z_on_visible_checks     = [];
 var z_on_visible_timer;
-var z_unique_id_counter		= 0;
-var z_language				= "en";
-var z_ua					= "desktop";
-var z_pageid				= '';
-var z_editor;
+var z_unique_id_counter     = 0;
+
 
 function z_set_page_id( page_id )
 {
-	if (z_pageid != page_id) {
-		z_pageid = page_id;
-		if (typeof pubzub == "object") {
-			setTimeout(function() { pubzub.publish("pageinit", page_id); }, 10);
-		}
-	}
+    ubf.add_spec('z_msg_v1', [
+        "qos", "msg_id", "timestamp", "content_type", "delegate",
+        "push_queue", "ua_class", "session_id", "page_id",
+        "data"
+        ]);
+    ubf.add_spec('z_msg_ack', [
+        "qos", "msg_id", "page_id", "result"
+        ]);
+    ubf.add_spec('postback_notify', [
+        "message", "trigger", "target", "data"
+        ]);
+    ubf.add_spec('postback_event', [
+        "postback", "trigger", "target",
+        "triggervalue", "data"
+        ]);
+    ubf.add_spec('q', [
+        "q"
+        ]);
+
+    if (z_pageid != page_id) {
+        z_pageid = page_id;
+        if (typeof pubzub == "object") {
+            setTimeout(function() { pubzub.publish("pageinit", page_id); }, 10);
+        }
+    }
 }
 
 /* Non modal dialogs
@@ -143,169 +175,320 @@ function z_event(name, extraParams)
 function z_notify(message, extraParams)
 {
     var trigger_id = '';
-    if (extraParams != undefined && extraParams.z_trigger_id != undefined) {
-        trigger_id = extraParams.z_trigger_id;
-        extraParams.z_trigger_id = undefined;
+    var params = extraParams || [];
+
+    if (typeof params == 'object' && params.z_trigger_id !== undefined) {
+        trigger_id = params.z_trigger_id;
+        delete params.z_trigger_id;
     }
-    var extra = ensure_name_value(extraParams);
-    if (typeof extra != 'object')
-    {
-        extra = [];
+    var notify = {
+        _record: "postback_notify",
+        message: message,
+        trigger: trigger_id,
+        target: params.z_target_id || undefined,
+        data: {
+            _record: 'q',
+            q: ensure_name_value(params) || []
+        }
+    };
+    var delegate = params.z_delegate || 'notify';
+    var options = {
+        trigger_id: trigger_id
+    };
+    if (trigger_id) {
+        options.ack = function(_ack_msg, _options) {
+            z_unmask(trigger_id);
+        };
     }
-    extra.push({name: 'z_msg', value: message});
-    z_queue_postback(trigger_id, 'notify', extra, true);
+    return z_transport(delegate, 'ubf', notify, options);
 }
 
-/* Postback loop
+
+/* Transport between user-agent and server
 ---------------------------------------------------------- */
 
-function z_postback_check()
+// Register a handler for incoming data (aka delegates)
+function z_transport_delegate_register(name, func)
 {
-    if (z_postbacks.length === 0)
-    {
-        z_doing_postback = false;
-    }
-    else
-    {
-        // Send only a single postback at a time.
-        z_doing_postback = true;
+    z_transport_delegates[name] = func;
+}
 
-        var o = z_postbacks.shift();
-        z_do_postback(o.triggerID, o.postback, o.extraParams);
+// Queue any data to be transported to the server
+function z_transport(delegate, content_type, data, options)
+{
+    var msg_id = z_pageid + z_unique_id(true);
+    var timestamp = new Date().getTime();
+
+    options = options || {};
+    if (typeof options.qos != 'integer' && options.ack) {
+        options.qos = 1;
+    }
+    var msg = ubf.encode({
+            "_record": "z_msg_v1",
+            "qos": options.qos,
+            "msg_id": msg_id,
+            "timestamp": timestamp,
+            "content_type": ubf.constant(content_type || "ubf"),
+            "delegate": ubf.constant(delegate),
+            "ua_class": ubf.constant(z_ua),
+            "page_id": z_pageid,
+            "session_id": window.z_sid || undefined,
+            "data": data
+        });
+
+    options.timeout = options.timeout || TRANSPORT_TIMEOUT;
+    if (options.qos > 0) {
+        var t = setTimeout(function() {
+                    z_transport_timeout(msg_id);
+                }, options.timeout);
+        z_transport_acks[msg_id] = {
+            msg: msg,
+            msg_id: msg_id,
+            options: options,
+            timestamp: timestamp,
+            timeout_timer: t,
+            timeout_count: 0,
+            is_queued: true
+        };
+    }
+    z_transport_queue.push({
+        msg: msg,
+        msg_id: msg_id,
+        options: options || {}
+    });
+    z_transport_check();
+    return msg_id;
+}
+
+// Ensure that a transport is scheduled for fetching data queued at the server
+function z_transport_ensure()
+{
+    if (z_transport_queue.length === 0 && !z_websocket_is_connected()) {
+        z_transport('$ping');
     }
 }
 
-function z_opt_cancel(obj)
+function z_transport_incoming(data)
 {
-    if(typeof obj.nodeName == 'undefined')
-        return false;
+    if (data !== undefined && data.length > 0) {
+        var msgs = ubf.decode(data);
 
-    var nodeName = obj.nodeName.toLowerCase();
-    var nodeType = $(obj).attr("type");
-
-    if (nodeName == 'input' &&	(nodeType == 'checkbox' || nodeType == 'radio'))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
+        if (typeof msgs == 'object' && msgs.ubf_type == ubf.LIST) {
+            for (i=0; i<msgs.length; i++) {
+                z_transport_incoming_msg(msgs[i]);
+            }
+        } else {
+            z_transport_incoming_msg(msgs);
+        }
     }
 }
 
-function z_httpdata( xhr, type, s )
+function z_transport_incoming_msg(msg)
 {
-    // lifted from jq1.4.4
-    var ct = xhr.getResponseHeader("content-type") || "",
-      xml = type === "xml" || !type && ct.indexOf("xml") >= 0,
-      data = xml ? xhr.responseXML : xhr.responseText;
-
-    if ( xml && data.documentElement.nodeName === "parsererror" ) {
-      $.error( "parsererror" );
-    }
-    if ( s && s.dataFilter ) {
-      data = s.dataFilter( data, type );
-    }
-    if ( typeof data === "string" ) {
-      if ( type === "json" || !type && ct.indexOf("json") >= 0 ) {
-        data = $.parseJSON( data );
-      } else if ( type === "script" || !type && ct.indexOf("javascript") >= 0 ) {
-        $.globalEval( data );
-      }
-    }
-    return data;
-}
-
-function z_queue_postback(triggerID, postback, extraParams, noTriggerValue)
-{
-    var triggerValue = '';
-
-    if (triggerID != '' && !noTriggerValue)
+    switch (msg._record)
     {
-        var trigger = $('#'+triggerID).get(0);
-        if (trigger)
-        {
-            if ($(trigger).is(":checkbox") || $(trigger).is(":radio"))
-            {
-                if ($(trigger).is(":checked"))
-                {
-                    triggerValue = $(trigger).val() || 'on';
+        case 'z_msg_v1':
+            var data = z_transport_incoming_data_decode(msg.content_type.valueOf(), msg.data);
+            var fun = z_transport_delegates[msg.delegate.valueOf()];
+            if (typeof fun == 'function') {
+                fun(data, msg);
+            } else {
+                console.log("No delegate registered for ",msg);
+            }
+            break;
+        case 'z_msg_ack':
+            if (!z_websocket_pong(msg)) {
+                console.log("Received ack ", msg);
+                if (typeof z_transport_acks[msg.msg_id] == 'object') {
+                    var ack = z_transport_acks[msg.msg_id];
+                    delete z_transport_acks[msg.msg_id];
+
+                    clearTimeout(ack.timeout_timer);
+                    if (typeof ack.options.ack == 'function') {
+                        ack.options.ack(msg, ack.options);
+                    }
                 }
             }
-            else
-            {
-                var nodeName = trigger.nodeName.toLowerCase();
+            break;
+        default:
+            console.log("Don't know where to delegate ", msg);
+            break;
+    }
+}
 
-                if (nodeName == 'input' || nodeName == 'button' || nodeName == 'textarea' || nodeName == 'select')
-                    triggerValue = $(trigger).val() || '';
+// If a transport times-out whilst in transit then it is reposted
+function z_transport_timeout(msg_id)
+{
+    if (typeof z_transport_acks[msg_id] == 'object') {
+        if (z_transport_acks[msg_id].timeout_count++ < TRANSPORT_TRIES) {
+            // Requeue the request (if it is not waiting in the queue)
+            if (!z_transport_acks[msg_id].is_queued) {
+                z_transport_queue.push({
+                    msg: z_transport_acks[msg_id].msg,
+                    msg_id: msg_id,
+                    options: z_transport_acks[msg_id].options || {},
+                });
+                z_transport_acks[msg_id].is_queued = true;
+            }
+            z_transport_acks[msg_id].timeout_timer = setTimeout(function() {
+                z_transport_timeout(msg_id);
+            }, z_transport_acks[msg_id].options.timeout);
+        } else {
+            // Final timeout, remove from all queues
+            if (z_transport_acks[msg_id].fail) {
+                z_transport_acks[msg_id].fail(msg_id, z_transport_acks[msg_id].options);
+            }
+            if (z_transport_acks[msg_id].is_queued) {
+                for (var i=0; i<z_transport_queue.length; i++) {
+                    if (z_transport_queue[i].msg_id == msg_id) {
+                        z_transport_queue.splice(i,i);
+                        break;
+                    }
+                }
+            }
+            delete z_transport_acks[msg_id];
+        }
+    }
+}
+
+function z_transport_incoming_data_decode(type, data)
+{
+    switch (type)
+    {
+        case 'ubf':
+            // Decoded by decoding the z_msg_v1 record 
+            return data;
+        case 'json':
+            return $.parseJSON(data.valueOf());
+        case 'javascript':
+            return data.valueOf();
+        case 'text':
+            return data.valueOf();
+        default:
+            console.log("Don't understand data format: ", type, data);
+            return data;
+    }
+}
+
+
+// Queue form data to be transported to the server
+// This is called by the server generated javascript and jquery triggered postback events.
+function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue)
+{
+    var triggervalue = '';
+    var trigger;
+
+    if (trigger_id) {
+        trigger = $('#'+trigger_id).get(0);
+    }
+    if (trigger && !noTriggerValue) {
+        if ($(trigger).is(":checkbox") || $(trigger).is(":radio")) {
+            if ($(trigger).is(":checked")) {
+                triggervalue = $(trigger).val() || 'on';
+            }
+        } else {
+            var nodeName = trigger.nodeName.toLowerCase();
+            if (nodeName == 'input' || nodeName == 'button' || nodeName == 'textarea' || nodeName == 'select') {
+                triggervalue = $(trigger).val() || '';
             }
         }
     }
+    extraParams = extraParams || [];
+    // extraParams.push({name: 'triggervalue', value: triggervalue});
 
-    extraParams = extraParams || new Array();
-    extraParams.push({name: 'triggervalue', value: triggerValue})
-
-    var o			= new Object();
-    o.triggerID		= triggerID;
-    o.postback		= postback;
-    o.extraParams	= extraParams;
-    z_postbacks.push(o);
-    z_postback_check();
-}
-
-
-function z_do_postback(triggerID, postback, extraParams)
-{
-    // Get params...
-    var params =
-        "postback=" + urlencode(postback) +
-        "&z_trigger_id=" + urlencode(triggerID) +
-        "&" + z_stream_args() +
-        "&" + $.param(extraParams);
+    var pb_event = {
+        _record: "postback_event",
+        postback: postback,
+        trigger: trigger_id,
+        target: extraParams.target_id || undefined,
+        triggervalue: triggervalue,
+        data: {
+            _record: 'q',
+            q: ensure_name_value(extraParams) || []
+        }
+    };
 
     // logon_form and .setcookie forms are always posted, as they will set cookies.
-    if (   z_websocket_is_connected()
-        && triggerID != "logon_form"
-        && (triggerID == '' || !$('#'+triggerID).hasClass("setcookie")))
+    var options = {
+        is_expect_cookie: (trigger_id == "logon_form") ||
+                          (trigger && $(trigger).hasClass("setcookie")),
+        trigger_id: trigger_id
+    };
+    if (trigger_id) {
+        options.ack = function(_ack_msg, _options) {
+            z_unmask(trigger_id);
+        };
+    }
+    z_transport('postback', 'ubf', pb_event, options);
+}
+
+function z_postback_opt_qs(extraParams)
+{
+    if (typeof extraParams == 'object' && extraParams instanceof Array) {
+        return {
+            _record: "q",
+            q: ensure_name_value(extraParams)
+        };
+    } else {
+        return extraParams;
+    }
+}
+
+function z_transport_check()
+{
+    if (z_transport_queue.length > 0)
     {
-        z_ws.send(params);
+        var qmsg = z_transport_queue.shift();
+
+        if (z_transport_acks[qmsg.msg_id]) {
+            z_transport_acks[qmsg.msg_id].is_queued = false;
+        }
+        z_do_transport(qmsg);
+    }
+}
+
+function z_do_transport(qmsg)
+{
+    if (z_websocket_is_connected() && !qmsg.options.is_expect_cookie)
+    {
+        z_ws.send(qmsg.msg);
     }
     else
     {
-        z_ajax(triggerID, params);
+        z_ajax(qmsg.options, qmsg.msg);
     }
 }
 
-function z_ajax(triggerID, params)
+function z_ajax(options, params)
 {
     z_start_spinner();
-
     $.ajax({
-        url:		'/postback',
-        type:		'post',
-        data:		params,
-        dataType:	'text',
+        url:        '/postback',
+        type:       'post',
+        data:       params,
+        dataType:   'text',
+        contentType: 'text/x-ubf',
         success: function(data, textStatus)
         {
             z_stop_spinner();
-
             try
             {
-                eval(data);
+                z_transport_incoming(data);
                 z_init_postback_forms();
+                z_unmask(options.trigger_id);
             }
             catch(e)
             {
+                console.log("Error evaluating ajax return value: ", data);
                 $.misc.error("Error evaluating ajax return value: " + data, e);
             }
-            setTimeout("z_postback_check()", 0);
+            setTimeout(function() { z_transport_check(); }, 0);
         },
         error: function(xmlHttpRequest, textStatus, errorThrown)
         {
             z_stop_spinner();
-
             $.misc.error("FAIL: " + textStatus);
-            z_unmask_error(triggerID);
+            z_unmask_error(options.trigger_id);
         }
     });
 }
@@ -359,7 +542,7 @@ function z_progress(id, value)
 
         if (trigger.nodeName.toLowerCase() == 'form')
         {
-            try { $(trigger).maskProgress(value); } catch (e) {};
+            try { $(trigger).maskProgress(value); } catch (e) {}
         }
     }
 }
@@ -375,10 +558,9 @@ function z_reload(args)
             window.location.reload(true);
         else {
             var qs = ensure_name_value(args);
+            var href;
 
             if (qs.length == 1 &&  typeof args.z_language == "string") {
-                var href;
-
                 if (  window.location.pathname.substring(0,2+z_language.length) == "/"+z_language+"/") {
                     href = window.location.protocol+"//"+window.location.host
                             +"/"+args.z_language+"/"
@@ -393,7 +575,7 @@ function z_reload(args)
                 else
                     window.location.href = href + "?" + window.location.search;
             } else {
-                var href = window.location.protocol+"//"+window.location.host+window.location.pathname;
+                href = window.location.protocol+"//"+window.location.host+window.location.pathname;
                 if (window.location.search == "") {
                     window.location.href = href + '?' + $.param(qs);
                 } else {
@@ -531,37 +713,39 @@ function z_comet_poll_ajax()
 {
     if (z_ws_pong_count === 0)
     {
-	    $.ajax({
-	        url: window.location.protocol + '//' + window.location.host + '/comet',
-	        type:'post',
-	        data: "z_pageid=" + urlencode(z_pageid),
-	        dataType: 'text',
+        $.ajax({
+            url: window.location.protocol + '//' + window.location.host + '/comet',
+            type:'post',
+            data: "z_pageid=" + urlencode(z_pageid),
+            dataType: 'text',
                 statusCode: {
-                    200: function(data, textStatus) 
-                    {
-                        z_comet_data(data);
-                        z_timeout_comet_poll_ajax(100);
-                    },
-                    204: function(data, textStatus) 
-                    {
-                        z_comet_data(data);
-                        z_timeout_comet_poll_ajax(1000);
-                    },
-                    403: function() 
-                    {
-                        /* Reload the page when get a forbidden response. */
-                        setTimeout(function() { 
-                            window.location.reload(); 
-                        }, 10000);
-                    }
+                    /* Handle incoming data */
+                    200: function(data, _textStatus) {
+                            z_comet_data(data);
+                            z_timeout_comet_poll_ajax(100);
+                         },
+                    204: function() {
+                            z_timeout_comet_poll_ajax(1000);
+                         },
+
+                    /* Reload the page on forbidden/auth responses. */
+                    401: function() {
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 10000);
+                         },
+                    403: function() {
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 10000);
+                         }
                 },
-	        error: function(xmlHttpRequest, textStatus, errorThrown)
-	        {
-                    setTimeout(function() { z_comet_poll_ajax(); }, z_comet_reconnect_timeout);
-                    if(z_comet_reconnect_timeout < 60000)
-                        z_comet_reconnect_timeout = z_comet_reconnect_timeout * 2;
-	        }
-	    });
+            error: function(xmlHttpRequest, textStatus, errorThrown) {
+                       setTimeout(function() { z_comet_poll_ajax(); }, z_comet_reconnect_timeout);
+                       if(z_comet_reconnect_timeout < 60000)
+                           z_comet_reconnect_timeout = z_comet_reconnect_timeout * 2;
+                   }
+        });
     }
     else
     {
@@ -570,7 +754,7 @@ function z_comet_poll_ajax()
 }
 
 
-function z_timeout_comet_poll_ajax(timeout) 
+function z_timeout_comet_poll_ajax(timeout)
 {
     setTimeout(function() {
         z_comet_reconnect_timeout = 1000;
@@ -583,12 +767,13 @@ function z_comet_data(data)
 {
     try
     {
-        eval(data);
+        z_transport_incoming(data);
         z_init_postback_forms();
     }
     catch (e)
     {
-        $.misc.error("Error evaluating ajax return value: " + data, e);
+        console.log("Error evaluating push return value: ", data);
+        $.misc.error("Error evaluating push return value: " + data, e);
     }
 }
 
@@ -596,13 +781,12 @@ function z_comet_data(data)
 function z_websocket_start()
 {
     var protocol = "ws:";
-    if (window.location.protocol == "https:")
-    {
+    if (window.location.protocol == "https:") {
         protocol = "wss:";
     }
 
     try {
-        z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket?" + z_stream_args("websocket"));
+        z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket");
     } catch (e) {
         z_ws_pong_count = 0;
     }
@@ -615,17 +799,13 @@ function z_websocket_start()
         z_websocket_restart();
     };
 
-    z_ws.onclose = function (evt)
-    {
+    z_ws.onclose = function (evt) {
         z_websocket_restart();
     };
 
-    z_ws.onmessage = function (evt)
-    {
-        if (!z_websocket_pong(evt.data)) {
-            z_comet_data(evt.data);
-            setTimeout("z_postback_check()", 0);
-        }
+    z_ws.onmessage = function (evt) {
+        z_comet_data(evt.data);
+        setTimeout(function() { z_transport_check(); }, 0);
     };
 }
 
@@ -633,7 +813,19 @@ function z_websocket_ping()
 {
     setTimeout(function() {
         if (z_ws && z_ws.readyState !== 0) {
-            z_ws.send('Z:PING:'+z_pageid);
+            var msg = ubf.encode({
+                    "_record": "z_msg_v1",
+                    "qos": 1,
+                    "msg_id": '$ws-'+z_pageid,
+                    "timestamp": new Date().getTime(),
+                    "content_type": ubf.constant("ubf"),
+                    "delegate": ubf.constant('$ping'),
+                    "ua_class": ubf.constant(z_ua),
+                    "page_id": z_pageid,
+                    "session_id": window.z_sid || undefined,
+                    "data": z_ws_pong_count
+                });
+            z_ws.send(msg);
         }
     }, 0);
     if (typeof z_ws_ping_timeout !== 'undefined') {
@@ -645,17 +837,15 @@ function z_websocket_ping()
     }, 5000);
 }
 
-function z_websocket_pong( data )
+function z_websocket_pong( msg )
 {
-    if (data.substring(0,7) == 'Z:PONG:') {
-        if (data == 'Z:PONG:'+z_pageid) {
-            if (typeof z_ws_ping_timeout !== 'undefined') {
-                clearTimeout(z_ws_ping_timeout);
-                z_ws_ping_timeout = undefined;
-            }
-            z_ws_pong_count++;
-            setTimeout(function() { z_websocket_ping(); }, 20000);
+    if (msg.msg_id == '$ws-'+z_pageid) {
+        if (typeof z_ws_ping_timeout !== 'undefined') {
+            clearTimeout(z_ws_ping_timeout);
+            z_ws_ping_timeout = undefined;
         }
+        z_ws_pong_count++;
+        setTimeout(function() { z_websocket_ping(); }, 20000);
         return true;
     } else {
         return false;
@@ -697,6 +887,25 @@ function z_stream_args(stream_type)
 /* Utility functions
 ---------------------------------------------------------- */
 
+// Should an event be canceled or passed through.
+function z_opt_cancel(obj)
+{
+    if(typeof obj.nodeName == 'undefined')
+        return false;
+
+    var nodeName = obj.nodeName.toLowerCase();
+    var nodeType = $(obj).attr("type");
+
+    if (nodeName == 'input' &&  (nodeType == 'checkbox' || nodeType == 'radio'))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 function z_is_enter_key(event)
 {
     return (event && event.keyCode == 13);
@@ -731,11 +940,11 @@ function z_ensure_id(elt)
     return id;
 }
 
-function z_unique_id()
+function z_unique_id(no_dom_check)
 {
     do {
         var id = '-z-' + z_unique_id_counter++;
-    } while ($('#'+id).length > 0);
+    } while (!no_dom_check || $('#'+id).length > 0);
     return id;
 }
 
@@ -801,15 +1010,14 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
 
         for (var i = 0; i < this.childNodes.length; i++)
         {
-            var sortTag = $(this.childNodes[i]).data("z_sort_tag")
+            var sortTag = $(this.childNodes[i]).data("z_sort_tag");
             if (sortTag)
             {
-                if (sortItems != "")
+                if (sortItems !== "")
                 {
                     sortItems += ",";
                 }
-
-                sortItems += sortTag
+                sortItems += sortTag;
             }
         }
 
@@ -818,7 +1026,7 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
         z_queue_postback(this.id, sortPostbackInfo, sortItem, true);
     };
     sortOptions.receive = function (ev, ui) {
-        var $target = $(this).data().sortable.element;
+        var $target = $(this).data().uiSortable.element;
         var $source = $(ui.sender);
         $target.data('z_sort_tag', $source.data('z_drag_tag'));
     };
@@ -844,7 +1052,7 @@ function z_typeselect(ElementId, postbackInfo)
         if(obj.val().length >= 2)
         {
             obj.addClass('loading');
-            z_queue_postback(ElementId, postbackInfo)
+            z_queue_postback(ElementId, postbackInfo);
         }
     }, 400);
 }
@@ -890,7 +1098,7 @@ function isScrolledIntoView(elem)
     var elemBottom = elemTop + $(elem).height();
 
     return (elemBottom >= docViewTop) && (elemTop <= docViewBottom);
-    // && (elemBottom <= docViewBottom) &&	(elemTop >= docViewTop);
+    // && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop);
 }
 
 /* Form element validations
@@ -903,7 +1111,7 @@ This function can be run multiple times.
 
 function z_init_postback_forms()
 {
-    $("form[action*='postback']").each(function()
+    $("form[action='postback']").each(function()
     {
         // store options in hash
         $(this).on('click.form-plugin', ":submit,input:image", function(e)
@@ -913,7 +1121,7 @@ function z_init_postback_forms()
 
             if (this.type == 'image')
             {
-                if (e.offsetX != undefined)
+                if (e.offsetX !== undefined)
                 {
                     form.clk_x = e.offsetX;
                     form.clk_y = e.offsetY;
@@ -938,13 +1146,13 @@ function z_init_postback_forms()
         z_editor_save(theForm);
 
         submitFunction = function(ev) {
-            var arguments = $(theForm).formToArray();
+            var args = $(theForm).formToArray();
 
-            try { $(theForm).mask("", 100); } catch (e) {};
+            try { $(theForm).mask("", 100); } catch (e) {}
 
-            var postback	= $(theForm).data("z_submit_postback");
-            var action		= $(theForm).data("z_submit_action");
-            var form_id		= $(theForm).attr('id');
+            var postback    = $(theForm).data("z_submit_postback");
+            var action      = $(theForm).data("z_submit_action");
+            var form_id     = $(theForm).attr('id');
             var validations = $(theForm).formValidationPostback();
 
             if(!postback)
@@ -981,7 +1189,7 @@ function z_init_postback_forms()
             else
             {
                 theForm.clk = theForm.clk_x = theForm.clk_y = null;
-                z_queue_postback(form_id, postback, arguments.concat(validations));
+                z_queue_postback(form_id, postback, args.concat(validations));
             }
             ev.stopPropagation();
             return false;
@@ -1001,7 +1209,7 @@ function z_form_submit_validated_delay(theForm, event, submitFunction)
         // There are form validations and they are not done yet.
         if (!event.zAfterValidation)
         {
-            event.zAfterValidation = new Array();
+            event.zAfterValidation = [];
         }
         event.zAfterValidation.push({ func: submitFunction, context: theForm });
         return true;
@@ -1032,10 +1240,11 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 {
     var a = validations;
 
-    a.push({name: "postback", value: postback});
+    a.push({name: "postback",     value: postback});
     a.push({name: "z_trigger_id", value: trigger_id});
-    a.push({name: "z_pageid", value: z_pageid});
-    a.push({name: "z_comet", value: typeof z_stream_host != 'undefined'});
+    a.push({name: "z_pageid",     value: z_pageid});
+    a.push({name: "z_ua",         value: z_ua});
+    a.push({name: "z_comet",      value: typeof z_stream_host != 'undefined'});
 
     var $form = this;
     var options = {
@@ -1114,7 +1323,9 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
                 }
             }
         }
-        form.clk = form.clk_x = form.clk_y = null;
+        form.clk   = null;
+        form.clk_x = null;
+        form.clk_y = null;
 
         // take a breath so that pending repaints get some cpu time before the upload starts
         setTimeout(function() {
@@ -1138,8 +1349,9 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
             }
 
             // support timout
-            if (opts.timeout)
+            if (opts.timeout) {
                 setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
+            }
 
             // add "extra" data to form if provided in options
             var extraInputs = [];
@@ -1152,117 +1364,78 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 
                 // add iframe to doc and submit the form
                 $io.appendTo('body');
-                io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
+                if (io.attachEvent) {
+                    io.attachEvent('onload', cb);
+                } else {
+                    io.addEventListener('load', cb, false);
+                }
                 form.submit();
             }
             finally {
                 // reset attrs and remove "extra" input elements
                 form.setAttribute('action',a);
-                t ? form.setAttribute('target', t) : $form.removeAttr('target');
+                if (t) {
+                    form.setAttribute('target', t);
+                } else {
+                    $form.removeAttr('target');
+                }
                 $(extraInputs).remove();
             }
         }, 10);
 
-        var domCheckCount = 3;
-
         function cb() {
-            if (cbInvoked++) return;
-
-            io.detachEvent ? io.detachEvent('onload', cb) : io.removeEventListener('load', cb, false);
-
-            var ok = true;
-            try {
-                if (timedOut) throw 'timeout';
-                // extract the server response from the iframe
-                var data, doc;
-
-                doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
-                if (doc.body == null || doc.body.innerHTML == '') {
-                    if (--domCheckCount) {
-                        // in some browsers (Opera) the iframe DOM is not always traversable when
-                        // the onload callback fires, so we loop a bit to accommodate
-
-                        // MW: looks like this is not a timing issue but Opera triggering a
-                        //     load event on the 100 continue.
-                        cbInvoked = 0;
-                        io.addEventListener('load', cb, false);
-                        return;
-                    }
-                    log('Could not access iframe DOM after 50 tries.');
-                    return;
-                }
-
-                xhr.responseText = doc.body ? doc.body.innerHTML : null;
-
-                xhr.getResponseHeader = function(header){
-                    var headers = {'content-type': opts.dataType};
-                    return headers[header];
-                };
-
-                var ta = doc.getElementsByTagName('textarea')[0];
-                xhr.responseText = ta ? ta.value : xhr.responseText;
-                data = z_httpdata(xhr, opts.dataType);
-            }
-            catch(e){
-                ok = false;
-                $.event.trigger("ajaxError", [xhr, opts, e]);
-            }
-
-            // ordering of these callbacks/triggers is odd, but that's how $.ajax does it
-            if (ok) {
-                try {
-                    eval(data);
-                } catch (e) {
-                    z_unmask_error(form.id);
-                }
-                if (g)
-                {
-                    $.event.trigger("ajaxSuccess", [xhr, opts]);
-                }
+            if (io.detachEvent) {
+                io.detachEvent('onload', cb);
             } else {
-                z_unmask_error(form.id);
+                io.removeEventListener('load', cb, false);
             }
-            if (g) $.event.trigger("ajaxComplete", [xhr, opts]);
-            if (g && ! --$.active) $.event.trigger("ajaxStop");
-            if (opts.complete) opts.complete(xhr, ok ? 'success' : 'error');
-
-            // clean up
-            setTimeout(function() {
-                $io.remove();
-                xhr.responseXML = null;
-            }, 100);
-        };
-    };
-}
+            if (timedOut) {
+                $.event.trigger("ajaxError", [xhr, opts, e]);
+                z_unmask_error(form.id);
+            } else {
+                $.event.trigger("ajaxSuccess", [xhr, opts]);
+                z_unmask(form.id);
+            }
+            if (g) {
+                $.event.trigger("ajaxComplete", [xhr, opts]);
+                $.event.trigger("ajaxStop");
+            }
+            if (opts.complete) {
+                opts.complete(xhr, ok ? 'success' : 'error');
+            }
+            z_transport_ensure();
+        }
+    }
+};
 
 
 // Collect all postback validations from the form elements
 $.fn.formValidationPostback = function()
 {
     var a = [];
-    if(this.length == 0) return a;
+    if(this.length > 0) {
+        var form = this[0];
+        var els      = form.elements;
 
-    var form = this[0];
-    var els      = form.elements;
+        if (!els) return a;
 
-    if (!els) return a;
-
-    for(var i=0, max=els.length; i < max; i++)
-    {
-        var el = els[i];
-        var n  = el.name;
-
-        if (n && !el.disabled && !$(el).hasClass("nosubmit"))
+        for(var i=0, max=els.length; i < max; i++)
         {
-            var v = $(el).data("z_postback_validation");
-            if (v)
+            var el = els[i];
+            var n  = el.name;
+
+            if (n && !el.disabled && !$(el).hasClass("nosubmit"))
             {
-                a.push({name: "z_v", value: n+":"+v})
+                var v = $(el).data("z_postback_validation");
+                if (v)
+                {
+                    a.push({name: "z_v", value: n+":"+v});
+                }
             }
         }
     }
     return a;
-}
+};
 
 // Initialize a validator for the element #id
 function z_init_validator(id, args)
@@ -1305,15 +1478,15 @@ function z_add_validator(id, type, args)
             }
             switch (type)
             {
-                case 'email':			v.add(Validate.Email, args);		break;
-                                case 'date':					v.add(Validate.Date, args);				break;
-                case 'presence':		v.add(Validate.Presence, args);		break;
-                case 'confirmation':	v.add(Validate.Confirmation, args); break;
-                case 'acceptance':		v.add(Validate.Acceptance, args);	break;
-                case 'length':			v.add(Validate.Length, args);		break;
-                case 'format':			v.add(Validate.Format, args);		break;
-                case 'numericality':	v.add(Validate.Numericality, args); break;
-                case 'custom':			v.add(Validate.Custom, args);		break;
+                case 'email':           v.add(Validate.Email, args);        break;
+                                case 'date':                    v.add(Validate.Date, args);             break;
+                case 'presence':        v.add(Validate.Presence, args);     break;
+                case 'confirmation':    v.add(Validate.Confirmation, args); break;
+                case 'acceptance':      v.add(Validate.Acceptance, args);   break;
+                case 'length':          v.add(Validate.Length, args);       break;
+                case 'format':          v.add(Validate.Format, args);       break;
+                case 'numericality':    v.add(Validate.Numericality, args); break;
+                case 'custom':          v.add(Validate.Custom, args);       break;
                 case 'postback':
                     args['z_id'] = id;
                     v.add(Validate.Postback, args);
@@ -1412,10 +1585,10 @@ function ensure_name_value(a)
 {
     if ((typeof a == 'object') && !(a instanceof Array))
     {
-        var n = []
+        var n = [];
         for (var prop in a)
         {
-            if (a[prop] != undefined)
+            if (a[prop] !== undefined)
                 n.push({name: prop, value: a[prop]});
         }
         return n;
@@ -1425,6 +1598,7 @@ function ensure_name_value(a)
         return a;
     }
 }
+
 
 // From: http://malsup.com/jquery/form/jquery.form.js
 
@@ -1452,15 +1626,16 @@ function ensure_name_value(a)
  */
 $.fn.formToArray = function(semantic) {
     var a = [];
-    if (this.length == 0) return a;
+    if (this.length === 0) return a;
 
     var form = this[0];
-
     var els = semantic ? form.getElementsByTagName('*') : form.elements;
+    var n;
+
     if (!els) return a;
     for(var i=0, max=els.length; i < max; i++) {
         var el = els[i];
-        var n = el.name;
+        n = el.name;
         if (!n) continue;
         if ($(el).hasClass("nosubmit")) continue;
         if ($(el).attr("type") == 'submit') continue;
@@ -1477,7 +1652,7 @@ $.fn.formToArray = function(semantic) {
     // add submitting element to data if we know it
     var sub = form.clk;
     if (sub) {
-        var n = sub.name;
+        n = sub.name;
         if (n && !sub.disabled) {
             a.push({name: n, value: $(sub).val()});
             a.push({name: 'z_submitter', value: n});
@@ -1518,34 +1693,34 @@ $.fn.fieldSerialize = function(successful) {
 };
 
 /**
- * Returns the value(s) of the element in the matched set.	For example, consider the following form:
+ * Returns the value(s) of the element in the matched set.  For example, consider the following form:
  *
- *	<form><fieldset>
- *		<input name="A" type="text" />
- *		<input name="A" type="text" />
- *		<input name="B" type="checkbox" value="B1" />
- *		<input name="B" type="checkbox" value="B2"/>
- *		<input name="C" type="radio" value="C1" />
- *		<input name="C" type="radio" value="C2" />
- *	</fieldset></form>
+ *  <form><fieldset>
+ *      <input name="A" type="text" />
+ *      <input name="A" type="text" />
+ *      <input name="B" type="checkbox" value="B1" />
+ *      <input name="B" type="checkbox" value="B2"/>
+ *      <input name="C" type="radio" value="C1" />
+ *      <input name="C" type="radio" value="C2" />
+ *  </fieldset></form>
  *
- *	var v = $(':text').fieldValue();
- *	// if no values are entered into the text inputs
- *	v == ['','']
- *	// if values entered into the text inputs are 'foo' and 'bar'
- *	v == ['foo','bar']
+ *  var v = $(':text').fieldValue();
+ *  // if no values are entered into the text inputs
+ *  v == ['','']
+ *  // if values entered into the text inputs are 'foo' and 'bar'
+ *  v == ['foo','bar']
  *
- *	var v = $(':checkbox').fieldValue();
- *	// if neither checkbox is checked
- *	v === undefined
- *	// if both checkboxes are checked
- *	v == ['B1', 'B2']
+ *  var v = $(':checkbox').fieldValue();
+ *  // if neither checkbox is checked
+ *  v === undefined
+ *  // if both checkboxes are checked
+ *  v == ['B1', 'B2']
  *
- *	var v = $(':radio').fieldValue();
- *	// if neither radio is checked
- *	v === undefined
- *	// if first radio is checked
- *	v == ['C1']
+ *  var v = $(':radio').fieldValue();
+ *  // if neither radio is checked
+ *  v === undefined
+ *  // if first radio is checked
+ *  v == ['C1']
  *
  * The successful argument controls whether or not the field element must be 'successful'
  * (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
@@ -1607,11 +1782,11 @@ $.fieldValue = function(el, successful) {
 
 /**
  * Clears the form data.  Takes the following actions on the form's input fields:
- *	- input text fields will have their 'value' property set to the empty string
- *	- select elements will have their 'selectedIndex' property set to -1
- *	- checkbox and radio inputs will have their 'checked' property set to false
- *	- inputs of type submit, button, reset, and hidden will *not* be effected
- *	- button elements will *not* be effected
+ *  - input text fields will have their 'value' property set to the empty string
+ *  - select elements will have their 'selectedIndex' property set to -1
+ *  - checkbox and radio inputs will have their 'checked' property set to false
+ *  - inputs of type submit, button, reset, and hidden will *not* be effected
+ *  - button elements will *not* be effected
  */
 $.fn.clearForm = function() {
     return this.each(function() {
@@ -1650,7 +1825,7 @@ $.fn.resetForm = function() {
  * Enables or disables any matching elements.
  */
 $.fn.enable = function(b) {
-    if (b == undefined) b = true;
+    if (b === undefined) b = true;
     return this.each(function() {
         this.disabled = !b;
     });
@@ -1661,7 +1836,7 @@ $.fn.enable = function(b) {
  * selects/deselects and matching option elements.
  */
 $.fn.selected = function(select) {
-    if (select == undefined) select = true;
+    if (select === undefined) select = true;
     return this.each(function() {
         var t = this.type;
         if (t == 'checkbox' || t == 'radio')
@@ -1703,10 +1878,20 @@ function is_equal(x, y) {
     return true;
 }
 
+$.extend({ 
+    keys: function(obj){
+        if (typeof Object.keys == 'function') 
+            return Object.keys(obj);
+        var a = [];
+        $.each(obj, function(k){ a.push(k) });
+        return a;
+    }
+});
+
 
 /**
  * A simple querystring parser.
- * Example usage: var q = $.parseQuery(); q.fooreturns	"bar" if query contains "?foo=bar"; multiple values are added to an array.
+ * Example usage: var q = $.parseQuery(); q.fooreturns  "bar" if query contains "?foo=bar"; multiple values are added to an array.
  * Values are unescaped by default and plus signs replaced with spaces, or an alternate processing function can be passed in the params object .
  * http://actingthemaggot.com/jquery
  *
@@ -1722,4 +1907,4 @@ $.parseQuery = function(qs,options) {
         params[p[0]] = params[p[0]]?((params[p[0]] instanceof Array)?(params[p[0]].push(p[1]),params[p[0]]):[params[p[0]],p[1]]):p[1];
     });
     return params;
-}
+};

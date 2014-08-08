@@ -32,6 +32,7 @@
 
 %% External exports
 -export([
+    start_session/3,
     continue_session/1,
     ensure_session/1, 
     stop_session/1, 
@@ -52,8 +53,8 @@
 %% The session server state
 -record(session_srv, {context, key2pid, pid2key}).
 
--type session_id() :: list().
--type persistent_id() :: list().
+-type session_id() :: binary().
+-type persistent_id() :: binary().
 
 %%====================================================================
 %% API
@@ -72,7 +73,7 @@ continue_session(#context{session_pid=Pid} = Context) when is_pid(Pid) ->
     {ok, Context};
 continue_session(Context) ->
     case get_session_cookie(Context) of
-        undefined -> {ok, Context};
+        <<>> -> {ok, Context};
         SessionId -> start_session(optional, SessionId, Context)
     end.
 
@@ -302,7 +303,7 @@ code_change(_OldVersion, State, _Extra) -> {ok, State}.
 %% Make sure that the session cookie is set and that the session process has been started.
 ensure_session1(SessionId, SessionPid, PersistId, State) when SessionId =:= undefined orelse SessionPid =:= error ->
     NewSessionPid = spawn_session(PersistId, State#session_srv.context),
-    NewSessionId = z_ids:id(),
+    NewSessionId = make_session_id(),
     State1 = store_session_pid(NewSessionId, NewSessionPid, State),
     update_session_metrics(State1),
     {ok, new, NewSessionPid, NewSessionId, State1};
@@ -313,10 +314,12 @@ rename_session(Pid, State) ->
     % Remove old session pid from the lookup tables
     State1 = erase_session_pid(Pid, State),
     % Generate a new session id and set cookie
-    NewSessionId = z_ids:id(),
+    NewSessionId = make_session_id(),
     State2 = store_session_pid(NewSessionId, Pid, State1),
     {ok, NewSessionId, State2}.
 
+make_session_id() ->
+    z_convert:to_binary(z_ids:id(32)).
 
 %% @doc Remove the pid from the session state
 -spec erase_session_pid(pid(), #session_srv{}) -> #session_srv{}.
@@ -333,7 +336,7 @@ erase_session_pid(Pid, State) ->
 
 %% @doc Add the pid to the session state
 -spec store_session_pid(session_id(), pid(), #session_srv{}) -> #session_srv{}.
-store_session_pid(SessionId, Pid, State) when is_list(SessionId) and is_pid(Pid) ->
+store_session_pid(SessionId, Pid, State) when is_binary(SessionId) and is_pid(Pid) ->
     State#session_srv{
             pid2key = dict:store(Pid, SessionId, State#session_srv.pid2key),
             key2pid = dict:store(SessionId, Pid, State#session_srv.key2pid)
@@ -380,7 +383,7 @@ spawn_session(PersistId, Context) ->
 
 -spec start_session( optional | ensure, session_id(), #context{} ) -> {ok, #context{}} | {error, term()}.
 start_session(Action, CurrentSessionId, Context) ->
-    PersistId = z_context:get_cookie(?PERSIST_COOKIE, Context),
+    PersistId = to_binary(z_context:get_cookie(?PERSIST_COOKIE, Context)),
     case gen_server:call(Context#context.session_manager, {start_session, Action, CurrentSessionId, PersistId}) of
         {ok, SessionState, SessionPid, NewSessionId} ->
             Context1 = Context#context{
@@ -436,12 +439,12 @@ get_session_cookie(Context) ->
             case z_context:get_q(z_sid, Context) of
                 undefined ->
                     % and as last resort check the context to support custom mechanisms
-                    z_context:get(z_sid, Context);
+                    to_binary(z_context:get(z_sid, Context));
                 SessionId ->
-                    SessionId
+                    to_binary(SessionId)
             end;
         SessionId ->
-            SessionId
+            to_binary(SessionId)
     end.
 
 
@@ -471,3 +474,6 @@ clear_session_cookie(Context) ->
 update_session_metrics(State) ->
     Value = dict:size(State#session_srv.pid2key),
     z_stats:update(#gauge{name=sessions, value=Value}, #stats_from{system=session, host=State#session_srv.context#context.host}).    
+
+to_binary(undefined) -> undefined;
+to_binary(A) -> z_convert:to_binary(A).

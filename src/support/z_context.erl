@@ -39,6 +39,7 @@
     prune_for_async/1,
     prune_for_template/1,
     prune_for_database/1,
+    prune_for_scomp/1,
     prune_for_scomp/2,
     output/2,
 
@@ -49,7 +50,6 @@
 
     combine_results/2,
 
-    continue_session/1,
     has_session/1,
     has_session_page/1,
     
@@ -57,11 +57,15 @@
     ensure_session/1,
     ensure_qs/1,
 
+    continue_all/1,
+    continue_session/1,
+
     get_reqdata/1,
     set_reqdata/2,
     get_controller_module/1,
     set_controller_module/2,
 
+    set_q/3,
     get_q/2,
     get_q/3,
     get_q_all/1,
@@ -346,8 +350,8 @@ prune_for_database(Context) ->
 
 %% @doc Cleanup a context for cacheable scomp handling.  Resets most of the accumulators to prevent duplicating
 %% between different (cached) renderings.
-prune_for_scomp(VisibleFor, Context) ->
-    z_acl:set_visible_for(VisibleFor, Context#context{
+prune_for_scomp(Context) ->
+    Context#context{
         dbc=undefined,
         wm_reqdata=undefined,
         updates=[],
@@ -357,7 +361,10 @@ prune_for_scomp(VisibleFor, Context) ->
         wire=[],
         validators=[],
         render=[]
-    }).
+    }.
+
+prune_for_scomp(VisibleFor, Context) ->
+    z_acl:set_visible_for(VisibleFor, prune_for_scomp(Context)).
 
 
 %% @doc Make the url an absolute url by prepending the hostname.
@@ -551,12 +558,12 @@ has_session(_) ->
 %% @doc Ensure session and page session. Fetches and parses the query string.
 ensure_all(Context) ->
     case get(no_session, Context, false) of
-        false ->
-            ensure_page_session(ensure_session(ensure_qs(Context)));
-        true ->
-            continue_page_session(continue_session(ensure_qs(Context)))
+        false -> ensure_page_session(ensure_session(ensure_qs(Context)));
+        true -> continue_all(Context)
     end.
 
+continue_all(Context) ->
+    continue_page_session(continue_session(ensure_qs(Context))).
 
 
 %% @doc Ensure that we have a session, start a new session process when needed
@@ -630,6 +637,14 @@ get_controller_module(Context) ->
 %% @spec set_controller_module(Module::atom(), Context) -> NewContext
 set_controller_module(Module, Context) ->
     Context#context{controller_module=Module}.
+
+
+%% @doc Set the value of a request parameter argument
+-spec set_q(string(), any(), #context{}) -> #context{}.
+set_q(Key, Value, Context) ->
+    Qs = get_q_all(Context),
+    Qs1 = proplists:delete(Key, Qs),
+    z_context:set('q', [{Key,Value}|Qs1], Context). 
 
 
 %% @spec get_q(Key::string(), Context) -> Value::string() | undefined
@@ -1143,13 +1158,14 @@ set_cookie(Key, Value, Options, Context) ->
             Context;
         false ->
             % Add domain to cookie if not set
+            ValueAsString = z_convert:to_list(Value),
             Options1 = case proplists:lookup(domain, Options) of
                            {domain, _} -> Options;
                            none -> [{domain, z_context:cookie_domain(Context)}|Options]
                        end,
-            Options2 = z_notifier:foldl(#cookie_options{name=Key, value=Value}, Options1, Context),
+            Options2 = z_notifier:foldl(#cookie_options{name=Key, value=ValueAsString}, Options1, Context),
             RD = Context#context.wm_reqdata,
-            Hdr = mochiweb_cookies:cookie(Key, Value, Options2),
+            Hdr = mochiweb_cookies:cookie(Key, ValueAsString, Options2),
             RD1 = wrq:merge_resp_headers([Hdr], RD),
             z_context:set_reqdata(RD1, Context)
     end.

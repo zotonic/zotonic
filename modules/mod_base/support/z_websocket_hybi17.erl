@@ -51,8 +51,9 @@ start(ReqData, Context) ->
             13, 10
             ],
     ok = send(Socket, Data),
-    SenderPid = spawn_link(fun() -> start_send_loop(Socket, Context) end),
-    receive_loop(<<>>, Socket, SenderPid, Context).
+    ContextPruned = z_context:set('q', [], z_context:prune_for_scomp(Context)), 
+    SenderPid = spawn_link(fun() -> start_send_loop(Socket, ContextPruned) end),
+    receive_loop(<<>>, Socket, SenderPid, ContextPruned).
 
 
 %% ============================== RECEIVE DATA =====================================
@@ -123,12 +124,12 @@ unmask_data(Opcode, <<O:8>>, MaskKey, RemainingData, Socket, SenderPid, Context,
 
 % Text frame
 handle_frame(RemainingData, 1, Message, Socket, SenderPid, Context) ->
-    handle_message(Message, SenderPid, Context),
-    handle_data(RemainingData, Socket, SenderPid, Context);
+    {ok, Context1} = handle_message(Message, SenderPid, Context),
+    handle_data(RemainingData, Socket, SenderPid, Context1);
 % Binary frame
 handle_frame(RemainingData, 2, Message, Socket, SenderPid, Context) ->
-    handle_message(Message, SenderPid, Context),
-    handle_data(RemainingData, Socket, SenderPid, Context);
+    {ok, Context1} = handle_message(Message, SenderPid, Context),
+    handle_data(RemainingData, Socket, SenderPid, Context1);
 % Close control frame
 handle_frame(_RemainingData, 8, _Message, Socket, SenderPid, Context) ->
     close({normal, closed}, Socket, SenderPid, Context);
@@ -147,9 +148,17 @@ handle_init(Context) ->
     W = z_context:get(ws_handler,  Context),
     W:websocket_init(Context).
 
-handle_message(Message, SenderPid, Context) ->
+handle_message(Msg, SenderPid, Context) ->
     H = z_context:get(ws_handler, Context),
-    H:websocket_message(Message, SenderPid, Context).
+    z_depcache:in_process(true),
+    case H:websocket_message(Msg, SenderPid, Context) of
+        ok ->
+            z_utils:erase_process_dict(),
+            {ok, Context};
+        {ok, Context1} ->
+            z_utils:erase_process_dict(),
+            {ok, z_context:prune_for_scomp(Context1)}
+    end.
 
 handle_info(Message, Context) ->
     H = z_context:get(ws_handler, Context),

@@ -3,7 +3,7 @@
 @package: Channel.me 2013
 @Author: MM Zeeman <mmzeeman@xs4all.nl.nl>
 
-Copyright 2013 Maas-Maarten Zeeman
+Copyright 2013-2014 Maas-Maarten Zeeman
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,8 +31,15 @@ limitations under the License.
     ubf.TUPLE = 3;
     ubf.LIST = 4;
     
+    // Make a constant
+    function constant(value) {
+        var s = new String(value);
+        s.ubf_type = ubf.CONSTANT;
+        return s;
+    }
+    ubf.constant = constant;
+
     // Encode the value as a ubf(a) tuple. 
-    //
     function encode_as_tuple(value, spec, buffer) {
         if (value._record) {
             encode_as_record(value, value._record, spec || specs[value._record], buf);
@@ -57,7 +64,6 @@ limitations under the License.
     ubf.encode_as_tuple = encode_as_tuple;
 
     // Encode the value as list
-    //
     function encode_as_list(value, buffer) {
         var buf = buffer || [];
         var i;
@@ -74,6 +80,27 @@ limitations under the License.
         }
     }
     ubf.encode_as_list = encode_as_list;
+
+    // Encode as proplist
+    function encode_as_proplist(value, buffer) {
+        var buf = buffer || [];
+        var i;
+
+        buf.push("#");
+        $.each(value, function(k, v) {
+                buf.push('{');
+                ubf.encode_as_constant(k, buf);
+                buf.push(' ');
+                encode(v, buf);
+                buf.push('}&');
+            });
+
+        if(!buffer) {
+            buf.push("$");
+            return buf.join("");
+        }
+    }
+    ubf.encode_as_proplist = encode_as_proplist;
 
     // Encode as record
     function encode_as_record(value, record_name, spec, buffer) {
@@ -126,7 +153,7 @@ limitations under the License.
     function encode(value, buffer) {
         var buf = buffer || [];
 
-        if(value === undefined) {
+        if(value === undefined || value === null) {
             encode_as_constant("undefined", buf);
         } else {
             switch(value.ubf_type) {
@@ -156,6 +183,13 @@ limitations under the License.
                     buf.push(_utf8len(value)+"~"+value+"~");
                 } else if (typeof(value) == "object" && value._record) {
                     encode_as_record(value, value._record, specs[value._record], buf);
+                } else if(typeof(value) == "object") {
+                    var keys = $.keys(value).sort();
+                    if (keys.length == 2 && keys[0] == 'name' && keys[1] == 'value') {
+                        encode_as_tuple([value.name, value.value], undefined, buf);
+                    } else {
+                        encode_as_proplist(value, buf);
+                    }
                 } else if(typeof(value) == "object" && value.valueOf) {
                     buf.push(_utf8len(value.valueOf)+"~"+value.valueOf()+"~");
                 } else if(typeof(value) == "boolean") {
@@ -390,7 +424,7 @@ limitations under the License.
         case ">": return _pop(bytes, env, stack);
         case "$": return _return(stack);
         default: return _push(bytes, env, stack);
-        };
+        }
     }
     
     function _utf8len ( s )

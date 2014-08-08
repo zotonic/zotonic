@@ -8,10 +8,13 @@
  {comet,     ["comet", "subdomain"], controller_template, [{template, "comet_subdomain.tpl"}, {ssl, any}]},
  
  %% WebSocket connection.
- {websocket, ["websocket"],          controller_websocket, [{ssl, any}, {no_session, true}]},
+ {websocket, ["websocket"],          controller_websocket, [{ssl, any}]},
  
  %% Postback of events from the browser to the server, dispatched from the postback resource.
- {postback,  ["postback"],           controller_postback, [{ssl, any}, {no_session, true}]},
+ {postback,  ["postback", z_message, z_delegate], controller_postback, [{ssl, any}]},
+ {postback,  ["postback", z_message],             controller_postback, [{ssl, any}]},
+ {postback,  ["postback"],                        controller_postback, [{ssl, any}]},
+
  
  %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
  {close_connection, ["close-connection"],  controller_close_connection, [{ssl, any}, {no_session, true}]},

@@ -29,14 +29,14 @@
     ]).
 
 -include_lib("controller_webmachine_helper.hrl").
--include_lib("include/zotonic.hrl").
+-include_lib("zotonic.hrl").
 
 
 %% Timeout for comet flush when there is no data, webmachine 0.x had a timeout of 60 seconds, so leave after 55
 -define(COMET_FLUSH_EMPTY, 55000).
 
-%% Timeout for comet flush when there is data, allow for 50 msec more to gather extra data before flushing
--define(COMET_FLUSH_DATA,  50).
+%% Timeout for comet flush when there is data, allow for 100 msec more to gather extra data before flushing
+-define(COMET_FLUSH_DATA,  100).
 
 
 init(_Args) -> {ok, []}.
@@ -67,44 +67,54 @@ process_post(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     MRef = erlang:monitor(process, Context1#context.page_pid),
     z_session_page:comet_attach(self(), Context1#context.page_pid),
-    TRef = start_timer(?COMET_FLUSH_EMPTY),
-    process_post_loop(Context1, TRef, MRef, false).
+    TRefFinal = erlang:send_after(?COMET_FLUSH_EMPTY, self(), flush_empty),
+    process_post_loop(Context1, TRefFinal, undefined, MRef).
 
 
 %% @doc Wait for all scripts to be pushed to the user agent.
-process_post_loop(Context, TRef, MRef, HasData) ->
+process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
     receive
-        flush ->
-            erlang:demonitor(MRef, [flush]),
-            cancel_timer(TRef),
-            z_session_page:comet_detach(Context#context.page_pid),
-            ?WM_REPLY(true, Context);
+        flush_empty ->
+            Data = z_session_page:get_transport_data(Context#context.page_pid),
+            flush(true, Data, TRefFinal, TRefData, MPageRef, Context);
 
-        script_queued ->
-            Scripts = z_session_page:get_scripts(Context#context.page_pid),
-            RD  = z_context:get_reqdata(Context),
-            RD1 = wrq:append_to_response_body(Scripts, RD),
-            Context1 = z_context:set_reqdata(RD1, Context),
-            TRef1 = case HasData of
-                        true  -> TRef;
-                        false -> reset_timer(?COMET_FLUSH_DATA, TRef)
+        flush_data ->
+            Data = z_session_page:get_transport_data(Context#context.page_pid),
+            flush(false, Data, TRefFinal, TRefData, MPageRef, Context);
+
+        transport ->
+            TRef1 = case TRefData of
+                        undefined  -> erlang:send_after(?COMET_FLUSH_DATA, self(), flush_data);
+                        _ -> TRefData
                     end,
-            process_post_loop(Context1, TRef1, MRef, true);
+            process_post_loop(Context, TRefFinal, TRef1, MPageRef);
 
         {'DOWN', _MonitorRef, process, Pid, _Info} when Pid == Context#context.page_pid ->
-            self() ! flush,
             Context1 = Context#context{page_pid=undefined},
-            process_post_loop(Context1, TRef, MRef, HasData)
+            cancel_timer(TRefFinal),
+            cancel_timer(TRefData),
+            ?WM_REPLY(true, Context1);
+
+        Msg ->
+            lager:warning("Unknown comet loop message ~p", [Msg]),
+            process_post_loop(Context, TRefFinal, TRefData, MPageRef)
     end.
 
 
-start_timer(Delta) ->
-    erlang:send_after(Delta, self(), flush).
 
-reset_timer(Delta, TRef) ->
-    cancel_timer(TRef),
-    start_timer(Delta).
+flush(false, <<>>, TRefFinal, TRefData, MPageRef, Context) ->
+    process_post_loop(Context, TRefFinal, TRefData, MPageRef);
+flush(_IsFinal, Data, TRefFinal, TRefData, MPageRef, Context) ->
+    erlang:demonitor(MPageRef, [flush]),
+    cancel_timer(TRefFinal),
+    cancel_timer(TRefData),
+    z_session_page:comet_detach(Context#context.page_pid),
+    RD  = z_context:get_reqdata(Context),
+    RD1 = wrq:append_to_response_body(Data, RD),
+    Context1 = z_context:set_reqdata(RD1, Context),
+    ?WM_REPLY(true, Context1).
 
+cancel_timer(undefined) ->
+    ok;
 cancel_timer(TRef) ->
-    erlang:cancel_timer(TRef),
-    z_utils:flush_message(flush).
+    erlang:cancel_timer(TRef).

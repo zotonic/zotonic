@@ -23,45 +23,47 @@
 
 -record(state, {
         wills = [],
+        user_id,
         site
     }).
 
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/1]).
--export([add/3, del/2]).
+-export([start_link/4]).
+-export([add/4, del/3]).
 
 -define(MAX_WILLS, 100).
 
 
-add(WillPid, WillId, Msg) ->
-    gen_server:cast(WillPid, {add, WillId, Msg}).
+add(WillPid, WillId, Msg, Context) ->
+    gen_server:cast(WillPid, {add, WillId, Msg, z_acl:user(Context)}).
 
-del(WillPid, WillId) ->
+del(WillPid, WillId, _Context) ->
     gen_server:cast(WillPid, {del, WillId}).
 
 
-start_link({_WillPid, _WillId, _Msg, _Site} = Args) ->
+start_link(WillPid, WillId, Msg, Context) ->
+    Args = {WillPid, WillId, Msg, z_context:site(Context), z_acl:user(Context)},
     gen_server:start_link(?MODULE, Args, []).
 
 
-init({Pid, undefined, undefined, Site}) ->
+init({Pid, undefined, undefined, Site, _UserId}) ->
     erlang:monitor(process, Pid),
     {ok, #state{
         wills=[],
         site=Site
     }};
-init({Pid, WillId, Msg, Site}) ->
+init({Pid, WillId, Msg, Site, UserId}) ->
     erlang:monitor(process, Pid),
     {ok, #state{
-        wills=[{WillId,Msg}],
+        wills=[{WillId,Msg,UserId}],
         site=Site
     }}.
 
 handle_call(_Msg, _From, State) ->
     {reply, {error, unknown_msg}, State}.
 
-handle_cast({add, WillId, Msg}, State) ->
-    State1 = State#state{wills=prune([{WillId,Msg} | maybe_delete_will(WillId, State#state.wills)])},
+handle_cast({add, WillId, Msg, UserId}, State) ->
+    State1 = State#state{wills=prune([{WillId, Msg, UserId} | maybe_delete_will(WillId, State#state.wills)])},
     {noreply, State1};
 handle_cast({del, WillId}, State) ->
     State1 = State#state{wills=maybe_delete_will(WillId, State#state.wills)},
@@ -71,8 +73,8 @@ handle_cast(_Msg, State) ->
 
 handle_info({'DOWN', _MRef, _, _, _}, State) ->
     Context = z_context:new(State#state.site),
-    lists:foreach(fun({_,Msg}) ->
-                        z_mqtt:publish(Msg, Context)
+    lists:foreach(fun({_WillId, Msg, UserId}) ->
+                        z_mqtt:publish(Msg, z_acl:logon(UserId,Context))
                   end,
                   State#state.wills), 
     {stop, normal, State}.
@@ -83,9 +85,6 @@ terminate(_Reason, _State) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
-
-maybe_delete_will(<<>>, Wills) ->
-    Wills;
 maybe_delete_will(Id, Wills) ->
     lists:keydelete(Id, 1, Wills). 
 

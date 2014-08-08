@@ -20,6 +20,8 @@
 -module(z_mqtt).
 
 -export([
+    transport_incoming/2,
+
     route/2,
     publish/2,
     publish/3,
@@ -31,7 +33,7 @@
     maybe_context_topic/2,
     remove_context_topic/2,
 
-    make_postback_payload/2,
+    wrap_payload/2,
     payload_data/1,
     encode_packet_payload/1
     ]).
@@ -42,13 +44,16 @@
 -compile([{parse_transform, lager_transform}]).
 
 -record(z_mqtt_payload, {
-        version = 1,
         site,
         user_id,
-        encoding = binary,
-        payload = <<>>
+        payload
     }).
 
+
+%% @doc Transport incoming messages to mod_mqtt
+%% @todo Decouple this or move the mod_mqtt routines to core z_mqtt functions
+transport_incoming(Cmd, Context) when is_tuple(Cmd) ->
+    z_notifier:first(Cmd, Context).
 
 
 %% @doc Entry point for messages received via the mqtt listener.
@@ -57,7 +62,7 @@
 route(#mqtt_msg{} = Msg, Context) ->
     Msg1 = Msg#mqtt_msg{
         topic=maybe_context_topic(Msg#mqtt_msg.topic, Context),
-        payload=wrap_payload(ubf, Msg#mqtt_msg.payload, Context),
+        payload=wrap_payload(Msg#mqtt_msg.payload, Context),
         encoder=fun(B) -> z_mqtt:encode_packet_payload(B) end
     },
     case z_mqtt_acl:is_allowed(publish, Msg1#mqtt_msg.topic, Context) of
@@ -143,19 +148,11 @@ unsubscribe(Topic, MFA, Context) when is_tuple(MFA) ->
 
 
 %doc Add a decode wrapper around the payload we received from via a postback event.
-make_postback_payload(undefined, Context) ->
-    wrap_payload(binary, <<>>, Context);
-make_postback_payload([], Context) ->
-    wrap_payload(binary, <<>>, Context);
-make_postback_payload(Data, Context) ->
-    wrap_payload(ubf, Data, Context).
-
-wrap_payload(Encoding, Data, Context) ->
+wrap_payload(Data, Context) ->
     #z_mqtt_payload{
         site=z_context:site(Context), 
         user_id=z_acl:user(Context),
-        encoding=Encoding,
-        payload=z_convert:to_binary(Data)
+        payload=Data
     }.
 
 
@@ -163,16 +160,8 @@ payload_data(#mqtt_msg{payload=Payload}) ->
     payload_data(Payload);
 payload_data(Bin) when is_binary(Bin) ->
     {ok, Bin};
-payload_data(#z_mqtt_payload{encoding=binary, payload=Data}) ->
-    {ok, Data};
-payload_data(#z_mqtt_payload{encoding=term, payload=Data}) ->
-    {ok, Data};
-payload_data(#z_mqtt_payload{encoding=ubf, payload=Data}) when is_binary(Data) ->
-    case z_ubf:decode(Data) of
-        {ok, Term, _} -> {ok, Term};
-        {more, _} -> {error, eof};      
-        {error, _} = Error -> Error
-    end.
+payload_data(#z_mqtt_payload{payload=Data}) ->
+    {ok, Data}.
 
 %% @doc UBF encode the data to be sent to a client over a TCP/IP connection.
 -spec encode_packet_payload(#z_mqtt_payload{} | undefined | binary()) -> binary().

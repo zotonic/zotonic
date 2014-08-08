@@ -36,6 +36,8 @@
 -export([
     start_link/3, 
     stop/1, 
+
+    whereis/2,
     ping/1,
     
     session_pid/1,
@@ -48,10 +50,14 @@
     
     add_script/2,
     add_script/1,
-    get_scripts/1,
+    transport/2,
+    transport/3,
+
+    get_transport_data/1,
     comet_attach/2,
     comet_detach/1,
     websocket_attach/2,
+    websocket_attach/3,
 
     get_attach_state/1,
     
@@ -68,7 +74,7 @@
     linked=[],
     comet_pid=undefined,
     websocket_pid=undefined,
-    script_queue=[],
+    transport,
     vars=[]
 }).
 
@@ -78,8 +84,11 @@
 
 %% @doc Starts the person manager server
 -spec start_link(pid(), binary(), #context{}) -> {ok, pid()} | {error, term()}.
-start_link(SessionPid, PageId, Context) ->
-    gen_server:start_link(?MODULE, {SessionPid,PageId,z_context:site(Context)}, []).
+start_link(SessionPid, PageId, Context) when is_binary(PageId) ->
+    % lager:debug(z_context:lager_md(Context), "[~p] register page ~p", [z_context:site(Context), PageId]),
+    gen_server:start_link({via, z_proc, {{session_page,PageId}, Context}}, 
+                          ?MODULE, {SessionPid,PageId,z_context:site(Context)},
+                          []).
 
 stop(Pid) ->
     try
@@ -87,6 +96,9 @@ stop(Pid) ->
     catch _Class:_Term -> 
         error 
     end.
+
+whereis(PageId, Context) when is_binary(PageId) ->
+    z_proc:whereis({session_page, PageId}, Context). 
 
 %% @doc Receive a ping, makes sure that we stay alive
 ping(Pid) ->
@@ -144,26 +156,44 @@ comet_detach(Pid) ->
     z_utils:flush_message(script_queued).
 
 %% @doc Attach the websocket request process to the page session, enabling sending scripts to the user agent
-websocket_attach(WsPid, #context{page_pid=Pid}) ->
-    websocket_attach(WsPid, Pid);
-websocket_attach(WsPid, Pid) ->
-    gen_server:cast(Pid, {websocket_attach, WsPid}).
+websocket_attach(WsPid, PageId, Context) when is_binary(PageId) ->
+    websocket_attach(WsPid, whereis(PageId, Context));
+websocket_attach(_WsPid, undefined, Context) ->
+    lager:info(z_context:lager_md(Context),
+               "Websocket attach to non-existing page ~p", [Context#context.page_id]).
 
-%% @doc Called by the comet process or the page request to fetch any outstanding scripts
-get_scripts(Pid) ->
-    gen_server:call(Pid, get_scripts).
+websocket_attach(WsPid, #context{page_pid=Pid}) when is_pid(Pid) ->
+    websocket_attach(WsPid, Pid);
+websocket_attach(WsPid, Pid) when is_pid(Pid) ->
+    gen_server:cast(Pid, {websocket_attach, WsPid});
+websocket_attach(_WsPid, #context{} = Context) ->
+    lager:info(z_context:lager_md(Context),
+               "Websocket attach to non-existing page ~p", [Context#context.page_id]).
+
+%% @doc Called by the comet process or the page request to fetch any queued transport messages
+get_transport_data(Pid) ->
+    gen_server:call(Pid, get_transport_data).
 
 %% @doc Send a script to the user agent, will be queued and send when the comet process attaches
-add_script(Script, #context{page_pid=Pid}) ->
-    add_script(Script, Pid);
-add_script(Script, Pid) ->
-    gen_server:cast(Pid, {add_script, Script}).
+add_script(Script, Context) ->
+    z_transport:page(javascript, Script, Context).
 
 %% @doc Split the scripts from the context and add the scripts to the page.
 add_script(Context) ->
     {Scripts, CleanContext} = z_script:split(Context),
-    add_script(Scripts, CleanContext),
+    z_transport:page(javascript, Scripts, CleanContext),
     CleanContext.
+
+%% @doc Send a msg to the pages, queue if no page-transport attached
+transport(_Msg, undefined) ->
+    ok;
+transport(Msg, #context{page_pid=PagePid}) ->
+    transport(Msg, PagePid);
+transport(Msg, Pid) when is_pid(Pid) ->
+    gen_server:cast(Pid, {transport, Msg}).
+
+transport(Msg, PageId, Context) when is_binary(PageId) ->
+    transport(Msg, whereis(PageId, Context)).
 
 
 %% @doc Spawn a new process, linked to the page pid
@@ -188,14 +218,16 @@ check_timeout(Pid) ->
 init({SessionPid, PageId, Site}) ->
     lager:md([
         {site, Site},
-        {module, ?MODULE}
+        {module, ?MODULE},
+        {page_id, PageId}
       ]),
     trigger_check_timeout(),
     {ok, #page_state{
             session_pid=SessionPid,
-            page_id=z_convert:to_binary(PageId), 
+            page_id=PageId, 
             last_detach=z_utils:now(),
-            site=Site
+            site=Site,
+            transport=z_transport_queue:new()
     }}.
 
 
@@ -230,10 +262,11 @@ handle_cast({websocket_attach, WebsocketPid}, State) ->
             {noreply, State}
     end;
 
-handle_cast({add_script, Script}, State) ->
-    StateQueued = State#page_state{script_queue=[Script|State#page_state.script_queue]},
-    StatePing   = ping_comet_ws(StateQueued),
-    {noreply, StatePing};
+%% @doc Add a message to all page's transport queues
+handle_cast({transport, Msg}, State) ->
+    State1 = State#page_state{transport=z_transport_queue:in(Msg, State#page_state.transport)},
+    State2 = ping_comet_ws(State1),
+    {noreply, State2};
     
 handle_cast(ping, State) ->
     {noreply, State#page_state{last_detach=z_utils:now()}};
@@ -263,11 +296,9 @@ handle_call({spawn_link, Module, Func, Args}, _From, State) ->
     erlang:monitor(process, Pid),
     {reply, Pid, State#page_state{linked=Linked}};
 
-handle_call(get_scripts, _From, State) ->
-    Queue   = State#page_state.script_queue,
-    State1  = State#page_state{script_queue=[]},
-    Scripts = lists:reverse(Queue),
-    {reply, Scripts, State1};
+handle_call(get_transport_data, _From, State) ->
+    {Data, State1} = do_transport_data(State),
+    {reply, Data, State1};
 
 handle_call({get, Key}, _From, State) ->
     Value = proplists:get_value(Key, State#page_state.vars),
@@ -341,19 +372,16 @@ handle_info(check_timeout, State) ->
     end;
 
 %% @doc MQTT message, forward it to the page.
-%% TODO: Queue messages, QoS handling
+%% @todo Decide if/how/where the topic mapping should be done.
 handle_info({route, Msg}, State) ->
     lager:debug("Page ~p route ~p", [State#page_state.page_id, Msg]),
-    Topic = Msg#mqtt_msg.topic,
-    Script = iolist_to_binary([
-            <<"pubzub.relayed('">>,
-            z_utils:js_escape(
-                z_mqtt:remove_context_topic(Topic, State#page_state.site)),
-            "','",
-            z_utils:js_escape(encode_payload(Msg)),
-            "');"
-    ]),
-    handle_cast({add_script, Script}, State);
+    ClientTopic = z_mqtt:remove_context_topic(Msg#mqtt_msg.topic, State#page_state.site),
+    Msg1 = Msg#mqtt_msg{
+                topic=ClientTopic,
+                encoder=undefined
+            },
+    Transport = z_transport:msg(page, <<"mqtt_route">>, Msg1, [{qos, Msg1#mqtt_msg.qos}]),
+    handle_cast({transport, Transport}, State);
 
 handle_info(_, State) ->
     {noreply, State}.
@@ -378,43 +406,34 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Trigger sending a check_timeout message.
 trigger_check_timeout() ->
     erlang:send_after(?INTERVAL_MSEC, self(), check_timeout).
-    
-%% @doc Ping the comet process that we have a script queued
-ping_comet_ws(#page_state{script_queue=[]} = State) ->
-    State;
-ping_comet_ws(#page_state{comet_pid=undefined, websocket_pid=undefined} = State) ->
-    State;
-ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
-    try
-        controller_websocket:websocket_send_data(WsPid, lists:reverse(State#page_state.script_queue)),
-        State#page_state{script_queue=[]}
-    catch _M : _E ->
-        State#page_state{websocket_pid=undefined}
-    end;
-ping_comet_ws(State) ->
-    try
-        State#page_state.comet_pid ! script_queued,
-        State
-    catch _M : _E ->
-        State#page_state{comet_pid=undefined}
+
+
+do_transport_data(State) ->
+    {Msgs,Transport1} = z_transport_queue:out_all(State#page_state.transport),
+    Transport2 = lists:foldl(fun(Msg,TQ) ->
+                                z_transport_queue:wait_ack(Msg, page, TQ)
+                             end,
+                             Transport1, 
+                             Msgs),
+    case Msgs of
+        [] ->
+            {<<>>, State};
+        _ ->
+            {ok, Data} = z_ubf:encode(Msgs), 
+            {Data, State#page_state{transport=Transport2}}
     end.
 
 
-% % @doc Replace the "page/PageId/" prefix with "local/" when relaying messages to the page
-% local_page_topic(<<"page/", Rest/binary>> = Topic, PageId) ->
-%     N = size(PageId),
-%     case Rest of
-%         <<PageId:N/binary, $/, X/binary>> ->
-%             <<"local/", X/binary>>;
-%         _ ->
-%             Topic
-%     end;
-% local_page_topic(Topic, _PageId) ->
-%     Topic.
-
-
-encode_payload(#mqtt_msg{encoder=undefined, payload=Data}) ->
-    z_mqtt:encode_packet_payload(Data);
-encode_payload(#mqtt_msg{encoder=Encoder, payload=Data}) ->
-    Encoder(Data).
-
+%% @doc Ping the comet process that we have a script queued
+ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
+    {Data, State1} = do_transport_data(State),
+    controller_websocket:websocket_send_data(WsPid, Data),
+    State1;
+ping_comet_ws(#page_state{transport=TQ, comet_pid=CometPid} = State) when is_pid(CometPid) ->
+    case z_transport_queue:is_empty(TQ) of
+        true -> nop;
+        false -> CometPid ! transport
+    end,
+    State;
+ping_comet_ws(State) ->
+    State.

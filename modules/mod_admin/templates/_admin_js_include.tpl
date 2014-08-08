@@ -4,14 +4,15 @@
     "js/apps/zotonic-1.0.js"
     "js/apps/z.widgetmanager.js"
 
+    "js/modules/ubf.js"
     "js/modules/jquery.hotkeys.js"
 
     "js/apps/admin-common.js"
 
-    "js/modules/z.adminwidget.js"
-    
     "js/jquery.ui.nestedSortable.js"
-    
+
+    "js/modules/z.adminwidget.js"
+   
     "js/modules/z.notice.js"
     "js/modules/z.tooltip.js"
     "js/modules/z.dialog.js"
