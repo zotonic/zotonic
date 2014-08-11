@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
+%% @copyright 2009-2014 Marc Worrell
 %% @doc Session for zotonic, holds all information for the current session at an user agent.
 %%      An agent can have multiple pages open and an user_session can have multiple sessions.
 %%      The user agent session also starts and monitors the page sessions.
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@
     add_script/2,
     add_script/1,
     transport/2,
+    receive_ack/2,
     add_cookie/4,
     get_cookies/1,
     clear_cookies/1,
@@ -179,6 +180,12 @@ transport(Msg, Pid) when is_pid(Pid) ->
 transport(Msg, Context) ->
     gen_server:cast(Context#context.session_pid, {transport, Msg}).
 
+%% @doc Ack a message, removes it from the retry queue
+receive_ack(Ack, Pid) when is_pid(Pid) ->
+    gen_server:cast(Pid, {receive_ack, Ack});
+receive_ack(Ack, Context) ->
+    gen_server:cast(Context#context.session_pid, {receive_ack, Ack}).
+
 
 %% @doc Store a cookie on the session. Useful for setting cookies from a websocket connection.
 add_cookie(Key, Value, Options, #context{session_pid=Pid}) ->
@@ -260,6 +267,7 @@ init({Host, PersistId}) ->
         {site, Host},
         {module, ?MODULE}
       ]),
+    gproc:reg({p, l, {Host, user_session, undefined}}),
     {ok, new_session(Host, PersistId)}.
 
 handle_cast(stop, Session) ->
@@ -267,38 +275,40 @@ handle_cast(stop, Session) ->
 
 %% @doc Reset the timeout counter for the session and, optionally, a specific page
 handle_cast(keepalive, Session) ->
-    Now      = z_utils:now(),
-    Session1 = Session#session{expire=Now + Session#session.expire_n},
+    Session1 = Session#session{
+                    expire=z_utils:now() + Session#session.expire_n
+                },
     {noreply, Session1};
 
 %% @doc Reset the timeout counter, propagate to the page process.
 handle_cast({keepalive, PageId}, Session) ->
-    Now      = z_utils:now(),
-    Session1 = Session#session{expire=Now + Session#session.expire_n},
+    Session1 = Session#session{
+                    expire=z_utils:now() + Session#session.expire_n
+                },
     case find_page(PageId, Session1) of
-        #page{page_pid=Pid} -> 
-            % Keep the page process alive
-            catch z_session_page:ping(Pid);
-        undefined -> 
-            ok
+        #page{page_pid=Pid} -> z_session_page:ping(Pid);
+        undefined -> ok
     end,
     {noreply, Session1};
 
 %% @doc Check session expiration, stop when passed expiration.
 handle_cast({check_expire, Now}, Session) ->
-    case length(Session#session.pages) of
-        0 ->
+    Session1 = Session#session{
+                    transport=z_transport_queue:periodic(Session#session.transport)
+                },
+    case Session1#session.pages of
+        [] ->
             if 
-                Session#session.expire < Now -> {stop, normal, Session};
-                true -> {noreply, Session}
+                Session1#session.expire < Now -> {stop, normal, Session1};
+                true -> {noreply, Session1}
             end;
         _ ->
             Expire   = Now + ?SESSION_PAGE_TIMEOUT,
-            Session1 = if 
-                            Expire > Session#session.expire -> Session#session{expire=Expire};
-                            true -> Session
+            Session2 = if 
+                            Expire > Session1#session.expire -> Session1#session{expire=Expire};
+                            true -> Session1
                        end,
-            {noreply, Session1}
+            {noreply, Session2}
     end;
 
 %% @doc Add a script to a specific page's script queue
@@ -324,6 +334,12 @@ handle_cast({transport, Msg}, #session{pages=Pages} = Session) ->
     Transport1 = z_transport_queue:wait_ack(Msg, session, Session#session.transport), 
     {noreply, Session#session{transport=Transport1}};
 
+%% @doc Receive a message ack
+handle_cast({receive_ack, Ack}, #session{pages=[]} = Session) ->
+    Transport1 = z_transport_queue:ack(Ack, Session#session.transport), 
+    {noreply, Session#session{transport=Transport1}};
+
+
 %% @doc Add a cookie to the session. Useful for setting cookies from a websocket connection.
 handle_cast({add_cookie, Key, Value, Options}, Session) ->
     Cookies = [{Key, Value, Options} | Session#session.cookies],
@@ -335,11 +351,11 @@ handle_cast(clear_cookies, Session) ->
 
 %% @doc Set the session variable, replaces any old value
 handle_cast({set, Key, Value}, Session) ->
-    {noreply, Session#session{ props = z_utils:prop_replace(Key, Value, Session#session.props) }};
+    {noreply, Session#session{ props = prop_replace(Key, Value, Session#session.props, Session#session.context#context.host) }};
 
 handle_cast({set, Props}, Session) ->
     Props1 = lists:foldl(fun({K,V}, Ps) ->
-                            z_utils:prop_replace(K, V, Ps)
+                            prop_replace(K, V, Ps, Session#session.context#context.host)
                          end,
                          Session#session.props,
                          Props),
@@ -428,7 +444,8 @@ handle_call({ensure_page_session, CurrPageId}, _From, Session) ->
                                 z_session_page:ping(Pid),
                                 {P, Session}
                           end,
-    {reply, {ok, NewPageId, NewPage#page.page_pid}, Session1};
+    Session2 = transport_all(Session1),
+    {reply, {ok, NewPageId, NewPage#page.page_pid}, Session2};
 
 handle_call({lookup_page_session, PageId}, _From, Session) ->
     case find_page(PageId, Session) of
@@ -475,6 +492,7 @@ handle_info(_, Session) ->
 %% The return value is ignored.
 %% Terminate all processes coupled to the session.
 terminate(_Reason, Session) ->
+    ?DEBUG(Session),
     save_persist(Session),
     lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, Session#session.linked),
     ok.
@@ -488,6 +506,30 @@ code_change(_OldVsn, Session, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+%% @doc Try to transport all queued messages to the connected pages
+transport_all(#session{pages=[]} = Session) ->
+    Session;
+transport_all(#session{transport=Transport, pages=Pages} = Session) ->
+    case z_transport_queue:is_empty(Transport) of
+        true ->
+            Session;
+        false ->
+            {Ms,Transport1} = z_transport_queue:out_all(Transport),
+            lists:foreach(
+                fun(#page{page_pid=PagePid}) ->
+                    z_session_page:transport(Ms, PagePid)
+                end,
+                Pages),
+            Transport2 = lists:foldl(
+                            fun(Msg, TQAcc) ->
+                                z_transport_queue:wait_ack(Msg, TQAcc)
+                            end,
+                            Transport1,
+                            Ms),
+            Session#session{transport=Transport2}  
+    end. 
 
 
 %% @doc Initialize a new session record
@@ -526,6 +568,23 @@ save_persist(#session{persist_is_dirty=true, persist_id=Id, props_persist=Props,
 save_persist(Session) ->
     Session.
 
+
+%% @doc Replace properties, special handling for tracking sessions belonging to an user_id
+prop_replace(auth_user_id, NewUserId, Props, Site) when is_list(Props) ->
+    case lists:keyfind(auth_user_id, 1, Props) of
+        {auth_user_id, NewUserId} -> 
+            Props;
+        {auth_user_id, PrefUserId} ->
+            gproc:unreg({p, l, {Site, user_session, PrefUserId}}), 
+            gproc:reg({p, l, {Site, user_session, NewUserId}}),
+            z_utils:prop_replace(auth_user_id, NewUserId, Props);
+        false ->
+            gproc:unreg({p, l, {Site, user_session, undefined}}), 
+            gproc:reg({p, l, {Site, user_session, NewUserId}}),
+            [{auth_user_id, NewUserId} | Props]
+    end;
+prop_replace(Key, Value, Props, _Site) when is_list(Props) ->
+    z_utils:prop_replace(Key, Value, Props).
 
 %% @doc Return a new page record, monitor the started page process because we want to know about normal exits
 page_start(PageId, Context) ->

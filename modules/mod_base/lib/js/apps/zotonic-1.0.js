@@ -60,12 +60,12 @@ var z_unique_id_counter     = 0;
 function z_set_page_id( page_id )
 {
     ubf.add_spec('z_msg_v1', [
-        "qos", "msg_id", "timestamp", "content_type", "delegate",
+        "qos", "dup", "msg_id", "timestamp", "content_type", "delegate",
         "push_queue", "ua_class", "session_id", "page_id",
         "data"
         ]);
     ubf.add_spec('z_msg_ack', [
-        "qos", "msg_id", "page_id", "result"
+        "qos", "msg_id", "push_queue", "page_id", "result"
         ]);
     ubf.add_spec('postback_notify', [
         "message", "trigger", "target", "data"
@@ -223,9 +223,10 @@ function z_transport(delegate, content_type, data, options)
     if (typeof options.qos != 'integer' && options.ack) {
         options.qos = 1;
     }
-    var msg = ubf.encode({
+    var msg = {
             "_record": "z_msg_v1",
             "qos": options.qos,
+            "dup": false,
             "msg_id": msg_id,
             "timestamp": timestamp,
             "content_type": ubf.constant(content_type || "ubf"),
@@ -234,7 +235,7 @@ function z_transport(delegate, content_type, data, options)
             "page_id": z_pageid,
             "session_id": window.z_sid || undefined,
             "data": data
-        });
+        };
 
     options.timeout = options.timeout || TRANSPORT_TIMEOUT;
     if (options.qos > 0) {
@@ -288,6 +289,7 @@ function z_transport_incoming_msg(msg)
     switch (msg._record)
     {
         case 'z_msg_v1':
+            z_transport_maybe_ack(msg);
             var data = z_transport_incoming_data_decode(msg.content_type.valueOf(), msg.data);
             var fun = z_transport_delegates[msg.delegate.valueOf()];
             if (typeof fun == 'function') {
@@ -316,6 +318,25 @@ function z_transport_incoming_msg(msg)
     }
 }
 
+function z_transport_maybe_ack(msg)
+{
+    if (msg.qos >= 1) {
+        var ack = ubf.encode({
+            "_record": "z_msg_ack",
+            "qos": msg.qos,
+            "msg_id": msg.msg_id,
+            "session_id": window.z_sid || undefined,
+            "page_id": msg.page_id || z_pageid,
+        });
+        z_transport_queue.push({
+            msg: ack,
+            msg_id: msg.msg_id,
+            options: {}
+        });
+        z_transport_check();
+    }
+}
+
 // If a transport times-out whilst in transit then it is reposted
 function z_transport_timeout(msg_id)
 {
@@ -323,6 +344,7 @@ function z_transport_timeout(msg_id)
         if (z_transport_acks[msg_id].timeout_count++ < TRANSPORT_TRIES) {
             // Requeue the request (if it is not waiting in the queue)
             if (!z_transport_acks[msg_id].is_queued) {
+                z_transport_acks[msg_id].msg.dup = true;
                 z_transport_queue.push({
                     msg: z_transport_acks[msg_id].msg,
                     msg_id: msg_id,
@@ -449,38 +471,39 @@ function z_transport_check()
 
 function z_do_transport(qmsg)
 {
+    var data = ubf.encode(qmsg.msg);
     if (z_websocket_is_connected() && !qmsg.options.is_expect_cookie)
     {
-        z_ws.send(qmsg.msg);
+        z_ws.send(data);
     }
     else
     {
-        z_ajax(qmsg.options, qmsg.msg);
+        z_ajax(qmsg.options, data);
     }
 }
 
-function z_ajax(options, params)
+function z_ajax(options, data)
 {
     z_start_spinner();
     $.ajax({
         url:        '/postback',
         type:       'post',
-        data:       params,
+        data:       data,
         dataType:   'text',
         contentType: 'text/x-ubf',
-        success: function(data, textStatus)
+        success: function(received_data, textStatus)
         {
             z_stop_spinner();
             try
             {
-                z_transport_incoming(data);
+                z_transport_incoming(received_data);
                 z_init_postback_forms();
                 z_unmask(options.trigger_id);
             }
             catch(e)
             {
-                console.log("Error evaluating ajax return value: ", data);
-                $.misc.error("Error evaluating ajax return value: " + data, e);
+                console.log("Error evaluating ajax return value: ", received_data);
+                $.misc.error("Error evaluating ajax return value: " + received_data, e);
             }
             setTimeout(function() { z_transport_check(); }, 0);
         },
@@ -816,6 +839,7 @@ function z_websocket_ping()
             var msg = ubf.encode({
                     "_record": "z_msg_v1",
                     "qos": 1,
+                    "dup" : false,
                     "msg_id": '$ws-'+z_pageid,
                     "timestamp": new Date().getTime(),
                     "content_type": ubf.constant("ubf"),

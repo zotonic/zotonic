@@ -20,6 +20,9 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    data_decode/1,
+    data_encode/1,
+
     incoming/2,
 
     page/3,
@@ -36,6 +39,13 @@
 
 -include_lib("zotonic.hrl").
 
+-spec data_decode(binary()) -> {ok, any(), binary()} | {error, term()}.
+data_decode(Bin) ->
+    z_ubf:decode(Bin).
+
+-spec data_encode(any()) -> {ok, binary()}.
+data_encode(Data) ->
+    z_ubf:encode(Data).
 
 %% @doc Handle incoming messages, originates from various sources, like postback, websocket etc
 incoming(L, Context) when is_list(L) ->
@@ -62,7 +72,15 @@ incoming(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_class=UA,
                         "Error '~p' for transport message ~p in ~p",
                         [Reason, Msg, erlang:get_stacktrace()]),
             {ok, maybe_ack({error, error}, Msg, Context2), Context2}
-    end.
+    end;
+incoming(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
+    Context1 = maybe_set_sessions(SessionId, PageId, Context),
+    case Ack#z_msg_ack.push_queue of
+        page -> z_session_page:receive_ack(Ack, Context);
+        session -> z_session:receive_ack(Ack, Context)
+    end,
+    {ok, [], Context1}.
+
 
 incoming_1(#z_msg_v1{delegate='$ping'} = Msg, Context) ->
     {ok, maybe_ack(pong, Msg, Context), Context};
@@ -209,7 +227,7 @@ maybe_ack(Result, #z_msg_v1{qos=N, msg_id=MsgId}, Context) when N > 0; Result =/
     },
     case Context#context.page_pid of
         Pid when is_pid(Pid) ->
-            transport(Ack, Context),
+            z_session_page:transport(Ack, Pid),
             [];
         undefined ->
             Ack
@@ -256,15 +274,19 @@ transport(L, Context) when is_list(L) ->
                     transport(Msg, Context)
                   end,
                   L);
-transport(#z_msg_ack{} = Ack, Context) ->
-    z_session_page:transport(Ack, Context);
 transport(Msg, Context) ->
     case Msg#z_msg_v1.push_queue of
         session ->
             z_session:transport(Msg, Context);
         page ->
-            z_session_page:transport(Msg, Context)
-        % user
+            z_session_page:transport(Msg, Context);
+        user ->
+            SessionPids = z_session_manager:whereis_user(z_acl:user(Context), Context),
+            lists:foreach(
+                    fun(Pid) ->
+                        z_session:transport(Msg#z_msg_v1{push_queue=session}, Pid)
+                    end,
+                    SessionPids)
     end.
 
 now_msec() ->

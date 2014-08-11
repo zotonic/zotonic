@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
+%% @copyright 2009-2014 Marc Worrell
 %% @doc User agent session management for zotonic.  A ua session is a process started for every
 %%      user agent visiting the site.  The session is alive for a fixed period after the 
 %%      last request has been done.  The session manager manages all the ua session processes.
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,6 +37,8 @@
     ensure_session/1, 
     stop_session/1, 
     rename_session/1, 
+    whereis/2,
+    whereis_user/2,
     add_script/1,
     add_script/2,
     count/1, 
@@ -147,6 +149,20 @@ get_session_id(Context) ->
         undefined -> get_session_cookie(Context);
         SessionId -> SessionId
     end.
+
+%% @doc Find the session with the given id
+-spec whereis(session_id(), #context{}) -> pid() | undefined.
+whereis(SessionId, #context{session_manager=SessionManager}) when is_binary(SessionId) ->
+    case gen_server:call(SessionManager, {whereis, SessionId}) of
+        {ok, Pid} -> Pid;
+        {error, notfound} -> undefined
+    end.
+
+%% @doc Find all the sessions for a certain user
+-spec whereis_user(integer()|undefined, #context{}) -> [pid()].
+whereis_user(UserId, #context{host=Site}) ->
+    gproc:lookup_pids({p, l, {Site, user_session, UserId}}).
+
 
 %% @spec tick(pid()) -> void()
 %% @doc Periodic tick used for cleaning up sessions
@@ -262,7 +278,16 @@ handle_call({fold, Function, Acc0}, From,
 		  end)
     end,
     {noreply, State};    
-    
+
+%% Find a specific session.
+handle_call({whereis, SessionId}, _From,  #session_srv{key2pid=Key2Pid} = State) ->
+    case dict:find(SessionId, Key2Pid) of
+        {ok, Pid} ->
+            {reply, {ok, Pid}, State};
+        error ->
+            {reply, {error, notfound}, State}
+    end;
+
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
 

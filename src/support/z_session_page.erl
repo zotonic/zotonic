@@ -52,6 +52,8 @@
     add_script/1,
     transport/2,
     transport/3,
+    receive_ack/2,
+    receive_ack/3,
 
     get_transport_data/1,
     comet_attach/2,
@@ -195,6 +197,18 @@ transport(Msg, Pid) when is_pid(Pid) ->
 transport(Msg, PageId, Context) when is_binary(PageId) ->
     transport(Msg, whereis(PageId, Context)).
 
+%% @doc Receive an ack for a sent message
+receive_ack(_Ack, undefined) ->
+    ok;
+receive_ack(Ack, #context{page_pid=PagePid}) ->
+    receive_ack(Ack, PagePid);
+receive_ack(Ack, Pid) when is_pid(Pid) ->
+    gen_server:cast(Pid, {receive_ack, Ack}).
+
+receive_ack(Ack, PageId, Context) when is_binary(PageId) ->
+    receive_ack(Ack, whereis(PageId, Context)).
+
+
 
 %% @doc Spawn a new process, linked to the page pid
 spawn_link(Module, Func, Args, Context) ->
@@ -263,11 +277,24 @@ handle_cast({websocket_attach, WebsocketPid}, State) ->
     end;
 
 %% @doc Add a message to all page's transport queues
+handle_cast({transport, Ms}, #page_state{transport=Transport} = State) when is_list(Ms) ->
+    Transport1 = lists:foldl(
+                    fun(M, TQAcc) ->
+                        z_transport_queue:in(M, TQAcc)
+                    end,
+                    Transport,
+                    Ms),
+    State2 = ping_comet_ws(State#page_state{transport=Transport1}),
+    {noreply, State2};
 handle_cast({transport, Msg}, State) ->
     State1 = State#page_state{transport=z_transport_queue:in(Msg, State#page_state.transport)},
     State2 = ping_comet_ws(State1),
     {noreply, State2};
     
+%% @doc Handle the ack of a sent message
+handle_cast({receive_ack, Ack}, State) ->
+    {noreply, State#page_state{transport=z_transport_queue:ack(Ack, State#page_state.transport)}};
+
 handle_cast(ping, State) ->
     {noreply, State#page_state{last_detach=z_utils:now()}};
 
@@ -356,19 +383,24 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
 
 %% @doc Do not timeout while there is a comet or websocket process attached
 handle_info(check_timeout, State) when is_pid(State#page_state.comet_pid) or is_pid(State#page_state.websocket_pid)->
+    State1 = State#page_state{transport=z_transport_queue:periodic(State#page_state.transport)},
+    State2 = ping_comet_ws(State1),
     z_utils:flush_message(check_timeout),
     trigger_check_timeout(),
-    {noreply, State};
+    {noreply, State2};
 
 %% @doc Give the comet process some time to come back, timeout afterwards
 handle_info(check_timeout, State) ->
     Timeout = State#page_state.last_detach + ?SESSION_PAGE_TIMEOUT,
     z_utils:flush_message(check_timeout),
     case Timeout =< z_utils:now() of
-        true -> {stop, normal, State};
+        true ->
+            {stop, normal, State};
         false ->
+            State1 = State#page_state{transport=z_transport_queue:periodic(State#page_state.transport)},
+            State2 = ping_comet_ws(State1),
             trigger_check_timeout(), 
-            {noreply, State}
+            {noreply, State2}
     end;
 
 %% @doc MQTT message, forward it to the page.

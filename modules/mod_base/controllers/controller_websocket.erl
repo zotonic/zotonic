@@ -118,9 +118,9 @@ websocket_message(<<>>, _SenderPid, Context) ->
     {ok, Context};
 websocket_message(Data, SenderPid, Context) ->
     try
-        {ok, Term, RestData} = z_ubf:decode(Data),
+        {ok, Term, RestData} = z_transport:data_decode(Data),
         {ok, Reply, ContextWs} = z_transport:incoming(Term, Context),
-        {ok, ReplyData} = z_ubf:encode(Reply),
+        {ok, ReplyData} = z_transport:data_encode(Reply),
         z_session_page:websocket_attach(SenderPid, ContextWs),
         websocket_send_data(SenderPid, ReplyData),
         websocket_message(RestData, SenderPid, ContextWs)
