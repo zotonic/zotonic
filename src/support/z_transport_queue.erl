@@ -35,6 +35,7 @@
 -include("zotonic.hrl").
 
 -record(tq, {
+        len = 0 :: integer(),
         qos0,
         qos1,
         qos2,
@@ -48,16 +49,22 @@
 %% @doc Requeue qos 1&2 messages once after waiting for an ack for 10 seconds
 -define(RETRY_ACK, 10000).
 
+%% @doc Maximum number of message in queue
+-define(MAX_LEN, 100).
+
 
 new() ->
     #tq{
+        % Number of items in all queues
+        len = 0,
+
         % Queues for outgoing messages and acks
         qos0 = queue:new(),
         qos1 = queue:new(),
         qos2 = queue:new(),
         send_ack = queue:new(),
 
-        % Sent messages waiting for an ack; send from this transport_queue
+        % Sent messages waiting for an ack
         wait_ack = []
     }.
 
@@ -68,43 +75,46 @@ is_empty(TQ) ->
     andalso queue:is_empty(TQ#tq.qos0).
 
 %% @doc Queue a message according to its qos level.
+in(Msg, #tq{len=Len} = TQ) when Len > ?MAX_LEN ->
+    in(Msg, prune(TQ));
 in(#z_msg_v1{qos=0} = Msg, TQ) ->
-    TQ#tq{qos0=queue:in(Msg, TQ#tq.qos0)};
+    TQ#tq{qos0=queue:in(Msg, TQ#tq.qos0), len=TQ#tq.len+1};
 in(#z_msg_v1{qos=1} = Msg, TQ) ->
-    TQ#tq{qos1=queue:in(Msg, TQ#tq.qos1)};
+    TQ#tq{qos1=queue:in(Msg, TQ#tq.qos1), len=TQ#tq.len+1};
 in(#z_msg_v1{qos=2} = Msg, TQ) ->
-    TQ#tq{qos2=queue:in(Msg, TQ#tq.qos2)};
+    TQ#tq{qos2=queue:in(Msg, TQ#tq.qos2), len=TQ#tq.len+1};
 in(#z_msg_ack{} = Ack, TQ) ->
-    TQ#tq{send_ack=queue:in({Ack,now_msec()}, TQ#tq.send_ack)}.
+    TQ#tq{send_ack=queue:in({Ack,now_msec()}, TQ#tq.send_ack), len=TQ#tq.len+1}.
 
 %% @doc Fetch a message from the queue, precendence for acks and higher qos messages
 out(TQ) ->
     case queue:out(TQ#tq.send_ack) of
         {empty, _Q} -> out2(TQ);
-        {{value, {Ack,_}}, Q1} -> {Ack, TQ#tq{send_ack=Q1}}
+        {{value, {Ack,_}}, Q1} -> {Ack, TQ#tq{send_ack=Q1, len=TQ#tq.len-1}}
     end.
 
 out2(TQ) ->
     case queue:out(TQ#tq.qos2) of
         {empty, _Q} -> out1(TQ);
-        {{value, Msg}, Q1} -> {Msg, TQ#tq{qos2=Q1}}
+        {{value, Msg}, Q1} -> {Msg, TQ#tq{qos2=Q1, len=TQ#tq.len-1}}
     end.
 
 out1(TQ) ->
     case queue:out(TQ#tq.qos1) of
         {empty, _Q} -> out0(TQ);
-        {{value, Msg}, Q1} -> {Msg, TQ#tq{qos1=Q1}}
+        {{value, Msg}, Q1} -> {Msg, TQ#tq{qos1=Q1, len=TQ#tq.len-1}}
     end.
 
 out0(TQ) ->
     case queue:out(TQ#tq.qos0) of
         {empty, _Q} -> {empty, TQ};
-        {{value, Msg}, Q1} -> {Msg, TQ#tq{qos0=Q1}}
+        {{value, Msg}, Q1} -> {Msg, TQ#tq{qos0=Q1, len=TQ#tq.len-1}}
     end.
 
 out_all(TQ) ->
     All = to_list(TQ),
     {All, TQ#tq{
+        len  = 0,
         qos0 = queue:new(),
         qos1 = queue:new(),
         qos2 = queue:new(),
@@ -128,62 +138,101 @@ ack(#z_msg_ack{msg_id=MsgId}, TQ) ->
 
 wait_ack(#z_msg_ack{}, _Queue, TQ) ->
     TQ;
-wait_ack(#z_msg_v1{push_queue=Queue, qos=QoS} = Msg, Queue, TQ) when QoS > 0 ->
+wait_ack(#z_msg_v1{dup=false, push_queue=Queue, qos=QoS} = Msg, Queue, TQ) when QoS > 0 ->
     TQ#tq{wait_ack = [Msg|TQ#tq.wait_ack]};
 wait_ack(_Msg, _Queue, TQ) ->
     TQ.
 
 %% @doc Periodic cleanup, drop expired messages from all queues.
 %% Requeue messages from the ack queue that are waiting too long.
-periodic(#tq{wait_ack=[]} = TQ) ->
-    TQ;
-periodic(#tq{wait_ack=WaitAck} = TQ) ->
+periodic(#tq{} = TQ) ->
     Now = now_msec(),
-    Oldest = Now - ?RETRY_ACK,
     Expired = Now - ?RETRY_EXPIRE,
+    {Q0,N1} = expire(TQ#tq.qos0, Expired, TQ#tq.len),
+    {Q1,N2} = expire(TQ#tq.qos1, Expired, N1),
+    {Q2,N3} = expire(TQ#tq.qos2, Expired, N2),
+    {SendAck,N4} = expire(TQ#tq.send_ack, Expired, N3),
     TQ1 = TQ#tq{
-        qos0 = expire_msg(TQ#tq.qos0, Expired),
-        qos1 = expire_msg(TQ#tq.qos1, Expired),
-        qos2 = expire_msg(TQ#tq.qos2, Expired),
-        send_ack = expire_ack(TQ#tq.send_ack, Expired)
+        len = N4,
+        qos0 = Q0,
+        qos1 = Q1,
+        qos2 = Q2,
+        send_ack = SendAck,
+        wait_ack = []
     },
-    {Retry,Wait} = lists:splitwith(
-                        fun(#z_msg_v1{timestamp=Tm}) ->
-                            Tm < Oldest
-                        end,
-                        WaitAck),
-    lists:foldl(fun(Msg, TQAcc) ->
-                    maybe_repost(Msg, TQAcc)
-                end,
-                TQ1#tq{wait_ack=Wait},
-                Retry).
-
-
-maybe_repost(#z_msg_v1{dup=true} = Msg, TQ) ->
-    lager:info("Timeout for message ~p", Msg),
-    TQ;
-maybe_repost(Msg, TQ) ->
-    in(Msg#z_msg_v1{dup=true}, TQ).
-
-expire_msg(Ms, Expired) ->
-    lists:filter(
-            fun(#z_msg_v1{timestamp=Tm} = Msg) when Tm < Expired ->
-                  lager:debug("Dropping expired message ~p", [Msg]),
-                  false;
-               (_) ->
-                  true
+    % Requeue messages waiting too long for an ack
+    Retry = Now - ?RETRY_ACK,
+    lists:foldl(
+            fun
+                (#z_msg_v1{timestamp=Tm} = Msg, TQAcc) when Tm < Retry ->
+                    in(Msg#z_msg_v1{dup=true}, TQAcc);
+                (Msg, TQAcc) ->
+                    TQAcc#tq{
+                        wait_ack=[Msg|TQAcc#tq.wait_ack]
+                    }
             end,
-            Ms).
+            TQ1,
+            TQ#tq.wait_ack).
 
-expire_ack(As, Expired) ->
-    lists:filter(
-            fun({Ack, Tm}) when Tm < Expired ->
-                  lager:debug("Dropping expired message ~p", [Ack]),
-                  false;
-               (_) ->
-                  true
+
+expire(MQs, Expired, N) when is_list(MQs) ->
+    lists:foldl(
+            fun
+                (#z_msg_v1{timestamp=Tm} = Msg, {AccMQ,AccN}) when Tm < Expired ->
+                    lager:debug("Dropping expired message ~p", [Msg]),
+                    {AccMQ, AccN-1};
+                (Msg, {AccMQ,AccN}) ->
+                    {[Msg|AccMQ], AccN}
             end,
-            As).
+            {[],N},
+            MQs);
+expire(MQ, Expired, N) ->
+    case queue:peek(MQ) of
+        empty ->
+            {MQ, N};
+        {value, #z_msg_v1{timestamp=TM}} when TM < Expired ->
+            {_, MQ1} = queue:out(MQ),
+            expire(MQ1, Expired, N-1);
+        {value, {#z_msg_ack{}, TM}} when TM < Expired ->
+            {_, MQ1} = queue:out(MQ),
+            expire(MQ1, Expired, N-1);
+        {value, _} ->
+            {MQ, N}
+    end.
+
+
+%% @doc Remove messages from the queues, called when more than ?MAX_LEN items are queued.
+%% First qos=0 items are removed
+prune(#tq{len=Len} = TQ) when Len >= ?MAX_LEN ->
+    case queue:len(TQ#tq.qos0) of
+        0 -> prune1(TQ);
+        N -> prune1(TQ#tq{qos0=queue:new(), len=TQ#tq.len-N})
+    end;
+prune(TQ) ->
+    TQ.
+
+prune1(#tq{len=Len} = TQ) when Len >= ?MAX_LEN ->
+    case queue:len(TQ#tq.qos1) of
+        0 -> prune_send_ack(TQ);
+        N -> prune_send_ack(TQ#tq{qos1=queue:new(), len=TQ#tq.len-N})
+    end;
+prune1(TQ) ->
+    TQ.
+
+prune_send_ack(#tq{len=Len} = TQ) when Len >= ?MAX_LEN ->
+    case queue:len(TQ#tq.send_ack) of
+        0 -> prune2(TQ);
+        N -> prune2(TQ#tq{send_ack=queue:new(), len=TQ#tq.len-N})
+    end;
+prune_send_ack(TQ) ->
+    TQ.
+
+prune2(#tq{len=Len} = TQ) when Len >= ?MAX_LEN ->
+    N = queue:len(TQ#tq.qos2),
+    TQ#tq{qos2=queue:new(), len=TQ#tq.len-N};
+prune2(TQ) ->
+    TQ.
+
 
 now_msec() ->
     {A,B,C} = os:timestamp(),

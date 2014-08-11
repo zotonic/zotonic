@@ -335,7 +335,7 @@ handle_cast({transport, Msg}, #session{pages=Pages} = Session) ->
     {noreply, Session#session{transport=Transport1}};
 
 %% @doc Receive a message ack
-handle_cast({receive_ack, Ack}, #session{pages=[]} = Session) ->
+handle_cast({receive_ack, Ack}, Session) ->
     Transport1 = z_transport_queue:ack(Ack, Session#session.transport), 
     {noreply, Session#session{transport=Transport1}};
 

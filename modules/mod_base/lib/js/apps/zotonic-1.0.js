@@ -65,7 +65,7 @@ function z_set_page_id( page_id )
         "data"
         ]);
     ubf.add_spec('z_msg_ack', [
-        "qos", "msg_id", "push_queue", "page_id", "result"
+        "qos", "msg_id", "push_queue", "session_id", "page_id", "result"
         ]);
     ubf.add_spec('postback_notify', [
         "message", "trigger", "target", "data"
@@ -321,13 +321,14 @@ function z_transport_incoming_msg(msg)
 function z_transport_maybe_ack(msg)
 {
     if (msg.qos >= 1) {
-        var ack = ubf.encode({
+        var ack = {
             "_record": "z_msg_ack",
             "qos": msg.qos,
             "msg_id": msg.msg_id,
+            "push_queue": msg.push_queue,
             "session_id": window.z_sid || undefined,
             "page_id": msg.page_id || z_pageid,
-        });
+        };
         z_transport_queue.push({
             msg: ack,
             msg_id: msg.msg_id,

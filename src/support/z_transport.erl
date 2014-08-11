@@ -47,6 +47,7 @@ data_decode(Bin) ->
 data_encode(Data) ->
     z_ubf:encode(Data).
 
+
 %% @doc Handle incoming messages, originates from various sources, like postback, websocket etc
 incoming(L, Context) when is_list(L) ->
     lists:foldl(
