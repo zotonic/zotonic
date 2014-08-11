@@ -175,6 +175,8 @@ add_script(Context) ->
     CleanContext.
 
 %% @doc Send a msg to all attached pages, queue if no pages
+transport(_Msg, undefined) ->
+    ok;
 transport(Msg, Pid) when is_pid(Pid) ->
     gen_server:cast(Pid, {transport, Msg});
 transport(Msg, Context) ->

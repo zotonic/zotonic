@@ -34,7 +34,11 @@
     
     msg/4,
 
-    transport/2
+    transport/2,
+    transport_user/3,
+    transport_session/3,
+    transport_page/3
+
     ]).
 
 -include_lib("zotonic.hrl").
@@ -277,18 +281,29 @@ transport(L, Context) when is_list(L) ->
                   L);
 transport(Msg, Context) ->
     case Msg#z_msg_v1.push_queue of
-        session ->
-            z_session:transport(Msg, Context);
-        page ->
-            z_session_page:transport(Msg, Context);
-        user ->
-            SessionPids = z_session_manager:whereis_user(z_acl:user(Context), Context),
-            lists:foreach(
-                    fun(Pid) ->
-                        z_session:transport(Msg#z_msg_v1{push_queue=session}, Pid)
-                    end,
-                    SessionPids)
+        session -> z_session:transport(Msg, Context);
+        page -> z_session_page:transport(Msg, Context);
+        user -> transport_user(Msg, z_acl:user(Context), Context)
     end.
+
+transport_user(Msg, UserId, Context) ->
+    SessionPids = z_session_manager:whereis_user(UserId, Context),
+    lists:foreach(
+            fun(Pid) ->
+                z_session:transport(Msg#z_msg_v1{push_queue=session}, Pid)
+            end,
+            SessionPids).
+
+transport_session(Msg, SessionPid, _Context) when is_pid(SessionPid) ->
+    z_session:transport(Msg, SessionPid);
+transport_session(Msg, SessionId, Context) ->
+    z_session:transport(Msg, z_session_manager:whereis(SessionId, Context)).
+
+transport_page(Msg, PagePid, _Context) when is_pid(PagePid) ->
+    z_session_page:transport(Msg, PagePid);
+transport_page(Msg, PageId, Context) ->
+    z_session_page:transport(Msg, PageId, Context).
+
 
 now_msec() ->
     {A,B,C} = os:timestamp(),
