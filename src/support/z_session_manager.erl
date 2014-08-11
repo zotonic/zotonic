@@ -470,4 +470,4 @@ clear_session_cookie(Context) ->
 %% @doc Update the metrics of the session count
 update_session_metrics(State) ->
     Value = dict:size(State#session_srv.pid2key),
-    z_stats:update(#gauge{name=sessions, value=Value}, #stats_from{system=session, host=State#session_srv.context#context.host}).    
+    exometer:update([zotonic, State#session_srv.context#context.host, session, sessions], Value).

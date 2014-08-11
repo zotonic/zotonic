@@ -391,7 +391,7 @@ handle_call({spawn_link, Module, Func, Args}, _From, Session) ->
     Pid    = spawn_link(Module, Func, Args),
     Linked = [Pid | Session#session.linked],
     erlang:monitor(process, Pid),
-    z_stats:update(#counter{name=page_processes, op=inc}, #stats_from{system=session, host=Session#session.context#context.host}),
+    exometer:update([zotonic, Session#session.context#context.host, session, page_processes], 1),
     {reply, Pid, Session#session{linked=Linked}};
 
 handle_call({ensure_page_session, CurrPageId}, _From, Session) ->
@@ -429,7 +429,7 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, Session) ->
     FIsUp  = fun(Page) -> Page#page.page_pid /= Pid end,
     Pages  = lists:filter(FIsUp, Session#session.pages),
     Linked = lists:delete(Pid, Session#session.linked),
-    z_stats:update(#counter{name=page_processes, op=dec}, #stats_from{system=session, host=Session#session.context#context.host}),
+    exometer:update([zotonic, Session#session.context#context.host, session, page_processes], -1),
     {noreply, Session#session{pages=Pages, linked=Linked}};
 
 %% @doc MQTT message, forward it to the page.
@@ -503,7 +503,7 @@ save_persist(Session) ->
 page_start(PageId, Context) ->
     {ok,PagePid} = z_session_page:start_link(self(), z_convert:to_binary(PageId), Context),
     erlang:monitor(process, PagePid),
-    z_stats:update(#counter{name=page_processes, op=inc}, #stats_from{system=session, host=Context#context.host}),
+    exometer:update([zotonic, Context#context.host, session, page_processes], 1),
     #page{page_pid=PagePid, page_id=PageId }.
 
 %% @doc Find the page record in the list of known pages

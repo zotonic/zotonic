@@ -1,4 +1,4 @@
-%% @author Maas-Maarten Zeeman <mmzeema@xs4all.nl>
+%% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2013 Maas-Maarten Zeeman
 %% Date: 2013-02-17
 %% @doc Server for matching the request path to correct site and dispatch rule.
@@ -22,118 +22,47 @@
 -include_lib("zotonic.hrl").
 -include_lib("webzmachine/include/webmachine_logger.hrl").
 
--export([
-         init/0,
-         init_site/1,
-         new/2,
-         update/2,
-         timed_update/3, timed_update/4, timed_update/5]).
+-export([init/0, init_site/1]).
 
-%% Act as a webmachine logger.
+%% Act as a webmachine logger
 -export([log_access/1]).
 
 
 %% @doc Initialize the statistics collection machinery.
 %%
 init() ->
-    folsom:start(),
     webmachine_sup:start_logger(webmachine_logger).
 
 init_site(Host) ->
-    HostStats = #stats_from{host=Host},
-    z_stats:new(#counter{name=requests}, HostStats#stats_from{system=webzmachine}),
-    z_stats:new(#counter{name=requests}, HostStats#stats_from{system=db}),
-    z_stats:new(#gauge{name=sessions}, HostStats#stats_from{system=session}),
-    z_stats:new(#counter{name=page_processes}, HostStats#stats_from{system=session}),
-    z_stats:new(#counter{name=out}, HostStats#stats_from{system=webzmachine}),
-    z_stats:new(#histogram{name=duration}, HostStats#stats_from{system=webzmachine}),
-    z_stats:new(#histogram{name=duration}, HostStats#stats_from{system=db}),
+    %% Webzmachine metrics
+    exometer:re_register([zotonic, Host, webzmachine, requests], counter, []),
+    exometer:re_register([zotonic, Host, webzmachine, duration], histogram, []),
+    exometer:re_register([zotonic, Host, webzmachine, data_out], counter, []),
+   
+    %% Database metrics 
+    exometer:re_register([zotonic, Host, db, requests], counter, []),
+    exometer:re_register([zotonic, Host, db, duration], histogram, []),
+    
+    %% Session metrics
+    exometer:re_register([zotonic, Host, session, sessions], gauge, []),
+    exometer:re_register([zotonic, Host, session, page_processes], counter, []),
+
     ok.
 
-%% @doc Create a new counters and histograms.
-%%
-new(Stat, From) ->
-    Key = key(Stat, From),
-    case Stat of
-        #counter{} ->
-            folsom_metrics:new_counter(Key);
-        #gauge{} ->
-            folsom_metrics:new_gauge(Key);
-        #histogram{} ->
-            folsom_metrics:new_histogram(Key, slide)
-    end,
-    folsom_metrics:tag_metric(Key, tag(From)).
 
-%% @doc Update a counter, histogram, whatever.
-%%
-update(What, StatsFrom) when is_tuple(StatsFrom) ->
-    update_metric(What, StatsFrom);
-update(_Stat, []) ->
-    ok;
-update(Stat, [H|T]) ->
-    update(Stat, H),
-    update(Stat, T).
-
-%% @doc Execute the function, and store the measured execution time.
-%%
-timed_update(Name, Fun, StatsFrom) ->
-    {Time, Result} = timer:tc(Fun),
-    update(#histogram{name=Name, value=Time}, StatsFrom),
-    Result.
-
-timed_update(Name, Fun, Args, StatsFrom) ->
-    {Time, Result} = timer:tc(Fun, Args),
-    update(#histogram{name=Name, value=Time}, StatsFrom),
-    Result.
-
-timed_update(Name, Mod, Fun, Args, StatsFrom) ->
-    {Time, Result} = timer:tc(Mod, Fun, Args),
-    update(#histogram{name=Name, value=Time}, StatsFrom),
-    Result.
-
-
-%% @doc Collect log data from webzmachine.
+%% @doc Collect log data from webzmachine and update webzmachine metrics
 %%
 log_access(#wm_log_data{finish_time=undefined}=LogData) -> 
     log_access(LogData#wm_log_data{finish_time=os:timestamp()});
 log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime, 
                         response_length=ResponseLength}=LogData) when StartTime =/= undefined ->
     try 
-        Duration = #histogram{name=duration, value=timer:now_diff(FinishTime, StartTime)},
-        Out = #counter{name=out, value=ResponseLength},
-        System = #stats_from{system=webzmachine},
-
         %% The request has already been counted by z_sites_dispatcher.
-        For = case webmachine_logger:get_metadata(zotonic_host, LogData) of
-                  undefined -> 
-                      System;
-                  Host -> 
-                      [System, System#stats_from{host=Host}]
-              end,
-
-        update(Duration, For),
-        update(Out, For)
+        Host = webmachine_logger:get_metadata(zotonic_host, LogData),
+        exometer:update([zotonic, Host, webzmachine, duration], timer:now_diff(FinishTime, StartTime)), 
+        exometer:update([zotonic, Host, webzmachine, data_out], ResponseLength)
     after 
-                                                % Pass it to the default webmachine logger.
+        % Pass it to the default webmachine logger.
         webmachine_logger:log_access(LogData)
     end.
 
-
-%% Some helper functions.
-
-update_metric(#counter{op=Op, value=Value}=Stat, From) when Op =:= inc; Op =:= dec ->
-    folsom_metrics:safely_notify({key(Stat, From), {Op, Value}});
-update_metric(#histogram{value=Value}=Stat, From) ->
-    folsom_metrics:safely_notify({key(Stat, From), Value});
-update_metric(#gauge{value=Value}=Stat, From) ->
-    folsom_metrics:safely_notify({key(Stat, From), Value}).
-
-key(#counter{name=Name}, #stats_from{host=Host, system=System}) ->
-	{Host, System, Name};
-key(#histogram{name=Name}, #stats_from{host=Host, system=System}) ->
-	{Host, System, Name};
-key(#gauge{name=Name}, #stats_from{host=Host, system=System}) ->
-	{Host, System, Name}.
-
-tag(#stats_from{host=Host}) ->
-    Host.

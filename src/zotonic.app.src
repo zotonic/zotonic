@@ -14,7 +14,7 @@
   {mod, {zotonic_app, []}},
   {env, []},
   {applications, [kernel, stdlib, crypto, mnesia,
-                  bert, dh_date, eiconv, lager, folsom,
+                  bert, dh_date, eiconv, lager, exometer,
                   depcache, mimetypes, webzmachine, z_stdlib,
                   poolboy, sendfile, public_key, ssl,
                   jobs, gproc, filezcache, s3filez,

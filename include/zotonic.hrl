@@ -20,7 +20,6 @@
 -include("zotonic_release.hrl").
 -include("zotonic_notifications.hrl").
 -include("zotonic_events.hrl").
--include("zotonic_stats.hrl").
 -include_lib("webzmachine/include/wm_reqdata.hrl").
 
 %% @doc The request context, session information and other
