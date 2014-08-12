@@ -229,8 +229,8 @@ function z_transport(delegate, content_type, data, options)
             "dup": false,
             "msg_id": msg_id,
             "timestamp": timestamp,
-            "content_type": ubf.constant(content_type || "ubf"),
-            "delegate": ubf.constant(delegate),
+            "content_type": z_transport_content_type(content_type),
+            "delegate": z_transport_delegate(delegate),
             "ua_class": ubf.constant(z_ua),
             "page_id": z_pageid,
             "session_id": window.z_sid || undefined,
@@ -259,6 +259,33 @@ function z_transport(delegate, content_type, data, options)
     });
     z_transport_check();
     return msg_id;
+}
+
+// Map some special content types to an atom
+function z_transport_content_type(content_type)
+{
+    switch (content_type || 'ubf')
+    {
+        case 'ubf':        return ubf.constant('ubf');
+        case 'json':       return ubf.constant('json');
+        case 'form':       return ubf.constant('form');
+        case 'javascript': return ubf.constant('javascript');
+        case 'text':       return ubf.constant('text');
+        case '$ping':      return ubf.constant('$ping');
+        default: return content_type;
+    }
+}
+
+// Map some special delegates to an atom
+function z_transport_delegate(delegate)
+{
+    switch (delegate)
+    {
+        case 'mqtt':     return ubf.constant('mqtt');
+        case 'notify':   return ubf.constant('notify');
+        case 'postback': return ubf.constant('postback');
+        default: return delegate;
+    }
 }
 
 // Ensure that a transport is scheduled for fetching data queued at the server
@@ -299,21 +326,18 @@ function z_transport_incoming_msg(msg)
             }
             break;
         case 'z_msg_ack':
-            if (!z_websocket_pong(msg)) {
-                console.log("Received ack ", msg);
-                if (typeof z_transport_acks[msg.msg_id] == 'object') {
-                    var ack = z_transport_acks[msg.msg_id];
-                    delete z_transport_acks[msg.msg_id];
+            if (!z_websocket_pong(msg) && typeof z_transport_acks[msg.msg_id] == 'object') {
+                var ack = z_transport_acks[msg.msg_id];
+                delete z_transport_acks[msg.msg_id];
 
-                    clearTimeout(ack.timeout_timer);
-                    if (typeof ack.options.ack == 'function') {
-                        ack.options.ack(msg, ack.options);
-                    }
+                clearTimeout(ack.timeout_timer);
+                if (typeof ack.options.ack == 'function') {
+                    ack.options.ack(msg, ack.options);
                 }
             }
             break;
         default:
-            console.log("Don't know where to delegate ", msg);
+            console.log("Don't know where to delegate incoming message ", msg);
             break;
     }
 }
@@ -385,10 +409,12 @@ function z_transport_incoming_data_decode(type, data)
             return $.parseJSON(data.valueOf());
         case 'javascript':
             return data.valueOf();
+        case 'form':
+            return $.parseQuery(data.valueOf());
         case 'text':
             return data.valueOf();
         default:
-            console.log("Don't understand data format: ", type, data);
+            console.log("Unknown message data format: ", type, data);
             return data;
     }
 }

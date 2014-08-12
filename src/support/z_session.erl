@@ -494,7 +494,6 @@ handle_info(_, Session) ->
 %% The return value is ignored.
 %% Terminate all processes coupled to the session.
 terminate(_Reason, Session) ->
-    ?DEBUG(Session),
     save_persist(Session),
     lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, Session#session.linked),
     ok.

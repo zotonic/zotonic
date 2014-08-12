@@ -81,7 +81,7 @@ limitations under the License.
     }
     ubf.encode_as_list = encode_as_list;
 
-    // Encode as proplist
+    // Encode as proplist with {key,value} tuples.
     function encode_as_proplist(value, buffer) {
         var buf = buffer || [];
         var i;
@@ -89,7 +89,7 @@ limitations under the License.
         buf.push("#");
         $.each(value, function(k, v) {
                 buf.push('{');
-                ubf.encode_as_constant(k, buf);
+                encode(k, buf);
                 buf.push(' ');
                 encode(v, buf);
                 buf.push('}&');

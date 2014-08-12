@@ -20,11 +20,6 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    data_decode/1,
-    data_encode/1,
-
-    incoming/2,
-
     page/3,
     page/4,
     session/3,
@@ -37,13 +32,100 @@
     transport/2,
     transport_user/3,
     transport_session/3,
-    transport_page/3
+    transport_page/3,
 
+    data_decode/1,
+    data_encode/1,
+
+    incoming/2
     ]).
 
 -include_lib("zotonic.hrl").
 
+%%% ---------------------------------------------------------------------------------------
+%%% Send data API
+%%% ---------------------------------------------------------------------------------------
+
+%% @doc Convenience function to send data to the current page
+page(Delegate, Data, Context) ->
+    page(Delegate, Data, [], Context).
+
+%% @doc Convenience function to send data to the current page
+page(Delegate, Data, Options, Context) ->
+    Msg = msg(page, Delegate, Data, Options),
+    transport(Msg, Context).
+
+%% @doc Convenience function to send data to all pages of the current session
+session(Delegate, Data, Context) ->
+    session(Delegate, Data, [], Context).
+
+%% @doc Convenience function to send data to all pages of the current session
+session(Delegate, Data, Options, Context) ->
+    Msg = msg(session, Delegate, Data, Options),
+    transport(Msg, Context).
+
+%% @doc Convenience function to send data to all sessions of the current user
+user(Delegate, Data, Context) ->
+    user(Delegate, Data, [], Context).
+
+%% @doc Convenience function to send data to all sessions of the current user
+user(Delegate, Data, Options, Context) ->
+    Msg = msg(user, Delegate, Data, Options),
+    transport(Msg, Context).
+
+%% @doc Fill a transport message, for sending with the transport functions.
+msg(Queue, Delegate, Data, Options) ->
+    #z_msg_v1{
+        qos=proplists:get_value(qos, Options, 0),
+        msg_id=z_convert:to_binary(z_ids:id(32)),
+        timestamp=now_msec(),
+        delegate=Delegate,
+        push_queue=Queue,
+        content_type=ubf,
+        data=Data
+    }.
+
+%% @doc Put a message or ack on transport.
+transport(L, Context) when is_list(L) ->
+    lists:foreach(fun(Msg) ->
+                    transport(Msg, Context)
+                  end,
+                  L);
+transport(Msg, Context) ->
+    case Msg#z_msg_v1.push_queue of
+        session -> z_session:transport(Msg, Context);
+        page -> z_session_page:transport(Msg, Context);
+        user -> transport_user(Msg, z_acl:user(Context), Context)
+    end.
+
+%% @doc Put a message or ack on transport to all sessions of the given user
+transport_user(Msg, UserId, Context) ->
+    SessionPids = z_session_manager:whereis_user(UserId, Context),
+    lists:foreach(
+            fun(Pid) ->
+                z_session:transport(Msg#z_msg_v1{push_queue=session}, Pid)
+            end,
+            SessionPids).
+
+%% @doc Put a message or ack on transport to all pages of the given session.
+transport_session(Msg, SessionPid, _Context) when is_pid(SessionPid) ->
+    z_session:transport(Msg, SessionPid);
+transport_session(Msg, SessionId, Context) ->
+    z_session:transport(Msg, z_session_manager:whereis(SessionId, Context)).
+
+%% @doc Put a message or ack on transport to a specific page.
+transport_page(Msg, PagePid, _Context) when is_pid(PagePid) ->
+    z_session_page:transport(Msg, PagePid);
+transport_page(Msg, PageId, Context) ->
+    z_session_page:transport(Msg, PageId, Context).
+
+
+%%% ---------------------------------------------------------------------------------------
+%%% Receive data API
+%%% ---------------------------------------------------------------------------------------
+
 -spec data_decode(binary()) -> {ok, any(), binary()} | {error, term()}.
+%% @doc Decoding is done in this module, as it also defines the various atoms.
 data_decode(Bin) ->
     z_ubf:decode(Bin).
 
@@ -53,6 +135,7 @@ data_encode(Data) ->
 
 
 %% @doc Handle incoming messages, originates from various sources, like postback, websocket etc
+-spec incoming(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> {ok, list(), #context{}}.
 incoming(L, Context) when is_list(L) ->
     lists:foldl(
         fun(Msg, {ok, Msgs, Ctx}) ->
@@ -87,6 +170,10 @@ incoming(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
     {ok, [], Context1}.
 
 
+%%% ---------------------------------------------------------------------------------------
+%%% Internal functions
+%%% ---------------------------------------------------------------------------------------
+
 incoming_1(#z_msg_v1{delegate='$ping'} = Msg, Context) ->
     {ok, maybe_ack(pong, Msg, Context), Context};
 incoming_1(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
@@ -120,7 +207,7 @@ incoming_1(#z_msg_v1{delegate=notify, content_type=Type, data=#postback_notify{}
                     #context{} = ContextNotify -> ContextNotify
                end,
     incoming_context_result(ok, Msg, Context2);
-incoming_1(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) when is_atom(Delegate) ->
+incoming_1(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
     Context1 = maybe_set_q(Type, Notify#postback_notify.data, Context),
     {ok, Module} = z_utils:ensure_existing_module(Delegate),
     % MochiWeb compatible values...
@@ -239,70 +326,6 @@ maybe_ack(Result, #z_msg_v1{qos=N, msg_id=MsgId}, Context) when N > 0; Result =/
     end;
 maybe_ack(_Result, #z_msg_v1{}, _Context) ->
     [].
-
-
-page(Delegate, Data, Context) ->
-    page(Delegate, Data, [], Context).
-
-page(Delegate, Data, Options, Context) ->
-    Msg = msg(page, Delegate, Data, Options),
-    transport(Msg, Context).
-
-session(Delegate, Data, Context) ->
-    session(Delegate, Data, [], Context).
-
-session(Delegate, Data, Options, Context) ->
-    Msg = msg(session, Delegate, Data, Options),
-    transport(Msg, Context).
-
-user(Delegate, Data, Context) ->
-    user(Delegate, Data, [], Context).
-
-user(Delegate, Data, Options, Context) ->
-    Msg = msg(user, Delegate, Data, Options),
-    transport(Msg, Context).
-
-msg(Queue, Delegate, Data, Options) ->
-    #z_msg_v1{
-        qos=proplists:get_value(qos, Options, 0),
-        msg_id=z_convert:to_binary(z_ids:id(32)),
-        timestamp=now_msec(),
-        delegate=Delegate,
-        push_queue=Queue,
-        content_type=ubf,
-        data=Data
-    }.
-
-%% @doc Put a message or ack on transport.
-transport(L, Context) when is_list(L) ->
-    lists:foreach(fun(Msg) ->
-                    transport(Msg, Context)
-                  end,
-                  L);
-transport(Msg, Context) ->
-    case Msg#z_msg_v1.push_queue of
-        session -> z_session:transport(Msg, Context);
-        page -> z_session_page:transport(Msg, Context);
-        user -> transport_user(Msg, z_acl:user(Context), Context)
-    end.
-
-transport_user(Msg, UserId, Context) ->
-    SessionPids = z_session_manager:whereis_user(UserId, Context),
-    lists:foreach(
-            fun(Pid) ->
-                z_session:transport(Msg#z_msg_v1{push_queue=session}, Pid)
-            end,
-            SessionPids).
-
-transport_session(Msg, SessionPid, _Context) when is_pid(SessionPid) ->
-    z_session:transport(Msg, SessionPid);
-transport_session(Msg, SessionId, Context) ->
-    z_session:transport(Msg, z_session_manager:whereis(SessionId, Context)).
-
-transport_page(Msg, PagePid, _Context) when is_pid(PagePid) ->
-    z_session_page:transport(Msg, PagePid);
-transport_page(Msg, PageId, Context) ->
-    z_session_page:transport(Msg, PageId, Context).
 
 
 now_msec() ->
