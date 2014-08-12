@@ -59,9 +59,9 @@ process_post(ReqData, Context) ->
 process_post_ubf(ReqData, Context) ->
     {Data,RD1} = wrq:req_body(ReqData),
     Context1 = ?WM_REQ(RD1, Context),
-    {ok, Term, _Rest} = z_transport:decode(Data),
+    {ok, Term, _Rest} = z_transport:data_decode(Data),
     {ok, Reply, Context2} = z_transport:incoming(Term, Context1),
-    {ok, ReplyData} = z_transport:encode(Reply), 
+    {ok, ReplyData} = z_transport:data_encode(Reply), 
     post_return(ReplyData, Context2).
 
 %% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2 

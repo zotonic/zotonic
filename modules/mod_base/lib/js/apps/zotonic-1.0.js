@@ -220,8 +220,12 @@ function z_transport(delegate, content_type, data, options)
     var timestamp = new Date().getTime();
 
     options = options || {};
-    if (typeof options.qos != 'integer' && options.ack) {
-        options.qos = 1;
+    if (typeof options.qos == 'undefined') {
+        if (options.ack) {
+            options.qos = 1;
+        } else {
+            options.qos = 0;
+        }
     }
     var msg = {
             "_record": "z_msg_v1",

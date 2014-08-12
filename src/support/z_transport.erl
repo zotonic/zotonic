@@ -99,6 +99,8 @@ transport(Msg, Context) ->
     end.
 
 %% @doc Put a message or ack on transport to all sessions of the given user
+transport_user(_Msg, undefined, _Context) ->
+    ok;
 transport_user(Msg, UserId, Context) ->
     SessionPids = z_session_manager:whereis_user(UserId, Context),
     lists:foreach(
@@ -216,7 +218,10 @@ incoming_1(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify
                     trigger=to_list(Notify#postback_notify.trigger),
                     target=to_list(Notify#postback_notify.target)
               },
-    incoming_context_result(ok, Msg, Module:event(Notify1, Context1)).
+    incoming_context_result(ok, Msg, Module:event(Notify1, Context1));
+incoming_1(#z_msg_v1{delegate=Delegate} = Msg, Context) when is_atom(Delegate); is_binary(Delegate) ->
+    {ok, Module} = z_utils:ensure_existing_module(Delegate),
+    incoming_context_result(ok, Msg, Module:event(Msg, Context)).
 
 
 incoming_postback_event(<<"submit">>, Module, Tag, Trigger, Target, Context) -> 
