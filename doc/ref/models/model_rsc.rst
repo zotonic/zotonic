@@ -260,7 +260,7 @@ Dates
 Dates are stored as a standard Erlang date time tuple, for example
 ``{{2008,12,10},{15,30,00}}``. Dates are stored and retrieved in UTC
 (universal time). When displaying a date, (e.g. with the
-:ref:`filter_date` filter), the date is automatically converted into
+:ref:`filter-date` filter), the date is automatically converted into
 the time zone of the site or that of the user.
 
 
