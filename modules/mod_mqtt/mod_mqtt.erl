@@ -32,7 +32,14 @@
     pid_observe_module_activate/3,
     pid_observe_mqtt_subscribe/3,
     pid_observe_mqtt_unsubscribe/3,
-    observe_z_mqtt_cmd/2
+    observe_z_mqtt_cmd/2,
+
+    observe_rsc_update_done/2,
+    observe_media_replace_file/2,
+    observe_edge_delete/2,
+    observe_edge_insert/2,
+
+    observe_action_event_type/2
     ]).
 
 -export([
@@ -82,6 +89,58 @@ local_topic(<<"/", Topic/binary>>) -> Topic;
 local_topic(Topic) -> Topic.
 
 
+observe_rsc_update_done(#rsc_update_done{action=Action, post_is_a=IsA, id=Id}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/update/",(z_convert:to_binary(Id))/binary>>, 
+        [
+            {id, Id},
+            {modifier_id, z_acl:user(Context)},
+            {is_a, IsA},
+            {action, Action}
+        ],
+        Context).
+
+observe_media_replace_file(#media_replace_file{id=Id}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/update/",(z_convert:to_binary(Id))/binary>>, 
+        [
+            {id, Id},
+            {modifier_id, z_acl:user(Context)},
+            {action, medium}
+        ],
+        Context).
+
+observe_edge_delete(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/update/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
+        [
+            {id,SubjectId},
+            {modifier_id, z_acl:user(Context)},
+            {action, delete},
+            {predicate, PredName},
+            {object_id, ObjectId}
+        ],
+        Context).
+
+observe_edge_insert(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/update/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
+        [
+            {id,SubjectId},
+            {modifier_id, z_acl:user(Context)},
+            {action, insert},
+            {predicate, PredName},
+            {object_id, ObjectId}
+        ],
+        Context).
+
+
+%% @doc Handle the <tt>{live ...}</tt> event type.
+observe_action_event_type(#action_event_type{event={mqtt, _Args}} = Ev, Context) ->
+    scomp_mqtt_live:event_type_mqtt(Ev, Context);
+observe_action_event_type(_, _Context) ->
+    undefined.
+
 start_link(Args) ->
     supervisor:start_link(?MODULE, Args).
 
@@ -108,8 +167,11 @@ handle_cmd(#z_mqtt_cmd{cmd= <<"publish">>, topic=Topic, payload=Data}, Context) 
     Msg = msg_from_event(Topic, Data, Context),
     z_mqtt:publish(Msg, Context);
 handle_cmd(#z_mqtt_cmd{cmd= <<"subscribe">>, topic=Topic}, Context) ->
-    ?DEBUG({subscribe, Topic, Context#context.page_pid}),
-    z_mqtt:subscribe(Topic, Context#context.page_pid, Context).
+    % ?DEBUG({subscribe, Topic, Context#context.page_pid}),
+    z_mqtt:subscribe(Topic, Context#context.page_pid, Context);
+handle_cmd(#z_mqtt_cmd{cmd= <<"unsubscribe">>, topic=Topic}, Context) ->
+    % ?DEBUG({unsubscribe, Topic, Context#context.page_pid}),
+    z_mqtt:unsubscribe(Topic, Context#context.page_pid, Context).
 
 
 msg_from_event(Topic, Data, Context) ->

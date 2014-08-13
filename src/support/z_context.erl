@@ -462,6 +462,11 @@ output1([{trans, _} = Trans|Rest], Context, Acc) ->
     output1(Rest, Context, [z_trans:lookup_fallback(Trans, Context)|Acc]);
 output1([{{_,_,_},{_,_,_}} = D|Rest], Context, Acc) ->
     output1([filter_date:date(D, "Y-m-d H:i:s", Context)|Rest], Context, Acc);
+output1([{javascript, Script}|Rest], Context, Acc) ->
+    Context1 = Context#context{
+              content_scripts=combine(Context#context.content_scripts, [Script])
+           },
+    output1(Rest, Context1, Acc);
 output1([T|Rest], Context, Acc) when is_tuple(T) ->
     output1([iolist_to_binary(io_lib:format("~p", [T]))|Rest], Context, Acc);
 output1([C|Rest], Context, Acc) ->
@@ -510,7 +515,7 @@ merge_scripts(C, Acc) ->
     
 combine([],X) -> X;
 combine(X,[]) -> X;
-combine(X,Y) -> [X++Y].
+combine(X,Y) -> [X,Y].
 
 %% @doc Remove all scripts from the context
 %% @spec clean_scripts(Context) -> Context

@@ -69,7 +69,12 @@ is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User], Site, Context)
                 _ -> false
             end 
     end;
-is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"page">>], Site, _Context) -> true;
+is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"page">>], Site, _Context) ->
+    true;
+is_allowed(publish, _Topic, [<<"site">>, Site, <<"rsc">>, <<"update">>, RscId | _], Site, Context) ->
+    z_acl:rsc_editable(z_convert:to_integer(RscId), Context);
+is_allowed(publish, _Topic, [<<"site">>, _SiteA, <<"rsc">>, <<"update">> | _], _SiteB, Context) ->
+    z_acl:is_admin(Context); 
 is_allowed(Action, Topic, Words, Site, Context) ->
     is_allowed(Action, Topic, Words, Site, z_session_page:page_id(Context), Context).
 
