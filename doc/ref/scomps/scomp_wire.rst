@@ -10,6 +10,8 @@ Wire actions to an element
 
 The primary use of wire is to connect an action to a HTML element or javascript event.
 
+.. highlight: django
+
 Example::
 
    {% wire id="show" action={show target="message"} %}
@@ -49,6 +51,8 @@ Example::
 
 The wire tag redirects the submit of the form to the event routine of the controller. A submit will also toggle the visibility of the “message” element on the page. Note that the action is “postback”, this is obligatory.
 
+.. highlight: erlang 
+
 The event routine will be called as::
 
    event({submit, Tag, FormId, TargetId}, Context).
@@ -79,6 +83,8 @@ Wire to the page load or unload
 
 A ``{% wire %}`` without an id will bind the actions and/or postback to the window instead of an element. Omitting a type as well will execute all actions and/or postback on page load.
 
+.. highlight: django 
+
 Example::
 
    {% wire action={alert text="Welcome to this page."} %}
@@ -94,6 +100,28 @@ Use ``{% wire name="myname" %}`` to define a named
 action and trigger it from Javascript with ``z_event("myname")``. See: :ref:`manual-template-calling-zotonic`.
 
 
+Wire an action to a MQTT topic
+------------------------------
+
+Use ``{% wire type={mqtt topic=... topic=...} %}`` to connect to one or more MQTT topics.
+
+.. highlight: django
+
+Example::
+
+    {% wire type={mqtt topic="/public/hello"} action={growl text="hello"} %}
+
+.. highlight: erlang
+
+And in Erlang this will trigger the above *growl*::
+
+    z_mqtt:publish(<<"public/hello">>, <<>>, z_acl:sudo(z:c(mysite))).
+
+.. note::
+
+    :ref:`mod_mqtt` must be enabled before wiring to a topic
+
+See also :ref:`scomp-live`
 
 Arguments
 ---------
@@ -112,6 +140,10 @@ The wire tag accepts the following arguments:
 |               |"unload", "beforeunload", "click", "dblclick", "mousedown", "mouseup", |                                     |
 |               |"mousemove", "mouseover", "mouseout", "mouseenter", "mouseleave",      |                                     |
 |               |"change", "select", "keydown", "keypress", "keyup" or "error".         |                                     |
+|               |                                                                       |                                     |
+|               |The types can be extended by modules using the ``#action_event_type``  |                                     |
+|               |notification. The type must be a tuple, an example is the              |                                     |
+|               |``{mqtt topic=...}`` type provided by :ref:`mod_mqtt`                  |                                     |
 +---------------+-----------------------------------------------------------------------+-------------------------------------+
 |propagate      |Specify this when you don’t want the event to be canceled after        |propagate                            |
 |               |handling the wire.  Useful for event types like focus, click etc.      |                                     |
