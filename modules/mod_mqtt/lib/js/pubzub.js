@@ -23,6 +23,8 @@ function Pubzub ()
         wildcard_one: '+',
         wildcard_some: '#'
     });
+    this._subs = {};
+    this._subs_relayed = {};
 
     this._will_id = 0;
     ubf.add_spec("mqtt_msg", [
@@ -39,7 +41,7 @@ function Pubzub ()
     var self = this;
     z_transport_delegate_register(
             'mqtt_route',
-            function(mqtt_msg, _msg) {
+            function(mqtt_msg, msg) {
                 self.relayed(mqtt_msg, msg);
             });
 }
@@ -48,10 +50,40 @@ Pubzub.prototype.me = function () {
     return "/page/" + z_pageid;
 };
 
+Pubzub.prototype.subscribe_multi = function (topics, fun) {
+    for(var i=topics.length-1; i >= 0; i--) {
+        this.subscribe(topics[i], fun);
+    }
+};
+
 Pubzub.prototype.subscribe = function (topic, fun) {
-    this._matcher.add(topic, fun);
+    var id = this.unique_id();
+    this._matcher.add(topic, id);
+    this._subs[id] = {fun: fun, topic: topic};
     if (!this.is_local_topic(topic)) {
-        this.transport("subscribe", topic);
+        var ct = this._subs_relayed[topic] || 0;
+        if (ct === 0) {
+            this.transport("subscribe", topic);
+        }
+        this._subs_relayed[topic] = ct + 1;
+    }
+    return id;
+};
+
+Pubzub.prototype.unsubscribe = function (id) {
+    if (this._subs[id]) {
+        var sub = this._subs[id];
+        var topic = sub.topic;
+
+        this._matcher.remove(topic, sub.id);
+        if (!this.is_local_topic(topic)) {
+            var ct = this._subs_relayed[topic] - 1;
+            if (ct === 0) {
+                this.transport("unsubscribe", topic);
+            }
+            this._subs_relayed[topic] = ct;
+        }
+        delete this._subs[id];
     }
 };
 
@@ -59,7 +91,10 @@ Pubzub.prototype.publish = function (topic, message) {
     if (this.is_local_topic(topic)) {
         var subs = this._matcher.match(topic);
         for (var i in subs) {
-            subs[i](topic, message);
+            var id = subs[i];
+            if (this._subs[id]) {
+                this._subs[id].fun(topic, message, id);
+            }
         }
     } else {
         this.transport("publish", topic, message);
@@ -83,7 +118,10 @@ Pubzub.prototype.is_local_topic = function (topic) {
 Pubzub.prototype.relayed = function (mqtt_msg, _msg) {
     var subs = this._matcher.match(mqtt_msg.topic);
     for (var i in subs) {
-        subs[i](mqtt_msg.topic, mqtt_msg.payload);
+        var id = subs[i];
+        if (this._subs[id]) {
+            this._subs[id].fun(mqtt_msg.topic, mqtt_msg.payload, id);
+        }
     }
 };
 
@@ -99,11 +137,6 @@ Pubzub.prototype.transport = function (cmd, topic, payload, extra) {
         qos: 1
     };
     z_transport('mqtt', 'ubf', msg, options);
-    // args = args || {};
-    // args.topic = topic;
-    // args.msg = ubf.encode(message);
-    // args.z_delegate = "mod_mqtt";
-    // z_notify(cmd, args);
 };
 
 Pubzub.prototype.unique_id = function () {

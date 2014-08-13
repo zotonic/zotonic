@@ -189,7 +189,7 @@ incoming_1(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Cont
                     _         -> TargetId
                  end,
     Context1 = maybe_set_q(ubf, Pb#postback_event.data, Context),
-    Context2 = z_context:set_q("triggervalue", Pb#postback_event.triggervalue, Context1),
+    Context2 = z_context:set_q("triggervalue", to_list(Pb#postback_event.triggervalue), Context1),
     ContextRsc = z_context:set_controller_module(Module, Context2),
     ContextRes = incoming_postback_event(z_convert:to_binary(EventType), Module, Tag, TriggerId1, TargetId1, ContextRsc),
     incoming_context_result(ok, Msg, ContextRes);
@@ -240,7 +240,7 @@ incoming_context_result(Result, Msg, Context) ->
     case iolist_to_binary(z_script:get_script(Context)) of
         <<>> -> 
             {ok, OptAck, Context};
-        Script -> 
+        Script ->
             {ok, lists:flatten([OptAck, msg(page, javascript, Script, [{qos,0}])]), Context}
     end.
 
@@ -296,10 +296,7 @@ maybe_set_q(_Type, _Data, Context) ->
 
 %% For MochiWeb we need to convert to strings
 set_q(Qs, Context) ->
-    Qs1 = lists:map(fun({K,V}) ->
-                        {to_list(K), to_list(V)}
-                    end,
-                    Qs),
+    Qs1 = [ {to_list(K), to_list(V)} || {K,V} <- Qs ],
     z_context:set('q', Qs1, Context).
 
 %% TODO: This can be removed when we switch to binary key/values for qs
