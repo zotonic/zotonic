@@ -32,8 +32,8 @@ Any MQTT topic can be used. The topics are interpreted as local to the page.
 There are three special topics:
 
  * Use any integer to map to the resource’s update topic. For example if id is *1234* then the topic will be ``/rsc/update/1234``
- * Use the tuple ``{edge id=... predicate=...} to listen to changes of a specific predicate of a page. An example of a mapped topic is ``/rsc/update/1234/author``
- * Use the tuple ``{edge id=...} to listen to changes of a all predicates of a page. An example of a mapped topic is ``/rsc/update/1234/+``
+ * Use the tuple ``{edge id=... predicate=...}`` to listen to changes of a specific predicate of a page. An example of a mapped topic is ``/rsc/update/1234/author``
+ * Use the tuple ``{edge id=...}`` to listen to changes of a all predicates of a page. An example of a mapped topic is ``/rsc/update/1234/+``
 
 
 Live actions
