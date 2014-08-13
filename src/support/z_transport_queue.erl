@@ -43,13 +43,13 @@
         wait_ack :: list()
     }).
 
-%% @doc Expire undelivered messages after 5 minutes
+%% Expire undelivered messages after 5 minutes
 -define(RETRY_EXPIRE, 300000).
 
-%% @doc Requeue qos 1&2 messages once after waiting for an ack for 10 seconds
+%% Requeue qos 1&2 messages once after waiting for an ack for 10 seconds
 -define(RETRY_ACK, 10000).
 
-%% @doc Maximum number of message in queue
+%% Maximum number of message in queue
 -define(MAX_LEN, 100).
 
 
