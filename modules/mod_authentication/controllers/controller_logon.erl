@@ -23,7 +23,7 @@
 -export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
 -export([provide_content/2]).
 -export([event/2]).
--export([get_rememberme_cookie/1, reset_rememberme_cookie/1]).
+-export([get_rememberme_cookie/1, set_rememberme_cookie/2, reset_rememberme_cookie/1]).
 
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
