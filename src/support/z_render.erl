@@ -125,8 +125,9 @@ render({script}, Context) ->
     Context1#context{render=[Context1#context.render, Html]};
 render(#context{} = C, Context) ->
     C1 = render(C#context.render, Context),
-    C2 = z_context:merge_scripts(C, C1),
-    C2;
+    z_context:merge_scripts(C, C1);
+render({javascript, Script}, Context) ->
+    z_script:add_content_script(Script, Context);
 render(B, Context) when is_binary(B) -> 
     Context#context{render=[Context#context.render, B]};
 render(N, Context) when is_integer(N), N >= 0, N =< 255 -> 

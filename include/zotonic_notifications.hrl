@@ -100,7 +100,11 @@
 %% the request. (first), 'trigger' the id of the element which triggered the postback, and 'target' the 
 %% id of the element which should receive possible updates. Note: postback_notify is also used as an event.
 %% Return either 'undefined' or a #context with the result of the postback
--record(postback_notify, {message, trigger, target}).
+-record(postback_notify, {message, trigger, target, data}).
+
+%% @doc Message sent by an user-agent on a postback event. Encapsulates the encoded postback and any
+%% additional data. This is handled by z_transport.erl, which will call the correct event/2 functions.
+-record(postback_event, {postback, trigger, target, triggervalue, data}).
 
 %% @doc Notification to signal an inserted comment. (notify)
 %% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.
@@ -371,6 +375,19 @@
 %% Must return an iolist()
 -record(scomp_script_render, {is_nostartup=false, args=[]}).
 
+
+%% @doc Render the javascript for a custom action event type.
+%% The custom event type must be a tuple, for example:
+%% <code>{% wire type={live id=myid} action={...} %}</code>
+%% Must return {ok, Javascript, Context}
+-record(action_event_type, {
+            event :: tuple(),
+            trigger_id :: string(),
+            trigger :: string(),
+            postback_js :: iolist(),
+            postback_pickled :: string()|binary(),
+            action_js :: iolist()
+}).
 
 %% @doc Find an import definition for a CSV file by checking the filename of the to be imported file. (first)
 %% Should return the #import_csv_definition or undefined (in which case the column headers are used as property names).

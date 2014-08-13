@@ -15,7 +15,8 @@ Upgrading to Zotonic 0.11
 Configuration change
 ....................
 
-The global file ``priv/config`` has been obsoleted in place of a new global configuration file, ``~/.zotonic/zotonic.config``. To upgrade, do the following:
+The global file ``priv/config`` has been obsoleted in place of a new global 
+configuration file, ``~/.zotonic/zotonic.config``. To upgrade, do the following:
 
  * Make a directory in your home folder, called ``~/.zotonic``.
  * Copy ``priv/zotonic.config.in`` to ``~/.zotonic/zotonic.config``
@@ -40,6 +41,16 @@ serialization of database values, you have to tag them with the new
 automatically.
 
 
+Postback and javascript changes
+...............................
+
+The file ``zotonic-1.0.js`` now uses ``lib/js/modules/ubf.js``. This file **must**
+be included for the Zotonic javascripts to work.
+
+All postback, comet and websocket connection are now handled by ``z_transport``.
+Check :ref:`manual-transport` for details.
+
+
 Dispatch rules for files
 ........................
 
@@ -57,7 +68,7 @@ The following options have been **removed**:
  * use_cache
  * use of an *id* argument, use ``controller_file_id`` instead
 
-See the the documentation for :ref:`controller-file` and :ref:`controller-file_id`.
+See the documentation for :ref:`controller-file` and :ref:`controller-file_id`.
 
 
 Modules moved out of core

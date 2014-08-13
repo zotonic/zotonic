@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2011 Marc Worrell
-%% @doc Handles all ajax postback calls
+%% @copyright 2009-2014 Marc Worrell
+%% @doc Handles Ajax and form posts
 
-%% Copyright 2009-2011 Marc Worrell
+%% Copyright 2009-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,138 +22,107 @@
 -export([
     init/1, 
     service_available/2,
-    forbidden/2,
-    malformed_request/2,
     allowed_methods/2,
-    content_types_provided/2,
-    process_post/2,
-    
-    process_postback/1
+    process_post/2
 ]).
 
 -include_lib("controller_webmachine_helper.hrl").
--include_lib("include/zotonic.hrl").
+-include_lib("zotonic.hrl").
 
 init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
+    Context1 = z_context:continue_all(z_context:set(DispatchArgs, Context)),
     z_context:lager_md(Context1),
     ?WM_REPLY(true, Context1).
-
-
-malformed_request(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_qs(Context1),
-    case z_context:get_q("postback", Context2) of
-        undefined ->
-            ?WM_REPLY(true, Context2);
-        _ ->
-            ?WM_REPLY(false, Context2)
-    end.
-
-forbidden(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    %% Ensure all, but don't start a new session
-    Context2 = z_context:set(no_session, true, Context1),
-    Context3 = z_context:ensure_all(Context2),
-    z_context:lager_md(Context3),
-    ?WM_REPLY(not z_context:has_session(Context3), Context3).
 
 allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
 
-content_types_provided(ReqData, Context) -> 
-    %% When handling a POST the content type function is not used, so supply false for the function.
-    { [{"application/x-javascript", false}], ReqData, Context }.
-
 process_post(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    {Script, EventContext} = process_postback(Context1),
-    CometScript = case z_context:has_session_page(EventContext) of
-                      true -> z_session_page:get_scripts(EventContext#context.page_pid);
-                      false -> []
-                  end,
-    
-    % Send back all the javascript.
-    RD  = z_context:get_reqdata(EventContext),
-    RD1 = case wrq:get_req_header_lc("content-type", ReqData) of
+    case wrq:get_req_header_lc("content-type", ReqData) of
+        "text/x-ubf" ++ _ ->
+            process_post_ubf(ReqData, Context);
+        "text/plain" ++ _ ->
+            process_post_ubf(ReqData, Context);
+        "application/x-www-form-urlencoded" ++ _ ->
+            process_post_form(ReqData, Context);
         "multipart/form-data" ++ _ ->
-            RDct = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", RD),
-            case z_context:document_domain(EventContext) of
-                undefined ->
-                    wrq:append_to_resp_body([
-                            "<textarea>", Script, CometScript, "</textarea>"
-                            ], RDct);
-                DocumentDomain ->
-                    wrq:append_to_resp_body([
-                            <<"<script>document.domain=\"">>, DocumentDomain,<<"\";</script><textarea>">>,
-                            Script, CometScript, "</textarea>"
-                            ], RDct)
-            end;
+            process_post_form(ReqData, Context);
         _ ->
-            wrq:append_to_resp_body([Script, CometScript], RD)
-    end,
+            {{halt, 415}, ReqData, Context}
+    end. 
 
-    ReplyContext = z_context:set_reqdata(RD1, EventContext),
-    ?WM_REPLY(true, ReplyContext).
+%% @doc AJAX postback, the received data is UBF which can be directly decoded
+%% and handled by the z_transport:incoming/2 routines. 
+process_post_ubf(ReqData, Context) ->
+    {Data,RD1} = wrq:req_body(ReqData),
+    Context1 = ?WM_REQ(RD1, Context),
+    {ok, Term, _Rest} = z_transport:data_decode(Data),
+    {ok, Reply, Context2} = z_transport:incoming(Term, Context1),
+    {ok, ReplyData} = z_transport:data_encode(Reply), 
+    post_return(ReplyData, Context2).
 
-
-
-%% @doc Process the postback, shared with the controller_websocket.
-process_postback(Context1) ->
-    EventContext = case z_context:get_q("postback", Context1) of
-        "notify" ->
-            Message = z_context:get_q("z_msg", Context1),
-            TriggerId1 = case z_context:get_q("z_trigger_id", Context1) of
-                             undefined -> undefined;
-                             [] -> undefined;
-                             TrId -> TrId
-                         end,
-            TargetId = case z_context:get_q("z_target_id", Context1) of
-                             undefined -> undefined;
-                             [] -> undefined;
-                             TtId -> TtId
-                         end,
-            PostbackNotify = #postback_notify{message=Message, trigger=TriggerId1, target=TargetId},
-            case z_context:get_q("z_delegate", Context1) of
-                None when None =:= []; None =:= <<>>; None =:= undefined ->
-                    case z_notifier:first(PostbackNotify, Context1) of
-                        undefined -> Context1;
-                        #context{} = ContextNotify -> ContextNotify
-                    end;
-                Delegate ->
-                    {ok, Module} = z_utils:ensure_existing_module(Delegate),
-                    Module:event(PostbackNotify, Context1)
-            end;
-        Postback ->
-            {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context1),
-            TriggerId1 = case TriggerId of
-                undefined -> z_context:get_q("z_trigger_id", Context1);
-                _         -> TriggerId
+%% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2 
+process_post_form(ReqData, Context0) ->
+    Context = ?WM_REQ(ReqData, Context0),
+    case z_context:get_q("postback", Context) of
+        undefined ->
+            % A "nornal" post of a form, no javascript involved
+            Event = #submit{
+                        message = z_context:get_q("z_message", Context),
+                        target = z_context:get_q("z_target_id", Context)
+                    },
+            Context1 = notify_submit(z_context:get_q("z_delegate", Context), Event, Context),
+            {Script, Context2} = z_script:split(Context1),
+            case Script of
+                <<>> ->  nop;
+                _JS -> z_transport:page(javascript, Script, Context2)
             end,
-            ContextRsc = z_context:set_controller_module(Module, Context1),
-            case EventType of
-                "submit" -> 
-                    case z_validation:validate_query_args(ContextRsc) of
-                        {ok, ContextEval} ->   
-                            Module:event(#submit{message=Tag, form=TriggerId1, target=TargetId}, ContextEval);
-                        {error, ContextEval} ->
-                            %% Posted form did not validate, return any errors.
-                            ContextEval
-                    end;
-                _ -> 
-                    Module:event(#postback{message=Tag, trigger=TriggerId1, target=TargetId}, ContextRsc)
-            end
-    end,
+            post_return(<<>>, Context2);
+        Postback ->
+            % A wired postback of a form
+            Msg = #z_msg_v1{
+                        qos=0,
+                        content_type=form,
+                        delegate=postback,
+                        data=#postback_event{
+                                postback=Postback,
+                                trigger=z_context:get_q("z_trigger_id", Context),
+                                target=z_context:get_q("z_target_id", Context),
+                                triggervalue=z_context:get_q("triggervalue", Context)
+                        }
+                  },
+            {ok, Reply, Context1} = z_transport:incoming(Msg, Context),
+            z_transport:transport(Reply, Context1),
+            post_return(<<>>, Context1)
+    end.
 
-    % Remove the busy mask from the element that triggered this event.
-    Unmask = case TriggerId1 of
-                 undefined -> [];
-                 "" -> [];
-                 _HtmlElementId ->
-                     [" z_unmask('", z_utils:js_escape(TriggerId1), "');"]
-             end,
-    Script = iolist_to_binary([z_script:get_script(EventContext), Unmask]),
-    {Script, EventContext}.
+notify_submit(None, Event, Context) when None =:= undefined; None =:= <<>>; None =:= [] ->
+    case z_notifier:first(Event, Context) of
+        #context{} = Context1 -> Context1;
+        undefined -> Context
+    end;
+notify_submit(Delegate, Event, Context) ->
+    {ok, Module} = z_utils:ensure_existing_module(Delegate),
+    Module:event(Event, Context).
+
+% Make sure that we retun 200, otherwise the form onload is not triggered.
+post_return(<<>>, Context) ->
+    {x, RD, Context1} = ?WM_REPLY(x, Context),
+    RD1 = case is_empty(wrq:resp_body(RD)) of
+            true -> wrq:append_to_resp_body(<<" ">>, RD);
+            false -> RD
+          end,
+    {true, RD1, Context1};
+post_return(Data, Context) ->
+    {x, RD, Context1} = ?WM_REPLY(x, Context),
+    RD1 = wrq:append_to_resp_body(Data, RD),
+    {true, RD1, Context1}.
+
+is_empty(<<>>) -> true;
+is_empty([]) -> true;
+is_empty(undefined) -> true;
+is_empty(_) -> false.
+

@@ -56,8 +56,9 @@ start(WsKey1, ReqData, Context1) ->
             <<SignKey/binary>>
             ],
     ok = z_websocket_hixie75:send(Socket, Data),
-    SenderPid = spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, Context1) end),
-    z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, Context1).
+    ContextPruned = z_context:set('q', [], z_context:prune_for_scomp(Context1)), 
+    SenderPid = spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, ContextPruned) end),
+    z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, ContextPruned).
 
 
 %% Process a key from the websockey handshake, return an integere

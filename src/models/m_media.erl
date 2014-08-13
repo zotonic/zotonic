@@ -207,6 +207,7 @@ delete(Id, Context) ->
             medium_delete(Id, Context),
             [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
             z_depcache:flush(Id, Context),
+            z_notifier:notify(#media_replace_file{id=Id, medium=[]}, Context),
             ok;
         false ->
             {error, eacces}
@@ -227,6 +228,7 @@ replace(Id, Props, Context) ->
         {ok, _} -> 
             [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
             z_depcache:flush(Id, Context),
+            z_notifier:notify(#media_replace_file{id=Id, medium=get(Id, Context)}, Context),
             ok;
         {rollback, {Error, _Trace}} ->
              {error, Error}

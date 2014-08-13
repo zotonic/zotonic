@@ -100,6 +100,34 @@
 -record(multipart_form, {name, data, filename, tmpfile, content_type, content_length, file, files=[], args=[]}).
 -record(upload, {filename, tmpfile, data, mime}).
 
+%% Record used for transporting data between the user-agent and the server.
+-record(z_msg_v1, {
+        qos = 0 :: 0 | 1 | 2,
+        dup = false :: boolean(),
+        msg_id :: binary(),
+        timestamp :: pos_integer(),
+        content_type = ubf :: text | javascript | json | form | ubf | atom() | binary(),
+        delegate = postback :: postback | mqtt | atom() | binary(),
+        push_queue = page :: page | session | user,
+
+        % Set by transports from user-agent to server
+        ua_class=undefined :: ua_classifier:device_type() | undefined,
+        session_id :: binary(),
+        page_id :: binary(),
+
+        % Payload data
+        data :: any()
+    }).
+
+-record(z_msg_ack, {
+        qos = 1 :: 1 | 2,
+        msg_id :: binary(),
+        push_queue = page :: page | session | user,
+        session_id :: binary(),
+        page_id :: binary(),
+        result :: any()
+    }).
+
 %% Model value interface for templates
 -record(m, {model, value}).
 

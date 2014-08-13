@@ -600,7 +600,6 @@ trace_final(TracerPid, {{Mod, ModOpts, _X, _Y, _PathTokens, Bindings, _AppRoot, 
 trace_final(_TracerPid, RedirectOrHandled) ->
     RedirectOrHandled.
 
-
 %%%%%%% Adapted version of Webmachine dispatcher %%%%%%%%
 % Main difference is that we want to know which dispatch rule was choosen.
 % We also added check functions and regular expressions to match vars.

@@ -23,21 +23,67 @@ function Pubzub ()
         wildcard_one: '+',
         wildcard_some: '#'
     });
+    this._subs = {};
+    this._subs_relayed = {};
 
     this._will_id = 0;
-    ubf.add_spec("z_mqtt_payload", [
-            "version", "site", "user_id", "encoding", "payload"
+    ubf.add_spec("mqtt_msg", [
+            "retain", "qos", "topic", "dup", "message_id", "payload",
+            "encoder"
         ]);
+    ubf.add_spec("z_mqtt_payload", [
+            "site", "user_id", "payload"
+        ]);
+    ubf.add_spec("z_mqtt_cmd", [
+            "cmd", "topic", "payload", "extra"
+        ]);
+
+    var self = this;
+    z_transport_delegate_register(
+            'mqtt_route',
+            function(mqtt_msg, msg) {
+                self.relayed(mqtt_msg, msg);
+            });
 }
 
 Pubzub.prototype.me = function () {
     return "/page/" + z_pageid;
 };
 
+Pubzub.prototype.subscribe_multi = function (topics, fun) {
+    for(var i=topics.length-1; i >= 0; i--) {
+        this.subscribe(topics[i], fun);
+    }
+};
+
 Pubzub.prototype.subscribe = function (topic, fun) {
-    this._matcher.add(topic, fun);
+    var id = this.unique_id();
+    this._matcher.add(topic, id);
+    this._subs[id] = {fun: fun, topic: topic};
     if (!this.is_local_topic(topic)) {
-        this.transport("subscribe", topic);
+        var ct = this._subs_relayed[topic] || 0;
+        if (ct === 0) {
+            this.transport("subscribe", topic);
+        }
+        this._subs_relayed[topic] = ct + 1;
+    }
+    return id;
+};
+
+Pubzub.prototype.unsubscribe = function (id) {
+    if (this._subs[id]) {
+        var sub = this._subs[id];
+        var topic = sub.topic;
+
+        this._matcher.remove(topic, sub.id);
+        if (!this.is_local_topic(topic)) {
+            var ct = this._subs_relayed[topic] - 1;
+            if (ct === 0) {
+                this.transport("unsubscribe", topic);
+            }
+            this._subs_relayed[topic] = ct;
+        }
+        delete this._subs[id];
     }
 };
 
@@ -45,7 +91,10 @@ Pubzub.prototype.publish = function (topic, message) {
     if (this.is_local_topic(topic)) {
         var subs = this._matcher.match(topic);
         for (var i in subs) {
-            subs[i](topic, message);
+            var id = subs[i];
+            if (this._subs[id]) {
+                this._subs[id].fun(topic, message, id);
+            }
         }
     } else {
         this.transport("publish", topic, message);
@@ -53,45 +102,41 @@ Pubzub.prototype.publish = function (topic, message) {
 };
 
 Pubzub.prototype.lastwill = function (topic, message) {
-    var will_id = this.unique_id();
-    this.transport("lastwill", topic, message, {will_id: will_id});
-    return will_id;
+    this._will_id = this.unique_id();
+    this.transport("lastwill", topic, message, this._will_id);
+};
+
+Pubzub.prototype.remove_lastwill = function () {
+    this.transport("lastwill", undefined, undefined, this._will_id);
+    this._will_id = undefined;
 };
 
 Pubzub.prototype.is_local_topic = function (topic) {
     return topic.substr(0,1) != "/";
 };
 
-Pubzub.prototype.relayed = function (topic, data) {
-    var subs = this._matcher.match(topic);
-    var message = ubf.decode(data);
-    message = this.map_record(message);
+Pubzub.prototype.relayed = function (mqtt_msg, _msg) {
+    var subs = this._matcher.match(mqtt_msg.topic);
     for (var i in subs) {
-        subs[i](topic, message);
-    }
-};
-
-Pubzub.prototype.transport = function (cmd, topic, message, args) {
-    args = args || {};
-    args.topic = topic;
-    args.msg = ubf.encode(message);
-    args.z_delegate = "mod_mqtt";
-    z_notify(cmd, args);
-};
-
-Pubzub.prototype.map_record = function (data) {
-    if (typeof data == 'object') {
-        switch (data._record)
-        {
-            case 'z_mqtt_payload':
-                if (data.encoding.valueOf() == "ubf")
-                    data.payload = ubf.decode(data.payload);
-                break;
-            default:
-                break;
+        var id = subs[i];
+        if (this._subs[id]) {
+            this._subs[id].fun(mqtt_msg.topic, mqtt_msg.payload, id);
         }
     }
-    return data;
+};
+
+Pubzub.prototype.transport = function (cmd, topic, payload, extra) {
+    var msg = {
+        _record: 'z_mqtt_cmd',
+        cmd: cmd,
+        topic: topic,
+        payload: payload,
+        extra: extra
+    };
+    var options = {
+        qos: 1
+    };
+    z_transport('mqtt', 'ubf', msg, options);
 };
 
 Pubzub.prototype.unique_id = function () {

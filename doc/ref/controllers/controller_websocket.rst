@@ -7,6 +7,8 @@ The controller provides persistent WebSocket connections between the
 client and the server. The default implementation is used by :ref:`mod_base`
 when the :ref:`{% stream %} <scomp-stream>` tag is placed on a page. 
 
+See :ref:`manual-transport` for more information about transporting data between the server and the browser.
+
 Defining Custom Websocket Behaviour
 -----------------------------------
 
@@ -26,18 +28,6 @@ websocket handler to the page session.
 It is also possible to configure a custom ``ws_handler`` by specifying it in a dispatch rule.::
 
     {customws, ["socket", "custom"], controller_websocket, [{ws_handler, my_ws_handler}]}
-
-
-WebSocket Handler without Zotonic session
------------------------------------------
-
-By default, ``contorller_websocket`` requires the ``z_pid`` and ``z_sid`` cookies to be sent to the WebSocket request, so that the controller will verify that the calling party has already a running session on the Zotonic instance. It is possible to override this behaviour to not require a session to be present. This is done through the ``require_session`` dispatch option, which defaults to ``true``.
-
-To create a WebSocket controller without the caller needing to have a
-session running, create a dispatch rule like this::
-
-  {customws, ["socket", "without-session"], controller_websocket, [{require_session, false}]}
-  
 
 
 .. highlight:: erlang

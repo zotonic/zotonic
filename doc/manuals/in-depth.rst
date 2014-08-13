@@ -15,6 +15,7 @@ In-depth manuals
    templates/index
    lib-files
    controllers
+   transport
    email
    services
    extensions

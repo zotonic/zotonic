@@ -32,13 +32,28 @@
     pid_observe_module_activate/3,
     pid_observe_mqtt_subscribe/3,
     pid_observe_mqtt_unsubscribe/3,
-    event/2
+    observe_z_mqtt_cmd/2,
+
+    observe_rsc_update_done/2,
+    observe_media_replace_file/2,
+    observe_edge_delete/2,
+    observe_edge_insert/2,
+
+    observe_action_event_type/2
     ]).
 
 -export([
     start_link/1,
     init/1
     ]).
+
+-record(z_mqtt_cmd, {
+        cmd,
+        topic,
+        payload,
+        extra
+    }).
+
 
 -include_lib("zotonic.hrl").
 -include_lib("emqtt/include/emqtt.hrl").
@@ -66,15 +81,65 @@ pid_observe_mqtt_subscribe(MyPid, #mqtt_subscribe{topic=Topic, qos=Qos, mfa=MFA}
 pid_observe_mqtt_unsubscribe(MyPid, #mqtt_unsubscribe{topic=Topic, mfa=MFA}, _Context) ->
     unsubscribe_topic(Topic, MFA, MyPid).
 
-event(#postback_notify{message=Message}, Context) ->
-    handle_event(z_convert:to_binary(Message),
-                 local_topic(z_convert:to_binary(z_context:get_q("topic", Context))),
-                 z_context:get_q("msg", Context),
-                 Context).
+observe_z_mqtt_cmd(#z_mqtt_cmd{topic=Topic} = Cmd, Context) ->
+    Cmd1 = Cmd#z_mqtt_cmd{topic=local_topic(Topic)},
+    handle_cmd(Cmd1, Context).
 
 local_topic(<<"/", Topic/binary>>) -> Topic;
 local_topic(Topic) -> Topic.
 
+
+observe_rsc_update_done(#rsc_update_done{action=Action, post_is_a=IsA, id=Id}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/update/",(z_convert:to_binary(Id))/binary>>, 
+        [
+            {id, Id},
+            {modifier_id, z_acl:user(Context)},
+            {is_a, IsA},
+            {action, Action}
+        ],
+        Context).
+
+observe_media_replace_file(#media_replace_file{id=Id}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/update/",(z_convert:to_binary(Id))/binary>>, 
+        [
+            {id, Id},
+            {modifier_id, z_acl:user(Context)},
+            {action, medium}
+        ],
+        Context).
+
+observe_edge_delete(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/update/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
+        [
+            {id,SubjectId},
+            {modifier_id, z_acl:user(Context)},
+            {action, delete},
+            {predicate, PredName},
+            {object_id, ObjectId}
+        ],
+        Context).
+
+observe_edge_insert(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/update/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
+        [
+            {id,SubjectId},
+            {modifier_id, z_acl:user(Context)},
+            {action, insert},
+            {predicate, PredName},
+            {object_id, ObjectId}
+        ],
+        Context).
+
+
+%% @doc Handle the <tt>{live ...}</tt> event type.
+observe_action_event_type(#action_event_type{event={mqtt, _Args}} = Ev, Context) ->
+    scomp_mqtt_live:event_type_mqtt(Ev, Context);
+observe_action_event_type(_, _Context) ->
+    undefined.
 
 start_link(Args) ->
     supervisor:start_link(?MODULE, Args).
@@ -93,32 +158,26 @@ init(Args) ->
 %% ==========================================================================
 
 
-%% TODO: add access control checks to the topics!!!!
-%% Idea: only admins can subscribe to wildcards
-
-handle_event(<<"lastwill">>, <<>>, _Data, Context) ->
-    WillId = z_context:get_q(<<"will_id">>, Context, ""),
-    del_lastwill(Context#context.page_pid, WillId, Context),
-    Context;
-handle_event(<<"lastwill">>, Topic, Data, Context) ->
+handle_cmd(#z_mqtt_cmd{cmd= <<"lastwill">>, topic=undefined, extra=WillId}, Context) ->
+    del_lastwill(Context#context.page_pid, WillId, Context);
+handle_cmd(#z_mqtt_cmd{cmd= <<"lastwill">>, topic=Topic, payload=Data, extra=WillId}, Context) ->
     Msg = msg_from_event(Topic, Data, Context),
-    WillId = z_context:get_q(<<"will_id">>, Context, ""),
-    add_lastwill(Context#context.page_pid, WillId, Msg, Context),
-    Context;
-handle_event(<<"publish">>, Topic, Data, Context) ->
+    add_lastwill(Context#context.page_pid, WillId, Msg, Context);
+handle_cmd(#z_mqtt_cmd{cmd= <<"publish">>, topic=Topic, payload=Data}, Context) ->
     Msg = msg_from_event(Topic, Data, Context),
-    z_mqtt:publish(Msg, Context),
-    Context;
-handle_event(<<"subscribe">>, Topic, _Data, Context) ->
-    % Subscribe the page process, it will forward any messages
-    z_mqtt:subscribe(Topic, Context#context.page_pid, Context),
-    Context.
+    z_mqtt:publish(Msg, Context);
+handle_cmd(#z_mqtt_cmd{cmd= <<"subscribe">>, topic=Topic}, Context) ->
+    % ?DEBUG({subscribe, Topic, Context#context.page_pid}),
+    z_mqtt:subscribe(Topic, Context#context.page_pid, Context);
+handle_cmd(#z_mqtt_cmd{cmd= <<"unsubscribe">>, topic=Topic}, Context) ->
+    % ?DEBUG({unsubscribe, Topic, Context#context.page_pid}),
+    z_mqtt:unsubscribe(Topic, Context#context.page_pid, Context).
 
 
 msg_from_event(Topic, Data, Context) ->
     #mqtt_msg{
         topic=Topic,
-        payload=z_mqtt:make_postback_payload(Data, Context)
+        payload=z_mqtt:wrap_payload(Data, Context)
     }.
 
 
@@ -156,7 +215,7 @@ add_lastwill(Pid, WillId, Msg, Context) when is_pid(Pid) ->
                 {ok, _} ->
                     ok;
                 {error, {already_started, ChildPid}} ->
-                    z_mqtt_lastwill:add(ChildPid, WillId1, Msg)
+                    z_mqtt_lastwill:add(ChildPid, WillId1, Msg, Context)
             end;
         false ->
             ok
@@ -171,7 +230,7 @@ del_lastwill(Pid, WillId, Context) when is_pid(Pid) ->
                 {ok, _} ->
                     ok;
                 {error, {already_started, ChildPid}} ->
-                    z_mqtt_lastwill:del(ChildPid, WillId1)
+                    z_mqtt_lastwill:del(ChildPid, WillId1, Context)
     end;
 del_lastwill(_Pid, _WillId, _Context) ->
     ok.
@@ -180,7 +239,7 @@ del_lastwill(_Pid, _WillId, _Context) ->
 start_lastwill_proc(Pid, WillId, Msg, Context) ->
     Sub = {
         {lastwill, Pid},
-        {z_mqtt_lastwill, start_link, [{Pid, WillId, Msg, z_context:site(Context)}]},
+        {z_mqtt_lastwill, start_link, [Pid, WillId, Msg, Context]},
         transient, 5000, worker, [z_mqtt_lastwill]
     },
     lager:debug("MQTT lastwill ~p to ~p", [Pid, Msg#mqtt_msg.topic]),
