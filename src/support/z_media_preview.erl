@@ -36,8 +36,8 @@
     calc_size/7
 ]).
 
--define(MAX_WIDTH,  5000).
--define(MAX_HEIGHT, 5000).
+-define(MAX_WIDTH,  10000).
+-define(MAX_HEIGHT, 10000).
 
 % Low and max image size (in total pixels) for quality 99 and 55.
 % A small thumbnail needs less compression to keep image quality.
