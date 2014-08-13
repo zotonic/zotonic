@@ -376,6 +376,19 @@
 -record(scomp_script_render, {is_nostartup=false, args=[]}).
 
 
+%% @doc Render the javascript for a custom action event type.
+%% The custom event type must be a tuple, for example:
+%% <code>{% wire type={live id=myid} action={...} %}</code>
+%% Must return {ok, Javascript, Context}
+-record(action_event_type, {
+            event :: tuple(),
+            trigger_id :: string(),
+            trigger :: string(),
+            postback_js :: iolist(),
+            postback_pickled :: string()|binary(),
+            action_js :: iolist()
+}).
+
 %% @doc Find an import definition for a CSV file by checking the filename of the to be imported file. (first)
 %% Should return the #import_csv_definition or undefined (in which case the column headers are used as property names).
 -record(import_csv_definition, {basename, filename}).
