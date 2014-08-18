@@ -85,7 +85,6 @@
 
 {% block _js_include_extra %}
 	{% lib
-		"js/ubf.js"
 		"js/qlobber.js"
 		"js/pubzub.js"
 
