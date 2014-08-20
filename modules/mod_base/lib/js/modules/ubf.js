@@ -31,6 +31,28 @@ limitations under the License.
     ubf.TUPLE = 3;
     ubf.LIST = 4;
     
+
+    DecodeStack = function(start) {
+        this._stack = start || [];
+        this._markers = [];
+    };
+    DecodeStack.prototype.length = function() {
+        return this._stack.length;
+    };
+    DecodeStack.prototype.push = function(v) {
+        this._stack.push(v);
+    };
+    DecodeStack.prototype.pop = function() {
+        return this._stack.pop();
+    };
+    DecodeStack.prototype.push_offset = function() {
+        this._markers.push(this._stack.length);
+    };
+    DecodeStack.prototype.pop_offset_diff = function() {
+        return this._stack.length - this._markers.pop();
+    };
+
+
     // Make a constant
     function constant(value) {
         var s = new String(value);
@@ -212,10 +234,10 @@ limitations under the License.
     // ubf(a) decoder
     //
     // 
-    ubf.decode = function(bytes, ready_fun, env, stack) {
+    ubf.decode = function(bytes, ready_fun, env, startStack) {
         var j, opcode;
 
-        stack = stack || [];
+        stack = new DecodeStack(startStack);
         env = env || {};
 
         try {
@@ -329,7 +351,7 @@ limitations under the License.
         stack.push(binary);
 
         if(rest[ws_length+1+charct] != "~")
-            throw "missing closing ~";
+            throw "UBF decode: missing closing ~";
 
         return length + ws_length + charct + 2;
     }
@@ -343,7 +365,7 @@ limitations under the License.
     }
 
     function _start_tuple(stack) {
-        stack.push(NaN); // marker for building a tuple
+        stack.push_offset(); // marker for building a tuple
         return 1;
     }
 
@@ -353,17 +375,16 @@ limitations under the License.
         tuple.ubf_type = ubf.TUPLE;
 
         var obj;
-        do {
-            if (stack.length === 0) {
-                console.log("UBF decode error - empty stack for tuple", obj, stack);
-                throw "UBF decode: Empty stack on tuple";
-            }
-            obj = stack.pop();
-            if((typeof(obj) == "number") && isNaN(obj))
-                break;
-            tuple.unshift(obj);
-        } while(true);
+        var ct = stack.pop_offset_diff();
 
+        if (ct < 0) {
+            console.log("UBF decode error - empty stack for tuple", stack);
+            throw "UBF decode: Empty stack on tuple";
+        }
+        while (ct--) {
+            obj = stack.pop();
+            tuple.unshift(obj);
+        }
         if (tuple[0] &&
             tuple[0].ubf_type == ubf.CONSTANT &&
             typeof specs[tuple[0].valueOf()] !== 'undefined')
@@ -413,7 +434,7 @@ limitations under the License.
     }
 
     function _return(stack) {
-        if(stack.length == 1)
+        if(stack.length() == 1)
             return 0;
         throw "The stack should contain one item";
     }
