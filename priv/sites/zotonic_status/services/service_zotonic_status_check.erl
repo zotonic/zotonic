@@ -20,7 +20,7 @@
 -module(service_zotonic_status_check).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--svc_title("Retrieve a full export of an object.").
+-svc_title("Checks if all sites are running.").
 -svc_needauth(false).
 
 -export([process_get/2]).
