@@ -38,6 +38,7 @@ var z_websocket_host;
 var z_default_form_postback = false;
 var z_doing_postback        = false;
 var z_comet_reconnect_timeout = 1000;
+var z_transport_check_timer = undefined;
 var z_transport_queue       = [];
 var z_transport_acks        = [];
 var z_transport_delegates   = {
@@ -491,12 +492,16 @@ function z_transport_check()
 {
     if (z_transport_queue.length > 0)
     {
-        var qmsg = z_transport_queue.shift();
+        if (z_pageid !== '') {
+            var qmsg = z_transport_queue.shift();
 
-        if (z_transport_acks[qmsg.msg_id]) {
-            z_transport_acks[qmsg.msg_id].is_queued = false;
+            if (z_transport_acks[qmsg.msg_id]) {
+                z_transport_acks[qmsg.msg_id].is_queued = false;
+            }
+            z_do_transport(qmsg);
+        } else if (!z_transport_check_timer) {
+            z_transport_check_timer = setTimeout(function() { z_transport_check_timer = undefined; z_transport_check(); }, 50);
         }
-        z_do_transport(qmsg);
     }
 }
 
@@ -999,7 +1004,7 @@ function z_unique_id(no_dom_check)
 {
     do {
         var id = '-z-' + z_unique_id_counter++;
-    } while (!no_dom_check || $('#'+id).length > 0);
+    } while (!no_dom_check && $('#'+id).length > 0);
     return id;
 }
 
