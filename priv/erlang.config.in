@@ -1,5 +1,14 @@
 %% -*- mode: erlang -*-
 [
+
+ {exometer, [{predefined, [
+    {[erlang, memory], {function, erlang, memory, [], value, []}, []},
+    {[erlang, system_info], {function, erlang, system_info, ['$dp'], value, [process_count]}, []},
+    {[erlang, statistics], {function, erlang, statistics, ['$dp'], value, [run_queue]}, []},
+    {[erlang, io], {function, erlang, statistics, [io], match, {{'_', input}, {'_', output}}}, []}
+   ]}
+ ]},
+
  {mnesia, [
     {dir, "priv/mnesia"}
  ]},
