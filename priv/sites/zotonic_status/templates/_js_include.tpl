@@ -3,6 +3,7 @@
 	"bootstrap/js/bootstrap.min.js"
 	"js/apps/zotonic-1.0.js"
 	"js/apps/z.widgetmanager.js"
+        "js/modules/ubf.js"
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/z.inputoverlay.js"
 %}
