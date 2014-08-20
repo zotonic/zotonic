@@ -218,21 +218,27 @@ limitations under the License.
         stack = stack || [];
         env = env || {};
 
-        while(true) {
-            opcode = bytes[0];
-            j = _operation(opcode, bytes, env, stack);
-            if(j === 0) {
-                if(ready_fun) {
-                    data = stack.pop();
-                    ready_fun(data);
-                    bytes = bytes.slice(1);
-                    if(bytes.length === 0)
-                        return data;
-                } else {
-                    return stack.pop();
+        try {
+            while(true) {
+                opcode = bytes[0];
+                j = _operation(opcode, bytes, env, stack);
+                if(j === 0) {
+                    if(ready_fun) {
+                        data = stack.pop();
+                        ready_fun(data);
+                        bytes = bytes.slice(1);
+                        if(bytes.length === 0)
+                            return data;
+                    } else {
+                        return stack.pop();
+                    }
                 }
+                bytes = bytes.slice(j);
             }
-            bytes = bytes.slice(j);
+        }
+        catch(err) {
+            console.log(err, stack, bytes);
+            throw err;
         }
     };
 
@@ -348,6 +354,10 @@ limitations under the License.
 
         var obj;
         do {
+            if (stack.length === 0) {
+                console.log("UBF decode error - empty stack for tuple", obj, stack);
+                throw "UBF decode: Empty stack on tuple";
+            }
             obj = stack.pop();
             if((typeof(obj) == "number") && isNaN(obj))
                 break;
