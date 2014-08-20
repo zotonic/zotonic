@@ -5,21 +5,21 @@
 image
 =====
 
-Show a still image using a ``<img/>`` element.
+Show a still image using a ``<img />`` element.
 
 The ``{% image %}`` tag is used to generate an HTML ``<img />`` element for a media resource. The image will be automatically resized to the desired size and filters.  See also the ``{% media %}`` tag for handling video.
 
 For example::
 
-   {% image "koe.jpg" width=200 height=200 crop %}
+   {% image "cow.jpg" width=200 height=200 crop %}
 
-This will generate an image tag for the image “koe.jpg” (in the files/archive directory) of 200x200 pixels. The image will be resized and cropped to the requested size.  The image tag will be something like (the checksum will vary per :term:`sign key`)::
+This will generate an image tag for the image “cow.jpg” (in the files/archive directory) of 200x200 pixels. The image will be resized and cropped to the requested size.  The image tag will be something like (the checksum will vary per :term:`sign key`)::
 
-   <img src="/image/koe.jpg%28200x200%29%28crop%29%28981E1AD8DA60381D00C094F0EE1311F5%29.jpg" width="200" height="200" />
+   <img src="/image/cow.jpg%28200x200%29%28crop%29%28981E1AD8DA60381D00C094F0EE1311F5%29.jpg" width="200" height="200" />
 
 The file argument can be one of the following:
 
-* filename relative to the archive folder (“koe.jpg” is always present)
+* filename relative to the archive folder (“cow.jpg” is always present)
 
 * resource id of a resource with attached file (mostly of the category “media”)
 
@@ -40,6 +40,9 @@ The following arguments/filters can be specified:
 |background          |The background color for transparent image parts. See       |background="white"  |
 |                    |ImageMagick colors for how to specify the RGB color.        |                    |
 +--------------------+------------------------------------------------------------+--------------------+
+|removebg            |Removes the image background. Accepts an optional fuzziness |removebg            |
+|                    |parameter (range 0..100).                                   |removebg=50         |
++--------------------+------------------------------------------------------------+--------------------+
 |blur                |Blur the image, making it less sharp. See ImageMagick blur  |blur="20x8"         |
 |                    |for valid argument values.                                  |                    |
 +--------------------+------------------------------------------------------------+--------------------+
@@ -47,7 +50,7 @@ The following arguments/filters can be specified:
 |                    |specified in the `width` and `height` arguments. Which part |                    |
 |                    |of the image will be cropped depends on the value of the    |crop="south"        |
 |                    |crop argument.                                              |                    |
-|                    |                                                            |crop = "+100+100"   |
+|                    |                                                            |crop="+100+100"     |
 |                    |When no argument is given to crop, it defaults to the center|                    |
 |                    |point of the image, unless there is a cropping center point |                    |
 |                    |defined in the media item. Other options are: `north`,      |                    |
@@ -61,9 +64,13 @@ The following arguments/filters can be specified:
 |                    |(unscaled), and is relative to the top left of the image, so|                    |
 |                    |``crop="+0+0"`` is the same as saying ``crop="north_east"``.|                    |
 +--------------------+------------------------------------------------------------+--------------------+
-|extent              |Resize the image so that it fits inside the width/height    |extent              |
-|                    |box.  Then extent the image with a white background so that |                    |
-|                    |it is centered and exactly the size of the box.             |                    |
+|extent              |Make the image fit the requested dimensions by adding       |extent              |
+|                    |whitespace using this procedure: Resize the image so that it|                    |
+|                    |fits inside the width/height box; then extent the image with|                    |
+|                    |a white background so that it is centered and exactly the   |                    |
+|                    |size of the box.                                            |                    |
++--------------------+------------------------------------------------------------+--------------------+
+|upscale             |Forces the image to scale up to the requested dimensions.   |upscale             |
 +--------------------+------------------------------------------------------------+--------------------+
 |flip                |Flip the image. Left and right will be mirrored.            |flip                |
 +--------------------+------------------------------------------------------------+--------------------+
