@@ -88,5 +88,11 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
 		{modifier_id, z_acl:user(Context)}
 		| Props 
 	],
-	z_db:insert(rsc_gone, Props1, Context).
+	case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Context) of
+		1 ->
+			lager:error(z_context:lager_md(Context), "Second rsc_gone entry for id ~p", [Id]), 
+			z_db:update(rsc_gone, Id, Props1, Context);
+		0 ->
+			z_db:insert(rsc_gone, Props1, Context)
+	end.
 
