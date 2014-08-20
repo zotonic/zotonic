@@ -26,9 +26,7 @@
             mod_base,
             mod_bootstrap,
             mod_zotonic_status_vcs,
-            mod_zotonic_tracer,
-
-            mod_freeboard
+            mod_zotonic_tracer
            ]},
 
  %% Default config keys
