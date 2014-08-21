@@ -138,7 +138,11 @@ data_encode(Data) ->
 
 %% @doc Handle incoming messages, originates from various sources, like postback, websocket etc
 -spec incoming(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> {ok, list(), #context{}}.
-incoming(L, Context) when is_list(L) ->
+incoming(Msg, Context) ->
+    {ok, Rs, Context1} = incoming_msgs(Msg, Context),
+    {ok, maybe_session_status_msg(Rs, Context1), Context1}.
+
+incoming_msgs(L, Context) when is_list(L) ->
     lists:foldl(
         fun(Msg, {ok, Msgs, Ctx}) ->
             {ok, Msgs1, Ctx1} = incoming(Msg, Ctx),
@@ -146,7 +150,7 @@ incoming(L, Context) when is_list(L) ->
         end,
         {ok, [], Context},
         L);
-incoming(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_class=UA, content_type=CT} = Msg, Context) ->
+incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_class=UA, content_type=CT} = Msg, Context) ->
     Context1 = maybe_set_sessions(SessionId, PageId, Context),
     Context2 = maybe_set_uaclass(UA, Context1),
     try
@@ -163,7 +167,7 @@ incoming(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_class=UA,
                         [Reason, Msg, erlang:get_stacktrace()]),
             {ok, maybe_ack({error, error}, Msg, Context2), Context2}
     end;
-incoming(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
+incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
     Context1 = maybe_set_sessions(SessionId, PageId, Context),
     case Ack#z_msg_ack.push_queue of
         page -> z_session_page:receive_ack(Ack, Context);
@@ -178,6 +182,10 @@ incoming(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
 
 incoming_1(#z_msg_v1{delegate='$ping'} = Msg, Context) ->
     {ok, maybe_ack(pong, Msg, Context), Context};
+incoming_1(#z_msg_v1{delegate= <<"$ping">>} = Msg, Context) ->
+    {ok, maybe_ack(pong, Msg, Context), Context};
+incoming_1(#z_msg_v1{delegate=session, data= <<"check">>}, Context) ->
+    {ok, session_status_message(Context), Context};
 incoming_1(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Pb#postback_event.postback, Context),
     TriggerId1 = case TriggerId of
@@ -262,8 +270,8 @@ maybe_set_session(SessionId, Context) ->
     {ok, Context1} = z_session_manager:start_session(optional, SessionId, Context),
     Context1.
 
-maybe_set_page_session(_PageId, #context{session_pid=undefined} = Context) ->
-    lager:error("PageId without page session"),
+maybe_set_page_session(_PageId, #context{session_pid=undefined, session_id=SessionId} = Context) ->
+    lager:error("PageId without page session (session_id ~p)", [SessionId]),
     Context;
 maybe_set_page_session(undefined, Context) ->
     Context;
@@ -293,6 +301,22 @@ maybe_set_q(_Type, {q, Qs}, Context) ->
     set_q(Qs, Context);
 maybe_set_q(_Type, _Data, Context) ->
     Context.
+
+
+maybe_session_status_msg(Result, #context{session_pid=SessionPid, page_pid=PagePid}) when is_pid(SessionPid), is_pid(PagePid) ->
+    Result;
+maybe_session_status_msg(Result, #context{session_pid=SessionPid}) when not is_pid(SessionPid) ->
+    [msg(undefined, session, <<"session_invalid">>, []) | mklist(Result)];
+maybe_session_status_msg(Result, #context{page_pid=PagePid}) when not is_pid(PagePid) ->
+    [msg(undefined, session, <<"page_invalid">>, []) | mklist(Result)].
+
+session_status_message(Context) ->
+    case {is_pid(Context#context.session_pid), is_pid(Context#context.page_pid)}
+    of
+        {false,_} -> msg(undefined, session, <<"session_invalid">>, []);
+        {_,false} -> msg(undefined, session, <<"page_invalid">>, []);
+        {true, true} -> msg(undefined, session, <<"ok">>, [])
+    end.
 
 %% For MochiWeb we need to convert to strings
 set_q(Qs, Context) ->
@@ -329,6 +353,8 @@ maybe_ack(Result, #z_msg_v1{qos=N, msg_id=MsgId}, Context) when N > 0; Result =/
 maybe_ack(_Result, #z_msg_v1{}, _Context) ->
     [].
 
+mklist(L) when is_list(L) -> L;
+mklist(V) -> [V].
 
 now_msec() ->
     {A,B,C} = os:timestamp(),

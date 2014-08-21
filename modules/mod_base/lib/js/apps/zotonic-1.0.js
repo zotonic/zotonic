@@ -27,6 +27,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 var z_language              = "en";
 var z_ua                    = "desktop";
 var z_pageid                = '';
+var z_session_valid;
 var z_editor;
 
 // Transport to/from server
@@ -38,11 +39,12 @@ var z_websocket_host;
 var z_default_form_postback = false;
 var z_doing_postback        = false;
 var z_comet_reconnect_timeout = 1000;
-var z_transport_check_timer = undefined;
+var z_transport_check_timer;
 var z_transport_queue       = [];
 var z_transport_acks        = [];
 var z_transport_delegates   = {
-    javascript: function (data, _msg) { eval(data); }
+    javascript: function (data, _msg) { eval(data); },
+    session: function (data, msg) { z_transport_session_status(data, msg); }
 };
 
 var TRANSPORT_TIMEOUT       = 30000;
@@ -84,6 +86,7 @@ function z_set_page_id( page_id )
         if (typeof pubzub == "object") {
             setTimeout(function() { pubzub.publish("pageinit", page_id); }, 10);
         }
+        z_transport('session', 'ubf', 'check');
     }
 }
 
@@ -214,6 +217,36 @@ function z_transport_delegate_register(name, func)
     z_transport_delegates[name] = func;
 }
 
+// Called for 'session' transport delegates, handles the session status
+function z_transport_session_status(data, msg)
+{
+    switch (data)
+    {
+        case 'session_invalid':
+        case 'page_invalid':
+            if (z_session_valid !== false) {
+                z_dialog_confirm({
+                    title: z_translate("Reload"),
+                    text: "<p>" +
+                        z_translate("Your session has expired or is invalid. Reload the page to continue.") +
+                        "</p>",
+                    ok: z_translate("Reload"),
+                    on_confirm: function() { z_reload(); }
+                });
+            }
+            z_session_valid = false;
+            z_pageid = '';
+            break;
+        case 'ok':
+            z_session_valid = true;
+            break;
+        default:
+            console.log("Transport, unknown session status ", data);
+            break;
+    }
+}
+
+
 // Queue any data to be transported to the server
 function z_transport(delegate, content_type, data, options)
 {
@@ -276,7 +309,6 @@ function z_transport_content_type(content_type)
         case 'form':       return ubf.constant('form');
         case 'javascript': return ubf.constant('javascript');
         case 'text':       return ubf.constant('text');
-        case '$ping':      return ubf.constant('$ping');
         default: return content_type;
     }
 }
@@ -289,6 +321,8 @@ function z_transport_delegate(delegate)
         case 'mqtt':     return ubf.constant('mqtt');
         case 'notify':   return ubf.constant('notify');
         case 'postback': return ubf.constant('postback');
+        case 'session':  return ubf.constant('session');
+        case '$ping':    return ubf.constant('$ping');
         default: return delegate;
     }
 }
@@ -508,7 +542,7 @@ function z_transport_check()
 function z_do_transport(qmsg)
 {
     var data = ubf.encode(qmsg.msg);
-    if (z_websocket_is_connected() && !qmsg.options.is_expect_cookie)
+    if (z_websocket_is_connected() && !qmsg.options.is_expect_cookie && z_pageid)
     {
         z_ws.send(data);
     }
@@ -739,12 +773,19 @@ function z_tinymce_remove($element)
 
 function z_stream_start(host, websocket_host)
 {
-    z_stream_host = host;
-    z_websocket_host = websocket_host || window.location.host;
-    setTimeout(function() { z_comet_start(); }, 1000);
-    if ("WebSocket" in window)
+    if (z_session_valid)
     {
-        setTimeout(function() { z_websocket_start(); }, 200);
+        z_stream_host = host;
+        z_websocket_host = websocket_host || window.location.host;
+        setTimeout(function() { z_comet_start(); }, 1000);
+        if ("WebSocket" in window)
+        {
+            setTimeout(function() { z_websocket_start(); }, 200);
+        }
+    }
+    else
+    {
+        setTimeout(function() { z_stream_start(host, websocket_host); }, 5000);
     }
 }
 
@@ -770,7 +811,7 @@ function z_comet_start()
 
 function z_comet_poll_ajax()
 {
-    if (z_ws_pong_count === 0)
+    if (z_ws_pong_count === 0 && z_session_valid)
     {
         $.ajax({
             url: window.location.protocol + '//' + window.location.host + '/comet',
@@ -789,14 +830,10 @@ function z_comet_poll_ajax()
 
                     /* Reload the page on forbidden/auth responses. */
                     401: function() {
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 10000);
+                            z_transport_session_status("session_invalid");
                          },
                     403: function() {
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 10000);
+                            z_transport_session_status("session_invalid");
                          }
                 },
             error: function(xmlHttpRequest, textStatus, errorThrown) {
@@ -927,6 +964,7 @@ function z_websocket_restart()
         z_ws_pong_count = 0;
         z_websocket_start();
     }
+    z_transport('$ping');
 }
 
 function z_stream_args(stream_type)
