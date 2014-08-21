@@ -23,7 +23,7 @@
 ]).
 
 date(Date, Format, true, Context) ->
-    date(Date, Format, z_context:set_tz(<<>>,Context));
+    date(Date, Format, z_context:set_tz(<<"UTC">>,Context));
 date(Date, Format, false, Context) ->
     date(Date, Format, Context);
 date(Date, Format, undefined, Context) ->

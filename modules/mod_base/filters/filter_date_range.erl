@@ -23,7 +23,7 @@
 ]).
 
 date_range(Dates, Format, true, Context) ->
-    date_range(Dates, Format, z_context:set_tz(<<>>,Context));
+    date_range(Dates, Format, z_context:set_tz(<<"UTC">>,Context));
 date_range(Dates, Format, false, Context) ->
     date_range(Dates, Format, Context);
 date_range(Dates, Format, undefined, Context) ->
