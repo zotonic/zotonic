@@ -104,12 +104,12 @@ url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
 %% @spec hostname(Context) -> iolist()
 %% @doc Fetch the preferred hostname for this site
 hostname(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'hostname').
+    gen_server:call(Dispatcher, 'hostname', infinity).
 
 %% @spec hostname_port(Context) -> iolist()
 %% @doc Fetch the preferred hostname, including port, for this site
 hostname_port(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'hostname_port').
+    gen_server:call(Dispatcher, 'hostname_port', infinity).
 
 %% @doc Make the url an absolute url
 abs_url(Url, Context) ->
