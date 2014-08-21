@@ -74,6 +74,8 @@ user(Delegate, Data, Options, Context) ->
     transport(Msg, Context).
 
 %% @doc Fill a transport message, for sending with the transport functions.
+msg(Queue, javascript, Data, Options) when not is_binary(Data) ->
+    msg(Queue, javascript, z_convert:to_binary(Data), Options);
 msg(Queue, Delegate, Data, Options) ->
     #z_msg_v1{
         qos=proplists:get_value(qos, Options, 0),
