@@ -30,10 +30,12 @@
     archive_file/3,
     archive_copy/2,
     archive_copy/3,
+    archive_copy/4,
     archive_copy_opt/2,
     archive_copy_opt/3,
     archive_delete/2,
     archive_filename/2,
+    preview_filename/2,
     rel_archive/2,
     safe_filename/1
 ]).
@@ -92,12 +94,22 @@ archive_copy(Filename, Context) ->
     archive_copy(Filename, filename:basename(Filename), Context).
 
 archive_copy(Filename, NewBasename, Context) ->
-    Fileabs = filename:absname(Filename),
+    archive_copy(archive, Filename, NewBasename, Context).
+
+archive_copy(archive, Filename, NewBasename, Context) ->
     NewFile = archive_filename(NewBasename, Context),
+    archive_copy_1(Filename, NewFile, Context);
+archive_copy(preview, Filename, NewBasename, Context) ->
+    NewFile = preview_filename(NewBasename, Context),
+    archive_copy_1(Filename, NewFile, Context).
+
+archive_copy_1(Filename, NewFile, Context) ->
+    Fileabs = filename:absname(Filename),
     AbsPath = abspath(NewFile, Context),
     ok = filelib:ensure_dir(AbsPath),
     {ok, _Bytes} = file:copy(Fileabs, AbsPath),
     NewFile.
+
 
 %% @doc Optionally archive a copy of a file in the archive directory (when it is not archived yet)
 %% @spec archive_copy_opt(Filename, Context) -> ArchivedFilename
@@ -129,6 +141,16 @@ archive_filename(Filename, Context) ->
     Rootname = filename:rootname(filename:basename(Filename)),
     Extension = filename:extension(Filename),
     RelRoot = filename:join([integer_to_list(Y),integer_to_list(M),integer_to_list(D),safe_filename(Rootname)]),
+    make_unique(RelRoot, z_convert:to_list(Extension), Context).
+
+preview_filename(Filename, Context) ->
+    Rootname = filename:rootname(filename:basename(Filename)),
+    Extension = filename:extension(Filename),
+    RelRoot = filename:join([
+                    "preview", 
+                    z_ids:identifier(2),
+                    z_ids:identifier(2),
+                    safe_filename(Rootname)]),
     make_unique(RelRoot, z_convert:to_list(Extension), Context).
 
 

@@ -166,31 +166,39 @@ get_by_filename(Filename, Context) ->
 %% they are missing then the attached medium record itself is returned.  We must be able to generate a preview
 %% from the medium.
 %% @spec depiction(RscId, Context) -> PropList | undefined
-depiction(Id, Context) when is_integer(Id) ->
-    F = fun() ->
-        find_previewable(m_edge:objects(Id, depiction, Context) ++ [Id], Context)
-    end,
+depiction(Id, Context) ->
     try
-        z_depcache:memo(F, {depiction, Id}, ?WEEK, [Id], Context)
+        z_depcache:memo(
+            fun() -> depiction([Id], [], Context) end,
+            {depiction, Id}, 
+            ?WEEK, [Id], Context)
     catch
         exit:{timeout, _} ->
             undefined
     end.
 
-    %% @doc Find the first image in the the list of depictions that can be used to generate a preview.
-    find_previewable([], _Context) ->
-        undefined;
-    find_previewable([Id|Rest], Context) ->
-        case get(Id, Context) of
-            undefined ->
-                find_previewable(Rest, Context);
-            Props ->
-                case z_media_preview:can_generate_preview(proplists:get_value(mime, Props)) of
-                    true -> Props;
-                    false -> find_previewable(Rest, Context)
-                end
-        end.
-    
+depiction([], _Visited, _Context) ->
+    undefined;
+depiction([Id|Ids], Visited, Context) ->
+    case lists:member(Id, Visited) of
+        true ->
+            undefined;
+        false ->
+            Depictions = m_edge:objects(Id, depiction, Context) ++ [Id],
+            case depiction(Depictions, [Id|Visited], Context) of
+                undefined ->
+                    case get(Id, Context) of
+                        undefined ->
+                            depiction(Ids, [Id|Visited], Context);
+                        Props when is_list(Props) ->
+                            Props
+                    end;
+                Props when is_list(Props) ->
+                    Props
+            end
+    end.
+
+
 
 %% @doc Return the list of resources that is depicted by the medium (excluding the rsc itself)
 %% @spec depicts(RscId, Context) -> [Id]
@@ -259,7 +267,7 @@ maybe_duplicate_file(Ms, Context) ->
                 false ->
                     {ok, Ms};
                 true ->
-                    {ok, NewFile} = duplicate_file(Filename, Context),
+                    {ok, NewFile} = duplicate_file(archive, Filename, Context),
                     RootName = filename:rootname(filename:basename(NewFile)),
                     Ms1 = proplists:delete(filename, 
                             proplists:delete(rootname, 
@@ -285,25 +293,33 @@ maybe_duplicate_preview(Ms, Context) ->
                 false ->
                     {ok, Ms};
                 true ->
-                    {ok, NewFile} = duplicate_file(Filename, Context),
-                    Ms1 = proplists:delete(preview_filename, 
-                            proplists:delete(is_deletable_preview, Ms)), 
-                    Ms2 = [
-                        {preview_filename, NewFile}, 
-                        {is_deletable_preview, true}
-                        | Ms1
-                    ],
-                    {ok, Ms2}
+                    case duplicate_file(preview, Filename, Context) of
+                        {ok, NewFile} ->
+                            Ms1 = proplists:delete(preview_filename, 
+                                    proplists:delete(is_deletable_preview, Ms)), 
+                            Ms2 = [
+                                {preview_filename, NewFile}, 
+                                {is_deletable_preview, true}
+                                | Ms1
+                            ],
+                            {ok, ?DEBUG(Ms2)};
+                        {error, _} = Error ->
+                            lager:error(z_context:lager_md(Context),
+                                        "Duplicate preview: error ~p for preview file ~p",
+                                        [Error, Filename]),
+                            Ms1 = proplists:delete(preview_filename, 
+                                    proplists:delete(is_deletable_preview, Ms)),
+                            {ok, Ms1}
+                    end
             end
     end.
 
 
-duplicate_file(Filename, Context) ->
+duplicate_file(Type, Filename, Context) ->
     case z_file_request:lookup_file(Filename, Context) of
         {ok, FileInfo} ->
             {ok, File} = z_file_request:content_file(FileInfo, Context),
-            ArchiveFile = z_media_archive:archive_copy(File, filename:basename(Filename), Context),
-            {ok, ArchiveFile};
+            {ok, z_media_archive:archive_copy(Type, File, filename:basename(Filename), Context)};
         {error, _} = Error ->
             Error
     end.

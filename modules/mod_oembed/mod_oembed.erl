@@ -165,21 +165,12 @@ is_ssl(Context) ->
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
+observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
     case proplists:get_value(mime, Props) of
         ?OEMBED_MIME ->
-            case m_rsc:p(Id, depiction, Context) of
-                undefined ->
-                    case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-                        [] ->
-                            {ok, "lib/images/embed.jpg"};
-                        PreviewFile -> {ok, PreviewFile}
-                    end;
-                DepictionProps ->
-                    case z_convert:to_list(proplists:get_value(filename, DepictionProps)) of
-                        [] -> undefined;
-                        Filename -> {ok, Filename}
-                    end
+            case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
+                [] -> {ok, "lib/images/embed.jpg"};
+                PreviewFile -> {ok, PreviewFile}
             end;
         _ ->
             undefined

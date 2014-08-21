@@ -97,56 +97,35 @@ viewer(Filename, Options, Context) ->
 %%   MediaReference = Filename | RscId | MediaPropList
 %% @doc Generate a HTML image tag for the image with the filename and options. The medium _must_ be in
 %% a format for which we can generate a preview.  Note that this will never generate video or audio.
-tag(What, Options, Context) ->
-    tag(What, Options, Context, []).
-
-tag(undefined, _Options, _Context, _Visited) ->
+tag(undefined, _Options, _Context) ->
     {ok, []};
-tag([], _Options, _Context, _Visited) ->
+tag([], _Options, _Context) ->
     {ok, []};
-tag(#rsc_list{list=[]}, _Options, _Context, _Visited) ->
+tag(#rsc_list{list=[]}, _Options, _Context) ->
     {ok, []};
-tag(#rsc_list{list=[Id|_]}, Options, Context, Visited) ->
-    tag(Id, Options, Context, Visited);
-tag(Name, Options, Context, Visited) when is_atom(Name) ->
+tag(#rsc_list{list=[Id|_]}, Options, Context) ->
+    tag(Id, Options, Context);
+tag(Name, Options, Context) when is_atom(Name) ->
     case m_rsc:name_to_id(Name, Context) of
-        {ok, Id} -> tag(Id, Options, Context, Visited);
+        {ok, Id} -> tag(Id, Options, Context);
         _ -> {ok, []}
     end;
-tag(Id, Options0, Context, Visited) when is_integer(Id) ->
-    Options = opt_crop_center(Id, Options0, Context),
-    case m_media:get(Id, Context) of
-        Props when is_list(Props) ->
-            case mediaprops_filename(Id, Props, Context) of
-                [] -> {ok, []};
-                Filename -> tag1(Props, Filename, Options, Context)
-            end;
-        undefined ->
-            NewId = case z_notifier:first(#media_stillimage{id=Id, props=[]}, Context) of
-                        {ok, N} -> N;
-                        _ ->
-                            %% Use the first depiction edge
-                            m_edge:object(Id, depiction, 1, Context)
-                    end,
-            case NewId of
-                undefined -> {ok, []};
-                _ -> case lists:member(NewId, Visited) of
-                         true -> {ok, []}; %% cycle detected
-                         false -> tag(NewId, Options, Context, [NewId|Visited]) %% recurse
-                     end
-            end
-    end;
-tag([{_Prop, _Value}|_] = Props, Options, Context, _Visited) ->
+tag(Id, Options, Context) when is_integer(Id) ->
+    tag(m_media:depiction(Id, Context), Options, Context);
+tag([{_Prop, _Value}|_] = Props, Options, Context) ->
     case mediaprops_filename(proplists:get_value(id, Props), Props, Context) of
-        [] -> {ok, []};
-        Filename -> tag1(Props, Filename, Options, Context)
+        None when None =:= []; None =:= <<>>; None =:= undefined ->
+            {ok, []};
+        Filename -> 
+            Options1 = opt_crop_center(proplists:get_value(id, Props), Options, Context),
+            tag1(Props, Filename, Options1, Context)
     end;
-tag(Filename, Options, Context, _Visited) when is_binary(Filename) ->
+tag(Filename, Options, Context) when is_binary(Filename) ->
     tag(binary_to_list(Filename), Options, Context);
-tag(Filename, Options, Context, _Visited) when is_list(Filename) ->
+tag(Filename, Options, Context) when is_list(Filename) ->
     FilePath = filename_to_filepath(Filename, Context),
     tag1(FilePath, Filename, Options, Context);
-tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
+tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context).
 
 
@@ -178,7 +157,7 @@ tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
                     end,
         % Filter some opts
         case proplists:get_value(link, TagOpts) of
-            Empty when Empty == undefined; Empty == []; Empty == <<>> ->
+            None when None =:= []; None =:= <<>>; None =:= undefined ->
                 {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts2]))};
             Link ->
                 HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
@@ -189,7 +168,7 @@ tag({filepath, Filename, FilePath}, Options, Context, _Visited) ->
 get_link(Media, true, Context) ->
     Id = media_id(Media),
     case m_rsc:p(Id, website, Context) of
-        Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
+        None when None =:= []; None =:= <<>>; None =:= undefined ->
             m_rsc:p(Id, page_url, Context);
         Website ->
             Website
@@ -228,29 +207,21 @@ filename_to_urlpath(Filename) ->
 %% @doc Generate the url for the image with the filename and options
 url(undefined, _Options, _Context) ->
     {error, enoent};
-url(Id, Options0, Context) when is_integer(Id) ->
-    Options = opt_crop_center(Id, Options0, Context),
-    case m_media:get(Id, Context) of
-        Props when is_list(Props) ->
-            url(Props, Options, Context);
-        undefined ->
-            case z_notifier:first({media_stillimage, Id, []}, Context) of
-                {ok, Filename} ->
-                    {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
-                    {ok, Url};
-                _ ->
-                    {ok, <<>>}
-            end
+url(Name, Options, Context) when is_atom(Name) ->
+    case m_rsc:name_to_id(Name, Context) of
+        {ok, Id} -> url(Id, Options, Context);
+        _ -> {ok, []}
     end;
+url(Id, Options, Context) when is_integer(Id) ->
+    url(m_media:depiction(Id, Context), Options, Context);
 url([{_Prop, _Value}|_] = Props, Options, Context) ->
     Id = proplists:get_value(id, Props),
     case mediaprops_filename(Id, Props, Context) of
-        [] ->
-            {ok, []};
-        <<>> ->
+        None when None =:= []; None =:= <<>>; None =:= undefined ->
             {ok, []};
         Filename ->
-            {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
+            Options1 = opt_crop_center(Id, Options, Context),
+            {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options1, Context),
             {ok, Url}
     end;
 url(Filename, Options, Context) ->

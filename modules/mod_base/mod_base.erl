@@ -39,35 +39,40 @@
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
 observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
-    case proplists:get_value(mime, Props) of
-        undefined -> undefined;
-        [] -> undefined;
-        Mime ->
-            case z_media_preview:can_generate_preview(Mime) of
-                true ->
-                    %% Let media preview handle this.
-                    undefined;
-                false ->
-                    %% Serve an icon representing the mime type.
-                    [A,B] = string:tokens(z_convert:to_list(Mime), "/"),
-                    Files = [
-                        "images/mimeicons/"++A++[$-|B]++".png",
-                        "images/mimeicons/"++A++".png",
-                        "images/mimeicons/application-octet-stream.png"
-                    ],
+    case proplists:get_value(preview_filename, Props) of
+        None when None =:= <<>>; None =:= undefined ->
+            case proplists:get_value(mime, Props) of
+                undefined -> undefined;
+                [] -> undefined;
+                Mime ->
+                    case z_media_preview:can_generate_preview(Mime) of
+                        true ->
+                            %% Let media preview handle this.
+                            undefined;
+                        false ->
+                            %% Serve an icon representing the mime type.
+                            [A,B] = string:tokens(z_convert:to_list(Mime), "/"),
+                            Files = [
+                                "images/mimeicons/"++A++[$-|B]++".png",
+                                "images/mimeicons/"++A++".png",
+                                "images/mimeicons/application-octet-stream.png"
+                            ],
 
-                    lists:foldl(
-                        fun(F, undefined) ->
-                                case z_module_indexer:find(lib, F, Context) of
-                                    {ok, #module_index{filepath=_File}} -> {ok, "lib/"++F};
-                                    {error, enoent} -> undefined
-                                end;
-                           (_F, Result) ->
-                               Result
-                        end,
-                        undefined,
-                        Files)
-            end
+                            lists:foldl(
+                                fun(F, undefined) ->
+                                        case z_module_indexer:find(lib, F, Context) of
+                                            {ok, #module_index{filepath=_File}} -> {ok, "lib/"++F};
+                                            {error, enoent} -> undefined
+                                        end;
+                                   (_F, Result) ->
+                                       Result
+                                end,
+                                undefined,
+                                Files)
+                    end
+            end;
+        PreviewFilename ->
+            {ok, z_convert:to_list(PreviewFilename)}
     end.
 
 
