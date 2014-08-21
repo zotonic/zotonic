@@ -96,12 +96,12 @@ url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
 %% @spec hostname(Context) -> iolist()
 %% @doc Fetch the preferred hostname for this site
 hostname(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'hostname').
+    gen_server:call(Dispatcher, 'hostname', infinity).
 
 %% @spec hostname_port(Context) -> iolist()
 %% @doc Fetch the preferred hostname, including port, for this site
 hostname_port(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'hostname_port').
+    gen_server:call(Dispatcher, 'hostname_port', infinity).
 
 %% @doc Make the url an absolute url
 abs_url(Url, Context) ->
@@ -110,19 +110,19 @@ abs_url(Url, Context) ->
 %% @spec dispatchinfo(Context) -> {host, hostname, streamhost, smtphost, hostaliases, redirect, dispatchlist}
 %% @doc Fetch the dispatchlist for the site.
 dispatchinfo(#context{dispatcher=Dispatcher}) -> 
-    gen_server:call(Dispatcher, 'dispatchinfo');
+    gen_server:call(Dispatcher, 'dispatchinfo', infinity);
 dispatchinfo(Server) when is_pid(Server) orelse is_atom(Server) -> 
-    gen_server:call(Server, 'dispatchinfo').
+    gen_server:call(Server, 'dispatchinfo', infinity).
 
 
 %% @doc Update the dispatch list but don't reload it yet. Used when flushing all sites, see z:flush/0
 update(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'reload').
+    gen_server:call(Dispatcher, 'reload', infinity).
 
 
 %% @doc Reload all dispatch lists.  Finds new dispatch lists and adds them to the dispatcher
 reload(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'reload'),
+    gen_server:call(Dispatcher, 'reload', infinity),
     z_sites_dispatcher:update_dispatchinfo().
 
 reload(module_ready, Context) ->
