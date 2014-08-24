@@ -17,4 +17,4 @@ For example::
 
 When the value is ``undefined``, the output “The value is true or undefined”.
 
-.. seealso:: :ref:`filter-is_defined`, :ref:`filter-is_undefined`
+.. seealso:: :ref:`filter-is_defined`, :ref:`filter-is_undefined`, :ref:`filter-if`
