@@ -12,4 +12,6 @@ expressed as follows::
 
   {% if value %}yes{% else %}no{% endif %}
 
-.. seealso:: :ref:`tag-if`
+Note that falsy values (0, ``false``, ``undefined`` or empty string) evaluate to false.
+
+.. seealso:: :ref:`tag-if`, :ref:`filter-if_undefined`

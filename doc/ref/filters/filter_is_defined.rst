@@ -12,4 +12,4 @@ For example::
 
 When the value is “foo” then the output “The value was defined”.
 
-.. seealso:: :ref:`filter-is_undefined`
+.. seealso:: :ref:`filter-is_undefined`, :ref:`filter-if_undefined`, :ref:`filter-if`
