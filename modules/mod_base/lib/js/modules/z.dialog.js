@@ -28,7 +28,9 @@
              // center the dialog vertically again
              dialogReposition: function() {
                  var dialog = $("#zmodal");
-                 dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
+                 if ($(window).width() >= 768) {
+                     dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
+                 }
              },
 
              dialogAdd: function(options)
@@ -58,7 +60,9 @@
                      .append(body)
                      .appendTo($("body"));
 
-                 dialog.modal({backdrop: true});
+                 dialog
+                    .modal({backdrop: true})
+                    .css({"overflow-x": "hidden", "overflow-y": "scroll"});
 
                  if (width > 0) {
                      dialog.css({
@@ -69,12 +73,12 @@
                      });
                  }
                  
-                 if ($(window).width() <= 480) {
-                    dialog.css({top: ($(window).scrollTop() + 10) + "px"});
-                 } else if (dialog.height() > 0.8 * $(window).height()) {
-                    dialog.addClass('high');
-                 } else {
-                     dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
+                 if ($(window).width() >= 768) {
+                    if (dialog.height() > 0.8 * $(window).height()) {
+                        dialog.addClass('high');
+                    } else {
+                        dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
+                    }
                  }
 
                  if (typeof($.widgetManager) != 'undefined') {
