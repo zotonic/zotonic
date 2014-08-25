@@ -51,7 +51,7 @@ start(ReqData, Context) ->
             13, 10
             ],
     ok = send(Socket, Data),
-    ContextPruned = z_context:set('q', [], z_context:prune_for_scomp(Context)), 
+    ContextPruned = z_context:prune_for_scomp(z_context:ensure_qs(Context)),
     SenderPid = spawn_link(fun() -> start_send_loop(Socket, ContextPruned) end),
     receive_loop(<<>>, Socket, SenderPid, ContextPruned).
 

@@ -56,7 +56,7 @@ start(WsKey1, ReqData, Context1) ->
             <<SignKey/binary>>
             ],
     ok = z_websocket_hixie75:send(Socket, Data),
-    ContextPruned = z_context:set('q', [], z_context:prune_for_scomp(Context1)), 
+    ContextPruned = z_context:prune_for_scomp(z_context:ensure_qs(Context1)),
     SenderPid = spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, ContextPruned) end),
     z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, ContextPruned).
 
