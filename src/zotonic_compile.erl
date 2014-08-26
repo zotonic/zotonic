@@ -136,6 +136,8 @@ compile_options() ->
      {i, "deps/webzmachine/include"},
      {outdir, "ebin"},
      {parse_transform, lager_transform},
+     {platform_define, "^[0-9]+", namespaced_dicts},
+     nowarn_deprecated_type,
      debug_info].    
 
 
