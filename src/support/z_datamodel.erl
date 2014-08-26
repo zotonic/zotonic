@@ -150,7 +150,6 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                 {error, {unknown_rsc, _}} ->
                     %% new resource, or old resource
                     Props1 = [{name, Name}, {category_id, CatId},
-                              {is_protected, true},
                               {installed_by, Module}, {managed_props, z_html:escape_props(Props)}] ++ Props,
                     Props2 = case proplists:get_value(is_published, Props1) of
                                  undefined -> [{is_published, true} | Props1];
@@ -160,15 +159,19 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                  undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
                                  _ -> Props2
                              end,
+                    Props4 = case proplists:get_value(is_protected, Props3) of
+                                 undefined -> [{is_protected, true} | Props3];
+                                 _ -> Props3
+                             end,
                     ?zInfo(io_lib:format("Creating new ~p '~p'", [Category, Name]), Context),
-                    {ok, Id} = m_rsc_update:update(insert_rsc, Props3, [{is_import, true}], Context),
-                    case proplists:get_value(media_url, Props3) of
+                    {ok, Id} = m_rsc_update:update(insert_rsc, Props4, [{is_import, true}], Context),
+                    case proplists:get_value(media_url, Props4) of
                         undefined ->
                             nop;
                         Url ->
                             m_media:replace_url(Url, Id, [], Context)
                     end,
-                    case proplists:get_value(media_file, Props3) of
+                    case proplists:get_value(media_file, Props4) of
                         undefined ->
                             nop;
                         File ->
