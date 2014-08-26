@@ -218,6 +218,9 @@
 %% Notifier defines
 -define(NOTIFIER_DEFAULT_PRIORITY, 500).
 
+%% This macro is needed in 0.11 and later for encoding props in psql bytea columns
+-define(DB_PROPS(N), N).
+
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
 %%% LOGGING %%%
