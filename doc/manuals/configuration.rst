@@ -35,6 +35,17 @@ When the Zotonic startup script finds a config file in one of the
 directories, it stops looking, so files in the other directories are
 ignored.
 
+.. highlight:: none
+
+In the course of Zotonic starting up, it will print the locations of
+the global config files that it is using::
+
+  17:03:54.766 [info] Zotonic started
+  17:03:54.766 [info] ===============
+  17:03:54.766 [info] Config files used:
+  17:03:54.768 [info] - /home/user/.zotonic/0.11/erlang.config
+  17:03:54.768 [info] - /home/user/.zotonic/zotonic001/zotonic.config
+  
 
 The `zotonic.config` file
 ---------------------------
