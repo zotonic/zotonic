@@ -160,6 +160,8 @@ to_ua_class(_) -> undefined.
 -spec get_class( #context{} | #wm_reqdata{} | undefined ) -> ua_classifier:device_type().
 get_class(undefined) ->
     desktop;
+get_class(#context{ua_class=Class}) when Class =/= undefined ->
+    Class;
 get_class(#context{} = Context) ->
     get_class(z_context:get_reqdata(Context));
 get_class(#wm_reqdata{} = ReqData) ->

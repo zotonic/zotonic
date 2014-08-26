@@ -47,7 +47,7 @@ event(#submit{message=explain_tpl}, Context) ->
 
 find_templates(CatName, TplName, Context) ->
 	[
-		{UA, index_props(find_template(CatName, TplName, set_class(UA, Context)))}
+		{UA, index_props(find_template(CatName, TplName, z_user_agent:set_class(UA, Context)))}
 		|| UA <- z_user_agent:classes()
 	].
 
@@ -64,8 +64,3 @@ index_props({ok, #module_index{filepath=Path, module=Module}}) ->
 		{module, Module},
 		{path, Path}
 	].
-
-set_class(UA, Context) ->
-	RD = z_context:get_reqdata(Context),
-	{ok, RD1} = webmachine_request:set_metadata(ua_class, UA, RD),
-	z_context:set_reqdata(RD1, Context).
