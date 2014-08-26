@@ -62,7 +62,7 @@
 
                  dialog
                     .modal({backdrop: true})
-                    .css({"overflow-x": "hidden", "overflow-y": "scroll"});
+                    .css({"overflow-x": "hidden", "overflow-y": "auto"});
 
                  if (width > 0) {
                      dialog.css({
