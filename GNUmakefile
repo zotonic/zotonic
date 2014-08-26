@@ -8,11 +8,11 @@ PARSER    := src/erlydtl/erlydtl_parser
 REBAR := ./rebar
 REBAR_DEPS := ../../rebar
 REBAR_URL := https://github.com/rebar/rebar/wiki/rebar
+REBAR_ENV = EXOMETER_PACKAGES="-afunix -netlink"
 
 # Default target - update sources and call all compile rules in succession
 .PHONY: all
 all: get-deps compile
-
 
 ./rebar:
 	$(ERL) -noshell -s inets -s ssl \
@@ -22,7 +22,7 @@ all: get-deps compile
 
 DEPS = $(shell find deps -maxdepth 1 -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
 LAGER = deps/lager
-Compile = (cd $(1) && $(REBAR_DEPS) deps_dir=.. compile)
+Compile = (cd $(1) && $(REBAR_ENV) $(REBAR_DEPS) deps_dir=.. compile)
 
 # Helper targets
 .PHONY: erl
@@ -42,7 +42,7 @@ ebin/$(APP).app: src/$(APP).app.src
 .PHONY: get-deps update-deps compile-deps compile-zotonic compile
 
 get-deps: $(REBAR)
-	$(REBAR) get-deps
+	$(REBAR_ENV) $(REBAR) get-deps
 
 update-deps: $(REBAR)
 	$(REBAR) update-deps
