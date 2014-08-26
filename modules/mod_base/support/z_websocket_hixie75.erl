@@ -34,8 +34,8 @@
 
 % Hixie-75 (Chrome 4; Safari 5.0.0)
 % First draft protocol version, this code should be removed in due time.
-start(ReqData, Context1) ->
-    Hostname = m_site:get(hostname, Context1),
+start(ReqData, Context) ->
+    Hostname = m_site:get(hostname, Context),
 
     Qs = mochiweb_util:urlencode(wrq:req_qs(ReqData)),
     WebSocketPath = case Qs of
@@ -54,9 +54,8 @@ start(ReqData, Context1) ->
             13, 10
             ],
     ok = send(Socket, Data),
-    ContextPruned = z_context:prune_for_scomp(z_context:ensure_qs(Context1)),
-    SenderPid = spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, ContextPruned) end),
-    z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, ContextPruned).
+    SenderPid = spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, Context) end),
+    z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, Context).
 
 
 %% ============================== RECEIVE DATA =====================================

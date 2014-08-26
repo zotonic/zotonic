@@ -40,7 +40,7 @@
 
 start(ReqData, Context) ->
     Socket = webmachine_request:socket(ReqData),
-    WsKey = z_string:trim(z_context:get_req_header("sec-websocket-key", Context)),
+    WsKey = z_string:trim(wrq:get_req_header_lc("sec-websocket-key", ReqData)),
     Accept = base64:encode(crypto:hash(sha, WsKey++"258EAFA5-E914-47DA-95CA-C5AB0DC85B11")),
 
     %% Send the handshake
@@ -51,9 +51,8 @@ start(ReqData, Context) ->
             13, 10
             ],
     ok = send(Socket, Data),
-    ContextPruned = z_context:prune_for_scomp(z_context:ensure_qs(Context)),
-    SenderPid = spawn_link(fun() -> start_send_loop(Socket, ContextPruned) end),
-    receive_loop(<<>>, Socket, SenderPid, ContextPruned).
+    SenderPid = spawn_link(fun() -> start_send_loop(Socket, Context) end),
+    receive_loop(<<>>, Socket, SenderPid, Context).
 
 
 %% ============================== RECEIVE DATA =====================================

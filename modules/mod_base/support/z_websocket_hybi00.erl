@@ -26,8 +26,8 @@
 ]).
 
 
-start(WsKey1, ReqData, Context1) ->
-    Hostname = m_site:get(hostname, Context1),
+start(WsKey1, ReqData, Context) ->
+    Hostname = m_site:get(hostname, Context),
 
     Qs = mochiweb_util:urlencode(wrq:req_qs(ReqData)),
     WebSocketPath = case Qs of
@@ -40,7 +40,7 @@ start(WsKey1, ReqData, Context1) ->
 
     %% Sec-Websocket stuff
     Key1 = process_key(WsKey1),
-    Key2 = process_key(z_context:get_req_header("sec-websocket-key2", Context1)),
+    Key2 = process_key(wrq:get_req_header_lc("sec-websocket-key2", ReqData)),
     {ok, Body} = mochiweb_socket:recv(Socket, 8, infinity),
     SignKey = crypto:hash(md5, <<Key1:32/integer, Key2:32/integer, Body/binary>>),
     WSProtocol = case wrq:is_ssl(ReqData) of true -> "wss"; _ -> "ws" end,
@@ -56,9 +56,8 @@ start(WsKey1, ReqData, Context1) ->
             <<SignKey/binary>>
             ],
     ok = z_websocket_hixie75:send(Socket, Data),
-    ContextPruned = z_context:prune_for_scomp(z_context:ensure_qs(Context1)),
-    SenderPid = spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, ContextPruned) end),
-    z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, ContextPruned).
+    SenderPid = spawn_link(fun() -> z_websocket_hixie75:start_send_loop(Socket, Context) end),
+    z_websocket_hixie75:receive_loop(none, nolength, Socket, SenderPid, Context).
 
 
 %% Process a key from the websockey handshake, return an integere
