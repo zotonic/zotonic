@@ -177,6 +177,8 @@ encode_values(L) when is_list(L) ->
 
 encode_value(undefined) ->
     null;
+encode_value({term, undefined}) ->
+    null;
 encode_value({term, Term}) ->
     B = term_to_binary(Term),
     <<?TERM_MAGIC_NUMBER, B/binary>>;
