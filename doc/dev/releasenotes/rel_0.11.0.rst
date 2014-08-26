@@ -6,7 +6,7 @@ Timezones
 
 Timezone support was added to the core. All dates are now stored in UTC.
 Resources with old dates are converted when read, assuming the configured server timezone.
-You need to set the timezone in the ``priv/config`` file, for example:
+You need to set the timezone in the ``zotonic.config`` file, for example:
 
     {timezone, "Europe/Berlin"}
 
