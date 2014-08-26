@@ -118,13 +118,3 @@ Currently, the following subcommands are implemented:
 ``zotonic logtail``
   Starts a ``tail -F`` on the three Zotonic log files, console.log, error.log and crash.log
 
-             
-Legacy zotonic.sh script
-++++++++++++++++++++++++
-
-For archival purposes, the ``zotonic.sh`` script that was used before
-release 0.8 is listed here.
-
-.. highlight:: bash
-.. literalinclude:: zotonic.sh
-

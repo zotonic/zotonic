@@ -14,7 +14,6 @@ Erlang application::
         custom_tags/
         log/
         sites/
-            default/
     src/
         behaviours/
         dbdrivers/
@@ -25,6 +24,12 @@ Erlang application::
         models/
         support/
         tests/
+    user/
+        log/
+        sites/
+            ...
+        modules/
+            ...
 
 ``zotonic/``
 
@@ -72,9 +77,10 @@ Erlang application::
 
 ``zotonic/priv/sites/``
 
-  The directory containing all sites. A single Zotonic system can
-  serve multiple sites. See the documentation about sites for more
-  information.
+  The directory containing sites which are internal to Zotonic. These
+  are the ``zotonic_status`` site (see
+  :ref:`installation-zotonic_status`), and the ``testsandbox`` site
+  for running the unit tests.
 
 ``zotonic/src/``
 
@@ -126,3 +132,26 @@ Erlang application::
 ``zotonic/src/tests/``
 
   Contains the EUnit tests for Zotonic.
+
+``zotonic/user``
+
+  This directory contains user-modifiable source code which runs in
+  Zotonic, namely user-defined sites and modules.
+  
+``zotonic/user/sites/``
+
+   A single Zotonic installation is capable of "virtual hosting"
+   serving multiple sites. This directory holds the sites which are
+   created and maintained by you, the users of Zotonic.
+
+   This directory is the default location of the ``user_sites_dir``
+   configuration variable. See :ref:`manual-configuration`.
+
+``zotonic/user/modules/``
+
+  This directory holds modules which are not part of the core Zotonic
+  modules, but which are also not site-specific. All modules installed
+  with the ``zotonic module install ...`` command are placed here.
+
+   This directory is the default location of the ``user_modules_dir``
+   configuration variable. See :ref:`manual-configuration`.

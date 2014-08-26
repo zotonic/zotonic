@@ -15,7 +15,9 @@ database. If you have your own database with project-specific user
 data, you may want to insert additional information into this database
 on sign up. To do this, you need to modify the ``sitename.erl`` file,
 where `sitename` is the name of your site. Remember that this file is
-located in ``priv/sites/sitename/``.
+located in ``user/sites/sitename/``.
+
+   .. note:: Your actual site location might be different, see the :term:`User sites directory`.
 
 Assumptions
 -----------
@@ -25,7 +27,7 @@ Readers are assumed to be comfortable with Erlang syntax and use of the command 
 How
 ---
 
-Open ``priv/sites/sitename/sitename.erl`` with your favorite editor.
+Open ``user/sites/sitename/sitename.erl`` with your favorite editor.
 
 Example 1: a gaming website with several point accounts for each user. Add the following code::
 

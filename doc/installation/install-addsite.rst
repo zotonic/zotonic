@@ -36,16 +36,18 @@ called ``yoursite``.
    Look at :ref:`skeleton-sites` to see which other skeletons are
    available to base your site on.
 
-4. Edit the generated file ``priv/sites/yoursite/config``, to make sure
+4. Edit the generated file ``user/sites/yoursite/config``, to make sure
    your database credentials and the hostname are correct, and change
    the password for the admin.
+
+   .. note:: Your actual site location might be different, see the :term:`User sites directory`.
 
 5. Rebuild Zotonic by typing ``make``, and then (re)start it using ``bin/zotonic debug``.
 
 6. Now Zotonic will install the initial database. If something goes
    wrong here, then it is almost always a problem with the database
    connection. Double-check your database configuration in the
-   `priv/sites/yoursite/config` file.
+   `user/sites/yoursite/config` file.
 
 7. Visit http://yoursite:8000/ in your browser to see your new blog,
    or go directly to http://yoursite:8000/admin/ to visit the admin

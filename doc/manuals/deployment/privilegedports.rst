@@ -42,10 +42,12 @@ For production release of your new Zotonic site you need to:
   (e.g. `www.mysite.com`) to point to your server’s IP address.
 
 - Change ``{hostname, "mysite:8000"}`` to ``{hostname,
-  "www.mysite.com"}`` in ``priv/sites/mysite/config``.  This last
+  "www.mysite.com"}`` in ``user/sites/mysite/config``.  This last
   change enables the virtual hosting: it makes sure that Zotonic knows
   which site is being requested when somebody visits `www.mysite.com`.
 
+   .. note:: Your actual site location might be different, see the :term:`User sites directory`.
+  
 
 Running behind another web server / proxy
 -----------------------------------------
@@ -106,7 +108,7 @@ Delete the Zotonic config file (this will be re-generated automatically when zot
 
   zotonic:~$ rm ~zotonic/zotonic/priv/config
   
-Set the port for your site. Edit the hostname entry in ~zotonic/priv/sites/yoursite/config to read as follows::
+Set the port for your site. Edit the hostname entry in ``zotonic/user/sites/yoursite/config`` to read as follows::
 
   {hostname, "yoursite:80"}
 

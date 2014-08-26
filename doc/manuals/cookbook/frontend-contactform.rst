@@ -28,11 +28,11 @@ How
 
 Create the contact page URL dispatcher and template
 
-The URL dispatcher is placed in ``priv/sites/yoursite/dispatch/dispatch``. Add this line::
+The URL dispatcher is placed in ``user/sites/yoursite/dispatch/dispatch``. Add this line::
 
   {contact_url, ["contact"], controller_template, [ {template, "contact.tpl"} ]},
 
-This says that the page at "/contact" will use the "contact.tpl" template. Let’s create this template, at ``priv/sites/yoursite/templates/contact.tpl``::
+This says that the page at "/contact" will use the "contact.tpl" template. Let’s create this template, at ``user/sites/yoursite/templates/contact.tpl``::
 
   {% extends "base.tpl" %}
 
@@ -45,6 +45,8 @@ cache (to refresh the URL dispatchers) by going to "modules" ->
 "rescan modules" in the admin. Now, point your browser to
 http://yoursite:8000/contact. This should show the contact page with the
 template you just made.
+
+.. note:: Your actual site location might be different, see the :term:`User sites directory`.
 
 Create the contact form
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -78,9 +80,9 @@ Create the contact-form handler Erlang file
 As you see in the :ref:`scomp-wire` statement in the contact form, the
 `delegate` argument is set to ``resource_default_contact``, which is
 the name of an erlang module which we still have to create. When the
-form submits, this module’s event/2 function gets called.Create a file
-``priv/sites/default/resources/resource_default_contact.erl`` with the
-following contents::
+form submits, this module’s event/2 function gets called. Create a
+file ``user/sites/default/resources/resource_default_contact.erl``
+with the following contents::
 
   -module(resource_default_contact).
   -export([event/2]).
@@ -110,7 +112,7 @@ Using Zotonic’s email module, you can very easily send somebody an
 e-mail. Let’s create a simple template to send the contents of the
 form to the site administrator.
 
-Create the file ``priv/sites/default/templates/_email_contact.tpl``::
+Create the file ``user/sites/default/templates/_email_contact.tpl``::
 
   <html>
     <head>

@@ -17,7 +17,7 @@ After enabling mod_backup, it will make a backup of the site’s data
 every night at 3 AM. It keeps the last 10 copies of the data, so you
 have alway a backup to roll back to.
 
-The backups are stored under ``priv/sites/yoursite/files/backup/``.
+The backups are stored under ``user/sites/yoursite/files/backup/``.
 
 The site’s media files are stored as a ``.tar.gz`` file, while the
 database is stored as an uncrompressed ``.sql`` file.

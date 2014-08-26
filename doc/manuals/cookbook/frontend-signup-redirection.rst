@@ -11,7 +11,9 @@ Why
 The default behavior of Zotonic is to redirect the user to his or her
 own page after logon (/page). If you want to change this, you need to
 modify the ``sitename.erl`` file, where `sitename` is the name of your
-site. Remember that this file is located in ``priv/sites/sitename/``.
+site. Remember that this file is located in ``user/sites/sitename/``.
+
+.. note:: Your actual site location might be different, see the :term:`User sites directory`.
 
 Assumptions
 -----------
@@ -20,11 +22,12 @@ Readers are assumed to be comfortable with Erlang syntax and use of the command 
 
 How
 ---
-Open priv/sites/sitename/sitename.erl with your favorite editor::
+Open ``user/sites/sitename/sitename.erl`` with your favorite editor::
 
   $ cd /path/to/zotonic 
-  $ vim priv/sites/sitename/sitename.erl 
+  $ vim user/sites/sitename/sitename.erl 
 
+  
 Example 1
 .........
 

@@ -108,3 +108,10 @@ Glossary
 
    Delegate
         A reference to a module which will be used to call a callback function on. Used in the templates when attaching actions like a :term:postback to a DOM Event. See :ref:`manual-template-actions`.
+
+   User sites directory
+        The directory in which user-installed Zotonic sites are placed. Defaults to the path ``user/sites`` relative to the Zotonic installation, but can be adjusted by changing the ``user_sites_dir`` configuration variable in the global ``zotonic.config`` file. See :ref:`manual-configuration`.
+
+   User modules directory
+        The directory in which user-installed Zotonic modules are placed. Defaults to the path ``user/modules`` relative to the Zotonic installation, but can be adjusted by changing the ``user_modules_dir`` configuration variable in the global ``zotonic.config`` file. See :ref:`manual-configuration`.
+        

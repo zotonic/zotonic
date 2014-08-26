@@ -39,22 +39,29 @@ ignored.
 The `zotonic.config` file
 ---------------------------
 
-user_sites_dir and user_modules_dir
-...................................
+When installed for the first time, the ``zotonic.config`` file is well
+annoted with comments about what each setting does. When in doubt,
+consult the stock ``zotonic.config`` file for explanation about all
+config settings.
+
+`user_sites_dir` and `user_modules_dir`
+.......................................
 
 Since version 0.11, Zotonic keeps sites and modules that are
 `external` to Zotonic, e.g. installed by website developers, outside
 the Zotonic source tree.
 
 The directory under which Zotonic expects to find all sites is called
-the User sites directory. This is configured with the config parameter
-``user_sites_dir``.
+the :term:`User sites directory`. This is configured with the config
+parameter ``user_sites_dir``. This directory defaults to
+``user/sites``, relative to Zotonic's installation directory.
 
 The directory under which Zotonic expects to find all external
 modules, e.g. those installed with ``zotonic modules install
 mod_....``, is called the User modules directory. This is configured
-with the config parameter ``user_modules_dir``.
-
+with the config parameter ``user_modules_dir``. This directory
+defaults to ``user/modules``, relative to Zotonic's installation
+directory.
 
 
   

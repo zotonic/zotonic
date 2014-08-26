@@ -68,7 +68,7 @@ Certificate and key files
 -------------------------
 
 The files with the certificates and key are placed into the ``ssl`` directory inside the site
-directory :file:`zotonic/priv/sites/sitename/ssl/`.
+directory :file:`user/sites/sitename/ssl/`.
 
 Where *sitename* must be replaced with the name of your site.
 

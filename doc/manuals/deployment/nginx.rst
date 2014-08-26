@@ -8,7 +8,7 @@ web server, for example if you have other, non-Zotonic virtual hosts
 running on your system.
 
 When proxying, don't forget to check the config files of the sites you
-are planning to server (the ``priv/sites/your_site/config``
+are planning to server (the ``user/sites/your_site/config``
 files). The ``hostname`` value should not contain any port number, if
 you run from port 80: ``{hostname, "test.zotonic.com"}``.
 

@@ -19,7 +19,7 @@ from jamendo.com, a Creative Commons music hosting site.
 
 To register the content block we add an
 ``observe_admin_edit_blocks/3`` function to the site's erl file
-e.g. zotonic/priv/sites/mysite/mysite.erl::
+e.g. ``zotonic/user/sites/mysite/mysite.erl``::
 
 
     %%====================================================================

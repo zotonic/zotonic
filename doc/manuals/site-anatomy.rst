@@ -7,9 +7,8 @@ Zotonic has the capability of serving more than one site at a
 time. You can have multiple sites enabled, each with its own set of
 templates, database and URL dispatch rules.
 
-A Zotonic site is defined as a folder which lives in the priv/sites
-directory of the zotonic installation (or in a location which is
-symlinked to this folder, see the tip below).
+A Zotonic site is defined as a folder which lives in the :term:`User sites directory` of the Zotonic installation, which defaults to
+ ``user/sites``.
 
 A site’s folder contains at least the following:
 
@@ -196,8 +195,8 @@ Setting module-specific config values in the site config
 ........................................................
 
 It is also possible to add :ref:`model-config` values for modules to
-the site's ``priv/sitename/config file``. To do this, add clauses like
-this to the site's config file::
+the site's ``user/sitename/config`` file. To do this, add clauses like
+this to the site's config::
 
   {mod_foo, [{key, value}, ...]}
 
@@ -217,25 +216,6 @@ site for them to have effect. From the Zotonic shell, do::
   
 to restart your site.
 
-  
-Tip: using symlinks for easy development
---------------------------------------------
-
-You clearly want to separate your new site from the main code
-base. This migh seem hard because sites are defined as subfolders of
-``priv/sites/`` inside the Zotonic code base.
-
-However, using symlinks you can put your site anywhere on
-your filesystem. For instance in ``$HOME/yoursite``. If you put it there,
-just symlink it from the priv/sites directory like this::
-
-  cd $HOME/zotonic/priv/sites
-  ln -s $HOME/yoursite
-
-When you now start Zotonic, everything will work as normal, and your
-new site lives outside the repository. This way it is easy to put your
-site under version control, for instance. The ``zotonic addsite``
-command option ``-L`` automates this for you (see :ref:`manual-cli`).
 
 Tip: multiple sites using one database
 --------------------------------------

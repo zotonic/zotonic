@@ -4,8 +4,8 @@
 Retrieve information which is stored in the site’s `config` files.
 
 The site configuration is stored for each site in
-``priv/sites/<sitename>/config`` and files in
-``priv/sites/<sitename>/config.d/``. Their syntax is equal to an
+``user/sites/<sitename>/config`` and files in
+``user/sites/<sitename>/config.d/``. Their syntax is equal to an
 Erlang property list, with unique keys.
 
 
