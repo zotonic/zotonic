@@ -35,5 +35,32 @@ Minimal example::
 Note that the install function should always be kept up-to-date
 according to the latest schema version. When you install a module for
 the first time, no upgrade functions are called, but only the
-``install`` clause.
+``install`` clause. The upgrade functions exist for migrating old
+data, not for newly installing a module.
 
+
+Using categories defined by other modules
+-----------------------------------------
+
+When your site needs to add resources which are defined by other
+module's ``manage_schema`` functions, you need to make sure that those
+modules manage functions are called first. This can be realised by
+adding a dependency to those modules, as explained in
+:ref:`manual-module-startup-order`.
+
+For instance, when you want to create a custom menu for your site::
+
+  manage_schema(install, _Context) ->
+    #datamodel{
+       resources=[
+                  {help_menu, menu,
+                   [
+                    {title, "Help"},
+                    {menu, [...]}
+                   ]
+                  }]}.
+
+You also need to make sure that you add a dependency to ``mod_menu``,
+which creates the ``menu`` category for you::
+
+  -mod_depends([mod_menu]).
