@@ -42,8 +42,8 @@ The simplest controller uses Zotonic’s ``controller_html_helper.hrl`` include 
    html(Context) ->
        {<<"<h1>Hello</h1>">>, Context}.
        
-To return the rendered output of a template file residing in the module's 
-``lib`` directory instead, use ``z_template``'s ``render/3`` function:
+To return the rendered output of a template file in the module's 
+``templates`` directory, use ``z_template:render/3``:
 
 .. code-block:: erlang  
 
