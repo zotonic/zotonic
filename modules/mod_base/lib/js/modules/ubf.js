@@ -30,7 +30,7 @@ limitations under the License.
     ubf.STRING = 2;
     ubf.TUPLE = 3;
     ubf.LIST = 4;
-    
+    ubf.OPCODE = 5;
 
     DecodeStack = function(start) {
         this._stack = start || [];
@@ -165,6 +165,11 @@ limitations under the License.
     }
     ubf.encode_as_string = encode_as_string;
 
+    function encode_as_binary(value, buffer) {
+        buffer.push(_utf8len(value)+"~"+value+"~");
+    }
+    ubf.encode_as_binary = encode_as_binary;
+
     function encode_as_constant(value, buffer) {
         buffer.push(["'", constant_escape(value), "'"].join(""));
     }
@@ -186,7 +191,7 @@ limitations under the License.
                 encode_as_constant(value, buf);
                 break;
             case ubf.BINARY:
-                buf.push(_utf8len(value)+"~"+value+"~");
+                encode_as_binary(value, buf);
                 break;
             case ubf.LIST:
                 encode_as_list(value, buf);
@@ -194,6 +199,8 @@ limitations under the License.
             case ubf.TUPLE:
                 encode_as_tuple(value, undefined, buf);
                 break;
+            case ubf.OPCODE:
+                buf.push(value);
             default:
                 if($.isArray(value)) {
                     encode_as_list(value, buf);
