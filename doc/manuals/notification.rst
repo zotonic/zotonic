@@ -95,7 +95,7 @@ Context
 
 Example::
 
-   z_notifier:observer(acl_logon, {mysitewww, handle_logon}, Context)
+   z_notifier:observe(acl_logon, {mysitewww, handle_logon}, Context)
 
 Subscription shorthands
 .......................
