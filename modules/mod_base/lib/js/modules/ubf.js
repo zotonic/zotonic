@@ -209,7 +209,7 @@ limitations under the License.
                     buf.push(Math.floor(value));
                 } else if(typeof(value) == "string") {
                     // Per default encode strings as binary - better on the server
-                    buf.push(_utf8len(value)+"~"+value+"~");
+                    encode_as_binary(value, buf);
                 } else if (typeof(value) == "object" && value._record) {
                     encode_as_record(value, value._record, specs[value._record], buf);
                 } else if(typeof(value) == "object") {
@@ -220,7 +220,7 @@ limitations under the License.
                         encode_as_proplist(value, buf);
                     }
                 } else if(typeof(value) == "object" && value.valueOf) {
-                    buf.push(_utf8len(value.valueOf)+"~"+value.valueOf()+"~");
+                    encode_as_binary(value.valueOf(), buf);
                 } else if(typeof(value) == "boolean") {
                     encode_as_constant((value)?"true":"false", buf);
                 } else if(value === null) {
