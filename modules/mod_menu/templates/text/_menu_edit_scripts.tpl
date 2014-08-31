@@ -49,7 +49,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	} else if (where == 'copy') {
 		z_notify("menu-item-copy", {
 				id: $menu_item.children('div').data('page-id'),
-				item_template: $menuedit.data('menuedit').options.item_template
+				item_template: $menuedit.data('menuedit').item_template
 			});
 	} else {
 		window.zMenuEditDone = function(v) {
@@ -79,7 +79,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 					id: v.object_id, 
 					callback: "window.zMenuNewItem", 
 					z_delegate:"mod_menu",
-					item_template: $menuedit.data('menuedit').options.item_template
+					item_template: $menuedit.data('menuedit').item_template
 				});
 		};
 		z_event("admin-menu-select", {tab: "{{ connect_tab|default:"find" }}"});
