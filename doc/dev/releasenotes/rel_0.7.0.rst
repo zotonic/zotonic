@@ -63,7 +63,7 @@ the core and moved to their own repository, at
 http://code.google.com/p/zotonic-modules/.  These modules are
 mod_search_solr, mod_pubsub, mod_slideshow, mod_broadcast,
 mod_imageclipper, mod_admin_event and mod_calendar. They can still be
-easily installed with the help of the "zotonic installmodule"
+easily installed with the help of the "zotonic modules install"
 command. The mod_emailer module (and its esmtp library) has been
 removed in favor of the native SMTP sending/receiving capabilities.
 
