@@ -80,54 +80,60 @@ event(#submit{message={rscform, Args}}, Context) ->
     Props1 = proplists:delete("id", Props),
     CatBefore = m_rsc:p(Id, category_id, Context),
     Props2 = z_notifier:foldl(#admin_rscform{id=Id, is_a=m_rsc:is_a(Id, Context)}, Props1, Context),
-    case m_rsc:update(Id, Props2, Context) of
-        {ok, _} -> 
-            case proplists:is_defined("save_view", Post) of
-                true ->
-                    case proplists:get_value(view_location, Args) of
-                        undefined ->
-                            PageUrl = m_rsc:p(Id, page_url, Context),
-                            z_render:wire({redirect, [{location, PageUrl}]}, Context);
-                        Location ->
-                            z_render:wire({redirect, [{location, Location}]}, Context)
-                    end;
-                false ->
-                    case m_rsc:p(Id, category_id, Context) of
-                        CatBefore ->
-                            Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
-                            Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context1), Context1),
-                            Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context1), Context2),
-                            Context4 = z_render:set_value("slug",  m_rsc:p(Id, slug, Context3), Context3),
-                            Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context4)), Context4),
-                            Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context4b)) of
-                                           true ->  z_render:wire("delete-button", {disable, []}, Context4b);
-                                           false -> z_render:wire("delete-button", {enable, []}, Context4b)
-                                       end,
-                            Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
-                            Context6 = z_render:growl([<<"Saved “">>, Title, <<"”.">>], Context5),
-                            case proplists:is_defined("save_duplicate", Post) of
-                                true ->
-                                    z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context6);
-                                false ->
-                                    Context6
-                            end;
-                        _CatOther ->
-                            z_render:wire({reload, []}, Context)
-                    end
-            end;
-        {error, duplicate_uri} ->
+    try
+        {ok, _} = m_rsc:update(Id, Props2, Context),
+        case proplists:is_defined("save_view", Post) of
+            true ->
+                case proplists:get_value(view_location, Args) of
+                    undefined ->
+                        PageUrl = m_rsc:p(Id, page_url, Context),
+                        z_render:wire({redirect, [{location, PageUrl}]}, Context);
+                    Location ->
+                        z_render:wire({redirect, [{location, Location}]}, Context)
+                end;
+            false ->
+                case m_rsc:p(Id, category_id, Context) of
+                    CatBefore ->
+                        Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
+                        Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context1), Context1),
+                        Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context1), Context2),
+                        Context4 = z_render:set_value("slug",  m_rsc:p(Id, slug, Context3), Context3),
+                        Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context4)), Context4),
+                        Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context4b)) of
+                                       true ->  z_render:wire("delete-button", {disable, []}, Context4b);
+                                       false -> z_render:wire("delete-button", {enable, []}, Context4b)
+                                   end,
+                        Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
+                        Context6 = z_render:growl([<<"Saved “"/utf8>>, Title, <<"”."/utf8>>], Context5),
+                        case proplists:is_defined("save_duplicate", Post) of
+                            true ->
+                                z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context6);
+                            false ->
+                                Context6
+                        end;
+                    _CatOther ->
+                        z_render:wire({reload, []}, Context)
+                end
+        end
+    catch
+        throw:{error, duplicate_uri} ->
             z_render:growl_error("Error, duplicate uri. Please change the uri.", Context);
-        {error, duplicate_name} ->
+        throw:{error, duplicate_page_path} ->
+            z_render:growl_error("Error, duplicate page path. Please change the uri.", Context);
+        throw:{error, duplicate_name} ->
             z_render:growl_error("Error, duplicate name. Please change the name.", Context);
-        {error, eacces} ->
+        throw:{error, eacces} ->
             z_render:growl_error("You don't have permission to edit this page.", Context);
-        {error, invalid_query} ->
+        throw:{error, invalid_query} ->
             z_render:growl_error("Your search query is invalid. Please correct it before saving.", Context);
-        {error, _Reason} ->
+        throw:{error, Message} when is_list(Message); is_binary(Message) ->
+            z_render:growl_error(Message, Context);
+        X:Y ->
+            lager:error("Rsc update error: ~p", [X, Y]),
             z_render:growl_error("Something went wrong. Sorry.", Context)
     end;
 
-% Opts: rsc_id, div_id, edge_template
+%% Opts: rsc_id, div_id, edge_template
 event(#postback{message={reload_media, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
     {Html, Context1} = z_template:render_to_iolist({cat, "_edit_media.tpl"}, Opts, Context),
@@ -168,4 +174,3 @@ filter_props(Fs) ->
               "save_stay"
              ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).
-%%[ {list_to_existing_atom(K), list_to_binary(V)} || {K,V} <- Props ].
