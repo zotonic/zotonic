@@ -220,7 +220,7 @@ http://code.google.com/p/zotonic-modules/.  These modules are:
 * mod_emailer*
 
 All modules, except mod_emailer can still be easily installed with the
-help of the ``zotonic installmodule`` command. The mod_emailer module
+help of the ``zotonic modules install`` command. The mod_emailer module
 (and its esmtp library) has been removed in favor of the native SMTP
 sending/receiving capabilities.  
 

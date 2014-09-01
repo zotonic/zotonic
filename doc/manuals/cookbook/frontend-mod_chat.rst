@@ -20,9 +20,9 @@ Mercurial (the ``hg`` command) installed.
 How
 ---
 
-Install the ``mod_chat`` module using ``zotonic installmodule``::
+Install the ``mod_chat`` module using ``zotonic modules install``::
 
-  :~$ zotonic installmodule mod_chat
+  :~$ zotonic modules install mod_chat
 
 This should download ``mod_chat`` and install it in the
 `priv/modules/` directory. Restart and rebuild zotonic to see the
