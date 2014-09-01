@@ -137,6 +137,7 @@ compile_options() ->
      {outdir, "ebin"},
      {parse_transform, lager_transform},
      {platform_define, "^[0-9]+", namespaced_dicts},
+     {platform_define, "^([0-9]+|R16)", coding_utf8},
      nowarn_deprecated_type,
      debug_info].    
 
