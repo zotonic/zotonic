@@ -75,7 +75,7 @@ do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Actions, Contex
                                  end,
                     Context1 = z_render:insert_bottom(ElementId1, Html, Context),
                     Title = m_rsc:p(ObjectId, title, Context),
-                    z_render:wire([{growl, [{text, [?__("Added the connection to", Context), <<"“">>, Title, <<"”.">>]}]}
+                    z_render:wire([{growl, [{text, [?__("Added the connection to", Context), <<" “"/utf8>>, Title, <<"”."/utf8>>]}]}
                                              | Actions], Context1);
                 _ ->
                     z_render:growl_error(?__("This connection already exists.", Context), Context)

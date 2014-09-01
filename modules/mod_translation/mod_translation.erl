@@ -1,3 +1,5 @@
+%% -*- coding: utf-8 -*-
+
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2011 Marc Worrell
 %% Date: 2010-05-19
@@ -61,17 +63,17 @@ init(Context) ->
             case m_config:get(i18n, language_list, Context) of
                 undefined ->
                     m_config:set_prop(i18n, language_list, list, [
-                            {ar, [ {language, <<"العربية">>}, {is_enabled, false}]},
-                            {de, [ {language, <<"Deutsch">>}, {is_enabled, true}]},
-                            {en, [ {language, <<"English">>}, {is_enabled, true}]},
-                            {es, [ {language, <<"Español">>}, {is_enabled, true}]},
-                            {et, [ {language, <<"Eesti">>}, {is_enabled, true}]},
-                            {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
-                            {nl, [ {language, <<"Nederlands">>}, {is_enabled, true}]},
-                            {pl, [ {language, <<"Polski">>}, {is_enabled, true}]},
-                            {ru, [ {language, <<"Русский">>}, {is_enabled, true}]},
-                            {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]},
-                            {zh, [ {language, <<"中文">>}, {is_enabled, false}]}
+                            {ar, [ {language, <<"العربية"/utf8>>}, {is_enabled, false}]},
+                            {de, [ {language, <<"Deutsch"/utf8>>}, {is_enabled, true}]},
+                            {en, [ {language, <<"English"/utf8>>}, {is_enabled, true}]},
+                            {es, [ {language, <<"Español"/utf8>>}, {is_enabled, true}]},
+                            {et, [ {language, <<"Eesti"/utf8>>}, {is_enabled, true}]},
+                            {fr, [ {language, <<"Français"/utf8>>}, {is_enabled, true}]},
+                            {nl, [ {language, <<"Nederlands"/utf8>>}, {is_enabled, true}]},
+                            {pl, [ {language, <<"Polski"/utf8>>}, {is_enabled, true}]},
+                            {ru, [ {language, <<"Русский"/utf8>>}, {is_enabled, true}]},
+                            {tr, [ {language, <<"Türkçe"/utf8>>}, {is_enabled, true}]},
+                            {zh, [ {language, <<"中文"/utf8>>}, {is_enabled, false}]}
                         ], Context);
                 _Exists ->
                     ok
