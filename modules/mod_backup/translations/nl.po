@@ -207,7 +207,7 @@ msgstr "Je kan 10 backups hebben, oudere backups worden automatisch verwijderd."
 msgid ""
 "You can start a backup immediately, while the backup is running you can "
 "continue working."
-msgstr "je kan nu een backup starten. Terwijl de backup bezig is kan je doorgaan met werken."
+msgstr "Je kan nu een backup starten. Terwijl de backup bezig is kan je doorgaan met werken."
 
 #: ./modules/mod_backup/templates/admin_backup.tpl:37 
 msgid ""
