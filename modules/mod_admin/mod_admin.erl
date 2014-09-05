@@ -160,7 +160,7 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
                         end
                    end,
     Type = z_string:to_name(z_context:get_q("type", Context)),
-    RscId = list_to_integer(z_context:get_q("rsc_id", Context)),
+    RscId = z_convert:to_integer(z_context:get_q("rsc_id", Context)),
     Render = #render{
                 template="_admin_edit_block_li.tpl",
                 vars=[
