@@ -31,7 +31,10 @@
 
          medium_log_table/0,
          medium_update_function/0,
-         medium_update_trigger/0
+         medium_update_trigger/0,
+
+         rsc_page_path_log/0,
+         rsc_page_path_log_fki/0
         ]).
 
 -include_lib("zotonic.hrl").
@@ -548,14 +551,8 @@ model_pgsql() ->
     medium_update_trigger(),
 
     %% Holds administration of previous page paths
-     "CREATE TABLE rsc_page_path_log ( 
-        id int not null,
-        page_path character varying(80),
-        created timestamp with time zone NOT NULL DEFAULT now(),
-        CONSTRAINT rsc_page_path_log_pkey PRIMARY KEY (page_path),
-        CONSTRAINT rsc_page_path_log_fkey FOREIGN KEY (id) REFERENCES rsc(id)
-      )"
-
+    rsc_page_path_log(),
+    rsc_page_path_log_fki()
     ].
 
 
@@ -615,6 +612,21 @@ medium_update_trigger() ->
     CREATE TRIGGER medium_update_trigger AFTER INSERT OR UPDATE
     ON medium FOR EACH ROW EXECUTE PROCEDURE medium_update()
     ".
+
+rsc_page_path_log() ->
+   "CREATE TABLE rsc_page_path_log ( 
+      page_path character varying(80),
+      id int not null,
+      created timestamp with time zone NOT NULL DEFAULT now(),
+      CONSTRAINT rsc_page_path_log_pkey PRIMARY KEY (page_path),
+      CONSTRAINT fk_rsc_page_path_log_id FOREIGN KEY (id) 
+        REFERENCES rsc(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+    )".
+
+rsc_page_path_log_fki() ->
+    "CREATE INDEX fki_rsc_page_path_log_id ON rsc_page_path_log (id)".
+
 
 %    -- Fulltext index of products
 %    -- TODO: Also mix in the shop product id, brand, group and properties

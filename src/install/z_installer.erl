@@ -173,16 +173,29 @@ install_persist(C, Database, Schema) ->
 install_rsc_page_path_log(C, Database, Schema) ->
     case has_table(C, "rsc_page_path_log", Database, Schema) of
         false ->
-            {ok, [], []} = pgsql:squery(
-                             C, "CREATE TABLE rsc_page_path_log ( 
-                                id int not null,
-                             page_path character varying(80),
-                             created timestamp with time zone NOT NULL DEFAULT now(),
-                             CONSTRAINT rsc_page_path_log_pkey PRIMARY KEY (page_path),
-                             CONSTRAINT rsc_page_path_log_fkey FOREIGN KEY (id) REFERENCES rsc(id))"),
+            {ok, [], []} = pgsql:squery(C, z_install:rsc_page_path_log()),
+            pgsql:squery(C, z_install:rsc_page_path_log_fki()),
             ok;
         true ->
-            ok
+            case pgsql:equery(C,
+                             "select count(*)
+                              from information_schema.referential_constraints
+                              where constraint_catalog = $1
+                                and constraint_schema = $2
+                                and constraint_name = 'rsc_page_path_log_fkey'",
+                             [Database, Schema])
+            of
+                {ok, [_], [{1}]} ->
+                    {ok, [], []} = pgsql:squery(C, "ALTER TABLE rsc_page_path_log "
+                                        "DROP CONSTRAINT rsc_page_path_log_fkey, "
+                                        "ADD CONSTRAINT fk_rsc_page_path_log_id FOREIGN KEY (id) "
+                                        "    REFERENCES rsc(id)"
+                                        "    ON UPDATE CASCADE ON DELETE CASCADE"),
+                    pgsql:squery(C, z_install:rsc_page_path_log_fki()),
+                    ok;
+                {ok, [_], [{0}]} ->
+                    ok
+            end
     end.
 
 
