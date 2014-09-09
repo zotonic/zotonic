@@ -146,11 +146,19 @@ set_content_dispostion(attachment, ReqData) ->
 set_content_dispostion(undefined, ReqData) ->
     ReqData.
 
-is_public([], _Context) ->
-    true;
 is_public(Ids, Context) ->
     ContextAnon = z_context:new(Context),
-    not lists:any(fun(Id) -> not z_acl:rsc_visible(Id, ContextAnon) end, Ids).
+    is_public(Ids, ContextAnon, true).
+
+is_public(_List, _Context, false) ->
+    false;
+is_public([], _Context, true) ->
+    true;
+is_public([{module, Mod}|T], Context, _Answer) ->
+    is_public(T, Context, z_acl:is_allowed(use, Mod, Context));
+is_public([Id|T], Context, _Answer) ->
+    is_public(T, Context, z_acl:rsc_visible(Id, Context)).
+
 
 set_cache_control_public(true, MaxAge, ReqData) ->
     wrq:set_resp_header("Cache-Control", "public, max-age="++z_convert:to_list(MaxAge), ReqData);
