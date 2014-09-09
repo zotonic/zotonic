@@ -113,6 +113,9 @@ terminate(_Reason, _State) ->
 handle_upload(Path, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
     case file:read_file_info(AbsPath) of
+        {ok, #file_info{type=regular, size=0}} ->
+            lager:info("Not uploading ~p because it is empty", [Path]),
+            ok;
         {ok, #file_info{type=regular, size=Size}} ->
             Result = do_upload(Cred, {filename, Size, AbsPath}),
             finish_upload(Result, Path, AbsPath, Size, Cred, Context);
