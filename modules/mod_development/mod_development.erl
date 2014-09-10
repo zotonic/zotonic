@@ -344,7 +344,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 recompile_file(File) ->
     Module = list_to_atom(filename:basename(File, ".erl")),
     do_observe_fun(Module, fun z_module_manager:remove_observers/3),
-    make:files([File], zotonic_compile:compile_options()),
+    make:files([File], [load|zotonic_compile:compile_options()]),
     do_observe_fun(Module, fun z_module_manager:add_observers/3).
 
 
