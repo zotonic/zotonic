@@ -27,7 +27,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 var z_language              = "en";
 var z_ua                    = "desktop";
 var z_pageid                = '';
-var z_session_valid;
+var z_session_valid         = undefined; /* undefined if there has been no session, true or false after attempt */ 
 var z_editor;
 
 // Transport to/from server
@@ -828,23 +828,23 @@ function z_comet_poll_ajax()
             type:'post',
             data: "z_pageid=" + urlencode(z_pageid),
             dataType: 'text',
-                statusCode: {
+            statusCode: {
                     /* Handle incoming data */
                     200: function(data, _textStatus) {
                             z_comet_data(data);
                             z_timeout_comet_poll_ajax(100);
-                         },
+                    },
                     204: function() {
-                            z_timeout_comet_poll_ajax(1000);
-                         },
+                        z_timeout_comet_poll_ajax(1000);
+                    },
 
                     /* Reload the page on forbidden/auth responses. */
                     401: function() {
-                            z_transport_session_status("session_invalid");
-                         },
+                        z_transport_delegates.session("session_invalid");
+                    },
                     403: function() {
-                            z_transport_session_status("session_invalid");
-                         }
+                        z_transport_delegates.session("session_invalid");
+                    },
                 },
             error: function(xmlHttpRequest, textStatus, errorThrown) {
                        setTimeout(function() { z_comet_poll_ajax(); }, z_comet_reconnect_timeout);
