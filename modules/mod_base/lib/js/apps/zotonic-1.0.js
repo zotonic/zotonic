@@ -36,6 +36,7 @@ var z_ws_pong_count         = 0;
 var z_ws_ping_timeout;
 var z_stream_host;
 var z_stream_starter;
+var z_stream_start_timeout;
 var z_websocket_host;
 var z_default_form_postback = false;
 var z_doing_postback        = false;
@@ -786,12 +787,15 @@ function z_stream_start(host, websocket_host)
         {
             setTimeout(function() { z_websocket_start(); }, 200);
         }
-        z_stream_starter = undefined;
     }
     else
     {
-        z_stream_starter = function() { z_stream_start(host, websocket_host); };
-        setTimeout(z_stream_starter, 5000);
+        z_stream_starter = function() {
+            clearTimeout(z_stream_start_timeout);
+            z_stream_starter = undefined;
+            z_stream_start(host, websocket_host);
+        };
+        z_stream_start_timeout = setTimeout(z_stream_starter, 5000);
     }
 }
 
