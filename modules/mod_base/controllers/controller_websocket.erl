@@ -106,8 +106,9 @@ prune_context(Context) ->
     ContextPruned = z_context:prune_for_scomp(ContextQs),
     ReqData = z_context:get_reqdata(ContextQs),
     ReqData1 = #wm_reqdata{
-        peer=ReqData#wm_reqdata.peer,
-        port=ReqData#wm_reqdata.port
+                  peer=ReqData#wm_reqdata.peer,
+                  port=ReqData#wm_reqdata.port,
+                  resp_headers=mochiweb_headers:empty()
     },
     z_context:set_reqdata(ReqData1, ContextPruned). 
 
