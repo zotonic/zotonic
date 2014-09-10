@@ -35,6 +35,7 @@ var z_ws                    = false;
 var z_ws_pong_count         = 0;
 var z_ws_ping_timeout;
 var z_stream_host;
+var z_stream_starter;
 var z_websocket_host;
 var z_default_form_postback = false;
 var z_doing_postback        = false;
@@ -239,6 +240,9 @@ function z_transport_session_status(data, msg)
             break;
         case 'ok':
             z_session_valid = true;
+            if (typeof z_stream_starter == 'function') {
+                z_stream_starter();
+            }
             break;
         default:
             console.log("Transport, unknown session status ", data);
@@ -782,10 +786,12 @@ function z_stream_start(host, websocket_host)
         {
             setTimeout(function() { z_websocket_start(); }, 200);
         }
+        z_stream_starter = undefined;
     }
     else
     {
-        setTimeout(function() { z_stream_start(host, websocket_host); }, 5000);
+        z_stream_starter = function() { z_stream_start(host, websocket_host); };
+        setTimeout(z_stream_starter, 5000);
     }
 }
 
