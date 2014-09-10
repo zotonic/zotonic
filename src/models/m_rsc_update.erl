@@ -355,7 +355,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
 normalize_props(Id, Props, Context) ->
     DateProps = recombine_dates(Id, Props, Context),
     TextProps = recombine_languages(DateProps, Context),
-    BlockProps = recombine_blocks(TextProps, Props),
+    BlockProps = recombine_blocks(TextProps, Props, Context),
     [ {map_property_name(P), V} || {P, V} <- BlockProps ].
 
 
@@ -936,11 +936,16 @@ recombine_languages(Props, Context) ->
         end.
 
 
-recombine_blocks(Props, OrgProps) ->
+recombine_blocks(Props, OrgProps, Context) ->
     {BPs, Ps} = lists:partition(fun({"block-"++ _, _}) -> true; (_) -> false end, Props),
     case BPs of
         [] ->
-            Props;
+            case proplists:get_value(blocks, Props) of
+                Blocks when is_list(Blocks) ->
+                    z_utils:prop_replace(blocks, normalize_blocks(Blocks, Context), Props);
+                _ ->
+                    Props
+            end;
         _ ->
             Keys = block_ids(OrgProps, []),
             Dict = lists:foldr(
@@ -950,11 +955,11 @@ recombine_blocks(Props, OrgProps) ->
                                     Ts = string:tokens(Name, "-"),
                                     BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
                                     BlockField = lists:last(Ts),
-                                    dict:append(BlockId, opt_value_map(BlockField, Val), Acc)
+                                    dict:append(BlockId, {BlockField, Val}, Acc)
                             end,
                             dict:new(),
                             BPs),
-            [{blocks, [ dict:fetch(K, Dict) || K <- Keys ]} | Ps ]
+            [{blocks, normalize_blocks([ dict:fetch(K, Dict) || K <- Keys ], Context)} | Ps ]
     end.
 
 block_ids([], Acc) -> 
@@ -969,12 +974,24 @@ block_ids([{"block-"++Name,_}|Rest], Acc) when Name =/= [] ->
 block_ids([_|Rest], Acc) ->
     block_ids(Rest, Acc).
 
-% Map some values to non-strings
-opt_value_map("rsc_id", V) -> {rsc_id, z_convert:to_integer(V)};
-opt_value_map("is_"++_ = K, V) -> {list_to_existing_atom(K), z_convert:to_bool(V)};
-opt_value_map(K, V) -> {list_to_existing_atom(K), V}.
 
-
+normalize_blocks(Blocks, Context) ->
+    lists:map(fun(B) -> normalize_block(B, Context) end, Blocks).
+                       
+normalize_block(B, Context) ->
+    lists:map(fun
+                  ({"rsc_id", V}) ->
+                      {rsc_id, m_rsc:rid(V, Context)};
+                  ({"is_" ++ _ = K, V}) ->
+                      {list_to_existing_atom(K), z_convert:to_bool(V)};
+                  ({K, V}) when is_list(K) ->
+                      {list_to_existing_atom(K), V};
+                  ({rsc_id, V}) ->
+                      {rsc_id, m_rsc:rid(V, Context)};
+                  (Pair) ->
+                      Pair
+              end,
+              B).
 
 %% @doc Accept only configured languages
 filter_langs(L, Cfg) ->
