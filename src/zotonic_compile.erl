@@ -20,7 +20,7 @@
 -module(zotonic_compile).
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
--export([all/0, all/1, d/0]).
+-export([all/0, all/1, d/0, compile_options/0]).
 
 -include_lib("include/zotonic.hrl").
 
@@ -31,6 +31,7 @@ all() ->
 %% @doc Does a parallel compile of the files in the different Zotonic directories.
 all(Options0) ->
     Options = Options0 ++ compile_options(),
+
     Work = d(),
     Ref = make_ref(),
     Self = self(),
@@ -136,12 +137,25 @@ compile_options() ->
      {i, "deps/webzmachine/include"},
      {outdir, "ebin"},
      {parse_transform, lager_transform},
-     {platform_define, "^[0-9]+", namespaced_dicts},
-     {platform_define, "^([0-9]+|R16)", coding_utf8},
      nowarn_deprecated_type,
-     debug_info].    
+     debug_info] ++ platform_defines_r17up() ++ platform_defines_r16up().
 
+platform_defines_r16up() ->
+    case re:run(erlang:system_info(otp_release), "^(R16|[0-9]).*") of
+        {match, _} ->
+            [{d, coding_utf8}];
+        nomatch ->
+            []
+    end.
 
+platform_defines_r17up() ->
+    case re:run(erlang:system_info(otp_release), "^[0-9].*") of
+        {match, _} ->
+            [{d, namespaced_dicts}];
+        nomatch ->
+            []
+    end.
+             
 %% @doc For a list of glob patterns, split all patterns which contain
 %% /*/* up in more patterns, so that we can parallelize it even more.
 unglob(Patterns) ->
