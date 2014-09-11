@@ -655,7 +655,6 @@ function z_ajax(options, data)
         contentType: 'text/x-ubf',
         success: function(received_data, textStatus)
         {
-            z_stop_spinner();
             try
             {
                 z_transport_incoming(received_data);
@@ -667,7 +666,7 @@ function z_ajax(options, data)
                 console.log("Error evaluating ajax return value: ", received_data);
                 $.misc.error("Error evaluating ajax return value: " + received_data, e);
             }
-            setTimeout(function() { z_transport_check(); }, 0);
+            setTimeout(function() { z_stop_spinner(); z_transport_check(); }, 0);
         },
         error: function(xmlHttpRequest, textStatus, errorThrown)
         {
@@ -735,7 +734,7 @@ function z_progress(id, value)
 function z_reload(args)
 {
     var page = $('#logon_form input[name="page"]');
-
+    z_start_spinner();
     if (page.length > 0 && page.val() != "") {
         window.location.href = window.location.protocol+"//"+window.location.host+page.val();
     } else {

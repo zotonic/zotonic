@@ -245,7 +245,10 @@ logon_user(UserId, Context) ->
 		        [] -> ContextUser;
 		        _ -> set_rememberme_cookie(UserId, ContextUser)
 		    end,
-		    z_render:wire({redirect, [{location, cleanup_url(get_ready_page(ContextRemember))}]}, ContextRemember);
+		    z_render:wire([
+                    {script, [{script, <<"z_start_spinner();">>}]},
+                    {redirect, [{location, cleanup_url(get_ready_page(ContextRemember))}]}
+                ], ContextRemember);
 		{error, user_not_enabled} ->
 			check_verified(UserId, Context);
 		{error, _Reason} ->
