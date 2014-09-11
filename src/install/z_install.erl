@@ -589,16 +589,16 @@ edge_log_function() ->
     begin
         if (tg_op = 'INSERT') then
             select into predicate r.name from rsc r where r.id = new.predicate_id;
-            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
-            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, predicate, new.seq);
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, pred, seq)
+            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, pred, new.seq);
         elseif (tg_op = 'UPDATE') then
             select into predicate r.name from rsc r where r.id = new.predicate_id;
-            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
-            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, predicate, new.seq);
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, pred, seq)
+            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, pred, new.seq);
         elseif (tg_op = 'DELETE') then
             select into predicate r.name from rsc r where r.id = old.predicate_id;
-            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
-            values (tg_op, old.id, old.subject_id, old.object_id, old.predicate_id, predicate, old.seq);
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, pred, seq)
+            values (tg_op, old.id, old.subject_id, old.object_id, old.predicate_id, pred, old.seq);
         end if;
         return null;
     end;
