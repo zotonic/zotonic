@@ -99,6 +99,7 @@ delete_nocheck(Id, Context) ->
                         pre_props=Props,
                         post_props=[]
                     }, Context),
+    z_edge_log_server:check(Context),
     ok.
 
 

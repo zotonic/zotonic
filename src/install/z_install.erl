@@ -33,6 +33,10 @@
          medium_update_function/0,
          medium_update_trigger/0,
 
+         edge_log_table/0,
+         edge_log_function/0,
+         edge_log_trigger/0,
+
          rsc_page_path_log/0,
          rsc_page_path_log_fki/0
         ]).
@@ -552,8 +556,61 @@ model_pgsql() ->
 
     %% Holds administration of previous page paths
     rsc_page_path_log(),
-    rsc_page_path_log_fki()
+    rsc_page_path_log_fki(),
+
+    %% Track deletion/insert/changes of edges
+    edge_log_table(),
+    edge_log_function(),
+    edge_log_trigger()
     ].
+
+
+edge_log_table() ->
+    "CREATE TABLE edge_log
+    (
+        id bigserial NOT NULL,
+        op character varying(6),
+        edge_id int not null,
+        subject_id int not null,
+        predicate_id int not null,
+        predicate character varying (80),
+        object_id int not null,
+        seq integer not null,
+        created timestamp NOT NULL default now(),
+        
+        CONSTRAINT edge_log_pkey PRIMARY KEY (id)
+    )".
+
+edge_log_function() ->
+    "
+    CREATE FUNCTION edge_update() RETURNS trigger AS $$
+    declare
+        predicate character varying(80);
+    begin
+        if (tg_op = 'INSERT') then
+            select into predicate r.name from rsc r where r.id = new.predicate_id;
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
+            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, predicate, new.seq);
+        elseif (tg_op = 'UPDATE') then
+            select into predicate r.name from rsc r where r.id = new.predicate_id;
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
+            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, predicate, new.seq);
+        elseif (tg_op = 'DELETE') then
+            select into predicate r.name from rsc r where r.id = old.predicate_id;
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
+            values (tg_op, old.id, old.subject_id, old.object_id, old.predicate_id, predicate, old.seq);
+        end if;
+        return null;
+    end;
+    $$ LANGUAGE plpgsql
+    ".
+
+
+edge_log_trigger() ->
+    "
+    CREATE TRIGGER edge_update_trigger AFTER INSERT OR UPDATE OR DELETE
+    ON edge FOR EACH ROW EXECUTE PROCEDURE edge_update()
+    ".
 
 
 medium_log_table() ->

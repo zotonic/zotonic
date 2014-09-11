@@ -92,6 +92,10 @@ init(Host) ->
                 {z_media_cleanup_server, start_link, [SiteProps]}, 
                 permanent, 5000, worker, dynamic},
 
+    EdgeLog = {z_edge_log_server,
+                {z_edge_log_server, start_link, [SiteProps]}, 
+                permanent, 5000, worker, dynamic},
+
     ModuleIndexer = {z_module_indexer,
                 {z_module_indexer, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
@@ -106,7 +110,8 @@ init(Host) ->
 
     Processes = [
             Notifier, Depcache, Translation, Installer, Session, 
-            Dispatcher, Template, MediaClass, Pivot, DropBox, MediaCleanup,
+            Dispatcher, Template, MediaClass, Pivot, DropBox, 
+            MediaCleanup, EdgeLog,
             ModuleIndexer, Modules,
             PostStartup
         ],

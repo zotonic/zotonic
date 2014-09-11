@@ -331,6 +331,10 @@
 %% The predicate is an atom.
 -record(edge_delete, {subject_id, predicate, object_id}).
 
+%% @doc An edge has been updated. (notify)
+%% The predicate is an atom.
+-record(edge_update, {subject_id, predicate, object_id}).
+
 
 %% @doc Notification that a site configuration is changed (notify)
 -record(m_config_update, {module, key, value}).

@@ -179,9 +179,7 @@ insert(Subject, Pred, Object, Opts, Context) ->
                 case z_acl:is_allowed(insert, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of
                     true ->
                         {ok, EdgeId} = z_db:transaction(F, Context),
-                        z_depcache:flush(SubjectId, Context),
-                        z_depcache:flush(ObjectId, Context),
-                        z_notifier:notify(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context),
+                        z_edge_log_server:check(Context),
                         {ok, EdgeId};
                     AclError ->
                         {error, {acl, AclError}}
@@ -203,9 +201,7 @@ delete(Id, Context) ->
             end,
             
             z_db:transaction(F, Context),
-            z_depcache:flush(SubjectId, Context),
-            z_depcache:flush(ObjectId, Context),
-            z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context),
+            z_edge_log_server:check(Context),
             ok;
         AclError -> 
             {error, {acl, AclError}}
@@ -229,9 +225,7 @@ delete(SubjectId, Pred, ObjectId, Options, Context) ->
             end,
 
             z_db:transaction(F, Context),
-            z_depcache:flush(SubjectId, Context),
-            z_depcache:flush(ObjectId, Context),
-            z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context),
+            z_edge_log_server:check(Context),
             ok;
         AclError ->
             {error, {acl, AclError}}
@@ -258,12 +252,7 @@ delete_multiple(SubjectId, Preds, ObjectId, Context) ->
                 0 -> 
                     ok;
                 N when is_integer(N) -> 
-                    z_depcache:flush(SubjectId, Context),
-                    z_depcache:flush(ObjectId, Context),
-                    [
-                        z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context)
-                        || PredName <- PredNames
-                    ],
+                    z_edge_log_server:check(Context),
                     ok;
                 Error -> 
                     Error
@@ -331,23 +320,7 @@ replace(SubjectId, Pred, NewObjects, Context) ->
             
                         % Sync all caches, notify edge delete/insert listeners
                         z_db:transaction(F, Context),
-                        z_depcache:flush(SubjectId, Context),
-                        [z_depcache:flush(ObjectId, Context) || ObjectId <- NewObjects],
-                        [z_depcache:flush(ObjectId, Context) || ObjectId <- CurrObjects],
-                        [
-                            case lists:member(ObjId, NewObjects) of
-                                true -> nop;
-                                false -> z_notifier:notify({edge_delete, SubjectId, PredName, ObjId}, Context)
-                            end
-                            || ObjId <- CurrObjects
-                        ],
-                        [
-                            case lists:member(ObjId, CurrObjects) of
-                                true -> nop;
-                                false -> z_notifier:notify({edge_insert, SubjectId, PredName, ObjId}, Context)
-                            end
-                            || ObjId <- NewObjects
-                        ],
+                        z_edge_log_server:check(Context),
                         ok;
                     AclError ->
                         {error, {acl, AclError}}
@@ -369,7 +342,7 @@ duplicate(Id, ToId, Context) ->
                 ]
             end,
             z_db:transaction(F, Context),
-            z_depcache:flush(ToId, Context),
+            z_edge_log_server:check(Context),
             ok;
         false ->
             {error, {eacces, Id}}
@@ -405,8 +378,7 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
         true -> 
             case z_db:transaction(F, Context) of
                 {ok,EdgeId} ->
-                    z_depcache:flush(SubjectId, Context),
-                    z_notifier:notify({edge_insert, SubjectId, PredName, ObjectId}, Context),
+                    z_edge_log_server:check(Context),
                     {ok, EdgeId};
                 {error, Reason} ->
                     {error, Reason}

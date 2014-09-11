@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
-%% @doc Delete medium files that were attached to deleted resources.
+%% @copyright 2014 Marc Worrell
+%% @doc Check for changed edges, trigger notifications.
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_media_cleanup_server).
+-module(z_edge_log_server).
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 
@@ -26,23 +26,23 @@
 
 %% interface functions
 -export([
-    cleanup/1
+    check/1
 ]).
 
--include_lib("zotonic_file.hrl").
+-include_lib("zotonic.hrl").
 
-% Check every 10 minutes if we have anything to delete.
-% Check every 10 seconds when working through a backlog. 
+% Check every 10 minutes if we have anything to handle.
+% Check every 100msec when working through a backlog. 
 -define(CLEANUP_TIMEOUT_LONG, 600000).
--define(CLEANUP_TIMEOUT_SHORT, 10000).
+-define(CLEANUP_TIMEOUT_SHORT, 100).
 
 -record(state, {host}).
 
 
-%% @doc Force a cleanup - useful after mass deletes, or when disk space is getting low.
-cleanup(Context) ->
+%% @doc Force a check, useful after known edge operations.
+check(Context) ->
     Name = z_utils:name_for_host(?MODULE, Context),
-    gen_server:cast(Name, cleanup).
+    gen_server:call(Name, check).
 
 
 %%====================================================================
@@ -80,6 +80,16 @@ init(Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
+handle_call(check, _From, State) ->
+    case do_check(State#state.host) of
+        {ok, 0} = OK ->
+            {reply, OK, State, ?CLEANUP_TIMEOUT_LONG};
+        {ok, _} = OK ->
+            {reply, OK, State, ?CLEANUP_TIMEOUT_SHORT};
+        {error, _} = Error ->
+            {reply, Error, State, ?CLEANUP_TIMEOUT_LONG}
+    end;
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -87,9 +97,8 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-%% @doc Trap unknown casts
-handle_cast(cleanup, State) ->
-    case do_cleanup(State#state.host) of
+handle_cast(check, State) ->
+    case do_check(State#state.host) of
         {ok, 0} ->
             {noreply, State, ?CLEANUP_TIMEOUT_LONG};
         {ok, _} ->
@@ -98,6 +107,7 @@ handle_cast(cleanup, State) ->
             {noreply, State, ?CLEANUP_TIMEOUT_LONG}
     end;
 
+%% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
@@ -108,7 +118,7 @@ handle_cast(Message, State) ->
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
 handle_info(timeout, State) ->
-    handle_cast(cleanup, State);
+    handle_cast(check, State);
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -130,49 +140,51 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-do_cleanup(Host) ->
-    Context = z_context:new(Host),
-    do_cleanup_1(z_db:q("
-                    select id, filename, deleted 
-                    from medium_deleted
+do_check(Host) ->
+    Context = z_acl:sudo(z_context:new(Host)),
+    do_check_1(z_db:q("
+                    select id,op,subject_id,predicate,object_id
+                    from edge_log
                     order by id
-                    limit 100",
+                    limit 1000",
                     Context),
                  Context).
 
-do_cleanup_1([], _Context) ->
+do_check_1([], _Context) ->
     {ok, 0};
-do_cleanup_1(Rs, Context) ->
-    lists:foreach(fun(R) ->
-                    do_cleanup_file(R, Context)
+do_check_1(Rs, Context) ->
+    RscIds = lists:usort(fetch_ids(Rs, [])),
+    lists:foreach(fun(RscId) ->
+                    z_depcache:flush(RscId, Context)
+                  end,
+                  RscIds), 
+    lists:foreach(fun({_Id,Op,SubjectId,Predicate,ObjectId}) ->
+                    PredName = z_convert:to_atom(Predicate), 
+                    do_edge_notify(Op, SubjectId, PredName, ObjectId, Context)
                   end, Rs),
-    Ranges = z_utils:ranges([ Id || {Id, _, _} <- Rs ]),
+    Ranges = z_utils:ranges([ element(1,R) || R <- Rs ]),
     z_db:transaction(
             fun(Ctx) ->
                 lists:foreach(fun
                                 ({A,A}) ->
-                                    z_db:q("delete from medium_deleted where id = $1", [A], Ctx);
+                                    z_db:q("delete from edge_log where id = $1", [A], Ctx);
                                 ({A,B}) ->
-                                    z_db:q("delete from medium_deleted where id >= $1 and id <= $2", [A,B], Ctx)
+                                    z_db:q("delete from edge_log where id >= $1 and id <= $2", [A,B], Ctx)
                               end,
                               Ranges)
              end,
              Context),
     {ok, length(Rs)}.
 
-do_cleanup_file({_Id, Filename, Date}, Context) ->
-    PreviewPath = z_path:media_preview(Context),
-    ArchivePath = z_path:media_archive(Context),
-    % Remove from the file system
-    BasePreview = filename:join(PreviewPath, Filename),
-    Previews = filelib:wildcard(binary_to_list(iolist_to_binary([BasePreview, "(*"]))),
-    [ file:delete(Preview) || Preview <- Previews ],
-    file:delete(filename:join(ArchivePath, Filename)),
-    % Remove from the file store
-    PreviewStore = iolist_to_binary([filename:basename(PreviewPath), $/, Filename, $( ]),
-    ArchiveStore = iolist_to_binary([filename:basename(ArchivePath), $/, Filename ]), 
-    z_notifier:first(#filestore{action=delete, path={prefix, PreviewStore}}, Context),
-    z_notifier:first(#filestore{action=delete, path=ArchiveStore}, Context),
-    lager:debug("Medium cleanup: ~p (from ~p)", [Filename, Date]),
-    ok.
+fetch_ids([], Acc) ->
+    Acc;
+fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId}|Rs], Acc) ->
+    fetch_ids(Rs, [SubjectId,ObjectId|Acc]).
+
+do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, Context) ->
+    z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context);
+do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, Context) ->
+    z_notifier:notify(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context);
+do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, Context) ->
+    z_notifier:notify(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context).
 

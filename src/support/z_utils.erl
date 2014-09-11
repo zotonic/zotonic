@@ -38,6 +38,7 @@
     f/1,
     f/2,
     get_seconds/0,
+    ranges/1,
     group_by/3,
     group_proplists/2,
     hex_decode/1,
@@ -84,7 +85,7 @@
     flush_message/1,
     ensure_existing_module/1,
     generate_username/2,
-    
+
     %% Deprecated, see z_url.erl
     url_path_encode/1,
     url_encode/1,
@@ -656,6 +657,20 @@ vsplit_in(N, L, RunLength, Acc) ->
 		{Row,Rest} = lists:split(RunLength, L),
 		vsplit_in(N-1, Rest, RunLength, [Row|Acc]).
 
+
+%% @doc Convert a sorted list of integers to a list of range pairs {From,To}
+-spec ranges([integer()]) -> [ {integer(),integer()} ].
+ranges([]) ->
+    [];
+ranges([N|Ns]) ->
+    ranges(Ns, [{N,N}]).
+
+ranges([],Acc) ->
+    lists:reverse(Acc);
+ranges([N|Ns], [{A,B}|Acc]) when B+1 =:= N ->
+    ranges(Ns, [{A,N}|Acc]);
+ranges([N|Ns], Acc) ->
+    ranges(Ns, [{N,N}|Acc]).
 
 %% @doc Group by a property or m_rsc property, keeps the input list in the same order.
 group_by([], _, _Context) ->

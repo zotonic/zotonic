@@ -126,6 +126,7 @@ upgrade(C, Database, Schema) ->
     ok = upgrade_config_schema(C, Database, Schema),
     ok = install_medium_log(C, Database, Schema),
     ok = install_pivot_location(C, Database, Schema),
+    ok = install_edge_log(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -382,6 +383,21 @@ install_pivot_location(C, Database, Schema) ->
         false ->
             ok
     end.
+
+
+
+%% Table with all uploaded filenames, used to ensure unique filenames in the upload archive
+install_edge_log(C, Database, Schema) ->
+    case has_table(C, "edge_log", Database, Schema) of
+        false ->
+            {ok,[],[]} = pgsql:squery(C, z_install:edge_log_table()),
+            {ok,[],[]} = pgsql:squery(C, z_install:edge_log_function()),
+            {ok,[],[]} = pgsql:squery(C, z_install:edge_log_trigger()),
+            ok;
+         true ->
+            ok
+    end.
+
 
 %% Perform some simple sanity checks
 sanity_check(C, _Database, _Schema) ->
