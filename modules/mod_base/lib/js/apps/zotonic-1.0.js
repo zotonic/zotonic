@@ -50,7 +50,8 @@ var z_transport_queue       = [];
 var z_transport_acks        = [];
 var z_transport_delegates   = {
     javascript: function (data, _msg) { eval(data); },
-    session: function (data, msg) { z_transport_session_status(data, msg); }
+    session: z_transport_session_status,
+    reload: z_session_invalid_dialog
 };
 
 var TRANSPORT_TIMEOUT       = 30000;
@@ -255,7 +256,7 @@ function z_session_restart_check()
 {
     if (z_spinner_show_ct === 0) {
         if (z_session_restart_count == 3) {
-            z_session_invalid_dialog();
+            z_transport_delegates.reload();
         } else {
             z_session_restart_count++;
             z_transport('session', 'ubf', 'ensure', {is_expect_cookie: true});
@@ -279,7 +280,7 @@ function z_session_status_ok(page_id, user_id)
             pubzub.publish("session", { status: "restart", user_id: user_id, page_id: page_id});
             z_stream_restart();
         } else {
-            z_session_invalid_dialog();
+            z_transport_delegates.reload();
         }
     }
 }
