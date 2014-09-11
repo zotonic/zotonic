@@ -353,7 +353,9 @@ handle_cast(clear_cookies, Session) ->
 
 %% @doc Set the session variable, replaces any old value
 handle_cast({set, Key, Value}, Session) ->
-    {noreply, Session#session{ props = prop_replace(Key, Value, Session#session.props, Session#session.context#context.host) }};
+    Session1 = handle_set(Key, Value, Session),
+    Session2 = maybe_auth_change(Key, Value, Session1, Session),
+    {noreply, Session2};
 
 handle_cast({set, Props}, Session) ->
     Props1 = lists:foldl(fun({K,V}, Ps) ->
@@ -507,6 +509,29 @@ code_change(_OldVsn, Session, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+handle_set(Key, Value, Session) ->
+    Session#session{ props = prop_replace(Key, Value, Session#session.props, Session#session.context#context.host)}.
+
+
+maybe_auth_change(auth_user_id, UserId, Session, OldSession) ->
+    case proplists:get_value(auth_user_id, OldSession#session.props) of
+        UserId ->
+            Session;
+        none when UserId =:= undefined ->
+            Session;
+        undefined when UserId =:= none ->
+            Session;
+        _OldUserId ->
+            lists:foreach(fun(#page{page_pid=PagePid}) ->
+                              z_session_page:auth_change(PagePid)
+                           end,
+                           Session#session.pages),
+            Session#session{pages=[], transport=z_transport_queue:new()}
+    end;
+maybe_auth_change(_K, _V, Session, _OldSession) ->
+    Session.
 
 
 %% @doc Try to transport all queued messages to the connected pages

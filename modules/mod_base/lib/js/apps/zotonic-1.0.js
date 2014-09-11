@@ -27,8 +27,12 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 var z_language              = "en";
 var z_ua                    = "desktop";
 var z_pageid                = '';
-var z_session_valid         = undefined; /* undefined if there has been no session, true or false after attempt */ 
+var z_userid;
 var z_editor;
+
+// Session state
+var z_session_valid         = false;
+var z_session_restart_count = 0;
 
 // Transport to/from server
 var z_ws                    = false;
@@ -62,7 +66,7 @@ var z_on_visible_timer;
 var z_unique_id_counter     = 0;
 
 
-function z_set_page_id( page_id )
+function z_set_page_id( page_id, user_id )
 {
     ubf.add_spec('z_msg_v1', [
         "qos", "dup", "msg_id", "timestamp", "content_type", "delegate",
@@ -79,16 +83,21 @@ function z_set_page_id( page_id )
         "postback", "trigger", "target",
         "triggervalue", "data"
         ]);
+    ubf.add_spec('session_state', [
+        "page_id", "user_id"
+        ]);
     ubf.add_spec('q', [
         "q"
         ]);
 
     if (z_pageid != page_id) {
+        z_session_valid = true;
         z_pageid = page_id;
+        z_userid = user_id;
+
         if (typeof pubzub == "object") {
             setTimeout(function() { pubzub.publish("pageinit", page_id); }, 10);
         }
-        z_transport('session', 'ubf', 'check');
     }
 }
 
@@ -122,6 +131,25 @@ function z_dialog_confirm(options)
         width: (options.width)
     });
     $(".z-dialog-cancel-button").click(function() { z_dialog_close(); });
+    $(".z-dialog-ok-button").click(function() {
+        z_dialog_close();
+        if (options.on_confirm) options.on_confirm();
+    });
+}
+
+function z_dialog_alert(options)
+{
+    html = '<div class="confirm">' + options.text + '</div>'
+         + '<div class="modal-footer">'
+         + '<button class="btn btn-primary z-dialog-ok-button">'
+         + (options.ok||z_translate('OK'))
+         + '</button>'
+         + '</div>';
+    $.dialogAdd({
+        title: (options.title||z_translate('Alert')),
+        text: html,
+        width: (options.width)
+    });
     $(".z-dialog-ok-button").click(function() {
         z_dialog_close();
         if (options.on_confirm) options.on_confirm();
@@ -210,6 +238,65 @@ function z_notify(message, extraParams)
 }
 
 
+/* Session handling and restarts
+---------------------------------------------------------- */
+
+
+function z_session_restart()
+{
+    if (z_session_valid) {
+        z_session_valid = false;
+        z_session_restart_count = 0;
+    }
+    setTimeout(function() { z_session_restart_check(); }, 500);
+}
+
+function z_session_restart_check()
+{
+    if (z_spinner_show_ct === 0) {
+        if (z_session_restart_count == 3) {
+            z_session_invalid_dialog();
+        } else {
+            z_session_restart_count++;
+            z_transport('session', 'ubf', 'ensure', {is_expect_cookie: true});
+        }
+    } else {
+        setTimeout(function() { z_session_restart_check(); }, 200);
+    }
+}
+
+function z_session_status_ok(page_id, user_id)
+{
+    if (page_id != z_pageid || user_id != z_userid) {
+        z_pageid = page_id;
+        z_userid = user_id;
+
+        // checks pubzub registry for the "session" topic
+        // if any handlers then publish the new user to the topic
+        // if no handlers then the default reload dialog is shown
+        if (typeof pubzub == "object" && pubzub.subscribers("session").length > 0) {
+            z_session_valid = true;
+            pubzub.publish("session", { status: "restart", user_id: user_id, page_id: page_id});
+            z_stream_restart();
+        } else {
+            z_session_invalid_dialog();
+        }
+    }
+}
+
+function z_session_invalid_dialog()
+{
+    z_dialog_confirm({
+        title: z_translate("Reload"),
+        text: "<p>" +
+            z_translate("Your session has expired or is invalid. Reload the page to continue.") +
+            "</p>",
+        ok: z_translate("Reload"),
+        on_confirm: function() { z_reload(); }
+    });
+}
+
+
 /* Transport between user-agent and server
 ---------------------------------------------------------- */
 
@@ -224,29 +311,27 @@ function z_transport_session_status(data, msg)
 {
     switch (data)
     {
+        case 'auth_change':
+            // The user-id of the session is changed.
+            // A new session cookie might still be on its way, so wait a bit
         case 'session_invalid':
-        case 'page_invalid':
-            if (z_session_valid !== false) {
-                z_dialog_confirm({
-                    title: z_translate("Reload"),
-                    text: "<p>" +
-                        z_translate("Your session has expired or is invalid. Reload the page to continue.") +
-                        "</p>",
-                    ok: z_translate("Reload"),
-                    on_confirm: function() { z_reload(); }
-                });
+            if (window.z_sid) {
+                window.z_sid = undefined;
             }
-            z_session_valid = false;
-            z_pageid = '';
+            z_session_restart();
+            break;
+        case 'page_invalid':
+            z_session_restart();
             break;
         case 'ok':
             z_session_valid = true;
-            if (typeof z_stream_starter == 'function') {
-                z_stream_starter();
-            }
             break;
         default:
-            console.log("Transport, unknown session status ", data);
+            if (typeof data == 'object' && data._record == 'session_state') {
+                z_session_status_ok(data.page_id, data.user_id);
+            } else {
+                console.log("Transport, unknown session status ", data);
+            }
             break;
     }
 }
@@ -466,7 +551,7 @@ function z_transport_incoming_data_decode(type, data)
 
 // Queue form data to be transported to the server
 // This is called by the server generated javascript and jquery triggered postback events.
-function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue)
+function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, isExpectCookie)
 {
     var triggervalue = '';
     var trigger;
@@ -503,7 +588,8 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue)
 
     // logon_form and .setcookie forms are always posted, as they will set cookies.
     var options = {
-        is_expect_cookie: (trigger_id == "logon_form") ||
+        is_expect_cookie: isExpectCookie ||
+                          (trigger_id == "logon_form") ||
                           (trigger && $(trigger).hasClass("setcookie")),
         trigger_id: trigger_id
     };
@@ -531,6 +617,7 @@ function z_transport_check()
 {
     if (z_transport_queue.length > 0)
     {
+        // Delay transport messages till the z_pageid is initialized.
         if (z_pageid !== '') {
             var qmsg = z_transport_queue.shift();
 
@@ -778,24 +865,26 @@ function z_tinymce_remove($element)
 
 function z_stream_start(host, websocket_host)
 {
-    if (z_session_valid)
-    {
+    if (!z_session_valid) {
+        setTimeout(function() {
+            z_stream_start(host, websocket_host);
+        }, 100);
+    } else {
         z_stream_host = host;
         z_websocket_host = websocket_host || window.location.host;
+        z_stream_restart();
+    }
+}
+
+function z_stream_restart()
+{
+    if (z_websocket_host) {
+        $('#z_comet_connection').remove();
         setTimeout(function() { z_comet_start(); }, 1000);
         if ("WebSocket" in window)
         {
             setTimeout(function() { z_websocket_start(); }, 200);
         }
-    }
-    else
-    {
-        z_stream_starter = function() {
-            clearTimeout(z_stream_start_timeout);
-            z_stream_starter = undefined;
-            z_stream_start(host, websocket_host);
-        };
-        z_stream_start_timeout = setTimeout(z_stream_starter, 5000);
     }
 }
 
@@ -807,7 +896,8 @@ function z_comet_start()
         if ($zc.length > 0) {
             $zc.attr('src', $zc.attr('src'));
         } else {
-            var url = window.location.protocol + '//' + z_stream_host + "/comet/subdomain?z_pageid=" + urlencode(z_pageid);
+            var qs = z_stream_args('comet');
+            var url = window.location.protocol + '//' + z_stream_host + "/comet/subdomain?"+qs;
             var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
             comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
             comet.appendTo("body");
@@ -826,7 +916,7 @@ function z_comet_poll_ajax()
         $.ajax({
             url: window.location.protocol + '//' + window.location.host + '/comet',
             type:'post',
-            data: "z_pageid=" + urlencode(z_pageid),
+            data: z_stream_args('comet'),
             dataType: 'text',
             statusCode: {
                     /* Handle incoming data */
@@ -970,11 +1060,10 @@ function z_websocket_restart()
         try { z_ws.close(); } catch(e) {} // closing an already closed ws can raise exceptions.
         z_ws = undefined;
     }
-    if (z_ws_pong_count > 0) {
+    if (z_ws_pong_count > 0 && z_session_valid) {
         z_ws_pong_count = 0;
         z_websocket_start();
     }
-    z_transport('$ping');
 }
 
 function z_stream_args(stream_type)
@@ -1041,7 +1130,7 @@ function z_has_flash()
 function z_ensure_id(elt)
 {
     var id = $(elt).attr('id');
-    if (id == undefined) {
+    if (id === undefined || id === "") {
         id = z_unique_id();
         $(elt).attr('id', id);
     }
@@ -1050,8 +1139,9 @@ function z_ensure_id(elt)
 
 function z_unique_id(no_dom_check)
 {
+    var id;
     do {
-        var id = '-z-' + z_unique_id_counter++;
+        id = '-z-' + z_unique_id_counter++;
     } while (!no_dom_check && $('#'+id).length > 0);
     return id;
 }
@@ -1062,7 +1152,7 @@ function z_unique_id(no_dom_check)
 
 function z_start_spinner()
 {
-    if (z_spinner_show_ct++ == 0)
+    if (z_spinner_show_ct++ === 0)
     {
         $(document.body).addClass('wait');
         $('#spinner').fadeIn(100);
@@ -1071,10 +1161,13 @@ function z_start_spinner()
 
 function z_stop_spinner()
 {
-    if (--z_spinner_show_ct == 0)
+    if (--z_spinner_show_ct === 0)
     {
         $('#spinner').fadeOut(100);
         $(document.body).removeClass('wait');
+    }
+    else if (z_spinner_show_ct < 0) {
+        z_spinner_show_ct = 0;
     }
 }
 
@@ -1273,20 +1366,14 @@ function z_init_postback_forms()
                 setTimeout(action, 10);
             }
 
-            var use_post = $(theForm).hasClass("z_cookie_form") || $(theForm).hasClass("z_logon_form");
-            if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
+            var files = $('input:file', theForm).fieldValue();
+            var use_post = false;
+            for (var j=0; j < files.length && !use_post; j++)
             {
-                use_post = true;
-            }
-            else
-            {
-                var files = $('input:file', theForm).fieldValue();
-                for (var j=0; j < files.length && !use_post; j++)
+                if (files[j])
                 {
-                    if (files[j])
-                    {
-                        use_post = true;
-                    }
+                    use_post = true;
+                    break;
                 }
             }
 
@@ -1296,8 +1383,13 @@ function z_init_postback_forms()
             }
             else
             {
+                var cookie_form = $(theForm).hasClass("z_cookie_form") || $(theForm).hasClass("z_logon_form");
+                if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
+                {
+                    cookie_form = true;
+                }
                 theForm.clk = theForm.clk_x = theForm.clk_y = null;
-                z_queue_postback(form_id, postback, args.concat(validations));
+                z_queue_postback(form_id, postback, args.concat(validations), false, cookie_form);
             }
             ev.stopPropagation();
             return false;
@@ -1358,7 +1450,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
     var options = {
         url:  '/postback?' + $.param(a),
         type: 'POST',
-        dataType: 'text/javascript'
+        dataType: 'text/plain'
     };
 
     // hack to fix Safari hang (thanks to Tim Molendijk for this)

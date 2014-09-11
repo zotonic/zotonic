@@ -46,8 +46,9 @@
     incr/3, 
     append/3,
 
+    auth_change/1,
     page_id/1,
-    
+
     add_script/2,
     add_script/1,
     transport/2,
@@ -116,6 +117,9 @@ get_attach_state(Pid) ->
         error 
     end.
 
+auth_change(Pid) when is_pid(Pid) ->
+    gen_server:cast(Pid, auth_change).
+
 page_id(#context{page_pid=Pid}) ->
     page_id(Pid);
 page_id(undefined) ->
@@ -154,7 +158,7 @@ comet_attach(CometPid, Pid) ->
 comet_detach(undefined) ->
     z_utils:flush_message(script_queued);
 comet_detach(Pid) ->
-    gen_server:call(Pid, comet_detach),
+    catch gen_server:call(Pid, comet_detach),
     z_utils:flush_message(script_queued).
 
 %% @doc Attach the websocket request process to the page session, enabling sending scripts to the user agent
@@ -298,6 +302,20 @@ handle_cast({receive_ack, Ack}, State) ->
 handle_cast(ping, State) ->
     {noreply, State#page_state{last_detach=z_utils:now()}};
 
+%% The user of the session changed, signal any connected push connections, stop this page.
+handle_cast(auth_change, #page_state{comet_pid=CometPid, websocket_pid=WsPid} = State) ->
+    Msg = z_transport:msg(page, <<"session">>, <<"auth_change">>, []), 
+    {ok, Data} = z_ubf:encode([Msg]), 
+    case WsPid of
+        undefined when is_pid(CometPid) ->
+            CometPid ! {final, Data};
+        undefined ->
+            ok;
+        _ ->
+            controller_websocket:websocket_send_data(WsPid, Data)
+    end,
+    {stop, normal, State};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -434,6 +452,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
 
 %% @doc Trigger sending a check_timeout message.
 trigger_check_timeout() ->

@@ -89,6 +89,9 @@ process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
                     end,
             process_post_loop(Context, TRefFinal, TRef1, MPageRef);
 
+        {final, Data} ->
+            flush(true, Data, TRefFinal, TRefData, MPageRef, Context);
+
         {'DOWN', _MonitorRef, process, Pid, _Info} when Pid == Context#context.page_pid ->
             Context1 = Context#context{page_pid=undefined},
             cancel_timer(TRefFinal),

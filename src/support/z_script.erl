@@ -1,7 +1,7 @@
 %% This is the MIT license.
 %% 
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2012 Marc Worrell
+%% Copyright (c) 2009-2014 Marc Worrell
 %% 
 %% Permission is hereby granted, free of charge, to any person obtaining a copy 
 %% of this software and associated documentation files (the "Software"), to deal 
@@ -64,9 +64,9 @@ get_page_startup_script(Context) ->
     PageIdUAScript = case Context#context.page_id of
         undefined ->
             %% No page id, so no comet loop started and generated random page id for postback loop
-            [ <<"z_set_page_id(\"\");">>, UAScript ];
+            [ <<"z_set_page_id(\"\",">>, str_user_id(z_acl:user(Context)), <<");">>, UAScript ];
         PageId ->
-            [ <<"z_set_page_id(\"">>, PageId, $", $), $;, UAScript ]
+            [ <<"z_set_page_id(\"">>, PageId, $", $,, str_user_id(z_acl:user(Context)), $), $;, UAScript ]
     end,
     case z_context:document_domain(Context) of
         undefined ->
@@ -74,6 +74,11 @@ get_page_startup_script(Context) ->
         DocumentDomain ->
             [ PageIdUAScript, <<"document.domain=\"">>, DocumentDomain, $", $; ]
     end.
+
+str_user_id(undefined) ->
+    <<"undefined">>;
+str_user_id(UserId) ->
+    [ $", z_convert:to_binary(UserId), $" ].
 
 %%
 ua_class_to_script(desktop) ->

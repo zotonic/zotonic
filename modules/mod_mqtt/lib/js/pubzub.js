@@ -101,6 +101,10 @@ Pubzub.prototype.publish = function (topic, message) {
     }
 };
 
+Pubzub.prototype.subscribers = function (topic) {
+    return this._matcher.match(topic);
+};
+
 Pubzub.prototype.lastwill = function (topic, message) {
     this._will_id = this.unique_id();
     this.transport("lastwill", topic, message, this._will_id);

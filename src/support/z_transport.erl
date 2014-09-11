@@ -192,6 +192,9 @@ incoming_1(#z_msg_v1{delegate= <<"$ping">>} = Msg, Context) ->
     {ok, maybe_ack(pong, Msg, Context), Context};
 incoming_1(#z_msg_v1{delegate=session, data= <<"check">>}, Context) ->
     {ok, session_status_message(Context), Context};
+incoming_1(#z_msg_v1{delegate=session, data= <<"ensure">>}, Context) ->
+    {ok, Reply, Context1} = session_status_ensure(Context),
+    {ok, Reply, Context1};
 incoming_1(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Pb#postback_event.postback, Context),
     TriggerId1 = case TriggerId of
@@ -317,12 +320,20 @@ maybe_session_status_msg(Result, #context{page_pid=PagePid}) when not is_pid(Pag
     [msg(undefined, session, <<"page_invalid">>, []) | mklist(Result)].
 
 session_status_message(Context) ->
-    case {is_pid(Context#context.session_pid), is_pid(Context#context.page_pid)}
-    of
+    case {is_pid(Context#context.session_pid), is_pid(Context#context.page_pid)} of
         {false,_} -> msg(undefined, session, <<"session_invalid">>, []);
         {_,false} -> msg(undefined, session, <<"page_invalid">>, []);
         {true, true} -> msg(undefined, session, <<"ok">>, [])
     end.
+
+session_status_ensure(Context) ->
+    Context1 = z_context:ensure_all(Context),
+    Reply = msg(undefined,
+                session, 
+                {session_state, Context#context.page_id, z_acl:user(Context1)},
+                []),
+    {ok, Reply, Context1}.
+
 
 %% For MochiWeb we need to convert to strings
 set_q(Qs, Context) ->

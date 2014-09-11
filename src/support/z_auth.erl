@@ -69,8 +69,7 @@ logon_pw(Username, Password, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
         {ok, Id} ->
             case logon(Id, Context) of
-                {ok, Context1} ->
-                                    Context1;
+                {ok, Context1} -> Context1;
                 {error, _Reason} -> {false, Context}
             end;
         {error, _Reason} -> {false, Context}
@@ -89,14 +88,15 @@ confirm(UserId, Context) ->
     end.
     
 
-%% @doc Logon an user whose id we know
+%% @doc Logon an user whose id we know, invalidate the current session id.
+%%      This sets a cookie with the new session id in the Context.
 logon(UserId, Context) ->
     case is_enabled(UserId, Context) of
         true ->
             Context1 = z_acl:logon(UserId, Context),
             {ok, Context2} = z_session_manager:rename_session(Context1),
-            z_context:set_session(auth_user_id, UserId, Context2),
             z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
+            z_context:set_session(auth_user_id, UserId, Context2),
             Context3 = z_notifier:foldl(auth_logon, Context2, Context2),
             z_notifier:notify(auth_logon_done, Context3),
             {ok, Context3};
@@ -108,8 +108,8 @@ logon(UserId, Context) ->
 %% @doc Continue the current session as a different user.
 switch_user(UserId, Context) ->
     Context1 = z_acl:logon(UserId, Context),
-    z_context:set_session(auth_user_id, UserId, Context1),
     z_context:set_session(auth_timestamp, calendar:universal_time(), Context1),
+    z_context:set_session(auth_user_id, UserId, Context1),
     Context2 = z_notifier:foldl(auth_logon, Context1, Context1),
     z_notifier:notify(auth_logon_done, Context2),
     {ok, Context2}.
