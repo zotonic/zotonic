@@ -289,12 +289,18 @@ maybe_set_page_session(<<>>, Context) ->
 maybe_set_page_session(PageId, #context{page_id=PageId} = Context) ->
     Context;
 maybe_set_page_session(PageId, Context) ->
-    case z_session:lookup_page_session(PageId, Context) of
-        {ok, Pid} ->
-            Context#context{page_id=PageId, page_pid=Pid};
-        {error, notfound} ->
-            % TODO: should stop here... an unknown page was referenced
-            Context
+    try
+        case z_session:lookup_page_session(PageId, Context) of
+            {ok, Pid} ->
+                Context#context{page_id=PageId, page_pid=Pid};
+            {error, notfound} ->
+                % TODO: decide if we should stop here... an unknown page was referenced
+                Context
+        end
+    catch
+        exit:{noproc, _} ->
+            lager:error("PageId without page session (session_id ~p)", [Context#context.session_id]),
+            Context#context{session_pid=undefined}
     end.
 
 maybe_set_uaclass(undefined, Context) ->
