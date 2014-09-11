@@ -475,7 +475,10 @@ do_transport_data(State) ->
     end.
 
 
-%% @doc Ping the comet process that we have a script queued
+%% @doc Ping the comet or ws process that we have a message queued
+ping_comet_ws(#page_state{websocket_pid=WsPid, comet_pid=CometPid} = State) when is_pid(WsPid), is_pid(CometPid) ->
+    CometPid ! {final, <<>>},
+    ping_comet_ws(State#page_state{comet_pid=undefined});
 ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
     {Data, State1} = do_transport_data(State),
     controller_websocket:websocket_send_data(WsPid, Data),
