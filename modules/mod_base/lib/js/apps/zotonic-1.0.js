@@ -43,7 +43,7 @@ var z_stream_starter;
 var z_stream_start_timeout;
 var z_websocket_host;
 var z_default_form_postback = false;
-var z_doing_postback        = false;
+var z_page_unloading        = false;
 var z_comet_reconnect_timeout = 1000;
 var z_transport_check_timer;
 var z_transport_queue       = [];
@@ -58,7 +58,7 @@ var TRANSPORT_TIMEOUT       = 30000;
 var TRANSPORT_TRIES         = 3;
 
 // Misc state
-var z_spinner_show_ct       = 0;
+var z_spinner_show_ct       = 0;  // Set when performing an AJAX callback
 var z_input_updater         = false;
 var z_drag_tag              = [];
 var z_registered_events     = {};
@@ -87,6 +87,9 @@ function z_set_page_id( page_id, user_id )
     ubf.add_spec('session_state', [
         "page_id", "user_id"
         ]);
+    ubf.add_spec('auth_change', [
+        "page_id"
+        ]);
     ubf.add_spec('q', [
         "q"
         ]);
@@ -100,6 +103,12 @@ function z_set_page_id( page_id, user_id )
             setTimeout(function() { pubzub.publish("pageinit", page_id); }, 10);
         }
     }
+    $(window).bind('beforeunload', function() {
+        z_page_unloading = true;
+        setTimeout(function() {
+            z_page_unloading = false;
+        }, 10000);
+    });
 }
 
 /* Non modal dialogs
@@ -243,26 +252,28 @@ function z_notify(message, extraParams)
 ---------------------------------------------------------- */
 
 
-function z_session_restart()
+function z_session_restart(invalid_page_id)
 {
     if (z_session_valid) {
         z_session_valid = false;
         z_session_restart_count = 0;
     }
-    setTimeout(function() { z_session_restart_check(); }, 500);
+    setTimeout(function() { z_session_restart_check(invalid_page_id); }, 500);
 }
 
-function z_session_restart_check()
+function z_session_restart_check(invalid_page_id)
 {
-    if (z_spinner_show_ct === 0) {
-        if (z_session_restart_count == 3) {
-            z_transport_delegates.reload();
+    if (z_pageid == invalid_page_id) {
+        if (z_spinner_show_ct === 0) {
+            if (z_session_restart_count == 3) {
+                z_session_invalid_reload(z_pageid);
+            } else {
+                z_session_restart_count++;
+                z_transport('session', 'ubf', 'ensure', {is_expect_cookie: true});
+            }
         } else {
-            z_session_restart_count++;
-            z_transport('session', 'ubf', 'ensure', {is_expect_cookie: true});
+            setTimeout(function() { z_session_restart_check(invalid_page_id); }, 200);
         }
-    } else {
-        setTimeout(function() { z_session_restart_check(); }, 200);
     }
 }
 
@@ -272,6 +283,9 @@ function z_session_status_ok(page_id, user_id)
         z_pageid = page_id;
         z_userid = user_id;
 
+        z_transport_queue = [];
+        z_transport_acks = [];
+
         // checks pubzub registry for the "session" topic
         // if any handlers then publish the new user to the topic
         // if no handlers then the default reload dialog is shown
@@ -280,11 +294,26 @@ function z_session_status_ok(page_id, user_id)
             pubzub.publish("session", { status: "restart", user_id: user_id, page_id: page_id});
             z_stream_restart();
         } else {
-            z_transport_delegates.reload();
+            z_session_invalid_reload(z_pageid);
         }
     }
 }
 
+function z_session_invalid_reload(page_id)
+{
+    if (page_id == z_pageid) {
+        if (z_spinner_show_ct === 0 && !z_page_unloading)
+        {
+            z_transport_delegates.reload();
+        } else {
+            setTimeout(function() {
+                z_session_invalid_reload(page_id);
+            }, 1000);
+        }
+    }
+}
+
+// Default action for delegates.reload
 function z_session_invalid_dialog()
 {
     z_dialog_confirm({
@@ -296,7 +325,6 @@ function z_session_invalid_dialog()
         on_confirm: function() { z_reload(); }
     });
 }
-
 
 /* Transport between user-agent and server
 ---------------------------------------------------------- */
@@ -312,24 +340,35 @@ function z_transport_session_status(data, msg)
 {
     switch (data)
     {
-        case 'auth_change':
-            // The user-id of the session is changed.
-            // A new session cookie might still be on its way, so wait a bit
         case 'session_invalid':
             if (window.z_sid) {
                 window.z_sid = undefined;
             }
-            z_session_restart();
+            z_session_restart(z_pageid);
             break;
         case 'page_invalid':
-            z_session_restart();
+            z_session_restart(z_pageid);
             break;
         case 'ok':
             z_session_valid = true;
             break;
         default:
-            if (typeof data == 'object' && data._record == 'session_state') {
-                z_session_status_ok(data.page_id, data.user_id);
+            if (typeof data == 'object') {
+                switch (data._record) {
+                    case 'session_state':
+                        z_session_status_ok(data.page_id, data.user_id);
+                        break;
+                    case 'auth_change':
+                        // The user-id of the session is changed.
+                        // A new session cookie might still be on its way, so wait a bit
+                        if (data.page_id == z_pageid) {
+                            z_session_restart(z_pageid);
+                        }
+                        break;
+                    default:
+                        console.log("Transport, unknown session status ", data);
+                        break;
+                }
             } else {
                 console.log("Transport, unknown session status ", data);
             }

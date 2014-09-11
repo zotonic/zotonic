@@ -108,7 +108,8 @@ rename_session(#context{session_manager=SessionManager, session_pid=SessionPid} 
             % Rename the session id, set a new session cookie.
             case gen_server:call(SessionManager, {rename_session, SessionPid}) of
                 {ok, NewSessionId} ->
-                    {ok, set_session_cookie(NewSessionId, Context#context{session_id=NewSessionId})};
+                    CleanContext = Context#context{session_id=NewSessionId, page_pid=undefined, page_id=undefined},
+                    {ok, set_session_cookie(NewSessionId, CleanContext)};
                 ignore ->
                     {ok, Context};
                 {error, _} = Error ->

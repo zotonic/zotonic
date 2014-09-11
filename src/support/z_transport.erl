@@ -42,6 +42,11 @@
 
 -include_lib("zotonic.hrl").
 
+-record(session_state, {
+        page_id,
+        user_id
+    }).
+
 %%% ---------------------------------------------------------------------------------------
 %%% Send data API
 %%% ---------------------------------------------------------------------------------------
@@ -156,7 +161,7 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_clas
     Context1 = maybe_set_sessions(SessionId, PageId, Context),
     Context2 = maybe_set_uaclass(UA, Context1),
     try
-        incoming_1(Msg#z_msg_v1{data=decode_data(CT,Data)}, Context2)
+        maybe_auth_change(incoming_1(Msg#z_msg_v1{data=decode_data(CT,Data)}, Context2), Context2)
     catch
         throw:Reason ->
             lager:error(z_context:lager_md(Context2),
@@ -318,6 +323,30 @@ maybe_set_q(_Type, _Data, Context) ->
     Context.
 
 
+%% If an user authenticated during this request then the user-agent needs to re-connect
+maybe_auth_change({ok, Msgs, ContextOut} = Res, ContextIn) ->
+    case is_auth_change(ContextOut, ContextIn) of
+        true ->
+            % Assume the new session-id comes along in the z_sid cookie
+            StatusMsg = msg(page, session, 
+                            #session_state{page_id=ContextOut#context.page_id, user_id=ContextOut#context.user_id},
+                            []),
+            {ok, lists:flatten([StatusMsg,Msgs]), ContextOut};
+        false ->
+            Res
+    end;
+maybe_auth_change(Res, _ContextIn) ->
+    Res.
+
+is_auth_change(#context{session_id=U1}, #context{session_id=U2}) when U1 =/= U2 ->
+    true;
+is_auth_change(#context{page_id=U1}, #context{page_id=U2}) when U1 =/= U2 ->
+    true;
+is_auth_change(#context{user_id=U1}, #context{user_id=U2}) when U1 =/= U2 ->
+    true;
+is_auth_change(#context{}, #context{}) ->
+    false.
+
 maybe_session_status_msg(Result, #context{session_pid=SessionPid, page_pid=PagePid}) when is_pid(SessionPid), is_pid(PagePid) ->
     Result;
 maybe_session_status_msg(Result, #context{session_pid=SessionPid}) when not is_pid(SessionPid) ->
@@ -334,9 +363,9 @@ session_status_message(Context) ->
 
 session_status_ensure(Context) ->
     Context1 = z_context:ensure_all(Context),
-    Reply = msg(undefined,
+    Reply = msg(page,
                 session, 
-                {session_state, Context#context.page_id, z_acl:user(Context1)},
+                #session_state{page_id=Context1#context.page_id, user_id=z_acl:user(Context1)},
                 []),
     {ok, Reply, Context1}.
 

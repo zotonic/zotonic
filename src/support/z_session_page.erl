@@ -29,6 +29,8 @@
 
 -define(INTERVAL_MSEC, (?SESSION_PAGE_TIMEOUT div 2) * 1000).
 
+-record(auth_change, {page_id}).
+
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
@@ -304,7 +306,7 @@ handle_cast(ping, State) ->
 
 %% The user of the session changed, signal any connected push connections, stop this page.
 handle_cast(auth_change, #page_state{comet_pid=CometPid, websocket_pid=WsPid} = State) ->
-    Msg = z_transport:msg(page, <<"session">>, <<"auth_change">>, []), 
+    Msg = z_transport:msg(page, <<"session">>, #auth_change{page_id=State#page_state.page_id}, []), 
     {ok, Data} = z_ubf:encode([Msg]), 
     case WsPid of
         undefined when is_pid(CometPid) ->
