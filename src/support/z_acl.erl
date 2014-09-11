@@ -20,6 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([is_allowed/3,
+         maybe_allowed/3,
 
          rsc_visible/2,
          rsc_prop_visible/3,
@@ -59,17 +60,25 @@
 -type object() :: m_rsc:resource().
 
 %% @doc Check if an action is allowed for the current actor.
--spec is_allowed(term(), term(), #context{}) -> true | false | undefined.
+-spec is_allowed(term(), term(), #context{}) -> true | false.
 is_allowed(_Action, _Object, #context{acl=admin}) ->
     true;
 is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 is_allowed(Action, Object, Context) ->
-    case z_notifier:first(#acl_is_allowed{action=Action, object=Object}, Context) of
+    case maybe_allowed(Action, Object, Context) of
         undefined -> false;
-        Other -> Other
+        true -> true;
+        false -> false
     end.
 
+-spec maybe_allowed(term(), term(), #context{}) -> true | false | undefined.
+maybe_allowed(_Action, _Object, #context{acl=admin}) ->
+    true;
+maybe_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
+    true;
+maybe_allowed(Action, Object, Context) ->
+    z_notifier:first(#acl_is_allowed{action=Action, object=Object}, Context).
 
 %% @doc Check if an action on a property of a resource is allowed for the current actor.
 -spec is_allowed_prop(term(), term(), atom(), #context{}) -> true | false | undefined.

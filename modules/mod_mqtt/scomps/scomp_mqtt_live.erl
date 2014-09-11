@@ -114,12 +114,12 @@ script(Target, Where, LiveVars, TplVars, Context) ->
     ]).
 
 map_topic(Id, _Context) when is_integer(Id) ->
-    <<"/rsc/update/",(z_convert:to_binary(Id))/binary>>;
+    <<"/rsc/",(z_convert:to_binary(Id))/binary>>;
 map_topic({edge, Props}, Context) when is_list(Props) ->
     Id = proplists:get_value(id, Props),
     Predicate = proplists:get_value(predicate, Props),
     Name = to_predicate_name(Predicate, Context),
-    <<"/rsc/update/",(z_convert:to_binary(Id))/binary, $/, Name/binary>>;
+    <<"/rsc/",(z_convert:to_binary(Id))/binary, $/, Name/binary>>;
 map_topic(Topic, _Context) ->
     z_convert:to_binary(Topic).
 

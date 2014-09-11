@@ -119,10 +119,10 @@ subscribe(Topic, Qos, Pid, Context) when is_pid(Pid) ->
     Topic1 = maybe_context_topic(Topic, Context),
     case z_mqtt_acl:is_allowed(subscribe, Topic1, Context) of
         true ->
-            lager:debug("MQTT subscribe ~p to ~p", [Pid, Topic1]),
+            lager:debug("MQTT subscribe ~p to ~p for ~p", [Pid, Topic1, z_acl:user(Context)]),
             emqtt_router:subscribe({Topic1, Qos}, Pid);
         false ->
-            lager:debug("MQTT subscribe access denied to ~p", [Topic]),
+            lager:debug("MQTT subscribe access denied to ~p for ~p", [Topic, z_acl:user(Context)]),
             {error, eacces}
     end;
 subscribe(Topic, Qos, MFA, Context) when is_tuple(MFA) ->
@@ -134,7 +134,7 @@ subscribe(Topic, Qos, MFA, Context) when is_tuple(MFA) ->
                 ok -> ok
             end;
         false ->
-            lager:debug("MQTT subscribe access denied to ~p", [Topic]),
+            lager:debug("MQTT subscribe access denied to ~p for ~p", [Topic, z_acl:user(Context)]),
             {error, eacces}
     end.
 
@@ -142,8 +142,10 @@ unsubscribe(Topic, Context) ->
     unsubscribe(Topic, self(), Context).
 
 unsubscribe(Topic, Pid, Context) when is_pid(Pid) ->
+    lager:debug("MQTT unsubscribe ~p from ~p", [Pid, Topic]),
     emqtt_router:unsubscribe(maybe_context_topic(Topic, Context), Pid);
 unsubscribe(Topic, MFA, Context) when is_tuple(MFA) ->
+    lager:debug("MQTT unsubscribe ~p from ~p", [MFA, Topic]),
     z_notifier:first(#mqtt_unsubscribe{topic=maybe_context_topic(Topic, Context), mfa=MFA}, Context).
 
 

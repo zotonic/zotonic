@@ -28,6 +28,9 @@
 
 -compile([{parse_transform, lager_transform}]).
 
+
+%% TODO: first check ACL callbacks, then this local fallback
+
 is_allowed(Action, Topic, #context{} = Context) when Action =:= subscribe; Action =:= publish ->
     LocalSite = z_convert:to_binary(z_context:site(Context)), 
     Parts = emqtt_topic:words(Topic),
@@ -35,13 +38,26 @@ is_allowed(Action, Topic, #context{} = Context) when Action =:= subscribe; Actio
         true ->
             % Admin can do anything on any topic within the admin's site.
             case Parts of
-                [<<"site">>, LocalSite | _] -> 
-                    true;
-                _ ->
-                    is_allowed(Action, Topic, Parts, LocalSite, Context)
+                [<<"site">>, LocalSite | _] -> true;
+                _ -> is_allowed_acl(Action, Topic, Parts, LocalSite, Context)
             end;
         false ->
-            is_allowed(Action, Topic, Parts, LocalSite, Context)
+            is_allowed_acl(Action, Topic, Parts, LocalSite, Context)
+    end.
+
+
+is_allowed_acl(Action, Topic, Words, LocalSite, Context) ->
+    Object = #acl_mqtt{
+        type=emqtt_topic:type(Words),   % wildcard | direct
+        topic=Topic,
+        words=Words,
+        site=LocalSite,
+        page_id=z_session_page:page_id(Context)
+    },
+    case z_acl:maybe_allowed(Action, Object, Context) of
+        true -> true;
+        false -> false;
+        undefined -> is_allowed(Action, Topic, Words, LocalSite, Context)
     end.
 
 
@@ -53,7 +69,7 @@ is_allowed(_Action, _Topic, [<<"site">>, Site, <<"test">>], Site, _Context) ->
 is_allowed(subscribe, _Topic, [<<"public">>], _Site, _Context) -> 
     true;
 is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"public">>], Site, _Context) ->
-     true;
+    true;
 
 is_allowed(subscribe, _Topic, [<<"user">>], _Site, Context) -> 
     z_auth:is_auth(Context); 
@@ -71,22 +87,15 @@ is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User], Site, Context)
     end;
 is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"page">>], Site, _Context) ->
     true;
-is_allowed(publish, _Topic, [<<"site">>, Site, <<"rsc">>, <<"update">>, RscId | _], Site, Context) ->
+is_allowed(publish, _Topic, [<<"site">>, Site, <<"rsc">>, RscId | _], Site, Context) ->
     z_acl:rsc_editable(z_convert:to_integer(RscId), Context);
-is_allowed(publish, _Topic, [<<"site">>, _SiteA, <<"rsc">>, <<"update">> | _], _SiteB, Context) ->
-    z_acl:is_admin(Context); 
+is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"rsc">>, RscId | _], Site, Context) ->
+    z_acl:rsc_visible(z_convert:to_integer(RscId), Context);
 is_allowed(Action, Topic, Words, Site, Context) ->
     is_allowed(Action, Topic, Words, Site, z_session_page:page_id(Context), Context).
 
 is_allowed(_Action, _Topic, [<<"site">>, Site, <<"page">>, PageId], Site, PageId, _Context) ->
     true;
-is_allowed(Action, Topic, Words, Site, PageId, Context) ->
-    Object = #acl_mqtt{
-        type=emqtt_topic:type(Words),   % wildcard | direct
-        topic=Topic,
-        words=Words,
-        site=Site,
-        page_id=PageId
-    },
-    z_acl:is_allowed(Action, Object, Context).
+is_allowed(_Action, _Topic, _Words, _Site, _PageId, _Context) ->
+    false.
 

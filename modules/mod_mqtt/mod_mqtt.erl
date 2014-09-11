@@ -38,6 +38,7 @@
     observe_media_replace_file/2,
     observe_edge_delete/2,
     observe_edge_insert/2,
+    observe_edge_update/2,
 
     observe_action_event_type/2
     ]).
@@ -91,7 +92,7 @@ local_topic(Topic) -> Topic.
 
 observe_rsc_update_done(#rsc_update_done{action=Action, post_is_a=IsA, id=Id}, Context) ->
     z_mqtt:publish(
-        <<"rsc/update/",(z_convert:to_binary(Id))/binary>>, 
+        <<"rsc/",(z_convert:to_binary(Id))/binary>>, 
         [
             {id, Id},
             {modifier_id, z_acl:user(Context)},
@@ -102,7 +103,7 @@ observe_rsc_update_done(#rsc_update_done{action=Action, post_is_a=IsA, id=Id}, C
 
 observe_media_replace_file(#media_replace_file{id=Id}, Context) ->
     z_mqtt:publish(
-        <<"rsc/update/",(z_convert:to_binary(Id))/binary>>, 
+        <<"rsc/",(z_convert:to_binary(Id))/binary>>, 
         [
             {id, Id},
             {modifier_id, z_acl:user(Context)},
@@ -112,7 +113,7 @@ observe_media_replace_file(#media_replace_file{id=Id}, Context) ->
 
 observe_edge_delete(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
     z_mqtt:publish(
-        <<"rsc/update/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
+        <<"rsc/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
         [
             {id,SubjectId},
             {modifier_id, z_acl:user(Context)},
@@ -124,7 +125,7 @@ observe_edge_delete(#edge_delete{subject_id=SubjectId, predicate=PredName, objec
 
 observe_edge_insert(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
     z_mqtt:publish(
-        <<"rsc/update/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
+        <<"rsc/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
         [
             {id,SubjectId},
             {modifier_id, z_acl:user(Context)},
@@ -134,6 +135,17 @@ observe_edge_insert(#edge_insert{subject_id=SubjectId, predicate=PredName, objec
         ],
         Context).
 
+observe_edge_update(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
+    z_mqtt:publish(
+        <<"rsc/",(z_convert:to_binary(SubjectId))/binary, $/, (z_convert:to_binary(PredName))/binary>>, 
+        [
+            {id,SubjectId},
+            {modifier_id, z_acl:user(Context)},
+            {action, update},
+            {predicate, PredName},
+            {object_id, ObjectId}
+        ],
+        Context).
 
 %% @doc Handle the <tt>{live ...}</tt> event type.
 observe_action_event_type(#action_event_type{event={mqtt, _Args}} = Ev, Context) ->
