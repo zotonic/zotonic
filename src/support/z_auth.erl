@@ -143,7 +143,7 @@ logon_from_session(Context) ->
     case z_context:get_session(auth_user_id, Context) of
         none ->
             z_memo:set_userid(undefined),
-            Context;
+            z_acl:logoff(Context);
         undefined ->
             % New session, check if some module wants to log on
             case z_notifier:first(auth_autologon, Context) of
@@ -157,7 +157,7 @@ logon_from_session(Context) ->
                             ContextLogon;
                         {error, _Reason} -> 
                             z_memo:set_userid(undefined),
-                            Context
+                            z_acl:logoff(Context)
                     end
             end;
         UserId ->

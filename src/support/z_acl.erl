@@ -311,6 +311,8 @@ logon_prefs(Id, Context) ->
 
 %% @doc Log off, reset the acl field of the context
 -spec logoff(#context{}) -> #context{}.
+logoff(#context{user_id=undefined, acl=undefined} = Context) ->
+    Context;
 logoff(Context) ->
     case z_notifier:first(#acl_logoff{}, Context) of
         undefined -> Context#context{user_id=undefined, acl=undefined};

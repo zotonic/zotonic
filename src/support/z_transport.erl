@@ -158,7 +158,7 @@ incoming_msgs(L, Context) when is_list(L) ->
         {ok, [], Context},
         L);
 incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_class=UA, content_type=CT} = Msg, Context) ->
-    Context1 = maybe_set_sessions(SessionId, PageId, Context),
+    Context1 = maybe_logon(maybe_set_sessions(SessionId, PageId, Context)),
     Context2 = maybe_set_uaclass(UA, Context1),
     try
         maybe_auth_change(incoming_1(Msg#z_msg_v1{data=decode_data(CT,Data)}, Context2), Context2)
@@ -273,6 +273,28 @@ maybe_set_sessions(SessionId, PageId, Context) ->
             SessionId,
             Context)).
 
+maybe_logon(#context{session_pid=undefined} = Context) ->
+    Context;
+maybe_logon(Context) ->
+    UserId = z_acl:user(Context),
+    try
+        case z_context:get_session(auth_user_id, Context) of
+            UserId when is_integer(UserId) ->
+                z_memo:set_userid(UserId),
+                Context;
+            none when is_integer(UserId) ->
+                z_memo:set_userid(undefined),
+                z_acl:logoff(Context);
+            _ ->
+                z_auth:logon_from_session(Context)
+        end
+    catch
+        exit:{noproc, _} ->
+            lager:info("PageId without page session (session_id ~p)", [Context#context.session_id]),
+            z_acl:logoff(Context#context{session_pid=undefined, page_pid=undefined})
+    end.
+
+
 maybe_set_session(undefined, Context) ->
     Context;
 maybe_set_session(<<>>, Context) ->
@@ -284,12 +306,12 @@ maybe_set_session(SessionId, Context) ->
     {ok, Context1} = z_session_manager:start_session(optional, SessionId, Context),
     Context1.
 
-maybe_set_page_session(_PageId, #context{session_pid=undefined, session_id=SessionId} = Context) ->
-    lager:error("PageId without page session (session_id ~p)", [SessionId]),
-    Context;
 maybe_set_page_session(undefined, Context) ->
     Context;
 maybe_set_page_session(<<>>, Context) ->
+    Context;
+maybe_set_page_session(_PageId, #context{session_pid=undefined, session_id=SessionId} = Context) ->
+    lager:info("PageId without page session (session_id ~p)", [SessionId]),
     Context;
 maybe_set_page_session(PageId, #context{page_id=PageId} = Context) ->
     Context;
@@ -304,7 +326,7 @@ maybe_set_page_session(PageId, Context) ->
         end
     catch
         exit:{noproc, _} ->
-            lager:error("PageId without page session (session_id ~p)", [Context#context.session_id]),
+            lager:info("PageId without page session (session_id ~p)", [Context#context.session_id]),
             Context#context{session_pid=undefined}
     end.
 
