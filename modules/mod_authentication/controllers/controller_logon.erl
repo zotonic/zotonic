@@ -178,19 +178,19 @@ event(#submit{message=[], form="password_reset"}, Context) ->
     end;
 
 event(#submit{message=[], form="password_reminder"}, Context) ->
-	case z_string:trim(z_context:get_q("reminder_address", Context, [])) of
-		[] ->
-			logon_error("reminder", Context);
-		Reminder ->
-			case lookup_identities(Reminder, Context) of
-				[] -> 
-					logon_error("reminder", Context);
-				Identities ->
-					% @todo TODO check if reminder could be sent (maybe there is no e-mail address)
-					send_reminder(Identities, Context),
-					logon_stage("reminder_sent", Context)
-			end
-	end;
+    case z_string:trim(z_context:get_q("reminder_address", Context, [])) of
+        [] ->
+            logon_error("reminder", Context);
+        Reminder ->
+            case lookup_identities(Reminder, Context) of
+                [] -> 
+                    logon_error("reminder", Context);
+                Identities ->
+                    % @todo TODO check if reminder could be sent (maybe there is no e-mail address)
+                    send_reminder(Identities, Context),
+                    logon_stage("reminder_sent", Context)
+            end
+    end;
 
 event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context) ->
     LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
@@ -240,33 +240,32 @@ logon_stage(Stage, Args, Context) ->
 
 logon_user(UserId, Context) ->
     case z_auth:logon(UserId, Context) of
-		{ok, ContextUser} ->
-		    ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
-		        [] -> ContextUser;
-		        _ -> set_rememberme_cookie(UserId, ContextUser)
-		    end,
-		    z_render:wire([
-                    {script, [{script, <<"z_start_spinner();">>}]},
-                    {redirect, [{location, cleanup_url(get_ready_page(ContextRemember))}]}
-                ], ContextRemember);
-		{error, user_not_enabled} ->
-			check_verified(UserId, Context);
-		{error, _Reason} ->
-			% Could not log on, some error occured
-			logon_error("unknown", Context)
-	end.
+        {ok, ContextUser} ->
+            ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
+                [] -> ContextUser;
+                _ -> set_rememberme_cookie(UserId, ContextUser)
+            end,
+            z_render:wire(
+                    {redirect, [{location, cleanup_url(get_ready_page(ContextRemember))}]}, 
+                    ContextRemember);
+        {error, user_not_enabled} ->
+            check_verified(UserId, Context);
+        {error, _Reason} ->
+            % Could not log on, some error occured
+            logon_error("unknown", Context)
+    end.
 
 
 check_verified(UserId, Context) ->
-	case m_rsc:p(UserId, is_verified_account, z_acl:sudo(Context)) of
-		false ->
-			% The account is awaiting verification
-			logon_stage("verification_pending", [{user_id, UserId}], Context);
-		V when V == true orelse V == undefined ->
-			% The account has been disabled after verification, or
-			% verification flag not set, account didn't need verification
-			logon_error("unknown", Context)
-	end.
+    case m_rsc:p(UserId, is_verified_account, z_acl:sudo(Context)) of
+        false ->
+            % The account is awaiting verification
+            logon_stage("verification_pending", [{user_id, UserId}], Context);
+        V when V == true orelse V == undefined ->
+            % The account has been disabled after verification, or
+            % verification flag not set, account didn't need verification
+            logon_error("unknown", Context)
+    end.
 
 
 %% @doc Check if there is a "rememberme" cookie.  If so then return the user id
@@ -358,15 +357,15 @@ make_rememberme_cookie_value(UserId, Context) ->
 % @doc Find all identities with the given handle.  The handle is either an e-mail address or an username.
 lookup_identities(Handle, Context) ->
     Handle1 = z_string:trim(Handle),
-	lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context).
+    lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context).
 
 lookup_by_username("admin", _Context) ->
     [];
 lookup_by_username(Handle, Context) ->
-	case m_identity:lookup_by_username(Handle, Context) of
-		undefined -> [];
-		Row -> [ proplists:get_value(rsc_id, Row) ]
-	end.
+    case m_identity:lookup_by_username(Handle, Context) of
+        undefined -> [];
+        Row -> [ proplists:get_value(rsc_id, Row) ]
+    end.
 
 
 %% @doc Find all users with a certain e-mail address
@@ -382,63 +381,63 @@ lookup_by_email(Handle, Context) ->
 
 %% Send an e-mail reminder to the listed ids.
 send_reminder(Ids, Context) ->
-	case send_reminder(Ids, z_acl:sudo(Context), []) of
-		[] -> {error, no_email};
-		_ -> ok
-	end.
-	
+    case send_reminder(Ids, z_acl:sudo(Context), []) of
+        [] -> {error, no_email};
+        _ -> ok
+    end.
+    
 send_reminder([], _Context, Acc) ->
-	Acc;
+    Acc;
 send_reminder([Id|Ids], Context, Acc) ->
-	case find_email(Id, Context) of
-		undefined -> 
+    case find_email(Id, Context) of
+        undefined -> 
             send_reminder(Ids, Context, Acc);
-		Email -> 
+        Email -> 
             case m_identity:get_username(Id, Context) of
                 undefined ->
                     send_reminder(Ids, Context, Acc);
                 <<"admin">> ->
                     send_reminder(Ids, Context, Acc);
                 Username ->
-        			Vars = [
-        			    {recipient_id, Id},
-        				{id, Id},
-        				{secret, set_reminder_secret(Id, Context)},
-        				{username, Username},
-        				{email, Email}
-        			],
-        			send_email(Email, Vars, Context),
+                    Vars = [
+                        {recipient_id, Id},
+                        {id, Id},
+                        {secret, set_reminder_secret(Id, Context)},
+                        {username, Username},
+                        {email, Email}
+                    ],
+                    send_email(Email, Vars, Context),
                     send_reminder(Ids, Context, [Id|Acc])
             end
-	end.
+    end.
 
 
 %% @doc Find the preferred e-mail address of an user.
 find_email(Id, Context) ->
-	m_rsc:p_no_acl(Id, email, Context).
+    m_rsc:p_no_acl(Id, email, Context).
 
 %% @doc Sent the reminder e-mail to the user.
 send_email(Email, Vars, Context) ->
-	z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
-	ok.
+    z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
+    ok.
 
 
 %% @doc Set the unique reminder code for the account.
 set_reminder_secret(Id, Context) ->
-	Code = z_ids:id(),
-	m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
-	Code.
+    Code = z_ids:id(),
+    m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
+    Code.
 
 %% @doc Delete the reminder secret of the user
 delete_reminder_secret(Id, Context) ->
-	m_identity:delete_by_type(Id, "logon_reminder_secret", Context).
-	
+    m_identity:delete_by_type(Id, "logon_reminder_secret", Context).
+    
 
 get_by_reminder_secret(Code, Context) ->
-	case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
-		undefined -> undefined;
-		Row -> {ok, proplists:get_value(rsc_id, Row)}
-	end.
+    case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
+        undefined -> undefined;
+        Row -> {ok, proplists:get_value(rsc_id, Row)}
+    end.
 
 
 
