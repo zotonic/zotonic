@@ -67,7 +67,6 @@ process_post_ubf(ReqData, Context) ->
 %% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2 
 process_post_form(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
-    ?DEBUG(z_context:get_q_all(Context)),
     case z_context:get_q("postback", Context) of
         undefined ->
             % A "nornal" post of a form, no javascript involved
@@ -83,7 +82,6 @@ process_post_form(ReqData, Context0) ->
             end,
             post_return(<<>>, Context2);
         Postback ->
-            ?DEBUG(Postback),
             % A wired postback of a form
             Msg = #z_msg_v1{
                         qos=0,
@@ -97,7 +95,6 @@ process_post_form(ReqData, Context0) ->
                         }
                   },
             {ok, Reply, Context1} = z_transport:incoming(Msg, Context),
-            ?DEBUG(Reply),
             z_transport:transport(Reply, Context1),
             post_return(<<>>, Context1)
     end.
