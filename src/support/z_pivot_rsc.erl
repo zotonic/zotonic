@@ -137,13 +137,15 @@ insert_queue(Id, Context) ->
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
 insert_task(Module, Function, Context) ->
-    insert_task(Module, Function, z_ids:id(), [], Context).
+    insert_task(Module, Function, undefined, [], Context).
 
 %% @doc Insert a slow running pivot task. Use the UniqueKey to prevent double queued tasks.
 insert_task(Module, Function, UniqueKey, Context) ->
     insert_task(Module, Function, UniqueKey, [], Context).
     
 %% @doc Insert a slow running pivot task with unique key and arguments.
+insert_task(Module, Function, undefined, Args, Context) ->
+    insert_task(Module, Function, z_ids:id(), Args, Context);
 insert_task(Module, Function, UniqueKey, Args, Context) ->
     insert_task_after(undefined, Module, Function, UniqueKey, Args, Context).
 
