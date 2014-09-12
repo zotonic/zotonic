@@ -513,26 +513,30 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 end
         end,
     
-    {ok, Id} = z_db:transaction(F, Context),
-    Depicts = depicts(Id, Context),
-    [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
-    z_depcache:flush(Id, Context),
+    case z_db:transaction(F, Context) of
+        {ok, Id} ->
+            Depicts = depicts(Id, Context),
+            [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
+            z_depcache:flush(Id, Context),
 
-    %% Flush categories
-    CatList = m_rsc:is_a(Id, Context),
-    [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
-    
-    m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
+            %% Flush categories
+            CatList = m_rsc:is_a(Id, Context),
+            [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
+            
+            m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
 
-    % Run possible post insertion function.
-    case PreProc#media_upload_preprocess.post_insert_fun of
-        undefined -> ok;
-        PostFun when is_function(PostFun, 3) -> PostFun(Id, Medium1, Context)
-    end, 
+            % Run possible post insertion function.
+            case PreProc#media_upload_preprocess.post_insert_fun of
+                undefined -> ok;
+                PostFun when is_function(PostFun, 3) -> PostFun(Id, Medium1, Context)
+            end, 
 
-    %% Pass the medium record along in the notification; this also fills the depcache (side effect).
-    z_notifier:notify(#media_replace_file{id=Id, medium=get(Id, Context)}, Context),
-    {ok, Id}.
+            %% Pass the medium record along in the notification; this also fills the depcache (side effect).
+            z_notifier:notify(#media_replace_file{id=Id, medium=get(Id, Context)}, Context),
+            {ok, Id};
+        {rollback, {{error, not_allowed}, _StackTrace}} ->
+            {error, not_allowed}
+    end.
 
 is_deletable_file(undefined, _Context) ->
     false;
