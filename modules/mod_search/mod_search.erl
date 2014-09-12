@@ -97,9 +97,9 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Casts for updates to resources
-handle_cast({{rsc_delete, Id}, _Ctx}, State=#state{context=Context,query_watches=Watches}) ->
-    Watches1 = case proplists:get_value('query', m_rsc:p(Id, is_a, Context)) of
-                   undefined -> Watches;
+handle_cast({#rsc_delete{id=Id, is_a=IsA}, _Ctx}, State=#state{context=Context,query_watches=Watches}) ->
+    Watches1 = case lists:member('query', IsA) of
+                   false -> Watches;
                    true -> search_query_notify:watches_remove(Id, Watches, Context)
                end,
     {noreply, State#state{query_watches=Watches1}};

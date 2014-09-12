@@ -121,7 +121,7 @@ observe_edge_delete(#edge_delete{subject_id=SubjectId, predicate=PredName, objec
             {predicate, PredName},
             {object_id, ObjectId}
         ],
-        Context).
+        z_context:prune_for_spawn(Context)).
 
 observe_edge_insert(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
     z_mqtt:publish(
@@ -133,7 +133,7 @@ observe_edge_insert(#edge_insert{subject_id=SubjectId, predicate=PredName, objec
             {predicate, PredName},
             {object_id, ObjectId}
         ],
-        Context).
+        z_context:prune_for_spawn(Context)).
 
 observe_edge_update(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) ->
     z_mqtt:publish(
@@ -145,7 +145,7 @@ observe_edge_update(#edge_update{subject_id=SubjectId, predicate=PredName, objec
             {predicate, PredName},
             {object_id, ObjectId}
         ],
-        Context).
+        z_context:prune_for_spawn(Context)).
 
 %% @doc Handle the <tt>{live ...}</tt> event type.
 observe_action_event_type(#action_event_type{event={mqtt, _Args}} = Ev, Context) ->

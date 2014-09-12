@@ -35,6 +35,7 @@
 % Check every 100msec when working through a backlog. 
 -define(CLEANUP_TIMEOUT_LONG, 600000).
 -define(CLEANUP_TIMEOUT_SHORT, 100).
+-define(CLEANUP_BATCH_SIZE, 100).
 
 -record(state, {host}).
 
@@ -42,7 +43,7 @@
 %% @doc Force a check, useful after known edge operations.
 check(Context) ->
     Name = z_utils:name_for_host(?MODULE, Context),
-    gen_server:call(Name, check).
+    gen_server:call(Name, check, infinity).
 
 
 %%====================================================================
@@ -87,7 +88,9 @@ handle_call(check, _From, State) ->
         {ok, _} = OK ->
             {reply, OK, State, ?CLEANUP_TIMEOUT_SHORT};
         {error, _} = Error ->
-            {reply, Error, State, ?CLEANUP_TIMEOUT_LONG}
+            {reply, Error, State, ?CLEANUP_TIMEOUT_LONG};
+        {rollback,{no_database_connection,_}} ->
+            {noreply, State, ?CLEANUP_TIMEOUT_LONG}
     end;
 
 %% @doc Trap unknown calls
@@ -104,6 +107,8 @@ handle_cast(check, State) ->
         {ok, _} ->
             {noreply, State, ?CLEANUP_TIMEOUT_SHORT};
         {error, _} ->
+            {noreply, State, ?CLEANUP_TIMEOUT_LONG};
+        {rollback,{no_database_connection,_}} ->
             {noreply, State, ?CLEANUP_TIMEOUT_LONG}
     end;
 
@@ -142,13 +147,18 @@ code_change(_OldVsn, State, _Extra) ->
 
 do_check(Host) ->
     Context = z_acl:sudo(z_context:new(Host)),
-    do_check_1(z_db:q("
-                    select id,op,subject_id,predicate,object_id
-                    from edge_log
-                    order by id
-                    limit 1000",
-                    Context),
-                 Context).
+    z_db:transaction(
+        fun(Ctx) ->
+            do_check_1(z_db:q("
+                            select id,op,subject_id,predicate,object_id,edge_id
+                            from edge_log
+                            order by id
+                            limit $1",
+                            [?CLEANUP_BATCH_SIZE],
+                            Ctx),
+                       Ctx)
+        end,
+        Context).
 
 do_check_1([], _Context) ->
     {ok, 0};
@@ -158,9 +168,9 @@ do_check_1(Rs, Context) ->
                     z_depcache:flush(RscId, Context)
                   end,
                   RscIds), 
-    lists:foreach(fun({_Id,Op,SubjectId,Predicate,ObjectId}) ->
+    lists:foreach(fun({_Id,Op,SubjectId,Predicate,ObjectId,EdgeId}) ->
                     PredName = z_convert:to_atom(Predicate), 
-                    do_edge_notify(Op, SubjectId, PredName, ObjectId, Context)
+                    do_edge_notify(Op, SubjectId, PredName, ObjectId, EdgeId, Context)
                   end, Rs),
     Ranges = z_utils:ranges([ element(1,R) || R <- Rs ]),
     z_db:transaction(
@@ -178,13 +188,13 @@ do_check_1(Rs, Context) ->
 
 fetch_ids([], Acc) ->
     Acc;
-fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId}|Rs], Acc) ->
+fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId,_EdgeId}|Rs], Acc) ->
     fetch_ids(Rs, [SubjectId,ObjectId|Acc]).
 
-do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, Context) ->
-    z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context);
-do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, Context) ->
-    z_notifier:notify(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context);
-do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, Context) ->
-    z_notifier:notify(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context).
+do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
+    z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context);
+do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
+    z_notifier:notify(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context);
+do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
+    z_notifier:notify(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context).
 

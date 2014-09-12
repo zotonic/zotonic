@@ -208,7 +208,7 @@
 %% @doc Resource will be deleted. (notify)
 %% This notification is part of the delete transaction, it's purpose is to clean up
 %% associated data.
--record(rsc_delete, {id}).
+-record(rsc_delete, {id, is_a}).
 
 %% @doc Foldr for an resource insert, modify the insertion properties.
 -record(rsc_insert, {}).
@@ -325,15 +325,15 @@
 
 %% @doc An edge has been inserted. (notify)
 %% The predicate is an atom.
--record(edge_insert, {subject_id, predicate, object_id}).
+-record(edge_insert, {subject_id, predicate, object_id, edge_id}).
 
 %% @doc An edge has been deleted. (notify)
 %% The predicate is an atom.
--record(edge_delete, {subject_id, predicate, object_id}).
+-record(edge_delete, {subject_id, predicate, object_id, edge_id}).
 
 %% @doc An edge has been updated. (notify)
 %% The predicate is an atom.
--record(edge_update, {subject_id, predicate, object_id}).
+-record(edge_update, {subject_id, predicate, object_id, edge_id}).
 
 
 %% @doc Notification that a site configuration is changed (notify)

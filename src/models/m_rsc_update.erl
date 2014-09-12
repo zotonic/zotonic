@@ -76,7 +76,7 @@ delete_nocheck(Id, Context) ->
     Props = m_rsc:get(Id, Context),
     
     F = fun(Ctx) ->
-        z_notifier:notify(#rsc_delete{id=Id}, Ctx),
+        z_notifier:notify(#rsc_delete{id=Id, is_a=CatList}, Ctx),
         m_rsc_gone:gone(Id, Ctx),
         z_db:delete(rsc, Id, Ctx)
     end,
