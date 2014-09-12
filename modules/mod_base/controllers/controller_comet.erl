@@ -47,12 +47,17 @@ malformed_request(ReqData, _Context) ->
     ?WM_REPLY(false, Context).
 
 forbidden(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    %% Ensure all, but don't start a new session
-    Context2 = z_context:set(no_session, true, Context1),
-    Context3 = z_context:ensure_all(Context2),
-    z_context:lager_md(Context3),
-    ?WM_REPLY(not z_context:has_session(Context3), Context3).
+    try
+        Context1 = ?WM_REQ(ReqData, Context),
+        %% Ensure all, but don't start a new session
+        Context2 = z_context:set(no_session, true, Context1),
+        Context3 = z_context:ensure_all(Context2),
+        z_context:lager_md(Context3),
+        ?WM_REPLY(not z_context:has_session(Context3), Context3)
+    catch
+        exit:{noproc,_} ->
+            {true, ReqData, Context}
+    end.
 
 allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
