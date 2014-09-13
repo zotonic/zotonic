@@ -112,9 +112,9 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
             Name1 = z_html:escape(z_string:trim(Name)),
             Message1 = z_html:escape_link(z_string:trim(Message)),
             KeepInformed = z_convert:to_bool(z_context:get_q("keep_informed", Context, false)),
-	    UserAgent = z_context:get_q("user_agent", Context, <<"">>),
-	    IPAddress = wrq:peer(z_context:get_reqdata(Context)),
-	    Props = [
+            UserAgent = z_context:get_q("user_agent", Context, <<"">>),
+            IPAddress = peer(z_context:get_reqdata(Context)),
+            Props = [
                 {rsc_id, z_convert:to_integer(RscId)},
                 {is_visible, Is_visible},
                 {user_id, z_acl:user(Context)},
@@ -139,6 +139,10 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
             {error, eacces}
     end.
 
+peer(undefined) ->
+    <<>>;
+peer(RD) ->
+    wrq:peer(RD).
 
 %% @doc Delete a comment.  Only possible if the user has edit permission on the page.
 delete(CommentId, Context) ->
