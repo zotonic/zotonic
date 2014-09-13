@@ -97,6 +97,11 @@
 %%% XYZ, YCbCr, YCC, YIQ, YCbCr, YUV.
    %% {default_colorspace, "sRGB"},
 
+%%% Whether or not to do a modification check on the templates while
+%%% they are rendered. Turn this off in production to increase
+%%% performance. However, you need to do an explicit z:flush() to see template changes.
+   %% {template_modified_check, true},
+   
   ]
  }
 ].

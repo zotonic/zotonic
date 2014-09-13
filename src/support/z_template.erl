@@ -49,7 +49,7 @@
     filename_to_modulename/3
 ]).
 
--record(state, {reset_counter, host}).
+-record(state, {reset_counter, host, do_modified_check}).
 
 %% Prefix for modules generated from templates.
 -define(TEMPLATE_PREFIX, "template_").
@@ -241,13 +241,14 @@ init(SiteProps) ->
     process_flag(trap_exit, true),
     Host = proplists:get_value(host, SiteProps),
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Host)),
-    {ok, #state{reset_counter=z_utils:now_msec(), host=Host}}.
+    Flag = z_config:get(template_modified_check, true),
+    {ok, #state{reset_counter=z_utils:now_msec(), host=Host, do_modified_check=Flag}}.
 
 
 %% @spec handle_call({check_modified, Module}, From, State) -> ok | modified
 %% @doc Compile the template if it has been modified, return the template module for rendering.
 handle_call({check_modified, Module}, _From, State) when Module =/= undefined ->
-    Result = case template_is_modified(Module, State#state.reset_counter, State#state.host) of
+    Result = case template_is_modified(Module, State) of
                 true  -> modified;
                 false -> ok
              end,
@@ -326,17 +327,22 @@ filename_to_modulename(File, UAClass, Host) ->
 
 %% Check if the template or one of the by the template included files is modified since compilation
 %% or if the template has been compiled before a reset of all compiled templates.
-template_is_modified(Module, ResetCounter, Host) ->
-    case catch Module:template_reset_counter() < ResetCounter of
+template_is_modified(Module, State) ->
+    case catch Module:template_reset_counter() < State#state.reset_counter of
         true ->
             true;
         false ->
-            case Module:trans_table() /= z_trans_server:table(Host) of
-                true ->
-                    true;
+            case State#state.do_modified_check of
                 false ->
-                    Deps = Module:dependencies(),
-                    is_modified(Deps)
+                    false;
+                true ->
+                    case Module:trans_table() /= z_trans_server:table(State#state.host) of
+                        true ->
+                            true;
+                        false ->
+                            Deps = Module:dependencies(),
+                            is_modified(Deps)
+                    end
             end;
         _Error -> 
             true
