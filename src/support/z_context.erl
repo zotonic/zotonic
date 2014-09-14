@@ -539,9 +539,11 @@ copy_scripts(From, Context) ->
 %% @doc Continue an existing session, if the session id is in the request.
 continue_session(Context) ->
     case z_session_manager:continue_session(Context) of
-        {ok, Context1} ->
+        {ok, #context{session_pid=Pid} = Context1} when is_pid(Pid) ->
             Context2 = z_auth:logon_from_session(Context1),
             z_notifier:foldl(session_context, Context2, Context2);
+        {ok, Context1} ->
+            Context1;
         {error, _} ->
             Context
     end.
