@@ -585,20 +585,20 @@ edge_log_function() ->
     "
     CREATE FUNCTION edge_update() RETURNS trigger AS $$
     declare
-        predicate character varying(80);
+        new_predicate character varying(80);
     begin
         if (tg_op = 'INSERT') then
-            select into predicate r.name from rsc r where r.id = new.predicate_id;
-            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, pred, seq)
-            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, pred, new.seq);
+            select into new_predicate r.name from rsc r where r.id = new.predicate_id;
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
+            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, new_predicate, new.seq);
         elseif (tg_op = 'UPDATE') then
-            select into predicate r.name from rsc r where r.id = new.predicate_id;
-            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, pred, seq)
-            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, pred, new.seq);
+            select into new_predicate r.name from rsc r where r.id = new.predicate_id;
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
+            values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, new_predicate, new.seq);
         elseif (tg_op = 'DELETE') then
-            select into predicate r.name from rsc r where r.id = old.predicate_id;
-            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, pred, seq)
-            values (tg_op, old.id, old.subject_id, old.object_id, old.predicate_id, pred, old.seq);
+            select into new_predicate r.name from rsc r where r.id = old.predicate_id;
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
+            values (tg_op, old.id, old.subject_id, old.object_id, old.predicate_id, new_predicate, old.seq);
         end if;
         return null;
     end;
