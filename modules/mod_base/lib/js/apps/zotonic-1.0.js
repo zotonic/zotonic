@@ -280,6 +280,14 @@ function z_session_restart_check(invalid_page_id)
 function z_session_status_ok(page_id, user_id)
 {
     if (page_id != z_pageid || user_id != z_userid) {
+        var status = {
+            status: "restart",
+            user_id: user_id,
+            page_id: page_id,
+            prev_user_id: z_userid,
+            prev_page_id: z_pageid
+        };
+
         z_pageid = page_id;
         z_userid = user_id;
 
@@ -291,23 +299,22 @@ function z_session_status_ok(page_id, user_id)
         // if no handlers then the default reload dialog is shown
         if (typeof pubzub == "object" && pubzub.subscribers("session").length > 0) {
             z_session_valid = true;
-            pubzub.publish("session", { status: "restart", user_id: user_id, page_id: page_id});
+            pubzub.publish("session", status);
             z_stream_restart();
         } else {
-            z_session_invalid_reload(z_pageid);
+            z_session_invalid_reload(z_pageid, status);
         }
     }
 }
 
-function z_session_invalid_reload(page_id)
+function z_session_invalid_reload(page_id, status)
 {
     if (page_id == z_pageid) {
-        if (z_spinner_show_ct === 0 && !z_page_unloading)
-        {
-            z_transport_delegates.reload();
+        if (z_spinner_show_ct === 0 && !z_page_unloading) {
+            z_transport_delegates.reload(status);
         } else {
             setTimeout(function() {
-                z_session_invalid_reload(page_id);
+                z_session_invalid_reload(page_id, status);
             }, 1000);
         }
     }
