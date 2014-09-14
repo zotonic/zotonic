@@ -35,7 +35,8 @@
     start_session/3,
     continue_session/1,
     ensure_session/1, 
-    stop_session/1, 
+    stop_session/1,
+    stop_session/2,
     rename_session/1, 
     whereis/2,
     whereis_user/2,
@@ -96,6 +97,17 @@ stop_session(#context{session_manager=SessionManager, session_pid=SessionPid} = 
         ignore -> {ok, Context}
     end.
 
+-spec stop_session(binary(), #context{}) -> ok | {error, term()}.
+stop_session(SessionId, #context{session_manager=SessionManager} = Context) ->
+    case whereis(SessionId, Context) of
+        undefined ->
+            {error, notfound};
+        SessionPid ->
+            case gen_server:call(SessionManager, {stop_session, SessionPid, SessionId}) of
+                ok -> ok;
+                ignore -> {error, notfound}
+            end
+    end.
 
 %% @doc Rename the session id, only call this after ensure_session
 -spec rename_session(#context{}) -> {ok, #context{}} | {error, term()}.
