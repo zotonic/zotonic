@@ -33,7 +33,7 @@ tinymce.addI18n('nl',{
 "Header 6": "Kop 6",
 "Redo": "Opnieuw",
 "Paragraph": "Paragraaf",
-"Ok": "Ok\u00e9",
+"Ok": "Ok",
 "Bold": "Vet",
 "Code": "Code",
 "Italic": "Schuin",
