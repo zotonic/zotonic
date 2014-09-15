@@ -11,7 +11,7 @@ Signal that this template extends a template with the same name in a module with
 
 The `overrules` tag must be the first tag in the template.
 
-.. note:: A template that overrules another template contains only the :ref:`tag-extends` tag and :ref:`tag-block` tags.
+.. note:: A template that overrules another template contains only the :ref:`tag-overrules` tag and :ref:`tag-block` tags.
 
 Example, say a template "page.tpl" contains the following::
 
