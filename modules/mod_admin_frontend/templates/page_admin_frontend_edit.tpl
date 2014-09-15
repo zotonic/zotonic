@@ -103,8 +103,7 @@
 
 	    "js/apps/admin-common.js"
 	    "js/modules/admin-frontend.js"
-	    "js/modules/tinymce3.5.0/z_editor.js"
 	%}
 	{% all include "_admin_lib_js.tpl" %}
-	{% include "_admin_tinymce.tpl" is_tinymce_include %}
+	{% include "_editor.tpl" is_editor_include %}
 {% endblock %}
