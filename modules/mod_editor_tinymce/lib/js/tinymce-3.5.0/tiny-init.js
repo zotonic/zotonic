@@ -1,4 +1,5 @@
-tinyInit = {
+if (typeof tinyInit !== 'object')
+  tinyInit = {
 	mode: "none",
 	theme: "advanced",
 	theme_advanced_buttons1: "bold,italic,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,cleanup,codemagic,|,formatselect,|,zlink,zmedia",

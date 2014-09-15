@@ -1,4 +1,5 @@
-tinyInit = {
+if (typeof tinyInit !== 'object')
+  tinyInit = {
     selector: "textarea",
 	mode: "none",
 	theme: "modern",

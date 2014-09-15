@@ -25,25 +25,27 @@ var z_editor = (function ($) {
         },
 
         add: function ($el) {
-            var self,
-                mce_id;
+            var self = this;
             $("textarea.z_editor", $el).each(function () {
-                if (typeof $(this).tinymce === "function") {
-                    self = $(this);
-                    setTimeout(function () {
-                        if (typeof tinyInit === "object") {
-                            self.tinymce(tinyInit);
-                        } else {
-                            self.tinymce({});
-                        }
-                    }, 200);
-                } else if (typeof tinyMCE === "object") {
-                    mce_id = $(this).attr("id");
-                    setTimeout(function () {
-                        tinyMCE.execCommand("mceAddControl", false, mce_id);
-                    }, 200);
-                }
+                self.initElement($(this));
             });
+        },
+
+        initElement: function ($elt) {
+            if (typeof $elt.tinymce === "function") {
+                setTimeout(function () {
+                    var ti = $.extend({}, tinyInit || {});
+                    if ($elt.attr("dir")) {
+                        ti.directionality = $elt.attr("dir");
+                    }
+                    $elt.tinymce(ti);
+                }, 200);
+            } else if (typeof tinyMCE === "object") {
+                var mce_id = $elt.attr("id");
+                setTimeout(function () {
+                    tinyMCE.execCommand("mceAddControl", false, mce_id);
+                }, 200);
+            }
         },
 
         save: function ($el) {
