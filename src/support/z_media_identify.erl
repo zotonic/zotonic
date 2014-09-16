@@ -33,6 +33,7 @@
     extension/2,
     extension/3,
 	guess_mime/1,
+    is_mime_vector/1,
     is_mime_compressed/1
 ]).
 
@@ -229,8 +230,9 @@ identify_file_imagemagick(OsFamily, ImageFile) ->
                 [_Path, Type, Dim, _Dim2] = Words1,
                 Mime = mime(Type),
                 [Width,Height] = string:tokens(Dim, "x"),
-                Props1 = [{width, list_to_integer(Width)},
-                          {height, list_to_integer(Height)},
+                {W1,H1} = maybe_sizeup(Mime, list_to_integer(Width), list_to_integer(Height)),
+                Props1 = [{width, W1},
+                          {height, H1},
                           {mime, Mime}],
                 Props2 = case Mime of
                              "image/" ++ _ ->
@@ -246,6 +248,22 @@ identify_file_imagemagick(OsFamily, ImageFile) ->
                     {error, "unknown result from 'identify': '"++Line1++"'"}
             end
     end.
+
+%% @doc Prevent unneeded 'extents' for vector based inputs.
+maybe_sizeup(Mime, W, H) ->
+    case is_mime_vector(Mime) of
+        true -> {W*2, H*2};
+        false -> {W,H}
+    end.
+
+is_mime_vector("application/pdf") -> true;
+is_mime_vector("application/postscript") -> true;
+is_mime_vector("image/svg+xml") -> true;
+is_mime_vector(<<"application/pdf">>) -> true;
+is_mime_vector(<<"application/postscript">>) -> true;
+is_mime_vector(<<"image/svg+xml">>) -> true;
+is_mime_vector(_) -> false.
+
 
 -spec devnull(win32|unix) -> string().
 devnull(win32) -> "nul";

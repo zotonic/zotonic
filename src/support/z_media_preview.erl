@@ -86,6 +86,7 @@ convert_1(InFile, OutFile, Mime, FileProps, Filters) ->
     ok = filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
         "convert ",
+        opt_density(FileProps),
         z_utils:os_filename(InFile++infile_suffix(Mime)), " ",
         lists:flatten(z_utils:combine(32, CmdArgs)), " ",
         z_utils:os_filename(OutFile)
@@ -104,6 +105,13 @@ convert_1(InFile, OutFile, Mime, FileProps, Filters) ->
         {error, _} = Error ->
             lager:error("convert cmd ~p failed, result ~p", [Cmd, Error]),
             Error
+    end.
+
+opt_density(Props) ->
+    case proplists:get_value(mime, Props) of
+        <<"application/pdf">> -> " -density 150x150 ";
+        "application/pdf" -> " -density 150x150 ";
+        _Mime -> ""
     end.
 
 run_cmd(Cmd, OutFile) ->
