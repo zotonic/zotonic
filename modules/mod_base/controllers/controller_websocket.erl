@@ -108,7 +108,8 @@ prune_context(Context) ->
     ReqData1 = #wm_reqdata{
                   peer=ReqData#wm_reqdata.peer,
                   port=ReqData#wm_reqdata.port,
-                  resp_headers=mochiweb_headers:empty()
+                  resp_headers=mochiweb_headers:empty(),
+                  req_cookie=[]
     },
     z_context:set_reqdata(ReqData1, ContextPruned). 
 
