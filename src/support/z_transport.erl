@@ -212,7 +212,13 @@ incoming_1(#z_msg_v1{delegate=session, data= <<"check">>}, Context) ->
 incoming_1(#z_msg_v1{delegate=session, data= <<"ensure">>}, Context) ->
     {ok, Reply, Context1} = session_status_ensure(Context),
     {ok, Reply, Context1};
-incoming_1(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
+incoming_1(Msg, #context{session_pid=SPid, page_pid=PPid} = Context) when is_pid(SPid), is_pid(PPid) ->
+    incoming_with_session(Msg, Context);
+incoming_1(_Msg, Context) ->
+    {ok, session_status_message(Context), Context}.
+
+
+incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Pb#postback_event.postback, Context),
     TriggerId1 = case TriggerId of
                     undefined -> Pb#postback_event.trigger;
@@ -231,10 +237,10 @@ incoming_1(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Cont
         {error, ContextValidation} ->
             incoming_context_result(ok, Msg, ContextValidation)
     end;
-incoming_1(#z_msg_v1{delegate=mqtt, data=Data} = Msg, Context) ->
+incoming_with_session(#z_msg_v1{delegate=mqtt, data=Data} = Msg, Context) ->
     Result = z_mqtt:transport_incoming(Data, Context),
     incoming_context_result(Result, Msg, Context);
-incoming_1(#z_msg_v1{delegate=notify, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
+incoming_with_session(#z_msg_v1{delegate=notify, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
     case maybe_set_q(Type, Notify#postback_notify.data, Context) of
         {ok, Context1} ->
             % MochiWeb compatible values...
@@ -251,7 +257,7 @@ incoming_1(#z_msg_v1{delegate=notify, content_type=Type, data=#postback_notify{}
         {error, ContextValidation} ->
             incoming_context_result(ok, Msg, ContextValidation)
     end;
-incoming_1(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
+incoming_with_session(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
     case maybe_set_q(Type, Notify#postback_notify.data, Context) of
         {ok, Context1} ->
             {ok, Module} = z_utils:ensure_existing_module(Delegate),
@@ -265,7 +271,7 @@ incoming_1(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify
         {error, ContextValidation} ->
             incoming_context_result(ok, Msg, ContextValidation)
     end;
-incoming_1(#z_msg_v1{delegate=Delegate} = Msg, Context) when is_atom(Delegate); is_binary(Delegate) ->
+incoming_with_session(#z_msg_v1{delegate=Delegate} = Msg, Context) when is_atom(Delegate); is_binary(Delegate) ->
     {ok, Module} = z_utils:ensure_existing_module(Delegate),
     incoming_context_result(ok, Msg, Module:event(Msg, Context)).
 
@@ -327,7 +333,6 @@ maybe_set_session(<<>>, Context) ->
 maybe_set_session(SessionId, #context{session_id=SessionId} = Context) ->
     Context;
 maybe_set_session(SessionId, Context) ->
-    %% TODO: should check if we have a session after this, if not then an unknown session was referenced
     {ok, Context1} = z_session_manager:start_session(optional, SessionId, Context),
     Context1.
 
