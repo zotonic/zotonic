@@ -53,12 +53,25 @@ prep_chart(Q, Answers, Context) ->
     Total = Yes + No,
     YesP = round(Yes * 100 / Total),
     NoP = 100 - YesP,
+    LabelYes = get_label(yes, Q, Context),
+    LabelNo = get_label(no, Q, Context),
     [
      {question, z_html:escape(proplists:get_value(prompt, Q), Context)},
-     {values, [ {Lab,Val} || {Lab,Val} <- [{"yes", Yes}, {"no", No}], Val /= 0 ]},
+     {values, [{LabelYes, Yes}, {LabelNo, No}]},
      {type, "pie"},
-     {data, [ [Lab,Val] || [Lab,Val] <- [["yes", YesP], ["no", NoP]], Val /= 0 ]}
+     {data, [[LabelYes, YesP], [LabelNo, NoP]]}
     ].
+
+get_label(Label, Q, Context) ->
+    Trans = proplists:get_value(Label, Q, <<>>),
+    maybe_default(Label, z_trans:lookup_fallback(Trans, Context), Context).
+
+maybe_default(no, <<>>, Context) ->
+    ?__("No", Context);
+maybe_default(yes, <<>>, Context) ->
+    ?__("Yes", Context);
+maybe_default(_, Text, _Context) ->
+    Text.
 
 
 prep_answer_header(Q, _Context) ->

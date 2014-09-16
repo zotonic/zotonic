@@ -36,8 +36,6 @@ answer(Block, Answers, _Context) ->
         V -> {ok, [{Name, z_convert:to_binary(z_convert:to_bool(V))}]}
     end.
 
-
-
 prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Q, [{_, Vals}], Context) ->
@@ -46,12 +44,25 @@ prep_chart(Q, [{_, Vals}], Context) ->
     Total = True + False,
     TrueP = round(True * 100 / Total),
     FalseP = 100 - TrueP,
+    LabelTrue = get_label(true, Q, Context),
+    LabelFalse = get_label(false, Q, Context),
     [
      {question, z_html:escape(proplists:get_value(prompt, Q), Context)},
-     {values, [ {Lab,Val} || {Lab,Val} <- [{"true", True}, {"false", False}], Val /= 0 ]},
+     {values, [{LabelTrue, True}, {LabelFalse, False}]},
      {type, "pie"},
-     {data, [ [Lab,Val] || [Lab,Val] <- [["true", TrueP], ["false", FalseP]], Val /= 0 ]}
+     {data, [[LabelTrue, TrueP], [LabelFalse, FalseP]]}
     ].
+
+get_label(Label, Q, Context) ->
+    Trans = proplists:get_value(Label, Q, <<>>),
+    maybe_default(Label, z_trans:lookup_fallback(Trans, Context), Context).
+
+maybe_default(true, <<>>, Context) ->
+    ?__("True", Context);
+maybe_default(false, <<>>, Context) ->
+    ?__("False", Context);
+maybe_default(_, Text, _Context) ->
+    Text.
 
 prep_answer_header(Q, _Context) ->
     proplists:get_value(name, Q).
