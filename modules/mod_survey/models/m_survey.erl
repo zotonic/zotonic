@@ -36,6 +36,7 @@
     survey_stats/2,
     survey_results/2,
     survey_results_sorted/3,
+    prepare_results/2,
     single_result/4,
     delete_result/4,
     get_questions/2
@@ -229,35 +230,71 @@ prep_chart(Type, Block, Stats, Context) ->
 
 
 
-%% @doc Fetch the aggregate answers of a survey, omitting the open text answers. 
+%% @doc Fetch the aggregate answers of a survey. 
 %% @spec survey_stats(int(), Context) -> [ {QuestionId, [{Name, [{Value,Count}] }] } ]
 survey_stats(SurveyId, Context) ->
     Rows = z_db:q("
-                select question, name, value, count(*) 
+                select question, name, value, text
                   from survey_answer 
-                  where survey_id = $1 and value is not null
-                  group by question, name, value 
-                  order by question, name, value", [z_convert:to_integer(SurveyId)], Context),
+                  where survey_id = $1
+                  order by question, name", [z_convert:to_integer(SurveyId)], Context),
     group_questions(Rows, []).
 
 %% @private
 group_questions([], Acc) ->
     lists:reverse(Acc);
 group_questions([{Question,_,_,_}|_] = Answers, Acc) ->
-    {Qs,Answers1} = lists:splitwith(fun({Q,_,_,_}) -> Q == Question end, Answers),
-    NVs = case Qs of
-              [{_, Name, Value, Count}|QsTail] -> group_values(Name, [{Value, Count}], QsTail, []);
-              [] -> []
-          end,
+    {Qs,Answers1} = lists:splitwith(fun({Q,_,_,_}) -> Q =:= Question end, Answers),
+    NVs = group_and_count_values(Qs),
     group_questions(Answers1, [{Question,NVs}|Acc]).
 
-%% @private
-group_values(Name, Values, [], Acc) ->
-    [{Name, Values}|Acc];
-group_values(Name, Values, [{_,Name,V,C}|Rs], Acc) ->
-    group_values(Name, [{V,C}|Values], Rs, Acc);
-group_values(Name, Values, [{_,N,V,C}|Rs], Acc) ->
-    group_values(N, [{V,C}], Rs, [{Name,Values}|Acc]).
+
+group_and_count_values(Qs) ->
+  OnName = split_by_name(Qs),
+  count_values(OnName).
+
+split_by_name([]) ->
+    [];
+split_by_name([{_Q,Name,V,T}|Rest]) ->
+    split_by_name_1(Rest, Name, [{V,T}], []).
+
+split_by_name_1([], Name, Vs, Acc) ->
+    [{Name,Vs}|Acc];
+split_by_name_1([{_Q,Name,V,T}|Rest], Name, Vs, Acc) ->
+    split_by_name_1(Rest, Name, [{V,T}|Vs], Acc);
+split_by_name_1([{_Q,Name1,V,T}|Rest], Name, Vs, Acc) ->
+    split_by_name_1(Rest, Name1, [{V,T}], [{Name,Vs}|Acc]).
+
+count_values(OnName) ->
+    lists:foldl(
+            fun({Name,Vs},Acc) ->
+                Vs1 = split_values(Vs),
+                Dict = lists:foldl(
+                            fun(V,Acc1) ->
+                                dict:update_counter(V, 1, Acc1)
+                            end,
+                            dict:new(),
+                            Vs1),
+                [{Name,dict:to_list(Dict)}|Acc]
+            end,
+            [],
+            OnName).
+
+split_values(Vs) ->
+    split_values_1(Vs, []).
+
+split_values_1([], Acc) ->
+    Acc;
+split_values_1([{undefined,undefined}|Vs], Acc) ->
+    split_values_1(Vs, Acc);
+split_values_1([{V,undefined}|Vs], Acc) ->
+    split_values_1(Vs, [V|Acc]);
+split_values_1([{undefined,Text}|Vs], Acc) ->
+    Ts = binary:split(Text, <<"#">>),
+    split_values_1(Vs, Ts++Acc);
+split_values_1([{V,Text}|Vs], Acc) ->
+    Ts = binary:split(Text, <<"#">>),
+    split_values_1(Vs, [V|Ts++Acc]).
 
 
 %% @doc Get survey results, sorted by the given sort column.

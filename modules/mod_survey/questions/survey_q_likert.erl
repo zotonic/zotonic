@@ -50,12 +50,15 @@ prep_chart(Block, [{_, Vals}], Context) ->
     Labels = [
         <<"5">>,<<"4">>,<<"3">>,<<"2">>,<<"1">>
     ],
-    LabelsDisplay = [
+    LabelsDisplay0 = [
         <<"Strongly agree">>,
         <<"Agree">>,
         <<"Neutral">>,
         <<"Disagree">>,
         <<"Strongly disagree">>
+    ],
+    LabelsDisplay = [
+        z_trans:trans(Lb, Context) || Lb <- LabelsDisplay0
     ],
 
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],

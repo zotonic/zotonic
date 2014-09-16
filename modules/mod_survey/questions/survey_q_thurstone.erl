@@ -55,7 +55,8 @@ prep_chart(Block, [{Name, {text, Vals0}}], Context) ->
     prep_chart(Block, [{Name, Vals0}], Context);
 prep_chart(Block, [{_, Vals}], Context) ->
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
-    Labels = [ Lab || {Lab,_} <- proplists:get_value(answers, Props) ],
+    Answers = proplists:get_value(answers, Props),
+    Labels = [ Lab || {Lab,_} <- Answers ],
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
@@ -63,7 +64,8 @@ prep_chart(Block, [{_, Vals}], Context) ->
         {question, z_html:escape(proplists:get_value(prompt, Block), Context)},
         {values, lists:zip(Labels, Values)},
         {type, "pie"},
-        {data, [{L,P} || {L,P} <- lists:zip(Labels, Perc), P /= 0]}
+        {data, [{L,P} || {L,P} <- lists:zip(Labels, Perc), P /= 0]},
+        {answers, Answers}
     ].
 
 prep_answer_header(Q, _Context) ->
