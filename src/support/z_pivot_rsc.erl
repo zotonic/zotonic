@@ -362,7 +362,7 @@ do_poll(Context) ->
                          from pivot_task_queue 
                          where due is null
                             or due < now()
-                         order by id asc 
+                         order by due asc 
                          limit 1", Context) 
         of
             {Id,Module,Function,Key,Props} ->
