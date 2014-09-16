@@ -95,6 +95,10 @@ start_link(SessionPid, PageId, Context) when is_binary(PageId) ->
                           ?MODULE, {SessionPid,PageId,z_context:site(Context)},
                           []).
 
+stop(#context{page_pid=PagePid}) ->
+    stop(PagePid);
+stop(undefined) ->
+    ok;
 stop(Pid) ->
     try
         gen_server:cast(Pid, stop)
@@ -109,9 +113,17 @@ whereis(PageId, Context) when is_binary(PageId) ->
 ping(Pid) ->
     gen_server:cast(Pid, ping).
 
+session_pid(#context{page_pid=PagePid}) ->
+    session_pid(PagePid);
+session_pid(undefined) ->
+    undefined;
 session_pid(Pid) ->
     gen_server:call(Pid, session_pid).
 
+get_attach_state(#context{page_pid=PagePid}) ->
+    get_attach_state(PagePid);
+get_attach_state(undefined) ->
+    detached;
 get_attach_state(Pid) ->
     try
         gen_server:call(Pid, get_attach_state)
