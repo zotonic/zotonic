@@ -70,20 +70,27 @@ recv_parse(UploadCheckFun, Context) ->
 
 
 %% @doc Report progress back to the page.
+progress(0, _ContentLength, _ReceivedLength, _Context) ->
+    nop;
 progress(Percentage, ContentLength, _ReceivedLength, Context) when ContentLength > ?CHUNKSIZE*5 ->
-	case {	z_convert:to_bool(z_context:get_q("z_comet", Context)),
-			z_context:get_q("z_pageid", Context), 
+	case {	is_push_attached(Context),
+			is_pid(Context#context.page_id), 
 			z_context:get_q("z_trigger_id", Context)} of
-		{true, PageId, TriggerId} when PageId /= undefined; TriggerId /= undefined ->
-			ContextEnsured = z_context:ensure_all(Context),
-			z_session_page:add_script("z_progress('"
-						++z_utils:js_escape(TriggerId)++"',"
-						++integer_to_list(Percentage)++");", ContextEnsured);
-		_ -> nop
+		{true, true, TriggerId} when TriggerId =/= undefined, TriggerId =/= "" ->
+            JS = iolist_to_binary([
+                        "z_progress('", z_utils:js_escape(TriggerId),
+                            "',", integer_to_list(Percentage),");"
+                    ]),
+			z_transport:page(javascript, JS, Context);
+		_ -> 
+            nop
 	end;
 progress(_, _, _, _) ->
     nop.
 	
+is_push_attached(Context) ->
+    z_convert:to_bool(z_context:get_q("z_comet", Context))
+    orelse z_session_page:get_attach_state(Context) =:= attached.
 
 %% @doc Callback function collecting all data found in the multipart/form-data body
 %% @spec callback(Next, function(), form()) -> function() | form()
@@ -121,24 +128,24 @@ callback(Next, Form, UploadCheckFun) ->
             end;
 
         {body, Data} ->
-            if  Form#multipart_form.filename =/= undefined ->
-                if Form#multipart_form.file =/= undefined ->
-                    file:write(Form#multipart_form.file, Data),
-                    NewForm = Form;
+            NewForm = 
+                if  Form#multipart_form.filename =/= undefined ->
+                    if Form#multipart_form.file =/= undefined ->
+                        file:write(Form#multipart_form.file, Data),
+                        Form;
+                    true ->
+                        case file:open(Form#multipart_form.tmpfile, [raw,write]) of
+                            {ok, File} ->
+                                file:write(File, Data),
+                                Form#multipart_form{file=File};
+                            {error, Error} ->
+                                lager:error("Couldn't open ~p for writing, error: ~p~n", [Form#multipart_form.tmpfile, Error]),
+                                exit(could_not_open_file_for_writing)
+                        end
+                    end;
                 true ->
-                    case file:open(Form#multipart_form.tmpfile, [raw,write]) of
-                        {ok, File} ->
-                            file:write(File, Data),
-                            NewForm = Form#multipart_form{file=File};
-                        {error, Error} ->
-                            ?ERROR("Couldn't open ~p for writing, error: ~p~n", [Form#multipart_form.tmpfile, Error]),
-                            NewForm = Form,
-                            exit(could_not_open_file_for_writing)
-                    end
-                end;
-            true ->
-                NewForm = Form#multipart_form{data=[Form#multipart_form.data, binary_to_list(Data)]}
-            end,
+                    Form#multipart_form{data=[Form#multipart_form.data, binary_to_list(Data)]}
+                end,
             fun(N) -> callback(N, NewForm, UploadCheckFun) end;
 
          body_end ->
