@@ -147,7 +147,19 @@ data_encode(Data) ->
 -spec incoming(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> {ok, list(), #context{}}.
 incoming(Msg, Context) ->
     {ok, Rs, Context1} = incoming_msgs(Msg, Context),
-    {ok, maybe_session_status_msg(Rs, Context1), Context1}.
+    {ok, maybe_session_status_msg(Rs, Context1), cleanup_context(Context1, Context)}.
+
+cleanup_context(ContextRes, Context) ->
+    ContextRes#context{
+        props=Context#context.props,
+        updates=[],
+        actions=[],
+        content_scripts=[],
+        scripts=[],
+        wire=[],
+        validators=[],
+        render=[]
+    }.
 
 incoming_msgs(L, Context) when is_list(L) ->
     lists:foldl(
@@ -210,37 +222,49 @@ incoming_1(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Cont
                     undefined -> Pb#postback_event.target;
                     _         -> TargetId
                  end,
-    Context1 = maybe_set_q(ubf, Pb#postback_event.data, Context),
-    Context2 = z_context:set_q("triggervalue", to_list(Pb#postback_event.triggervalue), Context1),
-    ContextRsc = z_context:set_controller_module(Module, Context2),
-    ContextRes = incoming_postback_event(z_convert:to_binary(EventType), Module, Tag, TriggerId1, TargetId1, ContextRsc),
-    incoming_context_result(ok, Msg, ContextRes);
+    case maybe_set_q(ubf, Pb#postback_event.data, Context) of
+        {ok, Context1} ->
+            Context2 = z_context:set_q("triggervalue", to_list(Pb#postback_event.triggervalue), Context1),
+            ContextRsc = z_context:set_controller_module(Module, Context2),
+            ContextRes = incoming_postback_event(z_convert:to_binary(EventType), Module, Tag, TriggerId1, TargetId1, ContextRsc),
+            incoming_context_result(ok, Msg, ContextRes);
+        {error, ContextValidation} ->
+            incoming_context_result(ok, Msg, ContextValidation)
+    end;
 incoming_1(#z_msg_v1{delegate=mqtt, data=Data} = Msg, Context) ->
     Result = z_mqtt:transport_incoming(Data, Context),
     incoming_context_result(Result, Msg, Context);
 incoming_1(#z_msg_v1{delegate=notify, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
-    Context1 = maybe_set_q(Type, Notify#postback_notify.data, Context),
-    % MochiWeb compatible values...
-    Notify1 = Notify#postback_notify{
-                    message=to_list(Notify#postback_notify.message),
-                    trigger=to_list(Notify#postback_notify.trigger),
-                    target=to_list(Notify#postback_notify.target)
-              },
-    Context2 = case z_notifier:first(Notify1, Context1) of
-                    undefined -> Context1;
-                    #context{} = ContextNotify -> ContextNotify
-               end,
-    incoming_context_result(ok, Msg, Context2);
+    case maybe_set_q(Type, Notify#postback_notify.data, Context) of
+        {ok, Context1} ->
+            % MochiWeb compatible values...
+            Notify1 = Notify#postback_notify{
+                            message=to_list(Notify#postback_notify.message),
+                            trigger=to_list(Notify#postback_notify.trigger),
+                            target=to_list(Notify#postback_notify.target)
+                      },
+            Context2 = case z_notifier:first(Notify1, Context1) of
+                            undefined -> Context1;
+                            #context{} = ContextNotify -> ContextNotify
+                       end,
+            incoming_context_result(ok, Msg, Context2);
+        {error, ContextValidation} ->
+            incoming_context_result(ok, Msg, ContextValidation)
+    end;
 incoming_1(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
-    Context1 = maybe_set_q(Type, Notify#postback_notify.data, Context),
-    {ok, Module} = z_utils:ensure_existing_module(Delegate),
-    % MochiWeb compatible values...
-    Notify1 = Notify#postback_notify{
-                    message=to_list(Notify#postback_notify.message),
-                    trigger=to_list(Notify#postback_notify.trigger),
-                    target=to_list(Notify#postback_notify.target)
-              },
-    incoming_context_result(ok, Msg, Module:event(Notify1, Context1));
+    case maybe_set_q(Type, Notify#postback_notify.data, Context) of
+        {ok, Context1} ->
+            {ok, Module} = z_utils:ensure_existing_module(Delegate),
+            % MochiWeb compatible values...
+            Notify1 = Notify#postback_notify{
+                            message=to_list(Notify#postback_notify.message),
+                            trigger=to_list(Notify#postback_notify.trigger),
+                            target=to_list(Notify#postback_notify.target)
+                      },
+            incoming_context_result(ok, Msg, Module:event(Notify1, Context1));
+        {error, ContextValidation} ->
+            incoming_context_result(ok, Msg, ContextValidation)
+    end;
 incoming_1(#z_msg_v1{delegate=Delegate} = Msg, Context) when is_atom(Delegate); is_binary(Delegate) ->
     {ok, Module} = z_utils:ensure_existing_module(Delegate),
     incoming_context_result(ok, Msg, Module:event(Msg, Context)).
@@ -259,11 +283,12 @@ incoming_postback_event(_Other, Module, Tag, Trigger, Target, Context) ->
 
 incoming_context_result(Result, Msg, Context) ->
     OptAck = maybe_ack(Result, Msg, Context),
-    case iolist_to_binary(z_script:get_script(Context)) of
+    {Script, ContextClean} = z_script:split(Context),
+    case iolist_to_binary(Script) of
         <<>> -> 
-            {ok, OptAck, Context};
-        Script ->
-            {ok, lists:flatten([OptAck, msg(page, javascript, Script, [{qos,0}])]), Context}
+            {ok, OptAck, ContextClean};
+        ScriptBin ->
+            {ok, lists:flatten([OptAck, msg(page, javascript, ScriptBin, [{qos,0}])]), ContextClean}
     end.
 
 maybe_set_sessions(SessionId, PageId, Context) ->
@@ -342,7 +367,7 @@ maybe_set_q(form, Qs, Context) ->
 maybe_set_q(_Type, {q, Qs}, Context) ->
     set_q(Qs, Context);
 maybe_set_q(_Type, _Data, Context) ->
-    Context.
+    {ok, Context}.
 
 
 %% If an user authenticated during this request then the user-agent needs to re-connect
@@ -395,7 +420,8 @@ session_status_ensure(Context) ->
 %% For MochiWeb we need to convert to strings
 set_q(Qs, Context) ->
     Qs1 = [ {to_list(K), to_list(V)} || {K,V} <- Qs ],
-    z_context:set('q', Qs1, Context).
+    z_validation:validate_query_args(
+        z_context:set('q', Qs1, Context)).
 
 %% TODO: This can be removed when we switch to binary key/values for qs
 to_list(B) when is_binary(B) -> z_convert:to_list(B);
