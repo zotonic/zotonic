@@ -25,11 +25,9 @@ var z_editor = (function ($) {
         },
 
         add: function ($el) {
-            var self,
-                mce_id;
-            $("textarea.z_editor", $el).each(function () {
+            $("textarea.z_editor,textarea.tinymce", $el).each(function () {
                 if (typeof $(this).tinymce === "function") {
-                    self = $(this);
+                    var self = $(this);
                     setTimeout(function () {
                         if (typeof tinyInit === "object") {
                             self.tinymce(tinyInit);
@@ -38,7 +36,7 @@ var z_editor = (function ($) {
                         }
                     }, 200);
                 } else if (typeof tinyMCE === "object") {
-                    mce_id = $(this).attr("id");
+                    var mce_id = $(this).attr("id");
                     setTimeout(function () {
                         tinyMCE.execCommand("mceAddControl", false, mce_id);
                     }, 200);
@@ -47,7 +45,7 @@ var z_editor = (function ($) {
         },
 
         save: function ($el) {
-            var tiny = $("textarea.z_editor", $el);
+            var tiny = $("textarea.z_editor,textarea.tinymce", $el);
             if (tiny.length > 0) {
                 if (typeof tiny.tinymce === "function") {
                     tiny.each(function () {
@@ -60,7 +58,7 @@ var z_editor = (function ($) {
         },
 
         remove: function ($el) {
-            $("textarea.z_editor", $el).each(function () {
+            $("textarea.z_editor,textarea.tinymce", $el).each(function () {
                 if (tinyMCE !== undefined) {
                     tinyMCE.execCommand("mceRemoveControl", false, $(this).attr("id"));
                 } else if (typeof $(this).tinymce === "function") {
