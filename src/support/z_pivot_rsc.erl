@@ -727,27 +727,41 @@ define_custom_pivot(Module, Columns, Context) ->
         true ->
             ok;
         false ->
-            Fields = custom_columns(Columns),
-            Sql = "CREATE TABLE " ++ TableName ++ "(" ++
-                "id int NOT NULL," ++ Fields ++ " primary key(id))",
-            z_db:q(lists:flatten(Sql), Context),
-            z_db:q("ALTER TABLE " ++ TableName ++ " ADD CONSTRAINT fk_" ++ TableName ++ "_id FOREIGN KEY (id) REFERENCES rsc(id) ON UPDATE CASCADE ON DELETE CASCADE", Context),
-            
-            Indexable = lists:filter(fun({_,_}) -> true;
-                                        ({_,_,Opts}) -> not lists:member(noindex, Opts)
-                                     end,
-                                     Columns),
-            Idx = [ 
-                    begin
-                        K = element(1,Col),
-                        "CREATE INDEX " ++ z_convert:to_list(K) ++ "_key ON " 
-                        ++ TableName ++ "(" ++ z_convert:to_list(K) ++ ")"
-                    end
-                    || Col <- Indexable
-                ],
-            [z_db:q(Sql1, Context) || Sql1 <- Idx]
-    end,
-    ok.
+            ok = z_db:transaction(
+                    fun(Ctx) ->
+                        Fields = custom_columns(Columns),
+                        Sql = "CREATE TABLE " ++ TableName ++ "(" ++
+                              "id int NOT NULL," ++ Fields ++ " primary key(id))",
+
+                        [] = z_db:q(lists:flatten(Sql), Ctx),
+
+                        [] = z_db:q("ALTER TABLE " ++ TableName ++ 
+                                    " ADD CONSTRAINT fk_" ++ TableName ++ "_id " ++
+                                    " FOREIGN KEY (id) REFERENCES rsc(id) ON UPDATE CASCADE ON DELETE CASCADE", Ctx),
+                        
+                        Indexable = lists:filter(fun({_,_}) -> true;
+                                                    ({_,_,Opts}) -> not lists:member(noindex, Opts)
+                                                 end,
+                                                 Columns),
+                        Idx = [ 
+                                begin
+                                    K = element(1,Col),
+                                    "CREATE INDEX " ++ z_convert:to_list(K) ++ "_key ON " 
+                                    ++ TableName ++ "(" ++ z_convert:to_list(K) ++ ")"
+                                end
+                                || Col <- Indexable
+                            ],
+                        lists:foreach(
+                            fun(Sql1) ->
+                                [] = z_db:q(Sql1, Ctx)
+                            end,
+                            Idx),
+                        ok
+                    end,
+                    Context),
+            z_db:flush(Context),
+            ok
+    end.
 
 
 custom_columns(Cols) ->
