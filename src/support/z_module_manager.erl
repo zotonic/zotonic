@@ -499,10 +499,10 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
                       ok
               end, ok, Create),
 
-                                                % 1. Put all to be started modules into a start list (add to State)
-                                                % 2. Let the module manager start them one by one (if startable)
-                                                % 3. Log any start errors, suppress modules that have errors.
-                                                % 4. Log non startable modules (remaining after all startable modules have started)
+    % 1. Put all to be started modules into a start list (add to State)
+    % 2. Let the module manager start them one by one (if startable)
+    % 3. Log any start errors, suppress modules that have errors.
+    % 4. Log non startable modules (remaining after all startable modules have started)
     case {StartList, sets:size(Kill)} of
         {[], 0} -> 
             State#state{start_queue=[]};
@@ -512,12 +512,12 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     end.
 
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
-                                                % Signal modules are loaded, and load all translations.
+    % Signal modules are loaded, and load all translations.
     z_notifier:notify(module_ready, Context),
     spawn_link(fun() -> z_trans_server:load_translations(Context) end),
     State;
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
-                                                % Filter all children on the capabilities of the loaded modules.
+    % Filter all children on the capabilities of the loaded modules.
     Provided = handle_get_provided(State),
     case lists:filter(fun(M) -> is_startable(M, Provided) end, Starting) of
         [] ->
@@ -723,16 +723,20 @@ manage_schema(_Module, _Current, undefined, _Context) ->
 
 %% @doc Installing a schema
 manage_schema(Module, undefined, Target, Context) ->
-    F = fun(C) ->
-                case Module:manage_schema(install, C) of
-                    D=#datamodel{} ->
-                        ok = z_datamodel:manage(Module, D, Context);
-                    ok -> ok
-                end,
-                ok = set_db_schema_version(Module, Target, C),
-                ok = z_db:flush(C)
-        end,
-    ok = z_db:transaction(F, Context);
+    SchemaRet = z_db:transaction(
+                    fun(C) ->
+                        Module:manage_schema(install, C)
+                    end,
+                    Context),
+    case SchemaRet of
+        #datamodel{} ->
+            ok = z_datamodel:manage(Module, SchemaRet, Context);
+        ok -> 
+            ok
+    end,
+    ok = set_db_schema_version(Module, Target, Context),
+    z_db:flush(Context),
+    ok;
 
 %% @doc Attempting a schema downgrade.
 manage_schema(Module, Current, Target, _Context) when
@@ -743,16 +747,19 @@ manage_schema(Module, Current, Target, _Context) when
 %% @doc Do a single upgrade step.
 manage_schema(Module, Current, Target, Context) when
       is_integer(Current) andalso is_integer(Target) ->
-    F = fun(C) ->
-                case Module:manage_schema({upgrade, Current+1}, C) of
-                    D=#datamodel{} ->
-                        ok = z_datamodel:manage(Module, D, Context);
-                    ok -> ok
-                end,
-                ok = set_db_schema_version(Module, Current+1, C),
-                ok = z_db:flush(C)
-        end,
-    ok = z_db:transaction(F, Context),
+    SchemaRet = z_db:transaction(
+                    fun(C) ->
+                        Module:manage_schema({upgrade, Current+1}, C)
+                    end,
+                    Context),
+    case SchemaRet of
+        #datamodel{} ->
+            ok = z_datamodel:manage(Module, SchemaRet, Context);
+        ok -> 
+            ok
+    end,
+    ok = set_db_schema_version(Module, Current+1, Context),
+    z_db:flush(Context),
     manage_schema(Module, Current+1, Target, Context);
 
 %% @doc Invalid version numbering
