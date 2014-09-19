@@ -119,7 +119,7 @@ do_body(State, Context) ->
     ContentType = z_context:get(content_type_mime, Context),
     {Id, _} = get_id(Context),
     Dispatch = z_context:get(zotonic_dispatch, Context),
-    case z_notifier:first(#export_resource_data{id=Id, content_type=ContentType, dispatch=Dispatch}, Context) of
+    case z_notifier:first(#export_resource_data{id=Id, content_type=ContentType, dispatch=Dispatch, state=State}, Context) of
         undefined -> do_body_data([Id], State, Context);
         {ok, List} -> do_body_data(List, State, Context);
         {ok, List, NewState} -> do_body_data(List, NewState, Context)
