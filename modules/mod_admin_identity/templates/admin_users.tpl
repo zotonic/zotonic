@@ -3,6 +3,8 @@
 {% block title %}{_ Users _}{% endblock %}
 
 {% block content %}
+{% with m.acl.is_admin as is_users_editable %}
+
 <div class="edit-header">
 
     <h2>
@@ -18,17 +20,17 @@
         that the former has logon credentials attached to its page record. _}
     </p>
 
-    {% if m.acl.is_admin %}
+    {% if is_users_editable %}
     <div class="well">
         {% button class="btn btn-primary" text=_"Make a new user" action={dialog_user_add on_success={reload}} %}
     </div>
     {% else %}
-    <div class="alert alert-info">{_ You need to be an administrator to add users. _}</div>
+        <div class="alert alert-info">{_ You need to be an administrator to add users. _}</div>
     {% endif %}
 </div>
 
 <div>
-    {% with m.acl.user as me %}
+{% with m.acl.user as me %}
     {% with m.search.paged[{users text=q.qs page=q.page}] as result %}
 
     <table class="table table-striped do_adminLinkedTable">
@@ -42,16 +44,18 @@
         </thead>
 
         <tbody>
-            {% for id, rank in result %}
+        {% for id, rank in result %}
             <tr id="{{ #tr.id }}" data-href="{% url admin_edit_rsc id=id %}" {% if not id.is_published %}class="unpublished"{% endif %}>
                 <td>{{ m.rsc[id].title|striptags }}</td>
                 <td>{{ m.identity[id].username|escape }}{% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}</td>
                 <td>{{ m.rsc[id].modified|date:_"d M, H:i" }}</td>
                 <td>
                     <div class="pull-right">
-                        {% button class="btn btn-mini" action={dialog_set_username_password id=id} text=_"set username / password" on_delete={slide_fade_out target=#tr.id} %}
-                        {% if id /= 1 %}
-                        {% button class="btn btn-mini" text=_"delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#tr.id}} %}
+                        {% if is_users_editable %}
+                            {% button class="btn btn-mini" action={dialog_set_username_password id=id} text=_"set username / password" on_delete={slide_fade_out target=#tr.id} %}
+                            {% if id /= 1 %}
+                               {% button class="btn btn-mini" text=_"delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#tr.id}} %}
+                            {% endif %}
                         {% endif %}
                         {% button class="btn btn-mini" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
                     </div>
@@ -59,20 +63,21 @@
                 </td>
             </tr>
 
-            {% empty %}
+        {% empty %}
             <tr>
                 <td colspan="4">
                     {_ No users found. _}
                 </td>
             </tr>
-            {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
 
     {% pager result=result dispatch="admin_user" qargs %}
 
     {% endwith %}
-    {% endwith %}
-
+{% endwith %}
 </div>
+
+{% endwith %}
 {% endblock %}

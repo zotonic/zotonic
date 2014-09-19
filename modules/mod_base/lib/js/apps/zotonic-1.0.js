@@ -1054,7 +1054,7 @@ function z_websocket_start()
 function z_websocket_ping()
 {
     setTimeout(function() {
-        if (z_ws && z_ws.readyState !== 0) {
+        if (z_ws && z_ws.readyState == 1) {
             var msg = ubf.encode({
                     "_record": "z_msg_v1",
                     "qos": 1,

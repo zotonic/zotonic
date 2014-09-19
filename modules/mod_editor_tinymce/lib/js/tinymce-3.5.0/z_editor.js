@@ -5,15 +5,23 @@ var z_editor = (function ($) {
 
     initEditor = function(className) {
         $("." + className + ":visible").each(function () {
-            var self = $(this),
-                ti;
-            setTimeout(function () {
+            var $elt = $(this),
+                id = $elt.attr('id'),
+                ti,
+                f;
+
+            f = function () {
                 ti = $.extend({}, tinyInit);
-                if (self.attr("dir")) {
-                    ti.directionality = self.attr("dir");
+                if ($elt.attr("dir")) {
+                    ti.directionality = $elt.attr("dir");
                 }
-                self.tinymce(ti);
-            }, 200);
+                $elt.tinymce(ti).addClass('z_editor-installed');
+            };
+            if (id) {
+                z_on_visible("#"+id, f);
+            } else {
+                setTimeout(f, 200);
+            }
         }).removeClass(className).addClass("z_editor");
     };
 
@@ -26,30 +34,39 @@ var z_editor = (function ($) {
 
         add: function ($el) {
             var self = this;
+
             $("textarea.z_editor", $el).each(function () {
-                self.initElement($(this));
+                var $elt = $(this),
+                    id = $elt.attr('id');
+
+                if (id) {
+                    z_on_visible('#'+id, function() {
+                        self.initElement($elt);
+                    });
+                } else {
+                    setTimeout(function () {
+                        self.initElement($elt);
+                    }, 200);
+                }
             });
         },
 
         initElement: function ($elt) {
             if (typeof $elt.tinymce === "function") {
-                setTimeout(function () {
-                    var ti = $.extend({}, tinyInit);
-                    if ($elt.attr("dir")) {
-                        ti.directionality = $elt.attr("dir");
-                    }
-                    $elt.tinymce(ti);
-                }, 200);
+                var ti = $.extend({}, tinyInit);
+                if ($elt.attr("dir")) {
+                    ti.directionality = $elt.attr("dir");
+                }
+                $elt.tinymce(ti);
             } else if (typeof tinyMCE === "object") {
                 var mce_id = $elt.attr("id");
-                setTimeout(function () {
-                    tinyMCE.execCommand("mceAddControl", false, mce_id);
-                }, 200);
+                tinyMCE.execCommand("mceAddControl", false, mce_id);
             }
+            $elt.addClass('z_editor-installed');
         },
 
         save: function ($el) {
-            var tiny = $("textarea.z_editor", $el);
+            var tiny = $("textarea.z_editor-installed", $el);
             if (tiny.length > 0) {
                 if (typeof tiny.tinymce === "function") {
                     tiny.each(function () {
@@ -62,12 +79,13 @@ var z_editor = (function ($) {
         },
 
         remove: function ($el) {
-            $("textarea.z_editor", $el).each(function () {
+            $("textarea.z_editor-installed", $el).each(function () {
                 if (tinyMCE !== undefined) {
                     tinyMCE.execCommand("mceRemoveControl", false, $(this).attr("id"));
                 } else if (typeof $(this).tinymce === "function") {
                     $(this).tinymce().remove();
                 }
+                $(this).removeClass('z_editor-installed');
             });
         }
     };
