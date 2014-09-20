@@ -233,7 +233,7 @@ init(SiteProps) ->
         {module, ?MODULE}
       ]),
     Context = z_context:new(Host),
-    Timer = timer:apply_interval(?PIVOT_POLL_INTERVAL * 1000, ?MODULE, poll, [Context]),
+    Timer = timer:apply_interval(timer:seconds(?PIVOT_POLL_INTERVAL), ?MODULE, poll, [Context]),
     {ok, #state{timer=Timer, context=Context}}.
 
 

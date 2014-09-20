@@ -83,7 +83,6 @@ get_raw_connection(#context{dbc=Worker}) when Worker =/= undefined ->
 %%
 
 init(Args) ->
-    process_flag(trap_exit, true),
     %% Start disconnected
     {ok, #state{conn=undefined, conn_args=Args}}.
 
