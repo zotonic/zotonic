@@ -35,6 +35,8 @@
     get_site_config/1,
     get_fallback_site/0,
     get_builtin_sites/0,
+    all_sites_running/0, all_sites_running/1,
+    info/0,
 
     stop/1,
     start/1,
@@ -79,6 +81,25 @@ get_sites_all() ->
 get_sites_status() ->
     gen_server:call(?MODULE, get_sites_status). 
 
+%% @doc Return information on all running sites.
+-spec info() -> [ {atom(), integer()} ].
+info() ->
+    gen_server:call(?MODULE, info).
+
+%% @doc Return true iff all sites are running.
+-spec all_sites_running() -> boolean().
+all_sites_running() ->
+    all_sites_running(info()).
+
+-spec all_sites_running([ {atom(), integer()} ]) -> boolean().
+all_sites_running(StateInfo) ->
+    all_sites_running(StateInfo, true).
+
+all_sites_running([], true) -> true;
+all_sites_running([{State, Count}| _Rest], true) when Count > 0 andalso State =/= running ->
+    false;
+all_sites_running([_Info|Rest], true) ->
+    all_sites_running(Rest, true).
 
 %% @doc Return a list of contexts initialized for all active sites.
 -spec get_site_contexts() -> [ #context{} ].
@@ -172,6 +193,11 @@ handle_call(get_sites_status, _From, State) ->
                             [],
                             Grouped),
     {reply, lists:sort(Ungrouped), State};
+
+%% @doc Are all sites running?
+handle_call(info, _From, State) ->
+    Grouped = z_supervisor:which_children(State#state.sup),
+    {reply, info(Grouped), State};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
@@ -376,6 +402,13 @@ hosted_sites(SiteProps) ->
     L = [ proplists:get_value(host, Props) || Props <- SiteProps ],
     [ Name || Name <- L, Name /= undefined ].
 
+info(Grouped) ->
+    info(Grouped, []).
+
+info([], Info) -> 
+    Info;
+info([{State, L} | Rest], Info) ->
+    info(Rest, [{State, length(L)} | Info]).
 
 %% @doc Check if the current beam is running the testsandbox
 is_testsandbox() ->

@@ -27,15 +27,9 @@
 
 -include_lib("zotonic.hrl").
 
-
 process_get(_ReqData, _Context) ->
-    Statuses = [Stat || [_Site, Stat |_] <- z_sites_manager:get_sites_status()],
-    Result = case lists:member(failed, Statuses) orelse
-                 lists:member(retrying, Statuses) of
-                 true ->
-                     fail;
-                 false ->
-                     ok
-             end,
-    {struct, [{status, Result}]}.
+    {struct, [{status, result(z_sites_manager:all_sites_running())}]}.
+
+result(true) -> ok;
+result(false) -> fail.
 
