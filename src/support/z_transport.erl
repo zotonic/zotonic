@@ -98,12 +98,14 @@ transport(L, Context) when is_list(L) ->
                     transport(Msg, Context)
                   end,
                   L);
-transport(Msg, Context) ->
+transport(#z_msg_v1{} = Msg, Context) ->
     case Msg#z_msg_v1.push_queue of
         session -> z_session:transport(Msg, Context);
         page -> z_session_page:transport(Msg, Context);
         user -> transport_user(Msg, z_acl:user(Context), Context)
-    end.
+    end;
+transport(#z_msg_ack{} = Ack, Context) ->
+    z_session_page:transport(Ack, Context).
 
 %% @doc Put a message or ack on transport to all sessions of the given user
 transport_user(_Msg, undefined, _Context) ->
