@@ -61,7 +61,7 @@
 
 {% if m.survey.handlers|length %}
 <div class="control-group">
-	<label>{_ Handle this survey with _}</label>
+	<label class="control-label">{_ Handle this survey with _}</label>
 	<div class="controls">
 		<select name="survey_handler" id="survey_handler">
 			<option value=""></option>
