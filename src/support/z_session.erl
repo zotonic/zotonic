@@ -433,23 +433,9 @@ handle_call({spawn_link, Module, Func, Args}, _From, Session) ->
     {reply, Pid, Session#session{linked=Linked}};
 
 handle_call({ensure_page_session, CurrPageId}, _From, Session) ->
-    NewPageId = case CurrPageId of
-                    undefined -> new_id();
-                    _ -> CurrPageId
-                end,
-    {NewPage, Session1} = case find_page(NewPageId, Session) of
-                            undefined -> 
-                                % Make a new page for this pid
-                                P     = page_start(NewPageId, Session#session.context),
-                                Pages = [P|Session#session.pages], 
-                                {P, Session#session{pages=Pages}};
-                            #page{page_pid=Pid} = P -> 
-                                % Keep the page alive
-                                z_session_page:ping(Pid),
-                                {P, Session}
-                          end,
+    {Page, Session1} = do_ensure_page_session(CurrPageId, Session),
     Session2 = transport_all(Session1),
-    {reply, {ok, NewPageId, NewPage#page.page_pid}, Session2};
+    {reply, {ok, Page#page.page_id, Page#page.page_pid}, Session2};
 
 handle_call({lookup_page_session, PageId}, _From, Session) ->
     case find_page(PageId, Session) of
@@ -612,12 +598,49 @@ prop_replace(auth_user_id, NewUserId, Props, Site) when is_list(Props) ->
 prop_replace(Key, Value, Props, _Site) when is_list(Props) ->
     z_utils:prop_replace(Key, Value, Props).
 
+
+%% @doc Continue or start a new page session. If an id is supplied then the
+%%      the page session must be running and coupled to this session.
+do_ensure_page_session(undefined, Session) ->
+    do_ensure_page_session_new(Session);
+do_ensure_page_session([], Session) ->
+    do_ensure_page_session_new(Session);
+do_ensure_page_session(<<>>, Session) ->
+    do_ensure_page_session_new(Session);
+do_ensure_page_session(PageId0, Session) ->
+    PageId = z_convert:to_binary(PageId0),
+    case find_page(PageId, Session) of
+        undefined ->
+            do_ensure_page_session(undefined, Session);
+        #page{page_pid=Pid} = P -> 
+            % Keep the page alive
+            z_session_page:ping(Pid),
+            {P, Session}
+    end.
+
+do_ensure_page_session_new(Session) ->
+    case page_start(Session#session.context) of
+        {error, already_started} ->
+            do_ensure_page_session_new(Session);
+        {ok, P} ->
+            {P, Session#session{pages=[P|Session#session.pages]}}
+    end.
+
 %% @doc Return a new page record, monitor the started page process because we want to know about normal exits
-page_start(PageId, Context) ->
-    {ok,PagePid} = z_session_page:start_link(self(), to_binary(PageId), Context),
-    erlang:monitor(process, PagePid),
-    exometer:update([zotonic, Context#context.host, session, page_processes], 1),
-    #page{page_pid=PagePid, page_id=PageId }.
+page_start(Context) ->
+    PageId = new_id(),
+    case z_session_page:start_link(self(), PageId, Context) of
+        {ok,PagePid} ->
+            erlang:monitor(process, PagePid),
+            exometer:update([zotonic, Context#context.host, session, page_processes], 1),
+            {ok, #page{page_pid=PagePid, page_id=PageId}};
+        {error, {already_started, _PagePid}} ->
+            lager:error(z_context:lager_md(Context),
+                        "Page-session process already running ~p",
+                        [PageId]),
+            {error, already_started}
+    end. 
+
 
 %% @doc Find the page record in the list of known pages
 find_page(undefined, _Session) ->
