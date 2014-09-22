@@ -34,6 +34,8 @@
     observe_admin_rscform/3,
     observe_survey_is_submit/2,
 
+    get_page/3,
+
     render_next_page/6,
     go_button_target/4,
     module_name/1
@@ -139,6 +141,15 @@ observe_survey_is_submit(#survey_is_submit{block=Q}, _Context) ->
     end.
 
 
+get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
+    case m_rsc:p(Id, blocks, Context) of
+        Qs when is_list(Qs) ->
+            go_page(Nr, Qs, [], exact, Context);
+        _ -> 
+            []
+    end.
+
+
 %%====================================================================
 %% support functions
 %%====================================================================
@@ -190,6 +201,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                              {pages, count_pages(Questions)},
                              {answers, Answers2},
                              {history, [NewPageNr|History]}],
+                    ?DEBUG(NewPageNr),
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
                 {error, {not_found, Name} = Reason} ->
@@ -390,48 +402,48 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
         end.
 
 
-    %% @doc Fetch the Nth page. Multiple page breaks in a row count as a single page break.
-    %%      Returns the position at the page breaks before the page, so that eventual jump
-    %%      expressions can be evaluated.
-    fetch_page(Nr, []) ->
-        {[], Nr};
-    fetch_page(Nr, L) ->
-        fetch_page(1, Nr, L).
+%% @doc Fetch the Nth page. Multiple page breaks in a row count as a single page break.
+%%      Returns the position at the page breaks before the page, so that eventual jump
+%%      expressions can be evaluated.
+fetch_page(Nr, []) ->
+    {[], Nr};
+fetch_page(Nr, L) ->
+    fetch_page(1, Nr, L).
 
-    fetch_page(_, Nr, []) ->
-        {[], Nr};
-    fetch_page(N, Nr, L) when N >= Nr ->
-        {L, N};
-    fetch_page(N, Nr, L) when N == Nr - 1 ->
-        L1 = lists:dropwhile(fun(B) -> not is_page_end(B) end, L),
-        {L1, Nr};
-    fetch_page(N, Nr, [B|Bs]) when N < Nr ->
-        case is_page_end(B) of
-            true ->
-                L1 = lists:dropwhile(fun is_page_end/1, Bs),
-                fetch_page(N+1, Nr, L1);
-            false ->
-                fetch_page(N, Nr, Bs)
-        end;
-    fetch_page(N, Nr, [_|Bs]) ->
-        fetch_page(N, Nr, Bs).
+fetch_page(_, Nr, []) ->
+    {[], Nr};
+fetch_page(N, Nr, L) when N >= Nr ->
+    {L, N};
+fetch_page(N, Nr, L) when N == Nr - 1 ->
+    L1 = lists:dropwhile(fun(B) -> not is_page_end(B) end, L),
+    {L1, Nr};
+fetch_page(N, Nr, [B|Bs]) when N < Nr ->
+    case is_page_end(B) of
+        true ->
+            L1 = lists:dropwhile(fun is_page_end/1, Bs),
+            fetch_page(N+1, Nr, L1);
+        false ->
+            fetch_page(N, Nr, Bs)
+    end;
+fetch_page(N, Nr, [_|Bs]) ->
+    fetch_page(N, Nr, Bs).
 
 
-    takepage(L) ->
-        takepage(L, []).
+takepage(L) ->
+    takepage(L, []).
 
-        takepage([], Acc) ->
-            lists:reverse(Acc);
-        takepage([Q|L], Acc) ->
-            case proplists:get_value(type, Q) of
-                <<"survey_page_break">> -> lists:reverse(Acc);
-                <<"survey_stop">> -> lists:reverse([Q|Acc]);
-                _ ->
-                    case proplists:get_value(name, Q) of
-                        <<"survey_feedback">> ->  takepage(L, Acc);
-                        _ -> takepage(L, [Q|Acc])
-                    end
-            end.
+    takepage([], Acc) ->
+        lists:reverse(Acc);
+    takepage([Q|L], Acc) ->
+        case proplists:get_value(type, Q) of
+            <<"survey_page_break">> -> lists:reverse(Acc);
+            <<"survey_stop">> -> lists:reverse([Q|Acc]);
+            _ ->
+                case proplists:get_value(name, Q) of
+                    <<"survey_feedback">> ->  takepage(L, Acc);
+                    _ -> takepage(L, [Q|Acc])
+                end
+        end.
 
 is_page_end(Block) ->
     case proplists:get_value(type, Block) of
