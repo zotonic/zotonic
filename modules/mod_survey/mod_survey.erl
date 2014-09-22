@@ -201,7 +201,6 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                              {pages, count_pages(Questions)},
                              {answers, Answers2},
                              {history, [NewPageNr|History]}],
-                    ?DEBUG(NewPageNr),
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
                 {error, {not_found, Name} = Reason} ->
