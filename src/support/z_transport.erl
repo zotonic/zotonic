@@ -442,19 +442,12 @@ decode_data(_Other, Data) ->
     Data.
 
 maybe_ack(Result, #z_msg_v1{qos=N, msg_id=MsgId}, Context) when N > 0; Result =/= undefined ->
-    Ack = #z_msg_ack{
+    #z_msg_ack{
         qos=N, 
         msg_id=MsgId, 
         result=Result,
         page_id=Context#context.page_id
-    },
-    case Context#context.page_pid of
-        Pid when is_pid(Pid) ->
-            z_session_page:transport(Ack, Pid),
-            [];
-        undefined ->
-            Ack
-    end;
+    };
 maybe_ack(_Result, #z_msg_v1{}, _Context) ->
     [].
 
