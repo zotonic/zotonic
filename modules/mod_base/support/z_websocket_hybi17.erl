@@ -68,7 +68,7 @@ receive_loop(Buff, Socket, SenderPid, Context) ->
 
 
 % Check if we received a full frame
-handle_data(Data, Socket, SenderPid, Context) when byte_size(Data) =< 1 ->
+handle_data(Data, Socket, SenderPid, Context) when byte_size(Data) =< 2 ->
     receive_loop(Data, Socket, SenderPid, Context);
 handle_data(Data, Socket, SenderPid, Context) ->
     << 1:1, 0:3, Opcode:4, Mask:1, PayloadLen:7, Rest/bits >> = Data,
