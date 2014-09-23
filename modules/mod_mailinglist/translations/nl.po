@@ -62,7 +62,7 @@ msgstr "<p>Er is iets foutgegaan. Probeer om je opnieuw te abboneren.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:19
 msgid "<p>Thank you. You are now subscribed.</p>"
-msgstr "<p>Bedankt. Je hebt je nu aangemeld bij de mailing.</p>"
+msgstr "<p>Bedankt voor je aanmelding.</p>"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:14
 msgid "<p>Thank you. You are now unsubscribed.</p>"
