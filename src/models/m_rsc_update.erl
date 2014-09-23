@@ -980,6 +980,7 @@ normalize_blocks(Blocks, Context) ->
     lists:map(fun(B) -> normalize_block(B, Context) end, Blocks).
                        
 normalize_block(B, Context) ->
+    z_depcache:flush(Context),
     lists:map(fun
                   ({"rsc_id", V}) ->
                       {rsc_id, m_rsc:rid(V, Context)};
