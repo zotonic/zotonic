@@ -309,7 +309,7 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc 
                     % Flush some low level caches
                     case proplists:get_value(name, NewProps) of
                         undefined -> nop;
-                        Name -> z_depcache:flush({rsc_name, z_convert:to_list(Name)}, Context)
+                        Name -> z_depcache:flush({rsc_name, z_string:to_name(Name)}, Context)
                     end,
                     case proplists:get_value(uri, NewProps) of
                         undefined -> nop;
