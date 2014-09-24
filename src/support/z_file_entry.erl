@@ -401,6 +401,7 @@ part_size(#part_data{data=D}) when is_binary(D) -> size(D);
 part_size(_) -> 0.
 
 is_compressable(<<"text/", _/binary>>) -> true;
+is_compressable(<<"application/javascript">>) -> true;
 is_compressable(<<"application/x-javascript">>) -> true;
 is_compressable(<<"application/xhtml+xml">>) -> true;
 is_compressable(<<"application/xml">>) -> true;
