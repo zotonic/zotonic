@@ -76,12 +76,16 @@ event(#submit{message={new_page, Args}}, Context) ->
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_value(actions, Args, []),
+    Objects = proplists:get_value(objects, Args, []),
 
     BaseProps = get_base_props(z_context:get_q("new_rsc_title", Context), Context),
     {ok, Id} = m_rsc_update:insert(BaseProps, Context),
 
     % Optionally add an edge from the subject to this new resource
     {_,Context1} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Callback, Context),
+
+    %% Optionally add outgoing edges from this new rsc to the given resources (id / name, predicate pairs)
+    [m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects],
 
     % Close the dialog
     Context2a = z_render:wire({dialog_close, []}, Context1),
