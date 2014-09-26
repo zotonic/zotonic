@@ -222,14 +222,14 @@ incoming_1(_Msg, Context) ->
 
 incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Pb#postback_event.postback, Context),
-    TriggerId1 = case TriggerId of
+    TriggerId1 = to_list(case TriggerId of
                     undefined -> Pb#postback_event.trigger;
                     _         -> TriggerId
-                 end,
-    TargetId1 =  case TargetId of
+                 end),
+    TargetId1 =  to_list(case TargetId of
                     undefined -> Pb#postback_event.target;
                     _         -> TargetId
-                 end,
+                 end),
     case maybe_set_q(ubf, Pb#postback_event.data, Context) of
         {ok, Context1} ->
             Context2 = z_context:set_q("triggervalue", to_list(Pb#postback_event.triggervalue), Context1),
