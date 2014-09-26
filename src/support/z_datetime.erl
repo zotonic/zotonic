@@ -135,7 +135,7 @@ timesince(Date, Base, Context) ->
 timesince(Date, Base, IndicatorStrings, Context) ->
     timesince(Date, Base, IndicatorStrings, 2, Context).
 
-%% @spec timesince(Date, BaseDate, WhenText, Context) -> string()
+%% @spec timesince(Date, BaseDate, IndicatorStrings, Mode, Context) -> string()
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% `WhenText' is a string containing a maximum of three tokens. Example "ago, now, in"
 %% @todo Use the language in the context for translations.
@@ -154,7 +154,7 @@ timesince(Date, Base, IndicatorStrings, Mode, Context) ->
     end.
 
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
-%% @spec timesince(Date, BaseDate, NowText, InText, AgoText, Context) -> string()
+%% @spec timesince(Date, BaseDate, AgoText, NowText, InText, Mode, Context) -> string()
 %% @todo Use the language in the context for translations.
 timesince(undefined, _, _AgoText, _NowText, _InText, _Mode, _Context) ->
     "";
