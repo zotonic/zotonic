@@ -30,6 +30,7 @@
     timesince/2,
     timesince/3,
     timesince/4,
+    timesince/5,
     
     days_in_year/1,
     
@@ -129,38 +130,42 @@ timesince(Date, Context) ->
 %% @spec timesince(Date, BaseDate, Context) -> string()
 %% @todo Use the language in the context for translations.
 timesince(Date, Base, Context) ->
-    timesince(Date, Base, ?__(<<"ago">>, Context), ?__(<<"now">>, Context), ?__(<<"in">>, Context), Context).
+    timesince(Date, Base, ?__(<<"ago">>, Context), ?__(<<"now">>, Context), ?__(<<"in">>, Context), 2, Context).
+
+timesince(Date, Base, IndicatorStrings, Context) ->
+    timesince(Date, Base, IndicatorStrings, 2, Context).
 
 %% @spec timesince(Date, BaseDate, WhenText, Context) -> string()
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% `WhenText' is a string containing a maximum of three tokens. Example "ago, now, in"
 %% @todo Use the language in the context for translations.
-timesince(Date, Base, IndicatorStrings, Context) ->
+
+timesince(Date, Base, IndicatorStrings, Mode, Context) ->
     %% strip the tokens, so the user can specify the text more flexible.
     case [string:strip(S, both) || S <- string:tokens(z_convert:to_list(IndicatorStrings), ",")] of
     [AgoText, NowText, InText] ->
-        timesince(Date, Base, AgoText, NowText, InText, Context);
+        timesince(Date, Base, AgoText, NowText, InText, Mode, Context);
     [AgoText, NowText] ->
-        timesince(Date, Base, AgoText, NowText, "", Context);
+        timesince(Date, Base, AgoText, NowText, "", Mode, Context);
     [AgoText] ->
-        timesince(Date, Base, AgoText, "", "", Context);
+        timesince(Date, Base, AgoText, "", "", Mode, Context);
     [] ->
-        timesince(Date, Base, "", "", "", Context)
+        timesince(Date, Base, "", "", "", Mode, Context)
     end.
 
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% @spec timesince(Date, BaseDate, NowText, InText, AgoText, Context) -> string()
 %% @todo Use the language in the context for translations.
-timesince(undefined, _, _AgoText, _NowText, _InText, _Context) ->
+timesince(undefined, _, _AgoText, _NowText, _InText, _Mode, _Context) ->
     "";
-timesince(_, undefined, _AgoText, _NowText, _InText, _Context) ->
+timesince(_, undefined, _AgoText, _NowText, _InText, _Mode, _Context) ->
     "";
-timesince(Date, Base, _AgoText, NowText, _InText, _Context) when Date == Base ->
+timesince(Date, Base, _AgoText, NowText, _InText, _Mode, _Context) when Date == Base ->
     NowText;
-timesince(Date, Base, _AgoText, _NowText, InText, Context) when Date > Base ->
-    combine({InText, combine(reldate(Base, Date, Context))}, " ");
-timesince(Date, Base, AgoText, _NowText, _InText, Context) ->
-    combine({combine(reldate(Date, Base, Context)), AgoText}, " ").
+timesince(Date, Base, _AgoText, _NowText, InText, Mode, Context) when Date > Base ->
+    combine({InText, combine(reldate(Base, Date, Mode, Context))}, " ");
+timesince(Date, Base, AgoText, _NowText, _InText, Mode, Context) ->
+    combine({combine(reldate(Date, Base, Mode, Context)), AgoText}, " ").
 
     combine(Tup) -> combine(Tup, ", ").
 
@@ -173,9 +178,12 @@ timesince(Date, Base, AgoText, _NowText, _InText, Context) ->
 
 
 %% @doc Return a string describing the relative date difference.
-reldate(D1, D2, Context) ->
+reldate(D1, D2, 1, Context) ->
+    {A, _} = reldate(D1,D2, 2, Context),
+    {A,[]};
+reldate(D1, D2, 2, Context) ->
     case diff(D1,D2) of
-        {{0,0,0},{0,0,0}} -> {"now",[]};
+        {{0,0,0},{0,0,0}} -> {?__(<<"now">>,Context),[]};
         {{0,0,0},{0,0,S}} when S < 10 -> {?__(<<"moments">>,Context),[]};
         {{0,0,0},{0,0,S}} -> {plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context)), 
                               []};

@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(filter_timesince).
--export([timesince/2, timesince/3, timesince/4]).
+-export([timesince/2, timesince/3, timesince/4, timesince/5]).
 
 
 timesince(undefined, _Context) ->
@@ -30,4 +30,6 @@ timesince(Date, Base, Context) ->
 	z_datetime:timesince(Date, Base, Context).
 timesince(Date, Base, When, Context) ->
     z_datetime:timesince(Date, Base, When, Context).
+timesince(Date, Base, When, Mode, Context) ->
+    z_datetime:timesince(Date, Base, When, Mode, Context).
 
