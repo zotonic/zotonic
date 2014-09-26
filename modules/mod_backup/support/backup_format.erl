@@ -52,6 +52,7 @@
 	name_surname,
 
 	phone,
+	phone_mobile,
 	phone_alt,
 	phone_emergency,
 
