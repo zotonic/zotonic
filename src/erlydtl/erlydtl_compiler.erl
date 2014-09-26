@@ -969,7 +969,7 @@ resolve_variable_ast({variable, {identifier, _, "now"}}, Context, TreeWalker, _F
         undefined ->
             erl_syntax:application(
                 erl_syntax:atom(erlang),
-                erl_syntax:atom(localtime),
+                erl_syntax:atom(universaltime),
                 []);
         Val ->
             Val
