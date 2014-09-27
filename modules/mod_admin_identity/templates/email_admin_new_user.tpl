@@ -16,7 +16,6 @@
     </p>
 
     <p>
-        {_ Username _}: <tt>{{ username }}</tt><br />
-        {_ Password _}: <tt>{{ password }}</tt>
+        {_ Username _}: <tt>{{ username }}</tt>
     </p>
 {% endblock %}
