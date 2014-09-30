@@ -92,7 +92,6 @@
 			$(function() { $.widgetManager(); });
 		</script>
 
-		{% stream %}
 		{% script %}
 
 		{% all include "_html_body.tpl" %}

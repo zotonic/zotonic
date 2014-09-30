@@ -47,7 +47,6 @@
     {% include "_admin_js_include.tpl" %}
     {% block js_extra %}{% endblock %}
 
-    {% stream %}
     {% script %}
 
     {% block editor %}{% endblock %}

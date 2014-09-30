@@ -20,5 +20,4 @@
 		 "js/qlobber.js"
 		 "js/pubzub.js"
 	%}
-	{% stream %}
 {% endblock %}

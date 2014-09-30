@@ -34,11 +34,11 @@ topic.
 Database changes
 ................
 
-The behaviour of automatically serializing Erlang terms into the
-database (on ``bytea`` columns) as been made explicit. To enable
-serialization of database values, you have to tag them with the new
-``?DB_PROPS(...)`` macro. Unserialization of terms is still done
-automatically.
+Due to the introduction of the new database driver, the behaviour of
+automatically serializing Erlang terms into the database (on ``bytea``
+columns) as been made explicit. To enable serialization of database
+values, you have to tag them with the new ``?DB_PROPS(...)``
+macro. Unserialization of terms is still done automatically.
 
 
 Postback and javascript changes
@@ -49,6 +49,10 @@ be included for the Zotonic javascripts to work.
 
 All postback, comet and websocket connection are now handled by ``z_transport``.
 Check :ref:`manual-transport` for details.
+
+The ``stream`` tag has been deprecated. You can remove it from your
+templates. Zotonic now automatically starts a WebSocket connection on
+each page, unless ``nostream`` is given in the :ref:`scomp-script` tag.
 
 
 Dispatch rules for files

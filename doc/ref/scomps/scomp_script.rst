@@ -1,6 +1,7 @@
 .. include:: meta-script.rst
 
-Placeholder for generated Javascript.
+This tag is the placeholder where all generated Javascript scripts
+will be output on the page.
 
 Zotonic generates Javascript for the actions and other template
 logic. This script needs to be added to the page.  The ``{% script
@@ -47,6 +48,10 @@ The script scomp can have the following arguments:
 |           | includes the scripts from actions etc.  Default is to      |               |
 |           | include the page initialization code.                      |               |
 +-----------+------------------------------------------------------------+---------------+
+| nostream  | Do not start the bi-directional communication layer (over  | nostream      |
+|           | WebSockets or comet).                                      |               |
+|           |                                                            |               |
++-----------+------------------------------------------------------------+---------------+
 | format    | Select a different format than the ``<script/>`` tag.  For | format="html" |
 |           | now this accepts ``"html"`` (for the ``<script/>``         |               | 
 |           | tag), ``"escapejs"`` for an escaped javascript string, and |               |
@@ -55,3 +60,16 @@ The script scomp can have the following arguments:
 +-----------+------------------------------------------------------------+---------------+
 
 
+
+WebSockets / Comet communication
+--------------------------------
+
+Unless ``nostream`` is added as a parameter, this tag also causes the
+WebSockets or Comet communication layer to be initiated.
+
+When available, a WebSocket connections is opened, otherwise a long
+polling Comet connection is started.  The WebSockets connection will
+also be used for sending Ajax requests to the server.
+
+See also :ref:`manual-transport` for details on the bi-directional
+communication.
