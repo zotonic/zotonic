@@ -63,3 +63,8 @@ Rememberme cookie changes
     The *rememberme* cookie (used for automatic logon) is now based on a token instead of
     the user-id. The token is reset if the user’s password is changed.
     Cookies set using the previous scheme are invalidated.
+
+User-defined Erlang dependencies
+    It is now possible to add extra rebar ``deps`` to Zotonic, by
+    adding them to the ``zotonic.config`` file.
+    
