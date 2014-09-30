@@ -93,7 +93,9 @@
             </tbody>
 	    </table>
     {% else %}
-	    <pre>{{ error_dump }}</pre>
+        {% if error_dump %}
+    	    <pre>{{ error_dump }}</pre>
+    	{% endif %}
 	{% endif %}
 {% endif %}
 {% endblock %}
