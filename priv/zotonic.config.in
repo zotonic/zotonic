@@ -101,6 +101,12 @@
 %%% they are rendered. Turn this off in production to increase
 %%% performance. However, you need to do an explicit z:flush() to see template changes.
    %% {template_modified_check, true},
+
+%%% List with extra dependencies which get fetched and compiled by rebar
+   %% {deps,
+   %%  [
+   %%   {jsx, "1.4", {git, "git://github.com/talentdeficit/jsx", {tag, "v1.4"}}}
+   %%  ]},
    
   ]
  }
