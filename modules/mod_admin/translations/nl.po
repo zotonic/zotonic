@@ -822,7 +822,7 @@ msgstr "Slaat de pagina op en bekijk aan de voorkant."
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:17
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:3
 msgid "Save this page."
-msgstr "Sla deze pagian op."
+msgstr "Sla deze pagina op."
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:5
 msgid "Search other media"
