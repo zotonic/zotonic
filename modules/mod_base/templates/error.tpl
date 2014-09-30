@@ -9,6 +9,9 @@
 {% elseif error_code == 410 %}
   <h1>{_ Gone_}</h1>
   <p>{_ Sorry, this page has been deleted. _}</p>
+{% elseif error_code == 404 %}
+  <h1>{_ That page does not exist _}</h1>
+  <p><a href="/">{_ Return to the homepage _}</a></p>
 {% else %}
 	<h1>{{ error_code }} {_ error _}</h1>
 
