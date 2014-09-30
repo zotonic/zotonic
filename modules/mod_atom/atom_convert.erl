@@ -31,7 +31,7 @@
 -define(ATOM_NS, 'http://www.w3.org/2005/Atom').
 
 %% @doc Export a resource to Atom XML.
-%% @spec resource_to_atom(rsc_export()) -> string()
+%% @spec resource_to_atom(rsc_export(), #context{}) -> string()
 resource_to_atom(RscExport, Context) ->
     Rsc = proplists:get_value(rsc, RscExport),
     Content0 = [
