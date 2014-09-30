@@ -27,12 +27,52 @@
 
 -include_lib("zotonic.hrl").
 
+-define(IDS_PAGE_LENGTH, 100).
 
 process_get(_ReqData, Context) ->
-    F = fun() ->
-                Ids = z_db:q("SELECT id FROM rsc ORDER BY id", Context),
-                Ids2 = lists:filter(fun({Id}) -> m_rsc:is_visible(Id, Context) end, Ids),
-                z_convert:to_json({array, [Id || {Id} <- Ids2]})
+    PageNr = get_page_nr(Context),
+    Ids = get_ids(z_acl:user(Context) =:= undefined, PageNr, Context),
+    Ids1 = lists:filter(
+        fun(Id) ->
+            z_acl:rsc_visible(Id, Context)
         end,
-    z_depcache:memo(F, {everything}, ?HOUR, [], Context).
+        Ids),
+    z_convert:to_json({array, Ids1}).
+
+get_ids(true, PageNr, Context) ->
+    Ids = z_db:q("SELECT id
+                  FROM rsc 
+                  WHERE visible_for = 0
+                    AND is_published
+                    AND publication_start <= now()
+                    AND publication_end >= now()
+                  ORDER BY id 
+                  LIMIT $1
+                  OFFSET $2",
+                 [?IDS_PAGE_LENGTH, (PageNr-1) * ?IDS_PAGE_LENGTH],
+                 Context),
+    [ Id || {Id} <- Ids ];
+get_ids(false, PageNr, Context) ->
+    Ids = z_db:q("SELECT id
+                  FROM rsc 
+                  ORDER BY id 
+                  LIMIT $1
+                  OFFSET $2",
+                 [?IDS_PAGE_LENGTH, (PageNr-1) * ?IDS_PAGE_LENGTH],
+                 Context),
+    [ Id || {Id} <- Ids ].
+
+get_page_nr(Context) ->
+    case z_context:get_q("page", Context) of
+        "" -> 1;
+        <<>> -> 1;
+        undefined -> 1;
+        N ->
+            try
+                erlang:max(1, z_convert:to_integer(N))
+            catch
+                _:_ ->
+                    1
+            end
+    end.
 
