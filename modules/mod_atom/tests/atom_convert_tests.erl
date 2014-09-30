@@ -37,7 +37,8 @@ rsc1() ->
 -define(assertContent(Elem, Content), ?assertEqual((hd(Elem#xmlElement.content))#xmlText.value, Content)).
 
 resource_to_atom_test() ->
-    Xml = atom_convert:resource_to_atom(rsc1()),
+    C = z_context:new(testsandbox),
+    Xml = atom_convert:resource_to_atom(rsc1(), C),
     {Elem, _} = xmerl_scan:string(Xml),
 
     ?assertEqual(Elem#xmlElement.name, entry),
@@ -123,8 +124,9 @@ filter_edges(Edges, PredicateName) ->
 
 
 resource_to_resource_test() ->
+    C = z_context:new(testsandbox),
     Rsc1 = rsc1(),
-    Rsc2 = atom_convert:atom_to_resource(atom_convert:resource_to_atom(rsc1())),
+    Rsc2 = atom_convert:atom_to_resource(atom_convert:resource_to_atom(rsc1(), C)),
 
     %% Verify the equality of base elements
     L = [uri],
