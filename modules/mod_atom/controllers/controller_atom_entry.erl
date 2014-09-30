@@ -104,7 +104,7 @@ provide_content(ReqData, Context) ->
     Context1 = z_context:set_reqdata(ReqData, Context),
     Id = get_id(Context1),
     RscExport = m_rsc_export:full(Id, Context1),
-    Content = atom_convert:resource_to_atom(RscExport),
+    Content = atom_convert:resource_to_atom(RscExport, Context),
     Content1 = wrq:encode_content(Content, ReqData),
     ?WM_REPLY(Content1, Context1).
 

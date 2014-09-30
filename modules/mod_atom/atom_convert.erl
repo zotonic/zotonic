@@ -20,7 +20,7 @@
 -module(atom_convert).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--export([resource_to_atom/1,
+-export([resource_to_atom/2,
          atom_to_resource/1
         ]).
 
@@ -32,11 +32,11 @@
 
 %% @doc Export a resource to Atom XML.
 %% @spec resource_to_atom(rsc_export()) -> string()
-resource_to_atom(RscExport) ->
+resource_to_atom(RscExport, Context) ->
     Rsc = proplists:get_value(rsc, RscExport),
     Content0 = [
                 {id, [binary_to_list(proplists:get_value(uri, RscExport))]},
-                {title, [{type, "text"}], [binary_to_list(proplists:get_value(title, Rsc))]},
+                {title, [{type, "text"}], [binary_to_list(z_trans:trans(proplists:get_value(title, Rsc), Context))]},
                 {published, [z_convert:to_isotime(proplists:get_value(publication_start, Rsc))]},
                 {updated, [z_convert:to_isotime(proplists:get_value(modified, Rsc))]}
                ],
@@ -45,14 +45,14 @@ resource_to_atom(RscExport) ->
                    true ->
                        Content0;
                    false ->
-                       Content0 ++ [{content, [{type, "html"}], [binary_to_list(Body)]}]
+                       Content0 ++ [{content, [{type, "html"}], [binary_to_list(z_trans:trans(Body, Context))]}]
                end,
 
     Content2 = case empty(Summary = proplists:get_value(summary, Rsc)) of
                    true ->
                        Content1;
                    false ->
-                       Content1 ++ [{summary, [{type, "text"}], [binary_to_list(Summary)]}]
+                       Content1 ++ [{summary, [{type, "text"}], [binary_to_list(z_trans:trans(Summary, Context))]}]
                end,
 
     Content3 = Content2 ++ author_element(RscExport),
