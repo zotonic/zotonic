@@ -179,7 +179,7 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
     end;
 
 event(#postback_notify{message="feedback", trigger="dialog-connect-find", target=TargetId}, Context) ->
-    % Find pages matching the search criteria.
+                                                % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     Category = z_context:get_q(find_category, Context),
     Text=z_context:get_q(find_text, Context),
@@ -199,9 +199,16 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
     ], Context);
 
 event(#postback_notify{message="admin-connect-select"}, Context) ->
-    SubjectId = z_convert:to_integer(z_context:get_q("subject_id", Context)),
+    {SubjectId, ObjectId} =
+        case z_utils:is_empty(z_context:get_q("object_id", Context)) of
+            true ->
+                {z_convert:to_integer(z_context:get_q("subject_id", Context)),
+                 z_convert:to_integer(z_context:get_q("select_id", Context))};
+            false ->
+                {z_convert:to_integer(z_context:get_q("select_id", Context)),
+                 z_convert:to_integer(z_context:get_q("object_id", Context))}
+        end,
     Predicate = z_context:get_q("predicate", Context),
-    ObjectId = z_convert:to_integer(z_context:get_q("select_id", Context)),
     Callback = z_context:get_q("callback", Context),
     case do_link(SubjectId, Predicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
