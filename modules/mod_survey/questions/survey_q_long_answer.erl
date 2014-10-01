@@ -19,6 +19,7 @@
 
 -export([
     answer/3,
+    prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
     prep_block/2,
@@ -39,6 +40,9 @@ answer(Block, Answers, _Context) ->
                 V -> {ok, [{Name, {text, z_convert:to_binary(V)}}]}
             end
     end.
+
+prep_chart(_Block, _Ans, _Context) ->
+    undefined.
 
 prep_answer_header(Block, _Context) ->
     proplists:get_value(name, Block).

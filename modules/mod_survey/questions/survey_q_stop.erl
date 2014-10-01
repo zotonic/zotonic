@@ -19,6 +19,7 @@
 
 -export([
     answer/3,
+    prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
     prep_block/2
@@ -28,6 +29,9 @@
 
 answer(_Block, _Answers, _Context) ->
     {ok, none}.
+
+prep_chart(_Block, _Ans, _Context) ->
+    undefined.
 
 prep_answer_header(_Q, _Context) ->
     [].
