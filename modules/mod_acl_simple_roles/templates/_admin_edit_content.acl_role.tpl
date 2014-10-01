@@ -60,7 +60,7 @@
                 {% with m.modules.all as modules %}
                     {% for mod in m.modules.enabled %}
                         <div>
-                            <label class="checkbox inline" for="{{ #module.mod }}"><input type="checkbox" id="{{ #module.mod }}" name="acl_mod"{% if mod|member:acl.modules %} checked="checked"{% endif %} value="{{ mod|escape }}" />{{ modules[mod]|escape }}</label>
+                            <label class="checkbox inline" for="{{ #module.mod }}"><input type="checkbox" id="{{ #module.mod }}" name="acl_mod"{% if mod|member:acl.modules %} checked="checked"{% endif %} value="{{ mod|escape }}" />{{ modules[mod]|escape }}<br /><span class="muted">{{ mod }}</span></label>
                         </div>
                     {% endfor %}
                 {% endwith %}
