@@ -23,6 +23,10 @@
 
 %% interface functions
 -export([
+    email_domain/1,
+    ensure_domain/2,
+    bounce_domain/1,
+    
 	get_admin_email/1,
 	send_admin/3,
 	
@@ -46,6 +50,31 @@
 -include_lib("zotonic.hrl").
 
 -define(EMAIL_SRV, z_email_server).
+
+
+% The email domain depends on the site sending the e-mail
+email_domain(Context) ->
+    case m_config:get_value(site, smtphost, Context) of
+        undefined -> z_context:hostname(Context);
+        SmtpHost -> z_convert:to_list(SmtpHost)
+    end.
+
+% Ensure that the sites's domain is attached to the email address.
+ensure_domain(Email, Context) when is_list(Email) ->
+    case lists:member($@, Email) of
+        true -> Email;
+        false -> Email ++ [$@|email_domain(Context)]
+    end;
+ensure_domain(Email, Context) ->
+    ensure_domain(z_convert:to_list(Email), Context).
+
+
+% Bounces can be forced to a different e-mail server altogether
+bounce_domain(Context) ->
+    case z_config:get('smtp_bounce_domain') of
+        undefined -> email_domain(Context);
+        BounceDomain -> BounceDomain
+    end.
 
 
 %% @doc Fetch the e-mail address of the site administrator

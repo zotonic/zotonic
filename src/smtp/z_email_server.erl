@@ -278,31 +278,8 @@ bounce_email(MessageId, Context) ->
     end.
 
 reply_email(MessageId, Context) ->
-    "reply+"++z_convert:to_list(MessageId)++[$@ | email_domain(Context)].
+    "reply+"++z_convert:to_list(MessageId)++[$@ | z_email:email_domain(Context)].
 
-% Ensure that the sites's domain is attached to the email address.
-ensure_domain(Email, Context) when is_list(Email) ->
-    case lists:member($@, Email) of
-        true -> Email;
-        false -> Email ++ [$@|email_domain(Context)]
-    end;
-ensure_domain(Email, Context) ->
-    ensure_domain(z_convert:to_list(Email), Context).
-
-
-% Bounces can be forced to a different e-mail server altogether
-bounce_domain(Context) ->
-    case z_config:get('smtp_bounce_domain') of
-        undefined -> email_domain(Context);
-        BounceDomain -> BounceDomain
-    end.
-
-% The email domain depends on the site sending the e-mail
-email_domain(Context) ->
-    case m_config:get_value(site, smtphost, Context) of
-        undefined -> z_context:hostname(Context);
-        SmtpHost -> z_convert:to_list(SmtpHost)
-    end.
 
 % The 'From' is either the message id (and bounce domain) or the set from.
 get_email_from(EmailFrom, VERP, State, Context) ->
@@ -327,13 +304,13 @@ get_email_from(EmailFrom, VERP, State, Context) ->
 get_email_from(Context) ->
     %% Let the default be overruled by the config setting
     case m_config:get_value(site, email_from, Context) of
-        undefined -> "noreply@" ++ email_domain(Context);
+        undefined -> "noreply@" ++ z_email:email_domain(Context);
         EmailFrom -> z_convert:to_list(EmailFrom)
     end.
 
 % Unique message-id, depends on bounce domain
 message_id(MessageId, Context) ->
-    z_convert:to_list(MessageId)++[$@ | bounce_domain(Context)].
+    z_convert:to_list(MessageId)++[$@ | z_email:bounce_domain(Context)].
 
 %% @doc Remove a worker Pid from the server state.
 remove_worker(Pid, State) ->
@@ -402,11 +379,11 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
                 case State#state.smtp_relay of
                     true ->
                         [{no_mx_lookups, State#state.smtp_no_mx_lookups},
-                         {hostname, email_domain(Context)}
+                         {hostname, z_email:email_domain(Context)}
                          | State#state.smtp_relay_opts];
                     false ->
                         [{no_mx_lookups, State#state.smtp_no_mx_lookups},
-                         {hostname, email_domain(Context)},
+                         {hostname, z_email:email_domain(Context)},
                          {relay, RecipientDomain}]
                 end,
 
@@ -547,7 +524,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
         [{"Reply-To", reply_email(Id, Context)} | Headers];
     add_reply_to(_Id, #email{reply_to=ReplyTo}, Headers, Context) ->
         {Name, Email} = z_email:split_name_email(ReplyTo),
-        ReplyTo1 = string:strip(Name ++ " <" ++ ensure_domain(Email, Context) ++ ">"),
+        ReplyTo1 = string:strip(Name ++ " <" ++ z_email:ensure_domain(Email, Context) ++ ">"),
         [{"Reply-To", ReplyTo1} | Headers].
 
 
