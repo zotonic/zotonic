@@ -35,7 +35,9 @@ allowed_methods(ReqData, Context) ->
 
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, mod_oauth, ReqData, Context).
+    Context1 = ?WM_REQ(ReqData, Context),
+    Context2 = z_context:ensure_all(Context1),
+    z_acl:wm_is_authorized(z_auth:is_auth(Context2), Context2).
 
 
 resource_exists(ReqData, Context) ->
