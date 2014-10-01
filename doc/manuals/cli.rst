@@ -54,6 +54,8 @@ Currently, the following subcommands are implemented:
 
   ``reinstall <module> [module2, ...]``  Reinstall a module
 
+  ``sync-branches``  Tries to update all installed modules to reflect the module's branch to the currently checked out Zotonic branch.
+
   ``list``  List all modules available on the Zotonic Module Repository
 
   ``search <query>``  Search for a module
@@ -66,7 +68,7 @@ Currently, the following subcommands are implemented:
   -s SITE, --site=SITE  affected Zotonic site
   -d, --debug   enable debugging
   -n NODE, --node=NODE  Zotonic Erlang node
-  
+
 
 ``zotonic copysite [site_name] [source_server]``
   Copy [site_name] and its database content from the [source_server] over SSH and load its content into the filesystem and database of the local machine. You will need to have created the database zotonic_[site_name] for this to work.

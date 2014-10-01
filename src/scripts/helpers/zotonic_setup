@@ -189,7 +189,7 @@ if [ "$(find_config zotonic.config)" == "" ]; then
     perl -e "s|\%\%USER_MODULES_DIR\%\%|$ZOTONIC/user/modules|" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
 fi
 
-MODULES=$(get_user_modules_dir)
+export MODULES=$(get_user_modules_dir)
 export SITES=$(get_user_sites_dir)
 
 if [ ! -d "$SITES" ]; then

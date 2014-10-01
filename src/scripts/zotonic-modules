@@ -51,15 +51,19 @@ import urllib
 import sys
 import os
 import re
-
-
+import pprint
+    
 try:
     import json
 except ImportError:
     import simplejson as json
 
-SITES_DIR = os.path.join(os.environ['ZOTONIC'], 'priv', 'sites')
-BASE_MODULE_PATH = os.path.join(os.environ['ZOTONIC'], 'modules')
+
+def cmd(sh):
+    return subprocess.Popen(sh, shell=True, stdout=subprocess.PIPE).stdout.read().rstrip()
+
+SITES_DIR = os.environ['SITES']
+BASE_MODULE_PATH = os.environ['MODULES']
 ROOT_DIR = os.environ['ZOTONIC']
 ZOTONIC = os.path.join(os.environ['ZOTONIC_BIN'], 'zotonic')
 
@@ -70,13 +74,19 @@ class ZMM():
     Wraps module related actions into a class
     """
     zmr_server = "http://%s/api/zmr/repositories"
-    install_path = os.path.join(ROOT_DIR, 'priv', 'modules')
+    install_path = BASE_MODULE_PATH
 
     def __init__(self):
         # debug switch
         self.debug = False
         self.nodename = os.environ['NODENAME']
 
+    def _get_git_branch(self, path):
+        return cmd("cd '%s' && git symbolic-ref --short HEAD" % path)
+
+    def _get_git_branches(self, path):
+        return list(set([l[2:].split("/")[-1] for l in cmd("cd '%s' && git branch -a" % path).split("\n")]))
+        
     def _scan_modules(self):
         """Scan for modules
 
@@ -90,13 +100,23 @@ class ZMM():
         glob_pattern = os.path.join(self.install_path, 'mod_*')
         shared_modules = glob.glob(glob_pattern)
 
+        def moduleMeta(path):
+            git_path = os.path.join(path, '.git')
+            hg_path = os.path.join(path, '.hg')
+            scm = 'git' if os.path.exists(git_path) else ('hg' if os.path.exists(hg_path) else None)
+            r = {'path': path}
+            # get the repo's remote url
+            if scm is not None:
+                r['scm'] = scm
+                r['url'] = self._get_repo_url(path)
+            return r
+            
         # get remote repository links
-        modules['priv'] = {}
+        modules['_user'] = {}
         for (module, path) in [(os.path.basename(module), module)
                                for module in shared_modules]:
             # get the repo's remote url
-            modules['priv'][module] = {'path': path,
-                                       'url': self._get_repo_url(path)}
+            modules['_user'][module] = moduleMeta(path)
 
         zotonic_sites = self._scan_sites()
         for site in zotonic_sites:
@@ -108,12 +128,8 @@ class ZMM():
             # get remote repository links
             for (module, path) in [(os.path.basename(module), module)
                                    for module in site_modules]:
-                repo_path = os.path.join(path, '.git')
-                scm = 'git' if os.path.exists(repo_path) else 'hg'
-                # get the repo's remote url
-                modules[site][module] = {'path': path,
-                                         'url': self._get_repo_url(path),
-                                         'scm': scm}
+                modules[site][module] = moduleMeta(path)
+
         return modules
 
     def module_exists(self, module, site=None):
@@ -128,7 +144,7 @@ class ZMM():
         """Returns the url to a module's repository master branch"""
         if os.path.exists(os.path.join(repo_path, '.git')):
             # repository is a Git repo
-            git_cmd = 'cd %s && git remote -v | grep fetch | cut -f 2 | cut -d " " -f 1'
+            git_cmd = 'cd %s && git remote -v | grep fetch | head -n 1 | cut -f 2 | cut -d " " -f 1'
             cmd = git_cmd % repo_path
         else:
             # assume Mercurial repository
@@ -174,19 +190,19 @@ class ZMM():
             print "** Module already exists in zotonic core:", clonepath
             return False
 
-        else:
-            info = [mod for mod in self.search(modulename)
-                    if mod['title'] == modulename]
-            if not info:
-                print "** Module not found:", modulename
-                return False
-            info = info[0]
+        info = [mod for mod in self.search(modulename)
+                if mod['title'] == modulename]
+        if not info:
+            print "** Module not found:", modulename
+            return False
+        info = info[0]
 
-            # clone repository
-            if self._clone_repo(modulename, info['repository'],
-                                info['scm']):
-                print "**", modulename, "OK"
-                return True
+        # clone repository
+        if self._clone_repo(modulename, info['repository'],
+                            info['scm']):
+            print "**", modulename, "OK"
+            self._sync_branch(self._get_git_branch(ROOT_DIR), modulename, clonepath)
+            return True
 
     def _clone_repo(self, modulename, repository, scm):
         clonepath = os.path.join(self.install_path, modulename)
@@ -421,6 +437,35 @@ class ZMM():
         else:
             return True
 
+    def _sync_branch(self, zotonicbranch, module, path):
+        curbranch = self._get_git_branch(path)
+        if curbranch == zotonicbranch:
+            print "** %s already on branch %s." % (module, zotonicbranch)
+            return False
+
+        branches = self._get_git_branches(path)
+        if zotonicbranch in branches:
+            print "** %s - checking out branch %s to align to Zotonic branch." % (module, zotonicbranch)
+            print cmd("cd '%s' && git checkout %s" % (path, zotonicbranch))
+            print
+            return True
+        else:
+            print "** %s does not have branch %s." % (module, zotonicbranch)
+            return False
+            
+                
+    def sync_branches(self):
+        modules = self._scan_modules()
+        zotonicbranch = self._get_git_branch(ROOT_DIR)
+        changed = False
+        for _site, mods in modules.iteritems():
+            for module, modinfo in mods.iteritems():
+                if 'scm' not in modinfo or modinfo['scm'] != 'git':
+                    continue
+                changed = changed or self._sync_branch(zotonicbranch, module, modinfo['path'])
+        if changed:
+            self.update_zotonic()
+                    
 
 def main():
     """Main script logic"""
@@ -441,7 +486,7 @@ def main():
 
     # subcommands
     subcommands = ['list', 'search', 'install', 'uninstall',
-                   'activate', 'deactivate', 'restart', 'reinstall', 'update']
+                   'activate', 'deactivate', 'restart', 'reinstall', 'update', 'sync-branches']
 
     if not args:
         parser.print_help()
@@ -453,7 +498,7 @@ def main():
 
     command, command_args = args[0], args[1:]
     # commands that require args
-    required_cmds = list(set(subcommands) - set(['list']))
+    required_cmds = list(set(subcommands) - set(['list', 'sync-branches']))
     if command in required_cmds and len(command_args) < 1:
         print "ERROR: missing argument for '%s' command" % command
         exit(os.EX_DATAERR)
@@ -510,6 +555,9 @@ def main():
     elif command == 'update':
         for command in command_args:
             zmm.update(command, opts.site)
+
+    elif command == 'sync-branches':
+        zmm.sync_branches()
 
 # define test fixture
 import unittest
