@@ -35,7 +35,7 @@ allowed_methods(ReqData, Context) ->
 
 
 is_authorized(ReqData, Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin, ReqData, Context).
+    z_acl:wm_is_authorized(use, mod_oauth, ReqData, Context).
 
 
 resource_exists(ReqData, Context) ->
