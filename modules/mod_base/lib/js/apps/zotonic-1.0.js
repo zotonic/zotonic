@@ -323,14 +323,25 @@ function z_session_invalid_reload(page_id, status)
 // Default action for delegates.reload
 function z_session_invalid_dialog()
 {
-    z_dialog_confirm({
-        title: z_translate("Reload"),
-        text: "<p>" +
-            z_translate("Your session has expired or is invalid. Reload the page to continue.") +
-            "</p>",
-        ok: z_translate("Reload"),
-        on_confirm: function() { z_reload(); }
+    var is_editing = false;
+
+    z_editor_save($('body'));
+    $('textarea').each(function() {
+        is_editing = is_editing || ($(this).val() !== "");
     });
+
+    if (is_editing) {
+        z_dialog_confirm({
+            title: z_translate("Reload"),
+            text: "<p>" +
+                z_translate("Your session has expired or is invalid. Reload the page to continue.") +
+                "</p>",
+            ok: z_translate("Reload"),
+            on_confirm: function() { z_reload(); }
+        });
+    } else {
+        z_reload();
+    }
 }
 
 /* Transport between user-agent and server
