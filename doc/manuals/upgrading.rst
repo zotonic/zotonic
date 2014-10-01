@@ -12,25 +12,45 @@ incompatible ways or get deprecated.
 Upgrading to Zotonic 0.11
 -------------------------
 
-Configuration change
-....................
+Global configuration changes
+............................
 
-The global file ``priv/config`` has been obsoleted in place of a new global 
-configuration file, ``~/.zotonic/zotonic.config``. To upgrade, do the following:
+The global file ``priv/config`` has been obsoleted in place of a new
+global configuration file, ``~/.zotonic/zotonic.config``. 
+
+To upgrade your config file, do the following:
 
  * Make a directory in your home folder, called ``~/.zotonic``.
  * Copy ``priv/zotonic.config.in`` to ``~/.zotonic/zotonic.config``
  * Copy any settings from ``priv/config`` into the new ``priv/zotonic.config`` (IP addresses, etc)
  * Remove the old file ``priv/config``, as it is no longer in use.
  * Also, move ``priv/erlang.config`` to ``~/.zotonic/erlang.config``.
-
+  
 These configuration files can also be put in other places
 (``/etc/zotonic``, most notably), or can contain Zotonic's version
 number or node name when running multiple Zotonic versions side by
 side. See :ref:`manual-configuration` for all information on this
 topic.
-   
-   
+
+
+Changed location of sites and external modules
+..............................................
+
+The default place for user-defined sites and external modules has been
+changed to the defaults ``user/sites`` and ``user/modules``,
+respectively.
+
+To move your sites and modules in the right places, do the following:
+
+ * In the zotonic dir, do ``mkdir -p user/{modules,sites}``
+ * Move any external modules: ``mv priv/modules/* user/modules/``
+ * Move all sites except ``zotonic_status`` and ``testsandbox`` to ``user/sites``.
+
+You can change the location of the user-defined sites and modules by
+changing ``user_sites_dir`` and ``user_modules`` dir settings in the
+:ref:`manual-configpuration`.
+
+
 Database changes
 ................
 
