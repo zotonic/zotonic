@@ -6,9 +6,19 @@ PARSER    := src/erlydtl/erlydtl_parser
 # Erlang Rebar downloading
 # see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
 REBAR := ./rebar
-REBAR_DEPS := ../../rebar
 REBAR_URL := https://github.com/rebar/rebar/wiki/rebar
 REBAR_ENV = EXOMETER_PACKAGES="-afunix -netlink"
+
+# The release branch should have a file named USE_REBAR_LOCKED
+# See: https://github.com/lukyanov/rebar-lock-deps
+use_locked_config = $(wildcard USE_REBAR_LOCKED)
+ifeq ($(use_locked_config),USE_REBAR_LOCKED)
+  rebar_config = rebar.config.lock
+else
+  rebar_config = rebar.config
+endif
+REBAR_OPTS = -C $(rebar_config)
+
 
 # Default target - update sources and call all compile rules in succession
 .PHONY: all
@@ -19,10 +29,6 @@ all: get-deps compile
 	  -eval '{ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [], [{stream, "./rebar"}])' \
 	  -s init stop
 	chmod +x ./rebar
-
-DEPS = $(shell find deps -maxdepth 1 -type d | egrep '^deps/[^/]*$$' | grep -v 'deps/lager')
-LAGER = deps/lager
-Compile = (cd $(1) && $(REBAR_ENV) $(REBAR_DEPS) deps_dir=.. compile)
 
 # Helper targets
 .PHONY: erl
@@ -42,14 +48,13 @@ ebin/$(APP).app: src/$(APP).app.src
 .PHONY: get-deps update-deps compile-deps compile-zotonic compile
 
 get-deps: $(REBAR)
-	$(REBAR_ENV) $(REBAR) get-deps
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) get-deps
 
 update-deps: $(REBAR)
-	$(REBAR) update-deps
+	$(REBAR) $(REBAR_OPTS) update-deps
 
 compile-deps: $(REBAR)
-	if [ -d $(LAGER) ]; then $(call Compile, $(LAGER)); fi
-	for i in $(DEPS); do $(call Compile, $$i); done
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) compile
 
 compile-zotonic: $(PARSER).erl erl
 
@@ -79,7 +84,7 @@ clean: clean_logs $(REBAR)
 	@echo "removing:"
 	rm -f ebin/*.beam ebin/*.app
 	@echo "cleaning dependencies:"
-	$(REBAR) clean
+	$(REBAR) $(REBAR_OPTS) clean
 
 .PHONY: dist-clean
 dist-clean: clean
