@@ -357,7 +357,9 @@ make_rememberme_cookie_value(UserId, Context) ->
 % @doc Find all identities with the given handle.  The handle is either an e-mail address or an username.
 lookup_identities(Handle, Context) ->
     Handle1 = z_string:trim(Handle),
-    lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context).
+    Set = sets:from_list(lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context)),
+    sets:to_list(Set).
+    
 
 lookup_by_username("admin", _Context) ->
     [];
