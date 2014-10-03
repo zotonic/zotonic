@@ -405,7 +405,7 @@ url2props(Url, Context) ->
                            _ -> string:tokens(Props, ")(")
                        end,
             FileMime = z_media_identify:guess_mime(Rest),
-            {_Mime, Extension} = z_media_preview:out_mime(FileMime, PropList, Context),
+            {_Mime, Extension} = z_media_preview:out_mime(FileMime, map_mime_props(PropList), Context),
             case {Check1,PropList} of
                 {"mediaclass-"++_, []} ->
                     % shorthand with only the mediaclass
@@ -431,6 +431,17 @@ url2props(Url, Context) ->
                     {Filepath,PropList1,Check1,Props}
             end
     end.
+
+map_mime_props(Props) ->
+    [ map_mime_prop(P) || P <- Props ].
+
+map_mime_prop("lossless") ->
+    lossless;
+map_mime_prop("mediaclass-"++Rest) ->
+    {mediaclass, lists:takewhile(fun(C) -> C =/= $. end, Rest)};
+map_mime_prop(X) -> 
+    X.
+
 
 url2props1([], Acc) ->
     lists:reverse(Acc);
