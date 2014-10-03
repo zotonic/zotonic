@@ -186,8 +186,7 @@ get_id(Context) ->
 %% @doc Make sure that we do an ACL check for all props before pushing them out.
 %% @todo Move this to the m_rsc module
 get_rsc(Id, Context) ->
-    Props = m_rsc:get(Id, Context),
-    Filtered = lists:filter(fun({K,_}) -> z_acl:rsc_prop_visible(Id, K, Context) end, Props),
+    Props = m_rsc:get_visible(Id, Context),
     IsA = m_rsc:is_a(Id, Context),
     Complete = [
         {category, hd(IsA)},
@@ -197,7 +196,7 @@ get_rsc(Id, Context) ->
         {computed_address_country, m_l10n:country_name(proplists:get_value(address_country, Props), Context)},
         {computed_mail_country, m_l10n:country_name(proplists:get_value(mail_country, Props), Context)},
         {medium, medium(Id, Context)}
-        | Filtered
+        | Props
     ],
     lists:filter(
         fun({_, ?ST_JUTTEMIS}) -> false;

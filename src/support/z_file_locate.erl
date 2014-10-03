@@ -31,7 +31,8 @@
 %%% Testing
 -export([
     locate_file/2,
-    locate_lib/2
+    locate_lib/2,
+    extract_filters/3
     ]).
 
 
