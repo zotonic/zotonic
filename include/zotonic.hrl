@@ -219,7 +219,7 @@
 -define(SESSION_UA_CLASS_Q, "z_ua").
 
 %% Number of seconds between two comet polls before the page expires
--define(SESSION_PAGE_TIMEOUT, 20).
+-define(SESSION_PAGE_TIMEOUT, 30).
 
 %% Number of seconds between session expiration checks
 -define(SESSION_CHECK_EXPIRE, 10).
