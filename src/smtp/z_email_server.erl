@@ -103,8 +103,13 @@ send(Id, #email{} = Email, Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    mnesia:create_table(email_queue,
-                        [{attributes, record_info(fields, email_queue)}]),
+    TabDef = [
+        {type, set},
+        {disc_copies, [node()]},
+        {record_name, email_queue},
+        {attributes, record_info(fields, email_queue)}
+    ],
+    mnesia:create_table(email_queue, TabDef),
     timer:send_interval(5000, poll),
     State = #state{},
     process_flag(trap_exit, true),
