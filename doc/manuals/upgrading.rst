@@ -56,7 +56,7 @@ Database changes
 
 Due to the introduction of the new database driver, the behaviour of
 automatically serializing Erlang terms into the database (on ``bytea``
-columns) as been made explicit. To enable serialization of database
+columns) has been made explicit. To enable serialization of database
 values, you have to tag them with the new ``?DB_PROPS(...)``
 macro. Unserialization of terms is still done automatically.
 
