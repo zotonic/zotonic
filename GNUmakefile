@@ -60,6 +60,8 @@ compile-zotonic: $(PARSER).erl erl
 
 compile: compile-deps compile-zotonic
 
+lock-deps: $(REBAR)
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) lock-deps
 
 # Generate documentation
 .PHONY: docs edocs
