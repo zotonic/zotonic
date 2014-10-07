@@ -109,7 +109,7 @@ init(_Args) ->
         {record_name, email_queue},
         {attributes, record_info(fields, email_queue)}
     ],
-    mnesia:create_table(email_queue, TabDef),
+    {atomic, ok} = mnesia:create_table(email_queue, TabDef),
     timer:send_interval(5000, poll),
     State = #state{},
     process_flag(trap_exit, true),
