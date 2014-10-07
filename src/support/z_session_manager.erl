@@ -420,6 +420,8 @@ spawn_session(PersistId, Context) ->
 
 
 -spec start_session( optional | ensure, session_id(), #context{} ) -> {ok, #context{}} | {error, term()}.
+start_session(optional, undefined, Context) ->
+    {ok, Context};
 start_session(Action, CurrentSessionId, Context) ->
     PersistId = to_binary(z_context:get_cookie(?PERSIST_COOKIE, Context)),
     case gen_server:call(Context#context.session_manager, {start_session, Action, CurrentSessionId, PersistId}) of
