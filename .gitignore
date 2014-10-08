@@ -27,6 +27,7 @@ deps/
 /priv/*.config
 
 /priv/log/
+/priv/mnesia/
 /priv/sites/default/files/
 /priv/modules/
 
