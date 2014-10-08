@@ -292,3 +292,5 @@ To do so, go to the modules overview in the admin interface, and
 scroll down to ``mod_mqtt``. Then, click on the "configure" button in
 the row in the right and tick the checkbox to enable these debug
 messages.
+
+.. image:: /img/mod_mqtt_config.png
