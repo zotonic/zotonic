@@ -1,12 +1,11 @@
+.. _upgrade-notes:
+
 Upgrade notes
 =============
 
-Although we try to keep things backward compatible, sometimes this is
-just impossible, e.g. when renaming things for the sake of clarity.
-
-These notes list the most important changes between Zotonic versions
-that require attetion for site developers when things change in
-incompatible ways or get deprecated.
+These notes list the most important changes between Zotonic
+versions. Please read these notes carefully when upgrading to a new
+major Zotonic version.
 
 
 Upgrading to Zotonic 0.11
@@ -32,6 +31,9 @@ number or node name when running multiple Zotonic versions side by
 side. See :ref:`manual-configuration` for all information on this
 topic.
 
+.. note:: You can *not* just copy over your old ``priv/config`` file to the new
+          location, as the structure of the file has changed.
+
 
 Changed location of sites and external modules
 ..............................................
@@ -48,17 +50,7 @@ To move your sites and modules in the right places, do the following:
 
 You can change the location of the user-defined sites and modules by
 changing ``user_sites_dir`` and ``user_modules`` dir settings in the
-:ref:`manual-configpuration`.
-
-
-Database changes
-................
-
-Due to the introduction of the new database driver, the behaviour of
-automatically serializing Erlang terms into the database (on ``bytea``
-columns) has been made explicit. To enable serialization of database
-values, you have to tag them with the new ``?DB_PROPS(...)``
-macro. Unserialization of terms is still done automatically.
+:ref:`manual-configuration`.
 
 
 Postback and javascript changes
@@ -105,6 +97,15 @@ mod_geomap``. Alternatively, you can try the module ``mod_geo``
 (``zotonic modules install mod_geomap``) , which uses Google Maps in
 the admin.
 
+
+Database-driver changes
+.......................
+
+Due to the introduction of the new database driver, the behaviour of
+automatically serializing Erlang terms into the database (on ``bytea``
+columns) has been made explicit. To enable serialization of database
+values, you have to tag them with the new ``?DB_PROPS(...)``
+macro. Unserialization of terms is still done automatically.
 
 Gotcha's
 ........
