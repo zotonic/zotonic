@@ -85,7 +85,12 @@ dispatch(Host, Path, ReqData, TracerPid) ->
                     tracer_pid=TracerPid
               },
     count_request(Host),
-    trace_final(TracerPid, handle_dispatch(gen_server:call(?MODULE, DispReq), DispReq, ReqDataUA)).
+    try
+        trace_final(TracerPid, handle_dispatch(gen_server:call(?MODULE, DispReq), DispReq, ReqDataUA))
+    catch
+        throw:{stop_request, RespCode} ->
+            {{stop_request, RespCode}, ReqData}
+    end.
 
 %% @doc Retrieve the fallback site.
 get_fallback_site() ->

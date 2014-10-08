@@ -238,7 +238,7 @@ create_email_queue() ->
         {attributes, record_info(fields, email_queue)}
     ],
     case mnesia:create_table(email_queue, TabDef) of
-        {atomic, ok} -> true;
+        {atomic, ok} -> ok;
         {aborted, {already_exists, email_queue}} -> ok
     end.
 

@@ -186,16 +186,22 @@ parse_multipart_request(ProgressFunction, Callback, Context) ->
     Prefix = <<"\r\n--", Boundary/binary>>,
     BS = size(Boundary),
     {{Chunk, Next}, ReqData1} = wrq:stream_req_body(ReqData, ?CHUNKSIZE),
-    Context1 = z_context:set_reqdata(ReqData1, Context),
-    <<"--", Boundary:BS/binary, "\r\n", Rest/binary>> = Chunk,
-    feed_mp(headers, #mp{boundary=Prefix,
-                         length=size(Chunk),
-                         content_length=Length,
-                         buffer=Rest,
-                         callback=Callback,
-                         progress=ProgressFunction,
-                         next_chunk=Next,
-                         context=Context1}).
+    case Chunk of
+        <<"--", Boundary:BS/binary, "\r\n", Rest/binary>> ->
+            Context1 = z_context:set_reqdata(ReqData1, Context),
+            feed_mp(headers, #mp{boundary=Prefix,
+                                 length=size(Chunk),
+                                 content_length=Length,
+                                 buffer=Rest,
+                                 callback=Callback,
+                                 progress=ProgressFunction,
+                                 next_chunk=Next,
+                                 context=Context1});
+        _ ->
+            lager:debug(z_context:lager_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
+            throw({stop_request, 400})
+    end.
+
 
 
 feed_mp(headers, State=#mp{buffer=Buffer, callback=Callback}) ->
@@ -203,10 +209,15 @@ feed_mp(headers, State=#mp{buffer=Buffer, callback=Callback}) ->
         {exact, N} ->
             {State, N};
         _ ->
-           S1 = read_more(State),
-           %% Assume headers must be less than ?CHUNKSIZE
-           {exact, N} = find_in_binary(<<"\r\n\r\n">>, S1#mp.buffer),
-           {S1, N}
+            S1 = read_more(State),
+            %% Assume headers must be less than ?CHUNKSIZE
+            case find_in_binary(<<"\r\n\r\n">>, S1#mp.buffer) of
+                {exact, N} ->
+                    {S1, N};
+                _ ->
+                    lager:debug("Could not decode multipart: headers incomplete or too long: ~p", [S1#mp.buffer]),
+                    throw({stop_request, 400})
+            end
     end,
     <<Headers:P/binary, "\r\n\r\n", Rest/binary>> = State1#mp.buffer,
     NextCallback = Callback({headers, parse_headers(Headers)}),
@@ -226,8 +237,11 @@ feed_mp(body, State=#mp{boundary=Prefix, buffer=Buffer, callback=Callback}) ->
         {maybe, 0} ->
             % Found a boundary, without an ending newline
             case read_more(State) of
-                State -> throw({error, incomplete_end_boundary});
-                S1 -> feed_mp(body, S1)
+                State ->
+                    lager:debug("Could not decode multipart: incomplete end boundary at: ~p", [Buffer]),
+                    throw({stop_request, 400});
+                S1 ->
+                    feed_mp(body, S1)
             end;
         {maybe, Start} ->
             <<Data:Start/binary, Rest/binary>> = Buffer,
