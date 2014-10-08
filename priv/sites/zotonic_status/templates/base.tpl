@@ -15,6 +15,7 @@
 	{% lib
 		"bootstrap/css/bootstrap.min.css"
 		"css/jquery.loadmask.css" 
+		"css/z.logo.css" 
 		"css/project.css"
 	%}
 

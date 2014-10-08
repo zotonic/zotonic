@@ -14,6 +14,7 @@
 
                 "css/jquery-ui.datepicker.css"
                 "css/jquery.timepicker.css"
+                "css/z.logo.css"
                 "css/zp-menuedit.css"
                 "css/zotonic-admin.css"
                 "css/z.modal.css"

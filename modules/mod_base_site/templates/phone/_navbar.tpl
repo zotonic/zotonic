@@ -9,7 +9,10 @@
           <span class="icon-bar"></span>
         </a>
 
-        <a class="brand" href="/"><img src="/lib/images/logo.png" class="logo" alt=""> {{ m.config.site.title.value }}</a>
+        <a class="brand" href="/">
+            <span class="zotonic-logo"></span>
+            {{ m.config.site.title.value }}
+        </a>
         
         <div class="nav-collapse">
             <form class="navbar-search pull-right" method="get" action="{% url search %}">

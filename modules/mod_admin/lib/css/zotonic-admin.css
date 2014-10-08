@@ -80,9 +80,8 @@ body.noframe > div.container-fluid {
 div.navbar ul.nav i.icon-white {
     opacity: 0.8;
 }
-div.navbar .brand {
-    padding-top: 7px;
-    padding-bottom: 0;
+div.navbar .brand .zotonic-logo {
+    padding-top: 2px;
 }
 
 /* footer edit nav

@@ -10,7 +10,9 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a class="brand" href="http://{{ m.site.hostname }}" title="{_ visit site _}"><img alt="zotonic logo" src="/lib/images/admin_zotonic.png" width="106" height="20"></a>
+            <a class="brand" href="/" title="{_ visit site _}">
+                <span class="zotonic-logo"></span>
+            </a>
         </div>
     </div>
 </div>

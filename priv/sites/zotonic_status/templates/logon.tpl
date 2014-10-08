@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="hero-unit">
-    <h1>{_ Powered by Zotonic _}</h1>
+    <h1>{_ Powered by _} <span class="zotonic-logo"></span></h1>
     <p>
         {_ Welcome, visitor! The page you are
         currently looking at is the default page for a

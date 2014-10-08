@@ -17,6 +17,7 @@
 	        "bootstrap/css/bootstrap-responsive.css" 
 	        "bootstrap/css/bootstrap-base-site.css" 
 	        "css/jquery.loadmask.css" 
+	        "css/z.logo.css" 
 	        "css/z.growl.css" 
 	        "css/z.modal.css" 
 	        "css/site.css" 

@@ -10,7 +10,9 @@
                 <span class="icon-bar"></span>
             </a>
 
-            <a class="brand" href="/" title="{_ visit site _}"><img alt="zotonic logo" src="/lib/images/admin_zotonic.png" width="106" height="20"></a>
+            <a class="brand" href="/" title="{_ visit site _}">
+                <span class="zotonic-logo"></span>
+            </a>
 
             <div class="nav-collapse collapse">
                 {% block search %}
