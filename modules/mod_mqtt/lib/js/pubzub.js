@@ -2,9 +2,9 @@
 
 Special topics:
 
-    "foo/bar"    within this page
-    "/foo/bar"   within the site, handled on the server
-    "//foo/bar"  the root of the server's mqtt router
+    "~pagesession"    within this page
+    "~site/foo/bar"   within the site, handled on the server
+    "foo/bar"  the root of the server's mqtt router
 
 TODO:
 
@@ -47,7 +47,7 @@ function Pubzub ()
 }
 
 Pubzub.prototype.me = function () {
-    return "/page/" + z_pageid;
+    return "~site/pagesession/" + z_pageid;
 };
 
 Pubzub.prototype.subscribe_multi = function (topics, fun) {
@@ -116,7 +116,12 @@ Pubzub.prototype.remove_lastwill = function () {
 };
 
 Pubzub.prototype.is_local_topic = function (topic) {
-    return topic.substr(0,1) != "/";
+    var me = this.me();
+
+    return topic == '~pagesession' ||
+           topic == me ||
+           topic.substr(0,13) == "~pagesession/" ||
+           topic.substr(0,me.length+1) == me+"/";
 };
 
 Pubzub.prototype.relayed = function (mqtt_msg, _msg) {

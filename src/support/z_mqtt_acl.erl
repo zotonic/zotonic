@@ -29,8 +29,10 @@
 -compile([{parse_transform, lager_transform}]).
 
 
-%% TODO: first check ACL callbacks, then this local fallback
-
+is_allowed(Action, Topic, Context) when is_list(Topic) ->
+    is_allowed(Action, unicode:characters_to_binary(Topic), Context);
+is_allowed(Action, <<$~, _/binary>> = Topic, Context) ->
+    is_allowed(Action, z_mqtt:expand_context_topic(Topic, Context), Context);
 is_allowed(Action, Topic, #context{} = Context) when Action =:= subscribe; Action =:= publish ->
     LocalSite = z_convert:to_binary(z_context:site(Context)), 
     Parts = emqtt_topic:words(Topic),
@@ -85,7 +87,7 @@ is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User], Site, Context)
                 _ -> false
             end 
     end;
-is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"page">>], Site, _Context) ->
+is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"pagesession">>], Site, _Context) ->
     true;
 is_allowed(publish, _Topic, [<<"site">>, Site, <<"rsc">>, RscId | _], Site, Context) ->
     z_acl:rsc_editable(z_convert:to_integer(RscId), Context);
@@ -94,7 +96,7 @@ is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"rsc">>, RscId | _], Site, Co
 is_allowed(Action, Topic, Words, Site, Context) ->
     is_allowed(Action, Topic, Words, Site, z_session_page:page_id(Context), Context).
 
-is_allowed(_Action, _Topic, [<<"site">>, Site, <<"page">>, PageId], Site, PageId, _Context) ->
+is_allowed(_Action, _Topic, [<<"site">>, Site, <<"pagesession">>, PageId], Site, PageId, _Context) ->
     true;
 is_allowed(_Action, _Topic, _Words, _Site, _PageId, _Context) ->
     false.

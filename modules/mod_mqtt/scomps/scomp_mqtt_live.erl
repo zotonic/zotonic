@@ -114,14 +114,20 @@ script(Target, Where, LiveVars, TplVars, Context) ->
     ]).
 
 map_topic(Id, _Context) when is_integer(Id) ->
-    <<"/rsc/",(z_convert:to_binary(Id))/binary>>;
-map_topic({edge, Props}, Context) when is_list(Props) ->
+    <<"~site/rsc/",(z_convert:to_binary(Id))/binary>>;
+map_topic({object, Props}, Context) when is_list(Props) ->
+    map_topic_edge($o, Props, Context);
+map_topic({subject, Props}, Context) when is_list(Props) ->
+    map_topic_edge($s, Props, Context);
+map_topic(Topic, _Context) ->
+    z_convert:to_binary(Topic).
+
+map_topic_edge(ObjSub, Props, Context) ->
     Id = proplists:get_value(id, Props),
     Predicate = proplists:get_value(predicate, Props),
     Name = to_predicate_name(Predicate, Context),
-    <<"/rsc/",(z_convert:to_binary(Id))/binary, $/, Name/binary>>;
-map_topic(Topic, _Context) ->
-    z_convert:to_binary(Topic).
+    <<"~site/rsc/",(z_convert:to_binary(Id))/binary, $/, ObjSub, $/, Name/binary>>.
+
 
 render(<<"top">>, Target, Render, Context) ->
     z_render:insert_top(Target, Render, Context);

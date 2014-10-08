@@ -31,9 +31,10 @@ Live topics
 Any MQTT topic can be used. The topics are interpreted as local to the page.
 There are three special topics:
 
- * Use any integer to map to the resource’s update topic. For example if id is *1234* then the topic will be ``/rsc/1234``
- * Use the tuple ``{edge id=... predicate=...}`` to listen to changes of a specific predicate of a page. An example of a mapped topic is ``/rsc/1234/author``
- * Use the tuple ``{edge id=...}`` to listen to changes of a all predicates of a page. An example of a mapped topic is ``/rsc/1234/+``
+ * Use any integer to map to the resource’s update topic. For example if id is *1234* then the topic will be ``~site/rsc/1234``
+ * Use the tuple ``{object id=... predicate=...}`` to listen to changes of a specific predicate of a page. An example of a mapped topic is ``~site/rsc/1234/o/author``
+ * Use the tuple ``{object id=...}`` to listen to changes of a all predicates of a page. An example of a mapped topic is ``~site/rsc/1234/o/+``
+ * Use the tuple ``{subject id=... }`` to listen to changes of connections to a page. An example of a mapped topic is ``~site/rsc/1234/s/author``
 
 
 Live actions
@@ -47,12 +48,12 @@ Use ``{% wire type={mqtt topic=... topic=...} %}`` to connect to one or more MQT
 
 Example::
 
-    {% wire type={mqtt topic="/public/hello"} action={growl text="hello"} %}
+    {% wire type={mqtt topic="~site/public/hello"} action={growl text="hello"} %}
 
 .. highlight: erlang
 
 And in Erlang this will trigger the above *growl*::
 
-    z_mqtt:publish(<<"public/hello">>, <<>>, z_acl:sudo(z:c(mysite))).
+    z_mqtt:publish(<<"~site/public/hello">>, <<>>, z_acl:sudo(z:c(mysite))).
 
 See also :ref:`scomp-wire`

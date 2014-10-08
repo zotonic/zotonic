@@ -92,7 +92,8 @@
 start_link(SessionPid, PageId, Context) when is_binary(PageId) ->
     % lager:debug(z_context:lager_md(Context), "[~p] register page ~p", [z_context:site(Context), PageId]),
     gen_server:start_link({via, z_proc, {{session_page,PageId}, Context}}, 
-                          ?MODULE, {SessionPid,PageId,z_context:site(Context)},
+                          ?MODULE,
+                          {SessionPid, PageId, z_context:site(Context)},
                           []).
 
 stop(#context{page_pid=PagePid}) ->
@@ -439,7 +440,12 @@ handle_info(check_timeout, State) ->
 %% @todo Decide if/how/where the topic mapping should be done.
 handle_info({route, Msg}, State) ->
     lager:debug("Page ~p route ~p", [State#page_state.page_id, Msg]),
-    ClientTopic = z_mqtt:remove_context_topic(Msg#mqtt_msg.topic, State#page_state.site),
+    MinimalContext = #context{
+        host=State#page_state.site,
+        page_id=State#page_state.page_id,
+        session_pid=State#page_state.session_pid
+    },
+    ClientTopic = z_mqtt:make_context_topic(Msg#mqtt_msg.topic, MinimalContext),
     Msg1 = Msg#mqtt_msg{
                 topic=ClientTopic,
                 encoder=undefined

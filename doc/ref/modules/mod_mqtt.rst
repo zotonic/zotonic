@@ -70,27 +70,33 @@ Predefined topics
 
 Currently the following topics are defined:
 
-+--------------------------+-------------------------------------------------------------------------+
-|Topic                     |Description                                                              |
-+==========================+=========================================================================+
-|public                    |Freely accessible topic, both for subscribe and publish                  |
-+--------------------------+-------------------------------------------------------------------------+
-|test                      |Test topic. If you publish here then mod_mqtt will log debug message.    |
-+--------------------------+-------------------------------------------------------------------------+
-|user                      |Topic available for any authenticated user                               |
-+--------------------------+-------------------------------------------------------------------------+
-|site/sitename             |Root for a site                                                          |
-+--------------------------+-------------------------------------------------------------------------+
-|site/sitename/public      |Freely accessible within the site                                        |
-+--------------------------+-------------------------------------------------------------------------+
-|site/sitename/test        |Test topic, freely accessible within the site                            |
-+--------------------------+-------------------------------------------------------------------------+
-|site/sitename/user        |Topic available for any authenticated user of the site *sitename*        |
-+--------------------------+-------------------------------------------------------------------------+
-|site/sitename/page        |HTML pages can subscribe, admins can publish                             |
-+--------------------------+-------------------------------------------------------------------------+
-|site/sitename/page/PageId |Topic to relay information to a specific page                            |
-+--------------------------+-------------------------------------------------------------------------+
++---------------------------------+-------------------------------------------------------------------------+
+|Topic                            |Description                                                              |
++=================================+=========================================================================+
+|public                           |Freely accessible topic, both for subscribe and publish                  |
++---------------------------------+-------------------------------------------------------------------------+
+|test                             |Test topic. If you publish here then mod_mqtt will log debug message.    |
++---------------------------------+-------------------------------------------------------------------------+
+|user                             |Topic available for any authenticated user                               |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename                    |Root for a site                                                          |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename/public             |Freely accessible within the site                                        |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename/test               |Test topic, freely accessible within the site                            |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename/user               |Topic available for any authenticated user of the site *sitename*        |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename/user/UserId        |Topic available for a specific user of the site *sitename*               |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename/session            |HTML pages can subscribe, admins can publish                             |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename/session/SessionId  |Topic to relay information to a specific session                         |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename/pagesession        |HTML pages can subscribe, admins can publish                             |
++---------------------------------+-------------------------------------------------------------------------+
+|site/sitename/pagesession/PageId |Topic to relay information to a specific page (in a browser)             |
++---------------------------------+-------------------------------------------------------------------------+
 
 
 Topics and namespaces
@@ -98,14 +104,21 @@ Topics and namespaces
 
 To make it easier to write generic software, without changing topic names, some namespace conventions and mappings are introduced.
 
-All sites have their own topics under the topic ``site/foobar`` (where ``foobar`` is your sitename).
-This site root is automatically added to any publish or subscribe actions, depending on the format of the topic.
+The following topics are expanded
 
-Topics starting with ``//`` are directly mapped to the central broker’s topic tree, without the slashes. For example ``//public`` corresponds to ``public``
++--------------------------+------------------------------------------------------------------------------------------------------------+
+|Topic                     | Expansion                                           | Description                                          |
++==========================+=====================================================+======================================================+
+| ~site                    | site/mysite                                         | The context’s site root topic                        |
++--------------------------+-----------------------------------------------------+------------------------------------------------------+
+| ~session                 | site/mysite/session/oLfVVaT299zpSjlGb5Im            | The topic for the current session                    |
++--------------------------+-----------------------------------------------------+------------------------------------------------------+
+| ~pagesession             | site/mysite/pagesession/vWCUKL9QKmfLxotWorZv        | The topic for the current HTML page in the browser   |
++--------------------------+-----------------------------------------------------+------------------------------------------------------+
+| ~user                    | site/user/1234                                      | The topic for the current user                       |
++--------------------------+-----------------------------------------------------+------------------------------------------------------+
 
-In the browser, topics starting with a ``/`` are relayed to the sites’s central broker, and any topic without a prefixed ``/`` is routed within the browser.
-
-In Erlang, any topic not starting with ``//`` will be prefixed with the site’s topic root.
+Note that there are not automatic subscriptions for session, pagesession and user topics. All subscriptions need to be added explicitly.
 
 
 Access control
@@ -123,11 +136,11 @@ Modules can automatically subscribe to topics. This is done by adding specially 
 For example, the following function subscribes to the topic ``site/sitename/test``::
 
     -export([
-        'mqtt:/test'/3
+        'mqtt:~site/test'/3
     ]).
 
-    'mqtt:/test'(Message, ModulePid, Context) ->
-        lager:debug("mqtt:/test received: ~p", [{Message, ModulePid, z_context:site(Context)}]),
+    'mqtt:~site/test'(Message, ModulePid, Context) ->
+        lager:debug("mqtt:~site/test received: ~p", [{Message, ModulePid, z_context:site(Context)}]),
         ok.
 
 Here *Message* is the received ``#mqtt_msg{}``, and *ModulePid* is the process id of the running module.
@@ -173,8 +186,8 @@ The JavaScript API uses callback functions:
 
 .. code-block:: javascript
 
-	pubzub.subscribe("foo/#", function(topic, msg) { console.log(topic, msg); });
-	pubzub.publish("foo/bar", "hello world");
+	pubzub.subscribe("~pagesession/foo/#", function(topic, msg) { console.log(topic, msg); });
+	pubzub.publish("~pagesession/foo/bar", "hello world");
 
 If the received message was relayed from the server then it is an object:
 
@@ -198,10 +211,12 @@ You will need to include the following JavaScript files:
 .. code-block:: django
 
 	{% lib
-		 "js/ubf.js"
 		 "js/qlobber.js"
 		 "js/pubzub.js"
 	%}
+
+The file ``js/modules/ubf.js`` should already have been included, as it is used by ``zotonic-1.0.js``.
+
 
 Connection will
 ^^^^^^^^^^^^^^^
@@ -214,7 +229,7 @@ Example:
 
 .. code-block:: javascript
 
-    var will_id = pubzub.lastwill("/page/goodbye", "thanks for the fish");
+    var will_id = pubzub.lastwill("~site/goodbye", "thanks for the fish");
 
 
 Quality of service

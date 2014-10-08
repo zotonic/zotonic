@@ -109,13 +109,13 @@ Use ``{% wire type={mqtt topic=... topic=...} %}`` to connect to one or more MQT
 
 Example::
 
-    {% wire type={mqtt topic="/public/hello"} action={growl text="hello"} %}
+    {% wire type={mqtt topic="~site/public/hello"} action={growl text="hello"} %}
 
 .. highlight: erlang
 
 And in Erlang this will trigger the above *growl*::
 
-    z_mqtt:publish(<<"public/hello">>, <<>>, z_acl:sudo(z:c(mysite))).
+    z_mqtt:publish(<<"~site/public/hello">>, <<>>, z_acl:sudo(z:c(mysite))).
 
 .. note::
 

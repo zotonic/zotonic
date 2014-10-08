@@ -100,7 +100,7 @@ function z_set_page_id( page_id, user_id )
         z_userid = user_id;
 
         if (typeof pubzub == "object") {
-            setTimeout(function() { pubzub.publish("pageinit", page_id); }, 10);
+            setTimeout(function() { pubzub.publish("~pagesession/pageinit", page_id); }, 10);
         }
     }
     $(window).bind('beforeunload', function() {
@@ -294,12 +294,12 @@ function z_session_status_ok(page_id, user_id)
         z_transport_queue = [];
         z_transport_acks = [];
 
-        // checks pubzub registry for the "session" topic
+        // checks pubzub registry for the local "session" topic
         // if any handlers then publish the new user to the topic
         // if no handlers then the default reload dialog is shown
-        if (typeof pubzub == "object" && pubzub.subscribers("session").length > 0) {
+        if (typeof pubzub == "object" && pubzub.subscribers("~pagesession/session").length > 0) {
             z_session_valid = true;
-            pubzub.publish("session", status);
+            pubzub.publish("~pagesession/session", status);
             z_stream_restart();
         } else {
             z_session_invalid_reload(z_pageid, status);

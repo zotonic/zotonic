@@ -159,8 +159,18 @@ dump(#context{session_manager=SessionManager}) ->
 -spec get_session_id(#context{}) -> undefined | session_id().
 get_session_id(Context) ->
     case Context#context.session_id of
-        undefined -> get_session_cookie(Context);
-        SessionId -> SessionId
+        undefined -> 
+            case Context#context.session_pid of
+                undefined ->
+                    get_session_cookie(Context);
+                Pid when is_pid(Pid) ->
+                    case gen_server:call(session_manager(Context), {whois, Pid}) of
+                        {ok, SessionId} -> SessionId;
+                        {error, notfound} -> undefined
+                    end
+            end;
+        SessionId -> 
+            SessionId
     end.
 
 %% @doc Find the session with the given id
@@ -301,6 +311,15 @@ handle_call({whereis, SessionId}, _From,  #session_srv{key2pid=Key2Pid} = State)
             {reply, {error, notfound}, State}
     end;
 
+%% Find a specific session by pid
+handle_call({whois, SessionPid}, _From,  #session_srv{pid2key=Pid2Key} = State) ->
+    case dict:find(SessionPid, Pid2Key) of
+        {ok, SessionId} ->
+            {reply, {ok, SessionId}, State};
+        error ->
+            {reply, {error, notfound}, State}
+    end;
+
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
 
@@ -336,6 +355,12 @@ code_change(_OldVersion, State, _Extra) -> {ok, State}.
 %%====================================================================
 %% support functions - called by session server
 %%====================================================================
+
+session_manager(#context{host=Host, session_manager=undefined}) ->
+    HostAsList = [$$ | atom_to_list(Host)],
+    list_to_atom("z_session_manager"++HostAsList);
+session_manager(#context{session_manager=SessionManager}) ->
+    SessionManager.
 
 
 %% Make sure that the session cookie is set and that the session process has been started.
