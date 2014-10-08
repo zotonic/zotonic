@@ -40,6 +40,8 @@ Commands:
   update     <module> [module2, ...]      Update a module
   restart    <module> [module2, ...]      Restart a module
   reinstall  <module> [module2, ...]      Reinstall a module
+  sync-branches                           Update all installed modules to match the current Zotonic git
+                                          branch (if such a branch exists in the module's repository; git only)
   list                                    List all modules available on the Zotonic Module Repository
   search     <query>                      Search for a module
 """
