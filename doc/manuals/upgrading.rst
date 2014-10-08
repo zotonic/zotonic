@@ -106,6 +106,16 @@ mod_geomap``. Alternatively, you can try the module ``mod_geo``
 the admin.
 
 
+Gotcha's
+........
+
+If you get this error on startup::
+
+  DTREE: cannot open ''
+
+You can fix this by doing: ``rm -rf deps/ua_classifier``, and then running ``make`` again.
+  
+
 Upgrading to Zotonic 0.10
 -------------------------
 
