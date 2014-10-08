@@ -233,9 +233,12 @@ code_change(_OldVsn, State, _Extra) ->
 create_email_queue() ->
     TabDef = [
         {type, set},
-        {disc_copies, [node()]},
         {record_name, email_queue},
         {attributes, record_info(fields, email_queue)}
+        | case application:get_env(mnesia, dir) of
+             {ok, _} -> [ {disc_copies, [node()]} ];
+             undefined -> []
+          end
     ],
     case mnesia:create_table(email_queue, TabDef) of
         {atomic, ok} -> ok;

@@ -116,10 +116,11 @@ ensure_mnesia_schema() ->
     application:load(mnesia),
     case application:get_env(mnesia, dir) of
         undefined ->
-            lager:error("No mnesia directory defined, running without persistent email queue and filezcache. To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}"),
+            error_logger:info_msg("No mnesia directory defined, running without persistent email queue and filezcache.~n"
+                                  "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}~n~n"),
             ok;
         {ok, Dir} ->
-            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir,"LATEST.LOG")) of
+            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir,"schema.DAT")) of
                 true ->
                     ok;
                 false ->
