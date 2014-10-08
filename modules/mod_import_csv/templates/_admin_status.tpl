@@ -1,4 +1,4 @@
-{% if m.acl.use.mod_import_wordpress %}
+{% if m.acl.use.mod_import_csv %}
 <div class="control-group">
     <div class="controls">
         {% button class="btn" text=_"CSV import" action={dialog_open title=_"Import CSV file" template="_dialog_import_csv.tpl"} %} 
