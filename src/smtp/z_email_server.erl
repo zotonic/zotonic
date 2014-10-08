@@ -103,13 +103,7 @@ send(Id, #email{} = Email, Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    TabDef = [
-        {type, set},
-        {disc_copies, [node()]},
-        {record_name, email_queue},
-        {attributes, record_info(fields, email_queue)}
-    ],
-    {atomic, ok} = mnesia:create_table(email_queue, TabDef),
+    ok = create_email_queue(),
     timer:send_interval(5000, poll),
     State = #state{},
     process_flag(trap_exit, true),
@@ -234,6 +228,20 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+%% @doc Create the email queue in mnesia
+create_email_queue() ->
+    TabDef = [
+        {type, set},
+        {disc_copies, [node()]},
+        {record_name, email_queue},
+        {attributes, record_info(fields, email_queue)}
+    ],
+    case mnesia:create_table(email_queue, TabDef) of
+        {atomic, ok} -> true;
+        {aborted, {already_exists, email_queue}} -> ok
+    end.
+
 
 %% @doc Refetch the emailer configuration so that we adapt to any config changes.
 update_config(State) ->
