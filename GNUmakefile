@@ -51,7 +51,7 @@ get-deps: $(REBAR)
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) get-deps
 
 update-deps: $(REBAR)
-	$(REBAR) $(REBAR_OPTS) update-deps
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) update-deps
 
 compile-deps: $(REBAR)
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) compile
