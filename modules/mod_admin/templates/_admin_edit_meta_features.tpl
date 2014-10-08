@@ -9,7 +9,7 @@
 <div class="admin-form clearfix">
 
     <div class="pull-right">
-        <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Help about features."|escapejs }}', text: '{{ _"Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
+        <a href="javascript:void(0)" class="btn btn-primary btn-xs do_dialog" data-dialog="title: '{{ _"Help about features."|escapejs }}', text: '{{ _"Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
     </div>
 
     {% all catinclude "_admin_features.tpl" id %}

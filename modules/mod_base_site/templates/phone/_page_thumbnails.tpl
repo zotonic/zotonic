@@ -1,7 +1,7 @@
 {% with id.o.hasdocument as xs %}
 {% with id.o.depiction as ds %}
 {% if xs or ds %}
-<ul class="thumbnails row-fluid">
+<ul class="thumbnails row">
 	{% for d in ds %}
 		{% catinclude "_thumbnail_list_item.tpl" d %}
 	{% endfor %}

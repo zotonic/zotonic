@@ -36,9 +36,9 @@
     <fieldset>
         <label>{_ Type the text to search _}</label>
         <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
-        <input type="text" name="qs" value="{{ q.qs|escape }}" />
+        <input class="form-control" type="text" name="qs" value="{{ q.qs|escape }}" />
     </fieldset>
-    <input class="btn btn-primary" type="submit" value="{_ Search _} {{ m.rsc[q.qcat].title }}" />
+    <input class="btn btn-primary form-control" type="submit" value="{_ Search _} {{ m.rsc[q.qcat].title }}" />
 </form>
 
 {% endblock %}

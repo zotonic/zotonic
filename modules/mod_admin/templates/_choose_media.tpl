@@ -2,7 +2,7 @@
 
 <ul id="{{ #media }}" class="thumbnails">
     {% for media_id in ids %}
-    <li class="span2">
+    <li class="col-lg-2 col-md-2">
         <div class="thumbnail">
             <a id="{{ #choose.media_id }}" href="#">
 	        {% with m.rsc[media_id].medium as medium %}

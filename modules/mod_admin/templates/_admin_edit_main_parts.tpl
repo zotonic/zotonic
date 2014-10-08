@@ -17,7 +17,5 @@
 {% catinclude "_admin_edit_blocks.tpl" id is_editable=is_editable languages=languages %}
 {% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
 
-{# {% catinclude "_admin_edit_haspart.tpl" id is_editable=is_editable languages=languages %} #}
-
 {% include "_admin_edit_content_advanced.tpl" %}
 {% include "_admin_edit_content_seo.tpl" %}

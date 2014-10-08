@@ -31,16 +31,16 @@
             <td>
                 <div>
                         {% if rsc_stats[mid].bounce %}
-                                {% button class="btn btn-mini" text=_"Bounces" title=_"View and edit the bounced addresses and re-send the mailing." 
+                                {% button class="btn btn-default btn-xs" text=_"Bounces" title=_"View and edit the bounced addresses and re-send the mailing." 
                                         action={dialog_open template="_dialog_mailing_bounces.tpl" title=_"Bounces" id=id mid=mid} %}
                         {% endif %}
                         {% if mid|member:scheduled %}
-                                {% button class="btn btn-mini" text=_"cancel" postback={dialog_mailing_cancel_confirm list_id=mid page_id=id} delegate="mod_mailinglist"  %}
+                                {% button class="btn btn-default btn-xs" text=_"cancel" postback={dialog_mailing_cancel_confirm list_id=mid page_id=id} delegate="mod_mailinglist"  %}
                         {% else %}
                                 {% if stats[1] > rsc_stats[mid].total|default:0 %}
-                                {% button class="btn btn-mini" text=_"send mailing" action={dialog_mailing_page id=id list_id=mid} title=_"send to "|append:m.rsc[mid].title %}
+                                {% button class="btn btn-default btn-xs" text=_"send mailing" action={dialog_mailing_page id=id list_id=mid} title=_"send to "|append:m.rsc[mid].title %}
                                 {% else %}
-                                {% button class="btn btn-mini" text=_"clear" action={confirm text=_"Are you sure you want to reset the statistics for this mailing? This means that if you send the mailing again afterwards, recipients might have gotten the mailing twice." postback={mailinglist_reset list_id=mid page_id=id} delegate="mod_mailinglist"} %}
+                                {% button class="btn btn-default btn-xs" text=_"clear" action={confirm text=_"Are you sure you want to reset the statistics for this mailing? This means that if you send the mailing again afterwards, recipients might have gotten the mailing twice." postback={mailinglist_reset list_id=mid page_id=id} delegate="mod_mailinglist"} %}
                                 {% endif %}
                         {% endif %}
                 </div>

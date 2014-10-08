@@ -10,7 +10,7 @@
 	{% if not m.rsc[id].is_editable %}
 	<p>{_ You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients. _}</p>
 	<div class="well">
-	    {% button class="btn" text=_"cancel" action={redirect back} %}
+	    {% button class="btn btn-default" text=_"cancel" action={redirect back} %}
     </div>
 	{% else %}
 
@@ -23,10 +23,10 @@
 
 	<div class="well">
 	    {% button class="btn btn-primary" text=_"Add recipient" title=_"Add a new recipient." postback={dialog_recipient_add id=id} %}
-	    {% button class="btn" text=_"Download all" title=_"Download list of all active recipients." action={growl text=_"Downloading active recipients list. Check your download window."} action={redirect dispatch="mailinglist_export" id=id} %}
-	    {% button class="btn" text=_"Upload file" title=_"Upload a list of recipients." action={dialog_open title=_"Upload a list of recipients."  template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
-            {% button class="btn" text=_"Clear" action={confirm text=_"Delete all recipients from this list?" postback={recipients_clear id=id} delegate='controller_admin_mailinglist_recipients'} %}
-        {% button class="btn" text=_"Combine…" action={dialog_open title=_"Combine mailing list" id=id template="_admin_dialog_mailinglist_combine.tpl"} %}
+	    {% button class="btn btn-default" text=_"Download all" title=_"Download list of all active recipients." action={growl text=_"Downloading active recipients list. Check your download window."} action={redirect dispatch="mailinglist_export" id=id} %}
+	    {% button class="btn btn-default" text=_"Upload file" title=_"Upload a list of recipients." action={dialog_open title=_"Upload a list of recipients."  template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
+            {% button class="btn btn-default" text=_"Clear" action={confirm text=_"Delete all recipients from this list?" postback={recipients_clear id=id} delegate='controller_admin_mailinglist_recipients'} %}
+        {% button class="btn btn-default" text=_"Combine…" action={dialog_open title=_"Combine mailing list" id=id template="_admin_dialog_mailinglist_combine.tpl"} %}
 
     </div>
 
@@ -37,7 +37,7 @@
     {% with m.search.paged[{mailinglist_recipients id=id pagelen=150 page=q.page}] as recipients %}
 
     {% for list in recipients|vsplit_in:3 %}
-    <div class="span4">
+    <div class="col-lg-4 col-md-4">
 	<h3>{_ Recipients _}</h3>
         <table class="table table-striped">
             <thead>
@@ -53,7 +53,7 @@
                     <td width="10%"><input id="{{ #enabled.rcpt_id }}" title="{_ Check to activate the e-mail address. _}" type="checkbox" value="{{ rcpt_id }}" {% if is_enabled %}checked="checked"{% endif %} /></td>
                     <td width="90%" id="{{ #item.rcpt_id }}" style="cursor: pointer" title="{_ Edit recipient _}">
                         <div class="pull-right">
-                            {% button class="btn btn-mini" text=_"delete" title=_"Remove this recipient. No undo possible." postback={recipient_delete recipient_id=rcpt_id target=#target.rcpt_id} %}
+                            {% button class="btn btn-default btn-xs" text=_"delete" title=_"Remove this recipient. No undo possible." postback={recipient_delete recipient_id=rcpt_id target=#target.rcpt_id} %}
                         </div>
                         {{ email|truncate:35|escape|default:"-" }}
                     </td>

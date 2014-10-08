@@ -1,12 +1,12 @@
 <p>{_ Copy texts from a language to the currently selected language. _}</p>
 
-<div class="controls">
+<div>
 	<label>{_ Select the language to copy from: _}</label>
-	<select id="{{ #langs }}"></select>
+	<select class="form-control" id="{{ #langs }}"></select>
 </div>
 
 <div class="modal-footer">
-    {% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
+    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
     {% button id=#copy class="btn btn-primary" text=_"Copy" %}
 </div>
 

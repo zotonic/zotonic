@@ -7,9 +7,9 @@
     <p>{_ When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders. _}</p>
 
     {% if not m.acl.user %}
-        <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+        <p><a class="btn btn-default" href="{% url logon %}">{_ Back to logon form _}</a></p>
     {% else %}
-        <p><a id="{{ #cancel }}" class="btn" href="#">{_ Cancel _}</a></p>
+        <p><a id="{{ #cancel }}" class="btn btn-default" href="#">{_ Cancel _}</a></p>
         {% wire id=#cancel action={redirect back} %}
     {% endif %}
 
@@ -45,9 +45,9 @@
     <p>{_ We don’t seem to have any valid e-mail address or other electronic communication address of you. _}</p>
 
     {% if not m.acl.user %}
-        <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+        <p><a class="btn btn-default" href="{% url logon %}">{_ Back to logon form _}</a></p>
     {% else %}
-        <p><a id="{{ #cancel }}" class="btn" href="#">{_ Cancel _}</a></p>
+        <p><a id="{{ #cancel }}" class="btn btn-default" href="#">{_ Cancel _}</a></p>
         {% wire id=#cancel action={redirect back} %}
     {% endif %}
 </div>
@@ -60,30 +60,30 @@
 
         <input type="hidden" id="logon_password_expired_secret" name="secret" value="{{ secret|escape }}" />
 
-        <div class="control-group">
+        <div class="form-group">
 	    <label class="control-label" for="password_reset1">{_ New password _}</label>
-            <div class="controls">
-	        <input type="password" id="password_reset1" class="span4" name="password_reset1" value="" autocomplete="off" />
+            <div>
+	        <input type="password" id="password_reset1" class="col-lg-4 col-md-4 form-control" name="password_reset1" value="" autocomplete="off" />
             </div>
         </div>
 
-        <div class="control-group">
+        <div class="form-group">
 	    <label class="control-label" for="password_reset1">{_ Repeat password _}</label>
-            <div class="controls">
-	        <input type="password" id="password_reset2" class="span4" name="password_reset2" value="" autocomplete="off" />
+            <div>
+	        <input type="password" id="password_reset2" class="col-lg-4 col-md-4 form-control" name="password_reset2" value="" autocomplete="off" />
             </div>
         </div>
 
-        <div class="control-group">
-            <div class="controls">
+        <div class="form-group">
+            <div>
 	        <input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
-	        <label class="checkbox inline" for="{{ #rememberme }}">{_ Stay logged on unless I log off. _}</label>
+	        <label class="checkbox-inline" for="{{ #rememberme }}">{_ Stay logged on unless I log off. _}</label>
             </div>
         </div>
 
-        <div class="control-group buttons">
-            <div class="controls">
-	        <button class="btn btn-primary btn-large" type="submit">{_ Change password and Log on _}</button>
+        <div class="form-group buttons">
+            <div>
+	        <button class="btn btn-primary btn-lg" type="submit">{_ Change password and Log on _}</button>
             </div>
         </div>
     </form>

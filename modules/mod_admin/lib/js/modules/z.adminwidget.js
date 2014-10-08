@@ -1,8 +1,8 @@
 /* adminwidget js
 ----------------------------------------------------------
 
-@package:	Zotonic 2009, 2012
-@Author:	Tim Benniks <tim@timbenniks.nl>
+@package:   Zotonic 2009, 2012
+@Author:    Tim Benniks <tim@timbenniks.nl>
 
 Copyright 2009 Tim Benniks
 Copyright 2012 Arjan Scherpenisse
@@ -25,17 +25,17 @@ $.widget("z.adminwidget",
 {
     _init: function() 
     {
-	    var self = this;
-	    self.element.addClass("widget-active");
-	    self.item = self.element.find("div.widget-content");
-	    self.header = self.element.find("h3:first");
+        var self = this;
+        self.element.addClass("widget-active");
+        self.item = self.element.find("div.widget-content");
+        self.header = self.element.find("h3:first");
         self.tabs = self.element.find(".language-tabs");
         if (self.options.minifier) {
             self.icon = $("<i>").appendTo(self.header);
             self.header
                 .css("cursor", "pointer")
-                .bind("mouseover", function(){self.icon.addClass('icon-white');})
-                .bind("mouseout", function(){self.icon.removeClass('icon-white');})
+                .bind("mouseover", function(){self.icon.addClass('white');})
+                .bind("mouseout", function(){self.icon.removeClass('white');})
                 .attr("title", z_translate("Click to toggle"))
                 .click(function(ev){self.toggle(ev);});
         }
@@ -46,45 +46,45 @@ $.widget("z.adminwidget",
     },
 
     toggle: function(ev) {
-    	if (	$(ev.target).hasClass('widget-header')
-    		||	$(ev.target).hasClass('icon-plus')
-    		||	$(ev.target).hasClass('icon-minus')) {
-		    var self = this;
-		    var id = self.element.attr("id");
-		    self.setVisible(!self.showing);
-	    	if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
-	    	ev.stopPropagation();
-	    }
+        if (    $(ev.target).hasClass('widget-header')
+            ||  $(ev.target).hasClass('glyphicon-plus')
+            ||  $(ev.target).hasClass('glyphicon-minus')) {
+            var self = this;
+            var id = self.element.attr("id");
+            self.setVisible(!self.showing);
+            if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
+            ev.stopPropagation();
+        }
     },
 
     setVisible: function(v, skipAnim) {
-	    var self = this;
-	    v ? self.show(skipAnim) : self.hide(skipAnim);
+        var self = this;
+        v ? self.show(skipAnim) : self.hide(skipAnim);
     },
     
     hide: function(skipAnim) {
-	    var self = this;
-	    if (skipAnim) 
-	        self.item.hide();
-	    else
-	        self.item.slideUp(200);
+        var self = this;
+        if (skipAnim) 
+            self.item.hide();
+        else
+            self.item.slideUp(200);
         if (self.tabs)
             self.tabs.hide();
-	    self.icon.attr("class", "pull-right icon-plus");
-	    self.showing = false;
+        self.icon.attr("class", "pull-right glyphicon glyphicon-plus");
+        self.showing = false;
     },
 
     show: function(skipAnim) {
-	    var self = this;
-	    if (skipAnim) 
-	        self.item.show();
-	    else
-	        self.item.slideDown(200);
+        var self = this;
+        if (skipAnim) 
+            self.item.show();
+        else
+            self.item.slideDown(200);
         if (self.tabs)
             self.tabs.show();
-	    if (self.icon)
-            self.icon.attr("class", "pull-right icon-minus");
-	    self.showing = true;
+        if (self.icon)
+            self.icon.attr("class", "pull-right glyphicon glyphicon-minus");
+        self.showing = true;
     }
 });
 

@@ -24,7 +24,7 @@
 
 3. Nesting actions on multiline (still non block) template tag.
 {% button text=_"Create a new Project"
-    class="btn btn-mini pull-right"
+    class="btn btn-default btn-xs pull-right"
     action={dialog_new_rsc
         cat="project"
         nocatselect=1
@@ -85,14 +85,14 @@ outside...
 9. indent multiline soup tags
 <div>
     <label for="{{ #title.id }}">Project name</label>
-    <input
+    <input class="form-control"
         type="text"
         id="{{ #title.id }}"
         name="title"
         value="{{ id.title }}" />
     {% validate id=#title.id name="title" type={presence} %}
 
-    <textarea
+    <textarea class="form-control"
         foo
     >
         Default text...
@@ -111,7 +111,7 @@ should not indent the following line.
 
 
 12. endif tag on same line as ending self close soup tag
-<input
+<input class="form-control"
     type="foo"
     {% if test %}
         bar="foo"

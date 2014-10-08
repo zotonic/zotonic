@@ -23,8 +23,8 @@
             {% endfor %}
             <td>
                 <div class="pull-right">
-                    {% button class="btn btn-mini" text=_"Edit" action={dialog_open template="_dialog_survey_editor.tpl" id=id persistent_id=r[2] user_id=r[1] title=_"Edit survey result"} %}
-                    {% button class="btn btn-mini" text=_"Delete" postback={survey_remove_result id=id persistent_id=r[2] user_id=r[1]} delegate="mod_survey" %}
+                    {% button class="btn btn-default btn-xs" text=_"Edit" action={dialog_open template="_dialog_survey_editor.tpl" id=id persistent_id=r[2] user_id=r[1] title=_"Edit survey result"} %}
+                    {% button class="btn btn-default btn-xs" text=_"Delete" postback={survey_remove_result id=id persistent_id=r[2] user_id=r[1]} delegate="mod_survey" %}
                 </div>
             </td>
         </tr>

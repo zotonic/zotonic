@@ -37,7 +37,7 @@
 
              var map = {
                  notice: 'alert-info',
-                 error: 'alert-error'
+                 error: 'alert-danger'
              };
              
              // declare varaibles

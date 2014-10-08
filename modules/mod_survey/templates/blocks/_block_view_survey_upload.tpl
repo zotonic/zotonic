@@ -1,14 +1,15 @@
 {% include "_survey_block_name_check.tpl" %}
 <div class="control-group survey-truefalse question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
-    <div class="controls">
+    <div>
 {% if blk.is_image %}
 		<img id="{{ #preview }}" class="picture-preview" width="256" src="/lib/images/noun/photo-camera.png" />
-		<input type="file" class="picture-file do_filepreview" name="{{ blk.name }}" id="{{ #upload }}" 
+		<input type="file"
+			   class="picture-file do_filepreview form-control" name="{{ blk.name }}" id="{{ #upload }}" 
 			   class="do_filepreview" data-filepreview="preview: '{{ #preview }}'" 
 			   accept="image/*" />
 {% else %}
-		<input type="file" name="{{ blk.name }}" id="{{ #upload }}" />
+		<input class="form-control" type="file" name="{{ blk.name }}" id="{{ #upload }}" />
 {% endif %}
     </div>
 </div>

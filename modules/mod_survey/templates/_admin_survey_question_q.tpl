@@ -1,10 +1,10 @@
 <li class="block" id="{{ #s }}">
-	<div class="row-fluid">
-		<div class="span2">
+	<div class="row">
+		<div class="col-lg-2 col-md-2">
 			<input name="block-{{ #s }}-name" type="text" class="input-block-level block-name {% if nosubmit %}nosubmit{% endif %}" placeholder="name" value="{{ blk.name }}" />
 			<label class="block-type">{% if blk and blk.type %}{{ blk.type|replace:"survey_":"" }}{% endif %}</label>
 		</div>
-		<div class="span10">
+		<div class="col-lg-10 col-md-10">
 			<div class="block-options">
 			{% if blk and blk.type %}
 				<input type="hidden" class="block-type" name="block-{{#s}}-type" value="{{ blk.type }}" />
@@ -15,7 +15,7 @@
 	</div>
 
 	<div class="actions btn-group pull-right">
-		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+		<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 			<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">

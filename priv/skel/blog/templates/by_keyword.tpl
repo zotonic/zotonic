@@ -14,7 +14,7 @@
 			{% include "_article_summary.tpl" id=id %}
 		{% endfor %}
 
-		{% pager result=result dispatch='keyword' id=id slug=m.rsc[id].slug %}
+		{% pager result=result dispatch='keyword' id=id slug=m.rsc[id].slug hide_single_page %}
 
 	{% endwith %}
 

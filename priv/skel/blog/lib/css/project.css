@@ -25,7 +25,7 @@ limitations under the License.
 body {
     background: #fff;
     color: #333;
-    padding-top: 60px;
+    padding-top: 80px;
     font-size: 14px;
     line-height: 20px;
 }
@@ -50,6 +50,11 @@ div.navbar .nav li a {
     color: #fff;
 }
 
+.thumbnail img {
+    width: 100%;
+    height: auto;
+}
+
 /* Typography
    ---------------------------------------------------------- */
 
@@ -58,6 +63,10 @@ h1 {
     font-size: 18px;
     margin: 0 0 12px 0;
     font-style: normal;
+}
+
+.big h1 {
+    font-size: 32px;
 }
 
 header h1 {
@@ -184,7 +193,7 @@ header {
    ------------------------------------------------------ */
 
 #footer {
-    margin-top: 20px;
+    margin: 20px 0;
     border-top: 1px dotted #333;
     padding: 9px 0 9px 0;
 }
@@ -390,3 +399,12 @@ p.image-caption {
 .comments-list li .comment-body {
     margin-top: 9px;
 }
+
+textarea.form-field-error,
+input.form-field-error {
+    background: #ffeeee;
+}
+label.form-field-error {
+    color: #cc0000;
+}
+

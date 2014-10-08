@@ -29,9 +29,9 @@
             <td>{{ m.rsc[id].modified|date:_"d M Y, H:i" }}</td>
             <td>
                 {{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}
-                <span class="pull-right">
-                    {% if id.page_url %}<a href="{{ m.rsc[id].page_url }}" class="btn btn-mini">{_ view _}</a>{% endif %}
-                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini">{_ edit _}</a>
+                <span class="pull-right buttons">
+                    {% if id.page_url %}<a href="{{ m.rsc[id].page_url }}" class="btn btn-default btn-xs">{_ view _}</a>{% endif %}
+                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                 </span>
             </td>
         </tr>

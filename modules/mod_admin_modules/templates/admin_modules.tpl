@@ -33,7 +33,7 @@
                             </td>
                             <td>
                                 <strong>{{ props.mod_title|default:props.title }}</strong><br />
-                                <span class="muted">{{ module }}</span>
+                                <span class="text-muted">{{ module }}</span>
                             </td>
                             <td>{{ props.mod_description|default:"-" }}</td>
                             <td>{{ prio }}</td>
@@ -42,16 +42,16 @@
                                     {% if props.is_active %}
                                         {% if config_template %}
                                             {% button text=_"Configure"
-                                                class="btn btn-mini"
+                                                class="btn btn-default btn-xs"
                                                 action={dialog_open template=config_template title=props.mod_title|default:props.title} %}
                                         {% endif %}
                                         {% button text=_"Deactivate"
-                                            class="btn btn-mini"
+                                            class="btn btn-default btn-xs"
                                             action={module_toggle module=module status_id=#status.module}
                                             action={toggle_class id=#li.module class="enabled"} %}
                                     {% else %}
                                         {% button text=_"Activate"
-                                            class="btn btn-mini btn-success"
+                                            class="btn btn-xs btn-success"
                                             action={module_toggle module=module status_id=#status.module} 
                                             action={toggle_class id=#li.module class="enabled"} %}
                                     {% endif %}

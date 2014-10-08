@@ -131,7 +131,7 @@
 					{# You could also use: delegate="module_handling_form" #}
 
 						<label for="email">e-mail</label>
-						<input type="text" id="email" name="email" value="" />
+						<input class="form-control" type="text" id="email" name="email" value="" />
 						{% validate id="email" type={presence} type={email} %}
 						
 						<div class="clear"></div>

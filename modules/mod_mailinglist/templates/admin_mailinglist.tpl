@@ -34,13 +34,13 @@
 		    <td width="10%">{{ stats[1]|format_number }}</td>
 		    <td width="30%">
 		        <div class="pull-right">
-		            <a class="btn btn-mini" href="{% url admin_mailinglist_recipients id=id %}">{_ Recipients _}</a>
+		            <a class="btn btn-default btn-xs" href="{% url admin_mailinglist_recipients id=id %}">{_ Recipients _}</a>
 			    {% if editable %}
-                            <a class="btn btn-mini" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
+                            <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
 			    {% else %}
-                            <a class="btn btn-mini" href="{% url admin_edit_rsc id=id %}">{_ View _}</a>
+                            <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=id %}">{_ View _}</a>
 			    {% endif %}
-			    {% button class="btn btn-mini" text=_"Delete" postback={mailinglist_delete_confirm id=id} disabled=not editable %}
+			    {% button class="btn btn-default btn-xs" text=_"Delete" postback={mailinglist_delete_confirm id=id} disabled=not editable %}
 		        </div>
                         {{ stats[2]|length|format_number }}
                     </td>

@@ -1,5 +1,5 @@
 {% wire id=#form type="submit" postback={consumer_save id=consumer.id} %}
-<form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
+<form id="{{ #form }}" method="POST" action="postback" class="form">
 
     <div class="tabbable">
 
@@ -12,55 +12,55 @@
             <div class="tab-pane active" id="{{ #tab }}-details">
 
                 {% if consumer %}
-                <div class="control-group">
-                    <label for="zp-ckey" class="control-label">{_ Consumer key _}:</label>
-                    <div class="controls">
-                        <input type="text" id="zp-ckey" readonly value="{{ consumer.consumer_key }}" />
+                    <div class="form-group row">
+                        <label for="zp-ckey" class="control-label col-md-3">{_ Consumer key _}:</label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="zp-ckey" readonly value="{{ consumer.consumer_key }}" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="control-group">
-                    <label for="zp-csec" class="control-label">{_ Consumer secret _}:</label>
-                    <div class="controls">
-                        <input type="text" id="zp-csec" readonly value="{{ consumer.consumer_secret }}" />
+                    <div class="form-group row">
+                        <label for="zp-csec" class="control-label col-md-3">{_ Consumer secret _}:</label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="zp-csec" readonly value="{{ consumer.consumer_secret }}" />
+                        </div>
                     </div>
-                </div>
                 {% endif %}
 
-                <div class="control-group">
-                    <label for="zp-title" class="control-label">{_ Application title _}:</label>
-                    <div class="controls">
-                        <input type="text" name="zp-title" id="zp-title" value="{{ consumer.application_title }}" />
+                <div class="form-group row">
+                    <label for="zp-title" class="control-label col-md-3">{_ Application title _}:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" type="text" name="zp-title" id="zp-title" value="{{ consumer.application_title }}" />
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label for="zp-url" class="control-label">{_ Homepage _}:</label>
-                    <div class="controls">
-                        <input type="text" name="zp-url" id="zp-url" value="{{ consumer.application_uri }}" />
+                <div class="form-group row">
+                    <label for="zp-url" class="control-label col-md-3">{_ Homepage _}:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" type="text" name="zp-url" id="zp-url" value="{{ consumer.application_uri }}" />
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label for="zp-text" class="control-label">{_ Description _}:</label>
-                    <div class="controls">
-                        <textarea name="zp-text" id="zp-text">{{ consumer.application_descr }}</textarea>
+                <div class="form-group row">
+                    <label for="zp-text" class="control-label col-md-3">{_ Description _}:</label>
+                    <div class="col-md-9">
+                        <textarea class="form-control" name="zp-text" id="zp-text">{{ consumer.application_descr }}</textarea>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label for="zp-callback" class="control-label">{_ Callback URL _}:</label>
-                    <div class="controls">
-                        <input type="text" name="zp-callback" id="zp-callback" value="{{ consumer.callback_uri }}" />
+                <div class="form-group row">
+                    <label for="zp-callback" class="control-label col-md-3">{_ Callback URL _}:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" type="text" name="zp-callback" id="zp-callback" value="{{ consumer.callback_uri }}" />
                     </div>
                 </div>
 
                 <div class="modal-footer">
                     {% if consumer.id %}
-                    {% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
-                    {% button class="btn btn-primary" type="submit" text=_"Update" %}
+                        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+                        {% button class="btn btn-primary" type="submit" text=_"Update" %}
                     {% else %}
-                    {_ When done, go to the authorization tab to set permissions. _}
+                        {_ When done, go to the authorization tab to set permissions. _}
                     {% endif %}
                 </div>
             </div>
@@ -70,31 +70,31 @@
                 <p>{_ Allow users of this application access to the following API calls: _}</p>
                 
                 {% with m.oauth_perms.selected[consumer.id] as perms %}
-                <table class="table" >
-                    {% for perm in m.oauth_perms %}
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="zp-perm" value="{{ perm.value }}" id="perm-{{ perm.value }}"
-                                   {% for p in perms %}{% ifequal perm.value p.perm %}checked="checked"{% endifequal %}{% endfor %}
-                                />
-                        </td>
-                        <td><label for="perm-{{ perm.value }}"><tt>{{ perm.value }}</tt></label></td>
-                        <td>{{ perm.title }}</td>
-                    </tr>
+                    <table class="table" >
+                        {% for perm in m.oauth_perms %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="zp-perm" value="{{ perm.value }}" id="perm-{{ perm.value }}"
+                                        {% for p in perms %}{% ifequal perm.value p.perm %}checked="checked"{% endifequal %}{% endfor %}
+                                    />
+                            </td>
+                            <td><label for="perm-{{ perm.value }}"><tt>{{ perm.value }}</tt></label></td>
+                            <td>{{ perm.title }}</td>
+                        </tr>
                     {% endfor %}
                 </table>
-                {% endwith %}
+            {% endwith %}
 
-                <div class="modal-footer">
-                    {% button class="btn" action={dialog_close} text=_"Cancel" %}
-                    {% if consumer.id %}
+            <div class="modal-footer">
+                {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
+                {% if consumer.id %}
                     {% button class="btn btn-primary" type="submit" text=_"Update" %}
-                    {% else %}
+                {% else %}
                     {% button class="btn btn-primary" type="submit" text=_"Add application" %}
-                    {% endif %}
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-        
+</div>
+
 </form>

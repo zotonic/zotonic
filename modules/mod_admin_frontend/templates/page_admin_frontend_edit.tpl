@@ -16,15 +16,15 @@
 {% block content_area %}
 	{% with tree_id|default:(id|menu_rsc) as tree_id %}
 	{% with `none` as admin_menu_edit_action %}
-	<div class="row-fluid">
+	<div class="row">
 		{% with m.rsc[tree_id].id as tree_id %}
 			{% if tree_id and tree_id.is_visible %}
-				<div class="span4" id="menu-editor" data-rsc-id="{{ tree_id }}">
+				<div class="col-lg-4 col-md-4" id="menu-editor" data-rsc-id="{{ tree_id }}">
 					{% block above_menu %}{% endblock%}
 			        {% catinclude "_admin_menu_menu_view.tpl" tree_id connect_tab="new" cat_id=m.rsc.text.id admin_menu_edit_action=admin_menu_edit_action %}
 					{% block below_menu %}{% endblock%}
 				</div>
-				<div class="span8" id="editcol">
+				<div class="col-lg-8 col-md-8" id="editcol">
 				{% block editcol %}
 					{% if id %}
 						{% javascript %}
@@ -41,7 +41,7 @@
 				{% endblock %}
 				</div>
 			{% else %}
-				<div class="span12" id="editcol">
+				<div class="col-lg-12 col-md-12" id="editcol">
 					<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
 					{% wire postback={admin_menu_edit id=id} delegate=`mod_admin_frontend` %}
 				</div>
@@ -56,26 +56,26 @@
 {% block navbar %}
 {# The buttons in the navbar click/sync with hidden counter parts in the resource edit form #}
 <nav class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span4">
+	<div class="container">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-md-4">
 				{% block close_button %}
-					<a href="{{ id.page_url }}" class="btn">{_ Close _}</a>
+					<a href="{{ id.page_url }}" class="btn btn-default">{_ Close _}</a>
 				{% endblock %}
 			</div>
-			<div class="span8" id="save-buttons" style="display:none">
-				<span class="brand visible-desktop">{_ This page _}</span>
+			<div class="col-lg-8 col-md-8" id="save-buttons" style="display:none">
+				<span class="navbar-brand visible-desktop">{_ This page _}</span>
 
 				{% button class="btn btn-primary" text=_"Save" title=_"Save this page." 
 						  action={script script="$('#save_stay').click();"}
 				 %}
 
-				{% button class="btn" text=_"Save &amp; view" title=_"Save and view the page." 
+				{% button class="btn btn-default" text=_"Save &amp; view" title=_"Save and view the page." 
 						  action={script script="$('#save_view').click();"}
 				 %}
 
-				{% button class="btn pull-right" text=_"Cancel" action={redirect back} tag="a" %}
+				{% button class="btn btn-default pull-right" text=_"Cancel" action={redirect back} tag="a" %}
 	    	</div>
 		</div>
 	</div>

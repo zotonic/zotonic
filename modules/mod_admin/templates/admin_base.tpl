@@ -9,9 +9,11 @@
         <meta name="author" content="Arjan Scherpenisse" />
 
         {% lib
-                "css/bootstrap-admin.css"
-                "css/bootstrap-admin-responsive.css"
+            "admin-bootstrap3/css/bootstrap.min.css"
+            "admin-bootstrap3/css/bootstrap-theme.min.css"
+        %}
 
+        {% lib
                 "css/jquery-ui.datepicker.css"
                 "css/jquery.timepicker.css"
                 "css/z.logo.css"
@@ -41,7 +43,7 @@
         {% include "_admin_menu.tpl" %}
     {% endblock %}
 
-    <div class="container-fluid">
+    <div class="admin-container">
         {% block content %}{% endblock %}
     </div>
 

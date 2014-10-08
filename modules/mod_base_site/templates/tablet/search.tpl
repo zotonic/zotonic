@@ -19,8 +19,8 @@
 		{% endif %}
 	</h1>
 
-	<div class="row-fluid">
-		<div class="span8 main">
+	<div class="row">
+		<div class="main col-lg-8 col-md-8">
 			{% if result.total > 0 %}
 				{% include "_content_list.tpl" list=result is_large %}
 				{% pager result=result %}
@@ -32,18 +32,18 @@
 			{% include "_search_form.tpl" %}
 		</div>
 
-		<div id="subnavbar" class="span4">
+		<div id="subnavbar" class="col-lg-4 col-md-4">
 			{% include "_subnav.tpl" %}
 		</div>
 	</div>
 {% endwith %}
 <hr/>
 {% else %}
-<div class="row-fluid">
-	<div class="span8 main">
+<div class="row">
+	<div class="main col-lg-8 col-md-8">
 		{% include "_search_form.tpl" %}
 	</div>
-	<div id="subnavbar" class="span4">
+	<div id="subnavbar" class="col-lg-4 col-md-4">
 		{% include "_subnav.tpl" %}
 	</div>
 </div>

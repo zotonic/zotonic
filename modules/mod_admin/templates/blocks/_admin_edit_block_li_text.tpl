@@ -8,12 +8,12 @@
 {% block widget_content %}
 {% with m.rsc[id] as r %}
 <fieldset class="admin-form">
-	<div class="form-item clearfix">
+	<div>
 		{% if is_editable %}
 			<textarea rows="10" 
 			    id="block-{{name}}-body{{ lang_code_for_id }}" 
-			    name="block-{{name}}-body{{ lang_code_with_dollar }}" 
-			    class="input-block-level body z_editor-init" 
+			    name="block-{{name}}-body{{ lang_code_with_dollar }}"
+			    class="body z_editor-init form-control" 
 			    {% include "_language_attrs.tpl" language=lang_code %}>{{ blk.body[lang_code] |escape }}</textarea>
 		{% else %}
 			{{ blk.body[lang_code]  }}

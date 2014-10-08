@@ -5,16 +5,17 @@
 
     <input type="hidden" name="id" value="{{ id }}" />
 
-    <div class="control-group">
-        <label class="control-label" for="category_id">{_ Choose the new category for this page. _}</label>
-        <div class="controls">
+    <div class="form-group row">
+        <div class="col-md-8 col-md-offset-2">
+            <label class="control-label" for="category_id">{_ Choose the new category for this page. _}</label>
             {% include "_admin_category_dropdown.tpl" id=id %}
         </div>
     </div>
-
-    <div class="modal-footer">
-	{% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
-	{% button class="btn btn-primary" text=_"Save" %}
+    
+    <div class="modal-footer clearfix">
+	    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+	    {% button class="btn btn-primary" text=_"Save" %}
     </div>
+
 </form>
 

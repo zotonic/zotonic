@@ -12,9 +12,8 @@
     </p>
 
     {% if is_editable %}
-    <div class="control-group">
-        <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
-               class="input-block-level" value="{{ blk.prompt[lang_code]  }}"
+    <div class="form-group">
+        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Please upload your image. _} ({{ lang_code }})" />
     </div>
     {% else %}
@@ -25,15 +24,15 @@
 
 {% block widget_content_nolang %}
     <div class="view-expanded view-expanded">
-        <div class="control-group">
-            <label class="checkbox">
+        <div class="form-group">
+            <div class="checkbox"><label>
                 <input type="checkbox" id="block-{{name}}-is_image" name="block-{{name}}-is_image" value="1" {% if blk.is_image or is_new %}checked="checked"{% endif %} />
                 {_ Only accept images. _}
-            </label>
-            <label class="checkbox">
+            </label></div>
+            <div class="checkbox"><label>
                 <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
                 {_ Required, this question must be answered. _}
-            </label>
+            </label></div>
         </div>
     </div>
 {% endblock %}

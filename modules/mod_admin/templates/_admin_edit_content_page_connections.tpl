@@ -11,7 +11,7 @@
 
 <div id="unlink-undo-message">
     <div class="pull-right">
-        <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Help about page connections."|escapejs }}', text: '{{ _"This page is able to connect to others. For example you can connect it to an actor or a brand."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
+        <a href="javascript:void(0)" class="btn btn-primary btn-xs do_dialog" data-dialog="title: '{{ _"Help about page connections."|escapejs }}', text: '{{ _"This page is able to connect to others. For example you can connect it to an actor or a brand."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
     </div>
 </div>
 
@@ -49,8 +49,8 @@
 {% endwith %}
 
 {% if not hide_referrers %}
-<div class="button-wrapper clearfix">
-	<a class="btn btn-small" href="{% url admin_referrers id=id %}"><i class="icon-list"></i> {_ View all referrers _}</a>
+<div class="form-group">
+	<a class="btn btn-default btn-sm" href="{% url admin_referrers id=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all referrers _}</a>
 </div>
 {% endif %}
 

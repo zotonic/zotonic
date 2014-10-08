@@ -10,7 +10,7 @@
         
     <div class="well">
         {% button class="btn btn-primary" text=_"Recompile Templates" action={admin_tasks task="templates_reset"} %}
-        {% button class="btn" text=_"Empty log" action={update target="dev_templates" text=""} %}
+        {% button class="btn btn-default" text=_"Empty log" action={update target="dev_templates" text=""} %}
     </div>
     
     <pre id="dev_templates">

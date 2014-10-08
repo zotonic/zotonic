@@ -5,13 +5,13 @@
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
-    <div class="controls">
+    <div>
     {% for val,item in props.items %}
         {% with forloop.counter as index %}
         {% with [blk.name, "_", val]|join|to_binary as nm %}
         {% with answers[nm] as ans %}
             <label for="{{ #match.index }}">{{ item|escape }}</label>
-            <select id="{{ #match.index }}" name="{{ nm }}">
+            <select class="form-control" id="{{ #match.index }}" name="{{ nm }}">
                 <option></option>
                 {% for v,opt in props.options %}
                     <option value="{{ v|escape }}" {% if v == ans %}selected="selected"{% endif %}>{{ opt|escape }}</option>

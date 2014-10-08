@@ -18,7 +18,7 @@
     {% if ds %}
     <ul class="thumbnails">
         {% for d in ds %}
-        <li class="span3">
+        <li class="col-lg-3 col-md-3">
             <a href="{{ d.page_url }}" class="thumbnail"><img src="{% image_url d mediaclass="base-thumbnail" %}" alt="{{ d.title }}" title="{{d.title}}"/></a>
         </li>
         {% endfor %}

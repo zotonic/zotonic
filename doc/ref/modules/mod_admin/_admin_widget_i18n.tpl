@@ -34,13 +34,13 @@
 {% block widget_content %}
     {% with m.rsc[id] as r %}
 	<fieldset class="admin-form">
-	    <div class="form-item clearfix">
+	    <div>
 		{# Then i18n is disabled, variables "lang_code", "lang_code_with_dollar" and others are undefined, 
 		   so following ids and names goes to unlocalized identifiers. #}
 		<label for="{{ #field }}{{ lang_code_with_dollar }}">{_ Title _} {{ lang_code_with_brackets }}</label>
 
 		{# INPUT-tag: Look at name and value attributes: value is rendered using "if" filter: #}
-		<input type="text" id="{{ #field }}{{ lang_code_with_dollar }}" name="title{{ lang_code_with_dollar }}" 
+		<input class="form-control" type="text" id="{{ #field }}{{ lang_code_with_dollar }}" name="title{{ lang_code_with_dollar }}" 
 			value="{{ is_i18n|if : r.translation[lang_code].title : r.title }}"
 			{% if not is_editable %}disabled="disabled"{% endif %}/>
 	    </div>

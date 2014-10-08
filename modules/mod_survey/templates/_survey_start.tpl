@@ -6,7 +6,7 @@
 	%}
 
     {% if id.survey_show_results %}
-    	<button id="{{ #survey_result }}" class="btn">{_ Results _}</button>
+    	<button id="{{ #survey_result }}" class="btn btn-default">{_ Results _}</button>
     	{% wire id=#survey_result
     		action={redirect dispatch="survey_results" id=id}
     	%}

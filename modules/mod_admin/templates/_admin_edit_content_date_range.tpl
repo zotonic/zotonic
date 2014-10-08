@@ -7,13 +7,13 @@
 {% block widget_id %}sidebar-date-range{% endblock %}
 
 {% block widget_content %}
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label" for="{{ #remarks }}{{ lang_code_for_id }}">{_ Remarks _} {{ lang_code_with_brackets }}</label>
-        <div class="controls">
+        <div>
             <input type="text" id="{{ #remarks }}{{ lang_code_for_id }}" name="date_remarks{{ lang_code_with_dollar }}" 
                 value="{{ is_i18n|if : id.translation[lang_code].date_remarks : id.date_remarks }}"
                 {% if not is_editable %}disabled="disabled"{% endif %}
-                {% include "_language_attrs.tpl" language=lang_code class="do_autofocus input-block-level field-title" %}
+                {% include "_language_attrs.tpl" language=lang_code class="do_autofocus field-title form-control" %}
                 placeholder="{_ e.g. might change _}"
             />
         </div>
@@ -22,13 +22,13 @@
 
 {% block widget_content_nolang_before %}
     <div class="pull-right">
-        <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{{ _"Help about date ranges."|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone’s life."|escapejs }}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
+        <a href="javascript:void(0)" class="btn btn-primary btn-xs do_dialog" data-dialog="title: '{{ _"Help about date ranges."|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone’s life."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
     </div>
 
     <div class="date-range">
-        <div class="control-group">
-            <div class="controls">
-                <label class="checkbox">
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
                     <input name="date_is_all_day" id="{{ #all_day }}" type="checkbox" {% if id.date_is_all_day %}checked{% endif %} /> {_ All day _}
                 </label>
             </div>
@@ -43,15 +43,15 @@
             });
         {% endjavascript %}
 
-        <div class="control-group">
+        <div class="form-group">
             <label class="control-label">{_ From _}</label>
-            <div class="controls">
+            <div>
         	{% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day %}
             </div>
         </div>
-        <div class="control-group">
+        <div class="form-group">
             <label class="control-label">{_ Till _}</label>
-            <div class="controls">
+            <div>
                 {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day %}
             </div>
         </div>

@@ -7,7 +7,7 @@
 	placeholder="ui-sortable-placeholder"
 	delegate=`controller_admin_edit`
 %}
-<ul id="{{ #list }}" class="media thumbnails">
+<ul id="{{ #list }}" class="media list-unstyled">
     {% for object_id, edge_id in m.edge.o[id].depiction %}
     {% include "_rsc_edge_media.tpl" subject_id=id unlink_message=#unlink_message %}
     {% endfor %}

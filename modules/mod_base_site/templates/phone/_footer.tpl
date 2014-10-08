@@ -1,5 +1,5 @@
 {# phone+ footer template #}
-<div class="row-fluid footer">
+<div class="row footer">
     <hr/>
     {% with m.rsc.menu_footer.menu as menu %}
     {% if menu %}

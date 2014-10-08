@@ -24,7 +24,7 @@
 		
 		<p id="confirm_key">
 			<label for="key">{_ Confirm key _}</label>
-			<input type="text" id="key" name="key" value="{{ q.key|escape }}" />
+			<input class="form-control" type="text" id="key" name="key" value="{{ q.key|escape }}" />
 		</p>
 		
 		<button>{_ Confirm my account _}</button>

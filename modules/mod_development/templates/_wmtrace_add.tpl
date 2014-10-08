@@ -6,9 +6,9 @@
 
 	<div>
 
-		<div class="form-item clearfix">
+		<div>
 			<label for="{{ #resource }}">Resource</label>
-			<select id="{{ #resource }}" name="resource">
+			<select class="form-control" id="{{ #resource }}" name="resource">
 			{% for res in resources %}
 				<option value="{{res}}">
 					{{ indent }}{{ res }}
@@ -17,7 +17,7 @@
 			</select>
 		</div>
 
-		<div class="form-item clearfix">
+		<div>
 			<button type="submit">Add trace rule</button>
 			{% button text="Cancel" action={dialog_close} tag="a" %}
 		</div>

@@ -3,13 +3,13 @@
 
 <p class="help-block">{_ These settings apply to all pages of this category. They define hints for search engines indexing the site. _}</p>
 
-<div class="row-fluid">
-    <div class="control-group span6">
+<div class="row">
+    <div class="form-group col-lg-6 col-md-6">
         <label class="control-label" for="seo_sitemap_priority">
             {_ Priority in sitemap _}
         </label>
-        <div class="controls">
-            <select id="seo_sitemap_priority" name="seo_sitemap_priority">
+        <div>
+            <select class="form-control" id="seo_sitemap_priority" name="seo_sitemap_priority">
                 <option value="0.0" {% if id.seo_sitemap_priority == '0.0' %}selected{% endif %}>0.0</option>
                 <option value="0.1" {% if id.seo_sitemap_priority == '0.1' %}selected{% endif %}>0.1</option>
                 <option value="0.2" {% if id.seo_sitemap_priority == '0.2' %}selected{% endif %}>0.2</option>
@@ -25,12 +25,12 @@
         </div>
     </div>
 
-    <div class="control-group span6">
+    <div class="form-group col-lg-6 col-md-6">
         <label class="control-label" for="seo_sitemap_changefreq">
             {_ Change frequency for sitemap _}
         </label>
-        <div class="controls">
-            <select id="seo_sitemap_changefreq" name="seo_sitemap_changefreq">
+        <div>
+            <select class="form-control" id="seo_sitemap_changefreq" name="seo_sitemap_changefreq">
                 <option value="always" {% if id.seo_sitemap_changefreq == 'always' %}selected{% endif %}>{_ Always _}</option>
                 <option value="hourly" {% if id.seo_sitemap_changefreq == 'hourly' %}selected{% endif %}>{_ Hourly _}</option>
                 <option value="daily" {% if id.seo_sitemap_changefreq == 'daily' %}selected{% endif %}>{_ Daily _}</option>

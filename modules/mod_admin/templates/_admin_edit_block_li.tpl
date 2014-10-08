@@ -1,10 +1,10 @@
 {% with is_editable|default:id.is_editable as is_editable %}
 <li id="{{ #block }}" class="block do_adminwidget">
     <h3 class="widget-header">
-        <i title="{_ Drag to change position _}" class="icon-move"></i>
-        <span title="{_ Disconnect _}" class="icon-remove"></span>
+        <i title="{_ Drag to change position _}" class="glyphicon glyphicon-move"></i>
+        <span title="{_ Disconnect _}" class="glyphicon glyphicon-remove"></span>
         {{ blk.type|make_list|capfirst|replace:"_":" " }} {_ block _}
-        <input type="text" class="block-name" name="block-{{#s}}-name" id="block-{{#s}}-name" value="{{ blk.name|escape }}" title="{_ Block name _}" placeholder="{_ name _}" />
+        <input type="text" class="block-name form-control" name="block-{{#s}}-name" id="block-{{#s}}-name" value="{{ blk.name|escape }}" title="{_ Block name _}" placeholder="{_ name _}" />
     </h3>
     <div class="widget-content">
         <input type="hidden" class="block-type" name="block-{{#s}}-type" value="{{ blk.type }}" />

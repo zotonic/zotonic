@@ -35,8 +35,8 @@
                 <td>{{ p.uri|default:"&nbsp;" }}</td>
                 <td>
                     <div class="pull-right">
-                        {% button class="btn btn-mini" disabled=p.is_protected text=_"delete" action={dialog_predicate_delete id=p.id on_success={slide_fade_out target=#li.name}} %}
-                        <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-mini">{_ edit _}</a>
+                        {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_predicate_delete id=p.id on_success={slide_fade_out target=#li.name}} %}
+                        <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                     </div>
                     {{ p.reversed|yesno:"reversed,&nbsp;" }}
                 </td>

@@ -19,14 +19,14 @@
             </td>
 
             <td>
-                <input id="{{ #change.rid }}" type="text" name="email" value="{{ email|escape }}" style="width: 240px;" />
+                <input class="form-control" id="{{ #change.rid }}" type="text" name="email" value="{{ email|escape }}" style="width: 240px;" />
                 {% validate id=#change.rid name="email" type={presence} type={email} %}
                 {% wire type="change" id=#change.rid postback={recipient_change_email recipient_id=rid} delegate="controller_admin_mailinglist_recipients" %}
             </td>
             <td>
                 <div class="pull-right">
-                    {% button text=_"edit" class="btn btn-mini" %}
-                    {% button text=_"delete" class="btn btn-mini" postback={recipient_delete recipient_id=rid target=#rcpt.rid} delegate="controller_admin_mailinglist_recipients" %}
+                    {% button text=_"edit" class="btn btn-default btn-xs" %}
+                    {% button text=_"delete" class="btn btn-default btn-xs" postback={recipient_delete recipient_id=rid target=#rcpt.rid} delegate="controller_admin_mailinglist_recipients" %}
                 </div>
                 
                 {% with m.mailinglist.bounce_reason[email] as log %}

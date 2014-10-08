@@ -8,7 +8,7 @@
 
 {% block content_log %}
 
-<h3 class="above-list ">
+<h3 class="above-list">
     {_ Most recent messages _}
 </h3>
 <br />

@@ -10,12 +10,12 @@
 	{% with m.rsc[id] as r %}
 	{% with r.blocks.survey_feedback as blk %}
 		<fieldset class="admin-form">
-			<div class="form-item clearfix">
+			<div>
 				{% if is_editable %}
 					<textarea rows="10" 
 					    id="block-{{ #s }}-body{{ lang_code_for_id }}" 
-					    name="block-{{ #s }}-body{{ lang_code_with_dollar }}" 
-					    class="input-block-level body tinymce-init" 
+					    name="block-{{ #s }}-body{{ lang_code_with_dollar }}"
+					    class="body tinymce-init form-control" 
 					    {% include "_language_attrs.tpl" language=lang_code %}>{{ blk.body[lang_code] |escape }}</textarea>
 				{% else %}
 					{{ blk.body[lang_code]  }}

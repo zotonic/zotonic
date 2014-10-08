@@ -66,6 +66,6 @@ to_text_csv(ReqData, Context) ->
 	Recipients = m_mailinglist:get_enabled_recipients(Id, Context1),
 	Export = z_utils:combine([13,10], Recipients),
 	%% Set the content disposition filename
-	Filename = "mailinglist-"++z_string:to_slug(m_rsc:p(Id, title, Context1))++".csv",
+	Filename = "mailinglist-"++binary_to_list(z_string:to_slug(m_rsc:p(Id, title, Context1)))++".csv",
 	Context2 = z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename, Context1),
 	?WM_REPLY(Export, Context2).

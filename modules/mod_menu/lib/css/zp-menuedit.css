@@ -72,6 +72,7 @@ ul.tree-list li div {
 ul.tree-list li .btns {
     position: absolute;
     right: 4px;
+    top: -2px;
 }
 ul.tree-list li .btns .btn-group {
     margin-left: 4px;
@@ -93,3 +94,4 @@ ul.tree-list .btn-group {
     #menu-editor .widget-header .btn-group {
         margin-right: 12px;
     }
+

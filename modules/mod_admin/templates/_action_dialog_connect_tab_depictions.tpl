@@ -2,7 +2,7 @@
 	<p>{_ Select a connected image _}</p>
 
 	<div id="dialog-connect-depictions">
-		<ul class="thumbnails">
+		<ul class="list-unstyled clearfix">
 		{% for id in m.rsc[subject_id].o.depiction %}
 			{% catinclude "_action_dialog_connect_tab_find_results_li.tpl" id %}
 		{% endfor %}

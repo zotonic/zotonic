@@ -76,7 +76,7 @@
 			{% if name_first %}
 				<span>{{ name_first|escape }}</span>
 			{% else %}
-				<input id="name_first" name="name_first" type="text" value="{{ name_first|escape }}" />
+				<input class="form-control" id="name_first" name="name_first" type="text" value="{{ name_first|escape }}" />
 				{% validate id="name_first" type={presence} %}
 			{% endif %}
 		</div>
@@ -85,7 +85,7 @@
 		{% if z_language == 'nl' or z_language == 'de' %}
 		<div id="signup_surname_prefix">
 			<label for="surprefix">{_ Prefix _}</label>
-			<input id="surprefix" name="surprefix" type="text" value="" />
+			<input class="form-control" id="surprefix" name="surprefix" type="text" value="" />
 		</div>
 		{% endif %}
 
@@ -94,7 +94,7 @@
 			{% if name_surname %}
 				<span>{{ name_surname|escape }}</span>
 			{% else %}
-				<input id="name_surname" name="name_surname" type="text" value="{{ name_surname|escape }}" />
+				<input class="form-control" id="name_surname" name="name_surname" type="text" value="{{ name_surname|escape }}" />
 				{% validate id="name_surname" type={presence} %}
 			{% endif %}
 		</div>
@@ -104,7 +104,7 @@
 			{% if email %}
 				<span>{{ email|escape }}</span>
 			{% else %}
-				<input id="email" name="email" type="text" value="{{ email|escape }}" />
+				<input class="form-control" id="email" name="email" type="text" value="{{ email|escape }}" />
 				{% validate id="email" type={email} type={presence} %}
 			{% endif %}
 		</div>
@@ -118,13 +118,13 @@
 
 			<div id="signup_username">
 				<label for="username">{_ Username _}</label>
-				<input id="username" name="username" type="text" value="" />
+				<input class="form-control" id="username" name="username" type="text" value="" />
 				{% validate id="username" wait=400 type={presence} type={username_unique} %}
 			</div>
 
 			<div id="signup_password1">
 				<label for="password1">{_ Password _}</label>
-				<input id="password1" name="password1" type="password" value="" autocomplete="off" />
+				<input class="form-control" id="password1" name="password1" type="password" value="" autocomplete="off" />
 				{% validate id="password1" 
 					type={presence} 
 					type={length minimum=6 too_short_message="Too short, use 6 or more."} %}
@@ -132,7 +132,7 @@
 
 			<div id="signup_password2">
 				<label for="password2">{_ Verify password _}</label>
-				<input id="password2" name="password2" type="password" value="" autocomplete="off" />
+				<input class="form-control" id="password2" name="password2" type="password" value="" autocomplete="off" />
 				{% validate id="password2" 
 				    type={presence} 
 				    type={confirmation match="password1"} %}

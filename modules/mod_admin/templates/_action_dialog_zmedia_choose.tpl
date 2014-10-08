@@ -31,11 +31,11 @@
         </div>
 
         <div class="tab-pane" id="{{ #tab }}-search">
-	    <div class="control-group">
+	    <div class="form-group">
 
                 <label for="{{#input}}" class="control-label">{_ Use the autocompleter to search the media in this site. _}</label>
-                <div class="controls">
-                    <input id="{{#input}}" class="autocompleter span8 do_autofocus" type="text" value="" />
+                <div>
+                    <input id="{{#input}}" class="autocompleter do_autofocus col-lg-8 col-md-8 form-control" type="text" value="" />
                     <ul id="{{#suggestions}}" class="suggestions-list"></ul>
                 </div>
             </div>

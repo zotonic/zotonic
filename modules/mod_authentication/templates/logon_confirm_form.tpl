@@ -13,7 +13,7 @@
 	<div id="logon_password">
 		<p class="do_inputoverlay">
 			<span>{_ Password _}</span>
-			<input type="password" id="password" name="password" value="" autocomplete="off" />
+			<input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" />
 		</p>
 	</div>
 
@@ -25,7 +25,7 @@
 		<button type="submit">{_ Confirm _}</button>
 	</div>
 	<div id="cancel_button">
-	    {% button class="btn" text=_"Cancel" action={dialog_close} tag="a" %}
+	    {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
 	</div>
 </form>
 

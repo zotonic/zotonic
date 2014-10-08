@@ -1,7 +1,7 @@
-<div class="control-group">
-	<label class="control-label" for="block-{{name}}-style">{_ Show as _}</label>
-	<div class="controls">
-	    <select id="block-{{name}}-style" name="block-{{name}}-style">
+<div class="form-group row">
+	<label class="control-label col-md-3" for="block-{{name}}-style">{_ Show as _}</label>
+	<div class="col-md-9">
+	    <select class="form-control" id="block-{{name}}-style" name="block-{{name}}-style">
 	         <option value="inline">{_ Inline block _}</option>
 	         {% if is_page_block %}
 		         <option value="info" {% if blk.style == "info" %}selected="selected"{% endif %}>{_ Info link with modal popup _}</option>

@@ -1,774 +1,715 @@
 /* Specific styles for Zotonic admin
-----------------------------------------------------------
+   ----------------------------------------------------------
 
 @package:	Zotonic admin CSS
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
- 
+
 http://www.apache.org/licenses/LICENSE-2.0
- 
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
-
-
-.widget-content h1,
-.widget-content h2,
-.widget-content h3,
-.widget-content h4,
-.widget-content h5,
-.widget-content h6 {
-    margin: 1em 0;
-}
-[class^="span"] h1:first-of-type,
-[class^="span"] h2:first-of-type,
-[class^="span"] h3:first-of-type,
-[class^="span"] h4:first-of-type,
-[class^="span"] h5:first-of-type,
-[class^="span"] h6:first-of-type,
-.widget-content h1:first-of-type,
-.widget-content h2:first-of-type,
-.widget-content h3:first-of-type,
-.widget-content h4:first-of-type,
-.widget-content h5:first-of-type,
-.widget-content h6:first-of-type {
-    margin-top: 0;
-}
-.widget-header {
-    margin: 0;
-}
-.radio.inline + .radio.inline,
-.checkbox.inline + .checkbox.inline {
-    margin-left: 0;
-}
-.radio.inline,
-.checkbox.inline {
-    padding-right: 10px;
-}
-hr {
-    background-color: #ddd;
-    border-top-color: #d0d0d0;
-    margin: 10px 0;
-}
-
+/* LESS mixins
+   --------------------------------------------------------- */
 /* bootstrap structure
---------------------------------------------------------- */
-@media (min-width: 980px) {
-    body {
-        padding-top: 60px;
-        /* background: url("/lib/images/admin_bg.jpg") repeat-x scroll center top #f1f1f1; */
-    }
+   --------------------------------------------------------- */
+body div.admin-container {
+  margin: 15px;
+  margin-top: 70px;
 }
-body > div.container-fluid {
-    margin-top: 0;
-    margin-bottom: 40px;
+body.noframe > div.admin-container {
+  background: transparent;
 }
-hr {
-    width: 100%;
+body.wait {
+  cursor: wait;
 }
-body.noframe > div.container-fluid {
-    background: transparent;
+body.wait .btn {
+  cursor: wait;
 }
-
-/* nav 
---------------------------------------------------------- */
-div.navbar ul.nav i.icon-white {
-    opacity: 0.8;
+.btn {
+  font-size: 13px;
 }
-div.navbar .brand .zotonic-logo {
+.btn.btn-xs {
+  font-size: 12px;
+}
+div.navbar-brand .zotonic-logo {
     padding-top: 2px;
 }
-
+hr {
+  background-color: #ddd;
+  border-top-color: #d0d0d0;
+  margin: 10px 0;
+  width: 100%;
+}
+.navbar-right {
+  margin-right: 0;
+}
+.navbar-nav > li > a {
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+.navbar-brand > img {
+  margin-top: -2px;
+}
 /* footer edit nav
---------------------------------------------------------- */
-
+   --------------------------------------------------------- */
 #rsc-image {
-    position: relative;
+  position: relative;
 }
 div.cropguide {
-    position: absolute;
+  position: absolute;
 }
 div.cropguide.horiz {
-    border-top: 1px dotted rgba(255,255,255,0.7);
-    border-bottom: 1px dotted rgba(0,0,0,0.7);
-    height: 0;
-    left: 0; right: 0;
+  border-top: 1px dotted rgba(255, 255, 255, 0.7);
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.7);
+  height: 0;
+  left: 0;
+  right: 0;
 }
 div.cropguide.vert {
-    border-left: 1px dotted rgba(255,255,255,0.7);
-    border-right: 1px dotted rgba(0,0,0,0.7);
-    width: 0;
-    top: 0; bottom: 0;
+  border-left: 1px dotted rgba(255, 255, 255, 0.7);
+  border-right: 1px dotted rgba(0, 0, 0, 0.7);
+  width: 0;
+  top: 0;
+  bottom: 0;
 }
-
 /* footer edit nav
---------------------------------------------------------- */
-
+   --------------------------------------------------------- */
 .navbar-fixed-save {
-    opacity: 0;
-    position: fixed;
-    top: 40px;
-    height: 0;
-    -webkit-transition: opacity 0.5s ease-in-out;
-    -moz-transition: opacity 0.5s ease-in-out;
-    -o-transition: opacity 0.5s ease-in-out;
-    transition: opacity 0.5s ease-in-out;
+  z-index: 1000;
+  opacity: 0;
+  position: fixed;
+  top: 44px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding: 5px;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -o-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+  min-height: inherit;
 }
 .navbar-fixed-save .navbar-inner {
-    border-radius: 0 0 4px 4px;
-    padding: 0 4px 0 4px;
+  border-radius: 0 0 4px 4px;
+  padding: 0 4px 0 4px;
 }
 .scrolled .navbar-fixed-save {
-    opacity: 1.0;
-    height: auto;
+  opacity: 1.0;
 }
 .navbar-fixed-save .control-group {
-    margin: 0 20px 0;
+  margin: 0 20px 0;
 }
 .navbar.navbar-fixed-save .pull-right {
-    float: right;
+  float: right;
 }
 .navbar-fixed-save label {
-    color: white;
-    margin-left: 20px;
+  color: white;
+  margin-left: 20px;
 }
 @media (max-width: 979px) {
-    body > div.container-fluid {
-        margin-top: 0;
-    }
-    .navbar-fixed-save {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-    }
+  body > div.container-fluid {
+    margin-top: 0;
+  }
+  .navbar-fixed-save {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
 }
-
 /* widget
---------------------------------------------------------- */
-
+   --------------------------------------------------------- */
 div.widget {
-    margin-bottom: 10px;
-    border-bottom: none;
-    border-radius: 2px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-}
-
-li > div.widget {
-    border-radius: 0 0 4px 4px;
-}
-
-
-div.widget h3.widget-header, 
-li h3.widget-header {
-    padding: 0 6px;
-    font-size: inherit;
-    font-weight: normal;
-}    
-
-div.widget > ul.nav,
-div.widget h3.widget-header, 
-li h3.widget-header {
-    background: #ddd;
-}
-
-li h3.widget-header {
-    border-radius: 4px 4px 0 0;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-}
-
-li div.widget > ul.nav {
-    background: none;
-}
-
-div.widget > ul.nav {
-    margin-bottom: 0;
-}
-
-div.widget {
-    background: #eeeeee; /* Old browsers */
-    background: -moz-linear-gradient(top, #eeeeee 0%, #f5f5f5 50%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(50%,#f5f5f5)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* IE10+ */
-    background: linear-gradient(top, #eeeeee 0%,#f5f5f5 50%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
+  margin-bottom: 10px;
+  border-bottom: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  background: #f0f0f0;
 }
 div.widget div.widget-content {
-    padding: 8px;
+  margin: 10px 8px;
 }
-
-div.widget ul.nav-tabs li > a {
-    padding-bottom: 3px;
-    padding-top: 5px;
+div.widget div.widget-content h1,
+div.widget div.widget-content h2,
+div.widget div.widget-content h3,
+div.widget div.widget-content h4,
+div.widget div.widget-content h5,
+div.widget div.widget-content h6 {
+  margin: 15px 0;
 }
-
-div.widget ul.nav-tabs li.active > a {
-     border-bottom-color: #eeeeee;
-     background: #ffffff; /* Old browsers */
-     background: -moz-linear-gradient(top, #ffffff 0%, #eeeeee 100%); /* FF3.6+ */
-     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
-     background: -webkit-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
-     background: -o-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* Opera 11.10+ */
-     background: -ms-linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* IE10+ */
-     background: linear-gradient(top, #ffffff 0%,#eeeeee 100%); /* W3C */
-     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+div.widget div.widget-content h1:first-of-type,
+div.widget div.widget-content h2:first-of-type,
+div.widget div.widget-content h3:first-of-type,
+div.widget div.widget-content h4:first-of-type,
+div.widget div.widget-content h5:first-of-type,
+div.widget div.widget-content h6:first-of-type {
+  margin-top: 0;
 }
-
+div.widget div.widget-content > :last-child {
+  margin-bottom: 0;
+}
+div.widget div.widget-content .form-group:last-child {
+  padding-bottom: 10px;
+}
+div.widget div.widget-content.nolang > .form-group:first-child {
+  padding-top: 10px;
+}
+div.widget div.widget-content .rsc-item {
+  overflow: hidden;
+  height: 64px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid white;
+}
+div.widget div.widget-content .rsc-item img {
+  margin-right: 4px;
+}
 div.widget.dark {
-
-}    
-
-div.widget.dark div.widget-content {
-    background: #ddd;
+  background: #ddd;
 }
-
-div.widget h3.widget-header button.btn-mini {
-    margin-top: 3px;
+div.widget.dark .widget-header {
+  background: #ddd;
 }
-
-div.widget-content-full > :last-child,
-div.widget-content > :last-child {
-    margin-bottom: 0;
+li > div.widget {
+  border-radius: 0 0 4px 4px;
 }
-
-td.clickable,
-tr.clickable td,
-div.widget-active h3 i {
-    cursor: pointer;
+li h3.widget-header {
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
 }
-div.widget-active h3 i {
-    margin: 5px;
+.widget-header {
+  margin: 0;
+  padding: 6px;
+  font-size: inherit;
+  font-weight: normal;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #e0e0e0;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#f0f0f0));
+  background: -webkit-linear-gradient(top, #e0e0e0, #f0f0f0);
+  background: -moz-linear-gradient(top, #e0e0e0, #f0f0f0);
+  background: -ms-linear-gradient(top, #e0e0e0, #f0f0f0);
+  background: -o-linear-gradient(top, #e0e0e0, #f0f0f0);
 }
-
-div.widget-footer,
-div.save-buttons {
-    min-height: 36px;
-    margin-top: 18px;
+.widget-header .pull-right {
+  margin: -2px;
 }
-
-.control-group span.error {
-    display: none;
+.widget-header i.pull-right.glyphicon {
+  margin: 1px;
+  font-size: 10px;
+  color: #888;
 }
-
-.control-group.error span.error {
-    display: inline;
+.widget-header i.pull-right.glyphicon.white {
+  color: white;
 }
-
+div.widget ul.nav-tabs li.active > a {
+  background-color: #eeeeee;
+  background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#ffffff));
+  background: -webkit-linear-gradient(top, #eeeeee, #ffffff);
+  background: -moz-linear-gradient(top, #eeeeee, #ffffff);
+  background: -ms-linear-gradient(top, #eeeeee, #ffffff);
+  background: -o-linear-gradient(top, #eeeeee, #ffffff);
+}
+/* admin forms
+   --------------------------------------------------------- */
+div.admin-form :last-child {
+  margin-bottom: 0;
+}
+div.form-group.row > label.control-label {
+  margin-top: 9px;
+  text-align: right;
+}
+div.form-group span.error {
+  display: none;
+}
+div.form-group.error span.error {
+  display: inline;
+}
 /* admin table
---------------------------------------------------------- */
-
-table.do_adminLinkedTable td.view-link {
-    padding: 0;
+   --------------------------------------------------------- */
+td.clickable,
+tr.clickable td {
+  cursor: pointer;
 }
-
+table.do_adminLinkedTable td.view-link {
+  padding: 0;
+}
 table.do_adminLinkedTable td a.view-link:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 table.do_adminLinkedTable td a.view-link {
-    display: block;
-    padding: 8px;
-    color: inherit;
+  display: block;
+  padding: 8px;
+  color: inherit;
 }
-
-.table tbody tr:hover td, .table tbody tr:hover th {
-    background: white;
+a.view-link .buttons {
+  margin-top: -2px;
 }
-
+.table > thead > tr > th {
+  border-width: 1px;
+}
+.table tbody tr:hover td,
+.table tbody tr:hover th {
+  background: white;
+}
 table.table tr.unpublished td,
 table.table tr.unpublished td a {
-    color: #999;
+  color: #999;
 }
-
 table.table tr.unpublished td a.btn-success {
-    color: white;
+  color: white;
 }
-
 img.thumb {
-    padding: 2px;
-    border-radius: 4px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+  padding: 2px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
 }
 img.admin-list-dashboard {
-    width: 40px;
-    height: 18px;
+  width: 40px;
+  height: 18px;
 }
 img.admin-list-overview {
-    width: 80px;
-    height: 60px;
+  width: 80px;
+  height: 60px;
 }
-img.admin-rsc-edge-media {
-    width: 166px;
-    height: 200px;
-}
-
 /* admin edit page
    -------------------------------------------------------------- */
-
 #content-address table {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
-
 .widget h5 {
-    margin-top: 18px;
+  margin-top: 18px;
 }
-
 .pull-right p.admin-chapeau {
-    text-align: right;
+  text-align: right;
 }
-
 p.admin-chapeau {
-    color: #999999;
-    margin: 0;
+  color: #999999;
+  margin: 0;
 }
 p.admin-chapeau a {
-    color: #999999;
-    text-decoration: underline;
+  color: #999999;
+  text-decoration: underline;
 }
-
-ul.media.thumbnails {
-    margin: 0;
+ul.media {
+  margin: 0;
 }
-ul.media.thumbnails > li {
-    margin: 0 0 18px 3px;
-    background: #f5f5f5;
+ul.media > li {
+  margin: 0 0 18px 3px;
+  background: #fff;
+  width: 25%;
+  height: 200px;
+  max-width: 200px;
+  float: left;
+  margin-left: 10px;
+  position: relative;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.125);
 }
-ul.media.thumbnails > li.ui-sortable-placeholder {
-    width: 176px;
-    height: 246px;
-    background: #aaa;
-    border-radius: 4px;
+ul.media > li img {
+  cursor: move;
+  width: 100%;
 }
-ul.media.thumbnails li img {
-    cursor: move;
+ul.media > li .bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 2px;
 }
-ul.media.thumbnails li .caption {
-    width: 120px;
-    height: 18px;
-    overflow: hidden;
+ul.media > li .bottom .caption {
+  height: 22px;
+  padding-left: 4px;
+  line-height: 1.6;
+  overflow: hidden;
 }
-ul.media.thumbnails li div.pull-right button {
-    margin-top: 10px;
+ul.media > li.ui-sortable-placeholder {
+  background: #aaa;
+  border-radius: 4px;
 }
-
-
-div.edit-header {
-    margin-bottom: 18px;
+div.edit-header h2 {
+  margin-top: 8px;
+  margin-bottom: 18px;
+  color: #333;
 }
-
 div.edit-media {
-    display: inline-block;
-    background: white;
-    padding: 4px;
-    border-radius: 4px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+  display: inline-block;
+  background: white;
+  padding: 4px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
 }
-
 .ui-datepicker .ui-datepicker-header {
-    height: 29px;
+  height: 29px;
 }
-
 input.do_datepicker {
-    width: 80px;
+  width: 100px;
+  display: inline;
 }
-
+input.do_timepicker {
+  width: 70px;
+  display: inline;
+}
 .do_menuedit {
-    min-height:100px;
+  min-height: 100px;
 }
-
 .tree-list.categories {
-    padding-bottom: 40px;
+  padding-bottom: 40px;
 }
-
+/* admin edit page - blocks
+   -------------------------------------------------------------- */
 ul.blocks {
-    margin-left: -8px;
-    margin-right: -8px;
-    border-top: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8;
-    padding: 30px 8px 0 8px;
-    border-radius: 2px;
+  padding: 0;
+  margin: 0;
 }
 ul.blocks > li {
-    list-style-type: none;
-    margin-left: 0;
-    margin-bottom: 32px;
+  list-style-type: none;
+  margin-left: 0;
 }
 ul.blocks > li > h3 {
-    cursor: move;
+  cursor: move;
 }
 ul.blocks > li > h3 > .icon-remove,
 ul.blocks > li > h3 > .pull-right {
-    cursor: pointer;
+  cursor: pointer;
 }
 ul.blocks > li > h3 > .pull-right {
-    margin-top: 6px;
+  margin-top: 6px;
 }
 ul.blocks > li > h3 > input {
-    margin: 2px 0 3px 0;
-    height: 1em;
-    width: 100px;
+  margin: 2px 0 3px 0;
+  height: 24px;
+  width: 120px;
+  display: inline;
 }
 ul.blocks li.block .widget {
-    padding-top: 4px;
-    border-radius: 0 0 4px 4px;
+  padding-top: 4px;
+  border-radius: 0 0 4px 4px;
 }
 .block-add-block {
-    margin-top: 6px;
+  margin-bottom: 12px;
+}
+.block-add-block .dropdown-menu {
+  top: auto;
 }
 fieldset.block-name {
-    margin-top: 8px;
+  margin-top: 8px;
 }
-
 h3.widget-header input.block-name {
-    background: #ddd;
+  background: #ddd;
 }
 h3.widget-header input.block-name:focus {
-    background: white;
+  background: white;
 }
-
 ul.blocks .ui-sortable-placeholder {
-    background: #aaa;
-    border-radius: 4px;
-    visibility: visible !important;
+  background: #aaa;
+  border-radius: 4px;
+  visibility: visible !important;
 }
-
-.input.inline {
-    display:inline-block;
-    padding-top:5px;
-    margin-bottom:0;
-    vertical-align:sub;
-}
-
-
 /* Connections
----------------------------------------------------------- */
+   ---------------------------------------------------------- */
 ul.connections-list {
-    padding-bottom: 8px;
-    min-height: 1em;
+  padding-bottom: 8px;
+  min-height: 1em;
 }
 ul.connections-list li {
-    position: relative;
+  position: relative;
 }
 ul.connections-list li .btns {
-    top: -2px;
+  top: -2px;
 }
 a span.category {
-    color: #bbb;
+  color: #bbb;
 }
 #unlink-undo-message div.alert {
-    padding-right: 14px; /* right-aligned undo button in page connections */
-}
+  padding-right: 14px;
+  /* right-aligned undo button in page connections */
 
+}
 /* .media-sorter .ui-sortable-placeholder, */
 .connections-list .ui-sortable-placeholder {
-    background: #aaa;
-    border-radius: 4px;
-    visibility: visible !important;
+  background: #aaa;
+  border-radius: 4px;
+  visibility: visible !important;
 }
-
 .form-field-error {
-    color: #B94A48;
-}    
+  color: #B94A48;
+}
 .z_validation_message {
-    background-color: #F2DEDE;
-    border-color: #EED3D7;
-    color: #B94A48;
-    margin-left: 9px;
-    margin-bottom: 9px;
-    display: inline-block;
-    vertical-align: middle;
-    padding: 5px 9px;
-    border-radius: 4px;
+  background-color: #F2DEDE;
+  border-color: #EED3D7;
+  color: #B94A48;
+  margin-left: 9px;
+  margin-bottom: 9px;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 5px 9px;
+  border-radius: 4px;
 }
-
 form.form-horizontal .z_validation_message {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
-
 ul.suggestions-list {
-    margin: 0; padding: 0;
-    list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 ul.suggestions-list li a {
-    display: block;
-
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 0%, #f5f5f5 50%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f5f5f5)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* IE10+ */
-    background: linear-gradient(top, #ffffff 0%,#f5f5f5 50%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
-    border: 1px solid #E0E0E0;
-    border-radius: 4px;
-    margin-bottom: -1px;
-    padding: 2px 4px;
+  display: block;
+  background-color: #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f5f5f5));
+  background: -webkit-linear-gradient(top, #ffffff, #f5f5f5);
+  background: -moz-linear-gradient(top, #ffffff, #f5f5f5);
+  background: -ms-linear-gradient(top, #ffffff, #f5f5f5);
+  background: -o-linear-gradient(top, #ffffff, #f5f5f5);
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  margin-bottom: -1px;
+  padding: 2px 4px;
 }
-
 ul.suggestions-list li a .pull-right {
-    color: #999;
+  color: #999;
 }
-
 ul.suggestions-list li a:hover span.pull-right,
 ul.suggestions-list li a:hover {
-    color: #f5f5f5;
-    background: #999;
-    text-decoration: none;
+  color: #f5f5f5;
+  background: #999;
+  text-decoration: none;
 }
-
-
 #dialog-connect-results {
-    max-height: 400px;
-    overflow-y: scroll;
-    padding: 10px 0;
-    border-top: 1px solid #eee;
+  max-height: 400px;
+  overflow-y: scroll;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
 }
-
-    #dialog-connect-panels .thumbnail:hover {
-        background-color: #eee;
-        cursor: pointer;
-    }
-
-    #dialog-connect-panels .thumbnails .thumbnail {
-        overflow: hidden;
-        height: 64px;
-    }
-
-    #dialog-connect-panels .thumbnails .thumbnail h6 {
-        font-weight: normal;
-        text-transform: lowercase;
-        line-height: 13px;
-    }
-    
-    #dialog-connect-panels .thumbnails .thumbnail img {
-        margin-right: 4px;
-    }
-
-.widget-content .rsc-item {
-    overflow: hidden;
-    height: 64px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid white;
+#dialog-connect-panels .thumbnail:hover {
+  background-color: #eee;
+  cursor: pointer;
 }
-    .widget-content .rsc-item img {
-        margin-right: 4px;
-    }
-
-
+#dialog-connect-panels .thumbnails .thumbnail {
+  overflow: hidden;
+  height: 64px;
+}
+#dialog-connect-panels .thumbnails .thumbnail h6 {
+  font-weight: normal;
+  text-transform: lowercase;
+  line-height: 13px;
+}
+#dialog-connect-panels .thumbnails .thumbnail img {
+  margin-right: 4px;
+}
 /* small image in admin edit */
 .leader {
-    float: left;
-    margin-right: 10px;
-    width: 48px;
-    height: 48px;
-    cursor: pointer;
+  float: left;
+  margin-right: 10px;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
 }
-
 span.leader {
-    background: #eee;
+  background: #eee;
 }
-
-
 /* growl message */
 .notice-wrap {
-	position: fixed;
-	top: 60px;
-	right: 20px;
-	width: 300px;
-	z-index: 9999;
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  z-index: 9999;
 }
-
-
 /* tinyMce stuff
---------------------------------------------------------- */
-
-table.mceLayout, textarea.tinyMCE {
-    width: 100% !important;
+   --------------------------------------------------------- */
+table.mceLayout,
+textarea.tinyMCE {
+  width: 100% !important;
 }
-
 .mceToolbar td a span.mce_zmore {
-	background: url(/lib/images/toolbars.gif) !important;
+  background: url(/lib/images/toolbars.gif) !important;
 }
-
 #zmedia-props-form [class*="span"] {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
-
 #zmedia-props-form .control-label {
-    font-weight: bold;
+  font-weight: bold;
 }
-
 .z-tinymce-media-left {
-    border: 1px solid #eee;
+  border: 1px solid #eee;
 }
-
 .dialog .z-tinymce-media-options label {
-	float: none;
-	width: auto;
+  float: none;
+  width: auto;
 }
-
-	.z-tinymce-media-options p {
-		margin: 0;
-	}
-
+.z-tinymce-media-options p {
+  margin: 0;
+}
 .wp_themeSkin .mceStatusbar div {
-    width: 600px;
-    overflow: hidden;
+  width: 600px;
+  overflow: hidden;
 }
-
 div.widget-content .mce-tinymce.mce-container {
-    border: 0;
-    margin: -8px; /* makes it fill the whole widget-content area */
-}
+  border: 0;
+  margin: -10px -8px -10px -8px;
+  /* makes it fill the whole widget-content area */
 
+}
 /* sets tinyMCE font size in admin */
-div.widget-content .mce-container, div.widget-content .mce-container *, div.widget-content .mce-widget, div.widget-content .mce-widget *, div.widget-content .mce-reset {
-    font-size: 13px;
+div.widget-content .mce-container,
+div.widget-content .mce-container *,
+div.widget-content .mce-widget,
+div.widget-content .mce-widget *,
+div.widget-content .mce-reset {
+  font-size: 13px;
 }
-
-
-/* ajax interaction 
--------------------------------------------------------------- */
-body.wait {
-    cursor: wait;
-}
-body.wait button {
-    cursor: wait;
-}
-
-
 /* maps
--------------------------------------------------------------- */
-
+   -------------------------------------------------------------- */
 .map-wrapper {
-	height: 300px;
-	width: 610px;
-	border: 3px solid #ddd;
-	margin: 0 0 9px 0;
-	border-radius: 6px;
+  height: 300px;
+  width: 610px;
+  border: 3px solid #ddd;
+  margin: 0 0 9px 0;
+  border-radius: 6px;
 }
-
 /* Some extra rtl definitions */
-
-input[type="text"].rtl, textarea.rtl {
-    font-size: 150%;
+input[type="text"].rtl,
+textarea.rtl {
+  font-size: 150%;
 }
-
 body[dir=rtl] label {
-    float: right;
-    text-align: right;
+  float: right;
+  text-align: right;
 }
-
-
-/* tinyMCE buttons */
-.defaultSkin span.mce_zlink {background-position:-40px -40px}
-.defaultSkin span.mce_zbdoltr {background-position:-60px -40px}
-.defaultSkin span.mce_zbdortl {background-position:-80px -40px}
-
-
 /* admin logon */
 .admin-logon {
-    margin: auto;
-    margin-top: 100px;
-    width: 400px;
+  margin: auto;
+  margin-top: 150px;
+  max-width: 480px;
+  width: 100%;
 }
 .admin-logon form {
-    padding: 16px;
+  padding: 16px;
 }
-
 .admin-logon div.buttons p {
-    margin-top: 9px;
+  margin-top: 9px;
 }
-
 .admin-logon div.buttons {
-    margin-top: 30px;
+  margin-top: 30px;
 }
-
+.admin-logon .widget-header {
+  font-size: 17px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #dddddd;
+  background: -webkit-gradient(linear, left top, left bottom, from(#dddddd), to(#eeeeee));
+  background: -webkit-linear-gradient(top, #dddddd, #eeeeee);
+  background: -moz-linear-gradient(top, #dddddd, #eeeeee);
+  background: -ms-linear-gradient(top, #dddddd, #eeeeee);
+  background: -o-linear-gradient(top, #dddddd, #eeeeee);
+  padding: 8px;
+  padding-top: 12px;
+  color: #333;
+}
 #logon_error {
-    padding: 16px;
-    display: none;
+  padding: 16px;
+  display: none;
 }
 .logon_error #logon_error {
-    display: block;
+  display: block;
 }
-#logon_error h2, #logon_error h3 {
-    font-size: 1.1em;
-    line-height: 1.2em;
+#logon_error h2,
+#logon_error h3 {
+  font-size: 1.1em;
+  line-height: 1.2em;
 }
 #logon_error p {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 }
-
 /* icon status
---------------------------------------------------------- */
+   --------------------------------------------------------- */
 span.icon_status {
-    width: 17px;
-    height: 17px;
-    background-image: url(/lib/images/icon_status.png);
-    background-repeat: no-repeat;
-    background-position: -59px 0;
-    margin-right: 3px;
+  width: 17px;
+  height: 17px;
+  background-image: url(/lib/images/icon_status.png);
+  background-repeat: no-repeat;
+  background-position: -59px 0;
+  margin-right: 3px;
 }
-
-span.icon_status_running, span.icon_status_ok {
-    background-position: -2px 0;
+span.icon_status_running,
+span.icon_status_ok {
+  background-position: -2px 0;
 }
-
 span.icon_status_error {
-    background-position: -21px 0;
+  background-position: -21px 0;
 }
-
-span.icon_status_retrying, 
+span.icon_status_retrying,
 span.icon_status_warning {
-    background-position: -40px 0;
+  background-position: -40px 0;
 }
-
 span.icon_status_starting {
-    background-position: -77px 0;
+  background-position: -77px 0;
 }
-
-/* sidebar - less space
---------------------------------------------------------- */
-
-#sidebar .controls {
-    margin-left: 100px;
-}
-
-#sidebar .control-label {
-    width: 90px;
-}
-
-
+/* sidebar
+   --------------------------------------------------------- */
 #sidebar-date-range .tab-content {
-    overflow: visible;
+  overflow: visible;
 }
-
 /* scroll - keep the save buttons into view
---------------------------------------------------------- */
-
+   --------------------------------------------------------- */
 #sidebar-publish-page .widget-content {
-    display: block;
+  display: block;
 }
 #sidebar-publish-page h3.widget-header i {
-    display: none;
+  display: none;
 }
-
-
 /* modal - fix for tab content getting scrollbars inside modal
---------------------------------------------------------- */
-.modal {
+   --------------------------------------------------------- */
+@media (min-width: 720px) {
+  .modal-dialog {
     width: 700px;
+  }
 }
 div.modal div.tab-content {
-    overflow: visible;
+  overflow: visible;
 }
-
-
-
+#dialog-connect-results {
+  margin-top: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.modal-dialog .row {
+  margin-right: -10px;
+  margin-left: -10px;
+}
+.modal-dialog [class*="col-"] {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.modal-dialog .modal-header {
+  padding: 0 10px;
+}
+.modal-dialog .modal-header h1,
+.modal-dialog .modal-header h2,
+.modal-dialog .modal-header h3 {
+  margin-top: 15px;
+}
+.modal-dialog .nav {
+  margin-bottom: 12px;
+}
+textarea.form-field-error,
+input.form-field-error {
+  background: #ffeeee;
+}
+.thumbnail {
+  min-height: 80px;
+}
+.thumbnail h6 {
+  color: #999;
+  margin: 0;
+}
+.thumbnail h5 {
+  margin: 3px 0;
+}

@@ -7,16 +7,21 @@ body {
     padding-bottom: 40px;
 }
 
+.navbar .navbar-brand img {
+    margin-top: -4px;
+    padding-right: 10px;
+}
+
 @media (max-width: 979px) {
     body {
         padding-top: 0px;
     }
-    .navbar .brand {
+    .navbar .navbar-brand {
        padding-left: 50px;
        padding-right: 10px;
        margin: 0 0 0 -5px;
      }
-     .navbar .brand .logo {
+     .navbar .navbar-brand .logo {
          left: 0px;
      }
     /* Site specific definitions */
@@ -280,3 +285,4 @@ form.z_form_invalid .alert.z_invalid {
 .body table tbody tr:hover th {
   background-color: #f5f5f5;
 }
+

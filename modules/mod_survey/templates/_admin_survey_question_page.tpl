@@ -1,6 +1,6 @@
 <li class="page" id="{{ #p }}">
 	<div class="options btn-group pull-right">
-		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+		<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 			<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -30,11 +30,11 @@
 
 	{% with js|survey_is_stop as is_stop %}
 	<div class="jumps">
-		<div class="control-group">
-			<label class="checkbox">
+		<div class="form-group">
+			<div class="checkbox"><label>
 				<input type="checkbox" class="is_stop_page {% if nosubmit %}nosubmit{% endif %}" name="is_stop_page" {% if is_stop %}checked{% endif %} /> 
 				{_ Stop the survey after this page. No questions are submitted. _}
-			</label>
+			</label></div>
 		</div>
 
 		<ul class="jump-list" {% if is_stop %}style="display:none"{% endif %}>

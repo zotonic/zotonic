@@ -47,88 +47,88 @@
     <table class="table">
         <thead>
             <tr>
-	        <th width="10%">{_ Severity _}</th>
-	        <th width="10%">{_ Status _}</th>
-	        <th width="10%">{_ Message nr _}</th>
-	        <th width="15%">{_ To _}</th>
-	        <th width="15%">{_ From _}</th>
-	        <th width="5%">{_ Content _}</th>
-	        <th width="5%">{_ Other _}</th>
-	        <th width="15%">{_ Template _}</th>
-	        <th width="15%">{_ Date _}</th>
+            <th width="8%">{_ Severity _}</th>
+            <th width="8%">{_ Status _}</th>
+            <th width="8%">{_ Message nr _}</th>
+            <th width="15%">{_ To _}</th>
+            <th width="15%">{_ From _}</th>
+            <th width="5%">{_ Content _}</th>
+            <th width="5%">{_ Other _}</th>
+            <th width="15%">{_ Template _}</th>
+            <th width="20%">{_ Date _}</th>
             </tr>
 
             <tr>
-	        <td class="span1">
-		    <select id="log_severity" name="severity" style="width: 95%">
-		        <option value="0" {% if q.severity == '0' %}selected="selected"{% endif %}>{_ Fatal _}</option>
-		        <option value="1" {% if q.severity == '' or q.severity|is_undefined or q.severity == '1' %}selected="selected"{% endif %}>{_ Error _}</option>
-		        <option value="2" {% if q.severity == '2' %}selected="selected"{% endif %}>{_ Warning _}</option>
-		        <option value="3" {% if q.severity == '3' %}selected="selected"{% endif %}>{_ Info _}</option>
-		        <option value="4" {% if q.severity == '4' %}selected="selected"{% endif %}>{_ Debug _}</option>
-		    </select>
-		    {% wire id="log_severity" type="change" action={submit target="log_filter"} %}
+            <td class="col-lg-1 col-md-1">
+            <select class="form-control" id="log_severity" name="severity" style="width: 95%">
+                <option value="0" {% if q.severity == '0' %}selected="selected"{% endif %}>{_ Fatal _}</option>
+                <option value="1" {% if q.severity == '' or q.severity|is_undefined or q.severity == '1' %}selected="selected"{% endif %}>{_ Error _}</option>
+                <option value="2" {% if q.severity == '2' %}selected="selected"{% endif %}>{_ Warning _}</option>
+                <option value="3" {% if q.severity == '3' %}selected="selected"{% endif %}>{_ Info _}</option>
+                <option value="4" {% if q.severity == '4' %}selected="selected"{% endif %}>{_ Debug _}</option>
+            </select>
+            {% wire id="log_severity" type="change" action={submit target="log_filter"} %}
                 </td>
-                <td class="span1">
- 		    <select id="log_status" name="status" style="width: 95%">
- 		        <option value="">{_ All _}</option>
- 		        <option value="sending" {% if q.status == 'sending' %}selected="selected"{% endif %}>{_ Sending _}</option>
- 		        <option value="sent" {% if q.status == 'sent' %}selected="selected"{% endif %}>{_ Sent _}</option>
- 		        <option value="bounce" {% if q.status == 'bounce' %}selected="selected"{% endif %}>{_ Bounce _}</option>
- 		        <option value="received" {% if q.status == 'received' %}selected="selected"{% endif %}>{_ Received _}</option>
- 		        <option value="failed" {% if q.status == 'failed' %}selected="selected"{% endif %}>{_ Failed _}</option>
- 		        <option value="retry" {% if q.status == 'retry' %}selected="selected"{% endif %}>{_ Retry _}</option>
- 		    </select>
-		    {% wire id="log_status" type="change" action={submit target="log_filter"} %}
+                <td class="col-lg-1 col-md-1">
+            <select class="form-control" id="log_status" name="status" style="width: 95%">
+                <option value="">{_ All _}</option>
+                <option value="sending" {% if q.status == 'sending' %}selected="selected"{% endif %}>{_ Sending _}</option>
+                <option value="sent" {% if q.status == 'sent' %}selected="selected"{% endif %}>{_ Sent _}</option>
+                <option value="bounce" {% if q.status == 'bounce' %}selected="selected"{% endif %}>{_ Bounce _}</option>
+                <option value="received" {% if q.status == 'received' %}selected="selected"{% endif %}>{_ Received _}</option>
+                <option value="failed" {% if q.status == 'failed' %}selected="selected"{% endif %}>{_ Failed _}</option>
+                <option value="retry" {% if q.status == 'retry' %}selected="selected"{% endif %}>{_ Retry _}</option>
+            </select>
+            {% wire id="log_status" type="change" action={submit target="log_filter"} %}
                 </td>
-	        <td class="span1">
-		    <input name="message_nr" type="text" style="width: 85%" value="{{ q.message_nr|escape }}" />
+            <td class="col-lg-1 col-md-1">
+            <input class="form-control" name="message_nr" type="text" style="width: 85%" value="{{ q.message_nr|escape }}" />
                 </td>
-	        <td class="span2">
-		    <input name="to" type="text" style="width: 85%" value="{{ q.to|escape }}" />
+            <td class="col-lg-2 col-md-2">
+            <input class="form-control" name="to" type="text" style="width: 85%" value="{{ q.to|escape }}" />
                 </td>
-	        <td class="span2">
- 		    <input name="from" type="text" style="width: 85%" value="{{ q.from|escape }}" />
+            <td class="col-lg-2 col-md-2">
+            <input class="form-control" name="from" type="text" style="width: 85%" value="{{ q.from|escape }}" />
                 </td>
-	        <td class="span1">
-		    <input name="content" type="text" style="width: 70%" value="{{ q.content|escape }}" />
+            <td class="col-lg-1 col-md-1">
+            <input class="form-control" name="content" type="text" style="width: 70%" value="{{ q.content|escape }}" />
                 </td>
-	        <td class="span1">
- 		    <input name="other" type="text" style="width: 70%" value="{{ q.other|escape }}" />
+            <td class="col-lg-1 col-md-1">
+            <input class="form-control" name="other" type="text" style="width: 70%" value="{{ q.other|escape }}" />
                 </td>
-	        <td class="span1">
-		    <input name="template" type="text" style="width: 85%" value="{{ q.template|escape }}" />
+            <td class="col-lg-1 col-md-1">
+            <input class="form-control" name="template" type="text" style="width: 85%" value="{{ q.template|escape }}" />
                 </td>
-	        <td class="span2">
-		    <button class="btn btn-primary btn-mini" type="submit">{_ Filter _}</button>
-		    <button class="btn btn-mini" id="filter_clear">{_ All _}</button>
-		    {% wire id="filter_clear" 
-		        action={set_value selector="#log_filter input" value=""}
-		        action={set_value selector="#log_status" value=""}
-		        action={set_value selector="#log_severity" value="4"}
-		        action={submit target="log_filter"}
-		    %}
+            <td class="col-lg-2 col-md-2">
+            <button class="btn btn-primary btn-xs" type="submit">{_ Filter _}</button>
+            <button class="btn btn-default btn-xs" id="filter_clear">{_ All _}</button>
+            {% wire id="filter_clear" 
+                action={set_value selector="#log_filter input" value=""}
+                action={set_value selector="#log_status" value=""}
+                action={set_value selector="#log_severity" value="4"}
+                action={submit target="log_filter"}
+            %}
                 </td>
             </tr>
         </thead>
 
         <tbody id="log-area">
-	    {% for result_row in result %}
-	    {% include "_admin_log_email_row.tpl" %}
-	    {% empty %}
-	    <tr>
+        {% for result_row in result %}
+        {% include "_admin_log_email_row.tpl" %}
+        {% empty %}
+        <tr>
                 <td colspan="9">
-		    {_ No log messages. _}
+            {_ No log messages. _}
                 </td>
             </tr>
-	    {% endfor %}
+        {% endfor %}
         </tbody>
         <tfoot>
-	    <tr>
+        <tr>
                 <td colspan="9">
-	            {% button class="btn btn-primary" text="More..." 
-	            action={moreresults result=result target="log-area" template="_admin_log_email_row.tpl"}
-	            %}
+                {% button class="btn btn-primary" text="More..." 
+                action={moreresults result=result target="log-area" template="_admin_log_email_row.tpl"}
+                %}
                 </td>
             </tr>
         </tfoot>
@@ -136,4 +136,4 @@
 </form>
 {% endwith %}
 
-    {% endblock %}
+{% endblock %}

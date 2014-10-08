@@ -23,20 +23,20 @@
 			<h3>{_ Add a question or block _}</h3>
 		</div>
 		<div class="modal-body">
-			<div class="row-fluid">
-				<div class="span4" data-block-type='survey_short_answer'>
+			<div class="row">
+				<div class="col-lg-4 col-md-4" data-block-type='survey_short_answer'>
 					<p>{_ Please enter your information. _}</p>
 					<p>
-						<input type="text" class="input-block-level" disabled />
+						<input class="form-control" type="text" disabled />
 					</p>
 				</div>
-				<div class="span4" data-block-type='survey_long_answer'>
+				<div class="col-lg-4 col-md-4" data-block-type='survey_long_answer'>
 					<p>{_ Please write an essay. _}</p>
 					<p>
-						<textarea rows="3" class="input-block-level" disabled></textarea>
+						<textarea class="form-control" rows="3" disabled></textarea>
 					</p>
 				</div>
-				<div class="span4" data-block-type='survey_yesno'>
+				<div class="col-lg-4 col-md-4" data-block-type='survey_yesno'>
 					<p>{_ Do you like pea soup? _}</p>
 					<p>
 						<input type="radio" disabled /> {_ Yes _}<br/>
@@ -44,7 +44,7 @@
 					</p>
 				</div>
 				<!--
-				<div class="span4" data-block-type='survey_truefalse'>
+				<div class="col-lg-4 col-md-4" data-block-type='survey_truefalse'>
 					<p>{_ The earth is flat. _}</p>
 					<p>
 						<input type="radio" disabled /> {_ True _}<br/>
@@ -54,8 +54,8 @@
 				-->
 			</div>
 			<hr/>
-			<div class="row-fluid">
-				<div class="span4" data-block-type='survey_likert'>
+			<div class="row">
+				<div class="col-lg-4 col-md-4" data-block-type='survey_likert'>
 					<p>{_ Weasels make great pets. _}</p>
 					<p>
 						{_ Disagree _}
@@ -67,7 +67,7 @@
 						{_ Agree _}
 					</p>
 				</div>
-				<div class="span4" data-block-type='survey_thurstone'>
+				<div class="col-lg-4 col-md-4" data-block-type='survey_thurstone'>
 					<p>{_ Select which you agree with. _}
 					<p>
 						<input type="checkbox" disabled /> {_ I like Chinese restaurants _}<br/>
@@ -75,53 +75,53 @@
 						<input type="checkbox" disabled /> {_ I always eat with others _}
 					</p>
 				</div>
-				<div class="span4" data-block-type='survey_matching'>
+				<div class="col-lg-4 col-md-4" data-block-type='survey_matching'>
 					<p>{_ Match which answer fits best. _}</p>
 					<p>
-						Apple <select disabled><option>{_ Wagner _}</option></select><br/>
-						Milk <select disabled><option>{_ Red _}</option></select><br/>
+						Apple <select class="form-control" disabled><option>{_ Wagner _}</option></select><br/>
+						Milk <select class="form-control" disabled><option>{_ Red _}</option></select><br/>
 					</p>
 				</div>
 			</div>
 			<hr/>
-			<div class="row-fluid">
-				<div class="span4" data-block-type='survey_narrative'>
+			<div class="row">
+				<div class="col-lg-4 col-md-4" data-block-type='survey_narrative'>
 					<p>
 						{_ I am _}
-						<input type="text" class="input-mini" disabled />
+						<input type="text" class="col-md-2 form-control" disabled />
 						{_ years old. I like _}
-						<select class="input-small" disabled><option>{_ chocolate _}</option></select>
-						{_ ice cream and my favorite color is _} <input type="text" class="input-mini" disabled />.
+						<select class="col-md-4 form-control" disabled><option>{_ chocolate _}</option></select>
+						{_ ice cream and my favorite color is _} <input type="text" class="col-md-2 form-control" disabled />.
 					</p>
 				</div>
-				<div class="span4" data-block-type='survey_country'>
+				<div class="col-lg-4 col-md-4" data-block-type='survey_country'>
 					<p>{_ Select your country _}</p>
 					<p>
-						<select disabled>
+						<select class="form-control" disabled>
 							<option disabled>{_ Country _}</option>
 						</select>
 					</p>
 				</div>
-				<div class="span4" data-block-type='survey_button'>
+				<div class="col-lg-4 col-md-4" data-block-type='survey_button'>
 					<p>
-						<button class="btn disabled" disabled>{_ Button text _}</button>
+						<button class="btn btn-default disabled" disabled>{_ Button text _}</button>
 					</p>
 				</div>
 			</div>
 			<hr/>
-			<div class="row-fluid">
-				<div class="span4" data-block-type='header'>
+			<div class="row">
+				<div class="col-lg-4 col-md-4" data-block-type='header'>
 					<h4>{_ Header _}</h4>
 				</div>
-				<div class="span4" data-block-type='text'>
+				<div class="col-lg-4 col-md-4" data-block-type='text'>
 					<p>{_ Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>. _}</p>
 				</div>
 			</div>
 			{% if m.acl.use.mod_admin %}
 			<hr/>
 			<div class="alert">
-				<div class="row-fluid">
-					<div class="span4" data-block-type='survey_category'>
+				<div class="row">
+					<div class="col-lg-4 col-md-4" data-block-type='survey_category'>
 						<p>{_ Options from a page category _}</p>
 						<p>
 							<input type="checkbox" disabled /> {_ First page in category _}<br/>
@@ -129,13 +129,13 @@
 							<input type="checkbox" disabled /> {_ Next page in category _}
 						</p>
 					</div>
-					<div class="span4" data-block-type='survey_upload'>
+					<div class="col-lg-4 col-md-4" data-block-type='survey_upload'>
 						<p>{_ Please upload your file. _}</p>
 						<p>
-							<input style="width:95%" type="file" disabled />
+							<input class="form-control" style="width:95%" type="file" disabled />
 						</p>
 					</div>
-					<div class="span4" data-block-type='page'>
+					<div class="col-lg-4 col-md-4" data-block-type='page'>
 						{% image "lib/images/koe.jpg" mediaclass="admin-editor" grey %}
 					</div>
 				</div>
@@ -143,7 +143,7 @@
 			{% endif %}
 		</div>
 		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal">{_ Cancel _}</a>
+			<a href="#" class="btn btn-default" data-dismiss="modal">{_ Cancel _}</a>
 		</div>
 	</div>
 

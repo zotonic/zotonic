@@ -4,19 +4,19 @@
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
-    <div class="controls">
+    <div>
 {% if blk.input_type == 'submit' %}
-        <button id="{{ #yes }}" name="{{ blk.name}}" class="btn" type="submit" value="1">
+        <button id="{{ #yes }}" name="{{ blk.name}}" class="btn btn-default" type="submit" value="1">
             <span></span>{{ blk.yes|default:_"True" }}
         </button>
-        <button id="{{ #no }}" name="{{ blk.name}}" class="btn" type="submit" value="0">
+        <button id="{{ #no }}" name="{{ blk.name}}" class="btn btn-default" type="submit" value="0">
             <span></span>{{ blk.no|default:_"False" }}
         </button>
 {% else %}
-        <label class="radio inline">
+        <label class="radio-inline">
             <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name] == "true" %}checked="checked"{% endif %} value="1" /> {{ blk.yes|default:_"True" }}
         </label>
-        <label class="radio inline">
+        <label class="radio-inline">
             <input type="radio" id="{{ #no }}" name="{{ blk.name}}" {% if answers[blk.name] == "false" %}checked="checked"{% endif %} value="0" /> {{ blk.no|default:_"False" }}
         </label>
         {% if blk.is_required %}

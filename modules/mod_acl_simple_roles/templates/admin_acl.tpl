@@ -38,8 +38,8 @@
                 <td>{{ acl.view_all|yesno:_"view all,&mdash;" }}</td>
                 <td>
                     <div class="pull-right">
-                        {% button class="btn btn-mini" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=id on_success={slide_fade_out target=#tr.id}} %}
-                        {% button class="btn btn-mini" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+                        {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=id on_success={slide_fade_out target=#tr.id}} %}
+                        {% button class="btn btn-default btn-xs" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
                     </div>
                     <strong>{_ Categories _}</strong>:
                     {% for cat in acl.categories %}

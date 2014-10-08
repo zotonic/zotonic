@@ -1,25 +1,30 @@
 <div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-find">
 	<p>{_ Find an existing page to connect _}</p>
 
-	<form id="dialog-connect-find">
-		<input name="find_text" type="text" value="" placeholder="{_ Type text to search _}" class="do_autofocus input-block-level" />
+	<form id="dialog-connect-find" class="row">
+        <div class="col-md-8">
+		    <input name="find_text" type="text" value="" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
+        </div>
 
-		{% block category_select %}
-		<select name="find_category">
-			{% if predicate %}
-				<option value="p:{{ predicate }}">{_ Valid for: _} {{ predicate.title }}</option>
-			{% endif %}
-			<option value="">{_ Any category _}</option>
-			<option value="" disabled></option>
-		    {% for cat_id, level, indent, name in m.category.all_flat %}
-			    {% if m.acl.insert[name|as_atom] %}
-				    <option value="{{cat_id}}" {% if cat_id == cat %}selected="selected" {% endif %}>
-						{{ indent }}{{ m.rsc[cat_id].title|default:name }}
-				    </option>
-			    {% endif %}
-		    {% endfor %}
-		</select>
-		{% endblock %}
+        <div class="col-md-4">
+            
+		    {% block category_select %}
+		        <select class="form-control" name="find_category">
+			        {% if predicate %}
+				        <option value="p:{{ predicate }}">{_ Valid for: _} {{ predicate.title }}</option>
+			        {% endif %}
+			        <option value="">{_ Any category _}</option>
+			        <option value="" disabled></option>
+		            {% for cat_id, level, indent, name in m.category.all_flat %}
+			            {% if m.acl.insert[name|as_atom] %}
+				            <option value="{{cat_id}}" {% if cat_id == cat %}selected="selected" {% endif %}>
+						        {{ indent }}{{ m.rsc[cat_id].title|default:name }}
+				            </option>
+			            {% endif %}
+		            {% endfor %}
+		        </select>
+	        {% endblock %}
+        </div>
 	</form>
 
 	<div id="dialog-connect-found" class="do_feedback"
@@ -29,16 +34,16 @@
 
 {% javascript %}
 
-$('#dialog-connect-find').change();
+    $('#dialog-connect-find').change();
 
-$("#dialog-connect-found").on('click', '.thumbnail', function() {
+    $("#dialog-connect-found").on('click', '.thumbnail', function() {
 	z_notify("admin-connect-select", { 
-				z_delegate: "mod_admin", 
-				select_id: $(this).data('id'),
-				predicate: '{{ predicate }}',
-				subject_id: '{{ subject_id }}',
-				callback: '{{ callback }}',
-				language: '{{ language }}'
-		});
-});
+	z_delegate: "mod_admin", 
+	select_id: $(this).data('id'),
+	predicate: '{{ predicate }}',
+	subject_id: '{{ subject_id }}',
+	callback: '{{ callback }}',
+	language: '{{ language }}'
+	});
+    });
 {% endjavascript %}

@@ -29,7 +29,7 @@
              dialogReposition: function() {
                  var dialog = $("#zmodal");
                  if ($(window).width() >= 768) {
-                     dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
+                     //dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
                  }
              },
 
@@ -53,11 +53,13 @@
                  if (typeof(options.addclass) == "string")
                      dialogClass += ' ' + options.addclass;
 
+                 var modalDialog = $("<div>").addClass("modal-dialog")
+                     .append($("<div>").addClass("modal-content").append(title).append(body));
+                 
                  var dialog = $("<div>")
                      .attr("id", "zmodal")
                      .addClass(dialogClass)
-                     .append(title)
-                     .append(body)
+                     .append(modalDialog)
                      .appendTo($("body"));
 
                  dialog
@@ -77,7 +79,7 @@
                     if (dialog.height() > 0.8 * $(window).height()) {
                         dialog.addClass('high');
                     } else {
-                        dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
+                        //dialog.css({marginTop: -Math.floor(dialog.height()/2)+'px'});
                     }
                  }
 

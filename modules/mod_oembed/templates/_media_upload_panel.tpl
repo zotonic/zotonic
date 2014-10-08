@@ -11,14 +11,16 @@
                                 subject_id=subject_id stay=stay callback=callback}
         delegate="mod_oembed" 
     %}
-    <form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
+    <form id="{{ #form }}" method="POST" action="postback" class="form">
 
-        <div class="control-group">
-            <label class="control-label" for="{{ #embed_code }}">{_ Embed URL _}</label>
-            <div class="controls">
-                <input id="{{ #embed_code }}" class="span4" name="oembed_url" value="{{ medium.oembed_url }}" placeholder="http://www.youtube.com/watch?v=r9cmWJvXIj4‎" />
+        <div class="form-group row">
+            <label class="control-label col-md-3" for="{{ #embed_code }}">{_ Embed URL _}</label>
+            <div class="col-md-7">
+                <input id="{{ #embed_code }}" class="form-control" name="oembed_url" value="{{ medium.oembed_url }}" placeholder="http://www.youtube.com/watch?v=r9cmWJvXIj4‎" />
                 {% validate id=#embed_code name="oembed_url" type={presence} %}
-                <button class="btn" id="oembed-url-check">{_ Try URL _}</button>
+            </div>
+            <div class="col-md-2">
+                <button class="form-control btn btn-default" id="oembed-url-check">{_ Try URL _}</button>
                 {% javascript %}
                         $('#oembed-url-check').click(function() {
                                 var url = $('#{{ #embed_code }}').val();
@@ -38,32 +40,32 @@
             <p>{_ The media title will be automatically detected from its URL. _}</p>
         {% endif %}
 
-        <div class="control-group" style="display:none">
-            <label class="control-label">&nbsp;</label>
-            <div class="controls">
+        <div class="form-group row" style="display:none">
+            <label class="control-label col-md-3">&nbsp;</label>
+            <div class="col-md-9">
                 <img id="oembed-image" src="" width="180" />
             </div>
         </div>
         
         {% if not id %}
-        <div class="control-group">
-            <label class="control-label" for="oembed-title">{_ Media title _}</label>
-            <div class="controls">
-                <input type="text" class="span4" id="oembed-title" name="title" value="{{ title|escape }}" {% if not medium.oembed_url %}disabled{% endif %} />
-                {% validate id="oembed-title" name="title" type={presence} %}
+            <div class="form-group row">
+                <label class="control-label col-md-3" for="oembed-title">{_ Media title _}</label>
+                <div class="col-md-9">
+                    <input type="text" class="col-lg-4 col-md-4 form-control" id="oembed-title" name="title" value="{{ title|escape }}" {% if not medium.oembed_url %}disabled{% endif %} />
+                    {% validate id="oembed-title" name="title" type={presence} %}
+                </div>
             </div>
-        </div>
         
-        <div class="control-group">
-            <label class="control-label" for="oembed-summary">{_ Summary _}</label>
-            <div class="controls">
-                <textarea class="span4" id="oembed-summary" name="summary" {% if not medium.oembed_url %}disabled{% endif %}>{{ summary|escape }}</textarea>
+            <div class="form-group row">
+                <label class="control-label col-md-3" for="oembed-summary">{_ Summary _}</label>
+                <div class="col-md-9">
+                    <textarea class="col-lg-4 col-md-4 form-control" id="oembed-summary" name="summary" {% if not medium.oembed_url %}disabled{% endif %}>{{ summary|escape }}</textarea>
+                </div>
             </div>
-        </div>
         {% endif %}
 
         <div class="modal-footer">
-            {% button class="btn" action={dialog_close} text=_"Cancel" tag="a" %}
+            {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
             <button class="btn btn-primary {% if not medium.oembed_url %}disabled{% endif %}" id="oembed-save" type="submit">{% if id %}{_ Replace media item _}{% else %}{_ Make media item _}{% endif %}</button>
         </div>
     </form>

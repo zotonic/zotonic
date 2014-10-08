@@ -7,12 +7,12 @@
 {% block widget_content %}
 
 <div class="pull-right">
-    <a href="javascript:void(0)" class="btn btn-primary btn-mini do_dialog" data-dialog="title: '{_ Finding a Twitter ID. _}', text: '{_ The (numeric) Twitter ID of a user can be found on the twitter page of the user: it is the number that is contained in the URL to the RSS feed for the user\'s updates. _}'" title="{_ Need more help? _}"><i class="icon-question-sign icon-white"></i></a>
+    <a href="javascript:void(0)" class="btn btn-primary btn-xs do_dialog" data-dialog="title: '{_ Finding a Twitter ID. _}', text: '{_ The (numeric) Twitter ID of a user can be found on the twitter page of the user: it is the number that is contained in the URL to the RSS feed for the user\'s updates. _}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
 </div>
 
-<div class="control-group">
-    <div class="controls">
-        <input type="text" id="twitter-id" name="twitter_id" class="zp-100" value="{{ m.rsc[id].twitter_id }}" />
+<div class="form-group">
+    <div>
+        <input type="text" id="twitter-id" name="twitter_id" class="zp-100 form-control" value="{{ m.rsc[id].twitter_id }}" />
         <p class="help-block">
             {_ Fill in the <strong>numeric</strong> Twitter id. To map a Twitter account name to this number go to: _} 
             <a target="_blank" href="http://www.idfromuser.com/">www.idfromuser.com</a>.

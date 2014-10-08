@@ -18,7 +18,7 @@
 	        {% endif %}
 	    {% endblock %}
 		{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
-		<div class="tab-content widget-content">
+		<div class="tab-content widget-content nolang_before">
 		    {% block widget_content_nolang_before %}{% endblock %}
 		</div>
 		<div class="tab-content widget-content">
@@ -37,8 +37,10 @@
 			{% endwith %}
 			{% endfor %}
 		</div>
-		<div class="tab-content widget-content">
-		    {% block widget_content_nolang %}{% endblock %}
+		<div class="tab-content">
+            <div class="widget-content nolang">
+		        {% block widget_content_nolang %}{% endblock %}
+            </div>
 		</div>
 	</div>
 	{% block widget_after %}{% endblock %}

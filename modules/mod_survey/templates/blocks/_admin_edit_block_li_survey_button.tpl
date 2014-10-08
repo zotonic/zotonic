@@ -8,15 +8,14 @@
 {% block widget_content %}
 {% with m.rsc[id] as r %}
     {% if is_editable %}
-    <div class="control-group">
-        <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" 
-               class="input-large" value="{{ blk.prompt[lang_code]  }}"
+    <div class="form-group">
+        <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}"
+               class="col-md-8 form-control" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Button text _} ({{ lang_code }})" />
     </div>
 
-    <div class="control-group view-expanded">
-       <textarea id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" 
-              class="input-block-level" rows="2"
+    <div class="form-group view-expanded">
+       <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" rows="2"
               placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
     </div>
 
@@ -27,10 +26,10 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-<div class="control-group view-expanded">
+<div class="form-group view-expanded">
     <label class="control-label" for="block-{{name}}-style">{_ Button style _}</label>
-    <div class="controls">
-      <select id="block-{{name}}-style" name="block-{{name}}-style">
+    <div>
+      <select class="form-control" id="block-{{name}}-style" name="block-{{name}}-style">
            <option value="">{_ Default _}</option>
            <option value="btn-primary" {% if blk.style == "btn-primary" %}selected="selected"{% endif %}>{_ Primary _}</option>
            <option value="btn-info" {% if blk.style == "btn-info" %}selected="selected"{% endif %}>{_ Informational _}</option>
@@ -42,10 +41,10 @@
     </div>
 </div>
 
-<div class="control-group view-expanded">
+<div class="form-group view-expanded">
     <label class="control-label" for="block-{{name}}-target">{_ question _}</label>
-    <div class="controls">
-      <input type="text" id="block-{{name}}-target" name="block-{{name}}-target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
+    <div>
+      <input class="form-control" type="text" id="block-{{name}}-target" name="block-{{name}}-target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
       <p class="help-block">{_ Jump to a question on a next page. _}</p>
     </div>
 </div>

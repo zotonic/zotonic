@@ -13,8 +13,9 @@
 
 	{% all include "_html_head.tpl" %}
 	{% lib 
-	        "bootstrap/css/bootstrap.css" 
-	        "bootstrap/css/bootstrap-responsive.css" 
+	    "bootstrap/css/bootstrap.css"
+    %}    
+	{% lib 
 	        "bootstrap/css/bootstrap-base-site.css" 
 	        "css/jquery.loadmask.css" 
 	        "css/z.logo.css" 
@@ -29,24 +30,24 @@
 {% block navbar %}
 	{% include "_navbar.tpl" %}
 {% endblock %}
-<div class="container-fluid">
+<div class="container">
 	{% block content_area %}
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
 		{% block content %}
 			{% block above %}
-			<div class="page-title row-fluid">
+			<div class="page-title row">
 				<div class="{% if z_language|is_rtl %}span8{% endif %}">
 					{% include "_breadcrumb.tpl" %}
 					{% include "_title.tpl" %}
 				</div>
 			</div>
 			{% endblock %}
-			<div class="row-fluid">
-				<div class="span8 main">
+			<div class="row">
+				<div class="main col-lg-8 col-md-8">
 					{% block main %}{% endblock %}
 				</div>
 
-				<div id="subnavbar" class="span4">
+				<div id="subnavbar" class="col-lg-4 col-md-4">
 					{% block subnavbar %}
                         {% include "_subnav.tpl" %}
 					{% endblock %}

@@ -13,7 +13,7 @@
                         <div class="clearfix">
                             <label for="trace_dd">Global tracing:</label>
                             {% wire id="trace_dd" type="change" postback={set_global} %}
-                            <select name="trace_global" id="trace_dd">
+                            <select class="form-control" name="trace_global" id="trace_dd">
                             <option {% ifequal trace_global "disable" %} selected {% endifequal %} value="disable">No global resource tracing</option>
                             <option {% ifequal trace_global "5xx" %} selected {% endifequal %} value="5xx">Log all requests with 5xx response code</option>
                             <option {% ifequal trace_global "4xx&5xx" %} selected {% endifequal %} value="4xx&5xx">Log all requests with 4xx and 5xx response codes</option>
@@ -26,7 +26,7 @@
                             {% button text="Add trace rule" action={dialog_open title="Select a resource" template="_wmtrace_add.tpl" resources=res} %}
                         </div>
 
-                        <h3 class="above-list ">Traced resources</h3>
+                        <h3 class="above-list">Traced resources</h3>
 			<ul class="short-list">
 				<li class="headers clearfix">
                                     <span class="zp-90">Resource name</span>

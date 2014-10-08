@@ -5,6 +5,6 @@
 </div>
 
 <div class="modal-footer">
-    {% button class="btn" text=_"Close" action={dialog_close} tag="a" %}
+    {% button class="btn btn-default" text=_"Close" action={dialog_close} tag="a" %}
 </div>
 

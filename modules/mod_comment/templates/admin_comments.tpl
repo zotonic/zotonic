@@ -8,7 +8,7 @@
 <div class="edit-header">
 
     <div class="pull-right">
-        <a class="btn btn-small" href="{% url admin_comments_settings %}">{_ Settings _}</a>
+        <a class="btn btn-default btn-sm" href="{% url admin_comments_settings %}">{_ Settings _}</a>
     </div>
 
     <h2>{_ Recent comments _}</h2>
@@ -33,9 +33,9 @@
                 <td>{{ comment.message|striptags|truncate:40 }}</td>
                 <td title="{{ comment.email }}">
                     <div class="pull-right">
-                        {% button class="btn btn-mini" text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
+                        {% button class="btn btn-default btn-xs" text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
                         {% include "_admin_comments_toggledisplay.tpl" element=#comment.id %}
-                        {% button class="btn btn-mini"
+                        {% button class="btn btn-default btn-xs"
                            text=_"delete"
                            action={confirm text=_"Are you sure you wish to delete that comment?"
                            action={postback delegate="controller_admin_comments"

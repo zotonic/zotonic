@@ -26,13 +26,13 @@
 
                 {% all include "_admin_make_page_buttons.tpl" %}
 
-                <a class="btn" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
-                <a class="btn" href="{% url admin_media %}">{_ All media _}</a>
+                <a class="btn btn-default" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
+                <a class="btn btn-default" href="{% url admin_media %}">{_ All media _}</a>
             </div>
         </div>
 
-        <div class="row-fluid">
-            <div class="span6">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
                 {# Latest modified texts #}
                 {% include "admin_widget_dashboard_latest.tpl" cat="text" headline=_"Latest modified texts" %}
 
@@ -40,7 +40,7 @@
                 {% include "admin_widget_dashboard_latest.tpl" cat="person" headline=_"Latest modified persons" %}
             </div>
 
-            <div class="span6">
+            <div class="col-lg-6 col-md-6">
 
                 {# Latest modified locations #}
                 {% if m.rsc['location'].id and m.acl.view['location'] %}

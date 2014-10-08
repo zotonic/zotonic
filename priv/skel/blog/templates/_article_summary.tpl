@@ -1,6 +1,6 @@
 {% if big %}
 
-	<section class="post clearfix">
+	<section class="post clearfix big">
 
 		<h1><a href="{{m.rsc[id].page_url }}" title="{{ m.rsc[id].title }}">{{ m.rsc[id].title }}</a></h1>
 		{% include "_article_meta.tpl" id=id %}

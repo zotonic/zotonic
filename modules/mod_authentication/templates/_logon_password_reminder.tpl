@@ -3,12 +3,11 @@
 
     <p>{_ Enter your e-mail address or username below and we will send you an e-mail with password reset instructions. _}</p>
 
-    <div class="control-group">
+    <div class="form-group">
         <label for="reminder_address" class="control-label">{_ E-mail address or username _}</label>
-        <div class="controls">
-	    <input type="text" id="reminder_address"
+        <div>
+	    <input class="form-control" type="text" id="reminder_address"
                    autofocus="autofocus="
-                   class="input-block-level"
                    placeholder="{_ user@example.com _}"
                    name="reminder_address"
                    value="{{ q.username|default:(m.identity[m.acl.user].username)|escape }}"
@@ -18,10 +17,10 @@
         </div>
     </div>
 
-    <div class="control-group buttons">
+    <div class="form-group buttons">
         <button class="btn btn-primary" type="submit">{_ Send me instructions _}</button>
         {% if not m.acl.user %}
-	       <a class="btn" href="{% url logon %}">{_ Back to logon form _}</a>
+	       <a class="btn btn-default" href="{% url logon %}">{_ Back to logon form _}</a>
         {% endif %}
     </div>
 </form>

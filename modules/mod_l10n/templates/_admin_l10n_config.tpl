@@ -1,6 +1,6 @@
-<div class="control-group">
-    <div class="controls">
-        <select id="pref_tz" name="pref_tz">
+<div class="form-group">
+    <div>
+        <select class="form-control" id="pref_tz" name="pref_tz">
             <option></option>
             {% include "_l10n_timezone_options.tpl" timezone=m.config.mod_l10n.timezone.value %}
         </select>
@@ -14,9 +14,9 @@
     </div>
 </div>
 
-<div class="control-group">
-    <div class="controls">
-        <label class="checkbox">
+<div class="form-group">
+    <div class="checkbox">
+        <label>
             <input type="checkbox" name="pref_tz_fixed" id="pref_tz_fixed" value="1"
                 {% if m.config.mod_l10n.timezone_is_fixed.value %}checked{% endif %}
             />

@@ -1,19 +1,19 @@
 {% include "_survey_block_name_check.tpl" %}
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
 {% with m.search[{all_bytitle cat=blk.category}] as list %}
-<div class="control-group survey-category type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
+<div class="form-group survey-category type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}"|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
-    <div class="controls">
+    <div>
 {% if blk.explanation %}
         <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
 {% if blk.input_type == 'multi' %}
     {% for title,val in list %}
         {% with forloop.counter as index %}
-            <label class="checkbox">
+            <div class="checkbox"><label>
                 <input id="{{ #cat.index }}" name="{{ blk.name }}" type="checkbox" value="{{ val }}" {% if val|member:ans %}checked="checked" {% endif %}/>
                 {{ title }}
-            </label>
+            </label></div>
             {% if forloop.first %}
                 {% if blk.is_required %}{% validate id=#cat.index name=blk.name type={presence} %}{% endif %}
             {% endif %}
@@ -22,7 +22,7 @@
 {% elseif blk.input_type == 'submit' %}
     {% for title,val in list %}
         {% with forloop.counter as index %}
-            <button id="{{ #cat.index }}" name="{{ blk.name }}" value="{{ val }}" class="btn" type="submit">
+            <button id="{{ #cat.index }}" name="{{ blk.name }}" value="{{ val }}" class="btn btn-default" type="submit">
                 <span></span>{{ title }}
             </button>
         {% endwith %}
@@ -30,10 +30,10 @@
 {% else %}
     {% for title,val in list %}
         {% with forloop.counter as index %}
-            <label class="radio">
+            <div class="radio"><label>
                 <input id="{{ #cat.index }}" name="{{ blk.name }}" type="radio" value="{{ val }}" {% if val|member:ans %}checked="checked" {% endif %}/>
                 {{ title }}
-            </label>
+            </label></div>
             {% if forloop.first %}
                 {% if blk.is_required %}{% validate id=#cat.index name=blk.name type={presence} %}{% endif %}
             {% endif %}

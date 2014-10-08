@@ -6,32 +6,32 @@
 
     <input type="hidden" name="secret" value="{{ secret|escape }}" />
 
-    <div class="control-group">
+    <div class="form-group">
 	<label class="control-label" for="password_reset1">{_ New password _}</label>
-        <div class="controls">
-	    <input type="password" id="password_reset1" class="input-block-level" name="password_reset1" value="" autocomplete="off" />
+        <div>
+	    <input class="form-control" type="password" id="password_reset1" name="password_reset1" value="" autocomplete="off" />
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="form-group">
 	<label class="control-label" for="password_reset1">{_ Repeat password _}</label>
-        <div class="controls">
-	    <input type="password" id="password_reset2" class="input-block-level" name="password_reset2" value="" autocomplete="off" />
+        <div>
+	    <input class="form-control" type="password" id="password_reset2" name="password_reset2" value="" autocomplete="off" />
         </div>
     </div>
 
-    <div class="control-group">
-        <div class="controls">
-	        <label class="checkbox inline" for="{{ #rememberme }}">
+    <div class="form-group">
+        <div>
+	        <label class="checkbox-inline" for="{{ #rememberme }}">
                 <input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
 	            {_ Stay logged on unless I log off. _}
             </label>
         </div>
     </div>
 
-    <div class="control-group buttons">
-        <div class="controls">
-	    <button class="btn btn-primary btn-large" type="submit">{_ Reset password and Log on _}</button>
+    <div class="form-group buttons">
+        <div>
+	    <button class="btn btn-primary btn-lg" type="submit">{_ Reset password and Log on _}</button>
         </div>
     </div>
 
@@ -48,7 +48,7 @@
 <p>{_ You can _} <a href="{% url logon_reminder %}">{_ request a new password reset code _}</a>.</p>
 
 {% if not m.acl.user %}
-<p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+<p><a class="btn btn-default" href="{% url logon %}">{_ Back to logon form _}</a></p>
 {% endif %}
 
 {% endif %}

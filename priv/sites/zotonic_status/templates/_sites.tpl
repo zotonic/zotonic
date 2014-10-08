@@ -28,31 +28,31 @@
 	<td>
 	    {% button 
 	    text=_"start"
-	    class="start btn btn-mini" 
+	    class="start btn btn-default btn-xs" 
 	    title=_"Start the site." 
 	    postback={site_start site=name} %}
 
 	    {% button 
 	    text=_"stop"
-	    class="stop btn btn-mini" 
+	    class="stop btn btn-default btn-xs" 
 	    title=_"Stop the site." 
 	    postback={site_stop site=name} %}
 
 	    {% button 
 	    text=_"restart"
-	    class="restart btn btn-mini" 
+	    class="restart btn btn-default btn-xs" 
 	    title=_"Restart the site, all users will be logged off." 
 	    postback={site_restart site=name} %}
 
 	    {% button 
 	    text=_"flush"
-	    class="flush btn btn-mini" 
+	    class="flush btn btn-default btn-xs" 
 	    title=_"Flush and reload all settings, templates etc." 
 	    postback={site_flush site=name} %}
 
         {% button 
             text=_"admin"
-            class="admin btn btn-mini" 
+            class="admin btn btn-default btn-xs" 
             title=_"Visit the admin page for this site." 
             postback={site_admin site=name} %}
 

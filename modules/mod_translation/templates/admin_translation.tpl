@@ -44,14 +44,14 @@
                             <td class="clickable" id="{{ #a.code }}">{{ code|default:"-" }}</td>
                             <td class="clickable" id="{{ #b.code }}">
                                 <div class="pull-right">
-                                    {% button class="btn btn-mini" text=_"Delete" 
+                                    {% button class="btn btn-default btn-xs" text=_"Delete" 
                                         action={dialog_open
                                             title=_"Delete language"
                                             template="_dialog_language_delete.tpl"
                                             code=code lang=lang
                                         }
                                     %}
-                                    {% button class="btn btn-mini"text=_"Edit" 
+                                    {% button class="btn btn-default btn-xs"text=_"Edit" 
                                         action={dialog_open 
                                             title=_"Edit language"|append:": "|append:lang.language template="_dialog_language_edit.tpl"
                                             code=code lang=lang}
@@ -80,24 +80,24 @@
 
     <div class="well">
 
-        <div class="control-group">
-            <div class="controls">
-                {% button class="btn" text=_"Generate .pot files" 
+        <div class="form-group">
+            <div>
+                {% button class="btn btn-default" text=_"Generate .pot files" 
                     action={postback postback="translation_generate" delegate="mod_translation"} %}
-                <span class="help-inline">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
+                <span class="help-block">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
             </div>
         </div>
-        <div class="control-group">
-            <div class="controls">
-                {% button class="btn" text=_"Reload Translations" 
+        <div class="form-group">
+            <div>
+                {% button class="btn btn-default" text=_"Reload Translations" 
                     action={postback postback="translation_reload" delegate="mod_translation"} %}
-                <span class="help-inline">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
+                <span class="help-block">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
             </div>
         </div>
-        <div class="">
-            <div class="controls">
-                <a class="btn" href="{% url admin_translation_status %}" class="button">{_ Translation status _}</a>
-                <span class="help-inline">{_ Show per module how much of the templates are translated. _}</span>
+        <div>
+            <div>
+                <a class="btn btn-default" href="{% url admin_translation_status %}" class="button">{_ Translation status _}</a>
+                <span class="help-block">{_ Show per module how much of the templates are translated. _}</span>
             </div>
         </div>
 
@@ -107,7 +107,7 @@
                     action={config_toggle module="mod_translation" key="rewrite_url"}
                     action={admin_tasks task='flush'} 
                 %}
-                <label class="checkbox inline">
+                <label class="checkbox-inline">
                     <input type="checkbox" id="{{ #redir }}" value="1"
                     {% if m.config.mod_translation.rewrite_url.value
                         or m.config.mod_translation.rewrite_url.value|is_undefined %}checked="checked"{% endif %}

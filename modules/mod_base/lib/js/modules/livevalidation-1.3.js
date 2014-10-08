@@ -568,6 +568,8 @@ LiveValidation.prototype = {
         }else{
             $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
                     .closest('.control-group').removeClass("success").addClass("error");
+            $('label[for="'+this.element.id+'"]').addClass(this.invalidFieldClass);
+
             switch (this.elementType) {
             case LiveValidation.RADIO:
             case LiveValidation.CHECKBOX:
@@ -605,6 +607,7 @@ LiveValidation.prototype = {
     removeFieldClass: function(){
         $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
                 .closest('.control-group').removeClass("success").removeClass("error");
+        $('label[for="'+this.element.id+'"]').removeClass(this.invalidFieldClass);
         switch (this.elementType) {
         case LiveValidation.RADIO:
         case LiveValidation.CHECKBOX:

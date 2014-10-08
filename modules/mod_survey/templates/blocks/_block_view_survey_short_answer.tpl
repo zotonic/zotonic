@@ -5,7 +5,7 @@
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
-    <div class="controls">
+    <div>
     {% if blk.validation == "date" %}
         {% include "blocks/_block_view_survey_short_answer_date.tpl" %}
     {% else %}

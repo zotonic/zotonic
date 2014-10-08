@@ -53,7 +53,7 @@ render(Params, _Vars, Context) ->
                     false -> proplists:get_value(template, Params, "_menu.tpl")
                end,
     IdPrefix = proplists:get_value(id_prefix, Params, ""),
-    Class = proplists:get_value(class, Params, "nav"),
+    Class = proplists:get_value(class, Params, "nav navbar-nav"),
     MaxDepth = proplists:get_value(maxdepth, Params, 999),
     Menu = mod_menu:get_menu(MenuId, Context),
     Vars = [

@@ -24,9 +24,9 @@
         <h3 class="widget-header">{_ General Comment Form Settings _}</h3>
         <div class="widget-content">
 
-            <div class="control-group">
-                <div class="controls">
-                    <label class="inline checkbox" for="comments-moderate" title="{_ Require all comments to be reviewed by a moderator before displaying them on the public website _}">
+            <div class="form-group">
+                <div>
+                    <label class="checkbox-inline" for="comments-moderate" title="{_ Require all comments to be reviewed by a moderator before displaying them on the public website _}">
                         <input type="checkbox" id="comments-moderate" name="comments-moderate" value="1" {% if m.config.comments.moderate.value %}checked="checked"{% endif %} />
                         {_ Moderate comments _}
                     </label>

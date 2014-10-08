@@ -50,8 +50,8 @@
 				<div id="responsebody"></div>
 			</div>
 			<div id="decisiondetail">
-				<div>Decision: <select id="decisionid"></select></div>
-				<div>Calls: <select id="decisioncalls"></select></div>
+				<div>Decision: <select class="form-control" id="decisionid"></select></div>
+				<div>Calls: <select class="form-control" id="decisioncalls"></select></div>
 				<div>Input:</div>
 				<pre id="callinput"></pre>
 				<div>Output:</div>

@@ -20,8 +20,8 @@
 	        text=_"Make a new media item" 
 	        action={dialog_media_upload}
 	        %}
-        <a class="btn" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
-        <a class="btn disabled" href="{% url admin_media %}">{_ All media _}</a>
+        <a class="btn btn-default" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
+        <a class="btn btn-default disabled" href="{% url admin_media %}">{_ All media _}</a>
     </div>
 
     {% with m.search.paged[{query cat="media" text=q.qs page=q.page sort=q.qsort|default:"-created"}] as result %}
@@ -56,9 +56,9 @@
 		<td>
                     {{ medium.created|date:"M d, H:i"|default:"&nbsp;" }}
                     <div class="pull-right">
-			{% button class="btn btn-mini" text=_"delete" disabled=r.is_protected action={dialog_delete_rsc
+			{% button class="btn btn-default btn-xs" text=_"delete" disabled=r.is_protected action={dialog_delete_rsc
                         id=id on_success={slide_fade_out target=#li.id}} %}
-                        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-mini">{_ edit _}</a>
+                        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                     </div>
                 </td>
             </tr>
@@ -74,7 +74,7 @@
 	    {% endfor %}
         </tbody>
     </table>
-    {% pager result=result dispatch="admin_media" qargs %}
+    {% pager result=result dispatch="admin_media" qargs hide_single_page %}
 
     {% endwith %}
 </div>

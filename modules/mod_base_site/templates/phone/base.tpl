@@ -14,7 +14,6 @@
 	{% all include "_html_head.tpl" %}
 	{% lib 
 	        "bootstrap/css/bootstrap.css" 
-	        "bootstrap/css/bootstrap-responsive.css" 
 	        "bootstrap/css/bootstrap-base-site.css" 
 	        "css/jquery.loadmask.css" 
 	        "css/z.growl.css" 
@@ -28,7 +27,7 @@
 {% block navbar %}
 	{% include "_navbar.tpl" %}
 {% endblock %}
-<div class="container-fluid">
+<div class="container">
 	{% block content_area %}
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
 		{% block content %}{% endblock %}

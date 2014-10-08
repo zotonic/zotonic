@@ -105,49 +105,47 @@
             z_dialog_open({
                 title: "Media properties",
                 text: '<form id="zmedia-props-form" class="form">' +
-                    '  <div class="row">' +
-                    '      <div class="span3">' +
-                    '          <img src="/admin/media/preview/' + id + '" class="z-tinymce-media-left" />' +
+                    '  <div class="form-group row">' +
+                    '      <div class="col-md-6">' +
+                    '          <img style="width: 100%" src="/admin/media/preview/' + id + '" class="z-tinymce-media-left" />' +
                     '      </div>'  +
-                    '      <div class="span6">' +
-                    '          <div class="row">' +
-                    '              <div class="span3">' +
-                    '                  <div class="control-group">' +
+                    '      <div class="col-md-3">' +
+                    '                  <div class="form-group">' +
                     '                      <label class="control-label">Alignment</label>' +
                     '                      <div class="controls">' +
-                    '                          <label class="radio"><input type="radio" name="align" ' + (opts.align === 'block' ? 'checked="checked"' : '') + ' value="block" id="a-block"> Between text</label>' +
-                    '                          <label class="radio"><input type="radio" name="align" ' + (opts.align === 'left' ? 'checked="checked"' : '') + 'value="left" id="a-left"> Aligned left</label>' +
-                    '                          <label class="radio"><input type="radio" name="align" ' + (opts.align === 'right' ? 'checked="checked"' : '') + 'value="right" id="a-right"> Aligned right</label>' +
+                    '                          <div class="radio"><label><input type="radio" name="align" ' + (opts.align === 'block' ? 'checked="checked"' : '') + ' value="block" id="a-block"> Between text</label></div>' +
+                    '                          <div class="radio"><label><input type="radio" name="align" ' + (opts.align === 'left' ? 'checked="checked"' : '') + 'value="left" id="a-left"> Aligned left</label></div>' +
+                    '                          <div class="radio"><label><input type="radio" name="align" ' + (opts.align === 'right' ? 'checked="checked"' : '') + 'value="right" id="a-right"> Aligned right</label></div>' +
+                    '                      </div>' +
+                    '                  </div>' +
+                    '                  <div class="form-group">' +
+                    '                      <label class="control-label">Crop</label>' +
+                    '                      <div class="controls">' +
+                    '                          <div class="checkbox"><label><input type="checkbox" name="crop" ' + (opts.crop === 'crop' ? 'checked="checked"' : '') + ' value="crop" id="a-crop"> Crop image</label></div>' +
                     '                      </div>' +
                     '                  </div>' +
                     '              </div>' +
-                    '              <div class="span3">' +
-                    '                  <div class="control-group">' +
+                    '              <div class="col-md-3">' +
+                    '                  <div class="form-group">' +
                     '                      <label class="control-label">Size</label>' +
                     '                      <div class="controls">' +
-                    '                          <label class="radio"><input type="radio" name="size" ' + (opts.size === 'small' ? 'checked="checked"' : '') + ' value="small" id="a-small"> Small</label>' +
-                    '                          <label class="radio"><input type="radio" name="size" ' + (opts.size === 'middle' || opts.size === undefined ? 'checked="checked"' : '') + 'value="middle" id="a-middle"> Middle</label>' +
-                    '                          <label class="radio"><input type="radio" name="size" ' + (opts.size === 'large' ? 'checked="checked"' : '') + 'value="large" id="a-large"> Large</label>' +
+                    '                          <div class="radio"><label><input type="radio" name="size" ' + (opts.size === 'small' ? 'checked="checked"' : '') + ' value="small" id="a-small"> Small</label></div>' +
+                    '                          <div class="radio"><label><input type="radio" name="size" ' + (opts.size === 'middle' || opts.size === undefined ? 'checked="checked"' : '') + 'value="middle" id="a-middle"> Middle</label></div>' +
+                    '                          <div class="radio"><label><input type="radio" name="size" ' + (opts.size === 'large' ? 'checked="checked"' : '') + 'value="large" id="a-large"> Large</label></div>' +
+                    '                      </div>' +
+                    '                  </div>' +
+                    '                  <div class="form-group">' +
+                    '                      <label class="control-label">Link</label>' +
+                    '                      <div class="controls">' +
+                    '                          <div class="checkbox"><label><input type="checkbox" name="link" ' + (opts.link === 'link' ? 'checked="checked"' : '') + ' value="crop" id="a-link"> Make link</label></div>' +
                     '                      </div>' +
                     '                  </div>' +
                     '              </div>' +
                     '          </div>' +
                     '          <div class="row">' +
-                    '              <div class="span3">' +
-                    '                  <div class="control-group">' +
-                    '                      <label class="control-label">Crop</label>' +
-                    '                      <div class="controls">' +
-                    '                          <label class="checkbox"><input type="checkbox" name="crop" ' + (opts.crop === 'crop' ? 'checked="checked"' : '') + ' value="crop" id="a-crop"> Crop image</label>' +
-                    '                      </div>' +
-                    '                  </div>' +
+                    '              <div class="col-md-3">' +
                     '              </div>'  +
-                    '              <div class="span3">' +
-                    '                  <div class="control-group">' +
-                    '                      <label class="control-label">Link</label>' +
-                    '                      <div class="controls">' +
-                    '                          <label class="checkbox"><input type="checkbox" name="link" ' + (opts.link === 'link' ? 'checked="checked"' : '') + ' value="crop" id="a-link"> Make link</label>' +
-                    '                      </div>' +
-                    '                  </div>' +
+                    '              <div class="col-md-3">' +
                     '              </div>' +
                     '          </div>' +
                     '      </div>'  +

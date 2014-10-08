@@ -37,13 +37,13 @@
 	{% wire action={event type='named' name="zlink" action={dialog_open title="Add link" template="_action_dialog_zlink.tpl"}} %}
 #}
 
-	<div class="control-group">
+	<div class="form-group">
 		{% if explanation %}
 			<p class="help-block">{{ explanation }}</p>
 		{% endif %}
 		{% with is_i18n|if:r.translation[lang_code].body:r.body	 as	 body %}
 		{% if r.is_editable %}
-			<textarea rows="10" cols="10" id="rsc-body{{ lang_code_for_id }}" name="body{{ lang_code_with_dollar }}" class="body z_editor-init input-block-level" {% include "_language_attrs.tpl" language=lang_code %}>{{ body|escape }}</textarea>
+			<textarea rows="10" cols="10" id="rsc-body{{ lang_code_for_id }}" name="body{{ lang_code_with_dollar }}" class="body z_editor-init form-control" {% include "_language_attrs.tpl" language=lang_code %}>{{ body|escape }}</textarea>
 		{% else %}
 			{{ body }}
 		{% endif %}

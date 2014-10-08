@@ -11,7 +11,7 @@
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/z.inputoverlay.js"
 	"js/modules/jquery.loadmask.js"
-	"bootstrap/js/bootstrap.js"
+	"bootstrap/js/bootstrap.min.js"
 	"js/modules/responsive.js"
 %}
 

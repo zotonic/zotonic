@@ -1,9 +1,9 @@
-        <input type="hidden" class="span6" name="{{ blk.name }}" id="{{ #id }}" value="{{ answers[blk.name]|escape }}" />
+        <input type="hidden" class="col-lg-6 col-md-6" name="{{ blk.name }}" id="{{ #id }}" value="{{ answers[blk.name]|escape }}" />
         {% if blk.is_required %}
             {% validate id=#id name=blk.name type={presence} %}
         {% endif %}
 
-        <select id="{{ #y }}" class="input-mini">
+        <select id="{{ #y }}" class="col-md-2 form-control">
             <option></option>
             {% with now|date:"Y" as year %}
             {% for i in year|range:(year-110):(0-1) %}
@@ -11,7 +11,7 @@
             {% endfor %}
             {% endwith %}
         </select>
-        <select id="{{ #m }}" class="input-medium">
+        <select id="{{ #m }}" class="col-md-6 form-control">
             <option></option>
             <option value="1">{_ January _}</option>
             <option value="2">{_ February _}</option>
@@ -26,7 +26,7 @@
             <option value="11">{_ November _}</option>
             <option value="12">{_ December _}</option>
         </select>
-        <select id="{{ #d }}" class="input-mini">
+        <select id="{{ #d }}" class="col-md-2 form-control">
             <option></option>
             {% for i in 1|range:31 %}
                 <option>{{ i }}</option>

@@ -49,8 +49,8 @@
                 <td>{{ value|escape|default:"-"|truncate:65 }}</td>
                 <td>
                     <div class="pull-right">
-                        {% button class="btn btn-mini" text=_"Delete" action=deleteAction %}
-                        {% button class="btn btn-mini" text=_"Edit" action=updateAction %}
+                        {% button class="btn btn-default btn-xs" text=_"Delete" action=deleteAction %}
+                        {% button class="btn btn-default btn-xs" text=_"Edit" action=updateAction %}
                     </div>
                     {{ c.modified|date:_"d M Y, H:i" }}
                 </td>
