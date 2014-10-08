@@ -21,11 +21,11 @@ You can do this from the Erlang shell without using the /admin or the reset-pass
 
 First go to the Erlang shell::
 
-  marc$ ./bin/zotonic shell 
+  marc$ ./bin/zotonic shell
 
 And then from the Erlang command prompt::
 
-  (zotonic@host)1> m_identity:set_username_pw(1234, "username", "password", z:c(yoursitename)). 
+  (zotonic@host)1> m_identity:set_username_pw(1234, "username", "password", z_acl:sudo(z:c(yoursitename))).
 
 Where `1234` is the id of your user (this must be an integer), ``yoursitename`` is the name of your site.
 
@@ -40,4 +40,3 @@ That means you are trying to change the password for the admin (user
 your admin password in the site’s config file, use the property
 ``admin_password``. For more info on this, see
 :ref:`manual-site-anatomy`.
-
