@@ -1,6 +1,6 @@
 {% ifequal align "block" %}
-	{% ifequal m.rsc[id].medium.mime "text/html-video-embed" %}
-		<section class="video-wrapper">
+	{% ifequal m.rsc[id].medium.mime "text/html-oembed" %}
+		<section class="oembed-wrapper">
 			{% media m.rsc[id].medium %}
 		</section>
 	{% else %}

@@ -5,8 +5,8 @@
 		<h1><a href="{{m.rsc[id].page_url }}" title="{{ m.rsc[id].title }}">{{ m.rsc[id].title }}</a></h1>
 		{% include "_article_meta.tpl" id=id %}
 
-		{% ifequal m.rsc[id].media[1].mime "text/html-video-embed" %}
-			<section class="video-wrapper clearfix">
+		{% ifequal m.rsc[id].media[1].mime "text/html-oembed" %}
+			<section class="oembed-wrapper clearfix">
 				{% media m.rsc[id].media[1] %}
 			</section>
 		{% else %}
