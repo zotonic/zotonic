@@ -41,10 +41,10 @@ ensure_started(App) ->
         {error, {already_started, App}} ->
             ok;
         {error, {Tag, Msg}} when is_list(Tag), is_list(Msg) ->
-                io_lib:format("~s: ~s", [Tag, Msg]);
+            io_lib:format("~s: ~s", [Tag, Msg]);
         {error, {bad_return, {{M, F, Args}, Return}}} ->
-                A = string:join([io_lib:format("~p", [A])|| A <- Args], ", "),
-                io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p", [App, M, F, A, Return]);
+            A = string:join([io_lib:format("~p", [A])|| A <- Args], ", "),
+            io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p", [App, M, F, A, Return]);
         {error, Reason} ->
             io_lib:format("~p", [Reason])
     end.
@@ -52,15 +52,17 @@ ensure_started(App) ->
 %% @spec start() -> ok
 %% @doc Start the zotonic server.
 start() -> start([]).
-	
+    
 %% @spec start(_Args) -> ok
 %% @doc Start the zotonic server.
 start(_Args) ->
     test_erlang_version(),
+    ensure_mnesia_dir(),
     zotonic_deps:ensure(),    
     case ensure_started(zotonic) of
-        ok -> ok;
-	Message ->
+        ok -> 
+            ok;
+        Message ->
             lager:error("Zotonic start error: ~s~n", [Message]),
             init:stop()
     end.
@@ -83,8 +85,8 @@ stop() ->
 stop([Node]) ->
     io:format("Stopping:~p~n",[Node]),
     case net_adm:ping(Node) of
-    	pong -> rpc:cast(Node, init, stop, []);
-    	pang -> io:format("There is no node with this name~n")
+        pong -> rpc:cast(Node, init, stop, []);
+        pang -> io:format("There is no node with this name~n")
     end,
     init:stop().
 
@@ -100,8 +102,8 @@ status() ->
 %% @spec status([node()]) -> ok
 %% @doc Get server status.  Prints the state of sites running.
 status([Node]) ->
-	[io:format("~-20s- ~s~n", [Site, Status]) || [Site,Status|_] <- rpc:call(Node, z_sites_manager, get_sites_status, [])],
-	ok.
+    [io:format("~-20s- ~s~n", [Site, Status]) || [Site,Status|_] <- rpc:call(Node, z_sites_manager, get_sites_status, [])],
+    ok.
 
 %% @spec update() -> ok
 %% @doc Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
@@ -109,14 +111,24 @@ update() ->
     z:m(),
     ok.
 
+%% @doc Ensure that mnesia has created its schema in the configured mnesia directory.
+ensure_mnesia_dir() ->
+    application:load(mnesia),
+    {ok, Dir} = application:get_env(mnesia, dir),
+    case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir,"LATEST.LOG")) of
+        true ->
+            ok;
+        false ->
+            ok = mnesia:create_schema([node()])
+    end.
 
 %% @spec update([Node]) -> ok
 %% @doc Update the server on a specific node with new code on disk and flush the caches.
 update([Node]) ->
     io:format("Update:~p~n",[Node]),
     case net_adm:ping(Node) of
-    	pong -> rpc:cast(Node, zotonic, update, []);
-    	pang -> io:format("There is no node with this name~n")
+        pong -> rpc:cast(Node, zotonic, update, []);
+        pang -> io:format("There is no node with this name~n")
     end,
     init:stop().
 
@@ -139,3 +151,4 @@ otp_version() ->
 
 run_tests() ->
     z_media_preview_tests:test().
+
