@@ -1,1 +1,5 @@
-/* Placeholder CSS file. Override this one in your site. */
+/* Placeholder CSS pfile. Override this one in your site. */
+a.navbar-brand {
+    color: #e0e0e0 !important;
+}
+
