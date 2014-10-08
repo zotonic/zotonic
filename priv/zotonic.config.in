@@ -32,6 +32,7 @@
 
 %%% PostgreSQL database defaults.
 %%% These are the defaults for the equally named options in your site's config file.
+   {dbdatabase, "zotonic"},
    {dbschema, "public"},
    {dbpassword, []},
    {dbuser, "zotonic"},

@@ -93,7 +93,7 @@ db_opts(SiteProps) ->
     Defaults = [{dbhost, z_config:get(dbhost, "localhost")},
                 {dbport, z_config:get(dbport, 5432)},
                 {dbpassword, z_config:get(dbpassword, "")},
-                {dbusername, z_config:get(dbusername, "zotonic")},
+                {dbuser, z_config:get(dbuser, "zotonic")},
                 {dbdatabase, z_config:get(dbdatabase, "zotonic")},
                 {dbschema, z_config:get(dbschema, "public")}],
     lists:foldl(fun({K, V}, Acc) ->
