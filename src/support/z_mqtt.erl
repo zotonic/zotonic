@@ -67,6 +67,7 @@ route(#mqtt_msg{} = Msg, Context) ->
     },
     case z_mqtt_acl:is_allowed(publish, Msg1#mqtt_msg.topic, Context) of
         true ->
+            opt_debug_pubsub("publish", Msg1#mqtt_msg.topic, Context),
             emqtt_router:publish(Msg1);
         false ->
             lager:debug("MQTT publish access denied to ~p", [Msg1#mqtt_msg.topic]),
@@ -80,6 +81,7 @@ publish(#mqtt_msg{} = Msg, Context) ->
     },
     case z_mqtt_acl:is_allowed(publish, Msg1#mqtt_msg.topic, Context) of
         true ->
+            opt_debug_pubsub("publish", Msg1#mqtt_msg.topic, Context),
             emqtt_router:publish(Msg1);
         false ->
             lager:debug("MQTT publish access denied to ~p", [Msg1#mqtt_msg.topic]),
@@ -95,7 +97,8 @@ publish(Topic, #z_mqtt_payload{} = Payload, Context) ->
         encoder=fun(B) -> z_mqtt:encode_packet_payload(B) end
     },
     case z_mqtt_acl:is_allowed(publish, Msg#mqtt_msg.topic, Context) of
-        true -> 
+        true ->
+            opt_debug_pubsub("publish", Msg#mqtt_msg.topic, Context),
             emqtt_router:publish(Msg);
         false ->
             lager:debug("MQTT publish access denied to ~p", [Msg#mqtt_msg.topic]),
@@ -119,7 +122,7 @@ subscribe(Topic, Qos, Pid, Context) when is_pid(Pid) ->
     Topic1 = expand_context_topic(Topic, Context),
     case z_mqtt_acl:is_allowed(subscribe, Topic1, Context) of
         true ->
-            lager:debug("MQTT subscribe ~p to ~p for ~p", [Pid, Topic1, z_acl:user(Context)]),
+            opt_debug_pubsub("subscribe", Topic1, Context),
             emqtt_router:subscribe({Topic1, Qos}, Pid);
         false ->
             lager:debug("MQTT subscribe access denied to ~p for ~p", [Topic, z_acl:user(Context)]),
@@ -157,6 +160,13 @@ wrap_payload(Data, Context) ->
         payload=Data
     }.
 
+opt_debug_pubsub(Action, Topic, Context) ->
+    case z_convert:to_bool(m_config:get_value(mod_mqtt, debug_pubsub, Context)) of
+        true ->
+            lager:info("[~p] mod_mqtt ~s: ~s", [z_context:site(Context), Action, Topic]);
+        false ->
+            nop
+    end.
 
 payload_data(#mqtt_msg{payload=Payload}) ->
     payload_data(Payload);

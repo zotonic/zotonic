@@ -33,8 +33,8 @@ There are three special topics:
 
  * Use any integer to map to the resource’s update topic. For example if id is *1234* then the topic will be ``~site/rsc/1234``
  * Use the tuple ``{object id=... predicate=...}`` to listen to changes of a specific predicate of a page. An example of a mapped topic is ``~site/rsc/1234/o/author``
- * Use the tuple ``{object id=...}`` to listen to changes of a all predicates of a page. An example of a mapped topic is ``~site/rsc/1234/o/+``
- * Use the tuple ``{subject id=... }`` to listen to changes of connections to a page. An example of a mapped topic is ``~site/rsc/1234/s/author``
+ * Use the tuple ``{object id=...}`` to listen to changes of outgoing connections from a page. An example of a mapped topic is ``~site/rsc/1234/o/+``
+ * Use the tuple ``{subject id=... }`` to listen to changes of incoming connections to a page. An example of a mapped topic is ``~site/rsc/1234/s/author``
 
 
 Live actions

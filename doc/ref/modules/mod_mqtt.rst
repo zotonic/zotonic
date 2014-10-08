@@ -280,3 +280,15 @@ In this way Zotonic knows which site the user belongs to.
 If no matching site can be found, or if no hostname is given, then Zotonic 
 will try to authenticate against the default site.
 
+
+Debugging
+^^^^^^^^^
+
+To see which topics are being subscribed and published to, you can
+configure ``mod_mqtt`` to print debug messages on the Zotonic console
+whenever a publish or subscribe occurs.
+
+To do so, go to the modules overview in the admin interface, and
+scroll down to ``mod_mqtt``. Then, click on the "configure" button in
+the row in the right and tick the checkbox to enable these debug
+messages.
