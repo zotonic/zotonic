@@ -62,17 +62,20 @@ test(Q, Answers, Context) ->
         _ -> eval(proplists:get_value(condition2, Q), proplists:get_value(target2, Q), Answers, Context)
     end.
     
-eval(undefined, _, _, _Context) ->
-    ok;
 eval(_, undefined, _, _Context) ->
     ok;
+eval(undefined, Target, _, _Context) ->
+    case z_string:trim(Target) of
+        <<>> -> ok;
+        T -> {jump, T}
+    end;
 eval(Expr, Target, Answers, Context) ->
     eval1(z_string:trim(Expr), z_string:trim(Target), Answers, Context).
 
-eval1(<<>>, _, _, _Context) ->
-    ok;
 eval1(_, <<>>, _, _Context) ->
     ok;
+eval1(<<>>, Target, _, _Context) ->
+    {jump, Target};
 eval1(Expr, Target, Answers, Context) ->
     case z_expression:parse(z_html:unescape(Expr)) of
         {ok, Tree} ->
