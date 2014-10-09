@@ -27,8 +27,7 @@ Upon first visit, the site shows a friendly message, which tells
 visitors that the site they are looking at has probably not been
 configured correctly yes. It also asks for a password to log in.
 
-The password that is used for this is a generated password which sites
-in the ``priv/config`` file of the Zotonic folder.
+The password for this site is automatically generated and stored in ``~/.zotonic/zotonic.config``.
 
 .. image:: /img/zotonic_status_sites.png
 
