@@ -105,7 +105,7 @@ send(Id, #email{} = Email, Context) ->
 init(_Args) ->
     ok = create_email_queue(),
     timer:send_interval(5000, poll),
-    State = #state{},
+    State = update_config(#state{}),
     process_flag(trap_exit, true),
     {ok, State}.
     
