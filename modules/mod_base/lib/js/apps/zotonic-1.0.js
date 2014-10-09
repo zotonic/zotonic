@@ -538,7 +538,7 @@ function z_transport_maybe_ack(msg)
             "msg_id": msg.msg_id,
             "push_queue": msg.push_queue,
             "session_id": window.z_sid || undefined,
-            "page_id": msg.page_id || z_pageid,
+            "page_id": msg.page_id || z_pageid
         };
         z_transport_queue.push({
             msg: ack,
@@ -560,7 +560,7 @@ function z_transport_timeout(msg_id)
                 z_transport_queue.push({
                     msg: z_transport_acks[msg_id].msg,
                     msg_id: msg_id,
-                    options: z_transport_acks[msg_id].options || {},
+                    options: z_transport_acks[msg_id].options || {}
                 });
                 z_transport_acks[msg_id].is_queued = true;
             }
@@ -991,7 +991,7 @@ function z_comet_poll_ajax()
                     },
                     403: function() {
                         z_transport_delegates.session("session_invalid");
-                    },
+                    }
                 },
             error: function(xmlHttpRequest, textStatus, errorThrown) {
                        setTimeout(function() { z_comet_poll_ajax(); }, z_comet_reconnect_timeout);
