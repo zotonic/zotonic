@@ -106,7 +106,7 @@ Source the file to update the environment::
 
 Delete the Zotonic config file (this will be re-generated automatically when zotonic next starts up)::
 
-  zotonic:~$ rm ~zotonic/zotonic/priv/config
+  zotonic:~$ rm ~/.zotonic/zotonic.config
   
 Set the port for your site. Edit the hostname entry in ``zotonic/user/sites/yoursite/config`` to read as follows::
 

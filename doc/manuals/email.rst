@@ -65,7 +65,7 @@ finally the `email` property of the admin user (user with id 1).
 Zotonic-wide settings
 .....................
 
-The file ``priv/config`` can be configured to hold any of the
+The file ``~/.zotonic/zotonic.config`` can be configured to hold any of the
 configuration options below. They are in effect for every site running
 in the Zotonic instance.
 
@@ -163,7 +163,7 @@ How does Zotonic know the domain?
 
 It checks in order:
 
-- global priv/config: ``smtp_bounce_domain`` setting
+- global ``~/.zotonic/zotonic.config``: ``smtp_bounce_domain`` setting
 - site’s config: ``smtphost``  (you can also set this with the admin config as site.smtphost)
 - site’s config: ``hostname``
 
