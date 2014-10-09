@@ -31,5 +31,5 @@ The following environment variables influence how Zotonic starts up.
 
   
 .. note:: When the variables do not seem to have effect, check
-          Zotonic’s ``priv/config`` file. The above variables are
-          overridden by the ones in that file, at the moment.
+          ``~/.zotonic/zotonic.config``. The above variables are
+          overridden by the ones in that file.
