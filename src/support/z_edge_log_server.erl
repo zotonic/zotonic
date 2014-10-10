@@ -147,18 +147,14 @@ code_change(_OldVsn, State, _Extra) ->
 
 do_check(Host) ->
     Context = z_acl:sudo(z_context:new(Host)),
-    z_db:transaction(
-        fun(Ctx) ->
-            do_check_1(z_db:q("
-                            select id,op,subject_id,predicate,object_id,edge_id
-                            from edge_log
-                            order by id
-                            limit $1",
-                            [?CLEANUP_BATCH_SIZE],
-                            Ctx),
-                       Ctx)
-        end,
-        Context).
+    do_check_1(z_db:q("
+                    select id,op,subject_id,predicate,object_id,edge_id
+                    from edge_log
+                    order by id
+                    limit $1",
+                    [?CLEANUP_BATCH_SIZE],
+                    Context),
+               Context).
 
 do_check_1([], _Context) ->
     {ok, 0};
