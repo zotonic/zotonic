@@ -458,7 +458,7 @@ ul.connections-list li {
 ul.connections-list li .btns {
     top: -2px;
 }
-a span.category {
+span.category {
     color: #bbb;
 }
 #unlink-undo-message div.alert {
