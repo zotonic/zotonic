@@ -1,7 +1,11 @@
 {% if id %}<li id="{{ #menu.c }}-{{ id }}" class="menu-item">
 	<div id="{{ menu_id|default:#menu.id }}" data-page-id="{{ id }}">
 	    <img class="grippy" src="/lib/images/grippy.png" title="{_ Drag me _}" />
-	    <span class="title-{{id}}">{{ id.short_title|default:id.title }}</span>
+	    <span class="title-{{id}}">
+	    	{% image id mediaclass="admin-list-dashboard" %}
+	    	{{ id.short_title|default:id.title }}
+	    	<span class="category">{{ id.category_id.title }}</span>
+	    </span>
 
 		<i class="warning glyphicon glyphicon-eye-close" {% if id.is_published %}style="display: none"{% endif %}></i>
 
