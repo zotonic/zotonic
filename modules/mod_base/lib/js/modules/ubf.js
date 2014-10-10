@@ -249,7 +249,7 @@ limitations under the License.
 
         try {
             while(true) {
-                opcode = bytes[0];
+                opcode = bytes.charAt(0);
                 j = _operation(opcode, bytes, env, stack);
                 if(j === 0) {
                     if(ready_fun) {
@@ -280,13 +280,13 @@ limitations under the License.
         var current, buf = [], i = 0;
 
         while(true) {
-            current = bytes[i];
+            current = bytes.charAt(i);
             
             if(current === undefined)
                 throw "Missing terminator";
             
             if(current == "\\") {
-                switch(bytes[i+1]) {
+                switch(bytes.charAt(i+1)) {
                     case "\\":
                         buf.push("\\");
                         break;
@@ -348,7 +348,7 @@ limitations under the License.
             rest = bytes.slice(length),
             ws_length = skip_ws(rest);
 
-        if(rest[ws_length] != "~") {
+        if(rest.charAt(ws_length) != "~") {
             stack.push(integer);
             return length;
         }
@@ -357,7 +357,7 @@ limitations under the License.
         var binary = rest.slice(ws_length + 1, ws_length + charct + 1);
         stack.push(binary);
 
-        if(rest[ws_length+1+charct] != "~")
+        if(rest.charAt(ws_length+1+charct) != "~")
             throw "UBF decode: missing closing ~";
 
         return length + ws_length + charct + 2;
@@ -427,13 +427,13 @@ limitations under the License.
     }
 
     function _pop(bytes, env, stack) {
-        var code = bytes[1];
+        var code = bytes.charAt(1);
         env[code] = stack.pop();
         return 2;
     }
 
     function _push(bytes, env, stack) {
-        var code = bytes[0];
+        var code = bytes.charAt(0);
         if(!env.hasOwnProperty(code))
             throw "Unknown register value: " + code;
         stack.push(env[code]);
