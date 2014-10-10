@@ -302,7 +302,7 @@ maybe_duplicate_preview(Ms, Context) ->
                                 {is_deletable_preview, true}
                                 | Ms1
                             ],
-                            {ok, ?DEBUG(Ms2)};
+                            {ok, Ms2};
                         {error, _} = Error ->
                             lager:error(z_context:lager_md(Context),
                                         "Duplicate preview: error ~p for preview file ~p",
