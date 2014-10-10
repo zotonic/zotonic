@@ -280,7 +280,7 @@ replace(SubjectId, Pred, NewObjects, Context) ->
 
     replace1(SubjectId, PredId, NewObjects, Context) ->
         {ok, PredName} = m_predicate:id_to_name(PredId, Context),
-        case objects(SubjectId, PredName, Context) of
+        case objects(SubjectId, PredId, Context) of
             NewObjects -> 
                 ok;
 
@@ -289,41 +289,19 @@ replace(SubjectId, Pred, NewObjects, Context) ->
                 Allowed1 = [ z_acl:is_allowed(delete, 
                                              #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId},
                                              Context)
-                            || ObjectId <- CurrObjects ],
+                            || ObjectId <- CurrObjects -- NewObjects ],
                 Allowed2 = [ z_acl:is_allowed(insert, 
                                              #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId},
                                              Context)
-                            || ObjectId <- NewObjects ],
+                            || ObjectId <- NewObjects -- CurrObjects ],
 
                 case is_allowed(Allowed1) andalso is_allowed(Allowed2) of
                     true ->
-                        Values = string:join([
-                            lists:flatten([
-                                $(, integer_to_list(SubjectId),
-                                $,, integer_to_list(PredId),
-                                $,, integer_to_list(Id),
-                                $,, z_convert:to_list(z_acl:user(Context)),
-                                ",now())"
-                            ]) || Id <- NewObjects
-                        ], ","),
-                        F = fun(Ctx) ->
-                                    z_db:q("delete from edge where subject_id = $1 and predicate_id = $2", 
-                                           [SubjectId, PredId], Ctx),
-                                    case NewObjects of
-                                        [] -> nop;
-                                        _ ->
-                                            z_db:q("insert into edge (subject_id, predicate_id, object_id, creator_id, created)
-                                                        values "++Values, Ctx)
-                                    end,
-                                    m_rsc:touch(SubjectId, Ctx)
-                        end,
-            
-                        % Sync all caches, notify edge delete/insert listeners
-                        z_db:transaction(F, Context),
+                        Result = set_sequence(SubjectId, PredId, NewObjects, Context),
                         z_edge_log_server:check(Context),
-                        ok;
-                    AclError ->
-                        {error, {acl, AclError}}
+                        Result;
+                    false ->
+                        {error, eacces}
                 end
         end.
 
