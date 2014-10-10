@@ -147,7 +147,9 @@ concatenate_stream({file, Size, Filename}, Acc) ->
     {ok, Data} = file:read(Fh, Size),
     ok = file:close(Fh),
     <<Acc/binary, Data/binary>>;
+concatenate_stream({stream, {B, Fun}}, Acc) when is_function(Fun) ->
+    concatenate_stream(Fun(), concatenate_stream(B, Acc));
 concatenate_stream({B, done}, Acc) ->
-    <<Acc/binary, B/binary>>;
+    concatenate_stream(B, Acc);
 concatenate_stream({B, Fun}, Acc) when is_function(Fun) ->
-    concatenate_stream(Fun(), <<Acc/binary, B/binary>>).
+    concatenate_stream(Fun(), concatenate_stream(B, Acc)).
