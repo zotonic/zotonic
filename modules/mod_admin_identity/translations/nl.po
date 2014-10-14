@@ -6,7 +6,6 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -44,9 +43,8 @@ msgid "Are you sure you want to delete the username from"
 msgstr "Weet je zeker dat je de gebruikersnaam wilt verwijderen van"
 
 #: modules/mod_admin_identity/mod_admin_identity.erl:151
-#, fuzzy
 msgid "Are you sure you want to delete this entry?"
-msgstr "Weet je zeker dat je de gebruikersnaam wilt verwijderen van"
+msgstr "Weet je zeker dat je dit wilt verwijderen?"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:46
@@ -70,6 +68,8 @@ msgid ""
 "clicking doesn't work then you can copy and paste the complete address to "
 "your browser."
 msgstr ""
+"Klik op de link hieronder om te bevestigen dat dit e-mailadres correct is. "
+"Wanneer je niet kan klikken kopieer dan het volledige adres in je browser."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
 msgid ""
@@ -150,7 +150,7 @@ msgid ""
 "Give the name and the e-mail address of the new user. A <em>person</em> page "
 "will be created for this user."
 msgstr ""
-"Geef de naam en e-mail adres van de nieuwe gebruiker. Een <em>persoon</em> "
+"Geef de naam en e-mailadres van de nieuwe gebruiker. Een <em>persoon</em> "
 "pagina wordt aangemaakt voor deze gebruiker."
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:6
@@ -175,6 +175,8 @@ msgid ""
 "If you don't know this site then you can ignore this e-mail. Maybe someone "
 "made an error typing his or her e-mail address."
 msgstr ""
+"Als je deze website niet kent dan kan je deze e-mail negeren. Misschien heeft "
+"iemand een fout gemaakt bij het invoeren van zijn of haar e-mailadres"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18
 msgid "Log on as this user"
@@ -424,26 +426,29 @@ msgid ""
 "of your e-mail address. You or the someone else either entered your e-mail "
 "address. You will not receive any additional e-mails because of this request."
 msgstr ""
+"Je hebt deze email ontvangen omdat jij of iemand anders heeft verzocht dit "
+"e-mailadres te verifiëren. Jij of iemand anders heeft jouw e-mailadres ingevoerd. "
+"Je krijgt geen andere e-mails als gevolg van dit verificatieverzoek."
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:12
 msgid "Your account name is"
-msgstr ""
+msgstr "Je gebruikersnaam is"
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:20
 msgid "Your address is now verified."
-msgstr ""
+msgstr "Je adres is nu geverifieerd."
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:20
 msgid "Your e-mail address is now verified."
-msgstr ""
+msgstr "Je e-amiladres is nu geverifieerd."
 
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
-msgstr ""
+msgstr "Je gebruikersgegevens voor"
 
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:15
 msgid "Your user details are:"
-msgstr ""
+msgstr "Je gebruikersgegevens zijn:"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:47
 #: modules/mod_admin_identity/templates/admin_users.tpl:56
