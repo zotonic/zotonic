@@ -462,7 +462,8 @@ p(Id, Property, DefaultValue, Context) ->
 p_no_acl(undefined, _Predicate, _Context) -> undefined;
 p_no_acl(Id, Prop, Context) when not is_integer(Id) -> 
     case rid(Id, Context) of
-        Rid when is_integer(Rid) -> p_no_acl(Rid, Prop, Context)
+        Rid when is_integer(Rid) -> p_no_acl(Rid, Prop, Context);
+        undefined -> undefined
     end;
 p_no_acl(Id, o, Context)  -> o(Id, Context);
 p_no_acl(Id, s, Context)  -> s(Id, Context);
