@@ -1044,17 +1044,9 @@ function z_websocket_start()
         z_ws_pong_count = 0;
     }
 
-    z_ws.onopen = function() {
-        z_websocket_ping();
-    };
-    
-    z_ws.onerror = function() {
-        z_websocket_restart();
-    };
-
-    z_ws.onclose = function (evt) {
-        z_websocket_restart();
-    };
+    z_ws.onopen = z_websocket_ping;
+    z_ws.onerror = z_websocket_restart; 
+    z_ws.onclose = z_websocket_restart;
 
     z_ws.onmessage = function (evt) {
         z_comet_data(evt.data);
@@ -1114,6 +1106,8 @@ function z_websocket_is_connected()
 function z_websocket_restart()
 {
     if (z_ws) {
+        z_ws.onclose = undefined;
+        z_ws.onerror = undefined;
         try { z_ws.close(); } catch(e) {} // closing an already closed ws can raise exceptions.
         z_ws = undefined;
     }
