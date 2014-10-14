@@ -142,11 +142,13 @@ lookup(Path, Context) ->
         undefined ->
             undefined;
         Props when is_list(Props) ->
-            Location = proplists:get_value(location, Props),
-            case filezcache:where(Location) of
-                Pid when is_pid(Pid) ->
+            {location, Location} = proplists:lookup(location, Props),
+            case filezcache:locate_monitor(Location) of
+                {ok, {file, _Size, Filename}} ->
+                    {ok, {filename, Filename, Props}};
+                {ok, {pid, Pid}} ->
                     {ok, {filezcache, Pid, Props}};
-                undefined ->
+                {error, enoent} ->
                     load_cache(Props, Context)
             end
     end.
@@ -158,18 +160,19 @@ load_cache(Props, Context) ->
     Id = proplists:get_value(id, Props),
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
+            lager:debug("[~p] File store cache load of ~p", [z_context:site(Context), Location]),
             Ctx = z_context:prune_for_async(Context), 
             StreamFun = fun(CachePid) ->
                             s3filez:stream(Cred, 
                                            Location1,
                                            fun({error, enoent}) ->
-                                                    lager:error("File store remote file is gone ~p (~p)", [Location, z_context:site(Ctx)]),
+                                                    lager:error("[~p] File store remote file is gone ~p", [z_context:site(Ctx), Location]),
                                                     ok = m_filestore:mark_error(Id, enoent, Ctx),
                                                     exit(normal);
                                               ({error, _} = Error) ->
                                                     % Abnormal exit when receiving an error.
                                                     % This takes down the cache entry.
-                                                    lager:error("Error ~p on cache load of ~p (~p)", [Error, Location, z_context:site(Ctx)]),
+                                                    lager:error("[~p] File store error ~p on cache load of ~p", [z_context:site(Ctx), Error, Location]),
                                                     exit(Error);
                                               (T) when is_tuple(T) ->
                                                     nop;
@@ -179,7 +182,7 @@ load_cache(Props, Context) ->
                                                     filezcache:finish_stream(CachePid)
                                            end)
                         end,
-            case filezcache:insert_stream(Location1, Size, StreamFun, []) of
+            case filezcache:insert_stream(Location, Size, StreamFun, [monitor]) of
                 {ok, Pid} ->
                     {ok, {filezcache, Pid, Props}};
                 {error, {already_started, Pid}} ->
