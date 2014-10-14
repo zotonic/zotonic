@@ -46,6 +46,11 @@
 	    {_ Enter a unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them. _}
     </p>
 
+    <!-- Fake usernames/password fields to stop Safari from autofilling -->
+    <!-- See https://github.com/zotonic/zotonic/issues/811 -->
+    <input style="position:absolute;top:-100px;" type="text" id="fake-username" name="fake-username" class="nosubmit" value="" />
+    <input style="position:absolute;top:-100px;" type="password" id="fake-password" name="fake-password" class="nosubmit" value="" />
+    <!-- End Safari -->
 	
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="new_username">{_ Username _}</label>

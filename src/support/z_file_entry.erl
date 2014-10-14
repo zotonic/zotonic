@@ -275,7 +275,7 @@ handle_info({gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
 handle_info({'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
     case is_mref_part(MRef, State#state.parts) of
         true ->
-            {stop, normal, State};
+            {next_state, locate, State, 0};
         false ->
             {next_state, StateName, State}
     end;

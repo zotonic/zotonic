@@ -54,7 +54,6 @@ msgstr ""
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:34
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:35
-#, fuzzy
 msgid "Copy translation"
 msgstr "Kopieer vertalingen"
 
@@ -157,9 +156,8 @@ msgid "Select language"
 msgstr "Selecteer taal"
 
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:4
-#, fuzzy
 msgid "Select the language to copy from:"
-msgstr "Selecteer taal"
+msgstr "Selecteer de brontaal voor het kopiëren"
 
 #: modules/mod_translation/templates/text/language_switch.tpl:7
 msgid "Select your preferred language."

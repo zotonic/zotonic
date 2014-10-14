@@ -50,7 +50,8 @@ start_link(Id, Path, Props, Context) ->
     gen_server:start_link({via, z_proc, {{upload, Path1}, Context}}, ?MODULE, [Id, Path1, Props, Context], []).
 
 init([Id, Path, Props, Context]) ->
-    lager:debug("Started uploader for ~p : ~p", [Path, z_context:site(Context)]),
+    z_context:lager_md(Context),
+    lager:debug("[~p] Started uploader for ~p", [z_context:site(Context), Path]),
     gen_server:cast(self(), start),
     {ok, #state{
             id = Id,
@@ -77,12 +78,12 @@ handle_cast(start, #state{id=Id, path=Path, context=Context, props=Props} = Stat
                             m_filestore:dequeue(Id, Context),
                             {stop, normal, State};
                         retry -> 
-                            lager:debug("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
+                            lager:debug("[~p] Filestore upload of ~p, sleeping 30m for retry.", [z_context:site(Context), Path]),
                             timer:send_after(?RETRY_DELAY, restart),
                             {noreply, State, hibernate}
                     end;
                 undefined ->
-                    lager:debug("Filestore no credentials found for ~p", [Path]),
+                    lager:debug("[~p] Filestore no credentials found for ~p", [z_context:site(Context), Path]),
                     m_filestore:dequeue(Id, Context),
                     {stop, normal, State}
             end;
@@ -114,16 +115,16 @@ handle_upload(Path, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
     case file:read_file_info(AbsPath) of
         {ok, #file_info{type=regular, size=0}} ->
-            lager:info("Not uploading ~p because it is empty", [Path]),
+            lager:info("[~p] Not uploading ~p because it is empty", [z_context:site(Context), Path]),
             ok;
         {ok, #file_info{type=regular, size=Size}} ->
             Result = do_upload(Cred, {filename, Size, AbsPath}),
             finish_upload(Result, Path, AbsPath, Size, Cred, Context);
         {ok, #file_info{type=Type}} ->
-            lager:error("Not uploading ~p because it is a ~p", [Path, Type]),
+            lager:error("[~p] Not uploading ~p because it is a ~p", [z_context:site(Context), Path, Type]),
             fatal;
         {error, enoent} ->
-            lager:error("Not uploading ~p because it is not found", [Path]),
+            lager:error("[~p] Not uploading ~p because it is not found", [z_context:site(Context), Path]),
             fatal
     end.
 
@@ -132,31 +133,30 @@ do_upload(#filestore_credentials{service= <<"s3">>, location=Location, credentia
 
 %% @doc Remember the new location in the m_filestore, move the file to the filezcache and delete the archived file
 finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, location=Location}, Context) ->
-    lager:debug("Moved ~p to ~p : ~p", [Path, Service, Location]),
-    Key = {z_context:site(Context), Path},
-    FzCache = start_empty_cache_entry(Key),
+    lager:debug("[~p] Moved ~p to ~p : ~p", [z_context:site(Context), Path, Service, Location]),
+    FzCache = start_empty_cache_entry(Location),
     {ok, _} = m_filestore:store(Path, Size, Service, Location, Context),
     case FzCache of
         {ok, Pid} ->
             force_stale(Path, Context),
             filezcache_entry:store(Pid, {tmpfile, AbsPath});
         {error, _} = Error ->
-            lager:warning("Error moving to cache entry ~p (moving ~p): ~p", [Key, Path, Error]),
+            lager:warning("[~p] Error moving to cache entry ~p (moving ~p): ~p", [z_context:site(Context), Location, Path, Error]),
             file:delete(AbsPath),
             ok
     end;
-finish_upload({error, _} = Error, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context) ->
-    lager:error("Filestore upload error to ~p : ~p of ~p error ~p", [Service, Location, Path, Error]),
+finish_upload({error, _} = Error, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, Context) ->
+    lager:error("[~p] Filestore upload error to ~p : ~p of ~p error ~p", [z_context:site(Context), Service, Location, Path, Error]),
     retry.
 
-start_empty_cache_entry(Key) ->
-    case filezcache:insert_wait(Key) of
+start_empty_cache_entry(Location) ->
+    case filezcache:insert_wait(Location) of
         {ok, _Pid} = OK ->
             OK;
         {error, {already_started, Pid}} ->
-            lager:warning("Duplicate cache entry ~p (will stop & restart)", [Key]),
+            lager:warning("Duplicate cache entry ~p (will stop & restart)", [Location]),
             ok = filezcache_entry:delete(Pid),
-            start_empty_cache_entry(Key);
+            start_empty_cache_entry(Location);
         {error, _} = Error ->
             Error
     end.
