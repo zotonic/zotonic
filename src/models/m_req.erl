@@ -65,11 +65,7 @@ get(_What, undefined) -> undefined;
 get(method, RD) -> wrq:method(RD);
 get(version, RD) -> wrq:version(RD);
 get(peer, RD) -> wrq:peer(RD);
-get(is_ssl, RD) ->
-    case wrq:port(RD) of
-        {ssl, _} -> true;
-        _ -> false
-    end; 
+get(is_ssl, RD) -> wrq:is_ssl(RD);
 get(host, RD) -> wrq:get_req_header_lc("host", RD);
 get(raw_path, RD) -> wrq:raw_path(RD);
 get(path, RD) -> wrq:path(RD);
