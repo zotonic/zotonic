@@ -353,7 +353,7 @@ prune_for_database(Context) ->
 prune_for_scomp(Context) ->
     Context#context{
         dbc=undefined,
-        wm_reqdata=undefined,
+        wm_reqdata=prune_reqdata(Context#context.wm_reqdata),
         updates=[],
         actions=[],
         content_scripts=[],
@@ -366,6 +366,15 @@ prune_for_scomp(Context) ->
 prune_for_scomp(VisibleFor, Context) ->
     z_acl:set_visible_for(VisibleFor, prune_for_scomp(Context)).
 
+prune_reqdata(undefined) ->
+    undefined;
+prune_reqdata(ReqData) ->
+    #wm_reqdata{
+        socket=ReqData#wm_reqdata.socket,
+        peer=ReqData#wm_reqdata.peer,
+        resp_headers=mochiweb_headers:empty(),
+        req_cookie=[]
+    }.
 
 %% @doc Make the url an absolute url by prepending the hostname.
 %% @spec abs_url(iolist(), Context) -> binary()
@@ -375,8 +384,15 @@ abs_url(Url, Context) when is_list(Url) ->
     abs_url(iolist_to_binary(Url), Context);
 abs_url(Url, Context) ->
     case has_url_protocol(Url) of
-        true -> Url;
-        false -> z_convert:to_binary([site_protocol(Context), "://", hostname_port(Context), Url])
+        true -> 
+            Url;
+        false ->
+            case z_notifier:first(#url_abs{url=Url}, Context) of
+                undefined ->
+                    z_convert:to_binary([site_protocol(Context), "://", hostname_port(Context), Url]);
+                AbsUrl ->
+                    AbsUrl
+            end
     end.
 
     has_url_protocol(<<>>) ->
@@ -401,13 +417,8 @@ db_driver(#context{db={_Pool, Driver}}) ->
 %%      Useful when the site is behind a https proxy.
 site_protocol(Context) ->
     case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
-        <<>> -> 
-            case m_req:get(is_ssl, Context) of
-                true -> <<"https">>;
-                _Other -> <<"http">>
-            end;
-        P ->
-            P
+        <<>> -> <<"http">>;
+        P -> P
     end.
 
 %% @doc Pickle a context for storing in the database

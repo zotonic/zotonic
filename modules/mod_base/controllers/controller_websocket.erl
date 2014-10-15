@@ -78,8 +78,8 @@ websocket_start(ReqData, Context) ->
         undefined -> z_context:set(ws_handler, ?MODULE, Context1);
         _Hdlr -> Context1
     end,
-    Context3 = z_context:set(ws_request, true, Context2),
-    PrunedContext = prune_context(Context3),
+    ContextQs = z_context:ensure_qs(z_context:set(ws_request, true, Context2)),
+    PrunedContext = z_context:prune_for_scomp(ContextQs),
     case wrq:get_req_header_lc("sec-websocket-version", ReqData) of
         undefined ->
             case wrq:get_req_header_lc("sec-websocket-key1", ReqData) of
@@ -98,20 +98,6 @@ websocket_start(ReqData, Context) ->
             % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
             z_websocket_hybi17:start(ReqData, PrunedContext)
     end.
-
-
-%% @doc Prune a context and reqdata for the long-lived websocket processes
-prune_context(Context) ->
-    ContextQs = z_context:ensure_qs(Context),
-    ContextPruned = z_context:prune_for_scomp(ContextQs),
-    ReqData = z_context:get_reqdata(ContextQs),
-    ReqData1 = #wm_reqdata{
-                  peer=ReqData#wm_reqdata.peer,
-                  port=ReqData#wm_reqdata.port,
-                  resp_headers=mochiweb_headers:empty(),
-                  req_cookie=[]
-    },
-    z_context:set_reqdata(ReqData1, ContextPruned). 
 
 
 %% @doc Returns true if this a websocket request
