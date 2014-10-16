@@ -69,6 +69,12 @@
     </form>
 </div>
 
+{% if is_oembed %}
+    {% javascript %}
+        $('#{{ tab }} a[href="#{{ tab }}-oembed"]').tab('show');
+    {% endjavascript %}
+{% endif %}
+
 {% endwith %}
 {% endwith %}
 
