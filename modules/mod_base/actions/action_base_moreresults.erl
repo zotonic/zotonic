@@ -24,51 +24,61 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Result = case proplists:get_value(result, Args) of
                 #m{model=m_search, value=V} -> V;
                 #m_search_result{} = M -> M
-            end,
-
+             end,
     SearchName = Result#m_search_result.search_name,
-    SearchProps = proplists:delete(page, Result#m_search_result.search_props),
     SearchResult = Result#m_search_result.result,
-    
-    Page = case z_convert:to_integer(proplists:get_value(page, Result#m_search_result.search_props, 1)) of
-               undefined -> 2;
-               P -> P+1
-           end,
-    PageLen = z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)),
-    MorePageLen = proplists:get_value(pagelen, Args, PageLen),
-
-    ResultLen = case proplists:get_value(ids, SearchResult#search_result.result) of
-                    undefined -> length(SearchResult#search_result.result);
-                    Ids -> length(Ids)
-                end,
-    case ResultLen < PageLen of
+    PageLen = pagelen(SearchResult, Result#m_search_result.search_props),
+    case total(SearchResult) < PageLen of
         true ->
             {"", z_script:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
         false ->
+            Page = page(SearchResult, Result#m_search_result.search_props) + 1,
+            MorePageLen = proplists:get_value(pagelen, Args, PageLen),
+            SearchProps = proplists:delete(pagelen,
+                                proplists:delete(page, Result#m_search_result.search_props)),
             make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context)
     end.
 
+total(#search_result{total=Total}) when is_integer(Total) ->
+    Total;
+total(#search_result{all=All}) when is_list(All) ->
+    length(All);
+total(#search_result{result=Result}) when is_list(Result) ->
+    case proplists:get_value(ids, Result) of
+        L when is_list(L) -> length(L);
+        _ -> length(Result)
+    end;
+total(_) ->
+    0.
 
+
+pagelen(#search_result{pagelen=PageLen}, _) when is_integer(PageLen) ->
+    PageLen;
+pagelen(_, SearchProps) ->
+    z_convert:to_integer(proplists:get_value(pagelen, SearchProps, 20)).
+
+page(#search_result{page=Page}, _) when is_integer(Page) ->
+    Page;
+page(_, SearchProps) ->
+    z_convert:to_integer(proplists:get_value(page, SearchProps, 1)).
 
 
 %% @doc Show more results.
 %% @spec event(Event, Context1) -> Context2
 %% @todo Handle the "MorePageLen" argument correctly.
 event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args}, trigger=TriggerId, target=TargetId}, Context) ->
-    SearchProps1 = [{page, Page}|SearchProps],
-    R = m_search:search({SearchName, SearchProps1}, Context),
-    Result = R#m_search_result.result,
+    SearchProps1 = [{page, Page},{pagelen,PageLen}|SearchProps],
+    #m_search_result{result=Result} = m_search:search({SearchName, SearchProps1}, Context),
     Rows = case proplists:get_value(ids, Result#search_result.result) of
               undefined -> Result#search_result.result;
               X -> X
            end,
-
     Context1 = case length(Rows) < PageLen of
                    false ->
                         {JS, Ctx} = make_postback(SearchName, SearchProps, Page+1, PageLen, MorePageLen, Args, TriggerId, TargetId, Context),
                         RebindJS = case proplists:get_value(visible, Args) of
                            true ->
-                               [ <<"z_on_visible('#">>, TriggerId, <<"', function() {">>, JS, <<"});\n">> ];
+                               [ <<"z_on_visible('#">>, TriggerId, <<"', function() {">>, JS, <<"});">> ];
                            _ ->
                                ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "; return false; });"]
                         end,
