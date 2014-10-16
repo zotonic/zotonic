@@ -21,5 +21,5 @@
 -export([escape_link/2]).
 
 escape_link(Text, Context) ->
-	z_html:escape_link(Text, Context).
+    z_sanitize:escape_link(Text, Context).
 
