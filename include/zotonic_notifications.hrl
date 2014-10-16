@@ -260,6 +260,19 @@
 -record(rsc_pivot_done, {id, is_a=[]}).
 
 
+%% @doc Sanitize an HTML element. This is applied using a foldl.
+-record(sanitize_element, {
+        element :: {binary(), list(), list()},
+        stack :: list()
+    }).
+
+%% @doc Sanitize an embed url. The hostpart is of the format: <<"youtube.com/v...">>.
+%%      Return 'undefined', 'false' or a binary with a acceptable hostpath
+-record(sanitize_embed_url, {
+        hostpath :: binary()
+    }).
+
+
 %% @doc Check if an action is allowed (first).
 %% Should return undefined, true or false.
 %% action :: view|update|delete
