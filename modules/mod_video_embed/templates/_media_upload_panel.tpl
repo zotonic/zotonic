@@ -2,7 +2,7 @@
 {% if not tabs_enabled or "embed"|member:tabs_enabled %}
 
 {% with id.medium as medium %}
-{% with medium.mime == "text/html-oembed" as is_video_embed %}
+{% with medium.mime == "text/html-video-embed" as is_video_embed %}
 <div class="tab-pane" id="{{ tab }}-embed">
     <p>{_ Embed a video or other media. Here you can paste embed code from YouTube, Vimeo or other services. _}</p>
 

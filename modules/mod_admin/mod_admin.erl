@@ -44,7 +44,7 @@
 %% <img class="z-tinymce-media z-tinymce-media-align-block z-tinymce-media-size-small z-tinymce-media-crop- z-tinymce-media-link- " 
 %%      src="/admin/media/preview/41113" 
 %%      alt="" />
-observe_sanitize_element(sanitize_element, {<<"img">>, Attrs, _Enclosed} = Element, Context) ->
+observe_sanitize_element(#sanitize_element{}, {<<"img">>, Attrs, _Enclosed} = Element, Context) ->
     case proplists:get_value(<<"src">>, Attrs) of
         <<"/admin/media/preview/", Number/binary>> ->
             NumberList = binary_to_list(Number),
@@ -63,7 +63,7 @@ observe_sanitize_element(sanitize_element, {<<"img">>, Attrs, _Enclosed} = Eleme
         _OtherSrc ->
             Element
     end;
-observe_sanitize_element(sanitize_element, Element, _Context) ->
+observe_sanitize_element(#sanitize_element{}, Element, _Context) ->
     Element.
 
 

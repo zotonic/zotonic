@@ -1,11 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-07-15
+%% @copyright 2009-2014 Marc Worrell
 %% @doc Enables embedding video's as media pages.  Handles the embed information for showing video's.
 %% The embed information is stored in the medium table associated with the page. You can not have embed
 %% information and a medium file. Either one or the other.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -65,7 +64,7 @@ observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
                             false
                     end;
                 EmbedCode ->
-                    EmbedCodeRaw = z_html:unescape(EmbedCode),
+                    EmbedCodeRaw = z_sanitize:html(z_html:unescape(EmbedCode), Context),
                     EmbedService = proplists:get_value(video_embed_service, Props, ""),
                     MediaProps = [
                         {mime, ?EMBED_MIME},
