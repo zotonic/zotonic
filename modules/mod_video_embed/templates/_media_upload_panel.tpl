@@ -35,6 +35,7 @@
         <div class="col-md-9">
 	        <textarea id="{{ #embed_code }}" class="form-control" name="video_embed_code" rows="10">{% if is_video_embed %}{{ medium.video_embed_code|escape }}{% endif %}</textarea>
 	        {% validate id=#embed_code name="video_embed_code" type={presence} %}
+	        <p class="help-block">{_ The embed code will be sanitized. Only whitelisted sites are allowed. _}</p>
             </div>
 	</div>
 	
@@ -44,6 +45,12 @@
 	</div>
     </form>
 </div>
+
+{% if is_video_embed %}
+	{% javascript %}
+		$('#{{ tab }} a[href="#{{ tab }}-embed"]').tab('show');
+	{% endjavascript %}
+{% endif %}
 
 {% endwith %}
 {% endwith %}
