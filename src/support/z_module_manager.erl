@@ -429,6 +429,7 @@ handle_cast({start_child_result, _Module, {ok, _}}, State) ->
 handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
     remove_observers(Module, Pid, State#state.context),
+    lager:warning("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
     z_notifier:notify(#module_deactivate{module=Module}, State#state.context), 
     stop_children_with_missing_depends(State),
     {noreply, State};
@@ -640,8 +641,14 @@ get_provided_for_modules(Modules) ->
 stop_children_with_missing_depends(State) ->
     Modules = handle_get_modules(State),
     Provided = get_provided_for_modules(Modules),
-    Unstartable = lists:filter(fun(M) -> not is_startable(M, Provided) end, Modules),
-    [ z_supervisor:stop_child(State#state.sup, M) || M <- Unstartable ].
+    case lists:filter(fun(M) -> not is_startable(M, Provided) end, Modules) of
+        [] ->
+            [];
+        Unstartable ->
+            lager:warning("[~p] Stopping child modules ~p", 
+                          [z_context:site(State#state.context), Unstartable]),
+            [ z_supervisor:stop_child(State#state.sup, M) || M <- Unstartable ]
+    end.
 
 
 %% @doc Return the list of module names currently managed by the z_supervisor.
