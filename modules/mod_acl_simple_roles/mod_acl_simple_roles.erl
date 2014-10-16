@@ -378,13 +378,15 @@ can_edge(#acl_edge{subject_id=SubjectId, object_id=ObjectId}, Context) ->
     end.
     
 
+can_media(Mime, Size, Context) when is_list(Mime) ->
+    can_media(z_convert:to_binary(Mime), Size, Context);
 can_media(Mime, Size, #context{acl=ACL}) ->
     case ACL of
         #acl_user{file_size=MaxSize, file_mimes=Allowed} ->
             case Size =< MaxSize * 1024 of
                 true ->
                     case lists:member(<<"*/*">>, Allowed)
-                         orelse lists:member(z_convert:to_binary(Mime), Allowed) of
+                         orelse lists:member(Mime, Allowed) of
                         true -> true;
                         false ->
                             case lists:member(make_wildcard(Mime), Allowed) of
@@ -398,6 +400,10 @@ can_media(Mime, Size, #context{acl=ACL}) ->
         _ -> undefined
     end.
     
+    make_wildcard(<<"text/html-video-embed">>) ->
+        <<"video/*">>;
+    make_wildcard(<<"text/html-oembed">>) ->
+        <<"video/*">>;
     make_wildcard(Mime) ->
         [Type|_] = string:tokens(z_convert:to_list(Mime), "/"),
         list_to_binary(Type ++ "/*").

@@ -226,20 +226,28 @@ delete(Id, Context) ->
 %% Resets all non mentioned attributes.
 %% @spec replace(Id, Props, Context) -> ok | {error, Reason}
 replace(Id, Props, Context) ->
-    Depicts = depicts(Id, Context),
-    F = fun(Ctx) ->
-        {ok, _}  = medium_delete(Id, Ctx),
-        {ok, Id} = medium_insert(Id, [{id, Id} | Props], Ctx)
-    end,
-    
-    case z_db:transaction(F, Context) of
-        {ok, _} -> 
-            [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
-            z_depcache:flush(Id, Context),
-            z_notifier:notify(#media_replace_file{id=Id, medium=get(Id, Context)}, Context),
-            ok;
-        {rollback, {Error, _Trace}} ->
-             {error, Error}
+    Mime = proplists:get_value(mime, Props),
+    Size = proplists:get_value(size, Props, 0), 
+    case z_acl:rsc_editable(Id, Context) andalso
+         z_acl:is_allowed(insert, #acl_media{mime=Mime, size=Size}, Context)
+    of
+        true ->
+            Depicts = depicts(Id, Context),
+            F = fun(Ctx) ->
+                {ok, _}  = medium_delete(Id, Ctx),
+                {ok, Id} = medium_insert(Id, [{id, Id} | Props], Ctx)
+            end,
+            case z_db:transaction(F, Context) of
+                {ok, _} -> 
+                    [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
+                    z_depcache:flush(Id, Context),
+                    z_notifier:notify(#media_replace_file{id=Id, medium=get(Id, Context)}, Context),
+                    ok;
+                {rollback, {Error, _Trace}} ->
+                    {error, Error}
+            end;
+        false ->
+            {error, eacces}
     end.
 
 
