@@ -512,7 +512,9 @@ check_hash(RscId, Username, Password, Hash, Context) ->
         ok ->
             check_hash_ok(RscId, Context);
         {error, Reason} ->
-            {error, Reason}
+            {error, Reason};
+        undefined ->
+            {error, nouser}
     end.
 
 
