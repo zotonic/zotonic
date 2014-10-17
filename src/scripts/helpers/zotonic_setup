@@ -166,24 +166,20 @@ ZOTONIC_CONFIG_DIR=${ZOTONIC_CONFIG_DIR:=$HOME/.zotonic/$(major_version)}
 
 # Make sure the erlang.config file exists
 if [ "$(find_config erlang.config)" == "" ]; then
-    echo "Installing default erlang.config file"
+    echo "Installing default erlang.config file" 1>&2
     mkdir -p $ZOTONIC_CONFIG_DIR
     cp "$ZOTONIC/priv/erlang.config.in" "$ZOTONIC_CONFIG_DIR/erlang.config"
 fi
 
 # Make sure the zotonic.config file exists
 if [ "$(find_config zotonic.config)" == "" ]; then
-    echo "Installing global Zotonic config file"
+    echo "Installing global Zotonic config file" 1>&2
     mkdir -p $ZOTONIC_CONFIG_DIR
     cp "$ZOTONIC/priv/zotonic.config.in" "$ZOTONIC_CONFIG_DIR/zotonic.config"
 
     # Generate a password for zotonic_status
     PW=$(env LC_CTYPE=C tr -dc "a-zA-Z0-9" < /dev/urandom | head -c 10)
     perl -e "s/%%GENERATED%%/$PW/" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
-    echo "Password for zotonic_status site is: $PW"
-
-    echo "$ZOTONIC_CONFIG_DIR/zotonic.config"
-    echo "$ZOTONIC"
 
     perl -e "s|\%\%USER_SITES_DIR\%\%|$ZOTONIC/user/sites|" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
     perl -e "s|\%\%USER_MODULES_DIR\%\%|$ZOTONIC/user/modules|" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"

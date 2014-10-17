@@ -1,4 +1,4 @@
-[ConfigFile] = string:tokens(os:cmd("bin/zotonic configfile"), "\n"),
+[ConfigFile] = string:tokens(os:cmd("bin/zotonic configfile 2>/dev/null"), "\n"),
 case filelib:is_regular(ConfigFile) of
     true ->
         {ok, [Terms]} = file:consult(ConfigFile),
