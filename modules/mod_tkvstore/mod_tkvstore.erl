@@ -52,7 +52,7 @@
 start_link() -> 
     start_link([]).
 start_link(Args) when is_list(Args) ->
-    gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
+    gen_server:start_link(?MODULE, Args, []).
 
 
 %% @doc Do a put in the persistent store, replace existing key/value
