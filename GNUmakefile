@@ -89,7 +89,7 @@ clean: clean_logs $(REBAR)
 	@echo "removing:"
 	rm -f ebin/*.beam ebin/*.app
 	@echo "cleaning dependencies:"
-	$(REBAR) $(REBAR_OPTS) clean
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) clean
 
 .PHONY: dist-clean
 dist-clean: clean
