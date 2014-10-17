@@ -1,3 +1,5 @@
+{# Sorting edge trees has an issue with nested collections. #}
+{#
 <div class="widget" id="{{ #menu }}">
 	<h3 class="widget-header">
 		{{ id.title }}
@@ -13,12 +15,12 @@
             </ul>
         </span>
 
-        <p>
-            {_ Click on <strong>Add</strong> to add pages. _}
-            <br/>{_ Drag items in the list up, down to structure the collection. _}
-        </p>
+		<p>
+			{_ Click on <strong>Add</strong> to add pages. _}
+			<br/>{_ Drag items in the list up, down to structure the collection. _}
+		</p>
 
-        {% block menu_tree %}
+		{% block menu_tree %}
 		<ul class="tree-list do_menuedit" id="collection-{{ id }}" data-menuedit="maxLevels: 1, item_template: '_menu_edit_item.tpl'">
 			{% for mid in id.o.haspart %}
 				{% include "_menu_edit_item.tpl" c=forloop.counter id=mid %}
@@ -27,5 +29,16 @@
 		{% endblock %}
 	</div>
 </div>
-
 {% include "_menu_edit_scripts.tpl" menu_id=#menu in_sorter="collection-"++id %}
+#}
+
+<div id="{{ #menu }}">
+	<h3>
+		{{ id.title }}
+
+		<a href="#edit_id={{ id }}" class="btn pull-right">
+			{_ Edit _}
+		</a>
+	</h3>
+	<p class="muted">{{ id.category_id.title }}</p>
+</div>
