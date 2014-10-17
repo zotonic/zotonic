@@ -22,7 +22,7 @@
 </div>
 {% endif %}
 
-{% if m.modules.info.mod_translation.enabled %}
+{% if m.modules.active.mod_translation %}
 <div class="control-group">
 	<label class="control-label" for="pref_language">{_ Language _}</label>
 	<div class="controls">
@@ -39,7 +39,7 @@
 </div>	
 {% endif %}
 
-{% if m.modules.info.mod_l10n.enabled %}
+{% if m.modules.active.mod_l10n %}
 <div class="control-group">
 	<label class="control-label" for="pref_tz">{_ Timezone _}</label>
 	<div class="controls">

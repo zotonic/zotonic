@@ -59,7 +59,7 @@
 	<div class="control-group">
 		<label class="control-label" for="address_country">{_ Country _}</label>
 		<div class="controls">
-		{% if m.modules.info.mod_l10n.enabled %}
+		{% if m.modules.active.mod_l10n %}
 			<select id="address_country" name="address_country">
 				<option value=""></option>
 				{% optional include "_l10n_country_options.tpl" country=r.address_country %}
@@ -123,7 +123,7 @@
 	<div class="control-group">
 		<label class="control-label" for="mail_country">{_ Country _}</label>
 		<div class="controls">
-		{% if m.modules.info.mod_l10n.enabled %}
+		{% if m.modules.active.mod_l10n %}
 			<select id="mail_country" name="mail_country">
 				<option value=""></option>
 				{% optional include "_l10n_country_options.tpl" country=r.mail_country %}
