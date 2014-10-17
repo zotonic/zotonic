@@ -14,6 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+function parse_zotonic_options {
+    while getopts "v" optionName; do
+        case "$optionName" in
+            v)
+                erl -noinput -eval "{ok, [{application,zotonic,P}]} = file:consult(\"$ZOTONIC/src/zotonic.app.src\"),io:format(\"Zotonic ~s~n\", [proplists:get_value(vsn,P)]),halt(0)"
+                exit 0
+        esac
+    done
+}
+
 #
 # usage zotonic [command] [arguments...]
 #
@@ -26,9 +36,12 @@ fi
 
 export ZOTONIC_SCRIPTS="$ZOTONIC/src/scripts"
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+parse_zotonic_options $@
+
 if [ ! $1 ]
 then
-    echo Usage: `basename $0` [command] 1>&2
+    echo Usage: `basename $0` \(options\) [command] 1>&2
     echo 1>&2
     echo Where [command] is one of: 1>&2
     echo 1>&2
@@ -37,12 +50,14 @@ then
     echo 1>&2
     echo See http://zotonic.com/docs/latest/manuals/cli.html for more info. 1>&2
     echo 1>&2
+    echo Options: 1>&2
+    echo "  -v :  Prints Zotonic version" 1>&2
+    echo 1>&2
     exit 127
 elif [ ! -f "$ZOTONIC_SCRIPTS/zotonic-$1" ]; then
     echo Command not found: $1 1>&2
     exit 127
 else
-    . $ZOTONIC_SCRIPTS/helpers/zotonic_setup
     $ZOTONIC_SCRIPTS/zotonic-$1 ${@:2}
     EXIT="$?"
     . $ZOTONIC_SCRIPTS/helpers/zotonic_teardown
