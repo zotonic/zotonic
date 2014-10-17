@@ -5,7 +5,7 @@
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-{% with m.modules.info.mod_translation.enabled as is_i18n %}
+{% with m.modules.active.mod_translation as is_i18n %}
 {% with m.site.hostname|default:"localhost" as hostname %}
 
 	<url>

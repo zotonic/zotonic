@@ -5,7 +5,7 @@
 
 {% if m.config.seo.noindex.value %}
 	<meta name="robots" content="noindex,nofollow" />
-{% elseif id and id.language and m.modules.info.mod_translation.enabled and not z_language|member:id.language %}
+{% elseif id and id.language and m.modules.active.mod_translation and not z_language|member:id.language %}
 	{# Take one of the alternative urls, provided by mod_translation #}
 	<meta name="robots" content="noindex" />
 {% else %}
