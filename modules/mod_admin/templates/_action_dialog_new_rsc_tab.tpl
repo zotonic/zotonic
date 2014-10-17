@@ -30,6 +30,7 @@
 		    {% else %}
 			    {% block category_select %}
 			        <select class="form-control" id="{{ #category }}" name="category_id">
+						<option></option>
 			            {% for cat_id, level, indent, name in m.category.all_flat %}
 			                {% if m.acl.insert[name|as_atom] %}
 			                    <option value="{{cat_id}}" {% ifequal cat_id cat %}selected="selected" {% endifequal %}>
@@ -38,6 +39,7 @@
 			                {% endif %}
 			            {% endfor %}
 			        </select>
+					{% validate id=#category name="category_id" type={presence} %}
 			    {% endblock %}
 		    {% endif %}
 	    </div>
