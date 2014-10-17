@@ -489,7 +489,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     Running = z_supervisor:running_children(State#state.sup),
     Start = sets:to_list(sets:subtract(New, sets:from_list(Running))),
     {ok, StartList} = dependency_sort(Start),
-
+    lager:info("[~p] Starting modules: ~p", [z_context:site(Context), Start]),
     sets:fold(fun (Module, ok) ->
                       z_supervisor:delete_child(ModuleSup, Module),
                       ok
