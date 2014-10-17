@@ -489,7 +489,8 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     Running = z_supervisor:running_children(State#state.sup),
     Start = sets:to_list(sets:subtract(New, sets:from_list(Running))),
     {ok, StartList} = dependency_sort(Start),
-    lager:info("[~p] Starting modules: ~p", [z_context:site(Context), Start]),
+    lager:debug("[~p] Stopping modules: ~p", [z_context:site(Context), sets:to_list(Kill)]),
+    lager:debug("[~p] Starting modules: ~p", [z_context:site(Context), Start]),
     sets:fold(fun (Module, ok) ->
                       z_supervisor:delete_child(ModuleSup, Module),
                       ok
@@ -515,6 +516,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
     z_notifier:notify(module_ready, Context),
+    lager:debug("[~p] Finished starting modules", [z_context:site(Context)]),
     spawn_link(fun() -> z_trans_server:load_translations(Context) end),
     State;
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
