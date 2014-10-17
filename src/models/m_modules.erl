@@ -39,6 +39,10 @@ m_find_value(all, #m{value=undefined}, Context) ->
     all(Context);
 m_find_value(enabled, #m{value=undefined}, Context) ->
     enabled(Context);
+m_find_value(active, #m{value=undefined} = M, _Context) ->
+    M#m{value=active};
+m_find_value(Module, #m{value=active}, Context) ->
+    lists:member(Module, active(Context));
 m_find_value(disabled, #m{value=undefined}, Context) ->
     disabled(Context);
 m_find_value(info, #m{value=undefined} = M, _Context) ->
@@ -65,15 +69,21 @@ m_value(#m{value=undefined}, Context) ->
 %% @doc Return the list of modules
 all(Context) ->
     All = lists:sort(z_module_manager:all(Context)),
-    All1 = lists:filter(fun(M) -> z_module_manager:module_exists(M) end, All),
-    [ {Name, z_module_manager:title(Name)} || Name <- All1 ].
+    [ {Name, z_module_manager:title(Name)} || Name <- All ].
 
 enabled(Context) ->
-    Mods = z_module_manager:active(Context),
-    lists:filter(fun(M) -> z_module_manager:module_exists(M) end, Mods).
+    case z_memo:get('m.enabled') of
+        undefined -> z_memo:set('m.enabled', z_module_manager:active(Context), Context);
+        V -> V
+    end.
+
+active(Context) ->
+    case z_memo:get('m.active') of
+        undefined -> z_memo:set('m.active', z_module_manager:get_modules(Context), Context);
+        V -> V
+    end.
 
 disabled(Context) ->
     All = z_module_manager:all(Context),
     Active = z_module_manager:active(Context),
-    lists:filter(fun(M) -> (not lists:member(M, Active)) andalso z_module_manager:module_exists(M) end, All).
-
+    All -- Active.
