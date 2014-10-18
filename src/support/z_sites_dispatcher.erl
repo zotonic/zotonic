@@ -634,8 +634,7 @@ trace_final(_TracerPid, RedirectOrHandled) ->
 %% See also http://bitbucket.org/justin/webmachine/wiki/DispatchConfiguration
 wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList, TracerPid) ->
     Context = z_context:new(Host),
-    Path = string:tokens(PathAsString, [?SEPARATOR]),
-    IsDir = lists:last(PathAsString) == ?SEPARATOR,
+    {Path, IsDir} = tokenize_path(PathAsString),
     {Path1, Bindings} = z_notifier:foldl(#dispatch_rewrite{is_dir=IsDir, path=PathAsString, host=HostAsString}, {Path, []}, Context),
     case Path1 of
         Path -> ok;
@@ -647,6 +646,30 @@ wm_dispatch(Protocol, HostAsString, Host, PathAsString, DispatchList, TracerPid)
     ],
     trace(TracerPid, Path1, try_match, [{bindings,Bindings1}]),
     try_path_binding(Protocol, HostAsString, Host, DispatchList, Path1, Bindings1, extra_depth(Path1, IsDir), TracerPid, Context).
+
+%% @doc Tokenizes the path
+%% @spec tokenize_path(PathAsString) -> {[string()], IsDir::boolean()}
+tokenize_path(PathAsString) ->
+    tokenize_path(PathAsString, []).
+
+tokenize_path([], Tokens) ->
+    {lists:reverse(Tokens), false};
+tokenize_path([?SEPARATOR], Tokens) ->
+    {lists:reverse(Tokens), true};
+tokenize_path([?SEPARATOR|S], Tokens) ->
+    tokenize_path(S, Tokens);
+tokenize_path([C|S], Tokens) ->
+    tokenize_path1(S, Tokens, [C]).
+
+tokenize_path1([], Tokens, Cs) ->
+    {lists:reverse([lists:reverse(Cs)|Tokens]), false};
+tokenize_path1([?SEPARATOR], Tokens, Cs) ->
+    {lists:reverse([lists:reverse(Cs)|Tokens]), true};
+tokenize_path1([?SEPARATOR|S], Tokens, Cs) ->
+    tokenize_path(S, [lists:reverse(Cs)|Tokens]);
+tokenize_path1([C|S], Tokens, Cs) ->
+    tokenize_path1(S, Tokens, [C|Cs]).
+
 
 % URIs that end with a trailing slash are implicitly one token
 % "deeper" than we otherwise might think as we are "inside"
