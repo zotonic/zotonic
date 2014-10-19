@@ -36,19 +36,26 @@ supported version.
 
 .. include:: _make_common.rst
 
-.. _installation_install-git:
+.. _installation-install-git:
 
-Installing the development version using `git`
+Installing from `git`
 ----------------------------------------------
 
-If you want to run the latest version of Zotonic, get a copy of the
-source tree from github.com and run the `master` branch of Zotonic.
+If you want to run the latest version of Zotonic or run on one of its
+release branches, get a copy of the source tree from github.com and
+run Zotonic from there.
 
 1. Use `git <http://git-scm.com/>`_ to `clone` a copy of the Zotonic source tree::
 
      git clone git://github.com/zotonic/zotonic.git
      cd zotonic
-   
+
+   You are now in the master branch, which contains the current
+   development version of Zotonic. To switch to the more stable 0.12
+   version, switch to the ``release-0.12.x`` branch::
+
+     git checkout release-0.12.x
+
 .. include:: _make_common.rst
 
              
