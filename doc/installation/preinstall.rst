@@ -10,8 +10,9 @@ Before running Zotonic, you must make sure your system meets the
 minimum requirements to do so. Zotonic needs the following software
 installed:
 
-1. **R15B03** or newer. Build it from source, or use
-   packages.    
+1. Erlang/OTP version **R15B03** or newer, unless it is one of the
+   :ref:`buggy-erlang-releases`. Build it from source, or use
+   packages.
 
 2. **ImageMagick** (version 6.5 or higher) for the ``convert`` and
    ``identify`` tools.  Make sure that the convert and identify tools
@@ -39,7 +40,7 @@ command in a terminal::
 
 The output should be something like::
 
-  Erlang R16B03 (erts-5.9.2) [source] [64-bit] [smp:4:4] [async-threads:0] [hipe] [kernel-poll:false]
+  Erlang/OTP 17 [erts-6.0] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
   Eshell V5.9.2  (abort with ^G)
   1>
 
@@ -52,6 +53,18 @@ your operating system from the Erlang Solutions website:
 https://www.erlang-solutions.com/downloads/download-erlang-otp
 
 
+.. _buggy-erlang-releases:
+
+Buggy Erlang releases
+^^^^^^^^^^^^^^^^^^^^^
+
+The following releases contain known issues and are therefore not supported:
+
+ * Release **R16B03** (instead, use **R16B03-1**).
+ * Release **17.3** has an SSL issue and causes Zotonic's
+   script to fail. Use another release, for instance **OTP 17.0**.
+
+   
 ImageMagick
 -----------
 
