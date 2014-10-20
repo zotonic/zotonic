@@ -60,9 +60,11 @@ Buggy Erlang releases
 
 The following releases contain known issues and are therefore not supported:
 
- * Release **R16B03** (instead, use **R16B03-1**).
  * Release **17.3** has an SSL issue and causes Zotonic's
    script to fail. Use another release, for instance **OTP 17.0**.
+ * Release **R16B03** has an issue with the `sendfile` driver. But,
+   luckily, Zotonic's sendfile support is disabled by default (when
+   you can, instead, use **R16B03-1**).
 
    
 ImageMagick
