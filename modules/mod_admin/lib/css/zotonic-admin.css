@@ -320,7 +320,7 @@ ul.media > li .bottom {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   padding: 2px;
 }
 ul.media > li .bottom .caption {
@@ -328,6 +328,11 @@ ul.media > li .bottom .caption {
   padding-left: 4px;
   line-height: 1.6;
   overflow: hidden;
+}
+ul.media > li .bottom .caption a {
+  word-break: break-all;
+  display: inline-block;
+  width: 85%;
 }
 ul.media > li.ui-sortable-placeholder {
   background: #aaa;
