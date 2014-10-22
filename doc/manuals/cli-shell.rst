@@ -113,6 +113,14 @@ To retrieve the list of pages, we access the ``result`` property of the record d
 Use ``m_rsc:get(Id, Context)`` to retrieve Page information of each search result (see above).
 
 
+Debugging
+---------
+
+We have added the ``recon`` application to the zotonic deps. This allows one
+to easily debug many aspects of a running zotonic node. It contains tools for tracing
+calls, check memory and bandwidth usage and a lot more. For more information see:
+`Stuff Goes Bad: Erlang in Anger <http://www.erlang-in-anger.com>`_.
+
 
 .. highlight:: bash
 
