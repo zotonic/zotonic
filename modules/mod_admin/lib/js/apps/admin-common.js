@@ -25,27 +25,25 @@ limitations under the License.
 {
     $.widget("ui.adminLinkedTable",
     {
+        // make rows clickable
         _init: function() {
             var self = this;
             (self.element.find("tr").each(function() {
-                var href = $(this).attr("data-href");
-                var event = $(this).attr("data-event");
+                var $this,
+                    href,
+                    event;
+                $this = $(this);
+                href = $this.attr("data-href");
+                event = $this.attr("data-event");
                 if (!href && !event) return;
-                if (!href) href = 'javascript:;';
-                $(this).find("td").each(function() {
-                    $(this)
-                        .addClass("view-link")
-                        .contents()
-                        .wrapAll($("<a>")
-                                 .addClass("view-link")
-                                 .attr("href", href));
-                });
-                if (event) {
-                    $(this).find("td a").on("click", function() {
+                $this.addClass("clickable");
+                $this.on("click", function() {
+                    if (event) {
                         z_event(event);
-                    });
-                }
-
+                    } else {
+                        document.location = href;
+                    }
+                });
             }));
         }
     });
