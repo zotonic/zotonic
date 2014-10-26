@@ -371,6 +371,9 @@ input.do_timepicker {
 .tree-list.categories {
   padding-bottom: 40px;
 }
+.tree-list.categories li.menu-item span.category {
+  display: none;
+}
 /* admin edit page - blocks
    -------------------------------------------------------------- */
 ul.blocks {
