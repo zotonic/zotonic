@@ -245,8 +245,8 @@ a.view-link .buttons {
 .table > thead > tr > th {
   border-width: 1px;
 }
-.table tbody tr:hover td,
-.table tbody tr:hover th {
+.table tbody tr.clickable:hover td,
+.table tbody tr.clickable:hover th {
   background: white;
 }
 table.table tr.unpublished td,
