@@ -32,14 +32,8 @@ body.wait {
 body.wait .btn {
   cursor: wait;
 }
-.btn {
-  font-size: 13px;
-}
-.btn.btn-xs {
-  font-size: 12px;
-}
 div.navbar-brand .zotonic-logo {
-    padding-top: 2px;
+  padding-top: 2px;
 }
 hr {
   background-color: #ddd;
@@ -429,13 +423,12 @@ ul.connections-list li {
 ul.connections-list li .btns {
   top: -2px;
 }
-span.category {
+a span.category {
   color: #bbb;
 }
 #unlink-undo-message div.alert {
   padding-right: 14px;
   /* right-aligned undo button in page connections */
-
 }
 /* .media-sorter .ui-sortable-placeholder, */
 .connections-list .ui-sortable-placeholder {
@@ -561,7 +554,6 @@ div.widget-content .mce-tinymce.mce-container {
   border: 0;
   margin: 0 -8px -8px -8px;
   /* makes it fill the whole widget-content area */
-
 }
 /* sets tinyMCE font size in admin */
 div.widget-content .mce-container,
