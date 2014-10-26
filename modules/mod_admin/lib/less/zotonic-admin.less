@@ -16,6 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
 
+// Lots of Love for LESS: http://mateuszkocz.github.io/3l/
+#3L {@import "3L/3L";}
+
 /* LESS mixins
    --------------------------------------------------------- */
 
@@ -28,8 +31,23 @@ limitations under the License.
 	background: -o-linear-gradient(top, @startColor, @endColor);
 }
 
+.word_break() {
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    // Non standard for webkit
+     word-break: break-word;
+
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+        -ms-hyphens: auto;
+            hyphens: auto;
+}
 
 @baseMargin: 15px;
+@thumbImageWidth: 80px;
+@thumbImageHeight: 60px;
+@hoverBackgroundColor: #eee;
 
 /* bootstrap structure
    --------------------------------------------------------- */
@@ -294,9 +312,13 @@ a.view-link .buttons {
 .table>thead>tr>th {
     border-width: 1px;
 }
+.table tbody tr.clickable td,
+.table tbody tr.clickable th {
+    #3L > .transition(all .2s ease-in-out);
+}
 .table tbody tr.clickable:hover td,
 .table tbody tr.clickable:hover th {
-    background: white;
+    background-color: @hoverBackgroundColor;
 }
 
 table.table tr.unpublished td,
@@ -309,17 +331,19 @@ table.table tr.unpublished td a.btn-success {
 }
 
 img.thumb {
-    padding: 2px;
-    border-radius: 4px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+    padding: 0;
+    #3L > .border-radius(0);
+    #3L > .box-shadow(none);
+    background-color: #fff;
 }
+
 img.admin-list-dashboard {
-    width: 40px;
-    height: 18px;
+    width: 32px;
+    height: 24px;
 }
 img.admin-list-overview {
-    width: 80px;
-    height: 60px;
+    width: @thumbImageWidth;
+    height: @thumbImageHeight;
 }
 
 /* admin edit page
@@ -561,36 +585,84 @@ ul.suggestions-list li a:hover {
 
 
 #dialog-connect-results {
+    @_gutter: 6px;
+    
     max-height: 400px;
     overflow-y: scroll;
     padding: 10px 0;
     border-top: 1px solid #eee;
-}
-
-#dialog-connect-panels {
-    .thumbnail:hover {
-        background-color: #eee;
-        cursor: pointer;
+    
+    // use smaller grid gutter
+    .row {
+        margin-left: -@_gutter;
+        margin-right: -@_gutter;
     }
+    [class*="col-"] {
+        padding-left: @_gutter;
+        padding-right: @_gutter;
+    }
+    
+    .thumbnail {
+        @_padding: 5px;
+        @_contentPartMargin: 0.25em;
+        @_contentHeight: @thumbImageHeight;
+        @_heigth: @_contentHeight + 2 * @_padding + 2px; // add border
+        @_sideMargin: 2 * @_padding;
+        @_fontSize: 12px;
+        @_lineHeight: 1.1em;
+        
+        min-height: @_heigth;
+        max-height: @_heigth;
+        overflow: hidden;    
+        #3L > .border-radius(2px);
+        #3L > .box-shadow(none);
+        cursor: pointer;
+        margin-bottom: 2 * @_gutter;
+        padding: @_padding;
+        font-size: @_fontSize;
+        line-height: @_lineHeight;
+        
+        &:hover {
+            background-color: @hoverBackgroundColor;
+        }
+        
+        &.z-image-thumbnail {
+            h5, h6, p {
+                margin-left: @thumbImageWidth + @_sideMargin;
+            }
+        }
+        
+        img {
+            padding: 0;
+            #3L > .border-radius(0);
+            #3L > .box-shadow(none);
+            margin: 0 @_sideMargin 0 0;
+        }
 
-    .thumbnails {
-        .thumbnail {
+        h5, h6, p {
+            font-size: @_fontSize;
+            line-height: @_lineHeight;
+            font-weight: normal;
+            margin: 0 0 @_contentPartMargin 0;
+        }
+        h5, h6 {
+            .word_break;
+        }
+        h5 {
+            font-weight: bold;
+            max-height: @_lineHeight;
+            width: 1000px; // wide enough to write on 1 line
+        }
+        h6 {
+            text-transform: lowercase;
+            color: #999;
+        }
+        p {
+            max-height: 2 * @_lineHeight;
             overflow: hidden;
-            height: 64px;
-
-            h6 {
-                font-weight: normal;
-                text-transform: lowercase;
-                line-height: 13px;
-            }
-            
-            img {
-                margin-right: 4px;
-            }
         }
     }
 }
-
 
 /* small image in admin edit */
 .leader {
@@ -787,58 +859,23 @@ span.icon_status_starting {
     }
 }
 
-div.modal div.tab-content {
-    overflow: visible;
-}
-
-div.tab-content {
-    //    margin-top: 18px;
+div.modal {
+    div.tab-content {
+        overflow: visible;
+    }
+    .nav.nav-pills {
+        margin-bottom: @baseMargin;
+    }
 }
 
 #dialog-connect-results {
-    margin-top: 10px;
+    margin-top: @baseMargin;
     overflow-x: hidden;
     overflow-y: auto;
-}
-
-.modal-dialog {
-    .row {
-        margin-right: -10px;
-        margin-left: -10px;
-    }
-
-    [class*="col-"] {
-        padding-right: 10px;
-        padding-left: 10px;
-    }
-
-    .modal-header {
-        padding: 0 10px;
-        h1,h2,h3 {
-            margin-top: 15px;
-        }
-    }
-
-    .nav {
-        margin-bottom: 12px;
-    }
 }
 
 textarea, input {
     &.form-field-error {
         background: #ffeeee;
-    }
-}
-
-// connect dialog
-
-.thumbnail {
-    min-height: 80px;
-    h6 {
-        color: #999;
-        margin: 0;
-    }
-    h5 {
-        margin: 3px 0;
     }
 }

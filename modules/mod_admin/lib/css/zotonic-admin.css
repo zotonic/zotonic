@@ -245,9 +245,14 @@ a.view-link .buttons {
 .table > thead > tr > th {
   border-width: 1px;
 }
+.table tbody tr.clickable td,
+.table tbody tr.clickable th {
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
 .table tbody tr.clickable:hover td,
 .table tbody tr.clickable:hover th {
-  background: white;
+  background-color: #eeeeee;
 }
 table.table tr.unpublished td,
 table.table tr.unpublished td a {
@@ -257,13 +262,18 @@ table.table tr.unpublished td a.btn-success {
   color: white;
 }
 img.thumb {
-  padding: 2px;
-  border-radius: 4px;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+  padding: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background-color: #fff;
 }
 img.admin-list-dashboard {
-  width: 40px;
-  height: 18px;
+  width: 32px;
+  height: 24px;
 }
 img.admin-list-overview {
   width: 80px;
@@ -486,21 +496,78 @@ ul.suggestions-list li a:hover {
   padding: 10px 0;
   border-top: 1px solid #eee;
 }
-#dialog-connect-panels .thumbnail:hover {
-  background-color: #eee;
-  cursor: pointer;
+#dialog-connect-results .row {
+  margin-left: -6px;
+  margin-right: -6px;
 }
-#dialog-connect-panels .thumbnails .thumbnail {
+#dialog-connect-results [class*="col-"] {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+#dialog-connect-results .thumbnail {
+  min-height: 72px;
+  max-height: 72px;
   overflow: hidden;
-  height: 64px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  cursor: pointer;
+  margin-bottom: 12px;
+  padding: 5px;
+  font-size: 12px;
+  line-height: 1.1em;
 }
-#dialog-connect-panels .thumbnails .thumbnail h6 {
+#dialog-connect-results .thumbnail:hover {
+  background-color: #eeeeee;
+}
+#dialog-connect-results .thumbnail.z-image-thumbnail h5,
+#dialog-connect-results .thumbnail.z-image-thumbnail h6,
+#dialog-connect-results .thumbnail.z-image-thumbnail p {
+  margin-left: 90px;
+}
+#dialog-connect-results .thumbnail img {
+  padding: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  margin: 0 10px 0 0;
+}
+#dialog-connect-results .thumbnail h5,
+#dialog-connect-results .thumbnail h6,
+#dialog-connect-results .thumbnail p {
+  font-size: 12px;
+  line-height: 1.1em;
   font-weight: normal;
-  text-transform: lowercase;
-  line-height: 13px;
+  margin: 0 0 0.25em 0;
 }
-#dialog-connect-panels .thumbnails .thumbnail img {
-  margin-right: 4px;
+#dialog-connect-results .thumbnail h5,
+#dialog-connect-results .thumbnail h6 {
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+#dialog-connect-results .thumbnail h5 {
+  font-weight: bold;
+  max-height: 1.1em;
+  width: 1000px;
+}
+#dialog-connect-results .thumbnail h6 {
+  text-transform: lowercase;
+  color: #999;
+}
+#dialog-connect-results .thumbnail p {
+  max-height: 2.2em;
+  overflow: hidden;
 }
 /* small image in admin edit */
 .leader {
@@ -672,41 +739,15 @@ span.icon_status_starting {
 div.modal div.tab-content {
   overflow: visible;
 }
+div.modal .nav.nav-pills {
+  margin-bottom: 15px;
+}
 #dialog-connect-results {
-  margin-top: 10px;
+  margin-top: 15px;
   overflow-x: hidden;
   overflow-y: auto;
-}
-.modal-dialog .row {
-  margin-right: -10px;
-  margin-left: -10px;
-}
-.modal-dialog [class*="col-"] {
-  padding-right: 10px;
-  padding-left: 10px;
-}
-.modal-dialog .modal-header {
-  padding: 0 10px;
-}
-.modal-dialog .modal-header h1,
-.modal-dialog .modal-header h2,
-.modal-dialog .modal-header h3 {
-  margin-top: 15px;
-}
-.modal-dialog .nav {
-  margin-bottom: 12px;
 }
 textarea.form-field-error,
 input.form-field-error {
   background: #ffeeee;
-}
-.thumbnail {
-  min-height: 80px;
-}
-.thumbnail h6 {
-  color: #999;
-  margin: 0;
-}
-.thumbnail h5 {
-  margin: 3px 0;
 }
