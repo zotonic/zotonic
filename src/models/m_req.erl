@@ -71,7 +71,7 @@ get(raw_path, RD) -> wrq:raw_path(RD);
 get(path, RD) -> wrq:path(RD);
 get(qs, RD) -> wrq:req_qs(RD);
 get(headers, RD) -> wrq:req_headers(RD);
-get(user_agent, RD) -> proplists:get_value("user-agent", wrq:req_headers(RD));
+get(user_agent, RD) -> wrq:get_req_header_lc("user-agent", RD);
 get(req_id, #wm_reqdata{log_data=#wm_log_data{req_id=ReqId}}) -> ReqId;
 
 get(_Key, _RD) -> undefined.
