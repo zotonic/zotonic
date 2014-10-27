@@ -536,7 +536,7 @@ transport_all(#session{transport=Transport, pages=Pages} = Session) ->
                 Pages),
             Transport2 = lists:foldl(
                             fun(Msg, TQAcc) ->
-                                z_transport_queue:wait_ack(Msg, TQAcc)
+                                z_transport_queue:wait_ack(Msg, session, TQAcc)
                             end,
                             Transport1,
                             Ms),
