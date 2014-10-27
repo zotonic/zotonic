@@ -130,6 +130,7 @@
     set_cookie/3,
     set_cookie/4,
     get_cookie/2,
+    get_cookies/2,
 
     cookie_domain/1,
     document_domain/1,
@@ -373,7 +374,8 @@ prune_reqdata(ReqData) ->
         socket=ReqData#wm_reqdata.socket,
         peer=ReqData#wm_reqdata.peer,
         resp_headers=mochiweb_headers:empty(),
-        req_cookie=[]
+        req_cookie=[],
+        req_headers=[]
     }.
 
 %% @doc Make the url an absolute url by prepending the hostname.
@@ -1199,3 +1201,9 @@ set_cookie(Key, Value, Options, Context) ->
 %% @doc Read a cookie value from the current request.
 get_cookie(Key, #context{wm_reqdata=RD}) ->
     wrq:get_cookie_value(Key, RD).
+
+get_cookies(Key, #context{wm_reqdata=RD}) ->
+    case wrq:req_cookie(RD) of
+        undefined -> [];
+        Cookies -> proplists:get_all_values(Key, Cookies) 
+    end.
