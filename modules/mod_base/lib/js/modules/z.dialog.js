@@ -26,9 +26,6 @@
         // center the dialog vertically again
         dialogReposition: function() {
             var $dialog = $("#zmodal");
-            if ($(window).width() >= 768) {
-                //$dialog.css({marginTop: -Math.floor($dialog.height()/2)+'px'});
-            }
         },
 
         dialogAdd: function(options) {
@@ -104,8 +101,6 @@
             if ($(window).width() >= 768) {
                 if ($dialog.height() > 0.8 * $(window).height()) {
                     $dialog.addClass('high');
-                } else {
-                    //$dialog.css({marginTop: -Math.floor($dialog.height()/2)+'px'});
                 }
             }
 
