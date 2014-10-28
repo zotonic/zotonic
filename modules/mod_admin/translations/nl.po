@@ -115,7 +115,7 @@ msgstr "Willekeurige categorie"
 
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
-msgstr "Weet je zeker dat je de"
+msgstr "Weet je zeker dat je de pagina wilt verwijderen"
 
 #: modules/mod_admin/templates/_admin_menu.tpl:54
 msgid "Are you sure you want to exit the admin interface?"
@@ -611,7 +611,7 @@ msgstr "Nieuwe pagina"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:3
 msgid "New page"
-msgstr "Niuwe pagina"
+msgstr "Nieuwe pagina"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:52
 msgid "Next in category: "
