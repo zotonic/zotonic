@@ -754,3 +754,8 @@ textarea.form-field-error,
 input.form-field-error {
   background: #ffeeee;
 }
+/* other bootstrap overrides
+   --------------------------------------------------------- */
+.text-muted {
+  color: #888888;
+}
