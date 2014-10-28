@@ -40,5 +40,5 @@
 			{_ Edit _}
 		</a>
 	</h3>
-	<p class="muted">{{ id.category_id.title }}</p>
+	<p class="text-muted">{{ id.category_id.title }}</p>
 </div>
