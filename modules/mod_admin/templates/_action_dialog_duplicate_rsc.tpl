@@ -7,7 +7,7 @@
 <form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
 
     <div class="control-group">
-	<label class="control-label" for="new_rsc_title">Page title</label>
+	<label class="control-label" for="new_rsc_title">{_ Page title _}</label>
         <div class="controls">
 	    <input class="do_autofocus" type="text" id="new_rsc_title" name="new_rsc_title" value="{{ m.rsc[id].title }}" />
 	    {% validate id="new_rsc_title" type={presence} %}
