@@ -48,6 +48,7 @@ limitations under the License.
 @thumbImageWidth: 80px;
 @thumbImageHeight: 60px;
 @hoverBackgroundColor: #eee;
+@textColorMuted: #888;
 
 /* bootstrap structure
    --------------------------------------------------------- */
@@ -166,7 +167,6 @@ div.cropguide.vert {
 
 /* widget
    --------------------------------------------------------- */
-
 
 div.widget {
 
@@ -882,4 +882,11 @@ textarea, input {
     &.form-field-error {
         background: #ffeeee;
     }
+}
+
+/* other bootstrap overrides
+   --------------------------------------------------------- */
+
+.text-muted {
+    color: @textColorMuted;
 }
