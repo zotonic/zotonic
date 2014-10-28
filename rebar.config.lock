@@ -39,7 +39,7 @@
                            "158bb1bded6035f4fe2ec15500f89e084e4a5db8"}},
        {sendfile,".*",
                  {git,"git://github.com/tuncer/sendfile.git",
-                      "44bf63f6a1e028839c6629167d555458492787d4"}},
+                      "e24ec2709a01d0f527ea45ee3bceb5db9fb8c31e"}},
        {webzmachine,".*",
                     {git,"git://github.com/zotonic/webzmachine.git",
                          "f58baa8d01eec2348c60d692d474bcd56b15a760"}},
