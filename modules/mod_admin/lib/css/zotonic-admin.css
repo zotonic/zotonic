@@ -19,7 +19,9 @@ limitations under the License.
    --------------------------------------------------------- */
 /* Mixins
    --------------------------------------------------------- */
-.white-border,
+.image-border,
+img.admin-list-dashboard,
+img.admin-list-overview,
 div.admin-edit-media {
   border: 1px solid #fff;
 }
@@ -357,7 +359,7 @@ img.admin-list-overview {
 }
 p.admin-chapeau {
   color: #999999;
-  margin: 0;
+  margin: 0 0 2px 0;
 }
 p.admin-chapeau a {
   color: #999999;
@@ -435,14 +437,46 @@ input.do_timepicker {
 .do_menuedit {
   min-height: 100px;
 }
+ul.tree-list li {
+  line-height: 1.2;
+}
+ul.tree-list li > div {
+  position: relative;
+  margin: -1px 0 0 0;
+  padding: 0;
+}
+ul.tree-list li img.grippy {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  margin-top: -7px;
+}
+ul.tree-list li > div > a,
+ul.tree-list li > div > span:not(.btns) {
+  display: inline-block;
+  width: 100%;
+  padding: 10px 40px 10px 24px;
+  min-height: 34px;
+}
+ul.tree-list li .warning {
+  position: absolute;
+  top: 12px;
+  right: 100px;
+}
+ul.tree-list li .btns {
+  display: block;
+  position: absolute;
+  right: 8px;
+  top: 7px;
+}
+ul.tree-list li .btns .btn-group {
+  margin: 0;
+}
 ul.tree-list.categories {
   padding-bottom: 40px;
 }
 ul.tree-list.categories li.menu-item span.category {
   display: none;
-}
-ul.tree-list li img.grippy {
-  margin: -1px 3px 0 0;
 }
 /* admin edit page - blocks
    -------------------------------------------------------------- */
@@ -506,12 +540,6 @@ ul.connections-list {
 }
 ul.connections-list:empty {
   display: none;
-}
-ul.connections-list li {
-  position: relative;
-}
-ul.connections-list li .btns {
-  top: -2px;
 }
 a span.category {
   color: #bbb;
@@ -903,6 +931,9 @@ input.form-field-error {
 .text-muted {
   color: #999999;
 }
+.btn.disabled {
+  color: #999999;
+}
 .btn.disabled .glyphicon {
   opacity: .6;
 }
@@ -911,6 +942,9 @@ input.form-field-error {
 }
 .btn.btn-xs .glyphicon {
   top: 2px;
+}
+.btn.btn-sm .glyphicon {
+  top: 1px;
 }
 .well {
   padding: 15px;

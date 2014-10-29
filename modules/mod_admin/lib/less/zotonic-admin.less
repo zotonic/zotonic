@@ -70,7 +70,7 @@ limitations under the License.
             hyphens: auto;
 }
 
-.white-border {
+.image-border {
     border: 1px solid #fff;
 }
 
@@ -414,19 +414,19 @@ img.thumb {
     padding: 0;
     #3L > .border-radius(0);
     #3L > .box-shadow(none);
-//    &:extend(.white-border);
+//    &:extend(.image-border);
 }
 
 img.admin-list-dashboard {
     width: 32px;
     height: 24px;
     margin: -1px 3px 0 0;
-//    &:extend(.white-border);
+    &:extend(.image-border);
 }
 img.admin-list-overview {
     width: @thumbImageWidth;
     height: @thumbImageHeight;
-//    &:extend(.white-border);
+    &:extend(.image-border);
 }
 
 /* admin edit page
@@ -446,7 +446,7 @@ img.admin-list-overview {
 
 p.admin-chapeau {
     color: @textColorMuted;
-    margin: 0;
+    margin: 0 0 2px 0;
 
     a {
         color: @textColorMuted;
@@ -512,7 +512,7 @@ div.admin-edit-media {
     background: white;
     padding: 0;
     margin: 0 0 10px 0;
-    &:extend(.white-border);
+    &:extend(.image-border);
 }
 
 .ui-datepicker .ui-datepicker-header {
@@ -533,6 +533,46 @@ input.do_timepicker {
 }
 
 ul.tree-list {
+    li {
+        @_side_spacing: 8px;
+        @_vertical_spacing: 10px;
+        
+        line-height: 1.2;
+        
+        > div {
+            position: relative;
+            margin: -1px 0 0 0;
+            padding: 0;
+        }
+        img.grippy {
+            position: absolute;
+            left: @_side_spacing;
+            top: 50%;
+            margin-top: -7px;
+        }
+        > div > a,
+        > div > span:not(.btns) {
+            display: inline-block;
+            width: 100%;
+            padding: @_vertical_spacing 40px @_vertical_spacing 24px;
+            min-height: 34px;
+        }
+        .warning {
+            position: absolute;
+            top: 12px;
+            right: 100px;
+        }
+        .btns {
+            display: block;
+            position: absolute;
+            right: @_side_spacing;
+            top: 7px;
+            
+            .btn-group {
+                margin: 0;
+            }
+        }
+    }
     &.categories {
         padding-bottom: 40px;
     
@@ -541,9 +581,6 @@ ul.tree-list {
                 display: none;
             }
         }
-    }    
-    li img.grippy {
-        margin: -1px 3px 0 0;
     }
 }
 
@@ -611,14 +648,6 @@ ul.connections-list {
 
     &:empty {
         display: none;
-    }
-    
-    li {
-        position: relative;
-
-        .btns {
-            top: -2px;
-        }
     }
 }
 a span.category {
@@ -767,7 +796,7 @@ ul.suggestions-list li a:hover {
     width: 64px;
     height: 48px;
     cursor: pointer;
-//    &:extend(.white-border);
+//    &:extend(.image-border);
 }
 
 span.leader {
@@ -1035,6 +1064,8 @@ textarea, input {
 }
 .btn {
     &.disabled {
+        color: @textColorMuted;
+        
         .glyphicon {
             opacity: .6;
         }
@@ -1045,6 +1076,11 @@ textarea, input {
     &.btn-xs {
         .glyphicon {
             top: 2px;
+        }
+    }
+    &.btn-sm {
+        .glyphicon {
+            top: 1px;
         }
     }
 }
