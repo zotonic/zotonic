@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <div class="edit-header">
+    <div class="admin-header">
         <h2>{_ Languages overview _}</h2>
 
         <p>{_ All languages known to the system. You can add or remove languages. _}

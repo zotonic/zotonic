@@ -4,7 +4,7 @@
 
 {% block content %}
 {% with m.acl.is_admin as editable %}
-<div class="edit-header">
+<div class="admin-header">
     <h2>{_ Categories _}</h2>
 
     <p>{_ Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy. _}</p>

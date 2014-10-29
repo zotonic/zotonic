@@ -5,7 +5,7 @@
 {% block search_target %}{% url admin_media %}{% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
     <h2>{_ Media _}</h2>
 
     <p>
@@ -15,11 +15,11 @@
 
     <div class="well">
         <a name="content-pager"></a>
-	{% button
-                class="btn btn-primary"
-	        text=_"Make a new media item" 
-	        action={dialog_media_upload}
-	        %}
+	    {% button
+           class="btn btn-primary"
+	       text=_"Make a new media item" 
+	       action={dialog_media_upload}
+	    %}
         <a class="btn btn-default" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
         <a class="btn btn-default disabled" href="{% url admin_media %}">{_ All media _}</a>
     </div>
@@ -44,9 +44,9 @@
 	    <tr id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
 		<td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
 		<td>
-                    <h5>{{ r.title|striptags|default:"<em>untitled</em>" }}</h5>
-                    <p class="help-block">{{ medium.filename|default:"-" }}</p>
-                </td>
+            <strong>{{ r.title|striptags|default:"<em>untitled</em>" }}</strong><br />
+            <span class="text-muted">{{ medium.filename|default:"-" }}</span>
+        </td>
 		<td>
                     <p class="help-block">
                         {{ medium.mime|default:"&nbsp;" }}<br />
@@ -55,9 +55,20 @@
                 </td>
 		<td>
                     {{ medium.created|date:"M d, H:i"|default:"&nbsp;" }}
-                    <div class="pull-right">
-			{% button class="btn btn-default btn-xs" text=_"delete" disabled=r.is_protected action={dialog_delete_rsc
-                        id=id on_success={slide_fade_out target=#li.id}} %}
+                    <div class="pull-right buttons">
+			            {% button
+                            class="btn btn-default btn-xs"
+                            text=_"delete"
+                            disabled=r.is_protected
+                            action={
+                                dialog_delete_rsc
+                                id=id
+                                on_success={
+                                    slide_fade_out
+                                    target=#li.id
+                                }
+                            }
+                        %}
                         <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                     </div>
                 </td>

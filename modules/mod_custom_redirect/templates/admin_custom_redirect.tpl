@@ -3,7 +3,7 @@
 {% block title %} {_ Admin Custom Redirects _} {% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
     <h2>{_ Domains and redirects _}</h2>
     <p>{_ Redirect unknown domains and paths to known pages or locations. _}</p>
     <p>{_ The new location can be a local path or a complete URL. Leave the host empty for redirects within this site. _}</p>

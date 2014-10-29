@@ -41,14 +41,15 @@
                     </div>
                 </form>
             {% endwith %}
-            <h2>
-                {_ Pages overview _}{% if q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, 
-                    {_ matching _} “{{ q.qs|escape }}”
-                    {% button text=_"show all" class="btn btn-default btn-xs" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
-                    <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
-                {% endif %}
-            </h2>
-
+            <div class="admin-header">
+                <h2>
+                    {_ Pages overview _}{% if q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, 
+                        {_ matching _} “{{ q.qs|escape }}”
+                        {% button text=_"show all" class="btn btn-default btn-xs" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
+                        <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
+                    {% endif %}
+                </h2>
+            </div>
             <div class="well">
                 <a name="content-pager"></a>
 

@@ -30,12 +30,12 @@
 
 {% block content %}
 
-<div class="edit-header">
+<div class="admin-header">
 
 	{% if id.exists %}
-    <h2>{_ Revisions for _} {{ id.title }}</h2>
+        <h2>{_ Revisions for _} {{ id.title }}</h2>
     {% else %}
-    <h2>{_ Revisions for _} <em>{_ Deleted _}</em></h2>
+        <h2>{_ Revisions for _} <em>{_ Deleted _}</em></h2>
     {% endif %}
 
     <p>

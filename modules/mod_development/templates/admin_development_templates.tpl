@@ -3,7 +3,7 @@
 {% block title %} Development {% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
     <h2>{_ Site Development &mdash; Included templates _}</h2>
         
     <p>{_ Below you see in real time which templates are compiled and included. _}</p>

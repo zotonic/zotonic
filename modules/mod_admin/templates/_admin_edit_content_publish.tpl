@@ -44,13 +44,29 @@
 
     <div class="form-group">
         <div class="pull-right">
-            {% for id in m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}] %}
-            {% button class="btn btn-default btn-sm right" text="&laquo;" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Previous in category: "|append:m.rsc[id].title %}
-            {% endfor %}
-
-            {% for id in m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}] %}
-            {% button class="btn btn-default btn-sm" text="&raquo;" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Next in category: "|append:m.rsc[id].title %}
-            {% endfor %}
+            {% with 
+               m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}],
+               m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}]
+               as
+               previous_items,
+               next_items
+            %}
+                {% if previous_items or next_items %}
+                    <div class="btn-group">
+                        {% for id in previous_items %}
+                            {% button class="btn btn-default btn-sm" text="<span class='glyphicon glyphicon-arrow-left'></span>" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Previous in category: "|append:m.rsc[id].title %}
+                        {% empty %}
+                            {% button class="btn btn-default btn-sm disabled" text="<span class='glyphicon glyphicon-arrow-left'></span>" %}
+                        {% endfor %}
+                        
+                        {% for id in next_items %}
+                            {% button class="btn btn-default btn-sm" text="<span class='glyphicon glyphicon-arrow-right'></span>" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Next in category: "|append:m.rsc[id].title %}
+                        {% empty %}
+                            {% button class="btn btn-default btn-sm disabled" text="<span class='glyphicon glyphicon-arrow-right'></span>" %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
         </div>
 
         {% ifnotequal id 1 %}

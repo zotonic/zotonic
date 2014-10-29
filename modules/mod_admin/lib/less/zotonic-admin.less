@@ -19,10 +19,36 @@ limitations under the License.
 // Lots of Love for LESS: http://mateuszkocz.github.io/3l/
 #3L {@import "3L/3L";}
 
-/* LESS mixins
+
+/* Variables
+   --------------------------------------------------------- */
+   
+// units
+@baseMargin: 15px;
+@thumbImageWidth: 80px;
+@thumbImageHeight: 60px;
+@radiusBlockElement: 4px;
+@radiusWidget: @radiusBlockElement;
+
+// general colors
+@backgroundColorLight: #eee;
+@backgroundColorLighter: #f2f2f2;
+@backgroundColorInteractive: #eee;
+@borderColorMedium: #ddd;
+@borderColorLight: #eee;
+@textColorMedium: #666;
+@textColorMuted: #999;
+
+// used colors
+@backgroundColorRowHover: @backgroundColorInteractive;
+@textColorUnpublished: @textColorMuted;
+@borderColorRow: @borderColorMedium;
+
+
+/* Mixins
    --------------------------------------------------------- */
 
-.gradient (@startColor: #eee, @endColor: white) {
+.gradient (@startColor: @backgroundColorLighter, @endColor: white) {
 	background-color: @startColor;
 	background: -webkit-gradient(linear, left top, left bottom, from(@startColor), to(@endColor));
 	background: -webkit-linear-gradient(top, @startColor, @endColor);
@@ -44,11 +70,9 @@ limitations under the License.
             hyphens: auto;
 }
 
-@baseMargin: 15px;
-@thumbImageWidth: 80px;
-@thumbImageHeight: 60px;
-@hoverBackgroundColor: #eee;
-@textColorMuted: #888;
+.white-border {
+    border: 1px solid #fff;
+}
 
 /* bootstrap structure
    --------------------------------------------------------- */
@@ -137,7 +161,7 @@ div.cropguide.vert {
     min-height: inherit;
 }
 .navbar-fixed-save .navbar-inner {
-    border-radius: 0 0 4px 4px;
+    #3L > .border-radius(0 0 @radiusBlockElement @radiusBlockElement);
     padding: 0 4px 0 4px;
 }
 .scrolled .navbar-fixed-save {
@@ -169,18 +193,19 @@ div.cropguide.vert {
    --------------------------------------------------------- */
 
 div.widget {
-
+    @_sidePadding: 10px;
+    @_verticalPadding: 9px;
+    
     margin-bottom: 10px;
     border-bottom: none;
-    border-radius: 2px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-    background: #f0f0f0;
+    #3L > .border-radius(@radiusWidget);
+    #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+    background-color: @backgroundColorLighter;
     
     div.widget-content {
-
-        margin: 10px 8px;
+        padding: @_verticalPadding @_sidePadding;
         
-        & h1, & h2, & h3,  & h4, & h5, & h6 {
+        & h1, & h2, & h3, & h4, & h5, & h6 {
             margin: @baseMargin 0;
 
             &:first-of-type {
@@ -191,13 +216,15 @@ div.widget {
         > :last-child {
             margin-bottom: 0;
         }
+        
         .form-group:last-child {
-            padding-bottom: 10px;
+            padding-bottom: @_verticalPadding;
+            margin-bottom: 0;
         }
 
         &.nolang {
             > .form-group:first-child {
-                padding-top: 10px;
+                padding-top: @_verticalPadding;
             }
         }
 
@@ -206,52 +233,82 @@ div.widget {
             height: 64px;
             padding-bottom: 4px;
             border-bottom: 1px solid white;
+            
             img {
                 margin-right: 4px;
             }
         }
     }
 
+    .widget-header,
+    .widget-section-header {
+        font-size: 13px;
+        font-weight: normal;
+        text-shadow: 0 1px 0 rgba(255,255,255,.5);
+        color: @textColorMedium;
+    }
+    
+    .widget-section-header {
+        margin: 30px 0 15px 0;
+    }
+    
+    .widget-header {
+        margin: 0;
+        padding: @_verticalPadding @_sidePadding;
+        #3L > .border-radius(@radiusWidget @radiusWidget 0);
+        .gradient(#e0e0e0, @backgroundColorLighter);
+        
+        .pull-right {
+            margin: -2px;
+        }
+        i.pull-right.glyphicon {
+            margin: 1px;
+            font-size: 10px;
+            color: #888;
+            
+            &.white {
+                color: black;
+                //text-shadow: 0 1px 0 rgba(0,0,0,.1);
+                text-shadow: 0 1px 0 rgba(255,255,255,.5);
+            }
+        }
+    }
+    h5 {
+        display: block;
+        margin: 20px 0;
+    }
+    
     &.dark {
         background: #ddd;
+        
         .widget-header {
             background: #ddd;
         }
+    }
+    
+    .admin-button-help {
+        @_size: 16px;
+        display: block;
+        float: right;
+        width: @_size;
+        height: @_size;
+        background-color: #333;
+        border-color: #fff;
+        #3L > .border-radius(@_size/2);
     }
 }
 
 li {
     > div.widget {
-        border-radius: 0 0 4px 4px;
+        #3L > .border-radius(0 0 @radiusWidget @radiusWidget);
     }
 
     h3.widget-header {
-        border-radius: 4px 4px 0 0;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+        #3L > .border-radius(@radiusWidget @radiusWidget 0 0);
+        #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
     }
     
 }
-
-.widget-header {
-    margin: 0;
-    padding: 6px;
-    font-size: inherit;
-    font-weight: normal;
-    text-shadow: 0 1px 0 rgba(255,255,255,.5);
-    .gradient(#e0e0e0, #f0f0f0);
-    
-    .pull-right {
-        margin: -2px;
-    }
-    i.pull-right.glyphicon {
-        margin: 1px;
-        font-size: 10px;
-        color: #888;
-        &.white {
-            color: white;
-        }
-    }
-}    
 
 div.widget ul.nav-tabs li.active > a {
     .gradient(#eeeeee, #ffffff);
@@ -288,25 +345,48 @@ div.form-group {
 /* admin table
    --------------------------------------------------------- */
 
+/* override table-striped */
+.table-striped>tbody>tr:nth-child(odd) {
+    background-color: #fff;
+}
+
 td.clickable,
 tr.clickable td {
     cursor: pointer;
 }
 
-table.do_adminLinkedTable td.view-link {
-    padding: 0;
+.table>thead>tr>th,
+.table>tbody>tr>th,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>tbody>tr>td,
+.table>tfoot>tr>td {
+    border-top: 1px solid @borderColorMedium;
+}
+.table {
+    border-bottom: 1px solid @borderColorMedium;
 }
 
-table.do_adminLinkedTable td a.view-link:hover {
-    text-decoration: none;
-}
-table.do_adminLinkedTable td a.view-link {
-    display: block;
-    padding: 8px;
-    color: inherit;
-}
-a.view-link .buttons {
-    margin-top: -2px;
+table.do_adminLinkedTable {
+    td.view-link {
+        padding: 0;
+    }
+    td a.view-link {
+        display: block;
+        padding: 8px;
+        color: inherit;
+        
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    .buttons {
+        margin-top: -2px;
+        margin-bottom: -2px;
+    }
+    h5, p {
+        margin: 0;
+    }
 }
 
 .table>thead>tr>th {
@@ -314,16 +394,16 @@ a.view-link .buttons {
 }
 .table tbody tr.clickable td,
 .table tbody tr.clickable th {
-    #3L > .transition(all .2s ease-in-out);
+    #3L > .transition(all .1s ease-in-out);
 }
 .table tbody tr.clickable:hover td,
 .table tbody tr.clickable:hover th {
-    background-color: @hoverBackgroundColor;
+    background-color: @backgroundColorRowHover;
 }
 
 table.table tr.unpublished td,
 table.table tr.unpublished td a {
-    color: #999;
+    color: @textColorUnpublished;
 }
 
 table.table tr.unpublished td a.btn-success {
@@ -334,16 +414,19 @@ img.thumb {
     padding: 0;
     #3L > .border-radius(0);
     #3L > .box-shadow(none);
-    background-color: #fff;
+//    &:extend(.white-border);
 }
 
 img.admin-list-dashboard {
     width: 32px;
     height: 24px;
+    margin: -1px 3px 0 0;
+//    &:extend(.white-border);
 }
 img.admin-list-overview {
     width: @thumbImageWidth;
     height: @thumbImageHeight;
+//    &:extend(.white-border);
 }
 
 /* admin edit page
@@ -362,11 +445,11 @@ img.admin-list-overview {
 }
 
 p.admin-chapeau {
-    color: #999999;
+    color: @textColorMuted;
     margin: 0;
 
     a {
-        color: #999999;
+        color: @textColorMuted;
         text-decoration: underline;
     }
 }
@@ -378,14 +461,14 @@ ul.media {
         margin: 0 0 18px 3px;
         background: #fff;
         width: 25%;
-        height: 200px;
+        height: 230px;
         max-width: 200px;
         float: left;
         margin-left: 10px;
         position: relative;
         padding: 4px;
         border: 1px solid #ddd;
-        border-radius: 4px;
+        #3L > .border-radius(@radiusBlockElement);
         -webkit-box-shadow: 0 0 4px rgba(0,0,0,.125);
         
         img {
@@ -396,8 +479,8 @@ ul.media {
             position: absolute;
             bottom: 0;
             left: 0; right: 0;
-            background: rgba(255,255,255,0.9);
             padding: 2px;
+            
             .caption {
                 height: 22px;
                 padding-left: 4px;
@@ -414,24 +497,22 @@ ul.media {
 
     > li.ui-sortable-placeholder {
         background: #aaa;
-        border-radius: 4px;
+        #3L > .border-radius(@radiusBlockElement);
     }
 }
 
-div.edit-header {
-    h2 {
-        margin-top: 8px;
-        margin-bottom: 18px;
-        color: #333;
-    }
+div.admin-header h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    color: #333;
 }
 
-div.edit-media {
+div.admin-edit-media {
     display: inline-block;
     background: white;
-    padding: 4px;
-    border-radius: 4px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15) inset;
+    padding: 0;
+    margin: 0 0 10px 0;
+    &:extend(.white-border);
 }
 
 .ui-datepicker .ui-datepicker-header {
@@ -451,13 +532,18 @@ input.do_timepicker {
     min-height:100px;
 }
 
-.tree-list.categories {
-    padding-bottom: 40px;
+ul.tree-list {
+    &.categories {
+        padding-bottom: 40px;
     
-    li.menu-item {
-        span.category {
-            display: none;
+        li.menu-item {
+            span.category {
+                display: none;
+            }
         }
+    }    
+    li img.grippy {
+        margin: -1px 3px 0 0;
     }
 }
 
@@ -490,7 +576,7 @@ ul.blocks > li > h3 > input {
 }
 ul.blocks li.block .widget {
     padding-top: 4px;
-    border-radius: 0 0 4px 4px;
+    #3L > .border-radius(0 0 @radiusWidget @radiusWidget);
 }
 .block-add-block {
     margin-bottom: 12px;
@@ -512,7 +598,7 @@ h3.widget-header input.block-name:focus {
 
 ul.blocks .ui-sortable-placeholder {
     background: #aaa;
-    border-radius: 4px;
+    #3L > .border-radius(@radiusBlockElement);
     visibility: visible !important;
 }
 
@@ -522,12 +608,18 @@ ul.blocks .ui-sortable-placeholder {
 ul.connections-list {
     padding-bottom: 8px;
     min-height: 1em;
-}
-ul.connections-list li {
-    position: relative;
-}
-ul.connections-list li .btns {
-    top: -2px;
+
+    &:empty {
+        display: none;
+    }
+    
+    li {
+        position: relative;
+
+        .btns {
+            top: -2px;
+        }
+    }
 }
 a span.category {
     color: #bbb;
@@ -539,7 +631,7 @@ a span.category {
 /* .media-sorter .ui-sortable-placeholder, */
 .connections-list .ui-sortable-placeholder {
     background: #aaa;
-    border-radius: 4px;
+    #3L > .border-radius(@radiusBlockElement);
     visibility: visible !important;
 }
 
@@ -555,7 +647,7 @@ a span.category {
     display: inline-block;
     vertical-align: middle;
     padding: 5px 9px;
-    border-radius: 4px;
+    #3L > .border-radius(@radiusBlockElement);
 }
 
 form.form-horizontal .z_validation_message {
@@ -571,13 +663,13 @@ ul.suggestions-list li a {
     .gradient(#ffffff, #f5f5f5);
 
     border: 1px solid #E0E0E0;
-    border-radius: 4px;
+    #3L > .border-radius(@radiusBlockElement);
     margin-bottom: -1px;
     padding: 2px 4px;
 }
 
 ul.suggestions-list li a .pull-right {
-    color: #999;
+    color: @textColorMuted;
 }
 
 ul.suggestions-list li a:hover span.pull-right,
@@ -594,7 +686,7 @@ ul.suggestions-list li a:hover {
     max-height: 400px;
     overflow-y: scroll;
     padding: 10px 0;
-    border-top: 1px solid #eee;
+    border-top: 1px solid @borderColorLight;
     
     // use smaller grid gutter
     .row {
@@ -627,7 +719,7 @@ ul.suggestions-list li a:hover {
         line-height: @_lineHeight;
         
         &:hover {
-            background-color: @hoverBackgroundColor;
+            background-color: @backgroundColorRowHover;
         }
         
         &.z-image-thumbnail {
@@ -659,7 +751,7 @@ ul.suggestions-list li a:hover {
         }
         h6 {
             text-transform: lowercase;
-            color: #999;
+            color: @textColorMuted;
         }
         p {
             max-height: 2 * @_lineHeight;
@@ -669,16 +761,17 @@ ul.suggestions-list li a:hover {
 }
 
 /* small image in admin edit */
-.leader {
+.admin-leader {
     float: left;
-    margin-right: 10px;
-    width: 48px;
+    margin-right: 12px;
+    width: 64px;
     height: 48px;
     cursor: pointer;
+//    &:extend(.white-border);
 }
 
 span.leader {
-    background: #eee;
+    background: @backgroundColorLight;
 }
 
 
@@ -712,7 +805,7 @@ table.mceLayout, textarea.tinyMCE {
 }
 
 .z-tinymce-media-left {
-    border: 1px solid #eee;
+    border: 1px solid @borderColorLight;
 }
 
 .dialog .z-tinymce-media-options label {
@@ -731,7 +824,7 @@ table.mceLayout, textarea.tinyMCE {
 
 div.widget-content .mce-tinymce.mce-container {
     border: 0;
-    margin: 0 -8px -8px -8px; /* makes it fill the whole widget-content area */
+    margin: 0 -4px -8px -4px; /* makes it fill the whole widget-content area */
 }
 
 /* sets tinyMCE font size in admin */
@@ -748,7 +841,7 @@ div.widget-content .mce-container, div.widget-content .mce-container *, div.widg
 	width: 610px;
 	border: 3px solid #ddd;
 	margin: 0 0 9px 0;
-	border-radius: 6px;
+	#3L > .border-radius(6px);
 }
 
 /* Some extra rtl definitions */
@@ -761,8 +854,6 @@ body[dir=rtl] label {
     float: right;
     text-align: right;
 }
-
-
 
 /* admin logon */
 .admin-logon {
@@ -811,30 +902,82 @@ body[dir=rtl] label {
 
 /* icon status
    --------------------------------------------------------- */
+   
+@_colorStatusOff: #D7D7D7;   
+@_colorStatusOk: #00D100;
+@_colorStatusError: #ED4A00;
+@_colorStatusWarning: #FFBD00;
+@_colorBorderStarting: #E2F800;
+@_colorBorderNeutral: #777;
+@_colorBorderLight: #fff;   
+
+.led-color(@color) {
+    @_glow_size: 7px;
+    &:before {
+        .gradient(
+            mix(@_colorBorderNeutral, @color, 50%), 
+            mix(@_colorBorderLight, @color, 50%)
+        );
+    }
+    &:after {
+        background: @color;
+        box-shadow: 
+            inset 0 -@_glow_size @_glow_size rgba(100,100,100,0.1),
+            inset 0 @_glow_size @_glow_size rgba(255,255,255,0.3);
+    }
+}
+
 span.icon_status {
-    width: 17px;
-    height: 17px;
-    background-image: url(/lib/images/icon_status.png);
-    background-repeat: no-repeat;
-    background-position: -59px 0;
-    margin-right: 3px;
-}
-
-span.icon_status_running, span.icon_status_ok {
-    background-position: -2px 0;
-}
-
-span.icon_status_error {
-    background-position: -21px 0;
-}
-
-span.icon_status_retrying, 
-span.icon_status_warning {
-    background-position: -40px 0;
-}
-
-span.icon_status_starting {
-    background-position: -77px 0;
+    @_size: 14px;
+    @_inner_size: @_size - 2;
+    width: @_size;
+    height: @_size;
+    display: inline-block;
+    position: relative;
+    margin-top: 3px;
+    
+    &:before {
+        // background as gradient border
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        border-radius: 50%;
+        width: @_size;
+        height: @_size;
+        content: " ";
+        background-color: #ddd;
+        z-index: 0;
+    }
+    &:after {
+        // colored status
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        border-radius: 50%;
+        width: @_inner_size;
+        height: @_inner_size;
+        content: " ";
+        background-color: #eee;
+        z-index: 1;
+    }
+    
+    &.icon_status_running,
+    &.icon_status_ok {
+        .led-color(@_colorStatusOk);
+    }
+    
+    &.icon_status_error {
+        .led-color(@_colorStatusError);
+    }
+    
+    &.icon_status_warning,
+    &.icon_status_retrying {
+        .led-color(@_colorStatusWarning);
+    }
+    
+    &.icon_status_starting {
+        .led-color(@_colorBorderStarting);
+    }
 }
 
 /* sidebar
@@ -889,4 +1032,33 @@ textarea, input {
 
 .text-muted {
     color: @textColorMuted;
+}
+.btn {
+    &.disabled {
+        .glyphicon {
+            opacity: .6;
+        }
+    }
+    .glyphicon {
+        top: 3px;
+    }
+    &.btn-xs {
+        .glyphicon {
+            top: 2px;
+        }
+    }
+}
+.well {
+    padding: 15px;
+    
+    .btn + .btn {
+        margin-left: 4px;
+    }
+}
+.alert {
+    padding: 10px;
+    
+    .close {
+        margin-top: -4px;
+    }
 }

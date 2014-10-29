@@ -5,7 +5,7 @@
 {% block content %}
 {% with m.acl.is_admin as editable %}
 
-<div class="edit-header">
+<div class="admin-header">
 
     <h2>{_ Access Control - Roles Overview _}</h2>
 
@@ -13,7 +13,15 @@
     
     {% if editable %}
     <div class="well">
-        {% button class="btn btn-primary" text=_"Make new ACL role" action={dialog_new_rsc cat="acl_role" nocatselect} %}
+        {% button
+           class="btn btn-primary"
+           text=_"Make new ACL role"
+           action={
+              dialog_new_rsc
+              cat="acl_role"
+              nocatselect
+           }
+        %}
     </div>
     {% endif %}
 </div>
@@ -37,7 +45,7 @@
                 <td>{{ title|default:"&nbsp;" }}</td>
                 <td>{{ acl.view_all|yesno:_"view all,&mdash;" }}</td>
                 <td>
-                    <div class="pull-right">
+                    <div class="pull-right buttons">
                         {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=id on_success={slide_fade_out target=#tr.id}} %}
                         {% button class="btn btn-default btn-xs" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
                     </div>

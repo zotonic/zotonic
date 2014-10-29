@@ -7,7 +7,7 @@
 {% block title %}{_ Survey editor _} &mdash; {{ m.rsc[q.id].title }}{% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
 
     <p class="admin-chapeau">{_ survey results editor _}:</p>
     <h2>

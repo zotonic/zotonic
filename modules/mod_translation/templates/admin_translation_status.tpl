@@ -11,7 +11,7 @@
 .perc-80 { background-color: #33cc00 !important; color: white; }
 .perc-100 { background-color: #00ff00 !important; color: white;}
 </style>
-<div class="edit-header">
+<div class="admin-header">
 
     <h2>{_ Translation status per module _}</h2>
 

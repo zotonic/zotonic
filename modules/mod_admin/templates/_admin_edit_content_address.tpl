@@ -54,7 +54,7 @@
 		</div>
 	</div>
 
-	<h5>{_ Visiting address _}</h5>
+	<div class="widget-section-header">{_ Visiting address _}</div>
 	
 	<div class="form-group">
 		<label class="control-label" for="address_country">{_ Country _}</label>
@@ -118,7 +118,7 @@
 		</div>
 	</div>
 
-	<h5>{_ Mailing address _}</h5>
+	<div class="widget-section-header">{_ Mailing address _}</div>
 
 	<div class="form-group">
 		<label class="control-label" for="mail_country">{_ Country _}</label>

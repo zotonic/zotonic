@@ -6,7 +6,7 @@
     <div class="bottom clearfix">
         <div class="caption">
             <div class="pull-right">
-                <button id="{{ #unlink.object_id }}" class="btn btn-default btn-xs" title="{_ Disconnect _} {{title}}."><i class="glyphicon glyphicon-remove"></i></button>
+                <button id="{{ #unlink.object_id }}" class="btn btn-default btn-xs" title="{_ Disconnect _} {{ object_id.title }}"><i class="glyphicon glyphicon-remove"></i></button>
             </div>
 
             {% with m.rsc[object_id].title|striptags|default:_"untitled" as title %}

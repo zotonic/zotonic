@@ -4,7 +4,7 @@
 
 {% block content %}
     {% with m.acl.is_admin as is_editable %}
-        <div class="edit-header">
+        <div class="admin-header">
 
             <h2>{_ Backups _}</h2>
 

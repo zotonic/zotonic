@@ -3,7 +3,7 @@
 {% block title %}{_ Modules _}{% endblock %}
 
 {% block content %}
-    <div class="edit-header">
+    <div class="admin-header">
         <h2>{_ Modules _}</h2>
         <p>{_ Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,
             while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation. _}</p>
@@ -38,7 +38,7 @@
                             <td>{{ props.mod_description|default:"-" }}</td>
                             <td>{{ prio }}</td>
                             <td>
-                                <div class="pull-right">
+                                <div class="pull-right buttons">
                                     {% if props.is_active %}
                                         {% if config_template %}
                                             {% button text=_"Configure"

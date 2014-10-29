@@ -3,7 +3,7 @@
 {% block title %}{_ Recipients for _} “{{ m.rsc[id].title }}”{% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
 
     <h2>{_ Recipients for _} “{{ m.rsc[id].title }}”</h2>
 
