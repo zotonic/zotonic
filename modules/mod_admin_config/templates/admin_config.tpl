@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="edit-header">
+<div class="admin-header">
     <h2>{_ System Configuration _}</h2>
 
     <div class="well">
@@ -48,7 +48,7 @@
                 <td>{{ key|escape|default:"-" }}</td>
                 <td>{{ value|escape|default:"-"|truncate:65 }}</td>
                 <td>
-                    <div class="pull-right">
+                    <div class="pull-right buttons">
                         {% button class="btn btn-default btn-xs" text=_"Delete" action=deleteAction %}
                         {% button class="btn btn-default btn-xs" text=_"Edit" action=updateAction %}
                     </div>

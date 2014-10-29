@@ -11,7 +11,9 @@
                 </p>
             </div>
             
-            <h2>{_ Dashboard _}</h2>
+            <div class="admin-header">
+                <h2>{_ Dashboard _}</h2>
+            </div>
 
             <div class="well">
                 {% button

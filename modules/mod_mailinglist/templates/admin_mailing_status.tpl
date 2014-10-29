@@ -3,7 +3,7 @@
 {% block title %}{_ Mailing status _} &mdash; {{ m.rsc[id].title }}{% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
 
     <p class="admin-chapeau">{_ mailinglist status page _}:</p>
     <h2>{{ m.rsc[id].title }}</h2>

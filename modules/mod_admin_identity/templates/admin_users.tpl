@@ -5,7 +5,7 @@
 {% block content %}
 {% with m.acl.is_admin as is_users_editable %}
 
-<div class="edit-header">
+<div class="admin-header">
 
     <h2>
         {_ Users _}{% if q.qs %},
@@ -50,7 +50,7 @@
                 <td>{{ m.identity[id].username|escape }}{% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}</td>
                 <td>{{ m.rsc[id].modified|date:_"d M, H:i" }}</td>
                 <td>
-                    <div class="pull-right">
+                    <div class="pull-right buttons">
                         {% if is_users_editable %}
                             {% button class="btn btn-default btn-xs" action={dialog_set_username_password id=id} text=_"set username / password" on_delete={slide_fade_out target=#tr.id} %}
                             {% if id /= 1 %}

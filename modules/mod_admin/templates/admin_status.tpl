@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <div class="edit-header">
+    <div class="admin-header">
         <h2>{_ System administration _}</h2>
         <p>{_ This page holds a collection of administrative options to perform certain tasks on this Zotonic installation. _}</p>
     </div>

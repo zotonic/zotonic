@@ -3,7 +3,7 @@
 {% block title %} Development {% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
     <h2>{_ Site Development _}</h2>
     
     <p>{_ Tools and settings that are useful for site development. _}</p>

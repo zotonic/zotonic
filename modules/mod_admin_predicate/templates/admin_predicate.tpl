@@ -4,7 +4,7 @@
 
 {% block content %}
 {% with m.acl.is_admin as editable %}
-<div class="edit-header">
+<div class="admin-header">
 
     <h2>{_ Predicates _}</h2>
 
@@ -34,7 +34,7 @@
                 <td>{{ p.name|default:"&nbsp;" }}</td>
                 <td>{{ p.uri|default:"&nbsp;" }}</td>
                 <td>
-                    <div class="pull-right">
+                    <div class="pull-right buttons">
                         {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_predicate_delete id=p.id on_success={slide_fade_out target=#li.name}} %}
                         <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                     </div>

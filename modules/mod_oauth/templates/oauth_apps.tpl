@@ -3,7 +3,7 @@
 {% block title %}{_ OAuth applications _}{% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
         
     <h2>{_ Registered OAuth applications _}</h2>
     <p>

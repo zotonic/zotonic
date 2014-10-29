@@ -14,7 +14,7 @@
     </p>
 
     {% if medium.width and medium.height %}
-    <div class="edit-media {% if id.is_a.image %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
+    <div class="admin-edit-media {% if id.is_a.image %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
         {% if medium.width < 597 and medium.height < 597 %}
             {% media medium mediaclass="admin-media-cropcenter" %}
         {% else %}
@@ -29,7 +29,7 @@
             <a href="#" id="crop-center-remove" class="btn btn-default">
                 <i class="glyphicon glyphicon-remove"></i> {_ Remove crop center _}
             </a>
-            <span id="crop-center-message" class="alert">{_ Click the image to set the cropping center. _}</span>
+            <span id="crop-center-message">{_ Click the image to set the cropping center. _}</span>
         {% endif %}
 
         <div class="pull-right">

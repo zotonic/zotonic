@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="edit-header">
+<div class="admin-header">
 
     <div class="pull-right">
         <a class="btn btn-default btn-sm" href="{% url admin_comments_settings %}">{_ Settings _}</a>
@@ -32,7 +32,7 @@
                 <td>{{ m.rsc[comment.rsc_id].title|truncate:20 }}</td>
                 <td>{{ comment.message|striptags|truncate:40 }}</td>
                 <td title="{{ comment.email }}">
-                    <div class="pull-right">
+                    <div class="pull-right buttons">
                         {% button class="btn btn-default btn-xs" text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
                         {% include "_admin_comments_toggledisplay.tpl" element=#comment.id %}
                         {% button class="btn btn-default btn-xs"

@@ -39,7 +39,6 @@
                 {% endif %}
             </tr>
         </thead>
-
         <tbody>
             {% for id in m.search[{latest cat=cat pagelen=pagelen|default:5}] %}
                 {% if m.rsc[id].is_visible %}

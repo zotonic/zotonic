@@ -8,7 +8,7 @@
 {% with r.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
 
-<div class="edit-header">
+<div class="admin-header">
 	<div class="pull-right">
 		<p class="admin-chapeau">
 			{_ Modified _} {_ by _}
