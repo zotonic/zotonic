@@ -75,8 +75,8 @@ msgid "I agree to the"
 msgstr "Я прочитал(а) и согласен(на) с"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2
-msgid "I don’t have an account, please sign me up."
-msgstr "У меня нет учетной записи, пожалуйста, зарегистрируйте меня."
+msgid "I don’t have an account, please sign me up"
+msgstr "У меня нет учетной записи, пожалуйста, зарегистрируйте меня"
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "If the link does not work then you can go to"
