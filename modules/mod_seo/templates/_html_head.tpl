@@ -3,7 +3,7 @@
 	<link rel="canonical" href="{{ m.rsc[id].page_url }}" />
 {% endif %}
 
-{% if m.config.seo.noindex.value %}
+{% if m.config.seo.noindex.value or noindex %}
 	<meta name="robots" content="noindex,nofollow" />
 {% elseif id and id.language and m.modules.active.mod_translation and not z_language|member:id.language %}
 	{# Take one of the alternative urls, provided by mod_translation #}
@@ -41,7 +41,7 @@
 {% with m.config.seo_google.webmaster_verify.value as wmv %}{% if wmv %}
 	<meta name="google-site-verification" content="{{ wmv }}" />
 {% endif %}{% endwith %}
-{% if m.acl.user /= 1 %}
+{% if m.acl.user /= 1 and not notrack %}
 	{% with m.config.seo_google.analytics.value as ga %}{% if ga %}
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
