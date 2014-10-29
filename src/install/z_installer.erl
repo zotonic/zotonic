@@ -69,6 +69,7 @@ install_check(SiteProps) ->
                             ignore
                     end;
                 {error, Reason} ->
+                    z_db:prepare_database(Context),                     
                     lager:warning("~p: Database connection failure!", [z_context:site (Context)]),
                     lager:warning("~p", [Reason]),
                     stop

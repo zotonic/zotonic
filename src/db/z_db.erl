@@ -67,6 +67,7 @@
     columns/2,
     column_names/2,
     update_sequence/3,
+    prepare_database/1,
     table_exists/2,
     create_table/3,
     drop_table/2,
@@ -618,8 +619,115 @@ update_sequence(Table, Ids, Context) ->
 	   end,
     with_connection(F, Context).
 
+%% @doc Create database and schema if they do not yet exist
+%% @spec prepare_database(Context) -> ok
+prepare_database(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    AnonOptions = lists:filter(fun({dbpassword,_}) -> false; (_) -> true end, Options),
+    Connection = create_connection(Context),
+    
+    Database = proplists:get_value(dbdatabase, Options),
+    case database_exists(Connection, Database) of
+        true ->
+            nop;
+        false ->
+            lager:warning("~p: Creating database with options: ~p", [z_context:site(Context), AnonOptions]),
+            create_database(Connection, Database)
+    end,
+    
+    %% Switching databases in PostgreSQL requires a new connection 
+    close_connection(Connection),
+    DatabaseConnection = create_connection(Context, true),
+    
+    Schema = proplists:get_value(dbschema, Options),
+    case schema_exists(DatabaseConnection, Schema) of
+        true ->
+            nop;
+        false ->
+            create_schema(DatabaseConnection, Schema)
+    end,
+    close_connection(DatabaseConnection),
+    ok.
+    
+create_connection(Context) ->
+    create_connection(Context, false).
+    
+create_connection(Context, WithDatabase) ->
+    Options = z_db_pool:get_database_options(Context),
+    ExtraOptions = [{port, proplists:get_value(dbport, Options)}] ++
+    case WithDatabase of
+        false -> [];
+        true -> [{database, proplists:get_value(dbdatabase, Options)}]
+    end,
+    
+    {ok, Connection} = pgsql:connect(
+        proplists:get_value(dbhost, Options),
+        proplists:get_value(dbuser, Options),
+        proplists:get_value(dbpassword, Options),
+        ExtraOptions
+    ),
+    Connection.
+    
+close_connection(Connection) ->
+    pgsql:close(Connection).
+    
+%% @doc Check whether database exists
+%% @spec database_exists(Connection, DatabaseName, Context) -> bool()
+database_exists(Connection, Database) ->
+    {ok, _, [{Count}]} = pgsql:equery(
+        Connection,
+        "SELECT COUNT(*) FROM pg_catalog.pg_database WHERE datname = $1",
+        [Database]
+    ),
+    case z_convert:to_integer(Count) of
+        0 -> false;
+        1 -> true
+    end.
 
+%% @doc Create a database
+%% @spec create_database(Connection, DatabaseName, Context) -> ok
+create_database(Connection, Database) ->
+    %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
+    %% the encoding of the template database (SQL_ASCII)
+    case pgsql:equery(
+        Connection, 
+        "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0" 
+    ) of  
+        {error, Reason} ->
+            lager:error("z_db error ~p when creating database ~p", [Reason, Database]);
+        {ok, _, _} ->
+            ok
+    end.
+    
+%% @doc Check whether schema exists
+%% @spec schema_exists(Connection, Schema) -> bool()
+schema_exists(Connection, Schema) ->
+    {ok, _, [{Count}]} = pgsql:equery(
+        Connection,
+        "select count(*) from information_schema.schemata where schema_name = $1",
+        [Schema]
+    ),
+    case z_convert:to_integer(Count) of
+        0 -> false;
+        1 -> true
+    end.
 
+%% @doc Create a schema
+%% @spec create_schema(Connection, Schema) -> ok
+create_schema(Connection, Schema) ->
+    %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
+    %% the encoding of the template database (SQL_ASCII)
+    lager:warning("Creating schema ~p", [Schema]),
+    case pgsql:equery(
+        Connection, 
+        "CREATE SCHEMA \"" ++ Schema ++ "\""
+    ) of  
+        {error, Reason} ->
+            lager:error("z_db error ~p when creating schema ~p", [Reason, Schema]);
+        {ok, _, _} ->
+            ok
+    end.    
+    
 %% @doc Check the information schema if a certain table exists in the context database.
 %% @spec table_exists(TableName, Context) -> bool()
 table_exists(Table, Context) ->
