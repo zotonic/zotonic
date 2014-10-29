@@ -33,7 +33,7 @@
                        "a60b350819c8ba5602ed85b9d0050cc8e3cb1152"}},
        {mochiweb,".*",
                  {git,"git://github.com/zotonic/mochiweb.git",
-                      "1bd4b26664a04ac714b4ccad7b92edbf94c5a47c"}},
+                      "a9888f277a0fd2e8c7cc81ab57a9efc60dc81eea"}},
        {ua_classifier,".*",
                       {git,"git://github.com/zotonic/ua_classifier.git",
                            "158bb1bded6035f4fe2ec15500f89e084e4a5db8"}},
