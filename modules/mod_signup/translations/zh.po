@@ -71,7 +71,7 @@ msgid "I agree to the"
 msgstr "我同意"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2
-msgid "I don’t have an account, please sign me up."
+msgid "I don’t have an account, please sign me up"
 msgstr "我没有账户，需要注册。"
 
 #: modules/mod_signup/templates/email_verify.tpl:14
