@@ -1,0 +1,35 @@
+body {
+    
+    div.admin-container {
+        margin: @baseMargin;
+        margin-top: 70px;
+    }
+
+    &.noframe > div.admin-container {
+        background: transparent;
+    }
+
+    &.wait {
+        cursor: wait;
+        .btn {
+            cursor: wait;
+        }
+    }
+}
+
+hr {
+    background-color: #ddd;
+    border-top-color: #d0d0d0;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.admin-image-border {
+    border: 1px solid #fff;
+}
+
+@media (max-width: @breakpointMediumMaxWidth) {
+    body > div.container-fluid {
+        margin-top: 0;
+    }
+}

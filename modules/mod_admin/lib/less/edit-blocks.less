@@ -1,0 +1,51 @@
+ul.blocks {
+    padding: 0;
+    margin: 0;
+}
+ul.blocks > li {
+    list-style-type: none;
+    margin-left: 0;
+}
+ul.blocks > li > h3 {
+    cursor: move;
+}
+ul.blocks > li > h3 > .icon-remove,
+ul.blocks > li > h3 > .pull-right {
+    cursor: pointer;
+}
+ul.blocks > li > h3 > .pull-right {
+    margin-top: 6px;
+}
+ul.blocks > li > h3 > input {
+    margin: 2px 0 3px 0;
+    height: 24px;
+    width: 120px;
+    display: inline;
+}
+ul.blocks li.block .widget {
+    padding-top: 4px;
+    #3L > .border-radius(0 0 @radiusWidget @radiusWidget);
+}
+.block-add-block {
+    margin-bottom: 12px;
+}
+.block-add-block .dropdown-menu {
+    top: auto;
+}
+
+fieldset.block-name {
+    margin-top: 8px;
+}
+
+h3.widget-header input.block-name {
+    background: #ddd;
+}
+h3.widget-header input.block-name:focus {
+    background: white;
+}
+
+ul.blocks .ui-sortable-placeholder {
+    background: #aaa;
+    #3L > .border-radius(@radiusBlockElement);
+    visibility: visible !important;
+}

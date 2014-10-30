@@ -1,0 +1,63 @@
+// All Bootstrap classes:
+// https://gist.github.com/geksilla/6543145
+
+.text-muted {
+    color: @textColorMuted;
+}
+.btn {
+    &.disabled {
+        color: @textColorMuted;
+        
+        .glyphicon {
+            opacity: .6;
+        }
+    }
+    .glyphicon {
+        top: 3px;
+    }
+    &.btn-xs {
+        .glyphicon {
+            top: 2px;
+        }
+    }
+    &.btn-sm {
+        .glyphicon {
+            top: 1px;
+        }
+    }
+}
+.dropdown-menu {
+    > li > a {
+        text-shadow: @darkOnLightTextShadow;
+    }
+    > li.active > a,
+    > li.active > a:hover,
+    > li > a:hover {
+        background: @zotonicBlue;
+        color: #fff;
+        text-shadow: @lightOnDarkTextShadow;
+    }
+}
+.nav-tabs {
+    > li > a {
+        text-shadow: @darkOnLightTextShadow;
+    }
+}
+.well {
+    padding: 15px;
+    
+    .btn + .btn {
+        margin-left: 4px;
+    }
+}
+.alert {
+    padding: 10px;
+    
+    .close {
+        margin-top: -4px;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 0;
+    }
+}

@@ -1,0 +1,35 @@
+img.thumb {
+    padding: 0;
+    #3L > .border-radius(0);
+    #3L > .box-shadow(none);
+}
+
+img.admin-list-dashboard {
+    width: 32px;
+    height: 24px;
+    margin: -1px 3px 0 0;
+    &:extend(.admin-image-border);
+}
+
+ul.tree-list {
+    img.admin-list-dashboard {
+        width: 32px / 3 * 2;
+        height: 24px / 3 * 2;
+    }
+}
+
+img.admin-list-overview {
+    width: @thumbImageWidth;
+    height: @thumbImageHeight;
+    &:extend(.admin-image-border);
+}
+
+/* small image in admin edit */
+img.admin-leader-image {
+    background-color: @backgroundColorLighter;
+    float: left;
+    margin-right: 12px;
+    width: 64px;
+    height: 48px;
+    cursor: pointer;
+}
