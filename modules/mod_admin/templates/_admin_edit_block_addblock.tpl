@@ -5,7 +5,7 @@
                 {_ + add block _}
                 <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-right">
                 {% for _order, title, items in blocks %}
                     {% if title %}
                         <li class="dropdown-header">{{ title }}</li>
