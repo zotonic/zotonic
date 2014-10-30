@@ -1,0 +1,47 @@
+div.admin-form {
+    & :last-child {
+        margin-bottom: 0;
+    }
+}
+
+div.form-group {
+    &.row {
+        // Horizontal form
+        > label.control-label {
+            margin-top: 9px;
+            text-align: right;
+        }
+    }
+
+    span.error {
+        display: none;
+    }
+    &.error span.error {
+        display: inline;
+    }
+}
+
+.form-field-error {
+    color: #B94A48;
+}    
+.z_validation_message {
+    background-color: #F2DEDE;
+    border-color: #EED3D7;
+    color: #B94A48;
+    margin-left: 9px;
+    margin-bottom: 9px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 9px;
+    #3L > .border-radius(@radiusBlockElement);
+}
+
+form.form-horizontal .z_validation_message {
+    margin-bottom: 0;
+}
+
+textarea, input {
+    &.form-field-error {
+        background: #ffeeee;
+    }
+}

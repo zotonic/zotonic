@@ -1,0 +1,51 @@
+ul.tree-list {
+    li {
+        @_side_spacing: 8px;
+        @_vertical_spacing: 10px;
+        
+        line-height: 1.2;
+        
+        > div {
+            position: relative;
+            margin: -1px 0 0 0;
+            padding: 0;
+        }
+        img.grippy {
+            position: absolute;
+            left: @_side_spacing;
+            top: 50%;
+            margin-top: -7px;
+        }
+        > div > a,
+        > div > span:not(.btns) {
+            display: inline-block;
+            width: 100%;
+            padding: @_vertical_spacing 40px @_vertical_spacing 24px;
+            min-height: 34px;
+        }
+        .warning {
+            position: absolute;
+            top: 12px;
+            right: 100px;
+        }
+        .btns {
+            display: block;
+            position: absolute;
+            right: @_side_spacing;
+            top: 7px;
+            
+            .btn-group {
+                margin: 0;
+            }
+        }
+    }
+    &.categories {
+        padding-bottom: 40px;
+    
+        li.menu-item {
+            span.category {
+                display: none;
+            }
+        }
+    }
+}

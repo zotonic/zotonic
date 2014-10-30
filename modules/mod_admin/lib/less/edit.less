@@ -1,0 +1,99 @@
+#content-address table {
+    margin-bottom: 0;
+}
+
+.pull-right p.admin-chapeau {
+    text-align: right;
+}
+
+p.admin-chapeau {
+    color: @textColorMuted;
+    margin: 0 0 2px 0;
+
+    a {
+        color: @textColorMuted;
+        text-decoration: underline;
+    }
+}
+
+ul.media {
+    margin: 0;
+
+    > li {
+        margin: 0 0 18px 3px;
+        background: #fff;
+        width: 25%;
+        height: 230px;
+        max-width: 200px;
+        float: left;
+        margin-left: 10px;
+        position: relative;
+        padding: 4px;
+        border: 1px solid #ddd;
+        #3L > .border-radius(@radiusBlockElement);
+        -webkit-box-shadow: 0 0 4px rgba(0,0,0,.125);
+        
+        img {
+            cursor: move;
+            width: 100%;
+        }
+        .bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0; right: 0;
+            padding: 2px;
+            
+            .caption {
+                height: 22px;
+                padding-left: 4px;
+                line-height: 1.6;
+                overflow: hidden;
+                a {
+                    word-break: break-all;
+                    display: inline-block;
+                    width: 85%;
+                }
+            }
+        }
+    }
+
+    > li.ui-sortable-placeholder {
+        background: #aaa;
+        #3L > .border-radius(@radiusBlockElement);
+    }
+}
+
+div.admin-header h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    color: #333;
+}
+
+div.admin-edit-media {
+    display: inline-block;
+    background: white;
+    padding: 0;
+    margin: 0 0 10px 0;
+    &:extend(.admin-image-border);
+}
+
+.ui-datepicker .ui-datepicker-header {
+    height: 29px;
+}
+
+input.do_datepicker {
+    width: 100px;
+    display: inline;
+}
+input.do_timepicker {
+    width: 70px;
+    display: inline;
+}
+
+.do_menuedit {
+    min-height:100px;
+}
+
+#sidebar-date-range .tab-content {
+    overflow: visible;
+}

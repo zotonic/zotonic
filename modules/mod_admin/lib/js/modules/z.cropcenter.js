@@ -20,8 +20,8 @@ $(function() {
 
                 var scale = parseInt(el.attr("data-original-width"), 10) / img.width();
 
-                var guide_h = $("<div>").attr("class", "cropguide horiz").hide();
-                var guide_v = $("<div>").attr("class", "cropguide vert").hide();
+                var guide_h = $("<div>").attr("class", "admin-cropguide admin-cropguide-horiz").hide();
+                var guide_v = $("<div>").attr("class", "admin-cropguide admin-cropguide-vert").hide();
 
                 el.append(guide_h).append(guide_v);
 

@@ -1,0 +1,134 @@
+div.widget {
+    @_sidePadding: 10px;
+    @_verticalPadding: 9px;
+    
+    margin-bottom: 10px;
+    border-bottom: none;
+    #3L > .border-radius(@radiusWidget);
+    #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+    background-color: @backgroundColorLighter;
+    
+    h5 {
+        margin-top: 18px;
+    }
+
+    div.widget-content {
+        padding: @_verticalPadding @_sidePadding;
+        
+        & h1, & h2, & h3, & h4, & h5, & h6 {
+            margin: @baseMargin 0;
+
+            &:first-of-type {
+                margin-top: 0;
+            }
+        }
+
+        > :last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-group:last-child {
+            padding-bottom: @_verticalPadding;
+            margin-bottom: 0;
+        }
+
+        &.nolang {
+            > .form-group:first-child {
+                padding-top: @_verticalPadding;
+            }
+        }
+
+        .rsc-item {
+            overflow: hidden;
+            height: 64px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid white;
+            
+            img {
+                margin-right: 4px;
+            }
+        }
+    }
+
+    .widget-header,
+    .widget-section-header {
+        font-size: 13px;
+        font-weight: normal;
+        text-shadow: @darkOnLightTextShadow;
+        color: @textColorMedium;
+    }
+    
+    .widget-section-header {
+        margin: 30px 0 15px 0;
+    }
+    
+    .widget-header {
+        margin: 0;
+        padding: @_verticalPadding @_sidePadding;
+        #3L > .border-radius(@radiusWidget @radiusWidget 0);
+        #3L > .gradient(#e0e0e0, @backgroundColorLighter);
+        
+        .pull-right {
+            margin: -2px;
+        }
+        i.pull-right.glyphicon {
+            margin: 1px;
+            font-size: 10px;
+            color: #888;
+            
+            &.white {
+                color: black;
+                text-shadow: @darkOnLightTextShadow;
+            }
+        }
+    }
+    h5 {
+        display: block;
+        margin: 20px 0;
+    }
+    
+    &.dark {
+        background: #ddd;
+        
+        .widget-header {
+            background: #ddd;
+        }
+    }
+    
+    .admin-button-help {
+        @_size: 16px;
+        display: block;
+        float: right;
+        width: @_size;
+        height: @_size;
+        background-color: #333;
+        border-color: #fff;
+        #3L > .border-radius(@_size/2);
+    }
+}
+
+li {
+    > div.widget {
+        #3L > .border-radius(0 0 @radiusWidget @radiusWidget);
+    }
+
+    h3.widget-header {
+        #3L > .border-radius(@radiusWidget @radiusWidget 0 0);
+        #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+    }
+    
+}
+
+div.widget ul.nav-tabs li.active > a {
+    #3L > .gradient(#eeeeee, #ffffff);
+}
+
+/* scroll - keep the save buttons into view
+   --------------------------------------------------------- */
+
+#sidebar-publish-page .widget-content {
+    display: block;
+}
+#sidebar-publish-page h3.widget-header i {
+    display: none;
+}

@@ -1,0 +1,81 @@
+#dialog-connect-results {
+    @_gutter: 6px;
+    
+    max-height: 400px;
+    margin-top: @baseMargin;
+    padding: 10px 0;
+    border-top: 1px solid @borderColorLight;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    // use smaller grid gutter
+    .row {
+        margin-left: -@_gutter;
+        margin-right: -@_gutter;
+    }
+    [class*="col-"] {
+        padding-left: @_gutter;
+        padding-right: @_gutter;
+    }
+    
+    .thumbnail {
+        @_padding: 5px;
+        @_contentPartMargin: 0.25em;
+        @_contentHeight: @thumbImageHeight;
+        @_heigth: @_contentHeight + 2 * @_padding + 2px; // add border
+        @_sideMargin: 2 * @_padding;
+        @_fontSize: 12px;
+        @_lineHeight: 1.1em;
+        
+        min-height: @_heigth;
+        max-height: @_heigth;
+        overflow: hidden;    
+        #3L > .border-radius(2px);
+        #3L > .box-shadow(none);
+        cursor: pointer;
+        margin-bottom: 2 * @_gutter;
+        padding: @_padding;
+        font-size: @_fontSize;
+        line-height: @_lineHeight;
+        
+        &:hover {
+            background-color: @backgroundColorRowHover;
+        }
+        
+        &.z-image-thumbnail {
+            h5, h6, p {
+                margin-left: @thumbImageWidth + @_sideMargin;
+            }
+        }
+        
+        img {
+            padding: 0;
+            #3L > .border-radius(0);
+            #3L > .box-shadow(none);
+            margin: 0 @_sideMargin 0 0;
+        }
+
+        h5, h6, p {
+            font-size: @_fontSize;
+            line-height: @_lineHeight;
+            font-weight: normal;
+            margin: 0 0 @_contentPartMargin 0;
+        }
+        h5, h6 {
+            .word_break;
+        }
+        h5 {
+            font-weight: bold;
+            max-height: @_lineHeight;
+            width: 1000px; // wide enough to write on 1 line
+        }
+        h6 {
+            text-transform: lowercase;
+            color: @textColorMuted;
+        }
+        p {
+            max-height: 2 * @_lineHeight;
+            overflow: hidden;
+        }
+    }
+}
