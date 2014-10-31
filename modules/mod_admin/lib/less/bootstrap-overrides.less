@@ -27,6 +27,22 @@
     }
 }
 .dropdown-menu {
+    &.admin-dropdown-menu-has-icons {
+        > li > a {
+            padding-left: 40px;
+            position: relative;
+            
+            .glyphicon {
+                @_height: 18px + 2 * 3px; // line-height + padding
+                @_icon_height: 13px; // icon font size
+                position: absolute;
+                left: 10px;
+                top: 0;
+                bottom: 0;
+                line-height: @_height;
+            }
+        }
+    }
     > li > a {
         text-shadow: @darkOnLightTextShadow;
     }

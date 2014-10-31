@@ -63,6 +63,17 @@ img.admin-list-overview {
 .btn.btn-sm .glyphicon {
   top: 1px;
 }
+.dropdown-menu.admin-dropdown-menu-has-icons > li > a {
+  padding-left: 40px;
+  position: relative;
+}
+.dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  line-height: 24px;
+}
 .dropdown-menu > li > a {
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
 }
@@ -530,7 +541,7 @@ div.modal .nav.nav-pills {
   text-shadow: 0 1px 0 rgba(0,0,0,.1);
 }
 .navbar-right {
-  margin-right: 0;
+  margin-right: 15px;
 }
 .navbar-nav > li > a {
   text-shadow: 0 1px 0 rgba(0,0,0,.1);
