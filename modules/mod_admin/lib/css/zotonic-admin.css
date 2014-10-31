@@ -360,6 +360,47 @@ input.do_timepicker {
 #sidebar-date-range .tab-content {
   overflow: visible;
 }
+.admin-navbar-fixed-save {
+  z-index: 1000;
+  opacity: 0;
+  position: fixed;
+  top: 44px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding: 5px;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -moz-transition: opacity 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+  min-height: inherit;
+}
+.admin-navbar-fixed-save.navbar .pull-right {
+  float: right;
+}
+.admin-navbar-fixed-save label {
+  color: white;
+  margin-left: 20px;
+}
+.admin-navbar-fixed-save .navbar-inner {
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+  padding: 0 4px 0 4px;
+}
+.admin-navbar-fixed-save .control-group {
+  margin: 0 20px 0;
+}
+.scrolled .admin-navbar-fixed-save {
+  opacity: 1.0;
+}
+@media (max-width: 979px) {
+  .admin-navbar-fixed-save {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+}
 div.admin-form :last-child {
   margin-bottom: 0;
 }
@@ -477,58 +518,22 @@ div.modal div.tab-content {
 div.modal .nav.nav-pills {
   margin-bottom: 15px;
 }
+.navbar-brand:hover,
+.navbar-brand:hover .zotonic-logo {
+  color: #fff;
+}
 .navbar-brand > img {
   margin-top: -2px;
 }
 .navbar-brand .zotonic-logo {
   padding-top: 2px;
+  text-shadow: 0 1px 0 rgba(0,0,0,.1);
 }
 .navbar-right {
   margin-right: 0;
 }
 .navbar-nav > li > a {
   text-shadow: 0 1px 0 rgba(0,0,0,.1);
-}
-.navbar-fixed-save {
-  z-index: 1000;
-  opacity: 0;
-  position: fixed;
-  top: 44px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  padding: 5px;
-  -webkit-transition: opacity 0.5s ease-in-out;
-  -moz-transition: opacity 0.5s ease-in-out;
-  -o-transition: opacity 0.5s ease-in-out;
-  transition: opacity 0.5s ease-in-out;
-  min-height: inherit;
-}
-.navbar-fixed-save.navbar .pull-right {
-  float: right;
-}
-.navbar-fixed-save label {
-  color: white;
-  margin-left: 20px;
-}
-.navbar-fixed-save .navbar-inner {
-  -webkit-border-radius: 0 0 4px 4px;
-  -moz-border-radius: 0 0 4px 4px;
-  border-radius: 0 0 4px 4px;
-  padding: 0 4px 0 4px;
-}
-.navbar-fixed-save .control-group {
-  margin: 0 20px 0;
-}
-.scrolled .navbar-fixed-save {
-  opacity: 1.0;
-}
-@media (max-width: 979px) {
-  .navbar-fixed-save {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-  }
 }
 input[type="text"].rtl,
 textarea.rtl {
