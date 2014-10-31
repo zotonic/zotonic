@@ -498,7 +498,7 @@ start_session(Action, CurrentSessionId, Context) ->
 %% @doc fetch the session id from the request, return 'undefined' when not found
 -spec get_session_cookie( #context{} ) -> string() | undefined.
 get_session_cookie(Context) ->
-    case z_context:get_cookie(?SESSION_COOKIE, Context) of
+    case z_context:get_cookie(get_session_cookie_name(Context), Context) of
         undefined ->
             % Check the z_sid in query or dispatch args
             case z_context:get_q(z_sid, Context) of
@@ -512,6 +512,13 @@ get_session_cookie(Context) ->
             to_binary(SessionId)
     end.
 
+%% @doc Fetch the name of the session cookie. Default to "z_sid"
+-spec get_session_cookie_name(#context{}) -> string().
+get_session_cookie_name(Context) ->
+    case m_config:get_value(site, session_cookie_name, Context) of
+        undefined -> ?SESSION_COOKIE;
+        Cookie -> z_convert:to_list(Cookie)
+    end.
 
 %% @doc Save the session id in a cookie on the user agent
 -spec set_session_cookie( string(), #context{} ) -> #context{}.
@@ -519,7 +526,7 @@ set_session_cookie(SessionId, Context) ->
     Options = [{path, "/"},
                {http_only, true}],
     z_context:set_cookie(
-                    ?SESSION_COOKIE, 
+                    get_session_cookie_name(Context), 
                     SessionId,
                     Options,
                     z_context:set(set_session_id, true, Context)).
@@ -531,7 +538,7 @@ clear_session_cookie(Context) ->
     Options = [{max_age, 0}, 
                {path, "/"}, 
                {http_only, true}],
-    Context1 = z_context:set_cookie(?SESSION_COOKIE, "", Options, Context),
+    Context1 = z_context:set_cookie(get_session_cookie_name(Context), "", Options, Context),
     Context1#context{session_id=undefined, session_pid=undefined}.
 
 
