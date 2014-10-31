@@ -44,9 +44,8 @@
     <div class="form-group">
         <div>
 	    <label class="checkbox-inline">
-                <input id="field-reversed" type="checkbox" class="do_fieldreplace" name="reversed" {% if r.reversed %}checked="checked"{% endif %} value="1" />
-		{_ The direction (from/to) of this predicate is reversed from the normal definition. _}
-            </label>
+            <input id="field-reversed" type="checkbox" class="do_fieldreplace" name="reversed" {% if r.reversed %}checked="checked"{% endif %} value="1" />{_ The direction (from/to) of this predicate is reversed from the normal definition. _}
+        </label>
 	</div>
     </div>
 </fieldset>
