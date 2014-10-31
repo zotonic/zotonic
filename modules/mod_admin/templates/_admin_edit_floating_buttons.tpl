@@ -1,4 +1,4 @@
-<div class="navbar navbar-fixed-save navbar-default">
+<div class="navbar admin-navbar-fixed-save navbar-default">
 	{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
 	
 	{% if id.page_url %}

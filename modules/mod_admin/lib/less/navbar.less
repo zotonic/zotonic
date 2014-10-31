@@ -1,9 +1,16 @@
 .navbar-brand {
+    &:hover {
+        &, 
+        .zotonic-logo {
+            color: #fff;
+        }
+    }
     > img {
         margin-top: -2px;
     }
     .zotonic-logo {
         padding-top: 2px;
+        text-shadow: @lightOnDarkTextShadow;
     }
 }
 .navbar-right {
@@ -11,49 +18,4 @@
 }
 .navbar-nav > li > a {
     text-shadow: @lightOnDarkTextShadow;
-}
-
-.navbar-fixed-save {
-    z-index: 1000;
-    opacity: 0;
-    position: fixed;
-    top: 44px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    padding: 5px;
-    -webkit-transition: opacity 0.5s ease-in-out;
-    -moz-transition: opacity 0.5s ease-in-out;
-    -o-transition: opacity 0.5s ease-in-out;
-    transition: opacity 0.5s ease-in-out;
-    min-height: inherit;
-    
-    &.navbar {
-        .pull-right {
-            float: right;
-        }
-    }
-    
-    label {
-        color: white;
-        margin-left: 20px;
-    }
-    .navbar-inner {
-        #3L > .border-radius(0 0 @radiusBlockElement @radiusBlockElement);
-        padding: 0 4px 0 4px;
-    }
-    .control-group {
-        margin: 0 20px 0;
-    }
-}
-.scrolled .navbar-fixed-save {
-    opacity: 1.0;
-}
-
-@media (max-width: @breakpointMediumMaxWidth) {
-    .navbar-fixed-save {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-    }
 }
