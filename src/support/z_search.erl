@@ -253,7 +253,6 @@ add_acl_check(_, Args, _Q, _Context) ->
 add_acl_check1(Table, Alias, Args, SearchSql, Context) ->
     case z_notifier:first(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) of
         undefined ->
-            % N = length(Args),
             case z_acl:can_see(Context) of
                 ?ACL_VIS_USER ->
                     % Admin or supervisor, can see everything
@@ -268,9 +267,10 @@ add_acl_check1(Table, Alias, Args, SearchSql, Context) ->
                     {Sql, Args};
                 ?ACL_VIS_GROUP ->
                     % Can see published community and public content or any content from one of the user's groups
-                    Sql = Alias ++ ".visible_for in (0,1) " ++ publish_check(Table, Alias, SearchSql),
-                    N = length(Args),
-                    Sql1 = "((" ++ Sql ++ ") or "++Alias++".id = $"++integer_to_list(N+1),
+                    Sql = Alias ++ ".visible_for <= 2 " ++ publish_check(Table, Alias, SearchSql),
+                    Sql1 = lists:flatten([
+                            $(, $(, Sql, ") or ", Alias, ".id = $", integer_to_list(length(Args)+1), $)
+                        ]),
                     {Sql1, Args ++ [z_acl:user(Context)]}
             end;
         {_NewSql, _NewArgs} = Result ->
