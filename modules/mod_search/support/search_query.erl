@@ -62,14 +62,13 @@ parse_request_args([{K,V}|Rest], Acc) ->
 %% Parses a query text. Every line is an argument; of which the first
 %% '=' separates argument key from argument value.
 %% @doc parse_query_text(string()) -> [{K, V}]
+parse_query_text(Text) when is_list(Text) ->
+    parse_query_text(list_to_binary(Text));
+
 parse_query_text(Text) ->
-    case is_binary(Text) of
-        true ->
-            parse_query_text(z_convert:to_list(Text));
-        _ ->
-            Lines = string:tokens(Text, "\n"),
-            [ {request_arg(L), string:join(Rest, "=")} || [L|Rest] <- [ string:tokens(string:strip(L), "=") || L <- Lines] ]
-    end.
+    Lines = binary:split(Text, <<"\n">>, [global]),
+    [ {request_arg(binary_to_list(L)), Rest}
+      || [L, Rest] <- [ binary:split(z_string:trim(L), <<"=">>) || L <- Lines] ].
 
 
 % Convert request arguments to atom. Doing it this way avoids atom
@@ -151,11 +150,11 @@ parse_query([{id_exclude, _Id}|Rest], Context, Result)  ->
 
 %% hassubject=[id]
 %% Give all things which have an incoming edge to Id
-parse_query([{hassubject, Id}|Rest], Context, Result) when is_integer(Id) ->
+parse_query([{hassubject, Id}|Rest], Context, Result) when is_integer(Id); is_binary(Id) ->
     parse_query([{hassubject, [Id]}|Rest], Context, Result);
 parse_query([{hassubject, [Id]}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join("object_id", Result),
-    {Arg, Result2} = add_arg(m_rsc:rid(Id,Context), Result1),
+    {Arg, Result2} = add_arg(m_rsc:rid(Id, Context), Result1),
     Result3 = add_where(A ++ ".subject_id = " ++ Arg, Result2),
     parse_query(Rest, Context, Result3);
 
@@ -180,7 +179,7 @@ parse_query([{hassubject, Id}|Rest], Context, Result) when is_list(Id) ->
 
 %% hasobject=[id]
 %% Give all things which have an outgoing edge to Id
-parse_query([{hasobject, Id}|Rest], Context, Result) when is_integer(Id) ->
+parse_query([{hasobject, Id}|Rest], Context, Result) when is_integer(Id); is_binary(Id) ->
     parse_query([{hasobject, [Id]}|Rest], Context, Result);
 parse_query([{hasobject, [Id]}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join("subject_id", Result),
@@ -521,9 +520,10 @@ sql_safe(String) ->
 
 %% Make sure the input is a list of valid categories.
 assure_categories(Name, Context) ->
-    Cats = case z_string:is_string(Name) of
-               true -> [iolist_to_binary(Name)];
-               false -> Name
+    Cats = case {z_string:is_string(Name), is_binary(Name)} of
+               {true, false} -> [iolist_to_binary(Name)];
+               {_, true} -> [Name];
+               _ -> Name
            end,
     Cats1 = assure_cat_flatten(Cats),
     lists:foldl(fun(C, Acc) ->
