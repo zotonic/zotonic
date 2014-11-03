@@ -35,7 +35,7 @@ menu_subtree(_, <<>>, _, _) -> [];
 menu_subtree(_, [], _, _) -> [];
 menu_subtree(BelowId, Menu, AddSiblings, Context) when is_integer(Menu) ->
     menu_subtree(BelowId, m_rsc:p(Menu, menu, Context), AddSiblings, Context);
-menu_subtree(BelowId, [{MId,L}|_] = Menu, AddSiblings, Context) when is_integer(MId), is_list(L) ->
+menu_subtree(BelowId, [{_MId,L}|_] = Menu, AddSiblings, Context) when is_list(L) ->
     mod_menu:menu_subtree(mod_menu:remove_invisible(Menu, Context), BelowId, z_convert:to_bool(AddSiblings), Context);
 menu_subtree(BelowId, Menu, AddSiblings, Context) ->
     menu_subtree(BelowId, m_rsc:rid(Menu, Context), AddSiblings, Context).
