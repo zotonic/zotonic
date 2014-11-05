@@ -168,7 +168,7 @@ msgstr ""
 #: modules/mod_backup/templates/admin_backup.tpl:39
 msgid ""
 "The \"tar\" command was not found in the path. Set the \"tar\" config key to "
-"the path to pg_dump and return to this page."
+"the path to tar and return to this page."
 msgstr ""
 "Команда «tar» не доступна в путях, указанных в переменной среды PATH. "
 "Установите ключ настройки «tar» в путь к исполняемому файлу tar в файловой "

@@ -146,7 +146,7 @@ msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" co
 msgstr "\"pg_dump\" komutu tanımlı yolda bulunamadı. \"pg_dump\" yapılandırma anahtarını tanımladıktan sonra bu sayfaya geri dönün."
 
 #: modules/mod_backup/templates/admin_backup.tpl:39
-msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to pg_dump and return to this page."
+msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "\"tar\" komutu tanımlı yolda bulunamadı. \"tar\" yapılandırma anahtarını tanımladıktan sonra bu sayfaya geri dönün."
 
 #: modules/mod_backup/templates/admin_backup.tpl:27
