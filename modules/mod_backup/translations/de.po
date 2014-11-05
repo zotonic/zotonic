@@ -51,7 +51,7 @@ msgstr "Backups"
 
 #~ msgid ""
 #~ "The \"tar\" command was not found in the path. Set the \"tar\" config key "
-#~ "to the path to pg_dump and return to this page."
+#~ "to the path to tar and return to this page."
 #~ msgstr ""
 #~ "Das \"tar\"-Kommandozeilentool konnte nicht gefunden werden. Setzen Sie "
 #~ "die Einstellung \"tar\" entsprechend, und versuchen Sie es anschließend "

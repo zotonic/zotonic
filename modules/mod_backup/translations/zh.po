@@ -164,7 +164,7 @@ msgstr ""
 #: modules/mod_backup/templates/admin_backup.tpl:39
 msgid ""
 "The \"tar\" command was not found in the path. Set the \"tar\" config key to "
-"the path to pg_dump and return to this page."
+"the path to tar and return to this page."
 msgstr ""
 "命令 \"tar\" 没有在搜索路径中找到。请设置 \"tar\" 的配置项然后返回本页面。"
 
