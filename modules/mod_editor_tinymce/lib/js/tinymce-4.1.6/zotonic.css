@@ -1,0 +1,32 @@
+/* This file contains the CSS data for the editable area (iframe) of tinyMCE */
+
+body {
+    font-size: 13px;
+}
+
+img.z-tinymce-media {
+    border: 1px solid #eee;
+    height: auto ! important;
+    cursor: pointer ! important;
+    width: 270px;
+}
+
+img.z-tinymce-media.z-active:hover {
+    border: 1px solid #039ed4;
+}
+
+img.z-tinymce-media-align-block {
+    display: block;
+    margin: 18px 0;
+}
+
+img.z-tinymce-media-align-right {
+    float: right;
+    margin: 0 0 0 4px;
+}
+
+img.z-tinymce-media-align-left {
+    float: left;
+    margin: 0 4px 0 0;
+}
+

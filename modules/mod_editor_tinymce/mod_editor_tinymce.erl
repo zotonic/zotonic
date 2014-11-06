@@ -26,9 +26,9 @@
 -export([init/1]).
 
 init(Context) ->
-    % set to default version 4.0.26
+    Newest = "4.1.6",
     case m_config:get(?MODULE, version, Context) of 
-        undefined -> m_config:set_value(?MODULE, version, "4.0.26", Context);
+        undefined -> m_config:set_value(?MODULE, version, Newest, Context);
         _ -> undefined
     end,
 	ok.
