@@ -7,7 +7,7 @@ PARSER    := src/erlydtl/erlydtl_parser
 # see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
 REBAR := ./rebar
 REBAR_URL := https://github.com/rebar/rebar/wiki/rebar
-REBAR_ENV = EXOMETER_PACKAGES="-afunix -netlink -exo"
+REBAR_ENV = EXOMETER_PACKAGES="-afunix -netlink -exo +setup"
 
 # The release branch should have a file named USE_REBAR_LOCKED
 # See: https://github.com/lukyanov/rebar-lock-deps
