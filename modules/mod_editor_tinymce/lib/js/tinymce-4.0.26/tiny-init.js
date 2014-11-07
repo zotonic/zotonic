@@ -73,5 +73,6 @@ if (typeof tinyInit !== 'object')
 	tab_focus: ":prev,:next", 
 	wpeditimage_disable_captions: "", 
 	table_row_limit: 100,
-	table_col_limit: 10
+	table_col_limit: 10,
+	autoresize_max_height: 400
 };
