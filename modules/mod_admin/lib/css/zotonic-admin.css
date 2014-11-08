@@ -15,6 +15,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
+body {
+  color: #222222;
+}
 body div.admin-container {
   margin: 15px;
   margin-top: 70px;
@@ -28,6 +31,11 @@ body.wait {
 body.wait .btn {
   cursor: wait;
 }
+@media (max-width: 979px) {
+  body > div.container-fluid {
+    margin-top: 0;
+  }
+}
 hr {
   background-color: #ddd;
   border-top-color: #d0d0d0;
@@ -40,10 +48,12 @@ img.admin-list-dashboard,
 img.admin-list-overview {
   border: 1px solid #fff;
 }
-@media (max-width: 979px) {
-  body > div.container-fluid {
-    margin-top: 0;
-  }
+.admin-text-header,
+div.widget .widget-header,
+div.widget .widget-section-header {
+  font-size: 13px;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  color: #777777;
 }
 .text-muted {
   color: #999999;
@@ -120,6 +130,7 @@ a span.category {
 #unlink-undo-message div.alert {
   padding-right: 14px;
   /* right-aligned undo button in page connections */
+
 }
 /* .media-sorter .ui-sortable-placeholder, */
 .connections-list .ui-sortable-placeholder {
@@ -463,7 +474,7 @@ img.admin-list-dashboard {
   margin: -1px 3px 0 0;
 }
 ul.tree-list img.admin-list-dashboard {
-  width: 21.33333333px;
+  width: 21.333333333333332px;
   height: 16px;
 }
 img.admin-list-overview {
@@ -742,6 +753,7 @@ div.widget-content .mce-tinymce.mce-container {
   border: 0;
   margin: 0 -4px -8px -4px;
   /* makes it fill the whole widget-content area */
+
 }
 /* sets tinyMCE font size in admin */
 div.widget-content .mce-container,
@@ -846,10 +858,7 @@ div.widget div.widget-content .rsc-item img {
 }
 div.widget .widget-header,
 div.widget .widget-section-header {
-  font-size: 13px;
   font-weight: normal;
-  text-shadow: 0 1px 0 rgba(255,255,255,.5);
-  color: #666666;
 }
 div.widget .widget-section-header {
   margin: 30px 0 15px 0;
@@ -868,10 +877,12 @@ div.widget .widget-header {
 div.widget .widget-header .pull-right {
   margin: -2px;
 }
+div.widget .widget-header .glyphicon {
+  font-size: 10px;
+  color: #777777;
+}
 div.widget .widget-header i.pull-right.glyphicon {
   margin: 1px;
-  font-size: 10px;
-  color: #888;
 }
 div.widget .widget-header i.pull-right.glyphicon.white {
   color: black;
