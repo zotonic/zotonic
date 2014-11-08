@@ -128,7 +128,7 @@ function z_dialog_confirm(options)
 {
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
-         + '<button class="btn z-dialog-cancel-button">'
+         + '<button class="btn btn-default z-dialog-cancel-button">'
          + (options.cancel||z_translate('Cancel'))
          + '</button>'
          + '<button class="btn btn-primary z-dialog-ok-button">'
