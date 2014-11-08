@@ -52,10 +52,8 @@ div.widget {
 
     .widget-header,
     .widget-section-header {
-        font-size: 13px;
+        &:extend(.admin-text-header);
         font-weight: normal;
-        text-shadow: @darkOnLightTextShadow;
-        color: @textColorMedium;
     }
     
     .widget-section-header {
@@ -71,12 +69,15 @@ div.widget {
         .pull-right {
             margin: -2px;
         }
+        .glyphicon {
+            font-size: 10px;
+            color: @textColorMedium;
+        }
         i.pull-right.glyphicon {
             margin: 1px;
-            font-size: 10px;
-            color: #888;
-            
+
             &.white {
+                // no we're not using the color white
                 color: black;
                 text-shadow: @darkOnLightTextShadow;
             }
