@@ -471,7 +471,7 @@ msgstr "Laatste evenementen"
 
 #: modules/mod_admin/templates/admin.tpl:41
 msgid "Latest modified locations"
-msgstr "Laatste lokaties"
+msgstr "Laatste locaties"
 
 #: modules/mod_admin/templates/admin.tpl:50
 msgid "Latest modified media items"
@@ -1259,7 +1259,7 @@ msgstr "bezoek site"
 #~ msgstr "Er verwijzen geen pagina's naar deze pagina."
 
 #~ msgid "Please click on the map to select the location."
-#~ msgstr "Klik op de kaart om de lokatie te selecteren."
+#~ msgstr "Klik op de kaart om de locatie te selecteren."
 
 #~ msgid "Published?"
 #~ msgstr "Gepubliceerd?"
