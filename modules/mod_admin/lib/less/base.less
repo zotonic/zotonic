@@ -31,6 +31,50 @@ hr {
     width: 100%;
 }
 
+// zotonic specific
+
+.z-drag-drop-placeholder {
+    background: @backgroundDragPlaceholder;
+    border: none;
+    #3L > .border-radius(@radiusBlockElement);
+    visibility: visible !important;
+}
+
+.z-close-btn {
+    @_inner_size: 13px;
+    
+    position: relative;
+    padding: 0;
+    width: @closeBtnSize;
+    height: @closeBtnSize;
+    #3L > .border-radius(@closeBtnSize/2);
+    background-color: transparent;
+    color: @textColorDark;
+    border: none;
+    #3L > .box-shadow(none);
+
+    &, 
+    i.glyphicon {    
+        font-size: @_inner_size;
+        line-height: @closeBtnSize;
+        text-align: center;
+        text-shadow: none;
+    }
+    i.glyphicon {    
+        .center();
+    }
+    &:hover {
+        background-color: @warningColor;
+        cursor: pointer;
+        
+        &, 
+        i.glyphicon {    
+            color: #fff;
+            text-shadow: none;
+        }
+    }
+}
+
 // extensible
 
 .admin-image-border {

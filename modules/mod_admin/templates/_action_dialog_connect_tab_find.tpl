@@ -1,7 +1,7 @@
 <div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-find">
 	<p>{_ Find an existing page to connect _}</p>
 
-	<form id="dialog-connect-find" class="row">
+	<form id="dialog-connect-find" class="row form form-horizontal">
         <div class="col-md-8">
 		    <input name="find_text" type="text" value="" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
         </div>

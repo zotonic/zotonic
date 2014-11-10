@@ -11,7 +11,7 @@
     {% endif %}
 </p>
 
-<form id="{{ #form }}" method="POST" action="postback" class="form">
+<form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 
 	<div class="form-group row">
 	    <label class="control-label col-md-3" for="new_rsc_title">{_ Page title _}</label>

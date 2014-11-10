@@ -1,23 +1,29 @@
-#dialog-connect-results {
-    @_gutter: 6px;
-    
+// use smaller grid gutter
+@_thumbnail_gutter: 6px;
+
+.connect-results {
     max-height: 400px;
     margin-top: @baseMargin;
     padding: 10px 0;
-    border-top: 1px solid @borderColorLight;
     overflow-x: hidden;
     overflow-y: auto;
-
-    // use smaller grid gutter
-    .row {
-        margin-left: -@_gutter;
-        margin-right: -@_gutter;
-    }
-    [class*="col-"] {
-        padding-left: @_gutter;
-        padding-right: @_gutter;
-    }
     
+    .row {
+        margin-left: -@_thumbnail_gutter;
+        margin-right: -@_thumbnail_gutter;
+    }
+}
+
+.thumbnails {
+    list-style: none;
+    padding: 0;
+    #3L > .clearfix;
+    
+    [class*="col-"] {
+        padding-left: @_thumbnail_gutter;
+        padding-right: @_thumbnail_gutter;
+    }
+
     .thumbnail {
         @_padding: 5px;
         @_contentPartMargin: 0.25em;
@@ -33,7 +39,7 @@
         #3L > .border-radius(2px);
         #3L > .box-shadow(none);
         cursor: pointer;
-        margin-bottom: 2 * @_gutter;
+        margin-bottom: 2 * @_thumbnail_gutter;
         padding: @_padding;
         font-size: @_fontSize;
         line-height: @_lineHeight;

@@ -1,19 +1,30 @@
-div.widget {
-    @_sidePadding: 10px;
-    @_verticalPadding: 9px;
-    
+   
+.widget {    
     margin-bottom: 10px;
     border-bottom: none;
     #3L > .border-radius(@radiusWidget);
-    #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+//    #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
     background-color: @backgroundColorLighter;
     
     h5 {
         margin-top: 18px;
     }
 
-    div.widget-content {
-        padding: @_verticalPadding @_sidePadding;
+    .widget-content {
+        padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
+        
+        .widget-content {
+            // nested
+            padding: 0;
+        }
+        
+        &:last-child {
+            padding-bottom: @widgetVerticalPadding;
+        }
+        
+        &:empty {
+            display: none;
+        }
         
         & h1, & h2, & h3, & h4, & h5, & h6 {
             margin: @baseMargin 0;
@@ -28,24 +39,19 @@ div.widget {
         }
         
         .form-group:last-child {
-            padding-bottom: @_verticalPadding;
+            padding-bottom: @widgetVerticalPadding;
             margin-bottom: 0;
         }
 
-        &.nolang {
-            > .form-group:first-child {
-                padding-top: @_verticalPadding;
-            }
+        .rsc-item-wrapper {
+            margin: 0 0 10px 0;
         }
-
         .rsc-item {
             overflow: hidden;
-            height: 64px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid white;
+            height: 5em;
             
             img {
-                margin-right: 4px;
+                margin: 0 10px 0 0;
             }
         }
     }
@@ -62,20 +68,14 @@ div.widget {
     
     .widget-header {
         margin: 0;
-        padding: @_verticalPadding @_sidePadding;
+        padding: @widgetVerticalPadding @widgetSidePadding;
         #3L > .border-radius(@radiusWidget @radiusWidget 0);
         #3L > .gradient(#e0e0e0, @backgroundColorLighter);
         
-        .pull-right {
-            margin: -2px;
-        }
         .glyphicon {
-            font-size: 10px;
             color: @textColorMedium;
         }
         i.pull-right.glyphicon {
-            margin: 1px;
-
             &.white {
                 // no we're not using the color white
                 color: black;
@@ -109,7 +109,7 @@ div.widget {
 }
 
 li {
-    > div.widget {
+    > .widget {
         #3L > .border-radius(0 0 @radiusWidget @radiusWidget);
     }
 
@@ -120,7 +120,7 @@ li {
     
 }
 
-div.widget ul.nav-tabs li.active > a {
+.widget ul.nav-tabs li.active > a {
     #3L > .gradient(#eeeeee, #ffffff);
 }
 

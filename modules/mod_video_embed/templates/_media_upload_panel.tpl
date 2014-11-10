@@ -10,7 +10,7 @@
     		postback={add_video_embed predicate=predicate actions=actions id=id subject_id=subject_id callback=callback stay=stay} 
     		delegate="mod_video_embed" %}
 
-    <form id="{{ #form }}" method="POST" action="postback" class="form">
+    <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 	{% if not id %}
 	    <div class="form-group row">
 	        <label class="control-label col-md-3" for="{{ #title }}">{_ Media title _}</label>

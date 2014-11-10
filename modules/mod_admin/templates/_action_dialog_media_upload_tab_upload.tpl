@@ -10,7 +10,7 @@
         postback={media_upload predicate=predicate actions=actions id=id subject_id=subject_id stay=stay callback=callback}
         delegate=`action_admin_dialog_media_upload`
     %}
-    <form id="{{ #form }}" method="POST" action="postback" class="form">
+    <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
         <fieldset>
             {% if not id %}
                 <div class="form-group row">

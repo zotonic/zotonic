@@ -1,13 +1,19 @@
 {% with m.config.i18n.language_list.list as languages %}
     {% with m.rsc[id].language as r_lang %}
-
         {% wire id=#form type="submit" 
-	        postback={rsc_edit_basics id=id edge_id=edge_id update_element=update_element
-				template=template actions=actions callback=callback is_update=is_update}
+	        postback={
+	            rsc_edit_basics
+	            id=id
+	            edge_id=edge_id
+	            update_element=update_element
+				template=template
+				actions=actions
+				callback=callback
+				is_update=is_update
+			}
 	        delegate=delegate 
         %}
-        <form id="{{ #form }}" method="POST" action="postback" class="form">
-
+        <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
             <div class="tabbable">
                 {% block tabbar %}
 	                <ul class="nav nav-pills">
@@ -15,8 +21,7 @@
 	                    <li><a data-toggle="tab" href="#{{ #acl }}">{_ Access control _}</a></li>
 	                </ul>
                 {% endblock %}
-                
-                <div class="tab-content">
+                <div class="tab-content form-horizontal">
                     {% block tab_content %}
 	                    <div class="tab-pane active" id="{{ #main }}">
 
@@ -57,7 +62,6 @@
             </div>
             
             <div class="modal-footer">
-
 	            {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 	            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default">{_ Visit full edit page _}</a>
 	            {% button class="btn btn-primary" type="submit" text=_"Save" %}

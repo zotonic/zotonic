@@ -28,14 +28,14 @@ $.widget("z.adminwidget",
         var self = this;
         self.element.addClass("widget-active");
         self.item = self.element.find("div.widget-content");
-        self.header = self.element.find("h3:first");
+        self.header = self.element.find(".widget-header");
         self.tabs = self.element.find(".language-tabs");
-        if (self.options.minifier) {
-            self.icon = $("<i>").appendTo(self.header);
+        var doMinify = self.options.minifier || $(self.element).attr("data-minifier");
+        if (doMinify) {
+            self.icon = $("<i>").appendTo(self.header).css("cursor", "pointer");            
             self.header
-                .css("cursor", "pointer")
-                .bind("mouseover", function(){self.icon.addClass('white');})
-                .bind("mouseout", function(){self.icon.removeClass('white');})
+                .on("mouseover", function(){self.icon.addClass('white');})
+                .on("mouseout", function(){self.icon.removeClass('white');})
                 .attr("title", z_translate("Click to toggle"))
                 .click(function(ev){self.toggle(ev);});
         }
@@ -64,27 +64,43 @@ $.widget("z.adminwidget",
     
     hide: function(skipAnim) {
         var self = this;
-        if (skipAnim) 
+        if (skipAnim) {
             self.item.hide();
-        else
+        } else {
             self.item.slideUp(200);
-        if (self.tabs)
+        }
+        if (self.tabs) {
             self.tabs.hide();
+        }
         self.icon.attr("class", "pull-right glyphicon glyphicon-plus");
         self.showing = false;
     },
 
     show: function(skipAnim) {
         var self = this;
-        if (skipAnim) 
-            self.item.show();
-        else
-            self.item.slideDown(200);
-        if (self.tabs)
+        // only show items that have content
+        self.item.each(function(index) {
+            var $item = $(this);
+            if (!self.itemIsEmpty($item)) {
+                if (skipAnim) {
+                    $item.show();
+                } else {
+                    $item.slideDown(200);
+                }
+            }
+        });
+        
+        if (self.tabs) {
             self.tabs.show();
-        if (self.icon)
+        }
+        if (self.icon) {
             self.icon.attr("class", "pull-right glyphicon glyphicon-minus");
+        }
         self.showing = true;
+    },
+    
+    itemIsEmpty: function(el) {
+        return !$.trim(el.html());
     }
 });
 
