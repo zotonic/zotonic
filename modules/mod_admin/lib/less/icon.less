@@ -1,7 +1,6 @@
-.icon {
-    position: relative;
-    top: 1px;
-    display: inline-block;
+.z-icon {
+    position: absolute;
+    display: block;
     font-family: "Glyphicons Halflings";
     font-style: normal;
     font-weight: 400;
@@ -9,6 +8,10 @@
 }
 
 .icon-move {
-    &:extend(.icon);
+    &:extend(.z-icon);
     content: "\e068";
+}
+.icon-remove {
+    &:extend(.z-icon);
+    content: "\e014";
 }

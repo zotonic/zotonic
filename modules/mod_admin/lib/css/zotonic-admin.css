@@ -53,6 +53,7 @@ ul.media > li.ui-sortable-placeholder {
   visibility: visible !important;
 }
 .z-close-btn {
+  display: block;
   position: relative;
   padding: 0;
   width: 21px;
@@ -60,21 +61,16 @@ ul.media > li.ui-sortable-placeholder {
   -webkit-border-radius: 10.5px;
   -moz-border-radius: 10.5px;
   border-radius: 10.5px;
-  background-color: transparent;
-  color: #222222;
-  border: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+  background-color: transparent;
+  border: none;
 }
-.z-close-btn,
-.z-close-btn i.glyphicon {
-  font-size: 13px;
-  line-height: 21px;
-  text-align: center;
-  text-shadow: none;
-}
-.z-close-btn i.glyphicon {
+.z-close-btn:before {
+  width: 13px;
+  height: 13px;
+  content: "\e014";
   display: block;
   position: absolute;
   top: 0;
@@ -82,15 +78,14 @@ ul.media > li.ui-sortable-placeholder {
   left: 0;
   right: 0;
   margin: auto;
+  color: #222222;
 }
 .z-close-btn:hover {
   background-color: #e4522a;
   cursor: pointer;
 }
-.z-close-btn:hover,
-.z-close-btn:hover i.glyphicon {
+.z-close-btn:hover:before {
   color: #fff;
-  text-shadow: none;
 }
 .admin-image-border,
 div.admin-edit-media,
@@ -201,13 +196,17 @@ ul.blocks.ui-sortable > li {
 ul.blocks.ui-sortable .widget-header {
   position: relative;
   cursor: move;
+  padding-left: 32px;
 }
 ul.blocks.ui-sortable .widget-header:before {
+  position: absolute;
   width: 16px;
   height: 16px;
   display: block;
   content: "\e068";
-  top: 2px;
+  left: 10px;
+  top: 11px;
+  color: #999999;
 }
 ul.blocks.ui-sortable .widget-header .z-close-btn {
   position: absolute;
@@ -405,12 +404,13 @@ textarea.form-field-error,
 input.form-field-error {
   background: #ffeeee;
 }
-.icon,
+.z-icon,
+.z-close-btn:before,
 ul.blocks.ui-sortable .widget-header:before,
-.icon-move {
-  position: relative;
-  top: 1px;
-  display: inline-block;
+.icon-move,
+.icon-remove {
+  position: absolute;
+  display: block;
   font-family: "Glyphicons Halflings";
   font-style: normal;
   font-weight: 400;
@@ -418,6 +418,9 @@ ul.blocks.ui-sortable .widget-header:before,
 }
 .icon-move {
   content: "\e068";
+}
+.icon-remove {
+  content: "\e014";
 }
 img.thumb {
   padding: 0;
@@ -901,6 +904,9 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 }
 .widget .widget-content > :last-child {
   margin-bottom: 0;
+}
+.widget .widget-content.tab-content {
+  padding-top: 10px;
 }
 .widget .widget-content .form-group:last-child {
   padding-bottom: 9px;

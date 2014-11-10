@@ -22,13 +22,17 @@ ul.blocks.ui-sortable {
     .widget-header {
         position: relative;
         cursor: move;
+        padding-left: 32px;
         
         &:before {
+            position: absolute;
             width: 16px;
             height: 16px;
             display: block;
             .icon-move;
-            top: 2px;
+            left: @widgetSidePadding;
+            top: @widgetVerticalPadding + 2;
+            color: @textColorMuted;
         }
 
         .z-close-btn {

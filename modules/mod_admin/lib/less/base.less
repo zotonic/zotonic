@@ -43,34 +43,31 @@ hr {
 .z-close-btn {
     @_inner_size: 13px;
     
+    display: block;
     position: relative;
     padding: 0;
     width: @closeBtnSize;
     height: @closeBtnSize;
     #3L > .border-radius(@closeBtnSize/2);
-    background-color: transparent;
-    color: @textColorDark;
-    border: none;
     #3L > .box-shadow(none);
-
-    &, 
-    i.glyphicon {    
-        font-size: @_inner_size;
-        line-height: @closeBtnSize;
-        text-align: center;
-        text-shadow: none;
-    }
-    i.glyphicon {    
-        .center();
+    background-color: transparent;
+    border: none;
+    
+    &:before {
+        position: absolute;
+        display: block;
+        width: @_inner_size;
+        height: @_inner_size;
+        .icon-remove;
+        .center;
+        color: @textColorDark;
     }
     &:hover {
         background-color: @warningColor;
         cursor: pointer;
         
-        &, 
-        i.glyphicon {    
+        &:before {
             color: #fff;
-            text-shadow: none;
         }
     }
 }
