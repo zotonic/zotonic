@@ -500,9 +500,12 @@ ping_comet_ws(#page_state{websocket_pid=WsPid, comet_pid=CometPid} = State) when
     CometPid ! {final, <<>>},
     ping_comet_ws(State#page_state{comet_pid=undefined});
 ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
-    {Data, State1} = do_transport_data(State),
-    controller_websocket:websocket_send_data(WsPid, Data),
-    State1;
+    case do_transport_data(State) of
+        {<<>>, State1} -> State1;
+        {Data, State1} ->
+            controller_websocket:websocket_send_data(WsPid, Data),
+            State1
+    end;
 ping_comet_ws(#page_state{transport=TQ, comet_pid=CometPid} = State) when is_pid(CometPid) ->
     case z_transport_queue:is_empty(TQ) of
         true -> nop;
