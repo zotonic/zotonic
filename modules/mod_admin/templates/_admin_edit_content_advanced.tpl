@@ -7,6 +7,7 @@
 {% block widget_id %}edit-advanced{% endblock %}
 
 {% block widget_content %}
+<fieldset class="form-horizontal">
     {% if m.rsc[id].is_authoritative %}
 	    <div class="form-group row">
 		    <label class="control-label col-md-3" for="field-page-path">{_ Page path _}</label>
@@ -40,4 +41,5 @@
 	        </div>
 	    {% endif %}
     {% endif %}
+</fieldset>
 {% endblock %}
