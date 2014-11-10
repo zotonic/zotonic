@@ -7,14 +7,13 @@
 {% block widget_id %}edit-seo{% endblock %}
 
 {% block widget_content %}
+<fieldset class="form-horizontal">
     {% with m.rsc[id] as r %}
-
         <div class="form-group row">
             <label class="control-label col-md-3" for="custom-slug">
                 {_ Page slug _}
             </label>
             <div class="col-md-9">
-
                 <div class="input-group">
                     <div class="input-group-addon">
                         <input class="checkbox" id="custom-slug" type="checkbox" name="custom_slug" {% if r.custom_slug %}checked="checked"{% endif %} value="1" onclick="$('#custom-slug:checked').val() ? $('#slug').removeAttr('disabled') : $('#slug').attr('disabled', 'disabled');" title="{_ Customize page slug _}" />
@@ -55,6 +54,6 @@
         </div>
 
         {% all catinclude "_admin_edit_content_seo_extra.tpl" r.id %}
-
     {% endwith %}
+</fieldset>
 {% endblock %}
