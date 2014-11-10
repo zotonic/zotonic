@@ -57,10 +57,8 @@
 -export_type([frame/0]).
 
 -type opcode() :: 0 | 1 | 2 | 8 | 9 | 10.
-% -type mask_key() :: 0..16#ffffffff.
 -type frag_state() :: undefined
 	| {nofin, opcode(), binary()} | {fin, opcode(), binary()}.
-% -type rsv() :: << _:3 >>.
 
 -record(state, {
 	env :: [], %% cowboy_middleware:env(),
