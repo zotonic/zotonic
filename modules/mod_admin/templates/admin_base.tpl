@@ -10,7 +10,6 @@
 
         {% lib
             "admin-bootstrap3/css/bootstrap.min.css"
-            "admin-bootstrap3/css/bootstrap-theme.min.css"
         %}
 
         {% lib

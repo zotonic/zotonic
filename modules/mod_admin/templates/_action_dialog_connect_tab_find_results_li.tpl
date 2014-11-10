@@ -1,9 +1,9 @@
 <div class="col-lg-4 col-md-4">
-    {% with id.medium as medium %}
+    {% with id.depiction as depict %}
         <div class="thumbnail{% if medium %} z-image-thumbnail{% endif %}" data-id="{{ id }}">
             {%
                 image
-                medium
+                depict
                 mediaclass="admin-list-overview"
                 class="thumb pull-left"
             %}

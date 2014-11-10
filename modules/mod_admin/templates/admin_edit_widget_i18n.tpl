@@ -12,15 +12,13 @@
 		 id="{% block widget_id %}{% endblock %}">
 	    {% block widget_header %}
 	        {% if show_header %}
-	        <h3 class="widget-header">
+	        <div class="widget-header">
 	            {% block widget_title %}{% endblock %}
-	        </h3>
+	        </div>
 	        {% endif %}
 	    {% endblock %}
 		{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
-		<div class="tab-content widget-content nolang_before">
-		    {% block widget_content_nolang_before %}{% endblock %}
-		</div>
+		<div class="tab-content widget-content nolang_before">{% block widget_content_nolang_before %}{% endblock %}</div>
 		<div class="tab-content widget-content">
 			{% for lang_code, lang in m.config.i18n.language_list.list|default:[[z_language,[]]] %}
 			{# to define some helper vars that will be useful in widget_content: #}
@@ -37,10 +35,8 @@
 			{% endwith %}
 			{% endfor %}
 		</div>
-		<div class="tab-content">
-            <div class="widget-content nolang">
-		        {% block widget_content_nolang %}{% endblock %}
-            </div>
+		<div class="tab-content widget-content nolang">
+            {% block widget_content_nolang %}{% endblock %}
 		</div>
 	</div>
 	{% block widget_after %}{% endblock %}

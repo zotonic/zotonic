@@ -10,3 +10,13 @@
         -ms-hyphens: auto;
             hyphens: auto;
 }
+
+.center(@offset: 0) {
+    display: block;
+    position: absolute;
+    top: @offset;
+    bottom: @offset;
+    left: @offset;
+    right: @offset;
+    margin: auto;
+}

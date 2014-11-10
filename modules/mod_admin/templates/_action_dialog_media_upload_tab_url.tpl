@@ -10,7 +10,7 @@
 		postback={media_url predicate=predicate actions=actions id=id subject_id=subject_id stay=stay callback=callback} 
 		delegate=`action_admin_dialog_media_upload` 
 	%}
-	<form id="{{ #urlform }}" method="POST" action="postback" class="form">
+	<form id="{{ #urlform }}" method="POST" action="postback" class="form form-horizontal">
 		{% if not id %}
 		    <div class="form-group row">
 		        <label class="control-label col-md-3" for="new_media_title">{_ Media title _}</label>

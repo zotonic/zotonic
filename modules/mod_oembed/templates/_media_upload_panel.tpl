@@ -11,16 +11,16 @@
                                 subject_id=subject_id stay=stay callback=callback}
         delegate="mod_oembed" 
     %}
-    <form id="{{ #form }}" method="POST" action="postback" class="form">
+    <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 
         <div class="form-group row">
             <label class="control-label col-md-3" for="{{ #embed_code }}">{_ Embed URL _}</label>
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <input id="{{ #embed_code }}" class="form-control" name="oembed_url" value="{{ medium.oembed_url }}" placeholder="http://www.youtube.com/watch?v=r9cmWJvXIj4‎" />
                 {% validate id=#embed_code name="oembed_url" type={presence} %}
             </div>
-            <div class="col-md-2">
-                <button class="form-control btn btn-default" id="oembed-url-check">{_ Try URL _}</button>
+            <div class="col-md-3">
+                <button class="btn btn-default" id="oembed-url-check">{_ Try URL _}</button>
                 {% javascript %}
                         $('#oembed-url-check').click(function() {
                                 var url = $('#{{ #embed_code }}').val();
@@ -66,7 +66,7 @@
 
         <div class="modal-footer">
             {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-            <button class="btn btn-primary {% if not medium.oembed_url %}disabled{% endif %}" id="oembed-save" type="submit">{% if id %}{_ Replace media item _}{% else %}{_ Make media item _}{% endif %}</button>
+            <button class="btn btn-primary" {% if not medium.oembed_url %}disabled{% endif %} id="oembed-save" type="submit">{% if id %}{_ Replace media item _}{% else %}{_ Make media item _}{% endif %}</button>
         </div>
     </form>
 </div>

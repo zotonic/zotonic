@@ -3,9 +3,9 @@
     <input type="hidden" id="block-" name="block-" value="" /> 
     {% include "_admin_edit_block_addblock.tpl" %}
     <ul class="blocks ui-sortable" id="edit-blocks">
-    {% for blk in id.blocks %}
-        {% include "_admin_edit_block_li.tpl" %}
-    {% endfor %}
+        {% for blk in id.blocks %}
+            {% include "_admin_edit_block_li.tpl" %}
+        {% endfor %}
     </ul>
 </div>
 {% endwith %}
@@ -24,30 +24,30 @@ $('#edit-blocks').sortable({
         z_editor_add($(this));
     }
 })
-.on('click', '.icon-remove', function(event) { 
+.on('click', '.block-remove', function(event) { 
     event.stopPropagation();
-    var block = $(this).closest('li');
+    var $block = $(this).closest('li');
     z_dialog_confirm({
         title: '{_ Confirm block removal _}',
         text: '<p>{_ Do you want to remove this block? _}</p>',
         cancel: '{_ Cancel _}',
         ok: '{_ Delete _}',
         on_confirm: function() { 
-                        $(block).fadeTo('fast', 0.0)
-                                .slideUp('normal', 0.0, 
-                                 function() { 
-                                    z_editor_remove($(this)); 
-                                    $(this).remove(); 
-                                });
-                    }
+            $block
+                .fadeTo('fast', 0.0)
+                .slideUp('normal', 0.0, function() { 
+                    z_editor_remove($(this)); 
+                    $(this).remove(); 
+                });
+        }
     })
 });
 
 $('#edit-blocks-wrapper').on('click', '.block-add-block .dropdown-menu a', function(event) {
-    var block_type = $(this).data('block-type'); 
-    var after_block = $(this).closest('li.block').attr('id');
-    var langs = '';
-    
+    var $this = $(this),
+        block_type = $this.data('block-type'),    
+        after_block = $(this).closest('li.block').attr('id');
+        langs = '';
     $('input[name=language]:checked').each(function() { langs += ',' + $(this).val(); });
     
     z_notify('admin-insert-block', { 
