@@ -9,7 +9,7 @@
                 <a href="#" id="{{ #edit }}">{{ title }}</a>
             {% endwith %}
 	    </div>
-	    <button id="{{ #unlink.object_id }}" class="z-close-btn" title="{_ Disconnect _} {{ object_id.title }}"><i class="glyphicon glyphicon-remove"></i></button>
+	    <button id="{{ #unlink.object_id }}" class="z-close-btn" title="{_ Disconnect _} {{ object_id.title }}"></button>
     </div>
 </li>
 
