@@ -80,25 +80,7 @@ websocket_start(ReqData, Context) ->
     end,
     ContextQs = z_context:ensure_qs(z_context:set(ws_request, true, Context2)),
     PrunedContext = z_context:prune_for_scomp(ContextQs),
-    case wrq:get_req_header_lc("sec-websocket-version", ReqData) of
-        undefined ->
-            case wrq:get_req_header_lc("sec-websocket-key1", ReqData) of
-                undefined ->
-                    z_websocket_hixie75:start(ReqData, PrunedContext);
-                WsKey1 ->
-                    z_websocket_hybi00:start(WsKey1, ReqData, PrunedContext)
-            end;
-        "7" ->
-            % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07
-            z_websocket_hybi17:start(ReqData, PrunedContext);
-        "8" ->
-            % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-10
-            z_websocket_hybi17:start(ReqData, PrunedContext);
-        "13" ->
-            % http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
-            z_websocket_hybi17:start(ReqData, PrunedContext)
-    end.
-
+    z_websocket:start(ReqData, PrunedContext).
 
 %% @doc Returns true if this a websocket request
 is_websocket_request(Context) ->
@@ -108,6 +90,8 @@ is_websocket_request(Context) ->
     end.
 
 %% @doc Send Data over websocket Pid to the client.
+websocket_send_data(_Pid, <<>>) ->
+    ok;
 websocket_send_data(Pid, Data) ->
     Pid ! {send_data, Data}.
 
@@ -129,7 +113,7 @@ websocket_message(Data, SenderPid, Context) ->
     catch
         Error:X ->
             ?zWarning(io_lib:format("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]), Context),
-            ok
+            {ok, Context}
     end.
 
 websocket_info(_Msg, _Context) -> 
