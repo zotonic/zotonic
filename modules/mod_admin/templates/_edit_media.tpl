@@ -1,7 +1,5 @@
-{# Used on the resource edit page and by the medium upload event.  Show all connected media. #}
-
+{# Used on the resource edit page and by the medium upload event. Show all connected media. #}
 <div id="{{ #unlink_message }}"></div>
-	
 {% sorter id=#list
     tag={object_sorter predicate=`depiction` id=id}
 	placeholder="ui-sortable-placeholder"
@@ -9,6 +7,6 @@
 %}
 <ul id="{{ #list }}" class="media list-unstyled">
     {% for object_id, edge_id in m.edge.o[id].depiction %}
-    {% include "_rsc_edge_media.tpl" subject_id=id unlink_message=#unlink_message %}
+        {% include "_rsc_edge_media.tpl" subject_id=id unlink_message=#unlink_message %}
     {% endfor %}
 </ul>
