@@ -288,6 +288,8 @@ encode_headers([[] | H]) ->
 encode_headers([{K, V} | H]) ->
     [encode_value(K), <<": ">>, encode_value(V), <<"\r\n">>, encode_headers(H)].
 
+
+encode_value(V) when is_integer(V) -> list_to_binary(integer_to_list(V));
 encode_value(V) when is_binary(V) -> V;
 encode_value(V) when is_list(V) -> list_to_binary(V).
             
