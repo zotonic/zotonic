@@ -246,7 +246,7 @@ event(#postback_notify{message="do_oembed"}, Context) ->
             z_context:add_script_page([
                     "$('#oembed-title').val('""').attr('disabled',true);",
                     "$('#oembed-summary').val('""').attr('disabled',true);",
-                    "$('#oembed-save').addClass('disabled');",
+                    "$('#oembed-save').attr('disabled',true);",
                     "$('#oembed-image').closest('.control-group').hide();"
                     ], Context),
             Context;
@@ -256,7 +256,7 @@ event(#postback_notify{message="do_oembed"}, Context) ->
                     z_context:add_script_page([
                             "$('#oembed-title').val('""').attr('disabled',true);",
                             "$('#oembed-summary').val('""').attr('disabled',true);",
-                            "$('#oembed-save').addClass('disabled');",
+                            "$('#oembed-save').attr('disabled', true);",
                             "$('#oembed-image').closest('.control-group').hide();"
                             ], Context),
                     z_render:growl_error(?__("Invalid or unsupported media URL. The item might have been deleted or is not public.", Context), Context);
@@ -264,7 +264,7 @@ event(#postback_notify{message="do_oembed"}, Context) ->
                     z_context:add_script_page([
                         "$('#oembed-title').val('", z_utils:js_escape(proplists:get_value(title, Json, [])), "').removeAttr('disabled');",
                         "$('#oembed-summary').val('", z_utils:js_escape(proplists:get_value(description, Json, [])), "').removeAttr('disabled');",
-                        "$('#oembed-save').removeClass('disabled');"
+                        "$('#oembed-save').removeAttr('disabled');"
                         ], Context),
                     case preview_url_from_json(proplists:get_value(type, Json), Json) of
                         undefined -> 
