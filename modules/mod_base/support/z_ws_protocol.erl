@@ -88,33 +88,58 @@ upgrade(Req, Env, Handler, HandlerOpts) ->
 	Socket = z_ws_request_adapter:get(socket, Req),
 	State = #state{env=Env, socket=Socket, handler=Handler},
 	try websocket_upgrade(State, Req) of
-		{ok, State2, Req2} -> handler_init(State2, Req2, HandlerOpts)
+            {ok, State2, Req2} -> 
+                handler_init(State2, Req2, HandlerOpts);
+            {bad_request, Req2} ->
+                z_ws_request_adapter:maybe_reply(400, Req2)
 	catch 
-		throw:Exc ->
-			handle_event(Req, Handler, websocket_throw, [Exc, erlang:get_stacktrace()], HandlerOpts),
-			z_ws_request_adapter:maybe_reply(400, Req);
-		error:Error ->
-			handle_event(Req, Handler, websocket_error, [Error, erlang:get_stacktrace()], HandlerOpts),
-			z_ws_request_adapter:maybe_reply(400, Req);
-		exit:Exit ->
-			handle_event(Req, Handler, websocket_exit, [Exit, erlang:get_stacktrace()], HandlerOpts),
-			z_ws_request_adapter:maybe_reply(400, Req)
-	end.
+            throw:Exc ->
+                handle_event(Req, Handler, websocket_throw, [Exc, erlang:get_stacktrace()], HandlerOpts),
+                z_ws_request_adapter:maybe_reply(400, Req);
+            error:Error ->
+                handle_event(Req, Handler, websocket_error, [Error, erlang:get_stacktrace()], HandlerOpts),
+                z_ws_request_adapter:maybe_reply(400, Req);
+            exit:Exit ->
+                handle_event(Req, Handler, websocket_exit, [Exit, erlang:get_stacktrace()], HandlerOpts),
+                z_ws_request_adapter:maybe_reply(400, Req)
+        end.
 
 % -spec websocket_upgrade(#state{}, Req)
 % 	-> {ok, #state{}, Req} when Req::z_ws_request_adapter:req().
 websocket_upgrade(State, Req) ->
-	{ok, ConnTokens, Req2} = z_ws_request_adapter:parse_header(<<"connection">>, Req),
-	true = lists:member(<<"upgrade">>, ConnTokens),
-
-	%% @todo Should probably send a 426 if the Upgrade header is missing.
-	{ok, [<<"websocket">>], Req3} = z_ws_request_adapter:parse_header(<<"upgrade">>, Req2),
-	{Version, Req4} = z_ws_request_adapter:header(<<"sec-websocket-version">>, Req3),
-	IntVersion = list_to_integer(binary_to_list(Version)),
-	true = (IntVersion =:= 7) orelse (IntVersion =:= 8) orelse (IntVersion =:= 13),
-	{Key, Req5} = z_ws_request_adapter:header(<<"sec-websocket-key">>, Req4),
-	false = Key =:= undefined,
-	websocket_extensions(State#state{key=Key}, z_ws_request_adapter:set_meta(websocket_version, IntVersion, Req5)).
+    {ok, ConnTokens, Req2} = z_ws_request_adapter:parse_header(<<"connection">>, Req),
+    case lists:member(<<"upgrade">>, ConnTokens) of
+        false -> {bad_request, Req2};
+        true ->
+            {ok, UpgradeHeader, Req3} = z_ws_request_adapter:parse_header(<<"upgrade">>, Req2),
+            case UpgradeHeader of
+                [<<"websocket">>] ->
+                    {Version, Req4} = z_ws_request_adapter:header(<<"sec-websocket-version">>, Req3),
+                    case Version of
+                        undefined -> {bad_request, Req4};
+                        _ ->
+                            IntVersion = case catch list_to_integer(binary_to_list(Version)) of 
+                                Int when is_integer(Int) -> Int;
+                                {'EXIT', _} -> undefined 
+                            end,
+                            case (IntVersion =:= 7) orelse (IntVersion =:= 8) orelse (IntVersion =:= 13) of
+                                true -> 
+                                    {Key, Req5} = z_ws_request_adapter:header(<<"sec-websocket-key">>, Req4),
+                                    case Key of
+                                        undefined -> {bad_request, Req5};
+                                        _ ->
+                                            websocket_extensions(State#state{key=Key}, 
+                                                z_ws_request_adapter:set_meta(websocket_version, IntVersion, Req5))
+                                    end;
+                                _ ->
+                                    {bad_request, Req4}
+                            end
+                    end;
+                _ ->
+                    %% @todo Should probably send a 426 if the Upgrade header is missing.
+                    {bad_request, Req3}
+            end
+    end.
 
 % -spec websocket_extensions(#state{}, Req)
 % 	-> {ok, #state{}, Req} when Req::z_ws_request_adapter:req().
