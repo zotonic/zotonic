@@ -1,6 +1,6 @@
 {% if medium.oembed_url %}
 <p class="clear">
-    <span class="label label-info">{_ Embed URL _}:</span>
+    <span class="label label-info">{_ Embed URL _}</span>
     <a href="{{ medium.oembed_url }}">{{ medium.oembed_url }}</a>
 </p>
 <p class="clear">
