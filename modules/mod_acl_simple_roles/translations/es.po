@@ -79,10 +79,10 @@ msgid "Categories"
 msgstr ""
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:12
-msgid "Check below what people that are member of this role are allowed to do."
+msgid "Check below what people that are member of this role are allowed to do"
 msgstr ""
 "Marque abajo qué es lo que tienen permitido hacer las personas que tienen "
-"asignado este rol."
+"asignado este rol"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:38
 msgid "Community members"
