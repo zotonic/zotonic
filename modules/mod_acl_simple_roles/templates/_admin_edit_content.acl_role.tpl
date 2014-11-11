@@ -8,7 +8,7 @@
         </div>
         
         <h4>
-            {_ Check below what people that are member of this role are allowed to do. _}
+            {_ Check below what people that are member of this role are allowed to do _}
         </h4>
 
         <div class="form-group">
