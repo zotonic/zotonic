@@ -87,6 +87,9 @@ ul.media > li.ui-sortable-placeholder {
 .z-close-btn:hover:before {
   color: #fff;
 }
+.z-text-light {
+  color: #bbbbbb;
+}
 .admin-image-border,
 div.admin-edit-media,
 img.admin-list-dashboard,
@@ -927,7 +930,7 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   font-weight: normal;
 }
 .widget .widget-section-header {
-  margin: 30px 0 0 0;
+  margin: 20px 0 0 0;
 }
 .widget .widget-header {
   margin: 0;
