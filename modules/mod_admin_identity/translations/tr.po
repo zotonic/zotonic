@@ -85,7 +85,7 @@ msgid "Give the name and the e-mail address of the new user. A <em>person</em> p
 msgstr "Yeni kullanıcının adını ve e-mail adresini veriniz. Bu kullanıcı için bir <em>kişi</em> sayfası yaratılacak."
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
-msgid "Help about user credentials."
+msgid "Help about user credentials"
 msgstr "Kullanıcı kimlikleriyle ilgili yardım"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:21

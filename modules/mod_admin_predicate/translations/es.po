@@ -42,8 +42,8 @@ msgid "From category"
 msgstr "De categoría"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
-msgid "Help about predicates."
-msgstr "Ayuda acerca de predicados."
+msgid "Help about predicates"
+msgstr "Ayuda acerca de predicados"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:15
 #, fuzzy

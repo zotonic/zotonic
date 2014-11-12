@@ -93,7 +93,7 @@ msgid "Group members"
 msgstr "Groepleden"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
-msgid "Help about ACL roles."
+msgid "Help about ACL roles"
 msgstr "Hulp bij de ACL rollen"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:16

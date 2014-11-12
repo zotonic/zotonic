@@ -47,8 +47,8 @@ msgid "From category"
 msgstr "От категории"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
-msgid "Help about predicates."
-msgstr "Справка о предикатах."
+msgid "Help about predicates"
+msgstr "Справка о предикатах"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:15
 msgid "Make a new predicate"

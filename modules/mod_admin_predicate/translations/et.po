@@ -26,9 +26,9 @@ msgstr ""
 
 #: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
 msgid ""
-"Help about predicates."
+"Help about predicates"
 msgstr ""
-"Abi predikaatidest."
+"Abi predikaatidest"
 
 #: ./modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:10 
 msgid ""

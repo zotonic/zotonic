@@ -421,20 +421,20 @@ msgid "Header"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
-msgid "Help about date ranges."
-msgstr "Ayuda acerca de rangos de fechas."
+msgid "Help about date ranges"
+msgstr "Ayuda acerca de rangos de fechas"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
-msgid "Help about page connections."
-msgstr "Ayuda acerca de conexiones de páginas."
+msgid "Help about page connections"
+msgstr "Ayuda acerca de conexiones de páginas"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
-msgid "Help about person name."
-msgstr "Ayuda acerca de nombre de persona."
+msgid "Help about person name"
+msgstr "Ayuda acerca de nombre de persona"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
-msgid "Help about publication date range."
-msgstr "Ayuda acerca de rangos de fechas de publicación."
+msgid "Help about publication date range"
+msgstr "Ayuda acerca de rangos de fechas de publicación"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""
@@ -1270,8 +1270,8 @@ msgstr "visitar sitio"
 #~ msgid "save this page"
 #~ msgstr "guardar esta página"
 
-#~ msgid "Help about category."
-#~ msgstr "Ayuda acerca de categoría."
+#~ msgid "Help about category"
+#~ msgstr "Ayuda acerca de categoría"
 
 #~ msgid ""
 #~ "Predicates, groups and categories can't be changed into another category."

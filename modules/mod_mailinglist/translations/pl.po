@@ -328,12 +328,12 @@ msgid "Hello,"
 msgstr "Witaj,"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
-msgid "Help about mailing lists."
-msgstr "Listy wysyłkowe - pomoc."
+msgid "Help about mailing lists"
+msgstr "Listy wysyłkowe - pomoc"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
-msgid "Help about the mailing page."
-msgstr "Listy wysyłkowe - pomoc."
+msgid "Help about the mailing page"
+msgstr "Listy wysyłkowe - pomoc"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
 msgid "Hope to see you again."

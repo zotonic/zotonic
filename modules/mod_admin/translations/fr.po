@@ -237,24 +237,23 @@ msgstr "Revenir en arrière"
 msgid "Group members"
 msgstr "Membres du groupe"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:510
-msgid "Help about category."
-msgstr "Aide sur les catégories"
+#~ msgid "Help about category"
+#~ msgstr "Aide sur les catégories"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:436
-msgid "Help about date ranges."
+msgid "Help about date ranges"
 msgstr "Aide sur les dates"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:465
-msgid "Help about page connections."
+msgid "Help about page connections"
 msgstr "Aide sur les connections de page"
 
 #: ./modules/mod_admin/templates/_admin_edit_content.person.tpl:13
-msgid "Help about person name."
+msgid "Help about person name"
 msgstr "Aide sur les noms"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:411
-msgid "Help about publication date range."
+msgid "Help about publication date range"
 msgstr "Aide sur la publication des dates"
 
 #: ./modules/mod_admin/templates/_admin_edit_content.location.tpl:12

@@ -339,12 +339,12 @@ msgid "Hello,"
 msgstr "Hola,"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
-msgid "Help about mailing lists."
-msgstr "Ayuda acerca de listas de correo."
+msgid "Help about mailing lists"
+msgstr "Ayuda acerca de listas de correo"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
-msgid "Help about the mailing page."
-msgstr "Ayuda acerca de listas de correo."
+msgid "Help about the mailing page"
+msgstr "Ayuda acerca de listas de correo"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
 msgid "Hope to see you again."
