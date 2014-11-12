@@ -45,11 +45,10 @@
     
         <div class="row">
             <div class="col-lg-6 col-md-6">
-                <h4>{_ Allow editing of category _}</h4>
-
+                <h4>{_ Allow editing of category _}</h4> 
                 {% for cat_id, level, indent, title in m.category.all_flat_meta %}
-                    <div>
-                        <label class="checkbox-inline" for="{{ #category.cat_id }}">{{ indent }}<input type="checkbox" id="{{ #category.cat_id }}" name="acl_cat"{% if title|as_atom|member:acl.categories %} checked="checked"{% endif %} value="{{ title }}" />{{ title }}</label>
+                    <div class="checkbox">
+                        <label for="{{ #category.cat_id }}">{{ indent }}<input type="checkbox" id="{{ #category.cat_id }}" name="acl_cat"{% if title|as_atom|member:acl.categories %} checked="checked"{% endif %} value="{{ title }}" />{{ cat_id.title }} <span class="z-text-light">{{ title }}</span></label>
                     </div>
                 {% endfor %}
             </div>
@@ -59,13 +58,12 @@
 
                 {% with m.modules.all as modules %}
                     {% for mod in m.modules.enabled %}
-                        <div>
-                            <label class="checkbox-inline" for="{{ #module.mod }}"><input type="checkbox" id="{{ #module.mod }}" name="acl_mod"{% if mod|member:acl.modules %} checked="checked"{% endif %} value="{{ mod|escape }}" />{{ modules[mod]|escape }} <span class="text-muted">{{ mod }}</span></label>
+                        <div class="checkbox">
+                            <label for="{{ #module.mod }}"><input type="checkbox" id="{{ #module.mod }}" name="acl_mod"{% if mod|member:acl.modules %} checked="checked"{% endif %} value="{{ mod|escape }}" />{{ modules[mod]|escape }} <span class="z-text-light">{{ mod }}</span></label>
                         </div>
                     {% endfor %}
                 {% endwith %}
             </div>
-        </div>
         
         <hr />
 
@@ -149,3 +147,9 @@
     </div>
 </div>
 {% endwith %}
+
+{% javascript %}
+function blo() {
+    console.log("blo");
+}
+{% endjavascript %}
