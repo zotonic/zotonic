@@ -102,7 +102,7 @@ msgid "Generate .pot files"
 msgstr "生成 .pot 文件"
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
-msgid "Help about translations."
+msgid "Help about translations"
 msgstr "翻译帮助"
 
 #: modules/mod_translation/templates/admin_translation.tpl:24

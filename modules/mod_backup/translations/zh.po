@@ -90,7 +90,7 @@ msgid "Download backup file"
 msgstr "下载备份文件"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:16
-msgid "Help about backup &amp; restore."
+msgid "Help about backup &amp; restore"
 msgstr "备份 &amp; 恢复帮助。"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:22

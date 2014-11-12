@@ -95,8 +95,8 @@ msgid "Give the name and the e-mail address of the new user. A <em>person</em> p
 msgstr "Podaj personalia i adres e-mail nowego użytkownika. Strona typu <em>osoba</em> zostanie utworzona automatycznie."
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
-msgid "Help about user credentials."
-msgstr "Dane uwierzytelniające - pomoc."
+msgid "Help about user credentials"
+msgstr "Dane uwierzytelniające - pomoc"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:21
 msgid "Make a new user"

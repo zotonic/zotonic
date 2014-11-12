@@ -94,8 +94,8 @@ msgid "Generate .pot files"
 msgstr ".pot dosyası oluştur"
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
-msgid "Help about translations."
-msgstr "Çevirilerle ilgili yardım."
+msgid "Help about translations"
+msgstr "Çevirilerle ilgili yardım"
 
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:6
 #: modules/mod_translation/templates/admin_translation.tpl:24

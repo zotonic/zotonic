@@ -111,7 +111,7 @@ msgid "Generate .pot files"
 msgstr "Stwórz pliki .pot"
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
-msgid "Help about translations."
+msgid "Help about translations"
 msgstr "Tłumaczenia - pomoc"
 
 #: modules/mod_translation/templates/admin_translation.tpl:24

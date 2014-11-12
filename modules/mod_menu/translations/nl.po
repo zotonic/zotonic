@@ -84,7 +84,7 @@ msgstr "Nieuwe pagina"
 msgid "Remove"
 msgstr "Verwijder"
 
-#~ msgid "Help about editing menus."
+#~ msgid "Help about editing menus"
 #~ msgstr "Hulp bij de menu-editor"
 
 #~ msgid ""

@@ -158,8 +158,8 @@ msgid "Hello"
 msgstr "Hallo"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
-msgid "Help about user credentials."
-msgstr "Hulp bij gebruikersgegevens."
+msgid "Help about user credentials"
+msgstr "Hulp bij gebruikersgegevens"
 
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:8
 msgid "Hi"

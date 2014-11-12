@@ -39,8 +39,8 @@ msgid "From category"
 msgstr "Kategoriden"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
-msgid "Help about predicates."
-msgstr "Öncüllerle ilgili yardım."
+msgid "Help about predicates"
+msgstr "Öncüllerle ilgili yardım"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:15
 msgid "Make a new predicate"

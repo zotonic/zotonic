@@ -312,11 +312,11 @@ msgid "Hello,"
 msgstr "你好，"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:8
-msgid "Help about mailing lists."
+msgid "Help about mailing lists"
 msgstr "邮件列表帮助。"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:19
-msgid "Help about the mailing page."
+msgid "Help about the mailing page"
 msgstr "邮寄页面帮助。"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8

@@ -98,8 +98,8 @@ msgstr "Download backupbestand"
 
 #: ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:16 
 msgid ""
-"Help about backup &amp; restore."
-msgstr "Hulp bij backup &amp; terugzetten."
+"Help about backup &amp; restore"
+msgstr "Hulp over backup &amp; terugzetten"
 
 #: ./modules/mod_backup/templates/_admin_edit_sidebar.tpl:22 
 msgid ""

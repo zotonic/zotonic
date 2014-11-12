@@ -50,8 +50,8 @@ msgid "From category"
 msgstr "Z kategorii"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
-msgid "Help about predicates."
-msgstr "Predykaty - pomoc."
+msgid "Help about predicates"
+msgstr "Predykaty - pomoc"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:15
 msgid "Make a new predicate"

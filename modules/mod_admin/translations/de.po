@@ -411,20 +411,20 @@ msgid "Header"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
-msgid "Help about date ranges."
-msgstr "Hilfe zu Zeiträumen."
+msgid "Help about date ranges"
+msgstr "Hilfe zu Zeiträumen"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
-msgid "Help about page connections."
-msgstr "Hilfe zu Querverbindungen."
+msgid "Help about page connections"
+msgstr "Hilfe zu Querverbindungen"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
-msgid "Help about person name."
-msgstr "Hilfe zu 'Name einer Person'."
+msgid "Help about person name"
+msgstr "Hilfe zu 'Name einer Person'"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
-msgid "Help about publication date range."
-msgstr "Hilfe zu Veröffentlichungszeiträumen."
+msgid "Help about publication date range"
+msgstr "Hilfe zu Veröffentlichungszeiträumen"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""

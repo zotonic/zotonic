@@ -411,23 +411,23 @@ msgid "Header"
 msgstr "Kop"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
-msgid "Help about date ranges."
+msgid "Help about date ranges"
 msgstr "Hulp voor datumreeksen"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:12
-msgid "Help about features."
+msgid "Help about features"
 msgstr "Hulp voor features"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
-msgid "Help about page connections."
+msgid "Help about page connections"
 msgstr "Hulp over paginaconnecties"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:25
-msgid "Help about person name."
+msgid "Help about person name"
 msgstr "Hulp over persoonsnamen"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
-msgid "Help about publication date range."
+msgid "Help about publication date range"
 msgstr "Hulp over publicatiedata"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
@@ -1316,7 +1316,7 @@ msgstr "bezoek site"
 #~ msgid "save this page"
 #~ msgstr "pagina opslaan"
 
-#~ msgid "Help about category."
+#~ msgid "Help about category"
 #~ msgstr "Hulp voor categorieën"
 
 #~ msgid ""

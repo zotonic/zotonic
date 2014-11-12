@@ -95,7 +95,7 @@ msgid "Group members"
 msgstr "组成员"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
-msgid "Help about ACL roles."
+msgid "Help about ACL roles"
 msgstr "ACL 角色帮助。"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:16
