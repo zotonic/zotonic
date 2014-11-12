@@ -54,7 +54,7 @@
               .addClass("modal-title")
               .html(options.title));
             $modalContent = $("<div>").addClass("modal-content");
-            $text = $(options.text);
+            $text = $("<div>").html(options.text);
 
             // if .modal-body is used in a template, don't add it again
             if ($text.hasClass("modal-body")) {
