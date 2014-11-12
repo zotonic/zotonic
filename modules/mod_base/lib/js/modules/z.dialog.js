@@ -54,7 +54,7 @@
               .addClass("modal-title")
               .html(options.title));
             $modalContent = $("<div>").addClass("modal-content");
-            $text = $(options.text);
+            $text = $("<div>").html(options.text);
 
             // if .modal-body is used in a template, don't add it again
             if ($text.hasClass("modal-body")) {
@@ -101,7 +101,7 @@
             if ($(window).width() >= 768) {
                 if ($dialog.height() > 0.8 * $(window).height()) {
                     $dialog.addClass('high');
-                } 
+                }
             }
 
             if (typeof($.widgetManager) != 'undefined') {
