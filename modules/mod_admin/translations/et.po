@@ -371,27 +371,25 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
 msgid ""
-"Help about date ranges."
+"Help about date ranges"
 msgstr ""
-"Abi kuupäeva vahemikest."
+"Abi kuupäeva vahemikest"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 
 msgid ""
-"Help about page connections."
+"Help about page connections"
 msgstr ""
-"Abi lehe ühendustest."
+"Abi lehe ühendustest"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15 
-msgid ""
-"Help about person name."
-msgstr ""
-"Abi isiku nimest."
+msgid "Help about person name"
+msgstr "Abi isiku nimest"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14 
 msgid ""
-"Help about publication date range."
+"Help about publication date range"
 msgstr ""
-"Abi avaldamise kuupäevadest."
+"Abi avaldamise kuupäevadest"
 
 #: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:14 
 msgid ""

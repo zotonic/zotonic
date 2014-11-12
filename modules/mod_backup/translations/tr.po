@@ -80,8 +80,8 @@ msgid "Download backup file"
 msgstr "Yedekleme dosyasını indir"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:16
-msgid "Help about backup &amp; restore."
-msgstr "Yedekleme &amp; Geri yükleme yardımı."
+msgid "Help about backup &amp; restore"
+msgstr "Yedekleme &amp; Geri yükleme yardımı"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:22
 msgid "List and restore an earlier version"

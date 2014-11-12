@@ -378,20 +378,20 @@ msgid "Header"
 msgstr "Başlık"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
-msgid "Help about date ranges."
-msgstr "Tarih aralığı yardımı."
+msgid "Help about date ranges"
+msgstr "Tarih aralığı yardımı"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
-msgid "Help about page connections."
+msgid "Help about page connections"
 msgstr "Sayfa bağlantıları yardımı"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
-msgid "Help about person name."
+msgid "Help about person name"
 msgstr "Kişi adı yardımı"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
-msgid "Help about publication date range."
-msgstr "Yayınlanma tarih aralığı yardımı."
+msgid "Help about publication date range"
+msgstr "Yayınlanma tarih aralığı yardımı"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""

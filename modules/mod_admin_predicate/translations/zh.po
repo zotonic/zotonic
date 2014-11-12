@@ -42,7 +42,7 @@ msgid "From category"
 msgstr "从分类"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
-msgid "Help about predicates."
+msgid "Help about predicates"
 msgstr "谓词帮助。"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:15

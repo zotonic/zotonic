@@ -88,8 +88,8 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#~ msgid "Help about editing menus."
-#~ msgstr "Ayuda acerca de las edición de menúes."
+#~ msgid "Help about editing menus"
+#~ msgstr "Ayuda acerca de las edición de menúes"
 
 #~ msgid ""
 #~ "Here you can change the menu of your site.  Select pages on the right "

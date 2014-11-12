@@ -107,8 +107,8 @@ msgid "Group members"
 msgstr "Участники групп"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
-msgid "Help about ACL roles."
-msgstr "О ролях ACL."
+msgid "Help about ACL roles"
+msgstr "О ролях ACL"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:16
 #, fuzzy

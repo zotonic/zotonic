@@ -86,8 +86,8 @@ msgid "Group members"
 msgstr "Członkowie grupy"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:8
-msgid "Help about ACL roles."
-msgstr "Kontrola dostępu - pomoc."
+msgid "Help about ACL roles"
+msgstr "Kontrola dostępu - pomoc"
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:16
 msgid "Make new ACL role"

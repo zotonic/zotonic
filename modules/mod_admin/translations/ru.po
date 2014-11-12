@@ -407,24 +407,24 @@ msgid "Header"
 msgstr "Заголовок"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:12
-msgid "Help about date ranges."
-msgstr "Справка о периодах."
+msgid "Help about date ranges"
+msgstr "Справка о периодах"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:12
-msgid "Help about features."
-msgstr "Справка об особенностях."
+msgid "Help about features"
+msgstr "Справка об особенностях"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:15
-msgid "Help about page connections."
-msgstr "Справка о связях страниц."
+msgid "Help about page connections"
+msgstr "Справка о связях страниц"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
-msgid "Help about person name."
-msgstr "Справка об имени персоны."
+msgid "Help about person name"
+msgstr "Справка об имени персоны"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:12
-msgid "Help about publication date range."
-msgstr "Справка о периоде публикации."
+msgid "Help about publication date range"
+msgstr "Справка о периоде публикации"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""

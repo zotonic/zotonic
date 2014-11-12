@@ -94,8 +94,8 @@ msgid "Download backup file"
 msgstr "Pobierz kopię zapasową"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:16
-msgid "Help about backup &amp; restore."
-msgstr "Kopie zapasowe i odtwarzanie - pomoc."
+msgid "Help about backup &amp; restore"
+msgstr "Kopie zapasowe i odtwarzanie - pomoc"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:22
 msgid "List and restore an earlier version"
