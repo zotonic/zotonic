@@ -68,83 +68,82 @@
                     {% endfor %}
                 {% endwith %}
             </div>
-        
-            <hr />
+        </div>
+        <hr />
 
-            <h4>{_ File uploads _}</h4>
-            <div class="form-group">
-                <div>
-                    <label for="field-file-upload-size">{_ Maximum allowed file size for uploads (in KB) _}</label>
-                    <input class="form-control" id="field-file-upload-size" style="width: 100px" type="text" name="acl_file_upload_size" value="{{ acl.file_upload_size|default:4096|escape }}" />
-                    {% validate id="field-file-upload-size" name="acl_file_upload_size" type={numericality} %}
-                </div>
+        <h4>{_ File uploads _}</h4>
+        <div class="form-group">
+            <div>
+                <label for="field-file-upload-size">{_ Maximum allowed file size for uploads (in KB) _}</label>
+                <input class="form-control" id="field-file-upload-size" style="width: 100px" type="text" name="acl_file_upload_size" value="{{ acl.file_upload_size|default:4096|escape }}" />
+                {% validate id="field-file-upload-size" name="acl_file_upload_size" type={numericality} %}
             </div>
-    
-            <h4>{_ File types allowed to be uploaded _}</h4>
-            <div class="form-group">
-                <p>{_ <strong>Security notice</strong>: When you allow */* files then all members of this role will be able to obtain full access to your whole site and all underlying data. _}</p>
+        </div>
 
-                <div class="row">
-                    {% for mimes in [
-                        "image/jpeg",
-                        "image/png",
-                        "image/gif",
-                        "image/tiff",
-                        "image/bmp",
-                        "image/vnd.adobe.photoshop",
-                        "application/pdf",
-                        "application/postscript",
-                        "image/*",
-                        "-",
-                        "audio/mpeg",
-                        "audio/x-wav",
-                        "audio/x-aiff",
-                        "audio/*",
-                        "-",
-                        "video/mp4",
-                        "video/mpeg",
-                        "video/msvideo",
-                        "video/x-ms-asf",
-                        "application/x-shockwave-flash",
-                        "text/html-video-embed",
-                        "text/html-oembed",
-                        "video/*",
-                        "-",
-                        "application/msword",
-                        "application/vnd.ms-excel",
-                        "application/vnd.ms-powerpoint",
-                        "application/vnd.ms-project",
-                        "-",
-                        "application/zip",
-                        "application/x-gzip",
-                        "application/x-tar",
-                        "application/x-gzip+tar",
-                        "-",
-                        "text/plain",
-                        "text/json",
-                        "text/css",
-                        "-",
-                        "*/*"
-                        ]|vsplit_in:3 %}
-                        <div class="col-lg-4 col-md-4">
-                            <ul class="list-unstyled">
-                                {% for mime in mimes %}
-                                    {% if mime == "-" %}
-                                        <li><br /></li>
-                                    {% else %}
-                                        <li>
-                                            <div class="checkbox">
-                                                <label for="{{ #acl.mime }}">
-                                                    <input type="checkbox" id="{{ #acl.mime }}" name="acl_mime" {% if mime|member:acl.file_mime %}checked="checked"{% endif %} value="{{ mime }}" /> {{ mime }}
-                                                </label>
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endfor %}
-                </div>
+        <h4>{_ File types allowed to be uploaded _}</h4>
+        <div class="form-group">
+            <p>{_ <strong>Security notice</strong>: When you allow */* files then all members of this role will be able to obtain full access to your whole site and all underlying data. _}</p>
+
+            <div class="row">
+                {% for mimes in [
+                    "image/jpeg",
+                    "image/png",
+                    "image/gif",
+                    "image/tiff",
+                    "image/bmp",
+                    "image/vnd.adobe.photoshop",
+                    "application/pdf",
+                    "application/postscript",
+                    "image/*",
+                    "-",
+                    "audio/mpeg",
+                    "audio/x-wav",
+                    "audio/x-aiff",
+                    "audio/*",
+                    "-",
+                    "video/mp4",
+                    "video/mpeg",
+                    "video/msvideo",
+                    "video/x-ms-asf",
+                    "application/x-shockwave-flash",
+                    "text/html-video-embed",
+                    "text/html-oembed",
+                    "video/*",
+                    "-",
+                    "application/msword",
+                    "application/vnd.ms-excel",
+                    "application/vnd.ms-powerpoint",
+                    "application/vnd.ms-project",
+                    "-",
+                    "application/zip",
+                    "application/x-gzip",
+                    "application/x-tar",
+                    "application/x-gzip+tar",
+                    "-",
+                    "text/plain",
+                    "text/json",
+                    "text/css",
+                    "-",
+                    "*/*"
+                    ]|vsplit_in:3 %}
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="list-unstyled">
+                            {% for mime in mimes %}
+                                {% if mime == "-" %}
+                                    <li><br /></li>
+                                {% else %}
+                                    <li>
+                                        <div class="checkbox">
+                                            <label for="{{ #acl.mime }}">
+                                                <input type="checkbox" id="{{ #acl.mime }}" name="acl_mime" {% if mime|member:acl.file_mime %}checked="checked"{% endif %} value="{{ mime }}" /> {{ mime }}
+                                            </label>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
