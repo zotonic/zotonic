@@ -24,6 +24,7 @@
                                form_id=#form
                                option_template="_admin_button_dropdown_categories.tpl"
                                header=_"Filter on category"
+                               align="right"
                             %}
                         </div>
                         <div class="btn-group">
@@ -36,6 +37,7 @@
                                form_id=#form
                                options=[[10,"10"], [20,"20"], [50,"50"], [100,"100"], [200,"200"], [500,"500"]]
                                header=_"Items per page"
+                               align="right"
                             %}
                         </div>
                     </div>

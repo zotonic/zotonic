@@ -14,6 +14,7 @@ or
 
 Optional:
 - header (header text at top of dropdown)
+- align ("right")
 #}
 {% with
    #select,
@@ -31,18 +32,20 @@ Optional:
     <span class="caret"></span>
 </button>
 <input type="hidden" name="{{ select_name }}" id="{{ unique_id }}" value="{{ selected_value }}" />
-<ul class="dropdown-menu dropdown-menu-right" role="menu">
+<ul class="dropdown-menu{% ifequal align "right" %} dropdown-menu-right{% endifequal %}" role="menu">
     {% if header %}
         <li role="presentation" class="dropdown-header">
             {{ header }}
         </li>
     {% endif %}
-    <li class="{% if not selected_value %}active{% endif %}">
-        <a href="#" class="{{ option_class }}" data-value="{{ default_value }}">
-            {{ default_label }}
-        </a>
-    </li>
-    <li class="divider"></li>
+    {% if default_label %}
+        <li class="{% if not selected_value %}active{% endif %}">
+            <a href="#" class="{{ option_class }}" data-value="{{ default_value }}">
+                {{ default_label }}
+            </a>
+        </li>
+        <li class="divider"></li>
+    {% endif %}
     {% if option_template %}
         {% include option_template
            selected_value=selected_value
@@ -62,9 +65,12 @@ Optional:
     action={
         script
         script="
-            document.getElementById('" ++ unique_id ++ "').value=this.getAttribute('data-value');
-            document.getElementById('" ++ form_id ++ "').submit();
-        "
+var form_id = '" ++ form_id ++ "';
+document.getElementById('" ++ unique_id ++ "').value=this.getAttribute('data-value');
+if (form_id) {
+    document.getElementById(form_id).submit();
+}
+"
     }
 %}
 {% endwith %}
