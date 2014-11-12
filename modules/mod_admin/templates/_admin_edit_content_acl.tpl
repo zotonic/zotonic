@@ -8,7 +8,7 @@
 
 {% block widget_content %}
 <div class="pull-right">
-    <a href="javascript:void(0)" class="btn btn-primary btn-xs do_dialog" data-dialog="title: '{{ _"Access control"|escapejs }}', text: '{{ _"Define who can see or edit this page."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
+    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Access control"|escapejs }}', text: '{{ _"Define who can see or edit this page."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
 </div>
 
 {% include "_admin_edit_visible_for.tpl" id=id %}
