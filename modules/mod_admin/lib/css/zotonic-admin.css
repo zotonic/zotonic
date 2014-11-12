@@ -90,6 +90,11 @@ ul.media > li.ui-sortable-placeholder {
 .z-text-light {
   color: #bbbbbb;
 }
+.z-btn-help {
+  display: inline-block;
+  font-size: 16px;
+  padding: 1px;
+}
 .admin-image-border,
 div.admin-edit-media,
 img.admin-list-dashboard,

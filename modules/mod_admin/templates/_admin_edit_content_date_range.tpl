@@ -22,7 +22,7 @@
 
 {% block widget_content_nolang_before %}
     <div class="pull-right">
-        <a href="javascript:void(0)" class="btn btn-primary btn-xs do_dialog" data-dialog="title: '{{ _"Help about date ranges"|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone’s life."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
+        <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about date ranges"|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone’s life."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
     </div>
 
     <div class="date-range">
