@@ -25,23 +25,36 @@ limitations under the License.
 {
     $.widget("ui.adminLinkedTable",
     {
-        // make rows clickable
+        // make row cells clickable
+        // by adding class 'clickable'
+        // except for rows and cells that have the class 'not-clickable'
         _init: function() {
             var self = this;
             (self.element.find("tr").each(function() {
-                var $this,
+                var $row,
                     href,
-                    event;
-                $this = $(this);
-                href = $this.attr("data-href");
-                event = $this.attr("data-event");
-                if (!href && !event) return;
-                $this.addClass("clickable");
-                $this.on("click", function() {
-                    if (event) {
-                        z_event(event);
-                    } else {
-                        document.location = href;
+                    event,
+                    $cell;
+                $row = $(this);
+                href = $row.attr("data-href");
+                event = $row.attr("data-event");
+                if (!href && !event) {
+                    return;
+                }
+                if ($row.hasClass("not-clickable")) {
+                    return;
+                }
+                $("td, th", $row).each(function() {
+                    $cell = $(this);
+                    if (!$cell.hasClass("not-clickable")) {
+                        $cell.addClass("clickable");
+                        $cell.on("click", function() {
+                            if (event) {
+                                z_event(event);
+                            } else {
+                                document.location = href;
+                            }
+                        });
                     }
                 });
             }));
