@@ -97,8 +97,7 @@ ul.media > li.ui-sortable-placeholder {
 }
 .admin-image-border,
 div.admin-edit-media,
-img.admin-list-dashboard,
-img.admin-list-overview {
+img.admin-list-dashboard {
   border: 1px solid #fff;
 }
 .admin-text-header,
@@ -681,17 +680,25 @@ table.do_adminLinkedTable p {
   border-width: 1px;
 }
 .table tbody tr.clickable td,
-.table tbody tr.clickable th {
+.table tbody tr.clickable th,
+.table tbody tr td.clickable,
+.table tbody tr th.clickable {
   -webkit-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
 }
 .table tbody tr.clickable:hover td,
-.table tbody tr.clickable:hover th {
+.table tbody tr.clickable:hover th,
+.table tbody tr:hover td.clickable,
+.table tbody tr:hover th.clickable {
   background-color: #eeeeee;
 }
 table.table tr.unpublished td,
-table.table tr.unpublished td a {
-  color: #999999;
+table.table tr.unpublished td a:not(.btn),
+table.table tr.unpublished td .text-muted,
+table.table tr.unpublished td a:not(.btn) .text-muted,
+table.table tr.unpublished td .help-block,
+table.table tr.unpublished td a:not(.btn) .help-block {
+  color: #bbbbbb;
 }
 table.table tr.unpublished td a.btn-success {
   color: white;

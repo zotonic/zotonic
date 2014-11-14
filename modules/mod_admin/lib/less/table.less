@@ -46,17 +46,25 @@ table.do_adminLinkedTable {
     border-width: 1px;
 }
 .table tbody tr.clickable td,
-.table tbody tr.clickable th {
+.table tbody tr.clickable th,
+.table tbody tr td.clickable,
+.table tbody tr th.clickable {
     #3L > .transition(all .1s ease-in-out);
 }
 .table tbody tr.clickable:hover td,
-.table tbody tr.clickable:hover th {
+.table tbody tr.clickable:hover th,
+.table tbody tr:hover td.clickable,
+.table tbody tr:hover th.clickable {
     background-color: @backgroundColorRowHover;
 }
 
 table.table tr.unpublished td,
-table.table tr.unpublished td a {
-    color: @textColorUnpublished;
+table.table tr.unpublished td a:not(.btn) {
+    &,
+    .text-muted,
+    .help-block {
+        color: @textColorUnpublished;
+    }
 }
 
 table.table tr.unpublished td a.btn-success {
