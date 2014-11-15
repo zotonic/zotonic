@@ -1,5 +1,5 @@
 {% wire id=#form type="submit" postback={config_edit module=module key=key on_success=on_success} delegate=delegate %}
-<form id="{{ #form }}" method="POST" action="postback" class="form">
+<form id="{{ #form }}" method="POST" action="postback" class="form  form-horizontal">
     <div class="form-group row">
         <label class="control-label col-md-3" for="{{ #module }}">{_ Module _}</label>
         <div class="col-md-6">

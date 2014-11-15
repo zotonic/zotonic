@@ -1,7 +1,7 @@
 {% with m.oauth_app.info[id] as app %}
 {% with m.oauth_app.tokens[id] as tokens %}
 
-<h2>{{ app.application_title }}</h2>
+<h4>{{ app.application_title }}</h4>
 
 {% if delete %}
 {% if tokens %}

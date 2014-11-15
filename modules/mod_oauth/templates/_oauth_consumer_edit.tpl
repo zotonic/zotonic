@@ -1,5 +1,5 @@
 {% wire id=#form type="submit" postback={consumer_save id=consumer.id} %}
-<form id="{{ #form }}" method="POST" action="postback" class="form">
+<form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 
     <div class="tabbable">
 
@@ -13,14 +13,14 @@
 
                 {% if consumer %}
                     <div class="form-group row">
-                        <label for="zp-ckey" class="control-label col-md-3">{_ Consumer key _}:</label>
+                        <label for="zp-ckey" class="control-label col-md-3">{_ Consumer key _}</label>
                         <div class="col-md-9">
                             <input class="form-control" type="text" id="zp-ckey" readonly value="{{ consumer.consumer_key }}" />
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="zp-csec" class="control-label col-md-3">{_ Consumer secret _}:</label>
+                        <label for="zp-csec" class="control-label col-md-3">{_ Consumer secret _}</label>
                         <div class="col-md-9">
                             <input class="form-control" type="text" id="zp-csec" readonly value="{{ consumer.consumer_secret }}" />
                         </div>
@@ -28,28 +28,28 @@
                 {% endif %}
 
                 <div class="form-group row">
-                    <label for="zp-title" class="control-label col-md-3">{_ Application title _}:</label>
+                    <label for="zp-title" class="control-label col-md-3">{_ Application title _}</label>
                     <div class="col-md-9">
                         <input class="form-control" type="text" name="zp-title" id="zp-title" value="{{ consumer.application_title }}" />
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="zp-url" class="control-label col-md-3">{_ Homepage _}:</label>
+                    <label for="zp-url" class="control-label col-md-3">{_ Homepage _}</label>
                     <div class="col-md-9">
                         <input class="form-control" type="text" name="zp-url" id="zp-url" value="{{ consumer.application_uri }}" />
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="zp-text" class="control-label col-md-3">{_ Description _}:</label>
+                    <label for="zp-text" class="control-label col-md-3">{_ Description _}</label>
                     <div class="col-md-9">
                         <textarea class="form-control" name="zp-text" id="zp-text">{{ consumer.application_descr }}</textarea>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="zp-callback" class="control-label col-md-3">{_ Callback URL _}:</label>
+                    <label for="zp-callback" class="control-label col-md-3">{_ Callback URL _}</label>
                     <div class="col-md-9">
                         <input class="form-control" type="text" name="zp-callback" id="zp-callback" value="{{ consumer.callback_uri }}" />
                     </div>
@@ -60,7 +60,12 @@
                         {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
                         {% button class="btn btn-primary" type="submit" text=_"Update" %}
                     {% else %}
-                        {_ When done, go to the authorization tab to set permissions. _}
+                        <a href="#" data-link="tab-auth" class="btn btn-primary">{_ Next step _}</a>
+{% javascript %}
+$("a[data-link='tab-auth']").on("click", function() {
+    $('a[href="#{{ #tab }}-auth"]').tab('show');
+});
+{% endjavascript %}
                     {% endif %}
                 </div>
             </div>
