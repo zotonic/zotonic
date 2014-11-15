@@ -1,14 +1,35 @@
-{% wire name="admin-menu-select" 
-		action={dialog_open 
-					template="_action_dialog_connect.tpl" 
-					title=(in_sorter == 'category')|if:_"Add category":_"Add menu item"
-					callback="window.zMenuEditDone"
-					cat=cat_id
-					in_sorter=in_sorter}
-%}
+{% if in_sorter == 'category' %}
+    {% wire name="admin-menu-select" 
+            action={
+                dialog_open 
+                template="_action_dialog_connect.tpl" 
+                title=_"Add category"
+                callback="window.zMenuEditDone"
+                cat=cat_id
+                in_sorter=in_sorter
+                tabs_enabled=["new"]
+            }
+    %}
+{% else %}
+    {% wire name="admin-menu-select" 
+            action={
+                dialog_open 
+                template="_action_dialog_connect.tpl" 
+                title=_"Add menu item"
+                callback="window.zMenuEditDone"
+                cat=cat_id
+                in_sorter=in_sorter
+            }
+    %}
+{% endif %}
+
 {% if admin_menu_edit_action /= `none` %}
-	{% wire name="admin-menu-edit" 
-			action=admin_menu_edit_action|default:{dialog_edit_basics callback="window.zMenuEditDone"} 
+	{% wire
+	    name="admin-menu-edit" 
+        action=admin_menu_edit_action|default:{
+            dialog_edit_basics
+            callback="window.zMenuEditDone"
+        } 
 	%}
 {% endif %}
 
@@ -16,7 +37,6 @@
 
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 	var id = $(this).closest('div').data('page-id');
-
 	window.zMenuEditDone = function(id, title) {
 		$(".title-"+id).html(title);
 	};

@@ -20,6 +20,7 @@
               dialog_new_rsc
               cat="acl_role"
               nocatselect
+              tabs_enabled=["new"]
            }
         %}
     </div>

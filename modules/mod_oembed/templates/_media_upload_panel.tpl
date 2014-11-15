@@ -37,7 +37,11 @@
         </div>
 
         {% if not id %}
-            <p>{_ The media title will be automatically detected from its URL. _}</p>
+             <div class="form-group row">
+                <div class="col-md-12">
+                    <p>{_ The media title will be automatically detected from its URL. _}</p>
+                </div>
+            </div>
         {% endif %}
 
         <div class="form-group row" style="display:none">
