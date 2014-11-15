@@ -82,7 +82,7 @@ msgstr "Leden"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:84
 msgid "File types allowed to be uploaded"
-msgstr "Bestandstypes dat geupload mogen worden"
+msgstr "Bestandstypes die geüpload mogen worden"
 
 #: modules/mod_acl_simple_roles/templates/_admin_edit_content.acl_role.tpl:77
 msgid "File uploads"
