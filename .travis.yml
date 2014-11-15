@@ -7,6 +7,8 @@ script: make all edocs && bin/zotonic runtests
 branches:
   only:
     - master
+    - release-0.12.x
+    - release-0.11.x
     - release-0.10.x
 notifications:
   email:
