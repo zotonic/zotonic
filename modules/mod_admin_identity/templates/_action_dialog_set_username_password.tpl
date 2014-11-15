@@ -12,7 +12,7 @@
     </p>
 
     {% wire id=#form type="submit" postback="set_username_password" delegate=delegate %}
-    <form id="{{ #form }}" method="POST" action="postback" class="form">
+    <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
         <input type="hidden" name="id" value="{{ id }}" />
 
         <!-- Fake usernames/password fields to stop Safari from autofilling -->
@@ -53,10 +53,6 @@
         
         <div class="modal-footer">
 	        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-
-	        {% if username %}
-	            {% button class="btn btn-default" action={dialog_delete_username id=id on_success=on_delete} text=_"Delete" %}
-	        {% endif %}
 
 	        <button class="btn btn-primary" type="submit">{_ Save _}</button>
         </div>

@@ -1,7 +1,7 @@
 <p>{_ Please fill in the module, key and value for the new configuration key. _}</p>
 
 {% wire id=#form type="submit" postback={config_new on_success=on_success} delegate=delegate %}
-<form id="{{ #form }}" method="POST" action="postback" class="form">
+<form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #module }}">{_ Module _}</label>
