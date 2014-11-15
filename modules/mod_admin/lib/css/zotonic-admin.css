@@ -1002,6 +1002,13 @@ li h3.widget-header {
   background-image: linear-gradient(to bottom, #eeeeee 0%, #ffffff 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#ffffff', GradientType=0);
 }
+.modal .widget {
+  margin: 0;
+  background: none;
+}
+.modal .widget .widget-content {
+  padding: 0;
+}
 /* scroll - keep the save buttons into view
    --------------------------------------------------------- */
 #sidebar-publish-page .widget-content {

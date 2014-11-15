@@ -1,7 +1,7 @@
 <p>{_ Please fill in the title of the new predicate. _}</p>
 
 {% wire id=#form type="submit" postback="predicate_new" delegate=delegate %}
-<form id="{{ #form }}" method="POST" action="postback" class="form">
+<form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 
     <input type="hidden" name="redirect" value="{{ redirect }}" />
 

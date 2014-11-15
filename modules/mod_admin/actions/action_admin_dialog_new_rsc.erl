@@ -31,20 +31,21 @@
 render_action(TriggerId, TargetId, Args, Context) ->
     Cat = proplists:get_value(cat, Args),
     NoCatSelect = z_convert:to_bool(proplists:get_value(nocatselect, Args, false)),
+    TabsEnabled = proplists:get_value(tabs_enabled, Args),
     Title = proplists:get_value(title, Args),
     Redirect = proplists:get_value(redirect, Args, true),
     SubjectId = proplists:get_value(subject_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_all_values(action, Args),
-    Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, Callback, Actions},
+    Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, Predicate, Callback, Actions},
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, SubjectId, Predicate, Callback, Actions}}, Context) ->
+event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, Predicate, Callback, Actions}}, Context) ->
     CatName = case Cat of
         undefined -> z_convert:to_list(?__("page", Context));
         _ -> z_convert:to_list(?__(m_rsc:p(Cat, title, Context), Context))
@@ -62,6 +63,7 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, Redirect, Subj
         {title, Title},
         {cat, CatId},
         {nocatselect, NoCatSelect},
+        {tabs_enabled, TabsEnabled},
         {catname, CatName},
         {callback, Callback},
         {catname, CatName},
