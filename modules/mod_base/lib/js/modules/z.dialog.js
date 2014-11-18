@@ -69,8 +69,8 @@
               .addClass("modal-content")
               .append($title)
               .append($body);
-            
-            dialogClass = 'modal';
+
+            dialogClass = "modal";
             if (typeof(options.addclass) == "string") {
                 dialogClass += ' ' + options.addclass;
             }
@@ -128,25 +128,29 @@
  
      $.widget("ui.show_dialog", {
         _init: function() {
-            var title,
-                text,
-                width;
-            title = this.options.title;
-            text  = this.options.text;
-            width = this.options.width;
-
+            var self = this;
             this.element.click(function() {
                 $.dialogAdd({
-                    title: title,
-                    text: text,
-                    width: width
+                    title: self.options.title,
+                    text: self.options.text,
+                    width: self.options.width,
+                    addclass: self.options.addclass
                 });
             });
         }
     });
  
+    /*
+    Default dialog parameters:
+    title: text, will be inserted in h4
+    text: text content, may contain html (will be inserted into div)
+    width: (optional)
+    addclass: (optional) classname will be appended to default dialog class
+    */
     $.ui.dialog.defaults = {
         title: 'Title',
-        text: 'text'
+        text: 'text',
+        width: undefined,
+        addclass: undefined
     };
 })(jQuery);
