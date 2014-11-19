@@ -382,10 +382,15 @@ is_changed(Current, Props) ->
     is_prop_changed([{pivot_category_nr, _}|Rest], Current) ->
         is_prop_changed(Rest, Current);
     is_prop_changed([{Prop, Value}|Rest], Current) ->
-        case z_utils:are_equal(Value, proplists:get_value(Prop, Current)) of
+        case is_equal(Value, proplists:get_value(Prop, Current)) of
             true -> is_prop_changed(Rest, Current);
             false -> true  % The property Prop has been changed.
         end.
+
+is_equal(A, A) -> true;
+is_equal(_, undefined) -> false;
+is_equal(undefined, _) -> false;
+is_equal(A,B) -> z_utils:are_equal(A, B).
 
 
 ensure_imported_id(true, Id, Context) when is_integer(Id) ->
