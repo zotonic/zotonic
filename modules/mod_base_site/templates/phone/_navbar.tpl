@@ -26,5 +26,4 @@
 			{% menu menu_id=menu_id id=id maxdepth=2 %}
         </div>
     </div>
-</div>
 </nav>
