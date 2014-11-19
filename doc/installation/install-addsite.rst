@@ -15,9 +15,17 @@ called ``yoursite``.
 
      127.0.0.1   yoursite
      
-2. Create an user and database in PostgreSQL (change the password for the user!)::
+2. Create a user in PostgreSQL (change the password for the user!)::
 
      CREATE USER zotonic WITH PASSWORD 'zotonic';
+     
+   Now, either give this user create rights to have Zotonic automatically  
+   create the database for you::
+   
+     ALTER USER zotonic CREATEDB;
+
+   Alternatively, you can create the database manually::
+    
      CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
      GRANT ALL ON DATABASE zotonic TO zotonic;
      \c zotonic
