@@ -75,7 +75,6 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 					pubzub.publish("menu/insert", {id: rsc_id});
 				}
 			};
-			console.log($menuedit);
 			z_notify("menu-item-render", {
 					id: v.object_id, 
 					callback: "window.zMenuNewItem", 
@@ -99,4 +98,3 @@ window.zMenuInsertAfter = function(after_id, html) {
 }
 
 {% endjavascript %}
-
