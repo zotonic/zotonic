@@ -81,60 +81,55 @@ render(#render{} = Render, Context) ->
 %% @doc Render a template.  First requests the template module from the template server, then renders the template.
 %% The resulting list contains the rendered template and scomp contexts.  Use render_to_iolist/3 to get a iolist().
 render({cat, File}, Variables, Context) ->
-    case find_template_cat(File, proplists:get_value(id, Variables), Context) of
-        {ok, ModuleIndex} -> 
-            render1(File, ModuleIndex, Variables, Context);
-        {error, Reason} ->
-            lager:info("Could not find template: ~s (~p)", [File, Reason]),
-            throw({error, {template_not_found, File, Reason}})
-    end;
+    Id = proplists:get_value(id, Variables),
+    maybe_render(find_template_cat(File, Id, Context), File, Variables, Context);
+render({cat, File, [Cat|_] = IsA}, Variables, Context) when is_atom(Cat) ->
+    maybe_render(find_template_cat(File, IsA, Context), File, Variables, Context);
 render(#module_index{} = M, Variables, Context) ->
     render1(M#module_index.filepath, M, Variables, Context);
-render(File, Variables, Context) when is_binary(File) ->
-    render(z_convert:to_list(File), Variables, Context);
 render(File, Variables, Context) ->
-    case find_template(File, Context) of
-        {ok, ModuleIndex} ->
-            render1(File, ModuleIndex, Variables, Context);
-        {error, Reason} ->
-            lager:info("Could not find template: ~s (~p)", [File, Reason]),
-            throw({error, {template_not_found, File, Reason}})
-    end.
+    maybe_render(find_template(File, Context), File, Variables, Context).
 
-    %% Render the found template
-    render1(File, #module_index{filepath=FoundFile, erlang_module=undefined}, Variables, Context) ->
-        Module = filename_to_modulename(FoundFile, Context),
-        render1(File, FoundFile, Module, Variables, Context);
-    render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables, Context) ->
-        render1(File, FoundFile, Module, Variables, Context).
-        
-    render1(File, FoundFile, Module, Variables, Context) ->
-        Result = case gen_server:call(Context#context.template_server, {check_modified, Module}, ?TIMEOUT) of
-                    modified -> compile(File, FoundFile, Module, Context);
-                    ok -> {ok, Module}
-                 end,
-        case Result of
-            {ok, Module} ->
-                %% @todo Move the in_process caching to the template compiler?
-                OldCaching = z_depcache:in_process(true),
-                case Module:render(Variables, Context) of
-                    {ok, Output}   -> 
-                        z_depcache:in_process(OldCaching),
-                        runtime_wrap_debug_comments(FoundFile, Output, Context);
-                    {error, Reason} ->
-                        z_depcache:in_process(OldCaching),
-                        lager:error("Error rendering template: ~p (~p)~n", [FoundFile, Reason]),
-                        throw({error, {template_rendering_error, FoundFile, Reason}})
-                 end;
-            {error, {{ErrFile,Line,Col}, _YeccModule, Error}} ->
-                Error1 = try lists:flatten(Error) catch _:_ -> Error end,
-                lager:error("Error compiling template: ~s:~p (~p) ~s~n", [ErrFile, Line, Col, Error1]),
-                throw({error, {template_compile_error, ErrFile, {Line,Col}, Error1}});
-            {error, Reason} ->
-                Reason1 = try lists:flatten(Reason) catch _:_ -> Reason end,
-                lager:error("Error compiling template: ~p (~p)~n", [FoundFile, Reason1]),
-                throw({error, {template_compile_error, FoundFile, Reason1}})
-        end.
+maybe_render({ok, ModuleIndex}, File, Variables, Context) ->
+    render1(File, ModuleIndex, Variables, Context);
+maybe_render({error, Reason}, File, _Variable, _Context) ->
+    lager:info("Could not find template: ~s (~p)", [File, Reason]),
+    throw({error, {template_not_found, File, Reason}}).
+
+%% Render the found template
+render1(File, #module_index{filepath=FoundFile, erlang_module=undefined}, Variables, Context) ->
+    Module = filename_to_modulename(FoundFile, Context),
+    render1(File, FoundFile, Module, Variables, Context);
+render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables, Context) ->
+    render1(File, FoundFile, Module, Variables, Context).
+    
+render1(File, FoundFile, Module, Variables, Context) ->
+    Result = case gen_server:call(Context#context.template_server, {check_modified, Module}, ?TIMEOUT) of
+                modified -> compile(File, FoundFile, Module, Context);
+                ok -> {ok, Module}
+             end,
+    case Result of
+        {ok, Module} ->
+            %% @todo Move the in_process caching to the template compiler?
+            OldCaching = z_depcache:in_process(true),
+            case Module:render(Variables, Context) of
+                {ok, Output}   -> 
+                    z_depcache:in_process(OldCaching),
+                    runtime_wrap_debug_comments(FoundFile, Output, Context);
+                {error, Reason} ->
+                    z_depcache:in_process(OldCaching),
+                    lager:error("Error rendering template: ~p (~p)~n", [FoundFile, Reason]),
+                    throw({error, {template_rendering_error, FoundFile, Reason}})
+             end;
+        {error, {{ErrFile,Line,Col}, _YeccModule, Error}} ->
+            Error1 = try lists:flatten(Error) catch _:_ -> Error end,
+            lager:error("Error compiling template: ~s:~p (~p) ~s~n", [ErrFile, Line, Col, Error1]),
+            throw({error, {template_compile_error, ErrFile, {Line,Col}, Error1}});
+        {error, Reason} ->
+            Reason1 = try lists:flatten(Reason) catch _:_ -> Reason end,
+            lager:error("Error compiling template: ~p (~p)~n", [FoundFile, Reason1]),
+            throw({error, {template_compile_error, FoundFile, Reason1}})
+    end.
     
             
 %% @doc Render a template to an iolist().  This removes all scomp state etc from the rendered html and appends the
@@ -191,8 +186,6 @@ find_template(File, true, Context) ->
 %% @spec find_template_cat(File, Id, Context) -> {ok, filename()} | {error, code} 
 %% @doc Finds the template designated by the file, for the category of the rsc with id, check modules.
 %% When the file is an absolute path, then do nothing and assume the file exists.
-find_template_cat([$/|_] = File, _Id, _Context) ->
-    {ok, File};
 find_template_cat(File, None, Context) when None =:= <<>>; None =:= undefined; None =:= [] ->
     find_template(File, Context);
 find_template_cat(File, [Item|_]=Stack, Context) when is_atom(Item) ->
