@@ -687,7 +687,7 @@ string_ast(String, TreeWalker) ->
 
 catinclude_ast(File, Id, Args, All, Context, TreeWalker) ->
     Args1 = [ {{identifier, none, "$file"}, File},
-			  {{identifier, none, "id"}, Id} | Args],
+			  {{identifier, none, "$id"}, Id} | Args],
     scomp_ast("catinclude", Args1, All, Context, TreeWalker).
 
 
