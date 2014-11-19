@@ -43,12 +43,18 @@ $(function() {
 						tree_id: $('#menu-editor').data('rsc-id'),
 						z_delegate: "mod_admin_frontend"
 			});
+		} else if (typeof document.z_default_edit_id == 'number') {
+			z_notify("admin-menu-edit", {
+						id: document.z_default_edit_id,
+						tree_id: $('#menu-editor').data('rsc-id'),
+						z_delegate: "mod_admin_frontend"
+			});
 		}
 	}
 
 	window.addEventListener("hashchange", function() {
-			hashchange();
+		hashchange();
 	}, false);
 
-	hashchange();
+	setTimeout(function() { hashchange(); }, 100);
 });

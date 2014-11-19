@@ -53,8 +53,10 @@ $('#edit-blocks-wrapper').on('click', '.block-add-block .dropdown-menu a', funct
     z_notify('admin-insert-block', { 
                 z_delegate: 'mod_admin', 
                 type: block_type, 
-                after: after_block, 
-                rsc_id: {{ id }}, 
+                after: after_block,
+                {% if id %}
+                    rsc_id: {{ id }}, 
+                {% endif %}
                 language: langs,
                 edit_language: $('.language-tabs .active').attr('lang')
             });
