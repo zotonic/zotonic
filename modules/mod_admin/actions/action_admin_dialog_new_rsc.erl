@@ -96,13 +96,26 @@ event(#submit{message={new_page, Args}}, Context) ->
     Context2 = z_render:wire([{Action, [{id, Id}|ActionArgs]}|| {Action, ActionArgs} <- Actions], Context2a),
 
     % optionally redirect to the edit page of the new resource
-    case z_convert:to_bool(Redirect) of
+    case dispatch(Redirect) of
         false ->
-             Context2;
-        true ->
-            Location = z_dispatcher:url_for(admin_edit_rsc, [{id, Id}], Context2),
+            Context2;
+        Dispatch ->
+            Location = z_dispatcher:url_for(Dispatch, [{id, Id}], Context2),
             z_render:wire({redirect, [{location, Location}]}, Context2)
     end.
+
+dispatch(true) ->
+    admin_edit_rsc;
+dispatch(false) ->
+    false;
+dispatch(undefined) ->
+    false;
+dispatch(Dispatch) when is_atom(Dispatch) ->
+    Dispatch;
+dispatch(Cond) ->
+    dispatch(z_convert:to_bool(Cond)).
+
+
 
 get_base_props(undefined, Context) ->
     z_context:get_q_all_noz(Context);
