@@ -10,8 +10,14 @@
 
 {% block rscform %}
 
-{% with id.is_editable as is_editable %}
+{% with not id or id.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
+{% with id.is_a|default:(m.category[cat].is_a) as cats %}
+{% wire id="rscform" 
+		type="submit" 
+		postback={rscform view_location=view_location cat=cat id=id} 
+		delegate=`controller_admin_edit`
+%}
 {% wire id="rscform" type="submit" postback={rscform view_location=view_location} delegate=`controller_admin_edit` %}
 <form id="rscform" method="post" action="postback" class="form">
 	<input type="hidden" name="id" value="{{ id }}" />
@@ -20,11 +26,15 @@
 		<div class="col-lg-10 col-md-10">
 			{% block meta_data_first %}{% endblock %}
 			<p>
-				{{ id.category_id.title }}
+				{% if id %}
+					{{ id.category_id.title }}
+				{% else %}
+					{{ m.rsc[cat].title }}
+				{% endif %}
 
 				<span class="publication-dates">
 					<label for="is_published" class="checkbox-inline">
-			    		<input type="checkbox" id="is_published" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}/>
+			    		<input type="checkbox" id="is_published" name="is_published" value="1" {% if not id or id.is_published %}checked="checked"{% endif %}/>
 			    	    {_ Published _}
 				    </label>
 
@@ -54,21 +64,21 @@
 		<div class="tab-pane active" id="poststuff">
 			{% optional include "_translation_init_languages.tpl" %}
 			{% block edit_blocks %}
-				{% catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
+				{% catinclude "_admin_edit_basics.tpl" cats is_editable=is_editable languages=languages %}
 
 				{% if id.category_id.feature_show_address %}
-					{% catinclude "_admin_edit_content_address.tpl" id is_editable=is_editable languages=languages %}
+					{% catinclude "_admin_edit_content_address.tpl" cats is_editable=is_editable languages=languages %}
 				{% endif %}
 				
-				{% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
+				{% all catinclude "_admin_edit_content.tpl" cats is_editable=is_editable languages=languages %}
 
-				{% if id.is_a.media or id.medium %}
+				{% if `media`|member:cats or id.medium %}
 					{% include "_admin_edit_content_media.tpl" %}
 				{% endif %}
 
-				{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages %}
-				{% catinclude "_admin_edit_blocks.tpl" id is_editable=is_editable languages=languages %}
-				{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
+				{% catinclude "_admin_edit_body.tpl" cats is_editable=is_editable languages=languages %}
+				{% catinclude "_admin_edit_blocks.tpl" cats is_editable=is_editable languages=languages %}
+				{% catinclude "_admin_edit_depiction.tpl" cats is_editable=is_editable languages=languages %}
 			{% endblock %}
 		</div>
 		{% block meta_panels %}{% endblock %}
@@ -82,19 +92,28 @@
 
 	{# Hidden safe buttons and publish state - controlled via the nabvar #}
 	<div style="display: none">
-		<span id="button-prompt">{% block nav_prompt %}{{ id.category_id.title }}{% endblock %}</span>
+		<span id="button-prompt">
+			{% block nav_prompt %}
+				{% if id %}
+					{{ id.category_id.title }}
+				{% else %}
+					{{ m.rsc[cat].title }}
+				{% endif %}
+			{% endblock %}
+		</span>
 
 		{% block buttons %}
-			{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
+			{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
 		
-			{% if id.is_editable %}
+			{% if is_editable %}
 				{% button type="submit" id="save_view" class="btn btn-default" text=_"Save &amp; view" title=_"Save and view the page." %}
-			{% else %}
+			{% elseif id %}
 				{% button id="save_view" class="btn btn-primary" text=_"View" title=_"View this page." action={redirect id=id} %}
 			{% endif %}
 		{% endblock %}
 	</div>
 </form>
+{% endwith %}
 {% endwith %}
 {% endwith %}
 

@@ -27,23 +27,21 @@
 				<div class="col-lg-8 col-md-8" id="editcol">
 				{% block editcol %}
 					{% if id %}
-						{% javascript %}
-							if (window.location.hash == '') {
-								setTimeout(function() {
-									window.location.hash = '#edit_id={{id}}';
-								}, 100);
-							}
-						{% endjavascript %}
 						<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
+						{% javascript %}
+							document.z_default_edit_id = {{ id }};
+						{% endjavascript %}
 					{% else %}
 						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
 					{% endif %}
 				{% endblock %}
 				</div>
-			{% else %}
+			{% elseif id %}
 				<div class="col-lg-12 col-md-12" id="editcol">
 					<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
-					{% wire postback={admin_menu_edit id=id} delegate=`mod_admin_frontend` %}
+					{% javascript %}
+						document.z_default_edit_id = {{ id }};
+					{% endjavascript %}
 				</div>
 			{% endif %}
 		{% endwith %}
