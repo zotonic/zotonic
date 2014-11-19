@@ -577,13 +577,18 @@ all_flat1(Context, ShowMeta) ->
         Name /= <<"meta">> andalso Name /= <<"predicate">> andalso Name /= <<"category">> andalso Name /= <<"acl_role">>.
     
 
-all_flat(CatId, Context) ->
-    F = fun() ->
-                {L,R} = boundaries(CatId, Context),
-                z_db:q("select c.id, c.lvl, r.name, c.props from category c join rsc r on r.id = c.id where $1 <= c.nr and c.nr <= $2 order by c.nr", [L, R], Context)
-        end,
-    All = z_depcache:memo(F, {category_flat, CatId}, ?WEEK, [category], Context),
-    [ {Id, Lvl, string:copies("&nbsp;&nbsp;&nbsp;&nbsp;", Lvl-1), flat_title(Name, Props)} || {Id, Lvl, Name, Props} <- All ].
+all_flat(Cat, Context) ->
+    case m_rsc:rid(Cat, Context) of
+        undefined ->
+            [];
+        CatId ->
+            F = fun() ->
+                        {L,R} = boundaries(CatId, Context),
+                        z_db:q("select c.id, c.lvl, r.name, c.props from category c join rsc r on r.id = c.id where $1 <= c.nr and c.nr <= $2 order by c.nr", [L, R], Context)
+                end,
+            All = z_depcache:memo(F, {category_flat, CatId}, ?WEEK, [category], Context),
+            [ {Id, Lvl, string:copies("&nbsp;&nbsp;&nbsp;&nbsp;", Lvl-1), flat_title(Name, Props)} || {Id, Lvl, Name, Props} <- All ]
+    end.
 
 
 %% @doc Return the category tree as a menu resource
