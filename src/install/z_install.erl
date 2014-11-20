@@ -431,7 +431,7 @@ model_pgsql() ->
     (
         rsc_id int NOT NULL,
         serial int NOT NULL DEFAULT 1,
-        due timestamp NOT NULL,
+        due timestamp with time zone,
         is_update boolean NOT NULL default true,
         
         CONSTRAINT rsc_pivot_queue_pkey PRIMARY KEY (rsc_id),
@@ -450,7 +450,7 @@ model_pgsql() ->
         module character varying(30) NOT NULL,
         function character varying(30) NOT NULL,
         key character varying(100) NOT NULL DEFAULT ''::character varying,
-        due timestamp,
+        due timestamp with time zone ,
         props bytea,
         
         CONSTRAINT pivot_task_queue_pkey PRIMARY KEY (id),
@@ -519,7 +519,7 @@ model_pgsql() ->
     (
         id serial NOT NULL,
         filename character varying (400) NOT NULL,
-        deleted timestamp NOT NULL default now(),
+        deleted timestamp with time zone NOT NULL default now(),
         
         CONSTRAINT medium_deleted_pkey PRIMARY KEY (id)
     )",
@@ -576,7 +576,7 @@ edge_log_table() ->
         predicate character varying (80),
         object_id int not null,
         seq integer not null,
-        created timestamp NOT NULL default now(),
+        created timestamp with time zone NOT NULL default now(),
         
         CONSTRAINT edge_log_pkey PRIMARY KEY (id)
     )".
@@ -619,7 +619,7 @@ medium_log_table() ->
         id serial NOT NULL,
         usr_id int,
         filename character varying (400) NOT NULL,
-        created timestamp NOT NULL default now(),
+        created timestamp with time zone NOT NULL default now(),
         
         CONSTRAINT medium_log_pkey PRIMARY KEY (id),
         CONSTRAINT medium_log_filename_key UNIQUE (filename)

@@ -157,7 +157,7 @@ create_table(Context) ->
 				notification varchar(64) not null,
 				user_id integer,
                 rsc_id integer,
-				created timestamp not null default current_timestamp,
+				created timestamp with time zone not null default current_timestamp,
 
                 CONSTRAINT email_receive_recipient_pkey PRIMARY KEY (recipient),
                 CONSTRAINT fk_email_receive_recipient_user_id FOREIGN KEY (user_id)
