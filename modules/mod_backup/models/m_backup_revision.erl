@@ -122,7 +122,7 @@ install(Context) ->
                         id bigserial not null,
                         type character(1) not null,
                         rsc_id integer not null,
-                        created timestamp not null default current_timestamp,
+                        created timestamp with time zone not null default current_timestamp,
                         version integer,
                         user_id integer,
                         user_name character varying(80),
