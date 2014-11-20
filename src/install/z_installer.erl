@@ -127,6 +127,7 @@ upgrade(C, Database, Schema) ->
     ok = install_medium_log(C, Database, Schema),
     ok = install_pivot_location(C, Database, Schema),
     ok = install_edge_log(C, Database, Schema),
+    ok = fix_timestamptz(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -259,7 +260,7 @@ install_task_due(C, Database, Schema) ->
         true -> 
             ok;
         false ->
-            {ok, [], []} = pgsql:squery(C, "alter table pivot_task_queue add column due timestamp "),
+            {ok, [], []} = pgsql:squery(C, "alter table pivot_task_queue add column due timestamp with time zone"),
             ok
     end.
 
@@ -413,3 +414,27 @@ ensure_module_active(C, Module) ->
         _ ->
             {ok, 1} = pgsql:equery(C, "insert into module (name, is_active) values ($1, true)", [Module])
     end.
+
+%% Ensure that all timestamp columns have a time zone
+fix_timestamptz(C, Database, Schema) ->
+    [   fix_timestamptz_column(C, Table, Column, Database, Schema)
+        || {Table, Column} <- get_timestamp_without_timezone_columns(C, Database, Schema)
+    ],
+    ok.
+
+fix_timestamptz_column(C, Table, Col, Database, Schema) ->
+    lager:info("[database: ~p ~p] Adding time zone to ~p ~p", [Database, Schema, Table, Col]),
+    {ok, [], []} = pgsql:squery(C, "alter table "++binary_to_list(Table)++" alter column "++binary_to_list(Col)++" type timestamp with time zone"),
+    ok.
+
+get_timestamp_without_timezone_columns(C, Database, Schema) ->
+    {ok, _, Cols} = pgsql:equery(C, "
+                                   select table_name, column_name
+                                   from information_schema.columns 
+                                   where table_catalog = $1 
+                                     and table_schema = $2
+                                     and data_type = 'timestamp without time zone'",
+                                [Database, Schema]),
+    Cols.
+
+
