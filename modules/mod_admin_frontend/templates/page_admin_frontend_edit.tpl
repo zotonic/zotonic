@@ -97,10 +97,11 @@
 	    "js/modules/jquery.shorten.js"
 	    "js/modules/jquery.timepicker.min.js"
 
-	    "js/jquery.ui.nestedSortable.js"
-
 	    "js/apps/admin-common.js"
 	    "js/modules/admin-frontend.js"
+	%}
+	{% lib
+	    "js/jquery.ui.nestedSortable.js"
 	%}
 	{% all include "_admin_lib_js.tpl" %}
 	{% include "_editor.tpl" is_editor_include %}
