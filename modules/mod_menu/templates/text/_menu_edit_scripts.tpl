@@ -92,7 +92,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				}
 				$sorter.trigger('sortupdate');
 				if (typeof pubzub !== "undefined") {
-					pubzub.publish("~/site/menu/insert", {id: rsc_id});
+					pubzub.publish("~pagesession/menu/insert", {id: rsc_id});
 				}
 			};
 			z_notify("menu-item-render", {
@@ -113,7 +113,7 @@ window.zMenuInsertAfter = function(after_id, html) {
 	$html.insertAfter($menu_item);
 	$('#{{ in_sorter }}').trigger('sortupdate');
 	if (typeof pubzub !== "undefined") {
-		pubzub.publish("~/site/menu/insert", {menu_id: '{{ menu_id }}', id: $html.children('div').data('page-id')});
+		pubzub.publish("~pagesession/menu/insert", {menu_id: '{{ menu_id }}', id: $html.children('div').data('page-id')});
 	}
 }
 
