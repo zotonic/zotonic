@@ -10,7 +10,7 @@ $(function() {
 	});
 
 	if (typeof pubzub !== "undefined") {
-		pubzub.subscribe("menu/insert", function(topic,args) {
+		pubzub.subscribe("~pagesession/menu/insert", function(topic,args) {
 			window.location.hash = "#edit_id="+args.id;
 		});
 	}
