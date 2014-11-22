@@ -12,7 +12,8 @@
     %}
         {% with q.qpagelen|default:default_pagelen as qpagelen %}
             {% with q.qcat as qcat %}
-                <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc qs=q.qs %}" class="form-inline">
+                <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc %}" class="form-inline">
+                    <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     <div class="btn-group pull-right">
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
