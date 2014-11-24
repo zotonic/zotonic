@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ Pages _}{% endblock %}
+{% block title %}{_ Pages overview _}{% if q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}{% endblock %}
 
 {% block content %}
     {% with 
@@ -46,8 +46,8 @@
             {% endwith %}
             <div class="admin-header">
                 <h2>
-                    {_ Pages overview _}{% if q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, 
-                        {_ matching _} “{{ q.qs|escape }}”
+                    {% block title %}{% endblock %}
+                    {% if q.qs %}
                         {% button text=_"show all" class="btn btn-default btn-xs" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
                         <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     {% endif %}
