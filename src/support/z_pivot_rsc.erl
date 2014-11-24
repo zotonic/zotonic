@@ -155,7 +155,6 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
 
     insert_transaction(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
         Due = to_utc_date(SecondsOrDate),
-        ?DEBUG(Due),
         UniqueKeyBin = z_convert:to_binary(UniqueKey), 
         Fields = [
             {module, Module},
