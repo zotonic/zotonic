@@ -3,6 +3,7 @@
     margin-bottom: 10px;
     border-bottom: none;
     #3L > .border-radius(@radiusWidget);
+    #3L > .clearfix;
 //    #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
     background-color: @backgroundColorLighter;
     
@@ -18,10 +19,6 @@
             padding: 0;
         }
         
-        &:last-child {
-            padding-bottom: @widgetVerticalPadding;
-        }
-        
         &:empty {
             display: none;
         }
@@ -33,18 +30,9 @@
                 margin-top: 0;
             }
         }
-
-        > :last-child {
-            margin-bottom: 0;
-        }
         
         &.tab-content {
             padding-top: 10px;
-        }
-
-        .form-group:last-child {
-            padding-bottom: @widgetVerticalPadding;
-            margin-bottom: 0;
         }
 
         .rsc-item-wrapper {
