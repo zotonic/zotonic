@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ Pages _}{% endblock %}
+{% block title %}{_ Pages overview _}{% if q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}{% endblock %}
 
 {% block content %}
 
@@ -41,11 +41,11 @@
     <input type="hidden" name="qsort" value="{{ q.qsort }}" />
     <input type="hidden" name="qs" value="{{ q.qs }}" />
     <h2>
-	{_ Pages overview _}{% if q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, 
-	{_ matching _} “{{ q.qs|escape }}”
-	{% button text=_"show all" class="btn btn-mini" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
-	<input type="hidden" name="qs" value="{{ q.qs|escape }}" />
-	{% endif %}
+        {% block title %}{% endblock %}
+        {% if q.qs %}
+            {% button text=_"show all" class="btn btn-mini" action={redirect dispatch="admin_overview_rsc" qcat=q.qcat} %}
+            <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
+        {% endif %}
     </h2>
 </form>
 
