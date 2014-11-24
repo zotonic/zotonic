@@ -277,7 +277,7 @@ q(Sql, Parameters, Context, Timeout) ->
                     {ok, _Cols, Rows} -> Rows;
                     {ok, Rows} -> Rows;
                     {error, Reason} = Error ->
-                        lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
+                        lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, Parameters]),
                         throw(Error) 
                 end
 	end,
@@ -299,7 +299,7 @@ q1(Sql, Parameters, Context, Timeout) ->
                     {ok, Value} -> Value;
                     {error, noresult} -> undefined;
                     {error, Reason} = Error ->
-                        lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
+                        lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, Parameters]),
                         throw(Error) 
                 end
     end,
@@ -398,7 +398,7 @@ insert(Table, Props, Context) ->
 			 {ok, IdVal} -> IdVal;
 			 {error, noresult} -> undefined;
              {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, FinalSql, Parameters]),
+                lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, FinalSql, Parameters]),
                 throw(Error) 
 		     end,
 		{ok, Id}
@@ -440,7 +440,7 @@ update(Table, Id, Parameters, Context) ->
         case equery1(DbDriver, C, Sql, [Id | Params]) of
             {ok, _RowsUpdated} = Ok -> Ok;
             {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id | Params]]),
+                lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, [Id | Params]]),
                 throw(Error) 
         end
     end,
@@ -459,7 +459,7 @@ delete(Table, Id, Context) ->
         case equery1(DbDriver, C, Sql, [Id]) of
             {ok, _RowsDeleted} = Ok -> Ok;
             {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id]]),
+                lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, [Id]]),
                 throw(Error) 
         end            
 	end,
