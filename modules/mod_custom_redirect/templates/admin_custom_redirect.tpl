@@ -14,7 +14,7 @@
         postback=`custom_redirects`
         delegate=`mod_custom_redirect`
 %}
-<form id="{{ #form }}" action="#postback">
+<form id="{{ #form }}" action="postback">
     <table id="custom-redirects" class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
