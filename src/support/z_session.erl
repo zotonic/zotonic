@@ -117,18 +117,17 @@ set(_K, _V, _) ->
     {error, no_session}.
 
 %% @doc Get a session value. Defaults to 'undefined'.
-get(Key, #context{session_pid=Pid}) ->
-    get(Key, Pid);
-get(Key, Pid) when is_pid(Pid) ->
-    get(Key, Pid, undefined);
-get(_, _) ->
-    undefined.
+get(Key, Context) ->
+    get(Key, Context, undefined).
 
 %% @doc Get a session value with a default.
 get(Key, #context{session_pid=Pid}, DefaultValue) ->
     get(Key, Pid, DefaultValue);
-get(Key, Pid, DefaultValue) ->
-    gen_server:call(Pid, {get, Key, DefaultValue}).
+get(Key, Pid, DefaultValue) when is_pid(Pid) ->
+    gen_server:call(Pid, {get, Key, DefaultValue});
+get(_, _, DefaultValue) ->
+    DefaultValue.
+
 
 incr(Key, Value, #context{session_pid=Pid}) ->
     incr(Key, Value, Pid);
