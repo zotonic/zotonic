@@ -560,8 +560,7 @@ copy_scripts(From, Context) ->
 continue_session(Context) ->
     case z_session_manager:continue_session(Context) of
         {ok, #context{session_pid=Pid} = Context1} when is_pid(Pid) ->
-            Context2 = z_auth:logon_from_session(Context1),
-            z_notifier:foldl(session_context, Context2, Context2);
+            maybe_logon_from_session(Context1);
         {ok, Context1} ->
             Context1;
         {error, _} ->
@@ -598,12 +597,18 @@ ensure_session(Context) ->
     case Context#context.session_pid of
         undefined ->
             {ok, Context1} = z_session_manager:ensure_session(Context),
-            Context2 = z_auth:logon_from_session(Context1),
-            Context3 = z_notifier:foldl(session_context, Context2, Context2),
-            set_nocache_headers(Context3);
+            maybe_logon_from_session(Context1);
         _ ->
             Context
     end.
+
+%% @doc After ensuring a session, try to log on from the user-id stored in the session
+maybe_logon_from_session(#context{user_id=undefined} = Context) ->
+    Context1 = z_auth:logon_from_session(Context),
+    Context2 = z_notifier:foldl(session_context, Context1, Context1),
+    set_nocache_headers(Context2);
+maybe_logon_from_session(Context) ->
+    Context.
 
 %% @doc Ensure that we have a page session, used for comet and postback requests.
 ensure_page_session(Context) ->
