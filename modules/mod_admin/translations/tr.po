@@ -396,10 +396,10 @@ msgstr "Yayınlanma tarih aralığı yardımı"
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""
 "Here you can edit the arguments of the  search query. Every argument goes on its own line. For more information, see the\n"
-"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model\">documentation on the query arguments</a> on the Zotonic website."
+"\t\t<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
 "Burada arama sorgusu argümanlarını düzenleyebilirsiniz. Her argüman kendi satırında devam eder. Daha fazla bilgi için \n"
-"\t\t<a href=\"http://zotonic.com/documentation/761/the-query-search-model\"> Zotonic dokümentasyon sayfasını ziyaret edin."
+"\t\t<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\"> Zotonic dokümentasyon sayfasını ziyaret edin."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
 msgid "Here you can edit the person's name.  Use the title of the base content for the display name of this person."
