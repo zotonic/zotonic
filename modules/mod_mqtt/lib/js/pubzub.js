@@ -75,7 +75,7 @@ Pubzub.prototype.unsubscribe = function (id) {
         var sub = this._subs[id];
         var topic = sub.topic;
 
-        this._matcher.remove(topic, sub.id);
+        this._matcher.remove(topic, id);
         if (!this.is_local_topic(topic)) {
             var ct = this._subs_relayed[topic] - 1;
             if (ct === 0) {
