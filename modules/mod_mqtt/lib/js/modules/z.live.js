@@ -23,6 +23,9 @@ limitations under the License.
 function ZLive ()
 {
     this._subscriptions = [];
+    this._prune_timeout = 10000;
+    var self = this;
+    setTimeout(function() { self.prune(); }, this._prune_timeout);
 }
 
 ZLive.prototype.subscribe = function(topics, target, postback) {
@@ -51,14 +54,30 @@ ZLive.prototype.update = function(topic, target, postback, payload, sub_id) {
         }
         z_queue_postback(target, postback, {topic: topic, message: payload});
     } else {
-        for (i=0; i<= this._subscriptions.length; i++) {
-            if (this._subscriptions[i].sub_id == sub_id) {
-                this._subscriptions.splice(i,1);
-                break;
-            }
-        }
-        pubzub.unsubscribe(sub_id);
+        this.unsubscribe(sub_id);
     }
+};
+
+ZLive.prototype.unsubscribe = function(sub_id) {
+    for (i=0; i<= this._subscriptions.length; i++) {
+        if (this._subscriptions[i].sub_id == sub_id) {
+            this._subscriptions.splice(i,1);
+            break;
+        }
+    }
+    pubzub.unsubscribe(sub_id);
+};
+
+ZLive.prototype.prune = function() {
+    for (i=this._subscriptions.length-1; i >= 0; i--) {
+        var target = this._subscriptions[i].target;
+        if ($('#'+target).length === 0) {
+            pubzub.unsubscribe(this._subscriptions[i].sub_id);
+            this._subscriptions.splice(i,1);
+        }
+    }
+    var self = this;
+    setTimeout(function() { self.prune(); }, this._prune_timeout);
 };
 
 window.z_live = new ZLive();
