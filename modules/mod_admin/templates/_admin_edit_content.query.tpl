@@ -12,7 +12,7 @@
 <fieldset class="admin-form">
 	<div class="notification notice">
 		{_ Here you can edit the arguments of the  search query. Every argument goes on its own line. For more information, see the
-		<a href="http://zotonic.com/documentation/761/the-query-search-model">documentation on the query arguments</a> on the Zotonic website. _}
+		<a href="http://zotonic.com/docs/latest/manuals/datamodel/search.html">documentation on the query arguments</a> on the Zotonic website. _}
 	</div>
 
     <div class="form-group">
