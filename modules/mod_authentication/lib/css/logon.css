@@ -37,7 +37,7 @@ div#logon_box {
 #logon_box form input[type="text"],
 #logon_box form input[type="password"] {
     font-size: 18px;
-    height: 22px;
+    height: 32px;
 }
 
 #logon_box form div.buttons {
