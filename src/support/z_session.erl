@@ -18,6 +18,19 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+% Sessions have two timeouts:
+%
+% 1. Initial timeout after setting up the process till the first ping from the page (expire_1)
+% 2. Inactivity timeout after receiving some communication from the page (expire_n)
+%
+% This is to make a distinction between pages fetched by visitors (with executing callbacks etc)
+% and bots (without executing callbacks).
+%
+% Pages fetched by bots won't setup the web socket connection, or perform postbacks, so we can 
+% quickly stop the page and session-process.
+%
+% Real visitors will perform interaction with the page, for this we keep the session and 
+% page-process. Even during some inactivity.
 
 -module(z_session).
 -author("Marc Worrell <marc@worrell.nl>").
