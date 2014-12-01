@@ -114,13 +114,20 @@ fetch_user_data(AccessToken) ->
 
 %% @doc Check if the user exists, if not then hand over control to the auth_signup resource.
 logon_fb_user(FacebookProps, Args, Context) ->
-    Props = [
+    Props0 = [
         {title, unicode:characters_to_binary(proplists:get_value(name, FacebookProps))},
         {name_first, unicode:characters_to_binary(proplists:get_value(first_name, FacebookProps))},
         {name_surname, unicode:characters_to_binary(proplists:get_value(last_name, FacebookProps))},
         {website, unicode:characters_to_binary(proplists:get_value(link, FacebookProps))},
         {email, unicode:characters_to_binary(proplists:get_value(email, FacebookProps))}
     ],
+
+    %% listner to append additional fields that might be fetched by changing the scope.
+    Props = case z_notifier:foldl(facebook_singup_fields, FacebookProps, Context) of 
+                FacebookProps -> FacebookProps;
+                NewProps      -> [NewProps | Props0]
+            end,
+
     UID = unicode:characters_to_binary(proplists:get_value(id, FacebookProps)),
     case m_identity:lookup_by_type_and_key("facebook", UID, Context) of
         undefined ->
