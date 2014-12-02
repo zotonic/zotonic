@@ -17,8 +17,13 @@
         .widget-content {
             // nested
             padding: 0;
+            
+            > :last-child {
+                // nested (blocks)
+                margin-bottom: 0;
+            }
         }
-        
+                
         &:empty {
             display: none;
         }
@@ -29,6 +34,10 @@
             &:first-of-type {
                 margin-top: 0;
             }
+        }
+        
+        > :last-child {
+            margin-bottom: @widgetVerticalPadding;
         }
         
         &.tab-content {

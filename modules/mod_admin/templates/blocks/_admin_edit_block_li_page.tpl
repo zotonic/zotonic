@@ -6,7 +6,7 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-<fieldset class="admin-form block-page">
+<fieldset class="block-page">
     <a class="btn btn-default page-connect pull-right" href="#connect">{_ Connect a page _}</a>
     <div class="rsc-item-wrapper" id="{{ #wrap }}">
 		{% include "_rsc_item.tpl" id=blk.rsc_id %}
