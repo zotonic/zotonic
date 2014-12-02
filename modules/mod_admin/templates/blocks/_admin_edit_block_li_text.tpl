@@ -7,7 +7,7 @@
 
 {% block widget_content %}
 {% with m.rsc[id] as r %}
-<fieldset class="admin-form">
+<fieldset>
 	<div>
 		{% if is_editable %}
 			<textarea rows="10" 

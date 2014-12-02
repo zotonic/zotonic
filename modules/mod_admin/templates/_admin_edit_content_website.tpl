@@ -7,7 +7,7 @@
 
 
 {% block widget_content %}
-<fieldset class="admin-form">
+<fieldset>
 	<div>
 		<label for="media-website">{_ Website for clicks on image _}</label>
 		<input class="form-control" type="text" id="media-website" name="website" value="{{ r.website }}"/>

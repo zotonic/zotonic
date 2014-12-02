@@ -29,7 +29,7 @@
         @_contentPartMargin: 0.25em;
         @_contentHeight: @thumbImageHeight;
         @_heigth: @_contentHeight + 2 * @_padding + 2px; // add border
-        @_sideMargin: 2 * @_padding;
+        @_contentMargin: 1.5 * @_padding;
         @_fontSize: 12px;
         @_lineHeight: 1.1em;
         
@@ -43,37 +43,46 @@
         padding: @_padding;
         font-size: @_fontSize;
         line-height: @_lineHeight;
+        position: relative;
         
         &:hover {
             background-color: @backgroundColorRowHover;
         }
         
-        &.z-image-thumbnail {
-            h5, h6, p {
-                margin-left: @thumbImageWidth + @_sideMargin;
-            }
+        .z-thumbnail-text {
+            @_content_height: @_heigth - 2 * @_padding - 2; // subtract border too
+            position: absolute;
+            left: @_padding;
+            top: @_padding;
+            margin-right: @_padding;
+            height: @_content_height;
+            max-height: @_content_height;
+            overflow: hidden;
+        }
+        
+        img + .z-thumbnail-text {
+            left: @_padding + @thumbImageWidth + @_contentMargin;
         }
         
         img {
             padding: 0;
             #3L > .border-radius(0);
             #3L > .box-shadow(none);
-            margin: 0 @_sideMargin 0 0;
+            margin: 0 @_contentMargin 0 0;
         }
-
+        
         h5, h6, p {
             font-size: @_fontSize;
             line-height: @_lineHeight;
             font-weight: normal;
-            margin: 0 0 @_contentPartMargin 0;
+            margin: 0;
         }
         h5, h6 {
             .word_break;
         }
         h5 {
             font-weight: bold;
-            max-height: @_lineHeight;
-            width: 1000px; // wide enough to write on 1 line
+            margin-bottom: 2px;
         }
         h6 {
             text-transform: lowercase;
