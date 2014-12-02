@@ -837,42 +837,45 @@ div.widget-content .mce-reset {
 ul.tree-list {
   margin: 0;
 }
-ul.tree-list > li {
+ul.tree-list li.menu-item {
   line-height: 1.2;
 }
-ul.tree-list > li:last-child {
+ul.tree-list li.menu-item:last-child {
   margin: 0 0 10px 0;
 }
-ul.tree-list > li > div {
+ul.tree-list li.menu-item li.menu-item:last-child {
+  margin: 0;
+}
+ul.tree-list li.menu-item > div {
   position: relative;
   margin: -1px 0 0 0;
   padding: 0;
 }
-ul.tree-list > li img.grippy {
+ul.tree-list li.menu-item img.grippy {
   position: absolute;
   left: 8px;
   top: 50%;
   margin-top: -7px;
 }
-ul.tree-list > li > div > a,
-ul.tree-list > li > div > span:not(.btns) {
+ul.tree-list li.menu-item > div > a,
+ul.tree-list li.menu-item > div > span:not(.btns) {
   display: inline-block;
   width: 100%;
   padding: 10px 40px 10px 24px;
   min-height: 34px;
 }
-ul.tree-list > li .warning {
+ul.tree-list li.menu-item .warning {
   position: absolute;
   top: 12px;
   right: 100px;
 }
-ul.tree-list > li .btns {
+ul.tree-list li.menu-item .btns {
   display: block;
   position: absolute;
   right: 8px;
   top: 7px;
 }
-ul.tree-list > li .btns .btn-group {
+ul.tree-list li.menu-item .btns .btn-group {
   margin: 0;
 }
 ul.tree-list.categories {
