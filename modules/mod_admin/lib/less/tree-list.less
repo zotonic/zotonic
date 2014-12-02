@@ -1,7 +1,7 @@
 ul.tree-list {
     margin: 0;
     
-    > li {
+    li.menu-item {
         @_side_spacing: 8px;
         @_vertical_spacing: 10px;
         
@@ -9,6 +9,11 @@ ul.tree-list {
         
         &:last-child {
             margin: 0 0 @widgetVerticalPadding 0;
+        }
+        
+        li.menu-item:last-child {
+            // nested
+            margin: 0;
         }
         
         > div {
