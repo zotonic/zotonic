@@ -460,35 +460,53 @@ img.admin-leader-image {
   height: 48px;
   cursor: pointer;
 }
-.admin-logon {
-  margin: auto;
-  margin-top: 150px;
+.widget.admin-logon {
   max-width: 480px;
-  width: 100%;
+  margin: 100px auto;
 }
-.admin-logon form {
-  padding: 16px;
+.widget.admin-logon .widget-content {
+  padding: 20px;
 }
-.admin-logon div.buttons p {
-  margin-top: 9px;
+.widget.admin-logon .z-logon-support {
+  margin: 20px -20px 0 -20px;
+  padding: 15px 20px 0 20px;
+  border-top: 1px solid #dddddd;
 }
-.admin-logon div.buttons {
-  margin-top: 30px;
+.widget.admin-logon .z-logon-support :last-child {
+  margin-bottom: 0;
 }
-#logon_error {
-  padding: 16px;
+.widget.admin-logon .z-logon-error-message {
   display: none;
 }
-.logon_error #logon_error {
+.widget.admin-logon .z-logon-error .z-logon-error-message {
   display: block;
+  margin: 0 -20px 20px -20px;
+  padding: 0 20px 15px 20px;
+  border-bottom: 1px solid #dddddd;
 }
-#logon_error h2,
-#logon_error h3 {
+.widget.admin-logon .z-logon-error .z-logon-error-message :last-child {
+  margin-bottom: 0;
+}
+.widget.admin-logon .alert {
+  display: none;
+}
+.widget.admin-logon .alert h2,
+.widget.admin-logon .alert h3,
+.widget.admin-logon .alert h4 {
+  margin: 1em 0;
+  font-weight: bold;
+}
+.widget.admin-logon .alert h2 {
+  font-size: 1.2em;
+}
+.widget.admin-logon .alert h3 {
   font-size: 1.1em;
-  line-height: 1.2em;
 }
-#logon_error p {
-  margin-bottom: 1em;
+.widget.admin-logon .alert h4 {
+  font-size: 1em;
+}
+.widget.admin-logon .logon_error .alert {
+  display: block;
 }
 .map-wrapper {
   height: 300px;
@@ -918,12 +936,48 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-content h6 {
   margin: 15px 0;
 }
-.widget .widget-content h1:first-of-type,
-.widget .widget-content h2:first-of-type,
-.widget .widget-content h3:first-of-type,
-.widget .widget-content h4:first-of-type,
-.widget .widget-content h5:first-of-type,
-.widget .widget-content h6:first-of-type {
+.widget .widget-content h1:first-child,
+.widget .widget-content h2:first-child,
+.widget .widget-content h3:first-child,
+.widget .widget-content h4:first-child,
+.widget .widget-content h5:first-child,
+.widget .widget-content h6:first-child,
+.widget .widget-content h1:first-child .widget .widget-content h1 > div,
+.widget .widget-content h1:first-child .widget .widget-content h2 > div,
+.widget .widget-content h1:first-child .widget .widget-content h3 > div,
+.widget .widget-content h1:first-child .widget .widget-content h4 > div,
+.widget .widget-content h1:first-child .widget .widget-content h5 > div,
+.widget .widget-content h1:first-child .widget .widget-content h6 > div,
+.widget .widget-content h2:first-child .widget .widget-content h1 > div,
+.widget .widget-content h2:first-child .widget .widget-content h2 > div,
+.widget .widget-content h2:first-child .widget .widget-content h3 > div,
+.widget .widget-content h2:first-child .widget .widget-content h4 > div,
+.widget .widget-content h2:first-child .widget .widget-content h5 > div,
+.widget .widget-content h2:first-child .widget .widget-content h6 > div,
+.widget .widget-content h3:first-child .widget .widget-content h1 > div,
+.widget .widget-content h3:first-child .widget .widget-content h2 > div,
+.widget .widget-content h3:first-child .widget .widget-content h3 > div,
+.widget .widget-content h3:first-child .widget .widget-content h4 > div,
+.widget .widget-content h3:first-child .widget .widget-content h5 > div,
+.widget .widget-content h3:first-child .widget .widget-content h6 > div,
+.widget .widget-content h4:first-child .widget .widget-content h1 > div,
+.widget .widget-content h4:first-child .widget .widget-content h2 > div,
+.widget .widget-content h4:first-child .widget .widget-content h3 > div,
+.widget .widget-content h4:first-child .widget .widget-content h4 > div,
+.widget .widget-content h4:first-child .widget .widget-content h5 > div,
+.widget .widget-content h4:first-child .widget .widget-content h6 > div,
+.widget .widget-content h5:first-child .widget .widget-content h1 > div,
+.widget .widget-content h5:first-child .widget .widget-content h2 > div,
+.widget .widget-content h5:first-child .widget .widget-content h3 > div,
+.widget .widget-content h5:first-child .widget .widget-content h4 > div,
+.widget .widget-content h5:first-child .widget .widget-content h5 > div,
+.widget .widget-content h5:first-child .widget .widget-content h6 > div,
+.widget .widget-content h6:first-child .widget .widget-content h1 > div,
+.widget .widget-content h6:first-child .widget .widget-content h2 > div,
+.widget .widget-content h6:first-child .widget .widget-content h3 > div,
+.widget .widget-content h6:first-child .widget .widget-content h4 > div,
+.widget .widget-content h6:first-child .widget .widget-content h5 > div,
+.widget .widget-content h6:first-child .widget .widget-content h6 > div {
   margin-top: 0;
 }
 .widget .widget-content.tab-content {

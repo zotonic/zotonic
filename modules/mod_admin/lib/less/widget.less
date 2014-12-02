@@ -26,7 +26,8 @@
         & h1, & h2, & h3, & h4, & h5, & h6 {
             margin: @baseMargin 0;
 
-            &:first-of-type {
+            &:first-child,
+            &:first-child & > div {
                 margin-top: 0;
             }
         }
