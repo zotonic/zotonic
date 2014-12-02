@@ -1,38 +1,54 @@
-<iframe src="/lib/images/spinner.gif" id="logonTarget" name="logonTarget" style="display:none"></iframe>
-<form id="logon_form" method="post" action="postback" class="z_logon_form" target="logonTarget">
-    {% if not hide_title %}
-    <h1 class="logon_header">{_ Log on to _} <span>{{ m.config.site.title.value|default:"Zotonic" }}</span></h1>
+{#
+Params:
+page
+error_reason
+
+logon_form_title_tpl
+    default: _logon_login_title.tpl
+
+logon_form_extra_tpl
+    default: _logon_login_extra.tpl
+    
+logon_form_entry_tpl
+    default: _logon_login_form.tpl
+    
+logon_form_support_tpl
+    default: _logon_login_support.tpl
+
+logon_form_outside_tpl
+    default: _logon_login_outside.tpl
+    
+#}
+<div id="logon_box" class="z-logon-box">
+
+    {% if logon_form_title_tpl %}
+        {% include logon_form_title_tpl %}
     {% endif %}
     
-    <input type="hidden" name="page" value="{{ page|escape }}" />
-    <input type="hidden" name="handler" value="username" />
-
-    <div class="form-group">
-        <label for="username" class="control-label">{_ Username _}</label>
-        <div>
-	    <input class="form-control" type="text" id="username" name="username" value="" autofocus="autofocus" autocapitalize="off" autocomplete="on" />
-            {% validate id="username" type={presence} %}
-        </div>
+    <div id="logon_error" class="z-logon-error-message">
+        {% include "_logon_error.tpl" reason=error_reason %}
+    </div>
+    
+    <div class="z-logon-form">
+        {% if logon_form_extra_tpl %}
+            {% include logon_form_extra_tpl %}
+        {% endif %}
+    
+        {% if logon_form_entry_tpl %}    
+            {% include logon_form_entry_tpl %}
+        {% endif %}
+    
+        {% if logon_form_support_tpl %}
+            <div class="z-logon-support">{% include logon_form_support_tpl %}</div>
+        {% endif %}
     </div>
 
-    <div class="form-group">
-        <label for="password" class="control-label">{_ Password _}</label>
-        <div>
-	    <input class="form-control" type="password" id="password" name="password" value="" autocomplete="on" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div>
-	        <button class="btn btn-primary btn-lg pull-right" type="submit">{_ Log on _}</button>
-	        <div class="checkbox"><label title="{_ Stay logged on unless I log off. _}">
-            	<input type="checkbox" name="rememberme" value="1" />
-                {_ Remember me _}
-            </label></div>
-        </div>
-    </div>
-
-    <div>
-        <a href="{% url logon_reminder %}">{_ I forgot my password _}</a>
-    </div>
-</form>
+    {% if logon_form_outside_tpl %}
+        {% include logon_form_outside_tpl %}
+    {% endif %}
+    
+</div>
+{# Use a real post for all forms on this page, and not AJAX or Websockets. This will enforce all cookies to be set correctly. #}
+{% javascript %}
+z_only_post_forms = true;
+{% endjavascript %}

@@ -222,12 +222,12 @@ event(#submit{message=[]}, Context) ->
 
 logon_error(Reason, Context) ->
     Context1 = z_render:set_value("password", "", Context),
-    Context2 = z_render:wire({add_class, [{target, "logon_box"}, {class, "logon_error"}]}, Context1),
+    Context2 = z_render:wire({add_class, [{target, "logon_box"}, {class, "z-logon-error"}]}, Context1),
     z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context2), Context2).
 
 
 remove_logon_error(Context) ->
-    z_render:wire({remove_class, [{target, "logon_box"}, {class, "logon_error"}]}, Context).
+    z_render:wire({remove_class, [{target, "logon_box"}, {class, "z-logon-error"}]}, Context).
 
 
 logon_stage(Stage, Context) ->
@@ -235,7 +235,7 @@ logon_stage(Stage, Context) ->
 
 logon_stage(Stage, Args, Context) ->
     Context1 = remove_logon_error(Context),
-    z_render:update("logon_form", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
+    z_render:update("logon_box", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
     
 
 logon_user(UserId, Context) ->

@@ -1,15 +1,15 @@
 {% if stage == "reminder_sent" %}
 <div class="logon_message">
 
-    <h1 class="logon_header">{_ We've sent you an e-mail _}</h1>
+    <h3 class="logon_header">{_ We've sent you an e-mail _}</h3>
 
     <p>{_ In the e-mail you will find instructions on how to reset the password of your account. _}</p>
     <p>{_ When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders. _}</p>
 
     {% if not m.acl.user %}
-        <p><a class="btn btn-default" href="{% url logon %}">{_ Back to logon form _}</a></p>
+        <p><a class="btn btn-primary" href="{% url logon %}">{_ Back to logon form _}</a></p>
     {% else %}
-        <p><a id="{{ #cancel }}" class="btn btn-default" href="#">{_ Cancel _}</a></p>
+        <p><a id="{{ #cancel }}" class="btn btn-default" href="#">{_ OK _}</a></p>
         {% wire id=#cancel action={redirect back} %}
     {% endif %}
 

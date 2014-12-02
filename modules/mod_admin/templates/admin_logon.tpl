@@ -18,8 +18,7 @@
 <div class="widget admin-logon">
     <div class="widget-header">{_ Log on to _} {{ m.config.site.title.value|default:"Zotonic" }}</div>
     <div id="logon_box" class="widget-content">
-        <div id="logon_error" class="alert alert-block alert-danger"></div>
-        {% include "_logon_form.tpl" page=page|default:"/admin" hide_title %}
+        {% include "_logon.tpl" page=page|default:"/admin" %}
     </div>
 </div>
 </div>

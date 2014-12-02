@@ -1,33 +1,42 @@
-.admin-logon {
-    margin: auto;
-    margin-top: 150px;
-    max-width: 480px;
-    width: 100%;
+
+.widget.admin-logon {
+    @_width: 480px;
+    @_spacing: 20px;
+    @_form_spacing: 15px; // Bootstrap default
+    @_border_color: #ddd;
     
-    form {
-        padding: 16px;
-    }
+    max-width: @_width;
+    margin: 100px auto;
 
-    div.buttons p {
-        margin-top: 9px;
+    .widget-content {
+        padding: @_spacing;
     }
-
-    div.buttons {
-        margin-top: 30px;
+    
+    .z-logon-support {
+        margin: @_spacing -@_spacing 0 -@_spacing;
+        padding: @_form_spacing @_spacing 0 @_spacing;
+        border-top: 1px solid @_border_color;
+        
+        :last-child {
+            margin-bottom: 0;
+        }
     }
-}
-
-#logon_error {
-    padding: 16px;
-    display: none;
-}
-.logon_error #logon_error {
-    display: block;
-}
-#logon_error h2, #logon_error h3 {
-    font-size: 1.1em;
-    line-height: 1.2em;
-}
-#logon_error p {
-    margin-bottom: 1em;
+    
+    .z-logon-error-message {
+        display: none;
+    }
+    
+    .z-logon-error {
+        .z-logon-error-message {
+            display: block;
+            margin: 0 -@_spacing @_spacing -@_spacing;
+            padding: 0 @_spacing @_form_spacing @_spacing;
+            border-bottom: 1px solid @_border_color;
+            
+            :last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    
 }

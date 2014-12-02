@@ -1,0 +1,127 @@
+.z-logon-box {
+    @_width: 320px;
+    @_spacing: 20px;
+    @_form_spacing: 15px; // Bootstrap default
+    @_border_color: #ddd;
+    @_background_color: #f2f2f2;
+    @_error_color: #C21C3D;
+    @_error_border_color: @_error_color;
+    @_error_background_color: #FBE5EC;
+    
+    max-width: @_width;
+    margin: 0 auto @_spacing auto;
+    float: none;
+    
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    button[type="submit"],
+    input[type="submit"] {
+        width: 100%;
+    }
+    
+    .z-logon-title {
+    
+    }
+    
+    .z-logon-form,
+    .z-logon-error-message {
+        margin: @_spacing 0;
+        padding: @_spacing;
+    }
+    
+    .z-logon-form {
+        background-color: @_background_color;   
+    }
+    
+    /* Extra login options */
+    .z-logon-extra {
+    
+    }
+
+    .z-logon-extra .z-logon-extra-separator {
+        @_line_height: 16px;
+        
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        line-height: @_line_height;
+        margin: @_form_spacing -@_spacing @_form_spacing/2 -@_spacing;
+        
+        &:before {
+            // background behind "or"
+            @_label_width: 40px;
+            @_label_height: @_line_height;
+            
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            height: @_label_height;
+            top: @_line_height/2;
+            width: @_label_width;
+            background-color: @_background_color;
+            content: "";
+            margin: -@_label_height/2 0 0 -@_label_width/2;
+            z-index: -1;
+        }
+        
+        &:after {
+            // horizontal line
+            position: absolute;
+            left: 0;
+            top: @_line_height/2;
+            content: " ";
+            width: @_width;
+            border-bottom: 1px solid @_border_color;
+            z-index: -2;
+        }
+    }
+    .z-logon-extra .z-logon-extra-separator:first-child {
+        display: none;
+    }
+    
+    /* Supporting options */
+    .z-logon-support {
+        margin: @_spacing -@_spacing 0 -@_spacing;
+        padding: @_form_spacing @_spacing 0 @_spacing;
+        border-top: 1px solid @_border_color;
+        
+        :last-child {
+            margin-bottom: 0;
+        }
+        
+        &:empty {
+            display: none;
+        }
+    }
+    
+    /* Validation */
+    .form-field-error,
+    .form-field-error:focus {
+        border-color: @_error_border_color;
+    }
+    
+    .z-logon-error-message {
+        display: none;
+        
+        background-color: @_error_background_color;
+        padding: @_spacing;
+        
+        :first-child {
+            margin-top: 0;
+        }
+    
+        :last-child {
+            margin-bottom: 0;
+        }
+    }
+    
+    &.z-logon-error {
+        .z-logon-error-message {
+            display: block;
+        }
+    }
+}
