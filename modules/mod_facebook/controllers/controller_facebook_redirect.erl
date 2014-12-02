@@ -125,7 +125,7 @@ logon_fb_user(FacebookProps, Args, Context) ->
     %% listner to append additional fields that might be fetched by changing the scope.
     Props = case z_notifier:foldl(facebook_singup_fields, FacebookProps, Context) of 
                 FacebookProps -> FacebookProps;
-                NewProps      -> [NewProps | Props0]
+                NewProps      -> lists:flatten([NewProps | Props0])
             end,
 
     UID = unicode:characters_to_binary(proplists:get_value(id, FacebookProps)),
