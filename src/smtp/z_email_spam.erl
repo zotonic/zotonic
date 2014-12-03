@@ -51,23 +51,29 @@ smtp_status(_SpamStatus, _From, _To, Peer) ->
 
 
 spamcheck(EncodedMail, SpamDServer, SpamDPort) ->
-    {ok, Socket} = gen_tcp:connect(SpamDServer, SpamDPort, [binary]),
-    gen_tcp:send(Socket, [
-    	<<"HEADERS SPAMC/1.2\r\n">>,
-    	<<"Content-length: ">>, integer_to_list(size(EncodedMail) + 2), <<"\r\n">>,
-    	<<"User: spamd\r\n">>,
-    	<<"\r\n">>,
-    	EncodedMail,
-    	<<"\r\n">>]),
-    case recv_spamd(Socket, <<>>) of
-        {ok, Response} ->
-            SpamHeaders = parse_response(Response),
-            SpamStatus = proplists:get_value(<<"X-Spam-Status">>, SpamHeaders),
-            check_status(spam_status(SpamStatus), SpamHeaders);
-        {error, Reason} = Error ->
-            lager:error("spamcheck error ~p", [Reason]),
-            Error
+    case gen_tcp:connect(SpamDServer, SpamDPort, [binary]) of
+        {ok, Socket} ->
+            gen_tcp:send(Socket, [
+            	<<"HEADERS SPAMC/1.2\r\n">>,
+            	<<"Content-length: ">>, integer_to_list(size(EncodedMail) + 2), <<"\r\n">>,
+            	<<"User: spamd\r\n">>,
+            	<<"\r\n">>,
+            	EncodedMail,
+            	<<"\r\n">>]),
+            case recv_spamd(Socket, <<>>) of
+                {ok, Response} ->
+                    SpamHeaders = parse_response(Response),
+                    SpamStatus = proplists:get_value(<<"X-Spam-Status">>, SpamHeaders),
+                    check_status(spam_status(SpamStatus), SpamHeaders);
+                {error, Reason} = Error ->
+                    lager:error("spamcheck error ~p", [Reason]),
+                    Error
+            end;
+        {error, Reason} = Err ->
+            lager:error("SMTP spam check: can not connect to spamd on ~p:~p (~p)", [SpamDServer, SpamDPort, Reason]),
+            Err
     end.
+
 
 check_status({true, Args}, Headers) ->
 	{ok, {spam, Args, Headers}};
