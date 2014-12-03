@@ -184,7 +184,10 @@ receive_data({ok, {ham, SpamStatus, _SpamHeaders}}, {Type, Subtype, Headers, Par
 receive_data({ok, {spam, SpamStatus, _SpamHeaders}}, _Decoded, MsgId, From, To, _DataRcvd, State) ->
     lager:info("Refusing spam from ~s to ~p (id ~s) (peer ~s) [~p]", 
                [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
-    {error, z_email_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)}.
+    {error, z_email_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)};
+receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
+    lager:debug("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
+    receive_data({ok, {ham, [], []}}, Decoded, MsgId, From, To, DataRcvd, State).
 
 
 reply_handled_status(Received, MsgId, State) ->
