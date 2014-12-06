@@ -13,7 +13,7 @@
         {_ And media can also be viewed on their own page. _}
     </p>
 
-    <div class="well">
+    <div class="well z-button-row">
         <a name="content-pager"></a>
 	    {% button
            class="btn btn-primary"
@@ -21,7 +21,7 @@
 	       action={dialog_media_upload}
 	    %}
         <a class="btn btn-default" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
-        <a class="btn btn-default disabled" href="{% url admin_media %}">{_ All media _}</a>
+        <a class="btn btn-default{% if not q.qcat %} disabled{% endif %}" href="{% url admin_media %}">{_ All media _}</a>
     </div>
 
     {% with m.search.paged[{query cat="media" text=q.qs page=q.page sort=q.qsort|default:"-created"}] as result %}
