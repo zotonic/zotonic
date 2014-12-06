@@ -46,15 +46,16 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, Predicate, Callback, Actions}}, Context) ->
-    CatName = case Cat of
-        undefined -> z_convert:to_list(?__("page", Context));
-        _ -> z_convert:to_list(?__(m_rsc:p(Cat, title, Context), Context))
-    end,
     CatId = case Cat of
+                [] -> undefined;
                 undefined -> undefined;
                 X when is_integer(X) -> X;
                 X -> m_category:name_to_id_check(X, Context)
             end,
+    CatName = case CatId of
+        undefined -> z_convert:to_list(?__("page", Context));
+        _ -> z_convert:to_list(?__(m_rsc:p(CatId, title, Context), Context))
+    end,
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {redirect, Redirect },
