@@ -1,4 +1,4 @@
-<div class="well">
+<div class="well z-button-row">
     {% button
         class="btn btn-primary" 
         text=_"Make a new page or media" 
