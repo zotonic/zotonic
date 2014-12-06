@@ -18,15 +18,15 @@ msgstr ""
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
-msgstr "Voek configuratiesleutel toe"
+msgstr "Voeg configuratieregel toe"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:31
 msgid "Add key"
-msgstr "Item toevoegen"
+msgstr "Regel toevoegen"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
-msgstr "Weet je zeker dat je het volgende item wilt weggooien:"
+msgstr "Weet je zeker dat je deze configuratieregel wilt weggooien:"
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:12
@@ -62,7 +62,7 @@ msgstr "Sleutel"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:11
 msgid "Make a new config setting"
-msgstr "maak een nieuw configuratieitem"
+msgstr "Maak een nieuwe configuratieregel"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:22
 msgid "Modified"
@@ -75,7 +75,7 @@ msgstr "Module"
 
 #: modules/mod_admin_config/templates/admin_config.tpl:50
 msgid "No configurations found."
-msgstr "Geen items gevonden."
+msgstr "Geen configuratieregels gevonden."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:63
 msgid "Only administrators can change the configuration."
@@ -83,16 +83,16 @@ msgstr "Alleen beheerders kunnen de configuratie aanpassen."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:48
 msgid "Only administrators can delete configurations."
-msgstr "Alleen beheerders kunnen configuratie-items verwijderen."
+msgstr "Alleen beheerders kunnen configuratieregels verwijderen."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:64
 msgid "Only an administrator can add configuration keys."
-msgstr "Alleen beheerders kunnen configuratie-items toevoegen."
+msgstr "Alleen beheerders kunnen configuratieregels toevoegen."
 
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
 msgstr ""
-"Vul a.u.b. de module, sleutel en waarde in voor het nieuwe configuratieitem."
+"Vul de module, sleutel en waarde in voor de nieuwe configuratieregel."
 
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:13
 msgid "Save"
@@ -108,7 +108,7 @@ msgstr "Deze sleutel bestaat al, kies a.u.b. een andere naam voor de sleutel."
 
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
-msgstr "Dit kan niet ongedaan worden: het item is voor altijd weg."
+msgstr "Dit kan niet ongedaan worden: de regel is voor altijd weg."
 
 #: modules/mod_admin_config/templates/admin_config.tpl:21
 #: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23

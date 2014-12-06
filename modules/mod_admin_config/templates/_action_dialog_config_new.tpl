@@ -5,7 +5,7 @@
 
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #module }}">{_ Module _}</label>
-        <div class="col-md-3">
+        <div class="col-md-4">
 	        <input type="text" id="{{ #module }}" name="module" value="" class="do_autofocus form-control" />
 	        {% validate id=#module name="module" type={presence} %}
         </div>
@@ -13,7 +13,7 @@
 
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #key }}">{_ Key _}</label>
-        <div class="col-md-3">
+        <div class="col-md-4">
 	        <input class="form-control" type="text" id="{{ #key }}" name="key" value="" />
 	        {% validate id=#key name="key" type={presence} %}
         </div>
