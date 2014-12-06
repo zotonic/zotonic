@@ -58,7 +58,7 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
     end,
     Vars = [
         {delegate, atom_to_list(?MODULE)},
-        {redirect, Redirect },
+        {redirect, Redirect},
         {subject_id, SubjectId},
         {predicate, Predicate},
         {title, Title},
@@ -70,7 +70,7 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
         {catname, CatName},
         {actions, Actions}
     ],
-    z_render:dialog(z_convert:to_list(?__("Make a new ", Context))++CatName, "_action_dialog_new_rsc.tpl", Vars, Context);
+    z_render:dialog(?__("Make a new page", Context), "_action_dialog_new_rsc.tpl", Vars, Context);
 
 
 event(#submit{message={new_page, Args}}, Context) ->
