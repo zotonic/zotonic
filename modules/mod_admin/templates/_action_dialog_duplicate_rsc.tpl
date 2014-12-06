@@ -17,10 +17,14 @@
     <div class="form-group row">
         <label for="{{ #published }}" class="control-label col-md-3">{_ Published _}</label>
         <div class="col-md-9">
-	        <input type="checkbox" id="{{ #published }}" name="is_published" value="1" />
-	    </div>
-    </div>
-
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="{{ #published }}" name="is_published" value="1" />
+                </label>
+            </div>
+        </div>
+    </div>    
+    
     <div class="modal-footer">
 	    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 	    <button class="btn btn-primary" type="submit">{_ Duplicate page _}</button>

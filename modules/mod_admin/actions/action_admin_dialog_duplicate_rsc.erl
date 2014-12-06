@@ -42,7 +42,7 @@ event(#postback{message={duplicate_rsc_dialog, Id}}, Context) ->
         {delegate, atom_to_list(?MODULE)},
         {id, Id}
     ],
-    z_render:dialog("Duplicate page.", "_action_dialog_duplicate_rsc.tpl", Vars, Context);
+    z_render:dialog(?__("Duplicate page", Context),  "_action_dialog_duplicate_rsc.tpl", Vars, Context);
 
 
 event(#submit{message={duplicate_page, ActionProps}}, Context) ->

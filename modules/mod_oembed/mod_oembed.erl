@@ -55,7 +55,7 @@ observe_rsc_update(#rsc_update{id=Id, props=BeforeProps}, {Changed, Props}, Cont
         true -> 
             {EmbedChanged, OEmbedTitle} = case proplists:get_value(oembed_url, Props) of
                 Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
-                    % Delete the media record iff the media mime type is our mime type
+                    % Delete the media record if the media mime type is our mime type
                     case m_media:identify(Id, Context) of
                         {ok, Props} ->
                             case proplists:get_value(mime, Props) of
