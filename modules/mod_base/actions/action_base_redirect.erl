@@ -32,8 +32,12 @@ render_action(_TriggerId, _TargetId, Args, Context) ->
                     [<<"if (history.length > 1) history.go(-1); else window.location = \"">>,z_utils:js_escape(Location),$",$;]
             end;
         _ ->
-            Location = get_location(Args, Context),
-            [<<"window.location = \"">>,z_utils:js_escape(Location),$",$;]
+            case get_location(Args, Context) of
+                undefined ->
+                    [];
+                Location ->
+                    [<<"window.location = \"">>,z_utils:js_escape(Location),$",$;]
+            end
     end,
     {Script, Context}.
 
@@ -41,10 +45,12 @@ render_action(_TriggerId, _TargetId, Args, Context) ->
 get_location(Args, Context) ->
     case proplists:get_value(dispatch, Args) of
         undefined ->
-            case proplists:get_value(id, Args) of
-                undefined -> 
+            case proplists:lookup(id, Args) of
+                none -> 
                     proplists:get_value(location, Args, "/");
-                Id ->
+                {id, undefined} ->
+                    undefined;
+                {id, Id} ->
                     m_rsc:p(Id, page_url, Context)
             end;
         DispatchString ->
