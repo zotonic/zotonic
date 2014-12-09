@@ -117,11 +117,11 @@ render(<<>>, Context) ->
     Context;
 render([], Context) -> 
     Context;
-render({script}, Context) -> 
+render({script, _Args} = Script, Context) -> 
     %% Renders the script tag - might not be correct as it adds everything collected in Context and not what was collected
     %% in the added iolist().  So maybe we should just ignore the {script} tag here.
     %% When the script tag should be rendered then it is better to call z_context:output/2 instead of z_render:render/2.
-    {Html,Context1} = z_context:output([{script}], Context),
+    {Html,Context1} = z_context:output([Script], Context),
     Context1#context{render=[Context1#context.render, Html]};
 render(#context{} = C, Context) ->
     C1 = render(C#context.render, Context),
