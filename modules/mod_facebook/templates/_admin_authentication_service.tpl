@@ -1,4 +1,4 @@
-{% wire id="admin_facebook" type="submit" postback="admin_facebook" %}
+{% wire id="admin_facebook" type="submit" postback="admin_facebook" delegate=`mod_facebook` %}
 <form name="admin_facebook" id="admin_facebook" class="form-horizontal" method="POST" action="postback">
     <div class="row">
         <div class="col-md-6">
