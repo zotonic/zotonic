@@ -48,7 +48,7 @@
                     <div class="form-actions">
                         <button class="btn btn-primary" type="submit">{_ Save Facebook Settings _}</button>
                     </div>
-                   
+
                 </div>
             </div>
         </div>
