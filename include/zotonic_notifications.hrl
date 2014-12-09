@@ -77,6 +77,15 @@
 %% An identity definition is {Kind, Identifier, IsUnique, IsVerified}
 -record(signup_url, {props=[], signup_props=[]}).
 
+%% @doc Request a signup of a new or existing user. Arguments are similar to #signup_url{}
+%% Returns {ok, UserId} or {error, Reason}
+-record(signup, {
+        id :: integer(),
+        props = [] :: list(),
+        signup_props = [] :: list(),
+        request_confirm = false :: boolean()
+    }).
+
 %% @doc Signup failed, give the error page URL. Return {ok, Url} or undefined. (first)
 %% Reason is returned by the signup handler for the particular signup method (username, facebook etc)
 -record(signup_failed_url, {reason}).
@@ -313,6 +322,15 @@
 %                     Called on every request with a session.
 % 'session_init'    - Notification that a new session has been initialized (session_pid is in the context)
 % 'session_init_fold' - foldl over the context containing a new session (after session_init)
+
+%% @doc Authentication against some (external or internal) service was validated
+-record(auth_validated, {
+        service :: atom(),
+        service_uid :: binary(),
+        service_props = [] :: list(),
+        props  = []:: list({atom(), any()}),
+        id :: integer() | 'undefined'
+    }).
 
 %% @doc Check if an user is enabled (first)
 %% Return true, false or undefined

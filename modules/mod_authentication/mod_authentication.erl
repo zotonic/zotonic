@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-07
+%% @copyright 2010-2014 Marc Worrell
 %% @doc Authentication and identification of users.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,10 +28,25 @@
 %% gen_server exports
 -export([
     observe_logon_submit/2,
-    observe_auth_autologon/2
+    observe_auth_autologon/2,
+    observe_auth_validated/2,
+
+    observe_admin_menu/3
 ]).
 
 -include("zotonic.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_authentication_services,
+                parent=admin_auth,
+                label=?__("App Keys & Authentication Services", Context),
+                url={admin_authentication_services},
+                visiblecheck={acl, use, mod_admin_config}}
+     
+     |Acc].
 
 %% @doc Check the logon event for the Zotonic native username/password registration.
 observe_logon_submit(#logon_submit{query_args=Args}, Context) ->
@@ -60,3 +74,90 @@ observe_auth_autologon(auth_autologon, Context) ->
         undefined -> undefined;
         {ok, UserId} -> {ok, UserId}
     end.
+
+
+%% @doc Handle a validation against an (external) authentication service.
+%%      If identity is known: log on the associated user and session
+%%      If unknown, add identity to current user or signup a new user
+observe_auth_validated(#auth_validated{} = Auth, Context) ->
+    maybe_add_identity(z_acl:user(Context), Auth, Context).
+
+maybe_add_identity(undefined, Auth, Context) ->
+    case auth_identity(Auth, Context) of
+        undefined -> maybe_signup(Auth, Context);
+        Ps -> logon_identity(Auth, Ps, Context)
+    end;
+maybe_add_identity(CurrUserId, Auth, Context) ->
+    case auth_identity(Auth, Context) of
+        undefined ->
+            % Unknown identity, add it to the current user
+            {ok, _} = insert_identity(CurrUserId, Auth, Context),
+            {ok, Context};
+        Ps ->
+            logon_identity(Auth, Ps, Context)
+    end.
+
+maybe_update_identity(Ps, Ps, _IdnPs, _Context) ->
+    ok;
+maybe_update_identity(_Ps1, _Ps2, [], _Context) ->
+    ok;
+maybe_update_identity(_Ps1, _Ps2, undefined, _Context) ->
+    ok;
+maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
+    {key, Key} = proplists:lookup(key, IdnPs),
+    {type, Type} = proplists:lookup(type, IdnPs),
+    {rsc_id, RscId} = proplists:lookup(rsc_id, IdnPs),
+    m_identity:set_by_type(RscId, Key, Type, NewProps, Context).
+
+
+logon_identity(Auth, IdnPs, Context) ->
+    {propb, IdnPropb} = proplists:lookup(propb, IdnPs),
+    {rsc_id, IdnRscId} = proplists:lookup(rsc_id, IdnPs),
+    maybe_update_identity(
+        IdnPropb,
+        Auth#auth_validated.service_props,
+        IdnPs,
+        Context),
+    z_auth:logon(IdnRscId, Context).
+
+
+maybe_signup(Auth, Context) ->
+    Signup = #signup{
+        id = undefined,
+        signup_props = maybe_email_identity(Auth#auth_validated.props),
+        props = Auth#auth_validated.props,
+        request_confirm = false
+    },
+    case z_notifier:first(Signup, Context) of
+        {ok, NewUserId} ->
+            case auth_identity(Auth, Context) of
+                undefined -> insert_identity(NewUserId, Auth, Context);
+                _ -> nop
+            end,
+            z_auth:logon(NewUserId, Context);
+        {error, _Reason} = Error ->
+            Error;
+        undefined ->
+            % No signup accepted
+            undefined
+    end.
+
+maybe_email_identity(Props) ->
+    case proplists:get_value(email, Props) of
+        undefined -> [];
+        Email -> [ {identity, {email, Email, false, false}} ]
+    end.
+
+insert_identity(UserId, Auth, Context) ->
+    Type = Auth#auth_validated.service,
+    Key = Auth#auth_validated.service_uid,
+    Props = [
+        {is_unique, true},
+        {is_verified, true},
+        {propb, {term, Auth#auth_validated.service_props}}
+    ],
+    m_identity:insert(UserId, Type, Key, Props, Context).
+
+
+auth_identity(#auth_validated{service=Service, service_uid=Uid}, Context) ->
+    m_identity:lookup_by_type_and_key(Service, Uid, Context).
