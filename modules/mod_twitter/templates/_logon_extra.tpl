@@ -1,9 +1,5 @@
-{% if m.config.mod_twitter.consumer_key.value %}
+{% if m.config.mod_twitter.consumer_key.value and m.config.mod_twitter.useauth.value %}
 <li id="logon_twitter">
-    <a id="{{ #twitter_logon }}" href="#twitter"><img src="/lib/images/sign-in-with-twitter.png" width="151" height="24" alt="{_ Sign in with Twitter _}" /></a>
-    {% wire id=#twitter_logon 
-	action={mask target=mask_target|default:"logon_outer" message=_"Waiting for Twitter…"}
-	action={redirect dispatch="twitter_authorize" p=page}
-    %}
+	<a href="{% url logon_service service='twitter' %}" class="btn social-login do_popupwindow" style="color: white; background-color: #55acee"><span class="icon-twitter-sign"></span> {_ Log on with Twitter _}</a>
 </li>
 {% endif %}

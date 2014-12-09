@@ -27,8 +27,6 @@
 -export([
     observe_auth_logoff/3,
     observe_search_query/2,
-    observe_admin_menu/3,
-
     event/2
 ]).
 -export([
@@ -36,13 +34,11 @@
 ]).
 
 -include("zotonic.hrl").
--include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
-% Default facebook appid and secret from the Zotonic Dev application.
--define(FACEBOOK_APPID, "106094309435783").
--define(FACEBOOK_APPSECRET, "50fb8d9d1ea8013c4c1640632c3ab706").
--define(FACEBOOK_SCOPE, "email"). %% by default, only request access to e-mail address.
+% You have to add your Facebook appid and secret to the config.
+% By default, we only request access to the Facebook user's e-mail address.
+-define(FACEBOOK_SCOPE, "email"). 
 
 
 %% @doc Reset the received facebook access token (as set in the session)
@@ -54,8 +50,8 @@ observe_auth_logoff(auth_logoff, AccContext, _Context) ->
 %% @doc Return the facebook appid, secret and scope
 %% @spec get_config(Context) -> {AppId, Secret, Scope}
 get_config(Context) ->
-    { z_convert:to_list(m_config:get_value(mod_facebook, appid, ?FACEBOOK_APPID, Context)),
-      z_convert:to_list(m_config:get_value(mod_facebook, appsecret, ?FACEBOOK_APPSECRET, Context)),
+    { z_convert:to_list(m_config:get_value(mod_facebook, appid, Context)),
+      z_convert:to_list(m_config:get_value(mod_facebook, appsecret, Context)),
       z_convert:to_list(m_config:get_value(mod_facebook, scope, ?FACEBOOK_SCOPE, Context))
     }.
 
@@ -66,26 +62,42 @@ observe_search_query({search_query, {fql, Args}, OffsetLimit}, Context) ->
 observe_search_query(_, _Context) ->
     undefined.
 
-observe_admin_menu(admin_menu, Acc, Context) ->
-    [
-     #menu_item{id=admin_facebook,
-                parent=admin_modules,
-                label=?__("Facebook", Context),
-                url={admin_facebook},
-                visiblecheck={acl, use, mod_facebook}}
-     
-     |Acc].
+
+event(#submit{message=admin_facebook}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            save_settings(Context),
+            z_render:growl(?__("Saved the Facebook settings.", Context), Context);
+        false ->
+            z_render:growl(?__("You don't have permission to change the Facebook settings.", Context), Context)
+    end.
+
+save_settings(Context) ->
+    lists:foreach(fun ({Key, Value}) ->
+                        K1 = z_convert:to_list(Key),
+                        case is_setting(K1) of
+                            true -> m_config:set_value(mod_facebook, list_to_atom(K1), Value, Context);
+                            false -> ok
+                        end
+                  end,
+                  z_context:get_q_all_noz(Context)).
+
+is_setting("appid") -> true;
+is_setting("appsecret") -> true;
+is_setting("scope") -> true;
+is_setting("useauth") -> true;
+is_setting(_) -> false.
 
 
-%% @doc Redirect to facebook, keep extra arguments in query arg
-event(#postback{message={logon_redirect, Args}}, Context) ->
-    Pickled = z_utils:pickle(Args, Context),
-    z_render:wire([
-            {alert, [
-                    {title, ?__("One moment please", Context)},
-                    {text, ?__("Redirecting to Facebook", Context)},
-                    only_text
-                ]},
-            {redirect, [{dispatch, facebook_authorize}, {pk, Pickled}]}
-        ], Context).
+% %% @doc Redirect to facebook, keep extra arguments in query arg
+% event(#postback{message={logon_redirect, Args}}, Context) ->
+%     Pickled = z_utils:pickle(Args, Context),
+%     z_render:wire([
+%             {alert, [
+%                     {title, ?__("One moment please", Context)},
+%                     {text, ?__("Redirecting to Facebook", Context)},
+%                     only_text
+%                 ]},
+%             {redirect, [{dispatch, facebook_authorize}, {pk, Pickled}]}
+%         ], Context).
 

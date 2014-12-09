@@ -1,7 +1,1 @@
-<a id="{{ #fb_logon }}" href="#facebook"><img src="/lib/images/fb-login-button.png" width="154" height="22" alt="Facebook login button" /></a>
-
-{% wire id=#fb_logon 
-	action={mask target=mask_target|default:"logon_outer" message="Waiting for Facebook …"}
-	postback={logon_redirect ready_page=page user_id=user_id}
-	delegate=`mod_facebook`
-%}
+<a id="{{ #fb }}" href="{% url logon_service service='facebook' %}" class="btn social-login do_popupwindow" data-popupwindow="height:300" style="color: white; background-color: #44609d"><span class="icon-facebook-sign"></span> {_ Log on with Facebook _}</a>

@@ -32,7 +32,7 @@
 
 -mod_title("Twitter").
 -mod_description("Use Twitter for logon, and/or follow users on Twitter using the streaming HTTP API.").
--mod_prio(200).
+-mod_prio(401).
 -mod_schema(1).
 -mod_depends([admin]).
 -mod_provides([twitter]).
@@ -43,15 +43,40 @@
 
 %% interface functions
 -export([
-         manage_schema/2,
-         fetch/4, 
-         observe_rsc_update_done/2,
-         receive_chunk/2
+        event/2,
+        manage_schema/2,
+        fetch/4, 
+        observe_rsc_update_done/2,
+        receive_chunk/2
 ]).
 
 -include_lib("zotonic.hrl").
 
 -record(state, {context, twitter_pid=undefined}).
+
+event(#submit{message=admin_twitter}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            save_settings(Context),
+            z_render:growl(?__("Saved the Twitter settings.", Context), Context);
+        false ->
+            z_render:growl(?__("You don't have permission to change the Twitter settings.", Context), Context)
+    end.
+
+save_settings(Context) ->
+    lists:foreach(fun ({Key, Value}) ->
+                        K1 = z_convert:to_list(Key),
+                        case is_setting(K1) of
+                            true -> m_config:set_value(mod_twitter, list_to_atom(K1), Value, Context);
+                            false -> ok
+                        end
+                  end,
+                  z_context:get_q_all_noz(Context)).
+
+is_setting("consumer_key") -> true;
+is_setting("consumer_secret") -> true;
+is_setting("useauth") -> true;
+is_setting(_) -> false.
 
 
 observe_rsc_update_done(#rsc_update_done{id=Id}, Context) ->
