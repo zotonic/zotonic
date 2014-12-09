@@ -26,7 +26,8 @@ limitations under the License.
 $.widget("ui.popupwindow", {
 	_init: function() {
 		var self = this;
-		$(this.element).click(function() {
+		$(this.element).click(function(e) {
+			e.preventDefault();
 			if (self.options.full) {
 				self.options.toolbar = 1;
 				self.options.scrollbars = 1;
@@ -77,7 +78,6 @@ $.widget("ui.popupwindow", {
 						}
 					}, 500);
 			w.focus();
-			return false;
 		});
 	}
 });
