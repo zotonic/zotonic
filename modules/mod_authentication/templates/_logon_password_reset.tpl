@@ -1,5 +1,5 @@
 {% if username %}
-<form id="password_reset" method="post" action="postback">
+<form id="password_reset" class="setcookie" method="post" action="postback">
     <h1 class="logon_header">{_ Reset your password _}</h1>
 
     <p>{_ Below you can enter a new password for your account _} <strong>{{ username|escape }}</strong>.</p>

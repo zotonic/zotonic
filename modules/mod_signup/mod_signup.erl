@@ -32,6 +32,7 @@
 -export([
     manage_schema/2,
 
+    observe_signup/2,
     observe_signup_url/2,
     observe_identity_verification/2,
     observe_logon_ready_page/2
@@ -43,6 +44,11 @@
 ]).
 
 -include("zotonic.hrl").
+
+
+%% @doc Add a new user or an existing person as user.
+observe_signup(#signup{id=UserId, props=Props, signup_props=SignupProps, request_confirm=RequestConfirm}, Context) ->
+    signup_existing(UserId, Props, SignupProps, RequestConfirm, Context).
 
 
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.

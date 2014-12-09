@@ -23,6 +23,8 @@
 -export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
 -export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
 
+-export([redirect_location/2]).
+
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
@@ -49,18 +51,21 @@ previously_existed(ReqData, Context) ->
 
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context1),
     Args = get_args(Context1),
-    RedirectUrl = z_convert:to_list(
-                        z_context:abs_url(
-                            z_dispatcher:url_for(facebook_redirect, Args, Context1),
-                            Context1)),
-    Location = "https://www.facebook.com/dialog/oauth?client_id="
-                ++ z_utils:url_encode(AppId)
-                ++ "&redirect_uri=" ++ z_utils:url_encode(RedirectUrl)
-                ++ "&scope=" ++ Scope,
+    Location = redirect_location(Args, Context1),
     ?WM_REPLY({true, Location}, Context1).
 
+redirect_location(Args, Context) ->
+    {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context),
+    RedirectUrl = z_convert:to_list(
+                        z_context:abs_url(
+                            z_dispatcher:url_for(facebook_redirect, Args, Context),
+                            Context)),
+    "https://www.facebook.com/v2.0/dialog/oauth?client_id="
+        ++ z_utils:url_encode(AppId)
+        ++ "&redirect_uri=" ++ z_utils:url_encode(RedirectUrl)
+        ++ "&display=popup"
+        ++ "&scope=" ++ Scope.
 
 get_args(Context) ->
     case z_context:get_q("pk", Context, []) of
