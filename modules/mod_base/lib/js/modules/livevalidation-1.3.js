@@ -702,7 +702,7 @@ LiveValidationForm.prototype = {
         if (self.skipValidations === 0) {
             var result = true;
             var is_first = true;
-            var i;
+            var i, len;
             var fields = self.getFields();
 
             self.submitWaitForAsync = [];
