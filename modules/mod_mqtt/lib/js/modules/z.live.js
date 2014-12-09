@@ -59,7 +59,7 @@ ZLive.prototype.update = function(topic, target, postback, payload, sub_id) {
 };
 
 ZLive.prototype.unsubscribe = function(sub_id) {
-    for (i=0; i<= this._subscriptions.length; i++) {
+    for (var i=0; i<= this._subscriptions.length; i++) {
         if (this._subscriptions[i].sub_id == sub_id) {
             this._subscriptions.splice(i,1);
             break;
@@ -69,7 +69,7 @@ ZLive.prototype.unsubscribe = function(sub_id) {
 };
 
 ZLive.prototype.prune = function() {
-    for (i=this._subscriptions.length-1; i >= 0; i--) {
+    for (var i=this._subscriptions.length-1; i >= 0; i--) {
         var target = this._subscriptions[i].target;
         if ($('#'+target).length === 0) {
             pubzub.unsubscribe(this._subscriptions[i].sub_id);
