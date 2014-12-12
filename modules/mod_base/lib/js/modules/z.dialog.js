@@ -24,9 +24,7 @@
 (function($) {
     $.extend({
         // center the dialog vertically again
-        dialogReposition: function() {
-            var $dialog = $("#zmodal");
-        },
+        dialogReposition: function() {},
 
         dialogAdd: function(options) {
             var width,
