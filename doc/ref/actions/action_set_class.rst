@@ -2,13 +2,12 @@
 .. include:: meta-set_class.rst
 
 
-Set the value of a form field.
+Set the class of an element.
 
 Example::
 
-   <input type="text" id="x" name="xyz" value="" />
-   {% button text="fill" action={set_value target="x" value="etaoinstrdlu"} %}
+   <div id="x" class="not-inited"></div>
+   {% button text="Init" action={set_class target="x" class="inited"} %}
 
-Clicking on the button will set the value of the input element to the most interesting string `etaoinstrdlu`.
 
-This action can set the value of any input element, select or text area. It uses the jQuery `val()` method to set the value.
+This uses the jQuery `attr('class', class_name)` method to set the new class.
