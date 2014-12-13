@@ -3,6 +3,7 @@ $(function() {
     {
         cropcenter: function(settings) {
             var config = {
+                editable: true,
                 hiddenInput: "#crop_center",
                 removeButton: "#crop-center-remove",
                 message: "#crop-center-message"
@@ -16,18 +17,19 @@ $(function() {
             el.find("img").one('load', function() {
 
                 // do stuff
-                var img = $(this);
+                var $img = $(this);
+                var scale = parseInt(el.attr("data-original-width"), 10) / $img.width();
+                var offset_h = $img.position().left + parseInt($img.css("margin-left"), 10);
+                var offset_v = $img.position().top + parseInt($img.css("margin-top"), 10);
+                
+                var $guide_h = $("<div>").attr("class", "admin-cropguide admin-cropguide-horiz").hide();
+                var $guide_v = $("<div>").attr("class", "admin-cropguide admin-cropguide-vert").hide();
 
-                var scale = parseInt(el.attr("data-original-width"), 10) / img.width();
-
-                var guide_h = $("<div>").attr("class", "admin-cropguide admin-cropguide-horiz").hide();
-                var guide_v = $("<div>").attr("class", "admin-cropguide admin-cropguide-vert").hide();
-
-                el.append(guide_h).append(guide_v);
+                el.append($guide_h).append($guide_v);
 
                 function removeCrop() {
-                    guide_h.fadeOut();
-                    guide_v.fadeOut();
+                    $guide_h.fadeOut();
+                    $guide_v.fadeOut();
                     $(config.hiddenInput).val("");
                     $(config.removeButton).hide();
                     $(config.message).show();
@@ -36,9 +38,8 @@ $(function() {
                 
                 function setCrop(x, y) {
                     // here x,y are in image coordinates
-                    guide_h.show().css("top", y/scale);
-                    guide_v.show().css("left", x/scale);
-
+                    $guide_h.show().css("top", y/scale + offset_v);
+                    $guide_v.show().css("left", x/scale + offset_h);
                     $(config.hiddenInput).val((x>=0?"+":"")+x + (y>=0?"+":"")+y);
                     $(config.removeButton).show();
                     $(config.message).hide();
@@ -61,28 +62,28 @@ $(function() {
                 }
 
                 // hook up the events
-                
-                var dragging = false;
-                el.mousedown(function(e) {
-                    if (e.which == 1) {
-                        dragging = true;
-                        setCropFromEvent(e);
-                    }
-                });
-                el.mousemove(function(e) {
-                    if (dragging) setCropFromEvent(e);
-                });
-                el.mouseup(function() {
-                    dragging = false;
-                });
-
-                $(config.removeButton).click(removeCrop);
+                if (config.editable) {
+                    var dragging = false;
+                    el.mousedown(function(e) {
+                        if (e.which == 1) {
+                            dragging = true;
+                            setCropFromEvent(e);
+                        }
+                    });
+                    el.mousemove(function(e) {
+                        if (dragging) setCropFromEvent(e);
+                    });
+                    el.mouseup(function() {
+                        dragging = false;
+                    });
+                    $(config.removeButton).click(removeCrop);
+                }
                 setCropFromValue($(config.hiddenInput).val());
             }).each(function() {
-                if(this.complete) $(this).load();
-            });
-                         
+                if (this.complete) {
+                    $(this).load();
+                }
+            });   
         }
     });
-
 });
