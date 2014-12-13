@@ -1,7 +1,7 @@
 {# Show a thumbnail with an unlink option. Used in the admin_edit #}
 
 {% sortable id=#unlink_wrapper tag=edge_id %}
-<li id="{{ #unlink_wrapper }}">
+<li id="{{ #unlink_wrapper }}" class="{% if not object_id.is_published %}unpublished{% endif %}">
     {% image object_id mediaclass="admin-rsc-edge-media" %}
     <div class="bottom clearfix">
         <div class="caption">
