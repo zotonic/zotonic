@@ -282,7 +282,7 @@ ul.media > li {
   float: left;
   position: relative;
   padding: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
   border-radius: 0px;
@@ -302,6 +302,7 @@ ul.media > li img {
   right: 5px;
   margin: auto;
   bottom: auto;
+  border: 1px solid #eeeeee;
 }
 ul.media > li .z-close-btn {
   position: absolute;
@@ -493,7 +494,7 @@ img.admin-leader-image {
 .map-wrapper {
   height: 300px;
   width: 610px;
-  border: 3px solid #ddd;
+  border: 3px solid #dddddd;
   margin: 0 0 9px 0;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -564,7 +565,7 @@ span.icon_status:after {
   width: 12px;
   height: 12px;
   content: " ";
-  background-color: #eee;
+  background-color: #eeeeee;
   z-index: 1;
 }
 span.icon_status.icon_status_running:before,

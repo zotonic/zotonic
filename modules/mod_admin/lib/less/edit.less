@@ -34,7 +34,7 @@ ul.media {
         float: left;
         position: relative;
         padding: @_padding;
-        border: 1px solid #ddd;
+        border: 1px solid @borderColorMedium;
         #3L > .border-radius(@radiusBlockElement);
         #3L > .box-shadow(none);
         
@@ -45,6 +45,7 @@ ul.media {
         img {
             .center(@_padding);
             bottom: auto; // align to top
+            border: 1px solid @borderColorLight; 
         }
         .z-close-btn {
             position: absolute;
