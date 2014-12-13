@@ -37,6 +37,15 @@ p {
 
 // zotonic specific
 
+.unpublished {
+    &,
+    a:not(.btn),
+    .text-muted,
+    .help-block {
+        color: @textColorUnpublished;
+    }
+}
+
 .z-drag-drop-placeholder {
     background: @backgroundDragPlaceholder;
     border: none;

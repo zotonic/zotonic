@@ -45,6 +45,12 @@ hr {
 p {
   margin: 0 0 15px 0;
 }
+.unpublished,
+.unpublished a:not(.btn),
+.unpublished .text-muted,
+.unpublished .help-block {
+  color: #bbbbbb;
+}
 .z-drag-drop-placeholder,
 ul.blocks.ui-sortable .ui-sortable-placeholder,
 ul.media > li.ui-sortable-placeholder {
@@ -685,14 +691,6 @@ table.do_adminLinkedTable p {
 .table tbody tr:hover td.clickable,
 .table tbody tr:hover th.clickable {
   background-color: #eeeeee;
-}
-table.table tr.unpublished td,
-table.table tr.unpublished td a:not(.btn),
-table.table tr.unpublished td .text-muted,
-table.table tr.unpublished td a:not(.btn) .text-muted,
-table.table tr.unpublished td .help-block,
-table.table tr.unpublished td a:not(.btn) .help-block {
-  color: #bbbbbb;
 }
 table.table tr.unpublished td a.btn-success {
   color: white;
