@@ -1,17 +1,26 @@
 {# Show a thumbnail with an unlink option. Used in the admin_edit #}
 
 {% sortable id=#unlink_wrapper tag=edge_id %}
+{% with (object_id.is_a.image and object_id.crop_center) as has_cropcenter %}
 <li id="{{ #unlink_wrapper }}" class="{% if not object_id.is_published %}unpublished{% endif %}">
-    {% image object_id mediaclass="admin-rsc-edge-media" %}
+    {% if has_cropcenter %}
+        <figure class="do_cropcenter{hiddenInput:'#crop_center_{{ object_id }}', editable: false}" data-original-width="{{ object_id.medium.width }}">
+            <input type="hidden" name="crop_center" id="crop_center_{{ object_id }}" value="{{ object_id.crop_center }}" />
+    {% else %}
+        <figure>
+    {% endif %}
+        {% image object_id mediaclass="admin-rsc-edge-media" %}
+    </figure>
     <div class="bottom clearfix">
         <div class="caption">
             {% with m.rsc[object_id].title|striptags|default:_"untitled" as title %}
-                <a href="#" id="{{ #edit }}">{{ title }}</a>
+                <a href="#" id="{{ #edit }}">{{ object_id.cropcenter }} {{ title }}</a>
             {% endwith %}
 	    </div>
 	    <button id="{{ #unlink.object_id }}" class="z-close-btn" title="{_ Disconnect _} {{ object_id.title }}"></button>
     </div>
 </li>
+{% endwith %}
 
 {% wire id=#unlink.object_id
     action={

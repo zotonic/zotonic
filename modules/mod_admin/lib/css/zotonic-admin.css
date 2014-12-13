@@ -244,15 +244,15 @@ ul.blocks.ui-sortable .form-control.block-name:focus {
   position: absolute;
 }
 .admin-cropguide.admin-cropguide-horiz {
-  border-top: 1px dotted rgba(255, 255, 255, 0.7);
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   height: 0;
   left: 0;
   right: 0;
 }
 .admin-cropguide.admin-cropguide-vert {
-  border-left: 1px dotted rgba(255, 255, 255, 0.7);
-  border-right: 1px dotted rgba(0, 0, 0, 0.7);
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
   width: 0;
   top: 0;
   bottom: 0;
@@ -293,7 +293,13 @@ ul.media > li {
 ul.media > li.sortable {
   cursor: move;
 }
-ul.media > li img {
+ul.media > li figure {
+  width: 182px;
+  max-width: 182px;
+  height: 182px;
+  max-height: 182px;
+  overflow: hidden;
+  position: relative;
   display: block;
   position: absolute;
   top: 5px;
@@ -302,7 +308,11 @@ ul.media > li img {
   right: 5px;
   margin: auto;
   bottom: auto;
+}
+ul.media > li img {
+  display: block;
   border: 1px solid #eeeeee;
+  margin: 0 auto;
 }
 ul.media > li .z-close-btn {
   position: absolute;

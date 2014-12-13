@@ -41,11 +41,22 @@ ul.media {
         &.sortable {
             cursor: move;
         }
-        
-        img {
+        figure {
+            @_w: @_image_width + 2;
+            @_h: @_image_height + 2;
+            width: @_w;
+            max-width: @_w;
+            height: @_h;
+            max-height: @_h;
+            overflow: hidden;
+            position: relative;
             .center(@_padding);
             bottom: auto; // align to top
+        }
+        img {
+            display: block;
             border: 1px solid @borderColorLight; 
+            margin: 0 auto;
         }
         .z-close-btn {
             position: absolute;
