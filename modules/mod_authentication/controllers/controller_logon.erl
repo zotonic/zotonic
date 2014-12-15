@@ -25,6 +25,10 @@
 -export([event/2]).
 -export([get_rememberme_cookie/1, set_rememberme_cookie/2, reset_rememberme_cookie/1]).
 
+%% Convenience export for other auth implementations.
+-export([send_reminder/2, lookup_identities/2]).
+
+
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
