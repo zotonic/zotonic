@@ -27,8 +27,8 @@
 -include_lib("zotonic.hrl").
 
 -export([
-    tag/2,
-    tag/3,
+    tag/2, tag/3,
+    url/2, url/3,
     uncollapse/1
 ]).
 
@@ -51,6 +51,22 @@ tag(Files, Args, Context) ->
                          [[],[]],
                          Files)
     end.
+
+%% @doc Generate a url with the given files.
+url(Files, Context) ->
+    url(Files, [], Context).
+
+%% @doc Generate a url with the given files.
+url(Files, Args, Context) ->
+    {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
+    CssFiles = url_for(Css, CssPath, <<".css">>, Args, Context), 
+    JsFiles = url_for(Js, JsPath, <<".js">>, Args, Context),
+    CssFiles ++ JsFiles.
+
+url_for(_F, [], _Ext, _Args, _Context) -> [];
+url_for(F, P, Ext, Args, Context) ->
+    [z_dispatcher:url_for(lib, url_for_args(F, P, Ext, Args, Context), Context)].
+
 
 tag1(Files, Args, Context) ->
     {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
