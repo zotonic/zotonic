@@ -672,7 +672,7 @@ close_connection(Connection) ->
     pgsql:close(Connection).
     
 %% @doc Check whether database exists
-%% @spec database_exists(Connection, DatabaseName, Context) -> bool()
+-spec database_exists(pgsql:connection(), string()) -> boolean().
 database_exists(Connection, Database) ->
     {ok, _, [{Count}]} = pgsql:equery(
         Connection,
@@ -685,7 +685,7 @@ database_exists(Connection, Database) ->
     end.
 
 %% @doc Create a database
-%% @spec create_database(Connection, DatabaseName, Context) -> ok
+-spec create_database(pgsql:connection(), string()) -> ok.
 create_database(Connection, Database) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
@@ -700,7 +700,7 @@ create_database(Connection, Database) ->
     end.
     
 %% @doc Check whether schema exists
-%% @spec schema_exists(Connection, Schema) -> bool()
+-spec schema_exists(pgsql:connection(), string()) -> boolean().
 schema_exists(Connection, Schema) ->
     {ok, _, [{Count}]} = pgsql:equery(
         Connection,
@@ -713,7 +713,7 @@ schema_exists(Connection, Schema) ->
     end.
 
 %% @doc Create a schema
-%% @spec create_schema(Connection, Schema) -> ok
+-spec create_schema(pgsql:connection(), string()) -> ok.
 create_schema(Connection, Schema) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
@@ -729,7 +729,7 @@ create_schema(Connection, Schema) ->
     end.    
     
 %% @doc Check the information schema if a certain table exists in the context database.
-%% @spec table_exists(TableName, Context) -> bool()
+-spec table_exists(string(), #context{}) -> boolean().
 table_exists(Table, Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
