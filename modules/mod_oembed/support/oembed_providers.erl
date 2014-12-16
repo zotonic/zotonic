@@ -82,19 +82,19 @@ list() ->
 
      #oembed_provider{
        url_re="^https?://(www\\.)?vimeo\\.com/.*",
-       endpoint_url="http://www.vimeo.com/api/oembed.json",
+       endpoint_url="https://www.vimeo.com/api/oembed.json",
        title="Vimeo"
      },
 
      #oembed_provider{
        url_re="^https?://([a-z]+\\.)?youtube\\.com/(watch|v/|embed/)",
-       endpoint_url="http://www.youtube.com/oembed",
+       endpoint_url="https://www.youtube.com/oembed",
        title="YouTube"
      },
 
      #oembed_provider{
        url_re="^https?://youtu\\.be/",
-       endpoint_url="http://www.youtube.com/oembed",
+       endpoint_url="https://www.youtube.com/oembed",
        title="YouTube"
      },
 
@@ -135,11 +135,3 @@ list() ->
      }
 
     ].
-
-
-
-
-
-
-
-
