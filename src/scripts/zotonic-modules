@@ -67,6 +67,7 @@ def cmd(sh):
 SITES_DIR = os.environ['SITES']
 BASE_MODULE_PATH = os.environ['MODULES']
 ROOT_DIR = os.environ['ZOTONIC']
+ROOT_MODULE_PATH = os.path.join(ROOT_DIR, 'modules')
 ZOTONIC = os.path.join(os.environ['ZOTONIC_BIN'], 'zotonic')
 
 
@@ -77,6 +78,7 @@ class ZMM():
     """
     zmr_server = "http://%s/api/zmr/repositories"
     install_path = BASE_MODULE_PATH
+    core_path = ROOT_MODULE_PATH
 
     def __init__(self):
         # debug switch
@@ -100,7 +102,8 @@ class ZMM():
         # dictionary to hold all Zotonic modules
         modules = {}
         glob_pattern = os.path.join(self.install_path, 'mod_*')
-        shared_modules = glob.glob(glob_pattern)
+        core_glob_pattern = os.path.join(self.core_path, 'mod_*')
+        shared_modules = glob.glob(glob_pattern) + glob.glob(core_glob_pattern)
 
         def moduleMeta(path):
             git_path = os.path.join(path, '.git')
@@ -140,7 +143,8 @@ class ZMM():
             modules = self._scan_modules()
             return site in modules and module in modules[site]
         else:
-            return os.path.exists(os.path.join(self.install_path, module))
+            return (os.path.exists(os.path.join(self.install_path, module)) or
+                    os.path.exists(os.path.join(self.core_path, module)))
 
     def _get_repo_url(self, repo_path):
         """Returns the url to a module's repository master branch"""
@@ -188,7 +192,7 @@ class ZMM():
             print "** %s already installed at %s" % (modulename, clonepath)
             return False
 
-        if os.path.exists(os.path.join(BASE_MODULE_PATH, modulename)):
+        if os.path.exists(os.path.join(core_path, modulename)):
             print "** Module already exists in zotonic core:", clonepath
             return False
 
