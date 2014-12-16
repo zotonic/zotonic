@@ -113,7 +113,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 do_discover(Url, State) ->
     UrlExtra = oembed_url_extra(State#state.context),
-    discover_per_provider(Url, UrlExtra, oembed_providers:list()).
+    fixup_html(discover_per_provider(Url, UrlExtra, oembed_providers:list())).
 
 
 discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest]) ->
@@ -171,6 +171,22 @@ oembed_url_extra(Context) ->
              H -> X1 ++ "&maxheight=" ++ z_utils:url_encode(z_convert:to_list(H))
          end,
     X2.
+
+%% @doc Fix oembed returned HTML, remove http: protocol to ensure that the oembed can also be shown on https: sites.
+fixup_html({ok, Props}) ->
+    {ok, fixup_protocol(html, Props)};
+fixup_html({error, _} = Error) ->
+    Error.
+
+fixup_protocol(Key, Props) ->
+    case lists:keytake(Key, 1, Props) of
+        false ->
+            Props;
+        {value, {Key, Value}, Props1} ->
+            Value1 = binary:replace(Value, <<"http://">>, <<"//">>, [global]),
+            [{Key,Value1}|Props1]
+    end.
+
 
 %% @doc Name of the oembed client gen_server for this site
 srv_name(Context) ->
