@@ -162,10 +162,11 @@ function z_load(name, init, wait_for) {
 }
 
 function z_lazy_load(url, name) {
-    if((url.slice(-3) === ".js") || (url.slice(-4) === ".css")) 
-        LazyLoad.js([url], function () {
-            pubzub.publish("~pagesession/loaded", name); 
-        })
+    function loaded() {
+        pubzub.publish("~pagesession/loaded", name); 
+    }
+    if(url.slice(-3) === ".js") LazyLoad.js([url], loaded);
+    if(url.slice(-4) === ".css") LazyLoad.css([url], loaded);
 }
 
 pubzub.subscribe("~pagesession/loaded", function(topic, msg) {
