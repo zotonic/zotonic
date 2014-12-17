@@ -456,7 +456,11 @@ dialog(Title, Template, Vars, Context) ->
                 undefined -> Args1;
                 Class -> [{addclass, Class} | Args1]
             end,
-    z_render:wire({dialog, Args2}, Context1).
+    Args3 = case proplists:get_value(backdrop, Vars) of
+                undefined -> Args2;
+                Backdrop -> [{backdrop, Backdrop} | Args2]
+            end,
+    z_render:wire({dialog, Args3}, Context1).
 
 dialog_close(Context) ->
     z_render:wire({dialog_close, []}, Context).

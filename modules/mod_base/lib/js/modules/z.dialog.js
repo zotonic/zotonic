@@ -84,7 +84,7 @@
               .appendTo($("body"));
 
             $dialog
-              .modal({backdrop: true})
+              .modal({backdrop: options.backdrop})
               .css({"overflow-x": "hidden", "overflow-y": "auto"});
 
             if (width > 0) {
@@ -132,7 +132,8 @@
                     title: self.options.title,
                     text: self.options.text,
                     width: self.options.width,
-                    addclass: self.options.addclass
+                    addclass: self.options.addclass,
+                    backdrop: self.options.backdrop
                 });
             });
         }
@@ -144,11 +145,13 @@
     text: text content, may contain html (will be inserted into div)
     width: (optional)
     addclass: (optional) classname will be appended to default dialog class
+    backdrop: (optional) boolean (0, 1) or the string 'static'
     */
     $.ui.dialog.defaults = {
         title: 'Title',
         text: 'text',
         width: undefined,
-        addclass: undefined
+        addclass: undefined,
+        backdrop: true
     };
 })(jQuery);
