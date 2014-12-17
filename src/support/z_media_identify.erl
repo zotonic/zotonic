@@ -187,6 +187,11 @@ identify_file_os(unix, File, OriginalFilename) ->
                         "application/msword" -> {ok, [{mime,"application/msword"}]};
                         _ -> {ok, [{mime, "application/vnd.ms-office"}]}
                     end;
+                "application/vnd.ms-excel" = Excel ->
+                    case guess_mime(OriginalFilename) of
+                        "application/vnd.openxmlformats" ++ _ = M -> {ok, [{mime,M}]};
+                        _ -> {ok, [{mime, Excel}]}
+                    end;
                 "audio/x-wav" ->
                     case guess_mime(OriginalFilename) of
                         "audio/" ++ _ = M -> {ok, [{mime,M}]};
@@ -319,6 +324,8 @@ maybe_binary(L) -> z_convert:to_binary(L).
 -spec extension(string()|binary(), string()|binary()|undefined) -> string().
 extension("image/jpeg", _PreferExtension) -> ".jpg";
 extension(<<"image/jpeg">>, _PreferExtension) -> ".jpg";
+extension("application/vnd.ms-excel", _) -> ".xls";
+extension(<<"application/vnd.ms-excel">>, _) -> ".xls";
 extension(Mime, PreferExtension) ->
     Extensions = mimetypes:extensions(z_convert:to_binary(Mime)),
     case PreferExtension of
