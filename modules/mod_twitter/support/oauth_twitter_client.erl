@@ -25,6 +25,7 @@
 
 -export([
          get_request_token/1,
+         get_consumer/1,
          authorize_url/1,
          get_access_token/2,
          request/4,
@@ -64,23 +65,33 @@ get_access_token({RequestToken, RequestSecret}, Context) ->
 request(get, ApiCall, {AccessToken, AccessSecret}, Context) ->
     request(get, ApiCall, [], {AccessToken, AccessSecret}, Context).
 request(get, ApiCall, Params, {AccessToken, AccessSecret}, Context) ->
-  case oauth:get("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret) of
-      {ok, {{_, 200, _}, _Headers, Body}} ->
-          {ok, z_convert:convert_json(mochijson2:decode(Body))};
-    {ok, {{_, 401, _}, _Headers, _Body}} ->
-          {error, unauthorized}
-  end;
+    handle_result(oauth:get("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret));
 request(post, ApiCall, Params, {AccessToken, AccessSecret}, Context) ->
-  case oauth:post("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret) of
-      {ok, {{_, 200, _}, _Headers, Body}} ->
-          {ok, z_convert:convert_json(mochijson2:decode(Body))};
-      {ok, {{_, 401, _}, _Headers, _Body}} ->
-          {error, unauthorized}
-  end.
+  handle_result(oauth:post("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret)).
+
+handle_result({ok, {{_, 200, _}, _Headers, Body}}) ->
+    {ok, z_convert:convert_json(mochijson2:decode(Body))};
+handle_result({ok, {{_, 401, _}, _Headers, _Body}}) ->
+    {error, unauthorized};
+handle_result({ok, {{_, 404, _}, _Headers, _Body}}) ->
+    {error, notfound};
+handle_result({ok, {{_, 420, _}, _Headers, _Body}}) ->
+    {error, connection_limit};
+handle_result({ok, {{_, 429, _}, _Headers, _Body}}) ->
+    {error, rate_limit};
+handle_result({ok, {{_, Code, _}, _Headers, _Body}}) ->
+    {error, {code, Code}};
+handle_result({error, _} = Error) ->
+    Error.
+
 
 get_consumer(Context) ->
-    case {m_config:get_value(mod_twitter, consumer_key, undefined, Context), m_config:get_value(mod_twitter, consumer_secret, undefined, Context)} of
-        {undefined, _} ->
+    case {m_config:get_value(mod_twitter, consumer_key, undefined, Context), 
+          m_config:get_value(mod_twitter, consumer_secret, undefined, Context)} 
+    of
+        {None, _} when None =:= undefined; None =:= <<>> ->
+            undefined;
+        {_, None} when None =:= undefined; None =:= <<>> ->
             undefined;
         {CKey, CSec} ->
             {z_convert:to_list(CKey), z_convert:to_list(CSec), hmac_sha1}
