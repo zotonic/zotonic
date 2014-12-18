@@ -91,6 +91,8 @@ request_arg("is_public")           -> is_public;
 request_arg("date_start_after")    -> date_start_after;
 request_arg("date_start_before")   -> date_start_before;
 request_arg("date_start_year")     -> date_start_year;
+request_arg("date_end_after")      -> date_end_after;
+request_arg("date_end_before")     -> date_end_before;
 request_arg("date_end_year")       -> date_end_year;
 request_arg("publication_month")   -> publication_month;
 request_arg("publication_year")    -> publication_year;
@@ -365,13 +367,13 @@ parse_query([{text, Text}|Rest], Context, Result) ->
 %% date_start_after=date
 %% Filter on date_start after a specific date.
 parse_query([{date_start_after, Date}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
+    {Arg, Result1} = add_arg(z_datetime:to_datetime(Date, Context), Result),
     parse_query(Rest, Context, add_where("rsc.pivot_date_start >= " ++ Arg, Result1));
 
 %% date_start_after=date
 %% Filter on date_start before a specific date.
 parse_query([{date_start_before, Date}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
+    {Arg, Result1} = add_arg(z_datetime:to_datetime(Date, Context), Result),
     parse_query(Rest, Context, add_where("rsc.pivot_date_start <= " ++ Arg, Result1));
 
 %% date_start_year=year
@@ -379,6 +381,18 @@ parse_query([{date_start_before, Date}|Rest], Context, Result) ->
 parse_query([{date_start_year, Year}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_integer(Year), Result),
     parse_query(Rest, Context, add_where("date_part('year', rsc.pivot_date_start) = " ++ Arg, Result1));
+
+%% date_end_after=date
+%% Filter on date_end after a specific date.
+parse_query([{date_end_after, Date}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_datetime:to_datetime(Date, Context), Result),
+    parse_query(Rest, Context, add_where("rsc.pivot_date_end >= " ++ Arg, Result1));
+
+%% date_end_after=date
+%% Filter on date_end before a specific date.
+parse_query([{date_end_before, Date}|Rest], Context, Result) ->
+    {Arg, Result1} = add_arg(z_datetime:to_datetime(Date, Context), Result),
+    parse_query(Rest, Context, add_where("rsc.pivot_date_end <= " ++ Arg, Result1));
 
 %% date_end_year=year
 %% Filter on year of end date
@@ -399,11 +413,11 @@ parse_query([{publication_month, Month}|Rest], Context, Result) ->
     parse_query(Rest, Context, add_where("date_part('month', rsc.publication_start) = " ++ Arg, Result1));
 
 parse_query([{publication_after, Date}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
+    {Arg, Result1} = add_arg(z_datetime:to_datetime(Date, Context), Result),
     parse_query(Rest, Context, add_where("rsc.publication_start >= " ++ Arg, Result1));
 
 parse_query([{publication_before, Date}|Rest], Context, Result) ->
-    {Arg, Result1} = add_arg(z_convert:to_datetime(Date), Result),
+    {Arg, Result1} = add_arg(z_datetime:to_datetime(Date, Context), Result),
     parse_query(Rest, Context, add_where("rsc.publication_start <= " ++ Arg, Result1));
 
 %% No match found
