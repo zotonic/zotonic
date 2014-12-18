@@ -35,7 +35,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_admin_controller_helper:init_session(Context1),
-    ?WM_REPLY(true, Context1).
+    ?WM_REPLY(true, Context2).
 
 resource_exists(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
