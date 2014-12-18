@@ -105,7 +105,18 @@ ul.media > li.ui-sortable-placeholder {
   padding: 1px;
 }
 .z-button-row {
-  font-size: 0;
+  *zoom: 1;
+}
+.z-button-row:before,
+.z-button-row:after {
+  content: " ";
+  display: table;
+}
+.z-button-row:after {
+  clear: both;
+}
+.z-button-row > * {
+  float: left;
 }
 .admin-image-border,
 div.admin-edit-media,
