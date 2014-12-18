@@ -236,7 +236,6 @@
 %%      Return {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
 -record(rsc_upload, {id, format :: json|bert, data}).
 
-
 %% @doc Add custom pivot fields to a resource's search index (map)
 %% Result is a list of {module, props} pairs.
 %% This will update a table "pivot_<module>".
@@ -372,6 +371,27 @@
 
 %% @doc Notification that a site configuration's property is changed (notify)
 -record(m_config_update_prop, {module, key, prop, value}).
+
+%% @doc Notification for fetching #media_import_props{} from different modules.
+%% This is used by z_media_import.erl for fetching properties and medium information
+%% about resources.
+-record(media_import, {
+        url :: binary(),
+        host_rev :: list(binary()),
+        mime :: binary,
+        metadata :: tuple()
+    }).
+
+-record(media_import_props, {
+        prio = 5 :: pos_integer(),      % 1 for perfect match (ie. host specific importer)
+        category :: atom(),
+        module :: atom(),
+        description :: binary() | {trans, list()},
+        rsc_props :: list(),
+        medium_props :: list(),
+        medium_url :: binary(),
+        preview_url :: binary()
+    }).
 
 %% @doc Notification to translate or map a file after upload, before insertion into the database (first)
 %% Used in mod_video to queue movies for conversion to mp4.
@@ -510,6 +530,19 @@
 % Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
 -record(debug, {what, arg=[]}).
 
+%% @doc An external feed delivered a resource. First handler can import it.
+-record(import_resource, {
+        source :: atom() | binary(),
+        source_id :: integer() | binary(),
+        source_url :: binary(),
+        source_user_id :: binary() | integer(),
+        user_id :: integer(),
+        name :: binary(),
+        props :: list(),
+        urls :: list(),
+        media_urls :: list(),
+        data :: any()
+    }).
 
 %% @doc mod_export - Check if the resource or dispatch is visible for export.
 -record(export_resource_visible, {
@@ -572,7 +605,3 @@
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
 % development_make - Perform a 'make' on Zotonic, reload all new beam files
-
-
-
-

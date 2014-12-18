@@ -32,12 +32,14 @@
     observe_rsc_update/3,
     observe_media_viewer/2,
     observe_media_stillimage/2,
+    observe_media_import/2,
     event/2,
 
     spawn_preview_create/3
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("z_stdlib/include/z_url_metadata.hrl").
 
 
 %% Fantasy mime type to distinguish embeddable html fragments.
@@ -143,6 +145,72 @@ observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
             undefined
     end.
 
+
+%% @doc Recognize youtube and vimeo URLs, generate the correct embed code
+observe_media_import(#media_import{host_rev=[<<"com">>, <<"youtube">> | _], metadata=MD} = MI, Context) ->
+    media_import(youtube, ?__("Youtube Video", Context), MD, MI);
+observe_media_import(#media_import{host_rev=[<<"com">>, <<"vimeo">> | _], metadata=MD} = MI, Context) ->
+    media_import(vimeo, ?__("Vimeo Video", Context), MD, MI);
+observe_media_import(#media_import{}, _Context) ->
+    undefined.
+
+media_import(Service, Descr, MD, MI) ->    
+    H = z_convert:to_integer(z_url_metadata:p([<<"og:video:height">>, <<"twitter:player:height">>], MD)), 
+    W = z_convert:to_integer(z_url_metadata:p([<<"og:video:width">>, <<"twitter:player:width">>], MD)),
+    V = fetch_videoid(Service, MI#media_import.url),
+    case is_integer(H) andalso is_integer(W) andalso V =/= <<>> of
+        true ->
+            #media_import_props{
+                prio = 1,
+                category = video,
+                module = ?MODULE,
+                description = Descr,
+                rsc_props = [
+                    {title, z_url_metadata:p(title, MD)},
+                    {summary, z_url_metadata:p(summary, MD)},
+                    {website, MI#media_import.url}
+                ],
+                medium_props = [
+                    {mime, ?EMBED_MIME},
+                    {width, W},
+                    {height, H},
+                    {video_embed_service, z_convert:to_binary(Service)},
+                    {video_embed_code, embed_code(Service, H, W, V)}
+                ],
+                preview_url = z_url_metadata:p(image, MD)
+            };
+        false ->
+            undefined
+    end.
+
+
+fetch_videoid(youtube, Url) ->
+    {_Protocol, _Host, _Path, Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
+    Qs1 = mochiweb_util:parse_qs(Qs),
+    z_convert:to_binary(proplists:get_value("v", Qs1));
+fetch_videoid(vimeo, Url) ->
+    {_Protocol, _Host, Path, _Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
+    P1 = lists:last(string:tokens(Path, "/")),
+    case z_utils:only_digits(P1) of
+        true -> z_convert:to_binary(P1);
+        false -> <<>>
+    end.
+
+
+embed_code(youtube, H, W, V) ->
+    iolist_to_binary([
+        <<"<iframe width=\"">>,integer_to_list(W),
+        <<"\" height=\"">>,integer_to_list(H),
+        <<"\" src=\"//www.youtube.com/embed/">>, z_utils:url_encode(V),
+        <<"\" frameborder=\"0\" allowfullscreen></iframe>">>
+        ]);
+embed_code(vimeo, H, W, V) ->
+    iolist_to_binary([
+        <<"<iframe width=\"">>,integer_to_list(W),
+        <<"\" height=\"">>,integer_to_list(H),
+        <<"\" src=\"//player.vimeo.com/video/">>, z_utils:url_encode(V),
+        <<"\" frameborder=\"0\" allowfullscreen></iframe>">>
+        ]).
 
 %% @doc Handle the form submit from the "new media" dialog.  The form is defined in templates/_media_upload_panel.tpl.
 %% @spec event(Event, Context1) -> Context2
