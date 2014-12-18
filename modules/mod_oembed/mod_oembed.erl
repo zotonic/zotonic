@@ -29,6 +29,7 @@
     observe_rsc_update/3,
     observe_media_viewer/2,
     observe_media_stillimage/2,
+    observe_media_import/2,
     event/2,
 
     preview_create/2
@@ -162,6 +163,41 @@ is_ssl(Context) ->
         false -> false;
         undefined -> z_convert:to_bool(z_context:get(is_ssl, Context)) 
     end.
+
+% @doc Recognize youtube and vimeo URLs, generate the correct embed code
+observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
+    case oembed_request(Url, Context) of
+        {ok, Json} ->
+            #media_import_props{
+                prio = 5,
+                category = type_to_category(proplists:get_value(type, Json)),
+                module = ?MODULE,
+                description = ?__("Embedded Content", Context),
+                rsc_props = [
+                    {title, first([proplists:get_value(title, Json), z_url_metadata:p(title, MD)])},
+                    {summary, first([proplists:get_value(description, Json), z_url_metadata:p(summary, MD)])},
+                    {website, Url}
+                ],
+                medium_props = [
+                    {mime, ?OEMBED_MIME},
+                    {width, proplists:get_value(width, Json)},
+                    {height, proplists:get_value(height, Json)},
+                    {oembed_service, proplists:get_value(provider_name, Json)},
+                    {oembed_url, Url},
+                    {oembed, Json}
+                ],
+                preview_url = proplists:get_value(thumbnail_url, Json)
+            };
+        {error, _} ->
+            undefined
+    end.
+
+first([]) -> undefined;
+first([undefined|Xs]) -> first(Xs);
+first([""|Xs]) -> first(Xs);
+first([<<>>|Xs]) -> first(Xs);
+first([X|_]) -> X.
+
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}

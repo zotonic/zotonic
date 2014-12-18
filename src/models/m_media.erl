@@ -39,23 +39,30 @@
     insert_file/2,
     insert_file/3,
     insert_file/4,
+    insert_medium/4,
     replace_file/3,
     replace_file/4,
     replace_file/5,
     replace_file/6,
+    replace_medium/5,
     insert_url/2,
     insert_url/3,
     insert_url/4,
     replace_url/4,
     replace_url/5,
+    save_preview_url/3,
 	save_preview/4,
     make_preview_unique/3,
-    is_unique_file/2
+    is_unique_file/2,
+    download_file/1,
+    download_file/2
 ]).
 
 -include_lib("zotonic.hrl").
 
-
+-define(MEDIA_MAX_LENGTH_PREVIEW, 10*1024*1024).
+-define(MEDIA_MAX_LENGTH_DOWNLOAD, 500*1024*1024).
+-define(MEDIA_TIMEOUT_DOWNLOAD, 60*1000).
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
@@ -363,6 +370,39 @@ insert_file(File, Props, PropsMedia, Options, Context) ->
             {error, file_not_allowed}
     end.
 
+%% @doc Insert a medium, together with rsc props and an optional preview_url. This is used for importing media
+insert_medium(Medium, RscProps, Options, Context) ->
+    update_medium_1(insert_rsc, Medium, RscProps, Options, Context).
+
+replace_medium(Medium, RscId, RscProps, Options, Context) ->
+    case z_acl:rsc_editable(RscId, Context) of
+        true -> update_medium_1(RscId, Medium, RscProps, Options, Context);
+        false -> {error, eacces}
+    end.
+
+update_medium_1(RscId, Medium, RscProps, Options, Context) ->
+    {mime, Mime} = proplists:lookup(mime, Medium),
+    {category, Category} = proplists:lookup(category, RscProps),
+    case z_acl:is_allowed(insert, #acl_rsc{category=Category}, Context) andalso
+         z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context) of
+        true ->
+            case replace_file_acl_ok(undefined, RscId, RscProps, Medium, Options, Context) of
+                {ok, NewRscId} ->
+                    case proplists:get_value(preview_url, Options) of
+                        None when None =:= undefined; None =:= <<>>; None =:= [] -> 
+                            nop;
+                        PreviewUrl ->
+                            save_preview_url(NewRscId, PreviewUrl, Context)
+                    end,
+                    {ok, NewRscId};
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, file_not_allowed}
+    end.
+
+
 
 %% @doc Make a new resource for the file based on a URL.
 %% @spec insert_url(File, Context) -> {ok, Id} | {error, Reason}
@@ -445,7 +485,8 @@ replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
                     id=RscId, 
                     mime=Mime,
                     file=File,
-                    original_filename=proplists:get_value(original_filename, Props, File),
+                    original_filename=proplists:get_value(original_filename, Props, 
+                                        proplists:get_value(original_filename, Medium, File)),
                     medium=Medium
                 },
     NewPreProc = case z_notifier:first(PreProc, Context) of
@@ -591,51 +632,63 @@ mime_to_category(Mime) ->
 
 
 %% @doc Download a file from a http or data url.
-download_file("data:" ++ _ = DataUrl) ->
-    download_file(z_convert:to_binary(DataUrl));
-download_file(<<"data:", _/binary>> = DataUrl) ->
-    case z_url:decode_data_url(DataUrl) of
-        {ok, Mime, _Charset, Bytes} ->
-            Filename = z_tempfile:new(),
-            ok = file:write_file(Filename, Bytes),
-            {ok, Filename, mime2filename(Mime)};
-        {error, _} = Error ->
-            Error
-    end;
 download_file(Url) ->
+    download_file(Url, []).
+
+download_file(Url, Options) ->
     File = z_tempfile:new(),
-    case httpc:request(get, 
-                      {z_convert:to_list(Url), []},
-                      [],
-                      [{stream, File}]) of
-        {ok, saved_to_file} ->
-            {ok, File, filename:basename(Url)};
-        {ok, _Other} ->
-            {error, download_failed};
-        {error, E} ->
+    {ok, Device} = file:open(File, [write]),
+    MaxLength = proplists:get_value(max_length, Options, ?MEDIA_MAX_LENGTH_DOWNLOAD),
+    Timeout = proplists:get_value(timeout, Options, ?MEDIA_TIMEOUT_DOWNLOAD),
+    FetchOptions = [
+        {max_length, MaxLength},
+        {timeout, Timeout},
+        {device, Device}
+    ],
+    case z_url_fetch:fetch_partial(Url, FetchOptions) of
+        {ok, {_FinalUrl, Hs, Length, _Data}} when Length < MaxLength ->
+            file:close(Device),
+            {ok, File, filename(Url, Hs)};
+        {ok, {_FinalUrl, _Hs, Length, _Data}} when Length >= MaxLength ->
+            file:close(Device),
             file:delete(File),
-            {error, E}
+            {error, file_too_large};
+        {ok, _Other} ->
+            file:close(Device),
+            file:delete(File),
+            {error, download_failed};
+        {error, _} = Error ->
+            file:close(Device),
+            file:delete(File),
+            Error
     end.
 
+filename(Url, Hs) ->
+    case z_url_metadata:filename(Url, Hs) of
+        undefined ->
+            {CT, _CTOpts} = content_type(Hs),
+            mime2filename(CT);
+        FN ->
+            FN
+    end.
 
-mime2filename(<<"image/jpeg">>) ->
-    <<"image.jpg">>;
-mime2filename(<<"application/pdf">>) ->
-    <<"document.pdf">>;
-mime2filename(<<"text/", _/binary>>) ->
-    <<"document.txt">>;
-mime2filename(<<"application/", _/binary>> = Mime) ->
-    case mimetypes:mime_to_exts(Mime) of
-        undefined -> "file";
-        [Ext|_] -> iolist_to_binary([<<"document.">>, Ext]) 
-    end;
+content_type(Hs) ->
+    case proplists:get_value("content-type", Hs) of
+        undefined ->
+            {<<"application/octet-stream">>, []};
+        CT ->
+            {Mime, Options} = mochiweb_util:parse_header(CT),
+            {z_convert:to_binary(Mime), Options}
+    end.
+
 mime2filename(Mime) ->
-    [Base|_] = binary:split(Mime, <<"/">>),
-    case mimetypes:mime_to_exts(Mime) of
-        undefined -> Base;
-        [Ext|_] -> iolist_to_binary([Base, $., Ext]) 
-    end.
+    iolist_to_binary([filebase(Mime), z_media_identify:extension(Mime)]).
 
+filebase(<<"video/", _/binary>>) -> <<"video">>;
+filebase(<<"image/", _/binary>>) -> <<"image">>;
+filebase(<<"audio/", _/binary>>) -> <<"audio">>;
+filebase(<<"media/", _/binary>>) -> <<"media">>;
+filebase(_) -> <<"document">>.
 
 %% @doc Fetch the medium information of the file, if they are not set in the Props
 add_medium_info(File, OriginalFilename, Props, Context) ->
@@ -656,6 +709,51 @@ add_medium_info(File, OriginalFilename, Props, Context) ->
     end,
     PropsMime.
 
+
+%% @doc Save a new file from a preview_url as the preview of a medium
+save_preview_url(RscId, Url, Context) ->
+    case download_file(Url, [{max_length, ?MEDIA_MAX_LENGTH_PREVIEW}]) of
+        {ok, TmpFile, Filename} ->
+            case z_media_identify:identify_file(TmpFile, Filename, Context) of
+                {ok, MediaInfo} -> 
+                    try
+                        {mime, Mime} = proplists:lookup(mime, MediaInfo),
+                        {width, Width} = proplists:lookup(width, MediaInfo),
+                        {height, Height} = proplists:lookup(height, MediaInfo),
+                        
+                        FileUnique = make_preview_unique(RscId, z_media_identify:extension(Mime), Context),
+                        FileUniqueAbs = z_media_archive:abspath(FileUnique, Context),
+                        ok = filelib:ensure_dir(FileUniqueAbs),
+                        case file:rename(TmpFile, FileUniqueAbs) of
+                            %% cross-fs rename is not supported by erlang, so copy and delete the file
+                            {error, exdev} ->
+                                {ok, _BytesCopied} = file:copy(TmpFile, FileUniqueAbs),
+                                ok = file:delete(TmpFile);
+                            ok -> 
+                                ok
+                        end,
+                        UpdateProps = [
+                            {preview_filename, FileUnique},
+                            {preview_width, Width},
+                            {preview_height, Height},
+                            {is_deletable_preview, true}
+                        ],
+                        {ok,1} = z_db:update(medium, RscId, UpdateProps, Context),
+                        z_depcache:flush({medium, RscId}, Context),
+                        {ok, FileUnique}
+                    catch
+                        _:Error ->
+                            lager:warning("[~p] Error importing preview for ~p, url ~p, mediainfo ~p",
+                                          [z_context:site(Context), RscId, Url, MediaInfo]),
+                            file:delete(TmpFile), 
+                            {error, Error}
+                    end;
+                {error, _} = Error -> 
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Save a preview for a medium record. The data is saved to a file in the archive directory.
 save_preview(RscId, Data, Mime, Context) ->
@@ -712,8 +810,9 @@ is_unique_file(Filename, Context) ->
 
 medium_insert(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
-    z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props}, Context),
-    z_db:insert(medium, Props, Context).
+    Props1 = check_medium_props(Props),
+    z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props1}, Context),
+    z_db:insert(medium, Props1, Context).
  
 medium_delete(Id, Context) ->
     medium_delete(Id, get(Id, Context), Context).
@@ -724,3 +823,10 @@ medium_delete(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=[]}, Context),
     z_db:delete(medium, Id, Context).
+
+check_medium_props(Ps) ->
+    [ check_medium_prop(P) || P <- Ps ].
+
+check_medium_prop({width, N}) when not is_integer(N) -> {width, 0};
+check_medium_prop({height, N}) when not is_integer(N) -> {height, 0};
+check_medium_prop(P) -> P.

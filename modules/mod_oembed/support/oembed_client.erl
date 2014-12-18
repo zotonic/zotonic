@@ -130,9 +130,8 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest]) ->
         nomatch ->
             discover_per_provider(Url, UrlExtra, Rest)
     end;
-
 discover_per_provider(Url, UrlExtra, []) ->
-    lager:warning("Fallback embed.ly discovery for url: ~p~n", [Url]),
+    lager:debug("Fallback embed.ly discovery for url: ~p~n", [Url]),
     oembed_request(?EMBEDLY_ENDPOINT ++ z_utils:url_encode(Url) ++ UrlExtra).
 
 
@@ -157,8 +156,13 @@ oembed_request(RequestUrl) ->
     case Code of
         200 -> 
             {ok, z_convert:convert_json(mochijson2:decode(Body))};
-        _Other ->
+        404 ->
+            {error, {http, 404, <<>>}};
+        NoAccess when NoAccess =:= 401; NoAccess =:= 403 ->
             lager:warning("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
+            {error, {http, Code, Body}};
+        _Other ->
+            lager:info("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
             {error, {http, Code, Body}}  %% empty proplist
     end.
 
