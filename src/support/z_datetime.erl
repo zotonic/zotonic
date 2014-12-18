@@ -25,6 +25,9 @@
     to_local/2,
     to_utc/2,
 
+    to_datetime/1,
+    to_datetime/2,
+
     format/3,
 
     timesince/2,
@@ -32,6 +35,9 @@
     timesince/4,
     timesince/5,
     
+    week_start/0,
+    week_start/2,
+
     days_in_year/1,
     
     prev_year/1,
@@ -116,6 +122,67 @@ to_utc(DT, Tz) ->
             NewDT
     end.
 
+
+%% @doc Convert an input to a (universal) datetime, using to_date/1 and
+%% to_time/1.  When the input is a string, it is expected to be in iso
+%% 8601 format, although it can also handle timestamps without time
+%% zones. The time component of the datetime is optional.
+to_datetime(DT) ->
+    to_dt(DT, calendar:universal_time()).
+
+to_datetime(DT, Tz) ->
+    Now = to_local(calendar:universal_time(), Tz),
+    to_utc(to_dt(DT, Now), Tz).
+
+to_dt({{_,_,_},{_,_,_}} = DT, _Now) -> DT;
+to_dt({_,_,_} = D, _Now) -> {D, {0,0,0}};
+to_dt(B, Now) when is_binary(B) ->  to_dt(binary_to_list(B), Now);
+to_dt("now", Now) -> Now;
+to_dt("today", Now) -> Now;
+to_dt("tomorrow", Now) ->    relative_time(1, '+', "day", Now);
+to_dt("yesterday", Now) ->   relative_time(1, '+', "day", Now);
+to_dt("+"++Relative, Now) -> to_relative_time('+', Relative, Now);
+to_dt("-"++Relative, Now) -> to_relative_time('-', Relative, Now);
+to_dt(DT, _Now) -> z_convert:to_datetime(DT).
+
+to_relative_time(Op, S, Now) ->
+    Ts = string:tokens(S, " "),
+    Ts1 = [ T || T <- Ts, T =/= [] ],
+    relative_time(1, Op, Ts1, Now).
+
+relative_time(_N, Op, [[C|_]=N|Ts], Now) when C >= $0, C =< $9 ->
+    relative_time(list_to_integer(N), Op, Ts, Now);
+relative_time(N, '+', ["minute"|_], Now) ->    relative_time_n(N,   fun next_minute/1, Now);
+relative_time(N, '+', ["hour"|_], Now) ->      relative_time_n(N,   fun next_hour/1, Now);
+relative_time(N, '+', ["day"|_], Now) ->       relative_time_n(N,   fun next_day/1, Now);
+relative_time(N, '+', ["sunday"|_], Now) ->    relative_time_n(N*7, fun next_day/1, week_start(7, Now));
+relative_time(N, '+', ["monday"|_], Now) ->    relative_time_n(N*7, fun next_day/1, week_start(1, Now));
+relative_time(N, '+', ["tuesday"|_], Now) ->   relative_time_n(N*7, fun next_day/1, week_start(2, Now));
+relative_time(N, '+', ["wednesday"|_], Now) -> relative_time_n(N*7, fun next_day/1, week_start(3, Now));
+relative_time(N, '+', ["thursday"|_], Now) ->  relative_time_n(N*7, fun next_day/1, week_start(4, Now));
+relative_time(N, '+', ["friday"|_], Now) ->    relative_time_n(N*7, fun next_day/1, week_start(5, Now));
+relative_time(N, '+', ["saturday"|_], Now) ->  relative_time_n(N*7, fun next_day/1, week_start(6, Now));
+relative_time(N, '+', ["week"|_], Now) ->      relative_time_n(N*7, fun next_day/1, Now);
+relative_time(N, '+', ["month"|_], Now) ->     relative_time_n(N,   fun next_month/1, Now);
+relative_time(N, '+', ["year"|_], Now) ->      relative_time_n(N,   fun next_year/1, Now);
+relative_time(N, '-', ["day"|_], Now) ->       relative_time_n(N,   fun prev_day/1, Now);
+relative_time(N, '-', ["sunday"|_], Now) ->    relative_time_n(N*7, fun prev_day/1, week_start(7, Now));
+relative_time(N, '-', ["monday"|_], Now) ->    relative_time_n(N*7, fun prev_day/1, week_start(1, Now));
+relative_time(N, '-', ["tuesday"|_], Now) ->   relative_time_n(N*7, fun prev_day/1, week_start(2, Now));
+relative_time(N, '-', ["wednesday"|_], Now) -> relative_time_n(N*7, fun prev_day/1, week_start(3, Now));
+relative_time(N, '-', ["thursday"|_], Now) ->  relative_time_n(N*7, fun prev_day/1, week_start(4, Now));
+relative_time(N, '-', ["friday"|_], Now) ->    relative_time_n(N*7, fun prev_day/1, week_start(5, Now));
+relative_time(N, '-', ["week"|_], Now) ->      relative_time_n(N*7, fun prev_day/1, Now);
+relative_time(N, '-', ["month"|_], Now) ->     relative_time_n(N,   fun prev_month/1, Now);
+relative_time(N, '-', ["year"|_], Now) ->      relative_time_n(N,   fun prev_year/1, Now);
+relative_time(_N, _Op, _Unit, _Now) ->         undefined.
+
+relative_time_n(N, _F, DT) when N =< 0 ->
+    DT;
+relative_time_n(N, F, DT) ->
+    relative_time_n(N-1, F, F(DT)).
+
+
 %% @doc Format a date/time. Convenience function which calls the zotonic erlydtl stub.
 format(Date, FormatString, Context) ->
     erlydtl_dateformat:format(Date, FormatString, Context).
@@ -128,7 +195,6 @@ timesince(Date, Context) ->
 
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% @spec timesince(Date, BaseDate, Context) -> string()
-%% @todo Use the language in the context for translations.
 timesince(Date, Base, Context) ->
     timesince(Date, Base, ?__(<<"ago">>, Context), ?__(<<"now">>, Context), ?__(<<"in">>, Context), 2, Context).
 
@@ -138,8 +204,6 @@ timesince(Date, Base, IndicatorStrings, Context) ->
 %% @spec timesince(Date, BaseDate, IndicatorStrings, Mode, Context) -> string()
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% `WhenText' is a string containing a maximum of three tokens. Example "ago, now, in"
-%% @todo Use the language in the context for translations.
-
 timesince(Date, Base, IndicatorStrings, Mode, Context) ->
     %% strip the tokens, so the user can specify the text more flexible.
     case [string:strip(S, both) || S <- string:tokens(z_convert:to_list(IndicatorStrings), ",")] of
@@ -155,7 +219,6 @@ timesince(Date, Base, IndicatorStrings, Mode, Context) ->
 
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% @spec timesince(Date, BaseDate, AgoText, NowText, InText, Mode, Context) -> string()
-%% @todo Use the language in the context for translations.
 timesince(undefined, _, _AgoText, _NowText, _InText, _Mode, _Context) ->
     "";
 timesince(_, undefined, _AgoText, _NowText, _InText, _Mode, _Context) ->
@@ -207,6 +270,19 @@ plural(1,Single,_Plural) ->
 plural(N,_Single,Plural) ->
     [integer_to_list(N), 32, Plural].
 
+
+%% @doc Return the date the current week starts (monday)
+week_start() ->
+    week_start(1, calendar:universal_time()).
+
+week_start(StartDayNr, {D,_}) ->
+    Today = {D,{0,0,0}},
+    WeekDay = calendar:day_of_the_week(D),
+    if 
+        WeekDay > StartDayNr -> relative_time_n(WeekDay - StartDayNr, fun prev_day/1, Today);
+        WeekDay =:= StartDayNr -> Today;
+        WeekDay < StartDayNr -> relative_time_n(WeekDay - StartDayNr + 7, fun prev_day/1, Today)
+    end.
 
 %% @doc Return the date one year earlier.
 prev_year({{Y,2,29},T})  ->

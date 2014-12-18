@@ -116,7 +116,7 @@ Query-model arguments
 
   ``hasobject=123``
   ``hasobject='tag_gift'``
-  ``hasobject=[123,'document']``
+  ``hasobject=[123,'hasdocument']``
 
 **is_featured**
 
@@ -186,7 +186,7 @@ Query-model arguments
   Filter on all things which have any outgoing edge with the given
   predicate.
 
-  ``hasobjectpredicate='document'``
+  ``hasobjectpredicate='hasdocument'``
 
 **hassubjectpredicate**
 
@@ -228,6 +228,20 @@ Query-model arguments
 
   ``date_start_after="2010-01-15"``
 
+  It also possible to use relative times:
+
+   * ``now``
+   * ``+0 sunday``  (last sunday or the current sunday)
+   * ``+0 monday``  (last monday or the current monday)
+   * ``+1 minute``
+   * ``+1 hour``
+   * ``+1 day``
+   * ``+1 week``
+   * ``+1 month``
+   * ``+1 year``
+
+  Negative offsets are allowed as well. There //must// be a ``+`` or ``-`` sign.
+
 **date_start_before**
 
   Select items with a start date smaller than given value
@@ -239,6 +253,18 @@ Query-model arguments
   Select items with an "event start date" in the given year.
 
   ``date_start_year=2012``
+
+**date_end_after**
+
+  Select items with a end date greater than given value
+
+  ``date_end_after="2010-01-15"``
+
+**date_end_before**
+
+  Select items with a end date smaller than given value
+
+  ``date_end_before="2010-01-15"``
 
 **date_end_year**
 
