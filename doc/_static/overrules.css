@@ -1,5 +1,6 @@
 body {
     background-color: white;
+    line-height: 1.3;
 }
 
 div.document {
@@ -23,9 +24,25 @@ div.body h1, div.body h2, div.body h3,
 div.body h4, div.body h5, div.body h6 {
     background: inherit;
 }
+div.body h1 {
+    font-size: 200%;
+}
+div.body h2 {
+    font-size: 160%;
+}
+div.body h3 {
+    font-size: 130%;
+}
+div.body h4 {
+    font-size: 120%;
+}
 
 div.body p, div.body dd, div.body li {
     text-align: left;
+}
+
+div.body em {
+    font-style: normal;
 }
 
 pre {
@@ -58,17 +75,18 @@ div.sphinxsidebar p.logo {
     margin: 10px 0 20px 0;
 }
 div.sphinxsidebar p.logo img {
-    height: 24px;
+    width: 140px;
 }
 
 div.sphinxsidebar ul,
 div.sphinxsidebar p.topless {
-    margin: 1em 0;
+    margin: 0 0 1em 0;
 }
 
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
     font-size: 1.2em;
+    margin: 1em 0 0 0;
 }
 
 div.sphinxsidebar h3,

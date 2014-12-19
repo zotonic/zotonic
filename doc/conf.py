@@ -105,8 +105,9 @@ html_theme_options = {
     'headfont': '"Lucida Grande", Arial, Helvetica, sans-serif',
 
     'bgcolor': 'white',
-    'textcolor': '#333',
-    'linkcolor': '#0778b0',
+    'textcolor': '#222',
+    'linkcolor': '#0A8BDF',
+    'visitedlinkcolor': '#0463C1',
     'headtextcolor': '#0778b0',
 
     'collapsiblesidebar': 'false',
@@ -134,7 +135,7 @@ html_theme_options = {
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = 'img/logo.png'
+html_logo = 'img/logo@2x.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
