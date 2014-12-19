@@ -3,10 +3,25 @@
 
 This module contains many useful icons and images.
 
-Included icons and images
--------------------------
+Included CSS icons
+--------------
 
-The following icons and images are included:
+``lib/font-awesome-4/``
+	Font Awesome 4: `fontawesome.io <http://fontawesome.io/>`_
+
+``lib/font-awesome/``
+	Font Awesome 3.2.1
+
+How to use CSS icons in your templates
+**************************************
+
+* Include the CSS file: ``{% lib "font-awesome-4/css/font-awesome.min.css" %}``
+* Follow the `examples <http://fontawesome.io/examples>`_
+* Find the class names in the `cheatsheet <http://fontawesome.io/cheatsheet/>`_
+
+
+Included images
+---------------
 
 ``lib/images/emotes/``
 	A collection of emoticons. These are from the Tango Icon Library and in the Public Domain.
@@ -43,8 +58,8 @@ The following icons and images are included:
 	is in the Public Domain. These icons are only 64x64 pixels (all others are 256x256).
 
 
-How to use these in your templates
-----------------------------------
+How to use images in your templates
+***********************************
 
 Most of the icons are in 256x256 PNG format.  That is too large for normal usage. Best is to resize the images in your templates using the :ref:`tag-image`.
 
