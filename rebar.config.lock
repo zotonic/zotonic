@@ -110,7 +110,7 @@
               {git,"https://github.com/tim/erlang-oauth.git",
                    "3ad509d487a72f9437fef31a379bf3cfeeb166a2"}},
        {twerl,".*",
-              {git,"git@github.com:mworrell/twerl.git",
+              {git,"https://github.com/mworrell/twerl.git",
                    "5674327a06d6fa60b8276d0ba8018a7fd18118a0"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
