@@ -111,7 +111,7 @@ extract_import_rsc(TweetId, UniqueName, User, Tweet, Context) ->
     {ok, #import_resource{
         source = twitter,
         source_id = TweetId,
-        source_url = undefined,
+        source_url = TweetUrl,
         source_user_id = TweeterId,
         user_id = UserId,
         name = UniqueName,

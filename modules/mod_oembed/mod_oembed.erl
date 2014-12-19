@@ -168,9 +168,13 @@ is_ssl(Context) ->
 observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
     case oembed_request(Url, Context) of
         {ok, Json} ->
+            Category = type_to_category(proplists:get_value(type, Json)),
             #media_import_props{
-                prio = 5,
-                category = type_to_category(proplists:get_value(type, Json)),
+                prio = case Category of
+                            website -> 11; % Prefer our own 'website' extraction
+                            _ -> 5
+                       end,
+                category = Category,
                 module = ?MODULE,
                 description = ?__("Embedded Content", Context),
                 rsc_props = [
@@ -436,4 +440,5 @@ preview_url_from_json(_Type, Json) ->
 
 type_to_category(<<"photo">>) -> image;
 type_to_category(<<"video">>) -> video;
-type_to_category(_) -> document.
+type_to_category(<<"link">>) -> website;
+type_to_category(_rich) -> document.
