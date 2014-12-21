@@ -73,7 +73,7 @@ prep_chart(Block, Answers, Context) ->
     Labels = proplists:get_value(options, Props),
     LabelsB = [ Lab || {Lab, _} <- Labels ],
     [
-        {question, z_html:escape(proplists:get_value(prompt, Block), Context)},
+        {question, proplists:get_value(prompt, Block)},
         {charts, [ prep_chart1(ItemText, proplists:get_value(ItemName, Answers, []), LabelsB) 
                     || {ItemText,ItemName} <- lists:zip(Items, ItemNames)
                  ]}

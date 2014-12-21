@@ -47,7 +47,7 @@ prep_chart(Q, [{_, Vals}], Context) ->
     LabelTrue = get_label(true, Q, Context),
     LabelFalse = get_label(false, Q, Context),
     [
-     {question, z_html:escape(proplists:get_value(prompt, Q), Context)},
+     {question, proplists:get_value(prompt, Q)},
      {values, [{LabelTrue, True}, {LabelFalse, False}]},
      {type, "pie"},
      {data, [[LabelTrue, TrueP], [LabelFalse, FalseP]]}
