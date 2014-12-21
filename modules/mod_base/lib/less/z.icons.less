@@ -24,14 +24,24 @@ For advanced usage, see the file z.icons.less.
 //
 // This file creates CSS styles for all Zotonic icons.
 // 
-// If you need to extend an icon class, import this less file...
+// If you need to extend an icon class, import this less file ...
 //
-//      for example:
-//      @import "../../../mod_base/lib/less/z.icons.less";
-// 
+//      NOTE
+//      The less files have a dependency with mod_artwork/lib/font-awesome-4,
+//      so you need to include the path to its less folder when using
+//      the lessc command.
+//
+//      For example:
+//      lessc --include-path="../../../mod_artwork/lib/font-awesome-4/less" 
+//         my_input.less my_output.css
+//
+//      Or for easier access, create a symlink to the font-awesome-4 less folder
+//      and add the symlink to the include-path.
+//
 // ... then call mixin .extend_icon(@name),
 // where @name is one of the the icon names below.
 // This will automatically extend your class to 'z-icon'.
+// Find the mixin in 'extend.less'.
 //
 // Example:
 // 
@@ -51,15 +61,14 @@ For advanced usage, see the file z.icons.less.
 // }
 //
 //
-// Extending Font Awesome icons
+// Extend Font Awesome 4 icons by adding parameter 'fa' to the extend mixin:
 //
-// By adding parameter 'fa' to the extend mixin, you can get call icons:
-//
-// .btn-remove {
+// .btn-bookmark {
 //    .extend_icon(fa, fa-var-bookmark);
 // }
 //
-// The FA icon names can be found in variables.less in the font-awesome-4 folder in mod_artwork.
+// The icon (variable) names can be found in 
+// 'mod_artwork/lib/font-awesome-4/less/variables.less'.
 
 
 @import "variables.less";
@@ -68,6 +77,4 @@ For advanced usage, see the file z.icons.less.
 @import "extend.less";
 @import "icons.less";
 @import "icon-buttons.less";
-
-@z-fa-path: "../../../mod_artwork/lib/font-awesome-4/less";
-@import (reference) "@{z-fa-path}/font-awesome.less";
+@import (reference) "font-awesome.less";
