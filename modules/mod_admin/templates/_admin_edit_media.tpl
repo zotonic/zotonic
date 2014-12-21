@@ -13,7 +13,6 @@
         &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
     </p>
 
-    {% if medium.width and medium.height %}
     <div class="admin-edit-media {% if id.is_a.image %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
         {% if medium.width < 597 and medium.height < 597 %}
             {% media medium mediaclass="admin-media-cropcenter" %}
@@ -21,7 +20,6 @@
             {% media medium mediaclass="admin-media" %}
         {% endif %}   
     </div>
-    {% endif %}
 
     <div class="form-group clearfix">
         {% if id.is_a.image %}
