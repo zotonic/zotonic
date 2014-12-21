@@ -886,9 +886,6 @@ table.mceLayout,
 textarea.tinyMCE {
   width: 100% !important;
 }
-.mceToolbar td a span.mce_zmore {
-  background: url(/lib/images/toolbars.gif) !important;
-}
 #zmedia-props-form [class*="span"] {
   margin-bottom: 20px;
 }
