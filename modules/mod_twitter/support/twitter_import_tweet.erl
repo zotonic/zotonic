@@ -99,7 +99,7 @@ extract_import_rsc(TweetId, UniqueName, User, Tweet, Context) ->
         {title, {trans, [
                     {Language, iolist_to_binary([
                                 ScreenName, ": ",
-                                z_string:truncate(z_html:strip(Body), 50)])}
+                                z_string:truncate(z_html:unescape(z_html:strip(Body)), 50)])}
                  ]}},
         {body, {trans, [{Language, Body}]}},
         {location_lng, Long},
