@@ -1,75 +1,107 @@
 {
 	"metadata": {
 		"name": "Zotonic",
-		"lastOpened": 1419172586373,
+		"lastOpened": 1419192248007,
 		"created": 1419006915280
 	},
 	"iconSets": [
 		{
 			"selection": [
 				{
-					"order": 14,
+					"order": 9,
+					"id": 18,
+					"prevSize": 32,
+					"name": "ok-circle",
+					"code": 58882,
+					"tempChar": ""
+				},
+				{
+					"order": 10,
+					"id": 17,
+					"prevSize": 32,
+					"name": "minus-circle",
+					"code": 58883,
+					"tempChar": ""
+				},
+				{
+					"order": 11,
+					"id": 16,
+					"prevSize": 32,
+					"name": "plus-circle",
+					"code": 58884,
+					"tempChar": ""
+				},
+				{
+					"order": 8,
 					"id": 15,
 					"name": "cross",
 					"prevSize": 32,
 					"code": 58892,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 2,
+					"order": 1,
 					"id": 13,
 					"name": "help-circle",
 					"prevSize": 32,
 					"code": 58880,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 3,
+					"order": 2,
 					"id": 5,
 					"name": "info-circle",
 					"prevSize": 32,
 					"code": 58881,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 5,
+					"order": 3,
 					"id": 7,
 					"name": "user",
 					"prevSize": 32,
 					"code": 58885,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 6,
+					"order": 4,
 					"id": 8,
 					"name": "edit",
 					"prevSize": 32,
 					"code": 58886,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 10,
+					"order": 5,
 					"id": 2,
 					"name": "cross-circle",
 					"prevSize": 32,
 					"code": 58889,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 12,
+					"order": 6,
 					"id": 1,
 					"name": "grab, drag",
 					"prevSize": 32,
 					"code": 58891,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 13,
+					"order": 7,
 					"id": 0,
 					"name": "logo",
 					"prevSize": 32,
 					"code": 90,
-					"tempChar": ""
+					"tempChar": ""
+				},
+				{
+					"order": 12,
+					"id": 19,
+					"name": "logo-z",
+					"prevSize": 32,
+					"code": 58887,
+					"tempChar": ""
 				}
 			],
 			"id": 0,
@@ -80,6 +112,51 @@
 			"height": 1024,
 			"prevSize": 32,
 			"icons": [
+				{
+					"id": 18,
+					"paths": [
+						"M512 0c-282.752 0-512 229.248-512 512s229.248 512 512 512 512-229.248 512-512-229.248-512-512-512zM432.64 748.256l-235.584-235.616 90.496-90.496 145.056 145.12 307.744-307.744 90.496 90.496-398.208 398.24z"
+					],
+					"attrs": [
+						{
+							"visibility": false
+						}
+					],
+					"grid": 16,
+					"tags": [
+						"ok-circle"
+					]
+				},
+				{
+					"id": 17,
+					"paths": [
+						"M512 0c-282.752 0-512 229.248-512 512 0 282.72 229.248 512 512 512 282.784 0 512-229.248 512-512s-229.216-512-512-512zM806.144 576h-588.288v-128h588.32v128z"
+					],
+					"attrs": [
+						{
+							"visibility": false
+						}
+					],
+					"grid": 16,
+					"tags": [
+						"minus-circle"
+					]
+				},
+				{
+					"id": 16,
+					"paths": [
+						"M512 0c-282.752 0-512 229.248-512 512s229.248 512 512 512c282.784 0 512-229.248 512-512s-229.216-512-512-512zM806.144 576h-230.144v230.144h-128v-230.144h-230.144v-128h230.144v-230.144h128v230.144h230.144v128z"
+					],
+					"attrs": [
+						{
+							"visibility": false
+						}
+					],
+					"grid": 16,
+					"tags": [
+						"plus-circle"
+					]
+				},
 				{
 					"id": 15,
 					"paths": [
@@ -245,6 +322,21 @@
 						"logo"
 					],
 					"matchesSearch": false
+				},
+				{
+					"id": 19,
+					"paths": [
+						"M829.754 287.98c0 32.012-9.946 63.994-28.672 91.586l-140.156 198.626h9.95c44.144 0 83.864 17.652 112.546 46.348 28.672 28.672 46.332 68.406 46.332 112.54 0 44.164-17.66 83.856-46.332 112.574-28.68 28.65-68.422 46.346-112.544 46.346h-317.77c-58.51 0-113.678-33.090-141.228-86.086-12.14-23.184-17.684-47.41-17.684-72.832 0-31.992 9.954-63.988 29.798-91.54l140.124-198.642h-10.984c-87.178 0-158.912-71.738-158.912-158.894 0-44.148 17.686-83.838 46.37-112.57 28.666-28.68 69.492-47.436 112.566-47.436h317.768c59.586 0 113.64 34.208 141.218 86.060 12.136 23.186 17.66 48.55 17.66 73.948l-0.050-0.028z"
+					],
+					"attrs": [
+						{
+							"visibility": false
+						}
+					],
+					"grid": 16,
+					"tags": [
+						"z"
+					]
 				}
 			],
 			"invisible": false
