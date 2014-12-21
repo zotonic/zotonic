@@ -41,12 +41,12 @@ prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, [{Name, {text, Vals0}}], Context) ->
     prep_chart(Block, [{Name, Vals0}], Context);
-prep_chart(Block, [{_, Values}], Context) ->
+prep_chart(Block, [{_, Values}], _Context) ->
     Counts = [ C || {_,C} <- Values ],
     Sum = case lists:sum(Counts) of 0 -> 1; N -> N end,
     Perc = [ {X,round(V*100/Sum)} || {X,V} <- Values ],
     [
-        {question, z_html:escape(proplists:get_value(prompt, Block), Context)},
+        {question, proplists:get_value(prompt, Block)},
         {values, Values},
         {type, "pie"},
         {data, [{L,P} || {L,P} <- Perc, P /= 0]}
