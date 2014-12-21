@@ -1,12 +1,14 @@
-/* zotonic_status styles 2012
+/* zotonic_status styles 2014
 ----------------------------------------------------------
 
 @Author: 	Arjan Scherpenisse
 @Created: 	2009-02-01
 @Changed:	2012-05-03
+@Changed:	2014-12-19
 
 Copyright 2009 Tim Benniks
 Copyright 2012 Arjan Scherpenisse
+Copyright 2014 Arthur Clemens
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,171 +23,209 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ---------------------------------------------------------- */
-
-/* Tables
----------------------------------------------------------- */
-
-#content table {
-	margin: 0 0 18px;
-	font-size: 14px;
-}
-
-#content table th,
-#content table td {
-	padding: 6px;
-	border-bottom: 1px dotted #333;
-}
-#content table th {
-    padding-bottom: 0;
-}
-
-#content table tr th {
-    text-align: left;
-    font-weight: bold;
-    border-bottom: 1px dotted #333;
-}
-
-#content table tr:nth-child(even) td {
-    background: #eee;
-}
-
 body {
-    margin-top: 80px;
+  background: #eee;
+  color: rgba(0, 0, 0, 0.87);
 }
-
-/* Logon
----------------------------------------------------------- */
-
-#error-pw {
-    display: none;
+.navbar {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  background-color: #039be5;
+  border: none;
 }
-
+.navbar > a,
+.navbar .navbar-brand,
+.navbar .navbar-nav > li > a,
+.navbar > a:hover,
+.navbar .navbar-brand:hover,
+.navbar .navbar-nav > li > a:hover {
+  color: #fff;
+}
+.navbar > a:hover,
+.navbar .navbar-brand:hover,
+.navbar .navbar-nav > li > a:hover {
+  background-color: #0288d1;
+}
+.navbar .navbar-nav > li > a {
+  font-size: 16px;
+}
+.content {
+  padding: 50px 0;
+}
+.footer {
+  padding: 20px 0;
+  border-top: 1px solid #d7d7d7;
+  text-align: left;
+}
+.footer .zotonic-logo {
+  color: #757575;
+}
+form #error-pw {
+  display: none;
+}
 form.error-pw #error-pw {
-    display: block;
+  display: block;
+  text-align: center;
 }
-
-
-/* status flags */
-
-span.status {
-	display: none;
-	padding: 4px 4px 3px;
-        font-size: 12px;
-	-moz-border-radius: 2px;
-	border-radius: 3px;
+form.error-pw #error-pw p {
+  margin-bottom: 0;
 }
-
-.waiting span.waiting {
-	display: inline;
+form .form-group {
+  margin-bottom: 0;
 }
-
-.running span.running {
-	display: inline;
+form .has-error .help-block {
+  color: #d84315;
 }
-
-.retrying span.retrying {
-	display: inline;
+.table.sites-overview {
+  margin-bottom: 0;
 }
-
-.failed span.failed {
-	display: inline;
+.table.sites-overview a {
+  color: rgba(0, 0, 0, 0.87);
 }
-
-.stopped span.stopped {
-	display: inline;
+.table.sites-overview > tbody > tr > td {
+  border-color: #fff;
 }
-
-span.running {
-	color: white;
-	background: green;
+.table.sites-overview > tbody > tr.stopped + tr.stopped > td {
+  border-color: #eee;
 }
-
-span.retrying {
-	color: white;
-	background: #f90;
+.table.sites-overview > tbody > tr.running > td {
+  background-color: #e8f5e9;
 }
-
-span.failed {
-	color: white;
-	background: #c00;
+.table.sites-overview > tbody > tr.retrying > td {
+  background-color: #fff3e0;
 }
-
-span.stopped {
-	color: white;
-	background: #999;
+.table.sites-overview > tbody > tr.stopped > td {
+  background-color: #ffffff;
 }
-
-/* status buttons */
-
-.running button.start {
-	display: none;
+.table.sites-overview > tbody > tr.waiting > td {
+  background-color: #ffffff;
 }
-
-.retrying button.restart,
-.retrying button.admin, 
-.retrying button.flush,
-.failed button.restart, 
-.failed button.admin, 
-.failed button.flush,
-.stopped button.stop, 
-.stopped button.restart, 
-.stopped button.admin, 
-.stopped button.flush {
-	display: none;
+.table.sites-overview > tbody > tr.failed > td {
+  background-color: #fbe9e7;
 }
-
-.stopped a {
-	color: #ccc;
+.table.sites-overview span.status {
+  display: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
-
-/* Some extra spacing for the buttons */
-
-#content table button, 
-#content table a.button {
-	padding: 1px 4px;
-	margin: 0px 8px -6px 0px;
+.table.sites-overview .running button.start {
+  display: none;
 }
-
-
-.hidden {
-	display: none;
+.table.sites-overview .waiting span.waiting,
+.table.sites-overview .running span.running,
+.table.sites-overview .retrying span.retrying,
+.table.sites-overview .failed span.failed,
+.table.sites-overview .stopped span.stopped {
+  display: inline-block;
 }
-
-
-
-.pager li {
-	display: inline;
-	margin: 0 6px 0 0;
+.table.sites-overview .stopped a {
+  color: #bdbdbd;
+  background: #ffffff;
 }
-
-.pager li.current {
-    font-weight: bold;
+.table.sites-overview span.running {
+  color: #fff;
+  background: #4caf50;
 }
-
-fieldset { padding-left: 0; }
-
-
-p.meta {
-    color: #666;
+.table.sites-overview span.retrying {
+  color: #fff;
+  background: #ef6c00;
 }
-
-
-#content-area .jumbotron {
-    background-color:#069CD1;
-    background-image:-moz-linear-gradient(top, #00BEF8, #069CD1);
-    background-image:-ms-linear-gradient(top, #00BEF8, #069CD1);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#00BEF8), to(#069CD1));background-image:-webkit-linear-gradient(top, #00BEF8, #069CD1);background-image:-o-linear-gradient(top, #00BEF8, #069CD1);background-image:linear-gradient(top, #00BEF8, #069CD1);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#00BEF8', endColorstr='#069CD1', GradientType=0);-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.25),inset 0 -1px 0 rgba(0, 0, 0, 0.1);-moz-box-shadow:0 1px 3px rgba(0, 0, 0, 0.25),inset 0 -1px 0 rgba(0, 0, 0, 0.1);box-shadow:0 1px 3px rgba(0, 0, 0, 0.25),inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    color: white;
-    text-shadow: 0 1px 0 rgba(0,0,0,.35);
+.table.sites-overview span.waiting {
+  color: #fff;
+  background: #00bcd4;
 }
-
-#content-area .jumbotron h1 {
-    margin-bottom: 20px;
+.table.sites-overview span.failed {
+  color: #fff;
+  background: #d84315;
 }
-
-p .zotonic-logo {
-    color: #069CD1;
+.table.sites-overview span.stopped {
+  color: #fff;
+  background: #999;
 }
-
-h1,h2 {
-    margin-top: 0;
+.table.sites-overview .retrying button.restart,
+.table.sites-overview .retrying button.admin,
+.table.sites-overview .retrying button.flush,
+.table.sites-overview .failed button.restart,
+.table.sites-overview .failed button.admin,
+.table.sites-overview .failed button.flush,
+.table.sites-overview .stopped button.stop,
+.table.sites-overview .stopped button.restart,
+.table.sites-overview .stopped button.admin,
+.table.sites-overview .stopped button.flush {
+  display: none;
+}
+.control-label {
+  font-weight: normal;
+}
+.panel-title,
+.list-group-item-heading {
+  font-size: 16px;
+}
+.panel .panel-body > :last-child {
+  margin-bottom: 0;
+}
+.list-group a {
+  cursor: pointer;
+}
+.list-group .list-group-item-text {
+  font-size: 13px;
+}
+.alert.alert-info {
+  background-color: #b3e5fc;
+  border-color: #b3e5fc;
+  color: rgba(0, 0, 0, 0.87);
+}
+.alert .close {
+  opacity: 1;
+  text-shadow: none;
+  color: #757575;
+}
+.text-muted {
+  color: #757575;
+}
+.alert,
+.list-group-item,
+.table > tbody > tr > td,
+.table > tbody > tr > th {
+  padding: 10px 15px;
+}
+.alert,
+.list-group,
+.container .jumbotron,
+.panel {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.btn:hover,
+a.list-group-item:hover,
+.btn:hover *,
+a.list-group-item:hover * {
+  cursor: pointer;
+  background-color: #039be5;
+  color: #fff;
+  border-color: #039be5;
+}
+.container .jumbotron {
+  background-color: #039be5;
+  padding: 40px;
+  color: #fff;
+}
+.container .jumbotron > :last-child {
+  margin-bottom: 0;
+}
+.container .jumbotron h1 {
+  font-size: 42px;
+  margin: 0 0 .5em 0;
+}
+.container .jumbotron p {
+  font-size: 19px;
+}
+.panel-default > .panel-heading {
+  background-color: #fff;
+  padding: 15px;
+  text-align: center;
 }

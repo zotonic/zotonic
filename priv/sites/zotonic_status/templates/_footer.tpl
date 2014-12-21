@@ -1,5 +1,10 @@
-<div id="footer-content" class="clearfix"> 
-	<div class="zp-100">
-	    <p style="text-align:right"><span class="zotonic-logo"></span> &copy; 2009–2014</p>
-	</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <a href="http://zotonic.com/" class="zotonic-logo"><em>Zotonic.com</em></a> <span class="text-muted">&copy; 2009–2014</span>
+        </div>
+    </div>
 </div>
+            
+            
+
