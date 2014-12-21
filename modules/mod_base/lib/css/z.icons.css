@@ -1,0 +1,99 @@
+/*
+CSS Documentation
+
+Common Zotonic icons to be reused across modules.
+
+Include icons CSS in your template:
+{% lib
+    "css/z.icons.css"
+%}
+
+Then use the icon:
+<span class="z-icon z-icon-off"></span>
+
+Note to always include 'z-icon' as well (except for convenience class 'zotonic-logo').
+
+If you want to provide a text label for accessibility (but visually hidden), 
+put the text inside <em>:
+<span class="z-icon z-icon-off"><em>Log off</em></span>
+
+For advanced usage, see the file z.icons.less.
+*/
+.z-icon-cross:before {
+  content: "\e60c";
+}
+.z-icon-cross-circle:before {
+  content: "\e609";
+}
+.z-icon-drag:before {
+  content: "\e60b";
+}
+.z-icon-edit:before {
+  content: "\e606";
+}
+.z-icon-help-circle:before {
+  content: "\e600";
+}
+.z-icon-info-circle:before {
+  content: "\e601";
+}
+.z-icon-load:before {
+  content: "\e607";
+}
+.z-icon-logo:before {
+  content: "\5a";
+}
+.z-icon-minus:before {
+  content: "\e603";
+}
+.z-icon-off:before {
+  content: "\e602";
+}
+.z-icon-ok-circle:before {
+  content: "\e60a";
+}
+.z-icon-ok:before {
+  content: "\e608";
+}
+.z-icon-plus:before {
+  content: "\e604";
+}
+.z-icon-user:before {
+  content: "\e605";
+}
+.zotonic-logo:before {
+  content: "\5a";
+}
+@font-face {
+  font-family: 'Zotonic';
+  src: url('/lib/css/z.icons/fonts/icomoon.eot?pzaagd');
+  src: url('/lib/css/z.icons/fonts/icomoon.eot?#iefixpzaagd') format('embedded-opentype'), url('/lib/css/z.icons/fonts/icomoon.woff?pzaagd') format('woff'), url('/lib/css/z.icons/fonts/icomoon.ttf?pzaagd') format('truetype'), url('/lib/css/z.icons/fonts/icomoon.svg?pzaagd#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.z-icon,
+.zotonic-logo {
+  font-family: 'Zotonic';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a.z-icon:hover,
+a.zotonic-logo:hover {
+  text-decoration: none;
+}
+.z-icon em,
+.zotonic-logo em {
+  display: none;
+}
+/* Logo shortcuts */
+.zotonic-logo {
+  font-size: 0.85em;
+  padding-right: 0.25em;
+}
