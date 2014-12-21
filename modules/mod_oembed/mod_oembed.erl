@@ -301,9 +301,11 @@ event(#postback_notify{message="do_oembed"}, Context) ->
                             ], Context),
                     z_render:growl_error(?__("Invalid or unsupported media URL. The item might have been deleted or is not public.", Context), Context);
                 {ok, Json} ->
+                    Title = z_html:unescape(proplists:get_value(title, Json, [])),
+                    Descr = z_html:unescape(proplists:get_value(description, Json, [])),
                     z_context:add_script_page([
-                        "$('#oembed-title').val('", z_utils:js_escape(proplists:get_value(title, Json, [])), "').removeAttr('disabled');",
-                        "$('#oembed-summary').val('", z_utils:js_escape(proplists:get_value(description, Json, [])), "').removeAttr('disabled');",
+                        "$('#oembed-title').val('", z_utils:js_escape(Title), "').removeAttr('disabled');",
+                        "$('#oembed-summary').val('", z_utils:js_escape(Descr), "').removeAttr('disabled');",
                         "$('#oembed-save').removeAttr('disabled');"
                         ], Context),
                     case preview_url_from_json(proplists:get_value(type, Json), Json) of
@@ -396,9 +398,41 @@ preview_create_from_json(MediaId, Json, Context) ->
 %% @spec oembed_request(string(), #context{}) -> [{Key, Value}]
 oembed_request(Url, Context) ->
     F = fun() ->
-                oembed_client:discover(Url, Context)
+            oembed_client:discover(Url, Context)
         end,
-    z_depcache:memo(F, {oembed, Url}, 3600, Context).
+    case z_depcache:memo(F, {oembed, Url}, 3600, Context) of
+        {ok, Json} ->
+            sanitize_json(Json, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+
+sanitize_json(Json, Context) ->
+    sanitize_json(Json, [], Context).
+
+sanitize_json([], Acc, _Context) ->
+    {ok, lists:reverse(Acc)};
+sanitize_json([{html,<<>>}|Rest], Acc, Context) ->
+    sanitize_json(Rest, Acc, Context);
+sanitize_json([{html,Html}|Rest], Acc, Context) when Html =/= <<>> ->
+    case z_sanitize:html(Html,Context) of
+        <<>> -> {error, illegal_html};
+        Html1 -> sanitize_json(Rest, [{html,Html1}|Acc], Context)
+    end;
+sanitize_json([{body,Body}|Rest], Acc, Context) ->
+    Body1 = z_sanitize:html(Body,Context),
+    sanitize_json(Rest, [{body,Body1}|Acc], Context);
+sanitize_json([{UrlTag,Url}|Rest], Acc, Context) when UrlTag =:= url; UrlTag =:= provider_url; UrlTag =:= author_url ->
+    Url1 = z_sanitize:uri(Url),
+    sanitize_json(Rest, [{UrlTag,Url1}|Acc], Context);
+sanitize_json([{Tag,B}|Rest], Acc, Context) when is_binary(B) ->
+    B1 = z_html:escape_check(B),
+    sanitize_json(Rest, [{Tag,B1}|Acc], Context);
+sanitize_json([{Tag,N}|Rest], Acc, Context) when is_integer(N) ->
+    sanitize_json(Rest, [{Tag,N}|Acc], Context);
+sanitize_json([_|Rest], Acc, Context) ->
+    sanitize_json(Rest, Acc, Context).
 
 
 %% @doc Given a thumbnail URL, download it and return the content type plus image data pair.
