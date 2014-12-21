@@ -70,14 +70,21 @@
     padding: 10px;
     margin-bottom: @baseMargin;
     
-    .close {
-        margin-top: -4px;
-    }
-    
     h1, h2, h3, h4, h5, h6 {
         margin-top: 0;
     }
 }
+
+.modal-header .close {
+    margin-top: 3px;
+    opacity: 1;
+}
+
+a.close,
+button.close {
+    color: @textColorButton;
+}
+
 .nav + .tab-content {
     margin: 10px 0 0 0;
 }

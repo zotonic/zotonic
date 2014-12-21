@@ -43,57 +43,21 @@ For advanced usage, see the file z.icons.less.
   font-weight: normal;
   font-style: normal;
 }
-.z-icon-cross:before {
-  content: "\e60c";
-}
-.z-icon-cross-circle:before {
-  content: "\e609";
-}
-.z-icon-drag:before {
-  content: "\e60b";
-}
-.z-icon-edit:before {
-  content: "\e606";
-}
-.z-icon-help-circle:before {
-  content: "\e600";
-}
-.z-icon-info-circle:before {
-  content: "\e601";
-}
-.z-icon-load:before {
-  content: "\e607";
-}
-.z-icon-logo:before {
-  content: "\5a";
-}
-.z-icon-minus:before {
-  content: "\e603";
-}
-.z-icon-off:before {
-  content: "\e602";
-}
-.z-icon-ok:before {
-  content: "\e608";
-}
-.z-icon-ok-circle:before {
-  content: "\e60a";
-}
-.z-icon-plus:before {
-  content: "\e604";
-}
-.z-icon-user:before {
-  content: "\e605";
-}
-.zotonic-logo:before {
-  content: "\5a";
-}
 .z-icon,
 .fa-icon,
 .zotonic-logo,
+.z-icon-plus:before,
+.z-icon-minus:before,
+.z-icon-off:before,
+.z-icon-ok:before,
+.z-icon-ok-circle:before,
 .z-btn-remove:before,
 .z-btn-remove:hover:before,
 .z-btn-help:before,
+a.close:before,
+button.close:before,
+a.close:hover:before,
+button.close:hover:before,
 ul.blocks.ui-sortable .widget-header:before {
   speak: none;
   font-style: normal;
@@ -120,15 +84,112 @@ a.zotonic-logo:hover {
 .z-btn-remove:before,
 .z-btn-remove:hover:before,
 .z-btn-help:before,
+a.close:before,
+button.close:before,
+a.close:hover:before,
+button.close:hover:before,
 ul.blocks.ui-sortable .widget-header:before {
   font-family: "Zotonic";
 }
-.fa-icon {
+.fa-icon,
+.z-icon-plus:before,
+.z-icon-minus:before,
+.z-icon-off:before,
+.z-icon-ok:before,
+.z-icon-ok-circle:before {
   font-family: 'FontAwesome';
+}
+.z-icon-cross:before {
+  content: "\e60c";
+}
+.z-icon-cross-circle:before {
+  content: "\e609";
+}
+.z-icon-drag:before {
+  content: "\e60b";
+}
+.z-icon-edit:before {
+  content: "\e606";
+}
+.z-icon-help-circle:before {
+  content: "\e600";
+}
+.z-icon-info-circle:before {
+  content: "\e601";
+}
+.z-icon-logo:before {
+  content: "\5a";
+}
+.z-icon-user:before {
+  content: "\e605";
+}
+.zotonic-logo:before {
+  content: "\5a";
 }
 .zotonic-logo {
   font-size: 0.85em;
   padding-right: 0.25em;
+}
+.z-icon-plus:before {
+  content: "\f067";
+}
+.z-icon-minus:before {
+  content: "\f068";
+}
+.z-icon-off:before {
+  content: "\f011";
+}
+.z-icon-ok:before {
+  content: "\f00c";
+}
+.z-icon-ok-circle:before {
+  content: "\f058";
+}
+.z-btn-remove,
+.z-btn-help {
+  display: block;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-shadow: none;
+}
+.z-btn-remove {
+  background-color: transparent;
+}
+.z-btn-remove:before {
+  content: "\e60c";
+}
+.z-btn-remove:hover {
+  text-decoration: none;
+}
+.z-btn-remove:hover:before {
+  content: "\e609";
+}
+.z-btn-help:before {
+  content: "\e600";
+}
+a.close,
+button.close {
+  padding: 0;
+  font-size: 16px;
+}
+a.close:before,
+button.close:before {
+  content: "\e60c";
+}
+a.close:hover:before,
+button.close:hover:before {
+  content: "\e609";
+}
+a.close > span,
+button.close > span,
+a.close > em,
+button.close > em {
+  display: none;
 }
 body {
   color: #222222;
@@ -257,9 +318,6 @@ img.admin-list-dashboard {
   padding: 10px;
   margin-bottom: 15px;
 }
-.alert .close {
-  margin-top: -4px;
-}
 .alert h1,
 .alert h2,
 .alert h3,
@@ -267,6 +325,14 @@ img.admin-list-dashboard {
 .alert h5,
 .alert h6 {
   margin-top: 0;
+}
+.modal-header .close {
+  margin-top: 3px;
+  opacity: 1;
+}
+a.close,
+button.close {
+  color: #777777;
 }
 .nav + .tab-content {
   margin: 10px 0 0 0;
@@ -279,34 +345,11 @@ img.admin-list-dashboard {
   margin-right: 10px;
   margin-bottom: 5px;
 }
-.z-btn-remove,
-.z-btn-help {
-  display: block;
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-shadow: none;
-}
 .z-btn-remove {
-  background-color: transparent;
   color: #777777;
-}
-.z-btn-remove:before {
-  content: "\e60c";
 }
 .z-btn-remove:hover {
   color: #222222;
-  text-decoration: none;
-}
-.z-btn-remove:hover:before {
-  content: "\e609";
-}
-.z-btn-help:before {
-  content: "\e600";
 }
 ul.connections-list li:last-child {
   margin-bottom: 10px;
@@ -1091,8 +1134,9 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-header .z-icon-plus,
 .widget .widget-header .z-icon-minus {
   display: block;
-  font-size: 14px;
-  width: 14px;
+  text-align: center;
+  font-size: 16px;
+  width: 16px;
   height: 16px;
   line-height: 16px;
   text-shadow: none;
