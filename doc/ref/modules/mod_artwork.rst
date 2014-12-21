@@ -7,17 +7,19 @@ Included CSS icons
 --------------
 
 ``lib/font-awesome-4/``
-	Font Awesome 4: `fontawesome.io <http://fontawesome.io/>`_
+	Font Awesome 4: `fontawesome.io <http://fontawesome.io/>`_.
 
 ``lib/font-awesome/``
-	Font Awesome 3.2.1
+	Font Awesome 3.2.1.
 
-How to use CSS icons in your templates
-**************************************
+
+How to use Font Awesome icons in your templates
+***********************************************
 
 * Include the CSS file: ``{% lib "font-awesome-4/css/font-awesome.min.css" %}``
 * Follow the `examples <http://fontawesome.io/examples>`_
 * Find the class names in the `cheatsheet <http://fontawesome.io/cheatsheet/>`_
+
 
 
 Included images
@@ -32,7 +34,7 @@ Included images
 	This collection is from Wikimedia Commons and in the Public Domain. The PNG files are created by the
 	Open Icon Library.
 
-``lib/images/logo/``
+``lib/images/zotonic/``
 	Some Zotonic logos, with space for more.
 
 ``lib/images/mimeicons/``
