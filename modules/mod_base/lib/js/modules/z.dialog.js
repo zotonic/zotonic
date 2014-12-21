@@ -47,7 +47,7 @@
               .append($("<a>")
               .addClass("close")
               .attr("data-dismiss", "modal")
-              .html("<em>&times;</em>"))
+              .html("<span>&times;</span>"))
               .append($("<h4>")
               .addClass("modal-title")
               .html(options.title));
