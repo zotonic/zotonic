@@ -49,127 +49,25 @@ For advanced usage, see the file z.icons.less.
 // .btn-remove:before {
 //      content: "\e609";
 // }
+//
+//
+// Extending Font Awesome icons
+//
+// By adding parameter 'fa' to the extend mixin, you can get call icons:
+//
+// .btn-remove {
+//    .extend_icon(fa, fa-var-bookmark);
+// }
+//
+// The FA icon names can be found in variables.less in the font-awesome-4 folder in mod_artwork.
 
 
-// Icon names
-@icon-cross: "z-icon-cross";
-@icon-cross-circle: "z-icon-cross-circle";
-@icon-drag: "z-icon-drag";
-@icon-edit: "z-icon-edit";
-@icon-help-circle: "z-icon-help-circle";
-@icon-info-circle: "z-icon-info-circle";
-@icon-load: "z-icon-load";
-@icon-logo: "z-icon-logo";
-@icon-minus: "z-icon-minus";
-@icon-off: "z-icon-off";
-@icon-ok-circle: "z-icon-ok-circle";
-@icon-ok: "z-icon-ok";
-@icon-plus: "z-icon-plus";
-@icon-user: "z-icon-user";
-@zotonic-logo: "zotonic-logo";
+@import "variables.less";
+@import "path.less";
+@import "icons.less";
+@import "mixins.less";
+@import "core.less";
+@import "convenience.less";
 
-// Icon chars
-@icon-cross-char: "\e60c";
-@icon-cross-circle-char: "\e609";
-@icon-drag-char: "\e60b";
-@icon-edit-char: "\e606";
-@icon-help-circle-char: "\e600";
-@icon-info-circle-char: "\e601";
-@icon-load-char: "\e607";
-@icon-logo-char: "\5a";
-@icon-minus-char: "\e603";
-@icon-off-char: "\e602";
-@icon-ok-char: "\e608";
-@icon-ok-circle-char: "\e60a";
-@icon-plus-char: "\e604";
-@icon-user-char: "\e605";
-@zotonic-logo-char: @icon-logo-char;
-
-// Create icon list with escaped names
-@_icons: ~"icon-cross" ~"icon-cross-circle" ~"icon-drag" ~"icon-edit" ~"icon-help-circle" ~"icon-info-circle" ~"icon-load" ~"icon-logo" ~"icon-minus" ~"icon-off" ~"icon-ok-circle" ~"icon-ok" ~"icon-plus" ~"icon-user" ~"zotonic-logo";
-
-// Get the class
-._define_class(@var) {
-    @icon-class: e(@@var);
-}
-// Get the char
-._define_char(@var) {
-    @icon-char: '@{var}-char';
-}
-
-// ............................................................
-// For loop mixin from Seven Phase Max
-// .for
-.for(@i, @n) {.-each(@i)}
-.for(@n)     when (isnumber(@n)) {.for(1, @n)}
-.for(@i, @n) when not (@i = @n)  {
-    .for((@i + (@n - @i) / abs(@n - @i)), @n);
-}
-// .for-each
-.for(@array)   when (default()) {.for-impl_(length(@array))}
-.for-impl_(@i) when (@i > 1)    {.for-impl_((@i - 1))}
-.for-impl_(@i)                  {.-each(extract(@array, @i))}
-// ............................................................
-
-._generate_icon(@name) {
-    ._define_char(@name);
-    ._define_class(@name);
-    .@{icon-class}:before {
-        content: @@icon-char;
-    }
-}
-
-.generate_icons() {
-    .for(@_icons); .-each(@name) {
-        ._generate_icon(@name);
-    }
-}
-
-.extend_icon(@name) {
-    ._define_char(@name);
-    &:before {
-        &:extend(.z-icon);
-        content: @@icon-char;
-    }
-}
-
-.generate_icons();
-
-@font-face {
-	font-family: 'Zotonic';
-	src:url('/lib/css/z.icons/fonts/icomoon.eot?pzaagd');
-	src:url('/lib/css/z.icons/fonts/icomoon.eot?#iefixpzaagd') format('embedded-opentype'),
-		url('/lib/css/z.icons/fonts/icomoon.woff?pzaagd') format('woff'),
-		url('/lib/css/z.icons/fonts/icomoon.ttf?pzaagd') format('truetype'),
-		url('/lib/css/z.icons/fonts/icomoon.svg?pzaagd#icomoon') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
-.z-icon {
-	font-family: 'Zotonic';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
-    display: inline-block;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	
-	a&:hover {
-        text-decoration: none;
-    }
-    
-	em {
-	    display: none;
-	}
-}
-
-/* Logo shortcuts */
-.zotonic-logo {
-    &:extend(.z-icon all);
-    font-size: 0.85em;
-    padding-right: 0.25em; // room for adjacent text
-}
+@z-fa-path: "../../../mod_artwork/lib/font-awesome-4/less";
+@import (reference) "@{z-fa-path}/font-awesome.less";

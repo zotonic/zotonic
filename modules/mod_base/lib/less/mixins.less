@@ -1,0 +1,17 @@
+.extend_icon(@name) {
+    .extend_icon(z, @name);
+}
+
+.extend_icon(z, @name) {
+    &:before {
+        &:extend(.z-icon);
+        content: @@name;
+    }
+}
+
+.extend_icon(fa, @name) {
+    &:before {
+        &:extend(.fa-icon);
+        content: @@name;
+    }
+}
