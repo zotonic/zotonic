@@ -66,8 +66,8 @@ html(Html, Context) ->
 
 context_options(Context) ->
     [
-        {elt_extra, m_config:get_value(site, html_elt_extra, <<"embed,iframe,object">>, Context)},
-        {attr_extra, m_config:get_value(site, html_attr_extra, <<"data,allowfullscreen,flashvars,frameborder,scrolling">>, Context)},
+        {elt_extra, m_config:get_value(site, html_elt_extra, <<"embed,iframe,object,script">>, Context)},
+        {attr_extra, m_config:get_value(site, html_attr_extra, <<"data,allowfullscreen,flashvars,frameborder,scrolling,async,defer">>, Context)},
         {element, fun(Element, Stack, _Opts) -> sanitize_element(Element, Stack, Context) end}
     ].
 
@@ -95,9 +95,21 @@ sanitize_element_1({<<"object">>, Props, []}, _Stack, Context) ->
     sanitize_object(Props, Context);
 sanitize_element_1({<<"object">>, _Props, Inner}, _Stack, _Context) ->
     Inner;
+sanitize_element_1({<<"script">>, Props, _Inner}, _Stack, Context) ->
+    sanitize_script(Props, Context);
 sanitize_element_1(Element, _Stack, _Context) ->
     Element.
 
+
+sanitize_script(Props, Context) ->
+    Src = proplists:get_value(<<"src">>, Props),
+    case to_whitelisted(Src, Context) of
+        {ok, Url} ->
+            {<<"script">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
+        false ->
+            lager:info("[~p] Dropped script with url ~p", [z_context:site(Context), Src]),
+            <<>>
+    end.
 
 sanitize_iframe(Props, Context) ->
     Src = proplists:get_value(<<"src">>, Props),
@@ -197,6 +209,7 @@ to_whitelist_1(_, _Context) ->
 preferred_protocol(<<"www.youtube.", _/binary>>) -> <<>>;
 preferred_protocol(<<"vimeo.", _/binary>>) -> <<>>;
 preferred_protocol(<<"www.vimeo.", _/binary>>) -> <<>>;
+preferred_protocol(<<"platform.instagram.com", _/binary>>) -> <<>>;
 preferred_protocol(<<"www.flickr.", _/binary>>) -> <<"https:">>;
 preferred_protocol(_) -> undefined.
 
@@ -227,6 +240,8 @@ wl(<<"video.google.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"spreadsheets.google.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"docs.google.com/viewer?",  _/binary>> = Url) -> {ok, Url};
 wl(<<"vine.co/",  _/binary>> = Url) -> {ok, Url};
+wl(<<"instagram.com/",  _/binary>> = Url) -> {ok, Url};
+wl(<<"platform.instagram.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"www.hulu.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"www.metacafe.com/fplayer/", _/binary>> = Url) -> {ok, Url};
 wl(<<"www.flickr.com/", _/binary>> = Url) -> {ok, Url};
@@ -234,8 +249,18 @@ wl(<<"flv.video.yandex.ru/", _/binary>> = Url) -> {ok, Url};
 wl(<<"www.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"assets.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
 wl(Url) ->
-    case re:run(Url, <<"^[a-z0-9\\-]+\\.tumblr.com/post/[0-9]+/audio_player_iframe/.*">>) of
-        {match, _} -> {ok, Url};
-        nomatch -> false
+    case lists:dropwhile(fun(Re) ->
+                            re:run(Url, Re) =:= nomatch
+                         end,
+                         wl_res())
+    of
+        [] -> false;
+        [_|_] -> {ok, Url}
     end.
+
+wl_res() ->
+    [
+        <<"^[a-z0-9\\-]+\\.tumblr.com/post/[0-9]+/audio_player_iframe/.*">>,
+        <<"cdn.embedly.com/widgets/media.html\\?src=http%3A%2F%2F[a-z0-9-]+\\.ak\\.instagram.com%2F">>
+    ].
 
