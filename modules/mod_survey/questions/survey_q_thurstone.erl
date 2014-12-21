@@ -61,7 +61,7 @@ prep_chart(Block, [{_, Vals}], Context) ->
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
     [
-        {question, z_html:escape(proplists:get_value(prompt, Block), Context)},
+        {question, proplists:get_value(prompt, Block)},
         {values, lists:zip(Labels, Values)},
         {type, "pie"},
         {data, [{L,P} || {L,P} <- lists:zip(Labels, Perc), P /= 0]},

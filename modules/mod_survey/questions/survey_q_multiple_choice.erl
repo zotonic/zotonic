@@ -63,7 +63,7 @@ prep_chart(_Q, [], _Context) ->
 prep_chart(Q, [{_, Vals}]=Vs, Context) ->
     T = prep_totals(Q, Vs, Context),
     [
-     {question, z_html:escape(proplists:get_value(prompt, Q), Context)},
+     {question, proplists:get_value(prompt, Q)},
      {values, Vals},
      {type, "pie"},
      {data, lists:map(fun tuple_to_list/1, Vals)},

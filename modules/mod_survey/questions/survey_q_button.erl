@@ -53,7 +53,7 @@ prep_chart(Q, Answers, Context) ->
     YesP = round(Yes * 100 / Total),
     NoP = 100 - YesP,
     [
-     {question, z_html:escape(proplists:get_value(prompt, Q), Context)},
+     {question, z_sanitize:html(proplists:get_value(prompt, Q), Context)},
      {values, [ {Lab,Val} || {Lab,Val} <- [{"yes", Yes}, {"no", No}], Val /= 0 ]},
      {type, "pie"},
      {data, [ [Lab,Val] || [Lab,Val] <- [["yes", YesP], ["no", NoP]], Val /= 0 ]}

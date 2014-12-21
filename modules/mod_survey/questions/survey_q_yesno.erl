@@ -56,7 +56,7 @@ prep_chart(Q, Answers, Context) ->
     LabelYes = get_label(yes, Q, Context),
     LabelNo = get_label(no, Q, Context),
     [
-     {question, z_html:escape(proplists:get_value(prompt, Q), Context)},
+     {question, proplists:get_value(prompt, Q)},
      {values, [{LabelYes, Yes}, {LabelNo, No}]},
      {type, "pie"},
      {data, [[LabelYes, YesP], [LabelNo, NoP]]}
