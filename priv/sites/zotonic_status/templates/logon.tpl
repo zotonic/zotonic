@@ -4,8 +4,9 @@
 {% block navbar %}{% endblock %}
 
 {% block content %}
+<div class="col-md-6 col-md-offset-3">
     <div class="jumbotron">
-        <h1>{_ Powered by _} <span class="zotonic-logo"></span></h1>
+        <h1>{_ Powered by _} <span class="zotonic-logo"><em>Zotonic</em></span></h1>
         <p>
             {_ Welcome, visitor! The page you are
             currently looking at is the default page for a
@@ -21,22 +22,29 @@
             this server, please enter the password below. _}
         </p>
     </div>
-    <div class="well">
-        <h2>{_ Log on to manage this server _}</h2>
-        <p class="help-block">{_ To manage the sites on this server, please enter the main admin password. _}</p>
-        <form id="logon_form" action="postback" class="form-inline">
-	        <p id="error-pw" class="alert alert-danger">The password does not match.  Please retry.</p>
-	        <div id="logon_password">
-	            <div style="display:none">
-		            <input class="form-control" type="text" id="username" name="username" value="admin"  />
-	            </div>
-	            <p>
-		            <label>{_ Password _}:&nbsp;</label>
-		            <input class="form-control" type="password" id="password" name="password" value="" autofocus />
-	                <button class="btn btn-primary">{_ Log On _}</button>
-	            </p>
-	        </div>
-        </form>
+</div>
+<div class="col-md-6 col-md-offset-3">
+   <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{_ Enter your password to manage this server _}</h3>
+        </div>
+        <div class="panel-body">
+            <form id="logon_form" action="postback" class="form">
+                <div class="form-group row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="input-group">
+                            <input class="form-control" type="password" id="password" name="password" value="" autofocus />
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">{_ Log On _}</button>
+                            </span>
+                        </div>
+                        <div id="error-pw" class="has-error">
+                            <p class="help-block">{_ The password does not match. Please retry. _}</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-
+</div>
 {% endblock %}	

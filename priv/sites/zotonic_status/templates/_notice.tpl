@@ -1,8 +1,12 @@
-<p class="alert alert-info" id="{{ #id }}">
-    <a style="float:right" id="{{ #close }}" href="#" title="{_ close _}"><strong>[x]</strong></a>
+<div class="alert alert-info" id="{{ #id }}">
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
 
-    <strong>{{ site }}</strong><br/>
-    <br/>
-    {{ notice|force_escape|linebreaksbr }}
-</p>
-{% wire id=#close action={hide target=#id} %}
+    <strong>{{ site }}</strong>
+    <p>
+        {{ notice|force_escape|linebreaksbr }}
+    </p>
+</div>
+{% wire id=" .close" action={hide target=#id} %}
