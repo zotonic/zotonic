@@ -1,0 +1,42 @@
+.z-btn-remove,
+.z-btn-help {
+    display: block;
+    font-size: @zRoundBtnSize;
+    width: @zRoundBtnSize;
+    height: @zRoundBtnSize;
+    line-height: @zRoundBtnSize;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-shadow: none;
+}
+
+.z-btn-remove {
+    .extend_icon(icon-cross);
+    background-color: transparent;
+
+    &:hover {
+        .extend_icon(icon-cross-circle);
+        text-decoration: none;
+    }
+}
+
+.z-btn-help {
+    .extend_icon(z, icon-help-circle);
+}
+
+a.close,
+button.close {
+    .extend_icon(z, icon-cross);
+    padding: 0;
+    font-size: 16px;
+    
+    &:hover {
+        .extend_icon(z, icon-cross-circle);
+    }
+    
+    > span,
+    > em {
+        display: none;
+    }    
+}
