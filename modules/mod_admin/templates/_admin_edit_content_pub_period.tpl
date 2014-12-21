@@ -7,29 +7,28 @@
 {% block widget_id %}sidebar-pub-period{% endblock %}
 
 {% block widget_content %}
-
-    <div class="pull-right">
-        <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about publication date range"|escapejs }}', text: '{{ _"When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
-    </div>
+<fieldset class="form-horizontal">
+    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about publication date range"|escapejs }}', text: '{{ _"When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it."|escapejs }}'" title="{_ Need more help? _}"></a>
 
     {% with m.rsc[id] as r %}
-        <div class="form-group">
-            <label class="control-label">{_ Visible from _}</label>
-            <div>
+        <div class="form-group row">
+            <label class="control-label col-md-5">{_ Visible from _}</label>
+            <div class="col-md-7">
                 {% include "_edit_date.tpl" date=r.publication_start name="publication_start" is_end=0 %}
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label">{_ Visible till _}</label>
-            <div>
+        <div class="form-group row">
+            <label class="control-label col-md-5">{_ Visible till _}</label>
+            <div class="col-md-7">
 	            {% include "_edit_date.tpl" date=r.publication_end name="publication_end" is_end=1 %}
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label">{_ Publication date of original article _}</label>
-            <div>
+        <div class="form-group row">
+            <label class="control-label col-md-5">{_ Publication date of original article _}</label>
+            <div class="col-md-7">
 	            {% include "_edit_date.tpl" date=r.org_pubdate name="org_pubdate" is_end=0 %}
             </div>
         </div>
     {% endwith %}
+</fieldset>
 {% endblock %}

@@ -11,7 +11,7 @@
             </button>
 
             <a class="navbar-brand" href="/">
-                <span class="zotonic-logo"></span>
+                <span class="zotonic-logo"><em>Zotonic</em></span>
                 {{ m.config.site.title.value }}
             </a>
         </div>

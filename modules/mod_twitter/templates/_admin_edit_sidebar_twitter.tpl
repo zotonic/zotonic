@@ -7,7 +7,7 @@
 {% block widget_content %}
 
 <div class="pull-right">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{_ Finding a Twitter ID. _}', text: '{_ The (numeric) Twitter ID of a user can be found on the twitter page of the user: it is the number that is contained in the URL to the RSS feed for the user\'s updates. _}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
+    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{_ Finding a Twitter ID. _}', text: '{_ The (numeric) Twitter ID of a user can be found on the twitter page of the user: it is the number that is contained in the URL to the RSS feed for the user\'s updates. _}'" title="{_ Need more help? _}"></a>
 </div>
 
 <div class="form-group">

@@ -91,7 +91,7 @@ event(#submit{message=[], form=FormId}, Context) ->
             z_render:wire({reload, []}, ContextAuth);
         false ->
             z_render:wire([
-                        {set_class, [{target,FormId},{class,"error-pw form-inline"}]}, 
+                        {add_class, [{target,FormId}, {class,"error-pw"}]}, 
                         {set_value, [{target,"password"},{value, ""}]}], Context)
     end;
 event(#postback{message={logoff, []}}, Context) ->

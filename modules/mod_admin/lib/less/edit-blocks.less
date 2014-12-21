@@ -22,24 +22,19 @@ ul.blocks.ui-sortable {
     .widget-header {
         position: relative;
         cursor: move;
-        padding-left: 32px;
-        
+        padding-left: 25px;
+        .extend_icon(icon-drag);
+            
         &:before {
+             @_icon_size: 16px;
             position: absolute;
-            width: 16px;
-            height: 16px;
-            display: block;
-            .icon-move;
+            width: @_icon_size;
+            height: @_icon_size;
+            font-size: @_icon_size;
+            line-height: @_icon_size;
             left: @widgetSidePadding;
-            top: @widgetVerticalPadding + 2;
+            top: @widgetVerticalPadding;
             color: @textColorMuted;
-        }
-
-        .z-close-btn {
-            position: absolute;
-            top: @widgetVerticalPadding - 2;
-            right: @widgetSidePadding + 22; // make room for minify button
-            z-index: 1;
         }
     }
     .form-control.block-name {

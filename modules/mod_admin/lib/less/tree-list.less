@@ -21,11 +21,23 @@ ul.tree-list {
             margin: -1px 0 0 0;
             padding: 0;
         }
-        img.grippy {
+        .z-icon-drag,
+        .z-btn-remove {
+            @_size: 16px;
+            width: @_size;
+            height: @_size;
+            font-size: @_size;
+            line-height: @_size;
             position: absolute;
-            left: @_side_spacing;
             top: 50%;
-            margin-top: -7px;
+            margin-top: -@_size/2;
+        }
+        .z-icon-drag {
+            color: #999;
+            left: @_side_spacing;
+        }
+        .z-btn-remove {
+            right: @_side_spacing;
         }
         > div > a,
         > div > span:not(.btns) {

@@ -7,12 +7,9 @@
 {% block widget_id %}sidebar-connections{% endblock %}
 
 {% block widget_content %}
+<a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about page connections"|escapejs }}', text: '{{ _"This page is able to connect to others. For example you can connect it to an actor or a brand."|escapejs }}'" title="{_ Need more help? _}"><i class="zotonic-icon-help"></i></a>
 {% with m.rsc[id] as r %}
-<div id="unlink-undo-message">
-    <div class="pull-right">
-        <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about page connections"|escapejs }}', text: '{{ _"This page is able to connect to others. For example you can connect it to an actor or a brand."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
-    </div>
-</div>
+<div id="unlink-undo-message"></div>
 {% with predicate_ids|default:r.predicates_edit as pred_shown %}
     {% for name, p in m.predicate %}
         {% if p.id|member:pred_shown %}

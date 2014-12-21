@@ -10,7 +10,7 @@
             </button>
 
             <a class="navbar-brand" href="/" title="{_ visit site _}">
-                <span class="zotonic-logo"></span>
+                <span class="zotonic-logo"><em>Zotonic</em></span>
             </a>
         </div>
         
@@ -45,7 +45,7 @@
                     {% endif %}
                 {% endfor %}
                 <li>
-                    <a href="#" id="{{ #logoff }}" title="{_ Log Off _}"><i class="glyphicon glyphicon-off"></i></a>
+                    <a href="#" id="{{ #logoff }}" title="{_ Log Off _}"><i class="z-icon z-icon-off"></i></a>
                     {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the admin interface?"
                             action={redirect dispatch=`logoff`}} %}
                 </li>

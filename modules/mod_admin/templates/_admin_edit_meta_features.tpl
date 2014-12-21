@@ -6,12 +6,8 @@
 
 
 {% block widget_content %}
-<div class="clearfix">
-
-    <div class="pull-right">
-        <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about features"|escapejs }}', text: '{{ _"Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."|escapejs }}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
-    </div>
-
+    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about features"|escapejs }}', text: '{{ _"Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."|escapejs }}'" title="{_ Need more help? _}"></a>
+<div class="form-group row">
     {% all catinclude "_admin_features.tpl" id %}
 </div>
 {% endblock %}
