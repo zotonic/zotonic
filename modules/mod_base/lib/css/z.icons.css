@@ -80,11 +80,11 @@ button.close:hover:before {
 .z-icon-ok-circle:before {
   font-family: 'FontAwesome';
 }
-.z-icon-cross:before {
-  content: "\e60c";
-}
 .z-icon-cross-circle:before {
   content: "\e609";
+}
+.z-icon-cross:before {
+  content: "\e60c";
 }
 .z-icon-drag:before {
   content: "\e60b";
@@ -98,8 +98,20 @@ button.close:hover:before {
 .z-icon-info-circle:before {
   content: "\e601";
 }
+.z-icon-logo-z:before {
+  content: "\e607";
+}
 .z-icon-logo:before {
   content: "\5a";
+}
+.z-icon-minus-circle:before {
+  content: "\e603";
+}
+.z-icon-ok-circle:before {
+  content: "\e602";
+}
+.z-icon-plus-circle:before {
+  content: "\e604";
 }
 .z-icon-user:before {
   content: "\e605";

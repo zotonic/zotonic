@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'icomoon';
-	src:url('fonts/icomoon.eot?-a2cn9u');
-	src:url('fonts/icomoon.eot?#iefix-a2cn9u') format('embedded-opentype'),
-		url('fonts/icomoon.woff?-a2cn9u') format('woff'),
-		url('fonts/icomoon.ttf?-a2cn9u') format('truetype'),
-		url('fonts/icomoon.svg?-a2cn9u#icomoon') format('svg');
+	src:url('fonts/icomoon.eot?1lpwcv');
+	src:url('fonts/icomoon.eot?#iefix1lpwcv') format('embedded-opentype'),
+		url('fonts/icomoon.woff?1lpwcv') format('woff'),
+		url('fonts/icomoon.ttf?1lpwcv') format('truetype'),
+		url('fonts/icomoon.svg?1lpwcv#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -23,6 +23,15 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-ok-circle:before {
+	content: "\e602";
+}
+.icon-minus-circle:before {
+	content: "\e603";
+}
+.icon-plus-circle:before {
+	content: "\e604";
+}
 .icon-cross:before {
 	content: "\e60c";
 }
@@ -43,6 +52,9 @@
 }
 .icon-logo:before {
 	content: "\5a";
+}
+.icon-logo-z:before {
+	content: "\e607";
 }
 .icon-user:before {
 	content: "\e605";
