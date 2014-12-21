@@ -35,10 +35,12 @@
 
     {% if m.acl.use.mod_admin_config %}
 	    {% if r.is_a.meta or not r.is_authoritative %}
-	        <div>
-		        <label for="field-name">{_ Unique uri _}</label>
-		        <input class="form-control" type="text" id="field-name" name="uri" value="{{ r.uri }}" {% if not is_editable %}disabled="disabled"{% endif %} />
-	        </div>
+	        <div class="form-group row">
+                <label class="control-label col-md-3" for="field-name">{_ Unique uri _}</label>
+                <div class="col-md-9">
+                    <input class="form-control" type="text" id="field-name" name="uri" value="{{ r.uri }}" {% if not is_editable %}disabled="disabled"{% endif %} />
+                </div>
+            </div>
 	    {% endif %}
     {% endif %}
 </fieldset>
