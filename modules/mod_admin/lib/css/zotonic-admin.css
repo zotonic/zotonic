@@ -18,7 +18,7 @@ limitations under the License.
 /*
 CSS Documentation
 
-Common Zotonic icons to be reused across modules, if so desired.
+Common Zotonic icons to be reused across modules.
 
 Include icons CSS in your template:
 {% lib
@@ -28,7 +28,7 @@ Include icons CSS in your template:
 Then use the icon:
 <span class="z-icon z-icon-off"></span>
 
-Note to always include 'z-icon' as well (except for convenince class 'zotonic-logo').
+Note to always include 'z-icon' as well (except for convenience class 'zotonic-logo').
 
 If you want to provide a text label for accessibility (but visually hidden), 
 put the text inside <em>:
@@ -36,6 +36,13 @@ put the text inside <em>:
 
 For advanced usage, see the file z.icons.less.
 */
+@font-face {
+  font-family: 'Zotonic';
+  src: url('/lib/css/z.icons/fonts/icomoon.eot?v=1');
+  src: url('/lib/css/z.icons/fonts/icomoon.eot?#iefix&v=1') format('embedded-opentype'), url('/lib/css/z.icons/fonts/icomoon.woff?v=1') format('woff'), url('/lib/css/z.icons/fonts/icomoon.ttf?v=1') format('truetype'), url('/lib/css/z.icons/fonts/icomoon.svg?v=1#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 .z-icon-cross:before {
   content: "\e60c";
 }
@@ -66,11 +73,11 @@ For advanced usage, see the file z.icons.less.
 .z-icon-off:before {
   content: "\e602";
 }
-.z-icon-ok-circle:before {
-  content: "\e60a";
-}
 .z-icon-ok:before {
   content: "\e608";
+}
+.z-icon-ok-circle:before {
+  content: "\e60a";
 }
 .z-icon-plus:before {
   content: "\e604";
@@ -81,20 +88,13 @@ For advanced usage, see the file z.icons.less.
 .zotonic-logo:before {
   content: "\5a";
 }
-@font-face {
-  font-family: 'Zotonic';
-  src: url('/lib/css/z.icons/fonts/icomoon.eot?pzaagd');
-  src: url('/lib/css/z.icons/fonts/icomoon.eot?#iefixpzaagd') format('embedded-opentype'), url('/lib/css/z.icons/fonts/icomoon.woff?pzaagd') format('woff'), url('/lib/css/z.icons/fonts/icomoon.ttf?pzaagd') format('truetype'), url('/lib/css/z.icons/fonts/icomoon.svg?pzaagd#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
 .z-icon,
+.fa-icon,
 .zotonic-logo,
 .z-btn-remove:before,
 .z-btn-remove:hover:before,
 .z-btn-help:before,
 ul.blocks.ui-sortable .widget-header:before {
-  font-family: 'Zotonic';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -106,14 +106,26 @@ ul.blocks.ui-sortable .widget-header:before {
   -moz-osx-font-smoothing: grayscale;
 }
 a.z-icon:hover,
+a.fa-icon:hover,
 a.zotonic-logo:hover {
   text-decoration: none;
 }
 .z-icon em,
+.fa-icon em,
 .zotonic-logo em {
   display: none;
 }
-/* Logo shortcuts */
+.z-icon,
+.zotonic-logo,
+.z-btn-remove:before,
+.z-btn-remove:hover:before,
+.z-btn-help:before,
+ul.blocks.ui-sortable .widget-header:before {
+  font-family: "Zotonic";
+}
+.fa-icon {
+  font-family: 'FontAwesome';
+}
 .zotonic-logo {
   font-size: 0.85em;
   padding-right: 0.25em;
