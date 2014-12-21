@@ -42,10 +42,12 @@ limitations under the License.
 @color_waiting_background: #fff;
 @color_failed: #D84315;
 @color_failed_background: #FBE9E7;
-@color_info: #B3E5FC;
+@color_info_background: #343434;
+@color_info_text: #fff;
 @color_muted: #757575;
 @color_error: #D84315;
 @block_border_radius: 4px;
+@info_block_border_radius: 2px;
 
 body {
     background: #eee;
@@ -230,15 +232,18 @@ form {
 }
 
 .alert {
+    #3L > .border-radius(@info_block_border_radius);
+    margin-bottom: 10px;
+    
     &.alert-info {
-        background-color: @color_info;
-        border-color: @color_info;
-        color: @color_palette_dark;
+        background-color: @color_info_background;
+        border-color: @color_info_background;
+        color: @color_info_text;
     }
     .close {
         opacity: 1;
         text-shadow: none;
-        color: @color_muted;
+        color: @color_info_text;
     }
 }
 
@@ -255,7 +260,6 @@ form {
     padding: 10px 15px;
 }
 
-.alert,
 .list-group,
 .container .jumbotron,
 .panel {

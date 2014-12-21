@@ -173,15 +173,21 @@ form .has-error .help-block {
 .list-group .list-group-item-text {
   font-size: 13px;
 }
+.alert {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
 .alert.alert-info {
-  background-color: #b3e5fc;
-  border-color: #b3e5fc;
-  color: rgba(0, 0, 0, 0.87);
+  background-color: #343434;
+  border-color: #343434;
+  color: #ffffff;
 }
 .alert .close {
   opacity: 1;
   text-shadow: none;
-  color: #757575;
+  color: #ffffff;
 }
 .text-muted {
   color: #757575;
@@ -192,7 +198,6 @@ form .has-error .help-block {
 .table > tbody > tr > th {
   padding: 10px 15px;
 }
-.alert,
 .list-group,
 .container .jumbotron,
 .panel {
