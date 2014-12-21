@@ -53,46 +53,8 @@ p {
     visibility: visible !important;
 }
 
-.z-close-btn {
-    @_inner_size: 13px;
-    
-    display: block;
-    position: relative;
-    padding: 0;
-    width: @closeBtnSize;
-    height: @closeBtnSize;
-    #3L > .border-radius(@closeBtnSize/2);
-    #3L > .box-shadow(none);
-    background-color: transparent;
-    border: none;
-    
-    &:before {
-        position: absolute;
-        display: block;
-        width: @_inner_size;
-        height: @_inner_size;
-        .icon-remove;
-        .center;
-        color: @textColorDark;
-    }
-    &:hover {
-        background-color: @warningColor;
-        cursor: pointer;
-        
-        &:before {
-            color: #fff;
-        }
-    }
-}
-
 .z-text-light {
     color: @textColorLight;
-}
-
-.z-btn-help {
-    display: inline-block;
-    font-size: 16px;
-    padding: 1px;
 }
 
 .z-button-row {

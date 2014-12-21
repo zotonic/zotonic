@@ -47,8 +47,8 @@ $.widget("z.adminwidget",
 
     toggle: function(ev) {
         if (    $(ev.target).hasClass('widget-header')
-            ||  $(ev.target).hasClass('glyphicon-plus')
-            ||  $(ev.target).hasClass('glyphicon-minus')) {
+            ||  $(ev.target).hasClass('z-icon-plus')
+            ||  $(ev.target).hasClass('z-icon-minus')) {
             var self = this;
             var id = self.element.attr("id");
             self.setVisible(!self.showing);
@@ -72,7 +72,7 @@ $.widget("z.adminwidget",
         if (self.tabs) {
             self.tabs.hide();
         }
-        self.icon.attr("class", "pull-right glyphicon glyphicon-plus");
+        self.icon.attr("class", "pull-right z-icon z-icon-plus");
         self.showing = false;
     },
 
@@ -94,7 +94,7 @@ $.widget("z.adminwidget",
             self.tabs.show();
         }
         if (self.icon) {
-            self.icon.attr("class", "pull-right glyphicon glyphicon-minus");
+            self.icon.attr("class", "pull-right z-icon z-icon-minus");
         }
         self.showing = true;
     },

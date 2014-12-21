@@ -51,9 +51,9 @@ ul.media {
             max-width: @_image_width;
             margin: auto;
         }
-        .z-close-btn {
+        .z-btn-remove {
             position: absolute;
-            top: 0;
+            bottom: 0;
             right: 0;
         }
         .bottom {
@@ -63,15 +63,16 @@ ul.media {
             right: @_padding;
             
             .caption {
-                height: @closeBtnSize;
+                height: @roundBtnSize;
                 overflow: hidden;
                 
                 a {
                     word-break: break-all;
                     display: inline-block;
-                    height: @closeBtnSize;
-                    line-height: @closeBtnSize;
-                    width: @_image_width - @closeBtnSize - 3;
+                    height: @roundBtnSize;
+                    line-height: 1;
+                    width: @_image_width - @roundBtnSize - 3;
+                    vertical-align: text-top;
                 }
             }
         }

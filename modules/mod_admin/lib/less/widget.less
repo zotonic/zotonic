@@ -1,6 +1,6 @@
    
 .widget {    
-    margin-bottom: 10px;
+    margin-bottom: @widgetVerticalPadding;
     border-bottom: none;
     #3L > .border-radius(@radiusWidget);
     #3L > .clearfix;
@@ -12,6 +12,7 @@
     }
 
     .widget-content {
+        position: relative;
         padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
         
         .widget-content {
@@ -23,7 +24,7 @@
                 margin-bottom: 0;
             }
         }
-                
+     
         &:empty {
             display: none;
         }
@@ -41,11 +42,16 @@
         }
         
         &.tab-content {
-            padding-top: 10px;
+            padding-top: @widgetVerticalPadding;
         }
 
+        .z-btn-help {
+            position: absolute;
+            top: @widgetVerticalPadding;
+            right: @widgetSidePadding;
+        }
         .rsc-item-wrapper {
-            margin: 0 0 10px 0;
+            margin: 0 0 @widgetVerticalPadding 0;
         }
         .rsc-item {
             overflow: hidden;
@@ -73,15 +79,24 @@
         #3L > .border-radius(@radiusWidget @radiusWidget 0);
         #3L > .gradient(#e0e0e0, @backgroundColorLighter);
         
-        .glyphicon {
-            color: @textColorMedium;
+        .z-btn-remove {
+            display: block;
+            position: absolute;
+            top: @widgetVerticalPadding;
+            right: @widgetSidePadding + 26; // make room for minify button
+            z-index: 1;
         }
-        i.pull-right.glyphicon {
-            &.white {
-                // no we're not using the color white
-                color: black;
-                text-shadow: @darkOnLightTextShadow;
-            }
+    
+        .z-icon-plus,
+        .z-icon-minus {
+            @_icon_width: 14px;
+            @_icon_height: 16px;
+            display: block;
+            font-size: @_icon_width;
+            width: @_icon_width;
+            height: @_icon_height;
+            line-height: @_icon_height;
+            text-shadow: none;
         }
     }
     h5 {

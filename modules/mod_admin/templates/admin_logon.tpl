@@ -9,7 +9,7 @@
 {% block navigation %}
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="navbar-header">
-        <a class="navbar-brand" href="http://{{ m.site.hostname }}" title="{_ visit site _}"><span class="zotonic-logo"></span></a>
+        <a class="navbar-brand" href="http://{{ m.site.hostname }}" title="{_ visit site _}"><span class="zotonic-logo"><em>Zotonic</em></span></a>
     </div>
 </div>
 {% endblock %}

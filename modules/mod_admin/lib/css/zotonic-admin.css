@@ -15,6 +15,109 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
+/*
+CSS Documentation
+
+Common Zotonic icons to be reused across modules, if so desired.
+
+Include icons CSS in your template:
+{% lib
+    "css/z.icons.css"
+%}
+
+Then use the icon:
+<span class="z-icon z-icon-off"></span>
+
+Note to always include 'z-icon' as well (except for convenince class 'zotonic-logo').
+
+If you want to provide a text label for accessibility (but visually hidden), 
+put the text inside <em>:
+<span class="z-icon z-icon-off"><em>Log off</em></span>
+
+For advanced usage, see the file z.icons.less.
+*/
+.z-icon-cross:before {
+  content: "\e60c";
+}
+.z-icon-cross-circle:before {
+  content: "\e609";
+}
+.z-icon-drag:before {
+  content: "\e60b";
+}
+.z-icon-edit:before {
+  content: "\e606";
+}
+.z-icon-help-circle:before {
+  content: "\e600";
+}
+.z-icon-info-circle:before {
+  content: "\e601";
+}
+.z-icon-load:before {
+  content: "\e607";
+}
+.z-icon-logo:before {
+  content: "\5a";
+}
+.z-icon-minus:before {
+  content: "\e603";
+}
+.z-icon-off:before {
+  content: "\e602";
+}
+.z-icon-ok-circle:before {
+  content: "\e60a";
+}
+.z-icon-ok:before {
+  content: "\e608";
+}
+.z-icon-plus:before {
+  content: "\e604";
+}
+.z-icon-user:before {
+  content: "\e605";
+}
+.zotonic-logo:before {
+  content: "\5a";
+}
+@font-face {
+  font-family: 'Zotonic';
+  src: url('/lib/css/z.icons/fonts/icomoon.eot?pzaagd');
+  src: url('/lib/css/z.icons/fonts/icomoon.eot?#iefixpzaagd') format('embedded-opentype'), url('/lib/css/z.icons/fonts/icomoon.woff?pzaagd') format('woff'), url('/lib/css/z.icons/fonts/icomoon.ttf?pzaagd') format('truetype'), url('/lib/css/z.icons/fonts/icomoon.svg?pzaagd#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.z-icon,
+.zotonic-logo,
+.z-btn-remove:before,
+.z-btn-remove:hover:before,
+.z-btn-help:before,
+ul.blocks.ui-sortable .widget-header:before {
+  font-family: 'Zotonic';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a.z-icon:hover,
+a.zotonic-logo:hover {
+  text-decoration: none;
+}
+.z-icon em,
+.zotonic-logo em {
+  display: none;
+}
+/* Logo shortcuts */
+.zotonic-logo {
+  font-size: 0.85em;
+  padding-right: 0.25em;
+}
 body {
   color: #222222;
 }
@@ -61,48 +164,8 @@ ul.media > li.ui-sortable-placeholder {
   border-radius: 0px;
   visibility: visible !important;
 }
-.z-close-btn {
-  display: block;
-  position: relative;
-  padding: 0;
-  width: 21px;
-  height: 21px;
-  -webkit-border-radius: 10.5px;
-  -moz-border-radius: 10.5px;
-  border-radius: 10.5px;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  background-color: transparent;
-  border: none;
-}
-.z-close-btn:before {
-  width: 13px;
-  height: 13px;
-  content: "\e014";
-  display: block;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  color: #222222;
-}
-.z-close-btn:hover {
-  background-color: #e4522a;
-  cursor: pointer;
-}
-.z-close-btn:hover:before {
-  color: #fff;
-}
 .z-text-light {
   color: #bbbbbb;
-}
-.z-btn-help {
-  display: inline-block;
-  font-size: 16px;
-  padding: 1px;
 }
 .z-button-row {
   *zoom: 1;
@@ -196,6 +259,43 @@ img.admin-list-dashboard {
 .nav + .tab-content {
   margin: 10px 0 0 0;
 }
+.radio-inline,
+.checkbox-inline,
+.radio-inline + .radio-inline,
+.checkbox-inline + .checkbox-inline {
+  margin-left: 0;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+.z-btn-remove,
+.z-btn-help {
+  display: block;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-shadow: none;
+}
+.z-btn-remove {
+  background-color: transparent;
+  color: #777777;
+}
+.z-btn-remove:before {
+  content: "\e60c";
+}
+.z-btn-remove:hover {
+  color: #222222;
+  text-decoration: none;
+}
+.z-btn-remove:hover:before {
+  content: "\e609";
+}
+.z-btn-help:before {
+  content: "\e600";
+}
 ul.connections-list li:last-child {
   margin-bottom: 10px;
 }
@@ -223,23 +323,20 @@ ul.blocks.ui-sortable > li {
 ul.blocks.ui-sortable .widget-header {
   position: relative;
   cursor: move;
-  padding-left: 32px;
+  padding-left: 25px;
+}
+ul.blocks.ui-sortable .widget-header:before {
+  content: "\e60b";
 }
 ul.blocks.ui-sortable .widget-header:before {
   position: absolute;
   width: 16px;
   height: 16px;
-  display: block;
-  content: "\e068";
-  left: 10px;
-  top: 12px;
+  font-size: 16px;
+  line-height: 16px;
+  left: 15px;
+  top: 10px;
   color: #999999;
-}
-ul.blocks.ui-sortable .widget-header .z-close-btn {
-  position: absolute;
-  top: 8px;
-  right: 32px;
-  z-index: 1;
 }
 ul.blocks.ui-sortable .form-control.block-name {
   background-color: transparent;
@@ -314,9 +411,9 @@ ul.media > li img {
   max-width: 180px;
   margin: auto;
 }
-ul.media > li .z-close-btn {
+ul.media > li .z-btn-remove {
   position: absolute;
-  top: 0;
+  bottom: 0;
   right: 0;
 }
 ul.media > li .bottom {
@@ -326,15 +423,16 @@ ul.media > li .bottom {
   right: 5px;
 }
 ul.media > li .bottom .caption {
-  height: 21px;
+  height: 16px;
   overflow: hidden;
 }
 ul.media > li .bottom .caption a {
   word-break: break-all;
   display: inline-block;
-  height: 21px;
-  line-height: 21px;
-  width: 156px;
+  height: 16px;
+  line-height: 1;
+  width: 161px;
+  vertical-align: text-top;
 }
 div.admin-header h2 {
   margin-top: 0;
@@ -425,24 +523,6 @@ textarea.form-field-error,
 input.form-field-error {
   background: #ffeeee;
 }
-.z-icon,
-.z-close-btn:before,
-ul.blocks.ui-sortable .widget-header:before,
-.icon-move,
-.icon-remove {
-  position: absolute;
-  display: block;
-  font-family: "Glyphicons Halflings";
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-}
-.icon-move {
-  content: "\e068";
-}
-.icon-remove {
-  content: "\e014";
-}
 img.thumb {
   padding: 0;
   -webkit-border-radius: 0;
@@ -528,11 +608,7 @@ div.modal .modal-footer .pull-left {
 .navbar-brand:hover .zotonic-logo {
   color: #fff;
 }
-.navbar-brand > img {
-  margin-top: -2px;
-}
 .navbar-brand .zotonic-logo {
-  padding-top: 2px;
   text-shadow: 0 1px 0 rgba(0,0,0,.1);
 }
 .navbar-right {
@@ -863,11 +939,22 @@ ul.tree-list li.menu-item > div {
   margin: -1px 0 0 0;
   padding: 0;
 }
-ul.tree-list li.menu-item img.grippy {
+ul.tree-list li.menu-item .z-icon-drag,
+ul.tree-list li.menu-item .z-btn-remove {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  line-height: 16px;
   position: absolute;
-  left: 8px;
   top: 50%;
-  margin-top: -7px;
+  margin-top: -8px;
+}
+ul.tree-list li.menu-item .z-icon-drag {
+  color: #999;
+  left: 8px;
+}
+ul.tree-list li.menu-item .z-btn-remove {
+  right: 8px;
 }
 ul.tree-list li.menu-item > div > a,
 ul.tree-list li.menu-item > div > span:not(.btns) {
@@ -918,7 +1005,8 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   margin-top: 18px;
 }
 .widget .widget-content {
-  padding: 10px 10px 0 10px;
+  position: relative;
+  padding: 10px 15px 0 15px;
 }
 .widget .widget-content .widget-content {
   padding: 0;
@@ -951,6 +1039,11 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-content.tab-content {
   padding-top: 10px;
 }
+.widget .widget-content .z-btn-help {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
 .widget .widget-content .rsc-item-wrapper {
   margin: 0 0 10px 0;
 }
@@ -970,7 +1063,7 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 }
 .widget .widget-header {
   margin: 0;
-  padding: 10px 10px;
+  padding: 10px 15px;
   -webkit-border-radius: 0px 0px 0;
   -moz-border-radius: 0px 0px 0;
   border-radius: 0px 0px 0;
@@ -979,12 +1072,21 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   background-image: linear-gradient(to bottom, #e0e0e0 0%, #f2f2f2 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0', endColorstr='#f2f2f2', GradientType=0);
 }
-.widget .widget-header .glyphicon {
-  color: #777777;
+.widget .widget-header .z-btn-remove {
+  display: block;
+  position: absolute;
+  top: 10px;
+  right: 41px;
+  z-index: 1;
 }
-.widget .widget-header i.pull-right.glyphicon.white {
-  color: black;
-  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+.widget .widget-header .z-icon-plus,
+.widget .widget-header .z-icon-minus {
+  display: block;
+  font-size: 14px;
+  width: 14px;
+  height: 16px;
+  line-height: 16px;
+  text-shadow: none;
 }
 .widget h5 {
   display: block;

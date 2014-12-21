@@ -19,7 +19,7 @@
                 <a href="#" id="{{ #edit }}">{{ object_id.cropcenter }} {{ title }}</a>
             {% endwith %}
 	    </div>
-	    <button id="{{ #unlink.object_id }}" class="z-close-btn" title="{_ Disconnect _} {{ object_id.title }}"></button>
+	    <button id="{{ #unlink.object_id }}" class="z-btn-remove" title="{_ Disconnect _} {{ object_id.title }}"></button>
     </div>
 </li>
 {% endwith %}

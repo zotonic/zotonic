@@ -1,6 +1,6 @@
 {% if id %}<li id="{{ #menu.c }}-{{ id }}" class="menu-item">
 	<div id="{{ menu_id|default:#menu.id }}" data-page-id="{{ id }}">
-	    <img class="grippy" src="/lib/images/grippy.png" title="{_ Drag me _}" />
+	    <i class="z-icon z-icon-drag"></i>
 	    <span class="title-{{id}}">
 	    	{% image id mediaclass="admin-list-dashboard" %}
 	    	{{ id.short_title|default:id.title }}

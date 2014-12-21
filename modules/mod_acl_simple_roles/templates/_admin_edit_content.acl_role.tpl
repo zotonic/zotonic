@@ -4,7 +4,7 @@
     <div class="widget-content">
 
         <div class="pull-right">
-            <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{_ Help about ACL roles _}', text: '{_ Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules. _}'" title="{_ Need more help? _}"><i class="glyphicon glyphicon-question-sign"></i></a>
+            <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{_ Help about ACL roles _}', text: '{_ Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules. _}'" title="{_ Need more help? _}"></a>
         </div>
         
         <h4>

@@ -11,15 +11,14 @@
         {% lib
             "admin-bootstrap3/css/bootstrap.min.css"
         %}
-
+        
         {% lib
-                "css/jquery-ui.datepicker.css"
-                "css/jquery.timepicker.css"
-                "css/z.logo.css"
-                "css/zp-menuedit.css"
-                "css/zotonic-admin.css"
-                "css/z.modal.css"
-                "css/jquery.loadmask.css"
+            "css/jquery-ui.datepicker.css"
+            "css/jquery.timepicker.css"
+            "css/zp-menuedit.css"
+            "css/zotonic-admin.css"
+            "css/z.modal.css"
+            "css/jquery.loadmask.css"
         %}
 
         {% all include "_html_head_admin.tpl" %}
