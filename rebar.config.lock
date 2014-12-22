@@ -45,7 +45,7 @@
                          "9d22ea3c56a16779e9164bae5fa0cc583bf022b6"}},
        {z_stdlib,".*",
                  {git,"git://github.com/zotonic/z_stdlib.git",
-                      "c1a8d2b8c53fa3c57ecaa51eec3d1def70cb8add"}},
+                      "36a25d71b28bc62adf15cdbae815cac9f9c32111"}},
        {edown,".*",
               {git,"git://github.com/uwiger/edown.git",
                    "d62ec85281e451a46ba30045917c119d65b72a84"}},
@@ -110,7 +110,7 @@
               {git,"https://github.com/tim/erlang-oauth.git",
                    "3ad509d487a72f9437fef31a379bf3cfeeb166a2"}},
        {twerl,".*",
-              {git,"git@github.com:mworrell/twerl.git",
+              {git,"https://github.com/mworrell/twerl.git",
                    "5674327a06d6fa60b8276d0ba8018a7fd18118a0"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
