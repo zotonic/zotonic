@@ -4,7 +4,7 @@
 This module contains many useful icons and images.
 
 Included CSS icons
---------------
+------------------
 
 ``lib/font-awesome-4/``
 	Font Awesome 4: `fontawesome.io <http://fontawesome.io/>`_.
