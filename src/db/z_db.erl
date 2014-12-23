@@ -656,7 +656,7 @@ create_connection(Context, WithDatabase) ->
     Options = z_db_pool:get_database_options(Context),
     ExtraOptions = [{port, proplists:get_value(dbport, Options)}] ++
     case WithDatabase of
-        false -> [];
+        false -> [{database, "postgres"}];
         true -> [{database, proplists:get_value(dbdatabase, Options)}]
     end,
     
