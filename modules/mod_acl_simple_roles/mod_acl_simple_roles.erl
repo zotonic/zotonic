@@ -293,6 +293,7 @@ can_edit(Id, #context{acl=Acl} = Context) ->
     IsA = m_rsc:p_no_acl(Id, is_a, Context),
     can_edit1(IsA, Acl#acl_user.categories).
 
+    can_edit1(undefined, _Allowed) -> undefined;
     can_edit1([], _Allowed) -> undefined;
     can_edit1([{Cat,_}|Cats], Allowed) -> 
         case lists:member(Cat, Allowed) of
