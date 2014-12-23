@@ -1111,7 +1111,7 @@ function z_websocket_restart()
         try { z_ws.close(); } catch(e) {} // closing an already closed ws can raise exceptions.
         z_ws = undefined;
     }
-    if (z_ws_pong_count > 0 && z_session_valid) {
+    if (z_ws_pong_count > 0 && z_session_valid && !z_page_unloading) {
         z_ws_pong_count = 0;
         z_websocket_start();
     }
