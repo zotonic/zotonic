@@ -99,17 +99,20 @@ ul.blocks.ui-sortable .widget-header:before {
 .z-icon-ok-circle:before {
   font-family: 'FontAwesome';
 }
-.z-icon-cross-circle:before {
-  content: "\e609";
-}
 .z-icon-cross:before {
   content: "\e60c";
+}
+.z-icon-cross-circle:before {
+  content: "\e609";
 }
 .z-icon-drag:before {
   content: "\e60b";
 }
 .z-icon-edit:before {
   content: "\e606";
+}
+.z-icon-help:before {
+  content: "\e60e";
 }
 .z-icon-help-circle:before {
   content: "\e600";
@@ -123,11 +126,20 @@ ul.blocks.ui-sortable .widget-header:before {
 .z-icon-logo:before {
   content: "\5a";
 }
+.z-icon-minus:before {
+  content: "\e60a";
+}
 .z-icon-minus-circle:before {
   content: "\e603";
 }
+.z-icon-ok:before {
+  content: "\e608";
+}
 .z-icon-ok-circle:before {
   content: "\e602";
+}
+.z-icon-plus:before {
+  content: "\e60d";
 }
 .z-icon-plus-circle:before {
   content: "\e604";
@@ -168,6 +180,12 @@ ul.blocks.ui-sortable .widget-header:before {
   padding: 0;
   cursor: pointer;
   text-shadow: none;
+}
+.z-btn-remove > span,
+.z-btn-help > span,
+.z-btn-remove > em,
+.z-btn-help > em {
+  display: none;
 }
 .z-btn-remove {
   background-color: transparent;
