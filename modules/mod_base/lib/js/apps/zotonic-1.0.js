@@ -105,6 +105,13 @@ function z_set_page_id( page_id, user_id )
     }
     $(window).bind('beforeunload', function() {
         z_page_unloading = true;
+
+        // Close the websocket. This prevents a connection interrupted error.
+        if (z_ws) {
+            try { z_ws.close(); } catch (e) { };
+            z_ws = undefined;
+        }
+
         setTimeout(function() {
             z_page_unloading = false;
         }, 10000);
