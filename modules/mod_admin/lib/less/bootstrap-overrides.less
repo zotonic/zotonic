@@ -60,10 +60,18 @@
     }
 }
 .well {
-    padding: 15px;
+    @_padding: 15px;
+    @_button_margin: 4px;
+
+    padding: @_padding;
     
-    .btn + .btn {
-        margin-left: 4px;
+    &.z-button-row {
+        padding: @_padding @_padding (@_padding - @_button_margin) @_padding;
+    
+        > *,
+        .btn + .btn {
+            margin: 0 @_button_margin @_button_margin 0;
+        }
     }
 }
 .alert {

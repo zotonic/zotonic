@@ -44,8 +44,16 @@
                 {% if m.rsc[id].is_visible %}
                     <tr class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
                         <td>
-                            {% if media %}{% image id mediaclass="admin-list-dashboard" class="thumb" %}&nbsp;{% endif %}
-                            {{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}
+                            {% if media %}
+                                <div class="admin-list-thumb">
+                            {% endif %}
+                            {% if media %}
+                                {% image id mediaclass="admin-list-dashboard" class="thumb" %}
+                            {% endif %}
+                            <span>{{ (m.rsc[id].title|striptags|truncate:50)|default:"<em>untitled</em>" }}</span>
+                            {% if media %}
+                                </div>
+                            {% endif %}
                         </td>
 
                         {% if show_date %}

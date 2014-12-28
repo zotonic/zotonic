@@ -21,25 +21,69 @@ tr.clickable td {
 }
 
 table.do_adminLinkedTable {
+    @_padding: 8px;
+    
+    th, td {
+        &:extend(.admin-word-break);
+    }
     td.view-link {
         padding: 0;
     }
+    
     td a.view-link {
         display: block;
-        padding: 8px;
+        padding: @_padding;
         color: inherit;
         
         &:hover {
             text-decoration: none;
         }
     }
+    
     .buttons {
         margin-top: -2px;
         margin-bottom: -2px;
     }
+    
     h5, p {
         margin: 0;
+    }    
+    
+    .admin-list-thumb {
+        display: table-row;
+        
+        > img,
+        > span {
+            display: table-cell;
+            vertical-align: top;
+        }
+        
+        > img {
+            width: @miniThumbImageWidth;
+            height: @miniThumbImageHeight;
+            &:extend(.admin-image-border);
+            margin: 0 10px 0 0;
+        }
+        > span {
+            &:extend(.admin-word-break);
+        }
     }
+/*
+    img.thumb.admin-list-dashboard {
+        width: @miniThumbImageWidth;
+        height: @miniThumbImageHeight;
+        &:extend(.admin-image-border);
+        position: absolute;
+        left: @_padding;
+        top: @_padding - 1;
+        
+        & + span {
+            display: inline-block;
+            margin: 0 0 0 (@miniThumbImageWidth + 10);
+            &:extend(.admin-word-break);
+        }
+    }
+*/
 }
 
 .table>thead>tr>th {

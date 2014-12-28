@@ -57,9 +57,10 @@ p {
     color: @textColorLight;
 }
 
-.z-button-row {
+.z-button-row {  
+    // see also bootstrap-overrides.less
     #3L > .clearfix;
-    
+
     > * {
         float: left;
     }
@@ -76,3 +77,15 @@ p {
     color: @textColorMedium;
 }
 
+.admin-word-break {
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    // Non standard for webkit
+     word-break: break-word;
+
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+        -ms-hyphens: auto;
+            hyphens: auto;
+}

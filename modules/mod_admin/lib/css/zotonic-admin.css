@@ -45,12 +45,6 @@ For advanced usage, see the file z.icons.less.
 }
 .z-icon,
 .fa-icon,
-.zotonic-logo,
-.z-icon-plus:before,
-.z-icon-minus:before,
-.z-icon-off:before,
-.z-icon-ok:before,
-.z-icon-ok-circle:before,
 .z-btn-remove:before,
 .z-btn-remove:hover:before,
 .z-btn-help:before,
@@ -58,6 +52,12 @@ a.close:before,
 button.close:before,
 a.close:hover:before,
 button.close:hover:before,
+.zotonic-logo,
+.z-icon-plus:before,
+.z-icon-minus:before,
+.z-icon-off:before,
+.z-icon-ok:before,
+.z-icon-ok-circle:before,
 ul.blocks.ui-sortable .widget-header:before {
   speak: none;
   font-style: normal;
@@ -80,7 +80,6 @@ a.zotonic-logo:hover {
   display: none;
 }
 .z-icon,
-.zotonic-logo,
 .z-btn-remove:before,
 .z-btn-remove:hover:before,
 .z-btn-help:before,
@@ -88,6 +87,7 @@ a.close:before,
 button.close:before,
 a.close:hover:before,
 button.close:hover:before,
+.zotonic-logo,
 ul.blocks.ui-sortable .widget-header:before {
   font-family: "Zotonic";
 }
@@ -98,6 +98,58 @@ ul.blocks.ui-sortable .widget-header:before {
 .z-icon-ok:before,
 .z-icon-ok-circle:before {
   font-family: 'FontAwesome';
+}
+.z-btn-remove,
+.z-btn-help {
+  display: block;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-shadow: none;
+}
+.z-btn-remove > span,
+.z-btn-help > span,
+.z-btn-remove > em,
+.z-btn-help > em {
+  display: none;
+}
+.z-btn-remove {
+  background-color: transparent;
+}
+.z-btn-remove:before {
+  content: "\e60c";
+}
+.z-btn-remove:hover {
+  text-decoration: none;
+}
+.z-btn-remove:hover:before {
+  content: "\e609";
+}
+.z-btn-help:before {
+  content: "\e600";
+}
+a.close,
+button.close {
+  padding: 0;
+  font-size: 16px;
+}
+a.close:before,
+button.close:before {
+  content: "\e60c";
+}
+a.close:hover:before,
+button.close:hover:before {
+  content: "\e609";
+}
+a.close > span,
+button.close > span,
+a.close > em,
+button.close > em {
+  display: none;
 }
 .z-icon-cross:before {
   content: "\e60c";
@@ -169,58 +221,6 @@ ul.blocks.ui-sortable .widget-header:before {
 .z-icon-ok-circle:before {
   content: "\f058";
 }
-.z-btn-remove,
-.z-btn-help {
-  display: block;
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-shadow: none;
-}
-.z-btn-remove > span,
-.z-btn-help > span,
-.z-btn-remove > em,
-.z-btn-help > em {
-  display: none;
-}
-.z-btn-remove {
-  background-color: transparent;
-}
-.z-btn-remove:before {
-  content: "\e60c";
-}
-.z-btn-remove:hover {
-  text-decoration: none;
-}
-.z-btn-remove:hover:before {
-  content: "\e609";
-}
-.z-btn-help:before {
-  content: "\e600";
-}
-a.close,
-button.close {
-  padding: 0;
-  font-size: 16px;
-}
-a.close:before,
-button.close:before {
-  content: "\e60c";
-}
-a.close:hover:before,
-button.close:hover:before {
-  content: "\e609";
-}
-a.close > span,
-button.close > span,
-a.close > em,
-button.close > em {
-  display: none;
-}
 body {
   color: #222222;
 }
@@ -286,7 +286,7 @@ ul.media > li.ui-sortable-placeholder {
 }
 .admin-image-border,
 div.admin-edit-media,
-img.admin-list-dashboard {
+table.do_adminLinkedTable .admin-list-thumb > img {
   border: 1px solid #fff;
 }
 .admin-text-header,
@@ -295,6 +295,21 @@ img.admin-list-dashboard {
   font-size: 13px;
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
   color: #777777;
+}
+.admin-word-break,
+div.admin-header h2,
+table.do_adminLinkedTable th,
+table.do_adminLinkedTable td,
+table.do_adminLinkedTable .admin-list-thumb > span,
+.thumbnails .thumbnail h5,
+.thumbnails .thumbnail h6 {
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 .text-muted {
   color: #999999;
@@ -341,8 +356,12 @@ img.admin-list-dashboard {
 .well {
   padding: 15px;
 }
-.well .btn + .btn {
-  margin-left: 4px;
+.well.z-button-row {
+  padding: 15px 15px 11px 15px;
+}
+.well.z-button-row > *,
+.well.z-button-row .btn + .btn {
+  margin: 0 4px 4px 0;
 }
 .alert {
   padding: 10px;
@@ -617,11 +636,6 @@ img.thumb {
   -moz-box-shadow: none;
   box-shadow: none;
 }
-img.admin-list-dashboard {
-  width: 32px;
-  height: 24px;
-  margin: -1px 3px 0 0;
-}
 ul.tree-list img.admin-list-dashboard {
   width: 21.33333333px;
   height: 16px;
@@ -829,6 +843,24 @@ tr.clickable td {
 .table {
   border-bottom: 1px solid #dddddd;
 }
+table.do_adminLinkedTable {
+  /*
+    img.thumb.admin-list-dashboard {
+        width: @miniThumbImageWidth;
+        height: @miniThumbImageHeight;
+        &:extend(.admin-image-border);
+        position: absolute;
+        left: @_padding;
+        top: @_padding - 1;
+        
+        & + span {
+            display: inline-block;
+            margin: 0 0 0 (@miniThumbImageWidth + 10);
+            &:extend(.admin-word-break);
+        }
+    }
+*/
+}
 table.do_adminLinkedTable td.view-link {
   padding: 0;
 }
@@ -847,6 +879,19 @@ table.do_adminLinkedTable .buttons {
 table.do_adminLinkedTable h5,
 table.do_adminLinkedTable p {
   margin: 0;
+}
+table.do_adminLinkedTable .admin-list-thumb {
+  display: table-row;
+}
+table.do_adminLinkedTable .admin-list-thumb > img,
+table.do_adminLinkedTable .admin-list-thumb > span {
+  display: table-cell;
+  vertical-align: top;
+}
+table.do_adminLinkedTable .admin-list-thumb > img {
+  width: 40px;
+  height: 30px;
+  margin: 0 10px 0 0;
 }
 .table > thead > tr > th {
   border-width: 1px;
@@ -944,16 +989,6 @@ table.table tr.unpublished td a.btn-success {
   line-height: 1.1em;
   font-weight: normal;
   margin: 0;
-}
-.thumbnails .thumbnail h5,
-.thumbnails .thumbnail h6 {
-  -ms-word-break: break-all;
-  word-break: break-all;
-  word-break: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
-  hyphens: auto;
 }
 .thumbnails .thumbnail h5 {
   font-weight: bold;
