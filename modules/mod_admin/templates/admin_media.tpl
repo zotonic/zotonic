@@ -29,10 +29,10 @@
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
-		<th width="10%">{_ Preview _}</th>
- 		<th width="35%">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}</th>
-		<th width="25%">{_ Info _}</th>
-		<th width="30%">{% include "_admin_sort_header.tpl" field="created" caption=_"Uploaded" %}</th>
+                <th width="10%">{_ Preview _}</th>
+                <th width="35%">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}</th>
+                <th width="25%">{_ Info _}</th>
+                <th width="30%">{% include "_admin_sort_header.tpl" field="created" caption=_"Uploaded" %}</th>
             </tr>
         </thead>
 
