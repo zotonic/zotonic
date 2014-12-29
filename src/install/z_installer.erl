@@ -1,11 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-17
+%% @copyright 2009-2014 Marc Worrell
 %%
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2014 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,13 +29,13 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(list()) -> ignore | {error, database|term()}.
 %% @doc Install zotonic on the databases in the PoolOpts, skips when already installed.
 start_link(SiteProps) when is_list(SiteProps) ->
-    install_check(SiteProps).
+    install_check(SiteProps, 1).
 
-install_check(SiteProps) ->
-    %% Check if the config table exists, if so then assume that all is ok
+%% Check if the config table exists, if so then assume that all is ok
+install_check(SiteProps, RetryCt) when RetryCt =< 2 ->
     {host, Host} = proplists:lookup(host, SiteProps),
     lager:md([
         {site, Host},
@@ -44,48 +43,57 @@ install_check(SiteProps) ->
       ]),
     Context = z_context:new(Host),
     case z_db:has_connection(Context) of
-        true ->
-            case z_db_pool:test_connection(Context) of
-                ok ->
-                    Options0 = z_db_pool:get_database_options(Context),
-                    Options = lists:filter(fun({dbpassword,_}) -> false; (_) -> true end, Options0),
-                    case z_db:table_exists(config, Context) of
-                        false ->
-                            %% Install database
-                            lager:warning("~p: Installing database with db options: ~p", [z_context:site(Context), Options]),
-                            z_install:install(Context),
-                            ignore;
-                        true ->
-                            %% Normal startup, do upgrade / check
-                            ok = z_db:transaction(
-                                   fun(Context1) ->
-                                           C = z_db_pgsql:get_raw_connection(Context1),
-                                           Database = proplists:get_value(dbdatabase, Options),
-                                           Schema = proplists:get_value(dbschema, Options),
-                                           ok = upgrade(C, Database, Schema),
-                                           ok = sanity_check(C, Database, Schema)
-                                   end,
-                                   Context),
-                            ignore
-                    end;
-                {error, Reason} ->
-                    z_db:prepare_database(Context),                     
-                    lager:warning("~p: Database connection failure!", [z_context:site (Context)]),
-                    lager:warning("~p", [Reason]),
-                    stop
-            end;
-        false ->
-            ignore
+        true -> check_db_and_upgrade(Context, 1);
+        false -> ignore
     end.
+
+check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
+    case z_db_pool:test_connection(Context) of
+        ok ->
+            DbOptions = proplists:delete(dbpassword, z_db_pool:get_database_options(Context)),
+            case z_db:table_exists(config, Context) of
+                false ->
+                    %% Install database
+                    lager:warning("[~p] Installing database with db options: ~p", [z_context:site(Context), DbOptions]),
+                    z_install:install(Context),
+                    ignore;
+                true ->
+                    %% Normal startup, do upgrade / check
+                    ok = z_db:transaction(
+                           fun(Context1) ->
+                                   C = z_db_pgsql:get_raw_connection(Context1),
+                                   Database = proplists:get_value(dbdatabase, DbOptions),
+                                   Schema = proplists:get_value(dbschema, DbOptions),
+                                   ok = upgrade(C, Database, Schema),
+                                   ok = sanity_check(C, Database, Schema)
+                           end,
+                           Context),
+                    ignore
+            end;
+        {error, Reason} ->
+            lager:warning("[~p] Database connection failure: ~p", [z_context:site(Context), Reason]),
+            case z_db:prepare_database(Context) of
+                ok ->
+                    lager:info("[~p] Retrying install check after db creation.", [z_context:site(Context)]),
+                    check_db_and_upgrade(Context, Tries+1);
+                {error, _PrepReason} = Error ->
+                    lager:error("[~p] Could not create the database and schema."),
+                    Error
+            end
+    end;
+check_db_and_upgrade(Context, _Tries) ->
+    lager:error("[~p] Could not connect to database and db creation failed", [z_context:site(Context)]),
+    {error, database}.
+
 
 has_table(C, Table, Database, Schema) ->    
     {ok, _, [{HasTable}]} = pgsql:equery(C, "
             select count(*) 
-                                         from information_schema.tables 
-                                         where table_catalog = $1 
-                                         and table_name = $3 
-                                         and table_schema = $2
-                                         and table_type = 'BASE TABLE'", [Database, Schema, Table]),
+            from information_schema.tables 
+            where table_catalog = $1 
+              and table_name = $3 
+              and table_schema = $2
+              and table_type = 'BASE TABLE'", [Database, Schema, Table]),
     HasTable =:= 1.
 
 
@@ -93,21 +101,21 @@ has_table(C, Table, Database, Schema) ->
 has_column(C, Table, Column, Database, Schema) ->
     {ok, _, [{HasColumn}]} = pgsql:equery(C, "
             select count(*) 
-                                          from information_schema.columns 
-                                          where table_catalog = $1 
-                                          and table_schema = $2
-                                          and table_name = $3 
-                                          and column_name = $4", [Database, Schema, Table, Column]),
+            from information_schema.columns 
+            where table_catalog = $1 
+              and table_schema = $2
+              and table_name = $3 
+              and column_name = $4", [Database, Schema, Table, Column]),
     HasColumn =:= 1.
 
 get_column_type(C, Table, Column, Database, Schema) ->
     {ok, _, [{ColumnType}]} = pgsql:equery(C, "
             select data_type
-                                           from information_schema.columns 
-                                           where table_catalog = $1 
-                                           and table_schema = $2
-                                           and table_name = $3 
-                                           and column_name = $4", [Database, Schema, Table, Column]),
+            from information_schema.columns 
+            where table_catalog = $1 
+              and table_schema = $2
+              and table_name = $3 
+              and column_name = $4", [Database, Schema, Table, Column]),
     ColumnType.
 
 

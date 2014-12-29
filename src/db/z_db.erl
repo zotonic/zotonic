@@ -620,53 +620,62 @@ update_sequence(Table, Ids, Context) ->
     with_connection(F, Context).
 
 %% @doc Create database and schema if they do not yet exist
-%% @spec prepare_database(Context) -> ok
+-spec prepare_database(#context{}) -> ok | {error, term()}.
 prepare_database(Context) ->
     Options = z_db_pool:get_database_options(Context),
-    AnonOptions = lists:filter(fun({dbpassword,_}) -> false; (_) -> true end, Options),
-    Connection = create_connection(Context),
-    
+    Site = z_context:site(Context),
+    case ensure_database(Site, Options) of
+        ok ->
+            ensure_schema(Site, Options);
+        {error, _} = Error ->
+            Error
+    end.
+
+ensure_database(Site, Options) ->
     Database = proplists:get_value(dbdatabase, Options),
-    case database_exists(Connection, Database) of
-        true ->
-            nop;
-        false ->
-            lager:warning("~p: Creating database with options: ~p", [z_context:site(Context), AnonOptions]),
-            create_database(Connection, Database)
-    end,
-    
-    %% Switching databases in PostgreSQL requires a new connection 
-    close_connection(Connection),
-    DatabaseConnection = create_connection(Context, true),
-    
+    case open_connection("postgres", Options) of
+        {ok, PgConnection} ->
+            Result = case database_exists(PgConnection, Database) of
+                true ->
+                    ok;
+                false ->
+                    AnonOptions = proplists:delete(dbpassword, Options),
+                    lager:warning("[~p] Creating database ~p with options: ~p", [Site, Database, AnonOptions]),
+                    create_database(Site, PgConnection, Database)
+            end,
+            close_connection(PgConnection),
+            Result;
+        {error, Reason} = Error ->
+            lager:error("[~p] Cannot create database ~p because user ~p cannot connect to the 'postgres' database: ~p", 
+                        [Site, Database, proplists:get_value(dbuser, Options), Reason]),
+            Error
+    end.
+
+ensure_schema(Site, Options) ->
+    Database = proplists:get_value(dbdatabase, Options),
     Schema = proplists:get_value(dbschema, Options),
-    case schema_exists(DatabaseConnection, Schema) of
+    {ok, DbConnection} = open_connection(Database, Options),
+    Result = case schema_exists(DbConnection, Schema) of
         true ->
-            nop;
+            ok;
         false ->
-            create_schema(DatabaseConnection, Schema)
+            lager:warning("[~p] Creating schema ~p in database ~p", [Site, Schema, Database]),
+            create_schema(Site, DbConnection, Schema)
     end,
-    close_connection(DatabaseConnection),
-    ok.
-    
-create_connection(Context) ->
-    create_connection(Context, false).
-    
-create_connection(Context, WithDatabase) ->
-    Options = z_db_pool:get_database_options(Context),
-    ExtraOptions = [{port, proplists:get_value(dbport, Options)}] ++
-    case WithDatabase of
-        false -> [{database, "postgres"}];
-        true -> [{database, proplists:get_value(dbdatabase, Options)}]
-    end,
-    
-    {ok, Connection} = pgsql:connect(
+    close_connection(DbConnection),
+    Result.
+
+
+open_connection(DatabaseName, Options) ->
+    pgsql:connect(
         proplists:get_value(dbhost, Options),
         proplists:get_value(dbuser, Options),
         proplists:get_value(dbpassword, Options),
-        ExtraOptions
-    ),
-    Connection.
+        [
+            {port, proplists:get_value(dbport, Options)},
+            {database, DatabaseName}
+        ]
+    ).
     
 close_connection(Connection) ->
     pgsql:close(Connection).
@@ -685,16 +694,17 @@ database_exists(Connection, Database) ->
     end.
 
 %% @doc Create a database
--spec create_database(pgsql:connection(), string()) -> ok.
-create_database(Connection, Database) ->
+-spec create_database(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
+create_database(Site, Connection, Database) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
     case pgsql:equery(
         Connection, 
         "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0" 
     ) of  
-        {error, Reason} ->
-            lager:error("z_db error ~p when creating database ~p", [Reason, Database]);
+        {error, Reason} = Error ->
+            lager:error("[~p] z_db error ~p when creating database ~p", [Site, Reason, Database]),
+            Error;
         {ok, _, _} ->
             ok
     end.
@@ -713,17 +723,17 @@ schema_exists(Connection, Schema) ->
     end.
 
 %% @doc Create a schema
--spec create_schema(pgsql:connection(), string()) -> ok.
-create_schema(Connection, Schema) ->
+-spec create_schema(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
+create_schema(Site, Connection, Schema) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
-    lager:warning("Creating schema ~p", [Schema]),
     case pgsql:equery(
         Connection, 
         "CREATE SCHEMA \"" ++ Schema ++ "\""
     ) of  
-        {error, Reason} ->
-            lager:error("z_db error ~p when creating schema ~p", [Reason, Schema]);
+        {error, Reason} = Error ->
+            lager:error("[~p] z_db error ~p when creating schema ~p", [Site, Reason, Schema]),
+            Error;
         {ok, _, _} ->
             ok
     end.    
