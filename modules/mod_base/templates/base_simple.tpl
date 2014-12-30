@@ -13,6 +13,7 @@
     {% block _html_head %}
       {% lib 
               "bootstrap/css/bootstrap.css" 
+              "bootstrap/css/bootstrap-responsive.css" 
               "css/jquery.loadmask.css" 
               "css/z.growl.css" 
               "css/z.modal.css" 
