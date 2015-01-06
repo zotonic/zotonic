@@ -188,9 +188,11 @@ encode_packet_payload(Any) ->
 
 
 %% @doc Map the ~site, ~pagesession, ~session, ~user topics
--spec expand_context_topic(binary()|string(), #context{}) -> binary().
+-spec expand_context_topic(binary()|string()|integer(), #context{}) -> binary().
 expand_context_topic(Topic, _Context) when is_list(Topic) ->
     unicode:characters_to_binary(Topic);
+expand_context_topic(Topic, Context) when is_integer(Topic) ->
+    localsite(<<"/rsc/", (z_convert:to_binary(Topic))/binary>>, Context);
 expand_context_topic(<<"~site", Topic/binary>>, Context) ->
     localsite(Topic, Context);    
 expand_context_topic(<<"~user", Topic/binary>>, Context) ->

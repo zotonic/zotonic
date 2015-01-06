@@ -5,5 +5,5 @@
 {% block title %}{_ Authorizing... _}{% endblock %}
 
 {% block content %}
-	{% include "_logon_service."++q.service++".tpl" service=q.service %}
+	{% include "_logon_service."++q.service++".tpl" service=q.service is_connect=q.is_connect %}
 {% endblock %}

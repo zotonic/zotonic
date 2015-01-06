@@ -34,6 +34,7 @@
     delete_username/2,
     set_username/3,
     set_username_pw/4,
+    ensure_username_pw/2,
     check_username_pw/3,
     hash/1,
     hash_is_equal/2,
@@ -72,6 +73,10 @@
     delete/2
 ]).
 
+-export([
+    generate_username/2
+]).
+
 -include_lib("zotonic.hrl").
 
 
@@ -85,6 +90,8 @@ m_find_value(username, #m{value=RscId}, Context) ->
     get_username(RscId, Context);
 m_find_value(all, #m{value=RscId} = M, _Context) ->
     M#m{value={all, RscId}};
+m_find_value(all_types, #m{value=RscId}, Context) ->
+    get_rsc_types(RscId, Context);
 m_find_value(Type, #m{value={all,RscId}}, Context) ->
     get_rsc_by_type(RscId, Type, Context);
 m_find_value(get, #m{value=undefined} = M, _Context) ->
@@ -134,8 +141,12 @@ get_username(Id, Context) ->
 %% @spec delete_username(ResourceId, Context) -> void
 delete_username(Id, Context) when is_integer(Id), Id /= 1 ->
     case z_acl:is_allowed(delete, Id, Context) orelse z_acl:user(Context) == Id of
-        true ->  z_db:q("delete from identity where rsc_id = $1 and type = 'username_pw'", [Id], Context);
-        false -> {error, eacces}
+        true ->  
+            z_db:q("delete from identity where rsc_id = $1 and type = 'username_pw'", [Id], Context),
+            z_mqtt:publish(Id, {identity, <<"username_pw">>}, Context),
+            ok;
+        false ->
+            {error, eacces}
     end.
 
 
@@ -168,8 +179,7 @@ set_username(Id, Username, Context) ->
 %% @spec set_username_pw(RscId, Username, Password, Context) -> ok | {error, Reason}
 set_username_pw(1, _, _, _) ->
     throw({error, admin_password_cannot_be_set});
-
-set_username_pw(Id, Username, Password, Context) ->
+set_username_pw(Id, Username, Password, Context) when is_integer(Id) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
             Username1 = z_string:to_lower(Username),
@@ -200,6 +210,7 @@ set_username_pw(Id, Username, Password, Context) ->
             case z_db:transaction(F, Context) of
                 1 ->
                     reset_rememberme_token(Id, Context),
+                    z_mqtt:publish(Id, {identity, <<"username_pw">>}, Context),
                     z_depcache:flush(Id, Context),
                     ok;
                 R ->
@@ -208,6 +219,75 @@ set_username_pw(Id, Username, Password, Context) ->
         false ->
             {error, eacces}
     end.
+
+
+%% @doc Ensure that the user has an associated username and password
+%% @spec ensure_username_pw(RscId, Context) -> ok | {error, Reason}
+ensure_username_pw(1, _Context) ->
+    throw({error, admin_password_cannot_be_set});
+ensure_username_pw(Id, Context) ->
+    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
+        true ->
+            case z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id = $1", [Id], Context) of
+                0 ->
+                    Username = generate_username(Id, Context),
+                    Password = z_ids:id(),
+                    set_username_pw(Id, Username, Password, Context);
+                _N ->
+                    ok
+            end;
+        false ->
+            {error, eacces}
+    end.
+
+generate_username(Id, Context) ->
+    Username = base_username(Id, Context),
+    username_unique(Username, Context).
+
+username_unique(U, Context) ->
+    N = z_convert:to_binary(z_ids:number(1000)),
+    U1 = <<U/binary, $., N/binary>>,
+    case z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [U1], Context) of
+        0 -> U1;
+        _ -> username_unique(U, Context)
+    end.
+
+
+base_username(Id, Context) ->
+    T1 = iolist_to_binary([
+                z_convert:to_binary(m_rsc:p_no_acl(Id, name_first, Context)),
+                " ",
+                z_convert:to_binary(m_rsc:p_no_acl(Id, name_surname, Context))
+            ]),
+    case nospace(z_string:trim(T1)) of
+        <<>> ->
+            case nospace(m_rsc:p_no_acl(Id, title, Context)) of
+                <<>> -> z_convert:to_binary(z_ids:identifier(6));
+                Title -> Title
+            end;
+        Name ->
+            Name
+    end.
+
+nospace(undefined) ->
+    <<>>;
+nospace([]) ->
+    <<>>;
+nospace(<<>>) ->
+    <<>>;
+nospace(S) ->
+    S1 = z_string:truncate(z_string:trim(S), 32, ""),
+    S2 = z_string:to_slug(S1),
+    nodash(binary:replace(S2, <<"-">>, <<".">>, [global])).
+
+nodash(<<".">>) ->
+    <<>>;
+nodash(S) ->
+    case binary:replace(S, <<"..">>, <<".">>, [global]) of
+        S -> S;
+        S1 -> nodash(S1)
+    end.
+
 
 
 %% @doc Return the rsc_id with the given username/password.  
@@ -327,8 +407,33 @@ get(IdnId, Context) ->
 get_rsc(Id, Context) ->
     z_db:assoc("select * from identity where rsc_id = $1", [Id], Context).
 
+
+%% @doc Fetch all different identity types of an user
+%% @spec get_rsc_type(integer(), context()) -> list()
+get_rsc_types(Id, Context) ->
+    Rs = z_db:q("select type from identity where rsc_id = $1", [Id], Context),
+    [ R || {R} <- Rs ].
+
 %% @doc Fetch all credentials belonging to the user "id" and of a certain type
+get_rsc_by_type(Id, email, Context) ->
+    Idns = get_rsc_by_type_1(Id, email, Context),
+    Email = m_rsc:p_no_acl(Id, email, Context),
+    IsMissing = is_valid_key(email, Email, Context)
+                andalso not lists:any(fun(Idn) ->
+                                         proplists:get_value(key, Idn) =:= Email
+                                      end,
+                                      Idns),
+    case IsMissing of
+        true ->
+            insert(Id, email, Email, Context),
+            get_rsc_by_type(Id, email, Context);
+        false ->
+            Idns
+    end;
 get_rsc_by_type(Id, Type, Context) ->
+    get_rsc_by_type_1(Id, Type, Context).
+
+get_rsc_by_type_1(Id, Type, Context) ->
     z_db:assoc("select * from identity where rsc_id = $1 and type = $2 order by is_verified desc, key asc",
                [Id, Type], Context).
 
@@ -373,11 +478,16 @@ insert_1(RscId, Type, Key, Props, Context) ->
     of
         undefined -> 
             Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
-            z_db:insert(identity, validate_is_unique(Props1), Context);
+            Result = z_db:insert(identity, validate_is_unique(Props1), Context),
+            z_mqtt:publish(RscId, {identity, Type}, Context),
+            Result;
         IdnId ->
             case proplists:get_value(is_verified, Props, false) of
-                true -> set_verified_trans(RscId, Type, Key, Context);
-                false -> nop
+                true ->
+                    set_verified_trans(RscId, Type, Key, Context),
+                    z_mqtt:publish(RscId, {identity, Type}, Context);
+                false ->
+                    nop
             end,
             {ok, IdnId}
     end.
@@ -427,7 +537,9 @@ set_verified(RscId, Type, Key, Context)
     when is_integer(RscId), 
          Type =/= undefined, 
          Key =/= undefined, Key =/= <<>>, Key =/= [] ->
-    z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context);
+    Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context),
+    z_mqtt:publish(RscId, {identity, Type}, Context),
+    Result;
 set_verified(_RscId, _Type, _Key, _Context) ->
     {error, badarg}.
 
@@ -472,7 +584,10 @@ delete(IdnId, Context) ->
     z_db:delete(identity, IdnId, Context).
 
 delete_by_type(RscId, Type, Context) ->
-	z_db:q("delete from identity where rsc_id = $1 and type = $2", [RscId, Type], Context).
+	case z_db:q("delete from identity where rsc_id = $1 and type = $2", [RscId, Type], Context) of
+        0 -> ok;
+        _N -> z_mqtt:publish(RscId, {identity, Type}, Context)
+    end.
 
 delete_by_type_and_key(RscId, Type, Key, Context) ->
     z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3", [RscId, Type, Key], Context).

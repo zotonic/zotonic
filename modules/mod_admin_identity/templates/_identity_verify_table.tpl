@@ -11,7 +11,7 @@
 			</td>
 			<td>
 				{% if idn.is_verified %}
-					<span class="glyphicon glyphicon-ok" title="{_ Verified _}"></span>
+					<span class="glyphicon glyphicon-ok" title="{_ Verified _}"></span> {_ Verfied _}
 				{% else %}
 					<a id="{{ #verify.idn_id }}"  href="#" class="btn btn-default btn-sm" title="{_ Send verification e-mail _}">{_ Verify _}</a>		
 					{% wire id=#verify.idn_id 

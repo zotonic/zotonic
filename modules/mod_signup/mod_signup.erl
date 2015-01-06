@@ -166,11 +166,34 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
                 true -> z_notifier:map(#signup_confirm{id=NewUserId}, Context);
                 false -> nop
             end,
+            maybe_add_depiction(NewUserId, Props, Context),
             {ok, NewUserId};
         {error, Reason} ->
             throw({error, Reason})
     end.
 
+%% @doc Optionally add a depiction using the 'depiction_url' in the user's props
+maybe_add_depiction(Id, Props, Context) ->
+    case m_edge:objects(Id, depiction, Context) of
+        [] ->
+            case proplists:get_value(depiction_url, Props) of
+                Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
+                    case m_media:insert_url(Url, z_acl:logon(Id, Context)) of
+                        {ok, MediaId} ->
+                            lager:info("[~p] Added depiction from depiction_url for ~p: ~p", 
+                                       [z_context:site(Context), Id, Url]),
+                            m_edge:insert(Id, depiction, MediaId, Context);
+                        {error, _} = Error ->
+                            lager:warning("[~p] Could not insert depiction_url for ~p: ~p", 
+                                          [z_context:site(Context), Id, Url]),
+                            Error
+                    end;
+                _ ->
+                    ok
+            end;
+        _ -> 
+            ok
+    end.
 
 insert_or_update(undefined, Props, Context) ->
     m_rsc:insert(Props, Context);

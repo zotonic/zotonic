@@ -135,7 +135,13 @@ get_page(Context) ->
 
 %% @doc User logged on, fetch the location of the next page to show
 get_ready_page(Context) ->
-    Page = z_context:get_q("page", Context, []),
+    get_ready_page(z_context:get_q("page", Context, []), Context).
+
+get_ready_page(undefined, Context) ->
+    get_ready_page([], Context);
+get_ready_page(Page, Context) when is_binary(Page) ->
+    get_ready_page(z_convert:to_list(Page), Context);
+get_ready_page(Page, Context) when is_list(Page) ->
     case z_notifier:first(#logon_ready_page{request_page=Page}, Context) of
         undefined -> Page;
         Url -> Url
@@ -222,6 +228,16 @@ event(#submit{message=[]}, Context) ->
         undefined -> 
             ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
             logon_error("pw", Context)
+    end;
+
+event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
+    case proplists:get_value(<<"msg">>, Data) of
+        <<"logon_redirect">> ->
+            Location = get_ready_page(proplists:get_value(<<"page">>, Data, []), Context),
+            z_render:wire({redirect, [{location, cleanup_url(Location)}]}, Context);
+        Msg ->
+            lager:warning("controller_logon: unknown msg: ~p", [Msg]),
+            Context
     end.
 
 logon_error(Reason, Context) ->

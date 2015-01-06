@@ -34,6 +34,19 @@ div#logon_box {
     filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');
 }
 
+#logon_box > h2 {
+    margin: 2em 0 0 0;
+    color: gray;
+    border-top: 1px solid gray;
+    text-align: center;
+}
+#logon_box > h2 > span {
+    position: relative;
+    top: -0.8em;
+    background: white;
+    padding: 0 10px;
+}
+
 #logon_box form input[type="text"],
 #logon_box form input[type="password"] {
     font-size: 18px;

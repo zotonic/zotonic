@@ -9,6 +9,8 @@
 
 <p>{_ Your account name is _} “<strong>{{ m.identity[id].username|escape }}</strong>”.{% if m.identity[id].username != email|default:(m.rsc[id].email) %} {_ The e-mail address associated with your account is _} “<strong>{{ email|default:(m.rsc[id].email)|escape }}</strong>”.{% endif %}</p>
 
+{% all include "_logon_extra_email_reset.tpl" identity_types=m.identity[id].all_types %}
+
 <p>{_ Click on the link below to enter a new password, when clicking doesn't work then you can copy and paste the complete address to your browser. _}</p>
 
 <p><a href="{{ m.site.protocol }}://{{ m.site.hostname }}{% url logon_reset secret=secret %}">{{ m.site.protocol }}://{{ m.site.hostname }}{% url logon_reset secret=secret %}</a></p>
