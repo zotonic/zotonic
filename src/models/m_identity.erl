@@ -409,7 +409,7 @@ get_rsc(Id, Context) ->
 
 
 %% @doc Fetch all different identity types of an user
-%% @spec get_rsc_type(integer(), context()) -> list()
+-spec get_rsc_types(integer(), #context{}) -> list().
 get_rsc_types(Id, Context) ->
     Rs = z_db:q("select type from identity where rsc_id = $1", [Id], Context),
     [ R || {R} <- Rs ].
