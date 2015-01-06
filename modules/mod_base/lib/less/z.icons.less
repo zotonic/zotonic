@@ -61,14 +61,18 @@ For advanced usage, see the file z.icons.less.
 // }
 //
 //
-// Extend Font Awesome 4 icons by adding parameter 'fa' to the extend mixin:
+// Extending Font Awesome 4 icons
 //
-// .btn-bookmark {
-//    .extend_icon(fa, fa-var-bookmark);
-// }
-//
-// The icon (variable) names can be found in 
-// 'mod_artwork/lib/font-awesome-4/less/variables.less'.
+// 1. Enable module mod_artwork.
+// 2. In LESS, add parameter 'fa' to the extend mixin:
+//      .btn-bookmark {
+//          .extend_icon(fa, fa-var-bookmark);
+//      }
+//      The icon (variable) names can be found in 
+//      'mod_artwork/lib/font-awesome-4/less/variables.less'.
+// 3. To load the webfonts, add the CSS to the template, for instance:
+//      {% lib "font-awesome-4/css/font-awesome.min.css" %}
+
 
 
 @import "z.icons/variables.less";
