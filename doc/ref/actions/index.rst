@@ -6,8 +6,7 @@ Actions
 .. seealso:: :ref:`manual-template-actions` in the :ref:`manual-templates` manual.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :glob:
 
-   action_*
-
+   */index
