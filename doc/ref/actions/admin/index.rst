@@ -8,4 +8,3 @@ Admin
 
    ../action_admin_tasks
    ../action_adminwidget_toggle
-

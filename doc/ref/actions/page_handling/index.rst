@@ -8,4 +8,3 @@ Page handling
 
    ../action_redirect
    ../action_reload
-

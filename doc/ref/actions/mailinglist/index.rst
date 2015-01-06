@@ -11,4 +11,3 @@ Mailing list
    ../action_mailing_page_test
    ../action_mailinglist_confirm
    ../action_mailinglist_unsubscribe
-

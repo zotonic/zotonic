@@ -7,4 +7,3 @@ Sessions
    :glob:
 
    ../action_session_set
-

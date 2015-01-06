@@ -7,4 +7,3 @@ Actions
    :glob:
 
    ../action_with_args
-

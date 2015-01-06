@@ -8,4 +8,3 @@ Modules (Admin)
 
    ../action_module_rescan
    ../action_module_toggle
-

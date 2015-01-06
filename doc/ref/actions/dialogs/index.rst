@@ -7,6 +7,5 @@ Dialogs
    :glob:
 
    ../action_dialog
-   ../action_dialog_open
    ../action_dialog_close
-
+   ../action_dialog_open

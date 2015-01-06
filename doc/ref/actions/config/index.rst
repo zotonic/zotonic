@@ -11,4 +11,3 @@ Config
    ../action_dialog_config_delete
    ../action_dialog_config_edit
    ../action_dialog_config_new
-

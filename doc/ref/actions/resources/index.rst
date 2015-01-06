@@ -13,4 +13,3 @@ Resources
    ../action_dialog_edit_basics
    ../action_dialog_media_upload
    ../action_dialog_new_rsc
-
