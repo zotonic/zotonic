@@ -7,4 +7,3 @@ JavaScript
    :glob:
 
    ../action_script
-

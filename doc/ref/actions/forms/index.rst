@@ -16,4 +16,3 @@ Forms
    ../action_submit
    ../action_typeselect
    ../action_validation_error
-

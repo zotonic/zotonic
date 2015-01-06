@@ -8,4 +8,3 @@ Backup
    :glob:
 
    ../action_backup_start
-

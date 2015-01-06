@@ -20,8 +20,8 @@ DOM Elements
    ../action_jquery_effect
    ../action_mask
    ../action_move
-   ../action_remove_class
    ../action_remove
+   ../action_remove_class
    ../action_replace
    ../action_set_class
    ../action_show
@@ -30,8 +30,7 @@ DOM Elements
    ../action_slide_fade_out
    ../action_slide_toggle
    ../action_slide_up
-   ../action_toggle_class
    ../action_toggle
+   ../action_toggle_class
    ../action_unmask
    ../action_update
-

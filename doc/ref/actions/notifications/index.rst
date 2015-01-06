@@ -9,4 +9,3 @@ Notifications
    ../action_alert
    ../action_confirm
    ../action_growl
-

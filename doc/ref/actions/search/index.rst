@@ -7,4 +7,3 @@ Search
    :glob:
 
    ../action_moreresults
-

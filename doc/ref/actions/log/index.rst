@@ -7,4 +7,3 @@ Log
    :glob:
 
    ../action_addlog
-
