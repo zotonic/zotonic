@@ -21,6 +21,7 @@
 	        "css/z.icons.css"
 	        "css/z.growl.css" 
 	        "css/z.modal.css" 
+	        "css/z.icons.css" 
 	        "css/site.css" 
 	%}
 	{% block html_head_extra %}{% endblock %}
