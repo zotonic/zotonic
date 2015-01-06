@@ -16,6 +16,7 @@
 			"bootstrap/css/bootstrap.css" 
 			"bootstrap/css/bootstrap-responsive.css" 
 			"bootstrap/css/bootstrap-base-site.css" 
+			"css/z.icons.css" 
 	        "css/site.css" 
 	%}
 	{% block html_head_extra %}{% endblock %}
