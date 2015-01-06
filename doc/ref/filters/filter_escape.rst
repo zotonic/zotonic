@@ -1,6 +1,5 @@
-
-.. index:: filter; escape
-.. _filter-escape:
+.. highlight:: django
+.. include:: meta-escape.rst
 
 escape
 ======
@@ -37,6 +36,5 @@ For example::
   {{ value|escape }}
 
 When the value is ``<hel&lo>`` then the output is ``&lt;hel&amp;lo&gt;``.
-
 
 Note: this filter is not part of a module, it is built into ErlyDTL.
