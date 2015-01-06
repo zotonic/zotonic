@@ -80,6 +80,7 @@ observe_auth_autologon(auth_autologon, Context) ->
 %%      If identity is known: log on the associated user and session
 %%      If unknown, add identity to current user or signup a new user
 observe_auth_validated(#auth_validated{} = Auth, Context) ->
+    z_context:set_persistent(auth_method, Auth#auth_validated.service, Context),
     maybe_add_identity(z_acl:user(Context), Auth, Context).
 
 maybe_add_identity(undefined, Auth, Context) ->
@@ -94,7 +95,15 @@ maybe_add_identity(CurrUserId, Auth, Context) ->
             {ok, _} = insert_identity(CurrUserId, Auth, Context),
             {ok, Context};
         Ps ->
-            logon_identity(Auth, Ps, Context)
+            {rsc_id, IdnRscId} = proplists:lookup(rsc_id, Ps),
+            case {IdnRscId, Auth#auth_validated.is_connect} of
+                {CurrUserId, _} ->
+                    {ok, Context};
+                {_UserId, false} ->
+                    logon_identity(Auth, Ps, Context);
+                {_UserId, true} ->
+                    {error, duplicate}
+            end
     end.
 
 maybe_update_identity(Ps, Ps, _IdnPs, _Context) ->

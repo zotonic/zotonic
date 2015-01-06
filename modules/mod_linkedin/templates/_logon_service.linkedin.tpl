@@ -1,5 +1,5 @@
 <h2>{_ One moment please _}</h2>
-<p>{_ Redirecting to Twitter. _}</p>
+<p>{_ Redirecting to LinkedIn. _}</p>
 
 {% javascript %}
 	setTimeout(function() {

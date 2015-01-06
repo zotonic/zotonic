@@ -19,6 +19,12 @@
 		{% javascript %}
 			window.close();
 		{% endjavascript %}
+	{% elseif error == `duplicate` %}
+		<div class="container">
+			<h1>{_ Already Connected _}</h1>
+
+			<p class="alert">{_ Somebody else is already connected with this account on _} {{ service }}</p>
+		</div>
 	{% else %}
 		<div class="container">
 			<h1>{_ Sorry _}</h1>
@@ -28,4 +34,8 @@
 			<p>{_ Please try again later. _}</p>
 		</div>
 	{% endif %}
+
+	<p>
+		{% button class="btn" action={script script="window.close();"} text=_"Close Window" %}
+	</p>
 {% endblock %}

@@ -45,7 +45,7 @@ access_token({error, _Reason}, Context) ->
     html_error(access_token, Context).
 
 user_data({ok, UserProps}, AccessData, Context) ->
-    case proplists:get_value(email, UserProps) of
+    case proplists:get_value(<<"email">>, UserProps) of
         undefined ->
             lager:info("[facebook] No email returned for user with props ~p", [UserProps]),
             html_error(email_required, Context);
@@ -55,6 +55,9 @@ user_data({ok, UserProps}, AccessData, Context) ->
                     % No handler for signups, or signup not accepted
                     lager:warning("[facebook] Undefined auth_user return for user with props ~p", [UserProps]),
                     html_error(auth_user_undefined, Context);
+                {error, duplicate} ->
+                    lager:info("[facebook] Duplicate connection for user with props ~p", [UserProps]),
+                    html_error(duplicate, Context);
                 {error, _} = Err ->
                     lager:warning("[facebook] Error return ~p for user with props ~p", [Err, UserProps]),
                     html_error(auth_user_error, Context);
@@ -74,29 +77,34 @@ html_error(Error, Context) ->
     Vars = [
         {service, "Facebook"}, 
         {error, Error}, 
-        {auth_link, controller_facebook_authorize:redirect_location([], Context)++"&auth_type=rerequest"}
+        {auth_link, controller_facebook_authorize:redirect_location(Context)++"&auth_type=rerequest"}
     ],
     Html = z_template:render("logon_service_error.tpl", Vars, Context),
     z_context:output(Html, Context).
 
 
 auth_user(FBProps, AccessTokenData, Context) ->
-    FacebookUserId = unicode:characters_to_binary(proplists:get_value(id, FBProps)),
+    FacebookUserId = proplists:get_value(<<"id">>, FBProps),
     lager:debug("[facebook] Authenticating ~p ~p", [FacebookUserId, FBProps]),
     PersonProps = [
-        {title, unicode:characters_to_binary(proplists:get_value(name, FBProps))},
-        {name_first, unicode:characters_to_binary(proplists:get_value(first_name, FBProps))},
-        {name_surname, unicode:characters_to_binary(proplists:get_value(last_name, FBProps))},
-        {website, unicode:characters_to_binary(proplists:get_value(link, FBProps))},
-        {email, unicode:characters_to_binary(proplists:get_value(email, FBProps, []))},
-        {thumbnail_url, undefined}
+        {title, proplists:get_value(<<"name">>, FBProps)},
+        {name_first, proplists:get_value(<<"first_name">>, FBProps)},
+        {name_surname, proplists:get_value(<<"last_name">>, FBProps)},
+        {website, proplists:get_value(<<"link">>, FBProps)},
+        {email, proplists:get_value(<<"email">>, FBProps, [])},
+        {depiction_url, iolist_to_binary([
+                <<"https://graph.facebook.com/">>,
+                FacebookUserId,
+                <<"/picture?type=large">>
+            ])}
     ],
+    Args = controller_facebook_authorize:get_args(Context),
     z_notifier:first(#auth_validated{
             service=facebook,
             service_uid=FacebookUserId,
             service_props=AccessTokenData,
             props=PersonProps,
-            id=undefined
+            is_connect=z_convert:to_bool(proplists:get_value("is_connect", Args))
         },
         Context).
 
@@ -104,8 +112,7 @@ auth_user(FBProps, AccessTokenData, Context) ->
 % Exchange the code for an access token
 fetch_access_token(Code, Context) ->
     {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
-    PK = z_context:get_q("pk", Context, []),
-    RedirectUrl = z_context:abs_url(z_dispatcher:url_for(facebook_redirect, [{pk,PK}], Context), Context),
+    RedirectUrl = z_context:abs_url(z_dispatcher:url_for(facebook_redirect, Context), Context),
     FacebookUrl = "https://graph.facebook.com/oauth/access_token?client_id="
                 ++ z_utils:url_encode(AppId)
                 ++ "&redirect_uri=" ++ z_convert:to_list(z_utils:url_encode(RedirectUrl))
@@ -125,8 +132,8 @@ fetch_user_data(AccessToken) ->
     FacebookUrl = "https://graph.facebook.com/v2.0/me?access_token=" ++ z_utils:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
-            {struct, Props} = mochijson:decode(Payload),
-            {ok, [ {list_to_atom(K), V} || {K,V} <- Props ]};
+            {struct, Props} = mochijson:binary_decode(Payload),
+            {ok, Props};
         Other ->
             lager:error("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),
             {error, {http_error, FacebookUrl, Other}}
