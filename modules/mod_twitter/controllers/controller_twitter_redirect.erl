@@ -30,9 +30,15 @@
 
 
 html(Context) ->
-    RequestToken = z_context:get_session(twitter_request_token, Context),
-    z_context:set_session(twitter_request_token, undefined, Context),
-    request_token(RequestToken, Context).
+    case z_utils:is_empty(z_context:get_q("denied", Context)) of
+        true ->
+            RequestToken = z_context:get_session(twitter_request_token, Context),
+            z_context:set_session(twitter_request_token, undefined, Context),
+            request_token(RequestToken, Context);
+        false ->
+            Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
+            html_error(denied, Context1)
+    end.
 
 request_token({_, _} = RequestToken, Context) ->
     access_token(oauth_twitter_client:get_access_token(RequestToken, Context), Context);
