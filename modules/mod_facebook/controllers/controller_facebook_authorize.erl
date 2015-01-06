@@ -22,8 +22,8 @@
 
 -export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
 -export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
-
--export([redirect_location/2]).
+-export([get_args/1]).
+-export([redirect_location/1]).
 
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
@@ -51,41 +51,29 @@ previously_existed(ReqData, Context) ->
 
 moved_temporarily(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Args = get_args(Context1),
-    Location = redirect_location(Args, Context1),
+    Location = redirect_location(Context1),
+    save_args(Context1),
     ?WM_REPLY({true, Location}, Context1).
 
-redirect_location(Args, Context) ->
+redirect_location(Context) ->
     {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context),
     RedirectUrl = z_convert:to_list(
                         z_context:abs_url(
-                            z_dispatcher:url_for(facebook_redirect, Args, Context),
+                            z_dispatcher:url_for(facebook_redirect, Context),
                             Context)),
     "https://www.facebook.com/v2.0/dialog/oauth?client_id="
         ++ z_utils:url_encode(AppId)
         ++ "&redirect_uri=" ++ z_utils:url_encode(RedirectUrl)
         ++ "&display=popup"
-        ++ "&scope=" ++ Scope.
+        ++ "&scope=" ++ z_utils:url_encode(Scope).
+
+save_args(Context) ->
+    z_context:set_session(?MODULE, z_context:get_q_all_noz(Context), Context).
 
 get_args(Context) ->
-    case z_context:get_q("pk", Context, []) of
-        [] -> 
-            Page = get_page(Context),
-            [{pk, z_utils:pickle([{p,Page}], Context)}];
-        PK ->
-            [{pk, PK}]
+    Args = z_context:get_session(?MODULE, Context),
+    z_context:set_session(?MODULE, undefined, Context),
+    case Args of
+        L when is_list(L) -> L;
+        undefined -> []
     end.
-
-%% @doc Get the page we should redirect to after a successful log on.
-get_page(Context) ->
-    case z_context:get_q("p", Context, []) of
-        [] ->
-            RD = z_context:get_reqdata(Context),
-            case wrq:get_req_header("referer", RD) of
-                undefined -> "/";
-                Referrer -> Referrer
-            end;
-        Other ->
-            Other
-    end.
-
