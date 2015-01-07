@@ -27,9 +27,13 @@
 -include_lib("controller_html_helper.hrl").
 
 html(Context) ->
-    State = z_context:get_session(linkedin_state, Context),
-    case z_context:get_q("state", Context) of
-        State when is_list(State) ->
+    QState = z_context:get_q("state", Context),
+    case z_context:get_session(linkedin_state, Context) of
+        undefined ->
+            lager:warning("[~p] LinkedIn OAuth redirect with missing session state",
+                          [z_context:site(Context)]),
+            html_error(missing_secret, Context);
+        QState ->
             case z_context:get_q("code", Context) of
                 undefined ->
                     Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
@@ -37,11 +41,11 @@ html(Context) ->
                 Code ->
                     access_token(fetch_access_token(Code, Context), Context)
             end;
-        QState ->
+        SessionState ->
             lager:warning("[~p] LinkedIn OAuth redirect with state mismatch, expected ~p, got ~p",
-                          [z_context:site(Context), State, QState]),
+                          [z_context:site(Context), SessionState, QState]),
             Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
-            html_error(cancel, Context1)
+            html_error(wrong_secret, Context1)
     end.
 
 access_token({ok, AccessToken, Expires}, Context) ->
@@ -79,10 +83,22 @@ html_ok(Context) ->
 html_error(Error, Context) ->
     Vars = [
         {service, "LinkedIn"}, 
+        {is_safari8problem, is_safari8problem(Context)},
         {error, Error}
     ],
     Html = z_template:render("logon_service_error.tpl", Vars, Context),
     z_context:output(Html, Context).
+
+%% @doc There is a problem here with Safari 8.0.x which (in its default setting) does not pass any
+%%      cookies after the redirect from LinkedIn (and other OAuth redirects).
+%%      See also this issue: https://github.com/drone/drone/issues/663#issuecomment-61565820
+is_safari8problem(Context) ->
+    Hs = m_req:get(headers, Context),
+    HasCookies = proplists:is_defined("cookie", Hs),
+    UA = m_req:get(user_agent, Context),
+    IsVersion8 = string:str(UA, "Version/8.0.") > 0,
+    IsSafari = string:str(UA, "Safari/6") > 0,
+    not HasCookies andalso IsVersion8 andalso IsSafari.
 
 
 auth_user(Profile, AccessTokenData, Context) ->
