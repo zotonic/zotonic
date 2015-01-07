@@ -25,6 +25,18 @@
 
 			<p class="alert">{_ Somebody else is already connected with this account on _} {{ service }}</p>
 		</div>
+	{% elseif is_safari8problem %}
+		<div class="container">
+			<h1>{_ Sorry _}</h1>
+
+			<p>{_ Safari 8 has a known problem with handling external authentications. _}</p>
+
+			<p>{_ This can be resolved by changing the Cookies and website data settings in the Safari preferences. _}</p>
+
+			<p>
+				<img src="https://cloud.githubusercontent.com/assets/38268/5646695/451d9c32-967f-11e4-80fc-913d5e8b483e.jpg" width="100%" />
+			</p>
+		</div>
 	{% else %}
 		<div class="container">
 			<h1>{_ Sorry _}</h1>
