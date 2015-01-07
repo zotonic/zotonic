@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block title %}
-{_ Log on to _} {{ m.config.site.title.value|default:"Zotonic" }}
+{{ m.rsc.page_logon.title|default:[_"Log on to", " ", m.config.site.title.value|default:"Zotonic"] }}
 {% endblock %}
 
 {% block page_class %}z-page-logon{% endblock %}

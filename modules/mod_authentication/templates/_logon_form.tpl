@@ -30,6 +30,10 @@ logon_form_outside_tpl
     </div>
     
     <div class="z-logon-form">
+        {% if m.rsc.page_logon.body %}
+            <div class="alert">{{ m.rsc.page_logon.body }}</div>
+        {% endif %}
+    
         {% if logon_form_extra_tpl %}
             {% include logon_form_extra_tpl %}
         {% endif %}
