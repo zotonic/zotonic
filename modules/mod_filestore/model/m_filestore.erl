@@ -166,7 +166,7 @@ purge_move_to_local(Id, Context) ->
 
 stats(Context) ->
     {Archived, ArchiveSize} = z_db:q_row("
-                            select count(*), sum(size) 
+                            select count(*), coalesce(sum(size), 0)
                             from medium
                             where filename is not null
                               and filename <> ''
