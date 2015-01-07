@@ -45,7 +45,7 @@
                          "f58baa8d01eec2348c60d692d474bcd56b15a760"}},
        {z_stdlib,".*",
                  {git,"git://github.com/zotonic/z_stdlib.git",
-                      "b69b24e849d1831022d9db38adb9a0252eab98a0"}},
+                      "85b660306c022c9f97a4ebf6a0eecf5682381902"}},
        {edown,".*",
               {git,"git://github.com/uwiger/edown.git",
                    "4cb4ad67382590d92228ea6c56225376bd9f5685"}},
