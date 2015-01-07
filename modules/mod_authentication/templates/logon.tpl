@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block title %}
-{_ Log on to _} {{ m.config.site.title.value|default:"Zotonic" }}
+{{ m.rsc.page_logon.title|default:[_"Log on to", " ", m.config.site.title.value|default:"Zotonic"] }}
 {% endblock %}
 
 {% block content_area %}
@@ -15,6 +15,9 @@
 	{% include "_logon_error.tpl" reason=error_reason %}
     </div>
 
+    {% if m.rsc.page_logon.body %}
+        <div class="alert">{{ m.rsc.page_logon.body }}</div>
+    {% endif %}
     <ul id="logon_methods">
         {% all include "_logon_extra.tpl" %}
     </ul>

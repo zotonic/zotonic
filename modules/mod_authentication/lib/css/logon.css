@@ -1,39 +1,5 @@
 /* Design for logon, password reminder etc. */
 
-div.logon_bottom {
-	text-align: center;
-	margin-top: 20px;
-        margin-bottom: 100px;
-}
-
-p#logon_reason {
-	margin-bottom: 30px;
-}
-
-ul#logon_methods {
-	margin: 30px;
-}
-
-div#logon_box {
-    text-align: left;
-    width: 380px;
-    margin: 0 auto;
-    padding: 30px;
-    padding-bottom: 10px;
-    margin-top: 100px;
-
-    border-radius: 8px;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-
-    box-shadow: 0 0 6px #999;
-    -webkit-box-shadow: 0 0 6px #999;
-    -moz-box-shadow: 0 0 6px #999;
-
-    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999')";
-    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');
-}
-
 #logon_box > h2 {
     margin: 2em 0 0 0;
     color: gray;
@@ -45,6 +11,32 @@ div#logon_box {
     top: -0.8em;
     background: white;
     padding: 0 10px;
+}
+
+div.logon_bottom {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 100px;
+}
+
+p#logon_reason {
+    margin-bottom: 30px;
+}
+
+ul#logon_methods {
+    margin: 15px;
+}
+
+#logonTarget {
+  padding: 0 10px;
+}
+
+div#logon_box {
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+    padding: 0;
+    margin: 10% auto 0 auto;
 }
 
 #logon_box form input[type="text"],
@@ -71,20 +63,10 @@ div#logon_box {
 #logon_box form .form-field-error:focus {
     border-color: red;
 }
-
-
-div#logon_box.logon_error  {
-    width: 600px;
-}
-
 div#logon_error {
-    margin: 0 18px 18px 0px;
-    padding-right: 18px;
-    border-right: 1px solid #ccc;
-    width: 260px; 
-    float: left; 
     text-align: left;
     display: none;
+    padding-bottom: 18px;
 }
 
 h1.logon_header.error {
@@ -94,22 +76,18 @@ h1.logon_header.error {
 div#logon_box.logon_error div#logon_error  {
     display: block;
 }
-div#logon_box.logon_error div#logon_form  {
-    margin-left: 300px;
-}
-
 
 div#logon_error h2 {
-	color: #d80000;
+    color: #d80000;
 }
 
 div#logon_button {
-	text-align: center;
+    text-align: center;
 }
 
 
 p.logon_link {
-	margin: 0;
+    margin: 0;
 }
 
 #logon_methods {
@@ -117,5 +95,96 @@ p.logon_link {
 }
 
 #logon_methods img {
-	float: none;
+    float: none;
 }
+
+@media (min-width:980px) {
+    div#logon_box .alert {
+        position: absolute;
+        margin-left: 400px;
+        width: 230px;
+    }
+    div#logon_box.logon_error .alert {
+        display: none;
+    }
+}
+@media (min-width:640px) {
+    div#logon_box.logon_error  {
+        width: 600px;
+        max-width: 600px;
+    }
+    div#logon_error {
+        margin: 0 18px 18px 0px;
+        padding-right: 18px;
+        border-right: 1px solid #ccc;
+        width: 260px; 
+        float: left; 
+    }
+    div#logon_box.logon_error div#logon_form,
+    div#logon_box.logon_error ul#logon_methods,
+    div#logon_box.logon_error > h2 {
+        margin-left: 300px;
+    }
+    #logon_box div#logon_error {
+        float:left;
+    }
+}
+@media (max-width:640px) {
+    div#logon_error {
+        padding: 10px;
+    }
+}
+
+#logon_form h1 {
+    font-size: 22px;
+}
+#logon_form h1 span {
+    display: inline;
+    font-size: inherit;
+}
+#logon_box .error {
+    display: block;
+}
+#logon_box div#logon_outer {
+    margin-top:1em;
+}
+    #logon_box .logon_message,
+    #logon_box form#logon_form,
+    #logon_box form#password_reminder,
+    #logon_box form#password_reset,
+    #logon_box form#password_expired {
+        padding:20px;
+        margin: 0;
+        width: auto;
+    }
+
+    #logon_box h1.logon_header {
+        margin-top:0;
+        line-height:1.3;
+    }
+    #logon_box #logon_dialog {
+        float:none !important;
+        margin:0 auto;
+        width:342px;
+    }
+    #logon_box #logon_form_box {
+        margin-left:-20px;
+    }
+    #logon_box div#logon_error {
+        border-right:none;
+        margin:10px;
+        padding-right:0;
+    }
+        #logon_box .logon_error div#logon_box {
+            width:auto;
+        }
+        #logon_box .btn {
+            margin: 10px 10px 10px 0;
+        }
+        #logon_box .checkbox {
+            clear:left;
+            margin: 10px 0;
+        }
+    #logon_box form div.control-group.buttons {
+        margin: 0;
+    }
