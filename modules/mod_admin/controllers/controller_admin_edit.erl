@@ -129,7 +129,7 @@ event(#submit{message={rscform, Args}}, Context) ->
         throw:{error, Message} when is_list(Message); is_binary(Message) ->
             z_render:growl_error(Message, Context);
         X:Y ->
-            lager:error("Rsc update error: ~p:~p", [X, Y]),
+            lager:error("Rsc update error: ~p:~p stacktrace: ~p", [X, Y, erlang:get_stacktrace()]),
             z_render:growl_error("Something went wrong. Sorry.", Context)
     end;
 
