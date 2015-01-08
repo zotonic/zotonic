@@ -508,6 +508,8 @@ validate_is_unique(Props) ->
             Props
     end.
 
+is_valid_key(_Type, undefined, _Context) ->
+    false;
 is_valid_key(email, Key, _Context) ->
     z_email_utils:is_email(Key);
 is_valid_key(_Type, _Key, _Context) ->
