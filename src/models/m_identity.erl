@@ -245,11 +245,17 @@ generate_username(Id, Context) ->
     username_unique(Username, Context).
 
 username_unique(U, Context) ->
-    N = z_convert:to_binary(z_ids:number(1000)),
+    case z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [U], Context) of
+        0 -> U;
+        _ -> username_unique_x(U, 10, Context)
+    end.
+
+username_unique_x(U, X, Context) ->
+    N = z_convert:to_binary(z_ids:number(X)),
     U1 = <<U/binary, $., N/binary>>,
     case z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [U1], Context) of
         0 -> U1;
-        _ -> username_unique(U, Context)
+        _ -> username_unique_x(U, X*10, Context)
     end.
 
 

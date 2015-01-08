@@ -60,7 +60,7 @@
 	<p>{_ You can also _} <a href="{% url signup %}">{_ sign up for a username and password _}</a>.</p>
 	{% else %}
 	<ul id="signup_services" class="clearfix">
-		{% all include "_signup_services.tpl" mask_target="signup_form" %}
+		{% all include "_logon_extra.tpl" %}
 	</ul>
 	{% endif %}
 
