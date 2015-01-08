@@ -172,7 +172,7 @@ fetch_access_token(Code, Context) ->
 fetch_user_data(AccessToken) ->
     LinkedInUrl = "https://api.linkedin.com//v1/people/\~:"++fields()++"?secure_urls=true",
     Hs = [
-        {"Authorization", "Bearer "++z_utils:url_encode(AccessToken)},
+        {"Authorization", "Bearer "++z_convert:to_list(AccessToken)},
         {"x-li-format", "json"}
     ],
     case httpc:request(get, {LinkedInUrl, Hs}, httpc_http_options(), httpc_options()) of
