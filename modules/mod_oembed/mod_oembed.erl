@@ -50,36 +50,64 @@ init(Context) ->
 %% @doc Check if the update contains video embed information.  If so
 %% then try to get the oembed information from the provider and update
 %% the attached medium item.
-%% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
-observe_rsc_update(#rsc_update{id=Id, props=BeforeProps}, {Changed, Props}, Context) ->
-    case proplists:is_defined(oembed_url, Props) of
+-spec observe_rsc_update(#rsc_update{}, {boolean(), list()}, #context{}) -> {boolean(), list()}.
+observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context) ->
+    case proplists:get_value(oembed_url, Props) of
+        undefined -> 
+            {Changed, Props};
+        [] -> 
+            {true, proplists:delete(oembed_url, Props)};
+        <<>> -> 
+            {true, proplists:delete(oembed_url, Props)};
+        EmbedUrl ->
+            case z_acl:is_allowed(insert, #acl_media{mime=?OEMBED_MIME}, Context) of
+                true ->
+                    MediaProps = [
+                        {mime, ?OEMBED_MIME},
+                        {oembed_url, EmbedUrl}
+                    ],
+                    case preview_create(Id, MediaProps, z_acl:sudo(Context)) of
+                        undefined ->
+                            {true, proplists:delete(oembed_url, Props)};
+                        OEmbedTitle ->
+                            Props1 = case z_utils:is_empty(z_trans:lookup_fallback(proplists:get_value(title, Props), Context)) of
+                                        true ->  [{title, z_html:escape(OEmbedTitle)} | proplists:delete(title, Props)];
+                                        false -> Props
+                                     end,
+                            {true, proplists:delete(oembed_url, Props1)}
+                    end;
+                false ->
+                    {true, proplists:delete(oembed_url, Props)}
+            end
+    end;
+observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed, UpdateProps}, Context) ->
+    case proplists:is_defined(oembed_url, UpdateProps) of
         true -> 
-            {EmbedChanged, OEmbedTitle} = case proplists:get_value(oembed_url, Props) of
-                Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
-                    % Delete the media record if the media mime type is our mime type
-                    case m_media:identify(Id, Context) of
-                        {ok, Props} ->
-                            case proplists:get_value(mime, Props) of
+            OldMediaProps = m_media:get(Id, Context),
+            {EmbedChanged, OEmbedTitle} = case proplists:get_value(oembed_url, UpdateProps) of
+                Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= [] ->
+                    % Delete the media record iff the media mime type is our mime type
+                    case OldMediaProps of
+                        undefined ->
+                            {false, undefined};
+                        _ ->
+                            case proplists:get_value(mime, OldMediaProps) of
                                 ?OEMBED_MIME -> 
                                     m_media:delete(Id, Context),
                                     {true, undefined};
                                 _ -> 
                                     {false, undefined}
-                            end;
-                        _ ->
-                            {false, undefined}
+                            end
                     end;
                 EmbedUrl ->
                     MediaProps = [
                         {mime, ?OEMBED_MIME},
                         {oembed_url, EmbedUrl}
                     ],
-
-                    case m_media:get(Id, Context) of
+                    case OldMediaProps of
                         undefined ->
-                            ok = m_media:replace(Id, MediaProps, Context),
                             {true, preview_create(Id, MediaProps, Context)};
-                        OldMediaProps ->
+                        _ ->
                             case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?OEMBED_MIME)
                                 andalso z_utils:are_equal(proplists:get_value(oembed_url, OldMediaProps), EmbedUrl)
                                 andalso proplists:get_value(oembed, OldMediaProps) =/= undefined of
@@ -88,22 +116,18 @@ observe_rsc_update(#rsc_update{id=Id, props=BeforeProps}, {Changed, Props}, Cont
                                     {false, undefined};
                                 false ->
                                     %% Changed, update the medium record
-                                    ok = m_media:replace(Id, MediaProps, Context),
                                     {true, preview_create(Id, MediaProps, Context)}
                             end
                     end
             end,
-            ExtraProps = case EmbedChanged andalso z_utils:is_empty(z_trans:lookup_fallback(proplists:get_value(title, BeforeProps), Context)) of
-                             true ->
-                                 [{title, OEmbedTitle}];
-                             false ->
-                                 []
-                         end,
-
-            Props1 = ExtraProps ++ proplists:delete(oembed_url, Props),
-            {Changed or EmbedChanged, Props1};
+            CurrTitle = proplists:get_value(title, UpdateProps, proplists:get_value(title, CurrProps)),
+            UpdateProps1 = case EmbedChanged andalso z_utils:is_empty(z_trans:lookup_fallback(CurrTitle, Context)) of
+                        true ->  [{title, z_html:escape_check(OEmbedTitle)} | proplists:delete(title, UpdateProps)];
+                        false -> UpdateProps
+                     end,
+            {Changed or EmbedChanged, proplists:delete(oembed_url, UpdateProps1)};
         false ->
-            {Changed, Props}
+            {Changed, UpdateProps}
     end.
 
 
@@ -353,7 +377,7 @@ preview_create(Id, Context) ->
 %%====================================================================
 
 %% Fetch or create a preview for the movie. Returns the media title
-%% that need to be set on the rsc when the rsc as no title.
+%% that need to be set on the rsc if the rsc has no title.
 preview_create(MediaId, MediaProps, Context) ->
     case z_convert:to_list(proplists:get_value(oembed_url, MediaProps)) of
         [] -> 
