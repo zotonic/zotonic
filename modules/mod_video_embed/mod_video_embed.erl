@@ -46,56 +46,80 @@
 -define(EMBED_MIME, <<"text/html-video-embed">>).
 
 %% @doc Check if the update contains video embed information.  If so then update the attached medium item.
-%% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
-observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
+-spec observe_rsc_update(#rsc_update{}, {boolean(), list()}, #context{}) -> {boolean(), list()}.
+observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context) ->
+    case proplists:get_value(video_embed_code, Props) of
+        undefined -> 
+            {Changed, Props};
+        [] -> 
+            {true, proplists:delete(video_embed_code, Props)};
+        <<>> -> 
+            {true, proplists:delete(video_embed_code, Props)};
+        EmbedCodeRaw ->
+            case z_acl:is_allowed(insert, #acl_media{mime=?EMBED_MIME}, Context) of
+                true ->
+                    EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
+                    EmbedService = proplists:get_value(video_embed_service, Props, <<>>),
+                    MediaProps = [
+                        {mime, ?EMBED_MIME},
+                        {video_embed_code, EmbedCode},
+                        {video_embed_service, EmbedService}
+                    ],
+                    ok = m_media:replace(Id, MediaProps, Context),
+                    spawn_preview_create(Id, MediaProps, Context);
+                false ->
+                    ok
+            end,
+            Props1 = proplists:delete(video_embed_code, 
+                        proplists:delete(video_embed_service, Props)),
+            {true, Props1}
+    end;
+observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, Props}, Context) ->
     case proplists:is_defined(video_embed_code, Props) of
         true -> 
+            OldMediaProps = m_media:get(Id, Context),
             EmbedChanged = case proplists:get_value(video_embed_code, Props) of
-                Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
+                Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= [] ->
                     % Delete the media record iff the media mime type is our mime type
-                    case m_media:identify(Id, Context) of
-                        {ok, Props} ->
-                            case proplists:get_value(mime, Props) of
+                    case OldMediaProps of
+                        undefined ->
+                            false;
+                        _ ->
+                            case proplists:get_value(mime, OldMediaProps) of
                                 ?EMBED_MIME -> 
                                     m_media:delete(Id, Context),
                                     true;
                                 _ -> 
                                     false
-                            end;
-                        _ ->
-                            false
+                            end
                     end;
-                EmbedCode ->
-                    EmbedCodeRaw = z_sanitize:html(z_html:unescape(EmbedCode), Context),
-                    EmbedService = proplists:get_value(video_embed_service, Props, ""),
+                EmbedCodeRaw ->
+                    EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
+                    EmbedService = proplists:get_value(video_embed_service, Props, <<>>),
                     MediaProps = [
                         {mime, ?EMBED_MIME},
-                        {video_embed_code, EmbedCodeRaw},
+                        {video_embed_code, EmbedCode},
                         {video_embed_service, EmbedService}
                     ],
-
-                    case m_media:get(Id, Context) of
+                    case OldMediaProps of
                         undefined ->
                             ok = m_media:replace(Id, MediaProps, Context),
                             spawn_preview_create(Id, MediaProps, Context),
                             true;
-                        OldMediaProps ->
+                        _ ->
                             case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?EMBED_MIME)
-                                andalso z_utils:are_equal(proplists:get_value(video_embed_code, OldMediaProps), EmbedCodeRaw)
-                                andalso z_utils:are_equal(proplists:get_value(video_embed_service, OldMediaProps), EmbedService) of
-                            
+                                andalso z_utils:are_equal(proplists:get_value(video_embed_code, OldMediaProps), EmbedCode)
+                                andalso z_utils:are_equal(proplists:get_value(video_embed_service, OldMediaProps), EmbedService)
+                            of
                                 true ->
-                                    %% Not changed
                                     false; 
                                 false -> 
-                                    %% Changed, update the medium record
                                     ok = m_media:replace(Id, MediaProps, Context),
                                     spawn_preview_create(Id, MediaProps, Context),
                                     true
                             end
                     end
             end,
-
             Props1 = proplists:delete(video_embed_code, 
                         proplists:delete(video_embed_service, Props)),
             {Changed or EmbedChanged, Props1};
@@ -283,12 +307,12 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 
 %% Fetch or create a preview for the movie
 spawn_preview_create(MediaId, InsertProps, Context) ->
-    case z_convert:to_list(proplists:get_value(video_embed_service, InsertProps)) of
-        "youtube" -> 
+    case z_convert:to_binary(proplists:get_value(video_embed_service, InsertProps)) of
+        <<"youtube">> -> 
             spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
-        "vimeo" -> 
+        <<"vimeo">> -> 
             spawn(fun() -> preview_vimeo(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
-        "yandex" -> 
+        <<"yandex">> -> 
             spawn(fun() -> preview_yandex(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
         _ -> nop
     end.
@@ -296,20 +320,14 @@ spawn_preview_create(MediaId, InsertProps, Context) ->
 % @doc Fetch the preview image of a youtube video. The preview is located at: http://img.youtube.com/vi/[code]/0.jpg
 % @todo Make this more robust wrt http errors.
 preview_youtube(MediaId, InsertProps, Context) ->
-    case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
-        [] -> nop;
+    case z_convert:to_binary(proplists:get_value(video_embed_code, InsertProps)) of
+        <<>> ->
+            nop;
         Embed ->
-            case re:run(Embed, "youtube(\-nocookie)?\\.com/(v|embed)/([^\?\"'&#]+)", [{capture,[3],list}]) of
+            case re:run(Embed, "youtube\\.com/(v|embed)/([a-zA-Z0-9_\\-]+)", [{capture,[2],list}]) of
                 {match, [Code]} ->
                     Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
-                    case httpc:request(Url) of
-                        {ok, {{_,200,_}, _Header, Data}} ->
-                            %% Received the preview image, move it to a file.
-                            m_media:save_preview(MediaId, Data, "image/jpeg", Context);
-                        {error, _Reason} ->
-                            %% Too bad - no preview available - ignore for now (see todo above)
-                            nop
-                    end;
+                    m_media:save_preview_url(MediaId, Url, Context);
                 _ ->
                     nop
             end
@@ -319,8 +337,9 @@ preview_youtube(MediaId, InsertProps, Context) ->
 % @doc Fetch the preview image of a vimeo video. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
 % @todo Make this more robust wrt http errors.
 preview_vimeo(MediaId, InsertProps, Context) ->
-    case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
-        [] -> nop;
+    case z_convert:to_binary(proplists:get_value(video_embed_code, InsertProps)) of
+        <<>> -> 
+            nop;
         Embed ->
             case re:run(Embed, "clip_id=([0-9]+)", [{capture,[1],list}]) of
                 {match, [Code]} ->
@@ -329,17 +348,8 @@ preview_vimeo(MediaId, InsertProps, Context) ->
                         {ok, {_StatusLine, _Header, Data}} ->
                             {array, [{struct, Props}]} = mochijson:decode(Data),
                             case proplists:get_value("thumbnail_large", Props) of
-                                undefined ->
-                                    nop;
-                                ImgUrl ->
-                                    case httpc:request(ImgUrl) of
-                                        {ok, {_StatusLine1, _Header1, ImgData}} ->
-                                            %% Received the preview image, move it to a file.
-                                            m_media:save_preview(MediaId, ImgData, "image/jpeg", Context);
-                                        {error, _Reason} ->
-                                            %% Error retrieving preview
-                                            nop
-                                    end
+                                undefined -> nop;
+                                ImgUrl -> m_media:save_preview_url(MediaId, ImgUrl, Context)
                             end;
                         {error, _Reason} ->
                             %% Too bad - no preview available - ignore for now (see todo above)
@@ -355,20 +365,14 @@ preview_vimeo(MediaId, InsertProps, Context) ->
 %% http://static.video.yandex.ru/get/[user]/[code]/1.m450x334.jpg
 %% @todo Make this more robust wrt http errors.
 preview_yandex(MediaId, InsertProps, Context) ->
-    case z_convert:to_list(proplists:get_value(video_embed_code, InsertProps)) of
-        [] -> nop;
+    case z_convert:to_binary(proplists:get_value(video_embed_code, InsertProps)) of
+        <<>> -> 
+            nop;
         Embed ->
             case re:run(Embed, "flv\\.video\\.yandex\\.ru/lite/([^/]+)/([^\"'&/#]+)", [{capture, [1, 2], list}]) of
                 {match, [User, Code]} ->
                     Url = lists:flatten(["http://static.video.yandex.ru/get/", User, $/, Code, "/1.m450x334.jpg"]),
-                    case httpc:request(Url) of
-                        {ok, {_StatusLine, _Header, Data}} ->
-                            %% Received the preview image, move it to a file.
-                            m_media:save_preview(MediaId, Data, "image/jpeg", Context);
-                        {error, _Reason} ->
-                            %% Too bad - no preview available - ignore for now (see todo above)
-                            nop
-                    end;
+                    m_media:save_preview_url(MediaId, Url, Context);
                 _ ->
                     nop
             end
