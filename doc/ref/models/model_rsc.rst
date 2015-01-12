@@ -102,12 +102,12 @@ A resource has the following properties accessible from the templates:
 |                   |belongs to. The list is suitable for indexing with   |                                |
 |                   |category atoms.                                      |                                |
 |                   |                                                     |                                |
-|                   |Example usage: {{ m.rsc[id].is_a.article }}          |                                |
+|                   |Example usage: ``{{ m.rsc[id].is_a.article }}``      |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
 |is_cat             |Direct check if a page is a certain category. More   |true                            |
 |                   |efficient then is_a.                                 |                                |
 |                   |                                                     |                                |
-|                   |Example usage: {{ m.rsc[id].is_cat.person }}         |                                |
+|                   |Example usage: ``{{ m.rsc[id].is_cat.person }}``     |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
 |is_featured        |If featured checked or not. Returns a boolean        |false                           |
 +-------------------+-----------------------------------------------------+--------------------------------+
@@ -143,7 +143,7 @@ A resource has the following properties accessible from the templates:
 |                   |indexed with the edge’s predicate name (atom). When  |                                |
 |                   |indexed the function will return a list of integers. |                                |
 |                   |                                                     |                                |
-|                   |``Example usage: {{ m.rsc[id].o.author[1].title }}`` |                                |
+|                   |Example usage: ``{{ m.rsc[id].o.author[1].title }}`` |                                |
 |                   |                                                     |                                |
 |                   |This returns the first author that is linked from    |                                |
 |                   |this page.                                           |                                |
@@ -154,7 +154,7 @@ A resource has the following properties accessible from the templates:
 |                   |(atom). When indexed the function will return a list |                                |
 |                   |of integers.                                         |                                |
 |                   |                                                     |                                |
-|                   |Example usage: {{ m.rsc[id].s.author[1].title }}     |                                |
+|                   |Example usage: ``{{ m.rsc[id].s.author[1].title }}`` |                                |
 |                   |                                                     |                                |
 |                   |This returns the first article that links to me with |                                |
 |                   |a author connection.                                 |                                |
