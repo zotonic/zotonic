@@ -173,7 +173,14 @@ insert(Subject, Pred, Object, Opts, Context) ->
                                   S when is_integer(S) -> [{seq, S}];
                                   _ -> []
                               end,
-                        z_db:insert(edge, [{subject_id, SubjectId}, {object_id, ObjectId}, {predicate_id, PredId} | SeqOpt], Ctx)
+                        EdgeProps = [
+                            {subject_id, SubjectId},
+                            {object_id, ObjectId},
+                            {predicate_id, PredId},
+                            {creator_id, z_acl:user(Ctx)}
+                            | SeqOpt
+                        ],
+                        z_db:insert(edge, EdgeProps, Ctx)
                     end,
                 {ok, PredName} = m_predicate:id_to_name(PredId, Context),
                 case z_acl:is_allowed(insert, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of
