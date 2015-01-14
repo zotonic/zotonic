@@ -64,9 +64,10 @@ With this it is possible to see for a request path which dispatch rules are matc
 Automatic recompilation
 -----------------------
 
-When this module is enabled, it runs an `inotifywait` program in the
+When this module is enabled, it runs a watcher program in the
 background, which watches files in Zotonic and its site for
-changes. If it detects changes, it performs certain actions.
+changes. If it detects changes, it performs certain actions. See below
+for platform-specific installation instructions.
 
 * If an `.erl` file changes, it recompiles and reloads the file
   on-the-fly. When a module exports notifier functions (`observe_...`
@@ -79,7 +80,23 @@ changes. If it detects changes, it performs certain actions.
 * If a template file is added, or a dispatch rule changed, it flushes
   the cache so the template file or the dispatch rule is found.
 
-.. note:: Automatic recompilation currently only works on Linux and depends on the `inotifywait` tool, which is part of the ``inotify-tools`` package.
+Linux installation
+...................................................
+
+On Linux this feature depends on the `inotifywait` tool, which is part
+of the ``inotify-tools`` package. For displaying notifications, it
+uses ``notify-send``::
+  
+  sudo apt-get install inotify-tools libnotify-bin
+
+MacOS X installation
+........................................
+
+On MacOS X (version 10.8 and higher), we use the external programs ``fswatch`` and
+``terminal-notifier``::
+
+  sudo brew install fswatch 
+  sudo brew install terminal-notifier
 
 
 Configuration options

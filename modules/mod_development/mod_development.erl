@@ -217,6 +217,8 @@ send_message(_, []) ->
     undefined;
 send_message({unix, linux}, Msg) ->
     os:cmd("which notify-send && notify-send \"Zotonic\" " ++ z_utils:os_escape(Msg));
+send_message({unix, darwin}, Msg) ->
+    os:cmd("which terminal-notifier && terminal-notifier -title Zotonic  -message " ++ z_utils:os_escape(Msg));
 send_message(_, _) ->
     undefined.
 
@@ -235,6 +237,11 @@ init(Args) ->
     NeedPeriodic = case os:type() of
                        {unix, linux} ->
                            case z_filewatcher_inotify:start_link(Context) of
+                               {ok, _} -> false;
+                               {error, _} -> true
+                           end;
+                       {unix, darwin} ->
+                           case z_filewatcher_fswatch:start_link(Context) of
                                {ok, _} -> false;
                                {error, _} -> true
                            end;
