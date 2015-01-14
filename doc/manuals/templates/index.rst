@@ -27,6 +27,9 @@ branches::
   {% if username == 'Arjan' %} Hi, Arjan {% endif %}
   
 
+In depth
+--------
+
 Being a web framework, it is of no surprise that templates are one of
 the most broad topics in Zotonic. The template manual has therefore
 been split up into the following sections, each of which addresses a
