@@ -72,7 +72,7 @@ user_data({error, _}, _AccessToken, Context) ->
 
 
 html_ok(Context) ->
-    Html = z_template:render("logon_service_done.tpl", [{service, "Twitter"}], Context),
+    Html = z_template:render("logon_service_done.tpl", [{service, "Twitter"} | z_context:get_all(Context)], Context),
     z_context:output(Html, Context).
 
 html_error(Error, Context) ->
