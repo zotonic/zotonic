@@ -51,16 +51,18 @@ previously_existed(ReqData, Context) ->
 
 moved_temporarily(ReqData, Context) ->
     %% @todo add the redirect page parameter of the logon page to the redirect url
-    Context1 = ?WM_REQ(ReqData, Context),
+    Context1 = z_context:ensure_all(?WM_REQ(ReqData, Context)),
     {ok, {Token, Secret}} = oauth_twitter_client:get_request_token(Context1),
+    Lang = z_convert:to_list(z_context:get_q("lang", Context1, z_context:language(Context1))),
     z_context:set_session(twitter_request_token, {Token, Secret}, Context),
-    % z_context:set_session(twitter_ready_page, get_page(Context1), Context1),
 
     RedirectUrl = z_context:abs_url(
                             z_dispatcher:url_for(twitter_redirect, Context1),
                             Context1),
     Location = oauth_twitter_client:authorize_url(Token)
-        ++ "&oauth_callback=" ++ z_convert:to_list(z_utils:url_encode(RedirectUrl)),
+        ++ "&oauth_callback=" ++ z_convert:to_list(z_utils:url_encode(RedirectUrl))
+        ++ "&lang=" ++ Lang,
+
     save_args(Context1),
     ?WM_REPLY({true, Location}, Context1).
 
