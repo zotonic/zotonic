@@ -186,7 +186,7 @@ handle_file(_Verb, ".tpl", F) ->
                             undefined;
                         {error, _} ->
                             z:flush(),
-                            "Flushed global cache due to new template, " ++ TemplateFile
+                            "Flushed global cache due to new template: " ++ TemplateFile
                     end
             end;
         {match, [Site, TemplateFile]} ->
@@ -197,10 +197,40 @@ handle_file(_Verb, ".tpl", F) ->
                 {error, _} ->
                     z_notifier:notify(module_ready, C),
                     z_depcache:flush(C),
-                    "Flushed cache of " ++ Site ++ " due to new template, " ++ TemplateFile
+                    "Flushed cache of " ++ Site ++ " due to new template: " ++ TemplateFile
             end
     end;
 
+%% @doc Flush 
+handle_file(_Verb, ".po", F) ->
+    case re:run(F, "/sites/([^/]+).*?/translations/(.*)", [{capture, all_but_first, list}]) of
+        nomatch ->
+            %% Flush the cache when a new zotonic-wide .po file is used
+            case re:run(F, ".*?/translations/(.*)", [{capture, all_but_first, list}]) of
+                nomatch -> 
+                    undefined;
+                {match, [TranslationFile]} ->
+                    z:flush(),
+                    "Flushed global cache due to updated translation: " ++ TranslationFile
+            end;
+        {match, [Site, TranslationFile]} ->
+            %% Flush the cache when a new .po file is used, within a site
+            C = z_context:new(list_to_atom(Site)),
+            Mods = z_module_indexer:translations(C),
+            InMods = lists:any(fun({_Module, Tls}) ->
+                lists:any(fun({_Key, T}) ->
+                    string:equal(T, F)
+                end, Tls)
+            end, Mods),
+            case InMods of
+                false -> undefined;
+                true ->
+                    z_notifier:notify(module_ready, C),
+                    z_depcache:flush(C),
+                    "Flushed cache of " ++ Site ++ " due to updated translation: " ++ TranslationFile
+            end
+    end;
+    
 %% @doc Unknown files
 handle_file(_, _, F) -> %% unknown filename
     case re:run(F, "^.*/dispatch/(.*)") of
