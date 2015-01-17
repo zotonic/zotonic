@@ -77,7 +77,8 @@ embed_image([Path, LibImg, SubPath], {Parts, Html, Context} = Acc) ->
                 {[Part|Parts], Html1, Context}
             catch
                 error:Error ->
-                    lager:error("email embed_image error ~p on embedding ~p~n~p", [Error, Info, erlang:get_stacktrace()]),
+                    Stacktrace = erlang:get_stacktrace(),
+                    lager:error("email embed_image error ~p on embedding ~p~n~p", [Error, Info, Stacktrace]),
                     Acc
             end;
         {error, _} ->
