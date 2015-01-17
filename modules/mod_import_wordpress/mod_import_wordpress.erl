@@ -48,9 +48,10 @@ do_import(TmpFile, Reset, OriginalFilename, Context) ->
             z_render:growl(Msg, Context)
         catch
             _:E ->
+                Stacktrace = erlang:get_stacktrace(),
                 Msg1 = lists:flatten(io_lib:format("~p failed to import. The error was: ~p", [OriginalFilename, E])),
                 ?zWarning(Msg1, Context),
-                lager:warning("Wordpress error: ~p~n~p", [E, erlang:get_stacktrace()]),
+                lager:warning("Wordpress error: ~p~n~p", [E, Stacktrace]),
                 z_render:growl(Msg1, error, true, Context)
         end,
     z_session_page:add_script(Context1).
