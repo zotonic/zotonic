@@ -34,7 +34,7 @@
 			{% endif %}
 			{% if not id.is_a.poll %}
 				<a id="{{ #cancel }}" href="#" class="btn">{_ Stop _}</a>
-				{% wire id=#cancel action={confirm text=_"Are you sure you want to stop?" ok=_"Stop" cancel=_"Continue" action={redirect id}} %}
+				{% wire id=#cancel action={confirm text=_"Are you sure you want to stop?" ok=_"Stop" cancel=_"Continue" action={redirect id=id}} %}
 			{% endif %}
 			{% with questions|last as last_q %}
 			{% if not questions|survey_is_submit and last_q.type /= "survey_stop" %}
