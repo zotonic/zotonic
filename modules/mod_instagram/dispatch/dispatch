@@ -1,0 +1,6 @@
+%% -*- mode: erlang -*-
+[
+ {instagram_authorize, ["instagram", "authorize"], controller_instagram_authorize, [{ssl,any}]},
+ {instagram_redirect,  ["instagram", "redirect"],  controller_instagram_redirect,  [{ssl,any}]},
+ {instagram_push,      ["instagram", "push"],  controller_instagram_push,  [{ssl,any}]}
+].
