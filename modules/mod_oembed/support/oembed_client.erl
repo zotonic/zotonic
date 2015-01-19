@@ -152,18 +152,22 @@ oembed_request(RequestUrl) ->
         {timeout, ?HTTP_GET_TIMEOUT},
         {relaxed, true}
     ],
-    {ok, {{_, Code, _}, Headers, Body}} = httpc:request(get, {RequestUrl, []}, HttpOptions, []),
-    case Code of
-        200 -> 
-            {ok, z_convert:convert_json(mochijson2:decode(Body))};
-        404 ->
-            {error, {http, 404, <<>>}};
-        NoAccess when NoAccess =:= 401; NoAccess =:= 403 ->
-            lager:warning("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
-            {error, {http, Code, Body}};
-        _Other ->
-            lager:info("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
-            {error, {http, Code, Body}}  %% empty proplist
+    case httpc:request(get, {RequestUrl, []}, HttpOptions, []) of
+        {ok, {{_, Code, _}, Headers, Body}} ->
+            case Code of
+                200 -> 
+                    {ok, z_convert:convert_json(mochijson2:decode(Body))};
+                404 ->
+                    {error, {http, 404, <<>>}};
+                NoAccess when NoAccess =:= 401; NoAccess =:= 403 ->
+                    lager:warning("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
+                    {error, {http, Code, Body}};
+                _Other ->
+                    lager:info("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
+                    {error, {http, Code, Body}}
+            end;
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Construct extra URL arguments to the OEmbed client request from the oembed module config.
