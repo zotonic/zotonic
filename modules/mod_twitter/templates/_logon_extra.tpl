@@ -1,6 +1,6 @@
 {% if m.config.mod_twitter.consumer_key.value and m.config.mod_twitter.useauth.value %}
 <li id="logon_twitter">
-	{% if is_connect and 'facebook'|member:identity_types %}
+	{% if is_connect and 'twitter'|member:identity_types %}
 		<a id="{{ #twdis }}" href="#disconnect" class="btn social-login" style="color: white; background-color: #55acee"><span class="icon-twitter-sign"></span> {_ Disconnect from Twitter _}</a>
 		{% wire id=#twdis 
 				action={confirm title=_"Disconnect from Twitter" 
