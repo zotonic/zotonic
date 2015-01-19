@@ -3,11 +3,11 @@
     <div class="row">
         <div class="col-md-6">
             <div class="widget">
-                <h3 class="widget-header"><span class="icon-facebook-sign"></span> Facebook</h3>
+                <h3 class="widget-header"><span class="fa fa-facebook"></span> Facebook</h3>
                 <div class="widget-content">
 
                     <div class="clearfix">
-                        <h1 class="icon-facebook-sign pull-left">&nbsp;</h1>
+                        <h1 class="fa fa-facebook pull-left">&nbsp;</h1>
 
                         <p>
                             Facebook<br/>

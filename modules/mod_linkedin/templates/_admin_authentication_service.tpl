@@ -3,11 +3,11 @@
     <div class="row">
         <div class="col-md-6">
             <div class="widget">
-                <h3 class="widget-header"><span class="icon-linkedin-sign"></span> LinkedIn</h3>
+                <h3 class="widget-header"><span class="fa fa-linkedin"></span> LinkedIn</h3>
                 <div class="widget-content">
 
                     <div class="clearfix">
-                        <h1 class="icon-linkedin-sign pull-left">&nbsp;</h1>
+                        <h1 class="fa fa-linkedin pull-left">&nbsp;</h1>
                         <p>LinkedIn<br/>
                             <small>{_ You can find the application keys in _} <a href="https://www.linkedin.com/secure/developer" title="Developer Network" target="_blank">{_ Your LinkedIn Developer Network _}</small></a>
                         </p>

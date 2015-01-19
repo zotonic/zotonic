@@ -3,11 +3,11 @@
     <div class="row">
         <div class="col-md-6">
             <div class="widget">
-                <h3 class="widget-header"><span class="icon-twitter-sign"></span> Twitter</h3>
+                <h3 class="widget-header"><span class="fa fa-twitter"></span> Twitter</h3>
                 <div class="widget-content">
 
                     <div class="clearfix">
-                        <h1 class="icon-twitter-sign pull-left">&nbsp;</h1>
+                        <h1 class="fa fa-twitter pull-left">&nbsp;</h1>
                         <p>Twitter<br/>
                             <small>{_ You can find the application keys in _} <a href="https://apps.twitter.com" title="Application Management" target="_blank">{_ Your Twitter Application Management _}</small></a>
                         </p>
