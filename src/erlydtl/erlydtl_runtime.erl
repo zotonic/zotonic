@@ -165,7 +165,7 @@ find_value(Key, F, _Context) when is_function(F, 1) ->
 %% Any subvalue of a non-existant value is undefined
 find_value(_Key, undefined, _Context) ->
     undefined;
-find_value(_Key, <<>>, _Context) ->
+find_value(_Key, _Other, _Context) ->
     undefined.
 
 %% This used to translate undefined into <<>>, this translation is now done by z_render:render/2

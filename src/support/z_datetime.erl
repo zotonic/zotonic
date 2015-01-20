@@ -73,8 +73,10 @@
 
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_local(calendar:datetime(), string()|binary()|#context{}) -> calendar:datetime().
+-spec to_local(calendar:datetime()|undefined|time_not_exists, string()|binary()|#context{}) -> calendar:datetime() | undefined.
 to_local(undefined, _Tz) ->
+    undefined;
+to_local(time_not_exists, _Tz) ->
     undefined;
 to_local({_Y, _M, _D} = Date, Tz) ->
     to_local({Date, {0,0,0}}, Tz);
@@ -93,13 +95,22 @@ to_local(DT, Tz) ->
         {error, unknown_tz} ->
             lager:warning("Unknown timezone ~p for to_local of ~p", [Tz, DT]),
             DT;
+        {error, Error} ->
+            lager:warning("to_utc error ~p for to_utc of ~p", [Error, DT]),
+            DT;
+        {ambiguous, _Standard, Daylight} ->
+            Daylight;
+        time_not_exists ->
+            undefined;
         NewDT ->
             NewDT
     end.
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_utc(calendar:datetime(), string()|binary()|#context{}) -> calendar:datetime().
+-spec to_utc(calendar:datetime()|undefined|time_not_exists, string()|binary()|#context{}) -> calendar:datetime() | undefined.
 to_utc(undefined, _Tz) ->
+    undefined;
+to_utc(time_not_exists, _Tz) ->
     undefined;
 to_utc({_Y, _M, _D} = Date, Tz) ->
     to_utc({Date, {0,0,0}}, Tz);
@@ -118,6 +129,13 @@ to_utc(DT, Tz) ->
         {error, unknown_tz} ->
             lager:warning("Unknown timezone ~p for to_utc of ~p", [Tz, DT]),
             DT;
+        {error, Error} ->
+            lager:warning("to_utc error ~p for to_utc of ~p", [Error, DT]),
+            DT;
+        {ambiguous, _Standard, Daylight} ->
+            Daylight;
+        time_not_exists ->
+            undefined;
         NewDT ->
             NewDT
     end.
