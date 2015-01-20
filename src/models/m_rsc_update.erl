@@ -634,8 +634,11 @@ props_filter_protected(Props) ->
 
 to_slug(undefined, _Context) -> undefined;
 to_slug({trans, _} = Tr, Context) -> to_slug(z_trans:lookup_fallback(Tr, en, Context), Context);
-to_slug(B, _Context) when is_binary(B) -> z_string:to_slug(B); 
+to_slug(B, _Context) when is_binary(B) -> truncate_slug(z_string:to_slug(B)); 
 to_slug(X, Context) -> to_slug(z_convert:to_binary(X), Context).
+
+truncate_slug(<<Slug:78/binary, _/binary>>) -> Slug;
+truncate_slug(Slug) -> Slug.
 
 %% @doc Map property names to an atom, fold pivot and computed fields together for later filtering.
 map_property_name(P) when not is_list(P) -> map_property_name(z_convert:to_list(P));
