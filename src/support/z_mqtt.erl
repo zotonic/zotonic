@@ -262,27 +262,27 @@ make_localsite(<<"anonymous/", Topic/binary>>, #context{user_id=undefined}) ->
     <<"~user/", Topic/binary>>;
 make_localsite(<<"user/", Topic/binary>> = Topic0, #context{user_id=UserId}) when is_integer(UserId) ->
     UserIdBin = z_convert:to_binary(UserId),
+    UserIdBinSize = size(UserIdBin),
     case Topic of
-        UserIdBin ->                   <<"~user">>;
-        <<UserIdBin, $/, T/binary>> -> <<"~user/", T/binary>>;
-        _ ->                           <<"~site/", Topic0/binary>>
+        <<UserIdBin:UserIdBinSize/binary, T/binary>> -> <<"~user", T/binary>>;
+        _ ->                                            <<"~site/", Topic0/binary>>
     end;
 make_localsite(<<"session/", Topic/binary>> = Topic0, #context{session_id=SessionId}) when is_binary(SessionId) ->
+    SessionIdSize = size(SessionId),
     case Topic of
-        SessionId ->                   <<"~session">>;
-        <<SessionId, $/, T/binary>> -> <<"~session/", T/binary>>;
-        _ ->                           <<"~site/", Topic0/binary>>
+        <<SessionId:SessionIdSize/binary, T/binary>> -> <<"~session", T/binary>>;
+        _ ->                                            <<"~site/", Topic0/binary>>
     end;
 make_localsite(<<"session/", _/binary>> = Topic0, #context{session_pid=SessionPid} = Context) when is_pid(SessionPid) ->
-    case z_session_manager:get_session_id(Context) of
+    case z_session:session_id(Context) of
         undefined -> <<"~site/", Topic0/binary>>;
         SessionId -> make_localsite(Topic0, Context#context{session_id=SessionId})
     end;
 make_localsite(<<"pagesession/", Topic/binary>> = Topic0, #context{page_id=PageId}) when is_binary(PageId) ->
+    PageIdSize = size(PageId),
     case Topic of
-        PageId ->                   <<"~pagesession">>;
-        <<PageId, $/, T/binary>> -> <<"~pagesession/", T/binary>>;
-        _ ->                        <<"~site/", Topic0/binary>>
+        <<PageId:PageIdSize/binary, T/binary>> -> <<"~pagesession", T/binary>>;
+        _ ->                                      <<"~site/", Topic0/binary>>
     end;
 make_localsite(Topic, _Context) ->
     <<"~site/", Topic/binary>>.

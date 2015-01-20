@@ -164,10 +164,7 @@ get_session_id(Context) ->
                 undefined ->
                     get_session_cookie(Context);
                 Pid when is_pid(Pid) ->
-                    case gen_server:call(session_manager(Context), {whois, Pid}) of
-                        {ok, SessionId} -> SessionId;
-                        {error, notfound} -> undefined
-                    end
+                    z_session:session_id(Pid)
             end;
         SessionId -> 
             SessionId
@@ -356,17 +353,11 @@ code_change(_OldVersion, State, _Extra) -> {ok, State}.
 %% support functions - called by session server
 %%====================================================================
 
-session_manager(#context{host=Host, session_manager=undefined}) ->
-    HostAsList = [$$ | atom_to_list(Host)],
-    list_to_atom("z_session_manager"++HostAsList);
-session_manager(#context{session_manager=SessionManager}) ->
-    SessionManager.
-
 
 %% Make sure that the session cookie is set and that the session process has been started.
 ensure_session1(SessionId, SessionPid, PersistId, State) when SessionId =:= undefined orelse SessionPid =:= error ->
-    NewSessionPid = spawn_session(PersistId, State#session_srv.context),
     NewSessionId = make_session_id(),
+    NewSessionPid = spawn_session(NewSessionId, PersistId, State#session_srv.context),
     State1 = store_session_pid(NewSessionId, NewSessionPid, State),
     update_session_metrics(State1),
     {ok, new, NewSessionPid, NewSessionId, State1};
@@ -376,8 +367,13 @@ ensure_session1(SessionId, SessionPid, _PersistId, State) ->
 rename_session(Pid, State) ->
     % Remove old session pid from the lookup tables
     State1 = erase_session_pid(Pid, State),
+
     % Generate a new session id and set cookie
     NewSessionId = make_session_id(),
+
+    % Tell the session it has a new session id.
+    ok = z_session:rename_session(NewSessionId, Pid),
+
     State2 = store_session_pid(NewSessionId, Pid, State1),
     {ok, NewSessionId, State2}.
 
@@ -431,9 +427,9 @@ session_find_pid(SessionId, State) ->
 
 
 %% @doc Spawn a new session, monitor the pid as we want to know about normal exits
--spec spawn_session(persistent_id(), #context{}) -> pid().
-spawn_session(PersistId, Context) ->
-    {ok, Pid} = z_session:start_link(PersistId, Context),
+-spec spawn_session(session_id(), persistent_id(), #context{}) -> pid().
+spawn_session(SessionId, PersistId, Context) ->
+    {ok, Pid} = z_session:start_link(SessionId, PersistId, Context),
     erlang:monitor(process, Pid),
     Pid.
 

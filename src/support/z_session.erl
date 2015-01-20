@@ -45,13 +45,15 @@
 
 %% session exports
 -export([
-    start_link/2,
+    start_link/3,
     stop/1, 
     set/2,
     set/3,
     get/2, 
     get/3, 
     incr/3, 
+    session_id/1,
+    rename_session/2,
     persistent_id/1,
     set_persistent/3,
     get_persistent/2, 
@@ -82,6 +84,7 @@
             expire_n,
             pages=[],
             linked=[],
+            session_id = undefined,
             persist_id = undefined,
             persist_is_saved = false,
             persist_is_dirty = false,
@@ -104,10 +107,12 @@
 %%====================================================================
 
 
-start_link(<<>>, Context) ->
-    start_link(undefined, Context);
-start_link(PersistId, Context) ->
-    gen_server:start_link(?MODULE, {z_context:site(Context), PersistId}, []).
+start_link(<<>>, PersistId, Context) ->
+    start_link(undefined, PersistId, Context);
+start_link(SessionId, <<>>, Context) ->
+    start_link(SessionId, undefined, Context);
+start_link(SessionId, PersistId, Context) ->
+    gen_server:start_link(?MODULE, {z_context:site(Context), SessionId, PersistId}, []).
 
 stop(SessionPid) when is_pid(SessionPid) ->
     gen_server:cast(SessionPid, stop).
@@ -147,6 +152,17 @@ incr(Key, Value, #context{session_pid=Pid}) ->
 incr(Key, Value, Pid) ->
     gen_server:call(Pid, {incr, Key, Value}).
 
+% @doc Get the session_id of this session.
+session_id(#context{session_pid=Pid}) ->
+    session_id(Pid);
+session_id(Pid) ->
+    gen_server:call(Pid, session_id).
+
+% @doc Rename the session
+rename_session(NewSessionId, #context{session_pid=Pid}) ->
+    rename_session(NewSessionId, Pid);
+rename_session(NewSessionId, Pid) ->
+    gen_server:call(Pid, {rename_session, NewSessionId}).
 
 persistent_id(Context) ->
     gen_server:call(Context#context.session_pid, persistent_id).
@@ -276,13 +292,13 @@ spawn_link(Module, Func, Args, Context) ->
 %% gen_server callbacks
 %%====================================================================
 
-init({Host, PersistId}) ->
+init({Host, SessionId, PersistId}) ->
     lager:md([
         {site, Host},
         {module, ?MODULE}
       ]),
     gproc:reg({p, l, {Host, user_session, undefined}}),
-    {ok, new_session(Host, PersistId)}.
+    {ok, new_session(Host, SessionId, PersistId)}.
 
 handle_cast(stop, Session) ->
     {stop, normal, Session};
@@ -398,6 +414,15 @@ handle_call(persistent_id, _From, Session) ->
         false -> save_persist(Session#session{persist_is_dirty=true}) 
     end,
     {reply, PersistedSession#session.persist_id, PersistedSession};
+
+%% @doc Get the session if of this session.
+handle_call(session_id, _From, Session) ->
+    {reply, Session#session.session_id, Session};
+
+
+%% @doc Rename the session
+handle_call({rename_session, NewSessionId}, _From, Session) ->
+    {reply, ok, Session#session{session_id=NewSessionId}};
 
 %% @doc Set a persistent variable, replaces any old value
 handle_call({set_persistent, Key, Value}, _From, #session{persist_id=undefined}=Session) ->
@@ -557,7 +582,7 @@ transport_all(#session{transport=Transport, pages=Pages} = Session) ->
 
 
 %% @doc Initialize a new session record
-new_session(Host, PersistId) ->
+new_session(Host, SessionId, PersistId) ->
     Context = z_context:new(Host),
     Expire1 = z_convert:to_integer(m_config:get_value(site, session_expire_1, ?SESSION_EXPIRE_1, Context)),
     ExpireN = z_convert:to_integer(m_config:get_value(site, session_expire_n, ?SESSION_EXPIRE_N, Context)),
@@ -565,6 +590,7 @@ new_session(Host, PersistId) ->
             expire=z_utils:now() + Expire1,
             expire_1 = Expire1,
             expire_n = ExpireN,
+            session_id = SessionId,
             persist_id = PersistId,
             transport=z_transport_queue:new(),
             context=Context
