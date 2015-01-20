@@ -4,8 +4,7 @@
 Controller which opens a WebSocket connection to the browser.
 
 The controller provides persistent WebSocket connections between the
-client and the server. The default implementation is used by :ref:`mod_base`
-when the :ref:`{% stream %} <scomp-stream>` tag is placed on a page. 
+client and the server. Since Zotonic 0.11, a WebSocket connection is automatically started on the page (unless nostream is given in the script tag). 
 
 See :ref:`manual-transport` for more information about transporting data between the server and the browser.
 
