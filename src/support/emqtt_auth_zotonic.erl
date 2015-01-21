@@ -48,6 +48,7 @@ check(Username, Password) when is_binary(Username), is_binary(Password) ->
                     false;
                 {ok, UserId} ->
                     UserContext = z_acl:logon(UserId, Context),
+                    lager:debug("MQTT logon success for ~p on ~p", [SiteUser, z_context:site(UserContext)]),
                     {true, {zauth, z_acl:user(UserContext), z_context:site(UserContext)}}
             end;
         {error, _} -> 
