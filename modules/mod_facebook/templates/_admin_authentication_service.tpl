@@ -5,34 +5,28 @@
             <div class="widget">
                 <h3 class="widget-header"><span class="fa fa-facebook"></span> Facebook</h3>
                 <div class="widget-content">
-
-                    <div class="clearfix">
-                        <h1 class="fa fa-facebook pull-left">&nbsp;</h1>
-
-                        <p>
-                            Facebook<br/>
-                            <small>{_ You can find the application keys in _}  <a href="https://www.facebook.com/developers/apps.php" title="Developer Dashboard" target="_blank">{_ Your Facebook Developer Dashboard _}</a></small>
-                        </p>
-                    </div>
+                    <p class="help-block">
+                        {_ Application keys can be found in _} <a href="https://www.facebook.com/developers/apps.php" title="Developer Dashboard" target="_blank">{_ Your Facebook Developer Dashboard _}</a>
+                    </p>
 
                     <div class="form-group row">
                         <label class="control-label col-md-3" for="facebook_app_id">{_ App ID. _}</label>
                         <div class="col-md-9">
-                            <input type="text" id="facebook_appid" name="appid" value="{{ m.config.mod_facebook.appid.value|escape }}" class="col-lg-6 col-md-6 form-control" />
+                            <input type="text" id="facebook_appid" name="appid" value="{{ m.config.mod_facebook.appid.value|escape }}" class="form-control" />
                         </div>
                     </div>
                     
                     <div class="form-group row">
                         <label class="control-label col-md-3" for="facebook_appsecret">{_ App Secret _}</label>
                         <div class="col-md-9">
-                            <input type="text" id="facebook_appsecret" name="appsecret" value="{{ m.config.mod_facebook.appsecret.value|escape }}" class="col-lg-6 col-md-6 form-control" />
+                            <input type="text" id="facebook_appsecret" name="appsecret" value="{{ m.config.mod_facebook.appsecret.value|escape }}" class="form-control" />
                         </div>
                     </div>
                     
                     <div class="form-group row">
                         <label class="control-label col-md-3" for="facebook_scope">{_ Scope _}</label>
                         <div class="col-md-9">
-                            <input type="text" id="facebook_scope" name="scope" value="{{ m.config.mod_facebook.scope.value|default:'email'|escape }}" class="col-lg-6 col-md-6 form-control" />
+                            <input type="text" id="facebook_scope" name="scope" value="{{ m.config.mod_facebook.scope.value|default:'email'|escape }}" class="form-control" />
                         </div>
                     </div>
 
@@ -47,8 +41,8 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-offset-3">
+                    <div class="form-group row">
+                        <div class="col-md-9  col-md-offset-3">
                             <button class="btn btn-primary" type="submit">{_ Save Facebook Settings _}</button>
                         </div>
                     </div>

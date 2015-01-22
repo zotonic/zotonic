@@ -11,7 +11,7 @@
                 {_ You need to be allowed to edit the system configuration to view or change the configured App Keys. _}
             </p>
         {% else %}
-            <p>{_ Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter _}</p>
+            <p>{_ Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter. _}</p>
 
             {% if m.modules.active.mod_signup %}
                 <p class="text-muted"><span class="icon-info-sign"></span> {_ The signup module is enabled, users authenticating via the services below are automatically signed up. _}</p>
