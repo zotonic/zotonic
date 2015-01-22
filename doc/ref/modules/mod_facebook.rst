@@ -7,7 +7,7 @@ login.
 Module is still largely undocumented, but this is what was said on the
 mailing list about it:
 
-The url of your site needs to be correctly configured in the Facebook app configuratoin at Facebook for your site to work.
+The url of your site needs to be correctly configured in the Facebook app configuration at Facebook for your site to work.
 
 The current (hard coded) test site has the url http://127.0.0.1:8000/ configured.
 Use the config keys:
