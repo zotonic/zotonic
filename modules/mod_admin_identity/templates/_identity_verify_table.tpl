@@ -4,10 +4,12 @@
 	{% with idn.id as idn_id %}
 		<tr id="{{ #row.idn_id }}">
 			<td>
-			<div class="radio"><label>
-				<input type="radio" name="{{ #verified}}" {% if id.email == idn.key %}checked{% endif %} class="radio nosubmit" value="{{ idn.key }}" />
-				{{ idn.key }}
-			</label></div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="{{ #verified}}" {% if id.email == idn.key %}checked{% endif %} class="radio nosubmit" value="{{ idn.key }}" />
+                    {{ idn.key }}
+                    </label>
+                </div>
 			</td>
 			<td>
 				{% if idn.is_verified %}
@@ -19,8 +21,7 @@
 							delegate=`mod_admin_identity`
 					%}
 				{% endif %}
-			</td>
-			<td>
+
 				<a id="{{ #del.idn_id }}" href="#" class="btn btn-default btn-sm" title="{_ Delete this e-mail address _}">{_ Delete _}</a>
 				{% wire id=#del.idn_id 
 						postback={identity_delete_confirm id=id idn_id=idn_id element=#row.idn_id list_element=#listemail}
