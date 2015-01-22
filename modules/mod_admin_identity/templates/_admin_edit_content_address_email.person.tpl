@@ -5,16 +5,19 @@
 		{% include "_identity_verify_table.tpl" identities=idns %}
 	</div>
 
-	<div class="input-append">
-		<input id="{{ #email }}" type="email" name="idn-key" value="{% if not idns %}{{ id.email }}{% endif %}" placeholder="{_ Add e-mail address _}" class="input-xlarge nosubmit form-control" />
-		<a id="{{ #email_add }}" href="#" class="btn btn-default">{_ Add _}</a>
-	</div>
-	{% validate id=#email type={email failure_message=""} %}
+    <div class="input-group">
+        <input id="{{ #email }}" type="email" name="idn-key" value="{% if not idns %}{{ id.email }}{% endif %}" placeholder="{_ Add e-mail address _}" class="nosubmit form-control" />
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">{_ Add _}</button>
+        </span>
+        {% validate id=#email type={email failure_message=""} only_on_submit %}
+    </div>
+
 </div>
 {% endwith %}
 
-{% wire id=#email_add
-		postback={identity_add id=id type=`email` list=#email_list input=#email}
-		delegate=`mod_admin_identity`
-		qarg=#email
+{% wire id=#email
+    postback={identity_add id=id type=`email` list=#email_list input=#email}
+    delegate=`mod_admin_identity`
+    qarg=#email
 %}

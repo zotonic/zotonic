@@ -483,9 +483,6 @@ ul.blocks.ui-sortable .form-control.block-name:focus {
   top: 0;
   bottom: 0;
 }
-#content-address table {
-  margin-bottom: 0;
-}
 .pull-right p.admin-chapeau {
   text-align: right;
 }
