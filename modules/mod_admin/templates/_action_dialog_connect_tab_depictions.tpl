@@ -11,14 +11,14 @@
 </div>
 
 {% javascript %}
-$("#dialog_connect_depictions").on('click', '.thumbnail', function() {
-	z_notify("admin-connect-select", { 
-				z_delegate: "mod_admin", 
-				select_id: $(this).data('id'),
-				predicate: '{{ predicate }}',
-				subject_id: '{{ subject_id }}',
-				callback: '{{ callback }}',
-				language: '{{ language }}'
-		});
-});
+    $("#dialog_connect_depictions").on('click', '.thumbnail', function() {
+        z_notify("admin-connect-select", { 
+            z_delegate: "mod_admin", 
+            select_id: $(this).data('id'),
+            predicate: '{{ predicate }}',
+            subject_id: '{{ subject_id }}',
+            callback: '{{ callback }}',
+            language: '{{ language }}'
+        });
+    });
 {% endjavascript %}

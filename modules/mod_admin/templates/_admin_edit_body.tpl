@@ -27,15 +27,12 @@
 		    dialog_open
 		    template="_action_dialog_connect.tpl"
 		    title=_"Add link"
-            subject_id=id predicate=`relation`
+            subject_id=id
             is_zlink
+            tab="find"
             callback="window.zAdminLinkDone"
         }
 	%}
-{#
-	{% wire action={event type='named' name="zmedia" action={zmedia id=id media_div_id=#media subject_id=id}} %}
-	{% wire action={event type='named' name="zlink" action={dialog_open title="Add link" template="_action_dialog_zlink.tpl"}} %}
-#}
 
 	<div class="form-group">
 		{% if explanation %}
