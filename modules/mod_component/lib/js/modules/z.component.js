@@ -130,7 +130,7 @@ function z_check_loaded(component) {
     /* Initialize */
     component.init();
     component.init = undefined;
-    component.state == "ready";
+    component.state = "ready";
 
     /* Trigger all on_load callbacks */
     component.on_load.forEach(function(cb) { cb() });
