@@ -1,4 +1,4 @@
-<input type="text" id="instagram_access_token" name="access_token" value="{{ m.config.mod_instagram.access_token.value|escape }}" class="col-lg-6 col-md-6 form-control" />
+<input type="text" id="instagram_access_token" name="access_token" value="{{ m.config.mod_instagram.access_token.value|escape }}" class="form-control" />
 
 <p class="help-block">
     {% if m.identity[m.acl.user].instagram %}

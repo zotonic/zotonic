@@ -5,27 +5,23 @@
             <div class="widget">
                 <h3 class="widget-header"><span class="fa fa-twitter"></span> Twitter</h3>
                 <div class="widget-content">
-
-                    <div class="clearfix">
-                        <h1 class="fa fa-twitter pull-left">&nbsp;</h1>
-                        <p>Twitter<br/>
-                            <small>{_ You can find the application keys in _} <a href="https://apps.twitter.com" title="Application Management" target="_blank">{_ Your Twitter Application Management _}</small></a>
-                        </p>
-                    </div>
+                    <p class="help-block">
+                        {_ Application keys can be found in _} <a href="https://apps.twitter.com" title="Application Management" target="_blank">{_ Your Twitter Application Management page _}</a>
+                    </p>
 
                     <fieldset>
 
                         <div class="form-group row">
                             <label class="control-label col-md-3" for="twitter_consumer_key">{_ Consumer Key _}</label>
                             <div class="col-md-9">
-                                <input type="text" id="twitter_consumer_key" name="consumer_key" value="{{ m.config.mod_twitter.consumer_key.value|escape }}" class="col-lg-6 col-md-6 form-control" />
+                                <input type="text" id="twitter_consumer_key" name="consumer_key" value="{{ m.config.mod_twitter.consumer_key.value|escape }}" class="form-control" />
                             </div>
                         </div>
                         
                         <div class="form-group row">
                             <label class="control-label col-md-3" for="consumer_secret">{_ Consumer Secret _}</label>
                             <div class="col-md-9">
-                                <input type="text" id="twitter_consumer_secret" name="consumer_secret" value="{{ m.config.mod_twitter.consumer_secret.value|escape }}" class="col-lg-6 col-md-6 form-control" />
+                                <input type="text" id="twitter_consumer_secret" name="consumer_secret" value="{{ m.config.mod_twitter.consumer_secret.value|escape }}" class="form-control" />
                             </div>
                         </div>
 
@@ -48,19 +44,19 @@
                         <div class="form-group row">
                             <label class="control-label col-md-3" for="twitter_access_token">{_ Access Token _}</label>
                             <div class="col-md-9">
-                                <input type="text" id="twitter_access_token" name="access_token" value="{{ m.config.mod_twitter.access_token.value|escape }}" class="col-lg-6 col-md-6 form-control" />
+                                <input type="text" id="twitter_access_token" name="access_token" value="{{ m.config.mod_twitter.access_token.value|escape }}" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-md-3" for="twitter_access_token_secret">{_ Access Token Secret _}</label>
                             <div class="col-md-9">
-                                <input type="text" id="twitter_access_token_secret" name="access_token_secret" value="{{ m.config.mod_twitter.access_token_secret.value|escape }}" class="col-lg-6 col-md-6 form-control" />
+                                <input type="text" id="twitter_access_token_secret" name="access_token_secret" value="{{ m.config.mod_twitter.access_token_secret.value|escape }}" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-md-3" for="twitter_follow">{_ Follow tags/accounts _}</label>
                             <div class="col-md-9">
-                                <textarea id="twitter_follow" name="follow" value="" class="col-lg-6 col-md-6 form-control" />{{ m.config.mod_twitter.follow.value|escape }}</textarea>
+                                <textarea id="twitter_follow" name="follow" value="" class="form-control" />{{ m.config.mod_twitter.follow.value|escape }}</textarea>
 
                                 <p class="help-block">
                                     {_ Separate #tags, @usernames and phrases with commas or newlines. _}
@@ -69,8 +65,8 @@
                         </div>
                     </fieldset>
 
-                    <div class="form-group">
-                        <div class="col-md-offset-3">
+                    <div class="form-group row">
+                        <div class="col-md-9 col-md-offset-3">
                             <button class="btn btn-primary" type="submit">{_ Save Twitter Settings _}</button>
                         </div>
                     </div>
