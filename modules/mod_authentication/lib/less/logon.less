@@ -1,5 +1,5 @@
 .z-logon-box {
-    @_width: 320px;
+    @_width: 320px; // just a convenient default
     @_spacing: 20px;
     @_form_spacing: 15px; // Bootstrap default
     @_border_color: #ddd;
@@ -34,12 +34,25 @@
     }
     
     .z-logon-form {
-        background-color: @_background_color;   
+        background-color: @_background_color;
+        
+        p {
+            margin: 0;
+            padding: 0;
+        }
     }
     
     /* Extra login options */
     .z-logon-extra {
-    
+        li {
+            margin: 0 0 1em 0;
+        }
+        
+        .btn.social-login {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+        }
     }
 
     .z-logon-extra .z-logon-extra-separator {
@@ -74,7 +87,7 @@
             left: 0;
             top: @_line_height/2;
             content: " ";
-            width: @_width;
+            width: 100%;
             border-bottom: 1px solid @_border_color;
             z-index: -2;
         }

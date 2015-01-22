@@ -23,6 +23,18 @@
 .z-logon-box .z-logon-form {
   background-color: #f2f2f2;
 }
+.z-logon-box .z-logon-form p {
+  margin: 0;
+  padding: 0;
+}
+.z-logon-box .z-logon-extra li {
+  margin: 0 0 1em 0;
+}
+.z-logon-box .z-logon-extra .btn.social-login {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
 .z-logon-box .z-logon-extra .z-logon-extra-separator {
   position: relative;
   z-index: 1;
@@ -47,7 +59,7 @@
   left: 0;
   top: 8px;
   content: " ";
-  width: 320px;
+  width: 100%;
   border-bottom: 1px solid #dddddd;
   z-index: -2;
 }
