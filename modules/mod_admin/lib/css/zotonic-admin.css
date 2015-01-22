@@ -403,6 +403,11 @@ button.close {
   margin-right: 10px;
   margin-bottom: 5px;
 }
+@media (min-width: 768px) {
+  .form-horizontal .control-label {
+    margin-bottom: 5px;
+  }
+}
 .z-btn-remove {
   color: #777777;
 }
