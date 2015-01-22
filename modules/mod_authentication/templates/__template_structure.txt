@@ -1,0 +1,63 @@
+base.tpl
+|-- logon.tpl // log on page
+|    `-- _logon.tpl // logon module
+|        |== logon_reminder:
+|        |   `-- _logon_form.tpl
+|        |       |-- _logon_reminder_title.tpl
+|        |       |-- _logon_reminder_form.tpl
+|        |       `-- _logon_reminder_support.tpl // backlink to logon form
+|        |== logon_reset:
+|        |   `-- _logon_form.tpl
+|        |       |-- _logon_reset_title.tpl
+|        |       |-- _logon_reset_form.tpl
+|        |       `-- _logon_reset_support.tpl // backlink to logon form
+|        |== admin_logon:
+|        |   `-- _logon_form.tpl
+|        |       |-- _logon_login_form.tpl
+|        |       |-- _logon_error.tpl
+|        |       |-- _logon_login_support.tpl // link forgot password
+|        `== else:
+|        |   `-- _logon_form.tpl
+|                |== awaiting verification:
+|                |   `-- _logon_stage.tpl // alternative content for logon box
+|                `== else:
+|                    |-- _logon_login_title.tpl
+|                    |-- _logon_login_extra.tpl // all-include by other modules
+|                    |-- _logon_error.tpl
+|                    |-- _logon_login_form.tpl
+|                    |-- _logon_login_support.tpl // link forgot password
+|                    |-- _logon_login_outside.tpl
+|                       `-- _logon_link.tpl // all-include by other modules
+`-- logoff.tpl // log off page, redirects to q.p or homepage
+
+
+                
+email_base.tpl
+|-- email_password_reset.tpl // links to logon.tpl with state: logon_reset
+
+
+
+admin_base.tpl
+|-- admin_authentication_services.tpl // admin menu: App Keys & Authentication Services
+    `-- _admin_authentication_service.tpl // all-include from other modules
+
+
+
+Templates for redirecting to an external identity service (shown in modal overlay):
+
+base_simple.tpl
+|-- _logon_service.tpl
+    `-- _logon_service.[q.service].tpl -- provided by other modules
+|-- logon_service_error.tpl
+|-- logon_service_done.tpl
+
+
+
+TO SORT OUT
+===========
+
+Not used by any module or template:
+-- _authentication_services_connected.tpl
+-- _logon_off.tpl
+-- logon_confirm_form.tpl
+
