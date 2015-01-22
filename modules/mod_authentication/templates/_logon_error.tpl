@@ -5,7 +5,7 @@
     {_ You might have made a typo in your username or password.  Please note that both are case sensitive and check that your caps lock key is off. _}
 </p>
 
-<strong>{_ I forgot my username or password _}</strong>
+<h4>{_ I forgot my username or password _}</h4>
 
 <p>{_ When you forgot your username or pasword then you can ask us to _} <a href="{% url logon_reminder %}">{_ e-mail a temporary password _}</a>.  {_ The e-mail will contain instructions how to reset your password. _}</p>
 
