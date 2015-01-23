@@ -62,6 +62,12 @@ websocket_handle(_ReqData, {text, Msg}, #context{}=Context) ->
 websocket_handle(_ReqData, {pong, _Msg}, #context{}=Context) ->
     %% Received pong back from client... still alive.
     {ok, Context};
+websocket_handle(_ReqData, {ws_ping, _Payload}, #context{}=Context) ->
+    %% Ping control frame - ignore
+    {ok, Context};
+websocket_handle(_ReqData, {ws_pong, _Payload}, #context{}=Context) ->
+    %% Pong control frame - ignore
+    {ok, Context};
 websocket_handle(_ReqData, Msg, #context{}=Context) ->
     lager:info("z_websocket: Received unexpected message from client. ~p~n", [Msg]),
     {ok, Context}.
