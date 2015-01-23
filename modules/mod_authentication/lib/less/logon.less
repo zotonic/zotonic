@@ -1,6 +1,7 @@
 .z-logon-box {
     @_width: 320px; // just a convenient default
     @_spacing: 20px;
+    @_button_spacing: 10px;
     @_form_spacing: 15px; // Bootstrap default
     @_border_color: #ddd;
     @_background_color: #f2f2f2;
@@ -45,10 +46,13 @@
     /* Extra login options */
     .z-logon-extra {
         li {
-            margin: 0 0 1em 0;
+            margin: 0;
+        }
+        li + li {
+            margin: @_button_spacing 0 0 0;
         }
         
-        .btn.social-login {
+        .z-btn-social {
             display: block;
             text-align: center;
             text-decoration: none;

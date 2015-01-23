@@ -15,7 +15,6 @@
         display: none;
     }
 }
-
 .z-btn-remove {
     .extend_icon(icon-cross);
     background-color: transparent;
@@ -25,7 +24,6 @@
         text-decoration: none;
     }
 }
-
 .z-btn-help {
     .extend_icon(z, icon-help-circle);
 }
@@ -44,4 +42,30 @@ button.close {
     > em {
         display: none;
     }    
+}
+
+.z-btn-social {
+    position: relative;
+    
+    &,
+    &a,
+    &:hover {
+        color: #fff;
+    }
+    // background-color set per brand (template or CSS)
+    
+    .z-icon,
+    .fa-icon {
+        @_size: @zSocialBtnSize;
+        position: absolute;
+        display: block;
+        font-size: @_size;
+        line-height: @_size;
+        height: @_size;
+        width: @_size;
+        text-align: center;
+        top: 50%;
+        left: .5em;
+        margin-top: -(@_size/2 - 0.5);
+    }
 }

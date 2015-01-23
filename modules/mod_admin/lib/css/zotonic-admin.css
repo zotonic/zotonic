@@ -151,6 +151,20 @@ a.close > em,
 button.close > em {
   display: none;
 }
+.z-btn-social {
+  position: relative;
+}
+.z-btn-social .z-icon,
+.z-btn-social .fa-icon,
+.z-btn-social .zotonic-logo {
+  position: absolute;
+  font-size: 16px;
+  line-height: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  margin-top: -8px;
+}
 .z-icon-cross:before {
   content: "\e60c";
 }

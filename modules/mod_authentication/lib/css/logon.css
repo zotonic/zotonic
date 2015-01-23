@@ -28,9 +28,12 @@
   padding: 0;
 }
 .z-logon-box .z-logon-extra li {
-  margin: 0 0 1em 0;
+  margin: 0;
 }
-.z-logon-box .z-logon-extra .btn.social-login {
+.z-logon-box .z-logon-extra li + li {
+  margin: 10px 0 0 0;
+}
+.z-logon-box .z-logon-extra .z-btn-social {
   display: block;
   text-align: center;
   text-decoration: none;
