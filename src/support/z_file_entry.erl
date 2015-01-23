@@ -241,12 +241,7 @@ handle_sync_event(lookup, From, StateName, State) ->
     case check_current(State) of
         {ok, State1} ->
             Reply = lookup_file_info(State1),
-            case timeout(StateName, State#state.is_found) of
-                undefined ->
-                    {reply, Reply, StateName, State1};
-                Timeout ->
-                    {reply, Reply, StateName, State1, Timeout}
-            end;
+            {reply, Reply, StateName, State1, timeout(StateName, State1#state.is_found)};
         stale ->
             State1 = State#state{waiting=[From|State#state.waiting]},
             {next_state, locate, State1, 0}
@@ -263,7 +258,7 @@ handle_event(stop, _StateName, State) ->
     {next_state, stopping, State, ?STOP_TIMEOUT};
 handle_event(Msg, StateName, State) ->
     lager:error("Unexpected event ~p in state ~p", [Msg, StateName]),
-    {next_state, StateName, State}.
+    {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
 
 handle_info({gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
     State1 = State#state{
@@ -271,20 +266,20 @@ handle_info({gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
         gzip_size=size(Data),
         gzipper=undefined
     },
-    {next_state, StateName, State1};
+    {next_state, StateName, State1, timeout(StateName, State1#state.is_found)};
 handle_info({'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
     case is_mref_part(MRef, State#state.parts) of
         true ->
             {next_state, locate, State, 0};
         false ->
-            {next_state, StateName, State}
+            {next_state, StateName, State, timeout(StateName, State#state.is_found)}
     end;
 handle_info(Info, StateName, State) ->
     lager:info("Unexpected info ~p in state ~p", [Info, StateName]),
-    {next_state, StateName, State}.
+    {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
 
 code_change(_OldVsn, StateName, State, _Extra) ->
-    {next_state, StateName, State}.
+    {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
 
 terminate(_Reason, _StateName, _State) ->
     ok.
@@ -295,16 +290,14 @@ terminate(_Reason, _StateName, _State) ->
 
 timeout(locate, _IsFound) ->
     0;
-timeout(content_encoding_gzip, true) ->
+timeout(content_encoding_gzip, _IsFound) ->
     0;
 timeout(serving, true) ->
     ?SERVING_TIMEOUT;
 timeout(serving, false) ->
     ?SERVING_ENOENT_TIMEOUT;
 timeout(stopping, _IsFound) ->
-    ?STOP_TIMEOUT;
-timeout(_State, _IsFound) ->
-    undefined.
+    ?STOP_TIMEOUT.
 
 unreg(State) ->
     z_proc:unregister(reg_name(State#state.request_path), State#state.site).
