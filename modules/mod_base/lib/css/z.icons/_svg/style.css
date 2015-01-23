@@ -1,0 +1,103 @@
+.icon {
+	display: inline-block;
+	color: #000000;
+	fill: currentColor;
+}
+.icon-off {
+	width: 32px;
+	height: 32px;
+}
+.icon-ok {
+	width: 32px;
+	height: 32px;
+}
+.icon-ok-circle {
+	width: 32px;
+	height: 32px;
+}
+.icon-minus {
+	width: 32px;
+	height: 32px;
+}
+.icon-minus-circle {
+	width: 32px;
+	height: 32px;
+}
+.icon-plus {
+	width: 32px;
+	height: 32px;
+}
+.icon-plus-circle {
+	width: 32px;
+	height: 32px;
+}
+.icon-help {
+	width: 32px;
+	height: 32px;
+}
+#icon-help .path1 {
+	fill: currentcolor;
+}
+#icon-help .path2 {
+	fill: currentcolor;
+}
+.icon-help-circle {
+	width: 32px;
+	height: 32px;
+}
+.icon-info-circle {
+	width: 32px;
+	height: 32px;
+}
+.icon-cross {
+	width: 32px;
+	height: 32px;
+}
+.icon-cross-circle {
+	width: 32px;
+	height: 32px;
+}
+.icon-grab {
+	width: 12px;
+	height: 32px;
+}
+#icon-grab .path1 {
+	fill: currentcolor;
+}
+#icon-grab .path2 {
+	fill: currentcolor;
+}
+#icon-grab .path3 {
+	fill: currentcolor;
+}
+#icon-grab .path4 {
+	fill: currentcolor;
+}
+#icon-grab .path5 {
+	fill: currentcolor;
+}
+#icon-grab .path6 {
+	fill: currentcolor;
+}
+#icon-grab .path7 {
+	fill: currentcolor;
+}
+#icon-grab .path8 {
+	fill: currentcolor;
+}
+.icon-logo {
+	width: 187px;
+	height: 32px;
+}
+.icon-logo-z {
+	width: 32px;
+	height: 32px;
+}
+.icon-user {
+	width: 32px;
+	height: 32px;
+}
+.icon-edit {
+	width: 32px;
+	height: 32px;
+}
