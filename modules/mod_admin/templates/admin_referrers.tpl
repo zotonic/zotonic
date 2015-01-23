@@ -4,14 +4,11 @@
 
 {% block content %}
 <div class="admin-header">
-    <h2 id="content-pager">{_ Referrers to _} “{{ m.rsc[q.id].title }}”</h2>
+    <h2 id="content-pager">{_ Referrers to _} <a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a></h2>
 
     {% with m.search.paged[{referrers id=q.id page=q.page}] as result %}
         {% ifequal result.total 0 %}
-            <p>{_ There are no pages with a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”</p>
-        {% else %}
-            <p>{_ The following _} {% ifequal result.total 1 %}{_ page has _}{% else %}{{ result.total }} {_ pages have _}{% endifequal %}
-            {_ a connection to the page _} “<a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a>”.</p>
+            <p>{_ There are no pages with a connection to the page _} “{{ m.rsc[q.id].title }}”</p>
         {% endifequal %}
 
         {% ifnotequal result.total 0 %}
