@@ -49,5 +49,6 @@ specific template-related topic.
    calling-zotonic
    bestpractices
    magicvalues
+   icons
 
 
