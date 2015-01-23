@@ -33,6 +33,7 @@
 %%   * Improved status reporting, events are fired when the websocket is open and when 
 %%     it closes.
 %%   * Checked types with dialyzer.
+%%	 * Renamed ping/pong messages to ws_ping and ws_pong
 
 -module(z_ws_protocol).
 
@@ -626,11 +627,11 @@ websocket_dispatch(State=#state{socket=Socket},
 	Len = payload_length_to_binary(byte_size(Payload)),
 	ok = mochiweb_socket:send(Socket, << 1:1, 0:3, 10:4, 0:1, Len/bits, Payload/binary >>),
 	handler_call(State, Req, HandlerState, RemainingData,
-		websocket_handle, {ping, Payload}, fun websocket_data/4);
+		websocket_handle, {ws_ping, Payload}, fun websocket_data/4);
 %% Pong control frame.
 websocket_dispatch(State, Req, HandlerState, RemainingData, 10, Payload) ->
 	handler_call(State, Req, HandlerState, RemainingData,
-		websocket_handle, {pong, Payload}, fun websocket_data/4).
+		websocket_handle, {ws_pong, Payload}, fun websocket_data/4).
 
 % -spec handler_call(#state{}, Req, any(), binary(), atom(), any(), fun())
 % 	-> {ok, Req, cowboy_middleware:env()}
