@@ -934,7 +934,7 @@ msgstr "Iedereen"
 #: modules/mod_admin/templates/admin_referrers.tpl:11
 msgid "There are no pages with a connection to the page"
 msgstr ""
-"Er zijn geen andere pagina's die een connectie hebben naar deze pagina."
+"Er zijn geen andere pagina's die een connectie hebben naar de pagina"
 
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
 msgid "This can't be undone. Your page will be lost forever."
