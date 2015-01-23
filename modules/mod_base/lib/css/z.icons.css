@@ -28,19 +28,14 @@ For advanced usage, see the file z.icons.less.
 }
 .z-icon,
 .fa-icon,
-.zotonic-logo,
-.z-icon-plus:before,
-.z-icon-minus:before,
-.z-icon-off:before,
-.z-icon-ok:before,
-.z-icon-ok-circle:before,
 .z-btn-remove:before,
 .z-btn-remove:hover:before,
 .z-btn-help:before,
 a.close:before,
 button.close:before,
 a.close:hover:before,
-button.close:hover:before {
+button.close:hover:before,
+.zotonic-logo {
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -62,93 +57,18 @@ a.zotonic-logo:hover {
   display: none;
 }
 .z-icon,
-.zotonic-logo,
 .z-btn-remove:before,
 .z-btn-remove:hover:before,
 .z-btn-help:before,
 a.close:before,
 button.close:before,
 a.close:hover:before,
-button.close:hover:before {
+button.close:hover:before,
+.zotonic-logo {
   font-family: "Zotonic";
 }
-.fa-icon,
-.z-icon-plus:before,
-.z-icon-minus:before,
-.z-icon-off:before,
-.z-icon-ok:before,
-.z-icon-ok-circle:before {
+.fa-icon {
   font-family: 'FontAwesome';
-}
-.z-icon-cross:before {
-  content: "\e60c";
-}
-.z-icon-cross-circle:before {
-  content: "\e609";
-}
-.z-icon-drag:before {
-  content: "\e60b";
-}
-.z-icon-edit:before {
-  content: "\e606";
-}
-.z-icon-help:before {
-  content: "\e60e";
-}
-.z-icon-help-circle:before {
-  content: "\e600";
-}
-.z-icon-info-circle:before {
-  content: "\e601";
-}
-.z-icon-logo-z:before {
-  content: "\e607";
-}
-.z-icon-logo:before {
-  content: "\5a";
-}
-.z-icon-minus:before {
-  content: "\e60a";
-}
-.z-icon-minus-circle:before {
-  content: "\e603";
-}
-.z-icon-ok:before {
-  content: "\e608";
-}
-.z-icon-ok-circle:before {
-  content: "\e602";
-}
-.z-icon-plus:before {
-  content: "\e60d";
-}
-.z-icon-plus-circle:before {
-  content: "\e604";
-}
-.z-icon-user:before {
-  content: "\e605";
-}
-.zotonic-logo:before {
-  content: "\5a";
-}
-.zotonic-logo {
-  font-size: 0.85em;
-  padding-right: 0.25em;
-}
-.z-icon-plus:before {
-  content: "\f067";
-}
-.z-icon-minus:before {
-  content: "\f068";
-}
-.z-icon-off:before {
-  content: "\f011";
-}
-.z-icon-ok:before {
-  content: "\f00c";
-}
-.z-icon-ok-circle:before {
-  content: "\f058";
 }
 .z-btn-remove,
 .z-btn-help {
@@ -201,4 +121,62 @@ button.close > span,
 a.close > em,
 button.close > em {
   display: none;
+}
+.z-icon-cross:before {
+  content: "\e60c";
+}
+.z-icon-cross-circle:before {
+  content: "\e609";
+}
+.z-icon-drag:before {
+  content: "\e60b";
+}
+.z-icon-edit:before {
+  content: "\e606";
+}
+.z-icon-help:before {
+  content: "\e60e";
+}
+.z-icon-help-circle:before {
+  content: "\e600";
+}
+.z-icon-info-circle:before {
+  content: "\e601";
+}
+.z-icon-logo-z:before {
+  content: "\e607";
+}
+.z-icon-logo:before {
+  content: "\5a";
+}
+.z-icon-minus:before {
+  content: "\e60a";
+}
+.z-icon-minus-circle:before {
+  content: "\e603";
+}
+.z-icon-off:before {
+  content: "\e60f";
+}
+.z-icon-ok:before {
+  content: "\e608";
+}
+.z-icon-ok-circle:before {
+  content: "\e602";
+}
+.z-icon-plus:before {
+  content: "\e60d";
+}
+.z-icon-plus-circle:before {
+  content: "\e604";
+}
+.z-icon-user:before {
+  content: "\e605";
+}
+.zotonic-logo:before {
+  content: "\5a";
+}
+.zotonic-logo {
+  font-size: 0.85em;
+  padding-right: 0.25em;
 }

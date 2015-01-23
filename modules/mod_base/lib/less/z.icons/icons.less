@@ -10,6 +10,7 @@
     .z-icon-logo:before { content: @icon-logo; }
     .z-icon-minus:before { content: @icon-minus; }
     .z-icon-minus-circle:before { content: @icon-minus-circle; }
+    .z-icon-off:before { content: @icon-off; }
     .z-icon-ok:before { content: @icon-ok; }
     .z-icon-ok-circle:before { content: @icon-ok-circle; }
     .z-icon-plus:before { content: @icon-plus; }
@@ -21,20 +22,5 @@
         &:extend(.z-icon all);
         font-size: 0.85em;
         padding-right: 0.25em; // room for adjacent text
-    }
-    .z-icon-plus {
-        .extend_icon(fa, fa-var-plus);
-    }
-    .z-icon-minus {
-        .extend_icon(fa, fa-var-minus);
-    }
-    .z-icon-off {
-        .extend_icon(fa, fa-var-power-off);
-    }
-    .z-icon-ok {
-        .extend_icon(fa, fa-var-check);
-    }
-    .z-icon-ok-circle {
-        .extend_icon(fa, fa-var-check-circle);
     }
 }
