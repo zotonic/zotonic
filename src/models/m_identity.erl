@@ -423,18 +423,22 @@ get_rsc_types(Id, Context) ->
 %% @doc Fetch all credentials belonging to the user "id" and of a certain type
 get_rsc_by_type(Id, email, Context) ->
     Idns = get_rsc_by_type_1(Id, email, Context),
-    Email = m_rsc:p_no_acl(Id, email, Context),
-    IsMissing = is_valid_key(email, Email, Context)
-                andalso not lists:any(fun(Idn) ->
-                                         proplists:get_value(key, Idn) =:= Email
-                                      end,
-                                      Idns),
-    case IsMissing of
-        true ->
-            insert(Id, email, Email, Context),
-            get_rsc_by_type(Id, email, Context);
-        false ->
-            Idns
+    case normalize_key(email, m_rsc:p_no_acl(Id, email, Context)) of
+        undefined ->
+            Idns;
+        Email ->
+            IsMissing = is_valid_key(email, Email, Context)
+                        andalso not lists:any(fun(Idn) ->
+                                                 proplists:get_value(key, Idn) =:= Email
+                                              end,
+                                              Idns),
+            case IsMissing of
+                true ->
+                    insert(Id, email, Email, Context),
+                    get_rsc_by_type_1(Id, email, Context);
+                false ->
+                    Idns
+            end
     end;
 get_rsc_by_type(Id, Type, Context) ->
     get_rsc_by_type_1(Id, Type, Context).
@@ -515,6 +519,8 @@ is_valid_key(email, Key, _Context) ->
 is_valid_key(_Type, _Key, _Context) ->
     true.
 
+normalize_key(_Type, undefined) ->
+    undefined;
 normalize_key(email, Key) ->
     z_convert:to_binary(z_string:trim(z_string:to_lower(Key)));
 normalize_key(_Type, Key) ->
