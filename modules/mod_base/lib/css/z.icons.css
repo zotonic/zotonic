@@ -122,6 +122,28 @@ a.close > em,
 button.close > em {
   display: none;
 }
+.z-btn-social {
+  position: relative;
+}
+.z-btn-social,
+.z-btn-sociala,
+.z-btn-social:hover {
+  color: #fff;
+}
+.z-btn-social .z-icon,
+.z-btn-social .fa-icon,
+.z-btn-social .zotonic-logo {
+  position: absolute;
+  display: block;
+  font-size: 16px;
+  line-height: 16px;
+  height: 16px;
+  width: 16px;
+  text-align: center;
+  top: 50%;
+  left: .5em;
+  margin-top: -7.5px;
+}
 .z-icon-cross:before {
   content: "\e60c";
 }
@@ -134,6 +156,12 @@ button.close > em {
 .z-icon-edit:before {
   content: "\e606";
 }
+.z-icon-facebook:before {
+  content: "\e614";
+}
+.z-icon-google-plus:before {
+  content: "\e610";
+}
 .z-icon-help:before {
   content: "\e60e";
 }
@@ -142,6 +170,12 @@ button.close > em {
 }
 .z-icon-info-circle:before {
   content: "\e601";
+}
+.z-icon-instagram:before {
+  content: "\e612";
+}
+.z-icon-linkedin:before {
+  content: "\e611";
 }
 .z-icon-logo-z:before {
   content: "\e607";
@@ -169,6 +203,9 @@ button.close > em {
 }
 .z-icon-plus-circle:before {
   content: "\e604";
+}
+.z-icon-twitter:before {
+  content: "\e613";
 }
 .z-icon-user:before {
   content: "\e605";

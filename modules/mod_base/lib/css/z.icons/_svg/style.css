@@ -3,6 +3,26 @@
 	color: #000000;
 	fill: currentColor;
 }
+.icon-google-plus {
+	width: 30px;
+	height: 32px;
+}
+.icon-linkedin {
+	width: 32px;
+	height: 32px;
+}
+.icon-instagram {
+	width: 32px;
+	height: 32px;
+}
+.icon-twitter {
+	width: 30px;
+	height: 32px;
+}
+.icon-facebook {
+	width: 18px;
+	height: 32px;
+}
 .icon-off {
 	width: 32px;
 	height: 32px;
