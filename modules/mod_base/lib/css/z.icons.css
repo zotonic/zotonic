@@ -1,23 +1,5 @@
 /*
-CSS Documentation
-
-Common Zotonic icons to be reused across modules.
-
-Include icons CSS in your template:
-{% lib
-    "css/z.icons.css"
-%}
-
-Then use the icon:
-<span class="z-icon z-icon-off"></span>
-
-Note to always include 'z-icon' as well (except for convenience class 'zotonic-logo').
-
-If you want to provide a text label for accessibility (but visually hidden), 
-put the text inside <em>:
-<span class="z-icon z-icon-off"><em>Log off</em></span>
-
-For advanced usage, see the file z.icons.less.
+See: http://zotonic.com/docs/latest/manuals/templates/icons.html
 */
 @font-face {
   font-family: 'Zotonic';
