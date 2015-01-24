@@ -126,11 +126,11 @@ msgstr "Privacy reglement"
 #: modules/mod_signup/templates/signup.tpl:3
 #: modules/mod_signup/templates/signup.tpl:164
 msgid "Sign Up"
-msgstr "Registreer"
+msgstr "Aanmelden"
 
 #: modules/mod_signup/templates/signup.tpl:55
 msgid "Sign up and become a member"
-msgstr "Registreer en wordt lid"
+msgstr "Meld je aan en wordt lid"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:20
 msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
