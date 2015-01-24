@@ -1,23 +1,23 @@
 {% if stage == "reminder_sent" %}
 <div class="logon_message">
 
-    <h3 class="logon_header">{_ We've sent you an e-mail _}</h3>
+    <h3 class="z-logon-title">{_ We've sent you an e-mail _}</h3>
 
     <p>{_ In the e-mail you will find instructions on how to reset the password of your account. _}</p>
     <p>{_ When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders. _}</p>
 
     {% if not m.acl.user %}
-        <p><a class="btn btn-primary" href="{% url logon %}">{_ Back to logon form _}</a></p>
+        <p><a class="btn btn-primary" href="{% url logon %}" id="stage_back_to_logon">{_ Back to logon form _}</a></p>
     {% else %}
-        <p><a id="{{ #cancel }}" class="btn btn-default" href="#">{_ OK _}</a></p>
-        {% wire id=#cancel action={redirect back} %}
+        <p><a id="stage_link_back" class="btn btn-default" href="#">{_ OK _}</a></p>
+        {% wire id="link_back" action={redirect back} %}
     {% endif %}
 
 </div>
 {% elseif stage == "verification_pending" %}
 <div class="logon_message">
 
-    <h1 class="logon_header">{_ Your account needs verification _}</h1>
+    <h1 class="z-logon-title">{_ Your account needs verification _}</h1>
 
     <p>{_ Click on the button below to e-mail you a verification message. _}</p>
 
@@ -30,7 +30,7 @@
 {% elseif stage == "verification_sent" %}
 <div class="logon_message">
 
-    <h1 class="logon_header">{_ Check your e-mail! _}</h1>
+    <h1 class="z-logon-title">{_ Check your e-mail! _}</h1>
 
     <p>{_ We have sent you an e-mail. In the e-mail you will find instructions on how to confirm your account. _}</p>
 
@@ -40,7 +40,7 @@
 {% elseif stage == "verification_error" %}
 <div class="logon_message">
 
-    <h1 class="logon_header error">{_ Sorry, could not send the verification message. _}</h1>
+    <h1 class="z-logon-title error">{_ Sorry, could not send the verification message. _}</h1>
     
     <p>{_ We don’t seem to have any valid e-mail address or other electronic communication address of you. _}</p>
 
@@ -54,7 +54,7 @@
 {% elseif stage == "password_expired" %}
 <div>
     <form id="password_expired" method="post" action="postback">
-        <h1 class="logon_header">{_ You need to change your password _}</h1>
+        <h1 class="z-logon-title">{_ You need to change your password _}</h1>
 
         <p>{_ Below you can enter a new password for your account _}</p>
 

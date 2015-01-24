@@ -38,7 +38,7 @@
 
 </form>
 {% else %}
-<h4 class="logon_header">{_ Sorry, your password reset code is unknown or expired _}</h4>
+<h4 class="z-logon-title">{_ Sorry, your password reset code is unknown or expired _}</h4>
 
 <p>{_ For security reasons password reset codes are only kept for a limited amount of time and can only be used once. _}</p>
 <p>{_ You can _} <a href="{% url logon_reminder %}">{_ request a new password reset code _}</a>.</p>

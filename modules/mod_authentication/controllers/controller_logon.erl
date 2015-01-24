@@ -26,6 +26,9 @@
 -export([get_rememberme_cookie/1, set_rememberme_cookie/2, reset_rememberme_cookie/1]).
 
 %% Convenience export for other auth implementations.
+-export([logon/2, reminder/2]).
+
+%% Convenience export for other auth implementations.
 -export([send_reminder/2, lookup_identities/2]).
 
 
@@ -187,20 +190,10 @@ event(#submit{message=[], form="password_reset"}, Context) ->
             logon_error("unequal", Context)
     end;
 
+%%@doc Handle submit form post.
 event(#submit{message=[], form="password_reminder"}, Context) ->
-    case z_string:trim(z_context:get_q("reminder_address", Context, [])) of
-        [] ->
-            logon_error("reminder", Context);
-        Reminder ->
-            case lookup_identities(Reminder, Context) of
-                [] -> 
-                    logon_error("reminder", Context);
-                Identities ->
-                    % @todo TODO check if reminder could be sent (maybe there is no e-mail address)
-                    send_reminder(Identities, Context),
-                    logon_stage("reminder_sent", Context)
-            end
-    end;
+    Args = z_context:get_q_all(Context),
+    reminder(Args, Context);
 
 event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context) ->
     LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
@@ -216,8 +209,23 @@ event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context
             z_render:growl_error("Configuration error: please enable a module for #logon_submit{}", Context)
     end;
 
+%%@doc Handle submit form post.
 event(#submit{message=[]}, Context) ->
     Args = z_context:get_q_all(Context),
+    logon(Args, Context);
+
+event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
+    case proplists:get_value(<<"msg">>, Data) of
+        <<"logon_redirect">> ->
+            Location = get_ready_page(proplists:get_value(<<"page">>, Data, []), Context),
+            z_render:wire({redirect, [{location, cleanup_url(Location)}]}, Context);
+        Msg ->
+            lager:warning("controller_logon: unknown msg: ~p", [Msg]),
+            Context
+    end.
+
+%%@doc Handle submit data.
+logon(Args, Context) ->
     case z_notifier:first(#logon_submit{query_args=Args}, Context) of
         {ok, UserId} when is_integer(UserId) -> 
             logon_user(UserId, Context);
@@ -228,16 +236,22 @@ event(#submit{message=[]}, Context) ->
         undefined -> 
             ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
             logon_error("pw", Context)
-    end;
+    end.
 
-event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
-    case proplists:get_value(<<"msg">>, Data) of
-        <<"logon_redirect">> ->
-            Location = get_ready_page(proplists:get_value(<<"page">>, Data, []), Context),
-            z_render:wire({redirect, [{location, cleanup_url(Location)}]}, Context);
-        Msg ->
-            lager:warning("controller_logon: unknown msg: ~p", [Msg]),
-            Context
+%%@doc Handle submit data.  
+reminder(Args, Context) ->
+    case z_string:trim(proplists:get_value("reminder_address", Args, [])) of
+        [] ->
+            logon_error("reminder", Context);
+        Reminder ->
+            case lookup_identities(Reminder, Context) of
+                [] -> 
+                    logon_error("reminder", Context);
+                Identities ->
+                    % @todo TODO check if reminder could be sent (maybe there is no e-mail address)
+                    send_reminder(Identities, Context),
+                    logon_stage("reminder_sent", Context)
+            end
     end.
 
 logon_error(Reason, Context) ->

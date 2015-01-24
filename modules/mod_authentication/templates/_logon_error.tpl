@@ -7,7 +7,7 @@
 
 <h4>{_ I forgot my username or password _}</h4>
 
-<p>{_ When you forgot your username or pasword then you can ask us to _} <a href="{% url logon_reminder %}">{_ e-mail a temporary password _}</a>.  {_ The e-mail will contain instructions how to reset your password. _}</p>
+<p>{_ When you forgot your username or pasword then you can ask us to _} <a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ e-mail a temporary password _}</a>.  {_ The e-mail will contain instructions how to reset your password. _}</p>
 
 {% elseif reason == "reminder" %}
 

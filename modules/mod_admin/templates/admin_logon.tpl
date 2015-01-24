@@ -17,7 +17,7 @@
 {% block content %}
 <div class="widget admin-logon">
     <div class="widget-header">{_ Log on to _} {{ m.config.site.title.value|default:"Zotonic" }}</div>
-    <div id="logon_box" class="widget-content">
+    <div class="widget-content">
         {% include "_logon.tpl" page=page|default:"/admin" %}
     </div>
 </div>

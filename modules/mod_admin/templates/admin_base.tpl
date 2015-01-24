@@ -21,6 +21,7 @@
             "css/zp-menuedit.css"
             "css/zotonic-admin.css"
             "css/z.modal.css"
+            "css/logon.css"
             "css/jquery.loadmask.css"
         %}
 

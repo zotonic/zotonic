@@ -19,7 +19,7 @@ logon_form_outside_tpl
     default: _logon_login_outside.tpl
     
 #}
-<div id="logon_box" class="z-logon-box">
+<div id="logon_box" class="z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}">
 
     {% if logon_form_title_tpl %}
         {% include logon_form_title_tpl %}
@@ -39,16 +39,29 @@ logon_form_outside_tpl
         {% endif %}
     
         {% if logon_form_entry_tpl %}    
-            {% include logon_form_entry_tpl %}
+            {% include logon_form_entry_tpl
+                page=page
+                use_wire=use_wire
+            %}
         {% endif %}
     
         {% if logon_form_support_tpl %}
-            <div class="z-logon-support">{% include logon_form_support_tpl %}</div>
+            <div class="z-logon-support">
+                {% include logon_form_support_tpl
+                    update_target=update_target
+                    update_template=update_template
+                    logon_state=logon_state
+                %}
+            </div>
         {% endif %}
     </div>
 
     {% if logon_form_outside_tpl %}
-        {% include logon_form_outside_tpl %}
+        {% include logon_form_outside_tpl
+            update_target=update_target
+            update_template=update_template
+            logon_state=logon_state
+        %}
     {% endif %}
     
 </div>

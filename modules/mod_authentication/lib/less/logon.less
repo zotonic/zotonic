@@ -1,16 +1,21 @@
 .z-logon-box {
-    @_width: 320px; // just a convenient default
-    @_spacing: 20px;
+    @_horizontal_spacing: 20px;
+    @_width: 300px; // just a convenient default
     @_button_spacing: 10px;
-    @_form_spacing: 15px; // Bootstrap default
+    @_vertical_element_spacing: 15px; // Bootstrap default
     @_border_color: #ddd;
     @_background_color: #f2f2f2;
     @_error_color: #C21C3D;
     @_error_border_color: @_error_color;
     @_error_background_color: #FBE5EC;
     
-    max-width: @_width;
-    margin: 0 auto @_spacing auto;
+    max-width: @_width - 2 * @_horizontal_spacing;
+    
+    &.z-logon-box-boxed {
+        max-width: @_width;
+    }
+    
+    margin: @_vertical_element_spacing auto;
     float: none;
     
     ul {
@@ -19,37 +24,39 @@
         padding: 0;
     }
     
+    p {
+        margin: 0 0 @_button_spacing 0;
+        padding: 0;
+    }
+    
     button[type="submit"],
     input[type="submit"] {
         width: 100%;
     }
     
-    .z-logon-title {
-    
-    }
-    
-    .z-logon-form,
-    .z-logon-error-message {
-        margin: @_spacing 0;
-        padding: @_spacing;
+    .z-logon-title:first-of-type {
+        margin-top: 0;
     }
     
     .z-logon-form {
-        background-color: @_background_color;
+        margin: 0;
         
-        p {
-            margin: 0;
-            padding: 0;
+        &.z-logon-box-boxed & {
+            margin: @_vertical_element_spacing 0;
+            padding: @_vertical_element_spacing @_horizontal_spacing;
+            background-color: @_background_color;
         }
+    }
+    
+    .z-logon-error-message {
+        margin: @_vertical_element_spacing 0;
+        padding: @_vertical_element_spacing @_horizontal_spacing;
     }
     
     /* Extra login options */
     .z-logon-extra {
         li {
-            margin: 0;
-        }
-        li + li {
-            margin: @_button_spacing 0 0 0;
+            margin: 0 0 @_button_spacing 0 ;
         }
         
         .z-btn-social {
@@ -57,57 +64,69 @@
             text-align: center;
             text-decoration: none;
         }
-    }
 
-    .z-logon-extra .z-logon-extra-separator {
-        @_line_height: 16px;
+        .z-logon-extra-separator {
+            @_line_height: 16px;
         
-        position: relative;
-        z-index: 1;
-        text-align: center;
-        line-height: @_line_height;
-        margin: @_form_spacing -@_spacing @_form_spacing/2 -@_spacing;
-        
-        &:before {
-            // background behind "or"
-            @_label_width: 40px;
-            @_label_height: @_line_height;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            line-height: @_line_height;
+            margin: @_vertical_element_spacing 0;
             
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            height: @_label_height;
-            top: @_line_height/2;
-            width: @_label_width;
-            background-color: @_background_color;
-            content: "";
-            margin: -@_label_height/2 0 0 -@_label_width/2;
-            z-index: -1;
-        }
+            &.z-logon-box-boxed & {
+                margin-left: -@_horizontal_spacing;
+                margin-right: -@_horizontal_spacing;
+            }
+            
+            &:before {
+                // background behind "or"
+                @_label_width: 40px;
+                @_label_height: @_line_height;
+            
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                height: @_label_height;
+                top: @_line_height/2;
+                width: @_label_width;
+                background-color: @_background_color;
+                content: "";
+                margin: -@_label_height/2 0 0 -@_label_width/2;
+                z-index: -1;
+            }
         
-        &:after {
-            // horizontal line
-            position: absolute;
-            left: 0;
-            top: @_line_height/2;
-            content: " ";
-            width: 100%;
-            border-bottom: 1px solid @_border_color;
-            z-index: -2;
+            &:after {
+                // horizontal line
+                position: absolute;
+                left: 0;
+                top: @_line_height/2;
+                content: " ";
+                width: 100%;
+                border-bottom: 1px solid @_border_color;
+                z-index: -2;
+            }
         }
-    }
-    .z-logon-extra .z-logon-extra-separator:first-child {
-        display: none;
+        .z-logon-extra-separator:first-child {
+            display: none;
+        }
     }
     
     /* Supporting options */
     .z-logon-support {
-        margin: @_spacing -@_spacing 0 -@_spacing;
-        padding: @_form_spacing @_spacing 0 @_spacing;
-        border-top: 1px solid @_border_color;
+        margin: @_vertical_element_spacing 0 0 0;
+        padding: @_vertical_element_spacing 0 0 0;
         
-        :last-child {
-            margin-bottom: 0;
+        &.z-logon-box-boxed & {
+            margin-left: -@_horizontal_spacing;
+            margin-right: -@_horizontal_spacing;
+            padding-left: @_horizontal_spacing;
+            padding-right: @_horizontal_spacing;
+            border-top: 1px solid @_border_color;
+            
+            p:last-child {
+                margin-bottom: 0;
+            }
         }
         
         &:empty {
@@ -125,7 +144,7 @@
         display: none;
         
         background-color: @_error_background_color;
-        padding: @_spacing;
+        padding: @_vertical_element_spacing @_horizontal_spacing;
         
         :first-child {
             margin-top: 0;

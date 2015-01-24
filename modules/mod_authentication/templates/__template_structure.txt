@@ -16,6 +16,11 @@ base.tpl
 |        |       |-- _logon_login_form.tpl
 |        |       |-- _logon_error.tpl
 |        |       |-- _logon_login_support.tpl // link forgot password
+|        |== signup (state)
+|        |   `-- _logon_form.tpl
+|        |       |-- _signup_title.tpl
+|        |       |-- _signup_form.tpl
+|        |       |-- _signup_support.tpl // backlink to logon form
 |        `== else:
 |        |   `-- _logon_form.tpl
 |                |== awaiting verification:

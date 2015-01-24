@@ -1,37 +1,44 @@
 .z-logon-box {
-  max-width: 320px;
-  margin: 0 auto 20px auto;
+  max-width: 260px;
+  margin: 15px auto;
   float: none;
   /* Extra login options */
   /* Supporting options */
   /* Validation */
+}
+.z-logon-box.z-logon-box-boxed {
+  max-width: 300px;
 }
 .z-logon-box ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
+.z-logon-box p {
+  margin: 0 0 10px 0;
+  padding: 0;
+}
 .z-logon-box button[type="submit"],
 .z-logon-box input[type="submit"] {
   width: 100%;
 }
-.z-logon-box .z-logon-form,
-.z-logon-box .z-logon-error-message {
-  margin: 20px 0;
-  padding: 20px;
+.z-logon-box .z-logon-title:first-of-type {
+  margin-top: 0;
 }
 .z-logon-box .z-logon-form {
+  margin: 0;
+}
+.z-logon-box .z-logon-form.z-logon-box-boxed .z-logon-box .z-logon-form {
+  margin: 15px 0;
+  padding: 15px 20px;
   background-color: #f2f2f2;
 }
-.z-logon-box .z-logon-form p {
-  margin: 0;
-  padding: 0;
+.z-logon-box .z-logon-error-message {
+  margin: 15px 0;
+  padding: 15px 20px;
 }
 .z-logon-box .z-logon-extra li {
-  margin: 0;
-}
-.z-logon-box .z-logon-extra li + li {
-  margin: 10px 0 0 0;
+  margin: 0 0 10px 0;
 }
 .z-logon-box .z-logon-extra .z-btn-social {
   display: block;
@@ -43,7 +50,11 @@
   z-index: 1;
   text-align: center;
   line-height: 16px;
-  margin: 15px -20px 7.5px -20px;
+  margin: 15px 0;
+}
+.z-logon-box .z-logon-extra .z-logon-extra-separator.z-logon-box-boxed .z-logon-box .z-logon-extra .z-logon-extra-separator {
+  margin-left: -20px;
+  margin-right: -20px;
 }
 .z-logon-box .z-logon-extra .z-logon-extra-separator:before {
   position: absolute;
@@ -70,11 +81,17 @@
   display: none;
 }
 .z-logon-box .z-logon-support {
-  margin: 20px -20px 0 -20px;
-  padding: 15px 20px 0 20px;
+  margin: 15px 0 0 0;
+  padding: 15px 0 0 0;
+}
+.z-logon-box .z-logon-support.z-logon-box-boxed .z-logon-box .z-logon-support {
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
   border-top: 1px solid #dddddd;
 }
-.z-logon-box .z-logon-support :last-child {
+.z-logon-box .z-logon-support.z-logon-box-boxed .z-logon-box .z-logon-support p:last-child {
   margin-bottom: 0;
 }
 .z-logon-box .z-logon-support:empty {
@@ -87,7 +104,7 @@
 .z-logon-box .z-logon-error-message {
   display: none;
   background-color: #fbe5ec;
-  padding: 20px;
+  padding: 15px 20px;
 }
 .z-logon-box .z-logon-error-message :first-child {
   margin-top: 0;

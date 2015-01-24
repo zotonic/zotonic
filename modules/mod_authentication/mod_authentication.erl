@@ -27,6 +27,7 @@
 
 %% gen_server exports
 -export([
+    event/2,
     observe_logon_submit/2,
     observe_auth_autologon/2,
     observe_auth_validated/2,
@@ -38,6 +39,14 @@
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
+%% @doc Handle logon submits in case we cannot use controller_logon. Pass on the  data to the page controller.
+event(#submit{message={logon, _Args}}, Context) ->
+    Args = z_context:get_q_all(Context),
+    controller_logon:logon(Args, Context);
+event(#submit{message={reminder, _Args}}, Context) ->
+    Args = z_context:get_q_all(Context),
+    controller_logon:reminder(Args, Context).
+    
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
      #menu_item{id=admin_authentication_services,

@@ -1,7 +1,10 @@
 {% extends "base.tpl" %}
 
 {% block html_head_extra %}
-{% lib "css/logon.css" %}
+{% lib
+    "css/z.icons.css"
+    "css/logon.css"
+%}
 {% endblock %}
 
 {% block title %}
@@ -11,5 +14,5 @@
 {% block page_class %}z-page-logon{% endblock %}
 
 {% block content_area %}
-    {% include "_logon.tpl" %}
+    {% include "_logon.tpl" style_boxed=1 %}
 {% endblock %}
