@@ -1,13 +1,10 @@
 .z-logon-box {
+  float: none;
   max-width: 260px;
   margin: 15px auto;
-  float: none;
   /* Extra login options */
   /* Supporting options */
   /* Validation */
-}
-.z-logon-box.z-logon-box-boxed {
-  max-width: 300px;
 }
 .z-logon-box ul {
   list-style-type: none;
@@ -26,12 +23,7 @@
   margin-top: 0;
 }
 .z-logon-box .z-logon-form {
-  margin: 0;
-}
-.z-logon-box .z-logon-form.z-logon-box-boxed .z-logon-box .z-logon-form {
-  margin: 15px 0;
-  padding: 15px 20px;
-  background-color: #f2f2f2;
+  margin: 15px auto 0 auto;
 }
 .z-logon-box .z-logon-error-message {
   margin: 15px 0;
@@ -52,10 +44,6 @@
   line-height: 16px;
   margin: 15px 0;
 }
-.z-logon-box .z-logon-extra .z-logon-extra-separator.z-logon-box-boxed .z-logon-box .z-logon-extra .z-logon-extra-separator {
-  margin-left: -20px;
-  margin-right: -20px;
-}
 .z-logon-box .z-logon-extra .z-logon-extra-separator:before {
   position: absolute;
   left: 50%;
@@ -63,7 +51,7 @@
   height: 16px;
   top: 8px;
   width: 40px;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   content: "";
   margin: -8px 0 0 -20px;
   z-index: -1;
@@ -83,16 +71,6 @@
 .z-logon-box .z-logon-support {
   margin: 15px 0 0 0;
   padding: 15px 0 0 0;
-}
-.z-logon-box .z-logon-support.z-logon-box-boxed .z-logon-box .z-logon-support {
-  margin-left: -20px;
-  margin-right: -20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-top: 1px solid #dddddd;
-}
-.z-logon-box .z-logon-support.z-logon-box-boxed .z-logon-box .z-logon-support p:last-child {
-  margin-bottom: 0;
 }
 .z-logon-box .z-logon-support:empty {
   display: none;
@@ -114,4 +92,29 @@
 }
 .z-logon-box.z-logon-error .z-logon-error-message {
   display: block;
+}
+.z-logon-box.z-logon-box-boxed {
+  max-width: 300px;
+}
+.z-logon-box.z-logon-box-boxed .z-logon-form {
+  margin: 15px 0;
+  padding: 15px 20px;
+  background-color: #f2f2f2;
+}
+.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator:before {
+  background-color: #f2f2f2;
+}
+.z-logon-box.z-logon-box-boxed .z-logon-support {
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-top: 1px solid #dddddd;
+}
+.z-logon-box.z-logon-box-boxed .z-logon-support p:last-child {
+  margin-bottom: 0;
 }

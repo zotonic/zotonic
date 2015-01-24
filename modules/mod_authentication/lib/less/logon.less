@@ -1,22 +1,17 @@
 .z-logon-box {
     @_horizontal_spacing: 20px;
-    @_width: 300px; // just a convenient default
+    @_width: 300px; // make it fit mobile. and wide enough for desktop too
     @_button_spacing: 10px;
     @_vertical_element_spacing: 15px; // Bootstrap default
     @_border_color: #ddd;
-    @_background_color: #f2f2f2;
+    @_background_color: #fff;
     @_error_color: #C21C3D;
     @_error_border_color: @_error_color;
     @_error_background_color: #FBE5EC;
     
-    max-width: @_width - 2 * @_horizontal_spacing;
-    
-    &.z-logon-box-boxed {
-        max-width: @_width;
-    }
-    
-    margin: @_vertical_element_spacing auto;
     float: none;
+    max-width: @_width - 2 * @_horizontal_spacing;
+    margin: @_vertical_element_spacing auto;
     
     ul {
         list-style-type: none;
@@ -29,6 +24,7 @@
         padding: 0;
     }
     
+    // full width submit button
     button[type="submit"],
     input[type="submit"] {
         width: 100%;
@@ -39,13 +35,7 @@
     }
     
     .z-logon-form {
-        margin: 0;
-        
-        &.z-logon-box-boxed & {
-            margin: @_vertical_element_spacing 0;
-            padding: @_vertical_element_spacing @_horizontal_spacing;
-            background-color: @_background_color;
-        }
+        margin: @_vertical_element_spacing auto 0 auto;
     }
     
     .z-logon-error-message {
@@ -73,11 +63,6 @@
             text-align: center;
             line-height: @_line_height;
             margin: @_vertical_element_spacing 0;
-            
-            &.z-logon-box-boxed & {
-                margin-left: -@_horizontal_spacing;
-                margin-right: -@_horizontal_spacing;
-            }
             
             &:before {
                 // background behind "or"
@@ -117,18 +102,6 @@
         margin: @_vertical_element_spacing 0 0 0;
         padding: @_vertical_element_spacing 0 0 0;
         
-        &.z-logon-box-boxed & {
-            margin-left: -@_horizontal_spacing;
-            margin-right: -@_horizontal_spacing;
-            padding-left: @_horizontal_spacing;
-            padding-right: @_horizontal_spacing;
-            border-top: 1px solid @_border_color;
-            
-            p:last-child {
-                margin-bottom: 0;
-            }
-        }
-        
         &:empty {
             display: none;
         }
@@ -158,6 +131,42 @@
     &.z-logon-error {
         .z-logon-error-message {
             display: block;
+        }
+    }
+    
+    // Overrides when the box is shown in a background-colored box
+    &.z-logon-box-boxed {
+        @_background_color: #f2f2f2;
+        
+        max-width: @_width;
+        
+        .z-logon-form {
+            margin: @_vertical_element_spacing 0;
+            padding: @_vertical_element_spacing @_horizontal_spacing;
+            background-color: @_background_color;
+        }
+        
+        .z-logon-extra {
+            .z-logon-extra-separator {
+                margin-left: -@_horizontal_spacing;
+                margin-right: -@_horizontal_spacing;
+                
+                &:before {
+                    background-color: @_background_color;
+                }
+            }
+        }
+        
+        .z-logon-support {
+            margin-left: -@_horizontal_spacing;
+            margin-right: -@_horizontal_spacing;
+            padding-left: @_horizontal_spacing;
+            padding-right: @_horizontal_spacing;
+            border-top: 1px solid @_border_color;
+            
+            p:last-child {
+                margin-bottom: 0;
+            }
         }
     }
 }
