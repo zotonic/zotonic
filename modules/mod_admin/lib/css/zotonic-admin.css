@@ -53,11 +53,6 @@ button.close:before,
 a.close:hover:before,
 button.close:hover:before,
 .zotonic-logo,
-.z-icon-plus:before,
-.z-icon-minus:before,
-.z-icon-off:before,
-.z-icon-ok:before,
-.z-icon-ok-circle:before,
 ul.blocks.ui-sortable .widget-header:before {
   speak: none;
   font-style: normal;
@@ -91,12 +86,7 @@ button.close:hover:before,
 ul.blocks.ui-sortable .widget-header:before {
   font-family: "Zotonic";
 }
-.fa-icon,
-.z-icon-plus:before,
-.z-icon-minus:before,
-.z-icon-off:before,
-.z-icon-ok:before,
-.z-icon-ok-circle:before {
+.fa-icon {
   font-family: 'FontAwesome';
 }
 .z-btn-remove,
@@ -154,16 +144,24 @@ button.close > em {
 .z-btn-social {
   position: relative;
 }
+.z-btn-social,
+.z-btn-sociala,
+.z-btn-social:hover {
+  color: #fff;
+}
 .z-btn-social .z-icon,
 .z-btn-social .fa-icon,
 .z-btn-social .zotonic-logo {
   position: absolute;
+  display: block;
   font-size: 16px;
   line-height: 16px;
   height: 16px;
-  top: 0;
-  left: 0;
-  margin-top: -8px;
+  width: 16px;
+  text-align: center;
+  top: 50%;
+  left: .5em;
+  margin-top: -7.5px;
 }
 .z-icon-cross:before {
   content: "\e60c";
@@ -177,6 +175,12 @@ button.close > em {
 .z-icon-edit:before {
   content: "\e606";
 }
+.z-icon-facebook:before {
+  content: "\e614";
+}
+.z-icon-google-plus:before {
+  content: "\e610";
+}
 .z-icon-help:before {
   content: "\e60e";
 }
@@ -185,6 +189,12 @@ button.close > em {
 }
 .z-icon-info-circle:before {
   content: "\e601";
+}
+.z-icon-instagram:before {
+  content: "\e612";
+}
+.z-icon-linkedin:before {
+  content: "\e611";
 }
 .z-icon-logo-z:before {
   content: "\e607";
@@ -198,6 +208,9 @@ button.close > em {
 .z-icon-minus-circle:before {
   content: "\e603";
 }
+.z-icon-off:before {
+  content: "\e60f";
+}
 .z-icon-ok:before {
   content: "\e608";
 }
@@ -210,6 +223,9 @@ button.close > em {
 .z-icon-plus-circle:before {
   content: "\e604";
 }
+.z-icon-twitter:before {
+  content: "\e613";
+}
 .z-icon-user:before {
   content: "\e605";
 }
@@ -219,21 +235,6 @@ button.close > em {
 .zotonic-logo {
   font-size: 0.85em;
   padding-right: 0.25em;
-}
-.z-icon-plus:before {
-  content: "\f067";
-}
-.z-icon-minus:before {
-  content: "\f068";
-}
-.z-icon-off:before {
-  content: "\f011";
-}
-.z-icon-ok:before {
-  content: "\f00c";
-}
-.z-icon-ok-circle:before {
-  content: "\f058";
 }
 /* FONT PATH
  * -------------------------- */
@@ -467,12 +468,12 @@ ul.blocks.ui-sortable .widget-header:before {
   font-size: 16px;
   line-height: 16px;
   left: 15px;
-  top: 10px;
+  top: 15px;
   color: #999999;
 }
 ul.blocks.ui-sortable .form-control.block-name {
   background-color: transparent;
-  margin: -10px 0 10px 0;
+  margin: -15px 0 10px 0;
 }
 ul.blocks.ui-sortable .form-control.block-name:focus {
   background-color: #fff;
@@ -557,9 +558,11 @@ ul.media > li .bottom .caption {
 }
 ul.media > li .bottom .caption a {
   word-break: break-all;
-  display: inline-block;
+  display: block;
   height: 16px;
-  line-height: 1;
+  max-height: 16px;
+  overflow: hidden;
+  line-height: 16px;
   width: 161px;
   vertical-align: text-top;
 }
@@ -679,30 +682,37 @@ img.admin-leader-image {
   cursor: pointer;
 }
 .widget.admin-logon {
-  max-width: 480px;
   margin: 100px auto;
+  max-width: 480px;
 }
-.widget.admin-logon .widget-content {
-  padding: 20px;
+.widget.admin-logon .z-logon-box {
+  max-width: none;
+  margin: 0 auto;
 }
-.widget.admin-logon .z-logon-support {
-  margin: 20px -20px 0 -20px;
-  padding: 15px 20px 0 20px;
+.widget.admin-logon .z-logon-box button[type="submit"],
+.widget.admin-logon .z-logon-box input[type="submit"] {
+  width: auto;
+}
+.widget.admin-logon .z-logon-box .z-logon-support {
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
   border-top: 1px solid #dddddd;
 }
-.widget.admin-logon .z-logon-support :last-child {
-  margin-bottom: 0;
-}
-.widget.admin-logon .z-logon-error-message {
+.widget.admin-logon .z-logon-box .z-logon-error-message {
   display: none;
 }
-.widget.admin-logon .z-logon-error .z-logon-error-message {
+.z-logon-error .widget.admin-logon .z-logon-box .z-logon-error-message {
   display: block;
-  margin: 0 -20px 20px -20px;
-  padding: 0 20px 15px 20px;
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-left: 15px;
+  padding-right: 15px;
   border-bottom: 1px solid #dddddd;
 }
-.widget.admin-logon .z-logon-error .z-logon-error-message :last-child {
+.z-logon-error .widget.admin-logon .z-logon-box .z-logon-error-message :last-child {
   margin-bottom: 0;
 }
 .map-wrapper {
@@ -1071,7 +1081,7 @@ ul.tree-list li.menu-item {
   line-height: 1.2;
 }
 ul.tree-list li.menu-item:last-child {
-  margin: 0 0 10px 0;
+  margin: 0 0 15px 0;
 }
 ul.tree-list li.menu-item li.menu-item:last-child {
   margin: 0;
@@ -1127,7 +1137,7 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   display: none;
 }
 .widget {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   border-bottom: none;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
@@ -1148,7 +1158,7 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 }
 .widget .widget-content {
   position: relative;
-  padding: 10px 15px 0 15px;
+  padding: 0 15px 0 15px;
 }
 .widget .widget-content .widget-content {
   padding: 0;
@@ -1176,18 +1186,21 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   margin-top: 0;
 }
 .widget .widget-content > :last-child {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+.widget .widget-content fieldset > :last-child {
+  margin-bottom: 0;
 }
 .widget .widget-content.tab-content {
-  padding-top: 10px;
+  padding-top: 15px;
 }
 .widget .widget-content .z-btn-help {
   position: absolute;
-  top: 10px;
+  top: 15px;
   right: 15px;
 }
 .widget .widget-content .rsc-item-wrapper {
-  margin: 0 0 10px 0;
+  margin: 0 0 15px 0;
 }
 .widget .widget-content .rsc-item {
   overflow: hidden;
@@ -1205,7 +1218,7 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 }
 .widget .widget-header {
   margin: 0;
-  padding: 10px 15px;
+  padding: 15px 15px;
   -webkit-border-radius: 0px 0px 0;
   -moz-border-radius: 0px 0px 0;
   border-radius: 0px 0px 0;
@@ -1217,7 +1230,7 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-header .z-btn-remove {
   display: block;
   position: absolute;
-  top: 10px;
+  top: 15px;
   right: 41px;
   z-index: 1;
 }

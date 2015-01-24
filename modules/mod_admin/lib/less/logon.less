@@ -1,42 +1,46 @@
-
 .widget.admin-logon {
-    @_width: 480px;
-    @_spacing: 20px;
-    @_form_spacing: 15px; // Bootstrap default
-    @_border_color: @borderColorMedium;
-    
-    max-width: @_width;
     margin: 100px auto;
-
-    .widget-content {
-        padding: @_spacing;
-    }
+    max-width: 480px;
     
-    .z-logon-support {
-        margin: @_spacing -@_spacing 0 -@_spacing;
-        padding: @_form_spacing @_spacing 0 @_spacing;
-        border-top: 1px solid @_border_color;
-        
-        :last-child {
-            margin-bottom: 0;
-        }
-    }
+    .z-logon-box {
+        @_spacing: 20px;
+        @_form_spacing: 15px; // Bootstrap default
+        @_border_color: @borderColorMedium;
     
-    .z-logon-error-message {
-        display: none;
-    }
-    
-    .z-logon-error {
-        .z-logon-error-message {
-            display: block;
-            margin: 0 -@_spacing @_spacing -@_spacing;
-            padding: 0 @_spacing @_form_spacing @_spacing;
-            border-bottom: 1px solid @_border_color;
+        ._stretch_to_side() {
+            margin-left: -@widgetSidePadding;
+            margin-right: -@widgetSidePadding;
+            padding-left: @widgetSidePadding;
+            padding-right: @widgetSidePadding;
             
-            :last-child {
-                margin-bottom: 0;
+        }
+    
+        max-width: none;
+        margin: 0 auto;
+        
+        button[type="submit"],
+        input[type="submit"] {
+            width: auto;
+        }
+    
+        .z-logon-support {
+            ._stretch_to_side;
+            padding-top: @widgetVerticalPadding;
+            border-top: 1px solid @_border_color;
+        }
+    
+        .z-logon-error-message {
+            display: none;
+            
+            .z-logon-error & {
+                display: block;
+                ._stretch_to_side;
+                border-bottom: 1px solid @_border_color;
+            
+                :last-child {
+                    margin-bottom: 0;
+                }
             }
         }
-    }
-    
+    }    
 }

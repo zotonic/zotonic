@@ -65,9 +65,11 @@ ul.media {
                 
                 a {
                     word-break: break-all;
-                    display: inline-block;
+                    display: block;
                     height: @roundBtnSize;
-                    line-height: 1;
+                    max-height: @roundBtnSize;
+                    overflow: hidden;
+                    line-height: @roundBtnSize;
                     width: @_image_width - @roundBtnSize - 3;
                     vertical-align: text-top;
                 }
