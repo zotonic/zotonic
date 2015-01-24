@@ -14,5 +14,5 @@
 {% block page_class %}z-page-logon{% endblock %}
 
 {% block content_area %}
-    {% include "_logon.tpl" style_boxed=1 %}
+    {% include "_logon.tpl" style_boxed=0 %}
 {% endblock %}

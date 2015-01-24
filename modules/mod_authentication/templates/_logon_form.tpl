@@ -1,23 +1,18 @@
 {#
 Params:
-page
-error_reason
-
-logon_form_title_tpl
+-page
+-error_reason
+-style_boxed -- creates a colored background box
+- logon_form_title_tpl
     default: _logon_login_title.tpl
-
-logon_form_extra_tpl
+- logon_form_extra_tpl
     default: _logon_login_extra.tpl
-    
-logon_form_entry_tpl
+- logon_form_entry_tpl
     default: _logon_login_form.tpl
-    
-logon_form_support_tpl
+- logon_form_support_tpl
     default: _logon_login_support.tpl
-
-logon_form_outside_tpl
-    default: _logon_login_outside.tpl
-    
+- logon_form_outside_tpl
+    default: _logon_login_outside.tpl  
 #}
 <div id="logon_box" class="z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}">
     {% if logon_form_title_tpl %}
