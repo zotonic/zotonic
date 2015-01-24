@@ -211,7 +211,7 @@ msgstr "Het e-mailadres verbonden aan je account is"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
 msgid "The e-mail will contain instructions how to reset your password."
-msgstr "Het e-mailbericht bevat instructies om je wachtwoord te veranderen"
+msgstr "Het e-mailbericht bevat instructies om je wachtwoord te veranderen."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:28
 msgid "The two passwords should be equal. Please retype them."
@@ -348,7 +348,7 @@ msgstr "Je wachtwoord wordt aangepast en je wordt ingelogd als"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
 msgid "e-mail a temporary password"
-msgstr "e-mail een tijdelijk wachtwoord"
+msgstr "een tijdelijk wachtwoord te e-mailen"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "request a new password reset code"
