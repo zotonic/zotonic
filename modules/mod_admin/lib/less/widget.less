@@ -13,7 +13,7 @@
 
     .widget-content {
         position: relative;
-        padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
+        padding: 0 @widgetSidePadding 0 @widgetSidePadding;
         
         .widget-content {
             // nested
@@ -41,6 +41,10 @@
             margin-bottom: @widgetVerticalPadding;
         }
         
+        fieldset > :last-child {
+            margin-bottom: 0;
+        }
+
         &.tab-content {
             padding-top: @widgetVerticalPadding;
         }
