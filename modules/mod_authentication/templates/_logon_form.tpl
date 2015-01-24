@@ -20,7 +20,6 @@ logon_form_outside_tpl
     
 #}
 <div id="logon_box" class="z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}">
-
     {% if logon_form_title_tpl %}
         {% include logon_form_title_tpl %}
     {% endif %}
@@ -51,6 +50,7 @@ logon_form_outside_tpl
                     update_target=update_target
                     update_template=update_template
                     logon_state=logon_state
+                    logon_context=logon_context
                 %}
             </div>
         {% endif %}
@@ -61,6 +61,7 @@ logon_form_outside_tpl
             update_target=update_target
             update_template=update_template
             logon_state=logon_state
+            logon_context=logon_context
         %}
     {% endif %}
     

@@ -8,6 +8,7 @@
                 template=update_template
                 target=update_target
                 logon_state="logon"
+                logon_context=logon_context
             }
         %}
 	{% endif %}

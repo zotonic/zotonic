@@ -520,6 +520,14 @@ img.admin-leader-image {
 .widget.admin-logon .z-logon-box input[type="submit"] {
   width: auto;
 }
+.widget.admin-logon .z-logon-box .z-logon-form {
+  margin: 0 auto;
+}
+.widget.admin-logon .z-logon-box .z-logon-title {
+  font-size: 1em;
+  margin: 0 0 1em 0;
+  font-weight: bold;
+}
 .widget.admin-logon .z-logon-box .z-logon-support {
   margin-left: -15px;
   margin-right: -15px;
@@ -531,7 +539,7 @@ img.admin-leader-image {
 .widget.admin-logon .z-logon-box .z-logon-error-message {
   display: none;
 }
-.z-logon-error .widget.admin-logon .z-logon-box .z-logon-error-message {
+.widget.admin-logon .z-logon-box.z-logon-error .z-logon-error-message {
   display: block;
   margin-left: -15px;
   margin-right: -15px;
@@ -539,7 +547,7 @@ img.admin-leader-image {
   padding-right: 15px;
   border-bottom: 1px solid #dddddd;
 }
-.z-logon-error .widget.admin-logon .z-logon-box .z-logon-error-message :last-child {
+.widget.admin-logon .z-logon-box.z-logon-error .z-logon-error-message :last-child {
   margin-bottom: 0;
 }
 .map-wrapper {

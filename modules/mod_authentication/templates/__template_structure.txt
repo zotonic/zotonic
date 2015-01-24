@@ -1,6 +1,6 @@
 base.tpl
 |-- logon.tpl // log on page
-|    `-- _logon.tpl // logon module
+|    `-- _logon.tpl or _logon_modal.tpl // logon module
 |        |== logon_reminder:
 |        |   `-- _logon_form.tpl
 |        |       |-- _logon_reminder_title.tpl
@@ -52,9 +52,13 @@ Templates for redirecting to an external identity service (shown in modal overla
 
 base_simple.tpl
 |-- _logon_service.tpl
-    `-- _logon_service.[q.service].tpl -- provided by other modules
+    `-- _logon_service.[q.service].tpl // provided by other modules
 |-- logon_service_error.tpl
 |-- logon_service_done.tpl
+
+
+
+-- _authentication_services_connected.tpl // used on the profile page of sites to enable connect/disconnects to other sites for logged on users
 
 
 
@@ -62,7 +66,7 @@ TO SORT OUT
 ===========
 
 Not used by any module or template:
--- _authentication_services_connected.tpl
+
 -- _logon_off.tpl
 -- logon_confirm_form.tpl
 

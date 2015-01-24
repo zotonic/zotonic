@@ -1,20 +1,20 @@
 .widget.admin-logon {
+    @_width: 480px; // widget width
+    @_spacing: 20px;
+    @_form_spacing: 15px; // Bootstrap default
+    @_border_color: @borderColorMedium;
+    
     margin: 100px auto;
-    max-width: 480px;
+    max-width: @_width;
+    
+    ._stretch_to_side() {
+        margin-left: -@widgetSidePadding;
+        margin-right: -@widgetSidePadding;
+        padding-left: @widgetSidePadding;
+        padding-right: @widgetSidePadding;
+    }
     
     .z-logon-box {
-        @_spacing: 20px;
-        @_form_spacing: 15px; // Bootstrap default
-        @_border_color: @borderColorMedium;
-    
-        ._stretch_to_side() {
-            margin-left: -@widgetSidePadding;
-            margin-right: -@widgetSidePadding;
-            padding-left: @widgetSidePadding;
-            padding-right: @widgetSidePadding;
-            
-        }
-    
         max-width: none;
         margin: 0 auto;
         
@@ -23,6 +23,16 @@
             width: auto;
         }
     
+        .z-logon-form {
+            margin: 0 auto;
+        }
+        
+        .z-logon-title {
+            font-size: 1em;
+            margin: 0 0 1em 0;
+            font-weight: bold;
+        }
+        
         .z-logon-support {
             ._stretch_to_side;
             padding-top: @widgetVerticalPadding;
@@ -31,16 +41,18 @@
     
         .z-logon-error-message {
             display: none;
-            
-            .z-logon-error & {
+        }
+        
+        &.z-logon-error {
+            .z-logon-error-message {
                 display: block;
                 ._stretch_to_side;
                 border-bottom: 1px solid @_border_color;
-            
+    
                 :last-child {
                     margin-bottom: 0;
                 }
             }
         }
-    }    
+    }
 }
