@@ -73,16 +73,13 @@ msgid "Confirmation failure"
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:7
-msgid "E-mail address or username"
-msgstr "Email ou identifiant"
+msgid "Your e-mail address or username"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:4
 msgid ""
-"Enter your e-mail address or username below and we will send you an e-mail "
-"with password reset instructions."
+"Request a password reset."
 msgstr ""
-"Entrez votre adresse email ou identifiant afin que nous puissions vous "
-"envoyer un nouveau mot de passe"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:45
 msgid ""
@@ -110,17 +107,13 @@ msgstr "Comment changer de mot de passe"
 msgid "I forgot my password"
 msgstr "Mot de passe oublié?"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:8
-msgid "I forgot my username or password"
-msgstr "J'ai oublié mon identifiant ou mot de passe"
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+msgid "A password reset e-mail has been sent"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:6
-msgid ""
-"In the e-mail you will find instructions on how to reset the password of "
-"your account."
+msgid "Please follow the instructions in the e-mail."
 msgstr ""
-"Dans l'email, vous trouverez des instructions sur comment changer votre mot "
-"de passe"
 
 #: modules/mod_authentication/templates/logoff.tpl:3
 #: modules/mod_authentication/templates/_logon_off.tpl:2
@@ -188,8 +181,8 @@ msgid "Send Verification Message"
 msgstr "Envoyer un message de verification"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:22
-msgid "Send me instructions"
-msgstr "Envoyez moi des instructions"
+msgid "Request reset"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:38
 msgid "Sorry, could not send the verification message."
@@ -282,17 +275,12 @@ msgstr ""
 #: modules/mod_authentication/templates/_logon_stage.tpl:7
 #: modules/mod_authentication/templates/_logon_stage.tpl:32
 msgid ""
-"When you don’t receive the e-mail within a few minutes then be sure to check "
-"your spam filter and spam folders."
+"If you do not receive the e-mail within a few minutes, please check your spam folder."
 msgstr ""
-"Si vous ne recevez pas d'email de notre part dans quelques minutes, allez "
-"vérifier votre boite spam."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
-msgid "When you forgot your username or pasword then you can ask us to"
+msgid "Need help signing in?"
 msgstr ""
-"Si vous oubliez votre idientifiant ou mot de passe, vous pouvez nous "
-"demander de"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "You can"
@@ -303,18 +291,9 @@ msgid "You entered an unknown username or e-mail address.  Please try again."
 msgstr ""
 "Vous avez entré un identifiant ou adresse email inconnue. Merci de réessayer."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:3
-msgid "You entered an unknown username or password.  Please try again."
-msgstr ""
-"Vous avez entré un identifiant ou mot de passe incorrect. Merci de réessayer."
-
 #: modules/mod_authentication/templates/_logon_error.tpl:5
-msgid ""
-"You might have made a typo in your username or password.  Please note that "
-"both are case sensitive and check that your caps lock key is off."
+msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
 msgstr ""
-"Vous avez peut etre fait une erreur de frappe pour votre identifiant ou mot "
-"de passe. Vérifiez que le vérouillage majuscule soit bien désactivé."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"

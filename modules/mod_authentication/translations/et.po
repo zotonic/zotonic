@@ -69,16 +69,13 @@ msgid "Confirmation failure"
 msgstr "Kinnitus ebaõnnstus"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:7
-msgid "E-mail address or username"
-msgstr "E-maili aadress või kasutajanimi"
+msgid "Your e-mail address or username"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:4
 msgid ""
-"Enter your e-mail address or username below and we will send you an e-mail "
-"with password reset instructions."
+"Request a password reset."
 msgstr ""
-"Sisesta allpool oma e-maili aadress või kasutajanimi ning me saadame sulle e-"
-"maili juhendiga parooli muutmiseks."
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:45
 msgid ""
@@ -109,11 +106,13 @@ msgstr "Unustasid parooli?"
 msgid "I forgot my username or password"
 msgstr "Unustasin oma kasutajanime või paooli"
 
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+msgid "A password reset e-mail has been sent"
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_stage.tpl:6
-msgid ""
-"In the e-mail you will find instructions on how to reset the password of "
-"your account."
-msgstr "E-mailist leiad juhendi kuidas oma kasutajakonto parooli muuta."
+msgid "Please follow the instructions in the e-mail."
+msgstr ""
 
 #: modules/mod_authentication/templates/logoff.tpl:3
 #: modules/mod_authentication/templates/_logon_off.tpl:2
@@ -181,8 +180,8 @@ msgid "Send Verification Message"
 msgstr "Saada kontrollteade"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:22
-msgid "Send me instructions"
-msgstr "Saada mulle juhend"
+msgid "Request reset"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:38
 msgid "Sorry, could not send the verification message."
@@ -269,16 +268,12 @@ msgstr ""
 #: modules/mod_authentication/templates/_logon_stage.tpl:7
 #: modules/mod_authentication/templates/_logon_stage.tpl:32
 msgid ""
-"When you don’t receive the e-mail within a few minutes then be sure to check "
-"your spam filter and spam folders."
+"If you do not receive the e-mail within a few minutes, please check your spam folder."
 msgstr ""
-"Kui sa ei saa e-maili mõne minuti jooksul, ole hea kontrolli oma rämpsposti "
-"filtrit või rämpsposti postkasti."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
-msgid "When you forgot your username or pasword then you can ask us to"
+msgid "Need help signing in?"
 msgstr ""
-"Kui sa oled oma kasutajanime või parooli unustanud, siis või küsida meilt"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "You can"
@@ -288,17 +283,9 @@ msgstr "Või"
 msgid "You entered an unknown username or e-mail address.  Please try again."
 msgstr "Sisestasid tundmatu kasutajanime või e-maili aadressi. Proovi uuesti."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:3
-msgid "You entered an unknown username or password.  Please try again."
-msgstr "Sisestasid tundmatu kasutajanime või parooli. Proovi uuesti."
-
 #: modules/mod_authentication/templates/_logon_error.tpl:5
-msgid ""
-"You might have made a typo in your username or password.  Please note that "
-"both are case sensitive and check that your caps lock key is off."
+msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
 msgstr ""
-"Sul võibolla näpuviga kasutajanimes või paroolis. Pane tähele, et mõlemad on "
-"tõstutundlikud ning kontrolli, et caps lock klahc oleks väljas."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"

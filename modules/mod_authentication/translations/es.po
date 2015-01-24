@@ -73,16 +73,13 @@ msgid "Confirmation failure"
 msgstr "Falla de confirmación"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:7
-msgid "E-mail address or username"
-msgstr "Dirección de correo electrónico o nombre de usuario"
+msgid "Your e-mail address or username"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:4
 msgid ""
-"Enter your e-mail address or username below and we will send you an e-mail "
-"with password reset instructions."
+"Request a password reset."
 msgstr ""
-"Ingrese su dirección de correo electrónico o su nombre de usuario y le "
-"enviaremos un correo con instrucciones para restablecer su clave."
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:45
 msgid ""
@@ -109,17 +106,13 @@ msgstr "Cómo cambiar su clave"
 msgid "I forgot my password"
 msgstr "Olvidó su clave?"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:8
-msgid "I forgot my username or password"
-msgstr "Olvidé mi usuario o clave"
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+msgid "A password reset e-mail has been sent"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:6
-msgid ""
-"In the e-mail you will find instructions on how to reset the password of "
-"your account."
+msgid "Please follow the instructions in the e-mail."
 msgstr ""
-"En el correo electrónico encontrará instrucciones de cómo restablecer la "
-"clave de su cuenta."
 
 #: modules/mod_authentication/templates/logoff.tpl:3
 #: modules/mod_authentication/templates/_logon_off.tpl:2
@@ -187,8 +180,8 @@ msgid "Send Verification Message"
 msgstr "Enviar Mensaje de Verificación"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:22
-msgid "Send me instructions"
-msgstr "Enviame instrucciones"
+msgid "Request reset"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:38
 msgid "Sorry, could not send the verification message."
@@ -283,15 +276,12 @@ msgstr ""
 #: modules/mod_authentication/templates/_logon_stage.tpl:7
 #: modules/mod_authentication/templates/_logon_stage.tpl:32
 msgid ""
-"When you don’t receive the e-mail within a few minutes then be sure to check "
-"your spam filter and spam folders."
+"If you do not receive the e-mail within a few minutes, please check your spam folder."
 msgstr ""
-"Si no recibe un correo electrónico dentro de los próximos minutos verifique "
-"sus carpetas o filtros antispam."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
-msgid "When you forgot your username or pasword then you can ask us to"
-msgstr "Si olvidó su nombre de usuario o clave entonces puede pedirnos que"
+msgid "Need help signing in?"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "You can"
@@ -303,20 +293,9 @@ msgstr ""
 "Ingresó un nombre de usuario o dirección de correo electrónico desconocidos. "
 "Por favor intente nuevamente."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:3
-msgid "You entered an unknown username or password.  Please try again."
-msgstr ""
-"Ingresó un nombre de usuario o clave desconocidos. Por favor intente "
-"nuevamente."
-
 #: modules/mod_authentication/templates/_logon_error.tpl:5
-msgid ""
-"You might have made a typo in your username or password.  Please note that "
-"both are case sensitive and check that your caps lock key is off."
+msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
 msgstr ""
-"Puede que haya cometido un error con su nombre de usuario o clave. Por favor "
-"tenga en cuenta que en ambos tiene que respetar mayúsculas y minúsculas y "
-"verifique que la tecla Bloq Mayús no esté activada."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"

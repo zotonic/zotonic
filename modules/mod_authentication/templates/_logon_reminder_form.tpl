@@ -7,7 +7,7 @@
 {% endif %}
 <form id="password_reminder" method="post" action="postback">
     <div class="form-group">
-        <label for="reminder_address" class="control-label">{_ E-mail address or username _}</label>
+        <label for="reminder_address" class="control-label">{_ Your e-mail address or username _}</label>
 	    <input
             class="form-control"
             type="text"
@@ -22,6 +22,6 @@
     </div>
 
     <div class="form-group">
-        <button class="btn btn-primary" type="submit">{_ Send me instructions _}</button>
+        <button class="btn btn-primary" type="submit">{_ Request reset _}</button>
     </div>
 </form>

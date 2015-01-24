@@ -69,16 +69,12 @@ msgid "Confirmation failure"
 msgstr "Ошибка подтверждения"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:7
-msgid "E-mail address or username"
-msgstr "E-mail или имя пользователя"
+msgid "Your e-mail address or username"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:4
-msgid ""
-"Enter your e-mail address or username below and we will send you an e-mail "
-"with password reset instructions."
+msgid "Request a password reset."
 msgstr ""
-"Введите e-mail или имя пользователя, чтобы получить сообщение с инструкцией "
-"по сбросу пароля."
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:45
 msgid ""
@@ -104,17 +100,13 @@ msgstr "Как сбросить пароль"
 msgid "I forgot my password"
 msgstr "Забыл пароль"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:8
-msgid "I forgot my username or password"
-msgstr "Забыл имя пользователя или пароль"
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+msgid "A password reset e-mail has been sent"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:6
-msgid ""
-"In the e-mail you will find instructions on how to reset the password of "
-"your account."
+msgid "Please follow the instructions in the e-mail."
 msgstr ""
-"В сообщении e-mail вы получите инструкции, как сбросить пароль учетной "
-"записи."
 
 #: modules/mod_authentication/templates/_logon_off.tpl:2
 #: modules/mod_authentication/templates/logoff.tpl:3
@@ -179,8 +171,8 @@ msgid "Send Verification Message"
 msgstr "Получить код проверки"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:22
-msgid "Send me instructions"
-msgstr "Получить инструкции"
+msgid "Request reset"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:38
 msgid "Sorry, could not send the verification message."
@@ -267,15 +259,12 @@ msgstr ""
 #: modules/mod_authentication/templates/_logon_stage.tpl:7
 #: modules/mod_authentication/templates/_logon_stage.tpl:32
 msgid ""
-"When you don’t receive the e-mail within a few minutes then be sure to check "
-"your spam filter and spam folders."
+"If you do not receive the e-mail within a few minutes, please check your spam folder."
 msgstr ""
-"Если вам не пришло сообщение в течение нескольких минут, проверьте свой спам-"
-"фильтр и папки со спамом."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
-msgid "When you forgot your username or pasword then you can ask us to"
-msgstr "Если вы забыли имя пользователя или пароль, вы можете сделать"
+msgid "Need help signing in?"
+msgstr ""
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "You can"
@@ -285,18 +274,9 @@ msgstr "Вы можете сделать"
 msgid "You entered an unknown username or e-mail address.  Please try again."
 msgstr "Вы указали неверное имя пользователя или e-mail.  Попробуйте снова."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:3
-msgid "You entered an unknown username or password.  Please try again."
-msgstr "Вы указали неверное имя пользователя или пароль.  Попробуйте снова."
-
 #: modules/mod_authentication/templates/_logon_error.tpl:5
-msgid ""
-"You might have made a typo in your username or password.  Please note that "
-"both are case sensitive and check that your caps lock key is off."
+msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
 msgstr ""
-"Возможно, вы ошиблись при наборе имени пользователя или пароля.  Обратите "
-"внимание, что оба поля чувствительны к регистру, и убедитесь, что режим caps "
-"lock выключен."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"

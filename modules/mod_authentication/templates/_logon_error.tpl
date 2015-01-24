@@ -1,13 +1,10 @@
 
 {% if reason == "pw" %}
-<h4>{_ You entered an unknown username or password.  Please try again. _}</h4>
 <p>
-    {_ You might have made a typo in your username or password.  Please note that both are case sensitive and check that your caps lock key is off. _}
+    {_ Either the email or the password you entered is incorrect. Please check your entry and try again. _}
 </p>
 
-<h4>{_ I forgot my username or password _}</h4>
-
-<p>{_ When you forgot your username or pasword then you can ask us to _} <a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ e-mail a temporary password _}</a>.  {_ The e-mail will contain instructions how to reset your password. _}</p>
+<p><a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ Need help signing in? _}</a></p>
 
 {% elseif reason == "reminder" %}
 

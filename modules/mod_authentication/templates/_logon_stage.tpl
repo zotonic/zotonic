@@ -1,10 +1,10 @@
 {% if stage == "reminder_sent" %}
 <div class="logon_message">
 
-    <h3 class="z-logon-title">{_ We've sent you an e-mail _}</h3>
+    <h3 class="z-logon-title">{_ A password reset e-mail has been sent _}</h3>
 
-    <p>{_ In the e-mail you will find instructions on how to reset the password of your account. _}</p>
-    <p>{_ When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders. _}</p>
+    <p>{_ Please follow the instructions in the e-mail. _}</p>
+    <p>{_ If you do not receive the e-mail within a few minutes, please check your spam folder. _}</p>
 
     {% if not m.acl.user %}
         <p><a class="btn btn-primary" href="{% url logon %}" id="stage_back_to_logon">{_ Back to logon form _}</a></p>

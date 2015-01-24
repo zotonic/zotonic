@@ -64,12 +64,12 @@ msgid "Confirmation failure"
 msgstr "Onaylama hatası"
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_password_reminder.tpl:7
-msgid "E-mail address or username"
-msgstr "E-posta adresi ya da kullanıcı adınız"
+msgid "Your e-mail address or username"
+msgstr ""
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_password_reminder.tpl:4
-msgid "Enter your e-mail address or username below and we will send you an e-mail with password reset instructions."
-msgstr "Kullanıcı adı ya da e-posta giriniz. Şifrenizi sıfırlamak için gerekenleri size e-posta ile göndereceğiz."
+msgid "Request a password reset."
+msgstr ""
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_password_reset.tpl:45
 msgid "For security reasons password reset codes are only kept for a limited amount of time and can only be used once."
@@ -91,13 +91,13 @@ msgstr "Şifrenizi nasıl sıfırlarsınız?"
 msgid "I forgot my password"
 msgstr "Şifremi unuttum"
 
-#: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_error.tpl:8
-msgid "I forgot my username or password"
-msgstr "Kullanıcı adımı ya da şifremi unuttum"
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+msgid "A password reset e-mail has been sent"
+msgstr ""
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_stage.tpl:6
-msgid "In the e-mail you will find instructions on how to reset the password of your account."
-msgstr "E-posta içinde şifre sıfırlama talimatlarını bulacaksınız."
+msgid "Please follow the instructions in the e-mail."
+msgstr ""
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_off.tpl:2
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/logoff.tpl:3
@@ -162,8 +162,8 @@ msgid "Send Verification Message"
 msgstr "Onay mesajı gönder"
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_password_reminder.tpl:22
-msgid "Send me instructions"
-msgstr "Talimatları gönder"
+msgid "Request reset"
+msgstr ""
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_stage.tpl:38
 msgid "Sorry, could not send the verification message."
@@ -230,12 +230,12 @@ msgstr "Eğer şifre sıfırlama talebi yapmadıysanız bu e-postaya itibar etme
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_stage.tpl:7
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_stage.tpl:32
-msgid "When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders."
-msgstr "Eğer bir kaç dakika içinde e-posta alamadıysanız, mutlaka SPAM ve JUNK klasörlerini kontrol edin."
+msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
+msgstr ""
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_error.tpl:10
-msgid "When you forgot your username or pasword then you can ask us to"
-msgstr "Kullanıcı adı veya şifrenizi unuttuysanız bize sorabilirsiniz"
+msgid "Need help signing in?"
+msgstr ""
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "You can"
@@ -245,13 +245,9 @@ msgstr "Yapabilirsiniz"
 msgid "You entered an unknown username or e-mail address.  Please try again."
 msgstr "Bilinmeyen bir kullanıcı adı veya e-mail adresi girdiniz. Lütfen tekrar deneyiniz."
 
-#: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_error.tpl:3
-msgid "You entered an unknown username or password.  Please try again."
-msgstr "Bilinmeyen bir kullanıcı adı veya şifresi girdiniz. Lütfen tekrar deneyiniz."
-
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_error.tpl:5
-msgid "You might have made a typo in your username or password.  Please note that both are case sensitive and check that your caps lock key is off."
-msgstr "Hatalı bir giriş yapmış olabilirsiniz. Lütfen büyük-küçük harf duyarlılığına dikkat ediniz ve caps lock tuşunun kapalı olduğunu kontrol ediniz."
+msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
+msgstr ""
 
 #: priv/sites/wwwteleskeleorg/modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"

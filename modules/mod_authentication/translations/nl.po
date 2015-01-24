@@ -68,16 +68,12 @@ msgid "Confirmation failure"
 msgstr "Fout bij bevestiging"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:7
-msgid "E-mail address or username"
-msgstr "E-mailadres of gebruikersnaam"
+msgid "Your e-mail address or username"
+msgstr "Je e-mailadres of gebruikersnaam"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:4
-msgid ""
-"Enter your e-mail address or username below and we will send you an e-mail "
-"with password reset instructions."
-msgstr ""
-"Vul je e-mailadres of gebruikersnaam hieronder in. Wij sturen je een e-mail "
-"met instructies om je wachtwoord te veranderen."
+msgid "Request a password reset."
+msgstr "Vraag een wachtwoord wijziging aan."
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:45
 msgid ""
@@ -103,17 +99,13 @@ msgstr "Hoe je wachtwoord te veranderen"
 msgid "I forgot my password"
 msgstr "Wachtwoord vergeten?"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:8
-msgid "I forgot my username or password"
-msgstr "Ik ben mijn gebruikersnaam en wachtwoord vergeten"
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+msgid "A password reset e-mail has been sent"
+msgstr "We hebben een e-mail verstuurd om je wachtwoord te wijzigen"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:6
-msgid ""
-"In the e-mail you will find instructions on how to reset the password of "
-"your account."
-msgstr ""
-"In het e-mailbericht staan instructies over hoe je je wachtwoord kan "
-"veranderen"
+msgid "Please follow the instructions in the e-mail."
+msgstr "Volg de instructies in de e-mail."
 
 #: modules/mod_authentication/templates/logoff.tpl:3
 #: modules/mod_authentication/templates/_logon_off.tpl:2
@@ -178,8 +170,8 @@ msgid "Send Verification Message"
 msgstr "Stuur verificatie bericht"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:22
-msgid "Send me instructions"
-msgstr "Stuur me instructies"
+msgid "Request reset"
+msgstr "Versturen"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:38
 msgid "Sorry, could not send the verification message."
@@ -270,16 +262,14 @@ msgstr ""
 #: modules/mod_authentication/templates/_logon_stage.tpl:7
 #: modules/mod_authentication/templates/_logon_stage.tpl:32
 msgid ""
-"When you don’t receive the e-mail within a few minutes then be sure to check "
-"your spam filter and spam folders."
+"If you do not receive the e-mail within a few minutes, please check your spam folder."
 msgstr ""
-"Als je niet binnen enkele minuten dit e-mailbericht ontvangt controleer dan "
-"je spamfilter en spamfolder."
+"Als je binnen enkele minuten geen e-mailbericht hebt ontvangen, controleer "
+"dan je spamfolder."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
-msgid "When you forgot your username or pasword then you can ask us to"
-msgstr ""
-"Als je je gebruikersnaam of wachtwoord vergeten bent, kan je ons vragen om"
+msgid "Need help signing in?"
+msgstr "Hulp nodig bij inloggen?"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:46
 msgid "You can"
@@ -291,20 +281,9 @@ msgstr ""
 "Je hebt een onbekende gebruikersnaam of e-mailadres ingevuld. Probeer het "
 "nogmaals."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:3
-msgid "You entered an unknown username or password.  Please try again."
-msgstr ""
-"Je hebt een onbekende gebruikersnaam of wachtwoord ingevuld. Probeer het "
-"nogmaals."
-
 #: modules/mod_authentication/templates/_logon_error.tpl:5
-msgid ""
-"You might have made a typo in your username or password.  Please note that "
-"both are case sensitive and check that your caps lock key is off."
+msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
 msgstr ""
-"Het kan zijn dat je een typefout hebt gemaakt in je gebruikersnaam of "
-"wachtwoord. Beide zijn hoofdletter gevoelig. Controleer of Caps Lock "
-"uitstaat.  "
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:49
 msgid "You need to change your password"
