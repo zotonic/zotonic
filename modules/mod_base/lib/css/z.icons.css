@@ -186,6 +186,9 @@ button.close > em {
 .z-icon-plus-circle:before {
   content: "\e604";
 }
+.z-icon-share:before {
+  content: "\e615";
+}
 .z-icon-twitter:before {
   content: "\e613";
 }

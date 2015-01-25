@@ -3,6 +3,10 @@
 	color: #000000;
 	fill: currentColor;
 }
+.icon-share {
+	width: 32px;
+	height: 32px;
+}
 .icon-google-plus {
 	width: 30px;
 	height: 32px;

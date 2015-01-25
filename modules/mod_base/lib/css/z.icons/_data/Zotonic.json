@@ -1,197 +1,219 @@
 {
 	"metadata": {
 		"name": "Zotonic",
-		"lastOpened": 1421421851289,
+		"lastOpened": 1422141250758,
 		"created": 1419006915280
 	},
 	"iconSets": [
 		{
 			"selection": [
 				{
-					"order": 28,
+					"order": 23,
+					"id": 30,
+					"name": "share",
+					"prevSize": 32,
+					"code": 58901,
+					"tempChar": ""
+				},
+				{
+					"order": 1,
 					"id": 25,
 					"prevSize": 32,
 					"code": 58896,
 					"name": "google-plus",
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 29,
+					"order": 2,
 					"id": 26,
 					"prevSize": 32,
 					"code": 58897,
 					"name": "linkedin",
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 30,
+					"order": 3,
 					"id": 27,
 					"prevSize": 32,
 					"code": 58898,
 					"name": "instagram",
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 31,
+					"order": 4,
 					"id": 28,
 					"prevSize": 32,
 					"code": 58899,
 					"name": "twitter",
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 32,
+					"order": 5,
 					"id": 29,
 					"prevSize": 32,
 					"code": 58900,
 					"name": "facebook",
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 33,
+					"order": 6,
 					"id": 24,
 					"prevSize": 32,
 					"code": 58895,
 					"name": "off",
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 34,
+					"order": 7,
 					"id": 20,
 					"prevSize": 32,
 					"name": "ok",
 					"code": 58888,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 35,
+					"order": 8,
 					"id": 18,
 					"prevSize": 32,
 					"name": "ok-circle",
 					"code": 58882,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 36,
+					"order": 9,
 					"id": 22,
 					"prevSize": 32,
 					"name": "minus",
 					"code": 58890,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 37,
+					"order": 10,
 					"id": 17,
 					"prevSize": 32,
 					"name": "minus-circle",
 					"code": 58883,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 38,
+					"order": 11,
 					"id": 21,
 					"prevSize": 32,
 					"name": "plus",
 					"code": 58893,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 39,
+					"order": 12,
 					"id": 16,
 					"prevSize": 32,
 					"name": "plus-circle",
 					"code": 58884,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 40,
+					"order": 13,
 					"id": 23,
 					"prevSize": 32,
 					"name": "help",
 					"code": 58894,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 41,
+					"order": 14,
 					"id": 13,
 					"name": "help-circle",
 					"prevSize": 32,
 					"code": 58880,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 42,
+					"order": 15,
 					"id": 5,
 					"name": "info-circle",
 					"prevSize": 32,
 					"code": 58881,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 43,
+					"order": 16,
 					"id": 7,
 					"name": "user",
 					"prevSize": 32,
 					"code": 58885,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 44,
+					"order": 17,
 					"id": 8,
 					"name": "edit",
 					"prevSize": 32,
 					"code": 58886,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 45,
+					"order": 18,
 					"id": 15,
 					"name": "cross",
 					"prevSize": 32,
 					"code": 58892,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 46,
+					"order": 19,
 					"id": 2,
 					"name": "cross-circle",
 					"prevSize": 32,
 					"code": 58889,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 47,
+					"order": 20,
 					"id": 1,
 					"name": "grab, drag",
 					"prevSize": 32,
 					"code": 58891,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 48,
+					"order": 21,
 					"id": 0,
 					"name": "logo",
 					"prevSize": 32,
 					"code": 90,
-					"tempChar": ""
+					"tempChar": ""
 				},
 				{
-					"order": 49,
+					"order": 22,
 					"id": 19,
 					"name": "logo-z",
 					"prevSize": 32,
 					"code": 58887,
-					"tempChar": ""
+					"tempChar": ""
 				}
 			],
 			"id": 0,
 			"metadata": {
 				"name": "Zotonic icons",
-				"importSize": 32
+				"importSize": 512
 			},
 			"height": 1024,
 			"prevSize": 32,
 			"icons": [
+				{
+					"id": 30,
+					"paths": [
+						"M767.998 836.936h-665.6v-479.202h153.334c0 0 37.596-52.532 113.868-101.866h-318.4c-28.268 0-51.2 22.664-51.2 50.932v581.064c0 28.004 22.932 50.934 51.2 50.934h767.998c28.266 0 51.202-22.664 51.202-50.934v-290.662l-102.4 83.732v156.002h-0.002zM682.664 426.536v170.4l341.336-254.666-341.336-257.068v159.2c-412.796 0-426.662 438.136-426.662 438.136 116.798-190.668 202.668-256.002 426.662-256.002v0z"
+					],
+					"attrs": [
+						{}
+					],
+					"isMulticolor": false,
+					"grid": 24,
+					"tags": [
+						"share"
+					]
+				},
 				{
 					"id": 25,
 					"paths": [
@@ -206,7 +228,7 @@
 						"google-plus"
 					],
 					"grid": 14,
-					"matchesSearch": true
+					"matchesSearch": false
 				},
 				{
 					"id": 26,
