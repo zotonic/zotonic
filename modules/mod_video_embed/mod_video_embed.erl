@@ -224,6 +224,7 @@ fetch_videoid(vimeo, Url) ->
 embed_code(youtube, H, W, V) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
+        <<"\" class=\"responsive-item">>,
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//www.youtube.com/embed/">>, z_utils:url_encode(V),
         <<"\" frameborder=\"0\" allowfullscreen></iframe>">>
@@ -231,6 +232,7 @@ embed_code(youtube, H, W, V) ->
 embed_code(vimeo, H, W, V) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
+        <<"\" class=\"responsive-item">>,
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//player.vimeo.com/video/">>, z_utils:url_encode(V),
         <<"\" frameborder=\"0\" allowfullscreen></iframe>">>
