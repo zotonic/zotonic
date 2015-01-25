@@ -46,6 +46,15 @@ A resource has the following properties accessible from the templates:
 |                   |category, the page id and its slug. Returns a non    |                                |
 |                   |flattened list. Returns the binary page_path when it |                                |
 |                   |is set.                                              |                                |
+|                   |                                                     |                                |
+|                   |The additional parameter ``with`` can be used to     |                                |
+|                   |pass extra (optional) query arguments to the url,    |                                |
+|                   |for instance:                                        |                                |
+|                   |                                                     |                                |
+|                   |``{{ id.page_url with t=now|date:"U" }}``            |                                |
+|                   |                                                     |                                |
+|                   |``{{ id.page_url with t="new" u=m.acl.user.id }}``   |                                |
+|                   |                                                     |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
 |page_url_abs       |The absolute url of the page. Same as ``page_url``   |<<"http://example.org/blog/42">>|
 |                   |but then with added protocol, hostname and port.     |                                |
