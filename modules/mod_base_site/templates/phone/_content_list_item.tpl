@@ -3,9 +3,13 @@
 {% if dep %}
 <li {% include "_language_attrs.tpl" id=id class="do_clickable has-depiction" %}>
 	{% if dep.id.is_a.document %}
-    	<img src="{% image_url dep mediaclass="base-list-item-small-document" %}" alt="" /> 
+	    <a href="{{ id.page_url }}">
+    	    <img src="{% image_url dep mediaclass="base-list-item-small-document" %}" alt="" />
+    	</a>
 	{% else %}
-		<img src="{% image_url dep mediaclass="base-list-item-small" %}" alt="" /> 
+	    <a href="{{ id.page_url }}">
+		    <img src="{% image_url dep mediaclass="base-list-item-small" %}" alt="" /> 
+		</a>
     {% endif %}
 {% else %}
 <li {% include "_language_attrs.tpl" id=id class="do_clickable" %}>

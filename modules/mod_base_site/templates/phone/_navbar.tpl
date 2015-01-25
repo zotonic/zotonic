@@ -17,12 +17,12 @@
         </div>
         
         <div class="navbar-collapse collapse">
-            <form class="navbar-form pull-right" method="get" action="{% url search %}">
+            <ul class="nav navbar-nav navbar-right">
+                {% include "_language_switch.tpl" is_nav %}
+            </ul>
+            <form class="navbar-form navbar-right" method="get" action="{% url search %}">
                 <input type="text" class="search-query form-control" placeholder="Search" name="qs"/>
             </form>
-			<div class="navbar-right">
-                {% include "_navbar_right.tpl"%}
-            </div>        
 			{% menu menu_id=menu_id id=id maxdepth=2 %}
         </div>
     </div>

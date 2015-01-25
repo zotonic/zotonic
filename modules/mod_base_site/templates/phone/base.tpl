@@ -31,7 +31,7 @@
 <div class="container">
 	{% block content_area %}
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
-		{% block content %}{% endblock %}
+		    {% block content %}{% endblock %}
 		</div>
 	{% endblock %}
 	{% include "_footer.tpl" %}

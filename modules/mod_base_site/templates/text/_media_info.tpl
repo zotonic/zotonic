@@ -23,9 +23,8 @@
     <tr>
         <th>{_ Links _}</th>
         <td>
-            <a href="{% url media_attachment id=id %}">{_ Download file _}</a>
-            <span class="separator">|</span>
-            <a href="{% url media_inline id=id %}">{_ View in browser _}</a>
+            <a href="{% url media_attachment id=id %}" class="btn btn-default btn-xs">{_ Download file _}</a>
+            <a href="{% url media_inline id=id %}" class="btn btn-default btn-xs">{_ View in browser _}</a>
         </td>
     </tr>
 </table>
