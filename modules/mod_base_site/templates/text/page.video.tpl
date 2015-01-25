@@ -2,9 +2,12 @@
 
 {% block content %}
     {% inherit %}
-    <p class="thumbnail">
-        {% media id width=400 %}
-    </p>
+    {% if id|is_a:"video" %}
+        <!-- 16:9 aspect ratio -->
+        <div class="embed-responsive embed-responsive-16by9">
+            {% media id width=500 %}
+        </div>
+    {% endif %}
 
     {% with id.medium as medium %}
         {% if medium.filename %}

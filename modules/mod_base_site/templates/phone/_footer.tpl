@@ -1,6 +1,6 @@
 {# phone+ footer template #}
-<div class="row footer">
-    <hr/>
+<div class="footer">
+    <hr />
     {% with m.rsc.menu_footer.menu as menu %}
     {% if menu %}
         <ul class="nav nav-footer">
@@ -13,4 +13,3 @@
     <span class="pull-right copyright">{% block copyright %}{% include "_copyright.tpl" %}{% endblock %}</span>
     {% include "_ua_select.tpl" dropup %}
 </div>
-

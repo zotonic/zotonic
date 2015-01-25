@@ -36,7 +36,7 @@
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
 		{% block content %}
 			{% block above %}
-			<div class="page-title row">
+			<div class="page-title">
 				<div class="{% if z_language|is_rtl %}span8{% endif %}">
 					{% include "_breadcrumb.tpl" %}
 					{% include "_title.tpl" %}

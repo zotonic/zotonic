@@ -1,4 +1,4 @@
-<nav class="trail">
+<nav>
 {% with id|menu_trail as breadcrumb %}
 {% if not q.in_collection and breadcrumb|length > 1 %}
 	<ul class="breadcrumb">
@@ -6,7 +6,7 @@
 			{% if forloop.last %}
 			<li class="active">{{ id.short_title|default:id.title }}</li>
 			{% else %}
-			<li><a href="{{ id.page_url }}">{{ id.short_title|default:id.title }}</a> <span class="divider">/</span></li>
+			<li><a href="{{ id.page_url }}">{{ id.short_title|default:id.title }}</a></li>
 			{% endif %}
 		{% endfor %}
 	</ul>
@@ -18,7 +18,7 @@
 		{% if p == id %}
 			{% with ps[forloop.counter-1], ps[forloop.counter+1] as prev, next %}
 			<ul class="breadcrumb">
-				<li><a href="{{	 m.rsc[in_collection].page_url }}">{{ m.rsc[in_collection].short_title|default:m.rsc[in_collection].title }}</a> <span class="divider">/</span></li>
+				<li><a href="{{	 m.rsc[in_collection].page_url }}">{{ m.rsc[in_collection].short_title|default:m.rsc[in_collection].title }}</a></li>
 				<li class="active">
 					{% if prev %}<a href="{% url page id=prev in_collection=in_collection %}">&larr; </a>{% endif %}
 					{{ id.short_title|default:id.title }}

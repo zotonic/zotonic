@@ -2853,3 +2853,7 @@ a.thumbnail:hover {
 .invisible {
   visibility: hidden;
 }
+
+.embed-responsive iframe {
+    width: 100% !important;
+}
