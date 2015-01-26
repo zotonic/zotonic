@@ -36,6 +36,8 @@
 
     get_page/3,
 
+    do_submit/4,
+    collect_answers/3,
     render_next_page/6,
     go_button_target/4,
     module_name/1
@@ -222,7 +224,6 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                             %% That was the last page. Show a thank you and save the result.
                             case do_submit(Id, Questions, Answers2, Context) of
                                 ok ->
-                                    mail_result(Id, Answers2, Context),
                                     case z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)) of
                                         true ->
                                             #render{template="_survey_results.tpl", vars=[{id,Id}, {inline, true}, {history,History}, {q, As}]};
@@ -230,7 +231,6 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                                             #render{template="_survey_end.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
                                     end;
                                 {ok, ContextOrRender} ->
-                                    mail_result(Id, Answers2, Context),
                                     ContextOrRender;
                                 {error, _Reason} ->
                                     #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
@@ -462,10 +462,13 @@ do_submit(SurveyId, Questions, Answers, Context) ->
     of
         undefined ->
             m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
+            mail_result(SurveyId, Answers, Context),
             ok;
         ok ->
+            mail_result(SurveyId, Answers, Context),
             ok;
         {ok, _Context1} = Handled ->
+            mail_result(SurveyId, Answers, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
