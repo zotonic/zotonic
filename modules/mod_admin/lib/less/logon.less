@@ -2,6 +2,7 @@
     margin: 100px auto;
     max-width: 480px;
     
+    #logon_box, 
     .z-logon-box {
         @_spacing: 20px;
         @_form_spacing: 15px; // Bootstrap default
@@ -40,6 +41,25 @@
                 :last-child {
                     margin-bottom: 0;
                 }
+            }
+        }
+        
+        p {
+            margin: 1em 0;
+        }
+        h2, h3 {
+            font-size: 1em;
+            margin: 0 0 1em 0;
+            font-weight: bold;
+        }
+        
+        #logon_error {
+            display: none;
+        }
+        
+        &.logon_error {
+            #logon_error {
+                display: block;
             }
         }
     }    

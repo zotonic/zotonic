@@ -512,14 +512,18 @@ img.admin-leader-image {
   margin: 100px auto;
   max-width: 480px;
 }
+.widget.admin-logon #logon_box,
 .widget.admin-logon .z-logon-box {
   max-width: none;
   margin: 0 auto;
 }
+.widget.admin-logon #logon_box button[type="submit"],
 .widget.admin-logon .z-logon-box button[type="submit"],
+.widget.admin-logon #logon_box input[type="submit"],
 .widget.admin-logon .z-logon-box input[type="submit"] {
   width: auto;
 }
+.widget.admin-logon #logon_box .z-logon-support,
 .widget.admin-logon .z-logon-box .z-logon-support {
   margin-left: -15px;
   margin-right: -15px;
@@ -528,9 +532,11 @@ img.admin-leader-image {
   padding-top: 15px;
   border-top: 1px solid #dddddd;
 }
+.widget.admin-logon #logon_box .z-logon-error-message,
 .widget.admin-logon .z-logon-box .z-logon-error-message {
   display: none;
 }
+.z-logon-error .widget.admin-logon #logon_box .z-logon-error-message,
 .z-logon-error .widget.admin-logon .z-logon-box .z-logon-error-message {
   display: block;
   margin-left: -15px;
@@ -539,8 +545,29 @@ img.admin-leader-image {
   padding-right: 15px;
   border-bottom: 1px solid #dddddd;
 }
+.z-logon-error .widget.admin-logon #logon_box .z-logon-error-message :last-child,
 .z-logon-error .widget.admin-logon .z-logon-box .z-logon-error-message :last-child {
   margin-bottom: 0;
+}
+.widget.admin-logon #logon_box p,
+.widget.admin-logon .z-logon-box p {
+  margin: 1em 0;
+}
+.widget.admin-logon #logon_box h2,
+.widget.admin-logon .z-logon-box h2,
+.widget.admin-logon #logon_box h3,
+.widget.admin-logon .z-logon-box h3 {
+  font-size: 1em;
+  margin: 0 0 1em 0;
+  font-weight: bold;
+}
+.widget.admin-logon #logon_box #logon_error,
+.widget.admin-logon .z-logon-box #logon_error {
+  display: none;
+}
+.widget.admin-logon #logon_box.logon_error #logon_error,
+.widget.admin-logon .z-logon-box.logon_error #logon_error {
+  display: block;
 }
 .map-wrapper {
   height: 300px;
