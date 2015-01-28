@@ -126,7 +126,7 @@ content_types_provided(ReqData, Context) ->
       {"text/javascript", to_json}
      ], ReqData, Context}.
 
-set_cors_header(ReqData0, Context) ->
+set_cors_header(ReqData, Context) ->
     %% set in site config file
     %%  [{cors, false}, %% 2nd is default value
     %%      {'Access-Control-Allow-Origin', "*"},
@@ -135,20 +135,20 @@ set_cors_header(ReqData0, Context) ->
     %%      {'Access-Control-Allow-Methods', undefined},
     %%      {'Access-Control-Allow-Headers', undefined}]
     SiteConfigs = z_sites_manager:get_site_config(z_context:site(Context)),
-    ReqData = case proplists:get_value(cors, SiteConfigs) of
+    case proplists:get_value(cors, SiteConfigs) of
         true -> lists:foldl(fun ({K, Def}, Acc) ->
                         case proplists:get_value(K, SiteConfigs, Def) of
                             undefined -> Acc;
                             V -> wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(V), Acc)
                         end
                 end, 
-                ReqData0, 
+                ReqData, 
                 [{'Access-Control-Allow-Origin', "*"},
                     {'Access-Control-Allow-Credentials', undefined}, 
                     {'Access-Control-Max-Age', undefined},
                     {'Access-Control-Allow-Methods', undefined},
                     {'Access-Control-Allow-Headers', undefined}]);
-        _ -> ReqData0
+        _ -> ReqData
     end.
 
 api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
