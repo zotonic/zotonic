@@ -134,7 +134,7 @@ set_cors_header(ReqData, Context) ->
     %%      {'Access-Control-Max-Age', undefined},
     %%      {'Access-Control-Allow-Methods', undefined},
     %%      {'Access-Control-Allow-Headers', undefined}]
-    SiteConfigs = z_sites_manager:get_site_config(z_context:site(Context)),
+    {ok, SiteConfigs} = z_sites_manager:get_site_config(z_context:site(Context)),
     case proplists:get_value(cors, SiteConfigs) of
         true -> lists:foldl(fun ({K, Def}, Acc) ->
                         case proplists:get_value(K, SiteConfigs, Def) of
