@@ -64,6 +64,8 @@ rename_args([{only_on_submit, Value}|T], Acc) ->
     rename_args(T, [{onlyOnSubmit, Value}|Acc]);
 rename_args([{only_on_blur, Value}|T], Acc) ->
     rename_args(T, [{onlyOnBlur, Value}|Acc]);
+rename_args([{message_after, Value}|T], Acc) ->
+    rename_args(T, [{insertAfterWhatNode, Value}|Acc]);
 rename_args([H|T], Acc) ->
     rename_args(T, [H|Acc]).
 

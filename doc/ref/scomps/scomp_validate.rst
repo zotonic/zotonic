@@ -45,10 +45,16 @@ The validator tag accepts the following arguments:
 |valid_message  |Message to show when the field passes validation. Defaults  |valid_message="ok!"    |
 |               |to the empty string.                                        |                       |
 +---------------+------------------------------------------------------------+-----------------------+
+|failure_message|Argument passed to the type argument. See individual        |                       |
+|               |validators.                                                 |                       |
++---------------+------------------------------------------------------------+-----------------------+
+|message_after  |The id of the element after which the failure message       |message_after=         |
+|               |should be shown. Defaults to the id argument.               |"signup_tos_agree"     |
++---------------+------------------------------------------------------------+-----------------------+
 |only_on_blur   |Normally validates on change, unles only_on_blur is set.    |only_on_blur           |
 +---------------+------------------------------------------------------------+-----------------------+
 |wait           |Time in msec to wait for validation after the last          |wait=100               |
-|               |keystroke, default 0.                                       |                       |
+|               |keystroke. Default: 0.                                      |                       |
 +---------------+------------------------------------------------------------+-----------------------+
 |only_on_submit |Whether the validation should be done when entering data or |only_on_submit         |
 |               |only on submit of the form.  Set this to suppress validation|                       |
