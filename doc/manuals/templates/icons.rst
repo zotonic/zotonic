@@ -153,6 +153,45 @@ For example::
        .extend_icon(z, icon-help-circle);
     }
 
+This will generate the following CSS::
+
+    (lots-of-classes),
+    .my-btn-help:before {
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        display: inline-block;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    (lots-of-classes),
+    .my-btn-help:before {
+        font-family: "Zotonic";
+    }
+    .my-btn-help:before {
+        content: "\e600";
+    }
+
+The ``:before`` pseudo-class can be extended to further style the icon. For instance to add a plus icon to a link::
+
+    .my-plus-link {
+        position: relative;
+        padding-left: 16px;
+    
+        .extend_icon(z, icon-plus);
+    
+        &:before {
+            position: absolute;
+            top: 4px;
+            left: 0;
+            width: 16px;
+            font-size: 13px;
+        }
+    }
+
 
 Extending FontAwesome 4 icons
 """""""""""""""""""""""""""""
