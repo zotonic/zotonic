@@ -21,7 +21,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    html/1
+    html/1,
+    fetch_user_data/1
     ]).
 
 -include_lib("controller_html_helper.hrl").
@@ -152,20 +153,20 @@ fetch_access_token(Code, Context) ->
     {AppId, AppSecret, _Scope} = mod_linkedin:get_config(Context),
     PK = z_context:get_q("pk", Context, []),
     RedirectUrl = z_context:abs_url(z_dispatcher:url_for(linkedin_redirect, [{pk,PK}], Context), Context),
-    LinkedInUrl = "https://www.linkedin.com/uas/oauth2/accessToken?grant_type=authorization_code"
-                ++ "&client_id=" ++ z_utils:url_encode(AppId)
-                ++ "&redirect_uri=" ++ z_convert:to_list(z_utils:url_encode(RedirectUrl))
-                ++ "&client_secret=" ++ z_utils:url_encode(AppSecret)
-                ++ "&code=" ++ z_utils:url_encode(Code),
-    Hs = [
-        {"Connection", "Close"}
-    ],
-    case httpc:request(post, {LinkedInUrl, Hs, "application/x-www-form-urlencoded", <<>>}, httpc_http_options(), httpc_options()) of
+    LinkedInUrl = "https://www.linkedin.com/uas/oauth2/accessToken",
+    Body = iolist_to_binary([
+            "grant_type=authorization_code",
+            "&client_id=", z_utils:url_encode(AppId),
+            "&redirect_uri=", z_convert:to_list(z_utils:url_encode(RedirectUrl)),
+            "&client_secret=", z_utils:url_encode(AppSecret),
+            "&code=", z_utils:url_encode(Code)
+        ]),
+    case httpc:request(post, {LinkedInUrl, [], "application/x-www-form-urlencoded", Body}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Json} = mochijson:binary_decode(Payload),
             {<<"access_token">>, AccessToken} = proplists:lookup(<<"access_token">>, Json), 
             {<<"expires_in">>, ExpiresIn} = proplists:lookup(<<"expires_in">>, Json), 
-            {ok, z_convert:to_list(AccessToken), ExpiresIn};
+            {ok, AccessToken, ExpiresIn};
         Other ->
             lager:error("[linkedin] error fetching access token [code ~p] ~p", [Code, Other]),
             {error, {http_error, LinkedInUrl, Other}}
@@ -173,45 +174,30 @@ fetch_access_token(Code, Context) ->
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    fetch_user_data(AccessToken, 1).
-
-fetch_user_data(AccessToken, RetryCt) when RetryCt > 2 ->
-    lager:error("[linkedin] giving on fetching user data [token ~p] too many retries", [AccessToken]),
-    {error, too_many_retries};
-fetch_user_data(AccessToken, RetryCt) ->
-    LinkedInUrl = "https://api.linkedin.com//v1/people/\~:"++fields()++"?secure_urls=true",
-    Hs = [
-        {"Authorization", "Bearer "++z_convert:to_list(AccessToken)},
-        {"x-li-format", "json"},
-        {"Connection", "Close"}
-    ],
-    case httpc:request(get, {LinkedInUrl, Hs}, httpc_http_options(), httpc_options()) of
+    LinkedInUrl = "https://api.linkedin.com/v1/people/\~:"
+                ++fields()
+                ++"?secure_urls=true&format=json&oauth2_access_token="
+                ++z_convert:to_list(AccessToken),
+    case httpc:request(get, {LinkedInUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
             {ok, Props};
-
-        % LinkedIn has an eventual consistency problem, sometimes it doesn't accept the just fetched Access-Token:
-        %
-        % {ok,{{"HTTP/1.1",401,"Unauthorized"},[{"connection","keep-alive"},{"date","Thu, 22 Jan 2015 14:08:56 GMT"},
-        % {"server","Apache-Coyote/1.1"},{"vary","*"},{"content-length","142"},{"content-type","application/json;charset=UTF-8"},
-        % {"x-li-request-id","xxxxx"},{"x-li-format","json"},{"x-li-fabric","prod-ltx1"},{"x-li-pop","PROD-IDB2"},
-        % {"x-li-uuid","xxxxx"}],<<"{\n  \"errorCode\": 0,\n  \"message\": \"Unable to verify access token\",\n  
-        % \"requestId\": \"xxxxxx\",\n  \"status\": 401,\n  \"timestamp\": 1421935736443\n}">>}}
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
-            {struct, Json} = mochijson:binary_decode(Payload),
-            case proplists:get_value(<<"errorCode">>, Json) of
-                0 ->
-                    lager:info("[linkedin] 401 error fetching user data [token ~p] will retry in 50msec ~p", [AccessToken, Payload]),
-                    timer:sleep(50),
-                    fetch_user_data(AccessToken, RetryCt+1);
-                _ ->
-                    lager:error("[linkedin] 401 error fetching user data [token ~p] will not rertry ~p", [AccessToken, Payload]),
-                    {error, {http_error, LinkedInUrl, Other}}
-            end;
+            lager:error("[linkedin] 401 error fetching user data [token ~p] will not retry ~p", [AccessToken, Payload]),
+            {error, {http_error, LinkedInUrl, Other}};
         Other ->
             lager:error("[linkedin] error fetching user data [token ~p] ~p", [AccessToken, Other]),
             {error, {http_error, LinkedInUrl, Other}}
     end.
+
+% ensure_inets_profile(Profile) ->
+%     case inets:start(httpc, [{profile, Profile}]) of
+%         {ok, _Pid} -> 
+%             httpc:set_options([{keep_alive_timeout, 1}], Profile),
+%             ok;
+%         {error, {already_started, _Pid}} ->
+%             ok
+%     end.
 
 
 %% Profile fields to request (see also https://developer.linkedin.com/documents/profile-fields#profile)
