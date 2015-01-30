@@ -105,6 +105,12 @@ function z_start_view(id, component_name, controller_options) {
         this.component_view =  undefined;
         this.component_controller = undefined;
 
+        this.onunload = function(e) {
+            if(this.component_controller && this.component_controller.onunload) {
+                this.component_controller.onunload(e);
+            }
+        }
+
         /* Load the view */
         z_load_view(id, this, component_name, controller_options);
     }
