@@ -352,6 +352,7 @@
 %% otherwise, return a #search_sql{} or #search_result{} record.
 -record(search_query, {search, offsetlimit}).
 
+-record(backend_rsc_select, {where_sql}).
 
 %% @doc An edge has been inserted. (notify)
 %% The predicate is an atom.
