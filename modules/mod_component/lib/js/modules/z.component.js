@@ -156,7 +156,8 @@ function z_load(name, init, wait_for) {
     }
 
     if(component.state != "pending") {
-        throw "Component not in pending state";
+        /* Ignore load requests for components which are not pending */
+        return;
     }
 
     component.state = "loading";
