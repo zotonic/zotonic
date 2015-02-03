@@ -308,6 +308,7 @@ os_escape(win32, [C|Rest], Acc) ->
 js_escape({trans, []}, undefined) -> [];
 js_escape({trans, Ts}, undefined) -> js_escape(hd(Ts));
 js_escape({trans, _} = Tr, Context) -> js_escape(z_trans:lookup_fallback(Tr, Context), Context);
+js_escape({trust, Value}, Context) -> Value;
 js_escape(undefined, _OptContext) -> [];
 js_escape([], _OptContext) -> [];
 js_escape(<<>>, _OptContext) -> [];
@@ -386,6 +387,7 @@ js_prop_value(pattern, [$/|T]=List, OptContext) ->
             end
     end;
 js_prop_value(_, Int, _OptContext) when is_integer(Int) -> integer_to_list(Int);
+js_prop_value(_, {trust, Value}, _OptContext) -> Value;
 js_prop_value(_, Value, OptContext) -> [$",js_escape(Value, OptContext),$"].
 
 
