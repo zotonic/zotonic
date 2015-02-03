@@ -662,7 +662,7 @@ is_protected(computed_xxx)  -> true;
 is_protected(_)             -> false.
 
 
-is_trimmable(_, V) when not is_binary(V) and not is_list(V) -> false;
+is_trimmable(_, V) when not is_binary(V), not is_list(V) -> false;
 is_trimmable(title, _)       -> true;
 is_trimmable(title_short, _) -> true;
 is_trimmable(summary, _)     -> true;
@@ -912,6 +912,7 @@ recombine_languages(Props, Context) ->
             LangProps ++ [{language, [list_to_atom(Lang) || Lang <- L1]}|proplists:delete("language", OtherProps)]
     end.
 
+    %% @doc Fetch all the edited languages, from 'language' inputs
     edited_languages(Props, PropLangs) ->
         case proplists:is_defined("language", Props) of
             true -> proplists:get_all_values("language", Props);
@@ -968,7 +969,7 @@ recombine_blocks(Props, OrgProps, Context) ->
                             end,
                             dict:new(),
                             BPs),
-            [{blocks, normalize_blocks([ dict:fetch(K, Dict) || K <- Keys ], Context)} | Ps ]
+            [{blocks, normalize_blocks([ {K, dict:fetch(K, Dict)} || K <- Keys ], Context)} | Ps ]
     end.
 
 block_ids([], Acc) -> 
@@ -985,34 +986,37 @@ block_ids([_|Rest], Acc) ->
 
 
 normalize_blocks(Blocks, Context) ->
-    lists:map(fun(B) -> normalize_block(B, Context) end, Blocks).
+    lists:map(fun({Name,B}) -> normalize_block(Name, B, Context) end, Blocks).
                        
-normalize_block(B, Context) ->
-    lists:map(fun
-                  ({"rsc_id", V}) ->
-                      {rsc_id, m_rsc:rid(V, Context)};
-                  ({"is_" ++ _ = K, V}) ->
-                      {list_to_existing_atom(K), z_convert:to_bool(V)};
-                  ({K, V}) when is_list(K) ->
-                      {list_to_existing_atom(K), V};
-                  ({rsc_id, V}) ->
-                      {rsc_id, m_rsc:rid(V, Context)};
-                  (Pair) ->
-                      Pair
+normalize_block(Name, B, Context) ->
+    Props = lists:map(fun
+                  ({rsc_id, V})         -> {rsc_id, m_rsc:rid(V, Context)};
+                  ({"rsc_id", V})       -> {rsc_id, m_rsc:rid(V, Context)};
+                  ({<<"rsc_id">>, V})   -> {rsc_id, m_rsc:rid(V, Context)};
+                  ({"is_" ++ _ = K, V}) -> {to_existing_atom(K), z_convert:to_bool(V)};
+                  ({<<"is_", _/binary>> = K, V}) -> {to_existing_atom(K), z_convert:to_bool(V)};
+                  ({K, V}) when is_list(K); is_binary(K) -> {to_existing_atom(K), V};
+                  (Pair) -> Pair
               end,
-              B).
+              B),
+    case proplists:is_defined(name, Props) of
+        true -> Props;
+        false -> [{name, Name} | Props]
+    end.
+
+to_existing_atom(K) when is_binary(K) ->
+    binary_to_existing_atom(K, utf8);
+to_existing_atom(K) when is_list(K) ->
+    list_to_existing_atom(K);
+to_existing_atom(K) when is_atom(K) ->
+    K.
 
 %% @doc Accept only configured languages
 filter_langs(L, Cfg) ->
-    filter_langs1(L, Cfg, []).
-    
-    filter_langs1([], _Cfg, Acc) ->
-        Acc;
-    filter_langs1([L|R], Cfg, Acc) ->
-        case lists:member(L, Cfg) of
-            true -> filter_langs1(R, Cfg, [L|Acc]);
-            false -> filter_langs1(R, Cfg, Acc)
-        end.
+    lists:filter(fun(LangS) ->
+                    lists:member(LangS, Cfg)
+                 end,
+                 L).
 
     
 
