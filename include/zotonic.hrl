@@ -204,7 +204,7 @@
 -record(render, {template, is_all=false, vars=[]}).
 
 %% @doc Data import definition. See also mod_import_csv.
--record(import_data_def, {colsep=$\t, skip_first_row=true, record, importdef}).
+-record(import_data_def, {colsep=$\t, skip_first_row=true, columns=[], importdef}).
 
 %% @doc Check if an assumption is true
 -define(ASSERT(A,E), z_utils:assert(A,E)).

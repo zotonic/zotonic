@@ -1,4 +1,4 @@
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -13,4 +13,4 @@
 %% limitations under the License.
 
 %% Import file definition.
--record(filedef, {filename, file_size, colsep, columns, record, importdef, skip_first_row=false}).
+-record(filedef, {filename, file_size, colsep, columns, importdef, skip_first_row=false}).

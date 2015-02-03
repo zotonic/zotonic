@@ -1,9 +1,8 @@
 %% @doc Import a csv file according to the derived file/record definitions.
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @author Marc Worrell <marc@worrell.nl>
-%% Date: 2010-06-26
 
-%% Copyright 2010-2011 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2010-2015 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,7 +26,11 @@
     import/3
 ]).
 
--include_lib("zotonic.hrl").
+-export([
+    sort_props/1
+    ]).
+
+-include_lib("../../../include/zotonic.hrl").
 -include_lib("../include/import_csv.hrl").
 
 -record(importresult, {seen=[], new=[], updated=[], errors=[], ignored=[], deleted=0}).
@@ -37,16 +40,27 @@
 %% @doc The import function, read the csv file and fetch all records.
 %% This function is run as a spawned process.  The Context should have the right permissions for inserting
 %% or updating the resources.
+-spec import(#filedef{}, boolean(), #context{}) -> list().
 import(Def, IsReset, Context) ->
     StartDate = erlang:universaltime(),
-    %% Read all rows
+
+    %% Read and parse all rows
     {ok, Device} = file:open(Def#filedef.filename, [read, binary, {encoding, utf8}]),
     Rows = parse_csv:scan_lines(Device, Def#filedef.colsep),
     file:close(Device),
     file:delete(Def#filedef.filename),
+
     %% Drop (optionally) the first row, empty rows and the comment rows (starting with a '#')
-    Rows1 = case Def#filedef.skip_first_row of true -> tl(Rows); _ -> Rows end,
-    Rows2 = lists:filter(fun([<<$#, _/binary>>|_]) -> false; ([]) -> false; (_) -> true end, Rows1),
+    Rows1 = case Def#filedef.skip_first_row of 
+                true -> tl(Rows); 
+                _ -> Rows
+            end,
+    Rows2 = lists:filter(fun
+                            ([<<$#, _/binary>>|_]) -> false; 
+                            ([]) -> false;
+                            (_) -> true
+                         end,
+                         Rows1),
     State = import_rows(Rows2, Def, new_importstate(IsReset), Context),
 
     %% @todo Delete all not-mentioned but previously imported resources
@@ -82,19 +96,18 @@ new_importstate(IsReset) ->
 import_rows([], _Def, ImportState, _Context) -> 
     ImportState;
 import_rows([R|Rows], Def, ImportState, Context) ->
-    Zipped = zip(R, Def#filedef.record, []),
+    Zipped = zip(R, Def#filedef.columns, []),
     ImportState1 = import_parts(Zipped, Def#filedef.importdef, ImportState, Context),
     import_rows(Rows, Def, ImportState1, Context).
 
-    
-    zip(_Cols, [], Acc) ->
-        lists:reverse(Acc);
-    zip([], [N|Ns], Acc) ->
-        zip([], Ns, [{N,<<>>}|Acc]);
-    zip([_C|Cs], [''|Ns], Acc) ->
-        zip(Cs, Ns, Acc);
-    zip([C|Cs], [N|Ns], Acc) ->
-        zip(Cs, Ns, [{N, C}|Acc]).
+
+%% @doc Combine the field name definitions and the field values.
+zip(_Cols, [], Acc) -> lists:reverse(Acc);
+zip([_C|Cs], [''|Ns], Acc) -> zip(Cs, Ns, Acc);
+zip([_C|Cs], [""|Ns], Acc) -> zip(Cs, Ns, Acc);
+zip([_C|Cs], [undefined|Ns], Acc) -> zip(Cs, Ns, Acc);
+zip([], [N|Ns], Acc) -> zip([], Ns, [{z_convert:to_list(N),<<>>}|Acc]);
+zip([C|Cs], [N|Ns], Acc) -> zip(Cs, Ns, [{z_convert:to_list(N), C}|Acc]).
 
 
 %% @doc Import all resources on a row
@@ -103,7 +116,7 @@ import_parts(_Row, [], ImportState, _Context) ->
 import_parts(Row, [Def | Definitions], ImportState, Context) ->
     {FieldMapping, ConnectionMapping} = Def,
     case import_def_rsc(FieldMapping, Row, ImportState, Context) of
-        {S, {ignore}} ->
+        {S, ignore} ->
             import_parts(Row, Definitions, S, Context);
         {S, {error, Type, E}} ->
             add_result_seen(Type, add_result_error(Type, E, S));
@@ -134,129 +147,195 @@ import_def_rsc(FieldMapping, Row, State, Context) ->
     {Callbacks, FieldMapping1} = case proplists:get_value(callbacks, FieldMapping) of
                                      undefined -> {[], FieldMapping};
                                      CB -> {CB, proplists:delete(callbacks, FieldMapping)}
-                                end,
-    %% Do the field mapping
-    Props = map_fields(FieldMapping1, Row, State),
+                                 end,
+    RowMapped = map_fields(FieldMapping1, Row, State),
+    import_def_rsc_1_cat(RowMapped, Callbacks, State, Context).
 
-    %% Check if props mapping is valid (at least a title and a (unique) name)
-    case has_required_rsc_props(Props) of
+import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
+    %% Get category name; put category ID in the record.
+    {"category", CategoryName} = proplists:lookup("category", Row),
+    {CatId, State1} = name_lookup_exists(CategoryName, State, Context),
+    Row1 = [{"category_id", CatId} | proplists:delete("category", Row)],
+    Name = case proplists:get_value("name", Row1) of
+               undefined -> throw({import_error, {definition_without_unique_name}});
+               N -> N
+           end,
+    {OptRscId, State2} = name_lookup(Name, State1, Context),
+    RscId = case OptRscId of undefined -> insert_rsc; _ -> OptRscId end,
+    NormalizedRow = sort_props(m_rsc_update:normalize_props(RscId, Row1, Context)),
+    case has_required_rsc_props(NormalizedRow) of
         true ->
-            %% Get category name; put category ID in the record.
-            Type = proplists:get_value(category, Props),
-            %% Convert category name
-            {CatId, State1} = name_lookup_exists(Type, State, Context),
-            Props0 = [{category_id, CatId} | proplists:delete(category, Props)],
-
-            %% Make row checksum
-            PropK = proplists:get_keys(Props0),
-            RowCS = import_checksum(Props0),
-
-            %% Unique name of this rsc
-            Name = case proplists:get_value(name, Props0) of
-                       undefined -> throw({import_error, {definition_without_unique_name}});
-                       N -> N
-                   end,
-
-            %% Lookup existing record
-            case name_lookup(Name, State1, Context) of
-                %% Not exists
-                {undefined, State2} ->
-                    lager:debug("Import CSV: importing ~p", [Name]),
-                    Props1 = [{import_csv_original, Props0} | Props0],
-                    case rsc_insert(Props1, Context) of
-                        {ok, NewId} ->
-                            StateAdd = flush_add(NewId, State2),
-                            case proplists:get_value(rsc_insert, Callbacks) of
-                                undefined -> none;
-                                Callback -> Callback(NewId, Props1, Context)
-                            end,
-                            {StateAdd, {new, Type, NewId, Name}};
-                        E ->
-                            lager:warning("Import CSV: could not insert ~p: ~p", [Name, E]),
-                            % ?DEBUG(Type),
-                            % ?DEBUG(Props1),
-                            % ?DEBUG(Row),
-                            % ?DEBUG(E),
-                            % ?DEBUG(m_rsc:name_to_id(Name, Context)),
-                            {State2, {error, Type, E}}
-                    end;
-
-                %% Exists? 
-                {Id, State2} ->
-                    %% Calculate resource checksum
-                    RscCS = rsc_checksum(Id, PropK, Context),
-                    case RowCS of
-                        RscCS when not State#importstate.is_reset ->
-                            lager:debug("Import CSV: skipping ~p (checksum not changed)", [Name]),
-                            {State2, {equal, Type, Id}};
-                        _ ->
-                            %% Resource has been enriched, or the import has changed.
-                            {State3, Props1} = case m_rsc:p_no_acl(Id, import_csv_original, Context) of
-                                         undefined ->
-                                             %% No import_csv_original record for this rsc; update all.
-                                             {State2, Props0};
-
-                                         OriginalProps ->
-                                             IsProtected = m_rsc:p_no_acl(Id, is_protected, Context),
-                                             if
-                                                not State#importstate.is_reset orelse IsProtected ->
-                                                    {State2, [{import_csv_touched, {props, []}} | Props0]};
-                                                true ->
-                                                    compare_old_new_props(Id, OriginalProps, Props0, State2, Context)
-                                             end
-                                     end,
-
-                            case Props1 of 
-                                [] ->
-                                    lager:debug("Import CSV: skipping ~p (fields not changed)", [Name]),
-                                    {State, {equal, Type, Id}};
-                                Props1 ->
-                                    lager:debug("Import CSV: updating ~p", [Name]),
-                                    Props2 = [{import_csv_original, Props0} | Props1],
-                                    case rsc_update(Id, Props2, Context) of
-                                        {ok, Id} ->
-                                            StateAdd = flush_add(Id, State3),
-                                            case proplists:get_value(rsc_update, Callbacks) of
-                                                undefined -> none;
-                                                Callback -> Callback(Id, Props2, Context)
-                                            end,
-                                            {StateAdd, {updated, Type, Id}};
-                                        E ->
-
-                                            {State3, {error, Type, E}}
-                                    end
-                            end
-                    end
-
-            end;
+           import_def_rsc_2_name(RscId, State2, Name, CategoryName, NormalizedRow, Callbacks, Context);
         false ->
-            {State, {ignore}}
+            lager:info("[~p] import_csv: missing required attributes for ~p", [z_context:site(Context), Name]),
+            {State2, ignore}
     end.
 
+import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRow, Callbacks, Context) ->
+    lager:debug("[~p] import_csv: importing ~p", [z_context:site(Context), Name]),
+    case rsc_insert(NormalizedRow, Context) of
+        {ok, NewId} ->
+            RawRscFinal = get_updated_props(NewId, NormalizedRow, Context),
+            Checksum = checksum(NormalizedRow),
+            m_import_csv_data:update(NewId, Checksum, NormalizedRow, RawRscFinal, Context),
+
+            case proplists:get_value(rsc_insert, Callbacks) of
+                undefined -> none;
+                Callback -> Callback(NewId, NormalizedRow, Context)
+            end,
+            {flush_add(NewId, State), {new, CategoryName, NewId, Name}};
+        {error, _} = E ->
+            lager:warning("[~p] import_csv: could not insert ~p: ~p", [z_context:site(Context), Name, E]),
+            {State, {error, CategoryName, E}}
+    end;
+import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, Context) when is_integer(Id) ->
+    % 1. Check if this update was the same as the last known import
+    PrevImportData = m_import_csv_data:get(Id, Context),
+    PrevChecksum = proplists:get_value(checksum, PrevImportData),
+    case checksum(NormalizedRow) of
+        PrevChecksum when not State#importstate.is_reset ->
+            lager:info("[~p] import_csv: skipping ~p (importing same values)", [z_context:site(Context), Name]),
+            {State, {equal, CategoryName, Id}};
+        Checksum ->
+            lager:info("[~p] import_csv: updating ~p", [z_context:site(Context), Name]),
+
+            % 2. Some properties might have been overwritten by an editor.
+            %    For this we will update a second time with all the changed values
+            %    (also pass any import-data from an older import module)
+            RawRscPre = get_updated_props(Id, NormalizedRow, Context),
+            Edited = diff_raw_props(RawRscPre, 
+                                    proplists:get_value(rsc_data, PrevImportData, []),
+                                    m_rsc:p_no_acl(Id, import_csv_original, Context)),
+
+            % Cleanup old import_csv data on update
+            Row1 = [ {import_csv_original, undefined}, {import_csv_touched, undefined} | NormalizedRow ],
+            case rsc_update(Id, Row1, Context) of
+                {ok, _} ->
+                    RawRscFinal = get_updated_props(Id, NormalizedRow, Context),
+                    % Ensure edited properties are set back to their edited values
+                    case Edited of
+                        [] ->
+                            ok;
+                        _ when State#importstate.is_reset ->
+                            ok;
+                        _ ->
+                            ?DEBUG({Id, Name, Edited}),
+                            {ok, _} = m_rsc_update:update(Id, Edited, [{is_import, true}], Context)
+                    end,
+                    m_import_csv_data:update(Id, Checksum, NormalizedRow, RawRscFinal, Context),
+
+                    case proplists:get_value(rsc_update, Callbacks) of
+                        undefined -> none;
+                        Callback -> Callback(Id, NormalizedRow, Context)
+                    end,
+                    {flush_add(Id, State), {updated, CategoryName, Id}};
+                {error, _} = E ->
+                    {State, {error, CategoryName, E}}
+            end
+    end.
+
+    % %% Calculate resource checksum
+    % RscCS = rsc_checksum(Id, proplists:get_keys(Props), Context),
+    % case import_checksum(Props) of
+    %     RscCS when not State#importstate.is_reset ->
+    %         lager:debug("Import CSV: skipping ~p (checksum not changed)", [Name]),
+    %         {State, {equal, CategoryName, Id}};
+    %     _ ->
+    %         %% Resource has been enriched, or the import has changed.
+    %         {State1, Props1} = case m_rsc:p_no_acl(Id, import_csv_original, Context) of
+    %                      undefined ->
+    %                          {State, Props};
+
+    %                      OriginalProps ->
+    %                          IsProtected = m_rsc:p_no_acl(Id, is_protected, Context),
+    %                          if
+    %                             not State#importstate.is_reset orelse IsProtected ->
+    %                                 {State, [{import_csv_touched, {props, []}} | Props]};
+    %                             true ->
+    %                                 compare_old_new_props(Id, OriginalProps, Props, State, Context)
+    %                          end
+    %                  end,
+
+    %         case Props1 of 
+    %             [] ->
+    %                 lager:debug("Import CSV: skipping ~p (fields not changed)", [Name]),
+    %                 {State, {equal, CategoryName, Id}};
+    %             Props1 ->
+    %                 lager:debug("Import CSV: updating ~p", [Name]),
+    %                 Props2 = [{import_csv_original, Props} | Props1],
+    %                 case rsc_update(Id, Props2, Context) of
+    %                     {ok, Id} ->
+    %                         StateAdd = flush_add(Id, State1),
+    %                         case proplists:get_value(rsc_update, Callbacks) of
+    %                             undefined -> none;
+    %                             Callback -> Callback(Id, Props2, Context)
+    %                         end,
+    %                         {StateAdd, {updated, CategoryName, Id}};
+    %                     E ->
+    %                         {State1, {error, CategoryName, E}}
+    %                 end
+    %         end
+    % end.
+
+%% @doc Check which properties are changed
+diff_raw_props(Current, [], {props, OriginalProps}) ->
+    % Old version of the csv import, do our best on the diff
+    diff_raw_props(Current, sort_props(OriginalProps), undefined);
+diff_raw_props(LastImport, LastImport, undefined) ->
+    [];
+diff_raw_props(Current, LastImport, undefined) ->
+    % Return the fields that are changed in Current but that were
+    % updated in the last import.
+    % Bit primitive for now ....
+    case LastImport -- Current of
+        [] -> 
+            [];
+        Diff ->
+            Keys = [ K || {K, _} <- Diff ],
+            [ {K, proplists:get_value(K, Current)} || K <- Keys ]
+    end.
+
+get_updated_props(Id, Row, Context) ->
+    Raw = m_rsc:get_raw(Id, Context),
+    sort_props([ {K, proplists:get_value(K, Raw)} || {K, _} <- Row ]).
+
+sort_props(Props) ->
+    Props1 = lists:sort(Props),
+    [ sort_props_1(P) || P <- Props1 ].
+
+sort_props_1({trans, Tr}) ->
+    {trans, lists:sort(Tr)};
+sort_props_1({K, [A|_] = L}) when is_list(A) ->
+    L1 = [ sort_props(V) || V <- L ],
+    {K, L1};
+sort_props_1({K, [{A,_}|_] = L}) when is_atom(A) ->
+    {K, sort_props(L)};
+sort_props_1(V) ->
+    V.
 
 rsc_insert(Props, Context) ->
     case check_medium(Props) of
         {url, Url, PropsMedia} ->
-            m_media:insert_url(Url, PropsMedia, [{escape_texts, false}], Context);
+            m_media:insert_url(Url, PropsMedia, [{is_import, true}], Context);
         none ->
-            m_rsc_update:insert(Props, [{escape_texts, false}], Context)
+            m_rsc_update:insert(Props, [{is_import, true}], Context)
     end.
 
 rsc_update(Id, Props, Context) ->
     case check_medium(Props) of
         {url, Url, PropsMedia} ->
-            m_media:replace_url(Url, Id, PropsMedia, [{escape_texts, false}], Context);
+            m_media:replace_url(Url, Id, PropsMedia, [{is_import, true}], Context);
         none ->
-            m_rsc_update:update(Id, Props, [{escape_texts, false}], Context)
+            m_rsc_update:update(Id, Props, [{is_import, true}], Context)
     end.
 
 
 check_medium(Props) ->
-    case proplists:get_value(medium_url, Props) of
+    case proplists:get_value("medium_url", Props) of
         undefined -> none;
         <<>> -> none;
         [] -> none;
-        Url -> {url, Url, proplists:delete(medium_url, Props)}
+        Url -> {url, Url, proplists:delete("medium_url", Props)}
     end.
 
 
@@ -276,7 +355,6 @@ import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Cont
     % Find the predicate
     case map_one_normalize(name, PredCat, map_one(PredRowField, Row, State)) of
         <<>> ->
-            %% Ignore
             fail;
         Name ->
             case name_lookup(Name, State, Context) of
@@ -306,7 +384,8 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context
 import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, State, Context) ->
     Name = map_one_normalize(name, ObjectCat, map_one(ObjectRowField, Row, State)),
     case Name of 
-        <<>> -> fail;
+        <<>> ->
+            fail;
         Name ->
             case name_lookup(Name, State, Context) of
                 %% Object doesn't exist, create it using the objectprops
@@ -344,7 +423,8 @@ add_name_lookup(State=#importstate{name_to_id=Tree}, Name, Id) ->
 
 name_lookup(Name, #importstate{name_to_id=Tree} = State, Context) ->
     case gb_trees:lookup(Name, Tree) of
-        {value, V} -> {V, State};
+        {value, V} ->
+            {V, State};
         none -> 
             V = m_rsc:rid(Name, Context),
             {V, add_name_lookup(State, Name, V)}
@@ -359,9 +439,13 @@ name_lookup_exists(Name, State, Context) ->
 
 %% @doc Maps fields from the given mapping into a new row, filtering out undefined values.
 map_fields(Mapping, Row, State) ->
-    Defaults = [{is_protected, true}, {is_published, true}],
+    Defaults = [
+        {"is_protected", true},
+        {"is_published", true},
+        {"visible_for", 0}
+    ],
     Mapped = [map_def(MapOne, Row, State) || MapOne <- Mapping],
-    Type = case proplists:get_value(category, Mapped) of 
+    Type = case proplists:get_value("category", Mapped) of 
                undefined -> throw({import_error, no_category_in_import_definition});
                T -> T
            end,
@@ -370,35 +454,34 @@ map_fields(Mapping, Row, State) ->
 					 [{K, map_one_normalize(K, Type, V)} || {K,V} <- Mapped]),
     add_defaults(Defaults, P).
 
-	map_def({K,F}, Row, State) ->
-		{K, map_one(F, Row, State)};
-	map_def(K, Row, State) when is_atom(K) ->
-		map_def({K,K}, Row, State).
+map_def({K,F}, Row, State) ->
+	{K, map_one(F, Row, State)};
+map_def(K, Row, State) when is_atom(K), is_list(K) ->
+	map_def({K,K}, Row, State).
 
 
-map_one_normalize(name, _Type, <<>>) ->
+map_one_normalize("name", _Type, <<>>) ->
     <<>>;
-map_one_normalize(name, _Type, {name_prefix, Prefix, V}) ->
+map_one_normalize("name", _Type, {name_prefix, Prefix, V}) ->
     CheckL = 80 - strlen(Prefix) - 1,
     Name = case strlen(V) of
                L when L > CheckL ->
-                   %% When name is too long, make a unique thing out of it.
+                   % If name is too long, make a unique thing out of it.
                    z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ base64:encode_to_string(checksum(V)));
                _ -> 
                    z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ z_string:to_name(V))
            end,
     z_convert:to_binary(Name);
-
-map_one_normalize(name, Type, V) ->
-    CheckL = 80 - strlen(Type) - 1,
-    Name = case strlen(V) of
-               L when L > CheckL ->
-                   %% When name is too long, make a unique thing out of it.
-                   z_string:to_name(z_convert:to_list(Type) ++ "_" ++ base64:encode_to_string(checksum(V)));
-               _ -> 
-                   z_string:to_name(z_convert:to_list(Type) ++ "_" ++ z_string:to_name(V))
-           end,
-    z_convert:to_binary(Name);
+% map_one_normalize("name", Type, V) ->
+%     CheckL = 80 - strlen(Type) - 1,
+%     Name = case strlen(V) of
+%                L when L > CheckL ->
+%                    % If name is too long, make a unique thing out of it.
+%                    z_string:to_name(z_convert:to_list(Type) ++ "_" ++ base64:encode_to_string(checksum(V)));
+%                _ -> 
+%                    z_string:to_name(z_convert:to_list(Type) ++ "_" ++ z_string:to_name(V))
+%            end,
+%     z_convert:to_binary(Name);
 map_one_normalize(_, _Type, V) ->
     V.
 
@@ -408,11 +491,13 @@ strlen(L) when is_list(L) -> erlang:length(L);
 strlen(A) when is_atom(A) -> erlang:length(atom_to_list(A)).
 
 map_one(F, _Row, _State) when is_binary(F) -> F;
-map_one(F, _Row, _State) when is_list(F) -> iolist_to_binary(F);
+% map_one(F, _Row, _State) when is_list(F) -> iolist_to_binary(F);
 map_one(undefined, _Row, _State) -> undefined;
 map_one(true, _Row, _State) -> true;
 map_one(false, _Row, _State) -> false;
 map_one(F, Row, _State) when is_atom(F) ->
+    concat_spaces(proplists:get_all_values(z_convert:to_list(F), Row));
+map_one(F, Row, _State) when is_list(F) ->
     concat_spaces(proplists:get_all_values(F, Row));
 map_one(F, Row, _State) when is_function(F) ->
     F(Row);
@@ -482,80 +567,15 @@ concat_spaces([X]) when is_atom(X); is_tuple(X) ->
 concat_spaces([H|L]) ->
     iolist_to_binary(concat_spaces(L, [H])).
     
-    concat_spaces([], Acc) ->
-        lists:reverse(Acc);
-    concat_spaces([C], Acc) ->
-        lists:reverse([C,<<" ">>|Acc]);
-    concat_spaces([H|T], Acc) ->
-        concat_spaces(T, [<<" ">>,H|Acc]).
-
-compare_old_new_props(_RscId, Original, New, State, Context) -> 
-    compare_old_new_props(_RscId, Original, New, State, [], Context).
-
-compare_old_new_props(_RscId, _OriginalProps, [], State, Acc, _Context) -> 
-    {State, Acc};
-compare_old_new_props(RscId, OriginalProps, [{NewKey, NewValue} | NewProps], State, Acc, Context) ->
-    case compare_old_new_props1(RscId, NewKey, proplists:get_value(NewKey, OriginalProps),NewValue, State, Context) of
-        {_, false} -> compare_old_new_props(RscId, OriginalProps, NewProps, State, Acc, Context);
-        {S, true} -> compare_old_new_props(RscId, OriginalProps, NewProps, S, [{NewKey, NewValue} | Acc], Context)
-    end.
-
-
-%% Check the original value and the new value of prop against the prop
-%% in the resource.
-compare_old_new_props1(Id, Prop, OrigVal0, NewVal, State, Context) ->
-    OrigTouched = case m_rsc:p(Id, import_csv_touched, Context) of
-                      undefined -> [];
-                      {props, T} -> T;
-                      [] -> []
-                  end,
-    %% Put surrounding paragraph tag around original value -- sometimes it is was not there yet.
-    OrigVal = case Prop of
-                  body ->
-                      case z_convert:to_list(OrigVal0) of
-                          [$<,$p,62|_] -> OrigVal0;
-                          [$<,$P,62|_] -> OrigVal0;
-                          Val -> list_to_binary("<p>" ++ Val ++ "</p>")
-                      end;
-                  _ -> OrigVal0
-              end,
-    DbVal = m_rsc:p(Id, Prop, Context),
-    {NewTouched, Result} = 
-        case {Prop, DbVal} of 
-            %% special properties which are always overwritten
-            {is_protected, false} ->
-                {OrigTouched, true};
-
-            {_, NewVal} ->
-                %% The value in the database is equal to the to-be-updated value. 
-                %% ignore this value.
-                {OrigTouched, false};
-
-            {_, OrigVal} ->
-                %% The value in the database has not changed from its original value.
-                %% (and is different from NewVal). Use this value.
-                {lists:delete(Prop, OrigTouched), true};
-
-            {_, DbVal} ->
-                %% The value has been edited in the database.
-                {case lists:member(Prop, OrigTouched) of
-                     true -> OrigTouched;
-                     false -> [Prop | OrigTouched]
-                 end,
-                 false}
-        end,
-    case NewTouched of
-        OrigTouched ->
-            % ignore
-            {State, Result};
-        _ ->
-            m_rsc:update(Id, [{import_csv_touched, {props, NewTouched}}], Context),
-            {flush_add(Id, State), Result}
-    end.
-
+concat_spaces([], Acc) ->
+    lists:reverse(Acc);
+concat_spaces([C], Acc) ->
+    lists:reverse([C,<<" ">>|Acc]);
+concat_spaces([H|T], Acc) ->
+    concat_spaces(T, [<<" ">>,H|Acc]).
 
 has_required_rsc_props(Props) ->
-            not(prop_empty(proplists:get_value(category, Props)))
+            not(prop_empty(proplists:get_value(category_id, Props)))
     andalso not(prop_empty(proplists:get_value(name, Props)))
     andalso not(prop_empty(proplists:get_value(title, Props))).
 
@@ -613,25 +633,14 @@ managed_edge_add(Id, NewEdges, State=#importstate{managed_edges=Tree}) ->
     end.
 
 
-prop_empty(<<>>) ->
-    true;
-prop_empty(<<" ">>) ->
-    true;
-prop_empty(<<"\n">>) ->
-    true;
-prop_empty(undefined) ->
-    true;
-prop_empty(_) ->
-    false.
+prop_empty(<<>>) -> true;
+prop_empty(<<" ">>) -> true;
+prop_empty(<<"\n">>) -> true;
+prop_empty(undefined) -> true;
+prop_empty({trans, [{_,<<>>}]}) -> true;
+prop_empty({trans, []}) -> true;
+prop_empty(_) -> false.
 
-
-%% Calculate a checksum of the modified properties.
-import_checksum(Props) ->
-    checksum(lists:sort(Props)).
-
-rsc_checksum(Id, PropKeys, Context) ->
-    Values = [{K, m_rsc:p(Id, K, Context)} || K <- PropKeys],
-    checksum(lists:sort(Values)).
 
 checksum(X) ->
     crypto:hash(sha, term_to_binary(X)).
