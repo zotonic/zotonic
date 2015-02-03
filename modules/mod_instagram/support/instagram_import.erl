@@ -162,7 +162,7 @@ import_rsc_base(Ps, Context) ->
     InsUserId = proplists:get_value(<<"id">>, User),
     UserId = find_user(InsUserId, Context),
     UserName = proplists:get_value(<<"username">>, User),
-    % FullName = proplists:get_value(<<"fullname">>, User),
+    % FullName = proplists:get_value(<<"full_name">>, User),
     UniqueName = <<"instagram_", (z_convert:to_binary(Id))/binary>>,
     {Long, Lat, LocDescr} = location(Ps),
     Caption = caption(Ps),
