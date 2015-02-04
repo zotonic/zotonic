@@ -55,22 +55,26 @@ update(Id, Checksum, RowData, RscData, Context) ->
                Context).
 
 
-install(install, Context) ->
-    z_db:q("
-        create table import_csv_data (
-            id integer not null,
-            checksum bytea,
-            row_data bytea,
-            rsc_data bytea,
-            created timestamp with time zone NOT NULL DEFAULT now(),
-            modified timestamp with time zone NOT NULL DEFAULT now(),
+install(_Vsn, Context) ->
+    case z_db:table_exists(import_csv_data, Context) of
+        false ->
+            [] = z_db:q("
+                create table import_csv_data (
+                    id integer not null,
+                    checksum bytea,
+                    row_data bytea,
+                    rsc_data bytea,
+                    created timestamp with time zone NOT NULL DEFAULT now(),
+                    modified timestamp with time zone NOT NULL DEFAULT now(),
 
-            primary key (id),
-            constraint fk_import_data_id foreign key (id) references rsc(id)
-                on update cascade
-                on delete cascade
-        )
-        ", Context),
-    ok;
-install(_Version, _Context) ->
-    ok.
+                    primary key (id),
+                    constraint fk_import_data_id foreign key (id) references rsc(id)
+                        on update cascade
+                        on delete cascade
+                )
+                ", Context),
+            z_db:flush(Context),
+            ok;
+        true ->
+            ok
+    end.
