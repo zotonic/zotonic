@@ -56,17 +56,20 @@ Pubzub.prototype.subscribe_multi = function (topics, fun) {
     }
 };
 
-Pubzub.prototype.subscribe = function (topic, fun) {
+Pubzub.prototype.subscribe = function (topic, fun, ack) {
     var id = this.unique_id();
+    var async_ack = false;
     this._matcher.add(topic, id);
     this._subs[id] = {fun: fun, topic: topic};
     if (!this.is_local_topic(topic)) {
         var ct = this._subs_relayed[topic] || 0;
         if (ct === 0) {
-            this.transport("subscribe", topic);
+            async_ack = true;
+            this.transport("subscribe", topic, undefined, undefined, ack);
         }
         this._subs_relayed[topic] = ct + 1;
     }
+    if(ack && !async_ack) { setTimeout(ack, 0) }; 
     return id;
 };
 
@@ -134,7 +137,7 @@ Pubzub.prototype.relayed = function (mqtt_msg, _msg) {
     }
 };
 
-Pubzub.prototype.transport = function (cmd, topic, payload, extra) {
+Pubzub.prototype.transport = function (cmd, topic, payload, extra, ack) {
     var msg = {
         _record: 'z_mqtt_cmd',
         cmd: cmd,
@@ -143,7 +146,8 @@ Pubzub.prototype.transport = function (cmd, topic, payload, extra) {
         extra: extra
     };
     var options = {
-        qos: 1
+        qos: 1,
+        ack: ack
     };
     z_transport('mqtt', 'ubf', msg, options);
 };
