@@ -40,19 +40,28 @@
 
 -include_lib("zotonic.hrl").
 
+-record(rscupd, {
+    id=undefined,
+    is_escape_texts=true,
+    is_acl_check=true,
+    is_import=false,
+    expected=[]
+}).
+
 
 %% @doc Insert a new resource. Crashes when insertion is not allowed.
-%% @spec insert(Props, Context) -> {ok, Id} | {error, Reason}
+-spec insert(list(), #context{}) -> {ok, integer()}.
 insert(Props, Context) ->
-    insert(Props, true, Context).
+    insert(Props, [{escape_texts, true}], Context).
 
-insert(Props, EscapeTexts, Context) ->
+-spec insert(list(), list()|boolean(), #context{}) -> {ok, integer()}.
+insert(Props, Options, Context) ->
     PropsDefaults = props_defaults(Props, Context),
-    update(insert_rsc, PropsDefaults, EscapeTexts, Context).
+    update(insert_rsc, PropsDefaults, Options, Context).
 
 
 %% @doc Delete a resource
-%% @spec delete(Props, Context) -> ok | {error, Reason}
+-spec delete(integer(), #context{}) -> ok.
 delete(Id, Context) when is_integer(Id), Id /= 1 ->
     case z_acl:rsc_deletable(Id, Context) of
         true ->
@@ -68,8 +77,8 @@ delete(Id, Context) when is_integer(Id), Id /= 1 ->
 
 
 %% @doc Delete a resource, no check on rights etc is made. This is called by m_category:delete/3
-%% @spec delete_nocheck(Id, Context) -> ok
 %% @throws {error, Reason}
+-spec delete_nocheck(integer(), #context{}) -> ok.
 delete_nocheck(Id, Context) ->
     Referrers = m_edge:subjects(Id, Context),
     CatList = m_rsc:is_a(Id, Context),
@@ -115,9 +124,8 @@ flush(Id, CatList, Context) ->
 
 
 %% @doc Duplicate a resource, creating a new resource with the given title.
-%% @spec duplicate(int(), PropList, Context) -> {ok, int()}
 %% @throws {error, Reason}
-%% @todo Also duplicate the attached medium.
+-spec duplicate(integer(), list(), #context{}) -> {ok, integer()}.
 duplicate(Id, DupProps, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
@@ -146,210 +154,268 @@ duplicate(Id, DupProps, Context) ->
 %% @doc Update a resource
 %% @spec update(Id, Props, Context) -> {ok, Id}
 %% @throws {error, Reason}
+-spec update(integer()|insert_rsc, list(), #context{}) -> {ok, integer()} | {error, term()}.
 update(Id, Props, Context) ->
     update(Id, Props, [], Context).
 
-%% @doc Backward comp.
+-spec update(integer()|insert_rsc, list(), list()|boolean(), #context{}) -> {ok, integer()} | {error, term()}.
 update(Id, Props, false, Context) ->
     update(Id, Props, [{escape_texts, false}], Context);
 update(Id, Props, true, Context) ->
     update(Id, Props, [{escape_texts, true}], Context);
 
 %% @doc Resource updater function
-%% @spec update(Id, Props, Options, Context)
 %% [Options]: {escape_texts, true|false (default: true}, {acl_check: true|false (default: true)}
 %% {escape_texts, false} checks if the texts are escaped, and if not then it will escape. This prevents "double-escaping" of texts.
-update(Id, Props, Options, Context) when is_integer(Id) orelse Id == insert_rsc ->
-    EscapeTexts = proplists:get_value(escape_texts, Options, true),
-    AclCheck = proplists:get_value(acl_check, Options, true),
-    IsImport = proplists:is_defined(is_import, Options),
+update(Id, Props, Options, Context) when is_integer(Id) orelse Id =:= insert_rsc ->
+    RscUpd = #rscupd{
+        id = Id,
+        is_escape_texts = proplists:get_value(escape_texts, Options, true),
+        is_acl_check = proplists:get_value(acl_check, Options, true),
+        is_import = proplists:get_value(is_import, Options, false),
+        expected = proplists:get_value(expected, Options, [])
+    },
+    update_imported_check(RscUpd, Props, Context).
 
-    ensure_imported_id(IsImport, Id, Context),
+update_imported_check(#rscupd{is_import=true, id=Id} = RscUpd, Props, Context) when is_integer(Id) ->
+    case m_rsc:exists(Id, Context) of
+        false ->
+            {ok, CatId} = m_category:name_to_id(other, Context), 
+            1 = z_db:q("insert into rsc (id, creator_id, is_published, category_id)
+                        values ($1, $2, false, $3)", 
+                       [Id, z_acl:user(Context), CatId], 
+                       Context);
+        true -> 
+            ok
+    end,
+    update_editable_check(RscUpd, Props, Context);
+update_imported_check(RscUpd, Props, Context) ->
+    update_editable_check(RscUpd, Props, Context).
 
-    IsEditable = Id == insert_rsc orelse z_acl:rsc_editable(Id, Context) orelse not(AclCheck),
 
-    case IsEditable of
+update_editable_check(#rscupd{id=Id, is_acl_check=true} = RscUpd, Props, Context) when is_integer(Id) ->
+    case z_acl:rsc_editable(Id, Context) of
         true ->
-            AtomProps = normalize_props(Id, Props, Context),
-            EditableProps = props_filter_protected(
-                                props_filter(
-                                    props_trim(AtomProps), [], Context)),
-            AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
-                L when is_list(L) -> L;
-                {error, Reason} -> throw({error, Reason})
-            end,
-            AutogeneratedProps = props_autogenerate(Id, AclCheckedProps, Context),
-            SafeProps = case EscapeTexts of
-                true -> z_sanitize:escape_props(AutogeneratedProps, Context);
-                false -> z_sanitize:escape_props_check(AutogeneratedProps, Context)
-            end,
-            ok = preflight_check(Id, SafeProps, Context),
-            throw_if_category_not_allowed(Id, SafeProps, AclCheck, Context),
-
-            %% This function will be executed in a transaction
-            TransactionF = fun(Ctx) ->
-                {RscId, UpdateProps, BeforeProps, BeforeCatList, RenumberCats} = case Id of
-                    insert_rsc ->
-                         % Allow the initial insertion props to be modified.
-                        CategoryId = z_convert:to_integer(proplists:get_value(category_id, SafeProps)),
-                        InsProps = [{category_id, CategoryId}, {version, 0}],
-                        InsPropsN = z_notifier:foldr(#rsc_insert{}, InsProps, Ctx),
-
-                        % Check if the user is allowed to create the resource
-                        InsertId = case proplists:get_value(creator_id, Props) of
-                                    self ->
-                                        {ok, InsId} = z_db:insert(rsc, [{creator_id, undefined} | InsPropsN], Ctx),
-                                        z_db:q("update rsc set creator_id = id where id = $1", [InsId], Ctx),
-                                        InsId;
-                                    CreatorId when is_integer(CreatorId) ->
-                                        true = z_acl:is_admin(Ctx),
-                                        {ok, InsId} = z_db:insert(rsc, [{creator_id, CreatorId} | InsPropsN], Ctx),
-                                        InsId;
-                                    undefined ->
-                                        {ok, InsId} = z_db:insert(rsc, [{creator_id, z_acl:user(Ctx)} | InsPropsN], Ctx),
-                                        InsId
-                                end,
-
-                        % Insert a category record for categories. Categories are so low level that we want
-                        % to make sure that all categories always have a category record attached.
-                        InsertCatList = [ CategoryId | m_category:get_path(CategoryId, Ctx) ],
-                        IsACat = case lists:member(m_category:name_to_id_check(category, Ctx), InsertCatList) of
-                            true ->
-                                1 = z_db:q("insert into category (id, seq) values ($1, 1)", [InsertId], Ctx),
-                                true;
-                            false ->
-                                false
-                        end,
-                         % Place the inserted properties over the update properties, replacing duplicates.
-                        SafePropsN = lists:foldl(
-                                                fun
-                                                    ({version, _}, Acc) -> Acc;
-                                                    ({P,V}, Acc) -> z_utils:prop_replace(P, V, Acc)
-                                                end,
-                                                SafeProps,
-                                                InsPropsN),
-                        {InsertId, SafePropsN, InsPropsN, [], IsACat};
-                    _ ->
-                        SafeProps1 = case z_acl:is_admin(Context) of
-                            true ->
-                                case proplists:get_value(creator_id, Props) of
-                                    self ->
-                                        [{creator_id, Id} | SafeProps];
-                                    CreatorId when is_integer(CreatorId) ->
-                                        [{creator_id, CreatorId} | SafeProps];
-                                    undefined -> 
-                                        SafeProps
-                                end;
-                            false ->
-                                SafeProps
-                        end,
-                        {Id, SafeProps1, m_rsc:get(Id, Ctx), m_rsc:is_a(Id, Ctx), false}
-                end,
-
-                UpdateProps1 = [
-                    {version, z_db:q1("select version+1 from rsc where id = $1", [RscId], Ctx)},
-                    {modifier_id, z_acl:user(Ctx)}
-                    | UpdateProps
-                ],
-
-                % Optionally fetch the created date if this is an import of a resource
-                UpdateProps2 = case imported_prop(IsImport, created, AtomProps, undefined) of
-                                   undefined -> UpdateProps1;
-                                   CreatedDT -> [{created, CreatedDT}|UpdateProps1]
-                               end,
-                
-                UpdateProps3 = case IsImport of
-                                  false ->
-                                      [{modified, calendar:universal_time()} | UpdateProps2 ];
-                                  true ->
-                                      case imported_prop(IsImport, modified, AtomProps, undefined) of
-                                          undefined -> UpdateProps2;
-                                          ModifiedDT -> [{modified, ModifiedDT}|UpdateProps2]
-                                      end
-                              end,
-
-                % Allow the update props to be modified.
-                {Changed, UpdatePropsN} = z_notifier:foldr(#rsc_update{
-                                                        action=case Id of insert_rsc -> insert; _ -> update end,
-                                                        id=RscId, 
-                                                        props=BeforeProps
-                                                    }, 
-                                                    {false, UpdateProps3},
-                                                    Ctx),
-
-                % Pre-pivot of the category-id to the category sequence nr.
-                UpdatePropsN1 = case proplists:get_value(category_id, UpdatePropsN) of
-                    undefined ->
-                        UpdatePropsN;
-                    CatId ->
-                        CatNr = z_db:q1("select nr from category where id = $1", [CatId], Ctx),
-                        [ {pivot_category_nr, CatNr} | UpdatePropsN]
-                end,
-
-                RawProps = case Id of 
-                              insert_rsc -> [];
-                              _ -> m_rsc:get_raw(Id, Context)
-                           end,
-                case Id =:= insert_rsc orelse Changed orelse is_changed(RawProps, UpdatePropsN1) of
-                    true ->
-                        UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(RscId, UpdatePropsN1, RawProps, Context),
-                        {ok, _RowsModified} = z_db:update(rsc, RscId, UpdatePropsPrePivoted, Ctx),
-                        ok = update_page_path_log(RscId, BeforeProps, UpdatePropsN, Ctx),
-                        {ok, RscId, BeforeProps, UpdatePropsN, BeforeCatList, RenumberCats};
-                    false ->
-                        {ok, RscId, notchanged}
-                end
-            end,
-            % End of transaction function
-
-            case z_db:transaction(TransactionF, Context) of
-                {ok, NewId, notchanged} ->
-                    {ok, NewId};
-                {ok, NewId, OldProps, NewProps, OldCatList, RenumberCats} ->
-                    % Flush some low level caches
-                    case proplists:get_value(name, NewProps) of
-                        undefined -> nop;
-                        Name -> z_depcache:flush({rsc_name, z_string:to_name(Name)}, Context)
-                    end,
-                    case proplists:get_value(uri, NewProps) of
-                        undefined -> nop;
-                        Uri -> z_depcache:flush({rsc_uri, z_convert:to_list(Uri)}, Context)
-                    end,
-
-                    % After inserting a category we need to renumber the categories
-                    case RenumberCats of
-                        true ->  m_category:renumber(Context);
-                        false -> nop
-                    end,
-
-                    % Flush all cached content that is depending on one of the updated categories
-                    z_depcache:flush(NewId, Context),
-                    NewCatList = m_rsc:is_a(NewId, Context),
-                    [ z_depcache:flush(Cat, Context) || Cat <- lists:usort(NewCatList ++ OldCatList) ],
-
-                     % Notify that a new resource has been inserted, or that an existing one is updated
-                    Note = #rsc_update_done{
-                        action= case Id of insert_rsc -> insert; _ -> update end,
-                        id=NewId,
-                        pre_is_a=OldCatList,
-                        post_is_a=NewCatList,
-                        pre_props=OldProps,
-                        post_props=NewProps
-                    },
-                    z_notifier:notify(Note, Context),
-
-                    % Return the updated or inserted id
-                    {ok, NewId};
-                {rollback, {_Why, _} = Er} ->
-                    throw(Er)
-            end;
+            update_normalize_props(RscUpd, Props, Context);
         false ->
             E = case m_rsc:p(Id, is_authoritative, Context) of
                 false -> {error, non_authoritative};
                 true -> {error, eacces}
             end,
             throw(E)
+    end;
+update_editable_check(RscUpd, Props, Context) ->
+    update_normalize_props(RscUpd, Props, Context).
+
+update_normalize_props(#rscupd{id=Id} = RscUpd, Props, Context) when is_list(Props) ->
+    AtomProps = normalize_props(Id, Props, Context),
+    update_transaction(RscUpd, fun(_, _, _) -> {ok, AtomProps} end, Context);
+update_normalize_props(RscUpd, Func, Context) when is_function(Func) ->
+    update_transaction(RscUpd, Func, Context).
+
+update_transaction(RscUpd, Func, Context) ->
+    Result = z_db:transaction(
+                    fun (Ctx) ->
+                        update_transaction_fun_props(RscUpd, Func, Ctx)
+                    end,
+                    Context),
+    update_result(Result, RscUpd, Context).
+
+update_result({ok, NewId, notchanged}, _RscUpd, _Context) ->
+    {ok, NewId};
+update_result({ok, NewId, OldProps, NewProps, OldCatList, RenumberCats}, #rscupd{id=Id}, Context) ->
+    % Flush some low level caches
+    case proplists:get_value(name, NewProps) of
+        undefined -> nop;
+        Name -> z_depcache:flush({rsc_name, z_string:to_name(Name)}, Context)
+    end,
+    case proplists:get_value(uri, NewProps) of
+        undefined -> nop;
+        Uri -> z_depcache:flush({rsc_uri, z_convert:to_list(Uri)}, Context)
+    end,
+
+    % After inserting a category we need to renumber the categories
+    case RenumberCats of
+        true ->  m_category:renumber(Context);
+        false -> nop
+    end,
+
+    % Flush all cached content that is depending on one of the updated categories
+    z_depcache:flush(NewId, Context),
+    NewCatList = m_rsc:is_a(NewId, Context),
+    [ z_depcache:flush(Cat, Context) || Cat <- lists:usort(NewCatList ++ OldCatList) ],
+
+     % Notify that a new resource has been inserted, or that an existing one is updated
+    Note = #rsc_update_done{
+        action= case Id of insert_rsc -> insert; _ -> update end,
+        id=NewId,
+        pre_is_a=OldCatList,
+        post_is_a=NewCatList,
+        pre_props=OldProps,
+        post_props=NewProps
+    },
+    z_notifier:notify(Note, Context),
+
+    % Return the updated or inserted id
+    {ok, NewId};
+update_result({rollback, {_Why, _} = Er}, _RscUpd, _Context) ->
+    throw(Er);
+update_result({error, _} = Error, _RscUpd, _Context) ->
+    throw(Error).
+
+
+%% @doc This is running inside the rsc update db transaction
+update_transaction_fun_props(#rscupd{id=Id} = RscUpd, Func, Context) ->
+    Raw = get_raw_lock(Id, Context),
+    case Func(Id, Raw, Context) of
+        {ok, UpdateProps} ->
+            EditableProps = props_filter_protected(
+                                props_filter(
+                                    props_trim(UpdateProps), [], Context)),
+            AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
+                                 L when is_list(L) -> L;
+                                 {error, Reason} -> throw({error, Reason})
+                              end,
+            AutogeneratedProps = props_autogenerate(Id, AclCheckedProps, Context),
+            SafeProps = case RscUpd#rscupd.is_escape_texts of
+                            true -> z_sanitize:escape_props(AutogeneratedProps, Context);
+                            false -> z_sanitize:escape_props_check(AutogeneratedProps, Context)
+                        end,
+            ok = preflight_check(Id, SafeProps, Context),
+            throw_if_category_not_allowed(Id, SafeProps, RscUpd#rscupd.is_acl_check, Context),
+            update_transaction_fun_insert(RscUpd, SafeProps, Raw, UpdateProps, Context);
+        {error, _} = Error ->
+            {rollback, Error}
     end.
+
+get_raw_lock(insert_rsc, _Context) -> [];
+get_raw_lock(Id, Context) -> m_rsc:get_raw_lock(Id, Context).
+
+update_transaction_fun_insert(#rscupd{id=insert_rsc} = RscUpd, Props, _Raw, UpdateProps, Context) ->
+     % Allow the initial insertion props to be modified.
+    CategoryId = z_convert:to_integer(proplists:get_value(category_id, Props)),
+    InsProps = z_notifier:foldr(#rsc_insert{}, [{category_id, CategoryId}, {version, 0}], Context),
+
+    % Check if the user is allowed to create the resource
+    InsertId = case proplists:get_value(creator_id, UpdateProps) of
+                    self ->
+                        {ok, InsId} = z_db:insert(rsc, [{creator_id, undefined} | InsProps], Context),
+                        1 = z_db:q("update rsc set creator_id = id where id = $1", [InsId], Context),
+                        InsId;
+                    CreatorId when is_integer(CreatorId) ->
+                        true = z_acl:is_admin(Context),
+                        {ok, InsId} = z_db:insert(rsc, [{creator_id, CreatorId} | InsProps], Context),
+                        InsId;
+                    undefined ->
+                        {ok, InsId} = z_db:insert(rsc, [{creator_id, z_acl:user(Context)} | InsProps], Context),
+                        InsId
+                end,
+
+    % Insert a category record for categories. Categories are so low level that we want
+    % to make sure that all categories always have a category record attached.
+    IsA = m_category:is_a(CategoryId, Context),
+    IsCatInsert = case lists:member(category, IsA) of
+                      true ->
+                          1 = z_db:q("insert into category (id, seq) values ($1, 1)", [InsertId], Context),
+                          true;
+                      false ->
+                          false
+                  end,
+     % Place the inserted properties over the update properties, replacing duplicates.
+    Props1 = lists:foldl(
+                    fun
+                        ({version, _}, Acc) -> Acc;
+                        ({creator_id, _}, Acc) -> Acc;
+                        ({P,_} = V, Acc) -> [ V | proplists:delete(P, Acc) ]
+                    end,
+                    Props,
+                    InsProps),
+    update_transaction_fun_db(RscUpd, InsertId, Props1, InsProps, [], IsCatInsert, Context);
+update_transaction_fun_insert(#rscupd{id=Id} = RscUpd, Props, Raw, UpdateProps, Context) ->
+    Props1 = case z_acl:is_admin(Context) of
+                true ->
+                    case proplists:get_value(creator_id, UpdateProps) of
+                        self ->
+                            [{creator_id, Id} | Props];
+                        CreatorId when is_integer(CreatorId) ->
+                            [{creator_id, CreatorId} | Props ];
+                        undefined -> 
+                            Props
+                    end;
+                false ->
+                    proplists:delete(creator_id, Props)
+            end,
+    IsA = m_rsc:is_a(Id, Context),
+    update_transaction_fun_expected(RscUpd, Id, Props1, Raw, IsA, false, Context).
+
+update_transaction_fun_expected(#rscupd{expected=Expected} = RscUpd, Id, Props1, Raw, IsA, false, Context) ->
+    case check_expected(Raw, Expected, Context) of
+        ok ->
+            update_transaction_fun_db(RscUpd, Id, Props1, Raw, IsA, false, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+
+check_expected(_Raw, [], _Context) ->
+    ok;
+check_expected(Raw, [{Key,F}|Es], Context) when is_function(F) ->
+    case F(Key, Raw, Context) of
+        true -> check_expected(Raw, Es, Context);
+        false -> {error, {expected, Key, proplists:get_value(Key, Raw)}}
+    end;
+check_expected(Raw, [{Key,Value}|Es], Context) ->
+    case proplists:get_value(Key, Raw) of
+        Value -> check_expected(Raw, Es, Context);
+        Other -> {error, {expected, Key, Other}}
+    end.
+
+
+update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Context) ->
+    {version, Version} = proplists:lookup(version, Raw),
+    UpdateProps1 = [
+        {version, Version+1},
+        {modifier_id, z_acl:user(Context)}
+        | Props
+    ],
+    UpdateProps2 = case imported_prop(RscUpd#rscupd.is_import, created, Props) of
+                       undefined -> UpdateProps1;
+                       CreatedDT -> [{created, CreatedDT}|UpdateProps1]
+                   end,
+
+    UpdateProps3 = case imported_prop(RscUpd#rscupd.is_import, modified, Props) of
+                       undefined -> UpdateProps1;
+                       ModifiedDT -> [{modified, ModifiedDT}|UpdateProps2]
+                   end,
+                
+    {IsChanged, UpdatePropsN} = z_notifier:foldr(#rsc_update{
+                                            action=case RscUpd#rscupd.id of insert_rsc -> insert; _ -> update end,
+                                            id=Id, 
+                                            props=Raw
+                                        }, 
+                                        {false, UpdateProps3},
+                                        Context),
+
+    % Pre-pivot of the category-id to the category sequence nr.
+    UpdatePropsN1 = case proplists:get_value(category_id, UpdatePropsN) of
+                        undefined ->
+                            UpdatePropsN;
+                        CatId ->
+                            CatNr = z_db:q1("select nr from category where id = $1", [CatId], Context),
+                            [ {pivot_category_nr, CatNr} | UpdatePropsN]
+                    end,
+
+    case RscUpd#rscupd.id =:= insert_rsc orelse IsChanged orelse is_changed(Raw, UpdatePropsN1) of
+        true ->
+            UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, UpdatePropsN1, Raw, Context),
+            {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
+            ok = update_page_path_log(Id, Raw, UpdatePropsN, Context),
+            {ok, Id, Raw, UpdatePropsN, IsABefore, IsCatInsert};
+        false ->
+            {ok, Id, notchanged}
+    end.
+
+
 
 %% @doc Recombine all properties from the ones that are posted by a form.
 %% @todo Move this one layer up, to the routines receiving the posted data.
@@ -360,10 +426,10 @@ normalize_props(Id, Props, Context) ->
     [ {map_property_name(P), V} || {P, V} <- BlockProps ].
 
 
-imported_prop(false, _, _, Default) ->
-    Default;
-imported_prop(true, Prop, Props, Default) ->
-    proplists:get_value(Prop, Props, Default).
+imported_prop(false, _, _) ->
+    undefined;
+imported_prop(true, Prop, Props) ->
+    proplists:get_value(Prop, Props).
 
 
 %% @doc Check if the update will change the data in the database
@@ -371,42 +437,26 @@ imported_prop(true, Prop, Props, Default) ->
 is_changed(Current, Props) ->
     is_prop_changed(Props, Current).
 
-    is_prop_changed([], _Current) ->
-        false;
-    is_prop_changed([{version, _}|Rest], Current) ->
-        is_prop_changed(Rest, Current);
-    is_prop_changed([{modifier_id, _}|Rest], Current) ->
-        is_prop_changed(Rest, Current);
-    is_prop_changed([{modified, _}|Rest], Current) ->
-        is_prop_changed(Rest, Current);
-    is_prop_changed([{pivot_category_nr, _}|Rest], Current) ->
-        is_prop_changed(Rest, Current);
-    is_prop_changed([{Prop, Value}|Rest], Current) ->
-        case is_equal(Value, proplists:get_value(Prop, Current)) of
-            true -> is_prop_changed(Rest, Current);
-            false -> true  % The property Prop has been changed.
-        end.
+is_prop_changed([], _Current) ->
+    false;
+is_prop_changed([{version, _}|Rest], Current) ->
+    is_prop_changed(Rest, Current);
+is_prop_changed([{modifier_id, _}|Rest], Current) ->
+    is_prop_changed(Rest, Current);
+is_prop_changed([{modified, _}|Rest], Current) ->
+    is_prop_changed(Rest, Current);
+is_prop_changed([{pivot_category_nr, _}|Rest], Current) ->
+    is_prop_changed(Rest, Current);
+is_prop_changed([{Prop, Value}|Rest], Current) ->
+    case is_equal(Value, proplists:get_value(Prop, Current)) of
+        true -> is_prop_changed(Rest, Current);
+        false -> true  % The property Prop has been changed.
+    end.
 
 is_equal(A, A) -> true;
 is_equal(_, undefined) -> false;
 is_equal(undefined, _) -> false;
 is_equal(A,B) -> z_utils:are_equal(A, B).
-
-
-ensure_imported_id(true, Id, Context) when is_integer(Id) ->
-    case m_rsc:exists(Id, Context) of
-        false ->
-            {ok, CatId} = m_category:name_to_id(other, Context), 
-            z_db:q("insert into rsc (id, creator_id, is_published, category_id)
-                    values ($1, $2, false, $3)", 
-                   [Id, z_acl:user(Context), CatId], 
-                   Context),
-            ok;
-        true -> 
-            ok
-    end;
-ensure_imported_id(_IsImport, _Id, _Context) ->
-    ok.
 
 
 %% @doc Check if all props are acceptable. Examples are unique name, uri etc.
@@ -629,7 +679,10 @@ props_defaults(Props, Context) ->
 
 
 props_filter_protected(Props) ->
-    lists:filter(fun({K,_V}) -> not is_protected(K) end, Props).
+    lists:filter(fun
+                    ({K, _}) -> not is_protected(K) 
+                 end,
+                 Props).
 
 
 to_slug(undefined, _Context) -> undefined;
