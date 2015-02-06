@@ -25,7 +25,15 @@
     $.extend({
         // center the dialog vertically again
         dialogReposition: function() {
-            var $dialog = $("#zmodal");
+            var $dialog = $("#zmodal:visible");
+            if ($dialog.length) {
+              if ($(window).width() >= 768 && $dialog.height() > 0.79 * $(window).height()) {
+                  $dialog.addClass('high');
+              } else {
+                  var self = this;
+                  setTimeout(function() { self.dialogReposition(); }, 250);
+              }
+            }
         },
 
         dialogAdd: function(options) {
@@ -98,11 +106,7 @@
                 });
             }
 
-            if ($(window).width() >= 768) {
-                if ($dialog.height() > 0.8 * $(window).height()) {
-                    $dialog.addClass('high');
-                }
-            }
+            this.dialogReposition();
 
             if (typeof($.widgetManager) != 'undefined') {
                 $dialog.widgetManager();
