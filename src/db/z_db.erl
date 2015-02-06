@@ -129,24 +129,29 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
         true ->
             with_connection(
               fun(C) ->
-                      Context1 = Context#context{dbc=C},
-                      DbDriver = z_context:db_driver(Context),
-                      try
-                                   case DbDriver:squery(C, "BEGIN", ?TIMEOUT) of
-                                       {ok, [], []} -> ok;
-                                       {error, _} = ErrorBegin -> throw(ErrorBegin)
-                                   end,
-                                   R = Function(Context1),
-                                   case DbDriver:squery(C, "COMMIT", ?TIMEOUT) of
-                                       {ok, [], []} -> ok;
-                                       {error, _} = ErrorCommit -> throw(ErrorCommit)
-                                   end,
-                                   R
-                               catch
-                                   _:Why ->
-                                       DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
-                                       {rollback, {Why, erlang:get_stacktrace()}}
-                               end
+                    Context1 = Context#context{dbc=C},
+                    DbDriver = z_context:db_driver(Context),
+                    try
+                        case DbDriver:squery(C, "BEGIN", ?TIMEOUT) of
+                            {ok, [], []} -> ok;
+                            {error, _} = ErrorBegin -> throw(ErrorBegin)
+                        end,
+                        case Function(Context1) of
+                            {rollback, R} ->
+                                DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
+                                R;
+                            R ->
+                                case DbDriver:squery(C, "COMMIT", ?TIMEOUT) of
+                                    {ok, [], []} -> ok;
+                                    {error, _} = ErrorCommit -> throw(ErrorCommit)
+                                end,
+                               R
+                        end
+                    catch
+                        _:Why ->
+                            DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
+                            {rollback, {Why, erlang:get_stacktrace()}}
+                    end
               end,
               Context);
         false ->

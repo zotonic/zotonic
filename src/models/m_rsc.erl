@@ -37,10 +37,12 @@
     get_visible/2,
     get/2,
     get_raw/2,
+    get_raw_lock/2,
     get_acl_props/2,
     insert/2,
     delete/2,
     update/3,
+    update/4,
     duplicate/3,
     touch/2,
     
@@ -228,7 +230,14 @@ get(Id, Context) ->
     end.
 
 %% @doc Get the resource from the database, do not fetch the pivot fields.
-get_raw(Id, Context) when is_integer(Id) ->
+get_raw(Id, Context) ->
+    get_raw(Id, false, Context).
+
+get_raw_lock(Id, Context) when is_integer(Id) ->
+    get_raw(Id, true, Context).
+
+
+get_raw(Id, IsLock, Context) when is_integer(Id) ->
     SQL = case z_memo:get(rsc_raw_sql) of
             undefined ->
                 AllCols = [ z_convert:to_list(C) || C <- z_db:column_names(rsc, Context) ],
@@ -244,12 +253,17 @@ get_raw(Id, Context) when is_integer(Id) ->
             Memo ->
                 Memo
           end,
-    case z_db:assoc_props_row(SQL, [Id], Context) of
+    SQL1 = case IsLock of
+              true -> SQL ++ " for update";
+              false -> SQL
+           end,
+    case z_db:assoc_props_row(SQL1, [Id], Context) of
         undefined -> 
             [];
         Raw -> 
             ensure_utc_dates(Raw, Context)
     end.
+
 
 %% Fix old records which had serialized data in localtime and no date_is_all_day flag
 ensure_utc_dates(Props, Context) ->
@@ -335,9 +349,15 @@ delete(Id, Context) when is_integer(Id) ->
 
 
 %% @doc Update a resource
-%% @spec update(Id, Props, Context) -> {ok, Id} | {error, Reason}
+-spec update(integer(), list(), #context{}) -> {ok, integer()} | {error, term()}.
 update(Id, Props, Context) when is_integer(Id) ->
     m_rsc_update:update(Id, Props, Context).
+
+-spec update(integer(), list(), list(), #context{}) -> {ok, integer()} | {error, term()}.
+update(Id, Props, Options, Context) when is_integer(Id) ->
+    m_rsc_update:update(Id, Props, Options, Context).
+
+
 
 
 %% @doc Duplicate a resource.
