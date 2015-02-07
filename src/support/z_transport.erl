@@ -236,7 +236,7 @@ incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} 
         {ok, Context1} ->
             Context2 = z_context:set_q("triggervalue", to_list(Pb#postback_event.triggervalue), Context1),
             ContextRsc = z_context:set_controller_module(Module, Context2),
-            ContextRes = incoming_postback_event(z_convert:to_binary(EventType), Module, Tag, TriggerId1, TargetId1, ContextRsc),
+            ContextRes = incoming_postback_event(EventType, Module, Tag, TriggerId1, TargetId1, ContextRsc),
             incoming_context_result(ok, Msg, ContextRes);
         {error, ContextValidation} ->
             incoming_context_result(ok, Msg, ContextValidation)
@@ -280,6 +280,8 @@ incoming_with_session(#z_msg_v1{delegate=Delegate} = Msg, Context) when is_atom(
     incoming_context_result(ok, Msg, Module:event(Msg, Context)).
 
 
+incoming_postback_event(EventType, Module, Tag, Trigger, Target, Context) when is_list(EventType) orelse is_atom(EventType) -> 
+    incoming_postback_event(z_convert:to_binary(EventType), Module, Tag, Trigger, Target, Context); 
 incoming_postback_event(<<"submit">>, Module, Tag, Trigger, Target, Context) -> 
     case z_validation:validate_query_args(Context) of
         {ok, ContextEval} ->   
