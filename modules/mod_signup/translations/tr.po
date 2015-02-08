@@ -52,15 +52,15 @@ msgid "Confirm my account."
 msgstr "Hesabımı onayla"
 
 #: modules/mod_signup/templates/signup.tpl:70
-msgid "Create your account"
-msgstr "Hesabınızı yaratın"
+msgid "Sign up with your e-mail address"
+msgstr ""
 
 #: modules/mod_signup/templates/email_verify.tpl:6
 msgid "Dear"
 msgstr "Sayın"
 
 #: modules/mod_signup/templates/signup.tpl:103
-msgid "E-mail"
+msgid "Email"
 msgstr "E-posta"
 
 #: modules/mod_signup/templates/signup.tpl:75
@@ -174,10 +174,10 @@ msgstr "Şifre tekrar"
 
 #: modules/mod_signup/templates/signup.tpl:173
 msgid ""
-"We have sent you an e-mail. In the e-mail you will find instructions on how "
+"In the e-mail you will find instructions on how "
 "to confirm your account."
 msgstr ""
-"Size bir e-posta gönderdik. Hesabınızı nasıl onaylayacağınız bu e-postada "
+"Hesabınızı nasıl onaylayacağınız bu e-postada "
 "olacak."
 
 #: modules/mod_signup/templates/signup.tpl:149
@@ -203,8 +203,8 @@ msgstr ""
 "klasörlerinizi kontrol edin."
 
 #: modules/mod_signup/templates/signup.tpl:171
-msgid "You are almost there!"
-msgstr "Neredeyse tamamladınız!"
+msgid "Confirm your account by email"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "You can also"
@@ -227,8 +227,8 @@ msgid "in the input field."
 msgstr "giriş alanına"
 
 #: modules/mod_signup/templates/signup.tpl:57
-msgid "log on now"
-msgstr "giriş yapabilirsiniz"
+msgid "sign in"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "sign up for a username and password"

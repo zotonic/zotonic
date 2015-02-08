@@ -1,1 +1,1 @@
-<h3 class="z-logon-title">{_ Sign Up _}</h3>
+<h2 class="z-logon-title">{_ Sign up _}</h2>

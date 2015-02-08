@@ -1,10 +1,9 @@
 .z-logon-box {
   float: none;
-  max-width: 260px;
   margin: 15px auto;
   /* Extra login options */
   /* Supporting options */
-  /* Validation */
+  /* Sign up specific*/
 }
 .z-logon-box ul {
   list-style-type: none;
@@ -12,22 +11,20 @@
   padding: 0;
 }
 .z-logon-box p {
-  margin: 0 0 10px 0;
-  padding: 0;
+  margin-bottom: 10px;
 }
 .z-logon-box button[type="submit"],
 .z-logon-box input[type="submit"] {
   width: 100%;
 }
-.z-logon-box .z-logon-title:first-of-type {
+.z-logon-box .z-logon-title:first-of-type,
+.z-logon-box h2:first-of-type,
+.z-logon-box h3:first-of-type,
+.z-logon-box h4:first-of-type {
   margin-top: 0;
 }
 .z-logon-box .z-logon-form {
   margin: 15px auto 0 auto;
-}
-.z-logon-box .z-logon-error-message {
-  margin: 15px 0;
-  padding: 15px 20px;
 }
 .z-logon-box .z-logon-extra li {
   margin: 0 0 10px 0;
@@ -75,26 +72,17 @@
 .z-logon-box .z-logon-support:empty {
   display: none;
 }
-.z-logon-box .form-field-error,
-.z-logon-box .form-field-error:focus {
-  border-color: #c21c3d;
-}
-.z-logon-box .z-logon-error-message {
+.z-logon-box .alert {
   display: none;
-  background-color: #fbe5ec;
-  padding: 15px 20px;
 }
-.z-logon-box .z-logon-error-message :first-child {
+.z-logon-box .alert :first-child {
   margin-top: 0;
 }
-.z-logon-box .z-logon-error-message :last-child {
+.z-logon-box .alert :last-child {
   margin-bottom: 0;
 }
-.z-logon-box.z-logon-error .z-logon-error-message {
+.z-logon-box.z-logon-error .alert {
   display: block;
-}
-.z-logon-box.z-logon-box-boxed {
-  max-width: 300px;
 }
 .z-logon-box.z-logon-box-boxed .z-logon-form {
   margin: 15px 0;
@@ -117,4 +105,26 @@
 }
 .z-logon-box.z-logon-box-boxed .z-logon-support p:last-child {
   margin-bottom: 0;
+}
+.z-logon-box #signup_verify {
+  display: none;
+}
+.z-logon-box input#surprefix {
+  width: 50px;
+}
+.z-logon-box #signup_error_tos_agree,
+.z-logon-box #signup_error_duplicate_username,
+.z-logon-box #signup_error_duplicate_identity {
+  display: none;
+}
+.z-logon-box .error_tos_agree #signup_error_tos_agree,
+.z-logon-box .error_duplicate_username #signup_error_duplicate_username,
+.z-logon-box .error_duplicate_identity #signup_error_duplicate_identity,
+.z-logon-box .error_custom_1 #signup_error_custom_1,
+.z-logon-box .error_custom_2 #signup_error_custom_2 {
+  display: block;
+}
+.z-logon-box .z_validation_message {
+  display: block;
+  margin: 5px 0 0 0;
 }

@@ -52,15 +52,15 @@ msgid "Confirm my account."
 msgstr "Confirmar mi cuenta."
 
 #: modules/mod_signup/templates/signup.tpl:70
-msgid "Create your account"
-msgstr "Crear su cuenta"
+msgid "Sign up with your e-mail address"
+msgstr ""
 
 #: modules/mod_signup/templates/email_verify.tpl:6
 msgid "Dear"
 msgstr "Estimado"
 
 #: modules/mod_signup/templates/signup.tpl:103
-msgid "E-mail"
+msgid "Email"
 msgstr "Correo"
 
 #: modules/mod_signup/templates/signup.tpl:75
@@ -177,10 +177,10 @@ msgstr "Verificar clave"
 
 #: modules/mod_signup/templates/signup.tpl:173
 msgid ""
-"We have sent you an e-mail. In the e-mail you will find instructions on how "
+"In the e-mail you will find instructions on how "
 "to confirm your account."
 msgstr ""
-"Le hemos enviado un correo electrónico. In el mismo encontrará instrucciones "
+"In el mismo encontrará instrucciones "
 "de cómo confirmar su cuenta."
 
 #: modules/mod_signup/templates/signup.tpl:149
@@ -206,8 +206,8 @@ msgstr ""
 "filtro antispam y su carpeta de correo basura."
 
 #: modules/mod_signup/templates/signup.tpl:171
-msgid "You are almost there!"
-msgstr "¡Ya casi ha terminado!"
+msgid "Confirm your account by email"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "You can also"
@@ -231,8 +231,8 @@ msgid "in the input field."
 msgstr "en el campo de entrada."
 
 #: modules/mod_signup/templates/signup.tpl:57
-msgid "log on now"
-msgstr "conectarse ahora"
+msgid "sign in"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "sign up for a username and password"

@@ -27,6 +27,7 @@
 
 %% gen_server exports
 -export([
+    init/1,
     event/2,
     observe_logon_submit/2,
     observe_auth_autologon/2,
@@ -39,13 +40,29 @@
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
+init(Context) ->
+    % Ensure password_min_length config
+    case m_config:get(?MODULE, password_min_length, Context) of 
+        undefined -> m_config:set_value(?MODULE, password_min_length, "6", Context);
+        _ -> nop
+    end,
+    ok.
+
+
 %% @doc Handle logon submits in case we cannot use controller_logon. Pass on the  data to the page controller.
 event(#submit{message={logon, _Args}}, Context) ->
     Args = z_context:get_q_all(Context),
     controller_logon:logon(Args, Context);
 event(#submit{message={reminder, _Args}}, Context) ->
     Args = z_context:get_q_all(Context),
-    controller_logon:reminder(Args, Context).
+    controller_logon:reminder(Args, Context);
+event(#submit{message={expired, _Args}}, Context) ->
+    Args = z_context:get_q_all(Context),
+    controller_logon:expired(Args, Context);
+event(#submit{message={reset, _Args}}, Context) ->
+    lager:info("reset"),
+    Args = z_context:get_q_all(Context),
+    controller_logon:reset(Args, Context).
     
 observe_admin_menu(admin_menu, Acc, Context) ->
     [

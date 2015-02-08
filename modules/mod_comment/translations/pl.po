@@ -45,7 +45,7 @@ msgid "Comments"
 msgstr "Komentarze"
 
 #: modules/mod_comment/templates/_comments_form.tpl:32
-msgid "E-mail"
+msgid "Email"
 msgstr "e-mail"
 
 #: modules/mod_comment/templates/admin_comments.tpl:22

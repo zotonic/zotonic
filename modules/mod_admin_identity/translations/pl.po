@@ -69,7 +69,7 @@ msgid "Duplicate username, please choose another username."
 msgstr "Wybrany login już istnieje, wybierz inny."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35
-msgid "E-mail"
+msgid "Email"
 msgstr "e-mail"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:16

@@ -8,11 +8,12 @@
 {% endblock %}
 
 {% block title %}
-{{ m.rsc.page_logon.title|default:[_"Log on to", " ", m.config.site.title.value|default:"Zotonic"] }}
+{{ m.rsc.page_logon.title|default:[_"Sign in to", " ", m.config.site.title.value|default:"Zotonic"] }}
 {% endblock %}
 
-{% block page_class %}z-page-logon{% endblock %}
-
 {% block content_area %}
-    {% include "_logon.tpl" style_boxed=0 %}
+    {% include
+        "_logon_config.tpl"
+        logon_modal=0
+    %}
 {% endblock %}

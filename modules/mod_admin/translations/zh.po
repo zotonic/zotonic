@@ -297,7 +297,7 @@ msgid "Duplicate this page."
 msgstr "复制这个页面。"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:40
-msgid "E-mail address"
+msgid "Email address"
 msgstr "E-mail 地址"
 
 #: modules/mod_admin/templates/admin_edit.tpl:3

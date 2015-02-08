@@ -258,11 +258,11 @@ msgstr "Nazwa pliku w usłudze Dropbox (opcjonalna)"
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:20
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:8
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:8
-msgid "E-mail"
+msgid "Email"
 msgstr "e-mail"
 
 #: modules/mod_mailinglist/templates/_mail_page_button.tpl:3
-msgid "E-mail page"
+msgid "Email page"
 msgstr "Wyślij stronę na adres e-mail"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42

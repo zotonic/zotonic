@@ -174,7 +174,7 @@ msgid "Duplicate this page."
 msgstr "Faire une copie de cette page"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:36
-msgid "E-mail address"
+msgid "Email address"
 msgstr "Adresse E-mail"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:3

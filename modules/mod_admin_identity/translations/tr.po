@@ -58,7 +58,7 @@ msgid "Duplicate username, please choose another username."
 msgstr "Bu kullanıcı ismi kullanılmış, lütfen başka bir tane seçiniz."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35
-msgid "E-mail"
+msgid "Email"
 msgstr "E-posta"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:16

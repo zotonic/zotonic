@@ -1,2 +1,2 @@
-<h3 class="z-logon-title">{_ Forgot your password? _}</h3>
-<p>{_ Request a password reset. _}</p>
+<h2 class="z-logon-title">{_ Reset your password _}</h2>
+<p>{_ Enter your email address and we'll send you instructions how to reset your password. _}</p>

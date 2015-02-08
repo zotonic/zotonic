@@ -1,47 +1,23 @@
+{#
+Params:
+- username: set by controller_logon
+#}
 {% if username %}
-<form id="password_reset" method="post" action="postback">
-    <input type="hidden" name="secret" value="{{ secret|escape }}" />
+    {% wire id="password_reset" type="submit" postback={reset} delegate=`mod_authentication` %}
+    <form id="password_reset" method="post" action="postback" class="z_logon_form">
+        <input type="hidden" name="secret" value="{{ secret|escape }}" />
 
-    <div class="form-group">
-	<label class="control-label" for="password_reset1">{_ New password _}</label>
-        <div>
-	    <input class="form-control" type="password" id="password_reset1" name="password_reset1" value="" autocomplete="off" />
-        </div>
-    </div>
+        {% include form_fields_tpl username=username %}
 
-    <div class="form-group">
-	<label class="control-label" for="password_reset1">{_ Repeat password _}</label>
-        <div>
-	    <input class="form-control" type="password" id="password_reset2" name="password_reset2" value="" autocomplete="off" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div>
-	        <label class="checkbox-inline" for="{{ #rememberme }}">
-                <input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
-	            {_ Stay logged on unless I log off. _}
-            </label>
-        </div>
-    </div>
-
-    <div class="form-group buttons">
-        <div>
-	    <button class="btn btn-primary btn-lg" type="submit">{_ Reset password and Log on _}</button>
-        </div>
-    </div>
-
-    <p class="help-block">
-	{_ Your password will be reset and you will be logged on as _} <strong>{{ username|escape }}</strong>.
-    </p>
-    {% javascript %}setTimeout(function(){$("#password_reset1").focus(); z_init_postback_forms();}, 100);{% endjavascript %}
-
-</form>
+        {% javascript %}
+            setTimeout(function(){
+                z_init_postback_forms();
+            }, 100);
+        {% endjavascript %}
+    </form>
 {% else %}
-<h4 class="z-logon-title">{_ Sorry, your password reset code is unknown or expired _}</h4>
-
-<p>{_ For security reasons password reset codes are only kept for a limited amount of time and can only be used once. _}</p>
-<p>{_ You can _} <a href="{% url logon_reminder %}">{_ request a new password reset code _}</a>.</p>
-
+    <h2 class="z-logon-title">{_ Sorry, your password reset code is unknown or expired _}</h2>
+    <p>{_ For security reasons, password reset codes are only kept for a limited amount of time and can only be used once. _}</p>
+    <p><strong>{_ Simply try again: _}</strong></p>
+    <p><a href="{% url logon_reminder %}">{_ I forgot my password _}</a></p>
 {% endif %}
-

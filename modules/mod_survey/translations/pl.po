@@ -159,7 +159,7 @@ msgid "Drag questions here."
 msgstr "Pytania przeciągaj tutaj."
 
 #: modules/mod_survey/mod_survey.erl:83
-msgid "E-mail addresses"
+msgid "Email addresses"
 msgstr "Adresy e-mail"
 
 #: modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4

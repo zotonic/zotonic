@@ -36,6 +36,7 @@ validate(presence, _Id, #upload{} = Value, _Args, Context) ->
     {{ok, Value}, Context};
 validate(presence, Id, Value,     _Args, Context) ->
     case z_string:trim(Value) of
-        [] -> {{error, Id, invalid}, Context};
+        [] -> 
+            {{error, Id, invalid}, Context};
         _Trimmed -> {{ok, Value}, Context}
     end.

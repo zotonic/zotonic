@@ -1,16 +1,14 @@
 .z-logon-box {
+    // width set in optional template var style_width
     @_horizontal_spacing: 20px;
-    @_width: 300px; // make it fit mobile. and wide enough for desktop too
     @_button_spacing: 10px;
     @_vertical_element_spacing: 15px; // Bootstrap default
     @_border_color: #ddd;
     @_background_color: #fff;
+    @_box_background_color: #f2f2f2;
     @_error_color: #C21C3D;
-    @_error_border_color: @_error_color;
-    @_error_background_color: #FBE5EC;
     
     float: none;
-    max-width: @_width - 2 * @_horizontal_spacing;
     margin: @_vertical_element_spacing auto;
     
     ul {
@@ -20,8 +18,7 @@
     }
     
     p {
-        margin: 0 0 @_button_spacing 0;
-        padding: 0;
+        margin-bottom: @_button_spacing;
     }
     
     // full width submit button
@@ -30,19 +27,17 @@
         width: 100%;
     }
     
-    .z-logon-title:first-of-type {
-        margin-top: 0;
+    .z-logon-title,
+    h2, h3, h4 {
+        &:first-of-type {
+            margin-top: 0;
+        }
     }
     
     .z-logon-form {
         margin: @_vertical_element_spacing auto 0 auto;
     }
-    
-    .z-logon-error-message {
-        margin: @_vertical_element_spacing 0;
-        padding: @_vertical_element_spacing @_horizontal_spacing;
-    }
-    
+        
     /* Extra login options */
     .z-logon-extra {
         li {
@@ -107,17 +102,8 @@
         }
     }
     
-    /* Validation */
-    .form-field-error,
-    .form-field-error:focus {
-        border-color: @_error_border_color;
-    }
-    
-    .z-logon-error-message {
+    .alert {
         display: none;
-        
-        background-color: @_error_background_color;
-        padding: @_vertical_element_spacing @_horizontal_spacing;
         
         :first-child {
             margin-top: 0;
@@ -129,17 +115,15 @@
     }
     
     &.z-logon-error {
-        .z-logon-error-message {
+        .alert {
             display: block;
         }
     }
     
     // Overrides when the box is shown in a background-colored box
     &.z-logon-box-boxed {
-        @_background_color: #f2f2f2;
-        
-        max-width: @_width;
-        
+        @_background_color: @_box_background_color;
+                
         .z-logon-form {
             margin: @_vertical_element_spacing 0;
             padding: @_vertical_element_spacing @_horizontal_spacing;
@@ -168,5 +152,34 @@
                 margin-bottom: 0;
             }
         }
+    }
+    
+    /* Sign up specific*/
+    
+    #signup_verify {
+        display: none;
+    }
+
+    input#surprefix {
+        width: 50px;
+    }
+
+    #signup_error_tos_agree,
+    #signup_error_duplicate_username,
+    #signup_error_duplicate_identity {
+        display: none;
+    }
+
+    .error_tos_agree #signup_error_tos_agree,
+    .error_duplicate_username #signup_error_duplicate_username,
+    .error_duplicate_identity #signup_error_duplicate_identity,
+    .error_custom_1 #signup_error_custom_1,
+    .error_custom_2 #signup_error_custom_2 {
+        display: block;
+    }
+
+    .z_validation_message {
+        display: block;
+        margin: 5px 0 0 0;
     }
 }

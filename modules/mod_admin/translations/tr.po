@@ -284,7 +284,7 @@ msgid "Duplicate this page."
 msgstr "Bu sayfayı çoğalt."
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:40
-msgid "E-mail address"
+msgid "Email address"
 msgstr "E-mail adresi"
 
 #: modules/mod_admin/templates/_rsc_edge.tpl:8

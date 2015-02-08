@@ -22,7 +22,7 @@ msgid "Comments"
 msgstr "Commentaires"
 
 #: ./modules/mod_comment/templates/_comments_form.tpl:15
-msgid "E-mail"
+msgid "Email"
 msgstr "E-mail"
 
 #: ./modules/mod_comment/templates/_comments_form.tpl:36
@@ -56,7 +56,7 @@ msgid "Comments"
 msgstr "Commentaires"
 
 #: ./modules/mod_comment/templates/_comments_form.tpl:15
-msgid "E-mail"
+msgid "Email"
 msgstr "E-mail"
 
 #: ./modules/mod_comment/templates/admin_comments.tpl:20

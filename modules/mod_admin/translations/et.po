@@ -260,7 +260,7 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:38 
 msgid ""
-"E-mail address"
+"Email address"
 msgstr ""
 "E-mail"
 

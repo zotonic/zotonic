@@ -45,13 +45,13 @@ validate(username_unique, Id, Value, Args, Context) ->
                 Identity -> 
                     case proplists:get_value(rsc_id, Identity) of
                         UserId -> {{ok, Username}, Context};
-                        _Other -> {{error, Id, invalid}, Context}
+                        _Other -> {{error, Id, ?__("Sorry, this username is already in use. Please try another one.", Context)}, Context}
                     end
             end
     end.
 
 %% @spec event(Event, Context) -> Context
-%% @doc Handle the validation during form entry.
+%% @doc Handle the validation during form entry. Hides/shows the message element with id: TriggerId + "_username_unique_error" (if present).
 event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     {IsValid, ContextValidated} = case validate(username_unique, TriggerId, Value, Args, Context) of
@@ -59,6 +59,6 @@ event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
             {"true", z_render:wire({fade_out, [{target, TriggerId ++ "_username_unique_error"}]}, ContextOk)};
         {{error, Id, _} = Error, ContextScript} -> 
             {"false", z_render:wire({fade_in, [{target, TriggerId ++ "_username_unique_error"}]},
-                                    z_validation:report_errors([{Id,Error}], ContextScript))}
+            z_validation:report_errors([{Id,Error}], ContextScript))}
     end,
     z_script:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).

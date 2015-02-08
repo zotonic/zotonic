@@ -300,7 +300,7 @@ msgid "Duplicate this page."
 msgstr "Dupliceer deze pagina."
 
 #: modules/mod_admin/templates/_admin_edit_content_address_email.tpl:2
-msgid "E-mail address"
+msgid "Email address"
 msgstr "E-mailadres"
 
 #: modules/mod_admin/templates/admin_edit.tpl:3

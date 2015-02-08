@@ -51,15 +51,15 @@ msgid "Confirm my account."
 msgstr "Подтвердить регистрацию."
 
 #: modules/mod_signup/templates/signup.tpl:70
-msgid "Create your account"
-msgstr "Создайте учетную запись"
+msgid "Sign up with your e-mail address"
+msgstr ""
 
 #: modules/mod_signup/templates/email_verify.tpl:6
 msgid "Dear"
 msgstr "Уважаемый(ая)"
 
 #: modules/mod_signup/templates/signup.tpl:103
-msgid "E-mail"
+msgid "Email"
 msgstr "Электронная почта"
 
 #: modules/mod_signup/templates/signup.tpl:75
@@ -176,10 +176,10 @@ msgstr "Повторите пароль"
 
 #: modules/mod_signup/templates/signup.tpl:173
 msgid ""
-"We have sent you an e-mail. In the e-mail you will find instructions on how "
+"In the e-mail you will find instructions on how "
 "to confirm your account."
 msgstr ""
-"Вам отправлено почтовое сообщение. В сообщении указаны инструкции по "
+"В сообщении указаны инструкции по "
 "подтверждению вашей учетной записи."
 
 #: modules/mod_signup/templates/signup.tpl:149
@@ -205,8 +205,8 @@ msgstr ""
 "проверить ваш спам-фильтр и папки для спама."
 
 #: modules/mod_signup/templates/signup.tpl:171
-msgid "You are almost there!"
-msgstr "Почти готово!"
+msgid "Confirm your account by email"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "You can also"
@@ -231,8 +231,8 @@ msgid "in the input field."
 msgstr "в поле ввода."
 
 #: modules/mod_signup/templates/signup.tpl:57
-msgid "log on now"
-msgstr "войти немедленно"
+msgid "sign in"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "sign up for a username and password"

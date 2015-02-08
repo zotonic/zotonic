@@ -247,16 +247,16 @@ msgstr "Dropbox bestandsnaam (optioneel)"
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:20
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:8
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:8
-msgid "E-mail"
+msgid "Email"
 msgstr "E-mail"
 
 #: modules/mod_mailinglist/templates/_mail_page_button.tpl:3
-msgid "E-mail page"
+msgid "Email page"
 msgstr "Email deze pagina"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42
 #: modules/mod_mailinglist/templates/phone/_share_page_email.tpl:1
-msgid "E-mail this page"
+msgid "Email this page"
 msgstr "E-mail deze pagina"
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:71

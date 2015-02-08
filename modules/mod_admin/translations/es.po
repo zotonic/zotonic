@@ -308,7 +308,7 @@ msgid "Duplicate this page."
 msgstr "Duplicar esta página."
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:40
-msgid "E-mail address"
+msgid "Email address"
 msgstr "Dirección de correo"
 
 #: modules/mod_admin/templates/admin_edit.tpl:3

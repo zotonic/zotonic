@@ -25,8 +25,8 @@
 -export([event/2]).
 -export([get_rememberme_cookie/1, set_rememberme_cookie/2, reset_rememberme_cookie/1]).
 
-%% Convenience export for other auth implementations.
--export([logon/2, reminder/2]).
+%% Convenience export for other modules.
+-export([logon/2, reminder/2, expired/2, reset/2]).
 
 %% Convenience export for other auth implementations.
 -export([send_reminder/2, lookup_identities/2]).
@@ -165,30 +165,13 @@ event(#postback{message={send_verification, [{user_id, UserId}]}}, Context) ->
         _Other -> logon_stage("verification_error", Context)
     end;
 
-event(#submit{message=[], form="password_expired"}=S, Context) ->
-    event(S#submit{form="password_reset"}, Context);
+event(#submit{message=[], form="password_expired"}, Context) ->
+    Args = z_context:get_q_all(Context),
+    expired(Args, Context);
 
 event(#submit{message=[], form="password_reset"}, Context) ->
-    Secret = z_context:get_q("secret", Context),
-    Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
-    Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
-    case {Password1,Password2} of
-        {A,_} when length(A) < 6 ->
-            logon_error("tooshort", Context);
-        {P,P} ->
-            {ok, UserId} = get_by_reminder_secret(Secret, Context),
-            case m_identity:get_username(UserId, Context) of
-                undefined ->
-                    throw({error, "User does not have an username defined."});
-                Username ->
-                    ContextLoggedon = logon_user(UserId, Context),
-                    delete_reminder_secret(UserId, ContextLoggedon),
-                    m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
-                    ContextLoggedon
-            end;
-        {_,_} ->
-            logon_error("unequal", Context)
-    end;
+    Args = z_context:get_q_all(Context),
+    reset(Args, Context);
 
 %%@doc Handle submit form post.
 event(#submit{message=[], form="password_reminder"}, Context) ->
@@ -254,14 +237,44 @@ reminder(Args, Context) ->
             end
     end.
 
+
+expired(Args, Context) ->
+    reset(Args, Context).
+
+
+reset(Args, Context) ->
+    Secret = proplists:get_value("secret", Args),
+    Password1 = z_string:trim(proplists:get_value("password_reset1", Args)),
+    Password2 = z_string:trim(proplists:get_value("password_reset2", Args)),
+    PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, "6", Context)),
+    
+    case {Password1,Password2} of
+        {A,_} when length(A) < PasswordMinLength ->
+            logon_error("tooshort", Context);
+        {P,P} ->
+            {ok, UserId} = get_by_reminder_secret(Secret, Context),
+            case m_identity:get_username(UserId, Context) of
+                undefined ->
+                    throw({error, "User does not have an username defined."});
+                Username ->
+                    ContextLoggedon = logon_user(UserId, Context),
+                    delete_reminder_secret(UserId, ContextLoggedon),
+                    m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
+                    ContextLoggedon
+            end;
+        {_,_} ->
+            logon_error("unequal", Context)
+    end.
+
+
 logon_error(Reason, Context) ->
     Context1 = z_render:set_value("password", "", Context),
-    Context2 = z_render:wire({add_class, [{target, "logon_box"}, {class, "z-logon-error"}]}, Context1),
+    Context2 = z_render:wire({add_class, [{target, "signup_logon_box"}, {class, "z-logon-error"}]}, Context1),
     z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context2), Context2).
 
 
 remove_logon_error(Context) ->
-    z_render:wire({remove_class, [{target, "logon_box"}, {class, "z-logon-error"}]}, Context).
+    z_render:wire({remove_class, [{target, "signup_logon_box"}, {class, "z-logon-error"}]}, Context).
 
 
 logon_stage(Stage, Context) ->
@@ -269,7 +282,7 @@ logon_stage(Stage, Context) ->
 
 logon_stage(Stage, Args, Context) ->
     Context1 = remove_logon_error(Context),
-    z_render:update("logon_box", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
+    z_render:update("signup_logon_box", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
     
 
 logon_user(UserId, Context) ->

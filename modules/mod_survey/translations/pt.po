@@ -129,7 +129,7 @@ msgid "Drag questions here."
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:83
-msgid "E-mail addresses"
+msgid "Email addresses"
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4

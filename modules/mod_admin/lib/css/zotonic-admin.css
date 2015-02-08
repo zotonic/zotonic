@@ -459,22 +459,22 @@ input.do_timepicker {
     left: 0;
   }
 }
+/*
 .form-field-error {
-  color: #B94A48;
-}
+    color: #B94A48;
+}    
 .z_validation_message {
-  background-color: #F2DEDE;
-  border-color: #EED3D7;
-  color: #B94A48;
-  margin-left: 9px;
-  margin-bottom: 9px;
-  display: inline-block;
-  vertical-align: middle;
-  padding: 5px 9px;
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
-  border-radius: 0px;
+    background-color: #F2DEDE;
+    border-color: #EED3D7;
+    color: #B94A48;
+    margin-left: 9px;
+    margin-bottom: 9px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 9px;
+    #3L > .border-radius(@radiusBlockElement);
 }
+*/
 form.form-horizontal .z_validation_message {
   margin-bottom: 0;
 }
@@ -536,18 +536,13 @@ img.admin-leader-image {
   padding-top: 15px;
   border-top: 1px solid #dddddd;
 }
-.widget.admin-logon .z-logon-box .z-logon-error-message {
+.widget.admin-logon .z-logon-box .alert {
   display: none;
 }
-.widget.admin-logon .z-logon-box.z-logon-error .z-logon-error-message {
+.widget.admin-logon .z-logon-box.z-logon-error .alert {
   display: block;
-  margin-left: -15px;
-  margin-right: -15px;
-  padding-left: 15px;
-  padding-right: 15px;
-  border-bottom: 1px solid #dddddd;
 }
-.widget.admin-logon .z-logon-box.z-logon-error .z-logon-error-message :last-child {
+.widget.admin-logon .z-logon-box.z-logon-error .alert :last-child {
   margin-bottom: 0;
 }
 .map-wrapper {
@@ -1022,9 +1017,6 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 }
 .widget .widget-content > :last-child {
   margin-bottom: 15px;
-}
-.widget .widget-content fieldset > :last-child {
-  margin-bottom: 0;
 }
 .widget .widget-content.tab-content {
   padding-top: 15px;

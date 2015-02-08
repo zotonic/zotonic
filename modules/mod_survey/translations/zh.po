@@ -156,7 +156,7 @@ msgid "Drag questions here."
 msgstr "将题目拖动到这里。"
 
 #: modules/mod_survey/mod_survey.erl:84
-msgid "E-mail addresses"
+msgid "Email addresses"
 msgstr "E-mail 地址"
 
 #: modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4

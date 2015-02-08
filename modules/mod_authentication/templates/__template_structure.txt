@@ -1,51 +1,90 @@
-base.tpl
-|-- logon.tpl // log on page
-|    `-- _logon.tpl or _logon_modal.tpl // logon module
-|        |== logon_reminder:
-|        |   `-- _logon_form.tpl
-|        |       |-- _logon_reminder_title.tpl
-|        |       |-- _logon_reminder_form.tpl
-|        |       `-- _logon_reminder_support.tpl // backlink to logon form
-|        |== logon_reset:
-|        |   `-- _logon_form.tpl
-|        |       |-- _logon_reset_title.tpl
-|        |       |-- _logon_reset_form.tpl
-|        |       `-- _logon_reset_support.tpl // backlink to logon form
-|        |== admin_logon:
-|        |   `-- _logon_form.tpl
-|        |       |-- _logon_login_form.tpl
-|        |       |-- _logon_error.tpl
-|        |       |-- _logon_login_support.tpl // link forgot password
-|        |== signup (state)
-|        |   `-- _logon_form.tpl
-|        |       |-- _signup_title.tpl
-|        |       |-- _signup_form.tpl
-|        |       |-- _signup_support.tpl // backlink to logon form
-|        `== else:
-|        |   `-- _logon_form.tpl
-|                |== awaiting verification:
-|                |   `-- _logon_stage.tpl // alternative content for logon box
-|                `== else:
-|                    |-- _logon_login_title.tpl
-|                    |-- _logon_login_extra.tpl // all-include by other modules
-|                    |-- _logon_error.tpl
-|                    |-- _logon_login_form.tpl
-|                    |-- _logon_login_support.tpl // link forgot password
-|                    |-- _logon_login_outside.tpl
-|                       `-- _logon_link.tpl // all-include by other modules
+SIGN IN
+=======
+
+logon.tpl // log on page
+|-- _logon_config.tpl // template and field configuration
+|   `-- _logon.tpl or _logon_modal.tpl // logon module
+|       `-- _logon_form.tpl
+|           `-- _logon_stage.tpl // feedback messages
+|               `-- _logon_expired_form.tpl
 `-- logoff.tpl // log off page, redirects to q.p or homepage
 
 
-                
+
+Depending on the dispatch/logon_state value, _logon_form.tpl is filled with different sub templates:
+
+state::
+|== logon_reminder:
+|   `-- _logon_form.tpl
+|       |-- _logon_reminder_title.tpl
+|       |-- _logon_reminder_form.tpl
+|       |   `-- _logon_reminder_form_fields.tpl or _logon_reminder_admin_form_fields.tpl // copy from _logon_reminder_form_fields.tpl so that the latter can be customized without messing up admin logon
+|       `-- _logon_reminder_support.tpl // backlink to logon form
+|== logon_reset:
+|   `-- _logon_form.tpl
+|       |-- _logon_reset_title.tpl
+|       |-- _logon_reset_form.tpl
+|       |   `-- _logon_reset_form_fields.tpl
+|       `-- _logon_reset_support.tpl // backlink to logon form
+|== admin_logon:
+|   `-- _logon_form.tpl
+|       |-- _logon_error.tpl
+|       |-- _logon_login_form.tpl
+|       |   `-- logon_login_admin_form_fields.tpl // copy from logon_login_admin_fields.tpl so that the latter can be customized without messing up admin logon
+|       |-- _logon_login_support.tpl // link forgot password
+|== signup (logon_state only)
+|   `-- _logon_form.tpl
+|       |-- _signup_title.tpl
+|       |-- _signup_form.tpl
+|       |   `-- _signup_form_fields.tpl
+|       |-- _signup_support.tpl // backlink to logon form
+`== else:
+    `-- _logon_form.tpl
+        |== awaiting verification:
+        |   `-- _logon_stage.tpl // alternative content for logon box
+        `== else:
+            |-- _logon_login_title.tpl
+            |-- _logon_login_extra.tpl // all-include by other modules
+            |-- _logon_error.tpl
+            |-- _logon_login_form.tpl
+            |   `-- _logon_login_form_fields.tpl
+            |-- _logon_login_support.tpl // link forgot password
+            |-- _logon_login_outside.tpl
+               `-- _logon_link.tpl // all-include by other modules
+
+
+SIGN UP
+=======
+
+signup.tpl // sign up page
+`-- _signup_config.tpl // template and field configuration
+    `-- _signup.tpl
+        `-- _signup_form.tpl
+            `-- _signup_stage.tpl // feedback message
+     
+_signup_form.tpl is populated by sub templates:
+|-- _signup_title.tpl // header "Sign up"
+|-- _signup_extra.tpl // space for other auth modules, for instance mod_facebook
+|-- _signup_form_form.tpl // html form
+|   `-- _signup_form_fields.tpl
+|       |-- _signup_form_fields_email.tpl
+|       |-- _signup_form_fields_username.tpl
+|       `-- _signup_form_fields_tos.tpl
+|-- _signup_support.tpl
+`-- _signup_outside.tpl
+
+
+
+OTHER
+=====
+
 email_base.tpl
 |-- email_password_reset.tpl // links to logon.tpl with state: logon_reset
-
 
 
 admin_base.tpl
 |-- admin_authentication_services.tpl // admin menu: App Keys & Authentication Services
     `-- _admin_authentication_service.tpl // all-include from other modules
-
 
 
 Templates for redirecting to an external identity service (shown in modal overlay):
@@ -55,7 +94,6 @@ base_simple.tpl
     `-- _logon_service.[q.service].tpl // provided by other modules
 |-- logon_service_error.tpl
 |-- logon_service_done.tpl
-
 
 
 -- _authentication_services_connected.tpl // used on the profile page of sites to enable connect/disconnects to other sites for logged on users

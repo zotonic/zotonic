@@ -21,7 +21,7 @@ msgstr ""
 
 #: modules/mod_contact/templates/email_contact.tpl:13
 #: modules/mod_contact/templates/contact.tpl:16
-msgid "E-mail"
+msgid "Email"
 msgstr "E-mail"
 
 #: modules/mod_contact/templates/email_contact.tpl:6

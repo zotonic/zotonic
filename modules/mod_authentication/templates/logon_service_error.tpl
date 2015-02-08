@@ -9,7 +9,7 @@
 		<div class="container">
 			<h1>{_ Sorry _}</h1>
 
-			<p>{_ You have to share your email address to be able to log on. _}</p>
+			<p>{_ You have to share your email address to be able to sign in. _}</p>
 
 			{% if auth_link %}
 				<p><a href="{{ auth_link }}">{_ Change your permissions _}</a></p>

@@ -47,15 +47,15 @@ msgid "Confirm my account."
 msgstr "确认我的账户。"
 
 #: modules/mod_signup/templates/signup.tpl:70
-msgid "Create your account"
-msgstr "创建账户"
+msgid "Sign up with your e-mail address"
+msgstr ""
 
 #: modules/mod_signup/templates/email_verify.tpl:6
 msgid "Dear"
 msgstr "亲爱的"
 
 #: modules/mod_signup/templates/signup.tpl:103
-msgid "E-mail"
+msgid "Email"
 msgstr "E-mail"
 
 #: modules/mod_signup/templates/signup.tpl:75
@@ -160,9 +160,9 @@ msgstr "确认密码"
 
 #: modules/mod_signup/templates/signup.tpl:173
 msgid ""
-"We have sent you an e-mail. In the e-mail you will find instructions on how "
+"In the e-mail you will find instructions on how "
 "to confirm your account."
-msgstr "我们已经给你发送了一封邮件。邮件里包含如何确认账户的说明。"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:149
 msgid ""
@@ -184,8 +184,8 @@ msgid ""
 msgstr "如果你在几分钟内没有收到邮件，请检查你的垃圾邮件过滤器和垃圾文件夹。"
 
 #: modules/mod_signup/templates/signup.tpl:171
-msgid "You are almost there!"
-msgstr "即将完成！"
+msgid "Confirm your account by email"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "You can also"
@@ -208,8 +208,8 @@ msgid "in the input field."
 msgstr "在输入框中。"
 
 #: modules/mod_signup/templates/signup.tpl:57
-msgid "log on now"
-msgstr "现在登录"
+msgid "sign in"
+msgstr ""
 
 #: modules/mod_signup/templates/signup.tpl:60
 msgid "sign up for a username and password"
