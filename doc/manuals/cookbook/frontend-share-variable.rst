@@ -1,3 +1,5 @@
+.. highlight:: django
+
 Share variable binding across blocks
 ====================================
 
@@ -8,61 +10,61 @@ Why
 
 In some situations, you may have to use the same query result inside
 several blocks of the same template. For instance, you may need to use
-it in the body of a page and in its javascript block. Intuitively, you
-would program your template as shown in these scripts:
+it in the body of a page and in its Javascript block. Intuitively, you
+would program your template as shown in these scripts::
 
-**base_1.tpl**::
+    {# base.tpl #}
+    <html>
+    <head>...</head>
+    <body>
+    {% block html_body %}
+        <!-- This is the default body -->
+    {% endblock %}
+    </body>
 
-  <html>
-  <head>...</head>
-  <body>
-  {% block html_body %}
-  <!-- This is the default body -->
-  {% endblock %}
-  </body>
-  
-  <script>
-  {% block js %}
-  // This is the default js
-  {% endblock %}
-  </script>
-  
-  </html>
+    <script>
+    {% block js %}
+        // This is the default js
+    {% endblock %}
+    </script>
 
-**mypage_1.tpl**::
+    </html>
 
-  {% extends "base_1.tpl" %}
-  
-  {# THIS won’t WORK BECAUSE %with% AND %block% TAGS CANNOT BE NESTED THIS WAY #}
-  {% with m.mymodule.myquery as myresult %}
-  
-  {% block html_body %}
-  Here is your result: {{ myresult|escape }}
-  {% endblock %}
-  
-  {% block js %}
-  alert('Do something with your result: {{ myresult|escapejs }}');
-  {% endblock %}
-  
-  {% endwith %}
+And a page::
+
+    {# mypage_1.tpl #}
+    {% extends "base_1.tpl" %}
+
+    {# THIS won’t WORK BECAUSE %with% AND %block% TAGS CANNOT BE NESTED THIS WAY #}
+    {% with m.mymodule.myquery as myresult %}
+
+    {% block html_body %}
+        Here is your result: {{ myresult|escape }}
+    {% endblock %}
+
+    {% block js %}
+        alert('Do something with your result: {{ myresult|escapejs }}');
+    {% endblock %}
+
+    {% endwith %}
 
 Unfortunately, this doesn't work, because Zotonic doesn't allow you to place a ``{% with %}`` tag around all ``{% block %}`` tags of `mypage_1.tpl`.
 
 One solution consists in duplicating the ``{% with %}`` tag and moving it inside each block::
 
-  {% extends "base_1.tpl" %}
-  
-  {% block html_body %}
-  {% with m.mymodule.myquery as myresult %}
-  Here is your result: {{ myresult|escape }}
-  {% endwith %}
-  {% endblock %}
-  
-  {% block js %}
-  {% with m.mymodule.myquery as myresult %} {# AGAIN THE SAME QUERY #}
-  alert('Do something with your result: {{ myresult|escapejs }}');
-  {% endwith %}
-  {% endblock %} 
+    {% extends "base_1.tpl" %}
+
+    {% block html_body %}
+        {% with m.mymodule.myquery as myresult %}
+            Here is your result: {{ myresult|escape }}
+        {% endwith %}
+    {% endblock %}
+
+    {% block js %}
+        {% with m.mymodule.myquery as myresult %} {# AGAIN THE SAME QUERY #}
+        alert('Do something with your result: {{ myresult|escapejs }}');
+        {% endwith %}
+    {% endblock %} 
 
 However, this has a severe drawback: the same assignment will be done
 twice, and if it comes from an "expansive" database query, this query
@@ -72,63 +74,68 @@ which increases the complexity of your system significantly).
 Assumptions
 -----------
 
-Readers are assumed to be comfortable with the template syntax and with template inheritance (the {% extends %} and {% block %} tags).
+Readers are assumed to be comfortable with the template syntax and with template inheritance, specifically the ``{% extends %}`` and ``{% block %}`` tags.
 
 How
 ---
 
-The solution consists in placing the ``{% with %}`` tag in a different
-file from the one that contains the surrounded "html_body" and "js"
-``{% block %}`` tags.
+The solution is to move both blocks to a new template, ``_html_body_and_js.tpl``::
 
-The base template is modified as follows::
+    {# _html_body_and_js.tpl #}
+    
+    <body>
+    {% block html_body %}
+        <!-- This is the default body -->
+    {% endblock %}
+    </body>
 
-  <html>
-  
-  <head>...</head>
-  
-  {% block html_body_and_js %}
-  {% include "_html_body_and_js.tpl" %}
-  {% endblock %}
-  
-  </html>
+    <script>
+    {% block js %}
+        // This is the default js
+    {% endblock %}
+    </script>
 
-The ... and ... tags are moved to a new inclusion file, _html_body_and_js.tpl, which contains the "html_body" and "js" blocks with their default contents::
 
-  <body>
-  {% block html_body %}
-  <!-- This is the default body -->
-  {% endblock %}
-  </body>
-  
-  <script>
-  {% block js %}
-  // This is the default js
-  {% endblock %}
-  </script>
+Our base template includes the new template so its contents will be drawn on the page::
 
-The template mypage.tpl contains the same "html_body" and "js" blocks, with the desired content::
+    {# base.tpl #}
 
-  {% extends "mypage_wrapper.tpl" %}
-  
-  {% block html_body %}
-  Here is your result: {{ myresult|escape }}
-  {% endblock %}
-  
-  {% block js %}
-  alert('Do something with your result: {{ myresult|escapejs }}');
-  {% endblock %} 
+    <html>
 
-The {% with %} tag is placed in a new template, mypage_wrapper.tpl, which comes between the base template and mypage.tpl in term of inheritance::
+    <head>...</head>
 
-  {% extends "base_2.tpl" %}
-  
-  {% block html_body_and_js %}
-  
-  {% with m.mymodule.myquery as myresult %}
-  
-  {% include "_html_body_and_js.tpl" %}
-  
-  {% endwith %}
-  
-  {% endblock %} {# html_body_and_js #}
+    {% block html_body_and_js %}
+        {% include "_html_body_and_js.tpl" %}
+    {% endblock %}
+
+    </html>
+
+
+Now we make sure that ``_html_body_and_js.tpl`` gets data. In a base subtemplate ``smart_base.tpl`` we override the block with the query::
+
+    {# smart_base.tpl #}
+
+    {% extends "base.tpl" %}
+
+    {% block html_body_and_js %}
+        {% with m.mymodule.myquery as myresult %}
+            {% include "_html_body_and_js.tpl" %}
+        {% endwith %}
+    {% endblock %}
+
+
+The page that needs the data extends ``smart_base.tpl``. Variable ``myresult`` is now accessible and can be used in both blocks::
+
+    {# mypage.tpl #}
+    {% extends "smart_base.tpl" %}
+
+    {% block html_body %}
+        Here is your result: {{ myresult|escape }}
+    {% endblock %}
+
+    {% block js %}
+        alert('Do something with your result: {{ myresult|escapejs }}');
+    {% endblock %} 
+
+
+
