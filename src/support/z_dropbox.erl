@@ -80,11 +80,18 @@ init(SiteProps) ->
     DropBox  = string:strip(proplists:get_value(dropbox_dir,            SiteProps, DefaultDropBoxDir),    right, $/), 
     ProcDir  = string:strip(proplists:get_value(dropbox_processing_dir, SiteProps, DefaultProcessingDir), right, $/), 
     UnDir    = string:strip(proplists:get_value(dropbox_unhandled_dir,  SiteProps, DefaultUnhandledDir),  right, $/), 
+    State    = #state{
+                    dropbox_dir=DropBox, 
+                    processing_dir=ProcDir, 
+                    unhandled_dir=UnDir, 
+                    min_age = proplists:get_value(dropbox_min_age, SiteProps, 10), 
+                    max_age = proplists:get_value(dropbox_max_age, SiteProps, 3600), 
+                    host=Host, 
+                    context=Context
+                },
     Interval = proplists:get_value(dropbox_interval, SiteProps, 10000),
-    MinAge   = proplists:get_value(dropbox_min_age, SiteProps, 10),
-    MaxAge   = proplists:get_value(dropbox_max_age, SiteProps, 3600),
-    State    = #state{dropbox_dir=DropBox, processing_dir=ProcDir, unhandled_dir=UnDir, min_age=MinAge, max_age=MaxAge, host=Host, context=Context},
     timer:apply_interval(Interval, ?MODULE, scan, [Context]),
+    gen_server:cast(self(), cleanup),
     {ok, State}.
 
 
@@ -107,7 +114,15 @@ handle_cast(scan, State) ->
     do_scan(State),
     z_utils:flush_message({'$gen_cast', scan}),
     {noreply, State};
-    
+
+% Move all files in the processing directory to the unhandled directory
+handle_cast(cleanup, #state{processing_dir=ProcDir, unhandled_dir=UnDir} = State) ->
+    lists:foreach(fun(F) -> 
+                       move_file(ProcDir, F, true, UnDir)
+                  end,
+                  scan_directory(ProcDir)),
+    {noreply, State};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
