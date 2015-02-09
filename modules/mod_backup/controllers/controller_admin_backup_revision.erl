@@ -27,7 +27,7 @@
 -include_lib("controller_html_helper.hrl").
 
 is_authorized(ReqData, Context0) ->
-    Context = z_controller_helper:init_session(?WM_REQ(ReqData, Context0)),
+    Context = z_admin_controller_helper:init_session(?WM_REQ(ReqData, Context0)),
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             Id = list_to_integer(z_context:get_q("id", Context)),
