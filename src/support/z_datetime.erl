@@ -145,6 +145,17 @@ to_utc(DT, Tz) ->
 %% to_time/1.  When the input is a string, it is expected to be in iso
 %% 8601 format, although it can also handle timestamps without time
 %% zones. The time component of the datetime is optional.
+to_datetime(undefined) ->
+    undefined;
+to_datetime(N) when is_integer(N) ->
+    z_datetime:timestamp_to_datetime(N);
+to_datetime(B) when is_binary(B); is_list(B) ->
+    case z_utils:only_digits(B) of
+        true ->
+            to_datetime(z_convert:to_integer(B));
+        false ->
+            to_dt(B, calendar:universal_time())
+    end;
 to_datetime(DT) ->
     to_dt(DT, calendar:universal_time()).
 
