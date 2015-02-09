@@ -40,16 +40,19 @@
 -include_lib("zotonic.hrl").
 -include_lib("include/import_csv.hrl").
 
-%% @doc Handle a dropbox file when it is a tsv file we know.
+%% @doc Handle a dropbox file when it is a tsv/csv file we know.
 observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
     case filename:extension(F) of
         ".csv" ->
             %% Correct file type, see if we can handle the file.
             %% Either a module has a definition or there are correct header lines.
             case can_handle(F, Context) of
-                {ok, Definition} -> handle_spawn(Definition, false, z_acl:sudo(Context)), true;
-                ok -> ok;
-                {error, _} -> undefined
+                {ok, Definition} ->
+                    handle_spawn(Definition, false, z_acl:sudo(Context)), true;
+                ok ->
+                    ok;
+                {error, _} ->
+                    undefined
             end;
         _ ->
             undefined
@@ -65,10 +68,10 @@ event(#submit{message={csv_upload, []}}, Context) ->
 
             %% Move temporary file to processing directory
             Dir = z_path:files_subdir_ensure("processing", Context),
-            Target = filename:join([Dir, OriginalFilename]),
-            file:delete(Target),
+            Target = filename:join([Dir, z_string:to_name(OriginalFilename)]),
+            _ = file:delete(Target),
             {ok, _} = file:copy(TmpFile, Target),
-            file:delete(TmpFile),
+            ok = file:delete(TmpFile),
 
             Context2 = case can_handle(Target, Context) of
                            {ok, Definition} ->
@@ -142,9 +145,11 @@ can_handle(Filename, Context) ->
                         true -> 
                             {ok, FD};
                         false ->
+                            lager:info("Invalid CSV file, missing 'name' and/or 'category' columns: ~p", [Cols]),
                             {error, invalid_csv_file}
                     end;
                 {error, _} = Error ->
+                    lager:info("Invalid CSV file, error during inspect: ~p", [Error]),
                     Error
             end
     end.
