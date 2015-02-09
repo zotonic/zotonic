@@ -219,7 +219,6 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, C
                         _ when State#importstate.is_reset ->
                             ok;
                         _ ->
-                            ?DEBUG({Id, Name, Edited}),
                             {ok, _} = m_rsc_update:update(Id, Edited, [{is_import, true}], Context)
                     end,
                     m_import_csv_data:update(Id, Checksum, NormalizedRow, RawRscFinal, Context),
@@ -234,48 +233,6 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, C
             end
     end.
 
-    % %% Calculate resource checksum
-    % RscCS = rsc_checksum(Id, proplists:get_keys(Props), Context),
-    % case import_checksum(Props) of
-    %     RscCS when not State#importstate.is_reset ->
-    %         lager:debug("Import CSV: skipping ~p (checksum not changed)", [Name]),
-    %         {State, {equal, CategoryName, Id}};
-    %     _ ->
-    %         %% Resource has been enriched, or the import has changed.
-    %         {State1, Props1} = case m_rsc:p_no_acl(Id, import_csv_original, Context) of
-    %                      undefined ->
-    %                          {State, Props};
-
-    %                      OriginalProps ->
-    %                          IsProtected = m_rsc:p_no_acl(Id, is_protected, Context),
-    %                          if
-    %                             not State#importstate.is_reset orelse IsProtected ->
-    %                                 {State, [{import_csv_touched, {props, []}} | Props]};
-    %                             true ->
-    %                                 compare_old_new_props(Id, OriginalProps, Props, State, Context)
-    %                          end
-    %                  end,
-
-    %         case Props1 of 
-    %             [] ->
-    %                 lager:debug("Import CSV: skipping ~p (fields not changed)", [Name]),
-    %                 {State, {equal, CategoryName, Id}};
-    %             Props1 ->
-    %                 lager:debug("Import CSV: updating ~p", [Name]),
-    %                 Props2 = [{import_csv_original, Props} | Props1],
-    %                 case rsc_update(Id, Props2, Context) of
-    %                     {ok, Id} ->
-    %                         StateAdd = flush_add(Id, State1),
-    %                         case proplists:get_value(rsc_update, Callbacks) of
-    %                             undefined -> none;
-    %                             Callback -> Callback(Id, Props2, Context)
-    %                         end,
-    %                         {StateAdd, {updated, CategoryName, Id}};
-    %                     E ->
-    %                         {State1, {error, CategoryName, E}}
-    %                 end
-    %         end
-    % end.
 
 %% @doc Check which properties are changed
 diff_raw_props(Current, [], {props, OriginalProps}) ->
@@ -331,11 +288,11 @@ rsc_update(Id, Props, Context) ->
 
 
 check_medium(Props) ->
-    case proplists:get_value("medium_url", Props) of
+    case proplists:get_value(medium_url, Props) of
         undefined -> none;
         <<>> -> none;
         [] -> none;
-        Url -> {url, Url, proplists:delete("medium_url", Props)}
+        Url -> {url, Url, proplists:delete(medium_url, Props)}
     end.
 
 
@@ -472,16 +429,6 @@ map_one_normalize("name", _Type, {name_prefix, Prefix, V}) ->
                    z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ z_string:to_name(V))
            end,
     z_convert:to_binary(Name);
-% map_one_normalize("name", Type, V) ->
-%     CheckL = 80 - strlen(Type) - 1,
-%     Name = case strlen(V) of
-%                L when L > CheckL ->
-%                    % If name is too long, make a unique thing out of it.
-%                    z_string:to_name(z_convert:to_list(Type) ++ "_" ++ base64:encode_to_string(checksum(V)));
-%                _ -> 
-%                    z_string:to_name(z_convert:to_list(Type) ++ "_" ++ z_string:to_name(V))
-%            end,
-%     z_convert:to_binary(Name);
 map_one_normalize(_, _Type, V) ->
     V.
 
@@ -491,7 +438,6 @@ strlen(L) when is_list(L) -> erlang:length(L);
 strlen(A) when is_atom(A) -> erlang:length(atom_to_list(A)).
 
 map_one(F, _Row, _State) when is_binary(F) -> F;
-% map_one(F, _Row, _State) when is_list(F) -> iolist_to_binary(F);
 map_one(undefined, _Row, _State) -> undefined;
 map_one(true, _Row, _State) -> true;
 map_one(false, _Row, _State) -> false;
