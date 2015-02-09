@@ -1005,7 +1005,8 @@ recombine_blocks(Props, OrgProps, Context) ->
         [] ->
             case proplists:get_value(blocks, Props) of
                 Blocks when is_list(Blocks) ->
-                    z_utils:prop_replace(blocks, normalize_blocks(Blocks, Context), Props);
+                    Blocks1 = [ {proplists:get_value(name, B),B} || B <- Blocks ],
+                    z_utils:prop_replace(blocks, normalize_blocks(Blocks1, Context), Props);
                 _ ->
                     Props
             end;
