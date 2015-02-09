@@ -130,7 +130,7 @@ duplicate(Id, DupProps, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
             Props = m_rsc:get_raw(Id, Context),
-            FilteredProps = props_filter_protected(Props),
+            FilteredProps = props_filter_protected(Props, false),
             SafeDupProps = z_sanitize:escape_props(DupProps, Context),
             InsProps = lists:foldl(
                             fun({Key, Value}, Acc) ->
@@ -271,7 +271,8 @@ update_transaction_fun_props(#rscupd{id=Id} = RscUpd, Func, Context) ->
         {ok, UpdateProps} ->
             EditableProps = props_filter_protected(
                                 props_filter(
-                                    props_trim(UpdateProps), [], Context)),
+                                    props_trim(UpdateProps), [], Context),
+                                RscUpd#rscupd.is_import),
             AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
                                  L when is_list(L) -> L;
                                  {error, Reason} -> throw({error, Reason})
@@ -373,27 +374,27 @@ check_expected(Raw, [{Key,Value}|Es], Context) ->
 
 update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Context) ->
     {version, Version} = proplists:lookup(version, Raw),
-    UpdateProps1 = [
+    UpdateProps = [
         {version, Version+1},
         {modifier_id, z_acl:user(Context)}
         | Props
     ],
-    UpdateProps2 = case imported_prop(RscUpd#rscupd.is_import, created, Props) of
-                       undefined -> UpdateProps1;
-                       CreatedDT -> [{created, CreatedDT}|UpdateProps1]
-                   end,
+    % UpdateProps2 = case imported_prop(RscUpd#rscupd.is_import, created, Props) of
+    %                    undefined -> UpdateProps1;
+    %                    CreatedDT -> [{created, to_datetime(CreatedDT)}|UpdateProps1]
+    %                end,
 
-    UpdateProps3 = case imported_prop(RscUpd#rscupd.is_import, modified, Props) of
-                       undefined -> UpdateProps1;
-                       ModifiedDT -> [{modified, ModifiedDT}|UpdateProps2]
-                   end,
+    % UpdateProps3 = case imported_prop(RscUpd#rscupd.is_import, modified, Props) of
+    %                    undefined -> UpdateProps1;
+    %                    ModifiedDT -> [{modified, to_datetime(ModifiedDT)}|UpdateProps2]
+    %                end,
                 
     {IsChanged, UpdatePropsN} = z_notifier:foldr(#rsc_update{
                                             action=case RscUpd#rscupd.id of insert_rsc -> insert; _ -> update end,
                                             id=Id, 
                                             props=Raw
                                         }, 
-                                        {false, UpdateProps3},
+                                        {false, UpdateProps},
                                         Context),
 
     % Pre-pivot of the category-id to the category sequence nr.
@@ -426,10 +427,10 @@ normalize_props(Id, Props, Context) ->
     [ {map_property_name(P), V} || {P, V} <- BlockProps ].
 
 
-imported_prop(false, _, _) ->
-    undefined;
-imported_prop(true, Prop, Props) ->
-    proplists:get_value(Prop, Props).
+% imported_prop(false, _, _) ->
+%     undefined;
+% imported_prop(true, Prop, Props) ->
+%     proplists:get_value(Prop, Props).
 
 
 %% @doc Check if the update will change the data in the database
@@ -594,8 +595,12 @@ props_filter([{slug, Slug}|T], Acc, Context) ->
     props_filter(T, [{slug, to_slug(Slug, Context)} | Acc], Context);
 props_filter([{custom_slug, P}|T], Acc, Context) ->
     props_filter(T, [{custom_slug, z_convert:to_bool(P)} | Acc], Context);
-props_filter([{is_published, P}|T], Acc, Context) ->
-    props_filter(T, [{is_published, z_convert:to_bool(P)} | Acc], Context);
+
+props_filter([{B, P}|T], Acc, Context) 
+    when  B =:= is_published; B =:= is_featured; B=:= is_protected; 
+          B =:= is_query_live; B =:= date_is_all_day ->
+    props_filter(T, [{B, z_convert:to_bool(P)} | Acc], Context);
+
 props_filter([{is_authoritative, P}|T], Acc, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
@@ -603,14 +608,24 @@ props_filter([{is_authoritative, P}|T], Acc, Context) ->
         false ->
             props_filter(T, Acc, Context)
     end;
-props_filter([{is_featured, P}|T], Acc, Context) ->
-    props_filter(T, [{is_featured, z_convert:to_bool(P)} | Acc], Context);
-props_filter([{is_protected, P}|T], Acc, Context) ->
-    props_filter(T, [{is_protected, z_convert:to_bool(P)} | Acc], Context);
-props_filter([{is_query_live, P}|T], Acc, Context) ->
-    props_filter(T, [{is_query_live, z_convert:to_bool(P)} | Acc], Context);
-props_filter([{date_is_all_day, P}|T], Acc, Context) ->
-    props_filter(T, [{date_is_all_day, z_convert:to_bool(P)} | Acc], Context);
+
+props_filter([{P, DT}|T], Acc, Context) 
+    when P =:= created; P =:= modified; 
+         P =:= date_start; P =:= date_end;
+         P =:= publication_start; P =:= publication_end  ->
+    props_filter(T, [{P,z_datetime:to_datetime(DT)}|Acc], Context);
+
+props_filter([{P, Id}|T], Acc, Context) when P =:= creator_id; P =:= modifier_id ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            props_filter(T, Acc, Context);
+        RId ->
+            case m_rsc:is_a(RId, person, Context) of
+                true -> props_filter(T, [{P,RId}|Acc], Context);
+                false -> props_filter(T, Acc, Context)
+            end
+    end;
+
 props_filter([{visible_for, Vis}|T], Acc, Context) ->
     VisibleFor = z_convert:to_integer(Vis),
     case VisibleFor of
@@ -678,9 +693,9 @@ props_defaults(Props, Context) ->
     end.
 
 
-props_filter_protected(Props) ->
+props_filter_protected(Props, IsImport) ->
     lists:filter(fun
-                    ({K, _}) -> not is_protected(K) 
+                    ({K, _}) -> not is_protected(K, IsImport) 
                  end,
                  Props).
 
@@ -701,18 +716,18 @@ map_property_name(P) when is_list(P) -> erlang:list_to_existing_atom(P).
 
 
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
-is_protected(id)            -> true;
-is_protected(created)       -> true;
-is_protected(creator_id)    -> true;
-is_protected(modified)      -> true;
-is_protected(modifier_id)   -> true;
-is_protected(props)         -> true;
-is_protected(version)       -> true;
-is_protected(page_url)      -> true;
-is_protected(medium)        -> true;
-is_protected(pivot_xxx)     -> true;
-is_protected(computed_xxx)  -> true;
-is_protected(_)             -> false.
+is_protected(id, _IsImport)            -> true;
+is_protected(created, false)           -> true;
+is_protected(creator_id, false)        -> true;
+is_protected(modified, false)          -> true;
+is_protected(modifier_id, false)       -> true;
+is_protected(props, _IsImport)         -> true;
+is_protected(version, _IsImport)       -> true;
+is_protected(page_url, _IsImport)      -> true;
+is_protected(medium, _IsImport)        -> true;
+is_protected(pivot_xxx, _IsImport)     -> true;
+is_protected(computed_xxx, _IsImport)  -> true;
+is_protected(_, _IsImport)             -> false.
 
 
 is_trimmable(_, V) when not is_binary(V), not is_list(V) -> false;
@@ -930,6 +945,8 @@ date_from_default( _S, {{Ye,Me,De},{He,Ie,Se}} ) ->
 
 to_int("") ->
     undefined;
+to_int(<<>>) ->
+    undefined;
 to_int(A) ->
     try
         list_to_integer(A)
@@ -937,6 +954,13 @@ to_int(A) ->
         _:_ -> undefined
     end.
 
+% to_datetime(undefined) ->
+%     erlang:universaltime();
+% to_datetime(B) ->
+%     case z_datetime:to_datetime(B) of
+%         undefined -> erlang:universaltime();
+%         DT -> DT
+%     end.
 
 %% @doc get all languages encoded in proplists' keys.
 %% e.g. m_rsc_update:props_languages([{"foo$en", x}, {"bar$nl", x}]) -> ["en", "nl"]
@@ -1040,8 +1064,20 @@ block_ids([_|Rest], Acc) ->
 
 
 normalize_blocks(Blocks, Context) ->
-    lists:map(fun({Name,B}) -> normalize_block(Name, B, Context) end, Blocks).
-                       
+    Blocks1 = lists:map(
+                 fun({Name,B}) ->
+                    normalize_block(Name, B, Context)
+                 end,
+                 Blocks),
+    lists:filter(fun(B) ->
+                    case proplists:get_value(type, B) of
+                        <<>> -> false;
+                        undefined -> false;
+                        _ -> true
+                    end
+                 end,
+                 Blocks1).
+
 normalize_block(Name, B, Context) ->
     Props = lists:map(fun
                   ({rsc_id, V})         -> {rsc_id, m_rsc:rid(V, Context)};
