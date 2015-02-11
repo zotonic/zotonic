@@ -55,13 +55,7 @@ import(Def, IsReset, Context) ->
                 true -> tl(Rows); 
                 _ -> Rows
             end,
-    Rows2 = lists:filter(fun
-                            ([<<$#, _/binary>>|_]) -> false; 
-                            ([]) -> false;
-                            (_) -> true
-                         end,
-                         Rows1),
-    State = import_rows(Rows2, Def, new_importstate(IsReset), Context),
+    State = import_rows(Rows1, 1, Def, new_importstate(IsReset), Context),
 
     %% @todo Delete all not-mentioned but previously imported resources
     DeleteIds = [],
@@ -93,12 +87,16 @@ new_importstate(IsReset) ->
 %%====================================================================
 
 %% @doc Import all rows.
-import_rows([], _Def, ImportState, _Context) -> 
+import_rows([], _RowNr, _Def, ImportState, _Context) -> 
     ImportState;
-import_rows([R|Rows], Def, ImportState, Context) ->
+import_rows([[<<$#, _/binary>>|_]|Rows], RowNr, Def, ImportState, Context) ->
+    import_rows(Rows, RowNr+1, Def, ImportState, Context);
+import_rows([[]|Rows], RowNr, Def, ImportState, Context) ->
+    import_rows(Rows, RowNr+1, Def, ImportState, Context);
+import_rows([R|Rows], RowNr, Def, ImportState, Context) ->
     Zipped = zip(R, Def#filedef.columns, []),
-    ImportState1 = import_parts(Zipped, Def#filedef.importdef, ImportState, Context),
-    import_rows(Rows, Def, ImportState1, Context).
+    ImportState1 = import_parts(Zipped, RowNr, Def#filedef.importdef, ImportState, Context),
+    import_rows(Rows, RowNr+1, Def, ImportState1, Context).
 
 
 %% @doc Combine the field name definitions and the field values.
@@ -111,35 +109,43 @@ zip([C|Cs], [N|Ns], Acc) -> zip(Cs, Ns, [{z_convert:to_list(N), C}|Acc]).
 
 
 %% @doc Import all resources on a row
-import_parts(_Row, [], ImportState, _Context) ->
+import_parts(_Row, _RowNr, [], ImportState, _Context) ->
     ImportState;
-import_parts(Row, [Def | Definitions], ImportState, Context) ->
+import_parts(Row, RowNr, [Def | Definitions], ImportState, Context) ->
     {FieldMapping, ConnectionMapping} = Def,
-    case import_def_rsc(FieldMapping, Row, ImportState, Context) of
-        {S, ignore} ->
-            import_parts(Row, Definitions, S, Context);
-        {S, {error, Type, E}} ->
-            add_result_seen(Type, add_result_error(Type, E, S));
+    try
+        case import_def_rsc(FieldMapping, Row, ImportState, Context) of
+            {S, ignore} ->
+                import_parts(Row, RowNr, Definitions, S, Context);
+            {S, {error, Type, E}} ->
+                add_result_seen(Type, add_result_error(Type, E, S));
 
-        {S, {new, Type, Id, Name}} ->
-            State0 = add_managed_resource(Id, FieldMapping, S),
-            State1 = add_name_lookup(State0, Name, Id),
-            State2 = import_parts(Row, Definitions, State1, Context),
-            import_def_edges(Id, ConnectionMapping, Row, State2, Context),
-            add_result_seen(Type, add_result_new(Type, State2));
+            {S, {new, Type, Id, Name}} ->
+                State0 = add_managed_resource(Id, FieldMapping, S),
+                State1 = add_name_lookup(State0, Name, Id),
+                State2 = import_parts(Row, RowNr, Definitions, State1, Context),
+                import_def_edges(Id, ConnectionMapping, Row, State2, Context),
+                add_result_seen(Type, add_result_new(Type, State2));
 
-        {S, {equal, Type, Id}} ->
-            State0 = add_managed_resource(Id, FieldMapping, S),
-            State1 = import_parts(Row, Definitions, State0, Context),
-            import_def_edges(Id, ConnectionMapping, Row, State1, Context),
-            add_result_seen(Type, add_result_ignored(Type, State1));
+            {S, {equal, Type, Id}} ->
+                State0 = add_managed_resource(Id, FieldMapping, S),
+                State1 = import_parts(Row, RowNr, Definitions, State0, Context),
+                import_def_edges(Id, ConnectionMapping, Row, State1, Context),
+                add_result_seen(Type, add_result_ignored(Type, State1));
 
-        {S, {updated, Type, Id}} ->
-            %% Equal
-            State0 = add_managed_resource(Id, FieldMapping, S),
-            State1 = import_parts(Row, Definitions, State0, Context),
-            add_result_seen(Type, import_def_edges(Id, ConnectionMapping, Row, State1, Context)),
-            add_result_updated(Type, State1)
+            {S, {updated, Type, Id}} ->
+                %% Equal
+                State0 = add_managed_resource(Id, FieldMapping, S),
+                State1 = import_parts(Row, RowNr, Definitions, State0, Context),
+                add_result_seen(Type, import_def_edges(Id, ConnectionMapping, Row, State1, Context)),
+                add_result_updated(Type, State1)
+        end
+    catch
+        throw:{import_error, ImportError} ->
+            lager:error("[import_csv] Error importing row #~p, error: ~p", [RowNr, ImportError]),
+            lager:error("[import_csv] Row #~p was: ~p", [RowNr, Row]),
+            lager:error("[import_csv] Row #~p import definition: ~p", [RowNr, Def]),
+            ImportState
     end.
 
 
@@ -413,7 +419,7 @@ map_fields(Mapping, Row, State) ->
 
 map_def({K,F}, Row, State) ->
 	{K, map_one(F, Row, State)};
-map_def(K, Row, State) when is_atom(K), is_list(K) ->
+map_def(K, Row, State) when is_atom(K); is_list(K) ->
 	map_def({K,K}, Row, State).
 
 

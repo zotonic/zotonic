@@ -1007,8 +1007,11 @@ recombine_languages(Props, Context) ->
                 [{P, {trans, [{Lang1,z_convert:to_binary(V)}]}}|Acc]
         end.
 
-
 recombine_blocks(Props, OrgProps, Context) ->
+    Props1 = recombine_blocks_form(Props, OrgProps, Context),
+    recombine_blocks_import(Props1, OrgProps, Context).
+
+recombine_blocks_form(Props, OrgProps, Context) ->
     {BPs, Ps} = lists:partition(fun({"block-"++ _, _}) -> true; (_) -> false end, Props),
     case BPs of
         [] ->
@@ -1032,7 +1035,29 @@ recombine_blocks(Props, OrgProps, Context) ->
                             end,
                             dict:new(),
                             BPs),
-            [{blocks, normalize_blocks([ {K, dict:fetch(K, Dict)} || K <- Keys ], Context)} | Ps ]
+            Blocks = normalize_blocks([ {K, dict:fetch(K, Dict)} || K <- Keys ], Context),
+            [{blocks, Blocks++proplists:get_value(blocks, Ps, [])} | proplists:delete(blocks, Ps) ]
+    end.
+
+recombine_blocks_import(Props, _OrgProps, Context) ->
+    {BPs, Ps} = lists:partition(fun({"blocks."++ _, _}) -> true; (_) -> false end, Props),
+    case BPs of
+        [] ->
+            Props;
+        _ ->
+            {Dict,Keys} = lists:foldr(
+                            fun({"blocks."++Name, Val}, {Acc,KeyAcc}) ->
+                                [BlockId,BlockField] = string:tokens(Name, "."),
+                                KeyAcc1 = case lists:member(BlockId, KeyAcc) of
+                                            true -> KeyAcc;
+                                            false -> [ BlockId | KeyAcc ]
+                                          end,
+                                {dict:append(BlockId, {BlockField, Val}, Acc), KeyAcc1}
+                            end,
+                            {dict:new(),[]},
+                            BPs),
+            Blocks = normalize_blocks([ {K, dict:fetch(K, Dict)} || K <- Keys ], Context),
+            [{blocks, Blocks++proplists:get_value(blocks, Ps, [])} | proplists:delete(blocks, Ps) ]
     end.
 
 block_ids([], Acc) -> 
