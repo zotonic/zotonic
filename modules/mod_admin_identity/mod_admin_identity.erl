@@ -188,10 +188,10 @@ event(#postback{message={identity_delete, Args}}, Context) ->
 
 % Add an identity
 event(#postback{message={identity_add, Args}}, Context) ->
+    {error_target, ErrorTarget} = proplists:lookup(error_target, Args),
     {id, RscId} = proplists:lookup(id, Args),
     case m_rsc:is_editable(RscId, Context) of
         true ->
-            {input, Input} = proplists:lookup(input, Args),
             Type = z_convert:to_atom(proplists:get_value(type, Args, email)),
             case z_convert:to_binary(z_string:trim(z_context:get_q("idn-key", Context, []))) of
                 <<>> -> 
@@ -208,11 +208,11 @@ event(#postback{message={identity_add, Args}}, Context) ->
                             end,
                             Context1 = optional_update_list(RscId, Type, proplists:get_value(list, Args), Context),
                             z_render:wire([
-                                    {set_value, [{target, Input}, {value, ""}]},
-                                    {remove_class, [{target, Input}, {class, "form-field-error"}]}
+                                    {set_value, [{target, ErrorTarget}, {value, "has-error"}]},
+                                    {remove_class, [{target, ErrorTarget}, {class, "has-error"}]}
                                 ], Context1);
                         false ->
-                            z_render:wire({add_class, [{target, Input}, {class, "form-field-error"}]}, Context)
+                            z_render:wire({add_class, [{target, ErrorTarget}, {class, "has-error"}]}, Context)
                     end
             end;
         false ->
