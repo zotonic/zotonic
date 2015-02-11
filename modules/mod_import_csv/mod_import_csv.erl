@@ -165,13 +165,14 @@ inspect_file(Filename) ->
                     file:close(Device),
                     case fetch_column_defs(Data) of
                         {ok, Cols, Sep} ->
+                            Cols1 = [ to_property_name(Col) || Col <- Cols ],
                             {ok, #filedef{
                                         filename=Filename, 
                                         file_size=FSize, 
                                         colsep=Sep, 
-                                        columns=Cols,
+                                        columns=Cols1,
                                         skip_first_row=true,
-                                        importdef=cols2importdef(Cols)
+                                        importdef=cols2importdef(Cols1)
                                 }};
                         {error, _} = Error ->
                             Error
@@ -234,8 +235,7 @@ parse_line([C|Rest], Sep, Col, Cols) ->
 
 %% @doc Map column names to names that can be handled by the import routines and m_rsc:update/3
 cols2importdef(Cols) ->
-    Cols1 = [ to_property_name(Col) || Col <- Cols ],
-    ImportDefMap = [ cols2importdef_map(Col) || Col <- unique(Cols1,[]) ],
+    ImportDefMap = [ cols2importdef_map(Col) || Col <- unique(Cols,[]) ],
     [
         {
             % Field mapping
@@ -251,8 +251,8 @@ cols2importdef(Cols) ->
         }
     ].
 
-to_property_name("block."++_ = BlockField) ->
-    [ case C of $. -> $-; _ -> C end || C <- BlockField ];
+to_property_name("block." ++ B) ->
+    "blocks."++B;
 to_property_name(Name) ->
     Name.
 
