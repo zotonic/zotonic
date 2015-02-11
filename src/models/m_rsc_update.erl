@@ -374,27 +374,15 @@ check_expected(Raw, [{Key,Value}|Es], Context) ->
 
 update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Context) ->
     {version, Version} = proplists:lookup(version, Raw),
-    UpdateProps = [
-        {version, Version+1},
-        {modifier_id, z_acl:user(Context)}
-        | Props
-    ],
-    % UpdateProps2 = case imported_prop(RscUpd#rscupd.is_import, created, Props) of
-    %                    undefined -> UpdateProps1;
-    %                    CreatedDT -> [{created, to_datetime(CreatedDT)}|UpdateProps1]
-    %                end,
-
-    % UpdateProps3 = case imported_prop(RscUpd#rscupd.is_import, modified, Props) of
-    %                    undefined -> UpdateProps1;
-    %                    ModifiedDT -> [{modified, to_datetime(ModifiedDT)}|UpdateProps2]
-    %                end,
-                
+    UpdateProps = [ {version, Version+1} | proplists:delete(version, Props) ],
+    UpdateProps1 = set_if_not_import(RscUpd#rscupd.is_import, modified, erlang:universaltime(), UpdateProps),
+    UpdateProps2 = set_if_not_import(RscUpd#rscupd.is_import, modifier_id, z_acl:user(Context), UpdateProps1),
     {IsChanged, UpdatePropsN} = z_notifier:foldr(#rsc_update{
                                             action=case RscUpd#rscupd.id of insert_rsc -> insert; _ -> update end,
                                             id=Id, 
                                             props=Raw
                                         }, 
-                                        {false, UpdateProps},
+                                        {false, UpdateProps2},
                                         Context),
 
     % Pre-pivot of the category-id to the category sequence nr.
@@ -417,7 +405,6 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     end.
 
 
-
 %% @doc Recombine all properties from the ones that are posted by a form.
 %% @todo Move this one layer up, to the routines receiving the posted data.
 normalize_props(Id, Props, Context) ->
@@ -427,10 +414,10 @@ normalize_props(Id, Props, Context) ->
     [ {map_property_name(P), V} || {P, V} <- BlockProps ].
 
 
-% imported_prop(false, _, _) ->
-%     undefined;
-% imported_prop(true, Prop, Props) ->
-%     proplists:get_value(Prop, Props).
+set_if_not_import(true, _K, _V, Props) ->
+    Props;
+set_if_not_import(false, K, V, Props) ->
+    [ {K,V} | proplists:delete(K, Props) ].
 
 
 %% @doc Check if the update will change the data in the database
