@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-PAPER         =
+PAPER         = 
 BUILDDIR      = _build
 
 # Internal variables.
@@ -29,6 +29,7 @@ help:
 	@echo "  epub       to make an epub"
 	@echo "  latex      to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
 	@echo "  latexpdf   to make LaTeX files and run them through pdflatex"
+	@echo "  xelatex    to make LaTeX files, and generate a PDF with xelatex"
 	@echo "  text       to make text files"
 	@echo "  man        to make manual pages"
 	@echo "  texinfo    to make Texinfo files"
@@ -158,6 +159,16 @@ doctest:
 	      "results in $(BUILDDIR)/doctest/output.txt."
 
 # customizations
+
+xelatex:
+	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
+	@echo "Running LaTeX files through xelatex..."
+	(cd $(BUILDDIR)/latex; \
+	 mv Zotonic.tex Zotonic0.tex; \
+	 cat Zotonic0.tex | grep -Ev 'DeclareUnicodeCharacter' > Zotonic.tex; \
+	 xelatex -interaction=batchmode Zotonic.tex; \
+	 xelatex -interaction=batchmode Zotonic.tex)
+	@echo "xelatex finished; the PDF files are in $(BUILDDIR)/latex."
 
 .PHONY: stubs
 stubs:
