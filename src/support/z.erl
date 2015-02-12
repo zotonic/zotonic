@@ -28,6 +28,8 @@
          n1/2,
          m/0,
          m/1,
+         compile/0,
+         compile/1,
          flush/0,
          flush/1,
          restart/0,
@@ -73,10 +75,18 @@ m() ->
 %% @doc (Re)make all erlang source modules with the supplied compile 
 %% options and reset the caches.
 m(Options) ->
-    case zotonic_compile:all([load|Options]) of
+    case compile(Options) of
         ok -> flush();
         error -> error
     end.
+
+%% @doc (Re)make all erlang source modules with the supplied compile 
+%% options. Do not reset the caches.
+compile() ->
+    compile([]).
+
+compile(Options) ->
+    zotonic_compile:all([load|Options]).
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
 flush() ->
