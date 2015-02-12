@@ -79,15 +79,22 @@ full(Id, Context) when is_integer(Id) ->
             {ok, Category} = z_db:select(category, Id, Context),
             {ok, Medium} = z_db:select(medium, Id, Context),
 
+            PreviewUrl = case z_media_tag:url(Id, [{width, 800}, {height, 800}, {upscale, true}, {use_absolute_url, true}], Context) of
+                             {ok, P} -> P;
+                             _ -> undefined
+                         end,
+            
             Export = [
                       %% Essential fields
                       {id, Id},
                       {uri, m_rsc:p(Id, uri, Context)},
+                      
                       %% Parts
                       {rsc, Rsc},
                       {medium, Medium},
                       {category, Category},
-                      {edges, Edges}
+                      {edges, Edges},
+                      {preview_url, PreviewUrl}
                      ],
 
             %% Filter empty lists
