@@ -440,7 +440,7 @@ msgstr "Je adres is nu geverifieerd."
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:20
 msgid "Your e-mail address is now verified."
-msgstr "Je e-amiladres is nu geverifieerd."
+msgstr "Je e-mailadres is nu geverifieerd."
 
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
