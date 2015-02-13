@@ -33,6 +33,9 @@
     expand_context_topic/2,
     make_context_topic/2,
 
+    map_topic/2,
+    flatten_topic/1,
+
     wrap_payload/2,
     payload_data/1,
     encode_packet_payload/1
@@ -152,6 +155,53 @@ unsubscribe(Topic, MFA, Context) when is_tuple(MFA) ->
     z_notifier:first(#mqtt_unsubscribe{topic=expand_context_topic(Topic, Context), mfa=MFA}, Context).
 
 
+-spec map_topic(integer()|list()|binary()|{object, list()}|{subject, list()}, #context{}) -> binary().
+map_topic({object, Props}, Context) when is_list(Props) ->
+    map_topic_edge($o, Props, Context);
+map_topic({subject, Props}, Context) when is_list(Props) ->
+    map_topic_edge($s, Props, Context);
+map_topic(Topic, _Context) ->
+    z_mqtt:flatten_topic(Topic).
+
+map_topic_edge(ObjSub, Props, Context) ->
+    Id = proplists:get_value(id, Props),
+    Predicate = proplists:get_value(predicate, Props),
+    Name = to_predicate_name(Predicate, Context),
+    <<"~site/rsc/",(z_convert:to_binary(Id))/binary, $/, ObjSub, $/, Name/binary>>.
+
+to_predicate_name(undefined, _Context) -> <<"+">>;
+to_predicate_name(<<"*">>, _Context) -> <<"+">>;
+to_predicate_name("*", _Context) -> <<"+">>;
+to_predicate_name('*', _Context) -> <<"+">>;
+to_predicate_name(<<>>, _Context) -> <<"+">>;
+to_predicate_name(Id, Context) when is_integer(Id) ->
+    {ok, Name} = m_predicate:to_name(Id, Context),
+    z_convert:to_binary(Name);
+to_predicate_name(Pred, _Context) ->
+    z_convert:to_binary(Pred).
+
+%% @doc Flatten a topic, could be a list like ["rsc", 1234, "foobar"]
+-spec flatten_topic(integer()|list()|binary()) -> binary().
+flatten_topic(Id) when is_integer(Id) ->
+    <<"~site/rsc/",(z_convert:to_binary(Id))/binary>>;
+flatten_topic(Topic) when is_binary(Topic) ->
+    Topic;
+flatten_topic(Topic) when is_list(Topic) ->
+    case lists:all(fun erlang:is_integer/1, Topic) of
+        true ->
+            iolist_to_binary(Topic); 
+        false ->
+            iolist_to_binary(
+                z_utils:combine($/, [
+                    case T of
+                        L when is_list(L) -> L;
+                        V -> z_convert:to_binary(V)
+                    end
+                    || T <- Topic]))
+    end.
+
+
+
 %doc Add a decode wrapper around the payload we received from via a postback event.
 wrap_payload(Data, Context) ->
     #z_mqtt_payload{
@@ -188,11 +238,11 @@ encode_packet_payload(Any) ->
 
 
 %% @doc Map the ~site, ~pagesession, ~session, ~user topics
--spec expand_context_topic(binary()|string()|integer(), #context{}) -> binary().
-expand_context_topic(Topic, _Context) when is_list(Topic) ->
-    unicode:characters_to_binary(Topic);
+-spec expand_context_topic(binary()|string()|integer()|tuple(), #context{}) -> binary().
 expand_context_topic(Topic, Context) when is_integer(Topic) ->
     localsite(<<"/rsc/", (z_convert:to_binary(Topic))/binary>>, Context);
+expand_context_topic(Topic, Context) when not is_binary(Topic) ->
+    expand_context_topic(map_topic(Topic, Context), Context);
 expand_context_topic(<<"~site", Topic/binary>>, Context) ->
     localsite(Topic, Context);    
 expand_context_topic(<<"~user", Topic/binary>>, Context) ->
@@ -204,7 +254,7 @@ expand_context_topic(<<"~pagesession", Topic/binary>>, Context) ->
 expand_context_topic(<<$~, T/binary>> = Topic, Context) ->
     lager:error(z_context:lager_md(Context), "Illegal MQTT topic ~p, mapped to ~p", [Topic, T]),
     T;
-expand_context_topic(Topic, _Context) ->
+expand_context_topic(Topic, _Context) when is_binary(Topic) ->
     Topic.
 
 localsite(<<>>, Context) ->
