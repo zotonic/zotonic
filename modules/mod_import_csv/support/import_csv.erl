@@ -57,9 +57,6 @@ import(Def, IsReset, Context) ->
             end,
     State = import_rows(Rows1, 1, Def, new_importstate(IsReset), Context),
 
-    %% @todo Delete all not-mentioned but previously imported resources
-    DeleteIds = [],
-
     %% Return the stats from this import run
     R = State#importstate.result,
     [ {file, filename:basename(Def#filedef.filename)},
@@ -69,7 +66,7 @@ import(Def, IsReset, Context) ->
       {new,  R#importresult.new},
       {updated, R#importresult.updated},
       {errors, R#importresult.errors},
-      {deleted, length(DeleteIds)},
+      {deleted, 0},
       {ignored, R#importresult.ignored}].
 
 
@@ -168,7 +165,7 @@ import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
            end,
     {OptRscId, State2} = name_lookup(Name, State1, Context),
     RscId = case OptRscId of undefined -> insert_rsc; _ -> OptRscId end,
-    NormalizedRow = sort_props(m_rsc_update:normalize_props(RscId, Row1, Context)),
+    NormalizedRow = sort_props(m_rsc_update:normalize_props(RscId, Row1, [is_import], Context)),
     case has_required_rsc_props(NormalizedRow) of
         true ->
            import_def_rsc_2_name(RscId, State2, Name, CategoryName, NormalizedRow, Callbacks, Context);
@@ -197,7 +194,7 @@ import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRow, Call
 import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, Context) when is_integer(Id) ->
     % 1. Check if this update was the same as the last known import
     PrevImportData = m_import_csv_data:get(Id, Context),
-    PrevChecksum = proplists:get_value(checksum, PrevImportData),
+    PrevChecksum = get_value(checksum, PrevImportData),
     case checksum(NormalizedRow) of
         PrevChecksum when not State#importstate.is_reset ->
             lager:info("[~p] import_csv: skipping ~p (importing same values)", [z_context:site(Context), Name]),
@@ -210,7 +207,7 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, C
             %    (also pass any import-data from an older import module)
             RawRscPre = get_updated_props(Id, NormalizedRow, Context),
             Edited = diff_raw_props(RawRscPre, 
-                                    proplists:get_value(rsc_data, PrevImportData, []),
+                                    get_value(rsc_data, PrevImportData, []),
                                     m_rsc:p_no_acl(Id, import_csv_original, Context)),
 
             % Cleanup old import_csv data on update
@@ -292,7 +289,6 @@ rsc_update(Id, Props, Context) ->
             m_rsc_update:update(Id, Props, [{is_import, true}], Context)
     end.
 
-
 check_medium(Props) ->
     case proplists:get_value(medium_url, Props) of
         undefined -> none;
@@ -301,6 +297,13 @@ check_medium(Props) ->
         Url -> {url, Url, proplists:delete(medium_url, Props)}
     end.
 
+get_value(K, L) ->
+    get_value(K, L, undefined).
+
+get_value(K, L, D) when is_list(L) ->
+    proplists:get_value(K, L, D);
+get_value(_K, undefined, D) ->
+    D.
 
 import_def_edges({error, _}, _, _, State, _Context) ->
     State;
@@ -380,6 +383,7 @@ add_managed_resource(Id, Props, State=#importstate{managed_resources=M}) ->
 
 add_name_lookup(State=#importstate{name_to_id=Tree}, Name, Id) ->
     case gb_trees:lookup(Name, Tree) of
+        {value, undefined} -> State#importstate{name_to_id=gb_trees:update(Name, Id, Tree)};
         {value, _} -> State;
         none -> State#importstate{name_to_id=gb_trees:insert(Name, Id, Tree)}
     end.
