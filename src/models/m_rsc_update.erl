@@ -31,6 +31,7 @@
     flush/2,
     
     normalize_props/3,
+    normalize_props/4,
 
     delete_nocheck/2,
     props_filter/3,
@@ -243,7 +244,8 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, RenumberCats}, #rscupd
     % Flush all cached content that is depending on one of the updated categories
     z_depcache:flush(NewId, Context),
     NewCatList = m_rsc:is_a(NewId, Context),
-    [ z_depcache:flush(Cat, Context) || Cat <- lists:usort(NewCatList ++ OldCatList) ],
+    Cats = lists:usort(NewCatList ++ OldCatList),
+    [ z_depcache:flush(Cat, Context) || Cat <- Cats ],
 
      % Notify that a new resource has been inserted, or that an existing one is updated
     Note = #rsc_update_done{
@@ -406,12 +408,15 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
 
 
 %% @doc Recombine all properties from the ones that are posted by a form.
-%% @todo Move this one layer up, to the routines receiving the posted data.
 normalize_props(Id, Props, Context) ->
+    normalize_props(Id, Props, [], Context).
+
+normalize_props(Id, Props, Options, Context) ->
     DateProps = recombine_dates(Id, Props, Context),
     TextProps = recombine_languages(DateProps, Context),
     BlockProps = recombine_blocks(TextProps, Props, Context),
-    [ {map_property_name(P), V} || {P, V} <- BlockProps ].
+    IsImport = proplists:get_value(is_import, Options, false),
+    [ {map_property_name(IsImport, P), V} || {P, V} <- BlockProps ].
 
 
 set_if_not_import(true, _K, _V, Props) ->
@@ -694,10 +699,11 @@ truncate_slug(<<Slug:78/binary, _/binary>>) -> Slug;
 truncate_slug(Slug) -> Slug.
 
 %% @doc Map property names to an atom, fold pivot and computed fields together for later filtering.
-map_property_name(P) when not is_list(P) -> map_property_name(z_convert:to_list(P));
-map_property_name("computed_"++_) -> computed_xxx;
-map_property_name("pivot_"++_) -> pivot_xxx;
-map_property_name(P) when is_list(P) -> erlang:list_to_existing_atom(P).
+map_property_name(IsImport, P) when not is_list(P) -> map_property_name(IsImport, z_convert:to_list(P));
+map_property_name(_IsImport, "computed_"++_) -> computed_xxx;
+map_property_name(_IsImport, "pivot_"++_) -> pivot_xxx;
+map_property_name(false, P) when is_list(P) -> erlang:list_to_existing_atom(P);
+map_property_name(true,  P) when is_list(P) -> erlang:list_to_atom(P).
 
 
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
