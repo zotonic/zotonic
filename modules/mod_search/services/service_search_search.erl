@@ -25,14 +25,19 @@
 
 -export([process_get/2]).
 
+-define(MAX_LIMIT, 1000).
+
 -include_lib("zotonic.hrl").
 
 process_get(_ReqData, Context) ->
-    Q1 = controller_api:get_q_all(Context),
     try
+        Format = z_context:get_q("format", Context, "ids"),
+        Limit = erlang:min(?MAX_LIMIT, z_convert:to_integer(z_context:get_q("limit", Context, "20"))),
+        Offset = 1+erlang:max(0, z_convert:to_integer(z_context:get_q("offset", Context, "0"))),
+        Q1 = lists:foldl(fun proplists:delete/2, controller_api:get_q_all(Context), ["offset", "limit", "format"]),
         Q = search_query:parse_request_args(Q1),
-        S = z_search:search({'query', Q}, Context),
-        {array, S#search_result.result}
+        S = z_search:search({'query', Q}, {Offset, Limit}, Context),
+        convert_result(Format, S#search_result.result, Context)
     catch
         _: {error, {unknown_query_term, E}} ->
             {error, unknown_arg, E};
@@ -42,3 +47,26 @@ process_get(_ReqData, Context) ->
             {error, syntax, binary_to_list(E)}
     end.
 
+
+convert_result("ids", Ids, _Context) ->
+    {array, Ids};
+
+convert_result("simple", Ids, Context) ->
+    {array, [format_simple(Id, Context) || Id <- Ids]};
+
+convert_result(F, _, _) ->
+    {error, unknown_arg, "format=" ++ F}.
+
+
+format_simple(Id, Context) ->
+    Preview = case z_media_tag:url(Id, [{width, 800}, {height, 800}, {upscale, true}, {use_absolute_url, true}], Context) of
+                  {ok, P} -> [{preview_url, P}];
+                  _ -> []
+              end,
+    z_convert:to_json(
+      [{id, Id},
+       {title, m_rsc:p(Id, title, Context)},
+       {category, m_rsc:is_a(Id, Context)},
+       {summary, m_rsc:p(Id, summary, Context)} | Preview
+      ]
+     ).
