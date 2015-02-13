@@ -10,7 +10,7 @@
 -include("zotonic.hrl").
 
 render_action(_TriggerId, _TargetId, Args, Context) ->
-    InitScript = proplists:get_value(init_script, Args),
+    InitScript = iolist_to_binary(proplists:get_value(init_script, Args, [])),
     Name = proplists:get_value(name, Args),
     Files = proplists:get_value(files, Args, []), 
 
