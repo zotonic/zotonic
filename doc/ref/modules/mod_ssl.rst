@@ -12,7 +12,7 @@ https is not possible.
 Configuration
 -------------
 
-There are three configurarion options. They can be set in the admin. All three are optional
+There are four configurarion options. They can be set in the admin. All four are optional
 and will be either set or replaced with a default when not set.
 
 ``mod_ssl.listen_port``

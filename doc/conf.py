@@ -210,7 +210,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Zotonic.tex', u'Zotonic Documentation',
+  ('index-tex', 'Zotonic.tex', u'Zotonic Documentation',
    u'Andreas Stenius', 'manual'),
 ]
 
