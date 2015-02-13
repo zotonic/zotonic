@@ -12,6 +12,7 @@ Zotonic |version| documentation
    installation/index
    manuals/maintenance
    manuals/in-depth
+   cookbook/index
    ref/index-tex
    dev/index-tex
    glossary

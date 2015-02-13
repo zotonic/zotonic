@@ -19,4 +19,3 @@ In-depth manuals
    email
    services
    extensions
-   cookbook/index

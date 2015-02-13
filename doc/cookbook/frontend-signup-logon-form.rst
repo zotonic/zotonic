@@ -1,7 +1,7 @@
 .. highlight:: erlang
 
 Customizing the sign up and sign in form
-======================================
+========================================
 
 You want to change parts of the form, or change its appearance.
 
@@ -17,7 +17,7 @@ For details, see "Template structure Sign up form" below.
 
 
 Overriding templates
-...............
+....................
 
 Some sub templates are more critical than others.
 

@@ -19,6 +19,7 @@ Contents:
    installation/index
    manuals/maintenance
    manuals/in-depth
+   cookbook/index
    ref/index
    dev/index
 
