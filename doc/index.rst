@@ -9,7 +9,7 @@ Zotonic |version| documentation
 Welcome to the Zotonic documentation!
 This describes Zotonic |version|, last updated |today|.
 
-These docs are also available in a `PDF version <http://zotonic.com/download/zotonic-docs>`_.
+The latest docs are also available in a `PDF version <http://zotonic.com/download/zotonic-docs>`_.
 
 Contents:
 
