@@ -143,7 +143,7 @@ delete_username(Id, Context) when is_integer(Id), Id /= 1 ->
     case z_acl:is_allowed(delete, Id, Context) orelse z_acl:user(Context) == Id of
         true ->  
             z_db:q("delete from identity where rsc_id = $1 and type = 'username_pw'", [Id], Context),
-            z_mqtt:publish(Id, {identity, <<"username_pw">>}, Context),
+            z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
             ok;
         false ->
             {error, eacces}
@@ -210,7 +210,7 @@ set_username_pw(Id, Username, Password, Context) when is_integer(Id) ->
             case z_db:transaction(F, Context) of
                 1 ->
                     reset_rememberme_token(Id, Context),
-                    z_mqtt:publish(Id, {identity, <<"username_pw">>}, Context),
+                    z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
                     z_depcache:flush(Id, Context),
                     ok;
                 R ->
@@ -489,13 +489,13 @@ insert_1(RscId, Type, Key, Props, Context) ->
         undefined -> 
             Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
             Result = z_db:insert(identity, validate_is_unique(Props1), Context),
-            z_mqtt:publish(RscId, {identity, Type}, Context),
+            z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
             Result;
         IdnId ->
             case proplists:get_value(is_verified, Props, false) of
                 true ->
                     set_verified_trans(RscId, Type, Key, Context),
-                    z_mqtt:publish(RscId, {identity, Type}, Context);
+                    z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context);
                 false ->
                     nop
             end,
@@ -541,10 +541,24 @@ set_visited(UserId, Context) ->
 
 
 %% @doc Set the verified flag on a record by identity id.
+-spec set_verified(integer(), #context{}) -> ok | {error, notfound}.
 set_verified(Id, Context) ->
-    z_db:q("update identity set is_verified = true, verify_key = null where id = $1", 
-           [Id], 
-           Context).
+    case z_db:q_row("select rsc_id, type from identity where id = $1", [Id], Context) of
+        {RscId, Type} ->
+            case z_db:q("update identity set is_verified = true, verify_key = null where id = $1", 
+                   [Id], 
+                   Context)
+            of
+                1 ->
+                    z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
+                    ok;
+                0 ->
+                    {error, notfound}
+            end;
+        undefined ->
+            {error, notfound}
+    end.
+
 
 %% @doc Set the verified flag on a record by rescource id, identity type and value (eg an user's email address).
 set_verified(RscId, Type, Key, Context) 
@@ -552,7 +566,7 @@ set_verified(RscId, Type, Key, Context)
          Type =/= undefined, 
          Key =/= undefined, Key =/= <<>>, Key =/= [] ->
     Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context),
-    z_mqtt:publish(RscId, {identity, Type}, Context),
+    z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
     Result;
 set_verified(_RscId, _Type, _Key, _Context) ->
     {error, badarg}.
@@ -595,12 +609,51 @@ set_by_type(RscId, Type, Key, Props, Context) ->
 	z_db:transaction(F, Context).
 
 delete(IdnId, Context) ->
-    z_db:delete(identity, IdnId, Context).
+    case z_db:q_row("select rsc_id, type, key from identity where id = $1", [IdnId], Context) of
+        undefined ->
+            {ok, 0};
+        {RscId, Type, Key} ->
+            case z_acl:rsc_editable(RscId, Context) of
+                true ->
+                    case z_db:delete(identity, IdnId, Context) of
+                        {ok, 1} ->
+                            z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
+                            maybe_reset_email_property(RscId, Type, Key, Context),
+                            {ok, 1};
+                        Other ->
+                            Other
+                    end;
+                false ->
+                    {error, eacces}
+            end
+    end.
+
+%% @doc If an email identity is deleted, then ensure that the 'email' property is reset accordingly.
+maybe_reset_email_property(Id, <<"email">>, Email, Context) when is_binary(Email) ->
+    case normalize_key(email, m_rsc:p_no_acl(Id, email, Context)) of
+        Email ->
+            NewEmail = z_db:q1("
+                    select key 
+                    from identity 
+                    where rsc_id = $1
+                      and type = 'email'
+                    order by is_verified desc, modified desc",
+                    [Id],
+                    Context),
+            Context1 = z_context:set(is_m_identity_update, true, Context),
+            {ok, _} = m_rsc:update(Id, [{email, NewEmail}], Context1),
+            ok;
+        _ ->
+            ok
+    end;
+maybe_reset_email_property(_Id, _Type, _Key, _Context) ->
+    ok.
+
 
 delete_by_type(RscId, Type, Context) ->
 	case z_db:q("delete from identity where rsc_id = $1 and type = $2", [RscId, Type], Context) of
         0 -> ok;
-        _N -> z_mqtt:publish(RscId, {identity, Type}, Context)
+        _N -> z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context)
     end.
 
 delete_by_type_and_key(RscId, Type, Key, Context) ->
