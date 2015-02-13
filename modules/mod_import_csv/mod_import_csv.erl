@@ -26,7 +26,7 @@
 %% interface functions
 -export([
 	observe_dropbox_file/2,
-	can_handle/2,
+	can_handle/3,
 	event/2,
     inspect_file/1,
     manage_schema/2
@@ -46,7 +46,7 @@ observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
         ".csv" ->
             %% Correct file type, see if we can handle the file.
             %% Either a module has a definition or there are correct header lines.
-            case can_handle(F, Context) of
+            case can_handle(F, F, Context) of
                 {ok, Definition} ->
                     handle_spawn(Definition, false, z_acl:sudo(Context)), true;
                 ok ->
@@ -73,7 +73,7 @@ event(#submit{message={csv_upload, []}}, Context) ->
             {ok, _} = file:copy(TmpFile, Target),
             ok = file:delete(TmpFile),
 
-            Context2 = case can_handle(Target, Context) of
+            Context2 = case can_handle(OriginalFilename, Target, Context) of
                            {ok, Definition} ->
                                handle_spawn(Definition, IsReset, Context),
                                z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
@@ -123,12 +123,12 @@ to_importing_dir(Def, Context) ->
 
 
 %% @doc Check if we can import this file
-can_handle(Filename, Context) ->
-    case z_notifier:first(#import_csv_definition{basename=filename:basename(Filename), filename=Filename}, Context) of
+can_handle(OriginalFilename, DataFile, Context) ->
+    case z_notifier:first(#import_csv_definition{basename=filename:basename(OriginalFilename), filename=DataFile}, Context) of
         {ok, #import_data_def{colsep=ColSep, skip_first_row=SkipFirstRow, columns=Columns, importdef=ImportDef}} ->
             {ok, #filedef{
-                        filename=Filename, 
-                        file_size=filelib:file_size(Filename), 
+                        filename=DataFile, 
+                        file_size=filelib:file_size(DataFile), 
                         colsep=ColSep, 
                         columns=Columns,
                         skip_first_row=SkipFirstRow,
@@ -139,7 +139,7 @@ can_handle(Filename, Context) ->
         {error, _} = Error ->
             Error;
         undefined ->
-            case inspect_file(Filename) of
+            case inspect_file(DataFile) of
                 {ok, #filedef{columns=Cols} = FD} ->
                     case lists:member("name", Cols) andalso lists:member("category", Cols) of
                         true -> 
