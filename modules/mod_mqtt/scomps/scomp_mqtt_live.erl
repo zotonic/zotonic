@@ -35,7 +35,7 @@
 
 %% @doc Special rendering for the {mqtt} wire event type
 event_type_mqtt(#action_event_type{event={mqtt, Args}, postback_js = PostbackJS, action_js = ActionJS}, Context) ->
-    Topics = [ map_topic(V, Context) || V <- proplists:get_all_values(topic, Args) ],
+    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, Args) ],
     Script = iolist_to_binary([
         <<"pubzub.subscribe_multi(">>,
             z_utils:js_array(Topics),$,,
@@ -104,7 +104,7 @@ opt_wrap_element(Element, Id, Html) ->
 script(Target, Where, LiveVars, TplVars, Context) ->
     Tag = {live, Where, proplists:get_value(template,LiveVars), TplVars},
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, ?MODULE, Context),
-    Topics = [ map_topic(V, Context) || V <- proplists:get_all_values(topic, LiveVars) ],
+    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, LiveVars) ],
     iolist_to_binary([
         <<"z_live.subscribe(">>, 
             z_utils:js_array(Topics),$,,
@@ -112,22 +112,6 @@ script(Target, Where, LiveVars, TplVars, Context) ->
             $',Postback,$',
         $), $;
     ]).
-
-map_topic(Id, _Context) when is_integer(Id) ->
-    <<"~site/rsc/",(z_convert:to_binary(Id))/binary>>;
-map_topic({object, Props}, Context) when is_list(Props) ->
-    map_topic_edge($o, Props, Context);
-map_topic({subject, Props}, Context) when is_list(Props) ->
-    map_topic_edge($s, Props, Context);
-map_topic(Topic, _Context) ->
-    z_convert:to_binary(Topic).
-
-map_topic_edge(ObjSub, Props, Context) ->
-    Id = proplists:get_value(id, Props),
-    Predicate = proplists:get_value(predicate, Props),
-    Name = to_predicate_name(Predicate, Context),
-    <<"~site/rsc/",(z_convert:to_binary(Id))/binary, $/, ObjSub, $/, Name/binary>>.
-
 
 render(<<"top">>, Target, Render, Context) ->
     z_render:insert_top(Target, Render, Context);
@@ -141,13 +125,3 @@ render(_Update, Target, Render, Context) ->
     z_render:update(Target, Render, Context).
 
 
-to_predicate_name(undefined, _Context) -> <<"+">>;
-to_predicate_name(<<"*">>, _Context) -> <<"+">>;
-to_predicate_name("*", _Context) -> <<"+">>;
-to_predicate_name('*', _Context) -> <<"+">>;
-to_predicate_name(<<>>, _Context) -> <<"+">>;
-to_predicate_name(Id, Context) when is_integer(Id) ->
-    {ok, Name} = m_predicate:to_name(Id, Context),
-    z_convert:to_binary(Name);
-to_predicate_name(Pred, _Context) ->
-    z_convert:to_binary(Pred).
