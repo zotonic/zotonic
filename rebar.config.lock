@@ -75,7 +75,7 @@
                   "6800e98e4e172521e5ffd50ee2032ea922c8f36b"}},
        {s3filez,".*",
                 {git,"git://github.com/mworrell/s3filez.git",
-                     "d348b9e14a88c1e50216717cc023e6b78a065c8d"}},
+                     "4760c1a7662e1e8a29a3b8d475602f1c1f056dbc"}},
        {gproc,".*",
               {git,"git://github.com/uwiger/gproc.git",
                    "26a9d9faff7b9fd60687d4bcfd3d6974b73205f3"}},
