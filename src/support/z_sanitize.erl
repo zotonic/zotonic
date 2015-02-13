@@ -248,6 +248,8 @@ wl(<<"www.flickr.com/", _/binary>> = Url) -> {ok, Url};
 wl(<<"flv.video.yandex.ru/", _/binary>> = Url) -> {ok, Url};
 wl(<<"www.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"assets.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
+wl(<<"static.issuu.com/",  _/binary>> = Url) -> {ok, Url};
+wl(<<"e.issuu.com/",  _/binary>> = Url) -> {ok, Url};
 wl(Url) ->
     case lists:dropwhile(fun(Re) ->
                             re:run(Url, Re) =:= nomatch
