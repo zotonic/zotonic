@@ -33,6 +33,7 @@
 ]).
 
 -define(SEP, $~).
+-define(TAG_CACHE_TIME, 60). % Cache generated link and script tags for 1 minute.
 
 %% @doc Generate the link and/or script tags for the given files.
 tag(Files, Context) ->
@@ -69,10 +70,19 @@ url_for(F, P, Ext, Args, Context) ->
 
 
 tag1(Files, Args, Context) ->
-    {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
-    NoLangContext = z_context:set_language(undefined, Context),
-    [link_element(Css, CssPath, Args, NoLangContext),
-     script_element(Js, JsPath, Args, NoLangContext)].
+    F = fun() ->
+            {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
+            NoLangContext = z_context:set_language(undefined, Context),
+            [link_element(Css, CssPath, Args, NoLangContext),
+                script_element(Js, JsPath, Args, NoLangContext)]
+    end,
+    case z_module_manager:active(mod_development, Context) of
+        false ->
+            z_depcache:memo(F, {tag, Files, Args}, ?TAG_CACHE_TIME, Context);
+        true ->
+            F()
+    end.
+
 
 link_element(_Css, [], _Args, _Context) ->
     [];
