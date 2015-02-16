@@ -47,6 +47,8 @@
    mod_authentication,
    mod_editor_tinymce,
 
+   mod_mqtt,
+   
    mod_admin,
    mod_admin_category,
    mod_admin_config,
