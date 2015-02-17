@@ -19,8 +19,12 @@
 -module(filter_trans_filter_filled).
 
 -export([
+    trans_filter_filled/2,
     trans_filter_filled/3
 ]).
+
+trans_filter_filled(Var, _Context) ->
+    filled_in(Var).
 
 trans_filter_filled(Var, Key, Context) ->
     filled_in(erlydtl_runtime:find_value(Key, Var, Context)).
