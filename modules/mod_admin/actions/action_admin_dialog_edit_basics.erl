@@ -76,7 +76,7 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
 
     Post = z_context:get_q_all_noz(Context),
     Props = controller_admin_edit:filter_props(Post),
-    Props1 = proplists:delete("id", Props),
+    Props1 = maybe_add_language(Id, proplists:delete("id", Props), Context),
 
     case m_rsc:update(Id, Props1, Context) of
         {ok, _} ->
@@ -124,3 +124,15 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
         {error, _Reason} ->
             z_render:growl_error(?__("Something went wrong. Sorry.", Context), Context)
     end.
+
+maybe_add_language(Id, Props, Context) ->
+    case proplists:is_defined("language", Props) of
+        true ->
+            Props;
+        false ->
+            case m_rsc:p_no_acl(Id, language, Context) of
+                undefined -> Props;
+                Language -> [ {language, Language} | Props ]
+            end
+    end.
+

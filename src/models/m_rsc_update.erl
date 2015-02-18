@@ -980,11 +980,18 @@ recombine_languages(Props, Context) ->
             LangProps ++ [{language, [list_to_atom(Lang) || Lang <- L1]}|proplists:delete("language", OtherProps)]
     end.
 
-    %% @doc Fetch all the edited languages, from 'language' inputs
+    %% @doc Fetch all the edited languages, from 'language' inputs or a merged 'language' property
     edited_languages(Props, PropLangs) ->
         case proplists:is_defined("language", Props) of
-            true -> proplists:get_all_values("language", Props);
-            false -> PropLangs
+            true ->
+                proplists:get_all_values("language", Props);
+            false ->
+                case proplists:get_value(language, Props) of
+                    L when is_list(L) ->
+                        [ z_convert:to_list(Lang) || Lang <- L ];
+                    undefined ->
+                        PropLangs
+                end
         end.
 
     comb_lang([], _L1, LAcc, OAcc) ->
