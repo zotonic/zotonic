@@ -22,11 +22,15 @@
 -include_lib("zotonic.hrl").
 
 %% no arg, sort on id, default order
+sort(undefined, _Context) ->
+    undefined;
 sort(Input, _Context) when is_list(Input) ->
     lists:sort(Input);
 sort(Input, Context) when is_record(Input, rsc_list) ->
     sort(Input, [id], Context).
 
+sort(undefined, _Arg, _Context) ->
+    undefined;
 sort(Input, Arg, _Context) when is_list(Input) ->
     case is_opt(Arg) of 
         false -> Input;
