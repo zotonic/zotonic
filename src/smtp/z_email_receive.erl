@@ -24,6 +24,10 @@
          get_host/1
         ]).
 
+-export([
+      parse_file/1
+    ]).
+
 -include_lib("zotonic.hrl").
 -include_lib("zotonic_log.hrl").
 
@@ -90,6 +94,13 @@ lowercase_headers(Hs) ->
     [ {z_string:to_lower(H), V} || {H,V} <- Hs ].
 
 
+%% @doc Parse a file using the html/text parse routines. This is used for testing
+parse_file(Filename) ->
+    {ok, Data} = file:read_file(Filename),
+    {Type, Subtype, Headers, Params, Body} = mimemail:decode(Data),
+    parse_email({Type,Subtype}, Headers, Params, Body).
+
+
 %% @doc Parse an #email_received to a sanitized #email try to make
 %% sense of all parts.
 %%
@@ -108,7 +119,8 @@ parse_email({<<"text">>, <<"html">>}, _Headers, Params, Body) ->
         undefined -> #email{html=z_html:sanitize(Body)}
     end;
 
-parse_email({<<"multipart">>, <<"alternative">>}, Headers, _Params, Body) ->
+parse_email({<<"multipart">>, Mergeable}, Headers, _Params, Body)
+  when Mergeable =:= <<"alternative">>; Mergeable =:= <<"related">> ->
     Parts = [
              parse_email({PartType, PartSubType}, PartHs, PartPs, PartBody)
              || {PartType, PartSubType, PartHs, PartPs, PartBody} <- Body
@@ -117,25 +129,8 @@ parse_email({<<"multipart">>, <<"alternative">>}, Headers, _Params, Body) ->
                 #email{subject=proplists:get_value(<<"Subject">>, Headers)}, 
                 Parts);
 
-parse_email({<<"multipart">>, <<"related">>}, Headers, _Params, Body) ->
-    Parts = [
-             parse_email({PartType, PartSubType}, PartHs, PartPs, PartBody)
-             || {PartType, PartSubType, PartHs, PartPs, PartBody} <- Body
-            ],
-    lists:foldr(fun(A,B) -> merge_email(A,B) end, 
-                #email{subject=proplists:get_value(<<"Subject">>, Headers)}, 
-                Parts);
-
-parse_email({<<"multipart">>, <<"mixed">>}, Headers, _Params, Body) ->
-    Parts = [
-             parse_email({PartType, PartSubType}, PartHs, PartPs, PartBody)
-             || {PartType, PartSubType, PartHs, PartPs, PartBody} <- Body
-            ],
-    lists:foldr(fun(A,B) -> append_email(A,B) end, 
-                #email{subject=proplists:get_value(<<"Subject">>, Headers)}, 
-                Parts);
-
-parse_email({<<"multipart">>, <<"digest">>}, Headers, _Params, Body) ->
+parse_email({<<"multipart">>, Appendable}, Headers, _Params, Body)
+  when Appendable =:= <<"mixed">>; Appendable =:= <<"digest">>; Appendable =:= <<"signed">> ->
     Parts = [
              parse_email({PartType, PartSubType}, PartHs, PartPs, PartBody)
              || {PartType, PartSubType, PartHs, PartPs, PartBody} <- Body
