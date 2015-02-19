@@ -185,6 +185,9 @@ checksum_assert(Data, Checksum, Context) ->
         assert(list_to_binary(z_utils:hex_decode(Checksum)) == erlang:md5([Sign,Data]), checksum_invalid)
     catch
         error:badarg ->
+            erlang:error(checksum_invalid);
+        error:{case_clause, _} ->
+            % Odd length checksum
             erlang:error(checksum_invalid)
     end.
 

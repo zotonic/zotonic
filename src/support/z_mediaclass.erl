@@ -99,10 +99,10 @@ expand_mediaclass_checksum(Checksum, Props) ->
         % Expand for preview generation, we got the checksum from the URL.
         case ets:lookup(?MEDIACLASS_INDEX, Checksum) of
             [#mediaclass_index{props=Ps}|_] ->
-                {ok, expand_mediaclass_1(Props, Ps)};
+                {ok, expand_mediaclass_2(Props, Ps)};
             [] ->
                 lager:warning("mediaclass expand for unknown mediaclass checksum ~p:~p", [Class, Checksum]),
-                {ok, Props};
+                {error, checksum};
             {error, _} = Error ->
                 Error
         end.
@@ -114,17 +114,22 @@ expand_mediaclass(Props, Context) ->
     case proplists:get_value(mediaclass, Props) of
         MC when is_list(MC); is_binary(MC) ->
             % Expand for tag generation
-            case get(MC, Context) of
-                {ok, Ps, _Checksum} ->
-                    {ok, expand_mediaclass_1(Props, Ps)};
-                Error ->
-                    Error
-            end;
+            expand_mediaclass_1(MC, Props, Context);
+        {MC, _Checksum} when is_list(MC); is_binary(MC) ->
+            expand_mediaclass_1(MC, Props, Context);
         undefined ->
             {ok, Props}
     end.
+
+expand_mediaclass_1(MC, Props, Context) ->
+    case get(MC, Context) of
+        {ok, Ps, _Checksum} ->
+            {ok, expand_mediaclass_2(Props, Ps)};
+        Error ->
+            Error
+    end.
     
-expand_mediaclass_1(Props, ClassProps) ->
+expand_mediaclass_2(Props, ClassProps) ->
     lists:foldl(fun(KV, Acc) ->
                     K = key(KV),
                     case proplists:is_defined(K, Acc) of
