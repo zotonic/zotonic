@@ -62,9 +62,12 @@ extract_filters(Path, OptFilters, Context) ->
                 nomatch ->
                     {SafePath, SafePath, OptFilters};
                 {_,_} ->
-                    PathS = z_convert:to_list(SafePath),
-                    {OriginalFile, PreviewPropList, _Checksum, _ChecksumBaseString} = z_media_tag:url2props(PathS, Context),
-                    {SafePath, OriginalFile, case OptFilters of undefined -> []; _ -> OptFilters end ++ PreviewPropList}
+                    case z_media_tag:url2props(SafePath, Context) of 
+                        {ok, {OriginalFile, PreviewPropList, _Checksum, _ChecksumBaseString}} ->
+                            {SafePath, OriginalFile, case OptFilters of undefined -> []; _ -> OptFilters end ++ PreviewPropList};
+                        {error, _} ->
+                            {SafePath, SafePath, OptFilters}
+                    end
             end
     end.
 
