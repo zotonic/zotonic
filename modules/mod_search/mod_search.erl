@@ -369,6 +369,9 @@ search({latest, [{cat, Cat}, {creator_id,CreatorId}]}, _OffsetLimit, _Context) -
 search({upcoming, [{cat, Cat}]}, OffsetLimit, Context) ->
     search({'query', [{upcoming, true}, {cat, Cat}, {sort, 'rsc.pivot_date_start'}]}, OffsetLimit, Context);
 
+search({finished, [{cat, Cat}]}, OffsetLimit, Context) ->
+    search({'query', [{finished, true}, {cat, Cat}, {sort, '-rsc.pivot_date_start'}]}, OffsetLimit, Context);
+
 search({autocomplete, [{text,QueryText}]}, OffsetLimit, Context) ->
     search({autocomplete, [{cat,[]}, {text,QueryText}]}, OffsetLimit, Context);
 search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
