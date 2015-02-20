@@ -19,7 +19,11 @@ implemented in `mod_search`:
 +------------------------+---------------------------------------------------------------+-------------------+
 |latest                  |The newest pages within in a category.                         |cat                |
 +------------------------+---------------------------------------------------------------+-------------------+
-|upcoming                |Pages with future date_end, sorted on ascending date_start.    |cat                |
+|upcoming                |Pages with future date_end, sorted on ascending date_start.    |                   |
++------------------------+---------------------------------------------------------------+-------------------+
+|finished                |Pages with a past date_end, sorted on ascending date_start.    |                   |
++------------------------+---------------------------------------------------------------+-------------------+
+|ongoing                 |Pages with past date_start and future date_end.                |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |autocomplete            |Full text search where the last word gets a wildcard.          |text               |
 +------------------------+---------------------------------------------------------------+-------------------+

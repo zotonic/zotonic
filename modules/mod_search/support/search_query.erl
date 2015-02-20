@@ -104,6 +104,7 @@ request_arg("sort")                -> sort;
 request_arg("text")                -> text;
 request_arg("upcoming")            -> upcoming;
 request_arg("ongoing")             -> ongoing;
+request_arg("finished")            -> finished;
 request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
 
 
@@ -291,6 +292,14 @@ parse_query([{ongoing, Boolean}|Rest], Context, Result) ->
               end,
     parse_query(Rest, Context, Result1);
 
+%% finished
+%% Filter on items whose start date lies in the past
+parse_query([{finished, Boolean}|Rest], Context, Result) ->
+    Result1 = case z_convert:to_bool(Boolean) of
+                  true -> add_where("rsc.pivot_date_start < current_date", Result);
+                  false -> Result
+              end,
+    parse_query(Rest, Context, Result1);
 
 %% authoritative={true|false}
 %% Filter on items which are authoritative or not

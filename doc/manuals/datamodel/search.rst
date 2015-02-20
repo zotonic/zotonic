@@ -146,6 +146,21 @@ Query-model arguments
 
   ``upcoming``
 
+**ongoing**
+
+  Specifying 'ongoing' means that you only want to select things that
+  are happening now: that have a start date which lies in the past,
+  and an end date which lies in the future.
+
+  ``ongoing``
+
+**finished**
+
+  Specifying 'finished' means that you only want to select things that
+  have a start date which lies in the past. 
+
+  ``finished``
+
 **sort**
 
   Sort the result on a field. The name of the field is a string which
