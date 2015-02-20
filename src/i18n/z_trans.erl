@@ -201,7 +201,7 @@ lookup_fallback_language(Langs, Lang, Context) ->
 
 
 %% @doc translate a string or trans record into another language
--spec trans({trans, list()} | binary() | string(), atom(), #context{}) -> binary() | string() | undefined.
+-spec trans({trans, list()} | binary() | string(), #context{} | atom()) -> binary() | string() | undefined.
 trans({trans, Tr}, Lang) when is_atom(Lang) ->
     proplists:get_value(Lang, Tr);
 trans(Text, Lang) when is_atom(Lang) ->
