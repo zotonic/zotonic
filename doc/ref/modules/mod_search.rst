@@ -19,9 +19,9 @@ implemented in `mod_search`:
 +------------------------+---------------------------------------------------------------+-------------------+
 |latest                  |The newest pages within in a category.                         |cat                |
 +------------------------+---------------------------------------------------------------+-------------------+
-|upcoming                |Pages with future date_end, sorted on ascending date_start.    |                   |
+|upcoming                |Selects pages with future date_end.                            |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|finished                |Pages with a past date_end, sorted on ascending date_start.    |                   |
+|finished                |Selects pages with a past date_end.                            |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |ongoing                 |Pages with past date_start and future date_end.                |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
