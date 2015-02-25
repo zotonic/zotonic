@@ -259,7 +259,7 @@ button.close {
 ul.connections-list li:last-child {
   margin-bottom: 10px;
 }
-a span.category {
+span.category {
   color: #bbb;
 }
 #unlink-undo-message div.alert {
@@ -948,7 +948,7 @@ ul.tree-list li.menu-item > div > span:not(.btns) {
 ul.tree-list li.menu-item .warning {
   position: absolute;
   top: 12px;
-  right: 100px;
+  right: 110px;
 }
 ul.tree-list li.menu-item .btns {
   display: block;

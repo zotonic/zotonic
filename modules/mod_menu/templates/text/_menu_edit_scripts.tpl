@@ -1,4 +1,5 @@
 {% if in_sorter == 'category' %}
+	{# Category - items can only appear once, strict handling #}
     {% wire name="admin-menu-select" 
             action={
                 dialog_open 
@@ -10,7 +11,20 @@
                 tabs_enabled=["new"]
             }
     %}
+{% elseif is_hierarchy %}
+	{# Hierarchy - items can only appear once #}
+    {% wire name="admin-menu-select" 
+            action={
+                dialog_open 
+                template="_action_dialog_connect.tpl" 
+                title=_"Add item"
+                callback="window.zMenuEditDone"
+                cat=cat_id
+                in_sorter=in_sorter
+            }
+    %}
 {% else %}
+	{# Menu - items can appear multiple times #}
     {% wire name="admin-menu-select" 
             action={
                 dialog_open 
@@ -95,6 +109,16 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 					pubzub.publish("~pagesession/menu/insert", {id: rsc_id});
 				}
 			};
+
+			{% if is_hierarchy %}
+				var $duplicate = $sorter.find('[data-page-id='+v.object_id+']');
+				if ($duplicate.length > 0) {
+					z_dialog_alert({text: "{_ This item is already in the hierarcgy. Every item can only occur once. _}"});
+					$duplicate.fadeTo(500, 0.5, function() { $duplicate.fadeTo(500, 1); });
+					return;
+				}
+			{% endif %}
+
 			z_notify("menu-item-render", {
 					id: v.object_id, 
 					callback: "window.zMenuNewItem", 

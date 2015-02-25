@@ -53,6 +53,8 @@
 	    </div>
 	</div>
 
+	{% all include "_dialog_new_rsc_extra.tpl" %}
+
     {% if cat.name == 'category' or cat.name == 'predicate' %}
 	    <div class="form-group row">
 	        <label class="control-label col-md-3" for="{{ #name }}">{_ Name _}</label>
@@ -62,7 +64,7 @@
 	        </div>
 	    </div>
     {% endif %}
-	
+
 	<div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #published }}">{_ Published _}</label>
 	    <div class="checkbox col-md-9">

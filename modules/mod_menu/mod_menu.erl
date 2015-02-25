@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-07-12
+%% @copyright 2009-2015 Marc Worrell
 %% @doc Menu module.  Supports menus in Zotonic. Adds admin interface to define the menu.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,8 +20,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Menus").
--mod_description("Menus in Zotonic, adds admin interface to define the menu.").
--mod_schema(1).
+-mod_description("Menus in Zotonic, adds admin interface to define menus and other hierarchical lists.").
+-mod_schema(2).
 -mod_depends([admin]).
 -mod_provides([menu]).
 
@@ -67,7 +66,7 @@ event(#postback_notify{message="menuedit", trigger=TriggerId}, Context) ->
     {Kind, RootId, Predicate} = get_kind_root(TriggerId),
     Tree = unpack(z_context:get_q("tree", Context)),
     {Tree1, Context1} = create_new(Tree, Context),
-    case z_context:get_q("kind", Context1, Kind) of
+    case Kind of
         category ->
             % This is the category hierarchy.
             z_notifier:notify(#category_hierarchy_save{tree=Tree1}, Context1),
@@ -75,6 +74,9 @@ event(#postback_notify{message="menuedit", trigger=TriggerId}, Context) ->
         menu ->
             % A menu hierarchy, give it to the menu routines
             z_notifier:notify(#menu_save{id=m_rsc:rid(RootId, Context1), tree=Tree1}, Context1),
+            Context1;
+        hierarchy ->
+            _ = m_menu_hierarchy:save(RootId, Tree1, Context),
             Context1;
         edge ->
             % Hierarchy using edges between resources
@@ -146,15 +148,20 @@ move_edges(RootId, Tree, Pred, Context) ->
 %% @doc The id of the root ul should be one of:
 %%      category
 %%      menu-ID
+%%      hierarchy-ROOTID
 %%      edge-ROOTID
 %%      edge-ROOTID-PREDICATE
 %%      collection-ROOTID
+get_kind_root(Root) when is_binary(Root) ->
+    get_kind_root(z_convert:to_list(Root));
 get_kind_root("category") ->
     {category, undefined, undefined};
 get_kind_root("menu-"++MenuId) ->
     {menu, MenuId, undefined};
 get_kind_root(TriggerId) ->
     case string:tokens(TriggerId, "-") of
+        ["hierarchy" | Name] ->
+            {hierarchy, string:join(Name, "-"), undefined};
         ["edge", RootId, Predicate] ->
             {edge, RootId, Predicate};
         ["collection", RootId] ->
@@ -163,6 +170,8 @@ get_kind_root(TriggerId) ->
             {edge, TriggerId, haspart}
     end.
 
+unpack(S) when is_binary(S) ->
+    unpack(binary_to_list(S));
 unpack(S) ->
     {[], Tree} = unpack(S, []),
     Tree.
@@ -182,10 +191,10 @@ unpack(S, Acc) ->
     Acc1 = [{map_id(Id),Sub}|Acc],
     unpack(Rest,Acc1).
 
-map_id(Id) ->
+map_id(Id) when is_list(Id) ->
     Id1 = lists:last(string:tokens(Id, "-")),
     case z_utils:only_digits(Id1) of
-        true -> list_to_integer(Id1);
+        true -> z_convert:to_integer(Id1);
         false -> Id
     end.
 
@@ -426,7 +435,10 @@ manage_schema(install, Context) ->
               }
         ]
       },
-      Context).
+      Context);
+manage_schema(_Version, Context) ->
+    m_menu_hierarchy:install(Context),
+    ok.
 
 
 

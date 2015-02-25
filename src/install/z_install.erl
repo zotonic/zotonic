@@ -76,8 +76,8 @@ install_sql_list(Context, Model) ->
 model_pgsql() ->
     [
 
-                                                % Table config
-                                                % Holds all configuration keys
+    % Table config
+    % Holds all configuration keys
      "CREATE TABLE config
     (
       id serial NOT NULL,
@@ -93,8 +93,8 @@ model_pgsql() ->
     )",
 
 
-                                                % Table module
-                                                % Holds install state of all known modules
+    % Table module
+    % Holds install state of all known modules
 
     "CREATE TABLE module
     (
@@ -111,10 +111,8 @@ model_pgsql() ->
     )",
 
 
-                                                % Table: rsc
-                                                % Holds all resources (posts, persons etc.)
-                                                % @todo Split the pivot part when we want to support MySQL (no fulltext in InnoDB...)
-
+    % Table: rsc
+    % Holds all resources (posts, persons etc.)
     "CREATE TABLE rsc
     (
       id serial NOT NULL,
@@ -125,8 +123,10 @@ model_pgsql() ->
       is_published boolean NOT NULL DEFAULT false,
       is_featured boolean NOT NULL DEFAULT false,
       is_protected boolean NOT NULL DEFAULT false,
+      is_dependent boolean NOT NULL DEFAULT false,
       publication_start timestamp with time zone NOT NULL DEFAULT now(),
       publication_end timestamp with time zone NOT NULL DEFAULT '9999-06-01 00:00:00'::timestamp with time zone,
+      content_group_id int,
       creator_id int,
       modifier_id int,
       version int NOT NULL DEFAULT 1,
@@ -170,14 +170,18 @@ model_pgsql() ->
     )",
     "COMMENT ON COLUMN rsc.visible_for IS '0 = public, 1 = community, 2 = group'",
 
+     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_content_group_id FOREIGN KEY (content_group_id)
+      REFERENCES rsc (id)
+      ON UPDATE CASCADE ON DELETE SET NULL",
      "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_creator_id FOREIGN KEY (creator_id)
       REFERENCES rsc (id)
-     ON UPDATE CASCADE ON DELETE SET NULL",
+      ON UPDATE CASCADE ON DELETE SET NULL",
     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_modifier_id FOREIGN KEY (modifier_id)
       REFERENCES rsc (id)
-     ON UPDATE CASCADE ON DELETE SET NULL",
+      ON UPDATE CASCADE ON DELETE SET NULL",
 
-    "CREATE INDEX fki_rsc_creator_id ON rsc (creator_id)",
+     "CREATE INDEX fki_rsc_content_group_id ON rsc (content_group_id)",
+     "CREATE INDEX fki_rsc_creator_id ON rsc (creator_id)",
      "CREATE INDEX fki_rsc_modifier_id ON rsc (modifier_id)",
      "CREATE INDEX fki_rsc_created ON rsc (created)",
      "CREATE INDEX fki_rsc_modified ON rsc (modified)",
@@ -200,10 +204,10 @@ model_pgsql() ->
      "CREATE INDEX rsc_pivot_title_key ON rsc (pivot_title)",
      "CREATE INDEX rsc_pivot_location_key ON rsc (pivot_location_lat, pivot_location_lng)",
 
-                                                % Table: rsc_gone
-                                                % Tracks deleted or moved resources, adding "410 gone" support
-                                                % Also contains new id or new url for 301 moved permanently replies.
-                                                % mod_backup is needed to recover a deleted resource's content.
+    % Table: rsc_gone
+    % Tracks deleted or moved resources, adding "410 gone" support
+    % Also contains new id or new url for 301 moved permanently replies.
+    % mod_backup is needed to recover a deleted resource's content.
 
      "CREATE TABLE rsc_gone (
         id bigint not null,
@@ -225,9 +229,9 @@ model_pgsql() ->
     "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)",
 
 
-                                                % Table: protect
-                                                % By making an entry in this table we protect a rsc from being deleted.
-                                                % This table is maintained by the update/insert trigger.
+    % Table: protect
+    % By making an entry in this table we protect a rsc from being deleted.
+    % This table is maintained by the update/insert trigger.
 
     "CREATE TABLE protect (
         id int NOT NULL,

@@ -1,0 +1,3 @@
+[
+    {admin_menu_hierarchy, ["admin", "hierarchy", name], controller_admin, [{template,"admin_menu_hierarchy.tpl"}]}
+].

@@ -41,6 +41,9 @@ render(Params, Vars, Context) ->
     Params1 = Params ++ Vars,
     render1(All, File, Id, Params1, Context1).
 
+render1(IsAll, File, [{Cat,true}|_] = Cats0, Params, Context) when is_atom(Cat) ->
+    Cats = [ C || {C,true} <- Cats0 ],
+    render1(IsAll, File, Cats, Params, Context);
 render1(false, File, [Cat|_] = Cats, Params, Context) when is_atom(Cat) ->
     {ok, z_template:render({cat, File, Cats}, Params, Context)};
 render1(false, File, Id, Params, Context) ->

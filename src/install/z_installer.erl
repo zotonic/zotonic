@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %%
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
 
-%% Copyright 2009-2014 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -121,6 +121,7 @@ get_column_type(C, Table, Column, Database, Schema) ->
 
 %% Upgrade older Zotonic versions.
 upgrade(C, Database, Schema) ->
+    % Ancient versions - this should be cleaned up.
     ok = install_acl(C, Database, Schema),
     ok = install_identity_is_verified(C, Database, Schema),
     ok = install_identity_verify_key(C, Database, Schema),
@@ -133,10 +134,14 @@ upgrade(C, Database, Schema) ->
     ok = install_rsc_gone(C, Database, Schema),
     ok = install_rsc_page_path_log(C, Database, Schema),
     ok = upgrade_config_schema(C, Database, Schema),
+    % 0.10.x
     ok = install_medium_log(C, Database, Schema),
     ok = install_pivot_location(C, Database, Schema),
+    % 0.12.x
     ok = install_edge_log(C, Database, Schema),
     ok = fix_timestamptz(C, Database, Schema),
+    % 0.12.5
+    ok = install_content_group_dependent(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -369,9 +374,9 @@ install_medium_log(C, Database, Schema) ->
                                    and m.is_deletable_preview
                                    "),
             ok;
-                                       true ->
-                                          ok
-                                  end.
+        true ->
+            ok
+    end.
 
 
 install_pivot_location(C, Database, Schema) ->
@@ -396,7 +401,7 @@ install_pivot_location(C, Database, Schema) ->
 
 
 
-%% Table with all uploaded filenames, used to ensure unique filenames in the upload archive
+%% Log all edge changes. This log is polled to issue edge-change notifications.
 install_edge_log(C, Database, Schema) ->
     case has_table(C, "edge_log", Database, Schema) of
         false ->
@@ -446,4 +451,21 @@ get_timestamp_without_timezone_columns(C, Database, Schema) ->
                                 [Database, Schema]),
     Cols.
 
+
+%% 0.12.5: Add content groups for the content- and user-group based ACL modules
+install_content_group_dependent(C, Database, Schema) ->
+    case has_column(C, "rsc", "content_group_id", Database, Schema) of
+        true -> 
+            ok;
+        false ->
+            {ok, [], []} = pgsql:squery(C, 
+                              "ALTER TABLE rsc "
+                              "ADD COLUMN is_dependent BOOLEAN NOT NULL DEFAULT false,"
+                              "ADD COLUMN content_group_id INT,"
+                              "ADD CONSTRAINT fk_rsc_content_group_id FOREIGN KEY (content_group_id) "
+                              "    REFERENCES rsc(id)"
+                              "    ON UPDATE CASCADE ON DELETE SET NULL"),
+            {ok, [], []} = pgsql:squery(C, "CREATE INDEX fki_rsc_content_group_id ON rsc (content_group_id)"),
+            ok
+    end.
 

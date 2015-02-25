@@ -631,6 +631,9 @@ props_filter([{category, CatName}|T], Acc, Context) ->
 props_filter([{category_id, CatId}|T], Acc, Context) ->
     props_filter(T, [{category_id, z_convert:to_integer(CatId)}|Acc], Context);
 
+props_filter([{content_group_id, CgId}|T], Acc, Context) ->
+    props_filter(T, [{content_group_id, z_convert:to_integer(CgId)}|Acc], Context);
+
 props_filter([{Location, P}|T], Acc, Context) when Location =:= location_lat; Location =:= location_lng ->
     case catch z_convert:to_float(P) of
         X when is_float(X) -> 
