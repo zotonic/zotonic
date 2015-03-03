@@ -52,7 +52,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
         ok ->
             DbOptions = proplists:delete(dbpassword, z_db_pool:get_database_options(Context)),
             case {z_db:table_exists(config, Context), z_config:get(dbinstall)} of
-                {false, false} -> ignore;
+                {false, false} -> lager:warning("[~p] config table does not exist and dbinstall is false; not installing", [z_context:site(Context)]);
                 {false, _} ->
                     %% Install database
                     lager:warning("[~p] Installing database with db options: ~p", [z_context:site(Context), DbOptions]),
@@ -74,7 +74,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
         {error, Reason} ->
             lager:warning("[~p] Database connection failure: ~p", [z_context:site(Context), Reason]),
 	    case z_config:get(dbcreate) of
-		false -> ignore;
+		false -> lager:warning("[~p] Database does not exist and dbcreate is false; not creating", [z_context:site(Context)]);
 		_Else ->
 		    case z_db:prepare_database(Context) of
 			ok ->
