@@ -39,6 +39,12 @@
    {dbport, 5432},
    {dbhost, "localhost"},
 
+%%% By default, Zotonic will create a postgres database for you if it doesn't
+%%% already exist, and install tables in it. Uncomment the options below
+%%% to prevent that.
+ % {dbcreate, false},
+ % {dbinstall, false},
+
 %%% IP address on which Zotonic will listen for HTTP requests.
 %%% Always overridden by the ZOTONIC_IP environment variable.
 %%% Use 'any' for all IP addresses.
