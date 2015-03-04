@@ -333,10 +333,12 @@ cat_check_pivot1(Alias, true, {From,To}) ->
 add_cat_check_joined(From, Alias, Exclude, Cats, Context) ->
     Ranges = m_category:ranges(Cats, Context),
     CatAlias = Alias ++ "_cat",
-    FromNew = [{"category", CatAlias}|From],
+    FromNew = [{"hierarchy", CatAlias}|From],
     CatChecks = lists:map(fun(Range) ->
                                   Check = cat_check_joined1(CatAlias, Exclude, Range),
-                                  Alias ++ ".category_id = " ++ CatAlias ++ ".id and " ++ Check
+                                  Alias ++ ".category_id = " ++ CatAlias ++ ".id and "
+                                  ++ CatAlias ++ ".name = '$category' and "
+                                  ++ Check
                           end,
                           Ranges),
     case CatChecks of

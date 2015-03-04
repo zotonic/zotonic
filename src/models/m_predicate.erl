@@ -98,7 +98,14 @@ is_predicate(Pred, Context) ->
 id_to_name(Id, Context) when is_integer(Id) ->
     F = fun() ->
                 {L,R} = cat_bounds(Context),
-                case z_db:q1("select name from rsc r join category c on (r.category_id = c.id) where r.id = $1 and $2 <= c.nr and c.nr <= $3", [Id, L, R], Context) of
+                case z_db:q1("
+                            select r.name 
+                            from rsc r 
+                                join hierarchy c 
+                                on r.category_id = c.id and c.name = '$category'
+                            where r.id = $1 
+                              and $2 <= c.nr 
+                              and c.nr <= $3", [Id, L, R], Context) of
                     undefined -> {error, {unknown_predicate, Id}};
                     Name -> {ok, z_convert:to_atom(Name)}
                 end
@@ -158,7 +165,14 @@ subjects(Id, Context) ->
 all(Context) ->
     F = fun() ->
                 {L,R} = cat_bounds(Context),
-                Preds = z_db:assoc_props("select * from rsc r join category c on (r.category_id = c.id) where $1 <= c.nr and c.nr <= $2 order by name", [L, R], Context),
+                Preds = z_db:assoc_props("
+                                select * 
+                                from rsc r
+                                    join hierarchy c 
+                                    on r.category_id = c.id and c.name = '$category'
+                                where $1 <= c.nr
+                                  and c.nr <= $2
+                                order by r.name", [L, R], Context),
                 FSetPred = fun(Pred) ->
                                    Id = proplists:get_value(id, Pred),
                                    Atom = case proplists:get_value(name, Pred) of
@@ -262,11 +276,13 @@ for_subject(Id, Context) ->
     ValidIds = z_db:q("
                 select p.predicate_id 
                 from predicate_category p,
-                     category pc,
+                     hierarchy pc,
                      rsc r,
-                     category rc
+                     hierarchy rc
                 where p.category_id = pc.id
+                  and pc.name = '$category'
                   and r.category_id = rc.id
+                  and rc.name = '$category'
                   and rc.nr >= pc.lft
                   and rc.nr <= pc.rght
                   and r.id = $1 
@@ -276,7 +292,7 @@ for_subject(Id, Context) ->
     NoRestrictionIds = z_db:q("
                     select r.id
                     from rsc r left join predicate_category p on p.predicate_id = r.id and p.is_subject = true
-                        join category c on (r.category_id = c.id)
+                        join hierarchy c on (r.category_id = c.id and c.name = '$category')
                     where p.predicate_id is null
                       and $1 <= c.nr and c.nr <= $2
                 ", [L, R], Context),
@@ -287,10 +303,11 @@ for_subject(Id, Context) ->
 
 
 %% @doc Return the id of the predicate category
-%% @spec cat_id(Context) -> integer()
+-spec cat_id(#context{}) -> integer().
 cat_id(Context) ->
     m_category:name_to_id_check(predicate, Context).
 
+-spec cat_bounds(#context{}) -> {integer(),integer()}.
 cat_bounds(Context) ->
-    m_category:boundaries(cat_id(Context), Context).
+    m_category:get_range(cat_id(Context), Context).
         

@@ -50,10 +50,12 @@
         <div class="row">
             <div class="col-lg-6 col-md-6">
                 <h4>{_ Allow editing of category _}</h4> 
-                {% for cat_id, level, indent, title in m.category.all_flat_meta %}
-                    <div class="checkbox">
-                        <label for="{{ #category.cat_id }}">{{ indent }}<input type="checkbox" id="{{ #category.cat_id }}" name="acl_cat"{% if title|as_atom|member:acl.categories %} checked="checked"{% endif %} value="{{ title }}" />{{ cat_id.title }} <span class="z-text-light">{{ title }}</span></label>
-                    </div>
+                {% for c in m.category.tree_flat_meta %}
+                    {% with c.id as cat_id %}
+                        <div class="checkbox">
+                            <label for="{{ #category.cat_id }}">{{ c.indent }}<input type="checkbox" id="{{ #category.cat_id }}" name="acl_cat"{% if cat_id.name|as_atom|member:acl.categories %} checked="checked"{% endif %} value="{{ title }}" />{{ cat_id.title }} <span class="z-text-light">{{ cat_id.name }}</span></label>
+                        </div>
+                    {% endwith %}
                 {% endfor %}
             </div>
         

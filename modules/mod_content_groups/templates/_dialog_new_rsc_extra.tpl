@@ -3,7 +3,7 @@
 	<div class="col-md-9">
 		<select class="form-control" id="{{ #content_group_id }}" name="content_group_id">
 			<option value=""></option>
-			{% for cg in m.menu_hierarchy.content_group.tree_flat %}
+			{% for cg in m.hierarchy.content_group.tree_flat %}
 				<option value="{{ cg.id }}" {% if cg.id == id.content_group_id %}selected{% endif %}>
 					{{ cg.indent }} {{ cg.id.title }}
 				</option>

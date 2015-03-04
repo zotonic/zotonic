@@ -90,13 +90,7 @@ delete_nocheck(Id, Context) ->
         m_rsc_gone:gone(Id, Ctx),
         z_db:delete(rsc, Id, Ctx)
     end,
-
     {ok, _RowsDeleted} = z_db:transaction(F, Context),
-    %% After inserting a category we need to renumber the categories
-    case lists:member(category, CatList) of
-        true ->  m_category:renumber(Context);
-        false -> nop
-    end,
     % Sync the caches
     [ z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers ],
     flush(Id, CatList, Context),
@@ -224,7 +218,7 @@ update_transaction(RscUpd, Func, Context) ->
 
 update_result({ok, NewId, notchanged}, _RscUpd, _Context) ->
     {ok, NewId};
-update_result({ok, NewId, OldProps, NewProps, OldCatList, RenumberCats}, #rscupd{id=Id}, Context) ->
+update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{id=Id}, Context) ->
     % Flush some low level caches
     case proplists:get_value(name, NewProps) of
         undefined -> nop;
@@ -235,9 +229,9 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, RenumberCats}, #rscupd
         Uri -> z_depcache:flush({rsc_uri, z_convert:to_list(Uri)}, Context)
     end,
 
-    % After inserting a category we need to renumber the categories
-    case RenumberCats of
-        true ->  m_category:renumber(Context);
+    % Flush category caches if a category is inserted.
+    case IsCatInsert of
+        true -> m_category:flush(Context);
         false -> nop
     end,
 
@@ -319,10 +313,10 @@ update_transaction_fun_insert(#rscupd{id=insert_rsc} = RscUpd, Props, _Raw, Upda
     IsA = m_category:is_a(CategoryId, Context),
     IsCatInsert = case lists:member(category, IsA) of
                       true ->
-                          1 = z_db:q("insert into category (id, seq) values ($1, 1)", [InsertId], Context),
-                          true;
+                            m_hierarchy:append('$category', [InsertId], Context),
+                            true;
                       false ->
-                          false
+                            false
                   end,
      % Place the inserted properties over the update properties, replacing duplicates.
     Props1 = lists:foldl(
@@ -392,7 +386,10 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
                         undefined ->
                             UpdatePropsN;
                         CatId ->
-                            CatNr = z_db:q1("select nr from category where id = $1", [CatId], Context),
+                            CatNr = z_db:q1("select nr
+                                             from hierarchy 
+                                             where id = $1
+                                               and name = '$category'", [CatId], Context),
                             [ {pivot_category_nr, CatNr} | UpdatePropsN]
                     end,
 

@@ -67,8 +67,8 @@
             <select class="form-control" name="tpl_cat">
                 <option value="">{_ Optional category for catinclude _}</option>
                 <option disabled></option>
-                {% for id, level, indent, name in m.category.all_flat %}
-                    <option value="{{name}}">{{ indent }}{{ name }}</option>
+                {% for c in m.category.tree_flat %}
+                    <option value="{{ c.id.name }}">{{ c.indent }}{{ c.id.name }}</option>
                 {% endfor%}
             </select>
             <input class="form-control" type="text" name="tpl_name" placeholder="foo.tpl" value="" />

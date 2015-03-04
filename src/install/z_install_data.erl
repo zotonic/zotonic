@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-07
+%% @copyright 2009-2015 Marc Worrell
 %%
 %% @doc Initialize the database with start data.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -135,10 +134,16 @@ install_category(C) ->
     lager:info("Inserting categories"),
     %% The egg has to lay a fk-checked chicken here, so the insertion order is sensitive.
 
-    %% 1. Insert the category "category" and "meta"
-    {ok, 1} = z_db:equery("insert into category (id, parent_id, seq) values (116, null, 1)", C),
-    {ok, 1} = z_db:equery("insert into category (id, parent_id, seq) values (115, null, 99)", C),
-    {ok, 1} = z_db:equery("update category set parent_id = 115 where id = 116", C),
+    %% 1. Insert the categories "meta" and "category" 
+    {ok, 2} = z_db:equery("
+                    insert into hierarchy (name, id, parent_id, nr, lvl, lft, rght) 
+                    values
+                        ('$category', 115, null, 90000000, 1, 90000000, 92000000),
+                        ('$category', 116, null, 91000000, 2, 91000000, 91000000)
+                    ", C),
+
+    %% make "category" a sub-category of "meta"
+    {ok, 1} = z_db:equery("update hierarchy set parent_id = 115 where id = 116", C),
 
     %% "http://purl.org/dc/terms/DCMIType" ?
     {ok, 1} = z_db:equery("
@@ -157,54 +162,51 @@ install_category(C) ->
     
     %% Now that we have the category "category" we can insert all other categories.
     Cats = [
-        % Meta categories for defining categories, predicates.
-            {117,115,    2, predicate,   true,  undefined,                                   [{title, {trans, [{en, <<"Predicate">>},     {nl, <<"Predikaat">>}]}}] },
+        {101,undefined,  1,1,1,1, other,       true,  undefined,                                   [{title, {trans, [{en, <<"Uncategorized">>}, {nl, <<"Zonder categorie">>}]}}] },
 
-        %% Other categories
-        {101,undefined,  1, other,       true,  undefined,                                   [{title, {trans, [{en, <<"Uncategorized">>}, {nl, <<"Zonder categorie">>}]}}] },
+        {104,undefined,  2,1,2,4, text,        false, "http://purl.org/dc/dcmitype/Text",          [{title, {trans, [{en, <<"Text">>}, {nl, <<"Tekst">>}]}}] },
+            {106,104,    3,2,3,3, article,     false, undefined,                                   [{title, {trans, [{en, <<"Article">>}, {nl, <<"Artikel">>}]}}] },
+                {109,106,4,3,4,4, news,        false, undefined,                                   [{title, {trans, [{en, <<"News">>}, {nl, <<"Nieuws">>}]}}] },
 
-        {102,undefined,  3, person,      true,  undefined,                                   [{title, {trans, [{en, <<"Person">>}, {nl, <<"Persoon">>}]}}] },
+        {102,undefined,  5,1,5,5, person,      true,  undefined,                                   [{title, {trans, [{en, <<"Person">>}, {nl, <<"Persoon">>}]}}] },
 
-        {104,undefined,  2, text,        false, "http://purl.org/dc/dcmitype/Text",          [{title, {trans, [{en, <<"Text">>}, {nl, <<"Tekst">>}]}}] },
-            {106,104,    1, article,     false, undefined,                                   [{title, {trans, [{en, <<"Article">>}, {nl, <<"Artikel">>}]}}] },
-                {109,106,1, news,        false, undefined,                                   [{title, {trans, [{en, <<"News">>}, {nl, <<"Nieuws">>}]}}] },
+        {119,undefined,  6,1,6,7, location,    false, undefined,                                   [{title, {trans, [{en, <<"Location">>}, {nl, <<"Locatie">>}]}}] },
+            {107,119,    7,2,7,7, website,     false, undefined,                                   [{title, {trans, [{en, <<"Website">>}, {nl, <<"Website">>}]}}] },
 
-        {119,undefined,  4, location,    false, undefined,                                   [{title, {trans, [{en, <<"Location">>}, {nl, <<"Locatie">>}]}}] },
-            {107,119,    4, website,     false, undefined,                                   [{title, {trans, [{en, <<"Website">>}, {nl, <<"Website">>}]}}] },
+        {108, undefined, 8,1,8,8, event,       false, "http://purl.org/dc/dcmitype/Event",         [{title, {trans, [{en, <<"Event">>}, {nl, <<"Evenement">>}]}}] },
 
-        {108, undefined, 5, event,       false, "http://purl.org/dc/dcmitype/Event",         [{title, {trans, [{en, <<"Event">>}, {nl, <<"Evenement">>}]}}] },
+        {103,undefined,  9,1,9,9, artifact,    false, "http://purl.org/dc/dcmitype/PhysicalObject",[{title, {trans, [{en, <<"Artifact">>}, {nl, <<"Artefact">>}]}}] },
 
-        {103,undefined,  6, artifact,    false, "http://purl.org/dc/dcmitype/PhysicalObject",[{title, {trans, [{en, <<"Artifact">>}, {nl, <<"Artefact">>}]}}] },
+        {110,undefined,  10,1,10,14, media,       true,  "http://purl.org/dc/dcmitype/Image",         [{title, {trans, [{en, <<"Media">>}, {nl, <<"Media">>}]}}] }, 
+            {111,110,    11,2,11,11, image,       true,  "http://purl.org/dc/dcmitype/StillImage",    [{title, {trans, [{en, <<"Image">>}, {nl, <<"Afbeelding">>}]}}] },
+            {112,110,    12,2,12,12, video,       true,  "http://purl.org/dc/dcmitype/MovingImage",   [{title, {trans, [{en, <<"Video">>}, {nl, <<"Video">>}]}}] },
+            {113,110,    13,2,13,13, audio,       true,  "http://purl.org/dc/dcmitype/Sound",         [{title, {trans, [{en, <<"Audio">>}, {nl, <<"Geluid">>}]}}] },
+            {114,110,    14,2,14,14, document,    true,  undefined,							         [{title, {trans, [{en, <<"Document">>}, {nl, <<"Document">>}]}}] },
 
-        {110,undefined,  7, media,       true,  "http://purl.org/dc/dcmitype/Image",         [{title, {trans, [{en, <<"Media">>}, {nl, <<"Media">>}]}}] }, 
-            {111,110,    1, image,       true,  "http://purl.org/dc/dcmitype/StillImage",    [{title, {trans, [{en, <<"Image">>}, {nl, <<"Afbeelding">>}]}}] },
-            {112,110,    2, video,       true,  "http://purl.org/dc/dcmitype/MovingImage",   [{title, {trans, [{en, <<"Video">>}, {nl, <<"Video">>}]}}] },
-            {113,110,    3, audio,       true,  "http://purl.org/dc/dcmitype/Sound",         [{title, {trans, [{en, <<"Audio">>}, {nl, <<"Geluid">>}]}}] },
-            {114,110,    4, document,    true,  undefined,							         [{title, {trans, [{en, <<"Document">>}, {nl, <<"Document">>}]}}] },
+        {120,undefined,  15,1,15,16, collection,  false, "http://purl.org/dc/dcmitype/Collection",    [{title, {trans, [{en, <<"Collection">>}, {nl, <<"Collectie">>}]}}] },
+            {121,120,    16,2,16,16, 'query',     false, "http://purl.org/dc/dcmitype/Dataset",       [{title, {trans, [{en, <<"Search query">>}, {nl, <<"Zoekopdracht">>}]}}] },
 
-        {120,undefined,  8, collection,  false, "http://purl.org/dc/dcmitype/Collection",    [{title, {trans, [{en, <<"Collection">>}, {nl, <<"Collectie">>}]}}] },
-            {121,120,    8, 'query',     false, "http://purl.org/dc/dcmitype/Dataset",       [{title, {trans, [{en, <<"Search query">>}, {nl, <<"Zoekopdracht">>}]}}] },
+        {122,undefined,  17,1,17,18, categorization,true,undefined,                                   [{title, {trans, [{en, <<"Categorization">>}, {nl, <<"Categorisatie">>}]}}] },
+            {123,122,    18,2,18,18, keyword,     true,  undefined,                                   [{title, {trans, [{en, <<"Keyword">>}, {nl, <<"Trefwoord">>}]}}] },
 
-        {122,undefined,  9, categorization,true,undefined,                                   [{title, {trans, [{en, <<"Categorization">>}, {nl, <<"Categorisatie">>}]}}] },
-            {123,122,    1, keyword,     true,  undefined,                                   [{title, {trans, [{en, <<"Keyword">>}, {nl, <<"Trefwoord">>}]}}] }
-
-        % 115-118 meta -> @ position 99
+        % 115. Meta (see above)
+            % 116. Category (see above)
+            {117,115,    92,2,92,92, predicate,   true,  undefined,                                   [{title, {trans, [{en, <<"Predicate">>},     {nl, <<"Predikaat">>}]}}] }
         
-        % Max: 124
+        % Next id: 124
     ],
 
-    InsertCat = fun({Id, ParentId, Seq, Name, Protected, Uri, Props}) ->
+    InsertCatFun = fun({Id, ParentId, Nr, Lvl, Left, Right, Name, Protected, Uri, Props}) ->
         {ok, 1} = z_db:equery("
                 insert into rsc (id, visible_for, category_id, is_protected, name, uri, props)
                 values ($1, 0, 116, $2, $3, $4, $5)
                 ", [ Id, Protected, Name, Uri, ?DB_PROPS(Props) ], C),
         {ok, 1} = z_db:equery("
-                insert into category (id, parent_id, seq)
-                values ($1, $2, $3)", [Id, ParentId, Seq], C)
+                insert into hierarchy (name, id, parent_id, nr, lvl, lft, rght)
+                values ('$category', $1, $2, $3, $4, $5, $6)", 
+                [Id, ParentId, Nr*1000000, Lvl, Left*1000000, Right*1000000-1], C)
     end,
-    [ InsertCat(R) || R <- Cats ],
-%    pgsql:reset_id(C, "rsc"),
-    ok = enumerate_categories(C),
+    lists:foreach(InsertCatFun, Cats),
     ok.
     
 
@@ -222,7 +224,6 @@ install_rsc(C) ->
             values ($1, $2, $3, $4, $5, $6)
             ", R, C) || R <- Rsc ],
     {ok, _} = z_db:equery("update rsc set creator_id = 1, modifier_id = 1, is_published = true", C),
-%    pgsql:reset_id(C, "rsc"),
     ok.
 
 
@@ -258,7 +259,6 @@ install_predicate(C) ->
             insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id)
             values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1)
             ", R ++ [CatId], C) || R <- Preds],
-%    pgsql:reset_id(C, "rsc"),
 
     ObjSubj = [
         [300, true,  104], %  text   -> about     -> _
@@ -287,17 +287,3 @@ install_predicate(C) ->
             insert into predicate_category (predicate_id, is_subject, category_id) 
             values ($1, $2, $3)", OS, C) || OS <- ObjSubj ],
     ok.
-
-
-%% @doc Enumerate all categories so that their left, right, level en nr are set correctly
-%% @spec enumerate_categories(Connection) -> ok
-enumerate_categories(C) ->
-    lager:info("Sorting the category hierarchy"),
-    {ok, _, CatTuples} = z_db:equery("select id, parent_id, seq from category order by seq, id", C),
-    Enums = m_category:enumerate(CatTuples),
-    [
-        {ok, _} = z_db:equery("update category set nr = $2, lvl = $3, lft = $4, rght = $5, props = $6 where id = $1", [CatId, Nr, Level, Left, Right, ?DB_PROPS([{path,Path}])], C)
-        || {CatId, Nr, Level, Left, Right, Path} <- Enums
-    ],
-    ok.
-

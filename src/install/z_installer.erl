@@ -142,6 +142,7 @@ upgrade(C, Database, Schema) ->
     ok = fix_timestamptz(C, Database, Schema),
     % 0.12.5
     ok = install_content_group_dependent(C, Database, Schema),
+    ok = convert_category_hierarchy(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -469,3 +470,21 @@ install_content_group_dependent(C, Database, Schema) ->
             ok
     end.
 
+convert_category_hierarchy(C, Database, Schema) ->
+    case has_table(C, "hierarchy", Database, Schema) of
+        false ->
+            {ok, [], []} = pgsql:squery(C, z_install:hierarchy_table()),
+            {ok, [], []} = pgsql:squery(C, z_install:hierarchy_index_1()),
+            {ok, [], []} = pgsql:squery(C, z_install:hierarchy_index_2()),
+
+            {ok, _} = pgsql:squery(C, "
+                insert into hierarchy
+                    (name, id, parent_id, nr, lvl, lft, rght)
+                select '$category', id, parent_id, nr, lvl, lft, rght
+                from category
+              "),
+            _ = pgsql:squery(C, "drop table category cascade"),
+            ok;
+        true ->
+            ok
+    end.

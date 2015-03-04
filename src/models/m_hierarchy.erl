@@ -15,7 +15,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(m_menu_hierarchy).
+-module(m_hierarchy).
 
 -export([
     m_find_value/3,
@@ -25,8 +25,16 @@
     tree_flat/2,
     menu/2,
     ensure/2,
+    ensure/3,
+    append/3,
     save/3,
-    install/1
+    save_nocheck/3,
+    flush/2
+    ]).
+
+% For testing
+-export([
+    assign_nrs/2
     ]).
 
 -include_lib("zotonic.hrl").
@@ -69,15 +77,15 @@ tree(Id, Context) when is_integer(Id) ->
 tree(Name, Context) when is_binary(Name) ->
     F = fun() ->
         CatTuples = z_db:q("
-                select id, parent_id, lvl 
-                from menu_hierarchy 
+                select id, parent_id, lvl, lft, rght
+                from hierarchy h
                 where name = $1
                 order by nr", 
                 [Name],
                 Context),
-        build_tree(CatTuples, [])
+        build_tree(CatTuples, [], [])
     end,
-    z_depcache:memo(F, {menu_hierarchy, Name}, ?DAY, [menu_hierarchy], Context);
+    z_depcache:memo(F, {hierarchy, Name}, ?DAY, [hierarchy], Context);
 tree(Name, Context) ->
     tree(z_convert:to_binary(Name), Context).
 
@@ -104,22 +112,34 @@ tree_to_menu([E|Rest], Acc) ->
 
 
 %% @doc Ensure that all resources are present in a hierarchy.
+-spec ensure(atom()|binary()|string()|integer(), #context{}) -> {ok, integer()} | {error, term()}.
 ensure(Category, Context) ->
     case m_category:name_to_id(Category, Context) of
         {ok, CatId} ->
             Name = m_rsc:p_no_acl(CatId, name, Context),
-            Ids = z_db:q("select id from menu_hierarchy where name = $1", [Name], Context),
-            F = fun(Id, Acc, _Ctx) ->
-                    case lists:member(Id, Ids) of
-                        true -> Acc;
-                        false -> [Id|Acc]
-                    end
-                end,
-            Missing = m_category:fold(CatId, F, [], Context),
-            append(Name, Missing, Context);
+            ensure(Name, CatId, Context);
         {error, _} = Error ->
             Error
     end.
+
+%% @doc Ensure that all resources of a certain category are present in a hierarchy.
+-spec ensure(atom()|binary()|string(), atom()|integer()|string(), #context{}) -> {ok, integer()}.
+ensure(Name, CatId, Context) when is_binary(Name), is_integer(CatId) ->
+    Ids = z_db:q("select id from hierarchy where name = $1", [Name], Context),
+    F = fun(Id, Acc, _Ctx) ->
+            case lists:member({Id}, Ids) of
+                true -> Acc;
+                false -> [Id|Acc]
+            end
+        end,
+    Missing = m_category:fold(CatId, F, [], Context),
+    append(Name, Missing, Context);
+ensure(Name, Category, Context) when not is_integer(Category) ->
+    {ok, CatId} = m_category:name_to_id(Category, Context),
+    ensure(Name, CatId, Context);
+ensure(Name, CatId, Context) when not is_binary(Name) ->
+    ensure(z_convert:to_binary(Name), CatId, Context).
+
 
 %% @doc Save a new hierarchy, replacing a previous one.
 save(Name, Tree, Context) ->
@@ -127,21 +147,21 @@ save(Name, Tree, Context) ->
         true ->
             case m_category:name_to_id(Name, Context) of
                 {ok, CatId} ->
-                    save_1(CatId, Tree, Context);
+                    Name1 = m_rsc:p_no_acl(CatId, name, Context),
+                    save_nocheck(Name1, Tree, Context);
                 {error, _} = Error ->
-                    lager:warning("[menu_hierarchy] Hierarchy save for unknown category ~p", [Name]),
+                    lager:warning("[m_hierarchy] Hierarchy save for unknown category ~p", [Name]),
                     Error
             end;
         false ->
             {error, eacces}
     end.
 
-save_1(CatId, NewTree, Context) ->
-    Name = m_rsc:p_no_acl(CatId, name, Context),
+save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
     NewFlat = flatten_save_tree(NewTree),
     OldFlatNr = z_db:q("
                 select id, parent_id, lvl, nr
-                from menu_hierarchy 
+                from hierarchy 
                 where name = $1
                 order by nr", 
                 [Name],
@@ -161,7 +181,7 @@ save_1(CatId, NewTree, Context) ->
                             {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
                             {Left,Right} = range(Id, NewFlatNr),
                             z_db:q("
-                                    insert into menu_hierarchy
+                                    insert into hierarchy
                                         (name, id, parent_id, lvl, nr, lft, rght)
                                     values
                                         ($1, $2, $3, $4, $5, $6, $7)",
@@ -173,7 +193,7 @@ save_1(CatId, NewTree, Context) ->
                             {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
                             {Left,Right} = range(Id, NewFlatNr),
                             z_db:q("
-                                    update menu_hierarchy
+                                    update hierarchy
                                     set parent_id = $3,
                                         lvl = $4,
                                         nr = $5,
@@ -191,7 +211,7 @@ save_1(CatId, NewTree, Context) ->
                           end,
                           UpdIds),
             lists:foreach(fun(Id) ->
-                            z_db:q("delete from menu_hierarchy
+                            z_db:q("delete from hierarchy
                                     where name = $1 and id = $2",
                                    [Name,Id],
                                    Ctx)
@@ -209,11 +229,12 @@ range(Id, [{Id,_P,Lvl,Nr}|Rest]) ->
 range(Id, [_|Rest]) ->
     range(Id, Rest).
 
-range_1(Lvl, _Max, [{_Id,_P,Lvl1,Nr}|Rest]) when Lvl > Lvl1 ->
+range_1(Lvl, _Max, [{_Id,_P,Lvl1,Nr}|Rest]) when Lvl < Lvl1 ->
     range_1(Lvl, Nr, Rest);
 range_1(_Lvl, Max, _Rest) ->
     Max.
 
+%% @doc Go through the flattened tree and assign the range nrs
 assign_nrs(Diff, OldFlatNr) ->
     IdNr = lists:foldl(fun({Id,_,_,Nr}, D) ->
                             dict:store(Id, Nr, D)
@@ -238,7 +259,9 @@ assign_nrs_1([{equal, [{Id,P,Lvl}|Rs]}|Rest], Acc, LastNr, IdNr) ->
                         undefined ->
                             LastNr + ?DELTA;
                         EqNr when EqNr >= LastNr + 2 ->
-                            LastNr + (EqNr-LastNr) div 2
+                            LastNr + (EqNr-LastNr) div 2;
+                        _ ->
+                            LastNr + ?DELTA_MIN
                     end,
             Acc1 = [{Id,P,Lvl,NewNr} | Acc],
             assign_nrs_1(Diff1, Acc1, NewNr, IdNr)
@@ -288,30 +311,32 @@ flatten_save_tree([{Id, Cs}|Ts], ParentId, Lvl, Acc) ->
     flatten_save_tree(Ts, ParentId, Lvl, Acc1).
 
 append(_Name, [], _Context) ->
-    ok;
+    {ok, 0};
 append(Name0, Missing, Context) ->
     Name = z_convert:to_binary(Name0),
     Nr = next_nr(Name0, Context),
     lists:foldl(fun(Id, NextNr) ->
                     z_db:q("
-                        insert into menu_hierarchy (name, id, nr, lft, rght)
-                        values ($1, $2, $3, $4, $5)",
-                        [Name, Id, NextNr, NextNr, NextNr]),
+                        insert into hierarchy (name, id, nr, lft, rght, lvl)
+                        values ($1, $2, $3, $4, $5, 1)",
+                        [Name, Id, NextNr, NextNr, NextNr],
+                        Context),
                     NextNr+?DELTA
                 end,
                 Nr,
                 Missing),
-    flush(Name, Context).
+    flush(Name, Context),
+    {ok, length(Missing)}.
 
 
 next_nr(Name, Context) ->
-    case z_db:q1("select max(nr) from menu_hierarchy where name = $1", [Name], Context) of
+    case z_db:q1("select max(nr) from hierarchy where name = $1", [Name], Context) of
         undefined -> ?DELTA;
         Nr -> Nr + ?DELTA
     end.
 
 flush(Name, Context) ->
-    z_depcache:flush({menu_hierarchy, Name}, Context).
+    z_depcache:flush({hierarchy, z_convert:to_binary(Name)}, Context).
 
 
 indent(Level) when Level =< 0 ->
@@ -332,48 +357,22 @@ flatten_tree([E|Ts], Path, Acc) ->
 
 
 %% @doc Build a tree from the queried arguments
-build_tree([], Acc) ->
+build_tree([], _Stack, Acc) ->
     lists:reverse(Acc);
-build_tree([{_Id, _Parent, _Lvl} = C|Rest], Acc) ->
-    {C1, Rest1} = build_tree(C, [], Rest),
-    build_tree(Rest1, [C1|Acc]).
+build_tree([{Id, _Parent, _Lvl, _Left, _Right} = C|Rest], Stack, Acc) ->
+    {C1, Rest1} = build_tree(C, [Id|Stack], [], Rest),
+    build_tree(Rest1, Stack, [C1|Acc]).
     
-build_tree({Id, _Parent, _Lvl} = P, Acc, [{_Id2, Parent2, _Lvl2} = C|Rest])
-    when Id == Parent2 ->
-    {C1, Rest1} = build_tree(C, [], Rest),
-    build_tree(P, [C1|Acc], Rest1);
-build_tree({Id, Parent, Lvl}, Acc, Rest) ->
-    {[{id,Id}, {parent_id,Parent}, {level,Lvl}, {children, lists:reverse(Acc)}], Rest}.
-
-
-
-
-install(Context) ->
-    case z_db:table_exists(menu_hierarchy, Context) of
-        false ->
-            create_table(Context),
-            z_db:flush(Context),
-            ok;
-        true ->
-            ok
-    end.
-
-create_table(Context) ->
-    [] = z_db:q("
-        CREATE TABLE menu_hierarchy (
-          name character varying (80),
-          id int NOT NULL,
-          parent_id int,
-          nr int NOT NULL DEFAULT 0,
-          lvl int NOT NULL DEFAULT 0,
-          lft int NOT NULL DEFAULT 0,
-          rght int NOT NULL DEFAULT 0,
-
-          CONSTRAINT menu_hierarchy_pkey PRIMARY KEY (name, id),
-          CONSTRAINT fk_menu_hierarchy_id FOREIGN KEY (id)
-            REFERENCES rsc(id)
-            ON UPDATE CASCADE ON DELETE CASCADE
-        )", Context),
-    z_db:q("CREATE INDEX menu_hierarchy_nr_key ON menu_hierarchy (name, nr)", Context),
-    ok.
-
+build_tree({Id, _Parent, _Lvl, _Left, _Right} = P, Stack, Acc, [{Id2, Id, _Lvl2, _Left2, _Right2} = C|Rest]) ->
+    {C1, Rest1} = build_tree(C, [Id2|Stack], [], Rest),
+    build_tree(P, Stack, [C1|Acc], Rest1);
+build_tree({Id, Parent, Lvl, Left, Right}, Stack, Acc, Rest) ->
+    {[  {id,Id},
+        {parent_id,Parent},
+        {level,Lvl},
+        {children, lists:reverse(Acc)},
+        {path, lists:reverse(Stack)},
+        {left, Left},
+        {right, Right}
+     ], 
+     Rest}.

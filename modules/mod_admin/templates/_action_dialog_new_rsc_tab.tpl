@@ -39,10 +39,10 @@
 			    {% block category_select %}
 			        <select class="form-control" id="{{ #category }}" name="category_id">
 						<option></option>
-			            {% for cat_id, level, indent, name in m.category.all_flat %}
-			                {% if m.acl.insert[name|as_atom] %}
-			                    <option value="{{cat_id}}" {% ifequal cat_id cat %}selected="selected" {% endifequal %}>
-				                    {{ indent }}{{ m.rsc[cat_id].title|default:name }}
+			            {% for c in m.category.tree_flat %}
+			                {% if m.acl.insert[c.id.name|as_atom] %}
+			                    <option value="{{c.id}}" {% if c.id == cat %}selected="selected" {% endif %}>
+				                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
 			                    </option>
 			                {% endif %}
 			            {% endfor %}

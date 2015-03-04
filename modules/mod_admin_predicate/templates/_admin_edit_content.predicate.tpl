@@ -20,22 +20,26 @@
         <div class="col-lg-6 col-md-6">
 	    <h4>{_ From category _}</h4>
 
-	    {% for cat_id, level, indent, title in m.category.all_flat_meta %}
-	    <div class="checkbox"><label>
-		{{ indent }}<input type="checkbox" id="{{ #subject.cat_id }}" name="predicate_subject" 
-		{% if cat_id|member:p.subject %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ title }}
-	    </label></div>
+	    {% for c in m.category.tree_flat_meta %}
+	    	{% with c.id as cat_id %}
+			    <div class="checkbox"><label>
+				{{ c.indent }}<input type="checkbox" id="{{ #subject.cat_id }}" name="predicate_subject" 
+				{% if cat_id|member:p.subject %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ cat_id.title }}
+			    </label></div>
+			{% endwith %}
 	    {% endfor %}
 	</div>
 
 	<div class="col-lg-6 col-md-6">
 	    <h4>{_ To category _}</h4>
 
-	    {% for cat_id, level, indent, title in m.category.all_flat_meta %}
-	    <div class="checkbox"><label>
-		{{ indent }}<input type="checkbox" id="{{ #object.cat_id }}" name="predicate_object"  
-		{% if cat_id|member:p.object %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ title }}<br/>
-	    </label></div>
+	    {% for c in m.category.tree_flat_meta %}
+	    	{% with c.id as cat_id %}
+			    <div class="checkbox"><label>
+				{{ c.indent }}<input type="checkbox" id="{{ #object.cat_id }}" name="predicate_object"  
+				{% if cat_id|member:p.object %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ cat_id.title }}<br/>
+			    </label></div>
+			{% endwith %}
 	    {% endfor %}
 	</div>
     </div>

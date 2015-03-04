@@ -15,84 +15,68 @@ individual category information.
 
 An example of a category tree, as returned by ``{% print m.category.tree %}``::
 
-  [[{id,101},
-    {parent_id,undefined},
-    {level,1},
-    {children,{ok,[]}},
-    {name,<<"other">>},
-    {path,{ok,[]}}],
-   [{id,104},
-    {parent,undefined},
-    {level,1},
-    {children,{ok,[[{id,106},
-                    {parent_id,104},
-                    {level,2},
-                    {children,{ok,[[{id,109},
-                                    {parent_id,106},
-                                    {level,3},
-                                    {children,{ok,[]}},
-                                    {name,<<"news">>},
-                                    {path,{ok,...}}]]}},
-                    {name,<<"article">>},
-                    {path,{ok,"h"}}],
-                   [{id,105},
-                    {parent_id,104},
-                    {level,2},
-                    {children,{ok,[]}},
-                    {name,<<"review">>},
-                    {path,{ok,"h"}}],
-                   [{id,503},
-                    {parent_id,104},
-                    {level,2},
-                    {children,{ok,[[{id,504},
-                                    {parent_id,503},
-                                    {level,3},
-                                    {children,{ok,...}},
-                                    {name,<<...>>},
-                                    {path,...}]]}},
-                    {name,<<"documentation">>},
-                    {path,{ok,"h"}}]]}},
-    {name,<<"text">>},
-    {path,{ok,[]}}], … 
-  ]
-
+    [[{id,101},
+      {parent_id,undefined},
+      {level,1},
+      {children,[]},
+      {path,"e"},
+      {left,1000000},
+      {right,1000000}],
+     [{id,104},
+      {parent_id,undefined},
+      {level,1},
+      {children,[[{id,106},
+                  {parent_id,104},
+                  {level,2},
+                  {children,[[{id,109},
+                              {parent_id,106},
+                              {level,3},
+                              {children,[]},
+                              {path,"hjm"},
+                              {left,4000000},
+                              {right,4000000}]]},
+                  {path,"hj"},
+                  {left,3000000},
+                  {right,4000000}]]},
+      {path,"h"},
+      {left,2000000},
+      {right,4000000}],
+      ...]
+ 
 About the complete category tree
 --------------------------------
 
 The following m_category model properties are available in templates:
 
-+-------------+-------------------------------+---------------------------+
-|Property     |Description                    |Example                    |
-|             |                               |value                      |
-+=============+===============================+===========================+
-|tree         |Return the complete forest of  |See above.                 |
-|             |category trees as nested       |                           |
-|             |property lists.                |                           |
-+-------------+-------------------------------+---------------------------+
-|tree1        |Return the root element of all |                           |
-|             |category trees.                |                           |
-+-------------+-------------------------------+---------------------------+
-|tree2        |Return the root set and their  |                           |
-|             |direct children as category    |                           |
-|             |trees.                         |                           |
-|             |                               |                           |
-+-------------+-------------------------------+---------------------------+
-|all_flat     |Return a list of tuples for the|``[…, {106, 2,             |
-|             |category tree. This list is    |"&nbsp;&nbsp;&nbsp;&nbsp;",|
-|             |intended for select            |<<"article">>}, … ]``      |
-|             |lists. There is a special field|                           |
-|             |for the indentation. The       |                           |
-|             |returned list consists of      |                           |
-|             |tuples {CategoryId, Level,     |                           |
-|             |NbspLevel, CategoryName} The   |                           |
-|             |list does not contain the      |                           |
-|             |“meta” category, which contains|                           |
-|             |the categories “predicate”,    |                           |
-|             |“category” etc.                |                           |
-+-------------+-------------------------------+---------------------------+
-|all_flat_meta|Same as all_flat but now       |                           |
-|             |including the meta category.   |                           |
-+-------------+-------------------------------+---------------------------+
++--------------+-------------------------------+---------------------------+
+|Property      |Description                    |Example                    |
+|              |                               |value                      |
++==============+===============================+===========================+
+|tree          |Return the complete forest of  |See above.                 |
+|              |category trees as nested       |                           |
+|              |property lists.                |                           |
++--------------+-------------------------------+---------------------------+
+|tree2         |Return the forest of           |See above.                 |
+|              |category trees as nested       |                           |
+|              |property lists. Up to the      |                           |
+|              |children of the children.      |                           |
++--------------+-------------------------------+---------------------------+
+|tree_flat     |Return a list of tuples for the|See above entries.         |
+|              |category tree. This list is    |                           |
+|              |intended for select            |                           |
+|              |lists. There is a special field|                           |
+|              |for the indentation. The       |                           |
+|              |returned list consists of      |                           |
+|              |proplists. The                 |                           |
+|              |list does not contain the      |                           |
+|              |“meta” category, which contains|                           |
+|              |the categories “predicate”,    |                           |
+|              |“category” etc.                |                           |
++--------------+-------------------------------+---------------------------+
+|tree_flat_meta|Same as `tree_flat` but with   |See above entries.         |
+|              |the categories in the `meta`   |                           |
+|              |category.                      |                           |
++--------------+-------------------------------+---------------------------+
 
 
 About a single category
@@ -110,13 +94,8 @@ category, they are accessed by id or category name. For example::
 |tree      |The category tree below and     |See above.                           |
 |          |including the indexing category.|                                     |
 +----------+--------------------------------+-------------------------------------+
-|tree1     |The list of direct children     |[ [{id,106},                         |
-|          |below the indexing category.    |{parent_id,104},                     |
-|          |                                |{seq,3}, {nr,3},                     |
-|          |                                |{lvl,2}, {lft,3},                    |
-|          |                                |{rght,4},                            |
-|          |                                |{name,<<"article">>},                |
-|          |                                |{path,{ok,"h"}}], … ]                |
+|tree1     |The list of direct children     |See above.                           |
+|          |below the indexing category.    |                                     |
 +----------+--------------------------------+-------------------------------------+
 |tree2     |The category tree below and     |See above.                           |
 |          |including the indexing category,|                                     |
@@ -146,21 +125,21 @@ category, they are accessed by id or category name. For example::
 |          |when categories are added or    |                                     |
 |          |removed. An integer.            |                                     |
 +----------+--------------------------------+-------------------------------------+
-|lvl       |The depth of the category. Level|1                                    |
+|level     |The depth of the category. Level|1                                    |
 |          |1 is the root, 2 and more are   |                                     |
 |          |below the root.                 |                                     |
 +----------+--------------------------------+-------------------------------------+
-|lft       |The lowest value of the nr range|2                                    |
+|left      |The lowest value of the nr range|2                                    |
 |          |of this category, including its |                                     |
 |          |sub categories.                 |                                     |
 +----------+--------------------------------+-------------------------------------+
-|rght      |The highest value of the nr     |8                                    |
+|right     |The highest value of the nr     |8                                    |
 |          |range of this category,         |                                     |
 |          |including its sub categories.   |                                     |
 +----------+--------------------------------+-------------------------------------+
 |name      |The unique page name of this    |<<"text">>                           |
 |          |category. A binary.             |                                     |
 +----------+--------------------------------+-------------------------------------+
-|path      |The path through the hierarchy  |{ok, [104, 106]}                     |
+|path      |The path through the hierarchy  |[104, 106]                           |
 |          |of categories to this category. |                                     |
 +----------+--------------------------------+-------------------------------------+

@@ -76,7 +76,7 @@ event(#postback_notify{message="menuedit", trigger=TriggerId}, Context) ->
             z_notifier:notify(#menu_save{id=m_rsc:rid(RootId, Context1), tree=Tree1}, Context1),
             Context1;
         hierarchy ->
-            _ = m_menu_hierarchy:save(RootId, Tree1, Context),
+            _ = m_hierarchy:save(RootId, Tree1, Context),
             Context1;
         edge ->
             % Hierarchy using edges between resources
@@ -436,8 +436,7 @@ manage_schema(install, Context) ->
         ]
       },
       Context);
-manage_schema(_Version, Context) ->
-    m_menu_hierarchy:install(Context),
+manage_schema(_Version, _Context) ->
     ok.
 
 

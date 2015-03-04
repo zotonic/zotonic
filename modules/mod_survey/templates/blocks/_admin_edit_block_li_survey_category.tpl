@@ -51,10 +51,10 @@
           <label>{_ Category to choose from _}</label>
           <select class="form-control" id="block-{{name}}-category" name="block-{{name}}-category">
               <option></option>
-              {% for cat_id, level, indent, name in m.category.all_flat %}
-              <option value="{{ name }}" {% if blk.category == name %}selected="selected"{% endif %}>
-                  {{ indent }}{{ cat_id.title|default:name }}
-              </option>
+              {% for c in m.category.tree_flat %}
+                <option value="{{ c.id.name }}" {% if blk.category == c.id.name %}selected="selected"{% endif %}>
+                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
+                </option>
               {% endfor %}
           </select>
         </div>

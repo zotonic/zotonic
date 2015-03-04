@@ -44,7 +44,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      |Acc].
 
 manage_schema(_Version, Context) ->
-	m_menu_hierarchy:ensure(content_group, Context),
+	m_hierarchy:ensure(content_group, Context),
 	#datamodel{
 		categories=[
 			{content_group, undefined, [

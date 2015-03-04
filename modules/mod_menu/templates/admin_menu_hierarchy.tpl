@@ -45,7 +45,7 @@
 					</div>
 				{% else %}
 					<ul class="list-group">
-						{% for cg in m.menu_hierarchy[id.name].tree_flat %}
+						{% for cg in m.hierarchy[id.name].tree_flat %}
 							<li class="list-group-item">{{ cg.indent }} {{ cg.id.title }}</li>
 						{% empty %}
 							<li class="list-group-item">

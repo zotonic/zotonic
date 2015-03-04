@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-07
+%% @copyright 2009-2015 Marc Worrell
 %%
 %% @doc Install Zotonic, loads the datamodel into the database
 %% Assumes the database has already been created (which normally needs superuser permissions anyway)
@@ -8,7 +7,7 @@
 %% CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
 %% CREATE LANGUAGE "plpgsql";
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +27,10 @@
 %% interface functions
 -export([
          install/1,
+
+         hierarchy_table/0,
+         hierarchy_index_1/0,
+         hierarchy_index_2/0,
 
          medium_log_table/0,
          medium_update_function/0,
@@ -312,35 +315,6 @@ model_pgsql() ->
 
     "CREATE INDEX medium_rootname_key ON medium (rootname)",
 
-
-    % Table category
-    % nr, left and right are filled using a topological sort of the category tree
-    % A category hierarchy is derived from the resources with the category "category"
-
-    "CREATE TABLE category
-    (
-      id int NOT NULL,
-      parent_id int,
-      seq int NOT NULL DEFAULT 1000000,
-      nr int NOT NULL DEFAULT 0,
-      lvl int NOT NULL DEFAULT 0,
-      lft int NOT NULL DEFAULT 0,
-      rght int NOT NULL DEFAULT 0,
-      props bytea,
-
-      CONSTRAINT category_pkey PRIMARY KEY (id),
-      CONSTRAINT fk_category_id FOREIGN KEY (id)
-        REFERENCES rsc(id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-        DEFERRABLE INITIALLY DEFERRED
-    )",
-
-    "ALTER TABLE category ADD CONSTRAINT fk_category_parent_id FOREIGN KEY (parent_id)
-      REFERENCES category (id)
-      ON UPDATE CASCADE ON DELETE SET NULL",
-    "CREATE INDEX fki_category_parent_id ON category(parent_id)",
-    "CREATE INDEX category_nr_key ON category (nr)",
-
     % Table: predicate_category
     % Defines which categories are valid for a predicate as subject or object
 
@@ -551,6 +525,11 @@ model_pgsql() ->
     ON medium FOR EACH ROW EXECUTE PROCEDURE medium_delete()
     ",
 
+    %% Table with hierarchies for menus and the category tree
+    hierarchy_table(),
+    hierarchy_index_1(),
+    hierarchy_index_2(),
+
     % Table with all uploaded filenames, used to ensure unique filenames in the upload archive
     medium_log_table(),
 
@@ -567,6 +546,30 @@ model_pgsql() ->
     edge_log_function(),
     edge_log_trigger()
     ].
+
+
+hierarchy_table() ->
+    "CREATE TABLE hierarchy (
+        name character varying (80),
+        id int NOT NULL,
+        parent_id int,
+        nr int NOT NULL DEFAULT 0,
+        lvl int NOT NULL DEFAULT 0,
+        lft int NOT NULL DEFAULT 0,
+        rght int NOT NULL DEFAULT 0,
+
+        CONSTRAINT hierarchy_pkey PRIMARY KEY (name, id),
+        CONSTRAINT fk_hierarchy_id FOREIGN KEY (id)
+          REFERENCES rsc(id)
+          ON UPDATE CASCADE ON DELETE CASCADE
+          DEFERRABLE INITIALLY DEFERRED
+    )".
+
+hierarchy_index_1() ->
+    "CREATE INDEX hierarchy_nr_key ON hierarchy (name, nr)".
+
+hierarchy_index_2() ->
+    "CREATE INDEX fki_hierarchy_id ON hierarchy (id)".
 
 
 edge_log_table() ->
