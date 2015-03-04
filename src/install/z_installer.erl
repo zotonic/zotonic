@@ -51,13 +51,14 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
     case z_db_pool:test_connection(Context) of
         ok ->
             DbOptions = proplists:delete(dbpassword, z_db_pool:get_database_options(Context)),
-            case z_db:table_exists(config, Context) of
-                false ->
+            case {z_db:table_exists(config, Context), z_config:get(dbinstall)} of
+                {false, false} -> lager:warning("[~p] config table does not exist and dbinstall is false; not installing", [z_context:site(Context)]);
+                {false, _} ->
                     %% Install database
                     lager:warning("[~p] Installing database with db options: ~p", [z_context:site(Context), DbOptions]),
                     z_install:install(Context),
                     ignore;
-                true ->
+                {true, _} ->
                     %% Normal startup, do upgrade / check
                     ok = z_db:transaction(
                            fun(Context1) ->
@@ -72,14 +73,18 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
             end;
         {error, Reason} ->
             lager:warning("[~p] Database connection failure: ~p", [z_context:site(Context), Reason]),
-            case z_db:prepare_database(Context) of
-                ok ->
-                    lager:info("[~p] Retrying install check after db creation.", [z_context:site(Context)]),
-                    check_db_and_upgrade(Context, Tries+1);
-                {error, _PrepReason} = Error ->
-                    lager:error("[~p] Could not create the database and schema."),
-                    Error
-            end
+	    case z_config:get(dbcreate) of
+		false -> lager:warning("[~p] Database does not exist and dbcreate is false; not creating", [z_context:site(Context)]);
+		_Else ->
+		    case z_db:prepare_database(Context) of
+			ok ->
+			    lager:info("[~p] Retrying install check after db creation.", [z_context:site(Context)]),
+			    check_db_and_upgrade(Context, Tries+1);
+			{error, _PrepReason} = Error ->
+			    lager:error("[~p] Could not create the database and schema."),
+			    Error
+		    end
+		end
     end;
 check_db_and_upgrade(Context, _Tries) ->
     lager:error("[~p] Could not connect to database and db creation failed", [z_context:site(Context)]),
