@@ -95,7 +95,20 @@
 
 %%% Inet request backlog, increase when requests are being dropped.
    %% {inet_backlog, 500},
-
+   
+%%% Inet acceptor pool size. Configure the number of processes waiting for incoming requests. Increase when
+%%% request take long to be accepted and you hit the backlog.
+   %% {inet_acceptor_pool_size, 32},
+   
+%%% SSL request backlog, increase when requests are being dropped.
+   %% {ssl_backlog, 500},
+   
+%%% SSL acceptor pool size. Configure the number of processes waiting for incoming ssl requests. Increase when
+%%% request take long to be accepted and you hit the backlog. Note that the ssl acceptor pool is bigger. The
+%%% reason for this is that accepting ssl requests is much slower than normal request. Especially if you have 
+%%% slow clients.
+   %% {ssl_acceptor_pool_size, 128},
+   
 %%% Default ImageMagick color space. Some ImageMagick versions (like 6.7.0 and above)
 %%% use the RGB colorspace, so all images are darker than the original.
 %%% Possible Values:

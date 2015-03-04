@@ -178,7 +178,8 @@ start_listener(SupPid, SSLPort, Certs, Context) ->
     	{ssl_opts, Certs},
         {dispatcher, z_sites_dispatcher},
         {dispatch_list, []},
-	    {backlog, z_config:get(inet_backlog)}
+        {backlog, z_config:get(ssl_backlog)},
+        {acceptor_pool_size, z_config:get(ssl_acceptor_pool_size)}
     ],
 	Name4 = z_utils:name_for_host("mochiweb_v4_ssl", Context), 
     Ipv4 = {
