@@ -37,8 +37,8 @@
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
      #menu_item{id=admin_content_groups,
-                parent=admin_auth,
-                label=?__("Content Groups", Context),
+                parent=admin_structure,
+                label=?__("Content groups", Context),
                 url={admin_menu_hierarchy, [{name, "content_group"}]},
                 visiblecheck={acl, use, mod_admin_config}}
      |Acc].
@@ -48,7 +48,7 @@ manage_schema(_Version, Context) ->
 	#datamodel{
 		categories=[
 			{content_group, undefined, [
-				{title, {trans, [{en, "Content Group"}, {nl, "Pagina Groep"}]}}
+				{title, {trans, [{en, "Content Group"}, {nl, "Paginagroep"}]}}
 			]}
 		]
 	}.
