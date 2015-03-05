@@ -20,6 +20,7 @@
                 title=_"Add item"
                 callback="window.zMenuEditDone"
                 cat=cat_id
+                nocatselect
                 in_sorter=in_sorter
             }
     %}
