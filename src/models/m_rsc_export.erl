@@ -76,7 +76,6 @@ full(Id, Context) when is_integer(Id) ->
                                 order by e.predicate_id, e.seq, e.id", [Id], Context),
             Edges = [edge_details(E, Context) || E <- Edges0],
 
-            {ok, Category} = z_db:select(category, Id, Context),
             {ok, Medium} = z_db:select(medium, Id, Context),
 
             PreviewUrl = case z_media_tag:url(Id, [{width, 800}, {height, 800}, {upscale, true}, {use_absolute_url, true}], Context) of
@@ -92,7 +91,6 @@ full(Id, Context) when is_integer(Id) ->
                       %% Parts
                       {rsc, Rsc},
                       {medium, Medium},
-                      {category, Category},
                       {edges, Edges},
                       {preview_url, PreviewUrl}
                      ],
