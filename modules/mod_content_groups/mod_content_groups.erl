@@ -26,7 +26,6 @@
 -mod_provides([]).
 
 -include_lib("zotonic.hrl").
--include_lib("emqtt/include/emqtt.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 -export([
@@ -47,7 +46,7 @@ manage_schema(_Version, Context) ->
 	m_hierarchy:ensure(content_group, Context),
 	#datamodel{
 		categories=[
-			{content_group, undefined, [
+			{content_group, meta, [
 				{title, {trans, [{en, "Content Group"}, {nl, "Paginagroep"}]}}
 			]}
 		]
