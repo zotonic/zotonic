@@ -11,34 +11,49 @@
         default_pagelen_label
     %}
         {% with q.qpagelen|default:default_pagelen as qpagelen %}
-            {% with q.qcat as qcat %}
+            {% with q.qcat, q.qgroup as qcat, qgroup %}
                 <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc %}" class="form-inline">
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     <div class="btn-group pull-right">
+                        {% if `mod_content_groups`|member:m.modules.enabled  and m.search[{query cat=`content_group`}]|length %}
+                            <div class="btn-group">
+                                {% include "_admin_button_dropdown.tpl"
+                                    select_name="qgroup"
+                                    selected_value=qgroup
+                                    selected_label=m.rsc[qgroup].title
+                                    default_value=""
+                                    default_label=_"All Content"
+                                    form_id=#form
+                                    option_template="_admin_button_dropdown_content_groups.tpl"
+                                    header=_"Filter on content group"
+                                    align="right"
+                                %}
+                            </div>
+                        {% endif %}
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
-                               select_name="qcat"
-                               selected_value=qcat
-                               selected_label=m.rsc[qcat].title
-                               default_value=""
-                               default_label=_"All Categories"
-                               form_id=#form
-                               option_template="_admin_button_dropdown_categories.tpl"
-                               header=_"Filter on category"
-                               align="right"
+                                select_name="qcat"
+                                selected_value=qcat
+                                selected_label=m.rsc[qcat].title
+                                default_value=""
+                                default_label=_"All Categories"
+                                form_id=#form
+                                option_template="_admin_button_dropdown_categories.tpl"
+                                header=_"Filter on category"
+                                align="right"
                             %}
                         </div>
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
-                               select_name="qpagelen"
-                               selected_value=qpagelen
-                               selected_label=qpagelen
-                               default_value=default_pagelen
-                               default_label=default_pagelen_label
-                               form_id=#form
-                               options=[[10,"10"], [20,"20"], [50,"50"], [100,"100"], [200,"200"], [500,"500"]]
-                               header=_"Items per page"
-                               align="right"
+                                select_name="qpagelen"
+                                selected_value=qpagelen
+                                selected_label=qpagelen
+                                default_value=default_pagelen
+                                default_label=default_pagelen_label
+                                form_id=#form
+                                options=[[10,"10"], [20,"20"], [50,"50"], [100,"100"], [200,"200"], [500,"500"]]
+                                header=_"Items per page"
+                                align="right"
                             %}
                         </div>
                     </div>
@@ -71,8 +86,8 @@
                 <a class="btn btn-default{% if not q.qcat %} disabled{% endif %}" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
                 <a class="btn btn-default" href="{% url admin_media %}">{_ All media _}</a>
             </div>
-
-            {% with m.search.paged[{query authoritative=1 cat=q.qcat text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}] as result %}
+            
+            {% with m.search.paged[{query authoritative=1 cat=q.qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}] as result %}
                 {% catinclude "_admin_overview_list.tpl" m.category[q.qcat].is_a result=result %}
                 {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
             {% endwith %}

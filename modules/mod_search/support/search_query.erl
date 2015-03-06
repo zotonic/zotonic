@@ -24,7 +24,7 @@
          search/2,
          parse_request_args/1,
          parse_query_text/1
-]).
+        ]).
 
 -include_lib("zotonic.hrl").
 
@@ -71,9 +71,10 @@ parse_query_text(Text) ->
       || [L, Rest] <- [ binary:split(z_string:trim(L), <<"=">>) || L <- Lines] ].
 
 
-% Convert request arguments to atom. Doing it this way avoids atom
-% table overflows.
+                                                % Convert request arguments to atom. Doing it this way avoids atom
+                                                % table overflows.
 request_arg("authoritative")       -> authoritative;
+request_arg("content_group")       -> content_group;
 request_arg("cat")                 -> cat;
 request_arg("cat_exclude")         -> cat_exclude;
 request_arg("creator_id")          -> creator_id;
@@ -139,6 +140,21 @@ parse_query([{cat_exclude, Cats}|Rest], Context, Result) ->
 
 parse_query([{filter, R}|Rest], Context, Result) ->
     Result1 = add_filters(R, Result),
+    parse_query(Rest, Context, Result1);
+
+%% content_group=id
+%% Include only resources which are member of the given content group (or one of its children)
+parse_query([{content_group, ContentGroup}|Rest], Context, Result) ->
+    List = z_depcache:memo(
+             fun() ->
+                     GrpId = m_rsc:rid(ContentGroup, Context),
+                     [{Lft, Rght}] = z_db:q("SELECT lft, rght FROM hierarchy WHERE name = 'content_group' AND id = $1", [GrpId], Context),
+                     R = z_db:q("SELECT id FROM hierarchy WHERE name = 'content_group' AND lft >= $1 AND rght <= $2", [Lft, Rght], Context),
+                     string:join([z_convert:to_list(I) || {I} <- R], ",")
+             end,
+             {search_query_content_group_list, ContentGroup},
+             Context),
+    Result1 = add_where("rsc.content_group_id IN (" ++ List ++ ")", Result),
     parse_query(Rest, Context, Result1);
 
 %% id_exclude=resource-id
@@ -305,22 +321,22 @@ parse_query([{finished, Boolean}|Rest], Context, Result) ->
 %% Filter on items which are authoritative or not
 parse_query([{authoritative, Boolean}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_bool(Boolean), Result),
-     Result2 = add_where("rsc.is_authoritative = " ++ Arg, Result1),
-     parse_query(Rest, Context, Result2);
+    Result2 = add_where("rsc.is_authoritative = " ++ Arg, Result1),
+    parse_query(Rest, Context, Result2);
 
 %% creator_id=<rsc id>
 %% Filter on items which are created by <rsc id>
 parse_query([{creator_id, Integer}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_integer(Integer), Result),
-     Result2 = add_where("rsc.creator_id = " ++ Arg, Result1),
-     parse_query(Rest, Context, Result2);
+    Result2 = add_where("rsc.creator_id = " ++ Arg, Result1),
+    parse_query(Rest, Context, Result2);
 
 %% modifier_id=<rsc id>
 %% Filter on items which are last modified by <rsc id>
 parse_query([{modifier_id, Integer}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_integer(Integer), Result),
-     Result2 = add_where("rsc.modifier_id = " ++ Arg, Result1),
-     parse_query(Rest, Context, Result2);
+    Result2 = add_where("rsc.modifier_id = " ++ Arg, Result1),
+    parse_query(Rest, Context, Result2);
 
 %% query_id=<rsc id>
 %% Get the query terms from given resource ID, and use those terms.
@@ -330,7 +346,7 @@ parse_query([{query_id, Id}|Rest], Context, Result) ->
             Q = z_convert:to_list(m_rsc:p(Id, 'query', Context)),
             parse_query(parse_query_text(Q) ++ Rest, Context, Result);
         false ->
-            % Fetch the id's haspart objects (assume a collection)
+                                                % Fetch the id's haspart objects (assume a collection)
             parse_query([{hassubject, [Id, haspart]} | Rest], Context, Result)
     end;
 
@@ -338,8 +354,8 @@ parse_query([{query_id, Id}|Rest], Context, Result) ->
 %% Filter to *only* include the given rsc id. Can be used for resource existence check.
 parse_query([{rsc_id, Id}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(Id, Result),
-     Result2 = add_where("rsc.id = " ++ Arg, Result1),
-     parse_query(Rest, Context, Result2);
+    Result2 = add_where("rsc.id = " ++ Arg, Result1),
+    parse_query(Rest, Context, Result2);
 
 %% sort=fieldname
 %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.
@@ -481,6 +497,20 @@ add_custompivot_join(RscTable, Table, Search) ->
       from=Search#search_sql.from ++ " left join pivot_" ++ Table1 ++ " " ++ Alias ++ " on " ++ JoinClause
      }.
 
+%% Add a join on the hierarchy table.
+add_hierarchy_join(HierarchyName, Lft, Rght, Search) ->
+    {NameArg, Search1} = add_arg(HierarchyName, Search),
+    {LftArg, Search2} = add_arg(Lft, Search1),
+    {RghtArg, Search3} = add_arg(Rght, Search2),
+
+    A = "h" ++ integer_to_list(length(Search#search_sql.tables)),
+    Search4 = add_where(A ++ ".name = " ++ NameArg ++ " AND " ++ A ++ ".lft >= " ++ LftArg ++ " AND " ++ A ++ ".rght <= " ++ RghtArg, Search3),
+
+    Search4#search_sql{
+      tables=Search1#search_sql.tables ++ [{hierarchy, A}],
+      from=Search1#search_sql.from ++ ", hierarchy " ++ A
+     }.
+
 %% Add an AND clause to the WHERE of a #search_sql
 %% Clause is already supposed to be safe.
 add_where(Clause, Search) ->
@@ -550,10 +580,10 @@ assure_categories(Name, Context) ->
            end,
     Cats1 = assure_cat_flatten(Cats),
     lists:foldl(fun(C, Acc) ->
-                    case assure_category(C, Context) of
-                        error -> Acc;
-                        {ok, N} -> [N|Acc]
-                    end
+                        case assure_category(C, Context) of
+                            error -> Acc;
+                            {ok, N} -> [N|Acc]
+                        end
                 end,
                 [],
                 Cats1).
@@ -561,16 +591,16 @@ assure_categories(Name, Context) ->
 %% Flatten eventual lists of categories
 assure_cat_flatten(Names) when is_list(Names) ->
     lists:flatten([  
-        case is_list(N) of
-            true -> 
-                case z_string:is_string(N) of
-                    true -> iolist_to_binary(N);
-                    false -> assure_cat_flatten(N)
-                end;
-            false ->
-                N
-        end
-        || N <- Names]).
+                     case is_list(N) of
+                         true -> 
+                             case z_string:is_string(N) of
+                                 true -> iolist_to_binary(N);
+                                 false -> assure_cat_flatten(N)
+                             end;
+                         false ->
+                             N
+                     end
+                     || N <- Names]).
 
 %% Make sure the given name is a category.
 assure_category([], _) -> error;
@@ -608,7 +638,7 @@ add_filters({'or', Filters}, Result) ->
                          Filters),
     Or = "(" ++ string:join(Exprs, " OR ") ++ ")",
     add_where(Or, Result1);
-    
+
 add_filters([Column, Value], R) ->
     add_filters([Column, eq, Value], R);
 
@@ -636,4 +666,4 @@ map_filter_operator(lte) -> "<=";
 map_filter_operator('<=') -> "<=";
 map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 
-                                                       
+

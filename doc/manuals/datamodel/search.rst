@@ -287,7 +287,13 @@ Query-model arguments
 
   ``date_end_year=2012``
 
+**content_group**
 
+  Select items which are member of the given content group (or one of its children).
+
+  ``content_group=public``
+
+  
 Filter behaviour
 ----------------
 
