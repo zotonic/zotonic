@@ -6,7 +6,7 @@ Icons in templates
 
 Zotonic provides a couple of ways to show icons in templates:
 
-* :ref:`mod_artwork` gives access to FontAwesome icons. It also has a number of other icon collections, mostly PNG images. Activate the module and follow the instructions on the doc page.
+* :ref:`mod_artwork` gives access to FontAwesome and Material Design icons. It also has a number of other icon collections, mostly PNG images. Activate the module and follow the instructions on the doc page.
 * Zotonic icons provided by `mod_base`. This is explained on the current page.
 
 
@@ -19,7 +19,7 @@ Use cases:
 
 * You create your frontend from scratch, but you also have pages in your site that are provided by other modules, for instance the login screens. It would be good if the social login icons show up. 
 * You are writing a template or module and like to take advantage of ready available icons. 
-* You are writing frontend styles in LESS and you would like to extend Zotonic or FontAwesome icons.
+* You are writing frontend styles in LESS and you would like to extend Zotonic / FontAwesome / Material Design icons.
 
 
 Including Zotonic icons CSS
@@ -193,6 +193,21 @@ The ``:before`` pseudo-class can be extended to further style the icon. For inst
     }
 
 
+Extending Material Design icons
+"""""""""""""""""""""""""""""
+
+1. Enable module mod_artwork.
+
+2. In LESS, add parameter 'md' to the `extend` mixin and pass the character code::
+
+     .btn-bookmark {
+         .extend_icon(md, "\f019");
+     }
+
+The icon (variable) characters can be found in the `icons cheatsheet <http://zavoloklom.github.io/material-design-iconic-font/cheatsheet.html>`_.
+
+
+
 Extending FontAwesome 4 icons
 """""""""""""""""""""""""""""
 
@@ -206,4 +221,3 @@ Extending FontAwesome 4 icons
 
 The icon (variable) names can be found in ``mod_artwork/lib/font-awesome-4/less/variables.less``.
 
-3. To load the webfonts, add the CSS to the template, for instance: ``{% lib "font-awesome-4/css/font-awesome.min.css" %}``

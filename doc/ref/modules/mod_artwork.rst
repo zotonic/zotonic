@@ -6,11 +6,22 @@ This module contains many useful icons and images.
 Included CSS icons
 ------------------
 
+``lib/material-design/``
+	`Material Design Iconic Font <http://zavoloklom.github.io/material-design-iconic-font/>`_.
+	
 ``lib/font-awesome-4/``
 	Font Awesome 4: `fontawesome.io <http://fontawesome.io/>`_.
 
 ``lib/font-awesome/``
 	Font Awesome 3.2.1.
+
+
+How to use Material Design icons in your templates
+***********************************************
+
+* Include the CSS file: ``{% lib "material-design/css/material-design-iconic-font.min.css" %}``
+* Follow the `examples <http://zavoloklom.github.io/material-design-iconic-font/examples.html>`_
+* Find the class names in the `icons overview <http://zavoloklom.github.io/material-design-iconic-font/icons.html>`_
 
 
 How to use Font Awesome icons in your templates
