@@ -29,16 +29,25 @@
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 -export([
+         init/1,
          observe_admin_menu/3,
          manage_schema/2
         ]).
 
+init(Context) ->
+    m_acl_rule:init(Context).
+
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
-     #menu_item{id=admin_content_groups,
+     #menu_item{id=admin_acl_user_groups,
                 parent=admin_auth,
                 label=?__("User groups", Context),
                 url={admin_menu_hierarchy, [{name, "acl_user_group"}]},
+                visiblecheck={acl, use, mod_acl_user_groups}},
+     #menu_item{id=admin_content_groups,
+                parent=admin_auth,
+                label=?__("Access control rules", Context),
+                url={admin_acl_rules, []},
                 visiblecheck={acl, use, mod_acl_user_groups}}
      |Acc].
 
