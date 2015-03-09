@@ -6,11 +6,12 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2015-03-09 16:50+0100\n"
+"PO-Revision-Date: 2015-03-09 16:48+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -20,65 +21,65 @@ msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:23
 msgid "ACL debugger"
-msgstr "ACL debugger"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
-msgstr "ACL regels"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_header.tpl:4
 msgid "ACL user group"
-msgstr "Gebruikersgroepen"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:19
 #: modules/mod_acl_user_groups/mod_acl_user_groups.erl:49
 msgid "Access control rules"
-msgstr "Toegangsregels"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:44
 msgid "Add"
-msgstr "Toevoegen"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:20
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:31
 msgid "All"
-msgstr "Alles"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_header.tpl:12
 msgid "Category"
-msgstr "Categorie"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:21
 msgid "Content"
-msgstr "Inhoud"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_header.tpl:8
 msgid "Content group"
-msgstr "Paginagroep"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:22
 msgid "Modules"
-msgstr "Modules"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_acl_rules_list.tpl:5
 msgid "No ACL rules"
-msgstr "Geen toegangsregels gedefinieerd"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_header.tpl:16
 msgid "Permissions"
-msgstr "Toestemming"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:23
 msgid "Publish"
-msgstr "Publiceer"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:50
 msgid "Remove"
-msgstr "Verwijder"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:31
 msgid "Revert to published"
-msgstr "Terug naar gepubliceerde versie"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:35
 msgid "Save edit version"
@@ -86,28 +87,28 @@ msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:27
 msgid "Try rules..."
-msgstr "Regels uitproberen..."
+msgstr ""
 
 #: modules/mod_acl_user_groups/mod_acl_user_groups.erl:44
 msgid "User groups"
-msgstr "Gebruikersgroepen"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "delete (acl action)"
-msgstr "verwijderen"
+msgstr "delete"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "edit (acl action)"
-msgstr "bewerken"
+msgstr "edit"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "insert (acl action)"
-msgstr "toevoegen"
+msgstr "insert"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "link (acl action)"
-msgstr "koppelen"
+msgstr "link"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "view (acl action)"
-msgstr "bekijken"
+msgstr "view"

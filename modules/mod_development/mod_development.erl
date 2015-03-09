@@ -185,8 +185,7 @@ handle_file(_Verb, ".tpl", F) ->
                         {ok, _} ->
                             undefined;
                         {error, _} ->
-                            z:flush(),
-                            "Flushed global cache due to new template: " ++ TemplateFile
+                            undefined
                     end
             end;
         {match, [Site, TemplateFile]} ->

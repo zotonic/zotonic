@@ -47,7 +47,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      #menu_item{id=admin_content_groups,
                 parent=admin_auth,
                 label=?__("Access control rules", Context),
-                url={admin_acl_rules, []},
+                url={admin_acl_rules, [{kind, rsc}]},
                 visiblecheck={acl, use, mod_acl_user_groups}}
      |Acc].
 

@@ -4,7 +4,7 @@
 %%
 %% @doc Access to the ACL rules
 
-%% Copyright 2009 Arjan Scherpenisse
+%% Copyright 2015 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +31,14 @@
     m_value/2,
 
     init/1,
-    all_rules/3
+    all_rules/3,
+
+    update/4,
+    insert/3,
+    delete/3,
+
+    revert/2,
+    publish/2
    ]).
 
 -include_lib("zotonic.hrl").
@@ -44,6 +51,8 @@
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(T, M=#m{value=undefined}, _Context) when ?valid_acl_kind(T) ->
     M#m{value=T};
+m_find_value(actions, #m{value=T}, Context) when ?valid_acl_kind(T) ->
+    actions(T, Context);
 m_find_value(S, #m{value=T}, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
     all_rules(T, S, Context).
 
@@ -60,10 +69,93 @@ m_value(#m{value=undefined}, _Context) ->
 -type acl_rule() :: list().
 -spec all_rules(rsc | module, edit | publish, #context{}) -> [acl_rule()].
 all_rules(Kind, State, Context) ->
-    lager:warning("Kind: ~p", [Kind]),
-    lager:warning("State: ~p", [State]),
-    [].
+    Table = table(Kind),
+    Query = "SELECT * FROM " ++ z_convert:to_list(Table) ++ " WHERE " ++ state_sql_clause(State) ++ " ORDER BY modified DESC",
+    All = z_db:assoc(Query, Context),
+    normalize_actions(All).
 
+
+table(rsc) -> acl_rule_rsc;
+table(module) -> acl_rule_module.
+
+state_sql_clause(edit) -> "is_edit = true";
+state_sql_clause(publish) -> "is_edit = false".
+
+normalize_actions(Rows) ->
+    [normalize_action(Row) || Row <- Rows].
+
+normalize_action(Row) ->
+    Actions = proplists:get_value(actions, Row),
+    [{actions, [{z_convert:to_atom(T), true} || T <- string:tokens(z_convert:to_list(Actions), ",")]}
+     | proplists:delete(actions, Row)].
+
+actions(rsc, Context) ->
+    [
+     {view, ?__("view (acl action)", Context)},
+     {insert, ?__("insert (acl action)", Context)},
+     {edit, ?__("edit (acl action)", Context)},
+     {delete, ?__("delete (acl action)", Context)},
+     {link, ?__("link (acl action)", Context)}
+    ];
+actions(module, Context) ->
+    [
+     {use, ?__("use (acl action)", Context)}
+    ].
+
+
+update(Kind, Id, Props, Context) ->
+    z_db:update(
+      table(Kind), Id,
+      [{is_edit, true},
+       {modifier_id, z_acl:user(Context)},
+       {modified, calendar:universal_time()}
+       | Props], Context
+     ).
+
+insert(Kind, Props, Context) ->
+    z_db:insert(
+      table(Kind),
+      [{is_edit, true},
+       {modifier_id, z_acl:user(Context)},
+       {modified, calendar:universal_time()},
+       {creator_id, z_acl:user(Context)},
+       {created, calendar:universal_time()} | Props], Context
+     ).
+
+delete(Kind, Id, Context) ->
+    %% Assertion, can only delete edit version of a rule
+    {ok, Row} = z_db:select(table(Kind), Id, Context),
+    true = proplists:get_value(is_edit, Row),
+    {ok, _} = z_db:delete(table(Kind), Id, Context),
+    ok.
+
+%% Remove all edit versions, add edit versions of published rules
+revert(Kind, Context) ->
+    T = z_convert:to_list(table(Kind)),
+    z_db:transaction(
+      fun(Ctx) ->
+              z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = true", Ctx),
+              All = z_db:assoc("SELECT * FROM " ++ T ++ " WHERE is_edit = false", Ctx),
+              [z_db:insert(table(Kind),
+                           z_utils:prop_delete(id, z_utils:prop_replace(is_edit, true, Row)),
+                           Context) || Row <- All],
+              ok
+      end,
+      Context).
+
+%% Remove all publish versions, add published versions of unpublished rules
+publish(Kind, Context) ->
+    T = z_convert:to_list(table(Kind)),
+    z_db:transaction(
+      fun(Ctx) ->
+              z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = false", Ctx),
+              All = z_db:assoc("SELECT * FROM " ++ T ++ " WHERE is_edit = true", Ctx),
+              [z_db:insert(table(Kind),
+                           z_utils:prop_delete(id, z_utils:prop_replace(is_edit, false, Row)),
+                           Context) || Row <- All],
+              ok
+      end,
+      Context).
 
 
 init(Context) ->
@@ -83,7 +175,7 @@ init(Context) ->
             fk("acl_rule_rsc", "content_group_id", Context),
             fk("acl_rule_rsc", "category_id", Context),
             ok;
-            
+
         true ->
             ok
     end,

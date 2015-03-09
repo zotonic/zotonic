@@ -1,0 +1,4 @@
+[
+ {admin_acl_rules, ["admin", "acl", "rules", kind], controller_admin, [{template, "admin_acl_rules.tpl"}]}
+].
+ 
