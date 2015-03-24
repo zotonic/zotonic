@@ -40,11 +40,11 @@ process_post(ReqData, Context) ->
                         Questions when is_list(Questions) ->
 
                             {_, Missing} = mod_survey:collect_answers(Questions, Answers, Context),
-                            case Missing of
-                                [] ->
+                            case Missing =:= [] orelse z_convert:to_bool(z_context:get_q("allow_missing", Context)) of
+                                true ->
                                     Result = mod_survey:do_submit(SurveyId, Questions, Answers, Context),
                                     handle_survey_result(Result, Context);
-                                L when is_list(L) ->
+                                false ->
                                     Ms = string:join([z_convert:to_list(M) || M <- Missing], ", "),
                                     {error, syntax, "Missing fields: " ++ Ms}
                             end;

@@ -19,3 +19,7 @@ In case of an error, an error JSON is returned::
 
   {"error":{"code":"syntax","message":"Syntax error: Missing fields: email"}}
 
+When an extra query parameter is posted, ``allow_missing=true``, the
+API call will never complain about missing fields but just submit the
+survey anyway.
+
