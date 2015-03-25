@@ -1,3 +1,4 @@
+{% block upload_form %}
 <div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-upload">
     <p>
         {_ Upload a file from your computer. _}
@@ -36,3 +37,4 @@
         </fieldset>
     </form>
 </div>
+{% endblock %}
