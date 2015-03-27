@@ -396,13 +396,16 @@ get_scheduled(Id, Context) ->
 %% @doc Fetch the next scheduled mailing that is publicly visible, published and in the publication date range.
 check_scheduled(Context) ->
 	z_db:q_row("
-		select m.mailinglist_id, m.page_id 
+		select m.mailinglist_id, m.page_id  
 		from mailinglist_scheduled m
-			join rsc r on m.page_id = r.id
-		where r.is_published
-		  and r.visible_for = 0
-		  and r.publication_start <= now()
-		  and r.publication_end >= now()
+		where (
+		    select r.is_published 
+		          and r.visible_for = 0 
+		          and r.publication_start <= now()
+		          and r.publication_end >= now()
+		    from rsc r
+		    where r.id = m.mailinglist_id
+		)
 		limit 1", Context).
 
 
