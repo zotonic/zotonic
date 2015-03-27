@@ -194,7 +194,7 @@ The ``:before`` pseudo-class can be extended to further style the icon. For inst
 
 
 Extending Material Design icons
-"""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""
 
 1. Enable module mod_artwork.
 
