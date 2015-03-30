@@ -262,35 +262,40 @@ normalize(Email) ->
 
 %% @doc Install the email tracking table
 install(Context) ->
-    [] = z_db:q("
-        create table email_status (
-            email character varying (200) not null,
-            is_valid boolean not null default true,
+    case z_db:table_exists(email_status, Context) of
+        false ->
+            [] = z_db:q("
+                create table email_status (
+                    email character varying (200) not null,
+                    is_valid boolean not null default true,
 
-            read timestamp with time zone,
-            read_ct integer not null default 0,
+                    read timestamp with time zone,
+                    read_ct integer not null default 0,
 
-            receive timestamp with time zone,
-            receive_ct integer not null default 0,
+                    receive timestamp with time zone,
+                    receive_ct integer not null default 0,
 
-            sent timestamp with time zone,
-            sent_ct integer not null default 0,
+                    sent timestamp with time zone,
+                    sent_ct integer not null default 0,
 
-            error timestamp with time zone,
-            error_status character varying (500),
-            error_ct integer not null default 0,
-            error_is_final boolean not null default false,
+                    error timestamp with time zone,
+                    error_status character varying (500),
+                    error_ct integer not null default 0,
+                    error_is_final boolean not null default false,
 
-            bounce timestamp with time zone,
-            bounce_ct integer not null default 0,
+                    bounce timestamp with time zone,
+                    bounce_ct integer not null default 0,
 
-            created timestamp with time zone default current_timestamp not null,
-            modified timestamp with time zone default current_timestamp not null,
+                    created timestamp with time zone default current_timestamp not null,
+                    modified timestamp with time zone default current_timestamp not null,
 
-            primary key (email)
-        )
-        ",
-        Context),
-    [] = z_db:q("create index email_status_modified on email_status(modified)", Context),
+                    primary key (email)
+                )
+                ",
+                Context),
+            [] = z_db:q("create index email_status_modified on email_status(modified)", Context);
+        true ->
+            ok
+    end,
     ok.
 
