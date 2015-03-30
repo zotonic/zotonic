@@ -189,7 +189,7 @@ mark_sent(Email0, true, Context) ->
 
 %% @doc Mark as failed, happens on connection errors or on errors returned by the receiving smtp server.
 %% The final flag is set if our smtp server received a permanent error or gave up sending the email.
--spec mark_failed(binary(), boolean(), binary()|undefined, #context{}) -> ok.
+-spec mark_failed(binary(), boolean(), binary()|{error,term()}|undefined, #context{}) -> ok.
 mark_failed(Email0, false, Status, Context) ->
     Email = normalize(Email0),
     IsValid = is_valid_nocache(Email, Context),
@@ -202,7 +202,7 @@ mark_failed(Email0, false, Status, Context) ->
             error_ct = error_ct + 1,
             modified = now()
         where email = $1",
-        [Email, z_string:truncate(Status, 490)],
+        [Email, z_string:truncate(to_binary(Status), 490)],
         Context)
     of
         0 -> ok;
@@ -220,10 +220,19 @@ mark_failed(Email0, true, Status, Context) ->
             error_ct = error_ct + 1,
             modified = now()
         where email = $1",
-        [Email, z_string:truncate(Status, 490)],
+        [Email, z_string:truncate(to_binary(Status), 490)],
         Context),
     maybe_notify(Email, IsValid, false, true, Context),
     ok.
+
+to_binary({error, nxdomain}) ->
+    <<"Non-Existent Domain">>;
+to_binary({error, Reason}) ->
+    iolist_to_binary(io_lib:format("~p", [Reason]));
+to_binary(T) when is_tuple(T) ->
+    iolist_to_binary(io_lib:format("~p", [T]));
+to_binary(V) ->
+    z_convert:to_binary(V).
 
 %% @doc Mark as bounced, this is handled as permanent error, though it could be temporary if
 %% the bounce happened due to some temporary problem on the receiver's end.
