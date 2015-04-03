@@ -1,0 +1,156 @@
+%% @copyright 2015 Marc Worrell
+%% @doc Expansion of all user groups and content groups, used to fill acl lookup tables.
+
+%% Copyright 2015 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
+-module(acl_user_groups_rules).
+
+-export([
+    expand/2,
+    expand_rsc/2,
+    test/0
+]).
+
+-export([
+    tree_expand/1,
+    tree_ids/1
+    ]).
+
+-include_lib("zotonic.hrl").
+
+-type rsc_id() :: integer().
+
+-type module_name() :: atom().
+-type module_action() :: use.
+
+-type only_if_owner() :: true | false.
+-type user_group_id() :: rsc_id().
+-type content_group_id() :: rsc_id().
+-type category_id() :: rsc_id().
+-type rsc_action() :: view | insert | delete | update | link.
+
+-type module_rule() :: {module_name(), module_action(), user_group_id()}.
+-type rsc_rule() :: {content_group_id(), {category_id(), rsc_action(), only_if_owner()}, user_group_id()}.
+
+-type rule() :: rsc_rule() | module_rule().
+-type user_group_path() :: {user_group_id(), list(user_group_id())}.
+
+-spec expand(edit|publish, #context{}) -> {list(content_group_id()),
+                                           list(user_group_id()),
+                                           list(user_group_path()),
+                                           list(rule())}.
+expand(State, Context) ->
+    GroupTree = m_hierarchy:menu(content_group, Context),
+    UserTree = m_hierarchy:menu(acl_user_group, Context),
+    {tree_ids(GroupTree),
+     tree_ids(UserTree),
+     expand_group_path(UserTree),
+     expand_module(State, UserTree, Context)
+        ++ expand_rsc(State, GroupTree, UserTree, Context)}.
+
+-spec expand_rsc(edit|publish, #context{}) -> list(rule()).
+expand_rsc(State, Context) ->
+    GroupTree = m_hierarchy:menu(content_group, Context),
+    UserTree = m_hierarchy:menu(acl_user_group, Context),
+    expand_rsc(State, GroupTree, UserTree, Context).
+
+-spec expand_module(edit|publish, list(), #context{}) -> list(module_rule()).
+expand_module(State, UserTree, Context) ->
+    Modules = z_module_manager:active(Context),
+    Modules1 = [ {<<>>, Modules} | [ {z_convert:to_binary(M),[M]} || M <- Modules ] ],
+    RuleRows = m_acl_rule:all_rules(module, State, Context),
+    Rules = expand_rule_rows(module, Modules1, RuleRows),
+    [ {M,A,GId} || {x,{M,A,_IsOwner},GId} <- expand_rules([{x,[]}], Rules, UserTree) ].
+
+
+-spec expand_rsc(edit|publish, list(), list(), #context{}) -> list(rsc_rule()).
+expand_rsc(State, GroupTree, UserTree, Context) ->
+    CategoryTree = m_category:menu(Context),
+    RuleRows = m_acl_rule:all_rules(rsc, State, Context),
+    Cs = [{undefined, tree_ids(CategoryTree)} | tree_expand(CategoryTree) ],
+    Rules = expand_rule_rows(category_id, Cs, RuleRows),
+    expand_rules(GroupTree, Rules, UserTree).
+
+expand_rule_rows(Prop, Cs, RuleRows) ->
+    lists:flatten([ expand_rule_row(Prop, RuleRow, Cs) || RuleRow <- RuleRows ]).
+
+expand_rule_row(Prop, Row, Cs) ->
+    Actions = [ Act || {Act,true} <- proplists:get_value(actions, Row, []) ],
+    ContentGroupId = proplists:get_value(content_group_id, Row),
+    UserGroupId = proplists:get_value(acl_user_group_id, Row),
+    IsOwner = proplists:get_value(is_owner, Row, false),
+    PropId = proplists:get_value(Prop, Row),
+    CIds = proplists:get_value(PropId, Cs, [PropId]),
+    [ {ContentGroupId, {CId, Action, IsOwner}, UserGroupId} || CId <- CIds, Action <- Actions ].
+
+%% @doc Given two id lists, return all possible combinations.
+expand_rules(TreeA, Rules, TreeB) ->
+    As = [{undefined, tree_ids(TreeA)} | tree_expand(TreeA) ],
+    Bs = tree_expand(TreeB),
+    lists:flatten(
+        lists:map(fun({A, Pred, B}) ->
+                      {A, A1} = lists:keyfind(A, 1, As),
+                      {B, B1} = lists:keyfind(B, 1, Bs),
+                      expand_rule(A1, Pred, B1)
+                  end,
+                  Rules)).
+
+expand_rule(As, Pred, Bs) ->
+    [ {A, Pred, B} || A <- As, B <- Bs ].
+
+
+%% @doc Given a tree, return a list with (id, [id|contained_ids])
+tree_expand(Tree) ->
+    lists:flatten([ element(2,tree_expand(T, [])) || T <- Tree ]).
+
+tree_expand({Id, []}, Acc) ->
+    {[Id], [{Id,[Id]}|Acc]};
+tree_expand({Id, Subs}, Acc) ->
+    {BIds, Acc1} = lists:foldl(
+                            fun(SId, {BIdsAcc, LookupAcc}) ->
+                                {BelowIds, LookupAcc1} = tree_expand(SId, LookupAcc),
+                                {[BelowIds,BIdsAcc], LookupAcc1}
+                            end,
+                            {[], Acc},
+                            Subs),
+    BIds1 = lists:flatten(BIds),
+    {[Id|BIds1], [{Id,[Id|BIds1]} | Acc1]}.
+
+tree_ids(Tree) ->
+    tree_ids(Tree, []).
+
+tree_ids([], Acc) ->
+    Acc;
+tree_ids([{Id,Sub}|Rest], Acc) ->
+    Acc1 = tree_ids(Sub, Acc),
+    tree_ids(Rest, [Id|Acc1]).
+
+% Fetch the path to all ids in the tree
+expand_group_path(Tree) ->
+    expand_group_path(Tree, [], []).
+
+expand_group_path([], _Path, Acc) ->
+    Acc;
+expand_group_path([{Id, Subs}|Rest], Path, Acc) ->
+    Path1 = [Id|Path],
+    Acc1 = [{Id, Path1}|Acc],
+    Acc2 = expand_group_path(Subs, Path1, Acc1),
+    expand_group_path(Rest, Path, Acc2).
+
+test() ->
+    [] = tree_expand([]),
+    [{1,[1]}, {2,[2]}] = tree_expand([{1,[]}, {2,[]}]),
+    [{1,[1]},{2,[2,3]},{3,[3]}] = acl_user_groups_rules:tree_expand([{1,[]}, {2,[{3,[]}]}]),
+    ok.

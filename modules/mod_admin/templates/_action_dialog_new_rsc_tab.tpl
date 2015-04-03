@@ -20,6 +20,7 @@
 </p>
 #}
 <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
+{% with #form as form %}
 
 	<div class="form-group row">
 	    <label class="control-label col-md-3" for="new_rsc_title">{_ Page title _}</label>
@@ -29,29 +30,31 @@
 	    </div>
 	</div>
 
-	<div class="form-group row">
-	    <label class="control-label col-md-3" for="{{ #category }}">{_ Category _}</label>
-	    <div class="col-md-9">
-		    {% if cat and nocatselect %}
-			    <input class="form-control" type="text" readonly value="{{ m.rsc[cat].title }}" />
-			    <input type="hidden" name="category_id" value="{{ cat }}"/>
-		    {% else %}
-			    {% block category_select %}
-			        <select class="form-control" id="{{ #category }}" name="category_id">
-						<option></option>
-			            {% for c in m.category.tree_flat %}
-			                {% if m.acl.insert[c.id.name|as_atom] %}
-			                    <option value="{{c.id}}" {% if c.id == cat %}selected="selected" {% endif %}>
-				                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
-			                    </option>
-			                {% endif %}
-			            {% endfor %}
-			        </select>
-					{% validate id=#category name="category_id" type={presence} %}
-			    {% endblock %}
-		    {% endif %}
-	    </div>
-	</div>
+	{% block category %}
+		<div class="form-group row">
+		    <label class="control-label col-md-3" for="{{ #category }}">{_ Category _}</label>
+		    <div class="col-md-9">
+			    {% if cat and nocatselect %}
+				    <input class="form-control" type="text" readonly value="{{ m.rsc[cat].title }}" />
+				    <input type="hidden" name="category_id" value="{{ cat }}"/>
+			    {% else %}
+				    {% block category_select %}
+				        <select class="form-control" id="{{ #category }}" name="category_id">
+							<option></option>
+				            {% for c in m.category.tree_flat %}
+				                {% if m.acl.insert[c.id.name|as_atom] %}
+				                    <option value="{{c.id}}" {% if c.id == cat %}selected="selected" {% endif %}>
+					                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
+				                    </option>
+				                {% endif %}
+				            {% endfor %}
+				        </select>
+						{% validate id=#category name="category_id" type={presence} %}
+				    {% endblock %}
+			    {% endif %}
+		    </div>
+		</div>
+	{% endblock %}
 
 	{% all include "_dialog_new_rsc_extra.tpl" %}
 
@@ -79,6 +82,6 @@
 	    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 	    <button class="btn btn-primary" type="submit">{_ Make _} {{ catname }}</button>
     </div>
-
+{% endwith %}
 </form>
 

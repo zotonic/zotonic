@@ -3,14 +3,10 @@
 {% block active1 %}active{% endblock %}
 
 {% block content_acl %}
-    {% with q.kind|as_atom as kind %}
-        
     <div class="acl-well">
-
-        <div id="acl-rules">
+       <div id="acl-rules">
             {% include "_acl_rules_list.tpl" %}
         </div>
-        
     </div>
 
     <div class="acl-well">
@@ -41,7 +37,7 @@
             }
         %}
 
-        {% button text=_"Revert to published"
+        {% button text=_"Revert back to published"
             class="btn"
             action={confirm
                 text=_"Are you sure you want to restore all the ACL rules on this page to their currently published version?"
@@ -54,7 +50,4 @@
         %}
         
     </div>
-
-    {% endwith %}
-    
 {% endblock %}

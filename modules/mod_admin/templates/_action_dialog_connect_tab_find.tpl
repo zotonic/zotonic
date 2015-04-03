@@ -16,11 +16,9 @@
 			        <option value="">{_ Any category _}</option>
 			        <option value="" disabled></option>
 		            {% for c in m.category.tree_flat %}
-			            {% if m.acl.insert[c.id.name|as_atom] %}
-				            <option value="{{ c.id }}" {% if c.id == cat %}selected="selected" {% endif %}>
-						        {{ c.indent }}{{ c.id.title|default:c.id.name }}
-				            </option>
-			            {% endif %}
+			            <option value="{{ c.id }}" {% if c.id == cat %}selected="selected" {% endif %}>
+					        {{ c.indent }}{{ c.id.title|default:c.id.name }}
+			            </option>
 		            {% endfor %}
 		        </select>
 	        {% endblock %}

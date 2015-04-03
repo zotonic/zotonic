@@ -1,4 +1,30 @@
 [
- {admin_acl_rules, ["admin", "acl", "rules", kind], controller_admin, [{template, "admin_acl_rules.tpl"}]}
+	{acl_rule_test, 
+			["acl", "rules", "test"],
+			controller_template, 
+			[{template, "page_acl_user_group_try.tpl"}]},
+	{acl_rule_test, 
+			["acl", "rules", "test", code],
+			controller_template, 
+			[{template, "page_acl_user_group_try.tpl"}]},
+	{admin_acl_rules_rsc, 
+			["admin", "acl", "rules"], 
+			controller_admin, 
+			[{template, "admin_acl_rules.tpl"}, {kind,rsc}]},
+	{admin_acl_rules_rsc, 
+			["admin", "acl", "rules", "rsc"], 
+			controller_admin, 
+			[{template, "admin_acl_rules.tpl"}, {kind,rsc}]},
+	{admin_acl_rules_module, 
+			["admin", "acl", "rules", "module"], 
+			controller_admin, 
+			[{template, "admin_acl_rules.tpl"}, {kind,module}]},
+	{admin_acl_rules_upload, 
+			["admin", "acl", "rules", "upload"], 
+			controller_admin, 
+			[{template, "admin_acl_rules_upload.tpl"}, {kind,upload}]},
+	{admin_acl_rules_test, 
+			["admin", "acl", "rules", "test"], 
+			controller_admin, 
+			[{template, "admin_acl_rules_test.tpl"}, {kind,test}]}
 ].
- 

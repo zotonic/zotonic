@@ -221,6 +221,7 @@ save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
         end,
         Context),
     flush(Name, Context),
+    z_notifier:notify(#hierarchy_updated{root_id=z_convert:to_binary(Name), predicate=undefined}, Context),
     ok.
 
 range(Id, [{Id,_P,Lvl,Nr}|Rest]) ->
@@ -326,6 +327,7 @@ append(Name0, Missing, Context) ->
                 Nr,
                 Missing),
     flush(Name, Context),
+    z_notifier:notify(#hierarchy_updated{root_id=Name0, predicate=undefined}, Context),
     {ok, length(Missing)}.
 
 

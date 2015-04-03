@@ -55,7 +55,8 @@
     make_preview_unique/3,
     is_unique_file/2,
     download_file/1,
-    download_file/2
+    download_file/2,
+    mime_to_category/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -627,6 +628,12 @@ mime_to_category(Mime) ->
         "video/" ++ _ -> video;
         "audio/" ++ _ -> audio;
         "application/" ++ _ -> document;
+        "text/" ++ _ -> document;
+        <<"image/", _/binary>> -> image;
+        <<"video/", _/binary>> -> video;
+        <<"audio/", _/binary>> -> audio;
+        <<"application/", _/binary>> -> document;
+        <<"text/", _/binary>> -> document;
         _ -> media
     end.
 

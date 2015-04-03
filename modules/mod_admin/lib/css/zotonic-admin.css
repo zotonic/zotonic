@@ -256,6 +256,9 @@ button.close {
 .z-btn-remove:hover {
   color: #222222;
 }
+ul.connections-list {
+  min-height: 10px;
+}
 ul.connections-list li:last-child {
   margin-bottom: 10px;
 }

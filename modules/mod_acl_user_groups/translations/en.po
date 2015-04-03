@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:23
-msgid "ACL debugger"
+msgid "Test ACL"
 msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:3

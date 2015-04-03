@@ -29,9 +29,26 @@
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 -export([
+    observe_rsc_get/3,
     observe_admin_menu/3,
 	manage_schema/2
 	]).
+
+observe_rsc_get(#rsc_get{}, Props, Context) ->
+	case proplists:get_value(content_group_id, Props) of
+		undefined ->
+			IsA = m_category:is_a(proplists:get_value(category_id, Props), Context),
+			[
+				{content_group_id, 
+						case lists:member(meta, IsA) of
+							true -> m_rsc:rid(system_content_group, Context);
+							false -> m_rsc:rid(default_content_group, Context)
+						end}
+				| proplists:delete(content_group_id, Props)
+			];
+		_ ->
+			Props
+	end.
 
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
@@ -43,11 +60,35 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      |Acc].
 
 manage_schema(_Version, Context) ->
+	z_datamodel:manage(
+              ?MODULE,
+              #datamodel{
+				categories=[
+					{content_group, meta, [
+						{title, {trans, [{en, "Content Group"}, {nl, "Paginagroep"}]}}
+					]}
+				],
+				resources=[
+					{system_content_group, content_group, [
+						{title, {trans, [{en, "System Content"}, {nl, "Systeempagina’s"}]}}
+					]},
+					{default_content_group, content_group, [
+						{title, {trans, [{en, "Default Content Group"}, {nl, "Standaard paginagroep"}]}}
+					]}
+				]
+			  },
+			  Context),
 	m_hierarchy:ensure(content_group, Context),
-	#datamodel{
-		categories=[
-			{content_group, meta, [
-				{title, {trans, [{en, "Content Group"}, {nl, "Paginagroep"}]}}
-			]}
-		]
-	}.
+	SysId = m_rsc:rid(system_content_group, Context),
+	{MetaFrom, MetaTo} = m_category:get_range(meta, Context),
+	z_db:q("
+		update rsc
+		set content_group_id = $1
+		where pivot_category_nr >= $2
+		  and pivot_category_nr <= $3
+		  and content_group_id is null
+		",
+		[SysId, MetaFrom, MetaTo],
+		Context),
+	ok.
+

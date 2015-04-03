@@ -18,10 +18,11 @@
     <div class="admin-header">
         <h2>{_ Access control rules _}</h2>
         <ul class="nav nav-tabs">
-            <li class="{% if q.kind == "rsc" %}active{% endif %}"><a href="{% url admin_acl_rules kind=`rsc` %}">{_ Content _}</a></li>
-            <li class="{% if q.kind == "module" %}active{% endif %}"><a href="{% url admin_acl_rules kind=`module` %}">{_ Modules _}</a></li>
-            <li class="{% block active3 %}{% endblock %}"><a href="{% url admin_acl_rules_debugger %}">{_ ACL debugger _}</a></li>
-        </ul>	    
+            <li class="{% if kind == `rsc` %}active{% endif %}"><a href="{% url admin_acl_rules_rsc %}">{_ Content _}</a></li>
+            <li class="{% if kind == `module` %}active{% endif %}"><a href="{% url admin_acl_rules_module %}">{_ Modules _}</a></li>
+            <li class="{% if kind == `upload` %}active{% endif %}"><a href="{% url admin_acl_rules_upload %}">{_ File Uploads _}</a></li>
+            <li class="{% if kind == `test` %}active{% endif %}"><a href="{% url admin_acl_rules_test %}">{_ Test ACL _}</a></li>
+        </ul>
     </div>
 
     <div class="acl">

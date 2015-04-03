@@ -19,8 +19,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:23
-msgid "ACL debugger"
-msgstr "ACL debugger"
+msgid "Test ACL"
+msgstr "Test ACL"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
@@ -77,12 +77,12 @@ msgid "Remove"
 msgstr "Verwijder"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:31
-msgid "Revert to published"
+msgid "Revert back to published"
 msgstr "Terug naar gepubliceerde versie"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:35
 msgid "Save edit version"
-msgstr ""
+msgstr "Bewaar edit versie"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:27
 msgid "Try rules..."
@@ -94,20 +94,20 @@ msgstr "Gebruikersgroepen"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "delete (acl action)"
-msgstr "verwijderen"
+msgstr "verwijder"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "edit (acl action)"
-msgstr "bewerken"
+msgstr "bewerk"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "insert (acl action)"
-msgstr "toevoegen"
+msgstr "voeg&nbsp;toe"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "link (acl action)"
-msgstr "koppelen"
+msgstr "koppel"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "view (acl action)"
-msgstr "bekijken"
+msgstr "bekijk"

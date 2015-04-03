@@ -5,8 +5,8 @@
 {% endif %}
 <form id="{{ #ruleform }}" class="row acl-rule-row acl-rule-{{ rule.id }}" method="post" action="postback">
 
-    <div class="col-sm-2">
-	    <select class="form-control" id="{{ #content_group_id }}" name="acl_user_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
+    <div class="col-md-2">
+	    <select class="form-control" id="{{ #user_group_id }}" name="acl_user_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
 		    {% for cg in m.hierarchy.acl_user_group.tree_flat %}
 			    <option value="{{ cg.id }}" {% if cg.id == rule.acl_user_group_id %}selected{% endif %}>
 				    {{ cg.indent }} {{ cg.id.title }}
@@ -16,7 +16,7 @@
     </div>
 
     {% if kind == "rsc" %}
-        <div class="col-sm-2">
+        <div class="col-md-2">
 	        <select class="form-control" id="{{ #content_group_id }}" name="content_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
 		        <option value="">{_ All _}</option>
 		        {% for cg in m.hierarchy.content_group.tree_flat %}
@@ -27,8 +27,8 @@
 	        </select>
         </div>
         
-        <div class="col-sm-2">
-	        <select class="form-control" id="{{ #content_group_id }}" name="category_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
+        <div class="col-md-2">
+	        <select class="form-control" id="{{ #category_id }}" name="category_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
 		        <option value="">{_ All _}</option>
 		        {% for cg in m.hierarchy[`$category`].tree_flat %}
 			        <option value="{{ cg.id }}" {% if cg.id == rule.category_id %}selected{% endif %}>
@@ -37,10 +37,18 @@
 		        {% endfor %}
 	        </select>
         </div>
-    {% endif %}
 
-    {% if kind == "module" %}
-        <div class="col-sm-4">
+        <div class="col-md-1">
+            <label class="checkbox-inline">
+                <input type="checkbox" id="{{ #is_owner }}" name="is_owner" value="on"
+                    {% if rule.is_owner %}checked="checked"{% endif %}
+                    {% if rule %}onchange="$(this.form).submit()"{% endif %}
+                />
+                {_ owner _}
+            </label>
+        </div>
+    {% elseif kind == "module" %}
+        <div class="col-md-5">
 	        <select class="form-control" id="{{ #module }}" name="module" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
 		        <option value="">{_ All _}</option>
                 {% for mod, name in m.modules.all %}
@@ -49,9 +57,8 @@
             </select>            
         </div>
     {% endif %}
-    
-    <div class="col-sm-6">
 
+    <div class="col-md-5">
         {% if is_new %}
             {% button
                 text=_"Add"
@@ -67,7 +74,6 @@
             %}
         {% endif %} 
 
-        
         <div>
             {% for action, label in m.acl_rule[kind].actions %}
                 <label class="checkbox-inline">
@@ -75,9 +81,9 @@
                         {% if rule.actions[action] %}checked="checked"{% endif %}
                         {% if rule %}onchange="$(this.form).submit()"{% endif %}
                     /> {{ label }}
-            </label>
-        {% endfor %}
+                </label>
+            {% endfor %}
+        </div>
     </div>
-</div>
 </form>
 

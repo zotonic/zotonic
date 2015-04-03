@@ -12,10 +12,12 @@
         <div class="col-md-2">
             <label>{_ Category _}</label>
         </div>
-    {% endif %}
 
-    {% if kind == "module" %}
-        <div class="col-md-4">
+        <div class="col-md-1">
+            <label>{_ User is owner _}</label>
+        </div>
+    {% elseif kind == "module" %}
+        <div class="col-md-5">
             <label>{_ Module _}</label>
         </div>
     {% endif %}
@@ -23,9 +25,4 @@
     <div class="col-md-5">
         <label>{_ Permissions _}</label>
     </div>
-
-    <div class="col-md-1">
-        &nbsp;
-    </div>
-    
 </div>
