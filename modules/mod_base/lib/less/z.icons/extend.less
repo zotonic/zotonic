@@ -1,5 +1,3 @@
-@import (reference) "variables.less";
-@import (reference) "core.less";
 
 // Extend a class with a Zotonic icon class
 .extend_icon(@name) {
@@ -33,5 +31,20 @@
     &:before {
         &:extend(.fa-icon);
         content: @@name;
+    }
+}
+
+
+// Extend a class with a Material Design character code
+//
+// Example:
+// .btn-bookmark {
+//    .extend_icon(md, "\f019");
+// }
+
+.extend_icon(md, @charstr) {
+    &:before {
+        &:extend(.md-icon);
+        content: @charstr;
     }
 }

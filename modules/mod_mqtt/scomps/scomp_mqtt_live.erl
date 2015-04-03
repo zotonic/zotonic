@@ -55,7 +55,14 @@ vary(_Params, _Context) ->
     nocache.
 
 render(Params, _Vars, Context) ->
-    Template = proplists:get_value(template, Params),
+    case proplists:get_value(template, Params) of
+        undefined ->
+            render_postback(Params, Context);
+        Template ->
+            render_template(Template, Params, Context)
+    end.
+
+render_template(Template, Params, Context) ->
     Target = proplists:get_value(target, Params, z_convert:to_binary(z_ids:identifier(16))),
     Where = z_convert:to_binary(proplists:get_value(where, Params, <<"update">>)), 
     {LiveVars,TplVars} = lists:partition(
@@ -80,6 +87,21 @@ render(Params, _Vars, Context) ->
         _ ->
             {ok, {javascript, script(Target, Where, LiveVars, TplVars, Context)}}
     end.
+
+render_postback(Params, Context) ->
+    {postback, Tag} = proplists:lookup(postback, Params),
+    {delegate, Delegate} = proplists:lookup(delegate, Params),
+    {target, Target} = proplists:lookup(target, Params),
+    Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, Delegate, Context),
+    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, Params) ],
+    Script = iolist_to_binary([
+        <<"z_live.subscribe(">>, 
+            z_utils:js_array(Topics),$,,
+            $',z_utils:js_escape(Target), $',$,,
+            $',Postback,$',
+        $), $;
+    ]),
+    {ok, {javascript, Script}}.
 
 event(#postback{message={live, Where, Template, TplVars}, target=Target}, Context) ->
     Render = #render{template=Template, vars=[{target,Target}|TplVars]},

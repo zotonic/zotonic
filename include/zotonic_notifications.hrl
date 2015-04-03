@@ -170,16 +170,39 @@
 % {z_convert:to_atom(Notification), received, UserId, ResourceId, Received}
 % The {Notification, UserId, ResourceId} comes from m_email_receive_recipient:get_by_recipient/2.
 
+%% @doc Email status notification, sent when the validity of an email recipient changes (notify)
+-record(email_status, {
+        recipient :: binary(),
+        is_valid :: boolean(),
+        is_final :: boolean()
+    }).
+
 %% @doc Bounced e-mail notification.  The recipient is the e-mail that is bouncing. When the
-%% the message_nr is unknown the it is set to 'undefined'. This can happen when it is a "late bounce".
+%% the message_nr is unknown the it is set to 'undefined'. This can happen if it is a "late bounce".
+%% If the recipient is defined then the Context is the depickled z_email:send/2 context.
 %% (notify)
--record(email_bounced, {message_nr, recipient}).
+-record(email_bounced, {
+            message_nr :: binary(),
+            recipient :: undefined | binary()
+        }).
 
-%% @doc Notify that we could send an e-mail (there might be a bounce later...)  (first)
--record(email_sent, {message_nr, recipient}).
+%% @doc Notify that we could send an e-mail (there might be a bounce later...)  (notify)
+%% The Context is the depickled z_email:send/2 context.
+-record(email_sent, {
+            message_nr :: binary(),
+            recipient :: binary(),
+            is_final :: boolean()   % Set to true after waiting 4 hours for bounces
+        }).
 
-%% @doc Notify that we could NOT send an e-mail (there might be a bounce later...)  (first)
--record(email_failed, {message_nr, recipient}).
+%% @doc Notify that we could NOT send an e-mail (there might be a bounce later...)  (notify)
+%% The Context is the depickled z_email:send/2 context.
+-record(email_failed, {
+            message_nr :: binary(),
+            recipient :: binary(), 
+            is_final :: boolean(),
+            reason :: retry | illegal_address | smtphost | error,
+            status :: binary()
+        }).
 
 
 %% @doc Add a handler for receiving e-mail notifications (first)

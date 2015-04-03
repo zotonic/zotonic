@@ -77,22 +77,27 @@ gone(Id, Context) when is_integer(Id) ->
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
 %%      Also sets the 'new id', which is the id that replaces the deleted id.
 gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:= undefined ->
-	Props = z_db:assoc_row("
+	case z_db:assoc_row("
 			select id, name, version, page_path, uri, is_authoritative, creator_id, created
 			from rsc
 			where id = $1
-		", [Id], Context),
-	Props1 = [
-		{new_id, NewId},
-		{new_uri, undefined},
-		{modifier_id, z_acl:user(Context)}
-		| Props 
-	],
-	case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Context) of
-		1 ->
-			lager:error(z_context:lager_md(Context), "Second rsc_gone entry for id ~p", [Id]), 
-			z_db:update(rsc_gone, Id, Props1, Context);
-		0 ->
-			z_db:insert(rsc_gone, Props1, Context)
+			", [Id], Context)
+	of
+		undefined ->
+			{error, notfound};
+		Props when is_list(Props) ->
+			Props1 = [
+				{new_id, NewId},
+				{new_uri, undefined},
+				{modifier_id, z_acl:user(Context)}
+				| Props 
+			],
+			case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Context) of
+				1 ->
+					lager:error(z_context:lager_md(Context), "Second rsc_gone entry for id ~p", [Id]), 
+					z_db:update(rsc_gone, Id, Props1, Context);
+				0 ->
+					z_db:insert(rsc_gone, Props1, Context)
+			end
 	end.
 

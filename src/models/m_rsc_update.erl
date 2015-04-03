@@ -584,8 +584,8 @@ props_filter([{custom_slug, P}|T], Acc, Context) ->
     props_filter(T, [{custom_slug, z_convert:to_bool(P)} | Acc], Context);
 
 props_filter([{B, P}|T], Acc, Context) 
-    when  B =:= is_published; B =:= is_featured; B=:= is_protected; 
-          B =:= is_query_live; B =:= date_is_all_day ->
+    when  B =:= is_published; B =:= is_featured; B=:= is_protected;
+          B =:= is_dependent; B =:= is_query_live; B =:= date_is_all_day ->
     props_filter(T, [{B, z_convert:to_bool(P)} | Acc], Context);
 
 props_filter([{is_authoritative, P}|T], Acc, Context) ->

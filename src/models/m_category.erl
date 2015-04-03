@@ -704,7 +704,7 @@ renumber_pivot_task(Context) ->
                     and c.name = '$category'
                 where c.id = r.category_id
                   and (r.pivot_category_nr is null or r.pivot_category_nr <> c.nr)
-                limit 1000", Context),
+                limit 1000", Context, 60000),
     case Nrs of
         [] ->
             ?zInfo("Category renumbering completed.", Context),

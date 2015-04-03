@@ -10,6 +10,7 @@ See: http://zotonic.com/docs/latest/manuals/templates/icons.html
 }
 .z-icon,
 .fa-icon,
+.md-icon,
 .z-btn-remove:before,
 .z-btn-remove:hover:before,
 .z-btn-help:before,
@@ -30,11 +31,13 @@ button.close:hover:before,
 }
 a.z-icon:hover,
 a.fa-icon:hover,
+a.md-icon:hover,
 a.zotonic-logo:hover {
   text-decoration: none;
 }
 .z-icon em,
 .fa-icon em,
+.md-icon em,
 .zotonic-logo em {
   display: none;
 }
@@ -51,6 +54,9 @@ button.close:hover:before,
 }
 .fa-icon {
   font-family: 'FontAwesome';
+}
+.md-icon {
+  font-family: 'Material Design Iconic Font';
 }
 .z-btn-remove,
 .z-btn-help {
@@ -114,6 +120,7 @@ button.close > em {
 }
 .z-btn-social .z-icon,
 .z-btn-social .fa-icon,
+.z-btn-social .md-icon,
 .z-btn-social .zotonic-logo {
   position: absolute;
   display: block;
@@ -125,6 +132,43 @@ button.close > em {
   top: 50%;
   left: .5em;
   margin-top: -7.5px;
+}
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('/lib/font-awesome-4/fonts/fontawesome-webfont.eot?v=4.2.0');
+  src: url('/lib/font-awesome-4/fonts/fontawesome-webfont.eot?#iefix&v=4.2.0') format('embedded-opentype'), url('/lib/font-awesome-4/fonts/fontawesome-webfont.woff?v=4.2.0') format('woff'), url('/lib/font-awesome-4/fonts/fontawesome-webfont.ttf?v=4.2.0') format('truetype'), url('/lib/font-awesome-4/fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.fa-icon {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@font-face {
+  font-family: 'Material Design Iconic Font';
+  src: url('/lib/material-design/fonts/Material-Design-Iconic-Font.eot?v=1.0.1');
+  src: url('/lib/material-design/fonts/Material-Design-Iconic-Font.eot?#iefix&v=1.0.1') format('embedded-opentype'), url('/lib/material-design/fonts/Material-Design-Iconic-Font.woff?v=1.0.1') format('woff'), url('/lib/material-design/fonts/Material-Design-Iconic-Font.ttf?v=1.0.1') format('truetype'), url('/lib/material-design/fonts/Material-Design-Iconic-Font.svg?v=1.0.1#Material-Design-Iconic-Font') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.md-icon,
+[class^="md-icon-"],
+[class*=" md-icon-"] {
+  display: inline-block;
+  font: normal normal normal 14px/1 'Material Design Iconic Font';
+  font-size: inherit;
+  speak: none;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.md-icon {
+  line-height: inherit;
+  vertical-align: bottom;
 }
 .z-icon-cross:before {
   content: "\e60c";

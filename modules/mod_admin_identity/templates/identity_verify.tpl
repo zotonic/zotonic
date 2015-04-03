@@ -19,9 +19,9 @@
 
 			<p>{% if idn.type == 'email' %}{_ Your e-mail address is now verified. _}{% else %}{_ Your address is now verified. _}{% endif %}</p>
 
-			<p class="buttons">
-				<a class="button" href="/">{_ Home _}</a>
-				{% if m.acl.user %}<a class="button" href="{{ m.acl.user.page_url }}">{_ My page _}</a>{% endif %}
+			<p>
+				<a class="btn btn-default" href="/">{_ Home _}</a>
+				{% if m.acl.user %}<a class="btn btn-default" href="{{ m.acl.user.page_url }}">{_ My page _}</a>{% endif %}
 			</p>
 		</div>
 
@@ -30,8 +30,8 @@
 	
 			<p>{_ This verification key is unknown. _}</p>
 
-			<p class="buttons">
-				<a class="button" href="/">{_ Home _}</a>
+			<p>
+				<a class="btn btn-default" href="/">{_ Home _}</a>
 			</p>
 		</div>
 

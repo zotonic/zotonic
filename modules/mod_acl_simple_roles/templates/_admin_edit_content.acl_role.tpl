@@ -53,7 +53,7 @@
                 {% for c in m.category.tree_flat_meta %}
                     {% with c.id as cat_id %}
                         <div class="checkbox">
-                            <label for="{{ #category.cat_id }}">{{ c.indent }}<input type="checkbox" id="{{ #category.cat_id }}" name="acl_cat"{% if cat_id.name|as_atom|member:acl.categories %} checked="checked"{% endif %} value="{{ title }}" />{{ cat_id.title }} <span class="z-text-light">{{ cat_id.name }}</span></label>
+                            <label for="{{ #category.cat_id }}">{{ c.indent }}<input type="checkbox" id="{{ #category.cat_id }}" name="acl_cat"{% if cat_id.name|as_atom|member:acl.categories %} checked="checked"{% endif %} value="{{ cat_id.name }}" />{{ cat_id.title }} <span class="z-text-light">{{ cat_id.name }}</span></label>
                         </div>
                     {% endwith %}
                 {% endfor %}
