@@ -22,7 +22,7 @@
 -mod_title("Menus").
 -mod_description("Menus in Zotonic, adds admin interface to define menus and other hierarchical lists.").
 -mod_schema(2).
--mod_depends([admin]).
+-mod_depends([]).
 -mod_provides([menu]).
 
 %% interface functions
