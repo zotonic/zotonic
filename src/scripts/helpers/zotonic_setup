@@ -155,7 +155,7 @@ else
 fi
 
 # The filename where zotonic writes its unix process Id to, for monitoring applications.
-export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
+[ -z $ZOTONIC_PIDFILE ] && export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
 
 # Locate the path to the erl_call binary
 ERL_CALL=$($ERL -noshell -noinput  -eval "io:format(\"~s\", [code:priv_dir(erl_interface)])" -s erlang halt|sed 's~priv$~bin/erl_call~')
