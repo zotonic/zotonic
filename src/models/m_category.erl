@@ -54,6 +54,7 @@
     last_modified/2,
     is_a/2,
     is_a/3,
+    is_meta/2,
     name_to_id/2,
     name_to_id_check/2,
     id_to_name/2,
@@ -372,16 +373,19 @@ get_range(Id, Context) ->
     case get(Id, Context) of
         undefined ->
             {1,0}; % empty range
-        C ->
+        C when is_list(C) ->
             {proplists:get_value(left, C),
-             proplists:get_value(right, C)}
+             proplists:get_value(right, C)};
+        Other ->
+            io:format("~n~n~p~n~n", [Other]),
+            1 = Other
     end.
 
 get_range_by_name(Name, Context) ->
     case get_by_name(Name, Context) of
         undefined ->
             {1,0}; % empty range
-        C ->
+        C when is_list(C) ->
             {proplists:get_value(left, C),
              proplists:get_value(right, C)}
     end.
@@ -452,6 +456,30 @@ is_a(Id, Context) ->
 is_a(Id, Cat, Context) ->
     CatName = m_category:id_to_name(Cat, Context),
     lists:member(CatName, is_a(Id, Context)).
+
+%% @doc Check if a category is a meta category. This can't use the m_rsc routines as it is also
+%%      used to determine the default content group during the m_rsc:get/2
+-spec is_meta(integer(), #context{}) -> boolean().
+is_meta(CatId, Context) when is_integer(CatId) ->
+    z_depcache:memo(
+        fun() ->
+             1 =:= z_db:q1("
+                    select count(*)
+                    from hierarchy a,
+                         hierarchy b
+                    where a.name = '$category'
+                      and b.name = '$category'
+                      and a.id = (select id from rsc where name = 'meta')
+                      and b.id = $1
+                      and b.lft >= a.lft
+                      and b.rght <= a.rght",
+                    [CatId],
+                    Context)
+        end,
+        {is_category_meta, CatId},
+        ?WEEK,
+        [{hierarchy, <<"$category">>}],
+        Context).
 
 %% @doc Map a category name to an id, be flexible with the input
 -spec name_to_id(binary()|list()|integer()|{integer()}, #context{}) -> {ok, integer()} | {error, {unknown_category, term()}}.
