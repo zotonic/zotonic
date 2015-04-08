@@ -246,7 +246,12 @@ acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=_SearchS
     case restrict_content_groups(Context) of
         all ->
             {[], Args};
+        [] ->
+            % User is not allowed to see anything
+            Clause = " false ",
+            {Clause, Args};
         Ids when is_list(Ids) ->
+            % User can see some content groups
             SIds = [ integer_to_list(Id) || Id <- Ids ],
             In = string:join(SIds, ","),
             Clause = " ("++Alias++".content_group_id is null or "++Alias++".content_group_id in ("++In++")) ",
