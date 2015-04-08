@@ -37,10 +37,9 @@
 observe_rsc_get(#rsc_get{}, Props, Context) ->
 	case proplists:get_value(content_group_id, Props) of
 		undefined ->
-			IsA = m_category:is_a(proplists:get_value(category_id, Props), Context),
 			[
 				{content_group_id, 
-						case lists:member(meta, IsA) of
+						case m_category:is_meta(proplists:get_value(category_id, Props), Context) of
 							true -> m_rsc:rid(system_content_group, Context);
 							false -> m_rsc:rid(default_content_group, Context)
 						end}
