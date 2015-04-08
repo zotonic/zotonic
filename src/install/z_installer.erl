@@ -464,6 +464,7 @@ install_content_group_dependent(C, Database, Schema) ->
         true -> 
             ok;
         false ->
+            lager:info("[database: ~p ~p] Adding rsc.is_dependent and rsc.content_group_id", [Database, Schema]),
             {ok, [], []} = pgsql:squery(C, 
                               "ALTER TABLE rsc "
                               "ADD COLUMN is_dependent BOOLEAN NOT NULL DEFAULT false,"
