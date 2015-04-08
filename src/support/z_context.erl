@@ -628,7 +628,8 @@ continue_page_session(Context) ->
     end.
 
 
-%% @doc Ensure that we have parsed the query string, fetch body if necessary
+%% @doc Ensure that we have parsed the query string, fetch body if necessary.
+%%      If this is a POST then the session/page-session might be continued after this call.
 ensure_qs(Context) ->
     case proplists:lookup('q', Context#context.props) of
         {'q', _Qs} ->
@@ -1131,15 +1132,17 @@ parse_form_urlencoded(Context) ->
         "application/x-www-form-urlencoded" ++ _ ->
             case wrq:req_body(ReqData) of
                 {undefined, ReqData1} ->
-                     {[], set_reqdata(ReqData1, Context)};
+                    {[], set_reqdata(ReqData1, Context)};
                 {Binary, ReqData1} ->
-                     {mochiweb_util:parse_qs(Binary), set_reqdata(ReqData1, Context)}
+                    Context1 = continue_page_session(continue_session(Context)),
+                    {mochiweb_util:parse_qs(Binary), set_reqdata(ReqData1, Context1)}
             end;
         "multipart/form-data" ++ _ ->
             FileCheckFun = fun(_Filename, _ContentType, _Size) ->
                                 ok
                            end,
-            {Form, ContextRcv} = z_parse_multipart:recv_parse(FileCheckFun, Context),
+            Context1 = continue_page_session(continue_session(Context)),
+            {Form, ContextRcv} = z_parse_multipart:recv_parse(FileCheckFun, Context1),
             FileArgs = [ {Name, #upload{filename=Filename, tmpfile=TmpFile}} || {Name, Filename, TmpFile} <- Form#multipart_form.files ],
             {Form#multipart_form.args ++ FileArgs, ContextRcv};
         _Other ->

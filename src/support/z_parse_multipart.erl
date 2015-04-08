@@ -73,10 +73,8 @@ recv_parse(UploadCheckFun, Context) ->
 progress(0, _ContentLength, _ReceivedLength, _Context) ->
     nop;
 progress(Percentage, ContentLength, _ReceivedLength, Context) when ContentLength > ?CHUNKSIZE*5 ->
-	case {	is_push_attached(Context),
-			is_pid(Context#context.page_id), 
-			z_context:get_q("z_trigger_id", Context)} of
-		{true, true, TriggerId} when TriggerId =/= undefined, TriggerId =/= "" ->
+	case {is_push_attached(Context), z_context:get_q("z_trigger_id", Context)} of
+		{true, TriggerId} when TriggerId =/= undefined, TriggerId =/= "", TriggerId =/= <<>> ->
             JS = iolist_to_binary([
                         "z_progress('", z_utils:js_escape(TriggerId),
                             "',", integer_to_list(Percentage),");"
