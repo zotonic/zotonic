@@ -34,6 +34,8 @@
     manage_schema/2
     ]).
 
+observe_rsc_get(#rsc_get{}, [], Context) ->
+    [];
 observe_rsc_get(#rsc_get{}, Props, Context) ->
     case proplists:get_value(content_group_id, Props) of
         undefined ->
