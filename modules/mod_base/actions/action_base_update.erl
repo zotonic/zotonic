@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %% Date: 2009-07-16
 %% @doc Replace the content of the target with the result of a render action.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
     
 render_update(Method, TriggerId, TargetId, Args, Context) ->
     Html = case proplists:get_value(template, Args) of
-        undefined -> proplists:get_value(text, Args, "");
+        undefined ->
+            proplists:get_value(text, Args, "");
         Template -> 
             IsAll = proplists:get_value('include_all', Args),
             case z_convert:to_bool(proplists:get_value('catinclude', Args)) of
@@ -52,20 +53,22 @@ render_inline(Method, TargetId, Html, Args, Context) ->
         true ->
             case Method of
                 update        -> {[], z_render:appear_selector(Sel, Html, Context)};
-		replace	      -> {[], z_render:appear_replace_selector(Sel, Html, Context)};
+                replace       -> {[], z_render:appear_replace_selector(Sel, Html, Context)};
                 insert_top    -> {[], z_render:appear_top_selector(Sel, Html, Context)};
                 insert_bottom -> {[], z_render:appear_bottom_selector(Sel, Html, Context)};
-		insert_before -> {[], z_render:appear_before_selector(Sel, Html, Context)};
-		insert_after  -> {[], z_render:appear_after_selector(Sel, Html, Context)}
+                insert_before -> {[], z_render:appear_before_selector(Sel, Html, Context)};
+                insert_after  -> {[], z_render:appear_after_selector(Sel, Html, Context)};
+                iframe        -> {[], z_render:update_iframe(TargetId, Html, Context)}
             end;
         _ -> 
             case Method of
                 update        -> {[], z_render:update_selector(Sel, Html, Context)};
-		replace       -> {[], z_render:replace_selector(Sel, Html, Context)};
+                replace       -> {[], z_render:replace_selector(Sel, Html, Context)};
                 insert_top    -> {[], z_render:insert_top_selector(Sel, Html, Context)};
                 insert_bottom -> {[], z_render:insert_bottom_selector(Sel, Html, Context)};
-		insert_before -> {[], z_render:insert_before_selector(Sel, Html, Context)};
-		insert_after  -> {[], z_render:insert_after_selector(Sel, Html, Context)}
+                insert_before -> {[], z_render:insert_before_selector(Sel, Html, Context)};
+                insert_after  -> {[], z_render:insert_after_selector(Sel, Html, Context)};
+                iframe        -> {[], z_render:update_iframe(TargetId, Html, Context)}
             end
     end.
 
@@ -75,20 +78,20 @@ render_static(Method, TargetId, Html, Args, Context) ->
         true -> 
             case Method of
                 update        -> {z_render:appear_selector_js(Sel, Html), Context};
-		replace       -> {z_render:appear_replace_selector_js(Sel, Html), Context};
+                replace       -> {z_render:appear_replace_selector_js(Sel, Html), Context};
                 insert_top    -> {z_render:appear_top_selector_js(Sel, Html), Context};
                 insert_bottom -> {z_render:appear_bottom_selector_js(Sel, Html), Context};
-		insert_before -> {z_render:appear_before_selector_js(Sel, Html), Context};
-		insert_after  -> {z_render:appear_after_selector_js(Sel, Html), Context}
+                insert_before -> {z_render:appear_before_selector_js(Sel, Html), Context};
+                insert_after  -> {z_render:appear_after_selector_js(Sel, Html), Context}
             end;
         _ -> 
             case Method of 
                 update        -> {z_render:update_selector_js(Sel, Html), Context};
-		    replace   -> {z_render:replace_selector_js(Sel, Html), Context};
+                    replace   -> {z_render:replace_selector_js(Sel, Html), Context};
                 insert_top    -> {z_render:insert_top_selector_js(Sel, Html), Context};
                 insert_bottom -> {z_render:insert_bottom_selector_js(Sel, Html), Context};
-		insert_before -> {z_render:insert_before_selector_js(Sel, Html), Context};
-		insert_after  -> {z_render:insert_after_selector_js(Sel, Html), Context}
+                insert_before -> {z_render:insert_before_selector_js(Sel, Html), Context};
+                insert_after  -> {z_render:insert_after_selector_js(Sel, Html), Context}
             end
     end.
 
