@@ -25,6 +25,8 @@
 -mod_schema(1).
 
 -export([
+    event/2,
+
     observe_email_sent/2,
     observe_email_failed/2,
     observe_email_bounced/2,
@@ -34,6 +36,32 @@
 ]).
 
 -include_lib("zotonic.hrl").
+
+
+event(#postback{message={email_status_reset, Args}}, Context) ->
+    Id = proplists:get_value(id, Args),
+    Email = proplists:get_value(email, Args),
+    case is_allowed(Id, Context) of
+        true ->
+            ok = m_email_status:clear_status(Id, Email, Context),
+            case proplists:get_all_values(on_success, Args) of
+                [] ->
+                    z_render:growl(?__("The email error flag has been cleared.", Context), Context);
+                OnSuccess ->
+                    z_render:wire(OnSuccess, Context)
+            end;
+        false ->
+            z_render:growl(?__("Sorry, you are not allowed to reset this email address.", Context), Context)
+    end.
+
+is_allowed(undefined, Context) ->
+    is_allowed(Context);
+is_allowed(Id, Context) ->
+    z_acl:rsc_editable(Id, Context) orelse is_allowed(Context).
+
+is_allowed(Context) ->
+    z_acl:is_allowed(use, mod_email_status, Context).
+
 
 observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) ->
     m_email_status:mark_sent(Recipient, IsFinal, Context).
