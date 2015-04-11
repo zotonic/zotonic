@@ -32,8 +32,7 @@
 -export([
     observe_media_stillimage/2,
     observe_scomp_script_render/2,
-    observe_dispatch/2,
-    observe_postback_notify/2
+    observe_dispatch/2
 ]).
 
 %% @doc Return the filename of a still image to be used for image tags.
@@ -128,23 +127,8 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
             end
     end.
 
-    last([]) -> $/;
-    last(Path) -> lists:last(Path).
-
-
-observe_postback_notify(#postback_notify{message="render-update", target=TargetId}, Context) ->
-    Id = m_rsc:rid(z_context:get_q("id", Context), Context),
-    case z_context:get_q("template", Context) of
-        undefined ->
-            undefined;
-        Template -> 
-            case Id of
-                undefined -> z_render:update(TargetId, #render{template=Template, vars=[]}, Context);
-                _ -> z_render:update(TargetId, #render{template={cat, Template}, vars=[{id, Id}]}, Context)
-            end
-    end;
-observe_postback_notify(#postback_notify{}, _Context) ->
-    undefined.
+last([]) -> $/;
+last(Path) -> lists:last(Path).
 
 
 %%====================================================================

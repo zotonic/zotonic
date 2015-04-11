@@ -27,6 +27,8 @@
     is_valid/2,
     get/2,
 
+    clear_status/3,
+
     mark_received/2,
 
     mark_read/2,
@@ -53,6 +55,31 @@ m_to_list(_m, _Context) ->
 
 m_value(_m, _Context) ->
     undefined.
+
+%% @doc Clear the status of the email address
+clear_status(undefined, Email0, Context) ->
+    clear_status(normalize(Email0), Context);
+clear_status(Id, Email0, Context) ->
+    Email = normalize(Email0),
+    Idns = m_identity:get_rsc_by_type(Id, email, Context),
+    Es = [ proplists:get_value(key, Idn) || Idn <- Idns ],
+    case lists:member(Email, Es) of
+        true ->
+            clear_status(Email, Context);
+        false ->
+            {error, notfound}
+    end.
+
+clear_status(Email, Context) ->
+    z_db:q("update email_status
+            set is_valid = true,
+                recent_error_ct = 0,
+                modified = now()
+            where email = $1",
+            [Email],
+            Context),
+    ok.
+
 
 %% @doc Check if an email address is known to be valid, if nothing known then assume it is valid.
 -spec is_valid(binary(), #context{}) -> boolean().
@@ -84,7 +111,8 @@ get(Email0, Context) ->
                    Context).
 
 
-%% @doc Increment the email receive counter, doesn't say anything about the validity of the email address
+%% @doc Increment the email receive counter. This doesn't say anything about the validity 
+%%      of the email address, only that we received an email with this envelope address.
 -spec mark_received(binary(), #context{}) -> ok.
 mark_received(Email0, Context) ->
     Email = normalize(Email0),
@@ -112,7 +140,7 @@ mark_received(Email0, Context) ->
             ok
     end.
 
-%% @doc Track email sending, a sent is marked 'final' if there wasn't a bounce within 4 hours.
+%% @doc Mark an email read, typically because a link in the email is followed.
 -spec mark_read(binary(), #context{}) -> ok.
 mark_read(Email0, Context) ->
     Email = normalize(Email0),
@@ -122,6 +150,7 @@ mark_read(Email0, Context) ->
             set is_valid = true,
                 read = now(),
                 read_ct = read_ct + 1,
+                recent_error_ct = 0,
                 modified = now()
             where email = $1",
            [Email],
@@ -218,6 +247,7 @@ mark_failed(Email0, true, Status, Context) ->
             error = now(),
             error_status = $2,
             error_ct = error_ct + 1,
+            recent_error_ct = recent_error_ct + 1,
             modified = now()
         where email = $1",
         [Email, z_string:truncate(to_binary(Status), 490)],
@@ -245,6 +275,7 @@ mark_bounced(Email0, Context) ->
         set is_valid = false,
             bounce = now(),
             bounce_ct = bounce_ct + 1,
+            recent_error_ct = recent_error_ct + 1,
             modified = now()
         where email = $1
         ",
@@ -287,6 +318,8 @@ install(Context) ->
                     sent timestamp with time zone,
                     sent_ct integer not null default 0,
 
+                    recent_error_ct integer not null default 0,
+
                     error timestamp with time zone,
                     error_status character varying (500),
                     error_ct integer not null default 0,
@@ -304,7 +337,17 @@ install(Context) ->
                 Context),
             [] = z_db:q("create index email_status_modified on email_status(modified)", Context);
         true ->
-            ok
+            Names = z_db:column_names(email_status, Context),
+            case lists:member(recent_error_ct, Names) of
+                false ->
+                    z_db:q("alter table email_status
+                            add column recent_error_ct integer not null default 0",
+                           Context),
+                    z_db:flush(Context),
+                    ok;
+                true ->
+                    ok
+            end
     end,
     ok.
 

@@ -18,6 +18,8 @@ Another example, now rendering a template::
 
 This updates the `<ul/>` with the output of the template `_list_item.tpl`.  All arguments to the update action are also arguments to the template.
 
+.. note:: 
+   Use the :ref:`action-update_iframe` action for updating the contents of an ``iframe`` element.
 
 ===========  ===============================================================  ==========================
 Argument     Description                                                      Example
@@ -34,4 +36,4 @@ catinclude   Add this argument to use a :ref:`tag-catinclude` instead of      `c
 
 All other arguments are passed as-is to the included template(s).
 
-.. seealso:: actions :ref:`action-insert_top` and :ref:`action-insert_bottom`.
+.. seealso:: actions :ref:`action-update_iframe`, :ref:`action-insert_top` and :ref:`action-insert_bottom`.
