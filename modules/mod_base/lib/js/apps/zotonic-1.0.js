@@ -1857,6 +1857,17 @@ function ensure_name_value(a)
     }
 }
 
+// Update the contents of an iframe
+function z_iframe_update(name, doc)
+{
+    var iframe = window.frames[name];
+    if (iframe) {
+        var iframe_doc = iframe.document || iframe.contentDocument || iframe.contentWindow.document;
+        iframe_doc.open();
+        iframe_doc.write(doc);
+        iframe_doc.close();
+    }
+}
 
 // From: http://malsup.com/jquery/form/jquery.form.js
 
