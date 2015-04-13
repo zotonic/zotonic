@@ -8,7 +8,7 @@
     </h3>
     <div class="widget-content">
         <input type="hidden" class="block-type" name="block-{{#s}}-type" value="{{ blk.type }}" />
-        {% include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_editable=is_editable is_new=is_new %}
+        {% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_editable=is_editable is_new=is_new %}
     </div>
     {% if is_new %}
         {% javascript %}
@@ -26,3 +26,4 @@
     z_admin_ensure_block_names();
 {% endjavascript %}
 {% endif %}
+

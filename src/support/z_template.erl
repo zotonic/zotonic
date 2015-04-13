@@ -92,7 +92,7 @@ render(File, Variables, Context) ->
 
 maybe_render({ok, ModuleIndex}, File, Variables, Context) ->
     render1(File, ModuleIndex, Variables, Context);
-maybe_render({error, Reason}, File, _Variable, _Context) ->
+maybe_render({error, Reason}, File, _Variables, _Context) ->
     lager:info("Could not find template: ~s (~p)", [File, Reason]),
     throw({error, {template_not_found, File, Reason}}).
 
