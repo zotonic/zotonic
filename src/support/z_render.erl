@@ -303,11 +303,9 @@ appear_after(TargetId, Html, Context) ->
 %% @doc Set the contents of an iframe to the generated html.
 update_iframe(IFrameId, Html, Context) ->
     {Html1, Context1} = render_html(Html, Context),
-    Document = [<<"window.frames['">>, IFrameId, <<"'].document">>],
-    Update = [ 
-        Document, <<".open();">>,
-        Document, <<".write('">>, z_utils:js_escape(Html1), <<"');">>,
-        Document, <<".close();">>
+    Update = [
+        <<"z_iframe_update('">>,IFrameId,
+        <<"','">>, z_utils:js_escape(Html1), <<"');">>
     ],
     Context1#context{updates=[{Update}|Context1#context.updates]}.
 
