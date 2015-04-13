@@ -22,7 +22,7 @@
 			{% endif %}
 
 			{% for blk in questions %}
-				{% include ["blocks/_block_view_",blk.type,".tpl"]|join id=id blk=blk answers=answers nr=forloop.counter %}
+				{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join id=id blk=blk answers=answers nr=forloop.counter %}
 			{% endfor %}
 		</fieldset>
 
