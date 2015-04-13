@@ -40,3 +40,6 @@ form.z_form_invalid .alert.z_invalid {
     display: block;
 }
 
+.form-survey .form-actions {
+	margin-top: 12px;
+}

@@ -8,7 +8,9 @@
 {% block content_attributes %}{% include "_language_attrs.tpl" id=id class="wrapper" %} id="survey-question"{% endblock %}
 
 {% block body %}
-	{{ id.body|show_media }}
+	{% if not id.survey_is_autostart %}
+		{{ id.body|show_media }}
+	{% endif %}
 {% endblock %}
 
 {% block below_body %}
