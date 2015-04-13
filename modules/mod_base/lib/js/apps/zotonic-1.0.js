@@ -1858,7 +1858,7 @@ function ensure_name_value(a)
 }
 
 // Update the contents of an iframe
-function z_iframe_update(name, doc)
+function z_update_iframe(name, doc)
 {
     var iframe = window.frames[name];
     if (iframe) {

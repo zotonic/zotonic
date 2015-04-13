@@ -304,7 +304,7 @@ appear_after(TargetId, Html, Context) ->
 update_iframe(IFrameId, Html, Context) ->
     {Html1, Context1} = render_html(Html, Context),
     Update = [
-        <<"z_iframe_update('">>,IFrameId,
+        <<"z_update_iframe('">>,IFrameId,
         <<"','">>, z_utils:js_escape(Html1), <<"');">>
     ],
     Context1#context{updates=[{Update}|Context1#context.updates]}.
