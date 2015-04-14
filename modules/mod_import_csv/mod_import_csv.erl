@@ -161,8 +161,9 @@ inspect_file(Filename) ->
         {ok, Device} ->
             FSize = filelib:file_size(Filename),
             case file:read(Device, min(4096,FSize)) of
-                {ok, Data} ->
+                {ok, Data0} ->
                     file:close(Device),
+                    Data = utf8(Data0),
                     case fetch_column_defs(Data) of
                         {ok, Cols, Sep} ->
                             Cols1 = [ to_property_name(Col) || Col <- Cols ],
@@ -185,6 +186,18 @@ inspect_file(Filename) ->
             Error
     end.
 
+utf8(S) ->
+    case z_string:sanitize_utf8(S) of
+        S ->
+            S;
+        Stripped -> 
+            case eiconv:convert("Windows-1250", S) of
+                {ok, Utf8} -> Utf8;
+                {error, _} -> Stripped
+            end
+    end.
+
+
 %% @doc Check if the first row is made up of column headers.
 %% The file must have at least a name and a category column.
 fetch_column_defs(<<>>) ->
@@ -194,10 +207,12 @@ fetch_column_defs(B) ->
         {ok, Line} ->
             {ok, Tabs} = parse_line(Line, $\t),
             {ok, Comma} = parse_line(Line, $,),
-            {Cols, Sep} = case length(Tabs) > length(Comma) of
-                              true -> {Tabs, $\t};
-                              false -> {Comma, $,}
-                          end,
+            {ok, SCol} = parse_line(Line, $;),
+            {_, Cols, Sep} = lists:last(lists:sort([
+                                    {length(Tabs), Tabs, $\t},
+                                    {length(Comma), Comma, $,},
+                                    {length(SCol), SCol, $;}
+                                ])),
             {ok, [ z_convert:to_list(z_string:trim(C)) || C <- Cols ], Sep};
         _ ->
             {error, invalid_csv_file}
