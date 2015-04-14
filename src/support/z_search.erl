@@ -65,7 +65,7 @@ pager(#search_result{result=Result} = SearchResult, Page, PageLen, _Context) ->
         false ->
             []
     end,
-    Next = if Offset + PageLen < Total -> false; true -> Page+1 end,
+    Next = if Offset + PageLen < Total -> Page+1; true -> false end,
     Prev = if Page > 1 -> Page-1; true -> 1 end,
     SearchResult#search_result{
         result=OnPage,
