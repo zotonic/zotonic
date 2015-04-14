@@ -1638,11 +1638,27 @@ resolve_value_ast(Value, Context, TreeWalker) ->
 
 
 %% Added by Marc Worrell - handle evaluation of scomps by z_scomp
-scomp_ast(ScompName, Args, false = _All, Context, TreeWalker) ->
+scomp_ast(ScompName, Args, true, Context, TreeWalker) ->
     {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
     AppAst = erl_syntax:application(
                 erl_syntax:atom(z_scomp),
-                erl_syntax:atom(render),
+                erl_syntax:atom(render_all),
+                [   erl_syntax:atom(ScompName), 
+                    ArgsAst,
+                    erl_syntax:variable("Variables"),
+                    z_context_ast(Context)
+                ]
+            ),
+    {{AppAst, #ast_info{}}, TreeWalker1};
+scomp_ast(ScompName, Args, All, Context, TreeWalker) ->
+    {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
+    AppAst = erl_syntax:application(
+                erl_syntax:atom(z_scomp),
+                erl_syntax:atom(
+                        case All of
+                            false -> render;
+                            optional -> render_optional
+                        end),
                 [   erl_syntax:atom(ScompName), 
                     ArgsAst,
                     erl_syntax:variable("Variables"),
@@ -1669,19 +1685,7 @@ scomp_ast(ScompName, Args, false = _All, Context, TreeWalker) ->
                 	 none,
                 	 [ErrStrAst]),
     CallAst = erl_syntax:case_expr(AppAst, [OkAst, ErrorAst]),
-    {{CallAst, #ast_info{}}, TreeWalker1};
-scomp_ast(ScompName, Args, true, Context, TreeWalker) ->
-    {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
-    AppAst = erl_syntax:application(
-                erl_syntax:atom(z_scomp),
-                erl_syntax:atom(render_all),
-                [   erl_syntax:atom(ScompName), 
-                    ArgsAst,
-                    erl_syntax:variable("Variables"),
-                    z_context_ast(Context)
-                ]
-            ),
-    {{AppAst, #ast_info{}}, TreeWalker1}.
+    {{CallAst, #ast_info{}}, TreeWalker1}.
 
 
 scomp_ast_list_args(Args, Context, TreeWalker) ->

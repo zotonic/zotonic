@@ -16,7 +16,7 @@
 	<div class="survey_result">
 		{% if not result %}
 {#
-    			{% include ["blocks/_block_view_",question.type,".tpl"]|join id=id blk=question answers=answers %}
+    			{% optional include ["blocks/_block_view_",question.type,".tpl"]|join id=id blk=question answers=answers %}
 #}
 		{% else %}
 			{% if chart.question %}

@@ -22,7 +22,7 @@
 -module(z_scomp).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([render/4, render_all/4]).
+-export([render/4, render_all/4, render_optional/4]).
 
 -include_lib("zotonic.hrl").
 
@@ -36,7 +36,16 @@ render(ScompName, Args, Vars, Context) ->
             render_scomp_module(ModuleName, Args, Vars, ScompContext, Context);
         {error, enoent} ->
             %% No such scomp, as we can switch on/off functionality we do a quiet skip
-            ?LOG("No scomp enabled for \"~p\"", [ScompName]),
+            lager:info("No scomp enabled for \"~p\"", [ScompName]),
+            {ok, <<>>}
+    end.
+
+render_optional(ScompName, Args, Vars, Context) ->
+    case z_module_indexer:find(scomp, ScompName, Context) of
+        {ok, #module_index{erlang_module=ModuleName}} ->
+            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context), 
+            render_scomp_module(ModuleName, ['$optional'|Args], Vars, ScompContext, Context);
+        {error, enoent} ->
             {ok, <<>>}
     end.
 

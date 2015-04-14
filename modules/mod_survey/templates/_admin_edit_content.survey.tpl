@@ -14,6 +14,10 @@
     <div class="row">
 	    <div class="col-lg-6 col-md-6">
 		    <div class="form-group">
+	            <div class="checkbox"><label>
+			            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked="checked"{% endif %} />
+			            {_ Immediately start with the questions, no “Start” button _}
+		            </label></div>
 			    <div class="checkbox"><label>
 				        {% if id.is_a.poll %}
 					        <input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />

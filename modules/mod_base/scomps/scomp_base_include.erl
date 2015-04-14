@@ -47,7 +47,17 @@ render(Params, Vars, Context) ->
     
     case proplists:get_value('$all', Params, false) of
         false ->
-            {ok, z_template:render(File, Vars1, Context1)};
+            try
+                {ok, z_template:render(File, Vars1, Context1)}
+            catch
+                throw:{error, {template_not_found, _File, _Reason}} = NotFound ->
+                    case proplists:get_value('$optional', Params) of
+                        true ->
+                            {ok, <<>>};
+                        _ ->
+                            throw(NotFound)
+                    end
+            end;
         true ->
             Templates = z_template:find_template(File, true, Context1),
             {ok, [ z_template:render(Tpl, Vars1, Context1) || Tpl <- Templates ]}

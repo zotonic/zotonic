@@ -1,4 +1,10 @@
 {% block question_page %}
+	{% if page_nr == 1 and id.survey_is_autostart %}
+		{% block autostart_body %}
+			{% include "_survey_autostart_body.tpl" %}
+		{% endblock %}
+	{% endif %}
+
 	{% wire id=#q type="submit" 
 		postback={survey_next id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
 		delegate="mod_survey" 
@@ -16,24 +22,24 @@
 			{% endif %}
 
 			{% for blk in questions %}
-				{% include ["blocks/_block_view_",blk.type,".tpl"]|join id=id blk=blk answers=answers nr=forloop.counter %}
+				{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join id=id blk=blk answers=answers nr=forloop.counter %}
 			{% endfor %}
 		</fieldset>
 
-		<div class="alert alert-error z_invalid">
+		<div class="alert alert-warning z_invalid">
 			{_ Please fill in all the required fields. _}
 		</div>
 
 		<div class="form-actions">
 			{% if page_nr > 1 %}
-				<a id="{{ #back }}" href="#" class="btn">{_ Back _}</a>
+				<a id="{{ #back }}" href="#" class="btn btn-default">{_ Back _}</a>
 				{% wire id=#back 
 						postback={survey_back id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
 						delegate="mod_survey"
 				%}
 			{% endif %}
-			{% if not id.is_a.poll %}
-				<a id="{{ #cancel }}" href="#" class="btn">{_ Stop _}</a>
+			{% if not id.survey_autostart or page_nr > 1 %}
+				<a id="{{ #cancel }}" href="#" class="btn btn-default">{_ Stop _}</a>
 				{% wire id=#cancel action={confirm text=_"Are you sure you want to stop?" ok=_"Stop" cancel=_"Continue" action={redirect id=id}} %}
 			{% endif %}
 			{% with questions|last as last_q %}
@@ -51,6 +57,12 @@
 			$(window).scrollTop(pos+100);
 		}
 	{% endjavascript %}
+
+	{% if page_nr == 1 and id.survey_is_autostart %}
+		{% block autostart_footer %}
+			{% include "_survey_autostart_footer.tpl" %}
+		{% endblock %}
+	{% endif %}
 {% endblock %}
 
 {% block question_page_after %}
