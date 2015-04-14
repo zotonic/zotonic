@@ -74,8 +74,8 @@ menu(Context) ->
                 end,
             z_depcache:memo(F, 
                             {admin_menu, z_acl:user(Context), z_context:language(Context)},
-                            ?WEEK,
-                            [admin_menu],
+                            ?HOUR,
+                            [admin_menu, admin_content_query],
                             Context)
     end.
 

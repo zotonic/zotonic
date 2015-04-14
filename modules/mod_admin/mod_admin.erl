@@ -22,18 +22,21 @@
 
 -mod_title("Admin module").
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
--mod_depends([base, authentication]).
+-mod_depends([base, authentication, mod_search]).
 -mod_provides([admin]).
+-mod_schema(1).
 -mod_prio(1000).
 
 -export([
-         observe_sanitize_element/3,
-         observe_admin_menu/3,
-         observe_admin_edit_blocks/3,
-         observe_module_ready/2,
-         event/2,
+     observe_sanitize_element/3,
+     observe_admin_menu/3,
+     observe_admin_edit_blocks/3,
+     observe_module_ready/2,
+     event/2,
 
-         do_link/5
+     do_link/5,
+
+     manage_schema/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -98,7 +101,10 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      #menu_item{id=admin_media,
                 parent=admin_content,
                 label=?__("Media", Context),
-                url={admin_media}},
+                url={admin_media}}
+    ]
+    ++ admin_menu_content_queries(Context) ++
+    [
 
      %% STRUCTURE %%
      #menu_item{id=admin_structure,
@@ -125,6 +131,25 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 url={admin_status}}
 
      |Acc].
+
+
+admin_menu_content_queries(Context) ->
+    #search_result{result=Result} = z_search:search({all_bytitle, [{cat,admin_content_query}]}, Context),
+    AdminOverviewQueryId = m_rsc:rid(admin_overview_query, Context),
+    Result1 = lists:filter(
+                    fun({_Title,Id}) ->
+                        Id =/= AdminOverviewQueryId
+                    end,
+                    Result),
+    lists:map(fun({Title, Id}) ->
+                #menu_item{
+                    id={admin_query, Id},
+                    parent=admin_content,
+                    label=Title,
+                    url={admin_overview_rsc, [{qquery, Id}]}
+                }
+              end,
+              Result1).
 
 
 observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
@@ -335,3 +360,17 @@ context_language(Context) ->
             end
     end.
 
+
+manage_schema(_Version, _Context) ->
+    #datamodel{
+        categories=[
+            {admin_content_query,
+             'query',
+             [
+                {title, {trans, [
+                            {en, <<"Admin content query">>},
+                            {nl, <<"Admin inhoud zoekopdracht">>}
+                    ]}}
+             ]}
+        ]
+    }.
