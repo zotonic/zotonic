@@ -72,9 +72,15 @@
                 <a class="btn btn-default" href="{% url admin_media %}">{_ All media _}</a>
             </div>
 
-            {% with m.search.paged[{query authoritative=1 cat=q.qcat text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}] as result %}
-                {% catinclude "_admin_overview_list.tpl" m.category[q.qcat].is_a result=result %}
-                {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
+            {% with m.rsc.admin_overview_query.is_visible|
+                      if:{query query_id=`admin_overview_query` cat=q.qcat text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}
+                        :{query authoritative=1 cat=q.qcat text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}
+               as query
+            %}
+              {% with m.search.paged[query] as result %}
+                  {% catinclude "_admin_overview_list.tpl" m.category[q.qcat].is_a result=result %}
+                  {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
+              {% endwith %}
             {% endwith %}
         {% endwith %}
     {% endwith %}
