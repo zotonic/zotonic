@@ -24,7 +24,9 @@ Optional:
    option_class
 %}
 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    {% if selected_value %}
+    {% if default_value2 and selected_value == default_value2 %}
+        {{ default_label2 }}
+    {% elseif selected_value %}
         {{ selected_label }}
     {% else %}
         {{ default_label }}
@@ -44,6 +46,15 @@ Optional:
                 {{ default_label }}
             </a>
         </li>
+    {% endif %}
+    {% if default_label2 %}
+        <li class="{% if selected_value == default_value2 %}active{% endif %}">
+            <a href="#" class="{{ option_class }}" data-value="{{ default_value2 }}">
+                {{ default_label2 }}
+            </a>
+        </li>
+    {% endif %}
+    {% if default_label or default_label2 %}
         <li class="divider"></li>
     {% endif %}
     {% if option_template %}
@@ -51,7 +62,7 @@ Optional:
            selected_value=selected_value
            option_class=option_class
         %}
-    {% elif options %}
+    {% elseif options %}
         {% for value, label in options %}
             <li class="{% ifequal value selected_value %}active{% endifequal %}">
             <a href="#" class="{{ option_class }}" data-value="{{ value }}">{{ label }}</a>
