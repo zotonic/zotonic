@@ -158,8 +158,19 @@ compile(File, FoundFile, Context) ->
 
 compile(File, FoundFile, Module, Context) ->
     z_notifier:notify(#debug{what=template, arg={compile, File, FoundFile, Module}}, Context),
-    gen_server:call(Context#context.template_server, {compile, File, FoundFile, Module, Context}, ?TIMEOUT).
+    % swap basenames for the File and FoundFile
+    File1 = set_filename(File, FoundFile),
+    gen_server:call(Context#context.template_server, {compile, File1, FoundFile, Module, Context}, ?TIMEOUT).
 
+set_filename(File, FoundFile) ->
+    set_filename_1(filename:dirname(File), FoundFile).
+
+set_filename_1(<<".">>, FoundFile) ->
+    filename:basename(FoundFile);
+set_filename_1(".", FoundFile) ->
+    filename:basename(FoundFile);
+set_filename_1(FilePath, FoundFile) ->
+    filename:join([FilePath, filename:basename(FoundFile)]).
 
 %% @spec find_template(File, Context) -> {ok, filename()} | {ok, #module_index{}} | {error, code} 
 %% @doc Finds the template designated by the file, check modules.
