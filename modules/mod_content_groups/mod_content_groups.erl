@@ -66,15 +66,15 @@ manage_schema(_Version, Context) ->
               #datamodel{
                 categories=[
                     {content_group, meta, [
-                        {title, {trans, [{en, "Content Group"}, {nl, "Paginagroep"}]}}
+                        {title, {trans, [{en, <<"Content Group">>}, {nl, <<"Paginagroep">>}]}}
                     ]}
                 ],
                 resources=[
                     {system_content_group, content_group, [
-                        {title, {trans, [{en, "System Content"}, {nl, "Systeempagina’s"}]}}
+                        {title, {trans, [{en, <<"System Content">>}, {nl, <<"Systeempagina’s"/utf8>>}]}}
                     ]},
                     {default_content_group, content_group, [
-                        {title, {trans, [{en, "Default Content Group"}, {nl, "Standaard paginagroep"}]}}
+                        {title, {trans, [{en, <<"Default Content Group">>}, {nl, <<"Standaard paginagroep">>}]}}
                     ]}
                 ]
               },
