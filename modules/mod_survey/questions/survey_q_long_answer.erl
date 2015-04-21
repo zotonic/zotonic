@@ -49,7 +49,7 @@ prep_answer_header(Block, _Context) ->
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
-prep_answer(_Q, [{_Name, {_Value, Text}}], _Context) ->
+prep_answer(_Q, [{_Name, {_Value, Text}}|_], _Context) ->
     z_convert:to_binary(Text).
 
 
