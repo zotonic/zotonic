@@ -238,18 +238,18 @@ os_filename(A) when is_list(A) ->
     os_filename(lists:flatten(A), []).
 
 os_filename([], Acc) ->
-    filename:nativename([$"] ++ lists:reverse(Acc) ++ [$"]);
+    filename:nativename([$'] ++ lists:reverse(Acc) ++ [$']);
 os_filename([$\\|Rest], Acc) ->
     os_filename_bs(Rest, Acc);
-os_filename([$"|Rest], Acc) ->
-    os_filename(Rest, [$", $\\ | Acc]);
+os_filename([$'|Rest], Acc) ->
+    os_filename(Rest, [$', $\\ | Acc]);
 os_filename([C|Rest], Acc) ->
     os_filename(Rest, [C|Acc]).
 
 os_filename_bs([$\\|Rest], Acc) ->
     os_filename(Rest, [$\\,$\\|Acc]);
-os_filename_bs([$"|Rest], Acc) ->
-    os_filename(Rest, [$",$\\,$\\,$\\|Acc]);
+os_filename_bs([$'|Rest], Acc) ->
+    os_filename(Rest, [$',$\\,$\\,$\\|Acc]);
 os_filename_bs([C|Rest], Acc) ->
     os_filename(Rest, [C,$\\|Acc]).
 
