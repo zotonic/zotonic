@@ -209,7 +209,7 @@ delete(Id, TransferId, Context) ->
                         ToNr = z_db:q1("select nr 
                                         from hierarchy
                                         where id = $1
-                                          and name = '$category", 
+                                          and name = '$category'", 
                                        [ToId],
                                        Ctx),
                         z_db:q("update rsc 
