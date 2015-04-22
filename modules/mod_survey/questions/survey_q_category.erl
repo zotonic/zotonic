@@ -75,9 +75,9 @@ prep_answer_header(Q, Context) ->
 
 prep_answer(Q, [], _Context) ->
     prep(Q, []);
-prep_answer(Q, [{_Name, {undefined, Text}}], _Context) ->
+prep_answer(Q, [{_Name, {undefined, Text}}|_], _Context) ->
     prep(Q, binary:split(Text, <<$#>>, [global]));
-prep_answer(Q, [{_Name, {Value, _Text}}], _Context) ->
+prep_answer(Q, [{_Name, {Value, _Text}}|_], _Context) ->
     prep(Q, [Value]).
 
     prep(Q, Vs) ->
