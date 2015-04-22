@@ -953,6 +953,10 @@ ul.tree-list li.menu-item .warning {
   top: 12px;
   right: 100px;
 }
+ul.tree-list li.menu-item .category {
+  color: #999;
+  padding-left: 8px;
+}
 ul.tree-list li.menu-item .btns {
   display: block;
   position: absolute;
