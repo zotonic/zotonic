@@ -42,6 +42,7 @@
     await_lookup/2,
     rebuild/2,
     observe_admin_menu/3,
+    observe_rsc_update_done/2,
     name/1,
     manage_schema/2
 ]).
@@ -96,6 +97,14 @@ observe_hierarchy_updated(#hierarchy_updated{root_id= <<"acl_user_group">>, pred
     rebuild(Context);
 observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
     ok.
+
+observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Context) ->
+    case  lists:member('acl_user_group', PreIsA) 
+        orelse lists:member('acl_user_group', PostIsA)
+    of
+        true -> m_hierarchy:ensure('acl_user_group', Context);
+        false -> ok
+    end.
 
 status(Context) ->
     gen_server:call(name(Context), status).

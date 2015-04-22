@@ -30,11 +30,12 @@
 
 -export([
     observe_rsc_get/3,
+    observe_rsc_update_done/2,
     observe_admin_menu/3,
     manage_schema/2
     ]).
 
-observe_rsc_get(#rsc_get{}, [], Context) ->
+observe_rsc_get(#rsc_get{}, [], _Context) ->
     [];
 observe_rsc_get(#rsc_get{}, Props, Context) ->
     case proplists:get_value(content_group_id, Props) of
@@ -59,6 +60,15 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 url={admin_menu_hierarchy, [{name, "content_group"}]},
                 visiblecheck={acl, use, mod_admin_config}}
      |Acc].
+
+
+observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Context) ->
+    case  lists:member('content_group', PreIsA) 
+        orelse lists:member('content_group', PostIsA)
+    of
+        true -> m_hierarchy:ensure(content_group, Context);
+        false -> ok
+    end.
 
 manage_schema(_Version, Context) ->
     z_datamodel:manage(
