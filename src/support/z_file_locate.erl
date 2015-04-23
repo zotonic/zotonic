@@ -117,6 +117,8 @@ locate_source([DirName|Rs], Path, OriginalFile, Filters, Context) ->
 
 %% @doc Source file is located in the lib, template or some other index-category (mostly css, js or static images)
 %%      Resized images are located in files/preview.
+locate_source_module_indexer(lib, Path, OriginalFile, [], Context) ->
+    locate_source_module_indexer(lib, Path, OriginalFile, undefined, Context);
 locate_source_module_indexer(ModuleIndex, Path, _OriginalFile, undefined, Context) ->
     case z_module_indexer:find(ModuleIndex, Path, Context) of
         {ok, #module_index{filepath=FoundFile}} ->
