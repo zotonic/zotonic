@@ -80,6 +80,7 @@ get_skeleton_modules(empty) ->
      mod_search,
      mod_oembed,
      mod_signal,
+     mod_mqtt,
      mod_logging,
      mod_l10n,
 
@@ -106,6 +107,7 @@ get_skeleton_modules(blog) ->
      mod_translation,
      mod_signal,
      mod_logging,
+     mod_mqtt,
      mod_l10n,
 
      mod_seo,
