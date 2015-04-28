@@ -290,7 +290,10 @@ menu(Context) ->
 tree(Cat, Context) ->
     case name_to_id(Cat, Context) of
         {ok, Id} ->
-            find_node(tree(Context), Id);
+            case find_tree_node(tree(Context), Id) of
+                {ok, Tree} -> Tree;
+                undefined -> undefined
+            end;
         {error, _} ->
             undefined
     end.
@@ -693,16 +696,20 @@ remove_node([{TId,TCs}|Ts], Id, ParentId) ->
     end.
 
 
-find_node([], _Id) ->
+find_tree_node([], _Id) ->
     undefined;
-find_node([{Id,_Cs}=Node|_Ts], Id) ->
-    {ok, Node};
-find_node([{_TId,TCs}|Ts], Id) ->
-    case find_node(TCs, Id) of
-        {ok, Node} ->
+find_tree_node([Node|Ns], Id) ->
+    case lists:keyfind(id, 1, Node) of
+        {id, Id} ->
             {ok, Node};
-        undefined ->
-            find_node(Ts, Id)
+        _ ->
+            {children, Cs} = lists:keyfind(children, 1, Node),
+            case find_tree_node(Cs, Id) of
+                {ok, FoundNode} ->
+                    {ok, FoundNode};
+                undefined ->
+                    find_tree_node(Ns, Id)
+            end
     end.
 
 
