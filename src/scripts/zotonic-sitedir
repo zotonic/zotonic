@@ -18,6 +18,8 @@
 # usage zotonic-sitedir [site_name]
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 SITE=$1
 
 if [ ! "$SITE" ]

@@ -18,6 +18,8 @@
 # usage zotonic-compilefile <file> [file..]
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 function usage {
     echo "Usage: `basename $0` [files...]" 1>&2
     echo 1>&2

@@ -17,6 +17,9 @@
 #
 # usage zotonic-stop
 #
+
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 require_zotonic_running
 
 echo -n "Stopping Zotonic $NODENAME@$NODEHOST"
