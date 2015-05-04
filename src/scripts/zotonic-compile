@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 require_zotonic_not_running
 
 $ERL -pa $PA $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -noinput +B \

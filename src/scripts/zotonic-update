@@ -18,6 +18,8 @@
 # usage zotonic-update
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 require_zotonic_running
 
 echo "Updating Zotonic $NODENAME@$NODEHOST"

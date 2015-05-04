@@ -19,6 +19,8 @@
 # usage zotonic-dropschema [schema_name]
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 SCHEMA=$1
 
 if [ -f "$HOME/.zotonic-defaults" ]; then

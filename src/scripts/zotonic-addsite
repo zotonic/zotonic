@@ -18,6 +18,8 @@
 # usage zotonic-addsite [site_name]
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 function usage {
     echo "Usage: `basename $0` [options] <site_name>" 1>&2
     echo 1>&2

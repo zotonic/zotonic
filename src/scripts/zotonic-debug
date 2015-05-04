@@ -18,6 +18,8 @@
 # usage zotonic-debug
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 # Make sure Zotonic is built
 if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
     echo "Building Zotonic for the first time."
