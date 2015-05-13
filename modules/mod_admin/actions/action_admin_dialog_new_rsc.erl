@@ -122,14 +122,24 @@ get_base_props(undefined, Context) ->
     z_context:get_q_all_noz(Context);
 get_base_props(NewRscTitle, Context) ->
     Lang = z_context:language(Context),
-    CatId = list_to_integer(z_context:get_q("category_id", Context)),
-    IsPublished = z_context:get_q("is_published", Context),
-    Name = z_context:get_q("name", Context),
+    Props = lists:foldl(fun({Prop,Val}, Acc) ->
+                            maybe_add_prop(Prop, Val, Acc)
+                        end,
+                        [],
+                        z_context:get_q_all_noz(Context)),
     [
         {title, {trans, [{Lang, NewRscTitle}]}},
-        {language, [Lang]},
-        {name, Name},
-        {category_id, CatId},
-        {is_published, IsPublished}
+        {language, [Lang]}
+        | Props
     ].
+
+maybe_add_prop("new_rsc_title", _, Acc) ->
+    Acc;
+maybe_add_prop("category_id", Cat, Acc) -> 
+    [{category_id, z_convert:to_integer(Cat)} | Acc];
+maybe_add_prop("is_published", IsPublished, Acc) ->
+    [{is_published, z_convert:to_bool(IsPublished)} | Acc];
+maybe_add_prop(P, V, Acc) ->
+    [{P, V} | Acc].
+
 
