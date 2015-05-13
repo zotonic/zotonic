@@ -29,7 +29,7 @@
             <h3 class="panel-title">{_ Enter your password to manage this server _}</h3>
         </div>
         <div class="panel-body">
-            <form id="logon_form" action="postback" class="form">
+            <form id="logon_form" method="post" action="postback" class="form">
                 <div class="form-group row">
                     <div class="col-md-8 col-md-offset-2">
                         <div class="input-group">
