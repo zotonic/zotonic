@@ -19,6 +19,8 @@
 #    See also: http://www.erlang.org/doc/man/etop.html
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 CONSOLE_LINES=`tput lines`
 LINES=$(($CONSOLE_LINES - 11))
 

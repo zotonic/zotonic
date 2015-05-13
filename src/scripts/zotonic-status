@@ -18,6 +18,8 @@
 # usage zotonic-start
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 require_zotonic_running
 
 echo "\

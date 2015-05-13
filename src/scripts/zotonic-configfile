@@ -18,4 +18,6 @@
 # usage zotonic configfile -- prints the name of the zotonic.config file
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 echo $(find_config "zotonic.config")

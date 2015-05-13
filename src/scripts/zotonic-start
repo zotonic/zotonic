@@ -18,6 +18,8 @@
 # usage zotonic-start
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 #
 # The heart restart loop protection below was taken from yaws startup script.
 # For more information see: http://steve.vinoski.net/blog/2009/02/22/controlling-erlangs-heart/

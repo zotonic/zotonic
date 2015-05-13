@@ -1,6 +1,6 @@
 language: erlang
 otp_release:
-  - 17.0  # experimental
+  - 17.4
   - R16B
   - R15B03
 install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'

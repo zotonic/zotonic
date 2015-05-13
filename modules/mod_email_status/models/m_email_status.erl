@@ -219,41 +219,42 @@ mark_sent(Email0, true, Context) ->
 %% @doc Mark as failed, happens on connection errors or on errors returned by the receiving smtp server.
 %% The final flag is set if our smtp server received a permanent error or gave up sending the email.
 -spec mark_failed(binary(), boolean(), binary()|{error,term()}|undefined, #context{}) -> ok.
-mark_failed(Email0, false, Status, Context) ->
+mark_failed(Email0, IsFinal, Status, Context) ->
     Email = normalize(Email0),
     IsValid = is_valid_nocache(Email, Context),
-    case z_db:q("
-        update email_status
-        set is_valid = false,
-            error_is_final = false,
-            error = now(),
-            error_status = $2,
-            error_ct = error_ct + 1,
-            modified = now()
-        where email = $1",
-        [Email, z_string:truncate(to_binary(Status), 490)],
-        Context)
-    of
-        0 -> ok;
-        1 -> maybe_notify(Email, IsValid, false, false, Context)
-    end;
-mark_failed(Email0, true, Status, Context) ->
-    Email = normalize(Email0),
-    IsValid = is_valid_nocache(Email, Context),
-    z_db:q("
-        update email_status
-        set is_valid = false,
-            error_is_final = true,
-            error = now(),
-            error_status = $2,
-            error_ct = error_ct + 1,
-            recent_error_ct = recent_error_ct + 1,
-            modified = now()
-        where email = $1",
-        [Email, z_string:truncate(to_binary(Status), 490)],
-        Context),
-    maybe_notify(Email, IsValid, false, true, Context),
-    ok.
+    Status1 = z_string:truncate(to_binary(Status), 490),
+    RecentError = case IsFinal of
+                    true -> 1;
+                    false -> 0
+                  end,
+    z_db:transaction(
+                fun(Ctx) ->
+                    case z_db:q("
+                        update email_status
+                        set is_valid = false,
+                            error_is_final = $2,
+                            error = now(),
+                            error_status = $3,
+                            error_ct = error_ct + 1,
+                            recent_error_ct = recent_error_ct + $4,
+                            modified = now()
+                        where email = $1",
+                        [Email, IsFinal, Status1, RecentError],
+                        Ctx)
+                    of
+                        0 ->
+                            z_db:q("insert into email_status 
+                                        (email, is_valid, error_is_final, error, error_status,
+                                         error_ct, recent_error_ct, modified)
+                                    values ($1, false, $2, now(), $3, 1, $4, now())",
+                                   [Email, IsFinal, Status1, RecentError],
+                                   Ctx);
+                        1 ->
+                            ok
+                    end
+               end,
+               Context),
+    maybe_notify(Email, IsValid, false, IsFinal, Context).
 
 to_binary({error, nxdomain}) ->
     <<"Non-Existent Domain">>;

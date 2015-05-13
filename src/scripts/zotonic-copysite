@@ -18,6 +18,8 @@
 # usage zotonic-copysite [site_name] [source_server]
 #
 
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 SITE=$1
 SERVER=$2
 
