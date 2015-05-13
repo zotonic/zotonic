@@ -11,7 +11,7 @@
 				<p class="alert alert-warning">
 					<span class="icon-envelope"></span>
 					<strong>{_ This email address is now ok. _}</strong>
-					{_ Previously there have been some problems. _}
+					{_ There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully. _}
 				</p>
 			{% else %}
 				<p class="alert alert-success">

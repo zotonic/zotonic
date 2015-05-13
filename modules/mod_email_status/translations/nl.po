@@ -61,9 +61,9 @@ msgstr ""
 
 #: ./modules/mod_email_status/templates/_email_status_view.tpl:14 
 msgid ""
-"Previously there have been some problems."
+"There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
 msgstr ""
-"Voorheen zijn er problemen geweest."
+"Er zijn foutmeldingen geweest maar deze zijn gewist. Dit bericht zal verdwijnen zodra er een e-mail is ontvangen."
 
 #: ./modules/mod_email_status/templates/_email_status_view.tpl:59 
 msgid ""
