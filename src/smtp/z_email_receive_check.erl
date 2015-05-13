@@ -69,6 +69,25 @@ is_auto_submitted({_, S}) ->
 is_auto_subject(undefined) -> false;
 is_auto_subject(Subject) -> is_auto_subject_1(z_convert:to_binary(z_string:to_lower(Subject))).
 
+-ifdef(coding_utf8).
+
+is_auto_subject_1(<<"auto:"/utf8>>) -> true;
+is_auto_subject_1(<<"automatic reply"/utf8>>) -> true;
+is_auto_subject_1(<<"autosvar"/utf8>>) -> true;
+is_auto_subject_1(<<"automatisk svar"/utf8>>) -> true;
+is_auto_subject_1(<<"automatisch antwoord"/utf8>>) -> true;
+is_auto_subject_1(<<"abwesenheitsnotiz"/utf8>>) -> true;
+is_auto_subject_1(<<"risposta non al computer"/utf8>>) -> true;
+is_auto_subject_1(<<"auto response"/utf8>>) -> true;
+is_auto_subject_1(<<"eespuesta automática"/utf8>>) -> true;
+is_auto_subject_1(<<"fuori sede"/utf8>>) -> true;
+is_auto_subject_1(<<"out of office"/utf8>>) -> true;
+is_auto_subject_1(<<"frånvaro"/utf8>>) -> true;
+is_auto_subject_1(<<"réponse automatique"/utf8>>) -> true;
+is_auto_subject_1(_) -> false.
+
+-else.
+
 is_auto_subject_1(<<"auto:">>) -> true;
 is_auto_subject_1(<<"automatic reply">>) -> true;
 is_auto_subject_1(<<"autosvar">>) -> true;
@@ -77,12 +96,14 @@ is_auto_subject_1(<<"automatisch antwoord">>) -> true;
 is_auto_subject_1(<<"abwesenheitsnotiz">>) -> true;
 is_auto_subject_1(<<"risposta non al computer">>) -> true;
 is_auto_subject_1(<<"auto response">>) -> true;
-is_auto_subject_1(<<"eespuesta automática">>) -> true;
+is_auto_subject_1(<<"eespuesta automática"/utf8>>) -> true;
 is_auto_subject_1(<<"fuori sede">>) -> true;
-is_auto_subject_1(<<"out of Office">>) -> true;
-is_auto_subject_1(<<"frånvaro">>) -> true;
-is_auto_subject_1(<<"réponse automatique">>) -> true;
+is_auto_subject_1(<<"out of office">>) -> true;
+is_auto_subject_1(<<"frånvaro"/utf8>>) -> true;
+is_auto_subject_1(<<"réponse automatique"/utf8>>) -> true;
 is_auto_subject_1(_) -> false.
+
+-endif.
 
 
 %% @doc Check if this might be a bounce e-mail by inspecting the headers of a received e-mail.
