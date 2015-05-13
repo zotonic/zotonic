@@ -163,8 +163,11 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                         false -> z_email_server:bounced(State#state.peer, MessageId)
                     end,
                     {ok, MsgId, reset_state(State)};
-                ok ->
+                bounce ->
                     % Bounced, but without a message id (accept & silently drop the message)
+                    {ok, MsgId, reset_state(State)};
+                maybe_autoreply ->
+                    % Sent to a bounce address, but not a bounce (accept & silently drop the message)
                     {ok, MsgId, reset_state(State)};
                 no_bounce ->
                     receive_data(z_email_spam:spam_check(DataRcvd),
@@ -207,18 +210,22 @@ reply_handled_status(Received, MsgId, State) ->
 %%% a {<<"message">>,<<"rfc822">>} part that contains the original message.
 %%% From that original message we can find the original message id
 
-%% @doc A message is classified as a bounce if the recipient is noreply+MSGID@@example.org
-%% OR if the Return-Path is set to an empty address and other appropriate headers are present
+%% @doc A message is classified as a bounce if the Return-Path is set to an empty address
+%%      and other appropriate headers are present. Try to match noreply+MSGID@@example.org
 find_bounce_id(Type, Recipients, Headers) ->
-    case find_bounce_email(Recipients) of
-        {ok, _MessageId} = M -> 
-            M;
-        undefined ->
-            case z_email_receive_check:is_bounce(Type, Headers) of
-                true -> ok;
-                false -> no_bounce
+    case z_email_receive_check:is_bounce(Type, Headers) of
+        true ->
+            case find_bounce_email(Recipients) of
+                {ok, _MessageId} = M -> M;
+                undefined -> bounce
+            end;
+        false ->
+            case find_bounce_email(Recipients) of
+                {ok, _MessageId} -> maybe_autoreply;
+                undefined -> no_bounce
             end
     end.
+
 
 % Check if one of the recipients is a bounce address
 find_bounce_email([]) ->

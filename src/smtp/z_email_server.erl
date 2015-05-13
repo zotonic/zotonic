@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2011 Maximonster Interactive Things
+%% @copyright 2010-2015 Maximonster Interactive Things
 %% @doc Email server.  Queues, renders and sends e-mails.
 
-%% Copyright 2010-2011 Maximonster Interactive Things
+%% Copyright 2010-2015 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
