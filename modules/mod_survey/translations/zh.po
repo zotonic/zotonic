@@ -502,8 +502,8 @@ msgstr "谢谢"
 
 #: modules/mod_survey/templates/_survey_end.tpl:7
 msgid ""
-"Thank you for filling in our survey. Be sure to come back for other surveys!"
-msgstr "谢谢你填写我们的问卷调查。欢迎继续填写其他感兴趣的调查！"
+"Thank you for filling in our survey."
+msgstr "谢谢你填写我们的问卷调查。"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:15
 msgid "The earth is flat."
