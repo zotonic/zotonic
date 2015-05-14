@@ -728,7 +728,7 @@ msgstr ""
 
 #: modules/mod_survey/templates/_survey_end.tpl:7
 msgid ""
-"Thank you for filling in our survey. Be sure to come back for other surveys!"
+"Thank you for filling in our survey."
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:48

@@ -729,7 +729,7 @@ msgstr "Bedankt"
 
 #: modules/mod_survey/templates/_survey_end.tpl:7
 msgid ""
-"Thank you for filling in our survey. Be sure to come back for other surveys!"
+"Thank you for filling in our survey."
 msgstr "Bedankt voor het invullen van de vragenlijst."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:48
