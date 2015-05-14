@@ -28,13 +28,6 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label" for="linkedin_scope">{_ Scope _}</label>
-                        <div class="controls">
-                            <input type="text" id="linkedin_scope" name="scope" value="{{ m.config.mod_linkedin.scope.value|default:'r_basicprofile r_emailaddress r_contactinfo'|escape }}" class="input-block-level" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
                         <div class="controls">
                             <label class="checkbox" for="linkedin_useauth">
                                 <input type="checkbox" id="linkedin_useauth" name="useauth" {% if m.config.mod_linkedin.useauth.value %}checked="checked"{% endif %} value="1" />

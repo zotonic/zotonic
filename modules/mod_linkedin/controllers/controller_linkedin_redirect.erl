@@ -131,7 +131,7 @@ auth_user(Profile, AccessTokenData, Context) ->
         Context).
 
 company_info(Profile) ->
-    case proplists:get_value(<<"threeCurrentPositions">>, Profile) of
+    case proplists:get_value(<<"positions">>, Profile) of
         {struct, Ps} ->
             case proplists:get_value(<<"values">>, Ps) of
                 [{struct, Qs}|_] ->
@@ -180,7 +180,9 @@ fetch_user_data(AccessToken) ->
                 ++z_convert:to_list(AccessToken),
     case httpc:request(get, {LinkedInUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
+            io:format("~n~n~p~n~n", [Payload]),
             {struct, Props} = mochijson:binary_decode(Payload),
+            io:format("~n~n~p~n~n", [Props]),
             {ok, Props};
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
             lager:error("[linkedin] 401 error fetching user data [token ~p] will not retry ~p", [AccessToken, Payload]),
@@ -218,9 +220,9 @@ fields() ->
             "headline", $,,
             "summary", $,,
             "location:(country:(code),name)", $,,
-            "picture-url", $,,
+            "picture-urls::(original)", $,,
             "public-profile-url", $,,
-            "three-current-positions:(title,company:(name))", $,,
+            "positions:(title,company:(name))", $,,
             "email-address",
         $)
         ]).
