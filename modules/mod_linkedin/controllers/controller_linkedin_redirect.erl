@@ -118,7 +118,7 @@ auth_user(Profile, AccessTokenData, Context) ->
             {email, proplists:get_value(<<"emailAddress">>, Profile, [])},
             {address_country, proplists:get_value(<<"code">>, Country)},
             {address_line_1, proplists:get_value(<<"name">>, Location)},
-            {depiction_url, proplists:get_value(<<"pictureUrl">>, Profile, [])}
+            {depiction_url, picture_url(proplists:get_value(<<"pictureUrls">>, Profile))}
         ] ++ company_info(Profile),
     Args = controller_linkedin_authorize:get_args(Context),
     z_notifier:first(#auth_validated{
@@ -147,6 +147,14 @@ company_info(Profile) ->
             []
     end.
 
+
+picture_url(undefined) ->
+    undefined;
+picture_url({struct, Ps}) ->
+    case proplists:get_value(<<"values">>, Ps) of
+        [Url|_] -> Url;
+        _ -> undefined
+    end.
 
 % Exchange the code for an access token
 fetch_access_token(Code, Context) ->
@@ -180,9 +188,7 @@ fetch_user_data(AccessToken) ->
                 ++z_convert:to_list(AccessToken),
     case httpc:request(get, {LinkedInUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
-            io:format("~n~n~p~n~n", [Payload]),
             {struct, Props} = mochijson:binary_decode(Payload),
-            io:format("~n~n~p~n~n", [Props]),
             {ok, Props};
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
             lager:error("[linkedin] 401 error fetching user data [token ~p] will not retry ~p", [AccessToken, Payload]),
