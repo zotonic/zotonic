@@ -170,7 +170,9 @@ parse_query([{id_exclude, _Id}|Rest], Context, Result)  ->
 %% hassubject=[id]
 %% Give all things which have an incoming edge to Id
 parse_query([{hassubject, Id}|Rest], Context, Result) when is_integer(Id); is_binary(Id) ->
-    parse_query([{hassubject, [Id]}|Rest], Context, Result);
+    parse_query([{hassubject, maybe_split_list(Id)}|Rest], Context, Result);
+parse_query([{hassubject, [$[|_] = Arg}|Rest], Context, Result) ->
+    parse_query([{hassubject, maybe_split_list(Arg)}|Rest], Context, Result);
 parse_query([{hassubject, [Id]}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join("object_id", Result),
     {Arg, Result2} = add_arg(m_rsc:rid(Id, Context), Result1),
@@ -199,7 +201,9 @@ parse_query([{hassubject, Id}|Rest], Context, Result) when is_list(Id) ->
 %% hasobject=[id]
 %% Give all things which have an outgoing edge to Id
 parse_query([{hasobject, Id}|Rest], Context, Result) when is_integer(Id); is_binary(Id) ->
-    parse_query([{hasobject, [Id]}|Rest], Context, Result);
+    parse_query([{hasobject, maybe_split_list(Id)}|Rest], Context, Result);
+parse_query([{hasobject, [$[|_] = Arg}|Rest], Context, Result) ->
+    parse_query([{hasobject, maybe_split_list(Arg)}|Rest], Context, Result);
 parse_query([{hasobject, [Id]}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join("subject_id", Result),
     {Arg, Result2} = add_arg(m_rsc:rid(Id,Context), Result1),
@@ -664,6 +668,35 @@ map_filter_operator(gte) -> ">=";
 map_filter_operator('>=') -> ">=";
 map_filter_operator(lte) -> "<=";
 map_filter_operator('<=') -> "<=";
+map_filter_operator("=") -> "=";
+map_filter_operator("<>") -> "<>";
+map_filter_operator(">") -> ">";
+map_filter_operator("<") -> "<";
+map_filter_operator(">=") -> ">=";
+map_filter_operator("<=") -> "<=";
+map_filter_operator(<<"=">>) -> "=";
+map_filter_operator(<<"<>">>) -> "<>";
+map_filter_operator(<<">">>) -> ">";
+map_filter_operator(<<"<">>) -> "<";
+map_filter_operator(<<">=">>) -> ">=";
+map_filter_operator(<<"<=">>) -> "<=";
 map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 
 
+% Convert an expression like [123,hasdocument]
+maybe_split_list(Id) when is_integer(Id) ->
+    [Id];
+maybe_split_list(<<"[", Rest/binary>>) ->
+    split_list(Rest);
+maybe_split_list([$[|Rest]) ->
+    split_list(z_conver:to_binary(Rest)).
+
+split_list(Bin) ->
+    Bin1 = binary:replace(Bin, <<"]">>, <<>>),
+    Parts = binary:split(Bin1, <<",">>, [global]),
+    [ unquot(z_string:trim(P)) || P <- Parts ].
+
+unquot(<<C, Rest/binary>>) when C =:= $'; C =:= $"; C =:= $` ->
+    binary:replace(Rest, <<C>>, <<>>);
+unquot(B) ->
+    B.
