@@ -23,6 +23,7 @@
     m_value/2,
     tree/2,
     tree_flat/2,
+    parents/3,
     menu/2,
     ensure/2,
     ensure/3,
@@ -89,6 +90,17 @@ tree(Name, Context) when is_binary(Name) ->
 tree(Name, Context) ->
     tree(z_convert:to_binary(Name), Context).
 
+%% @doc Return a list of all this id's ancestor nodes
+parents(Name, Id, Context) ->
+    case z_depcache:memo(
+                 fun() -> z_db:q1("SELECT parent_id FROM hierarchy WHERE name = $1 AND id = $2", [Name, Id], Context)
+                 end, {hierarchy_parent, Name, Id}, ?DAY, [hierarchy], Context) of
+        undefined ->
+            [];
+        P ->
+            [P | parents(Name, P, Context)]
+    end.
+                                       
 %% @doc Make a flattened list with indentations showing the level of the tree entries.
 %%      Useful for select lists.
 tree_flat(Name, Context) ->
