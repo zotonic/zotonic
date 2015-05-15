@@ -1834,7 +1834,11 @@ function urlencode(s)
 // HTML escape a string so it is safe to concatenate when making tags.
 function html_escape(s)
 {
-    s.replace(/&/, "&amp;").replace(/</, "&lt;").replace(/>/, "&gt;").replace(/"/, "&quot;");
+    return s.replace(/&/, "&amp;")
+            .replace(/</, "&lt;")
+            .replace(/>/, "&gt;")
+            .replace(/"/, "&quot;")
+            .replace(/'/, "&#39;");
 }
 
 
