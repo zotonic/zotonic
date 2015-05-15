@@ -49,14 +49,16 @@ event1(#postback{message={remove_rule, [{id, RuleId}, {kind, Kind}]}}, Context) 
     z_context:add_script_page(Script, Context),
     Context;
 
-event1(#postback{message={revert, [{kind, Kind}]=V}}, Context) ->
+event1(#postback{message={revert, [{kind, _}]=V}}, Context) ->
     lager:warning("revert: ~p", [revert]),
-    ok = m_acl_rule:revert(Kind, Context),
+    ok = m_acl_rule:revert(rsc, Context),
+    ok = m_acl_rule:revert(module, Context),
     Context1 = z_render:update("acl-rules", #render{template="_acl_rules_list.tpl", vars=V}, Context),
     z_render:growl(?__("Revert OK", Context), Context1);
 
-event1(#postback{message={publish, [{kind, Kind}]=V}}, Context) ->
-    ok = m_acl_rule:publish(Kind, Context),
+event1(#postback{message={publish, [{kind, _}]=V}}, Context) ->
+    ok = m_acl_rule:publish(rsc, Context),
+    ok = m_acl_rule:publish(module, Context),
     Context1 = z_render:update("acl-rules", #render{template="_acl_rules_list.tpl", vars=V}, Context),
     z_render:growl(?__("Publish successful", Context), Context1);
 

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row acl-header">
 
     <div class="col-md-2">
         <label>{_ ACL user group _}</label>
@@ -13,16 +13,14 @@
             <label>{_ Category _}</label>
         </div>
 
-        <div class="col-md-1">
-            <label>{_ User is owner _}</label>
-        </div>
     {% elseif kind == "module" %}
-        <div class="col-md-5">
+        <div class="col-md-4">
             <label>{_ Module _}</label>
         </div>
     {% endif %}
     
-    <div class="col-md-5">
+    <div class="col-md-6">
         <label>{_ Permissions _}</label>
     </div>
+
 </div>

@@ -3,8 +3,9 @@
 {% block active1 %}active{% endblock %}
 
 {% block content_acl %}
+
     <div class="acl-well">
-       <div id="acl-rules">
+        <div id="acl-rules">
             {% include "_acl_rules_list.tpl" %}
         </div>
     </div>
@@ -14,40 +15,46 @@
         {% include "_admin_acl_rule_header.tpl" %}
         {% include "_admin_acl_rule_row.tpl" is_new %}
     </div>
-    
-    <div class="well acl-well">
 
-        {% button text=_"Publish"
-            class="btn btn-primary pull-right"
-            action={confirm
-                text=_"Are you sure you want to make all rules on this page permanent?"
-                action={dialog_close}
-                delegate=`admin_acl_rules`
-                postback={publish
-                    kind=kind
-                }
-            }
-        %}
+{% endblock %}
 
-        {% button text=_"Try rules..."
-            class="btn"
-            action={dialog_open
-                title=_"Try ACL rules"
-                template="_dialog_acl_rules_try.tpl"
-            }
-        %}
+{% block filter %}
+    <div class="pull-right" style="margin-top: 10px; height: 50px">
+        <span>{_ Show: _}</span>
+        <div class="btn-group">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    {% if q.g %}
+                        {{ m.rsc[q.g].title }}
+                    {% else %}
+                        {_ All _}
+                    {% endif %}
+                    <span class="caret"></span>
+                </button>
 
-        {% button text=_"Revert back to published"
-            class="btn"
-            action={confirm
-                text=_"Are you sure you want to restore all the ACL rules on this page to their currently published version?"
-                action={dialog_close}
-                delegate=`admin_acl_rules`
-                postback={revert
-                    kind=kind
-                }
-            }
-        %}
-        
+                <input type="hidden" name="qgroup" id="cskrft-select" value="" />
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li role="presentation" class="dropdown-header">
+                        {_ Show this ACL user group first: _}
+                    </li>
+                    
+		            {% for cg in m.hierarchy.acl_user_group.tree_flat %}
+			            <li id="{{ cg.id }}" {% if cg.id == q.g %}class="active"{% endif %}>
+				            <a href="?g={{ cg.id }}">
+                                {{ cg.indent }} {{ cg.id.title }}
+                            </a>
+                        </li>
+		            {% endfor %}
+
+                    <li class="divider"></li>
+                    <li class="">
+                        <a href="?g=" class="cskrft-option" data-value="353">
+                            <i class="glyphicon glyphicon-remove"></i> {_ Reset _}
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
     </div>
 {% endblock %}

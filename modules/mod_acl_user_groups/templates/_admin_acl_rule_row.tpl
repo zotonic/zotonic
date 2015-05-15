@@ -37,18 +37,8 @@
 		        {% endfor %}
 	        </select>
         </div>
-
-        <div class="col-md-1">
-            <label class="checkbox-inline">
-                <input type="checkbox" id="{{ #is_owner }}" name="is_owner" value="on"
-                    {% if rule.is_owner %}checked="checked"{% endif %}
-                    {% if rule %}onchange="$(this.form).submit()"{% endif %}
-                />
-                {_ owner _}
-            </label>
-        </div>
     {% elseif kind == "module" %}
-        <div class="col-md-5">
+        <div class="col-md-4">
 	        <select class="form-control" id="{{ #module }}" name="module" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
 		        <option value="">{_ All _}</option>
                 {% for mod, name in m.modules.all %}
@@ -58,7 +48,8 @@
         </div>
     {% endif %}
 
-    <div class="col-md-5">
+    <div class="col-md-6">
+
         {% if is_new %}
             {% button
                 text=_"Add"
@@ -73,17 +64,26 @@
                 postback={remove_rule id=rule.id kind=kind} delegate=`admin_acl_rules`
             %}
         {% endif %} 
-
+        
         <div>
             {% for action, label in m.acl_rule[kind].actions %}
                 <label class="checkbox-inline">
                     <input type="checkbox" name="action${{ action }}" value="on"
                         {% if rule.actions[action] %}checked="checked"{% endif %}
-                        {% if rule %}onchange="$(this.form).submit()"{% endif %}
-                    /> {{ label }}
+                        {% if rule %}onchange="$(this.form).submit()"{% endif %} /> {{ label }}
                 </label>
             {% endfor %}
+
+            {% if kind == "rsc" %}
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="{{ #is_owner }}" name="is_owner" value="on"
+                        {% if rule.is_owner %}checked="checked"{% endif %}
+                        {% if rule %}onchange="$(this.form).submit()"{% endif %} /> manage own
+                </label>
+            {% endif %}
+            
         </div>
     </div>
+
 </form>
 

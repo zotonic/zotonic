@@ -83,8 +83,10 @@ m_find_value(T, M=#m{value=undefined}, _Context) when ?valid_acl_kind(T) ->
     M#m{value=T};
 m_find_value(actions, #m{value=T}, Context) when ?valid_acl_kind(T) ->
     actions(T, Context);
-m_find_value(S, #m{value=T}, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    all_rules(T, S, Context).
+m_find_value(S, M=#m{value=T}, _) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
+    M#m{value={list, T, S}};
+m_find_value({all, Opts}, #m{value={list, T, S}}, Context) ->
+    all_rules(T, S, Opts, Context).
 
 
 %% @spec m_to_list(Source, Context) -> List
@@ -118,12 +120,17 @@ is_valid_code(Code, Context) ->
 -type acl_rule() :: list().
 -spec all_rules(rsc | module, edit | publish, #context{}) -> [acl_rule()].
 all_rules(Kind, State, Context) ->
+    all_rules(Kind, State, [], Context).
+
+-type acl_rules_opt() :: {group, string()}.
+-spec all_rules(rsc | module, edit | publish, [acl_rules_opt()], #context{}) -> [acl_rule()].
+all_rules(Kind, State, Opts, Context) ->
     Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind)) 
             ++ " WHERE " ++ state_sql_clause(State),
     All = z_db:assoc(Query, Context),
-    sort_by_user_group(normalize_actions(All), Context).
+    sort_by_user_group(normalize_actions(All), z_convert:to_integer(proplists:get_value(group, Opts)), Context).
 
-sort_by_user_group(Rs, Context) ->
+sort_by_user_group(Rs, undefined, Context) ->
     Tree = m_hierarchy:menu(acl_user_group, Context),
     Ids = lists:reverse(flatten_tree(Tree, [])),
     Zipped = lists:zip(Ids, lists:seq(1,length(Ids))),
@@ -134,7 +141,22 @@ sort_by_user_group(Rs, Context) ->
                        end,
                        Rs),
     Rs1 = lists:sort(WithNr),
+    [ R1 || {_,R1} <- Rs1 ];
+
+sort_by_user_group(Rs, Group, Context) ->
+    Parents = m_hierarchy:parents(acl_user_group, Group, Context),
+    Tree = m_hierarchy:menu(acl_user_group, Context),
+    Ids = [Group | Parents] ++ lists:reverse(flatten_tree(Tree, [])),
+    Zipped = lists:zip(Ids, lists:seq(1,length(Ids))),
+    WithNr = lists:map(fun(R) ->
+                            UGId = proplists:get_value(acl_user_group_id, R),
+                            Nr = proplists:get_value(UGId, Zipped),
+                            {Nr, R}
+                       end,
+                       Rs),
+    Rs1 = lists:sort(WithNr),
     [ R1 || {_,R1} <- Rs1 ].
+
 
 flatten_tree([], Acc) ->
     Acc;
