@@ -306,6 +306,7 @@ search({users, [{text,QueryText}]}, _OffsetLimit, Context) ->
             #search_sql{
                 select="r.id, max(r.modified) AS rank",
                 from="rsc r join identity i on r.id = i.rsc_id",
+                where="i.type = 'username_pw'",
                 order="rank desc",
                 group_by="r.id",
                 tables=[{rsc,"r"}]
@@ -314,7 +315,7 @@ search({users, [{text,QueryText}]}, _OffsetLimit, Context) ->
             #search_sql{
                 select="r.id, max(ts_rank_cd(pivot_tsv, query, 32)) AS rank",
                 from="rsc r join identity i on r.id = i.rsc_id, plainto_tsquery($2, $1) query",
-                where=" query @@ pivot_tsv",
+                where=" query @@ pivot_tsv and i.type = 'username_pw'",
                 order="rank desc",
                 group_by="r.id",
                 args=[QueryText, z_pivot_rsc:pg_lang(Context#context.language)],
