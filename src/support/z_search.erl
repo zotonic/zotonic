@@ -173,7 +173,9 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
 
 %% @doc Inject the ACL checks in the SQL query.
 %% @spec reformat_sql_query(#search_sql{}, Context) -> #search_sql{}
-reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args, cats=TabCats, cats_exclude=TabCatsExclude} = Q, Context) ->
+reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args, 
+                               cats=TabCats, cats_exclude=TabCatsExclude,
+                               cats_exact=TabCatsExact} = Q, Context) ->
     {ExtraWhere, Args1} = lists:foldl(
                                 fun(Table, {Acc,As}) ->
                                     {W,As1} = add_acl_check(Table, As, Q, Context),
@@ -193,9 +195,13 @@ reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args,
                                         {FromNew, CatCheck} -> {FromNew, [CatCheck | C]}
                                     end
                                 end, {From1, ExtraWhere1}, TabCatsExclude),
+    {ExtraWhere3, Args2} = lists:foldl(
+                                fun({Alias, Cats}, {WAcc,As}) ->
+                                    add_cat_exact_check(Cats, Alias, WAcc, As, Context)
+                                end, {ExtraWhere2, Args1}, TabCatsExact),
 
-    Where1 = lists:flatten(concat_where(ExtraWhere2, Where)),
-    Q#search_sql{where=Where1, from=From2, args=Args1}.
+    Where1 = lists:flatten(concat_where(ExtraWhere3, Where)),
+    Q#search_sql{where=Where1, from=From2, args=Args2}.
 
 
 %% @doc Concatenate the where clause with the extra ACL checks using "and".  Skip empty clauses.
@@ -327,7 +333,6 @@ cat_check_pivot1(Alias, true, {From,To}) ->
         ++ " or "++ Alias ++ ".pivot_category_nr > " ++ integer_to_list(To) ++ ")".
 
 
-
 %% Add category tree range checks by using joins. Less optimal; only
 %% used while the category tree is being recalculated.
 add_cat_check_joined(From, Alias, Exclude, Cats, Context) ->
@@ -358,3 +363,14 @@ cat_check_joined1(CatAlias, true, {Left,Left}) ->
 cat_check_joined1(CatAlias, true, {Left,Right}) ->
     "(" ++ CatAlias ++ ".nr < " ++ integer_to_list(Left)
         ++ " or "++ CatAlias ++ ".nr > " ++ integer_to_list(Right) ++ ")".
+
+%% @doc Add a check for an exact category match
+add_cat_exact_check([], _Alias, WAcc, As, _Context) ->
+    {WAcc, As};
+add_cat_exact_check(CatsExact, Alias, WAcc, As, Context) ->
+    NArgs = length(As),
+    CatIds = [ m_rsc:rid(CId, Context) || CId <- CatsExact ],
+    CatArgs = [ [$$,integer_to_list(N)] || N <- lists:seq(NArgs+1,NArgs+length(CatIds))],
+    {WAcc ++ [[Alias, ".category_id in (", z_utils:combine($,, CatArgs), ")"]],
+     As ++ CatIds}.
+

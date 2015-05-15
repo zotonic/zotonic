@@ -75,6 +75,7 @@ parse_query_text(Text) ->
 % table overflows.
 request_arg("authoritative")       -> authoritative;
 request_arg("cat")                 -> cat;
+request_arg("cat_exact")           -> cat_exact;
 request_arg("cat_exclude")         -> cat_exclude;
 request_arg("creator_id")          -> creator_id;
 request_arg("modifier_id")         -> modifier_id;
@@ -126,16 +127,21 @@ parse_query([], _Context, Result) ->
 parse_query([{cat, Cats}|Rest], Context, Result) ->
     Cats1 = assure_categories(Cats, Context),
     Cats2 = add_or_append("rsc", Cats1, Result#search_sql.cats),
-    Tables1 = Result#search_sql.tables,
-    parse_query(Rest, Context, Result#search_sql{cats=Cats2, tables=Tables1});
+    parse_query(Rest, Context, Result#search_sql{cats=Cats2});
 
 %% cat_exclude=categoryname
 %% Filter results outside a certain category.
 parse_query([{cat_exclude, Cats}|Rest], Context, Result) ->
     Cats1 = assure_categories(Cats, Context),
     Cats2 = add_or_append("rsc", Cats1, Result#search_sql.cats_exclude),
-    Tables1 = Result#search_sql.tables,
-    parse_query(Rest, Context, Result#search_sql{cats_exclude=Cats2, tables=Tables1});
+    parse_query(Rest, Context, Result#search_sql{cats_exclude=Cats2});
+
+%% cat_exact=categoryname
+%% Filter results excactly of a category (excluding subcategories)
+parse_query([{cat_exact, Cats}|Rest], Context, Result) ->
+    Cats1 = assure_categories(Cats, Context),
+    Cats2 = add_or_append("rsc", Cats1, Result#search_sql.cats_exact),
+    parse_query(Rest, Context, Result#search_sql{cats_exact=Cats2});
 
 parse_query([{filter, R}|Rest], Context, Result) ->
     Result1 = add_filters(R, Result),
@@ -563,6 +569,8 @@ assure_categories(Name, Context) ->
                 Cats1).
 
 %% Flatten eventual lists of categories
+assure_cat_flatten(Name) when not is_list(Name) ->
+    assure_cat_flatten([Name]);
 assure_cat_flatten(Names) when is_list(Names) ->
     lists:flatten([  
         case is_list(N) of
