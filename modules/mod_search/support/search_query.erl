@@ -667,7 +667,9 @@ maybe_split_list(Id) when is_integer(Id) ->
 maybe_split_list(<<"[", Rest/binary>>) ->
     split_list(Rest);
 maybe_split_list([$[|Rest]) ->
-    split_list(z_conver:to_binary(Rest)).
+    split_list(z_conver:to_binary(Rest));
+maybe_split_list(Other) ->
+    [Other].
 
 split_list(Bin) ->
     Bin1 = binary:replace(Bin, <<"]">>, <<>>),
