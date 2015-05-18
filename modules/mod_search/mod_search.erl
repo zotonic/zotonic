@@ -311,12 +311,12 @@ search({match_objects_cats, [{cat,Cat},{id,Id}]}, OffsetLimit, Context) ->
 %% @doc Return a list of resource ids, featured ones first
 %% @spec search(SearchSpec, Range, Context) -> #search_sql{}
 search({featured, []}, OffsetLimit, Context) -> 
-   search({'query', [{sort, '-rsc.is_featured'}]}, OffsetLimit, Context);
+   search({'query', [{sort, "-rsc.is_featured"}, {sort, "-rsc.publication_start"}]}, OffsetLimit, Context);
 
 %% @doc Return a list of resource ids inside a category, featured ones first
 %% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
 search({featured, [{cat, Cat}]}, OffsetLimit, Context) ->
-    search({'query', [{cat, Cat}, {sort, '-rsc.is_featured'}]}, OffsetLimit, Context);
+    search({'query', [{cat, Cat}, {sort, "-rsc.is_featured"}, {sort, "-rsc.publication_start"}]}, OffsetLimit, Context);
 
 %% @doc Return the list of resource ids, on descending id
 %% @spec search(SearchSpec, Range, Context) -> IdList | {error, Reason}
@@ -334,16 +334,16 @@ search({featured, [{cat,Cat},{object,ObjectId},{predicate,Predicate}]}, OffsetLi
     search({'query', [{cat, Cat}, {hassubject, [ObjectId, Predicate]}]}, OffsetLimit, Context);
 
 search({published, []}, OffsetLimit, Context) ->
-    search({'query', [{sort, '-rsc.publication_start'}]}, OffsetLimit, Context);
+    search({'query', [{sort, "-rsc.publication_start"}]}, OffsetLimit, Context);
 
 search({published, [{cat, Cat}]}, OffsetLimit, Context) ->
-    search({'query', [{cat, Cat}, {sort, '-rsc.publication_start'}]}, OffsetLimit, Context);
+    search({'query', [{cat, Cat}, {sort, "-rsc.publication_start"}]}, OffsetLimit, Context);
 
 search({latest, []}, OffsetLimit, Context) ->
-    search({'query', [{sort, '-rsc.modified'}]}, OffsetLimit, Context);
+    search({'query', [{sort, "-rsc.modified"}]}, OffsetLimit, Context);
 
 search({latest, [{cat, Cat}]}, OffsetLimit, Context) ->
-    search({'query', [{cat, Cat}, {sort, '-rsc.modified'}]}, OffsetLimit, Context);
+    search({'query', [{cat, Cat}, {sort, "-rsc.modified"}]}, OffsetLimit, Context);
 
 search({latest, [{creator_id,CreatorId}]}, _OffsetLimit, _Context) ->
     #search_sql{
@@ -367,7 +367,7 @@ search({latest, [{cat, Cat}, {creator_id,CreatorId}]}, _OffsetLimit, _Context) -
     };
 
 search({upcoming, [{cat, Cat}]}, OffsetLimit, Context) ->
-    search({'query', [{upcoming, true}, {cat, Cat}, {sort, 'rsc.pivot_date_start'}]}, OffsetLimit, Context);
+    search({'query', [{upcoming, true}, {cat, Cat}, {sort, "rsc.pivot_date_start"}]}, OffsetLimit, Context);
 
 search({finished, [{cat, Cat}]}, OffsetLimit, Context) ->
     search({'query', [{finished, true}, {cat, Cat}, {sort, '-rsc.pivot_date_start'}]}, OffsetLimit, Context);
