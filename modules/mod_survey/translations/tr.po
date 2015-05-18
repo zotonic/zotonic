@@ -489,9 +489,11 @@ msgstr "Anket sonuçları editörü"
 msgid "Thank you"
 msgstr "Teşekkürler"
 
-#: modules/mod_survey/templates/_survey_end.tpl:3
-msgid "Thank you for filling in our survey. Be sure to come back for other surveys!"
-msgstr "Anketimizi doldurduğunuz için teşekkür ederiz. Diğer anketler için yine bekleriz!"
+#: modules/mod_survey/templates/_survey_end.tpl:7
+msgid ""
+"Thank you for filling in our survey."
+msgstr ""
+"Anketimizi doldurduğunuz için teşekkür ederiz."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:15
 msgid "The earth is flat."

@@ -118,7 +118,7 @@ auth_user(Profile, AccessTokenData, Context) ->
             {email, proplists:get_value(<<"emailAddress">>, Profile, [])},
             {address_country, proplists:get_value(<<"code">>, Country)},
             {address_line_1, proplists:get_value(<<"name">>, Location)},
-            {depiction_url, proplists:get_value(<<"pictureUrl">>, Profile, [])}
+            {depiction_url, picture_url(proplists:get_value(<<"pictureUrls">>, Profile))}
         ] ++ company_info(Profile),
     Args = controller_linkedin_authorize:get_args(Context),
     z_notifier:first(#auth_validated{
@@ -131,7 +131,7 @@ auth_user(Profile, AccessTokenData, Context) ->
         Context).
 
 company_info(Profile) ->
-    case proplists:get_value(<<"threeCurrentPositions">>, Profile) of
+    case proplists:get_value(<<"positions">>, Profile) of
         {struct, Ps} ->
             case proplists:get_value(<<"values">>, Ps) of
                 [{struct, Qs}|_] ->
@@ -147,6 +147,14 @@ company_info(Profile) ->
             []
     end.
 
+
+picture_url(undefined) ->
+    undefined;
+picture_url({struct, Ps}) ->
+    case proplists:get_value(<<"values">>, Ps) of
+        [Url|_] -> Url;
+        _ -> undefined
+    end.
 
 % Exchange the code for an access token
 fetch_access_token(Code, Context) ->
@@ -218,9 +226,9 @@ fields() ->
             "headline", $,,
             "summary", $,,
             "location:(country:(code),name)", $,,
-            "picture-url", $,,
+            "picture-urls::(original)", $,,
             "public-profile-url", $,,
-            "three-current-positions:(title,company:(name))", $,,
+            "positions:(title,company:(name))", $,,
             "email-address",
         $)
         ]).

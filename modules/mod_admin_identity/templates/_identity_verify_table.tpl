@@ -28,6 +28,12 @@
 						delegate=`mod_admin_identity`
 				%}
 			</td>
+			{% if m.modules.active.mod_email_status %}
+			<td>
+				<a id="{{ #status.idn_id }}" href="#" class="btn btn-small" title="{_ View email status _}">{_ Status _}</a>
+				{% wire id=#status.idn_id action={dialog_open title=_"Email Status" template="_dialog_email_status.tpl" email=idn.key} %}
+			</td>
+			{% endif %}
 		</tr>
 	{% endwith %}
 	{% endfor %}

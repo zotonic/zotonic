@@ -61,6 +61,12 @@ Query-model arguments
 
   ``cat='news'``
 
+**cat_exact**
+
+  Filter resources to include the given category, but exclude any subcategory
+
+  ``cat_exact='news'``
+
 **cat_exclude**
 
   Filter resources to exclude the given category.

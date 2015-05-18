@@ -35,7 +35,7 @@
         get_config/1
     ]).
 
--define(LINKEDIN_SCOPE, "r_basicprofile r_emailaddress r_contactinfo").
+-define(LINKEDIN_SCOPE, "r_basicprofile r_emailaddress").
 
 -include_lib("zotonic.hrl").
 
@@ -61,7 +61,6 @@ save_settings(Context) ->
 
 is_setting("appid") -> true;
 is_setting("appsecret") -> true;
-is_setting("scope") -> true;
 is_setting("useauth") -> true;
 is_setting(_) -> false.
 
@@ -71,6 +70,6 @@ is_setting(_) -> false.
 get_config(Context) ->
     { z_convert:to_list(m_config:get_value(mod_linkedin, appid, Context)),
       z_convert:to_list(m_config:get_value(mod_linkedin, appsecret, Context)),
-      z_convert:to_list(m_config:get_value(mod_linkedin, scope, ?LINKEDIN_SCOPE, Context))
+      ?LINKEDIN_SCOPE
     }.
 

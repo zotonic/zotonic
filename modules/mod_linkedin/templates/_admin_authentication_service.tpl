@@ -25,13 +25,6 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="control-label col-md-3" for="linkedin_scope">{_ Scope _}</label>
-                        <div class="col-md-9">
-                            <input type="text" id="linkedin_scope" name="scope" value="{{ m.config.mod_linkedin.scope.value|default:'r_basicprofile r_emailaddress r_contactinfo'|escape }}" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
                         <div class="col-md-9 col-md-offset-3">
                             <div class="checkbox">
                                 <label>

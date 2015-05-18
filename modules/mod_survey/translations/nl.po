@@ -501,7 +501,7 @@ msgstr "Bedankt"
 
 #: modules/mod_survey/templates/_survey_end.tpl:3
 msgid ""
-"Thank you for filling in our survey. Be sure to come back for other surveys!"
+"Thank you for filling in our survey."
 msgstr "Bedankt voor het invullen van de vragenlijst."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:15
