@@ -70,7 +70,13 @@ event1(#postback{message={set_upload_size, [{id,Id}]}}, Context) ->
         _OldSize ->
             {ok, _} = m_rsc:update(Id, [{acl_upload_size, NewSize}], Context),
             Context
-    end.
+    end;
+
+event1(#submit{message={acl_rule_import, []}}, Context) ->
+    #upload{tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
+    m_acl_rule:import_rules(TmpFile, Context),
+    z_render:wire([{reload, []}], Context).
+
 
 normalize_values(Row) ->
     {Actions, Rest} =
@@ -98,4 +104,7 @@ highlight_row(RuleId, Context) ->
     Script = "setTimeout(function() { $('.acl-rule-" ++ z_convert:to_list(RuleId) ++ "').animate({backgroundColor: '#ffff99'}, 200).animate({backgroundColor: '#ffffff'}, 1000); }, 10);",
     z_context:add_script_page(Script, Context),
     Context.
+
+
+
 

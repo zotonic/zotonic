@@ -26,5 +26,8 @@
 	{admin_acl_rules_test, 
 			["admin", "acl", "rules", "test"], 
 			controller_admin, 
-			[{template, "admin_acl_rules_test.tpl"}, {kind,test}]}
+			[{template, "admin_acl_rules_test.tpl"}, {kind,test}]},
+	{admin_acl_export, 
+			["admin", "acl", "rules", "export"], 
+			controller_admin_acl_rules_export, []}
 ].

@@ -40,7 +40,10 @@
     delete/3,
 
     revert/2,
-    publish/2
+    publish/2,
+
+    ids_to_names/2,
+    import_rules/2
    ]).
 
 -include_lib("zotonic.hrl").
@@ -126,7 +129,7 @@ all_rules(Kind, State, Context) ->
 -spec all_rules(rsc | module, edit | publish, [acl_rules_opt()], #context{}) -> [acl_rule()].
 all_rules(Kind, State, Opts, Context) ->
     Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind)) 
-            ++ " WHERE " ++ state_sql_clause(State),
+        ++ " WHERE " ++ state_sql_clause(State),
     All = z_db:assoc(Query, Context),
     sort_by_user_group(normalize_actions(All), z_convert:to_integer(proplists:get_value(group, Opts)), Context).
 
@@ -135,9 +138,9 @@ sort_by_user_group(Rs, undefined, Context) ->
     Ids = lists:reverse(flatten_tree(Tree, [])),
     Zipped = lists:zip(Ids, lists:seq(1,length(Ids))),
     WithNr = lists:map(fun(R) ->
-                            UGId = proplists:get_value(acl_user_group_id, R),
-                            Nr = proplists:get_value(UGId, Zipped),
-                            {Nr, R}
+                               UGId = proplists:get_value(acl_user_group_id, R),
+                               Nr = proplists:get_value(UGId, Zipped),
+                               {Nr, R}
                        end,
                        Rs),
     Rs1 = lists:sort(WithNr),
@@ -149,9 +152,9 @@ sort_by_user_group(Rs, Group, Context) ->
     Ids = [Group | Parents] ++ lists:reverse(flatten_tree(Tree, [])),
     Zipped = lists:zip(Ids, lists:seq(1,length(Ids))),
     WithNr = lists:map(fun(R) ->
-                            UGId = proplists:get_value(acl_user_group_id, R),
-                            Nr = proplists:get_value(UGId, Zipped),
-                            {Nr, R}
+                               UGId = proplists:get_value(acl_user_group_id, R),
+                               Nr = proplists:get_value(UGId, Zipped),
+                               {Nr, R}
                        end,
                        Rs),
     Rs1 = lists:sort(WithNr),
@@ -194,24 +197,24 @@ actions(module, Context) ->
 
 update(Kind, Id, Props, Context) ->
     Result = z_db:update(
-      table(Kind), Id,
-      [{is_edit, true},
-       {modifier_id, z_acl:user(Context)},
-       {modified, calendar:universal_time()}
-       | Props], Context
-     ),
+               table(Kind), Id,
+               [{is_edit, true},
+                {modifier_id, z_acl:user(Context)},
+                {modified, calendar:universal_time()}
+                | Props], Context
+              ),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
 
 insert(Kind, Props, Context) ->
     Result = z_db:insert(
-      table(Kind),
-      [{is_edit, true},
-       {modifier_id, z_acl:user(Context)},
-       {modified, calendar:universal_time()},
-       {creator_id, z_acl:user(Context)},
-       {created, calendar:universal_time()} | Props], Context
-     ),
+               table(Kind),
+               [{is_edit, true},
+                {modifier_id, z_acl:user(Context)},
+                {modified, calendar:universal_time()},
+                {creator_id, z_acl:user(Context)},
+                {created, calendar:universal_time()} | Props], Context
+              ),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
 
@@ -227,15 +230,15 @@ delete(Kind, Id, Context) ->
 revert(Kind, Context) ->
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
-      fun(Ctx) ->
-              z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = true", Ctx),
-              All = z_db:assoc("SELECT * FROM " ++ T ++ " WHERE is_edit = false", Ctx),
-              [z_db:insert(table(Kind),
-                           z_utils:prop_delete(id, z_utils:prop_replace(is_edit, true, Row)),
-                           Context) || Row <- All],
-              ok
-      end,
-      Context),
+               fun(Ctx) ->
+                       z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = true", Ctx),
+                       All = z_db:assoc("SELECT * FROM " ++ T ++ " WHERE is_edit = false", Ctx),
+                       [z_db:insert(table(Kind),
+                                    z_utils:prop_delete(id, z_utils:prop_replace(is_edit, true, Row)),
+                                    Context) || Row <- All],
+                       ok
+               end,
+               Context),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
 
@@ -244,15 +247,15 @@ revert(Kind, Context) ->
 publish(Kind, Context) ->
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
-      fun(Ctx) ->
-              z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = false", Ctx),
-              All = z_db:assoc("SELECT * FROM " ++ T ++ " WHERE is_edit = true", Ctx),
-              [z_db:insert(table(Kind),
-                           z_utils:prop_delete(id, z_utils:prop_replace(is_edit, false, Row)),
-                           Context) || Row <- All],
-              ok
-      end,
-      Context),
+               fun(Ctx) ->
+                       z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = false", Ctx),
+                       All = z_db:assoc("SELECT * FROM " ++ T ++ " WHERE is_edit = true", Ctx),
+                       [z_db:insert(table(Kind),
+                                    z_utils:prop_delete(id, z_utils:prop_replace(is_edit, false, Row)),
+                                    Context) || Row <- All],
+                       ok
+               end,
+               Context),
     mod_acl_user_groups:rebuild(publish, Context),
     Result.
 
@@ -316,3 +319,84 @@ shared_table_columns() ->
 
 fk(Table, Field, Context) ->
     z_db:equery("alter table " ++ Table ++ " add constraint fk_" ++ Table ++ "_" ++ Field ++ "_id foreign key (" ++ Field ++ ") references rsc(id) on update cascade on delete cascade", Context).
+
+
+import_rules(TmpFile, Context) ->
+    {ok, Content} = file:read_file(TmpFile),
+    RuleTypes = binary_to_term(Content),
+    z_db:transaction(
+      fun(Ctx) ->
+              [begin
+                   {Kind, State, Rules0} = Row,
+                   Rules = names_to_ids(Rules0, Context),
+                   Query = "DELETE FROM " ++ z_convert:to_list(table(Kind)) 
+                       ++ " WHERE " ++ state_sql_clause(State),
+                   z_db:equery(Query, Ctx),
+                   Rules1 = controller_admin_acl_rules_export:names_to_ids(Rules, Context),
+                   [z_db:insert(table(Kind), R, Ctx) || R <- Rules1]
+               end
+               || Row <- RuleTypes]
+      end,
+      Context),
+    mod_acl_user_groups:rebuild(edit, Context),
+    mod_acl_user_groups:rebuild(publish, Context),
+    ok.
+
+
+ids_to_names(Rows, Context) ->
+    [ids_to_names_row(R, Context) || R <- Rows].
+
+ids_to_names_row(R, Context) ->
+    lists:foldl(
+      fun(K, Acc) ->
+              Value = proplists:get_value(K, Acc),
+              case is_integer(Value) of
+                  true ->
+                      %% look up name
+                      case m_rsc:p(Value, name, Context) of
+                          undefined ->
+                              %% nope, keep id
+                              Acc;
+                          Name ->
+                              z_utils:prop_replace(K, Name, Acc)
+                      end;
+                  false ->
+                      Acc
+              end
+      end,
+      R,
+      fields()).
+
+names_to_ids(Rows, Context) ->
+    [names_to_ids_row(R, Context) || R <- Rows].
+
+names_to_ids_row(R, Context) ->
+    lists:foldl(
+      fun(actions, Acc) ->
+              A1 = implode_actions(proplists:get_value(actions, Acc)),
+              z_utils:prop_replace(actions, A1, Acc);
+         (K, Acc) ->
+              Value = proplists:get_value(K, Acc),
+              case is_binary(Value) of
+                  true ->
+                      %% look up name
+                      case m_rsc:name_to_id(Value, Context) of
+                          {ok, Id} ->
+                              z_utils:prop_replace(K, Id, Acc);
+                          _ ->
+                              Acc
+                      end;
+                  false ->
+                      Acc
+              end
+      end,
+      R,
+      [actions|fields()]).
+
+fields() ->
+    [acl_user_group_id, category_id, content_group_id, creator_id, modifier_id].
+
+implode_actions(L) ->
+    string:join(
+      [z_convert:to_list(K) || {K, true} <- L],
+      ",").

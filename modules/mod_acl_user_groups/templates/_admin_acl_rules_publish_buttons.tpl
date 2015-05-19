@@ -12,13 +12,26 @@
     %}
 
     {% button text=_"Try rules..."
-        class="btn"
+        class="btn btn-default"
         action={dialog_open
             title=_"Try ACL rules"
             template="_dialog_acl_rules_try.tpl"
         }
     %}
 
+    {% button text=_"Export rules"
+        class="btn btn-default"
+        action={redirect dispatch=`admin_acl_export`}
+    %}
+
+    {% button text=_"Import rules..."
+        class="btn btn-default"
+        action={dialog_open
+            title=_"Import ACL rules"
+            template="_dialog_acl_rules_import.tpl"
+        }
+    %}
+    
     {% button text=_"Revert back to published"
         class="btn"
         action={confirm

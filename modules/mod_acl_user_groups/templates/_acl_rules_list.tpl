@@ -7,8 +7,6 @@
 {% endfor %}
 
 {% javascript %}
-    console.log('reffresh');
-
     var elements = $("select[name=acl_user_group_id]");
     for (var i=0; i<elements.length-1; i++) {
         if ($(elements[i]).val() != $(elements[i+1]).val()) {
