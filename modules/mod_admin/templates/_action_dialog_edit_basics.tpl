@@ -13,7 +13,7 @@
 			}
 	        delegate=delegate 
         %}
-        <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
+        <form id="{{ #form }}" method="POST" action="postback" class="form">
             <div class="tabbable">
                 {% block tabbar %}
 	                <ul class="nav nav-pills">
@@ -21,9 +21,9 @@
 	                    <li><a data-toggle="tab" href="#{{ #acl }}">{_ Access control _}</a></li>
 	                </ul>
                 {% endblock %}
-                <div class="tab-content form-horizontal">
+                <div class="tab-content">
                     {% block tab_content %}
-	                    <div class="tab-pane active" id="{{ #main }}">
+	                    <div class="tab-pane form-horizontal active" id="{{ #main }}">
 
 	                        {% catinclude "_admin_edit_basics.tpl" id in_dialog is_editable=id.is_editable languages=languages %}
 			                
@@ -51,7 +51,7 @@
                     {% endblock %}
                     
                     {% block tab_visible_for %}
-	                    <div class="tab-pane" id="{{ #acl }}">
+	                    <div class="tab-pane form-horizontal" id="{{ #acl }}">
 	                        {% include "_admin_edit_visible_for.tpl" id=id %}
 	                    </div>
                     {% endblock %}

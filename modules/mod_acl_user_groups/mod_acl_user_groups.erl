@@ -98,7 +98,9 @@ observe_hierarchy_updated(#hierarchy_updated{root_id= <<"acl_user_group">>, pred
 observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
     ok.
 
-observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Context) ->
+observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->
+
+    check_hasusergroup(Id, M#rsc_update_done.post_props, Context),
     case  lists:member('acl_user_group', PreIsA) 
         orelse lists:member('acl_user_group', PostIsA)
     of
@@ -433,3 +435,17 @@ manage_datamodel(Context) ->
                 ]
         },
         Context).
+
+check_hasusergroup(UserId, P, Context) ->
+    HasUserGroup = proplists:get_all_values(hasusergroup, P),
+    case length(HasUserGroup) of
+        0 ->
+            %% not submitted, do nothing
+            ok;
+        _ -> 
+            GroupIds = lists:map(fun z_convert:to_integer/1, lists:filter(fun(<<>>) -> false; (_) -> true end,
+                                                                          HasUserGroup)),
+            PredId = m_predicate:name_to_id_check(hasusergroup, Context),
+            m_edge:replace(UserId, PredId, GroupIds, Context)
+    end.
+

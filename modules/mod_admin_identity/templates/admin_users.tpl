@@ -45,7 +45,7 @@
 
         <tbody>
         {% for id, rank in result %}
-            <tr id="{{ #tr.id }}" data-href="{% url admin_edit_rsc id=id %}" {% if not id.is_published %}class="unpublished"{% endif %}>
+            <tr id="{{ #tr.id }}" data-href="javascript:;" {% if not id.is_published %}class="unpublished"{% endif %}>
                 <td>{{ m.rsc[id].title|striptags }}</td>
                 <td>{{ m.identity[id].username|escape }}{% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}</td>
                 <td>{{ m.rsc[id].modified|date:_"d M, H:i" }}</td>
@@ -53,16 +53,13 @@
                     <div class="pull-right buttons">
                         {% if is_users_editable %}
                             {% button class="btn btn-default btn-xs" action={dialog_set_username_password id=id} text=_"set username / password" on_delete={slide_fade_out target=#tr.id} %}
-                            {% if id /= 1 %}
-                                {% button class="btn btn-default btn-xs" text=_"delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#tr.id}} %}
-                            {% endif %}
                         {% endif %}
                         {% button class="btn btn-default btn-xs" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
                     </div>
                     {{ m.rsc[id].created|date:_"d M, H:i" }}
                 </td>
             </tr>
-
+            {% wire id=" #"|append:#tr.id|append:" td" action={dialog_edit_basics id=id target=undefined} %}
         {% empty %}
             <tr>
                 <td colspan="4">
