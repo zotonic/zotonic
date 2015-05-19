@@ -62,7 +62,7 @@
                     <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
                     <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
                     <input type="hidden" name="qquery" value="{{ q.qquery|escape }}" />
-                    <input class="search-query col-md-6 form-control" type="text" name="qs" value="{{q.qs|escape}}" placeholder="Search..." />
+                    <input class="search-query col-md-6 form-control" type="text" name="qs" value="{{q.qs|escape}}" placeholder="{% block search_placeholder %}{_ Search... _}{% endblock %}" />
                 </form>
             {% endblock %}
         </div>

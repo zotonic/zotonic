@@ -4,6 +4,8 @@
 
 {% block search_target %}{% url admin_user %}{% endblock %}
 
+{% block search_placeholder %}{_ Search users _}{% endblock %}
+
 {% block content %}
 {% with m.acl.is_admin as is_users_editable %}
 
