@@ -300,28 +300,30 @@ verify(IdnId, VerifyKey, Context) ->
     end.
 
 
-search({users, [{text,QueryText}]}, _OffsetLimit, Context) ->
-    case QueryText of
-        A when A == undefined orelse A == "" orelse A == <<>> ->
-            #search_sql{
-                select="r.id, max(r.modified) AS rank",
-                from="rsc r join identity i on r.id = i.rsc_id",
-                where="i.type = 'username_pw'",
-                order="rank desc",
-                group_by="r.id",
-                tables=[{rsc,"r"}]
-            };
-        _ ->
-            #search_sql{
-                select="r.id, max(ts_rank_cd(pivot_tsv, query, 32)) AS rank",
-                from="rsc r join identity i on r.id = i.rsc_id, plainto_tsquery($2, $1) query",
-                where=" query @@ pivot_tsv and i.type = 'username_pw'",
-                order="rank desc",
-                group_by="r.id",
-                args=[QueryText, z_pivot_rsc:pg_lang(Context#context.language)],
-                tables=[{rsc,"r"}]
-            }
-    end;
+search({users, [{text,QueryText}, {users_only, Flag}]}, _OffsetLimit, Context) ->
+    {TSJoin, Where, Args, Order} = case z_utils:is_empty(QueryText) of
+                         true -> {[], [], [], "r.pivot_title"};
+                         false -> {
+                           ", plainto_tsquery($2, $1) query",
+                           "query @@ pivot_tsv",
+                           [QueryText, z_pivot_rsc:pg_lang(Context#context.language)],
+                          "max(ts_rank_cd(pivot_tsv, query, 32))"}
+                     end,
+    JoinType = case z_convert:to_bool(Flag) of
+                   true -> ""; false -> "left" end,
+
+    IdentityCats = [person, institution],
+    
+    #search_sql{
+       select="r.id",
+       from="rsc r " ++ JoinType ++" join identity i on (r.id = i.rsc_id and i.type = 'username_pw')" ++ TSJoin,
+       where=Where,
+       order=Order,
+       group_by="r.id",
+       args=Args,
+       cats=[{"r", [m_rsc:rid(N, Context) || N <- IdentityCats]}],
+       tables=[{rsc,"r"}]
+      };
 search(_, _, _) ->
     undefined.
 
