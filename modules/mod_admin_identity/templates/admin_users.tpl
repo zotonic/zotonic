@@ -2,15 +2,18 @@
 
 {% block title %}{_ Users _}{% endblock %}
 
+{% block search_target %}{% url admin_user %}{% endblock %}
+
 {% block content %}
 {% with m.acl.is_admin as is_users_editable %}
 
+    
 <div class="admin-header">
 
     <h2>
         {_ Users _}{% if q.qs %},
         {_ matching _} “{{ q.qs|escape }}”
-        {% button text=_"show all" action={redirect dispatch="admin_user"} %}
+        {% button text=_"show all" class="btn btn-small btn-default" icon="glyphicon glyphicon-remove" action={redirect dispatch="admin_user"} %}
         {% else %} {_ overview _}{% endif %}
     </h2>
 
