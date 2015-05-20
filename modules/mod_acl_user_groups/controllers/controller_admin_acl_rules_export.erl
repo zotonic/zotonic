@@ -6,8 +6,7 @@
          service_available/2,
          is_authorized/2,
          content_types_provided/2,
-         do_export/2,
-         names_to_ids/2
+         do_export/2
         ]).
 
 -include_lib("zotonic.hrl").
@@ -34,7 +33,7 @@ do_export(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
 
     All =
-        [{Kind, Type, ids_to_names(m_acl_rule:all_rules(Kind, Type, Context), Context)}
+        [{Kind, Type, m_acl_rule:ids_to_names(m_acl_rule:all_rules(Kind, Type, Context), Context)}
          || {Kind, Type} <-
                 [{rsc, edit}, {rsc, publish},
                  {module, edit}, {module, publish}]],
