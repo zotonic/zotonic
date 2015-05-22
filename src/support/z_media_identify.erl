@@ -98,13 +98,13 @@ identify_file_direct_1(File, OriginalFilename) ->
 	case identify_file_os(OsFamily, File, OriginalFilename) of
 		{error, _} ->
 			%% Last resort, give ImageMagick a try
-			identify_file_imagemagick(OsFamily, File);
+			identify_file_imagemagick(OsFamily, File, undefined);
 		{ok, Props} ->
 			%% Images, pdf and ps are further investigated by ImageMagick
 			case proplists:get_value(mime, Props) of
-				"image/" ++ _ -> identify_file_imagemagick(OsFamily, File);
-				"application/pdf" -> identify_file_imagemagick(OsFamily, File);
-				"application/postscript" -> identify_file_imagemagick(OsFamily, File);
+				"image/" ++ _ = M -> identify_file_imagemagick(OsFamily, File, M);
+				"application/pdf" = M -> identify_file_imagemagick(OsFamily, File, M);
+				"application/postscript" = M -> identify_file_imagemagick(OsFamily, File, M);
 				_Mime -> {ok, Props}
 			end
 	end.
@@ -209,8 +209,8 @@ identify_file_os(unix, File, OriginalFilename) ->
 
 
 %% @doc Try to identify the file using image magick
--spec identify_file_imagemagick(win32|unix, Filename::string()) -> {ok, Props::list()} | {error, term()}.
-identify_file_imagemagick(OsFamily, ImageFile) ->
+-spec identify_file_imagemagick(win32|unix, Filename::string(), MimeFile::string()|undefined) -> {ok, Props::list()} | {error, term()}.
+identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
     Result    = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2> " ++ devnull(OsFamily)),
     case Result of
@@ -238,7 +238,7 @@ identify_file_imagemagick(OsFamily, ImageFile) ->
                          end,
 
                 [_Path, Type, Dim, _Dim2] = Words1,
-                Mime = mime(Type),
+                Mime = mime(Type, MimeFile),
                 [Width,Height] = string:tokens(Dim, "x"),
                 {W1,H1} = maybe_sizeup(Mime, list_to_integer(Width), list_to_integer(Height)),
                 Props1 = [{width, W1},
@@ -280,7 +280,11 @@ devnull(win32) -> "nul";
 devnull(unix)  -> "/dev/null".
 
 
-%% @spec mime(String) -> MimeType
+-spec mime(string(), string()|undefined) -> string().
+%% @doc ImageMagick identify can identify PDF/PS files as PBM
+mime("PBM", MimeFile) when is_list(MimeFile) -> MimeFile;
+mime(Type, _) -> mime(Type).
+
 %% @doc Map the type returned by ImageMagick to a mime type
 %% @todo Add more imagemagick types, check the mime types
 -spec mime(string()) -> string().
