@@ -204,7 +204,7 @@ find_template_cat(File, [Item|_]=Stack, Context) when is_atom(Item) ->
 find_template_cat(File, Id, Context) ->
     Stack = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
                 {L, undefined} -> L;
-                {L, Name} -> L ++ [z_convert:to_atom(Name)]
+                {L, Name} -> L ++ [Name]
             end,
     find_template_cat_stack(File, Stack, Context).
 
@@ -212,7 +212,7 @@ find_template_cat_stack(File, Stack, Context) ->
     Root = z_convert:to_list(filename:rootname(File)),
     Ext = z_convert:to_list(filename:extension(File)),
     case lists:foldr(fun(Cat, {error, enoent}) ->
-                            find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, Context);
+                            find_template(Root ++ [$.|z_convert:to_list(Cat)] ++ Ext, Context);
                         (_Cat, Found) ->
                             Found  
                      end, 
