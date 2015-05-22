@@ -53,8 +53,10 @@
 
 -define(TIMER_INTERVAL, [ {1, tick_1s}, 
                           {60, tick_1m}, 
+                          {600, tick_10m}, 
                           {3600, tick_1h},
                           {7200, tick_2h},
+                          {21600, tick_6h},
                           {43200, tick_12h},
                           {86400, tick_24h} ]).
 
