@@ -4,9 +4,8 @@
 Installing Zotonic
 ==================
 
-   
 Before beginning installation, please be sure your system meets the
-:ref:`install-requirements`.
+:ref:`installation-preinstall`.
 
 At the end of this page, you should have a bare-bones Zotonic running,
 without any sites in it.
@@ -15,8 +14,7 @@ There are multiple ways of installing Zotonic, depending on what you want and
 
 1. :ref:`installation-install-release`
 2. :ref:`installation-install-git`
-3. :ref:`installation-install-deb`
-4. :ref:`installation-install-script`
+3. :ref:`installation-install-script`
 
 For most people, :ref:`installation-install-release` should be the best option.
    
@@ -59,35 +57,6 @@ run Zotonic from there.
 .. include:: _make_common.rst
 
              
-.. _installation-install-deb:
-
-Installing from the Debian package
-----------------------------------             
-
-Official Zotonic releases are packaged as a ``.deb`` package. This
-packages installs all prerequisites, creates a ``zotonic`` user, and
-sets up a Zotonic instance running from
-``/var/lib/zotonic/zotonic``. This package works for both Ubuntu and
-Debian distributions, and is the preferred way of running Zotonic on
-Debian for production purposes.
-
-Ubuntu users can do the following to install this package::
-
-  sudo add-apt-repository ppa:arjan-scherpenisse/zotonic
-
-Debian users need to add the following line to their ``/etc/apt/sources.list`` file::
-
-  deb http://ppa.launchpad.net/arjan-scherpenisse/zotonic/ubuntu lucid main 
-
-Then, run::
-
-  sudo apt-get update && sudo apt-get install zotonic
-  
-Now, point your browser to http://localhost:8000/ and make sure
-you see the `Powered by Zotonic` welcome screen. Then, head on to
-:ref:`installation-install-addsite`.
-
-  
 .. _installation-install-script:
 
 Installation with the one-line script for Debian-based systems
