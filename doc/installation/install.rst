@@ -64,6 +64,9 @@ run Zotonic from there.
 Installing from the Debian package
 ----------------------------------             
 
+**At this time it is NOT recommended to use PPA / deb install method because
+the PPA is not up to date with upstream releases. (23.05.2015)**
+
 Official Zotonic releases are packaged as a ``.deb`` package. This
 packages installs all prerequisites, creates a ``zotonic`` user, and
 sets up a Zotonic instance running from
