@@ -632,12 +632,12 @@ props_filter([{category_id, CatId}|T], Acc, Context) ->
     props_filter(T, [{category_id, z_convert:to_integer(CatId)}|Acc], Context);
 
 props_filter([{Location, P}|T], Acc, Context) when Location =:= location_lat; Location =:= location_lng ->
-    case catch z_convert:to_float(P) of
-        X when is_float(X) -> 
-            props_filter(T, [{Location, X} | Acc], Context);
-        _ ->
-            props_filter(T, [{Location, undefined} | Acc], Context)
-    end;
+    X = try
+            z_convert:to_float(P)
+        catch
+            _:_ -> undefined
+        end,
+    props_filter(T, [{Location, X} | Acc], Context);
 
 props_filter([{_Prop, _V}=H|T], Acc, Context) ->
     props_filter(T, [H|Acc], Context).
