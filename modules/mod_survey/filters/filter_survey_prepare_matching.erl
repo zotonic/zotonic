@@ -57,7 +57,13 @@ split_markers(Qs) ->
         split_markers(Qs, N+1, [split_marker(Opt, N)|Acc]).
 
 split_marker(X, N) ->
-    case lists:splitwith(fun(C) -> C /= $# end, X) of
-        {Opt, []} -> {z_convert:to_binary(N), z_convert:to_binary(Opt)};
-        {Opt, [$#|Rest]} -> {z_convert:to_binary(Opt), z_convert:to_binary(Rest)}
-    end.
+    split_marker(X, N, []).
+
+split_marker([], N, Acc) ->
+    Str = lists:reverse(Acc),
+    {z_convert:to_binary(N), z_convert:to_binary(Str)};
+split_marker([$&, $# | Rest], N, Acc) -> split_marker(Rest, N, [$#, $& | Acc]);
+split_marker([$# | Rest], _N, Acc) ->
+    Opt = lists:reverse(Acc),
+    {z_convert:to_binary(Opt), z_convert:to_binary(Rest)};
+split_marker([C | Rest], N, Acc) -> split_marker(Rest, N, [C | Acc]).
