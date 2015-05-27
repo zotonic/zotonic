@@ -39,13 +39,13 @@
             <form method="GET" action="{% url admin_users %}">
                 <label style="font-weight: normal; margin: 0">
                     <input type="hidden" name="qs" value="{{ q.qs }}" />
-                    <input type="checkbox" name="users_only" value="1" {% if q.users_only %}checked="checked"{% endif %}
+                    <input type="checkbox" name="persons" value="1" {% if q.persons %}checked="checked"{% endif %}
                         onchange="this.form.submit()" />
-                    {_ Show only users _}
+                    {_ Also show persons without user account _}
                 </label>
             </form>
             
-            {% with m.search.paged[{users text=q.qs page=q.page users_only=q.users_only}] as result %}
+            {% with m.search.paged[{users text=q.qs page=q.page users_only=not(q.persons)}] as result %}
 
                 <table class="table table-striped do_adminLinkedTable">
                     <thead>
