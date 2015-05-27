@@ -15,7 +15,6 @@
             <h2>
                 {_ Users _}{% if q.qs %},
                     {_ matching _} “{{ q.qs|escape }}”
-                    {% button text=_"show all" class="btn btn-small btn-default" icon="glyphicon glyphicon-remove" action={redirect dispatch="admin_user"} %}
                 {% else %} {_ overview _}{% endif %}
             </h2>
 
