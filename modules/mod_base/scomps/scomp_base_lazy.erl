@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2015 Marc Worrell
 %% @doc Perform some actions when an element comes into view.
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,8 +33,27 @@ render(Params, Vars, Context) ->
     Class  = proplists:get_value(class, Params, "z-lazy"),
     Image = proplists:get_value(image, Params, <<"/lib/images/spinner.gif">>),
     Params1 = [{id, Id}, {type, "visible"} | proplists:delete(id, Params)],
+    Params2 = [ ensure_moreresults_visible(Param) || Param <- Params1 ],
     Html = [<<"<div id='">>, Id, <<"' class='">>, Class, <<"'><img src='">>, Image, <<"' alt='' /></div>">>],
-    case scomp_base_wire:render(Params1, Vars, Context) of
+    case scomp_base_wire:render(Params2, Vars, Context) of
         {ok, Result} -> {ok, [Html, z_context:prune_for_template(Result)]};
         {error, _Reason} = Error -> Error
     end.
+
+%% @doc Convenience function: the action "moreresults" is often used with the lazy scomp.
+%%      A mistake that happens is to not add the 'visible' argument, which stops the
+%%      moreresults from rearming after the first time it is triggered.
+ensure_moreresults_visible({action, {moreresults, _} = Action}) ->
+    {action, ensure_moreresults_visible_1(Action)};
+ensure_moreresults_visible({action, Actions}) when is_list(Actions) ->
+    {action, [ ensure_moreresults_visible_1(Action) || Action <- Actions ]};
+ensure_moreresults_visible(Arg) ->
+    Arg.
+
+ensure_moreresults_visible_1({moreresults, Args} = Action) ->
+    case proplists:is_defined(visible, Args) of
+        false -> {moreresults, [{visible,true}|Args]};
+        true -> Action
+    end;
+ensure_moreresults_visible_1(Action) ->
+    Action.

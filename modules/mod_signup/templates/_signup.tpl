@@ -28,14 +28,16 @@ style_width
         form_form_tpl|if_undefined:"_signup_form.tpl",
         form_fields_tpl|if_undefined:"_signup_form_fields.tpl",
         form_support_tpl|if_undefined:"_signup_support.tpl",
-        form_outside_tpl|if_undefined:"_signup_outside.tpl"
+        form_outside_tpl|if_undefined:"_signup_outside.tpl",
+        signup_delegate|if_undefined:"controller_signup"
     as
         form_title_tpl,
         form_extra_tpl,
         form_form_tpl,
         form_fields_tpl,
         form_support_tpl,
-        form_outside_tpl
+        form_outside_tpl,
+        signup_delegate
     %}
         {% include "_signup_box.tpl" %}
     {% endwith %}
