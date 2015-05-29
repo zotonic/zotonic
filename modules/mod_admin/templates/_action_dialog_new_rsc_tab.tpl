@@ -5,8 +5,9 @@
 	    subject_id=subject_id
 	    predicate=predicate
 	    redirect=redirect 
-		actions=actions
-		callback=callback
+	    actions=actions
+	    callback=callback
+            objects=objects
 	}
 	delegate=delegate 
 %}
