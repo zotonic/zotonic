@@ -36,13 +36,14 @@
 -type module_action() :: use.
 
 -type only_if_owner() :: true | false.
+-type allow() :: true | false.
 -type user_group_id() :: rsc_id().
 -type content_group_id() :: rsc_id().
 -type category_id() :: rsc_id().
 -type rsc_action() :: view | insert | delete | update | link.
 
--type module_rule() :: {module_name(), module_action(), user_group_id()}.
--type rsc_rule() :: {content_group_id(), {category_id(), rsc_action(), only_if_owner()}, user_group_id()}.
+-type module_rule() :: {module_name(), module_action(), user_group_id(), allow()}.
+-type rsc_rule() :: {content_group_id(), {category_id(), rsc_action(), only_if_owner(), allow()}, user_group_id()}.
 
 -type rule() :: rsc_rule() | module_rule().
 -type user_group_path() :: {user_group_id(), list(user_group_id())}.
@@ -72,7 +73,7 @@ expand_module(State, UserTree, Context) ->
     Modules1 = [ {<<>>, Modules} | [ {z_convert:to_binary(M),[M]} || M <- Modules ] ],
     RuleRows = m_acl_rule:all_rules(module, State, Context),
     Rules = expand_rule_rows(module, Modules1, RuleRows),
-    [ {M,A,GId} || {x,{M,A,_IsOwner},GId} <- expand_rules([{x,[]}], Rules, UserTree) ].
+    [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree) ].
 
 
 -spec expand_rsc(edit|publish, list(), list(), #context{}) -> list(rsc_rule()).
@@ -88,12 +89,13 @@ expand_rule_rows(Prop, Cs, RuleRows) ->
 
 expand_rule_row(Prop, Row, Cs) ->
     Actions = [ Act || {Act,true} <- proplists:get_value(actions, Row, []) ],
+    IsAllow = not proplists:get_value(is_block, Row),
     ContentGroupId = proplists:get_value(content_group_id, Row),
     UserGroupId = proplists:get_value(acl_user_group_id, Row),
     IsOwner = proplists:get_value(is_owner, Row, false),
     PropId = proplists:get_value(Prop, Row),
     CIds = proplists:get_value(PropId, Cs, [PropId]),
-    [ {ContentGroupId, {CId, Action, IsOwner}, UserGroupId} || CId <- CIds, Action <- Actions ].
+    [ {ContentGroupId, {CId, Action, IsOwner, IsAllow}, UserGroupId} || CId <- CIds, Action <- Actions ].
 
 %% @doc Given two id lists, return all possible combinations.
 expand_rules(TreeA, Rules, TreeB) ->

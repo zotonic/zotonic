@@ -32,35 +32,28 @@ event(Msg, Context) ->
 event1(#submit{message={add_rule, [{kind, Kind}]}}, Context) ->
     Row = z_context:get_q_all_noz(Context),
     Row1 = normalize_values(Row),
-    {ok, NewRuleId} = m_acl_rule:insert(Kind, Row1, Context),
-    Vars = [{kind, Kind}],
-    Context1 = z_render:update("acl-rules", #render{template="_acl_rules_list.tpl", vars=Vars}, Context),
-    highlight_row(NewRuleId, Context1);
+    {ok, _NewRuleId} = m_acl_rule:insert(Kind, Row1, Context),
+    Context;
 
 event1(#submit{message={update_rule, [{id, RuleId}, {kind, Kind}]}}, Context) ->
     Row = z_context:get_q_all_noz(Context),
     Row1 = normalize_values(Row),
     m_acl_rule:update(Kind, RuleId, Row1, Context),
-    highlight_row(RuleId, Context);
+    Context;
 
 event1(#postback{message={remove_rule, [{id, RuleId}, {kind, Kind}]}}, Context) ->
     ok = m_acl_rule:delete(Kind, RuleId, Context),
-    Script = "$('.acl-rule-" ++ z_convert:to_list(RuleId) ++ "').slideUp(function() { $(this).remove(); });",
-    z_context:add_script_page(Script, Context),
     Context;
 
-event1(#postback{message={revert, [{kind, _}]=V}}, Context) ->
-    lager:warning("revert: ~p", [revert]),
+event1(#postback{message={revert, _Args}}, Context) ->
     ok = m_acl_rule:revert(rsc, Context),
     ok = m_acl_rule:revert(module, Context),
-    Context1 = z_render:update("acl-rules", #render{template="_acl_rules_list.tpl", vars=V}, Context),
-    z_render:growl(?__("Revert OK", Context), Context1);
+    z_render:growl(?__("Revert OK", Context), Context);
 
-event1(#postback{message={publish, [{kind, _}]=V}}, Context) ->
+event1(#postback{message={publish, _Args}}, Context) ->
     ok = m_acl_rule:publish(rsc, Context),
     ok = m_acl_rule:publish(module, Context),
-    Context1 = z_render:update("acl-rules", #render{template="_acl_rules_list.tpl", vars=V}, Context),
-    z_render:growl(?__("Publish successful", Context), Context1);
+    z_render:growl(?__("Publish successful", Context), Context);
 
 event1(#postback{message={set_upload_size, [{id,Id}]}}, Context) ->
     NewSize = z_convert:to_integer(z_context:get_q("triggervalue", Context)),
@@ -77,7 +70,6 @@ event1(#submit{message={acl_rule_import, []}}, Context) ->
     m_acl_rule:import_rules(TmpFile, Context),
     z_render:wire([{reload, []}], Context).
 
-
 normalize_values(Row) ->
     {Actions, Rest} =
         lists:foldl(
@@ -89,6 +81,8 @@ normalize_values(Row) ->
                   {A, [{module, M} | Rest]};
                ({"is_owner", V}, {A, Rest}) ->
                   {A, [{is_owner,z_convert:to_bool(V)}|Rest]};
+               ({"is_block", V}, {A, Rest}) ->
+                  {A, [{is_block,z_convert:to_bool(V)}|Rest]};
                ({K, V}, {A, Rest}) ->
                   {A, [{z_convert:to_atom(K),val(V)}|Rest]}
             end,
@@ -98,13 +92,3 @@ normalize_values(Row) ->
 
 val([]) -> undefined;
 val(I) -> z_convert:to_integer(I).
-
-
-highlight_row(RuleId, Context) ->
-    Script = "setTimeout(function() { $('.acl-rule-" ++ z_convert:to_list(RuleId) ++ "').animate({backgroundColor: '#ffff99'}, 200).animate({backgroundColor: '#ffffff'}, 1000); }, 10);",
-    z_context:add_script_page(Script, Context),
-    Context.
-
-
-
-

@@ -1,12 +1,14 @@
 {% extends "admin_acl_rules_base.tpl" %}
 
 {% block content_acl %}
-    <div class="acl-well">
-    	<p>{_ Maximum file upload size per user group. This restricts file uploads for users. _}</p>
-    	<p>{_ The default upload size is: _} <strong>{{ m.acl_rule.default_upload_size|filesizeformat }}</strong></p>
-    </div>
+	<div class="alert alert-info"
+		<p>
+			{_ Maximum file upload size per user group. This restricts file uploads for users. _}<br/>
+			{_ The default upload size is: _} <strong>{{ m.acl_rule.default_upload_size|filesizeformat }}</strong>
+		</p>
+	</div>
 
-    <div class="row">
+    <div class="row header">
     	<div class="col-md-2">
     		<label>{_ ACL user group _}</label>
     	</div>
@@ -48,5 +50,4 @@
 		    </div>
 	    {% endwith %}
     {% endfor %}
-
 {% endblock %}

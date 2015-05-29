@@ -55,18 +55,19 @@ rebuild(ModulePid, State, Context) ->
 					{heir, ModulePid, State}
 				]),
 	lists:foreach(
-		fun(K) ->
+		fun(K0) ->
+			{IsAllow, K} = extract_is_allow(K0), 
 			case K of
 				{CId, {CatId, insert, _IfOwner}, GId} ->
-					ets:insert(Table, {{CId, {CatId, insert, false}, GId}, true}),
-					ets:insert(Table, {{CId, {CatId, insert, true}, GId}, true}),
-					ets:insert(Table, {{CatId, insert, GId}, true}),
-					ets:insert(Table, {{CId, insert, GId}, true});
+					ets:insert(Table, {{CId, {CatId, insert, false}, GId}, IsAllow}),
+					ets:insert(Table, {{CId, {CatId, insert, true}, GId}, IsAllow}),
+					ets:insert(Table, {{CatId, insert, GId}, IsAllow}),
+					ets:insert(Table, {{CId, insert, GId}, IsAllow});
 				{CId, {_CatId, Action, _IfOwner}, GId} ->
-					ets:insert(Table, {K, true}),
-					ets:insert(Table, {{CId, Action, GId}, true});
+					ets:insert(Table, {K, IsAllow}),
+					ets:insert(Table, {{CId, Action, GId}, IsAllow});
 				_ ->
-					ets:insert(Table, {K, true})
+					ets:insert(Table, {K, IsAllow})
 			end
 		end,
 		Rules),
@@ -77,6 +78,14 @@ rebuild(ModulePid, State, Context) ->
 		UserGroupPaths),
 	can_action(Table, view, UserGroupIds, ContentGroupIds),
 	can_action(Table, insert, UserGroupIds, ContentGroupIds).
+
+
+extract_is_allow({CId, {CatId, Action, IfOwner, IsAllow}, GId}) ->
+	K1 = {CId, {CatId, Action, IfOwner}, GId},
+	{IsAllow, K1};
+extract_is_allow({Module, Action, GId, IsAllow}) ->
+	K1 = {Module, Action, GId},
+	{IsAllow, K1}.
 
 %% @doc Add lookups to see per user-group on which content-groups an action can be done.
 can_action(_Table, _Action, [], _CIds) ->

@@ -1,9 +1,25 @@
 {% if rule %}
-    {% wire id=#ruleform type="submit" postback={update_rule id=rule.id kind=kind} delegate=`admin_acl_rules` %}
+    {% wire id=#ruleform type="submit" 
+            action={mask target=#ruleform}
+            postback={update_rule id=rule.id kind=kind} 
+            delegate=`admin_acl_rules`
+    %}
 {% else %}
-    {% wire id=#ruleform type="submit" postback={add_rule kind=kind} delegate=`admin_acl_rules` %}
+    {% wire id=#ruleform type="submit"
+            postback={add_rule kind=kind}
+            delegate=`admin_acl_rules`
+    %}
 {% endif %}
-<form id="{{ #ruleform }}" class="row acl-rule-row acl-rule-{{ rule.id }}" method="post" action="postback">
+<form id="{{ #ruleform }}" class="row acl-rule-row acl-rule-{{ rule.id }} {% if rule.is_block %}is_block{% endif %}" method="post" action="postback">
+
+    <div class="col-md-1">
+        <label class="checkbox-inline">
+            <input type="checkbox" id="{{ #is_block }}" name="is_block" value="on"
+                {% if rule.is_block %}checked="checked"{% endif %}
+                {% if rule %}onchange="$(this.form).submit()"{% endif %} />
+                {% if rule.is_block %}<span class="glyphicon glyphicon-minus-sign"></span>&nbsp;{% endif %}block
+        </label>
+    </div>
 
     <div class="col-md-2">
 	    <select class="form-control" id="{{ #user_group_id }}" name="acl_user_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
@@ -48,7 +64,7 @@
         </div>
     {% endif %}
 
-    <div class="col-md-6">
+    <div class="col-md-5">
 
         {% if is_new %}
             {% button
@@ -81,7 +97,6 @@
                         {% if rule %}onchange="$(this.form).submit()"{% endif %} /> manage own
                 </label>
             {% endif %}
-            
         </div>
     </div>
 

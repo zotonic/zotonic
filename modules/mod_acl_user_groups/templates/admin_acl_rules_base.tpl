@@ -4,25 +4,35 @@
 
 {% block content %}
     <style>
+        .acl-filter {
+            margin-top: 5px;
+        }
         .acl-rule-row {
-        padding: 5px 0;
+            padding: 5px 0;
+        }
+        .acl {
+            padding: 10px 0;
         }
         .acl .well {
-        margin-top: 20px;
+            margin-top: 20px;
         }
         .acl-well {
-        margin-top: 40px;
+            margin-bottom: 20px;
         }
         div.acl .checkbox-inline {
-        margin-top: 5px;
+            margin-top: 5px;
         }
         div.sep {
-        border-top: 1px solid #eeeeee;
-        padding-top: 20px;
-        margin-top: 20px;
+            border-top: 1px solid #eeeeee;
+            padding-top: 20px;
+            margin-top: 20px;
         }
-        div.acl-header {
-        margin-top: 20px;
+        .row.header > div {
+            border-bottom: 1px solid #eeeeee;
+            margin-bottom: 10px;
+        }
+        form.is_block {
+            background-color: #fdd;
         }
     </style>
     
@@ -50,4 +60,3 @@
     <!-- {_ view (acl action) _} {_ insert (acl action) _} {_ edit (acl action) _} {_ delete (acl action) _} {_ link (acl action) _} -->
     
 {% endblock %}
-    

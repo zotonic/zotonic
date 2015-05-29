@@ -1,5 +1,9 @@
 <div class="row acl-header">
 
+    <div class="col-md-1">
+        <label>{_ Block _}</label>
+    </div>
+
     <div class="col-md-2">
         <label>{_ ACL user group _}</label>
     </div>
@@ -19,7 +23,7 @@
         </div>
     {% endif %}
     
-    <div class="col-md-6">
+    <div class="col-md-5">
         <label>{_ Permissions _}</label>
     </div>
 

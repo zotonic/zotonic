@@ -21,7 +21,7 @@
 -mod_title("ACL User Groups").
 -mod_description("Organize users into hierarchical groups").
 -mod_prio(400).
--mod_schema(4).
+-mod_schema(5).
 -mod_depends([menu, mod_content_groups]).
 -mod_provides([acl]).
 
@@ -99,7 +99,6 @@ observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
     ok.
 
 observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->
-
     check_hasusergroup(Id, M#rsc_update_done.post_props, Context),
     case  lists:member('acl_user_group', PreIsA) 
         orelse lists:member('acl_user_group', PostIsA)
@@ -116,8 +115,10 @@ rebuild(Context) ->
     rebuild(edit, Context).
 
 rebuild(edit, Context) ->
+    z_mqtt:publish(<<"~site/acl-rules/edit-rebuild">>, [], Context),
     gen_server:cast(name(Context), rebuild_edit);
 rebuild(publish, Context) ->
+    z_mqtt:publish(<<"~site/acl-rules/publish-rebuild">>, [], Context),
     gen_server:cast(name(Context), rebuild_publish).
 
 -spec table(#context{}) -> ets:tab() | undefined.
@@ -279,11 +280,13 @@ handle_info({'ETS-TRANSFER', TId, _FromPid, publish}, State) ->
     lager:debug("[mod_acl_user_groups] 'ETS-TRANSFER' for 'publish' (~p)", [TId]),
     gproc_new_ets(TId, publish, State#state.site),
     State1 = store_new_ets(TId, publish, State),
+    z_mqtt:publish(<<"~site/acl-rules/publish">>, [], z_context:new(State#state.site)),
     {noreply, State1};
 handle_info({'ETS-TRANSFER', TId, _FromPid, edit}, State) ->
     lager:debug("[mod_acl_user_groups] 'ETS-TRANSFER' for 'edit' (~p)", [TId]),
     gproc_new_ets(TId, edit, State#state.site),
     State1 = store_new_ets(TId, edit, State),
+    z_mqtt:publish(<<"~site/acl-rules/edit">>, [], z_context:new(State#state.site)),
     {noreply, State1};
 
 handle_info({'EXIT', _Pid, normal}, State) ->

@@ -140,7 +140,8 @@ sort_by_user_group(Rs, undefined, Context) ->
     WithNr = lists:map(fun(R) ->
                                UGId = proplists:get_value(acl_user_group_id, R),
                                Nr = proplists:get_value(UGId, Zipped),
-                               {Nr, R}
+                               IsBlock = proplists:get_value(is_block, R),
+                               {{Nr,not IsBlock}, R}
                        end,
                        Rs),
     Rs1 = lists:sort(WithNr),
@@ -154,7 +155,8 @@ sort_by_user_group(Rs, Group, Context) ->
     WithNr = lists:map(fun(R) ->
                                UGId = proplists:get_value(acl_user_group_id, R),
                                Nr = proplists:get_value(UGId, Zipped),
-                               {Nr, R}
+                               IsBlock = proplists:get_value(is_block, R),
+                               {{Nr,not IsBlock}, R}
                        end,
                        Rs),
     Rs1 = lists:sort(WithNr),
@@ -196,6 +198,8 @@ actions(module, Context) ->
 
 
 update(Kind, Id, Props, Context) ->
+    lager:info("[~p] ACL user groups update by ~p of ~p:~p with ~p",
+               [z_context:site(Context), z_acl:user(Context), Kind, Id, Props]),
     Result = z_db:update(
                table(Kind), Id,
                [{is_edit, true},
@@ -207,6 +211,8 @@ update(Kind, Id, Props, Context) ->
     Result.
 
 insert(Kind, Props, Context) ->
+    lager:info("[~p] ACL user groups insert by ~p of ~p with ~p",
+               [z_context:site(Context), z_acl:user(Context), Kind, Props]),
     Result = z_db:insert(
                table(Kind),
                [{is_edit, true},
@@ -219,6 +225,8 @@ insert(Kind, Props, Context) ->
     Result.
 
 delete(Kind, Id, Context) ->
+    lager:info("[~p] ACL user groups delete by ~p of ~p:~p",
+               [z_context:site(Context), z_acl:user(Context), Kind, Id]),
     %% Assertion, can only delete edit version of a rule
     {ok, Row} = z_db:select(table(Kind), Id, Context),
     true = proplists:get_value(is_edit, Row),
@@ -228,6 +236,8 @@ delete(Kind, Id, Context) ->
 
 %% Remove all edit versions, add edit versions of published rules
 revert(Kind, Context) ->
+    lager:warning("[~p] ACL user groups revert by ~p of ~p",
+                  [z_context:site(Context), z_acl:user(Context), Kind]),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
                fun(Ctx) ->
@@ -245,6 +255,8 @@ revert(Kind, Context) ->
 
 %% Remove all publish versions, add published versions of unpublished rules
 publish(Kind, Context) ->
+    lager:warning("[~p] ACL user groups publish by ~p",
+                  [z_context:site(Context), z_acl:user(Context)]),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
                fun(Ctx) ->
@@ -283,6 +295,7 @@ ensure_acl_rule_rsc(Context) ->
             ok;
 
         true ->
+            ensure_column_is_block(acl_rule_rsc, Context),
             ok
     end.
 
@@ -300,10 +313,20 @@ ensure_acl_rule_module(Context) ->
             fk("acl_rule_module", "acl_user_group_id", Context),
             ok;
         true ->
+            ensure_column_is_block(acl_rule_module, Context),
             ok
     end,
     ok.
 
+ensure_column_is_block(Table, Context) ->
+    Columns = z_db:column_names(Table, Context),
+    case lists:member(is_block, Columns) of
+        true ->
+            ok;
+        false ->
+            [] = z_db:q("alter table "++atom_to_list(Table)++" add column is_block boolean not null default false", Context),
+            z_db:flush(Context)
+    end.
 
 shared_table_columns() ->
     [
@@ -314,6 +337,7 @@ shared_table_columns() ->
      #column_def{name=created, type="timestamp", is_nullable=true},
      #column_def{name=modified, type="timestamp", is_nullable=true},
      #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
+     #column_def{name=is_block, type="boolean", is_nullable=false, default="false"},
      #column_def{name=actions, type="character varying", length=300, is_nullable=true}
     ].    
 

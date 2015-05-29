@@ -3,10 +3,9 @@
 {% block active1 %}active{% endblock %}
 
 {% block content_acl %}
-
     <div class="acl-well">
         <div id="acl-rules">
-            {% include "_acl_rules_list.tpl" %}
+            {% live template="_acl_rules_list.tpl" topic="~site/acl-rules/edit-rebuild" kind=kind group=q.g %}
         </div>
     </div>
 
@@ -15,11 +14,11 @@
         {% include "_admin_acl_rule_header.tpl" %}
         {% include "_admin_acl_rule_row.tpl" is_new %}
     </div>
-
 {% endblock %}
 
 {% block filter %}
-    <div class="pull-right" style="margin-top: 10px; height: 50px">
+<div class="clearfix acl-filter">
+    <div class="pull-right">
         <span>{_ Show: _}</span>
         <div class="btn-group">
             <div class="btn-group">
@@ -57,4 +56,5 @@
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

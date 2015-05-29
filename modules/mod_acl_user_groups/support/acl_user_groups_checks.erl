@@ -296,6 +296,7 @@ can_insert(Cat, Context) ->
     lists:any(fun(GId) ->
                  case mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context) of
                     true -> true;
+                    false -> false;
                     undefined -> false
                  end
               end,
@@ -328,6 +329,7 @@ can_rsc_ug(CGId, CatId, Action, IsOwner, UGs, Context) ->
     lists:any(fun(GId) ->
                  case mod_acl_user_groups:await_lookup({CGId, {CatId, Action, IsOwner}, GId}, Context) of
                     true -> true;
+                    false -> false;
                     undefined -> false
                  end
               end,
@@ -363,6 +365,7 @@ can_module(Action, ModuleName, Context) ->
     lists:any(fun(GId) ->
                  case mod_acl_user_groups:await_lookup({ModuleName, Action, GId}, Context) of
                     true -> true;
+                    false -> false;
                     undefined -> false
                  end
               end,
