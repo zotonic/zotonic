@@ -38,7 +38,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_all_values(action, Args),
-    Objects = proplists:get_value(objects, Args),
+    Objects = proplists:get_all_values(object, Args),
     Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, Predicate, Callback, Actions, Objects},
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
