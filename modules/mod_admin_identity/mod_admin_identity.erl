@@ -300,7 +300,14 @@ verify(IdnId, VerifyKey, Context) ->
     end.
 
 
-search({users, [{text,QueryText}, {users_only, UsersOnly}]}, _OffsetLimit, Context) ->
+search({users, []}, OffsetLimit, Context) ->
+    search({user, [{text,undefined},{users_only,true}]}, OffsetLimit, Context);
+search({users, [{users_only,UsersOnly}]}, OffsetLimit, Context) ->
+    search({user, [{text,undefined},{users_only,UsersOnly}]}, OffsetLimit, Context);
+search({users, [{text,Text}]}, OffsetLimit, Context) ->
+    search({user, [{text,Text},{user_only,true}]}, OffsetLimit, Context);
+search({users, [{text,QueryText}, {users_only, UsersOnly0}]}, _OffsetLimit, Context) ->
+    UsersOnly = z_convert:to_bool(UsersOnly0),
     {TSJoin, Where, Args, Order} = case z_utils:is_empty(QueryText) of
                         true -> 
                             {[], [], [], "r.pivot_title"};
@@ -310,20 +317,21 @@ search({users, [{text,QueryText}, {users_only, UsersOnly}]}, _OffsetLimit, Conte
                              [QueryText, z_pivot_rsc:pg_lang(Context#context.language)],
                              "ts_rank_cd(pivot_tsv, query, 32)"}
                      end,
-    IdnJoin = case z_convert:to_bool(UsersOnly) of
+    IdnJoin = case UsersOnly of
                 true -> " join identity i on (r.id = i.rsc_id and i.type = 'username_pw') ";
                 false -> "" 
               end,
-
-    IdentityCats = [person, institution],
-    
+    Cats = case UsersOnly of   
+                true -> [];
+                false -> [{"r", [person, institution]}]
+           end,
     #search_sql{
        select="r.id",
        from="rsc r " ++ IdnJoin ++ TSJoin,
        where=Where,
        order=Order,
        args=Args,
-       cats=[{"r", [m_rsc:rid(N, Context) || N <- IdentityCats]}],
+       cats=Cats,
        tables=[{rsc,"r"}]
       };
 search(_, _, _) ->
