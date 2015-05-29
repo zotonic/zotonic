@@ -90,7 +90,7 @@ event(#submit{message={new_page, Args}}, Context) ->
     {_,Context1} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, Id, Callback, Context),
 
     %% Optionally add outgoing edges from this new rsc to the given resources (id / name, predicate pairs)
-    [m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects],
+    maybe_add_objects(Id, Objects, Context),
 
     % Close the dialog
     Context2a = z_render:wire({dialog_close, []}, Context1),
@@ -106,6 +106,15 @@ event(#submit{message={new_page, Args}}, Context) ->
             Location = z_dispatcher:url_for(Dispatch, [{id, Id}], Context2),
             z_render:wire({redirect, [{location, Location}]}, Context2)
     end.
+
+maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
+    [m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];
+maybe_add_objects(_Id, undefined, _Context) ->
+    ok;
+maybe_add_objects(_Id, Objects, Context) ->
+    lager:warning("[~p] action_admin_dialog_new_rsc: objects are not a list: ~p", 
+                  [z_context:site(Context), Objects]),
+    ok.
 
 dispatch(true) ->
     admin_edit_rsc;
