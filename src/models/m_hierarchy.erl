@@ -176,7 +176,8 @@ save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
                         select id, parent_id, lvl, nr
                         from hierarchy 
                         where name = $1
-                        order by nr", 
+                        order by nr
+                        for update", 
                         [Name],
                         Context),
             OldFlat = [ {Id,P,Lvl} || {Id,P,Lvl,_Nr} <- OldFlatNr ],
