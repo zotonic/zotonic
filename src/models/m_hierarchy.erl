@@ -171,24 +171,24 @@ save(Name, Tree, Context) ->
 
 save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
     NewFlat = flatten_save_tree(NewTree),
-    OldFlatNr = z_db:q("
-                select id, parent_id, lvl, nr
-                from hierarchy 
-                where name = $1
-                order by nr", 
-                [Name],
-                Context),
-    OldFlat = [ {Id,P,Lvl} || {Id,P,Lvl,_Nr} <- OldFlatNr ],
-    Diff = diffy_term:diff(OldFlat, NewFlat),
-    NewFlatNr = assign_nrs(Diff, OldFlatNr),
-
-    OldIds = [ Id || {Id, _P, _Lvl, _Nr} <- OldFlatNr ],
-    NewIds = [ Id || {Id, _P, _Lvl, _Nr} <- NewFlatNr ],
-    InsIds = NewIds -- OldIds,
-    UpdIds = NewIds -- InsIds,
-    DelIds = OldIds -- NewIds,
-
     z_db:transaction(fun(Ctx) ->
+            OldFlatNr = z_db:q("
+                        select id, parent_id, lvl, nr
+                        from hierarchy 
+                        where name = $1
+                        order by nr", 
+                        [Name],
+                        Context),
+            OldFlat = [ {Id,P,Lvl} || {Id,P,Lvl,_Nr} <- OldFlatNr ],
+            Diff = diffy_term:diff(OldFlat, NewFlat),
+            NewFlatNr = assign_nrs(Diff, OldFlatNr),
+
+            OldIds = [ Id || {Id, _P, _Lvl, _Nr} <- OldFlatNr ],
+            NewIds = [ Id || {Id, _P, _Lvl, _Nr} <- NewFlatNr ],
+            InsIds = NewIds -- OldIds,
+            UpdIds = NewIds -- InsIds,
+            DelIds = OldIds -- NewIds,
+
             lists:foreach(fun(Id) ->
                             {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
                             {Left,Right} = range(Id, NewFlatNr),
