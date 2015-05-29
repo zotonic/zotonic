@@ -2,7 +2,6 @@ language: erlang
 otp_release:
   - 17.4
   - R16B
-  - R15B03
 install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'
 script: make all edocs && bin/zotonic runtests
 branches:
