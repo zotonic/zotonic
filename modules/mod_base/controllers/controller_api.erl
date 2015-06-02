@@ -143,6 +143,9 @@ api_result(ReqData, Context, Result) ->
         {error, Err=syntax, Arg} ->
             api_error(400, Err, "Syntax error: " ++ Arg, ReqData, Context);
 
+        {error, Err=unauthorized, _Arg} ->
+            api_error(401, Err, "Unauthorized.", ReqData, Context);
+        
         {error, Err=not_exists, Arg} ->
             api_error(404, Err, "Resource does not exist: " ++ Arg, ReqData, Context);
 
