@@ -11,8 +11,10 @@
             </button>
 
             <a class="navbar-brand" href="/">
+            {% block navbar_brand %}
                 <span class="zotonic-logo"><em>Zotonic</em></span>
                 {{ m.config.site.title.value }}
+            {% endblock %}
             </a>
         </div>
         

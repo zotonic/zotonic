@@ -3,14 +3,13 @@
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
 <div class="form-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
-    <div class="checkbox">
 {% if blk.input_type == 'multi' %}
     {% for val,item in props.answers %}
         {% with forloop.counter as index %}
-            <label>
+            <div class="checkbox"><label>
                 <input id="{{ #thur.index }}" name="{{ blk.name }}" type="checkbox" value="{{ val }}" {% if val|member:ans %}checked="checked" {% endif %}/>
                 {{ item }}
-            </label>
+            </label></div>
             {% if forloop.first %}
                 {% if blk.is_required %}{% validate id=#thur.index name=blk.name type={presence} %}{% endif %}
             {% endif %}
@@ -44,7 +43,6 @@
         {% endwith %}
     {% endfor %}
 {% endif %}
-    </div>
 {% if blk.explanation %}
     <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}

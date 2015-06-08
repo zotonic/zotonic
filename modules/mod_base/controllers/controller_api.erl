@@ -143,6 +143,9 @@ api_result(ReqData, Context, Result) ->
         {error, Err=syntax, Arg} ->
             api_error(400, Err, "Syntax error: " ++ Arg, ReqData, Context);
 
+        {error, Err=unauthorized, _Arg} ->
+            api_error(401, Err, "Unauthorized.", ReqData, Context);
+        
         {error, Err=not_exists, Arg} ->
             api_error(404, Err, "Resource does not exist: " ++ Arg, ReqData, Context);
 
@@ -179,14 +182,59 @@ to_json(ReqData, Context) ->
 
 
 process_post(ReqData, Context) ->
-    Module = z_context:get(service_module, Context),
-    case Module:process_post(ReqData, Context) of
-        ok ->
-            {true, ReqData, Context};
-        Result ->
-            api_result(ReqData, Context, Result)
+    case handle_json_request(ReqData, Context) of
+        {error, _Reason} ->
+            api_result(ReqData, Context, {error, syntax, "invalid JSON in request body"});
+        {ok, Context1} ->
+            Module = z_context:get(service_module, Context),
+            case Module:process_post(ReqData, Context1) of
+                ok ->
+                    {true, ReqData, Context1};
+                Result ->
+                    api_result(ReqData, Context1, Result)
+            end
+    end.
+    
+%% @doc Handle JSON request bodies.
+-spec handle_json_request(#wm_reqdata{}, #context{}) -> {ok, #context{}} | {error, string()}.
+handle_json_request(ReqData, Context) ->
+    case wrq:get_req_header("content-type", ReqData) of
+        "application/json" ++ _ ->
+            decode_json_body(ReqData, Context);
+        _ ->
+            {ok, Context}
     end.
 
+%% @doc Decode JSON request body.
+-spec decode_json_body(#wm_reqdata{}, #context{}) -> {ok, #context{}} | {error, string()}.
+decode_json_body(ReqData, Context) ->
+    {ReqBody, _RD} = wrq:req_body(ReqData),
+    case ReqBody of 
+        <<>> -> {ok, Context};
+        NonEmptyBody ->
+            Json = try 
+                mochijson2:decode(NonEmptyBody)
+            catch
+                Type:Reason -> {error, {Type, Reason}}
+            end,
+            
+            case Json of 
+                {error, Error} -> {error, Error};
+                {struct, JsonStruct} ->
+                    %% A JSON object: set key/value pairs in the context
+                    Context1 = lists:foldl(
+                        fun({Key, Value}, Context2) ->
+                            z_context:set_q(z_convert:to_list(Key), Value, Context2)
+                        end,
+                        Context,
+                        JsonStruct
+                    ),
+                    {ok, Context1};
+                _ ->
+                    %% A JSON list: don't alter context
+                    {ok, Context}
+            end
+    end.
 
 get_callback(Context) ->
     case z_context:get_q("callback", Context) of
