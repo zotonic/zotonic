@@ -59,6 +59,7 @@ default(smtp_ssl) -> false;
 default(smtp_bounce_ip) -> "127.0.0.1";
 default(smtp_bounce_port) -> 2525;
 default(smtp_spamd_port) -> 783;
+default(smpt_dsnbl) -> z_email_dnsbl:dnsbl_list();
 default(smtp_delete_sent_after) -> 240;
 default(inet_backlog) -> 500;
 default(inet_acceptor_pool_size) -> 75;
