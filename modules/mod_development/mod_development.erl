@@ -379,25 +379,5 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
 %% @doc Recompile and reload an Erlang file.
 recompile_file(File) ->
-    Module = list_to_atom(filename:basename(File, ".erl")),
-    do_observe_fun(Module, fun z_module_manager:remove_observers/3),
-    make:files([File], [load|zotonic_compile:compile_options()]),
-    do_observe_fun(Module, fun z_module_manager:add_observers/3).
+    make:files([File], [load|zotonic_compile:compile_options()]).
 
-
-%% @doc Given an Erlang module that is being recompiled, adds or
-%% remove the 'magic' module observers if the erlang module is also a
-%% Zotonic module.
-do_observe_fun(Module, F) ->
-    Contexts = [z:c(Site) || [Site, State |_] <- z_sites_manager:get_sites_status(), State =:= running],
-    lists:foreach(
-      fun(C) ->
-              case z_module_manager:whereis(Module, C) of
-                  {ok, Pid} ->
-                      F(Module, Pid, C),
-                      z_depcache:flush(C);
-                  {error, _} ->
-                      nop
-              end
-      end,
-      Contexts).

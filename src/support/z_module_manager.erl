@@ -36,6 +36,7 @@
          deactivate/2,
          activate/2,
          restart/2,
+         module_reloaded/2,
          active/1,
          active/2,
          active_dir/1,
@@ -52,8 +53,6 @@
          startable/2,
          module_exists/1,
          title/1,
-         add_observers/3,
-         remove_observers/3,
          reinstall/2
         ]).
 
@@ -66,7 +65,14 @@
 -define(MODULE_START_TIMEOUT, 60000).
 
 %% Module manager state
--record(state, {context, sup, start_wait=none, start_queue=[], start_error=[]}).
+-record(state, {
+          context :: #context{},
+          sup :: pid(),
+          module_exports = [] :: list({atom(), list()}),
+          start_wait  = none :: none | {atom(), pid(), erlang:timestamp()}, 
+          start_queue = [] :: list(),
+          start_error = [] :: list()
+      }).
 
 
 %%====================================================================
@@ -113,10 +119,19 @@ activate(Module, Context) ->
     upgrade(Context).
 
 
-%% @doc Shortcut, restart a module by deactivating and reactivating the module.
+%% @doc Restart a module, activates the module if it was not activated.
 restart(Module, Context) ->
-    deactivate(Module, Context),
-    activate(Module, Context).
+    case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
+        [{true}] -> 
+            gen_server:cast(name(Context), {restart_module, Module});
+        _ ->
+            activate(Module, Context)
+    end.
+
+
+%% @doc Check all observers of a module, ensure that they are all active. Used after a module has been reloaded
+module_reloaded(Module, Context) ->
+    gen_server:cast(name(Context), {module_reloaded, Module}).
 
 
 %% @doc Return the list of active modules.
@@ -411,16 +426,23 @@ handle_cast(start_next, State) ->
     State1 = handle_start_next(State),
     {noreply, State1};
 
+%% @doc Restart a running module.
+handle_cast({restart_module, Module}, State) ->
+    State1 = handle_restart_module(Module, State),
+    {noreply, State1};
+
 %% @doc New child process started, add the event listeners
 %% @todo When this is an automatic restart, start all depending modules
 handle_cast({supervisor_child_started, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
+    lager:info("[~p] Module ~p started", [z_context:site(State#state.context), Module]),
     State1 = handle_start_child_result(Module, {ok, Pid}, State),
     {noreply, State1};
 
 %% @doc Handle errors, success is handled by the supervisor_child_started above.
 handle_cast({start_child_result, Module, {error, _} = Error}, State) ->
     State1 = handle_start_child_result(Module, Error, State),
+    lager:info("[~p] Module ~p start error ~p", [z_context:site(State#state.context), Module, Error]),
     {noreply, State1};
 handle_cast({start_child_result, _Module, {ok, _}}, State) ->
     {noreply, State};
@@ -428,15 +450,35 @@ handle_cast({start_child_result, _Module, {ok, _}}, State) ->
 %% @doc Existing child process stopped, remove the event listeners
 handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
-    remove_observers(Module, Pid, State#state.context),
-    lager:warning("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
+    remove_observers(Module, Pid, State),
+    lager:info("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
     z_notifier:notify(#module_deactivate{module=Module}, State#state.context), 
     stop_children_with_missing_depends(State),
     {noreply, State};
 
+%% @doc Check all observers of a module. Add new ones, remove non-existing ones.
+%%      This is called after a code reload of a module.
+handle_cast({module_reloaded, Module}, State) ->
+    lager:debug("[~p] checking observers of (re-)loaded module ~p", [z_context:site(State#state.context), Module]),
+    State1 = refresh_module_exports(Module, State),
+    OldExports = proplists:get_value(Module, State#state.module_exports),
+    NewExports = proplists:get_value(Module, State1#state.module_exports),
+    case OldExports of
+        NewExports ->
+            {noreply, State1};
+        undefined ->
+            % Assume this load is because of the first start, otherwise there would be some exports known.
+            {noreply, State1};
+        _Changed ->
+            % Exports changed, assume the worst and restart the complete module
+            lager:info("[~p] exports of (re-)loaded module ~p changed, restarting module", [z_context:site(State#state.context), Module]),
+            State2 = handle_restart_module(Module, State1),
+            {noreply, State2}
+    end;
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
+    lager:error("z_module_manager: unknown cast ~p in state ~p", [Message, State]),
     {stop, {unknown_cast, Message}, State}.
 
 
@@ -475,6 +517,12 @@ name(Module, #context{host=Host}) ->
 
 flush(Context) ->
     z_depcache:flush({?MODULE, active, Context#context.host}, Context).
+
+handle_restart_module(Module, #state{context=Context, sup=ModuleSup} = State) ->
+    z_supervisor:delete_child(ModuleSup, Module),
+    z_supervisor:add_child_async(ModuleSup, module_spec(Module, Context)),
+    handle_upgrade(State).
+
 
 handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     ValidModules = valid_modules(Context),
@@ -533,7 +581,7 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
              end || M <- Starting
             ],
 
-                                                % Add non-started modules to the list with errors.
+            % Add non-started modules to the list with errors.
             CleanedUpErrors = lists:foldl(fun(M,Acc) -> 
                                                   proplists:delete(M,Acc) 
                                           end,
@@ -546,20 +594,22 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
                                             ] ++ CleanedUpErrors,
                                 start_queue=[]
                                });
-        [C|_] ->
-            case start_child(self(), C, ModuleSup, module_spec(C, Context), Context) of
+        [Module|_] ->
+            State1 = refresh_module_exports(Module, State),
+            {Module, Exports} = lists:keyfind(Module, 1, State1#state.module_exports),
+            case start_child(self(), Module, ModuleSup, module_spec(Module, Context), Exports, Context) of
                 {ok, StartHelperPid} -> 
-                    State#state{
-                      start_error=proplists:delete(C, State#state.start_error),
-                      start_wait={C, StartHelperPid, now()},
-                      start_queue=lists:delete(C, Starting)
-                     };
+                    State1#state{
+                      start_error=proplists:delete(Module, State1#state.start_error),
+                      start_wait={Module, StartHelperPid, os:timestamp()},
+                      start_queue=lists:delete(Module, Starting)
+                    };
                 {error, Reason} -> 
                     handle_start_next(
-                      State#state{
-                        start_error=[ {C, Reason} | proplists:delete(C, State#state.start_error) ],
-                        start_queue=lists:delete(C, Starting)
-                       })
+                      State1#state{
+                        start_error=[ {Module, Reason} | proplists:delete(Module, State1#state.start_error) ],
+                        start_queue=lists:delete(Module, Starting)
+                      })
             end
     end.
 
@@ -580,10 +630,10 @@ is_module(Module) ->
 
 %% @doc Try to add and start the child, do not crash on missing modules. Run as a separate process.
 %% @todo Add some preflight tests
-start_child(ManagerPid, Module, ModuleSup, Spec, Context) ->
+start_child(ManagerPid, Module, ModuleSup, Spec, Exports, Context) ->
     StartPid = spawn_link(
                  fun() ->
-                         Result = case catch manage_schema(Module, Context) of
+                         Result = case catch manage_schema(Module, Exports, Context) of
                                       ok ->
                                                 % Try to start it
                                           z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
@@ -611,7 +661,7 @@ handle_start_child_result(Module, Result, State) ->
                       {ok, Pid} ->
                                                 % Remove any registered errors for the started module
                           State2 = State1#state{start_error=lists:keydelete(Module, 1, State1#state.start_error)},
-                          add_observers(Module, Pid, State2#state.context),
+                          add_observers(Module, Pid, State2),
                           z_notifier:notify(#module_activate{module=Module, pid=Pid}, State2#state.context),
                           State2;
                       {error, _Reason} = Error ->
@@ -709,10 +759,10 @@ valid(M, Context) ->
 
 
 %% @doc Manage the upgrade/install of this module.
-manage_schema(Module, Context) ->
+manage_schema(Module, Exports, Context) ->
     Target = mod_schema(Module),
     Current = db_schema_version(Module, Context),
-    case {proplists:get_value(manage_schema, erlang:get_module_info(Module, exports)), Target =/= undefined} of
+    case {proplists:get_value(manage_schema, Exports), Target =/= undefined} of
         {undefined, false} ->
             ok; %% No manage_schema function, and no target schema
         {undefined, true} ->
@@ -721,6 +771,13 @@ manage_schema(Module, Context) ->
             %% Module has manage_schema function
             manage_schema(Module, Current, Target, Context)
     end.
+
+%% @doc Fetch the list of exported functions of a module.
+refresh_module_exports(Module, #state{module_exports=Exports} = State) ->
+    Exports1 = lists:keydelete(Module, 1, Exports),
+    State#state{
+        module_exports=[{Module, erlang:get_module_info(Module, exports)} | Exports1]
+    }.
 
 %% @doc Database version equals target version; ignore
 manage_schema(_Module, Version, Version, _Context) ->
@@ -777,35 +834,42 @@ manage_schema(_, Current, Target, _) ->
 
 
 %% @doc Add the observers for a module, called after module has been activated
-add_observers(Module, Pid, Context) ->
-    [ z_notifier:observe(Message, Handler, Context) || {Message, Handler} <- observes(Module, Pid) ].
-
+add_observers(Module, Pid, State) ->
+    {Module, Exports} = lists:keyfind(Module, 1, State#state.module_exports),
+    lists:foreach(fun({Message, Handler}) ->
+                      z_notifier:observe(Message, Handler, State#state.context)
+                  end,
+                  observes(Module, Exports,Pid)).
 
 %% @doc Remove the observers for a module, called before module is deactivated
-remove_observers(Module, Pid, Context) ->
-    [ z_notifier:detach(Message, Handler, Context) || {Message, Handler} <- lists:reverse(observes(Module, Pid)) ].
+remove_observers(Module, Pid, State) ->
+    {Module, Exports} = lists:keyfind(Module, 1, State#state.module_exports),
+    lists:foreach(fun({Message, Handler}) ->
+                      z_notifier:detach(Message, Handler, State#state.context)
+                  end,
+                  lists:reverse(observes(Module, Exports, Pid))).
 
 
 %% @doc Get the list of events the module observes.
 %% The event functions should be called: observe_(event)
 %% observe_xxx/2 functions observer map/notify and observe_xxx/3 functions observe folds.
-%% @spec observes(atom(), pid()) -> [{atom(), Handler}]
-observes(Module, Pid) ->
-    observes(Module, Pid, erlang:get_module_info(Module, exports), []).
+-spec observes(atom(), list({atom(), integer()}), pid()) -> [{atom(), {atom(),atom()}|{atom(), atom(), [pid()]}}].
+observes(Module, Exports, Pid) ->
+    observes_1(Module, Pid, Exports, []).
 
-observes(_Module, _Pid, [], Acc) ->
+observes_1(_Module, _Pid, [], Acc) ->
     Acc;
-observes(Module, Pid, [{F,Arity}|Rest], Acc) ->
+observes_1(Module, Pid, [{F,Arity}|Rest], Acc) ->
     case atom_to_list(F) of
         "observe_" ++ Message when Arity == 2; Arity == 3 ->
-            observes(Module, Pid, Rest, [{list_to_atom(Message), {Module,F}}|Acc]);
+            observes_1(Module, Pid, Rest, [{list_to_atom(Message), {Module,F}}|Acc]);
         "pid_observe_" ++ Message when Arity == 3; Arity == 4 ->
-            observes(Module, Pid, Rest, [{list_to_atom(Message), {Module,F,[Pid]}}|Acc]);
+            observes_1(Module, Pid, Rest, [{list_to_atom(Message), {Module,F,[Pid]}}|Acc]);
         _ -> 
-            observes(Module, Pid, Rest, Acc)
+            observes_1(Module, Pid, Rest, Acc)
     end;
-observes(Module, Pid, [_|Rest], Acc) -> 
-    observes(Module, Pid, Rest, Acc).
+observes_1(Module, Pid, [_|Rest], Acc) -> 
+    observes_1(Module, Pid, Rest, Acc).
 
 
 
