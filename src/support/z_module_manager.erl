@@ -435,14 +435,14 @@ handle_cast({restart_module, Module}, State) ->
 %% @todo When this is an automatic restart, start all depending modules
 handle_cast({supervisor_child_started, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
-    lager:info("[~p] Module ~p started", [z_context:site(State#state.context), Module]),
+    lager:debug("[~p] Module ~p started", [z_context:site(State#state.context), Module]),
     State1 = handle_start_child_result(Module, {ok, Pid}, State),
     {noreply, State1};
 
 %% @doc Handle errors, success is handled by the supervisor_child_started above.
 handle_cast({start_child_result, Module, {error, _} = Error}, State) ->
     State1 = handle_start_child_result(Module, Error, State),
-    lager:info("[~p] Module ~p start error ~p", [z_context:site(State#state.context), Module, Error]),
+    lager:error("[~p] Module ~p start error ~p", [z_context:site(State#state.context), Module, Error]),
     {noreply, State1};
 handle_cast({start_child_result, _Module, {ok, _}}, State) ->
     {noreply, State};
@@ -451,7 +451,7 @@ handle_cast({start_child_result, _Module, {ok, _}}, State) ->
 handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
     remove_observers(Module, Pid, State),
-    lager:info("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
+    lager:debug("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
     z_notifier:notify(#module_deactivate{module=Module}, State#state.context), 
     stop_children_with_missing_depends(State),
     {noreply, State};
