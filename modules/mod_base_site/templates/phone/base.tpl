@@ -31,7 +31,19 @@
 <div class="container">
 	{% block content_area %}
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
-		    {% block content %}{% endblock %}
+		    {% block content %}
+ 		    <div class="row">
+		    	<div class="main">
+                    		{% block main %}{% endblock %}
+		    	</div>
+		    	<div class="subnavbar">
+                    		{% block subnavbar %}
+                        		{% include "_subnav.tpl" %}
+                    		{% endblock %}
+                    	</div>
+	            </div>
+                    {% endblock %}
+		    {% block below %}{% endblock %}
 		</div>
 	{% endblock %}
 	{% include "_footer.tpl" %}

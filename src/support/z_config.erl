@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell, 2014 Arjan Scherpenisse
+%% @copyright 2010-2015 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 
-%% Copyright 2010 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2010-2015 Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@ default(smtp_ssl) -> false;
 default(smtp_bounce_ip) -> "127.0.0.1";
 default(smtp_bounce_port) -> 2525;
 default(smtp_spamd_port) -> 783;
+default(smpt_dsnbl) -> z_email_dnsbl:dnsbl_list();
 default(smtp_delete_sent_after) -> 240;
 default(inet_backlog) -> 500;
 default(inet_acceptor_pool_size) -> 75;
@@ -70,4 +71,6 @@ default(dbuser) -> "zotonic";
 default(dbpassword) -> "";
 default(dbschema) -> "public";
 default(use_ua_classifier) -> true;
+default(filewatcher_enabled) -> true;
+default(filewatcher_scanner_enabled) -> false;
 default(_) -> undefined.
