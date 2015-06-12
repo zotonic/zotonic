@@ -37,6 +37,15 @@ Currently, the following subcommands are implemented:
 ``zotonic addsite [options] <site_name>``
   Creates a new site with [site_name] as its name.  See :ref:`manual-cli-addsite` for a full overview of this command.
 
+``zotonic startsite <site_name>``
+  Start the site with name [site_name].
+
+``zotonic stopsite <site_name>``
+  Stop the site with name [site_name].
+
+``zotonic restartsite <site_name>``
+  Restart the site with name [site_name].
+
 ``zotonic modules <subcommand> [options]``
   Manages modules. It has the following subcommands:
   

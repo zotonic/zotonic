@@ -40,6 +40,10 @@
 
          log_level/1,
 
+         shell_stopsite/1,
+         shell_startsite/1,
+         shell_restartsite/1,
+
          debug_msg/3,
 
          debug/2,
@@ -121,6 +125,34 @@ ld() ->
 %% @doc Reload an Erlang module
 ld(Module) ->
     zotonic_compile:ld(Module).
+
+%% @doc Shell commands: start a site
+shell_startsite(Site) ->
+    case z_sites_manager:get_site_status(Site) of
+        {ok, stopped} ->
+            z_sites_manager:start(Site);
+        {ok, Status} ->
+            Status;
+        {error, notfound} ->
+            notfound
+    end.
+
+%% @doc Shell commands: stop a site
+shell_stopsite(Site) ->
+    case z_sites_manager:get_site_status(Site) of
+        {ok, stopped} ->
+            stopped;
+        {ok, _Status} ->
+            z_sites_manager:stop(Site);
+        {error, notfound} ->
+            notfound
+    end.
+
+%% @doc Shell commands: stop a site
+shell_restartsite(Site) ->
+    z_sites_manager:stop(Site),
+    shell_startsite(Site).
+
 
 %% @doc Echo and return a debugging value
 debug_msg(Module, Line, Msg) ->
