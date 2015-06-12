@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Bryan Fink <bryan@basho.com>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %% Date: 2009-11-01
 %% @doc Development server.  Periodically performs a "make" and loads new files.
 %% When new files are loaded the caches are emptied.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,7 +39,6 @@
     observe_debug_stream/2,
     pid_observe_development_reload/3,
     pid_observe_development_make/3,
-    file_changed/2,
     observe_admin_menu/3,
     observe_module_activate/2,
     % internal (for spawn)
@@ -54,10 +53,6 @@
 
 % Interval for checking for new and/or changed files.
 -define(DEV_POLL_INTERVAL, 10000).
-
-
-%% Which files do we not consider at all in the file_changed handler
--define(FILENAME_BLACKLIST_RE, "_flymake|\.#").
 
 
 %%====================================================================
@@ -99,158 +94,6 @@ pid_observe_development_reload(Pid, development_reload, _Context) ->
 pid_observe_development_make(Pid, development_make, _Context) ->
      gen_server:cast(Pid, development_make).
 
-%% @doc Called when a file is changed on disk. Decides what to do.
-%% @spec file_changed(modify | create, string()) -> ok
-file_changed(Verb, F) ->
-    case file_blacklisted(F) of
-        true -> nop;
-        false ->
-            case handle_file(Verb, filename:extension(F), F) of
-                undefined -> ok;
-                Message -> send_message(os:type(), z_string:trim(Message))
-            end
-    end,
-    ok.
-
-
-file_blacklisted(F) ->
-    case re:run(F, ?FILENAME_BLACKLIST_RE) of
-        {match, _} ->
-             true;
-        nomatch ->
-            false
-    end.
-
-
-%% @doc Recompile Erlang files on the fly
-handle_file(_Verb, ".erl", F) ->
-    spawn(fun() -> recompile_file(F) end),
-    Libdir = z_utils:lib_dir(),
-    L = length(Libdir),
-    F2 = case string:substr(F, 1, L) of
-             Libdir ->
-                 string:substr(F, L+2);
-             _ -> F
-         end,
-    "Recompile " ++ F2;
-
-%% @doc SCSS / SASS files from lib/scss -> lib/css
-handle_file(_Verb, ".sass", F) ->
-    handle_file(_Verb, ".scss", F);
-handle_file(_Verb, ".scss", F) ->
-    InPath = filename:dirname(F),
-    OutPath = filename:join(filename:dirname(InPath), "css"),
-    case filelib:is_dir(OutPath) of
-        true ->
-            os:cmd("sass -C --sourcemap=none --update " ++ z_utils:os_escape(InPath) ++ ":" ++ z_utils:os_escape(OutPath));
-        false ->
-            undefined
-    end;
-
-%% @doc LESS from lib/less -> lib/css
-handle_file(_Verb, ".less", F) ->
-    InPath = filename:dirname(F),
-    OutPath = filename:join(filename:dirname(InPath), "css"),
-    case filelib:is_dir(OutPath) of
-        true ->
-            OutFile = filename:join(OutPath, filename:basename(F, ".less")++".css"),
-            os:cmd("lessc " ++ z_utils:os_escape(F) ++ " > " ++ z_utils:os_escape(OutFile)),
-            "Compiled " ++ OutFile;
-        false ->
-            undefined
-    end;
-
-%% @doc Coffeescript from lib/coffee -> lib/js
-handle_file(_Verb, ".coffee", F) ->
-    InPath = filename:dirname(F),
-    OutPath = filename:join(filename:dirname(InPath), "js"),
-    case filelib:is_dir(OutPath) of
-        true ->
-            os:cmd("coffee -o " ++ z_utils:os_escape(OutPath) ++ " -c " ++ z_utils:os_escape(InPath)),
-            "Compiled " ++ OutPath;
-        false ->
-            undefined
-    end;
-
-%% @doc Flush 
-handle_file(_Verb, ".tpl", F) ->
-    case re:run(F, "/sites/([^/]+).*?/templates/(.*)", [{capture, all_but_first, list}]) of
-        nomatch ->
-            %% Flush the cache when a new zotonic-wide .tpl file is used
-            case re:run(F, ".*?/templates/(.*)", [{capture, all_but_first, list}]) of
-                nomatch -> 
-                    undefined;
-                {match, [TemplateFile]} ->
-                    case z_template:find_template(TemplateFile, z_context:new(hd(z_sites_manager:get_sites()))) of
-                        {ok, _} ->
-                            undefined;
-                        {error, _} ->
-                            z:flush(),
-                            "Flushed global cache due to new template: " ++ TemplateFile
-                    end
-            end;
-        {match, [Site, TemplateFile]} ->
-            %% Flush the cache when a new .tpl file is used, within a site
-            C = z_context:new(list_to_atom(Site)),
-            case z_template:find_template(TemplateFile, C) of
-                {ok, _} -> undefined;
-                {error, _} ->
-                    z_notifier:notify(module_ready, C),
-                    z_depcache:flush(C),
-                    "Flushed cache of " ++ Site ++ " due to new template: " ++ TemplateFile
-            end
-    end;
-
-%% @doc Flush 
-handle_file(_Verb, ".po", F) ->
-    case re:run(F, "/sites/([^/]+).*?/translations/(.*)", [{capture, all_but_first, list}]) of
-        nomatch ->
-            %% Flush the cache when a new zotonic-wide .po file is used
-            case re:run(F, ".*?/translations/(.*)", [{capture, all_but_first, list}]) of
-                nomatch -> 
-                    undefined;
-                {match, [TranslationFile]} ->
-                    z:flush(),
-                    "Flushed global cache due to updated translation: " ++ TranslationFile
-            end;
-        {match, [Site, TranslationFile]} ->
-            %% Flush the cache when a new .po file is used, within a site
-            C = z_context:new(list_to_atom(Site)),
-            Mods = z_module_indexer:translations(C),
-            InMods = lists:any(fun({_Module, Tls}) ->
-                lists:any(fun({_Key, T}) ->
-                    string:equal(T, F)
-                end, Tls)
-            end, Mods),
-            case InMods of
-                false -> undefined;
-                true ->
-                    z_notifier:notify(module_ready, C),
-                    z_depcache:flush(C),
-                    "Flushed cache of " ++ Site ++ " due to updated translation: " ++ TranslationFile
-            end
-    end;
-    
-%% @doc Unknown files
-handle_file(_, _, F) -> %% unknown filename
-    case re:run(F, "^.*/dispatch/(.*)") of
-        nomatch ->
-            undefined;
-        {match, _} ->
-            z:flush(),
-            "Flushed cache due to dispatch rule change."
-    end.
-
-
-%% @doc send message to the user
-send_message(_, []) ->
-    undefined;
-send_message({unix, linux}, Msg) ->
-    os:cmd("which notify-send && notify-send \"Zotonic\" " ++ z_utils:os_escape(Msg));
-send_message({unix, darwin}, Msg) ->
-    os:cmd("which terminal-notifier && terminal-notifier -title Zotonic  -message " ++ z_utils:os_escape(Msg));
-send_message(_, _) ->
-    undefined.
 
 
 %%====================================================================
@@ -264,21 +107,6 @@ send_message(_, _) ->
 %% @doc Initiates the server.
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
-    NeedPeriodic = case os:type() of
-                       {unix, linux} ->
-                           case z_filewatcher_inotify:start_link(Context) of
-                               {ok, _} -> false;
-                               {error, _} -> true
-                           end;
-                       {unix, darwin} ->
-                           case z_filewatcher_fswatch:start_link(Context) of
-                               {ok, _} -> false;
-                               {error, _} -> true
-                           end;
-                       _ ->
-                           true
-                   end,
-    z_code_reloader:start_link(NeedPeriodic),
     Host = z_context:site(Context),
     lager:md([
             {site, Host},
@@ -375,9 +203,4 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 visiblecheck={acl, use, mod_development}}
      
      |Acc].
-
-
-%% @doc Recompile and reload an Erlang file.
-recompile_file(File) ->
-    make:files([File], [load|zotonic_compile:compile_options()]).
 

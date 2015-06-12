@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell, 2014 Arjan Scherpenisse
+%% @copyright 2010-2015 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 
-%% Copyright 2010 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2010-2015 Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -71,4 +71,6 @@ default(dbuser) -> "zotonic";
 default(dbpassword) -> "";
 default(dbschema) -> "public";
 default(use_ua_classifier) -> true;
+default(filewatcher_enabled) -> true;
+default(filewatcher_scanner_enabled) -> false;
 default(_) -> undefined.

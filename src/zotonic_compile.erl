@@ -20,13 +20,30 @@
 -module(zotonic_compile).
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
--export([all/0, all/1, d/0, compile_options/0]).
+-export([
+    all/0, all/1, 
+    d/0, compile_options/0,
+    ld/0, ld/1
+]).
 
--include_lib("include/zotonic.hrl").
+-include_lib("zotonic.hrl").
 
+%% @doc Load all changed beam files
+ld() ->
+    Ms = reloader:all_changed(),
+    [ ld(M) || M <- Ms ]. 
+
+%% @doc Load a specific beam file, reattach any observers etc.
+ld(Module) when is_atom(Module) ->
+    code:purge(Module),
+    Ret = code:load_file(Module),
+    z_sites_manager:module_loaded(Module),
+    Ret.
+
+
+%% @doc Compile all files
 all() ->
     all([]).
-
 
 %% @doc Does a parallel compile of the files in the different Zotonic directories.
 all(Options0) ->
@@ -38,7 +55,9 @@ all(Options0) ->
 
     spawn_link(fun() -> compile(Self, Ref, Work, Options) end),
     receive
-        {Ref, Result} -> Result
+        {Ref, Result} -> 
+            z:ld(),
+            Result
     end.
 
 compile(Parent, Ref, Work, Options) ->

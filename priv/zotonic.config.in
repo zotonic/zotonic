@@ -130,6 +130,13 @@
 %%% performance. However, you need to do an explicit z:flush() to see template changes.
    %% {template_modified_check, true},
 
+%%% Automatically compile and load changed files. You must have inotify or fswatch installed.
+   %% {filewatcher_enabled, true},
+
+%%% Scan for changed files beam files if inotify and fswatch are not enabled
+%%% Enabling this will make the system slow, it is not advised on production systems.
+   %% {filewatcher_scanner_enabled, false},
+
 %%% List with extra dependencies which get fetched and compiled by rebar
    %% {deps,
    %%  [
