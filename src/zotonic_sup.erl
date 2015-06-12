@@ -69,16 +69,16 @@ init([]) ->
     %% Random id generation
     Ids = {z_ids,
            {z_ids, start_link, []}, 
-           permanent, 5000, worker, dynamic},
+           permanent, 5000, worker, [z_ids]},
 
     %% SMTP gen_servers: one for encoding and sending mails, the other for bounces
     SmtpServer = {z_email_server,
                   {z_email_server, start_link, []},
-                  permanent, 5000, worker, dynamic},
+                  permanent, 5000, worker, [z_email_server]},
 
     SmtpBounceServer = {z_email_receive_server,
                         {z_email_receive_server, start_link, []},
-                        permanent, 5000, worker, dynamic},
+                        permanent, 5000, worker, [z_email_receive_server]},
 
     FilesSup = {z_file_sup, 
                  {z_file_sup, start_link, []},
@@ -89,11 +89,17 @@ init([]) ->
                 {z_sites_sup, start_link, []},
                 permanent, 10100, supervisor, dynamic},
 
+    %% File watcher, keep track of changed files for modules, templates etc.
+    FSWatchSup = {z_filewatcher_sup,
+                {z_filewatcher_sup, start_link, []},
+                permanent, 10100, supervisor, dynamic},
+
     Processes = [
                  Ids,
                  SmtpServer, SmtpBounceServer,
                  FilesSup, 
-                 SitesSup | get_extensions()
+                 SitesSup,
+                 FSWatchSup| get_extensions()
                 ],
 
     %% Listen to IP address and Port

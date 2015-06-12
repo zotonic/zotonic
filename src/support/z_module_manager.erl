@@ -1,11 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2011 Marc Worrell
-%% Date: 2009-06-03
+%% @copyright 2009-2015 Marc Worrell
 
 %% @doc Module supervisor. Uses a z_supervisor.  Starts/restarts module processes.
-%% @todo Take module dependencies into account when starting/restarting modules.
 
-%% Copyright 2009-2011 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -69,6 +67,7 @@
           context :: #context{},
           sup :: pid(),
           module_exports = [] :: list({atom(), list()}),
+          module_schema = [] :: list({atom(), integer()|undefined}),
           start_wait  = none :: none | {atom(), pid(), erlang:timestamp()}, 
           start_queue = [] :: list(),
           start_error = [] :: list()
@@ -460,18 +459,20 @@ handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
 %%      This is called after a code reload of a module.
 handle_cast({module_reloaded, Module}, State) ->
     lager:debug("[~p] checking observers of (re-)loaded module ~p", [z_context:site(State#state.context), Module]),
-    State1 = refresh_module_exports(Module, State),
+    State1 = refresh_module_exports(Module, refresh_module_schema(Module, State)),
     OldExports = proplists:get_value(Module, State#state.module_exports),
     NewExports = proplists:get_value(Module, State1#state.module_exports),
-    case OldExports of
-        NewExports ->
+    OldSchema = proplists:get_value(Module, State#state.module_schema),
+    NewSchema = proplists:get_value(Module, State1#state.module_schema),
+    case {OldExports, OldSchema} of
+        {NewExports, NewSchema} ->
             {noreply, State1};
-        undefined ->
+        {undefined, undefined} ->
             % Assume this load is because of the first start, otherwise there would be some exports known.
             {noreply, State1};
         _Changed ->
-            % Exports changed, assume the worst and restart the complete module
-            lager:info("[~p] exports of (re-)loaded module ~p changed, restarting module", [z_context:site(State#state.context), Module]),
+            % Exports or schema changed, assume the worst and restart the complete module
+            lager:info("[~p] exports or schema of (re-)loaded module ~p changed, restarting module", [z_context:site(State#state.context), Module]),
             State2 = handle_restart_module(Module, State1),
             {noreply, State2}
     end;
@@ -595,7 +596,7 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
                                 start_queue=[]
                                });
         [Module|_] ->
-            State1 = refresh_module_exports(Module, State),
+            State1 = refresh_module_exports(Module, refresh_module_schema(Module, State)),
             {Module, Exports} = lists:keyfind(Module, 1, State1#state.module_exports),
             case start_child(self(), Module, ModuleSup, module_spec(Module, Context), Exports, Context) of
                 {ok, StartHelperPid} -> 
@@ -777,6 +778,13 @@ refresh_module_exports(Module, #state{module_exports=Exports} = State) ->
     Exports1 = lists:keydelete(Module, 1, Exports),
     State#state{
         module_exports=[{Module, erlang:get_module_info(Module, exports)} | Exports1]
+    }.
+
+%% @doc Fetch the list of exported functions of a module.
+refresh_module_schema(Module, #state{module_schema=Schemas} = State) ->
+    Schemas1 = lists:keydelete(Module, 1, Schemas),
+    State#state{
+        module_schema=[{Module, mod_schema(Module)} | Schemas1]
     }.
 
 %% @doc Database version equals target version; ignore

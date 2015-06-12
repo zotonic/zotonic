@@ -83,10 +83,10 @@ m(Options) ->
 %% @doc (Re)make all erlang source modules with the supplied compile 
 %% options. Do not reset the caches.
 compile() ->
-    compile([]).
+    zotonic_compile:all().
 
 compile(Options) ->
-    zotonic_compile:all([load|Options]).
+    zotonic_compile:all(Options).
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
 flush() ->
@@ -116,13 +116,11 @@ log_level(Level) ->
 
 %% @doc Reload all changed Erlang modules
 ld() ->
-    Ms = reloader:all_changed(),
-    [ ld(M) || M <- Ms ]. 
+    zotonic_compile:ld().
 
 %% @doc Reload an Erlang module
 ld(Module) ->
-    code:purge(Module),
-    code:load_file(Module). 
+    zotonic_compile:ld(Module).
 
 %% @doc Echo and return a debugging value
 debug_msg(Module, Line, Msg) ->

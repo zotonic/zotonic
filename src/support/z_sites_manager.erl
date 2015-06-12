@@ -37,7 +37,9 @@
     get_fallback_site/0,
     get_builtin_sites/0,
     all_sites_running/0, all_sites_running/1,
+    module_loaded/1,
     info/0,
+    foreach/1,
 
     stop/1,
     start/1,
@@ -109,6 +111,17 @@ all_sites_running([{State, Count}| _Rest], true) when Count > 0 andalso State =/
 all_sites_running([_Info|Rest], true) ->
     all_sites_running(Rest, true).
 
+%% @doc Do something for all sites that are currently running.
+foreach(Fun) ->
+    lists:foreach(fun(Site) ->
+                    try
+                        Fun(z_context:new(Site))
+                    catch
+                        _:_ -> ok
+                    end
+                  end,
+                  get_sites()).
+
 %% @doc Return a list of contexts initialized for all active sites.
 -spec get_site_contexts() -> [ #context{} ].
 get_site_contexts() ->
@@ -151,6 +164,11 @@ restart([Node, Site]) ->
 restart(Site) ->
     gen_server:cast(?MODULE, {restart, Site}).
 
+%% @doc Tell the sites manager that a module was loaded, check
+%%      changes to observers, schema.
+module_loaded(Module) ->
+    gen_server:cast(?MODULE, {module_loaded, Module}).
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -167,11 +185,6 @@ init([]) ->
     ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]),
     ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]),
     add_sites_to_sup(Sup, scan_sites()),
-    erlang:trace_pattern(
-                  {code_server, post_beam_load, '_'},
-                  [{'_',[],[{return_trace}]}],  % dbg:fun2ms(fun(_) -> return_trace() end)
-                  [local]),
-    erlang:trace(whereis(code_server), true, [call]),
     {ok, #state{sup=Sup}}.
 
 
@@ -256,6 +269,10 @@ handle_cast({supervisor_child_stopped, Child, SitePid}, State) ->
     z_sites_dispatcher:update_dispatchinfo(),
     {noreply, State};
 
+%% @doc Handle load of a module, check observers and schema
+handle_cast({module_loaded, Module}, State) ->
+    do_load_module(Module, State),
+    {noreply, State};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -265,13 +282,6 @@ handle_cast(Message, State) ->
 %% @spec handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
-
-%% @doc Handle trace of newly loaded modules
-handle_info({trace, _CodeServer, call, {code_server,post_beam_load,[Module]}}, State) ->
-    do_load_module(Module, State),
-    {noreply, State};
-handle_info({trace, _CodeServer, return_from, {code_server,post_beam_load,_Arity}, ok}, State) ->
-    {noreply, State};
 
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
