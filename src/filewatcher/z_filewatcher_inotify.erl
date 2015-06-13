@@ -103,7 +103,7 @@ handle_info({Port, {data, {eol, Line}}}, State=#state{port=Port, timers=Timers})
 
 %% @doc Launch the actual filechanged notification
 handle_info({filechange, Verb, Filename}, State=#state{timers=Timers}) ->
-    mod_development:file_changed(Verb, Filename),
+    z_filewatcher_handler:file_changed(Verb, Filename),
     {noreply, State#state{timers=lists:keydelete(Filename, 1, Timers)}};
 
 handle_info({Port,{exit_status,Status}}, State=#state{port=Port}) ->
