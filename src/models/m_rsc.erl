@@ -48,7 +48,8 @@
     
     exists/2, 
     
-    is_visible/2, is_editable/2, is_deletable/2, is_me/2, 
+    is_visible/2, is_editable/2, is_deletable/2, is_linkable/2,
+    is_me/2, 
     is_cat/3,
     is_a/2,
     is_a_id/2,
@@ -388,33 +389,21 @@ exists(Id, Context) ->
     end.
     
 is_visible(Id, Context) ->
-    case rid(Id, Context) of
-        RscId when is_integer(RscId) ->
-            z_acl:rsc_visible(RscId, Context);
-        _ ->
-            false
-    end.
+    z_acl:rsc_visible(Id, Context).
 
-is_editable(Id, Context) -> 
-    case rid(Id, Context) of
-        RscId when is_integer(RscId) ->
-            z_acl:rsc_editable(RscId, Context);
-        _ ->
-            false
-    end.
+is_editable(Id, Context) ->
+    z_acl:rsc_editable(Id, Context).
     
 is_deletable(Id, Context) -> 
-    case rid(Id, Context) of
-        RscId when is_integer(RscId) ->
-            z_acl:rsc_deletable(RscId, Context);
-        _ ->
-            false
-    end.
+    z_acl:rsc_deletable(Id, Context).
+
+is_linkable(Id, Context) ->
+    z_acl:rsc_linkable(Id, Context).
     
 is_me(Id, Context) -> 
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
-            z_acl:user(Context) == RscId;
+            z_acl:user(Context) =:= RscId;
         _ ->
             false
     end.
@@ -493,6 +482,7 @@ p_no_acl(Id, is_me, Context) -> is_me(Id, Context);
 p_no_acl(Id, is_visible, Context) -> is_visible(Id, Context);
 p_no_acl(Id, is_editable, Context) -> is_editable(Id, Context);
 p_no_acl(Id, is_deletable, Context) -> is_deletable(Id, Context);
+p_no_acl(Id, is_linkable, Context) -> is_linkable(Id, Context);
 p_no_acl(Id, is_published_date, Context) -> is_published_date(Id, Context);
 p_no_acl(Id, is_a, Context) -> [ {C,true} || C <- is_a(Id, Context) ];
 p_no_acl(Id, exists, Context) -> exists(Id, Context);

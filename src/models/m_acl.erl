@@ -41,7 +41,8 @@ m_find_value(is_admin, #m{value=undefined}, Context) ->
     z_acl:is_allowed(use, mod_admin_config, Context);
 m_find_value(Action, #m{value=undefined} = M, _Context) 
     when Action == use orelse Action == admin orelse Action == view
-    orelse Action == delete orelse Action == update orelse Action == insert ->
+    orelse Action == delete orelse Action == update orelse Action == insert
+    orelse Action == link ->
     M#m{value={is_allowed, Action}};
 m_find_value(is_allowed, #m{value=undefined} = M, _Context) ->
     M#m{value=is_allowed};
