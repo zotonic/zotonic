@@ -6,9 +6,9 @@
 	<label class="control-label" for="{{ #code }}">{_ ISO Code _}</label>
         <div class="controls">
             <select name="code" id="{{ #code }}">
-                {% for lang in m.translation.language_list_all %}
-                    <option value="{{ lang.code }}" {% if lang.code == code %}selected{% endif %}>
-                        {{ lang.title }} ({{lang.code}})
+                {% for iso,lang in m.translation.language_list_all %}
+                    <option value="{{ iso }}" {% if iso == code %}selected{% endif %}>
+                        {{ lang.language }} ({{iso}})
                     </option>
                 {% endfor %}
             </select>

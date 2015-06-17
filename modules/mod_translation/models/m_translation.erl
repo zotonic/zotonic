@@ -70,5 +70,5 @@ language_list_enabled(Context) ->
 				 language_list(Context)).
 
 language_list_all(_Context) ->
-	[ [{code,Code}, {title, Title}] || {Code,Title} <- iso639:all2lang() ].
+	[ {Code, [{language, Title}]} || {Code,Title} <- iso639:all2lang() ].
 
