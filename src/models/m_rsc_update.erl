@@ -457,18 +457,30 @@ preflight_check(_Id, [], _Context) ->
     ok;
 preflight_check(Id, [{name, Name}|T], Context) when Name =/= undefined ->
     case z_db:q1("select count(*) from rsc where name = $1 and id <> $2", [Name, Id], Context) of
-        0 ->  preflight_check(Id, T, Context);
-        _N -> throw({error, duplicate_name})
+        0 -> 
+            preflight_check(Id, T, Context);
+        _N ->
+            lager:warning("[~p] Trying to insert duplicate name ~p", 
+                          [z_context:site(Context), Name]), 
+            throw({error, duplicate_name})
     end;
 preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
     case z_db:q1("select count(*) from rsc where page_path = $1 and id <> $2", [Path, Id], Context) of
-        0 ->  preflight_check(Id, T, Context);
-        _N -> throw({error, duplicate_page_path})
+        0 ->
+            preflight_check(Id, T, Context);
+        _N ->
+            lager:warning("[~p] Trying to insert duplicate page_path ~p", 
+                          [z_context:site(Context), Path]), 
+            throw({error, duplicate_page_path})
     end;
 preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
     case z_db:q1("select count(*) from rsc where uri = $1 and id <> $2", [Uri, Id], Context) of
-        0 ->  preflight_check(Id, T, Context);
-        _N -> throw({error, duplicate_uri})
+        0 ->
+            preflight_check(Id, T, Context);
+        _N ->
+            lager:warning("[~p] Trying to insert duplicate uri ~p", 
+                          [z_context:site(Context), Uri]), 
+            throw({error, duplicate_uri})
     end;
 preflight_check(Id, [{'query', Query}|T], Context) ->
     Valid = case m_rsc:is_a(Id, 'query', Context) of
@@ -638,6 +650,13 @@ props_filter([{Location, P}|T], Acc, Context) when Location =:= location_lat; Lo
             _:_ -> undefined
         end,
     props_filter(T, [{Location, X} | Acc], Context);
+
+props_filter([{pref_language, Lang}|T], Acc, Context) ->
+    Lang1 = case z_trans:to_language_atom(Lang) of
+                {ok, LangAtom} -> LangAtom;
+                {error, not_a_language} -> undefined
+            end,
+    props_filter(T, [{pref_language, Lang1} | Acc], Context);
 
 props_filter([{_Prop, _V}=H|T], Acc, Context) ->
     props_filter(T, [H|Acc], Context).

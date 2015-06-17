@@ -5,8 +5,13 @@
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #code }}">{_ ISO Code _}</label>
         <div class="col-md-9">
-	        <input class="form-control" type="text" style="width: 50px" id="{{ #code }}" name="code" value="{{ code }}" />
-	        {% validate id=#code name="code" type={presence} %}
+            <select name="code" id="{{ #code }}">
+                {% for iso,lang in m.translation.language_list_all %}
+                    <option value="{{ iso }}" {% if iso == code %}selected{% endif %}>
+                        {{ lang.language }} ({{iso}})
+                    </option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 
