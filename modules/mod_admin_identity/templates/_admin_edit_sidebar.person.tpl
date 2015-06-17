@@ -27,13 +27,10 @@
 	<label class="control-label" for="pref_language">{_ Language _}</label>
 	<div class="controls">
 		<select id="pref_language" name="pref_language">
-		{% with m.config.i18n.language_list.list as list %}
-		{% for code,lang in list %}
-			{% if lang.is_enabled %}
-			<option {% if id.pref_language == code %}selected{% endif %} value="{{ code }}">{{ lang.language }}</a>
-			{% endif %}
-		{% endfor %}
-		{% endwith %}
+			<option></option>
+			{% for code,lang in m.translation.language_list_enabled %}
+				<option {% if id.pref_language == code %}selected{% endif %} value="{{ code }}">{{ lang.language }}</a>
+			{% endfor %}
 		</select>
 	</div>
 </div>	
