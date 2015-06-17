@@ -41,7 +41,9 @@ m_find_value(default_language, #m{value=undefined}, Context) ->
 m_find_value(language_list, #m{value=undefined}, Context) ->
 	language_list(Context);
 m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
-	language_list_enabled(Context).
+	language_list_enabled(Context);
+m_find_value(language_list_all, #m{value=undefined}, Context) ->
+	language_list_all(Context).
 
 m_to_list(#m{}, _Context) ->
 	[].
@@ -66,3 +68,7 @@ language_list_enabled(Context) ->
 					proplists:get_value(is_enabled, Props)
 				 end,
 				 language_list(Context)).
+
+language_list_all(_Context) ->
+	[ {Code, [{language, Title}]} || {Code,Title} <- iso639:all2lang() ].
+

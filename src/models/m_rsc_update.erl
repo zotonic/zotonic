@@ -651,6 +651,13 @@ props_filter([{Location, P}|T], Acc, Context) when Location =:= location_lat; Lo
         end,
     props_filter(T, [{Location, X} | Acc], Context);
 
+props_filter([{pref_language, Lang}|T], Acc, Context) ->
+    Lang1 = case z_trans:to_language_atom(Lang) of
+                {ok, LangAtom} -> LangAtom;
+                {error, not_a_language} -> undefined
+            end,
+    props_filter(T, [{pref_language, Lang1} | Acc], Context);
+
 props_filter([{_Prop, _V}=H|T], Acc, Context) ->
     props_filter(T, [H|Acc], Context).
 
