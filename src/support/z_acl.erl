@@ -26,6 +26,7 @@
          rsc_prop_visible/3,
          rsc_editable/2,
          rsc_deletable/2,
+         rsc_linkable/2,
 
          rsc_update_check/3,
 
@@ -56,7 +57,7 @@
 
 -type acl() :: list(operationrequest()).
 -type operationrequest() :: {action(), object()}.
--type action() :: atom().
+-type action() :: use | admin | view | insert | update | delete | link | atom().
 -type object() :: m_rsc:resource().
 
 %% @doc Check if an action is allowed for the current actor.
@@ -65,6 +66,8 @@ is_allowed(_Action, _Object, #context{acl=admin}) ->
     true;
 is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
+is_allowed(link, Object, Context) ->
+    is_allowed(insert, #acl_edge{subject_id=Object, predicate=relation, object_id=Object}, Context);
 is_allowed(Action, Object, Context) ->
     case maybe_allowed(Action, Object, Context) of
         undefined -> false;
@@ -188,6 +191,18 @@ rsc_deletable(RscName, Context) ->
         RscId -> rsc_deletable(RscId, Context)
     end.
 
+%% @doc Check if the resource is connected to another resource by the current user
+rsc_linkable(undefined, _Context) ->
+    false;
+rsc_linkable(_Id, #context{acl=admin}) ->
+    true;
+rsc_linkable(Id, Context) when is_integer(Id) ->
+    is_allowed(link, Id, Context);
+rsc_linkable(RscName, Context) ->
+    case m_rsc:rid(RscName, Context) of
+        undefined -> false;
+        RscId -> is_allowed(link, RscId, Context)
+    end.
 
 %% @doc Filter the properties of an update.  This is before any escaping.
 rsc_update_check(Id, Props, Context) ->

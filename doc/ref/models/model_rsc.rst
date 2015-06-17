@@ -101,6 +101,9 @@ A resource has the following properties accessible from the templates:
 |is_editable        |Check if this page is editable by the current        |false                           |
 |                   |user. Returns a boolean.                             |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
+|is_linkable        |Check if this page can be connected to another page. |false                           |
+|                   |Returns a boolean.                                   |                                |
++-------------------+-----------------------------------------------------+--------------------------------+
 |is_ingroup         |Check if the current user is a member of the group   |true                            |
 |                   |the page belongs to. Returns a boolean.              |                                |
 +-------------------+-----------------------------------------------------+--------------------------------+
