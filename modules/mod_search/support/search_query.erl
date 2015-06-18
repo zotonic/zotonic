@@ -62,13 +62,22 @@ parse_request_args([{K,V}|Rest], Acc) ->
 %% Parses a query text. Every line is an argument; of which the first
 %% '=' separates argument key from argument value.
 %% @doc parse_query_text(string()) -> [{K, V}]
+parse_query_text(undefined) ->
+    [];
 parse_query_text(Text) when is_list(Text) ->
     parse_query_text(list_to_binary(Text));
-
-parse_query_text(Text) ->
+parse_query_text(Text) when is_binary(Text) ->
     Lines = binary:split(Text, <<"\n">>, [global]),
-    [ {request_arg(binary_to_list(L)), Rest}
-      || [L, Rest] <- [ binary:split(z_string:trim(L), <<"=">>) || L <- Lines] ].
+    KVs = [ split_arg(z_string:trim(Line)) || Line <- Lines],
+    [ {request_arg(binary_to_list(K)), V} || {K,V} <- KVs, K =/= <<>> ].
+
+split_arg(<<>>) ->
+    {<<>>, <<>>};
+split_arg(B) ->
+    case binary:split(B, <<"=">>) of
+        [K,V] -> {z_string:trim(K), z_string:trim(V)};
+        [K] -> {z_string:trim(K), <<"true">>}
+    end. 
 
 
 % Convert request arguments to atom. Doing it this way avoids atom
