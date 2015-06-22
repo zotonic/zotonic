@@ -22,6 +22,7 @@
     m_to_list/2,
     m_value/2,
     tree/2,
+    tree1/2,
     tree_flat/2,
     parents/3,
     menu/2,
@@ -50,10 +51,17 @@ m_find_value(Name, #m{value=undefined} = M, _Context) ->
     M#m{value=Name};
 m_find_value(tree, #m{value=Name}, Context) ->
     tree(Name, Context);
+m_find_value(tree1, #m{value=Name}, Context) ->
+    tree1(Name, Context);
 m_find_value(tree_flat, #m{value=Name}, Context) ->
     tree_flat(Name, Context);
 m_find_value(menu, #m{value=Name}, Context) ->
     menu(Name, Context);
+m_find_value(Id, #m{value=Name} = M, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined -> undefined;
+        RId -> M#m{value={sub, Name, RId}}
+    end;
 m_find_value(_Key, _Value, _Context) ->
     undefined.
 
@@ -69,6 +77,11 @@ m_value(#m{value=#m{value=Name}}, Context) ->
 
 
 %% @doc Fetch a named tree
+tree({sub, Tree, RId}, Context) ->
+    case find_tree_node(tree(Tree, Context), RId) of
+        undefined -> [];
+        {ok, Node} -> [Node]
+    end;
 tree(undefined, _Context) ->
     [];
 tree(<<>>, _Context) ->
@@ -89,6 +102,16 @@ tree(Name, Context) when is_binary(Name) ->
     z_depcache:memo(F, {hierarchy, Name}, ?DAY, [hierarchy], Context);
 tree(Name, Context) ->
     tree(z_convert:to_binary(Name), Context).
+
+%% @doc Fetch a 1 level deep tree
+tree1({sub, _, _} = Tree, Context) ->
+    case tree(Tree, Context) of
+        [] -> [];
+        [Node] -> proplists:get_value(children, Node)
+    end;
+tree1(Name, Context) ->
+    tree(Name, Context).
+
 
 %% @doc Return a list of all this id's ancestor nodes
 parents(Name, Id, Context) ->
@@ -391,3 +414,21 @@ build_tree({Id, Parent, Lvl, Left, Right}, Stack, Acc, Rest) ->
         {right, Right}
      ], 
      Rest}.
+
+
+%% @doc Find a id and sub-tree in a tree (tree nodes are proplists)
+find_tree_node([], _Id) ->
+    undefined;
+find_tree_node([Node|Ns], Id) ->
+    case lists:keyfind(id, 1, Node) of
+        {id, Id} ->
+            {ok, Node};
+        _ ->
+            {children, Cs} = lists:keyfind(children, 1, Node),
+            case find_tree_node(Cs, Id) of
+                {ok, FoundNode} ->
+                    {ok, FoundNode};
+                undefined ->
+                    find_tree_node(Ns, Id)
+            end
+    end.
