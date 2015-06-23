@@ -713,11 +713,12 @@ function z_ajax(options, data)
 {
     z_start_spinner();
     $.ajax({
-        url:        '/postback',
-        type:       'post',
-        data:       data,
-        dataType:   'text',
+        url: '/postback',
+        type: 'post',
+        data: data,
+        dataType: 'text',
         contentType: 'text/x-ubf',
+        async: !z_page_unloading, // Prevents requests from being cancelled during unloading of the page.
         success: function(received_data, textStatus)
         {
             try
