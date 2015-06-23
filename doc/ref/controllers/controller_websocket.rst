@@ -1,7 +1,7 @@
 
 .. include:: meta-websocket.rst
 
-Controller which opens a WebSocket connection to the browser.
+Controller which accepts a WebSocket connection from the browser.
 
 The controller provides persistent WebSocket connections between the
 client and the server. Since Zotonic 0.11, a WebSocket connection is automatically started on the page (unless nostream is given in the script tag). 
