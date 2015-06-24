@@ -106,7 +106,7 @@ Query-model arguments
   example, or the unique page name 'tag_gift'). Optionally, you can
   pass the name of a predicate as the second argument, to specify that
   the connection should have this predicate. Specifying this multiple
-  times does an "or" of the conditions.
+  times does an "and" of the conditions.
 
   ``hassubject=123``
   ``hassubject='tag_gift'``
@@ -123,6 +123,19 @@ Query-model arguments
   ``hasobject=123``
   ``hasobject='tag_gift'``
   ``hasobject=[123,'hasdocument']``
+
+**hasanyobject**
+
+  Like hasobject, but allows to define an "or" operation on the edge.
+  You can define multiple combinations of predicates and objects, any
+  resource having such an outgoing edge will be matched.
+
+  ``hasanyobject=1,2,3``
+  ``hasanyobject=[1,author],2,3``
+  ``hasanyobject=[*,author],2,3``
+
+  The term ``[*,author],2,3`` selects any resource with an *author*,
+  or a connection to the ids 2 or 3 (with any predicate).
 
 **is_featured**
 

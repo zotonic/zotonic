@@ -26,6 +26,11 @@
          parse_query_text/1
         ]).
 
+%% For testing
+-export([
+    expand_object_predicates/2
+]).
+
 -include_lib("zotonic.hrl").
 
 -define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
@@ -56,8 +61,7 @@ parse_request_args([{"zotonic_host",_}|Rest], Acc) ->
 parse_request_args([{"zotonic_dispatch",_}|Rest], Acc) ->
     parse_request_args(Rest, Acc);
 parse_request_args([{K,V}|Rest], Acc) ->
-    NewVal = V,
-    parse_request_args(Rest, [{request_arg(K),NewVal}|Acc]).
+    parse_request_args(Rest, [{request_arg(K),z_convert:to_binary(V)}|Acc]).
 
 %% Parses a query text. Every line is an argument; of which the first
 %% '=' separates argument key from argument value.
@@ -96,6 +100,7 @@ request_arg("hasobject")           -> hasobject;
 request_arg("hasobjectpredicate")  -> hasobjectpredicate;
 request_arg("hassubject")          -> hassubject;
 request_arg("hassubjectpredicate") -> hassubjectpredicate;
+request_arg("hasanyobject")        -> hasanyobject;
 request_arg("is_featured")         -> is_featured;
 request_arg("is_published")        -> is_published;
 request_arg("is_public")           -> is_public;
@@ -243,6 +248,20 @@ parse_query([{hasobject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
 parse_query([{hasobject, Id}|Rest], Context, Result) when is_list(Id) ->
     parse_query([{hasobject, [m_rsc:rid(Id,Context)]}|Rest], Context, Result);
 
+%% hasanyobject=[[id,predicate]|id, ...]
+%% Give all things which have an outgoing edge to Id with any of the given object/predicate combinations
+parse_query([{hasanyobject, ObjPreds}|Rest], Context, Result) ->
+    OPs = expand_object_predicates(ObjPreds, Context),
+    % rsc.id in (select subject_id from edge where (object_id = ... and predicate_id = ... ) or (...) or ...)
+    Alias = "edge_" ++ z_ids:identifier(),
+    OPClauses = [ object_predicate_clause(Alias, Obj,Pred) || {Obj,Pred} <- OPs ],
+    Where = lists:flatten([
+                "rsc.id in (select ", Alias ,".subject_id from edge ",Alias," where (",
+                    z_utils:combine(") or (", OPClauses),
+                "))"
+                ]),
+    Result1 = add_where(Where, Result),
+    parse_query(Rest, Context, Result1);
 
 %% hasobjectpredicate=predicate
 %% Give all things which have any outgoing edge with given predicate
@@ -706,16 +725,60 @@ maybe_split_list(Id) when is_integer(Id) ->
 maybe_split_list(<<"[", Rest/binary>>) ->
     split_list(Rest);
 maybe_split_list([$[|Rest]) ->
-    split_list(z_conver:to_binary(Rest));
+    split_list(z_convert:to_binary(Rest));
 maybe_split_list(Other) ->
     [Other].
 
 split_list(Bin) ->
-    Bin1 = binary:replace(Bin, <<"]">>, <<>>),
+    Bin1 = binary:replace(Bin, <<"]">>, <<>>, [global]),
     Parts = binary:split(Bin1, <<",">>, [global]),
     [ unquot(z_string:trim(P)) || P <- Parts ].
 
 unquot(<<C, Rest/binary>>) when C =:= $'; C =:= $"; C =:= $` ->
     binary:replace(Rest, <<C>>, <<>>);
+unquot([C|Rest]) when C =:= $'; C =:= $"; C =:= $` ->
+    [ X || X <- Rest, X =/= C ];
 unquot(B) ->
     B.
+
+%% Expand the argument for hasanyobject, make pairs of {ObjectId,PredicateId}
+expand_object_predicates(Bin, Context) when is_binary(Bin) ->
+    map_rids(search_parse_list:parse(Bin), Context);
+expand_object_predicates(OPs, Context) ->
+    map_rids(OPs, Context).
+
+map_rids(L, Context) when is_list(L) ->
+    [ map_rid(unquot(X),Context) || X <- L, X =/= <<>> ];
+map_rids(Id, Context) ->
+    map_rid(Id, Context).
+
+map_rid([], _Context) ->  {any, any};
+map_rid([Obj,Pred|_], Context) -> {rid(Obj,Context),rid(Pred,Context)};
+map_rid([Obj], Context) ->  {rid(Obj, Context), any};
+map_rid(Obj, Context) ->  {rid(Obj, Context), any}.
+
+rid(undefined, _Context) -> undefined;
+rid(<<"*">>, _Context) -> any;
+rid('*', _Context) -> any;
+rid("*", _Context) -> any;
+rid("", _Context) -> any;
+rid(<<>>, _Context) -> any;
+rid(Id, _Context) when is_integer(Id) -> Id;
+rid(Id, Context) -> m_rsc:rid(Id, Context).
+
+%% Support routine for "hasanyobject"
+object_predicate_clause(_Alias, undefined, undefined) ->
+    "false";
+object_predicate_clause(_Alias, _Object, undefined) ->
+    "false";
+object_predicate_clause(_Alias, undefined, _Predicate) ->
+    "false";
+object_predicate_clause(Alias, any, any) ->
+    [Alias, ".subject_id = rsc.id"];
+object_predicate_clause(Alias, any, PredicateId) when is_integer(PredicateId) ->
+    [Alias, ".predicate_id = ", integer_to_list(PredicateId)];
+object_predicate_clause(Alias, ObjectId, any) when is_integer(ObjectId) ->
+    [Alias, ".object_id = ", integer_to_list(ObjectId)];
+object_predicate_clause(Alias, ObjectId, PredicateId) when is_integer(PredicateId), is_integer(ObjectId) ->
+    [Alias, ".object_id=", integer_to_list(ObjectId), 
+     " and ", Alias, ".predicate_id=", integer_to_list(PredicateId)].
