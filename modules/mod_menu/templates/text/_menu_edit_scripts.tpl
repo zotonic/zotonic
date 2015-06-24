@@ -96,7 +96,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				} else if (where == 'before') {
 					$(html).insertBefore($menu_item);
 				} else if (where == 'below') {
-					$submenu = $("ul.menu-submenu", $menu_item);
+					$submenu = $(">ul.menu-submenu", $menu_item);
 					if ($submenu.length > 0) {
 						$submenu.append(html);
 					} else {
@@ -111,10 +111,10 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				}
 			};
 
-			{% if is_hierarchy %}
+			{% if is_hierarchy or in_sorter == 'category' %}
 				var $duplicate = $sorter.find('[data-page-id='+v.object_id+']');
 				if ($duplicate.length > 0) {
-					z_dialog_alert({text: "{_ This item is already in the hierarcgy. Every item can only occur once. _}"});
+					z_dialog_alert({text: "{_ This item is already in the hierarchy. Every item can only occur once. _}"});
 					$duplicate.fadeTo(500, 0.5, function() { $duplicate.fadeTo(500, 1); });
 					return;
 				}
