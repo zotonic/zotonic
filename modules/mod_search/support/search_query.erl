@@ -717,6 +717,8 @@ expand_object_predicates(Bin, Context) when is_binary(Bin) ->
 expand_object_predicates(OPs, Context) ->
     map_rids(OPs, Context).
 
+map_rids({rsc_list, L}, Context) ->
+    map_rids(L, Context);
 map_rids(L, Context) when is_list(L) ->
     [ map_rid(unquot(X),Context) || X <- L, X =/= <<>> ];
 map_rids(Id, Context) ->
