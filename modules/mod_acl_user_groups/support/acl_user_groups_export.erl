@@ -198,48 +198,8 @@ menu_from_names([{Name,Sub}|Rest], Acc, Context) ->
 
 %% @doc Ensure that all things of a category have an unique name.
 ensure_name(Cat, Context) ->
-    CatName = m_rsc:p_no_acl(Cat, name, Context),
     m_category:foreach(Cat, 
                        fun(Id, Ctx) ->
-                            ensure_name_1(Id, CatName, Ctx)
+                            m_rsc:ensure_name(Id, Ctx)
                        end,
                        Context).
-
-ensure_name_1(Id, CatName, Context) ->
-    case m_rsc:p_no_acl(Id, name, Context) of
-        undefined ->
-            Name = ensure_unique(CatName, english_title(Id, Context), 0, Context),
-            lager:info("[~p] ACL export, setting name of ~p to ~p",
-                       [z_context:site(Context), Id, Name]),
-            {ok, _} = m_rsc_update:update(Id, [{name, Name}], z_acl:sudo(Context)),
-            ok;
-        _Name ->
-            ok
-    end.
-
-english_title(Id, Context) ->
-    case m_rsc:p_no_acl(Id, title, Context) of
-        {trans, []} ->
-            <<>>;
-        {trans, Tr} ->
-            case proplists:get_value(en, Tr) of
-                undefined ->
-                    {_, T} = hd(Tr),
-                    T;
-                T ->
-                    T
-            end;
-        Title ->
-            Title
-    end.
-
-ensure_unique(CatName, Title, N, Context) ->
-    Name = z_string:to_name(iolist_to_binary([CatName, $_, Title, postfix(N)])),
-    case z_db:q1("select id from rsc where name = $1", [Name], Context) of
-        undefined -> Name;
-        _Id -> ensure_unique(CatName, Title, N+1, Context)
-    end.
-
-postfix(0) -> <<>>;
-postfix(N) -> integer_to_list(N).
-

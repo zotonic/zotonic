@@ -67,7 +67,8 @@
     rid/2,
 
     name_lookup/2,
-    uri_lookup/2
+    uri_lookup/2,
+    ensure_name/2
 ]).
 
 -export_type([resource/0, resource_id/0, resource_name/0]).
@@ -801,4 +802,47 @@ predicates_edit(Id, Context) ->
     Present = m_edge:object_predicate_ids(Id, Context),
     ByCategory ++ Present.
     
-    
+
+%% @doc Ensure that a resource has a name, caller must have update rights.
+-spec ensure_name(integer(), #context{}) -> ok.
+ensure_name(Id, Context) ->
+    case m_rsc:p_no_acl(Id, name, Context) of
+        undefined ->
+            CatId = m_rsc:p_no_acl(Id, category_id, Context),
+            CatName = m_rsc:p_no_acl(CatId, name, Context),
+            BaseName = iolist_to_binary([CatName, $_, english_title(Id, Context)]),
+            BaseName1 = ensure_name_maxlength(BaseName),
+            Name = ensure_name_unique(BaseName1, 0, Context),
+            {ok, _} = m_rsc_update:update(Id, [{name, Name}], z_acl:sudo(Context)),
+            ok;
+        _Name ->
+            ok
+    end.
+
+ensure_name_maxlength(<<Name:70/binary, _/binary>>) -> Name;
+ensure_name_maxlength(Name) -> Name.
+
+english_title(Id, Context) ->
+    case m_rsc:p_no_acl(Id, title, Context) of
+        Title when is_binary(Title) -> Title;
+        {trans, []} -> <<>>;
+        undefined -> <<>>;
+        {trans, Tr} ->
+            case proplists:get_value(en, Tr) of
+                undefined ->
+                    {_, T} = hd(Tr),
+                    T;
+                T ->
+                    T
+            end
+    end.
+
+ensure_name_unique(BaseName, N, Context) ->
+    Name = iolist_to_binary([BaseName, postfix(N)]),
+    case z_db:q1("select id from rsc where name = $1", [Name], Context) of
+        undefined -> Name;
+        _Id -> ensure_name_unique(BaseName, N+1, Context)
+    end.
+
+postfix(0) -> <<>>;
+postfix(N) -> integer_to_list(N).
