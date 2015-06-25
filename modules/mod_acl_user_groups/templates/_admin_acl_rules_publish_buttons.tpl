@@ -19,15 +19,15 @@
         }
     %}
 
-    {% button text=_"Export rules"
+    {% button text=_"Export edit rules"
         class="btn btn-default"
         action={redirect dispatch=`admin_acl_export`}
     %}
 
-    {% button text=_"Import rules..."
+    {% button text=_"Import edit rules..."
         class="btn btn-default"
         action={dialog_open
-            title=_"Import ACL rules"
+            title=_"Import edit version of ACL rules"
             template="_dialog_acl_rules_import.tpl"
         }
     %}

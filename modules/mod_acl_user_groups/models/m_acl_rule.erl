@@ -42,8 +42,8 @@
     revert/2,
     publish/2,
 
-    ids_to_names/2,
-    import_rules/2
+    import_rules/4,
+    ids_to_names/2
    ]).
 
 -include_lib("zotonic.hrl").
@@ -345,74 +345,113 @@ fk(Table, Field, Context) ->
     z_db:equery("alter table " ++ Table ++ " add constraint fk_" ++ Table ++ "_" ++ Field ++ "_id foreign key (" ++ Field ++ ") references rsc(id) on update cascade on delete cascade", Context).
 
 
-import_rules(TmpFile, Context) ->
-    {ok, Content} = file:read_file(TmpFile),
-    RuleTypes = binary_to_term(Content),
+%% @doc Replace all rules of a certain kind/state
+import_rules(Kind, State, Rules0, Context) ->
+    Rules = names_to_ids(Rules0, Context),
     z_db:transaction(
-      fun(Ctx) ->
-              [begin
-                   {Kind, State, Rules0} = Row,
-                   Rules = names_to_ids(Rules0, Context),
-                   Query = "DELETE FROM " ++ z_convert:to_list(table(Kind)) 
-                       ++ " WHERE " ++ state_sql_clause(State),
-                   z_db:equery(Query, Ctx),
-                   Rules1 = controller_admin_acl_rules_export:names_to_ids(Rules, Context),
-                   [z_db:insert(table(Kind), R, Ctx) || R <- Rules1]
-               end
-               || Row <- RuleTypes]
-      end,
-      Context),
-    mod_acl_user_groups:rebuild(edit, Context),
-    mod_acl_user_groups:rebuild(publish, Context),
-    ok.
+        fun(Ctx) ->
+            Query = "DELETE FROM " ++ z_convert:to_list(table(Kind)) 
+                  ++ " WHERE " ++ state_sql_clause(State),
+            z_db:equery(Query, Ctx),
+            lists:foreach(
+                    fun
+                        ([]) ->
+                            ok;
+                        (R) ->
+                            R1 = [
+                                {modifier_id, z_acl:user(Context)},
+                                {creator_id, z_acl:user(Context)}
+                                | proplists:delete(modifier_id,
+                                    proplists:delete(creator_id, R))
+                            ],
+                            z_db:insert(table(Kind), R1, Ctx)
+                    end,
+                    Rules)
+        end,
+        Context),
+    mod_acl_user_groups:rebuild(State, Context).
 
 
 ids_to_names(Rows, Context) ->
-    [ids_to_names_row(R, Context) || R <- Rows].
+    [
+        begin
+            R1 = proplists:delete(id, R),
+            ids_to_names_row(R1, Context)
+        end
+        || R <- Rows
+    ].
 
 ids_to_names_row(R, Context) ->
     lists:foldl(
-      fun(K, Acc) ->
-              Value = proplists:get_value(K, Acc),
-              case is_integer(Value) of
-                  true ->
-                      %% look up name
-                      case m_rsc:p(Value, name, Context) of
-                          undefined ->
-                              %% nope, keep id
-                              Acc;
-                          Name ->
-                              z_utils:prop_replace(K, Name, Acc)
-                      end;
-                  false ->
-                      Acc
-              end
-      end,
-      R,
-      fields()).
+        fun(K, Acc) ->
+            case proplists:get_value(K, Acc) of
+                Id when is_integer(Id) ->
+                    case m_rsc:p_no_acl(Id, name, Context) of
+                        undefined ->
+                            % Problem this rule might be skipped on import
+                            z_utils:prop_replace(K, 
+                                                {id, z_context:site(Context), m_rsc:is_a(Id, Context), Id},
+                                                Acc);
+                        Name ->
+                            z_utils:prop_replace(K, Name, Acc)
+                    end;
+                undefined ->
+                    Acc
+            end
+        end,
+        R,
+        fields()).
 
 names_to_ids(Rows, Context) ->
-    [names_to_ids_row(R, Context) || R <- Rows].
+    [
+        begin
+            R1 = proplists:delete(id, R),
+            names_to_ids_row(R1, Context)
+        end
+        || R <- Rows
+    ].
 
 names_to_ids_row(R, Context) ->
     lists:foldl(
-      fun(actions, Acc) ->
-              A1 = implode_actions(proplists:get_value(actions, Acc)),
-              z_utils:prop_replace(actions, A1, Acc);
-         (K, Acc) ->
-              Value = proplists:get_value(K, Acc),
-              case is_binary(Value) of
-                  true ->
-                      %% look up name
-                      case m_rsc:name_to_id(Value, Context) of
-                          {ok, Id} ->
-                              z_utils:prop_replace(K, Id, Acc);
-                          _ ->
-                              Acc
-                      end;
-                  false ->
-                      Acc
-              end
+      fun
+        (actions, Acc) ->
+            A1 = implode_actions(proplists:get_value(actions, Acc)),
+            z_utils:prop_replace(actions, A1, Acc);
+        (K, Acc) ->
+            case proplists:get_value(K, Acc) of
+                Value when is_binary(Value) ->
+                    case m_rsc:rid(Value, Context) of
+                        undefined ->
+                            case lists:member(K, [creator_id, modifier_id]) of
+                                true ->
+                                    z_utils:prop_replace(K, undefined, Acc);
+                                false ->
+                                    lager:notice("[~p] ACL import dropping rule, due to missing ~p ~p: ~p",
+                                                 [z_context:site(Context), K, Value, R]),
+                                    []
+                            end;
+                        Id ->
+                            z_utils:prop_replace(K, Id, Acc)
+                    end;
+                {id, Host, IsA, Id} ->
+                    MyHost = z_context:site(Context),
+                    MyIsA = m_rsc:is_a(Id, Context),
+                    case {MyHost, MyIsA} of
+                        {Host, IsA} ->
+                            Acc;
+                        _ ->
+                            case lists:member(K, [creator_id, modifier_id]) of
+                                true ->
+                                    z_utils:prop_replace(K, undefined, Acc);
+                                false ->
+                                    lager:notice("[~p] ACL import dropping rule, due to missing ~p ~p: ~p",
+                                                 [z_context:site(Context), K, Id, R]),
+                                    []
+                            end
+                    end;
+                undefined ->
+                    Acc
+            end
       end,
       R,
       [actions|fields()]).

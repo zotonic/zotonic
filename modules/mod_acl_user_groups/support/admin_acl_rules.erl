@@ -67,8 +67,13 @@ event1(#postback{message={set_upload_size, [{id,Id}]}}, Context) ->
 
 event1(#submit{message={acl_rule_import, []}}, Context) ->
     #upload{tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
-    m_acl_rule:import_rules(TmpFile, Context),
-    z_render:wire([{reload, []}], Context).
+    {ok, Binary} = file:read_file(TmpFile),
+    ContextAsync = z_context:prune_for_async(Context),
+    erlang:spawn(fun() ->
+                    Data = binary_to_term(Binary),
+                    acl_user_groups_export:import(Data, ContextAsync)
+                 end),
+    z_render:dialog_close(z_render:growl(?__("Importing, the list of rules will refresh after importing.", Context), Context)). 
 
 normalize_values(Row) ->
     {Actions, Rest} =

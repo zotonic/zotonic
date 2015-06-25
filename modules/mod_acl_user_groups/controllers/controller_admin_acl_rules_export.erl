@@ -13,7 +13,8 @@
 -include_lib("controller_webmachine_helper.hrl").
 
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
+init(DispatchArgs) -> 
+    {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
@@ -27,23 +28,18 @@ is_authorized(ReqData, Context) ->
 
 content_types_provided(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
-    ?WM_REPLY([{"text/plain", do_export}], Context).
+    ?WM_REPLY([{"application/octet-stream", do_export}], Context).
 
 do_export(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
-
-    All =
-        [{Kind, Type, m_acl_rule:ids_to_names(m_acl_rule:all_rules(Kind, Type, Context), Context)}
-         || {Kind, Type} <-
-                [{rsc, edit}, {rsc, publish},
-                 {module, edit}, {module, publish}]],
-
-    Content = term_to_binary(All),
+    Data = acl_user_groups_export:export(Context),
+    Content = erlang:term_to_binary(Data, [compressed]),
     Context1 = set_filename(Context),
     ?WM_REPLY(Content, Context1).
 
-
 set_filename(Context) ->
-    z_context:set_resp_header("Content-Disposition", "attachment; filename=rules.dat", Context).
-
-
+    Filename = lists:flatten([
+                        "acl-rules-",
+                        atom_to_list(z_context:site(Context)),
+                        ".dat"]),
+    z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename, Context).
