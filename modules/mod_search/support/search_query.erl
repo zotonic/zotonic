@@ -31,6 +31,11 @@
     expand_object_predicates/2
 ]).
 
+%% For testing
+-export([
+    expand_object_predicates/2
+]).
+
 -include_lib("zotonic.hrl").
 
 -define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
@@ -747,6 +752,8 @@ expand_object_predicates(Bin, Context) when is_binary(Bin) ->
 expand_object_predicates(OPs, Context) ->
     map_rids(OPs, Context).
 
+map_rids({rsc_list, L}, Context) ->
+    map_rids(L, Context);
 map_rids(L, Context) when is_list(L) ->
     [ map_rid(unquot(X),Context) || X <- L, X =/= <<>> ];
 map_rids(Id, Context) ->

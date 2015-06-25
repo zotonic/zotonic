@@ -34,7 +34,7 @@ Site-specific settings
 |site      |email_override        |If set, all e-mail messages that get sent|
 |          |                      |from Zotonic will arrive at this         |
 |          |                      |address. Useful if you are testing but   |
-|          |                      |don't want to confuse other people with  |
+|          |                      |don’t want to confuse other people with  |
 |          |                      |your test e-mails.                       |
 +----------+----------------------+-----------------------------------------+
 |site      |smtphost              |The hostname where you want messages to  |
@@ -61,6 +61,9 @@ places for determining the admin e-mail address: the config key
 ``zotonic.admin_email``, then the ``site.admin_email`` key, and
 finally the `email` property of the admin user (user with id 1).
 
+If no admin email address is found then the address ``wwwadmin@example.com``
+is used, where ``example.com`` will be your site’s hostname.
+
 
 Zotonic-wide settings
 .....................
@@ -69,18 +72,15 @@ The file ``~/.zotonic/zotonic.config`` can be configured to hold any of the
 configuration options below. They are in effect for every site running
 in the Zotonic instance.
 
+Zotonic-wide settings for receiving email
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 +--------------------------+--------------------------------------+
 |Key                       |Description                           |
 +==========================+======================================+
 |smtp_relay                |Whether or not to use a SMTP relay    |
 |                          |host. Boolean value, defaults to      |
 |                          |false.                                |
-+--------------------------+--------------------------------------+
-|smtp_relay_host           |Host name for the relay server.       |
-|                          |Defaults to "localhost".              |
-+--------------------------+--------------------------------------+
-|smtp_relay_port           |Port number of the SMTP relay host.   |
-|                          |Defaults to 2525.                     |
 +--------------------------+--------------------------------------+
 |smtp_host                 |The hostname for the SMTP relay host, |
 |                          |only needed if smtp_relay is enabled. |
@@ -107,20 +107,47 @@ in the Zotonic instance.
 |email_override            |A global e-mail override. The override|
 |                          |logic first checks the site override, |
 |                          |and then the global override address. |
-+--------------------------+--------------------------------------+
-|smtp_spamd_ip             |Optional IP address for a spamassassin|
-|                          |host                                  |
-+--------------------------+--------------------------------------+
-|smtp_spamd_port           |Optional port number for a            |
-|                          |spamassassin host                     |
+|                          |Useful for testing and development.   |
 +--------------------------+--------------------------------------+
 |smtp_bounce_domain        |Which domain to use for bounce VERP   |
-|                          |messages. Defaults to the smtp domain.|
+|                          |messages. Defaults to the smtp domain |
+|                          |of the site sending the email.        |
 +--------------------------+--------------------------------------+
 |smtp_bounce_email_override|The email address for bounce handling.|
-|                          |Only use when all else fails (see     |
-|                          |the paragraph below).                 |
+|                          |Only use if all else fails (see       |
+|                          |the paragraphs after the next one).   |
 +--------------------------+--------------------------------------+
+
+Zotonic-wide settings for receiving email
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To receive email the SMTP server has to listen on the correct IP address and
+port. Spam filtering is done by checking DNSBL (DNS Block List) servers and
+optionally using Spamassassin.
+
++--------------------------+--------------------------------------------+
+|Key                       |Description                                 |
++==========================+============================================+
+|smtp_listen_domain        |The domain announced in the HELO            |
++--------------------------+--------------------------------------------+
+|smtp_listen_ip            |IP address to listen on for incoming        |
+|                          |SMTP connections. Defaults to               |
+|                          |``"127.0.0.1"``                             |
++--------------------------+--------------------------------------------+
+|smtp_listen_port          |IP address to listen on for incoming        |
+|                          |SMTP connections. Defaults to 2525.         |
++--------------------------+--------------------------------------------+
+|smtp_dnsbl                |List for the DNS block lists used for       |
+|                          |checking incoming email connections.        |
+|                          |Defaults to                                 |
+|                          |``["zen.spamhaus.org","dnsbl.sorbs.net"]``  |
++--------------------------+--------------------------------------------+
+|smtp_spamd_ip             |Optional IP address for a spamassassin      |
+|                          |host                                        |
++--------------------------+--------------------------------------------+
+|smtp_spamd_port           |Optional port number for a                  |
+|                          |spamassassin host                           |
++--------------------------+--------------------------------------------+
 
 
 The sender’s domain
@@ -147,7 +174,7 @@ You need a valid domain for this envelope sender address. The part
 before the ``@`` is generated by Zotonic and is used for identifying
 the original message and recipient when the message bounces.
 
-When the generated part is not acceptable then you can force an envelope
+If the generated part is not acceptable then you can force an envelope
 address by setting the ``smtp_bounce_email_override`` option. Setting the
 bounce/envelop address manually disables Zotonic’s build-in handling of
 bounces that happen *after* the e-mail was accepted for delivery by
@@ -163,13 +190,18 @@ How does Zotonic know the domain?
 
 It checks in order:
 
+- site’s config: ``bounce_email_override`` (you can also set this with the admin config as site.bounce_email_override)
 - global ``~/.zotonic/zotonic.config``: ``smtp_bounce_domain`` setting
-- site’s config: ``smtphost``  (you can also set this with the admin config as site.smtphost)
+- site’s config: ``smtphost``
 - site’s config: ``hostname``
 
-The part before the ``@`` is generated by Zotonic itself, for
-administration and detection of bounces. A typical sender address on
-the envelope looks like: ``noreply+mlcm6godbz2cchtgdvom@example.org``
+Any *bounce_email_override* configuration must be a complete email address.
+For example: ``bounces@example.org``
+
+If no *bounce_email_override* is used then the part before the ``@`` is
+generated by Zotonic itself, for administration and detection of bounces. 
+A typical sender address on the envelope looks like: 
+``noreply+mlcm6godbz2cchtgdvom@example.org``
 
 
 Sending E-mail
@@ -193,6 +225,8 @@ e-mail from Zotonic code:
 |``z_email:send_render/4``|Renders a template and sends it as a HTML message |
 |                         |to a specified recipient.                         |
 +-------------------------+--------------------------------------------------+
+|``z_email:send/2``       |Sends an email defined by a ``#email{}`` record.  |
++-------------------------+--------------------------------------------------+
 
 
 Receiving E-mail
@@ -200,7 +234,7 @@ Receiving E-mail
 
 In its default configuration, Zotonic starts an SMTP server on port
 2525 for receiving e-mail messages. You can write your own code to
-decide what happens when somebody sends e-mail to the system, by
+decide what happens if somebody sends e-mail to the system, by
 implementing the ``email_received`` notification (see below).
 
 The SMTP server is also used to receive bounce messages from other
@@ -224,7 +258,7 @@ program, like this::
 
 Then, you should be greeted by Zotonic in the following way::
 
-  220 example.com ESMTP Zotonic 0.9.0
+  220 example.com ESMTP Zotonic 0.13.0
 
 Press ctrl-c to exit.
 
@@ -237,7 +271,7 @@ configured to handle this message. It looks at the ``host`` and
 ``hostalias`` fields in the site’s config file to match the recipient
 domain.
 
-When no site matches the e-mails domain, the message is dropped, and a
+If no site matches the e-mails domain, the message is dropped, and a
 warning logged.
 
 For handling incoming messages in your site, you need a hook in your
@@ -263,7 +297,7 @@ Zotonic::
 Troubleshooting
 ---------------
 
-Check in the admin the log and smtp log. When a message bounces back
+Check in the admin the log and smtp log. If a message bounces back
 to the Zotonic SMTP server, you will see errors there. A typical error
 looks like this::
 
