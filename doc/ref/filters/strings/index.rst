@@ -10,6 +10,7 @@ Strings
    ../filter_capfirst
    ../filter_center
    ../filter_insert
+   ../filter_is_valid_email
    ../filter_length
    ../filter_ljust
    ../filter_lower

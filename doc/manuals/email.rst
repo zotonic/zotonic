@@ -62,8 +62,8 @@ places for determining the admin e-mail address: the config key
 finally the `email` property of the admin user (user with id 1).
 
 
-Zotonic-wide settings
-.....................
+Zotonic-wide settings for sending email
+.......................................
 
 The file ``~/.zotonic/zotonic.config`` can be configured to hold any of the
 configuration options below. They are in effect for every site running
@@ -75,12 +75,6 @@ in the Zotonic instance.
 |smtp_relay                |Whether or not to use a SMTP relay    |
 |                          |host. Boolean value, defaults to      |
 |                          |false.                                |
-+--------------------------+--------------------------------------+
-|smtp_relay_host           |Host name for the relay server.       |
-|                          |Defaults to "localhost".              |
-+--------------------------+--------------------------------------+
-|smtp_relay_port           |Port number of the SMTP relay host.   |
-|                          |Defaults to 2525.                     |
 +--------------------------+--------------------------------------+
 |smtp_host                 |The hostname for the SMTP relay host, |
 |                          |only needed if smtp_relay is enabled. |
@@ -108,19 +102,47 @@ in the Zotonic instance.
 |                          |logic first checks the site override, |
 |                          |and then the global override address. |
 +--------------------------+--------------------------------------+
-|smtp_spamd_ip             |Optional IP address for a spamassassin|
-|                          |host                                  |
-+--------------------------+--------------------------------------+
-|smtp_spamd_port           |Optional port number for a            |
-|                          |spamassassin host                     |
-+--------------------------+--------------------------------------+
 |smtp_bounce_domain        |Which domain to use for bounce VERP   |
-|                          |messages. Defaults to the smtp domain.|
+|                          |messages. Defaults to the smtp domain |
+|                          |of the site sending the email.        |
 +--------------------------+--------------------------------------+
 |smtp_bounce_email_override|The email address for bounce handling.|
 |                          |Only use when all else fails (see     |
 |                          |the paragraph below).                 |
 +--------------------------+--------------------------------------+
+
+Zotonic-wide settings for receiving email
+.........................................
+
+To receive email the SMTP server has to listen on the correct IP address and
+port. Spam filtering is done by checking DNSBL (DNS Block List) servers and
+optionally using Spamassassin.
+
+These settings are also in the file ``~/.zotonic/zotonic.config``.
+
++--------------------------+--------------------------------------------+
+|Key                       |Description                                 |
++==========================+============================================+
+|smtp_listen_domain        |The domain announced in the HELO            |
++--------------------------+--------------------------------------------+
+|smtp_listen_ip            |IP address to listen on for incoming        |
+|                          |SMTP connections. Defaults to               |
+|                          |``"127.0.0.1"``                             |
++--------------------------+--------------------------------------------+
+|smtp_listen_port          |IP address to listen on for incoming        |
+|                          |SMTP connections. Defaults to 2525.         |
++--------------------------+--------------------------------------------+
+|smtp_dnsbl                |List for the DNS block lists used for       |
+|                          |checking incoming email connections.        |
+|                          |Defaults to                                 |
+|                          |``["zen.spamhaus.org","dnsbl.sorbs.net"]``  |
++--------------------------+--------------------------------------------+
+|smtp_spamd_ip             |Optional IP address for a spamassassin      |
+|                          |host                                        |
++--------------------------+--------------------------------------------+
+|smtp_spamd_port           |Optional port number for a                  |
+|                          |spamassassin host                           |
++--------------------------+--------------------------------------------+
 
 
 The sender’s domain

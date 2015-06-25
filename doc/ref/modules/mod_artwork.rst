@@ -17,7 +17,7 @@ Included CSS icons
 
 
 How to use Material Design icons in your templates
-***********************************************
+**************************************************
 
 * Include the CSS file: ``{% lib "material-design/css/material-design-iconic-font.min.css" %}``
 * Follow the `examples <http://zavoloklom.github.io/material-design-iconic-font/examples.html>`_
