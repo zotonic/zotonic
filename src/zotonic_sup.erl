@@ -71,12 +71,12 @@ init([]) ->
            {z_ids, start_link, []}, 
            permanent, 5000, worker, [z_ids]},
 
-    %% SMTP gen_servers: one for encoding and sending mails, the other for bounces
+    %% SMTP gen_servers: one for sending mails, the other for receiving email
     SmtpServer = {z_email_server,
                   {z_email_server, start_link, []},
                   permanent, 5000, worker, [z_email_server]},
 
-    SmtpBounceServer = {z_email_receive_server,
+    SmtpReceiveServer = {z_email_receive_server,
                         {z_email_receive_server, start_link, []},
                         permanent, 5000, worker, [z_email_receive_server]},
 
@@ -96,7 +96,7 @@ init([]) ->
 
     Processes = [
                  Ids,
-                 SmtpServer, SmtpBounceServer,
+                 SmtpServer, SmtpReceiveServer,
                  FilesSup, 
                  SitesSup,
                  FSWatchSup| get_extensions()
