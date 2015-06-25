@@ -59,6 +59,11 @@ $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 	e.preventDefault();
 });
 
+$('#{{ menu_id }}').on('click', '.menu-toggle', function(e) {
+	e.stopImmediatePropagation();
+	$(this).closest('li').toggleClass('submenu-open');
+});
+
 $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	var $a = $(e.currentTarget);
 	var where = $a.data('where');
@@ -96,12 +101,15 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				} else if (where == 'before') {
 					$(html).insertBefore($menu_item);
 				} else if (where == 'below') {
-					$submenu = $(">ul.menu-submenu", $menu_item);
+					$submenu = $(">ul", $menu_item);
 					if ($submenu.length > 0) {
 						$submenu.append(html);
 					} else {
-						$menu_item.append("<ul class='.menu-submenu'>"+html+"</ul>");
+						$menu_item.append("<ul>"+html+"</ul>");
 					}
+					$menu_item
+						.addClass("has-submenu")
+						.addClass("submenu-open");
 				} else if (where == 'after') {
 					$(html).insertAfter($menu_item);
 				}

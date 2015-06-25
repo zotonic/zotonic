@@ -40,6 +40,7 @@ $.widget("ui.menuedit", {
                 args.z_delegate = self.options.z_delegate;
                 z_notify(self.options.z_notify, args);
             }
+            self.submenus();
         };
         self.options.receive = function(event, ui) {
             var elt = ui.item[0];
@@ -66,11 +67,23 @@ $.widget("ui.menuedit", {
                 z_notify(self.options.z_notify, args);
                 suppress_update = true;
             }
+            self.submenus();
         };
         $(self.element).bind('sortupdate', self.options.update);
         $(self.element).nestedSortable(self.options);
     },
     
+    submenus: function() {
+        $("li.menu-item", this.element).each(function() {
+            var hasSub = $("li.menu-item:first", $(this)).length > 0;
+            if (hasSub) {
+                $(this).addClass('has-submenu');
+            } else {
+                $(this).removeClass('has-submenu').addClass("submenu-open");
+            }
+        });
+    },
+
     flatten: function(h) {
         var s = "[";
         var n = h.length;

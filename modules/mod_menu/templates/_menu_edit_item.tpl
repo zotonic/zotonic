@@ -1,6 +1,7 @@
-{% if id %}<li id="{{ #menu.c }}-{{ id }}" class="menu-item">
+{% if id %}<li id="{{ #menu.c }}-{{ id }}" class="menu-item {% if action == `down` %}has-submenu{% else %}submenu-open{% endif %}">
 	<div id="{{ menu_id|default:#menu.id }}" data-page-id="{{ id }}">
-	    <i class="z-icon z-icon-drag"></i>
+		<a class="menu-toggle glyphicon" href="#toggle"></a>
+	    <!-- <i class="z-icon z-icon-drag"></i> -->
 	    <span class="title-{{id}}">
 	    	{% image id mediaclass="admin-list-dashboard" %}
 	    	{{ id.short_title|default:id.title }}
@@ -27,7 +28,7 @@
 	</div>
 
 	{% if action == `down` %}
-		<ul class="menu-submenu">
+		<ul>
 	{% else %}
 		</li>
 	{% endif %}
