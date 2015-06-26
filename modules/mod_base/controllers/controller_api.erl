@@ -132,7 +132,8 @@ api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
     {{halt, HttpCode}, wrq:set_resp_body(mochijson:encode(R), ReqData), Context}.
 
 
-api_result(ReqData, Context, Result) ->
+api_result(Context, Result) ->
+    ReqData = z_context:get_reqdata(Context),
     case Result of
         {error, Err=missing_arg, Arg} ->
             api_error(400, Err, "Missing argument: " ++ Arg, ReqData, Context);
@@ -177,21 +178,30 @@ api_result(ReqData, Context, Result) ->
     
 
 to_json(ReqData, Context) ->
-    Module = z_context:get(service_module, Context),
-    api_result(ReqData, Context, Module:process_get(ReqData, Context)).
+    Context0 = ?WM_REQ(ReqData, Context),
+    Module = z_context:get(service_module, Context0),
+    {Context1, Result} = 
+        case Module:process_get(ReqData, Context0) of
+            {R, C=#context{}} -> {C, R};
+            R -> {Context, R}
+        end,
+    api_result(Context1, Result).
 
 
-process_post(ReqData, Context) ->
+process_post(ReqData, Context0) ->
+    Context = ?WM_REQ(ReqData, Context0),
     case handle_json_request(ReqData, Context) of
         {error, _Reason} ->
-            api_result(ReqData, Context, {error, syntax, "invalid JSON in request body"});
+            api_result(Context, {error, syntax, "invalid JSON in request body"});
         {ok, Context1} ->
             Module = z_context:get(service_module, Context),
             case Module:process_post(ReqData, Context1) of
                 ok ->
                     {true, ReqData, Context1};
+                {Result, Context2=#context{}} ->
+                    api_result(Context2, Result);
                 Result ->
-                    api_result(ReqData, Context1, Result)
+                    api_result(Context1, Result)
             end
     end.
     

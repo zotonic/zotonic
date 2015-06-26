@@ -135,7 +135,7 @@ Of course, you would write real code there which retrieves actual stats. If your
   process_get(_ReqData, Context) ->
       Stats = mod_something:stats_data(Context),
       z_convert:to_json(Stats).
-      
+
 Creating a POST service
 -----------------------
 
@@ -169,6 +169,20 @@ and is only accessible with POST and expects an ``id`` argument to be
 posted.
 
 Again, its output is a JSON object containing a `result` field.
+
+
+Setting response headers
+------------------------
+
+You can set response headers by returning a ``{Result, #context{}}``
+tuple from the ``process_get/2`` and ``process_post/2`` calls::
+
+  process_get(_ReqData, Context) ->
+      Stats = mod_something:stats_data(Context),
+      Result = {struct, [{count, 100}]},
+      Context1 = z_context:set_resp_header("Cache-Control", "max-age=3600", Context),
+      {Result, Context1}.
+  
 
 .. _manual-services-auth:
 
