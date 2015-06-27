@@ -194,10 +194,11 @@ process_post(ReqData, Context0) ->
         {error, _Reason} ->
             api_result(Context, {error, syntax, "invalid JSON in request body"});
         {ok, Context1} ->
-            Module = z_context:get(service_module, Context),
-            case Module:process_post(ReqData, Context1) of
+            Module = z_context:get(service_module, Context1),
+            ReqData1 = z_context:get_reqdata(Context1),
+            case Module:process_post(ReqData1, Context1) of
                 ok ->
-                    {true, ReqData, Context1};
+                    {true, ReqData1, Context1};
                 {Result, Context2=#context{}} ->
                     api_result(Context2, Result);
                 Result ->
@@ -217,8 +218,10 @@ handle_json_request(ReqData, Context) ->
 
 %% @doc Decode JSON request body.
 -spec decode_json_body(#wm_reqdata{}, #context{}) -> {ok, #context{}} | {error, string()}.
-decode_json_body(ReqData, Context) ->
-    {ReqBody, _RD} = wrq:req_body(ReqData),
+decode_json_body(ReqData0, Context0) ->
+    {ReqBody, ReqData} = wrq:req_body(ReqData0),
+    Context = ?WM_REQ(ReqData, Context0),
+    
     case ReqBody of 
         <<>> -> {ok, Context};
         NonEmptyBody ->
