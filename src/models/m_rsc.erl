@@ -810,7 +810,7 @@ ensure_name(Id, Context) ->
         undefined ->
             CatId = m_rsc:p_no_acl(Id, category_id, Context),
             CatName = m_rsc:p_no_acl(CatId, name, Context),
-            BaseName = iolist_to_binary([CatName, $_, english_title(Id, Context)]),
+            BaseName = z_string:to_name(iolist_to_binary([CatName, $_, english_title(Id, Context)])),
             BaseName1 = ensure_name_maxlength(BaseName),
             Name = ensure_name_unique(BaseName1, 0, Context),
             {ok, _} = m_rsc_update:update(Id, [{name, Name}], z_acl:sudo(Context)),
