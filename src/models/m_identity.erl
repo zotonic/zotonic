@@ -70,7 +70,8 @@
     set_verified/4,
     is_verified/2,
     
-    delete/2
+    delete/2,
+    is_reserved_name/1
 ]).
 
 -export([
@@ -156,20 +157,25 @@ set_username(Id, Username, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
             Username1 = z_string:to_lower(Username),
-            F = fun(Ctx) ->
-                UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id <> $1 and key = $2", [Id, Username1], Ctx),
-                case UniqueTest of
-                    0 ->
-                        case z_db:q("update identity set key = $2 where rsc_id = $1 and type = 'username_pw'", [Id, Username1], Ctx) of
-                            1 -> ok;
-                            0 -> {error, enoent};
-                            {error, _} -> {error, eexist} % assume duplicate key error?
-                        end;
-                    _Other ->
-                        {error, eexist}
-                end
-            end,
-            z_db:transaction(F, Context);
+            case is_reserved_name(Username1) of
+                true ->
+                    {error, eexist};
+                false ->
+                    F = fun(Ctx) ->
+                        UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id <> $1 and key = $2", [Id, Username1], Ctx),
+                        case UniqueTest of
+                            0 ->
+                                case z_db:q("update identity set key = $2 where rsc_id = $1 and type = 'username_pw'", [Id, Username1], Ctx) of
+                                    1 -> ok;
+                                    0 -> {error, enoent};
+                                    {error, _} -> {error, eexist} % assume duplicate key error?
+                                end;
+                            _Other ->
+                                {error, eexist}
+                        end
+                    end,
+                    z_db:transaction(F, Context)
+            end;
         false ->
             {error, eacces}
     end.
@@ -182,44 +188,59 @@ set_username_pw(1, _, _, _) ->
 set_username_pw(Id, Username, Password, Context) when is_integer(Id) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
-            Username1 = z_string:to_lower(Username),
-            Hash = hash(Password),
-            F = fun(Ctx) ->
-                Rupd = z_db:q("
-                            update identity 
-                            set key = $2,
-                                propb = $3,
-                                is_verified = true,
-                                modified = now()
-                            where type = 'username_pw' and rsc_id = $1", [Id, Username1, {term, Hash}], Ctx),
-                case Rupd of
-                    0 ->
-                        UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", [Username1], Ctx),
-                        case UniqueTest of
-                            0 ->
-                                Rows = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) values ($1, true, true, 'username_pw', $2, $3)", [Id, Username1, {term, Hash}], Ctx),
-                                z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Ctx),
-                                Rows;
-                            _Other ->
-                                throw({error, eexist})
-                        end;
-                    1 -> 
-                        1
-                end
-            end,
-            case z_db:transaction(F, Context) of
-                1 ->
-                    reset_rememberme_token(Id, Context),
-                    z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
-                    z_depcache:flush(Id, Context),
-                    ok;
-                R ->
-                    R
+            Username1 = z_string:trim(z_string:to_lower(Username)),
+            case is_reserved_name(Username1) of
+                true ->
+                    {error, eexist};
+                false ->
+                    set_username_pw_1(Id, Username1, Password, Context)
             end;
         false ->
             {error, eacces}
     end.
 
+set_username_pw_1(Id, Username, Password, Context) ->
+    Hash = hash(Password),
+    F = fun(Ctx) ->
+        Rupd = z_db:q("
+                    update identity 
+                    set key = $2,
+                        propb = $3,
+                        is_verified = true,
+                        modified = now()
+                    where type = 'username_pw'
+                      and rsc_id = $1", 
+                    [Id, Username, {term, Hash}], 
+                    Ctx),
+        case Rupd of
+            0 ->
+                UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", 
+                                     [Username],
+                                     Ctx),
+                case UniqueTest of
+                    0 ->
+                        Rows = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) 
+                                       values ($1, true, true, 'username_pw', $2, $3)", 
+                                      [Id, Username, {term, Hash}],
+                                      Ctx),
+                        z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Ctx),
+                        Rows;
+                    _Other ->
+                        throw({error, eexist})
+                end;
+            1 -> 
+                1
+        end
+    end,
+    case z_db:transaction(F, Context) of
+        1 ->
+            reset_rememberme_token(Id, Context),
+            z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
+            z_depcache:flush(Id, Context),
+            ok;
+        R ->
+            R
+    end.
 
 %% @doc Ensure that the user has an associated username and password
 %% @spec ensure_username_pw(RscId, Context) -> ok | {error, Reason}
@@ -516,12 +537,16 @@ is_valid_key(_Type, undefined, _Context) ->
     false;
 is_valid_key(email, Key, _Context) ->
     z_email_utils:is_email(Key);
+is_valid_key(username_pw, Key, _Context) ->
+    not is_reserved_name(Key);
 is_valid_key(_Type, _Key, _Context) ->
     true.
 
 normalize_key(_Type, undefined) ->
     undefined;
 normalize_key(email, Key) ->
+    z_convert:to_binary(z_string:trim(z_string:to_lower(Key)));
+normalize_key(username_pw, Key) ->
     z_convert:to_binary(z_string:trim(z_string:to_lower(Key)));
 normalize_key(_Type, Key) ->
     Key.
@@ -703,4 +728,31 @@ check_hash(RscId, Username, Password, Hash, Context) ->
 check_hash_ok(RscId, Context) ->
     set_visited(RscId, Context),
     {ok, RscId}.
-    
+
+%% @doc Prevent insert of reserved usernames.
+%% See: http://tools.ietf.org/html/rfc2142
+%% See: http://arstechnica.com/security/2015/03/bogus-ssl-certificate-for-windows-live-could-allow-man-in-the-middle-hacks/
+is_reserved_name(List) when is_list(List) ->
+    is_reserved_name(z_convert:to_binary(List));
+is_reserved_name(Name) when is_binary(Name) ->
+    is_reserved_name_1(z_string:trim(z_string:to_lower(Name))).
+
+is_reserved_name_1(<<>>) -> true;
+is_reserved_name_1(<<"admin">>) -> true;
+is_reserved_name_1(<<"administrator">>) -> true;
+is_reserved_name_1(<<"postmaster">>) -> true;
+is_reserved_name_1(<<"hostmaster">>) -> true;
+is_reserved_name_1(<<"webmaster">>) -> true;
+is_reserved_name_1(<<"abuse">>) -> true;
+is_reserved_name_1(<<"security">>) -> true;
+is_reserved_name_1(<<"root">>) -> true;
+is_reserved_name_1(<<"www">>) -> true;
+is_reserved_name_1(<<"uucp">>) -> true;
+is_reserved_name_1(<<"ftp">>) -> true;
+is_reserved_name_1(<<"usenet">>) -> true;
+is_reserved_name_1(<<"news">>) -> true;
+is_reserved_name_1(<<"wwwadmin">>) -> true;
+is_reserved_name_1(<<"webadmin">>) -> true;
+is_reserved_name_1(<<"mail">>) -> true;
+is_reserved_name_1(_) -> false.
+

@@ -247,10 +247,16 @@ props_to_rsc(Props, IsVerified, Context) ->
 
 %% @doc Check if a username exists
 username_exists(UserId, Username, Context) ->
-    case m_identity:lookup_by_username(Username, Context) of
-        undefined -> false;
-        Props -> UserId =/= proplists:get_value(rsc_id, Props)
+    case m_identity:is_reserved_name(Username) of
+        true ->
+            true;
+        false ->
+            case m_identity:lookup_by_username(Username, Context) of
+                undefined -> false;
+                Props -> UserId =/= proplists:get_value(rsc_id, Props)
+            end
     end.
+
 
 %% @doc Check if the identity exists
 identity_exists(UserId, Type, Key, Context) ->
