@@ -405,6 +405,10 @@ days_in_year(Y) ->
     end.
 
 %% @doc Return the absolute difference between two dates.  Does not take daylight saving into account.
+diff({Y,M,D}, Date2) when is_integer(Y), is_integer(M), is_integer(D) ->
+    diff({{Y,M,D},{0,0,0}}, Date2);
+diff(Date1, {Y,M,D}) when is_integer(Y), is_integer(M), is_integer(D) ->
+    diff(Date1, {{Y,M,D},{0,0,0}});
 diff(Date1, Date2) when Date1 < Date2 ->
     diff(Date2,Date1);
 diff({YMD1,{H1,I1,S1}}, {_,{_,_,S2}} = Date2) when S2 > S1 ->
