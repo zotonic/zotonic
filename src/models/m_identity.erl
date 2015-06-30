@@ -189,12 +189,7 @@ set_username_pw(Id, Username, Password, Context) when is_integer(Id) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
             Username1 = z_string:trim(z_string:to_lower(Username)),
-            case is_reserved_name(Username1) of
-                true ->
-                    {error, eexist};
-                false ->
-                    set_username_pw_1(Id, Username1, Password, Context)
-            end;
+            set_username_pw_1(Id, Username1, Password, Context);
         false ->
             {error, eacces}
     end.
@@ -214,19 +209,24 @@ set_username_pw_1(Id, Username, Password, Context) ->
                     Ctx),
         case Rupd of
             0 ->
-                UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", 
-                                     [Username],
-                                     Ctx),
-                case UniqueTest of
-                    0 ->
-                        Rows = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) 
-                                       values ($1, true, true, 'username_pw', $2, $3)", 
-                                      [Id, Username, {term, Hash}],
-                                      Ctx),
-                        z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Ctx),
-                        Rows;
-                    _Other ->
-                        throw({error, eexist})
+                case is_reserved_name(Username) of
+                    true ->
+                        throw({error, eexist});
+                    false ->
+                        UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", 
+                                             [Username],
+                                             Ctx),
+                        case UniqueTest of
+                            0 ->
+                                Rows = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) 
+                                               values ($1, true, true, 'username_pw', $2, $3)", 
+                                              [Id, Username, {term, Hash}],
+                                              Ctx),
+                                z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Ctx),
+                                Rows;
+                            _Other ->
+                                throw({error, eexist})
+                        end
                 end;
             1 -> 
                 1
