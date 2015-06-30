@@ -307,10 +307,12 @@ do_poll(Context) ->
         {TaskId, Module, Function, _Key, Args} ->
             try
                 case erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context]) of
-                    {delay, Seconds} ->
+                    {delay, Seconds} when is_integer(Seconds) ->
                         Due = calendar:gregorian_seconds_to_datetime(
                                 calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Seconds
                               ),
+                        z_db:q("update pivot_task_queue set due = $1 where id = $2", [Due, TaskId], Context);
+                    {delay, Due} when is_tuple(Due) ->
                         z_db:q("update pivot_task_queue set due = $1 where id = $2", [Due, TaskId], Context);
                     _OK ->
                         z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context)
