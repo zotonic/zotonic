@@ -6,6 +6,7 @@ logon_state: manages state instead of dispatch rule; values: logon, signup, rese
 logon_context: used to distinguish user login from admin login; values: 'admin_logon' or empty
 style_boxed: creates a background around the form
 style_width: width of box
+page: page to redirect to after succesful logon
 
 
 Changes relative to the logon *page*:
@@ -107,6 +108,7 @@ Make sure that these CSS files are loaded:
         %}
     {% else %}
         {% include "_logon_box.tpl"
+            page=page
             form_extra_tpl="_logon_login_extra.tpl"
             form_form_tpl="_logon_login_form.tpl"
             form_fields_tpl="_logon_login_form_fields.tpl"
