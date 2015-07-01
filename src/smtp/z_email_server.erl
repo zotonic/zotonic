@@ -32,7 +32,11 @@
     bounced/2,
     generate_message_id/0,
     send/2,
-    send/3
+    send/3,
+
+    tempfile/0,
+    is_tempfile/1,
+    is_tempfile_deletable/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -45,6 +49,7 @@
 % Max number of e-mails being sent at the same time
 -define(EMAIL_MAX_SENDING, 30).
 
+-define(TMPFILE_EXT, ".mailspool").
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override, 
@@ -87,10 +92,44 @@ send(#email{} = Email, Context) ->
 
 %% @doc Send an email using a predefined unique id.
 send(Id, #email{} = Email, Context) ->
+    Email1 = copy_attachments(Email),
     Id1 = z_convert:to_binary(Id),
     Context1 = z_context:depickle(z_context:pickle(Context)),
-    gen_server:cast(?MODULE, {send, Id1, Email, Context1}),
+    gen_server:cast(?MODULE, {send, Id1, Email1, Context1}),
     {ok, Id1}.
+
+%% @doc Return the filename for a tempfile that can be used for the emailer
+tempfile() ->
+    z_tempfile:tempfile(?TMPFILE_EXT).
+
+%% @doc Check if a file is a tempfile of the emailer
+is_tempfile(File) when is_list(File) ->
+    z_tempfile:is_tempfile(File) andalso filename:extension(File) =:= ?TMPFILE_EXT.
+
+%% @doc Return the max age of a tempfile
+is_tempfile_deletable(undefined) ->
+    false;
+is_tempfile_deletable(File) ->
+    case is_tempfile(File) of
+        true ->
+            case filelib:last_modified(File) of
+                0 ->
+                    false;
+                Modified when is_tuple(Modified) ->
+                    ModifiedSecs = calendar:datetime_to_gregorian_seconds(Modified),
+                    NowSecs = calendar:datetime_to_gregorian_seconds(calendar:local_time()),
+                    NowSecs > max_tempfile_age() + ModifiedSecs
+            end;
+        false ->
+            true
+    end.
+
+%% @doc Max tempfile age in seconds
+max_tempfile_age() ->
+    max_tempfile_age(?MAX_RETRY, 0) + 24*3600.
+
+max_tempfile_age(0, Acc) -> Acc;
+max_tempfile_age(N, Acc) -> max_tempfile_age(N-1, period(N) + Acc).
 
 
 %%====================================================================
@@ -887,7 +926,6 @@ is_valid_email(Recipient) ->
             [A-Za-z\\-]{2,}
         )".
 
-
 %% @doc Simple header encoding.
 encode_header({Header, [V|Vs]}) when is_list(V) ->
     Hdr = lists:map(fun ({K, Value}) when is_list(K), is_list(Value) ->
@@ -913,3 +951,28 @@ encode_header({Header, Value}) when is_atom(Header), is_list(Value) ->
 
 encode_headers(Headers) ->
     string:join(lists:map(fun encode_header/1, Headers), "\r\n").
+
+%% @doc Copy all tempfiles in the #mail attachments, to prevent automatic deletion while
+%% the email is queued.
+copy_attachments(#email{attachments=[]} = Email) ->
+    Email;
+copy_attachments(#email{attachments=Atts} = Email) ->
+    Atts1 = [ copy_attachment(Att) || Att <- Atts ],
+    Email#email{attachments=Atts1}.
+
+copy_attachment(#upload{tmpfile=File} = Upload) when is_binary(File) ->
+    copy_attachment(Upload#upload{tmpfile=binary_to_list(File)});
+copy_attachment(#upload{tmpfile=File} = Upload) when is_list(File) ->
+    case filename:extension(File) of
+        ?TMPFILE_EXT ->
+            Upload;
+        _Other ->
+            case z_tempfile:is_tempfile(File) of
+                true ->
+                    NewFile = tempfile(),
+                    {ok, _Size} = file:copy(File, NewFile),
+                    Upload#upload{tmpfile=NewFile};
+                false ->
+                    Upload
+            end
+    end.

@@ -45,6 +45,7 @@ start(_Type, _StartArgs) ->
     ensure_started(emqtt),
     ensure_started(gproc),
     ensure_started(jobs),
+    z_tempfile_cleanup:start(),
     zotonic_sup:start_link().
 
 %% @spec stop(_State) -> ServerRet

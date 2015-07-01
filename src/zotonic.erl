@@ -60,7 +60,7 @@ start(_Args) ->
     ensure_mnesia_schema(),
     zotonic_deps:ensure(),    
     case ensure_started(zotonic) of
-        ok -> 
+        ok ->
             ok;
         Message ->
             lager:error("Zotonic start error: ~s~n", [Message]),
