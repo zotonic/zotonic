@@ -245,6 +245,7 @@ wl(<<"platform.instagram.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"www.hulu.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"www.metacafe.com/fplayer/", _/binary>> = Url) -> {ok, Url};
 wl(<<"www.flickr.com/", _/binary>> = Url) -> {ok, Url};
+wl(<<"flickrit.com/slideshowholder.php?", _/binary>> = Url) -> {ok, Url};
 wl(<<"flv.video.yandex.ru/", _/binary>> = Url) -> {ok, Url};
 wl(<<"www.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"assets.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
