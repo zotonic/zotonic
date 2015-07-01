@@ -210,7 +210,9 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
     Text=z_context:get_q(find_text, Context),
     Cats = case Category of
                 "p:"++Predicate -> m_predicate:object_category(Predicate, Context);
+                <<"p:", Predicate/binary>> -> m_predicate:object_category(Predicate, Context);
                 "" -> [];
+                <<>> -> [];
                 CatId -> [{z_convert:to_integer(CatId)}]
            end,
     Vars = [
