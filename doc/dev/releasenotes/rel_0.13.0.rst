@@ -3,7 +3,7 @@
 Release 0.13.0
 ==============
 
-Welcome Zotonic 0.13.0, released on October 8, 2014.
+Welcome Zotonic 0.13.0, released on July 3, 2015.
 
 Major changes are:
 
