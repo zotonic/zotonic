@@ -674,6 +674,17 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                         },
                 encode_attachment(Upload, Context)
         end;
+    encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=File, filename=Filename} = Att, Context) ->
+        case z_media_identify:identify(File, Filename, Context) of
+            {ok, Ps} ->
+                Mime = proplists:get_value(mime, Ps, <<"application/octet-stream">>),
+                encode_attachment(Att#upload{mime=Mime}, Context);
+            {error, _} ->
+                encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
+        end;
+    encode_attachment(#upload{mime=undefined, filename=Filename} = Att, Context) ->
+        Mime = z_media_identify:guess_mime(Filename),
+        encode_attachment(Att#upload{mime=Mime}, Context);
     encode_attachment(#upload{} = Att, _Context) ->
         Data = case Att#upload.data of
                     undefined ->
