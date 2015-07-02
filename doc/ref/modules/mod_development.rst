@@ -3,9 +3,6 @@
 
 Presents various tools for development.
 
-.. note:: **Do not enable this module on production systems, as it severely impacts performance.**
-
-
 Admin page
 ----------
 
@@ -64,21 +61,43 @@ With this it is possible to see for a request path which dispatch rules are matc
 Automatic recompilation
 -----------------------
 
-When this module is enabled, it runs a watcher program in the
-background, which watches files in Zotonic and its site for
-changes. If it detects changes, it performs certain actions. See below
-for platform-specific installation instructions.
+The core Zotonic system starts either ``inotify-tools`` or ``fswatch``, depending on 
+which one is available. You have to install one of these to enable auto-compile
+and auto-load of changed files.
 
-* If an `.erl` file changes, it recompiles and reloads the file
-  on-the-fly. When a module exports notifier functions (`observe_...`
-  or `pid_observe_...` functions), these are re-registered with the
-  notification system automatically.
+.. note:: The system can only scan for changed files if either ``inotify-tools`` or ``fswatch`` is installed.
 
-* If a `.scss` or `.less` file is touched, it calls ``lessc`` to compile
+See below for platform-specific installation instructions.
+
+If a changed file is detected then Zotonic will:
+
+* If an `.erl` file changes then the file is recompiled.
+
+* If a `.scss` or `.sass` file changes then ``sass`` is called to compile
   it to its `.css` equivalent.
 
-* If a template file is added, or a dispatch rule changed, it flushes
-  the cache so the template file or the dispatch rule is found.
+* If a `.less` file changes then ``lessc`` is called to compile
+  it to its `.css` equivalent.
+
+* If a `.coffee` file changes then ``coffee`` is called to compile
+  it to its `.js` equivalent.
+
+* If a lib file changes then the module indexer will be called so that any
+  removed or added templates will be handled correctly.
+
+* If a template file changes then the module indexer will be called so that any
+  removed or added template will be handled correctly.
+
+* If a dispatch file changes then all dispatch rules are reloaded.
+
+* If a beam file changes then the module will be loaded. If the beam file is
+  a Zotonic module then it will be automatically restarted if either the
+  function exports or the ``mod_schema`` changed. 
+
+* If the .yrl definition of the template parser changes, then the .erl version
+  of the parser is regenerated. (This will trigger a compile, which triggers a
+  beam load).
+
 
 Linux installation
 ...................................................
@@ -89,10 +108,11 @@ uses ``notify-send``::
   
   sudo apt-get install inotify-tools libnotify-bin
 
-MacOS X installation
+
+Mac OS X installation
 ........................................
 
-On MacOS X (version 10.8 and higher), we use the external programs ``fswatch`` and
+On Mac OS X (version 10.8 and higher), we use the external programs ``fswatch`` and
 ``terminal-notifier``::
 
   sudo brew install fswatch 
