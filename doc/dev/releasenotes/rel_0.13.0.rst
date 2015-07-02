@@ -18,6 +18,7 @@ Major changes are:
  * More strict sanitization of content
  * Social integration with Twitter, Facebook, LinkedIn, and Instagram
  * *is_dependent* Resources
+ * Refactored automatic compile and load of changed files
 
 This release also incorporates all fixes in the 0.12.x branch.
 
@@ -159,6 +160,30 @@ the resource will automatically be deleted.
 This makes it possible to have resources (images, documents) that can only exist
 in the context of another resource. If that referring resource is deleted then the
 depending resources are deleted as well.
+
+
+Automatic compile and load of changed files
+-------------------------------------------
+
+The core system now starts either ``inotify-tools`` or ``fswatch``, depending on 
+which one is available. You have to install one of these to enable auto-compile
+and auto-load of changed files.
+
+These are watching for any change to files in Zotonic and the sites.
+
+If a file is changed then Zotonic will:
+
+ * Recompile if a .erl file changed
+ * Regenerate css if a .sass, .less or .scss file changed
+ * Regenerate js if a .coffee file changed
+ * Reindex the module index if a lib file changed (.css, .js, etc)
+ * Reload translations if a .po file changed
+ * Reload a module if a .beam file changed
+ * Reload dispatch rules if a dispatch file changed
+
+If a Zotonic module is reloaded then it will be automatically restarted it the
+function exports or the ``mod_schema`` is changed.
+
 
 
 Commits since 0.12.0
@@ -470,7 +495,7 @@ Maas-Maarten Zeeman (43):
       * mod_base: Make synchronous ajax requests when the page is unloading
       * mod_search: Make it possible to pass rsc_lists as parameter to hasanyobject.
 
-Marc Worrell (312):
+Marc Worrell (313):
       * smtp: Initialize e-mail server settings on startup. This is needed now that disc_copies are used.
       * mod_survey: evaluate empty jump conditions to 'true'
       * mod_menu: fix for passing the item_template option to the server when adding items.
@@ -783,6 +808,7 @@ Marc Worrell (312):
       * Lock deps
       * docs: 0.13.0 release notes and some extra (minimal) documentation.
       * docs: add tentatve 0.13.0 release date
+      * core: determine mime type of attachments if it was not given.
 
 Marco Wessel (4):
       * Allow configuration of db creation and installation
