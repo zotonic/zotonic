@@ -1,7 +1,7 @@
 ERL       ?= erl
 ERLC      ?= $(ERL)c
 APP       := zotonic
-PARSER    := src/erlydtl/erlydtl_parser
+PARSER    := src/erlydtl_parser
 
 # Erlang Rebar downloading
 # see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
@@ -30,17 +30,6 @@ all: get-deps compile
 	  -s init stop
 	chmod +x ./rebar
 
-# Helper targets
-.PHONY: erl
-
-# First compile zotonic_compile, so that we can call "zotonic compile" to compile ourselves, then just call 'zotonic compile'.
-erl: ebin/$(APP).app
-	@$(ERL) -pa $(wildcard deps/*/ebin) -noinput -eval 'case make:files(["src/zotonic_compile.erl"], [{outdir, "ebin"}]) of up_to_date -> halt(0); error -> halt(1) end.'
-	bin/zotonic compile
-
-$(PARSER).erl: $(PARSER).yrl
-	$(ERLC) -o src/erlydtl $(PARSER).yrl
-
 ebin/$(APP).app: src/$(APP).app.src
 	cp src/$(APP).app.src $@
 
@@ -56,12 +45,17 @@ get-deps: $(REBAR)
 update-deps: $(REBAR)
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) update-deps
 
-compile-deps: $(REBAR)
+refresh-deps: $(REBAR)
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) refresh-deps
+
+list-deps: $(REBAR)
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) list-deps
+
+compile-zotonic:
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) skip_deps=true compile
+
+compile: get-deps
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) compile
-
-compile-zotonic: $(PARSER).erl erl
-
-compile: compile-deps compile-zotonic
 
 lock-deps: $(REBAR)
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) lock-deps
@@ -81,16 +75,17 @@ edocs:
 .PHONY: clean_logs
 clean_logs:
 	@echo "deleting logs:"
-	rm -f erl_crash.dump $(PARSER).erl
+	rm -f erl_crash.dump
 	rm -rf priv/log/*
 
 .PHONY: clean
 clean: clean_logs $(REBAR)
 	@echo "removing:"
-	rm -f ebin/*.beam ebin/*.app
-	@echo "cleaning dependencies:"
+	rm -f $(PARSER).erl src/erlydtl/erlydtl_parser.erl
+	@echo "cleaning ebin:"
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) clean
 
 .PHONY: dist-clean
 dist-clean: clean
 	rm -f ./rebar
+	find deps -type d -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
