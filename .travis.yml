@@ -12,9 +12,8 @@ branches:
     - release-0.11.x
 notifications:
   email:
-    recipients:
-      - zotonic-commits@googlegroups.com
-      - marc@worrell.nl
+    # recipients:
+    #   - zotonic-commits@googlegroups.com
     on_success: change #[always|never|change] # default: change
     on_failure: always #[always|never|change] # default: always
   irc:
