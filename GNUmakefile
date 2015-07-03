@@ -30,9 +30,6 @@ all: get-deps compile
 	  -s init stop
 	chmod +x ./rebar
 
-ebin/$(APP).app: src/$(APP).app.src
-	cp src/$(APP).app.src $@
-
 # Use Rebar to get, update and compile dependencies
 .PHONY: delete-deps get-deps update-deps compile-deps compile-zotonic compile
 
@@ -53,9 +50,11 @@ list-deps: $(REBAR)
 
 compile-zotonic:
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) skip_deps=true compile
+	bin/zotonic compile
 
 compile: get-deps
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) compile
+	bin/zotonic compile
 
 lock-deps: $(REBAR)
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) lock-deps
