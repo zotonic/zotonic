@@ -189,7 +189,7 @@ function exports or the ``mod_schema`` is changed.
 Commits since 0.12.0
 --------------------
 
-There were more than 600 commits since release 0.12.0.
+There were 586 distinct commits (more than 600 in total) since release 0.12.0.
 
 The committers were:  Alain O'Dea, Arjan Scherpenisse, Arthur Clemens, David de Boer, Jeff Bell, 
 Maas-Maarten Zeeman, Marc Worrell, Marco Wessel, Paul Guyot, Paul Monson, Sergei, Witeman Zheng, imagency, and 肥仔. 
@@ -201,6 +201,9 @@ Big thanks to all of you!
 
 Git shortlog
 ............
+
+For clarity, some cherry-picks and development branch merges are removed from this list.
+
 
 Alain O'Dea (2):
       * Fix#891
@@ -495,7 +498,7 @@ Maas-Maarten Zeeman (43):
       * mod_base: Make synchronous ajax requests when the page is unloading
       * mod_search: Make it possible to pass rsc_lists as parameter to hasanyobject.
 
-Marc Worrell (313):
+Marc Worrell (280):
       * smtp: Initialize e-mail server settings on startup. This is needed now that disc_copies are used.
       * mod_survey: evaluate empty jump conditions to 'true'
       * mod_menu: fix for passing the item_template option to the server when adding items.
@@ -666,10 +669,8 @@ Marc Worrell (313):
       * mod_email_status: fix problem with re-installing the model.
       * mod_email_status: handle non-binary error status values.
       * mow_acl_user_groups: first working version. To do: docs and test interface.
-      * Merge branch 'master' into acl-content-groups
       * mod_menu: breack cyclic dependency [mod_acl_user_groups,mod_authentication,mod_admin,mod_menu,mod_content_groups]
       * Merge pull request #933 from driebit/fix-page-block-links
-      * Merge branch 'master' into acl-content-groups
       * Merge pull request #936 from CyBeRoni/override-pidfile
       * mod_base: remove 'render-update' observer, leave template rendering to modules for more control
       * mod_l10n: add some extra country-name to country-code mappings.
@@ -684,38 +685,25 @@ Marc Worrell (313):
       * mod_base: added the action update_iframe
       * mod_email_status: add status dialog and simple templates to see the status of an email address.
       * mod_base: missing part of the update_iframe addition
-      * Merge branch 'master' into acl-content-groups
       * mod_base: cross-platform fix for update_iframe
-      * Merge branch 'master' into acl-content-groups
       * mod_survey: add is_autostart option. Fix some minor template errors.
       * core: use 'optional' includes for blocks.
       * mod_survey: use the 'optional' include for the templates.
       * core: normalize the name of the z_update_iframe JS function with its Erlang equivalent.
       * mod_import_csv: Force convert to utf8 of the top row. Add test for ';' as a column separator.
       * core: fix 'next' page number for queries returning a #search_result{}.
-      * Merge branch 'master' into acl-content-groups
       * mod_admin: use search query 'admin_overview_query' for the overview page if it is defined.
-      * Merge branch 'master' into acl-content-groups
       * mod_admin: add admin_content_query, also displayed in the content menu.
-      * Merge branch 'master' into acl-content-groups
       * mod_admin: enable 'all pages' button if a qquery is defined.
-      * Merge branch 'master' into acl-content-groups
       * core: ensure that the compiled template's name equals the one found via an (optional) catinclude. Issue #938
-      * Merge branch 'master' into acl-content-groups
       * mod_content_groups: 17.x compatibility for string with unicode character (breaks 15.x)
       * mod_survey: fix crash on prep_answer if question name is not unique
       * core: fix sql query in category delete.
-      * core: fix sql query in category delete.
-      * Merge branch 'master' into acl-content-groups
       * mod_acl_user_groups/mod_content_groups: ensure the hierarchy if the content/user groups are changed.
-      * mod_admin: in tree-list, show the category in gray.
       * mod_admin: in tree-list, show the category in gray.
       * core: escape filenames using a single quot. Fixes #924
       * core: shortcut for lib file lookup without filters (don't check the file store)
-      * core: shortcut for lib file lookup without filters (don't check the file store)
       * core: add mod_mqtt to the default installed modules (as it is a dependency of mod_admin).
-      * core: add mod_mqtt to the default installed modules (as it is a dependency of mod_admin).
-      * core: fix m_category/2 lookup. Thanks to Alvaro Pagliari.
       * core: fix m_category/2 lookup. Thanks to Alvaro Pagliari.
       * Merge pull request #946 from AlainODea/BUGFIX_issue891
       * core: fix problem where a gmail autoreply was classified as a bounce. Fix tracking of some email errors. Started collecting email test data.
@@ -724,10 +712,8 @@ Marc Worrell (313):
       * mod_acl_user_groups: when changing category/content-group, show the meta category if the id is a meta or the current user is 1 (the admin)
       * Merge branch 'master' into acl-content-groups
       * zotonic_status: use default 'post' method for the logon form to prevent showing the password if there is a js error.
-      * zotonic_status: use default 'post' method for the logon form to prevent showing the password if there is a js error.
       * mod_linkedin: adaptations for LinkedIn API changes.
       * mod_linkedin: fix for picture-url.
-      * mod_search: fix a problem where a 'hassubject=[...]' query term was incorrectly parsed. Fixes #950
       * mod_search: fix a problem where a 'hassubject=[...]' query term was incorrectly parsed. Fixes #950
       * mod_survey: change the thank you text, remove the 'Be sure to come back for other surveys' text.
       * mod_search: add cat_exact query argument.
@@ -736,55 +722,40 @@ Marc Worrell (313):
       * mod_admin_identity: show 'email status' buttons if mod_email_status is enabled.
       * mod_search: add 2nd ordering on -publication_start to featured search.
       * mod_search: fix search_query for 'hasobject=123'. Fixes #953
-      * Merge branch 'master' into acl-content-groups
       * core: do not create atoms from rsc names in catinclude.
       * core: add tick_10m and tick_6h notifications
       * core: fix a problem where ImageMagick identified PDF files as PBM.
-      * Merge branch 'master' into acl-content-groups
       * core: cleanup location_lat/lng update/pivot code.
       * mod_base: in scomp_lazy, ensure the 'visible' argument to all 'moreresults' actions
       * Merge pull request #955 from pguyot/patch-2
-      * Merge branch 'master' of github.com:zotonic/zotonic
       * Merge pull request #956 from pguyot/patch-3
       * mod_admin: pass all strings from the new-rsc dialog form. Fixes #948
       * Merge pull request #958 from driebit/fix-signup-delegate
       * core: adding some test data for smtp tests.
-      * Merge branch 'master' into acl-content-groups
       * Merge pull request #960 from trigeek38/fix-dialog-new-rsc
-      * Merge branch 'master' into acl-content-groups
       * Merge pull request #961 from trigeek38/fix-my-fix
       * mod_admin_identity: fix user query.
       * mod_admin: make action admin_dialog_new_rsc more robust against illegal objects arg
       * mod_admin_identity: small changes/fixes to the users query.
       * mod_acl_user_groups: add 'block' option to access control rules. Update the view via a 'live' subscribe.
-      * Merge branch 'master' into acl-content-groups
       * Start removing R15 support.
-      * Merge branch 'master' into acl-content-groups
       * core: move more code into the m_hierarchy update to prevent race conditions.
       * core: in m_hierarchy, lock the rows of a hierarchy when updating.
       * core: trace module (re-)loads and restart modules if any exported functions are changed. Issue #964
-      * Merge branch 'master' into acl-content-groups
       * core: bit more silent start/stop of modules.
       * core: add realtime block list checks for incoming email. Needs updated z_stdlib.
       * mod_development: move fswatch/inotify to the core.
       * core: add cli commands 'zotonic startsite|stopsite|restartsite'. Fixes #964
-      * Merge branch 'master' into acl-content-groups
       * core: fix delete of timer in fswatch.
       * core: log warnings if trying to insert duplicate rsc name/uri/path
       * Fixes for language handling. Allow undefined pref_language for user. Filter on valid language code on pref_language upate. Show select list * with all valid languages in /admin/translation.
-      * Merge branch 'master' into acl-content-groups
       * core: add m_rsc 'is_linkable' lookup, also in z_acl and m_acl
       * docs: add placeholders for ACL documentation.
-      * core: add m_rsc 'is_linkable' lookup, also in z_acl and m_acl
       * mod_search: allow search terms in texts without '=value' arg, map to '=true'. Fixes #970
-      * Merge branch 'master' into acl-content-groups
       * [docs] proposal for site-fsm
       * [core] add possibility to fetch sub-trees from a hierarchy. Example: m.hierarchy.content_group[id].tree1
       * [docs] A websocket connection is opened by the browser, accepted by the server.
-      * [docs] A websocket connection is opened by the browser, accepted by the server.
       * mod_menu: fix issue that on insertion of a new item it is added to all sub-menus. Fixes #971
-      * mod_menu: fix issue that on insertion of a new item it is added to all sub-menus. Fixes #971
-      * mod_search: add query term 'hasanyobject', to search using an 'or' on outgoing edges. Fixes #968
       * mod_search: add query term 'hasanyobject', to search using an 'or' on outgoing edges. Fixes #968
       * mod_acl_user_groups: new import/export version of the acl rules. Include the content groups, user groups and hierarchies in the export.
       * mod_acl_user_groups: move ensure_name to the core m_rsc module.
@@ -792,9 +763,7 @@ Marc Worrell (313):
       * docs: fix documentation of smtp server settings. Also fix z_config settings.
       * core: name correction, the bounce server is a complete smtp receive server.
       * docs: clarification of the bounce addresses.
-      * Merge branch 'master' into acl-content-groups
       * core: allow pivot task to return {delay, DateTime}.
-      * Merge branch 'master' into acl-content-groups
       * core: fix a problem where m_rsc:ensure_name/2 could insert duplicate names. Fixes #974
       * core: add reserved usernames to prevent users signing up as these. Fixes #929
       * core: if some reserved username was taken, allow to update the password. Issue #929
@@ -809,6 +778,7 @@ Marc Worrell (313):
       * docs: 0.13.0 release notes and some extra (minimal) documentation.
       * docs: add tentatve 0.13.0 release date
       * core: determine mime type of attachments if it was not given.
+      * core: use 'rebar' to compile zotonic from the command line. Move .yrl output to default location for rebar. > Use skip_deps for 'make compile-zotonic'. Add 'make refresh-deps' and 'make list-deps'. Fixes #978
 
 Marco Wessel (4):
       * Allow configuration of db creation and installation
