@@ -26,7 +26,7 @@
 -export([get_rememberme_cookie/1, set_rememberme_cookie/2, reset_rememberme_cookie/1]).
 
 %% Convenience export for other modules.
--export([logon/2, reminder/2, expired/2, reset/2]).
+-export([logon/2, logon/3, reminder/2, expired/2, reset/2]).
 
 %% Convenience export for other auth implementations.
 -export([send_reminder/2, lookup_identities/2]).
@@ -209,14 +209,18 @@ event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
 
 %%@doc Handle submit data.
 logon(Args, Context) ->
+    logon(Args, [], Context).
+
+-spec logon(list(), list(), #context{}) -> #context{}.
+logon(Args, WireArgs, Context) ->
     case z_notifier:first(#logon_submit{query_args=Args}, Context) of
-        {ok, UserId} when is_integer(UserId) -> 
-            logon_user(UserId, Context);
-        {error, _Reason} -> 
+        {ok, UserId} when is_integer(UserId) ->
+            logon_user(UserId, WireArgs, Context);
+        {error, _Reason} ->
             logon_error("pw", Context);
         {expired, UserId} when is_integer(UserId) ->
             logon_stage("password_expired", [{user_id, UserId}, {secret, set_reminder_secret(UserId, Context)}], Context);
-        undefined -> 
+        undefined ->
             ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
             logon_error("pw", Context)
     end.
@@ -257,7 +261,7 @@ reset(Args, Context) ->
                 undefined ->
                     throw({error, "User does not have an username defined."});
                 Username ->
-                    ContextLoggedon = logon_user(UserId, Context),
+                    ContextLoggedon = logon_user(UserId, [], Context),
                     delete_reminder_secret(UserId, ContextLoggedon),
                     m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
                     ContextLoggedon
@@ -285,16 +289,15 @@ logon_stage(Stage, Args, Context) ->
     z_render:update("signup_logon_box", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
     
 
-logon_user(UserId, Context) ->
+logon_user(UserId, WireArgs, Context) ->
     case z_auth:logon(UserId, Context) of
         {ok, ContextUser} ->
             ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
                 [] -> ContextUser;
                 _ -> set_rememberme_cookie(UserId, ContextUser)
             end,
-            z_render:wire(
-                    {redirect, [{location, cleanup_url(get_ready_page(ContextRemember))}]}, 
-                    ContextRemember);
+            Actions = get_post_logon_actions(WireArgs, ContextRemember),
+            z_render:wire(Actions, ContextRemember);
         {error, user_not_enabled} ->
             check_verified(UserId, Context);
         {error, _Reason} ->
@@ -489,4 +492,13 @@ get_by_reminder_secret(Code, Context) ->
     end.
 
 
+%% @doc Get actions that should be wired after successful logon
+-spec get_post_logon_actions(list(), #context{}) -> list().
+get_post_logon_actions(WireArgs, Context) ->
+    case z_notifier:foldl(#logon_actions{args=WireArgs}, [], Context) of
+        [] ->
+            [{redirect, [{location, cleanup_url(get_ready_page(Context))}]}];
+        Actions ->
+            Actions
+    end.
 
