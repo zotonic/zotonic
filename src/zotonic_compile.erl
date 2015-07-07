@@ -152,8 +152,13 @@ compile_dirs() ->
     ].
 
 compile_options() ->
+    application:load(zotonic),
+    {ok, Sites} = application:get_env(zotonic, user_sites_dir),
+    {ok, Modules} = application:get_env(zotonic, user_modules_dir),
     [{i, "include"},
      {i, "deps/webzmachine/include"},
+     {i, Modules},
+     {i, Sites},
      {outdir, "ebin"},
      {parse_transform, lager_transform},
      nowarn_deprecated_type,
