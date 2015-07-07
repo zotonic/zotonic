@@ -57,6 +57,10 @@
 % @doc Check where to go after a user logs on. Return an URL or undefined (first)
 -record(logon_ready_page, {request_page=[]}).
 
+%% @doc Determine post-logon actions; args are the arguments passed to the logon
+%% submit wire
+-record(logon_actions, {args=[]}).
+
 %% @doc Handle an user logon. The posted query args are included. Return {ok, UserId} or {error, Reason} (first)
 -record(logon_submit, {query_args=[]}).
 

@@ -50,9 +50,9 @@ init(Context) ->
 
 
 %% @doc Handle logon submits in case we cannot use controller_logon. Pass on the  data to the page controller.
-event(#submit{message={logon, _Args}}, Context) ->
+event(#submit{message={logon, WireArgs}}, Context) ->
     Args = z_context:get_q_all(Context),
-    controller_logon:logon(Args, Context);
+    controller_logon:logon(Args, WireArgs, Context);
 event(#submit{message={reminder, _Args}}, Context) ->
     Args = z_context:get_q_all(Context),
     controller_logon:reminder(Args, Context);
