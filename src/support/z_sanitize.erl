@@ -235,6 +235,7 @@ wl(<<"www.slideshare.net/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"embed.spotify.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"api.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"w.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
+wl(<<"cdn.knightlab.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"maps.google.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"video.google.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"spreadsheets.google.com/",  _/binary>> = Url) -> {ok, Url};
