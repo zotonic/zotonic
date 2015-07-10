@@ -1,4 +1,6 @@
-
+.modal-dialog {
+    /* for dialog offset, set margin here */
+}
 div.modal-backdrop {
     opacity: 0.5;
 }
@@ -18,15 +20,3 @@ div.modal-body div.modal-footer {
     margin-top: 0;
 }
 
-#zmodal.high {
-	top: 5%;
-	bottom: 5%;
-	margin-top: 0;
-	max-height: 90%;
-}
-
-@media (max-width: 480px) {
-    #zmodal {
-        max-height: 90%;
-    }
-}

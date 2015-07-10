@@ -1,12 +1,13 @@
 /* dialog js
  ----------------------------------------------------------
 
- @package:      Zotonic 2009, 2012
+ @package:      Zotonic 2009, 2012, 2015
  @Author:       Tim Benniks <tim@timbenniks.nl>
 
  Copyright 2009 Tim Benniks
  Copyright 2012 Arjan Scherpenisse
-
+ Copyright 2015 Arthur Clemens
+ 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -22,20 +23,24 @@
  ---------------------------------------------------------- */
 
 (function($) {
+    
+    function dialogReposition() {
+        var $dialog,
+            minMargin,
+            newMarginTop;
+        $dialog = $('#zmodal:visible').find('.modal-dialog');
+        minMargin = parseInt($dialog.css('margin-top') || 0, 0);
+        if (!$dialog.data('minMargin')) {
+            $dialog.data('minMargin', minMargin);
+        }
+        newMarginTop = Math.max(0, ($(window).height() - $dialog.height()) / 2);
+        newMarginTop *= .96; // visual coherence
+        if (newMarginTop > $dialog.data('minMargin')) {
+            $dialog.css('margin-top', newMarginTop);
+        }
+    }
+    
     $.extend({
-        // center the dialog vertically again
-        dialogReposition: function() {
-            var $dialog = $("#zmodal:visible");
-            if ($dialog.length) {
-              if ($(window).width() >= 768 && $dialog.height() > 0.79 * $(window).height()) {
-                  $dialog.addClass('high');
-              } else {
-                  var self = this;
-                  setTimeout(function() { self.dialogReposition(); }, 250);
-              }
-            }
-        },
-
         dialogAdd: function(options) {
             var width,
                 $title,
@@ -47,66 +52,61 @@
                 $dialog;
             
             $('#zmodal').remove();
-            $(".modal-backdrop").remove();
+            $('.modal-backdrop').remove();
 
             options = $.extend({}, $.ui.dialog.defaults, options);
-            width = options.width;
 
-            $title = $("<div>")
-              .addClass("modal-header")
-              .append($("<a>")
-              .addClass("close")
-              .attr("data-dismiss", "modal")
-              .html("<span>&times;</span>"))
-              .append($("<h4>")
-              .addClass("modal-title")
+            $title = $('<div>')
+              .addClass('modal-header')
+              .append($('<a>')
+              .addClass('close')
+              .attr('data-dismiss', 'modal')
+              .html('<span>&times;</span>'))
+              .append($('<h4>')
+              .addClass('modal-title')
               .html(options.title));
-            $modalContent = $("<div>").addClass("modal-content");
-            $text = $("<div>").html(options.text);
+            $modalContent = $('<div>').addClass('modal-content');
+            $text = $('<div>').html(options.text);
 
             // if .modal-body is used in a template, don't add it again
-            if ($text.hasClass("modal-body")) {
+            if ($text.hasClass('modal-body')) {
                 $body = $text;
             } else {
-                $body = $("<div>")
-                  .addClass("modal-body")
+                $body = $('<div>')
+                  .addClass('modal-body')
                   .html($text);
             }
             
-            $modalContent = $("<div>")
-              .addClass("modal-content")
+            $modalContent = $('<div>')
+              .addClass('modal-content')
               .append($title)
               .append($body);
 
-            dialogClass = "modal";
-            if (typeof(options.addclass) == "string") {
+            dialogClass = 'modal';
+            if (typeof(options.addclass) == 'string') {
                 dialogClass += ' ' + options.addclass;
             }
 
-            $modalDialog = $("<div>")
-              .addClass("modal-dialog")
+            $modalDialog = $('<div>')
+              .addClass('modal-dialog')
               .append($modalContent);
 
-            $dialog = $("<div>")
-              .attr("id", "zmodal")
+            width = options.width;
+            if (width) {
+                $modalDialog.css({'width': width + 'px'});
+            }
+            
+            $dialog = $('<div>')
+              .attr('id', 'zmodal')
               .addClass(dialogClass)
               .append($modalDialog)
-              .appendTo($("body"));
+              .appendTo($('body'));
 
             $dialog
               .modal({backdrop: options.backdrop})
-              .css({"overflow-x": "hidden", "overflow-y": "auto"});
+              .css({'overflow-x': 'hidden', 'overflow-y': 'auto'});
 
-            if (width > 0) {
-                $dialog.css({
-                    width: width,
-                    'margin-left': function () {
-                        return -($(this).width() / 2);
-                    }
-                });
-            }
-
-            this.dialogReposition();
+            dialogReposition();
 
             if (typeof($.widgetManager) != 'undefined') {
                 $dialog.widgetManager();
@@ -129,8 +129,13 @@
               });
         }
     });
- 
-     $.widget("ui.show_dialog", {
+    
+    $(window).on('resize', function() {
+    console.log('resize');
+        dialogReposition();
+    });
+    
+    $.widget('ui.show_dialog', {
         _init: function() {
             var self = this;
             this.element.click(function() {
