@@ -97,8 +97,8 @@
         %}
         <form id="explain-dispatch" class="form-inline" method="GET" action="postback">
             <select id="explain_protocol" name="explain_protocol" class="col-md-4 form-control">
-                <option>http</option>
-                <option>https</option>
+                <option value="http">http://{{ m.site.hostname }}</option>
+                <option value="https">https://{{ m.site.hostname }}</option>
             </select>
             <input class="form-control" type="text" id="explain_req" name="explain_req" placeholder="/foo/bar" value="" />
             <button class="btn btn-default" type="submit">{_ Explain _}</button>
