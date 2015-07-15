@@ -70,6 +70,6 @@ z_only_post_forms = true;
 {% javascript %}
     z_transport_delegate_register('reload', function(_status) {
         $('body').mask();
-        z_transport("controller_logon", "ubf", { msg: "logon_redirect", page: '{{ q.p|escapejs }}' });
+        z_transport("controller_logon", "ubf", { msg: "logon_redirect", page: '{{ page|default:q.p|escapejs }}' });
     });
 {% endjavascript %}
