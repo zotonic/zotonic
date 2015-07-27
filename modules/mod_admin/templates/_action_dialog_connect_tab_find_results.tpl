@@ -18,4 +18,3 @@
         %}
     {% endwith %}
 </div>
-{% javascript %}$.dialogReposition();{% endjavascript %}
