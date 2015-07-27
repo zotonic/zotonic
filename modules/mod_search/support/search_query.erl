@@ -386,8 +386,15 @@ parse_query([{modifier_id, Integer}|Rest], Context, Result) ->
 parse_query([{query_id, Id}|Rest], Context, Result) ->
     case m_category:is_a(m_rsc:p(Id, category_id, Context), 'query', Context) of
         true ->
-            Q = z_convert:to_list(m_rsc:p(Id, 'query', Context)),
-            parse_query(parse_query_text(Q) ++ Rest, Context, Result);
+            QArgs = try
+                        parse_query_text(m_rsc:p(Id, 'query', Context))
+                    catch
+                        throw:{error,{unknown_query_term,Term}} ->
+                            lager:error("[~p] Unknown query term in search query ~p: ~p",
+                                        [z_context:site(Context), Id, Term]),
+                            []
+                    end,
+            parse_query(QArgs ++ Rest, Context, Result);
         false ->
                                                 % Fetch the id's haspart objects (assume a collection)
             parse_query([{hassubject, [Id, haspart]} | Rest], Context, Result)

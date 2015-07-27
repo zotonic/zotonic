@@ -34,7 +34,8 @@
 %% Get all 'query' types and add them to the watches.
 init(Context) ->
     case m_category:get_by_name('query', Context) of
-        undefined -> [];
+        undefined ->
+            [];
         _ ->
             Ids = z_search:query_([{cat, 'query'}], Context),
             lists:foldr(fun (Id, Acc) -> watches_update(Id, Acc, Context) end, [], Ids)
@@ -48,8 +49,13 @@ watches_update(Id, Watches, Context) ->
         Q ->
             case z_convert:to_bool(m_rsc:p(Id, is_query_live, Context)) of
                 true ->
-                    Props = search_query:parse_query_text(Q),
-                    [{Id, Props} | proplists:delete(Id, Watches)];
+                    try
+                        Props = search_query:parse_query_text(Q),
+                        [{Id, Props} | proplists:delete(Id, Watches)]
+                    catch
+                        throw:{error,{unknown_query_term, _Term}} ->
+                            proplists:delete(Id, Watches)
+                    end;
                 false ->
                     proplists:delete(Id, Watches)
             end
