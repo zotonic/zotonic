@@ -226,7 +226,7 @@ create_app(ConsumerId, UserId, Context) when is_integer(ConsumerId), is_integer(
     {ok, AppId} = z_db:insert(oauth_application_token,
                 [
                     {application_id, ConsumerId},
-                    {user_id, 1},
+                    {user_id, UserId},
                     {token, generate_key()},
                     {token_secret, generate_key()},
                     {token_type, "access"},
