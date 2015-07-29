@@ -42,6 +42,11 @@
 
          get_request_token/2,
 
+         create_app/2,
+         create_app/3,
+
+         get_app_tokens/2,
+
          create_consumer/5,
          update_consumer/3,
          get_consumer/2,
@@ -210,6 +215,36 @@ exchange_request_for_access(Token, Context) ->
             {false, "Failed to exchange request token for access token.\n"}
     end.
 
+%%
+%% Create an application for the a consumer associated with the current user.
+%% 
+create_app(ConsumerId, Context) ->
+    create_app(ConsumerId, z_acl:user(Context), Context).
+
+create_app(ConsumerId, UserId, Context) when is_integer(ConsumerId), is_integer(UserId) ->
+    Consumer = get_consumer(ConsumerId, Context),
+    {ok, AppId} = z_db:insert(oauth_application_token,
+                [
+                    {application_id, ConsumerId},
+                    {user_id, 1},
+                    {token, generate_key()},
+                    {token_secret, generate_key()},
+                    {token_type, "access"},
+                    {authorized, true},
+                    {callback_uri, proplists:get_value(callback_uri, Consumer)}
+                ],
+                Context),
+    {ok, get_app_tokens(AppId, Context)}.
+
+get_app_tokens(AppId, Context) ->
+    z_db:assoc_row("
+                select cons.consumer_key, cons.consumer_secret, tk.token, tk.token_secret 
+                from oauth_application_token tk join
+                     oauth_application_registry cons 
+                     on tk.application_id = cons.id
+                where tk.id = $1",
+                [AppId],
+                Context).
 
 %%
 %% Get a token from the database.
@@ -223,7 +258,7 @@ get_request_token(Tok, Context) ->
     
 create_consumer(Title, URL, Desc, Callback, Context) ->
     case z_db:insert("oauth_application_registry", 
-                [ {user_id, Context#context.user_id},
+                [ {user_id, z_acl:user(Context)},
                   {consumer_key, generate_key()},
                   {consumer_secret, generate_key()},
                   {enabled, true},
