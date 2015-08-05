@@ -30,6 +30,7 @@
 
 -export([
     observe_rsc_get/3,
+    observe_pivot_related/3,
     observe_rsc_update_done/2,
     observe_admin_menu/3,
     manage_schema/2
@@ -61,6 +62,16 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 visiblecheck={acl, use, mod_admin_config}}
      |Acc].
 
+observe_pivot_related(#pivot_related{id=Id}, Ids, Context) ->
+    case m_rsc:p_no_acl(Id, content_group_id, Context) of
+        undefined ->
+            Ids;
+        CId ->
+            case lists:member(CId, Ids) of
+                true -> Ids;
+                false -> [CId|Ids]
+            end
+    end.
 
 observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Context) ->
     case  lists:member('content_group', PreIsA) 
