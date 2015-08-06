@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2015 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
 
-%% Copyright 2009-2014 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2015 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -598,7 +598,8 @@ props_filter([{custom_slug, P}|T], Acc, Context) ->
 
 props_filter([{B, P}|T], Acc, Context) 
     when  B =:= is_published; B =:= is_featured; B=:= is_protected;
-          B =:= is_dependent; B =:= is_query_live; B =:= date_is_all_day ->
+          B =:= is_dependent; B =:= is_query_live; B =:= date_is_all_day;
+          B =:= is_website_redirect; B =:= is_page_path_multiple ->
     props_filter(T, [{B, z_convert:to_bool(P)} | Acc], Context);
 
 props_filter([{is_authoritative, P}|T], Acc, Context) ->
