@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %% @doc Basic page
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,52 +34,10 @@ resource_exists(ReqData, Context) ->
     ContextQs = z_context:ensure_qs(Context1),
     try
         Id = z_controller_helper:get_id(ContextQs),
-        maybe_redirect(m_rsc:p_no_acl(Id, page_path, ContextQs), Id, ContextQs)
+        maybe_redirect(Id, ContextQs)
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
     end.
-
-maybe_redirect(Empty, Id, Context) when Empty =:= <<>>; Empty =:= undefined ->
-    maybe_exists(Id, Context);
-maybe_redirect(PagePath, Id, Context) ->
-    case z_context:get(is_canonical, Context, true) of
-        false ->
-            maybe_exists(Id, Context);
-        true ->
-            %% Check if we need to be at a different URL. When the page
-            %% path of a resource is set, we need to redirect there if the
-            %% current request's path is not equal to the resource's path.
-            DispatchPath = z_context:get_q(zotonic_dispatch_path, Context),
-            DispatchBin = case DispatchPath of
-                              [] -> <<"/">>;
-                              _ -> z_convert:to_binary([[ $/, P ] || P <- DispatchPath ])
-                          end,
-            if
-                DispatchBin =:= PagePath ->
-                    maybe_exists(Id, Context);
-                true ->
-                    AbsUrl = m_rsc:p(Id, page_url_abs, Context),
-                    AbsUrlQs = append_qs(AbsUrl, wrq:req_qs(z_context:get_reqdata(Context))),
-                    ContextRedirect = z_context:set_resp_header("Location", AbsUrlQs, Context),
-                    ?WM_REPLY({halt, 301}, ContextRedirect)
-            end
-    end.
-
-append_qs(AbsUrl, []) ->
-    AbsUrl;
-append_qs(AbsUrl, Qs) ->
-    iolist_to_binary([AbsUrl, $?, mochiweb_util:urlencode(Qs)]).
-
-maybe_exists(Id, Context) ->
-    case {m_rsc:exists(Id, Context), z_context:get(cat, Context)} of
-        {Exists, undefined} ->
-            ?WM_REPLY(Exists, Context);
-        {true, Cat} ->
-            ?WM_REPLY(m_rsc:is_a(Id, Cat, Context), Context);
-        {false, _} ->
-            ?WM_REPLY(false, Context)
-    end.
-
 
 %% @doc Check if the resource used to exist
 previously_existed(ReqData, Context) ->
@@ -126,3 +84,81 @@ html(Context) ->
 	%% End experimental.
 
 	z_context:output(Html, Context1).
+
+
+maybe_redirect(Id, Context) ->
+    maybe_redirect_website(
+          m_rsc:p_no_acl(Id, website, Context),
+          m_rsc:p_no_acl(Id, is_website_redirect, Context),
+          Id, Context).
+
+maybe_redirect_website(undefined, _IsRedirect, Id, Context) ->
+    maybe_redirect_canonical(Id, Context);
+maybe_redirect_website(<<>>, _IsRedirect, Id, Context) ->
+    maybe_redirect_canonical(Id, Context);
+maybe_redirect_website(Website, true, Id, Context) ->
+    AbsUrl = z_context:abs_url(Website, Context),
+    CurrAbsUrl = z_context:abs_url(current_path(Context), Context),
+    case AbsUrl of
+        CurrAbsUrl -> maybe_redirect_canonical(Id, Context);
+        _ -> do_temporary_redirect(AbsUrl, Context)
+    end;
+maybe_redirect_website(_Website, _False, Id, Context) ->
+    maybe_redirect_canonical(Id, Context).
+
+maybe_redirect_canonical(Id, Context) ->
+    maybe_redirect_page_path(m_rsc:p_no_acl(Id, page_path, Context), Id, Context).
+
+maybe_redirect_page_path(undefined, Id, Context) ->
+    maybe_exists(Id, Context);
+maybe_redirect_page_path(<<>>, Id, Context) ->
+    maybe_exists(Id, Context);
+maybe_redirect_page_path(PagePath, Id, Context) ->
+    case is_canonical(Id, Context) of
+        false ->
+            maybe_exists(Id, Context);
+        true ->
+            %% Check if we need to be at a different URL. If the page_path
+            %% of a resource is set, we need to redirect there if the
+            %% current request's path is not equal to the resource's path.
+            case current_path(Context) of
+                PagePath ->
+                    maybe_exists(Id, Context);
+                true ->
+                    AbsUrl = m_rsc:p(Id, page_url_abs, Context),
+                    AbsUrlQs = append_qs(AbsUrl, wrq:req_qs(z_context:get_reqdata(Context))),
+                    do_temporary_redirect(AbsUrlQs, Context)
+            end
+    end.
+
+do_temporary_redirect(Location, Context) ->
+    ContextRedirect = z_context:set_resp_header("Location", Location, Context),
+    ?WM_REPLY({halt, 302}, ContextRedirect).
+
+current_path(Context) ->
+    case z_context:get_q(zotonic_dispatch_path, Context) of
+        [] -> <<"/">>;
+        DP -> z_convert:to_binary([[ $/, P ] || P <- DP ])
+    end.
+
+is_canonical(Id, Context) ->
+    case m_rsc:p_no_acl(Id, is_page_path_multiple, Context) of
+        true -> false;
+        _False -> z_context:get(is_canonical, Context, true)
+    end.
+
+append_qs(AbsUrl, []) ->
+    AbsUrl;
+append_qs(AbsUrl, Qs) ->
+    iolist_to_binary([AbsUrl, $?, mochiweb_util:urlencode(Qs)]).
+
+maybe_exists(Id, Context) ->
+    case {m_rsc:exists(Id, Context), z_context:get(cat, Context)} of
+        {Exists, undefined} ->
+            ?WM_REPLY(Exists, Context);
+        {true, Cat} ->
+            ?WM_REPLY(m_rsc:is_a(Id, Cat, Context), Context);
+        {false, _} ->
+            ?WM_REPLY(false, Context)
+    end.
+

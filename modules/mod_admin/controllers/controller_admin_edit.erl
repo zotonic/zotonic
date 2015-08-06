@@ -95,11 +95,12 @@ event(#submit{message={rscform, Args}}, Context) ->
                 case m_rsc:p(Id, category_id, Context) of
                     CatBefore ->
                         Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
-                        Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context1), Context1),
-                        Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context1), Context2),
-                        Context4 = z_render:set_value("slug",  m_rsc:p(Id, slug, Context3), Context3),
-                        Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context4)), Context4),
-                        Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context4b)) of
+                        Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context), Context1),
+                        Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context), Context2),
+                        Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
+                        Context4a = z_render:set_value("slug",  m_rsc:p(Id, slug, Context), Context4),
+                        Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context)), Context4a),
+                        Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context)) of
                                        true ->  z_render:wire("delete-button", {disable, []}, Context4b);
                                        false -> z_render:wire("delete-button", {enable, []}, Context4b)
                                    end,

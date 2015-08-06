@@ -50,6 +50,16 @@
 				</div>
 			</div>
 
+	        <div class="form-group checkbox">
+                <label>
+                    <input type="checkbox" id="field-is-website=redirect" name="is_website_redirect" value="1"
+                        {% if r.is_website_redirect %}checked{% endif %}
+                        {% if not is_editable %}disabled="disabled"{% endif %}
+                    />
+                    {_ Redirect to website on page view _}
+                </label>
+	        </div>
+
 			{% catinclude "_admin_edit_content_address_email.tpl" r.id %}
 		</div>
 	</div>
