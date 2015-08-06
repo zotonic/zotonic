@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Atilla Erdodi <atilla@maximonster.com>
 %% @copyright 2010-2015 Maximonster Interactive Things
-%% @doc Email server.  Queues, renders and sends e-mails.
+%% @doc Email server. Queues, renders and sends e-mails.
 
 %% Copyright 2010-2015 Maximonster Interactive Things
 %%
@@ -44,12 +44,17 @@
 -include_lib("stdlib/include/qlc.hrl").
 
 % Maximum times we retry to send a message before we mark it as failed.
--define(MAX_RETRY, 7).
+-define(MAX_RETRY, 10).
 
 % Max number of e-mails being sent at the same time
--define(EMAIL_MAX_SENDING, 30).
+-define(EMAIL_MAX_SENDING, 100).
 
+% Max number of connections per (relay) domain.
+-define(EMAIL_MAX_DOMAIN, 5).
+
+% Extension of files with queued copies of tmpfile attachments
 -define(TMPFILE_EXT, ".mailspool").
+
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override, 
@@ -57,6 +62,8 @@
 -record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0, 
                       recipient, email, created=os:timestamp(), sent, 
                       pickled_context}).
+
+-record(email_sender, {id, sender_pid, domain, is_connected=false}).
 
 %%====================================================================
 %% API
@@ -155,6 +162,26 @@ init(_Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
+handle_call({is_sending_allowed, Pid, Relay}, _From, State) ->
+    DomainWorkers = length(lists:filter(
+                                fun(#email_sender{domain=Domain, is_connected=IsConnected}) -> 
+                                    IsConnected andalso Relay =:= Domain
+                                end,
+                                State#state.sending)),
+    case DomainWorkers < ?EMAIL_MAX_DOMAIN of
+        true ->
+            Workers = [
+                    case E#email_sender.sender_pid of
+                        Pid -> E#email_sender{is_connected=true};
+                        _ -> E
+                    end
+                    || E <- State#state.sending
+                ],
+            {reply, ok, State#state{sending=Workers}};
+        false ->
+            {reply, {error, wait}, State}
+    end;
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -374,7 +401,7 @@ message_id(MessageId, Context) ->
 
 %% @doc Remove a worker Pid from the server state.
 remove_worker(Pid, State) ->
-    Filtered = lists:filter(fun({_,P}) -> P =/= Pid end, State#state.sending),
+    Filtered = lists:filter(fun(#email_sender{sender_pid=P}) -> P =/= Pid end, State#state.sending),
     State#state{sending=Filtered}.
 
 %% =========================
@@ -398,6 +425,15 @@ send_email(Id, Recipient, Email, Context, State) ->
 
 
 spawn_send(Id, Recipient, Email, Context, State) ->
+    case lists:keyfind(Id, #email_sender.id, State#state.sending) =/= false of
+        false ->
+            spawn_send_check_email(Id, Recipient, Email, Context, State);
+        _ ->
+            %% Is already being sent. Do nothing, it will retry later
+            State
+    end.
+
+spawn_send_check_email(Id, Recipient, Email, Context, State) ->
     case is_valid_email(Recipient) of
         true ->
             spawn_send_checked(Id, Recipient, Email, Context, State);
@@ -428,32 +464,68 @@ spawn_send(Id, Recipient, Email, Context, State) ->
             State
     end.
 
+% Start a worker, prevent too many workers per domain.
 spawn_send_checked(Id, Recipient, Email, Context, State) ->
-    F = fun() ->
-            MessageId = message_id(Id, Context),
-            VERP = "<"++bounce_email(MessageId, Context)++">",
+    Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
+    Recipient2 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(Recipient1)))),
+    {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
+    [_RcptLocalName, RecipientDomain] = string:tokens(RecipientEmail, "@"),
+    SmtpOpts = [
+        {no_mx_lookups, State#state.smtp_no_mx_lookups},
+        {hostname, z_email:email_domain(Context)}
+        | case State#state.smtp_relay of
+            true -> State#state.smtp_relay_opts;
+            false -> [{relay, RecipientDomain}]
+          end
+    ],
+    BccSmtpOpts = case z_utils:is_empty(State#state.smtp_bcc) of
+                      true -> 
+                            [];
+                      false ->
+                            {_BccName, BccEmail} = z_email:split_name_email(State#state.smtp_bcc),
+                            [_BccLocalName, BccDomain] = string:tokens(BccEmail, "@"),
+                            [
+                                {no_mx_lookups, State#state.smtp_no_mx_lookups},
+                                {hostname, z_email:email_domain(Context)}
+                                | case State#state.smtp_relay of
+                                    true -> State#state.smtp_relay_opts;
+                                    false -> [{relay, BccDomain}]
+                                  end
+                            ]
+                  end,
+    MessageId = message_id(Id, Context),
+    VERP = "<"++bounce_email(MessageId, Context)++">",
+    From = get_email_from(Email#email.from, VERP, State, Context),
+    SenderPid = erlang:spawn_link(
+                    fun() ->
+                        spawned_email_sender(
+                                Id, MessageId, Recipient, RecipientEmail, VERP,
+                                From, State#state.smtp_bcc, Email, SmtpOpts, BccSmtpOpts,
+                                Context)
+                    end),
+    {relay, Relay} = proplists:lookup(relay, SmtpOpts),
+    State#state{
+            sending=[
+                #email_sender{id=Id, sender_pid=SenderPid, domain=Relay} | State#state.sending
+            ]}.
 
-            From = get_email_from(Email#email.from, VERP, State, Context),
-            Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
-            Recipient2 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(Recipient1)))),
-            {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
-            [_RcptLocalName, RecipientDomain] = string:tokens(RecipientEmail, "@"),
+spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
+                     Bcc, Email, SmtpOpts, BccSmtpOpts, Context) ->
+    EncodedMail = encode_email(Id, Email, "<"++MessageId++">", From, Context),
+    spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
+                              Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, Context).
 
-            EncodedMail = encode_email(Id, Email, "<"++MessageId++">", From, Context),
-            
-            SmtpOpts = 
-                case State#state.smtp_relay of
-                    true ->
-                        [{no_mx_lookups, State#state.smtp_no_mx_lookups},
-                         {hostname, z_email:email_domain(Context)}
-                         | State#state.smtp_relay_opts];
-                    false ->
-                        [{no_mx_lookups, State#state.smtp_no_mx_lookups},
-                         {hostname, z_email:email_domain(Context)},
-                         {relay, RecipientDomain}]
-                end,
-
-
+spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
+                          Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, Context) ->
+    {relay, Relay} = proplists:lookup(relay, SmtpOpts),
+    case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
+        {error, wait} ->
+            lager:debug("[smtp] Delaying email to ~p (~p), too many parallel senders for relay ~p", 
+                        [RecipientEmail, Id, Relay]),
+            timer:sleep(1000),
+            spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
+                                 Bcc, Email, SmtpOpts, BccSmtpOpts, Context);
+        ok ->
             LogEmail = #log_email{
                 message_nr=Id,
                 envelop_to=RecipientEmail,
@@ -466,6 +538,9 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
             },
             z_notifier:notify({log, LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}}, Context),
             
+            lager:info("[smtp] Sending email to ~p (~p), via relay ~p", 
+                       [RecipientEmail, Id, Relay]),
+
             %% use the unique id as 'envelope sender' (VERP)
             case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
                 {error, retries_exceeded, {_FailureType, Host, Message}} ->
@@ -530,16 +605,14 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
                     %% email accepted by relay
                     mark_sent(Id),
                     %% async send a copy for debugging if necessary
-                    case z_utils:is_empty(State#state.smtp_bcc) of
+                    case z_utils:is_empty(Bcc) of
                         true -> 
                             ok;
                         false -> 
-                            catch gen_smtp_client:send({VERP, [State#state.smtp_bcc], EncodedMail}, SmtpOpts)
+                            catch gen_smtp_client:send({VERP, [Bcc], EncodedMail}, BccSmtpOpts)
                     end
             end
-        end,
-    SenderPid = spawn_link(F),
-    State#state{sending=[{Id,SenderPid}|State#state.sending]}.
+    end.
 
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
@@ -899,10 +972,7 @@ update_retry(QEmail=#email_queue{retry=Retry}) ->
 period(0) -> 10;
 period(1) -> 60;
 period(2) -> 12 * 60;
-period(3) -> 24 * 60;
-period(4) -> 48 * 60;
-period(5) -> 72 * 60;
-period(_) -> 7 * 24 * 60.       % Retry every week for extreme cases
+period(_) -> 24 * 60. % Retry every day for extreme cases
     
 
 %% @doc Increases a timestamp (as returned by now/0) with a value provided in minutes
