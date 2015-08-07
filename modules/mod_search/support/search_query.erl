@@ -31,11 +31,6 @@
     expand_object_predicates/2
 ]).
 
-%% For testing
--export([
-    expand_object_predicates/2
-]).
-
 -include_lib("zotonic.hrl").
 
 -define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
