@@ -81,7 +81,7 @@
                      "4760c1a7662e1e8a29a3b8d475602f1c1f056dbc"}},
        {proper,".*",
                {git,"git://github.com/manopapad/proper.git",
-                    "87e4a56e8f97f1972cde44ed30500daa4641595f"}},
+                    "fa58f82bdc35e20f44eeb710362c488f1378e23c"}},
        {diffy,".*",
               {git,"https://github.com/mmzeeman/diffy.git",
                    "ecd0365d65db065dba469a5e29560804d90f030c"}},
@@ -93,19 +93,19 @@
                    "97804eabcb71b0ab68f1f33b90e8934483151bad"}},
        {poolboy,".*",
                 {git,"git://github.com/devinus/poolboy.git",
-                     "9c4b4580b0363cce91693ec6a7f1f03005955023"}},
+                     "3bb48a893ff5598f7c73731ac17545206d259fac"}},
        {epgsql,".*",
                {git,"git://github.com/epgsql/epgsql.git",
                     "c7dfb06481143d5554aed0d4f6853d1e3d56c670"}},
        {erlware_commons,".*",
                         {git,"git://github.com/erlware/erlware_commons.git",
-                             "cbe494b1cb1dcacf1926a3e1261a1161e5d2c050"}},
+                             "83adceaa1abc1af5358a61601b17d10c43e6d7a1"}},
        {erlang_localtime,".*",
                          {git,"git://github.com/choptastic/erlang_localtime.git",
-                              "66f2e225f0e5b1ae3a8bb1005d759ee87032f388"}},
+                              "bd0083ffe6107537a555133c9b94656ca5c854f3"}},
        {qdate,".*",
               {git,"git://github.com/mworrell/qdate.git",
-                   "171b39b968aabcc77ed265341cac06a1fa918029"}},
+                   "89692026f90fde34fa3810df5e984fd0963dc0ee"}},
        {recon,".*",
               {git,"git://github.com/ferd/recon.git",
                    "0f0c00232c698f0ce0c106178c3e3b3b3da009d8"}},
@@ -117,7 +117,7 @@
                    "3ad509d487a72f9437fef31a379bf3cfeeb166a2"}},
        {twerl,".*",
               {git,"https://github.com/mworrell/twerl.git",
-                   "5674327a06d6fa60b8276d0ba8018a7fd18118a0"}}]}.
+                   "739b0aa9850ce599d338dcc4a8ee797e4dfe0c03"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
 
