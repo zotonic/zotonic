@@ -36,7 +36,7 @@
 						action={alert text=_"Download will start in the background. Please check your download window."}
 				%}
 			{% endif %}
-			<a class="btn btn-default btn-xs" href="{% url survey_results id=id %}">{_ Show survey results _}</a>
+			<a class="btn btn-default btn-xs" href="{% url survey_results id=id %}" target="_blank">{_ Show survey results _}</a>
 			<a class="btn btn-default btn-xs" href="#" id="{{ #email_addresses }}">{_ Show email addresses _}</a>
 			{% wire id=#email_addresses postback={admin_show_emails id=id} delegate="mod_survey" %}
 			<a class="btn btn-default btn-xs" href="{% url survey_results_printable id=id %}" target="_blank">{_ Printable list _}</a>
