@@ -170,7 +170,6 @@ provide_content(ReqData, State) ->
                         _ ->
                             case State#state.multiple_encodings of
                                 true ->
-                                    file:read_file(FullPath),
                                     {ok, Data} = file:read_file(State#state.fullpath),
                                     Body = encode_data(Data),
                                     {select_encoding(Body, ReqData), ReqData, State#state{body=Body}};
@@ -245,6 +244,8 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
             	                _ ->
                     	            {ReqData, State#state{path=SafePath, fullpath=FullPath, context=Context}}
                     	    end;
+                        {error, eacces} ->
+                            {ReqData, State#state{path=SafePath, fullpath=false, context=Context, mime="text/html"}};
                     	{error, _Reason} -> 
                             Dir = filename:join(Root, SafePath),
                             case filelib:is_dir(Dir) andalso State#state.allow_directory_index of
@@ -274,48 +275,62 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
 check_resource(ReqData, State) ->
     {ReqData, State}.
     
-    last([]) -> undefined;
-    last(L) -> lists:last(L).
+last([]) -> undefined;
+last(L) -> lists:last(L).
 
-    find_file(Root, File, Context) ->
-        RelName = case File of
-            "" -> "";
-            "/" ++ RelFile -> RelFile;
-            _ -> File
-        end,
-        T = [ RelName, 
-              RelName ++ ".tpl", 
-              filename:join(RelName, "index.html.tpl"), 
-              filename:join(RelName, "index.html")
-            ],
-        case find_template(T, Context) of
-            {error, enoent} ->
-                RelName1 = filename:join(Root, RelName),
-                T1 = [  RelName1,
-                        RelName1 ++ ".tpl", 
-                        filename:join(RelName1, "index.html.tpl"),
-                        filename:join(RelName1, "index.html") 
-                     ],
-                find_file1(T1);
-            {ok, File} = Found -> 
-                Found
-        end.
+find_file(Root, File, Context) ->
+    RelName = case File of
+        "" -> "";
+        "/" ++ RelFile -> RelFile;
+        _ -> File
+    end,
+    case is_protected(RelName) of
+        true ->
+            {error, eacces};
+        false ->
+            T = [ RelName, 
+                  RelName ++ ".tpl", 
+                  filename:join(RelName, "index.html.tpl"), 
+                  filename:join(RelName, "index.html")
+                ],
+            case find_template(T, Context) of
+                {error, enoent} ->
+                    RelName1 = filename:join(Root, RelName),
+                    T1 = [  RelName1,
+                            RelName1 ++ ".tpl", 
+                            filename:join(RelName1, "index.html.tpl"),
+                            filename:join(RelName1, "index.html") 
+                         ],
+                    find_file1(T1);
+                {ok, File} = Found -> 
+                    Found
+            end
+    end.
 
-    find_file1([]) ->
-        {error, enoent};
-    find_file1([F|R]) ->
-        case filelib:is_regular(F) of
-            true -> {ok, F};
-            false -> find_file1(R)
-        end.
+is_protected("." ++ _) -> true;
+is_protected("/." ++ _) -> true;
+is_protected(Filename) -> is_protected_1(Filename).
 
-    find_template([], _Context) ->
-        {error, enoent};
-    find_template([F|R], Context) ->
-        case z_module_indexer:find(template, F, Context) of
-            {error, enoent} -> find_template(R, Context);
-            {ok, #module_index{filepath=File}} -> {ok, File}
-        end.
+is_protected_1([]) -> false;
+is_protected_1("/." ++ _) -> true;
+is_protected_1("\\." ++ _) -> true;
+is_protected_1([_|Rest]) -> is_protected_1(Rest).
+
+find_file1([]) ->
+    {error, enoent};
+find_file1([F|R]) ->
+    case filelib:is_regular(F) of
+        true -> {ok, F};
+        false -> find_file1(R)
+    end.
+
+find_template([], _Context) ->
+    {error, enoent};
+find_template([F|R], Context) ->
+    case z_module_indexer:find(template, F, Context) of
+        {error, enoent} -> find_template(R, Context);
+        {ok, #module_index{filepath=File}} -> {ok, File}
+    end.
 
 
 
