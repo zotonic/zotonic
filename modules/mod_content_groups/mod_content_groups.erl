@@ -67,10 +67,15 @@ observe_pivot_related(#pivot_related{id=Id}, Ids, Context) ->
         undefined ->
             Ids;
         CId ->
-            case lists:member(CId, Ids) of
-                true -> Ids;
-                false -> [CId|Ids]
-            end
+            lists:foldl(
+                fun(PId,Acc) ->
+                    case lists:member(PId, Acc) of
+                        true -> Acc;
+                        false -> [PId|Acc]
+                    end
+                end,
+                Ids,
+                [CId | m_hierarchy:parents(content_group, CId, Context) ])
     end.
 
 observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Context) ->
