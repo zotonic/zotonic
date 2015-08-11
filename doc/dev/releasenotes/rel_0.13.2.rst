@@ -3,7 +3,7 @@
 Release 0.13.2
 ==============
 
-Welcome Zotonic 0.13.2, released on August 10, 2015.
+Welcome Zotonic 0.13.2, released on August 11, 2015.
 
 This is a maintenance release of Zotonic 0.13
 
