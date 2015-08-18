@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2013 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %%
 %% @doc Some easy shortcut functions.
 
-%% Copyright 2009-2013 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,6 +46,8 @@
 
          debug_msg/3,
 
+         log/3,
+
          debug/2,
          debug/3,
          debug/4,
@@ -54,13 +56,15 @@
          info/4,
          warning/2,
          warning/3,
-         warning/4
+         warning/4,
+         error/2,
+         error/3,
+         error/4
         ]).
 
 -include("zotonic.hrl").
--include("zotonic_log.hrl").
 
-                                                % @doc Return a new context
+% @doc Return a new context
 c(Site) ->
     z_context:new(Site).
 
@@ -174,7 +178,22 @@ warning(Msg, Context)         -> log(warning, Msg, [], Context).
 warning(Msg, Props, Context)  -> log(warning, Msg, Props, Context).
 warning(Msg, Args, Props, Context)  -> log(warning, Msg, Args, Props, Context).
 
+%% @doc Log a error.
+error(Msg, Context)         -> log(error, Msg, [], Context).
+error(Msg, Props, Context)  -> log(error, Msg, Props, Context).
+error(Msg, Args, Props, Context)  -> log(error, Msg, Args, Props, Context).
 
+
+log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
+    z_notifier:notify(
+        #zlog{
+            type=Type,
+            user_id=z_acl:user(Context),
+            timestamp=os:timstamp(),
+            props=Props
+        }, 
+        Context).
+    
 log(Type, Msg, Args, Props, Context) ->
     Msg1 = lists:flatten(io_lib:format(Msg, Args)),
     log(Type, Msg1, Props, Context).
@@ -183,5 +202,14 @@ log(Type, Msg, Props, Context) ->
     Msg1 = erlang:iolist_to_binary(Msg),
     Line = proplists:get_value(line, Props, 0),
     Module = proplists:get_value(module, Props, unknown),
-    lager:log(Type, Props, "[~p] ~p @ ~p:~p  ~s~n", [Context#context.host, Type, Module, Line, binary_to_list(Msg1)]),
-    z_notifier:notify({log, #log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}}, Context).
+    lager:log(Type, Props, "[~p] ~p @ ~p:~p  ~s~n", 
+             [z_context:site(Context), Type, Module, Line, binary_to_list(Msg1)]),
+    z_notifier:notify(
+        #zlog{
+            type=Type,
+            user_id=z_acl:user(Context),
+            timestamp=os:timstamp(),
+            props=#log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}
+        }, 
+        Context).
+

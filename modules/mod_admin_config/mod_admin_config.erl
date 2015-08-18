@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %% Date: 2009-08-07
 %% @doc Allow editing and inserting config keys with string values.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@
 
 %% interface functions
 -export([
-    observe_admin_menu/3
+    observe_admin_menu/3,
+    event/2
 ]).
 
 -include("zotonic.hrl").
@@ -45,4 +46,19 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 visiblecheck={acl, use, mod_admin_config}}
      
      |Acc].
+
+event(#submit{message={config_save, Args}}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            {module, Module} = proplists:lookup(module, Args),
+            Mod = z_convert:to_atom(Module),
+            Qs = z_context:get_q_all_noz(Context),
+            lists:foreach(fun({Key, Value}) ->
+                             m_config:set_value(Mod, z_convert:to_atom(Key), Value, Context)
+                          end,
+                          Qs),
+            z_render:wire(proplists:get_all_values(on_success, Args), Context);
+        false ->
+            z_render:growl_error("Only administrators can delete configurations.", Context)
+    end.
 

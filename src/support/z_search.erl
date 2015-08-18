@@ -99,8 +99,9 @@ search({SearchName, Props} = Search, OffsetLimit, Context) ->
     PropsSorted = lists:keysort(1, Props2),
     Q = #search_query{search={SearchName, PropsSorted}, offsetlimit=OffsetLimit},
     case z_notifier:first(Q, Context) of
-        undefined -> 
-            ?LOG("Unknown search query ~p~n~p~n", [Search, erlang:get_stacktrace()]),
+        undefined ->
+            Stack = erlang:get_stacktrace(),
+            lager:info("Unknown search query ~p~n~p~n", [Search, Stack]),
             #search_result{};
         Result when Result /= undefined -> 
             search_result(Result, OffsetLimit, Context)
