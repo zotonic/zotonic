@@ -339,9 +339,9 @@ body_ast([overrules | ThisParseTree], Context, TreeWalker) ->
             notify(#debug{what=template, arg={overrules, CurrentExtend, File}}, Context#dtl_context.z_context),
             body_extends(CurrentExtend, File, ThisParseTree, Context, TreeWalker);
         error ->
-            ?ERROR("body_ast: could not find overruled template for \"~p\" (~p)", [CurrentExtend,CurrentFile]),
+            lager:error("body_ast: could not find overruled template for \"~p\" (~p)", [CurrentExtend,CurrentFile]),
             throw({error, "Could not find the template for overrules: '" ++ CurrentExtend ++ "'"}),
-            {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
+                  {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
     end;
     
 body_ast([{extends, {string_literal, _Pos, String}} | ThisParseTree], Context, TreeWalker) ->
@@ -350,9 +350,9 @@ body_ast([{extends, {string_literal, _Pos, String}} | ThisParseTree], Context, T
         {ok, File} ->
             body_extends(Extends, File, ThisParseTree, Context, TreeWalker);
        {error, Reason} ->
-            ?ERROR("body_ast: could not find template ~p (~p)", [Extends, Reason]),
+            lager:error("body_ast: could not find template ~p (~p)", [Extends, Reason]),
             throw({error, "Could not find the template for extends: '" ++ Extends ++ "'"}),
-            {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
+                  {{erl_syntax:string(""), #ast_info{}}, TreeWalker}
     end;
 
 body_ast(DjangoParseTree, Context, TreeWalker) ->
@@ -377,7 +377,7 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 % Check if we have a recursive definition
                 case lists:member({Name,BlockFile}, Context#dtl_context.block_trail) of
                     true ->
-                        ?ERROR("body_ast: recursive block ~p (~p)", [Name, BlockFile]),
+                        lager:error("body_ast: recursive block ~p (~p)", [Name, BlockFile]),
                         throw({error, "Recursive block definition of '" ++ Name ++ "' (" ++ BlockFile ++ ")"});
                     false ->
                         block_ast(Block,
@@ -781,7 +781,7 @@ include_ast(File, Args, All, Context, TreeWalker) ->
             case lists:foldl(IncludeFun, {[], #ast_info{}, TreeWalker1}, full_path(Template1, AllB, Context)) of
                 {[], _, TreeWalkerN} ->
                     case All of
-                        false -> ?LOG("include: could not find template ~p", [Template1]);
+                        false -> lager:info("include: could not find template ~p", [Template1]);
                         _ -> ok
                     end,
                     {{erl_syntax:string(""), #ast_info{}}, TreeWalkerN};

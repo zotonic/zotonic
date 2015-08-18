@@ -216,7 +216,7 @@ identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
     case Result of
         [] ->
             Err = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2>&1"),
-            ?LOG("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
+            lager:info("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
             {error, "identify error: " ++ Err};
         _ ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
@@ -254,7 +254,7 @@ identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
             catch
                 X:B ->
                     ?DEBUG({X,B, erlang:get_stacktrace()}),
-                    ?LOG("identify of ~p failed - ~p", [CleanedImageFile, Line1]),
+                    lager:info("identify of ~p failed - ~p", [CleanedImageFile, Line1]),
                     {error, "unknown result from 'identify': '"++Line1++"'"}
             end
     end.

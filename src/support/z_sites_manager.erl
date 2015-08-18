@@ -365,8 +365,8 @@ parse_config([C|T], SiteConfig) ->
             MergedConfig = lists:ukeymerge(1, SortedNewConfig, SiteConfig),
             parse_config(T, MergedConfig);
         {error, Reason} = Error ->
-            ?ERROR("Could not consult site config: ~s: ~s", 
-                   [C, unicode:characters_to_binary(file:format_error(Reason))]),
+            lager:error("Could not consult site config: ~s: ~s", 
+                        [C, unicode:characters_to_binary(file:format_error(Reason))]),
             Error
     end.
 

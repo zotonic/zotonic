@@ -29,7 +29,6 @@
     ]).
 
 -include_lib("zotonic.hrl").
--include_lib("zotonic_log.hrl").
 
 %% @doc Handle a received e-mail
 received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Body, Data) ->
@@ -46,18 +45,20 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
      case get_host(Recipient) of
          {ok, LocalPart, LocalTags, Domain, Host} ->
              Context = z_context:new(Host),
-             z_notifier:notify({log, #log_email{
-                                  severity = ?LOG_INFO,
-                                  mailer_status = received,
-                                  mailer_host = z_convert:ip_to_list(Peer),
-                                  message_nr = Reference,
-                                  envelop_to = Recipient,
-                                  envelop_from = From,
-                                  props = [
-                                           {headers, Headers}
-                                          ]
-                                 }},
-                               Context),
+             z_notifier:notify(#zlog{
+                                  props=#log_email{
+                                      severity = ?LOG_INFO,
+                                      mailer_status = received,
+                                      mailer_host = z_convert:ip_to_list(Peer),
+                                      message_nr = Reference,
+                                      envelop_to = Recipient,
+                                      envelop_from = From,
+                                      props = [
+                                               {headers, Headers}
+                                              ]
+                                  }
+                              },
+                              Context),
              Email = #email_received{
                          localpart=LocalPart,
                          localtags=LocalTags,
@@ -76,7 +77,7 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
                       },
              z_notifier:first(Email1, Context);
          undefined ->
-             error_logger:info_msg("SMTP Dropping message, unknown host for recipient: ~p", [Recipient]),
+             lager:info("SMTP Dropping message, unknown host for recipient: ~p", [Recipient]),
              {error, unknown_host}
      end
      || Recipient <- Recipients

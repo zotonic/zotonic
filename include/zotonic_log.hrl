@@ -48,3 +48,34 @@
 }).
 
 % NOTE: Make sure to extend record_to_proplist/1 in mod_logging.erl when adding log types.
+-record(zlog, {
+        type = undefined :: atom(),
+        user_id = undefined :: integer(),
+        timestamp = undefined :: erlang:timestamp(),
+        props = [] :: list() | #log_message{} | #log_email{}
+    }).
+
+%% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
+
+%%% LOGGING %%%
+
+
+%% Log notifications
+-define(zDebug(Msg, Context), z:debug(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zInfo(Msg, Context), z:info(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zWarning(Msg, Context), z:warning(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zError(Msg, Context), z:error(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
+
+-define(zDebug(Msg, Args, Context), z:debug(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zInfo(Msg, Args, Context), z:info(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zWarning(Msg, Args, Context), z:warning(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
+-define(zError(Msg, Args, Context), z:error(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
+
+%% Easy to use macros for debugging/development
+-define(PRINT(Var), lager:info("DEBUG: ~p:~p - ~p: ~p~n", [?MODULE, ?LINE, ??Var, Var])).
+-define(STACKTRACE, erlang:display(try throw(a) of _ -> a catch _:_ -> erlang:get_stacktrace() end)).
+-define(DEBUG(Msg), z:debug_msg(?MODULE, ?LINE, Msg)).
+
+%% Deprecated shortcuts
+-define(LOG(Msg, Args), lager:info(Msg, Args)).
+-define(ERROR(Msg, Args), lager:error("~p:~p "++Msg, [?MODULE, ?LINE|Args])).

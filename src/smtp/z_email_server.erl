@@ -40,7 +40,6 @@
 ]).
 
 -include_lib("zotonic.hrl").
--include_lib("zotonic_log.hrl").
 -include_lib("stdlib/include/qlc.hrl").
 
 % Maximum times we retry to send a message before we mark it as failed.
@@ -226,16 +225,18 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                                 message_nr=MsgId, 
                                 recipient=Recipient
                             }, Context),
-            z_notifier:notify({log, #log_email{
-                                        severity = ?LOG_ERROR,
-                                        message_nr = MsgId,
-                                        mailer_status = bounce,
-                                        mailer_host = z_convert:ip_to_list(Peer), 
-                                        envelop_to = BounceEmail,
-                                        envelop_from = "<>",
-                                        to_id = z_acl:user(Context),
-                                        props = []
-                                    }}, Context);
+            z_notifier:notify(#zlog{
+                                user_id=z_acl:user(Context),
+                                props=#log_email{
+                                    severity = ?LOG_ERROR,
+                                    message_nr = MsgId,
+                                    mailer_status = bounce,
+                                    mailer_host = z_convert:ip_to_list(Peer), 
+                                    envelop_to = BounceEmail,
+                                    envelop_from = "<>",
+                                    to_id = z_acl:user(Context),
+                                    props = []
+                                }}, Context);
         _ ->
             % We got a bounce, but we don't have the message anymore.
             % Custom bounce domains make this difficult to process.
@@ -246,15 +247,17 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                                     message_nr=MsgId, 
                                     recipient=undefined
                                 }, Context),
-                    z_notifier:notify({log, #log_email{
-                                                severity = ?LOG_WARNING,
-                                                message_nr = MsgId,
-                                                mailer_status = bounce,
-                                                mailer_host = z_convert:ip_to_list(Peer), 
-                                                envelop_to = BounceEmail,
-                                                envelop_from = "<>",
-                                                props = []
-                                            }}, Context);
+                    z_notifier:notify(#zlog{
+                                user_id=undefined,
+                                props=#log_email{
+                                    severity = ?LOG_WARNING,
+                                    message_nr = MsgId,
+                                    mailer_status = bounce,
+                                    mailer_host = z_convert:ip_to_list(Peer), 
+                                    envelop_to = BounceEmail,
+                                    envelop_from = "<>",
+                                    props = []
+                                }}, Context);
                 undefined ->
                     ignore
             end
@@ -460,7 +463,7 @@ spawn_send_check_email(Id, Recipient, Email, Context, State) ->
                 other_id=proplists:get_value(list_id, Email#email.vars),
                 message_template=Email#email.html_tpl
             },
-            z_notifier:notify({log, LogEmail}, Context),
+            z_notifier:notify(#zlog{user_id=z_acl:user(Context), props=LogEmail}, Context),
             State
     end.
 
@@ -536,7 +539,10 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                 other_id=proplists:get_value(list_id, Email#email.vars), %% Supposed to contain the mailinglist id
                 message_template=Email#email.html_tpl
             },
-            z_notifier:notify({log, LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}}, Context),
+            z_notifier:notify(#zlog{
+                                user_id=LogEmail#log_email.from_id,
+                                props=LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}
+                              }, Context),
             
             lager:info("[smtp] Sending email to ~p (~p), via relay ~p", 
                        [RecipientEmail, Id, Relay]),
@@ -552,12 +558,15 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             reason=retry,
                             status=Message
                         }, Context),
-                    z_notifier:notify({log, LogEmail#log_email{
+                    z_notifier:notify(#zlog{
+                                        user_id=LogEmail#log_email.from_id,
+                                        props=LogEmail#log_email{
                                                 severity=?LOG_WARNING, 
                                                 mailer_status=retry,
                                                 mailer_message=Message,
                                                 mailer_host=Host
-                                            }}, Context),
+                                            }
+                                      }, Context),
                     ok;
                 {error, no_more_hosts, {permanent_failure, Host, Message}} ->
                     % classify this as a permanent failure, something is wrong with the receiving server or the recipient
@@ -568,12 +577,15 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             reason=smtphost,
                             status=Message
                         }, Context),
-                    z_notifier:notify({log, LogEmail#log_email{
+                    z_notifier:notify(#zlog{
+                                        user_id=LogEmail#log_email.from_id,
+                                        props=LogEmail#log_email{
                                                 severity = ?LOG_ERROR,
                                                 mailer_status = bounce,
                                                 mailer_message = Message,
                                                 mailer_host = Host
-                                            }}, Context),
+                                            }
+                                      }, Context),
                     % delete email from the queue and notify the system
                     delete_emailq(Id);
                 {error, Reason} ->
@@ -584,11 +596,14 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             is_final=true,
                             reason=error
                         }, Context),
-                    z_notifier:notify({log, LogEmail#log_email{
+                    z_notifier:notify(#zlog{
+                                        user_id=LogEmail#log_email.from_id,
+                                        props=LogEmail#log_email{
                                                 severity=?LOG_ERROR, 
                                                 mailer_status=error,
                                                 props=[{reason, Reason}]
-                                            }}, Context),
+                                            }
+                                      }, Context),
                     %% delete email from the queue and notify the system
                     delete_emailq(Id);
                 Receipt when is_binary(Receipt) ->
@@ -597,11 +612,14 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             recipient=Recipient,
                             is_final=false
                         }, Context),
-                    z_notifier:notify({log, LogEmail#log_email{
+                    z_notifier:notify(#zlog{
+                                        user_id=LogEmail#log_email.from_id,
+                                        props=LogEmail#log_email{
                                                 severity=?LOG_INFO, 
                                                 mailer_status=sent,
                                                 mailer_message=Receipt
-                                            }}, Context),
+                                            }
+                                      }, Context),
                     %% email accepted by relay
                     mark_sent(Id),
                     %% async send a copy for debugging if necessary

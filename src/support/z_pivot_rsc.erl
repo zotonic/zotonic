@@ -340,7 +340,8 @@ do_poll(Context) ->
                 end,
             case z_db:transaction(F, Context) of
                 {rollback, PivotError} -> 
-                    ?ERROR("Pivot error: ~p: ~p~n", [PivotError, Qs]);
+                    lager:error("[~p] Pivot error: ~p: ~p~n", 
+                                [z_context:site(Context), PivotError, Qs]);
                 L when is_list(L) -> 
                     lists:map(fun({Id, _Serial}) ->
                                     IsA = m_rsc:is_a(Id, Context),
