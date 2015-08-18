@@ -625,7 +625,7 @@ is_module(Module) ->
         true
     catch 
         M:E -> 
-            ?ERROR("Can not fetch module info for module ~p, error: ~p:~p", [Module, M, E]),
+            lager:error("Can not fetch module info for module ~p, error: ~p:~p", [Module, M, E]),
             false
     end.
 
@@ -639,8 +639,8 @@ start_child(ManagerPid, Module, ModuleSup, Spec, Exports, Context) ->
                                                 % Try to start it
                                           z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
                                       Error ->
-                                          ?ERROR("[~p] Error starting module ~p, Schema initialization error:~n~p~n", 
-                                                 [z_context:site(Context), Module, Error]),
+                                          lager:error("[~p] Error starting module ~p, Schema initialization error:~n~p~n", 
+                                                      [z_context:site(Context), Module, Error]),
                                           {error, {schema_init, Error}}
                                   end,
                          gen_server:cast(ManagerPid, {start_child_result, Module, Result})

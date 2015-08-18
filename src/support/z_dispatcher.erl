@@ -346,7 +346,7 @@ get_file_dispatch(File) ->
         end
     catch 
         M:E ->
-            ?ERROR("File dispatch error: ~p  ~p", [File, {M,E}]),
+            lager:error("File dispatch error: ~p  ~p", [File, {M,E}]),
             throw({error, "Parse error in " ++ z_convert:to_list(File)})
     end.
 

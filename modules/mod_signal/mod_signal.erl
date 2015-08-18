@@ -67,7 +67,7 @@ emit(Signal, Context) ->
               try
                   emit_signal(Signal, Slot, AsyncContext) 
               catch M:E ->
-                  ?ERROR("Error emitting signal %p to slot %p. %p:%p. Disconnecting...", [Signal, Slot, M, E]),
+                  lager:error("Error emitting signal %p to slot %p. %p:%p. Disconnecting...", [Signal, Slot, M, E]),
                   disconnect(Signal, Slot, AsyncContext)
               end
           end, Slots).
@@ -82,7 +82,7 @@ emit_script(Signal, Script, Context) ->
             try
                 emit_signal_script(Script, Slot) 
             catch M:E ->
-                ?ERROR("Error emitting signal %p to slot %p. %p:%p. Disconnecting...", [Signal, Slot, M, E]),
+                lager:error("Error emitting signal %p to slot %p. %p:%p. Disconnecting...", [Signal, Slot, M, E]),
                 disconnect(Signal, Slot, z_context:prune_for_async(Context))
             end
         end, Slots).

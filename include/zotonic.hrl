@@ -20,6 +20,7 @@
 -include("zotonic_release.hrl").
 -include("zotonic_notifications.hrl").
 -include("zotonic_events.hrl").
+-include("zotonic_log.hrl").
 -include_lib("webzmachine/include/wm_reqdata.hrl").
 
 %% @doc The request context, session information and other
@@ -253,24 +254,7 @@
 %% Notifier defines
 -define(NOTIFIER_DEFAULT_PRIORITY, 500).
 
+%% Wrapper macro to put Erlang terms in a bytea databae column. 
+%% Extraction is automatic, based on a magic marker prefixed to the serialized term.
 -define(DB_PROPS(N), {term, N}).
-
-%% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
-
-%%% LOGGING %%%
--define(DEBUG(Msg), z:debug_msg(?MODULE, ?LINE, Msg)).
--define(PRINT(Var), error_logger:info_msg("DEBUG: ~p:~p - ~p: ~p~n", [?MODULE, ?LINE, ??Var, Var])).
--define(LOG(Msg, Args), error_logger:info_msg(Msg, Args)).
--define(ERROR(Msg, Args), error_logger:error_msg("~p:~p "++Msg, [?MODULE, ?LINE|Args])).
-
--define(STACKTRACE, erlang:display(try throw(a) of _ -> a catch _:_ -> erlang:get_stacktrace() end)).
-
-
--define(zDebug(Msg, Context), z:debug(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zInfo(Msg, Context), z:info(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zWarning(Msg, Context), z:warning(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
-
--define(zDebug(Msg, Args, Context), z:debug(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zInfo(Msg, Args, Context), z:info(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zWarning(Msg, Args, Context), z:warning(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
 

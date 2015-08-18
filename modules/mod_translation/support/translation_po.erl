@@ -40,7 +40,7 @@ generate1([{ModDir, Labels}|ModLabs]) ->
             generate_po_files(ModuleName, Dir, Labels),
             generate1(ModLabs);
         {error, Reason} ->
-            ?LOG("Could not create directory for extracted translations: ~p ~p", [{error, Reason}, Dir]),
+            lager:warning("Could not create directory for extracted translations: ~p ~p", [{error, Reason}, Dir]),
             generate1(ModLabs)
     end.
 

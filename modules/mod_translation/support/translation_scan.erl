@@ -73,7 +73,7 @@ scan_file(".erl", File) ->
         {ok, Epp} ->
             parse_erl(File, Epp);
         {error, Reason} ->
-            ?ERROR("POT generation, erlang error in ~p: ~p~n", [File, Reason]),
+            lager:error("POT generation, erlang error in ~p: ~p~n", [File, Reason]),
             []
     end;
 
@@ -84,7 +84,7 @@ scan_file(".tpl", File) ->
         {ok, ParseTree} ->
             extract(ParseTree, [], File);
         {error, Reason} ->
-            ?ERROR("POT generation, template error in ~p: ~p~n", [File, Reason]),
+            lager:error("POT generation, template error in ~p: ~p~n", [File, Reason]),
             []
     end;
 
