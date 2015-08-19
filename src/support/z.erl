@@ -189,7 +189,7 @@ log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
         #zlog{
             type=Type,
             user_id=z_acl:user(Context),
-            timestamp=os:timstamp(),
+            timestamp=os:timestamp(),
             props=Props
         }, 
         Context).
@@ -208,7 +208,7 @@ log(Type, Msg, Props, Context) ->
         #zlog{
             type=Type,
             user_id=z_acl:user(Context),
-            timestamp=os:timstamp(),
+            timestamp=os:timestamp(),
             props=#log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}
         }, 
         Context).
