@@ -53,16 +53,17 @@
 -include("zotonic.hrl").
 
 % Interval (in seconds) to check if there are any items to be pivoted.
--define(PIVOT_POLL_INTERVAL, 10).
+-define(PIVOT_POLL_INTERVAL_FAST, 2).
+-define(PIVOT_POLL_INTERVAL_SLOW, 20).
 
 % Number of queued ids taken from the queue at one go
--define(POLL_BATCH, 500).
+-define(POLL_BATCH, 50).
 
 %% Minimum day, inserted for date start search ranges
 -define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
 
 
--record(state, {context, timer}).
+-record(state, {site}).
 
 
 %% @doc Poll the pivot queue for the database in the context
@@ -215,7 +216,7 @@ delete_task(Module, Function, UniqueKey, Context) ->
 start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     Name = z_utils:name_for_host(?MODULE, Host),
-    gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
+    gen_server:start_link({local, Name}, ?MODULE, Host, []).
 
 
 %%====================================================================
@@ -227,15 +228,13 @@ start_link(SiteProps) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps), 
+init(Host) ->
     lager:md([
         {site, Host},
         {module, ?MODULE}
       ]),
-    Context = z_context:new(Host),
-    Timer = timer:apply_interval(timer:seconds(?PIVOT_POLL_INTERVAL), ?MODULE, poll, [Context]),
-    {ok, #state{timer=Timer, context=Context}}.
+    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    {ok, #state{site=Host}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -254,29 +253,30 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @doc Poll the queue for the default host
 handle_cast(poll, State) ->
-    flush(),
-	Context1 = z_trans_server:set_context_table(State#state.context),
-    do_poll(Context1),
-    {noreply, State#state{context=Context1}};
+    do_poll(z_context:new(State#state.site)),
+    {noreply, State};
 
 
 %% @doc Poll the queue for a particular database
 handle_cast({pivot, Id}, State) ->
-	Context1 = z_trans_server:set_context_table(State#state.context),
-    do_pivot(Id, Context1),
-    {noreply, State#state{context=Context1}};
-
+    do_pivot(Id, z_context:new(State#state.site)),
+    {noreply, State};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
-
-
 %% @spec handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
+handle_info(poll, State) ->
+    case do_poll(z_context:new(State#state.site)) of
+        true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
+        false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
+    end,
+    {noreply, State};
+
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -285,13 +285,11 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, State) ->
-    timer:cancel(State#state.timer),
+terminate(_Reason, _State) ->
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
-
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
@@ -302,7 +300,10 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Poll a database for any queued updates.
 do_poll(Context) ->
-    % Perform some queued tasks
+    DidTask = do_poll_task(Context),
+    do_poll_queue(Context) or DidTask.
+
+do_poll_task(Context) ->
     case poll_task(Context) of
         {TaskId, Module, Function, _Key, Args} ->
             try
@@ -327,13 +328,16 @@ do_poll(Context) ->
                     ?zWarning(io_lib:format("Task failed(~p:~p): ~p:~p(~p) ~p~n", 
                                 [Error, Reason, Module, Function, Args, erlang:get_stacktrace()]), 
                                 Context)
-            end;
+            end,
+            true;
         empty ->
-            nop
-    end,
-    % Pivot some resources
+            false
+    end.
+
+do_poll_queue(Context) ->
     case fetch_queue(Context) of
-        [] -> ok;
+        [] ->
+            false;
         Qs ->
             F = fun(Ctx) ->
                         [ {Id, catch pivot_resource(Id, Ctx)} || {Id,_Serial} <- Qs]
@@ -354,31 +358,32 @@ do_poll(Context) ->
                                  ({Id,Error}) -> log_error(Id, Error, Context) end, 
                               L),
                     delete_queue(Qs, Context)
-            end
+            end,
+            true
     end.
 
-    log_error(Id, Error, Context) ->
-        ?zWarning(io_lib:format("Pivot error ~p: ~p", [Id, Error]), Context).
+log_error(Id, Error, Context) ->
+    ?zWarning(io_lib:format("Pivot error ~p: ~p", [Id, Error]), Context).
 
-    %% @doc Fetch the next task uit de task queue, if any.
-    poll_task(Context) ->
-        case z_db:q_row("select id, module, function, key, props 
-                         from pivot_task_queue 
-                         where due is null
-                            or due < current_timestamp
-                         order by due asc 
-                         limit 1", Context) 
-        of
-            {Id,Module,Function,Key,Props} ->
-                Args = case Props of
-                    [{args,Args0}] -> Args0;
-                    _ -> []
-                end,
-                %% @todo We delete the task right now, this needs to be changed to a deletion after the task has been running.
-                {Id, z_convert:to_atom(Module), z_convert:to_atom(Function), Key, Args};
-            undefined ->
-                empty
-        end.
+%% @doc Fetch the next task uit de task queue, if any.
+poll_task(Context) ->
+    case z_db:q_row("select id, module, function, key, props 
+                     from pivot_task_queue 
+                     where due is null
+                        or due < current_timestamp
+                     order by due asc 
+                     limit 1", Context) 
+    of
+        {Id,Module,Function,Key,Props} ->
+            Args = case Props of
+                [{args,Args0}] -> Args0;
+                _ -> []
+            end,
+            %% @todo We delete the task right now, this needs to be changed to a deletion after the task has been running.
+            {Id, z_convert:to_atom(Module), z_convert:to_atom(Function), Key, Args};
+        undefined ->
+            empty
+    end.
     
 
 %% @doc Pivot a specific id, delete its queue record if present
@@ -809,11 +814,3 @@ lookup_custom_pivot(Module, Column, Value, Context) ->
         [{Id}|_] -> Id
     end.
 
-
-%% @doc Flush all 'poll' messages in the message queue.  This is needed when waking up after sleep.
-flush() ->
-    receive
-        {'$gen_cast', poll} -> flush()
-    after 
-        0 -> ok
-    end.
