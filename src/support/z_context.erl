@@ -312,6 +312,7 @@ prune_for_async(#context{} = Context) ->
         db=Context#context.db,
         translation_table=Context#context.translation_table,
         language=Context#context.language,
+        ua_class=Context#context.ua_class,
         tz=Context#context.tz
     }.
 
