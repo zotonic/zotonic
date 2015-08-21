@@ -272,7 +272,7 @@ function z_session_restart_check(invalid_page_id)
 {
     if (z_pageid == invalid_page_id) {
         if (z_spinner_show_ct === 0) {
-            if (z_session_restart_count == 3) {
+            if (z_session_restart_count == 3 || !z_pageid) {
                 z_session_invalid_reload(z_pageid);
             } else {
                 z_session_restart_count++;

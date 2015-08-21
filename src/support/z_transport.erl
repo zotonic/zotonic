@@ -171,6 +171,8 @@ incoming_msgs(L, Context) when is_list(L) ->
         end,
         {ok, [], Context},
         L);
+incoming_msgs(#z_msg_v1{page_id=undefined}, Context) ->
+    {ok, [msg(undefined, session, <<"page_invalid">>, [])], Context};
 incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_class=UA, content_type=CT} = Msg, Context) ->
     Context1 = maybe_logon(maybe_set_sessions(SessionId, PageId, Context)),
     Context2 = maybe_set_uaclass(UA, Context1),
@@ -329,7 +331,7 @@ maybe_logon(Context) ->
         end
     catch
         exit:{noproc, _} ->
-            lager:debug("PageId without page session (session_id ~p)", [Context#context.session_id]),
+            lager:info("PageId without page session (session_id ~p)", [Context#context.session_id]),
             z_acl:logoff(Context#context{session_pid=undefined, page_pid=undefined})
     end.
 
