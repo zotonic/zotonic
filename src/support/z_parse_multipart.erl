@@ -245,8 +245,16 @@ feed_mp(body, State=#mp{boundary=Prefix, buffer=Buffer, callback=Callback}) ->
             <<Data:Start/binary, Rest/binary>> = Buffer,
             feed_mp(body, read_more(State#mp{callback=Callback({body, Data}), buffer=Rest}));
         not_found ->
-            {Data, Rest} = {Buffer, <<>>},
-            feed_mp(body, read_more(State#mp{callback=Callback({body, Data}), buffer=Rest}))
+            State1 = read_more(State#mp{callback=Callback({body, Buffer}), buffer= <<>>}),
+            case State1 of
+                #mp{buffer= <<>>, content_length=ContentLength, length=Length} when ContentLength =:= Length; ContentLength =:= 0 ->
+                    {State1#mp.length, <<>>, (State1#mp.callback)(eof), State1#mp.context};
+                #mp{buffer= <<>>} = State1 ->
+                    lager:debug("Could not decode multipart: unexpected end and missing end boundary"),
+                    throw({stop_request, 400});
+                #mp{} ->
+                    feed_mp(body, State1)
+            end
     end.
 
 
