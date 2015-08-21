@@ -329,7 +329,7 @@ maybe_logon(Context) ->
         end
     catch
         exit:{noproc, _} ->
-            % lager:info("PageId without page session (session_id ~p)", [Context#context.session_id]),
+            lager:debug("PageId without page session (session_id ~p)", [Context#context.session_id]),
             z_acl:logoff(Context#context{session_pid=undefined, page_pid=undefined})
     end.
 
