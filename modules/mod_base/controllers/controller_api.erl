@@ -42,7 +42,13 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
     z_context:lager_md(Context1),
-    ?WM_REPLY(true, Context1).
+    ReqData1 = set_cors_header(ReqData, Context1),
+    case wrq:method(ReqData) of
+        'OPTIONS' ->
+            {{halt, 204}, ReqData1, Context1};
+        _ ->
+            {true, ReqData1, Context1}
+    end.
 
 
 allowed_methods(ReqData, Context) ->
@@ -68,14 +74,14 @@ allowed_methods(ReqData, Context) ->
         {ok, Module} ->
             Context2 = z_context:set(service_module, Module, Context1),
             try
-                {z_service:http_methods(Module), ReqData, Context2}
+                {['OPTIONS' | z_service:http_methods(Module)], ReqData, Context2}
             catch
                 _X:_Y ->
-                    {['GET', 'HEAD', 'POST'], ReqData, Context2}
+                    {['GET', 'HEAD', 'POST', 'OPTIONS'], ReqData, Context2}
             end;
         {error, not_found} ->
             %% The atom (service module) does not exist, return default methods.
-            {['GET', 'HEAD', 'POST'], ReqData, Context1}
+            {['GET', 'HEAD', 'POST', 'OPTIONS'], ReqData, Context1}
     end.
 
 
@@ -126,6 +132,30 @@ content_types_provided(ReqData, Context) ->
       {"text/javascript", to_json}
      ], ReqData, Context}.
 
+set_cors_header(ReqData, Context) ->
+    %% set in site config file
+    %%  [{service_api_cors, false}, %% 2nd is default value
+    %%      {'Access-Control-Allow-Origin', "*"},
+    %%      {'Access-Control-Allow-Credentials', undefined}, 
+    %%      {'Access-Control-Max-Age', undefined},
+    %%      {'Access-Control-Allow-Methods', undefined},
+    %%      {'Access-Control-Allow-Headers', undefined}]
+    {ok, SiteConfigs} = z_sites_manager:get_site_config(z_context:site(Context)),
+    case proplists:get_value(service_api_cors, SiteConfigs) of
+        true -> lists:foldl(fun ({K, Def}, Acc) ->
+                        case proplists:get_value(K, SiteConfigs, Def) of
+                            undefined -> Acc;
+                            V -> wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(V), Acc)
+                        end
+                end, 
+                ReqData, 
+                [{'Access-Control-Allow-Origin', "*"},
+                    {'Access-Control-Allow-Credentials', undefined}, 
+                    {'Access-Control-Max-Age', undefined},
+                    {'Access-Control-Allow-Methods', undefined},
+                    {'Access-Control-Allow-Headers', undefined}]);
+        _ -> ReqData
+    end.
 
 api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
     R = {struct, [{error, {struct, [{code, ErrCode}, {message, Message}]}}]},
@@ -134,6 +164,7 @@ api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
 
 api_result(Context, Result) ->
     ReqData = z_context:get_reqdata(Context),
+    
     case Result of
         {error, Err=missing_arg, Arg} ->
             api_error(400, Err, "Missing argument: " ++ Arg, ReqData, Context);

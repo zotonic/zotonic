@@ -379,7 +379,6 @@
 %% otherwise, return a #search_sql{} or #search_result{} record.
 -record(search_query, {search, offsetlimit}).
 
-
 %% @doc An edge has been inserted. (notify)
 %% The predicate is an atom.
 -record(edge_insert, {subject_id, predicate, object_id, edge_id}).
