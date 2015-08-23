@@ -256,9 +256,6 @@ button.close {
 .z-btn-remove:hover {
   color: #222222;
 }
-ul.connections-list {
-  min-height: 10px;
-}
 ul.connections-list li:last-child {
   margin-bottom: 10px;
 }
@@ -584,8 +581,18 @@ div.modal .modal-footer .pull-left {
 .navbar-right {
   margin-right: 15px;
 }
-.navbar-nav > li > a {
+.navbar-nav > li > a,
+.navbar-nav > li > .dropdown-menu > li > a {
   text-shadow: 0 1px 0 rgba(0,0,0,.1);
+}
+.navbar-default .navbar-toggle {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+body.navbar-menu-open {
+  overflow: hidden;
 }
 input[type="text"].rtl,
 textarea.rtl {
@@ -927,7 +934,6 @@ ul.tree-list li.menu-item > div {
   margin: -1px 0 0 0;
   padding: 0;
 }
-ul.tree-list li.menu-item .menu-toggle,
 ul.tree-list li.menu-item .z-icon-drag,
 ul.tree-list li.menu-item .z-btn-remove {
   width: 16px;
@@ -940,54 +946,22 @@ ul.tree-list li.menu-item .z-btn-remove {
 }
 ul.tree-list li.menu-item .z-icon-drag {
   color: #999;
-  left: 32px;
+  left: 8px;
 }
 ul.tree-list li.menu-item .z-btn-remove {
   right: 8px;
-}
-ul.tree-list li.menu-item > div > a.menu-toggle {
-  position: absolute;
-  color: #ccc;
-  padding: 0;
-  left: 8px;
-  top: 55%;
-  display: none;
-}
-ul.tree-list li.menu-item.has-submenu > div > a.menu-toggle {
-  display: block;
-}
-ul.tree-list li.menu-item > div > a.menu-toggle:hover {
-  cursor: pointer;
-  text-decoration: none;
-  color: black;
-}
-ul.tree-list li .menu-toggle:before {
-  content: "\e080";
-}
-ul.tree-list li.submenu-open > div > .menu-toggle:before {
-  content: "\e114";
-}
-ul.tree-list li.menu-item > ul {
-  display: none;
-}
-ul.tree-list li.menu-item.submenu-open > ul {
-  display: block;
 }
 ul.tree-list li.menu-item > div > a,
 ul.tree-list li.menu-item > div > span:not(.btns) {
   display: inline-block;
   width: 100%;
-  padding: 10px 40px 10px 32px;
+  padding: 10px 40px 10px 24px;
   min-height: 34px;
 }
 ul.tree-list li.menu-item .warning {
   position: absolute;
   top: 12px;
   right: 100px;
-}
-ul.tree-list li.menu-item .category {
-  color: #999;
-  padding-left: 8px;
 }
 ul.tree-list li.menu-item .btns {
   display: block;

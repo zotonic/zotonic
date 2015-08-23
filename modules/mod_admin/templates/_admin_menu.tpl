@@ -14,7 +14,7 @@
             </a>
         </div>
         
-        <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse" id="admin-menu-collapse">
 
             <ul class="nav navbar-nav">
                 {% for id, item in m.admin_menu %}
@@ -68,3 +68,12 @@
         </div>
     </div>
 </div>
+
+{% javascript %}
+$('#admin-menu-collapse').on('show.bs.collapse', function () {
+    $("body").addClass("navbar-menu-open");
+});
+$('#admin-menu-collapse').on('hide.bs.collapse', function () {
+    $("body").removeClass("navbar-menu-open");
+});
+{% endjavascript %}
