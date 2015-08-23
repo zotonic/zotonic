@@ -12,6 +12,21 @@
 .navbar-right {
     margin-right: 15px;
 }
-.navbar-nav > li > a {
+.navbar-nav > li > a,
+.navbar-nav > li > .dropdown-menu > li > a {
     text-shadow: @lightOnDarkTextShadow;
+}
+.navbar-default {
+    .navbar-toggle {
+        @_color: rgba(255, 255, 255, 0.7);
+        border-color: @_color;
+    
+        .icon-bar {
+            background-color: @_color;
+        }
+    }
+}
+
+body.navbar-menu-open {
+    overflow: hidden;
 }
