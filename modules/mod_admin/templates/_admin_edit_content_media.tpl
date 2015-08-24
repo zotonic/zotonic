@@ -2,7 +2,11 @@
 
 {# Widget for viewing/editing media/file content #}
 
-{% block widget_title %}{_ File / media content _}{% endblock %}
+{% block widget_title %}
+{_ File / media content _}
+<div class="widget-header-tools"></div>
+{% endblock %}
+
 {% block widget_show_minimized %}false{% endblock %}
 {% block widget_id %}edit-content-media{% endblock %}
 

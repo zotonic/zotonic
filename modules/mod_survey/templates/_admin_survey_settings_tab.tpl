@@ -2,7 +2,11 @@
 
 {# Admin controls for the survey #}
 
-{% block widget_title %}{{ m.rsc.survey.title }}{% endblock %}
+{% block widget_title %}
+{{ m.rsc.survey.title }}
+<div class="widget-header-tools"></div>
+{% endblock %}
+
 {% block widget_show_minimized %}false{% endblock %}
 {% block widget_id %}content-survey{% endblock %}
 

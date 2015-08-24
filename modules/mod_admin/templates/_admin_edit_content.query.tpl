@@ -3,7 +3,11 @@
 {# To edit the stored search query #}
 
 
-{% block widget_title %}{_ Search query _}{% endblock %}
+{% block widget_title %}
+{_ Search query _}
+<div class="widget-header-tools"></div>
+{% endblock %}
+
 {% block widget_show_minimized %}false{% endblock %}
 
 

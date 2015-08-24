@@ -1,6 +1,10 @@
 {% extends "admin_edit_widget_i18n.tpl" %}
 
-{% block widget_title %}{_ Block _}{% endblock %}
+{% block widget_title %}
+{_ Block _}
+<div class="widget-header-tools"></div>
+{% endblock %}
+
 {% block widget_show_minimized %}false{% endblock %}
 {% block widget_id %}edit-block-{{ name }}{% endblock %}
 {% block widget_header %}{% endblock %}

@@ -29,10 +29,11 @@ $.widget("z.adminwidget",
         self.element.addClass("widget-active");
         self.item = self.element.find("div.widget-content");
         self.header = self.element.find(".widget-header");
+        self.tools = self.header.find(".widget-header-tools");
         self.tabs = self.element.find(".language-tabs");
         var doMinify = self.options.minifier || $(self.element).attr("data-minifier");
         if (doMinify) {
-            self.icon = $("<i>").appendTo(self.header).css("cursor", "pointer");            
+            self.icon = $("<i>").appendTo(self.tools).css("cursor", "pointer");            
             self.header
                 .on("mouseover", function(){self.icon.addClass('white');})
                 .on("mouseout", function(){self.icon.removeClass('white');})
@@ -72,7 +73,8 @@ $.widget("z.adminwidget",
         if (self.tabs) {
             self.tabs.hide();
         }
-        self.icon.attr("class", "pull-right z-icon z-icon-plus");
+        self.icon.attr("class", "z-icon z-icon-plus");
+        self.element.removeClass("widget-expanded");
         self.showing = false;
     },
 
@@ -94,8 +96,9 @@ $.widget("z.adminwidget",
             self.tabs.show();
         }
         if (self.icon) {
-            self.icon.attr("class", "pull-right z-icon z-icon-minus");
+            self.icon.attr("class", "z-icon z-icon-minus");
         }
+        self.element.addClass("widget-expanded");
         self.showing = true;
     },
     

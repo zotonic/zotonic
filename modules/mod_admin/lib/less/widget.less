@@ -50,11 +50,6 @@
             padding-top: @widgetVerticalPadding;
         }
 
-        .z-btn-help {
-            position: absolute;
-            top: @widgetVerticalPadding;
-            right: @widgetSidePadding;
-        }
         .rsc-item-wrapper {
             margin: 0 0 @widgetVerticalPadding 0;
         }
@@ -73,7 +68,7 @@
         &:extend(.admin-text-header);
         font-weight: normal;
     }
-    
+
     .widget-section-header {
         margin: 20px 0 0 0;
     }
@@ -83,7 +78,8 @@
         padding: @widgetVerticalPadding @widgetSidePadding;
         #3L > .border-radius(@radiusWidget @radiusWidget 0);
         #3L > .gradient(#e0e0e0, @backgroundColorLighter);
-        
+        #3L > .user-select(none);
+
         .z-btn-remove {
             display: block;
             position: absolute;
@@ -91,12 +87,26 @@
             right: @widgetSidePadding + 26; // make room for minify button
             z-index: 1;
         }
+        
+        .widget-header-tools {
+            float: right;
+            font-size: 0; // against inline-block margins
+            text-align: right;
+        
+            .z-btn-help,
+            .z-icon {
+                display: inline-block;
+                margin-left: 12px;
+            }
+        
+            .z-btn-help {
+                color: @textColorLight;
+            }
+        }
     
         .z-icon-plus,
         .z-icon-minus {
             @_icon_size: 16px;
-            display: block;
-            text-align: center;
             font-size: @_icon_size;
             width: @_icon_size;
             height: @_icon_size;
@@ -104,6 +114,17 @@
             text-shadow: none;
         }
     }
+    
+    &.widget-expanded {
+        .widget-header {
+            .widget-header-tools {
+                .z-btn-help {
+                    color: @colorLink;
+                }
+            }
+        }
+    }
+
     h5 {
         display: block;
         margin: 20px 0;

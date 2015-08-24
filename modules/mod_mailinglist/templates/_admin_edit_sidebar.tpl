@@ -1,6 +1,10 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
-{% block widget_title %}{_ Mailing list _}{% endblock %}
+{% block widget_title %}
+{_ Mailing list _}
+<div class="widget-header-tools"></div>
+{% endblock %}
+
 {% block widget_show_minimized %}false{% endblock %}
 {% block widget_id %}sidebar-mailinglist{% endblock %}
 

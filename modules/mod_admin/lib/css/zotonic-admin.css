@@ -162,6 +162,10 @@ table.do_adminLinkedTable .admin-list-thumb > span,
   -ms-hyphens: auto;
   hyphens: auto;
 }
+p .z-btn-help {
+  display: inline;
+  vertical-align: text-bottom;
+}
 .text-muted {
   color: #999999;
 }
@@ -567,6 +571,9 @@ div.modal div.tab-content {
 }
 div.modal .nav.nav-pills {
   margin-bottom: 15px;
+}
+div.modal .modal-body > :first-child {
+  margin-top: 0;
 }
 div.modal .modal-footer .pull-left {
   margin-left: 0;
@@ -1084,11 +1091,6 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-content.tab-content {
   padding-top: 15px;
 }
-.widget .widget-content .z-btn-help {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
 .widget .widget-content .rsc-item-wrapper {
   margin: 0 0 15px 0;
 }
@@ -1116,6 +1118,10 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   background-image: -webkit-linear-gradient(top, #e0e0e0 0%, #f2f2f2 100%);
   background-image: linear-gradient(to bottom, #e0e0e0 0%, #f2f2f2 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0', endColorstr='#f2f2f2', GradientType=0);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .widget .widget-header .z-btn-remove {
   display: block;
@@ -1124,15 +1130,30 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   right: 41px;
   z-index: 1;
 }
+.widget .widget-header .widget-header-tools {
+  float: right;
+  font-size: 0;
+  text-align: right;
+}
+.widget .widget-header .widget-header-tools .z-btn-help,
+.widget .widget-header .widget-header-tools .z-icon,
+.widget .widget-header .widget-header-tools .zotonic-logo {
+  display: inline-block;
+  margin-left: 12px;
+}
+.widget .widget-header .widget-header-tools .z-btn-help {
+  color: #bbbbbb;
+}
 .widget .widget-header .z-icon-plus,
 .widget .widget-header .z-icon-minus {
-  display: block;
-  text-align: center;
   font-size: 16px;
   width: 16px;
   height: 16px;
   line-height: 16px;
   text-shadow: none;
+}
+.widget.widget-expanded .widget-header .widget-header-tools .z-btn-help {
+  color: #069cd1;
 }
 .widget h5 {
   display: block;

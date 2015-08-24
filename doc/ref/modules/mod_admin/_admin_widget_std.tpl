@@ -7,7 +7,10 @@
 
 
 {# Title data for widget headline. #}
-{% block widget_title %}{_ Edit title _}{% endblock %}
+{% block widget_title %}
+{_ Edit title _}
+<div class="widget-header-tools"></div>
+{% endblock %}
 
 
 {# Widget may be displayed to user as minimized by default

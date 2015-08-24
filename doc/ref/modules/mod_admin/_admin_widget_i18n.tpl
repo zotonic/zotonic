@@ -17,7 +17,10 @@
 
 {# See doc/admin/tpl/_admin_widget_std.tpl for block description. #}
    NOTE: displayed only then mod_translation is disabled. #}
-{% block widget_title %}{_ Basic _}{% endblock %}
+{% block widget_title %}
+{_ Basic _}
+<div class="widget-header-tools"></div>
+{% endblock %}
 
 
 {# Optional CSS-classes for widget container #}

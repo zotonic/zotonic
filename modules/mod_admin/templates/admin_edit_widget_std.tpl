@@ -7,7 +7,7 @@
     {% block widget_header %}
         {% if not in_dialog and not noheader %}
         <div class="widget-header">
-            {% block widget_title %}{% endblock %}
+            {% block widget_title %}<div class="widget-header-tools"></div>{% endblock %}
         </div>
         {% endif %}
     {% endblock %}
