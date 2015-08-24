@@ -2,7 +2,11 @@
 
 {# Widget for viewing/editing media/file website-related props #}
 
-{% block widget_title %}{_ Website _}{% endblock %}
+{% block widget_title %}
+{_ Website _}
+<div class="widget-header-tools"></div>
+{% endblock %}
+
 {% block widget_show_minimized %}true{% endblock %}
 
 

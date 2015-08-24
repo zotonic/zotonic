@@ -1,18 +1,17 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
-{% block widget_title %}{_ Valid between _}{% endblock %}
+{% block widget_title %}
+{_ Valid between _}
+<div class="widget-header-tools">
+    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about predicates"|escapejs }}', text: '{{ _"You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to.  When you don\\'t check anything then all categories are valid."|escapejs }}'" title="{_ Need more help? _}"></a>
+</div>
+{% endblock %}
+
 {% block widget_show_minimized %}false{% endblock %}
 
 {% block widget_content %}
-
-<div class="pull-right">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about predicates"|escapejs }}', text: '{{ _"You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to.  When you don\\'t check anything then all categories are valid."|escapejs }}'" title="{_ Need more help? _}"></a>
-</div>
-
 {% with m.predicate[id] as p %}
-
 <fieldset>
-
     <p>{_ This predicate can be used between two pages of the following categories. _}</p>
     
     <div class="row">

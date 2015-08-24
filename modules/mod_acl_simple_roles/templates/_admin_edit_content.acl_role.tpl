@@ -1,12 +1,12 @@
 {% with m.rsc[id].acl as acl %}
 <div class="widget do_adminwidget" id="content-acl-role">
-    <h3 class="widget-header">{_ Permissions _}</h3>
-    <div class="widget-content">
-
-        <div class="pull-right">
+    <h3 class="widget-header">
+        {_ Permissions _}
+        <div class="widget-header-tools">
             <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{_ Help about ACL roles _}', text: '{_ Users can be member of multiple roles. Depending on the roles an user is allowed to create and edit certain categories or is able to manage certain modules. _}'" title="{_ Need more help? _}"></a>
         </div>
-        
+    </h3>
+    <div class="widget-content">
         <h4>
             {_ Check below what people that are member of this role are allowed to do _}
         </h4>

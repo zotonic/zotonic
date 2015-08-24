@@ -2,14 +2,18 @@
 
 {# Widget for editing access control to rsc  #}
 
-{% block widget_title %}{_ Category &amp; Content Group _}{% endblock %}
+{% block widget_title %}
+{_ Category &amp; Content Group _}
+<div class="widget-header-tools">
+    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Access control"|escapejs }}', text: '{{ _"Define who can see or edit this page."|escapejs }}'" title="{_ Need more help? _}"></a>
+</div>
+{% endblock %}
+
 {% block widget_show_minimized %}false{% endblock %}
 {% block widget_id %}sidebar-catcg{% endblock %}
 
 {% block widget_content %}
 <fieldset>
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Access control"|escapejs }}', text: '{{ _"Define who can see or edit this page."|escapejs }}'" title="{_ Need more help? _}"></a>
-
     <p>
     	{_ This page is a _}
     	<strong>{{ id.category_id.title }}</strong>

@@ -2,7 +2,11 @@
 
 {# Widget for editing SEO preferences #}
 
-{% block widget_title %}{_ SEO Content _}{% endblock %}
+{% block widget_title %}
+{_ SEO Content _}
+<div class="widget-header-tools"></div>
+{% endblock %}
+
 {% block widget_show_minimized %}true{% endblock %}
 {% block widget_id %}edit-seo{% endblock %}
 

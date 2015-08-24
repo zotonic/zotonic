@@ -2,7 +2,11 @@
 
 {# Widget to edit some advanced rsc props #}
 
-{% block widget_title %}{_ Advanced _}{% endblock %}
+{% block widget_title %}
+{_ Advanced _}
+<div class="widget-header-tools"></div>
+{% endblock %}
+
 {% block widget_show_minimized %}true{% endblock %}
 {% block widget_id %}edit-advanced{% endblock %}
 
