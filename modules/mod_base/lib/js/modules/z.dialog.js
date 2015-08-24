@@ -74,7 +74,7 @@
             } else {
                 $body = $('<div>')
                   .addClass('modal-body')
-                  .html($text);
+                  .html(options.text);
             }
             
             $modalContent = $('<div>')
