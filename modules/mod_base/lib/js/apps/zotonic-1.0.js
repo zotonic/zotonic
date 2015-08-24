@@ -1108,7 +1108,7 @@ function z_websocket_pong( msg )
 
 function z_websocket_is_connected()
 {
-    return z_ws && z_ws.readyState !== 0 && z_ws_pong_count > 0;
+    return z_ws && z_ws.readyState == 1 && z_ws_pong_count > 0;
 }
 
 function z_websocket_restart()
