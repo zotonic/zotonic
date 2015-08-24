@@ -3,9 +3,13 @@ ul.tree-list {
     
     li.menu-item {
         @_side_spacing: 8px;
+        @_left_spacing: 32px;
         @_vertical_spacing: 10px;
+        @_icon_size: 16px;
+        @_item_height: 34px;
+        @_line_height: 1.2;
         
-        line-height: 1.2;
+        line-height: @_line_height;
         
         &:last-child {
             margin: 0 0 @widgetVerticalPadding 0;
@@ -21,31 +25,89 @@ ul.tree-list {
             margin: -1px 0 0 0;
             padding: 0;
         }
+        .menu-toggle > i,
         .z-icon-drag,
         .z-btn-remove {
-            @_size: 16px;
-            width: @_size;
-            height: @_size;
-            font-size: @_size;
-            line-height: @_size;
+            width: @_icon_size;
+            height: @_icon_size;
+            font-size: @_icon_size;
+            line-height: @_icon_size;
             position: absolute;
             top: 50%;
-            margin-top: -@_size/2;
+            margin-top: -@_icon_size/2;
         }
         .z-icon-drag {
             color: #999;
-            left: @_side_spacing;
+            left: @_left_spacing;
         }
         .z-btn-remove {
             right: @_side_spacing;
         }
-        > div > a,
-        > div > span:not(.btns) {
-            display: inline-block;
-            width: 100%;
-            padding: @_vertical_spacing 40px @_vertical_spacing 24px;
-            min-height: 34px;
+        > div {
+            > a,
+            > span:not(.btns) {
+                display: inline-block;
+                width: 100%;
+                padding: @_vertical_spacing 40px @_vertical_spacing @_left_spacing;
+                min-height: @_item_height;
+            }
+            a.menu-toggle {
+                position: absolute;
+                width: @_item_height;
+                height: @_item_height;
+                line-height: @_item_height;
+                color: #ccc;
+                padding: 0;
+                top: 0;
+                left: 0;
+                display: none;
+                
+                &:hover {
+                    cursor: pointer;
+                    text-decoration: none;
+                    color: black;
+                }
+                > i {
+                    left: 50%;
+                    margin-left: -@_icon_size/2;
+                    cursor: pointer;
+                }
+                > i.menu-collapse {
+                    display: none;
+                }
+                > i.menu-expand {
+                    display: block;
+                }
+            }
         }
+        &.has-submenu {
+            > div {
+                a.menu-toggle {
+                    display: block;
+                }
+            }
+        }
+        &.submenu-open {
+            > div {
+                a.menu-toggle {
+                    > i.menu-collapse {
+                        display: block;
+                    }
+                    > i.menu-expand {
+                        display: none;
+                    }
+                }
+            }
+        }
+        > ul {
+            display: none;
+        }
+        &.submenu-open {
+            > ul {
+                display: block;
+            }
+        }
+
         .warning {
             position: absolute;
             top: 12px;

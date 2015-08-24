@@ -934,6 +934,7 @@ ul.tree-list li.menu-item > div {
   margin: -1px 0 0 0;
   padding: 0;
 }
+ul.tree-list li.menu-item .menu-toggle > i,
 ul.tree-list li.menu-item .z-icon-drag,
 ul.tree-list li.menu-item .z-btn-remove {
   width: 16px;
@@ -946,7 +947,7 @@ ul.tree-list li.menu-item .z-btn-remove {
 }
 ul.tree-list li.menu-item .z-icon-drag {
   color: #999;
-  left: 8px;
+  left: 32px;
 }
 ul.tree-list li.menu-item .z-btn-remove {
   right: 8px;
@@ -955,8 +956,50 @@ ul.tree-list li.menu-item > div > a,
 ul.tree-list li.menu-item > div > span:not(.btns) {
   display: inline-block;
   width: 100%;
-  padding: 10px 40px 10px 24px;
+  padding: 10px 40px 10px 32px;
   min-height: 34px;
+}
+ul.tree-list li.menu-item > div a.menu-toggle {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  color: #ccc;
+  padding: 0;
+  top: 0;
+  left: 0;
+  display: none;
+}
+ul.tree-list li.menu-item > div a.menu-toggle:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+ul.tree-list li.menu-item > div a.menu-toggle > i {
+  left: 50%;
+  margin-left: -8px;
+  cursor: pointer;
+}
+ul.tree-list li.menu-item > div a.menu-toggle > i.menu-collapse {
+  display: none;
+}
+ul.tree-list li.menu-item > div a.menu-toggle > i.menu-expand {
+  display: block;
+}
+ul.tree-list li.menu-item.has-submenu > div a.menu-toggle {
+  display: block;
+}
+ul.tree-list li.menu-item.submenu-open > div a.menu-toggle > i.menu-collapse {
+  display: block;
+}
+ul.tree-list li.menu-item.submenu-open > div a.menu-toggle > i.menu-expand {
+  display: none;
+}
+ul.tree-list li.menu-item > ul {
+  display: none;
+}
+ul.tree-list li.menu-item.submenu-open > ul {
+  display: block;
 }
 ul.tree-list li.menu-item .warning {
   position: absolute;
