@@ -95,9 +95,9 @@ body.wait .btn {
 }
 hr {
   background-color: #ddd;
-  border-top-color: #d0d0d0;
+  border: none;
+  height: 1px;
   margin: 10px 0;
-  width: 100%;
 }
 p {
   margin: 0 0 15px 0;
@@ -570,6 +570,9 @@ div.modal .nav.nav-pills {
 }
 div.modal .modal-footer .pull-left {
   margin-left: 0;
+}
+#menu-editor .widget-header {
+  height: auto;
 }
 .navbar-brand:hover,
 .navbar-brand:hover .zotonic-logo {
@@ -1045,6 +1048,10 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-content {
   position: relative;
   padding: 0 15px 0 15px;
+}
+.widget .widget-content hr {
+  margin-left: -15px;
+  margin-right: -15px;
 }
 .widget .widget-content .widget-content {
   padding: 0;
