@@ -184,6 +184,25 @@ p .z-btn-help {
 .btn.btn-sm .glyphicon {
   top: 1px;
 }
+.nav .dropdown-menu > li > a.has-icon,
+.nav .dropdown-toggle.has-icon {
+  position: relative;
+  padding-left: 34px;
+}
+.nav .dropdown-menu > li > a.has-icon .z-icon,
+.nav .dropdown-toggle.has-icon .z-icon,
+.nav .dropdown-menu > li > a.has-icon .zotonic-logo,
+.nav .dropdown-toggle.has-icon .zotonic-logo {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  height: 14px;
+  width: 14px;
+  margin-top: -7px;
+}
+.navbar-form .form-control {
+  width: 8em;
+}
 .dropdown-menu.admin-dropdown-menu-has-icons > li > a {
   padding-left: 40px;
   position: relative;
@@ -214,7 +233,8 @@ p .z-btn-help {
 .well.z-button-row {
   padding: 15px 15px 11px 15px;
 }
-.well.z-button-row > *,
+.well.z-button-row > .btn,
+.well.z-button-row > a[href],
 .well.z-button-row .btn + .btn {
   margin: 0 4px 4px 0;
 }
@@ -252,6 +272,11 @@ button.close {
 @media (min-width: 768px) {
   .form-horizontal .control-label {
     margin-bottom: 5px;
+  }
+}
+@media (min-width: 992px) {
+  .navbar-form .form-control {
+    width: 10em;
   }
 }
 .z-btn-remove {

@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="/" title="{_ visit site _}">
+            <a class="navbar-brand hidden-sm" href="/" title="{_ visit site _}">
                 <span class="zotonic-logo"><em>Zotonic</em></span>
             </a>
         </div>
@@ -44,27 +44,51 @@
                         </li>
                     {% endif %}
                 {% endfor %}
-                <li>
-                    <a href="#" id="{{ #logoff }}" title="{_ Log Off _}"><i class="z-icon z-icon-off"></i></a>
-                    {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the admin interface?"
-                            action={redirect dispatch=`logoff`}} %}
-                </li>
             </ul>
 
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
                     {% all include "_admin_headeritem.tpl" %}
+
+                    {# at the far right is the account menu #}
+                    {% with
+                        "account"
+                        as
+                        id
+                    %}
+                        <li class="dropdown" id="nav-{{ id }}">
+                            <a class="dropdown-toggle has-icon" data-toggle="dropdown" href="#nav-{{ id }}">
+                                <i class="z-icon z-icon-user"></i>
+                                <span class="hidden-sm">{{ m.acl.user.title|escape|truncate_html:20 }}</span>
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header visible-sm">
+                                    {{ m.acl.user.title|escape }}
+                                </li>
+                                <li>
+                                    <a href="{% url admin_edit_rsc id=m.acl.user %}">{_ User page _}</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="{{ #logoff }}">{_ Log Off _}</a>
+                                    {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the admin interface?"
+                                            action={redirect dispatch=`logoff`}} %}
+                                </li>
+                            </ul>
+                        </li>
+                    {% endwith %}
                 </ul>
             </div>
             
             {% block search %}
-                <form class="navbar-right navbar-form form-inline hidden-sm" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
+                <form class="navbar-right navbar-form form-inline" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
                     <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
                     <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
                     <input type="hidden" name="qquery" value="{{ q.qquery|escape }}" />
-                    <input class="search-query col-md-6 form-control" type="text" name="qs" value="{{q.qs|escape}}" placeholder="{% block search_placeholder %}{_ Search... _}{% endblock %}" />
+                    <input class="search-query form-control" type="text" name="qs" value="{{q.qs|escape}}" placeholder="{% block search_placeholder %}{_ Search... _}{% endblock %}" />
                 </form>
             {% endblock %}
+
         </div>
     </div>
 </div>
