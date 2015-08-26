@@ -1,7 +1,7 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # Pass url to release file to download, something like:
-# $ ./update-bootstrap https://github.com/twbs/bootstrap/releases/download/v3.3.4/bootstrap-3.3.4-dist.zip
+# $ ./update-bootstrap https://github.com/twbs/bootstrap/releases/download/v3.3.5/bootstrap-3.3.5-dist.zip
 
 cd `dirname $0`/../lib
 rm -rf bootstrap
