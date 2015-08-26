@@ -95,17 +95,19 @@
             </div>
 
             {% with q.qcat|replace:'\\*':'' as qcat %}
-                {% with m.rsc[q.qquery|default:`admin_overview_query`].id as qqeury_id %}
-                      {% with (qqeury_id.is_visible and not q.qcat)|
-                                if:{query query_id=qqeury_id cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}
-                                  :{query authoritative=1 cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}
-                         as query
-                      %}
-                          {% with m.search.paged[query] as result %}
-                              {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result %}
-                              {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
+                {% with q.qsort|default:"-modified" as qsort %}
+                    {% with m.rsc[q.qquery|default:`admin_overview_query`].id as qquery_id %}
+                          {% with (qquery_id.is_visible and not q.qcat)|
+                                    if:{query query_id=qquery_id cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort}
+                                      :{query authoritative=1 cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort}
+                             as query
+                          %}
+                              {% with m.search.paged[query] as result %}
+                                  {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort %}
+                                  {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
+                              {% endwith %}
                           {% endwith %}
-                      {% endwith %}
+                    {% endwith %}
                 {% endwith %}
             {% endwith %}
         {% endwith %}

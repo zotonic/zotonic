@@ -26,6 +26,11 @@ table.do_adminLinkedTable {
     th, td {
         &:extend(.admin-word-break);
     }
+    th {
+        a:hover {
+            text-decoration: none;
+        }
+    }
     td.view-link {
         padding: 0;
     }
@@ -104,4 +109,39 @@ table.do_adminLinkedTable {
 
 table.table tr.unpublished td a.btn-success {
     color: white;
+}
+
+.arrow {
+    @_size: 4px;
+
+    height: 0;
+    width: 0;
+    border: @_size solid transparent;
+    vertical-align: middle;
+    
+    &.up {
+        border-bottom-color: #000;
+        border-bottom-color: currentColor;
+        margin-top: -@_size;
+    }
+    &.down {
+       border-top-color: #000;
+       border-top-color: currentColor;
+       margin-top: @_size;
+    }
+}
+
+th {
+    .arrow {
+        display: inline-block;
+        margin-left: 8px;
+    }
+    a:hover .arrow {
+        &.up {
+            border-bottom-color: currentColor;
+        }
+        &.down {
+           border-top-color: currentColor;
+        }
+    }
 }
