@@ -5,7 +5,7 @@
                 {% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}
             </th>
             <th width="15%">
-                {% catinclude "_admin_sort_header.tpl" m.category[q.qcat].is_a field="category_id" caption=_"Category" qsort=qsort %}
+                {% catinclude "_admin_sort_header.tpl" m.category[qcat].is_a field="category_id" caption=_"Category" qsort=qsort %}
             </th>
             <th width="15%">
                 {% include "_admin_sort_header.tpl" field="created" caption=_"Created on" type="date" qsort=qsort %}
@@ -24,7 +24,7 @@
         {% if m.rsc[id].is_visible %}
         <tr id="{{ #tr.id }}" class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
             <td><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span></td>
-            <td>{% if q.qcat %}
+            <td>{% if qcat %}
                     {% catinclude "_admin_overview_list_data.tpl" id %}
                 {% else %}
                     {% include "_admin_overview_list_data.tpl" %}
