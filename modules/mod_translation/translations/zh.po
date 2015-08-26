@@ -13,11 +13,11 @@ msgstr ""
 "PO-Revision-Date: 2013-01-30 19:51+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
-"Language: zh\n"
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:22
 msgid "Active modules"
@@ -36,9 +36,9 @@ msgstr "系统已知的所有语言。你可以添加或删除语言。"
 msgid "Are you sure you want to delete the language"
 msgstr "确认删除语言"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:30
-#: modules/mod_translation/templates/_dialog_language_delete.tpl:6
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:9
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:6
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:37
 msgid "Cancel"
 msgstr "取消"
 
@@ -50,8 +50,8 @@ msgstr "复制"
 msgid "Copy texts from a language to the currently selected language."
 msgstr "从其他语言拷贝文本到当前选择语言。"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:34
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:35
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:19
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:20
 msgid "Copy translation"
 msgstr "复制翻译"
 
@@ -63,8 +63,8 @@ msgstr "默认"
 msgid "Delete"
 msgstr "删除"
 
-#: modules/mod_translation/templates/admin_translation.tpl:49
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:7
+#: modules/mod_translation/templates/admin_translation.tpl:49
 msgid "Delete language"
 msgstr "删除语言"
 
@@ -101,18 +101,18 @@ msgstr ""
 msgid "Generate .pot files"
 msgstr "生成 .pot 文件"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid "Help about translations"
 msgstr "翻译帮助"
 
-#: modules/mod_translation/templates/admin_translation.tpl:24
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:6
+#: modules/mod_translation/templates/admin_translation.tpl:24
 msgid "ISO Code"
 msgstr "ISO 码"
 
-#: modules/mod_translation/templates/text/_language_switch.tpl:1
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:19
 #: modules/mod_translation/templates/admin_translation.tpl:25
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:14
+#: modules/mod_translation/templates/text/_language_switch.tpl:1
 msgid "Language"
 msgstr "语言"
 
@@ -138,7 +138,11 @@ msgid ""
 "recompiled."
 msgstr "重新加载模块和站点的所有翻页。所有模版将被重新编译。"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:31
+#: modules/mod_translation/mod_translation.erl:255
+msgid "Reloading all .po files in the background."
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:38
 msgid "Save"
 msgstr "保存"
 
@@ -160,7 +164,7 @@ msgstr "选择拷贝源语言："
 msgid "Select your preferred language."
 msgstr "选择首选语言。"
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:22
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:27
 msgid "Show in menu"
 msgstr "在菜单中显示"
 
@@ -168,11 +172,33 @@ msgstr "在菜单中显示"
 msgid "Show per module how much of the templates are translated."
 msgstr "显示每个模块的翻译进度。"
 
+#: modules/mod_translation/mod_translation.erl:269
+#: modules/mod_translation/mod_translation.erl:280
+#: modules/mod_translation/mod_translation.erl:290
+msgid "Sorry, you don't have permission to change the language list."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:257
+msgid "Sorry, you don't have permission to reload translations."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:249
+msgid "Sorry, you don't have permission to scan for translations."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:239
+msgid "Sorry, you don't have permission to set the default language."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:247
+msgid "Started building the .pot files. This may take a while..."
+msgstr ""
+
 #: modules/mod_translation/templates/text/_language_switch.tpl:1
 msgid "Switch language"
 msgstr "切换语言"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid ""
 "The title, body and other texts can be translated in different languages. "
 "Here you can select which languages will be used."
@@ -198,12 +224,12 @@ msgid ""
 "files\" first from the translation overview."
 msgstr "请从翻译概览执行 \"生成 .pot 文件\"，然后再查看模块最近状态。"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid "Translate this page in other languages."
 msgstr "翻译本页面到其他语言"
 
 #: modules/mod_translation/templates/admin_translation.tpl:3
-#: modules/mod_translation/mod_translation.erl:463
+#: modules/mod_translation/mod_translation.erl:501
 msgid "Translation"
 msgstr "翻译"
 
@@ -211,8 +237,8 @@ msgstr "翻译"
 msgid "Translation configuration and tools"
 msgstr "翻译配置和工具"
 
-#: modules/mod_translation/templates/admin_translation_status.tpl:3
 #: modules/mod_translation/templates/admin_translation.tpl:99
+#: modules/mod_translation/templates/admin_translation_status.tpl:3
 msgid "Translation status"
 msgstr "翻译状态"
 
@@ -220,6 +246,6 @@ msgstr "翻译状态"
 msgid "Translation status per module"
 msgstr "每个模块的翻译状态"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:5
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:6
 msgid "Translations"
 msgstr "翻译"
