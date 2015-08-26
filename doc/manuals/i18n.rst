@@ -116,10 +116,16 @@ in a language’s ``.po`` file accordingly::
   $ msgmerge -U nl.po templates/mod_foo.pot
 
 This will merge the new strings into the existing ``nl.po``
-file. After doing this, you'll need to edit the ``nl.po`` file again
+file. 
+
+To update all ``.po`` files in the directory::
+
+  $ cd modules/mod_foo/translations
+  $ find . -name "*.po" -print0 | xargs -0 -I file msgmerge -U file template/mod_foo.pot
+
+After doing this, you'll need to edit each ``po`` file again
 to check if there are new strings which need translation, edit
 existing strings, etc.
-
 
 
 Translated content
