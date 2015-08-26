@@ -7,3 +7,4 @@
 # 4a. With Material Design, run: lessc --include-path="../mod_base_less:../material_design_less" my-project.less ../css/my-project.css
 
 lessc --include-path="../../../mod_artwork/lib/font-awesome-4/less:../../../mod_artwork/lib/material-design/less" z.icons.less ../css/z.icons.css
+lessc scomp_base_pager.less ../css/scomp_base_pager.css
