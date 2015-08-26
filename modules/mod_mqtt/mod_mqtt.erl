@@ -65,7 +65,7 @@
 ]).
 
 'mqtt:~site/test'(Message, Pid, Context) ->
-    lager:debug("mqtt:~site/test received: ~p", [{Message, Pid, z_context:site(Context)}]),
+    lager:debug("mqtt:~~site/test received: ~p", [{Message, Pid, z_context:site(Context)}]),
     ok.
 
 pid_observe_module_activate(MyPid, #module_activate{module=Module, pid=ModulePid}, Context) ->
@@ -229,7 +229,7 @@ maybe_subscribe(_, _M, _Pid, _MyPid, _Context) ->
 % Middleman calls M:F(Message, ModulePid, Context) when it receives a message.
 subscribe_topic(Topic, Qos, MFA, ModulePid, MyPid, Context) ->
     Sub = {
-        {Topic,MFA},
+        {Topic, MFA, ModulePid},
         {z_mqtt_module_subscriber, start_link, [{Topic, Qos, MFA, ModulePid, z_context:site(Context)}]},
         temporary, 5000, worker, [z_mqtt_module_subscriber]
     },
