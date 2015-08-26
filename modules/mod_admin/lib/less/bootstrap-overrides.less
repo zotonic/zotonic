@@ -1,4 +1,4 @@
-// All Bootstrap classes:
+// For reference, all Bootstrap classes:
 // https://gist.github.com/geksilla/6543145
 
 .text-muted {
@@ -133,6 +133,20 @@ button.close {
     margin-left: 0;
     margin-right: 10px;
     margin-bottom: 5px;
+}
+
+.pagination {
+    > li {
+        > a {
+            #3L > .user-select(none);
+        }
+        
+        &.disabled {
+            > a {
+                pointer-events: none;   
+            }
+        }
+    }
 }
 
 @media (min-width:768px) {

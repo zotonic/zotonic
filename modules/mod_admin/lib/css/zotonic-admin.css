@@ -269,6 +269,15 @@ button.close {
   margin-right: 10px;
   margin-bottom: 5px;
 }
+.pagination > li > a {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.pagination > li.disabled > a {
+  pointer-events: none;
+}
 @media (min-width: 768px) {
   .form-horizontal .control-label {
     margin-bottom: 5px;
