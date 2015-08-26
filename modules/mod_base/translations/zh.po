@@ -13,17 +13,17 @@ msgstr ""
 "PO-Revision-Date: 2013-01-12 00:26+0800\n"
 "Last-Translator: Shuyu Wang <andelf@gmail.com>\n"
 "Language-Team: \n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
-"Language: zh\n"
 
-#: modules/mod_base/actions/action_base_alert.erl:36
+#: modules/mod_base/actions/action_base_alert.erl:35
 msgid "Alert"
 msgstr "警告"
 
-#: modules/mod_base/templates/error.tpl:71
+#: modules/mod_base/templates/error.tpl:74
 msgid "Arguments"
 msgstr "参数"
 
@@ -49,7 +49,7 @@ msgstr "日期"
 msgid "Desktop"
 msgstr "桌面"
 
-#: modules/mod_base/templates/error.tpl:72
+#: modules/mod_base/templates/error.tpl:75
 msgid "File"
 msgstr "文件"
 
@@ -61,7 +61,7 @@ msgstr "文件名"
 msgid "Folder"
 msgstr "文件夹"
 
-#: modules/mod_base/templates/error.tpl:70
+#: modules/mod_base/templates/error.tpl:73
 msgid "Function/ template"
 msgstr "函数/模版"
 
@@ -78,11 +78,15 @@ msgstr "来自 Zotonic 的问候"
 msgid "Index of"
 msgstr "索引"
 
+#: modules/mod_base/templates/email_base.tpl:22
+msgid "Kind regards,"
+msgstr ""
+
 #: modules/mod_base/templates/phone/_ua_select.tpl:5
 msgid "Mobile or desktop"
 msgstr "移动平台或桌面"
 
-#: modules/mod_base/templates/error.tpl:69
+#: modules/mod_base/templates/error.tpl:72
 msgid "Module"
 msgstr "模块"
 
@@ -94,8 +98,8 @@ msgstr "下一页"
 msgid "No Access"
 msgstr "无法访问"
 
+#: modules/mod_base/templates/_action_dialog_alert.tpl:5
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:7
-#: modules/mod_base/templates/_action_dialog_alert.tpl:4
 msgid "OK"
 msgstr "好"
 
@@ -108,9 +112,13 @@ msgstr "手机"
 msgid "Previous"
 msgstr "前一页"
 
-#: modules/mod_base/templates/error.tpl:16
+#: modules/mod_base/templates/error.tpl:19
 msgid "Reason"
 msgstr "原因"
+
+#: modules/mod_base/templates/error.tpl:14
+msgid "Return to the homepage"
+msgstr ""
 
 #: modules/mod_base/templates/directory_index.tpl:17
 msgid "Size"
@@ -124,7 +132,7 @@ msgstr "对不起，这个页面已经被删除。"
 msgid "Sorry, you don’t have access to this page."
 msgstr "对不起，你没有权限访问本页面。"
 
-#: modules/mod_base/templates/error.tpl:20
+#: modules/mod_base/templates/error.tpl:23
 msgid "Stack trace"
 msgstr "堆栈跟踪"
 
@@ -137,6 +145,10 @@ msgstr "平板"
 msgid "Text"
 msgstr "文本"
 
+#: modules/mod_base/templates/error.tpl:13
+msgid "That page does not exist"
+msgstr ""
+
 #: modules/mod_base/templates/email_base.tpl:19
 msgid ""
 "This is the base message. When you receive this text then the template "
@@ -148,36 +160,36 @@ msgstr ""
 msgid "Type"
 msgstr "类型"
 
-#: modules/mod_base/templates/error.tpl:13
+#: modules/mod_base/templates/error.tpl:16
 msgid "error"
 msgstr "错误"
 
-msgid "second"
-msgstr "秒"
+#~ msgid "second"
+#~ msgstr "秒"
 
-msgid "seconds"
-msgstr "秒"
+#~ msgid "seconds"
+#~ msgstr "秒"
 
-msgid "minute"
-msgstr "分"
+#~ msgid "minute"
+#~ msgstr "分"
 
-msgid "minutes"
-msgstr "分"
+#~ msgid "minutes"
+#~ msgstr "分"
 
-msgid "ago"
-msgstr "之前"
+#~ msgid "ago"
+#~ msgstr "之前"
 
-msgid "hour"
-msgstr "小时"
+#~ msgid "hour"
+#~ msgstr "小时"
 
-msgid "hours"
-msgstr "小时"
+#~ msgid "hours"
+#~ msgstr "小时"
 
-msgid "day"
-msgstr "天"
+#~ msgid "day"
+#~ msgstr "天"
 
-msgid "days"
-msgstr "天"
+#~ msgid "days"
+#~ msgstr "天"
 
-msgid "now"
-msgstr "刚刚"
+#~ msgid "now"
+#~ msgstr "刚刚"
