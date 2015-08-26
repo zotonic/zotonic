@@ -9,10 +9,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic-0.10-dev\n"
-"POT-Creation-Date: 2012-12-27 15:07+0400\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2013-01-14 14:32+0400\n"
 "Last-Translator: Ilyas Gasanov <torso.nafi@gmail.com>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,9 +39,9 @@ msgstr ""
 msgid "Are you sure you want to delete the language"
 msgstr "Вы уверены, что желаете удалить язык"
 
-#: modules/mod_translation/templates/_dialog_language_delete.tpl:6
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:9
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:30
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:6
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:37
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -52,8 +53,8 @@ msgstr "Копировать"
 msgid "Copy texts from a language to the currently selected language."
 msgstr "Копировать тексты из языка в выбранный сейчас язык."
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:34
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:35
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:19
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:20
 msgid "Copy translation"
 msgstr "Копировать перевод"
 
@@ -106,18 +107,18 @@ msgstr ""
 msgid "Generate .pot files"
 msgstr "Генерация файлов .pot"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid "Help about translations"
 msgstr "Справка о переводах"
 
-#: modules/mod_translation/templates/admin_translation.tpl:24
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:6
+#: modules/mod_translation/templates/admin_translation.tpl:24
 msgid "ISO Code"
 msgstr "Код по ISO"
 
-#: modules/mod_translation/templates/text/_language_switch.tpl:1
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:19
 #: modules/mod_translation/templates/admin_translation.tpl:25
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:14
+#: modules/mod_translation/templates/text/_language_switch.tpl:1
 msgid "Language"
 msgstr "Язык"
 
@@ -144,7 +145,11 @@ msgid ""
 msgstr ""
 "Перезагрузить все переводы из модулей и сайта. Все шаблоны будут пересобраны."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:31
+#: modules/mod_translation/mod_translation.erl:255
+msgid "Reloading all .po files in the background."
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:38
 msgid "Save"
 msgstr "Сохранить"
 
@@ -168,7 +173,7 @@ msgstr "Выберите исходный язык для копирования
 msgid "Select your preferred language."
 msgstr "Выберите предпочитаемый язык."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:22
+#: modules/mod_translation/templates/_dialog_language_edit.tpl:27
 msgid "Show in menu"
 msgstr "Показывать в меню"
 
@@ -176,11 +181,33 @@ msgstr "Показывать в меню"
 msgid "Show per module how much of the templates are translated."
 msgstr "Показать, насколько полно переведены шаблоны в каждом модуле."
 
+#: modules/mod_translation/mod_translation.erl:269
+#: modules/mod_translation/mod_translation.erl:280
+#: modules/mod_translation/mod_translation.erl:290
+msgid "Sorry, you don't have permission to change the language list."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:257
+msgid "Sorry, you don't have permission to reload translations."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:249
+msgid "Sorry, you don't have permission to scan for translations."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:239
+msgid "Sorry, you don't have permission to set the default language."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:247
+msgid "Started building the .pot files. This may take a while..."
+msgstr ""
+
 #: modules/mod_translation/templates/text/_language_switch.tpl:1
 msgid "Switch language"
 msgstr "Сменить язык"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid ""
 "The title, body and other texts can be translated in different languages. "
 "Here you can select which languages will be used."
@@ -210,12 +237,12 @@ msgstr ""
 "Для просмотра актуальных сведений по этому модулю, пожалуйста, запустите "
 "сначала «генерация файлов .pot» со страницы обзора переводов."
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:12
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid "Translate this page in other languages."
 msgstr "Перевести эту страницу на другие языки."
 
 #: modules/mod_translation/templates/admin_translation.tpl:3
-#: modules/mod_translation/mod_translation.erl:463
+#: modules/mod_translation/mod_translation.erl:501
 msgid "Translation"
 msgstr "Перевод"
 
@@ -232,6 +259,6 @@ msgstr "Состояние перевода"
 msgid "Translation status per module"
 msgstr "Состояние перевода каждого модуля"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:5
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:6
 msgid "Translations"
 msgstr "Переводы"

@@ -236,7 +236,7 @@ event(#postback{message={language_default, Args}}, Context) ->
             m_config:set_value(i18n, language, z_convert:to_binary(Code), Context),
             Context;
         false ->
-            z_render:growl_error("Sorry, you don't have permission to set the default language.", Context)
+            z_render:growl_error(?__("Sorry, you don't have permission to set the default language.", Context), Context)
     end;
 
 %% @doc Start rescanning all templates for translation tags.
@@ -244,17 +244,17 @@ event(#postback{message=translation_generate}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> generate(Context) end),
-            z_render:growl("Started building the .po templates. This may take a while.", Context);
+            z_render:growl(?__("Started building the .pot files. This may take a while...", Context), Context);
         false ->
-            z_render:growl_error("Sorry, you don't have permission to scan for translations.", Context)
+            z_render:growl_error(?__("Sorry, you don't have permission to scan for translations.", Context), Context)
     end;
 event(#postback{message=translation_reload}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> z_trans_server:load_translations(Context) end),
-            z_render:growl("Reloading all .po template in the background.", Context);
+            z_render:growl(?__("Reloading all .po files in the background.", Context), Context);
         false ->
-            z_render:growl_error("Sorry, you don't have permission to reload translations.", Context)
+            z_render:growl_error(?__("Sorry, you don't have permission to reload translations.", Context), Context)
     end;
 
 event(#submit{message={language_edit, Args}}, Context) ->
@@ -266,7 +266,7 @@ event(#submit{message={language_edit, Args}}, Context) ->
             Context1 = z_render:dialog_close(Context),
             z_render:wire({reload, []}, Context1);
         false ->
-            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
+            z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
     end;
 
 event(#postback{message={language_delete, Args}}, Context) ->
@@ -277,7 +277,7 @@ event(#postback{message={language_delete, Args}}, Context) ->
             Context1 = z_render:dialog_close(Context),
             z_render:wire({reload, []}, Context1);
         false ->
-            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
+            z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
     end;
 
 event(#postback{message={language_enable, Args}}, Context) ->
@@ -287,7 +287,7 @@ event(#postback{message={language_enable, Args}}, Context) ->
             language_enable(Code, z_convert:to_bool(z_context:get_q("triggervalue", Context)), Context),
             Context;
         false ->
-            z_render:growl_error("Sorry, you don't have permission to change the language list.", Context)
+            z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
     end.
 
 
