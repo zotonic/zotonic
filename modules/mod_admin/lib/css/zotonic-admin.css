@@ -774,6 +774,9 @@ table.do_adminLinkedTable {
     }
 */
 }
+table.do_adminLinkedTable th a:hover {
+  text-decoration: none;
+}
 table.do_adminLinkedTable td.view-link {
   padding: 0;
 }
@@ -824,6 +827,32 @@ table.do_adminLinkedTable .admin-list-thumb > img {
 }
 table.table tr.unpublished td a.btn-success {
   color: white;
+}
+.arrow {
+  height: 0;
+  width: 0;
+  border: 4px solid transparent;
+  vertical-align: middle;
+}
+.arrow.up {
+  border-bottom-color: #000;
+  border-bottom-color: currentColor;
+  margin-top: -4px;
+}
+.arrow.down {
+  border-top-color: #000;
+  border-top-color: currentColor;
+  margin-top: 4px;
+}
+th .arrow {
+  display: inline-block;
+  margin-left: 8px;
+}
+th a:hover .arrow.up {
+  border-bottom-color: currentColor;
+}
+th a:hover .arrow.down {
+  border-top-color: currentColor;
 }
 .connect-results {
   max-height: 400px;
