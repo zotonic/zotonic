@@ -136,7 +136,7 @@ ul.media > li.ui-sortable-placeholder {
   float: left;
 }
 .admin-image-border,
-div.admin-edit-media,
+.admin-edit-media,
 table.do_adminLinkedTable .admin-list-thumb > img {
   border: 1px solid #fff;
 }
@@ -148,7 +148,7 @@ table.do_adminLinkedTable .admin-list-thumb > img {
   color: #777777;
 }
 .admin-word-break,
-div.admin-header h2,
+.admin-header h2,
 table.do_adminLinkedTable th,
 table.do_adminLinkedTable td,
 table.do_adminLinkedTable .admin-list-thumb > span,
@@ -165,6 +165,29 @@ table.do_adminLinkedTable .admin-list-thumb > span,
 p .z-btn-help {
   display: inline;
   vertical-align: text-bottom;
+}
+.admin-header {
+  margin-bottom: 24px;
+  *zoom: 1;
+}
+.admin-header:before,
+.admin-header:after {
+  content: " ";
+  display: table;
+}
+.admin-header:after {
+  clear: both;
+}
+.admin-header > :last-child {
+  margin-bottom: 0;
+}
+.admin-header h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+}
+h3 {
+  margin: 1.25em 0 .75em 0;
 }
 .text-muted {
   color: #999999;
@@ -363,17 +386,6 @@ ul.blocks.ui-sortable .form-control.block-name:focus {
   top: 0;
   bottom: 0;
 }
-.pull-right p.admin-chapeau {
-  text-align: right;
-}
-p.admin-chapeau {
-  color: #999999;
-  margin: 0 0 2px 0;
-}
-p.admin-chapeau a {
-  color: #999999;
-  text-decoration: underline;
-}
 ul.media {
   margin: 0;
 }
@@ -431,12 +443,40 @@ ul.media > li .bottom .caption a {
   width: 161px;
   vertical-align: text-top;
 }
-div.admin-header h2 {
-  margin-top: 0;
-  margin-bottom: 18px;
-  color: #333;
+.edit-page .admin-header h2 {
+  margin-bottom: 0;
 }
-div.admin-edit-media {
+.edit-page .admin-header .admin-header-meta {
+  margin-bottom: 10px;
+}
+.edit-page .admin-header .admin-btn-category,
+.edit-page .admin-header .admin-edit-dates {
+  font-size: 12px;
+}
+.edit-page .admin-header .admin-btn-category {
+  margin-top: -2px;
+}
+.edit-page .admin-header .admin-edit-dates {
+  margin-left: 6px;
+}
+.edit-page .admin-header .admin-edit-dates,
+.edit-page .admin-header .admin-edit-dates a {
+  color: #bbbbbb;
+}
+.edit-page .admin-header .admin-edit-dates a {
+  text-decoration: underline;
+}
+.edit-page .admin-header .admin-header-has-image {
+  padding-left: 100px;
+}
+/* small image in admin edit */
+img.admin-leader-image {
+  background-color: #f2f2f2;
+  float: left;
+  width: 80px;
+  height: 60px;
+}
+.admin-edit-media {
   display: inline-block;
   background: white;
   padding: 0;
@@ -539,15 +579,6 @@ ul.tree-list img.admin-list-dashboard {
 img.admin-list-overview {
   width: 80px;
   height: 60px;
-}
-/* small image in admin edit */
-img.admin-leader-image {
-  background-color: #f2f2f2;
-  float: left;
-  margin-right: 12px;
-  width: 64px;
-  height: 48px;
-  cursor: pointer;
 }
 .widget.admin-logon {
   margin: 100px auto;
