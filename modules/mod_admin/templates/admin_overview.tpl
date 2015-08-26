@@ -103,7 +103,7 @@
                              as query
                           %}
                               {% with m.search.paged[query] as result %}
-                                  {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort %}
+                                  {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort qcat=qcat %}
                                   {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
                               {% endwith %}
                           {% endwith %}
