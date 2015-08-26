@@ -1,9 +1,0 @@
-.pagination > li > a {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.pagination > li.disabled > a {
-  pointer-events: none;
-}
