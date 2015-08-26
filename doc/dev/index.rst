@@ -11,6 +11,7 @@ Topics:
    filing_issues
    contributing
    documentation
+   translations
    testing
    directory-structure
    releasenotes/index
