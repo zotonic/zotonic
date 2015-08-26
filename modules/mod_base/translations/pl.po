@@ -20,11 +20,11 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 
-#: modules/mod_base/actions/action_base_alert.erl:36
+#: modules/mod_base/actions/action_base_alert.erl:35
 msgid "Alert"
 msgstr "Ostrzeżenie"
 
-#: modules/mod_base/templates/error.tpl:71
+#: modules/mod_base/templates/error.tpl:74
 msgid "Arguments"
 msgstr "Parametry"
 
@@ -50,7 +50,7 @@ msgstr "Data"
 msgid "Desktop"
 msgstr "Stacjonarny"
 
-#: modules/mod_base/templates/error.tpl:72
+#: modules/mod_base/templates/error.tpl:75
 msgid "File"
 msgstr "Plik"
 
@@ -62,7 +62,7 @@ msgstr "Nazwa pliku"
 msgid "Folder"
 msgstr "Katalog"
 
-#: modules/mod_base/templates/error.tpl:70
+#: modules/mod_base/templates/error.tpl:73
 msgid "Function/ template"
 msgstr "Funkcja/ szablon"
 
@@ -79,11 +79,15 @@ msgstr "Zotonic pozdrawia!"
 msgid "Index of"
 msgstr "Zawartość"
 
+#: modules/mod_base/templates/email_base.tpl:22
+msgid "Kind regards,"
+msgstr ""
+
 #: modules/mod_base/templates/phone/_ua_select.tpl:5
 msgid "Mobile or desktop"
 msgstr "Mobilny czy stacjonarny"
 
-#: modules/mod_base/templates/error.tpl:69
+#: modules/mod_base/templates/error.tpl:72
 msgid "Module"
 msgstr "Moduł"
 
@@ -95,8 +99,8 @@ msgstr "Dalej"
 msgid "No Access"
 msgstr "Brak dostępu"
 
+#: modules/mod_base/templates/_action_dialog_alert.tpl:5
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:7
-#: modules/mod_base/templates/_action_dialog_alert.tpl:4
 msgid "OK"
 msgstr "OK"
 
@@ -109,9 +113,13 @@ msgstr "Telefon"
 msgid "Previous"
 msgstr "Poprzedni"
 
-#: modules/mod_base/templates/error.tpl:16
+#: modules/mod_base/templates/error.tpl:19
 msgid "Reason"
 msgstr "Przyczyna"
+
+#: modules/mod_base/templates/error.tpl:14
+msgid "Return to the homepage"
+msgstr ""
 
 #: modules/mod_base/templates/directory_index.tpl:17
 msgid "Size"
@@ -125,7 +133,7 @@ msgstr "Niestety, strona została usunięta."
 msgid "Sorry, you don’t have access to this page."
 msgstr "Niestety, do tej strony nie masz dostępu."
 
-#: modules/mod_base/templates/error.tpl:20
+#: modules/mod_base/templates/error.tpl:23
 msgid "Stack trace"
 msgstr "Stack trace"
 
@@ -138,6 +146,10 @@ msgstr "Tablet"
 msgid "Text"
 msgstr "Tekst"
 
+#: modules/mod_base/templates/error.tpl:13
+msgid "That page does not exist"
+msgstr ""
+
 #: modules/mod_base/templates/email_base.tpl:19
 msgid ""
 "This is the base message. When you receive this text then the template "
@@ -148,6 +160,6 @@ msgstr ""
 msgid "Type"
 msgstr "Rodzaj"
 
-#: modules/mod_base/templates/error.tpl:13
+#: modules/mod_base/templates/error.tpl:16
 msgid "error"
 msgstr "błąd"

@@ -1,4 +1,4 @@
-﻿# SOME DESCRIPTIVE TITLE.
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -6,7 +6,6 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -19,163 +18,242 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_base_site/templates/text/map.tpl:8
-#: modules/mod_base_site/templates/tablet/map.tpl:6
-msgid "Back to"
-msgstr "Zurück zu"
+#: modules/mod_base/actions/action_base_alert.erl:35
+msgid "Alert"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_meta.tpl:4
-msgid "By"
-msgstr "Durch"
-
-#: modules/mod_base_site/templates/text/map.tpl:28
-#: modules/mod_base_site/templates/tablet/map.tpl:26
-msgid "City"
-msgstr "Ort"
-
-#: modules/mod_base_site/templates/text/page.media.tpl:6
-#: modules/mod_base_site/templates/tablet/page.media.tpl:30
-msgid "Click to download"
-msgstr "Klicken für den Download"
-
-#: modules/mod_base_site/templates/phone/_dialog_share_page.tpl:17
-msgid "Close"
-msgstr "Schließen"
-
-#: modules/mod_base_site/templates/text/search.tpl:27
-#: modules/mod_base_site/templates/tablet/search.tpl:29
-msgid "Did not find any pages matching"
-msgstr "Keine Treffer gefunden"
-
-#: modules/mod_base_site/templates/text/_media_info.tpl:12
-msgid "Dimensions"
-msgstr "Dimensionen"
-
-#: modules/mod_base_site/templates/text/page.tpl:34
-#: modules/mod_base_site/templates/text/page.collection.tpl:7
-#: modules/mod_base_site/templates/text/page.query.tpl:14
-msgid "Documents"
+#: modules/mod_base/templates/error.tpl:74
+#, fuzzy
+msgid "Arguments"
 msgstr "Dokumente"
 
-#: modules/mod_base_site/templates/text/_media_info.tpl:26
-msgid "Download file"
-msgstr "Dateidownload"
+#: modules/mod_base/templates/text/_ua_select.tpl:5
+#: modules/mod_base/templates/phone/_ua_select.tpl:13
+msgid "Automatic"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_meta.tpl:9
-msgid "Edit"
-msgstr "Editieren"
+#: modules/mod_base/templates/_action_dialog_confirm.tpl:6
+msgid "Cancel"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_media_info.tpl:4
+#: modules/mod_base/actions/action_base_confirm.erl:35
+msgid "Confirm"
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:16
+msgid "Date"
+msgstr ""
+
+#: modules/mod_base/templates/text/_ua_select.tpl:2
+#: modules/mod_base/templates/phone/_ua_select.tpl:9
+msgid "Desktop"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:75
+#, fuzzy
+msgid "File"
+msgstr "Dateiname"
+
+#: modules/mod_base/templates/directory_index.tpl:14
 msgid "Filename"
 msgstr "Dateiname"
 
-#: modules/mod_base_site/templates/text/_navbar.tpl:5
-msgid "Home"
-msgstr "Home"
+#: modules/mod_base/templates/directory_index.tpl:28
+msgid "Folder"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_media_info.tpl:24
-msgid "Links"
-msgstr "Links"
+#: modules/mod_base/templates/error.tpl:73
+msgid "Function/ template"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/map.tpl:3
-#: modules/mod_base_site/templates/tablet/map.tpl:3
-msgid "Map of"
-msgstr "Karte von"
+#: modules/mod_base/templates/error.tpl:10
+msgid "Gone"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/page.tpl:35
-#: modules/mod_base_site/templates/text/page.collection.tpl:8
-#: modules/mod_base_site/templates/text/page.query.tpl:15
-msgid "Media"
-msgstr "Media"
+#: modules/mod_base/templates/email_base.tpl:4
+msgid "Hello from Zotonic"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_media_info.tpl:8
-msgid "Mime"
-msgstr "Mime"
+#: modules/mod_base/templates/directory_index.tpl:4
+#: modules/mod_base/templates/directory_index.tpl:8
+msgid "Index of"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/page.tpl:37
-msgid "More"
-msgstr "Mehr"
+#: modules/mod_base/templates/email_base.tpl:22
+msgid "Kind regards,"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/search.tpl:20
-#: modules/mod_base_site/templates/tablet/page.query.tpl:8
-#: modules/mod_base_site/templates/tablet/search.tpl:18
-msgid "Page"
-msgstr "Seite"
+#: modules/mod_base/templates/phone/_ua_select.tpl:5
+msgid "Mobile or desktop"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/page.media.tpl:6
-#: modules/mod_base_site/templates/tablet/page.media.tpl:30
-msgid "Preview"
+#: modules/mod_base/templates/error.tpl:72
+msgid "Module"
+msgstr ""
+
+#: modules/mod_base/templates/text/_pager.tpl:7
+msgid "Next"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:7
+msgid "No Access"
+msgstr ""
+
+#: modules/mod_base/templates/_action_dialog_alert.tpl:5
+#: modules/mod_base/templates/_action_dialog_confirm.tpl:7
+msgid "OK"
+msgstr ""
+
+#: modules/mod_base/templates/text/_ua_select.tpl:4
+#: modules/mod_base/templates/phone/_ua_select.tpl:11
+msgid "Phone"
+msgstr ""
+
+#: modules/mod_base/templates/text/_pager.tpl:4
+#, fuzzy
+msgid "Previous"
 msgstr "Vorschau"
 
-#: modules/mod_base_site/templates/phone/_content_list_item.tpl:18
-msgid "Read more"
-msgstr "Mehr dazu"
+#: modules/mod_base/templates/error.tpl:19
+msgid "Reason"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_navbar.tpl:11
-#: modules/mod_base_site/templates/text/search.tpl:3
-#: modules/mod_base_site/templates/text/search.tpl:41
-#: modules/mod_base_site/templates/tablet/_search_form.tpl:4
-#: modules/mod_base_site/templates/tablet/search.tpl:3
-msgid "Search"
-msgstr "Suche"
+#: modules/mod_base/templates/error.tpl:14
+msgid "Return to the homepage"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/search.tpl:14
-#: modules/mod_base_site/templates/tablet/search.tpl:14
-msgid "Searching for"
-msgstr "Suchen nach"
-
-#: modules/mod_base_site/templates/phone/_meta_share.tpl:3
-msgid "Share"
-msgstr "Teilen"
-
-#: modules/mod_base_site/templates/phone/_meta_share.tpl:3
-#: modules/mod_base_site/templates/phone/_meta_share.tpl:5
-msgid "Share this page"
-msgstr "Diese Seite teilen"
-
-#: modules/mod_base_site/templates/text/_address.tpl:13
-#: modules/mod_base_site/templates/text/_address.tpl:17
-msgid "Show map"
-msgstr "Karte anzeigen"
-
-#: modules/mod_base_site/templates/text/_media_info.tpl:16
+#: modules/mod_base/templates/directory_index.tpl:17
 msgid "Size"
 msgstr "Größe"
 
-#: modules/mod_base_site/templates/text/map.tpl:32
-#: modules/mod_base_site/templates/tablet/map.tpl:30
-msgid "Street"
-msgstr "Straße"
+#: modules/mod_base/templates/error.tpl:11
+msgid "Sorry, this page has been deleted."
+msgstr ""
 
-#: modules/mod_base_site/templates/text/search.tpl:37
-msgid "Type the text to search"
-msgstr "Suchtext eingeben"
+#: modules/mod_base/templates/error.tpl:8
+msgid "Sorry, you don’t have access to this page."
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_media_info.tpl:20
-msgid "Uploaded"
-msgstr "Hochladen"
+#: modules/mod_base/templates/error.tpl:23
+msgid "Stack trace"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_media_info.tpl:28
-msgid "View in browser"
-msgstr "Im Browser anzeigen"
+#: modules/mod_base/templates/text/_ua_select.tpl:3
+#: modules/mod_base/templates/phone/_ua_select.tpl:10
+msgid "Tablet"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/home.tpl:3
-msgid "Welcome"
-msgstr "Willkommen"
+#: modules/mod_base/templates/phone/_ua_select.tpl:12
+msgid "Text"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/map.tpl:6
-msgid "Where is"
-msgstr "Wo ist"
+#: modules/mod_base/templates/error.tpl:13
+msgid "That page does not exist"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_meta.tpl:7
-msgid "l, F j, Y"
-msgstr "l, F j, Y"
+#: modules/mod_base/templates/email_base.tpl:19
+msgid ""
+"This is the base message. When you receive this text then the template "
+"builder did not overrule the <tt>body</tt> block."
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_content_list_item.tpl:4
-#: modules/mod_base_site/templates/text/_content_list_item.tpl:5
-msgid "more…"
-msgstr "mehr…"
+#: modules/mod_base/templates/directory_index.tpl:15
+msgid "Type"
+msgstr ""
 
-#: modules/mod_base_site/templates/text/_media_info.tpl:13
-msgid "pixels"
-msgstr "Pixel"
+#: modules/mod_base/templates/error.tpl:16
+msgid "error"
+msgstr ""
+
+#~ msgid "Back to"
+#~ msgstr "Zurück zu"
+
+#~ msgid "By"
+#~ msgstr "Durch"
+
+#~ msgid "City"
+#~ msgstr "Ort"
+
+#~ msgid "Click to download"
+#~ msgstr "Klicken für den Download"
+
+#~ msgid "Close"
+#~ msgstr "Schließen"
+
+#~ msgid "Did not find any pages matching"
+#~ msgstr "Keine Treffer gefunden"
+
+#~ msgid "Dimensions"
+#~ msgstr "Dimensionen"
+
+#~ msgid "Download file"
+#~ msgstr "Dateidownload"
+
+#~ msgid "Edit"
+#~ msgstr "Editieren"
+
+#~ msgid "Home"
+#~ msgstr "Home"
+
+#~ msgid "Links"
+#~ msgstr "Links"
+
+#~ msgid "Map of"
+#~ msgstr "Karte von"
+
+#~ msgid "Media"
+#~ msgstr "Media"
+
+#~ msgid "Mime"
+#~ msgstr "Mime"
+
+#~ msgid "More"
+#~ msgstr "Mehr"
+
+#~ msgid "Page"
+#~ msgstr "Seite"
+
+#~ msgid "Read more"
+#~ msgstr "Mehr dazu"
+
+#~ msgid "Search"
+#~ msgstr "Suche"
+
+#~ msgid "Searching for"
+#~ msgstr "Suchen nach"
+
+#~ msgid "Share"
+#~ msgstr "Teilen"
+
+#~ msgid "Share this page"
+#~ msgstr "Diese Seite teilen"
+
+#~ msgid "Show map"
+#~ msgstr "Karte anzeigen"
+
+#~ msgid "Street"
+#~ msgstr "Straße"
+
+#~ msgid "Type the text to search"
+#~ msgstr "Suchtext eingeben"
+
+#~ msgid "Uploaded"
+#~ msgstr "Hochladen"
+
+#~ msgid "View in browser"
+#~ msgstr "Im Browser anzeigen"
+
+#~ msgid "Welcome"
+#~ msgstr "Willkommen"
+
+#~ msgid "Where is"
+#~ msgstr "Wo ist"
+
+#~ msgid "l, F j, Y"
+#~ msgstr "l, F j, Y"
+
+#~ msgid "more…"
+#~ msgstr "mehr…"
+
+#~ msgid "pixels"
+#~ msgstr "Pixel"
