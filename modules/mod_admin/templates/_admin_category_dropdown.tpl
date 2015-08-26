@@ -1,4 +1,8 @@
-{% with m.rsc[id].category_id as r_cat %}
+{% with
+    cat_id|default:m.rsc[id].category_id
+    as
+    r_cat
+%}
 <select id="category_id" name="category_id" class="col-lg-4 col-md-4 form-control">
     {% for c in m.category.tree_flat %}
 	    {% if m.acl.insert[c.id.name|as_atom] %}

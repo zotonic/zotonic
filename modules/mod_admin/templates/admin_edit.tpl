@@ -2,48 +2,37 @@
 
 {% block title %}{_ Edit _} “{{ m.rsc[id].title }}”{% endblock %}
 
+{% block bodyclass %}edit-page{% endblock %}
 
 {% block content %}
 {% with m.rsc[id] as r %}
 {% with r.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
 
-<div class="admin-header">
-	<div class="pull-right">
-		<p class="admin-chapeau">
-			{_ Modified _} {_ by _}
-			<a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a> &ndash; {{ r.modified|date:"Y-m-d H:i" }}<br/>
-			{_ Created by _}
-			<a href="{% url admin_edit_rsc id=r.creator_id %}">{{ m.rsc[r.creator_id].title }}</a> &ndash; {{ r.created|date:"Y-m-d H:i" }}
-		</p>
-	</div>
+{% if not is_editable %}
+    <div class="alert alert-warning" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        {_ You are not allowed to edit this page. _}
+    </div>
+{% endif %}
 
-	{% if not is_editable %}
-	<h2>
-	{_ You are not allowed to edit the _} {{ m.rsc[r.category_id].title|lower }} “<span {% include "_language_attrs.tpl" %}>{{ r.title|striptags }}</span>”
-	</h2>
-	{% else %}
-	    <p class="admin-chapeau">
-            {% include "_admin_edit_leader_image.tpl" %}
-            
-		{_ editing _}
-		{% if m.acl.insert[r.category.name|as_atom] and not r.is_a.category and not r.is_a.predicate %}
-		<a	href="javascript:;" id="changecategory" title="{_ Change category _}">{{ m.rsc[r.category_id].title|lower }}</a>:
-		{% wire id="changecategory" action={dialog_open title=_"Change category" template="_action_dialog_change_category.tpl" id=id} %}
-		{% else %}
-		{{ m.rsc[r.category_id].title|lower }}:
-		{% endif %}
-	</p>
-	
-	<h2 {% include "_language_attrs.tpl" %}>
-		{{ r.title|striptags|default:_"<em>untitled</em>" }}
-	</h2>
-	{% endif %}{# editable #}
-</div>
+{% include "_admin_edit_header.tpl" %}
 
 {% block admin_edit_form_pre %}{% endblock %}
 
-{% wire id="rscform" type="submit" postback="rscform" %}
+{% wire
+    id="rscform"
+    type="submit"
+    postback="rscform"
+    action={
+        update
+        target="edit_admin_header"
+        template="_admin_edit_header.tpl"
+        r=r
+        is_editable=is_editable
+        languages=languages
+    }
+%}
 <form id="rscform" method="post" action="postback" class="form">
 	<input type="hidden" name="id" value="{{ id }}" />
 
