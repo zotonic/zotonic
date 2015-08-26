@@ -16,20 +16,22 @@
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     <input type="hidden" name="qquery" value="{{ q.qquery|escape }}" />
                     <div class="btn-group pull-right">
-                        {% if `mod_content_groups`|member:m.modules.enabled  and m.search[{query cat=`content_group`}]|length %}
-                            <div class="btn-group">
-                                {% include "_admin_button_dropdown.tpl"
-                                    select_name="qgroup"
-                                    selected_value=qgroup
-                                    selected_label=m.rsc[qgroup].title
-                                    default_value=""
-                                    default_label=_"All Content"
-                                    form_id=#form
-                                    option_template="_admin_button_dropdown_content_groups.tpl"
-                                    header=_"Filter on content group"
-                                    align="right"
-                                %}
-                            </div>
+                        {% if `mod_content_groups`|member:m.modules.enabled %}
+                            {% if m.search[{query cat=`content_group`}]|length %}
+                                <div class="btn-group">
+                                    {% include "_admin_button_dropdown.tpl"
+                                        select_name="qgroup"
+                                        selected_value=qgroup
+                                        selected_label=m.rsc[qgroup].title
+                                        default_value=""
+                                        default_label=_"All Content"
+                                        form_id=#form
+                                        option_template="_admin_button_dropdown_content_groups.tpl"
+                                        header=_"Filter on content group"
+                                        align="right"
+                                    %}
+                                </div>
+                            {% endif %}
                         {% endif %}
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
