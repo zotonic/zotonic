@@ -1,0 +1,16 @@
+@import (reference) "../../../mod_admin/lib/less/variables.less";
+#3L {@import "../../../mod_admin/lib/less/3L/3L";}
+
+.pagination {
+    > li {
+        > a {
+            #3L > .user-select(none);
+        }
+        
+        &.disabled {
+            > a {
+                pointer-events: none;   
+            }
+        }
+    }
+}

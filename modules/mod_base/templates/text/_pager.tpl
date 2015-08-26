@@ -1,3 +1,6 @@
+{% lib 
+    "css/scomp_base_pager.css"
+%}
 <div class="pager">
     <ul>
         {% if prev_url %}

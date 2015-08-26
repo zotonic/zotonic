@@ -27,13 +27,11 @@
 
 % Pages before/after the current page
 -define(DELTA, 2).
--define(SLIDE, ?DELTA + ?DELTA + 1).
-
--define(TRANS_PAGER_NEXT, {trans, [{en, "next"}, {nl, "volgende"}]}).
--define(TRANS_PAGER_PREV, {trans, [{en, "previous"}, {nl, "vorige"}]}).
+-define(SLIDE, (?DELTA + ?DELTA + 1)).
 
 
 vary(_Params, _Context) -> nocache.
+
 
 render(Params, _Vars, Context) ->
     Result       = proplists:get_value(result, Params),
@@ -82,6 +80,7 @@ render(Params, _Vars, Context) ->
             {error, "scomp_pager: search result is not a #search_result{}"}
     end.
 
+
 build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
@@ -102,23 +101,26 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
 
 
 pages(Page, Pages) ->
-    Start = case Page - ?DELTA > 1 of
+    AtStart = (not (Page == Pages)) and (Page < ?SLIDE),
+    AtEnd = (not AtStart) and (Page > (Pages - (?SLIDE - 1))),
+    Start = case AtStart of
         true ->
-            % Separate "1 ... 3"
-            [1];
-        false ->
             % Together "1 .. "
-            seq(1, erlang:min(?SLIDE, Pages))
-    end,
-    Middle = case Page - ?DELTA > 1 of
-        true ->
-            seq(erlang:max(1,Page-?DELTA), erlang:min(Pages,Page+?DELTA));
+            seq(1, erlang:min(?SLIDE, Pages - 1));
         false ->
-            []
+            % Separate "1 ... 3"
+            [1]
     end,
-    End = case Pages > Page + ?DELTA of
+    End = case AtEnd of
         true ->
-            [Pages];
+            % Together "10 .. 15"
+            seq(erlang:max(2, Pages - ?SLIDE + 1), Pages);
+        false ->
+            [Pages]
+    end,
+    Middle = case (not AtStart) and (not AtEnd) of
+        true ->
+            seq(erlang:max(2, Page - ?DELTA), erlang:min(Pages - 1, Page + ?DELTA));
         false ->
             []
     end,
