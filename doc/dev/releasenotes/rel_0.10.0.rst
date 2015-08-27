@@ -29,9 +29,9 @@ is now much easier to add custom hooks to do custom media processing
 when a media file has been uploaded. The following notifications were
 added as extension points:
 
- * ``#media_identify_extension{}`` to make custom mappings from a mime-type to an extension
- * ``#media_identify_file{}`` to override media file identification
- * ``#media_update_done{}`` when the media metadata has been stored in the database
+* ``#media_identify_extension{}`` to make custom mappings from a mime-type to an extension
+* ``#media_identify_file{}`` to override media file identification
+* ``#media_update_done{}`` when the media metadata has been stored in the database
   
 For SEO purposes, a new table `rsc_page_path_log` was added, that tracks old page_path
 names from :term:`resources <resource>` so that old urls keep working

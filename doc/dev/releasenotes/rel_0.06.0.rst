@@ -129,10 +129,10 @@ lazy
 General bug fixes
 -----------------
 
-- Fix for 'double-dot' in e-mails when using postfix. Also encode the $. characters using quoted-printable.
-- Fix for format_price filter. Show thousands when no cents.
-- Make video embed code editable.
-- Merged various webmachine fixes, updating it to 1.7.3:
+* Fix for 'double-dot' in e-mails when using postfix. Also encode the $. characters using quoted-printable.
+* Fix for format_price filter. Show thousands when no cents.
+* Make video embed code editable.
+* Merged various webmachine fixes, updating it to 1.7.3:
 
  - support {stream, TotalSize, StreamFun} body result for range-capable streams
  - Add infinity timeout to gen_server calls
@@ -143,16 +143,16 @@ General bug fixes
  - webmachine: WM-1.7.3(compat) ignores client’s Content-Type on HTTP PUT requests (#130)
  - webmachine: prevent using chunked transfer encoding with HTTP/1.0.
 
-- increase the startup timeouts for the gen_servers to prevent startup race condition
-- Update mochiweb to latest version from mochi/mochiweb github repository (1.5.0)
-- Pulled latest epgsql driver to support Postgres notifications.
-- Added additional mime types (Office 2007, .rar)
-- z_session: Only mark the persistent store as dirty when a persistent value changes.
-- pgsql: Fix for a problem where a postgres connection was not returned to the pool in case of a sql error.
-- z_media_preview: some files without a preview where not showing an icon.
-- fixed an DoS vulnerability in Mochiweb/SSL
-- Added flushing for most periodic internal messages (e.g. tick, poll)
-- windows: fix build.cmd; remove some unix-specificness from imagemagick shell commands
-- mochiweb: Cookie expire date format string now follows rfc2109
-- ACL checks on static file serving
-- Comet: support for cross-domain comet connections
+* increase the startup timeouts for the gen_servers to prevent startup race condition
+* Update mochiweb to latest version from mochi/mochiweb github repository (1.5.0)
+* Pulled latest epgsql driver to support Postgres notifications.
+* Added additional mime types (Office 2007, .rar)
+* z_session: Only mark the persistent store as dirty when a persistent value changes.
+* pgsql: Fix for a problem where a postgres connection was not returned to the pool in case of a sql error.
+* z_media_preview: some files without a preview where not showing an icon.
+* fixed an DoS vulnerability in Mochiweb/SSL
+* Added flushing for most periodic internal messages (e.g. tick, poll)
+* windows: fix build.cmd; remove some unix-specificness from imagemagick shell commands
+* mochiweb: Cookie expire date format string now follows rfc2109
+* ACL checks on static file serving
+* Comet: support for cross-domain comet connections
