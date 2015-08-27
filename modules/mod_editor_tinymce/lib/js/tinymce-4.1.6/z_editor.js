@@ -1,91 +1,83 @@
+/*jslint browser: true*/
+/*global jQuery, tinymce, tinyInit, z_on_visible*/
+
+'use strict';
+
 var z_editor = (function ($) {
-    "use strict";
 
-    var initEditor;
+    var CLASS_EDITOR = 'z_editor',
+        CLASS_EDITOR_INSTALLED = 'z_editor-installed',
+        initEditors,
+        instances,
+        initEditor,
+        addEditor,
+        removeEditor;
 
-    initEditor = function(className) {
-        $("." + className + ":visible").each(function () {
-            var $elt = $(this),
-                id = $elt.attr('id'),
-                ti,
-                f;
+    initEditors = function(className) {
+        $('.' + className + ':visible').each(function () {
+            addEditor($(this));
+        }).removeClass(className).addClass(CLASS_EDITOR);
+    };
 
-            f = function () {
-                ti = $.extend({}, tinyInit);
-                if ($elt.attr("dir")) {
-                    ti.directionality = $elt.attr("dir");
-                }
-                $elt.tinymce(ti).addClass('z_editor-installed');
-            };
-            if (id) {
-                z_on_visible("#"+id, f);
-            } else {
-                setTimeout(f, 200);
-            }
-        }).removeClass(className).addClass("z_editor");
+    instances = function($el, installed) {
+        if ($el.hasClass(CLASS_EDITOR_INSTALLED)) {
+            return $el;
+        } else {
+            var editorClass = installed ? CLASS_EDITOR_INSTALLED : CLASS_EDITOR;
+            return $el.find('textarea' + '.' + editorClass);
+        }
+    };
+
+    initEditor = function($el) {
+        var id, options;
+        id = $el.attr('id');
+        options = $.extend({}, tinyInit || {});
+        options.selector = '#' + id;
+        if ($el.attr('dir')) {
+            options.directionality = $el.attr('dir');
+        }
+        tinymce.init(options);
+        $el.addClass(CLASS_EDITOR_INSTALLED);
+    };
+
+    addEditor = function($el) {
+        var id = $el.attr('id');
+        if (id) {
+            z_on_visible('#' + id, function() {
+                initEditor($el);
+            });
+        } else {
+            setTimeout(function () {
+                initEditor($el);
+            }, 200);
+        }
+    };
+
+    removeEditor = function($el) {
+        var mceId = '#' + $el.attr('id');
+        tinymce.remove(mceId);
+        $el.removeClass(CLASS_EDITOR_INSTALLED);
     };
 
     return {
         init: function () {
-            initEditor("z_editor-init");
-            // tinymce-init might be still in use in code
-            initEditor("tinymce-init");
+            initEditors('z_editor-init');
+            initEditors('tinymce-init'); // tinymce-init might be still in use in code
         },
 
         add: function ($el) {
-            var self = this;
-
-            $("textarea.z_editor", $el).each(function () {
-                var $elt = $(this),
-                    id = $elt.attr('id');
-
-                if (id) {
-                    z_on_visible('#'+id, function() {
-                        self.initElement($elt);
-                    });
-                } else {
-                    setTimeout(function () {
-                        self.initElement($elt);
-                    }, 200);
-                }
+            instances($el, false).each(function () {
+                addEditor($(this));
             });
         },
 
-        initElement: function ($elt) {
-            if (typeof $elt.tinymce === "function") {
-                var ti = $.extend({}, tinyInit || {});
-                if ($elt.attr("dir")) {
-                    ti.directionality = $elt.attr("dir");
-                }
-                $elt.tinymce(ti);
-            } else if (typeof tinyMCE === "object") {
-                var mce_id = $elt.attr("id");
-                tinyMCE.execCommand("mceAddControl", false, mce_id);
-            }
-            $elt.addClass('z_editor-installed');
-        },
-
-        save: function ($el) {
-            var tiny = $("textarea.z_editor-installed", $el);
-            if (tiny.length > 0) {
-                if (typeof tiny.tinymce === "function") {
-                    tiny.each(function () {
-                        $(this).tinymce().save();
-                    });
-                } else if (typeof tinyMCE === "object") {
-                    tinyMCE.triggerSave(true, true);
-                }
-            }
+        save: function () {
+            tinymce.triggerSave(); // calls save on all instances
         },
 
         remove: function ($el) {
-            $("textarea.z_editor-installed", $el).each(function () {
-                if (tinyMCE !== undefined) {
-                    tinyMCE.execCommand("mceRemoveControl", false, $(this).attr("id"));
-                } else if (typeof $(this).tinymce === "function") {
-                    $(this).tinymce().remove();
-                }
-                $(this).removeClass('z_editor-installed');
+            instances($el, true).each(function () {
+                removeEditor($(this));
             });
         }
     };
