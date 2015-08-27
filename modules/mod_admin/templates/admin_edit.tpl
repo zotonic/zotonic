@@ -16,7 +16,9 @@
     </div>
 {% endif %}
 
-{% include "_admin_edit_header.tpl" %}
+<div id="edit_admin_header">
+    {% include "_admin_edit_header.tpl" %}
+</div>
 
 {% block admin_edit_form_pre %}{% endblock %}
 
@@ -29,6 +31,7 @@
         target="edit_admin_header"
         template="_admin_edit_header.tpl"
         r=r
+        id=id
         is_editable=is_editable
         languages=languages
     }
