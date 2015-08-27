@@ -1,4 +1,11 @@
-<div class="admin-header" id="edit_admin_header">
+{#
+Params:
+r
+id
+is_editable
+languages
+#}
+<div class="admin-header">
     {% with id.depiction as depict %}
         {% if depict %}
             {% image depict mediaclass="admin-leader-image" class="admin-leader" title=depict.id.title %}
