@@ -26,7 +26,21 @@
         }
     }
 }
-
+.navbar-form {
+    .form-control {
+        width: 9em;
+    }
+}
 body.navbar-menu-open {
     overflow: hidden;
+}
+
+@media (max-width: @breakpointMediumMaxWidth) {
+    .navbar {
+        padding: 0 5px;
+    }
+    .navbar-nav > li > a {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
 }
