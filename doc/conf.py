@@ -268,3 +268,18 @@ texinfo_documents = [
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
 
+from sphinx.directives import TocTree
+from docutils.parsers.rst import directives
+
+class NewTocTree(TocTree):
+    option_spec = dict(TocTree.option_spec,
+                       reverse=directives.flag)
+
+    def run(self):
+        rst = super(NewTocTree, self).run()
+        if 'reverse' in self.options:
+            rst[0][0]['entries'].reverse()
+        return rst
+
+def setup(app):
+    app.add_directive('toctree', NewTocTree)

@@ -9,5 +9,6 @@ release in November 2009.
 .. toctree::
    :maxdepth: 1
    :glob:
+   :reverse:
 
    rel_*
