@@ -88,7 +88,7 @@ body.wait {
 body.wait .btn {
   cursor: wait;
 }
-@media (max-width: 979px) {
+@media (max-width: 991px) {
   body > div.container-fluid {
     margin-top: 0;
   }
@@ -223,9 +223,6 @@ h3 {
   width: 14px;
   margin-top: -7px;
 }
-.navbar-form .form-control {
-  width: 8em;
-}
 .dropdown-menu.admin-dropdown-menu-has-icons > li > a {
   padding-left: 40px;
   position: relative;
@@ -304,11 +301,6 @@ button.close {
 @media (min-width: 768px) {
   .form-horizontal .control-label {
     margin-bottom: 5px;
-  }
-}
-@media (min-width: 992px) {
-  .navbar-form .form-control {
-    width: 10em;
   }
 }
 .z-btn-remove {
@@ -529,7 +521,7 @@ input.do_timepicker {
 .scrolled .admin-navbar-fixed-save {
   opacity: 1.0;
 }
-@media (max-width: 979px) {
+@media (max-width: 991px) {
   .admin-navbar-fixed-save {
     position: fixed;
     top: 0;
@@ -666,8 +658,20 @@ div.modal .modal-footer .pull-left {
 .navbar-default .navbar-toggle .icon-bar {
   background-color: rgba(255, 255, 255, 0.7);
 }
+.navbar-form .form-control {
+  width: 9em;
+}
 body.navbar-menu-open {
   overflow: hidden;
+}
+@media (max-width: 991px) {
+  .navbar {
+    padding: 0 5px;
+  }
+  .navbar-nav > li > a {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
 }
 input[type="text"].rtl,
 textarea.rtl {

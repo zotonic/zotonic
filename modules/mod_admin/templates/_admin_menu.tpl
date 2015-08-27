@@ -59,11 +59,11 @@
                         <li class="dropdown" id="nav-{{ id }}">
                             <a class="dropdown-toggle has-icon" data-toggle="dropdown" href="#nav-{{ id }}">
                                 <i class="z-icon z-icon-user"></i>
-                                <span class="hidden-sm">{{ m.acl.user.title|escape|truncate_html:20 }}</span>
+                                <span class="hidden-md hidden-sm">{{ m.acl.user.title|escape|truncate_html:20 }}</span>
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header visible-sm">
+                                <li class="dropdown-header visible-lg-block">
                                     {{ m.acl.user.title|escape }}
                                 </li>
                                 <li>
