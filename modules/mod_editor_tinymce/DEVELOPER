@@ -1,0 +1,21 @@
+Installing a new version of tinymce:
+
+* Let's refer to the up to now newest version as PREVIOUS
+* Define the name of the version, for example tinymce-4.2.5, after this referred to as NEW
+* Copy templates/PREVIOUS to templates/NEW
+* In templates/_admin_configure_module.tpl, add the version number and date of NEW
+* In templates/_editor.tpl, add the version number of NEW for 'newest'
+* In lib/js, create a folder for NEW and copy into it from PREVIOUS:
+    * tiny-init.js
+    * z_editor.js
+    * zotonic.css
+* Copy from the downloaded distribution: tinymce/js/tinymce to lib/js/NEW/tinymce; after this referred to as NEW_TINY
+* Copy from PREVIOUS_TINY/langs into NEW_TINY/langs:
+    * en_GB.js
+    * nl.js
+    * ru.js
+* Copy from PREVIOUS_TINY/plugins into NEW_TINY/plugins:
+    * codemirror
+    * zlink
+    * zmedia
+* Flush Zotonic caches and hunt for bugs
