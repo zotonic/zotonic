@@ -3,8 +3,20 @@
 {% set css_files = css_files + ["_static/overrules.css"] %}
 
 {% block rootrellink %}
-<li><a href="http://zotonic.com">Zotonic Home</a>{{ reldelim1 }}</li>
+<li class="link-home"><a href="http://zotonic.com">Zotonic Home</a>{{ reldelim1 }}</li>
 {{ super() }}
+{% endblock %}
+
+{%- block doctype -%}
+<!doctype html>
+{% endblock %}
+
+{% block linktags %}
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="cleartype" content="on">
+    {{ super() }}
 {% endblock %}
 
 {% block extrahead %}
