@@ -214,7 +214,7 @@ to_json(ReqData, Context) ->
     {Context1, Result} = 
         case Module:process_get(ReqData, Context0) of
             {R, C=#context{}} -> {C, R};
-            R -> {Context, R}
+            R -> {Context0, R}
         end,
     api_result(Context1, Result).
 
