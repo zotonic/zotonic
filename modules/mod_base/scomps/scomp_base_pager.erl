@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %% Date: 2009-04-18
 %% @doc Show the pager for the search result
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -87,11 +87,11 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
     Props = [
         {prev_url, case Page =< 1 of 
                         true -> undefined; 
-                        false ->  z_dispatcher:url_for(Dispatch, [{page,Page-1}|DispatchArgs], Context)
+                        false ->  url_for(Dispatch, [{page,Page-1}|DispatchArgs], Context)
                    end},
         {next_url, case Page >= Pages of 
                         true -> undefined; 
-                        false ->  z_dispatcher:url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context)
+                        false ->  url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context)
                    end},
         {pages, Urls},
         {page, Page}
@@ -99,6 +99,53 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
     {Html, _} = z_template:render_to_iolist("_pager.tpl", Props, Context),
     Html.
 
+url_for(page, Args, Context) ->
+    case proplists:get_value(id, Args) of
+        undefined ->
+            z_dispatcher:url_for(page, Args, Context);
+        Id ->
+            Url = m_rsc:p(Id, page_url, Context),
+            ArgsWithQArgs = append_qargs(Args, Context),
+            ArgsEncoded = encode_args(proplists:delete(slug, proplists:delete(id, ArgsWithQArgs))),
+            case binary:match(Url, <<"?">>) of
+                {_,_} ->
+                    iolist_to_binary([ Url, $&, ArgsEncoded ]);
+                nomatch ->
+                    iolist_to_binary([ Url, $?, ArgsEncoded ])
+            end
+    end;
+url_for(Dispatch, Args, Context) ->
+    z_dispatcher:url_for(Dispatch, Args, Context).
+
+
+%% @doc Append all query arguments iff they are not mentioned in the arglist and if qargs parameter is set
+%% Taken from z_dispatcher.erl
+append_qargs(Args, Context) ->
+    case proplists:get_value(qargs, Args) of
+        undefined ->
+            Args;
+        false -> 
+            proplists:delete(qargs, Args);
+        true ->
+            Args1 = proplists:delete(qargs, Args),
+            Qs = z_context:get_q_all(Context),
+            lists:foldr(fun 
+                            ({[$q|_]=Key,_Value}=A, Acc) ->
+                                case proplists:is_defined(Key, Args) of
+                                    true -> Acc;
+                                    false -> [A|Acc]
+                                end;
+                            (_, Acc) -> 
+                                Acc
+                        end,
+                        Args1,
+                        Qs)
+    end.
+
+encode_args(Args) ->
+    z_utils:combine($&, [
+        [z_url:url_encode(K), $=, z_url:url_encode(V)] || {K,V} <- Args
+    ]).
 
 pages(Page, Pages) ->
     AtStart = (not (Page == Pages)) and (Page < ?SLIDE),
