@@ -22,7 +22,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--define(TIMEOUT, 5000).
+-define(TIMEOUT, 30000).
 
 %% interface functions
 -export([
