@@ -1,10 +1,18 @@
 {#
     Page table sort header.
+
+    Ascending for alphabet and numbers: A to Z, 0 to 9
+    Ascending for dates: old to new. The default for dates should thus be descending.
+    
+    Ascending is identified as: 1
+    Descending is identified as: -1
+    Unsorted is identified as: 0
     
     Params:
     field: database column
     caption: display text
-    type: used to distinguish type "date"
+    type: used to distinguish type "date" to set inital sort as descending
+    custompivot: the custom pivot
     qsort: the sort id passed in url param qsort
 #}
 {% with
@@ -36,8 +44,8 @@
             (sort_status == 0)|if
                 : ""
                 : ((sort_status == 1)|if
-                    : down_arrow
-                    : up_arrow)
+                    : up_arrow
+                    : down_arrow)
             as
             status_modifier_char
         %}
@@ -50,7 +58,7 @@
                 as
                 next_modifier_param_char
             %}
-                <a href="?qs={{ q.qs }}&qcat={{ q.qcat }}&qsort={{next_modifier_param_char}}{{ field }}{{ url_append }}">{{ caption }}{{ status_modifier_char }}</a>
+                <a href="?qs={{ q.qs }}&qcat={{ q.qcat }}&qsort={{next_modifier_param_char}}{{ field }}&qcustompivot={{ custompivot|default:q.qcustompivot }}{{ url_append }}">{{ caption }}{{ status_modifier_char }}</a>
             {% endwith %}
         {% endwith %}
     {% endwith %}

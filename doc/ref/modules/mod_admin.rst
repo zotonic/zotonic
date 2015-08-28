@@ -2,6 +2,7 @@
 .. include:: meta-mod_admin.rst
 
 .. todo:: Finish documentation
+.. role:: gray
 
 Extending the admin menu
 ------------------------
@@ -115,6 +116,94 @@ In this example, when the condition is true, the wrapper is rendered normally (c
 
 
 .. seealso:: :ref:`template-admin_edit_widget_i18n`, :ref:`tag-inherit`
+
+
+Extending the admin overview page
+---------------------------------
+
+The overview page at ``admin/overview`` shows a table with links to all pages. It can be filtered and sorted. This extension deals with the view when a category filter has been selected.
+
+The goal is to add more specific information that helps to distinguish pages.
+
+The `Category` column, second from the left, can be extended to carry category-specific information. As an example, pages of category Event show the start date for each event, grayed out when the event is in the past. Something like this:
+
+    ============ ===========================  ===================
+    Title        Starts                       Created on
+    ============ ===========================  ===================
+    Great event  2016-08-27 00:00:00          25 Aug 2015, 22:19
+    Past event   :gray:`2014-01-02 00:00:00`  01 Jan 2014, 13:10
+    ============ ===========================  ===================
+
+Instead of dates, the information can be anything - from color coding labels to location data, the number of comments or the completeness state of product descriptions. 
+
+Setting up templates
+````````````````````
+
+To make it work we are using 3 templates (where `category_name` is the lowercase name of your category):
+
+``_admin_overview_list.category_name.tpl``
+  
+    Overrides the overview with a ``field`` variable for our custom sort. If we are using :ref:`an existing resource property<model-rsc>` such as ``date_start``, we write::
+
+      {% include "_admin_overview_list.tpl"
+        field="rsc.pivot_date_start"
+      %}
+
+``_admin_sort_header.category_name.tpl``
+  
+    The sort header caption. For a non-sortable header, just write the caption as text. For a sortable header, include the sort functionality in ``_admin_sort_header.tpl`` and pass the caption as variable::
+
+        {% include "_admin_sort_header.tpl"
+            caption="My caption"
+            type="date"
+        %}
+
+``type="date"`` indicates that sorting should start descending, from new to old.
+
+
+``_admin_overview_list_data.category_name.tpl``
+
+    Contains the category-specific information. This is a freeform Zotonic template. The Events example checks if the end date is in the past::
+
+        {% if id.date_end|in_past %}
+            <span class="text-muted">{{ id.date_start }}</span>
+        {% else %}
+            <span>{{ id.date_start }}</span>
+        {% endif %}
+
+
+Custom sort properties
+``````````````````````
+
+To sort on values that are not stored in the default Zotonic resources, you will need to create a :ref:`custom pivot <manual-datamodel-custompivots>`. This will create an additional database table with the values to sort on.
+
+Let's take the (unlikely) example where we want to display the summary of each page (and sort on it as well). The summary data is not stored in an easily accessible way (at least for sorting), so we need to add 2 pivot methods to our Erlang module::
+
+    init(Context) ->
+        z_pivot_rsc:define_custom_pivot(?MODULE, [{summary, "binary"}], Context),
+        ok.
+
+    observe_custom_pivot({custom_pivot, Id}, Context) ->
+        case m_rsc:p(Id, summary, Context) of
+            {trans, [{en, Summary}]} -> 
+                {?MODULE, [{summary, Summary}]};
+            _ -> none
+        end.
+
+For this example we are just grabbing the English text, and assume that other translations exist.
+
+The ``field`` name in ``_admin_overview_list.category_name.tpl`` now just needs to contain the pivot column name::
+
+    {% include "_admin_overview_list.tpl"
+        field="summary"
+    %}
+
+And the sort header template ``_admin_sort_header.category_name.tpl`` adds the custom pivot variable::  
+
+    {% include "_admin_sort_header.tpl"
+        caption="Summary"
+        custompivot="my_module"
+    %}
 
 
 Resource meta `features`

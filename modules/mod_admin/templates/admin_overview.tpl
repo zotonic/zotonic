@@ -100,12 +100,12 @@
                 {% with q.qsort|default:"-modified" as qsort %}
                     {% with m.rsc[q.qquery|default:`admin_overview_query`].id as qquery_id %}
                           {% with (qquery_id.is_visible and not q.qcat)|
-                                    if:{query query_id=qquery_id cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort}
-                                      :{query authoritative=1 cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort}
+                                    if:{query query_id=qquery_id cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort custompivot=q.qcustompivot}
+                                      :{query authoritative=1 cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort custompivot=q.qcustompivot}
                              as query
                           %}
                               {% with m.search.paged[query] as result %}
-                                  {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort qcat=qcat %}
+                                  {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort qcat=qcat custompivot=q.qcustompivot %}
                                   {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
                               {% endwith %}
                           {% endwith %}
