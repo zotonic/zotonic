@@ -2,10 +2,10 @@
     <thead>
         <tr>
             <th width="30%">
-                {% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" %}
+                {% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" type=type|default:"string" %}
             </th>
             <th width="15%">
-                {% catinclude "_admin_sort_header.tpl" m.category[qcat].is_a field="category_id" caption=_"Category" qsort=qsort %}
+                {% catinclude "_admin_sort_header.tpl" m.category[qcat].is_a field=field|default:"category_id" type=type|default:"string" caption=_"Category" qsort=qsort %}
             </th>
             <th width="15%">
                 {% include "_admin_sort_header.tpl" field="created" caption=_"Created on" type="date" qsort=qsort %}
@@ -14,7 +14,7 @@
                 {% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" type="date" qsort=qsort %}
             </th>
             <th width="25%">
-                {% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" qsort=qsort %}
+                {% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" type=type|default:"string" qsort=qsort %}
             </th>
         </tr>
     </thead>
