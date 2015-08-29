@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: white;
     font-size: 16px;
@@ -101,7 +105,7 @@ div.admonition.seealso {
 }
 div.note,
 div.admonition.note {
-    background-color: #FFF59D;
+    background-color: #FFF9C4;
 }
 pre,
 div.admonition {
@@ -246,24 +250,16 @@ button {
     white-space: nowrap;
     width: auto;
 }
-div.sphinxsidebar #searchbox input[type=submit] {
-    margin-left: 4px;
-}
 
 input[type=text],
-div.sphinxsidebar input[type=text] {
+div.sphinxsidebar #searchbox input[type="text"] {
     -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
-    -webkit-transition-delay: 0s, 0s;
-    -webkit-transition-duration: 0.15s, 0.15s;
-    -webkit-transition-property: border-color, box-shadow;
-    -webkit-transition-timing-function: ease-in-out, ease-in-out;
     background-color: #fff;
     border-color: rgb(204, 204, 204);
     border-radius: 3px;
     border-style: solid;
     border-width: 1px;
     box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
-    box-sizing: border-box;
     color: rgb(85, 85, 85);
     display: inline-block;
     font-family: inherit;
@@ -273,10 +269,20 @@ div.sphinxsidebar input[type=text] {
     line-height: 18px;
     margin: 0;
     padding: 4px 10px;
-    transition-delay: 0s, 0s;
-    transition-duration: 0.15s, 0.15s;
-    transition-property: border-color, box-shadow;
-    transition-timing-function: ease-in-out, ease-in-out;
+}
+div.sphinxsidebar #searchbox input[type="text"]{
+    width: 75%;
+    max-width: 15rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-width: 0;
+}
+div.sphinxsidebar #searchbox input[type=submit] {
+    margin: 0;
+    width: 25%;
+    max-width: 4rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 input[type=text]:focus,
@@ -294,8 +300,9 @@ div.footer a {
     color: #aaa;
 }
 
-dt:target, .highlighted {
-    background-color: #FFF9BD;
+dt:target,
+.highlighted {
+    background-color: #FFF59D;
 }
 
 .gray {
