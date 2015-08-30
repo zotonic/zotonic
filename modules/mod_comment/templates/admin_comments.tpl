@@ -7,12 +7,14 @@
 {% block content %}
 <div class="admin-header">
 
-    <div class="pull-right">
+    <h2>{_ Recent comments _}</h2>
+    
+    <div class="well">
         <a class="btn btn-default btn-sm" href="{% url admin_comments_settings %}">{_ Settings _}</a>
     </div>
+</div>
 
-    <h2>{_ Recent comments _}</h2>
-
+<div>
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>

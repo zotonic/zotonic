@@ -3,19 +3,20 @@
 {% block title %} {_ Translation _} {% endblock %}
 
 {% block content %}
+<div class="admin-header">
+    <h2>{_ Languages overview _}</h2>
 
-    <div class="admin-header">
-        <h2>{_ Languages overview _}</h2>
+    <p>{_ All languages known to the system. You can add or remove languages. _}
+        <br/>{_ Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language. _}</p>
+</div>
 
-        <p>{_ All languages known to the system. You can add or remove languages. _}
-            <br/>{_ Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language. _}</p>
+<div class="well">
+    {% button class="btn btn-primary" text=_"Add language" 
+        action={dialog_open title=_"Add language" template="_dialog_language_edit.tpl" new}
+    %}
+</div>
 
-        <div class="well">
-            {% button class="btn btn-primary" text=_"Add language" 
-                action={dialog_open title=_"Add language" template="_dialog_language_edit.tpl" new}
-            %}
-        </div>
-
+<div>
         <table class="table table-striped">
             <thead>
                 <tr>

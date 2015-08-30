@@ -6,26 +6,24 @@
 {% with m.acl.is_admin as editable %}
 
 <div class="admin-header">
-
     <h2>{_ Access Control - Roles Overview _}</h2>
-
     <p>{_ Access control controls what an user is allowed to do and see.  The roles define different groups of rights.  Users can be made member of multiple roles. _}</p>
-    
-    {% if editable %}
-    <div class="well">
-        {% button
-           class="btn btn-primary"
-           text=_"Make new ACL role"
-           action={
-              dialog_new_rsc
-              cat="acl_role"
-              nocatselect
-              tabs_enabled=["new"]
-           }
-        %}
-    </div>
-    {% endif %}
 </div>
+
+{% if editable %}
+<div class="well">
+    {% button
+       class="btn btn-primary"
+       text=_"Make new ACL role"
+       action={
+          dialog_new_rsc
+          cat="acl_role"
+          nocatselect
+          tabs_enabled=["new"]
+       }
+    %}
+</div>
+{% endif %}
         
 <div>
     <h3>{_ ACL role overview _}</h3>

@@ -10,13 +10,15 @@
 
     <p>{_ A predicate denotes traits or aspects of a page and expresses a relationship between two pages.
     The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href="http://sioc-project.org/">SIOC</a>.  On this page you can define the predicates known to Zotonic. _}</p>
+</div>
 
-    {% if editable %}
-    <div class="well">
-        {% button class="btn btn-primary" text=_"Make a new predicate" action={dialog_predicate_new title=""} %}
-    </div>
-    {% endif %}
+{% if editable %}
+<div class="well">
+    {% button class="btn btn-primary" text=_"Make a new predicate" action={dialog_predicate_new title=""} %}
+</div>
+{% endif %}
 
+<div>
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>

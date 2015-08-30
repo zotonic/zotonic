@@ -9,29 +9,26 @@
 {% block content %}
     {% with m.acl.is_admin as is_users_editable %}
 
-        
-        <div class="admin-header">
-
-            <h2>
-                {_ Users _}{% if q.qs %},
-                    {_ matching _} “{{ q.qs|escape }}”
-                {% else %} {_ overview _}{% endif %}
-            </h2>
-
-            <p>
-                {_ Every page/person can be made into a user on the edit page.
-                The difference between a user and a normal page is only
-                that the former has logon credentials attached to its page record. _}
-            </p>
-            
-            {% if is_users_editable %}
-                <div class="well">
-                    {% button class="btn btn-primary" text=_"Make a new user" action={dialog_user_add on_success={reload}} %}
-            </div>
-        {% else %}
-            <div class="alert alert-info">{_ You need to be an administrator to add users. _}</div>
-        {% endif %}
+    <div class="admin-header">
+        <h2>
+            {_ Users _}{% if q.qs %},
+                {_ matching _} “{{ q.qs|escape }}”
+            {% else %} {_ overview _}{% endif %}
+        </h2>
+        <p>
+            {_ Every page/person can be made into a user on the edit page.
+            The difference between a user and a normal page is only
+            that the former has logon credentials attached to its page record. _}
+        </p>
     </div>
+    
+    {% if is_users_editable %}
+        <div class="well">
+            {% button class="btn btn-primary" text=_"Make a new user" action={dialog_user_add on_success={reload}} %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">{_ You need to be an administrator to add users. _}</div>
+    {% endif %}
 
     <div>
         {% with m.acl.user as me %}
