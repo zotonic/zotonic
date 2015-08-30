@@ -21,8 +21,15 @@ languages
                 {% endif %}
     
                 <span class='admin-edit-dates'>
-                    {_ Modified: _} {{ r.modified|date:"Y-m-d H:i" }} {_ by _} <a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a> &middot;
-                    {_ Created: _} {{ r.created|date:"Y-m-d H:i" }} {_ by _} <a href="{% url admin_edit_rsc id=r.creator_id %}">{{ m.rsc[r.creator_id].title }}</a>
+                    {_ Modified: _} {{ r.modified|date:"Y-m-d H:i" }}
+                    {% if r.modifier_id %}
+                        {_ by _} <a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a>
+                    {% endif %}    
+                    &middot;
+                    {_ Created: _} {{ r.created|date:"Y-m-d H:i" }}
+                    {% if r.creator_id %}
+                        {_ by _} <a href="{% url admin_edit_rsc id=r.creator_id %}">{{ m.rsc[r.creator_id].title }}</a>
+                    {% endif %}
                 </span>
             </div>
 
