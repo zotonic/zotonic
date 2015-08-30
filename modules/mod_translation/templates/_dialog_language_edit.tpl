@@ -1,14 +1,14 @@
 <p>{_ Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title of the language. Use the native form of the language, for example <em>English</em>, <em>Türkçe</em> or <em>Français</em>. _}</p>
 
 {% wire id=#form type="submit" postback={language_edit code=code} delegate="mod_translation" %}
-<form id="{{ #form }}" method="POST" action="postback" class="form">
+<form id="{{ #form }}" method="POST" action="postback" class="form-horizontal">
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #code }}">{_ ISO Code _}</label>
         <div class="col-md-9">
-            <select name="code" id="{{ #code }}">
+            <select class="form-control" name="code" id="{{ #code }}">
                 {% for iso,lang in m.translation.language_list_all %}
                     <option value="{{ iso }}" {% if iso == code %}selected{% endif %}>
-                        {{ lang.language }} ({{iso}})
+                        {{iso}} ({{ lang.language }})
                     </option>
                 {% endfor %}
             </select>
