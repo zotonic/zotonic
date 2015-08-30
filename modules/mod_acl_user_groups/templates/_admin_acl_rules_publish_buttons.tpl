@@ -33,9 +33,12 @@
     %}
     
     {% button text=_"Revert back to published"
-        class="btn"
+        class="btn btn-default"
         action={confirm
             text=_"Are you sure you want to restore all ACL rules to their currently published version?"
+            title=_"Revert back to published version"
+            cancel=_"Keep"
+            ok=_"Revert"
             action={dialog_close}
             delegate=`admin_acl_rules`
             postback={revert kind=kind}

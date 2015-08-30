@@ -13,12 +13,6 @@
         .acl {
             padding: 10px 0;
         }
-        .acl .well {
-            margin-top: 20px;
-        }
-        .acl-well {
-            margin-bottom: 20px;
-        }
         div.acl .checkbox-inline {
             margin-top: 5px;
         }
@@ -38,15 +32,15 @@
     
     <div class="admin-header">
         <h2>{_ Access control rules _}</h2>
-
-        {% include "_admin_acl_rules_publish_buttons.tpl" %}
-        
-        <ul class="nav nav-tabs">
-            <li class="{% if kind == `rsc` %}active{% endif %}"><a href="{% url admin_acl_rules_rsc %}">{_ Content _}</a></li>
-            <li class="{% if kind == `module` %}active{% endif %}"><a href="{% url admin_acl_rules_module %}">{_ Modules _}</a></li>
-            <li class="{% if kind == `upload` %}active{% endif %}"><a href="{% url admin_acl_rules_upload %}">{_ File Uploads _}</a></li>
-        </ul>
     </div>
+    
+    {% include "_admin_acl_rules_publish_buttons.tpl" %}
+    
+    <ul class="nav nav-tabs">
+        <li class="{% if kind == `rsc` %}active{% endif %}"><a href="{% url admin_acl_rules_rsc %}">{_ Content _}</a></li>
+        <li class="{% if kind == `module` %}active{% endif %}"><a href="{% url admin_acl_rules_module %}">{_ Modules _}</a></li>
+        <li class="{% if kind == `upload` %}active{% endif %}"><a href="{% url admin_acl_rules_upload %}">{_ File Uploads _}</a></li>
+    </ul>
 
     {% block filter %}
     {% endblock %}
