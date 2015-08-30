@@ -132,13 +132,19 @@ lookup_fallback(Trans, Context) ->
 lookup_fallback({trans, Tr}, Lang, Context) ->
     case proplists:get_value(Lang, Tr) of
         undefined ->
-            case default_language(Context) of
-                undefined -> take_english_or_first(Tr);
-                CfgLang ->
-                    case proplists:get_value(z_convert:to_atom(CfgLang), Tr) of
+            FallbackLang = z_context:fallback_language(Context),
+            case proplists:get_value(FallbackLang, Tr) of
+                undefined -> 
+                    case default_language(Context) of
                         undefined -> take_english_or_first(Tr);
-                        Text -> Text
-                    end
+                        CfgLang ->
+                            case proplists:get_value(z_convert:to_atom(CfgLang), Tr) of
+                                undefined -> take_english_or_first(Tr);
+                                Text -> Text
+                            end
+                    end;
+                Text ->
+                    Text
             end;
         Text -> 
             Text
@@ -207,7 +213,7 @@ trans({trans, Tr}, Lang) when is_atom(Lang) ->
 trans(Text, Lang) when is_atom(Lang) ->
     Text;
 trans(Text, Context) ->
-    trans(Text, Context#context.language, Context).
+    trans(Text, z_context:language(Context), Context).
 
 trans({trans, Tr0}, Language, Context) ->
     case proplists:lookup(en, Tr0) of

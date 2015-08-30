@@ -107,6 +107,7 @@
     get_all/1,
 
     language/1,
+    fallback_language/1,
     set_language/2,
 
     tz/1,
@@ -187,7 +188,7 @@ new(ReqData) ->
 new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
     Context = set_server_names(#context{host=Host}),
     Context#context{
-        language=Lang,
+        language=[Lang],
         tz=tz_config(Context)
     };
 %% @doc Create a new context record for the current request and resource module
@@ -202,7 +203,7 @@ new(ReqData, Module) ->
 
 set_default_language_tz(Context) ->
     Context#context{
-        language=z_trans:default_language(Context),
+        language=[z_trans:default_language(Context)],
         tz=tz_config(Context)
     }.
 
@@ -211,7 +212,7 @@ new_tests() ->
     z_trans_server:set_context_table(
             #context{
                 host=test,
-                language=en,
+                language=[en],
                 tz= <<"UTC">>,
                 notifier='z_notifier$test'
             }).
@@ -979,16 +980,30 @@ incr(Key, Value, Context) ->
 	end,
     {R, set(Key, R, Context)}.
 
-
 %% @doc Return the selected language of the Context
 -spec language(#context{}) -> atom().
 language(Context) ->
-    Context#context.language.
+    % A check on atom must exist because the language setting may be stored in mnesia and passed to the context when the site starts
+    case Context#context.language of
+        [Language|_] -> Language;
+        Language -> Language
+    end.
 
-%% @doc Set the language of the context.
--spec set_language(atom()|binary()|string(), #context{}) -> #context{}.
+%% @doc Return the first fallback language of the Context
+-spec fallback_language(#context{}) -> atom().
+fallback_language(Context) ->
+    % Take the second item of the list, if it exists
+    case Context#context.language of
+        [_|[Fallback|_]] -> Fallback;
+        _ -> undefined
+    end.
+
+%% @doc Set the language of the context, either an atom (language) or a list (language and fallback languages)
+-spec set_language(atom()|binary()|string()|list(), #context{}) -> #context{}.
 set_language(Lang, Context) when is_atom(Lang) ->
-    Context#context{language=Lang};
+    Context#context{language=[Lang]};
+set_language(Langs, Context) when is_list(Langs) ->
+    Context#context{language=Langs};
 set_language(Lang, Context) ->
     Lang1 = z_convert:to_list(Lang),
     case z_trans:is_language(Lang1) of

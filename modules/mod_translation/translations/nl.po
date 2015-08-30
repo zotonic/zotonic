@@ -26,7 +26,7 @@ msgstr "Actieve modules"
 #: modules/mod_translation/templates/admin_translation.tpl:14
 #: modules/mod_translation/templates/admin_translation.tpl:15
 msgid "Add language"
-msgstr "Taal toevoegen"
+msgstr ""
 
 #: modules/mod_translation/templates/admin_translation.tpl:10
 msgid "All languages known to the system. You can add or remove languages."
