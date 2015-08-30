@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'icomoon';
-	src:url('fonts/icomoon.eot?-343g4q');
-	src:url('fonts/icomoon.eot?#iefix-343g4q') format('embedded-opentype'),
-		url('fonts/icomoon.woff?-343g4q') format('woff'),
-		url('fonts/icomoon.ttf?-343g4q') format('truetype'),
-		url('fonts/icomoon.svg?-343g4q#icomoon') format('svg');
+	src:url('fonts/icomoon.eot?9mfi9i');
+	src:url('fonts/icomoon.eot?#iefix9mfi9i') format('embedded-opentype'),
+		url('fonts/icomoon.ttf?9mfi9i') format('truetype'),
+		url('fonts/icomoon.woff?9mfi9i') format('woff'),
+		url('fonts/icomoon.svg?9mfi9i#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -23,99 +23,78 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-search:before {
+	content: "\e616";
+}
 .icon-share:before {
 	content: "\e615";
 }
-
 .icon-google-plus:before {
 	content: "\e610";
 }
-
 .icon-linkedin:before {
 	content: "\e611";
 }
-
 .icon-instagram:before {
 	content: "\e612";
 }
-
 .icon-twitter:before {
 	content: "\e613";
 }
-
 .icon-facebook:before {
 	content: "\e614";
 }
-
 .icon-off:before {
 	content: "\e60f";
 }
-
 .icon-ok:before {
 	content: "\e608";
 }
-
 .icon-ok-circle:before {
 	content: "\e602";
 }
-
 .icon-minus:before {
 	content: "\e60a";
 }
-
 .icon-minus-circle:before {
 	content: "\e603";
 }
-
 .icon-plus:before {
 	content: "\e60d";
 }
-
 .icon-plus-circle:before {
 	content: "\e604";
 }
-
 .icon-help:before {
 	content: "\e60e";
 }
-
 .icon-help-circle:before {
 	content: "\e600";
 }
-
 .icon-info-circle:before {
 	content: "\e601";
 }
-
-.icon-cross:before {
-	content: "\e60c";
-}
-
-.icon-cross-circle:before {
-	content: "\e609";
-}
-
-.icon-grab:before {
-	content: "\e60b";
-}
-
-.icon-drag:before {
-	content: "\e60b";
-}
-
-.icon-logo:before {
-	content: "\5a";
-}
-
-.icon-logo-z:before {
-	content: "\e607";
-}
-
 .icon-user:before {
 	content: "\e605";
 }
-
+.icon-cross:before {
+	content: "\e60c";
+}
+.icon-cross-circle:before {
+	content: "\e609";
+}
+.icon-grab:before {
+	content: "\e60b";
+}
+.icon-drag:before {
+	content: "\e60b";
+}
+.icon-logo:before {
+	content: "\5a";
+}
+.icon-logo-z:before {
+	content: "\e607";
+}
 .icon-edit:before {
 	content: "\e606";
 }
-
