@@ -7,6 +7,11 @@
 {% wire id="admin-comments-settings" type="submit" postback="admin_comments_settings" %}
 <form name="admin-comments-settings" id="admin-comments-settings" method="POST" action="postback">
 
+    <ul class="breadcrumb">
+		<li><a href="{% url admin_comments %}">{_ Comments _}</a></li>
+		<li class="active">{_ Settings _}</li>
+    </ul>
+    
     <div class="admin-header">
         <h2>{_ Comment Form Settings _}</h2>
         <p>{_ Here you find settings to configure the comment module to suit your needs. _}</p>

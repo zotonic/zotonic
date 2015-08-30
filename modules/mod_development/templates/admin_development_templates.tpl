@@ -3,9 +3,13 @@
 {% block title %} Development {% endblock %}
 
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="{% url admin_development %}">{_ Site Development _}</a></li>
+    <li class="active">{_ Included templates _}</li>
+</ul>
+
 <div class="admin-header">
-    <h2>{_ Site Development: included templates _}</h2>
-        
+    <h2>{_ Included templates _}</h2>    
     <p>{_ Below you see in real time which templates are compiled and included. _}</p>
 </div>
 
