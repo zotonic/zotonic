@@ -142,7 +142,7 @@ observe_session_context(session_context, Context, _Context) ->
 observe_user_context(#user_context{id=UserId}, Context, _Context) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
         Code when is_atom(Code), Code /= undefined -> 
-            z_context:set_language(Code, Context);
+            do_set_language(Code, Context);
         _ ->
             Context
     end.
@@ -165,7 +165,7 @@ observe_auth_logon(auth_logon, Context, _Context) ->
 observe_set_user_language(#set_user_language{id=UserId}, Context, _Context) when is_integer(UserId) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
         Code when is_atom(Code), Code /= undefined -> 
-            z_context:set_language(Code, Context);
+            do_set_language(Code, Context);
         _ ->
             Context
     end;
@@ -261,7 +261,7 @@ event(#submit{message={language_edit, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             OldCode = proplists:get_value(code, Args, '$empty'),
-            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context), 
+            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context), z_context:get_q("fallback", Context), 
                          z_context:get_q("is_enabled", Context), Context),
             Context1 = z_render:dialog_close(Context),
             z_render:wire({reload, []}, Context1);
@@ -353,10 +353,17 @@ set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
 
 
 do_set_language(Code, Context) when is_atom(Code) ->
-    Context1 = z_context:set_language(Code, Context),
-    case z_context:language(Context) of
+    List = get_language_config(Context),
+    LangProps = proplists:get_value(Code, List),
+    FallbackLangCode = proplists:get_value(fallback, LangProps),
+    Langs = case FallbackLangCode of
+        undefined -> [Code];
+        _ -> [Code, z_convert:to_atom(FallbackLangCode)]
+    end,
+    Context1 = z_context:set_language(Langs, Context),
+    case z_context:language(Context1) of
         Code -> 
-            Context;
+            Context1;
         _ ->
             z_context:set_session(language, Code, Context1),
             z_notifier:notify(#language{language=Code}, Context1),
@@ -365,12 +372,14 @@ do_set_language(Code, Context) when is_atom(Code) ->
 
 
 %% @doc Add a language to the i18n configuration
-language_add(OldIsoCode, NewIsoCode, Language, IsEnabled, Context) ->
+language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
     IsoCodeNewAtom = z_convert:to_atom(z_string:to_name(z_string:trim(NewIsoCode))),
+    FallbackIsoCodeAtom = z_convert:to_atom(z_string:to_name(z_string:trim(FallbackIsoCode))),
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
     Languages2 = lists:usort([{IsoCodeNewAtom, 
                                [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
+                                {fallback, FallbackIsoCodeAtom},
                                 {is_enabled, z_convert:to_bool(IsEnabled)}
                                ]} | Languages1]),
     set_language_config(Languages2, Context).
@@ -428,7 +437,7 @@ set_language_config(NewConfig, Context) ->
     m_config:set_prop(i18n, language_list, list, NewConfig, Context).
 
 
-                                                % @doc Generate all .po templates for the given site
+% @doc Generate all .po templates for the given site
 generate(#context{} = Context) ->
     translation_po:generate(translation_scan:scan(Context));
 generate(Host) when is_atom(Host) ->

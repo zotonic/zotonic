@@ -314,7 +314,7 @@ search({users, [{text,QueryText}, {users_only, UsersOnly0}]}, _OffsetLimit, Cont
                         false ->
                             {", plainto_tsquery($2, $1) query",
                              "query @@ r.pivot_tsv",
-                             [QueryText, z_pivot_rsc:pg_lang(Context#context.language)],
+                             [QueryText, z_pivot_rsc:pg_lang(z_context:language(Context))],
                              "ts_rank_cd(pivot_tsv, query, 32)"}
                      end,
     IdnJoin = case UsersOnly of
