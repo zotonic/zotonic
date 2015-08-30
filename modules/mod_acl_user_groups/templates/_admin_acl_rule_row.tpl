@@ -17,7 +17,7 @@
             <input type="checkbox" id="{{ #is_block }}" name="is_block" value="on"
                 {% if rule.is_block %}checked="checked"{% endif %}
                 {% if rule %}onchange="$(this.form).submit()"{% endif %} />
-                {% if rule.is_block %}<span class="glyphicon glyphicon-minus-sign"></span>&nbsp;{% endif %}block
+                {% if rule.is_block %}<span class="z-icon z-icon-minus-circle"></span>&nbsp;{% endif %}block
         </label>
     </div>
 
@@ -70,13 +70,13 @@
             {% button
                 text=_"Add"
                 class="btn btn-primary pull-right"
-                icon="glyphicon glyphicon-plus"
+                icon="z-icon z-icon-plus"
             %}
         {% else %}
             {% button
                 text=_"Remove"
                 class="btn btn-danger pull-right"
-                icon="glyphicon glyphicon-minus"
+                icon="z-icon z-icon-minus"
                 postback={remove_rule id=rule.id kind=kind} delegate=`admin_acl_rules`
             %}
         {% endif %} 

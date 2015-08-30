@@ -19,10 +19,10 @@
 {% block filter %}
 <div class="clearfix acl-filter">
     <div class="pull-right">
-        <span>{_ Show: _}</span>
         <div class="btn-group">
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    {_ Show _}
                     {% if q.g %}
                         {{ m.rsc[q.g].title }}
                     {% else %}

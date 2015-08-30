@@ -99,6 +99,8 @@ hr {
   height: 1px;
   margin: 10px 0;
 }
+ul,
+ol,
 p {
   margin: 0 0 15px 0;
 }
@@ -308,6 +310,18 @@ button.close {
 }
 .z-btn-remove:hover {
   color: #222222;
+}
+.btn {
+  position: relative;
+}
+.btn > .z-icon,
+.btn > .zotonic-logo {
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  line-height: 18px;
+  vertical-align: bottom;
+  text-align: center;
 }
 ul.connections-list li:last-child {
   margin-bottom: 10px;
