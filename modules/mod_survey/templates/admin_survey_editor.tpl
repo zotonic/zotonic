@@ -7,11 +7,14 @@
 {% block title %}{_ Survey editor _} &mdash; {{ m.rsc[q.id].title }}{% endblock %}
 
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="{% url admin_edit_rsc id=q.id %}">{{ m.rsc[q.id].title }}</a></li>
+    <li class="active">{_ Survey Results Editor _}</li>
+</ul>
+
 <div class="admin-header">
-    <p class="admin-chapeau">{_ survey results editor _}:</p>
     <h2>
-        {{ m.rsc[q.id].title }}
-        <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=q.id %}">{_ edit _}</a>
+        {_ Survey Results Editor _}
     </h2>
 </div>
 
