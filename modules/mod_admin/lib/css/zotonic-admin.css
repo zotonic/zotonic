@@ -655,11 +655,18 @@ div.modal .modal-footer .pull-left {
 #menu-editor .widget-header {
   height: auto;
 }
+.navbar-brand {
+  font-size: 14px;
+  line-height: 14px;
+  padding: 15px 15px;
+}
 .navbar-brand:hover,
 .navbar-brand:hover .zotonic-logo {
   color: #fff;
 }
 .navbar-brand .zotonic-logo {
+  height: 14px;
+  width: 82px;
   text-shadow: 0 1px 0 rgba(0,0,0,.1);
 }
 .navbar-right {

@@ -242,7 +242,3 @@ button.close > em {
 .zotonic-logo:before {
   content: "\5a";
 }
-.zotonic-logo {
-  font-size: 0.85em;
-  padding-right: 0.25em;
-}
