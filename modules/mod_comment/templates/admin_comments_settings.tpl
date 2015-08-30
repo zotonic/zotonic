@@ -7,17 +7,14 @@
 {% wire id="admin-comments-settings" type="submit" postback="admin_comments_settings" %}
 <form name="admin-comments-settings" id="admin-comments-settings" method="POST" action="postback">
 
-<div class="admin-header">
-
-    <h2>{_ Comment Form Settings _}</h2>
-
-    <p>{_ Here you find settings to configure the comment module to suit your needs. _}</p>
+    <div class="admin-header">
+        <h2>{_ Comment Form Settings _}</h2>
+        <p>{_ Here you find settings to configure the comment module to suit your needs. _}</p>
+    </div>
 
     <div class="well">
         <button class="btn btn-primary" type="submit">{_ Save Comment Form settings _}</button>
     </div>
-</div>
-
 
     <div class="widget">
 

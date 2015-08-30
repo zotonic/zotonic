@@ -6,12 +6,12 @@
 
 <div class="admin-header">
     <h2>{_ System Configuration _}</h2>
-
-    <div class="well">
-        {% button class="btn btn-primary" text=_"Make a new config setting" action={dialog_config_new on_success={reload}} %}
-    </div>
-
 </div>
+
+<div class="well">
+    {% button class="btn btn-primary" text=_"Make a new config setting" action={dialog_config_new on_success={reload}} %}
+</div>
+
 <div>
     <table class="table table-striped do_adminLinkedTable">
         <thead>

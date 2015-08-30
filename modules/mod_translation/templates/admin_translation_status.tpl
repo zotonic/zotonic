@@ -12,13 +12,11 @@
 .perc-100 { background-color: #00ff00 !important; color: white;}
 </style>
 <div class="admin-header">
-
     <h2>{_ Translation status per module _}</h2>
-
     <p>{_ To view the up-to-date version of this module, please run "generate .pot files" first from the translation overview. _}</p>
-	
-    <hr />
+</div>
 
+<div>
     <h3>{_ Active modules _}</h3>
     
     <table class="table">

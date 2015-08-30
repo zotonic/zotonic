@@ -8,14 +8,11 @@
 
 {% block content %}
 <div class="admin-header">
-
     <p class="admin-chapeau">{_ survey results editor _}:</p>
     <h2>
         {{ m.rsc[q.id].title }}
         <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=q.id %}">{_ edit _}</a>
     </h2>
-
-    <hr />
 </div>
 
 <div id="survey-results">

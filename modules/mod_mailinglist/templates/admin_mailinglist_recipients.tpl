@@ -4,16 +4,18 @@
 
 {% block content %}
 <div class="admin-header">
-
     <h2>{_ Recipients for _} “{{ m.rsc[id].title }}”</h2>
-
 	{% if not m.rsc[id].is_editable %}
 	<p>{_ You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients. _}</p>
-	<div class="well">
-	    {% button class="btn btn-default" text=_"cancel" action={redirect back} %}
-    </div>
-	{% else %}
+	{% endif %}
+</div>
 
+{% if not m.rsc[id].is_editable %}
+	<div class="well">
+    {% button class="btn btn-default" text=_"cancel" action={redirect back} %}
+</div>
+{% else %}
+<div>
 	<p>{_ All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line. _}<br/>
 	<a href="{% url admin_edit_rsc id=id %}">{_ Edit the mailing list &raquo; _}</a><br/>
         {% if id.s.subscriberof|length > 0 %}
