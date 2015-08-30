@@ -48,6 +48,16 @@ body {
 .navbar .navbar-nav > li > a:hover {
   background-color: #0288d1;
 }
+.navbar .navbar-brand {
+  font-size: 15px;
+  line-height: 15px;
+  padding: 17px 15px;
+}
+.navbar .zotonic-logo {
+  height: 15px;
+  width: 87px;
+  margin-right: .4em;
+}
 .navbar .navbar-nav > li > a {
   font-size: 16px;
 }
