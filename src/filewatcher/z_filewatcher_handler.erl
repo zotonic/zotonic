@@ -126,17 +126,21 @@ handle_file(_Verb, _Basename, SASS, F) when SASS =:= ".scss"; SASS =:= ".sass" -
             undefined
     end;
 
-%% @doc LESS from lib/less -> lib/css
+%% @doc LESS from lib/less -> lib/css, unless a file 'config' in the file dir is present
 handle_file(_Verb, _Basename, ".less", F) ->
     InPath = filename:dirname(F),
-    OutPath = filename:join(filename:dirname(InPath), "css"),
-    case filelib:is_dir(OutPath) of
-        true ->
-            OutFile = filename:join(OutPath, filename:basename(F, ".less")++".css"),
-            os:cmd("lessc " ++ z_utils:os_escape(F) ++ " > " ++ z_utils:os_escape(OutFile)),
-            "Compiled " ++ OutFile;
-        false ->
-            undefined
+    case handle_config_command(InPath, ".less") of
+        undefined -> 
+            OutPath = filename:join(filename:dirname(InPath), "css"),
+            case filelib:is_dir(OutPath) of
+                true ->
+                    OutFile = filename:join(OutPath, filename:basename(F, ".less")++".css"),
+                    os:cmd("lessc " ++ z_utils:os_escape(F) ++ " > " ++ z_utils:os_escape(OutFile)),
+                    "Compiled " ++ OutFile;
+                false ->
+                    undefined
+            end;
+        Result -> Result
     end;
 
 %% @doc Coffeescript from lib/coffee -> lib/js
@@ -196,6 +200,34 @@ handle_file(_Verb, _Basename, _Extension, F) ->
             LibMsg
     end.
 
+%% @doc Check for config file on path and read proplist values from, to, params, return as tuple. Path values are local to Path.
+config_command(Path) ->
+    ConfigFile = filename:join(Path, "config"),
+    case filelib:is_regular(ConfigFile) of 
+        true -> 
+            {ok, C} = file:consult(ConfigFile),
+            [Config] = C,
+            From = proplists:get_value(from, Config),
+            To = proplists:get_value(to, Config),
+            Params = proplists:get_value(params, Config, ""),
+            case {From, To, Params} of
+                {undefined, _, _} -> {};
+                {_, undefined, _} -> {};
+                _ -> {From, To, Params}
+            end;
+        false -> {}
+    end.
+
+%% @doc Use config variables 'from', 'to', 'params' and run the lessc command from the path directory.
+handle_config_command(Path, ".less") ->
+    case config_command(Path) of
+        {} -> undefined;
+        {From, To, Params} ->
+            Cmd = "cd " ++ Path ++ "; lessc " ++ Params ++ " " ++ z_utils:os_escape(filename:join(Path, From)) ++ " " ++ z_utils:os_escape(filename:join(Path, To)),
+            os:cmd(Cmd),
+            "Compiled " ++ To
+    end.
+ 
 maybe_handle_lib(F) ->
     case re:run(F, "^.*/lib/(.*)") of
         nomatch ->
