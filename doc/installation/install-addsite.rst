@@ -68,6 +68,26 @@ To learn more about how sites work and what consists of a
 :ref:`manual-site-anatomy`.
 
 
+Troubleshooting
+---------------
+
+Unable to read boot script
+``````````````````````````
+
+In some cases the Zotonic nodename does not resolve well and you see an error like::
+
+    [error] Unable to read boot script (start_sasl.script): {error,enoent}
+
+or::
+
+    erl_call: can't ei_gethostbyname(MacBook-Pro-Apple)
+    Zotonic is not running. You need to start Zotonic first to use this command.
+
+Solution: Add the computer name to ``/etc/hosts``, for instance::
+
+    127.0.0.1 MacBook-Pro-Apple
+
+
 .. _skeleton-sites:
      
 Available skeleton sites
