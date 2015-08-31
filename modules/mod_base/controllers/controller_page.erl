@@ -124,7 +124,7 @@ maybe_redirect_page_path(PagePath, Id, Context) ->
             case current_path(Context) of
                 PagePath ->
                     maybe_exists(Id, Context);
-                true ->
+                _ ->
                     AbsUrl = m_rsc:p(Id, page_url_abs, Context),
                     AbsUrlQs = append_qs(AbsUrl, wrq:req_qs(z_context:get_reqdata(Context))),
                     do_temporary_redirect(AbsUrlQs, Context)
