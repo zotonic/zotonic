@@ -52,7 +52,7 @@ event(#submit{message={restore, Args}}, Context) ->
         true ->
             #upload{filename=_Filename, tmpfile=Tmpfile} = z_context:get_q_validated("file", Context),
             {ok, Data} = file:read_file(Tmpfile), 
-            case z_notifier:first(#rsc_upload{id=Id, format=bert, data=Data}, Context) of
+            case catch z_notifier:first(#rsc_upload{id=Id, format=bert, data=Data}, Context) of
                 {ok, NewId} ->
                     z_render:wire([{dialog_close, []}, 
                                    {redirect, [{dispatch, admin_edit_rsc}, {id,NewId}]}], Context);
