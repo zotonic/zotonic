@@ -86,7 +86,7 @@ render_scomp_module(ModuleName, Args, Vars, ScompContext, Context) ->
 %% @doc Create an unique key for the scomp and the visibility level it is rendered for
 %% @spec key(atom(), proplist(), context()) -> term()
 key(ScompName, EssentialParams, Context) ->
-    {ScompName, EssentialParams, z_acl:cache_key(Context), Context#context.language}.
+    {ScompName, EssentialParams, z_acl:cache_key(Context), z_context:language(Context)}.
 
 
 %% @doc Check how and if the scomp wants to be cached.

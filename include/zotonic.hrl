@@ -62,7 +62,8 @@
         db=undefined :: {pid(), atom()} | undefined,
 
         %% The language selected, used by z_trans and others
-        language=en :: atom(),
+        %% The first language in the list is the selected language, the tail are the fallback languages
+        language=[en] :: [atom()],
 
         %% The timezone for this request
         tz= <<"UTC">> :: string()|binary(),

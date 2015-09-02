@@ -22,8 +22,10 @@
                 <tr>
                     <th width="10%">{_ Enabled _}</th>
                     <th width="10%">{_ Default _}</th>
+                    <th width="15%">{_ Language _}</th>
                     <th width="15%">{_ ISO Code _}</th>
-                    <th width="65%">{_ Language _}</th>
+                    <th width="15%">{_ Fallback language _}</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -41,9 +43,12 @@
                                 {% if code == default_code %}checked="checked"{% endif %} />
                                 {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
                             </td>
-
-                            <td class="clickable" id="{{ #a.code }}">{{ code|default:"-" }}</td>
                             <td class="clickable" id="{{ #b.code }}">
+                                {{ lang.language|default:"-" }}
+                            </td>
+                            <td class="clickable" id="{{ #a.code }}">{{ code|default:"-" }}</td>
+                            <td class="clickable" id="{{ #a.fallback }}">{{ lang.fallback|default:"-" }}</td>
+                            <td class="clickable">
                                 <div class="pull-right">
                                     {% button class="btn btn-default btn-xs" text=_"Delete" 
                                         action={dialog_open
@@ -55,10 +60,9 @@
                                     {% button class="btn btn-default btn-xs"text=_"Edit" 
                                         action={dialog_open 
                                             title=_"Edit language"|append:": "|append:lang.language template="_dialog_language_edit.tpl"
-                                            code=code lang=lang}
+                                            code=code lang=lang fallback=lang.fallback}
                                     %}
                                 </div>
-                                {{ lang.language|default:"-" }}
                             </td>
                             {% wire id=#a.code action={dialog_open title=_"Edit language" template="_dialog_language_edit.tpl" code=code lang=lang} %}
             {% wire id=#b.code action={dialog_open title=_"Edit language" template="_dialog_language_edit.tpl" code=code lang=lang} %}

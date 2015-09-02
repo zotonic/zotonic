@@ -389,7 +389,7 @@ search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
                         from="rsc r, to_tsquery($2, $1) query",
                         where=" query @@ pivot_tsv",
                         order="rank desc",
-                        args=[TsQuery, z_pivot_rsc:pg_lang(Context#context.language)],
+                        args=[TsQuery, z_pivot_rsc:pg_lang(z_context:language(Context))],
                         cats=[{"r", Cat}],
                         tables=[{rsc,"r"}]
                     }
@@ -418,7 +418,7 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
                 from="rsc r, to_tsquery($2, $1) query",
                 where=" query @@ pivot_tsv",
                 order="rank desc",
-                args=[TsQuery, z_pivot_rsc:pg_lang(Context#context.language)],
+                args=[TsQuery, z_pivot_rsc:pg_lang(z_context:language(Context))],
                 tables=[{rsc,"r"}]
             }
     end;
@@ -442,7 +442,7 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
                 from="rsc r, to_tsquery($2, $1) query",
                 where=" query @@ pivot_tsv",
                 order="rank desc",
-                args=[TsQuery, z_pivot_rsc:pg_lang(Context#context.language)],
+                args=[TsQuery, z_pivot_rsc:pg_lang(z_context:language(Context))],
                 cats=[{"r", Cat}],
                 tables=[{rsc,"r"}]
             }
