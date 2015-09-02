@@ -49,7 +49,7 @@
     filename_to_modulename/3
 ]).
 
--record(state, {reset_counter, host, do_modified_check}).
+-record(state, {reset_counter, host, do_modified_check, compile_queue, compile_job, compile_job_pid}).
 
 %% Prefix for modules generated from templates.
 -define(TEMPLATE_PREFIX, "template_").
@@ -160,7 +160,9 @@ compile(File, FoundFile, Module, Context) ->
     z_notifier:notify(#debug{what=template, arg={compile, File, FoundFile, Module}}, Context),
     % swap basenames for the File and FoundFile
     File1 = set_filename(File, FoundFile),
-    gen_server:call(Context#context.template_server, {compile, File1, FoundFile, Module, Context}, ?TIMEOUT).
+    gen_server:call(Context#context.template_server, 
+                    {compile, File1, FoundFile, Module, z_context:prune_for_async(Context)}, 
+                    ?TIMEOUT).
 
 set_filename(File, FoundFile) ->
     set_filename_1(filename:dirname(File), FoundFile).
@@ -246,7 +248,12 @@ init(SiteProps) ->
     Host = proplists:get_value(host, SiteProps),
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Host)),
     Flag = z_config:get(template_modified_check, true),
-    {ok, #state{reset_counter=z_utils:now_msec(), host=Host, do_modified_check=Flag}}.
+    {ok, #state{
+            reset_counter=z_utils:now_msec(), 
+            host=Host,
+            compile_queue=[],
+            do_modified_check=Flag
+    }}.
 
 
 %% @spec handle_call({check_modified, Module}, From, State) -> ok | modified
@@ -261,28 +268,13 @@ handle_call({check_modified, Module}, _From, State) when Module =/= undefined ->
 
 %% @doc Compile the template, loads the compiled template in memory.  Make sure that we only compile 
 %% one template at a time to prevent overloading the server on restarts.
-handle_call({compile, File, FoundFile, Module, Context}, _From, State) ->
-    FinderFun  = fun(FinderFile, All) ->
-                    [
-                        case F of
-                            #module_index{filepath=FP} -> FP;
-                            {abs, FP} -> FP
-                        end
-                        || F <- ?MODULE:find_template(FinderFile, All, Context)
-                    ]
-                 end,
-    ErlyResult = case erlydtl:compile(  FoundFile,
-                                        File,
-                                        Module, 
-                                        [{finder, FinderFun}, {template_reset_counter, State#state.reset_counter},
-                                         {debug_includes, get_debug_includes(Context)},
-                                         {debug_blocks, get_debug_blocks(Context)}
-                                        ],
-                                        Context) of
-                    {ok, Module1} -> {ok, Module1};
-                    Error -> Error
-                 end,
-    {reply, ErlyResult, State}.
+handle_call({compile, _File, _FoundFile, Module, _Context} = Compile, From, State) ->
+    case template_is_modified(Module, State) of
+        true  ->
+            {noreply, queue_compile(Compile, From, State)};
+        false -> 
+            {reply, {ok, Module}, State}
+    end.
 
 %% @doc Reset all compiled templates, done by the module_indexer after the module list changed.
 handle_cast(module_reindexed, State) -> 
@@ -290,6 +282,22 @@ handle_cast(module_reindexed, State) ->
 handle_cast(_Msg, State) -> 
     {noreply, State}.
 
+%% @doc Handle result of the compilation server
+handle_info({compile_result, Pid, Result}, #state{compile_job_pid=Pid} = State) ->
+    {value, {_Key,_Req,Wait}, CQ} = lists:keytake(State#state.compile_job, 1, State#state.compile_queue),
+    lists:foreach(fun(From) ->
+                     gen_server:reply(From, Result)
+                  end,
+                  Wait),
+    {noreply, maybe_start_compile(State#state{compile_queue=CQ, compile_job=undefined, compile_job_pid=undefined})};
+
+handle_info({'EXIT', Pid, Reason}, #state{compile_job_pid=Pid} = State) ->
+    {value, {_Key,_Req,Wait}, CQ} = lists:keytake(State#state.compile_job, 1, State#state.compile_queue),
+    lists:foreach(fun(From) ->
+                     gen_server:reply(From, {error, {'EXIT', Reason}})
+                  end,
+                  Wait),
+    {noreply, maybe_start_compile(State#state{compile_queue=CQ, compile_job=undefined, compile_job_pid=undefined})};
 handle_info(_Msg, State) -> 
     {noreply, State}.
 
@@ -303,6 +311,57 @@ code_change(_OldVersion, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+queue_compile({compile, File, FoundFile, Module, Context} = Req, From, State) ->
+    Key = {
+        File,
+        FoundFile,
+        Module,
+        z_context:language(Context),
+        Context#context.ua_class
+    },
+    CQ1 = case lists:keytake(Key, 1, State#state.compile_queue) of
+            false ->
+                [ {Key, Req, [From]} | State#state.compile_queue ];
+            {value, {Key, Req0, Wait}, CQ} ->
+                [ {Key, Req0, [From|Wait]} | CQ ]
+          end,
+    maybe_start_compile(State#state{compile_queue=CQ1}).
+
+maybe_start_compile(#state{compile_queue=[]} = State) ->
+    State;
+maybe_start_compile(#state{compile_queue=CQ, compile_job_pid=undefined} = State) ->
+    {Key,Job,_Wait} = hd(CQ),
+    Self = self(),
+    Pid = erlang:spawn_link(
+                    fun() ->
+                        compile_job(Self, Job, State#state.reset_counter)
+                    end),
+    State#state{compile_job=Key, compile_job_pid=Pid};
+maybe_start_compile(State) ->
+    State.
+
+compile_job(Server, {compile, File, FoundFile, Module, Context}, ResetCounter) ->
+    FinderFun  = fun(FinderFile, All) ->
+                    [
+                        case F of
+                            #module_index{filepath=FP} -> FP;
+                            {abs, FP} -> FP
+                        end
+                        || F <- ?MODULE:find_template(FinderFile, All, Context)
+                    ]
+                 end,
+    Result = erlydtl:compile(FoundFile,
+                             File,
+                             Module, 
+                             [{finder, FinderFun}, {template_reset_counter, ResetCounter},
+                              {debug_includes, get_debug_includes(Context)},
+                              {debug_blocks, get_debug_blocks(Context)}
+                             ],
+                             Context),
+    Server ! {compile_result, self(), Result}.
+
 
 
 %% @doc Translate a filename to a module name
