@@ -243,7 +243,7 @@ map_country(Prop, Rsc) ->
                 <<"belgie">> -> [{Prop, <<"be">>} | Rsc];
                 <<"belgique">> -> [{Prop, <<"be">>} | Rsc];
                 % typos
-                <<"nethlerlands">> -> [{Prop, <<"nl">>} | Rsc];
+                <<"netherlands">> -> [{Prop, <<"nl">>} | Rsc];
                 % just keep as-is
                 _ -> Rsc
             end
