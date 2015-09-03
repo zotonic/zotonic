@@ -1079,10 +1079,10 @@ ul.tree-list li.menu-item .z-btn-remove {
 }
 ul.tree-list li.menu-item .z-icon-drag {
   color: #999;
-  left: 32px;
+  left: 10px;
 }
 ul.tree-list li.menu-item .z-btn-remove {
-  right: 8px;
+  right: 10px;
 }
 ul.tree-list li.menu-item > div > a,
 ul.tree-list li.menu-item > div > span:not(.btns) {
@@ -1141,7 +1141,7 @@ ul.tree-list li.menu-item .warning {
 ul.tree-list li.menu-item .btns {
   display: block;
   position: absolute;
-  right: 8px;
+  right: 10px;
   top: 7px;
 }
 ul.tree-list li.menu-item .btns .btn-group {
