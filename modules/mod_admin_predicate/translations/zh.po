@@ -62,7 +62,7 @@ msgid "Need more help?"
 msgstr "更多帮助？"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:1
-msgid "Please fill in the title of the new predicate."
+msgid "Enter the title of the new predicate:"
 msgstr "请填写新谓词的标题"
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:9
@@ -106,7 +106,7 @@ msgstr "有效范围"
 msgid ""
 "You can define for which categories the predicate is shown on the edit "
 "page.  You can also define which categories of objects will be found when "
-"searching for a page to connect to.  When you don\\'t check anything then "
+"searching for a page to connect to. When you don't check anything then "
 "all categories are valid."
 msgstr ""
 "你可以定义本谓词显示在哪些分类的编辑页面中。同时也可以定义搜索连接页面时显示"

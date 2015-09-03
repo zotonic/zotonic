@@ -59,7 +59,7 @@ msgid "Need more help?"
 msgstr "Daha fazla yardım?"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:1
-msgid "Please fill in the title of the new predicate."
+msgid "Enter the title of the new predicate:"
 msgstr "Yeni öncülün başlığını doldurunuz."
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:9
@@ -97,7 +97,7 @@ msgid "Valid between"
 msgstr "Geçerli tarih aralığı"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:9
-msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to.  When you don\\'t check anything then all categories are valid."
+msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."
 msgstr "Hangi kategorilerin düzenleme sayfasında bu öncülün gösterileceğini belirleyebilirsiniz. Bağlanacak sayfa için arama sonuçlarında hangi kategorideki nesnelerin bulunacağını da tanımlayabilirsiniz. Hiçbirini işaretlemezseniz hepsi geçerli olurlar."
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:38

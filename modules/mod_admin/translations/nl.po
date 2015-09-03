@@ -22,7 +22,7 @@ msgstr ""
 msgid "+ add block"
 msgstr "+ nieuw blok"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:30
+#: modules/mod_admin/templates/_admin_edit_header.tpl:37
 msgid "<em>untitled</em>"
 msgstr "<em>zonder titel</em>"
 
@@ -102,13 +102,13 @@ msgid "All day"
 msgstr "Alle media"
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:14
-#: modules/mod_admin/templates/admin_media.tpl:24
+#: modules/mod_admin/templates/admin_media.tpl:25
 #: modules/mod_admin/templates/admin_overview.tpl:96
 msgid "All media"
 msgstr "Alle media"
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:13
-#: modules/mod_admin/templates/admin_media.tpl:23
+#: modules/mod_admin/templates/admin_media.tpl:24
 #: modules/mod_admin/templates/admin_overview.tpl:95
 msgid "All pages"
 msgstr "Alle pagina's"
@@ -177,7 +177,7 @@ msgstr "Annuleren"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:36
 #: modules/mod_admin/templates/_admin_overview_list.tpl:8
-#: modules/mod_admin/templates/admin_referrers.tpl:19
+#: modules/mod_admin/templates/admin_referrers.tpl:21
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:38
 msgid "Category"
@@ -244,7 +244,7 @@ msgstr "Land"
 msgid "Created on"
 msgstr "Gemaakt op"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:25
+#: modules/mod_admin/templates/_admin_edit_header.tpl:29
 #, fuzzy
 msgid "Created:"
 msgstr "Gemaakt door"
@@ -474,7 +474,7 @@ msgstr ""
 "Hier kan je de namen van de persoon bewerken. Gebruik de titel van de "
 "basisgegevens voor de naam zoals die wordt weergegeven op pagina's."
 
-#: modules/mod_admin/templates/admin_media.tpl:35
+#: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
 msgstr "Informatie"
 
@@ -541,7 +541,7 @@ msgstr "Basis"
 msgid "Make"
 msgstr "Aanmaken"
 
-#: modules/mod_admin/templates/admin_media.tpl:20
+#: modules/mod_admin/templates/admin_media.tpl:21
 msgid "Make a new media item"
 msgstr "Maak een nieuw mediabestand"
 
@@ -603,12 +603,12 @@ msgid "Mobile"
 msgstr "Mobiele telefoon"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:17
-#: modules/mod_admin/templates/admin_referrers.tpl:22
+#: modules/mod_admin/templates/admin_referrers.tpl:24
 msgid "Modified by"
 msgstr "Bewerkt door"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:14
-#: modules/mod_admin/templates/admin_referrers.tpl:21
+#: modules/mod_admin/templates/admin_referrers.tpl:23
 msgid "Modified on"
 msgstr "Bewerkt op"
 
@@ -647,12 +647,12 @@ msgstr "Volgende in categorie:"
 msgid "No items."
 msgstr "Geen items."
 
-#: modules/mod_admin/templates/admin_media.tpl:83
+#: modules/mod_admin/templates/admin_media.tpl:85
 msgid "No media found."
 msgstr "Geen media gevonden."
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:47
-#: modules/mod_admin/templates/admin_referrers.tpl:45
+#: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
 
@@ -707,11 +707,11 @@ msgstr "Vul a.u.b. de titel in van de nieuwe pagina."
 msgid "Postcode"
 msgstr "Postcode"
 
-#: modules/mod_admin/templates/admin_referrers.tpl:20
+#: modules/mod_admin/templates/admin_referrers.tpl:22
 msgid "Predicate"
 msgstr "Predicaat"
 
-#: modules/mod_admin/templates/admin_media.tpl:33
+#: modules/mod_admin/templates/admin_media.tpl:35
 msgid "Preview"
 msgstr "Voorbeeld"
 
@@ -780,7 +780,7 @@ msgid "Redirect to website on page view"
 msgstr ""
 
 #: modules/mod_admin/templates/admin_referrers.tpl:3
-#: modules/mod_admin/templates/admin_referrers.tpl:7
+#: modules/mod_admin/templates/admin_referrers.tpl:8
 msgid "Referrers to"
 msgstr "Verwijzingen naar"
 
@@ -1010,8 +1010,8 @@ msgstr "Tot"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
 #: modules/mod_admin/templates/_admin_overview_list.tpl:5
-#: modules/mod_admin/templates/admin_media.tpl:34
-#: modules/mod_admin/templates/admin_referrers.tpl:18
+#: modules/mod_admin/templates/admin_media.tpl:36
+#: modules/mod_admin/templates/admin_referrers.tpl:20
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
 msgid "Title"
@@ -1058,7 +1058,7 @@ msgstr "Upload een bestand van het internet."
 msgid "Upload file"
 msgstr "Upload bestand"
 
-#: modules/mod_admin/templates/admin_media.tpl:36
+#: modules/mod_admin/templates/admin_media.tpl:38
 msgid "Uploaded"
 msgstr "geupload"
 
@@ -1175,18 +1175,18 @@ msgstr "maak mediabestand"
 msgid "block"
 msgstr "blok"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:24
-#: modules/mod_admin/templates/_admin_edit_header.tpl:25
+#: modules/mod_admin/templates/_admin_edit_header.tpl:26
+#: modules/mod_admin/templates/_admin_edit_header.tpl:31
 msgid "by"
 msgstr "door"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:33
 #: modules/mod_admin/templates/_admin_overview_list.tpl:34
-#: modules/mod_admin/templates/admin_referrers.tpl:32
+#: modules/mod_admin/templates/admin_referrers.tpl:34
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
-#: modules/mod_admin/templates/admin_media.tpl:62
+#: modules/mod_admin/templates/admin_media.tpl:64
 msgid "delete"
 msgstr "verwijder"
 
@@ -1195,8 +1195,8 @@ msgid "e.g. might change"
 msgstr "bv. kan nog veranderen"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:39
-#: modules/mod_admin/templates/admin_media.tpl:73
-#: modules/mod_admin/templates/admin_referrers.tpl:37
+#: modules/mod_admin/templates/admin_media.tpl:75
+#: modules/mod_admin/templates/admin_referrers.tpl:39
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
 msgid "edit"
@@ -1247,7 +1247,7 @@ msgid "uploaded on"
 msgstr "geupload op"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:38
-#: modules/mod_admin/templates/admin_referrers.tpl:36
+#: modules/mod_admin/templates/admin_referrers.tpl:38
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
 msgid "view"

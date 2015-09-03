@@ -70,7 +70,7 @@ msgid "Need more help?"
 msgstr "Potrzebujesz podpowiedzi?"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:1
-msgid "Please fill in the title of the new predicate."
+msgid "Enter the title of the new predicate:"
 msgstr "Podaj tytuł predykatu."
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:9
@@ -116,7 +116,7 @@ msgstr "Predykaty - określenie relacji"
 msgid ""
 "You can define for which categories the predicate is shown on the edit "
 "page.  You can also define which categories of objects will be found when "
-"searching for a page to connect to.  When you don\\'t check anything then "
+"searching for a page to connect to. When you don't check anything then "
 "all categories are valid."
 msgstr ""
 "Możesz określić, dla których kategorii predykat będzie widoczny za "
