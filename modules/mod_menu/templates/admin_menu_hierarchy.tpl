@@ -35,7 +35,7 @@
 							<h3 class="widget-header">{_ How does this work? _}</h3>
 							<div class="widget-content">
 								<p>
-									{_ Use the <i class="glyphicon glyphicon-cog"></i> button to add or remove pages. _}
+									{_ Create an (optionally) nested navigation menu for this site. _}
 								</p>
 								<p>
 									{_ Drag pages to the place where you want them in the hierarchy. _}
