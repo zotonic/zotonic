@@ -194,7 +194,7 @@ msgid "Every page can have a date range. For example if the page is an event or 
 msgstr "Chaque page peut avoir une date. Par exemple si une page représente un évenement ou une description de la vie de quelqun"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:510
-msgid "Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
+msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
 msgstr "Chaque page est catégorisée dans une catégorie. La catégorie définit ce que les pages représentent. Par exemple un évenement, un produit ou une personne. Les catégorie sont définient hierarchiquement. Par exemple; vous pouvez avoir une catégorie véhicules avec des sous catégories voiture et bicyclette."
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:341

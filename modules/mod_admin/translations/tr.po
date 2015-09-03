@@ -317,7 +317,7 @@ msgid "Every page can have a date range. For example if the page is an event or 
 msgstr "Her sayfa tarih aralığına sahip olabilir. Örneğin sayfa bir etkinlik veya birinin hayatını tanımlıyorsa."
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:1
-msgid "Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
+msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
 msgstr "Her sayfa sadece tek bir kategoriye ait olabilir. Kategori sayfanın neyle alakalı olduğunu gösterir. Örneğin bir etkinlik, bir ürün veya bir kişi. Kategoriler hiyerarşik olarak tanımlanır. Bu yolla araçlar kategorisinin altında bisiklet ve araba şeklinde kategoriler yaratabilirsiniz."
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
