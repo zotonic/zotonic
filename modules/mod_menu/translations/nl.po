@@ -16,34 +16,50 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:11
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:18
+#, fuzzy
+msgid "Add"
+msgstr "Bovenaan invoegen"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:20
 msgid "Add after"
-msgstr "Invoegen na"
+msgstr "Hierna invoegen"
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:9
+#: modules/mod_menu/templates/_menu_edit_item.tpl:18
 msgid "Add before"
-msgstr "Invoegen voor"
+msgstr "Hiervoor invoegen"
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:10
+#: modules/mod_menu/templates/_menu_edit_item.tpl:19
 msgid "Add below"
-msgstr "Hieronder invoegen"
+msgstr "Als sub-item invoegen"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:22
 msgid "Add bottom"
 msgstr "Onderaan invoegen"
 
-#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:7
 msgid "Add category"
-msgstr "Voeg categorie to"
+msgstr "Voeg categorie toe"
 
-#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:4
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:20
+#, fuzzy
+msgid "Add item"
+msgstr "Voeg menu-item toe"
+
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:8
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:33
 msgid "Add menu item"
 msgstr "Voeg menu-item toe"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:11
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:21
 msgid "Add top"
 msgstr "Bovenaan invoegen"
+
+#: modules/mod_menu/mod_menu.erl:120
+msgid "COPY"
+msgstr ""
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
 msgid ""
@@ -51,69 +67,75 @@ msgid ""
 "pages."
 msgstr "Klik op <strong>voeg menu-item</strong> om pagina's toe te voegen."
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3
-msgid "Current menu"
-msgstr "Huidig menu"
+#: modules/mod_menu/templates/_menu_edit_item.tpl:22
+msgid "Copy"
+msgstr ""
 
 #: modules/mod_menu/templates/_menu_trash.tpl:1
 msgid "Drag elements here to remove them"
 msgstr "Sleep elementen hier om ze te verwijderen"
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:3
-msgid "Drag me"
-msgstr "Verslepen"
-
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:18
 msgid ""
 "Drag menu items in the menu up, down, left or right to structure the menu."
-msgstr "Versleep de elementen in het menu naar boven, onder, links of rechts om het menu in te delen."
+msgstr ""
+"Versleep de elementen in het menu naar boven, onder, links of rechts om het "
+"menu in te delen."
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:18
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:41
+msgid "Drag pages to the place where you want them in the hierarchy."
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.collection.tpl:40
+#: modules/mod_menu/templates/_menu_edit_item.tpl:14
 msgid "Edit"
 msgstr "Bewerk"
 
-#: modules/mod_menu/mod_menu.erl:402
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:52
+msgid "Empty hierarchy"
+msgstr ""
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:64
+msgid "Hierarchies can be defined for any existing category."
+msgstr ""
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:8
+#, fuzzy
+msgid "Hierarchy for"
+msgstr "Pagina opzoeken"
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:35
+msgid "How does this work?"
+msgstr "Hoe werkt dit?"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3
+#: modules/mod_menu/mod_menu.erl:450
 msgid "Menu"
 msgstr "Menu"
 
-#: modules/mod_menu/mod_menu.erl:187
+#: modules/mod_menu/mod_menu.erl:231
 msgid "New page"
 msgstr "Nieuwe pagina"
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:13
+#: modules/mod_menu/templates/_menu_edit_item.tpl:23
 msgid "Remove"
 msgstr "Verwijder"
 
-#~ msgid "Help about editing menus"
-#~ msgstr "Hulp bij de menu-editor"
+#: modules/mod_menu/mod_menu.erl:111
+msgid "Sorry, can’t copy that page."
+msgstr ""
 
-#~ msgid ""
-#~ "Here you can change the menu of your site.  Select pages on the right "
-#~ "hand side and drag them to the menu on the left."
-#~ msgstr ""
-#~ "Op deze plek kan je het menu van de site aanpassen. Selecteer pagina's "
-#~ "aan de rechterkant en sleep ze in het menu links."
+#: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:125
+msgid "This item is already in the hierarchy. Every item can only occur once."
+msgstr ""
 
-#~ msgid "Need more help?"
-#~ msgstr "Meer hulp nodig?"
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:63
+#, fuzzy
+msgid "Unknown category"
+msgstr "Voeg categorie toe"
 
-#~ msgid "Search for a page"
-#~ msgstr "Pagina opzoeken"
-
-#~ msgid ""
-#~ "Type the name of the page you want in your menu in the box left of this "
-#~ "note. When you get a result, you can drag that item onto the menu pane on "
-#~ "the left side of the page. You can also move the menu items around to "
-#~ "manage the way your navigations looks."
-#~ msgstr ""
-#~ "Type de naam van de pagina die je in het menu wilt in het zoekveld "
-#~ "rechts. Zodra je een resultaat krijgt, kan je dat in het menu aan de "
-#~ "linkerkan slepen. Je kan ook het menu aanpassen en van volgorde "
-#~ "veranderen door de items binnen het menu te slepen."
-
-#~ msgid ""
-#~ "Type your search terms to find pages. Then drag them on to the panel on "
-#~ "your left."
-#~ msgstr ""
-#~ "Type een zoekterm om pagina's te vinden. Sleep ze daarna in het menu "
-#~ "links."
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:38
+msgid ""
+"Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove "
+"pages."
+msgstr ""
