@@ -298,8 +298,8 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:18 
 msgid ""
-"Every page is categorized in exactly one category.  The category defines "
-"what the page represents. For example an event, a product or a person.  "
+"Every page is categorized in exactly one category. The category defines "
+"what the page represents. For example an event, a product or a person. "
 "The categories are hierarchically defined. In that way you can have a "
 "vehicles category with subcategories car and bicycle."
 msgstr "Iga leht kuulub ainult ühte gategooriasse. Kategoori defineerib"

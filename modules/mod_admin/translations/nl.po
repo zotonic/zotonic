@@ -185,9 +185,8 @@ msgstr "Categorie"
 
 #: modules/mod_admin/templates/_admin_edit_header.tpl:17
 #: modules/mod_admin/templates/_admin_edit_header.tpl:20
-#, fuzzy
 msgid "Category:"
-msgstr "Categorie"
+msgstr "Categorie:"
 
 #: modules/mod_admin/templates/_admin_edit_header.tpl:17
 #: modules/mod_admin/templates/_admin_edit_header.tpl:18
@@ -354,15 +353,15 @@ msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:6
 msgid ""
-"Every page is categorized in exactly one category.  The category defines "
-"what the page represents. For example an event, a product or a person.  The "
+"Every page is categorized in exactly one category. The category defines "
+"what the page represents. For example an event, a product or a person. The "
 "categories are hierarchically defined. In that way you can have a vehicles "
 "category with subcategories car and bicycle."
 msgstr ""
-"Elke pagina is gecatogoriseerd in één categorie. De categorie bepaald\n"
-"wat de pagina betekent op de site. Bijvoorbeeld een evenement, product\n"
-"of persoon. De categorieën zijn hierarchisch ingedeeld. Zo kan je\n"
-"bijvoorbeeld een categorie voertuigen hebben met daarin subcategorieën auto "
+"Elke pagina valt onder één categorie. De categorie bepaalt "
+"wat de pagina betekent op de site. Bijvoorbeeld een evenement, product "
+"of persoon. De categorieën zijn hiërarchisch ingedeeld. Zo kun je "
+"bijvoorbeeld een categorie voertuig hebben met daarin subcategorieën auto "
 "en fiets."
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
