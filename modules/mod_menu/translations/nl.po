@@ -17,9 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:18
-#, fuzzy
 msgid "Add"
-msgstr "Bovenaan invoegen"
+msgstr "Toevoegen"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:20
 msgid "Add after"
@@ -43,7 +42,6 @@ msgid "Add category"
 msgstr "Voeg categorie toe"
 
 #: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:20
-#, fuzzy
 msgid "Add item"
 msgstr "Voeg menu-item toe"
 
@@ -59,7 +57,7 @@ msgstr "Bovenaan invoegen"
 
 #: modules/mod_menu/mod_menu.erl:120
 msgid "COPY"
-msgstr ""
+msgstr "KOPIEER"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
 msgid ""
@@ -69,7 +67,11 @@ msgstr "Klik op <strong>voeg menu-item</strong> om pagina's toe te voegen."
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:22
 msgid "Copy"
-msgstr ""
+msgstr "Kopieer"
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:38
+msgid "Create an (optionally) nested navigation menu for this site."
+msgstr "Maak een (optioneel genest) navigatie menu voor deze site."
 
 #: modules/mod_menu/templates/_menu_trash.tpl:1
 msgid "Drag elements here to remove them"
@@ -84,7 +86,7 @@ msgstr ""
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:41
 msgid "Drag pages to the place where you want them in the hierarchy."
-msgstr ""
+msgstr "Versleep pagina's naar de gewenste plek in de hiërarchie."
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.collection.tpl:40
 #: modules/mod_menu/templates/_menu_edit_item.tpl:14
@@ -93,16 +95,15 @@ msgstr "Bewerk"
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:52
 msgid "Empty hierarchy"
-msgstr ""
+msgstr "Lege hiërarchie"
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:64
 msgid "Hierarchies can be defined for any existing category."
-msgstr ""
+msgstr "Een hiërarchie kan worden bepaald voor elke bestaande categorie."
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:8
-#, fuzzy
 msgid "Hierarchy for"
-msgstr "Pagina opzoeken"
+msgstr "Hiërarchie voor"
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:35
 msgid "How does this work?"
@@ -123,19 +124,12 @@ msgstr "Verwijder"
 
 #: modules/mod_menu/mod_menu.erl:111
 msgid "Sorry, can’t copy that page."
-msgstr ""
+msgstr "Sorry, pagina kan niet gekopieerd worden."
 
 #: modules/mod_menu/templates/text/_menu_edit_scripts.tpl:125
 msgid "This item is already in the hierarchy. Every item can only occur once."
-msgstr ""
+msgstr "Dit item staat al in de hiërarchie. Items kunnen maar 1 keer voor komen."
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:63
-#, fuzzy
 msgid "Unknown category"
-msgstr "Voeg categorie toe"
-
-#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:38
-msgid ""
-"Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove "
-"pages."
-msgstr ""
+msgstr "Onbekende categorie"
