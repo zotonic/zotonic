@@ -90,7 +90,11 @@ show_template(ReqData, Code, ErrorDump, Reason) ->
         {Output, _} = z_context:output(Html, Context),
         {Output, RD3}
     catch
-        _:_Reason -> {<<>>,RD3}
+        _E:R-> 
+            StackTrace = erlang:get_stacktrace(),
+            Path = wrq:path(RD3),
+            lager:error("Error rendering error.tpl: Path: ~p, Code: ~p~nError: ~p~n~p~n", [Path, Code, R, StackTrace]),
+            {<<>>, RD3}
     end.
 
 
