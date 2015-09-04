@@ -93,7 +93,7 @@ confirm(UserId, Context) ->
 logon(UserId, Context) ->
     case is_enabled(UserId, Context) of
         true ->
-            Context1 = z_acl:logon(UserId, Context),
+            Context1 = z_acl:logon_prefs(UserId, Context),
             {ok, Context2} = z_session_manager:rename_session(Context1),
             z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
             z_context:set_session(auth_user_id, UserId, Context2),
@@ -108,7 +108,7 @@ logon(UserId, Context) ->
 
 %% @doc Continue the current session as a different user.
 switch_user(UserId, Context) ->
-    Context1 = z_acl:logon(UserId, Context),
+    Context1 = z_acl:logon_prefs(UserId, Context),
     z_context:set_session(auth_timestamp, calendar:universal_time(), Context1),
     z_context:set_session(auth_user_id, UserId, Context1),
     Context2 = z_session:ensure_page_session(Context1#context{page_pid=undefined, page_id=undefined}),
@@ -162,7 +162,7 @@ logon_from_session(Context) ->
             end;
         UserId ->
             z_memo:set_userid(UserId),
-            z_acl:logon(UserId, Context)
+            z_acl:logon_prefs(UserId, Context)
     end.
 
 
