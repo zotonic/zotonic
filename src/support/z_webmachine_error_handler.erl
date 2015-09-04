@@ -72,6 +72,7 @@ show_template(ReqData, Code, ErrorDump, Reason) ->
     Host = webmachine_request:get_metadata('zotonic_host', RD3),
     try 
         Context = z_context:new(Host),
+        ContextRd = z_context:set_reqdata(RD3, Context),
         Vars = case bt_simplify(Reason) of
                     {reason, ErlangError, Tab} ->
                         [
@@ -86,9 +87,9 @@ show_template(ReqData, Code, ErrorDump, Reason) ->
                             {error_dump, X}
                         ]
                end,
-        Html = z_template:render("error.tpl", Vars, Context),
-        {Output, _} = z_context:output(Html, Context),
-        {Output, RD3}
+        Html = z_template:render("error.tpl", Vars, ContextRd),
+        {Output, ContextOut} = z_context:output(Html, ContextRd),
+        {Output, z_context:get_reqdata(ContextOut)}
     catch
         _E:R-> 
             StackTrace = erlang:get_stacktrace(),
