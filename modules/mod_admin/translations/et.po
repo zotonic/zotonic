@@ -575,9 +575,9 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40 
 msgid ""
-"No items."
+"No items"
 msgstr ""
-"Pole midagi."
+"Pole midagi"
 
 #: ./modules/mod_admin/templates/admin_media.tpl:74 
 msgid ""

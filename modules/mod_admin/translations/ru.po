@@ -610,8 +610,8 @@ msgid "Next in category: "
 msgstr "Следующее в категории:"
 
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:57
-msgid "No items."
-msgstr "Элементы отсутствуют."
+msgid "No items"
+msgstr "Элементы отсутствуют"
 
 #: modules/mod_admin/templates/admin_media.tpl:71
 msgid "No media found."
