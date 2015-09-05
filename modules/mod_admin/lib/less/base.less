@@ -1,14 +1,6 @@
 body {
     color: @textColorDark;
-    
-    div.admin-container {
-        margin: @baseMargin;
-        margin-top: 70px;
-    }
-
-    &.noframe > div.admin-container {
-        background: transparent;
-    }
+    background-color: #fff;
 
     &.wait {
         cursor: wait;
@@ -68,6 +60,15 @@ p {
     }
 }
 
+.admin-container {
+    margin: @baseMargin;
+    margin-top: @topbarHeight + @topbarBottomMargin;
+}
+
+body.noframe > .admin-container {
+    background: transparent;
+}
+
 // extensible
 
 .admin-image-border {
@@ -107,9 +108,12 @@ p .z-btn-help {
     
     h2 {
         margin-top: 0;
-        margin-bottom: @widgetVerticalPadding;
+        margin-bottom: 0;
         color: #333;
         &:extend(.admin-word-break);
+    }
+    h2 + p {
+        margin-top: 1em;
     }
 }
 
