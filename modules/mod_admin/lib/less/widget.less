@@ -1,19 +1,22 @@
-   
-.widget {    
+
+.widget { 
     margin-bottom: @widgetVerticalPadding;
     border-bottom: none;
     #3L > .border-radius(@radiusWidget);
     #3L > .clearfix;
-//    #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
-    background-color: @backgroundColorLighter;
-    
+
+    &,
+    &.dark {
+        background-color: @backgroundColorMedium;
+    }
+
     h5 {
         margin-top: 18px;
     }
 
     .widget-content {
         position: relative;
-        padding: 0 @widgetSidePadding 0 @widgetSidePadding;
+        padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
         
         hr {
             margin-left: -@widgetSidePadding;
@@ -62,7 +65,9 @@
             }
         }
     }
-
+    .widget-header + .widget-content {
+        border-top: 1px solid @borderColorMedium;
+    }
     .widget-header,
     .widget-section-header {
         &:extend(.admin-text-header);
@@ -76,8 +81,6 @@
     .widget-header {
         margin: 0;
         padding: @widgetVerticalPadding @widgetSidePadding;
-        #3L > .border-radius(@radiusWidget @radiusWidget 0);
-        #3L > .gradient(#e0e0e0, @backgroundColorLighter);
         #3L > .user-select(none);
 
         .z-btn-remove {
@@ -114,8 +117,25 @@
             text-shadow: none;
         }
     }
-    
-    &.widget-expanded {
+
+    &.widget-active:not(.widget-expanded) {
+        @_transitionDuration: .5s;
+        @_transitionEffect: ease-in-out;
+        @_color: @backgroundColorLightest;
+
+        background-color: @_color;
+        #3L > .border-radius(@radiusWidget);
+        #3L > .transition(background @_transitionDuration @_transitionEffect);
+
+        .widget-header {
+            background-color: @_color;
+            #3L > .border-radius(@radiusWidget @radiusWidget 0);
+            #3L > .transition(background @_transitionDuration @_transitionEffect);
+        }
+    }
+
+    &.widget-expanded,
+    &.dark.widget-expanded {
         .widget-header {
             .widget-header-tools {
                 .z-btn-help {
@@ -150,20 +170,52 @@
     }
 }
 
+// TODO: html.no-touch only
+.widget.widget-active:not(.widget-expanded) {
+    .widget-header:hover {
+        @_transitionDuration: .1s;
+        @_transitionEffect: ease-in-out;
+        background-color: @backgroundColorMedium;
+        #3L > .transition(background @_transitionDuration @_transitionEffect);
+        cursor: pointer;
+    }
+}
+
 li {
     > .widget {
         #3L > .border-radius(0 0 @radiusWidget @radiusWidget);
     }
 
     h3.widget-header {
-        #3L > .border-radius(@radiusWidget @radiusWidget 0 0);
+        //#3L > .border-radius(@radiusWidget @radiusWidget 0 0);
         #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
     }
     
 }
 
-.widget ul.nav-tabs li.active > a {
-    #3L > .gradient(@backgroundColorLight, #ffffff);
+.widget > ul.nav-tabs {
+    padding: 0 @widgetSidePadding;
+    border-color: @borderColorDark;
+    
+    > li {
+        margin-bottom: 0;
+    }
+
+    > li > a,
+    li.active > a {
+        #3L > .border-radius(0);
+        margin-right: 1px;
+        border: none;
+
+    }
+    > li > a {
+        background-color: @backgroundColorLightest;
+        color: @textColorButton;
+    }
+    li.active > a {
+        background-color: #fff;
+        color: @textColorDark;
+    }
 }
 
 .modal {
