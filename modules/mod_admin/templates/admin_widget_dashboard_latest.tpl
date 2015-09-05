@@ -26,67 +26,66 @@
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
-    <table class="table do_adminLinkedTable">
-        <thead>
-            <tr>
-                {% if show_date %}
-                    <th width="40%">{_ Title _}</th>
-                    <th width="30%">{_ Date _}</th>
-                    <th width="30%">{_ Category _}</th>
-                {% else %}
-                    <th width="55%">{_ Title _}</th>
-                    <th width="45%">{_ Category _}</th>
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for id in m.search[{latest cat=cat pagelen=pagelen|default:5}] %}
-                {% if m.rsc[id].is_visible %}
-                    <tr class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
-                        <td>
-                            {% if media %}
-                                <div class="admin-list-thumb">
-                            {% endif %}
-                            {% if media %}
-                                {% image id mediaclass="admin-list-dashboard" class="thumb" %}
-                            {% endif %}
-                            <span>{{ (m.rsc[id].title|striptags|truncate:50)|default:"<em>untitled</em>" }}</span>
-                            {% if media %}
-                                </div>
-                            {% endif %}
-                        </td>
-
+    {% with m.search[{latest cat=cat pagelen=pagelen|default:5}] as latest %}
+        {% if latest %}
+            <table class="table do_adminLinkedTable">
+                <thead>
+                    <tr>
                         {% if show_date %}
-                            <td>
-                                {{ id.modified|date:"j F Y - H:i:s" }}
-                            </td>
-                            <td>
-                                {{ id.category_id.short_title|default:id.category_id.title }}
-                                <span class="pull-right buttons">
-                                    {% if id.page_url %}<a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>{% endif %}
-                                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
-                                </span>
-                            </td>
+                            <th width="40%">{_ Title _}</th>
+                            <th width="30%">{_ Date _}</th>
+                            <th width="30%">{_ Category _}</th>
                         {% else %}
-                            <td>
-                                {{ id.category_id.short_title|default:id.category_id.title }}
-                                <span class="pull-right buttons">
-                                    {% if id.page_url %}<a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>{% endif %}
-                                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
-                                </span>
-                            </td>
+                            <th width="55%">{_ Title _}</th>
+                            <th width="45%">{_ Category _}</th>
                         {% endif %}
-                    </td>
-                </tr>
-            {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for id in latest %}
+                        {% if m.rsc[id].is_visible %}
+                            <tr class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
+                                <td>
+                                    {% if media %}
+                                        <div class="admin-list-thumb">
+                                    {% endif %}
+                                    {% if media %}
+                                        {% image id mediaclass="admin-list-dashboard" class="thumb" %}
+                                    {% endif %}
+                                    <span>{{ (m.rsc[id].title|striptags|truncate:50)|default:"<em>untitled</em>" }}</span>
+                                    {% if media %}
+                                        </div>
+                                    {% endif %}
+                                </td>
 
-        {% empty %}
-            <tr>
-                <td colspan="2">
-	                {_ No items. _}
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                                {% if show_date %}
+                                    <td>
+                                        {{ id.modified|date:"j F Y - H:i:s" }}
+                                    </td>
+                                    <td>
+                                        {{ id.category_id.short_title|default:id.category_id.title }}
+                                        <span class="pull-right buttons">
+                                            {% if id.page_url %}<a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>{% endif %}
+                                            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                                        </span>
+                                    </td>
+                                {% else %}
+                                    <td>
+                                        {{ id.category_id.short_title|default:id.category_id.title }}
+                                        <span class="pull-right buttons">
+                                            {% if id.page_url %}<a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>{% endif %}
+                                            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                                        </span>
+                                    </td>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div class="widget-content">{_ No items _}</div>
+        {% endif %}
+{% endwith %}
 {% endblock %}

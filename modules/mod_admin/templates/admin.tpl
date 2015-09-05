@@ -1,5 +1,6 @@
 {% extends "admin_base.tpl" %}
 
+{% block bodyclass %}dashboard{% endblock %}
 {% block title %}{_ Dashboard _}{% endblock %}
 
 {% block content %}
