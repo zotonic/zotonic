@@ -18,6 +18,11 @@
         position: relative;
         padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
         
+        &.widget-content-full {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
         hr {
             margin-left: -@widgetSidePadding;
             margin-right: -@widgetSidePadding;
@@ -25,7 +30,7 @@
         
         .widget-content {
             // nested
-            padding: 0;
+            padding-top: 0;
             
             > :last-child {
                 // nested (blocks)
@@ -66,7 +71,7 @@
         }
     }
     .widget-header + .widget-content {
-        border-top: 1px solid @borderColorMedium;
+        border-top: 1px solid @borderColorMediumTransparent;
     }
     .widget-header,
     .widget-section-header {
@@ -179,6 +184,10 @@
         #3L > .transition(background @_transitionDuration @_transitionEffect);
         cursor: pointer;
     }
+}
+
+.dashboard .widget { 
+    background-color: @backgroundColorLightest;
 }
 
 li {
