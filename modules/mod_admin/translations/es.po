@@ -623,8 +623,8 @@ msgid "Next in category: "
 msgstr "Próximo en la categoría:"
 
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:57
-msgid "No items."
-msgstr "No hay ítems."
+msgid "No items"
+msgstr "No hay ítems"
 
 #: modules/mod_admin/templates/admin_media.tpl:71
 msgid "No media found."
