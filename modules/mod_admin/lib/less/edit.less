@@ -1,3 +1,4 @@
+
 ul.media {
     @_item_spacing: 10px;
     margin: 0;
@@ -71,23 +72,24 @@ ul.media {
 @_leaderImageHeight: 60px;
 
 .edit-page {
+    .admin-container {
+        margin-top: @topbarHeight;
+    }
     .admin-header {
-        h2 {
-            margin-bottom: 0;
-        }
         .admin-header-meta {
-            margin-bottom: 10px;
+            margin: 0 -@baseMargin 0 -@baseMargin;
+            padding: @baseMargin;
         }
-        .admin-btn-category,
-        .admin-edit-dates {
+        h2 {
+            margin-bottom: 8px;
+        }
+        .admin-btn-category {
             font-size: 12px;
         }
         .admin-btn-category {
             margin-top: -2px;
         }
         .admin-edit-dates {
-            margin-left: 6px;
-            
             &,
             a {
                 color: @textColorLight;
