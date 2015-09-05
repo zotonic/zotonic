@@ -7,7 +7,7 @@
 <div class="widget-header-tools"></div>
 {% endblock %}
 
-{% block widget_show_minimized %}false{% endblock %}
+{% block show_opened %}true{% endblock %}
 {% block widget_id %}sidebar-publish-page{% endblock %}
 {% block widget_class %}dark{% endblock %}
 

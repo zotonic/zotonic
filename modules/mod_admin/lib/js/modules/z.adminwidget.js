@@ -29,9 +29,13 @@ $.widget("z.adminwidget",
         self.element.addClass("widget-active");
         self.item = self.element.find("div.widget-content");
         self.header = self.element.find(".widget-header");
+        if (self.header.length === 0) {
+            self.header = self.element.find(".language-tabs");
+        }
         self.tools = self.header.find(".widget-header-tools");
         self.tabs = self.element.find(".language-tabs");
         var doMinify = self.options.minifier || $(self.element).attr("data-minifier");
+        console.log(self.header, "doMinify", doMinify);
         if (doMinify) {
             self.icon = $("<i>").appendTo(self.tools).css("cursor", "pointer");            
             self.header
