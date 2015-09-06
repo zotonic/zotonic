@@ -1,8 +1,13 @@
 <p>{_ Copy texts from a language to the currently selected language. _}</p>
 
-<div>
-	<label>{_ Select the language to copy from: _}</label>
-	<select class="form-control" id="{{ #langs }}"></select>
+<div class="form-group">
+    <div class="hide-when-empty">
+        <label>{_ Select the language to copy from: _}</label>
+        <select class="form-control" id="{{ #langs }}"></select>
+    </div>
+    <div class="show-when-empty" style="display: none;">
+        <p class="form-field-error">{_ More than one language must be active. _}</p>
+    </div>
 </div>
 
 <div class="modal-footer">
@@ -14,11 +19,17 @@
 var active = $('#edit-basics .language-tabs li.active').attr('lang');
 $('#admin-translation-checkboxes input[type=checkbox]:checked').each(function() {
 	var code = $(this).attr('value');
-	if (code != active) {
+	if (code !== active) {
 		var name = $(this).parent().children('span').text();
 		$('<option>', { value: code }).text(name).appendTo('#{{ #langs }}');
 	}
 });
+var count = $("#{{ #langs }}").find("option").length;
+if (count == 0) {
+    $(".hide-when-empty").hide();
+    $(".show-when-empty").show();
+    $("#{{ #copy }}").attr("disabled", "disabled");
+}
 
 $('#{{ #copy }}').click(function(e) {
 	var selected = $('#{{ #langs }} option:selected');

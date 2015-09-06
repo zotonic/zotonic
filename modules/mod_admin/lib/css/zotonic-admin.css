@@ -580,10 +580,10 @@ input.do_timepicker {
     left: 0;
   }
 }
-/*
 .form-field-error {
-    color: #B94A48;
-}    
+  color: #B94A48;
+}
+/*
 .z_validation_message {
     background-color: #F2DEDE;
     border-color: #EED3D7;
