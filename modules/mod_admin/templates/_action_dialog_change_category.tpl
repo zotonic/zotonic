@@ -22,7 +22,7 @@ cat_id
 
             <div class="form-group row">
                 <div class="col-md-12">
-                    <h4>{_ Change page category _}</h4>
+                    <h4>{_ Change the category of this page _}</h4>
                     {% include "_admin_category_dropdown.tpl" id=id cat_id=cat_id %}
                 </div>
             </div>
