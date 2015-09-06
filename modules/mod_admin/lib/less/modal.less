@@ -9,10 +9,11 @@ div.modal {
         overflow: visible;
     }
     .nav.nav-pills {
-        margin-bottom: @baseMargin;
+        margin: -15px -15px 15px -15px;
+        padding: 0 15px;
     }
     .modal-body {
-        > :first-child {
+        > :first-child:not(.nav) {
             margin-top: 0;
         }
     }

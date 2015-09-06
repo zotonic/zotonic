@@ -19,8 +19,17 @@
         padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
         
         &.widget-content-full {
-            padding-left: 0;
-            padding-right: 0;
+            padding: 0;
+
+            .table > thead > tr > th,
+            .table > tbody > tr > td {
+                &:first-child {
+                    padding-left: @widgetSidePadding;
+                };
+                &:last-child {
+                    padding-right: @widgetSidePadding;
+                };
+            }
         }
 
         hr {
@@ -88,6 +97,7 @@
         margin: 0;
         padding: @widgetVerticalPadding @widgetSidePadding;
         #3L > .user-select(none);
+        text-shadow: @darkOnLightTextShadow;
 
         .z-btn-remove {
             display: block;
@@ -196,36 +206,8 @@ li {
 }
 
 .widget > ul.nav-tabs {
-    padding: 0;
-    border-color: @borderColorMediumTransparent;
-    margin: 0;
+    &:extend(.minimalTabs all);
     background: #e0e0e0;
-
-    > li {
-        margin-bottom: -1px;
-    }
-
-    > li > a,
-    li.active > a {
-        #3L > .border-radius(0);
-        margin-right: 0;
-        border: none;
-        background: none;
-        padding-top: 8px;
-        padding-bottom: 8px;
-        border-style: solid none;
-        border-width: 2px;
-        border-color: transparent;
-    }
-    > li > a {
-        background-color: transparent;
-        color: @textColorButton;
-        
-    }
-    li.active > a {
-        border-bottom-color: #00C853;
-        color: @textColorDark;
-    }
 }
 
 .modal {

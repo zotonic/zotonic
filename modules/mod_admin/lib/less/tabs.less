@@ -1,0 +1,36 @@
+// use with ul elements
+// for example:
+// .widget > ul.nav-tabs {
+//    &:extend(.minimalTabs all);
+// }
+.minimalTabs {
+	padding: 0;
+	border-color: @borderColorMediumTransparent;
+	margin: 0;
+
+	> li {
+	    margin-bottom: -1px;
+	}
+
+	> li > a,
+	li.active > a {
+	    #3L > .border-radius(0);
+	    margin-right: 0;
+	    border: none;
+	    background: none;
+	    padding-top: 8px;
+	    padding-bottom: 8px;
+	    border-style: solid none;
+	    border-width: 2px;
+	    border-color: transparent;
+	}
+	> li > a {
+	    background-color: transparent;
+	    color: @textColorButton;
+	    
+	}
+	li.active > a {
+	    border-bottom-color: #00C853;
+	    color: @textColorDark;
+	}
+}

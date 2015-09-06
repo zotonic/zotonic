@@ -46,6 +46,12 @@
             margin-top: -@_icon_size/2;
         }
     }
+
+    &.nav-pills {
+        &:extend(.minimalTabs all);
+        border-style: none none solid none;
+        border-width: 1px;
+    }
 }
 
 .dropdown-menu {
@@ -115,10 +121,6 @@
 a.close,
 button.close {
     color: @textColorButton;
-}
-
-.nav + .tab-content {
-    margin: 10px 0 0 0;
 }
 
 .radio-inline,

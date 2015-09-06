@@ -1,0 +1,34 @@
+.dashboard {
+	.widget { 
+  		border: 1px solid @borderColorMediumTransparent;
+
+  		.widget-header {
+  			.btn {
+  				margin-top: -2px;
+  			}
+  		}
+  	}
+  	.table {
+  		margin: 0;
+		border-bottom: 1px solid @borderColorMediumTransparent;
+  		
+  		> thead > tr > th,
+  		> tbody > tr > td {
+  			border: none;
+
+  			&:first-child {
+  				width: 60%;
+  			};
+  			&:last-child {
+  				width: 40%;
+  				color: @textColorMuted;
+  			};
+  		}
+  		th {
+  			display: none;
+  		}
+  		td {
+  			background: #fff;
+  		}
+  	}
+ }
