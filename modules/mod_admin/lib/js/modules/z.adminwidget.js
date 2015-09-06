@@ -35,7 +35,6 @@ $.widget("z.adminwidget",
         self.tools = self.header.find(".widget-header-tools");
         self.tabs = self.element.find(".language-tabs");
         var doMinify = self.options.minifier || $(self.element).attr("data-minifier");
-        console.log(self.header, "doMinify", doMinify);
         if (doMinify) {
             self.icon = $("<i>").appendTo(self.tools).css("cursor", "pointer");            
             self.header

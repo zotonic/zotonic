@@ -3,7 +3,7 @@
 {% block widget_wrapper %}
 {% block widget_before %}{% endblock %}
 
-<div id="{% block widget_id %}{% endblock %}" class="widget {% if in_dialog %}dialog-{% endif %}widget do_adminwidget" data-adminwidget="minifiedOnInit: {% block widget_show_minimized %}false{% endblock %}, minifier: {% if show_opened %}false{% else %}true{% endif %} {% block widget_class %}{% endblock %}">
+<div id="{% block widget_id %}{% endblock %}" class="widget {% if in_dialog %}dialog-{% endif %}widget do_adminwidget {% block widget_class %}{% endblock %}" data-adminwidget="minifiedOnInit: {% block widget_show_minimized %}false{% endblock %}, minifier: {% if show_opened %}false{% else %}true{% endif %}">
     {% block widget_header %}
         {% if not in_dialog and not noheader %}
         <div class="widget-header">
