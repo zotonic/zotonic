@@ -70,7 +70,8 @@
             }
         }
     }
-    .widget-header + .widget-content {
+    .widget-header + .widget-content,
+    .widget-header + .nav {
         border-top: 1px solid @borderColorMediumTransparent;
     }
     .widget-header,
@@ -203,37 +204,51 @@ li {
 }
 
 .widget > ul.nav-tabs {
-    padding: 0 @widgetSidePadding;
-    border-color: @borderColorDark;
-    
+    padding: 0;
+    border-color: @borderColorMediumTransparent;
+    margin: 0;
+    background: #e0e0e0;
+
     > li {
-        margin-bottom: 0;
+        margin-bottom: -1px;
     }
 
     > li > a,
     li.active > a {
         #3L > .border-radius(0);
-        margin-right: 1px;
+        margin-right: 0;
         border: none;
-
+        background: none;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-style: solid none;
+        border-width: 2px;
+        border-color: transparent;
     }
     > li > a {
-        background-color: @backgroundColorLightest;
+        background-color: transparent;
         color: @textColorButton;
+        
     }
     li.active > a {
-        background-color: #fff;
+        border-bottom-color: #00C853;
         color: @textColorDark;
     }
 }
 
 .modal {
-    .widget { 
-        margin: 0;
-        background: none;
+    .widget {
+        background-color: transparent;
+        margin-bottom: 0;
 
         .widget-content {
             padding: 0;
+        }
+        > ul.nav-tabs {
+            padding: 0;
+            margin: 0 0 15px 0;
+            background: none;
+            border-color: @borderColorLight;
         }
     }
 }

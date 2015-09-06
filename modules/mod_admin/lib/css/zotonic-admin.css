@@ -428,7 +428,7 @@ ul.media > li figure {
 }
 ul.media > li img {
   display: block;
-  border: 1px solid #eeeeee;
+  border: 1px solid #e5e5e5;
   max-width: 180px;
   margin: auto;
 }
@@ -465,7 +465,7 @@ ul.media > li .bottom .caption a {
   padding: 15px;
 }
 .edit-page .admin-header h2 {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .edit-page .admin-header .admin-btn-category {
   font-size: 12px;
@@ -1031,7 +1031,7 @@ textarea.tinyMCE {
   font-weight: bold;
 }
 .z-tinymce-media-left {
-  border: 1px solid #eeeeee;
+  border: 1px solid #e5e5e5;
 }
 .dialog .z-tinymce-media-options label {
   float: none;
@@ -1238,7 +1238,8 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-content .rsc-item img {
   margin: 0 10px 0 0;
 }
-.widget .widget-header + .widget-content {
+.widget .widget-header + .widget-content,
+.widget .widget-header + .nav {
   border-top: 1px solid rgba(217, 217, 217, 0.6);
 }
 .widget .widget-header,
@@ -1346,34 +1347,48 @@ li h3.widget-header {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 .widget > ul.nav-tabs {
-  padding: 0 15px;
-  border-color: #d4d4d4;
+  padding: 0;
+  border-color: rgba(217, 217, 217, 0.6);
+  margin: 0;
+  background: #e0e0e0;
 }
 .widget > ul.nav-tabs > li {
-  margin-bottom: 0;
+  margin-bottom: -1px;
 }
 .widget > ul.nav-tabs > li > a,
 .widget > ul.nav-tabs li.active > a {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  margin-right: 1px;
+  margin-right: 0;
   border: none;
+  background: none;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-style: solid none;
+  border-width: 2px;
+  border-color: transparent;
 }
 .widget > ul.nav-tabs > li > a {
-  background-color: #f5f5f5;
+  background-color: transparent;
   color: #888888;
 }
 .widget > ul.nav-tabs li.active > a {
-  background-color: #fff;
+  border-bottom-color: #00C853;
   color: #222222;
 }
 .modal .widget {
-  margin: 0;
-  background: none;
+  background-color: transparent;
+  margin-bottom: 0;
 }
 .modal .widget .widget-content {
   padding: 0;
+}
+.modal .widget > ul.nav-tabs {
+  padding: 0;
+  margin: 0 0 15px 0;
+  background: none;
+  border-color: #e5e5e5;
 }
 /* scroll - keep the save buttons into view
    --------------------------------------------------------- */
