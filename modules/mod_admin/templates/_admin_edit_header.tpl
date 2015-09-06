@@ -26,12 +26,12 @@ languages
 
         <div class="{% if depict %}admin-header-has-image{% endif %}">
             <h2 {% include "_language_attrs.tpl" %}>
-                {{ r.title|striptags|default:_"<em>untitled</em>" }}
+                {{ r.title|striptags|default:("<em>" ++ _"untitled" ++ "</em>")}}
             </h2>                      
             <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">{_ Category: _} {{ m.rsc[r.category_id].title }}</a>
             {% wire id="changecategory"
                 action={dialog_open
-                    title=_"Category: " ++ m.rsc[r.category_id].title
+                    title=_"Category:" ++ " " ++ m.rsc[r.category_id].title
                     template="_action_dialog_change_category.tpl"
                     id=id
                     cat_id=r.category_id

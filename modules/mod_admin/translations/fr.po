@@ -190,7 +190,8 @@ msgid "Emergency telephone"
 msgstr "Telephone d'urgence"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:436
-msgid "Every page can have a date range. For example if the page is an event or description of someone\'s life."
+"Every page can have a date range. For example if the page is an event or "
+"description of someone’s life."
 msgstr "Chaque page peut avoir une date. Par exemple si une page représente un évenement ou une description de la vie de quelqun"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:510
@@ -237,24 +238,17 @@ msgstr "Revenir en arrière"
 msgid "Group members"
 msgstr "Membres du groupe"
 
-#~ msgid "Help about category"
-#~ msgstr "Aide sur les catégories"
-
 #: ./modules/mod_admin/templates/admin_edit.tpl:436
-msgid "Help about date ranges"
-msgstr "Aide sur les dates"
+msgid "Date ranges"
+msgstr "Les dates"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:465
-msgid "Help about page connections"
-msgstr "Aide sur les connections de page"
-
-#: ./modules/mod_admin/templates/_admin_edit_content.person.tpl:13
-msgid "Help about person name"
-msgstr "Aide sur les noms"
+msgid "Page connections"
+msgstr "Les connections de page"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:411
-msgid "Help about publication date range"
-msgstr "Aide sur la publication des dates"
+msgid "Publication date range"
+msgstr "La publication des dates"
 
 #: ./modules/mod_admin/templates/_admin_edit_content.location.tpl:12
 msgid "Here you add the latitude and longitude data. Please click on the map to select the location."
@@ -484,7 +478,7 @@ msgid "Performer"
 msgstr "Executant"
 
 #: ./modules/mod_admin/templates/_admin_edit_content.person.tpl:5
-msgid "Person name"
+msgid "Personal Name"
 msgstr "Nom de la personne"
 
 #: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:7
@@ -931,8 +925,8 @@ msgid "save"
 msgstr "enregistrer"
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:327
-msgid "save &amp; view"
-msgstr "save &amp; view"
+msgid "Save and View"
+msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_save_buttons.tpl:4
 #: ./modules/mod_admin/templates/_admin_save_buttons.tpl:6

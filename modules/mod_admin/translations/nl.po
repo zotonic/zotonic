@@ -22,10 +22,6 @@ msgstr ""
 msgid "+ add block"
 msgstr "+ nieuw blok"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:37
-msgid "<em>untitled</em>"
-msgstr "<em>zonder titel</em>"
-
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
 msgid ""
 "<strong>First</strong> also known as given name, forename or Christen name."
@@ -37,6 +33,10 @@ msgstr ""
 "Naam-gegevens zijn <strong>Voornaam</strong> (bv. Jan), <strong>Tweede\n"
 "naam</strong> (bv. Hendricus), <strong>Voorvoegsel</strong> (bv. van\n"
 "de), en <strong>Achternaam</strong> (bv. Ven)."
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
+msgid "About categories"
+msgstr "Over categorieën"
 
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:21
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:6
@@ -92,14 +92,12 @@ msgid "All Categories"
 msgstr "Alle categorieën"
 
 #: modules/mod_admin/templates/admin_overview.tpl:27
-#, fuzzy
 msgid "All Content"
-msgstr "Inhoud"
+msgstr "Alle inhoud"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:37
-#, fuzzy
 msgid "All day"
-msgstr "Alle media"
+msgstr "Gehele dag"
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:14
 #: modules/mod_admin/templates/admin_media.tpl:25
@@ -163,7 +161,7 @@ msgstr "Naam blok"
 msgid "Block quote"
 msgstr "Citaat"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:21
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
@@ -178,28 +176,27 @@ msgstr "Annuleren"
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:36
 #: modules/mod_admin/templates/_admin_overview_list.tpl:8
 #: modules/mod_admin/templates/admin_referrers.tpl:21
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:38
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
 msgid "Category"
 msgstr "Categorie"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:17
-#: modules/mod_admin/templates/_admin_edit_header.tpl:20
+#: modules/mod_admin/templates/_admin_edit_header.tpl:31
+#: modules/mod_admin/templates/_admin_edit_header.tpl:34
 msgid "Category:"
 msgstr "Categorie:"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:17
-#: modules/mod_admin/templates/_admin_edit_header.tpl:18
+#: modules/mod_admin/templates/_admin_edit_header.tpl:31
 msgid "Change category"
 msgstr "Verander categorie"
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:25
+msgid "Change the category of this page"
+msgstr "Verander de categorie van deze pagina"
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Kies een mediabestand van deze pagina om in de tekst in te voegen."
-
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:15
-msgid "Choose the new category for this page."
-msgstr "Kies de nieuwe categorie van deze pagina."
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:110
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:172
@@ -239,25 +236,30 @@ msgstr "Inhoud"
 msgid "Country"
 msgstr "Land"
 
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:22
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:41
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
+msgid "Create Page"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_overview_list.tpl:11
 msgid "Created on"
 msgstr "Gemaakt op"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:29
-#, fuzzy
+#: modules/mod_admin/templates/_admin_edit_header.tpl:15
 msgid "Created:"
-msgstr "Gemaakt door"
+msgstr "Aangemaakt:"
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
 msgid "Customize page slug"
 msgstr "Paginaslug aanpassen"
 
-#: modules/mod_admin/templates/admin.tpl:3
-#: modules/mod_admin/templates/admin.tpl:7
+#: modules/mod_admin/templates/admin.tpl:4
+#: modules/mod_admin/templates/admin.tpl:8
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:34
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:36
 msgid "Date"
 msgstr "Datum"
 
@@ -276,9 +278,8 @@ msgid "Delete"
 msgstr "Verwijder"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:47
-#, fuzzy
 msgid "Delete if no other page is connected to this page."
-msgstr "Er zijn geen andere pagina's die een connectie hebben naar de pagina"
+msgstr "Verwijder als geen andere pagina's een connectie met deze pagina hebben."
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:81
 msgid "Delete this page."
@@ -322,7 +323,6 @@ msgid "Duplicate this page."
 msgstr "Dupliceer deze pagina."
 
 #: modules/mod_admin/templates/_admin_edit_content_address_email.tpl:2
-#, fuzzy
 msgid "E-mail address"
 msgstr "E-mailadres"
 
@@ -351,18 +351,17 @@ msgstr ""
 "Elke pagina kan een datum-bereik hebben. Bijvoorbeeld als de pagina een "
 "evenement voorstelt."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:6
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
 msgid ""
-"Every page is categorized in exactly one category. The category defines "
-"what the page represents. For example an event, a product or a person. The "
+"Every page is categorized in exactly one category. The category defines what "
+"the page represents. For example an event, a product or a person. The "
 "categories are hierarchically defined. In that way you can have a vehicles "
 "category with subcategories car and bicycle."
 msgstr ""
-"Elke pagina valt onder één categorie. De categorie bepaalt "
-"wat de pagina betekent op de site. Bijvoorbeeld een evenement, product "
-"of persoon. De categorieën zijn hiërarchisch ingedeeld. Zo kun je "
-"bijvoorbeeld een categorie voertuig hebben met daarin subcategorieën auto "
-"en fiets."
+"Elke pagina valt onder één categorie. De categorie bepaalt wat de pagina "
+"betekent op de site. Bijvoorbeeld een evenement, product of persoon. De "
+"categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een "
+"categorie voertuig hebben met daarin subcategorieën auto en fiets."
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
 msgid "Failed to download the file."
@@ -385,9 +384,8 @@ msgid "Filter on category"
 msgstr "Filter op categorie"
 
 #: modules/mod_admin/templates/admin_overview.tpl:30
-#, fuzzy
 msgid "Filter on content group"
-msgstr "Filter op categorie"
+msgstr "Filter op contentgroep"
 
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:35
 msgid "Find Page"
@@ -435,43 +433,35 @@ msgid "Header"
 msgstr "Kop"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
-msgid "Help about date ranges"
-msgstr "Hulp voor datumreeksen"
-
-#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
-msgid "Help about features"
-msgstr "Hulp voor features"
+msgid "Date ranges"
+msgstr "Datumreeksen"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
-msgid "Help about page connections"
-msgstr "Hulp over paginaconnecties"
-
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid "Help about person name"
-msgstr "Hulp over persoonsnamen"
+msgid "Page connections"
+msgstr "Paginaconnecties"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
-msgid "Help about publication date range"
-msgstr "Hulp over publicatiedata"
+msgid "Publication date range"
+msgstr "Publicatiedata"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
-"its own line. For more information, see the "
-"<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html"
-"\">documentation on the query arguments</a> on the Zotonic website."
+"its own line. For more information, see the <a href=\"http://zotonic.com/"
+"docs/latest/manuals/datamodel/search.html\">documentation on the query "
+"arguments</a> on the Zotonic website."
 msgstr ""
-"Hier kan je de argumenten van de zoekopdracht invoeren. Elk argument "
-"moet op zijn eigen regel staan. Voor meer informatie, zie de "
-"<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html"
-"\">documentatie over zoekopdrachten</a> op de Zotonic website."
+"Hier kan je de argumenten van de zoekopdracht invoeren. Elk argument moet op "
+"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://"
+"zotonic.com/docs/latest/manuals/datamodel/search.html\">documentatie over "
+"zoekopdrachten</a> op de Zotonic website."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
 msgid ""
-"Here you can edit the person's name.  Use the title of the base content for "
+"Use the title of the base content for "
 "the display name of this person."
 msgstr ""
-"Hier kan je de namen van de persoon bewerken. Gebruik de titel van de "
+"Gebruik de titel van de "
 "basisgegevens voor de naam zoals die wordt weergegeven op pagina's."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
@@ -514,7 +504,7 @@ msgstr "Laatste personen"
 msgid "Latest modified texts"
 msgstr "Laatste teksten"
 
-#: modules/mod_admin/templates/_admin_edit_content.query.tpl:32
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:38
 msgid ""
 "Live query, send notifications when matching items are updated or inserted."
 msgstr ""
@@ -546,9 +536,8 @@ msgid "Make a new media item"
 msgstr "Maak een nieuw mediabestand"
 
 #: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:75
-#, fuzzy
 msgid "Make a new page"
-msgstr "Maak een nieuwe pagina of media-item"
+msgstr "Maak een nieuwe pagina"
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:4
 #: modules/mod_admin/templates/admin_overview.tpl:85
@@ -612,10 +601,13 @@ msgstr "Bewerkt door"
 msgid "Modified on"
 msgstr "Bewerkt op"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:24
-#, fuzzy
+#: modules/mod_admin/templates/_admin_edit_header.tpl:10
 msgid "Modified:"
-msgstr "Bewerkt"
+msgstr "Bewerkt:"
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
+msgid "More like this"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64
 msgid "Name"
@@ -630,20 +622,11 @@ msgstr "Naam"
 msgid "Need more help?"
 msgstr "Meer hulp nodig?"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:22
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:41
-msgid "New Page"
-msgstr "Nieuwe pagina"
-
-#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
-msgid "New page"
-msgstr "Nieuwe pagina"
-
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:71
 msgid "Next in category: "
 msgstr "Volgende in categorie:"
 
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:86
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:88
 msgid "No items"
 msgstr "Geen items"
 
@@ -691,7 +674,7 @@ msgid "Pages overview"
 msgstr "Paginaoverzicht"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
-msgid "Person name"
+msgid "Personal Name"
 msgstr "Naam"
 
 #: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
@@ -750,7 +733,7 @@ msgstr "Gepubliceerd"
 msgid "Query"
 msgstr "Zoekvraag"
 
-#: modules/mod_admin/templates/_admin_edit_content.query.tpl:36
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:42
 msgid "Query preview"
 msgstr "Zoekvraag voorbeeld"
 
@@ -836,7 +819,7 @@ msgstr ""
 msgid "SEO Content"
 msgstr "SEO inhoud"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:22
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
@@ -845,8 +828,8 @@ msgstr "Opslaan"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:23
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:6
-msgid "Save &amp; view"
-msgstr "Opslaan &amp; bekijken"
+msgid "Save and View"
+msgstr "Opslaan en Bekijken"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:23
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:6
@@ -879,9 +862,8 @@ msgid "Select a connected image"
 msgstr "Selecteer een gekoppelde afbeelding"
 
 #: modules/mod_admin/templates/admin_overview.tpl:42
-#, fuzzy
 msgid "Selected Categories"
-msgstr "Alle categorieën"
+msgstr "Geselecteerde categorieën"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:23
 msgid "Short title"
@@ -908,7 +890,6 @@ msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
 #: modules/mod_admin/mod_admin.erl:351
-#, fuzzy
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
@@ -958,6 +939,10 @@ msgstr "Systeembeheer"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
 msgstr "Telefoon"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:31
+msgid "Test query"
+msgstr "Test zoekopdracht"
 
 #: modules/mod_admin/mod_admin.erl:159
 msgid "Text"
@@ -1012,8 +997,8 @@ msgstr "Tot"
 #: modules/mod_admin/templates/_admin_overview_list.tpl:5
 #: modules/mod_admin/templates/admin_media.tpl:36
 #: modules/mod_admin/templates/admin_referrers.tpl:20
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
 msgid "Title"
 msgstr "Titel"
 
@@ -1024,12 +1009,6 @@ msgstr "Navigatie open/dicht"
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:6
 msgid "Type text to search"
 msgstr "Typ een tekst om te zoeken"
-
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:52
-#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
-#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
-msgid "URL"
-msgstr "URL"
 
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:32
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:38
@@ -1043,8 +1022,8 @@ msgstr "Unieke URI"
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:47
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:10
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
-msgid "Upload"
-msgstr "Uploaden"
+msgid "Upload File"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
@@ -1053,6 +1032,12 @@ msgstr "Upload een bestand van je computer"
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:3
 msgid "Upload a file which is already on the internet."
 msgstr "Upload een bestand van het internet."
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:52
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
+msgid "Upload by URL"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:35
 msgid "Upload file"
@@ -1068,9 +1053,8 @@ msgstr ""
 "Gebruik het zoekvak om mediabestanden te zoeken die al in het systeem zitten."
 
 #: modules/mod_admin/templates/_admin_menu.tpl:70
-#, fuzzy
 msgid "User page"
-msgstr "Nieuwe pagina"
+msgstr "Gebruikerspagina"
 
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:14
 msgid "Valid for:"
@@ -1080,6 +1064,10 @@ msgstr "Geldig voor:"
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
 msgid "View"
 msgstr "Bekijken"
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
+msgid "View all pages from this category"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:55
 msgid "View all referrers"
@@ -1142,9 +1130,8 @@ msgid "You are not allowed to delete this page."
 msgstr "Je mag deze pagina niet verwijderen."
 
 #: modules/mod_admin/templates/admin_edit.tpl:15
-#, fuzzy
 msgid "You are not allowed to edit this page."
-msgstr "Je mag deze pagina niet verwijderen."
+msgstr "Je hebt geen rechten om deze pagina te bewerken."
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:154
 msgid "You don't have permission to change this media item."
@@ -1175,8 +1162,8 @@ msgstr "maak mediabestand"
 msgid "block"
 msgstr "blok"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:26
-#: modules/mod_admin/templates/_admin_edit_header.tpl:31
+#: modules/mod_admin/templates/_admin_edit_header.tpl:12
+#: modules/mod_admin/templates/_admin_edit_header.tpl:17
 msgid "by"
 msgstr "door"
 
@@ -1197,8 +1184,8 @@ msgstr "bv. kan nog veranderen"
 #: modules/mod_admin/templates/_admin_overview_list.tpl:39
 #: modules/mod_admin/templates/admin_media.tpl:75
 #: modules/mod_admin/templates/admin_referrers.tpl:39
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:69
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:77
 msgid "edit"
 msgstr "bewerk"
 
@@ -1236,6 +1223,7 @@ msgstr "toon alle"
 msgid "undo"
 msgstr "ongedaan maken"
 
+#: modules/mod_admin/templates/_admin_edit_header.tpl:29
 #: modules/mod_admin/templates/_choose_media.tpl:9
 #: modules/mod_admin/templates/_rsc_edge_media.tpl:18
 msgid "untitled"
@@ -1248,8 +1236,8 @@ msgstr "geupload op"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:38
 #: modules/mod_admin/templates/admin_referrers.tpl:38
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:68
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:76
 msgid "view"
 msgstr "bekijk"
 

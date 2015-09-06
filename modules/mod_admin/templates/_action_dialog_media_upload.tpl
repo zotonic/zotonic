@@ -7,12 +7,12 @@ params:
         <ul class="nav nav-pills">
             {% if not tabs_enabled or "upload"|member:tabs_enabled %}
             <li class="active">
-                <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload _}</a>
+                <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload File _}</a>
             </li>
             {% endif %}
             {% if not tabs_enabled or "url"|member:tabs_enabled %}
             <li>
-                <a data-toggle="tab" href="#{{ #tab }}-url">{_ URL _}</a>
+                <a data-toggle="tab" href="#{{ #tab }}-url">{_ Upload by URL _}</a>
             </li>
             {% endif %}
             {% all include "_media_upload_tab.tpl" tab=#tab %}

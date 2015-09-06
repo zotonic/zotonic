@@ -19,7 +19,7 @@ params:
             {% if in_sorter == "category" %}
                 {% if "new"|member:tabs_enabled %}
                     <li class="active">
-                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ New Page _}</a>
+                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create Page _}</a>
                     </li>
                 {% endif %}
             {% else %}
@@ -38,18 +38,18 @@ params:
                 {% if not tabs_enabled or "new"|member:tabs_enabled %}
                     {% if predicate.name /= "depiction" %}
                     <li {% if tab == "new" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ New Page _}</a>
+                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create Page _}</a>
                     </li>
                     {% endif %}
                 {% endif %}
                 {% if not tabs_enabled or "upload"|member:tabs_enabled %}
                     <li {% if tab == "upload" and not q.is_zmedia %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload _}</a>
+                        <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload File _}</a>
                     </li>
                 {% endif %}
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
                     <li {% if tab == "url" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-url">{_ URL _}</a>
+                        <a data-toggle="tab" href="#{{ #tab }}-url">{_ Upload by URL _}</a>
                     </li>
                 {% endif %}
                 {% all include "_media_upload_tab.tpl" tab=#tab %}

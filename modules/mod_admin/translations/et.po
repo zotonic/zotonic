@@ -6,7 +6,6 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -20,9 +19,9 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/admin_edit.tpl:25 
 msgid ""
-"<em>untitled</em>"
+"untitled"
 msgstr ""
-"<em>tundmatu</em>
+"tundmatu"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15 
 msgid ""
@@ -291,7 +290,7 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone�s life."
+"description of someone�s life."
 msgstr ""
 "Iga leheküljega võib olla seotud kuupäevade vahemik. Näiteks juhul kui lehekülg on sündmuse"
 " või kellegi elu kirjelduse leheks."
@@ -371,25 +370,20 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
 msgid ""
-"Help about date ranges"
+"Date ranges"
 msgstr ""
-"Abi kuupäeva vahemikest"
+""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 
 msgid ""
-"Help about page connections"
+"Page connections"
 msgstr ""
-"Abi lehe ühendustest"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15 
-msgid "Help about person name"
-msgstr "Abi isiku nimest"
+""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14 
 msgid ""
-"Help about publication date range"
+"Publication date range"
 msgstr ""
-"Abi avaldamise kuupäevadest"
 
 #: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:14 
 msgid ""
@@ -405,10 +399,10 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:14 
 msgid ""
-"Here you can edit the person's name.  Use the title of the base content "
+"Use the title of the base content "
 "for the display name of this person."
 msgstr ""
-"Siin saad redigeerida isiku nime. Kasuta baassisu pealkirja kuvatavaks isiku nimeks."
+"Kasuta baassisu pealkirja kuvatavaks isiku nimeks."
 
 #: ./modules/mod_admin/templates/admin.tpl:44 
 msgid ""
@@ -653,7 +647,7 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:6 
 msgid ""
-"Person name"
+"Personal Name"
 msgstr ""
 "Isiku nimi"
 
@@ -1287,7 +1281,7 @@ msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15 
 msgid ""
-"save &amp; view"
+"Save and View"
 msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_save_buttons.tpl:4 ./modules/mod_admin/templates/_admin_save_buttons.tpl:6 
