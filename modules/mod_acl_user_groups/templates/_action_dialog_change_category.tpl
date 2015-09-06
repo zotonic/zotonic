@@ -1,4 +1,4 @@
-<p>{_ Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle._}</p>
+<p>{_ Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle. _}</p>
 <hr/>
 
 {% wire id=#form type="submit" postback={change_catcg id=id error=#error} delegate=`admin_acl_rules_rsc` %}
