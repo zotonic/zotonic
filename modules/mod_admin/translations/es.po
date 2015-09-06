@@ -442,8 +442,9 @@ msgid "Date ranges"
 msgstr "Rangos de fechas"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
 msgid "Page connections"
-msgstr "Conexiones de páginas"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
 msgid "Publication date range"
@@ -462,12 +463,9 @@ msgstr ""
 "argumentos de consulta</a> en el sitio web de Zotonic."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid ""
-"Use the title of the base content for "
-"the display name of this person."
+msgid "Use the title of the base content for the display name of this person."
 msgstr ""
-"Use el título del contenido base "
-"para el nombre que se mostrará  en pantalla."
+"Use el título del contenido base para el nombre que se mostrará  en pantalla."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -641,10 +639,6 @@ msgstr "No se encontraron medios."
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "No se encontraron páginas."
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr "Conexiones de la página"
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"

@@ -121,11 +121,19 @@ file.
 To update all ``.po`` files in the directory::
 
   $ cd modules/mod_foo/translations
-  $ find . -name "*.po" -print0 | xargs -0 -I file msgmerge -U -N file template/mod_foo.pot
+  $ find . -name "*.po" -print0 | xargs -0 -I file msgmerge -U -N file template/*.pot
 
 After doing this, you'll need to edit each ``po`` file again
 to check if there are new strings which need translation, edit
 existing strings, etc.
+
+Helpful commands
+````````````````
+
+To remove duplicates (and make a backup first), use::
+
+    $ cat nl.po > nl~.po && msguniq nl.po -o nl.po
+
 
 
 Translated content

@@ -439,9 +439,9 @@ msgstr "Заголовок"
 msgid "Date ranges"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
 msgid "Page connections"
-msgstr ""
+msgstr "Связи страницы"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
 msgid "Publication date range"
@@ -460,12 +460,10 @@ msgstr ""
 "аргументам запросов</a> на сайте Zotonic."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid ""
-"Use the title of the base content for "
-"the display name of this person."
+msgid "Use the title of the base content for the display name of this person."
 msgstr ""
-"Используйте заголовок базового "
-"контента в качестве отображаемого имени этой персоны."
+"Используйте заголовок базового контента в качестве отображаемого имени этой "
+"персоны."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -641,10 +639,6 @@ msgstr "Материалы не найдены."
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Страницы не найдены."
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr "Связи страницы"
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"

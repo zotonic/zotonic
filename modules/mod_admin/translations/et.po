@@ -32,7 +32,7 @@ msgid ""
 "as family name or last name."
 msgstr ""
 "<strong>Eesnimi</strong><br/>"
-"<strong>Keskmine nimie</strong> - tihti lühendatakse lihtsalt initsiaaliks nagu "
+"<strong>Keskmine nimie</strong> - tihti l√ºhendatakse lihtsalt initsiaaliks nagu "
 "<em>Jonh D. Rockefeller</em>.<br/>Tiitel</strong> nagu taanslaste <em>vad, van de, der</em>.<br/>"
 "<strong>Perekonnanimi</strong>."
 
@@ -40,7 +40,7 @@ msgstr ""
 msgid ""
 "Access control"
 msgstr ""
-"Ligipääs"
+"Ligip√§√§s"
 
 #: ./modules/mod_admin/templates/admin_media.tpl:48 
 msgid ""
@@ -82,7 +82,7 @@ msgstr ""
 msgid ""
 "All Categories"
 msgstr ""
-"Kõik kategooriad"
+"K√µik kategooriad"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:24 
 msgid ""
@@ -124,7 +124,7 @@ msgstr ""
 msgid ""
 "Basic"
 msgstr ""
-"Põhi"
+"P√µhi"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:69 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:51 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:9 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:13 
 msgid ""
@@ -195,25 +195,25 @@ msgstr ""
 msgid ""
 "Customize page slug"
 msgstr ""
-"Kohalda lehe h�lkutsungit"
+"Kohalda lehe h√lkutsungit"
 
 #: ./modules/mod_admin/templates/admin_base.tpl:67 ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:9 
 msgid ""
 "Dashboard"
 msgstr ""
-"Töölaud"
+"T√∂√∂laud"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:5 
 msgid ""
 "Date range"
 msgstr ""
-"Kuupäeva vahemik"
+"Kuup√§eva vahemik"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:12 
 msgid ""
 "Define who can see or edit this page."
 msgstr ""
-"Kes saab lehte näha või muuta."
+"Kes saab lehte n√§ha v√µi muuta."
 
 #: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:36 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:8 
 msgid ""
@@ -231,13 +231,13 @@ msgstr ""
 msgid ""
 "Dimensions"
 msgstr ""
-"Mõõdud"
+"M√µ√µdud"
 
 #: ./modules/mod_admin/templates/_rsc_edge_media.tpl:12 
 msgid ""
 "Disconnect"
 msgstr ""
-"Katkesta ühendus"
+"Katkesta √ºhendus"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:40 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:43 
 msgid ""
@@ -285,15 +285,15 @@ msgstr ""
 msgid ""
 "Emergency telephone"
 msgstr ""
-"Häda telefon"
+"H√§da telefon"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone�s life."
+"description of someone’s life."
 msgstr ""
-"Iga leheküljega võib olla seotud kuupäevade vahemik. Näiteks juhul kui lehekülg on sündmuse"
-" või kellegi elu kirjelduse leheks."
+"Iga lehek√ºljega v√µib olla seotud kuup√§evade vahemik. N√§iteks juhul kui lehek√ºlg on s√ºndmuse"
+" v√µi kellegi elu kirjelduse leheks."
 
 #: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:18 
 msgid ""
@@ -301,16 +301,16 @@ msgid ""
 "what the page represents. For example an event, a product or a person. "
 "The categories are hierarchically defined. In that way you can have a "
 "vehicles category with subcategories car and bicycle."
-msgstr "Iga leht kuulub ainult ühte gategooriasse. Kategoori defineerib"
-"mida leht endast kujutab. Näiteks kujutab ündmust, toodet või isikut"
-"Kategooriad on defineeritud hierarhiliselt. Sellisiel meetodil võib sul olla defineeritud "
-"sõidukite kategoori, millel on alamkategooriad autod ja jalgrattad."
+msgstr "Iga leht kuulub ainult √ºhte gategooriasse. Kategoori defineerib"
+"mida leht endast kujutab. N√§iteks kujutab √ºndmust, toodet v√µi isikut"
+"Kategooriad on defineeritud hierarhiliselt. Sellisiel meetodil v√µib sul olla defineeritud "
+"s√µidukite kategoori, millel on alamkategooriad autod ja jalgrattad."
 
 #: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:28 
 msgid ""
 "Featured"
 msgstr ""
-"Esile tõstetud"
+"Esile t√µstetud"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_media.tpl:5 
 msgid ""
@@ -335,14 +335,14 @@ msgid ""
 "Flush all URL dispatch rules, template- and library caches and other "
 "in-memory cached data."
 msgstr ""
-"Kustuta vahemälust kõik URL suunamisreeglid, lehtede mallid ja bilioteekide vahemälud "
-"ning kogu muu vahemälus hoitav info."
+"Kustuta vahem√§lust k√µik URL suunamisreeglid, lehtede mallid ja bilioteekide vahem√§lud "
+"ning kogu muu vahem√§lus hoitav info."
 
 #: ./modules/mod_admin/templates/admin_status.tpl:17 
 msgid ""
 "Flush system caches"
 msgstr ""
-"Tühjendasüsteemne vahemälu"
+"T√ºhjendas√ºsteemne vahem√§lu"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18 
 msgid ""
@@ -392,10 +392,10 @@ msgid ""
 "<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html"
 "\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
-"Siin saad redigeerida otsingupäringute argumente. Iga argument eraldi real. "
+"Siin saad redigeerida otsingup√§ringute argumente. Iga argument eraldi real. "
 "Lisainformatsiooniks vaata <a "
 "href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">"
-"päringute parameetride dokumentatsiooni</a> Zotonic'u veebilehel."
+"p√§ringute parameetride dokumentatsiooni</a> Zotonic'u veebilehel."
 
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:14 
 msgid ""
@@ -408,7 +408,7 @@ msgstr ""
 msgid ""
 "Latest modified events"
 msgstr ""
-"Viimati muudetud sündmused"
+"Viimati muudetud s√ºndmused"
 
 #: ./modules/mod_admin/templates/admin.tpl:38 
 msgid ""
@@ -468,7 +468,7 @@ msgstr ""
 msgid ""
 "Make a new connection"
 msgstr ""
-"Loo uus ühendus"
+"Loo uus √ºhendus"
 
 #: ./modules/mod_admin/templates/admin_overview.tpl:14 ./modules/mod_admin/templates/admin_media.tpl:26 ./modules/mod_admin/templates/admin.tpl:19 
 msgid ""
@@ -505,7 +505,7 @@ msgid ""
 "Media encompasses all uploaded images, movies and documents. Media can be "
 "attached to pages."
 msgstr ""
-"Meedia kujutab endast kõiki üles laetud pilte, filme ja dokumente. Meediat "
+"Meedia kujutab endast k√µiki √ºles laetud pilte, filme ja dokumente. Meediat "
 "saab lisada lehtedele."
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:29 
@@ -524,7 +524,7 @@ msgstr ""
 msgid ""
 "Media overview"
 msgstr ""
-"Meedia ülevaade"
+"Meedia √ºlevaade"
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:22 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:55 
 msgid ""
@@ -565,7 +565,7 @@ msgstr ""
 msgid ""
 "Next in category: "
 msgstr ""
-"Kategooris järgmine:"
+"Kategooris j√§rgmine:"
 
 #: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40 
 msgid ""
@@ -595,7 +595,7 @@ msgstr ""
 msgid ""
 "Page connections"
 msgstr ""
-"Lehe ühendused"
+"Lehe √ºhendused"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:36 
 msgid ""
@@ -607,7 +607,7 @@ msgstr ""
 msgid ""
 "Page keywords"
 msgstr ""
-"Lehe võtmesõnad"
+"Lehe v√µtmes√µnad"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:17 
 msgid ""
@@ -637,7 +637,7 @@ msgstr ""
 msgid ""
 "Pages overview"
 msgstr ""
-"Lehtede ülevaade"
+"Lehtede √ºlevaade"
 
 #: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:7 
 msgid ""
@@ -661,13 +661,13 @@ msgstr ""
 msgid ""
 "Please fill in the title"
 msgstr ""
-"Palun täida pealkiri"
+"Palun t√§ida pealkiri"
 
 #: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:3 
 msgid ""
 "Please fill in the title of the new page."
 msgstr ""
-"Palun täida uue lehe pealkir."
+"Palun t√§ida uue lehe pealkir."
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:73 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:114 
 msgid ""
@@ -727,21 +727,21 @@ msgstr ""
 msgid ""
 "Query"
 msgstr ""
-"Päring"
+"P√§ring"
 
 #: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:23 
 msgid ""
 "Query preview"
 msgstr ""
-"Päringu eelvaade"
+"P√§ringu eelvaade"
 
 #: ./modules/mod_admin/templates/admin_status.tpl:23 
 msgid ""
 "Rebuild all search-indices by putting all pages and data from the database "
 "in the indexer queue. This can take a long time!"
 msgstr ""
-"Konstrueeri uuesti kõik otsingu indeksid, pane kõik lehed ja andmed andmebaasist "
-"indekseerija järjekorda. See võib võtta kaua a!"
+"Konstrueeri uuesti k√µik otsingu indeksid, pane k√µik lehed ja andmed andmebaasist "
+"indekseerija j√§rjekorda. See v√µib v√µtta kaua a!"
 
 #: ./modules/mod_admin/templates/admin_status.tpl:22 
 msgid ""
@@ -753,7 +753,7 @@ msgstr ""
 msgid ""
 "Recalculate the numbering of the category tree. This can take a long time."
 msgstr ""
-"Arvuta uuesti kategooriapuu numeratsioon. See võib võtta kaua aega."
+"Arvuta uuesti kategooriapuu numeratsioon. See v√µib v√µtta kaua aega."
 
 #: ./modules/mod_admin/templates/admin_referrers.tpl:21 
 msgid ""
@@ -771,7 +771,7 @@ msgstr ""
 msgid ""
 "Remarks"
 msgstr ""
-"Märkused"
+"M√§rkused"
 
 #: ./modules/mod_admin/templates/admin_status.tpl:27 
 msgid ""
@@ -825,31 +825,31 @@ msgstr ""
 msgid ""
 "Search query"
 msgstr ""
-"Otsinu päring"
+"Otsinu p√§ring"
 
 #: ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:13 ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:22 
 msgid ""
 "Short title"
 msgstr ""
-"Lühipealkiri"
+"L√ºhipealkiri"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:13 
 msgid ""
 "Show this article only between the two dates."
 msgstr ""
-"Näita seda artiklidnende kuupävade vahemikus."
+"N√§ita seda artiklidnende kuup√§vade vahemikus."
 
 #: ./modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:98 
 msgid ""
 "Something went wrong. Sorry."
 msgstr ""
-"Midagi läks valesti. Sorry."
+"Midagi l√§ks valesti. Sorry."
 
 #: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:10 
 msgid ""
 "Start date"
 msgstr ""
-"Alguskuupäev"
+"Alguskuup√§ev"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:78 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:119 
 msgid ""
@@ -861,19 +861,19 @@ msgstr ""
 msgid ""
 "Street Line 1"
 msgstr ""
-"Täna rida 1"
+"T√§na rida 1"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:63 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:104 
 msgid ""
 "Street Line 2"
 msgstr ""
-"Tänav rida 2"
+"T√§nav rida 2"
 
 #: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:13 
 msgid ""
 "Summary"
 msgstr ""
-"Kokkuvõte"
+"Kokkuv√µte"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:34 
 msgid ""
@@ -891,19 +891,19 @@ msgstr ""
 msgid ""
 "System"
 msgstr ""
-"Süsteem"
+"S√ºsteem"
 
 #: ./modules/mod_admin/templates/admin_status.tpl:3 
 msgid ""
 "System Status"
 msgstr ""
-"Süsteemi staatus"
+"S√ºsteemi staatus"
 
 #: ./modules/mod_admin/templates/admin_status.tpl:15 
 msgid ""
 "System administration"
 msgstr ""
-"Süsteemi adminnimine"
+"S√ºsteemi adminnimine"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:17 
 msgid ""
@@ -915,7 +915,7 @@ msgstr ""
 msgid ""
 "The following"
 msgstr ""
-"Järgnev"
+"J√§rgnev"
 
 #: ./modules/mod_admin/templates/_action_unlink_undo.tpl:9 
 msgid ""
@@ -933,26 +933,26 @@ msgstr ""
 msgid ""
 "There are no pages with a connection to the page"
 msgstr ""
-"Ei ole �htegi lehte seosega sellele lehele"
+"Ei ole √htegi lehte seosega sellele lehele"
 
 #: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:5 
 msgid ""
 "This can't be undone. Your media will be lost forever."
 msgstr ""
-"Seda tegevust ei saa tagasi võtte. Sinu meedia kaob igavaeseks."
+"Seda tegevust ei saa tagasi v√µtte. Sinu meedia kaob igavaeseks."
 
 #: ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:4 
 msgid ""
 "This can't be undone. Your page will be lost forever."
 msgstr ""
-"Seda tegevust ei saa tagasi võtte. Sinu leht kaob igaeseks."
+"Seda tegevust ei saa tagasi v√µtte. Sinu leht kaob igaeseks."
 
 #: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:13 ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 
 msgid ""
 "This page is able to connect to others. For example you can connect it to "
 "an actor or a brand."
 msgstr ""
-"Seda lehte saab ühendada teistega. Näiteks võid ühendada selle esineja või brändiga."
+"Seda lehte saab √ºhendada teistega. N√§iteks v√µid √ºhendada selle esineja v√µi br√§ndiga."
 
 #: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:40 
 msgid ""
@@ -976,27 +976,27 @@ msgstr ""
 msgid ""
 "Try to fill the fields automatically from the title of the location"
 msgstr ""
-"Proovime täita välju automaatselt sihtkohast"
+"Proovime t√§ita v√§lju automaatselt sihtkohast"
 
 #: ./modules/mod_admin/templates/admin_media.tpl:44 
 msgid ""
 "Type"
 msgstr ""
-"Tüüp"
+"T√º√ºp"
 
 #: ./modules/mod_admin/templates/_action_dialog_zlink.tpl:2 
 msgid ""
 "Type the title of the page you want to connect to."
 msgstr ""
-"Sisesta lehe nimetus millega sa tahad ühendust teha."
+"Sisesta lehe nimetus millega sa tahad √ºhendust teha."
 
 #: ./modules/mod_admin/templates/_action_dialog_link.tpl:2 
 msgid ""
-"Type the title of the page you want to connect to.  Click “Make a new "
-"connection” when the page does not yet exist."
+"Type the title of the page you want to connect to.  Click ‚ÄúMake a new "
+"connection‚Äù when the page does not yet exist."
 msgstr ""
-"Siseta lehe pealkiri millega tahad ühendada. Vajuta “Tee uus "
-"ühendus�� kui lehte veel ei ole olemas."
+"Siseta lehe pealkiri millega tahad √ºhendada. Vajuta ‚ÄúTee uus "
+"√ºhendusÄù kui lehte veel ei ole olemas."
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:5 
 msgid ""
@@ -1020,19 +1020,19 @@ msgstr ""
 msgid ""
 "Upload"
 msgstr ""
-"�Üleslaadimine"
+"√√úleslaadimine"
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:11 
 msgid ""
 "Upload a file from your computer."
 msgstr ""
-"Lae üles oma arvutist."
+"Lae √ºles oma arvutist."
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:44 
 msgid ""
 "Upload a file which is already on the internet."
 msgstr ""
-"Lae üles fail internetist."
+"Lae √ºles fail internetist."
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:35 
 msgid ""
@@ -1044,7 +1044,7 @@ msgstr ""
 msgid ""
 "Uploaded"
 msgstr ""
-"Üles laetud"
+"√úles laetud"
 
 #: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:35 
 msgid ""
@@ -1056,13 +1056,13 @@ msgstr ""
 msgid ""
 "Used for events and other periods."
 msgstr ""
-"Kasutatakse sündmusteks ja muudeks periooddeks."
+"Kasutatakse s√ºndmusteks ja muudeks periooddeks."
 
 #: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:46 
 msgid ""
 "View all referrers"
 msgstr ""
-"Vaata kõiki viitajaid"
+"Vaata k√µiki viitajaid"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 
 msgid ""
@@ -1074,19 +1074,19 @@ msgstr ""
 msgid ""
 "Visible for"
 msgstr ""
-"Nähtav neil"
+"N√§htav neil"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:18 
 msgid ""
 "Visible from"
 msgstr ""
-"Nähtav alates"
+"N√§htav alates"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:22 
 msgid ""
 "Visible till"
 msgstr ""
-"Nähtav kuni"
+"N√§htav kuni"
 
 #: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:50 
 msgid ""
@@ -1098,7 +1098,7 @@ msgstr ""
 msgid ""
 "Visiting address"
 msgstr ""
-"Külastusaadress"
+"K√ºlastusaadress"
 
 #: ./modules/mod_admin/templates/_admin_edit_content_website.tpl:5 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:46 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:21 
 msgid ""
@@ -1118,9 +1118,9 @@ msgid ""
 "between the two dates. Note that when you are allowed to edit the page then "
 "you can always see it"
 msgstr ""
-"Kui lehel on avaldamise kuupäevade vahemik, siis on ta nähtav ainult nen "
-"kahe kuupäeva vahel. NB! kui sul on lubatud lehte redigeerida, siis võid "
-"seda alati näh"
+"Kui lehel on avaldamise kuup√§evade vahemik, siis on ta n√§htav ainult nen "
+"kahe kuup√§eva vahel. NB! kui sul on lubatud lehte redigeerida, siis v√µid "
+"seda alati n√§h"
 
 #: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2 
 msgid ""
@@ -1145,7 +1145,7 @@ msgstr ""
 msgid ""
 "a connection to the page"
 msgstr ""
-"ühendus lehele"
+"√ºhendus lehele"
 
 #: ./modules/mod_admin/templates/_admin_edit_depiction.tpl:14 
 msgid ""
@@ -1223,13 +1223,13 @@ msgstr ""
 msgid ""
 "has been disconnected."
 msgstr ""
-"on lahti ühendatud."
+"on lahti √ºhendatud."
 
 #: ./modules/mod_admin/templates/admin_edit_widget_std.tpl:15 
 msgid ""
 "make smaller"
 msgstr ""
-"tee väiksemaks"
+"tee v√§iksemaks"
 
 #: ./modules/mod_admin/templates/admin_overview.tpl:24 
 msgid ""
@@ -1253,7 +1253,7 @@ msgstr ""
 msgid ""
 "or use the autocompleter to search the site."
 msgstr ""
-"või kasuta autoaatlahendajat saidilt otsimiseks."
+"v√µi kasuta autoaatlahendajat saidilt otsimiseks."
 
 #: ./modules/mod_admin/templates/admin_referrers.tpl:16 
 msgid ""
@@ -1294,13 +1294,13 @@ msgstr ""
 msgid ""
 "show all"
 msgstr ""
-"näita kõik"
+"n√§ita k√µik"
 
 #: ./modules/mod_admin/templates/_action_unlink_undo.tpl:3 
 msgid ""
 "undo"
 msgstr ""
-"võta tagasi"
+"v√µta tagasi"
 
 #: ./modules/mod_admin/templates/_rsc_edge_media.tpl:7 ./modules/mod_admin/templates/_choose_media.tpl:8 
 msgid ""
@@ -1312,7 +1312,7 @@ msgstr ""
 msgid ""
 "uploaded on"
 msgstr ""
-"üles laaditud"
+"√ºles laaditud"
 
 #: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/_admin_overview_list.tpl:31 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:35 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 
 msgid ""
@@ -1324,4 +1324,4 @@ msgstr ""
 msgid ""
 "visit site"
 msgstr ""
-"külasta saiti"
+"k√ºlasta saiti"

@@ -23,6 +23,8 @@ msgid "+ add block"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_header.tpl:29
+#: modules/mod_admin/templates/_choose_media.tpl:9
+#: modules/mod_admin/templates/_rsc_edge_media.tpl:18
 msgid "untitled"
 msgstr "unbenannt"
 
@@ -181,10 +183,6 @@ msgstr "Abbrechen"
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
 msgid "Category"
 msgstr "Kategorie"
-
-#: modules/mod_admin/templates/_admin_edit_header.tpl:31
-msgid "Category:"
-msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_header.tpl:34
 msgid "Category:"
@@ -371,6 +369,7 @@ msgid "Featured"
 msgstr "Featured"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:4
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
 msgid "Features"
 msgstr ""
 
@@ -435,17 +434,17 @@ msgstr ""
 msgid "Date ranges"
 msgstr "Zeiträumen"
 
-#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
-msgid "Features"
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
+msgid "Page connections"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
-msgid "Page connections"
-msgstr "Querverbindungen"
-
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
+
 msgid "Personal Name"
-msgstr "Name einer Person"
+msgstr ""
+
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
 msgid "Publication date range"
@@ -464,12 +463,10 @@ msgstr ""
 "\">Dokumentation über Query-Argumente</a> auf der Zotonic-Webseite."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid ""
-"Use the title of the base content for "
-"the display name of this person."
+msgid "Use the title of the base content for the display name of this person."
 msgstr ""
-"Geben Sie als Titel der "
-"Seite den Namen der Person an, der für alle sichtbar sein soll."
+"Geben Sie als Titel der Seite den Namen der Person an, der für alle sichtbar "
+"sein soll."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -653,10 +650,6 @@ msgstr "Keine Mediendateien gefunden."
 msgid "No pages found."
 msgstr "Keine Seiten gefunden."
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr "Seitenquerverweise"
-
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
 msgstr "Seitenbeschreibung"
@@ -686,10 +679,6 @@ msgstr "Seiten"
 #: modules/mod_admin/templates/admin_overview.tpl:69
 msgid "Pages overview"
 msgstr "Übersicht über alle Seiten"
-
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
-msgid "Personal Name"
-msgstr "Name der Person"
 
 #: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
@@ -1232,11 +1221,6 @@ msgstr "alle anzeigen"
 #: modules/mod_admin/templates/_action_unlink_undo.tpl:3
 msgid "undo"
 msgstr "rückgängig"
-
-#: modules/mod_admin/templates/_choose_media.tpl:9
-#: modules/mod_admin/templates/_rsc_edge_media.tpl:18
-msgid "untitled"
-msgstr "unbenannt"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:13
 #: modules/mod_admin/templates/_admin_edit_media.tpl:44
