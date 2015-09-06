@@ -1310,12 +1310,6 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   display: block;
   margin: 20px 0;
 }
-.widget.dark {
-  background: #ddd;
-}
-.widget.dark .widget-header {
-  background: #ddd;
-}
 .widget .admin-button-help {
   display: block;
   float: right;
