@@ -441,6 +441,7 @@ msgid "Date ranges"
 msgstr "Okresy czasu"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
 msgid "Page connections"
 msgstr "Połączenia ze stronami"
 
@@ -466,12 +467,9 @@ msgstr ""
 "Zotonic."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid ""
-"Use the title of the base content for "
-"the display name of this person."
+msgid "Use the title of the base content for the display name of this person."
 msgstr ""
-"Użyj pola \"Tytuł\" by podać "
-"nazwę użytkownika wyświetlaną na stronach."
+"Użyj pola \"Tytuł\" by podać nazwę użytkownika wyświetlaną na stronach."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -647,10 +645,6 @@ msgstr "Nie znaleziono obiektów mediów."
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Nie znaleziono stron."
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr "Połączenia ze stronami"
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"

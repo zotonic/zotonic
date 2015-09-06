@@ -436,9 +436,9 @@ msgstr "Başlık"
 msgid "Date ranges"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
 msgid "Page connections"
-msgstr ""
+msgstr "Sayfa bağlantıları"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
 msgid "Publication date range"
@@ -457,12 +457,8 @@ msgstr ""
 "ziyaret edin</a>."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid ""
-"Use the title of the base content for "
-"the display name of this person."
-msgstr ""
-"İçerik başlığını kullanarak bu "
-"kişinin ismini görüntüleyiniz."
+msgid "Use the title of the base content for the display name of this person."
+msgstr "İçerik başlığını kullanarak bu kişinin ismini görüntüleyiniz."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -637,10 +633,6 @@ msgstr "Medya bulunamadı."
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Sayfa bulunmadı."
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr "Sayfa bağlantıları"
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
