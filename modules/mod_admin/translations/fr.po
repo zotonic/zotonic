@@ -261,8 +261,11 @@ msgid "Here you add the latitude and longitude data. Please click on the map to 
 msgstr "Ici vous pouvez entrer la latitude et longitude. Cliquez sur la carte pour sélectionner l\'emplacement"
 
 #: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:12
-msgid "Here you can edit the arguments of the  search query. Every argument goes "
-msgstr "Here you can edit the arguments of the  search query. Every argument goes "
+"Here you can edit the arguments of the search query. Every argument goes on "
+"its own line. For more information, see the "
+"<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html"
+"\">documentation on the query arguments</a> on the Zotonic website."
+msgstr ""
 
 #: ./modules/mod_admin/templates/_admin_edit_content.person.tpl:12
 msgid "Here you can edit the person\'s name.  Use the title of the base content for the display name of this person."

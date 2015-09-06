@@ -14,10 +14,9 @@
 {% block widget_content %}
 {% with m.rsc[id] as r %}
 <fieldset>
-	<div class="notification notice">
-		{_ Here you can edit the arguments of the  search query. Every argument goes on its own line. For more information, see the
-		<a href="http://zotonic.com/docs/latest/manuals/datamodel/search.html">documentation on the query arguments</a> on the Zotonic website. _}
-	</div>
+	<p class="notification notice">
+		{_ Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href="http://zotonic.com/docs/latest/manuals/datamodel/search.html">documentation on the query arguments</a> on the Zotonic website. _}
+	</p>
 
     <div class="form-group">
     	<label class="control-label" for="query">{_ Query _}</label>

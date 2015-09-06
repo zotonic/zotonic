@@ -428,13 +428,13 @@ msgstr "发布时间范围帮助。"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:14
 msgid ""
-"Here you can edit the arguments of the  search query. Every argument goes on "
-"its own line. For more information, see the\n"
-"\t\t<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html"
+"Here you can edit the arguments of the search query. Every argument goes on "
+"its own line. For more information, see the "
+"<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html"
 "\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
-"这里可以编辑搜索查询词的参数。每个参数占一行。更多相关信息请参考\n"
-"\t\t<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">"
+"这里可以编辑搜索查询词的参数。每个参数占一行。更多相关信息请参考 "
+"<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">"
 "查询词参数文档</a>。"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:12
