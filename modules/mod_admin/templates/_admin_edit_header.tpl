@@ -1,8 +1,7 @@
 {#
 Params:
-r
 id
-is_editable
+cat_id
 languages
 #}
 <div class="admin-header">
@@ -28,13 +27,17 @@ languages
         <div class="{% if depict %}admin-header-has-image{% endif %}">
             <h2 {% include "_language_attrs.tpl" %}>
                 {{ r.title|striptags|default:_"<em>untitled</em>" }}
-            </h2>          
-            {% if is_editable and m.acl.insert[r.category.name|as_atom] and not r.is_a.category and not r.is_a.predicate %}
-                <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">{_ Category: _} {{ m.rsc[r.category_id].title }}</a>
-                {% wire id="changecategory" action={dialog_open title=_"Change category" template="_action_dialog_change_category.tpl" id=id cat_id=r.category_id } %}
-            {% else %}
-                <span class="admin-btn-category">{_ Category: _} {{ m.rsc[r.category_id].title }}</span>
-            {% endif %}
+            </h2>                      
+            <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">{_ Category: _} {{ m.rsc[r.category_id].title }}</a>
+            {% wire id="changecategory"
+                action={dialog_open
+                    title=_"Category: " ++ m.rsc[r.category_id].title
+                    template="_action_dialog_change_category.tpl"
+                    id=id
+                    cat_id=r.category_id
+                    is_editable = is_editable and m.acl.insert[r.category.name|as_atom] and not r.is_a.category and not r.is_a.predicate
+                }
+            %}
         </div>
     {% endwith %}
 </div>
