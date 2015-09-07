@@ -270,6 +270,10 @@ msgstr ""
 msgid "Date range"
 msgstr "Период"
 
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+msgid "Date ranges"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
 msgid "Define who can see or edit this page."
 msgstr "Определить, кто сможет просматривать или редактировать эту страницу."
@@ -375,6 +379,7 @@ msgid "Featured"
 msgstr "В избранное"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:4
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
 msgid "Features"
 msgstr "Особенности"
 
@@ -435,18 +440,6 @@ msgstr "Членов группы"
 msgid "Header"
 msgstr "Заголовок"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
-msgid "Date ranges"
-msgstr ""
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr "Связи страницы"
-
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
-msgid "Publication date range"
-msgstr ""
-
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
@@ -458,12 +451,6 @@ msgstr ""
 "ставится на отдельной строке. Для дополнительных сведений смотрите <a href="
 "\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">справку по "
 "аргументам запросов</a> на сайте Zotonic."
-
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid "Use the title of the base content for the display name of this person."
-msgstr ""
-"Используйте заголовок базового контента в качестве отображаемого имени этой "
-"персоны."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -640,6 +627,11 @@ msgstr "Материалы не найдены."
 msgid "No pages found."
 msgstr "Страницы не найдены."
 
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+msgid "Page connections"
+msgstr "Связи страницы"
+
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
 msgstr "Описание страницы"
@@ -671,8 +663,9 @@ msgid "Pages overview"
 msgstr "Обзор страниц"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
-msgid "Personal Name"
-msgstr "Имя персоны"
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Personal name"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
@@ -710,6 +703,10 @@ msgstr "Защита от удаления"
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
 msgid "Publication date of original article"
 msgstr "Дата публикации исходной статьи"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+msgid "Publication date range"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:6
 msgid "Publication period"
@@ -1049,6 +1046,12 @@ msgstr "Закачано"
 msgid "Use the autocompleter to search the media in this site."
 msgstr "Используйте автозаполнение для поиска материалов на этом сайте."
 
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Use the title of the base content for the display name of this person."
+msgstr ""
+"Используйте заголовок базового контента в качестве отображаемого имени этой "
+"персоны."
+
 #: modules/mod_admin/templates/_admin_menu.tpl:70
 msgid "User page"
 msgstr ""
@@ -1241,6 +1244,9 @@ msgstr "просмотр"
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "перейти на сайт"
+
+#~ msgid "Personal Name"
+#~ msgstr "Имя персоны"
 
 #~ msgid "New Page"
 #~ msgstr "Новая страница"

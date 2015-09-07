@@ -13,494 +13,535 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Taavi Talvik <taavi@uninet.ee>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:25 
-msgid ""
-"untitled"
-msgstr ""
-"tundmatu"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15 
-msgid ""
-"<strong>First</strong> also known as given name, forename or Christen "
-"name.<br/><strong>Middle</strong> often shortened to an initial like in "
-"<em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the "
-"Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known "
-"as family name or last name."
-msgstr ""
-"<strong>Eesnimi</strong><br/>"
-"<strong>Keskmine nimie</strong> - tihti l√ºhendatakse lihtsalt initsiaaliks nagu "
-"<em>Jonh D. Rockefeller</em>.<br/>Tiitel</strong> nagu taanslaste <em>vad, van de, der</em>.<br/>"
-"<strong>Perekonnanimi</strong>."
-
-#: ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:5 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:11 
-msgid ""
-"Access control"
-msgstr ""
-"Ligip√§√§s"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:48 
-msgid ""
-"Actions"
-msgstr ""
-"Tegevused"
-
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:17 
-msgid ""
-"Add a new media item"
-msgstr ""
-"Lisa uus meediafail"
-
-#: ./modules/mod_admin/templates/_admin_edit_body.tpl:10 
-msgid ""
-"Add media to body"
-msgstr ""
-"Lisa meedia sisule"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:5 
-msgid ""
-"Address"
-msgstr ""
-"Aadress"
-
-#: ./modules/mod_admin/templates/admin_base.tpl:5 
-msgid ""
-"Admin"
-msgstr ""
-"Adminn"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:6 
-msgid ""
-"Advanced"
-msgstr ""
-"Spetsile"
-
-#: ./modules/mod_admin/templates/admin_overview.tpl:32 
-msgid ""
-"All Categories"
-msgstr ""
-"K√µik kategooriad"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:24 
-msgid ""
-"Alternative telephone"
-msgstr ""
-"Teine telefon"
-
-#: ./modules/mod_admin/templates/_action_dialog_link.tpl:27 
-msgid ""
-"Alternatively, choose an item from this predefined list:"
-msgstr ""
-"Alternatiivina vali siit nimekirjast:"
-
-#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:3 
-msgid ""
-"Are you sure you want to delete the"
-msgstr ""
-"Oled kindel, et tahad kustutada"
-
-#: ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:2 
-msgid ""
-"Are you sure you want to delete the page"
-msgstr ""
-"Oled kindel, et tahad kustutada seda lehte"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:14 
-msgid ""
-"Ask google to not index this page"
-msgstr ""
-"Keela Googlil lehe indekseerimine"
-
-#: ./modules/mod_admin/templates/_admin_edit_depiction.tpl:3 
-msgid ""
-"Attached media"
-msgstr ""
-"Lisatud meediafail"
-
-#: ./modules/mod_admin/templates/_admin_edit_basics.tpl:3 
-msgid ""
-"Basic"
-msgstr ""
-"P√µhi"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:47 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:69 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:51 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:23 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:9 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:13 
-msgid ""
-"Cancel"
-msgstr ""
-"Katkesta"
-
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:16 ./modules/mod_admin/templates/admin_referrers.tpl:26 ./modules/mod_admin/templates/_admin_overview_list.tpl:7 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:13 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:23 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:29 
-msgid ""
-"Category"
-msgstr ""
-"Kategooria"
-
-#: ./modules/mod_admin/templates/admin_edit.tpl:28 
-msgid ""
-"Change category"
-msgstr ""
-"Muuda kategooria"
-
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:9 
-msgid ""
-"Choose a media item from this page to insert in the body text."
-msgstr ""
-"Vali meediafail siit lehelt teksti sisusse lisamiseks."
-
-#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:2 
-msgid ""
-"Choose the new category for this page."
-msgstr ""
-"Vali uus kategooria sellele lehele."
-
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:68 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:109 
-msgid ""
-"City"
+#: modules/mod_admin/templates/_admin_edit_block_addblock.tpl:5
+msgid "+ add block"
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:6 
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
 msgid ""
-"Community members"
+"<strong>First</strong> also known as given name, forename or Christen name."
+"<br/><strong>Middle</strong> often shortened to an initial like in <em>John "
+"D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch "
+"<em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family "
+"name or last name."
 msgstr ""
-"Kommuuni liikmed"
+"<strong>Eesnimi</strong><br/><strong>Keskmine nimie</strong> - tihti "
+"l√ºhendatakse lihtsalt initsiaaliks nagu <em>Jonh D. Rockefeller</em>.<br/"
+">Tiitel</strong> nagu taanslaste <em>vad, van de, der</em>.<br/"
+"><strong>Perekonnanimi</strong>."
 
-#: ./modules/mod_admin/templates/_admin_edit_body.tpl:3 
-msgid ""
-"Content"
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
+msgid "About categories"
 msgstr ""
-"Sisu"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:83 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:124 
-msgid ""
-"Country"
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:21
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
+msgid "Access control"
+msgstr "Ligip√§√§s"
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:41
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:22
+msgid "Add a connection: "
 msgstr ""
-"Riik"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:22 
-msgid ""
-"Created by"
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:57
+msgid "Add a new media file"
 msgstr ""
-"Looja"
 
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:10 
-msgid ""
-"Created on"
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:19
+msgid "Add a new media item"
+msgstr "Lisa uus meediafail"
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:33
+msgid "Add link"
 msgstr ""
-"Loodud"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:27 
-msgid ""
-"Customize page slug"
+#: modules/mod_admin/templates/_admin_edit_body.tpl:14
+msgid "Add media to body"
+msgstr "Lisa meedia sisule"
+
+#: modules/mod_admin/actions/action_admin_link.erl:78
+#: modules/mod_admin/mod_admin.erl:347
+msgid "Added the connection to"
 msgstr ""
-"Kohalda lehe h√lkutsungit"
 
-#: ./modules/mod_admin/templates/admin_base.tpl:67 ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:9 
-msgid ""
-"Dashboard"
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:6
+msgid "Address"
+msgstr "Aadress"
+
+#: modules/mod_admin/templates/admin_base.tpl:5
+msgid "Admin"
+msgstr "Adminn"
+
+#: modules/mod_admin/templates/admin_logon.tpl:4
+msgid "Admin log on"
 msgstr ""
-"T√∂√∂laud"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:5 
-msgid ""
-"Date range"
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:6
+msgid "Advanced"
+msgstr "Spetsile"
+
+#: modules/mod_admin/templates/admin_overview.tpl:44
+#: modules/mod_admin/templates/admin_overview.tpl:69
+msgid "All Categories"
+msgstr "K√µik kategooriad"
+
+#: modules/mod_admin/templates/admin_overview.tpl:27
+msgid "All Content"
 msgstr ""
-"Kuup√§eva vahemik"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_acl.tpl:12 
-msgid ""
-"Define who can see or edit this page."
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:37
+msgid "All day"
 msgstr ""
-"Kes saab lehte n√§ha v√µi muuta."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:36 ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6 ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:8 
-msgid ""
-"Delete"
+#: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:14
+#: modules/mod_admin/templates/admin_media.tpl:25
+#: modules/mod_admin/templates/admin_overview.tpl:96
+msgid "All media"
 msgstr ""
-"Kustuta"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:36 
-msgid ""
-"Delete this page."
+#: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:13
+#: modules/mod_admin/templates/admin_media.tpl:24
+#: modules/mod_admin/templates/admin_overview.tpl:95
+msgid "All pages"
 msgstr ""
-"Kustute see leht."
 
-#: ./modules/mod_admin/templates/admin_media.tpl:46 
-msgid ""
-"Dimensions"
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:33
+msgid "Alternative telephone"
+msgstr "Teine telefon"
+
+#: modules/mod_admin/templates/admin_media.tpl:13
+msgid "And media can also be viewed on their own page."
 msgstr ""
-"M√µ√µdud"
 
-#: ./modules/mod_admin/templates/_rsc_edge_media.tpl:12 
-msgid ""
-"Disconnect"
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:16
+msgid "Any category"
 msgstr ""
-"Katkesta √ºhendus"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:40 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:43 
-msgid ""
-"Duplicate"
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:2
+msgid "Are you sure you want to delete the page"
+msgstr "Oled kindel, et tahad kustutada seda lehte"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:74
+msgid "Are you sure you want to exit the admin interface?"
 msgstr ""
-"Kopeeri"
 
-#: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:21 
-msgid ""
-"Duplicate page"
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:11
+msgid "Aside"
 msgstr ""
-"Kopeeri leht"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:40 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:45 
-msgid ""
-"Duplicate this page."
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:34
+msgid "Ask google to not index this page"
+msgstr "Keela Googlil lehe indekseerimine"
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:29
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:4
+msgid "Attached media"
+msgstr "Lisatud meediafail"
+
+#: modules/mod_admin/templates/_admin_edit_basics.tpl:4
+msgid "Basic"
+msgstr "P√µhi"
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:4
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_text.tpl:4
+msgid "Block"
 msgstr ""
-"Kopeeri see leht."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:38 
-msgid ""
-"Email address"
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:9
+msgid "Block name"
 msgstr ""
-"E-mail"
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:3 
-msgid ""
-"Edit"
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:10
+msgid "Block quote"
 msgstr ""
-"Redigeeri"
 
-#: ./modules/mod_admin/templates/_edit_link.tpl:16 
-msgid ""
-"Edit this page"
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:33
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:83
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:33
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
+msgid "Cancel"
+msgstr "Katkesta"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:36
+#: modules/mod_admin/templates/_admin_overview_list.tpl:8
+#: modules/mod_admin/templates/admin_referrers.tpl:21
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
+msgid "Category"
+msgstr "Kategooria"
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:31
+#: modules/mod_admin/templates/_admin_edit_header.tpl:34
+msgid "Category:"
 msgstr ""
-"Redigeeri lehte"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:13 
-msgid ""
-"Electronic address"
+#: modules/mod_admin/templates/_admin_edit_header.tpl:31
+msgid "Change category"
+msgstr "Muuda kategooria"
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:25
+msgid "Change the category of this page"
 msgstr ""
-"Elektrooniline aadress"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:31 
-msgid ""
-"Emergency telephone"
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:10
+msgid "Choose a media item from this page to insert in the body text."
+msgstr "Vali meediafail siit lehelt teksti sisusse lisamiseks."
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:110
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:172
+msgid "City"
 msgstr ""
-"H√§da telefon"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
+#: modules/mod_admin/templates/_admin_edit_media.tpl:30
+msgid "Click the image to set the cropping center."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
+msgid "Community members"
+msgstr "Kommuuni liikmed"
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:31
+msgid "Confirm block removal"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:48
+msgid "Confirm delete"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_menu.tpl:74
+msgid "Confirm logoff"
+msgstr ""
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_page.tpl:10
+msgid "Connect a page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:4
+msgid "Content"
+msgstr "Sisu"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:76
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:138
+msgid "Country"
+msgstr "Riik"
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:22
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:41
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
+msgid "Create Page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:11
+msgid "Created on"
+msgstr "Loodud"
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:15
+msgid "Created:"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
+msgid "Customize page slug"
+msgstr "Kohalda lehe h√lkutsungit"
+
+#: modules/mod_admin/templates/admin.tpl:4
+#: modules/mod_admin/templates/admin.tpl:8
+msgid "Dashboard"
+msgstr "T√∂√∂laud"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:36
+msgid "Date"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:6
+msgid "Date range"
+msgstr "Kuup√§eva vahemik"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+msgid "Date ranges"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
+msgid "Define who can see or edit this page."
+msgstr "Kes saab lehte n√§ha v√µi muuta."
+
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:34
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:81
+msgid "Delete"
+msgstr "Kustuta"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:47
+msgid "Delete if no other page is connected to this page."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:81
+msgid "Delete this page."
+msgstr "Kustute see leht."
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:49
+msgid "Dependent"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:6
+#: modules/mod_admin/templates/_rsc_edge.tpl:12
+#: modules/mod_admin/templates/_rsc_edge_media.tpl:22
+msgid "Disconnect"
+msgstr "Katkesta √ºhendus"
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:32
+msgid "Do you want to remove this block?"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:34
+msgid "Download"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:4
+msgid "Drag to change position"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:85
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:88
+msgid "Duplicate"
+msgstr "Kopeeri"
+
+#: modules/mod_admin/actions/action_admin_dialog_duplicate_rsc.erl:45
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:30
+msgid "Duplicate page"
+msgstr "Kopeeri leht"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:85
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:90
+msgid "Duplicate this page."
+msgstr "Kopeeri see leht."
+
+#: modules/mod_admin/templates/_admin_edit_content_address_email.tpl:2
+msgid "E-mail address"
+msgstr ""
+
+#: modules/mod_admin/templates/_rsc_edge.tpl:7
+#: modules/mod_admin/templates/admin_edit.tpl:3
+msgid "Edit"
+msgstr "Redigeeri"
+
+#: modules/mod_admin/mod_admin.erl:160
+msgid "Embed page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:40
+msgid "Emergency telephone"
+msgstr "H√§da telefon"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:161
+msgid "Error uploading the file."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
 "description of someone’s life."
 msgstr ""
-"Iga lehek√ºljega v√µib olla seotud kuup√§evade vahemik. N√§iteks juhul kui lehek√ºlg on s√ºndmuse"
-" v√µi kellegi elu kirjelduse leheks."
+"Iga lehek√ºljega v√µib olla seotud kuup√§evade vahemik. N√§iteks juhul kui "
+"lehek√ºlg on s√ºndmuse v√µi kellegi elu kirjelduse leheks."
 
-#: ./modules/mod_admin/templates/_action_dialog_change_category.tpl:18 
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
 msgid ""
-"Every page is categorized in exactly one category. The category defines "
-"what the page represents. For example an event, a product or a person. "
-"The categories are hierarchically defined. In that way you can have a "
-"vehicles category with subcategories car and bicycle."
-msgstr "Iga leht kuulub ainult √ºhte gategooriasse. Kategoori defineerib"
-"mida leht endast kujutab. N√§iteks kujutab √ºndmust, toodet v√µi isikut"
-"Kategooriad on defineeritud hierarhiliselt. Sellisiel meetodil v√µib sul olla defineeritud "
+"Every page is categorized in exactly one category. The category defines what "
+"the page represents. For example an event, a product or a person. The "
+"categories are hierarchically defined. In that way you can have a vehicles "
+"category with subcategories car and bicycle."
+msgstr ""
+"Iga leht kuulub ainult √ºhte gategooriasse. Kategoori defineeribmida leht "
+"endast kujutab. N√§iteks kujutab √ºndmust, toodet v√µi isikutKategooriad on "
+"defineeritud hierarhiliselt. Sellisiel meetodil v√µib sul olla defineeritud "
 "s√µidukite kategoori, millel on alamkategooriad autod ja jalgrattad."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:28 
-msgid ""
-"Featured"
-msgstr ""
-"Esile t√µstetud"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_media.tpl:5 
-msgid ""
-"File / media content"
-msgstr ""
-"File / meedia"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:45 
-msgid ""
-"Filename"
-msgstr ""
-"Failinimi"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:20 
-msgid ""
-"First"
-msgstr ""
-"Esimene"
-
-#: ./modules/mod_admin/templates/admin_status.tpl:18 
-msgid ""
-"Flush all URL dispatch rules, template- and library caches and other "
-"in-memory cached data."
-msgstr ""
-"Kustuta vahem√§lust k√µik URL suunamisreeglid, lehtede mallid ja bilioteekide vahem√§lud "
-"ning kogu muu vahem√§lus hoitav info."
-
-#: ./modules/mod_admin/templates/admin_status.tpl:17 
-msgid ""
-"Flush system caches"
-msgstr ""
-"T√ºhjendas√ºsteemne vahem√§lu"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18 
-msgid ""
-"From"
-msgstr ""
-"Kellelt"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:6 
-msgid ""
-"Geodata"
-msgstr ""
-"Geodata"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20 
-msgid ""
-"Go back."
-msgstr ""
-"Tagasi"
-
-#: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:7 
-msgid ""
-"Group members"
-msgstr ""
-"Grupi liikmed"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
-msgid ""
-"Date ranges"
-msgstr ""
-""
-
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 
-msgid ""
-"Page connections"
-msgstr ""
-""
-
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14 
-msgid ""
-"Publication date range"
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
+msgid "Failed to download the file."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:14 
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:39
+msgid "Featured"
+msgstr "Esile t√µstetud"
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:4
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
+msgid "Features"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_media.tpl:6
+msgid "File / media content"
+msgstr "File / meedia"
+
+#: modules/mod_admin/templates/admin_overview.tpl:47
+msgid "Filter on category"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_overview.tpl:30
+msgid "Filter on content group"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:35
+msgid "Find Page"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:2
+msgid "Find an existing page to connect"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:99
+msgid "Find page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:20
+msgid "First"
+msgstr "Esimene"
+
+#: modules/mod_admin/templates/admin_status.tpl:18
+msgid ""
+"Flush all URL dispatch rules, template- and library caches and other in-"
+"memory cached data."
+msgstr ""
+"Kustuta vahem√§lust k√µik URL suunamisreeglid, lehtede mallid ja "
+"bilioteekide vahem√§lud ning kogu muu vahem√§lus hoitav info."
+
+#: modules/mod_admin/templates/admin_status.tpl:17
+msgid "Flush system caches"
+msgstr "T√ºhjendas√ºsteemne vahem√§lu"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:52
+msgid "From"
+msgstr "Kellelt"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
+msgid "Go back."
+msgstr "Tagasi"
+
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
+msgid "Group members"
+msgstr "Grupi liikmed"
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:18
+#: modules/mod_admin/mod_admin.erl:158
+msgid "Header"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
-"its own line. For more information, see the "
-"<a href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html"
-"\">documentation on the query arguments</a> on the Zotonic website."
+"its own line. For more information, see the <a href=\"http://zotonic.com/"
+"docs/latest/manuals/datamodel/search.html\">documentation on the query "
+"arguments</a> on the Zotonic website."
 msgstr ""
 "Siin saad redigeerida otsingup√§ringute argumente. Iga argument eraldi real. "
-"Lisainformatsiooniks vaata <a "
-"href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">"
-"p√§ringute parameetride dokumentatsiooni</a> Zotonic'u veebilehel."
+"Lisainformatsiooniks vaata <a href=\"http://zotonic.com/docs/latest/manuals/"
+"datamodel/search.html\">p√§ringute parameetride dokumentatsiooni</a> "
+"Zotonic'u veebilehel."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:14 
-msgid ""
-"Use the title of the base content "
-"for the display name of this person."
+#: modules/mod_admin/templates/admin_media.tpl:37
+msgid "Info"
 msgstr ""
-"Kasuta baassisu pealkirja kuvatavaks isiku nimeks."
 
-#: ./modules/mod_admin/templates/admin.tpl:44 
-msgid ""
-"Latest modified events"
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:8
+msgid "Info link with modal popup"
 msgstr ""
-"Viimati muudetud s√ºndmused"
 
-#: ./modules/mod_admin/templates/admin.tpl:38 
-msgid ""
-"Latest modified locations"
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:6
+msgid "Inline block"
 msgstr ""
-"Viimati muudetud asukohad"
 
-#: ./modules/mod_admin/templates/admin.tpl:49 
-msgid ""
-"Latest modified media items"
+#: modules/mod_admin/templates/_admin_edit_body.tpl:20
+msgid "Insert image"
 msgstr ""
-"Viimati muudetud meedia failid"
 
-#: ./modules/mod_admin/templates/admin.tpl:31 
-msgid ""
-"Latest modified persons"
+#: modules/mod_admin/templates/admin_overview.tpl:60
+msgid "Items per page"
 msgstr ""
-"Viimati muudetud isikud"
 
-#: ./modules/mod_admin/templates/admin.tpl:28 
+#: modules/mod_admin/templates/_admin_dashboard_events.tpl:3
+msgid "Latest modified events"
+msgstr "Viimati muudetud s√ºndmused"
+
+#: modules/mod_admin/templates/_admin_dashboard_locations.tpl:3
+msgid "Latest modified locations"
+msgstr "Viimati muudetud asukohad"
+
+#: modules/mod_admin/templates/_admin_dashboard_media.tpl:2
+msgid "Latest modified media items"
+msgstr "Viimati muudetud meedia failid"
+
+#: modules/mod_admin/templates/_admin_dashboard_persons.tpl:2
+msgid "Latest modified persons"
+msgstr "Viimati muudetud isikud"
+
+#: modules/mod_admin/templates/_admin_dashboard_texts.tpl:2
+msgid "Latest modified texts"
+msgstr "Viimati muudetud tekstid"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:38
 msgid ""
-"Latest modified texts"
+"Live query, send notifications when matching items are updated or inserted."
 msgstr ""
-"Viimati muudetud tekstid"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:19 
-msgid ""
-"Latitude"
+#: modules/mod_admin/templates/_admin_menu.tpl:73
+msgid "Log Off"
 msgstr ""
-"Laiuskraad"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:26 
-msgid ""
-"Longitude"
+#: modules/mod_admin/templates/admin_logon.tpl:19
+msgid "Log on to"
 msgstr ""
-"Pikkuskraad"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:96 
-msgid ""
-"Mailing address"
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:135
+msgid "Mailing address"
+msgstr "Postiaadress"
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:20
+msgid "Main"
+msgstr "Pea"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:84
+msgid "Make"
+msgstr "Loo"
+
+#: modules/mod_admin/templates/admin_media.tpl:21
+msgid "Make a new media item"
+msgstr "Loo uus meediafail"
+
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:75
+msgid "Make a new page"
+msgstr "Loo uus leht"
+
+#: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:4
+#: modules/mod_admin/templates/admin_overview.tpl:85
+msgid "Make a new page or media"
 msgstr ""
-"Postiaadress"
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:10 
-msgid ""
-"Main"
-msgstr ""
-"Pea"
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
+msgid "Make media item"
+msgstr "Loo meediafail"
 
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:46 
-msgid ""
-"Make"
-msgstr ""
-"Loo"
+#: modules/mod_admin/templates/admin_media.tpl:3
+#: modules/mod_admin/templates/admin_media.tpl:9
+msgid "Media"
+msgstr "Meedia"
 
-#: ./modules/mod_admin/templates/_action_dialog_link.tpl:4 
-msgid ""
-"Make a new connection"
-msgstr ""
-"Loo uus √ºhendus"
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:25
+msgid "Media URL"
+msgstr "Meedia URL"
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:14 ./modules/mod_admin/templates/admin_media.tpl:26 ./modules/mod_admin/templates/admin.tpl:19 
-msgid ""
-"Make a new media item"
-msgstr ""
-"Loo uus meediafail"
-
-#: ./modules/mod_admin/templates/admin_overview.tpl:13 ./modules/mod_admin/templates/admin.tpl:15 
-msgid ""
-"Make a new page"
-msgstr ""
-"Loo uus leht"
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:68 
-msgid ""
-"Make media item"
-msgstr ""
-"Loo meediafail"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:3 ./modules/mod_admin/templates/admin_media.tpl:22 ./modules/mod_admin/templates/admin_base.tpl:69 
-msgid ""
-"Media"
-msgstr ""
-"Meedia"
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:62 
-msgid ""
-"Media URL"
-msgstr ""
-"Meedia URL"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:33 
+#: modules/mod_admin/templates/admin_media.tpl:12
 msgid ""
 "Media encompasses all uploaded images, movies and documents. Media can be "
 "attached to pages."
@@ -508,820 +549,862 @@ msgstr ""
 "Meedia kujutab endast k√µiki √ºles laetud pilte, filme ja dokumente. Meediat "
 "saab lisada lehtedele."
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:29 
-msgid ""
-"Media file"
-msgstr ""
-"Meedia fail"
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:26
+msgid "Media file"
+msgstr "Meedia fail"
 
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4 
-msgid ""
-"Media on this page"
-msgstr ""
-"Meedia sellel lehel"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:38 
-msgid ""
-"Media overview"
-msgstr ""
-"Meedia √ºlevaade"
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:22 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:55 
-msgid ""
-"Media title"
-msgstr ""
-"Meedia pealkiri"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:27 
-msgid ""
-"Middle"
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:132
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:144
+msgid "Media item created."
 msgstr ""
 
-#: ./modules/mod_admin/templates/admin_edit.tpl:20 
-msgid ""
-"Modified"
-msgstr ""
-"Muudetud"
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4
+msgid "Media on this page"
+msgstr "Meedia sellel lehel"
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:28 ./modules/mod_admin/templates/_admin_overview_list.tpl:16 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:19 
-msgid ""
-"Modified by"
-msgstr ""
-"Muudetud "
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:18
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:16
+msgid "Media title"
+msgstr "Meedia pealkiri"
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:27 ./modules/mod_admin/templates/_admin_overview_list.tpl:13 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:16 
-msgid ""
-"Modified on"
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:26
+msgid "Middle"
 msgstr ""
-"Muudetud "
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14 ./modules/mod_admin/templates/_admin_edit_content_person.tpl:15 ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
-msgid ""
-"Need more help?"
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:24
+msgid "Mobile"
 msgstr ""
-"Veel abi?"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:50 
-msgid ""
-"Next in category: "
+#: modules/mod_admin/templates/_admin_overview_list.tpl:17
+#: modules/mod_admin/templates/admin_referrers.tpl:24
+msgid "Modified by"
+msgstr "Muudetud "
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:14
+#: modules/mod_admin/templates/admin_referrers.tpl:23
+msgid "Modified on"
+msgstr "Muudetud "
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:10
+msgid "Modified:"
 msgstr ""
-"Kategooris j√§rgmine:"
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40 
-msgid ""
-"No items"
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
+msgid "More like this"
 msgstr ""
-"Pole midagi"
 
-#: ./modules/mod_admin/templates/admin_media.tpl:74 
-msgid ""
-"No media found."
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64
+msgid "Name"
 msgstr ""
-"Ei leia meediat."
 
-#: ./modules/mod_admin/templates/_admin_overview_list.tpl:38 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:42 
-msgid ""
-"No pages found."
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
+msgid "Need more help?"
+msgstr "Veel abi?"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:71
+msgid "Next in category: "
+msgstr "Kategooris j√§rgmine:"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:88
+msgid "No items"
+msgstr "Pole midagi"
+
+#: modules/mod_admin/templates/admin_media.tpl:85
+msgid "No media found."
+msgstr "Ei leia meediat."
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:47
+#: modules/mod_admin/templates/admin_referrers.tpl:47
+msgid "No pages found."
+msgstr "Ei leie lehti."
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+msgid "Page connections"
+msgstr "Lehe √ºhendused"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
+msgid "Page description"
+msgstr "Lehe kirjeldus"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:47
+msgid "Page keywords"
+msgstr "Lehe v√µtmes√µnad"
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:17
+msgid "Page path"
 msgstr ""
-"Ei leie lehti."
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:46 
-msgid ""
-"No referrers found."
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:18
+msgid "Page slug"
+msgstr "Lehe kutsung"
+
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:10
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:27
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
+msgid "Page title"
+msgstr "Lehe pealkiri"
+
+#: modules/mod_admin/templates/admin_overview.tpl:3
+msgid "Pages"
+msgstr "Lehed"
+
+#: modules/mod_admin/templates/admin_overview.tpl:69
+msgid "Pages overview"
+msgstr "Lehtede √ºlevaade"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Personal name"
 msgstr ""
-"Ei leia viitajaid."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:5 
-msgid ""
-"Page connections"
+#: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
+msgid "Pivot queue count size:"
 msgstr ""
-"Lehe √ºhendused"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:36 
-msgid ""
-"Page description"
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:3
+msgid "Please fill in the title of the new page."
+msgstr "Palun t√§ida uue lehe pealkir."
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:117
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:179
+msgid "Postcode"
+msgstr "Postiindeks"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:22
+msgid "Predicate"
+msgstr "Predikaat"
+
+#: modules/mod_admin/templates/admin_media.tpl:35
+msgid "Preview"
+msgstr "Eelvaade"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:65
+msgid "Previous in category: "
+msgstr "Kategoorias eelmine: "
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:44
+msgid "Protect"
 msgstr ""
-"Lehe kirjeldus"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:31 
-msgid ""
-"Page keywords"
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:42
+msgid "Protect from deletion"
+msgstr "Kaitse kustutamise eest"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
+msgid "Publication date of original article"
 msgstr ""
-"Lehe v√µtmes√µnad"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:17 
-msgid ""
-"Page path, default is"
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+msgid "Publication date range"
 msgstr ""
-"Lehe path, vaikimisi"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:23 
-msgid ""
-"Page slug"
-msgstr ""
-"Lehe kutsung"
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:6
+msgid "Publication period"
+msgstr "Avaldamise periood"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:18 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:17 
-msgid ""
-"Page title"
-msgstr ""
-"Lehe pealkiri"
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:6
+msgid "Publish this page"
+msgstr "Avalda see leht"
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:3 ./modules/mod_admin/templates/admin_base.tpl:68 
-msgid ""
-"Pages"
-msgstr ""
-"Lehed"
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:41
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:73
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:34
+msgid "Published"
+msgstr "Avaldatud"
 
-#: ./modules/mod_admin/templates/admin_overview.tpl:23 
-msgid ""
-"Pages overview"
-msgstr ""
-"Lehtede √ºlevaade"
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:22
+msgid "Query"
+msgstr "P√§ring"
 
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:7 
-msgid ""
-"Performer"
-msgstr ""
-"Teostaja"
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:42
+msgid "Query preview"
+msgstr "P√§ringu eelvaade"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:6 
-msgid ""
-"Personal Name"
-msgstr ""
-"Isiku nimi"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:13 
-msgid ""
-"Please click on the map to select the location."
-msgstr ""
-"Palun kliki kaardil asukoha valikuks"
-
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:7 
-msgid ""
-"Please fill in the title"
-msgstr ""
-"Palun t√§ida pealkiri"
-
-#: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:3 
-msgid ""
-"Please fill in the title of the new page."
-msgstr ""
-"Palun t√§ida uue lehe pealkir."
-
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:73 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:114 
-msgid ""
-"Postcode"
-msgstr ""
-"Postiindeks"
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:25 
-msgid ""
-"Predicate"
-msgstr ""
-"Predikaat"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:42 
-msgid ""
-"Preview"
-msgstr ""
-"Eelvaade"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:54 
-msgid ""
-"Previous in category: "
-msgstr ""
-"Kategoorias eelmine: "
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:31 
-msgid ""
-"Protect from deletion"
-msgstr ""
-"Kaitse kustutamise eest"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:5 
-msgid ""
-"Publication period"
-msgstr ""
-"Avaldamise periood"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:5 
-msgid ""
-"Publish this page"
-msgstr ""
-"Avalda see leht"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:25 ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:42 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:37 ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18 
-msgid ""
-"Published"
-msgstr ""
-"Avaldatud"
-
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:35 
-msgid ""
-"Published?"
-msgstr ""
-"Avadatud?"
-
-#: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:18 
-msgid ""
-"Query"
-msgstr ""
-"P√§ring"
-
-#: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:23 
-msgid ""
-"Query preview"
-msgstr ""
-"P√§ringu eelvaade"
-
-#: ./modules/mod_admin/templates/admin_status.tpl:23 
+#: modules/mod_admin/templates/admin_status.tpl:44
 msgid ""
 "Rebuild all search-indices by putting all pages and data from the database "
 "in the indexer queue. This can take a long time!"
 msgstr ""
-"Konstrueeri uuesti k√µik otsingu indeksid, pane k√µik lehed ja andmed andmebaasist "
-"indekseerija j√§rjekorda. See v√µib v√µtta kaua a!"
+"Konstrueeri uuesti k√µik otsingu indeksid, pane k√µik lehed ja andmed "
+"andmebaasist indekseerija j√§rjekorda. See v√µib v√µtta kaua a!"
 
-#: ./modules/mod_admin/templates/admin_status.tpl:22 
-msgid ""
-"Rebuild search indices"
-msgstr ""
-"Konstrueeri otsingu indeksid"
+#: modules/mod_admin/templates/admin_status.tpl:27
+msgid "Rebuild search indices"
+msgstr "Konstrueeri otsingu indeksid"
 
-#: ./modules/mod_admin/templates/admin_status.tpl:28 
+#: modules/mod_admin/templates/admin_status.tpl:52
 msgid ""
 "Recalculate the numbering of the category tree. This can take a long time."
-msgstr ""
-"Arvuta uuesti kategooriapuu numeratsioon. See v√µib v√µtta kaua aega."
+msgstr "Arvuta uuesti kategooriapuu numeratsioon. See v√µib v√µtta kaua aega."
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:21 
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:26
+msgid "Redirect to above website on page view"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:63
+msgid "Redirect to website on page view"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_referrers.tpl:3
+#: modules/mod_admin/templates/admin_referrers.tpl:8
+msgid "Referrers to"
+msgstr "Viitajad sinna"
+
+#: modules/mod_admin/templates/admin_status.tpl:58
+msgid "Reinstall site datamodel"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18
+msgid "Remarks"
+msgstr "M√§rkused"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:28
+msgid "Remove crop center"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_status.tpl:51
+msgid "Renumber category tree"
+msgstr "Nummerda kategoori puu uuesti"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:57
+msgid "Replace current medium"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
+msgid "Replace media item"
+msgstr "Asenda meedia"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:35
+#: modules/mod_admin/templates/_admin_edit_media.tpl:48
+msgid "Replace this media item"
+msgstr "Asenda see meedia"
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
 msgid ""
-"Referrers"
+"Resources in the <i>meta</i> category can have 'features': certain resource "
+"properties that decide what to show or hide on certain pages in the admin. "
+"If this box is empty, no features are enabled for this meta-resource."
 msgstr ""
-"Viitajad"
 
-#: ./modules/mod_admin/templates/admin_referrers.tpl:3 ./modules/mod_admin/templates/admin_referrers.tpl:9 
+#: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:103
+msgid "Retrieving status..."
+msgstr ""
+
+#: modules/mod_admin/templates/admin_status.tpl:59
+msgid "Runs the schema install command from the site's module again."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:6
+msgid "SEO Content"
+msgstr "SEO sisu"
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
+#: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
+msgid "Save"
+msgstr "Salvesta"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:23
+#: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:6
+msgid "Save and View"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:23
+#: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:6
+msgid "Save and view the page."
+msgstr "Salvesta ja vaata lehte."
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
+#: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
+msgid "Save this page."
+msgstr "Salvesta see leht."
+
+#: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:68
+msgid "Search indices rebuilt."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:5
+msgid "Search other media"
+msgstr "Otsi muud meediat"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:7
+msgid "Search query"
+msgstr "Otsinu p√§ring"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:88
+msgid "Search..."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:2
+msgid "Select a connected image"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_overview.tpl:42
+msgid "Selected Categories"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:23
+msgid "Short title"
+msgstr "L√ºhipealkiri"
+
+#: modules/mod_admin/templates/_admin_features.category.tpl:8
+msgid "Show address on edit page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:3
+msgid "Show as"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:31
+msgid "Show page on multiple paths"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:125
+msgid "Something went wrong. Sorry."
+msgstr "Midagi l√§ks valesti. Sorry."
+
+#: modules/mod_admin/actions/action_admin_link.erl:84
+msgid "Sorry, you don't have permission to add the connection."
+msgstr ""
+
+#: modules/mod_admin/mod_admin.erl:351
+msgid "Sorry, you have no permission to add the connection."
+msgstr ""
+
+#: modules/mod_admin/mod_admin.erl:157
+msgid "Standard"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_sort_header.event.tpl:2
+msgid "Starts"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:126
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:188
+msgid "State"
+msgstr "Seisund"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:95
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:157
+msgid "Street Line 1"
+msgstr "T√§na rida 1"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:102
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:164
+msgid "Street Line 2"
+msgstr "T√§nav rida 2"
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:16
+msgid "Summary"
+msgstr "Kokkuv√µte"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:32
+msgid "Sur. prefix"
+msgstr "Eesliidend"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:38
+msgid "Surname"
+msgstr "Perenimi"
+
+#: modules/mod_admin/templates/admin_status.tpl:3
+msgid "System Status"
+msgstr "S√ºsteemi staatus"
+
+#: modules/mod_admin/templates/admin_status.tpl:8
+msgid "System administration"
+msgstr "S√ºsteemi adminnimine"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:18
+msgid "Telephone"
+msgstr "Telefon"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:31
+msgid "Test query"
+msgstr ""
+
+#: modules/mod_admin/mod_admin.erl:159
+msgid "Text"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
+msgid "The page"
+msgstr "Leht"
+
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:6
+msgid "The whole world"
+msgstr "Kogu maailm"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:11
+msgid "There are no pages with a connection to the page"
+msgstr "Ei ole √htegi lehte seosega sellele lehele"
+
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
+msgid "This can't be undone. Your page will be lost forever."
+msgstr "Seda tegevust ei saa tagasi v√µtte. Sinu leht kaob igaeseks."
+
+#: modules/mod_admin/actions/action_admin_link.erl:81
+msgid "This connection already exists."
+msgstr ""
+
+#: modules/mod_admin/templates/admin_status.tpl:9
 msgid ""
-"Referrers to"
+"This page holds a collection of administrative options to perform certain "
+"tasks on this Zotonic installation."
 msgstr ""
-"Viitajad sinna"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:26 
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
 msgid ""
-"Remarks"
+"This page is able to connect to others. For example you can connect it to an "
+"actor or a brand."
 msgstr ""
-"M√§rkused"
+"Seda lehte saab √ºhendada teistega. N√§iteks v√µid √ºhendada selle esineja "
+"v√µi br√§ndiga."
 
-#: ./modules/mod_admin/templates/admin_status.tpl:27 
-msgid ""
-"Renumber category tree"
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:50
+msgid "This resource was created by the module"
+msgstr "See ressurs on loodu selle mooduli poolt"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
+msgid "Till"
+msgstr "Kuni"
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
+#: modules/mod_admin/templates/_admin_overview_list.tpl:5
+#: modules/mod_admin/templates/admin_media.tpl:36
+#: modules/mod_admin/templates/admin_referrers.tpl:20
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
+msgid "Title"
+msgstr "Nimi"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:6
+msgid "Toggle navigation"
 msgstr ""
-"Nummerda kategoori puu uuesti"
 
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:68 
-msgid ""
-"Replace media item"
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:6
+msgid "Type text to search"
 msgstr ""
-"Asenda meedia"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_media.tpl:15 
-msgid ""
-"Replace this media item"
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:32
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:38
+msgid "Unique name"
+msgstr "Unikaalne nimi"
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:56
+msgid "Unique uri"
+msgstr "Unikaalne uri"
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:47
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:10
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
+msgid "Upload File"
 msgstr ""
-"Asenda see meedia"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_seo.tpl:5 
-msgid ""
-"SEO Content"
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:4
+msgid "Upload a file from your computer."
+msgstr "Lae √ºles oma arvutist."
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:3
+msgid "Upload a file which is already on the internet."
+msgstr "Lae √ºles fail internetist."
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:52
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
+msgid "Upload by URL"
 msgstr ""
-"SEO sisu"
 
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:49 ./modules/mod_admin/templates/_action_dialog_change_category.tpl:12 
-msgid ""
-"Save"
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:35
+msgid "Upload file"
+msgstr "Lae fail"
+
+#: modules/mod_admin/templates/admin_media.tpl:38
+msgid "Uploaded"
+msgstr "√úles laetud"
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:36
+msgid "Use the autocompleter to search the media in this site."
+msgstr "Kasuta automaatset nimelahendust meedia otsimiseks saidilt."
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Use the title of the base content for the display name of this person."
+msgstr "Kasuta baassisu pealkirja kuvatavaks isiku nimeks."
+
+#: modules/mod_admin/templates/_admin_menu.tpl:70
+msgid "User page"
 msgstr ""
-"Salvesta"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15 
-msgid ""
-"Save and view the page."
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:14
+msgid "Valid for:"
 msgstr ""
-"Salvesta ja vaata lehte."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:13 
-msgid ""
-"Save this page."
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:25
+#: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
+msgid "View"
 msgstr ""
-"Salvesta see leht."
 
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:5 
-msgid ""
-"Search other media"
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
+msgid "View all pages from this category"
 msgstr ""
-"Otsi muud meediat"
 
-#: ./modules/mod_admin/templates/_admin_edit_content.query.tpl:6 
-msgid ""
-"Search query"
-msgstr ""
-"Otsinu p√§ring"
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:55
+msgid "View all referrers"
+msgstr "Vaata k√µiki viitajaid"
 
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:13 ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:22 
-msgid ""
-"Short title"
-msgstr ""
-"L√ºhipealkiri"
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:25
+#: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
+msgid "View this page."
+msgstr "Vaata sedea lehte."
 
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:13 
-msgid ""
-"Show this article only between the two dates."
-msgstr ""
-"N√§ita seda artiklidnende kuup√§vade vahemikus."
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:3
+msgid "Visible for"
+msgstr "N√§htav neil"
 
-#: ./modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:98 
-msgid ""
-"Something went wrong. Sorry."
-msgstr ""
-"Midagi l√§ks valesti. Sorry."
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:19
+msgid "Visible from"
+msgstr "N√§htav alates"
 
-#: ./modules/mod_admin/templates/_admin_overview_list.event.tpl:10 
-msgid ""
-"Start date"
-msgstr ""
-"Alguskuup√§ev"
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:25
+msgid "Visible till"
+msgstr "N√§htav kuni"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:78 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:119 
-msgid ""
-"State"
-msgstr ""
-"Seisund"
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:67
+msgid "Visit full edit page"
+msgstr "Mine redigeerimisse"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:58 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:99 
-msgid ""
-"Street Line 1"
-msgstr ""
-"T√§na rida 1"
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:72
+msgid "Visiting address"
+msgstr "K√ºlastusaadress"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:63 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:104 
-msgid ""
-"Street Line 2"
-msgstr ""
-"T√§nav rida 2"
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:51
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:6
+msgid "Website"
+msgstr "Veebileht"
 
-#: ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:13 
-msgid ""
-"Summary"
-msgstr ""
-"Kokkuv√µte"
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:16
+msgid "Website for clicks on image"
+msgstr "Veebileht pildil klikkimiseks"
 
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:34 
-msgid ""
-"Sur. prefix"
-msgstr ""
-"Eesliidend"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_person.tpl:41 
-msgid ""
-"Surname"
-msgstr ""
-"Perenimi"
-
-#: ./modules/mod_admin/templates/admin_base.tpl:74 
-msgid ""
-"System"
-msgstr ""
-"S√ºsteem"
-
-#: ./modules/mod_admin/templates/admin_status.tpl:3 
-msgid ""
-"System Status"
-msgstr ""
-"S√ºsteemi staatus"
-
-#: ./modules/mod_admin/templates/admin_status.tpl:15 
-msgid ""
-"System administration"
-msgstr ""
-"S√ºsteemi adminnimine"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:17 
-msgid ""
-"Telephone"
-msgstr ""
-"Telefon"
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:16 
-msgid ""
-"The following"
-msgstr ""
-"J√§rgnev"
-
-#: ./modules/mod_admin/templates/_action_unlink_undo.tpl:9 
-msgid ""
-"The page"
-msgstr ""
-"Leht"
-
-#: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:5 
-msgid ""
-"The whole world"
-msgstr ""
-"Kogu maailm"
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:14 
-msgid ""
-"There are no pages with a connection to the page"
-msgstr ""
-"Ei ole √htegi lehte seosega sellele lehele"
-
-#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:5 
-msgid ""
-"This can't be undone. Your media will be lost forever."
-msgstr ""
-"Seda tegevust ei saa tagasi v√µtte. Sinu meedia kaob igavaeseks."
-
-#: ./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:4 
-msgid ""
-"This can't be undone. Your page will be lost forever."
-msgstr ""
-"Seda tegevust ei saa tagasi v√µtte. Sinu leht kaob igaeseks."
-
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:13 ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:14 
-msgid ""
-"This page is able to connect to others. For example you can connect it to "
-"an actor or a brand."
-msgstr ""
-"Seda lehte saab √ºhendada teistega. N√§iteks v√µid √ºhendada selle esineja v√µi br√§ndiga."
-
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:40 
-msgid ""
-"This resource was created by the module"
-msgstr ""
-"See ressurs on loodu selle mooduli poolt"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:22 
-msgid ""
-"Till"
-msgstr ""
-"Kuni"
-
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:15 ./modules/mod_admin/templates/admin_referrers.tpl:24 ./modules/mod_admin/templates/admin_media.tpl:43 ./modules/mod_admin/templates/_admin_overview_list.tpl:4 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:4 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:5 ./modules/mod_admin/templates/_admin_edit_basics_form.tpl:5 
-msgid ""
-"Title"
-msgstr ""
-"Nimi"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_location.tpl:14 
-msgid ""
-"Try to fill the fields automatically from the title of the location"
-msgstr ""
-"Proovime t√§ita v√§lju automaatselt sihtkohast"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:44 
-msgid ""
-"Type"
-msgstr ""
-"T√º√ºp"
-
-#: ./modules/mod_admin/templates/_action_dialog_zlink.tpl:2 
-msgid ""
-"Type the title of the page you want to connect to."
-msgstr ""
-"Sisesta lehe nimetus millega sa tahad √ºhendust teha."
-
-#: ./modules/mod_admin/templates/_action_dialog_link.tpl:2 
-msgid ""
-"Type the title of the page you want to connect to.  Click ‚ÄúMake a new "
-"connection‚Äù when the page does not yet exist."
-msgstr ""
-"Siseta lehe pealkiri millega tahad √ºhendada. Vajuta ‚ÄúTee uus "
-"√ºhendusÄù kui lehte veel ei ole olemas."
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:5 
-msgid ""
-"URL"
-msgstr ""
-"URL"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:25 ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:23 
-msgid ""
-"Unique name"
-msgstr ""
-"Unikaalne nimi"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:46 
-msgid ""
-"Unique uri"
-msgstr ""
-"Unikaalne uri"
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:4 
-msgid ""
-"Upload"
-msgstr ""
-"√√úleslaadimine"
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:11 
-msgid ""
-"Upload a file from your computer."
-msgstr ""
-"Lae √ºles oma arvutist."
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:44 
-msgid ""
-"Upload a file which is already on the internet."
-msgstr ""
-"Lae √ºles fail internetist."
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:35 
-msgid ""
-"Upload file"
-msgstr ""
-"Lae fail"
-
-#: ./modules/mod_admin/templates/admin_media.tpl:47 
-msgid ""
-"Uploaded"
-msgstr ""
-"√úles laetud"
-
-#: ./modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:35 
-msgid ""
-"Use the autocompleter to search the media in this site."
-msgstr ""
-"Kasuta automaatset nimelahendust meedia otsimiseks saidilt."
-
-#: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:13 
-msgid ""
-"Used for events and other periods."
-msgstr ""
-"Kasutatakse s√ºndmusteks ja muudeks periooddeks."
-
-#: ./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:46 
-msgid ""
-"View all referrers"
-msgstr ""
-"Vaata k√µiki viitajaid"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 
-msgid ""
-"View this page."
-msgstr ""
-"Vaata sedea lehte."
-
-#: ./modules/mod_admin/templates/_admin_edit_visible_for.tpl:3 
-msgid ""
-"Visible for"
-msgstr ""
-"N√§htav neil"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:18 
-msgid ""
-"Visible from"
-msgstr ""
-"N√§htav alates"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:22 
-msgid ""
-"Visible till"
-msgstr ""
-"N√§htav kuni"
-
-#: ./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:50 
-msgid ""
-"Visit full edit page"
-msgstr ""
-"Mine redigeerimisse"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_address.tpl:55 
-msgid ""
-"Visiting address"
-msgstr ""
-"K√ºlastusaadress"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_website.tpl:5 ./modules/mod_admin/templates/_admin_edit_content_address.tpl:46 ./modules/mod_admin/templates/_admin_edit_basics_form.website.tpl:21 
-msgid ""
-"Website"
-msgstr ""
-"Veebileht"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_website.tpl:12 
-msgid ""
-"Website for clicks on image"
-msgstr ""
-"Veebileht pildil klikkimiseks"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:14 
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
 msgid ""
 "When a page has a publication date range then it will only be visible "
 "between the two dates. Note that when you are allowed to edit the page then "
-"you can always see it"
-msgstr ""
-"Kui lehel on avaldamise kuup√§evade vahemik, siis on ta n√§htav ainult nen "
-"kahe kuup√§eva vahel. NB! kui sul on lubatud lehte redigeerida, siis v√µid "
-"seda alati n√§h"
-
-#: ./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2 
-msgid ""
-"You are going to duplicate the page"
-msgstr ""
-"Hakkad lehte duplitseerima"
-
-#: ./modules/mod_admin/templates/admin_edit.tpl:15 
-msgid ""
-"You are not allowed to edit the"
-msgstr ""
-"Sul on keelatud redigeerida"
-
-#: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:13 ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:46 
-msgid ""
-"You have to specify a description of the file to make it easier to find "
-"and share."
-msgstr ""
-"Pead sisestama faili kirjelduse, et seda oleks hiljem lihtsam leida ja jagada."
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:16 
-msgid ""
-"a connection to the page"
-msgstr ""
-"√ºhendus lehele"
-
-#: ./modules/mod_admin/templates/_admin_edit_depiction.tpl:14 
-msgid ""
-"add a new media item"
-msgstr ""
-"lisa uus meedia"
-
-#: ./modules/mod_admin/templates/_admin_edit_depiction.tpl:19 
-msgid ""
-"add existing media item"
-msgstr ""
-"lisa olemasolev meedia"
-
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:7 
-msgid ""
-"and the category of the new page."
-msgstr ""
-"ja lehe kategooria"
-
-#: ./modules/mod_admin/templates/admin_edit.tpl:21 
-msgid ""
-"by"
-msgstr ""
-"poolt"
-
-#: ./modules/mod_admin/templates/_admin_save_buttons.tpl:8 
-msgid ""
-"cancel"
-msgstr ""
-"katkesta"
-
-#: ./modules/mod_admin/templates/admin_edit.tpl:27 
-msgid ""
-"change"
-msgstr ""
-"muuda"
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:40 ./modules/mod_admin/templates/admin_media.tpl:64 
-msgid ""
-"delete"
-msgstr ""
-"kustuta"
-
-#: ./modules/mod_admin/templates/_admin_edit_media.tpl:20 
-msgid ""
-"download"
-msgstr ""
-"lae alla"
-
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:33 ./modules/mod_admin/templates/admin_referrers.tpl:41 ./modules/mod_admin/templates/admin_media.tpl:65 ./modules/mod_admin/templates/_admin_overview_list.tpl:32 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:36 
-msgid ""
-"edit"
-msgstr ""
-"redig."
-
-#: ./modules/mod_admin/templates/_edit_button.tpl:3 
-msgid ""
-"edit this page"
-msgstr ""
-"redigeeri lehte"
-
-#: ./modules/mod_admin/templates/admin_edit.tpl:18 
-msgid ""
-"editing"
-msgstr ""
-"redigeerin"
-
-#: ./modules/mod_admin/templates/admin_overview.tpl:30 
-msgid ""
-"filter on category"
-msgstr ""
-"filtreeri kaegooriaga"
-
-#: ./modules/mod_admin/templates/_action_unlink_undo.tpl:9 
-msgid ""
-"has been disconnected."
-msgstr ""
-"on lahti √ºhendatud."
-
-#: ./modules/mod_admin/templates/admin_edit_widget_std.tpl:15 
-msgid ""
-"make smaller"
-msgstr ""
-"tee v√§iksemaks"
-
-#: ./modules/mod_admin/templates/admin_overview.tpl:24 
-msgid ""
-"matching"
-msgstr ""
-"klapib"
-
-#: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:3 
-msgid ""
-"media from"
-msgstr ""
-"meedia sealt"
-
-#: ./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:7 
-msgid ""
-"of the new"
-msgstr ""
-"uuest"
-
-#: ./modules/mod_admin/templates/_action_dialog_link.tpl:6 
-msgid ""
-"or use the autocompleter to search the site."
-msgstr ""
-"v√µi kasuta autoaatlahendajat saidilt otsimiseks."
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:16 
-msgid ""
-"page has"
-msgstr ""
-"lehel on"
-
-#: ./modules/mod_admin/templates/admin_referrers.tpl:16 
-msgid ""
-"pages have"
-msgstr ""
-"lehel on"
-
-#: ./modules/mod_admin/templates/_admin_edit_media.tpl:5 
-msgid ""
-"pixels"
-msgstr ""
-"pikslit"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:13 
-msgid ""
-"save"
-msgstr ""
-"salvesta"
-
-#: ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:15 
-msgid ""
-"Save and View"
+"you can always see it."
 msgstr ""
 
-#: ./modules/mod_admin/templates/_admin_save_buttons.tpl:4 ./modules/mod_admin/templates/_admin_save_buttons.tpl:6 
-msgid ""
-"save this page"
-msgstr ""
-"salvesta see leht"
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
+msgid "You are going to duplicate the page"
+msgstr "Hakkad lehte duplitseerima"
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:7 
-msgid ""
-"show all"
+#: modules/mod_admin/actions/action_admin_delete_media.erl:52
+msgid "You are not allowed to delete this media."
 msgstr ""
-"n√§ita k√µik"
 
-#: ./modules/mod_admin/templates/_action_unlink_undo.tpl:3 
-msgid ""
-"undo"
+#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:50
+msgid "You are not allowed to delete this page."
 msgstr ""
-"v√µta tagasi"
 
-#: ./modules/mod_admin/templates/_rsc_edge_media.tpl:7 ./modules/mod_admin/templates/_choose_media.tpl:8 
-msgid ""
-"untitled"
+#: modules/mod_admin/templates/admin_edit.tpl:15
+msgid "You are not allowed to edit this page."
 msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:154
+msgid "You don't have permission to change this media item."
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:156
+msgid "You don't have the proper permissions to upload this type of file."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:6
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:5
+msgid ""
+"You have to specify a description of the file to make it easier to find and "
+"share."
+msgstr ""
+"Pead sisestama faili kirjelduse, et seda oleks hiljem lihtsam leida ja "
+"jagada."
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:35
+msgid "add a connection"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:19
+msgid "add media item"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:5
+msgid "block"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:12
+#: modules/mod_admin/templates/_admin_edit_header.tpl:17
+msgid "by"
+msgstr "poolt"
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:33
+#: modules/mod_admin/templates/_admin_overview_list.tpl:34
+#: modules/mod_admin/templates/admin_referrers.tpl:34
+msgid "d M Y, H:i"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_media.tpl:64
+msgid "delete"
+msgstr "kustuta"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:24
+msgid "e.g. might change"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:39
+#: modules/mod_admin/templates/admin_media.tpl:75
+#: modules/mod_admin/templates/admin_referrers.tpl:39
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:69
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:77
+msgid "edit"
+msgstr "redig."
+
+#: modules/mod_admin/templates/_edit_button.tpl:7
+msgid "edit this page"
+msgstr "redigeeri lehte"
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
+msgid "has been disconnected."
+msgstr "on lahti √ºhendatud."
+
+#: modules/mod_admin/templates/admin_overview.tpl:69
+msgid "matching"
+msgstr "klapib"
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:9
+msgid "name"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:57
+msgid "page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:6
+msgid "pixels"
+msgstr "pikslit"
+
+#: modules/mod_admin/templates/admin_overview.tpl:72
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:20
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:22
+msgid "show all"
+msgstr "n√§ita k√µik"
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:3
+msgid "undo"
+msgstr "v√µta tagasi"
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:29
+#: modules/mod_admin/templates/_choose_media.tpl:9
+#: modules/mod_admin/templates/_rsc_edge_media.tpl:18
+#, fuzzy
+msgid "untitled"
+msgstr ""
+"#-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"tundmatu\n"
+"#-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "nimetu"
 
-#: ./modules/mod_admin/templates/_admin_edit_media.tpl:8 
-msgid ""
-"uploaded on"
-msgstr ""
-"√ºles laaditud"
+#: modules/mod_admin/templates/_admin_edit_media.tpl:13
+#: modules/mod_admin/templates/_admin_edit_media.tpl:44
+msgid "uploaded on"
+msgstr "√ºles laaditud"
 
-#: ./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:32 ./modules/mod_admin/templates/_admin_overview_list.tpl:31 ./modules/mod_admin/templates/_admin_overview_list.event.tpl:35 ./modules/mod_admin/templates/_admin_edit_content_publish.tpl:17 
-msgid ""
-"view"
-msgstr ""
-"vaata"
+#: modules/mod_admin/templates/_admin_overview_list.tpl:38
+#: modules/mod_admin/templates/admin_referrers.tpl:38
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:68
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:76
+msgid "view"
+msgstr "vaata"
 
-#: ./modules/mod_admin/templates/_admin_header_title.tpl:5 
-msgid ""
-"visit site"
-msgstr ""
-"k√ºlasta saiti"
+#: modules/mod_admin/templates/_admin_menu.tpl:12
+#: modules/mod_admin/templates/admin_logon.tpl:12
+msgid "visit site"
+msgstr "k√ºlasta saiti"
+
+#~ msgid "Personal Name"
+#~ msgstr "Isiku nimi"
+
+#~ msgid "Actions"
+#~ msgstr "Tegevused"
+
+#~ msgid "Alternatively, choose an item from this predefined list:"
+#~ msgstr "Alternatiivina vali siit nimekirjast:"
+
+#~ msgid "Are you sure you want to delete the"
+#~ msgstr "Oled kindel, et tahad kustutada"
+
+#~ msgid "Choose the new category for this page."
+#~ msgstr "Vali uus kategooria sellele lehele."
+
+#~ msgid "Created by"
+#~ msgstr "Looja"
+
+#~ msgid "Dimensions"
+#~ msgstr "M√µ√µdud"
+
+#~ msgid "Email address"
+#~ msgstr "E-mail"
+
+#~ msgid "Edit this page"
+#~ msgstr "Redigeeri lehte"
+
+#~ msgid "Electronic address"
+#~ msgstr "Elektrooniline aadress"
+
+#~ msgid "Filename"
+#~ msgstr "Failinimi"
+
+#~ msgid "Geodata"
+#~ msgstr "Geodata"
+
+#~ msgid "Latitude"
+#~ msgstr "Laiuskraad"
+
+#~ msgid "Longitude"
+#~ msgstr "Pikkuskraad"
+
+#~ msgid "Make a new connection"
+#~ msgstr "Loo uus √ºhendus"
+
+#~ msgid "Media overview"
+#~ msgstr "Meedia √ºlevaade"
+
+#~ msgid "Modified"
+#~ msgstr "Muudetud"
+
+#~ msgid "No referrers found."
+#~ msgstr "Ei leia viitajaid."
+
+#~ msgid "Page path, default is"
+#~ msgstr "Lehe path, vaikimisi"
+
+#~ msgid "Performer"
+#~ msgstr "Teostaja"
+
+#~ msgid "Please click on the map to select the location."
+#~ msgstr "Palun kliki kaardil asukoha valikuks"
+
+#~ msgid "Please fill in the title"
+#~ msgstr "Palun t√§ida pealkiri"
+
+#~ msgid "Published?"
+#~ msgstr "Avadatud?"
+
+#~ msgid "Referrers"
+#~ msgstr "Viitajad"
+
+#~ msgid "Show this article only between the two dates."
+#~ msgstr "N√§ita seda artiklidnende kuup√§vade vahemikus."
+
+#~ msgid "Start date"
+#~ msgstr "Alguskuup√§ev"
+
+#~ msgid "System"
+#~ msgstr "S√ºsteem"
+
+#~ msgid "The following"
+#~ msgstr "J√§rgnev"
+
+#~ msgid "This can't be undone. Your media will be lost forever."
+#~ msgstr "Seda tegevust ei saa tagasi v√µtte. Sinu meedia kaob igavaeseks."
+
+#~ msgid "Try to fill the fields automatically from the title of the location"
+#~ msgstr "Proovime t√§ita v√§lju automaatselt sihtkohast"
+
+#~ msgid "Type"
+#~ msgstr "T√º√ºp"
+
+#~ msgid "Type the title of the page you want to connect to."
+#~ msgstr "Sisesta lehe nimetus millega sa tahad √ºhendust teha."
+
+#~ msgid ""
+#~ "Type the title of the page you want to connect to.  Click ‚ÄúMake a new "
+#~ "connection‚Äù when the page does not yet exist."
+#~ msgstr ""
+#~ "Siseta lehe pealkiri millega tahad √ºhendada. Vajuta ‚ÄúTee uus "
+#~ "√ºhendusÄù kui lehte veel ei ole olemas."
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Upload"
+#~ msgstr "√√úleslaadimine"
+
+#~ msgid "Used for events and other periods."
+#~ msgstr "Kasutatakse s√ºndmusteks ja muudeks periooddeks."
+
+#~ msgid ""
+#~ "When a page has a publication date range then it will only be visible "
+#~ "between the two dates. Note that when you are allowed to edit the page "
+#~ "then you can always see it"
+#~ msgstr ""
+#~ "Kui lehel on avaldamise kuup√§evade vahemik, siis on ta n√§htav ainult "
+#~ "nen kahe kuup√§eva vahel. NB! kui sul on lubatud lehte redigeerida, siis "
+#~ "v√µid seda alati n√§h"
+
+#~ msgid "You are not allowed to edit the"
+#~ msgstr "Sul on keelatud redigeerida"
+
+#~ msgid "a connection to the page"
+#~ msgstr "√ºhendus lehele"
+
+#~ msgid "add a new media item"
+#~ msgstr "lisa uus meedia"
+
+#~ msgid "add existing media item"
+#~ msgstr "lisa olemasolev meedia"
+
+#~ msgid "and the category of the new page."
+#~ msgstr "ja lehe kategooria"
+
+#~ msgid "cancel"
+#~ msgstr "katkesta"
+
+#~ msgid "change"
+#~ msgstr "muuda"
+
+#~ msgid "download"
+#~ msgstr "lae alla"
+
+#~ msgid "editing"
+#~ msgstr "redigeerin"
+
+#~ msgid "filter on category"
+#~ msgstr "filtreeri kaegooriaga"
+
+#~ msgid "make smaller"
+#~ msgstr "tee v√§iksemaks"
+
+#~ msgid "media from"
+#~ msgstr "meedia sealt"
+
+#~ msgid "of the new"
+#~ msgstr "uuest"
+
+#~ msgid "or use the autocompleter to search the site."
+#~ msgstr "v√µi kasuta autoaatlahendajat saidilt otsimiseks."
+
+#~ msgid "page has"
+#~ msgstr "lehel on"
+
+#~ msgid "pages have"
+#~ msgstr "lehel on"
+
+#~ msgid "save"
+#~ msgstr "salvesta"
+
+#~ msgid "save this page"
+#~ msgstr "salvesta see leht"

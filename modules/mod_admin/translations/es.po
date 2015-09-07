@@ -271,6 +271,10 @@ msgstr ""
 msgid "Date range"
 msgstr "Rango de fechas"
 
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+msgid "Date ranges"
+msgstr "Rangos de fechas"
+
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
 msgid "Define who can see or edit this page."
 msgstr "Definir quién puede ver o editar esta página."
@@ -377,6 +381,7 @@ msgid "Featured"
 msgstr "Presentados"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:4
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
 msgid "Features"
 msgstr ""
 
@@ -437,19 +442,6 @@ msgstr "Miembros del grupo"
 msgid "Header"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
-msgid "Date ranges"
-msgstr "Rangos de fechas"
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr ""
-
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
-msgid "Publication date range"
-msgstr "De rangos de fechas de publicación"
-
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
@@ -461,11 +453,6 @@ msgstr ""
 "va en su propia línea. Para más información ver la <a href=\"http://zotonic."
 "com/docs/latest/manuals/datamodel/search.html\">documentación de los "
 "argumentos de consulta</a> en el sitio web de Zotonic."
-
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid "Use the title of the base content for the display name of this person."
-msgstr ""
-"Use el título del contenido base para el nombre que se mostrará  en pantalla."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -640,6 +627,11 @@ msgstr "No se encontraron medios."
 msgid "No pages found."
 msgstr "No se encontraron páginas."
 
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+msgid "Page connections"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
 msgstr "Descripción de la página"
@@ -671,8 +663,9 @@ msgid "Pages overview"
 msgstr "Resumen de páginas"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
-msgid "Personal Name"
-msgstr "Nombre de la persona"
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Personal name"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
@@ -710,6 +703,10 @@ msgstr "Proteger de borrado"
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
 msgid "Publication date of original article"
 msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+msgid "Publication date range"
+msgstr "De rangos de fechas de publicación"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:6
 msgid "Publication period"
@@ -1044,6 +1041,11 @@ msgid "Use the autocompleter to search the media in this site."
 msgstr ""
 "Usar el servicio de autocompletar para buscar los medios en este sitio."
 
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Use the title of the base content for the display name of this person."
+msgstr ""
+"Use el título del contenido base para el nombre que se mostrará  en pantalla."
+
 #: modules/mod_admin/templates/_admin_menu.tpl:70
 msgid "User page"
 msgstr ""
@@ -1237,3 +1239,6 @@ msgstr "ver"
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "visitar sitio"
+
+#~ msgid "Personal Name"
+#~ msgstr "Nombre de la persona"

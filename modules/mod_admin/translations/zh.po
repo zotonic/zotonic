@@ -269,6 +269,10 @@ msgstr ""
 msgid "Date range"
 msgstr "日期范围"
 
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+msgid "Date ranges"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
 msgid "Define who can see or edit this page."
 msgstr "定义页面可以被谁看到或者编辑。"
@@ -371,6 +375,7 @@ msgid "Featured"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:4
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
 msgid "Features"
 msgstr "特性"
 
@@ -429,18 +434,6 @@ msgstr "组成员"
 msgid "Header"
 msgstr "题头"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
-msgid "Date ranges"
-msgstr ""
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr "页面连接"
-
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
-msgid "Publication date range"
-msgstr ""
-
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
@@ -451,10 +444,6 @@ msgstr ""
 "这里可以编辑搜索查询词的参数。每个参数占一行。更多相关信息请参考 <a href="
 "\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">查询词参数文"
 "档</a>。"
-
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid "Use the title of the base content for the display name of this person."
-msgstr "基本内容的标题会做为人员的显示名字。"
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -627,6 +616,11 @@ msgstr "没有找到媒体。"
 msgid "No pages found."
 msgstr "没有找到页面。"
 
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+msgid "Page connections"
+msgstr "页面连接"
+
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
 msgstr "页面描述"
@@ -658,8 +652,9 @@ msgid "Pages overview"
 msgstr "页面概览"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
-msgid "Personal Name"
-msgstr "人名"
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Personal name"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
@@ -697,6 +692,10 @@ msgstr "保护避免被删除"
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
 msgid "Publication date of original article"
 msgstr "原始文章的发布日期"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+msgid "Publication date range"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:6
 msgid "Publication period"
@@ -1029,6 +1028,10 @@ msgstr "已上传"
 msgid "Use the autocompleter to search the media in this site."
 msgstr "使用自动完成来搜索本站点的媒体。"
 
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Use the title of the base content for the display name of this person."
+msgstr "基本内容的标题会做为人员的显示名字。"
+
 #: modules/mod_admin/templates/_admin_menu.tpl:70
 msgid "User page"
 msgstr ""
@@ -1219,3 +1222,6 @@ msgstr "查看"
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "查看站点"
+
+#~ msgid "Personal Name"
+#~ msgstr "人名"
