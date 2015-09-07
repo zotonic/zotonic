@@ -19,12 +19,7 @@ ul.tree-list {
             // nested
             margin: 0;
         }
-        
-        > div {
-            position: relative;
-            margin: -1px 0 0 0;
-            padding: 0;
-        }
+
         .menu-toggle > i,
         .z-icon-drag,
         .z-btn-remove {
@@ -44,12 +39,32 @@ ul.tree-list {
             right: @_side_spacing;
         }
         > div {
+            position: relative;
+            margin: -1px 0 0 0;
+            padding: 0;
+            #3L > .gradient(#ffffff, @backgroundColorLightest);
+
+            &:hover {
+                background-color: @backgroundColorInteractiveLight;
+            }
             > a,
             > span:not(.btns) {
                 display: inline-block;
                 width: 100%;
                 padding: @_vertical_spacing 40px @_vertical_spacing @_left_spacing;
                 min-height: @_item_height;
+            }
+
+            > a {
+                color: @textColorMedium;
+
+                &:hover {
+                    color: @textColorDark;
+                    text-decoration: none;
+                }
+                > span {
+                    font-size: @fontSizeSmall;
+                }
             }
             a.menu-toggle {
                 position: absolute;

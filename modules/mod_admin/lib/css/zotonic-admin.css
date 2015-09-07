@@ -684,6 +684,9 @@ div.modal .nav.nav-pills {
 div.modal .modal-body > :first-child:not(.nav) {
   margin-top: 0;
 }
+div.modal .modal-footer {
+  font-size: 0;
+}
 div.modal .modal-footer .pull-left {
   margin-left: 0;
 }
@@ -1141,11 +1144,6 @@ ul.tree-list li.menu-item:last-child {
 ul.tree-list li.menu-item li.menu-item:last-child {
   margin: 0;
 }
-ul.tree-list li.menu-item > div {
-  position: relative;
-  margin: -1px 0 0 0;
-  padding: 0;
-}
 ul.tree-list li.menu-item .menu-toggle > i,
 ul.tree-list li.menu-item .z-icon-drag,
 ul.tree-list li.menu-item .z-btn-remove {
@@ -1164,12 +1162,34 @@ ul.tree-list li.menu-item .z-icon-drag {
 ul.tree-list li.menu-item .z-btn-remove {
   right: 10px;
 }
+ul.tree-list li.menu-item > div {
+  position: relative;
+  margin: -1px 0 0 0;
+  padding: 0;
+  background-image: -moz-linear-gradient(top, #ffffff 0%, #f5f5f5 100%);
+  background-image: -webkit-linear-gradient(top, #ffffff 0%, #f5f5f5 100%);
+  background-image: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f5f5f5', GradientType=0);
+}
+ul.tree-list li.menu-item > div:hover {
+  background-color: #f5f5f5;
+}
 ul.tree-list li.menu-item > div > a,
 ul.tree-list li.menu-item > div > span:not(.btns) {
   display: inline-block;
   width: 100%;
   padding: 10px 40px 10px 32px;
   min-height: 34px;
+}
+ul.tree-list li.menu-item > div > a {
+  color: #777777;
+}
+ul.tree-list li.menu-item > div > a:hover {
+  color: #222222;
+  text-decoration: none;
+}
+ul.tree-list li.menu-item > div > a > span {
+  font-size: 12px;
 }
 ul.tree-list li.menu-item > div a.menu-toggle {
   position: absolute;
