@@ -7,8 +7,8 @@
 {% with edit_language|member:r_language|if:edit_language:(r_language[1]) as edit_language %}
 {% if is_i18n %}
 	{% block widget_before %}{% endblock %}
-	<div class="widget {% if in_dialog %}dialog-{% endif %}widget translations tabbable {% if show_header %}do_adminwidget{% endif %}{% block widget_class %}{% endblock %}"
-		 data-adminwidget="minifiedOnInit: {% block widget_show_minimized %}false{% endblock %}, minifier: {% if show_opened %}false{% else %}true{% endif %}"
+	<div class="widget {% if in_dialog %}dialog-widget{% endif %} translations tabbable {% if show_header %}do_adminwidget{% endif %}{% block widget_class %}{% endblock %}"
+		 data-adminwidget="minifiedOnInit: {% block widget_show_minimized %}false{% endblock %}, minifier: {% if show_opened or in_dialog %}false{% else %}true{% endif %}"
 		 id="{% block widget_id %}{% endblock %}">
 		{% if not in_dialog and not noheader %}
             {% block widget_header %}
