@@ -33,6 +33,9 @@ $.widget("z.adminwidget",
             self.header = self.element.find(".language-tabs");
         }
         self.tools = self.header.find(".widget-header-tools");
+        if (self.tools.length == 0) {
+            self.tools = $("<div>").appendTo(self.header).addClass("widget-header-tools");
+        }
         self.tabs = self.element.find(".language-tabs");
         var doMinify = self.options.minifier || $(self.element).attr("data-minifier");
         if (doMinify) {
