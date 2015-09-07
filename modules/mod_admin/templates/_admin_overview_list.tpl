@@ -1,3 +1,9 @@
+{#
+Params:
+qsort
+qcat
+custompivot
+#}
 <table class="table table-striped do_adminLinkedTable">
     <thead>
         <tr>

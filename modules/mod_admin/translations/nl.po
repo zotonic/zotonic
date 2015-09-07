@@ -1065,7 +1065,7 @@ msgstr "Bekijken"
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
 msgid "View all pages from this category"
-msgstr ""
+msgstr "Bekijk alle pagina's binnen deze categorie"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:55
 msgid "View all referrers"
