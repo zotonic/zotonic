@@ -793,13 +793,14 @@ ensure_table_create_cols([C|Cols], Acc) ->
     M = lists:flatten([$", atom_to_list(C#column_def.name), $", 32, column_spec(C)]),
     ensure_table_create_cols(Cols, [M|Acc]).
 
-column_spec(#column_def{type=Type, length=Length, is_nullable=Nullable, default=Default}) ->
+column_spec(#column_def{type=Type, length=Length, is_nullable=Nullable, default=Default, unique=Unique}) ->
     L = case Length of
             undefined -> [];
             _ -> [$(, integer_to_list(Length), $)]
         end,
     N = column_spec_nullable(Nullable),
     D = column_spec_default(Default),
+    U = column_spec_unique(Unique),
     lists:flatten([Type, L, N, D]).
 
 column_spec_nullable(true) -> "";
@@ -808,6 +809,8 @@ column_spec_nullable(false) -> " not null".
 column_spec_default(undefined) -> "";
 column_spec_default(Default) -> [" DEFAULT ", Default].
 
+column_spec_unique(false) -> "";
+column_spec_unique(true) -> " UNIQUE".
 
 %% @doc Check if a name is a valid SQL table name. Crashes when invalid
 %% @spec assert_table_name(String) -> true
