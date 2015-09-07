@@ -22,12 +22,6 @@ msgstr ""
 msgid "+ add block"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:29
-#: modules/mod_admin/templates/_choose_media.tpl:9
-#: modules/mod_admin/templates/_rsc_edge_media.tpl:18
-msgid "untitled"
-msgstr "unbenannt"
-
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
 msgid ""
 "<strong>First</strong> also known as given name, forename or Christen name."
@@ -184,6 +178,7 @@ msgstr "Abbrechen"
 msgid "Category"
 msgstr "Kategorie"
 
+#: modules/mod_admin/templates/_admin_edit_header.tpl:31
 #: modules/mod_admin/templates/_admin_edit_header.tpl:34
 msgid "Category:"
 msgstr "Kategorie:"
@@ -238,6 +233,12 @@ msgstr "Inhalt"
 msgid "Country"
 msgstr "Land"
 
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:22
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:41
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
+msgid "Create Page"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_overview_list.tpl:11
 msgid "Created on"
 msgstr "Erstellt am"
@@ -262,6 +263,10 @@ msgstr ""
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
 msgstr "Zeitraum"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+msgid "Date ranges"
+msgstr "Zeiträumen"
 
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
 msgid "Define who can see or edit this page."
@@ -430,26 +435,6 @@ msgstr "Gruppenmitglieder"
 msgid "Header"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
-msgid "Date ranges"
-msgstr "Zeiträumen"
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr ""
-
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
-
-msgid "Personal Name"
-msgstr ""
-
-
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
-msgid "Publication date range"
-msgstr "Veröffentlichungszeiträumen"
-
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
@@ -461,12 +446,6 @@ msgstr ""
 "kommt in eine neue Zeile. Für weitere Informationen, konsultieren Sie die <a "
 "href=\"http://zotonic.com/docs/latest/manuals/datamodel/search.html"
 "\">Dokumentation über Query-Argumente</a> auf der Zotonic-Webseite."
-
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid "Use the title of the base content for the display name of this person."
-msgstr ""
-"Geben Sie als Titel der Seite den Namen der Person an, der für alle sichtbar "
-"sein soll."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -624,15 +603,6 @@ msgstr ""
 msgid "Need more help?"
 msgstr "Benötigen Sie weitere Hilfe?"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:22
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:41
-msgid "New Page"
-msgstr "Neue Seite"
-
-#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
-msgid "New page"
-msgstr "Neue Seite"
-
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:71
 msgid "Next in category: "
 msgstr "Nächstes in Kategorie: "
@@ -649,6 +619,11 @@ msgstr "Keine Mediendateien gefunden."
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Keine Seiten gefunden."
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+msgid "Page connections"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
@@ -679,6 +654,11 @@ msgstr "Seiten"
 #: modules/mod_admin/templates/admin_overview.tpl:69
 msgid "Pages overview"
 msgstr "Übersicht über alle Seiten"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Personal name"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
@@ -716,6 +696,10 @@ msgstr "Nicht löschbar"
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
 msgid "Publication date of original article"
 msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+msgid "Publication date range"
+msgstr "Veröffentlichungszeiträumen"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:6
 msgid "Publication period"
@@ -1008,12 +992,6 @@ msgstr ""
 msgid "Type text to search"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:52
-#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
-#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
-msgid "URL"
-msgstr "URL"
-
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:32
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:38
 msgid "Unique name"
@@ -1026,8 +1004,8 @@ msgstr "Eindeutiger URI"
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:47
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:10
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
-msgid "Upload"
-msgstr "Hochladen"
+msgid "Upload File"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
@@ -1036,6 +1014,12 @@ msgstr "Eine Datei von Ihrem Computer hochladen."
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:3
 msgid "Upload a file which is already on the internet."
 msgstr "Eine Datei vom Internet auf Ihre Seite hochladen."
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:52
+#: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
+#: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
+msgid "Upload by URL"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:35
 msgid "Upload file"
@@ -1050,6 +1034,12 @@ msgid "Use the autocompleter to search the media in this site."
 msgstr ""
 "Benutzen Sie den Autovervollständiger, um nach Medieninhalten auf der Seite "
 "zu suchen."
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Use the title of the base content for the display name of this person."
+msgstr ""
+"Geben Sie als Titel der Seite den Namen der Person an, der für alle sichtbar "
+"sein soll."
 
 #: modules/mod_admin/templates/_admin_menu.tpl:70
 msgid "User page"
@@ -1222,6 +1212,12 @@ msgstr "alle anzeigen"
 msgid "undo"
 msgstr "rückgängig"
 
+#: modules/mod_admin/templates/_admin_edit_header.tpl:29
+#: modules/mod_admin/templates/_choose_media.tpl:9
+#: modules/mod_admin/templates/_rsc_edge_media.tpl:18
+msgid "untitled"
+msgstr "unbenannt"
+
 #: modules/mod_admin/templates/_admin_edit_media.tpl:13
 #: modules/mod_admin/templates/_admin_edit_media.tpl:44
 msgid "uploaded on"
@@ -1238,3 +1234,15 @@ msgstr "anzeigen"
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "Seite besuchen"
+
+#~ msgid "New Page"
+#~ msgstr "Neue Seite"
+
+#~ msgid "New page"
+#~ msgstr "Neue Seite"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Upload"
+#~ msgstr "Hochladen"

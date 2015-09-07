@@ -267,6 +267,10 @@ msgstr "Datum"
 msgid "Date range"
 msgstr "Datumbereik"
 
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+msgid "Date ranges"
+msgstr "Datumreeksen"
+
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
 msgid "Define who can see or edit this page."
 msgstr "Bepaal wie deze pagina mag bekijken en bewerken."
@@ -373,6 +377,7 @@ msgid "Featured"
 msgstr "Prominent"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:4
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
 msgid "Features"
 msgstr "Eigenschappen"
 
@@ -433,19 +438,6 @@ msgstr "Groepsleden"
 msgid "Header"
 msgstr "Kop"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
-msgid "Date ranges"
-msgstr "Datumreeksen"
-
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
-msgid "Page connections"
-msgstr "Paginaconnecties"
-
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
-msgid "Publication date range"
-msgstr "Publicatiedata"
-
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
@@ -457,12 +449,6 @@ msgstr ""
 "zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://"
 "zotonic.com/docs/latest/manuals/datamodel/search.html\">documentatie over "
 "zoekopdrachten</a> op de Zotonic website."
-
-#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid "Use the title of the base content for the display name of this person."
-msgstr ""
-"Gebruik de titel van de basisgegevens voor de naam zoals die wordt "
-"weergegeven op pagina's."
 
 #: modules/mod_admin/templates/admin_media.tpl:37
 msgid "Info"
@@ -607,7 +593,7 @@ msgstr "Bewerkt:"
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
 msgid "More like this"
-msgstr ""
+msgstr "Vergelijkbare pagina's"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64
 msgid "Name"
@@ -638,6 +624,11 @@ msgstr "Geen media gevonden."
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+msgid "Page connections"
+msgstr "Paginaconnecties"
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
 msgid "Page description"
@@ -670,7 +661,8 @@ msgid "Pages overview"
 msgstr "Paginaoverzicht"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:6
-msgid "Personal Name"
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Personal name"
 msgstr "Naam"
 
 #: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
@@ -709,6 +701,10 @@ msgstr "Bescherm"
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
 msgid "Publication date of original article"
 msgstr "Publicatiedatum van het oorspronkelijke artikel"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+msgid "Publication date range"
+msgstr "Publicatiedata"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:6
 msgid "Publication period"
@@ -1048,6 +1044,12 @@ msgid "Use the autocompleter to search the media in this site."
 msgstr ""
 "Gebruik het zoekvak om mediabestanden te zoeken die al in het systeem zitten."
 
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Use the title of the base content for the display name of this person."
+msgstr ""
+"Gebruik de titel van de basisgegevens voor de naam zoals die wordt "
+"weergegeven op pagina's."
+
 #: modules/mod_admin/templates/_admin_menu.tpl:70
 msgid "User page"
 msgstr "Gebruikerspagina"
@@ -1241,3 +1243,6 @@ msgstr "bekijk"
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "bezoek site"
+
+#~ msgid "Personal Name"
+#~ msgstr "Naam"
