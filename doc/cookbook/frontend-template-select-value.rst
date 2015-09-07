@@ -7,7 +7,7 @@ Why
 ---
 
 Suppose you want to wire a change event for a select box to update a
-div based on the selected value i.e. you want to wire the action to
+another select box, i.e. you want to wire the action to
 use the selected value when rendering the template.
 
 Assumptions
@@ -19,32 +19,75 @@ Zotonic Scomp knowledge.
 How
 ---
 
+We want to select an image from a page in 2 steps. First we select a page from the pages that have images. Then we select an image from the selected page.
+
 This is how the main template will look::
 
-  {% wire id="node_customer" type="change" action={ update target="mydiv" template="_items_list.tpl" }%} 
-  <select name="node_customer" id="node_customer"> <option value="">--Select a Customer--</option> 
-  {% for cid in m.search[{query cat="customer" sort='+rsc.pivot_title'}] %} 
-      <option value="{{cid}}"> {{ m.rsc[cid].title }}</option> 
-  {% endfor %}
-  </select>
-  <select name="item_list" id="item_list">
-    <option value="">--Select an item--</option>
-    <div id="mydiv">
-    {# this is where we dynamically update our template #}
-    </div> 
-  </select> 
+    <div class="form-group">
+        {% wire id="pages" type="change" action={update
+            target="media_list"
+            template="_media_list.tpl"
+        }%}
+        <select id="pages" class="form-control">
+            <option value="">--Select a page--</option>
+            {% for page_id in m.search[{query
+                hasobjectpredicate='depiction'
+                sort='+rsc.pivot_title'
+            }] %}
+                <option value="{{ page_id }}">
+                    {{ m.rsc[page_id].title }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id="media_list">
+        <!- contents will be updated -->
+    </div>
 
-So, when an item is selected (on change) "mydiv" will be replace by
-``_item_list.tpl`` which looks like this::
+When an item is selected (by the change event), element with id "media_list" will be replaced by ``_media_list.tpl`` which looks like this::
 
-  {% for itemid in m.search[{query cat="node" hasobject=[q.triggervalue, "node_customer"] sort='+rsc.pivot_title'}] %}
-    <option value="{{itemid}}"> {{ m.rsc[itemid].title }}</option> 
-  {% endfor %}
-  
+    {% with q.triggervalue as page_id %}
+    <div class="form-group">
+        <select class="form-control">
+            <option value="">--Select an image--</option>
+            {% for media_id in m.rsc[page_id].media %}
+                <option value="{{media_id}}">
+                    {{ m.rsc[media_id].title }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endwith %}
+
 This template uses the q.triggervalue returned from the postback of
-the wire event to query for items of category "node" that have
-q.triggervalue as the object id and a predicate of "node_customer".
+the wire event, and it contains the value of the selected option.
 
-This example shows one way of using the q.triggervalue to dynamically
-render templates after the main template has been rendered.
+We can go one step further to show the selected image. ``_media_list.tpl`` also gets a wire action::
 
+    {% with q.triggervalue as page_id %}
+    <div class="form-group">
+        {% wire id="images" type="change" action={update
+            target="image"
+            template="_image.tpl"
+        }%}
+        <select class="form-control" id="images">
+            <option value="">--Select an image--</option>
+            {% for media_id in m.rsc[page_id].media %}
+                <option value="{{media_id}}">
+                    {{ m.rsc[media_id].title }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id="image">
+        <!- contents will be updated -->
+    </div>
+    {% endwith %}
+
+And we show the image using ``_image.tpl``::
+
+    {% with m.rsc[q.triggervalue].medium as medium %}
+    <div class="form-group">
+        {% image medium width=300 %}
+    </div>
+    {% endwith %}
