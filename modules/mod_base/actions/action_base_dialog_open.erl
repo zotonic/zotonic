@@ -32,8 +32,6 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback({dialog, Args}, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
-
-%% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the resource
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={dialog, Args}}, Context) ->
     Title = proplists:get_value(title, Args, ""),
