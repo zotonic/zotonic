@@ -11,14 +11,14 @@
 
     <div class="admin-header">
         <h2>
-            {_ Users _}{% if q.qs %},
-                {_ matching _} “{{ q.qs|escape }}”
-            {% else %} {_ overview _}{% endif %}
+            {% if q.qs %}
+                {_ Users _} {_ matching _} “{{ q.qs|escape }}”
+            {% else %}
+                {_ Users Overview _}
+            {% endif %}
         </h2>
         <p>
-            {_ Every page/person can be made into a user on the edit page.
-            The difference between a user and a normal page is only
-            that the former has logon credentials attached to its page record. _}
+            {_ Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record. _}
         </p>
     </div>
     

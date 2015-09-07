@@ -20,25 +20,45 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:46
+#: modules/mod_admin_identity/templates/admin_users.tpl:65
 msgid "(that's you)"
 msgstr "(你自己)"
+
+#: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:7
+msgid "Access control"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_identity_email.tpl:11
+msgid "Add"
+msgstr ""
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44
 msgid "Add a new user"
 msgstr "添加新用户"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:68
+#: modules/mod_admin_identity/templates/_admin_identity_email.tpl:9
+msgid "Add e-mail address"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:83
 msgid "Add user"
 msgstr "添加用户"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:41
+msgid "Also show persons without user account"
+msgstr ""
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:2
 msgid "Are you sure you want to delete the username from"
 msgstr "确认删除用户"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:67
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:38
+#: modules/mod_admin_identity/mod_admin_identity.erl:156
+msgid "Are you sure you want to delete this entry?"
+msgstr ""
+
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:55
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:82
 msgid "Cancel"
 msgstr "取消"
 
@@ -46,7 +66,21 @@ msgstr "取消"
 msgid "Changed the username."
 msgstr "用户名已修改。"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:9
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
+msgid ""
+"Click OK to log on as this user. You will be redirected to the home page if "
+"this user has no rights to access the admin system."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:16
+msgid ""
+"Click on the link below to confirm that this e-mail address is correct, when "
+"clicking doesn't work then you can copy and paste the complete address to "
+"your browser."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:10
 msgid ""
 "Click “delete” to remove any existing username/password from the person; "
 "this person will no longer be a user."
@@ -56,46 +90,62 @@ msgstr "使用“删除”来删除人员的用户名/密码，这样人员就�
 msgid "Confirm user deletion"
 msgstr "确认用户删除"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:99
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:110
 msgid "Could not create the user. Sorry."
 msgstr "无法创建用户。"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:38
+#: modules/mod_admin_identity/templates/admin_users.tpl:53
 msgid "Created on"
 msgstr "创建时间"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:41
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:25
+#: modules/mod_admin_identity/mod_admin_identity.erl:157
 msgid "Delete"
 msgstr "删除"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:94
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:25
+msgid "Delete this e-mail address"
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:105
 msgid "Duplicate username, please choose another username."
 msgstr "用户名重复，请选择其他用户名。"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35
-msgid "Email"
-msgstr "E-mail"
-
-#: modules/mod_admin_identity/templates/admin_users.tpl:16
-msgid ""
-"Every page/person can be made into a user on the edit page.\n"
-"        The difference between a user and a normal page is only\n"
-"        that the former has logon credentials attached to its page record."
+msgid "E-mail"
 msgstr ""
-"每个可编辑页面上的人员都可以成为用户。用户和普通页面的区别只是前者的页面记录"
-"有登录证书。"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11
-msgid "First"
-msgstr "名字"
+#: modules/mod_admin_identity/templates/_admin_identity_email.tpl:2
+msgid "E-mail address"
+msgstr ""
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:7
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
+msgid "Email Status"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:8
 msgid ""
 "Enter a (unique) username and password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr "设置唯一用户名和一个密码。键入时需要注意用户名和密码区分大小写。"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
+msgid ""
+"Enter a unique username and a password. Usernames and passwords are case "
+"sensitive, so be careful when entering them."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:21
+msgid ""
+"Every page/person can be made into a user on the edit page. The difference "
+"between a user and a normal page is only that the former has logon "
+"credentials attached to its page record."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11
+msgid "First"
+msgstr "名字"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:7
 msgid ""
@@ -104,19 +154,55 @@ msgid ""
 msgstr ""
 "设置新用户的名字和 e-mail 地址。系统会自动为他创建一个<em>人员</em>页面。"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:6
+msgid "Hello"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Help about user credentials"
 msgstr "用户认证信息帮助"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:21
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:8
+msgid "Hi"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:23
+#: modules/mod_admin_identity/templates/identity_verify.tpl:34
+msgid "Home"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:20
+msgid ""
+"If you don't know this site then you can ignore this e-mail. Maybe someone "
+"made an error typing his or her e-mail address."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:28
+msgid "Language"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
+msgid "Log on as this user"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:5
+msgid "Main"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:27
 msgid "Make a new user"
 msgstr "创建一个新用户"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:37
+#: modules/mod_admin_identity/templates/admin_users.tpl:52
 msgid "Modified on"
 msgstr "修改时间"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:35
+#: modules/mod_admin_identity/templates/identity_verify.tpl:24
+msgid "My page"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:50
 msgid "Name"
 msgstr "名字"
 
@@ -124,16 +210,24 @@ msgstr "名字"
 msgid "Name and e-mail address"
 msgstr "名字和 e-mail 地址"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Need more help?"
 msgstr "需要更多帮助？"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:63
+#: modules/mod_admin_identity/templates/admin_users.tpl:82
 msgid "No users found."
 msgstr "没有找到用户。"
 
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:42
+msgid "No verified e-mail addresses. Please add one below."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:14
+msgid "One moment, please..."
+msgstr ""
+
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:103
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:114
 msgid "Only administrators can add users."
 msgstr "只有管理员可以添加用户。"
 
@@ -145,26 +239,62 @@ msgstr "只有管理员可以删除用户名。"
 msgid "Only an administrator can delete usernames."
 msgstr "只有管理员可以删除用户名。"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:89
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:98
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "只有管理员或者用户自己可以设置密码。"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:59
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:26
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:33
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:64
 msgid "Password"
 msgstr "密码"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:44
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:3
+msgid "Please verify your e-mail address"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:57
 msgid "Save"
 msgstr "保存"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:17
+#: modules/mod_admin_identity/templates/admin_users.tpl:7
+msgid "Search users"
+msgstr ""
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:100
+msgid "Send"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:18
+msgid "Send verification e-mail"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:48
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:75
+msgid "Send welcome e-mail"
+msgstr ""
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:117
+msgid "Sent verification e-mail."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:9
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18
 msgid "Set username / password"
 msgstr "设置用户名/密码"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-msgid "Set username / password"
-msgstr "设置用户名/密码"
+#: modules/mod_admin_identity/templates/identity_verify.tpl:29
+#: modules/mod_admin_identity/templates/identity_verify.tpl:41
+msgid "Sorry"
+msgstr ""
+
+#: modules/mod_admin_identity/validators/validator_admin_identity_username_unique.erl:48
+msgid "Sorry, this username is already in use. Please try another one."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:33
+msgid "Status"
+msgstr ""
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:19
 msgid "Sur. prefix"
@@ -174,7 +304,11 @@ msgstr "姓前缀"
 msgid "Surname"
 msgstr "姓"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:84
+#: modules/mod_admin_identity/templates/identity_verify.tpl:18
+msgid "Thank you"
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:93
 msgid "The new username/ password has been set."
 msgstr "新用户名/密码设置成功。"
 
@@ -197,21 +331,51 @@ msgstr "没有用户名与该人员匹配。"
 msgid "This can't be undone. The username and password will be lost forever."
 msgstr "操作无法撤销，用户名和密码将被永远删除。"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:24
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:8
+msgid "This e-mail address was added to your personal information on"
+msgstr ""
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:143
+msgid "This is not a valid e-mail address."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:55
 msgid "This person is also a user."
 msgstr "该人员也是站点用户。"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:26
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
 msgid "This person is not yet a user."
 msgstr "该人员不是站点用户。"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:36
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:51
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:18
+#: modules/mod_admin_identity/templates/identity_verify.tpl:31
+#: modules/mod_admin_identity/templates/identity_verify.tpl:43
+msgid "This verification key is unknown."
+msgstr ""
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:97
+msgid "This will send a verification e-mail to "
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:42
+msgid "Timezone"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:6
+msgid "User account"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:7
+msgid "User actions"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:25
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:56
+#: modules/mod_admin_identity/templates/admin_users.tpl:51
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:19
 msgid "Username"
 msgstr "用户名"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:5
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:6
 msgid "Username / password"
 msgstr "用户名/密码"
 
@@ -224,12 +388,36 @@ msgid "Username has been deleted."
 msgstr "用户名已被删除"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:3
-#: modules/mod_admin_identity/templates/admin_users.tpl:9
-#: modules/mod_admin_identity/mod_admin_identity.erl:74
+#: modules/mod_admin_identity/templates/admin_users.tpl:15
+#: modules/mod_admin_identity/mod_admin_identity.erl:81
 msgid "Users"
 msgstr "用户"
 
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:10
+#: modules/mod_admin_identity/templates/admin_users.tpl:17
+msgid "Users Overview"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:16
+msgid "Verified"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:18
+msgid "Verify"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:3
+msgid "Verify Address |"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:12
+msgid "Verifying..."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:33
+msgid "View email status"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
 msgid ""
 "When you add credentials to a person then the person becomes an user. A "
 "person or machine can log on with those credentials and perform actions on "
@@ -240,24 +428,69 @@ msgstr ""
 "些认证信息来登录你的 Zotonic 系统执行操作。<br /></br />用户可执行的操作依赖"
 "于他所在的用户组。"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:96
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:107
 msgid "You are not allowed to create the person page."
 msgstr "没有权限创建人员页面。"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:24
+#: modules/mod_admin_identity/mod_admin_identity.erl:150
+#: modules/mod_admin_identity/mod_admin_identity.erl:177
+#: modules/mod_admin_identity/mod_admin_identity.erl:206
+msgid "You are not allowed to edit identities."
+msgstr ""
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:223
+msgid "You are not allowed to switch users."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:10
+msgid "You can now login to the admin, on the following URL:"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:10
+msgid "You have been granted access to"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:30
 msgid "You need to be an administrator to add users."
 msgstr "只有管理员可以添加用户。"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:47
-#: modules/mod_admin_identity/templates/admin_users.tpl:56
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:25
+msgid ""
+"You receive this e-mail because you or someone else requested verification "
+"of your e-mail address. You or the someone else either entered your e-mail "
+"address. You will not receive any additional e-mails because of this request."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:12
+msgid "Your account name is"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:20
+msgid "Your address is now verified."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:20
+msgid "Your e-mail address is now verified."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:4
+msgid "Your login details for"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:15
+msgid "Your user details are:"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:67
+#: modules/mod_admin_identity/templates/admin_users.tpl:75
 msgid "d M, H:i"
 msgstr "M d, H:i"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:52
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
 msgid "delete username"
 msgstr "删除用户名"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:54
+#: modules/mod_admin_identity/templates/admin_users.tpl:73
 msgid "edit"
 msgstr "编辑"
 
@@ -265,18 +498,30 @@ msgstr "编辑"
 msgid "if you want to change the admin password."
 msgstr "如果你需要修改管理员密码。"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:10
+#: modules/mod_admin_identity/templates/admin_users.tpl:15
 msgid "matching"
 msgstr "匹配"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:12
-msgid "overview"
-msgstr "概览"
+#: modules/mod_admin_identity/templates/admin_users.tpl:71
+msgid "set username / password"
+msgstr ""
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:50
-msgid "set username/ password"
-msgstr "设置用户名/密码"
+#~ msgid "Email"
+#~ msgstr "E-mail"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:11
-msgid "show all"
-msgstr "显示全部"
+#~ msgid ""
+#~ "Every page/person can be made into a user on the edit page.\n"
+#~ "        The difference between a user and a normal page is only\n"
+#~ "        that the former has logon credentials attached to its page record."
+#~ msgstr ""
+#~ "每个可编辑页面上的人员都可以成为用户。用户和普通页面的区别只是前者的页面记"
+#~ "录有登录证书。"
+
+#~ msgid "overview"
+#~ msgstr "概览"
+
+#~ msgid "set username/ password"
+#~ msgstr "设置用户名/密码"
+
+#~ msgid "show all"
+#~ msgstr "显示全部"
