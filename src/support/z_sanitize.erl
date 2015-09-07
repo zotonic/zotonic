@@ -237,6 +237,7 @@ wl(<<"api.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"w.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"cdn.knightlab.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"maps.google.com/",  _/binary>> = Url) -> {ok, Url};
+wl(<<"www.google.com/maps/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"video.google.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"spreadsheets.google.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"docs.google.com/viewer?",  _/binary>> = Url) -> {ok, Url};
