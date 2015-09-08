@@ -4,8 +4,9 @@ id
 predicate: (predicate object) the predicate
 predicate_name: (atom) predicate name
 button_label (optional) (string)
-dialog_title_add (optional) (string)
-tabs_enabled (optional) (list of strings), f.i. ["new", "find"]
+button_class (optional) (string); default: ""
+dialog_title_add (optional) (string); default: "Add a connection: Predicate Name"
+tabs_enabled (optional) (list of strings), f.i. ["new", "find"]; default: undefined
 #}
 <div class="unlink-wrapper">
     {% sorter id=["links",id|format_integer,predicate_name]|join:"-" 
@@ -17,7 +18,7 @@ tabs_enabled (optional) (list of strings), f.i. ["new", "find"]
 </div>
 
 {% if is_editable %}
-  <a id="{{ #connect.predicate_name }}" href="#connect">{{ button_label|default:"+ " ++ _"add a connection" }}</a>
+  <a id="{{ #connect.predicate_name }}" href="#connect" class="{{ button_class|default:"" }}">{{ button_label|default:_"+ add" }}</a>
     {% wire
        id=#connect.predicate_name
        action={

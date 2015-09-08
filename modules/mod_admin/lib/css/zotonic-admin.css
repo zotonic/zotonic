@@ -1293,8 +1293,7 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   padding-right: 15px;
 }
 .widget .widget-content hr {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin: 15px -15px;
 }
 .widget .widget-content .widget-content {
   padding-top: 0;

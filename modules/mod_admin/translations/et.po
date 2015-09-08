@@ -18,6 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:21
+msgid "+ add"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_block_addblock.tpl:5
 msgid "+ add block"
 msgstr ""
@@ -45,7 +49,7 @@ msgstr ""
 msgid "Access control"
 msgstr "Ligip√§√§s"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:41
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:27
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:22
 msgid "Add a connection: "
 msgstr ""
@@ -175,7 +179,7 @@ msgid "Cancel"
 msgstr "Katkesta"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:36
-#: modules/mod_admin/templates/_admin_overview_list.tpl:8
+#: modules/mod_admin/templates/_admin_overview_list.tpl:14
 #: modules/mod_admin/templates/admin_referrers.tpl:21
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
@@ -243,7 +247,7 @@ msgstr "Riik"
 msgid "Create Page"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:11
+#: modules/mod_admin/templates/_admin_overview_list.tpl:17
 msgid "Created on"
 msgstr "Loodud"
 
@@ -575,12 +579,12 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:17
+#: modules/mod_admin/templates/_admin_overview_list.tpl:23
 #: modules/mod_admin/templates/admin_referrers.tpl:24
 msgid "Modified by"
 msgstr "Muudetud "
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:14
+#: modules/mod_admin/templates/_admin_overview_list.tpl:20
 #: modules/mod_admin/templates/admin_referrers.tpl:23
 msgid "Modified on"
 msgstr "Muudetud "
@@ -618,7 +622,7 @@ msgstr "Pole midagi"
 msgid "No media found."
 msgstr "Ei leia meediat."
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:47
+#: modules/mod_admin/templates/_admin_overview_list.tpl:53
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Ei leie lehti."
@@ -977,7 +981,7 @@ msgid "Till"
 msgstr "Kuni"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
-#: modules/mod_admin/templates/_admin_overview_list.tpl:5
+#: modules/mod_admin/templates/_admin_overview_list.tpl:11
 #: modules/mod_admin/templates/admin_media.tpl:36
 #: modules/mod_admin/templates/admin_referrers.tpl:20
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
@@ -1055,7 +1059,7 @@ msgstr ""
 msgid "View all pages from this category"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:55
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:37
 msgid "View all referrers"
 msgstr "Vaata k√µiki viitajaid"
 
@@ -1133,10 +1137,6 @@ msgstr ""
 "Pead sisestama faili kirjelduse, et seda oleks hiljem lihtsam leida ja "
 "jagada."
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:35
-msgid "add a connection"
-msgstr ""
-
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
 msgstr ""
@@ -1150,8 +1150,8 @@ msgstr ""
 msgid "by"
 msgstr "poolt"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:33
-#: modules/mod_admin/templates/_admin_overview_list.tpl:34
+#: modules/mod_admin/templates/_admin_overview_list.tpl:39
+#: modules/mod_admin/templates/_admin_overview_list.tpl:40
 #: modules/mod_admin/templates/admin_referrers.tpl:34
 msgid "d M Y, H:i"
 msgstr ""
@@ -1164,7 +1164,7 @@ msgstr "kustuta"
 msgid "e.g. might change"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:39
+#: modules/mod_admin/templates/_admin_overview_list.tpl:45
 #: modules/mod_admin/templates/admin_media.tpl:75
 #: modules/mod_admin/templates/admin_referrers.tpl:39
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:69
@@ -1222,7 +1222,7 @@ msgstr ""
 msgid "uploaded on"
 msgstr "√ºles laaditud"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:38
+#: modules/mod_admin/templates/_admin_overview_list.tpl:44
 #: modules/mod_admin/templates/admin_referrers.tpl:38
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:68
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:76
