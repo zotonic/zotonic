@@ -66,29 +66,33 @@ error_handler(_, ReqData, Code, ErrorDump, Reason) ->
 
 
 show_template(ReqData, Code, ErrorDump, Reason) ->
+    %% Rendering error templates is done a little bit different. 
+    %% It could be possible that there is a problem when using the context. This 
+    %% code makes sure the right headers are in the error response. When possible,
+    %% the error template from the current site is rendered.
     RD1 = wrq:set_resp_header("Content-Type", "text/html; charset=utf-8", ReqData),
     RD2 = wrq:set_resp_header("Content-Encoding", "identity", RD1),
     RD3 = wrq:set_resp_header("X-Robots", "noindex,nofollow", RD2),
     Host = webmachine_request:get_metadata('zotonic_host', RD3),
     try 
-        Context = z_context:new(Host),
-        ContextRd = z_context:set_reqdata(RD3, Context),
-        Vars = case bt_simplify(Reason) of
+        Context = (z_context:new(RD3))#context{host=Host},
+        Vars = z_context:get_all(Context),
+        Vars1 = case bt_simplify(Reason) of
                     {reason, ErlangError, Tab} ->
                         [
                             {error_code, Code},
                             {error_dump, ErrorDump},
                             {error_erlang, ErlangError},
-                            {error_table, Tab}
+                            {error_table, Tab} | Vars
                         ];
                     {raw, X} ->
                         [
                             {error_code, Code}, 
-                            {error_dump, X}
+                            {error_dump, X} | Vars
                         ]
-               end,
-        Html = z_template:render("error.tpl", Vars, ContextRd),
-        {Output, ContextOut} = z_context:output(Html, ContextRd),
+                end,
+        Html = z_template:render("error.tpl", Vars1, Context),
+        {Output, ContextOut} = z_context:output(Html, Context),
         {Output, z_context:get_reqdata(ContextOut)}
     catch
         _E:R-> 
