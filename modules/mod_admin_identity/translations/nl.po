@@ -151,10 +151,9 @@ msgid ""
 "between a user and a normal page is only that the former has logon "
 "credentials attached to its page record."
 msgstr ""
-msgstr "Van elke persoon kan een gebruiker worden gemaakt op de edit pagina."
-"Het verschil tussen een gebruiker en een normale pagina is slechts "
-"dat een gebruiker een gebruikersnaam/wachtwoord heeft waarmee hij kan "
-"inloggen."
+"Van elke persoon kan een gebruiker worden gemaakt op de edit pagina. Het "
+"verschil tussen een gebruiker en een normale pagina is slechts dat een "
+"gebruiker een gebruikersnaam/wachtwoord heeft waarmee hij kan inloggen."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:11
 msgid "First"
@@ -531,4 +530,3 @@ msgstr "voldoet aan"
 #: modules/mod_admin_identity/templates/admin_users.tpl:71
 msgid "set username / password"
 msgstr "gebruikersnaam / wachtwoord instellen"
-

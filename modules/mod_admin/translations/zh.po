@@ -341,6 +341,10 @@ msgstr ""
 msgid "Edit"
 msgstr "编辑"
 
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:72
+msgid "Edit:"
+msgstr ""
+
 #: modules/mod_admin/mod_admin.erl:160
 msgid "Embed page"
 msgstr "嵌入页面"
@@ -867,7 +871,7 @@ msgstr "显示为"
 msgid "Show page on multiple paths"
 msgstr ""
 
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:125
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:128
 msgid "Something went wrong. Sorry."
 msgstr "出错了。"
 

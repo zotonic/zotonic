@@ -343,6 +343,10 @@ msgstr ""
 msgid "Edit"
 msgstr "Edytuj"
 
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:72
+msgid "Edit:"
+msgstr "Edytuj:"
+
 #: modules/mod_admin/mod_admin.erl:160
 msgid "Embed page"
 msgstr "Osadź stronę"
@@ -877,7 +881,7 @@ msgstr "Pokaż jako"
 msgid "Show page on multiple paths"
 msgstr ""
 
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:125
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:128
 msgid "Something went wrong. Sorry."
 msgstr "Coś poszło nie tak. Wybacz."
 

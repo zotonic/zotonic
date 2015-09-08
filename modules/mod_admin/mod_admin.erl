@@ -344,11 +344,11 @@ do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
                 end,
 
             case IsNew of
-                true -> {ok, z_render:growl([?__("Added the connection to", Context1),<<" \"">>,Title,<<"\".">>], Context1)};
+                true -> {ok, z_render:growl([?__("Added the connection to", Context1),<<" \"">>, Title, <<"\".">>], Context1)};
                 false -> {ok, Context1}
             end;
         false ->
-            {error, z_render:growl_error(?__("Sorry, you have no permission to add the connection.",Context), Context)}
+            {error, z_render:growl_error(?__("Sorry, you have no permission to add the connection.", Context), Context)}
     end.
 
 context_language(Context) ->
