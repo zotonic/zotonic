@@ -801,7 +801,7 @@ column_spec(#column_def{type=Type, length=Length, is_nullable=Nullable, default=
     N = column_spec_nullable(Nullable),
     D = column_spec_default(Default),
     U = column_spec_unique(Unique),
-    lists:flatten([Type, L, N, D]).
+    lists:flatten([Type, L, N, D, U]).
 
 column_spec_nullable(true) -> "";
 column_spec_nullable(false) -> " not null".
