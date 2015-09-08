@@ -340,6 +340,10 @@ msgstr "E-mailadres"
 msgid "Edit"
 msgstr "Bewerk"
 
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:72
+msgid "Edit:"
+msgstr "Bewerken:"
+
 #: modules/mod_admin/mod_admin.erl:160
 msgid "Embed page"
 msgstr "Pagina embedden"
@@ -877,7 +881,7 @@ msgstr "Toon als"
 msgid "Show page on multiple paths"
 msgstr "Toon pagina op meerdere paginapaden"
 
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:125
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:128
 msgid "Something went wrong. Sorry."
 msgstr "Er ging iets mis, onze excuses."
 

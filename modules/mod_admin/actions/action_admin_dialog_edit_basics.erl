@@ -66,7 +66,7 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
         {callback, Callback}
     ],
     Title = z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(ObjectId, title, Context), Context)),
-    z_render:dialog("Edit " ++ Title, {cat, "_action_dialog_edit_basics.tpl"}, Vars, Context);
+    z_render:dialog([?__("Edit:", Context), " " ++ Title], {cat, "_action_dialog_edit_basics.tpl"}, Vars, Context);
 
 %% @doc Save the thing and close the dialog.
 event(#submit{message={rsc_edit_basics, Args}}, Context) ->
