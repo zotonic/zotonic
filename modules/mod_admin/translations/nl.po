@@ -18,6 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:21
+msgid "+ add"
+msgstr "+ voeg toe"
+
 #: modules/mod_admin/templates/_admin_edit_block_addblock.tpl:5
 msgid "+ add block"
 msgstr "+ nieuw blok"
@@ -44,7 +48,7 @@ msgstr "Over categorieën"
 msgid "Access control"
 msgstr "Toegangsrechten"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:41
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:27
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:22
 msgid "Add a connection: "
 msgstr "Voeg een connectie toe: "
@@ -174,7 +178,7 @@ msgid "Cancel"
 msgstr "Annuleren"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:36
-#: modules/mod_admin/templates/_admin_overview_list.tpl:8
+#: modules/mod_admin/templates/_admin_overview_list.tpl:14
 #: modules/mod_admin/templates/admin_referrers.tpl:21
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
@@ -242,7 +246,7 @@ msgstr "Land"
 msgid "Create Page"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:11
+#: modules/mod_admin/templates/_admin_overview_list.tpl:17
 msgid "Created on"
 msgstr "Gemaakt op"
 
@@ -577,12 +581,12 @@ msgstr "Middennaam"
 msgid "Mobile"
 msgstr "Mobiele telefoon"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:17
+#: modules/mod_admin/templates/_admin_overview_list.tpl:23
 #: modules/mod_admin/templates/admin_referrers.tpl:24
 msgid "Modified by"
 msgstr "Bewerkt door"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:14
+#: modules/mod_admin/templates/_admin_overview_list.tpl:20
 #: modules/mod_admin/templates/admin_referrers.tpl:23
 msgid "Modified on"
 msgstr "Bewerkt op"
@@ -620,7 +624,7 @@ msgstr "Geen items"
 msgid "No media found."
 msgstr "Geen media gevonden."
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:47
+#: modules/mod_admin/templates/_admin_overview_list.tpl:53
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
@@ -986,7 +990,7 @@ msgid "Till"
 msgstr "Tot"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
-#: modules/mod_admin/templates/_admin_overview_list.tpl:5
+#: modules/mod_admin/templates/_admin_overview_list.tpl:11
 #: modules/mod_admin/templates/admin_media.tpl:36
 #: modules/mod_admin/templates/admin_referrers.tpl:20
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
@@ -1067,7 +1071,7 @@ msgstr "Bekijken"
 msgid "View all pages from this category"
 msgstr "Bekijk alle pagina's binnen deze categorie"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:55
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:37
 msgid "View all referrers"
 msgstr "Bekijk verwijzende pagina's"
 
@@ -1148,10 +1152,6 @@ msgstr ""
 "Je moet een omschrijving van het mediabestand geven om het zo makkelijker "
 "vindbaar te maken."
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:35
-msgid "add a connection"
-msgstr "Maak een nieuwe connectie"
-
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
 msgstr "maak mediabestand"
@@ -1165,8 +1165,8 @@ msgstr "blok"
 msgid "by"
 msgstr "door"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:33
-#: modules/mod_admin/templates/_admin_overview_list.tpl:34
+#: modules/mod_admin/templates/_admin_overview_list.tpl:39
+#: modules/mod_admin/templates/_admin_overview_list.tpl:40
 #: modules/mod_admin/templates/admin_referrers.tpl:34
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
@@ -1179,7 +1179,7 @@ msgstr "verwijder"
 msgid "e.g. might change"
 msgstr "bv. kan nog veranderen"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:39
+#: modules/mod_admin/templates/_admin_overview_list.tpl:45
 #: modules/mod_admin/templates/admin_media.tpl:75
 #: modules/mod_admin/templates/admin_referrers.tpl:39
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:69
@@ -1232,7 +1232,7 @@ msgstr "zonder titel"
 msgid "uploaded on"
 msgstr "geupload op"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:38
+#: modules/mod_admin/templates/_admin_overview_list.tpl:44
 #: modules/mod_admin/templates/admin_referrers.tpl:38
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:68
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:76
@@ -1243,6 +1243,9 @@ msgstr "bekijk"
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "bezoek site"
+
+#~ msgid "add a connection"
+#~ msgstr "Maak een nieuwe connectie"
 
 #~ msgid "Personal Name"
 #~ msgstr "Naam"
