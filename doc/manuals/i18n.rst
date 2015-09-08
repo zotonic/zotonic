@@ -38,8 +38,34 @@ two letter `ISO639-1 language code
 <http://nl.wikipedia.org/wiki/Lijst_van_ISO_639-1-codes>`_.
 
 
-Static translations
+Translation sources
 -------------------
+
+Texts in templates are made localizable with different forms of underscore syntax.
+
+Translate tag::
+
+    {_ Translate me _}
+
+Extended translate tag::
+
+    {% _ "Example" nl="Voorbeeld" fr="Exemple" %}
+
+As part of a tag parameter::
+
+    {% button text=_"Click me" %}
+
+Texts in ``erl`` files use the ``?__()`` syntax::
+
+    ?__("Translate me", Context)
+
+and using string concatenation::
+
+    [?__("Edit:", Context), " " ++ Title]
+
+
+Generation of translations
+--------------------------
 
 The fixed texts in a Zotonic website are translated using the `GNU
 gettext <http://www.gnu.org/software/gettext/>` ``.po`` file format and
