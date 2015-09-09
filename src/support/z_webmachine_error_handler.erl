@@ -95,10 +95,11 @@ show_template(ReqData, Code, ErrorDump, Reason) ->
         {Output, ContextOut} = z_context:output(Html, Context),
         {Output, z_context:get_reqdata(ContextOut)}
     catch
-        _E:R-> 
-            StackTrace = erlang:get_stacktrace(),
-            Path = wrq:path(RD3),
-            lager:error("Error rendering error.tpl: Path: ~p, Code: ~p~nError: ~p~n~p~n", [Path, Code, R, StackTrace]),
+        _E:_R-> 
+            %% Note: During site dispatch rule swaps common urls like /comet and /postback 
+            %% are not reachable. During this period the error template is also unavailable.
+            %% This causes a lot of crashes on a hot server, and can cause the server to 
+            %% stop responding entirely when there is error logging code in this location. 
             {<<>>, RD3}
     end.
 
