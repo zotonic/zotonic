@@ -255,7 +255,7 @@
 %% Notifier defines
 -define(NOTIFIER_DEFAULT_PRIORITY, 500).
 
-%% Wrapper macro to put Erlang terms in a bytea databae column. 
+%% Wrapper macro to put Erlang terms in a bytea database column. 
 %% Extraction is automatic, based on a magic marker prefixed to the serialized term.
 -define(DB_PROPS(N), {term, N}).
 
