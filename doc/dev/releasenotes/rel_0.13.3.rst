@@ -7,14 +7,6 @@ Welcome Zotonic 0.13.3, released on September 9, 2015.
 
 This is a maintenance release of Zotonic 0.13
 
-The main change is that this version compiles correctly on Erlang 18.
-
-
-Commits since 0.13.2
---------------------
-
-There were 103 commits since release 0.13.2.
-
 Main changes are:
 
  * refinements to the admin interface by Arthur Clemens
@@ -23,6 +15,12 @@ Main changes are:
  * CORS support for the API (Thanks to @ghosthamlet!)
  * fixes some issues with the websocket connection
  * fixes an issue where the wrong language could be selected
+
+
+Commits since 0.13.2
+--------------------
+
+There were 103 commits since release 0.13.2.
 
 Big thanks to all people contributing to Zotonic!
 
