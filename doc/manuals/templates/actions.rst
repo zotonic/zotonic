@@ -11,7 +11,7 @@ when the wire is triggered. `What` should happen, is specified as the
 `action`.
 
 The :ref:`scomp-wire` scomp attached actions to to HTML elements or
-Javascript events.
+Javascript events. In order for any scripts to be generated though the :ref:`script <scomp-script>` needs to be included in after your wires.
 
 Actions range from a simple jQuery :ref:`action-show` to Ajax
 :ref:`action-postback`\s that can trigger many other actions. The
