@@ -45,7 +45,7 @@
                          "cfbdd16f4f6745d6f21355efe713406c5816f1e7"}},
        {z_stdlib,".*",
                  {git,"git://github.com/zotonic/z_stdlib.git",
-                      "e5459bfd31b5adc726e6f9301e1343c98f2654d0"}},
+                      "756f38058d817e75b258080c89f80415f9393141"}},
        {edown,".*",
               {git,"git://github.com/uwiger/edown.git",
                    "b7c8eb0ac1859f8fce11cbfe3526f5ec83194776"}},
@@ -111,13 +111,13 @@
                    "0f0c00232c698f0ce0c106178c3e3b3b3da009d8"}},
        {jiffy,".*",
               {git,"https://github.com/davisp/jiffy.git",
-                   "d16a4fd968e000b65e4678cccfad68d7a0a8bd1c"}},
+                   "75dd259189b1c1134f4e0c0de667da3dc67590bf"}},
        {oauth,".*",
               {git,"https://github.com/tim/erlang-oauth.git",
                    "3ad509d487a72f9437fef31a379bf3cfeeb166a2"}},
        {twerl,".*",
               {git,"https://github.com/mworrell/twerl.git",
-                   "739b0aa9850ce599d338dcc4a8ee797e4dfe0c03"}}]}.
+                   "12d91dd5085149cdd5de262a44fbb62779b39e16"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
 
