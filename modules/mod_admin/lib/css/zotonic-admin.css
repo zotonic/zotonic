@@ -965,22 +965,22 @@ th a:hover .arrow.down {
 }
 .minimalTabs,
 .nav.nav-pills,
-.widget > ul.nav-tabs {
+.widget ul.nav-tabs {
   padding: 0;
   border-color: rgba(217, 217, 217, 0.6);
   margin: 0;
 }
 .minimalTabs > li,
 .nav.nav-pills > li,
-.widget > ul.nav-tabs > li {
+.widget ul.nav-tabs > li {
   margin-bottom: -1px;
 }
 .minimalTabs > li > a,
 .minimalTabs li.active > a,
 .nav.nav-pills > li > a,
 .nav.nav-pills li.active > a,
-.widget > ul.nav-tabs > li > a,
-.widget > ul.nav-tabs li.active > a {
+.widget ul.nav-tabs > li > a,
+.widget ul.nav-tabs li.active > a {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
@@ -995,13 +995,13 @@ th a:hover .arrow.down {
 }
 .minimalTabs > li > a,
 .nav.nav-pills > li > a,
-.widget > ul.nav-tabs > li > a {
+.widget ul.nav-tabs > li > a {
   background-color: transparent;
   color: #888888;
 }
 .minimalTabs li.active > a,
 .nav.nav-pills li.active > a,
-.widget > ul.nav-tabs li.active > a {
+.widget ul.nav-tabs li.active > a {
   border-bottom-color: #00C853;
   color: #222222;
 }
@@ -1304,20 +1304,80 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-content:empty {
   display: none;
 }
-.widget .widget-content h1,
-.widget .widget-content h2,
-.widget .widget-content h3,
-.widget .widget-content h4,
-.widget .widget-content h5,
-.widget .widget-content h6 {
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h1),
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h1),
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h1),
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h1),
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h1),
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h1),
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h2),
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h2),
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h2),
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h2),
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h2),
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h2),
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h3),
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h3),
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h3),
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h3),
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h3),
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h3),
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h4),
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h4),
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h4),
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h4),
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h4),
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h4),
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h5),
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h5),
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h5),
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h5),
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h5),
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h5),
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h6),
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h6),
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h6),
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h6),
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h6),
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h6) {
   margin: 15px 0;
 }
-.widget .widget-content h1:first-of-type,
-.widget .widget-content h2:first-of-type,
-.widget .widget-content h3:first-of-type,
-.widget .widget-content h4:first-of-type,
-.widget .widget-content h5:first-of-type,
-.widget .widget-content h6:first-of-type {
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h1):first-of-type,
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h1):first-of-type,
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h1):first-of-type,
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h1):first-of-type,
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h1):first-of-type,
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h1):first-of-type,
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h2):first-of-type,
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h2):first-of-type,
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h2):first-of-type,
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h2):first-of-type,
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h2):first-of-type,
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h2):first-of-type,
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h3):first-of-type,
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h3):first-of-type,
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h3):first-of-type,
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h3):first-of-type,
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h3):first-of-type,
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h3):first-of-type,
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h4):first-of-type,
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h4):first-of-type,
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h4):first-of-type,
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h4):first-of-type,
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h4):first-of-type,
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h4):first-of-type,
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h5):first-of-type,
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h5):first-of-type,
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h5):first-of-type,
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h5):first-of-type,
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h5):first-of-type,
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h5):first-of-type,
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h6):first-of-type,
+.widget .widget-content h2:not(.panel-heading .widget .widget-content h6):first-of-type,
+.widget .widget-content h3:not(.panel-heading .widget .widget-content h6):first-of-type,
+.widget .widget-content h4:not(.panel-heading .widget .widget-content h6):first-of-type,
+.widget .widget-content h5:not(.panel-heading .widget .widget-content h6):first-of-type,
+.widget .widget-content h6:not(.panel-heading .widget .widget-content h6):first-of-type {
   margin-top: 0;
 }
 .widget .widget-content > :last-child {
@@ -1439,7 +1499,7 @@ li h3.widget-header {
   -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
-.widget > ul.nav-tabs {
+.widget ul.nav-tabs.language-tabs {
   background: #e0e0e0;
 }
 .modal .widget {

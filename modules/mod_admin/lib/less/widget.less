@@ -51,10 +51,12 @@
         }
         
         & h1, & h2, & h3, & h4, & h5, & h6 {
-            margin: @baseMargin 0;
+            &:not(.panel-heading &) {
+                margin: @baseMargin 0;
 
-            &:first-of-type {
-                margin-top: 0;
+                &:first-of-type {
+                    margin-top: 0;
+                }
             }
         }
         
@@ -204,9 +206,12 @@ li {
     
 }
 
-.widget > ul.nav-tabs {
+.widget ul.nav-tabs {
     &:extend(.minimalTabs all);
-    background: #e0e0e0;
+
+    &.language-tabs {
+        background: #e0e0e0;
+    }
 }
 
 .modal {
