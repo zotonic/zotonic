@@ -161,15 +161,19 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                  undefined -> [{is_protected, true} | Props3];
                                  _ -> Props3
                              end,
+                    Props5 = case proplists:get_value(is_dependent, Props4) of
+                                 undefined -> [{is_dependent, false} | Props4];
+                                 _ -> Props4
+                             end,
                     ?zInfo(io_lib:format("Creating new ~p '~p'", [Category, Name]), Context),
-                    {ok, Id} = m_rsc_update:update(insert_rsc, Props4, [{is_import, true}], Context),
-                    case proplists:get_value(media_url, Props4) of
+                    {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
+                    case proplists:get_value(media_url, Props5) of
                         undefined ->
                             nop;
                         Url ->
                             m_media:replace_url(Url, Id, [], Context)
                     end,
-                    case proplists:get_value(media_file, Props4) of
+                    case proplists:get_value(media_file, Props5) of
                         undefined ->
                             nop;
                         File ->

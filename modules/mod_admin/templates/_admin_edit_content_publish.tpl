@@ -45,7 +45,7 @@
     </label>
 
     <label for="is_dependent" class="checkbox-inline" title="{_ Delete if no other page is connected to this page. _}">
-        <input type="checkbox" id="is_dependent" name="is_dependent" value="1" {% if r.is_dependent and not id.is_protected %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
+        <input type="checkbox" id="is_dependent" name="is_dependent" value="1" {% if r.is_dependent %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
         {_ Dependent _}
     </label>
 </div>
