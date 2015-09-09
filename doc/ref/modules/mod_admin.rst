@@ -166,9 +166,9 @@ To make it work we are using 3 templates (where `category_name` is the lowercase
     Contains the category-specific information. This is a freeform Zotonic template. The Events example checks if the end date is in the past::
 
         {% if id.date_end|in_past %}
-            <span class="text-muted">{{ id.date_start }}</span>
+            <span class="text-muted">{{ id.date_start|timesince }}</span>
         {% else %}
-            <span>{{ id.date_start }}</span>
+            <span>{{ id.date_start|timesince }}</span>
         {% endif %}
 
 
