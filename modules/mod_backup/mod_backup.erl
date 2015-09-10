@@ -38,6 +38,7 @@
     observe_admin_menu/3,
     observe_rsc_update/3,
     start_backup/1,
+    start_backup/2,
     list_backups/1,
     backup_in_progress/1,
     file_exists/2,
@@ -93,12 +94,16 @@ file_forbidden(_File, Context) ->
 
 %% @doc Start a backup
 start_backup(Context) ->
-    gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), start_backup).
+    start_backup(true, Context).
+
+%% @doc Start a backup, either a full backup (including archived files) or a database only backup.
+start_backup(IsFullBackup, Context) ->
+    gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), {start_backup, IsFullBackup}).
     
 %% @doc List all backups present.  Newest first.
 list_backups(Context) ->
     InProgress = gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), in_progress_start),
-    [ {F, D, D =:= InProgress} || {F,D} <- list_backup_files(Context) ].
+    [ {F, D, IsFull, D =:= InProgress} || {F,D,IsFull} <- list_backup_files(Context) ].
     
 
 %% @doc Check if there is a backup in progress.
@@ -140,7 +145,7 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     {ok, TimerRef} = timer:send_interval(?BCK_POLL_INTERVAL, periodic_backup),
     {ok, #state{
-        context = z_context:new(Context),
+        context = z_acl:sudo(z_context:new(Context)),
         backup_pid = undefined,
         timer_ref = TimerRef
     }}.
@@ -153,12 +158,12 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Start a backup
-handle_call(start_backup, _From, State) ->
+handle_call({start_backup, IsFullBackup}, _From, State) ->
     case State#state.backup_pid of
         undefined ->
             %% @doc Return the base name of the dump files. The base name is composed of the date and time.
             %% @todo keep the backup page updated with the state of the current backup.
-            Pid = do_backup(name(State#state.context), State),
+            Pid = do_backup(name(State#state.context), IsFullBackup, State),
             {reply, ok, State#state{backup_pid=Pid, backup_start=calendar:universal_time()}};
         _Pid ->
             {reply, {error, in_progress}, State}
@@ -199,7 +204,7 @@ handle_info(periodic_backup, State) ->
 handle_info({'EXIT', Pid, normal}, State) ->
     case State#state.backup_pid of
         Pid ->
-            %% @todo send an update to the page that started the backup
+            z_mqtt:publish(<<"~site/backup">>, [{msg, <<"backup_completed">>}], State#state.context),
             {noreply, State#state{backup_pid=undefined, backup_start=undefined}};
         _ ->
             %% when connected to the page, then this might be the page exiting
@@ -209,7 +214,7 @@ handle_info({'EXIT', Pid, normal}, State) ->
 handle_info({'EXIT', Pid, _Error}, State) ->
     case State#state.backup_pid of
         Pid ->
-            %% @todo send the error update to the page that started the backup
+            z_mqtt:publish(<<"~site/backup">>, [{msg, <<"backup_error">>}], State#state.context),
             %% @todo Log the error
             %% Remove all files of this backup
             Name = z_convert:to_list(erlydtl_dateformat:format(State#state.backup_start, "Ymd-His", State#state.context)),
@@ -270,7 +275,7 @@ maybe_daily_dump(State) ->
             end,
             case DoStart of
                 true ->
-                    Pid = do_backup(name(State#state.context), State),
+                    Pid = do_backup(name(State#state.context), true, State),
                     {noreply, State#state{backup_pid=Pid, backup_start={Date, Time}}};
                 false ->
                     {noreply, State}
@@ -281,18 +286,21 @@ maybe_daily_dump(State) ->
 
 
 %% @doc Start a backup and return the pid of the backup process, whilst linking to the process.
-do_backup(Name, State) ->
-    spawn_link(fun() -> do_backup_process(Name, State#state.context) end).
+do_backup(Name, IsFullBackup, State) ->
+    z_mqtt:publish(<<"~site/backup">>, [{msg, <<"backup_started">>}], State#state.context),
+    spawn_link(fun() -> do_backup_process(Name, IsFullBackup, State#state.context) end).
 
 
 %% @todo Add a tar of all files in the files/archive directory (excluding preview)
-do_backup_process(Name, Context) ->
+do_backup_process(Name, IsFullBackup, Context) ->
     Cfg = check_configuration(),
     case proplists:get_value(ok, Cfg) of
         true ->
             ok = pg_dump(Name, Context),
-            ok = archive(Name, Context),
-            z_session_manager:broadcast(#broadcast{type="info", message="Backup completed.", title="mod_backup", stay=false}, Context),
+            case IsFullBackup of
+                true -> ok = archive(Name, Context);
+                false -> ok
+            end,
             ok;
         false ->
             {error, not_configured}
@@ -378,7 +386,12 @@ archive(Name, Context) ->
 %% @doc List all backups in the backup directory.
 list_backup_files(Context) ->
     Files = filelib:wildcard(filename:join(dir(Context), "*.sql")),
-    lists:reverse(lists:sort([ {filename:rootname(filename:basename(F), ".sql"), filename_to_date(F)} || F <- Files ])).
+    lists:reverse(
+        lists:sort(
+            [ {filename:rootname(filename:basename(F), ".sql"), filename_to_date(F), is_full_backup(F)} || F <- Files ])).
+
+is_full_backup(SQLFilename) ->
+    filelib:is_regular(filename:rootname(SQLFilename, ".sql") ++ ".tar.gz").
 
 filename_to_date(File) ->
     R = re:run(filename:basename(File), "([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})", [{capture, all, list}]),

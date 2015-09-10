@@ -33,7 +33,6 @@ is_authorized(ReqData, Context) ->
 html(Context) ->
     Vars = [
         {page_admin_backup, true},
-        {backups, mod_backup:list_backups(Context)},
         {backup_config, mod_backup:check_configuration()},
         {backup_in_progress, mod_backup:backup_in_progress(Context)}
     ],
