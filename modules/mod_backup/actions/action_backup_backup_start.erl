@@ -23,17 +23,19 @@
     event/2
 ]).
 
-render_action(TriggerId, TargetId, _Args, Context) ->
-	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(backup_start, undefined, TriggerId, TargetId, ?MODULE, Context),
+render_action(TriggerId, TargetId, Args, Context) ->
+    IsFullBackup = z_convert:to_bool(proplists:get_value(is_full_backup, Args, false)),
+	{PostbackMsgJS, _PickledPostback} = z_render:make_postback({backup_start, IsFullBackup}, undefined, 
+                                                               TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
 
 %% @doc Download a backup.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message=backup_start}, Context) ->
+event(#postback{message={backup_start, IsFullBackup}}, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true ->
-            case mod_backup:start_backup(Context) of
+            case mod_backup:start_backup(IsFullBackup, Context) of
                 ok ->
         	        z_render:growl("Started the backup. You can keep this page open or continue working.", Context);
         	    {error, in_progress} ->

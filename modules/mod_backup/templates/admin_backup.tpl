@@ -14,51 +14,25 @@
         <div class="row">
 
             <div class="col-lg-8 col-md-6">
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th width="100%">{_ Date _}</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for id,date,in_progress in backups %}
-                            <tr id="{{ #li.id }}">
-                                <td>
-                                    <div class="pull-right">
-                                        {% if in_progress %}
-                                            <span class="label label-info">{_ this backup is in progress _}</span>
-                                        {% else %}
-                                            <a class="btn btn-default btn-xs" href="{% url backup_download star=[id, ".sql"] %}">{_ download database _}</a>
-                                            <a class="btn btn-default btn-xs" href="{% url backup_download star=[id, ".tar.gz"] %}">{_ download files _}</a>
-                                        {% endif %}
-                                    </div>
-                                    {{ date|date:"M d Y, H:i" }}
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td>
-                                    {_ No backups present. _}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                {% live template="_admin_backup_list.tpl" topic="~site/backup" %}
             </div>
 
             <div class="col-lg-4 col-md-6">
                 {% if is_editable %}
                     <div class="well">
                         {# TODO: make this a mod_admin_config scomp/include #}
-                        <div class="checkbox"><label>
+                        <div class="checkbox">
+                            <label>
                                 <input id="backup_panel" name="backup_panel" type="checkbox" value="1" {% if m.config.mod_backup.admin_panel.value %}checked="checked"{% endif %} /> {_ Show import/export panel in the admin. _}
-                            </label></div>
+                            </label>
+                        </div>
                         {% wire id="backup_panel" postback=`config_backup_panel` %}
-                        <div class="checkbox"><label>
+
+                        <div class="checkbox">
+                            <label>
                                 <input id="backup_daily" name="backup_daily" type="checkbox" value="1" {% if m.config.mod_backup.daily_dump.value %}checked="checked"{% endif %}/> {_ Make a daily backup of the database and uploaded files. _}
-                            </label></div>
+                            </label>
+                        </div>
                         {% wire id="backup_daily" postback=`config_backup_daily` %}
                     </div>
                 {% endif %}
@@ -68,8 +42,8 @@
                         {_ You can have 10 backups, older ones will be deleted automatically. _}</p>
                     
                     {% if backup_config.ok and is_editable %}
-                        {% button class="btn btn-primary" text=_"Start backup now" action={backup_start} %}
-
+                        {% button class="btn btn-primary" text=_"Start backup now" action={backup_start is_full_backup} %}
+                        {% button class="btn btn-primary" text=_"Start database-only backup now" action={backup_start is_full_backup=0} %}
                     {% elseif not backup_config.ok %}
                         <div class="alert alert-danger">
                             <strong>{_ Warning: _}</strong> {_ Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved: _}
