@@ -27,9 +27,14 @@
 -define(CHUNK_SIZE, 4096).
 
 
-scan_lines(Device) ->
-    scan_lines(Device, $,).
+scan_lines(DeviceOrFilename) ->
+    scan_lines(DeviceOrFilename, $,).
 
+scan_lines(Filename, FieldSep) when is_list(Filename); is_binary(Filename) ->
+    {ok, Device} = file:open(Filename, [read, binary, {encoding, latin1}]),
+    Res = scan_lines(Device, FieldSep, <<>>, 0, [[]], <<>>, false),
+    _ = file:close(Device),
+    Res;
 scan_lines(Device, FieldSep) ->
     scan_lines(Device, FieldSep, <<>>, 0, [[]], <<>>, false).
 
@@ -49,8 +54,8 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
                                 Acc;
                               _ ->
                                 case EmptyChunk of
-                                    <<$">> -> append_field(<<$">>, Remainder, Acc);
-                                    _ -> append_field(<<>>, Remainder, Acc)
+                                    <<$">> -> append_last_field(<<$">>, Remainder, Acc);
+                                    _ -> append_last_field(<<>>, Remainder, Acc)
                                 end
                           end,
                     %% Remove lastly added empty line
