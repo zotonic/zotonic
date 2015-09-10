@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015 Marc Worrell
-%% @doc Model for SQL & archive backups
+%% @doc Model for SQL and archive backups
 
 %% Copyright 2015 Marc Worrell
 %%
