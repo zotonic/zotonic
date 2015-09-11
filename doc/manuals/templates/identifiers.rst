@@ -26,3 +26,16 @@ Unique ids can also be generated inside a ``for`` loop::
 This will generate html like this::
 
   <li id="gdjqa-foo-1234">Some great news</li>
+
+When using a :ref:`scomp-wire` tag, that same unique id can be referenced::
+
+    {% for id in mylist %}
+        <li>
+            <a id="{{ #list.id }}" href="#">{{ m.rsc[id].title }}</a>
+        </li>
+        {% wire
+            id=#list.id
+            action=some_action
+        %}
+    {% endfor %}
+
