@@ -466,7 +466,7 @@ send_reminder([Id|Ids], Context, Acc) ->
 
 %% @doc Find the preferred e-mail address of an user.
 find_email(Id, Context) ->
-    m_rsc:p_no_acl(Id, email, Context).
+    m_rsc:p_no_acl(Id, email_raw, Context).
 
 %% @doc Sent the reminder e-mail to the user.
 send_email(Email, Vars, Context) ->

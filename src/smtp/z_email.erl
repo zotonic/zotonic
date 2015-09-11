@@ -83,7 +83,7 @@ get_admin_email(Context) ->
 		undefined -> 
 			case m_site:get(admin_email, Context) of
 				undefined -> 
-					case m_rsc:p_no_acl(1, email, Context) of
+					case m_rsc:p_no_acl(1, email_raw, Context) of
 						Empty when Empty == undefined orelse Empty == <<>> ->
 							hd(string:tokens("wwwadmin@" ++ z_convert:to_list(m_site:get(hostname, Context)), ":"));
 						Email -> Email

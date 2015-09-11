@@ -84,7 +84,7 @@ event(#submit{message=set_username_password}, Context) ->
                                 Vars = [{id, Id},
                                         {username, Username},
                                         {password, Password}],
-                                z_email:send_render(m_rsc:p(Id, email, Context), "email_admin_new_user.tpl", Vars, Context);
+                                z_email:send_render(m_rsc:p(Id, email_raw, Context), "email_admin_new_user.tpl", Vars, Context);
                             false ->
                                 nop
                             end,

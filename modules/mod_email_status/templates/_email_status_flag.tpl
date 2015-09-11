@@ -1,4 +1,4 @@
-{% with id.email as email %}
+{% with id.email_raw as email %}
 	{% if email and not m.email_status.is_valid[email] %}
 		{% if email_status_tag %}
 			<{{email_status_tag}} id="{{ #status }}" class="text-error email-status-flag">

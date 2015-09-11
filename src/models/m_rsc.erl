@@ -537,6 +537,8 @@ p_no_acl(Id, day_end, Context) ->
         {{_,_,_} = Date, _} -> Date;
         _Other -> undefined
     end;
+p_no_acl(Id, email_raw, Context) ->
+    z_html:unescape(p_no_acl(Id, email, Context));
 % p_no_acl(Id, title, Context) ->
 %     Title = p_cached(Id, title, Context),
 %     Title1 = case z_utils:is_empty(Title) of true -> undefined; false -> Title end,

@@ -1,13 +1,14 @@
 {% if identities %}
 	<table id="{{ #listemail }}" class="table">
+	{% with id.email_raw as email_raw %}
 	{% for idn in identities %}
 	{% with idn.id as idn_id %}
 		<tr>
 			<td>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="{{ #verified}}" {% if id.email == idn.key %}checked{% endif %} class="radio nosubmit" value="{{ idn.key }}" />
-                    {{ idn.key }}
+                        <input type="radio" name="{{ #verified}}" {% if email_raw == idn.key %}checked{% endif %} class="radio nosubmit" value="{{ idn.key|escape }}" />
+                    {{ idn.key|escape }}
                     </label>
                 </div>
 			</td>
@@ -37,6 +38,7 @@
 		</tr>
 	{% endwith %}
 	{% endfor %}
+	{% endwith%}
 	</table>
 {% else %}
 <p class="help-block">{_ No verified e-mail addresses. Please add one below. _}</p>
