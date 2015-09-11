@@ -655,7 +655,7 @@ delete(IdnId, Context) ->
 
 %% @doc If an email identity is deleted, then ensure that the 'email' property is reset accordingly.
 maybe_reset_email_property(Id, <<"email">>, Email, Context) when is_binary(Email) ->
-    case normalize_key(email, m_rsc:p_no_acl(Id, email, Context)) of
+    case normalize_key(email, m_rsc:p_no_acl(Id, email_raw, Context)) of
         Email ->
             NewEmail = z_db:q1("
                     select key 

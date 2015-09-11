@@ -38,7 +38,7 @@ observe_email_received(#email_received{localpart=Recipient} = Received, Context)
             case proplists:get_value(is_verified, Props) of
                 true ->
                     UserId = proplists:get_value(rsc_id, Props),
-                    Email = m_rsc:p_no_acl(UserId, email, Context),
+                    Email = m_rsc:p_no_acl(UserId, email_raw, Context),
                     case z_utils:is_empty(Email) of
                         true ->
                             undefined;

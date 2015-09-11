@@ -351,6 +351,11 @@ pg_dump(Name, Context) ->
                end,
                Database],
 
+    erlang:spawn(
+            fun() ->
+                timer:sleep(1000),
+                z_mqtt:publish(<<"~site/backup">>, [{msg, <<"sql_backup_started">>}], Context)
+            end),
     Result = case os:cmd(binary_to_list(iolist_to_binary(Command))) of
                  [] ->
                      ok;
@@ -375,6 +380,11 @@ archive(Name, Context) ->
                                      "-f '", DumpFile, "' ",
                                      "-C '", ArchiveDir, "' ",
                                      " ."]),
+            erlang:spawn(
+                    fun() ->
+                        timer:sleep(1000),
+                        z_mqtt:publish(<<"~site/backup">>, [{msg, <<"archive_backup_started">>}], Context)
+                    end),
             [] = os:cmd(Command),
             ok;
         false ->

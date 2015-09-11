@@ -7,7 +7,7 @@
 
 <p>{_ You've requested a new password for _} <a href="{{ m.site.protocol }}://{{ m.site.hostname }}/">{{ m.site.hostname }}</a>. {_ Below are your account details and a link to set a new password. _}</p>
 
-<p>{_ Your account name is _} “<strong>{{ m.identity[id].username|escape }}</strong>”.{% if m.identity[id].username != email|default:(m.rsc[id].email) %} {_ The email address associated with your account is _} “<strong>{{ email|default:(m.rsc[id].email)|escape }}</strong>”.{% endif %}</p>
+<p>{_ Your account name is _} “<strong>{{ m.identity[id].username|escape }}</strong>”.{% if m.identity[id].username != email|default:(m.rsc[id].email_raw) %} {_ The email address associated with your account is _} “<strong>{{ email|default:(m.rsc[id].email_raw)|escape }}</strong>”.{% endif %}</p>
 
 {% all include "_logon_extra_email_reset.tpl" identity_types=m.identity[id].all_types %}
 
