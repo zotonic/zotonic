@@ -16,7 +16,7 @@
         <div class="form-group row">
             <label class="control-label col-md-3" for="{{ #embed_code }}">{_ Embed URL _}</label>
             <div class="col-md-6">
-                <input id="{{ #embed_code }}" class="form-control" name="oembed_url" value="{{ medium.oembed_url }}" placeholder="http://www.youtube.com/watch?v=r9cmWJvXIj4‎" />
+                <input id="{{ #embed_code }}" class="form-control do_autofocus" name="oembed_url" value="{{ medium.oembed_url }}" placeholder="http://www.youtube.com/watch?v=r9cmWJvXIj4‎" />
                 {% validate id=#embed_code name="oembed_url" type={presence} %}
             </div>
             <div class="col-md-3">

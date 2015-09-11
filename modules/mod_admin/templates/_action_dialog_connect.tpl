@@ -54,6 +54,18 @@ params:
                 {% endif %}
                 {% all include "_media_upload_tab.tpl" tab=#tab %}
             {% endif %}
+            {% javascript %}
+                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var tabRef = e.target.getAttribute('href');
+                    if (!tabRef) return;
+                    var tabId = tabRef.substr(1);
+                    var tabEl = document.getElementById(tabId);
+                    if (!tabEl) return;
+                    var focusEl = tabEl.querySelector('.do_autofocus');
+                    if (!focusEl) return;
+                    focusEl.focus();
+                });
+            {% endjavascript %}
         {% endblock %}
     </ul>
 {% endif %}
