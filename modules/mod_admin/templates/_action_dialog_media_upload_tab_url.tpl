@@ -11,7 +11,16 @@
 		delegate=`action_admin_dialog_media_upload` 
 	%}
 	<form id="{{ #urlform }}" method="POST" action="postback" class="form form-horizontal">
-		{% if not id %}
+	
+		<div class="form-group row">
+		    <label class="control-label col-md-3" for="upload_file">{_ Media URL _}</label>
+            <div class="col-md-9">
+		        <input type="text" class="col-lg-4 col-md-4 form-control do_autofocus" id="url" name="url" />
+		        {% validate id="url" type={presence} type={format pattern="^https?://.+"} %}
+            </div>
+		</div>
+    
+        {% if not id %}
 		    <div class="form-group row">
 		        <label class="control-label col-md-3" for="new_media_title">{_ Media title _}</label>
                 <div class="col-md-9">
@@ -20,15 +29,7 @@
                 </div>
 		    </div>
 		{% endif %}
-
-		<div class="form-group row">
-		    <label class="control-label col-md-3" for="upload_file">{_ Media URL _}</label>
-            <div class="col-md-9">
-		        <input type="text" class="col-lg-4 col-md-4 form-control" id="url" name="url" />
-		        {% validate id="url" type={presence} type={format pattern="^https?://.+"} %}
-            </div>
-		</div>
-
+		
 		<div class="modal-footer">
 		    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 		    <button class="btn btn-primary" type="submit">{% if not id %}{_ Make media item _}{% else %}{_ Replace media item _}{% endif %}</button>
