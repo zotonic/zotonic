@@ -1,8 +1,8 @@
-{% with email|default:id.email as email %}
+{% with email|default:(id.email_raw) as email %}
 {% with m.email_status[email] as status %}
 	<h3>
 		{_ Information about _}
-		&lt;{{ email }}&gt;
+		&lt;{{ email|escape }}&gt;
 	</h3>
 
 	{% if status or email|is_valid_email %}

@@ -19,7 +19,7 @@
         <tr id="survey-result-{{ r[1] }}-{{ r[2] }}">
             <td align="right">{{ forloop.counter }}.&nbsp;&nbsp;</td>
             {% for value in r|tail|tail %}
-            <td>{{ value }}</td>
+            <td>{{ value|escape }}</td>
             {% endfor %}
             <td>
                 <div class="pull-right">

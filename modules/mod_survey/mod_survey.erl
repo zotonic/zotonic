@@ -84,8 +84,7 @@ event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, 
 
 event(#postback{message={admin_show_emails, [{id, SurveyId}]}}, Context) ->
     case m_survey:survey_results(SurveyId, Context) of
-        [Headers0|Data] ->
-            Headers = lists:map(fun(X) -> list_to_atom(binary_to_list(X)) end, Headers0),
+        [Headers|Data] ->
             All = [lists:zip(Headers, Row) || Row <- Data],
             z_render:dialog(?__("E-mail addresses", Context),
                             "_dialog_survey_email_addresses.tpl",
@@ -219,7 +218,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                 submit ->
                     case z_session:get(mod_survey_editing, Context) of
                         {U, P} -> 
-                            admin_edit_survey_result(Id, U, P, Questions, Answers2, Context);
+                            admin_edit_survey_result(z_convert:to_integer(Id), U, P, Questions, Answers2, Context);
                         _ ->
                             %% That was the last page. Show a thank you and save the result.
                             case do_submit(Id, Questions, Answers2, Context) of

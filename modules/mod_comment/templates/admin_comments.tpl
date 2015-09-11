@@ -31,7 +31,7 @@
                 <td>{{ comment.created|date:_"d M Y, H:i" }}</td>
                 <td>{{ m.rsc[comment.rsc_id].title|truncate:20 }}</td>
                 <td>{{ comment.message|striptags|truncate:40 }}</td>
-                <td title="{{ comment.email }}">
+                <td title="{{ comment.email|esacpe }}">
                     <div class="pull-right">
                         {% button class="btn btn-mini" text=_"view" action={redirect location=[m.rsc[comment.rsc_id].page_url,"#comment-",id|format_integer]|join } %}
                         {% include "_admin_comments_toggledisplay.tpl" element=#comment.id %}

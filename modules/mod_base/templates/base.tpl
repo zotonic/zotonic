@@ -13,7 +13,9 @@
   
   <body>
     {% block content_area %}
-    {% block content %}{% endblock %}
+       {% block content %}
+          {% block main %}{% endblock %}
+       {% endblock %}
     {% endblock %}
   </body>
 </html>

@@ -63,7 +63,7 @@ observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {_Modified, 
                 {_Old, undefined} -> Acc;
                 {_Old, <<>>} -> Acc;
                 {_Old, New} -> 
-                    ensure(RscId, email, New, Context),
+                    ensure(RscId, email, z_html:unescape(New), Context),
                     Acc
             end
     end;
