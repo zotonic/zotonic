@@ -192,7 +192,7 @@ class ZMM():
             print "** %s already installed at %s" % (modulename, clonepath)
             return False
 
-        if os.path.exists(os.path.join(core_path, modulename)):
+        if os.path.exists(os.path.join(self.core_path, modulename)):
             print "** Module already exists in zotonic core:", clonepath
             return False
 
