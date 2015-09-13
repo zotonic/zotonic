@@ -25,6 +25,10 @@
             top: 1px;
         }
     }
+    &.btn-primary:hover {
+        background-color: @brandPrimaryDark;
+        border-color: darken(@brandPrimaryDark, 5%);
+    }
 }
 
 .nav {
@@ -77,7 +81,7 @@
     > li.active > a,
     > li.active > a:hover,
     > li > a:hover {
-        background: @zotonicBlue;
+        background: @brand-primary;
         color: #fff;
         text-shadow: @lightOnDarkTextShadow;
     }
