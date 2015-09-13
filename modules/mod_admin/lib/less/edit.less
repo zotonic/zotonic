@@ -137,41 +137,22 @@ input.do_timepicker {
     overflow: visible;
 }
 
-.admin-navbar-fixed-save {
+.navbar.admin-navbar-fixed-save {
     @_transation_duration: 0.3s;
     
     z-index: 1000;
     opacity: 0;
     position: fixed;
-    top: 44px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    padding: 5px;
+    top: @topbarHeight;
+    border-radius: 0;
+    padding: @widgetVerticalPadding @widgetSidePadding;
+    background-color: fadeout(@brand-primary, 40%);
     -webkit-transition: opacity @_transation_duration ease-in-out;
     -moz-transition: opacity @_transation_duration ease-in-out;
     -o-transition: opacity @_transation_duration ease-in-out;
     transition: opacity @_transation_duration ease-in-out;
     min-height: inherit;
-    
-    &.navbar {
-        .pull-right {
-            float: right;
-        }
-    }
-    
-    label {
-        color: white;
-        margin-left: 20px;
-    }
-    
-    .navbar-inner {
-        #3L > .border-radius(0 0 @radiusBlockElement @radiusBlockElement);
-        padding: 0 4px 0 4px;
-    }
-    
-    .control-group {
-        margin: 0 20px 0;
-    }
+    #3L > .box-shadow(@boxShadow);
 }
 
 .scrolled .admin-navbar-fixed-save {

@@ -1,5 +1,5 @@
 
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+<div class="navbar navbar-branded navbar-fixed-top" role="navigation">
     <div class="">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -9,12 +9,12 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand hidden-sm" href="/" title="{_ visit site _}">
+            <a class="navbar-brand" href="/" title="{_ visit site _}">
                 <span class="zotonic-logo"><em>Zotonic</em></span>
             </a>
         </div>
         
-        <div class="navbar-collapse collapse" id="admin-menu-collapse">
+        <div class="navbar-collapse collapse" id="admin_menu_collapse">
 
             <ul class="nav navbar-nav">
                 {% for id, item in m.admin_menu %}
@@ -59,11 +59,11 @@
                         <li class="dropdown" id="nav-{{ id }}">
                             <a class="dropdown-toggle has-icon" data-toggle="dropdown" href="#nav-{{ id }}">
                                 <i class="z-icon z-icon-user"></i>
-                                <span class="hidden-md hidden-sm">{{ m.acl.user.title|escape|truncate_html:20 }}</span>
+                                <span class="z-username">{{ m.acl.user.title|escape|truncate_html:20 }}</span>
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-header visible-lg-block">
+                                <li class="dropdown-header z-username">
                                     {{ m.acl.user.title|escape }}
                                 </li>
                                 <li>
@@ -94,10 +94,10 @@
 </div>
 
 {% javascript %}
-$('#admin-menu-collapse').on('show.bs.collapse', function () {
+$('#admin_menu_collapse').on('show.bs.collapse', function () {
     $("body").addClass("navbar-menu-open");
 });
-$('#admin-menu-collapse').on('hide.bs.collapse', function () {
+$('#admin_menu_collapse').on('hide.bs.collapse', function () {
     $("body").removeClass("navbar-menu-open");
 });
 {% endjavascript %}
