@@ -219,6 +219,27 @@ pre:empty {
   background-color: #0c91cb;
   border-color: #0b80b3;
 }
+.btn-primary.disabled,
+.btn-primary[disabled],
+fieldset[disabled] .btn-primary,
+.btn-primary.disabled:hover,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover,
+.btn-primary.disabled:focus,
+.btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus,
+.btn-primary.disabled.focus,
+.btn-primary[disabled].focus,
+fieldset[disabled] .btn-primary.focus,
+.btn-primary.disabled:active,
+.btn-primary[disabled]:active,
+fieldset[disabled] .btn-primary:active,
+.btn-primary.disabled.active,
+.btn-primary[disabled].active,
+fieldset[disabled] .btn-primary.active {
+  background-color: #c0c0c0;
+  border-color: #bbb;
+}
 .nav .dropdown-menu > li > a.has-icon,
 .nav .dropdown-toggle.has-icon {
   position: relative;
@@ -550,7 +571,7 @@ input.do_timepicker {
   top: 50px;
   border-radius: 0;
   padding: 15px 15px;
-  background-color: rgba(15, 162, 219, 0.6);
+  background-color: rgba(15, 162, 219, 0.8);
   -webkit-transition: opacity 0.3s ease-in-out;
   -moz-transition: opacity 0.3s ease-in-out;
   -o-transition: opacity 0.3s ease-in-out;
