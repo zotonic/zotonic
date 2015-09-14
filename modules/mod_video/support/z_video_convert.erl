@@ -166,11 +166,13 @@ video_convert(QueuePath, Mime, Context) ->
         " -metadata:s:v:0 rotate=0 ").
 
 video_convert_1(QueuePath, Orientation, _Mime, Context) ->
-
-    Cmdline = z_convert:to_list(m_config:get_value(mod_video, ffmpeg_cmdline, ?CMDLINE, Context)),
-
+    Cmdline = case m_config:get_value(mod_video, ffmpeg_cmdline, Context) of
+                  undefined -> ?CMDLINE;
+                  <<>> -> ?CMDLINE;
+                  [] -> ?CMDLINE;
+                  CmdLineCfg -> z_conver:to_list(CmdLineCfg)
+              end,
     Logging = z_convert:to_bool(m_config:get_value(mod_video, logging, Context)),
-
     TmpFile = z_tempfile:new(),
     FfmpegCmd = z_convert:to_list(
                   iolist_to_binary(
