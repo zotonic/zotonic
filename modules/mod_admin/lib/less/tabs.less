@@ -1,3 +1,9 @@
+.nav-tabs {
+    > li > a {
+        text-shadow: @darkOnLightTextShadow;
+    }
+}
+
 // use with ul elements
 // for example:
 // .widget > ul.nav-tabs {
@@ -20,7 +26,7 @@
 	    background: none;
 	    padding-top: 8px;
 	    padding-bottom: 8px;
-	    border-style: solid none;
+	    border-style: none none solid none;
 	    border-width: 2px;
 	    border-color: transparent;
 	}
@@ -30,7 +36,21 @@
 	    
 	}
 	li.active > a {
-	    border-bottom-color: #00C853;
-	    color: @textColorDark;
+		&,
+		&:focus,
+		&:hover {
+			border-style: none none solid none;
+		    border-width: 2px;
+		    border-bottom-color: #00C853;
+		    color: @textColorDark;
+		}
+	}
+
+	&.nav-justified {
+		border-bottom: 1px solid @borderColorMedium;
+
+		> li > a {
+			margin-bottom: -1px;
+		}
 	}
 }
