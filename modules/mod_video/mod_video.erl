@@ -257,7 +257,12 @@ queue_path(Filename, Context) ->
 
 
 video_info(Path, Context) ->
-    Cmdline = z_convert:to_list(m_config:get_value(mod_video, ffprobe_cmdline, ?FFPROBE_CMDLINE, Context)),
+    Cmdline = case m_config:get_value(mod_video, ffprobe_cmdline, Context) of
+                  undefined -> ?FFPROBE_CMDLINE;
+                  <<>> -> ?FFPROBE_CMDLINE;
+                  [] -> ?FFPROBE_CMDLINE;
+                  CmdlineCfg -> z_convert:to_list(CmdlineCfg)
+              end,
     FfprobeCmd = lists:flatten([
                                 Cmdline, " ",
                                 z_utils:os_filename(Path) 
@@ -340,9 +345,12 @@ video_preview(MovieFile, Props, Context) ->
                 N when N =< 30 -> 1;
                 _ -> 10
             end,
-
-    Cmdline = z_convert:to_list(m_config:get_value(mod_video, ffmpeg_preview_cmdline, ?PREVIEW_CMDLINE, Context)),
-    
+    Cmdline = case m_config:get_value(mod_video, ffmpeg_preview_cmdline, Context) of
+                  undefined -> ?PREVIEW_CMDLINE;
+                  <<>> -> ?PREVIEW_CMDLINE;
+                  [] -> ?PREVIEW_CMDLINE;
+                  CmdlineCfg -> z_convert:to_list(CmdlineCfg)
+              end,
     TmpFile = z_tempfile:new(),
     FfmpegCmd = z_convert:to_list(
                   iolist_to_binary(
