@@ -34,7 +34,41 @@ or::
 
   z_event("test", { foo: bar });
 
-Of course, you can also :ref:`scomp-wire` :ref:`postback actions <action-postback>`.
+
+Postback actions
+````````````````
+
+You can also wire postback actions. For example:
+
+In JavaScript::
+
+    z_event("list_delete");
+    
+In a template::
+
+    {% wire
+        name="list_delete"
+        postback={
+            remove_list
+            list_id=id
+        }
+        delegate=`list_manager`
+    %}
+
+In Erlang module ``list_manager``::
+
+    event(#postback{message={remove_list, Args}}, Context) ->
+        ListId = proplists:get_value(list_id, Args),
+        ok = m_rsc:delete(ListId, Context),
+        %% do other things ...
+        %% return a Context, for instance with a redirect
+        z_render:wire([
+            {redirect, [{dispatch, lists}]}
+        ], Context).
+
+
+More about :ref:`postback actions <action-postback>`. 
+
 
 Trigger notification from Javascript
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
