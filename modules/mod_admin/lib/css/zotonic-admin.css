@@ -260,9 +260,6 @@ pre:empty {
   color: #fff;
   text-shadow: 0 1px 0 rgba(0,0,0,.1);
 }
-.nav-tabs > li > a {
-  text-shadow: 0 1px 0 rgba(255,255,255,.5);
-}
 .well {
   background-color: #f5f5f5;
   padding: 15px;
@@ -1012,6 +1009,9 @@ th a:hover .arrow.up {
 th a:hover .arrow.down {
   border-top-color: currentColor;
 }
+.nav-tabs > li > a {
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
 .minimalTabs,
 .nav.nav-pills,
 .widget ul.nav-tabs {
@@ -1038,7 +1038,7 @@ th a:hover .arrow.down {
   background: none;
   padding-top: 8px;
   padding-bottom: 8px;
-  border-style: solid none;
+  border-style: none none solid none;
   border-width: 2px;
   border-color: transparent;
 }
@@ -1049,10 +1049,28 @@ th a:hover .arrow.down {
   color: #888888;
 }
 .minimalTabs li.active > a,
+.minimalTabs li.active > a:focus,
+.minimalTabs li.active > a:hover,
 .nav.nav-pills li.active > a,
-.widget ul.nav-tabs li.active > a {
+.nav.nav-pills li.active > a:focus,
+.nav.nav-pills li.active > a:hover,
+.widget ul.nav-tabs li.active > a,
+.widget ul.nav-tabs li.active > a:focus,
+.widget ul.nav-tabs li.active > a:hover {
+  border-style: none none solid none;
+  border-width: 2px;
   border-bottom-color: #00C853;
   color: #222222;
+}
+.minimalTabs.nav-justified,
+.nav.nav-pills.nav-justified,
+.widget ul.nav-tabs.nav-justified {
+  border-bottom: 1px solid #d9d9d9;
+}
+.minimalTabs.nav-justified > li > a,
+.nav.nav-pills.nav-justified > li > a,
+.widget ul.nav-tabs.nav-justified > li > a {
+  margin-bottom: -1px;
 }
 .connect-results {
   max-height: 400px;
@@ -1432,9 +1450,6 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-content > :last-child {
   margin-bottom: 15px;
 }
-.widget .widget-content.tab-content {
-  padding-top: 15px;
-}
 .widget .widget-content .rsc-item-wrapper {
   margin: 0 0 15px 0;
 }
@@ -1444,6 +1459,9 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 }
 .widget .widget-content .rsc-item img {
   margin: 0 10px 0 0;
+}
+.widget .tab-pane {
+  padding-top: 15px;
 }
 .widget .widget-header + .widget-content,
 .widget .widget-header + .nav {
