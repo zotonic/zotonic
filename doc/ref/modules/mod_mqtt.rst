@@ -204,7 +204,7 @@ If the received message was relayed from the server then it is an object:
     }
 
 The transport between the server and the browser always uses UBF(A).
-Most decoded values will be an objecy with an extra ``ubf_type``, always use the method ``.valueOf()`` to get the primitive type of the object.
+Most decoded values will be an object with an extra ``ubf_type``; always use the method ``.valueOf()`` to get the primitive type of the object.
 
 You will need to include the following JavaScript files:
 
