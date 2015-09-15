@@ -314,6 +314,9 @@ button.close {
     margin-bottom: 5px;
   }
 }
+code {
+  padding: 0;
+}
 .z-btn-remove {
   color: #888888;
 }
