@@ -686,6 +686,7 @@ div.modal .modal-footer .pull-left {
 }
 .navbar.navbar-branded {
   min-height: 50px;
+  height: 50px;
   background-color: #0fa2db;
 }
 .navbar.navbar-branded .navbar-header > a,
