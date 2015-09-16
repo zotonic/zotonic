@@ -235,7 +235,12 @@
 -record(menu_save, {id, tree}).
 
 %% @doc Signal that the hierarchy underneath a resource has been changed by mod_menu (notify)
--record(hierarchy_updated, {root_id, predicate}).
+-record(hierarchy_updated, {
+            root_id :: binary() | integer(),
+            predicate :: atom(),
+            inserted_ids=[] :: list(integer()),
+            deleted_ids=[] :: list(integer())
+        }).
 
 %% @doc Resource is read, opportunity to add computed fields
 %%      Used in a foldr with the read properties as accumulator.
