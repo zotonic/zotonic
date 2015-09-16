@@ -67,7 +67,7 @@ render(Params, _Vars, Context) ->
             "grouped_vertical_bar" -> "bvg";
             "pie" -> "p";
             "pie3d" -> "p3";
-            OtherType -> OtherType
+            OtherType -> z_utils:url_encode(OtherType)
         end
     ],
     
@@ -87,16 +87,16 @@ render(Params, _Vars, Context) ->
     
     % Grid...
     Grid = io_lib:format("&chg=~s,~s,~b,~b", [
-                z_convert:to_list(z_utils:coalesce([GridX, 0])),
-                z_convert:to_list(z_utils:coalesce([GridY, 0])),
+                z_utils:url_encode(z_convert:to_list(z_utils:coalesce([GridX, 0]))),
+                z_utils:url_encode(z_convert:to_list(z_utils:coalesce([GridY, 0]))),
                 GridLineLength,
                 GridBlankLength
             ]),
     
     % Background Colors...
     BGColors = io_lib:format("&chf=bg,s,~s|c,s,~s", [
-                z_convert:to_list(BGColor), 
-                z_convert:to_list(ChartColor)
+                z_utils:url_encode(z_convert:to_list(BGColor)), 
+                z_utils:url_encode(z_convert:to_list(ChartColor))
             ]),
     
     % Legend Location...
@@ -117,36 +117,49 @@ render(Params, _Vars, Context) ->
             AxesRecords ->          
                 ProcessedAxes = [process_axis(N - 1, lists:nth(N, AxesRecords), Context) || N <- lists:seq(1, length(AxesRecords))],
                 
-                AxesPositions = "&chxt=" ++ string:join([X || [X, _, _] <- ProcessedAxes], ","),
-                AxesScaling   =                         [X || [_, X, _] <- ProcessedAxes]     ,
-                AxesColors    = "&chxs=" ++ string:join([X || [_, _, X] <- ProcessedAxes], "|"),
+                AxesPositions0 = string:join([X || [X, _, _] <- ProcessedAxes], ","),
+                AxesScaling0   =             [X || [_, X, _] <- ProcessedAxes],
+                AxesColors0    = string:join([X || [_, _, X] <- ProcessedAxes], "|"),
+
+                AxesPositions = "&chxt=" ++ z_utils:url_encode(AxesPositions0),
+                AxesScaling   = AxesScaling0,  % Already urlencode in process_axis/2
+                AxesColors    = "&chxs=" ++ z_utils:url_encode(AxesColors0),
                 AxesPositions ++ AxesScaling ++ AxesColors
         end,
     
     % Data...
-    Data = case DataArg1 of
-                undefined   -> MaxValueLength=0, [];
-                []          -> MaxValueLength=0, [];
-                <<>>        -> MaxValueLength=0, [];
+    {MaxValueLength, Data} = case DataArg1 of
+                undefined   -> {0, []};
+                []          -> {0, []};
+                <<>>        -> {0, []};
                 DataRecords ->
                     ProcessedData = [process_data(N -1, lists:nth(N, DataRecords)) || N <- lists:seq(1, length(DataRecords))],
-                    DataColors  = "&chco="  ++ string:join([X || [X, _, _, _, _, _] <- ProcessedData], ","),
-                    DataLegends = "&chdl="  ++ string:join([X || [_, X, _, _, _, _] <- ProcessedData], "|"),
-                    DataScales  = "&chds="  ++ string:join([X || [_, _, X, _, _, _] <- ProcessedData], ","),
-                    DataStyles  = "&chls="  ++ string:join([X || [_, _, _, X, _, _] <- ProcessedData], "|"),
-                    DataValues  = "&chd=t:" ++ string:join([X || [_, _, _, _, X, _] <- ProcessedData], "|"),
-                    MaxValueLength = lists:max([X || [_, _, _, _, _, X] <- ProcessedData]),
+
+                    DataColors0  = string:join([X || [X, _, _, _, _, _] <- ProcessedData], ","),
+                    DataLegends0 = string:join([X || [_, X, _, _, _, _] <- ProcessedData], "|"),
+                    DataScales0  = string:join([X || [_, _, X, _, _, _] <- ProcessedData], ","),
+                    DataStyles0  = string:join([X || [_, _, _, X, _, _] <- ProcessedData], "|"),
+                    DataValues0  = string:join([X || [_, _, _, _, X, _] <- ProcessedData], "|"),
+
+                    DataColors  = "&chco="  ++ z_utils:url_encode(DataColors0),
+                    DataLegends = "&chdl="  ++ z_utils:url_encode(DataLegends0),
+                    DataScales  = "&chds="  ++ z_utils:url_encode(DataScales0),
+                    DataStyles  = "&chls="  ++ z_utils:url_encode(DataStyles0),
+                    DataValues  = "&chd=t:" ++ z_utils:url_encode(DataValues0),
+
                     DataLegends1 = case string:strip(DataLegends, both, $|) of
                         "&chdl=" -> [];
                         _ -> DataLegends
                     end,                
             
-                    DataColors ++ DataLegends1 ++ DataScales ++ DataValues ++ DataStyles
+                    {lists:max([X || [_, _, _, _, _, X] <- ProcessedData]),
+                     DataColors ++ DataLegends1 ++ DataScales ++ DataValues ++ DataStyles}
             end,
     
     % Calculate bar size...
     BarSize = case MaxValueLength of 
-                0 -> [];
+                0 -> 
+                    [];
                 _ -> 
                     DataGroupsLength = length(Data),
                     GroupSpacerPixels = MaxValueLength * BarGroupSpace,
@@ -166,11 +179,11 @@ render(Params, _Vars, Context) ->
     {ok, z_tags:render_tag(
             <<"img">>, 
             [
-                {<<"id">>,     Id},
-                {<<"name">>,   Id},
+                {<<"id">>,     z_html:escape(Id)},
+                {<<"name">>,   z_html:escape(Id)},
                 {<<"class">>,  [<<"google_chart">>, Class]},
                 {<<"alt">>,    <<"google chart">>},
-                {<<"style">>,  Style},
+                {<<"style">>,  z_html:escape(Style)},
                 {<<"src">>,    ImageUri},
                 {<<"width">>,  Width},
                 {<<"height">>, Height}
@@ -189,21 +202,23 @@ process_axis(N, {axis, Axis}, Context) ->
                     OtherPosition -> erlang:error({unknown_axis_position, OtherPosition})
                 end,
 
-    Style        = io_lib:format("~b,~s,~b", [N, z_convert:to_list(Color), FontSize]),
+    Style        = lists:flatten(io_lib:format("~b,~s,~b", [N, z_convert:to_list(Color), FontSize])),
     Scaling      = case {proplists:get_value(labels, Axis, []), proplists:get_value(range, Axis, [])} of
                         {LabelsP, []} when is_list(LabelsP) -> 
                             StringLabels = [make_label(X, Context) || X <- LabelsP],
                             Labels       = integer_to_list(N) ++ ":|" ++ string:join(StringLabels, "|"),
-                            "&chxl=" ++ Labels;
+                            "&chxl=" ++ z_utils:url_encode(Labels);
         
                         {[],  Range} when is_list(Range)  -> 
                             Format = string:join(["~p" || _X <- [c | Range] ], ","),
-                            "&chxr=" ++ io_lib:format(Format, [N | Range]);
+                            "&chxr=" ++ z_utils:url_encode(
+                                            lists:flatten(io_lib:format(Format, [N | Range])));
         
-                        _ -> ""  
+                        _ -> 
+                            ""  
                   end,
     [Position, Scaling, Style].
-    
+
     
 process_data(_N, {data, Data}) ->
     LineWidth    = proplists:get_value(line_width,  Data, 1),
@@ -215,10 +230,10 @@ process_data(_N, {data, Data}) ->
     Legend       = z_convert:to_list(proplists:get_value(legend, Data)),
     Values       = proplists:get_value(values, Data, []),
     
-    Scale        = io_lib:format("~b,~b", [MinValue,MaxValue]),
+    Scale        = lists:flatten(io_lib:format("~b,~b", [MinValue,MaxValue])),
     StringValues = [z_convert:to_list(X) || X <- Values],
     JoinedValues = string:join(StringValues, ","),
-    Styles       = io_lib:format("~b,~b,~b", [LineWidth, LineLength, BlankLength]),
+    Styles       = lists:flatten(io_lib:format("~b,~b,~b", [LineWidth, LineLength, BlankLength])),
     [flatten_color(Color), Legend, Scale, Styles, JoinedValues, length(StringValues)].
 
 flatten_color([A|_] = List) when is_list(A) or is_binary(A) or is_atom(A) ->
