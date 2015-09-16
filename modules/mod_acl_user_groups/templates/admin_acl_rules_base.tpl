@@ -3,6 +3,7 @@
 {% block title %}{_ ACL rules _}{% endblock %}
 
 {% block content %}
+{% with m.acl.insert.acl_user_group as is_editable %}
     <style>
         .acl-filter {
             margin-top: 5px;
@@ -34,8 +35,10 @@
         <h2>{_ Access control rules _}</h2>
     </div>
     
-    {% include "_admin_acl_rules_publish_buttons.tpl" %}
-    
+    {% if is_editable %}
+        {% include "_admin_acl_rules_publish_buttons.tpl" %}
+    {% endif %}
+
     <ul class="nav nav-tabs">
         <li class="{% if kind == `rsc` %}active{% endif %}"><a href="{% url admin_acl_rules_rsc %}">{_ Content _}</a></li>
         <li class="{% if kind == `module` %}active{% endif %}"><a href="{% url admin_acl_rules_module %}">{_ Modules _}</a></li>
@@ -52,5 +55,5 @@
 
     {# these are needed for translation string generation #}
     <!-- {_ view (acl action) _} {_ insert (acl action) _} {_ edit (acl action) _} {_ delete (acl action) _} {_ link (acl action) _} -->
-    
+{% endwith %}
 {% endblock %}

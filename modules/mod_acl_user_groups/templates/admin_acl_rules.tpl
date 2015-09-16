@@ -5,15 +5,17 @@
 {% block content_acl %}
     <div class="acl-well">
         <div id="acl-rules">
-            {% live template="_acl_rules_list.tpl" topic="~site/acl-rules/edit-rebuild" kind=kind group=q.g %}
+            {% live template="_acl_rules_list.tpl" topic="~site/acl-rules/edit-rebuild" kind=kind group=q.g is_editable=is_editable %}
         </div>
     </div>
 
-    <div class="acl-well">
-        <h4>{_ New rule _}</h4>
-        {% include "_admin_acl_rule_header.tpl" %}
-        {% include "_admin_acl_rule_row.tpl" is_new %}
-    </div>
+    {% if is_editable %}
+        <div class="acl-well">
+            <h4>{_ New rule _}</h4>
+            {% include "_admin_acl_rule_header.tpl" %}
+            {% include "_admin_acl_rule_row.tpl" is_new %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block filter %}
