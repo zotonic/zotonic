@@ -22,7 +22,9 @@
 -export([event/2]).
 
 event(Msg, Context) ->
-    case z_acl:is_allowed(use, mod_acl_user_groups, Context) of
+    case      z_acl:is_allowed(use, mod_acl_user_groups, Context)
+      andalso z_acl:is_allowed(insert, acl_user_group, Context)
+    of
         true ->
             event1(Msg, Context);
         false ->
