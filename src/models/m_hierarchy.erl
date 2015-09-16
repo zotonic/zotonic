@@ -194,71 +194,81 @@ save(Name, Tree, Context) ->
 
 save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
     NewFlat = flatten_save_tree(NewTree),
-    z_db:transaction(fun(Ctx) ->
-            OldFlatNr = z_db:q("
-                        select id, parent_id, lvl, nr
-                        from hierarchy 
-                        where name = $1
-                        order by nr
-                        for update", 
-                        [Name],
+    {ok, New, Del} = z_db:transaction(
+                        fun(Ctx) ->
+                            save_nocheck_trans(Name, NewFlat, Ctx)
+                        end,
                         Context),
-            OldFlat = [ {Id,P,Lvl} || {Id,P,Lvl,_Nr} <- OldFlatNr ],
-            Diff = diffy_term:diff(OldFlat, NewFlat),
-            NewFlatNr = assign_nrs(Diff, OldFlatNr),
-
-            OldIds = [ Id || {Id, _P, _Lvl, _Nr} <- OldFlatNr ],
-            NewIds = [ Id || {Id, _P, _Lvl, _Nr} <- NewFlatNr ],
-            InsIds = NewIds -- OldIds,
-            UpdIds = NewIds -- InsIds,
-            DelIds = OldIds -- NewIds,
-
-            lists:foreach(fun(Id) ->
-                            {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
-                            {Left,Right} = range(Id, NewFlatNr),
-                            z_db:q("
-                                    insert into hierarchy
-                                        (name, id, parent_id, lvl, nr, lft, rght)
-                                    values
-                                        ($1, $2, $3, $4, $5, $6, $7)",
-                                   [Name, Id, P, Lvl, Nr, Left, Right],
-                                   Ctx)
-                          end,
-                          InsIds),
-            lists:foreach(fun(Id) ->
-                            {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
-                            {Left,Right} = range(Id, NewFlatNr),
-                            z_db:q("
-                                    update hierarchy
-                                    set parent_id = $3,
-                                        lvl = $4,
-                                        nr = $5,
-                                        lft = $6,
-                                        rght = $7
-                                    where name = $1
-                                      and id = $2
-                                      and (  parent_id <> $3
-                                          or lvl <> $4
-                                          or nr <> $5
-                                          or lft <> $6
-                                          or rght <> $7)",
-                                   [Name, Id, P, Lvl, Nr, Left, Right],
-                                   Ctx)
-                          end,
-                          UpdIds),
-            lists:foreach(fun(Id) ->
-                            z_db:q("delete from hierarchy
-                                    where name = $1 and id = $2",
-                                   [Name,Id],
-                                   Ctx)
-                          end,
-                          DelIds),
-            ok
-        end,
-        Context),
     flush(Name, Context),
-    z_notifier:notify(#hierarchy_updated{root_id=z_convert:to_binary(Name), predicate=undefined}, Context),
+    z_notifier:notify(
+                #hierarchy_updated{
+                    root_id=z_convert:to_binary(Name),
+                    predicate=undefined,
+                    inserted_ids=New,
+                    deleted_ids=Del
+                }, Context),
     ok.
+
+save_nocheck_trans(Name, NewFlat, Context) ->
+    OldFlatNr = z_db:q("
+                select id, parent_id, lvl, nr
+                from hierarchy 
+                where name = $1
+                order by nr
+                for update", 
+                [Name],
+                Context),
+    OldFlat = [ {Id,P,Lvl} || {Id,P,Lvl,_Nr} <- OldFlatNr ],
+    Diff = diffy_term:diff(OldFlat, NewFlat),
+    NewFlatNr = assign_nrs(Diff, OldFlatNr),
+
+    OldIds = [ Id || {Id, _P, _Lvl, _Nr} <- OldFlatNr ],
+    NewIds = [ Id || {Id, _P, _Lvl, _Nr} <- NewFlatNr ],
+    InsIds = NewIds -- OldIds,
+    UpdIds = NewIds -- InsIds,
+    DelIds = OldIds -- NewIds,
+
+    lists:foreach(fun(Id) ->
+                    {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
+                    {Left,Right} = range(Id, NewFlatNr),
+                    z_db:q("
+                            insert into hierarchy
+                                (name, id, parent_id, lvl, nr, lft, rght)
+                            values
+                                ($1, $2, $3, $4, $5, $6, $7)",
+                           [Name, Id, P, Lvl, Nr, Left, Right],
+                           Context)
+                  end,
+                  InsIds),
+    lists:foreach(fun(Id) ->
+                    {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
+                    {Left,Right} = range(Id, NewFlatNr),
+                    z_db:q("
+                            update hierarchy
+                            set parent_id = $3,
+                                lvl = $4,
+                                nr = $5,
+                                lft = $6,
+                                rght = $7
+                            where name = $1
+                              and id = $2
+                              and (  parent_id <> $3
+                                  or lvl <> $4
+                                  or nr <> $5
+                                  or lft <> $6
+                                  or rght <> $7)",
+                           [Name, Id, P, Lvl, Nr, Left, Right],
+                           Context)
+                  end,
+                  UpdIds),
+    lists:foreach(fun(Id) ->
+                    z_db:q("delete from hierarchy
+                            where name = $1 and id = $2",
+                           [Name,Id],
+                           Context)
+                  end,
+                  DelIds),
+    {ok, InsIds, DelIds}.
 
 range(Id, [{Id,_P,Lvl,Nr}|Rest]) ->
     Right = range_1(Lvl, Nr, Rest),
