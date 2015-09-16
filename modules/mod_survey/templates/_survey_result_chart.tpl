@@ -13,9 +13,9 @@
 			        	<th>
 			        		{% with chart.answers[label] as text %}
 			        			{% if text %}
-			        				{{ label }}) {{ text }}
+			        				{{ label|escape }}) {{ text }}
 			        			{% else %}
-			        				{{ label }}
+			        				{{ label|escape }}
 			        			{% endif %}
 			        		{% endwith %}
 			        	</th>
