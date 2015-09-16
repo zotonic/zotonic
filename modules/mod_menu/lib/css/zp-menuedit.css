@@ -81,6 +81,9 @@ ul.tree-list li .btns .btn-group {
 .menu-edit a {
     float: right;
 }
+.menu-item .category {
+    color: #999;
+}
 
 ul.tree-list .btn-group {
     margin-left: 6px;
