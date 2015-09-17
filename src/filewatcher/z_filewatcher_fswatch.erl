@@ -157,9 +157,41 @@ extract_filename_verb(Line) ->
 split_line(<<>>, Acc) ->
     Acc;
 split_line(Line, Acc) ->
-    %% @todo handle spaces in filenames correctly
-    [Filename|Flags] = binary:split(Line, <<" ">>, [global]),
-    [{unicode:characters_to_list(Filename), extract_verb(Flags)} | Acc].
+	% get a file path that may include spaces
+	Filepath = get_filepath(Line),
+	% extract a verb from the line, while ignoring strings that are not verbs
+	[_|Flags] = binary:split(Line, <<" ">>, [global]),
+	Verb = extract_verb(Flags),
+    [{Filepath, Verb} | Acc].
+
+%% Remove verbs from line, preserve spaces
+get_filepath(Line) ->
+	Space = <<" ">>,
+	Parts = lists:foldl(fun(Part, Acc) ->
+		case extract_filepath(Part) of
+			<<>> -> Acc;
+			P -> <<Acc/binary, P/binary, Space/binary>>
+		end		
+	end, <<>>, binary:split(Line, Space, [global])),
+	string:strip(unicode:characters_to_list(Parts), both, $ ).
+
+% Remove all known verbs; the remainder must be the file path
+% of course this breaks when new event names are added to fswatch
+extract_filepath(<<>>) -> <<>>;
+extract_filepath(<<"PlatformSpecific">>) -> <<>>;
+extract_filepath(<<"AttributeModified">>) -> <<>>;
+extract_filepath(<<"Created">>) -> <<>>;
+extract_filepath(<<"Updated">>) -> <<>>;
+extract_filepath(<<"Removed">>) -> <<>>;
+extract_filepath(<<"Renamed">>) -> <<>>;
+extract_filepath(<<"OwnerModified">>) -> <<>>;
+extract_filepath(<<"MovedFrom">>) -> <<>>;
+extract_filepath(<<"MovedTo">>) -> <<>>;
+extract_filepath(<<"IsFile">>) -> <<>>;
+extract_filepath(<<"IsDir">>) -> <<>>;
+extract_filepath(<<"IsSymLink">>) -> <<>>;
+extract_filepath(<<"Link">>) -> <<>>;
+extract_filepath(F) -> F.
 
 extract_verb([]) -> modify;
 extract_verb([<<"Removed">>, <<"Renamed">> | _ ]) -> modify;
@@ -169,4 +201,3 @@ extract_verb([<<"MovedFrom">>|_]) -> delete;
 extract_verb([<<"MovedTo">>|_]) -> create;
 extract_verb([<<"Renamed">>|_]) -> create;
 extract_verb([_|Flags]) -> extract_verb(Flags).
-
