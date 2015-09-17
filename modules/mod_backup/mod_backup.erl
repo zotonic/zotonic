@@ -270,7 +270,7 @@ maybe_daily_dump(State) ->
     case Time >= {3,0,0} andalso Time =< {7,0,0} of
         true ->
             DoStart = case list_backup_files(State#state.context) of
-                [{_, LastBackupDate}|_] -> LastBackupDate < {Date, {0,0,0}};
+                [{_, LastBackupDate, _IsFull}|_] -> LastBackupDate < {Date, {0,0,0}};
                 [] -> true
             end,
             case DoStart of
