@@ -196,50 +196,54 @@ set_username_pw(Id, Username, Password, Context) when is_integer(Id) ->
 
 set_username_pw_1(Id, Username, Password, Context) ->
     Hash = hash(Password),
-    F = fun(Ctx) ->
-        Rupd = z_db:q("
-                    update identity 
-                    set key = $2,
-                        propb = $3,
-                        is_verified = true,
-                        modified = now()
-                    where type = 'username_pw'
-                      and rsc_id = $1", 
-                    [Id, Username, {term, Hash}], 
-                    Ctx),
-        case Rupd of
-            0 ->
-                case is_reserved_name(Username) of
-                    true ->
-                        throw({error, eexist});
-                    false ->
-                        UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", 
-                                             [Username],
-                                             Ctx),
-                        case UniqueTest of
-                            0 ->
-                                Rows = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) 
-                                               values ($1, true, true, 'username_pw', $2, $3)", 
-                                              [Id, Username, {term, Hash}],
-                                              Ctx),
-                                z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Ctx),
-                                Rows;
-                            _Other ->
-                                throw({error, eexist})
-                        end
-                end;
-            1 -> 
-                1
-        end
-    end,
-    case z_db:transaction(F, Context) of
-        1 ->
+    case z_db:transaction(fun(Ctx) -> set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
+        ok ->
             reset_rememberme_token(Id, Context),
             z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
             z_depcache:flush(Id, Context),
             ok;
-        R ->
-            R
+        {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
+            lager:error("[~p] set_username_pw error for ~p, setting username ~p: ~p", 
+                        [z_context:site(Context), Username, ErrTrace]),
+            Error;
+        {error, _} = Error ->
+            Error
+    end.
+
+set_username_pw_trans(Id, Username, Hash, Context) ->
+    case z_db:q("
+                update identity 
+                set key = $2,
+                    propb = $3,
+                    is_verified = true,
+                    modified = now()
+                where type = 'username_pw'
+                  and rsc_id = $1", 
+                [Id, Username, ?DB_PROPS(Hash)], 
+                Context)
+    of
+        0 ->
+            case is_reserved_name(Username) of
+                true ->
+                    {rollback, {error, eexist}};
+                false ->
+                    UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", 
+                                         [Username],
+                                         Context),
+                    case UniqueTest of
+                        0 ->
+                            1 = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) 
+                                        values ($1, true, true, 'username_pw', $2, $3)", 
+                                        [Id, Username, {term, Hash}],
+                                        Context),
+                            z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Context),
+                            ok;
+                        _Other ->
+                            {rollback, {error, eexist}}
+                    end
+            end;
+        1 -> 
+            1
     end.
 
 %% @doc Ensure that the user has an associated username and password
