@@ -729,6 +729,9 @@ div.modal .modal-footer .pull-left {
 .navbar.navbar-branded .navbar-form .form-control {
   width: 9em;
 }
+.navbar.navbar-branded .navbar-collapse {
+  background-color: #0fa2db;
+}
 .navbar.navbar-branded .collapse.in {
   max-height: none;
 }
