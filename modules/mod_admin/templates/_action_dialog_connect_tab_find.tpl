@@ -29,19 +29,24 @@
 		data-feedback="trigger: 'dialog-connect-find', delegate: 'mod_admin'">
 	</div>
 </div>
-
+{% wire name="dialog_connect_find"
+    action={postback
+        delegate=delegate|default:"mod_admin"
+        postback={admin_connect_select
+            id=id
+            subject_id=subject_id
+            predicate=predicate
+            callback=callback
+            language=language
+            action=action
+        }
+    }
+%}
 {% javascript %}
-
     $('#dialog-connect-find').change();
-
     $("#dialog-connect-found").on('click', '.thumbnail', function() {
-        z_notify("admin-connect-select", { 
-            z_delegate: '{{ delegate|default:"mod_admin" }}',
-            select_id: $(this).data('id'),
-            predicate: '{{ predicate }}',
-            subject_id: '{{ subject_id }}',
-            callback: '{{ callback }}',
-            language: '{{ language }}'
+        z_event('dialog_connect_find', { 
+            select_id: $(this).data('id')
         });
     });
 {% endjavascript %}
