@@ -7,6 +7,8 @@ params:
 - subject_id
 - tabs_enabled (optional): list of tab names: ["new", "depiction", "find",  "upload", "url"]
 - tab (optional)
+- predicate (optional) (atom)
+- delegate (optional)
 #}
 {% with callback|default:q.callback|default:"window.zAdminConnectDone" as callback %}
 {% with language|default:q.language|default:z_language as language %}
@@ -76,6 +78,7 @@ params:
                 {% include "_action_dialog_connect_tab_new.tpl"
                     tab=#tab
                     predicate=predicate
+                    delegate=delegate
                     subject_id=subject_id
                     is_active
                     title=""
@@ -88,6 +91,7 @@ params:
                     {% include "_action_dialog_connect_tab_depictions.tpl"
                         tab=#tab
                         predicate=predicate
+                        delegate=delegate
                         subject_id=subject_id
                         is_active=(tab == "depiction")
                         title=""
@@ -98,6 +102,7 @@ params:
                 {% include "_action_dialog_connect_tab_find.tpl"
                     tab=#tab
                     predicate=predicate
+                    delegate=delegate
                     subject_id=subject_id 
                     is_active=(not q.is_zmedia and tab == "find")
                     title=""
@@ -109,6 +114,7 @@ params:
                         "_action_dialog_connect_tab_new.tpl"
                         tab=#tab
                         predicate=predicate
+                        delegate=delegate
                         subject_id=subject_id
                         title="" 
                         is_active=(tab == "new")
@@ -129,6 +135,7 @@ params:
                     {% include "_action_dialog_media_upload_tab_url.tpl"
                         tab=#tab
                         predicate=predicate
+                        delegate=delegate
                         subject_id=subject_id
                         is_active=(tab == "url")
                         title=""
@@ -137,6 +144,7 @@ params:
                 {% all include "_media_upload_panel.tpl"
                     tab=#tab
                     predicate=predicate
+                    delegate=delegate
                     subject_id=subject_id
                     title=""
                     delegate=delegate

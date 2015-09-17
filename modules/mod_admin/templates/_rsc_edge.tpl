@@ -1,18 +1,36 @@
-{# Show an object with an unlink option. Used in the admin_edit #}
+{#
+Show an object with an unlink option. Used in the admin_edit
+
+Params:
+- object_id (integer) resource id to disconnect
+- subject_id (integer) resource where id is connected to
+- edge_id (integer) connection resource
+- unlink_action (optional) action to be called after disconnecting
+#}
 {% with m.rsc[object_id].title as title %}
 {% sortable id=#unlink_wrapper tag=edge_id %}
 <li id="{{ #unlink_wrapper }}" class="menu-item">
     <div>
 	    <i class="z-icon z-icon-drag"></i>
         <a id="{{ #edit }}" href="{% url admin_edit_rsc id=object_id %}" title="{_ Edit _}">
-	    	{% image object_id mediaclass="admin-list-dashboard" %}
-        	{{ title|truncate:30|default:"<i>untitled</i>" }}
-            <span class="category">{{ object_id.category_id.title|truncate:20 }}</span>
+            {% catinclude "_rsc_edge_item.tpl" object_id %}
        	</a>
         <button id="{{ #unlink }}" title="{_ Disconnect _}" class="z-btn-remove"></button>
     </div>
 </li>
 {% endwith %}
 
-{% wire id=#unlink action={unlink subject_id=subject_id edge_id=edge_id hide=#unlink_wrapper} %}
-{% wire id=#edit target=#unlink_wrapper action={dialog_edit_basics edge_id=edge_id} %}
+{% wire id=#unlink
+    action={unlink
+        subject_id=subject_id
+        edge_id=edge_id
+        hide=#unlink_wrapper
+        action=unlink_action
+    }
+%}
+{% wire id=#edit
+    target=#unlink_wrapper
+    action={dialog_edit_basics
+        edge_id=edge_id
+    }
+%}
