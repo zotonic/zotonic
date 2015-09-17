@@ -5,6 +5,7 @@ Installing a new version of tinymce:
 * Copy templates/PREVIOUS to templates/NEW
 * In templates/_admin_configure_module.tpl, add the version number and date of NEW
 * In templates/_editor.tpl, add the version number of NEW for 'newest'
+* In templates/VERSION/_editor.tpl, update the version numbers
 * In lib/js, create a folder for NEW and copy into it from PREVIOUS:
     * tiny-init.js
     * z_editor.js
@@ -18,4 +19,7 @@ Installing a new version of tinymce:
     * codemirror
     * zlink
     * zmedia
+* Copy from the development release of Tiny:
+	* tinymce/jquery.tinymce.min.js
+	* tinymce/plugins/compat3x
 * Flush Zotonic caches and hunt for bugs
