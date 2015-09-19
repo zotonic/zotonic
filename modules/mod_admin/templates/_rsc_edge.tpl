@@ -15,7 +15,7 @@ Params:
         <a id="{{ #edit }}" href="{% url admin_edit_rsc id=object_id %}" title="{_ Edit _}">
             {% catinclude "_rsc_edge_item.tpl" object_id %}
        	</a>
-        <button id="{{ #unlink }}" title="{_ Disconnect _}" class="z-btn-remove"></button>
+        <button type="button" id="{{ #unlink }}" title="{_ Disconnect _}" class="z-btn-remove"></button>
     </div>
 </li>
 {% endwith %}
