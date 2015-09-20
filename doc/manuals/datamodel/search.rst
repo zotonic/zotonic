@@ -32,11 +32,11 @@ for receiving lists of ids in JSON.
 
 Get all resource of the "documentation" category on zotonic.com::
 
-  http://zotonic.com/api/search?cat=documentation
+http://zotonic.com/api/search?cat=documentation
 
 Get a feed of most recent documentation containing the word "filter"::
 
-  http://zotonic.com/feed/search?cat=documentation&text=filter
+http://zotonic.com/feed/search?cat=documentation&text=filter
 
 .. note::
    
@@ -235,6 +235,14 @@ Query-model arguments
   will automatically be ordered on the relevancy (rank) of the result.
 
   ``text="test"``
+  
+  Use prefix ``id:`` to find specific resources by id or name:
+  
+  ``text="id:1000"``
+  
+  ``text="id:1000,1001,1002"``
+  
+  ``text="id:category,1"``
 
 **query_id**
 
