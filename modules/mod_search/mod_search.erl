@@ -36,7 +36,8 @@
     observe_search_query/2,
     observe_module_activate/2,
     to_tsquery/2,
-    find_by_id/2
+    find_by_id/2,
+    find_by_id/3
 ]).
 
 -include("zotonic.hrl").
@@ -377,7 +378,7 @@ search({autocomplete, [{text,QueryText}]}, OffsetLimit, Context) ->
 search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
     case z_string:trim(QueryText) of
         "id:" ++ S ->
-            find_by_id(S, Context);
+            find_by_id(S, true, Context);
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             case TsQuery of
@@ -410,7 +411,7 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
                 tables=[{rsc,"r"}]
             };
         "id:" ++ S ->
-            find_by_id(S, Context);
+            find_by_id(S, true, Context);
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
@@ -434,7 +435,7 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
                 tables=[{rsc,"r"}]
             };
         "id:" ++ S ->
-            find_by_id(S, Context);
+            find_by_id(S, true, Context);
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
@@ -549,15 +550,36 @@ to_tsquery(Text, Context) ->
     end.
 
 
-%% @doc Find a resource by id or name
+%% @doc Find one more more resources by id or name, when the resources exists.
+%% Input may be a single token or a comma-separated string.
+%% Search results contain a list of ids.
+-spec find_by_id(string(), #context{}) -> #search_result{}.
 find_by_id(S, Context) ->
-    case m_rsc:rid(S, Context) of
-        undefined ->
+    find_by_id(S, false, Context).
+
+%% @doc As find_by_id/2, but when Rank is true, results contain a list of tuples: {id, 1}.
+-spec find_by_id(string(), boolean(), #context{}) -> #search_result{}.
+find_by_id(S, Rank, Context) ->
+    Ids = lists:foldl(fun(Id, Acc) ->
+        case m_rsc:exists(Id, Context) of
+            false -> Acc;
+            true -> [m_rsc:rid(Id, Context)|Acc]
+        end
+    end, [], string:tokens(S, ", ")),
+    Ids1 = lists:sort(sets:to_list(sets:from_list(Ids))),
+    Ids2 = case Rank of 
+        false -> Ids1;
+        true ->
+            lists:map(fun(Id) ->
+                {Id, 1}
+            end, Ids1)
+    end,
+    case length(Ids2) of
+        0 ->
             #search_result{};
-        RscId ->
+        L ->
             #search_result{
-                result=[RscId],
-                page=1,
-                total=1
+                result=Ids2,
+                total=L
             }
     end.
