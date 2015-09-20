@@ -1,6 +1,6 @@
 <div class="col-lg-4 col-md-4">
     {% with id.depiction as depict %}
-        <div class="thumbnail{% if medium %} z-image-thumbnail{% endif %}" data-id="{{ id }}">
+        <a href="{{ id.page_url }}" class="thumbnail{% if medium %} z-image-thumbnail{% endif %}" data-id="{{ id }}">
             {%
                 image
                 depict
@@ -12,6 +12,6 @@
                 <h5>{{ id.title }}</h5>
                 <p>{{ id|summary:50 }}</p>
             </div>
-        </div>
+        </a>
     {% endwith %}
 </div>

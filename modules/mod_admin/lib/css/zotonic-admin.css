@@ -1116,9 +1116,16 @@ th a:hover .arrow.down {
   font-size: 12px;
   line-height: 1.1em;
   position: relative;
+  transition-duration: 0;
+  -webkit-transition-duration: 0;
+}
+.thumbnails .thumbnail,
+.thumbnails .thumbnail a:link,
+.thumbnails .thumbnail a:visited {
+  color: #222222;
 }
 .thumbnails .thumbnail:hover {
-  background-color: #eeeeee;
+  border-color: #888888;
 }
 .thumbnails .thumbnail .z-thumbnail-text {
   position: absolute;
