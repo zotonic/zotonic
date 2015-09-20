@@ -23,6 +23,7 @@
             is_zmedia
             tab="depiction"
             callback="window.zAdminMediaDone"
+            center=0
         }
 	%}
 
@@ -35,6 +36,7 @@
             is_zlink
             tab="find"
             callback="window.zAdminLinkDone"
+            center=0
         }
 	%}
 

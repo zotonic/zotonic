@@ -35,15 +35,16 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Predicate = proplists:get_value(predicate, Args, depiction),
     Actions = proplists:get_all_values(action, Args),
     Stay = proplists:get_value(stay, Args, false),
+    Center = proplists:get_value(center, Args, 1),
     Callback = proplists:get_value(callback, Args),
-    Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Callback, Actions},
+    Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Center, Callback, Actions},
         {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
         {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Callback, Actions}}, Context) ->
+event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Center, Callback, Actions}}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {id, Id},
@@ -52,7 +53,8 @@ event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, S
         {actions, Actions},
         {callback, Callback},
         {predicate, Predicate},
-        {stay, Stay}
+        {stay, Stay},
+        {center, Center}
     ],
     DTitle = case Id of undefined -> ?__("Add a new media file", Context); _ -> ?__("Replace current medium", Context) end,
     z_render:dialog(DTitle, "_action_dialog_media_upload.tpl", Vars, Context);

@@ -23,8 +23,7 @@ Params:
 
 {% wire
     name=list_id
-    action={
-        update
+    action={update
         target=list_id
         template="_rsc_edge_list.tpl"
         id=id
@@ -48,6 +47,7 @@ Params:
           callback=callback
           action=action
           unlink_action=unlink_action
+          center=0
         }
     %}
 {% endif %}

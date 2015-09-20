@@ -106,8 +106,10 @@
               .modal({backdrop: options.backdrop})
               .css({'overflow-x': 'hidden', 'overflow-y': 'auto'});
 
-            dialogReposition();
-
+            if (options.center) {
+                dialogReposition();
+            }
+            
             if (typeof($.widgetManager) != 'undefined') {
                 $dialog.widgetManager();
             }
@@ -156,12 +158,14 @@
     width: (optional)
     addclass: (optional) classname will be appended to default dialog class
     backdrop: (optional) boolean (0, 1) or the string 'static'
+    center: (optional) boolean (0, 1); set to 0 to align dialog to the top
     */
     $.ui.dialog.defaults = {
         title: 'Title',
         text: 'text',
         width: undefined,
         addclass: undefined,
-        backdrop: true
+        backdrop: 1,
+        center: 1
     };
 })(jQuery);
