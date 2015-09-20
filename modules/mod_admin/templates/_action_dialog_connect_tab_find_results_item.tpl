@@ -1,6 +1,6 @@
 <div class="col-lg-4 col-md-4">
     {% with id.depiction as depict %}
-        <a href="{{ id.page_url }}" class="thumbnail{% if medium %} z-image-thumbnail{% endif %}" data-id="{{ id }}">
+        <a href="{{ id.page_url }}" class="thumbnail{% if medium %} z-image-thumbnail{% endif %}{% if predicate and m.edge.id[subject_id][predicate][id] %} thumbnail-connected{% endif %}" data-id="{{ id }}">
             {%
                 image
                 depict

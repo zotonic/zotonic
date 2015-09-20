@@ -2,10 +2,19 @@
 	<p>{_ Select a connected image _}</p>
 
 	<div id="dialog_connect_depictions" class="connect-results thumbnails">
+	    
 		<div class="row">
-            {% for id in m.rsc[subject_id].o.depiction %}
-                {% catinclude "_action_dialog_connect_tab_find_results_item.tpl" id %}
-            {% endfor %}
+		    {% with m.rsc[subject_id].o.depiction as depictions %}
+		        {% if depictions %}
+                    {% for id in depictions %}
+                        {% catinclude "_action_dialog_connect_tab_find_results_item.tpl" id %}
+                    {% endfor %}
+                {% else %}
+                    <div class="col-lg-4 col-md-4">
+                        {_ No connected images. _}
+                    </div>
+                {% endif %}
+            {% endwith %}
 		</div>
 	</div>
 </div>

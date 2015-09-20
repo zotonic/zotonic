@@ -63,7 +63,8 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
         {update_element, TargetId1},
         {is_update, z_convert:to_bool(z_context:get_q("is_update", Context))},
         {actions, Actions},
-        {callback, Callback}
+        {callback, Callback},
+        {center, 0}
     ],
     Title = z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(ObjectId, title, Context), Context)),
     z_render:dialog([?__("Edit:", Context), " " ++ Title], {cat, "_action_dialog_edit_basics.tpl"}, Vars, Context);
