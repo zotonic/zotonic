@@ -1,6 +1,4 @@
 <div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-find">
-	<p>{_ Find an existing page to connect _}</p>
-
 	<form id="dialog-connect-find" class="row form form-horizontal">
 		<input type="hidden" name="subject_id" value="{{ subject_id }}" />
 		<input type="hidden" name="predicate" value="{{ predicate|default:'' }}" />
