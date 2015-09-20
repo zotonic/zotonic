@@ -68,7 +68,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
 
 map_speed_default(Speed) ->
     case map_speed(Speed) of
-        [] -> "500";
+        [] -> "350";
         S -> S
     end.
 
