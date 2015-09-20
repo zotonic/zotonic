@@ -143,14 +143,14 @@ The final mandatory function specification::
 The intended use is to normalize a value to something printable, but you can safely ignore this and return ``undefined``.
 
 
-Setting up m_omdb
-^^^^^^^^^^^^^^^^^
+Example: Setting up m_omdb
+--------------------------
 
 All data calls to the OMDB go through the url ``http://www.omdbapi.com/?``, with query string appended. We can pass the movie id, title, and pass a type (movie/series/episode). OMDB offers more parameters but we don't need them now.
 
 
 Template interface
-""""""""""""""""""
+^^^^^^^^^^^^^^^^^^
 
 Let's define how will we use the data in templates.
 
@@ -180,7 +180,7 @@ or from an episode::
     
 
 Model skeleton
-""""""""""""""
+^^^^^^^^^^^^^^
 
 We will write our model in module ``models/m_omdb.erl``. Let's first get the mandatory elements out of the way::
 
@@ -212,7 +212,7 @@ We will write our model in module ``models/m_omdb.erl``. Let's first get the man
 
 
 Querying the API
-""""""""""""""""
+^^^^^^^^^^^^^^^^
 
 Before diving into the lookup functions, let's see what we want to achieve as result.
 
@@ -256,7 +256,7 @@ It is important to know that we will pass a list, and get a list as result (for 
 
 
 Lookup functions
-""""""""""""""""
+^^^^^^^^^^^^^^^^
 
 To illustrate the simplest ``m_find_value`` function, we add one to get the API url::
 
@@ -373,13 +373,13 @@ We won't do any validity checking on the parameter here, but for most modules it
 
 
 Full source code
-""""""""""""""""
+^^^^^^^^^^^^^^^^
 
 The source code of the documentation so far can be found in this gist: `Zotonic template model for the OMDB movie database - source code to accompany the documentation <https://gist.github.com/ArthurClemens/11be71e7fb1b0af31f05>`_.
 
 
 Possible enhancements
-"""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^
 
 For a complete model for this API, I would expect:
 
