@@ -568,7 +568,7 @@ input.do_timepicker {
   top: 50px;
   border-radius: 0;
   padding: 15px 15px;
-  background-color: rgba(15, 162, 219, 0.8);
+  background-color: rgba(15, 162, 219, 0.6);
   -webkit-transition: opacity 0.3s ease-in-out;
   -moz-transition: opacity 0.3s ease-in-out;
   -o-transition: opacity 0.3s ease-in-out;
