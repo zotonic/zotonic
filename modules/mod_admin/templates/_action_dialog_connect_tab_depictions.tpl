@@ -23,7 +23,8 @@
     }
 %}
 {% javascript %}
-    $("#dialog_connect_depictions").on('click', '.thumbnail', function() {
+    $("#dialog_connect_depictions").on('click', '.thumbnail', function(e) {
+        e.preventDefault();
         z_event('dialog_connect_depiction', { 
             select_id: $(this).data('id')
         });

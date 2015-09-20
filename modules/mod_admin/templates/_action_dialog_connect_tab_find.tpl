@@ -3,7 +3,7 @@
 
 	<form id="dialog-connect-find" class="row form form-horizontal">
         <div class="col-md-8">
-		    <input name="find_text" type="text" value="" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
+		    <input name="find_text" type="text" value="{{ text|default:'' }}" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
         </div>
 
         <div class="col-md-4">
@@ -44,7 +44,8 @@
 %}
 {% javascript %}
     $('#dialog-connect-find').change();
-    $("#dialog-connect-found").on('click', '.thumbnail', function() {
+    $("#dialog-connect-found").on('click', '.thumbnail', function(e) {
+    	e.preventDefault();
         z_event('dialog_connect_find', { 
             select_id: $(this).data('id')
         });

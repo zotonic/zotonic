@@ -204,10 +204,10 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
     end;
 
 event(#postback_notify{message="feedback", trigger="dialog-connect-find", target=TargetId}, Context) ->
-                                                % Find pages matching the search criteria.
+    % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     Category = z_context:get_q(find_category, Context),
-    Text=z_context:get_q(find_text, Context),
+    Text = z_context:get_q(find_text, Context),
     Cats = case Category of
                 "p:"++Predicate -> m_predicate:object_category(Predicate, Context);
                 <<"p:", Predicate/binary>> -> m_predicate:object_category(Predicate, Context);

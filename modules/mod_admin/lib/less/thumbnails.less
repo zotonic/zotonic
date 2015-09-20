@@ -44,9 +44,17 @@
         font-size: @_fontSize;
         line-height: @_lineHeight;
         position: relative;
+        transition-duration: 0;
+        -webkit-transition-duration: 0;
+        
+        &,
+        a:link, 
+        a:visited {
+            color: @textColorDark;
+        }
         
         &:hover {
-            background-color: @backgroundColorRowHover;
+            border-color: @borderColorSelection;
         }
         
         .z-thumbnail-text {
