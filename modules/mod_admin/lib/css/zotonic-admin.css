@@ -1127,6 +1127,19 @@ th a:hover .arrow.down {
 .thumbnails .thumbnail:hover {
   border-color: #888888;
 }
+.thumbnails .thumbnail.thumbnail-connected {
+  background-color: #f5f5f5;
+}
+.thumbnails .thumbnail.thumbnail-connected,
+.thumbnails .thumbnail.thumbnail-connected h5,
+.thumbnails .thumbnail.thumbnail-connected h6,
+.thumbnails .thumbnail.thumbnail-connected a:link,
+.thumbnails .thumbnail.thumbnail-connected a:visited {
+  color: #bbbbbb;
+}
+.thumbnails .thumbnail.thumbnail-connected img {
+  opacity: .3;
+}
 .thumbnails .thumbnail .z-thumbnail-text {
   position: absolute;
   left: 5px;
@@ -1163,7 +1176,6 @@ th a:hover .arrow.down {
 }
 .thumbnails .thumbnail h6 {
   text-transform: lowercase;
-  color: #999999;
 }
 .thumbnails .thumbnail p {
   max-height: 2.2em;

@@ -57,6 +57,19 @@
             border-color: @borderColorSelection;
         }
         
+        &.thumbnail-connected {
+            &,
+            h5, h6,
+            a:link, 
+            a:visited {
+                color: @textColorLight;
+            }
+            img {
+                opacity: .3;
+            }
+            background-color: @backgroundColorLightest;
+        }
+        
         .z-thumbnail-text {
             @_content_height: @_heigth - 2 * @_padding - 2; // subtract border too
             position: absolute;
@@ -94,7 +107,6 @@
         }
         h6 {
             text-transform: lowercase;
-            color: @textColorMuted;
         }
         p {
             max-height: 2 * @_lineHeight;

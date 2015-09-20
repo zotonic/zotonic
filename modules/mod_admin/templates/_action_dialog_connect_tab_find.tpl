@@ -2,6 +2,9 @@
 	<p>{_ Find an existing page to connect _}</p>
 
 	<form id="dialog-connect-find" class="row form form-horizontal">
+		<input type="hidden" name="subject_id" value="{{ subject_id }}" />
+		<input type="hidden" name="predicate" value="{{ predicate|default:'' }}" />
+
         <div class="col-md-8">
 		    <input name="find_text" type="text" value="{{ text|default:'' }}" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
         </div>

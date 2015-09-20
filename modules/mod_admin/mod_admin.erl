@@ -207,6 +207,7 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
     % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     Category = z_context:get_q(find_category, Context),
+    Predicate = z_context:get_q(predicate, Context, ""),
     Text = z_context:get_q(find_text, Context),
     Cats = case Category of
                 "p:"++Predicate -> m_predicate:object_category(Predicate, Context);
@@ -218,6 +219,7 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
     Vars = [
         {subject_id, SubjectId},
         {cat, Cats},
+        {predicate, Predicate},
         {text, Text}
     ],
     z_render:wire([
