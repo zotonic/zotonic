@@ -17,6 +17,12 @@
 
 <div class="form-group">
     <button class="btn btn-default" id="{{ #copy }}">{_ Copy translation _}…</button>
-    {% wire id=#copy action={dialog_open title=_"Copy translation" template="_dialog_language_copy.tpl"} %}
+    {% wire id=#copy
+        action={dialog_open
+            title=_"Copy translation"
+            template="_dialog_language_copy.tpl"
+            center=0
+        }
+    %}
 </div>
 {% endblock %}

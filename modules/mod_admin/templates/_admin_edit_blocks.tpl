@@ -91,12 +91,14 @@ $('#edit-blocks-wrapper').on('click', '.rsc-item h5 a', function(event) {
 {% endjavascript %}
 
 {% wire name="admin-block-connect" 
-        action={dialog_open
-                    subject_id=id
-                    predicate=""
-                    template="_action_dialog_connect.tpl" 
-                    title=_"Find page"
-                    callback="window.zAdminBlockConnectDone"}
+    action={dialog_open
+        subject_id=id
+        predicate=""
+        template="_action_dialog_connect.tpl"
+        title=_"Find page"
+        callback="window.zAdminBlockConnectDone"
+        center=0
+    }
 %}
 
 {% wire name="admin-edit-basics" action={dialog_edit_basics template="_rsc_item.tpl"} %}

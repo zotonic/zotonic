@@ -19,8 +19,11 @@ title     required  Dialog header title
 text      required  Dialog body text
 width     optional  Dialog width in pixels
 addclass  optional  classname will be appended to default dialog class
-backdrop  optional  boolean (0, 1) or the string 'static' for a
-                    modal dialog (does not close on backdrop click)
+backdrop  optional  boolean (0, 1), or the string 'static' for a
+                    modal dialog (does not close on backdrop click);
+                    default 1
+center    optional  boolean (0, 1) default 1; set to 0 to align the
+                    dialog at the top
 ========  ========  ==================================================
 
 .. seealso:: actions :ref:`action-dialog_open` and :ref:`action-dialog_close`.
