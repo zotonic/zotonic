@@ -250,6 +250,10 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
         %% Create a new page
         undefined ->
             SubjectId = proplists:get_value(subject_id, EventProps),
+            ContentGroupdId = case proplists:get_value(content_group_id, EventProps) of
+                                    undefined -> m_rsc:p_no_acl(SubjectId, content_group_id, Context);
+                                    CGId -> CGId
+                              end,
             Predicate = proplists:get_value(predicate, EventProps, depiction),
             Title   = z_context:get_q_validated("title", Context),
             Props = [
@@ -257,7 +261,8 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 {is_published, true},
                 {category, video},
                 {video_embed_service, EmbedService},
-                {video_embed_code, EmbedCode}
+                {video_embed_code, EmbedCode},
+                {content_group_id, ContentGroupdId}
             ],
 
             case m_rsc:insert(Props, Context) of
