@@ -11,7 +11,7 @@
 	        <div class="form-group">
 		        <input class="form-control" type="text" id="{{ #email }}" name="email" value="{{ rcpt.email|default:r.email|default:q.email|escape }}" placeholder="you@example.com" />
 		        {% validate id=#email name="email" type={presence} type={email} %}
-		        {% button class="btn btn-primary" text=_"Subscribe" %}
+		        {% button class="btn btn-primary" type="submit" text=_"Subscribe" %}
 	        </div>
         </form>
     {% else %}
@@ -68,9 +68,9 @@
 		{% endif %}
 
 		{% if recipient_id %}
-			{% button class="btn btn-primary" text=_"Edit" %}
+			{% button class="btn btn-primary" type="submit" text=_"Edit" %}
 		{% else %}
-			{% button class="btn btn-primary" text=_"Subscribe" %}
+			{% button class="btn btn-primary" type="submit" text=_"Subscribe" %}
 		{% endif %}
 	</div>
 </form>

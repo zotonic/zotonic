@@ -14,10 +14,11 @@
 		<p>{_ Click the button below to confirm your subscription to this mailing list. _}</p>
 		 
 		<div id="confirm">
-			{% button text=_"Subscribe"
-					action={mailinglist_confirm confirm_key=q.confirm_key 
-							on_success={update target="confirm" text=_"<p>Thank you. You are now subscribed.</p>"}
-							on_error={update target="confirm" text=_"<p>Sorry, something went wrong. Please try to re-subscribe.</p>"}} %}
+			{% button
+			    text=_"Subscribe"
+                action={mailinglist_confirm confirm_key=q.confirm_key 
+                        on_success={update target="confirm" text=_"<p>Thank you. You are now subscribed.</p>"}
+                        on_error={update target="confirm" text=_"<p>Sorry, something went wrong. Please try to re-subscribe.</p>"}} %}
 		</div>
 		
 	{% else %}

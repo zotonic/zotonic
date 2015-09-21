@@ -9,10 +9,11 @@
 	<h1>{_ Unsubscribe from _} {{ m.rsc[sub.mailinglist_id].title|default:_"mailing list" }}</h1>
 	<p>{_ Click <strong>unsubscribe</strong> to remove yourself from the mailing list. _}</p>
 	<div id="confirm">
-		{% button text=_"Unsubscribe"
-				action={mailinglist_unsubscribe id=sub.id 
-						on_success={update target="confirm" text=_"<p>Thank you. You are now unsubscribed.</p>"}
-						on_error={update target="confirm" text=_"<p>Sorry, something went wrong. Please try again later.</p>"}} %}
+		{% button
+		    text=_"Unsubscribe"
+            action={mailinglist_unsubscribe id=sub.id 
+                    on_success={update target="confirm" text=_"<p>Thank you. You are now unsubscribed.</p>"}
+                    on_error={update target="confirm" text=_"<p>Sorry, something went wrong. Please try again later.</p>"}} %}
 	</div>
 
 {% else %}

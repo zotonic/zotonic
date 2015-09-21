@@ -25,8 +25,15 @@
 
     <div>
     	<a href="{% url rest_rsc id=id format="bert" %}" class="btn btn-default">{_ Download backup file _}</a>
-    	{% button text=_"Restore backup" class="btn btn-default" 
-    		action={dialog_open title=_"Restore backup" template="_dialog_backup_upload.tpl" id=id} %}
+    	{% button
+    	    text=_"Restore backup"
+    	    class="btn btn-default" 
+    		action={dialog_open
+    		    title=_"Restore backup"
+    		    template="_dialog_backup_upload.tpl"
+    		    id=id
+    		}
+    	%}
     </div>
 </div>
 

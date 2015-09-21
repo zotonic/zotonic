@@ -126,8 +126,14 @@
         <tfoot>
         <tr>
                 <td colspan="9">
-                {% button class="btn btn-primary" text="More..." 
-                action={moreresults result=result target="log-area" template="_admin_log_email_row.tpl"}
+                {% button
+                    class="btn btn-primary"
+                    text="More..." 
+                    action={moreresults
+                        result=result
+                        target="log-area"
+                        template="_admin_log_email_row.tpl"
+                    }
                 %}
                 </td>
             </tr>

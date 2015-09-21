@@ -4,5 +4,5 @@
 
 <div class="modal-footer">
     {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
-    {% button class="btn btn-primary" text=_"Delete" action={delete_rsc id=id on_success=on_success} action={dialog_close} %}
+    {% button class="btn btn-primary" text=_"Delete" type="submit" action={delete_rsc id=id on_success=on_success} action={dialog_close} %}
 </div>

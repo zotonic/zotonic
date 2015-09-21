@@ -38,7 +38,7 @@
 
                                     <span class="zp-90">{{ traced_res|escape }}</span>	
                                     <span class="zp-10">
-                                            {% button text="Delete" postback={delete res_to_del=traced_res} %}
+                                            {% button text="Delete" type="submit" postback={delete res_to_del=traced_res} %}
                                     </span>
                                 </li>
 
