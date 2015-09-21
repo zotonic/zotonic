@@ -37,7 +37,6 @@
             postback={
                 reload_media
                 rsc_id=id
-                id=id
                 div_id=["links-",id|make_list,"-depiction"]
             } 
             delegate="controller_admin_edit"

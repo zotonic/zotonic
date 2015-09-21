@@ -1,4 +1,5 @@
 {# Used on the resource edit page and by the medium upload event. Show all connected media. #}
+{% with rsc_id|default:id as id %}
 <div id="{{ #unlink_message }}"></div>
 {% sorter id=#list
     tag={object_sorter predicate=`depiction` id=id}
@@ -10,3 +11,4 @@
         {% include "_rsc_edge_media.tpl" subject_id=id unlink_message=#unlink_message %}
     {% endfor %}
 </ul>
+{% endwith %}
