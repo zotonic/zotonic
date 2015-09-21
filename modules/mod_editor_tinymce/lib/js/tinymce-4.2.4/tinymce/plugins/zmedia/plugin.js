@@ -164,7 +164,7 @@ tinymce.PluginManager.requireLangPack('zmedia');
                     '      </div>'  +
                     '  </div>' +
                     '  <div class="modal-footer">' +
-                    '      <button class="btn" id="zmedia-props-cancel">Cancel</button>' +
+                    '      <button class="btn btn-default" id="zmedia-props-cancel">Cancel</button>' +
                     '      <button class="btn btn-primary" type="submit">Save Properties</button>' +
                     '  </div>' +
                     '</form>'
