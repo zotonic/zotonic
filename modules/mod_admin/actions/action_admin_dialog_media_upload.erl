@@ -72,10 +72,13 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                                            true -> OriginalFilename;
                                            false -> Title
                                        end,
-                            [{title, {trans, [{Lang,NewTitle}]}},
-                             {language, [Lang]},
-                             {original_filename, OriginalFilename}];
-                        _ ->
+                            Props0 = [
+                                {title, {trans, [{Lang,NewTitle}]}},
+                                {language, [Lang]},
+                                {original_filename, OriginalFilename}
+                            ],
+                            add_content_group(EventProps, Props0, Context);
+                        _Id ->
                             [{original_filename, OriginalFilename}]
                     end,
             handle_media_upload(EventProps, Context,
@@ -91,7 +94,10 @@ event(#submit{message={media_url, EventProps}}, Context) ->
     Url = z_context:get_q("url", Context),
     Props = case proplists:get_value(id, EventProps) of
                 undefined ->
-                    [{title, z_context:get_q_validated("new_media_title_url", Context)}];
+                    Props0 = [
+                        {title, z_context:get_q_validated("new_media_title_url", Context)}
+                    ],
+                    add_content_group(EventProps, Props0, Context);
                 _ ->
                     []
             end,
@@ -101,6 +107,18 @@ event(#submit{message={media_url, EventProps}}, Context) ->
                         %% replace fun
                         fun(Id, Ctx) -> m_media:replace_url(Url, Id, Props, Ctx) end).
 
+
+add_content_group(EventProps, Props, Context) ->
+    case proplists:get_value(subject_id, EventProps) of
+        undefined ->
+            [ {proplists:get_value(content_group_id, EventProps)} | Props ];
+        SubjectId when is_integer(SubjectId) ->
+            ContentGroupdId = case proplists:get_value(content_group_id, EventProps) of
+                                    undefined -> m_rsc:p_no_acl(SubjectId, content_group_id, Context);
+                                    CGId -> CGId
+                              end,
+            [ {content_group_id, ContentGroupdId} | Props ]
+    end.
 
 
 %% Handling the media upload.
