@@ -674,7 +674,7 @@ LiveValidationForm.getInstance = function(element){
 
 LiveValidationForm.prototype = {
   validFormClass: 'z_form_valid',
-  invalidFormClass: 'z_form_invalid',
+  invalidFormClass: 'z_form_invalid has-error',
 
   /**
    *  constructor for LiveValidationForm - handles validation of LiveValidation fields belonging to this form on its submittal
@@ -694,12 +694,12 @@ LiveValidationForm.prototype = {
     var self = this;
 
     this.onInvalid = function() {
-        $(this).removeClass("z_form_valid").addClass("z_form_invalid");
+        $(this).removeClass(this.validFormClass).addClass(this.invalidFormClass);
         $(".z_form_valid", this).hide();
         $(".z_form_invalid", this).fadeIn();
     };
     this.onValid = function() {
-        $(this).removeClass("z_form_invalid").addClass("z_form_valid");
+        $(this).removeClass(this.invalidFormClass).addClass(this.validFormClass);
         $(".z_form_invalid", this).hide();
         $(".z_form_valid", this).fadeIn();
     };
