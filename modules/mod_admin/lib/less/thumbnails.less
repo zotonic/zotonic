@@ -57,7 +57,9 @@
             border-color: @borderColorSelection;
         }
         
-        &.thumbnail-connected {
+        // fade out thumbnails that are connected to the page
+        // except when it is a depiction predicate
+        &.thumbnail-connected:not(.thumbnail-depiction) {
             &,
             h5, h6,
             a:link, 

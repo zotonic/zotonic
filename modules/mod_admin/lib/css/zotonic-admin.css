@@ -1127,17 +1127,17 @@ th a:hover .arrow.down {
 .thumbnails .thumbnail:hover {
   border-color: #888888;
 }
-.thumbnails .thumbnail.thumbnail-connected {
+.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) {
   background-color: #f5f5f5;
 }
-.thumbnails .thumbnail.thumbnail-connected,
-.thumbnails .thumbnail.thumbnail-connected h5,
-.thumbnails .thumbnail.thumbnail-connected h6,
-.thumbnails .thumbnail.thumbnail-connected a:link,
-.thumbnails .thumbnail.thumbnail-connected a:visited {
+.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction),
+.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) h5,
+.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) h6,
+.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) a:link,
+.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) a:visited {
   color: #bbbbbb;
 }
-.thumbnails .thumbnail.thumbnail-connected img {
+.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) img {
   opacity: .3;
 }
 .thumbnails .thumbnail .z-thumbnail-text {
