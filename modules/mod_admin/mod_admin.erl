@@ -233,7 +233,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
-    Action = proplists:get_value(action, Args, []),
+    Actions = proplists:get_all_values(action, Args) ++ proplists:get_value(actions, Args, []),
 
     {SubjectId, ObjectId} =
         case z_utils:is_empty(ObjectId0) of
@@ -248,9 +248,9 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     case do_link(SubjectId, Predicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
             Context2 = z_render:dialog_close(Context1),
-            case Action of
+            case Actions of
                 [] -> Context2;
-                _ -> z_render:wire(Action, Context2)
+                _ -> z_render:wire(Actions, Context2)
             end;
         {error, Context1} ->
             Context1
