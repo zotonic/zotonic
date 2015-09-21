@@ -12,7 +12,7 @@ if (typeof tinyInit !== 'object')
 
     codemirror: {
         indentOnInit: true, // Whether or not to indent code on init. 
-        path: 'codemirror-4.1', // Path to CodeMirror distribution
+        path: 'codemirror-4.8', // Path to CodeMirror distribution
     },
     
     content_css: "/lib/js/tinymce-4.0.26/zotonic.css", 
