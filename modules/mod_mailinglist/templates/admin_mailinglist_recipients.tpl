@@ -27,7 +27,7 @@
 	    {% button class="btn btn-primary" text=_"Add recipient" title=_"Add a new recipient." postback={dialog_recipient_add id=id} %}
 	    {% button class="btn btn-default" text=_"Download all" title=_"Download list of all active recipients." action={growl text=_"Downloading active recipients list. Check your download window."} action={redirect dispatch="mailinglist_export" id=id} %}
 	    {% button class="btn btn-default" text=_"Upload file" title=_"Upload a list of recipients." action={dialog_open title=_"Upload a list of recipients."  template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
-            {% button class="btn btn-default" text=_"Clear" action={confirm text=_"Delete all recipients from this list?" postback={recipients_clear id=id} delegate='controller_admin_mailinglist_recipients'} %}
+        {% button class="btn btn-default" text=_"Clear" action={confirm text=_"Delete all recipients from this list?" postback={recipients_clear id=id} delegate='controller_admin_mailinglist_recipients'} %}
         {% button class="btn btn-default" text=_"Combine…" action={dialog_open title=_"Combine mailing list" id=id template="_admin_dialog_mailinglist_combine.tpl"} %}
 
     </div>

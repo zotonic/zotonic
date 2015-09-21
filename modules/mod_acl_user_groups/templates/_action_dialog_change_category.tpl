@@ -8,7 +8,7 @@
    
     <div class="modal-footer clearfix">
 	    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-	    {% button class="btn btn-primary" text=_"Save" %}
+	    {% button class="btn btn-primary" text=_"Save" type="submit" %}
     </div>
 
 </form>

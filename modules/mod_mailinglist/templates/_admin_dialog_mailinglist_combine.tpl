@@ -44,7 +44,7 @@
 
     <div class="modal-footer">
 	    {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
-	    {% button class="btn btn-primary" text=_"Perform operation" %}
+	    {% button class="btn btn-primary" type="submit" text=_"Perform operation" %}
     </div>
 
 </form>

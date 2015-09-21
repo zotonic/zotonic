@@ -31,8 +31,8 @@
             </div>
 
             <div class="modal-footer">
-                {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-                <button class="btn btn-primary" type="submit">{_ Upload file _}</button>
+                {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
+                {% button class="btn btn-primary" type="submit" text=_"Upload file" %}
             </div>
         </fieldset>
     </form>
