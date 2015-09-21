@@ -34,6 +34,7 @@
             <a class="btn btn-default" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
             {% button   text=_"Replace this media item"
                 class="btn btn-primary"
+                element="a"
     	    action={dialog_media_upload
     	        id=id
     	        action={update
@@ -55,6 +56,7 @@
         <div class="pull-right">
             {% button text=_"Replace this media item"
                 class="btn btn-primary"
+                element="a"
     	        action={dialog_media_upload
     	            id=id
     	            action={update
