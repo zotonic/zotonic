@@ -29,10 +29,14 @@
     fetch_deleted/1,
     purge_deleted/2,
 
-    mark_move_to_local/1,
+    mark_move_to_local_all/1,
+    mark_move_to_local_limit/2,
     mark_move_to_local/2,
-    unmark_move_to_local/1,
+
+    unmark_move_to_local_all/1,
+    unmark_move_to_local_limit/2,
     unmark_move_to_local/2,
+
     fetch_move_to_local/1,
     purge_move_to_local/2,
 
@@ -133,7 +137,31 @@ fetch_deleted(Context) ->
 purge_deleted(Id, Context) ->
     z_db:q("delete from filestore where id = $1 and is_deleted", [Id], Context).
 
-mark_move_to_local(Context) ->
+mark_move_to_local_limit(Limit, Context) ->
+    z_db:transaction(fun(Ctx) ->
+                        case z_db:q("
+                                update filestore f
+                                set is_move_to_local = true
+                                from (
+                                     select id
+                                     from filestore
+                                     where not is_move_to_local
+                                       and not is_deleted
+                                       and error is null
+                                     limit $1
+                                     for update
+                                ) mv
+                                where mv.id = f.id", 
+                                [Limit],
+                                Ctx)
+                        of
+                            N when is_integer(N) ->
+                                {ok, N}
+                        end
+                     end,
+                     Context).
+
+mark_move_to_local_all(Context) ->
     z_db:q("update filestore
             set is_move_to_local = true
             where not is_move_to_local
@@ -145,7 +173,29 @@ mark_move_to_local(Id, Context) ->
             set is_move_to_local = true
             where id = $1", [Id], Context).
 
-unmark_move_to_local(Context) ->
+unmark_move_to_local_limit(Limit, Context) ->
+    z_db:transaction(fun(Ctx) ->
+                        case z_db:q("
+                                update filestore f
+                                set is_move_to_local = false
+                                from (
+                                     select id
+                                     from filestore
+                                     where is_move_to_local
+                                     limit $1
+                                     for update
+                                ) mv
+                                where mv.id = f.id", 
+                                [Limit],
+                                Ctx)
+                        of
+                            N when is_integer(N) ->
+                                {ok, N}
+                        end
+                     end,
+                     Context).
+
+unmark_move_to_local_all(Context) ->
     z_db:q("update filestore
             set is_move_to_local = false
             where is_move_to_local", Context).

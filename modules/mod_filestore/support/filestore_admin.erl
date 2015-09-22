@@ -19,10 +19,14 @@
 -module(filestore_admin).
 
 -export([
-    event/2
+    event/2,
+    task_file_to_local/1,
+    task_file_to_remote/1
     ]).
 
 -include_lib("zotonic.hrl").
+
+-define(BATCH_MOVE, 100).
 
 event(#submit{message=admin_filestore}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
@@ -110,7 +114,8 @@ queue_upload_all(Context) ->
     case testcred(S3Url, S3Key, S3Secret) of
         ok ->
             mod_filestore:queue_all(Context),
-            m_filestore:unmark_move_to_local(Context),
+            z_pivot_rsc:delete_task(?MODULE, task_file_to_local, filestore_file_to_local, Context),
+            z_pivot_rsc:insert_task_after(5, ?MODULE, task_file_to_remote, filestore_file_to_remote, [], Context),
             QueueCt = z_db:q1("select count(*) from filestore_queue", Context),
             z_render:wire([
                     {update, [{target, "s3queue"}, {text, z_convert:to_binary(QueueCt)}]},
@@ -127,7 +132,9 @@ queue_upload_all(Context) ->
     end.
 
 queue_local_all(Context) ->
-    m_filestore:mark_move_to_local(Context),
+    mod_filestore:queue_all_stop(Context),
+    z_pivot_rsc:delete_task(?MODULE, task_file_to_remote, filestore_file_to_remote, Context),
+    z_pivot_rsc:insert_task_after(5, ?MODULE, task_file_to_local, filestore_file_to_local, [], Context),
     QueueCt = z_db:q1("select count(*) from filestore where is_move_to_local and not is_deleted", Context),
     z_render:wire([
             {update, [{target, "s3queue-local"}, {text, z_convert:to_binary(QueueCt)}]},
@@ -135,3 +142,26 @@ queue_local_all(Context) ->
             {hide, [{target, "s3ok-queue"}]},
             {fade_in, [{target, "s3ok-queue-local"}]}
         ], Context).
+
+
+task_file_to_local(Context) ->
+    case catch m_filestore:mark_move_to_local_limit(?BATCH_MOVE, Context) of
+        {ok, 0} ->
+            ok;
+        {ok, N} ->
+            lager:info("[~p] Marked ~p files for move to local.", [z_context:site(Context), N]),
+            {delay, 1};
+        _Other ->
+            {delay, 10}
+    end.
+
+task_file_to_remote(Context) ->
+    case catch m_filestore:unmark_move_to_local_limit(?BATCH_MOVE, Context) of
+        {ok, 0} ->
+            ok;
+        {ok, N} ->
+            lager:info("[~p] Unmarked ~p files for move to local.", [z_context:site(Context), N]),
+            {delay, 1};
+        _Other ->
+            {delay, 10}
+    end.

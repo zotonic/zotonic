@@ -31,6 +31,8 @@
 -include_lib("zotonic_file.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
+-define(BATCH_SIZE, 200).
+
 -export([
     observe_filestore/2,
     observe_media_update_done/2,
@@ -41,6 +43,10 @@
     pid_observe_tick_1m/3,
 
     queue_all/1,
+    queue_all_stop/1,
+
+    task_queue_all/3,
+
     lookup/2,
 
     delete_ready/5,
@@ -193,8 +199,30 @@ load_cache(Props, Context) ->
     end.
 
 queue_all(Context) ->
-    Media = z_db:assoc_props("select * from medium order by id asc", Context),
-    {ok, length([ queue_medium(M, Context) || M <- Media ])}.
+    Max = z_db:q1("select count(id) from medium", Context),
+    z_pivot_rsc:insert_task(?MODULE, task_queue_all, filestore_queue_all, [0, Max], Context).
+
+queue_all_stop(Context) ->
+    z_pivot_rsc:delete_task(?MODULE, task_queue_all, filestore_queue_all, Context).
+
+task_queue_all(Offset, Max, Context) when Offset =< Max ->
+    Media = z_db:assoc_props("
+                    select *
+                    from medium 
+                    order by id asc
+                    limit $1
+                    offset $2",
+                    [?BATCH_SIZE, Offset],
+                    Context),
+    lager:info("[~p] Ensuring ~p files are queued for remote upload.", [z_context:site(Context), length(Media)]),
+    lists:foreach(fun(M) ->
+                    queue_medium(M, Context)
+                  end,
+                  Media),
+    {delay, 0, [Offset+?BATCH_SIZE, Max]};
+task_queue_all(_Offset, _Max, _Context) ->
+    ok.
+
 
 queue_medium(Props, Context) ->
     maybe_queue_file(<<"archive/">>, proplists:get_value(filename, Props), proplists:get_value(is_deletable_file, Props), Props, Context),
