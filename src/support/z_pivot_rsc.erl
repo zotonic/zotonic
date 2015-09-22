@@ -174,13 +174,8 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
                 z_db:insert(pivot_task_queue, Fields, Context);
             Id when is_integer(Id) -> 
                 case Due of
-                    undefined -> 
-                        nop;
-                    _ ->
-                        z_db:q("update pivot_task_queue 
-                                set due = $1 
-                                where id = $2", 
-                               [Due, Id], Context)
+                    undefined -> nop;
+                    _ -> z_db:update(pivot_task_queue, Id, Fields, Context)
                 end,
                 {ok, Id}
         end.
@@ -308,13 +303,28 @@ do_poll_task(Context) ->
         {TaskId, Module, Function, _Key, Args} ->
             try
                 case erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context]) of
-                    {delay, Seconds} when is_integer(Seconds) ->
-                        Due = calendar:gregorian_seconds_to_datetime(
-                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Seconds
-                              ),
+                    {delay, Delay} ->
+                        Due = if
+                                is_integer(Delay) ->
+                                    calendar:gregorian_seconds_to_datetime(
+                                        calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
+                                is_tuple(Delay) ->
+                                    Delay
+                              end,
                         z_db:q("update pivot_task_queue set due = $1 where id = $2", [Due, TaskId], Context);
-                    {delay, Due} when is_tuple(Due) ->
-                        z_db:q("update pivot_task_queue set due = $1 where id = $2", [Due, TaskId], Context);
+                    {delay, Delay, NewArgs} ->
+                        Due = if
+                                is_integer(Delay) ->
+                                    calendar:gregorian_seconds_to_datetime(
+                                        calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
+                                is_tuple(Delay) ->
+                                    Delay
+                              end,
+                        Fields = [
+                            {due, Due},
+                            {args, NewArgs}
+                        ],
+                        z_db:update(pivot_task_queue, TaskId, Fields, Context);
                     _OK ->
                         z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context)
                 end
