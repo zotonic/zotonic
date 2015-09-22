@@ -118,7 +118,7 @@
                                 <thead>
                                     <tr>
                                         <th>{_ Upload Queue _}</th>
-                                        <th>{_ Dowload Queue _}</th>
+                                        <th>{_ Download Queue _}</th>
                                         <th>{_ Delete Queue_}</th>
                                     </tr>
                                 </thead>
@@ -140,9 +140,9 @@
                             {_ This will queue the files for later asynchronous upload. _}
                         </p>
 
-                        <p id="s3error-queue" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
-                        <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ All files has been queued, uploads will be done in the background within 10 minutes. _}</p>
-                        <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ All cloud files have been queued for download. _}</p>
+                        <p id="s3error-queue" class="alert alert-error" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
+                        <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ All files will be queued, uploads will start in the background within 10 minutes. _}</p>
+                        <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ All cloud files will be queued for download. _}</p>
 
                         <div class="form-group">
                             <div>
