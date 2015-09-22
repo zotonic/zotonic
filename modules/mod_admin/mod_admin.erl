@@ -233,7 +233,18 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
-    Actions = proplists:get_all_values(action, Args) ++ proplists:get_value(actions, Args, []),
+    
+    QAction = proplists:get_all_values(action, Args),
+    QActions = proplists:get_value(actions, Args, []),
+    QAction1 = case QAction of
+        [undefined] -> [];
+        _ -> QAction
+    end,
+    QActions1 = case QActions of
+        undefined -> [];
+        _ -> QActions
+    end,
+    Actions = QAction1 ++ QActions1,
 
     {SubjectId, ObjectId} =
         case z_utils:is_empty(ObjectId0) of
