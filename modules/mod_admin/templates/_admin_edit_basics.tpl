@@ -1,3 +1,9 @@
+{#
+Params:
+- id
+- is_editable
+- languages
+#}
 {% extends "admin_edit_widget_i18n.tpl" %}
 
 {% block widget_title %}

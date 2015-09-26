@@ -1,37 +1,47 @@
-Customizing the layout of an admin edit page
-============================================
+.. _admin-custom-layout:
+
+Customizing the layout of the admin edit page
+=============================================
 
 Why
 ---
 
-The default admin edit pages are a "one size fits all". There are times you want to customize which elements you want to show on a specific edit page.
+After having created a custom widget (see :ref:`admin-a-custom-widget`), we want to hide widgets that we don't need.
+
 
 Assumptions
------------
+```````````
 
-Readers are expected to have experience with Zotonic templates.
+Readers are expected to have experience with Zotonic templates. For reference, look at the Zotonic admin template directory ``modules/mod_admin/templates/``.
 
-How
----
 
-The edit page consists of 2 main areas, main and sidebar. The area contents are specified in sub-template files (both in ``modules/mod_admin/templates/``):
 
-- main area: ``_admin_edit_main_parts.tpl``
-- sidebar area: ``_admin_edit_sidebar_parts.tpl``
+Page structure
+--------------
 
-Let’s say you have created a category *Shop*, and the only data you want to maintain on shops are the name and url.
+To hide default widgets from the page, we need to change the template that loads these widgets. 
 
-In your site’s template directory you create the file ``_admin_edit_main_parts.shop.tpl``. In it you write only those elements that you need. For instance, to show the default Title and Advanced blocks you would write::
+The edit page widgets are grouped into 2 main areas, main and sidebar. These groups are created by the files ``_admin_edit_main_parts.tpl`` and ``_admin_edit_sidebar_parts.tpl``.
 
-  {% block admin_edit_form_top %}{% endblock %}
-  
-  {% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
-  
-  {% include "_admin_edit_content_advanced.tpl" %}
 
-To make the Title section contain your shop's name and url, you can redefine ``_admin_edit_basics_form.tpl``. Copy the file ``_admin_edit_basics_form.tpl`` to ``_admin_edit_basics_form.shop.tpl`` in your site’s template directory. Change the fields to your needs.
+Content parts
+-------------
 
-For the sidebar area you can follow the same procedure. Of course you need to keep the submit buttons, so include ``_admin_edit_content_publish.tpl``.
+We won't change the default Zotonic edit template; instead we will override it by adding the category to the filename.
+
+Create a file ``_admin_edit_main_parts.webshop.tpl`` and give it the contents::
+
+    {% all catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
+    {% all catinclude "_admin_edit_content.tpl" id is_editable=is_editable languages=languages %}
+    {% include "_admin_edit_content_advanced.tpl" %}
+
+This template will now load the Basic widget (Title, Summary, Short title), all content widgets (for now only ``_admin_edit_content.webshop.tpl``), and the default Advanced widget.
+
+
+Sidebar
+-------
+
+For the sidebar area you can follow the same procedure. Of course you need to keep the submit buttons, so always include ``_admin_edit_content_publish.tpl``.
 
 
 Category and instance
