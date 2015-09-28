@@ -72,6 +72,7 @@
                     text=_"Add"
                     class="btn btn-primary pull-right"
                     icon="z-icon z-icon-plus"
+                    type="submit"
                 %}
             {% else %}
                 {% button
