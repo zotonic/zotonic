@@ -243,7 +243,7 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                     end
             end;
         1 -> 
-            1
+            ok
     end.
 
 %% @doc Ensure that the user has an associated username and password
