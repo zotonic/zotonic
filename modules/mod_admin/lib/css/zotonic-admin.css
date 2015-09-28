@@ -1221,6 +1221,9 @@ div.widget-content .mce-reset {
 ul.tree-list {
   margin: 0 0 15px 0;
 }
+ul.tree-list:empty {
+  margin: 0;
+}
 ul.tree-list li.menu-item {
   line-height: 1.2;
 }
