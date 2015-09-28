@@ -1,6 +1,10 @@
 ul.tree-list {
     margin: 0 0 @widgetVerticalPadding 0;
     
+    &:empty {
+        margin: 0;
+    }
+    
     li.menu-item {
     	@_toggle_width: 40px;
         @_left_spacing: @_toggle_width;
