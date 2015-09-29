@@ -50,7 +50,7 @@ ul.tree-list .active .menu-edit {
 }
 
 
-ul.tree-list li div {
+ul.tree-list li > div {
     cursor: move;
     clear: both;
     border: 1px solid #E0E0E0;
