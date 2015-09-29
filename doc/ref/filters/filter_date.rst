@@ -65,17 +65,17 @@ All supported formatting characters are listed below:
 +==========+=======================================+===========================+
 |a         |“a.m.” or “p.m.”  (note that this      |“a.m.”                     |
 |          |follows Associated Press style and adds|                           |
-|          |periods)                               |                           |
+|          |periods).                              |                           |
 +----------+---------------------------------------+---------------------------+
-|A         |Uppercase “AM” or “PM”                 |“AM”                       |
+|A         |Uppercase “AM” or “PM”.                |“AM”                       |
 +----------+---------------------------------------+---------------------------+
 |b         |Month, textual, in three lowercase     |“jan”                      |
 |          |characters.                            |                           |
 +----------+---------------------------------------+---------------------------+
-|c         |ISO-8601 date format                   |“2004-02-12T15:19:21+00:00”|
+|c         |ISO-8601 date format.                  |“2004-02-12T15:19:21+00:00”|
 +----------+---------------------------------------+---------------------------+
 |d         |Day of the month in two digits with    |“01”                       |
-|          |leading zeros, i.e. “01” to “31”       |                           |
+|          |leading zero, i.e. “01” to “31”.       |                           |
 +----------+---------------------------------------+---------------------------+
 |D         |Day of the week, textual, three letters|“Mon”, “Fri”               |
 |          |of which the first one uppercase.      |                           |
@@ -92,22 +92,22 @@ All supported formatting characters are listed below:
 |          |i.e. “1” to “12”.                      |                           |
 +----------+---------------------------------------+---------------------------+
 |G         |24 Hour format without leading zero,   |“0”, “15”                  |
-|          |i.e. “0” to “23”                       |                           |
+|          |i.e. “0” to “23”.                      |                           |
 +----------+---------------------------------------+---------------------------+
 |h         |12 Hour format with leading zero,      |“01”                       |
-|          |i.e. “01” to “12”                      |                           |
+|          |i.e. “01” to “12”.                     |                           |
 +----------+---------------------------------------+---------------------------+
 |H         |24 Hour format with leading zero,      |“00”, “15”                 |
-|          |i.e. “00” to “23”                      |                           |
+|          |i.e. “00” to “23”.                     |                           |
 +----------+---------------------------------------+---------------------------+
 |i         |Minutes with leading zero, i.e. “00” to|“00”, “46”                 |
-|          |“59”                                   |                           |
+|          |“59”.                                  |                           |
 +----------+---------------------------------------+---------------------------+
 |i         |Daylight saving time flag. “1” if DST  |“0”                        |
-|          |is in effect, “0” if no DST            |                           |
+|          |is in effect, “0” if no DST.           |                           |
 +----------+---------------------------------------+---------------------------+
-|j         |Day of the month without leading zeros,|“1”, “28”                  |
-|          |i.e. “1” to “31”                       |                           |
+|j         |Day of the month without leading zero, |“1”, “28”                  |
+|          |i.e. “1” to “31”.                      |                           |
 +----------+---------------------------------------+---------------------------+
 |l         |(lowercase L) Day of the week, textual,|“Monday”, “Friday”         |
 |          |full english name with first character |                           |
@@ -117,14 +117,14 @@ All supported formatting characters are listed below:
 |          |year.  Returns the string “True” or    |                           |
 |          |“False”.                               |                           |
 +----------+---------------------------------------+---------------------------+
-|m         |Month with leading zeros, i.e. “01” to |“01”, “12”                 |
-|          |“12”                                   |                           |
+|m         |Month with leading zero, i.e. “01” to  |“01”, “12”                 |
+|          |“12”.                                  |                           |
 +----------+---------------------------------------+---------------------------+
 |M         |Month, textual, in three characters,   |“Jan”                      |
 |          |first character in uppercase.          |                           |
 +----------+---------------------------------------+---------------------------+
-|n         |Month without leading zeros, i.e. “1”  |“1”, “12”                  |
-|          |to “12”                                |                           |
+|n         |Month without leading zero, i.e. “1”   |“1”, “12”                  |
+|          |to “12”.                               |                           |
 +----------+---------------------------------------+---------------------------+
 |N         |Month abbreviation in Associated Press |“Jan.”, “June”, “Sept.”,   |
 |          |style. March, April, June and July are |“Dec.”                     |
@@ -142,16 +142,18 @@ All supported formatting characters are listed below:
 |          |strings “midnight” or “noon” if        |                           |
 |          |appropriate.                           |                           |
 +----------+---------------------------------------+---------------------------+
-|r         |RFC 2822 formatted date.               |“Thu, 21 Dec 2000 16:01:07 |
+|r         |RFC 2822 formatted date.               |“Thu, 21 Dec 2000 16:01:07”|
++----------+---------------------------------------+---------------------------+
+|s         |Seconds with leading zero.             |“09”                       |
 +----------+---------------------------------------+---------------------------+
 |S         |English ordinal suffix for the day of  |“st”, “nd”                 |
 |          |the month, 2 characters; i.e. “st”,    |                           |
-|          |“nd”, “rd” or “th”                     |                           |
+|          |“nd”, “rd” or “th”.                    |                           |
 +----------+---------------------------------------+---------------------------+
 |t         |Number of days in the given month,     |“30”                       |
-|          |i.e. “28” to “31”                      |                           |
+|          |i.e. “28” to “31”.                     |                           |
 +----------+---------------------------------------+---------------------------+
-|T         |Timezone used for displaying the date  |“CEST”                     |
+|T         |Timezone used for displaying the date. |“CEST”                     |
 +----------+---------------------------------------+---------------------------+
 |U         |Seconds since the Unix epoch of January|1254911050                 |
 |          |1, 00:00:00 GMT.                       |                           |
