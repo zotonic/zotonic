@@ -1,8 +1,12 @@
 ul.tree-list {
-    margin: 0 0 @widgetVerticalPadding 0;
+    margin: 0;
     
     &:empty {
         margin: 0;
+    }
+    
+    > li:last-child {
+        margin-bottom: 10px;
     }
     
     li.menu-item {
@@ -16,8 +20,8 @@ ul.tree-list {
         
         line-height: @_line_height;
         
+        // nested:
         li.menu-item:last-child {
-            // nested
             margin: 0;
         }
 

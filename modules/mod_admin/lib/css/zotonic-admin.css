@@ -335,9 +335,6 @@ code {
   vertical-align: bottom;
   text-align: center;
 }
-ul.connections-list li:last-child {
-  margin-bottom: 10px;
-}
 #unlink-undo-message div.alert {
   padding-right: 14px;
   /* right-aligned undo button in page connections */
@@ -1219,10 +1216,13 @@ div.widget-content .mce-reset {
   font-size: 13px;
 }
 ul.tree-list {
-  margin: 0 0 15px 0;
+  margin: 0;
 }
 ul.tree-list:empty {
   margin: 0;
+}
+ul.tree-list > li:last-child {
+  margin-bottom: 10px;
 }
 ul.tree-list li.menu-item {
   line-height: 1.2;
