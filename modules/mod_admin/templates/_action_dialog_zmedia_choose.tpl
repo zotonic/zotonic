@@ -15,17 +15,16 @@
 
             <div class="modal-footer">
                 {% button
-                    class="btn btn-primary"
-                    text=_"Add a new media item" 
-                    action={dialog_media_upload subject_id=id stay
-                    action={postback 
-                        postback={zmedia_choose} 
-                        delegate="action_admin_zmedia_choose"}
-                        action={postback
-                            postback={reload_media rsc_id=id div_id=media_div_id}
-                            delegate="controller_admin_edit"
-                        }
-                    }
+                class="btn btn-primary"
+                text=_"Add a new media item" 
+                action={dialog_media_upload subject_id=id stay
+                action={postback 
+                postback={zmedia_choose} 
+                delegate="action_admin_zmedia_choose"}
+	        action={postback
+	        postback={reload_media rsc_id=id div_id=media_div_id}
+ 	        delegate="controller_admin_edit"}
+                }
                 %}
             </div>
 
