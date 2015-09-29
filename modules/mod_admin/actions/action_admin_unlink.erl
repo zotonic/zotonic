@@ -40,7 +40,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
     Action1 = case Hide of
                   undefined -> Action;
-                  _ -> [{slide_fade_out, [{target, Hide}, {speed, 200}]}|Action]
+                  _ -> [{remove, [{fadeout, true}, {target, Hide}, {speed, 200}]}|Action]
               end,
 
     Postback = {unlink, EdgeId, SubjectId, Predicate, ObjectId, UndoMessageId, EdgeTemplate, Action1, UndoAction},
