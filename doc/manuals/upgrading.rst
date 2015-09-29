@@ -8,6 +8,18 @@ versions. Please read these notes carefully when upgrading to a new
 major Zotonic version.
 
 
+Upgrading to Zotonic 0.14 (next major release)
+----------------------------------------------
+
+Button type
+...........
+
+A change was made to have safer defaults for the ``{% button %}`` tag. We noticed that  buttons sometimes triggered unexpected changes to the page, because their default type was "submit".
+
+Buttons generated with ``{% button %}`` now have the default type "button" instead of "submit". If the button must submit a form, and if the button does not already have an action or postback defined, the type must be set explicitly: ``{% button type="submit" %}``.
+
+
+
 Upgrading to Zotonic 0.12
 -------------------------
 
