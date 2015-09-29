@@ -1301,6 +1301,9 @@ ul.tree-list li.menu-item > div a.menu-toggle > i.menu-collapse {
 ul.tree-list li.menu-item > div a.menu-toggle > i.menu-expand {
   display: block;
 }
+ul.tree-list li.menu-item > div .label {
+  color: #999999;
+}
 ul.tree-list li.menu-item img.admin-list-dashboard {
   position: absolute;
   width: 21.33333333px;
