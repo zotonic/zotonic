@@ -10,7 +10,7 @@
                     <span class="icon-bar"></span>
                 </button>
             {% endif %}
-            <a class="navbar-brand" href="http://{{ m.site.hostname }}">
+            <a class="navbar-brand" href="/">
                 <span class="zotonic-logo"><em>Zotonic</em></span>
                 {_ Status _}
             </a>

@@ -39,7 +39,8 @@
                             </span>
                         </div>
                         <div id="error-pw" class="has-error">
-                            <p class="help-block">{_ The password does not match. Please retry. _}</p>
+                            <p class="help-block help-block-error">{_ This password is not correct. _}</p>
+                            <p class="help-block">{_ You can find the password in ~/.zotonic/[version]/zotonic.config. _}</p>
                         </div>
                     </div>
                 </div>

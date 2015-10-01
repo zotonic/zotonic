@@ -1,1 +1,1 @@
-lessc project.less ../css/project.css
+lessc zotonic-status.less ../css/zotonic-status.css

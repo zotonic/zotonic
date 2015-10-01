@@ -32,7 +32,7 @@ body {
   -moz-border-radius: 0;
   border-radius: 0;
   margin-bottom: 0;
-  background-color: #039be5;
+  background-color: #0fa2db;
   border: none;
 }
 .navbar > a,
@@ -46,7 +46,7 @@ body {
 .navbar > a:hover,
 .navbar .navbar-brand:hover,
 .navbar .navbar-nav > li > a:hover {
-  background-color: #0288d1;
+  background-color: #0d90c3;
 }
 .navbar .navbar-brand {
   font-size: 15px;
@@ -70,7 +70,13 @@ body {
   text-align: left;
 }
 .footer .zotonic-logo {
-  color: #757575;
+  color: #999999;
+}
+.jumbotron h1 {
+  font-size: 42px;
+}
+.jumbotron .zotonic-logo {
+  height: 42px;
 }
 form #error-pw {
   display: none;
@@ -85,7 +91,13 @@ form.error-pw #error-pw p {
 form .form-group {
   margin-bottom: 0;
 }
+form .has-error {
+  margin: 15px 0 0 0;
+}
 form .has-error .help-block {
+  color: #777777;
+}
+form .has-error .help-block-error {
   color: #d84315;
 }
 .table.sites-overview {
@@ -200,7 +212,7 @@ form .has-error .help-block {
   color: #ffffff;
 }
 .text-muted {
-  color: #757575;
+  color: #999999;
 }
 .alert,
 .list-group-item,
@@ -220,12 +232,12 @@ a.list-group-item:hover,
 .btn:hover *,
 a.list-group-item:hover * {
   cursor: pointer;
-  background-color: #039be5;
+  background-color: #0fa2db;
   color: #fff;
-  border-color: #039be5;
+  border-color: #0fa2db;
 }
 .container .jumbotron {
-  background-color: #039be5;
+  background-color: #0fa2db;
   padding: 40px;
   color: #fff;
 }

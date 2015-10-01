@@ -27,10 +27,10 @@ limitations under the License.
 
 // Lots of Love for LESS: http://mateuszkocz.github.io/3l/
 #3L {@import "3L/3L";}
+@import "../../../../../modules/mod_admin/lib/less/variables";
 
-@main_color: #039BE5;
-@main_color_hover: #0288D1;
-@zotonic_color: @main_color; //#069cd1;
+@main_color: @brand-primary;
+@main_color_hover: darken(@main_color, 5%);
 @color_palette_dark: rgba(0,0,0,0.87);
 @color_running: #4CAF50;
 @color_running_background: #E8F5E9;
@@ -44,8 +44,7 @@ limitations under the License.
 @color_failed_background: #FBE9E7;
 @color_info_background: #343434;
 @color_info_text: #fff;
-@color_muted: #757575;
-@color_error: #D84315;
+@textColorError: #D84315;
 @block_border_radius: 4px;
 @info_block_border_radius: 2px;
 
@@ -97,11 +96,22 @@ body {
     text-align: left;
     
     .zotonic-logo {
-        color: @color_muted;
+        color: @textColorMuted;
     }
 }
 
 // LOGIN FORM
+
+.jumbotron {
+    @_size: 42px;
+    
+    h1 {
+        font-size: @_size;
+    }
+    .zotonic-logo {
+        height: @_size;
+    }
+}
 
 form {
     #error-pw {
@@ -118,8 +128,14 @@ form {
     .form-group {
         margin-bottom: 0;
     }
+    .has-error {
+        margin: 15px 0 0 0;
+    }
     .has-error .help-block {
-        color: @color_error;
+        color: @textColorMedium;
+    }
+    .has-error .help-block-error {
+        color: @textColorError;
     }
 }
 
@@ -258,7 +274,7 @@ form {
 }
 
 .text-muted {
-    color: @color_muted;
+    color: @textColorMuted;
 }
 
 // Synchronize sizes
