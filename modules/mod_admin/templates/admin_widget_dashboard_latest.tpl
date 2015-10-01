@@ -85,7 +85,7 @@
             </tbody>
         </table>
         {% else %}
-            <div class="widget-content">{_ No items _}</div>
+            <div class="widget-content widget-content-full"><div class="table-like"><span class="text-muted">{_ No items _}</span></div></div>
         {% endif %}
 {% endwith %}
 {% endblock %}

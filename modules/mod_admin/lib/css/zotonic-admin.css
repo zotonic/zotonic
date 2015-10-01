@@ -201,7 +201,11 @@ pre:empty {
   color: #999999;
 }
 .btn.disabled {
+  pointer-events: none;
   color: #999999;
+  background: transparent;
+  color: #bbbbbb;
+  opacity: 1;
 }
 .btn.disabled .glyphicon {
   opacity: .6;
@@ -263,6 +267,9 @@ pre:empty {
 .well {
   background-color: #f5f5f5;
   padding: 15px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 .well.z-button-row {
   padding: 15px 15px 11px 15px;
@@ -347,10 +354,11 @@ code {
 }
 .dashboard .table {
   margin: 0;
-  border-bottom: 1px solid rgba(217, 217, 217, 0.6);
 }
-.dashboard .table > thead > tr > th,
-.dashboard .table > tbody > tr > td {
+.dashboard .table > thead > tr:first-child th,
+.dashboard .table > tbody > tr:first-child th,
+.dashboard .table > thead > tr:first-child td,
+.dashboard .table > tbody > tr:first-child td {
   border: none;
 }
 .dashboard .table > thead > tr > th:first-child,
@@ -906,28 +914,10 @@ tr.clickable td {
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-  border-top: 1px solid #d9d9d9;
+  border-top: 1px solid #e5e5e5;
 }
 .table {
-  border-bottom: 1px solid #d9d9d9;
-}
-table.do_adminLinkedTable {
-  /*
-    img.thumb.admin-list-dashboard {
-        width: @miniThumbImageWidth;
-        height: @miniThumbImageHeight;
-        &:extend(.admin-image-border);
-        position: absolute;
-        left: @_padding;
-        top: @_padding - 1;
-        
-        & + span {
-            display: inline-block;
-            margin: 0 0 0 (@miniThumbImageWidth + 10);
-            &:extend(.admin-word-break);
-        }
-    }
-*/
+  border-bottom: 1px solid #e5e5e5;
 }
 table.do_adminLinkedTable th a:hover {
   text-decoration: none;
@@ -1391,6 +1381,9 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
 .widget .widget-content.widget-content-full .table > thead > tr > th:last-child,
 .widget .widget-content.widget-content-full .table > tbody > tr > td:last-child {
   padding-right: 15px;
+}
+.widget .widget-content .table-like {
+  padding: 8px 15px;
 }
 .widget .widget-content hr {
   margin: 15px -15px;

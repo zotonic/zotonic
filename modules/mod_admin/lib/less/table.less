@@ -14,10 +14,10 @@ tr.clickable td {
 .table>thead>tr>td,
 .table>tbody>tr>td,
 .table>tfoot>tr>td {
-    border-top: 1px solid @borderColorMedium;
+    border-top: 1px solid @borderColorLight;
 }
 .table {
-    border-bottom: 1px solid @borderColorMedium;
+    border-bottom: 1px solid @borderColorLight;
 }
 
 table.do_adminLinkedTable {
@@ -72,22 +72,6 @@ table.do_adminLinkedTable {
             &:extend(.admin-word-break);
         }
     }
-/*
-    img.thumb.admin-list-dashboard {
-        width: @miniThumbImageWidth;
-        height: @miniThumbImageHeight;
-        &:extend(.admin-image-border);
-        position: absolute;
-        left: @_padding;
-        top: @_padding - 1;
-        
-        & + span {
-            display: inline-block;
-            margin: 0 0 0 (@miniThumbImageWidth + 10);
-            &:extend(.admin-word-break);
-        }
-    }
-*/
 }
 
 .table>thead>tr>th {
