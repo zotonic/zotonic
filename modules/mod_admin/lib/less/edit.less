@@ -146,13 +146,13 @@ input.do_timepicker {
     top: @topbarHeight;
     border-radius: 0;
     padding: @widgetVerticalPadding @widgetSidePadding;
-    background-color: fadeout(@brand-primary, 40%);
+    background-color: @state-info-bg;
     -webkit-transition: opacity @_transation_duration ease-in-out;
     -moz-transition: opacity @_transation_duration ease-in-out;
     -o-transition: opacity @_transation_duration ease-in-out;
     transition: opacity @_transation_duration ease-in-out;
     min-height: inherit;
-    #3L > .box-shadow(@boxShadow);
+    #3L > .box-shadow(none);
 }
 
 .scrolled .admin-navbar-fixed-save {

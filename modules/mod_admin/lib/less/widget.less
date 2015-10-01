@@ -110,7 +110,7 @@
         #3L > .user-select(none);
         text-shadow: @darkOnLightTextShadow;
         font-size: @font-size-base;
-        line-height: @font-size-base;
+        line-height: 16px; // make room for widget-header-tools
         
         .z-btn-remove {
             display: block;
@@ -129,6 +129,7 @@
             .z-icon {
                 display: inline-block;
                 margin-left: 12px;
+                line-height: inherit;
             }
         
             .z-btn-help {
@@ -166,7 +167,7 @@
     &.widget-expanded,
     &.dark.widget-expanded {
         .widget-header {
-            .widget-header-tools {
+            .widget-header-tools {  
                 .z-btn-help {
                     color: @colorLink;
                 }
@@ -227,7 +228,7 @@ li {
     &:extend(.minimalTabs all);
 
     &.language-tabs {
-        background: #e0e0e0;
+        background: @backgroundColorMediumDark;
     }
 }
 
