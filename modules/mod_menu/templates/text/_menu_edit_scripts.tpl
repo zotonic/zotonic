@@ -9,6 +9,7 @@
                 cat=cat_id
                 in_sorter=in_sorter
                 tabs_enabled=["new"]
+                center=0
             }
     %}
 {% elseif is_hierarchy %}
@@ -22,6 +23,7 @@
                 cat=cat_id
                 nocatselect
                 in_sorter=in_sorter
+                center=0
             }
     %}
 {% else %}
