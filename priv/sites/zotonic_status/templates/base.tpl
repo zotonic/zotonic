@@ -16,7 +16,7 @@
             "bootstrap/css/bootstrap.min.css"
             "css/jquery.loadmask.css" 
             "css/z.icons.css"
-            "css/project.css"
+            "css/zotonic-status.css"
         %}
 
         {% block html_head_extra %}{% endblock %}
