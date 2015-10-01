@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:21
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:37
 msgid "+ add"
 msgstr "+ voeg toe"
 
@@ -38,7 +38,7 @@ msgstr ""
 "naam</strong> (bv. Hendricus), <strong>Voorvoegsel</strong> (bv. van\n"
 "de), en <strong>Achternaam</strong> (bv. Ven)."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
 msgid "About categories"
 msgstr "Over categorieën"
 
@@ -48,12 +48,12 @@ msgstr "Over categorieën"
 msgid "Access control"
 msgstr "Toegangsrechten"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:27
-#: modules/mod_admin/templates/_admin_edit_depiction.tpl:22
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:43
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection: "
 msgstr "Voeg een connectie toe: "
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:57
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:59
 msgid "Add a new media file"
 msgstr "Nieuw mediabestand toevoegen"
 
@@ -61,7 +61,7 @@ msgstr "Nieuw mediabestand toevoegen"
 msgid "Add a new media item"
 msgstr "Nieuw mediabestand"
 
-#: modules/mod_admin/templates/_admin_edit_body.tpl:33
+#: modules/mod_admin/templates/_admin_edit_body.tpl:34
 msgid "Add link"
 msgstr "Link toevoegen"
 
@@ -70,7 +70,7 @@ msgid "Add media to body"
 msgstr "Media toevoegen aan pagina"
 
 #: modules/mod_admin/actions/action_admin_link.erl:78
-#: modules/mod_admin/mod_admin.erl:347
+#: modules/mod_admin/mod_admin.erl:371
 msgid "Added the connection to"
 msgstr "Connectie gemaakt naar"
 
@@ -123,7 +123,7 @@ msgstr "Alternatief telefoonnummer"
 msgid "And media can also be viewed on their own page."
 msgstr "Media-items kunnen een eigen pagina hebben."
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:16
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:17
 msgid "Any category"
 msgstr "Willekeurige categorie"
 
@@ -143,7 +143,7 @@ msgstr "Zijkant"
 msgid "Ask google to not index this page"
 msgstr "Laat Google deze pagina niet indexeren"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:29
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:31
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Gekoppelde media"
@@ -165,12 +165,12 @@ msgstr "Naam blok"
 msgid "Block quote"
 msgstr "Citaat"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:30
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:33
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:83
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:33
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
@@ -194,7 +194,7 @@ msgstr "Categorie:"
 msgid "Change category"
 msgstr "Verander categorie"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:25
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:24
 msgid "Change the category of this page"
 msgstr "Verander de categorie van deze pagina"
 
@@ -211,7 +211,7 @@ msgstr "Stad"
 msgid "Click the image to set the cropping center."
 msgstr "Klik op de afbeelding om het middelpunt van uitsnedes te bepalen."
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
 msgid "Community members"
 msgstr "Leden van deze site"
 
@@ -240,8 +240,8 @@ msgstr "Inhoud"
 msgid "Country"
 msgstr "Land"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:22
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:41
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:24
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:43
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
 msgid "Create Page"
 msgstr ""
@@ -299,7 +299,7 @@ msgid "Dependent"
 msgstr "Afhankelijk"
 
 #: modules/mod_admin/templates/_admin_edit_block_li.tpl:6
-#: modules/mod_admin/templates/_rsc_edge.tpl:12
+#: modules/mod_admin/templates/_rsc_edge.tpl:18
 #: modules/mod_admin/templates/_rsc_edge_media.tpl:22
 msgid "Disconnect"
 msgstr "Ontkoppel"
@@ -335,12 +335,12 @@ msgstr "Dupliceer deze pagina."
 msgid "E-mail address"
 msgstr "E-mailadres"
 
-#: modules/mod_admin/templates/_rsc_edge.tpl:7
+#: modules/mod_admin/templates/_rsc_edge.tpl:15
 #: modules/mod_admin/templates/admin_edit.tpl:3
 msgid "Edit"
 msgstr "Bewerk"
 
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:72
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:70
 msgid "Edit:"
 msgstr "Bewerken:"
 
@@ -352,7 +352,7 @@ msgstr "Pagina embedden"
 msgid "Emergency telephone"
 msgstr "Noodnummer (telefoon)"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:161
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:181
 msgid "Error uploading the file."
 msgstr "Fout bij uploaden van bestand."
 
@@ -364,7 +364,7 @@ msgstr ""
 "Elke pagina kan een datum-bereik hebben. Bijvoorbeeld als de pagina een "
 "evenement voorstelt."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
 msgid ""
 "Every page is categorized in exactly one category. The category defines what "
 "the page represents. For example an event, a product or a person. The "
@@ -376,7 +376,7 @@ msgstr ""
 "categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een "
 "categorie voertuig hebben met daarin subcategorieën auto en fiets."
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:178
 msgid "Failed to download the file."
 msgstr "Het downloaden van het mediabestand is mislukt."
 
@@ -401,15 +401,11 @@ msgstr "Filter op categorie"
 msgid "Filter on content group"
 msgstr "Filter op contentgroep"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:35
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:37
 msgid "Find Page"
 msgstr "Zoek pagina"
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:2
-msgid "Find an existing page to connect"
-msgstr "Zoek een bestaande pagina om te verbinden"
-
-#: modules/mod_admin/templates/_admin_edit_blocks.tpl:99
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:98
 msgid "Find page"
 msgstr "Zoek pagina"
 
@@ -437,7 +433,7 @@ msgstr "Van"
 msgid "Go back."
 msgstr "Ga terug."
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:9
 msgid "Group members"
 msgstr "Groepsleden"
 
@@ -538,7 +534,7 @@ msgstr "Maak een nieuwe pagina"
 msgid "Make a new page or media"
 msgstr "Maak een nieuwe pagina of media-item"
 
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
 msgid "Make media item"
 msgstr "Maak mediabestand"
 
@@ -547,7 +543,7 @@ msgstr "Maak mediabestand"
 msgid "Media"
 msgstr "Mediabestanden"
 
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:25
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:16
 msgid "Media URL"
 msgstr "Media URL"
 
@@ -563,8 +559,8 @@ msgstr ""
 msgid "Media file"
 msgstr "Mediabestand"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:132
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:144
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:152
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:164
 msgid "Media item created."
 msgstr "Media item gemaakt."
 
@@ -573,7 +569,7 @@ msgid "Media on this page"
 msgstr "Media op deze pagina"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:18
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:16
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:25
 msgid "Media title"
 msgstr "Media titel"
 
@@ -599,7 +595,7 @@ msgstr "Bewerkt op"
 msgid "Modified:"
 msgstr "Bewerkt:"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:11
 msgid "More like this"
 msgstr "Vergelijkbare pagina's"
 
@@ -620,6 +616,14 @@ msgstr "Meer hulp nodig?"
 msgid "Next in category: "
 msgstr "Volgende in categorie:"
 
+#: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:14
+msgid "No connected images."
+msgstr "Geen gekoppelde afbeeldingen."
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:18
+msgid "No features are enabled for this meta-resource."
+msgstr "Deze meta-resource bevat geen geactiveerde features."
+
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:88
 msgid "No items"
 msgstr "Geen items"
@@ -628,6 +632,7 @@ msgstr "Geen items"
 msgid "No media found."
 msgstr "Geen media gevonden."
 
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find_results_loop.tpl:12
 #: modules/mod_admin/templates/_admin_overview_list.tpl:53
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
@@ -783,16 +788,16 @@ msgstr "Verwijder uitsnede-middelpunt"
 msgid "Renumber category tree"
 msgstr "Categorieboom opnieuw berekenen"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:57
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:59
 msgid "Replace current medium"
 msgstr "Vervang huidig mediabestand"
 
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
 msgid "Replace media item"
 msgstr "Vervang mediabestand"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:35
-#: modules/mod_admin/templates/_admin_edit_media.tpl:48
+#: modules/mod_admin/templates/_admin_edit_media.tpl:57
 msgid "Replace this media item"
 msgstr "Vervang dit mediabestand"
 
@@ -819,7 +824,7 @@ msgstr ""
 msgid "SEO Content"
 msgstr "SEO inhoud"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
@@ -881,7 +886,7 @@ msgstr "Toon als"
 msgid "Show page on multiple paths"
 msgstr "Toon pagina op meerdere paginapaden"
 
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:128
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:126
 msgid "Something went wrong. Sorry."
 msgstr "Er ging iets mis, onze excuses."
 
@@ -889,7 +894,7 @@ msgstr "Er ging iets mis, onze excuses."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: modules/mod_admin/mod_admin.erl:351
+#: modules/mod_admin/mod_admin.erl:375
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
@@ -948,11 +953,11 @@ msgstr "Test zoekopdracht"
 msgid "Text"
 msgstr "Tekst"
 
-#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:15
 msgid "The page"
 msgstr "De pagina"
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:6
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
 msgid "The whole world"
 msgstr "Iedereen"
 
@@ -987,7 +992,7 @@ msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:50
 msgid "This resource was created by the module"
-msgstr "Deze pagina was vanzelf aangemaakt door de module"
+msgstr "Deze resource is aangemaakt door de module"
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
 msgid "Till"
@@ -1006,7 +1011,7 @@ msgstr "Titel"
 msgid "Toggle navigation"
 msgstr "Navigatie open/dicht"
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:6
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:7
 msgid "Type text to search"
 msgstr "Typ een tekst om te zoeken"
 
@@ -1019,7 +1024,7 @@ msgstr "Unieke naam"
 msgid "Unique uri"
 msgstr "Unieke URI"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:47
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:49
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:10
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
 msgid "Upload File"
@@ -1033,7 +1038,7 @@ msgstr "Upload een bestand van je computer"
 msgid "Upload a file which is already on the internet."
 msgstr "Upload een bestand van het internet."
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:52
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:54
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
 msgid "Upload by URL"
@@ -1062,7 +1067,7 @@ msgstr ""
 msgid "User page"
 msgstr "Gebruikerspagina"
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:14
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:15
 msgid "Valid for:"
 msgstr "Geldig voor:"
 
@@ -1071,11 +1076,11 @@ msgstr "Geldig voor:"
 msgid "View"
 msgstr "Bekijken"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
 msgid "View all pages from this category"
 msgstr "Bekijk alle pagina's binnen deze categorie"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:37
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:36
 msgid "View all referrers"
 msgstr "Bekijk verwijzende pagina's"
 
@@ -1084,7 +1089,7 @@ msgstr "Bekijk verwijzende pagina's"
 msgid "View this page."
 msgstr "Bekijk deze pagina."
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:3
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:4
 msgid "Visible for"
 msgstr "Zichtbaar voor"
 
@@ -1139,11 +1144,11 @@ msgstr "Je mag deze pagina niet verwijderen."
 msgid "You are not allowed to edit this page."
 msgstr "Je hebt geen rechten om deze pagina te bewerken."
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:154
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:174
 msgid "You don't have permission to change this media item."
 msgstr "Je hebt geen toestemming om dit mediabestand te bewerken."
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:156
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:176
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Je hebt niet de juiste permissies om dit type bestand te uploaden."
 
@@ -1195,7 +1200,7 @@ msgstr "bewerk"
 msgid "edit this page"
 msgstr "bewerk deze pagina"
 
-#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
 msgstr "is ontkoppeld."
 
@@ -1227,12 +1232,13 @@ msgstr "ongedaan maken"
 
 #: modules/mod_admin/templates/_admin_edit_header.tpl:29
 #: modules/mod_admin/templates/_choose_media.tpl:9
+#: modules/mod_admin/templates/_rsc_edge_item.tpl:9
 #: modules/mod_admin/templates/_rsc_edge_media.tpl:18
 msgid "untitled"
 msgstr "zonder titel"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:13
-#: modules/mod_admin/templates/_admin_edit_media.tpl:44
+#: modules/mod_admin/templates/_admin_edit_media.tpl:53
 msgid "uploaded on"
 msgstr "geupload op"
 
@@ -1247,6 +1253,9 @@ msgstr "bekijk"
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "bezoek site"
+
+#~ msgid "Find an existing page to connect"
+#~ msgstr "Zoek een bestaande pagina om te verbinden"
 
 #~ msgid "add a connection"
 #~ msgstr "Maak een nieuwe connectie"

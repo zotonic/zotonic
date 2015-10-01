@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:21
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:37
 msgid "+ add"
 msgstr ""
 
@@ -40,7 +40,7 @@ msgstr ""
 "姓前缀</strong>在中文中不常见，荷兰文姓名例如 <em>van, van de, der</em>。<br/"
 "><strong>姓</strong>对应与英文的 Last Name。"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
 msgid "About categories"
 msgstr ""
 
@@ -50,12 +50,12 @@ msgstr ""
 msgid "Access control"
 msgstr "访问控制"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:27
-#: modules/mod_admin/templates/_admin_edit_depiction.tpl:22
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:43
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection: "
 msgstr "添加一个连接："
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:57
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:59
 msgid "Add a new media file"
 msgstr "添加新媒体文件"
 
@@ -63,7 +63,7 @@ msgstr "添加新媒体文件"
 msgid "Add a new media item"
 msgstr "添加新媒体条目"
 
-#: modules/mod_admin/templates/_admin_edit_body.tpl:33
+#: modules/mod_admin/templates/_admin_edit_body.tpl:34
 msgid "Add link"
 msgstr "添加链接"
 
@@ -72,7 +72,7 @@ msgid "Add media to body"
 msgstr "添加媒体到正文"
 
 #: modules/mod_admin/actions/action_admin_link.erl:78
-#: modules/mod_admin/mod_admin.erl:347
+#: modules/mod_admin/mod_admin.erl:371
 msgid "Added the connection to"
 msgstr "将连接添加到"
 
@@ -125,7 +125,7 @@ msgstr "其他电话"
 msgid "And media can also be viewed on their own page."
 msgstr "所有媒体也可以通过它们自己的页面来查看。"
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:16
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:17
 msgid "Any category"
 msgstr "任意分类"
 
@@ -145,7 +145,7 @@ msgstr "旁边"
 msgid "Ask google to not index this page"
 msgstr "使 Google 不要索引这个页面"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:29
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:31
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "附加媒体"
@@ -167,12 +167,12 @@ msgstr "块名称"
 msgid "Block quote"
 msgstr "块引用"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:30
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:33
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:83
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:33
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
@@ -196,7 +196,7 @@ msgstr ""
 msgid "Change category"
 msgstr "修改分类"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:25
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:24
 msgid "Change the category of this page"
 msgstr ""
 
@@ -213,7 +213,7 @@ msgstr "市/区/县"
 msgid "Click the image to set the cropping center."
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
 msgid "Community members"
 msgstr "社区成员"
 
@@ -242,8 +242,8 @@ msgstr "内容"
 msgid "Country"
 msgstr "国家"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:22
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:41
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:24
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:43
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
 msgid "Create Page"
 msgstr ""
@@ -300,7 +300,7 @@ msgid "Dependent"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_block_li.tpl:6
-#: modules/mod_admin/templates/_rsc_edge.tpl:12
+#: modules/mod_admin/templates/_rsc_edge.tpl:18
 #: modules/mod_admin/templates/_rsc_edge_media.tpl:22
 msgid "Disconnect"
 msgstr "取消连接"
@@ -336,12 +336,12 @@ msgstr "复制这个页面。"
 msgid "E-mail address"
 msgstr ""
 
-#: modules/mod_admin/templates/_rsc_edge.tpl:7
+#: modules/mod_admin/templates/_rsc_edge.tpl:15
 #: modules/mod_admin/templates/admin_edit.tpl:3
 msgid "Edit"
 msgstr "编辑"
 
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:72
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:70
 msgid "Edit:"
 msgstr ""
 
@@ -353,7 +353,7 @@ msgstr "嵌入页面"
 msgid "Emergency telephone"
 msgstr "紧急联系电话"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:161
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:181
 msgid "Error uploading the file."
 msgstr "上传文件出错。"
 
@@ -363,7 +363,7 @@ msgid ""
 "description of someone’s life."
 msgstr "每个页面都可以有一个日期范围。例如当页面表示一个事件或者某人的生平时。"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
 msgid ""
 "Every page is categorized in exactly one category. The category defines what "
 "the page represents. For example an event, a product or a person. The "
@@ -374,7 +374,7 @@ msgstr ""
 "是树状的，也就是说你可以有一个“交通工具”分类，然后其下有子分类“汽车”和“自行"
 "车”。"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:158
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:178
 msgid "Failed to download the file."
 msgstr "下载文件出错。"
 
@@ -399,15 +399,11 @@ msgstr "通过分类过滤"
 msgid "Filter on content group"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:35
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:37
 msgid "Find Page"
 msgstr "查找页面"
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:2
-msgid "Find an existing page to connect"
-msgstr "查找已存在页面并连接"
-
-#: modules/mod_admin/templates/_admin_edit_blocks.tpl:99
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:98
 msgid "Find page"
 msgstr "查找页面"
 
@@ -433,7 +429,7 @@ msgstr "起始"
 msgid "Go back."
 msgstr "回退。"
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:9
 msgid "Group members"
 msgstr "组成员"
 
@@ -531,7 +527,7 @@ msgstr ""
 msgid "Make a new page or media"
 msgstr "创建新页面或媒体条目"
 
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
 msgid "Make media item"
 msgstr "创建媒体条目"
 
@@ -540,7 +536,7 @@ msgstr "创建媒体条目"
 msgid "Media"
 msgstr "媒体"
 
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:25
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:16
 msgid "Media URL"
 msgstr "媒体 URL"
 
@@ -554,8 +550,8 @@ msgstr "媒体包括所有上传的图片，视频以及文档。媒体可以被
 msgid "Media file"
 msgstr "媒体文件"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:132
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:144
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:152
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:164
 msgid "Media item created."
 msgstr "媒体条目已创建。"
 
@@ -564,7 +560,7 @@ msgid "Media on this page"
 msgstr "该页面上的媒体"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:18
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:16
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:25
 msgid "Media title"
 msgstr "媒体标题"
 
@@ -590,7 +586,7 @@ msgstr "修改时间"
 msgid "Modified:"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:11
 msgid "More like this"
 msgstr ""
 
@@ -611,6 +607,14 @@ msgstr "需要更多帮助？"
 msgid "Next in category: "
 msgstr "分类中的下一个："
 
+#: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:14
+msgid "No connected images."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:18
+msgid "No features are enabled for this meta-resource."
+msgstr ""
+
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:88
 msgid "No items"
 msgstr "无内容"
@@ -619,6 +623,7 @@ msgstr "无内容"
 msgid "No media found."
 msgstr "没有找到媒体。"
 
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find_results_loop.tpl:12
 #: modules/mod_admin/templates/_admin_overview_list.tpl:53
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
@@ -774,16 +779,16 @@ msgstr ""
 msgid "Renumber category tree"
 msgstr "重计数分类树"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:57
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:59
 msgid "Replace current medium"
 msgstr "替换这个媒体条目"
 
-#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
 msgid "Replace media item"
 msgstr "替换媒体条目"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:35
-#: modules/mod_admin/templates/_admin_edit_media.tpl:48
+#: modules/mod_admin/templates/_admin_edit_media.tpl:57
 msgid "Replace this media item"
 msgstr "替换这个媒体条目"
 
@@ -809,7 +814,7 @@ msgstr ""
 msgid "SEO Content"
 msgstr "SEO 内容"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
@@ -871,7 +876,7 @@ msgstr "显示为"
 msgid "Show page on multiple paths"
 msgstr ""
 
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:128
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:126
 msgid "Something went wrong. Sorry."
 msgstr "出错了。"
 
@@ -879,7 +884,7 @@ msgstr "出错了。"
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "对不起，你没有添加连接的权限。"
 
-#: modules/mod_admin/mod_admin.erl:351
+#: modules/mod_admin/mod_admin.erl:375
 msgid "Sorry, you have no permission to add the connection."
 msgstr ""
 
@@ -938,11 +943,11 @@ msgstr ""
 msgid "Text"
 msgstr "文本"
 
-#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:15
 msgid "The page"
 msgstr "页面"
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:6
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
 msgid "The whole world"
 msgstr "全部可见"
 
@@ -991,7 +996,7 @@ msgstr "标题"
 msgid "Toggle navigation"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:6
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:7
 msgid "Type text to search"
 msgstr "输入文本进行检索"
 
@@ -1004,7 +1009,7 @@ msgstr "唯一标识"
 msgid "Unique uri"
 msgstr "唯一 URL"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:47
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:49
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:10
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
 msgid "Upload File"
@@ -1018,7 +1023,7 @@ msgstr "从电脑上传一个文件。"
 msgid "Upload a file which is already on the internet."
 msgstr "上传一个互联网内容。"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:52
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:54
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
 msgid "Upload by URL"
@@ -1044,7 +1049,7 @@ msgstr "基本内容的标题会做为人员的显示名字。"
 msgid "User page"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:14
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:15
 msgid "Valid for:"
 msgstr ""
 
@@ -1053,11 +1058,11 @@ msgstr ""
 msgid "View"
 msgstr "查看"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
 msgid "View all pages from this category"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:37
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:36
 msgid "View all referrers"
 msgstr "查看所有引用"
 
@@ -1066,7 +1071,7 @@ msgstr "查看所有引用"
 msgid "View this page."
 msgstr "查看该页面。"
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:3
+#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:4
 msgid "Visible for"
 msgstr ""
 
@@ -1120,11 +1125,11 @@ msgstr "没有权限删除这个页面。 "
 msgid "You are not allowed to edit this page."
 msgstr ""
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:154
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:174
 msgid "You don't have permission to change this media item."
 msgstr "没有权限修改这个媒体条目。"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:156
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:176
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "没有上传这个文件类型的权限。"
 
@@ -1174,7 +1179,7 @@ msgstr "编辑"
 msgid "edit this page"
 msgstr "编辑本页面"
 
-#: modules/mod_admin/templates/_action_unlink_undo.tpl:9
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
 msgstr "已经取消了连接。"
 
@@ -1206,12 +1211,13 @@ msgstr "撤销"
 
 #: modules/mod_admin/templates/_admin_edit_header.tpl:29
 #: modules/mod_admin/templates/_choose_media.tpl:9
+#: modules/mod_admin/templates/_rsc_edge_item.tpl:9
 #: modules/mod_admin/templates/_rsc_edge_media.tpl:18
 msgid "untitled"
 msgstr "未命名"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:13
-#: modules/mod_admin/templates/_admin_edit_media.tpl:44
+#: modules/mod_admin/templates/_admin_edit_media.tpl:53
 msgid "uploaded on"
 msgstr "上传时间"
 
@@ -1226,6 +1232,9 @@ msgstr "查看"
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "查看站点"
+
+#~ msgid "Find an existing page to connect"
+#~ msgstr "查找已存在页面并连接"
 
 #~ msgid "add a connection"
 #~ msgstr "添加连接"
