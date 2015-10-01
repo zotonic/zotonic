@@ -6,7 +6,11 @@
 }
 .btn {
     &.disabled {
+        pointer-events: none;
         color: @textColorMuted;
+        background: transparent;
+        color: @textColorLight;
+        opacity: 1;
         
         .glyphicon {
             opacity: .6;
@@ -101,6 +105,7 @@ fieldset[disabled] .btn-primary.active {
 
     background-color: @backgroundColorLightest;
     padding: @_padding;
+    #3L > .box-shadow(none);
     
     &.z-button-row {
         padding: @_padding @_padding (@_padding - @_button_margin) @_padding;

@@ -10,11 +10,19 @@
   	}
   	.table {
   		margin: 0;
-		border-bottom: 1px solid @borderColorMediumTransparent;
+  		
+  		> thead > tr,
+  		> tbody > tr {
+  		    &:first-child {
+  		        th, td {
+  		            border: none;
+  		        }
+  		    }
+  		}
   		
   		> thead > tr > th,
   		> tbody > tr > td {
-  			border: none;
+  			
 
   			&:first-child {
   				width: 60%;
