@@ -4,44 +4,6 @@
 .text-muted {
     color: @textColorMuted;
 }
-.btn {
-    &.disabled {
-        pointer-events: none;
-        color: @textColorMuted;
-        background: transparent;
-        color: @textColorLight;
-        opacity: 1;
-        
-        .glyphicon {
-            opacity: .6;
-        }
-    }
-    .glyphicon {
-        top: 3px;
-    }
-    &.btn-xs {
-        .glyphicon {
-            top: 2px;
-        }
-    }
-    &.btn-sm {
-        .glyphicon {
-            top: 1px;
-        }
-    }
-    &.btn-primary:hover {
-        background-color: @brandPrimaryDark;
-        border-color: darken(@brandPrimaryDark, 5%);
-    }
-}
-
-.btn-primary.disabled, .btn-primary[disabled], fieldset[disabled] .btn-primary,
-.btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus,
-fieldset[disabled] .btn-primary.focus, .btn-primary.disabled:active, .btn-primary[disabled]:active, fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active,
-fieldset[disabled] .btn-primary.active {
-    background-color: #c0c0c0;
-    border-color: #bbb;
-}
 
 .nav {
     .dropdown-menu > li > a.has-icon,
@@ -145,6 +107,10 @@ button.close {
     margin-bottom: 5px;
 }
 
+.checkbox label {
+    color: @textColorButton;
+}
+
 .pagination {
     > li {
         > a {
@@ -157,6 +123,12 @@ button.close {
             }
         }
     }
+}
+
+.control-label {
+    font-weight: normal;
+    color: @textColorMedium;
+    text-shadow: @darkOnLightTextShadow;
 }
 
 @media (min-width:768px) {
