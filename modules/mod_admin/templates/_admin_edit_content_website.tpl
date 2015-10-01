@@ -17,14 +17,16 @@
 		<input class="form-control" type="text" id="media-website" name="website" value="{{ r.website }}"/>
 	</div>
 
-    <div class="form-group checkbox">
-        <label>
-            <input type="checkbox" id="field-is-website=redirect" name="is_website_redirect" value="1"
-                {% if r.is_website_redirect %}checked{% endif %}
-                {% if not is_editable %}disabled="disabled"{% endif %}
-            />
-            {_ Redirect to above website on page view _}
-        </label>
+    <div class="form-group">
+	    <div class="checkbox">
+            <label>
+                <input type="checkbox" id="field-is-website=redirect" name="is_website_redirect" value="1"
+                    {% if r.is_website_redirect %}checked{% endif %}
+                    {% if not is_editable %}disabled="disabled"{% endif %}
+                />
+                {_ Redirect to above website on page view _}
+            </label>
+        </div>
     </div>
 </fieldset>
 {% endblock %}

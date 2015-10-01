@@ -40,13 +40,20 @@
             margin: 15px -@widgetSidePadding;
         }
         
+        // nested content blocks
         .widget-content {
-            // nested
             padding-top: 0;
             
             > :last-child {
                 // nested (blocks)
                 margin-bottom: 0;
+            }
+        }
+        
+        // adjacent content blocks
+        & + .widget-content {            
+            > .tab-pane {
+                padding-top: 0;
             }
         }
      
@@ -102,7 +109,9 @@
         padding: @widgetVerticalPadding @widgetSidePadding;
         #3L > .user-select(none);
         text-shadow: @darkOnLightTextShadow;
-
+        font-size: @font-size-base;
+        line-height: @font-size-base;
+        
         .z-btn-remove {
             display: block;
             position: absolute;
