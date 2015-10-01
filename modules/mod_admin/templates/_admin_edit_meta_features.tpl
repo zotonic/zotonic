@@ -13,5 +13,10 @@
 {% block widget_content %}
 <div class="form-group row">
     {% all catinclude "_admin_features.tpl" id %}
+    <div class="admin-edit-no-features">
+        <div class="col-md-12">
+            {_ No features are enabled for this meta-resource. _}
+        </div>
+    </div>
 </div>
 {% endblock %}
