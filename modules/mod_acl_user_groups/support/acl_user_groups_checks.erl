@@ -80,7 +80,7 @@ user_groups(#context{user_id=UserId, acl=admin} = Context) ->
     case {MgrId, lists:member(MgrId, Groups)} of
         {undefined, _} -> Groups;
         {_, true} -> Groups;
-        {_, false} -> Groups ++ MgrId
+        {_, false} -> Groups ++ [MgrId]
     end;
 user_groups(#context{user_id=UserId} = Context) ->
     has_user_groups(UserId, Context).
@@ -296,7 +296,7 @@ has_user_groups(1, Context) ->
     case {MgrId, lists:member(MgrId, Groups)} of
         {undefined, _} -> Groups;
         {_, true} -> Groups;
-        {_, false} -> Groups ++ MgrId
+        {_, false} -> Groups ++ [MgrId]
     end;
 has_user_groups(UserId, Context) ->
     case m_edge:objects(UserId, hasusergroup, Context) of
