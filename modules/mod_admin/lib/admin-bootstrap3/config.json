@@ -221,8 +221,8 @@
     "@state-success-bg": "#dff0d8",
     "@state-success-border": "darken(spin(@state-success-bg, -10), 5%)",
     "@state-info-text": "#555",
-    "@state-info-bg": "#a6daf0",
-    "@state-info-border": "darken(@state-info-bg, 2%)",
+    "@state-info-bg": "#e8f8ff",
+    "@state-info-border": "#a6daf0",
     "@state-warning-text": "#8a6d3b",
     "@state-warning-bg": "#fcf8e3",
     "@state-warning-border": "darken(spin(@state-warning-bg, -10), 5%)",
@@ -430,5 +430,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=1a7d23e697bd9ff5e808"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=d33692b32c2f13344293"
 }

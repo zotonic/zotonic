@@ -47,7 +47,7 @@
     {% endif %}
 
     {% if r.installed_by %}
-        <div class="alert alert-info">{_ This resource was created by the module _} <strong>{{ m.modules.info[r.installed_by].title|default:r.installed_by }}</strong></div>
+        <div class="alert alert-info edit-message">{_ This resource was created by the module _} <strong>{{ m.modules.info[r.installed_by].title|default:r.installed_by }}</strong></div>
     {% endif %}
 
     {% if m.acl.use.mod_admin_config %}
