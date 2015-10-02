@@ -111,7 +111,7 @@ event(#submit{message={media_url, EventProps}}, Context) ->
 add_content_group(EventProps, Props, Context) ->
     case proplists:get_value(subject_id, EventProps) of
         undefined ->
-            [ {proplists:get_value(content_group_id, EventProps)} | Props ];
+            [ {content_group_id, proplists:get_value(content_group_id, EventProps)} | Props ];
         SubjectId when is_integer(SubjectId) ->
             ContentGroupdId = case proplists:get_value(content_group_id, EventProps) of
                                     undefined -> m_rsc:p_no_acl(SubjectId, content_group_id, Context);
