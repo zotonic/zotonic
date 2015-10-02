@@ -156,6 +156,8 @@ uncollapse_dirs([File|Rest]) ->
 
 uncollapse_dirs([], _Dirname, Acc) ->
     Acc;
+uncollapse_dirs([Rest], _Dirname, Acc) ->
+    uncollapse_dirs([], [], [Rest|Acc]);
 uncollapse_dirs([[$/|_]=File|Rest], _Dirname, Acc) ->
     uncollapse_dirs(Rest, filename:dirname(File), [File|Acc]);
 uncollapse_dirs([<<$/,_/binary>>=File|Rest], _Dirname, Acc) ->
