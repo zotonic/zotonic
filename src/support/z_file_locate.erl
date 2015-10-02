@@ -126,9 +126,9 @@ locate_source_module_indexer(ModuleIndex, Path, _OriginalFile, undefined, Contex
         {error, enoent} ->
             % Try to find ".tpl" version -> render and cache result
             TplFile = <<Path/binary, ".tpl">>,
-            case z_module_indexer:find(ModuleIndex, TplFile, Context) of
+            case z_module_indexer:find_ua_class(template, desktop, TplFile, Context) of
                 {ok, #module_index{} = M} ->
-                    render(M, Context);
+                    {ok, render(M, Context)};
                 {error, _} = Error ->
                     Error
             end
@@ -218,10 +218,11 @@ part_file(Filename, Opts) ->
     end.
 
 render(ModuleIndex, Context) ->
+    {Data, _Context} = z_template:render_to_iolist(ModuleIndex, [], Context),
     #part_data{
         acl=undefined,
         modified=calendar:local_time(),
-        data=iolist_to_binary(z_template:render_to_iolist(ModuleIndex, [], Context))
+        data=iolist_to_binary(Data)
     }.
 
 
