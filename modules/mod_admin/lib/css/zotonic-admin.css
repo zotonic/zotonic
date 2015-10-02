@@ -596,6 +596,14 @@ input.do_timepicker {
 div + .admin-edit-no-features {
   display: none;
 }
+.edit-message {
+  background-color: #a6daf0;
+  border-color: #a6daf0;
+  color: #555555;
+}
+.edit-message .btn {
+  margin-top: -2px;
+}
 @media (max-width: 991px) {
   .admin-navbar-fixed-save {
     position: fixed;

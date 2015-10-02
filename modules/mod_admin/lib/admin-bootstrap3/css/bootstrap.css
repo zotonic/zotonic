@@ -5,8 +5,8 @@
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=1a7d23e697bd9ff5e808)
- * Config saved to config.json and https://gist.github.com/1a7d23e697bd9ff5e808
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=d33692b32c2f13344293)
+ * Config saved to config.json and https://gist.github.com/d33692b32c2f13344293
  */
 /*!
  * Bootstrap v3.3.5 (http://getbootstrap.com)
@@ -1394,11 +1394,11 @@ a.bg-success:focus {
   background-color: #c1e2b3;
 }
 .bg-info {
-  background-color: #a6daf0;
+  background-color: #e8f8ff;
 }
 a.bg-info:hover,
 a.bg-info:focus {
-  background-color: #7ac8e9;
+  background-color: #b5e8ff;
 }
 .bg-warning {
   background-color: #fcf8e3;
@@ -2395,14 +2395,14 @@ table th[class*="col-"] {
 .table > thead > tr.info > th,
 .table > tbody > tr.info > th,
 .table > tfoot > tr.info > th {
-  background-color: #a6daf0;
+  background-color: #e8f8ff;
 }
 .table-hover > tbody > tr > td.info:hover,
 .table-hover > tbody > tr > th.info:hover,
 .table-hover > tbody > tr.info:hover > td,
 .table-hover > tbody > tr:hover > .info,
 .table-hover > tbody > tr.info:hover > th {
-  background-color: #90d1ec;
+  background-color: #cef0ff;
 }
 .table > thead > tr > td.warning,
 .table > tbody > tr > td.warning,
@@ -5119,12 +5119,12 @@ a.thumbnail.active {
   color: #2b542c;
 }
 .alert-info {
-  background-color: #a6daf0;
-  border-color: #9dd6ef;
+  background-color: #e8f8ff;
+  border-color: #a6daf0;
   color: #555555;
 }
 .alert-info hr {
-  border-top-color: #87cdeb;
+  border-top-color: #90d1ec;
 }
 .alert-info .alert-link {
   color: #3b3b3b;
@@ -5406,7 +5406,7 @@ button.list-group-item-success.active:focus {
 }
 .list-group-item-info {
   color: #555555;
-  background-color: #a6daf0;
+  background-color: #e8f8ff;
 }
 a.list-group-item-info,
 button.list-group-item-info {
@@ -5421,7 +5421,7 @@ button.list-group-item-info:hover,
 a.list-group-item-info:focus,
 button.list-group-item-info:focus {
   color: #555555;
-  background-color: #90d1ec;
+  background-color: #cef0ff;
 }
 a.list-group-item-info.active,
 button.list-group-item-info.active,
@@ -5789,22 +5789,22 @@ button.list-group-item-danger.active:focus {
   border-bottom-color: #d6e9c6;
 }
 .panel-info {
-  border-color: #9dd6ef;
+  border-color: #a6daf0;
 }
 .panel-info > .panel-heading {
   color: #555555;
-  background-color: #a6daf0;
-  border-color: #9dd6ef;
+  background-color: #e8f8ff;
+  border-color: #a6daf0;
 }
 .panel-info > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #9dd6ef;
+  border-top-color: #a6daf0;
 }
 .panel-info > .panel-heading .badge {
-  color: #a6daf0;
+  color: #e8f8ff;
   background-color: #555555;
 }
 .panel-info > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: #9dd6ef;
+  border-bottom-color: #a6daf0;
 }
 .panel-warning {
   border-color: #faebcc;

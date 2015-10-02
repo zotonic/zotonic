@@ -1,5 +1,5 @@
 {# Called by the action_unlink after removing an edge. Enables an undo of the action #}
-<div class="alert alert-info clearfix" id="{{ #notice }}">
+<div class="alert alert-info clearfix edit-message" id="{{ #notice }}">
 	{% button text=_"undo" class="btn btn-default btn-xs pull-right" 
 			action={link
 				subject_id=subject_id

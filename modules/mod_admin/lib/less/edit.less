@@ -146,7 +146,7 @@ input.do_timepicker {
     top: @topbarHeight;
     border-radius: 0;
     padding: @widgetVerticalPadding @widgetSidePadding;
-    background-color: @state-info-bg;
+    background-color: @backgroundColorInfo;
     -webkit-transition: opacity @_transation_duration ease-in-out;
     -moz-transition: opacity @_transation_duration ease-in-out;
     -o-transition: opacity @_transation_duration ease-in-out;
@@ -161,6 +161,16 @@ input.do_timepicker {
 
 div + .admin-edit-no-features {
     display: none;
+}
+
+.edit-message {
+    background-color: @backgroundColorInfo;
+    border-color: @backgroundColorInfo;
+    color: @textColorButton;
+    
+    .btn {
+        margin-top: -2px;
+    }
 }
 
 @media (max-width: @breakpointMediumMaxWidth) {
