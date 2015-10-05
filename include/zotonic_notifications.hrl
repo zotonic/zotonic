@@ -329,6 +329,9 @@
 %% @doc Return the maximum visible_for value an user can see. Used for optimizing queries. (first)
 -record(acl_can_see, {}).
 
+%% @doc Set the context to a 'typical' authenticated uses. Used by m_acl.erl (first)
+-record(acl_context_authenticated, {}).
+
 %% @doc Log an user on, fill the acl fields of the context (first)
 %% Either return an updated #context or undefined
 -record(acl_logon, {id}).

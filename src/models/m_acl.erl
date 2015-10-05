@@ -39,18 +39,32 @@ m_find_value(user, #m{value=undefined}, Context) ->
     z_acl:user(Context);
 m_find_value(is_admin, #m{value=undefined}, Context) ->
     z_acl:is_allowed(use, mod_admin_config, Context);
-m_find_value(Action, #m{value=undefined} = M, _Context) 
-    when Action == use orelse Action == admin orelse Action == view
+m_find_value(authenticated, #m{value=undefined} = M, _Context) ->
+    M#m{value=authenticated};
+m_find_value(Action, #m{value=Auth} = M, _Context) 
+    when (Action == use orelse Action == admin orelse Action == view
     orelse Action == delete orelse Action == update orelse Action == insert
-    orelse Action == link ->
-    M#m{value={is_allowed, Action}};
-m_find_value(is_allowed, #m{value=undefined} = M, _Context) ->
-    M#m{value=is_allowed};
-m_find_value(Action, #m{value=is_allowed} = M, _Context) ->
-    M#m{value={is_allowed, Action}};
-m_find_value(Object, #m{value={is_allowed, Action}}, Context) when is_binary(Object) ->
+    orelse Action == link), (Auth =:= undefined orelse Auth =:= authenticated) ->
+    M#m{value={is_allowed, Action, Auth}};
+m_find_value(is_allowed, #m{value=Auth} = M, _Context) when Auth =:= undefined, Auth =:= authenticated ->
+    M#m{value={is_allowed, Auth}};
+m_find_value(Action, #m{value={is_allowed, Auth}} = M, _Context) ->
+    M#m{value={is_allowed, Action, Auth}};
+m_find_value(Object, #m{value={is_allowed, Action, authenticated}}, Context) when is_binary(Object) ->
+    Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
+                    undefined -> Context;
+                    Ctx -> Ctx
+               end,
+    z_acl:is_allowed(Action, z_convert:to_atom(Object), Context1);
+m_find_value(Object, #m{value={is_allowed, Action, undefined}}, Context) when is_binary(Object) ->
     z_acl:is_allowed(Action, z_convert:to_atom(Object), Context);
-m_find_value(Object, #m{value={is_allowed, Action}}, Context) ->
+m_find_value(Object, #m{value={is_allowed, Action, authenticated}}, Context) ->
+    Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
+                    undefined -> Context;
+                    Ctx -> Ctx
+               end,
+    z_acl:is_allowed(Action, Object, Context1);
+m_find_value(Object, #m{value={is_allowed, Action, undefined}}, Context) ->
     z_acl:is_allowed(Action, Object, Context).
 
 
