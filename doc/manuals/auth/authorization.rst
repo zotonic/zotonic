@@ -48,3 +48,7 @@ This table lists the ACL notifications:
 +----------------------------+----------+----------+---------------------------------------------------------+
 |#acl_logoff{}               |first     |Context   |Clear the associated access policy for the context.      |
 +----------------------------+----------+----------+---------------------------------------------------------+
+|#acl_context_authenticated{}|first     |Context   |Set the context to a typical user’s permissions, do not  |
+|                            |          |          |change the context if an user is logged on. Used by      |
+|                            |          |          |(for example) ``m.acl.authenticated.insert.article``     |
++----------------------------+----------+----------+---------------------------------------------------------+

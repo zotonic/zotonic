@@ -32,6 +32,7 @@
         acl_is_allowed/2,
         acl_logon/2,
         acl_logoff/2,
+        acl_context_authenticated/1,
         acl_rsc_update_check/3,
         acl_add_sql_check/2
     ]).
@@ -165,6 +166,15 @@ acl_logoff(#acl_logoff{}, Context) ->
     UserGroups = has_user_groups(undefined, Context),
     Context#context{acl=#aclug{user_groups=UserGroups, state=session_state(Context)}, user_id=undefined}.
 
+%% @doc Set an anonymous context to the context of a 'typical' member.
+acl_context_authenticated(#context{user_id=undefined} = Context) ->
+    UserGroups = [ m_rsc:rid(acl_user_group_members, Context) ],
+    Context#context{
+        acl=#aclug{user_groups=UserGroups, state=session_state(Context)},
+        user_id=authenticated
+    };
+acl_context_authenticated(#context{} = Context) ->
+    Context.
 
 %% @doc Restrict the content group being updated, possible set default content group.
 acl_rsc_update_check(#acl_rsc_update_check{}, {error, Reason}, _Context) ->
