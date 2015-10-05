@@ -137,6 +137,16 @@ Query-model arguments
   The term ``[*,author],2,3`` selects any resource with an *author*,
   or a connection to the ids 2 or 3 (with any predicate).
 
+**match_objects**
+
+  Find the resources that have similar object edges as the given resource.
+  This is done using a full text query. The resource with most overlapping
+  objects ids will be returned first.
+
+  ``match_objects=1234``
+
+  An ``id_exlude=...`` is automatically added for the resource in the argument.
+
 **is_featured**
 
   A boolean option that specifies if a page should be featured or not.

@@ -118,6 +118,7 @@ request_arg("query_id")            -> query_id;
 request_arg("rsc_id")              -> rsc_id;
 request_arg("sort")                -> sort;
 request_arg("text")                -> text;
+request_arg("match_objects")       -> match_objects;
 request_arg("upcoming")            -> upcoming;
 request_arg("ongoing")             -> ongoing;
 request_arg("finished")            -> finished;
@@ -434,6 +435,31 @@ parse_query([{text, Text}|Rest], Context, Result) ->
             parse_query(Rest, Context, Result5)
     end;
 
+%% match_objects=<id>
+%% Match on the objects of the resource, best matching return first.
+%% Similar to the {match_objects id=...} query.
+parse_query([{match_objects, RId}|Rest], Context, Result) ->
+    case m_rsc:rid(RId, Context) of
+        undefined ->
+            #search_result{};
+        Id ->
+            ObjectIds = m_edge:objects(Id, Context),
+            MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds ],
+            TsQuery = lists:flatten(z_utils:combine("|", MatchTerms)),
+            case TsQuery of
+                [] ->
+                    #search_result{};
+                _ ->
+                    {QArg, Result1} = add_arg(TsQuery, Result),
+                    Result2 = Result1#search_sql{
+                                from=Result1#search_sql.from ++ ", to_tsquery(" ++ QArg ++ ") matchquery"
+                               },
+                    Result3 = add_where("matchquery @@ rsc.pivot_rtsv", Result2),
+                    Result4 = add_order_unsafe("ts_rank(rsc.pivot_rtsv, matchquery) desc", Result3),
+                    parse_query([{id_exclude, Id}|Rest], Context, Result4)
+            end
+    end;
+
 %% date_start_after=date
 %% Filter on date_start after a specific date.
 parse_query([{date_start_after, Date}|Rest], Context, Result) ->
@@ -543,18 +569,18 @@ add_custompivot_join(RscTable, Table, Search) ->
      }.
 
 %% Add a join on the hierarchy table.
-add_hierarchy_join(HierarchyName, Lft, Rght, Search) ->
-    {NameArg, Search1} = add_arg(HierarchyName, Search),
-    {LftArg, Search2} = add_arg(Lft, Search1),
-    {RghtArg, Search3} = add_arg(Rght, Search2),
+% add_hierarchy_join(HierarchyName, Lft, Rght, Search) ->
+%     {NameArg, Search1} = add_arg(HierarchyName, Search),
+%     {LftArg, Search2} = add_arg(Lft, Search1),
+%     {RghtArg, Search3} = add_arg(Rght, Search2),
 
-    A = "h" ++ integer_to_list(length(Search#search_sql.tables)),
-    Search4 = add_where(A ++ ".name = " ++ NameArg ++ " AND " ++ A ++ ".lft >= " ++ LftArg ++ " AND " ++ A ++ ".rght <= " ++ RghtArg, Search3),
+%     A = "h" ++ integer_to_list(length(Search#search_sql.tables)),
+%     Search4 = add_where(A ++ ".name = " ++ NameArg ++ " AND " ++ A ++ ".lft >= " ++ LftArg ++ " AND " ++ A ++ ".rght <= " ++ RghtArg, Search3),
 
-    Search4#search_sql{
-      tables=Search1#search_sql.tables ++ [{hierarchy, A}],
-      from=Search1#search_sql.from ++ ", hierarchy " ++ A
-     }.
+%     Search4#search_sql{
+%       tables=Search1#search_sql.tables ++ [{hierarchy, A}],
+%       from=Search1#search_sql.from ++ ", hierarchy " ++ A
+%      }.
 
 %% Add an AND clause to the WHERE of a #search_sql
 %% Clause is already supposed to be safe.
