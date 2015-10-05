@@ -61,7 +61,7 @@ process_post_ubf(ReqData, Context) ->
     Context1 = ?WM_REQ(RD1, Context),
     {ok, Term, _Rest} = z_transport:data_decode(Data),
     {ok, Rs, Context2} = z_transport:incoming(Term, Context1),
-    Rs1 = case z_transport:get_transport_msgs(Context2) of
+    Rs1 = case z_session_page:get_transport_msgs(Context2) of
               [] -> Rs;
               Msgs -> mklist(Rs) ++ mklist(Msgs)
           end,
