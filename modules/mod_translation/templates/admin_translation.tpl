@@ -84,6 +84,33 @@
     <h3>{_ Translation configuration and tools _}</h3>
 
     <div class="well">
+        <div class="form-group">
+            {% wire id=#redir 
+                action={config_toggle module="mod_translation" key="rewrite_url"}
+            %}
+            <label class="checkbox-inline">
+                <input type="checkbox" id="{{ #redir }}" value="1"
+                {% if m.config.mod_translation.rewrite_url.value
+                    or m.config.mod_translation.rewrite_url.value|is_undefined %}checked="checked"{% endif %}
+                />
+                <span>{_ Put the current language in the URL _} (<tt>/en/page/...</tt>).</span>
+            </label>
+        </div>
+
+        <div class="form-group">
+            {% wire id=#force 
+                action={config_toggle module="mod_translation" key="force_default"}
+            %}
+            <label class="checkbox-inline">
+                <input type="checkbox" id="{{ #force }}" value="1"
+                {% if m.config.mod_translation.force_default.value %}checked="checked"{% endif %}
+                />
+                <span>{_ Set initial language to the default language. _}</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="well">
 
         <div class="form-group">
             <div>
@@ -106,19 +133,6 @@
             </div>
         </div>
 
-    </div>
-    <div class="well">
-                {% wire id=#redir 
-                    action={config_toggle module="mod_translation" key="rewrite_url"}
-                    action={admin_tasks task='flush'} 
-                %}
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="{{ #redir }}" value="1"
-                    {% if m.config.mod_translation.rewrite_url.value
-                        or m.config.mod_translation.rewrite_url.value|is_undefined %}checked="checked"{% endif %}
-                    />
-                    <span>{_ Put the current language in the URL _} (<tt>/en/page/...</tt>).</span>
-                </label>
     </div>
     
 </div>

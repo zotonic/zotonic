@@ -106,21 +106,39 @@ default_languages() ->
 %%      then check the accept-language header (if any) against the available languages.
 observe_session_init_fold(session_init_fold, Context, _Context) ->
     case get_q_language(Context) of
-        undefined ->
-            case z_context:get_persistent(language, Context) of
-                undefined ->
-                    case z_context:get_req_header("accept-language", Context) of
-                        undefined ->
-                            Context;
-                        AcceptLanguage ->
-                            try_set_language(AcceptLanguage, Context)
-                    end;
-                Language ->
-                    do_set_language(Language, Context)
-            end;
-        QsLang ->
-            try_set_language(QsLang, Context)
+        undefined -> maybe_persistent(Context);
+        QsLang -> try_set_language(QsLang, Context)
     end.
+
+maybe_persistent(Context) ->
+    case z_context:get_persistent(language, Context) of
+        undefined ->
+            maybe_configuration(Context);
+        Language ->
+            do_set_language(Language, Context)
+    end.
+
+maybe_configuration(Context) ->
+    case z_convert:to_bool(m_config:get_value(?MODULE, force_default, Context)) of
+        true ->
+            case m_config:get_value(i18n, language, Context) of
+                undefined -> maybe_accept_header(Context);
+                <<>> -> maybe_accept_header(Context);
+                _Lang -> Context  % Already set by context init
+            end;
+        false ->
+            maybe_accept_header(Context)
+    end.
+
+
+maybe_accept_header(Context) ->
+    case z_context:get_req_header("accept-language", Context) of
+        undefined ->
+            Context;
+        AcceptLanguage ->
+            try_set_language(AcceptLanguage, Context)
+    end.
+
 
 get_q_language(Context) ->
     case z_context:get_q_all("z_language", Context) of
