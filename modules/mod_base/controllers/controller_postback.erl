@@ -60,9 +60,16 @@ process_post_ubf(ReqData, Context) ->
     {Data,RD1} = wrq:req_body(ReqData),
     Context1 = ?WM_REQ(RD1, Context),
     {ok, Term, _Rest} = z_transport:data_decode(Data),
-    {ok, Reply, Context2} = z_transport:incoming(Term, Context1),
-    {ok, ReplyData} = z_transport:data_encode(Reply), 
+    {ok, Rs, Context2} = z_transport:incoming(Term, Context1),
+    Rs1 = case z_transport:get_transport_msgs(Context2) of
+              [] -> Rs;
+              Msgs -> mklist(Rs) ++ mklist(Msgs)
+          end,
+    {ok, ReplyData} = z_transport:data_encode(Rs1), 
     post_return(ReplyData, Context2).
+
+mklist(L) when is_list(L) -> L;
+mklist(V) -> [V].
 
 %% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2 
 process_post_form(ReqData, Context0) ->
