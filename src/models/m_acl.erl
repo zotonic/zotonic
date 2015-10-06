@@ -46,7 +46,7 @@ m_find_value(Action, #m{value=Auth} = M, _Context)
     orelse Action == delete orelse Action == update orelse Action == insert
     orelse Action == link), (Auth =:= undefined orelse Auth =:= authenticated) ->
     M#m{value={is_allowed, Action, Auth}};
-m_find_value(is_allowed, #m{value=Auth} = M, _Context) when Auth =:= undefined, Auth =:= authenticated ->
+m_find_value(is_allowed, #m{value=Auth} = M, _Context) when Auth =:= undefined; Auth =:= authenticated ->
     M#m{value={is_allowed, Auth}};
 m_find_value(Action, #m{value={is_allowed, Auth}} = M, _Context) ->
     M#m{value={is_allowed, Action, Auth}};
