@@ -30,9 +30,9 @@ render(Params, _Vars, Context) ->
     Id = proplists:get_value(id, Params),
     Script = case proplists:get_value(hash, Params) of
                 true ->
-                    [ "$('#", z_convert:to_list(Id), "').tabs({ select: function(event, ui) { window.location.hash = ui.tab.hash; }});" ];
+                    [ "$('#", Id, "').tabs({ select: function(event, ui) { window.location.hash = ui.tab.hash; }});" ];
                 _ ->
-                    [ "$('#", z_convert:to_list(Id), "').tabs();" ]
+                    [ "$('#", Id, "').tabs();" ]
              end,
     {ok, z_render:wire({script, [{script, Script}]}, Context)}.
 

@@ -35,11 +35,11 @@ render(Params, _Vars, Context) ->
     Id      = proplists:get_value(id, Params),
     Tag     = proplists:get_value(tag, Params),
     Clone   = proplists:get_value(clone, Params, false),
-    Revert  = proplists:get_value(revert, Params, "invalid"),
+    Revert  = proplists:get_value(revert, Params, <<"invalid">>),
     Axis    = proplists:get_value(axis, Params),
     Handle  = proplists:get_value(handle, Params),
     Groups  = proplists:get_all_values(group, Params),
-    Opacity = proplists:get_value(opacity, Params, "0.8"),
+    Opacity = proplists:get_value(opacity, Params, <<"0.8">>),
     Delegate= proplists:get_value(delegate, Params),
     ConnectToSortable= proplists:get_value(to_sorter, Params),
     
@@ -61,24 +61,20 @@ render(Params, _Vars, Context) ->
             		    false -> "'original'"
             	    end,
 	
-	RevertText   =  case z_convert:to_list(Revert) of
-                		"true"    -> "true";
-                		"false"   -> "false";
-                		"valid"   -> "'valid'";
-                		"invalid" -> "'invalid'"
+	RevertText   =  case z_convert:to_binary(Revert) of
+                		<<"true">>    -> <<"true">>;
+                		<<"false">>   -> <<"false">>;
+                		<<"valid">>   -> <<"'valid'">>;
+                		<<"invalid">> -> <<"'invalid'">>
                     end,
     
-    HandleText   = case Handle of
-                        undefined -> "null";
-                        []        -> "null";
-                        <<>>      -> "null";
+    HandleText   = case z_convert:to_binary(Handle) of
+                        <<>> -> "null";
                         _ -> [$',z_utils:js_escape(Handle),$']
                     end,
 
-    AxisText   = case Axis of
-                        "x" -> "'x'";
+    AxisText   = case z_convert:to_binary(Axis) of
                         <<"x">> -> "'x'";
-                        "y" -> "'y'";
                         <<"y">> -> "'y'";
                         _ -> "null"
                     end,

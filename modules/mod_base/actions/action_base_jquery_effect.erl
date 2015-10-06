@@ -73,6 +73,7 @@ map_speed_default(Speed) ->
     end.
 
 map_speed(N) when is_integer(N) -> integer_to_list(N);
+map_speed(<<"normal">>) -> [];
 map_speed("normal") -> [];
 map_speed(undefined) -> [];
 map_speed(<<>>) -> [];

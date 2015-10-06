@@ -57,32 +57,29 @@ parse_po(Fname) ->
     end.
 
 parse_po_bin(Bin) ->
-    parse_po_file(to_list(Bin)).
-
-parse_po_file(List) ->
     lists:reverse(
-      lists:foldl(fun ({"", R}, AccIn) ->
+      lists:foldl(fun ({<<>>, R}, AccIn) ->
                           [{?GETTEXT_HEADER_INFO, R}|AccIn];
-                      ({_, ""}, AccIn) ->
+                      ({_, <<>>}, AccIn) ->
                           AccIn;
                       (R, AccIn) ->
                           [R|AccIn]
                   end,
                   [],
-                  parse_po_list(List))).
+                  parse_po_part(Bin))).
 
-parse_po_list("msgid" ++ T) ->
+parse_po_part(<<"msgid", T/binary>>) ->
     {Key, R0} = get_po_string(T),
     {Val, Rest} = get_msgstr(R0),
-    [{Key,Val} | parse_po_list(Rest)];
-parse_po_list([_ | T]) ->
-    parse_po_list(T);
-parse_po_list([]) ->
+    [{Key,Val} | parse_po_part(Rest)];
+parse_po_part(<<_/utf8, T/binary>>) ->
+    parse_po_part(T);
+parse_po_part(<<>>) ->
     [].
 
-get_msgstr("msgstr" ++ T) ->
+get_msgstr(<<"msgstr", T/binary>>) ->
     get_po_string(T);
-get_msgstr([_ | T]) ->
+get_msgstr(<<_/utf8, T/binary>>) ->
     get_msgstr(T).
 
 %%%
@@ -96,33 +93,28 @@ get_msgstr([_ | T]) ->
 %%%
 %%% Is parsed as: "Hello \World\n"
 %%%
-get_po_string([$\s|T]) -> get_po_string(T);
-get_po_string([$\r|T]) -> get_po_string(T);
-get_po_string([$\n|T]) -> get_po_string(T);
-get_po_string([$\t|T]) -> get_po_string(T);
-get_po_string([$"|T])  -> eat_string(T).
+get_po_string(<<$\s, T/binary>>) -> get_po_string(T);
+get_po_string(<<$\r, T/binary>>) -> get_po_string(T);
+get_po_string(<<$\n, T/binary>>) -> get_po_string(T);
+get_po_string(<<$\t, T/binary>>) -> get_po_string(T);
+get_po_string(<<$", T/binary>>)  -> eat_string(T).
 
 eat_string(S) ->
-    eat_string(S,[]).
+    eat_string(S, <<>>).
 
-eat_string([$\\,$"|T], Acc)   -> eat_string(T, [$"|Acc]);   % unescape !
-eat_string([$\\,$\\ |T], Acc) -> eat_string(T, [$\\|Acc]);  % unescape !
-eat_string([$\\,$n |T], Acc)  -> eat_string(T, [$\n|Acc]);  % unescape !
-eat_string([$"|T], Acc)       -> eat_more(T,Acc);
-eat_string([H|T], Acc)        -> eat_string(T, [H|Acc]).
+eat_string(<<$\\,$", T/binary>>, Acc)   -> eat_string(T, <<Acc/binary, $">>);   % unescape !
+eat_string(<<$\\,$\\ , T/binary>>, Acc) -> eat_string(T, <<Acc/binary, $\\>>);  % unescape !
+eat_string(<<$\\,$n , T/binary>>, Acc)  -> eat_string(T, <<Acc/binary, $\n>>);  % unescape !
+eat_string(<<$", T/binary>>, Acc)       -> eat_more(T, Acc);
+eat_string(<<H/utf8, T/binary>>, Acc)   -> eat_string(T, <<Acc/binary, H/utf8>>).
 
-eat_more([$\s|T], Acc) -> eat_more(T, Acc);
-eat_more([$\n|T], Acc) -> eat_more(T, Acc);
-eat_more([$\r|T], Acc) -> eat_more(T, Acc);
-eat_more([$\t|T], Acc) -> eat_more(T, Acc);
-eat_more([$"|T], Acc)  -> eat_string(T, Acc);
-eat_more(T, Acc)       -> {lists:reverse(Acc), T}.
+eat_more(<<$\s, T/binary>>, Acc) -> eat_more(T, Acc);
+eat_more(<<$\n, T/binary>>, Acc) -> eat_more(T, Acc);
+eat_more(<<$\r, T/binary>>, Acc) -> eat_more(T, Acc);
+eat_more(<<$\t, T/binary>>, Acc) -> eat_more(T, Acc);
+eat_more(<<$", T/binary>>, Acc)  -> eat_string(T, Acc);
+eat_more(T, Acc)       -> {Acc, T}.
 
-
-to_list(A) when is_atom(A)    -> atom_to_list(A);
-to_list(I) when is_integer(I) -> integer_to_list(I);
-to_list(B) when is_binary(B)  -> binary_to_list(B);
-to_list(L) when is_list(L)    -> L.
 
 test() ->
 
@@ -138,7 +130,7 @@ msgid \"en\"
 msgstr \"nl\"
 ">>),
 
-[{header, "header value"}, {"en", "nl"}] = X2,
+[{header, <<"header value">>}, {<<"en">>, <<"nl">>}] = X2,
 
     X3 = parse_po_bin(<<"msgid \"\"
 msgstr \"header value\"
@@ -150,7 +142,5 @@ msgid \"empty trans\"
 msgstr \"\"
 ">>),
 
-[{header, "header value"}, {"en", "nl"}, {"empty trans", "empty trans"}] = X3.
-
-
+[{header, <<"header value">>}, {<<"en">>, <<"nl">>}, {<<"empty trans">>, <<"empty trans">>}] = X3.
 

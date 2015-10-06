@@ -34,14 +34,32 @@ render_action(TriggerId, TargetId, Args, Context) ->
                                                               Delegate, QArgs, Context),
     {ActionsJS,Context1} = z_render:render_actions(Trigger, TargetId, Actions, Context),
 
-    script(EventType, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context1).
+    script(map_type(EventType), TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context1).
 
 %%% ---------------------------------------------------------------------------------
 %%% Render actions for the different types
 %%% ---------------------------------------------------------------------------------
 
-script("enterkey", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
-    script(enterkey, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
+map_type("enterkey") -> enterkey;
+map_type("continuation") -> continuation;
+map_type("interval") -> interval;
+map_type("submit") -> submit;
+map_type("named") -> named;
+map_type("none") -> none;
+map_type("load") -> load;
+map_type("inline") -> inline;
+map_type("visible") -> visible;
+map_type(<<"enterkey">>) -> enterkey;
+map_type(<<"continuation">>) -> continuation;
+map_type(<<"interval">>) -> interval;
+map_type(<<"submit">>) -> submit;
+map_type(<<"named">>) -> named;
+map_type(<<"none">>) -> none;
+map_type(<<"load">>) -> load;
+map_type(<<"inline">>) -> inline;
+map_type(<<"visible">>) -> visible;
+map_type(Type) -> Type.
+
 script(enterkey, _TriggerId, Trigger, PostbackMsgJS, _PickledPostback, ActionsJS, Propagate, Args, Context) ->
     {[
         z_render:render_css_selector(z_render:css_selector(Trigger, Args)), 
@@ -56,11 +74,7 @@ script(enterkey, _TriggerId, Trigger, PostbackMsgJS, _PickledPostback, ActionsJS
 
 %%% Interval - periodically execute the actions
 
-script("continuation", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
-    script(interval, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
 script(continuation, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
-    script(interval, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
-script("interval", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
     script(interval, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
 script(interval, _TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJS, _Propagate, Args, Context) ->
     Interval = proplists:get_value(interval, Args, 250),
@@ -71,8 +85,6 @@ script(interval, _TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJ
 
 %%% Submit - connected to a form
 
-script("submit", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
-    script(submit, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
 script(submit, TriggerId, _Trigger, _PostbackMsgJS, PickledPostback, ActionsJS, _Propagate, _Args, Context) ->
     SubmitPostback = [
         <<"$('#">>, TriggerId, <<"').data('z_submit_postback',\"">>, PickledPostback, <<"\")">>
@@ -84,8 +96,6 @@ script(submit, TriggerId, _Trigger, _PostbackMsgJS, PickledPostback, ActionsJS, 
 
 %%% Named - register for later trigger
 
-script("named", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
-    script(named, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
 script(named, _TriggerId, Trigger, PostbackMsgJS, _PickledPostback, ActionsJS, _Propagate, Args, Context) ->
     Name = proplists:get_value(name, Args, Trigger),
     {[
@@ -95,14 +105,12 @@ script(named, _TriggerId, Trigger, PostbackMsgJS, _PickledPostback, ActionsJS, _
 
 %%% Inline
 
-script("none", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
+script(none, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
     script(inline, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
-script("load", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
+script(load, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
     script(inline, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
 script(undefined, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
     script(inline, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS,Propagate, Args,  Context);
-script("inline", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
-    script(inline, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
 script(inline, _TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJS, _Propagate, _Args, Context) ->
     {[
         PostbackMsgJS, ActionsJS
@@ -110,8 +118,6 @@ script(inline, _TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJS,
 
 %%% Visible - keep track of visibility, trigger when target becomes visible
 
-script("visible", TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context) ->
-    script(visible, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, Propagate, Args, Context);
 script(visible, TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJS, _Propagate, _Args, Context) ->
     {[
         <<"z_on_visible('#">>, TriggerId, <<"', function() {">>, PostbackMsgJS, ActionsJS, <<"});\n">>
@@ -121,7 +127,7 @@ script(visible, TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJS,
 
 script(EventType, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, _Propagate, _Args, Context) when is_tuple(EventType) ->
     case z_notifier:first(#action_event_type{
-            event = EventType,
+            event = z_convert:to_list(EventType),
             trigger_id = TriggerId,
             trigger = Trigger,
             postback_js = PostbackMsgJS,

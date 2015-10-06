@@ -92,23 +92,17 @@ parse_translations(Context) ->
         Dict;
     add_labels(Lang, [{header,_}|Rest],Dict) ->
         add_labels(Lang, Rest,Dict);
-    add_labels(Lang, [{Label,Trans}|Rest], Dict) ->
-        LabelB = list_to_binary(Label),
-        case dict:find(LabelB, Dict) of
+    add_labels(Lang, [{Label,Trans}|Rest], Dict) when is_binary(Trans), is_binary(Label) ->
+        case dict:find(Label, Dict) of
             {ok, Ts} ->
                 case proplists:get_value(Lang, Ts) of
-                    undefined -> add_labels(Lang, Rest, dict:store(LabelB, [{Lang,list_to_binary(Trans)}|Ts], Dict));
+                    undefined -> add_labels(Lang, Rest, dict:store(Label, [{Lang,Trans}|Ts], Dict));
                     _PrevTrans -> add_labels(Lang, Rest, Dict)
                 end;
             error -> 
-                add_labels(Lang, Rest, dict:store(LabelB,[{Lang,to_binary(Trans)}],Dict))
+                add_labels(Lang, Rest, dict:store(Label,[{Lang,Trans}],Dict))
         end.
         
-        to_binary(header) -> "";
-        to_binary(L) -> list_to_binary(L).
-            
-
-
 %% @doc Strict translation lookup of a language version
 -spec lookup({trans, list()}|binary()|string(), #context{}) -> binary() | string() | undefined.
 lookup(Trans, Context) ->

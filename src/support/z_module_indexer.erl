@@ -120,7 +120,7 @@ find_ua_class(What, _Class, Name, Context) ->
 %% @doc Find a scomp, validator etc.
 %% @spec find_all(What, Name, Context) -> list()
 find_all(template, Name, Context) ->
-    find_ua_class_all(template, z_user_agent:get_class(Context), Name, Context);
+    find_ua_class_all(template, z_user_agent:get_class(Context), z_convert:to_list(Name), Context);
 find_all(What, Name, Context) ->
     find_ua_class_all(What, generic, Name, Context).
 
