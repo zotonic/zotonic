@@ -48,13 +48,8 @@ event(#z_msg_v1{data=#load_component{name=Name, loaded=LoadedResources}}, Contex
             z_transport:page(javascript, Script, [{qos, 1}], Context),
             Ctx1;
         {ok, InitScript, Resources} ->
-            ReqJs = unify(proplists:get_value(js, Resources, [])),
-            ReqCss = unify(proplists:get_value(css, Resources, [])),
-            Required = ReqJs ++ ReqCss,
-
-            LoadedJs = unify(uncollapse(proplists:get_value(<<"js">>, LoadedResources, []))),
-            LoadedCss = unify(uncollapse(proplists:get_value(<<"css">>, LoadedResources, []))),
-            Loaded = LoadedJs ++ LoadedCss,
+            Required = unify(collect(Resources)),
+            Loaded = unify(uncollapse(collect(LoadedResources))),
 
             % Calculate which resources must be loaded.
             Needed = subtract(Required, Loaded),
@@ -71,6 +66,18 @@ event(#z_msg_v1{data=#load_component{name=Name, loaded=LoadedResources}}, Contex
 %%
 %% Helpers
 %%
+
+collect(List) ->
+    collect(List, []).
+
+collect([], Acc) ->
+    lists:reverse(lists:flatten(Acc));
+collect([{Type, Resources}|Rest], Acc) 
+        when Type =:= js orelse Type =:= css 
+        orelse Type =:= <<"js">> orelse Type =:= <<"css">> ->
+    collect(Rest, [Resources | Acc]);
+collect([Resource|Rest], Acc) ->
+    collect(Rest, [Resource | Acc]).
 
 uncollapse(L) ->
     uncollapse(L, []).
