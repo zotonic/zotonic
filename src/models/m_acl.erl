@@ -38,7 +38,7 @@
 m_find_value(user, #m{value=undefined}, Context) ->
     z_acl:user(Context);
 m_find_value(is_admin, #m{value=undefined}, Context) ->
-    z_acl:is_allowed(use, mod_admin_config, Context);
+    z_acl:is_admin(Context);
 m_find_value(authenticated, #m{value=undefined} = M, _Context) ->
     M#m{value=authenticated};
 m_find_value(Action, #m{value=Auth} = M, _Context) 

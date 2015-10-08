@@ -286,10 +286,10 @@ set_admin(Context) ->
     Context#context{acl=admin}.
 
 
-%% @doc Check if the current user is the admin or a sudo action
+%% @doc Check if the current user is an admin or a sudo action
 is_admin(#context{user_id=?ACL_ADMIN_USER_ID}) -> true;
 is_admin(#context{acl=admin}) -> true;
-is_admin(_) -> false.
+is_admin(Context) -> is_allowed(use, mod_admin_config, Context).
 
 
 %% @doc Call a function as the anonymous user.
