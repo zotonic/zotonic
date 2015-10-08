@@ -36,7 +36,10 @@
 
     tempfile/0,
     is_tempfile/1,
-    is_tempfile_deletable/1
+    is_tempfile_deletable/1,
+
+    is_sender_enabled/2,
+    is_sender_enabled/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -98,11 +101,16 @@ send(#email{} = Email, Context) ->
 
 %% @doc Send an email using a predefined unique id.
 send(Id, #email{} = Email, Context) ->
-    Email1 = copy_attachments(Email),
-    Id1 = z_convert:to_binary(Id),
-    Context1 = z_context:depickle(z_context:pickle(Context)),
-    gen_server:cast(?MODULE, {send, Id1, Email1, Context1}),
-    {ok, Id1}.
+    case is_sender_enabled(Email, Context) of
+        true ->
+            Email1 = copy_attachments(Email),
+            Id1 = z_convert:to_binary(Id),
+            Context1 = z_context:depickle(z_context:pickle(Context)),
+            gen_server:cast(?MODULE, {send, Id1, Email1, Context1}),
+            {ok, Id1};
+        false ->
+            {error, sender_disabled}
+    end.
 
 %% @doc Return the filename for a tempfile that can be used for the emailer
 tempfile() ->
@@ -136,6 +144,31 @@ max_tempfile_age() ->
 
 max_tempfile_age(0, Acc) -> Acc;
 max_tempfile_age(N, Acc) -> max_tempfile_age(N-1, period(N) + Acc).
+
+
+%% @doc Check if the sender is allowed to send email. If an user is disabled they are only
+%%      allowed to send mail to themselves or to the admin.
+is_sender_enabled(#email{} = Email, Context) ->
+    is_sender_enabled(z_acl:user(Context), Email#email.to, Context).
+
+is_sender_enabled(undefined, _RecipientEmail, _Context) ->
+    true;
+is_sender_enabled(1, _RecipientEmail, _Context) ->
+    true;
+is_sender_enabled(Id, RecipientEmail, Context) when is_list(RecipientEmail) ->
+    is_sender_enabled(Id, z_convert:to_binary(RecipientEmail), Context);
+is_sender_enabled(Id, RecipientEmail, Context) when is_integer(Id) ->
+    (m_rsc:exists(Id, Context) andalso z_convert:to_bool(m_rsc:p_no_acl(Id, is_published, Context)))
+    orelse recipient_is_user_or_admin(Id, RecipientEmail, Context).
+
+recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
+    m_config:get_value(zotonic, admin_email, Context) =:= RecipientEmail
+    orelse m_rsc:p_no_acl(1, email, Context) =:= RecipientEmail
+    orelse m_rsc:p_no_acl(Id, email, Context) =:= RecipientEmail
+    orelse lists:any(fun(Idn) ->
+                        proplists:get_value(key, Idn) =:= RecipientEmail
+                     end,
+                     m_identity:get_rsc_by_type(Id, email, Context)).
 
 
 %%====================================================================
@@ -437,35 +470,48 @@ spawn_send(Id, Recipient, Email, Context, State) ->
     end.
 
 spawn_send_check_email(Id, Recipient, Email, Context, State) ->
-    case is_valid_email(Recipient) of
+    case is_sender_enabled(Email, Context) of
         true ->
-            spawn_send_checked(Id, Recipient, Email, Context, State);
+            case is_valid_email(Recipient) of
+                true ->
+                    spawn_send_checked(Id, Recipient, Email, Context, State);
+                false ->
+                    %% delete email from the queue and notify the system
+                    delete_email(illegal_address, Id, Recipient, Email, Context),
+                    State
+            end;
         false ->
-            %% delete email from the queue and notify the system
-            delete_emailq(Id),
-            z_notifier:first(#email_failed{
-                    message_nr=Id,
-                    recipient=Recipient,
-                    is_final=true,
-                    status= <<"Malformed email address">>,
-                    reason=illegal_address
-                }, Context),
-            LogEmail = #log_email{
-                severity=?LOG_ERROR, 
-                mailer_status=error,
-                props=[{reason, illegal_address}],
-                message_nr=Id,
-                envelop_to=Recipient,
-                envelop_from="",
-                to_id=proplists:get_value(recipient_id, Email#email.vars),
-                from_id=z_acl:user(Context),
-                content_id=proplists:get_value(id, Email#email.vars),
-                other_id=proplists:get_value(list_id, Email#email.vars),
-                message_template=Email#email.html_tpl
-            },
-            z_notifier:notify(#zlog{user_id=z_acl:user(Context), props=LogEmail}, Context),
+            delete_email(sender_disabled, Id, Recipient, Email, Context),
             State
     end.
+
+delete_email(Error, Id, Recipient, Email, Context) ->
+    delete_emailq(Id),
+    z_notifier:first(#email_failed{
+            message_nr=Id,
+            recipient=Recipient,
+            is_final=true,
+            status= case Error of
+                        illegal_address -> <<"Malformed email address">>;
+                        sender_disabled -> <<"Sender disabled">>
+                    end,
+            reason=Error
+        }, Context),
+    LogEmail = #log_email{
+        severity=?LOG_ERROR, 
+        mailer_status=error,
+        props=[{reason, Error}],
+        message_nr=Id,
+        envelop_to=Recipient,
+        envelop_from="",
+        to_id=proplists:get_value(recipient_id, Email#email.vars),
+        from_id=z_acl:user(Context),
+        content_id=proplists:get_value(id, Email#email.vars),
+        other_id=proplists:get_value(list_id, Email#email.vars),
+        message_template=Email#email.html_tpl
+    },
+    z_notifier:notify(#zlog{user_id=z_acl:user(Context), props=LogEmail}, Context).
+
 
 % Start a worker, prevent too many workers per domain.
 spawn_send_checked(Id, Recipient, Email, Context, State) ->
