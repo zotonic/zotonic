@@ -162,15 +162,7 @@ compile_options() ->
      {outdir, "ebin"},
      {parse_transform, lager_transform},
      nowarn_deprecated_type,
-     debug_info] ++ platform_defines_r17up() ++ platform_defines_r16up().
-
-platform_defines_r16up() ->
-    case re:run(erlang:system_info(otp_release), "^(R16|[0-9]).*") of
-        {match, _} ->
-            [{d, coding_utf8}];
-        nomatch ->
-            []
-    end.
+     debug_info] ++ platform_defines_r17up().
 
 platform_defines_r17up() ->
     case re:run(erlang:system_info(otp_release), "^[0-9].*") of

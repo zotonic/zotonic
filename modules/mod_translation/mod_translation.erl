@@ -68,7 +68,6 @@ init(Context) ->
             end
     end.
 
--ifdef(coding_utf8).
 default_languages() -> 
     [
      {ar, [ {language, <<"العربية"/utf8>>}, {is_enabled, false}]},
@@ -83,23 +82,6 @@ default_languages() ->
      {tr, [ {language, <<"Türkçe"/utf8>>}, {is_enabled, true}]},
      {zh, [ {language, <<"中文"/utf8>>}, {is_enabled, false}]}
     ].
--else.
-%% Compatibility with R15
-default_languages() -> 
-    [
-     {ar, [ {language, <<"العربية">>}, {is_enabled, false}]},
-     {de, [ {language, <<"Deutsch">>}, {is_enabled, true}]},
-     {en, [ {language, <<"English">>}, {is_enabled, true}]},
-     {es, [ {language, <<"Español">>}, {is_enabled, true}]},
-     {et, [ {language, <<"Eesti">>}, {is_enabled, true}]},
-     {fr, [ {language, <<"Français">>}, {is_enabled, true}]},
-     {nl, [ {language, <<"Nederlands">>}, {is_enabled, true}]},
-     {pl, [ {language, <<"Polski">>}, {is_enabled, true}]},
-     {ru, [ {language, <<"Русский">>}, {is_enabled, true}]},
-     {tr, [ {language, <<"Türkçe">>}, {is_enabled, true}]},
-     {zh, [ {language, <<"中文">>}, {is_enabled, false}]}
-    ].
--endif.
 
 
 %% @doc Check if the user has a prefered language (in the user's persistent data). If not
