@@ -127,11 +127,18 @@ m_value(#m{value=Id}, Context) ->
 
 %% @doc Return the id of the resource with the name
 % @spec name_to_id(NameString, Context) -> {ok, int()} | {error, Reason}
+name_to_id(Name, _Context) when is_integer(Name) ->
+    {ok, Name};
+name_to_id(undefined, _Context) ->
+    {error, {unknown_rsc, undefined}};
+name_to_id(<<>>, _Context) ->
+    {error, {unknown_rsc, <<>>}};
+name_to_id([], _Context) ->
+    {error, {unknown_rsc, []}};
 name_to_id(Name, Context) ->
     case z_utils:only_digits(Name) of
         true ->
             {ok, z_convert:to_integer(Name)};
-        false when is_integer(Name) -> {ok, Name};
         false ->
             case name_lookup(Name, Context) of
                 Id when is_integer(Id) -> {ok, Id};
