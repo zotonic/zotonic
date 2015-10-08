@@ -382,8 +382,12 @@ prune_reqdata(ReqData) ->
 
 %% @doc Make the url an absolute url by prepending the hostname.
 %% @spec abs_url(iolist(), Context) -> binary()
-abs_url(<<"http:", _/binary>> = Url, _Context) -> Url;
-abs_url(<<"https", _/binary>> = Url, _Context) -> Url;
+abs_url(<<"http:", _/binary>> = Url, _Context) -> 
+    Url;
+abs_url(<<"https", _/binary>> = Url, _Context) ->
+    Url;
+abs_url(<<"//", _/binary>> = Url, Context) ->
+    <<(site_protocol(Context))/binary, $:, Url/binary>>;
 abs_url(Url, Context) when is_list(Url) ->
     abs_url(iolist_to_binary(Url), Context);
 abs_url(Url, Context) ->
