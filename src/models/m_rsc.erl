@@ -574,8 +574,13 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
         end.
 
 
-        authoritative_uri(Id, Context) ->
-            iolist_to_binary(z_context:abs_url(z_dispatcher:url_for(id, [{id, Id}], Context), Context)).
+authoritative_uri(Id, Context) ->
+    case z_dispatcher:url_for(id, [{id, Id}], z_context:set_language(undefined, Context)) of
+        undefined ->
+            iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(Id))/binary>>, Context));
+        Url ->
+            iolist_to_binary(z_context:abs_url(Url, Context))
+    end.
 
 
 %% Return a list of all edge predicates of this resource
