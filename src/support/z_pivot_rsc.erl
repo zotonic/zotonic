@@ -43,7 +43,9 @@
     delete_task/4,
     
     pivot_resource/2,
+    stemmer_language/1,
     pg_lang/1,
+    pg_lang_extra/1,
     get_pivot_data/2,
 
     define_custom_pivot/3,
@@ -435,10 +437,11 @@ pivot_resource(Id, Context) ->
     R = get_pivot_rsc(Id, Context),
     {ObjIds, CatIds, [TA,TB,TC,TD]} = get_pivot_data(Id, R, Context),
 
-    {SqlA, ArgsA} = to_tsv(TA, $A, []),
-    {SqlB, ArgsB} = to_tsv(TB, $B, ArgsA),
-    {SqlC, ArgsC} = to_tsv(TC, $C, ArgsB),
-    {SqlD, ArgsD} = to_tsv(TD, $D, ArgsC),
+    StemmerLanguage = stemmer_language(Context),
+    {SqlA, ArgsA} = to_tsv(TA, $A, [], StemmerLanguage),
+    {SqlB, ArgsB} = to_tsv(TB, $B, ArgsA, StemmerLanguage),
+    {SqlC, ArgsC} = to_tsv(TC, $C, ArgsB, StemmerLanguage),
+    {SqlD, ArgsD} = to_tsv(TD, $D, ArgsC, StemmerLanguage),
 
     TsvObj = [ [" zpo",integer_to_list(OId)] || OId <- ObjIds ],
     TsvCat = [ [" zpc",integer_to_list(CId)] || CId <- CatIds ],
@@ -507,24 +510,18 @@ pivot_resource(Id, Context) ->
 
 
 %% Make the setweight(to_tsvector()) parts of the update statement
-to_tsv([], _Level, Args) ->
+to_tsv([], _Level, Args, _StemmingLanguage) ->
     {"tsvector('')", Args};
-to_tsv(List, Level, Args) -> 
+to_tsv(List, Level, Args, StemmingLanguage) -> 
     {Sql1, Args1} = lists:foldl(
-        fun ({Lang,Text}, {Sql, As}) -> 
+        fun ({_Lang,Text}, {Sql, As}) -> 
             N   = length(As) + 1,
             As1 = As ++ [Text],
-            {[["setweight(to_tsvector('pg_catalog.",pg_lang(Lang),"', $",integer_to_list(N),"), '",Level,"')"] | Sql], As1}
+            {[["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"] | Sql], As1}
         end,
         {[], Args},
         List),
     {z_utils:combine(" || ", Sql1), Args1}.
-            
-    %      new.tsv := 
-    %        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.title_nl,'')), 'A') || 
-    %        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.desc_nl,'')),  'D') ||
-    %        setweight(to_tsvector('pg_catalog.english', coalesce(new.title_en,'')), 'A') || 
-    %        setweight(to_tsvector('pg_catalog.english', coalesce(new.desc_en,'')),  'D'); 
 
 get_float(K, Ps) ->
     case proplists:get_value(K, Ps) of
@@ -733,12 +730,78 @@ is_lang_neutral(_, _) -> false.
 %% postgresql. This language list is the intersection of the default
 %% catalogs of postgres with the languages supported by
 %% mod_translation.
+pg_lang(dk) -> "danish";
 pg_lang(nl) -> "dutch";
-pg_lang(de) -> "german";
+pg_lang(en) -> "english";
+pg_lang(fi) -> "finnish";
 pg_lang(fr) -> "french";
+pg_lang(de) -> "german";
+pg_lang(hu) -> "hungarian";
+pg_lang(it) -> "italian";
+pg_lang(no) -> "norwegian";
+pg_lang(ro) -> "romanian";
+pg_lang(ru) -> "russian";
 pg_lang(es) -> "spanish";
+pg_lang(se) -> "swedish";
 pg_lang(tr) -> "turkish";
+pg_lang(<<"dk">>) -> "danish";
+pg_lang(<<"nl">>) -> "dutch";
+pg_lang(<<"en">>) -> "english";
+pg_lang(<<"fi">>) -> "finnish";
+pg_lang(<<"fr">>) -> "french";
+pg_lang(<<"de">>) -> "german";
+pg_lang(<<"hu">>) -> "hungarian";
+pg_lang(<<"it">>) -> "italian";
+pg_lang(<<"no">>) -> "norwegian";
+pg_lang(<<"ro">>) -> "romanian";
+pg_lang(<<"ru">>) -> "russian";
+pg_lang(<<"es">>) -> "spanish";
+pg_lang(<<"se">>) -> "swedish";
+pg_lang(<<"tr">>) -> "turkish";
 pg_lang(_) -> "english".
+
+%% Map extra languages, these are from the i18n.language_stemmer configuration and not
+%% per default installed in PostgreSQL
+pg_lang_extra(Iso) ->
+    case iso639:lc2lang(z_convert:to_list(Iso)) of
+        <<"">> ->
+            pg_lang(Iso);
+        Lang ->
+            lists:takewhile(fun
+                                (C) when C >= $a, C =< $z -> true;
+                                (_) -> false
+                            end,
+                            z_convert:to_list(z_string:to_lower(Lang)))
+    end.
+
+% Default stemmers in a Ubuntu psql install:
+%
+%  pg_catalog | danish_stem     | snowball stemmer for danish language
+%  pg_catalog | dutch_stem      | snowball stemmer for dutch language
+%  pg_catalog | english_stem    | snowball stemmer for english language
+%  pg_catalog | finnish_stem    | snowball stemmer for finnish language
+%  pg_catalog | french_stem     | snowball stemmer for french language
+%  pg_catalog | german_stem     | snowball stemmer for german language
+%  pg_catalog | hungarian_stem  | snowball stemmer for hungarian language
+%  pg_catalog | italian_stem    | snowball stemmer for italian language
+%  pg_catalog | norwegian_stem  | snowball stemmer for norwegian language
+%  pg_catalog | portuguese_stem | snowball stemmer for portuguese language
+%  pg_catalog | romanian_stem   | snowball stemmer for romanian language
+%  pg_catalog | russian_stem    | snowball stemmer for russian language
+%  pg_catalog | simple          | simple dictionary: just lower case and check for stopword
+%  pg_catalog | spanish_stem    | snowball stemmer for spanish language
+%  pg_catalog | swedish_stem    | snowball stemmer for swedish language
+%  pg_catalog | turkish_stem    | snowball stemmer for turkish language
+
+%% @doc Return the language used for stemming the full text index.
+%%      We use a single stemming to prevent having seperate indexes per language.
+-spec stemmer_language(#context{}) -> string().
+stemmer_language(Context) ->
+    StemmingLanguage = m_config:get_value(i18n, language_stemmer, Context),
+    case z_utils:is_empty(StemmingLanguage) of
+        true -> pg_lang(z_trans:default_language(Context));
+        false -> pg_lang_extra(StemmingLanguage)
+    end.
 
 
 %% @spec define_custom_pivot(Module, columns(), Context) -> ok

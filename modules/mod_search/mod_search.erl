@@ -390,7 +390,7 @@ search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
                         from="rsc r, to_tsquery($2, $1) query",
                         where=" query @@ pivot_tsv",
                         order="rank desc",
-                        args=[TsQuery, z_pivot_rsc:pg_lang(z_context:language(Context))],
+                        args=[TsQuery, z_pivot_rsc:stemmer_language(Context)],
                         cats=[{"r", Cat}],
                         tables=[{rsc,"r"}]
                     }
@@ -419,7 +419,7 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
                 from="rsc r, to_tsquery($2, $1) query",
                 where=" query @@ pivot_tsv",
                 order="rank desc",
-                args=[TsQuery, z_pivot_rsc:pg_lang(z_context:language(Context))],
+                args=[TsQuery, z_pivot_rsc:stemmer_language(Context)],
                 tables=[{rsc,"r"}]
             }
     end;
@@ -443,7 +443,7 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
                 from="rsc r, to_tsquery($2, $1) query",
                 where=" query @@ pivot_tsv",
                 order="rank desc",
-                args=[TsQuery, z_pivot_rsc:pg_lang(z_context:language(Context))],
+                args=[TsQuery, z_pivot_rsc:stemmer_language(Context)],
                 cats=[{"r", Cat}],
                 tables=[{rsc,"r"}]
             }
@@ -533,7 +533,7 @@ to_tsquery(Text, Context) when is_binary(Text) ->
 to_tsquery(Text, Context) ->
     [{TsQuery, Version}] = z_db:q("
         select plainto_tsquery($2, $1) , version()
-    ", [Text ++ "xcvvcx", z_pivot_rsc:pg_lang(z_context:language(Context))], Context),
+    ", [Text ++ "xcvvcx", z_pivot_rsc:stemmer_language(Context)], Context),
     % Version is something like "PostgreSQL 8.3.5 on i386-apple-darwin8.11.1, compiled by ..."
     case z_convert:to_list(TsQuery) of
         [] -> 

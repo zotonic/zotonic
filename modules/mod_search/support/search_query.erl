@@ -426,7 +426,7 @@ parse_query([{text, Text}|Rest], Context, Result) ->
         _ ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             {QArg, Result1} = add_arg(TsQuery, Result),
-            {LArg, Result2} = add_arg(z_pivot_rsc:pg_lang(z_context:language(Context)), Result1),
+            {LArg, Result2} = add_arg(z_pivot_rsc:stemmer_language(Context), Result1),
             Result3 = Result2#search_sql{
                         from=Result2#search_sql.from ++ ", to_tsquery(" ++ LArg ++ ", " ++ QArg ++ ") txtquery"
                        },

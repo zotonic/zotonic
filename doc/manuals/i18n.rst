@@ -176,3 +176,16 @@ you to start translating your site by translating the most important
 pages first.
 
 
+Text searches, translations and stemming
+----------------------------------------
+
+For text searches a full text index is maintained. This full text index
+is stemmed according to the site’s configured default language.
+
+All translations are added to the same full text index. This combined text is
+stemmed using a single stemmer. The selected stemmer depends on the configured 
+default language (config key ``i18n.language``). The stemmer can be overruled by
+setting the config key ``i18n.language_stemmer`` to the two letter iso code of
+the language matching with the stemmer. You have to make sure that the stemmer
+is configured in PostgreSQL otherwise the pivot process will crash with a SQL error.
+
