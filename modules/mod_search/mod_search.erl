@@ -386,11 +386,11 @@ search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
                     #search_result{};
                 _ ->
                     #search_sql{
-                        select="r.id, ts_rank_cd(pivot_tsv, query, 32) AS rank",
-                        from="rsc r, to_tsquery($2, $1) query",
-                        where=" query @@ pivot_tsv",
+                        select="r.id, ts_rank_cd(pivot_tsv, $1, 32) AS rank",
+                        from="rsc r",
+                        where=" $1 @@ pivot_tsv",
                         order="rank desc",
-                        args=[TsQuery, z_pivot_rsc:stemmer_language(Context)],
+                        args=[TsQuery],
                         cats=[{"r", Cat}],
                         tables=[{rsc,"r"}]
                     }
@@ -415,11 +415,11 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
-                select="r.id, ts_rank_cd(pivot_tsv, query, 32) AS rank",
+                select="r.id, ts_rank_cd(pivot_tsv, $1, 32) AS rank",
                 from="rsc r, to_tsquery($2, $1) query",
-                where=" query @@ pivot_tsv",
+                where=" $1 @@ pivot_tsv",
                 order="rank desc",
-                args=[TsQuery, z_pivot_rsc:stemmer_language(Context)],
+                args=[TsQuery],
                 tables=[{rsc,"r"}]
             }
     end;
@@ -439,11 +439,11 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
-                select="r.id, ts_rank_cd(pivot_tsv, query, 32) AS rank",
-                from="rsc r, to_tsquery($2, $1) query",
-                where=" query @@ pivot_tsv",
+                select="r.id, ts_rank_cd(pivot_tsv, $1, 32) AS rank",
+                from="rsc r",
+                where=" $1 @@ pivot_tsv",
                 order="rank desc",
-                args=[TsQuery, z_pivot_rsc:stemmer_language(Context)],
+                args=[TsQuery],
                 cats=[{"r", Cat}],
                 tables=[{rsc,"r"}]
             }
@@ -528,26 +528,30 @@ search(_, _, _) ->
 %% @doc Expand a search string like "hello wor" to a posgres search query.
 to_tsquery(undefined, _Context) ->
     [];
+to_tsquery(Text, Context) when is_list(Text) ->
+    to_tsquery(z_convert:to_binary(Text), Context);
 to_tsquery(Text, Context) when is_binary(Text) ->
-    to_tsquery(binary_to_list(Text), Context);
-to_tsquery(Text, Context) ->
-    [{TsQuery, Version}] = z_db:q("
-        select plainto_tsquery($2, $1) , version()
-    ", [Text ++ "xcvvcx", z_pivot_rsc:stemmer_language(Context)], Context),
+    [{TsQuery, Version}] = z_db:q("select plainto_tsquery($2, $1), version()",
+                                  [Text, z_pivot_rsc:stemmer_language(Context)], 
+                                  Context),
     % Version is something like "PostgreSQL 8.3.5 on i386-apple-darwin8.11.1, compiled by ..."
-    case z_convert:to_list(TsQuery) of
-        [] -> 
-            [];
-        TsQ ->
-            TsQ1 = re:replace(TsQ, "&? *'xcvvcx", ""),
-            TsQ2 = case Version < <<"PostgreSQL 8.4">> of
-                true ->
-                    re:replace(TsQ1, "&? *xcvvcx", "", [global]);
-                false ->
-                    re:replace(TsQ1, "xcvvcx'", ":*'", [global])
-            end,
-            re:replace(TsQ2, "'", "", [global])
+    append_wildcard(Text, TsQuery, Version).
+
+append_wildcard(_Text, <<>>, _Version) ->
+    <<>>;
+append_wildcard(_Text, TsQ, Version) when Version < <<"PostgreSQL 8.4">> ->
+    TsQ;
+append_wildcard(Text, TsQ, _Version) ->
+    case is_wordchar(z_string:last_char(Text)) of
+        true -> <<TsQ/binary, ":*">>;
+        false -> TsQ
     end.
+
+is_wordchar(C) when C >= 0, C =< 9 -> true;
+is_wordchar(C) when C >= $a, C =< $z -> true;
+is_wordchar(C) when C >= $A, C =< $Z -> true;
+is_wordchar(C) when C > 255 -> true;
+is_wordchar(_) -> false.
 
 
 %% @doc Find one more more resources by id or name, when the resources exists.

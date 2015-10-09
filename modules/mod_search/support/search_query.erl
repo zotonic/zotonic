@@ -421,18 +421,16 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
 %% Perform a fulltext search
 parse_query([{text, Text}|Rest], Context, Result) ->
     case z_string:trim(Text) of 
-        "id:"++ S -> mod_search:find_by_id(S, Context);
-        [] -> parse_query(Rest, Context, Result);
+        "id:"++ S ->
+            mod_search:find_by_id(S, Context);
+        [] ->
+            parse_query(Rest, Context, Result);
         _ ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             {QArg, Result1} = add_arg(TsQuery, Result),
-            {LArg, Result2} = add_arg(z_pivot_rsc:stemmer_language(Context), Result1),
-            Result3 = Result2#search_sql{
-                        from=Result2#search_sql.from ++ ", to_tsquery(" ++ LArg ++ ", " ++ QArg ++ ") txtquery"
-                       },
-            Result4 = add_where("txtquery @@ rsc.pivot_tsv", Result3),
-            Result5 = add_order_unsafe("ts_rank_cd(rsc.pivot_tsv, txtquery, 32) desc", Result4),
-            parse_query(Rest, Context, Result5)
+            Result2 = add_where(QArg++" @@ rsc.pivot_tsv", Result1),
+            Result3 = add_order_unsafe("ts_rank_cd(rsc.pivot_tsv, "++QArg++", 32) desc", Result2),
+            parse_query(Rest, Context, Result3)
     end;
 
 %% match_objects=<id>
