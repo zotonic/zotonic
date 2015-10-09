@@ -533,11 +533,12 @@ to_tsquery(undefined, _Context) ->
 to_tsquery(Text, Context) when is_list(Text) ->
     to_tsquery(z_convert:to_binary(Text), Context);
 to_tsquery(Text, Context) when is_binary(Text) ->
+    Stemmer = z_pivot_rsc:stemmer_language(Context),
     [{TsQuery, Version}] = z_db:q("select plainto_tsquery($2, $1), version()",
-                                  [Text, z_pivot_rsc:stemmer_language(Context)], 
+                                  [Text, Stemmer], 
                                   Context),
     % Version is something like "PostgreSQL 8.3.5 on i386-apple-darwin8.11.1, compiled by ..."
-    append_wildcard(Text, TsQuery, Version).
+    fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text, TsQuery, Version)).
 
 append_wildcard(_Text, <<>>, _Version) ->
     <<>>;
@@ -554,6 +555,18 @@ is_wordchar(C) when C >= $a, C =< $z -> true;
 is_wordchar(C) when C >= $A, C =< $Z -> true;
 is_wordchar(C) when C > 255 -> true;
 is_wordchar(_) -> false.
+
+% There are some problems with the stemming of prefixes.
+% For now we fix this up by removing the one case we found.
+%
+% to_tsquery('dutch', 'overstee') -> 'overstee'
+% to_tsquery('dutch', 'oversteek') -> 'overstek'
+fixup_tsquery(_Stemmer, <<>>) ->
+    <<>>;
+fixup_tsquery("dutch", TsQ) ->
+    iolist_to_binary(re:replace(TsQ, <<"([a-z]([aieou]))\\2':\\*">>, <<"\\1':\\*">>));
+fixup_tsquery(_Stemmer, TsQ) ->
+    TsQ.
 
 
 %% @doc Find one more more resources by id or name, when the resources exists.
