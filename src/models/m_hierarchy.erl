@@ -55,6 +55,9 @@ m_find_value(tree1, #m{value=Name}, Context) ->
     tree1(Name, Context);
 m_find_value(tree_flat, #m{value=Name}, Context) ->
     tree_flat(Name, Context);
+m_find_value(menu_ensured, #m{value=Name}, Context) ->
+    {ok, _} = ensure(Name, Context),
+    menu(Name, Context);
 m_find_value(menu, #m{value=Name}, Context) ->
     menu(Name, Context);
 m_find_value(Id, #m{value=Name} = M, Context) ->

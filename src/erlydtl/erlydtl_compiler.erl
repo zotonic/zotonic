@@ -841,7 +841,7 @@ filter_ast_noescape(Variable, Filter, Context, TreeWalker) ->
     {{FilterAst,Info2},TreeWalker3} = filter_ast1(Filter, VariableAst, Context, TreeWalker2),
     {{FilterAst, merge_info(Info, Info2)}, TreeWalker3}.
 
-filter_ast1({filter, {identifier, _, "escape"}, []}, VariableAst, Context, TreeWalker) ->
+filter_ast1({filter, {identifier, _, <<"escape">>}, []}, VariableAst, Context, TreeWalker) ->
     FilterAst = erl_syntax:application(erl_syntax:atom(filter_force_escape), erl_syntax:atom(force_escape), [VariableAst, z_context_ast(Context)]),
     {{FilterAst, #ast_info{}}, TreeWalker};
 filter_ast1({filter, {identifier, _, Name}, []}, VariableAst, Context, TreeWalker) ->
