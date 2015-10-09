@@ -795,55 +795,35 @@ include_ast(File, Args, All, Context, TreeWalker) ->
     end.
 
 filter_tag_ast(FilterList, Contents, Context, TreeWalker) ->
-    {{InnerAst, Info}, TreeWalker1} = body_ast(Contents, Context#dtl_context{auto_escape = did}, TreeWalker),
-
-    {{FilteredAst, FilteredInfo}, TreeWalker2} = lists:foldl(fun
-                ({filter, {identifier, _, <<"escape">>}, _}, {{AstAcc, InfoAcc}, TreeWalkerAcc}) ->
-                    {{AstAcc, InfoAcc}, TreeWalkerAcc};
-                (Filter, {{AstAcc, InfoAcc}, TreeWalkerAcc}) ->
+    {{InnerAst, Info}, TreeWalker1} = body_ast(Contents, Context, TreeWalker),
+    lists:foldl(
+            fun(Filter, {{AstAcc, InfoAcc}, TreeWalkerAcc}) ->
                     {{Ast, AstInfo}, TreeWalkerAcc1} = filter_ast1(Filter, AstAcc, Context, TreeWalkerAcc),
                     {{Ast, merge_info(InfoAcc, AstInfo)}, TreeWalkerAcc1}
-            end, {{erl_syntax:application(
+            end,
+            {{erl_syntax:application(
                         erl_syntax:atom(lists),
                         erl_syntax:atom(flatten),
-                        [InnerAst]), Info}, TreeWalker1}, FilterList),
-
-    case search_for_escape_filter(lists:reverse(FilterList), Context) of
-        on -> 
-            {{erl_syntax:application(
-                erl_syntax:atom(filter_force_escape),
-                erl_syntax:atom(force_escape),
-                [FilteredAst, z_context_ast(Context)]), FilteredInfo}, TreeWalker2};
-        _ -> 
-            {{FilteredAst, FilteredInfo}, TreeWalker2}
-    end.
+                        [InnerAst]), Info}, 
+             TreeWalker1}, 
+            FilterList).
 
 filter_ast(Variable, Filter, Context, TreeWalker) ->
-    % the escape filter is special; it is always applied last, so we have to go digging for it
-
-    % AutoEscape = 'did' means we (will have) decided whether to escape the current variable,
-    % so don't do any more escaping
-    {{UnescapedAst, Info}, TreeWalker2} = filter_ast_noescape(Variable, Filter, Context#dtl_context{auto_escape = did}, TreeWalker),
-    case search_for_escape_filter(Variable, Filter, Context) of
-        on -> 
-            {{erl_syntax:application(
-                        erl_syntax:atom(filter_force_escape), 
-                        erl_syntax:atom(force_escape), 
-                        [UnescapedAst, z_context_ast(Context)]), Info}, TreeWalker};
-        _ -> 
-            {{UnescapedAst, Info}, TreeWalker2}
-    end.
-
-filter_ast_noescape(Variable, {filter, {identifier, _, <<"escape">>}, []}, Context, TreeWalker) ->
-    value_ast(Variable, true, Context, TreeWalker);
-filter_ast_noescape(Variable, Filter, Context, TreeWalker) ->
     {{VariableAst,Info},TreeWalker2} = value_ast(Variable, true, Context, TreeWalker),
     {{FilterAst,Info2},TreeWalker3} = filter_ast1(Filter, VariableAst, Context, TreeWalker2),
     {{FilterAst, merge_info(Info, Info2)}, TreeWalker3}.
 
 filter_ast1({filter, {identifier, _, <<"escape">>}, []}, VariableAst, Context, TreeWalker) ->
-    FilterAst = erl_syntax:application(erl_syntax:atom(filter_force_escape), erl_syntax:atom(force_escape), [VariableAst, z_context_ast(Context)]),
-    {{FilterAst, #ast_info{}}, TreeWalker};
+    case Context#dtl_context.auto_escape of
+        on ->
+            {{VariableAst, #ast_info{}}, TreeWalker};
+        _ ->
+            FilterAst = erl_syntax:application(
+                                erl_syntax:atom(filter_force_escape), 
+                                erl_syntax:atom(force_escape),
+                                [VariableAst, z_context_ast(Context)]),
+            {{FilterAst, #ast_info{}}, TreeWalker}
+    end;
 filter_ast1({filter, {identifier, _, Name}, []}, VariableAst, Context, TreeWalker) ->
     FilterAst = erl_syntax:application(
                         erl_syntax:atom(to_atom("filter_"++to_list(Name))), 
@@ -887,29 +867,6 @@ filter_ast1({filter, {identifier, _, Name}, Args}, VariableAst, Context, TreeWal
                 ),
     {{FilterAst, Info}, TreeWalker2}.
     
-
-search_for_escape_filter(_FilterList, #dtl_context{auto_escape = on}) ->
-    on;
-search_for_escape_filter(_FilterList, #dtl_context{auto_escape = did}) ->
-    off;
-search_for_escape_filter([{filter, {identifier, _, <<"escape">>}, []}|_Rest], _Context) ->
-    on;
-search_for_escape_filter([_|Rest], Context) ->
-    search_for_escape_filter(Rest, Context);
-search_for_escape_filter([], _Context) ->
-    off.
-
- 
-search_for_escape_filter(_, _, #dtl_context{auto_escape = on}) ->
-    on;
-search_for_escape_filter(_, _, #dtl_context{auto_escape = did}) ->
-    off;
-search_for_escape_filter(_, {filter, {identifier, _, <<"escape">>}, []}, _Context) ->
-    on;
-search_for_escape_filter({apply_filter, Variable, Filter}, _, Context) ->
-    search_for_escape_filter(Variable, Filter, Context);
-search_for_escape_filter(_Variable, _Filter, _Context) ->
-    off.
 
 resolve_variable_ast(VarTuple, Context, TreeWalker) ->
     opttrans_variable_ast(resolve_variable_ast(VarTuple, Context, TreeWalker, 'fetch_value'), Context).
@@ -1555,7 +1512,6 @@ image_url_ast(FilenameValue, Args, Context, TreeWalker) ->
 
 %% Added by Marc Worrell - handle url generation using the url patterns
 url_ast(Name, Args, Context, TreeWalker) ->
-    % Check if the 'escape' argument is there
     {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
     AppAst = erl_syntax:application(
                 erl_syntax:atom(z_dispatcher),
@@ -1583,7 +1539,7 @@ print_ast(Value, Context, TreeWalker) ->
                 [PrintAst]
             ),
     EscapeAst = erl_syntax:application(
-                  erl_syntax:atom(mochiweb_html),
+                  erl_syntax:atom(z_html),
                   erl_syntax:atom(escape),
                   [FlattenAst]
             ),
