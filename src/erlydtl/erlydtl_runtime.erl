@@ -48,12 +48,12 @@ find_value(Name, [[{A,_}|_]|_] = Blocks, _Context ) when is_atom(A), not is_inte
     end;
 
 %% Regular proplist lookup
-find_value(Key, [{B,_}|_] = L, _Context) when is_binary(B) ->
-    proplists:get_value(z_convert:to_binary(Key), L);
+find_value(Key, [{B,_}|_] = L, _Context) when is_list(B) ->
+    proplists:get_value(z_convert:to_list(Key), L);
 find_value(Key, [T|_] = L, _Context) when is_tuple(T), size(T) > 2 ->
-    case is_binary(element(1,T)) of
+    case is_list(element(1,T)) of
         true ->
-            case lists:keyfind(z_convert:to_binary(Key), 1, L) of
+            case lists:keyfind(z_convert:to_list(Key), 1, L) of
                 false -> undefined;
                 Found -> Found
             end;
