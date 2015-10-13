@@ -3,7 +3,7 @@ if (typeof tinyInit !== 'object')
     selector: "textarea",
 	mode: "none",
 	theme: "modern",
-	plugins: "compat3x advlist codemirror paste table link zlink zmedia autosave directionality autoresize",
+	plugins: "compat3x advlist code paste table link zlink zmedia autosave directionality autoresize",
 	menubar: "edit format table tools insert",
 	toolbar: [
 	    "styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | ltr rtl | removeformat",
@@ -11,13 +11,13 @@ if (typeof tinyInit !== 'object')
 	],
 
     codemirror: {
-        indentOnInit: true, // Whether or not to indent code on init. 
+        indentOnInit: true, // Whether or not to indent code on init.
         path: 'codemirror-4.8', // Path to CodeMirror distribution
     },
-    
-    content_css: "/lib/js/tinymce-4.0.26/zotonic.css", 
+
+    content_css: "/lib/js/tinymce-4.0.26/zotonic.css",
 //    language : "en", // set in _admin_tinymce_overrides_js.tpl
-    
+
 	/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
 	/* See: http://www.tinymce.com/wiki.php/Configuration:valid_elements */
 	valid_elements : "@[class|style|title|dir<ltr?rtl|lang|xml::lang],"
@@ -38,26 +38,26 @@ if (typeof tinyInit !== 'object')
 	+ "q[cite],samp,small,"
 	+ "tt,var,big,"
 	+ "section,header,nav,article,footer,audio,video",
-	
-	relative_urls: "", 
-	remove_script_host: "", 
-	convert_urls: "", 
-	apply_source_formatting: "", 
-	remove_linebreaks: "1", 
-	gecko_spellcheck: "1", 
-	
+
+	relative_urls: "",
+	remove_script_host: "",
+	convert_urls: "",
+	apply_source_formatting: "",
+	remove_linebreaks: "1",
+	gecko_spellcheck: "1",
+
 	formats : {
 		bdo_rtl : {inline : 'bdo', attributes : {dir: 'rtl'}},
 		bdo_ltr : {inline : 'bdo', attributes : {dir: 'ltr'}}
 	},
-    
+
     setup: function(editor) {
         // setup code here; override in _admin_tinymce_overrides_js.tpl
     },
-    
+
 	/* Cleanup pasted html code */
 	paste_auto_cleanup_on_paste : true,
-	paste_convert_middot_lists: true, 
+	paste_convert_middot_lists: true,
 	paste_remove_spans: true,
 	paste_remove_styles: true,
 	paste_remove_styles_if_webkit: true,
@@ -66,12 +66,12 @@ if (typeof tinyInit !== 'object')
 	/* below is a workaround for problem where tinyMCE setEntities skips the ones below and the doesn't initialize the entityLookup array
 	 * which results in an error in the _encode function.
 	 */
-	entity_encoding: "raw",		
-	entities: "38,amp,60,lt,62,gt", 
+	entity_encoding: "raw",
+	entities: "38,amp,60,lt,62,gt",
 
-	accessibility_focus: "1", 
-	tab_focus: ":prev,:next", 
-	wpeditimage_disable_captions: "", 
+	accessibility_focus: "1",
+	tab_focus: ":prev,:next",
+	wpeditimage_disable_captions: "",
 	table_row_limit: 100,
 	table_col_limit: 10,
 	autoresize_max_height: 400
