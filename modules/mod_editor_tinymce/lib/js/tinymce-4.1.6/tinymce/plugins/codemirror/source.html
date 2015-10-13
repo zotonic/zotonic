@@ -189,7 +189,7 @@ function submit()
 	if (findDepth(curLineHTML, cc) !== 0) {
 		// Cursor is inside a <tag>, don't set cursor:
 		curLineHTML = curLineHTML.replace(cc, '');
-		doc.setLine(pos.line, curLineHTML);
+		doc.replaceRange(curLineHTML, CodeMirror.Pos(pos.line, 0), CodeMirror.Pos(pos.line));
 	}
 
 	// Submit HTML to TinyMCE:

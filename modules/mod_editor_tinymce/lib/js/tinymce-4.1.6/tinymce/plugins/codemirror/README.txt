@@ -9,6 +9,11 @@ License: see LICENSE.txt
 
 Changelog
 =========
+Version 1.4 - 2014-12-15
+- Bugfix: Replace setLine call to replaceRange (for CodeMirror 4)
+  This fixed &#x0; appearing in the source code.
+- Note: This plugin requires CodeMirror version 4 (3 is no longer supported)
+
 Version 1.3 - 2014-03-04
 - Bugfix: If any text was highlighted in CodeMirror and the code dialog is closed and saved,
           the selected text was removed from TinyMCE.

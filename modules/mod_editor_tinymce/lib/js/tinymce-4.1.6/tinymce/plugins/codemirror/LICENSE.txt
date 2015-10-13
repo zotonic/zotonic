@@ -178,7 +178,7 @@
 
    APPENDIX: How to apply the Apache License to your work.
 
-   Copyright 2013 Arjan Haverkamp (arjan@avoid.org)
+   Copyright 2013-2015 Arjan Haverkamp (arjan@webgear.nl)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
