@@ -518,7 +518,7 @@ do_fetch_transport_msgs(State) ->
 
 
 %% @doc Ping the comet or ws process that we have a message queued
-ping_comet_ws(#page_state{websocket_pid=WsPid, comet_pid=CometPid} = State) when is_pid(WsPid), is_pid(CometPid) ->
+ping_comet_ws(#page_state{websocket_pid=WsPid, comet_pid=CometPid} = State) when is_pid(WsPid) andalso is_pid(CometPid) ->
     CometPid ! {final, <<>>},
     ping_comet_ws(State#page_state{comet_pid=undefined});
 ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
@@ -531,7 +531,8 @@ ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
 ping_comet_ws(#page_state{transport=TQ, comet_pid=CometPid} = State) when is_pid(CometPid) ->
     case z_transport_queue:is_empty(TQ) of
         true -> nop;
-        false -> CometPid ! transport
+        false -> 
+            CometPid ! transport
     end,
     State;
 ping_comet_ws(State) ->

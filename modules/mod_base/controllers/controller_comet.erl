@@ -81,16 +81,18 @@ process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
     receive
         flush_empty ->
             Data = z_session_page:get_transport_data(Context#context.page_pid),
-            flush(true, Data, TRefFinal, TRefData, MPageRef, Context);
+            flush(true, Data, undefined, TRefData, MPageRef, Context);
 
         flush_data ->
             Data = z_session_page:get_transport_data(Context#context.page_pid),
-            flush(false, Data, TRefFinal, TRefData, MPageRef, Context);
+            flush(false, Data, TRefFinal, undefined, MPageRef, Context);
 
         transport ->
             TRef1 = case TRefData of
-                        undefined  -> erlang:send_after(?COMET_FLUSH_DATA, self(), flush_data);
-                        _ -> TRefData
+                        undefined  -> 
+                            erlang:send_after(?COMET_FLUSH_DATA, self(), flush_data);
+                        _ -> 
+                            TRefData
                     end,
             process_post_loop(Context, TRefFinal, TRef1, MPageRef);
 
