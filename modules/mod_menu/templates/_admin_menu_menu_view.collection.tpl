@@ -21,7 +21,7 @@
 		</p>
 
 		{% block menu_tree %}
-		<ul class="tree-list do_menuedit" id="collection-{{ id }}" data-menuedit="maxLevels: 1, item_template: '_menu_edit_item.tpl'">
+		<ul class="tree-list do_menuedit" id="collection-{{ id }}" data-menuedit="maxLevels: 1">
 			{% for mid in id.o.haspart %}
 				{% include "_menu_edit_item.tpl" c=forloop.counter id=mid %}
 			{% endfor %}

@@ -50,7 +50,27 @@
 	%}
 {% endif %}
 
+
 {% javascript %}
+
+(function() {
+	var sortupdater = undefined;
+
+	pubzub.subscribe("~site/rsc/+", function(_topic, args) {
+		if (args.payload._record == 'rsc_update_done' && args.payload.action == 'delete') {
+			var elts = $('#{{ menu_id }} [data-page-id='+args.payload.id+']').closest('li.menu-item');
+			if (elts.length) {
+				elts.remove();
+				if (sortupdater) {
+					clearTimeout(sortupdater);
+				}
+				sortupdater = setTimeout(function() {
+					$sorter.trigger('sortupdate');
+				}, 150);
+			}
+		}
+	});
+})();
 
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 	var id = $(this).closest('div').data('page-id');
@@ -81,18 +101,22 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	}
 
 	if (where == 'remove') {
-		z_notify("menu-item-delete", {
+		{% if is_hierarchy or in_sorter == 'category' %}
+			z_transport('mod_menu', 'ubf', {
+				cmd: "delete",
 				id: $menu_item.children('div').data('page-id')
 			});
-		$(this).closest('li.menu-item').fadeOut(500, function() { 
-			$(this).remove();
-			$sorter.trigger('sortupdate')
-		});
-	} else if (where == 'copy') {
-		z_notify("menu-item-copy", {
-				id: $menu_item.children('div').data('page-id'),
-				item_template: $menuedit.menuedit('option').item_template
+		{% else %}
+			$(this).closest('li.menu-item').fadeOut(500, function() { 
+				$(this).remove();
+				$sorter.trigger('sortupdate')
 			});
+		{% endif %}
+	} else if (where == 'copy') {
+		z_transport("mod_menu", "ubf", {
+			cmd: "copy",
+			id: $menu_item.children('div').data('page-id')
+		});
 	} else {
 		window.zMenuEditDone = function(v) {
 			window.zMenuNewItem = function(rsc_id, html) {
@@ -130,11 +154,10 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				}
 			{% endif %}
 
-			z_notify("menu-item-render", {
+			z_transport("mod_menu", "ubf", {
+					cmd: "menu-item-render",
 					id: v.object_id, 
-					callback: "window.zMenuNewItem", 
-					z_delegate:"mod_menu",
-					item_template: $menuedit.menuedit('option').item_template
+					callback: "window.zMenuNewItem"
 				});
 		};
 		z_event("admin-menu-select", {tab: "{{ connect_tab|default:"find" }}"});

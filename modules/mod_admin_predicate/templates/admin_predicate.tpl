@@ -29,15 +29,15 @@
             </tr>
         </thead>
 
-        <tbody>
+        <tbody id="predicate-list">
             {% for name,p in m.predicate %}
-            <tr id="{{ #li.name }}" data-href="{% url admin_edit_rsc id=p.id %}">
+            <tr id="{{ #li.name }}" data-href="{% url admin_edit_rsc id=p.id %}" data-id="{{ p.id }}">
                 <td>{{ p.title|default:"&nbsp;" }}</td>
                 <td>{{ p.name|default:"&nbsp;" }}</td>
                 <td>{{ p.uri|default:"&nbsp;" }}</td>
                 <td>
                     <div class="pull-right buttons">
-                        {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_predicate_delete id=p.id on_success={slide_fade_out target=#li.name}} %}
+                        {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=p.id} %}
                         <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                     </div>
                     {{ p.reversed|yesno:"reversed,&nbsp;" }}
@@ -53,4 +53,15 @@
     </div>
 </div>
 {% endwith %}
+
+{% javascript %}
+    pubzub.subscribe("~site/rsc/+", function(_topic, args) {
+        if (args.payload._record == 'rsc_update_done' && args.payload.action == 'delete') {
+            $('#predicate-list tr[data-id='+args.payload.id+']').remove();
+        }
+    });
+{% endjavascript %}
+
 {% endblock %}
+
+

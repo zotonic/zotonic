@@ -43,12 +43,15 @@
     rebuild/2,
     observe_admin_menu/3,
     observe_rsc_update_done/2,
+    observe_rsc_delete/2,
     name/1,
     manage_schema/2
 ]).
 
 % Access control hooks
 -export([
+    event/2,
+
     observe_acl_is_allowed/2,
     observe_acl_logon/2,
     observe_acl_logoff/2,
@@ -74,6 +77,140 @@
             table_edit = [],
             table_publish = []
         }).
+
+
+event(#submit{message={delete_move, Args}}, Context) ->
+    ToUGId = z_convert:to_integer(z_context:get_q_validated("acl_user_group_id", Context)),
+    {id, Id} = proplists:lookup(id, Args),
+    Ids = [ Id | m_hierarchy:children('acl_user_group', Id, Context) ],
+    case deletable(Ids, Context) andalso z_acl:rsc_editable(ToUGId, Context) of
+        true ->
+            Context1 = z_context:prune_for_async(Context),
+            spawn(fun() ->
+                    ug_move_and_delete(Ids, ToUGId, Context1)
+                  end),
+            z_render:wire({dialog_close, []}, Context);
+        false ->
+            z_render:growl(?__("Sorry, you are not allowed to delete this.", Context), Context)
+    end;
+event(#postback{message={delete_all, Args}}, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    IfEmpty = proplists:get_value(if_empty, Args, false),
+    Ids = [ Id | m_hierarchy:children('acl_user_group', Id, Context) ],
+    case not IfEmpty orelse not m_acl_user_group:is_used(Id, Context) of
+        true ->
+            case deletable(Ids, Context)  of
+                true ->
+                    Context1 = z_context:prune_for_async(Context),
+                    spawn(fun() ->
+                            ug_delete(Ids, Context1)
+                          end),
+                    z_render:wire({dialog_close, []}, Context);
+                false ->
+                    z_render:growl(?__("Sorry, you are not allowed to delete this.", Context), Context)
+            end;
+        false ->
+            z_render:wire({alert, [{message, ?__("Delete is canceled, there are users in the user groups.", Context)}]}, Context)
+    end.
+
+ug_delete(Ids, Context) ->
+    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    UGUserIds = in_user_groups(Ids, Context),
+    Total = lists:sum([length(UIds) || {_, UIds} <- UGUserIds]),
+    case unlink_all(UGUserIds, 0, Total, Context) of
+        ok ->
+            lists:foreach(fun(Id) ->
+                             m_rsc:delete(Id, Context)
+                          end,
+                          Ids),
+            z_session_page:add_script(z_render:wire({unmask, []}, Context));
+        {error, _} ->
+            Context1 = z_render:wire([
+                    {unmask, []},
+                    {alert, [{message, ?__("Not all user groups could be deleted.", Context)}]}
+                ],
+                Context),
+            z_session_page:add_script(Context1)
+
+    end.
+
+ug_move_and_delete(Ids, ToGroupId, Context) ->
+    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    UGUserIds = in_user_groups(Ids, Context),
+    Total = lists:sum([length(UIds) || {_, UIds} <- UGUserIds]),
+    ok = move_all(UGUserIds, ToGroupId, 0, Total+Total, Context),
+    lists:foreach(fun(Id) ->
+                     m_rsc:delete(Id, Context)
+                  end,
+                  Ids),
+    z_session_page:add_script(z_render:wire({unmask, []}, Context)),
+    ok.
+
+in_user_groups(Ids, Context) ->
+    lists:flatten([ {Id, m_edge:subjects(Id, hasusergroup, Context)} || Id <- Ids ]).
+
+unlink_all([], _N, _Total, _Context) ->
+    ok;
+unlink_all([{UGId, UserIds}|Ids], N, Total, Context) ->
+    case unlink_users(UGId, UserIds, N, Total, Context) of
+        {ok, N1} ->
+            unlink_all(Ids, N1, Total, Context);
+        Error ->
+            {error, Error}
+    end.
+
+unlink_users(_UGId, [], N, _Total, _Context) ->
+    {ok, N};
+unlink_users(UGId, [UserId|UserIds], N, Total, Context) ->
+    case m_edge:delete(UserId, hasusergroup, UGId, [no_touch], Context) of
+        ok ->
+            maybe_progress(N, N+1, Total, Context),
+            unlink_users(UGId, UserIds, N+1, Total, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+move_all([], _ToUGId, _N, _Total, _Context) ->
+    ok;
+move_all([{UGId, UserIds}|Ids], ToUGId, N, Total, Context) ->
+    case move_link_users(UGId, ToUGId, UserIds, N, Total, Context) of
+        {ok, N1} ->
+            move_all(Ids, ToUGId, N1, Total, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+move_link_users(_OldUGId, _UGId, [], N, _Total, _Context) ->
+    {ok, N};
+move_link_users(OldUGId, UGId, [UserId|UserIds], N, Total, Context) ->
+    case m_edge:insert(UserId, hasusergroup, UGId, [no_touch], Context) of
+        {ok, _} ->
+            case m_edge:delete(UserId, hasusergroup, OldUGId, [no_touch], Context) of
+                ok ->
+                    maybe_progress(N, N+1, Total, Context),
+                    move_link_users(OldUGId, UGId, UserIds, N+1, Total, Context);
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+maybe_progress(_N1, _N2, 0, _Context) ->
+    ok;
+maybe_progress(N1, N2, Total, Context) ->
+    PerStep = Total / 100,
+    S1 = round(N1 / PerStep),
+    S2 = round(N2 / PerStep),
+    case S1 of
+        S2 -> ok;
+        _ -> z_session_page:add_script(z_render:wire({mask_progress, [{percent,S2}]}, Context))
+    end.
+
+deletable(Ids, Context) ->
+    lists:all(fun(Id) -> z_acl:rsc_deletable(Id, Context) end, Ids).
+
+
 
 observe_acl_is_allowed(AclIsAllowed, Context) ->
     acl_user_groups_checks:acl_is_allowed(AclIsAllowed, Context).
@@ -109,6 +246,18 @@ observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostI
     of
         true -> m_hierarchy:ensure('acl_user_group', Context);
         false -> ok
+    end.
+
+%% @doc Do now allow the deletion of a acl_user_group if that group is still used.
+observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
+    case lists:member('acl_user_group', IsA) of
+        true ->
+            case m_acl_user_group:is_used(Id, Context) of
+                true -> throw({error, is_used});
+                false -> ok
+            end;
+        false ->
+            ok
     end.
 
 status(Context) ->

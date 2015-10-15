@@ -30,6 +30,8 @@
 
     flush/1,
 
+    is_used/2,
+
     insert/4,
     delete/3,
     image/2,
@@ -38,6 +40,7 @@
     tree/1,
     tree2/1,
     tree_flat/1,
+    tree_flat/2,
     tree_flat_meta/1,
     menu/1,
 
@@ -84,6 +87,11 @@ m_find_value(tree_flat, #m{value=undefined}, Context) ->
 m_find_value(tree_flat_meta, #m{value=undefined}, Context) ->
     tree_flat_meta(Context);
 
+m_find_value(is_used, #m{value=undefined} = M, _Context) ->
+    M#m{value=is_used};
+m_find_value(Cat, #m{value=is_used}, Context) ->
+    is_used(Cat, Context);
+
 m_find_value(Index, #m{value=undefined} = M, Context) ->
     case name_to_id(Index, Context) of
         {ok, Id} -> M#m{value={cat, Id}};
@@ -96,6 +104,8 @@ m_find_value(is_a, #m{value={cat, Id}}, Context) ->
     is_a(Id, Context);
 m_find_value(tree, #m{value={cat, Id}}, Context) ->
     tree(Id, Context);
+m_find_value(tree_flat, #m{value={cat, Id}}, Context) ->
+    tree_flat(Id, Context);
 m_find_value(tree1, #m{value={cat, Id}}, Context) ->
     tree1(Id, Context);
 m_find_value(tree2, #m{value={cat, Id}}, Context) ->
@@ -130,6 +140,15 @@ m_value(#m{value=#m{value={cat, Id}}}, Context) ->
 flush(Context) ->
     m_hierarchy:flush('$category', Context),
     z_depcache:flush(category, Context).
+
+%% @doc Check if a category is actually in use.
+is_used(Category, Context) ->
+    Id = m_rsc:rid(Category, Context),
+    Ids = [ Id | m_hierarchy:children('$category', Id, Context)],
+    lists:any(fun(CatId) ->
+                 z_db:q1("select id from rsc where category_id = $1 limit 1", [CatId], Context) =/= undefined
+              end,
+              Ids).
 
 
 %% Insert a category
@@ -269,6 +288,17 @@ tree_flat(Context) ->
                     end
                  end,
                  tree_flat_meta(Context)).
+
+%% @doc Return the flattened category tree, every entry is a proplist. Used for select lists.
+-spec tree_flat(integer()|atom()|binary()|string(), #context{}) -> list(list()).
+tree_flat(CatId, Context) ->
+    case name_to_id(CatId, Context) of
+        {ok, Id} ->
+            m_hierarchy:tree_flat('$category', Id, Context);
+        {error, _} ->
+            []
+    end.
+
 
 %% @doc Return the flattened category tree, every entry is a proplist. Used for select lists.
 -spec tree_flat_meta(#context{}) -> list(list()).

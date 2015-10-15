@@ -86,7 +86,7 @@ delete_nocheck(Id, Context) ->
     Props = m_rsc:get(Id, Context),
     
     F = fun(Ctx) ->
-        z_notifier:notify(#rsc_delete{id=Id, is_a=CatList}, Ctx),
+        z_notifier:notify_sync(#rsc_delete{id=Id, is_a=CatList}, Ctx),
         m_rsc_gone:gone(Id, Ctx),
         z_db:delete(rsc, Id, Ctx)
     end,
@@ -95,7 +95,8 @@ delete_nocheck(Id, Context) ->
     [ z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers ],
     flush(Id, CatList, Context),
     %% Notify all modules that the rsc has been deleted
-    z_notifier:notify(#rsc_update_done{
+    z_notifier:notify_sync(
+                    #rsc_update_done{
                         action=delete,
                         id=Id,
                         pre_is_a=CatList,
@@ -250,7 +251,7 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
         pre_props=OldProps,
         post_props=NewProps
     },
-    z_notifier:notify(Note, Context),
+    z_notifier:notify_sync(Note, Context),
 
     % Return the updated or inserted id
     {ok, NewId};

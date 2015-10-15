@@ -1,5 +1,5 @@
 <ul id="hierarchy-{{ id.name }}" class="tree-list menu_hierarchy {% if is_editable %}do_menuedit{% endif %}">
-{% for mid, path, action in m.hierarchy[id.name].menu|menu_flat %}
+{% for mid, path, action in m.hierarchy[id.name].menu_ensured|menu_flat %}
     {% with forloop.counter as c %}
         {% include "_menu_edit_item.tpl" c=forloop.counter id=mid %}
     {% endwith %}

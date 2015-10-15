@@ -90,6 +90,23 @@ function z_set_page_id( page_id, user_id )
     ubf.add_spec('auth_change', [
         "page_id"
         ]);
+    ubf.add_spec("rsc_update_done", [
+        "action", "id", "pre_is_a", "post_is_a", 
+        "pre_props", "post_props" // Always empty
+        ]);
+    ubf.add_spec("media_replace_file", [
+        "id", 
+        "medium" // Always empty
+        ]);
+    ubf.add_spec("edge_insert", [
+        "subject_id", "predicate", "object_id", "edge_id"
+        ]);
+    ubf.add_spec("edge_delete", [
+        "subject_id", "predicate", "object_id", "edge_id"
+        ]);
+    ubf.add_spec("edge_update", [
+        "subject_id", "predicate", "object_id", "edge_id"
+        ]);
     ubf.add_spec('q', [
         "q"
         ]);

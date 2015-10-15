@@ -33,7 +33,6 @@
     observe_menu_get_rsc_ids/2,
     observe_menu_save/2,
     observe_admin_menu/3,
-    observe_postback_notify/2,
     get_menu/1,
     get_menu/2,
     set_menu/3,
@@ -69,11 +68,11 @@ event(#postback_notify{message="menuedit", trigger=TriggerId}, Context) ->
     case Kind of
         category ->
             % This is the category hierarchy.
-            z_notifier:notify(#category_hierarchy_save{tree=Tree1}, Context1),
+            z_notifier:notify_sync(#category_hierarchy_save{tree=Tree1}, Context1),
             Context1;
         menu ->
             % A menu hierarchy, give it to the menu routines
-            z_notifier:notify(#menu_save{id=m_rsc:rid(RootId, Context1), tree=Tree1}, Context1),
+            z_notifier:notify_sync(#menu_save{id=m_rsc:rid(RootId, Context1), tree=Tree1}, Context1),
             Context1;
         hierarchy ->
             _ = m_hierarchy:save(RootId, Tree1, Context),
@@ -82,30 +81,23 @@ event(#postback_notify{message="menuedit", trigger=TriggerId}, Context) ->
             % Hierarchy using edges between resources
             hierarchy_edge(m_rsc:rid(RootId, Context1), Predicate, Tree1, Context1)
     end;
-
-event(#postback_notify{message="menu-item-render"}, Context) ->
-    Id = z_convert:to_integer(z_context:get_q("id", Context)),
-    Callback = z_context:get_q("callback", Context),
-    Template = z_context:get_q("item_template", Context, "_menu_edit_item.tpl"),
-    {Html, Context2} = z_template:render_to_iolist({cat, Template}, [{id,Id}], Context),
-    z_render:wire({script, [{script, [
-                    Callback, $(,$", integer_to_list(Id), $",$,,$",z_utils:js_escape(Html,Context2),$",$),$;
-                ]}]}, Context2).
+event(#z_msg_v1{data=Data}, Context) ->
+    handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
 
 
-observe_postback_notify(#postback_notify{message="menu-item-copy"}, Context) ->
-    FromId = z_convert:to_integer(z_context:get_q("id", Context)),
+handle_cmd(<<"copy">>, Data, Context) ->
+    FromId = z_convert:to_integer(proplists:get_value(<<"id">>, Data)),
     case m_rsc:is_visible(FromId, Context) of
         true ->
             NewTitle = make_copy_title(m_rsc:p(FromId, title, Context), Context),
             case m_rsc:duplicate(FromId, [{title, NewTitle}], Context) of
                 {ok, NewId} ->
-                    Template = z_context:get_q("item_template", Context, "_menu_edit_item.tpl"),
-                    {Html, Context1} = z_template:render_to_iolist({cat, Template}, [{id,NewId}], Context),
+                    {Html, Context1} = z_template:render_to_iolist({cat, "_menu_edit_item.tpl"}, [{id,NewId}], Context),
                     z_render:wire({script, [{script, [
                                     <<"window.zMenuInsertAfter(\"">>,
                                             integer_to_list(FromId), $",$,,
-                                            $",z_utils:js_escape(Html,Context1),$",$),$;
+                                            $",z_utils:js_escape(Html,Context1),$",
+                                    $),$;
                                 ]}]}, Context1);
                 {error, _Reason} ->
                     z_render:growl_error(?__("Sorry, can’t copy that page.", Context), Context) 
@@ -113,8 +105,28 @@ observe_postback_notify(#postback_notify{message="menu-item-copy"}, Context) ->
         false ->
             Context
     end;
-observe_postback_notify(_, _Context) ->
-    undefined.
+handle_cmd(<<"menu-item-render">>, Data, Context) ->
+    Id = z_convert:to_integer(proplists:get_value(<<"id">>, Data)),
+    Callback = proplists:get_value(<<"callback">>, Data),
+    {Html, Context2} = z_template:render_to_iolist({cat, "_menu_edit_item.tpl"}, [{id,Id}], Context),
+    z_render:wire({script, [{script, [
+                    Callback, $(,
+                        $", integer_to_list(Id), $",$,,
+                        $",z_utils:js_escape(Html,Context2),$",
+                    $),$;
+                ]}]}, Context2);
+handle_cmd(<<"delete">>, Data, Context) ->
+    Id = z_convert:to_integer(proplists:get_value(<<"id">>, Data)),
+    case m_rsc:is_deletable(Id, Context) of
+        true ->
+            z_render:wire({dialog_delete_rsc, [{id,Id}]}, Context);
+        false ->
+            z_render:wire(
+                {alert, [{text, ?__("Sorry, you are not allowed to delete this.", Context)}]},
+                Context)
+    end.
+
+
 
 make_copy_title(Title, Context) when is_binary(Title) ->
     iolist_to_binary([?__("COPY", Context), " ", Title]);

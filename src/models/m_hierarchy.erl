@@ -24,7 +24,9 @@
     tree/2,
     tree1/2,
     tree_flat/2,
+    tree_flat/3,
     parents/3,
+    children/3,
     menu/2,
     ensure/2,
     ensure/3,
@@ -55,6 +57,7 @@ m_find_value(tree1, #m{value=Name}, Context) ->
     tree1(Name, Context);
 m_find_value(tree_flat, #m{value=Name}, Context) ->
     tree_flat(Name, Context);
+
 m_find_value(menu_ensured, #m{value=Name}, Context) ->
     {ok, _} = ensure(Name, Context),
     menu(Name, Context);
@@ -117,16 +120,37 @@ tree1(Name, Context) ->
 
 
 %% @doc Return a list of all this id's ancestor nodes
-parents(Name, Id, Context) ->
+parents(Name, Id, Context) when is_binary(Name), is_integer(Id) ->
     case z_depcache:memo(
                  fun() -> z_db:q1("SELECT parent_id FROM hierarchy WHERE name = $1 AND id = $2", [Name, Id], Context)
-                 end, {hierarchy_parent, Name, Id}, ?DAY, [hierarchy], Context) of
+                 end, {hierarchy_parent, Name, Id}, ?DAY, [hierarchy, {hierarchy,Name}], Context) of
         undefined ->
             [];
         P ->
             [P | parents(Name, P, Context)]
+    end;
+parents(Name, Id, Context) when is_atom(Name) ->
+    parents(z_convert:to_binary(Name), Id, Context).
+
+%% @doc Return a list of all the ids below the id, excluding the id itself
+children(Name, Id, Context) ->
+    case find_tree_node(tree(Name, Context), Id) of
+        undefined -> [];
+        {ok, Node} -> ids(proplists:get_value(children, Node))
     end.
-                                       
+
+%% @doc Return all ids in a node list
+ids([]) ->
+    [];
+ids(Ns) ->
+    ids(Ns, []).
+
+ids([], Acc) ->
+    Acc;
+ids([N|Ns], Acc) ->
+    Acc1 = [proplists:get_value(id,N) | ids(proplists:get_value(children, N), Acc)],
+    ids(Ns, Acc1).
+                             
 %% @doc Make a flattened list with indentations showing the level of the tree entries.
 %%      Useful for select lists.
 tree_flat(Name, Context) ->
@@ -135,6 +159,9 @@ tree_flat(Name, Context) ->
         [{indent,indent(proplists:get_value(level, E, 0))} | E ]
         || E <- List
     ].
+
+tree_flat(Name, Id, Context) ->
+    tree_flat({sub, Name, Id}, Context).
 
 %% @doc Transform a hierarchy to a menu structure
 menu(Name, Context) ->
@@ -163,15 +190,30 @@ ensure(Category, Context) ->
 %% @doc Ensure that all resources of a certain category are present in a hierarchy.
 -spec ensure(atom()|binary()|string(), atom()|integer()|string(), #context{}) -> {ok, integer()}.
 ensure(Name, CatId, Context) when is_binary(Name), is_integer(CatId) ->
-    Ids = z_db:q("select id from hierarchy where name = $1", [Name], Context),
-    F = fun(Id, Acc, _Ctx) ->
-            case lists:member({Id}, Ids) of
-                true -> Acc;
-                false -> [Id|Acc]
-            end
-        end,
-    Missing = m_category:fold(CatId, F, [], Context),
-    append(Name, Missing, Context);
+    {ok, Total} = z_db:transaction(
+                fun(Ctx) ->
+                    Ids0 = z_db:q("select id from hierarchy where name = $1", [Name], Ctx),
+                    Ids = [ Id || {Id} <- Ids0 ],
+                    F = fun(Id, {All,Acc}, _Ctx) ->
+                            case lists:member(Id, Ids) of
+                                true -> {[Id|All], Acc};
+                                false -> {[Id|All], [Id|Acc]}
+                            end
+                        end,
+                    {All, Missing} = m_category:fold(CatId, F, {[],[]}, Ctx),
+                    {ok, N1} = append(Name, Missing, Ctx),
+                    {ok, N2} = remove(Name, Ids -- All, Ctx),
+                    {ok, N1+N2}
+                end,
+                Context),
+    flush(Name, Context),
+    case Total of
+        0 ->
+            {ok, 0};
+        _ ->
+            z_notifier:notify(#hierarchy_updated{root_id=Name, predicate=undefined}, Context),
+            {ok, Total}
+    end;
 ensure(Name, Category, Context) when not is_integer(Category) ->
     {ok, CatId} = m_category:name_to_id(Category, Context),
     ensure(Name, CatId, Context);
@@ -360,11 +402,21 @@ flatten_save_tree([{Id, Cs}|Ts], ParentId, Lvl, Acc) ->
     Acc1 = flatten_save_tree(Cs, Id, Lvl+1, [{Id,ParentId,Lvl}|Acc]),
     flatten_save_tree(Ts, ParentId, Lvl, Acc1).
 
-append(_Name, [], _Context) ->
-    {ok, 0};
 append(Name0, Missing, Context) ->
     Name = z_convert:to_binary(Name0),
-    Nr = next_nr(Name0, Context),
+    case append_1(Name, Missing, Context) of
+        {ok, N} when N > 0 ->
+            flush(Name, Context),
+            z_notifier:notify(#hierarchy_updated{root_id=Name, predicate=undefined}, Context),
+            {ok, N};
+        {ok, 0} ->
+            {ok, 0}
+    end.
+
+append_1(_Name, [], _Context) ->
+    {ok, 0};
+append_1(Name, Missing, Context) ->
+    Nr = next_nr(Name, Context),
     lists:foldl(fun(Id, NextNr) ->
                     z_db:q("
                         insert into hierarchy (name, id, nr, lft, rght, lvl)
@@ -375,10 +427,17 @@ append(Name0, Missing, Context) ->
                 end,
                 Nr,
                 Missing),
-    flush(Name, Context),
-    z_notifier:notify(#hierarchy_updated{root_id=Name0, predicate=undefined}, Context),
     {ok, length(Missing)}.
 
+remove(_Name, [], _Context) ->
+    {ok, 0};
+remove(Name, Ids, Context) ->
+    lists:foreach(fun(Id) ->
+                    z_db:q("delete from hierarchy where name = $1 and id = $2", [Name, Id], Context)
+                  end,
+                  Ids),
+    flush(Name, Context),
+    {ok, length(Ids)}.
 
 next_nr(Name, Context) ->
     case z_db:q1("select max(nr) from hierarchy where name = $1", [Name], Context) of

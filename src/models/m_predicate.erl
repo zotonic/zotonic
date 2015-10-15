@@ -30,6 +30,7 @@
     m_value/2,
     
     is_predicate/2,
+    is_used/2,
     id_to_name/2,
     name_to_id/2,
     name_to_id_check/2,
@@ -52,6 +53,10 @@
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(all, #m{value=undefined}, Context) ->
     all(Context);
+m_find_value(is_used, #m{value=undefined} = M, _Context) ->
+    M#m{value=is_used};
+m_find_value(Pred, #m{value=is_used}, Context) ->
+    is_used(Pred, Context);
 m_find_value(object_category, #m{value=undefined} = M, _Context) ->
     M#m{value=object_category};
 m_find_value(subject_category, #m{value=undefined} = M, _Context) ->
@@ -91,6 +96,11 @@ is_predicate(Pred, Context) ->
             is_predicate(Id, Context);
         _ -> false
     end.
+
+%% @doc Check if a predicate is actually in use for an existing edge.
+is_used(Predicate, Context) ->
+    Id = m_rsc:rid(Predicate, Context),
+    z_db:q1("select id from edge where predicate_id = $1 limit 1", [Id], Context) =/= undefined.
 
 
 %% @doc Lookup the name of a predicate with an id

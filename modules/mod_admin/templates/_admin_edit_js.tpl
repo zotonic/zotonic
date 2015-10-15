@@ -13,4 +13,12 @@ setTimeout(function() {
 		z_editor.init();
 	}
 });
+
+pubzub.subscribe("~site/rsc/{{ id }}", function(topic, msg) {
+	if (msg.payload._record == 'rsc_update_done') {
+		if (msg.payload.action == 'delete' && $('#rscform input[name=id]').val() == {{ id }}) {
+			$('#rscform').replaceWith("<p class='alert alert-warning'><b>{_ Deleted. _}</b> {_ This page has been deleted. _}</p>");
+		}
+	}
+});
 {% endjavascript %}

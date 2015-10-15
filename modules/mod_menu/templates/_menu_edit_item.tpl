@@ -1,4 +1,5 @@
-{% if id %}<li id="{{ #menu.c }}-{{ id }}" class="menu-item {% if action == `down` %}has-submenu{% else %}submenu-open{% endif %}">
+{% if id %}
+<li id="{{ #menu.c }}-{{ id }}" class="menu-item {% if action == `down` %}has-submenu{% else %}submenu-open{% endif %}">
 	<div id="{{ menu_id|default:#menu.id }}" data-page-id="{{ id }}">
 		<a class="menu-toggle" href="#toggle"><i class="menu-expand z-icon z-icon-plus"></i><i class="menu-collapse z-icon z-icon-minus"></i></a>
 	    <span class="title-{{id}}">
@@ -32,4 +33,6 @@
 		</li>
 	{% endif %}
 {% else %}
-</ul></li>{% endif %}
+	</ul>
+	</li>
+{% endif %}
