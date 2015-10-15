@@ -39,7 +39,7 @@ event_type_mqtt(#action_event_type{event={mqtt, Args}, postback_js = PostbackJS,
     Script = iolist_to_binary([
         <<"pubzub.subscribe_multi(">>,
             z_utils:js_array(Topics),$,,
-            <<"function(topic, msg, sub_id) {">>, 
+            <<"function(topic, msg, sub_id) { var zEvtArgs=pubzub.make_zEvtArgs(topic, msg, sub_id);">>,
                 PostbackJS,
                 ActionJS,
               $},

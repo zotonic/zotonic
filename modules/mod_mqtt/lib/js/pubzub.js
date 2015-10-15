@@ -160,6 +160,17 @@ Pubzub.prototype.unique_id = function () {
     return t;
 };
 
+Pubzub.prototype.make_zEvtArgs = function (topic, msg, sub_id) {
+    if(typeof msg == 'object') {
+        var args = ensure_name_value(msg)
+        args.unshift({name: "topic", value: topic});
+        args.unshift({name: "sub_id", value: sub_id});
+        return args;
+    }
+
+    return undefined;
+};
+
 (function($) {
     window.pubzub = new Pubzub();
 })(jQuery);
