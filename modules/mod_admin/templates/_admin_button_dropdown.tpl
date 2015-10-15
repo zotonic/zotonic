@@ -70,18 +70,13 @@ Optional:
         {% endfor %}
     {% endif %}
 </ul>
-{%
-    wire 
-    id=" ." ++ option_class
-    action={
-        script
-        script="
-var form_id = '" ++ form_id ++ "';
-document.getElementById('" ++ unique_id ++ "').value=this.getAttribute('data-value');
-if (form_id) {
-    document.getElementById(form_id).submit();
-}
-"
-    }
-%}
+{% javascript %}
+    $(".{{ option_class }}").click(function() {
+        var form_id = '{{ form_id }}';
+        document.getElementById('{{ unique_id }}').value=this.getAttribute('data-value');
+        if (form_id) {
+            document.getElementById(form_id).submit();
+        }
+    });
+{% endjavascript %}
 {% endwith %}
