@@ -81,13 +81,11 @@ process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
     receive
         flush_empty ->
             Data = z_session_page:get_transport_data(Context#context.page_pid),
-            cancel_timer(TRefFinal),
-            flush(true, Data, undefined, TRefData, MPageRef, Context);
+            flush(true, Data, TRefFinal, TRefData, MPageRef, Context);
 
         flush_data ->
             Data = z_session_page:get_transport_data(Context#context.page_pid),
-            cancel_timer(TRefData),
-            flush(false, Data, TRefFinal, undefined, MPageRef, Context);
+            flush(false, Data, TRefFinal, TRefData, MPageRef, Context);
 
         transport ->
             TRef1 = case TRefData of
