@@ -25,7 +25,8 @@
     malformed_request/2,
     allowed_methods/2,
     content_types_provided/2,
-    process_post/2
+    process_post/2,
+    process_post_loop/4
     ]).
 
 -include_lib("controller_webmachine_helper.hrl").
