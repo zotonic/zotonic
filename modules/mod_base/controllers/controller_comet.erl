@@ -96,37 +96,38 @@ process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
                         _ -> 
                             TRefData
                     end,
-            process_post_loop(Context, TRefFinal, TRef1, MPageRef);
+            ?MODULE:process_post_loop(Context, TRefFinal, TRef1, MPageRef);
 
         {final, Data} ->
             flush(true, Data, TRefFinal, TRefData, MPageRef, Context);
 
-        {'DOWN', _MonitorRef, process, Pid, _Info} when Pid == Context#context.page_pid ->
+        {'DOWN', _MonitorRef, process, Pid, _Info} when Pid =:= Context#context.page_pid ->
             Context1 = Context#context{page_pid=undefined},
-            cancel_timer(TRefFinal),
-            cancel_timer(TRefData),
+            maybe_cancel_timer(TRefFinal),
+            maybe_cancel_timer(TRefData),
             ?WM_REPLY(true, Context1);
 
         Msg ->
             lager:warning("Unknown comet loop message ~p", [Msg]),
-            process_post_loop(Context, TRefFinal, TRefData, MPageRef)
+            ?MODULE:process_post_loop(Context, TRefFinal, TRefData, MPageRef)
     end.
 
 
 
 flush(false, <<>>, TRefFinal, TRefData, MPageRef, Context) ->
-    process_post_loop(Context, TRefFinal, TRefData, MPageRef);
+    maybe_cancel_timer(TRefData),
+    ?MODULE:process_post_loop(Context, TRefFinal, undefined, MPageRef);
 flush(_IsFinal, Data, TRefFinal, TRefData, MPageRef, Context) ->
     erlang:demonitor(MPageRef, [flush]),
-    cancel_timer(TRefFinal),
-    cancel_timer(TRefData),
+    maybe_cancel_timer(TRefFinal),
+    maybe_cancel_timer(TRefData),
     z_session_page:comet_detach(Context#context.page_pid),
     RD  = z_context:get_reqdata(Context),
     RD1 = wrq:append_to_response_body(Data, RD),
     Context1 = z_context:set_reqdata(RD1, Context),
     ?WM_REPLY(true, Context1).
 
-cancel_timer(undefined) ->
+maybe_cancel_timer(undefined) ->
     ok;
-cancel_timer(TRef) ->
+maybe_cancel_timer(TRef) ->
     erlang:cancel_timer(TRef).
