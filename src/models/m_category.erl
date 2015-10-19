@@ -437,11 +437,16 @@ ranges(CatList0, Context) ->
                   true -> [CatList0];
                   false -> CatList0
               end,
-    F = fun(Nm, Acc) ->
-            case get(Nm, Context) of
-                undefined -> [{-1,-1}|Acc];
-                Props -> [{proplists:get_value(left, Props), proplists:get_value(right, Props)} | Acc]
-            end
+    F = fun
+            (undefined, Acc) ->
+                Acc;
+            ('$error', Acc) ->
+                [{-1,-1}|Acc];
+            (Nm, Acc) ->
+                case get(Nm, Context) of
+                    undefined -> [{-1,-1}|Acc];
+                    Props -> [{proplists:get_value(left, Props), proplists:get_value(right, Props)} | Acc]
+                end
         end,
     Ranges = lists:sort(lists:foldl(F, [], flatten_string(CatList, []))),
     maybe_drop_empty_range(merge_ranges(Ranges, [])).
