@@ -101,7 +101,7 @@ search({SearchName, Props} = Search, OffsetLimit, Context) ->
     case z_notifier:first(Q, Context) of
         undefined ->
             Stack = erlang:get_stacktrace(),
-            lager:info("Unknown search query ~p~n~p~n", [Search, Stack]),
+            lager:info("[~p] Unknown search query ~p~n~p~n", [z_context:site(Context), Search, Stack]),
             #search_result{};
         Result when Result /= undefined -> 
             search_result(Result, OffsetLimit, Context)

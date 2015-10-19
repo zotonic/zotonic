@@ -50,7 +50,7 @@ watches_update(Id, Watches, Context) ->
             case z_convert:to_bool(m_rsc:p(Id, is_query_live, Context)) of
                 true ->
                     try
-                        Props = search_query:parse_query_text(Q),
+                        Props = search_query:parse_query_text(z_html:unescape(Q)),
                         [{Id, Props} | proplists:delete(Id, Watches)]
                     catch
                         throw:{error,{unknown_query_term, _Term}} ->

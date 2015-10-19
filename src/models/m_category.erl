@@ -444,7 +444,17 @@ ranges(CatList0, Context) ->
             end
         end,
     Ranges = lists:sort(lists:foldl(F, [], flatten_string(CatList, []))),
-    merge_ranges(Ranges, []).
+    maybe_drop_empty_range(merge_ranges(Ranges, [])).
+
+maybe_drop_empty_range([]) ->
+    [];
+maybe_drop_empty_range([_] = Range) ->
+    Range;
+maybe_drop_empty_range(Ranges) ->
+    case [ Range || Range <- Ranges, Range =/= {-1,-1} ] of
+        [] -> [{-1,-1}];
+        Ranges1 -> Ranges1
+    end.
 
 %% Flatten the list of cats, but do not flatten strings
 flatten_string([], Acc) ->
