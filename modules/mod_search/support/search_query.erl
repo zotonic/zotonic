@@ -211,7 +211,7 @@ parse_query([{hassubject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
                   _ -> {Arg1, R} = add_arg(m_rsc:rid(Id,Context), Result1),
                        add_where(A ++ ".subject_id = " ++ Arg1, R)
               end,
-    PredicateId = m_predicate:name_to_id_check(Predicate, Context),
+    PredicateId = predicate_to_id(Predicate, Context),
     {Arg2, Result3} = add_arg(PredicateId, Result2),
     Result4 = add_where(A ++ ".predicate_id = " ++ Arg2, Result3),
     parse_query(Rest, Context, Result4);
@@ -242,7 +242,7 @@ parse_query([{hasobject, [Id, Predicate, Alias]}|Rest], Context, Result) ->
                   _ -> {Arg1, R} = add_arg(m_rsc:rid(Id,Context), Result1),
                        add_where(A ++ ".object_id = " ++ Arg1, R)
               end,
-    PredicateId = m_predicate:name_to_id_check(Predicate, Context),
+    PredicateId = predicate_to_id(Predicate, Context),
     {Arg2, Result3} = add_arg(PredicateId, Result2),
     Result4 = add_where(A ++ ".predicate_id = " ++ Arg2, Result3),
     parse_query(Rest, Context, Result4);
@@ -268,7 +268,7 @@ parse_query([{hasanyobject, ObjPreds}|Rest], Context, Result) ->
 %% Give all things which have any outgoing edge with given predicate
 parse_query([{hasobjectpredicate, Predicate}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join("subject_id", Result),
-    PredicateId = m_predicate:name_to_id_check(Predicate, Context),
+    PredicateId = predicate_to_id(Predicate, Context),
     {Arg1, Result2} = add_arg(PredicateId, Result1),
     Result3 = add_where(A ++ ".predicate_id = " ++ Arg1, Result2),
     parse_query(Rest, Context, Result3);
@@ -277,7 +277,7 @@ parse_query([{hasobjectpredicate, Predicate}|Rest], Context, Result) ->
 %% Give all things which have any incoming edge with given predicate
 parse_query([{hassubjectpredicate, Predicate}|Rest], Context, Result) ->
     {A, Result1} = add_edge_join("object_id", Result),
-    PredicateId = m_predicate:name_to_id_check(Predicate, Context),
+    PredicateId = predicate_to_id(Predicate, Context),
     {Arg1, Result2} = add_arg(PredicateId, Result1),
     Result3 = add_where(A ++ ".predicate_id = " ++ Arg1, Result2),
     parse_query(Rest, Context, Result3);
@@ -383,7 +383,7 @@ parse_query([{query_id, Id}|Rest], Context, Result) ->
     case m_category:is_a(m_rsc:p(Id, category_id, Context), 'query', Context) of
         true ->
             QArgs = try
-                        parse_query_text(m_rsc:p(Id, 'query', Context))
+                        parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
                     catch
                         throw:{error,{unknown_query_term,Term}} ->
                             lager:error("[~p] Unknown query term in search query ~p: ~p",
@@ -650,7 +650,7 @@ assure_categories(Name, Context) ->
     Cats1 = assure_cat_flatten(Cats),
     lists:foldl(fun(C, Acc) ->
                         case assure_category(C, Context) of
-                            error -> Acc;
+                            error -> ['$error'|Acc];
                             {ok, N} -> [N|Acc]
                         end
                 end,
@@ -677,24 +677,59 @@ assure_cat_flatten(Names) when is_list(Names) ->
 assure_category([], _) -> error;
 assure_category(<<>>, _) -> error;
 assure_category(undefined, _) -> error;
+assure_category([$'|_] = Name, Context) ->
+    case lists:last(Name) of
+        $' -> assure_category_1(z_string:trim(Name, $'), Context);
+        _ -> assure_category_1(Name, Context)
+    end;
+assure_category([$"|_] = Name, Context) ->
+    case lists:last(Name) of
+        $" -> assure_category_1(z_string:trim(Name, $"), Context);
+        _ -> assure_category_1(Name, Context)
+    end;
+assure_category(<<$', _/binary>> = Name, Context) ->
+    case binary:last(Name) of
+        $' -> assure_category_1(z_string:trim(Name, $'), Context);
+        _ -> assure_category_1(Name, Context)
+    end;
+assure_category(<<$", _/binary>> = Name, Context) ->
+    case binary:last(Name) of
+        $" -> assure_category_1(z_string:trim(Name, $"), Context);
+        _ -> assure_category_1(Name, Context)
+    end;
 assure_category(Name, Context) ->
+    assure_category_1(Name, Context).
+
+assure_category_1(Name, Context) ->
     case m_category:name_to_id(Name, Context) of
         {ok, _Id} ->
             {ok, Name};
         _ -> 
             case m_rsc:rid(Name, Context) of
                 undefined ->
-                    lager:warning("Query: unknown category ~p", [Name]),
+                    lager:warning("[~p] Query: unknown category '~p'", [z_context:site(Context), Name]),
+                    display_error([ ?__("Unknown category", Context), 32, $", z_html:escape(z_convert:to_binary(Name)), $" ], Context),
                     error;
                 CatId ->
                     case m_category:id_to_name(CatId, Context) of
                         undefined ->
-                            lager:warning("Query: ~p is not a category", [CatId]),
+                            lager:warning("[~p] Query: '~p' is not a category", [z_context:site(Context), Name]),
+                            display_error([ $", z_html:escape(z_convert:to_binary(Name)), $", 32, ?__("is not a category", Context) ], Context),
                             error;
                         Name1 ->
                             {ok, Name1}
                     end
             end
+    end.
+
+%% If the current user is an administrator or editor, show an error message about this search
+display_error(Msg, Context) ->
+    case z_acl:is_allowed(use, mod_admin, Context) of
+        true ->
+            ContextPruned = z_context:prune_for_async(Context),
+            z_session_page:add_script(z_render:growl_error(Msg, ContextPruned));
+        false ->
+            ok
     end.
 
 
@@ -798,6 +833,39 @@ rid("", _Context) -> any;
 rid(<<>>, _Context) -> any;
 rid(Id, _Context) when is_integer(Id) -> Id;
 rid(Id, Context) -> m_rsc:rid(Id, Context).
+
+predicate_to_id([$'|_] = Name, Context) ->
+    case lists:last(Name) of
+        $' -> predicate_to_id_1(z_string:trim(Name, $'), Context);
+        _ -> predicate_to_id_1(Name, Context)
+    end;
+predicate_to_id([$"|_] = Name, Context) ->
+    case lists:last(Name) of
+        $" -> predicate_to_id_1(z_string:trim(Name, $"), Context);
+        _ -> predicate_to_id_1(Name, Context)
+    end;
+predicate_to_id(<<$', _/binary>> = Name, Context) ->
+    case binary:last(Name) of
+        $' -> predicate_to_id_1(z_string:trim(Name, $'), Context);
+        _ -> predicate_to_id_1(Name, Context)
+    end;
+predicate_to_id(<<$", _/binary>> = Name, Context) ->
+    case binary:last(Name) of
+        $" -> predicate_to_id_1(z_string:trim(Name, $"), Context);
+        _ -> predicate_to_id_1(Name, Context)
+    end;
+predicate_to_id(Pred, Context) ->
+    predicate_to_id_1(Pred, Context).
+
+predicate_to_id_1(Pred, Context) ->
+    case m_predicate:name_to_id(Pred, Context) of
+        {ok, Id} ->
+            Id;
+        {error, _} ->
+            lager:warning("[~p] Query: unknown predicate '~p'", [z_context:site(Context), Pred]),
+            display_error([ ?__("Unknown predicate", Context), 32, $", z_html:escape(z_convert:to_binary(Pred)), $" ], Context),
+            0
+    end.
 
 %% Support routine for "hasanyobject"
 object_predicate_clause(_Alias, undefined, undefined) ->
