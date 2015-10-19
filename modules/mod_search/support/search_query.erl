@@ -650,6 +650,7 @@ assure_categories(Name, Context) ->
     Cats1 = assure_cat_flatten(Cats),
     lists:foldl(fun(C, Acc) ->
                         case assure_category(C, Context) of
+                            undefined -> Acc;
                             error -> ['$error'|Acc];
                             {ok, N} -> [N|Acc]
                         end
@@ -674,9 +675,9 @@ assure_cat_flatten(Names) when is_list(Names) ->
                      || N <- Names]).
 
 %% Make sure the given name is a category.
-assure_category([], _) -> error;
-assure_category(<<>>, _) -> error;
-assure_category(undefined, _) -> error;
+assure_category([], _) -> undefined;
+assure_category(<<>>, _) -> undefined;
+assure_category(undefined, _) -> undefined;
 assure_category([$'|_] = Name, Context) ->
     case lists:last(Name) of
         $' -> assure_category_1(z_string:trim(Name, $'), Context);
