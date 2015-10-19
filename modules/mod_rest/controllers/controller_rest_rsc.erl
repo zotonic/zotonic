@@ -190,6 +190,7 @@ get_rsc(Id, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     Complete = [
         {category, hd(IsA)},
+        {content_group, content_group(Id, Context)},
         {page_url, z_convert:to_binary(z_context:abs_url(m_rsc:p(Id, page_url, Context), Context))},
         {computed_category, IsA},
         {computed_site_name, z_context:site(Context)},
@@ -202,6 +203,8 @@ get_rsc(Id, Context) ->
         fun({_, ?ST_JUTTEMIS}) -> false;
            ({computed_address_country, <<>>}) -> false;
            ({computed_mail_country, <<>>}) -> false;
+           ({category_id, _}) -> false;
+           ({content_group_id, _}) -> false;
            (_) -> true
         end,
         Complete).
@@ -218,5 +221,12 @@ medium(Id, Context) ->
                                     Context))} 
                 | M
             ]
+    end.
+
+content_group(Id, Context) ->
+    CGId = m_rsc:p_no_acl(Id, content_group_id, Context),
+    case m_rsc:p_no_acl(CGId, name, Context) of
+        undefined -> CGId;
+        Name -> Name
     end.
 
