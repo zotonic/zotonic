@@ -639,12 +639,36 @@ props_filter([{visible_for, Vis}|T], Acc, Context) ->
 
 props_filter([{category, CatName}|T], Acc, Context) ->
     props_filter([{category_id, m_category:name_to_id_check(CatName, Context)} | T], Acc, Context);
-
 props_filter([{category_id, CatId}|T], Acc, Context) ->
-    props_filter(T, [{category_id, z_convert:to_integer(CatId)}|Acc], Context);
+    CatId1 = m_rsc:rid(CatId, Context),
+    case m_rsc:is_a(CatId1, category, Context) of
+        true ->
+            props_filter(T, [{category_id, CatId1}|Acc], Context);
+        false ->
+            lager:error("[~p] Ignoring unknown category '~p' in update, using 'other' instead.",
+                        [z_context:site(Context), CatId]),
+            props_filter(T, [{category_id,m_rsc:rid(other, Context)}|Acc], Context)
+    end;
 
+props_filter([{content_group, undefined}|T], Acc, Context) ->
+    props_filter(T, [{content_group_id, undefined}|Acc], Context);
+props_filter([{content_group, CgName}|T], Acc, Context) ->
+    case m_rsc:rid(CgName, Context) of
+        undefined ->
+            props_filter(T, [{content_group_id, undefined}|Acc], Context);
+        CgId ->
+            props_filter([{content_group_id, CgId}|T], Acc, Context)
+    end;
 props_filter([{content_group_id, CgId}|T], Acc, Context) ->
-    props_filter(T, [{content_group_id, z_convert:to_integer(CgId)}|Acc], Context);
+    CgId1 = m_rsc:rid(CgId, Context),
+    case m_rsc:is_a(CgId1, content_group, Context) of
+        true ->
+            props_filter(T, [{content_group_id, CgId1}|Acc], Context);
+        false ->
+            lager:error("[~p] Ignoring unknown content group '~p' in update.",
+                        [z_context:site(Context), CgId]),
+            props_filter(T, Acc, Context)
+    end;
 
 props_filter([{Location, P}|T], Acc, Context) when Location =:= location_lat; Location =:= location_lng ->
     X = try
