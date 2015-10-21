@@ -161,6 +161,7 @@ video_convert(QueuePath, Mime, Context) ->
         " -f mp4 "
         " -strict -2 "
         " -y "
+        " -pix_fmt yuv420p "
         " -movflags +faststart "
         " -preset medium "
         " -metadata:s:v:0 rotate=0 ").
