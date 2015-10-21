@@ -19,6 +19,7 @@ DOM Elements
    ../action_insert_top
    ../action_jquery_effect
    ../action_mask
+   ../action_mask_progress
    ../action_move
    ../action_remove
    ../action_remove_class
