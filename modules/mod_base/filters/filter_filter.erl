@@ -18,10 +18,17 @@
 
 -module(filter_filter).
 -export([
+	filter/2,
 	filter/3,
 	filter/4
 	]).
 
+filter(undefined, _Context) -> [];
+filter(In, Context) ->
+	lists:filter(fun(Elt) -> 
+					not z_utils:is_empty(Elt)
+			 	 end,
+			 	 erlydtl_runtime:to_list(In, Context)).
 
 filter(_, undefined, _Context) -> [];
 filter(undefined, _, _Context) -> [];
