@@ -31,4 +31,4 @@ delay     Delay (in milliseconds) before the mask is shown.
           Only shows the mask during lengthy actions.        delay=200
 ========  =================================================  =======
 
-.. seealso:: action :ref:`action-unmask`.
+.. seealso:: action :ref:`action-unmask`, :ref:`action-mask_progress`
