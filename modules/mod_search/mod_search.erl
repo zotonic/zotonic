@@ -388,7 +388,7 @@ search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
                     #search_sql{
                         select="r.id, ts_rank_cd(pivot_tsv, $1, 32) AS rank",
                         from="rsc r",
-                        where=" $1 @@ pivot_tsv",
+                        where=" $1 @@ r.pivot_tsv",
                         order="rank desc",
                         args=[TsQuery],
                         cats=[{"r", Cat}],
@@ -416,8 +416,8 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
                 select="r.id, ts_rank_cd(pivot_tsv, $1, 32) AS rank",
-                from="rsc r, to_tsquery($2, $1) query",
-                where=" $1 @@ pivot_tsv",
+                from="rsc r",
+                where=" $1 @@ r.pivot_tsv",
                 order="rank desc",
                 args=[TsQuery],
                 tables=[{rsc,"r"}]
@@ -532,13 +532,38 @@ to_tsquery(undefined, _Context) ->
     <<>>;
 to_tsquery(Text, Context) when is_list(Text) ->
     to_tsquery(z_convert:to_binary(Text), Context);
+to_tsquery(<<>>, _Context) ->
+    <<>>;
 to_tsquery(Text, Context) when is_binary(Text) ->
+    case to_tsquery_1(Text, Context) of
+        <<>> ->
+            % Check if the wildcard prefix was a stopword like the dutch "de"
+            case is_separator(binary:last(Text)) of
+                true ->
+                    <<>>;
+                false ->
+                    Text1 = <<(z_convert:to_binary(Text))/binary, "xcvvcx">>,
+                    TsQuery = to_tsquery_1(Text1, Context),
+                    binary:replace(TsQuery, <<"xcvvcx">>, <<>>)
+            end;
+        TsQuery ->
+            TsQuery
+    end.
+
+to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
     [{TsQuery, Version}] = z_db:q("select plainto_tsquery($2, $1), version()",
                                   [Text, Stemmer], 
                                   Context),
     % Version is something like "PostgreSQL 8.3.5 on i386-apple-darwin8.11.1, compiled by ..."
     fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text, TsQuery, Version)).
+
+is_separator(C) when C < $0 -> true;
+is_separator(C) when C >= $0, C =< $9 -> false;
+is_separator(C) when C >= $A, C =< $Z -> false;
+is_separator(C) when C >= $a, C =< $z -> false;
+is_separator(C) when C >= 128 -> false;
+is_separator(_) -> true.
 
 append_wildcard(_Text, <<>>, _Version) ->
     <<>>;
