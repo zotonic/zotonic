@@ -7,3 +7,4 @@ Resources
    :glob:
 
    ../filter_summary
+   ../filter_temporary_rsc
