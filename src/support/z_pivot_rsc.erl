@@ -39,6 +39,10 @@
     insert_task/4,
     insert_task/5,
     insert_task_after/6,
+    get_task/1,
+    get_task/2,
+    get_task/3,
+    get_task/4,
     delete_task/3,
     delete_task/4,
     
@@ -181,6 +185,38 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
                 end,
                 {ok, Id}
         end.
+
+
+get_task(Context) ->
+    z_db:assoc("
+            select *
+            from pivot_task_queue",
+            Context).
+
+get_task(Module, Context) ->
+    z_db:assoc("
+            select *
+            from pivot_task_queue
+            where module = $1", 
+            [Module], 
+            Context).
+
+get_task(Module, Function, Context) ->
+    z_db:assoc("
+            select *
+            from pivot_task_queue
+            where module = $1 and function = $2", 
+            [Module, Function], 
+            Context).
+
+get_task(Module, Function, UniqueKey, Context) ->
+    UniqueKeyBin = z_convert:to_binary(UniqueKey), 
+    z_db:assoc_row("
+            select *
+            from pivot_task_queue
+            where module = $1 and function = $2 and key = $3", 
+            [Module, Function, UniqueKeyBin], 
+            Context).
 
 to_utc_date(undefined) ->
     undefined;
