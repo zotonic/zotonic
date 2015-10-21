@@ -459,6 +459,7 @@ coalesce([H|_]) -> H.
 is_empty(undefined) -> true;
 is_empty([]) -> true;
 is_empty(<<>>) -> true;
+is_empty({{9999,_,_},{_,_,_}}) -> true;
 is_empty(_) -> false.
 
 
