@@ -50,6 +50,8 @@ find_value(Name, [[{A,_}|_]|_] = Blocks, _Context ) when is_atom(A), not is_inte
 %% Regular proplist lookup
 find_value(Key, [{B,_}|_] = L, _Context) when is_list(B) ->
     proplists:get_value(z_convert:to_list(Key), L);
+find_value(Key, [{B,_}|_] = L, _Context) when is_binary(B) ->
+    proplists:get_value(z_convert:to_binary(Key), L);
 find_value(Key, [T|_] = L, _Context) when is_tuple(T), size(T) > 2 ->
     case is_list(element(1,T)) of
         true ->
@@ -100,22 +102,31 @@ find_value(Key, {struct, Props}, _Context) when is_list(Props) ->
         V -> V
     end;
 
-% Index of tuple with an integer like "a[2]"
-find_value(Key, T, _Context) when is_integer(Key) andalso is_tuple(T) ->
-    case element(1,T) of
-        dict ->
-            case dict:find(Key, T) of
-                {ok, Val} ->
-                    Val;
-                _ ->
-                    undefined
+% gbtree lookup
+find_value(Key, {GBSize, GBData} = GB, _Context) when is_integer(GBSize), is_tuple(GBData), size(GBData) =:= 4 ->
+    case gb_trees:lookup(Key, GB) of
+        {value, Val} -> Val;
+        _ -> undefined
+    end;
+
+%% Other cases: context or dict module lookup.
+find_value(Key, Tuple, _Context) when is_tuple(Tuple) ->
+    case element(1, Tuple) of
+        context -> 
+            z_context:get_value(Key, Tuple);
+        dict -> 
+            case dict:find(Key, Tuple) of
+                {ok, Val} -> Val;
+                _ -> undefined
             end;
-        _ ->
+        _ when is_integer(Key) ->
             try
-                element(Key, T)
+                element(Key, Tuple)
             catch 
                 _:_ -> undefined
-            end
+            end;
+        _ ->
+            undefined
     end;
 
 % Search results
@@ -125,35 +136,30 @@ find_value(Key, #search_result{} = S, _Context) when is_integer(Key) ->
     catch
         _:_ -> undefined
     end;
-find_value(Key, #search_result{} = S, _Context) ->
+find_value(Key, #m_search_result{} = S, Context) when is_integer(Key) ->
+    find_value(Key, S#m_search_result.result, Context);
+
+find_value(Key, #search_result{} = S, _Context) when is_atom(Key) ->
     case Key of
         result -> S#search_result.result;
         all -> S#search_result.all;
         total -> S#search_result.total;
         page -> S#search_result.page;
-        pages -> S#search_result.pages
+        pages -> S#search_result.pages;
+        next -> S#search_result.next;
+        prev -> S#search_result.prev
     end;
-
-% gbtree lookup
-find_value(Key, {GBSize, GBData}, _Context) when is_integer(GBSize) ->
-    case gb_trees:lookup(Key, {GBSize, GBData}) of
-        {value, Val} -> Val;
-        _ -> undefined
-    end;
-
-%% Other cases: context or dict module lookup.
-find_value(Key, Tuple, _Context) when is_tuple(Tuple) ->
-    Module = element(1, Tuple),
-    case Module of
-        context -> 
-            z_context:get_value(Key, Tuple);
-        dict -> 
-            case dict:find(Key, Tuple) of
-                {ok, Val} -> Val;
-                _ -> undefined
-            end;
-        _ ->
-            undefined
+find_value(Key, #m_search_result{} = S, _Context) when is_atom(Key) ->
+    case Key of
+        search -> {S#m_search_result.search_name, S#m_search_result.search_props};
+        search_name -> S#m_search_result.search_name;
+        search_props -> S#m_search_result.search_props;
+        result -> S#m_search_result.result;
+        page -> S#m_search_result.page;
+        pages -> S#m_search_result.pages;
+        pagelen -> S#m_search_result.pagelen;
+        next -> S#m_search_result.next;
+        prev -> S#m_search_result.prev
     end;
 
 %% When the current value lookup is a function, the context can be passed to F
