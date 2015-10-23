@@ -252,6 +252,9 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
                 AllCols = [ z_convert:to_list(C) || C <- z_db:column_names(rsc, Context) ],
                 DataCols = lists:filter(
                                     fun("pivot_geocode") -> true;
+                                       ("pivot_geocode_qhash") -> true;
+                                       ("pivot_location_lat") -> true;
+                                       ("pivot_location_lng") -> true;
                                        ("pivot_" ++ _) -> false; 
                                        (_) -> true 
                                     end, 
