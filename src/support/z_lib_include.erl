@@ -219,12 +219,18 @@ checksum([], State, _Context) ->
 checksum([File|Files], State, Context) ->
     case z_module_indexer:find(lib, File, Context) of
         {ok, #module_index{filepath=FilePath}} ->
-	    State1 = dt_checksum(filelib:last_modified(FilePath), State),
-	    checksum(Files, State1, Context);
+            State1 = dt_checksum(last_modified(FilePath), State),
+            checksum(Files, State1, Context);
         {error, enoent} ->
             %% Not found, skip the file
-            ?zWarning("lib file not found: ~s", [File], Context),
+            lager:warning("[~s] lib file not found: ~s", [z_context:site(Context), File]),
             checksum(Files, State, Context)
+    end.
+
+last_modified(FilePath) ->
+    case z_filewatcher_mtime:mtime(FilePath) of
+        {ok, MTime} -> MTime;
+        {error, notfound} -> {{0,0,0},{0,0,0}}
     end.
 
 dt_checksum({{Year, Month, Day}, {Hour, Minute, Second}}, State) ->
@@ -246,7 +252,7 @@ split_css_js(Files) ->
     split_css_js([], CssAcc, JsAcc) ->
         {lists:reverse(CssAcc), lists:reverse(JsAcc)};
     split_css_js([[$/|File]|Rest], CssAcc, JsAcc) ->
-		split_css_js([File|Rest], CssAcc, JsAcc);
+        split_css_js([File|Rest], CssAcc, JsAcc);
     split_css_js([File|Rest], CssAcc, JsAcc) ->
         case filename:extension(File) of
             ".css" -> split_css_js(Rest, [File|CssAcc], JsAcc);
