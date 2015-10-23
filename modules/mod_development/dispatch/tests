@@ -1,0 +1,4 @@
+%% -*- mode: erlang -*-
+[
+ {hello_world, ["test", "hello_world"], controller_hello_world, [{ssl, any}]}
+].
