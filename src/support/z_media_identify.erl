@@ -185,6 +185,7 @@ identify_file_os(unix, File, OriginalFilename) ->
                     case guess_mime(OriginalFilename) of
                         "application/vnd.ms" ++ _ = M -> {ok, [{mime,M}]};
                         "application/msword" -> {ok, [{mime,"application/msword"}]};
+                        "application/vnd.visio" -> {ok, [{mime,"application/vnd.visio"}]};
                         _ -> {ok, [{mime, "application/vnd.ms-office"}]}
                     end;
                 "application/vnd.ms-excel" = Excel ->
