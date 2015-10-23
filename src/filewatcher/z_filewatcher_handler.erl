@@ -45,6 +45,7 @@ file_changed(Verb, F) ->
         true ->
             nop;
         false ->
+            z_filewatcher_mtime:modified(F),
             Message = handle_file(Verb, filename:basename(F), filename:extension(F), F),
             send_message(Message)
     end,

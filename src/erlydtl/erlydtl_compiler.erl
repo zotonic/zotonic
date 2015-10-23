@@ -236,7 +236,7 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
                     [ erl_syntax:list( lists:map(
                             fun ({XFile, {{Year,Month,Day},{Hour,Min,Sec}}}) ->
                                 erl_syntax:tuple([
-                                    erl_syntax:string(XFile),
+                                    erl_syntax:abstract(z_convert:to_binary(XFile)),
                                     erl_syntax:tuple([
                                         erl_syntax:tuple([erl_syntax:integer(Year), erl_syntax:integer(Month), erl_syntax:integer(Day)]),
                                         erl_syntax:tuple([erl_syntax:integer(Hour), erl_syntax:integer(Min), erl_syntax:integer(Sec)])

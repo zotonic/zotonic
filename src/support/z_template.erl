@@ -104,9 +104,9 @@ render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables
     render1(File, FoundFile, Module, Variables, Context).
     
 render1(File, FoundFile, Module, Variables, Context) ->
-    Result = case gen_server:call(Context#context.template_server, {check_modified, Module}, ?TIMEOUT) of
-                modified -> compile(File, FoundFile, Module, Context);
-                ok -> {ok, Module}
+    Result = case z_filewatcher_mtime:is_template_modified(Module, z_context:site(Context)) of
+                true -> compile(File, FoundFile, Module, Context);
+                false -> {ok, Module}
              end,
     case Result of
         {ok, Module} ->
@@ -277,7 +277,8 @@ handle_call({compile, _File, _FoundFile, Module, _Context} = Compile, From, Stat
     end.
 
 %% @doc Reset all compiled templates, done by the module_indexer after the module list changed.
-handle_cast(module_reindexed, State) -> 
+handle_cast(module_reindexed, State) ->
+    z_filewatcher_mtime:flush_site(State#state.host),
     {noreply, State#state{reset_counter=State#state.reset_counter+1}};
 handle_cast(_Msg, State) -> 
     {noreply, State}.
@@ -343,6 +344,7 @@ maybe_start_compile(State) ->
     State.
 
 compile_job(Server, {compile, File, FoundFile, Module, Context}, ResetCounter) ->
+    CompileTime = calendar:universal_time(),
     FinderFun  = fun(FinderFile, All) ->
                     [
                         case F of
@@ -360,6 +362,10 @@ compile_job(Server, {compile, File, FoundFile, Module, Context}, ResetCounter) -
                               {debug_blocks, get_debug_blocks(Context)}
                              ],
                              Context),
+    case Result of
+        {ok, M} -> z_filewatcher_mtime:insert_template(M, CompileTime);
+        _ -> ok
+    end,
     Server ! {compile_result, self(), Result}.
 
 
