@@ -55,10 +55,19 @@ children(false) ->
     ].
 
 which_watcher([]) ->
-    lager:error("FILEWATCHER: please install fswatch or inotify-tools to automatically load changed files"),
+    IsScannerEnabled = z_config:get(filewatcher_scanner_enabled, false),
+    case IsScannerEnabled of
+        true ->
+            lager:error("FILEWATCHER: please install fswatch or inotify-tools to improve automatic loading of changed files");
+        false ->
+            lager:error("FILEWATCHER: please install fswatch or inotify-tools to automatically load changed files")
+    end,
     [
+        {z_filewatcher_monitor,
+          {z_filewatcher_monitor, start_link, []},
+          permanent, 5000, worker, [z_filewatcher_monitor]},
         {z_code_reloader,
-          {z_code_reloader, start_link, [z_config:get(filewatcher_scanner_enabled)]},
+          {z_code_reloader, start_link, [IsScannerEnabled]},
           permanent, 5000, worker, [z_code_reloader]}
     ];
 which_watcher([M|Ms]) ->

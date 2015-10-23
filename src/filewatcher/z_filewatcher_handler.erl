@@ -37,6 +37,8 @@
 
 %% @doc Called when a file is changed on disk. Decides what to do.
 %% @spec file_changed(modify | create, string()) -> ok
+file_changed(Verb, F) when is_binary(F) ->
+    file_changed(Verb, z_convert:to_list(F));
 file_changed(Verb, F) ->
     lager:debug("[filewatcher] ~p of ~p", [Verb, F]),
     case file_blacklisted(F) of
