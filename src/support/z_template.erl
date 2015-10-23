@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %% @doc Template handling, compiles and renders django compatible templates using an extended version of erlydtl
 %% @todo Make the template handling dependent on the host of the context (hosts have different modules enabled).
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -255,21 +255,10 @@ init(SiteProps) ->
             do_modified_check=Flag
     }}.
 
-
-%% @spec handle_call({check_modified, Module}, From, State) -> ok | modified
-%% @doc Compile the template if it has been modified, return the template module for rendering.
-handle_call({check_modified, Module}, _From, State) when Module =/= undefined ->
-    Result = case template_is_modified(Module, State) of
-                true  -> modified;
-                false -> ok
-             end,
-    {reply, Result, State};
-
-
 %% @doc Compile the template, loads the compiled template in memory.  Make sure that we only compile 
 %% one template at a time to prevent overloading the server on restarts.
-handle_call({compile, _File, _FoundFile, Module, _Context} = Compile, From, State) ->
-    case template_is_modified(Module, State) of
+handle_call({compile, _File, _FoundFile, Module, Context} = Compile, From, State) ->
+    case z_filewatcher_mtime:is_template_modified(Module, z_context:site(Context)) of
         true  ->
             {noreply, queue_compile(Compile, From, State)};
         false -> 
@@ -392,43 +381,6 @@ filename_to_modulename(File, UAClass, Host) ->
         C+32;
     savechar(_C) ->
         $_.
-
-
-%% Check if the template or one of the by the template included files is modified since compilation
-%% or if the template has been compiled before a reset of all compiled templates.
-template_is_modified(Module, State) ->
-    case catch Module:template_reset_counter() < State#state.reset_counter of
-        true ->
-            true;
-        false ->
-            case State#state.do_modified_check of
-                false ->
-                    false;
-                true ->
-                    case Module:trans_table() /= z_trans_server:table(State#state.host) of
-                        true ->
-                            true;
-                        false ->
-                            Deps = Module:dependencies(),
-                            is_modified(Deps)
-                    end
-            end;
-        _Error -> 
-            true
-    end.
-
-%% Check if one of the template files is newer than the given datetime
-is_modified([]) ->
-    false;
-is_modified([{File, DateTime}|Rest]) ->
-    case filelib:last_modified(File) of
-        0 -> 
-            true;
-        FileMod when FileMod =/= DateTime ->
-            true;
-        _ ->
-            is_modified(Rest)
-    end.
 
 
 get_debug_includes(Context) ->
