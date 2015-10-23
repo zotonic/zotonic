@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015 Marc Worrell <marc@worrell.nl>
-
 %% @doc Keep a registration of file modification times, especially for z_template
 
 %% Copyright 2015 Marc Worrell
@@ -63,7 +62,7 @@
 -define(TEMPLATE_FILES, z_filewatcher_template_files_tab).
 -define(TEMPLATE_MODIFIED, z_filewatcher_template_modified_tab).
 
-%% @doc If no file scanner, then cache all mtimes for max 2 seconds
+%% If no file scanner, then cache all mtimes for max 2 seconds
 -define(FLUSH_INTERVAL, 2000).
 
 %% @doc Return the modification time of a file
