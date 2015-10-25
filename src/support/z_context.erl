@@ -202,9 +202,11 @@ new(ReqData, Module) ->
 
 
 set_default_language_tz(Context) ->
+    F = fun() -> {z_trans:default_language(Context), tz_config(Context)} end,
+    {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
     Context#context{
-        language=[z_trans:default_language(Context)],
-        tz=tz_config(Context)
+        language= [DefaultLang],
+        tz= TzConfig
     }.
 
 % @doc Create a new context used when testing parts of zotonic
@@ -1028,7 +1030,7 @@ tz(Context) ->
 tz_config(Context) ->
     case m_config:get_value(mod_l10n, timezone, Context) of
         None when None =:= undefined; None =:= <<>> ->
-            z_config:get(timezone, <<"UTC">>);
+            z_config:get(timezone);
         TZ ->
             TZ
     end.
