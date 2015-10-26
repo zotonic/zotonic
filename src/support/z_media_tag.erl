@@ -308,6 +308,7 @@ is_tagopt({align, _}) -> true;  % HTML 1.0 for e-mails
 is_tagopt({width, _}) -> false;
 is_tagopt({height, _}) -> false;
 is_tagopt({crop, _}) -> false;
+is_tagopt({grey, _}) -> false;
 is_tagopt({gray, _}) -> false;
 is_tagopt({mono, _}) -> false;
 is_tagopt({extent, _}) -> false;
