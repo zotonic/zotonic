@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2014 Marc Worrell
-%% @doc Make still previews of media, using image manipulation functions.  Resize, crop, gray, etc.
+%% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
 %% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
 
@@ -560,6 +560,8 @@ string2filter("crop", Where) ->
           end,
     {crop,Dir};
 string2filter("grey",[]) ->
+    grey;
+string2filter("gray",[]) ->
     grey;
 string2filter("mono",[]) ->
     mono;
