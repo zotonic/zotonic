@@ -134,7 +134,8 @@ provide_content(ReqData,  {Info,Context} = State) ->
     RD1 = set_content_dispostion(z_context:get(content_disposition, Context), ReqData),
     MaxAge = z_context:get(max_age, Context, ?MAX_AGE),
     RD2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context), MaxAge, RD1),
-    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD2)), RD2, State}.
+    RD3 = set_allow_origin(RD2),
+    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD3)), RD3, State}.
 
 
 %%%%% -------------------------- Support functions ------------------------
@@ -159,6 +160,8 @@ is_public([{module, Mod}|T], Context, _Answer) ->
 is_public([Id|T], Context, _Answer) ->
     is_public(T, Context, z_acl:rsc_visible(Id, Context)).
 
+set_allow_origin(ReqData) ->
+    wrq:set_resp_header("Access-Control-Allow-Origin", "*", ReqData).
 
 set_cache_control_public(true, MaxAge, ReqData) ->
     wrq:set_resp_header("Cache-Control", "public, max-age="++z_convert:to_list(MaxAge), ReqData);
