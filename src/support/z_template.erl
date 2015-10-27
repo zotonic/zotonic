@@ -49,7 +49,7 @@
     filename_to_modulename/3
 ]).
 
--record(state, {reset_counter, host, do_modified_check, compile_queue, compile_job, compile_job_pid}).
+-record(state, {host, compile_queue, compile_job, compile_job_pid}).
 
 %% Prefix for modules generated from templates.
 -define(TEMPLATE_PREFIX, "template_").
@@ -247,12 +247,9 @@ init(SiteProps) ->
     process_flag(trap_exit, true),
     Host = proplists:get_value(host, SiteProps),
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Host)),
-    Flag = z_config:get(template_modified_check, true),
     {ok, #state{
-            reset_counter=z_utils:now_msec(), 
             host=Host,
-            compile_queue=[],
-            do_modified_check=Flag
+            compile_queue=[]
     }}.
 
 %% @doc Compile the template, loads the compiled template in memory.  Make sure that we only compile 
@@ -268,7 +265,7 @@ handle_call({compile, _File, _FoundFile, Module, Context} = Compile, From, State
 %% @doc Reset all compiled templates, done by the module_indexer after the module list changed.
 handle_cast(module_reindexed, State) ->
     z_filewatcher_mtime:flush_site(State#state.host),
-    {noreply, State#state{reset_counter=State#state.reset_counter+1}};
+    {noreply, State};
 handle_cast(_Msg, State) -> 
     {noreply, State}.
 
@@ -326,13 +323,13 @@ maybe_start_compile(#state{compile_queue=CQ, compile_job_pid=undefined} = State)
     Self = self(),
     Pid = erlang:spawn_link(
                     fun() ->
-                        compile_job(Self, Job, State#state.reset_counter)
+                        compile_job(Self, Job)
                     end),
     State#state{compile_job=Key, compile_job_pid=Pid};
 maybe_start_compile(State) ->
     State.
 
-compile_job(Server, {compile, File, FoundFile, Module, Context}, ResetCounter) ->
+compile_job(Server, {compile, File, FoundFile, Module, Context}) ->
     CompileTime = calendar:universal_time(),
     FinderFun  = fun(FinderFile, All) ->
                     [
@@ -346,7 +343,7 @@ compile_job(Server, {compile, File, FoundFile, Module, Context}, ResetCounter) -
     Result = erlydtl:compile(FoundFile,
                              File,
                              Module, 
-                             [{finder, FinderFun}, {template_reset_counter, ResetCounter},
+                             [{finder, FinderFun},
                               {debug_includes, get_debug_includes(Context)},
                               {debug_blocks, get_debug_blocks(Context)}
                              ],

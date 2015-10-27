@@ -88,13 +88,12 @@ compile(File, Module, Options, ZContext) ->
     compile(File, filename:basename(File), Module, Options, ZContext).
 
 compile(Binary, BaseFile, Module, Options, ZContext) when is_binary(Binary) ->
-    TemplateResetCounter =  proplists:get_value(template_reset_counter, Options, 0),
     case parse(Binary) of
         {ok, DjangoParseTree} ->
             case compile_to_binary( BaseFile,
                                     DjangoParseTree, 
-                                    init_dtl_context(BaseFile, BaseFile, Module, Options, ZContext),
-                                    TemplateResetCounter) of
+                                    init_dtl_context(BaseFile, BaseFile, Module, Options, ZContext))
+            of
                 {ok, Module1, _Bin} ->
                     {ok, Module1};
                 Err ->
@@ -106,10 +105,9 @@ compile(Binary, BaseFile, Module, Options, ZContext) when is_binary(Binary) ->
 
 compile(File, BaseFile, Module, Options, ZContext) ->  
     Context = init_dtl_context(File, BaseFile, Module, Options, ZContext),
-    TemplateResetCounter =  proplists:get_value(template_reset_counter, Options, 0),
     case parse(File, Context) of  
         {ok, DjangoParseTree} ->
-            case compile_to_binary(File, DjangoParseTree, Context, TemplateResetCounter) of
+            case compile_to_binary(File, DjangoParseTree, Context) of
                 {ok, Module1, _Bin} ->
                     {ok, Module1};
                 Err ->
@@ -129,10 +127,10 @@ compile(File, BaseFile, Module, Options, ZContext) ->
 %% Internal functions
 %%====================================================================
 
-compile_to_binary(File, DjangoParseTree, Context, TemplateResetCounter) ->
+compile_to_binary(File, DjangoParseTree, Context) ->
     try body_ast(DjangoParseTree, Context, #treewalker{}) of
         {{Ast, Info}, TreeWalker} ->
-            case compile:forms(forms(File, Context#dtl_context.module, Ast, Info, Context, TreeWalker, TemplateResetCounter), 
+            case compile:forms(forms(File, Context#dtl_context.module, Ast, Info, Context, TreeWalker), 
                     Context#dtl_context.compiler_options) of
                 {ok, Module1, Bin} -> 
                     code:purge(Module1),
@@ -195,16 +193,7 @@ scan_parse(SourceRef, Data) ->
             Err
     end.        
   
-forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter) ->
-    TemplateResetCounterFunctionAst = erl_syntax:function(
-        erl_syntax:atom(template_reset_counter),
-            [ erl_syntax:clause(
-                    [],
-                    none,
-                    [erl_syntax:integer(TemplateResetCounter)]
-                    )
-            ]),
-
+forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker) ->
     TransTableFunctionAst = erl_syntax:function(
         erl_syntax:atom(trans_table),
             [ erl_syntax:clause(
@@ -283,13 +272,12 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
     
     ExportAst = erl_syntax:attribute(erl_syntax:atom(export),
         [erl_syntax:list([
-		            erl_syntax:arity_qualifier(erl_syntax:atom(template_reset_counter), erl_syntax:integer(0)),
 		            erl_syntax:arity_qualifier(erl_syntax:atom(trans_table), erl_syntax:integer(0)),
 					erl_syntax:arity_qualifier(erl_syntax:atom(render), erl_syntax:integer(2)),
                     erl_syntax:arity_qualifier(erl_syntax:atom(source), erl_syntax:integer(0)),
                     erl_syntax:arity_qualifier(erl_syntax:atom(dependencies), erl_syntax:integer(0))])]),
 
-    [erl_syntax:revert(X) || X <- [ModuleAst, ExportAst, TemplateResetCounterFunctionAst, TransTableFunctionAst,
+    [erl_syntax:revert(X) || X <- [ModuleAst, ExportAst, TransTableFunctionAst,
             Render2FunctionAst, SourceFunctionAst, DependenciesFunctionAst, RenderInternalFunctionAst
             | BodyInfo#ast_info.pre_render_asts]].    
 
