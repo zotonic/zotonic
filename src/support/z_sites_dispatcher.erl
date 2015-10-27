@@ -39,6 +39,11 @@
          update_dispatchinfo/0
         ]).
 
+-export([
+    collect_dispatchrules/0,
+    fetch_dispatchinfo/1
+]).
+
 -include_lib("zotonic.hrl").
 -include_lib("wm_host_dispatch_list.hrl").
 
@@ -377,8 +382,7 @@ first_site_match([Site|Sites], DispHost, ReqData) ->
 %% @doc Collect all dispatch rules for all sites, normalize and filter them.
 collect_dispatchrules() ->
     Rules = [ filter_rules(fetch_dispatchinfo(Site), Site) || Site <- z_sites_manager:get_sites() ],
-    Rules1 = normalize_streamhosts(Rules),
-    compile_regexps_hosts(Rules1).
+    compile_regexps_hosts(Rules).
 
 
 %% @doc Fetch dispatch rules for a specific site.
@@ -473,26 +477,16 @@ split_host(Host) ->
 
 
 %% @doc Search the host where the main hostname matches the requested host
-get_dispatch_host(Host, DLs) ->
-    case get_dispatch_host1(Host, DLs) of
-        undefined ->
-            case make_streamhost(Host) of
-                Host -> undefined;
-                StreamHost -> get_dispatch_host1(StreamHost, DLs)
-            end;
-        Found -> Found
-    end.
-
-    get_dispatch_host1(_Host, []) ->
-        undefined;
-    get_dispatch_host1(Host, [#wm_host_dispatch_list{hostname=Host} = DL|_]) ->
-        {ok, DL};
-    get_dispatch_host1(Host, [#wm_host_dispatch_list{streamhost=Host} = DL|_]) ->
-        {ok, DL};
-    get_dispatch_host1(Host, [#wm_host_dispatch_list{smtphost=Host} = DL|_]) ->
-        {ok, DL};
-    get_dispatch_host1(Host, [_|Rest]) ->
-        get_dispatch_host1(Host, Rest).
+get_dispatch_host(_Host, []) ->
+    undefined;
+get_dispatch_host(Host, [#wm_host_dispatch_list{hostname=Host} = DL|_]) ->
+    {ok, DL};
+get_dispatch_host(Host, [#wm_host_dispatch_list{streamhost=Host} = DL|_]) ->
+    {ok, DL};
+get_dispatch_host(Host, [#wm_host_dispatch_list{smtphost=Host} = DL|_]) ->
+    {ok, DL};
+get_dispatch_host(Host, [_|Rest]) ->
+    get_dispatch_host(Host, Rest).
 
 
 %% @doc Search the host where the req hostname is an alias of main host.
@@ -552,33 +546,6 @@ is_compile_opt(ungreedy) -> true;
 is_compile_opt(no_auto_capture) -> true;
 is_compile_opt(dupnames) -> true;
 is_compile_opt(_) -> false.
-
-
-%% @doc Normalize streamhosts, remove any prepending # or *
-normalize_streamhosts(DLs) ->
-    normalize_streamhosts(DLs, []).
-
-    normalize_streamhosts([], Acc) ->
-        lists:reverse(Acc);
-    normalize_streamhosts([#wm_host_dispatch_list{streamhost=Host} = DL|Rest], Acc) ->
-        normalize_streamhosts(Rest, [DL#wm_host_dispatch_list{streamhost=make_streamhost(Host)}|Acc]).
-
-make_streamhost(Hostname) ->
-    case make_streamhost1(Hostname) of
-        false -> Hostname;
-        Other -> Other
-    end.
-
-    make_streamhost1([C|Hostname]) when C >= $0 andalso C =< $9 ->
-        make_streamhost1(Hostname);
-    make_streamhost1([$?|Hostname]) ->
-        Hostname;
-    make_streamhost1([$*|Hostname]) ->
-        Hostname;
-    make_streamhost1([$.|_] = Hostname) ->
-        Hostname;
-    make_streamhost1(_) -> 
-        false.
 
 
 %% @doc Filter all rules, also used to set/reset protocol (https) options.

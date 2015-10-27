@@ -972,23 +972,7 @@ function z_stream_restart()
 
 function z_comet_start()
 {
-    if (z_stream_host != window.location.host && window.location.protocol == "http:")
-    {
-        var $zc = $('#z_comet_connection');
-        if ($zc.length > 0) {
-            $zc.attr('src', $zc.attr('src'));
-        } else {
-            var qs = z_stream_args('comet');
-            var url = window.location.protocol + '//' + z_stream_host + "/comet/subdomain?"+qs;
-            var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
-            comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
-            comet.appendTo("body");
-        }
-    }
-    else
-    {
-        z_comet_poll_ajax();
-    }
+    z_comet_poll_ajax();
 }
 
 function z_comet_poll_ajax()

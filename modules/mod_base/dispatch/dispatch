@@ -4,9 +4,6 @@
  %% Comet connection, used with long polls from the browser.
  {comet,     ["comet"],              controller_comet, [{ssl, any}, {no_session, true}]},
  
- %% Comet sub-domain connection, used with long polls from the browser.
- {comet,     ["comet", "subdomain"], controller_template, [{template, "comet_subdomain.tpl"}, {ssl, any}]},
- 
  %% WebSocket connection.
  {websocket, ["websocket"],          controller_websocket, [{ssl, any}]},
  

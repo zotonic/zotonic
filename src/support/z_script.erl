@@ -62,18 +62,12 @@ add_script(Script, Context) ->
 
 get_page_startup_script(Context) ->
     UAScript = [ ?SESSION_UA_CLASS_Q, $=, $", ua_class_to_script(z_user_agent:get_class(Context)), $", $;],
-    PageIdUAScript = case Context#context.page_id of
+    case Context#context.page_id of
         undefined ->
             %% No page id, so no comet loop started and generated random page id for postback loop
             [ <<"z_set_page_id(\"\",">>, str_user_id(z_acl:user(Context)), <<");">>, UAScript ];
         PageId ->
             [ <<"z_set_page_id(\"">>, PageId, $", $,, str_user_id(z_acl:user(Context)), $), $;, UAScript ]
-    end,
-    case z_context:document_domain(Context) of
-        undefined ->
-            PageIdUAScript;
-        DocumentDomain ->
-            [ PageIdUAScript, <<"document.domain=\"">>, DocumentDomain, $", $; ]
     end.
 
 str_user_id(undefined) ->
@@ -149,31 +143,14 @@ get_stream_start_script(Context) ->
 
 % Make the call of the start script.
 get_stream_start_script(false, Context) ->
-    [<<"z_stream_start(">>, add_subdomain(z_context:streamhost(Context)), ");"];
+    [<<"z_stream_start(">>, js_domain(z_context:streamhost(Context)), ");"];
 get_stream_start_script(true, Context) ->
-    [<<"z_stream_start(">>, add_subdomain(z_context:streamhost(Context)), $,,
+    [<<"z_stream_start(">>, js_domain(z_context:streamhost(Context)), $,,
         $', z_context:websockethost(Context), $', ");"].
     
-% Add random number 0-9
-add_subdomain([$?|Hostname]) ->
-    [$', integer_to_list(z_ids:number(10)), Hostname, $'];
-add_subdomain(<<$?,Hostname/binary>>) ->
-    [$', integer_to_list(z_ids:number(10)), Hostname, $'];
-
-% Add random number, no real limits
-add_subdomain([$*|Hostname]) ->
-    [$', integer_to_list(z_ids:number()),Hostname,$'];
-add_subdomain(<<$*,Hostname/binary>>) ->
-    [$',integer_to_list(z_ids:number()), Hostname, $'];
-add_subdomain([$.|_] = Hostname) ->
-    [$',integer_to_list(z_ids:number()), Hostname, $'];
-add_subdomain(<<$.,_/binary>> = Hostname) ->
-    [$', integer_to_list(z_ids:number()), Hostname, $'];
-    
 % special case for the zotonic_status site
-add_subdomain(none) ->
-    "window.location.host";
-    
+js_domain(none) -> "window.location.host";
+js_domain(<<>>) -> "window.location.host";
+js_domain(undefined) ->"window.location.host";
 % Just connect to the hostname itself
-add_subdomain(Hostname) ->
-    [$', Hostname, $'].
+js_domain(Hostname) -> [$', Hostname, $'].
