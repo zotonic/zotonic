@@ -192,7 +192,8 @@ dispatch_rewrite(Hostname, Path, Tokens, IsDir, TracerPid, Context) ->
 get_fallback_site() ->
     case ets:lookup(?MODULE, "*") of
         [] -> undefined;
-        [{_,Site}] -> Site
+        [{_,Site}] -> Site;
+        [{_,Site, _}] -> Site
     end.
 
 %% @doc Fetch the host handling the given domain name
@@ -319,6 +320,8 @@ add_redirects(HostSites, Redirects) ->
 add_redirect(HS, {_, false, _, _}) ->
     HS;
 add_redirect({Host, Site}, {Site, true, Host, _Redirect}) ->
+    {Host, Site};
+add_redirect({Host, Site}, {Site, true, _Host, none}) ->
     {Host, Site};
 add_redirect({Host, Site}, {Site, true, _Host, Redirect}) ->
     {Host, Site, Redirect}.
