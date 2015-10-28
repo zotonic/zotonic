@@ -129,18 +129,18 @@ dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = 
             {{stop_request, RespCode}, ReqDataUA}
     end.
 
-%% @doc Fix bindings: values should be lists and the 'star' should be a string
+%% @doc Fix bindings: values should be lists and the '*' should be a string
 fix_match_bindings(Ms, IsDir) ->
     [ fix_match_binding(M, IsDir) || M <- Ms ].
 
 fix_match_binding({Name, Value}, _IsDir) when is_binary(Value) ->
     {Name, z_convert:to_list(Value)};
-fix_match_binding({star, List}, IsDir) when is_list(List) ->
+fix_match_binding({'*', List}, IsDir) when is_list(List) ->
     List1 = [ mochiweb_util:quote_plus(B) || B <- List ],
     Path = string:join(List1, "/"),
     case IsDir of
-        true -> {star, Path ++ "/"};
-        false -> {star, Path}
+        true -> {'*', Path ++ "/"};
+        false -> {'*', Path}
     end;
 fix_match_binding(NV, _IsDir) -> 
     NV.
@@ -391,7 +391,7 @@ do_dispatch({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, Re
             {{Mod, Props, 
               [], none, 
               Tokens, Bindings1, 
-              ".", Path}, z_context:site(Context)}
+              ".", proplists:get_value('*', Bindings1, Path)}, z_context:site(Context)}
     end,
     handle_dispatch_result(DispatchResult, DispReq, ReqData);
 do_dispatch(fail, Bindings, _Tokens, _IsDir, DispReq, ReqData, Context0) ->

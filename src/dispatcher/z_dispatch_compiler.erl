@@ -33,7 +33,7 @@
 %% match([<<"page">>, Id, Slug], Context) ->
 %%      {ok, {{page, ["page", id, slug], controller_page, [...]}, [{id,Id}, {slug,Slug}]}};
 %% match([<<"lib">> | Star], Context) when Star =/= [] ->
-%%      {ok, {{lib, ["lib", '*'], controller_file, [...]}, [{star,Star}]}};
+%%      {ok, {{lib, ["lib", '*'], controller_file, [...]}, [{'*',Star}]}};
 %% match(_, _Context) ->
 %%      fail.
 %% </code>
@@ -268,7 +268,7 @@ list_bindings([B|Ps], Nr, Acc) when is_binary(B); is_list(B) ->
     list_bindings(Ps, Nr+1, Acc);
 list_bindings(['*'], Nr, Acc) ->
     Binding = erl_syntax:tuple([
-            erl_syntax:atom(star),
+            erl_syntax:atom('*'),
             var(Nr)
         ]),
     erl_syntax:list(lists:reverse([Binding|Acc]), none);
@@ -333,7 +333,7 @@ runtime_bind(Pattern, Path, Context) ->
 bind([], [], Bindings, _Context) ->
     {ok, Bindings};
 bind(['*'], Rest, Bindings, _Context) when is_list(Rest) ->
-    {ok, [{star,Rest} | Bindings]};
+    {ok, [{'*',Rest} | Bindings]};
 bind(_Tokens, [], _Bindings, _Context) ->
     fail;
 bind([Token|RestToken], [Token|RestMatch], Bindings, Context) ->
