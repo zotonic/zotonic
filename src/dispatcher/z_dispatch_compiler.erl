@@ -15,7 +15,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-%% @doc Compile dispatch rules to an Erlang module.
+%% Compile dispatch rules to an Erlang module.
 %%
 %% The dispatch compiler takes all the list of dispatch rules and creates
 %% an Erlang module that matches those rules.
