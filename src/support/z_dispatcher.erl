@@ -44,7 +44,7 @@
 -include_lib("zotonic.hrl").
 
 -record(state, {dispatchlist=undefined, lookup=undefined, context, 
-                host, hostname, hostname_port, streamhost, smtphost, hostalias, 
+                host, hostname, hostname_port, smtphost, hostalias, 
 				redirect=true}).
 
 -record(dispatch_url, {url, dispatch_options}).
@@ -115,7 +115,7 @@ hostname_port(#context{dispatcher=Dispatcher}) ->
 abs_url(Url, Context) ->
     abs_url(Url, undefined, [], Context).
 
-%% @spec dispatchinfo(Context) -> {host, hostname, streamhost, smtphost, hostaliases, redirect, dispatchlist}
+%% @spec dispatchinfo(Context) -> {host, hostname, smtphost, hostaliases, redirect, dispatchlist}
 %% @doc Fetch the dispatchlist for the site.
 dispatchinfo(#context{dispatcher=Dispatcher}) -> 
     gen_server:call(Dispatcher, 'dispatchinfo', infinity);
@@ -204,7 +204,6 @@ init(SiteProps) ->
         {site, Host},
         {module, ?MODULE}
       ]),
-    Streamhost = proplists:get_value(streamhost, SiteProps),
     Smtphost = proplists:get_value(smtphost, SiteProps),
     HostAlias = proplists:get_value(hostalias, SiteProps, []),
     Context = z_context:new(Host),
@@ -214,7 +213,6 @@ init(SiteProps) ->
                 lookup=dict:new(),
                 context=Context, 
                 host=Host, 
-                streamhost=drop_port(Streamhost),
 				smtphost=drop_port(Smtphost),
                 hostname=drop_port(Hostname),
                 hostname_port=Hostname,
@@ -255,10 +253,10 @@ handle_call('hostname', _From, State) ->
 handle_call('hostname_port', _From, State) ->
     {reply, State#state.hostname_port, State};
 
-%% @doc Return the dispatchinfo for the site  {host, hostname, streamhost, smtphost, hostaliases, redirect, dispatchlist}
+%% @doc Return the dispatchinfo for the site  {host, hostname, smtphost, hostaliases, redirect, dispatchlist}
 handle_call('dispatchinfo', _From, State) ->
     {reply,
-     {State#state.host, State#state.hostname, State#state.streamhost, State#state.smtphost,
+     {State#state.host, State#state.hostname, State#state.smtphost,
       State#state.hostalias, State#state.redirect, State#state.dispatchlist}, 
      State};
 

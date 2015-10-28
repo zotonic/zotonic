@@ -407,7 +407,7 @@ is_multiple_languages_config(Context) ->
 is_enabled_language(Lang, Context) ->
     case z_trans:is_language(Lang) of
         true ->
-            case lists:keyfind(list_to_atom(Lang), 1, get_enabled_languages(Context)) of
+            case lists:keyfind(z_convert:to_atom(Lang), 1, get_enabled_languages(Context)) of
                 false -> false;
                 _ -> true
             end;
