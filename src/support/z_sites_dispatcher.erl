@@ -333,7 +333,7 @@ get_site_hosts(#context{} = Context) ->
     Hostname = z_context:hostname(Context),
     HostAlias = case m_site:get(hostalias, Context) of
                     undefined -> [];
-                    List when is_list(List) -> List;
+                    List when is_list(List) -> ensure_alias_list(List);
                     _ -> []
                 end,
     HostSmtp = m_site:get(smtphost, Context),
@@ -348,6 +348,9 @@ get_site_hosts(#context{} = Context) ->
                     (_) -> true
                 end,
                 Hs).
+
+ensure_alias_list([C|_] = Alias) when is_integer(C) -> [Alias];
+ensure_alias_list(Alias) -> Alias.
 
 do_compile_modified(OldDs, NewDs) ->
     Ds = NewDs -- OldDs,
