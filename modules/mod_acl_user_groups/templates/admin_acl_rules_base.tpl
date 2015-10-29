@@ -34,7 +34,7 @@
     <h2>{_ Access control rules _}</h2>
 </div>
 
-{% if m.acl.use.mod_admin_user_groups %}
+{% if m.acl.use.mod_acl_user_groups %}
     {% with m.acl.insert.acl_user_group as is_editable %}
         
         {% if is_editable %}
