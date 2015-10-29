@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2015 Marc Worrell
 %% Date: 2010-05-18
 %% @doc Simple server to manage the translations, owns the ets table containing all translations.
 %% When new translations are read then the previous table is kept and the one before the previous is deleted.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ start_tests() ->
 start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     Name = z_utils:name_for_host(?MODULE, Host),
-    gen_server:start_link({local, Name}, ?MODULE, Host, []).
+    gen_server:start_link({local, Name}, ?MODULE, [Host, Name], []).
 
 
 %% @doc Parse all .po files and reload the found translations in the trans server
@@ -67,9 +67,7 @@ load_translations(Trans, Context) ->
 
 %% @doc Return the name of the ets table holding all translations
 table(Host) when is_atom(Host) ->
-    Name = z_utils:name_for_host(?MODULE,Host),
-    {ok, Table} = gen_server:call(Name, table),
-    Table;
+    z_utils:name_for_host(?MODULE, Host);
 table(#context{} = Context) ->
     Context#context.translation_table.
 
@@ -91,14 +89,14 @@ observe_module_ready(module_ready, Context) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(Host) ->
+init([Host, Name]) ->
     lager:md([
         {site, Host},
         {module, ?MODULE}
       ]),
     process_flag(trap_exit, true),
     z_notifier:observe(module_ready, {?MODULE, observe_module_ready}, Host),
-    Table = ets:new(translations, [set, protected]),
+    Table = ets:new(Name, [named_table, set, protected, {read_concurrency, true}]),
     {ok, #state{table=Table, host=Host}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -107,10 +105,6 @@ init(Host) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% @doc Return the id of the current translation table
-handle_call(table, _From, State) ->
-    {reply, {ok, State#state.table}, State};
-
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -137,8 +131,6 @@ handle_cast({load_translations, Trans}, State) ->
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
-
-
 
 %% @spec handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
