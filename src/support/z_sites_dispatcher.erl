@@ -115,7 +115,7 @@ dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = 
             | Bindings
         ],
         trace(TracerPid, TokensRewritten, try_match, [{bindings, Bindings1}]),
-        case z_dispatch_compiler:match(TokensRewritten, Context) of
+        case z_dispatch_compiler:match(z_utils:name_for_host(dispatch, z_context:site(Context)), TokensRewritten, Context) of
             {ok, {DispatchRule, MatchBindings}} ->
                 trace_final(
                         TracerPid, 
@@ -361,7 +361,7 @@ do_compile_modified(OldDs, NewDs) ->
     lists:foreach(fun do_compile/1, Ds).
 
 do_compile(#wm_host_dispatch_list{host=Host, dispatch_list=DL}) ->
-    z_dispatch_compiler:compile(Host, DL).
+    z_dispatch_compiler:compile(z_utils:name_for_host(dispatch, Host), DL).
 
 do_dispatch({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, ReqData, Context) ->
     #dispatch{tracer_pid=TracerPid, host=Hostname, protocol=Protocol, path=Path} = DispReq,

@@ -2,6 +2,8 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
+-define(M, '-dispatch-test-').
+
 simple_test() ->
     Rules = [
         {home, [], x, []},
@@ -12,7 +14,7 @@ simple_test() ->
         {avc, ["a", v, "c"], x, []},
         {avw, ["a", v, w], x, []}
     ],
-    {ok, Module} = z_dispatch_compiler:compile(?MODULE, Rules),
+    {ok, Module} = z_dispatch_compiler:compile(?M, Rules),
     ?assertEqual({ok, {{home, [], x, []}, []}},
                  Module:match("", none)),
 
@@ -41,7 +43,7 @@ wildcard_test() ->
     Rules = [
         {image, ["image", '*'], x, []}
     ],
-    {ok, Module} = z_dispatch_compiler:compile(?MODULE, Rules),
+    {ok, Module} = z_dispatch_compiler:compile(?M, Rules),
     ?assertEqual({ok, {{image, ["image", '*'], x, []}, [{'*', [<<"foo">>, <<"bar">>]}]}},
                  Module:match([<<"image">>, <<"foo">>, <<"bar">>], none)).
 
@@ -51,7 +53,7 @@ re_test() ->
         {nr, ["id", {v, "^[0-9]+$"}], x, []},
         {nr, ["id", foo], x, []}
     ],
-    {ok, Module} = z_dispatch_compiler:compile(?MODULE, Rules),
+    {ok, Module} = z_dispatch_compiler:compile(?M, Rules),
     ?assertEqual({ok, {{nr, ["id", {v, "^[0-9]+$"}], x, []}, [{v, <<"1234">>}]}},
                  Module:match([<<"id">>, <<"1234">>], none)),
 

@@ -64,17 +64,14 @@
 
 -export([
     compile/2,
-    match/2,
+    match/3,
 
     runtime_bind/3
 ]).
 
 -include_lib("zotonic.hrl").
 
-compile(Site, List) ->
-    compile1(z_utils:name_for_host(dispatch, Site), List).
-
-compile1(ModuleName, DLs) when is_atom(ModuleName), is_list(DLs) ->
+compile(ModuleName, DLs) when is_atom(ModuleName), is_list(DLs) ->
     MatchFunAsts = match_asts(DLs),
     ModuleAst = erl_syntax:attribute(erl_syntax:atom(module), [erl_syntax:atom(ModuleName)]),
     ExportAst = erl_syntax:attribute(
@@ -89,10 +86,9 @@ compile1(ModuleName, DLs) when is_atom(ModuleName), is_list(DLs) ->
     {module, _} = code:load_binary(Module, atom_to_list(ModuleName) ++ ".erl", Bin),
     {ok, ModuleName}.
 
-match(Tokens, Context) ->
-    M = z_utils:name_for_host(dispatch, z_context:site(Context)),
+match(Module, Tokens, Context) ->
     try
-        M:match(Tokens, Context)
+        Module:match(Tokens, Context)
     catch 
         error:undef ->
             fail
@@ -242,7 +238,7 @@ list_pattern([B|Ps], Nr, Acc) when is_binary(B) ->
     P = erl_syntax:abstract(B),
     list_pattern(Ps, Nr+1, [P|Acc]);
 list_pattern([B|Ps], Nr, Acc) when is_list(B) ->
-    P = erl_syntax:abstract(z_convert:to_binary(B)),
+    P = erl_syntax:abstract(unicode:characters_to_binary(B)),
     list_pattern(Ps, Nr+1, [P|Acc]);
 list_pattern(['*'], Nr, Acc) ->
     %  [ <<"foo">>, <<"bar">> | V3 ] = Path
@@ -276,11 +272,16 @@ list_bindings([P|Ps], Nr, Acc) ->
     list_bindings(Ps, Nr+1, [Binding|Acc]).
 
 binding_var({Name, _}) ->
-    erl_syntax:atom(z_convert:to_atom(Name));
+    erl_syntax:atom(to_atom(Name));
 binding_var({Name, _, _}) ->
-    erl_syntax:atom(z_convert:to_atom(Name));
+    erl_syntax:atom(to_atom(Name));
 binding_var(Name) ->
-    erl_syntax:atom(z_convert:to_atom(Name)).
+    erl_syntax:atom(to_atom(Name)).
+
+to_atom(Name) when is_atom(Name) -> Name;
+to_atom(Name) when is_binary(Name) -> list_to_atom(binary_to_list(Name)); 
+to_atom(Name) when is_integer(Name) -> list_to_atom(integer_to_list(Name)); 
+to_atom(Name) when is_list(Name) -> list_to_atom(Name). 
 
 is_simple_pattern([]) -> true;
 is_simple_pattern([B|Ps]) when is_binary(B) -> is_simple_pattern(Ps);
@@ -301,7 +302,7 @@ compile_re_path([{Token, RE, Options}|Rest], Acc) ->
     {ok, MP} = re:compile(RE, CompileOpt),
     compile_re_path(Rest, [{Token, MP, RunOpt}|Acc]);
 compile_re_path([Token|Rest], Acc) when is_list(Token) ->
-    compile_re_path(Rest, [z_convert:to_binary(Token)|Acc]);
+    compile_re_path(Rest, [unicode:characters_to_binary(Token)|Acc]);
 compile_re_path([Token|Rest], Acc) when is_atom(Token); is_binary(Token) ->
     compile_re_path(Rest, [Token|Acc]).
 
