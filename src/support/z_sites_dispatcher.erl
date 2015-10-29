@@ -76,6 +76,7 @@ dispatch(Host, Path, ReqData) ->
 
 dispatch(Host, Path, ReqData, TracerPid) when is_list(Host); is_binary(Host) ->
     % Classify the user agent
+    z_depcache:in_process(true), 
     {ok, ReqDataUA} = z_user_agent:set_class(ReqData),
     Protocol = case wrq:is_ssl(ReqDataUA) of true -> https; false -> http end,
     DispReq = #dispatch{
