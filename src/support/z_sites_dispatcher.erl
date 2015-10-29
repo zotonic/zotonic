@@ -547,14 +547,11 @@ first_site_match([Site|Sites], DispHost, ReqData) ->
 
 %% @doc Collect all dispatch rules for all sites, normalize and filter them.
 collect_dispatchrules() ->
-    Rules = [ filter_rules(fetch_dispatchinfo(Site), Site) || Site <- z_sites_manager:get_sites() ],
-    compile_regexps_hosts(Rules).
+    [ filter_rules(fetch_dispatchinfo(Site), Site) || Site <- z_sites_manager:get_sites() ].
 
 %% @doc Collect all dispatch rules for all sites, normalize and filter them.
 collect_dispatchrules(Site) ->
-    Rules = [ filter_rules(fetch_dispatchinfo(Site), Site) ],
-    hd(compile_regexps_hosts(Rules)).
-
+    filter_rules(fetch_dispatchinfo(Site), Site).
 
 %% @doc Fetch dispatch rules for a specific site.
 fetch_dispatchinfo(Site) ->
@@ -605,49 +602,6 @@ split_host(Host) ->
 % is_hostname("localhost") -> false;
 % is_hostname("127.0.0.1") -> false;
 % is_hostname(_) -> true.
-
-
-%% @doc Compile all regexps in the dispatch lists
-compile_regexps_hosts(DLs) ->
-    compile_regexps_hosts(DLs, []).
-
-compile_regexps_hosts([], Acc) ->
-    lists:reverse(Acc);
-compile_regexps_hosts([#wm_host_dispatch_list{dispatch_list=DispatchList} = DL|Rest], Acc) ->
-    DispatchList1 = compile_regexps(DispatchList, []),
-    compile_regexps_hosts(Rest, [DL#wm_host_dispatch_list{dispatch_list=DispatchList1}|Acc]).
-
-compile_regexps([], Acc) ->
-    lists:reverse(Acc);
-compile_regexps([{DispatchName, PathSchema, Mod, Props}|Rest], Acc) ->
-    PathSchema1 = compile_re_path(PathSchema, []),
-    compile_regexps(Rest, [{DispatchName, PathSchema1, Mod, Props}|Acc]).
-
-compile_re_path([], Acc) ->
-    lists:reverse(Acc);
-compile_re_path([{Token, {Mod, Fun}}|Rest], Acc) ->
-    compile_re_path(Rest, [{Token, {Mod,Fun}}|Acc]);
-compile_re_path([{Token, RE}|Rest], Acc) ->
-    {ok, MP} = re:compile(RE),
-    compile_re_path(Rest, [{Token, MP}|Acc]);
-compile_re_path([{Token, RE, Options}|Rest], Acc) ->
-    {CompileOpt,RunOpt} = lists:partition(fun is_compile_opt/1, Options),
-    {ok, MP} = re:compile(RE, CompileOpt),
-    compile_re_path(Rest, [{Token, MP, RunOpt}|Acc]);
-compile_re_path([Token|Rest], Acc) ->
-    compile_re_path(Rest, [Token|Acc]).
-
-%% Only allow options valid for the re:compile/3 function.
-is_compile_opt(unicode) -> true;
-is_compile_opt(anchored) -> true;
-is_compile_opt(caseless) -> true;
-is_compile_opt(dotall) -> true;
-is_compile_opt(extended) -> true;
-is_compile_opt(ungreedy) -> true;
-is_compile_opt(no_auto_capture) -> true;
-is_compile_opt(dupnames) -> true;
-is_compile_opt(_) -> false.
-
 
 %% @doc Filter all rules, also used to set/reset protocol (https) options.
 filter_rules(Rules, Site) ->

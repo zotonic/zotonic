@@ -63,7 +63,6 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([
-    compile/1,
     compile/2,
     match/2,
 
@@ -71,11 +70,6 @@
 ]).
 
 -include_lib("zotonic.hrl").
--include_lib("wm_host_dispatch_list.hrl").
-
-compile(Site) ->
-    Rules = z_sites_dispatcher:collect_dispatchrules(Site),
-    compile(Site, Rules#wm_host_dispatch_list.dispatch_list).
 
 compile(Site, List) ->
     compile1(z_utils:name_for_host(dispatch, Site), List).
@@ -167,7 +161,7 @@ match_clauses([ DispatchRule | DLs ], Nr, Acc) ->
                             erl_syntax:atom(z_dispatch_compiler),
                             erl_syntax:atom(runtime_bind),
                             [
-                                erl_syntax:abstract(Pattern),
+                                erl_syntax:abstract(compile_re_path(Pattern, [])),
                                 erl_syntax:variable("Path"),
                                 erl_syntax:variable("Context")
                             ]
@@ -175,37 +169,39 @@ match_clauses([ DispatchRule | DLs ], Nr, Acc) ->
             Case = erl_syntax:case_expr(Runtime, [
                             % {ok, Bindings} -> {ok, {DispatchRule, Bindings}}
                             erl_syntax:clause(
-                                erl_syntax:tuple([
+                                [ erl_syntax:tuple([
                                         erl_syntax:atom(ok),
                                         erl_syntax:variable("Bindings")
-                                    ]),
+                                    ])],
                                 none,
-                                erl_syntax:tuple([
+                                [ erl_syntax:tuple([
                                     erl_syntax:atom(ok),
                                     erl_syntax:tuple([
                                             erl_syntax:abstract(DispatchRule),
                                             erl_syntax:variable("Bindings")
                                         ])
-                                    ])
-                                ),
+                                    ]) 
+                                ]),
                             % One of:
                             % * fail -> mN(Pattern, Context)
                             % * fail -> {error, nomatch}
                             erl_syntax:clause(
-                                erl_syntax:atom(fail),
+                                [ erl_syntax:atom(fail) ],
                                 none,
-                                case IsMatchingOther of
-                                    true ->
-                                        erl_syntax:application(
-                                                erl_syntax:atom(funname(Nr+1)),
-                                                [
-                                                    erl_syntax:variable("Path"),
-                                                    erl_syntax:variable("Context")
-                                                ]
-                                            );
-                                    false ->
-                                        erl_syntax:atom(fail)
-                                end)
+                                [ 
+                                    case IsMatchingOther of
+                                        true ->
+                                            erl_syntax:application(
+                                                    erl_syntax:atom(funname(Nr+1)),
+                                                    [
+                                                        erl_syntax:variable("Path"),
+                                                        erl_syntax:variable("Context")
+                                                    ]
+                                                );
+                                        false ->
+                                            erl_syntax:atom(fail)
+                                    end
+                                ])
                         ]),
 
             Clause = erl_syntax:clause(
@@ -293,6 +289,33 @@ is_simple_pattern([z_language|_]) -> false;
 is_simple_pattern([V|Ps]) when is_atom(V) -> is_simple_pattern(Ps);
 is_simple_pattern(_) -> false.
 
+compile_re_path([], Acc) ->
+    lists:reverse(Acc);
+compile_re_path([{Token, {Mod, Fun}}|Rest], Acc) ->
+    compile_re_path(Rest, [{Token, {Mod,Fun}}|Acc]);
+compile_re_path([{Token, RE}|Rest], Acc) ->
+    {ok, MP} = re:compile(RE),
+    compile_re_path(Rest, [{Token, MP}|Acc]);
+compile_re_path([{Token, RE, Options}|Rest], Acc) ->
+    {CompileOpt,RunOpt} = lists:partition(fun is_compile_opt/1, Options),
+    {ok, MP} = re:compile(RE, CompileOpt),
+    compile_re_path(Rest, [{Token, MP, RunOpt}|Acc]);
+compile_re_path([Token|Rest], Acc) when is_list(Token) ->
+    compile_re_path(Rest, [z_convert:to_binary(Token)|Acc]);
+compile_re_path([Token|Rest], Acc) when is_atom(Token); is_binary(Token) ->
+    compile_re_path(Rest, [Token|Acc]).
+
+%% Only allow options valid for the re:compile/3 function.
+is_compile_opt(unicode) -> true;
+is_compile_opt(anchored) -> true;
+is_compile_opt(caseless) -> true;
+is_compile_opt(dotall) -> true;
+is_compile_opt(extended) -> true;
+is_compile_opt(ungreedy) -> true;
+is_compile_opt(no_auto_capture) -> true;
+is_compile_opt(dupnames) -> true;
+is_compile_opt(_) -> false.
+
 var(Nr) ->
     erl_syntax:variable("V"++integer_to_list(Nr)).
 
@@ -331,9 +354,9 @@ runtime_bind(Pattern, Path, Context) ->
     bind(Pattern, Path, [], Context).
 
 bind([], [], Bindings, _Context) ->
-    {ok, Bindings};
+    {ok, lists:reverse(Bindings)};
 bind(['*'], Rest, Bindings, _Context) when is_list(Rest) ->
-    {ok, [{'*',Rest} | Bindings]};
+    {ok, lists:reverse([{'*',Rest} | Bindings])};
 bind(_Tokens, [], _Bindings, _Context) ->
     fail;
 bind([Token|RestToken], [Token|RestMatch], Bindings, Context) ->
