@@ -34,6 +34,12 @@
     update_dispatchinfo/0
 ]).
 
+%% Exports for dispatch bindings
+-export([
+    is_bind_language/2
+]).
+
+
 -export([
     collect_dispatchrules/0,
     collect_dispatchrules/1,
@@ -115,7 +121,7 @@ dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = 
             | Bindings
         ],
         trace(TracerPid, TokensRewritten, try_match, [{bindings, Bindings1}]),
-        case z_dispatch_compiler:match(z_utils:name_for_host(dispatch, z_context:site(Context)), TokensRewritten, Context) of
+        case dispatch_match(TokensRewritten, Context) of
             {ok, {DispatchRule, MatchBindings}} ->
                 trace_final(
                         TracerPid, 
@@ -129,6 +135,16 @@ dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = 
         throw:{stop_request, RespCode} ->
             {{stop_request, RespCode}, ReqDataUA}
     end.
+
+dispatch_match(Tokens, Context) ->
+    Module = z_utils:name_for_host(dispatch, z_context:site(Context)),
+    try
+        dispatch_compiler:match(Module, Tokens, Context)
+    catch 
+        error:undef ->
+            fail
+    end.
+
 
 %% @doc Fix bindings: values should be lists and the '*' should be a string
 fix_match_bindings(Ms, IsDir) ->
@@ -207,6 +223,12 @@ get_host_for_domain(Domain) ->
         [{_,Site,_Redirect}] -> Site;
         [] -> undefined
     end.
+
+
+%% @doc Callback for the dispatch compiler, try to bind a language
+is_bind_language(Match, _Context) ->
+    z_trans:is_language(Match).
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -361,7 +383,18 @@ do_compile_modified(OldDs, NewDs) ->
     lists:foreach(fun do_compile/1, Ds).
 
 do_compile(#wm_host_dispatch_list{host=Host, dispatch_list=DL}) ->
-    z_dispatch_compiler:compile(z_utils:name_for_host(dispatch, Host), DL).
+    dispatch_compiler:compile_load(z_utils:name_for_host(dispatch, Host), map_z_language(DL)).
+
+map_z_language(DL) ->
+    [ map_z_language_1(Disp) || Disp <- DL ].
+
+map_z_language_1({Name, Path, Controller, Opts}) ->
+    Path1 = [ map_z_language_2(P) || P <- Path ],
+    {Name, Path1, Controller, Opts}.
+
+map_z_language_2(z_language) -> {z_language, {?MODULE, is_bind_language}};
+map_z_language_2(X) -> X.
+
 
 do_dispatch({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, ReqData, Context) ->
     #dispatch{tracer_pid=TracerPid, host=Hostname, protocol=Protocol, path=Path} = DispReq,
