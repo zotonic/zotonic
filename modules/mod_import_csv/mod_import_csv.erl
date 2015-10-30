@@ -61,7 +61,7 @@ observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
 
 %% @doc Uploading a CSV file through the web interface.
 event(#submit{message={csv_upload, []}}, Context) ->
-    case z_acl:is_allowed(use, mod_import_cvs, Context) of
+    case z_acl:is_allowed(use, mod_import_csv, Context) of
         true ->
             #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
             IsReset = z_convert:to_bool(z_context:get_q("reset", Context)), 
