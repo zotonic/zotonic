@@ -53,6 +53,7 @@ var z_transport_delegates   = {
     session: z_transport_session_status,
     reload: z_session_invalid_dialog
 };
+var z_force_unload_beacon   = false;
 
 var TRANSPORT_TIMEOUT       = 30000;
 var TRANSPORT_TRIES         = 3;
@@ -89,6 +90,10 @@ function z_set_page_id( page_id, user_id )
         ]);
     ubf.add_spec('auth_change', [
         "page_id"
+        ]);
+    ubf.add_spec("unload_beacon", [
+        "session_id",
+        "page_id",
         ]);
     ubf.add_spec("rsc_update_done", [
         "action", "id", "pre_is_a", "post_is_a", 
@@ -132,6 +137,29 @@ function z_set_page_id( page_id, user_id )
         setTimeout(function() {
             z_page_unloading = false;
         }, 10000);
+    });
+    $(window).bind('unload', function() {
+        var msg = {
+            "_record": "unload_beacon",
+            "page_id": z_pageid,
+            "session_id": window.z_sid || undefined
+        }
+   
+        if(navigator.sendBeacon) {
+	    navigator.sendBeacon("/beacon", ubf.encode(msg));
+            return;
+        }
+
+	// If the browser doesn't have the beacon api, and we are forced to send the
+ 	// unload beacon we have to send it via a synchronous ajax request.
+        if(z_force_unload_beacon) {
+	    $.ajax({url: "/beacon", 
+		    type: "post", 
+		    data: ubf.encoce(msg), 
+		    dataType: "text", 
+		    contentType: "text/x-ubf", 
+		    async: false});
+        }
     });
 }
 
