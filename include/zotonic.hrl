@@ -166,7 +166,7 @@
 -define(MEDIACLASS_INDEX, 'zotonic$mediaclass_index').
 
 %% For the z_db definitions
--record(column_def, {name, type, length, is_nullable=true, default, primary_key}).
+-record(column_def, {name, type, length, is_nullable=true, default, primary_key, unique=false}).
 
 %% For the datamodel: default resources to create.
 -record(datamodel, {categories=[], predicates=[], resources=[], media=[], edges=[]}).
