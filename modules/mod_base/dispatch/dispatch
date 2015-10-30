@@ -15,6 +15,9 @@
  
  %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
  {close_connection, ["close-connection"],  controller_close_connection, [{ssl, any}, {no_session, true}]},
+
+ %% Used to get page unload beacons from open pages.
+ {unload_beacon, ["beacon"],  controller_unload_beacon, [{ssl, any}, {no_session, true}]},
  
  %% The id controller redirects depending on the accept header sent by the user agent.
  {id, ["id", id], controller_id, [ {ssl, any} ]},
