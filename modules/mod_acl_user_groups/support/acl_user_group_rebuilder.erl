@@ -11,17 +11,17 @@
 %%
 %% The entries in the ets table are:
 %%
-%% <code>
+%% ```
 %% {{content_group_id, {category_id, action, only_if_owner}, user_group_id}, true}
 %% {{content_group_id, action, user_group_id}, true}
 %% {{module, module_action, user_group_id}, true}
 %% {{action, user_group_id}, [content_group_id]}
 %% {user_group_id, [user_group_id]}
-%% </code>
+%% '''
 %%
 %% The action is one of the atoms: view, insert, delete, update, and link.
 %%
-%% @enddoc
+%% @end
 
 %% Copyright 2015 Marc Worrell
 %%
