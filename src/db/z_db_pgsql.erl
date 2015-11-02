@@ -58,7 +58,7 @@ start_link(Args) ->
 test_connection(Args) ->
     case connect(Args) of
         {ok, Conn} ->
-            pgsql:close(Conn),
+            epgsql:close(Conn),
             ok;
         {error, _} = E ->
             E
@@ -96,10 +96,10 @@ handle_call(Cmd, _From, #state{conn=undefined}=State) ->
     end;
 
 handle_call({squery, Sql}, _From, #state{conn=Conn}=State) ->
-    {reply, decode_reply(pgsql:squery(Conn, Sql)), State, ?IDLE_TIMEOUT};
+    {reply, decode_reply(epgsql:squery(Conn, Sql)), State, ?IDLE_TIMEOUT};
 
 handle_call({equery, Sql, Params}, _From, #state{conn=Conn}=State) ->
-    {reply, decode_reply(pgsql:equery(Conn, Sql, encode_values(Params))), State, ?IDLE_TIMEOUT};
+    {reply, decode_reply(epgsql:equery(Conn, Sql, encode_values(Params))), State, ?IDLE_TIMEOUT};
 
 handle_call(get_raw_connection, _From, #state{conn=Conn}=State) ->
     {reply, Conn, State, ?IDLE_TIMEOUT};
@@ -120,7 +120,7 @@ handle_info(_Info, State) ->
 terminate(_Reason, #state{conn=undefined}) ->
     ok;
 terminate(_Reason, #state{conn=Conn}) ->
-    ok = pgsql:close(Conn),
+    ok = epgsql:close(Conn),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
@@ -140,14 +140,14 @@ connect(Args) when is_list(Args) ->
     Username = get_arg(dbuser, Args),
     Password = get_arg(dbpassword, Args),
     Schema = get_arg(dbschema, Args),
-    case pgsql:connect(Hostname, Username, Password,
+    case epgsql:connect(Hostname, Username, Password,
                        [{database, Database}, {port, Port}]) of
         {ok, Conn} ->
-            case pgsql:squery(Conn, "SET search_path TO " ++ Schema) of
+            case epgsql:squery(Conn, "SET search_path TO " ++ Schema) of
                 {ok, [], []} ->
                     {ok, Conn};
                 Error -> 
-                    pgsql:close(Conn),
+                    epgsql:close(Conn),
                     {error, Error}
             end;
         {error, _} = E ->
@@ -155,7 +155,7 @@ connect(Args) when is_list(Args) ->
     end.
 
 disconnect(State) ->
-    pgsql:close(State#state.conn),
+    epgsql:close(State#state.conn),
     State#state{conn=undefined}.
     
 get_arg(K, Args) ->
