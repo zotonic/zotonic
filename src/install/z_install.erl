@@ -71,7 +71,7 @@ install(Context) ->
 
 install_sql_list(Context, Model) ->
     C = z_db_pgsql:get_raw_connection(Context),
-    [ {ok, [], []} = pgsql:squery(C, Sql) || Sql <- Model ],
+    [ {ok, [], []} = epgsql:squery(C, Sql) || Sql <- Model ],
     ok.
 
 

@@ -79,7 +79,7 @@
 
 
 -include_lib("zotonic.hrl").
--include_lib("deps/epgsql/include/pgsql.hrl").
+-include_lib("deps/epgsql/include/epgsql.hrl").
 
 -compile([{parse_transform, lager_transform}]).
 
@@ -672,7 +672,7 @@ ensure_schema(Site, Options) ->
 
 
 open_connection(DatabaseName, Options) ->
-    pgsql:connect(
+    epgsql:connect(
         proplists:get_value(dbhost, Options),
         proplists:get_value(dbuser, Options),
         proplists:get_value(dbpassword, Options),
@@ -683,12 +683,12 @@ open_connection(DatabaseName, Options) ->
     ).
     
 close_connection(Connection) ->
-    pgsql:close(Connection).
+    epgsql:close(Connection).
     
 %% @doc Check whether database exists
--spec database_exists(pgsql:connection(), string()) -> boolean().
+-spec database_exists(epgsql:connection(), string()) -> boolean().
 database_exists(Connection, Database) ->
-    {ok, _, [{Count}]} = pgsql:equery(
+    {ok, _, [{Count}]} = epgsql:equery(
         Connection,
         "SELECT COUNT(*) FROM pg_catalog.pg_database WHERE datname = $1",
         [Database]
@@ -699,11 +699,11 @@ database_exists(Connection, Database) ->
     end.
 
 %% @doc Create a database
--spec create_database(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
+-spec create_database(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 create_database(Site, Connection, Database) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
-    case pgsql:equery(
+    case epgsql:equery(
         Connection, 
         "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0" 
     ) of  
@@ -715,9 +715,9 @@ create_database(Site, Connection, Database) ->
     end.
     
 %% @doc Check whether schema exists
--spec schema_exists(pgsql:connection(), string()) -> boolean().
+-spec schema_exists(epgsql:connection(), string()) -> boolean().
 schema_exists(Connection, Schema) ->
-    {ok, _, [{Count}]} = pgsql:equery(
+    {ok, _, [{Count}]} = epgsql:equery(
         Connection,
         "select count(*) from information_schema.schemata where schema_name = $1",
         [Schema]
@@ -728,11 +728,11 @@ schema_exists(Connection, Schema) ->
     end.
 
 %% @doc Create a schema
--spec create_schema(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
+-spec create_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 create_schema(Site, Connection, Schema) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
-    case pgsql:equery(
+    case epgsql:equery(
         Connection, 
         "CREATE SCHEMA \"" ++ Schema ++ "\""
     ) of  
