@@ -139,7 +139,7 @@ changed strings in a ``.pot`` file and changes the translated strings
 in a language’s ``.po`` file accordingly::
 
   $ cd modules/mod_foo/translations
-  $ msgmerge -U -N nl.po templates/mod_foo.pot
+  $ msgmerge -U -N nl.po template/mod_foo.pot
 
 This will merge the new strings into the existing ``nl.po``
 file. 
