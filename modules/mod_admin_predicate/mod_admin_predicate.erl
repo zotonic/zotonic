@@ -141,7 +141,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 visiblecheck={acl, insert, predicate}},
      #menu_item{id=admin_edges,
                 parent=admin_content,
-                label=?__("Connections", Context),
+                label=?__("Page connections", Context),
                 url={admin_edges}}
      |Acc].
 

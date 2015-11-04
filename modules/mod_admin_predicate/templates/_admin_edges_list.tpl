@@ -45,9 +45,9 @@
         <tr>
             <td colspan="5">
                 {% if q.qpredicate %}
-                    {_ No connections with the predicate: _} {{ m.rsc[q.qpredicate].title }}
+                    {_ No page connections with the predicate: _} {{ m.rsc[q.qpredicate].title }}
                 {% else %}
-                    {_ No connections found. _}
+                    {_ No page connections found. _}
                 {% endif %}
             </td>
         </tr>
