@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ Connections _}{% endblock %}
+{% block title %}{_ Page connections _}{% endblock %}
 
 {% block content %}
     {% with 
@@ -46,9 +46,9 @@
             <div class="admin-header">
                 <h2>
                     {% if q.qpredicate %}
-                        {_ Connections with the predicate _}: {{ m.rsc[q.qpredicate].title }}
+                        {_ Page connections with the predicate _}: {{ m.rsc[q.qpredicate].title }}
                     {% else %}
-                        {_ Connections overview _}
+                        {_ Page connections overview _}
                     {% endif %}
                 </h2>
             </div>
