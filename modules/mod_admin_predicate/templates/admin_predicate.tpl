@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Predicates {% endblock %}
+{% block title %}{_ Predicates _}{% endblock %}
 
 {% block content %}
 {% with m.acl.is_admin as editable %}
@@ -45,7 +45,7 @@
             </li>
             {% empty %}
             <li>
-                No predicates found.
+                {_ No predicates found. _}
             </li>
             {% endfor %}
         </ul>

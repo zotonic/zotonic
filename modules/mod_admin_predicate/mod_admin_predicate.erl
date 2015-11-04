@@ -33,7 +33,8 @@
     observe_rsc_update/3,
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
-    observe_admin_menu/3
+    observe_admin_menu/3,
+    observe_search_query/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -137,7 +138,32 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 parent=admin_structure,
                 label=?__("Predicates", Context),
                 url={admin_predicate},
-                visiblecheck={acl, insert, predicate}}
-     
+                visiblecheck={acl, insert, predicate}},
+     #menu_item{id=admin_edges,
+                parent=admin_content,
+                label=?__("Connections", Context),
+                url={admin_edges}}
      |Acc].
 
+observe_search_query({search_query, {edges, [{predicate,Predicate}]}, _OffsetLimit}, Context) 
+   when Predicate =/= undefined, Predicate =/= <<>>, Predicate =/= [] ->
+    PredId = m_rsc:rid(Predicate, Context),
+    #search_sql{
+        select="e.id, e.subject_id, e.predicate_id, e.object_id, e.creator_id, e.created",
+        from="edge e join rsc s on s.id = e.subject_id join rsc o on o.id = e.object_id",
+        order="e.id desc",
+        where="e.predicate_id = $1",
+        args=[PredId],
+        tables=[{rsc,"o"}, {rsc,"s"}],
+        assoc=true
+    };
+observe_search_query({search_query, {edges, _Args}, _OffsetLimit}, _Context) ->
+    #search_sql{
+        select="e.id, e.subject_id, e.predicate_id, e.object_id, e.creator_id, e.created",
+        from="edge e join rsc s on s.id = e.subject_id join rsc o on o.id = e.object_id",
+        order="e.id desc",
+        tables=[{rsc,"o"}, {rsc,"s"}],
+        assoc=true
+    };
+observe_search_query(_, _Context) ->
+    undefined.

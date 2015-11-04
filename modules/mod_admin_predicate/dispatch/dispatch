@@ -1,6 +1,7 @@
 %% -*- mode: erlang -*-
-%% Dispatch rule for a predicate list page
+%% Dispatch rule for a predicate list, edit and connections overview
 [
  {admin_predicate,      ["admin", "predicate"],     controller_admin,                [{template, "admin_predicate.tpl"}, {selected, "predicate"}]},
- {admin_predicate_edit, ["admin", "predicate", id], controller_admin_predicate_edit, []}
+ {admin_predicate_edit, ["admin", "predicate", id], controller_admin_predicate_edit, []},
+ {admin_edges,  		["admin", "connections"],   controller_admin,                [{template, "admin_edges.tpl"}, {selected, "edges"}]}
 ].
