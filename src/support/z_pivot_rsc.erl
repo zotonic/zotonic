@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2013 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
 
-%% Copyright 2009-2013 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -651,10 +651,17 @@ split_lang([Text|Rest], Dict, Context) ->
 
 %% @doc Fetch the title of all things related to the resource
 related(Id, Context) ->
-    Ids = lists:usort(m_edge:objects(Id, Context)),
+    Edges = lists:filter(
+                    fun({Predicate, _Edges}) ->
+                        not z_convert:to_bool(m_rsc:p_no_acl(m_rsc:rid(Predicate, Context), is_object_noindex, Context))
+                    end,
+                    m_edge:get_edges(Id, Context)),
+    Ids = lists:usort(
+                lists:flatten(
+                    [ [ proplists:get_value(object_id, E) || E <- Es ] || {_Pred, Es} <- Edges])),
     Ids1 = z_notifier:foldr(#pivot_related{id=Id}, Ids, Context),
     IdsTexts = z_notifier:foldr(#pivot_related_text_ids{id=Id}, Ids, Context),
-    Texts = [ m_rsc:p(R, title, Context) || R <- IdsTexts ],
+    Texts = [ m_rsc:p_no_acl(R, title, Context) || R <- IdsTexts ],
     {Ids1, Texts}.
     
 
