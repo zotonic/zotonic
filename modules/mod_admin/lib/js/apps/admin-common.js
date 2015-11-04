@@ -58,6 +58,28 @@ limitations under the License.
                     }
                 });
             }));
+            (self.element.find("td").each(function() {
+                var $cell,
+                    href,
+                    event;
+                $cell = $(this);
+                href = $cell.attr("data-href");
+                event = $cell.attr("data-event");
+                if (!href && !event) {
+                    return;
+                }
+                if ($cell.hasClass("not-clickable")) {
+                    return;
+                }
+                $cell.addClass("clickable");
+                $cell.on("click", function() {
+                    if (event) {
+                        z_event(event);
+                    } else {
+                        document.location = href;
+                    }
+                });
+            }));
         }
     });
 

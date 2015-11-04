@@ -48,8 +48,6 @@
                                 <td>
                                     {% if media %}
                                         <div class="admin-list-thumb">
-                                    {% endif %}
-                                    {% if media %}
                                         {% image id mediaclass="admin-list-dashboard" class="thumb" %}
                                     {% endif %}
                                     <span>{{ (m.rsc[id].title|striptags|truncate:50)|default:"<em>untitled</em>" }}</span>
