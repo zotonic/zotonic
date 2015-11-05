@@ -32,8 +32,16 @@
 	}
 	> li > a {
 	    background-color: transparent;
+	}
+    > li:not(.disabled) > a {
 	    color: @textColorButton;
-	    
+	}
+    > li.disabled > a {
+        &,
+        &:hover,
+        &:focus {
+           color: @textColorLight;
+       }
 	}
 	li.active > a {
 		&,
