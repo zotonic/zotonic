@@ -1,5 +1,5 @@
 
-.widget { 
+.widget {
     margin-bottom: @widgetVerticalPadding;
     border-bottom: none;
     #3L > .border-radius(@radiusWidget);
@@ -17,7 +17,7 @@
     .widget-content {
         position: relative;
         padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
-        
+
         &.widget-content-full {
             padding: 0;
 
@@ -31,7 +31,7 @@
                 };
             }
         }
-        
+
         .table-like {
             padding: @table-cell-padding @widgetSidePadding;
         }
@@ -39,28 +39,28 @@
         hr {
             margin: 15px -@widgetSidePadding;
         }
-        
+
         // nested content blocks
         .widget-content {
             padding-top: 0;
-            
+
             > :last-child {
                 // nested (blocks)
                 margin-bottom: 0;
             }
         }
-        
+
         // adjacent content blocks
-        & + .widget-content {            
+        & + .widget-content {
             > .tab-pane {
                 padding-top: 0;
             }
         }
-     
+
         &:empty {
             display: none;
         }
-        
+
         & h1, & h2, & h3, & h4, & h5, & h6 {
             &:not(.panel-heading &) {
                 margin: @baseMargin 0;
@@ -70,7 +70,7 @@
                 }
             }
         }
-        
+
         > :last-child {
             margin-bottom: @widgetVerticalPadding;
         }
@@ -91,7 +91,7 @@
     .widget-section-header {
         margin: 20px 0 0 0;
     }
-    
+
     .widget-header {
         margin: 0;
         padding: @widgetVerticalPadding @widgetSidePadding;
@@ -99,7 +99,7 @@
         text-shadow: @darkOnLightTextShadow;
         font-size: @font-size-base;
         line-height: 16px; // make room for widget-header-tools
-        
+
         .z-btn-remove {
             display: block;
             position: absolute;
@@ -107,24 +107,24 @@
             right: @widgetSidePadding + 26; // make room for minify button
             z-index: 1;
         }
-        
+
         .widget-header-tools {
             float: right;
             font-size: 0; // against inline-block margins
             text-align: right;
-        
+
             .z-btn-help,
             .z-icon {
                 display: inline-block;
                 margin-left: 12px;
                 line-height: inherit;
             }
-        
+
             .z-btn-help {
                 color: @textColorLight;
             }
         }
-    
+
         .z-icon-plus,
         .z-icon-minus {
             @_icon_size: 16px;
@@ -155,7 +155,7 @@
     &.widget-expanded,
     &.dark.widget-expanded {
         .widget-header {
-            .widget-header-tools {  
+            .widget-header-tools {
                 .z-btn-help {
                     color: @colorLink;
                 }
@@ -167,7 +167,7 @@
         display: block;
         margin: 20px 0;
     }
-    
+
     .admin-button-help {
         @_size: 16px;
         display: block;
@@ -196,7 +196,7 @@
     }
 }
 
-.dashboard .widget { 
+.dashboard .widget {
     background-color: @backgroundColorLightest;
 }
 
@@ -209,7 +209,7 @@ li {
         //#3L > .border-radius(@radiusWidget @radiusWidget 0 0);
         #3L > .box-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
     }
-    
+
 }
 
 .widget ul.nav-tabs {

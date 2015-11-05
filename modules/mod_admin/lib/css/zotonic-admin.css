@@ -1078,7 +1078,22 @@ th a:hover .arrow.down {
 .nav.nav-pills > li > a,
 .widget ul.nav-tabs > li > a {
   background-color: transparent;
+}
+.minimalTabs > li:not(.disabled) > a,
+.nav.nav-pills > li:not(.disabled) > a,
+.widget ul.nav-tabs > li:not(.disabled) > a {
   color: #555555;
+}
+.minimalTabs > li.disabled > a,
+.minimalTabs > li.disabled > a:hover,
+.minimalTabs > li.disabled > a:focus,
+.nav.nav-pills > li.disabled > a,
+.nav.nav-pills > li.disabled > a:hover,
+.nav.nav-pills > li.disabled > a:focus,
+.widget ul.nav-tabs > li.disabled > a,
+.widget ul.nav-tabs > li.disabled > a:hover,
+.widget ul.nav-tabs > li.disabled > a:focus {
+  color: #aaaaaa;
 }
 .minimalTabs li.active > a,
 .minimalTabs li.active > a:focus,
