@@ -9,6 +9,9 @@ Strings
    ../filter_append
    ../filter_capfirst
    ../filter_center
+   ../filter_format_integer
+   ../filter_format_number
+   ../filter_format_price
    ../filter_insert
    ../filter_is_valid_email
    ../filter_length

@@ -7,9 +7,6 @@ Numbers
    :glob:
 
    ../filter_filesizeformat
-   ../filter_format_integer
-   ../filter_format_number
-   ../filter_format_price
    ../filter_is_even
    ../filter_max
    ../filter_min
