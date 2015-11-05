@@ -47,6 +47,7 @@ event(#postback{message={module_toggle, Module, StatusId}, trigger=TriggerId}, C
                     z_module_manager:deactivate(Module, Context),
                     Context1 = z_render:update(TriggerId, "Activate", Context),
                     z_render:wire([
+                            {set_class, [{target, TriggerId}, {class, "btn btn-info btn-xs"}]},
                             {set_class, [{target, StatusId}, {class, "pull-left icon_status icon_status_"}]},
                             {growl, [{text, ["Deactivated ", atom_to_list(Module), "."]}]}
                         ], Context1);
@@ -54,6 +55,7 @@ event(#postback{message={module_toggle, Module, StatusId}, trigger=TriggerId}, C
                     z_module_manager:activate(Module, Context),
                     Context1 = z_render:update(TriggerId, "Deactivate", Context),
                     z_render:wire([
+                            {set_class, [{target, TriggerId}, {class, "btn btn-default btn-xs"}]},
                             {set_class, [{target, StatusId}, {class, "pull-left icon_status icon_status_starting"}]},
                             {growl, [{text, ["Activated ", atom_to_list(Module), "."]}]}
                         ], Context1)

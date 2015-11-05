@@ -48,12 +48,12 @@
                                         {% button text=_"Deactivate"
                                             class="btn btn-default btn-xs"
                                             action={module_toggle module=module status_id=#status.module}
-                                            action={toggle_class id=#li.module class="enabled"} %}
+                                            action={toggle_class target=#li.module class="unpublished"} %}
                                     {% else %}
                                         {% button text=_"Activate"
-                                            class="btn btn-xs btn-success"
+                                            class="btn btn-info btn-xs"
                                             action={module_toggle module=module status_id=#status.module} 
-                                            action={toggle_class id=#li.module class="enabled"} %}
+                                            action={toggle_class target=#li.module class="unpublished"} %}
                                     {% endif %}
                                 </div>
 
