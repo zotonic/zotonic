@@ -5,7 +5,7 @@ Take the minimum of the filter value and its first argument.
 
 The following::
 
-  {% print 102|min:103 %}
+  {% print 102|to_integer|min:103 %}
 
 Prints ``102``.
 
