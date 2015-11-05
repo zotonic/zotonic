@@ -75,8 +75,10 @@ show_template(ReqData, Code, ErrorDump, Reason) ->
     RD3 = wrq:set_resp_header("X-Robots", "noindex,nofollow", RD2),
     Host = webmachine_request:get_metadata('zotonic_host', RD3),
     try 
-        Context = (z_context:new(RD3))#context{host=Host},
-        Vars = z_context:get_all(Context),
+	Context = z_context:new(Host),
+	ContextRd = z_context:set_reqdata(RD3, Context),
+	ContextArgs = set_zotonic_args(ContextRd),
+        Vars = z_context:get_all(ContextArgs),
         Vars1 = case bt_simplify(Reason) of
                     {reason, ErlangError, Tab} ->
                         [
@@ -91,8 +93,8 @@ show_template(ReqData, Code, ErrorDump, Reason) ->
                             {error_dump, X} | Vars
                         ]
                 end,
-        Html = z_template:render("error.tpl", Vars1, Context),
-        {Output, ContextOut} = z_context:output(Html, Context),
+        Html = z_template:render("error.tpl", Vars1, ContextArgs),
+        {Output, ContextOut} = z_context:output(Html, ContextArgs),
         {Output, z_context:get_reqdata(ContextOut)}
     catch
         _E:_R-> 
@@ -103,6 +105,17 @@ show_template(ReqData, Code, ErrorDump, Reason) ->
             {<<>>, RD3}
     end.
 
+%% @doc Set the zotonic args found in the request data. 
+set_zotonic_args(#context{wm_reqdata=RD, host=Host}=Context) ->
+    Context1 = z_context:set(zotonic_host, Host, Context),
+    Context2 = z_context:set(zotonic_dispatch_path, z_context:get_req_path(Context1), Context1),
+    PathInfo = wrq:path_info(RD),
+    case dict:find(zotonic_dispatch, PathInfo) of
+        {ok, Dispatch} -> 
+            z_context:set(zotonic_dispatch, Dispatch, Context2);
+        error -> 
+            Context2
+    end.
 
 bt_simplify({_E1, {_E2, Reason, BT}}) when is_list(BT) ->
     {reason, Reason, bt_table(BT)};
