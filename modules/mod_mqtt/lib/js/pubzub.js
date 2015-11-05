@@ -18,13 +18,17 @@ TODO:
 
 function Pubzub ()
 {
-    this._matcher = new Qlobber({
-        separator: '/',
-        wildcard_one: '+',
-        wildcard_some: '#'
-    });
+    this._new_matcher = function() { 
+        return new Qlobber({
+        	separator: '/',
+	        wildcard_one: '+',
+	        wildcard_some: '#'
+	    });
+    };
+    this._matcher = this._new_matcher();
     this._subs = {};
     this._subs_relayed = {};
+    this._retained = {};
 
     this._will_id = 0;
     ubf.add_spec("mqtt_msg", [
@@ -68,6 +72,8 @@ Pubzub.prototype.subscribe = function (topic, fun, ack) {
             this.transport("subscribe", topic, undefined, undefined, ack);
         }
         this._subs_relayed[topic] = ct + 1;
+    } else {
+        this.handle_retained(topic, fun, id);
     }
     if(ack && !async_ack) { setTimeout(ack, 0) }; 
     return id;
@@ -90,8 +96,15 @@ Pubzub.prototype.unsubscribe = function (id) {
     }
 };
 
-Pubzub.prototype.publish = function (topic, message) {
+Pubzub.prototype.publish = function (topic, message, options) {
+    options = options || {retained: false};
+    
     if (this.is_local_topic(topic)) {
+        if (message == undefined && options.retained) {
+             delete this._retained[topic];
+             return;
+        }
+        
         var subs = this._matcher.match(topic);
         for (var i in subs) {
             var id = subs[i];
@@ -99,7 +112,14 @@ Pubzub.prototype.publish = function (topic, message) {
                 this._subs[id].fun(topic, message, id);
             }
         }
+
+        if (options.retained) {
+            this._retained[topic] = message;
+        }
     } else {
+        if(options.retained)
+            throw "Error: retained messages are not supported for non-local topics";
+            
         this.transport("publish", topic, message);
     }
 };
@@ -136,6 +156,23 @@ Pubzub.prototype.relayed = function (mqtt_msg, _msg) {
         }
     }
 };
+
+Pubzub.prototype.handle_retained = function(topic, fun, id) {
+    var retained_matcher = this._new_matcher();
+    retained_matcher.add(topic, true);
+    
+    function publish(topic, msg) {
+        setTimeout(function() { fun(topic, msg, id); }, 0);
+    }
+        
+    for(var retained_topic in this._retained) {
+        for(var matches in retained_matcher.match(retained_topic)) {
+            if(matches.length) {
+                publish(retained_topic, this._retained[retained_topic]);
+            }
+        }
+    }
+}
 
 Pubzub.prototype.transport = function (cmd, topic, payload, extra, ack) {
     var msg = {
