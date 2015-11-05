@@ -51,10 +51,6 @@
 
 -record(state, {host, compile_queue, compile_job, compile_job_pid}).
 
-%% Prefix for modules generated from templates.
--define(TEMPLATE_PREFIX, "template_").
-
-
 start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     Name = z_utils:name_for_host(?MODULE, Host),
@@ -210,11 +206,12 @@ find_template_cat(File, Id, Context) ->
             end,
     find_template_cat_stack(File, Stack, Context).
 
-find_template_cat_stack(File, Stack, Context) ->
-    Root = z_convert:to_list(filename:rootname(File)),
-    Ext = z_convert:to_list(filename:extension(File)),
+find_template_cat_stack(File0, Stack, Context) ->
+    File = z_convert:to_binary(File0),
+    Root = filename:rootname(File),
+    Ext = filename:extension(File),
     case lists:foldr(fun(Cat, {error, enoent}) ->
-                            find_template(Root ++ [$.|z_convert:to_list(Cat)] ++ Ext, Context);
+                            find_template(<<Root/binary, $., (z_convert:to_binary(Cat))/binary, Ext/binary>>, Context);
                         (_Cat, Found) ->
                             Found  
                      end, 
@@ -228,11 +225,9 @@ find_template_cat_stack(File, Stack, Context) ->
 
 %% @doc Check if the module is a template module.
 %% @spec is_template_module(atom()) -> bool()
-is_template_module(Module) ->
-    case z_convert:to_list(Module) of
-        ?TEMPLATE_PREFIX ++ _ -> true;
-        _ -> false
-    end.
+is_template_module(<<"template_", _/binary>>) -> true;
+is_template_module("template_" ++ _) -> true;
+is_template_module(_) -> false.
 
 %%====================================================================
 %% gen_server callbacks
@@ -361,23 +356,29 @@ compile_job(Server, {compile, File, FoundFile, Module, Context}) ->
 filename_to_modulename(File, #context{} = Context) ->
     filename_to_modulename(File, z_user_agent:get_class(Context), z_context:site(Context)).
 
--spec filename_to_modulename(file:filename(), ua_classifier:device_type(), atom()) -> string().
-filename_to_modulename(File, UAClass, Host) ->
-    list_to_atom(filename_to_modulename_1(File, Host, lists:reverse([$_|z_convert:to_list(UAClass)]))).
+-spec filename_to_modulename(file:filename(), ua_classifier:device_type(), atom()) -> binary().
+filename_to_modulename(File, UAClass, Host) when is_binary(File) ->
+    z_convert:to_atom(
+        <<"template_",
+          (z_convert:to_binary(Host))/binary,
+          $_,
+          (z_convert:to_binary(UAClass))/binary,
+          $_,
+          (savefile(File))/binary>>).
 
-    filename_to_modulename_1([], Host, Acc) ->
-        ?TEMPLATE_PREFIX ++ atom_to_list(Host) ++ [$_ | lists:reverse(Acc)];
-    filename_to_modulename_1([C|T], Host, Acc) ->
-        filename_to_modulename_1(T, Host, [savechar(C)|Acc]).
+savefile(<<>>) -> 
+    <<>>;
+savefile(File) ->
+    z_convert:to_binary([ savechar(C) || C <- unicode:characters_to_list(File) ]).
 
-    savechar(C) when C >= $0 andalso C =< $9 ->
-        C;
-    savechar(C) when C >= $a andalso C =< $z ->
-        C;
-    savechar(C) when C >= $A andalso C =< $Z ->
-        C+32;
-    savechar(_C) ->
-        $_.
+savechar(C) when C >= $0 andalso C =< $9 ->
+    C;
+savechar(C) when C >= $a andalso C =< $z ->
+    C;
+savechar(C) when C >= $A andalso C =< $Z ->
+    C+32;
+savechar(_C) ->
+    $_.
 
 
 get_debug_includes(Context) ->
@@ -386,17 +387,18 @@ get_debug_includes(Context) ->
 get_debug_blocks(Context) ->
     z_convert:to_bool(m_config:get_value(mod_development, debug_blocks, Context)).
     
-
-runtime_wrap_debug_comments(FilePath, Output, Context) ->
+runtime_wrap_debug_comments(FilePath, Output, Context) when is_binary(FilePath) ->
     case get_debug_includes(Context) of
         false ->
             Output;
         true ->
-            Start = "\n<!-- START " ++ relpath(FilePath) ++ " (runtime) -->\n",
-            End = "\n<!-- END " ++ relpath(FilePath) ++ " -->\n",
-            [Start, Output, End]
+            [
+                <<"\n<!-- START ">>, relpath(FilePath), <<" (runtime) -->\n">>, 
+                Output, 
+                <<"\n<!-- END ">>, relpath(FilePath),  <<" -->\n">>
+            ]
     end.
 
 relpath(FilePath) ->
-    Base = os:getenv("ZOTONIC"),
-    lists:nthtail(1+length(Base), FilePath).
+    BaseLen = size(z_convert:to_binary(os:getenv("ZOTONIC"))),
+    binary:part(FilePath, BaseLen, size(FilePath) - BaseLen).

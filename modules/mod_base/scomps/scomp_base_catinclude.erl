@@ -56,11 +56,15 @@ render1(true, File, Id, Params, Context) ->
     IsA = m_rsc:is_a(RscId, Context),
     render1_all(File, IsA, [{id,RscId}|Params], Context).
 
-render1_all(File, IsA, Params, Context) ->
-    Root = z_convert:to_list(filename:rootname(File)),
-    Ext = z_convert:to_list(filename:extension(File)),
+render1_all(File0, IsA, Params, Context) ->
+    File = z_convert:to_binary(File0),
+    Root = filename:rootname(File),
+    Ext = filename:extension(File),
     Templates = lists:foldr(fun(Cat, Templates) -> 
-                                Templates ++ z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, true, Context) 
+                                Templates ++ z_template:find_template(
+                                                    <<Root/binary,  $., (z_convert:to_binary(Cat))/binary, Ext/binary>>, 
+                                                    true,
+                                                    Context) 
                             end,
                             [],
                             IsA),

@@ -90,15 +90,24 @@ find(template, Name, Context) ->
 find(What, Name, Context) ->
     find_ua_class(What, generic, Name, Context).
 
-find_ua_class(What, Class, Name, Context) when is_binary(Name) ->
-    find_ua_class(What, Class, binary_to_list(Name), Context);
 find_ua_class(template, Class, Name, Context) ->
     case ets:lookup(?MODULE_INDEX,
                     #module_index_key{
                         site=z_context:site(Context),
                         type=template,
-                        name=z_convert:to_list(Name),
+                        name=z_convert:to_binary(Name),
                         ua_class=Class
+                    })
+    of
+        [] -> {error, enoent};
+        [#module_index{} = M|_] -> {ok, M}
+    end;
+find_ua_class(lib, _Class, Name, Context) ->
+    case ets:lookup(?MODULE_INDEX,
+                    #module_index_key{
+                        site=z_context:site(Context),
+                        type=lib,
+                        name=z_convert:to_binary(Name)
                     })
     of
         [] -> {error, enoent};
@@ -120,12 +129,12 @@ find_ua_class(What, _Class, Name, Context) ->
 %% @doc Find a scomp, validator etc.
 %% @spec find_all(What, Name, Context) -> list()
 find_all(template, Name, Context) ->
-    find_ua_class_all(template, z_user_agent:get_class(Context), z_convert:to_list(Name), Context);
+    find_ua_class_all(template, z_user_agent:get_class(Context), z_convert:to_binary(Name), Context);
 find_all(What, Name, Context) ->
     find_ua_class_all(What, generic, Name, Context).
 
 find_ua_class_all(What, Class, Name, Context) ->
-    gen_server:call(Context#context.module_indexer, {find_all, What, Name, Class}, ?TIMEOUT).
+    gen_server:call(Context#context.module_indexer, {find_all, What, z_convert:to_binary(Name), Class}, ?TIMEOUT).
 
 %% @doc Return a list of all templates, scomps etc per module
 all(What, Context) ->
@@ -420,8 +429,8 @@ scan_subdir_class_files(Subdir, ActiveDirs) ->
                                     {UAClass, RelPath} = z_user_agent:filename_split_class(F),
                                     Filepath = filename:join([Dir, Subdir, F]),
                                     #mfile{
-                                        filepath=Filepath,
-                                        name=RelPath,
+                                        filepath=z_convert:to_binary(Filepath),
+                                        name=z_convert:to_binary(RelPath),
                                         module=Module,
                                         erlang_module=undefined,
                                         prio=Prio,

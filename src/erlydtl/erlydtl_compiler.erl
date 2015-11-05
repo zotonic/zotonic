@@ -75,19 +75,19 @@
     has_auto_id = false,
     custom_tags = []}).    
 
-compile(Binary, Module, ZContext) when is_binary(Binary) ->
-    compile(Binary, Module, [], ZContext);
+compile({template, Binary}, Module, ZContext) ->
+    compile({template, Binary}, Module, [], ZContext);
 
 compile(File, Module, ZContext) ->
     compile(File, File, Module, [], ZContext).
 
-compile(Binary, Module, Options, ZContext) when is_binary(Binary) ->
-    compile(Binary, [], Module, Options, ZContext);
+compile({template, Binary}, Module, Options, ZContext) ->
+    compile({template, Binary}, [], Module, Options, ZContext);
     
 compile(File, Module, Options, ZContext) ->  
     compile(File, filename:basename(File), Module, Options, ZContext).
 
-compile(Binary, BaseFile, Module, Options, ZContext) when is_binary(Binary) ->
+compile({template, Binary}, BaseFile, Module, Options, ZContext) ->
     case parse(Binary) of
         {ok, DjangoParseTree} ->
             case compile_to_binary( BaseFile,
@@ -102,7 +102,6 @@ compile(Binary, BaseFile, Module, Options, ZContext) when is_binary(Binary) ->
         Err ->
             Err
     end;
-
 compile(File, BaseFile, Module, Options, ZContext) ->  
     Context = init_dtl_context(File, BaseFile, Module, Options, ZContext),
     case parse(File, Context) of  
