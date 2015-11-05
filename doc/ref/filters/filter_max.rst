@@ -5,7 +5,7 @@ Take the maximum of the filter value and its first argument.
 
 The following::
 
-  {% print 102|max:103 %}
+  {% print 102|to_integer|max:103 %}
 
 Prints ``103``.
 

@@ -7,7 +7,7 @@ This clamps the filter value between the two filter arguments.
 
 Example::
 
-  {% print 3|minmax:10:20 %}
+  {% print 3|to_integer|minmax:10:20 %}
 
 This will print ``10``, since that is the minimum value allowed.
 
