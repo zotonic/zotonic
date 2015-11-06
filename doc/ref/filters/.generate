@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/filters/filter_filter_name.erl
-for f in `find $ZOTONIC_SRC/modules -name filter_\*`
+for f in `find $ZOTONIC_SRC/modules -name filter_\*.erl`
 do
     read -r mod filter <<EOF
 `echo $f | sed -e 's,.*/\(mod_[^/]*\).*/filter_\(.*\).erl,\1 \2,'`
@@ -27,7 +27,7 @@ ${filter//?/=}
 
 EOF
 
-    if [ ! -e $doc ]; then 
+    if [ ! -e $doc ]; then
         echo "New doc: $doc"
         cat <<EOF > $doc
 
