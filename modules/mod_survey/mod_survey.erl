@@ -461,32 +461,77 @@ do_submit(SurveyId, Questions, Answers, Context) ->
     of
         undefined ->
             m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
-            mail_result(SurveyId, Answers, Context),
+            maybe_mail(SurveyId, Answers, Context),
             ok;
         ok ->
-            mail_result(SurveyId, Answers, Context),
+            maybe_mail(SurveyId, Answers, Context),
             ok;
         {ok, _Context1} = Handled ->
-            mail_result(SurveyId, Answers, Context),
+            maybe_mail(SurveyId, Answers, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
     end.
 
+maybe_mail(SurveyId, Answers, Context) ->
+    case probably_email(SurveyId, Context) of
+        true ->
+            PrepAnswers = survey_answer_prep:readable(SurveyId, Answers, Context),
+            mail_respondent(SurveyId, Answers, PrepAnswers, Context),
+            mail_result(SurveyId, PrepAnswers, Context);
+        false ->
+            nop
+    end.
+
+probably_email(SurveyId, Context) ->
+    not z_utils:is_empty(m_rsc:p_no_acl(SurveyId, survey_email, Context))
+    orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)).
 
 %% @doc mail the survey result to an e-mail address
-mail_result(SurveyId, Answers, Context) ->
+mail_result(SurveyId, PrepAnswers, Context) ->
     case m_rsc:p_no_acl(SurveyId, survey_email, Context) of
         undefined ->
             skip;
         Email ->
             Vars = [
+                {is_result_email, true},
                 {id, SurveyId},
-                {answers, Answers}
+                {answers, PrepAnswers}
             ],
             z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
             ok
     end.
+
+mail_respondent(SurveyId, Answers, PrepAnswers, Context) ->
+    case z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)) of
+        true ->
+            case find_email_respondent(Answers, Context) of
+                <<>> ->
+                    skip;
+                undefined ->
+                    skip;
+                Email ->
+                    Vars = [
+                        {id, SurveyId},
+                        {answers, PrepAnswers}
+                    ],
+                    z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
+                    ok
+            end;
+        false ->
+            skip
+    end.
+
+find_email_respondent([], Context) ->
+    m_rsc:p_no_acl(z_acl:user(Context), email, Context);
+find_email_respondent([{<<"email">>, Ans}|As], Context) ->
+    Ans1 = z_string:trim(Ans),
+    case z_utils:is_empty(Ans1) of
+        true -> find_email_respondent(As, Context);
+        false -> Ans1
+    end;
+find_email_respondent([_Ans|As], Context) ->
+    find_email_respondent(As, Context).
 
 
 %% @doc Collect all answers, report any missing answers.

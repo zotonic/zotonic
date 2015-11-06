@@ -22,6 +22,10 @@
 
 	 <div class="tab-pane" id="survey-settings">
 	 	{% include "_admin_survey_settings_tab.tpl" show_opened %}
+		<div id="tinyinit2">
+			{% lazy action={script script="z_editor_init();"} action={remove target="tinyinit2"} %}
+		</div>
+		{% include "_admin_survey_edit_email_text.tpl" %}
 	 </div>
 
 	 <div class="tab-pane" id="survey-questions">
