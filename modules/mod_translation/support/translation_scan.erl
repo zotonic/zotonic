@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2012 Marc Worrell
+%% @copyright 2010-2015 Marc Worrell
 %% @doc Parse templates / erlang files in modules, extract all translations.
 
-%% Copyright 2010-2012 Marc Worrell
+%% Copyright 2010-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ merge_args([{Lang,Text}|Rest], Args) ->
 
 
 %% @doc Parse the Erlang module. Extract all translation tags.
-scan_file(".erl", File) ->
+scan_file(<<".erl">>, File) ->
     case epp:open(File, [z_utils:lib_dir(include)]) of
         {ok, Epp} ->
             parse_erl(File, Epp);
@@ -77,10 +77,9 @@ scan_file(".erl", File) ->
             []
     end;
 
-
 %% @doc Parse the template in the file. Extract all translation tags.
-scan_file(".tpl", File) ->
-    case parse(File) of
+scan_file(<<".tpl">>, File) ->
+    case parse_file(File) of
         {ok, ParseTree} ->
             extract(ParseTree, [], File);
         {error, Reason} ->
@@ -88,16 +87,15 @@ scan_file(".tpl", File) ->
             []
     end;
 
-
 %% Skip unknown extensions (like ".config")
 scan_file(_Ext, _File) ->
     [].
 
 
-parse(File) when is_list(File) ->  
+parse_file(File) ->  
     case catch file:read_file(File) of
         {ok, Data} ->
-            case parse(Data) of
+            case parse_data(Data) of
                 {ok, Val} ->
                     {ok, Val};
                 Err ->
@@ -105,9 +103,10 @@ parse(File) when is_list(File) ->
             end;
         Error ->
             {error, io_lib:format("reading ~p failed (~p)", [File, Error])}  
-    end;
-parse(Data) when is_binary(Data) ->
-    case erlydtl_scanner:scan(binary_to_list(Data)) of
+    end.
+
+parse_data(Data) when is_binary(Data) ->
+    case erlydtl_scanner:scan(Data) of
         {ok, Tokens} ->
             erlydtl_parser:parse(Tokens);
         Err ->
@@ -132,7 +131,7 @@ extract({auto_id, _}, Acc, _F) -> Acc;
 extract({variable, _}, Acc, _F) -> Acc;
 extract(T, Acc, F) when is_tuple(T) ->
     extract(tl(tuple_to_list(T)), Acc, F);
-extract(N, Acc, _F) when is_integer(N); is_atom(N) ->
+extract(N, Acc, _F) when is_integer(N); is_atom(N); is_binary(N) ->
     Acc.
 
 trans_ext_args([], Acc) ->
