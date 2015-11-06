@@ -62,10 +62,10 @@
 		</div>
 
 		<div class="control-group">
-			<div class="checkbox">
+			<label class="checkbox">
 				<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %} />
 				{_ Send confirmation to respondent (please add a question named <i>email</i>) _}
-			</div>
+			</label>
 		</div>
 
 		{% if m.survey.handlers|length %}
