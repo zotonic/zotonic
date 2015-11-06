@@ -169,9 +169,6 @@ fmt_fileinfo(Finfo, LibDir) ->
 	end,
     lists:foldr(F,[],Finfo).
 
-to_list(L) when is_list(L) -> L;
-to_list(B) when is_binary(B) -> binary_to_list(B).
-   
 write_header(Fd) ->
     file:write(Fd,
 	      "# SOME DESCRIPTIVE TITLE.\n"
