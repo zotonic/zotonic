@@ -414,7 +414,7 @@ msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "İlerleme durmunu “<em>Soru 3/10</em>” gibi göster"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:27
-msgid "Show results to user after completion of survey"
+msgid "Show results to user after completion (only results for multiple choice questions are shown)"
 msgstr "Anket tamamlanınca kullanıcıya sonuçlarını göster"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:75

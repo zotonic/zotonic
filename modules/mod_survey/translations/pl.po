@@ -428,7 +428,7 @@ msgstr ""
 "Pokazuj informacje o postępie badania w postaci \"<em>Pytanie 3/10</em>\""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:27
-msgid "Show results to user after completion of survey"
+msgid "Show results to user after completion (only results for multiple choice questions are shown)"
 msgstr "Po zakończeniu badania pokaż użytkownikowi wyniki."
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:75
