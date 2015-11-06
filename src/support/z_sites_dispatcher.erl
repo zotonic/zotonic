@@ -125,11 +125,11 @@ dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = 
             {ok, {DispatchRule, MatchBindings}} ->
                 trace_final(
                         TracerPid, 
-                        do_dispatch(DispatchRule, Bindings1++fix_match_bindings(MatchBindings, IsDir), Tokens, IsDir, DispReq, ReqDataHost, Context));
+                        do_dispatch_rule(DispatchRule, Bindings1++fix_match_bindings(MatchBindings, IsDir), Tokens, IsDir, DispReq, ReqDataHost, Context));
             fail ->
                 trace_final(
                         TracerPid,
-                        do_dispatch(fail, Bindings1, Tokens, IsDir, DispReq, ReqDataHost, Context))
+                        do_dispatch_fail(Bindings1, Tokens, IsDir, DispReq, ReqDataHost, Context))
         end
     catch
         throw:{stop_request, RespCode} ->
@@ -396,7 +396,7 @@ map_z_language_2(z_language) -> {z_language, {?MODULE, is_bind_language}};
 map_z_language_2(X) -> X.
 
 
-do_dispatch({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, ReqData, Context) ->
+do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, ReqData, Context) ->
     #dispatch{tracer_pid=TracerPid, host=Hostname, protocol=Protocol, path=Path} = DispReq,
     Bindings1 = [ {zotonic_dispatch, DispatchName} | Bindings ],
     trace(TracerPid, 
@@ -430,8 +430,9 @@ do_dispatch({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, Re
               Tokens, Bindings1, 
               ".", proplists:get_value('*', Bindings1, Path)}, z_context:site(Context)}
     end,
-    handle_dispatch_result(DispatchResult, DispReq, ReqData);
-do_dispatch(fail, Bindings, _Tokens, _IsDir, DispReq, ReqData, Context0) ->
+    handle_dispatch_result(DispatchResult, DispReq, ReqData).
+
+do_dispatch_fail(Bindings, _Tokens, _IsDir, DispReq, ReqData, Context0) ->
     trace(DispReq#dispatch.tracer_pid, DispReq#dispatch.path, notify_dispatch, []),
     Context = maybe_set_language(Bindings, Context0),
     Redirect = z_notifier:first(DispReq#dispatch{path=DispReq#dispatch.path}, Context#context{wm_reqdata=ReqData}),
@@ -459,25 +460,36 @@ handle_dispatch_result({redirect_protocol, NewProtocol, NewHost}, _DispReq, ReqD
 
 
 %% Handle possible request rewrite; used when no dispatch rule matched
-handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, ReqDataHost, Context) when is_integer(Id) ->
+handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, ReqDataHost, Context) when is_integer(Id) ->
     %% Retry with the resource's default page uri
     case m_rsc:p_no_acl(Id, default_page_url, Context) of
         undefined ->
             trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id}]),
             {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost};
         DefaultPagePathBin ->
-            DefaultPagePath = binary_to_list(DefaultPagePathBin),
-            trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id},{path,DefaultPagePath}]),
-            case gen_server:call(?MODULE, DispReq#dispatch{path=DefaultPagePath}) of
-                {no_dispatch_match, MatchedHost1, NonMatchedPathTokens1, _} ->
-                    {ok, ReqDataHost1} = webmachine_request:set_metadata(zotonic_host, MatchedHost1, ReqDataHost),
-                    {{no_dispatch_match, MatchedHost1, NonMatchedPathTokens1}, ReqDataHost1};
-                {no_host_match} ->
-                    {{no_dispatch_match, undefined, undefined, []}, undefined};
-                OtherDispatchMatch ->
-                    set_dispatch_path(
-                        handle_dispatch_result(OtherDispatchMatch, DispReq, ReqDataHost),
-                        proplists:get_value(zotonic_dispatch_path, Bindings))
+            trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id},{path,DefaultPagePathBin}]),
+            {Tokens, IsDir} = split_path(DefaultPagePathBin),
+            {TokensRewritten, BindingsRewritten} = dispatch_rewrite(DispReq#dispatch.host, DefaultPagePathBin, Tokens, IsDir, DispReq#dispatch.tracer_pid, Context),
+            BindingsRewritten1 = [
+                {zotonic_dispatch_path, TokensRewritten},
+                {zotonic_host, z_context:site(Context)}
+                | BindingsRewritten
+            ],
+            trace(DispReq#dispatch.tracer_pid, TokensRewritten, try_match, [{bindings, BindingsRewritten1}]),
+            case dispatch_match(TokensRewritten, Context) of
+                {ok, {DispatchRule, MatchBindings}} ->
+                    trace_final(
+                            DispReq#dispatch.tracer_pid, 
+                            set_dispatch_path(
+                                do_dispatch_rule(
+                                            DispatchRule, 
+                                            BindingsRewritten1++fix_match_bindings(MatchBindings, IsDir), 
+                                            Tokens, IsDir, DispReq, ReqDataHost, 
+                                            Context),
+                                DefaultPagePathBin));
+                fail ->
+                    trace(DispReq#dispatch.tracer_pid, undefined, rewrite_nomatch, []),
+                    {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost}
             end
     end;
 handle_rewrite({ok, #dispatch_match{
