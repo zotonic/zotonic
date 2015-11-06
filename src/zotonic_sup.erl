@@ -198,7 +198,7 @@ init_webmachine() ->
     ServerHeader = webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
     application:set_env(webzmachine, server_header, ServerHeader),
     set_webzmachine_default(webmachine_logger_module, z_stats),
-    set_webzmachine_default(error_handler, z_webmachine_error_handler),
+    set_webzmachine_default(error_handler, controller),
     webmachine_sup:start_logger().
 
 set_webzmachine_default(Par, Def) ->

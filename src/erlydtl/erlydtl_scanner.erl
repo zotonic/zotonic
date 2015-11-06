@@ -422,7 +422,7 @@ scan([H | T], Scanned, {SourceRef, Row, Column}, {in_code, Closer}) ->
         digit ->
             scan(T, [{number_literal, {SourceRef, Row, Column}, [H]} | Scanned], {SourceRef, Row, Column + 1}, {in_number, Closer});
         _ ->
-            {error, io_lib:format("Illegal character ~p:~p column ~p", [SourceRef, Row, Column])}
+            {error, io_lib:format("Illegal character ~s:~p column ~p", [SourceRef, Row, Column])}
     end;
 
 scan([H | T], Scanned, {SourceRef, Row, Column}, {in_number, Closer}) ->
@@ -430,7 +430,7 @@ scan([H | T], Scanned, {SourceRef, Row, Column}, {in_number, Closer}) ->
         digit ->
             scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_number, Closer});
         _ ->
-            {error, io_lib:format("Illegal character ~p:~p column ~p", [SourceRef, Row, Column])}
+            {error, io_lib:format("Illegal character ~s:~p column ~p", [SourceRef, Row, Column])}
     end;
 
 scan([H | T], Scanned, {SourceRef, Row, Column}, {in_identifier, Closer}) ->
@@ -440,7 +440,7 @@ scan([H | T], Scanned, {SourceRef, Row, Column}, {in_identifier, Closer}) ->
         digit ->
             scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_identifier, Closer});
         _ ->
-            {error, io_lib:format("Illegal character ~p:~p column ~p", [SourceRef, Row, Column])}
+            {error, io_lib:format("Illegal character ~s:~p column ~p", [SourceRef, Row, Column])}
     end.
 
 

@@ -4,8 +4,8 @@
 
 {% block content %}
 {% if error_code == 403 %}
-	<h1>{_ No Access _}</h1>
-	<p>{_ Sorry, you don’t have access to this page. _}</p>
+  <h1>{_ No Access _}</h1>
+  <p>{_ Sorry, you don’t have access to this page. _}</p>
 {% elseif error_code == 410 %}
   <h1>{_ Gone_}</h1>
   <p>{_ Sorry, this page has been deleted. _}</p>
@@ -13,17 +13,17 @@
   <h1>{_ That page does not exist _}</h1>
   <p><a href="/">{_ Return to the homepage _}</a></p>
 {% else %}
-	<h1>{{ error_code }} {_ error _}</h1>
+  <h1>{{ error_code }} {_ error _}</h1>
 
-	{% if error_erlang %}
-	    <p>{_ Reason _}: <strong>{{ error_erlang|escape }}</strong></p>
-	{% endif %}
-	
-	{% if error_table %}
-	    <h2>{_ Stack trace _}</h2>
-	    
-	    <style type="text/css">
-    	    table {
+  {% if error_erlang %}
+      <p><strong>{{ error_erlang|escape }}</strong></p>
+  {% endif %}
+  
+  {% if error_table %}
+      <h2>{_ Stack trace _}</h2>
+      
+      <style type="text/css">
+          table {
               background-color: transparent;
               border-collapse: collapse;
               border-spacing: 0;
@@ -64,18 +64,18 @@
             .template-error td:nth-child(2) {
                 font-weight: bold;
             }
-	    </style>
-	    
-	    <table class="tablex table-striped" style="border-collapse: transparent; border-spacing: 0;">
-	        <thead>
-    	        <tr>
-    	            <th align="left">{_ Module _}</th>
-    	            <th align="left">{_ Function/ template _}</th>
-    	            <th align="left">{_ Arguments _}</th>
-    	            <th align="left">{_ File _}</th>
-    	        </tr>
-    	    </thead>
-    	    <tbody>
+      </style>
+      
+      <table class="tablex table-striped" style="border-collapse: transparent; border-spacing: 0;">
+          <thead>
+              <tr>
+                  <th align="left">{_ Module _}</th>
+                  <th align="left">{_ Function/ template _}</th>
+                  <th align="left">{_ Arguments _}</th>
+                  <th align="left">{_ File _}</th>
+              </tr>
+          </thead>
+          <tbody>
                 {% for is_template,mod,func,arg,file in error_table %}
                     {% if is_template %}
                     <tr class="template-error">
@@ -94,11 +94,11 @@
                     {% endif %}
                 {% endfor %}
             </tbody>
-	    </table>
-    {% else %}
-        {% if error_dump %}
-    	    <pre>{{ error_dump }}</pre>
-    	{% endif %}
-	{% endif %}
+      </table>
+  {% else %}
+      {% if error_dump %}
+          <pre>{{ error_dump }}</pre>
+      {% endif %}
+  {% endif %}
 {% endif %}
 {% endblock %}
