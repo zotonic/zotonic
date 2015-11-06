@@ -424,7 +424,7 @@ msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Toon voortgang als <em>Vraag 3/10</em>"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:27
-msgid "Show results to user after completion of survey"
+msgid "Show results to user after completion (only results for multiple choice questions are shown)"
 msgstr "Toon de resultaten van de vragenlijst aan de gebruiker aan het eind."
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:75

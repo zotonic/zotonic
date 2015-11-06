@@ -34,7 +34,7 @@
 			        {% else %}
 				        <input type="checkbox" name="survey_show_results" id="survey_show_results" value="1" {% if id.survey_show_results %}checked="checked"{% endif %} />
 			        {% endif %}
-			        {_ Show results to user after completion of survey _}
+			        {_ Show results to user after completion (only results for multiple choice questions are shown) _}
 		        </label>
 		    </div>
             <div class="checkbox">

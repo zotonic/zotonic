@@ -326,7 +326,7 @@ msgid "Show email addresses"
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:27
-msgid "Show results to user after completion of survey."
+msgid "Show results to user after completion (only results for multiple choice questions are shown)."
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:57
