@@ -657,7 +657,7 @@ msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:24
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:24
-msgid "Show results to user after completion of survey"
+msgid "Show results to user after completion (only results for multiple choice questions are shown)"
 msgstr "完成问卷调查后显示结果"
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:83

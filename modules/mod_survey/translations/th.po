@@ -640,7 +640,7 @@ msgstr ""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:24
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:24
-msgid "Show results to user after completion of survey"
+msgid "Show results to user after completion (only results for multiple choice questions are shown)"
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_edit_content.survey.tpl:83
