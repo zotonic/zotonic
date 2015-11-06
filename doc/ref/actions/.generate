@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/scomps/scomp_<mod>_scomp_name.erl
-for f in `find $ZOTONIC_SRC/modules -name action_\*`
+for f in `find $ZOTONIC_SRC/modules -name action_\*.erl`
 do
     read -r mod action <<EOF
 `echo $f | sed -e 's,.*/mod_\([^/]*\).*/action_\1_\(.*\).erl,mod_\1 \2,'`
@@ -27,7 +27,7 @@ ${action//?/=}
 
 EOF
 
-    if [ ! -e $doc -a "$base" != "" ]; then 
+    if [ ! -e $doc -a "$base" != "" ]; then
         echo "New doc: $doc"
         cat <<EOF > $doc
 

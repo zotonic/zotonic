@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-for f in `find $ZOTONIC_SRC/modules -name mod_\* -type d` 
-do 
+for f in `find $ZOTONIC_SRC/modules -name mod_\*.erl -type d` 
+do
 
     dir=${0%/*}
     mod=${f##*/}
@@ -20,7 +20,7 @@ ${mod//?/=}
 
 EOF
 
-    if [ ! -e $doc ]; then 
+    if [ ! -e $doc ]; then
         echo "New doc: $doc"
         cat <<EOF > $doc
 

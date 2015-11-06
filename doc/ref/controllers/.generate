@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/controllers/controller_controller_name.erl
-for f in `find $ZOTONIC_SRC/modules -name controller_\*`
+for f in `find $ZOTONIC_SRC/modules -name controller_\*.erl`
 do
     read -r mod controller <<EOF
 `echo $f | sed -e 's,.*/\(mod_[^/]*\).*/controller_\(.*\).erl,\1 \2,'`
@@ -28,7 +28,7 @@ ${full//?/=}
 
 EOF
 
-    if [ ! -e $doc ]; then 
+    if [ ! -e $doc ]; then
         echo "New doc: $doc"
         cat <<EOF > $doc
 

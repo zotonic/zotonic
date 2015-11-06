@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/validators/validator_validator_name.erl
-for f in `find $ZOTONIC_SRC/modules -name validator_\*`
+for f in `find $ZOTONIC_SRC/modules -name validator_\*.erl`
 do
     read -r mod validator <<EOF
 `echo $f | sed -e 's,.*/mod_\([^/]*\).*/validator_\1_\(.*\).erl,mod_\1 \2,'`
@@ -27,7 +27,7 @@ ${validator//?/=}
 
 EOF
 
-    if [ ! -e $doc ]; then 
+    if [ ! -e $doc ]; then
         echo "New doc: $doc"
         cat <<EOF > $doc
 
