@@ -1,36 +1,54 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}{_ New survey result: _} {{ id.title }}{% endblock %}
+{% block title %}{% if is_result_email %}{_ New survey result: _} {% endif %}{{ id.title }}{% endblock %}
 
 {% block body %}
 
-<p>{_ The following survey has been filled in: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
+{% if is_result_email %}
+	<p>{_ The following survey has been filled in: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
+{% endif %}
 
-<table>
-	<tr>
-		<th>{_ Question _}</th>
-		<th>{_ Answer _}</th>
-	</tr>
-{% for name,ans in answers %}
-    <tr>
-        <td>
-        	<strong>{{ name|escape }}</strong>
-       	</td>
-       	<td>
-    	{% if ans|is_list %}
-	  		{% for v in ans %}
-	       		{% if v /= "" %}{{ v|force_escape|linebreaksbr }}{% if not forloop.last %}<br/>{% endif %}{% endif %}
-		    {% endfor %}
+{% block feedback %}
+	{% if not is_result_email %}
+		{% if id.email_text_html %}
+			{{ id.email_text_html|show_media:"_body_media_mailing.tpl" }}
 		{% else %}
-			{{ ans|force_escape|linebreaksbr }}
+			<p>{_ Thank you for filling in: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
 		{% endif %}
-       	</td>
-    </tr>
+	{% endif %}
+{% endblock %}
+
+<table style="width: 100%; border-collapse: collapse; border-spacing: 0; margin-bottom: 18px;">
+	<tr>
+		<th style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd;">{_ Question _}</th>
+		<th style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd;">{_ Answer _}</th>
+	</tr>
+{% for name, ans in answers %}
+	<tr style="border-top: 1px solid #ccc">
+		<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd;">
+			{% if ans.question.prompt %}
+				{{ ans.question.prompt }}
+			{% else %}
+				{{ name|force_escape }}
+			{% endif %}
+		</td>
+		<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd;">
+			{% if ans.answer_text|is_list %}
+				{% for v in ans.answer_text %}
+					{{ v }}{% if not forloop.last %}<br/>{% endif %}
+				{% endfor %}
+			{% else %}
+				{{ ans.answer_text }}
+			{% endif %}
+		</td>
+	</tr>
 {% endfor %}
 </table>
 
 {% block edit_answer %}
-	<p><a href="{% url admin_edit_rsc id=id use_absolute_url %}">{_ Check the answer in the admin. _}</a></p>
+	{% if is_result_email and id.is_editable and m.acl.use.mod_admin %}
+		<p><a href="{% url admin_edit_rsc id=id use_absolute_url %}">{_ Check the answer in the admin. _}</a></p>
+	{% endif %}
 {% endblock %}
 
 {% endblock %}
