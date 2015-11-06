@@ -42,7 +42,7 @@
                       "42355894adeb1fef9ec7b31642a9707c86dd0f23"}},
        {webzmachine,".*",
                     {git,"git://github.com/zotonic/webzmachine.git",
-                         "cfbdd16f4f6745d6f21355efe713406c5816f1e7"}},
+                         "da50cc790667b25cbe73f70fea98a4f6c0c07cba"}},
        {z_stdlib,".*",
                  {git,"git://github.com/zotonic/z_stdlib.git",
                       "245a46e089ffa5c591ea2b4c891e0ee3a488e632"}},
