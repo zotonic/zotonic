@@ -1619,28 +1619,7 @@ scomp_ast(ScompName, Args, All, Context, TreeWalker) ->
                     z_context_ast(Context)
                 ]
             ),
-    RenderedAst = erl_syntax:variable("Rendered"),
-    CleanedAst = erl_syntax:application(
-                erl_syntax:atom(z_context),
-                erl_syntax:atom(prune_for_template),
-                [RenderedAst]
-            ),
-    OkAst = erl_syntax:clause(
-                      [erl_syntax:tuple([erl_syntax:atom(ok), RenderedAst])], 
-                      none,
-                      [CleanedAst]),
-    ReasonAst = erl_syntax:variable("Reason"),
-    ErrStrAst = erl_syntax:application(
-                	  erl_syntax:atom(io_lib),
-                	  erl_syntax:atom(format),
-                	  [erl_syntax:string("error: ~p"), erl_syntax:list([ReasonAst])]),
-    ErrorAst = erl_syntax:clause(
-                	 [erl_syntax:tuple([erl_syntax:atom(error), ReasonAst])], 
-                	 none,
-                	 [ErrStrAst]),
-    CallAst = erl_syntax:case_expr(AppAst, [OkAst, ErrorAst]),
-    {{CallAst, #ast_info{}}, TreeWalker1}.
-
+    {{AppAst, #ast_info{}}, TreeWalker1}.
 
 scomp_ast_list_args(Args, Context, TreeWalker) ->
     {ArgsAst, TreeWalker1}= interpreted_args(Args, Context, TreeWalker),

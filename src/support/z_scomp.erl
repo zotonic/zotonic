@@ -37,7 +37,7 @@ render(ScompName, Args, Vars, Context) ->
         {error, enoent} ->
             %% No such scomp, as we can switch on/off functionality we do a quiet skip
             lager:info("No scomp enabled for \"~p\"", [ScompName]),
-            {ok, <<>>}
+            <<>>
     end.
 
 render_optional(ScompName, Args, Vars, Context) ->
@@ -46,21 +46,16 @@ render_optional(ScompName, Args, Vars, Context) ->
             ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context), 
             render_scomp_module(ModuleName, ['$optional'|Args], Vars, ScompContext, Context);
         {error, enoent} ->
-            {ok, <<>>}
+            <<>>
     end.
 
 render_all(ScompName, Args, Vars, Context) ->
-    case z_module_indexer:find_all(scomp, ScompName, Context) of
-        [] -> 
-            [];
-        ModuleNames when is_list(ModuleNames) ->
-            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context),
-            Args1 = [{'$all', true} | Args],
-            RenderFun = fun(#module_index{erlang_module=ModuleName}) ->
-                            {ok, Result} = render_scomp_module(ModuleName, Args1, Vars, ScompContext, Context),
-                            Result
-                        end,
-            [ RenderFun(ModuleName) || ModuleName <- ModuleNames ]
+    case z_module_indexer:find(scomp, ScompName, Context) of
+        {ok, #module_index{erlang_module=ModuleName}} ->
+            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context), 
+            render_scomp_module(ModuleName, [{'$all', true}|Args], Vars, ScompContext, Context);
+        {error, enoent} ->
+            <<>>
     end.
 
 render_scomp_module(ModuleName, Args, Vars, ScompContext, Context) ->
@@ -68,20 +63,19 @@ render_scomp_module(ModuleName, Args, Vars, ScompContext, Context) ->
     case vary(ModuleName, Args, ScompContext) of
         nocache ->
             case ModuleName:render(Args, Vars, ScompContextWM) of
-                {ok, Result} -> {ok, z_context:prune_for_template(Result)};
+                {ok, Result} -> z_context:prune_for_template(Result);
                 {error, Reason} -> throw({error, Reason})
             end;
         {CachKeyArgs, MaxAge, Varies} ->
             Key = key(ModuleName, CachKeyArgs, ScompContextWM),
             RenderFun =  fun() ->
                             case ModuleName:render(Args, Vars, ScompContextWM) of
-                                {ok, Result} -> {ok, z_context:prune_for_template(Result)};
+                                {ok, Result} -> z_context:prune_for_template(Result);
                                 {error, Reason} -> throw({error, Reason})
                             end
                          end,
             z_depcache:memo(RenderFun, Key, MaxAge, Varies, Context)
     end.
-
 
 %% @doc Create an unique key for the scomp and the visibility level it is rendered for
 %% @spec key(atom(), proplist(), context()) -> term()
