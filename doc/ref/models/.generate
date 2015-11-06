@@ -3,7 +3,7 @@
 # Get core models
 
 # /path/to/zotonic/src/models/m_model_name.erl
-for f in $ZOTONIC_SRC/src/models/m_*
+for f in $ZOTONIC_SRC/src/models/m_*.erl
 do
     dir=${0%/*}
     mod=core
@@ -34,7 +34,7 @@ ${title//?/=}
 
 EOF
 
-    if [ ! -e $doc ]; then 
+    if [ ! -e $doc ]; then
         echo "New doc: $doc"
         cat <<EOF > $doc
 
@@ -77,7 +77,7 @@ ${title//?/=}
 
 EOF
 
-    if [ ! -e $doc ]; then 
+    if [ ! -e $doc ]; then
         echo "New doc: $doc"
         cat <<EOF > $doc
 
