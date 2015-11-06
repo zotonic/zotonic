@@ -69,9 +69,9 @@ write_entries(Fd, L) ->
     F = fun({Id,Trans,Finfo}) ->
             io:format(Fd, "~n#: ~s~n", [fmt_fileinfo(Finfo, LibDir)]),
     		file:write(Fd, "msgid \"\"\n"),
-    		write_pretty(Id, Fd),
+    		write_pretty(to_list(Id), Fd),
     		file:write(Fd, "msgstr \"\"\n"),
-    		write_pretty(Trans, Fd)
+    		write_pretty(to_list(Trans), Fd)
     	end,
     lists:foreach(F, L).
 
@@ -159,7 +159,8 @@ split_string([], _End, _N, Acc) ->
 
 
 fmt_fileinfo(Finfo, LibDir) ->
-    F = fun({Fname,LineNo}, Acc) ->
+    F = fun({Fname0,LineNo}, Acc) ->
+        Fname = to_list(Fname0),
         Fname1 = case lists:prefix(LibDir, Fname) of
                     true -> [$.|lists:nthtail(length(LibDir), Fname)];
                     false -> Fname
@@ -167,8 +168,9 @@ fmt_fileinfo(Finfo, LibDir) ->
 		Fname1 ++ ":" ++ to_list(LineNo) ++ [$\s|Acc]
 	end,
     lists:foldr(F,[],Finfo).
-		
 
+to_list(L) when is_list(L) -> L;
+to_list(B) when is_binary(B) -> binary_to_list(B).
    
 write_header(Fd) ->
     file:write(Fd,

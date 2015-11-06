@@ -36,13 +36,17 @@ render(Params, _Vars, Context) ->
     PotFile = filename:join([BasePath, "translations", "template", z_convert:to_list(Module) ++ ".pot"]),
     case filelib:is_regular(PotFile) of
         true ->
-            TotalLines = length(z_gettext:parse_po(PotFile)),
+            TotalLines = length(z_gettext:parse_pot(PotFile)),
             PoFile = filename:join([BasePath, "translations", z_convert:to_list(Lang) ++ ".po"]),
             case filelib:is_regular(PoFile) of
                 true ->
                     C = count_translated(PoFile),
                     Cls = erlang:min(100, trunc(((C/TotalLines) * 100)/20)*20),
-                    {ok, ["<td class=\"perc perc-", z_convert:to_list(Cls), "\"><span>", z_convert:to_list(C), " / ", z_convert:to_list(TotalLines), "</span></td>"]};
+                    {ok, [
+                        "<td class=\"perc perc-", z_convert:to_list(Cls), "\"><span>", 
+                        z_convert:to_list(C), " / ", z_convert:to_list(TotalLines), 
+                        "</span></td>"
+                    ]};
                 false ->
                     {ok, ["<td class=\"perc perc-0\"><span>0 / ", z_convert:to_list(TotalLines), "</span></td>"]}
             end;
@@ -53,11 +57,10 @@ render(Params, _Vars, Context) ->
 
 count_translated(File) ->
     lists:foldl(fun(Line, Total) ->
-                        is_translated(Line) + Total
+                    is_translated(Line) + Total
                 end,
                 0,
                 z_gettext:parse_po(File)).
-
 
 is_translated({header, _}) -> 1;
 is_translated({_, header}) -> 0;

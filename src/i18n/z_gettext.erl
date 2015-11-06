@@ -37,7 +37,7 @@
 %%%----------------------------------------------------------------------
 -module(z_gettext).
 
--export([parse_po/1, parse_po_bin/1, test/0]).
+-export([parse_pot/1, parse_po/1, parse_po_bin/1, parse_po_bin/2, test/0]).
 
 
 -define(GETTEXT_HEADER_INFO, header).
@@ -47,20 +47,29 @@
 %%% Parse a PO-file
 %%% --------------------------------------------------------------------
 
+parse_pot(Fname) ->
+    parse_po_1(Fname, false).
+
 parse_po(Fname) ->
+    parse_po_1(Fname, true).
+
+parse_po_1(Fname, DropEmpty) ->
     case file:read_file(Fname) of
         {ok, Bin} -> 
-            parse_po_bin(Bin);
+            parse_po_bin(Bin, DropEmpty);
         {error, _} = Error ->
             lager:error("Error reading po file ~p: ~p", [Fname, Error]),
             []
     end.
 
 parse_po_bin(Bin) ->
+    parse_po_bin(Bin, true).
+
+parse_po_bin(Bin, DropEmpty) ->
     lists:reverse(
       lists:foldl(fun ({<<>>, R}, AccIn) ->
                           [{?GETTEXT_HEADER_INFO, R}|AccIn];
-                      ({_, <<>>}, AccIn) ->
+                      ({_, <<>>}, AccIn) when DropEmpty ->
                           AccIn;
                       (R, AccIn) ->
                           [R|AccIn]
