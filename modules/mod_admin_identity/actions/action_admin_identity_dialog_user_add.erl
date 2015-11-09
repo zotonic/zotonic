@@ -36,7 +36,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
-    case z_acl:is_allowed(insert, identity, Context) of
+    case z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             Vars = [
                 {on_success, OnSuccess}
@@ -49,7 +49,7 @@ event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
 %% @doc Delete an username from an user.
 %% @spec event(Event, Context1) -> Context2
 event(#submit{message={user_add, Props}}, Context) ->
-    case z_acl:is_allowed(insert, identity, Context) of
+    case z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             NameFirst = z_context:get_q_validated("name_first", Context),
             NamePrefix = z_context:get_q("surprefix", Context),
