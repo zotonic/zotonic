@@ -655,10 +655,14 @@ props_filter([{content_group, undefined}|T], Acc, Context) ->
 props_filter([{content_group, CgName}|T], Acc, Context) ->
     case m_rsc:rid(CgName, Context) of
         undefined ->
-            props_filter(T, [{content_group_id, undefined}|Acc], Context);
+            lager:error("[~p] Ignoring unknown content group '~p' in update.",
+                        [z_context:site(Context), CgName]),
+            props_filter(T, Acc, Context);
         CgId ->
             props_filter([{content_group_id, CgId}|T], Acc, Context)
     end;
+props_filter([{content_group_id, undefined}|T], Acc, Context) ->
+    props_filter(T, [{content_group_id, undefined}|Acc], Context);
 props_filter([{content_group_id, CgId}|T], Acc, Context) ->
     CgId1 = m_rsc:rid(CgId, Context),
     case m_rsc:is_a(CgId1, content_group, Context) of
