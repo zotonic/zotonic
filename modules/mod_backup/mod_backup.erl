@@ -421,13 +421,11 @@ archive_cmd() ->
 db_dump_cmd() ->
     z_convert:to_list(z_config:get(pg_dump, "pg_dump")).
 
-
 %% @doc Check if we can make backups, the configuration is ok
 check_configuration() ->
-    Which = fun(Cmd) -> filelib:is_regular(z_string:trim_right(os:cmd("which " ++ z_utils:os_escape(Cmd)))) end,
-    Db = Which(db_dump_cmd()),
-    Tar = Which(archive_cmd()),
-    [{ok, Db and Tar},
+    Db = os:find_executable(db_dump_cmd()),
+    Tar = os:find_executable(archive_cmd()),
+    [{ok, is_list(Db) and is_list(Tar)},
      {db_dump, Db},
      {archive, Tar}].
 
