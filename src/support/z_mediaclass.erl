@@ -40,7 +40,7 @@
 ]).
 
 -record(state, {context, last=[]}).
--define(MEDIACLASS_FILENAME, "mediaclass.config").
+-define(MEDIACLASS_FILENAME, <<"mediaclass.config">>).
 -define(RESCAN_PERIOD, 10000).
 
 -include("zotonic.hrl").
