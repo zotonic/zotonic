@@ -7,7 +7,7 @@
 {% block search_placeholder %}{_ Search users _}{% endblock %}
 
 {% block content %}
-    {% with m.acl.is_admin as is_users_editable %}
+    {% with m.acl.is_allowed.use.mod_admin_identity as is_users_editable %}
 
     <div class="admin-header">
         <h2>
