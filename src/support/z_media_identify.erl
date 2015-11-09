@@ -120,10 +120,17 @@ maybe_identify_extension(Result, _OriginalFilename) ->
 -spec identify_file_os(win32|unix, File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
 identify_file_os(win32, _File, OriginalFilename) ->
     {ok, [{mime, guess_mime(OriginalFilename)}]};
-
 identify_file_os(unix, File, OriginalFilename) ->
-    SafeFile = z_utils:os_filename(File),
-    Mime = z_string:trim(os:cmd("file -b --mime-type "++SafeFile)),
+    identify_file_unix(os:find_executable("file"), File, OriginalFilename).
+
+identify_file_unix(false, _File, _OriginalFilename) ->
+    lager:error("Please install 'file' for identifying the type of uploaded files."),
+    {error, "'file' not installed"};
+identify_file_unix(Cmd, File, OriginalFilename) ->
+    Mime = z_string:trim(
+                os:cmd(z_utils:os_filename(Cmd)
+                        ++" -b --mime-type "
+                        ++ z_utils:os_filename(File))),
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
         nomatch -> 
             case Mime of 
@@ -212,11 +219,23 @@ identify_file_os(unix, File, OriginalFilename) ->
 %% @doc Try to identify the file using image magick
 -spec identify_file_imagemagick(win32|unix, Filename::string(), MimeFile::string()|undefined) -> {ok, Props::list()} | {error, term()}.
 identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
+    identify_file_imagemagick_1(os:find_executable("identify"), OsFamily, ImageFile, MimeFile).
+
+identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
+    lager:error("Please install ImageMagick 'identify' for identifying the type of uploaded files."),
+    {error, "'identify' not installed"};
+identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
-    Result    = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2> " ++ devnull(OsFamily)),
+    Result    = os:cmd(z_utils:os_filename(Cmd)
+                       ++" -quiet "
+                       ++CleanedImageFile
+                       ++" 2> " ++ devnull(OsFamily)),
     case Result of
         [] ->
-            Err = os:cmd("identify -quiet " ++ CleanedImageFile ++ " 2>&1"),
+            Err = os:cmd(z_utils:os_filename(Cmd)
+                         ++" -quiet "
+                         ++CleanedImageFile
+                         ++" 2>&1"),
             lager:info("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
             {error, "identify error: " ++ Err};
         _ ->
@@ -391,12 +410,15 @@ exif_orientation(InFile) ->
     end.
 
 exif_orientation_cmd(File) ->
-    exif_orientation_cmd_1(os:type(), File).
+    exif_orientation_cmd_1(os:find_executable("exif"), os:type(), File).
 
-exif_orientation_cmd_1({win32, _}, File) ->
+exif_orientation_cmd_1(false, _OS, _File) ->
+    lager:error("Install 'exif' to determine the orientation of image files."),
+    [];
+exif_orientation_cmd_1(_Cmd, {win32, _}, File) ->
     os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(File));
-exif_orientation_cmd_1({_Unix, _}, File) ->
-    os:cmd("LANG=en exif -m -t Orientation " ++ z_utils:os_filename(File)).
+exif_orientation_cmd_1(Cmd, {_Unix, _}, File) ->
+    os:cmd("LANG=en "++z_utils:os_filename(Cmd)++" -m -t Orientation " ++ z_utils:os_filename(File)).
 
 %% @doc Given a mime type, return whether its file contents is already compressed or not.
 -spec is_mime_compressed(string()) -> boolean().

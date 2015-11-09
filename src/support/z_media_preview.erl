@@ -50,7 +50,7 @@
 %% @spec convert(InFile, OutFile, Filters, Context) -> ok | {error, Reason}
 %% @doc Convert the Infile to an outfile with a still image using the filters.
 convert(InFile, InFile, _, _Context) ->
-    lager:error("convert will overwrite input file ~p", [InFile]),
+    lager:error("Image convert will overwrite input file ~p", [InFile]),
     {error, will_overwrite_infile};
 convert(InFile, OutFile, Filters, Context) ->
     convert(InFile, InFile, OutFile, Filters, Context).
@@ -64,7 +64,7 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                 true ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
-                            convert_1(InFile, OutFile, Mime, FileProps, FiltersExpanded);
+                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded);
                         {error, _} = Error ->
                             lager:warning("cannot expand mediaclass for ~p (~p)", [Filters, Error]),
                             Error
@@ -77,7 +77,10 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
             {error, Reason}
     end.
 
-convert_1(InFile, OutFile, Mime, FileProps, Filters) ->
+convert_1(false, _InFile, _OutFile, _Mime, _FileProps, _Filters) ->
+    lager:error("Install ImageMagick 'convert' to generate previews of images."),
+    {error, "'convert' not installed"};
+convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters, OutMime),
     z_utils:assert(EndWidth  < ?MAX_WIDTH, image_too_wide),
@@ -85,7 +88,7 @@ convert_1(InFile, OutFile, Mime, FileProps, Filters) ->
     file:delete(OutFile),
     ok = filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
-        "convert ",
+        z_utils:os_filename(ConvertCmd), " ",
         opt_density(FileProps),
         z_utils:os_filename(InFile++infile_suffix(Mime)), " ",
         lists:flatten(z_utils:combine(32, CmdArgs)), " ",
