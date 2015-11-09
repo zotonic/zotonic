@@ -294,9 +294,9 @@ send_message(Message) ->
 %% @doc send message to the user
 send_message(_OS, "") ->
     undefined;
-send_message({unix, linux}, Msg) ->
-    os:cmd("which notify-send && notify-send \"Zotonic\" " ++ z_utils:os_escape(Msg));
 send_message({unix, darwin}, Msg) ->
     os:cmd("which terminal-notifier && terminal-notifier -title Zotonic  -message " ++ z_utils:os_escape(Msg));
+send_message({unix, _Arch}, Msg) ->
+    os:cmd("which notify-send && notify-send \"Zotonic\" " ++ z_utils:os_escape(Msg));
 send_message(_OS, _Msg) ->
     undefined.

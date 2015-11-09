@@ -44,20 +44,16 @@
 %% @doc Starts the server
 -spec start_link() -> {ok, pid()} | ignore | {error, term()}.
 start_link() ->
-    case os:cmd("which inotifywait 2>/dev/null") of
-        [] ->
+    case os:find_executable("inotifywait") of
+        false ->
             {error, "inotifywait not found"};
-        Output ->
-            Executable = hd(string:tokens(Output, "\n")),
+        Executable ->
             gen_server:start_link({local, ?MODULE}, ?MODULE, [Executable], [])
     end.
 
 -spec is_installed() -> boolean().
 is_installed() ->
-    case os:cmd("which inotifywait 2>/dev/null") of
-        [] -> false;
-        _ -> true
-    end.
+    os:find_executable("inotifywait") =/= false.
 
 %%====================================================================
 %% gen_server callbacks

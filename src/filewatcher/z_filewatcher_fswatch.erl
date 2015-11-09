@@ -43,20 +43,16 @@
 %% @doc Starts the server
 -spec start_link() -> {ok, pid()} | ignore | {error, term()}.
 start_link() ->
-    case os:cmd("which fswatch 2>/dev/null") of
-        [] ->
+    case os:find_executable("fswatch") of
+        false ->
             {error, "fswatch not found"};
-        Output ->
-            Executable = hd(string:tokens(Output, "\n")),
+        Executable ->
             gen_server:start_link({local, ?MODULE}, ?MODULE, [Executable], [])
     end.
 
 -spec is_installed() -> boolean().
 is_installed() ->
-    case os:cmd("which fswatch 2>/dev/null") of
-        [] -> false;
-        _ -> true
-    end.
+    os:find_executable("fswatch") =/= false.
 
 %%====================================================================
 %% gen_server callbacks
