@@ -72,30 +72,67 @@ expand_module(State, UserTree, Context) ->
     Modules = z_module_manager:active(Context),
     Modules1 = [ {<<>>, Modules} | [ {z_convert:to_binary(M),[M]} || M <- Modules ] ],
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(module, State, Context)),
-    Rules = expand_rule_rows(module, Modules1, RuleRows),
+    Rules = expand_rule_rows(module, Modules1, RuleRows, Context),
     [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree) ].
-
 
 -spec expand_rsc(edit|publish, list(), list(), #context{}) -> list(rsc_rule()).
 expand_rsc(State, GroupTree, UserTree, Context) ->
     CategoryTree = m_category:menu(Context),
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(rsc, State, Context)),
     Cs = [{undefined, tree_ids(CategoryTree)} | tree_expand(CategoryTree) ],
-    Rules = expand_rule_rows(category_id, Cs, RuleRows),
+    Rules = expand_rule_rows(category_id, Cs, RuleRows, Context),
     expand_rules(GroupTree, Rules, UserTree).
 
-expand_rule_rows(Prop, Cs, RuleRows) ->
-    lists:flatten([ expand_rule_row(Prop, RuleRow, Cs) || RuleRow <- RuleRows ]).
+expand_rule_rows(category_id, Cs, RuleRows, Context) ->
+    NonMetaCs = remove_meta_category(Cs, Context),
+    lists:flatten([ expand_rule_row(category_id, RuleRow, Cs, NonMetaCs, Context) || RuleRow <- RuleRows ]);
+expand_rule_rows(Prop, Cs, RuleRows, Context) ->
+    lists:flatten([ expand_rule_row(Prop, RuleRow, Cs, Cs, Context) || RuleRow <- RuleRows ]).
 
-expand_rule_row(Prop, Row, Cs) ->
+remove_meta_category(Cs, Context) ->
+    case m_category:name_to_id(meta, Context) of
+        {ok, MetaId} ->
+            MetaIds = [ MetaId | proplists:get_value(MetaId, Cs, [])],
+            Cs1 = lists:filter(fun({Id,_SubIds}) ->
+                                    not lists:member(Id, MetaIds)
+                               end,
+                               Cs),
+            [ {Id, SubIds -- MetaIds} || {Id, SubIds} <- Cs1 ];
+        {error, _} ->
+            Cs
+    end.
+
+expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) ->
     Actions = [ Act || {Act,true} <- proplists:get_value(actions, Row, []) ],
     IsAllow = not proplists:get_value(is_block, Row),
     ContentGroupId = proplists:get_value(content_group_id, Row),
     UserGroupId = proplists:get_value(acl_user_group_id, Row),
     IsOwner = proplists:get_value(is_owner, Row, false),
     PropId = proplists:get_value(Prop, Row),
-    CIds = proplists:get_value(PropId, Cs, [PropId]),
-    [ {ContentGroupId, {CId, Action, IsOwner, IsAllow}, UserGroupId} || CId <- CIds, Action <- Actions ].
+    ContentGroupName = m_rsc:p_no_acl(ContentGroupId, name, Context),
+    CIdsEdit = maybe_filter_meta(ContentGroupName, Prop, PropId, Cs, NonMetaCs, Context),
+    CIdsView = proplists:get_value(PropId, Cs, [PropId]),
+    lists:flatten(
+        [ 
+            [
+              {ContentGroupId, {CId, Action, IsOwner, IsAllow}, UserGroupId} 
+              || CId <- select_cids(Action, CIdsEdit, CIdsView)
+            ]
+            || Action <- Actions 
+        ]).
+
+select_cids(view, _Edit, View) -> View;
+select_cids(_Action, Edit, _View) -> Edit.
+
+maybe_filter_meta(<<"system_content_group">>, category_id, PropId, Cs, _NonMetaCs, _Context) ->
+    proplists:get_value(PropId, Cs, [PropId]);
+maybe_filter_meta(_ContentGroupName, category_id, PropId, Cs, NonMetaCs, Context) ->
+    case m_rsc:is_a(PropId, meta, Context) of
+        true -> proplists:get_value(PropId, Cs, [PropId]);
+        false -> proplists:get_value(PropId, NonMetaCs, [PropId])
+    end;
+maybe_filter_meta(_ContentGroupName, _Prop, PropId, Cs, _NonMetaCs, _Context) ->
+    proplists:get_value(PropId, Cs, [PropId]).
 
 %% @doc Given two id lists, return all possible combinations.
 expand_rules(TreeA, Rules, TreeB) ->
