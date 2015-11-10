@@ -71,7 +71,7 @@ expand_rsc(State, Context) ->
 expand_module(State, UserTree, Context) ->
     Modules = z_module_manager:active(Context),
     Modules1 = [ {<<>>, Modules} | [ {z_convert:to_binary(M),[M]} || M <- Modules ] ],
-    RuleRows = m_acl_rule:all_rules(module, State, Context),
+    RuleRows = resort_deny_rules(m_acl_rule:all_rules(module, State, Context)),
     Rules = expand_rule_rows(module, Modules1, RuleRows),
     [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree) ].
 
@@ -79,7 +79,7 @@ expand_module(State, UserTree, Context) ->
 -spec expand_rsc(edit|publish, list(), list(), #context{}) -> list(rsc_rule()).
 expand_rsc(State, GroupTree, UserTree, Context) ->
     CategoryTree = m_category:menu(Context),
-    RuleRows = m_acl_rule:all_rules(rsc, State, Context),
+    RuleRows = resort_deny_rules(m_acl_rule:all_rules(rsc, State, Context)),
     Cs = [{undefined, tree_ids(CategoryTree)} | tree_expand(CategoryTree) ],
     Rules = expand_rule_rows(category_id, Cs, RuleRows),
     expand_rules(GroupTree, Rules, UserTree).
@@ -150,6 +150,32 @@ expand_group_path([{Id, Subs}|Rest], Path, Acc) ->
     Acc1 = [{Id, Path1}|Acc],
     Acc2 = expand_group_path(Subs, Path1, Acc1),
     expand_group_path(Rest, Path, Acc2).
+
+
+% Bubble all deny rules after the allow rules for a specific user group
+resort_deny_rules(Rs) ->
+    resort_deny_rules(Rs, undefined, [], []).
+
+resort_deny_rules([], _GroupId, DenyAcc, Acc) ->
+    lists:reverse(DenyAcc ++ Acc);
+resort_deny_rules([R|Rs], GroupId, DenyAcc, Acc) ->
+    case proplists:get_value(acl_user_group_id, R) of
+        GroupId ->
+            case proplists:get_value(is_block, R) of
+                true ->
+                    resort_deny_rules(Rs, GroupId, [R|DenyAcc], Acc);
+                false ->
+                    resort_deny_rules(Rs, GroupId, DenyAcc, [R|Acc])
+            end;
+        NewGroupId ->
+            Acc1 = DenyAcc ++ Acc,
+            case proplists:get_value(is_block, R) of
+                true ->
+                    resort_deny_rules(Rs, NewGroupId, [R], Acc1);
+                false ->
+                    resort_deny_rules(Rs, NewGroupId, [], [R|Acc1])
+            end
+    end.
 
 test() ->
     [] = tree_expand([]),
