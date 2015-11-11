@@ -49,7 +49,7 @@
 scomp_viewer(undefined, _Options, _Context) ->
     <<>>;
 scomp_viewer(IdOrName, Options, Context) ->
-    case url(IdOrName, Options, Context) of
+    case viewer(IdOrName, Options, Context) of
         {ok, Rendered} ->
             Rendered;
         {error, Reason} ->
@@ -62,7 +62,7 @@ scomp_viewer(IdOrName, Options, Context) ->
 scomp_tag(undefined, _Options, _Context) ->
     <<>>;
 scomp_tag(IdOrName, Options, Context) ->
-    case url(IdOrName, Options, Context) of
+    case tag(IdOrName, Options, Context) of
         {ok, Rendered} ->
             Rendered;
         {error, Reason} ->
