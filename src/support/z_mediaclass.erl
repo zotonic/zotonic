@@ -257,7 +257,7 @@ collect_files([UAClass|Rest], Acc, Context) ->
 
 
 reindex_files(Files, Site) ->
-    Tag = now(),
+    Tag = make_ref(),
     MCs = lists:flatten([ expand_file(MUP) || MUP <- Files ]),
     ByModulePrio = prio_sort(MCs),
     % Insert least prio first, later overwrite with higher priority modules
@@ -330,7 +330,12 @@ consult_file(Path) ->
 
 %% @doc Remove all ets entries for this host with an old tag
 cleanup_ets(Tag, Site) ->
-    cleanup_ets_1(ets:first(?MEDIACLASS_INDEX), Tag, Site, []).
+    ets:safe_fixtable(?MEDIACLASS_INDEX, true),
+    try
+        cleanup_ets_1(ets:first(?MEDIACLASS_INDEX), Tag, Site, [])
+    after
+        ets:safe_fixtable(?MEDIACLASS_INDEX, false)
+    end.
     
     cleanup_ets_1('$end_of_table', _Tag, _Site, Acc) ->
         [ ets:delete(?MEDIACLASS_INDEX, K) || K <- Acc ];
