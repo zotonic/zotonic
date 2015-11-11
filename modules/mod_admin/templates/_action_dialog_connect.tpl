@@ -7,8 +7,11 @@ params:
 - subject_id
 - tabs_enabled (optional): list of tab names: ["new", "depiction", "find",  "upload", "url"]
 - tab (optional)
+
+find params:
 - predicate (optional) (atom)
-- delegate (optional)
+- delegate (optional) (atom)
+- category (optional) (string)
 #}
 {% with callback|default:q.callback|default:"window.zAdminConnectDone" as callback %}
 {% with language|default:q.language|default:z_language as language %}
