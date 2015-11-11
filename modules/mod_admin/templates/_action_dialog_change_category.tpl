@@ -4,6 +4,7 @@ id
 is_editable
 cat_id
 #}
+<p class="text-muted">{_ Category name: _} {{ cat_id.name }}</p>
 
 <h4>{_ About categories _}</h4>
 <p>{_ Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle. _}</p>
@@ -16,7 +17,7 @@ cat_id
 {% if is_editable %}
     {% wire id=#form type="submit" postback="rscform" action={dialog_close} delegate="controller_admin_edit" %}
     <form id="{{ #form }}" method="POST" action="postback" class="form">
-        <fieldset class="form-horizontal"> 
+        <fieldset class="form-horizontal">
 
             <input type="hidden" name="id" value="{{ id }}" />
 

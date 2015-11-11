@@ -38,7 +38,7 @@ msgstr ""
 "naam</strong> (bv. Hendricus), <strong>Voorvoegsel</strong> (bv. van\n"
 "de), en <strong>Achternaam</strong> (bv. Ven)."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
 msgid "About categories"
 msgstr "Over categorieën"
 
@@ -99,7 +99,7 @@ msgstr "Alle categorieën"
 msgid "All Content"
 msgstr "Alle inhoud"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:37
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:40
 msgid "All day"
 msgstr "Gehele dag"
 
@@ -165,7 +165,7 @@ msgstr "Naam blok"
 msgid "Block quote"
 msgstr "Citaat"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:30
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
@@ -185,6 +185,10 @@ msgstr "Annuleren"
 msgid "Category"
 msgstr "Categorie"
 
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
+msgid "Category name:"
+msgstr "Naam categorie:"
+
 #: modules/mod_admin/templates/_admin_edit_header.tpl:31
 #: modules/mod_admin/templates/_admin_edit_header.tpl:34
 msgid "Category:"
@@ -194,7 +198,7 @@ msgstr "Categorie:"
 msgid "Change category"
 msgstr "Verander categorie"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:24
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:26
 msgid "Change the category of this page"
 msgstr "Verander de categorie van deze pagina"
 
@@ -294,6 +298,10 @@ msgstr ""
 msgid "Delete this page."
 msgstr "Verwijder deze pagina."
 
+#: modules/mod_admin/templates/_admin_edit_js.tpl:20
+msgid "Deleted."
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:49
 msgid "Dependent"
 msgstr "Afhankelijk"
@@ -364,7 +372,7 @@ msgstr ""
 "Elke pagina kan een datum-bereik hebben. Bijvoorbeeld als de pagina een "
 "evenement voorstelt."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:10
 msgid ""
 "Every page is categorized in exactly one category. The category defines what "
 "the page represents. For example an event, a product or a person. The "
@@ -425,7 +433,7 @@ msgstr ""
 msgid "Flush system caches"
 msgstr "Flush systeemcache"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:52
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
 msgid "From"
 msgstr "Van"
 
@@ -454,7 +462,7 @@ msgstr ""
 "zotonic.com/docs/latest/manuals/datamodel/search.html\">documentatie over "
 "zoekopdrachten</a> op de Zotonic website."
 
-#: modules/mod_admin/templates/admin_media.tpl:37
+#: modules/mod_admin/templates/admin_media.tpl:38
 msgid "Info"
 msgstr "Informatie"
 
@@ -595,7 +603,7 @@ msgstr "Bewerkt op"
 msgid "Modified:"
 msgstr "Bewerkt:"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:11
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
 msgid "More like this"
 msgstr "Vergelijkbare pagina's"
 
@@ -624,11 +632,11 @@ msgstr "Geen gekoppelde afbeeldingen."
 msgid "No features are enabled for this meta-resource."
 msgstr "Deze meta-resource bevat geen geactiveerde features."
 
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:88
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:86
 msgid "No items"
 msgstr "Geen items"
 
-#: modules/mod_admin/templates/admin_media.tpl:85
+#: modules/mod_admin/templates/admin_media.tpl:86
 msgid "No media found."
 msgstr "Geen media gevonden."
 
@@ -695,7 +703,7 @@ msgstr "Postcode"
 msgid "Predicate"
 msgstr "Predicaat"
 
-#: modules/mod_admin/templates/admin_media.tpl:35
+#: modules/mod_admin/templates/admin_media.tpl:36
 msgid "Preview"
 msgstr "Voorbeeld"
 
@@ -711,7 +719,7 @@ msgstr "Bescherm"
 msgid "Protect from deletion"
 msgstr "Bescherm"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:38
 msgid "Publication date of original article"
 msgstr "Publicatiedatum van het oorspronkelijke artikel"
 
@@ -759,7 +767,7 @@ msgid ""
 "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Hernummert de categorie-boom opnieuw. Dit kan even duren."
 
-#: modules/mod_admin/templates/_admin_edit_content_website.tpl:26
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
 msgstr ""
 
@@ -776,7 +784,7 @@ msgstr "Verwijzingen naar"
 msgid "Reinstall site datamodel"
 msgstr "Datamodel opnieuw installeren"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:19
 msgid "Remarks"
 msgstr "Opmerkingen"
 
@@ -824,7 +832,7 @@ msgstr ""
 msgid "SEO Content"
 msgstr "SEO inhoud"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:33
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
@@ -974,6 +982,10 @@ msgstr ""
 msgid "This connection already exists."
 msgstr "Deze connectie bestaat al"
 
+#: modules/mod_admin/templates/_admin_edit_js.tpl:20
+msgid "This page has been deleted."
+msgstr ""
+
 #: modules/mod_admin/templates/admin_status.tpl:9
 msgid ""
 "This page holds a collection of administrative options to perform certain "
@@ -994,13 +1006,13 @@ msgstr ""
 msgid "This resource was created by the module"
 msgstr "Deze resource is aangemaakt door de module"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:66
 msgid "Till"
 msgstr "Tot"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
 #: modules/mod_admin/templates/_admin_overview_list.tpl:11
-#: modules/mod_admin/templates/admin_media.tpl:36
+#: modules/mod_admin/templates/admin_media.tpl:37
 #: modules/mod_admin/templates/admin_referrers.tpl:20
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
@@ -1048,7 +1060,7 @@ msgstr ""
 msgid "Upload file"
 msgstr "Upload bestand"
 
-#: modules/mod_admin/templates/admin_media.tpl:38
+#: modules/mod_admin/templates/admin_media.tpl:39
 msgid "Uploaded"
 msgstr "geupload"
 
@@ -1076,7 +1088,7 @@ msgstr "Geldig voor:"
 msgid "View"
 msgstr "Bekijken"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:14
 msgid "View all pages from this category"
 msgstr "Bekijk alle pagina's binnen deze categorie"
 
@@ -1093,11 +1105,11 @@ msgstr "Bekijk deze pagina."
 msgid "Visible for"
 msgstr "Zichtbaar voor"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:19
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:21
 msgid "Visible from"
 msgstr "Zichtbaar vanaf"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:25
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible till"
 msgstr "Zichtbaar tot"
 
@@ -1180,19 +1192,19 @@ msgstr "door"
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
-#: modules/mod_admin/templates/admin_media.tpl:64
+#: modules/mod_admin/templates/admin_media.tpl:65
 msgid "delete"
 msgstr "verwijder"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:24
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:25
 msgid "e.g. might change"
 msgstr "bv. kan nog veranderen"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:45
-#: modules/mod_admin/templates/admin_media.tpl:75
+#: modules/mod_admin/templates/admin_media.tpl:76
 #: modules/mod_admin/templates/admin_referrers.tpl:39
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:69
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:77
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
 msgid "edit"
 msgstr "bewerk"
 
@@ -1244,8 +1256,8 @@ msgstr "geupload op"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:44
 #: modules/mod_admin/templates/admin_referrers.tpl:38
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:68
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:76
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
 msgid "view"
 msgstr "bekijk"
 

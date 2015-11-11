@@ -39,7 +39,7 @@ msgstr ""
 ">Tiitel</strong> nagu taanslaste <em>vad, van de, der</em>.<br/"
 "><strong>Perekonnanimi</strong>."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
 msgid "About categories"
 msgstr ""
 
@@ -100,7 +100,7 @@ msgstr "K√µik kategooriad"
 msgid "All Content"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:37
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:40
 msgid "All day"
 msgstr ""
 
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Block quote"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:30
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
@@ -186,6 +186,10 @@ msgstr "Katkesta"
 msgid "Category"
 msgstr "Kategooria"
 
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
+msgid "Category name:"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_header.tpl:31
 #: modules/mod_admin/templates/_admin_edit_header.tpl:34
 msgid "Category:"
@@ -195,7 +199,7 @@ msgstr ""
 msgid "Change category"
 msgstr "Muuda kategooria"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:24
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:26
 msgid "Change the category of this page"
 msgstr ""
 
@@ -294,6 +298,10 @@ msgstr ""
 msgid "Delete this page."
 msgstr "Kustute see leht."
 
+#: modules/mod_admin/templates/_admin_edit_js.tpl:20
+msgid "Deleted."
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:49
 msgid "Dependent"
 msgstr ""
@@ -364,7 +372,7 @@ msgstr ""
 "Iga lehek√ºljega v√µib olla seotud kuup√§evade vahemik. N√§iteks juhul kui "
 "lehek√ºlg on s√ºndmuse v√µi kellegi elu kirjelduse leheks."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:10
 msgid ""
 "Every page is categorized in exactly one category. The category defines what "
 "the page represents. For example an event, a product or a person. The "
@@ -425,7 +433,7 @@ msgstr ""
 msgid "Flush system caches"
 msgstr "T√ºhjendas√ºsteemne vahem√§lu"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:52
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
 msgid "From"
 msgstr "Kellelt"
 
@@ -454,7 +462,7 @@ msgstr ""
 "datamodel/search.html\">p√§ringute parameetride dokumentatsiooni</a> "
 "Zotonic'u veebilehel."
 
-#: modules/mod_admin/templates/admin_media.tpl:37
+#: modules/mod_admin/templates/admin_media.tpl:38
 msgid "Info"
 msgstr ""
 
@@ -593,7 +601,7 @@ msgstr "Muudetud "
 msgid "Modified:"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:11
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
 msgid "More like this"
 msgstr ""
 
@@ -622,11 +630,11 @@ msgstr ""
 msgid "No features are enabled for this meta-resource."
 msgstr ""
 
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:88
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:86
 msgid "No items"
 msgstr "Pole midagi"
 
-#: modules/mod_admin/templates/admin_media.tpl:85
+#: modules/mod_admin/templates/admin_media.tpl:86
 msgid "No media found."
 msgstr "Ei leia meediat."
 
@@ -693,7 +701,7 @@ msgstr "Postiindeks"
 msgid "Predicate"
 msgstr "Predikaat"
 
-#: modules/mod_admin/templates/admin_media.tpl:35
+#: modules/mod_admin/templates/admin_media.tpl:36
 msgid "Preview"
 msgstr "Eelvaade"
 
@@ -709,7 +717,7 @@ msgstr ""
 msgid "Protect from deletion"
 msgstr "Kaitse kustutamise eest"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:38
 msgid "Publication date of original article"
 msgstr ""
 
@@ -757,7 +765,7 @@ msgid ""
 "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Arvuta uuesti kategooriapuu numeratsioon. See v√µib v√µtta kaua aega."
 
-#: modules/mod_admin/templates/_admin_edit_content_website.tpl:26
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
 msgstr ""
 
@@ -774,7 +782,7 @@ msgstr "Viitajad sinna"
 msgid "Reinstall site datamodel"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:19
 msgid "Remarks"
 msgstr "M√§rkused"
 
@@ -818,7 +826,7 @@ msgstr ""
 msgid "SEO Content"
 msgstr "SEO sisu"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:33
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
@@ -967,6 +975,10 @@ msgstr "Seda tegevust ei saa tagasi v√µtte. Sinu leht kaob igaeseks."
 msgid "This connection already exists."
 msgstr ""
 
+#: modules/mod_admin/templates/_admin_edit_js.tpl:20
+msgid "This page has been deleted."
+msgstr ""
+
 #: modules/mod_admin/templates/admin_status.tpl:9
 msgid ""
 "This page holds a collection of administrative options to perform certain "
@@ -985,13 +997,13 @@ msgstr ""
 msgid "This resource was created by the module"
 msgstr "See ressurs on loodu selle mooduli poolt"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:66
 msgid "Till"
 msgstr "Kuni"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
 #: modules/mod_admin/templates/_admin_overview_list.tpl:11
-#: modules/mod_admin/templates/admin_media.tpl:36
+#: modules/mod_admin/templates/admin_media.tpl:37
 #: modules/mod_admin/templates/admin_referrers.tpl:20
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
@@ -1039,7 +1051,7 @@ msgstr ""
 msgid "Upload file"
 msgstr "Lae fail"
 
-#: modules/mod_admin/templates/admin_media.tpl:38
+#: modules/mod_admin/templates/admin_media.tpl:39
 msgid "Uploaded"
 msgstr "√úles laetud"
 
@@ -1064,7 +1076,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:14
 msgid "View all pages from this category"
 msgstr ""
 
@@ -1081,11 +1093,11 @@ msgstr "Vaata sedea lehte."
 msgid "Visible for"
 msgstr "N√§htav neil"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:19
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:21
 msgid "Visible from"
 msgstr "N√§htav alates"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:25
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible till"
 msgstr "N√§htav kuni"
 
@@ -1165,19 +1177,19 @@ msgstr "poolt"
 msgid "d M Y, H:i"
 msgstr ""
 
-#: modules/mod_admin/templates/admin_media.tpl:64
+#: modules/mod_admin/templates/admin_media.tpl:65
 msgid "delete"
 msgstr "kustuta"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:24
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:25
 msgid "e.g. might change"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:45
-#: modules/mod_admin/templates/admin_media.tpl:75
+#: modules/mod_admin/templates/admin_media.tpl:76
 #: modules/mod_admin/templates/admin_referrers.tpl:39
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:69
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:77
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
 msgid "edit"
 msgstr "redig."
 
@@ -1234,8 +1246,8 @@ msgstr "√ºles laaditud"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:44
 #: modules/mod_admin/templates/admin_referrers.tpl:38
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:68
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:76
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
 msgid "view"
 msgstr "vaata"
 
