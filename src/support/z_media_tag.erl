@@ -28,6 +28,10 @@
 
 %% interface functions
 -export([
+    scomp_viewer/3,
+    scomp_tag/3,
+    scomp_url/3,
+
     viewer/3,
     tag/3,
     url/3,
@@ -40,6 +44,46 @@
 -include_lib("zotonic.hrl").
 
 -compile([{parse_transform, lager_transform}]).
+
+%% @doc Called from erlydtl, render the media viewer for some resource/medium
+scomp_viewer(undefined, _Options, _Context) ->
+    <<>>;
+scomp_viewer(IdOrName, Options, Context) ->
+    case url(IdOrName, Options, Context) of
+        {ok, Rendered} ->
+            Rendered;
+        {error, Reason} ->
+            lager:debug("[~p] Could not render media-viewer for ~p (~p), error ~p",
+                        [z_context:site(Context), IdOrName, Options, Reason]),
+            <<>>
+    end.
+
+%% @doc Called from erlydtl, render the media tag for some resource/medium
+scomp_tag(undefined, _Options, _Context) ->
+    <<>>;
+scomp_tag(IdOrName, Options, Context) ->
+    case url(IdOrName, Options, Context) of
+        {ok, Rendered} ->
+            Rendered;
+        {error, Reason} ->
+            lager:debug("[~p] Could not render media-tag for ~p (~p), error ~p",
+                        [z_context:site(Context), IdOrName, Options, Reason]),
+            <<>>
+    end.
+
+%% @doc Called from erlydtl, render the media url for some resource/medium
+scomp_url(undefined, _Options, _Context) ->
+    <<>>;
+scomp_url(IdOrName, Options, Context) ->
+    case url(IdOrName, Options, Context) of
+        {ok, Rendered} ->
+            Rendered;
+        {error, Reason} ->
+            lager:debug("[~p] Could not render media-url for ~p (~p), error ~p",
+                        [z_context:site(Context), IdOrName, Options, Reason]),
+            <<>>
+    end.
+
 
 %% @spec viewer(MediaReference, Options, Context) -> {ok, HtmlFragMent} | {error, Reason}
 %%   MediaReference = Filename | RscId | MediaPropList

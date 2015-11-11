@@ -1437,13 +1437,14 @@ call_ast(Module, ArgAst, AstInfo, Context, TreeWalker) ->
 	      [RenderedAst]),
     ReasonAst = erl_syntax:variable("Reason"),
     ErrStrAst = erl_syntax:application(
-		  erl_syntax:atom(io_lib),
-		  erl_syntax:atom(format),
-		  [erl_syntax:string("error: ~p"), erl_syntax:list([ReasonAst])]),
+		  erl_syntax:atom(error_logger),
+		  erl_syntax:atom(warning_msg),
+		  [erl_syntax:string("erlydtl call ~p:render(~p, ...) error: ~p"), 
+           erl_syntax:list([erl_syntax:atom(to_atom(Module)), ArgAst, ReasonAst])]),
     ErrorAst = erl_syntax:clause(
 		 [erl_syntax:tuple([erl_syntax:atom(error), ReasonAst])], 
 		 none,
-		 [ErrStrAst]),
+		 [ErrStrAst, erl_syntax:abstract(<<>>)]),
     CallAst = erl_syntax:case_expr(AppAst, [OkAst, ErrorAst]),   
     {{CallAst, AstInfo}, TreeWalker}.
 
@@ -1457,28 +1458,13 @@ media_ast(FilenameValue, Args, Context, TreeWalker) ->
     {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
     AppAst = erl_syntax:application(
                         erl_syntax:atom(z_media_tag),
-                        erl_syntax:atom(viewer),
+                        erl_syntax:atom(scomp_viewer),
                         [   FilenameAst,
                             ArgsAst,
                             z_context_ast(Context)
                         ]
                     ),
-    RenderedAst = erl_syntax:variable("Rendered"),
-    OkAst = erl_syntax:clause(
-                      [erl_syntax:tuple([erl_syntax:atom(ok), RenderedAst])], 
-                      none,
-                      [RenderedAst]),
-    ReasonAst = erl_syntax:variable("Reason"),
-    ErrStrAst = erl_syntax:application(
-                	  erl_syntax:atom(io_lib),
-                	  erl_syntax:atom(format),
-                	  [erl_syntax:string("error: ~p"), erl_syntax:list([ReasonAst])]),
-    ErrorAst = erl_syntax:clause(
-                	 [erl_syntax:tuple([erl_syntax:atom(error), ReasonAst])], 
-                	 none,
-                	 [ErrStrAst]),
-    CallAst = erl_syntax:case_expr(AppAst, [OkAst, ErrorAst]),
-    {{CallAst, #ast_info{}}, TreeWalker1}.
+    {{AppAst, #ast_info{}}, TreeWalker1}.
 
 
 %% @doc Generate an image tag based on the image name and the arguments
@@ -1489,28 +1475,13 @@ image_ast(FilenameValue, Args, Context, TreeWalker) ->
     {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
     AppAst = erl_syntax:application(
                         erl_syntax:atom(z_media_tag),
-                        erl_syntax:atom(tag),
+                        erl_syntax:atom(scomp_tag),
                         [   FilenameAst,
                             ArgsAst,
                             z_context_ast(Context)
                         ]
                     ),
-    RenderedAst = erl_syntax:variable("Rendered"),
-    OkAst = erl_syntax:clause(
-                      [erl_syntax:tuple([erl_syntax:atom(ok), RenderedAst])], 
-                      none,
-                      [RenderedAst]),
-    ReasonAst = erl_syntax:variable("Reason"),
-    ErrStrAst = erl_syntax:application(
-                	  erl_syntax:atom(io_lib),
-                	  erl_syntax:atom(format),
-                	  [erl_syntax:string("error: ~p"), erl_syntax:list([ReasonAst])]),
-    ErrorAst = erl_syntax:clause(
-                	 [erl_syntax:tuple([erl_syntax:atom(error), ReasonAst])], 
-                	 none,
-                	 [ErrStrAst]),
-    CallAst = erl_syntax:case_expr(AppAst, [OkAst, ErrorAst]),
-    {{CallAst, #ast_info{}}, TreeWalker1}.
+    {{AppAst, #ast_info{}}, TreeWalker1}.
 
 
 %% @doc Generate an image url based on the image name and the arguments
@@ -1521,28 +1492,13 @@ image_url_ast(FilenameValue, Args, Context, TreeWalker) ->
     {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
     AppAst = erl_syntax:application(
                         erl_syntax:atom(z_media_tag),
-                        erl_syntax:atom(url),
+                        erl_syntax:atom(scomp_url),
                         [   FilenameAst,
                             ArgsAst,
                             z_context_ast(Context)
                         ]
                     ),
-    RenderedAst = erl_syntax:variable("Rendered"),
-    OkAst = erl_syntax:clause(
-                      [erl_syntax:tuple([erl_syntax:atom(ok), RenderedAst])], 
-                      none,
-                      [RenderedAst]),
-    ReasonAst = erl_syntax:variable("Reason"),
-    ErrStrAst = erl_syntax:application(
-                	  erl_syntax:atom(io_lib),
-                	  erl_syntax:atom(format),
-                	  [erl_syntax:string("error: ~p"), erl_syntax:list([ReasonAst])]),
-    ErrorAst = erl_syntax:clause(
-                	 [erl_syntax:tuple([erl_syntax:atom(error), ReasonAst])], 
-                	 none,
-                	 [ErrStrAst]),
-    CallAst = erl_syntax:case_expr(AppAst, [OkAst, ErrorAst]),
-    {{CallAst, #ast_info{}}, TreeWalker1}.
+    {{AppAst, #ast_info{}}, TreeWalker1}.
     
 
 %% Added by Marc Worrell - handle url generation using the url patterns
