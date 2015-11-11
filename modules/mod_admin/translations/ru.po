@@ -41,7 +41,7 @@ msgstr ""
 "фамилии</strong>, например голландские <em>van, van de, der</em>.<br/"
 "><strong>Фамилия</strong>."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
 msgid "About categories"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgstr "Все категории"
 msgid "All Content"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:37
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:40
 msgid "All day"
 msgstr ""
 
@@ -168,7 +168,7 @@ msgstr "Название блока"
 msgid "Block quote"
 msgstr "Цитату"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:30
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
@@ -188,6 +188,10 @@ msgstr "Отмена"
 msgid "Category"
 msgstr "Категория"
 
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
+msgid "Category name:"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_header.tpl:31
 #: modules/mod_admin/templates/_admin_edit_header.tpl:34
 msgid "Category:"
@@ -197,7 +201,7 @@ msgstr ""
 msgid "Change category"
 msgstr "Изменить категорию"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:24
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:26
 msgid "Change the category of this page"
 msgstr ""
 
@@ -296,6 +300,10 @@ msgstr ""
 msgid "Delete this page."
 msgstr "Удалить эту страницу."
 
+#: modules/mod_admin/templates/_admin_edit_js.tpl:20
+msgid "Deleted."
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:49
 msgid "Dependent"
 msgstr ""
@@ -366,7 +374,7 @@ msgstr ""
 "У каждой страницы может быть указан период. Например, если страница содержит "
 "событие или описание чьей-то жизни."
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:8
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:10
 msgid ""
 "Every page is categorized in exactly one category. The category defines what "
 "the page represents. For example an event, a product or a person. The "
@@ -427,7 +435,7 @@ msgstr ""
 msgid "Flush system caches"
 msgstr "Очистить системный кэш"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:52
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
 msgid "From"
 msgstr "От"
 
@@ -456,7 +464,7 @@ msgstr ""
 "\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">справку по "
 "аргументам запросов</a> на сайте Zotonic."
 
-#: modules/mod_admin/templates/admin_media.tpl:37
+#: modules/mod_admin/templates/admin_media.tpl:38
 msgid "Info"
 msgstr "Информация"
 
@@ -597,7 +605,7 @@ msgstr "Изменено"
 msgid "Modified:"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:11
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
 msgid "More like this"
 msgstr ""
 
@@ -626,11 +634,11 @@ msgstr ""
 msgid "No features are enabled for this meta-resource."
 msgstr ""
 
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:88
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:86
 msgid "No items"
 msgstr "Элементы отсутствуют"
 
-#: modules/mod_admin/templates/admin_media.tpl:85
+#: modules/mod_admin/templates/admin_media.tpl:86
 msgid "No media found."
 msgstr "Материалы не найдены."
 
@@ -697,7 +705,7 @@ msgstr "Почтовый индекс"
 msgid "Predicate"
 msgstr "Предикат"
 
-#: modules/mod_admin/templates/admin_media.tpl:35
+#: modules/mod_admin/templates/admin_media.tpl:36
 msgid "Preview"
 msgstr "Предварительный просмотр"
 
@@ -713,7 +721,7 @@ msgstr "Защита"
 msgid "Protect from deletion"
 msgstr "Защита от удаления"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:31
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:38
 msgid "Publication date of original article"
 msgstr "Дата публикации исходной статьи"
 
@@ -762,7 +770,7 @@ msgid ""
 msgstr ""
 "Пересчитать нумерацию дерева категорий. Это может занять много времени."
 
-#: modules/mod_admin/templates/_admin_edit_content_website.tpl:26
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
 msgstr ""
 
@@ -779,7 +787,7 @@ msgstr "Связи с"
 msgid "Reinstall site datamodel"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:18
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:19
 msgid "Remarks"
 msgstr "Примечания"
 
@@ -827,7 +835,7 @@ msgstr ""
 msgid "SEO Content"
 msgstr "SEO-контент"
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:31
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:33
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
@@ -977,6 +985,10 @@ msgstr ""
 msgid "This connection already exists."
 msgstr ""
 
+#: modules/mod_admin/templates/_admin_edit_js.tpl:20
+msgid "This page has been deleted."
+msgstr ""
+
 #: modules/mod_admin/templates/admin_status.tpl:9
 msgid ""
 "This page holds a collection of administrative options to perform certain "
@@ -997,13 +1009,13 @@ msgstr ""
 msgid "This resource was created by the module"
 msgstr "Этот ресурс был создан модулем"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:66
 msgid "Till"
 msgstr "До"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
 #: modules/mod_admin/templates/_admin_overview_list.tpl:11
-#: modules/mod_admin/templates/admin_media.tpl:36
+#: modules/mod_admin/templates/admin_media.tpl:37
 #: modules/mod_admin/templates/admin_referrers.tpl:20
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
@@ -1051,7 +1063,7 @@ msgstr ""
 msgid "Upload file"
 msgstr "Закачать файл"
 
-#: modules/mod_admin/templates/admin_media.tpl:38
+#: modules/mod_admin/templates/admin_media.tpl:39
 msgid "Uploaded"
 msgstr "Закачано"
 
@@ -1078,7 +1090,7 @@ msgstr "Действителен для:"
 msgid "View"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_change_category.tpl:12
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:14
 msgid "View all pages from this category"
 msgstr ""
 
@@ -1095,11 +1107,11 @@ msgstr "Просмотреть эту страницу."
 msgid "Visible for"
 msgstr "Видимо для"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:19
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:21
 msgid "Visible from"
 msgstr "Видимо с"
 
-#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:25
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible till"
 msgstr "Видимо до"
 
@@ -1181,19 +1193,19 @@ msgstr "пользователем"
 msgid "d M Y, H:i"
 msgstr ""
 
-#: modules/mod_admin/templates/admin_media.tpl:64
+#: modules/mod_admin/templates/admin_media.tpl:65
 msgid "delete"
 msgstr "удалить"
 
-#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:24
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:25
 msgid "e.g. might change"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:45
-#: modules/mod_admin/templates/admin_media.tpl:75
+#: modules/mod_admin/templates/admin_media.tpl:76
 #: modules/mod_admin/templates/admin_referrers.tpl:39
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:69
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:77
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
 msgid "edit"
 msgstr "изменить"
 
@@ -1245,8 +1257,8 @@ msgstr "загружено"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:44
 #: modules/mod_admin/templates/admin_referrers.tpl:38
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:68
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:76
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
 msgid "view"
 msgstr "просмотр"
 
