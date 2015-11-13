@@ -1120,4 +1120,7 @@ copy_attachment(#upload{tmpfile=File} = Upload) when is_list(File) ->
                 false ->
                     Upload
             end
-    end.
+    end;
+copy_attachment(Att) ->
+    Att.
+
