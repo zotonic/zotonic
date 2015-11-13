@@ -12,6 +12,8 @@
         </a>
     {% endwith %}
 
+    {% all include "_share_page_option.tpl" id=id %}
+
 </div>
 <div class="modal-footer">
     {% button class="btn btn-default" text=_"Close" action={dialog_close} %}
