@@ -223,7 +223,7 @@ handle_config_command(Path, ".less") ->
     case config_command(Path) of
         {} -> undefined;
         {From, To, Params} ->
-            Cmd = "cd " ++ Path ++ "; lessc " ++ Params ++ " " ++ z_utils:os_escape(filename:join(Path, From)) ++ " " ++ z_utils:os_escape(filename:join(Path, To)),
+            Cmd = "cd " ++ handle_spaces(Path) ++ "; lessc " ++ Params ++ " " ++ z_utils:os_escape(filename:join(Path, From)) ++ " " ++ z_utils:os_escape(filename:join(Path, To)),
             os:cmd(Cmd),
             "Compiled " ++ To
     end.
@@ -297,3 +297,7 @@ send_message({unix, _Arch}, Msg) ->
     os:cmd("which notify-send && notify-send \"Zotonic\" " ++ z_utils:os_escape(Msg));
 send_message(_OS, _Msg) ->
     undefined.
+
+handle_spaces(Path) ->
+    re:replace(Path, "\s+", "\\\\ ", [global, {return, list}]).
+    
