@@ -89,12 +89,16 @@ function find_config_arg {
 export -f find_config_arg
 
 function get_user_sites_dir {
-    cat $(find_config zotonic.config) | grep {user_sites_dir|sed 's/.*"\(.*\)".*/\1/'
+    file=$(find_config zotonic.config)
+    [ -z "$file" ] && return 1
+    cat $file | grep {user_sites_dir|sed 's/.*"\(.*\)".*/\1/'
 }
 export -f get_user_sites_dir
 
 function get_user_modules_dir {
-    cat $(find_config zotonic.config) | grep {user_modules_dir|sed 's/.*"\(.*\)".*/\1/'
+    file=$(find_config zotonic.config)
+    [ -z "$file" ] && return 1
+    cat $file | grep {user_modules_dir|sed 's/.*"\(.*\)".*/\1/'
 }
 export -f get_user_modules_dir
     
