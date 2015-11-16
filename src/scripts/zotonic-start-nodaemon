@@ -32,6 +32,12 @@ cd $ZOTONIC
 
 echo -n "Starting Zotonic $NODENAME@$NODEHOST.." 
 
-ENV=`which env`
+# Set the HEART_DISABLE env var to disable heart
+heart_arg="-heart"
+[ -z $HEART_DISABLE ] && heart_arg="" 
 
-exec $ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -s zotonic -noshell
+# $HEART_COMMAND is executed if the VM is unresponsive, after it has been killed by 'heart'. It must be set or 'heart' will only print a warning.
+# By default, do nothing and just kill the VM.
+[ -z $HEART_COMMAND ] && export HEART_COMMAND="/bin/true"
+
+exec $ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -s zotonic -noshell $heart_arg
