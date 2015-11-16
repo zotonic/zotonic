@@ -49,12 +49,14 @@
         </div>
     </div>
 {% else %}
-    <p>
-        {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
-    </p>
+    {% if medium.created %}
+        <p>
+            {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
+        </p>
+    {% endif %}
     <div class="form-group clearfix">
         <div class="pull-right">
-            {% button text=_"Replace this media item"
+            {% button text=medium|if:_"Replace this media item":_"Add media item"
                 class="btn btn-primary"
                 element="a"
     	        action={dialog_media_upload
