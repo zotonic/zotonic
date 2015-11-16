@@ -78,7 +78,7 @@ function find_config {
 export -f find_config 
 
 function find_config_arg {
-    [ ! -z "$ZOTONIC_CONFIG_DIR" ] && { echo "-config ${ZOTONIC_CONFIG_DIR}/$file"; return 0; }
+    [ ! -z "$ZOTONIC_CONFIG_DIR" ] && { echo "-config ${ZOTONIC_CONFIG_DIR}/$1"; return 0; }
 
     file=$(find_config $1)
     if [ "$file" == "" ]; then
