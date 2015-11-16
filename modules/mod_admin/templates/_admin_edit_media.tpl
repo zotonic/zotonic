@@ -37,12 +37,14 @@
         </div>
     </div>
 {% else %}
-    <p>
+    {% if medium.created %}
+        <p>
         {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
-    </p>
+        </p>
+    {% endif %}
     <div class="save-buttons">
         <div class="pull-right">
-            {% button   text=_"Replace this media item"
+            {% button text=medium|if:_"Replace this media item":_"add media item"
                 class="btn btn-primary"
     	    action={dialog_media_upload id=id action={update target="media-edit-view" template="_admin_edit_media_all.tpl" id=id}} 
     	    disabled=not id.is_editable %}
