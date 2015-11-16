@@ -34,7 +34,7 @@ echo -n "Starting Zotonic $NODENAME@$NODEHOST.."
 
 # Set the HEART_DISABLE env var to disable heart
 heart_arg="-heart"
-[ -z $HEART_DISABLE ] && heart_arg="" 
+[ ! -z $HEART_DISABLE ] && heart_arg="" 
 
 # $HEART_COMMAND is executed if the VM is unresponsive, after it has been killed by 'heart'. It must be set or 'heart' will only print a warning.
 # By default, do nothing and just kill the VM.
