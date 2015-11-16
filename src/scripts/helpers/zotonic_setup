@@ -164,27 +164,31 @@ ERL_CALL=$($ERL -noshell -noinput  -eval "io:format(\"~s\", [code:priv_dir(erl_i
 export ZOTONIC_CALL="$ERL_CALL $NAME_ARG $NODENAME@$NODEHOST"
 
 
-ZOTONIC_CONFIG_DIR=${ZOTONIC_CONFIG_DIR:=$HOME/.zotonic/$(major_version)}
+# If a config dir was set by the user, don't interfere with that.
+# If not, and if no configuration is found, install a default config file.
+if [ -z "$ZOTONIC_CONFIG_DIR" ]; then
+    default_dir=${HOME}/.zotonic/$(major_version)
 
-# Make sure the erlang.config file exists
-if [ "$(find_config erlang.config)" == "" ]; then
-    echo "Installing default erlang.config file" 1>&2
-    mkdir -p $ZOTONIC_CONFIG_DIR
-    cp "$ZOTONIC/priv/erlang.config.in" "$ZOTONIC_CONFIG_DIR/erlang.config"
-fi
+    # Make sure the erlang.config file exists
+    if [ "$(find_config erlang.config)" == "" ]; then
+        echo "Installing default erlang.config file" 1>&2
+        mkdir -p $default_dir
+        cp "$ZOTONIC/priv/erlang.config.in" "${default_dir}/erlang.config"
+    fi
 
-# Make sure the zotonic.config file exists
-if [ "$(find_config zotonic.config)" == "" ]; then
-    echo "Installing global Zotonic config file" 1>&2
-    mkdir -p $ZOTONIC_CONFIG_DIR
-    cp "$ZOTONIC/priv/zotonic.config.in" "$ZOTONIC_CONFIG_DIR/zotonic.config"
+        # Make sure the zotonic.config file exists
+    if [ "$(find_config zotonic.config)" == "" ]; then
+        echo "Installing global Zotonic config file" 1>&2
+        mkdir -p $default_dir || true
+        cp "$ZOTONIC/priv/zotonic.config.in" "${default_dir}/zotonic.config"
 
-    # Generate a password for zotonic_status
-    PW=$(openssl rand -hex 10)
-    perl -e "s/%%GENERATED%%/$PW/" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
+        # Generate a password for zotonic_status
+        PW=$(openssl rand -hex 10)
+        perl -e "s/%%GENERATED%%/$PW/" -pi "${default_dir}/zotonic.config"
 
-    perl -e "s|\%\%USER_SITES_DIR\%\%|$ZOTONIC/user/sites|" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
-    perl -e "s|\%\%USER_MODULES_DIR\%\%|$ZOTONIC/user/modules|" -pi "$ZOTONIC_CONFIG_DIR/zotonic.config"
+        perl -e "s|\%\%USER_SITES_DIR\%\%|$ZOTONIC/user/sites|" -pi "${default_dir}/zotonic.config"
+        perl -e "s|\%\%USER_MODULES_DIR\%\%|$ZOTONIC/user/modules|" -pi "${default_dir}/zotonic.config"
+    fi
 fi
 
 export MODULES=$(get_user_modules_dir)
