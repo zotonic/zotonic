@@ -1276,6 +1276,7 @@ ul.tree-list > li:last-child {
 }
 ul.tree-list li.menu-item {
   line-height: 1.2;
+  border: none;
 }
 ul.tree-list li.menu-item li.menu-item:last-child {
   margin: 0;

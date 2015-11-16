@@ -1,14 +1,14 @@
 ul.tree-list {
     margin: 0;
-    
+
     &:empty {
         margin: 0;
     }
-    
+
     > li:last-child {
         margin-bottom: 10px;
     }
-    
+
     li.menu-item {
     	@_toggle_width: 40px;
         @_left_spacing: @_toggle_width;
@@ -17,8 +17,9 @@ ul.tree-list {
         @_item_height: 34px;
         @_line_height: 1.2;
         @_side_spacing: (@_toggle_width - @_icon_size) / 2;
-        
+
         line-height: @_line_height;
+        border: none;
         
         // nested:
         li.menu-item:last-child {
@@ -78,7 +79,7 @@ ul.tree-list {
                 top: 0;
                 left: 0;
                 display: none;
-                
+
                 &:hover {
                     cursor: pointer;
                     text-decoration: none;
@@ -153,7 +154,7 @@ ul.tree-list {
             position: absolute;
             right: @_side_spacing;
             top: 7px;
-            
+
             .btn-group {
                 margin: 0;
             }
