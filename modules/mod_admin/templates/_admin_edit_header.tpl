@@ -7,15 +7,15 @@ languages
 <div class="admin-header">
     <div class="admin-header-meta">
         <span class='admin-edit-dates'>
-            {_ Modified: _} {{ r.modified|date:"Y-m-d H:i" }}
-            {% if r.modifier_id %}
-                {_ by _} <a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a>
-            {% endif %}    
-            &middot;
             {_ Created: _} {{ r.created|date:"Y-m-d H:i" }}
             {% if r.creator_id %}
                 {_ by _} <a href="{% url admin_edit_rsc id=r.creator_id %}">{{ m.rsc[r.creator_id].title }}</a>
             {% endif %}
+            &middot;
+            {_ Modified: _} {{ r.modified|date:"Y-m-d H:i" }}
+            {% if r.modifier_id %}
+                {_ by _} <a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a>
+            {% endif %}  
         </span>
     </div>
 
@@ -27,7 +27,7 @@ languages
         <div class="{% if depict %}admin-header-has-image{% endif %}">
             <h2 {% include "_language_attrs.tpl" %}>
                 {{ r.title|striptags|default:("<em>" ++ _"untitled" ++ "</em>")}}
-            </h2>                      
+            </h2>
             <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">{_ Category: _} {{ m.rsc[r.category_id].title }}</a>
             {% wire id="changecategory"
                 action={dialog_open
