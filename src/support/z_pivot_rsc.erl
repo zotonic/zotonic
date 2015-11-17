@@ -48,6 +48,7 @@
     
     pivot_resource/2,
     stemmer_language/1,
+    cleanup_tsv_text/1,
     pg_lang/1,
     pg_lang_extra/1,
     get_pivot_data/2,
@@ -552,12 +553,20 @@ to_tsv(List, Level, Args, StemmingLanguage) ->
     {Sql1, Args1} = lists:foldl(
         fun ({_Lang,Text}, {Sql, As}) -> 
             N   = length(As) + 1,
-            As1 = As ++ [Text],
+            As1 = As ++ [cleanup_tsv_text(z_html:unescape(z_html:strip(Text)))],
             {[["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"] | Sql], As1}
         end,
         {[], Args},
         List),
     {z_utils:combine(" || ", Sql1), Args1}.
+
+cleanup_tsv_text(Text) when is_binary(Text) ->
+    lists:foldl(
+        fun (R, Acc) ->
+            binary:replace(Acc, R, <<" ">>, [global])
+        end,
+        Text,
+        [<<"-">>, <<"/">>]).   
 
 get_float(K, Ps) ->
     case proplists:get_value(K, Ps) of
