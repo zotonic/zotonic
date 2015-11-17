@@ -21,9 +21,18 @@
            {% ifnotequal name "depiction" %}
                <h4>{{ p.title }}</h4>
 
-                {% include "_admin_edit_content_page_connections_list.tpl"
+                {% live template="_admin_edit_content_page_connections_list.tpl"
+                    topic={object id=id predicate=name}
                     id=id
-                    predicate=name                
+                    predicate=name|as_atom
+                    button_label=button_label
+                    button_class=button_class
+                    dialog_title_add=dialog_title_add
+                    callback=callback
+                    action=action
+                    unlink_action=unlink_action
+                    list_id=list_id
+                    is_editable=is_editable
                 %}
            
                 <hr />

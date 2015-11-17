@@ -1,14 +1,7 @@
 {# Used on the resource edit page and by the medium upload event. Show all connected media. #}
 {% with rsc_id|default:id as id %}
 <div id="{{ #unlink_message }}"></div>
-{% sorter id=#list
-    tag={object_sorter predicate=`depiction` id=id}
-	placeholder="ui-sortable-placeholder"
-	delegate=`controller_admin_edit`
-%}
-<ul id="{{ #list }}" class="media list-unstyled">
-    {% for object_id, edge_id in m.edge.o[id].depiction %}
-        {% include "_rsc_edge_media.tpl" subject_id=id unlink_message=#unlink_message %}
-    {% endfor %}
-</ul>
+{% live template="_edit_media_list.tpl" 
+        id=id unlink_message=#unlink_message 
+        topic={object id=id predicate=`depiction`} %}
 {% endwith %}

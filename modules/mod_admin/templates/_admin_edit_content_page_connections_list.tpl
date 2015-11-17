@@ -18,7 +18,9 @@ Params:
               group="edges"
               delegate=delegate|default:`controller_admin_edit`
     %}
-    <ul id="{{ list_id }}" class="tree-list connections-list">{% include "_rsc_edge_list.tpl" id=id predicate=predicate unlink_action=unlink_action %}</ul>
+    <ul id="{{ list_id }}" class="tree-list connections-list">
+      {% include "_rsc_edge_list.tpl" id=id predicate=predicate unlink_action=unlink_action %}
+    </ul>
 </div>
 
 {% wire
