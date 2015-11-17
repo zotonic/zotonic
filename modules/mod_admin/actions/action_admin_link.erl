@@ -57,26 +57,28 @@ do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Actions, Contex
             case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
                 undefined ->
                     {ok, EdgeId} = m_edge:insert(SubjectId, Predicate, ObjectId, Context),
-                    Vars = [
-                            {subject_id, SubjectId},
-                            {predicate, Predicate},
-                            {object_id, ObjectId},
-                            {edge_id, EdgeId}
-                           ],
-                    Html  = z_template:render(case EdgeTemplate of
-                                                    undefined -> "_rsc_edge.tpl";
-                                                    _ -> EdgeTemplate 
-                                              end,
-                                              Vars,
-                                              Context),
-                    ElementId1 = case ElementId of
-                                     undefined -> "links-"++z_convert:to_list(SubjectId)++"-"++z_convert:to_list(Predicate);
-                                     _ -> ElementId
-                                 end,
-                    Context1 = z_render:insert_bottom(ElementId1, Html, Context),
+                    Context1 = case EdgeTemplate of
+                        undefined ->
+                            Context;
+                        _ ->
+                            Vars = [
+                                    {subject_id, SubjectId},
+                                    {predicate, Predicate},
+                                    {object_id, ObjectId},
+                                    {edge_id, EdgeId}
+                                   ],
+                            Html  = z_template:render(EdgeTemplate,
+                                                      Vars,
+                                                      Context),
+                            ElementId1 = case ElementId of
+                                             undefined -> "links-"++z_convert:to_list(SubjectId)++"-"++z_convert:to_list(Predicate);
+                                             _ -> ElementId
+                                         end,
+                            z_render:insert_bottom(ElementId1, Html, Context)
+                    end,
                     Title = m_rsc:p(ObjectId, title, Context),
                     z_render:wire([{growl, [{text, [?__("Added the connection to", Context), <<" \"">>, Title, <<"\".">>]}]}
-                                             | Actions], Context1);
+                                            | Actions], Context1);
                 _ ->
                     z_render:growl_error(?__("This connection already exists.", Context), Context)
             end;
