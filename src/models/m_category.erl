@@ -383,7 +383,7 @@ get(Id, Context) when is_integer(Id) ->
                     {path, PathIds} = proplists:lookup(path, C),
                     PathNames = [ z_convert:to_atom(m_rsc:p_no_acl(CId, name, Context)) || CId <- PathIds ],
                     Name = z_convert:to_atom(m_rsc:p_no_acl(Id, name, Context)),
-                    IsA = PathNames ++ [Name],
+                    IsA = lists:reverse([Name|PathNames]),
                     [
                         {name, Name},
                         {is_a, IsA}
