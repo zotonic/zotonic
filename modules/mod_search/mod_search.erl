@@ -555,7 +555,7 @@ to_tsquery(Text, Context) when is_binary(Text) ->
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
     [{TsQuery, Version}] = z_db:q("select plainto_tsquery($2, $1), version()",
-                                  [Text, Stemmer], 
+                                  [z_pivot_rsc:cleanup_tsv_text(Text), Stemmer], 
                                   Context),
     % Version is something like "PostgreSQL 8.3.5 on i386-apple-darwin8.11.1, compiled by ..."
     fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text, TsQuery, Version)).
