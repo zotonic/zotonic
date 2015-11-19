@@ -38,6 +38,7 @@ var z_session_restart_count = 0;
 var z_ws                    = false;
 var z_ws_pong_count         = 0;
 var z_ws_ping_timeout;
+var z_comet;
 var z_stream_host;
 var z_stream_starter;
 var z_stream_start_timeout;
@@ -133,6 +134,12 @@ function z_set_page_id( page_id, user_id )
             try { z_ws.close(); } catch (e) { };
             z_ws = undefined;
         }
+        
+        // Abort an open comet connection
+        if (z_comet) { 
+            try { z_comet.abort(); } catch(e) { };
+            z_comet = undefined;
+        }
 
         setTimeout(function() {
             z_page_unloading = false;
@@ -146,7 +153,7 @@ function z_set_page_id( page_id, user_id )
         }
    
         if(navigator.sendBeacon) {
-	    navigator.sendBeacon("/beacon", ubf.encode(msg));
+            navigator.sendBeacon("/beacon", ubf.encode(msg));
             return;
         }
 
@@ -1021,9 +1028,9 @@ function z_comet_start()
 
 function z_comet_poll_ajax()
 {
-    if (z_ws_pong_count === 0 && z_session_valid)
+    if (z_ws_pong_count === 0 && z_session_valid && !z_page_unloading)
     {
-        $.ajax({
+        z_comet = $.ajax({
             url: window.location.protocol + '//' + window.location.host + '/comet',
             type:'post',
             data: z_stream_args('comet'),
@@ -1051,6 +1058,8 @@ function z_comet_poll_ajax()
                        if(z_comet_reconnect_timeout < 60000)
                            z_comet_reconnect_timeout = z_comet_reconnect_timeout * 2;
                    }
+        }).done(function() { 
+            z_comet = undefined; 
         });
     }
     else
