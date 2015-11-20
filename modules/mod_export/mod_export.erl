@@ -41,7 +41,7 @@ observe_content_types_dispatch(#content_types_dispatch{}, Acc, _Context) ->
 observe_export_resource_data(#export_resource_data{id=Id}, Context) when is_integer(Id) ->
     case m_rsc:is_a(Id, 'query', Context) of
         true ->
-            {ok, z_search:query_([{id, Id}], Context)};
+            {ok, z_search:query_([{query_id, Id}], Context)};
         false ->
             case m_rsc:is_a(Id, collection, Context) of
                 true -> {ok, m_edge:objects(Id, haspart, Context)};
