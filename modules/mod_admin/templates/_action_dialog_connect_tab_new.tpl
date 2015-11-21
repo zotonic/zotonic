@@ -4,6 +4,6 @@
         delegate="action_admin_dialog_new_rsc" 
         predicate=predicate
         callback=callback
-			cat=cat|default:(m.predicate.object_category[predicate]|first|element:1)
+		cat=cat
 	%}
 </div>

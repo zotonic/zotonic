@@ -16,7 +16,7 @@
 			        <option value="">{_ Any category _}</option>
 			        <option value="" disabled></option>
 		            {% for c in m.category.tree_flat %}
-			            <option value="{{ c.id }}" {% if c.id == m.rsc[category].id %}selected="selected" {% endif %}>
+			            <option value="{{ c.id }}" {% if c.id == cat %}selected="selected" {% endif %}>
 					        {{ c.indent }}{{ c.id.title|default:c.id.name }}
 			            </option>
 		            {% endfor %}
