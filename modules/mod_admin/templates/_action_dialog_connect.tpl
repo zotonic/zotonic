@@ -11,13 +11,22 @@ params:
 find params:
 - predicate (optional) (atom)
 - delegate (optional) (atom)
-- category (optional) (string)
+- category (optional) (string) preselect the category dropdown
 #}
-{% with callback|default:q.callback|default:"window.zAdminConnectDone" as callback %}
-{% with language|default:q.language|default:z_language as language %}
-{% with actions|default:[] as actions %}
+{% with
+    callback|default:q.callback|default:"window.zAdminConnectDone",
+    language|default:q.language|default:z_language,
+    actions|default:[],
+    tab|default:q.tab|default:(tabs_enabled|first)|default:"find",
+    m.rsc[category].id|default:m.rsc.category.id|default:(m.predicate.object_category[predicate]|first|element:1)
+    as
+    callback,
+    language,
+    actions,
+    tab,
+    cat
+%} 
 {% with stay or callback or subject_id as stay %}
-{% with tab|default:q.tab|default:(tabs_enabled|first)|default:"find" as tab %}
 {% if not (tabs_enabled and tabs_enabled|length == 1) %}
     <ul class="nav nav-pills">
         {% block tabs %}
@@ -85,7 +94,7 @@ find params:
                     subject_id=subject_id
                     is_active
                     title=""
-                    cat=m.rsc.category.id
+                    cat=cat
                     nocatselect
                 %}
         {% else %}
@@ -109,6 +118,7 @@ find params:
                     subject_id=subject_id 
                     is_active=(not q.is_zmedia and tab == "find")
                     title=""
+                    cat=cat
                 %}
             {% endif %}
             {% if not tabs_enabled or "new"|member:tabs_enabled %}
@@ -121,6 +131,7 @@ find params:
                         subject_id=subject_id
                         title="" 
                         is_active=(tab == "new")
+                        cat=cat
                     %}
                 {% endif %}
             {% endif %}
@@ -156,8 +167,5 @@ find params:
         {% endif %}
     {% endblock %}
 </div>
-{% endwith %}
-{% endwith %}
-{% endwith %}
 {% endwith %}
 {% endwith %}
