@@ -163,6 +163,8 @@ parse_erl_form_part({match, _, X, Y}, File, Acc) ->
     parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
 parse_erl_form_part({cons, _, X, Y}, File, Acc) ->
     parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
+parse_erl_form_part({op, _, '++', X, Y}, File, Acc) ->
+    parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
 parse_erl_form_part({'case', _, Expr, Exprs}, File, Acc) ->
     parse_erl_form_part(Expr, File, []) ++ 
         lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Exprs);
@@ -178,7 +180,7 @@ parse_erl_form_part({call, _, _, Expressions}, File, Acc) ->
     lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);
 parse_erl_form_part({record, _, _, Fields}, File, Acc) ->
     lists:foldl(fun({record_field, _, _, Part}, A) ->
-                        parse_erl_form_part(Part, File, A)
-                end, Acc, Fields);
+            parse_erl_form_part(Part, File, A)
+    end, Acc, Fields);
 parse_erl_form_part(_Part, _File, Acc) ->
     Acc. %% ignore
