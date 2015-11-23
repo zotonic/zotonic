@@ -46,6 +46,7 @@ var z_websocket_host;
 var z_default_form_postback = false;
 var z_page_unloading        = false;
 var z_comet_reconnect_timeout = 1000;
+var z_comet_poll_count      = 0;
 var z_transport_check_timer;
 var z_transport_queue       = [];
 var z_transport_acks        = [];
@@ -97,11 +98,11 @@ function z_set_page_id( page_id, user_id )
         "page_id",
         ]);
     ubf.add_spec("rsc_update_done", [
-        "action", "id", "pre_is_a", "post_is_a", 
+        "action", "id", "pre_is_a", "post_is_a",
         "pre_props", "post_props" // Always empty
         ]);
     ubf.add_spec("media_replace_file", [
-        "id", 
+        "id",
         "medium" // Always empty
         ]);
     ubf.add_spec("edge_insert", [
@@ -131,13 +132,13 @@ function z_set_page_id( page_id, user_id )
 
         // Close the websocket. This prevents a connection interrupted error.
         if (z_ws) {
-            try { z_ws.close(); } catch (e) { };
+            try { z_ws.close(); } catch (e) { }
             z_ws = undefined;
         }
-        
+
         // Abort an open comet connection
-        if (z_comet) { 
-            try { z_comet.abort(); } catch(e) { };
+        if (z_comet) {
+            try { z_comet.abort(); } catch(e) { }
             z_comet = undefined;
         }
 
@@ -150,22 +151,22 @@ function z_set_page_id( page_id, user_id )
             "_record": "unload_beacon",
             "page_id": z_pageid,
             "session_id": window.z_sid || undefined
-        }
-   
+        };
+
         if(navigator.sendBeacon) {
             navigator.sendBeacon("/beacon", ubf.encode(msg));
             return;
         }
 
-	// If the browser doesn't have the beacon api, and we are forced to send the
- 	// unload beacon we have to send it via a synchronous ajax request.
+        // If the browser doesn't have the beacon api, and we are forced to send the
+     	// unload beacon we have to send it via a synchronous ajax request.
         if(z_force_unload_beacon) {
-	    $.ajax({url: "/beacon", 
-		    type: "post", 
-		    data: ubf.encode(msg), 
-		    dataType: "text", 
-		    contentType: "text/x-ubf", 
-		    async: false});
+            $.ajax({url: "/beacon",
+        	    type: "post",
+        	    data: ubf.encode(msg),
+        	    dataType: "text",
+        	    contentType: "text/x-ubf",
+        	    async: false});
         }
     });
 }
@@ -461,6 +462,8 @@ function z_transport(delegate, content_type, data, options)
     var timestamp = new Date().getTime();
 
     options = options || {};
+    options.transport = options.transport || '';
+
     if (typeof options.qos == 'undefined') {
         if (options.ack) {
             options.qos = 1;
@@ -497,12 +500,21 @@ function z_transport(delegate, content_type, data, options)
             is_queued: true
         };
     }
-    z_transport_queue.push({
-        msg: msg,
-        msg_id: msg_id,
-        options: options || {}
-    });
-    z_transport_check();
+
+    if (options.transport == 'form') {
+        z_transport_form({
+            msg: msg,
+            msg_id: msg_id,
+            options: options
+        });
+    } else {
+        z_transport_queue.push({
+            msg: msg,
+            msg_id: msg_id,
+            options: options
+        });
+        z_transport_check();
+    }
     return msg_id;
 }
 
@@ -649,7 +661,7 @@ function z_transport_incoming_data_decode(type, data)
     switch (type)
     {
         case 'ubf':
-            // Decoded by decoding the z_msg_v1 record 
+            // Decoded by decoding the z_msg_v1 record
             return data;
         case 'json':
             return $.parseJSON(data.valueOf());
@@ -668,11 +680,15 @@ function z_transport_incoming_data_decode(type, data)
 
 // Queue form data to be transported to the server
 // This is called by the server generated javascript and jquery triggered postback events.
-function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, isExpectCookie)
+// 'transport' is one of: '', 'ajax', 'form'
+function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, transport, optPostForm)
 {
     var triggervalue = '';
     var trigger;
 
+    if (transport === true) {
+        transport = 'ajax';
+    }
     if (trigger_id) {
         trigger = $('#'+trigger_id).get(0);
     }
@@ -703,12 +719,17 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, isE
         }
     };
 
+    if (!transport) {
+        if ((trigger_id == "logon_form") || (trigger && $(trigger).hasClass("setcookie"))) {
+            transport = 'ajax';
+        }
+    }
+
     // logon_form and .setcookie forms are always posted, as they will set cookies.
     var options = {
-        is_expect_cookie: isExpectCookie ||
-                          (trigger_id == "logon_form") ||
-                          (trigger && $(trigger).hasClass("setcookie")),
-        trigger_id: trigger_id
+        transport: transport,
+        trigger_id: trigger_id,
+        post_form: optPostForm
     };
     if (trigger_id) {
         options.ack = function(_ack_msg, _options) {
@@ -751,13 +772,10 @@ function z_transport_check()
 function z_do_transport(qmsg)
 {
     var data = ubf.encode(qmsg.msg);
-    if (z_websocket_is_connected() && !qmsg.options.is_expect_cookie && z_pageid)
-    {
-        z_ws.send(data);
-    }
-    else
-    {
+    if (qmsg.options.transport == 'ajax' || !z_websocket_is_connected() || !z_pageid) {
         z_ajax(qmsg.options, data);
+    } else {
+        z_ws.send(data);
     }
 }
 
@@ -853,7 +871,7 @@ function z_reload(args)
 {
     var page = $('#logon_form input[name="page"]');
     z_start_spinner();
-    if (page.length > 0 && page.val() != "") {
+    if (page.length > 0 && page.val() !== "") {
         window.location.href = window.location.protocol+"//"+window.location.host+page.val();
     } else {
         if (typeof args == "undefined")
@@ -996,10 +1014,8 @@ function z_stream_start(host, websocket_host)
 function z_stream_restart()
 {
     if (z_websocket_host) {
-        $('#z_comet_connection').remove();
         setTimeout(function() { z_comet_start(); }, 1000);
-        if ("WebSocket" in window)
-        {
+        if ("WebSocket" in window) {
             setTimeout(function() { z_websocket_start(); }, 200);
         }
     }
@@ -1035,27 +1051,34 @@ function z_comet_poll_ajax()
 {
     if (z_ws_pong_count === 0 && z_session_valid && !z_page_unloading)
     {
+        z_comet_poll_count++;
+        var msg = ubf.encode({
+                "_record": "z_msg_v1",
+                "qos": 0,
+                "dup" : false,
+                "msg_id": '$comet-'+z_pageid+'-'+z_comet_poll_count,
+                "timestamp": new Date().getTime(),
+                "content_type": ubf.constant("ubf"),
+                "delegate": ubf.constant('$comet'),
+                "ua_class": ubf.constant(z_ua),
+                "page_id": z_pageid,
+                "session_id": window.z_sid || undefined,
+                "data": z_comet_poll_count
+            });
         z_comet = $.ajax({
             url: window.location.protocol + '//' + window.location.host + '/comet',
             type:'post',
-            data: z_stream_args('comet'),
+            data: msg,
             dataType: 'text',
+            contentType: 'text/x-ubf',
             statusCode: {
                     /* Handle incoming data */
                     200: function(data, _textStatus) {
-                            z_comet_data(data);
-                            z_timeout_comet_poll_ajax(100);
+                        z_transport_handle_push_data(data);
+                        z_timeout_comet_poll_ajax(100);
                     },
                     204: function() {
                         z_timeout_comet_poll_ajax(1000);
-                    },
-
-                    /* Reload the page on forbidden/auth responses. */
-                    401: function() {
-                        z_transport_delegates.session("session_invalid");
-                    },
-                    403: function() {
-                        z_transport_delegates.session("session_invalid");
                     }
                 },
             error: function(xmlHttpRequest, textStatus, errorThrown) {
@@ -1063,8 +1086,8 @@ function z_comet_poll_ajax()
                        if(z_comet_reconnect_timeout < 60000)
                            z_comet_reconnect_timeout = z_comet_reconnect_timeout * 2;
                    }
-        }).done(function() { 
-            z_comet = undefined; 
+        }).done(function() {
+            z_comet = undefined;
         });
     }
     else
@@ -1088,7 +1111,7 @@ function z_timeout_comet_poll_ajax(timeout)
 }
 
 
-function z_comet_data(data)
+function z_transport_handle_push_data(data)
 {
     try
     {
@@ -1117,11 +1140,11 @@ function z_websocket_start()
     }
 
     z_ws.onopen = z_websocket_ping;
-    z_ws.onerror = z_websocket_restart; 
+    z_ws.onerror = z_websocket_restart;
     z_ws.onclose = z_websocket_restart;
 
     z_ws.onmessage = function (evt) {
-        z_comet_data(evt.data);
+        z_transport_handle_push_data(evt.data);
         setTimeout(function() { z_transport_check(); }, 0);
     };
 }
@@ -1189,20 +1212,6 @@ function z_websocket_restart()
     }
 }
 
-function z_stream_args(stream_type)
-{
-    var args = "z_pageid=" + urlencode(z_pageid);
-
-    // Set the z_ua because we can't derive it from the ws handshake.
-    if(stream_type == "websocket")
-        args += "&z_ua=" + urlencode(z_ua);
-
-    // Set z_sid when it is available. Can be used if there are problems with cookies.
-    if(window.z_sid)
-        args += "&z_sid=" + urlencode(z_sid);
-
-    return args;
-}
 
 /* Utility functions
 ---------------------------------------------------------- */
@@ -1435,11 +1444,9 @@ This function can be run multiple times.
 
 function z_init_postback_forms()
 {
-    $("form[action='postback']").each(function()
-    {
+    $("form[action='postback']").each(function() {
         // store options in hash
-        $(this).on('click.form-plugin', ":submit,input:image", function(e)
-        {
+        $(this).on('click.form-plugin', ":submit,input:image", function(e) {
             var form = this.form;
             form.clk = this;
 
@@ -1464,56 +1471,66 @@ function z_init_postback_forms()
             }
         });
     })
-    .submit(function(event)
-    {
+    .submit(function(event) {
         theForm = this;
         z_editor_save(theForm);
 
         submitFunction = function(ev) {
-            var args = $(theForm).formToArray();
-
             try { $(theForm).mask("", 100); } catch (e) {}
 
-            var postback    = $(theForm).data("z_submit_postback");
-            var action      = $(theForm).data("z_submit_action");
-            var form_id     = $(theForm).attr('id');
-            var validations = $(theForm).formValidationPostback();
+            var postback     = $(theForm).data("z_submit_postback");
+            var action       = $(theForm).data("z_submit_action");
+            var form_id      = $(theForm).attr('id');
+            var validations  = $(theForm).formValidationPostback();
+            var transport    = '';
+            var files        = $('input:file', theForm).fieldValue();
+            var is_file_form = false;
 
-            if(!postback)
-            {
+            if (!postback) {
                 postback = z_default_form_postback;
             }
-
-            if(action)
-            {
+            if (action) {
                 setTimeout(action, 10);
             }
 
-            var files = $('input:file', theForm).fieldValue();
-            var use_post = false;
-            for (var j=0; j < files.length && !use_post; j++)
-            {
-                if (files[j])
-                {
-                    use_post = true;
+            for (var j=0; j < files.length && !is_file_form; j++) {
+                if (files[j]) {
+                    is_file_form = true;
                     break;
                 }
             }
-
-            if (use_post)
-            {
-                $(theForm).postbackFileForm(form_id, postback, validations);
-            }
-            else
-            {
-                var cookie_form = $(theForm).hasClass("z_cookie_form") || $(theForm).hasClass("z_logon_form");
-                if (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)
-                {
-                    cookie_form = true;
+            if (is_file_form) {
+                transport = 'form';
+                args = validations;
+            } else {
+                if ($(theForm).hasClass("z_cookie_form") ||
+                    $(theForm).hasClass("z_logon_form") ||
+                    (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)) {
+                    transport = 'ajax';
                 }
-                theForm.clk = theForm.clk_x = theForm.clk_y = null;
-                z_queue_postback(form_id, postback, args.concat(validations), false, cookie_form);
+                args = validations.concat($(theForm).formToArray());
             }
+
+            // add submitting element to data if we know it
+            var sub = theForm.clk;
+            if (sub) {
+                var n = sub.name;
+                if (n && !sub.disabled) {
+                    args.push({name: n, value: $(sub).val()});
+                    args.push({name: 'z_submitter', value: n});
+                    if (sub.type == "image") {
+                        args.push({name: name+'.x', value: theForm.clk_x});
+                        args.push({name: name+'.y', value: theForm.clk_y});
+                    }
+                }
+            }
+
+            // Queue the postback, or use a post to an iframe (if files present)
+            z_queue_postback(form_id, postback, args, false, transport, theForm);
+
+            theForm.clk   = null;
+            theForm.clk_x = null;
+            theForm.clk_y = null;
             ev.stopPropagation();
             return false;
         };
@@ -1559,19 +1576,10 @@ function z_form_submit_validated_do(event)
 }
 
 
-$.fn.postbackFileForm = function(trigger_id, postback, validations)
+function z_transport_form(qmsg)
 {
-    var a = validations;
-
-    a.push({name: "postback",     value: postback});
-    a.push({name: "z_trigger_id", value: trigger_id});
-    a.push({name: "z_pageid",     value: z_pageid});
-    a.push({name: "z_ua",         value: z_ua});
-    a.push({name: "z_comet",      value: typeof z_stream_host != 'undefined'});
-
-    var $form = this;
     var options = {
-        url:  '/postback?' + $.param(a),
+        url:  '/postback',
         type: 'POST',
         dataType: 'text/plain'
     };
@@ -1585,6 +1593,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
 
     // private function for handling file uploads (hat tip to YAHOO!)
     function fileUpload() {
+        var $form = $(qmsg.options.post_form);
         var form = $form[0];
 
         if ($(':input[name=submit]', form).length) {
@@ -1632,24 +1641,6 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
         var cbInvoked = 0;
         var timedOut = 0;
 
-        // add submitting element to data if we know it
-        var sub = form.clk;
-        if (sub) {
-            var n = sub.name;
-            if (n && !sub.disabled) {
-                options.extraData = options.extraData || {};
-                options.extraData['z_submitter'] = n;
-                options.extraData[n] = sub.value;
-                if (sub.type == "image") {
-                    options.extraData[name+'.x'] = form.clk_x;
-                    options.extraData[name+'.y'] = form.clk_y;
-                }
-            }
-        }
-        form.clk   = null;
-        form.clk_x = null;
-        form.clk_y = null;
-
         // take a breath so that pending repaints get some cpu time before the upload starts
         setTimeout(function() {
             // make sure form attrs are set
@@ -1676,15 +1667,13 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
                 setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
             }
 
-            // add "extra" data to form if provided in options
-            var extraInputs = [];
-            try {
-                if (options.extraData)
-                    for (var n in options.extraData)
-                        extraInputs.push(
-                            $('<input type="hidden" name="'+n+'" value="'+options.extraData[n]+'" />')
-                                .appendTo(form)[0]);
+            zmsgInput = $('<input />')
+                            .attr('type', 'hidden')
+                            .attr('name', 'z_msg')
+                            .attr('value', ubf.encode(qmsg.msg))
+                         .prependTo(form)[0];
 
+            try {
                 // add iframe to doc and submit the form
                 $io.appendTo('body');
                 if (io.attachEvent) {
@@ -1702,7 +1691,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
                 } else {
                     $form.removeAttr('target');
                 }
-                $(extraInputs).remove();
+                $(zmsgInput).remove();
             }
         }, 10);
 
@@ -1729,7 +1718,7 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
             z_transport_ensure();
         }
     }
-};
+}
 
 
 // Collect all postback validations from the form elements
@@ -1802,7 +1791,7 @@ function z_add_validator(id, type, args)
             switch (type)
             {
                 case 'email':           v.add(Validate.Email, args);        break;
-                                case 'date':                    v.add(Validate.Date, args);             break;
+                case 'date':            v.add(Validate.Date, args);         break;
                 case 'presence':        v.add(Validate.Presence, args);     break;
                 case 'confirmation':    v.add(Validate.Confirmation, args); break;
                 case 'acceptance':      v.add(Validate.Acceptance, args);   break;
@@ -1964,71 +1953,38 @@ function z_update_iframe(name, doc)
  */
 $.fn.formToArray = function(semantic) {
     var a = [];
-    if (this.length === 0) return a;
+    if (this.length > 0) {
+        var form = this[0];
+        var els = semantic ? form.getElementsByTagName('*') : form.elements;
+        var n;
 
-    var form = this[0];
-    var els = semantic ? form.getElementsByTagName('*') : form.elements;
-    var n;
-
-    if (!els) return a;
-    for(var i=0, max=els.length; i < max; i++) {
-        var el = els[i];
-        n = el.name;
-        if (!n) continue;
-        if ($(el).hasClass("nosubmit")) continue;
-        if ($(el).attr("type") == 'submit') continue;
-
-        var v = $.fieldValue(el, true);
-        if (v && v.constructor == Array) {
-            for(var j=0, jmax=v.length; j < jmax; j++)
-                a.push({name: n, value: v[j]});
-        }
-        else if (v !== null && typeof v != 'undefined')
-            a.push({name: n, value: v});
-    }
-
-    // add submitting element to data if we know it
-    var sub = form.clk;
-    if (sub) {
-        n = sub.name;
-        if (n && !sub.disabled) {
-            a.push({name: n, value: $(sub).val()});
-            a.push({name: 'z_submitter', value: n});
+        if (els) {
+            for(var i=0, max=els.length; i < max; i++) {
+                var el = els[i];
+                n = el.name;
+                if (n && !$(el).hasClass("nosubmit")) {
+                    switch ($(el).attr("type")) {
+                        case "submit":
+                            break;
+                        case "file":
+                            break;
+                        default:
+                            var v = $.fieldValue(el, true);
+                            if (v && v.constructor == Array) {
+                                for(var j=0, jmax=v.length; j < jmax; j++)
+                                    a.push({name: n, value: v[j]});
+                            }
+                            else if (v !== null && typeof v != 'undefined') {
+                                a.push({name: n, value: v});
+                            }
+                    }
+                }
+            }
         }
     }
-
     return a;
 };
 
-/**
- * Serializes form data into a 'submittable' string. This method will return a string
- * in the format: name1=value1&amp;name2=value2
- */
-$.fn.formSerialize = function(semantic) {
-    //hand off to jQuery.param for proper encoding
-    return $.param(this.formToArray(semantic));
-};
-
-/**
- * Serializes all field elements in the jQuery object into a query string.
- * This method will return a string in the format: name1=value1&amp;name2=value2
- */
-$.fn.fieldSerialize = function(successful) {
-    var a = [];
-    this.each(function() {
-        var n = this.name;
-        if (!n) return;
-        var v = $.fieldValue(this, successful);
-        if (v && v.constructor == Array) {
-            for (var i=0,max=v.length; i < max; i++)
-                a.push({name: n, value: v[i]});
-        }
-        else if (v !== null && typeof v != 'undefined')
-            a.push({name: this.name, value: v});
-    });
-    //hand off to jQuery.param for proper encoding
-    return $.param(a);
-};
 
 /**
  * Returns the value(s) of the element in the matched set.  For example, consider the following form:
@@ -2216,9 +2172,9 @@ function is_equal(x, y) {
     return true;
 }
 
-$.extend({ 
+$.extend({
     keys: function(obj){
-        if (typeof Object.keys == 'function') 
+        if (typeof Object.keys == 'function')
             return Object.keys(obj);
         var a = [];
         $.each(obj, function(k){ a.push(k) });

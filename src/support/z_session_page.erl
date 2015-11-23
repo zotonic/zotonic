@@ -220,6 +220,8 @@ add_script(Context) ->
     CleanContext.
 
 %% @doc Send a msg to the pages, queue if no page-transport attached
+transport([], _Context) ->
+    ok;
 transport(_Msg, undefined) ->
     ok;
 transport(Msg, #context{page_pid=PagePid}) ->

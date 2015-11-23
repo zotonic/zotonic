@@ -33,7 +33,7 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:continue_all(z_context:set(DispatchArgs, Context)),
+    Context1 = z_context:continue_session(z_context:set(DispatchArgs, Context)),
     z_context:lager_md(Context1),
     ?WM_REPLY(true, Context1).
 
@@ -74,36 +74,26 @@ mklist(V) -> [V].
 %% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2 
 process_post_form(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
-    case z_context:get_q("postback", Context) of
+    Context1 = z_context:ensure_qs(Context),
+    case z_context:get_q("z_msg", Context1) of
         undefined ->
             % A "nornal" post of a form, no javascript involved
             Event = #submit{
-                        message = z_context:get_q("z_message", Context),
-                        target = z_context:get_q("z_target_id", Context)
+                        message = z_context:get_q("z_message", Context1),
+                        target = z_context:get_q("z_target_id", Context1)
                     },
-            Context1 = notify_submit(z_context:get_q("z_delegate", Context), Event, Context),
-            {Script, Context2} = z_script:split(Context1),
+            Context2 = notify_submit(z_context:get_q("z_delegate", Context), Event, Context1),
+            {Script, Context3} = z_script:split(Context2),
             case Script of
                 <<>> ->  nop;
-                _JS -> z_transport:page(javascript, Script, Context2)
+                _JS -> z_transport:page(javascript, Script, Context3)
             end,
-            post_return(<<>>, Context2);
-        Postback ->
-            % A wired postback of a form
-            Msg = #z_msg_v1{
-                        qos=0,
-                        content_type=form,
-                        delegate=postback,
-                        data=#postback_event{
-                                postback=Postback,
-                                trigger=z_context:get_q("z_trigger_id", Context),
-                                target=z_context:get_q("z_target_id", Context),
-                                triggervalue=z_context:get_q("triggervalue", Context)
-                        }
-                  },
-            {ok, Reply, Context1} = z_transport:incoming(Msg, Context),
-            z_transport:transport(Reply, Context1),
-            post_return(<<>>, Context1)
+            post_return(<<>>, Context3);
+        #z_msg_v1{} = Msg ->
+            {ok, Reply, Context2} = z_transport:incoming(Msg, Context1),
+            {ok, Ms, Context3} = z_transport:transport(Reply, Context2),
+            z_session_page:transport(Ms, Context3),
+            post_return(<<>>, Context3)
     end.
 
 notify_submit(None, Event, Context) when None =:= undefined; None =:= <<>>; None =:= [] ->
