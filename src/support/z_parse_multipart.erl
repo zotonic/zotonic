@@ -37,7 +37,6 @@
 %% interface functions
 -export([
    recv_parse/1,
-   recv_parse/2,
    
    find_boundary/2
 ]).
@@ -46,20 +45,24 @@
 
 -define(CHUNKSIZE, 4096).
 
--record(mp, {state, boundary, content_length, length, percentage=0, 
-			 buffer, next_chunk, callback, progress, context}).
+-record(mp, {
+        boundary :: binary(),
+        content_length :: integer(),
+        length :: integer(),
+        percentage = 0 :: pos_integer(), 
+        buffer :: binary(),
+        next_chunk :: done | function(),
+        form = #multipart_form{},
+        z_msg = undefined :: #z_msg_v1{},
+        context :: #context{}
+    }).
 
 
 %% @doc Receive and parse the form data in the request body.  
 %% The progress function should accept the parameters [Percentage, Context]
 %% @spec recv_parse(Context) -> {form(), NewContext}
 recv_parse(Context) ->
-    recv_parse(fun(_Filename, _ContentType, _Size) -> ok end, Context).
-
-%% @spec recv_parse(UploadCheckFun, Context) -> {form(), NewContext}
-recv_parse(UploadCheckFun, Context) ->
-    Callback = fun(N) -> callback(N, #multipart_form{}, UploadCheckFun) end,
-    {_LengthRemaining, _RestData, Form, ContextParsed} = parse_multipart_request(fun progress/4, Callback, Context),
+    {Form, _ZMsg, ContextParsed} = parse_multipart_request(Context),
     if Form#multipart_form.file =/= undefined ->
         % Premature end
         file:close(Form#multipart_form.file);
@@ -69,115 +72,8 @@ recv_parse(UploadCheckFun, Context) ->
     {Form, ContextParsed}.
 
 
-%% @doc Report progress back to the page.
-progress(0, _ContentLength, _ReceivedLength, _Context) ->
-    nop;
-progress(Percentage, ContentLength, _ReceivedLength, Context) when ContentLength > ?CHUNKSIZE*5 ->
-	case {is_push_attached(Context), z_context:get_q("z_trigger_id", Context)} of
-		{true, TriggerId} when TriggerId =/= undefined, TriggerId =/= "", TriggerId =/= <<>> ->
-            JS = iolist_to_binary([
-                        "z_progress('", z_utils:js_escape(TriggerId),
-                            "',", integer_to_list(Percentage),");"
-                    ]),
-			z_transport:page(javascript, JS, Context);
-		_ -> 
-            nop
-	end;
-progress(_, _, _, _) ->
-    nop.
-	
-is_push_attached(Context) ->
-    z_convert:to_bool(z_context:get_q("z_comet", Context))
-    orelse z_session_page:get_attach_state(Context) =:= attached.
-
-%% @doc Callback function collecting all data found in the multipart/form-data body
-%% @spec callback(Next, function(), form()) -> function() | form()
-callback(Next, Form, UploadCheckFun) ->
-    case Next of
-        {headers, Headers} ->
-            % Find out if it is a file
-            ContentDisposition = proplists:get_value("content-disposition", Headers),
-            case ContentDisposition of
-                {"form-data", [{"name", Name}, {"filename",Filename}]} ->
-                    ContentLength = case proplists:get_value("content-length", Headers) of
-                                        undefined -> undefined;
-                                        {CL,_} -> z_convert:to_integer(CL)
-                                    end,
-                    ContentType = case proplists:get_value("content-type", Headers) of
-                                        undefined -> undefined;
-                                        {Mime,_} -> Mime
-                                  end,
-                    case UploadCheckFun(Filename, ContentType, ContentLength) of
-                        ok ->
-                            NF = Form#multipart_form{name=Name,
-                                                     filename=Filename, 
-                                                     content_length=ContentLength, 
-                                                     content_type=ContentType,
-                                                     tmpfile=z_tempfile:new()},
-                            fun(N) -> callback(N, NF, UploadCheckFun) end;
-                        {error, _Reason} = Error ->
-                            throw(Error)
-                    end;
-                {"form-data",[{"name",Name}]} ->
-                    NF = Form#multipart_form{name=Name, data=[]},
-                    fun(N) -> callback(N, NF, UploadCheckFun) end;
-                _ ->
-                    fun(N) -> callback(N, Form, UploadCheckFun) end
-            end;
-
-        {body, Data} ->
-            NewForm = 
-                if  Form#multipart_form.filename =/= undefined ->
-                    if Form#multipart_form.file =/= undefined ->
-                        file:write(Form#multipart_form.file, Data),
-                        Form;
-                    true ->
-                        case file:open(Form#multipart_form.tmpfile, [raw,write]) of
-                            {ok, File} ->
-                                file:write(File, Data),
-                                Form#multipart_form{file=File};
-                            {error, Error} ->
-                                lager:error("Couldn't open ~p for writing, error: ~p~n", [Form#multipart_form.tmpfile, Error]),
-                                exit(could_not_open_file_for_writing)
-                        end
-                    end;
-                true ->
-                    Form#multipart_form{data=[Form#multipart_form.data, binary_to_list(Data)]}
-                end,
-            fun(N) -> callback(N, NewForm, UploadCheckFun) end;
-
-         body_end ->
-            NewForm = if Form#multipart_form.file =/= undefined ->
-                            file:close(Form#multipart_form.file),
-                            Form#multipart_form{
-                                name=undefined,
-                                data=undefined,
-                                file=undefined,
-                                tmpfile=undefined,
-                                filename=undefined,
-                                content_type=undefined,
-                                content_length=undefined,
-                                files=[{Form#multipart_form.name, Form#multipart_form.filename, Form#multipart_form.tmpfile}|Form#multipart_form.files]
-                            };
-                        Form#multipart_form.name =/= undefined ->
-                            Data = lists:flatten(Form#multipart_form.data),
-                            Form#multipart_form{
-                                name=undefined,
-                                data=undefined,
-                                args=[{Form#multipart_form.name, Data} | Form#multipart_form.args]
-                            };
-                        true ->
-                            Form
-                        end,
-            fun(N) -> callback(N, NewForm, UploadCheckFun) end;
-        
-        eof ->
-            Form
-    end.
-
-
 %% @doc Parse the multipart request
-parse_multipart_request(ProgressFunction, Callback, Context) ->
+parse_multipart_request(Context) ->
     ReqData  = z_context:get_reqdata(Context),
     Length   = list_to_integer(wrq:get_req_header_lc("content-length", ReqData)),
     Boundary = iolist_to_binary(get_boundary(wrq:get_req_header_lc("content-type", ReqData))),
@@ -191,18 +87,16 @@ parse_multipart_request(ProgressFunction, Callback, Context) ->
                                  length=size(Chunk),
                                  content_length=Length,
                                  buffer=Rest,
-                                 callback=Callback,
-                                 progress=ProgressFunction,
+                                 form=#multipart_form{},
                                  next_chunk=Next,
                                  context=Context1});
         _ ->
-            lager:debug(z_context:lager_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
+            lager:info(z_context:lager_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
             throw({stop_request, 400})
     end.
 
 
-
-feed_mp(headers, State=#mp{buffer=Buffer, callback=Callback}) ->
+feed_mp(headers, #mp{buffer=Buffer, form=Form} = State) ->
     {State1, P} = case find_in_binary(<<"\r\n\r\n">>, Buffer) of
         {exact, N} ->
             {State, N};
@@ -213,49 +107,167 @@ feed_mp(headers, State=#mp{buffer=Buffer, callback=Callback}) ->
                 {exact, N} ->
                     {S1, N};
                 _ ->
-                    lager:debug("Could not decode multipart: headers incomplete or too long: ~p", [S1#mp.buffer]),
+                    lager:info("Could not decode multipart: headers incomplete or too long: ~p", [S1#mp.buffer]),
                     throw({stop_request, 400})
             end
     end,
     <<Headers:P/binary, "\r\n\r\n", Rest/binary>> = State1#mp.buffer,
-    NextCallback = Callback({headers, parse_headers(Headers)}),
-    feed_mp(body, State1#mp{buffer=Rest, callback=NextCallback});
-
-feed_mp(body, State=#mp{boundary=Prefix, buffer=Buffer, callback=Callback}) ->
+    Form1 = handle_data({headers, parse_headers(Headers)}, Form),
+    feed_mp(body, State1#mp{buffer=Rest, form=Form1});
+feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
     case find_boundary(Prefix, Buffer) of
         {end_boundary, Start, Skip} ->
-             <<Data:Start/binary, _:Skip/binary, Rest/binary>> = Buffer,
-             C1 = Callback({body, Data}),
-             C2 = C1(body_end),
-             {State#mp.length, Rest, C2(eof), State#mp.context};
+            <<Data:Start/binary, _:Skip/binary, _Rest/binary>> = Buffer,
+            Form1 = handle_data({body, Data}, Form),
+            Form2 = handle_data(body_end, Form1),
+            Form3 = handle_data(eof, Form2),
+            {Form3, State#mp.z_msg, State#mp.context};
         {next_boundary, Start, Skip} ->
-             <<Data:Start/binary, _:Skip/binary, Rest/binary>> = Buffer,
-             C1 = Callback({body, Data}),
-             feed_mp(headers, State#mp{callback=C1(body_end), buffer=Rest});
+            <<Data:Start/binary, _:Skip/binary, Rest/binary>> = Buffer,
+            Form1 = handle_data({body, Data}, Form),
+            Form2 =handle_data(body_end, Form1),
+            State1 = State#mp{form=Form2, buffer=Rest},
+            State2 = maybe_z_msg_context(State1),
+            feed_mp(headers, State2);
         {maybe, 0} ->
             % Found a boundary, without an ending newline
             case read_more(State) of
                 State ->
-                    lager:debug("Could not decode multipart: incomplete end boundary at: ~p", [Buffer]),
+                    lager:info("Could not decode multipart: incomplete end boundary at: ~p", [Buffer]),
                     throw({stop_request, 400});
                 S1 ->
                     feed_mp(body, S1)
             end;
         {maybe, Start} ->
             <<Data:Start/binary, Rest/binary>> = Buffer,
-            feed_mp(body, read_more(State#mp{callback=Callback({body, Data}), buffer=Rest}));
+            Form1 = handle_data({body, Data}, Form),
+            feed_mp(body, read_more(State#mp{form=Form1, buffer=Rest}));
         not_found ->
-            State1 = read_more(State#mp{callback=Callback({body, Buffer}), buffer= <<>>}),
-            case State1 of
-                #mp{buffer= <<>>, content_length=ContentLength, length=Length} when ContentLength =:= Length; ContentLength =:= 0 ->
-                    {State1#mp.length, <<>>, (State1#mp.callback)(eof), State1#mp.context};
-                #mp{buffer= <<>>} = State1 ->
-                    lager:debug("Could not decode multipart: unexpected end and missing end boundary"),
-                    throw({stop_request, 400});
-                #mp{} ->
-                    feed_mp(body, State1)
-            end
+            Form1 = handle_data({body, Buffer}, Form),
+            State1 = read_more(State#mp{form=Form1, buffer= <<>>}),
+            feed_maybe_eof(State1)
     end.
+
+feed_maybe_eof(#mp{buffer= <<>>, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length; ContentLength =:= 0 ->
+    Form1 = handle_data(eof, State#mp.form),
+    {Form1, State#mp.z_msg, State#mp.context};
+feed_maybe_eof(#mp{buffer= <<>>}) ->
+    lager:info("Could not decode multipart: unexpected end and missing end boundary"),
+    throw({stop_request, 400});
+feed_maybe_eof(#mp{} = State) ->
+    feed_mp(body, State).
+
+
+maybe_z_msg_context(#mp{
+            z_msg=undefined,
+            form=#multipart_form{args=[{"z_msg",Data}|RestArgs]} = Form,
+            context=#context{page_pid=undefined} = Context
+        } = State) ->
+    {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
+    #z_msg_v1{page_id=PageId, session_id=SessionId} = ZMsg,
+    Context1 = z_transport:maybe_logon(
+                    z_transport:maybe_set_sessions(SessionId, PageId, Context)),
+    Form1 = Form#multipart_form{args=[{"z_msg", ZMsg}|RestArgs]},
+    State#mp{z_msg=ZMsg, form=Form1, context=Context1};
+maybe_z_msg_context(#mp{} = State) ->
+    State.
+
+
+%% @doc Report progress back to the page.
+progress(0, _ContentLength, _ZMsg, _Context) ->
+    ok;
+progress(Percentage, ContentLength, 
+         #z_msg_v1{data=#postback_event{trigger=TriggerId}}, 
+         Context) 
+    when ContentLength > ?CHUNKSIZE*5, TriggerId =/= undefined, TriggerId =/= "", TriggerId =/= <<>> ->
+    case is_push_attached(Context) of
+        true ->
+            JS = iolist_to_binary([
+                        "z_progress('", z_utils:js_escape(TriggerId),
+                            "',", integer_to_list(Percentage),");"
+                    ]),
+            z_transport:page(javascript, JS, Context);
+        false -> 
+            ok
+    end;
+progress(_Percentage, _ContentLength, _ZMsg, _Context) ->
+    ok.
+    
+is_push_attached(Context) ->
+    z_session_page:get_attach_state(Context) =:= attached.
+
+
+
+%% @doc Callback function collecting all data found in the multipart/form-data body
+%% @spec callback(Next, function(), form()) -> function() | form()
+handle_data({headers, Headers}, Form) ->
+    % Find out if it is a file
+    ContentDisposition = proplists:get_value("content-disposition", Headers),
+    case ContentDisposition of
+        {"form-data", [{"name", Name}, {"filename",Filename}]} ->
+            ContentLength = case proplists:get_value("content-length", Headers) of
+                                undefined -> undefined;
+                                {CL,_} -> z_convert:to_integer(CL)
+                            end,
+            ContentType = case proplists:get_value("content-type", Headers) of
+                                undefined -> undefined;
+                                {Mime,_} -> Mime
+                          end,
+            Form#multipart_form{name=Name,
+                                filename=Filename, 
+                                content_length=ContentLength, 
+                                content_type=ContentType,
+                                tmpfile=z_tempfile:new()};
+        {"form-data",[{"name",Name}]} ->
+            Form#multipart_form{name=Name, data= <<>>};
+        _ ->
+            Form
+    end;
+handle_data({body, Data}, #multipart_form{filename=undefined} = Form) ->
+    Form#multipart_form{data = <<(Form#multipart_form.data)/binary, Data/binary>>};
+handle_data({body, Data}, #multipart_form{filename=Filename, file=undefined} = Form) when Filename =/= undefined ->
+    case file:open(Form#multipart_form.tmpfile, [raw,write]) of
+        {ok, File} ->
+            file:write(File, Data),
+            Form#multipart_form{file=File};
+        {error, Error} ->
+            lager:error("Couldn't open ~p for writing, error: ~p~n", [Form#multipart_form.tmpfile, Error]),
+            exit(could_not_open_file_for_writing)
+    end;
+handle_data({body, Data}, #multipart_form{file=File} = Form) when File =/= undefined ->
+    file:write(File, Data),
+    Form;
+handle_data(body_end, #multipart_form{name=undefined} = Form) ->
+    Form#multipart_form{
+        name=undefined,
+        data=undefined
+    };
+handle_data(body_end, #multipart_form{file=undefined, name=Name} = Form) when Name =/= undefined ->
+    Form#multipart_form{
+        name=undefined,
+        data=undefined,
+        args=[
+            {Name, Form#multipart_form.data}
+            | Form#multipart_form.args
+        ]
+    };
+handle_data(body_end, #multipart_form{file=File, name=Name} = Form) when Name =/= undefined ->
+    file:close(File),
+    Form#multipart_form{
+        name=undefined,
+        data=undefined,
+        file=undefined,
+        tmpfile=undefined,
+        filename=undefined,
+        content_type=undefined,
+        content_length=undefined,
+        files=[
+            {Name, Form#multipart_form.filename, Form#multipart_form.tmpfile}
+            |Form#multipart_form.files
+        ]
+    };
+handle_data(eof, Form) ->
+    Form.
 
 
 
@@ -263,37 +275,32 @@ feed_mp(body, State=#mp{boundary=Prefix, buffer=Buffer, callback=Callback}) ->
 %% @spec read_more(mp()) -> mp()
 read_more(State=#mp{next_chunk=done, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length ->
     State;
-read_more(State=#mp{next_chunk=done} = State) ->
+read_more(State=#mp{next_chunk=done, context=Context} = State) ->
+    lager:info(z_context:lager_md(Context), "Multipart post with wrong content length"),
     throw({error, wrong_content_length});
 read_more(State=#mp{length=Length, content_length=ContentLength, 
-				percentage=Percentage,
-				buffer=Buffer, next_chunk=Next, context=Context,
-				progress=ProgressFunction}) ->
+                percentage=Percentage,
+                buffer=Buffer, next_chunk=Next, context=Context}) ->
     {Data, Next1} = Next(),
     Buffer1 = <<Buffer/binary, Data/binary>>,
-	Length1 = Length + size(Data),
-	NewPercentage = case ContentLength of
-						0 -> 100;
-						_ -> (Length1 * 100) div ContentLength
-					end,
-	case NewPercentage > Percentage of
-		true ->
-			case ProgressFunction of
-				undefined -> nop;
-				F -> F(NewPercentage, ContentLength, Length1, Context)
-			end;
-		_ ->
-			nop
-	end,
+    Length1 = Length + size(Data),
+    NewPercentage = case ContentLength of
+                        0 -> 100;
+                        _ -> (Length1 * 100) div ContentLength
+                    end,
+    case NewPercentage > Percentage of
+        true -> progress(NewPercentage, ContentLength, undefined, Context);
+        _ -> nop
+    end,
     State#mp{length=Length1, buffer=Buffer1, next_chunk=Next1, percentage=NewPercentage}.
 
 
 %% @doc Parse the headers of a part in the form data
-parse_headers(<<>>) ->
-    [];
 parse_headers(Binary) ->
     parse_headers(Binary, []).
 
+parse_headers(<<>>, Acc) ->
+    Acc;
 parse_headers(Binary, Acc) ->
     case find_in_binary(<<"\r\n">>, Binary) of
         {exact, N} ->

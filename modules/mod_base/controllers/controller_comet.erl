@@ -21,112 +21,57 @@
 
 -export([
     init/1, 
-    forbidden/2,
+    service_available/2,
     malformed_request/2,
     allowed_methods/2,
-    content_types_provided/2,
-    process_post/2,
-    process_post_loop/4
+    process_post/2
     ]).
 
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 
-%% Timeout for comet flush when there is no data, webmachine 0.x had a timeout of 60 seconds, so leave after 55
--define(COMET_FLUSH_EMPTY, 55000).
-
-%% Timeout for comet flush when there is data, allow for 100 msec more to gather extra data before flushing
--define(COMET_FLUSH_DATA,  100).
-
-
 init(_Args) -> {ok, []}.
 
-malformed_request(ReqData, _Context) ->
-    Context = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    ?WM_REPLY(false, Context).
+service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
+    Context  = z_context:new(ReqData, ?MODULE),
+    Context1 = z_context:continue_session(z_context:set(DispatchArgs, Context)),
+    z_context:lager_md(Context1),
+    ?WM_REPLY(true, Context1).
 
-forbidden(ReqData, Context) ->
+%% @doc Expect an UBF encoded #z_msg_v1 record in the POST
+malformed_request(ReqData, Context0) ->
     try
-        Context1 = ?WM_REQ(ReqData, Context),
-        %% Ensure all, but don't start a new session
-        Context2 = z_context:set(no_session, true, Context1),
-        Context3 = z_context:ensure_all(Context2),
-        z_context:lager_md(Context3),
-        ?WM_REPLY(not z_context:has_session(Context3), Context3)
-    catch
-        exit:{noproc,_} ->
-            {true, ReqData, Context}
+        {Data, RD1} = wrq:req_body(ReqData),
+        {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
+        Context = ?WM_REQ(RD1, Context0),
+        z_context:lager_md(Context),
+        Context1 = z_context:set(z_msg, ZMsg, Context),
+        ?WM_REPLY(ZMsg#z_msg_v1.delegate =/= '$comet', Context1)
+    catch _:_ ->
+        {true, ReqData, Context0}
     end.
 
 allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
 
-content_types_provided(ReqData, Context) -> 
-    %% When handling a POST the content type function is not used, so supply false for the function.
-    { [{"application/x-javascript", false}], ReqData, Context }.
-
-
-%% @doc Collect all scripts to be pushed back to the user agent
+%% @doc Collect all data to be pushed back to the user agent
 process_post(ReqData, Context) ->
+    case wrq:get_req_header_lc("content-type", ReqData) of
+        "text/x-ubf" ++ _ ->
+            process_post_ubf(ReqData, Context);
+        "text/plain" ++ _ ->
+            process_post_ubf(ReqData, Context);
+        _ ->
+            {{halt, 415}, ReqData, Context}
+    end. 
+
+process_post_ubf(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    MRef = erlang:monitor(process, Context1#context.page_pid),
-    z_session_page:comet_attach(self(), Context1#context.page_pid),
-    TRefFinal = erlang:send_after(?COMET_FLUSH_EMPTY, self(), flush_empty),
-    process_post_loop(Context1, TRefFinal, undefined, MRef).
+    Term = z_context:get(z_msg, Context1),
+    {ok, Rs, Context2} = z_transport:incoming(Term, Context1),
+    {ok, ReplyData} = z_transport:data_encode(Rs), 
+    {x, RD, Context1} = ?WM_REPLY(x, Context2),
+    RD1 = wrq:append_to_resp_body(ReplyData, RD),
+    {true, RD1, Context1}.
 
-
-%% @doc Wait for all scripts to be pushed to the user agent.
-process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
-    receive
-        flush_empty ->
-            Data = z_session_page:get_transport_data(Context#context.page_pid),
-            flush(true, Data, TRefFinal, TRefData, MPageRef, Context);
-
-        flush_data ->
-            Data = z_session_page:get_transport_data(Context#context.page_pid),
-            flush(false, Data, TRefFinal, TRefData, MPageRef, Context);
-
-        transport ->
-            TRef1 = case TRefData of
-                        undefined  -> 
-                            erlang:send_after(?COMET_FLUSH_DATA, self(), flush_data);
-                        _ -> 
-                            TRefData
-                    end,
-            ?MODULE:process_post_loop(Context, TRefFinal, TRef1, MPageRef);
-
-        {final, Data} ->
-            flush(true, Data, TRefFinal, TRefData, MPageRef, Context);
-
-        {'DOWN', _MonitorRef, process, Pid, _Info} when Pid =:= Context#context.page_pid ->
-            Context1 = Context#context{page_pid=undefined},
-            maybe_cancel_timer(TRefFinal),
-            maybe_cancel_timer(TRefData),
-            ?WM_REPLY(true, Context1);
-
-        Msg ->
-            lager:warning("Unknown comet loop message ~p", [Msg]),
-            ?MODULE:process_post_loop(Context, TRefFinal, TRefData, MPageRef)
-    end.
-
-
-
-flush(false, <<>>, TRefFinal, TRefData, MPageRef, Context) ->
-    maybe_cancel_timer(TRefData),
-    ?MODULE:process_post_loop(Context, TRefFinal, undefined, MPageRef);
-flush(_IsFinal, Data, TRefFinal, TRefData, MPageRef, Context) ->
-    erlang:demonitor(MPageRef, [flush]),
-    maybe_cancel_timer(TRefFinal),
-    maybe_cancel_timer(TRefData),
-    z_session_page:comet_detach(Context#context.page_pid),
-    RD  = z_context:get_reqdata(Context),
-    RD1 = wrq:append_to_response_body(Data, RD),
-    Context1 = z_context:set_reqdata(RD1, Context),
-    ?WM_REPLY(true, Context1).
-
-maybe_cancel_timer(undefined) ->
-    ok;
-maybe_cancel_timer(TRef) ->
-    erlang:cancel_timer(TRef).

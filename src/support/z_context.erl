@@ -596,7 +596,7 @@ ensure_all(Context) ->
     end.
 
 continue_all(Context) ->
-    continue_page_session(continue_session(ensure_qs(Context))).
+    ensure_page_session(continue_session(ensure_qs(Context))).
 
 
 %% @doc Ensure that we have a session, start a new session process when needed
@@ -617,22 +617,11 @@ maybe_logon_from_session(#context{user_id=undefined} = Context) ->
 maybe_logon_from_session(Context) ->
     Context.
 
-%% @doc Ensure that we have a page session, used for comet and postback requests.
+%% @doc Ensure that we have a page session process for this request.
+ensure_page_session(#context{session_pid=undefined} = Context) ->
+    Context;
 ensure_page_session(Context) ->
-    case Context#context.page_pid of
-        undefined ->
-            z_session:ensure_page_session(Context);
-        _ ->
-            Context
-    end.
-
-continue_page_session(Context) ->
-    case Context#context.session_pid of
-        undefined ->
-            Context;
-        _ ->
-            z_session:ensure_page_session(Context)
-    end.
+    z_session:ensure_page_session(Context).
 
 
 %% @doc Ensure that we have parsed the query string, fetch body if necessary.
@@ -651,7 +640,7 @@ ensure_qs(Context) ->
                             end,
                             dict:to_list(PathDict)),
             QPropsUrl = z_utils:prop_replace('q', PathArgs++Query, Context#context.props),
-            {Body, ContextParsed} = parse_form_urlencoded(Context#context{props=QPropsUrl}),
+            {Body, ContextParsed} = parse_post_body(Context#context{props=QPropsUrl}),
             QPropsAll = z_utils:prop_replace('q', PathArgs++Body++Query, ContextParsed#context.props),
             ContextQs = ContextParsed#context{props=QPropsAll},
             z_notifier:foldl(request_context, ContextQs, ContextQs)
@@ -1114,9 +1103,9 @@ has_websockethost(Context) ->
 %% Local helper functions
 %% ------------------------------------------------------------------------------------
 
-%% @spec parse_form_urlencoded(context()) -> {list(), NewContext}
+%% @spec parse_post_body(context()) -> {list(), NewContext}
 %% @doc Return the keys in the body of the request, only if the request is application/x-www-form-urlencoded
-parse_form_urlencoded(Context) ->
+parse_post_body(Context) ->
     ReqData = get_reqdata(Context),
     case wrq:get_req_header_lc("content-type", ReqData) of
         "application/x-www-form-urlencoded" ++ _ ->
@@ -1124,17 +1113,18 @@ parse_form_urlencoded(Context) ->
                 {undefined, ReqData1} ->
                     {[], set_reqdata(ReqData1, Context)};
                 {Binary, ReqData1} ->
-                    Context1 = continue_page_session(continue_session(Context)),
-                    {mochiweb_util:parse_qs(Binary), set_reqdata(ReqData1, Context1)}
+                    {mochiweb_util:parse_qs(Binary), set_reqdata(ReqData1, Context)}
             end;
         "multipart/form-data" ++ _ ->
-            FileCheckFun = fun(_Filename, _ContentType, _Size) ->
-                                ok
-                           end,
-            Context1 = continue_page_session(continue_session(Context)),
-            {Form, ContextRcv} = z_parse_multipart:recv_parse(FileCheckFun, Context1),
+            {Form, ContextRcv} = z_parse_multipart:recv_parse(Context),
+            QArgs = lists:map(
+                        fun
+                            ({Key,Val}) when is_binary(Val) -> {Key,z_convert:to_list(Val)};
+                            (KV) -> KV
+                        end,
+                        Form#multipart_form.args),
             FileArgs = [ {Name, #upload{filename=Filename, tmpfile=TmpFile}} || {Name, Filename, TmpFile} <- Form#multipart_form.files ],
-            {Form#multipart_form.args ++ FileArgs, ContextRcv};
+            {QArgs ++ FileArgs, ContextRcv};
         _Other ->
             {[], Context}
     end.

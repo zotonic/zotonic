@@ -37,7 +37,10 @@
     data_decode/1,
     data_encode/1,
 
-    incoming/2
+    incoming/2,
+
+    maybe_set_sessions/3,
+    maybe_logon/1
     ]).
 
 -include_lib("zotonic.hrl").
@@ -120,12 +123,16 @@ transport_user(Msg, UserId, Context) ->
             SessionPids).
 
 %% @doc Put a message or ack on transport to all pages of the given session.
+transport_session([], _Page, _Context) ->
+    ok;
 transport_session(Msg, SessionPid, _Context) when is_pid(SessionPid) ->
     z_session:transport(Msg, SessionPid);
 transport_session(Msg, SessionId, Context) ->
     z_session:transport(Msg, z_session_manager:whereis(SessionId, Context)).
 
 %% @doc Put a message or ack on transport to a specific page.
+transport_page([], _Page, _Context) ->
+    ok;
 transport_page(Msg, PagePid, _Context) when is_pid(PagePid) ->
     z_session_page:transport(Msg, PagePid);
 transport_page(Msg, PageId, Context) ->
@@ -228,6 +235,8 @@ incoming_1(_Msg, Context) ->
     {ok, session_status_message(Context), Context}.
 
 
+incoming_with_session(#z_msg_v1{delegate='$comet'}, Context) ->
+    z_transport_comet:comet_delegate(Context);
 incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Pb#postback_event.postback, Context),
     TriggerId1 = to_list(case TriggerId of
@@ -438,7 +447,11 @@ session_status_ensure(Context) ->
 
 %% For MochiWeb we need to convert to strings
 set_q(Qs, Context) ->
-    Qs1 = [ {to_list(K), to_list(V)} || {K,V} <- Qs ],
+    Qs0 = case z_context:get('q', Context) of
+             L when is_list(L) -> L;
+             _ -> []
+          end,
+    Qs1 = [ {to_list(K), to_list(V)} || {K,V} <- Qs ] ++ Qs0,
     z_validation:validate_query_args(
         z_context:set('q', Qs1, Context)).
 
