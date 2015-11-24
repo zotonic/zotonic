@@ -36,8 +36,6 @@
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
--define(DELEGATE(Fun, Module), Fun(ReqData, Args) -> Module:Fun(ReqData, Args)).
-
 init(DispatchArgs) ->
     {ok, DispatchArgs}.
     
@@ -48,11 +46,17 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     z_context:lager_md(Context2),
     ?WM_REPLY(true, Context2).
 
+charsets_provided(ReqData, Context) ->
+    controller_template:charsets_provided(ReqData, Context).
 
-?DELEGATE(charsets_provided, controller_template).
-?DELEGATE(content_types_provided, controller_template).
-?DELEGATE(is_authorized, controller_template).
-?DELEGATE(provide_content, controller_template).
+content_types_provided(ReqData, Context) ->
+    controller_template:content_types_provided(ReqData, Context).
+
+is_authorized(ReqData, Context) ->
+    controller_template:is_authorized(ReqData, Context).
+
+provide_content(ReqData, Context) ->
+    controller_template:provide_content(ReqData, Context).
     
     
 %%
@@ -71,9 +75,3 @@ event(#postback{message={session_info, []}, target=TargetId}, Context) ->
     Vars1 = [{pages, Combi} | Vars],
     
     z_render:update(TargetId, #render{template="_session_info.tpl", vars=Vars1}, Context).
-
-
-    
-%%
-%% Helpers
-%%
