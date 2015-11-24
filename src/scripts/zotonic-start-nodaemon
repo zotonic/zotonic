@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# Copyright 2011 Lloyd R. Prentice
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# usage zotonic-start-nodaemon
+#
+
+. $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
+# Make sure Zotonic is built
+if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
+       echo "Zotonic has not been compiled and cannot run. Exiting."
+       exit 1
+fi
+
+require_zotonic_not_running
+
+cd $ZOTONIC
+
+echo -n "Starting Zotonic $NODENAME@$NODEHOST.." 
+
+# Set the HEART_DISABLE env var to disable heart
+heart_arg="-heart"
+[ ! -z "$HEART_DISABLE" ] && heart_arg="" 
+
+# $HEART_COMMAND is executed if the VM is unresponsive, after it has been killed by 'heart'. It must be set or 'heart' will only print a warning.
+# By default, do nothing and just kill the VM.
+[ -z "$HEART_COMMAND" ] && export HEART_COMMAND="/bin/true"
+
+exec $ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -s zotonic -noshell $heart_arg
