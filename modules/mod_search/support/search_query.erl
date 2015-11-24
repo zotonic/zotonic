@@ -759,11 +759,24 @@ add_filters([Column, Operator, Value], Result) ->
     {Expr, Result1} = create_filter(Column, Operator, Value, Result),
     add_where(Expr, Result1).
 
+create_filter(Column, Operator, null, Result) ->
+    create_filter(Column, Operator, undefined, Result);
+create_filter(Column, Operator, undefined, Result) ->
+    Column1 = sql_safe(Column),
+    Operator1 = map_filter_operator(Operator),
+    {create_filter_null(Column1, Operator1), Result};
 create_filter(Column, Operator, Value, Result) ->
     {Arg, Result1} = add_arg(Value, Result),
     Column1 = sql_safe(Column),
     Operator1 = map_filter_operator(Operator),
     {Column1 ++ " " ++ Operator1 ++ " " ++ Arg, Result1}.
+
+create_filter_null(Column, "=") ->
+    Column ++ " is null";
+create_filter_null(Column, "<>") ->
+    Column ++ " is not null";
+create_filter_null(_Column, _Op) ->
+    "false".
 
 map_filter_operator(eq) -> "=";
 map_filter_operator('=') -> "=";
