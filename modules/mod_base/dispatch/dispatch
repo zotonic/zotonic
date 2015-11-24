@@ -19,6 +19,9 @@
  %% Used to get page unload beacons from open pages.
  {unload_beacon, ["beacon"],  controller_unload_beacon, [{ssl, any}, {no_session, true}]},
  
+ %% Test page for connection tests
+ {connection_test, ["connection-test"], controller_connection_test, [{ssl, any}, {template, "connection_test.tpl"}]},
+ 
  %% The id controller redirects depending on the accept header sent by the user agent.
  {id, ["id", id], controller_id, [ {ssl, any} ]},
  
