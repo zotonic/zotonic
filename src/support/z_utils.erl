@@ -153,14 +153,14 @@ encode_value(Value, Context) ->
     Salt = z_ids:id(),
     Secret = z_ids:sign_key(Context),
     base64:encode(
-      term_to_binary({Value, Salt, crypto:sha_mac(Secret, term_to_binary([Value, Salt]))})
+      term_to_binary({Value, Salt, crypto:hmac(sha, Secret, term_to_binary([Value, Salt]))})
      ).
 
 %% 23 usec on core2duo 2GHz
 decode_value(Data, Context) ->
     Secret = z_ids:sign_key(Context),
     {Value, Salt, Sign} = binary_to_term(base64:decode(Data)),
-    Sign = crypto:sha_mac(Secret, term_to_binary([Value, Salt])),
+    Sign = crypto:hmac(sha, Secret, term_to_binary([Value, Salt])),
     Value.
 
 encode_value_expire(Value, Date, Context) ->
@@ -198,7 +198,7 @@ pickle(Data, Context) ->
     Nonce = crypto:rand_bytes(4), 
     Sign  = z_ids:sign_key(Context),
     SData = <<BData/binary, Nonce:4/binary>>,
-    <<Mac:16/binary>> = crypto:md5_mac(Sign, SData),	
+    <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),	
     base64url:encode(<<Mac:16/binary, Nonce:4/binary, BData/binary>>).
 
 depickle(Data, Context) ->
@@ -206,7 +206,7 @@ depickle(Data, Context) ->
         <<Mac:16/binary, Nonce:4/binary, BData/binary>> = base64url:decode(Data),
         Sign  = z_ids:sign_key(Context),
         SData = <<BData/binary, Nonce:4/binary>>,
-        <<Mac:16/binary>> = crypto:md5_mac(Sign, SData),
+        <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),
         erlang:binary_to_term(BData)
     catch
         _M:_E ->
