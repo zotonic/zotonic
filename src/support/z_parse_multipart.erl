@@ -60,7 +60,7 @@
 
 %% @doc Receive and parse the form data in the request body.  
 %% The progress function should accept the parameters [Percentage, Context]
-%% @spec recv_parse(Context) -> {form(), NewContext}
+-spec recv_parse(#context{}) -> {#multipart_form{}, #context{}}.
 recv_parse(Context) ->
     {Form, _ZMsg, ContextParsed} = parse_multipart_request(Context),
     if Form#multipart_form.file =/= undefined ->
@@ -199,7 +199,7 @@ is_push_attached(Context) ->
 
 
 %% @doc Callback function collecting all data found in the multipart/form-data body
-%% @spec callback(Next, function(), form()) -> function() | form()
+-spec handle_data({headers, list()}|{body,binary()}|body_end|eof, #multipart_form{}) -> #multipart_form{}.
 handle_data({headers, Headers}, Form) ->
     % Find out if it is a file
     ContentDisposition = proplists:get_value("content-disposition", Headers),
@@ -272,7 +272,7 @@ handle_data(eof, Form) ->
 
 
 %% @doc Read more data for the feed_mp functions.
-%% @spec read_more(mp()) -> mp()
+-spec read_more(#mp{}) -> #mp{}.
 read_more(State=#mp{next_chunk=done, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length ->
     State;
 read_more(State=#mp{next_chunk=done, context=Context} = State) ->
