@@ -116,6 +116,14 @@
 %%% slow clients.
 %%% When this value is not set, the inet_acceptor_pool_size setting is used.
    %% {ssl_acceptor_pool_size, 75},
+
+%%% The access log is sent to syslog. The collection of access logs to files must be configured
+%%% by configuring syslog on the system. See syslogd(8) on Linux, or the appropriate documentation
+%%% of your host system.
+   %% {syslog_ident, "zotonic"},
+   %% {syslog_opts, [ndelay]},
+   %% {syslog_facility, local0},
+   %% {syslog_level, info}, % OSX shows messages from level notice and higer.
    
 %%% Default ImageMagick color space. Some ImageMagick versions (like 6.7.0 and above)
 %%% use the RGB colorspace, so all images are darker than the original.

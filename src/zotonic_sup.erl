@@ -71,6 +71,11 @@ init([]) ->
            {z_ids, start_link, []}, 
            permanent, 5000, worker, [z_ids]},
 
+    %% Access Logger
+    Logger = {z_access_syslog,
+              {z_access_syslog, start_link, []}, 
+              permanent, 5000, worker, [z_access_syslog, z_buffered_worker]},
+
     %% SMTP gen_servers: one for sending mails, the other for receiving email
     SmtpServer = {z_email_server,
                   {z_email_server, start_link, []},
@@ -96,6 +101,7 @@ init([]) ->
 
     Processes = [
                  Ids,
+                 Logger,
                  SmtpServer, SmtpReceiveServer,
                  FilesSup, 
                  SitesSup,

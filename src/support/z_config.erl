@@ -73,4 +73,8 @@ default(dbschema) -> "public";
 default(use_ua_classifier) -> true;
 default(filewatcher_enabled) -> true;
 default(filewatcher_scanner_enabled) -> false;
+default(syslog_ident) -> "zotonic";
+default(syslog_opts) -> [ndelay];
+default(syslog_facility) -> local0;
+default(syslog_level) -> info;
 default(_) -> undefined.

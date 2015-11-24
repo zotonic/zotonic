@@ -1,9 +1,9 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2013 Maas-Maarten Zeeman
-%% Date: 2013-02-17
-%% @doc Server for matching the request path to correct site and dispatch rule.
+%% @copyright 2013-2015 Maas-Maarten Zeeman
+%% Date: 2015-11-16
+%% @doc Module for handling request statistics.
 
-%% Copyright 2013 Maas-Maarten Zeeman
+%% Copyright 2013-2015 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
 %% @doc Initialize the statistics collection machinery.
 %%
 init() ->
-    webmachine_sup:start_logger(webmachine_logger).
+    ok.
 
 init_site(Host) ->
     %% Webzmachine metrics
@@ -62,7 +62,6 @@ log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
         exometer:update([zotonic, Host, webzmachine, duration], timer:now_diff(FinishTime, StartTime)), 
         exometer:update([zotonic, Host, webzmachine, data_out], ResponseLength)
     after 
-        % Pass it to the default webmachine logger.
-        webmachine_logger:log_access(LogData)
+        z_access_syslog:log_access(LogData)
     end.
 
