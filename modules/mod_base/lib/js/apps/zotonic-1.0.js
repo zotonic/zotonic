@@ -266,10 +266,10 @@ function z_event(name, extraParams)
     if (z_registered_events[name])
     {
         z_registered_events[name](ensure_name_value(extraParams));
-    }
-    else if (window.console)
+    } 
+    else
     {
-        console.error("z_event: no registered event named: '"+name+"'");
+        $.misc.error("z_event: no registered event named: '"+name+"'");
     }
 }
 
@@ -444,11 +444,11 @@ function z_transport_session_status(data, msg)
                         }
                         break;
                     default:
-                        console.log("Transport, unknown session status ", data);
+                        $.misc.error("Transport, unknown session status ", data);
                         break;
                 }
             } else {
-                console.log("Transport, unknown session status ", data);
+                $.misc.error("Transport, unknown session status ", data);
             }
             break;
     }
@@ -580,7 +580,7 @@ function z_transport_incoming_msg(msg)
             if (typeof fun == 'function') {
                 fun(data, msg);
             } else {
-                console.log("No delegate registered for ",msg);
+                $.misc.error("No delegate registered for ",msg);
             }
             break;
         case 'z_msg_ack':
@@ -595,7 +595,7 @@ function z_transport_incoming_msg(msg)
             }
             break;
         default:
-            console.log("Don't know where to delegate incoming message ", msg);
+            $.misc.error("Don't know where to delegate incoming message ", msg);
             break;
     }
 }
@@ -672,7 +672,7 @@ function z_transport_incoming_data_decode(type, data)
         case 'text':
             return data.valueOf();
         default:
-            console.log("Unknown message data format: ", type, data);
+            $.misc.error("Unknown message data format: ", type, data);
             return data;
     }
 }
@@ -799,7 +799,6 @@ function z_ajax(options, data)
             }
             catch(e)
             {
-                console.log("Error evaluating ajax return value: ", received_data);
                 $.misc.error("Error evaluating ajax return value: " + received_data, e);
             }
             setTimeout(function() { z_stop_spinner(); z_transport_check(); }, 0);
@@ -1104,7 +1103,6 @@ function z_transport_handle_push_data(data)
     }
     catch (e)
     {
-        console.log("Error evaluating push return value: ", data);
         $.misc.error("Error evaluating push return value: " + data, e);
     }
 }

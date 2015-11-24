@@ -82,7 +82,11 @@ limitations under the License.
                 var text = obj.toString();
                 if(window.console)
                 {
-                    console.log(text);
+                    if(console.log.apply) {
+                        console.log.apply(console, arguments);
+                    } else {
+                        console.log(text);
+                    }
 
                     if($.noticeAdd)
                     {
@@ -116,7 +120,11 @@ limitations under the License.
 
                 if(window.console)
                 {
-                    console.warn(text, obj.toString());
+                    if(console.warn.apply) {
+                        console.warn.apply(console, arguments);
+                    } else {
+                        console.warn(text, obj.toString());
+                    }
                 }
 
                 if($.noticeAdd)
@@ -135,7 +143,12 @@ limitations under the License.
 
                 if(window.console)
                 {
-                    console.error(text, obj.toString());
+                    if(console.error.apply) {
+                        console.error.apply(console, arguments);
+                    } else {
+                        console.error(text, obj.toString());
+                    }
+                    
                     if (obj.stack)
                         console.error(obj.stack);
                 }
@@ -178,7 +191,7 @@ limitations under the License.
         try {
             data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
         } catch (e) {
-            console.error("Error evaluating widget data attribute:", data);
+            console.error("Error evaluating widget data attribute:", data, e);
         }
         $(elem).data(data_name, data);
         return data;
