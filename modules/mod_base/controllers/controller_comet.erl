@@ -45,6 +45,8 @@ malformed_request(ReqData, Context0) ->
         {Data, RD1} = wrq:req_body(ReqData),
         {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
         Context = ?WM_REQ(RD1, Context0),
+        
+        ?DEBUG(ZMsg),
         z_context:lager_md(Context),
         Context1 = z_context:set(z_msg, ZMsg, Context),
         ?WM_REPLY(ZMsg#z_msg_v1.delegate =/= '$comet', Context1)
@@ -70,8 +72,8 @@ process_post_ubf(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Term = z_context:get(z_msg, Context1),
     {ok, Rs, Context2} = z_transport:incoming(Term, Context1),
-    {ok, ReplyData} = z_transport:data_encode(Rs), 
-    {x, RD, Context1} = ?WM_REPLY(x, Context2),
+    {ok, ReplyData} = z_transport:data_encode(Rs),
+    {x, RD, Context3} = ?WM_REPLY(x, Context2),
     RD1 = wrq:append_to_resp_body(ReplyData, RD),
-    {true, RD1, Context1}.
+    {true, RD1, Context3}.
 
