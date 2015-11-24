@@ -1005,6 +1005,11 @@ function z_stream_restart()
     }
 }
 
+function z_stream_is_connected()
+{
+    return z_websocket_is_connected() || z_comet_is_connected();
+}
+
 function z_comet_start()
 {
     if (z_stream_host != window.location.host && window.location.protocol == "http:")
@@ -1068,6 +1073,11 @@ function z_comet_poll_ajax()
     }
 }
 
+
+function z_comet_is_connected()
+{
+    return z_comet && z_comet.readyState != 0;
+}
 
 function z_timeout_comet_poll_ajax(timeout)
 {
