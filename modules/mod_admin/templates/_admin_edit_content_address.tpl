@@ -46,7 +46,7 @@
 			<div class="control-group">
 				<label class="control-label" for="website">{_ Website _}</label>
 				<div class="controls">
-					<input id="website" type="url" name="website" value="{{ r.website }}" class="input-block-level" />
+					<input id="website" type="text" name="website" inputmode="url" value="{{ r.website }}" class="input-block-level" />
 				</div>
 			</div>
 
