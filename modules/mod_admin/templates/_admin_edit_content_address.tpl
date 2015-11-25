@@ -17,13 +17,13 @@
 			<div class="form-group">
 				<label class="control-label" for="phone">{_ Telephone _}</label>
 				<div>
-					<input class="form-control" id="phone" type="text" name="phone" value="{{ r.phone }}" />
+					<input class="form-control" id="phone" type="text" name="phone" inputmode="tel" value="{{ r.phone }}" />
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label" for="phone">{_ Mobile _}</label>
 				<div>
-					<input class="form-control" id="phone_mobile" type="text" name="phone_mobile" value="{{ r.phone_mobile }}" />
+					<input class="form-control" id="phone_mobile" type="text" name="phone_mobile" inputmode="tel" value="{{ r.phone_mobile }}" />
 				</div>
 			</div>
 		</div>
@@ -32,14 +32,14 @@
 			<div class="form-group">
 				<label class="control-label" for="phone_alt">{_ Alternative telephone _}</label>
 				<div>
-					<input class="form-control" id="phone_alt" type="text" name="phone_alt" value="{{ r.phone_alt }}" />
+					<input class="form-control" id="phone_alt" type="text" name="phone_alt" inputmode="tel" value="{{ r.phone_alt }}" />
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label" for="phone_emergency">{_ Emergency telephone _}</label>
 				<div>
-					<input class="form-control" id="phone_emergency" type="text" name="phone_emergency" value="{{ r.phone_emergency }}" />
+					<input class="form-control" id="phone_emergency" type="text" name="phone_emergency" inputmode="tel" value="{{ r.phone_emergency }}" />
 				</div>
 			</div>
 		</div>
@@ -50,7 +50,7 @@
 			<div class="form-group">
 				<label class="control-label" for="website">{_ Website _}</label>
 				<div>
-					<input class="form-control" id="website" type="url" name="website" value="{{ r.website }}" />
+					<input class="form-control" id="website" type="text" name="website" inputmode="url" value="{{ r.website }}" />
 				</div>
 			</div>
 
