@@ -199,15 +199,48 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
                         undefined -> [{alt,""}|TagOpts1];
                         _ -> TagOpts1
                     end,
+
+        TagOpts3 = with_srcset(TagOpts2, Filename, Options, Context),
+
         % Filter some opts
         case proplists:get_value(link, TagOpts) of
             None when None =:= []; None =:= <<>>; None =:= undefined ->
-                {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts2]))};
+                {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts3]))};
             Link ->
                 HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
-                Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts2)]),
+                Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts3)]),
                 {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
         end.
+
+with_srcset(TagOptions, Filename, Options, Context) ->
+    SrcSet = case proplists:get_value(srcset, Options) of
+        undefined ->
+            case proplists:get_value(mediaclass, Options) of
+                undefined ->
+                    undefined;
+                MediaClass ->
+                    {ok, Props, _Hash} = z_mediaclass:get(MediaClass, Context),
+                    proplists:get_value(srcset, Props)
+            end;
+         Arg ->
+             Arg
+    end,
+
+    case SrcSet of
+        undefined ->
+            TagOptions;
+        SrcSet ->
+            %% Build up syntax: srcset="medium.jpg 150w, large.jpg 500w"
+           Result = lists:map(
+               fun(Width) ->
+                   SrcOptions = [{width, Width} | proplists:delete(width, Options)],
+                   {url, SrcUrl, _TagOpts, _ImageOpts} = url1(Filename, SrcOptions, Context),
+                   binary_to_list(SrcUrl) ++  " " ++ z_convert:to_list(Width) ++ "w"
+               end,
+               SrcSet
+           ),
+           [{srcset, string:join(Result, ", ")} | TagOptions]
+    end.
 
 get_link(Media, true, Context) ->
     Id = media_id(Media),

@@ -437,6 +437,8 @@ filter2arg({extent, _}, Width, Height, _AllFilters) ->
 filter2arg({extent, _, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg(upscale, Width, Height, _AllFilters) ->
+    {Width, Height, []};
+filter2arg({srcset, _Arg}, Width, Height, _AllFilters) ->
     {Width, Height, []}.
 
 
@@ -592,7 +594,9 @@ string2filter("removebg", Arg) ->
     {removebg, list_to_integer(Arg)};
 string2filter("mediaclass", Arg) ->
     [MediaClass|Checksum] = string:tokens(Arg, "."),
-    {mediaclass, {MediaClass, iolist_to_binary(Checksum)}}.
+    {mediaclass, {MediaClass, iolist_to_binary(Checksum)}};
+string2filter("srcset", Arg) ->
+    {srcset, Arg}.
 
 
 % simple ceil for positive numbers
