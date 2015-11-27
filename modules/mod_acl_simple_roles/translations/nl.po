@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "<strong>Waarschuwing</strong>: Wanneer je */* toelaat als filter voor\n"
 "bestanden dan kunnen alle leden van deze rol volledige toegang tot\n"
-"jesite en alle onderliggende data verkrijgen."
+"je site en alle onderliggende data verkrijgen."
 
 #: modules/mod_acl_simple_roles/templates/admin_acl.tpl:22
 msgid "ACL role overview"
