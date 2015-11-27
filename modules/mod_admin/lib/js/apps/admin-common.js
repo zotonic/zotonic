@@ -114,20 +114,13 @@ limitations under the License.
 After a page connection is done. Calls a named wire (that must exist).
 See: _admin_edit_content_page_connections_list.tpl
 */
-window.zAdminConnectDone = function(v) {
-    if (v.is_new) {
-        z_event("links-" + v.subject_id + "-" + v.predicate);
-    }
-};
 
 window.zAdminLinkDone = function(v) {
     window.z_zlink(v.url_language, v.title_language);
-    window.zAdminConnectDone(v);
 };
 
 window.zAdminMediaDone = function(v) {
     window.z_choose_zmedia(v.object_id);
-    window.zAdminConnectDone(v);
 };
 
 window.zEditLanguage = function() {

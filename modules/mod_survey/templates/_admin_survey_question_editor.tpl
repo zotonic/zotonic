@@ -179,7 +179,6 @@
 	    var target_id = $(".rsc-item-wrapper", $block_page).attr('id');
 	    $("input[type=hidden]", $block_page).val(v.object_id);
 	    z_notify("update", {z_delegate: 'mod_admin', template: "_rsc_item.tpl", id: v.object_id, z_target_id: target_id});
-	    window.zAdminConnectDone(v);
 	}
 
 	$('#admin-survey-questions').on('click', '.rsc-item h5 a', function(event) {
