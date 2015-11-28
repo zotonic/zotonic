@@ -67,7 +67,7 @@ process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
             Context1 = Context#context{page_pid=undefined},
             maybe_cancel_timer(TRefFinal),
             maybe_cancel_timer(TRefData),
-            ?WM_REPLY(true, Context1);
+            {ok, [], Context1};
 
         Msg ->
             lager:warning("Unknown comet loop message ~p", [Msg]),
