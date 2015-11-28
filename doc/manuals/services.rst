@@ -182,7 +182,49 @@ tuple from the ``process_get/2`` and ``process_post/2`` calls::
       Result = {struct, [{count, 100}]},
       Context1 = z_context:set_resp_header("Cache-Control", "max-age=3600", Context),
       {Result, Context1}.
-  
+
+
+.. _manual-services-cors:
+
+Enabling Cross-Origin Resource Sharing (CORS)
+---------------------------------------------
+
+By default the server has a `same-origin policy <https://en.wikipedia.org/wiki/Same-origin_policy>`_: scripts that access the API must reside on the same server.
+
+Cross-origin resource sharing allows cross-domain requests for apps outside of the server domain. CORS header settings define which requests are (and are not) allowed.
+
+In-depth background information is available at https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+
+CORS settings are defined in the site's config. 
+
+**Site config settings**
+
+``{service_api_cors, false}``
+  Set to ``true`` to enable CORS
+
+``{'Access-Control-Allow-Origin', "*"}``
+
+``{'Access-Control-Allow-Credentials', undefined}``
+
+``{'Access-Control-Max-Age', undefined}``
+
+``{'Access-Control-Allow-Methods', undefined}``
+
+``{'Access-Control-Allow-Headers', undefined}``
+
+
+**Note:**
+
+* The config file can be modified without a site restart.
+* The "Access-Control" settings only work if ``service_api_cors`` is set to true.
+* The setting name is an Erlang atom and must be in single quotes.
+* Setting values are either ``undefined`` or a string value. Multiple values can be set as a comma-separated string, for instance::
+
+    {'Access-Control-Allow-Headers', "authorization, X-Requested-With, Content-Type"}
+
+
+
+
 
 .. _manual-services-auth:
 

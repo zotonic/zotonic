@@ -167,27 +167,8 @@ The following options can be configured:
   performs those operations.
 
 ``{service_api_cors, false}``
-  default is disabled, for cross domain api, see more detail: http://www.html5rocks.com/en/tutorials/cors/
-
-``{'Access-Control-Allow-Origin', "*"}``
-  default is all origin. meaningful if service_api_cors is true, 
-  see more detail: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Access-Control-Allow-Origin
-
-``{'Access-Control-Allow-Credentials', undefined}``
-  default is undefined, not return this header. meaningful if service_api_cors is true, 
-  see more detail: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Access-Control-Allow-Credentials
-
-``{'Access-Control-Max-Age', undefined}``
-  default is undefined, not return this header. meaningful if service_api_cors is true, 
-  see more detail: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Access-Control-Max-Age
-
-``{'Access-Control-Allow-Methods', undefined}``
-  default is undefined, not return this header. meaningful if service_api_cors is true, 
-  see more detail: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Access-Control-Allow-Methods
-
-``{'Access-Control-Allow-Headers', undefined}``
-  default is undefined, not return this header. meaningful if service_api_cors is true, 
-  see more detail: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Access-Control-Allow-Headers
+  See :ref:`manual-services-cors`.
+  
 
 Database connection options
 ...........................

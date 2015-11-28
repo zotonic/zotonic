@@ -17,6 +17,10 @@ ul, ol {
     padding-left: .7rem;
 }
 
+li p.first {
+    margin: 0 !important;
+}
+
 div.document {
     max-width: 1100px;
     margin: auto;
