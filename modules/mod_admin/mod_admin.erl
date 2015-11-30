@@ -328,7 +328,7 @@ do_link(SubjectId, Predicate, ObjectId, Callback, Context)
                 ]}]}, Context)}
     end;
 do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
-    case z_acl:rsc_editable(SubjectId, Context) of
+    case z_acl:rsc_linkable(SubjectId, Context) of
         true ->
             {EdgeId,IsNew} = case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
                 undefined ->

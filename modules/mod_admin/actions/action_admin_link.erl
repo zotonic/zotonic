@@ -52,7 +52,7 @@ do_link(SubjectId, Predicate, ObjectId, EdgeTemplate, Context) ->
     do_link(SubjectId, Predicate, ObjectId, undefined, EdgeTemplate, [], Context).
 
 do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Actions, Context) ->
-    case z_acl:rsc_editable(SubjectId, Context) of
+    case z_acl:rsc_linkable(SubjectId, Context) of
         true ->
             case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
                 undefined ->
