@@ -51,7 +51,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Unlink the edge, on success show an undo message in the element with id "undo-message"
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={unlink, EdgeId, SubjectId, Predicate, ObjectId, UndoMessageId, EdgeTemplate, Action, UndoAction}}, Context) ->
-    case z_acl:rsc_editable(SubjectId, Context) of
+    case z_acl:rsc_linkable(SubjectId, Context) of
         true ->
             {SubjectId, Predicate1, ObjectId1} = case EdgeId of
                     undefined -> {SubjectId, Predicate, ObjectId};
