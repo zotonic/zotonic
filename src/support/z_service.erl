@@ -43,7 +43,7 @@ all(Context) ->
     F = fun() ->
             [ ServiceModule || #module_index{erlang_module=ServiceModule} <- z_module_indexer:find_all(service, true, Context) ]
         end,
-    z_depcache:memo(F, {z_services}, ?WEEK, [z_modules], Context).
+    z_depcache:memo(F, {z_services}, ?HOUR, [z_modules, module_index], Context).
 
 %%
 %% All services grouped by module
@@ -63,8 +63,8 @@ all(info, Context) ->
             Info = z_module_indexer:find_all(service, true, Context),
             [ serviceinfo(Name, Module, ErlangModule) || #module_index{key=#module_index_key{name=Name}, module=Module, erlang_module=ErlangModule} <- Info ]
         end,
-    F();
-%    z_depcache:memo(F, {z_services_info}, ?WEEK, [z_modules], Context);
+    % F();
+    z_depcache:memo(F, {z_services_info}, ?HOUR, [z_modules, module_index], Context);
 
 
 %%
@@ -157,7 +157,7 @@ handler('DELETE') ->
 
 
 module_attr(Service, Attr, Default, T) ->
-    code:ensure_loaded(Service),
+    % code:ensure_loaded(Service),
     try
         Info = Service:module_info(attributes),
         V = proplists:get_value(Attr, Info),

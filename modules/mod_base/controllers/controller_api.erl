@@ -43,7 +43,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context1 = z_context:set(DispatchArgs, Context),
     z_context:lager_md(Context1),
     ReqData1 = set_cors_header(ReqData, Context1),
-    case wrq:method(ReqData) of
+    case wrq:method(ReqData1) of
         'OPTIONS' ->
             {{halt, 204}, ReqData1, Context1};
         _ ->
@@ -55,22 +55,19 @@ allowed_methods(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
     Context1 = z_context:ensure_qs(z_context:continue_session(Context0)),
     z_context:lager_md(Context1),
-
     TheMod = case z_context:get_q("module", Context1) of
                  undefined -> z_convert:to_list(z_context:get(module, Context1));
                  M -> M
              end,
-
     Method = case z_context:get_q("method", Context1) of
                  undefined ->
                      case z_convert:to_list(z_context:get(method, Context1)) of
-                         [] -> 
-                             TheMod; %% method == module name
+                         [] -> TheMod; %% method == module name
                          M2 -> M2
                      end;
                  M3 -> M3
              end,
-    case z_utils:ensure_existing_module("service_" ++ TheMod ++ "_" ++ Method) of
+    case ensure_existing_module("service_" ++ TheMod ++ "_" ++ Method) of
         {ok, Module} ->
             Context2 = z_context:set(service_module, Module, Context1),
             try
@@ -84,14 +81,19 @@ allowed_methods(ReqData, Context) ->
             {['GET', 'HEAD', 'POST', 'OPTIONS'], ReqData, Context1}
     end.
 
+ensure_existing_module(ModuleName) ->
+    try
+        {ok, list_to_existing_atom(ModuleName)}
+    catch
+        error:badarg ->
+            z_utils:ensure_existing_module(ModuleName)
+    end.
 
 is_authorized(ReqData, Context) ->
     %% Check if we are authorized via a regular session.
     Context0 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_qs(z_context:continue_session(Context0)),
-
     Module = z_context:get(service_module, Context2),
-
     case z_service:needauth(Module) of
         false ->
             %% No auth needed; so we're authorized.
@@ -132,29 +134,34 @@ content_types_provided(ReqData, Context) ->
       {"text/javascript", to_json}
      ], ReqData, Context}.
 
+
+%% set in site config file
+%%  [{service_api_cors, false}, %% 2nd is default value
+%%   {'Access-Control-Allow-Origin', "*"},
+%%   {'Access-Control-Allow-Credentials', undefined}, 
+%%   {'Access-Control-Max-Age', undefined},
+%%   {'Access-Control-Allow-Methods', undefined},
+%%   {'Access-Control-Allow-Headers', undefined}]
 set_cors_header(ReqData, Context) ->
-    %% set in site config file
-    %%  [{service_api_cors, false}, %% 2nd is default value
-    %%      {'Access-Control-Allow-Origin', "*"},
-    %%      {'Access-Control-Allow-Credentials', undefined}, 
-    %%      {'Access-Control-Max-Age', undefined},
-    %%      {'Access-Control-Allow-Methods', undefined},
-    %%      {'Access-Control-Allow-Headers', undefined}]
-    {ok, SiteConfigs} = z_sites_manager:get_site_config(z_context:site(Context)),
-    case proplists:get_value(service_api_cors, SiteConfigs) of
-        true -> lists:foldl(fun ({K, Def}, Acc) ->
-                        case proplists:get_value(K, SiteConfigs, Def) of
-                            undefined -> Acc;
-                            V -> wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(V), Acc)
+    case z_convert:to_bool(m_config:get_value(site, service_api_cors, Context)) of
+        true ->
+            lists:foldl(
+                    fun ({K, Def}, Acc) ->
+                        case m_config:get_value(site, K, Def, Context) of
+                            undefined ->
+                                Acc;
+                            V ->
+                                wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(V), Acc)
                         end
-                end, 
-                ReqData, 
-                [{'Access-Control-Allow-Origin', "*"},
-                    {'Access-Control-Allow-Credentials', undefined}, 
-                    {'Access-Control-Max-Age', undefined},
-                    {'Access-Control-Allow-Methods', undefined},
-                    {'Access-Control-Allow-Headers', undefined}]);
-        _ -> ReqData
+                    end, 
+                    ReqData, 
+                    [{'Access-Control-Allow-Origin', "*"},
+                     {'Access-Control-Allow-Credentials', undefined}, 
+                     {'Access-Control-Max-Age', undefined},
+                     {'Access-Control-Allow-Methods', undefined},
+                     {'Access-Control-Allow-Headers', undefined}]);
+        false ->
+            ReqData
     end.
 
 api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
@@ -164,7 +171,6 @@ api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
 
 api_result(Context, Result) ->
     ReqData = z_context:get_reqdata(Context),
-    
     case Result of
         {error, Err=missing_arg, Arg} ->
             api_error(400, Err, "Missing argument: " ++ Arg, ReqData, Context);
