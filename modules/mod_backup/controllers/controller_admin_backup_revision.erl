@@ -30,7 +30,7 @@ is_authorized(ReqData, Context0) ->
     Context = z_admin_controller_helper:init_session(?WM_REQ(ReqData, Context0)),
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
-            Id = list_to_integer(z_context:get_q("id", Context)),
+            Id = m_rsc:rid(z_context:get_q("id", Context), Context),
             case m_rsc:exists(Id, Context) of
                 false -> 
                     z_acl:wm_is_authorized(true, Context);
@@ -44,7 +44,7 @@ is_authorized(ReqData, Context0) ->
 
 html(Context) ->
     Vars = [
-        {id, list_to_integer(z_context:get_q("id", Context))},
+        {id, m_rsc:rid(z_context:get_q("id", Context), Context)},
         {page_admin_backup, true}
     ],
 	Html = z_template:render("admin_backup_revision.tpl", Vars, Context),
@@ -52,13 +52,19 @@ html(Context) ->
 
 
 event(#postback_notify{message="rev-diff"}, Context) ->
-    A = z_context:get_q("a", Context),
-    B = z_context:get_q("b", Context),
-    PropsA = fetch_props(A, Context),
-    PropsB = fetch_props(B, Context),
-    case check_access(PropsA, PropsB, Context) of
+    Id = m_rsc:rid(z_context:get_q("id", Context), Context),
+    case z_acl:rsc_editable(Id, Context) of
         true ->
-            update_diff(PropsA, PropsB, Context); 
+            A = z_convert:to_list(z_context:get_q("a", Context)),
+            B = z_convert:to_list(z_context:get_q("b", Context)),
+            PropsA = fetch_props(Id, A, Context),
+            PropsB = fetch_props(Id, B, Context),
+            case check_access(PropsA, PropsB, Context) of
+                true ->
+                    update_diff(Id, PropsA, PropsB, Context); 
+                false ->
+                    z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context) 
+            end;
         false ->
             z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context) 
     end;
@@ -93,17 +99,19 @@ do_revert(Id, RevId, Context) ->
     end.
 
 
-update_diff(undefined, undefined, Context) ->
-    z_render:wire({reload, []}, Context);
-update_diff({ok, A}, undefined, Context) ->
+update_diff(_Id, undefined, undefined, Context) ->
+    Context;
+update_diff(Id, {ok, A}, undefined, Context) ->
     Vars = [
+        {id, Id},
         {a, A},
         {b, undefined},
         {diff, format_diff(A, [], Context)}
     ],
     z_render:update("page-diff", #render{template="_admin_backup_diff.tpl", vars=Vars}, Context);
-update_diff({ok, A}, {ok, B}, Context) ->
+update_diff(Id, {ok, A}, {ok, B}, Context) ->
     Vars = [
+        {id, Id},
         {a, A},
         {b, B},
         {diff, format_diff(A, B, Context)}
@@ -111,8 +119,11 @@ update_diff({ok, A}, {ok, B}, Context) ->
     z_render:update("page-diff", #render{template="_admin_backup_diff.tpl", vars=Vars}, Context).
 
 
-fetch_props("#="++N, Context) ->
-    Id = z_convert:to_integer(N),
+fetch_props(_Id, undefined, _Context) ->
+    undefined;
+fetch_props(Id, <<"latest">>, Context) ->
+    fetch_props(Id, "latest", Context);
+fetch_props(Id, "latest", Context) ->
     {ok, [
             {id, 0},
             {rsc_id, Id},
@@ -121,14 +132,17 @@ fetch_props("#="++N, Context) ->
             {version, m_rsc:p(Id, version, Context)},
             {data, m_rsc:get(Id, Context)}
         ]};
-fetch_props("#"++N, Context) ->
-    RevId = z_convert:to_integer(N),
+fetch_props(Id, Rev, Context) ->
+    RevId = z_convert:to_integer(Rev),
     case m_backup_revision:get_revision(RevId, Context) of
-        {ok, Row} -> {ok, Row};
-        _ -> undefined
-    end;
-fetch_props(undefined, _Context) ->
-    undefined.
+        {ok, Row} ->
+            case proplists:get_value(rsc_id, Row) of
+                Id -> {ok, Row};
+                _ -> undefined
+            end;
+        _ ->
+            undefined
+    end.
 
 
 check_access(undefined, undefined, _Context) ->
@@ -144,8 +158,6 @@ check_access({ok, PropsA}, {ok, PropsB}, Context) ->
         {Id,Id} -> z_acl:rsc_editable(Id, Context);
         _ -> false
     end.
-
-
 
 
 format_diff(A, B, Context) ->

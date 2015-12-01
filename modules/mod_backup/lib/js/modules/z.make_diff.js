@@ -28,7 +28,7 @@ $.widget("ui.make_diff",
 		var tds = $(this.element).children('td');
 		var a = $(tds.get(0)).html();
 		var b = $(tds.get(1)).html();
-		var diff = WDiffShortenOutput(WDiffString(b,a));
+		var diff = WDiffShortenOutput(WDiffString(a,b));
 
 		// diff = diff.replace(/\n\n--\n\n/g, "<hr class='make-diff-x' />")
 		// 		   .replace(/\n\n/g, "<br class='make-diff-x' />")

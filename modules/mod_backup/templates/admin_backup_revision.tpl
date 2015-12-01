@@ -6,13 +6,13 @@
 	{% lib "js/wdiff.js" "js/modules/z.make_diff.js" %}
 
 	<style type="text/css">
-		#revisions .active a.first {
-			background-color: green;
-			color: white;
-		}
-		#revisions .active a.second {
-			background-color: red;
-			color: white;
+		#revisions label {
+			display: inline-block;
+			height: 20px;
+			width: 20px;
+			text-align: center;
+			margin: 0 0 1px 0;
+			padding: 0;
 		}
 		.diff-omitted {
 			color: #999;
@@ -52,27 +52,28 @@
 	<div class="col-lg-3 col-md-3">
 		<ul class="nav nav-list" id="revisions">
 		{% if id.exists %}
-			<li class="dropdown-header">
-				{_ Current _}
-			</li>
 			<li class="active">
-				<a href="#={{ id }}" class="first">
+				<label class="rev-a"><input type="radio" name="a" value="latest" checked /></label>
+				<label class="rev-b"><input type="radio" name="b" value="latest" checked /></label>
+				<span>
 					{{ id.modified|date:"Y-m-d H:i" }}
 					{{ id.modifier_id.title }}
-				</a>
+				</span>
 			</li>
 		{% endif %}
 		{% for rev in m.backup_revision.list[id] %}
 			{% if forloop.first %}
-			<li class="dropdown-header">
-				{_ Previous _}
+			<li>
+				<h4>{_ Previous _}</h4>
 			</li>
 			{% endif %}
 			<li>
-				<a href="#{{rev.id}}">
-					{{ rev.created|date:"Y-m-d H:i" }}
-					{{ rev.user_name }}
-				</a>
+				<label class="rev-a"><input type="radio" name="a" value="{{ rev.id }}" /></label>
+				<label class="rev-b"><input type="radio" name="b" value="{{ rev.id }}" style="visibility: hidden"/></label>
+				<span>
+					{{ rev.created|date:_"Y-m-d H:i" }}
+					{{ rev.user_id.title|default:rev.user_name }}
+				</span>
 			</li>
 		{% endfor %}
 		</ul>
@@ -80,47 +81,58 @@
 
 	<div class="col-lg-9 col-md-9">
 		<div id="page-diff" >
-			<p class="alert">
-				{_ Select one or two revisions from the list on the left. _}
-			</p>
 		</div
 	</div>
 
 </div>
 
 {% javascript %}
-var $last_clicked;
+$('#revisions input').change(function(event) {
+	var a = $('#revisions input[name="a"]:checked').val();
+	var b = $('#revisions input[name="b"]:checked').val();
+	var is_show = false;
+	$('#revisions input[name="a"]').each(function() {
+		if ($(this).val() == b) {
+			is_show = true;
+		}
+		if (is_show) {
+			$(this).css({visibility: "visible"});
+		} else {
+			$(this).css({visibility: "hidden"});
+		}
+	});
+	is_show = true;
+	$('#revisions input[name="b"]').each(function() {
+		if (is_show) {
+			$(this).css({visibility: "visible"});
+		} else {
+			$(this).css({visibility: "hidden"});
+		}
+		if ($(this).val() == a) {
+			is_show = false;
+		}
+	});
 
-$('#revisions a').click(function(event) {
-	$(this).closest('li').toggleClass('active');
-	$('#revisions li a').removeClass('first second');
-
-	var checked = $('#revisions li.active a');
-
-	if (checked.length > 2) {
-		$last_clicked.closest('li').removeClass('active');
-		checked = $('#revisions li.active a');
-	}
-	$last_clicked = $(this);
-
-	if (checked.length == 2) {
-		$(checked.get(0)).addClass("first");
-		$(checked.get(1)).addClass("second");
-
+	if (a == b) {
 		z_notify("rev-diff", { 
-			a: $(checked.get(0)).attr('href'), 
-			b: $(checked.get(1)).attr('href'), 
-			z_delegate: 'controller_admin_backup_revision' 
+			id: {{ id }},
+			a: a, 
+			z_delegate: `controller_admin_backup_revision`
 		});
-	} else if (checked.length == 1) {
-		$(checked.get(0)).addClass("first");
-
+	} else {
 		z_notify("rev-diff", { 
-			a: $(checked.get(0)).attr('href'), 
-			z_delegate: 'controller_admin_backup_revision' 
+			id: {{ id  }},
+			a: a, 
+			b: b, 
+			z_delegate: `controller_admin_backup_revision`
 		});
 	}
-	event.preventDefault();
+});
+
+z_notify("rev-diff", { 
+	id: {{ id }},
+	a: "latest", 
+	z_delegate: `controller_admin_backup_revision`
 });
 {% endjavascript %}
 
