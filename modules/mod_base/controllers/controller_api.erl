@@ -154,7 +154,7 @@ process_post(ReqData, Context0) ->
 %%   {'Access-Control-Allow-Methods', undefined},
 %%   {'Access-Control-Allow-Headers', undefined}]
 set_cors_header(ReqData, Context) ->
-    case z_convert:to_bool(m_site:get(site, service_api_cors, Context)) of
+    case z_convert:to_bool(m_site:get(service_api_cors, Context)) of
         true ->
             lists:foldl(
                     fun ({K, Def}, Acc) ->
