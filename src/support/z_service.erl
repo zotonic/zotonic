@@ -63,7 +63,6 @@ all(info, Context) ->
             Info = z_module_indexer:find_all(service, true, Context),
             [ serviceinfo(Name, Module, ErlangModule) || #module_index{key=#module_index_key{name=Name}, module=Module, erlang_module=ErlangModule} <- Info ]
         end,
-    % F();
     z_depcache:memo(F, {z_services_info}, ?HOUR, [z_modules, module_index], Context);
 
 
@@ -157,25 +156,19 @@ handler('DELETE') ->
 
 
 module_attr(Service, Attr, Default, T) ->
-    % code:ensure_loaded(Service),
-    try
-        Info = Service:module_info(attributes),
-        V = proplists:get_value(Attr, Info),
-        case T of
-            list -> 
-                case V of
-                    undefined -> Default;
-                    V -> V
-                end;
-            atom ->
-                case V of
-                    [X] -> X;
-                    _ -> Default
-                end
-        end
-    catch
-        _M:_E -> 
-            Default
+    Info = Service:module_info(attributes),
+    V = proplists:get_value(Attr, Info),
+    case T of
+        list -> 
+            case V of
+                undefined -> Default;
+                V -> V
+            end;
+        atom ->
+            case V of
+                [X] -> X;
+                _ -> Default
+            end
     end.
 
 %%

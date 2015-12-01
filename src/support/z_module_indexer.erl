@@ -533,6 +533,21 @@ to_ets(List, Type, Tag, Site) ->
 
     to_ets([], _Type, _Tag, _Site, _Acc) ->
         ok;
+    to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], service, Tag, Site, Acc) ->
+        K = #module_index{
+            key=#module_index_key{
+                site=Site,
+                type=service,
+                name=service_key(z_convert:to_binary(Mod), Name),
+                ua_class=generic
+            },
+            module=Mod,
+            erlang_module=ErlMod,
+            filepath=FP,
+            tag=Tag
+        },
+        ets:insert(?MODULE_INDEX, K),
+        to_ets(T, service, Tag, Site, [Name|Acc]);
     to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Type, Tag, Site, Acc) ->
         case lists:member(Name, Acc) of
             true ->
@@ -554,6 +569,10 @@ to_ets(List, Type, Tag, Site) ->
                 to_ets(T, Type, Tag, Site, [Name|Acc])
         end.
 
+service_key(<<"mod_", Mod/binary>>, Name) ->
+    {Mod, z_convert:to_binary(Name)};
+service_key(Site, Name) ->
+    {Site, z_convert:to_binary(Name)}.
 
 % Place all templates in the ets table, indexed per device type
 templates_to_ets(List, Tag, Site) ->
