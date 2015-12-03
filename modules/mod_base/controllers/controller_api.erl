@@ -24,6 +24,7 @@
 -export([
     init/1,
     service_available/2,
+    options/2,
     resource_exists/2,
     allowed_methods/2,
     process_post/2,
@@ -44,10 +45,11 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context1 = z_context:set(DispatchArgs, Context),
     z_context:lager_md(Context1),
     ReqData1 = set_cors_header(ReqData, Context1),
-    case wrq:method(ReqData1) of
-        'OPTIONS' -> {{halt, 204}, ReqData1, Context1};
-        _ -> {true, ReqData1, Context1}
-    end.
+    {true, ReqData1, Context1}.
+
+% Headers where already added in service_available/2
+options(ReqData, Context) ->
+    {[], ReqData, Context}.
 
 allowed_methods(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
@@ -68,10 +70,10 @@ allowed_methods(ReqData, Context) ->
     case ensure_existing_module(Module, Method, Context1) of
         {ok, ServiceModule} ->
             Context2 = z_context:set(service_module, ServiceModule, Context1),
-            {z_service:http_methods(ServiceModule), ReqData, Context2};
+            {['OPTIONS' | z_service:http_methods(ServiceModule)], ReqData, Context2};
         {error, enoent} ->
             Context2 = z_context:set(service_module, undefined, Context1),
-            {['GET', 'HEAD', 'POST'], ReqData, Context2}
+            {['OPTIONS', 'GET', 'HEAD', 'POST'], ReqData, Context2}
     end.
 
 ensure_existing_module(Module, Method, Context) ->
