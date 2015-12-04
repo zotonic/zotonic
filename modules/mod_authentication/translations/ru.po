@@ -283,11 +283,7 @@ msgstr "Получить код проверки"
 #: modules/mod_authentication/templates/_logon_off.tpl:4
 #, fuzzy
 msgid "Sign in"
-msgstr ""
-"#-#-#-#-#  ru.po (zotonic-0.10-dev)  #-#-#-#-#\n"
-"Войти\n"
-"#-#-#-#-#  ru.po (zotonic-0.10-dev)  #-#-#-#-#\n"
-"Вход"
+msgstr "Войти"
 
 #: modules/mod_authentication/templates/_logon_login_title.tpl:1
 #: modules/mod_authentication/templates/logon.tpl:11
@@ -354,7 +350,7 @@ msgid ""
 "To find your account you need to enter either your username or the email "
 "address we have received from you."
 msgstr ""
-"Чтобы определить вашу учетную запись,\tнужно указать имя пользователя или "
+"Чтобы определить вашу учетную запись, нужно указать имя пользователя или "
 "связанный с ней адрес e-mail."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:20
