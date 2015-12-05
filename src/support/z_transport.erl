@@ -149,6 +149,8 @@ data_decode(Bin) ->
     z_ubf:decode(Bin).
 
 -spec data_encode(any()) -> {ok, binary()}.
+data_encode([]) -> {ok, <<>>}; 
+data_encode(<<>>) -> {ok, <<>>}; 
 data_encode(Data) ->
     z_ubf:encode(Data).
 
