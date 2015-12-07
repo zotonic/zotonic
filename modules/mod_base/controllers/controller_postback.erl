@@ -23,6 +23,7 @@
     init/1, 
     service_available/2,
     allowed_methods/2,
+    content_types_provided/2,
     process_post/2
 ]).
 
@@ -39,7 +40,11 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
 
 allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
-
+    
+content_types_provided(ReqData, Context) ->
+    {[{"text/x-ubf", undefined}, 
+      {"text/plain", undefined}], ReqData, Context}.
+    
 process_post(ReqData, Context) ->
     case wrq:get_req_header_lc("content-type", ReqData) of
         "text/x-ubf" ++ _ ->
@@ -52,7 +57,7 @@ process_post(ReqData, Context) ->
             process_post_form(ReqData, Context);
         _ ->
             {{halt, 415}, ReqData, Context}
-    end. 
+    end.
 
 %% @doc AJAX postback, the received data is UBF which can be directly decoded
 %% and handled by the z_transport:incoming/2 routines. 
@@ -88,13 +93,16 @@ process_post_form(ReqData, Context0) ->
                 <<>> ->  nop;
                 _JS -> z_transport:page(javascript, Script, Context3)
             end,
-            post_return(<<>>, Context3);
+            post_form_return(Context3);
         #z_msg_v1{} = Msg ->
             {ok, Reply, Context2} = z_transport:incoming(Msg, Context1),
-            {ok, Ms, Context3} = z_transport:transport(Reply, Context2),
-            z_session_page:transport(Ms, Context3),
-            post_return(<<>>, Context3)
+            ok = z_transport:transport(Reply, Context2),
+            post_form_return(Context2)
     end.
+    
+post_form_return(Context) ->
+    % Make sure that we return 200, otherwise the form onload is not triggered.
+    post_return(<<"#$">>, Context).
 
 notify_submit(None, Event, Context) when None =:= undefined; None =:= <<>>; None =:= [] ->
     case z_notifier:first(Event, Context) of
@@ -105,21 +113,8 @@ notify_submit(Delegate, Event, Context) ->
     {ok, Module} = z_utils:ensure_existing_module(Delegate),
     Module:event(Event, Context).
 
-% Make sure that we retun 200, otherwise the form onload is not triggered.
-post_return(<<>>, Context) ->
-    {x, RD, Context1} = ?WM_REPLY(x, Context),
-    RD1 = case is_empty(wrq:resp_body(RD)) of
-            true -> wrq:append_to_resp_body(<<" ">>, RD);
-            false -> RD
-          end,
-    {true, RD1, Context1};
+
 post_return(Data, Context) ->
     {x, RD, Context1} = ?WM_REPLY(x, Context),
     RD1 = wrq:append_to_resp_body(Data, RD),
     {true, RD1, Context1}.
-
-is_empty(<<>>) -> true;
-is_empty([]) -> true;
-is_empty(undefined) -> true;
-is_empty(_) -> false.
-

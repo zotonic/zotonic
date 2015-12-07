@@ -800,7 +800,9 @@ function z_ajax(options, data)
         url: '/postback',
         type: 'post',
         data: data,
-        dataType: 'text',
+        dataType: 'ubf text',
+        accepts: {ubf: 'text/x-ubf'},
+        converters: {"text ubf": window.String},
         contentType: 'text/x-ubf',
         async: !z_page_unloading, // Prevents requests from being cancelled during unloading of the page.
         success: function(received_data, textStatus)
@@ -1082,7 +1084,9 @@ function z_comet_poll_ajax()
             url: window.location.protocol + '//' + window.location.host + '/comet',
             type:'post',
             data: msg,
-            dataType: 'text',
+            dataType: 'ubf text',
+            accepts: {ubf: "text/x-ubf"},
+            converters: {"text ubf": window.String},
             contentType: 'text/x-ubf',
             statusCode: {
                     /* Handle incoming data */
@@ -1608,7 +1612,7 @@ function z_transport_form(qmsg)
     var options = {
         url:  '/postback',
         type: 'POST',
-        dataType: 'text/plain'
+        dataType: 'text'
     };
 
     // hack to fix Safari hang (thanks to Tim Molendijk for this)
