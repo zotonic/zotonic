@@ -46,6 +46,7 @@
     is_escape_texts=true,
     is_acl_check=true,
     is_import=false,
+    is_no_touch=false,
     expected=[]
 }).
 
@@ -169,6 +170,8 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id =:= insert_rsc
         is_escape_texts = proplists:get_value(escape_texts, Options, true),
         is_acl_check = proplists:get_value(acl_check, Options, true),
         is_import = proplists:get_value(is_import, Options, false),
+        is_no_touch = proplists:get_value(no_touch, Options, false)
+                        andalso z_acl:is_admin(Context),
         expected = proplists:get_value(expected, Options, [])
     },
     update_imported_check(RscUpd, Props, Context).
@@ -269,7 +272,7 @@ update_transaction_fun_props(#rscupd{id=Id} = RscUpd, Func, Context) ->
             EditableProps = props_filter_protected(
                                 props_filter(
                                     props_trim(UpdateProps), [], Context),
-                                RscUpd#rscupd.is_import),
+                                RscUpd),
             AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
                                  L when is_list(L) -> L;
                                  {error, Reason} -> throw({error, Reason})
@@ -301,7 +304,6 @@ update_transaction_fun_insert(#rscupd{id=insert_rsc} = RscUpd, Props, _Raw, Upda
                         1 = z_db:q("update rsc set creator_id = id where id = $1", [InsId], Context),
                         InsId;
                     CreatorId when is_integer(CreatorId) ->
-                        true = z_acl:is_admin(Context),
                         {ok, InsId} = z_db:insert(rsc, [{creator_id, CreatorId} | InsProps], Context),
                         InsId;
                     undefined ->
@@ -372,10 +374,13 @@ check_expected(Raw, [{Key,Value}|Es], Context) ->
 update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Context) ->
     {version, Version} = proplists:lookup(version, Raw),
     UpdateProps = [ {version, Version+1} | proplists:delete(version, Props) ],
-    UpdateProps1 = set_if_not_import(RscUpd#rscupd.is_import, modified, erlang:universaltime(), UpdateProps),
-    UpdateProps2 = set_if_not_import(RscUpd#rscupd.is_import, modifier_id, z_acl:user(Context), UpdateProps1),
+    UpdateProps1 = set_if_normal_update(RscUpd, modified, erlang:universaltime(), UpdateProps),
+    UpdateProps2 = set_if_normal_update(RscUpd, modifier_id, z_acl:user(Context), UpdateProps1),
     {IsChanged, UpdatePropsN} = z_notifier:foldr(#rsc_update{
-                                            action=case RscUpd#rscupd.id of insert_rsc -> insert; _ -> update end,
+                                            action=case RscUpd#rscupd.id of 
+                                                        insert_rsc -> insert; 
+                                                        _ -> update
+                                                   end,
                                             id=Id, 
                                             props=Raw
                                         }, 
@@ -390,7 +395,9 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
                             CatNr = z_db:q1("select nr
                                              from hierarchy 
                                              where id = $1
-                                               and name = '$category'", [CatId], Context),
+                                               and name = '$category'",
+                                            [CatId],
+                                            Context),
                             [ {pivot_category_nr, CatNr} | UpdatePropsN]
                     end,
 
@@ -404,7 +411,6 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
             {ok, Id, notchanged}
     end.
 
-
 %% @doc Recombine all properties from the ones that are posted by a form.
 normalize_props(Id, Props, Context) ->
     normalize_props(Id, Props, [], Context).
@@ -417,10 +423,19 @@ normalize_props(Id, Props, Options, Context) ->
     [ {map_property_name(IsImport, P), V} || {P, V} <- BlockProps ].
 
 
-set_if_not_import(true, _K, _V, Props) ->
+set_if_normal_update(#rscupd{} = RscUpd, K, V, Props) ->
+    set_if_normal_update_1(
+            is_normal_update(RscUpd),
+            K, V, Props).
+
+set_if_normal_update_1(false, _K, _V, Props) ->
     Props;
-set_if_not_import(false, K, V, Props) ->
+set_if_normal_update_1(true, K, V, Props) ->
     [ {K,V} | proplists:delete(K, Props) ].
+
+is_normal_update(#rscupd{is_import=true}) -> false;
+is_normal_update(#rscupd{is_no_touch=true}) -> false;
+is_normal_update(#rscupd{}) -> true.
 
 
 %% @doc Check if the update will change the data in the database
@@ -548,20 +563,15 @@ props_filter([], Acc, _Context) ->
     Acc;
 
 props_filter([{uri, Uri}|T], Acc, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
-        true ->
-            case Uri of
-                Empty when Empty == undefined; Empty == []; Empty == <<>> ->
-                    props_filter(T, [{uri, undefined} | Acc], Context);
-                _ ->
-                    props_filter(T, [{uri, z_sanitize:uri(Uri)} | Acc], Context)
-            end;
-        false ->
-            props_filter(T, Acc, Context)
+    case Uri of
+        Empty when Empty == undefined; Empty == []; Empty == <<>> ->
+            props_filter(T, [{uri, undefined} | Acc], Context);
+        _ ->
+            props_filter(T, [{uri, z_sanitize:uri(Uri)} | Acc], Context)
     end;
 
 props_filter([{name, Name}|T], Acc, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
+    case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             case Name of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -617,15 +627,13 @@ props_filter([{P, DT}|T], Acc, Context)
          P =:= publication_start; P =:= publication_end  ->
     props_filter(T, [{P,z_datetime:to_datetime(DT)}|Acc], Context);
 
-props_filter([{P, Id}|T], Acc, Context) when P =:= creator_id; P =:= modifier_id ->
+props_filter([{P, Id}|T], Acc, Context) 
+    when P =:= creator_id; P =:= modifier_id ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             props_filter(T, Acc, Context);
         RId ->
-            case m_rsc:is_a(RId, person, Context) of
-                true -> props_filter(T, [{P,RId}|Acc], Context);
-                false -> props_filter(T, Acc, Context)
-            end
+            props_filter(T, [{P,RId}|Acc], Context)
     end;
 
 props_filter([{visible_for, Vis}|T], Acc, Context) ->
@@ -674,7 +682,8 @@ props_filter([{content_group_id, CgId}|T], Acc, Context) ->
             props_filter(T, Acc, Context)
     end;
 
-props_filter([{Location, P}|T], Acc, Context) when Location =:= location_lat; Location =:= location_lng ->
+props_filter([{Location, P}|T], Acc, Context) 
+    when Location =:= location_lat; Location =:= location_lng ->
     X = try
             z_convert:to_float(P)
         catch
@@ -733,9 +742,10 @@ props_defaults(Props, Context) ->
     end.
 
 
-props_filter_protected(Props, IsImport) ->
+props_filter_protected(Props, RscUpd) ->
+    IsNormal = is_normal_update(RscUpd),
     lists:filter(fun
-                    ({K, _}) -> not is_protected(K, IsImport) 
+                    ({K, _}) -> not is_protected(K, IsNormal) 
                  end,
                  Props).
 
@@ -757,18 +767,18 @@ map_property_name(true,  P) when is_list(P) -> erlang:list_to_atom(P).
 
 
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
-is_protected(id, _IsImport)            -> true;
-is_protected(created, false)           -> true;
-is_protected(creator_id, false)        -> true;
-is_protected(modified, false)          -> true;
-is_protected(modifier_id, false)       -> true;
-is_protected(props, _IsImport)         -> true;
-is_protected(version, _IsImport)       -> true;
-is_protected(page_url, _IsImport)      -> true;
-is_protected(medium, _IsImport)        -> true;
-is_protected(pivot_xxx, _IsImport)     -> true;
-is_protected(computed_xxx, _IsImport)  -> true;
-is_protected(_, _IsImport)             -> false.
+is_protected(id, _IsNormal)            -> true;
+is_protected(created, true)            -> true;
+is_protected(creator_id, true)         -> true;
+is_protected(modified, true)           -> true;
+is_protected(modifier_id, true)        -> true;
+is_protected(props, _IsNormal)         -> true;
+is_protected(version, _IsNormal)       -> true;
+is_protected(page_url, _IsNormal)      -> true;
+is_protected(medium, _IsNormal)        -> true;
+is_protected(pivot_xxx, _IsNormal)     -> true;
+is_protected(computed_xxx, _IsNormal)  -> true;
+is_protected(_, _IsNormal)             -> false.
 
 
 is_trimmable(_, V) when not is_binary(V), not is_list(V) -> false;
