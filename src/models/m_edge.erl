@@ -48,6 +48,8 @@
     subjects/2,
     object_edge_ids/3,
     subject_edge_ids/3,
+    object_edge_props/3,
+    subject_edge_props/3,
     update_sequence/4,
     set_sequence/4,
     update_sequence_edge_ids/4,
@@ -69,11 +71,30 @@ m_find_value(o, #m{value=undefined}, _Context) ->
         end
     end;
 
+m_find_value(o_props, #m{value=undefined}, _Context) ->
+    fun(Id, _IdContext) ->
+        fun(Pred, PredContext) ->
+            object_edge_props(Id, Pred, PredContext)
+        end
+    end;
+
 m_find_value(s, #m{value=undefined}, _Context) ->
     fun(Id, _IdContext) ->
         fun(Pred, PredContext) ->
             subject_edge_ids(Id, Pred, PredContext)
         end
+    end;
+
+m_find_value(s_props, #m{value=undefined}, _Context) ->
+    fun(Id, _IdContext) ->
+        fun(Pred, PredContext) ->
+            subject_edge_props(Id, Pred, PredContext)
+        end
+    end;
+
+m_find_value(edges, #m{value=undefined}, _Context) ->
+    fun(Id, IdContext) ->
+        get_edges(Id, IdContext)
     end;
 
 %% m.edge.id[subject_id].predicatename[object_id] returns the
@@ -131,7 +152,8 @@ get_edges(SubjectId, Context) ->
             Edges;
         undefined ->
             Edges = z_db:assoc("
-                select e.id, e.subject_id, e.predicate_id, p.name, e.object_id, e.seq 
+                select e.id, e.subject_id, e.predicate_id, p.name, e.object_id,
+                       e.seq, e.created, e.creator_id
                 from edge e join rsc p on p.id = e.predicate_id 
                 where e.subject_id = $1 
                 order by e.predicate_id, e.seq, e.id", [SubjectId], Context),
@@ -161,40 +183,57 @@ insert(Subject, Pred, Object, Opts, Context) ->
     SubjectId = m_rsc:name_to_id_check(Subject, Context),
     insert(SubjectId, Pred, Object, Opts, Context).
 
-    insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
-        case z_db:q1("select id from edge where subject_id = $1 and object_id = $2 and predicate_id = $3", [SubjectId, ObjectId, PredId], Context) of
-            undefined ->
-                F = fun(Ctx) ->
-                        case proplists:is_defined(no_touch, Opts) of 
-                            true -> skip;
-                            false -> m_rsc:touch(SubjectId, Ctx)
-                        end,
-                        SeqOpt = case proplists:get_value(seq, Opts) of
-                                  S when is_integer(S) -> [{seq, S}];
-                                  _ -> []
-                              end,
-                        EdgeProps = [
-                            {subject_id, SubjectId},
-                            {object_id, ObjectId},
-                            {predicate_id, PredId},
-                            {creator_id, z_acl:user(Ctx)}
-                            | SeqOpt
-                        ],
-                        z_db:insert(edge, EdgeProps, Ctx)
-                    end,
-                {ok, PredName} = m_predicate:id_to_name(PredId, Context),
-                case z_acl:is_allowed(insert, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of
-                    true ->
-                        {ok, EdgeId} = z_db:transaction(F, Context),
-                        z_edge_log_server:check(Context),
-                        {ok, EdgeId};
-                    AclError ->
-                        {error, {acl, AclError}}
-                end;
-            EdgeId ->
-                % Edge exists - skip
-                {ok, EdgeId}
-        end.
+insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
+case z_db:q1("select id 
+              from edge 
+              where subject_id = $1 
+                and object_id = $2
+                and predicate_id = $3",
+             [SubjectId, ObjectId, PredId], 
+             Context)
+of
+    undefined ->
+        F = fun(Ctx) ->
+                case z_convert:to_bool(proplists:get_value(no_touch, Opts, false)) of 
+                    true -> skip;
+                    false -> m_rsc:touch(SubjectId, Ctx)
+                end,
+                SeqOpt = case proplists:get_value(seq, Opts) of
+                            S when is_integer(S) -> [{seq, S}];
+                            undefined -> []
+                         end,
+                CreatedOpt = case proplists:get_value(created, Opts) of
+                                DT when is_tuple(DT) -> [{created,DT}];
+                                undefined -> []
+                             end,
+                EdgeProps = [
+                    {subject_id, SubjectId},
+                    {object_id, ObjectId},
+                    {predicate_id, PredId},
+                    {creator_id, case proplists:get_value(creator_id, Opts) of
+                                    undefined -> z_acl:user(Ctx);
+                                    CreatorId -> CreatorId
+                                 end}
+                    | (SeqOpt ++ CreatedOpt)
+                ],
+                z_db:insert(edge, EdgeProps, Ctx)
+            end,
+        {ok, PredName} = m_predicate:id_to_name(PredId, Context),
+        case z_acl:is_allowed(insert, 
+                              #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, 
+                              Context)
+        of
+            true ->
+                {ok, EdgeId} = z_db:transaction(F, Context),
+                z_edge_log_server:check(Context),
+                {ok, EdgeId};
+            AclError ->
+                {error, {acl, AclError}}
+        end;
+    EdgeId ->
+        % Edge exists - skip
+        {ok, EdgeId}
+end.
 
 
 %% @doc Delete an edge by Id
@@ -475,6 +514,47 @@ subject_edge_ids(Id, Predicate, Context) ->
                 z_db:q("select subject_id, id from edge where object_id = $1 and predicate_id = $2 order by seq, id", [Id, PredId], Context)
             end,
             z_depcache:memo(F, {subject_edge_ids, Id, PredId}, ?DAY, [Id], Context);
+        {error, _} ->
+            []
+    end.
+
+
+%% @doc Return all object ids with edge properties
+-spec object_edge_props(integer(), binary()|list()|atom()|integer(), #context{}) -> list().
+object_edge_props(Id, Predicate, Context) ->
+    case m_predicate:name_to_id(Predicate, Context) of
+        {ok, PredId} ->
+            F = fun() ->
+                z_db:assoc("
+                        select *
+                        from edge
+                        where subject_id = $1
+                          and predicate_id = $2
+                        order by seq, id", 
+                       [Id, PredId], 
+                       Context)
+            end,
+            z_depcache:memo(F, {object_edge_props, Id, PredId}, ?DAY, [Id], Context);
+        {error, _} ->
+            []
+    end.
+
+%% @doc Return all subject ids with the edge properties
+-spec subject_edge_props(integer(), binary()|list()|atom()|integer(), #context{}) -> list().
+subject_edge_props(Id, Predicate, Context) ->
+    case m_predicate:name_to_id(Predicate, Context) of
+        {ok, PredId} ->
+            F = fun() ->
+                z_db:assoc("
+                        select *
+                        from edge 
+                        where object_id = $1 
+                          and predicate_id = $2 
+                        order by seq, id", 
+                       [Id, PredId], 
+                       Context)
+            end,
+            z_depcache:memo(F, {subject_edge_props, Id, PredId}, ?DAY, [Id], Context);
         {error, _} ->
             []
     end.
