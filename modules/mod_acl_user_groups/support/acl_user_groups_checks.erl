@@ -260,7 +260,7 @@ find_cg([{CGId, Sub}|Rest], CatId, UGs, Context) ->
     end.
 
 %% @doc Add a restriction on the visible content groups to SQL searches
-acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=_SearchSql}, Context) ->
+acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) ->
     case restrict_content_groups(Context) of
         all ->
             {[], Args};
@@ -272,8 +272,22 @@ acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=_SearchS
             % User can see some content groups
             SIds = [ integer_to_list(Id) || Id <- Ids ],
             In = string:join(SIds, ","),
-            Clause = " ("++Alias++".content_group_id is null or "++Alias++".content_group_id in ("++In++")) ",
+            Clause = lists:flatten([
+                        " (",Alias,".content_group_id is null or ",
+                             Alias,".content_group_id in (",In,")) ",
+                             publish_check(Alias, SearchSql, Context)]),
             {Clause, Args}
+    end.
+
+publish_check(Alias, #search_sql{extra=Extra}, Context) ->
+    case lists:member(no_publish_check, Extra) orelse z_acl:is_allowed(use, mod_admin, Context) of
+        true ->
+            "";
+        false ->
+            [" and ",
+             Alias,".is_published and ",
+             Alias,".publication_start <= now() and ",
+             Alias,".publication_end >= now()"]
     end.
 
 restrict_content_groups(#context{user_id=1}) ->

@@ -251,15 +251,14 @@ concat_sql_from1(Something) ->	%% make list for records or other stuff
 %% @doc Create extra 'where' conditions for checking the access control
 %% @spec add_acl_check({Table, Alias}, Args, Q, Context) -> {Where, NewArgs}
 add_acl_check({rsc, Alias}, Args, Q, Context) ->
-    add_acl_check1(rsc, Alias, Args, Q, Context);
+    add_acl_check_rsc(Alias, Args, Q, Context);
 add_acl_check(_, Args, _Q, _Context) ->
     {[], Args}.
 
 
 %% @doc Create extra 'where' conditions for checking the access control
-%% @spec add_acl_check1(Table, Alias, Args, SearchSQL, Context) -> {Where, NewArgs}
 %% @todo This needs to be changed for the pluggable ACL
-add_acl_check1(Table, Alias, Args, SearchSql, Context) ->
+add_acl_check_rsc(Alias, Args, SearchSql, Context) ->
     case z_notifier:first(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) of
         undefined ->
             case z_acl:can_see(Context) of
@@ -268,15 +267,15 @@ add_acl_check1(Table, Alias, Args, SearchSql, Context) ->
                     {[], Args};
                 ?ACL_VIS_PUBLIC -> 
                     % Anonymous users can only see public published content
-                    Sql = Alias ++ ".visible_for = 0" ++ publish_check(Table, Alias, SearchSql),
+                    Sql = Alias ++ ".visible_for = 0" ++ publish_check(Alias, SearchSql),
                     {Sql, Args};
                 ?ACL_VIS_COMMUNITY -> 
                     % Only see published public or community content
-                    Sql = Alias ++ ".visible_for in (0,1) " ++ publish_check(Table, Alias, SearchSql),
+                    Sql = Alias ++ ".visible_for in (0,1) " ++ publish_check(Alias, SearchSql),
                     {Sql, Args};
                 ?ACL_VIS_GROUP ->
                     % Can see published community and public content or any content from one of the user's groups
-                    Sql = Alias ++ ".visible_for <= 2 " ++ publish_check(Table, Alias, SearchSql),
+                    Sql = Alias ++ ".visible_for <= 2 " ++ publish_check(Alias, SearchSql),
                     Sql1 = lists:flatten([
                             $(, $(, Sql, ") or ", Alias, ".id = $", integer_to_list(length(Args)+1), $)
                         ]),
@@ -287,7 +286,7 @@ add_acl_check1(Table, Alias, Args, SearchSql, Context) ->
     end.
 
 
-publish_check(rsc, Alias, #search_sql{extra=Extra}) ->
+publish_check(Alias, #search_sql{extra=Extra}) ->
     case lists:member(no_publish_check, Extra) of
         true ->
             "";
@@ -296,9 +295,7 @@ publish_check(rsc, Alias, #search_sql{extra=Extra}) ->
             ++Alias++".is_published and "
             ++Alias++".publication_start <= now() and "
             ++Alias++".publication_end >= now()"
-    end;
-publish_check(_Table, _Alias, _SearchSql) ->
-    "".
+    end.
 
 
 %% @doc Create the 'where' conditions for the category check
