@@ -38,7 +38,7 @@
 
     do_submit/4,
     collect_answers/3,
-    render_next_page/6,
+    render_next_page/7,
     go_button_target/4,
     module_name/1
 ]).
@@ -54,24 +54,27 @@ manage_schema(What, Context) ->
 event(#postback{message={survey_start, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     Answers = normalize_answers(proplists:get_value(answers, Args)),
-    render_update(render_next_page(SurveyId, 1, exact, Answers, [], Context), Args, Context);
+    Editing = proplists:get_value(editing, Args),
+    render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context), Args, Context);
 
 event(#submit{message={survey_next, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {page_nr, PageNr} = proplists:lookup(page_nr, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
     {history, History} = proplists:lookup(history, Args),
-    render_update(render_next_page(SurveyId, PageNr+1, forward, Answers, History, Context), Args, Context);
+    Editing = proplists:get_value(editing, Args),
+    render_update(render_next_page(SurveyId, PageNr+1, forward, Answers, History, Editing, Context), Args, Context);
 
 event(#postback{message={survey_back, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
     {history, History} = proplists:lookup(history, Args),
+    Editing = proplists:get_value(editing, Args),
     case History of
         [_,PageNr|History1] ->
-            render_update(render_next_page(SurveyId, PageNr, exact, Answers, History1, Context), Args, Context);
+            render_update(render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Context), Args, Context);
         _History ->
-            render_update(render_next_page(SurveyId, 0, exact, Answers, [], Context), Args, Context)
+            render_update(render_next_page(SurveyId, 0, exact, Answers, [], Editing, Context), Args, Context)
     end;
 
 event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, PersistentId}, {user_id, UserId}]}}, Context) ->
@@ -175,10 +178,10 @@ render_update(#render{} = Render, Args, Context) ->
 
 
 %% @doc Fetch the next page from the survey, update the page view
--spec render_next_page(integer(), integer(), exact|forward, list(), list(), #context{}) -> #render{} | #context{}.
-render_next_page(Id, 0, _Direction, _Answers, _History, Context) ->
+-spec render_next_page(integer(), integer(), exact|forward, list(), list(), list()|undefined, #context{}) -> #render{} | #context{}.
+render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Context) when is_integer(Id) ->
     z_render:wire({redirect, [{id, Id}]}, Context);
-render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
+render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when is_integer(Id) ->
     {As, Submitter} = get_args(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
     Answers2 = Answers1 ++ group_multiselect(As),
@@ -201,7 +204,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                              {questions, L},
                              {pages, count_pages(Questions)},
                              {answers, Answers2},
-                             {history, [NewPageNr|History]}],
+                             {history, [NewPageNr|History]},
+                             {editing, Editing}],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
                 {error, {not_found, Name} = Reason} ->
@@ -213,28 +217,36 @@ render_next_page(Id, PageNr, Direction, Answers, History, Context) ->
                     z_render:growl_error("Error evaluating submit.", Context);
 
                 stop ->
-                    render_next_page(Id, 0, Direction, Answers, History, Context);
+                    render_next_page(Id, 0, Direction, Answers, History, Editing, Context);
+
+                submit when Editing =:= undefined ->
+                    %% That was the last page. Show a thank you and save the result.
+                    case do_submit(Id, Questions, Answers2, Context) of
+                        ok ->
+                            case z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)) of
+                                true ->
+                                    #render{
+                                        template="_survey_results.tpl", 
+                                        vars=[
+                                            {id,Id}, {inline, true}, {history, History}, {q, As}
+                                        ]
+                                    };
+                                false ->
+                                    #render{
+                                        template="_survey_end.tpl", 
+                                        vars=[
+                                            {id,Id}, {history, History}, {q, As}
+                                        ]
+                                    }
+                            end;
+                        {ok, ContextOrRender} ->
+                            ContextOrRender;
+                        {error, _Reason} ->
+                            #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
+                    end;
 
                 submit ->
-                    case z_session:get(mod_survey_editing, Context) of
-                        {U, P} -> 
-                            admin_edit_survey_result(z_convert:to_integer(Id), U, P, Questions, Answers2, Context);
-                        _ ->
-                            %% That was the last page. Show a thank you and save the result.
-                            case do_submit(Id, Questions, Answers2, Context) of
-                                ok ->
-                                    case z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)) of
-                                        true ->
-                                            #render{template="_survey_results.tpl", vars=[{id,Id}, {inline, true}, {history,History}, {q, As}]};
-                                        false ->
-                                            #render{template="_survey_end.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
-                                    end;
-                                {ok, ContextOrRender} ->
-                                    ContextOrRender;
-                                {error, _Reason} ->
-                                    #render{template="_survey_error.tpl", vars=[{id,Id}, {history,History}, {q, As}]}
-                            end
-                    end
+                    admin_edit_survey_result(Id, Questions, Answers2, Editing, Context)
             end;
         _NoBlocks ->
             % No survey defined, show an error page.
@@ -565,12 +577,29 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
     end.
 
 %% @doc Save the modified survey results
-admin_edit_survey_result(Id, U, P, Questions, Answers, Context) ->
-    z_session:set(mod_survey_editing, undefined, Context),
-    {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
-    m_survey:insert_survey_submission(Id, U, P, FoundAnswers, Context),
-    Context1 = z_render:dialog_close(Context),
-    z_render:update("survey-results", z_template:render("_admin_survey_editor_results.tpl", [{id, Id}], Context), Context1).
+admin_edit_survey_result(Id, Questions, Answers, {editing, UserId, PersistentId, Actions}, Context) ->
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
+            m_survey:insert_survey_submission(Id, UserId, PersistentId, FoundAnswers, Context),
+            case Actions of
+                [] ->
+                    Context1 = z_render:dialog_close(Context),
+                    z_render:update(
+                            "survey-results",
+                            #render{
+                                template="_admin_survey_editor_results.tpl",
+                                vars=[
+                                    {id, Id}
+                                ]
+                            },
+                            Context1);
+                _ ->
+                    z_render:wire(Actions, Context)
+            end;
+        false ->
+            z_render:growl(?__("You are not allowed to change these results.", Context), Context)
+    end.
 
 
 

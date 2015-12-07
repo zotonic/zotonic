@@ -59,6 +59,10 @@ m_find_value(totals, #m{value=undefined} = M, _Context) ->
     M#m{value=totals};
 m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
     M#m{value=did_survey};
+m_find_value(did_survey_results, #m{value=undefined} = M, _Context) ->
+    M#m{value=did_survey_results};
+m_find_value(did_survey_results_readable, #m{value=undefined} = M, _Context) ->
+    M#m{value=did_survey_results_readable};
 m_find_value(is_allowed_results_download, #m{value=undefined} = M, _Context) ->
     M#m{value=is_allowed_results_download};
 m_find_value(handlers, #m{value=undefined}, Context) ->
@@ -76,6 +80,25 @@ m_find_value(Id, #m{value=totals}, Context) ->
     survey_totals(Id, Context);
 m_find_value(Id, #m{value=did_survey}, Context) ->
     did_survey(Id, Context);
+m_find_value(Id, #m{value=did_survey_results}, Context) ->
+    {UserId, PersistentId} = case z_acl:user(Context) of
+                                undefined ->
+                                    {undefined, z_session:persistent_id(Context)};
+                                UId ->
+                                    {UId, undefined}
+                            end,
+    Answers = m_survey:single_result(Id, UserId, PersistentId, Context),
+    lists:flatten([ Vs || {_,Vs} <- Answers ]);
+m_find_value(Id, #m{value=did_survey_results_readable}, Context) ->
+    {UserId, PersistentId} = case z_acl:user(Context) of
+                                undefined ->
+                                    {undefined, z_session:persistent_id(Context)};
+                                UId ->
+                                    {UId, undefined}
+                            end,
+    Answers = m_survey:single_result(Id, UserId, PersistentId, Context),
+    Answers1 = lists:flatten([ Vs || {_,Vs} <- Answers ]),
+    survey_answer_prep:readable(Id, Answers1, Context);
 m_find_value(Id, #m{value=is_allowed_results_download}, Context) ->
     is_allowed_results_download(Id, Context).
 
@@ -235,16 +258,20 @@ prep_chart(Type, Block, Stats, Context) ->
 survey_stats(SurveyId, Context) ->
     Rows = z_db:q("
                 select question, name, value, text
-                  from survey_answer 
-                  where survey_id = $1
-                  order by question, name", [z_convert:to_integer(SurveyId)], Context),
+                from survey_answer 
+                where survey_id = $1
+                order by question, name", 
+                [z_convert:to_integer(SurveyId)],
+                Context),
     group_questions(Rows, []).
 
 %% @private
 group_questions([], Acc) ->
     lists:reverse(Acc);
 group_questions([{Question,_,_,_}|_] = Answers, Acc) ->
-    {Qs,Answers1} = lists:splitwith(fun({Q,_,_,_}) -> Q =:= Question end, Answers),
+    {Qs,Answers1} = lists:splitwith(
+                        fun({Q,_,_,_}) -> Q =:= Question end, 
+                        Answers),
     NVs = group_and_count_values(Qs),
     group_questions(Answers1, [{Question,NVs}|Acc]).
 
@@ -290,10 +317,10 @@ split_values_1([{undefined,undefined}|Vs], Acc) ->
 split_values_1([{V,undefined}|Vs], Acc) ->
     split_values_1(Vs, [V|Acc]);
 split_values_1([{undefined,Text}|Vs], Acc) ->
-    Ts = binary:split(Text, <<"#">>),
+    Ts = binary:split(Text, <<"#">>, [global]),
     split_values_1(Vs, Ts++Acc);
 split_values_1([{V,Text}|Vs], Acc) ->
-    Ts = binary:split(Text, <<"#">>),
+    Ts = binary:split(Text, <<"#">>, [global]),
     split_values_1(Vs, [V|Ts++Acc]).
 
 
