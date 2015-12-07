@@ -1,7 +1,8 @@
 -module(survey_answer_prep).
 
 -export([
-    readable/3
+    readable/3,
+    single/4
 ]).
 
 readable(Id, Answers0, Context) ->
@@ -9,6 +10,11 @@ readable(Id, Answers0, Context) ->
     Answers = order_by_blocks(Answers0, Blocks),
     Answers1 = [ {Name, question(Name, Answer, Blocks, Context)} || {Name, Answer} <- Answers ],
     [ {Name, Q} || {Name,Q} <- Answers1, is_list(Q) ].
+
+single(Id, Name, Answer, Context) ->
+    Blocks = m_rsc:p(Id, blocks, Context),
+    question(Name, Answer, Blocks, Context).
+
 
 %% @doc Ensure that all answers are in the same order as the blocks
 order_by_blocks(As, Bs) ->
@@ -82,8 +88,9 @@ answer(N, Block, Context) ->
 answer_1(<<"survey_thurstone">>, N, Block, Context) ->
     Prep = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
     Ans = proplists:get_value(answers, Prep),
-    case is_list(N) of
-        true -> [ thurs_answer(N1, Ans) || N1 <- N ];
+    Ns = maybe_split(N),
+    case is_list(Ns) of
+        true -> [ thurs_answer(N1, Ans) || N1 <- Ns ];
         false -> thurs_answer(N, Ans)
     end;
 answer_1(<<"survey_yesno">>, N, Block, Context) ->
@@ -111,4 +118,9 @@ default(undefined, A, _Context) -> A;
 default(<<>>, A, _Context) -> A;
 default([], A, _Context) -> A;
 default(V, _, _Context) -> V.
+
+maybe_split(B) when is_binary(B) ->
+    binary:split(B, <<"#">>, [global]);
+maybe_split(V) ->
+    V.
 
