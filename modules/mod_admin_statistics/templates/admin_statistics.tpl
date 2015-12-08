@@ -8,12 +8,14 @@
 
 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-">
   <div class="panel panel-default">
-    <div class="panel-heading">Processes</div>
+    <div class="panel-heading">System</div>
     <div class="panel-body">
-      <dl class="dl-horizontal">
-        <dt>Process Count</dt><dd id="erlang-stats-system_info-process_count"></dd>
-        <dt>Run Queue</dt> <dd id="erlang-stats-statistics-run_queue"></dd>
-      </dl>
+        {% for id, name in [
+                ["erlang-stats-system_info-process_count", "Process Count"], 
+                ["erlang-stats-statistics-run_queue", "Run Queue"], 
+                ["erlang-stats-system_info-port_count", "Port Count"]] %}
+            {% include "_stat_info.tpl" id=id name=name %}
+        {% endfor %}
     </div>
   </div>
 </div>
@@ -22,11 +24,11 @@
   <div class="panel panel-default">
     <div class="panel-heading">I/O</div>
     <div class="panel-body">
-      <dl class="dl-horizontal">
-        <dt>Port Count</dt> <dd id="erlang-stats-system_info-port_count"></dd>
-        <dt>Input</dt> <dd id="erlang-stats-io-input"></dd>
-        <dt>Output</dt> <dd id="erlang-stats-io-output"></dd>
-      </dl>
+        {% for id, name in [
+                ["erlang-stats-io-input", "Input"], 
+                ["erlang-stats-io-output", "Output"]] %}
+            {% include "_stat_info.tpl" id=id name=name render="to_human" %}
+        {% endfor %}
     </div>
   </div>
 </div>
@@ -35,13 +37,14 @@
   <div class="panel panel-default">
     <div class="panel-heading">Memory</div>
     <div class="panel-body">
-      <dl class="dl-horizontal">
-        <dt>Total<dt><dd id="erlang-stats-memory-total"></dd>
-        <dt>Binary<dt><dd id="erlang-stats-memory-binary"></dd>
-        <dt>Ets<dt><dd id="erlang-stats-memory-ets"><dd>
-        <dt>Code<dt><dd id="erlang-stats-memory-code"></dd>
-        <dt>System<dt><dd id="erlang-stats-memory-system"></dd>
-      </dl>
+      {% for id, name in [
+                ["erlang-stats-memory-total", "Total"],
+                ["erlang-stats-memory-binary", "Binary"], 
+                ["erlang-stats-memory-ets", "Ets"], 
+                ["erlang-stats-memory-code", "Code"],
+                ["erlang-stats-memory-system", "System"]]  %}
+            {% include "_stat_info.tpl" id=id name=name render="to_human" %}
+        {% endfor %}
     </div>
   </div>
 </div>
@@ -49,10 +52,28 @@
 </div>
 
 {% javascript %}
-    pubzub.subscribe("erlang/stats/#", function(topic, msg) {
-        $("#" + topic.replace(/\//g, "-")).text(msg.payload);
+function to_human(value) {
+    if(value < 512) // .5 kb
+        return value + "<small>B</small>";
         
-        console.log(topic);
+    if(value < 524288) // .5 Mb
+        return (value/1024).toFixed(1) + "<small>Kb</small>";
+        
+    if(value < 536870912) // .5 Gb
+        return (value/1024/1024).toFixed(1) + "<small>Mb</small>";
+        
+    if(value < 549755813888) // *.5 Tb
+        return (value/1024/1024/1024).toFixed(1) + "<small>Gb</small>";
+        
+    return (value/1024/1024/1024/1024).toFixed(1) + "<small>Tb</small>";
+}
+{% endjavascript %}
+
+{% javascript %}
+    pubzub.subscribe("erlang/stats/#", function(topic, msg) {
+        var item = $("#" + topic.replace(/\//g, "-"));
+        if(!item.length) return;
+        item.html(item.data('render')(msg.payload));
     });
 {% endjavascript %}
 
