@@ -28,6 +28,7 @@
     flush/1
 ]).
 
+
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
@@ -115,6 +116,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% Helpers
 %%
 
+
 % @doc Return a sequence number for the next element
 %
 get_next(Name) ->
@@ -131,7 +133,7 @@ flush(Name, Upto, Handler, HandlerState, Key) when is_integer(Key) andalso Key =
     [#entry{count=Count, value=Value}] = ets:lookup(Name, Key),
     true = ets:delete(Name, Key),
     Handler:handle_value(self(), Count, Value, HandlerState),
-    flush(Name, Upto, ets:next(Name, Key), Handler, HandlerState);
+    flush(Name, Upto, Handler, HandlerState, ets:next(Name, Key));
 flush(Name, Upto, Handler, HandlerState, Atom) when is_atom(Atom) ->
     % Skip over counters
     flush(Name, Upto, Handler, HandlerState, ets:next(Name, Atom));
