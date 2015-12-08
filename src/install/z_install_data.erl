@@ -63,12 +63,12 @@ install_modules(Context) ->
 
 install_module({skeleton, S}, C) ->
     [install_module(M, C) || M <- get_skeleton_modules(S)];
-install_module(M, Context) ->
-    case catch z_db:equery("insert into module (name, is_active) values ($1, true)", [M], Context) of
+install_module(M, Context) when is_atom(M); is_binary(M); is_list(M) ->
+    case z_db:equery("update module set is_active = true where name = $1", [M], Context) of
         {ok, 1} = R ->
             R;
-        _ ->
-            {ok, 1} = z_db:equery("update module set is_active = true where name = $1", [M], Context)
+        {ok, 0} ->
+            {ok, 1} = z_db:equery("insert into module (name, is_active) values ($1, true)", [M], Context)
     end.
 
 -spec get_skeleton_modules(Skeleton::atom()) -> list().
