@@ -542,7 +542,17 @@ pivot_resource(Id, Context) ->
     end,
     
     CustomPivots = z_notifier:map(#custom_pivot{id=Id}, Context),
-    [ ok = update_custom_pivot(Id, Res, Context) || Res <- CustomPivots ],
+    lists:foreach(
+            fun
+                (undefined) -> ok;
+                (none) -> ok;
+                ({error, _} = Error) ->
+                    lager:error("[~p] Error return from custom pivot of ~p, error: ~p",
+                                [z_context:site(Context), Id, Error]);
+                (Res) ->
+                    update_custom_pivot(Id, Res, Context)
+            end,
+            CustomPivots),
     ok.
 
 
@@ -914,9 +924,6 @@ custom_columns([{Name, Spec, _Opts}|Rest], Acc) ->
     custom_columns(Rest, [ [z_convert:to_list(Name), " ", Spec, ","] |  Acc]).
 
 
-
-update_custom_pivot(_Id, none, _Context) ->
-    ok;
 update_custom_pivot(Id, {Module, Columns}, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
     case z_db:select(TableName, Id, Context) of
@@ -924,8 +931,7 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
             {ok, _} = z_db:insert(TableName, [{id, Id}|Columns], Context);
         {ok, _}  ->
             {ok, _} = z_db:update(TableName, Id, Columns, Context)
-    end,
-    ok.
+    end.
 
 
 %% @doc Lookup a custom pivot; give back the Id based on a column. Will always return the first Id found.
