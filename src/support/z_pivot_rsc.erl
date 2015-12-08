@@ -600,7 +600,10 @@ get_float(K, Ps) ->
     end.
 
 truncate(undefined, _Len) -> undefined;
-truncate(S, Len) -> iolist_to_binary(z_string:to_lower(truncate_1(S, Len, Len))).
+truncate(S, Len) -> iolist_to_binary(
+                        z_string:trim(
+                            z_string:to_lower(
+                                truncate_1(S, Len, Len)))).
     
 truncate_1(_S, 0, _Bytes) ->
     "";
