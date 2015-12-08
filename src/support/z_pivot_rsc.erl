@@ -28,6 +28,7 @@
 -export([
     poll/1,
     pivot/2,
+    pivot_delay/1,
     pivot_resource_update/4,
     queue_all/1,
     insert_queue/2,
@@ -70,7 +71,7 @@
 -define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
 
 
--record(state, {site}).
+-record(state, {site, is_pivot_delay = false}).
 
 
 %% @doc Poll the pivot queue for the database in the context
@@ -80,9 +81,14 @@ poll(Context) ->
 
 
 %% @doc An immediate pivot request for a resource
-%% @spec pivot(Id, Context) -> void()
+-spec pivot(integer(), #context{}) -> ok.
 pivot(Id, Context) ->
     gen_server:cast(Context#context.pivot_server, {pivot, Id}).
+
+%% @doc Delay the next pivot, useful when performing big updates
+-spec pivot_delay(#context{}) -> ok.
+pivot_delay(Context) ->
+    gen_server:cast(Context#context.pivot_server, pivot_delay).
 
 
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
@@ -268,7 +274,7 @@ init(Host) ->
         {module, ?MODULE}
       ]),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {ok, #state{site=Host}}.
+    {ok, #state{site=Host, is_pivot_delay=false}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -296,6 +302,10 @@ handle_cast({pivot, Id}, State) ->
     do_pivot(Id, z_context:new(State#state.site)),
     {noreply, State};
 
+%% @doc Delay the next pivot, useful when performing big updates
+handle_cast(pivot_delay, State) ->
+    {noreply, State#state{is_pivot_delay=true}};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -304,6 +314,9 @@ handle_cast(Message, State) ->
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
+handle_info(poll, #state{is_pivot_delay=true} = State) ->
+    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    {noreply, State#state{is_pivot_delay=false}};
 handle_info(poll, State) ->
     case do_poll(z_context:new(State#state.site)) of
         true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
