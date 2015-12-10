@@ -50,6 +50,9 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
     CatId = case Cat of
                 [] -> undefined;
                 undefined -> undefined;
+                "*" -> undefined;
+                <<>> -> undefined;
+                <<"*">> -> undefined;
                 X when is_integer(X) -> X;
                 X -> m_category:name_to_id_check(X, Context)
             end,

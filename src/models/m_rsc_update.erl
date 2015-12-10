@@ -141,12 +141,13 @@ merge_delete_nocheck(WinnerId, LooserId, Context) ->
     m_media:merge(WinnerId, LooserId, Context),
     m_identity:merge(WinnerId, LooserId, Context),
     move_creator_modifier_ids(WinnerId, LooserId, Context),
-    CopyProps = merge_copy_props(LooserId, WinnerId, [name, page_path, uri, email], Context),
-    MergeProps = merge_combine_props(LooserId, WinnerId, [alternative_uris], Context),
+    PropsLooser = m_rsc:get(LooserId, Context),
     ok = delete_nocheck(LooserId, WinnerId, Context),
-    case CopyProps ++ MergeProps of
-        [] -> ok;
-        UpdProps -> update(WinnerId, UpdProps, [{escape_texts, false}], Context)
+    case merge_copy_props(WinnerId, PropsLooser, Context) of
+        [] -> 
+            ok;
+        UpdProps ->
+            {ok, _} = update(WinnerId, UpdProps, [{escape_texts, false}], Context)
     end,
     ok.
 
@@ -171,38 +172,29 @@ move_creator_modifier_ids(WinnerId, LooserId, Context) ->
             end,
             Ids).
 
+merge_copy_props(WinnerId, Props, Context) ->
+    merge_copy_props(WinnerId, Props, [], Context).
 
-merge_copy_props(FromId, ToId, Props, Context) ->
-    Props1 = lists:filter(
-                    fun(P) ->
-                        z_utils:is_empty(m_rsc:p_no_acl(ToId, P, Context))
-                    end,
-                    Props),
-    Ps = [ {P, m_rsc:p_no_acl(FromId, P, Context)} || P <- Props1 ],
-    lists:filter(fun({_,V}) ->
-                    not z_utils:is_empty(V)
-                 end,
-                 Ps).
+merge_copy_props(_WinnerId, [], Acc, _Context) ->
+    lists:reverse(Acc);
+merge_copy_props(WinnerId, [{P,_}|Ps], Acc, Context) 
+    when P =:= creator; P =:= creator_id; P =:= modifier; P =:= modifier_id;
+         P =:= created; P =:= modified; P =:= version;
+         P =:= id; P =:= is_published; P =:= is_protected; P =:= is_dependent;
+         P =:= is_authoritative; P =:= pivot_geocode; P =:= pivot_geocode_qhash;
+         P =:= category_id ->
+    merge_copy_props(WinnerId, Ps, Acc, Context);
+merge_copy_props(WinnerId, [{_,Empty}|Ps], Acc, Context)
+    when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
+    merge_copy_props(WinnerId, Ps, Acc, Context);
+merge_copy_props(WinnerId, [{P,_} = PV|Ps], Acc, Context) ->
+    case m_rsc:p_no_acl(WinnerId, P, Context) of
+        Empty when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
+            merge_copy_props(WinnerId, Ps, [PV|Acc], Context);
+        _Value ->
+            merge_copy_props(WinnerId, Ps, Acc, Context)
+    end.
 
-merge_combine_props(FromId, ToId, Props, Context) ->
-    Props1 = lists:filter(
-                    fun(P) ->
-                        z_utils:is_empty(m_rsc:p_no_acl(FromId, P, Context))
-                    end,
-                    Props),
-    Ps = [
-        {P, combine(m_rsc:p_no_acl(ToId, P, Context), m_rsc:p_no_acl(FromId, P, Context))}
-        || P <- Props1
-    ],
-    lists:filter(fun({_,V}) ->
-                    not z_utils:is_empty(V)
-                 end,
-                 Ps).
-
-combine(A, undefined) -> A;
-combine(undefined, B) -> B;
-combine(A, B) when is_binary(A), is_binary(B) -> <<A/binary, 10, B/binary>>;
-combine(A, _) -> A.
 
 %% Flush all cached entries depending on this entry, one of its subjects or its categories.
 flush(Id, Context) ->
