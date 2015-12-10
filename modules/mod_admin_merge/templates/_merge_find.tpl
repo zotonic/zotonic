@@ -1,3 +1,7 @@
+{% wire id="dialog-merge-find"
+        type="submit"
+        action={script script=""}
+%}
 <form id="dialog-merge-find" class="row form form-horizontal">
     <input type="hidden" name="id" value="{{ id }}" />
     
@@ -33,6 +37,7 @@
     }
 %}
 {% javascript %}
+    $('#dialog-merge-find').submit(function() { return false; });
     $('#dialog-merge-find').change();
     $("#dialog-merge-found").on('click', '.thumbnail', function(e) {
         e.preventDefault();
