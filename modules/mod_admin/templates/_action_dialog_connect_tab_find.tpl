@@ -44,6 +44,7 @@
     }
 %}
 {% javascript %}
+    $('#dialog-connect-find').submit(function() { return false; });
     $('#dialog-connect-find').change();
     $("#dialog-connect-found").on('click', '.thumbnail', function(e) {
     	e.preventDefault();
