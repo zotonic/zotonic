@@ -68,7 +68,7 @@ get_new_location(undefined, _Context) ->
     undefined;
 get_new_location(Id, Context) when is_integer(Id) ->
     F = fun() ->
-            z_db:q("select new_id, new_uri from rsc_gone where id = $1", [Id], Context)
+            z_db:q_row("select new_id, new_uri from rsc_gone where id = $1 limit 1", [Id], Context)
         end,
     case z_depcache:memo(F, {rsc_gone_new_location, Id}, Context) of
         undefined ->
