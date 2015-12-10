@@ -8,15 +8,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-07-17 10:32+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-12-10 12:52+0100\n"
+"Last-Translator: Michiel Klonhammer <michiel@maximonster.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.1\n"
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:37
 msgid "+ add"
@@ -28,11 +29,11 @@ msgstr "+ nieuw blok"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
 msgid ""
-"<strong>First</strong> also known as given name, forename or Christen name."
-"<br/><strong>Middle</strong> often shortened to an initial like in <em>John "
-"D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch "
-"<em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family "
-"name or last name."
+"<strong>First</strong> also known as given name, forename or Christen name.<br/"
+"><strong>Middle</strong> often shortened to an initial like in <em>John D. "
+"Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, "
+"van de, der</em>.<br/><strong>Surname</strong> also known as family name or "
+"last name."
 msgstr ""
 "Naam-gegevens zijn <strong>Voornaam</strong> (bv. Jan), <strong>Tweede\n"
 "naam</strong> (bv. Hendricus), <strong>Voorvoegsel</strong> (bv. van\n"
@@ -248,7 +249,7 @@ msgstr "Land"
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:43
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
 msgid "Create Page"
-msgstr ""
+msgstr "Pagina maken"
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:17
 msgid "Created on"
@@ -291,8 +292,7 @@ msgstr "Verwijder"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:47
 msgid "Delete if no other page is connected to this page."
-msgstr ""
-"Verwijder als geen andere pagina's een connectie met deze pagina hebben."
+msgstr "Verwijder als geen andere pagina's een connectie met deze pagina hebben."
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:81
 msgid "Delete this page."
@@ -300,7 +300,7 @@ msgstr "Verwijder deze pagina."
 
 #: modules/mod_admin/templates/_admin_edit_js.tpl:20
 msgid "Deleted."
-msgstr ""
+msgstr "Verwijderd."
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:49
 msgid "Dependent"
@@ -381,8 +381,8 @@ msgid ""
 msgstr ""
 "Elke pagina valt onder één categorie. De categorie bepaalt wat de pagina "
 "betekent op de site. Bijvoorbeeld een evenement, product of persoon. De "
-"categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een "
-"categorie voertuig hebben met daarin subcategorieën auto en fiets."
+"categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een categorie "
+"voertuig hebben met daarin subcategorieën auto en fiets."
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:178
 msgid "Failed to download the file."
@@ -423,11 +423,10 @@ msgstr "Eerste"
 
 #: modules/mod_admin/templates/admin_status.tpl:18
 msgid ""
-"Flush all URL dispatch rules, template- and library caches and other in-"
-"memory cached data."
+"Flush all URL dispatch rules, template- and library caches and other in-memory "
+"cached data."
 msgstr ""
-"Ververs alle URL regels, template- en librarycaches en andere in-memory "
-"caches."
+"Ververs alle URL regels, template- en librarycaches en andere in-memory caches."
 
 #: modules/mod_admin/templates/admin_status.tpl:17
 msgid "Flush system caches"
@@ -452,14 +451,14 @@ msgstr "Kop"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
-"Here you can edit the arguments of the search query. Every argument goes on "
-"its own line. For more information, see the <a href=\"http://zotonic.com/"
-"docs/latest/manuals/datamodel/search.html\">documentation on the query "
-"arguments</a> on the Zotonic website."
+"Here you can edit the arguments of the search query. Every argument goes on its "
+"own line. For more information, see the <a href=\"http://zotonic.com/docs/"
+"latest/manuals/datamodel/search.html\">documentation on the query arguments</a> "
+"on the Zotonic website."
 msgstr ""
 "Hier kan je de argumenten van de zoekopdracht invoeren. Elk argument moet op "
-"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://"
-"zotonic.com/docs/latest/manuals/datamodel/search.html\">documentatie over "
+"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://zotonic."
+"com/docs/latest/manuals/datamodel/search.html\">documentatie over "
 "zoekopdrachten</a> op de Zotonic website."
 
 #: modules/mod_admin/templates/admin_media.tpl:38
@@ -560,8 +559,8 @@ msgid ""
 "Media encompasses all uploaded images, movies and documents. Media can be "
 "attached to pages."
 msgstr ""
-"Mediabestanden omvatten alle geuploade afbeeldingen, filmpjes en documenten. "
-"Ze kunnen worden gekoppeld aan pagina's."
+"Mediabestanden omvatten alle geuploade afbeeldingen, filmpjes en documenten. Ze "
+"kunnen worden gekoppeld aan pagina's."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:26
 msgid "Media file"
@@ -752,8 +751,8 @@ msgstr "Zoekvraag voorbeeld"
 
 #: modules/mod_admin/templates/admin_status.tpl:44
 msgid ""
-"Rebuild all search-indices by putting all pages and data from the database "
-"in the indexer queue. This can take a long time!"
+"Rebuild all search-indices by putting all pages and data from the database in "
+"the indexer queue. This can take a long time!"
 msgstr ""
 "Bouw de zoek-index opnieuw op door alle pagina's langs te gaan. Dit kan even "
 "duren!"
@@ -763,17 +762,16 @@ msgid "Rebuild search indices"
 msgstr "Zoek-index opnieuw maken"
 
 #: modules/mod_admin/templates/admin_status.tpl:52
-msgid ""
-"Recalculate the numbering of the category tree. This can take a long time."
+msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Hernummert de categorie-boom opnieuw. Dit kan even duren."
 
 #: modules/mod_admin/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
-msgstr ""
+msgstr "Naar paginaweergave van de website gaan"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:63
 msgid "Redirect to website on page view"
-msgstr ""
+msgstr "Naar paginaweergave van de website gaan"
 
 #: modules/mod_admin/templates/admin_referrers.tpl:3
 #: modules/mod_admin/templates/admin_referrers.tpl:8
@@ -812,8 +810,8 @@ msgstr "Vervang dit mediabestand"
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
 msgid ""
 "Resources in the <i>meta</i> category can have 'features': certain resource "
-"properties that decide what to show or hide on certain pages in the admin. "
-"If this box is empty, no features are enabled for this meta-resource."
+"properties that decide what to show or hide on certain pages in the admin. If "
+"this box is empty, no features are enabled for this meta-resource."
 msgstr ""
 "Resources in de <em>meta</em> categorie kunnen 'features' hebben:\n"
 "eigenschappen die bepalen wat te tonen op de editpagina van de admin."
@@ -825,8 +823,8 @@ msgstr "Status ophalen..."
 #: modules/mod_admin/templates/admin_status.tpl:59
 msgid "Runs the schema install command from the site's module again."
 msgstr ""
-"Voer het commando voor de schema-installatie van de hoofdmodule van deze "
-"site opnieuw uit."
+"Voer het commando voor de schema-installatie van de hoofdmodule van deze site "
+"opnieuw uit."
 
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
@@ -975,8 +973,7 @@ msgstr "Er zijn geen andere pagina's die een connectie hebben naar de pagina"
 
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
 msgid "This can't be undone. Your page will be lost forever."
-msgstr ""
-"Dit kan niet ongedaan worden gemaakt. Je pagina is voor altijd verloren."
+msgstr "Dit kan niet ongedaan worden gemaakt. Je pagina is voor altijd verloren."
 
 #: modules/mod_admin/actions/action_admin_link.erl:81
 msgid "This connection already exists."
@@ -984,12 +981,12 @@ msgstr "Deze connectie bestaat al"
 
 #: modules/mod_admin/templates/_admin_edit_js.tpl:20
 msgid "This page has been deleted."
-msgstr ""
+msgstr "Deze pagina is verwijderd."
 
 #: modules/mod_admin/templates/admin_status.tpl:9
 msgid ""
-"This page holds a collection of administrative options to perform certain "
-"tasks on this Zotonic installation."
+"This page holds a collection of administrative options to perform certain tasks "
+"on this Zotonic installation."
 msgstr ""
 "Op deze pagina een verzameling van opties waarmee verschillende\n"
 "administratieve taken kunnen worden uitgevoerd op deze Zotonic site."
@@ -999,8 +996,8 @@ msgid ""
 "This page is able to connect to others. For example you can connect it to an "
 "actor or a brand."
 msgstr ""
-"Deze pagina kan verbindingen hebben naar andere pagina's. Bijvoorbeeld kun "
-"je het een auteur geven of een gerelateerd document."
+"Deze pagina kan verbindingen hebben naar andere pagina's. Bijvoorbeeld kun je "
+"het een auteur geven of een gerelateerd document."
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:50
 msgid "This resource was created by the module"
@@ -1040,7 +1037,7 @@ msgstr "Unieke URI"
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:10
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
 msgid "Upload File"
-msgstr ""
+msgstr "Upload bestand"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
@@ -1054,7 +1051,7 @@ msgstr "Upload een bestand van het internet."
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
 msgid "Upload by URL"
-msgstr ""
+msgstr "Upload met URL"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:35
 msgid "Upload file"
@@ -1072,8 +1069,8 @@ msgstr ""
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
 msgid "Use the title of the base content for the display name of this person."
 msgstr ""
-"Gebruik de titel van de basisgegevens voor de naam zoals die wordt "
-"weergegeven op pagina's."
+"Gebruik de titel van de basisgegevens voor de naam zoals die wordt weergegeven "
+"op pagina's."
 
 #: modules/mod_admin/templates/_admin_menu.tpl:70
 msgid "User page"
@@ -1132,9 +1129,9 @@ msgstr "Website voor kliks op de afbeelding"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
 msgid ""
-"When a page has a publication date range then it will only be visible "
-"between the two dates. Note that when you are allowed to edit the page then "
-"you can always see it."
+"When a page has a publication date range then it will only be visible between "
+"the two dates. Note that when you are allowed to edit the page then you can "
+"always see it."
 msgstr ""
 "Wanneer een pagina een publicatie start- en eindatum heeft, is deze\n"
 "alleen zichtbaar tussen die periode. Echter, wanneer je de pagina mag\n"

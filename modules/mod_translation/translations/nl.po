@@ -6,18 +6,18 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-10-31 21:52+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-12-10 13:08+0100\n"
+"Last-Translator: Michiel Klonhammer <michiel@maximonster.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.1\n"
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:22
 msgid "Active modules"
@@ -26,13 +26,12 @@ msgstr "Actieve modules"
 #: modules/mod_translation/templates/admin_translation.tpl:14
 #: modules/mod_translation/templates/admin_translation.tpl:15
 msgid "Add language"
-msgstr ""
+msgstr "Taal toevoegen"
 
 #: modules/mod_translation/templates/admin_translation.tpl:10
 msgid "All languages known to the system. You can add or remove languages."
 msgstr ""
-"Alle in het systeem bekende talen. Je kunt hier talen toevoegen of "
-"verwijderen."
+"Alle in het systeem bekende talen. Je kunt hier talen toevoegen of verwijderen."
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to delete the language"
@@ -86,8 +85,8 @@ msgstr "Actief"
 
 #: modules/mod_translation/templates/admin_translation.tpl:11
 msgid ""
-"Enabled languages show up in the language selection menu. The default "
-"language is used for new visitors without a selected language."
+"Enabled languages show up in the language selection menu. The default language "
+"is used for new visitors without a selected language."
 msgstr ""
 "Actieve talen worden getoond in het taalselectie-menu. De\n"
 "standaardtaal is voor nieuwe bezoekers die nog geen voorkeurstaal\n"
@@ -95,9 +94,9 @@ msgstr ""
 
 #: modules/mod_translation/templates/_dialog_language_edit.tpl:1
 msgid ""
-"Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title "
-"of the language. Use the native form of the language, for example "
-"<em>English</em>, <em>Türkçe</em> or <em>Français</em>."
+"Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title of "
+"the language. Use the native form of the language, for example <em>English</"
+"em>, <em>Türkçe</em> or <em>Français</em>."
 msgstr "Voer de iso-code en de titel van de taal in."
 
 #: modules/mod_translation/templates/admin_translation.tpl:85
@@ -207,17 +206,17 @@ msgstr "Verander taal"
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid ""
-"The title, body and other texts can be translated in different languages. "
-"Here you can select which languages will be used."
+"The title, body and other texts can be translated in different languages. Here "
+"you can select which languages will be used."
 msgstr ""
 "De titel en tekst kunnen vertaald worden in andere talen. Hier kan je\n"
 "kiezen welke talen daarvoor gebruikt kunnen worden."
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:3
 msgid ""
-"This will not affect any translations in the database or .po files. This "
-"only removes the reference to the language, making it impossible to select "
-"or edit content written in the delete language."
+"This will not affect any translations in the database or .po files. This only "
+"removes the reference to the language, making it impossible to select or edit "
+"content written in the delete language."
 msgstr ""
 "Dit heeft geen invloed op enige vertalingen in de database of in .po\n"
 "bestanden. Het verwijdert alleen de verwijzing naar de taal, zodat het\n"
@@ -229,8 +228,8 @@ msgstr "Titel"
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:18
 msgid ""
-"To view the up-to-date version of this module, please run \"generate .pot "
-"files\" first from the translation overview."
+"To view the up-to-date version of this module, please run \"generate .pot files"
+"\" first from the translation overview."
 msgstr ""
 "Om een up-todate versie van deze module te zien, kies \"genereer .pot\n"
 "bestanden\" eerst vanuit het vertaal-overzicht."
@@ -260,4 +259,3 @@ msgstr "Status van de vertalingen per module"
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:6
 msgid "Translations"
 msgstr "Vertalingen"
-
