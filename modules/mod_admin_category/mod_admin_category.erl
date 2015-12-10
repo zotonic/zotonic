@@ -126,6 +126,7 @@ move_all([{Id}|Ids], ToCatId, N, Total, Context) ->
 maybe_progress(_N1, _N2, 0, _Context) ->
     ok;
 maybe_progress(N1, N2, Total, Context) ->
+    z_pivot_rsc:pivot_delay(Context),
     PerStep = Total / 100,
     S1 = round(N1 / PerStep),
     S2 = round(N2 / PerStep),
