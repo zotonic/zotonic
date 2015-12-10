@@ -161,7 +161,7 @@ check_access({ok, PropsA}, {ok, PropsB}, Context) ->
 
 
 format_diff(A, B, Context) ->
-    backup_format:format(
+    admin_rsc_diff:format(
                     proplists:get_value(data, A),
                     proplists:get_value(data, B),
                     Context).

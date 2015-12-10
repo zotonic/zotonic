@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-05-08
-%% @doc List all referrers to a rsc, should also offer to filter on predicate
+%% @copyright 2009-2015 Marc Worrell
+%% @doc List all referrers to a rsc
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,6 +20,8 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([resource_exists/2,
+         previously_existed/2,
+         moved_temporarily/2,
          is_authorized/2
         ]).
 
@@ -34,6 +35,22 @@ resource_exists(ReqData, Context) ->
     Id = m_rsc:rid(z_context:get_q("id", Context1), Context1),
     Context2 = z_context:set(id, Id, Context1),
     ?WM_REPLY(m_rsc:exists(Id, Context2), Context2).
+
+previously_existed(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    Id = z_context:get(id, Context1),
+    IsGone = m_rsc_gone:is_gone(Id, Context1),
+    ?WM_REPLY(IsGone, Context1).
+
+moved_temporarily(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    Id = z_context:get(id, Context1),
+    redirect(m_rsc_gone:get_new_location(Id, Context1), Context1).
+
+redirect(undefined, Context) ->
+    ?WM_REPLY(false, Context);
+redirect(Location, Context) ->
+    ?WM_REPLY({true, Location}, Context).
 
 html(Context) ->
     Vars = [

@@ -35,6 +35,7 @@
     delete/2,
     toggle/2,
     gravatar_code/1,
+    merge/3,
     
     search/3
 ]).
@@ -191,6 +192,17 @@ check_editable(CommentId, Context) ->
 gravatar_code(Email) ->
     z_string:to_lower(z_utils:hex_encode(erlang:md5(z_string:to_lower(Email)))).
 
+
+%% @doc Move all comments from one resource to another
+merge(WinnerId, LooserId, Context) ->
+    z_db:q("update comment
+            set rsc_id = $1
+            where rsc_id = $2",
+           [WinnerId, LooserId],
+           Context),
+    z_depcache:flush({comment_rsc, LooserId}, Context),
+    z_depcache:flush({comment_rsc, WinnerId}, Context),
+    ok.
 
 
 %% @doc Return the search as used by z_search and the search model.

@@ -36,6 +36,7 @@
     delete/2,
     replace/3,
     duplicate/3,
+    merge/3,
     insert_file/2,
     insert_file/3,
     insert_file/4,
@@ -258,6 +259,33 @@ replace(Id, Props, Context) ->
             {error, eacces}
     end.
 
+
+%% @doc Move a medium between resources, iff the destination doesn't have an associated medium.
+%%      This is called when merging two resources (and the FromId is subsequently deleted).
+merge(WinnerId, LooserId, Context) ->
+    case z_acl:rsc_editable(LooserId, Context) andalso z_acl:rsc_editable(WinnerId, Context) of
+        true ->
+            case z_db:q1("select count(*) from medium where id = $1", [WinnerId], Context) of
+                1 ->
+                    ok;
+                0 ->
+                    case z_db:q1("select count(*) from medium where id = $1", [LooserId], Context) of
+                        0 ->
+                            ok;
+                        1 ->
+                            Depicts = depicts(LooserId, Context),
+                            1 = z_db:q("update medium set id = $1 where id = $2",
+                                       [WinnerId, LooserId],
+                                       Context),
+                            [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
+                            z_depcache:flush(LooserId, Context),
+                            z_depcache:flush(WinnerId, Context),
+                            ok
+                    end
+            end;
+        false ->
+            {error, eacces}
+    end.
 
 %% @doc Duplicate the media item from the id to the new-id. Called by m_rsc:duplicate/3 
 duplicate(FromId, ToId, Context) ->
