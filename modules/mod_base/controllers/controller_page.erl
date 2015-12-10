@@ -22,6 +22,7 @@
 -export([
     resource_exists/2,
     previously_existed/2,
+    moved_temporarily/2,
     is_authorized/2,
     html/1
 ]).
@@ -42,12 +43,20 @@ resource_exists(ReqData, Context) ->
 %% @doc Check if the resource used to exist
 previously_existed(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    IsGone = case z_controller_helper:get_id(Context1) of
-                 Id when is_integer(Id) ->
-                     m_rsc_gone:is_gone(Id, Context1);
-                 _ -> false
-             end,
+    Id = z_controller_helper:get_id(Context1),
+    IsGone = m_rsc_gone:is_gone(Id, Context1),
     ?WM_REPLY(IsGone, Context1).
+
+moved_temporarily(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    Id = z_controller_helper:get_id(Context1),
+    redirect(m_rsc_gone:get_new_location(Id, Context1), Context1).
+
+redirect(undefined, Context) ->
+    ?WM_REPLY(false, Context);
+redirect(Location, Context) ->
+    ?WM_REPLY({true, Location}, Context).
+
 
 %% @doc Check if the current user is allowed to view the resource. 
 is_authorized(ReqData, Context) ->

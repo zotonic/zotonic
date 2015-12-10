@@ -20,6 +20,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([resource_exists/2,
+         previously_existed/2,
+         moved_temporarily/2,
          is_authorized/2,
          event/2,
          filter_props/1,
@@ -41,6 +43,20 @@ resource_exists(ReqData, Context) ->
         undefined -> ?WM_REPLY(false, Context2);
         _N -> ?WM_REPLY(m_rsc:exists(Id, Context2), Context2)
     end.
+
+previously_existed(ReqData, Context) ->
+    {Context1, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+    IsGone = m_rsc_gone:is_gone(Id, Context1),
+    ?WM_REPLY(IsGone, Context1).
+
+moved_temporarily(ReqData, Context) ->
+    {Context1, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+    redirect(m_rsc_gone:get_new_location(Id, Context1), Context1).
+
+redirect(undefined, Context) ->
+    ?WM_REPLY(false, Context);
+redirect(Location, Context) ->
+    ?WM_REPLY({true, Location}, Context).
 
 
 html(Context) ->

@@ -27,6 +27,7 @@
     update/3,
     update/4,
     duplicate/3,
+    merge_delete/3,
 
     flush/2,
     
@@ -82,13 +83,16 @@ delete(Id, Context) when is_integer(Id), Id /= 1 ->
 %% @throws {error, Reason}
 -spec delete_nocheck(integer(), #context{}) -> ok.
 delete_nocheck(Id, Context) ->
+    delete_nocheck(Id, undefined, Context).
+
+delete_nocheck(Id, OptFollowUpId, Context) ->
     Referrers = m_edge:subjects(Id, Context),
     CatList = m_rsc:is_a(Id, Context),
     Props = m_rsc:get(Id, Context),
     
     F = fun(Ctx) ->
         z_notifier:notify_sync(#rsc_delete{id=Id, is_a=CatList}, Ctx),
-        m_rsc_gone:gone(Id, Ctx),
+        m_rsc_gone:gone(Id, OptFollowUpId, Ctx),
         z_db:delete(rsc, Id, Ctx)
     end,
     {ok, _RowsDeleted} = z_db:transaction(F, Context),
@@ -108,6 +112,97 @@ delete_nocheck(Id, Context) ->
     z_edge_log_server:check(Context),
     ok.
 
+%% @doc Merge two resources, delete the loosing resource.
+-spec merge_delete(integer(), integer(), #context{}) -> ok | {error, term()}.
+merge_delete(WinnerId, WinnerId, _Context) ->
+    ok;
+merge_delete(_WinnerId, 1, _Context) ->
+    throw({error, eacces});
+merge_delete(WinnerId, LooserId, Context) when is_integer(WinnerId), is_integer(LooserId) ->
+    case z_acl:rsc_deletable(LooserId, Context)
+        andalso z_acl:rsc_editable(WinnerId, Context)
+    of
+        true ->
+            case m_rsc:is_a(WinnerId, category, Context) of
+                true ->
+                    m_category:delete(LooserId, WinnerId, Context);
+                false ->
+                    merge_delete_nocheck(WinnerId, LooserId, Context)
+            end;
+        false ->
+            throw({error, eacces})
+    end.
+
+%% @doc Merge two resources, delete the 'looser'
+-spec merge_delete_nocheck(integer(), integer(), #context{}) -> ok.
+merge_delete_nocheck(WinnerId, LooserId, Context) ->
+    z_notifier:map(#rsc_merge{winner_id=WinnerId, looser_id=LooserId}, Context),
+    ok = m_edge:merge(WinnerId, LooserId, Context),
+    m_media:merge(WinnerId, LooserId, Context),
+    m_identity:merge(WinnerId, LooserId, Context),
+    move_creator_modifier_ids(WinnerId, LooserId, Context),
+    CopyProps = merge_copy_props(LooserId, WinnerId, [name, page_path, uri, email], Context),
+    MergeProps = merge_combine_props(LooserId, WinnerId, [alternative_uris], Context),
+    ok = delete_nocheck(LooserId, WinnerId, Context),
+    case CopyProps ++ MergeProps of
+        [] -> ok;
+        UpdProps -> update(WinnerId, UpdProps, [{escape_texts, false}], Context)
+    end,
+    ok.
+
+move_creator_modifier_ids(WinnerId, LooserId, Context) ->
+    Ids = z_db:q("select id
+                  from rsc 
+                  where (creator_id = $1 or modifier_id = $1)
+                    and id <> $1", 
+                 [LooserId],
+                 Context),
+    z_db:q("update rsc set creator_id = $1 where creator_id = $2",
+           [WinnerId, LooserId],
+           Context,
+           1200000),
+    z_db:q("update rsc set modifier_id = $1 where modifier_id = $2",
+           [WinnerId, LooserId],
+           Context,
+           1200000),
+    lists:foreach(
+            fun(Id) ->
+                flush(Id, [], Context)
+            end,
+            Ids).
+
+
+merge_copy_props(FromId, ToId, Props, Context) ->
+    Props1 = lists:filter(
+                    fun(P) ->
+                        z_utils:is_empty(m_rsc:p_no_acl(ToId, P, Context))
+                    end,
+                    Props),
+    Ps = [ {P, m_rsc:p_no_acl(FromId, P, Context)} || P <- Props1 ],
+    lists:filter(fun({_,V}) ->
+                    not z_utils:is_empty(V)
+                 end,
+                 Ps).
+
+merge_combine_props(FromId, ToId, Props, Context) ->
+    Props1 = lists:filter(
+                    fun(P) ->
+                        z_utils:is_empty(m_rsc:p_no_acl(FromId, P, Context))
+                    end,
+                    Props),
+    Ps = [
+        {P, combine(m_rsc:p_no_acl(ToId, P, Context), m_rsc:p_no_acl(FromId, P, Context))}
+        || P <- Props1
+    ],
+    lists:filter(fun({_,V}) ->
+                    not z_utils:is_empty(V)
+                 end,
+                 Ps).
+
+combine(A, undefined) -> A;
+combine(undefined, B) -> B;
+combine(A, B) when is_binary(A), is_binary(B) -> <<A/binary, 10, B/binary>>;
+combine(A, _) -> A.
 
 %% Flush all cached entries depending on this entry, one of its subjects or its categories.
 flush(Id, Context) ->

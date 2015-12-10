@@ -25,6 +25,7 @@
     service_available/2,
     resource_exists/2,
     previously_existed/2,
+    moved_temporarily/2,
     content_types_provided/2,
     see_other/2
 ]).
@@ -51,6 +52,16 @@ previously_existed(ReqData, Context) ->
     {Id, Context2} = get_id(Context1),
     IsGone = m_rsc_gone:is_gone(Id, Context2),
     ?WM_REPLY(IsGone, Context2).
+
+moved_temporarily(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    {Id, Context2} = get_id(Context1),
+    redirect(m_rsc_gone:get_new_location(Id, Context2), Context2).
+
+redirect(undefined, Context) ->
+    ?WM_REPLY(false, Context);
+redirect(Location, Context) ->
+    ?WM_REPLY({true, Location}, Context).
 
 content_types_provided(ReqData, Context) ->
     {CT,Context1} = get_content_types(Context),

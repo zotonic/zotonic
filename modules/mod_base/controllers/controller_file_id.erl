@@ -57,8 +57,15 @@ previously_existed(ReqData, {undefined, _M, _Context} = MC) ->
 previously_existed(ReqData, {_Id, undefined, _Context} = MC) ->
     {false, ReqData, MC};
 previously_existed(ReqData, {Id, _M, Context} = MC) ->
-    Existed = m_rsc:exists(Id, Context) orelse m_rsc_gone:is_gone(Id, Context),
-    {Existed, ReqData, MC}.
+    case m_rsc:exists(Id, Context) of
+        true ->
+            {true, ReqData, MC};
+        false ->
+            case m_rsc:is_gone(Id, Context) of
+                true -> {true, ReqData, {Id, gone, Context}};
+                false -> {false, ReqData, MC}
+            end
+    end.
 
 forbidden(ReqData, {undefined, _M, _Context} = MC) ->
     {false, ReqData, MC};
@@ -67,6 +74,11 @@ forbidden(ReqData, {_Id, undefined, _Context} = MC) ->
 forbidden(ReqData, {Id, _M, Context} = MC) ->
     {not z_acl:rsc_visible(Id, Context), ReqData, MC}.
 
+moved_temporarily(ReqData, {Id, gone, Context} = MC) ->
+    case m_rsc_gone:get_new_location(Id, Context) of
+        undefined -> {false, ReqData, MC};
+        Location -> {{true, Location}, ReqData, MC}
+    end;
 moved_temporarily(ReqData, {Id, Medium, Context} = MC) ->
     case z_context:get(is_permanent, Context, false) of
         true -> {false, ReqData, MC};
