@@ -126,13 +126,18 @@ lookup(Text, Lang, Context) ->
 %% @doc Non strict translation lookup of a language version.
 %%      In order check: requested language, default configured language, english, any
 -spec lookup_fallback({trans, list()}|binary()|string(), #context{}) -> binary() | string() | undefined.
+lookup_fallback(Trans, undefined) ->
+    lookup_fallback(Trans, en, undefined);
 lookup_fallback(Trans, Context) ->
     lookup_fallback(Trans, z_context:language(Context), Context).
 
 lookup_fallback({trans, Tr}, Lang, Context) ->
     case proplists:get_value(Lang, Tr) of
         undefined ->
-            FallbackLang = z_context:fallback_language(Context),
+            FallbackLang = case Context of
+                undefined -> en;
+                _ -> z_context:fallback_language(Context)
+            end,
             case proplists:get_value(FallbackLang, Tr) of
                 undefined -> 
                     case default_language(Context) of
@@ -240,6 +245,7 @@ trans(Text, Language, Context) ->
 
 %% @doc Return the configured default language for this server
 -spec default_language(#context{}) -> atom().
+default_language(undefined) -> en;
 default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).
 
