@@ -62,22 +62,22 @@ event(#postback{message={merge_select, Args}}, Context) ->
 
 event(#postback{message={merge, Args}}, Context) ->
     {winner_id, WinnerId} = proplists:lookup(winner_id, Args),
-    {looser_id, LooserId} = proplists:lookup(looser_id, Args),
-    case {m_rsc:p_no_acl(LooserId, is_protected, Context),
-          z_acl:rsc_deletable(LooserId, Context),
+    {loser_id, LoserId} = proplists:lookup(loser_id, Args),
+    case {m_rsc:p_no_acl(LoserId, is_protected, Context),
+          z_acl:rsc_deletable(LoserId, Context),
           z_acl:rsc_editable(WinnerId, Context)}
     of
         {true, _, _} ->
-            z_render:wire({alert, [{text,?__("The looser is protected, unprotect the looser before merging.", Context)}]}, Context);
+            z_render:wire({alert, [{text,?__("The loser is protected, unprotect the loser before merging.", Context)}]}, Context);
         {_, false, _} ->
-            z_render:wire({alert, [{text,?__("You do not have permission to delete the looser.", Context)}]}, Context);
+            z_render:wire({alert, [{text,?__("You do not have permission to delete the loser.", Context)}]}, Context);
         {_, _, false} ->
             z_render:wire({alert, [{text,?__("You do not have permission to edit the winner.", Context)}]}, Context);
         {false, true, true} ->
             ContextSpawn = z_context:prune_for_spawn(Context),
             erlang:spawn(
                 fun() ->
-                    ok = m_rsc:merge_delete(WinnerId, LooserId, ContextSpawn),
+                    ok = m_rsc:merge_delete(WinnerId, LoserId, ContextSpawn),
                     z_session_page:add_script(
                         z_render:wire({redirect, [{dispatch, admin_edit_rsc}, {id, WinnerId}]}, ContextSpawn))
                 end),

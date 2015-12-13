@@ -7,24 +7,29 @@
 {% block content %}
 {% with m.rsc[q.id2].id as id2 %}
     <div class="admin-header">
-        <h2>{_ Merge _} “{{ id.title }}” &amp; “{{ id2.title }}”</h2>
+        <h2>{_ Merge Pages _}</h2>
         <p>
-            {_ Compare the two pages and select the winner. _}<br/>
-            {_ The winner stays, the looser gets merged into the winner and will be deleted. _}
+            {_ Select the winner from two pages. The loser will get merged into the winner. Only the winner remains. _}
         </p>
     </div>
 
     {% if id.is_editable and id2.is_editable %}
-        <p>{_ Differences between the two pages are shown below. _}</p>
+        <h3>{_ Compare and select _}</h3>
 
-        <table id="merge-diffs" class="table table-hover">
+        <table id="merge-diffs" class="table">
             <thead>
                 <tr>
                     <th></th>
                     <th width="40%">
+                        <h4>
+                            {_ Left _}
+                        </h4>
                         <a href="{% url admin_edit_rsc id=id %}" title="{_ Edit page _}">{{ id.title }}</a>
                     </th>
                     <th width="40%">
+                         <h4>
+                            {_ Right _}
+                        </h4>
                         <a href="{% url admin_edit_rsc id=id2 %}" title="{_ Edit page _}">{{ id2.title }}</a>
                     </th>
                 </tr>
@@ -63,13 +68,13 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td></td>
-                    <td>
-                        <button id="{{ #merge1 }}" class="btn btn-primary">{_ Winner _}: {{ id.title }}</button>
-                    </td>
-                    <td>
-                        <button id="{{ #merge2 }}" class="btn btn-primary">{_ Winner _}: {{ id2.title }}</button>
-                    </td>
+                    <th></th>
+                    <th width="40%">
+                        <button id="{{ #merge1 }}" class="btn btn-primary">{_ Select Left _}</button>
+                    </th>
+                    <th width="40%">
+                        <button id="{{ #merge2 }}" class="btn btn-primary">{_ Select Right _}</button>
+                    </th>
                 </tr>
             </foot>
         </table>
@@ -81,13 +86,13 @@
                             title=_"Confirm merge"
                             text=[
                                     _"Winner:", " <b>", id.title, "</b><br/>",
-                                    _"Looser:", " <b><del>", id2.title, "</del></b><br/><br/>",
-                                    _"The winner will stay, the looser will be deleted and replaced with the winner.",
+                                    _"Loser:", " <b><del>", id2.title, "</del></b><br/><br/>",
+                                    _"The winner will stay, the loser will be deleted and replaced with the winner.",
                                     "<br/><br/>",
-                                    _"This can not be undone."
+                                    _"This cannot be undone."
                                  ]
                             ok=_"Merge"
-                            postback={merge winner_id=id looser_id=id2} 
+                            postback={merge winner_id=id loser_id=id2} 
                             delegate=`mod_admin_merge`}
         %}
         {% wire id=#merge2
@@ -95,13 +100,13 @@
                             title=_"Confirm merge"
                             text=[
                                     _"Winner:", " <b>", id2.title, "</b><br/>",
-                                    _"Looser:", " <b><del>", id.title, "</del></b><br/><br/>",
-                                    _"The winner will stay, the looser will be deleted and replaced with the winner.",
+                                    _"Loser:", " <b><del>", id.title, "</del></b><br/><br/>",
+                                    _"The winner will stay, the loser will be deleted and replaced with the winner.",
                                     "<br/><br/>",
-                                    _"This can not be undone."
+                                    _"This cannot be undone."
                                  ]
                             ok=_"Merge"
-                            postback={merge winner_id=id2 looser_id=id} 
+                            postback={merge winner_id=id2 loser_id=id} 
                             delegate=`mod_admin_merge`}
         %}
     {% else %}
@@ -111,5 +116,4 @@
         </div>
     {% endif %}
 {% endwith %}
-
 {% endblock %}
