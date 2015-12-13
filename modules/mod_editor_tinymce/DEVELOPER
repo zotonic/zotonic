@@ -16,7 +16,6 @@ Installing a new version of tinymce:
     * nl.js
     * ru.js
 * Copy from PREVIOUS_TINY/plugins into NEW_TINY/plugins:
-    * codemirror
     * zlink
     * zmedia
 * Copy from the development release of Tiny:

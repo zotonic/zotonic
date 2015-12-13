@@ -10,11 +10,6 @@ if (typeof tinyInit !== 'object')
 		"link unlink | zlink zmedia | code"
 	],
 
-    codemirror: {
-        indentOnInit: true, // Whether or not to indent code on init.
-        path: 'codemirror-4.8', // Path to CodeMirror distribution
-    },
-
     content_css: "/lib/js/tinymce-4.0.26/zotonic.css",
 //    language : "en", // set in _admin_tinymce_overrides_js.tpl
 
