@@ -3,7 +3,7 @@
 Release 0.13.6
 ==============
 
-Welcome Zotonic 0.13.6, released on December 10, 2015.
+Welcome Zotonic 0.13.6, released on December 14, 2015.
 
 This is a maintenance release of Zotonic 0.13
 
@@ -25,7 +25,7 @@ enhancements from the master (1.0-dev) branch.
 Commits since 0.13.5
 --------------------
 
-There were 92 commits since release 0.13.5.
+There were 96 commits since release 0.13.5.
 
 Big thanks to all people contributing to Zotonic!
 
@@ -36,7 +36,7 @@ Git shortlog
 Arjan Scherpenisse (1):
     * core: Revert edown revision bump due to compilation breakage
 
-Arthur Clemens (22):
+Arthur Clemens (24):
     * Tweak input border border to match buttons
     * doc: typo
     * mod_admin_predicate: fine-tune display of items
@@ -59,19 +59,22 @@ Arthur Clemens (22):
     * mod_acl_simple_roles: typo
     * mod_admin: add dependency mod_mqtt
     * doc: improve docs on CORS
+    * mod_editor_tinymce: remove codemirror init code
+    * mod_admin_merge: grammar and text tweaks
 
 David de Boer (2):
     * Add modules model docs
     * Fix query export
 
-Maas-Maarten Zeeman (5):
+Maas-Maarten Zeeman (6):
     * mod_mqtt: Added a way to pass js arguments for mqtt wires.
     * mod_base: Use beacon api to get good page close feedback for chrome/firefox and recent android users
     * mod_mqtt: Added retained messages for local (~pagesession) topics
     * mod_component: Updated mithril to version 0.0.2
     * mod_mqtt: Just return the topic if it is not a site topic
+    * core: Make sure looking up translations always succeed. Fixes #1103
 
-Marc Worrell (56):
+Marc Worrell (57):
     *  mod_acl_user_groups: fix acl check for module use rights. Fixes #1071
     *  Merge pull request #1064 from driebit/modules-model-doc
     *  Add USE_REBAR_LOCKED file to use the locked config
@@ -128,6 +131,7 @@ Marc Worrell (56):
     *  core: when merging, also merge properties (todo: map languages).     Fix a problem in the admin new-rsc dialog when the category selection is set to '*'
     *  mod_admin(_merge): prevent form submit when pressing enter in the connect or merge search fields.
     *  mod_content_groups/mod_admin_category/mod_acl_user_groups: Delay pivoting whilst peforming updates of many resources.
+    *  Prepare for 0.13.6 release, preliminary release notes.
 
 Marco Wessel (5):
     *  Allow properly starting up in the foreground
