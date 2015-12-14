@@ -18,7 +18,7 @@ find params:
     language|default:q.language|default:z_language,
     actions|default:[],
     tab|default:q.tab|default:(tabs_enabled|first)|default:"find",
-    m.rsc[category].id|default:m.rsc.category.id|default:(m.predicate.object_category[predicate]|first|element:1)
+    m.rsc[category].id|default:(m.predicate.object_category[predicate]|first|element:1)
     as
     callback,
     language,
