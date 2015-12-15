@@ -63,6 +63,11 @@ event(#postback{message={merge_select, Args}}, Context) ->
 event(#postback{message={merge, Args}}, Context) ->
     {winner_id, WinnerId} = proplists:lookup(winner_id, Args),
     {loser_id, LoserId} = proplists:lookup(loser_id, Args),
+    merge(WinnerId, LoserId, Context).
+
+merge(WinnerId, LoserId, Context) when LoserId =:= 1 ->
+    z_render:wire({alert, [{text,?__("You cannot remove the admin user.", Context)}]}, Context);
+merge(WinnerId, LoserId, Context) ->
     case {m_rsc:p_no_acl(LoserId, is_protected, Context),
           z_acl:rsc_deletable(LoserId, Context),
           z_acl:rsc_editable(WinnerId, Context)}
