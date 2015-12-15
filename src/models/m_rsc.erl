@@ -360,10 +360,10 @@ insert(Props, Context) ->
 delete(Id, Context) when is_integer(Id) ->
     m_rsc_update:delete(Id, Context).
 
-%% @doc Merge a resource with another, delete the looser. 
+%% @doc Merge a resource with another, delete the loser. 
 -spec merge_delete(integer(), integer(), #context{}) -> ok | {error, term()}.
-merge_delete(WinnerId, LooserId, Context) when is_integer(WinnerId), is_integer(LooserId) ->
-    m_rsc_update:merge_delete(WinnerId, LooserId, Context).
+merge_delete(WinnerId, LoserId, Context) when is_integer(WinnerId), is_integer(LoserId) ->
+    m_rsc_update:merge_delete(WinnerId, LoserId, Context).
 
 %% @doc Update a resource
 -spec update(integer(), list(), #context{}) -> {ok, integer()} | {error, term()}.

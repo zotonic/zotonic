@@ -112,37 +112,37 @@ delete_nocheck(Id, OptFollowUpId, Context) ->
     z_edge_log_server:check(Context),
     ok.
 
-%% @doc Merge two resources, delete the loosing resource.
+%% @doc Merge two resources, delete the losing resource.
 -spec merge_delete(integer(), integer(), #context{}) -> ok | {error, term()}.
 merge_delete(WinnerId, WinnerId, _Context) ->
     ok;
 merge_delete(_WinnerId, 1, _Context) ->
     throw({error, eacces});
-merge_delete(WinnerId, LooserId, Context) when is_integer(WinnerId), is_integer(LooserId) ->
-    case z_acl:rsc_deletable(LooserId, Context)
+merge_delete(WinnerId, LoserId, Context) when is_integer(WinnerId), is_integer(LoserId) ->
+    case z_acl:rsc_deletable(LoserId, Context)
         andalso z_acl:rsc_editable(WinnerId, Context)
     of
         true ->
             case m_rsc:is_a(WinnerId, category, Context) of
                 true ->
-                    m_category:delete(LooserId, WinnerId, Context);
+                    m_category:delete(LoserId, WinnerId, Context);
                 false ->
-                    merge_delete_nocheck(WinnerId, LooserId, Context)
+                    merge_delete_nocheck(WinnerId, LoserId, Context)
             end;
         false ->
             throw({error, eacces})
     end.
 
-%% @doc Merge two resources, delete the 'looser'
+%% @doc Merge two resources, delete the 'loser'
 -spec merge_delete_nocheck(integer(), integer(), #context{}) -> ok.
-merge_delete_nocheck(WinnerId, LooserId, Context) ->
-    z_notifier:map(#rsc_merge{winner_id=WinnerId, looser_id=LooserId}, Context),
-    ok = m_edge:merge(WinnerId, LooserId, Context),
-    m_media:merge(WinnerId, LooserId, Context),
-    m_identity:merge(WinnerId, LooserId, Context),
-    move_creator_modifier_ids(WinnerId, LooserId, Context),
-    PropsLooser = m_rsc:get(LooserId, Context),
-    ok = delete_nocheck(LooserId, WinnerId, Context),
+merge_delete_nocheck(WinnerId, LoserId, Context) ->
+    z_notifier:map(#rsc_merge{winner_id=WinnerId, looser_id=LoserId}, Context),
+    ok = m_edge:merge(WinnerId, LoserId, Context),
+    m_media:merge(WinnerId, LoserId, Context),
+    m_identity:merge(WinnerId, LoserId, Context),
+    move_creator_modifier_ids(WinnerId, LoserId, Context),
+    PropsLooser = m_rsc:get(LoserId, Context),
+    ok = delete_nocheck(LoserId, WinnerId, Context),
     case merge_copy_props(WinnerId, PropsLooser, Context) of
         [] -> 
             ok;
@@ -151,19 +151,19 @@ merge_delete_nocheck(WinnerId, LooserId, Context) ->
     end,
     ok.
 
-move_creator_modifier_ids(WinnerId, LooserId, Context) ->
+move_creator_modifier_ids(WinnerId, LoserId, Context) ->
     Ids = z_db:q("select id
                   from rsc 
                   where (creator_id = $1 or modifier_id = $1)
                     and id <> $1", 
-                 [LooserId],
+                 [LoserId],
                  Context),
     z_db:q("update rsc set creator_id = $1 where creator_id = $2",
-           [WinnerId, LooserId],
+           [WinnerId, LoserId],
            Context,
            1200000),
     z_db:q("update rsc set modifier_id = $1 where modifier_id = $2",
-           [WinnerId, LooserId],
+           [WinnerId, LoserId],
            Context,
            1200000),
     lists:foreach(
