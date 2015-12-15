@@ -2,8 +2,8 @@
 
 .survey-thurstone .btn {
 	display: block;
-	margin-bottom: 12px;	
 	width: auto;
+	margin-bottom: 12px;
 }
 
 .survey-thurstone .btn:before {
@@ -12,8 +12,9 @@
 
 .survey-narrative input,
 .survey-narrative select {
+	display: inline-block;
+	width: auto;
     vertical-align: baseline;
-    width: auto;
 }
 
 hr.survey-stop {
@@ -25,8 +26,8 @@ hr.survey-stop {
 }
 
 .picture-preview {
-	margin: 4px 0;
 	width: 128px;
+	margin: 4px 0;
 }
 
 .picture-preview.has-preview {
@@ -34,8 +35,9 @@ hr.survey-stop {
 }
 
 .alert.z_invalid {
-  display: none;
+	display: none;
 }
+
 form.z_form_invalid .alert.z_invalid {
     display: block;
 }

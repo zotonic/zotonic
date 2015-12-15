@@ -1,17 +1,18 @@
 .survey-editor ul {
     min-height: 1300px;
+    padding: 0;
+    margin: 0;
     list-style-type: none;
-    margin: 0; padding: 0;
 }
 
 .survey-editor ul li {
-    border: 1px solid #ddd;
-    border-left: 5px solid #ddd;
     padding: 4px;
     margin-bottom: 4px;
     margin-right: 4px;
-    cursor: hand;
     background-color: #f8f8f8;
+    cursor: hand;
+    border: 1px solid #ddd;
+    border-left: 5px solid #ddd;
 }
 
 .survey-editor ul li textarea {
@@ -26,48 +27,58 @@
 .pages, .meta-data {
     margin-top: 2em;
 }
+
 ol.pages {
     counter-reset:pages;
 }
+
 ol.pages > li {
     position: relative;
     background-color: white;
     background-color: rgba(255,255,255,200);
     list-style: none;
 }
+
 ol.pages > li:before {
     content:counter(pages);
     counter-increment:pages;
-    position: absolute;
-    font-size: 3em;
-    background-color: white;
     padding-right: 0.5em;
+    position: absolute;
     left: -0.5em;
+    background-color: white;
+    font-size: 3em;
 }
+
 .meta-data .buttons {
     margin-right: 10px;
 }
+
 .page-header {
     cursor: move;
 }
+
 .page-header:hover {
     background-color: #eee;
 }
+
 .jump-list, .question-list {
-    list-style: none;
+    padding: 0.5em;
+    margin-left: 12px;
     min-height: 2em;
     background-color: #fcfcfc;
+    list-style: none;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
-    margin-left: 12px;
-    padding: 0.5em;
 }
+
 .question-list {
     min-height: 4em;
 }
+
 .question-list > li.block {
     position: relative;
 }
+
 .question-list > li.block .actions {
     position: absolute;
     right: 8px;
@@ -96,7 +107,6 @@ label.block-type {
     border-left-width: 1px;
 }
 
-
 .dialog-content #survey-question form p {
     margin: 0;
 }
@@ -106,8 +116,8 @@ label.block-type {
 }
 
 #modal-question {
-    top: 10px;
     margin-top: 0;
+    top: 10px;
 }
 
 #modal-question .hover {
@@ -115,8 +125,8 @@ label.block-type {
 }
 
 #modal-question .span4 {
-    cursor: pointer;
     min-height: 5em;
+    cursor: pointer;
 }
 
 #modal-question .span4 input,
@@ -124,4 +134,3 @@ label.block-type {
 #modal-question .span4 select {
     cursor: pointer;
 }
-
