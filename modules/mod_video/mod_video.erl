@@ -38,7 +38,7 @@
 
 
 -define(FFPROBE_CMDLINE, "ffprobe -loglevel quiet -show_format -show_streams -print_format json ").
--define(PREVIEW_CMDLINE, "ffmpeg -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
+-define(PREVIEW_CMDLINE, "ffmpeg -itsoffset -~p -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
 
 
 -include_lib("zotonic.hrl").
@@ -355,8 +355,10 @@ video_preview(MovieFile, Props, Context) ->
     FfmpegCmd = z_convert:to_list(
                   iolist_to_binary(
                     [
-                     io_lib:format(Cmdline, [MovieFile]),
-                     " -itsoffset -", integer_to_list(Start),
+                     case string:str(Cmdline, "-itsoffset") of
+                        0 -> io_lib:format(Cmdline, [MovieFile]);
+                        _ -> io_lib:format(Cmdline, [Start, MovieFile])
+                     end,
                      " ",
                      orientation_to_transpose(proplists:get_value(orientation, Props)),
                      z_utils:os_filename(TmpFile) 
