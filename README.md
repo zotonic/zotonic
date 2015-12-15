@@ -19,4 +19,24 @@ You can find out more about Zotonic on http://zotonic.com, such as:
 - [**Release notes**](http://zotonic.com/docs/latest/dev/releasenotes/index.html).
 
 
+Zotonic in Docker
+-----------------
+
+You can now try out zotonic easily in a
+[Docker](https://www.docker.com/) Container. We build images
+automatically on
+[Docker Hub](https://hub.docker.com/r/zotonic/zotonic/).
+
+To get started quickly, start a `zotonic/zotonic` image on your docker machine:
+
+    # use a tagged version, or branch
+    docker run -d -p 8000:8000 zotonic/zotonic:release-x.y.z
+
+    # or run latest version from master
+    docker run -d -p 8000:8000 zotonic/zotonic:latest
+
+**Note** This image is for evaluation purposes, and are not supposed
+to be used in production.
+
+
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=zotonic&url=https://github.com/zotonic/zotonic&title=zotonic&language=en_GB&tags=github&category=software) 
