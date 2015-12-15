@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,14 +60,34 @@ event(#postback{message={merge_select, Args}}, Context) ->
             z_render:growl(?__("Sorry, you have no permission to edit this page.", Context), Context)
     end;
 
-event(#postback{message={merge, Args}}, Context) ->
+event(#submit{message={merge, Args}}, Context) ->
     {winner_id, WinnerId} = proplists:lookup(winner_id, Args),
     {loser_id, LoserId} = proplists:lookup(loser_id, Args),
-    merge(WinnerId, LoserId, Context).
+    MergeAction = z_context:get_q("merge_action", Context),
+    lager:info("MergeAction=~p WinnerId=~p LoserId=~p", [MergeAction, WinnerId, LoserId]),
+    merge(WinnerId, LoserId, MergeAction, Context).
 
-merge(WinnerId, LoserId, Context) when LoserId =:= 1 ->
+merge(_WinnerId, LoserId, _MergeAction, Context) when LoserId =:= 1 ->
     z_render:wire({alert, [{text,?__("You cannot remove the admin user.", Context)}]}, Context);
-merge(WinnerId, LoserId, Context) ->
+merge(WinnerId, LoserId, MergeAction, Context) when MergeAction =:= "merge_only" ->
+    case z_acl:rsc_editable(WinnerId, Context)
+    of
+        false ->
+            z_render:wire({alert, [{text,?__("You do not have permission to edit the winner.", Context)}]}, Context);
+        true ->
+            % ContextSpawn = z_context:prune_for_spawn(Context),
+            % erlang:spawn(
+            %     fun() ->
+            %         ok = m_rsc:merge_delete(WinnerId, LoserId, ContextSpawn),
+            %         z_session_page:add_script(
+            %             z_render:wire({redirect, [{dispatch, admin_edit_rsc}, {id, WinnerId}]}, ContextSpawn))
+            %     end),
+            z_render:wire([
+                    {growl, [{text, ?__("not implemented yet", Context)}]},
+                    {dialog_close, []}
+                ], Context)
+    end;
+merge(WinnerId, LoserId, MergeAction, Context) when MergeAction =:= "merge_delete" ->
     case {m_rsc:p_no_acl(LoserId, is_protected, Context),
           z_acl:rsc_deletable(LoserId, Context),
           z_acl:rsc_editable(WinnerId, Context)}
@@ -88,6 +108,8 @@ merge(WinnerId, LoserId, Context) ->
                 end),
             z_render:wire([
                     {growl, [{text, ?__("Merging the two pages ...", Context)}]},
-                    {mask, [{target, "merge-diffs"}]}
+                    {dialog_close, []}
                 ], Context)
-    end.
+    end;
+merge(_WinnerId, _LoserId, _MergeAction, Context) ->
+    z_render:wire({alert, [{text,?__("No merge action specified.", Context)}]}, Context).
