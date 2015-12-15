@@ -6,7 +6,7 @@
 
 {% block content %}
 {% with m.rsc[q.id2].id as id2 %}
-{% with 
+{% with
     id.is_editable,
     id2.is_editable,
     id.is_editable and id != 1,
@@ -17,7 +17,7 @@
     is_deletable1,
     is_deletable2
 %}
-{% with 
+{% with
     is_editable1 and is_deletable2,
     is_editable2 and is_deletable1
     as
@@ -31,7 +31,7 @@
         </p>
     </div>
 
-    <h3>{_ Compare and select _}</h3>
+    <h3>{_ Select the winning page _}</h3>
 
     <table id="merge-diffs" class="table">
         <thead>
@@ -119,33 +119,25 @@
 
     <p><br/></p>
 
-    {% wire id=#merge1 
-            action={confirm
-                        title=_"Confirm merge"
-                        text=[
-                                _"Winner:", " <b>", id.title, "</b><br/>",
-                                _"Loser:", " <b><del>", id2.title, "</del></b><br/><br/>",
-                                _"The winner will stay, the loser will be deleted and replaced with the winner.",
-                                "<br/><br/>",
-                                _"This cannot be undone."
-                             ]
-                        ok=_"Merge"
-                        postback={merge winner_id=id loser_id=id2} 
-                        delegate=`mod_admin_merge`}
+    {% wire
+        id=#merge1
+        action={dialog_open
+            title=_"Confirm merge"
+            template="_confirm_merge.tpl"
+            winner_id=id
+            loser_id=id2
+            left=1
+        }
     %}
-    {% wire id=#merge2
-            action={confirm
-                        title=_"Confirm merge"
-                        text=[
-                                _"Winner:", " <b>", id2.title, "</b><br/>",
-                                _"Loser:", " <b><del>", id.title, "</del></b><br/><br/>",
-                                _"The winner will stay, the loser will be deleted and replaced with the winner.",
-                                "<br/><br/>",
-                                _"This cannot be undone."
-                             ]
-                        ok=_"Merge"
-                        postback={merge winner_id=id2 loser_id=id} 
-                        delegate=`mod_admin_merge`}
+    {% wire
+        id=#merge2
+        action={dialog_open
+            title=_"Confirm merge"
+            template="_confirm_merge.tpl"
+            winner_id=id2
+            loser_id=id
+            right=1
+        }
     %}
 {% endwith %}
 {% endwith %}
