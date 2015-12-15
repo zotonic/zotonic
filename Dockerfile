@@ -1,8 +1,7 @@
 FROM debian
 MAINTAINER Andreas Stenius git@astekk.se
 
-RUN apt-get update && apt-get install -y erlang build-essential postgresql imagemagick exif wget git
-RUN \
+RUN apt-get update && apt-get install -y erlang build-essential postgresql imagemagick exif wget git && \
     useradd --system --create-home zotonic && \
     printf "# Zotonic settings \n\
 local   all         zotonic                           ident \n\
@@ -20,9 +19,13 @@ EXPOSE 8000
 ENV ERL_FLAGS -noinput
 ENTRYPOINT ["./bin/zotonic"]
 CMD ["debug"]
+VOLUME /etc/zotonic
 
 ADD . /home/zotonic/
-RUN chown zotonic:zotonic -R .
+RUN mkdir -p /etc/zotonic/config /etc/zotonic/user && \
+    ln -s /etc/zotonic/config /home/zotonic/.zotonic && \
+    ln -s /etc/zotonic/user /home/zotonic/user && \
+    chown -LR zotonic:zotonic .
 
 USER zotonic
 RUN make
