@@ -694,12 +694,12 @@ LiveValidationForm.prototype = {
     var self = this;
 
     this.onInvalid = function() {
-        $(this).removeClass(this.validFormClass).addClass(this.invalidFormClass);
+        $(this).removeClass(self.validFormClass).addClass(self.invalidFormClass);
         $(".z_form_valid", this).hide();
         $(".z_form_invalid", this).fadeIn();
     };
     this.onValid = function() {
-        $(this).removeClass(this.invalidFormClass).addClass(this.validFormClass);
+        $(this).removeClass(self.invalidFormClass).addClass(self.validFormClass);
         $(".z_form_invalid", this).hide();
         $(".z_form_valid", this).fadeIn();
     };
