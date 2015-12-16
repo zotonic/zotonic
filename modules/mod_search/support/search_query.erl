@@ -28,7 +28,8 @@
 
 %% For testing
 -export([
-    expand_object_predicates/2
+    expand_object_predicates/2,
+    parse_query/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -637,6 +638,8 @@ add_arg(ArgValue, Search) ->
 
 
 %% Make sure that parts of the query are safe to append to the search query.
+sql_safe(String) when not is_list(String) ->
+    sql_safe(z_convert:to_list(String));
 sql_safe(String) ->
     case re:run(String, ?SQL_SAFE_REGEXP) of
         {match, _} ->
@@ -741,23 +744,30 @@ display_error(Msg, Context) ->
 
 
 %% Add filters
+add_filters([ [Column|_] | _ ] = Filters, Result) when is_list(Column); is_binary(Column); is_atom(Column) ->
+    add_filters_or(Filters, Result);
 add_filters({'or', Filters}, Result) ->
+    add_filters_or(Filters, Result);
+add_filters([Column, Value], R) ->
+    add_filters([Column, eq, Value], R);
+add_filters([Column, Operator, Value], Result) ->
+    {Expr, Result1} = create_filter(Column, Operator, Value, Result),
+    add_where(Expr, Result1).
+
+add_filters_or(Filters, Result) ->
     {Exprs, Result1} = lists:foldr(
-                         fun([C,O,V], {Es, R}) ->
+                         fun
+                            ([C,O,V], {Es, R}) ->
                                  {E, R1} = create_filter(C, O, V, R),
+                                 {[E|Es], R1};
+                            ([C,V], {Es, R}) ->
+                                 {E, R1} = create_filter(C, eq, V, R),
                                  {[E|Es], R1}
                          end,
                          {[], Result},
                          Filters),
     Or = "(" ++ string:join(Exprs, " OR ") ++ ")",
-    add_where(Or, Result1);
-
-add_filters([Column, Value], R) ->
-    add_filters([Column, eq, Value], R);
-
-add_filters([Column, Operator, Value], Result) ->
-    {Expr, Result1} = create_filter(Column, Operator, Value, Result),
-    add_where(Expr, Result1).
+    add_where(Or, Result1).
 
 create_filter(Column, Operator, null, Result) ->
     create_filter(Column, Operator, undefined, Result);
