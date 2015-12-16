@@ -30,11 +30,11 @@ The query-model is exposed to the browser in (currently) 2 URLs: the
 Atom feed module for creating a customized update feed, and the API
 for receiving lists of ids in JSON.
 
-Get all resource of the "documentation" category on zotonic.com::
+Get all resource of the "documentation" category on zotonic.com:
 
 http://zotonic.com/api/search?cat=documentation
 
-Get a feed of most recent documentation containing the word "filter"::
+Get a feed of most recent documentation containing the word "filter":
 
 http://zotonic.com/feed/search?cat=documentation&text=filter
 
@@ -99,6 +99,11 @@ Query-model arguments
 
   ``filter=['numeric_value', `>`, 10]``
   
+  It is possible to define an *or* query for multiple terms:
+
+  ``filter=[ ['numeric_value', `>`, 10], ['numeric_value', `<=`, 0] ]``
+
+
 **hassubject**
 
   Select all resources that have an outgoing connection to the given
