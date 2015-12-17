@@ -63,6 +63,14 @@ By default, users created through the signup process will become
 changed by setting the configuration value
 ``mod_signup.member_category`` to the name of a different category.
 
+Config: setting the content group for new users
+------------------------------------------
+
+By default, users created through the signup process will become
+:term:`resources <resource>` in the content group `default_content_group `. This can be
+changed by setting the configuration value
+``mod_signup.content_group`` to the name of a different content group.
+
 
 Config: setting the visibility of new users
 -------------------------------------------
