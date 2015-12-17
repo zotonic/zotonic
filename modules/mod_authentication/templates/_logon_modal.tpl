@@ -39,7 +39,7 @@ Make sure that these CSS files are loaded:
 %}
 {% if logon_state == `signup` %}
     {# hide title #}
-    {% include "_signup_config.tpl"
+    {% optional include "_signup_config.tpl"
         form_title_tpl=""
         logon_state=logon_state
         logon_context=logon_context
