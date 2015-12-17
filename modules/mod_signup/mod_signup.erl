@@ -220,7 +220,7 @@ ensure_identity(Id, {Type, Key, IsUnique, IsVerified}, Context) when is_binary(K
 
 props_to_rsc(Props, IsVerified, Context) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
-    ContentGroup = z_convert:to_atom(m_config:get_value(mod_signup, content_group, default_content_group, Context)),
+    ContentGroup = z_convert:to_atom(m_config:get_value(mod_signup, content_group, undefined, Context)),
     VisibleFor = z_convert:to_integer(m_config:get_value(mod_signup, member_visible_for, 0, Context)),
     Props1 = [
         {is_published, IsVerified},
