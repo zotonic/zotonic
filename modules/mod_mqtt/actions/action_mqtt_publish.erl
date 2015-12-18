@@ -29,8 +29,22 @@ render_action(_TriggerId, _TargetId, Args, Context) ->
         undefined ->
             z_utils:js_object(proplists:delete(topic, Args));
         Msg ->
-            z_utils:js_escape(Msg)
+            case Msg of
+                {trust, JsValue} -> JsValue;
+                _ -> js_value(z_utils:js_escape(Msg))
+            end
     end,
 
     Script = iolist_to_binary([<<"pubzub.publish(">>, $", Topic, $", $,, Message, <<");">>]),
     {Script, Context}.
+
+%%
+%% Helpers
+%%
+
+js_value(Str) when is_binary(Str) orelse is_list(Str) -> [$", Str, $"];
+js_value(Int) when is_integer(Int) -> z_convert:to_string(Int);
+js_value(true) -> <<"true">>;
+js_value(false) -> <<"false">>;
+js_value(undefined) -> <<"undefined">>.
+
