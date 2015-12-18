@@ -19,8 +19,12 @@
 -module(filter_stringify).
 -export([stringify/2]).
 
+-include("zotonic.hrl").
+
 stringify([], _Context) ->
     <<>>;
+stringify(#m{} = M, Context) ->
+    erlydtl_runtime:to_value(M, Context);
 stringify(N, _Context) when is_integer(N) ->
 	z_convert:to_binary(N); 
 stringify(L, Context) when is_list(L) ->
@@ -33,6 +37,8 @@ stringify_1(undefined, _Context) ->
     <<>>;
 stringify_1({{_Y,_M,_D},{_H,_I,_S}} = Date, Context) ->
 	erlydtl_dateformat:format(Date, "Y-m-d H:i:s", Context);
+stringify_1(#m{} = M, Context) ->
+    erlydtl_runtime:to_value(M, Context);
 stringify_1(B, _Context) when is_binary(B) ->
     B;
 stringify_1(C, _Context) when is_integer(C), C >= 0, C =< 255 ->

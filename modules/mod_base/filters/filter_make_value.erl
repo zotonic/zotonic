@@ -1,6 +1,6 @@
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @doc Pretty print filter to dump values in a readable format.
+%% @author Dirk Geurs <dirk@driebit.nl>
+%% @copyright 2015 Marc Worrell
+%% @doc Force the input to a value
 
 %% Copyright 2010 Marc Worrell
 %%
@@ -16,12 +16,8 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_pprint).
--export([pprint/2]).
+-module(filter_make_value).
+-export([make_value/2]).
 
--include("zotonic.hrl").
-
-pprint(#m{} = M, Context) ->
-    pprint(erlydtl_runtime:to_value(M, Context), Context);
-pprint(V, _Context) ->
-	z_html:nl2br(z_html:escape(io_lib:format("~p", [V]))).
+make_value(In, Context) ->
+    erlydtl_runtime:to_value(In, Context).
