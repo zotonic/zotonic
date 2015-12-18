@@ -155,7 +155,7 @@ function z_set_page_id( page_id, user_id )
         if(z_force_unload_beacon) {
 	    $.ajax({url: "/beacon", 
 		    type: "post", 
-		    data: ubf.encoce(msg), 
+		    data: ubf.encode(msg), 
 		    dataType: "text", 
 		    contentType: "text/x-ubf", 
 		    async: false});
