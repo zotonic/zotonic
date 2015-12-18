@@ -215,9 +215,6 @@
 %% @doc Call the translate function, 2nd parameter is context
 -define(__(T,Context), z_trans:trans(T,Context)).
 
-%% The name of the session request parameter
--define(SESSION_PAGE_Q, "z_pageid").
-
 %% The name of the session user agent class parameter
 -define(SESSION_UA_CLASS_Q, "z_ua").
 

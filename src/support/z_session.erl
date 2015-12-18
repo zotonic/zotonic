@@ -250,11 +250,12 @@ ensure_page_session(#context{wm_reqdata=undefined} = Context) ->
 ensure_page_session(#context{session_pid=undefined} = Context) ->
     lager:debug("[~p] ensure page session without a session_pid", [z_context:site(Context)]),
     Context;
+ensure_page_session(#context{page_pid=undefined}=Context) ->
+    {ok, NewPageId, PagePid} = gen_server:call(Context#context.session_pid, start_page_session),
+    Context#context{page_id=NewPageId, page_pid=PagePid};
 ensure_page_session(Context) ->
-    Context1 = z_context:ensure_qs(Context),
-    PageId = to_binary(z_context:get_q(?SESSION_PAGE_Q, Context1)),
-    {ok, NewPageId, PagePid} = gen_server:call(Context1#context.session_pid, {ensure_page_session, PageId}),
-    Context1#context{page_id=NewPageId, page_pid=PagePid}.
+    Context.
+
 
 %% @doc Lookup a page session (if any)
 lookup_page_session(_PageId, #context{session_pid=undefined}) ->
@@ -476,8 +477,8 @@ handle_call({spawn_link, Module, Func, Args}, _From, Session) ->
     exometer:update([zotonic, Session#session.context#context.host, session, page_processes], 1),
     {reply, Pid, Session#session{linked=Linked}};
 
-handle_call({ensure_page_session, CurrPageId}, _From, Session) ->
-    {Page, Session1} = do_ensure_page_session(CurrPageId, Session),
+handle_call(start_page_session, _From, Session) ->
+    {Page, Session1} = do_ensure_page_session_new(Session),
     Session2 = transport_all(Session1),
     {reply, {ok, Page#page.page_id, Page#page.page_pid}, Session2};
 
@@ -643,26 +644,7 @@ prop_replace(auth_user_id, NewUserId, Props, Site) when is_list(Props) ->
 prop_replace(Key, Value, Props, _Site) when is_list(Props) ->
     z_utils:prop_replace(Key, Value, Props).
 
-
-%% @doc Continue or start a new page session. If an id is supplied then the
-%%      the page session must be running and coupled to this session.
-do_ensure_page_session(undefined, Session) ->
-    do_ensure_page_session_new(Session);
-do_ensure_page_session([], Session) ->
-    do_ensure_page_session_new(Session);
-do_ensure_page_session(<<>>, Session) ->
-    do_ensure_page_session_new(Session);
-do_ensure_page_session(PageId0, Session) ->
-    PageId = z_convert:to_binary(PageId0),
-    case find_page(PageId, Session) of
-        undefined ->
-            do_ensure_page_session(undefined, Session);
-        #page{page_pid=Pid} = P -> 
-            % Keep the page alive
-            z_session_page:ping(Pid),
-            {P, Session}
-    end.
-
+% @doc Create a new page session
 do_ensure_page_session_new(Session) ->
     case page_start(Session#session.context) of
         {error, already_started} ->
@@ -698,6 +680,3 @@ find_page(PageId, Session) ->
 
 new_id() ->
     z_convert:to_binary(z_ids:id()).
-
-to_binary(undefined) -> undefined;
-to_binary(A) -> z_convert:to_binary(A).

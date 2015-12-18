@@ -600,14 +600,12 @@ continue_all(Context) ->
 
 
 %% @doc Ensure that we have a session, start a new session process when needed
+ensure_session(#context{session_pid=undefined}=Context) ->
+    {ok, Context1} = z_session_manager:ensure_session(Context),
+    maybe_logon_from_session(Context1);
 ensure_session(Context) ->
-    case Context#context.session_pid of
-        undefined ->
-            {ok, Context1} = z_session_manager:ensure_session(Context),
-            maybe_logon_from_session(Context1);
-        _ ->
-            Context
-    end.
+    Context.
+
 
 %% @doc After ensuring a session, try to log on from the user-id stored in the session
 maybe_logon_from_session(#context{user_id=undefined} = Context) ->
@@ -620,6 +618,7 @@ maybe_logon_from_session(Context) ->
 %% @doc Ensure that we have a page session process for this request.
 ensure_page_session(#context{session_pid=undefined} = Context) ->
     Context;
+    
 ensure_page_session(Context) ->
     z_session:ensure_page_session(Context).
 
