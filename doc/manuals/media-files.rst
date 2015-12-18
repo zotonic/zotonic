@@ -38,6 +38,27 @@ The image URL will have a checksum embedded in it so that when the
 contents of the media class is changed, all images which use that
 media class will be regenerated to reflect the new media class.
 
+Responsive images
+.................
+
+To provide images in multiple `responsive sizes`_, use the ``srcset`` attribute::
+
+    %% templates/mediaclass.config
+
+    [
+        {"masthead", [
+            {width, 1600},
+            {height, 900},
+            {crop, center},
+            upscale,
+            {quality, 85},
+            {srcset, [
+                {"640w", [{quality, 50}]},
+                {"1200w", [{quality, 100}]}
+            ]},
+            {sizes, "100vw"}
+        ]}
+    ].
 
 ImageMagick conversion options
 ..............................
@@ -82,3 +103,5 @@ selection mechanism.
 
 
 .. seealso:: :ref:`tag-image`, :ref:`tag-media`, :ref:`manual-lookup-system-ua`
+
+_responsive sizes: https://html.spec.whatwg.org/multipage/embedded-content.html#attr-img-srcset

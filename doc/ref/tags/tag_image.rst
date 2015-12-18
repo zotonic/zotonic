@@ -37,8 +37,6 @@ The following arguments/filters can be specified:
 |mediaclass          |The media class of the image. See                           |mediaclass="thumb"  |
 |                    |:ref:`manual-media-classes`.                                |                    |
 +--------------------+------------------------------------------------------------+--------------------+
-|srcset              |Provide the image in multiple `responsive sizes`_           |srcset=["150", "450"]|
-+--------------------+------------------------------------------------------------+--------------------+
 |background          |The background color for transparent image parts. See       |background="white"  |
 |                    |ImageMagick colors for how to specify the RGB color.        |                    |
 +--------------------+------------------------------------------------------------+--------------------+
