@@ -54,11 +54,34 @@ To provide images in multiple `responsive sizes`_, use the ``srcset`` attribute:
             {quality, 85},
             {srcset, [
                 {"640w", [{quality, 50}]},
-                {"1200w", [{quality, 100}]}
+                {"1200w", []},
+                {"2x", []}
             ]},
             {sizes, "100vw"}
         ]}
     ].
+
+An ``{% image id mediaclass="masthead" %}`` tag in your template will output::
+
+    <img src='image-default.jpg'
+        sizes='100vw'
+        srcset='image-640.jpg 640w, image-1200.jpg 1200w, image-2400.jpg 2x' />
+
+Each ``srcset`` value is either a `width descriptor`_ or a pixel density
+descriptor.
+
+* A width descriptor of ``640w`` will resize the image to a width of 640 pixels.
+* A pixel density descriptor of ``2x`` will resize the image to 2 times the
+  original media class width value, so 2 * 1600 = 3200.
+
+By default, each srcset image will inherit all properties from the parent
+media class. So, in the example above, the 640w image will have a reduced
+quality value of 50 while the 1200w image will inherit its parent’s value of 85.
+
+So you can override the automatically determined width of 3200 for the 2x
+descriptor by adding::
+
+    {"2x", [{width, 2000}]}
 
 ImageMagick conversion options
 ..............................
@@ -105,3 +128,4 @@ selection mechanism.
 .. seealso:: :ref:`tag-image`, :ref:`tag-media`, :ref:`manual-lookup-system-ua`
 
 _responsive sizes: https://html.spec.whatwg.org/multipage/embedded-content.html#attr-img-srcset
+_width descriptor: https://html.spec.whatwg.org/multipage/embedded-content.html#image-candidate-string

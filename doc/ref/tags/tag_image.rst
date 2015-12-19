@@ -107,5 +107,3 @@ The following arguments/filters can be specified:
 See also :ref:`manual-media-classes` for some options that are only available in `mediaclass` files.
 
 .. seealso:: :ref:`tag-image_url`, :ref:`manual-media-classes` and :ref:`tag-media`.
-
-.. _responsive sizes: https://html.spec.whatwg.org/multipage/embedded-content.html#attr-img-srcset
