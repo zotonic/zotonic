@@ -174,7 +174,8 @@ handle_cmd(#z_mqtt_cmd{cmd= <<"unsubscribe">>, topic=Topic}, Context) ->
 msg_from_event(Topic, Data, Context) ->
     #mqtt_msg{
         topic=Topic,
-        payload=z_mqtt:wrap_payload(Data, Context)
+        payload=z_mqtt:wrap_payload(Data, Context),
+        encoder=fun(B) -> z_mqtt:encode_packet_payload(B) end
     }.
 
 
