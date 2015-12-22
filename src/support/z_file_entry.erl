@@ -183,6 +183,7 @@ locate(timeout, State) ->
                 ModifiedUTC = hd(calendar:local_time_to_universal_time_dst(Modified)),
                 State1 = State#state{
                     is_found=true,
+                    gzip_part=undefined,
                     mime=Mime,
                     size=Size,
                     parts=Sources,
