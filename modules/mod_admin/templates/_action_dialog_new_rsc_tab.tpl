@@ -11,15 +11,6 @@
 	}
 	delegate=delegate 
 %}
-{#
-<p>{_ Please fill in the title _}
-    {% if not nocatselect %}
-        {_ and the category of the new page._}
-    {% else %}
-        {_ of the new _} {{ m.rsc[cat].title }}.
-    {% endif %}
-</p>
-#}
 <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 {% with #form as form %}
 

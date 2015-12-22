@@ -6,7 +6,7 @@
                 template="_action_dialog_connect.tpl" 
                 title=_"Add category"
                 callback="window.zMenuEditDone"
-                cat=cat_id
+                category=`category`
                 in_sorter=in_sorter
                 tabs_enabled=["new"]
                 center=0
@@ -20,7 +20,7 @@
                 template="_action_dialog_connect.tpl" 
                 title=_"Add item"
                 callback="window.zMenuEditDone"
-                cat=cat_id
+                category=cat_id
                 nocatselect
                 in_sorter=in_sorter
                 center=0
@@ -33,7 +33,7 @@
                 template="_action_dialog_connect.tpl" 
                 title=_"Add menu item"
                 callback="window.zMenuEditDone"
-                cat=cat_id
+                category=cat_id
                 in_sorter=in_sorter
                 center=0
             }

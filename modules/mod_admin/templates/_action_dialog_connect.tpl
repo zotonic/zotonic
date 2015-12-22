@@ -11,7 +11,7 @@ params:
 find params:
 - predicate (optional) (atom)
 - delegate (optional) (atom)
-- category (optional) (string) preselect the category dropdown
+- category (optional) (string/id) preselect the category dropdown
 #}
 {% with
     callback|default:q.callback,
@@ -25,7 +25,7 @@ find params:
     actions,
     tab,
     cat
-%} 
+%}
 {% with stay or callback or subject_id as stay %}
 {% if not (tabs_enabled and tabs_enabled|length == 1) %}
     <ul class="nav nav-pills">
