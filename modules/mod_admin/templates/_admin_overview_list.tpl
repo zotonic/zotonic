@@ -26,33 +26,39 @@ custompivot
     </thead>
 
     <tbody>
-        {% for id in result %}
-        {% if m.rsc[id].is_visible %}
-        <tr id="{{ #tr.id }}" class="{% if not m.rsc[id].is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
-            <td><span {% include "_language_attrs.tpl" %}>{{ m.rsc[id].title|striptags|default:"<em>untitled</em>" }}</span></td>
-            <td>{% if qcat %}
+    {% for id in result|is_visible %}
+        <tr id="{{ #tr.id }}" class="{% if not id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
+            <td>
+                {% if id.name %}
+                    <span class="label label-default pull-right">
+                        {{ id.name }}
+                    </span>
+                {% endif %}
+                <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:"<em>untitled</em>" }}</span>
+            </td>
+            <td>
+                {% if qcat %}
                     {% catinclude "_admin_overview_list_data.tpl" id %}
                 {% else %}
                     {% include "_admin_overview_list_data.tpl" %}
                 {% endif %}
             </td>
-            <td>{{ m.rsc[id].created|date:_"d M Y, H:i" }}</td>
-            <td>{{ m.rsc[id].modified|date:_"d M Y, H:i" }}</td>
+            <td>{{ id.created|date:_"d M Y, H:i" }}</td>
+            <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
             <td>
-                {{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}
+                {{ id.modifier_id.title|default:"-" }}
                 <span class="pull-right buttons">
-                    {% if id.page_url %}<a href="{{ m.rsc[id].page_url }}" class="btn btn-default btn-xs">{_ view _}</a>{% endif %}
+                    <a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>
                     <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                 </span>
             </td>
         </tr>
-        {% endif %}
-        {% empty %}
+    {% empty %}
         <tr>
             <td colspan="5">
                 {_ No pages found. _}
             </td>
         </tr>
-        {% endfor %}
+    {% endfor %}
     </tbody>
 </table>
