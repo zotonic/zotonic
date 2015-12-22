@@ -214,7 +214,7 @@ duplicate(Id, DupProps, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
             Props = m_rsc:get_raw(Id, Context),
-            FilteredProps = props_filter_protected(Props, false),
+            FilteredProps = props_filter_protected(Props, #rscupd{id=insert_rsc, is_escape_texts=false}),
             SafeDupProps = z_sanitize:escape_props(DupProps, Context),
             InsProps = lists:foldl(
                             fun({Key, Value}, Acc) ->
