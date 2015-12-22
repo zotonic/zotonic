@@ -419,21 +419,22 @@ update_transaction_fun_insert(#rscupd{id=insert_rsc} = RscUpd, Props, _Raw, Upda
                     InsProps),
     update_transaction_fun_db(RscUpd, InsertId, Props1, InsProps, [], IsCatInsert, Context);
 update_transaction_fun_insert(#rscupd{id=Id} = RscUpd, Props, Raw, UpdateProps, Context) ->
-    Props1 = case z_acl:is_admin(Context) of
+    Props1 = proplists:delete(creator_id, Props),
+    Props2 = case z_acl:is_admin(Context) of
                 true ->
                     case proplists:get_value(creator_id, UpdateProps) of
                         self ->
-                            [{creator_id, Id} | Props];
+                            [{creator_id, Id} | Props1];
                         CreatorId when is_integer(CreatorId) ->
-                            [{creator_id, CreatorId} | Props ];
+                            [{creator_id, CreatorId} | Props1 ];
                         undefined -> 
-                            Props
+                            Props1
                     end;
                 false ->
-                    proplists:delete(creator_id, Props)
+                    Props1
             end,
     IsA = m_rsc:is_a(Id, Context),
-    update_transaction_fun_expected(RscUpd, Id, Props1, Raw, IsA, false, Context).
+    update_transaction_fun_expected(RscUpd, Id, Props2, Raw, IsA, false, Context).
 
 update_transaction_fun_expected(#rscupd{expected=Expected} = RscUpd, Id, Props1, Raw, IsA, false, Context) ->
     case check_expected(Raw, Expected, Context) of
