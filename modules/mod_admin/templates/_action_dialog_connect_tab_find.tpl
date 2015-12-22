@@ -11,15 +11,23 @@
 		    {% block category_select %}
 		        <select class="form-control" name="find_category">
 			        {% if predicate %}
-				        <option value="p:{{ predicate }}">{_ Valid for: _} {{ predicate.title }}</option>
+				        <option value="p:{{ predicate }}" selected="selected">{_ Valid for: _} {{ predicate.title }}</option>
 			        {% endif %}
 			        <option value="">{_ Any category _}</option>
 			        <option value="" disabled></option>
-		            {% for c in m.category.tree_flat %}
-			            <option value="{{ c.id }}" {% if c.id == cat %}selected="selected" {% endif %}>
-					        {{ c.indent }}{{ c.id.title|default:c.id.name }}
-			            </option>
-		            {% endfor %}
+                    {% if cat.is_a.meta %}
+                        {% for c in m.category.tree_flat_meta %}
+                            <option value="{{ c.id }}" {% if c.id == cat and not predicate %}selected="selected"{% endif %}>
+                                {{ c.indent }}{{ c.id.title|default:c.id.name }}
+                            </option>
+                        {% endfor %}
+                    {% else %}
+    		            {% for c in m.category.tree_flat %}
+    			            <option value="{{ c.id }}" {% if c.id == cat and not predicate %}selected="selected"{% endif %}>
+    					        {{ c.indent }}{{ c.id.title|default:c.id.name }}
+    			            </option>
+    		            {% endfor %}
+                    {% endif %}
 		        </select>
 	        {% endblock %}
         </div>
