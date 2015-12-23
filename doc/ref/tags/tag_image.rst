@@ -78,8 +78,12 @@ The following arguments/filters can be specified:
 +--------------------+------------------------------------------------------------+--------------------+
 |grey                |Make the image greyscale.                                   |grey                |
 +--------------------+------------------------------------------------------------+--------------------+
-|lossless            |Generate a PNG preview if the original file is a PNG, GIF or|lossless            |
-|                    |PDF.                                                        |                    |
+|lossless            |Controls whether resized images should become JPG           |lossless=`true`     |
+|                    |(lossless=false) or PNG images (lossess=true). By default   |lossless=`auto`     |
+|                    |(lossless=auto), PNG images will stay PNG images when       |lossless=`false`    |
+|                    |resized, as PNG images usually contain graphics, which tend |                    |
+|                    |to look bad when encoded as JPG. The 'lossless' option can  |                    |
+|                    |be used to override this behaviour.                         |                    |
 +--------------------+------------------------------------------------------------+--------------------+
 |mono                |Make the image black and white.                             |mono                |
 +--------------------+------------------------------------------------------------+--------------------+
