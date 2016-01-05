@@ -42,4 +42,42 @@ The ”not” operator can be used to negate a boolean value::
 .. note:: 
    Besides the ``{% elif %}`` tag we also support the alias ``{% elseif %}``.
 
+
+if-with
+-------
+
+The ``if`` is often combined with the ``with`` tag. For example::
+
+    {% with m.search[{latest cat=`news` pagelen=10}] as result %}
+        {% if result %}
+            <h3>{_ Latest news _}</h3>
+            <ul>
+              {% for id in result %}
+                <li><a href="{{ id.page_url }}">{{ id.title }}</a></li>
+              {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+To make this easier it is possible to combine the ``if`` and ``with`` tags in a single expression::
+
+    {% if m.search[{latest cat=`news` pagelen=10}] as result %}
+        <h3>{_ Latest news _}</h3>
+        <ul>
+          {% for id in result %}
+            <li><a href="{{ id.page_url }}">{{ id.title }}</a></li>
+          {% endfor %}
+        </ul>
+    {% endif %}
+
+The ``as`` can also be used in the ``elif`` expressions::
+
+    {% if expression1 as x %}
+      ...
+    {% elif expression2 as y %}
+      ...
+    {% else %}
+      ...
+    {% endif %}
+
 .. seealso:: :ref:`tag-ifequal` and :ref:`tag-ifnotequal`.
