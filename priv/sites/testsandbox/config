@@ -22,6 +22,8 @@
    mod_base,
    mod_authentication,
    mod_acl_adminonly,
+   mod_mqtt,
+   mod_search,
    mod_admin
   ]}
 
