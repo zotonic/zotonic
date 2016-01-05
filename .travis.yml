@@ -4,7 +4,7 @@ otp_release:
   - 17.4
   - R16B
 install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'
-script: make all edocs && bin/zotonic runtests
+script: make all edocs && make test
 sudo: false
 branches:
   only:

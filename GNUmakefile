@@ -31,7 +31,7 @@ all: get-deps compile
 	chmod +x ./rebar
 
 # Use Rebar to get, update and compile dependencies
-.PHONY: delete-deps get-deps update-deps compile-deps compile-zotonic compile
+.PHONY: delete-deps get-deps update-deps compile-deps compile-zotonic compile test
 
 delete-deps: $(REBAR)
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) delete-deps
@@ -58,6 +58,9 @@ compile: get-deps
 
 lock-deps: $(REBAR)
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) lock-deps
+
+test: compile
+	bin/zotonic runtests erlydtl && bin/zotonic runtests
 
 # Generate documentation
 .PHONY: docs edocs

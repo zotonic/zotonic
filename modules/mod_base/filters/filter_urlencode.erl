@@ -70,8 +70,6 @@ urlencode1([B | Rest], Acc) when is_binary(B) ->
     urlencode1(Rest, [urlencode1(B, 0) | Acc]);
 urlencode1([C | Rest], Acc) when ?NO_ENCODE(C) ->
     urlencode1(Rest, [C | Acc]);
-urlencode1([$\s | Rest], Acc) ->
-    urlencode1(Rest, [$+ | Acc]);
 urlencode1([C | Rest], Acc) ->
     <<Hi:4, Lo:4>> = <<C>>,
     urlencode1(Rest, [hexdigit(Lo), hexdigit(Hi), $\% | Acc]).

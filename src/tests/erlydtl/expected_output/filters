@@ -7,8 +7,8 @@ Centered:
        center       
 </pre>
 
-Date format:  Thu, 24 Jul 1975 00:00:00 +0100
-DateTime format: Thu, 24 Jul 1975 07:13:01 +0100
+Date format:  Thu, 24 Jul 1975 00:00:00 +0000
+DateTime format: Thu, 24 Jul 1975 07:13:01 +0000
 
 Escape JS: \x22 \x27
 
@@ -42,4 +42,4 @@ Right adjust:
 
 Uppercase: UPPERCASE
 
-URL Encode: Let%27s+go%21
+URL Encode: Let%27s%20go%21

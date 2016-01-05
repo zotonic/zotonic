@@ -15,8 +15,8 @@ rsc1() ->
     %% here because we want the tests to be timezone independent.
     [{uri, <<"http://localhost/id/222">>},
      {rsc,  [{title, <<"Resource 1">>},
-             {publication_start, calendar:universal_time_to_local_time({{2010,1,1},{12,11,0}})},
-             {modified, calendar:universal_time_to_local_time({{2010,1,28},{12,14,4}})},
+             {publication_start, {{2010,1,1},{12,11,0}}},
+             {modified, {{2010,1,28},{12,14,4}}},
              {summary, <<"This is a summary.">>},
              {body, <<"This is the body.">>}
             ]
@@ -102,7 +102,7 @@ atom_to_resource_test() ->
 
     Rsc = proplists:get_value(rsc, ImportedRsc),
     ?assertEqual(<<"Arjan Scherpenisse">>, proplists:get_value(title, Rsc)),
-    ?assertEqual(calendar:universal_time_to_local_time({{2010,1,19},{17,29,39}}), proplists:get_value(modified, Rsc)),
+    ?assertEqual({{2010,1,19},{17,29,39}}, proplists:get_value(modified, Rsc)),
 
     Medium = proplists:get_value(medium, ImportedRsc),
     ?assertEqual(<<"image/jpeg">>, proplists:get_value(mime, Medium)),

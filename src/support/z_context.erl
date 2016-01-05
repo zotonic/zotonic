@@ -210,13 +210,21 @@ set_default_language_tz(Context) ->
 
 % @doc Create a new context used when testing parts of zotonic
 new_tests() ->
-    z_trans_server:set_context_table(
+    Context = z_trans_server:set_context_table(
             #context{
                 host=test,
                 language=[en],
                 tz= <<"UTC">>,
                 notifier='z_notifier$test'
-            }).
+            }),
+    case ets:info(Context#context.translation_table) of
+        undefined -> 
+            ets:new(Context#context.translation_table, 
+                    [named_table, set, protected,  {read_concurrency, true}]);
+        _TabInfo ->
+            ok
+    end,
+    Context.
 
 
 %% @doc Set the dispatch rule for this request to the context var 'zotonic_dispatch'

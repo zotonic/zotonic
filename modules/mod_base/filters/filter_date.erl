@@ -63,7 +63,7 @@ date({{_,_,_} = Date,{_,_,_} = Time} = DT, FormatStr, Context) ->
     end;
 date({_,_,_} = Date, FormatStr, Context) ->
     try
-        erlydtl_dateformat:format(Date, FormatStr, Context)
+        erlydtl_dateformat:format({Date, {0,0,0}}, FormatStr, Context)
     catch
         error:Error ->
             lager:warning("Date format on illegal date ~p (format ~p), error: ~p", [Date, FormatStr, Error]),

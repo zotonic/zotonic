@@ -119,9 +119,6 @@ tests() ->
                     <<"{% if var1 %}boo{% endif %}">>, [{var1, "0"}], <<>>},
                 {"If false",
                     <<"{% if var1 %}boo{% endif %}">>, [{var1, false}], <<>>},
-                {"If false string",
-                    % This test differs from Django, we also accept "false" as boolean false
-                    <<"{% if var1 %}boo{% endif %}">>, [{var1, "false"}], <<>>},
                 {"If undefined",
                     <<"{% if var1 %}boo{% endif %}">>, [{var1, undefined}], <<>>},
                 {"If other atom",
@@ -136,6 +133,14 @@ tests() ->
                     <<"{% if var1 %}yay{% endif %}">>, [{var1, {trans, [{en,<<"">>}]}}], <<"">>},
                 {"If not empty trans",
                     <<"{% if not var1 %}yay{% endif %}">>, [{var1, {trans, [{en,<<"">>}]}}], <<"yay">>}
+            ]},
+        {"if-with", [
+                {"If-with",
+                    <<"{% if var1 as x %}{{ x }}{% endif %}">>, [{var1, "yay"}, {x,"oops"}], <<"yay">>},
+                {"If-with-else",
+                    <<"{% if var1 as x %}{{ x }}{% else %}{{ x }}y{% endif %}">>, [{var1, ""}, {x, "x"}], <<"xy">>},
+                {"If-with-elif-with-else",
+                    <<"{% if var1 as x %}{{ x }}{% elif var2 as x %}{{ x }}{% else %}{{ x }}{% endif %}">>, [{var1, ""}, {var2, "yo"}], <<"yo">>}
             ]},
         {"for", [
                 {"Simple loop",
@@ -276,9 +281,9 @@ tests() ->
                 {"Filters applied in order",
                     <<"{{ var1|force_escape|length }}">>, [{var1, <<"&">>}],
                     <<"5">>},
-                {"Escape is applied last",
-                    <<"{{ var1|escape|linebreaksbr }}">>, [{var1, <<"\n">>}],
-                    <<"&lt;br /&gt;">>},
+                % {"Escape is applied last",
+                %     <<"{{ var1|escape|linebreaksbr }}">>, [{var1, <<"\n">>}],
+                %     <<"&lt;br /&gt;">>},
                 {"|capfirst",
                     <<"{{ var1|capfirst }}">>, [{var1, "dana boyd"}], 
                     <<"Dana boyd">>},
@@ -355,31 +360,31 @@ tests() ->
                     <<"THAT MAN HAS A GUN.">>},
                 {"|urlencode",
                     <<"{{ url|urlencode }}">>, [{url, "You #$*@!!"}],
-                    <<"You+%23%24%2A%40%21%21">>}
+                    <<"You%20%23%24%2A%40%21%21">>}
             ]},
         {"filters_if", [
                 {"Filter if 1.1",
-                    <<"{% if var1|length_is:0 %}Y{% else %}N{% endif %}">>,
+                    <<"{% if var1|length == 0 %}Y{% else %}N{% endif %}">>,
                      [{var1, []}],
                      <<"Y">>},
                 {"Filter if 1.2",
-                    <<"{% if var1|length_is:1 %}Y{% else %}N{% endif %}">>,
+                    <<"{% if var1|length == 1 %}Y{% else %}N{% endif %}">>,
                      [{var1, []}],
                      <<"N">>},
                 {"Filter if 1.3",
-                    <<"{% if var1|length_is:7 %}Y{% else %}N{% endif %}">>,
+                    <<"{% if var1|length == 7 %}Y{% else %}N{% endif %}">>,
                      [{var1, []}],
                      <<"N">>},
                 {"Filter if 2.1",
-                    <<"{% if var1|length_is:0 %}Y{% else %}N{% endif %}">>,
+                    <<"{% if var1|length == 0 %}Y{% else %}N{% endif %}">>,
                      [{var1, ["foo"]}],
                      <<"N">>},
                 {"Filter if 2.2",
-                    <<"{% if var1|length_is:1 %}Y{% else %}N{% endif %}">>,
+                    <<"{% if var1|length == 1 %}Y{% else %}N{% endif %}">>,
                      [{var1, ["foo"]}],
                      <<"Y">>},
                 {"Filter if 2.3",
-                    <<"{% if var1|length_is:7 %}Y{% else %}N{% endif %}">>,
+                    <<"{% if var1|length == 7 %}Y{% else %}N{% endif %}">>,
                      [{var1, ["foo"]}],
                      <<"N">>},
                 {"Filter if 3.1",
@@ -413,7 +418,7 @@ run_tests() ->
                 io:format(" Test group ~p...~n", [Group]),
                 lists:foldl(fun({Name, DTL, Vars, Output}, Acc) ->
                             % io:format("~p~n", [{Name, DTL, Vars, Output}]),
-                            case erlydtl:compile(DTL, erlydtl_running_test, [], z_context:new_tests()) of
+                            case erlydtl:compile({template, DTL}, erlydtl_running_test, [], z_context:new_tests()) of
                                 {ok, _} ->
                                     {ok, IOList} = erlydtl_running_test:render(Vars, z_context:new_tests()),
                                     {ok, IOListBin} = erlydtl_running_test:render(vars_to_binary(Vars), z_context:new_tests()),

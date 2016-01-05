@@ -268,13 +268,13 @@ scan(<<$`, T/binary>>, Scanned, {SourceRef, Row, Column}, {in_identifier, Closer
     scan(T, [{atom_literal, {SourceRef, Row, Column}, <<>>} | Scanned], {SourceRef, Row, Column + 1}, {in_back_quote, Closer});
 
 scan(<<$\\, $", T/binary>>, Scanned, {SourceRef, Row, Column}, {in_double_quote, Closer}) ->
-    scan(T, append_char(Scanned, $\\), {SourceRef, Row, Column + 1}, {in_double_quote_slash, Closer});
+    scan(T, append_char(Scanned, $"), {SourceRef, Row, Column + 1}, {in_double_quote_slash, Closer});
 
 scan(<<H/utf8, T/binary>>, Scanned, {SourceRef, Row, Column}, {in_double_quote_slash, Closer}) ->
     scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_double_quote, Closer});
 
-scan(<<$\\, T/binary>>, Scanned, {SourceRef, Row, Column}, {in_single_quote, Closer}) ->
-    scan(T, append_char(Scanned, $\\), {SourceRef, Row, Column + 1}, {in_single_quote_slash, Closer});
+scan(<<$\\, $', T/binary>>, Scanned, {SourceRef, Row, Column}, {in_single_quote, Closer}) ->
+    scan(T, append_char(Scanned, $'), {SourceRef, Row, Column + 1}, {in_single_quote_slash, Closer});
 
 scan(<<H/utf8, T/binary>>, Scanned, {SourceRef, Row, Column}, {in_single_quote_slash, Closer}) ->
     scan(T, append_char(Scanned, H), {SourceRef, Row, Column + 1}, {in_single_quote, Closer});

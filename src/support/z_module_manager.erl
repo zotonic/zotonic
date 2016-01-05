@@ -761,6 +761,9 @@ valid(M, Context) ->
 
 %% @doc Manage the upgrade/install of this module.
 manage_schema(Module, Exports, Context) ->
+    manage_schema_if_db(z_db:has_connection(Context), Module, Exports, Context).
+
+manage_schema_if_db(true, Module, Exports, Context) ->
     Target = mod_schema(Module),
     Current = db_schema_version(Module, Context),
     case {proplists:get_value(manage_schema, Exports), Target =/= undefined} of
@@ -771,7 +774,11 @@ manage_schema(Module, Exports, Context) ->
         {2, _} ->
             %% Module has manage_schema function
             manage_schema(Module, Current, Target, Context)
-    end.
+    end;
+manage_schema_if_db(false, Module, _Exports, Context) ->
+    lager:error("[~p] Skipping schema for ~p as there is no database connection.", 
+                [z_context:site(Context), Module]),
+    ok.
 
 %% @doc Fetch the list of exported functions of a module.
 refresh_module_exports(Module, #state{module_exports=Exports} = State) ->

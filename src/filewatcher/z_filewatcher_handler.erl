@@ -30,6 +30,8 @@
 
 -type verb() :: create|modify|delete.
 
+-include("zotonic.hrl").
+
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE, 
         "_flymake|\\.#|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/").
@@ -46,7 +48,11 @@ file_changed(Verb, F) ->
             nop;
         false ->
             z_filewatcher_mtime:modified(F),
-            Message = handle_file(Verb, filename:basename(F), filename:extension(F), F),
+            Message = handle_file(
+                            check_deleted(F, Verb), 
+                            filename:basename(F), 
+                            filename:extension(F),
+                            F),
             send_message(Message)
     end,
     ok.
@@ -66,7 +72,16 @@ select_verb(delete, _Verb) -> delete;
 select_verb(create, _Verb) -> create;
 select_verb(modify, Verb) -> Verb.
 
-
+check_deleted(F, delete) ->
+    case filelib:is_file(F) of
+        true -> create;
+        false -> delete
+    end;
+check_deleted(F, Verb) ->
+    case filelib:is_file(F) of
+        true -> Verb;
+        false -> delete
+    end.
 
 %% @doc Set a timer to prevent duplicate file changed message for the same filename
 %% (e.g. if a editor saves a file twice for some reason).
@@ -109,14 +124,20 @@ handle_file(_Verb, "erlydtl_parser.yrl", ".yrl", F) ->
     "Rebuilding yecc file: " ++ filename:basename(F);
 
 handle_file(_Verb, _Basename, ".erl", F) ->
-    make:files([F], zotonic_compile:compile_options()),
     Libdir = z_utils:lib_dir(),
     L = length(Libdir),
     F2 = case string:substr(F, 1, L) of
              Libdir -> string:substr(F, L+2);
              _ -> F
          end,
-    "Recompile " ++ F2;
+    try
+        make:files([F], zotonic_compile:compile_options()),
+        "Recompile " ++ F2
+    catch
+        error:{badmatch, {error, enoent}} ->
+            % File disappeared
+            "Not found " ++ F2
+    end;
 
 %% @doc SCSS / SASS files from lib/scss -> lib/css
 handle_file(_Verb, _Basename, SASS, F) when SASS =:= ".scss"; SASS =:= ".sass" ->

@@ -24,7 +24,7 @@ Last: {{ "last"|last }}
 
 Length: {{ list|length }}
 
-Length is 2?: {{ list|length_is:2 }}
+Length is 2?: {{ list|length == 2 }}
 
 Left adjust: 
 <pre>

@@ -297,16 +297,18 @@ test_render(Name, Module) ->
 find_file(File) ->
     hd(find_file(File, true)).
 
-find_file(File, false) ->
-    DocRoot = templates_docroot(),
-    DocRoot2 = templates_docroot2(),
+find_file(File0, false) ->
+    File = z_convert:to_list(File0),
+    DocRoot = z_convert:to_list(templates_docroot()),
+    DocRoot2 = z_convert:to_list(templates_docroot2()),
     case lists:prefix(DocRoot, File) or lists:prefix(DocRoot2, File) of
         true -> [File];
         false -> [filename:join([DocRoot, File])]
     end;
-find_file(File, true) ->
-    DocRoot = templates_docroot(),
-    DocRoot2 = templates_docroot2(),
+find_file(File0, true) ->
+    File = z_convert:to_list(File0),
+    DocRoot = z_convert:to_list(templates_docroot()),
+    DocRoot2 = z_convert:to_list(templates_docroot2()),
     case lists:prefix(DocRoot, File) or lists:prefix(DocRoot2, File) of
         true -> 
             [File];
