@@ -392,21 +392,9 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
             ({'catinclude', Template, RscId, Args, All}, TreeWalkerAcc) ->
                 catinclude_ast(Template, RscId, Args, All, Context, TreeWalkerAcc);
             ({'if', E, Contents, []}, TreeWalkerAcc) ->
-                {IfAstInfo, TreeWalker1} = body_ast(Contents, Context, TreeWalkerAcc),
-                {ElseAstInfo, TreeWalker2} = empty_ast(TreeWalker1),
-                ifexpr_ast(E, IfAstInfo, [{'else', ElseAstInfo}], Context, TreeWalker2);
+                ifexpr_ast(E, Contents, [], Context, TreeWalkerAcc);
             ({'if', E, IfContents, ElseChoices}, TreeWalkerAcc) ->
-                {IfAstInfo, TreeWalker1} = body_ast(IfContents, Context, TreeWalkerAcc),
-                {ElseAsts,TW2} = lists:foldr(fun({'else', ElseContents}, {EAS, IfTW}) ->
-                                                        {ElseAstInfo, IfTW1} = body_ast(ElseContents, Context, IfTW),
-                                                        {[{'else', ElseAstInfo}|EAS], IfTW1};
-                                                  ({'elif', ElifExpr, ElseContents}, {EAS, IfTW}) ->
-                                                        {ElseAstInfo, IfTW1} = body_ast(ElseContents, Context, IfTW),
-                                                        {[{'elif', ElifExpr, ElseAstInfo}|EAS], IfTW1}
-                                             end,
-                                             {[], TreeWalker1},
-                                             ElseChoices),
-                ifexpr_ast(E, IfAstInfo, ElseAsts, Context, TW2);
+                ifexpr_ast(E, IfContents, ElseChoices, Context, TreeWalkerAcc);
             ({'ifequal', Args, Contents}, TreeWalkerAcc) ->
                 {IfAstInfo, TreeWalker1} = body_ast(Contents, Context, TreeWalkerAcc),
                 {ElseAstInfo, TreeWalker2} = empty_ast(TreeWalker1),
@@ -1003,22 +991,49 @@ auto_escape(Value, Context) ->
     end.
 
 ifexpr_ast(Expression, IfContents, ElseChoices, Context, TreeWalker) ->
-    lists:foldr(fun({'else', {ElseAst, ElseInfo}}, {{_InnerAst, Inf}, TW}) ->
-                            {{ElseAst, merge_info(Inf, ElseInfo)}, TW};
-                   ({'elif', E, {ElseAst, ElseInfo}}, {{InnerAst, Inf}, TW}) ->
-                             {{ElseExprAst, ElseExprInfo}, TW1} = value_ast(E, false, Context, TW),
-                             {{erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), 
-                                                                          erl_syntax:atom(is_false), 
-                                                                          [ElseExprAst, z_context_ast(Context)]),
-                                                    [
-                                                    erl_syntax:clause([erl_syntax:atom(true)], none, [InnerAst]),
-                                                    erl_syntax:clause([erl_syntax:underscore()], none, [ElseAst])
-                                                    ]),
-                               merge_info(merge_info(Inf, ElseInfo), ElseExprInfo)
-                              }, TW1}
+    lists:foldr(fun
+                    ({'else', Contents}, {{_InnerAst, Inf}, TW}) ->
+                        {{ElseAst, ElseInfo}, TW1} = body_ast(Contents, Context, TW),
+                        {{ElseAst, merge_info(Inf, ElseInfo)}, TW1};
+                    (Elif, Acc) ->
+                        elif_ast(Elif, Acc, Context)
                 end,
                 empty_ast(TreeWalker),
                 [{'elif', Expression, IfContents} | ElseChoices]).
+
+elif_ast({'elif', {'as', E, undefined}, Contents}, {{InnerAst, Info}, TW}, Context) ->
+    {ElsAstInfo, TW1} = body_ast(Contents, Context, TW),
+    elif_ast_1(E, InnerAst, Info, ElsAstInfo, Context, TW1);
+elif_ast({'elif', {'as', E, {identifier, _, V} = Idn}, Contents}, {{InnerAst, Info}, TW}, Context) ->
+    Postfix = z_ids:identifier(),
+    VarAst  = erl_syntax:variable("With_" ++ to_list(V) ++ [$_|Postfix]),
+    {{ValueAst, ValueInfo}, TW1} = value_ast(E, false, Context, TW),
+    LocalScope = [ {to_atom(V), VarAst} ],
+    Context1 = Context#dtl_context{
+                local_scopes=[LocalScope | Context#dtl_context.local_scopes]
+            },
+    {ElseAstInfo, TW2} = body_ast(Contents, Context1, TW1),
+    {{InnerAst1, InnerInfo1}, TW3} = elif_ast_1(
+            {variable, Idn},
+            InnerAst,
+            merge_info(ValueInfo,Info),
+            ElseAstInfo,
+            Context1, 
+            TW2),
+    WithAst = erl_syntax:block_expr([erl_syntax:match_expr(VarAst, ValueAst), InnerAst1]),
+    {{WithAst, InnerInfo1}, TW3}.
+
+elif_ast_1(E, InnerAst, Info, {ElseAst, ElseInfo}, Context, TW) ->
+    {{ElseExprAst, ElseExprInfo}, TW1} = value_ast(E, false, Context, TW),
+    {{erl_syntax:case_expr(erl_syntax:application(erl_syntax:atom(erlydtl_runtime), 
+                                                  erl_syntax:atom(is_false), 
+                                                  [ElseExprAst, z_context_ast(Context)]),
+                            [
+                            erl_syntax:clause([erl_syntax:atom(true)], none, [InnerAst]),
+                            erl_syntax:clause([erl_syntax:underscore()], none, [ElseAst])
+                            ]),
+       merge_info(merge_info(Info, ElseInfo), ElseExprInfo)
+     }, TW1}.
 
 
 ifequalelse_ast(Args, {IfContentsAst, IfContentsInfo}, {ElseContentsAst, ElseContentsInfo}, Context, TreeWalker) ->
@@ -1313,7 +1328,9 @@ full_path(File, All, Context) ->
                 undefined -> [];
                 ZContext -> z_template:find_template(to_list(File), All, ZContext)
             end;
-        FinderFun ->
+        {M,F} ->
+            M:F(File, All);
+        FinderFun when is_function(FinderFun) ->
             FinderFun(File, All)
     end.
 
