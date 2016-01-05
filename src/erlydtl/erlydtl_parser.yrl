@@ -148,7 +148,8 @@ Nonterminals
     
     OptionalPrefix
 	OptionalAll
-	
+
+    OptAsPart
 	OptE
 	E
 	Uminus
@@ -362,10 +363,13 @@ ElsePart -> ElifList : '$1'.
 
 ElifList -> ElifBraced Elements ElsePart : [{'elif', '$1', '$2'}] ++ '$3'.
 
-IfBraced -> open_tag if_keyword E close_tag : '$3'.
-ElifBraced -> open_tag elif_keyword E close_tag : '$3'.
+IfBraced -> open_tag if_keyword E OptAsPart close_tag : {'as', '$3', '$4'}.
+ElifBraced -> open_tag elif_keyword E OptAsPart close_tag : {'as', '$3', '$4'}.
 ElseBraced -> open_tag else_keyword close_tag.
 EndIfBraced -> open_tag endif_keyword close_tag.
+
+OptAsPart -> '$empty' : undefined.
+OptAsPart -> as_keyword identifier : '$2'.
 
 IfEqualBlock -> IfEqualBraced Elements ElseBraced Elements EndIfEqualBraced : {ifequalelse, '$1', '$2', '$4'}.
 IfEqualBlock -> IfEqualBraced Elements EndIfEqualBraced : {ifequal, '$1', '$2'}.
