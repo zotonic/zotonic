@@ -275,7 +275,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                 X:B ->
                     ?DEBUG({X,B, erlang:get_stacktrace()}),
                     lager:info("identify of ~p failed - ~p", [CleanedImageFile, Line1]),
-                    {error, "unknown result from 'identify': '"++Line1++"'"}
+                    {error, "identify error: unknown result: '"++Line1++"'"}
             end
     end.
 
