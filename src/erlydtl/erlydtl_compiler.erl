@@ -1363,6 +1363,9 @@ to_atom(L) when is_list(L) ->
 to_atom(A) when is_atom(A) ->
     A.
 
+to_list(L) when is_list(L) -> L;
+to_list(B) when is_binary(B) -> unicode:characters_to_list(B).
+
 
 full_path(File, Context) ->
     case full_path(File, false, Context) of
