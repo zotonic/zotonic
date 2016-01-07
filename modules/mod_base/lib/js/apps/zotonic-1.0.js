@@ -135,7 +135,7 @@ function z_set_page_id( page_id, user_id )
             try { z_ws.close(); } catch (e) { }
             z_ws = undefined;
         }
-        
+
         // Abort an open comet connection
         if (z_comet) {
             try { z_comet.abort(); } catch(e) { }
@@ -265,7 +265,7 @@ function z_event(name, extraParams)
     if (z_registered_events[name])
     {
         z_registered_events[name](ensure_name_value(extraParams));
-    } 
+    }
     else
     {
         $.misc.error("z_event: no registered event named: '"+name+"'");
@@ -660,7 +660,7 @@ function z_transport_incoming_data_decode(type, data)
     switch (type)
     {
         case 'ubf':
-            // Decoded by decoding the z_msg_v1 record 
+            // Decoded by decoding the z_msg_v1 record
             return data;
         case 'json':
             return $.parseJSON(data.valueOf());
@@ -1124,21 +1124,25 @@ function z_websocket_start()
         z_ws_pong_count = 0;
     }
 
-    z_ws.onopen = z_websocket_ping;
+    z_ws.onopen = function() { setTimeout(z_websocket_ping, 0); };
     z_ws.onerror = z_websocket_restart;
     z_ws.onclose = z_websocket_restart;
 
     z_ws.onmessage = function (evt) {
         z_transport_handle_push_data(evt.data);
-        setTimeout(function() { z_transport_check(); }, 0);
+        setTimeout(z_transport_check, 0);
     };
 }
 
 function z_websocket_ping()
 {
-    setTimeout(function() {
-        if (z_ws && z_ws.readyState == 1) {
-            var msg = ubf.encode({
+    if (typeof z_ws_ping_timeout !== 'undefined') {
+        clearTimeout(z_ws_ping_timeout);
+        z_ws_ping_timeout = undefined;
+    }
+
+    if (z_ws && z_ws.readyState == 1) {
+        var msg = ubf.encode({
                     "_record": "z_msg_v1",
                     "qos": 1,
                     "dup" : false,
@@ -1150,17 +1154,11 @@ function z_websocket_ping()
                     "page_id": z_pageid,
                     "session_id": window.z_sid || undefined,
                     "data": z_ws_pong_count
-                });
-            z_ws.send(msg);
-        }
-    }, 0);
-    if (typeof z_ws_ping_timeout !== 'undefined') {
-        clearTimeout(z_ws_ping_timeout);
-        z_ws_ping_timeout = undefined;
+        });
+        z_ws.send(msg);
     }
-    z_ws_ping_timeout = setTimeout(function() {
-        z_websocket_restart();
-    }, 5000);
+
+    z_ws_ping_timeout = setTimeout(z_websocket_restart, 5000);
 }
 
 function z_websocket_pong( msg )
@@ -1171,7 +1169,8 @@ function z_websocket_pong( msg )
             z_ws_ping_timeout = undefined;
         }
         z_ws_pong_count++;
-        setTimeout(function() { z_websocket_ping(); }, 20000);
+
+        setTimeout(z_websocket_ping, 20000);
         return true;
     } else {
         return false;
@@ -2157,9 +2156,9 @@ function is_equal(x, y) {
     return true;
 }
 
-$.extend({ 
+$.extend({
     keys: function(obj){
-        if (typeof Object.keys == 'function') 
+        if (typeof Object.keys == 'function')
             return Object.keys(obj);
         var a = [];
         $.each(obj, function(k){ a.push(k) });
