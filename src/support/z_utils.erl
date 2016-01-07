@@ -209,7 +209,10 @@ depickle(Data, Context) ->
         <<Mac:16/binary>> = crypto:md5_mac(Sign, SData),
         erlang:binary_to_term(BData)
     catch
-        _M:_E -> erlang:throw("Postback data invalid, could not depickle: "++Data)
+        _M:_E ->
+            lager:error("[~p] Postback data invalid, could not depickle: ~p",
+                        [z_context:site(Context), Data]),
+            erlang:throw({checksum_invalid, Data})
     end.
 
 
