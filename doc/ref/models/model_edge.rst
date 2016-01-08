@@ -31,14 +31,21 @@ The following m_edge model properties are available in templates:
 |          |that this function returns the subject             |                            |
 |          |edges.                                             |                            |
 +----------+---------------------------------------------------+----------------------------+
-|o_props   |Similar to ``m.edge.o[id].author`` above, but      |``[[{id,86062},             |
-|          |returns a property list for the edges instead of   |  {subject_id,10635},       |
-|          |the 2-tuple.                                       |  {predicate_id,304},       |
-|          |                                                   |  {object_id,57577},        |
-|          |                                                   |  {seq,1},                  |
-|          |                                                   |  {creator_id,1},           |
-|          |                                                   |  {created,{{2015,11,17},   |
-|          |                                                   |  {11,23,32}}}]]``          |
+|o_props   |Similar to ``m.edge.o[id].author`` above, but      |.. code-block:: none        |
+|          |returns a property list for the edges instead of   |                            |
+|          |the 2-tuple.                                       |    [                       |
+|          |                                                   |        {id, 86062},        |
+|          |                                                   |        {subject_id, 10635},|
+|          |                                                   |        {predicate_id, 304},|
+|          |                                                   |        {object_id, 57577}, |
+|          |                                                   |        {seq, 1},           |
+|          |                                                   |        {creator_id, 1},    |
+|          |                                                   |        {created, {         |
+|          |                                                   |            {2015,11,17},   |
+|          |                                                   |            {11,23,32}      |
+|          |                                                   |        }}                  |
+|          |                                                   |    ]                       |
+|          |                                                   |    ]                       |
 +----------+---------------------------------------------------+----------------------------+
 |s_props   |Similar to ``m.edge.s[id].author`` above, but      |                            |
 |          |returns a property list for the edges instead of   |                            |

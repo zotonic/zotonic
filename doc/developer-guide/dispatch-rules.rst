@@ -23,8 +23,8 @@ must be placed inside the ``dispatch/`` directory of a module or your
 site.
 
 A module or site can have multiple dispatch files, and they can have
-`any` filename. Nota bene: the file may not have the extension
-“.erl”. Otherwise it will be compiled by the Emakefile, which will
+`any` filename. The file may not have the extension
+``.erl``. Otherwise it will be compiled by the Emakefile, which will
 result in errors as a dispatch file is not a valid Erlang module.
 
 The content of a dispatch file is an Erlang list of dispatch rules.
@@ -91,7 +91,7 @@ Then when I create a URL like this::
 
   {% url rulename %}
 
-It will match the first rule (rendering the url ``/foo/bar``) because
+It will match the first rule (rendering the URL ``/foo/bar``) because
 no arguments were given. However when I add an argument::
 
   {% url rulename var=1 %}

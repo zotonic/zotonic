@@ -27,7 +27,7 @@ EOF
         fi
 
         cat <<EOF - $meta >> $all
-.. _all-dispatch-$mod:
+.. _all-$base:
 :ref:\`$mod\` (:ref:\`$dispatch <dispatch-$base>\`)
 EOF
 

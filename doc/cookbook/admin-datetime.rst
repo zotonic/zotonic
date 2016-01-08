@@ -2,7 +2,7 @@ Storing date/time fields
 ========================
 
 Some interesting tidbits about saving/updating a date/time field of a
-rsc.
+resource.
 
 Why
 ---

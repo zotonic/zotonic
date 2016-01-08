@@ -1,4 +1,5 @@
-Welcome to Zotonic [![Build Status](https://secure.travis-ci.org/zotonic/zotonic.png?branch=master)](http://travis-ci.org/zotonic/zotonic)
+Welcome to Zotonic [![Build Status](https://travis-ci.org/zotonic/zotonic.svg?branch=master)](https://travis-ci.org/zotonic/zotonic)
+
 ==================
 
 Zotonic is the open source, high speed, real-time web framework  and content management system, built with Erlang. It is flexible, extensible and designed from the ground up to support dynamic, interactive websites and mobile solutions.

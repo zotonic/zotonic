@@ -3,8 +3,19 @@ otp_release:
   - 18.0
   - 17.4
   - R16B
-install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'
-script: make all edocs && bin/zotonic runtests
+
+addons:
+  apt:
+    packages:
+      - python-sphinx
+      - enchant
+
+install: make all edocs
+script:
+  - bin/zotonic runtests
+  - make test
+  - make -C doc/ stubs
+  - make -C doc/ SPHINXOPTS='-nW' html
 sudo: false
 branches:
   only:
