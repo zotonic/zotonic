@@ -80,7 +80,7 @@ tracer_loop(Acc) ->
 
 maybe_flatten(undefined) -> undefined;
 maybe_flatten(Path) when is_binary(Path) -> Path;
-maybe_flatten([X|_] = Path) when is_binary(X) -> Path;
+maybe_flatten([X|_] = Path) when is_binary(X); is_list(X) -> Path;
 maybe_flatten([X|_] = Path) when is_integer(X) -> z_convert:to_binary(Path);
 maybe_flatten([]) -> <<>>.
 
