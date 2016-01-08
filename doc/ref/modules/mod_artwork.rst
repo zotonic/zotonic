@@ -28,7 +28,7 @@ How to use Font Awesome icons in your templates
 ***********************************************
 
 * Include the CSS file: ``{% lib "font-awesome-4/css/font-awesome.min.css" %}``
-* Follow the `examples <http://fontawesome.io/examples>`_
+* Follow the `Font Awesome examples <http://fontawesome.io/examples>`_
 * Find the class names in the `cheatsheet <http://fontawesome.io/cheatsheet/>`_
 
 

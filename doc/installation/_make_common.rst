@@ -1,3 +1,5 @@
+:orphan:
+
 2. Type ``make`` in the root of Zotonic (there where the Makefile is located).
 
 3. When the build is done, start Zotonic in debug mode::

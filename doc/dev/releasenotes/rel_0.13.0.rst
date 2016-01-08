@@ -427,7 +427,7 @@ Arthur Clemens (160):
 * mod_base_site: better defaults
 * Revert "mod_video_embed: add bootstrap responsive class"
 * doc: document 'page_url with' syntax
-* doc: document more use cases for |if
+* doc: document more use cases for ``|if``
 * mod_bootstrap: version 3.3.2
 * doc: show css output when extending icons
 * validation: provide message_after param to templates

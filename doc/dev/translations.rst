@@ -1,5 +1,3 @@
-.. _dev-contributing:
-
 Translations of source code and templates
 =========================================
 
