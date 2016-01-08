@@ -10,10 +10,10 @@
 {% for _trace, path, what, args in trace %}
 	<tr>
 		<td>
-			{% if what == `notify_dispatch` %}
-				/{{ path|escape }}
-			{% elseif path != `undefined` %}
+			{% if path|is_list %}
 				/{{ path|join:"/"|escape }}
+			{% else %}
+				{{ path }}
 			{% endif %}
 		</td>
 		<td>

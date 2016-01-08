@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2016 Marc Worrell
 %% @doc Server for matching the request path to correct site and dispatch rule.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ update_dispatchinfo() ->
 dispatch(Host, Path, ReqData) ->
     dispatch(Host, Path, ReqData, undefined).
 
-dispatch(Host, Path, ReqData, TracerPid) when is_list(Host); is_binary(Host) ->
+dispatch(Host, Path, ReqData, TracerPid) when (is_list(Host) orelse is_binary(Host)), is_list(Path) ->
     % Classify the user agent
     z_depcache:in_process(true), 
     {ok, ReqDataUA} = z_user_agent:set_class(ReqData),
@@ -125,11 +125,11 @@ dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = 
             {ok, {DispatchRule, MatchBindings}} ->
                 trace_final(
                         TracerPid, 
-                        do_dispatch_rule(DispatchRule, Bindings1++fix_match_bindings(MatchBindings, IsDir), Tokens, IsDir, DispReq, ReqDataHost, Context));
+                        do_dispatch_rule(DispatchRule, Bindings1++fix_match_bindings(MatchBindings, IsDir), TokensRewritten, IsDir, DispReq, ReqDataHost, Context));
             fail ->
                 trace_final(
                         TracerPid,
-                        do_dispatch_fail(Bindings1, Tokens, IsDir, DispReq, ReqDataHost, Context))
+                        do_dispatch_fail(Bindings1, TokensRewritten, IsDir, DispReq, ReqDataHost, Context))
         end
     catch
         throw:{stop_request, RespCode} ->
@@ -432,11 +432,18 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
     end,
     handle_dispatch_result(DispatchResult, DispReq, ReqData).
 
-do_dispatch_fail(Bindings, _Tokens, _IsDir, DispReq, ReqData, Context0) ->
+do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, ReqData, Context0) ->
+    TokenPath = tokens_to_path(Tokens),
     trace(DispReq#dispatch.tracer_pid, DispReq#dispatch.path, notify_dispatch, []),
     Context = maybe_set_language(Bindings, Context0),
-    Redirect = z_notifier:first(DispReq#dispatch{path=DispReq#dispatch.path}, Context#context{wm_reqdata=ReqData}),
-    handle_rewrite(Redirect, DispReq, DispReq#dispatch.host, DispReq#dispatch.path, Bindings, ReqData, Context).
+    Redirect = z_notifier:first(DispReq#dispatch{path=TokenPath}, Context#context{wm_reqdata=ReqData}),
+    handle_rewrite(Redirect, DispReq, DispReq#dispatch.host, Tokens, Bindings, ReqData, Context).
+
+%% @TODO change this to binaries
+tokens_to_path([]) ->
+    "/";
+tokens_to_path(Ts) ->
+    lists:flatten([ [ $/, z_convert:to_list(T) ] || T <- Ts ]).
 
 
 handle_dispatch_result({Match, MatchedHost}, _DispReq, ReqData) when is_tuple(Match) ->
@@ -478,15 +485,13 @@ handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, 
             trace(DispReq#dispatch.tracer_pid, TokensRewritten, try_match, [{bindings, BindingsRewritten1}]),
             case dispatch_match(TokensRewritten, Context) of
                 {ok, {DispatchRule, MatchBindings}} ->
-                    trace_final(
-                            DispReq#dispatch.tracer_pid, 
-                            set_dispatch_path(
-                                do_dispatch_rule(
-                                            DispatchRule, 
-                                            BindingsRewritten1++fix_match_bindings(MatchBindings, IsDir), 
-                                            Tokens, IsDir, DispReq, ReqDataHost, 
-                                            Context),
-                                DefaultPagePathBin));
+                    set_dispatch_path(
+                        do_dispatch_rule(
+                                    DispatchRule, 
+                                    BindingsRewritten1++fix_match_bindings(MatchBindings, IsDir), 
+                                    TokensRewritten, IsDir, DispReq, ReqDataHost, 
+                                    Context),
+                        NonMatchedPathTokens);
                 fail ->
                     trace(DispReq#dispatch.tracer_pid, undefined, rewrite_nomatch, []),
                     {{no_dispatch_match, MatchedHost, NonMatchedPathTokens}, ReqDataHost}
