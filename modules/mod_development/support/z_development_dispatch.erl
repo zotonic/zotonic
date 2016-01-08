@@ -28,20 +28,20 @@
 event(#submit{message=explain_dispatch}, Context) ->
 	case z_acl:is_allowed(use, mod_development, Context) of
 		true ->
-			Req = ensure_abs(z_convert:to_list(z_string:trim(z_context:get_q("explain_req", Context)))),
+			ReqPath = ensure_abs(z_convert:to_list(z_string:trim(z_context:get_q("explain_req", Context)))),
 			Protocol = list_to_existing_atom(z_context:get_q("explain_protocol", Context)),
 			TracerPid = erlang:spawn_link(fun tracer/0),
 			z_sites_dispatcher:dispatch(
 								z_context:hostname(Context),
-								Req,
-								make_reqdata(Protocol, Req),
+								ReqPath,
+								make_reqdata(Protocol, ReqPath),
 								TracerPid),
 			TracerPid ! {fetch, self()},
 			receive
 				{trace, Trace} ->
 					Vars = [
 						{trace, Trace},
-						{path, Req},
+						{path, z_convert:to_binary(ReqPath)},
 						{protocol, Protocol}
 					],
 					Context1 = z_render:update(
@@ -49,6 +49,8 @@ event(#submit{message=explain_dispatch}, Context) ->
 									#render{template="_development_dispatch_trace.tpl", vars=Vars}, 
 									Context),
 					z_render:wire({fade_in, [{target, "explain-dispatch-output"}]}, Context1)
+				after 5000 ->
+					z_render:growl(?__("Could not fetch tracer output, please try again.", Context), Context) 
 			end;
 		false ->
 			z_render:growl(?__("You are not allowed to use the dispatch debugging.", Context), Context) 
@@ -68,9 +70,17 @@ tracer() ->
 
 tracer_loop(Acc) ->
 	receive
-		{trace, _PathTokens, _What, _Args} = Trace ->
+		{trace, Path, What, Args} ->
+			Trace = {trace, maybe_flatten(Path), What, Args},
 			tracer_loop([Trace|Acc]);
 		{fetch, Pid} ->
 			Acc1 = lists:reverse(Acc),
 			Pid ! {trace, Acc1}
 	end.
+
+maybe_flatten(undefined) -> undefined;
+maybe_flatten(Path) when is_binary(Path) -> Path;
+maybe_flatten([X|_] = Path) when is_binary(X) -> Path;
+maybe_flatten([X|_] = Path) when is_integer(X) -> z_convert:to_binary(Path);
+maybe_flatten([]) -> <<>>.
+
