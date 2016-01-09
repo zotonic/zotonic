@@ -38,6 +38,7 @@ var z_session_restart_count = 0;
 var z_ws                    = false;
 var z_ws_pong_count         = 0;
 var z_ws_ping_timeout;
+var z_ws_ping_interval;
 var z_comet;
 var z_stream_host;
 var z_stream_starter;
@@ -1136,10 +1137,8 @@ function z_websocket_start()
 
 function z_websocket_ping()
 {
-    if (typeof z_ws_ping_timeout !== 'undefined') {
-        clearTimeout(z_ws_ping_timeout);
-        z_ws_ping_timeout = undefined;
-    }
+    z_clear_ws_ping_timeout();
+    z_ws_ping_timeout = setTimeout(z_websocket_restart, 5000);
 
     if (z_ws && z_ws.readyState == 1) {
         var msg = ubf.encode({
@@ -1157,24 +1156,38 @@ function z_websocket_ping()
         });
         z_ws.send(msg);
     }
+}
 
-    z_ws_ping_timeout = setTimeout(z_websocket_restart, 5000);
+function z_clear_ws_ping_timeout()
+{
+    if (z_ws_ping_timeout) {
+        clearTimeout(z_ws_ping_timeout);
+        z_ws_ping_timeout = undefined;
+    }
+}
+
+function z_clear_ws_ping_interval()
+{
+    if (z_ws_ping_interval) {
+        clearTimeout(z_ws_ping_interval);
+        z_ws_ping_interval = undefined;
+    }
 }
 
 function z_websocket_pong( msg )
 {
     if (msg.msg_id == '$ws-'+z_pageid) {
-        if (typeof z_ws_ping_timeout !== 'undefined') {
-            clearTimeout(z_ws_ping_timeout);
-            z_ws_ping_timeout = undefined;
-        }
+        z_clear_ws_ping_timeout();
+
+        z_clear_ws_ping_interval();
+        z_ws_ping_interval = setTimeout(z_websocket_ping, 20000);
+
         z_ws_pong_count++;
 
-        setTimeout(z_websocket_ping, 20000);
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 function z_websocket_is_connected()
@@ -1182,14 +1195,18 @@ function z_websocket_is_connected()
     return z_ws && z_ws.readyState == 1 && z_ws_pong_count > 0;
 }
 
-function z_websocket_restart()
+function z_websocket_restart(e)
 {
+    z_clear_ws_ping_timeout();
+    z_clear_ws_ping_interval();
+
     if (z_ws) {
         z_ws.onclose = undefined;
         z_ws.onerror = undefined;
         try { z_ws.close(); } catch(e) {} // closing an already closed ws can raise exceptions.
         z_ws = undefined;
     }
+
     if (z_ws_pong_count > 0 && z_session_valid && !z_page_unloading) {
         z_ws_pong_count = 0;
         z_websocket_start();
