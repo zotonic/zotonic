@@ -604,8 +604,17 @@ add_order(Order, Search) when is_atom(Order) ->
 add_order(Order, Search) when is_binary(Order) ->
     add_order(binary_to_list(Order), Search);
 add_order("seq", Search) ->
+    add_order("+seq", Search);
+add_order([C,$s,$e,$q], Search) when C =:= $-; C =:= $+ ->
     case proplists:get_value(edge, Search#search_sql.tables) of
-        L when is_list(L) -> add_order(L++".seq", Search);
+        L when is_list(L) -> add_order([C|L]++".seq", Search);
+        undefined -> Search
+    end;
+add_order("edge."++_ = Order, Search) ->
+    add_order([$+|Order], Search);
+add_order([C,$e,$d,$g,$e,$.|Order], Search) when C =:= $-; C =:= $+ ->
+    case proplists:get_value(edge, Search#search_sql.tables) of
+        L when is_list(L) -> add_order([C|L]++[$.|Order], Search);
         undefined -> Search
     end;
 add_order(Sort, Search) ->
@@ -613,10 +622,9 @@ add_order(Sort, Search) ->
                  "random" ->
                      "random()";
                  _ -> 
-                     [FirstChar|F1] = Sort,
-                     case FirstChar of
-                         $- -> sql_safe(F1) ++ " DESC";
-                         $+ -> sql_safe(F1) ++ " ASC";
+                     case Sort of
+                         [$-|F1] -> sql_safe(F1) ++ " DESC";
+                         [$+|F1] -> sql_safe(F1) ++ " ASC";
                          _ -> sql_safe(Sort) ++ " ASC"
                      end
              end,
