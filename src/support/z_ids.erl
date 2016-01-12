@@ -86,10 +86,11 @@ sign_key(Context) ->
             Key = list_to_binary(generate_id(true, 50)),
             m_config:set_value(site, sign_key, Key, Context),
             Key;
+        <<>> ->
+            application_key(sign_key);
         SignKey -> 
             SignKey
     end.
-
 
 %% @spec sign_key_simple(Context) -> binary()
 %% @doc Get the key for less secure signing of data (without nonce).
@@ -99,10 +100,22 @@ sign_key_simple(Context) ->
             Key = list_to_binary(generate_id(true, 10)),
             m_config:set_value(site, sign_key_simple, Key, Context),
             Key;
+        <<>> ->
+            application_key(sign_key_simple);
         SignKey ->
             SignKey
     end.
 
+%% @doc Set/get a default sign key for the zotonic.
+application_key(Name) when is_atom(Name) ->
+    case application:get_env(zotonic, Name) of
+        undefined ->
+            Key = list_to_binary(generate_id(true, 50)),
+            application:set_env(zotonic, Name, Key),
+            Key;
+        {ok, Key} ->
+            Key
+    end.
 
 %% @doc Return a big random integer, but smaller than maxint32
 number() ->
