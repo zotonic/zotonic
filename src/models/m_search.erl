@@ -78,12 +78,19 @@ m_value(#m{value=#m_search_result{result=Result}}, _Context) ->
 %% @spec search(Search, Context) -> #m_search_result{}
 search({SearchName, Props}, Context) ->
     {Page, PageLen, Props1} = get_optional_paging_props(Props),
-    Result = z_search:search({SearchName, Props1}, {(Page-1)*PageLen+1,PageLen}, Context),
-    Total1 = case Result#search_result.total of
-        undefined -> length(Result#search_result.result);
-        Total -> Total
-    end,
-    #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props};
+    try
+        Result = z_search:search({SearchName, Props1}, {(Page-1)*PageLen+1,PageLen}, Context),
+        Total1 = case Result#search_result.total of
+            undefined -> length(Result#search_result.result);
+            Total -> Total
+        end,
+        #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props}
+    catch
+        throw:Error ->
+            lager:error("[~p] Error in m.search[~p] error: ~p",
+                        [z_context:site(Context), {SearchName, Props}, Error]),
+            #m_search_result{result=[], total=0, search_name=SearchName, search_props=Props}
+    end;
 search(SearchName, Context) ->
     search({z_convert:to_atom(SearchName), []}, Context).
 
@@ -92,12 +99,19 @@ search(SearchName, Context) ->
 %% @spec search_pager(Search, Context) -> #m_search_result{}
 search_pager({SearchName, Props}, Context) ->
     {Page, PageLen, Props1} = get_paging_props(Props),
-    Result = z_search:search_pager({SearchName, Props1}, Page, PageLen, Context),
-    Total1 = case Result#search_result.total of
-        undefined -> length(Result#search_result.result);
-        Total -> Total
-    end,
-    #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props1};
+    try
+        Result = z_search:search_pager({SearchName, Props1}, Page, PageLen, Context),
+        Total1 = case Result#search_result.total of
+            undefined -> length(Result#search_result.result);
+            Total -> Total
+        end,
+        #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props1}
+    catch
+        throw:Error ->
+            lager:error("[~p] Error in m.search[~p] error: ~p",
+                        [z_context:site(Context), {SearchName, Props}, Error]),
+            #m_search_result{result=[], total=0, search_name=SearchName, search_props=Props}
+    end;
 search_pager(SearchName, Context) ->
     search_pager({z_convert:to_atom(SearchName), []}, Context).
 
