@@ -89,7 +89,7 @@ search({SearchName, Props}, Context) ->
         throw:Error ->
             lager:error("[~p] Error in m.search[~p] error: ~p",
                         [z_context:site(Context), {SearchName, Props}, Error]),
-            #m_search_result{result=[], total=0, search_name=SearchName, search_props=Props}
+            empty_result(SearchName, Props, PageLen)
     end;
 search(SearchName, Context) ->
     search({z_convert:to_atom(SearchName), []}, Context).
@@ -110,11 +110,25 @@ search_pager({SearchName, Props}, Context) ->
         throw:Error ->
             lager:error("[~p] Error in m.search[~p] error: ~p",
                         [z_context:site(Context), {SearchName, Props}, Error]),
-            #m_search_result{result=[], total=0, search_name=SearchName, search_props=Props}
+            empty_result(SearchName, Props, PageLen)
     end;
 search_pager(SearchName, Context) ->
     search_pager({z_convert:to_atom(SearchName), []}, Context).
 
+empty_result(SearchName, Props, PageLen) ->
+    #m_search_result{
+        result=#search_result{
+            result=[], 
+            page=1,
+            pagelen=PageLen,
+            total=0,
+            all=[],
+            pages=1
+        },
+        total=0,
+        search_name=SearchName,
+        search_props=Props
+    }.
 
 
 get_result(N, #m_search_result{result=Result}, _Context) when is_integer(N) ->
