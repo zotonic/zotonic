@@ -429,7 +429,7 @@ parse_query([{text, Text}|Rest], Context, Result) ->
         _ ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             {QArg, Result1} = add_arg(TsQuery, Result),
-            {BArg, Result1a} = add_arg(mod_search:rank_behaviour(), Result1),
+            {BArg, Result1a} = add_arg(mod_search:rank_behaviour(Context), Result1),
             Result2 = add_where(QArg++" @@ rsc.pivot_tsv", Result1a),
             Result3 = add_order_unsafe(
                               "ts_rank_cd("
