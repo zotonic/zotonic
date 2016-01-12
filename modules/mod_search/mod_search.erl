@@ -37,7 +37,7 @@
     observe_module_activate/2,
     to_tsquery/2,
     rank_weight/0,
-    rank_behaviour/0,
+    rank_behaviour/1,
     find_by_id/2,
     find_by_id/3
 ]).
@@ -392,7 +392,7 @@ search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
                         from="rsc r",
                         where=" $1 @@ r.pivot_tsv",
                         order="rank desc",
-                        args=[TsQuery, rank_behaviour()],
+                        args=[TsQuery, rank_behaviour(Context)],
                         cats=[{"r", Cat}],
                         tables=[{rsc,"r"}]
                     }
@@ -421,7 +421,7 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
                 from="rsc r",
                 where=" $1 @@ r.pivot_tsv",
                 order="rank desc",
-                args=[TsQuery, rank_behaviour()],
+                args=[TsQuery, rank_behaviour(Context)],
                 tables=[{rsc,"r"}]
             }
     end;
@@ -445,7 +445,7 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
                 from="rsc r",
                 where=" $1 @@ pivot_tsv",
                 order="rank desc",
-                args=[TsQuery, rank_behaviour()],
+                args=[TsQuery, rank_behaviour(Context)],
                 cats=[{"r", Cat}],
                 tables=[{rsc,"r"}]
             }
@@ -631,9 +631,12 @@ find_by_id(S, Rank, Context) ->
 
 %% @doc The ranking behaviour for scoring words in a full text search
 %% See also: http://www.postgresql.org/docs/9.3/static/textsearch-controls.html
--spec rank_behaviour() -> integer().
-rank_behaviour() ->
-    1 bor 4 bor 32.
+-spec rank_behaviour(#context{}) -> integer().
+rank_behaviour(Context) ->
+    case m_config:get_value(mod_search, rank_behaviour, Context) of
+        Empty when Empty =:= undefined; Empty =:= <<>> -> 1 bor 4 bor 32;
+        Rank -> z_convert:to_integer(Rank)
+    end.
 
 %% @doc The weights for the ranking of the ABCD indexing categories.
 %% See also: http://www.postgresql.org/docs/9.3/static/textsearch-controls.html
