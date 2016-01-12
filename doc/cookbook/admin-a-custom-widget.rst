@@ -6,7 +6,7 @@ Creating a custom widget on the edit page
 Why
 ---
 
-For an imaginary webshop edit page, we want to add 2 more data fields: the affiliate url and a note about free shipping.
+For an imaginary webshop edit page, we want to add 2 more data fields: the affiliate URL and a note about free shipping.
 
 
 Assumptions

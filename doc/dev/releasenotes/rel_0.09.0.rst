@@ -56,7 +56,7 @@ New tags/changed tags
 {% javascript %}...{% endjavascript %}
 Adds javascript that will be run after jQuery has been initialized.
 In dynamic content it will run after the DOM has been updated with the
-template where the Javascript was defined.
+template where the JavaScript was defined.
 
 {% image %} new attribute: mediaclass. Image classes can be defined
 using property files in the template directory. Which image class

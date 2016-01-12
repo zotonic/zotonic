@@ -9,4 +9,4 @@ the site is also usable on simpler `text` or `phone` devices.
      
 .. todo:: Add more documentation
 
-.. seealso:: :ref:`dispatch rules <all-dispatch-mod_base_site>`, :ref:`mod_base`.
+.. seealso:: :ref:`mod_base`.

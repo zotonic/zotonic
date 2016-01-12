@@ -31,7 +31,7 @@ Arthur Clemens (44):
 * doc: Document template models
 * doc: add icons documentation
 * doc: document 'page_url with' syntax
-* doc: document more use cases for |if
+* doc: document more use cases for ``|if``
 * doc: formatting
 * doc: remove deprecated %stream%
 * doc: restructure actions

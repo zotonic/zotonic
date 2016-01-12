@@ -44,7 +44,7 @@ The interesting parts are ``"Media"``, ``"Music Player"`` and
 ``music_player``. ``"Media"`` will appear as a section heading in the
 ``[+add block]`` drop down menu, below the ``Standard`` section.
 ``"Music Player"`` will appear below this, and is what the content
-editor clicks on to instert the block. The ``music_player`` atom is
+editor clicks on to insert the block. The ``music_player`` atom is
 what Zotonic uses to figure out which templates to use, they will be
 created in ``templates/blocks`` and will be called
 ``_admin_edit_block_li_music_player.tpl`` and
