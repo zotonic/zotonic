@@ -207,8 +207,10 @@ Query-model arguments
   - ``rsc.modified`` - date of last modification
   - ``rsc.pivot_date_start`` - the start date specified in the admin
   - ``rsc.pivot_date_end`` - the end date specified in the admin
-  - ``rsc.pivot_title`` - the title of the page. When making
+  - ``rsc.pivot_title`` - the title of the page. For
     multilingual sites, the behavior of sorting on title is undefined.
+  - ``seq`` - sequence number of the first edge (ignored if no edge is joined)
+  - ``edge.created`` - creation date of the first edge (ignored if no edge is joined)
 
   For all the sort fields, you will have to consult Zotonic’s data
   model. Example sorting on modification date, newest first:
