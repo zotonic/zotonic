@@ -607,8 +607,11 @@ add_order("seq", Search) ->
     add_order("+seq", Search);
 add_order([C,$s,$e,$q], Search) when C =:= $-; C =:= $+ ->
     case proplists:get_value(edge, Search#search_sql.tables) of
-        L when is_list(L) -> add_order([C|L]++".seq", Search);
-        undefined -> Search
+        L when is_list(L) -> 
+            Search1 = add_order([C|L]++".seq", Search),
+            add_order([C|L]++".id", Search1);
+        undefined -> 
+            Search
     end;
 add_order("edge."++_ = Order, Search) ->
     add_order([$+|Order], Search);
