@@ -382,10 +382,9 @@ is_owner(_Id, _CreatorId, _Context) -> false.
 
 %% @doc Check if an edge can be made, special checks for the hasusergroup edge
 can_edge(#acl_edge{predicate=hasusergroup, subject_id=SubjectId, object_id=ObjectId}, Context) ->
-    can_insert(acl_user_group, Context)
-    andalso can_rsc(ObjectId, update, Context)
-    andalso can_rsc(SubjectId, update, Context)
-    andalso can_rsc(SubjectId, link, Context);
+    can_rsc(SubjectId, link, Context)
+    andalso can_rsc(ObjectId, view, Context)
+    andalso can_module(use, mod_acl_user_groups, Context);
 can_edge(#acl_edge{predicate=P, subject_id=SubjectId, object_id=ObjectId}, Context) when is_atom(P) ->
     can_rsc(SubjectId, link, Context)
     andalso can_rsc(ObjectId, view, Context).
