@@ -7,6 +7,7 @@ Topics:
 .. toctree::
    :maxdepth: 2
 
+   releasing
    codestyle
    filing_issues
    contributing
@@ -15,6 +16,3 @@ Topics:
    testing
    directory-structure
    releasenotes/index
-
-
-   
