@@ -24,7 +24,6 @@ function require_zotonic_running {
         exit 1
     fi
 }
-export -f require_zotonic_running
 
 function require_zotonic_not_running {
     PONG=$($ZOTONIC_CALL -a "zotonic ping" 2>&1)
@@ -35,22 +34,18 @@ function require_zotonic_not_running {
         exit 1
     fi
 }
-export -f require_zotonic_not_running
 
 function major_version {
     cat $ZOTONIC/{apps,_build/default/lib}/zotonic_core/include/zotonic_release.hrl 2>/dev/null|grep ZOTONIC_VERSION|head -1|sed 's/[^"]*\"\([0-9]*\).*/\1/'
 }
-export -f major_version
 
 function minor_version {
     cat $ZOTONIC/{apps,_build/default/lib}/zotonic_core/include/zotonic_release.hrl 2>/dev/null|grep ZOTONIC_VERSION|head -1|sed 's/[^"]*\"\([0-9]\.[0-9]*\).*/\1/'
 }
-export -f minor_version
 
 function full_version {
     cat $ZOTONIC/{apps,_build/default/lib}/zotonic_core/include/zotonic_release.hrl 2>/dev/null|grep ZOTONIC_VERSION|head -1|sed 's/[^"]*\"\([^"]*\)\".*/\1/'
 }
-export -f full_version
 
 function find_enabled_sites {
     # find enabled sites
@@ -64,7 +59,6 @@ function find_enabled_sites {
         fi
     done
 }
-export -f find_enabled_sites
 
 function find_config {
     # Allow admin to override default behaviour
@@ -83,7 +77,6 @@ function find_config {
         fi
     done
 }
-export -f find_config
 
 function find_config_in {
     filename="$1"
@@ -96,12 +89,10 @@ function find_config_in {
         fi
     done
 }
-export -f find_config_in
 
 function consult_config {
     $ZOTONIC_SCRIPTS/helpers/zotonic_consult_config $1 $2 $3
 }
-export -f consult_config
 
 function find_config_arg {
     file=$(find_config $1)
@@ -110,28 +101,24 @@ function find_config_arg {
     fi
     echo "-config $file"
 }
-export -f find_config_arg
 
 function get_user_sites_dir {
     file=$(find_config zotonic.config)
     [ -z "$file" ] && return 1
     consult_config $file zotonic user_sites_dir
 }
-export -f get_user_sites_dir
 
 function get_user_modules_dir {
     file=$(find_config zotonic.config)
     [ -z "$file" ] && return 1
     consult_config $file zotonic user_modules_dir
 }
-export -f get_user_modules_dir
 
 function get_user_ebin_dir {
     file=$(find_config zotonic.config)
     [ -z "$file" ] && return 1
     consult_config $file zotonic user_ebin_dir
 }
-export -f get_user_modules_dir
 
 export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
 
