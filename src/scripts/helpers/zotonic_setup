@@ -24,7 +24,6 @@ function require_zotonic_running {
         exit 1
     fi
 }
-export -f require_zotonic_running
 
 function require_zotonic_not_running {
     PONG=$($ZOTONIC_CALL -a "zotonic ping" 2>&1)
@@ -35,7 +34,6 @@ function require_zotonic_not_running {
         exit 1
     fi
 }
-export -f require_zotonic_not_running
 
 function enablesite {
     config="priv/sites/$1/config"
@@ -44,12 +42,10 @@ function enablesite {
     #echo sed -e "$expr" -i $config
     echo "$1 enabled: $2"
 }
-export -f enablesite
 
 function major_version {
     cat $ZOTONIC/src/zotonic.app.src |grep vsn,|sed 's/[^"]*\"\([0-9]\.[0-9]*\).*/\1/'
 }
-export -f major_version
 
 function find_enabled_sites {
     # find enabled sites
@@ -63,7 +59,6 @@ function find_enabled_sites {
         fi
     done
 }
-export -f find_enabled_sites
 
 function find_config {
     filename="$1"
@@ -75,7 +70,6 @@ function find_config {
         fi
     done
 }
-export -f find_config 
 
 function find_config_arg {
     [ ! -z "$ZOTONIC_CONFIG_DIR" ] && { echo "-config ${ZOTONIC_CONFIG_DIR}/$1"; return 0; }
@@ -86,22 +80,19 @@ function find_config_arg {
     fi
     echo "-config $file"
 }
-export -f find_config_arg
 
 function get_user_sites_dir {
     file=$(find_config zotonic.config)
     [ -z "$file" ] && return 1
     cat $file | grep {user_sites_dir|sed 's/.*"\(.*\)".*/\1/'
 }
-export -f get_user_sites_dir
 
 function get_user_modules_dir {
     file=$(find_config zotonic.config)
     [ -z "$file" ] && return 1
     cat $file | grep {user_modules_dir|sed 's/.*"\(.*\)".*/\1/'
 }
-export -f get_user_modules_dir
-    
+
 export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
 
 # Path to the Erlang VM
