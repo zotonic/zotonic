@@ -268,7 +268,7 @@ video_info(Path, Context) ->
                                 z_utils:os_filename(Path) 
                                ]),
     lager:warning("Video info: ~p", [FfprobeCmd]),
-    JSONText = z_convert:to_binary(os:cmd(FfprobeCmd)),
+    JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
         {struct, Ps} = decode_json(JSONText),
         {Width, Height, Orientation} = fetch_size(Ps),
