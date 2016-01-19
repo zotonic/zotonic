@@ -86,12 +86,62 @@ pred_delete(Id, Context) ->
     _ = m_rsc:delete(Id, Context),
     z_session_page:add_script(z_render:wire({unmask, []}, Context)).
 
-pred_move_and_delete(Id, ToPredId, Context) ->
+pred_move_and_delete(FromPredId, ToPredId, Context) ->
     z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
-    z_db:q("update edge set predicate_id = $2 where predicate_id = $1", [Id, ToPredId], Context, 120000),
-    _ = m_rsc:delete(Id, Context),
+    Edges = z_db:q("select a.id 
+                    from edge a
+                            left join edge b
+                            on  a.subject_id = b.subject_id
+                            and a.object_id = b.object_id
+                            and b.predicate_id = $2
+                    where a.predicate_id = $1
+                      and b.id is null",
+                   [FromPredId, ToPredId],
+                   Context,
+                   120000),
+    pred_move(Edges, ToPredId, 0, length(Edges), Context),
+    z_db:q("delete from edge where predicate_id = $1", [FromPredId], Context, 120000),
+    _ = m_rsc:delete(FromPredId, Context),
     z_session_page:add_script(z_render:wire({unmask, []}, Context)).
 
+pred_move([], _ToPredId, _Ct, _N, _Context) ->
+    ok;
+pred_move(EdgeIds, ToPredId, Ct, N, Context) ->
+    {UpdIds, RestIds} = take(EdgeIds, 100),
+    UpdIdsS = lists:flatten(
+                    z_utils:combine($,, [ integer_to_list(Id) || {Id} <- UpdIds ])),
+    z_db:q("update edge
+            set predicate_id = $1
+            where id in ("++ UpdIdsS ++")",
+           [ToPredId],
+           Context,
+           120000),
+    Ct1 = Ct + length(UpdIds),
+    maybe_progress(Ct, Ct1, N, Context),
+    pred_move(RestIds, ToPredId, Ct1, N, Context).
+
+maybe_progress(_N1, _N2, 0, _Context) ->
+    ok;
+maybe_progress(N1, N2, Total, Context) ->
+    z_pivot_rsc:pivot_delay(Context),
+    PerStep = Total / 100,
+    S1 = round(N1 / PerStep),
+    S2 = round(N2 / PerStep),
+    case S1 of
+        S2 -> ok;
+        _ -> z_session_page:add_script(z_render:wire({mask_progress, [{percent,S2}]}, Context))
+    end.
+
+
+take(L, N) ->
+    take(L, N, []).
+
+take([], _N, Acc) ->
+    {Acc, []};
+take(L, 0, Acc) ->
+    {Acc, L};
+take([Id|L], N, Acc) ->
+    take(L, N-1, [Id|Acc]).
 
 %% @doc Check if the update contains information for a predicate.  If so then update
 %% the predicate information in the db and remove it from the update props.
