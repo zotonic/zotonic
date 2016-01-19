@@ -674,7 +674,7 @@ LiveValidationForm.getInstance = function(element){
 
 LiveValidationForm.prototype = {
   validFormClass: 'z_form_valid',
-  invalidFormClass: 'z_form_invalid has-error',
+  invalidFormClass: 'z_form_invalid',
 
   /**
    *  constructor for LiveValidationForm - handles validation of LiveValidation fields belonging to this form on its submittal
