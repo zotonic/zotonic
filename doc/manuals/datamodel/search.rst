@@ -205,7 +205,7 @@ Query-model arguments
 **unfinished_or_nodate**
 
   Specifying 'unfinished_or_nodate' means that you only want to select things that
-  have an end date which lies in the future or no end date. 
+  have an end date which lies in the future or no start date. 
 
   ``unfinished_or_nodate``
 

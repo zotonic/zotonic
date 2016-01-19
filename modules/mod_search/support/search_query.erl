@@ -370,7 +370,7 @@ parse_query([{unfinished, Boolean}|Rest], Context, Result) ->
 %% Filter on items whose start date lies in the future or don't have an end_date
 parse_query([{unfinished_or_nodate, Boolean}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(Boolean) of
-                  true -> add_where("(rsc.pivot_date_end >= current_date or rsc.pivot_date_end is null)", Result);
+                  true -> add_where("(rsc.pivot_date_end >= current_date or rsc.pivot_date_start is null)", Result);
                   false -> Result
               end,
     parse_query(Rest, Context, Result1);
