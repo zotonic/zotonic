@@ -195,6 +195,20 @@ Query-model arguments
 
   ``finished``
 
+**unfinished**
+
+  Specifying 'unfinished' means that you only want to select things that
+  have an end date which lies in the future. 
+
+  ``unfinished``
+
+**unfinished_or_nodate**
+
+  Specifying 'unfinished_or_nodate' means that you only want to select things that
+  have an end date which lies in the future or no end date. 
+
+  ``unfinished_or_nodate``
+
 **sort**
 
   Sort the result on a field. The name of the field is a string which

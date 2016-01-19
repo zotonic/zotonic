@@ -123,6 +123,8 @@ request_arg("match_objects")       -> match_objects;
 request_arg("upcoming")            -> upcoming;
 request_arg("ongoing")             -> ongoing;
 request_arg("finished")            -> finished;
+request_arg("unfinished")          -> unfinished;
+request_arg("unfinished_or_nodate")-> unfinished_or_nodate;
 request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
 
 
@@ -353,6 +355,22 @@ parse_query([{ongoing, Boolean}|Rest], Context, Result) ->
 parse_query([{finished, Boolean}|Rest], Context, Result) ->
     Result1 = case z_convert:to_bool(Boolean) of
                   true -> add_where("rsc.pivot_date_start < current_date", Result);
+                  false -> Result
+              end,
+    parse_query(Rest, Context, Result1);
+
+%% Filter on items whose start date lies in the future
+parse_query([{unfinished, Boolean}|Rest], Context, Result) ->
+    Result1 = case z_convert:to_bool(Boolean) of
+                  true -> add_where("rsc.pivot_date_end >= current_date", Result);
+                  false -> Result
+              end,
+    parse_query(Rest, Context, Result1);
+
+%% Filter on items whose start date lies in the future or don't have an end_date
+parse_query([{unfinished_or_nodate, Boolean}|Rest], Context, Result) ->
+    Result1 = case z_convert:to_bool(Boolean) of
+                  true -> add_where("(rsc.pivot_date_end >= current_date or rsc.pivot_date_end is null)", Result);
                   false -> Result
               end,
     parse_query(Rest, Context, Result1);
