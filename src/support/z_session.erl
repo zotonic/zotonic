@@ -385,6 +385,16 @@ handle_cast(clear_cookies, Session) ->
     {noreply, Session#session{cookies=[]}};
 
 %% @doc Set the session variable, replaces any old value
+handle_cast({set, language, Value}, Session) ->
+    case proplists:get_value(language, Session#session.props) of
+        Value ->
+            {noreply, Session};
+        _ ->
+            Session1 = handle_set(language, Value, Session),
+            z_notifier:notify(#language{language=Value}, Session1#session.context),
+            {noreply, Session1}
+    end;
+
 handle_cast({set, Key, Value}, Session) ->
     Session1 = handle_set(Key, Value, Session),
     Session2 = maybe_auth_change(Key, Value, Session1, Session),

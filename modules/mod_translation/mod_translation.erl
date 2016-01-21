@@ -369,7 +369,6 @@ set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
         _Other -> set_language(Code, Other, Context)
     end.
 
-
 do_set_language(Code, Context) when is_atom(Code) ->
     List = get_language_config(Context),
     LangProps = proplists:get_value(Code, List),
@@ -379,12 +378,11 @@ do_set_language(Code, Context) when is_atom(Code) ->
         _ -> [Code, z_convert:to_atom(FallbackLangCode)]
     end,
     Context1 = z_context:set_language(Langs, Context),
-    case z_context:language(Context1) of
-        Code -> 
+    case {z_context:language(Context), z_context:language(Context1)} of
+        {Code, Code} ->
             Context1;
         _ ->
             z_context:set_session(language, Code, Context1),
-            z_notifier:notify(#language{language=Code}, Context1),
             Context1
     end.
 
