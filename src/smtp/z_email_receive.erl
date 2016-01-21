@@ -87,10 +87,10 @@ get_host(Recipient) ->
     [Username, Domain] = binstr:split(Recipient, <<"@">>, 2),
     [LocalPart|LocalTags] = binstr:split(Username, <<"+">>),
     case z_sites_dispatcher:get_host_for_domain(Domain) of
-        {ok, Host} ->
-            {ok, LocalPart, LocalTags, Domain, Host};
         undefined ->
-            undefined
+            undefined;
+        Host ->
+            {ok, LocalPart, LocalTags, Domain, Host}
     end.
 
 lowercase_headers(Hs) ->
