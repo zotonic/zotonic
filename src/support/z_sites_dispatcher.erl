@@ -216,13 +216,14 @@ get_fallback_site() ->
     end.
 
 %% @doc Fetch the host handling the given domain name
+-spec get_host_for_domain(string()|binary()) -> {ok, atom()} | undefined.
 get_host_for_domain(Domain) when is_binary(Domain) ->
     get_host_for_domain(binary_to_list(Domain));
 get_host_for_domain(Domain) ->
     {Hostname, _Port} = split_host(Domain),
     case ets:lookup(?MODULE, Hostname) of
-        [{_,Site}] -> Site;
-        [{_,Site,_Redirect}] -> Site;
+        [{_,Site}] -> {ok, Site};
+        [{_,Site,_Redirect}] -> {ok, Site};
         [] -> undefined
     end.
 
