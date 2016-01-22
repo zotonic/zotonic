@@ -27,7 +27,7 @@ This controller handles the following query argument:
 +---------------------+-------------------------------------+------------------------+
 
 The list of provided content types is collected with a `foldr`
-notification (see :ref:`manual-notification`) of the type
+notification (see :ref:`guide-notification`) of the type
 ``content_types_dispatch``. Modules should add their provided content
 types in front of the accumulator. The added entries are tuples:
 ``{MimeType, DispatchRuleName}``.

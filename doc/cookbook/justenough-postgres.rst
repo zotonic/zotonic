@@ -467,5 +467,5 @@ Books
 
 Momjian, Bruce, PostgreSQL: Introduction and Concepts, 2001, Addison-Wesley, Upper Saddle River, NJ, 462 pp
 
-Worsley, John C. and Joshua D. Drake, Practical PostgreSQL, 2002, O'Rielly & Associates, Inc., Sebastopol, CA, 618 pp
+Worsley, John C. and Joshua D. Drake, Practical PostgreSQL, 2002, O'Reilly & Associates, Inc., Sebastopol, CA, 618 pp
 

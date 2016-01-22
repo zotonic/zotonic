@@ -11,7 +11,7 @@ for managing these mailing lists where you can import, export, add or
 delete recipients.
 
 For details on configuring e-mail sending and receiving in Zotonic,
-see :ref:`manual-email`.
+see :ref:`guide-email`.
 
 
 Including the subscribe custom tag on your pages
@@ -19,7 +19,7 @@ Including the subscribe custom tag on your pages
 
 The module includes the :ref:`signup tag
 <scomp-mailinglist_subscribe>` tag (and template) that you can use on
-your site.  
+your site.
 
 When you want to add a subscribe template to your page then you will
 need the following scomp include in your template::
@@ -60,7 +60,7 @@ In the footer there is a link to the unsubscribe page.
 
 All e-mail templates extend from the :ref:`template-email_base`
 template. The following templates are used for e-mails:
-     
+
 +---------------------------------------------------------+-------------------------------------------+
 |Template                                                 |Description                                |
 +=========================================================+===========================================+
@@ -102,7 +102,7 @@ varions functions on the recipients of the list.
 
 - `Clear recipient list` - After a confirmation, this removes all
   recipients from the list.
-  
+
 - `Combine two lists` - this opens a dialog which lets you combine two
   lists. Using this new dialog, the recipients of two lists can be
   combined according to the three set operations union, subtract and
@@ -123,7 +123,7 @@ you see how many recipients the list has, and the status, e.g. if the
 mailing has already been sent to this list or not.
 
 .. todo:: finish description of the mailing status page
-          
+
 Mailings are only send when the to be send page is published and
 publicly visible.  The page should also be within its publication
 period.

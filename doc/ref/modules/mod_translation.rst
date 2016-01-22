@@ -4,14 +4,14 @@
 This module provides support for dealing with multiple languages.
 
 How content and static strings are translated is explained in full in
-:ref:`manual-i18n`.
+:ref:`guide-translation`.
 
-             
+
 Language as part of the URL
 ---------------------------
 
 By default, :ref:`mod_translation` prefixes each URL (using
-:ref:`manual-dispatch-rewriting`) in your website with the code of the
+:ref:`guide-dispatch-rewriting`) in your website with the code of the
 current language. The idea behind this is that each language version
 of a :term:`resource` gets its own URL, and is as such indexable for
 Google.
@@ -33,7 +33,7 @@ to switch between languages::
   {% button text="Dutch" postback={set_language code="nl"} delegate=`mod_translation` %}
 
 Creates a button which switches to Dutch. And another one for english::
-       
+
   {% button text="English" postback={set_language code="en"} delegate=`mod_translation` %}
 
 
@@ -54,12 +54,12 @@ You can specify the text direction element attributes by including a template::
 This will generate the following, when Zotonic selected Arabic for the page with id `id`::
 
   <body xml:lang="ar" lang="ar" dir="rtl" class="rtl">
-  
+
 When you want to add an extra class added to the rtl or ltr class you can use::
 
   <body {% include "_language_attrs.tpl" id=id class="my-body-class" %} >
-  
+
 And when you want to force a specific language::
 
   <body {% include "_language_attrs.tpl" language=`en` %} >
-  
+

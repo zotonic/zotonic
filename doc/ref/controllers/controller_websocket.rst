@@ -4,14 +4,14 @@
 Controller which accepts a WebSocket connection from the browser.
 
 The controller provides persistent WebSocket connections between the
-client and the server. Since Zotonic 0.11, a WebSocket connection is automatically started on the page (unless nostream is given in the script tag). 
+client and the server. Since Zotonic 0.11, a WebSocket connection is automatically started on the page (unless nostream is given in the script tag).
 
-See :ref:`manual-transport` for more information about transporting data between the server and the browser.
+See :ref:`guide-transport` for more information about transporting data between the server and the browser.
 
 Defining Custom Websocket Behaviour
 -----------------------------------
 
-You can provide your own websocket_start similar too controller websocket by setting a ws_handler 
+You can provide your own websocket_start similar too controller websocket by setting a ws_handler
 containing the name of a websocket handler module in the zotonic context.
 
 Example::
@@ -20,8 +20,8 @@ Example::
         Context1 = z_context:set(ws_handler, ?MODULE, Context),
         controller_websocket:websocket_start(ReqData, Context).
 
-When passing a custom handler module, the default handler websocket will not be used, but the specified 
-one. Controller websocket contains the code for the default zotonic handler. It attaches itself as 
+When passing a custom handler module, the default handler websocket will not be used, but the specified
+one. Controller websocket contains the code for the default zotonic handler. It attaches itself as
 websocket handler to the page session.
 
 It is also possible to configure a custom ``ws_handler`` by specifying it in a dispatch rule.::
@@ -30,11 +30,11 @@ It is also possible to configure a custom ``ws_handler`` by specifying it in a d
 
 
 .. highlight:: erlang
-               
+
 WebSocket Handler API
 ---------------------
 
-In order to implement your own websocket handler you have to implement four callback functions. 
+In order to implement your own websocket handler you have to implement four callback functions.
 When you want to sent a message to the client you call ``controller_websocket:send_data/2``.
 
 Example::
@@ -45,7 +45,7 @@ Example::
            websocket_message/3,
            websocket_info/2,
            websocket_terminate/2]).
-  
+
   %% @doc Called when the websocket is initialized.
   websocket_init(_Context) ->
       erlang:send_after(1000, self(), <<"Hello!">>),

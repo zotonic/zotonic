@@ -26,5 +26,5 @@ The following m_identity model properties are available in templates:
 |        |m.identity[page_id].username|             |
 +--------+----------------------------+-------------+
 
-.. seealso:: :ref:`manual-auth`, :ref:`mod_authentication`,
+.. seealso:: :ref:`guide-auth`, :ref:`mod_authentication`,
              :ref:`mod_twitter` or :ref:`mod_facebook`.

@@ -39,4 +39,4 @@ That means you are trying to change the password for the admin (user
 1). The admin password is not set in the database: you need to define
 your admin password in the site’s config file, use the property
 ``admin_password``. For more info on this, see
-:ref:`manual-site-anatomy`.
+:ref:`guide-site-anatomy`.

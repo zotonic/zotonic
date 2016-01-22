@@ -20,7 +20,7 @@ programming.
 How
 ---
 
-When updating a :term:`resource` by passing a `proplist` to
+When updating a :term:`resource` by passing a proplist to
 ``m_rsc:update/3``, Zotonic has a way of looking for specific name
 patterns in the proplist that tells it what items are date/time fields
 and which ones are not. This allows Zotonic to split those off the

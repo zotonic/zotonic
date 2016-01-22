@@ -1,9 +1,9 @@
 .. include:: meta-script.rst
 
-This tag is the placeholder where all generated Javascript scripts
+This tag is the placeholder where all generated JavaScript scripts
 will be output on the page.
 
-Zotonic generates Javascript for the actions and other template
+Zotonic generates JavaScript for the actions and other template
 logic. This script needs to be added to the page.  The ``{% script
 %}`` scomp designates the place where the ``<script>`` element with
 all the generated javascript can be placed.
@@ -11,7 +11,7 @@ all the generated javascript can be placed.
 Normally the ``{% script %}`` scomp is placed at the end of the page,
 just above the ``</body>``.
 
-Note that all Javascripts generated after the ``{% script %}`` scomp
+Note that all JavaScripts generated after the ``{% script %}`` scomp
 will not be included in the generated page. Only a single ``{% script
 %}`` scomp is allowed on any page.
 
@@ -53,7 +53,7 @@ The script scomp can have the following arguments:
 |           |                                                            |               |
 +-----------+------------------------------------------------------------+---------------+
 | format    | Select a different format than the ``<script/>`` tag.  For | format="html" |
-|           | now this accepts ``"html"`` (for the ``<script/>``         |               | 
+|           | now this accepts ``"html"`` (for the ``<script/>``         |               |
 |           | tag), ``"escapejs"`` for an escaped javascript string, and |               |
 |           | ``"js"`` for a normal javascript string.                   |               |
 |           | Default is ``"html"``.                                     |               |
@@ -71,5 +71,5 @@ When available, a WebSocket connections is opened, otherwise a long
 polling Comet connection is started.  The WebSockets connection will
 also be used for sending Ajax requests to the server.
 
-See also :ref:`manual-transport` for details on the bi-directional
+See also :ref:`guide-transport` for details on the bi-directional
 communication.

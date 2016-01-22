@@ -15,10 +15,10 @@ The controller accepts GET, PUT and DELETE requests.
 
 * GET returns the dump of the :term:`resource`
 * PUT updates the resource with the information provided
-* DELETE removes the resource.  
+* DELETE removes the resource.
 
-All of these methods use the standard Zotonic :ref:`authentication <manual-auth>` checks.
-  
+All of these methods use the standard Zotonic :ref:`authentication <guide-auth>` checks.
+
 .. seealso:: :ref:`controller-rest_rsc`
 
 .. todo:: Add more documentation

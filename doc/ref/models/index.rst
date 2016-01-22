@@ -3,7 +3,7 @@
 Models
 ======
 
-.. seealso:: :ref:`manual-models`
+.. seealso:: :ref:`guide-models`
 
 .. toctree::
    :maxdepth: 1

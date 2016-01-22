@@ -1,3 +1,4 @@
+:orphan:
 
 Reference
 =========
@@ -17,10 +18,15 @@ All the nitty gritty details when the big picture has settled.
    tags/index
    scomps/index
    validators/index
-
+   directory-structure
+   notifications
+   configuration/site-configuration
+   configuration/zotonic-configuration
+   transport
+   troubleshooting
 
 EDoc reference
 --------------
 
-There are reference docs built from the source code using edoc, and may be browsed online at: 
+There are reference docs built from the source code using edoc, and may be browsed online at:
 http://zotonic.com/edoc/core for the core docs, and http://zotonic.com/edoc/modules for the module docs.

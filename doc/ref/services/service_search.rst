@@ -2,14 +2,14 @@
 .. include:: meta-search.rst
 
 Search Zotonic’s :term:`resources <resource>` using the
-:ref:`manual-datamodel-query-model`.
+:ref:`guide-datamodel-query-model`.
 
 For instance, the API call::
 
   http://localhost:8000/api/search?cat=text&text=test
 
 Returns a JSON list of all resource ids of the :ref:`category
-<manual-datamodel-categories>` `text` that contain the string `test`::
+<guide-datamodel-categories>` ``text`` that contain the string ``test``::
 
   [320]
 
@@ -41,7 +41,7 @@ Adding ``&format=simple`` to the API call gives us a list of JSON objects::
 Parameters
 ----------
 
-You can enter all parameters that are in the standard :ref:`manual-datamodel-query-model`.
+You can enter all parameters that are in the standard :ref:`guide-datamodel-query-model`.
 
 Besides, the following parameters exist:
 
@@ -60,7 +60,7 @@ Besides, the following parameters exist:
   Either ``ids`` to return a plain array of rsc ids; or ``simple`` to
   return a list of JSON objects with the resource's `title`,
   `summary`, `category`, and `preview_url` (the first image).
-  
-.. seealso:: :ref:`manual-datamodel-query-model`
 
-             
+.. seealso:: :ref:`guide-datamodel-query-model`
+
+

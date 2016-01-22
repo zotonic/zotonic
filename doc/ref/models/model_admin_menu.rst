@@ -9,13 +9,13 @@ module to add items to the menu.
 Extending the admin menu
 ------------------------
 
-By implementing the ``admin_menu`` :ref:`notification <manual-notification>` you can add your own
+By implementing the ``admin_menu`` :ref:`notification <guide-notification>` you can add your own
 menu items to the admin menu. The ``admin_menu`` notification is a
 fold which build up the menu, allowing each callback to add and remove
 menu items as they wish.
 
 .. highlight:: erlang
-            
+
 For example, this add a menu separator and an "edit homepage" button
 to the "content" submenu::
 

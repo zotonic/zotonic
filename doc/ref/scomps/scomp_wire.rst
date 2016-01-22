@@ -51,7 +51,7 @@ Example::
 
 The wire tag redirects the submit of the form to the event routine of the controller. A submit will also toggle the visibility of the “message” element on the page. Note that the action is “postback”, this is obligatory.
 
-.. highlight: erlang 
+.. highlight: erlang
 
 The event routine will be called as::
 
@@ -83,7 +83,7 @@ Wire to the page load or unload
 
 A ``{% wire %}`` without an id will bind the actions and/or postback to the window instead of an element. Omitting a type as well will execute all actions and/or postback on page load.
 
-.. highlight: django 
+.. highlight: django
 
 Example::
 
@@ -94,10 +94,10 @@ The type “unload” will execute all actions and/or postback when leaving the 
    {% wire type="unload" action={alert text="Bye."} %}
 
 
-Call a wire action from Javascript
+Call a wire action from JavaScript
 ----------------------------------
 Use ``{% wire name="myname" %}`` to define a named
-action and trigger it from Javascript with ``z_event("myname")``. See: :ref:`manual-template-calling-zotonic`.
+action and trigger it from JavaScript with ``z_event("myname")``. See: :ref:`guide-named-wire`.
 
 
 Wire an action to a MQTT topic
