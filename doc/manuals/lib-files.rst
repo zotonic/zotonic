@@ -1,6 +1,0 @@
-
-Lib files
-=========
-
-Lorem ipsum...
-

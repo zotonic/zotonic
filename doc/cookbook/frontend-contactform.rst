@@ -1,4 +1,4 @@
-.. _manual-cookbook-frontend-contactform:
+.. _guide-cookbook-frontend-contactform:
 
 Implementing a simple contact form
 ----------------------------------
@@ -18,7 +18,7 @@ actually very easy.﻿
 3. Create the contact-form handler Erlang file.
 
 Assumptions
-...........   
+...........
 
 Readers are assumed to be comfortable both in developing Zotonic
 templates and in writing Erlang modules.
@@ -73,7 +73,7 @@ comment field::
   </form>
 
 This form has 3 fields, of which the message and the e-mail are required, and the e-mail input has to contain a valid e-mail address. The name field is optional.
-  
+
 Create the contact-form handler Erlang file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -68,7 +68,7 @@ implemented in `mod_search`:
 +------------------------+---------------------------------------------------------------+-------------------+
 |query                   |Very powerful search with which you can implement almost all of|                   |
 |                        |the other search functionality. See:                           |                   |
-|                        |:ref:`manual-datamodel-query-model`                            |                   |
+|                        |:ref:`guide-datamodel-query-model`                             |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |archive_year            |Returns an overview on publication year basis, for a specified |cat                |
 |                        |category. Every row returned has parts: "as_date", "year" and  |                   |
@@ -96,6 +96,6 @@ implemented in `mod_search`:
 +------------------------+---------------------------------------------------------------+-------------------+
 
 
-.. seealso:: :ref:`manual-datamodel-query-model`
+.. seealso:: :ref:`guide-datamodel-query-model`
 
 

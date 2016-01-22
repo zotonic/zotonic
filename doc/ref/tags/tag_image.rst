@@ -35,7 +35,7 @@ The following arguments/filters can be specified:
 |height              |The maximum height of the image.                            |height=200          |
 +--------------------+------------------------------------------------------------+--------------------+
 |mediaclass          |The media class of the image. See                           |mediaclass="thumb"  |
-|                    |:ref:`manual-media-classes`.                                |                    |
+|                    |:ref:`guide-media-classes`.                                 |                    |
 +--------------------+------------------------------------------------------------+--------------------+
 |background          |The background color for transparent image parts. See       |background="white"  |
 |                    |ImageMagick colors for how to specify the RGB color.        |                    |
@@ -108,6 +108,6 @@ The following arguments/filters can be specified:
 |use_absolute_url    |Ensure that the generated url contains the hostname and port|use_absolute_url    |
 +--------------------+------------------------------------------------------------+--------------------+
 
-See also :ref:`manual-media-classes` for some options that are only available in `mediaclass` files.
+See also :ref:`guide-media-classes` for some options that are only available in `mediaclass` files.
 
-.. seealso:: :ref:`tag-image_url`, :ref:`manual-media-classes` and :ref:`tag-media`.
+.. seealso:: :ref:`tag-image_url`, :ref:`guide-media-classes` and :ref:`tag-media`.

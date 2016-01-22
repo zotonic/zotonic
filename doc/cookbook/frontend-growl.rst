@@ -1,4 +1,4 @@
-.. _manual-cookbook-frontend-growl:
+.. _guide-cookbook-frontend-growl:
 
 Enabling Growl Notifications
 ============================
@@ -26,17 +26,17 @@ client side scripts, ``/lib/js/modules/z.notice.js`` and
 
 In your ``base.tpl`` template, include these files using the :ref:`tag-lib` tag::
 
-  {% lib "js/modules/z.notice.js" %} 
+  {% lib "js/modules/z.notice.js" %}
 
 And the CSS::
 
-  {% lib "css/z.growl.css" %} 
+  {% lib "css/z.growl.css" %}
 
 Now you should be able to use growl actions in your templates, example:
 
-  {% button action={growl text="hello world"} %} 
+  {% button action={growl text="hello world"} %}
 
 
 .. seealso:: :ref:`action-growl`, :ref:`tag-lib`
-               
+
 

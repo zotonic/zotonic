@@ -7,6 +7,6 @@ long-polling as fallback.
 
 The comet controller is used to transport data from the server to the browser.
 
-See :ref:`manual-transport` for more information about transporting data between the server and the browser.
+See :ref:`guide-transport` for more information about transporting data between the server and the browser.
 
 .. todo:: Extend documentation

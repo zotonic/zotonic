@@ -8,7 +8,7 @@ section documents each of them, explaining their uses and their
 relationships to other modules.
 
 To learn more about how a module works and what it consists of, we
-refer you to the :ref:`manual-modules` manual.
+refer you to the :ref:`guide-modules` manual.
 
 **Looking for more modules?**
 
@@ -23,5 +23,5 @@ Module listing
 .. toctree::
    :glob:
    :maxdepth: 1
-           
+
    mod_*

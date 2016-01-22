@@ -7,12 +7,12 @@ functions on your Zotonic site.
 
 ``controller_api`` by default intercepts all URLs according to the
 patterns ``/api/:module/:method`` and the URL ``/api/:module``. See
-the :ref:`manual-services` manual for more information.
+the :ref:`guide-services` manual for more information.
 
 
 Authentication
 --------------
-See :ref:`manual-services-auth` on how authentication is done when
+See :ref:`guide-services-auth` on how authentication is done when
 using this controller.
 
 
@@ -24,12 +24,12 @@ Creating services at a non-standard URL
 
 It is possible to pre-fill the required `module` and `method`
 parameters so that you can use ``controller_api`` at another entry
-point. For instance, the following :ref:`dispatch rule <manual-dispatch>` is valid::
+point. For instance, the following :ref:`dispatch rule <guide-dispatch>` is valid::
 
     {dosomething,    ["do", "something"], controller_api, [{module, "foobar"}, {method, "test"}]}
 
 This would invoke the ``mod_foobar/services/service_foobar_test.erl`` service at the url `/do/something`,
 
 
-.. seealso:: :ref:`manual-dispatch` and :ref:`manual-controllers`.
-                  
+.. seealso:: :ref:`guide-dispatch` and :ref:`guide-controllers`.
+

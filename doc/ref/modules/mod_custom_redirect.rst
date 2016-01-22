@@ -36,4 +36,4 @@ Permanent or temporary redirects
 
 A redirection can be permanent or temporary. A permanent redirect will be remembered by the visiting browser (and search engines), replacing any occurence of the redirected location. A temporary redirect will not be remembered and be retried on every visit.
 
-.. seealso:: :ref:`manual-dispatch`, :ref:`mod_base`
+.. seealso:: :ref:`guide-dispatch`, :ref:`mod_base`

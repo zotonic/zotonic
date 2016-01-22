@@ -1,23 +1,5 @@
 .. include:: meta-validate.rst
 
-Add a validation to a form.
-
-This tag connects validators to input elements of a form.
-
-Validators check the input element with Javascript and prevent posting the form unless the validation is passed. All validations are also done on the server. This prevents people bypassing the validation checks in their browser. When the validation does not pass on the server side then the post will fail.
-
-Validated form fields are available to Erlang code using the ``z_context:get_q_validated/2`` function.
-
-To check if two fields are equal::
-
-   <input type="password" id="password" name="password" value="" />
-   <input type="password" id="password2" name="password2" value="" />
-   {% validate id="password" type={confirmation match="password2"} %}
-
-The password field is now available to the Erlang code with::
-
-   Password = z_context:get_q_validated("password", Context).
-
 The validator tag accepts the following arguments:
 
 +---------------+------------------------------------------------------------+-----------------------+
@@ -61,4 +43,7 @@ The validator tag accepts the following arguments:
 |               |when entering data.                                         |                       |
 +---------------+------------------------------------------------------------+-----------------------+
 
-.. seealso:: the list of :ref:`validators`.
+.. seealso::
+
+    * the list of :ref:`validators`
+    * :ref:`Forms and validation <guide-validators>` in the Developer Guide

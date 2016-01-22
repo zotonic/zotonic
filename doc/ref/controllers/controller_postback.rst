@@ -4,7 +4,7 @@
 The postback controller is the endpoint for AJAX callbacks and transports from
 the browser to the server.
 
-See :ref:`manual-transport` for more information about transporting data between the server and the browser.
+See :ref:`guide-transport` for more information about transporting data between the server and the browser.
 
 This controller is used internally by :ref:`scomp-wire` and :ref:`action-postback`.
 
