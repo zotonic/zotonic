@@ -52,11 +52,12 @@ var z_transport_check_timer;
 var z_transport_queue       = [];
 var z_transport_acks        = [];
 var z_transport_delegates   = {
-    javascript: function (data, _msg) { eval(data); },
+    javascript: z_transport_delegate_javascript,
     session: z_transport_session_status,
     reload: z_session_invalid_dialog
 };
 var z_force_unload_beacon   = false;
+var z_init_postback_forms_timeout = false;
 
 var TRANSPORT_TIMEOUT       = 30000;
 var TRANSPORT_TRIES         = 3;
@@ -601,6 +602,18 @@ function z_transport_incoming_msg(msg)
     }
 }
 
+function z_transport_delegate_javascript(data, _msg)
+{
+    if (z_init_postback_forms_timeout) {
+        clearTimeout(z_init_postback_forms_timeout);
+    }
+    eval(data);
+    z_init_postback_forms_timeout = setTimeout(function() {
+            z_init_postback_forms_timeout = false;
+            z_init_postback_forms();
+        }, 10);
+}
+
 function z_transport_maybe_ack(msg)
 {
     if (msg.qos >= 1) {
@@ -795,7 +808,6 @@ function z_ajax(options, data)
             try
             {
                 z_transport_incoming(received_data);
-                z_init_postback_forms();
                 z_unmask(options.trigger_id);
             }
             catch(e)
@@ -1117,7 +1129,6 @@ function z_transport_handle_push_data(data)
     try
     {
         z_transport_incoming(data);
-        z_init_postback_forms();
     }
     catch (e)
     {
@@ -2163,7 +2174,6 @@ $.fn.selected = function(select) {
 };
 
 // helper fn for console logging
-// set $.fn.ajaxSubmit.debug to true to enable debug logging
 function log() {
     if (window.console && window.console.log)
         window.console.log('[jquery.form] ' + Array.prototype.join.call(arguments,''));
