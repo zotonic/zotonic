@@ -179,7 +179,6 @@ event(#postback{message={identity_delete, Args}}, Context) ->
 
 % Add an identity
 event(#postback{message={identity_add, Args}}, Context) ->
-    {error_target, ErrorTarget} = proplists:lookup(error_target, Args),
     {id, RscId} = proplists:lookup(id, Args),
     case m_rsc:is_editable(RscId, Context) of
         true ->
@@ -199,7 +198,12 @@ event(#postback{message={identity_add, Args}}, Context) ->
                             end,
                             Context;
                         false ->
-                            z_render:wire({add_class, [{target, ErrorTarget}, {class, "has-error"}]}, Context)
+                            case proplists:get_value(error_target, Args) of
+                                undefined ->
+                                    z_render:growl(?__("The address is invalid.", Context), Context);
+                                ErrorTarget ->
+                                    z_render:wire({add_class, [{target, ErrorTarget}, {class, "has-error"}]}, Context)
+                            end
                     end
             end;
         false ->
