@@ -72,8 +72,8 @@ The file ``~/.zotonic/zotonic.config`` can be configured to hold any of the
 configuration options below. They are in effect for every site running
 in the Zotonic instance.
 
-Zotonic-wide settings for receiving email
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Zotonic-wide settings for sending email
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 +--------------------------+--------------------------------------+
 |Key                       |Description                           |
