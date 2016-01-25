@@ -93,6 +93,9 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
         {<<_Field:Index/binary, 13, 10, _Rest/binary>>, true} ->
             scan_lines(Device, Fs, Chunk, Index + 2, Acc, Remainder, true);
 
+        {<<_Field:Index/binary, 13, _Rest/binary>>, true} ->
+            scan_lines(Device, Fs, Chunk, Index + 1, Acc, Remainder, true);
+
         {<<_Field:Index/binary, 10, _Rest/binary>>, true} ->
             scan_lines(Device, Fs, Chunk, Index + 1, Acc, Remainder, true);
 
@@ -105,6 +108,9 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
             scan_lines(Device, Fs, Chunk, Index + 1, Acc, Remainder, true);
 
         {<<Field:Index/binary, 13, 10, Rest/binary>>, false} ->
+            scan_lines(Device, Fs, Rest, 0, [ [] | append_last_field(Remainder, Field, Acc)], <<>>, false);
+
+        {<<Field:Index/binary, 13, Rest/binary>>, false} ->
             scan_lines(Device, Fs, Rest, 0, [ [] | append_last_field(Remainder, Field, Acc)], <<>>, false);
 
         {<<Field:Index/binary, 10, Rest/binary>>, false} ->
