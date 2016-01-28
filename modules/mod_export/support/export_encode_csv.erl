@@ -23,6 +23,7 @@
 	encode/2
 	]).
 
+-include_lib("zotonic.hrl").
 
 encode([], _Context) ->
 	<<"\r\n">>;
@@ -51,6 +52,12 @@ encode_value(B, _Context) when is_binary(B) ->
 encode_value({Y,M,D} = Date, Context)
 	when is_integer(Y), is_integer(M), is_integer(D) ->
 	quote(erlydtl_dateformat:format_utc({Date, {0,0,0}}, "Y-m-d", Context));
+encode_value(?ST_JUTTEMIS, _Context) ->
+	<<>>;
+encode_value({{9999,M,D}, {H,I,S}}, _Context) 
+	when is_integer(M), is_integer(D),
+		 is_integer(H), is_integer(I), is_integer(S) ->
+	<<>>;
 encode_value({{Y,M,D}, {H,I,S}} = Date, Context) 
 	when is_integer(Y), is_integer(M), is_integer(D),
 		 is_integer(H), is_integer(I), is_integer(S) ->
