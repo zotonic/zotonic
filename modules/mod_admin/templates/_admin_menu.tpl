@@ -9,11 +9,9 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="/" title="{_ visit site _}">
-                <span class="zotonic-logo"><em>Zotonic</em></span>
-            </a>
+            {% include "_admin_navbar_brand.tpl" %}
         </div>
-        
+
         <div class="navbar-collapse collapse" id="admin_menu_collapse">
 
             <ul class="nav navbar-nav">
@@ -79,7 +77,7 @@
                     {% endwith %}
                 </ul>
             </div>
-            
+
             {% block search %}
                 <form class="navbar-right navbar-form form-inline" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
                     <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
