@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1, 
+    init/1,
     service_available/2,
     malformed_request/2,
     allowed_methods/2,
@@ -45,8 +45,6 @@ malformed_request(ReqData, Context0) ->
         {Data, RD1} = wrq:req_body(ReqData),
         {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
         Context = ?WM_REQ(RD1, Context0),
-        
-        ?DEBUG(ZMsg),
         z_context:lager_md(Context),
         Context1 = z_context:set(z_msg, ZMsg, Context),
         ?WM_REPLY(ZMsg#z_msg_v1.delegate =/= '$comet', Context1)
@@ -66,7 +64,7 @@ process_post(ReqData, Context) ->
             process_post_ubf(ReqData, Context);
         _ ->
             {{halt, 415}, ReqData, Context}
-    end. 
+    end.
 
 process_post_ubf(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
@@ -76,4 +74,3 @@ process_post_ubf(ReqData, Context) ->
     {x, RD, Context3} = ?WM_REPLY(x, Context2),
     RD1 = wrq:append_to_resp_body(ReplyData, RD),
     {true, RD1, Context3}.
-
