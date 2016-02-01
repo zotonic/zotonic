@@ -13,6 +13,10 @@
     {% endif %}
     <form id="{{ #ruleform }}" class="row acl-rule-row acl-rule-{{ rule.id }} {% if rule.is_block %}is_block{% endif %}" method="post" action="postback">
 
+        {% if rule.managed_by %}
+            <fieldset disabled="disabled">
+        {% endif %}
+
         <div class="col-md-1">
             <label class="checkbox-inline">
                 <input type="checkbox" id="{{ #is_block }}" name="is_block" value="on"
@@ -22,48 +26,60 @@
             </label>
         </div>
 
-        <div class="col-md-2">
-    	    <select class="form-control" id="{{ #user_group_id }}" name="acl_user_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
-    		    {% for cg in m.hierarchy.acl_user_group.tree_flat %}
-    			    <option value="{{ cg.id }}" {% if cg.id == rule.acl_user_group_id %}selected{% endif %}>
-    				    {{ cg.indent }} {{ cg.id.title }}
-    			    </option>
-    		    {% endfor %}
-    	    </select>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <select class="form-control" id="{{ #user_group_id }}" name="acl_user_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
+                        {% for cg in m.hierarchy.acl_user_group.tree_flat %}
+                            <option value="{{ cg.id }}" {% if cg.id == rule.acl_user_group_id %}selected{% endif %}>
+                                {{ cg.indent }} {{ cg.id.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            {% if kind == "rsc" %}
+                <div class="col-md-4">
+                    <select class="form-control" id="{{ #content_group_id }}" name="content_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
+                        <option value="">{_ All _}</option>
+                        {% for cg in m.hierarchy.content_group.tree_flat %}
+                            <option value="{{ cg.id }}" {% if cg.id == rule.content_group_id %}selected{% endif %}>
+                                {{ cg.indent }} {{ cg.id.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control" id="{{ #category_id }}" name="category_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
+                        <option value="">{_ All _}</option>
+                        {% for cg in m.hierarchy[`$category`].tree_flat %}
+                            <option value="{{ cg.id }}" {% if cg.id == rule.category_id %}selected{% endif %}>
+                                {{ cg.indent }} {{ cg.id.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                {% if rule.managed_by %}<div class="col-md-12">{_ This rule is managed by module _} <strong>{{ m.modules.info[rule.managed_by].title|default:rule.managed_by }}</strong></div>{% endif %}
+            </div>
+        </div>
+            {% elseif kind == "module" %}
+                <div class="col-md-8">
+                    <select class="form-control" id="{{ #module }}" name="module" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
+                        <option value="">{_ All _}</option>
+                        {% for mod, name in m.modules.all %}
+                            <option value="{{ mod }}" {% if mod == rule.module %}selected{% endif %}>{{ mod }} ({{name }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                {% if rule.managed_by %}<div class="col-md-12">{_ This rule is managed by module _} <strong>{{ m.modules.info[rule.managed_by].title|default:rule.managed_by }}</strong></div>{% endif %}
+            </div>
         </div>
 
-        {% if kind == "rsc" %}
-            <div class="col-md-2">
-    	        <select class="form-control" id="{{ #content_group_id }}" name="content_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
-    		        <option value="">{_ All _}</option>
-    		        {% for cg in m.hierarchy.content_group.tree_flat %}
-    			        <option value="{{ cg.id }}" {% if cg.id == rule.content_group_id %}selected{% endif %}>
-    				        {{ cg.indent }} {{ cg.id.title }}
-    			        </option>
-    		        {% endfor %}
-    	        </select>
-            </div>
-            
-            <div class="col-md-2">
-    	        <select class="form-control" id="{{ #category_id }}" name="category_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
-    		        <option value="">{_ All _}</option>
-    		        {% for cg in m.hierarchy[`$category`].tree_flat %}
-    			        <option value="{{ cg.id }}" {% if cg.id == rule.category_id %}selected{% endif %}>
-    				        {{ cg.indent }} {{ cg.id.title }}
-    			        </option>
-    		        {% endfor %}
-    	        </select>
-            </div>
-        {% elseif kind == "module" %}
-            <div class="col-md-4">
-    	        <select class="form-control" id="{{ #module }}" name="module" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
-    		        <option value="">{_ All _}</option>
-                    {% for mod, name in m.modules.all %}
-                        <option value="{{ mod }}" {% if mod == rule.module %}selected{% endif %}>{{ mod }} ({{name }})</option>
-                    {% endfor %}
-                </select>            
-            </div>
-        {% endif %}
+            {% endif %}
 
         <div class="col-md-5">
 
@@ -102,6 +118,9 @@
             </div>
         </div>
 
+        {% if rule.managed_by %}
+            </fieldset>
+        {% endif %}
     </form>
 {% else %}
     <div class="row acl-rule-row acl-rule-{{ rule.id }} {% if rule.is_block %}bg-danger{% endif %}">

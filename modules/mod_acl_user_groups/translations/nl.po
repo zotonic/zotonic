@@ -111,3 +111,6 @@ msgstr "koppel"
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:32
 msgid "view (acl action)"
 msgstr "bekijk"
+
+msgid "This rule is managed by module"
+msgstr "Deze regel wordt beheerd door module"
