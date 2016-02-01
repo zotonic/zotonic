@@ -21,7 +21,7 @@
 -mod_title("ACL User Groups").
 -mod_description("Organize users into hierarchical groups").
 -mod_prio(400).
--mod_schema(5).
+-mod_schema(6).
 -mod_depends([menu, mod_content_groups]).
 -mod_provides([acl]).
 
@@ -42,6 +42,7 @@
     await_lookup/2,
     rebuild/2,
     observe_admin_menu/3,
+    observe_manage_data/2,
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
     name/1,
@@ -239,6 +240,11 @@ observe_hierarchy_updated(#hierarchy_updated{root_id= <<"acl_user_group">>, pred
     rebuild(Context);
 observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
     ok.
+
+observe_manage_data(#manage_data{module = Module, props = {acl_rules, Rules}}, Context) ->
+    m_acl_rule:replace_managed(Rules, Module, Context);
+observe_manage_data(#manage_data{}, _Context) ->
+    undefined.
 
 observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->
     check_hasusergroup(Id, M#rsc_update_done.post_props, Context),

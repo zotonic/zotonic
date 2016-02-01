@@ -38,6 +38,7 @@
     update/4,
     insert/3,
     delete/3,
+    replace_managed/3,
 
     revert/2,
     publish/2,
@@ -213,16 +214,38 @@ update(Kind, Id, Props, Context) ->
 insert(Kind, Props, Context) ->
     lager:info("[~p] ACL user groups insert by ~p of ~p with ~p",
                [z_context:site(Context), z_acl:user(Context), Kind, Props]),
+
     Result = z_db:insert(
                table(Kind),
                [{is_edit, true},
                 {modifier_id, z_acl:user(Context)},
                 {modified, calendar:universal_time()},
                 {creator_id, z_acl:user(Context)},
-                {created, calendar:universal_time()} | Props], Context
+                {created, calendar:universal_time()} | map_props(Props, Context)], Context
               ),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
+
+map_props(Props, Context) ->
+    lists:map(
+        fun(Prop) ->
+            map_prop(Prop, Context)
+        end,
+        Props
+    ).
+
+map_prop({acl_user_group_id, Id}, Context) ->
+    {acl_user_group_id, m_rsc:rid(Id, Context)};
+map_prop({category_id, Id}, Context) ->
+    {category_id, m_rsc:rid(Id, Context)};
+map_prop({actions, Actions}, _Context) ->
+    Joined = string:join(
+        [z_convert:to_list(Action) || Action <- Actions],
+        ","
+    ),
+    {actions, Joined};
+map_prop(Prop, _Context) ->
+    Prop.
 
 delete(Kind, Id, Context) ->
     lager:info("[~p] ACL user groups delete by ~p of ~p:~p",
@@ -233,6 +256,13 @@ delete(Kind, Id, Context) ->
     {ok, _} = z_db:delete(table(Kind), Id, Context),
     mod_acl_user_groups:rebuild(edit, Context),
     ok.
+
+replace_managed(Rules, Module, Context) ->
+    delete_managed(Module, Context),
+    [manage_acl_rule(Rule, Module, Context) || Rule <- Rules].
+
+manage_acl_rule({Type, Props}, Module, Context) ->
+    insert(Type, [{managed_by, Module} | Props], Context).
 
 %% Remove all edit versions, add edit versions of published rules
 revert(Kind, Context) ->
@@ -296,6 +326,7 @@ ensure_acl_rule_rsc(Context) ->
 
         true ->
             ensure_column_is_block(acl_rule_rsc, Context),
+            ensure_column_managed_by(acl_rule_rsc, Context),
             ok
     end.
 
@@ -314,6 +345,7 @@ ensure_acl_rule_module(Context) ->
             ok;
         true ->
             ensure_column_is_block(acl_rule_module, Context),
+            ensure_column_managed_by(acl_rule_module, Context),
             ok
     end,
     ok.
@@ -328,6 +360,16 @@ ensure_column_is_block(Table, Context) ->
             z_db:flush(Context)
     end.
 
+ensure_column_managed_by(Table, Context) ->
+    Columns = z_db:column_names(Table, Context),
+    case lists:member(managed_by, Columns) of
+        true ->
+            ok;
+        false ->
+            [] = z_db:q("alter table "++atom_to_list(Table)++" add column managed_by character varying(255)", Context),
+            z_db:flush(Context)
+    end.
+
 shared_table_columns() ->
     [
      #column_def{name=id, type="serial", is_nullable=false},
@@ -336,6 +378,7 @@ shared_table_columns() ->
      #column_def{name=modifier_id, type="integer", is_nullable=false},
      #column_def{name=created, type="timestamp", is_nullable=true},
      #column_def{name=modified, type="timestamp", is_nullable=true},
+     #column_def{name=managed_by, type="character varying", length=255, is_nullable=true}
      #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
      #column_def{name=is_block, type="boolean", is_nullable=false, default="false"},
      #column_def{name=actions, type="character varying", length=300, is_nullable=true}
@@ -463,3 +506,13 @@ implode_actions(L) ->
     string:join(
       [z_convert:to_list(K) || {K, true} <- L],
       ",").
+
+%% @doc Delete ACL rules that are managed by a module
+-spec delete_managed(atom(), #context{}) -> integer().
+delete_managed(Module, Context) ->
+    delete_managed(Module, rsc, Context) + delete_managed(Module, module, Context).
+
+-spec delete_managed(atom(), atom(), #context{}) -> integer().
+delete_managed(Module, Kind, Context) ->
+    T = z_convert:to_list(table(Kind)),
+    z_db:q("DELETE FROM " ++ T ++ " WHERE managed_by = $1", [Module], Context).

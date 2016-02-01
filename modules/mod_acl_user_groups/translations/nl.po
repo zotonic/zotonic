@@ -449,3 +449,6 @@ msgstr "bekijk"
 
 msgid "Reverted rules"
 msgstr "Regels teruggezet"
+
+msgid "This rule is managed by module"
+msgstr "Deze regel wordt beheerd door module"
