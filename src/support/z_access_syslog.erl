@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,12 +33,12 @@
 -record(state, {
     priority,
     format,
-    log 
+    log
 }).
 
 -define(FLUSH_INTERVAL, 1000).
 
-%% 
+%%
 %% Api
 %%
 
@@ -52,10 +52,10 @@ start_link() ->
 start_link(Ident, Opts, Facility, Level) ->
     z_buffered_worker:start_link(?MODULE, ?MODULE, [[Ident, Opts, Facility], Level]).
 
-log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime, 
+log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
         method=Method, response_code=Status,
         path=Path, headers=Headers, response_length=Size}) ->
-    MD = [{start_time, StartTime}, 
+    MD = [{start_time, StartTime},
         {finish_time, FinishTime},
         {method, Method},
         {status, Status},
@@ -65,7 +65,7 @@ log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
         {referer, get_header_value("Referer", Headers)}
         | lager:md()],
     z_buffered_worker:push(?MODULE, MD).
- 
+
 %%
 %% Buffered worker callbacks
 %%
@@ -98,7 +98,7 @@ get_header_value(Name, Headers) ->
 %%
 %% Formats
 %%
-    
+
 format(alog, MD) ->
     StartTime = proplists:get_value(start_time, MD),
     RequestId = proplists:get_value(req_id, MD),
@@ -110,11 +110,11 @@ format(alog, MD) ->
     RemoteIP = proplists:get_value(remote_ip, MD),
     Referer = proplists:get_value(referer, MD),
     UserAgent = proplists:get_value(user_agent, MD),
-   
+
     fmt_alog(
         fmt_time(StartTime),
         RequestId,
-        RemoteIP,  
+        RemoteIP,
         z_convert:to_binary(User),
         z_convert:to_binary(Method),
         Path,
@@ -123,7 +123,7 @@ format(alog, MD) ->
         z_convert:to_binary(Size),
         Referer,
         UserAgent).
-        
+
 
 fmt_time({_MegaSecs, _Secs, _MicroSecs}=Ts) ->
     fmt_time(calendar:now_to_universal_time(Ts));
@@ -143,9 +143,9 @@ fmt_ip(undefined) ->
     <<"0.0.0.0">>;
 fmt_ip(HostName) ->
     HostName.
-    
+
 % @doc Prevent escape characters to be shown in the log file.
-% @seealso http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-4487
+% Seealso http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-4487
 sanitize(S) ->
     sanitize(S, <<>>).
 
@@ -155,7 +155,7 @@ sanitize(<<C, Rest/binary>>, Acc) when C < 32 ->
     sanitize(Rest, <<Acc/binary, (C+$A), $^>>);
 sanitize(<<C, Rest/binary>>, Acc) ->
     sanitize(Rest, <<Acc/binary, C>>).
-    
+
 month(1) -> <<"Jan">>;
 month(2) -> <<"Feb">>;
 month(3) -> <<"Mar">>;
