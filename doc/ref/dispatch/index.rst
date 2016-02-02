@@ -3,7 +3,7 @@
 All dispatch rules
 ==================
 
-All the dispatch rules from all modules. For a background on dispatch rules, see :ref:`The URL dispatch system <manual-dispatch>`.
+All the dispatch rules from all modules. For a background on dispatch rules, see :ref:`The URL dispatch system <guide-dispatch>`.
 
 .. csv-table::
    :delim: tab

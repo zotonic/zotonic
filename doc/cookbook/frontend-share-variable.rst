@@ -10,7 +10,7 @@ Why
 
 In some situations, you may have to use the same query result inside
 several blocks of the same template. For instance, you may need to use
-it in the body of a page and in its Javascript block. Intuitively, you
+it in the body of a page and in its JavaScript block. Intuitively, you
 would program your template as shown in these scripts::
 
     {# base.tpl #}

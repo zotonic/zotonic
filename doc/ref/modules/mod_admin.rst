@@ -16,7 +16,7 @@ Extending the admin edit page
 There are several special templates names that will be automatically
 included into the `/admin/edit/xxx` page from when you create these
 specially named templates.
-        
+
 ``_admin_edit_basics.tpl``
   Will be automatically included into main (left) div (at top).
 
@@ -29,7 +29,7 @@ specially named templates.
 These templates are included using the :ref:`tag-all-catinclude` tag; so
 if you need something in the sidebar just for persons, create a
 ``_admin_edit_sidebar.person.tpl`` file in your project.
-  
+
 
 Overriding TinyMCE options
 ``````````````````````````
@@ -40,7 +40,7 @@ file which can contain extra settings for the TinyMCE editors in the
 admin.
 
 .. highlight:: javascript
-   
+
 The template must contain JavasSript which modifies the `tinyInit`
 variable just before the editor is started. For example, to tweak the
 "paste" options you can put the following in the template::
@@ -84,18 +84,18 @@ You can use them as basis for your site admin-related tasks.
   Sligthly more complex widget example. Same templates are used into /admin/edit/N for
   main content and sidebar widgets. These widgets do not provide any localization
   abilities. Also note that there are several special widget names:
-        
+
 ``_admin_widget_i18n.tpl``
   Complex widget example. Is used to edit localized rsc properties. It will be rendered
   as tabs. See /admin/edit/N top left to see the tabs. If mod_translation disabled, then
   i18n-widgets are displayed same as _admin_widget_std.tpl.
-      
+
 
 Making an admin widget conditionally visible
 --------------------------------------------
 
 .. highlight:: django
-               
+
 To make an entire admin widget visible or not, depending on some
 condition that you want to calculate inside the widget’s code, you can
 use the `widget_wrapper` block (which sits around the entire widget)
@@ -134,7 +134,7 @@ The `Category` column, second from the left, can be extended to carry category-s
     Past event   :gray:`2014-01-02 00:00:00`  01 Jan 2014, 13:10
     ============ ===========================  ===================
 
-Instead of dates, the information can be anything - from color coding labels to location data, the number of comments or the completeness state of product descriptions. 
+Instead of dates, the information can be anything - from color coding labels to location data, the number of comments or the completeness state of product descriptions.
 
 Setting up templates
 ````````````````````
@@ -142,7 +142,7 @@ Setting up templates
 To make it work we are using 3 templates (where `category_name` is the lowercase name of your category):
 
 ``_admin_overview_list.category_name.tpl``
-  
+
     Overrides the overview with a ``field`` variable for our custom sort. If we are using :ref:`an existing resource property<model-rsc>` such as ``date_start``, we write::
 
       {% include "_admin_overview_list.tpl"
@@ -150,7 +150,7 @@ To make it work we are using 3 templates (where `category_name` is the lowercase
       %}
 
 ``_admin_sort_header.category_name.tpl``
-  
+
     The sort header caption. For a non-sortable header, just write the caption as text. For a sortable header, include the sort functionality in ``_admin_sort_header.tpl`` and pass the caption as variable::
 
         {% include "_admin_sort_header.tpl"
@@ -175,7 +175,7 @@ To make it work we are using 3 templates (where `category_name` is the lowercase
 Custom sort properties
 ``````````````````````
 
-To sort on values that are not stored in the default Zotonic resources, you will need to create a :ref:`custom pivot <manual-datamodel-custompivots>`. This will create an additional database table with the values to sort on.
+To sort on values that are not stored in the default Zotonic resources, you will need to create a :ref:`custom pivot <cookbook-custom-pivots>`. This will create an additional database table with the values to sort on.
 
 Let's take the (unlikely) example where we want to display the summary of each page (and sort on it as well). The summary data is not stored in an easily accessible way (at least for sorting), so we need to add 2 pivot methods to our Erlang module::
 
@@ -185,7 +185,7 @@ Let's take the (unlikely) example where we want to display the summary of each p
 
     observe_custom_pivot({custom_pivot, Id}, Context) ->
         case m_rsc:p(Id, summary, Context) of
-            {trans, [{en, Summary}]} -> 
+            {trans, [{en, Summary}]} ->
                 {?MODULE, [{summary, Summary}]};
             _ -> none
         end.
@@ -198,7 +198,7 @@ The ``field`` name in ``_admin_overview_list.category_name.tpl`` now just needs 
         field="summary"
     %}
 
-And the sort header template ``_admin_sort_header.category_name.tpl`` adds the custom pivot variable::  
+And the sort header template ``_admin_sort_header.category_name.tpl`` adds the custom pivot variable::
 
     {% include "_admin_sort_header.tpl"
         caption="Summary"
@@ -235,7 +235,7 @@ And on the edit page there is this check to conditionally include the geodata bo
 
 The ``if_undefined`` is used so that the default value can be true
 when the checkbox has never been touched.
-  
+
 
 Configuration keys
 ------------------

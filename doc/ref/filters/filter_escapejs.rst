@@ -1,7 +1,7 @@
 .. highlight:: django
 .. include:: meta-escapejs.rst
 
-Escapes the value for insertion in Javascript output.
+Escapes the value for insertion in JavaScript output.
 
 For example::
 

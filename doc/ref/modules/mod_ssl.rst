@@ -1,10 +1,10 @@
 
 .. include:: meta-mod_ssl.rst
 
-The mod_ssl module adds https support. After enabling mod_ssl the logon window 
+The mod_ssl module adds https support. After enabling mod_ssl the logon window
 and other secure pages will be served using https.
 
-SSL support can be switched on for each site separately. Because of the nature of 
+SSL support can be switched on for each site separately. Because of the nature of
 SSL, each site will listen on its own port or IP address. Virtual hosting of sites via
 https is not possible.
 
@@ -22,7 +22,7 @@ and will be either set or replaced with a default when not set.
     Note that on Unix and BSD it is not possible to use ports
     below 1024. You need to map ports below 1024 to the
     ``mod_ssl.listen_port``.  See :ref:`How to bind Zotonic to Port 80
-    and Port 443 <manual-deployment-privilegedports>`.
+    and Port 443 <guide-deployment-privilegedports>`.
 
 ``mod_ssl.port``
     This is the *outside* port, as seen by a visitor of the site. When this is set to 443 then
@@ -76,11 +76,11 @@ The files all have the name of the site in them (*sitename* in the filenames bel
 This is to prevent mixing them up with other sites:
 
 :file:`sitename.pem`
-    This holds the private key for the encryption. The key must be unlocked and in 
+    This holds the private key for the encryption. The key must be unlocked and in
     PKCS#1 format (see below).
 
 :file:`sitename.crt`
-    This is the certificate. Usually it is supplied by the certificate authority where you 
+    This is the certificate. Usually it is supplied by the certificate authority where you
     bought it. It can also be a self signed certificate, see below.
 
 :file:`sitename.ca.crt`
@@ -100,7 +100,7 @@ This is to prevent mixing them up with other sites:
 Serving a page via SSL
 ----------------------
 
-The :ref:`dispatch rule argument <manual-dispatch>` ``ssl`` defines if a page will be 
+The :ref:`dispatch rule argument <guide-dispatch>` ``ssl`` defines if a page will be
 served over https or http.
 
 There are three variations:
@@ -130,7 +130,7 @@ And of a dispatch rule that should keep the protocol, in this case the lib contr
 used for serving css, javascript and other static lib files::
 
     {lib, ["lib",'*'], controller_lib, [{ssl, any}]}
- 
+
 
 
 Dependencies

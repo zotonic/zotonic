@@ -35,7 +35,7 @@ Domain model
 ------------
 
 The :term:`domain model` for this module is the following: the module
-creates a :ref:`category <manual-datamodel-categories>` `tweet` as a
+creates a :ref:`category <guide-datamodel-categories>` `tweet` as a
 subcategory of `text.` Each time a tweet is imported, a resource of
 this category is created.
 
@@ -65,4 +65,4 @@ window will now automatically show ah "sign in with Twitter" button.
 
 
 .. seealso:: :ref:`filter-twitter` filter
-  
+

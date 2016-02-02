@@ -14,7 +14,7 @@ Back in history example::
 
    {% button text="Back" action={redirect back} %}
 
-After clicking the button the browser will go back to the last page using the Javascript history.
+After clicking the button the browser will go back to the last page using the JavaScript history.
 
 Example of using dispatch rules for the redirect location::
 

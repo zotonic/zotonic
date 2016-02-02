@@ -11,8 +11,8 @@ interactions:
 
 - Login confirmation
 - Password reset
-- Send password reminder  
+- Send password reminder
 
 .. todo:: Extend documentation
 
-.. seealso:: :ref:`controller-logoff`, :ref:`manual-authentication`.
+.. seealso:: :ref:`controller-logoff`, :ref:`guide-authentication`.

@@ -1,9 +1,9 @@
 
 .. include:: meta-custom.rst
 
-Support for custom client-side (Javascript-based) validators.
+Support for custom client-side (JavaScript-based) validators.
 
-This call simply adds a ``z_add_validator()`` Javascript call which
+This call simply adds a ``z_add_validator()`` JavaScript call which
 adds a custom validator based on the arguments given in the validator.
 
 .. highlight:: django
@@ -24,7 +24,7 @@ And then ``validate_foobar`` is defined as follows::
     }
 
 The ``args`` are available if the validation is added using the LiveValidation
-Javascript API.
+JavaScript API.
 
 ``isSubmit`` is ``true`` if the validation is triggered by a form submit, if it
 was triggered by change or focus events then it is ``false``.

@@ -1,4 +1,4 @@
-.. _manual-cookbook-frontend-custom-content-block:
+.. _guide-cookbook-frontend-custom-content-block:
 
 How to add a custom Content Block
 ---------------------------------

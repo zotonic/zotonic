@@ -1,7 +1,16 @@
-.. _manual-cookbook:
+.. _guide-cookbook:
 
 Cookbooks
 =========
+
+.. toctree::
+   :maxdepth: 1
+
+   custom-action
+   custom-model
+   custom-pivot
+   custom-tag
+   writing-module
 
 
 Frontend cookbook
@@ -13,7 +22,7 @@ regarding the frontend development of a site.
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    frontend-*
 
 
@@ -23,20 +32,20 @@ Admin cookbook
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    admin-*
 
-   
+
 Shell cookbook
 --------------
 
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    shell-*
 
-   
+
 Just enough...
 --------------
 
@@ -47,5 +56,5 @@ in general.
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    justenough-*

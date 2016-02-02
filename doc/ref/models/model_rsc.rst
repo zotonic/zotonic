@@ -1,7 +1,7 @@
 .. include:: meta-rsc.rst
 
 The main resource model, which is the central part of the
-:ref:`Zotonic data model <manual-datamodel>`. This model provides an
+:ref:`Zotonic data model <guide-datamodel>`. This model provides an
 interface to all resource ("page") information. It also provides an
 easy way to fetch edges from pages without needing to use the
 :ref:`model-edge` model.
@@ -307,4 +307,4 @@ And also using the :ref:`tag-print` tag::
 
 
 
-.. seealso:: :ref:`manual-datamodel`, :ref:`model-edge`, :ref:`model-media`, :ref:`model-rsc_gone`.
+.. seealso:: :ref:`guide-datamodel`, :ref:`model-edge`, :ref:`model-media`, :ref:`model-rsc_gone`.

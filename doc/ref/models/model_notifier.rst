@@ -1,7 +1,7 @@
 
 .. include:: meta-notifier.rst
 
-Use the :ref:`notification system <manual-notification>` from your templates.
+Use the :ref:`notification system <guide-notification>` from your templates.
 
 This model makes it possible to user the power of the notifier mechanism inside your templates.
 

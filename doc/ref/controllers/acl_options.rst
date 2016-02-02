@@ -1,7 +1,7 @@
 ACL options
 -----------
 
-:ref:`manual-authorization` checks to perform, in addition to the
+:ref:`guide-authorization` checks to perform, in addition to the
 ``acl_action`` dispatch option, can be given in the ``acl`` dispatch
 option, and accepts the following options:
 

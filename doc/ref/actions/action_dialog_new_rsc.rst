@@ -21,7 +21,7 @@ This postback has the following arguments:
 * ``redirect``: Boolean flag whether or not to redirect to the edit
   page. Defaults to ``true``.
 * ``actions``: Any actions to perform after the resource is created.
-* ``callback``: Javascript function to call when the subject edge has been created.
+* ``callback``: JavaScript function to call when the subject edge has been created.
 * ``objects``: A list of ``[object, predicate]`` pairs which are
   created as outgoing edges from the new page to the given
   objects. The object can be a resource ID or a resource
