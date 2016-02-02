@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,12 +68,12 @@ init([]) ->
 
     %% Random id generation
     Ids = {z_ids,
-           {z_ids, start_link, []}, 
+           {z_ids, start_link, []},
            permanent, 5000, worker, [z_ids]},
 
     %% Access Logger
     Logger = {z_access_syslog,
-              {z_access_syslog, start_link, []}, 
+              {z_access_syslog, start_link, []},
               permanent, 5000, worker, [z_access_syslog, z_buffered_worker]},
 
     %% SMTP gen_servers: one for sending mails, the other for receiving email
@@ -85,7 +85,7 @@ init([]) ->
                         {z_email_receive_server, start_link, []},
                         permanent, 5000, worker, [z_email_receive_server]},
 
-    FilesSup = {z_file_sup, 
+    FilesSup = {z_file_sup,
                  {z_file_sup, start_link, []},
                  permanent, 5000, supervisor, dynamic},
 
@@ -103,7 +103,7 @@ init([]) ->
                  Ids,
                  Logger,
                  SmtpServer, SmtpReceiveServer,
-                 FilesSup, 
+                 FilesSup,
                  SitesSup,
                  FSWatchSup| get_extensions()
                 ],
@@ -112,14 +112,14 @@ init([]) ->
     WebIp = case os:getenv("ZOTONIC_IP") of
                 false -> z_config:get(listen_ip);
                 Any when Any == []; Any == "*"; Any == "any" -> any;
-                ConfIP -> ConfIP 
-            end,   
+                ConfIP -> ConfIP
+            end,
     WebPort = case os:getenv("ZOTONIC_PORT") of
-                  false -> z_config:get(listen_port); 
-                  Anyport -> list_to_integer(Anyport) 
+                  false -> z_config:get(listen_port);
+                  Anyport -> list_to_integer(Anyport)
               end,
 
-    WebConfig = [ 
+    WebConfig = [
                   {dispatcher, z_sites_dispatcher},
                   {dispatch_list, []},
                   {backlog, z_config:get(inet_backlog)},
@@ -127,16 +127,16 @@ init([]) ->
                 ],
 
     %% Listen to the ip address and port for all sites.
-    IPv4Opts = [{port, WebPort}, {ip, WebIp}], 
+    IPv4Opts = [{port, WebPort}, {ip, WebIp}],
     IPv6Opts = [{port, WebPort}, {ip, any6}],
 
     %% Webmachine/Mochiweb processes
     [IPv4Proc, IPv6Proc] =
         [[{Name,
            {webmachine_mochiweb, start,
-            [Name, Opts]},                                 
+            [Name, Opts]},
            permanent, 5000, worker, dynamic}]
-         || {Name, Opts} 
+         || {Name, Opts}
                 <- [{webmachine_mochiweb, IPv4Opts ++ WebConfig},
                     {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig}]],
 
@@ -146,7 +146,7 @@ init([]) ->
                      _ -> false
                  end,
 
-    Processes1 = 
+    Processes1 =
         case EnableIPv6 of
             true -> Processes ++ IPv4Proc ++ IPv6Proc;
             false -> Processes ++ IPv4Proc
@@ -176,12 +176,12 @@ init([]) ->
 
     {ok, {{one_for_one, 1000, 10}, Processes1}}.
 
-%% @doc Initializes the stats collector. 
+%% @doc Initializes the stats collector.
 %%
 init_stats() ->
     z_stats:init().
 
-%% @doc Initializes the ua classifier. When it is enabled it is loaded and 
+%% @doc Initializes the ua classifier. When it is enabled it is loaded and
 %% tested if it works.
 init_ua_classifier() ->
     case z_config:get(use_ua_classifier) of
@@ -200,7 +200,7 @@ init_ua_classifier() ->
 %% @doc Sets the application parameters for webmachine and starts the logger processes.
 %%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid
 %%      messing with application parameters when starting up a new wm-mochiweb process.
-init_webmachine() -> 
+init_webmachine() ->
     ServerHeader = webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
     application:set_env(webzmachine, server_header, ServerHeader),
     set_webzmachine_default(webmachine_logger_module, z_stats),
@@ -239,7 +239,7 @@ ipv6_supported() ->
 
 %% @doc Scan priv/extensions for ext_ folders and add those as childs to the supervisor.
 get_extensions() ->
-    Files = filelib:wildcard(filename:join([z_utils:lib_dir(priv), "extensions", "ext_*"])),
+    Files = z_utils:wildcard(filename:join([z_utils:lib_dir(priv), "extensions", "ext_*"])),
     [
      begin
          Module = list_to_atom(filename:basename(F)),

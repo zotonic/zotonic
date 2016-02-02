@@ -1,16 +1,16 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2010 Marc Worrell
-%% @doc Server managing all sites running inside Zotonic.  Starts the sites 
-%% according to the config files in the sites subdirectories.  
+%% @doc Server managing all sites running inside Zotonic.  Starts the sites
+%% according to the config files in the sites subdirectories.
 
 %% Copyright 2009-2010 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -73,12 +73,12 @@ upgrade() ->
 %% @doc Return a list of active site names.
 -spec get_sites() -> [ atom() ].
 get_sites() ->
-    gen_server:call(?MODULE, get_sites). 
+    gen_server:call(?MODULE, get_sites).
 
 %% @doc Return a list of all site names.
 -spec get_sites_all() -> [ atom() ].
 get_sites_all() ->
-    gen_server:call(?MODULE, get_sites_all). 
+    gen_server:call(?MODULE, get_sites_all).
 
 %% @doc Get the status of a particular site
 get_site_status(Site) when is_atom(Site) ->
@@ -89,7 +89,7 @@ get_site_status(#context{host=Site}) ->
 %% @doc Return a list of all sites and their status.
 -spec get_sites_status() -> list().
 get_sites_status() ->
-    gen_server:call(?MODULE, get_sites_status). 
+    gen_server:call(?MODULE, get_sites_status).
 
 %% @doc Return information on all running sites.
 -spec info() -> [ {atom(), integer()} ].
@@ -151,7 +151,7 @@ stop([Node, Site]) ->
     rpc:call(Node, ?MODULE, stop, [Site]);
 stop(Site) ->
     gen_server:cast(?MODULE, {stop, Site}).
-    
+
 %% @doc Start a site or multiple sites.
 start([Node, Site]) ->
     rpc:call(Node, ?MODULE, start, [Site]);
@@ -181,7 +181,7 @@ module_loaded(Module) ->
 %% @doc Initiates the server.
 init([]) ->
     {ok, Sup} = z_supervisor:start_link([]),
-    z_supervisor:set_manager_pid(Sup, self()), 
+    z_supervisor:set_manager_pid(Sup, self()),
     ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]),
     ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]),
     add_sites_to_sup(Sup, scan_sites()),
@@ -345,7 +345,7 @@ scan_sites(false) ->
     [ BuiltinCfg || {ok, BuiltinCfg} <- Builtin ] ++ scan_directory(z_path:user_sites_dir()).
 
 scan_directory(Directory) ->
-    ConfigFiles = filelib:wildcard(filename:join([Directory, "*", "config"])),
+    ConfigFiles = z_utils:wildcard(filename:join([Directory, "*", "config"])),
     ParsedConfigs = [ parse_config(CfgFile) || CfgFile <- ConfigFiles ],
     [ SiteConfig || {ok, SiteConfig} <- ParsedConfigs ].
 
@@ -365,7 +365,7 @@ parse_config([C|T], SiteConfig) ->
             MergedConfig = lists:ukeymerge(1, SortedNewConfig, SiteConfig),
             parse_config(T, MergedConfig);
         {error, Reason} = Error ->
-            lager:error("Could not consult site config: ~s: ~s", 
+            lager:error("Could not consult site config: ~s: ~s",
                         [C, unicode:characters_to_binary(file:format_error(Reason))]),
             Error
     end.
@@ -374,7 +374,7 @@ parse_config([C|T], SiteConfig) ->
 %% Filter out files starting with '.' or ending with '~'.
 config_d_files(SitePath) ->
     Path = filename:join([SitePath, "config.d", "*"]),
-    lists:sort([ F || F <- filelib:wildcard(Path),
+    lists:sort([ F || F <- z_utils:wildcard(Path),
                       filelib:is_regular(F),
                       lists:nth(1, filename:basename(F)) =/= $.,
                       lists:last(filename:basename(F)) =/= $~ ]).
@@ -442,7 +442,7 @@ handle_upgrade(State) ->
 
 supervised_sites(Sup) ->
     names(z_supervisor:which_children(Sup), []  ).
-    
+
     names([], Acc) ->
         Acc;
     names([{_RunState,CS}|Rest], Acc) ->
@@ -456,7 +456,7 @@ hosted_sites(SiteProps) ->
 info(Grouped) ->
     info(Grouped, []).
 
-info([], Info) -> 
+info([], Info) ->
     Info;
 info([{State, L} | Rest], Info) ->
     info(Rest, [{State, length(L)} | Info]).
@@ -506,4 +506,3 @@ is_module(Module) ->
         "mod_"++_ -> true;
         _ -> false
     end.
-

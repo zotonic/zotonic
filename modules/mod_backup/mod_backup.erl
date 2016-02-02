@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -65,7 +65,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("Backup", Context),
                 url={admin_backup},
                 visiblecheck={acl, use, mod_backup}}
-     
+
      |Acc].
 
 
@@ -79,7 +79,7 @@ observe_rsc_update(_, Acc, _Context) ->
 %% @doc Callback for controller_file_readonly.  Check if the file exists.
 file_exists(File, Context) ->
     PathFile = filename:join([dir(Context), File]),
-    case filelib:is_regular(PathFile) of 
+    case filelib:is_regular(PathFile) of
     	true ->
     	    {true, PathFile};
     	false ->
@@ -99,12 +99,12 @@ start_backup(Context) ->
 %% @doc Start a backup, either a full backup (including archived files) or a database only backup.
 start_backup(IsFullBackup, Context) ->
     gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), {start_backup, IsFullBackup}).
-    
+
 %% @doc List all backups present.  Newest first.
 list_backups(Context) ->
     InProgress = gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), in_progress_start),
     [ {F, D, IsFull, D =:= InProgress} || {F,D,IsFull} <- list_backup_files(Context) ].
-    
+
 
 %% @doc Check if there is a backup in progress.
 backup_in_progress(Context) ->
@@ -195,7 +195,7 @@ handle_info(periodic_backup, #state{backup_pid=Pid} = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_backup, State) ->
     cleanup(State#state.context),
-    z_utils:flush_message(periodic_backup), 
+    z_utils:flush_message(periodic_backup),
     case z_convert:to_bool(m_config:get_value(mod_backup, daily_dump, State#state.context)) of
         true -> maybe_daily_dump(State);
         false -> {noreply, State}
@@ -218,7 +218,7 @@ handle_info({'EXIT', Pid, _Error}, State) ->
             %% @todo Log the error
             %% Remove all files of this backup
             Name = z_convert:to_list(erlydtl_dateformat:format(State#state.backup_start, "Ymd-His", State#state.context)),
-            [ file:delete(F) || F <- filelib:wildcard(filename:join(dir(State#state.context), Name++"*")) ],
+            [ file:delete(F) || F <- z_utils:wildcard(filename:join(dir(State#state.context), Name++"*")) ],
             {noreply, State#state{backup_pid=undefined, backup_start=undefined}};
         _ ->
             %% when connected to the page, then this might be the page exiting
@@ -251,7 +251,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Keep the last 10 backups, delete all others.
 cleanup(Context) ->
-    Files = filelib:wildcard(filename:join(dir(Context), "*.sql")),
+    Files = z_utils:wildcard(filename:join(dir(Context), "*.sql")),
     Backups = lists:sort([ filename:rootname(F) || F <- Files ]),
     case length(Backups) of
         N when N > 10 ->
@@ -262,7 +262,7 @@ cleanup(Context) ->
         _ ->
             nop
     end.
-    
+
 
 
 maybe_daily_dump(State) ->
@@ -328,7 +328,7 @@ pg_dump(Name, Context) ->
     Password = proplists:get_value(dbpassword, All),
     Database = proplists:get_value(dbdatabase, All),
     Schema = proplists:get_value(dbschema, All),
-    
+
     DumpFile = filename:join([dir(Context), z_convert:to_list(Name) ++ ".sql"]),
     PgPass = filename:join([dir(Context), ".pgpass"]),
     ok = file:write_file(PgPass, z_convert:to_list(Host)
@@ -342,7 +342,7 @@ pg_dump(Name, Context) ->
                db_dump_cmd(),
                "' -h ", Host,
                " -p ", z_convert:to_list(Port),
-               " -w ", 
+               " -w ",
                " -f '", DumpFile, "' ",
                " -U '", User, "' ",
                case z_utils:is_empty(Schema) of
@@ -395,7 +395,7 @@ archive(Name, Context) ->
 
 %% @doc List all backups in the backup directory.
 list_backup_files(Context) ->
-    Files = filelib:wildcard(filename:join(dir(Context), "*.sql")),
+    Files = z_utils:wildcard(filename:join(dir(Context), "*.sql")),
     lists:reverse(
         lists:sort(
             [ {filename:rootname(filename:basename(F), ".sql"), filename_to_date(F), is_full_backup(F)} || F <- Files ])).
@@ -428,4 +428,3 @@ check_configuration() ->
     [{ok, is_list(Db) and is_list(Tar)},
      {db_dump, Db},
      {archive, Tar}].
-

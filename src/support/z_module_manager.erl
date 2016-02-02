@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,7 +68,7 @@
           sup :: pid(),
           module_exports = [] :: list({atom(), list()}),
           module_schema = [] :: list({atom(), integer()|undefined}),
-          start_wait  = none :: none | {atom(), pid(), erlang:timestamp()}, 
+          start_wait  = none :: none | {atom(), pid(), erlang:timestamp()},
           start_queue = [] :: list(),
           start_error = [] :: list()
       }).
@@ -121,7 +121,7 @@ activate(Module, Context) ->
 %% @doc Restart a module, activates the module if it was not activated.
 restart(Module, Context) ->
     case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
-        [{true}] -> 
+        [{true}] ->
             gen_server:cast(name(Context), {restart_module, Module});
         _ ->
             activate(Module, Context)
@@ -138,7 +138,7 @@ module_reloaded(Module, Context) ->
 active(Context) ->
     case z_db:has_connection(Context) of
         true ->
-            F = fun() -> 
+            F = fun() ->
                         Modules = z_db:q("select name from module where is_active = true order by name", Context),
                         [ z_convert:to_atom(M) || {M} <- Modules ]
                 end,
@@ -223,13 +223,13 @@ scan(#context{host=Host}) ->
            [z_utils:lib_dir(priv), "sites", Host, "modules", "mod_*"],
            [z_utils:lib_dir(priv), "sites", Host],
            [z_utils:lib_dir(priv), "modules", "mod_*"]
-           
+
           ],
-    Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [filelib:wildcard(filename:join(P)) || P <- All]),
+    Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [z_utils:wildcard(filename:join(P)) || P <- All]),
     [ {z_convert:to_atom(filename:basename(F)), F} ||  F <- Files ].
 
 
-%% @doc Return the priority of a module. Default priority is 500, lower is higher priority. 
+%% @doc Return the priority of a module. Default priority is 500, lower is higher priority.
 %% Never crash on a missing module.
 %% @spec prio(Module) -> integer()
 prio(Module) ->
@@ -244,7 +244,7 @@ prio(Module) ->
     end.
 
 
-%% @doc Sort the results of a scan on module priority first, module name next. 
+%% @doc Sort the results of a scan on module priority first, module name next.
 %% The list is made up of {module, Values} tuples
 %% @spec prio_sort(proplist()) -> proplist()
 prio_sort([{_,_}|_]=ModuleProps) ->
@@ -252,7 +252,7 @@ prio_sort([{_,_}|_]=ModuleProps) ->
     Sorted = lists:sort(WithPrio),
     [ X || {_Prio, X} <- Sorted ];
 
-%% @doc Sort the results of a scan on module priority first, module name next. 
+%% @doc Sort the results of a scan on module priority first, module name next.
 %% The list is made up of module atoms.
 %% @spec prio_sort(proplist()) -> proplist()
 prio_sort(Modules) ->
@@ -451,7 +451,7 @@ handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
     remove_observers(Module, Pid, State),
     lager:debug("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
-    z_notifier:notify(#module_deactivate{module=Module}, State#state.context), 
+    z_notifier:notify(#module_deactivate{module=Module}, State#state.context),
     stop_children_with_missing_depends(State),
     {noreply, State};
 
@@ -555,7 +555,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     % 3. Log any start errors, suppress modules that have errors.
     % 4. Log non startable modules (remaining after all startable modules have started)
     case {StartList, sets:size(Kill)} of
-        {[], 0} -> 
+        {[], 0} ->
             State#state{start_queue=[]};
         _ ->
             gen_server:cast(self(), start_next),
@@ -583,15 +583,15 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
             ],
 
             % Add non-started modules to the list with errors.
-            CleanedUpErrors = lists:foldl(fun(M,Acc) -> 
-                                                  proplists:delete(M,Acc) 
+            CleanedUpErrors = lists:foldl(fun(M,Acc) ->
+                                                  proplists:delete(M,Acc)
                                           end,
                                           State#state.start_error,
                                           Starting),
 
             handle_start_next(State#state{
-                                start_error=[ {M, case is_module(M) of false -> not_found; true -> dependencies_error end} 
-                                              || M <- Starting 
+                                start_error=[ {M, case is_module(M) of false -> not_found; true -> dependencies_error end}
+                                              || M <- Starting
                                             ] ++ CleanedUpErrors,
                                 start_queue=[]
                                });
@@ -599,13 +599,13 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
             State1 = refresh_module_exports(Module, refresh_module_schema(Module, State)),
             {Module, Exports} = lists:keyfind(Module, 1, State1#state.module_exports),
             case start_child(self(), Module, ModuleSup, module_spec(Module, Context), Exports, Context) of
-                {ok, StartHelperPid} -> 
+                {ok, StartHelperPid} ->
                     State1#state{
                       start_error=proplists:delete(Module, State1#state.start_error),
                       start_wait={Module, StartHelperPid, os:timestamp()},
                       start_queue=lists:delete(Module, Starting)
                     };
-                {error, Reason} -> 
+                {error, Reason} ->
                     handle_start_next(
                       State1#state{
                         start_error=[ {Module, Reason} | proplists:delete(Module, State1#state.start_error) ],
@@ -620,11 +620,11 @@ is_startable(Module, Dependencies) ->
 
 %% @doc Check if we can load the module
 is_module(Module) ->
-    try 
+    try
         {ok, _} = z_utils:ensure_existing_module(Module),
         true
-    catch 
-        M:E -> 
+    catch
+        M:E ->
             lager:error("Can not fetch module info for module ~p, error: ~p:~p", [Module, M, E]),
             false
     end.
@@ -639,7 +639,7 @@ start_child(ManagerPid, Module, ModuleSup, Spec, Exports, Context) ->
                                                 % Try to start it
                                           z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
                                       Error ->
-                                          lager:error("[~p] Error starting module ~p, Schema initialization error:~n~p~n", 
+                                          lager:error("[~p] Error starting module ~p, Schema initialization error:~n~p~n",
                                                       [z_context:site(Context), Module, Error]),
                                           {error, {schema_init, Error}}
                                   end,
@@ -688,7 +688,7 @@ get_provided_for_modules(Modules) ->
             {_, _, Provides} -> Provides;
             _ -> []
         end
-        || M <- Modules ]).    
+        || M <- Modules ]).
 
 
 stop_children_with_missing_depends(State) ->
@@ -698,7 +698,7 @@ stop_children_with_missing_depends(State) ->
         [] ->
             [];
         Unstartable ->
-            lager:warning("[~p] Stopping child modules ~p", 
+            lager:warning("[~p] Stopping child modules ~p",
                           [z_context:site(State#state.context), Unstartable]),
             [ z_supervisor:stop_child(State#state.sup, M) || M <- Unstartable ]
     end.
@@ -790,7 +790,7 @@ refresh_module_schema(Module, #state{module_schema=Schemas} = State) ->
 manage_schema_if_db(true, Module, Current, Target, Context) ->
     manage_schema(Module, Current, Target, Context);
 manage_schema_if_db(false, Module, _Current, _Target, Context) ->
-    lager:error("[~p] Skipping schema for ~p as there is no database connection.", 
+    lager:error("[~p] Skipping schema for ~p as there is no database connection.",
                 [z_context:site(Context), Module]),
     ok.
 
@@ -812,7 +812,7 @@ manage_schema(Module, undefined, Target, Context) ->
     case SchemaRet of
         #datamodel{} ->
             ok = z_datamodel:manage(Module, SchemaRet, Context);
-        ok -> 
+        ok ->
             ok
     end,
     ok = set_db_schema_version(Module, Target, Context),
@@ -836,7 +836,7 @@ manage_schema(Module, Current, Target, Context) when
     case SchemaRet of
         #datamodel{} ->
             ok = z_datamodel:manage(Module, SchemaRet, Context);
-        ok -> 
+        ok ->
             ok
     end,
     ok = set_db_schema_version(Module, Current+1, Context),
@@ -880,10 +880,10 @@ observes_1(Module, Pid, [{F,Arity}|Rest], Acc) ->
             observes_1(Module, Pid, Rest, [{list_to_atom(Message), {Module,F}}|Acc]);
         "pid_observe_" ++ Message when Arity == 3; Arity == 4 ->
             observes_1(Module, Pid, Rest, [{list_to_atom(Message), {Module,F,[Pid]}}|Acc]);
-        _ -> 
+        _ ->
             observes_1(Module, Pid, Rest, Acc)
     end;
-observes_1(Module, Pid, [_|Rest], Acc) -> 
+observes_1(Module, Pid, [_|Rest], Acc) ->
     observes_1(Module, Pid, Rest, Acc).
 
 

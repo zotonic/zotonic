@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@
 -include_lib("zotonic_file.hrl").
 
 % Check every 10 minutes if we have anything to delete.
-% Check every 10 seconds when working through a backlog. 
+% Check every 10 seconds when working through a backlog.
 -define(CLEANUP_TIMEOUT_LONG, 600000).
 -define(CLEANUP_TIMEOUT_SHORT, 10000).
 
@@ -50,7 +50,7 @@ cleanup(Context) ->
 %%====================================================================
 %% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link() -> 
+start_link() ->
     start_link([]).
 start_link(Args) when is_list(Args) ->
     {host, Host} = proplists:lookup(host, Args),
@@ -133,7 +133,7 @@ code_change(_OldVsn, State, _Extra) ->
 do_cleanup(Host) ->
     Context = z_context:new(Host),
     do_cleanup_1(z_db:q("
-                    select id, filename, deleted 
+                    select id, filename, deleted
                     from medium_deleted
                     order by id
                     limit 100",
@@ -165,14 +165,13 @@ do_cleanup_file({_Id, Filename, Date}, Context) ->
     ArchivePath = z_path:media_archive(Context),
     % Remove from the file system
     BasePreview = filename:join(PreviewPath, Filename),
-    Previews = filelib:wildcard(binary_to_list(iolist_to_binary([BasePreview, "(*"]))),
+    Previews = z_utils:wildcard(binary_to_list(iolist_to_binary([BasePreview, "(*"]))),
     [ file:delete(Preview) || Preview <- Previews ],
     file:delete(filename:join(ArchivePath, Filename)),
     % Remove from the file store
     PreviewStore = iolist_to_binary([filename:basename(PreviewPath), $/, Filename, $( ]),
-    ArchiveStore = iolist_to_binary([filename:basename(ArchivePath), $/, Filename ]), 
+    ArchiveStore = iolist_to_binary([filename:basename(ArchivePath), $/, Filename ]),
     z_notifier:first(#filestore{action=delete, path={prefix, PreviewStore}}, Context),
     z_notifier:first(#filestore{action=delete, path=ArchiveStore}, Context),
     lager:debug("Medium cleanup: ~p (from ~p)", [Filename, Date]),
     ok.
-

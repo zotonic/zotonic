@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,7 @@
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
 -export([
-    all/0, all/1, 
+    all/0, all/1,
     d/0, compile_options/0,
     ld/0, ld/1
 ]).
@@ -31,7 +31,7 @@
 %% @doc Load all changed beam files
 ld() ->
     Ms = reloader:all_changed(),
-    [ ld(M) || M <- Ms ]. 
+    [ ld(M) || M <- Ms ].
 
 %% @doc Load a specific beam file, reattach any observers etc.
 ld(Module) when is_atom(Module) ->
@@ -55,7 +55,7 @@ all(Options0) ->
 
     spawn_link(fun() -> compile(Self, Ref, Work, Options) end),
     receive
-        {Ref, Result} -> 
+        {Ref, Result} ->
             z:ld(),
             Result
     end.
@@ -78,7 +78,7 @@ compile_loop(_WorkQueue, Workers, error) ->
 
 %% No more work, but workers are still busy compiling.
 compile_loop([], Workers, Result) ->
-    receive 
+    receive
         {want_file, Worker} ->
             Worker ! done,
             compile_loop([], Workers, Result);
@@ -108,7 +108,7 @@ compile_worker_process(Options, Parent) ->
     Parent ! {want_file, self()},
     receive
         {work, Work} ->
-            Result = make:files(filelib:wildcard(Work), Options),
+            Result = make:files(z_utils:wildcard(Work), Options),
             Parent ! {result, Result},
             compile_worker_process(Options, Parent);
         done ->
@@ -172,7 +172,7 @@ platform_defines_r17up() ->
         nomatch ->
             []
     end.
-             
+
 %% @doc For a list of glob patterns, split all patterns which contain
 %% /*/* up in more patterns, so that we can parallelize it even more.
 unglob(Patterns) ->
@@ -180,7 +180,7 @@ unglob(Patterns) ->
                         case re:split(Pattern, "/\\*/\\*", [{return, list}, {parts, 2}]) of
                             [_] -> [Pattern | All];
                             [Start, End] ->
-                                Dirs = lists:filter(fun filelib:is_dir/1, filelib:wildcard(Start ++ "/*")),
+                                Dirs = lists:filter(fun filelib:is_dir/1, z_utils:wildcard(Start ++ "/*")),
                                 [Dir ++ "/*" ++ End || Dir <- Dirs] ++ All
                         end
                 end,

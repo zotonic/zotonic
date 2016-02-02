@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -102,13 +102,13 @@ watch_dirs() ->
         filename:join(os:getenv("ZOTONIC"), "src"),
         filename:join(os:getenv("ZOTONIC"), "modules"),
         filename:join(os:getenv("ZOTONIC"), "ebin"),
-            
+
         filename:join(os:getenv("ZOTONIC"), "priv/sites"),
         filename:join(os:getenv("ZOTONIC"), "priv/modules"),
-        
+
         z_path:user_sites_dir(),
         z_path:user_modules_dir()
     ],
     LinkedDirs = string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n"),
-    DepDirs = filelib:wildcard(filename:join(os:getenv("ZOTONIC"), "deps/*/ebin")),
+    DepDirs = z_utils:wildcard(filename:join(os:getenv("ZOTONIC"), "deps/*/ebin")),
     ZotonicDirs ++ LinkedDirs ++ DepDirs.

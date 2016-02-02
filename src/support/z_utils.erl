@@ -61,6 +61,9 @@
     json_escape/1,
     lib_dir/0,
     lib_dir/1,
+    wildcard/1,
+    wildcard/2,
+    filter_dot_files/1,
     list_dir_recursive/1,
     name_for_host/2,
     only_digits/1,
@@ -110,6 +113,25 @@ lib_dir() ->
 lib_dir(Dir) ->
     {ok, Path} = zotonic_app:get_path(),
     filename:join([Path, Dir]).
+
+%% @doc filename:wildcard version which filters dotfiles like unix does
+wildcard(Wildcard) ->
+    filter_dot_files(filelib:wildcard(Wildcard)).
+
+wildcard(Wildcard, DirName) ->
+    filter_dot_files(filelib:wildcard(Wildcard, DirName)).
+
+%% @doc Filter all filenames which start with a dot.
+filter_dot_files(Names) ->
+    [NoDotName || NoDotName <- Names, no_dot_file(NoDotName)].
+
+    no_dot_file(Name) ->
+        no_dot_file1(filename:split(Name)).
+
+    no_dot_file1([]) -> true;
+    no_dot_file1([[$.|_] | _]) -> false;
+    no_dot_file1([_|Rest]) -> no_dot_file1(Rest).
+
 
 %% @doc Return the current tick count
 now() ->
@@ -195,10 +217,10 @@ checksum_assert(Data, Checksum, Context) ->
 %%% PICKLE / UNPICKLE %%%
 pickle(Data, Context) ->
     BData = erlang:term_to_binary(Data),
-    Nonce = crypto:rand_bytes(4), 
+    Nonce = crypto:rand_bytes(4),
     Sign  = z_ids:sign_key(Context),
     SData = <<BData/binary, Nonce:4/binary>>,
-    <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),	
+    <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),
     base64url:encode(<<Mac:16/binary, Nonce:4/binary, BData/binary>>).
 
 depickle(Data, Context) ->
@@ -510,7 +532,7 @@ props_merge(Ps, [{K,_}=P|Xs]) ->
     case proplists:is_defined(K, Ps) of
         true -> props_merge(Ps, Xs);
         false -> props_merge([P|Ps], Xs)
-    end. 
+    end.
 
 
 %% @doc Given a list of proplists, make it a nested list with respect to a property, combining elements
@@ -573,7 +595,7 @@ nested_props_assign([K], V, Acc) ->
     end;
 nested_props_assign([H|T], V, Acc) ->
     case only_digits(H) of
-        true -> 
+        true ->
             Index = list_to_integer(H),
             NewV = case get_nth(Index, Acc) of
                        L when is_list(L) -> nested_props_assign(T, V, L);
@@ -593,7 +615,7 @@ get_nth(N, L) when N >= 1 ->
     try lists:nth(N, L) catch _:_ -> undefined end.
 
 set_nth(N, V, L) when N >= 1 ->
-    try 
+    try
         case lists:split(N-1, L) of
             {Pre, []} -> Pre ++ [V];
             {Pre, [_|T]} -> Pre ++ [V|T]
@@ -809,7 +831,7 @@ ensure_existing_module(ModuleName) when is_list(ModuleName) ->
     end;
 ensure_existing_module(ModuleName) when is_atom(ModuleName) ->
     case module_loaded(ModuleName) of
-        true -> 
+        true ->
             {ok, ModuleName};
         false ->
             case code:ensure_loaded(ModuleName) of
