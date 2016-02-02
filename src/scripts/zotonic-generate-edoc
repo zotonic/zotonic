@@ -27,7 +27,7 @@ main(_) ->
     generate("src", "core"),
     io:format("Generated core edoc files in ~p~n", [outpath("core")]),
     Zotonic = os:getenv("ZOTONIC"),
-    Modules = [string:substr(L, length(Zotonic++"/modules/")+1) || L <- z_utils:wildcard(filename:join([os:getenv("ZOTONIC"), "modules/mod_*"]))],
+    Modules = [string:substr(L, length(Zotonic++"/modules/")+1) || L <- filelib:wildcard(filename:join([os:getenv("ZOTONIC"), "modules/mod_*"]))],
 
     [
      generate("modules/" ++ M, "modules/" ++ M) || M <- Modules
