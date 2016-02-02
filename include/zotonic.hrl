@@ -169,7 +169,7 @@
 -record(column_def, {name, type, length, is_nullable=true, default, primary_key, unique=false}).
 
 %% For the datamodel: default resources to create.
--record(datamodel, {categories=[], predicates=[], resources=[], media=[], edges=[]}).
+-record(datamodel, {categories=[], predicates=[], resources=[], media=[], edges=[], data=[]}).
 
 %% ACL administrator user id
 -define(ACL_ADMIN_USER_ID, 1).

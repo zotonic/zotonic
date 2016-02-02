@@ -50,7 +50,8 @@ manage(Module, Datamodel, Context) when is_list(Datamodel) ->
                       predicates=proplists:get_value(predicates, Datamodel, []),
                       resources=proplists:get_value(resources, Datamodel, []),
                       media=proplists:get_value(media, Datamodel, []),
-                      edges=proplists:get_value(edges, Datamodel, [])
+                      edges=proplists:get_value(edges, Datamodel, []),
+                      data=proplists:get_value(data, Datamodel, [])
                      },
            Context);
 
@@ -66,8 +67,8 @@ manage(Module, Datamodel, Options, Context) ->
     [manage_resource(Module, R, Options, AdminContext) || R <- Datamodel#datamodel.resources],
     [manage_medium(Module, Medium, Options, AdminContext) || Medium <- Datamodel#datamodel.media],
     [manage_edge(Module, Edge, Options, AdminContext) || Edge <- Datamodel#datamodel.edges],
+    [manage_data(Module, Data, AdminContext) || Data <- Datamodel#datamodel.data],
     ok.
-
 
 manage_medium(Module, {Name, Props}, Options, Context) ->
     manage_resource(Module, {Name, media, Props}, Options, Context);
@@ -187,6 +188,9 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
             ok
     end.
 
+manage_data(Module, Data, AdminContext) ->
+    z_notifier:first(#manage_data{module = Module, props = Data}, AdminContext).
+
 update_new_props(Module, Id, NewProps, Options, Context) ->
     case m_rsc:p(Id, managed_props, Context) of
         undefined ->
@@ -290,5 +294,3 @@ manage_edge(_Module, {SubjectName, PredicateName, ObjectName, EdgeOptions}, _Opt
         _ ->
             skip %% One part of the triple was MIA
     end.
-
-
