@@ -556,6 +556,8 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
 
 %% @spec string2filter(Filter, Arg) -> FilterTuple
 %% @doc Map the list of known filters and known args to atoms.  Used when mapping preview urls back to filter args.
+string2filter("crop", "none") ->
+    {crop,none};
 string2filter("crop", []) ->
     {crop,center};
 string2filter("crop", Where) -> 
@@ -569,9 +571,9 @@ string2filter("crop", Where) ->
             "west"       -> west;
             "north_west" -> north_west;
             "center"     -> center;
-        [C|_] = CropLT when C == $+ orelse C == $- ->
-        {match, [[CropL], [CropT]]} = re:run(CropLT, "[+-][0-9]+", [global, {capture, first, list}]),
-        [list_to_integer(CropL), list_to_integer(CropT)]
+            [C|_] = CropLT when C =:= $+ orelse C =:= $- ->
+                {match, [[CropL], [CropT]]} = re:run(CropLT, "[+-][0-9]+", [global, {capture, first, list}]),
+                [list_to_integer(CropL), list_to_integer(CropT)]
           end,
     {crop,Dir};
 string2filter("grey",[]) ->
