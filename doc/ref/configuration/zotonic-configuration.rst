@@ -56,7 +56,7 @@ consult the stock ``zotonic.config`` file for explanation about all
 config settings.
 
 `user_sites_dir`, `user_modules_dir` and `user_ebin_dir`
-.......................................
+.............................................................
 
 Since version 0.11, Zotonic keeps sites and modules that are
 `external` to Zotonic, e.g. installed by website developers, outside
