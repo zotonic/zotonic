@@ -21,8 +21,8 @@
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
 -export([
-    all/0, all/1, 
-    d/0, compile_options/0,
+    all/0, all/1,
+    compile_options/0,
     ld/0, ld/1
 ]).
 
@@ -47,9 +47,21 @@ all() ->
 
 %% @doc Does a parallel compile of the files in the different Zotonic directories.
 all(Options0) ->
-    Options = Options0 ++ compile_options(),
+    case compile_stage(zotonic, Options0) of
+        ok -> compile_stage(user, Options0);
+        error -> error
+    end.
 
-    Work = d(),
+compile_stage(zotonic, Options0) ->
+    Options = Options0 ++ compile_options(),
+    Work = unglob(compile_zotonic_dirs()),
+    compile(Options, Work);
+compile_stage(user, Options0) ->
+    Options = Options0 ++ compile_user_options(),
+    Work = unglob(compile_user_dirs()),
+    compile(Options, Work).
+
+compile(Options, Work) ->
     Ref = make_ref(),
     Self = self(),
 
@@ -98,11 +110,9 @@ compile_loop([Work|Rest]=WorkQueue, Workers, Result) ->
             compile_loop(WorkQueue, Workers, R)
     end.
 
-
 spawn_compile_workers(Options, Parent) ->
     NoWorkers = min(8, erlang:system_info(schedulers_online)*2),
     [spawn_link(fun() -> compile_worker_process(Options, Parent) end) || _ <- lists:seq(1, NoWorkers)].
-
 
 compile_worker_process(Options, Parent) ->
     Parent ! {want_file, self()},
@@ -116,11 +126,7 @@ compile_worker_process(Options, Parent) ->
             ok
     end.
 
-
-compile_dirs() ->
-    application:load(zotonic),
-    {ok, Sites} = application:get_env(zotonic, user_sites_dir),
-    {ok, Modules} = application:get_env(zotonic, user_modules_dir),
+compile_zotonic_dirs() ->
     [
      "*.erl",
      "src/*.erl",
@@ -138,8 +144,14 @@ compile_dirs() ->
      "priv/sites/*/*.erl",
      "priv/sites/*/*/*.erl",
      "priv/sites/*/modules/*/*.erl",
-     "priv/sites/*/modules/*/*/*.erl",
+     "priv/sites/*/modules/*/*/*.erl"
+    ].
 
+compile_user_dirs() ->
+    application:load(zotonic),
+    {ok, Modules} = application:get_env(zotonic, user_modules_dir),
+    {ok, Sites} = application:get_env(zotonic, user_sites_dir),
+    [
      %% External modules
      Modules ++ "/*/*.erl",
      Modules ++ "/*/*/*.erl",
@@ -150,6 +162,7 @@ compile_dirs() ->
      Sites ++ "/*/modules/*/*.erl",
      Sites ++ "/*/modules/*/*/*.erl"
     ].
+
 
 compile_options() ->
     application:load(zotonic),
@@ -172,6 +185,11 @@ platform_defines_r16up() ->
             []
     end.
 
+compile_user_options() ->
+    application:load(zotonic),
+    Outdir = application:get_env(zotonic, user_ebin_dir, "ebin"),
+    [ {outdir, Outdir} | compile_options()].
+
 platform_defines_r17up() ->
     case re:run(erlang:system_info(otp_release), "^[0-9].*") of
         {match, _} ->
@@ -193,6 +211,3 @@ unglob(Patterns) ->
                 end,
                 [],
                 Patterns).
-
-d() ->
-    unglob(compile_dirs()).

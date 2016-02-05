@@ -6,9 +6,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -75,7 +75,12 @@ function find_config {
         fi
     done
 }
-export -f find_config 
+export -f find_config
+
+function consult_config {
+    $ZOTONIC_SCRIPTS/helpers/zotonic_consult_config $1 $2 $3
+}
+export -f consult_config
 
 function find_config_arg {
     [ ! -z "$ZOTONIC_CONFIG_DIR" ] && { echo "-config ${ZOTONIC_CONFIG_DIR}/$1"; return 0; }
@@ -91,17 +96,24 @@ export -f find_config_arg
 function get_user_sites_dir {
     file=$(find_config zotonic.config)
     [ -z "$file" ] && return 1
-    cat $file | grep {user_sites_dir|sed 's/.*"\(.*\)".*/\1/'
+    consult_config $file zotonic user_sites_dir
 }
 export -f get_user_sites_dir
 
 function get_user_modules_dir {
     file=$(find_config zotonic.config)
     [ -z "$file" ] && return 1
-    cat $file | grep {user_modules_dir|sed 's/.*"\(.*\)".*/\1/'
+    consult_config $file zotonic user_modules_dir
 }
 export -f get_user_modules_dir
-    
+
+function get_user_ebin_dir {
+    file=$(find_config zotonic.config)
+    [ -z "$file" ] && return 1
+    consult_config $file zotonic user_ebin_dir
+}
+export -f get_user_modules_dir
+
 export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
 
 # Path to the Erlang VM
@@ -116,8 +128,8 @@ fi
 
 # Increase this if you expect a lot of concurrent connections. For example
 # if you use comet on popular pages.
-# Please check the documentation of your system on how to increase 
-# the maximum number of open files your operating system. 
+# Please check the documentation of your system on how to increase
+# the maximum number of open files your operating system.
 export MAX_PORTS=${MAX_PORTS:=$(ulimit -n|sed 's/unlimited/100000/')}
 
 # The maximum number of Erlang processes. Must be in the range
@@ -128,8 +140,10 @@ export MAX_PROCESSES=${MAX_PROCESSES:=10000000}
 # 'false'
 export KERNEL_POLL=${KERNEL_POLL:=true}
 
+export USER_EBIN_DIR=$(get_user_ebin_dir)
+
 # The include path for the erlang vm, add when needed for your application.
-export PA=${PA:="$ZOTONIC/ebin $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
+export PA=${PA:="$ZOTONIC/ebin $USER_EBIN_DIR $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
 
 # The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
 export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
@@ -192,6 +206,7 @@ if [ -z "$ZOTONIC_CONFIG_DIR" ]; then
 
         perl -e "s|\%\%USER_SITES_DIR\%\%|$ZOTONIC/user/sites|" -pi "${default_dir}/zotonic.config"
         perl -e "s|\%\%USER_MODULES_DIR\%\%|$ZOTONIC/user/modules|" -pi "${default_dir}/zotonic.config"
+        perl -e "s|\%\%USER_EBIN_DIR\%\%|$ZOTONIC/user/ebin|" -pi "${default_dir}/zotonic.config"
     fi
 fi
 

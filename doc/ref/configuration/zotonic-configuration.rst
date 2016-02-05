@@ -55,7 +55,7 @@ annoted with comments about what each setting does. When in doubt,
 consult the stock ``zotonic.config`` file for explanation about all
 config settings.
 
-`user_sites_dir` and `user_modules_dir`
+`user_sites_dir`, `user_modules_dir` and `user_ebin_dir`
 .......................................
 
 Since version 0.11, Zotonic keeps sites and modules that are
@@ -74,6 +74,11 @@ with the config parameter ``user_modules_dir``. This directory
 defaults to ``user/modules``, relative to Zotonic's installation
 directory.
 
+Optionally it is possible to change the location of the compiled
+erlang code in the user sites and module directories. The default location
+for these files is ``ebin`` in Zotonic's installation directory. This is
+configured with the ``user_ebin_dir`` config parameter. This makes it possible
+to separate the beam files of user defined code from Zotonic's beam files.
 
 `deps`
 ......
