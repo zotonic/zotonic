@@ -102,6 +102,11 @@ category, they are accessed by id or category name. For example::
 |          |up to the children of the       |                                     |
 |          |children.                       |                                     |
 +----------+--------------------------------+-------------------------------------+
+|tree_flat |The category tree below and     |See above.                           |
+|          |including the indexing category,|                                     |
+|          |up to the children of the       |                                     |
+|          |children. As a flattened list.  |                                     |
++----------+--------------------------------+-------------------------------------+
 |path      |List of parent category ids from|[ 104, 106 ]                         |
 |          |the root till the category,     |                                     |
 |          |excluding the indexing category.|                                     |
