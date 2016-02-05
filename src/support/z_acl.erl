@@ -246,14 +246,11 @@ args_to_visible_for(Args) ->
     case proplists:get_value(visible_for, Args) of
         undefined   -> ?ACL_VIS_USER;
         "user"      -> ?ACL_VIS_USER;
-        3           -> ?ACL_VIS_USER;
         "group"     -> ?ACL_VIS_GROUP;
-        2           -> ?ACL_VIS_GROUP;
         "community" -> ?ACL_VIS_COMMUNITY;
-        1           -> ?ACL_VIS_COMMUNITY;
         "world"     -> ?ACL_VIS_PUBLIC;
         "public"    -> ?ACL_VIS_PUBLIC;
-        0           -> ?ACL_VIS_PUBLIC
+        N when is_integer(N), N >= 0 -> N
     end.
 
 
