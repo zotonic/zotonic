@@ -74,7 +74,7 @@ compile(Options, Work) ->
 
 compile(Parent, Ref, Work, Options) ->
     Workers = spawn_compile_workers(Options, self()),
-    Parent ! {Ref, compile_loop(Work, Workers, ok)}.
+    Parent ! {Ref, compile_loop(Work, Workers, up_to_date)}.
 
 %% No work, and no workers, we are done.
 compile_loop([], [], Result) ->
