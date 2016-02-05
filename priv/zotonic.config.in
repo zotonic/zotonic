@@ -20,12 +20,16 @@
   [
 
 %%% Path configuration
-   
+
    %% Where the Zotonic sites are located
    {user_sites_dir, "%%USER_SITES_DIR%%"},
 
    %% Where the extra Zotonic modules are located (those installed with 'zotonic modules install mod_...')
    {user_modules_dir, "%%USER_MODULES_DIR%%"},
+
+   %% Optionally define the ebin directory of the user sites and modules. Default
+   %% location is zotonic's ebin director.
+   % {user_ebin_dir, "%%USER_EBIN_DIR%%"},
 
 %%% Default timezone (for example: <<"Europe/Berlin">>)
    %% {timezone, <<"UTC">>},
@@ -101,18 +105,18 @@
 
 %%% Inet request backlog, increase when requests are being dropped.
    %% {inet_backlog, 500},
-   
+
 %%% Inet acceptor pool size. Configure the number of processes waiting for incoming requests. Increase when
 %%% request take long to be accepted and you hit the backlog.
    %% {inet_acceptor_pool_size, 75},
-   
+
 %%% SSL request backlog, increase when requests are being dropped.
 %%% When this value is not set, the inet_backlog setting is used.
    %% {ssl_backlog, 500},
-   
+
 %%% SSL acceptor pool size. Configure the number of processes waiting for incoming ssl requests. Increase when
 %%% request take long to be accepted and you hit the backlog. Note that the ssl acceptor pool is bigger. The
-%%% reason for this is that accepting ssl requests is much slower than normal request. Especially if you have 
+%%% reason for this is that accepting ssl requests is much slower than normal request. Especially if you have
 %%% slow clients.
 %%% When this value is not set, the inet_acceptor_pool_size setting is used.
    %% {ssl_acceptor_pool_size, 75},
@@ -124,7 +128,7 @@
    %% {syslog_opts, [ndelay]},
    %% {syslog_facility, local0},
    %% {syslog_level, info}, % OSX shows messages from level notice and higer.
-   
+
 %%% Default ImageMagick color space. Some ImageMagick versions (like 6.7.0 and above)
 %%% use the RGB colorspace, so all images are darker than the original.
 %%% Possible Values:
@@ -145,7 +149,7 @@
    %%  [
    %%   {jsx, "1.4", {git, "git://github.com/talentdeficit/jsx", {tag, "v1.4"}}}
    %%  ]},
-   
+
   ]
  }
 ].
