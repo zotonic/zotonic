@@ -38,8 +38,8 @@
 	{% endwith %}
     </div>
 
-    <input type="hidden" name="qsort" value="{{ q.qsort }}" />
-    <input type="hidden" name="qs" value="{{ q.qs }}" />
+    <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
+    <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
     <h2>
         {% block title %}{% endblock %}
         {% if q.qs %}

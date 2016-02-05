@@ -545,6 +545,8 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
 
 %% @spec string2filter(Filter, Arg) -> FilterTuple
 %% @doc Map the list of known filters and known args to atoms.  Used when mapping preview urls back to filter args.
+string2filter("crop", "none") ->
+    {crop,none};
 string2filter("crop", []) ->
     {crop,center};
 string2filter("crop", Where) -> 
