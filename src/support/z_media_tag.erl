@@ -241,10 +241,9 @@ filename_to_filepath(Filename, #context{host=Host} = Context) ->
     end.
 
 
-%% @doc Give the base url for the filename being served
-%% @todo Use the dispatch rules to find the correct image path (when we want that...)
-filename_to_urlpath(Filename) ->
-    filename:join("/image/", Filename).
+%% @doc Give the base url for the filename being served using the 'image' dispatch rule
+filename_to_urlpath(Filename, Context) ->
+    z_dispatcher:url_for(image, [{star, Filename}], z_context:set_language(undefined, Context)).
 
 
 %% @spec url(MediaRef, Options, Context) -> {ok, Url::binary()} | {error, Reason}
@@ -329,13 +328,13 @@ url2(File, Options, Context) ->
     case props2url(ImageOpts, Context) of
         {no_checksum, UrlProps} ->
             PropsQuoted = mochiweb_util:quote_plus(UrlProps),
-            {url, list_to_binary(filename_to_urlpath(lists:flatten([Filename,PropsQuoted,Extension]))), 
+            {url, filename_to_urlpath(lists:flatten([Filename,PropsQuoted,Extension]), Context), 
                   TagOpts,
                   ImageOpts};
         {checksum, UrlProps} ->
             Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
             PropCheck = mochiweb_util:quote_plus(iolist_to_binary([UrlProps,$(,Checksum,$)])),
-            {url, list_to_binary(filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]))), 
+            {url, filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]), Context), 
                   TagOpts,
                   ImageOpts}
     end.
