@@ -20,30 +20,55 @@ You can fetch individual values by key, for example::
 Viewing all request variables
 .............................
 
-Use the :ref:`tag-print` tag to get a complete overview of all request
-variables::
+Use the :ref:`tag-print` tag to get a complete overview of all request variables::
 
   {% print m.req|make_list %}
 
 This will show something like::
 
-  [{version,{1,1}},
+  [{method,'GET'},
+   {version,{1,1}},
    {peer,"127.0.0.1"},
    {is_ssl,false},
-   {host,"127.0.0.1:8000"},
-   {raw_path,"/?foo=bar"},
-   {path,"/"},
+   {host,"test.dev:8000"},
+   {raw_path,"/en/page/1234?foo=bar"},
+   {path,"/en/page/1234"},
    {qs,[{"foo","bar"}]},
+   {referrer,"http://test.dev:8000/"},
+   {user_agent,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/601.4.4 (KHTML, like Gecko) Version/9.0.3 Safari/601.4.4"},
+   {req_id,525158920},
    {headers,[{"accept",
-            "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"},
-           {"accept-encoding","gzip, deflate"},
-           {"accept-language","en-us"},
-           {"connection","keep-alive"},
-           {"cookie","z_sid=1RrDIvFVsoyLgtSU62mN; z_pid=HRrAaiPI08Il4Nu4wST1"},
-           {"host","127.0.0.1:8000"},
-           {"referer","http://localhost:8000/"},
-           {"user-agent",
-            "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_4; en-us) AppleWebKit/533.16 (KHTML, like Gecko) Version/5.0 Safari/533.16"}]}]
+              "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
+             {"accept-encoding","gzip, deflate"},
+             {"accept-language","en-us"},
+             {"cache-control","max-age=0"},
+             {"connection","keep-alive"},
+             {"cookie",
+              "z_logon=; z_sid=LopWHBmHXCs94virnboZhBHLKV6m1Cga; z_ua=c%3Ddesktop%26u%3D1%26t%3D1%26w%3D1920%26h%3D1200"},
+             {"dnt","1"},
+             {"host","test.dev:8000"},
+             {"referer","http://test.dev:8000/"},
+             {"user-agent",
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/601.4.4 (KHTML, like Gecko) Version/9.0.3 Safari/601.4.4"}]},
+   {ua_class,desktop},
+   {ua_props,[{is_user_select,true},
+              {has_pointer,true},
+              {is_desktop,true},
+              {is_crawler,false},
+              {is_wireless_device,false},
+              {is_tablet,false},
+              {ajax_support_javascript,true},
+              {device_os,<<"-">>},
+              {displayWidth,1920},
+              {displayHeight,1200},
+              {inputDevices,<<"-">>},
+              {parentId,<<"generic-">>},
+              {model,<<"browser">>},
+              {vendor,<<"desktop">>},
+              {id,<<"desktopDevice">>}]},
+   {timezone,<<"UTC">>},
+   {language,en}]
+
 
 Please note that all values are raw and not escaped, take care to
 escape the values before you use them in your templates, using the
@@ -51,4 +76,3 @@ escape the values before you use them in your templates, using the
 
 The :ref:`filter-make_list` filter is used to force the evaluation of the
 model; otherwise it would just print ``{m,req,undefined}``.
-     
