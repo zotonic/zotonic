@@ -115,8 +115,8 @@ provide_any() ->
         {"application/x-javascript", do_c_comment},
         {"text/css", do_c_comment},
         {"text/plain", do_text},
-        {"application/atom+xml;type=entry", provide_empty},
-        {"application/atom+xml", provide_empty}
+        {"application/atom+xml;type=entry", do_empty},
+        {"application/atom+xml", do_empty}
     ].
 
 provide_extension(ReqData, Default) ->
