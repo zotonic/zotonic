@@ -86,17 +86,8 @@
 -spec m_find_value(resource()|atom(), #m{}, #context{}) -> #m{} | undefined | any().
 m_find_value(Id, #m{value=undefined} = M, Context) ->
     case rid(Id, Context) of
-        undefined -> 
-            undefined;
-        RId ->
-            case z_acl:rsc_visible(RId, Context) of
-                true ->
-                    M#m{value=RId};
-                false ->
-                    fun(is_a, C) -> is_a(RId, C);
-                       (_, _C) -> undefined
-                    end
-            end
+        undefined -> undefined;
+        RId -> M#m{value=RId}
     end;
 m_find_value(is_cat, #m{value=Id} = M, _Context) when is_integer(Id) -> 
     M#m{value={is_cat, Id}};
