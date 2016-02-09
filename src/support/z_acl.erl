@@ -220,11 +220,12 @@ set_visible_for(?ACL_VIS_COMMUNITY, Context) ->
     Context#context{user_id=?ACL_ANY_USER_ID, acl=undefined};
 set_visible_for(?ACL_VIS_GROUP, Context) ->
     Context#context{acl=undefined};
-set_visible_for(?ACL_VIS_USER, Context) ->
+set_visible_for(_VisibleFor, Context) ->
     Context.
 
 
 %% @doc Return the max visible_for the current user can see
+%% @todo Change this for the pluggable ACL
 can_see(#context{user_id=undefined}) ->
     ?ACL_VIS_PUBLIC;
 can_see(#context{user_id=?ACL_ADMIN_USER_ID}) ->
@@ -338,15 +339,17 @@ logoff(Context) ->
 wm_is_authorized(true, Context) ->
     ?WM_REPLY(true, Context);
 wm_is_authorized(false, Context) ->
-    wm_is_authorized(false, logon, Context);
+    wm_is_authorized(false, undefined, Context);
 wm_is_authorized(ACLs, Context) when is_list(ACLs) ->
-    wm_is_authorized(ACLs, logon, Context).
+    wm_is_authorized(ACLs, undefined, Context).
 
 -spec wm_is_authorized(boolean() | acl(), Redirect | ReqData, #context{}) -> webzmachine:reply() when
-      Redirect :: atom(),
+      Redirect :: atom() | undefined,
       ReqData :: webzmachine:reqdata().
 wm_is_authorized(true, _Redirect, Context) ->
     wm_is_authorized(true, Context);
+wm_is_authorized(false, undefined, _Context) ->
+    throw({stop_request, 403});
 wm_is_authorized(false, Redirect, Context) ->
     ContextLocation = wm_set_location(Redirect, Context),
     ?WM_REPLY({halt, 302}, ContextLocation);
