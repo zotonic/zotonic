@@ -75,14 +75,14 @@ Writing commit messages
 The Zotonic commit convention are slightly based on `rebar’s README
 <https://github.com/basho/rebar>`_.
 
-Structure your commit message like this::
+Structure your commit message like this:
 
-  prefix: One line summary (less than 50 characters)
+    prefix: One line summary (less than 50 characters)
 
-  Longer description, multiline text that is supposed to wrap at 72
-  characters.
+    Longer description, multiline text that is supposed to wrap at 72
+    characters.
 
-  Fixes #403
+    Fixes #403
 
 * **Prefix**: Every commit message must start with one of the designated commit
   prefixes:
@@ -153,11 +153,31 @@ configured to run on ``localhost:8040``.
 Contributing documentation
 --------------------------
 
+Build the documentation
+^^^^^^^^^^^^^^^^^^^^^^^
+
+First, install `Sphinx <http://www.sphinx-doc.org/en/stable/install.html>`_.
+To build the documentation, Erlang must be installed.
+
+.. code-block:: bash
+
+    $ cd doc/
+
+    # Generate meta-*.rst files:
+    $ make stubs
+
+    # Then generate HTML files:
+    $ make html
+
+Then view the HTML files in ``doc/_build/html/index.html``.
+
 Heading styles
 ^^^^^^^^^^^^^^
 
 Use the following `convention <http://www.sphinx-doc.org/en/stable/rest.html#sections>`_
-for headings::
+for headings:
+
+.. code-block:: rst
 
     First-level heading
     ===================
