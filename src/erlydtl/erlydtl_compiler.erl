@@ -1689,4 +1689,4 @@ cond_wrap_debug_comments(_, Ast, #dtl_context{}) ->
 
 relpath(FilePath) ->
     Base = os:getenv("ZOTONIC"),
-    lists:nthtail(1+length(Base), FilePath).
+    lists:nthtail(1+length(Base), z_convert:to_list(FilePath)).
