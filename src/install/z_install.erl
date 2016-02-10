@@ -103,7 +103,7 @@ model_pgsql() ->
     (
       id serial NOT NULL,
       name character varying(80) NOT NULL DEFAULT ''::character varying,
-      uri character varying(250) NOT NULL DEFAULT ''::character varying,
+      uri character varying(2048) NOT NULL DEFAULT ''::character varying,
       is_active boolean NOT NULL DEFAULT false,
       created timestamp with time zone NOT NULL DEFAULT now(),
       modified timestamp with time zone NOT NULL DEFAULT now(),
@@ -119,7 +119,7 @@ model_pgsql() ->
     "CREATE TABLE rsc
     (
       id serial NOT NULL,
-      uri character varying(250),
+      uri character varying(2048),
       name character varying(80),
       page_path character varying(80),
       is_authoritative boolean NOT NULL DEFAULT true,
@@ -215,9 +215,9 @@ model_pgsql() ->
      "CREATE TABLE rsc_gone (
         id bigint not null,
      new_id bigint,
-     new_uri character varying(250),
+     new_uri character varying(2048),
      version int not null,
-     uri character varying(250),
+     uri character varying(2048),
      name character varying(80),
      page_path character varying(80),
      is_authoritative boolean NOT NULL DEFAULT true,
