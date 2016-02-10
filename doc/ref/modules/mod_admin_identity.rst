@@ -1,13 +1,25 @@
 
 .. include:: meta-mod_admin_identity.rst
 
-Provides "identity management" in the admin - for example the storage
+Provides identity management in the admin - for example the storage
 of usernames and passwords.
 
 It provides a user interface where you can create new users for the
 admin system. There is also an option to send these new users an
 e-mail with their password.
 
+Create new users
+----------------
+
+See the :ref:`guide-user-management` chapter in the User Guide for more
+information about the user management interface.
+
+Configure new user category
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To configure the category that new users will be placed in, set the
+``mod_admin_identity.new_user_category`` configuration parameter to that
+category’s unique name.
 
 Password Complexity Rules
 -------------------------
@@ -17,7 +29,7 @@ blank. However, if you, your clients or your business require the
 enforcement of Password Complexity Rules Zotonic provides it.
 
 Configuring Password Rules
-..........................
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After logging into the administration interface of your site, go to
 the `Config` section and click `Make a new config setting`.  In the
@@ -28,7 +40,7 @@ After saving, your password complexity rule will now be enforced on
 all future password changes.
 
 Advice on Building a Password Regular Expression
-................................................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A typical password_regex should start with ^.* and end with .*$. This allows everything by default and allows you to assert typical password rules like:
 
@@ -48,7 +60,7 @@ To understand the mechanics behind this regular expression see
 
 
 Migrating from an older password hashing scheme
-...............................................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When you migrate a legacy system to Zotonic, you might not want your
 users to re-enter their password before they can log in again.

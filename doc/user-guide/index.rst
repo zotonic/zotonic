@@ -12,6 +12,7 @@ Zotonic.
    cms
    data-model
    domain-model
+   user-management
    issues-and-features
 
 .. todo::
