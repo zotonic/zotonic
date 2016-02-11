@@ -46,7 +46,7 @@ event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
             z_render:growl_error(?__("Only administrators can add users.", Context), Context)
     end;
 
-%% @doc Delete an username from an user.
+%% @doc Create user resource and a password identity
 %% @spec event(Event, Context1) -> Context2
 event(#submit{message={user_add, Props}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) of
@@ -54,6 +54,7 @@ event(#submit{message={user_add, Props}}, Context) ->
             NameFirst = z_context:get_q_validated("name_first", Context),
             NamePrefix = z_context:get_q("surprefix", Context),
             NameSur = z_context:get_q_validated("name_surname", Context),
+            Category = z_context:get_q(category, Context, person),
             Title = case NamePrefix of
                 [] -> [ NameFirst, " ", NameSur ];
                 _ -> [ NameFirst, " ", NamePrefix, " ", NameSur ]
@@ -62,7 +63,7 @@ event(#submit{message={user_add, Props}}, Context) ->
             Email = z_context:get_q_validated("email", Context),
             PersonProps = [
                 {is_published, true},
-                {category, person},
+                {category, Category},
                 {title, lists:flatten(Title)},
                 {name_first, NameFirst},
                 {name_surname_prefix, NamePrefix},
