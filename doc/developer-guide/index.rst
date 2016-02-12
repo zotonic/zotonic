@@ -17,7 +17,7 @@ Developer Guide
    forms-and-validation
    search
    translation
-   access-control/index
+   access-control
    modules
    notifications
    server-browser-interaction
