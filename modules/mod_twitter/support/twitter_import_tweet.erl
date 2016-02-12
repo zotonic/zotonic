@@ -40,6 +40,9 @@ import_tweet_1({User}, Tweet, Context) ->
 import_tweet_1(_NoUser, Tweet, Context) ->
     lager:info("[~p] Twitter: received unknown tweet data: ~p", [z_context:site(Context), Tweet]).
 
+import_rsc(_RscId, 0, _UniqueName, _User, _Tweet, _Context) ->
+    % 2016-02-12: Twitter keeps pushing a tweet with id 0, drop it here.
+    ok;
 import_rsc(undefined, TweetId, UniqueName, User, Tweet, Context) ->
     {ok, ImportRsc, IsAutoImport} = extract_import_rsc(TweetId, UniqueName, User, Tweet, Context),
     case z_notifier:first(ImportRsc, Context) of
