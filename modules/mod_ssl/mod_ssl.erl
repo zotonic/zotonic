@@ -127,6 +127,8 @@ map_ssl_option(IsSecure, IsSSL, Port, SSLPort, [{DispatchName, PathSchema, Mod, 
 						true -> [{protocol, {https, SSLPort}} | Props ];
 						false -> [{protocol, keep} | Props]
 					end;
+				keep ->
+					[{protocol, keep} | Props];
 				true ->
 					[{protocol, {https, SSLPort}} | Props ];
 				false ->

@@ -69,6 +69,7 @@ merge_args([{Lang,Text}|Rest], Args) ->
 
 %% @doc Parse the Erlang module. Extract all translation tags.
 scan_file(".erl", File) ->
+    lager:info("~p", [File]),
     case epp:open(File, [z_utils:lib_dir(include)]) of
         {ok, Epp} ->
             parse_erl(File, Epp);
@@ -80,6 +81,7 @@ scan_file(".erl", File) ->
 
 %% @doc Parse the template in the file. Extract all translation tags.
 scan_file(".tpl", File) ->
+    lager:info("~p", [File]),
     case parse(File) of
         {ok, ParseTree} ->
             extract(ParseTree, [], File);
