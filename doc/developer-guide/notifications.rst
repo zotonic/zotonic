@@ -66,6 +66,7 @@ foldr
 
 You can also send notifications from JavaScript.
 
+.. _guide-notifications-observe:
 
 Subscribing to notifications
 ----------------------------

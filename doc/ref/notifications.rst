@@ -6,8 +6,11 @@ Notifications
 =============
 
 This is a list of the most important built-in notifications that Zotonic sends.
-Observe these notifications in your code to add custom functionality. All
-notifications are defined as records in ``include/zotonic_notifications.hrl``.
+:ref:`Observe <guide-notifications-observe>` these notifications in your code to
+add custom functionality. Most notifications are defined as records in
+``include/zotonic_notifications.hrl``.
+
+.. _acl_is_allowed:
 
 acl_is_allowed
 --------------
