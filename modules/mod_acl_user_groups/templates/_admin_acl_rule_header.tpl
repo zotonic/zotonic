@@ -1,7 +1,7 @@
 <div class="row acl-header">
 
     <div class="col-md-1">
-        <label>{_ Block _}</label>
+        <label>{_ Deny _}</label>
     </div>
 
     <div class="col-md-2">
@@ -12,7 +12,7 @@
         <div class="col-md-2">
             <label>{_ Content group _}</label>
         </div>
-        
+
         <div class="col-md-2">
             <label>{_ Category _}</label>
         </div>
@@ -22,7 +22,7 @@
             <label>{_ Module _}</label>
         </div>
     {% endif %}
-    
+
     <div class="col-md-5">
         <label>{_ Permissions _}</label>
     </div>

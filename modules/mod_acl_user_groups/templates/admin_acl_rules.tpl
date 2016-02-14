@@ -28,7 +28,7 @@
                     {% if q.g %}
                         {{ m.rsc[q.g].title }}
                     {% else %}
-                        {_ All _}
+                        {_ all _}
                     {% endif %}
                     <span class="caret"></span>
                 </button>
@@ -38,7 +38,7 @@
                     <li role="presentation" class="dropdown-header">
                         {_ Show this ACL user group first: _}
                     </li>
-                    
+
 		            {% for cg in m.hierarchy.acl_user_group.tree_flat %}
 			            <li id="{{ cg.id }}" {% if cg.id == q.g %}class="active"{% endif %}>
 				            <a href="?g={{ cg.id }}">
@@ -53,7 +53,7 @@
                             <i class="glyphicon glyphicon-remove"></i> {_ Reset _}
                         </a>
                     </li>
-                    
+
                 </ul>
             </div>
         </div>
