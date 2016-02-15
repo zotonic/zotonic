@@ -310,6 +310,8 @@ Note that when a site start, its modules are started up in order of
 module dependency, in such a way that a module's dependencies are
 always started before the module itsef starts.
 
+.. _guide-modules-versioning:
+
 Module versioning
 -----------------
 
