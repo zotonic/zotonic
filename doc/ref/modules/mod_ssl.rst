@@ -49,6 +49,11 @@ and will be either set or replaced with a default when not set.
     Force all dispatch rules to use ``{ssl, true}``, unless specified otherwise.
     Use this in combination with ``mod_ssl.is_secure`` to ensure serving a site over https.
 
+``mod_ssl.is_permanent``
+  When set to ``true`` it makes http to https protocol redirects for dispatch rules which
+  use ``{ssl, true}`` to be permanent redirects. The default setting is ``false`` which will
+  make redirects temporary redirects. 
+
 
 SSL Certificates
 ----------------
@@ -204,4 +209,3 @@ When the key is already in PKCS#1 format (with older openssl installs) then mod_
 the :file:`sitename.key` file to :file:`sitename.pem`.
 
 .. todo:: Add SSL/certificate problem solving.
-
