@@ -50,7 +50,7 @@ event1(#postback{message={remove_rule, [{id, RuleId}, {kind, Kind}]}}, Context) 
 event1(#postback{message={revert, _Args}}, Context) ->
     ok = m_acl_rule:revert(rsc, Context),
     ok = m_acl_rule:revert(module, Context),
-    z_render:growl(?__("Revert OK", Context), Context);
+    z_render:growl(?__("Reverted rules", Context), Context);
 
 event1(#postback{message={publish, _Args}}, Context) ->
     ok = m_acl_rule:publish(rsc, Context),
@@ -75,7 +75,7 @@ event1(#submit{message={acl_rule_import, []}}, Context) ->
                     Data = binary_to_term(Binary),
                     acl_user_groups_export:import(Data, ContextAsync)
                  end),
-    z_render:dialog_close(z_render:growl(?__("Importing, the list of rules will refresh after importing.", Context), Context)). 
+    z_render:dialog_close(z_render:growl(?__("Importing, the list of rules will refresh after importing.", Context), Context)).
 
 normalize_values(Row) ->
     {Actions, Rest} =

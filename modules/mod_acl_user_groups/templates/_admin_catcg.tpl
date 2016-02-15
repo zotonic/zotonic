@@ -11,7 +11,7 @@
 </div>
 
 <div class="form-group row">
-    <label class="control-label col-md-3" for="{{ #category }}">{_ Content Group _}</label>
+    <label class="control-label col-md-3" for="{{ #category }}">{_ Content group _}</label>
     <div class="col-md-9" id="{{ #cgwrapper }}">
         {% include "_admin_content_group_dropdown.tpl" cgsel_id=#cgsel %}
     </div>

@@ -31,8 +31,8 @@
             template="_dialog_acl_rules_import.tpl"
         }
     %}
-    
-    {% button text=_"Revert back to published"
+
+    {% button text=_"Revert back to published version"
         class="btn btn-default"
         action={confirm
             text=_"Are you sure you want to restore all ACL rules to their currently published version?"
@@ -44,5 +44,5 @@
             postback={revert kind=kind}
         }
     %}
-    
+
 </div>

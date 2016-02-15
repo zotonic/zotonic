@@ -1,8 +1,8 @@
 {% if is_editable %}
     {% if rule %}
-        {% wire id=#ruleform type="submit" 
+        {% wire id=#ruleform type="submit"
                 action={mask target=#ruleform}
-                postback={update_rule id=rule.id kind=kind} 
+                postback={update_rule id=rule.id kind=kind}
                 delegate=`admin_acl_rules`
         %}
     {% else %}
@@ -18,7 +18,7 @@
                 <input type="checkbox" id="{{ #is_block }}" name="is_block" value="on"
                     {% if rule.is_block %}checked="checked"{% endif %}
                     {% if rule %}onchange="$(this.form).submit()"{% endif %} />
-                    {% if rule.is_block %}<span class="z-icon z-icon-minus-circle"></span>&nbsp;{% endif %}block
+                    {% if rule.is_block %}<span class="z-icon z-icon-minus-circle"></span> {% endif %}{_ deny _}
             </label>
         </div>
 
@@ -43,7 +43,7 @@
     		        {% endfor %}
     	        </select>
             </div>
-            
+
             <div class="col-md-2">
     	        <select class="form-control" id="{{ #category_id }}" name="category_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
     		        <option value="">{_ All _}</option>
@@ -61,7 +61,7 @@
                     {% for mod, name in m.modules.all %}
                         <option value="{{ mod }}" {% if mod == rule.module %}selected{% endif %}>{{ mod }} ({{name }})</option>
                     {% endfor %}
-                </select>            
+                </select>
             </div>
         {% endif %}
 
@@ -81,8 +81,8 @@
                     icon="z-icon z-icon-minus"
                     postback={remove_rule id=rule.id kind=kind} delegate=`admin_acl_rules`
                 %}
-            {% endif %} 
-            
+            {% endif %}
+
             <div>
                 {% for action, label in m.acl_rule[kind].actions %}
                     <label class="checkbox-inline">
@@ -96,7 +96,7 @@
                     <label class="checkbox-inline">
                         <input type="checkbox" id="{{ #is_owner }}" name="is_owner" value="on"
                             {% if rule.is_owner %}checked="checked"{% endif %}
-                            {% if rule %}onchange="$(this.form).submit()"{% endif %} /> manage own
+                            {% if rule %}onchange="$(this.form).submit()"{% endif %} /> {_ manage own _}
                     </label>
                 {% endif %}
             </div>
@@ -135,7 +135,7 @@
                     {_ All Content Groups _}
                 {% endif %}
             </div>
-            
+
             <div class="col-md-2">
                 {% if rule.category_id %}
                     {{ rule.category_id.title }}
