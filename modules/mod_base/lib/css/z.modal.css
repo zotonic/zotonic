@@ -20,3 +20,26 @@ div.modal-body div.modal-footer {
     margin-top: 0;
 }
 
+/* modal overlay - full screen dialog - below normal dialog */
+.modal-overlay {
+    position: fixed;
+    z-index: 1031;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    overflow-y: auto;
+    background-color: white;
+}
+.modal-overlay-close {
+    position: absolute;
+    z-index: 1032;
+    right: 8px;
+    top: -10px;
+    font-size: 48px;
+    font-weight: 100;
+    cursor: pointer;
+}
+.modal-overlay-close:hover {
+    text-decoration: none;
+}
