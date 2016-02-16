@@ -11,7 +11,7 @@
             </td>
     
             <td>
-                <a href="http://{{ configs[name].hostname|escape }}/">http://{{ configs[name].hostname|escape }}/</a>
+                <a href="http://{{ configs[name].hostname|escape }}/">http://{{ configs[name].hostname|escape }}/ ({{ name }})</a>
             </td>
     
             {% if has_user %}
