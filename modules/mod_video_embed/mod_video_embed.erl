@@ -38,6 +38,10 @@
     spawn_preview_create/3
 ]).
 
+-export([
+    test/0
+    ]).
+
 -include_lib("zotonic.hrl").
 -include_lib("z_stdlib/include/z_url_metadata.hrl").
 
@@ -59,11 +63,14 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
             case z_acl:is_allowed(insert, #acl_media{mime=?EMBED_MIME}, Context) of
                 true ->
                     EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
-                    EmbedService = proplists:get_value(video_embed_service, Props, <<>>),
+                    EmbedService = z_convert:to_binary(
+                                        proplists:get_value(video_embed_service, Props, <<>>)),
+                    {EmbedService1, EmbedId} = fetch_videoid_from_embed(EmbedService, EmbedCode),
                     MediaProps = [
                         {mime, ?EMBED_MIME},
                         {video_embed_code, EmbedCode},
-                        {video_embed_service, EmbedService}
+                        {video_embed_service, EmbedService1},
+                        {video_embed_id, EmbedId}
                     ],
                     ok = m_media:replace(Id, MediaProps, Context),
                     spawn_preview_create(Id, MediaProps, Context);
@@ -96,10 +103,12 @@ observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, Props}, Context)
                 EmbedCodeRaw ->
                     EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
                     EmbedService = proplists:get_value(video_embed_service, Props, <<>>),
+                    {EmbedService1, EmbedId} = fetch_videoid_from_embed(EmbedService, EmbedCode),
                     MediaProps = [
                         {mime, ?EMBED_MIME},
                         {video_embed_code, EmbedCode},
-                        {video_embed_service, EmbedService}
+                        {video_embed_service, EmbedService1},
+                        {video_embed_id, EmbedId}
                     ],
                     case OldMediaProps of
                         undefined ->
@@ -181,8 +190,8 @@ observe_media_import(#media_import{}, _Context) ->
 media_import(Service, Descr, MD, MI) ->    
     H = z_convert:to_integer(z_url_metadata:p([<<"og:video:height">>, <<"twitter:player:height">>], MD)), 
     W = z_convert:to_integer(z_url_metadata:p([<<"og:video:width">>, <<"twitter:player:width">>], MD)),
-    V = fetch_videoid(Service, MI#media_import.url),
-    case is_integer(H) andalso is_integer(W) andalso V =/= <<>> of
+    VideoId = fetch_videoid(Service, MI#media_import.url),
+    case is_integer(H) andalso is_integer(W) andalso VideoId =/= <<>> of
         true ->
             #media_import_props{
                 prio = 1,
@@ -199,7 +208,8 @@ media_import(Service, Descr, MD, MI) ->
                     {width, W},
                     {height, H},
                     {video_embed_service, z_convert:to_binary(Service)},
-                    {video_embed_code, embed_code(Service, H, W, V)}
+                    {video_embed_code, embed_code(Service, H, W, VideoId)},
+                    {video_embed_id, z_convert:to_binary(VideoId)}
                 ],
                 preview_url = z_url_metadata:p(image, MD)
             };
@@ -207,18 +217,54 @@ media_import(Service, Descr, MD, MI) ->
             undefined
     end.
 
+fetch_videoid_from_embed(Service, undefined) ->
+    {<<>>, undefined};
+fetch_videoid_from_embed(Service, EmbedCode) ->
+    case re:run(EmbedCode, 
+                <<"(src|href)=\"([^\"]*)\"">>,
+                [global, notempty, {capture, all, binary}])
+    of
+        {match, [[_,_,Url]|_]} ->
+            case url_to_service(Url) of
+                undefined ->
+                    {Service, <<>>};
+                UrlService ->
+                    {z_convert:to_binary(UrlService), fetch_videoid(UrlService, Url)}
+            end;
+        nomatch ->
+            {Service, <<>>}
+    end.
 
 fetch_videoid(youtube, Url) ->
-    {_Protocol, _Host, _Path, Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
-    Qs1 = mochiweb_util:parse_qs(Qs),
-    z_convert:to_binary(proplists:get_value("v", Qs1));
+    [Url1|_] = binary:split(Url, <<"?">>),
+    case binary:split(Url1, <<"/embed/">>) of
+        [_, Code] ->
+            Code;
+        _ ->
+            {_Protocol, _Host, _Path, Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
+            Qs1 = mochiweb_util:parse_qs(Qs),
+            z_convert:to_binary(proplists:get_value("v", Qs1))
+    end;
 fetch_videoid(vimeo, Url) ->
     {_Protocol, _Host, Path, _Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
     P1 = lists:last(string:tokens(Path, "/")),
     case z_utils:only_digits(P1) of
         true -> z_convert:to_binary(P1);
         false -> <<>>
-    end.
+    end;
+fetch_videoid(_Service, _Url) ->
+    <<>>.
+
+url_to_service(<<"https://", Url/binary>>) -> url_to_service(Url);
+url_to_service(<<"http://", Url/binary>>) -> url_to_service(Url);
+url_to_service(<<"//", Url/binary>>) -> url_to_service(Url);
+url_to_service(<<"www.youtube.com/", _/binary>>) -> youtube;
+url_to_service(<<"youtube.com/", _/binary>>) -> youtube;
+url_to_service(<<"www.vimeo.com/", _/binary>>) -> vimeo;
+url_to_service(<<"vimeo.com/", _/binary>>) -> vimeo;
+url_to_service(<<"flv.video.yandex.ru/", _/binary>>) -> yandex;
+url_to_service(<<"static.video.yandex.ru/", _/binary>>) -> yandex;
+url_to_service(_) -> undefined.
 
 
 embed_code(youtube, H, W, V) ->
@@ -382,3 +428,7 @@ preview_yandex(MediaId, InsertProps, Context) ->
                     nop
             end
     end.
+
+test() ->
+    Html = <<"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/PSb4ZfKif4Y\" frameborder=\"0\" allowfullscreen></iframe>">>,
+    fetch_videoid_from_embed(<<"?">>, Html).
