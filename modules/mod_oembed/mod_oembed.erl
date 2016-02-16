@@ -391,7 +391,15 @@ preview_create(MediaId, MediaProps, Context) ->
             case oembed_request(Url, Context) of
                 {ok, Json} ->
                     %% store found properties in the media part of the rsc
-                    ok = m_media:replace(MediaId, [{oembed, Json} | MediaProps], Context),
+                    {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, proplists:get_value(html, Json)),
+                    ok = m_media:replace(MediaId, 
+                                         [
+                                            {oembed, Json},
+                                            {video_embed_service, EmbedService},
+                                            {video_embed_id, EmbedId}
+                                            | MediaProps
+                                         ],
+                                         Context),
                     _ = preview_create_from_json(MediaId, Json, Context),
                     proplists:get_value(title, Json);
                 {error, {http, Code, Body}} ->
@@ -505,3 +513,54 @@ type_to_category(<<"photo">>) -> image;
 type_to_category(<<"video">>) -> video;
 type_to_category(<<"link">>) -> website;
 type_to_category(_rich) -> document.
+
+
+%% This is a copy from mod_video_embed, should be combined (which is in the works)
+fetch_videoid_from_embed(Service, undefined) ->
+    {<<>>, undefined};
+fetch_videoid_from_embed(Service, EmbedCode) ->
+    case re:run(EmbedCode, 
+                <<"(src|href)=\"([^\"]*)\"">>,
+                [global, notempty, {capture, all, binary}])
+    of
+        {match, [[_,_,Url]|_]} ->
+            case url_to_service(Url) of
+                undefined ->
+                    {Service, <<>>};
+                UrlService ->
+                    {z_convert:to_binary(UrlService), fetch_videoid(UrlService, Url)}
+            end;
+        nomatch ->
+            {Service, <<>>}
+    end.
+
+fetch_videoid(youtube, Url) ->
+    [Url1|_] = binary:split(Url, <<"?">>),
+    case binary:split(Url1, <<"/embed/">>) of
+        [_, Code] ->
+            Code;
+        _ ->
+            {_Protocol, _Host, _Path, Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
+            Qs1 = mochiweb_util:parse_qs(Qs),
+            z_convert:to_binary(proplists:get_value("v", Qs1))
+    end;
+fetch_videoid(vimeo, Url) ->
+    {_Protocol, _Host, Path, _Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
+    P1 = lists:last(string:tokens(Path, "/")),
+    case z_utils:only_digits(P1) of
+        true -> z_convert:to_binary(P1);
+        false -> <<>>
+    end;
+fetch_videoid(_Service, _Url) ->
+    <<>>.
+
+url_to_service(<<"https://", Url/binary>>) -> url_to_service(Url);
+url_to_service(<<"http://", Url/binary>>) -> url_to_service(Url);
+url_to_service(<<"//", Url/binary>>) -> url_to_service(Url);
+url_to_service(<<"www.youtube.com/", _/binary>>) -> youtube;
+url_to_service(<<"youtube.com/", _/binary>>) -> youtube;
+url_to_service(<<"www.vimeo.com/", _/binary>>) -> vimeo;
+url_to_service(<<"vimeo.com/", _/binary>>) -> vimeo;
+url_to_service(<<"flv.video.yandex.ru/", _/binary>>) -> yandex;
+url_to_service(<<"static.video.yandex.ru/", _/binary>>) -> yandex;
+url_to_service(_) -> undefined.
