@@ -228,6 +228,27 @@ function z_dialog_alert(options)
     });
 }
 
+function z_dialog_overlay_open(options)
+{
+    var $overlay = $('.modal-overlay');
+    if ($overlay.length > 0) {
+        $overlay
+            .html(options.html)
+            .show();
+    } else {
+        html = '<div class="modal-overlay">' +
+               '<a href="#close" class="modal-overlay-close" onclick="z_dialog_overlay_close()">&times;</a>' +
+               options.html +
+               '</div>';
+        $('body').append(html);
+    }
+}
+
+function z_dialog_overlay_close()
+{
+    $('.modal-overlay').remove();
+}
+
 /* Growl messages
 ---------------------------------------------------------- */
 

@@ -26,6 +26,6 @@ center    optional  boolean (0, 1) default 1; set to 0 to align the
                     dialog at the top
 ========  ========  ==================================================
 
-.. seealso:: actions :ref:`action-dialog_open` and :ref:`action-dialog_close`.
+.. seealso:: actions :ref:`action-dialog_open`, :ref:`action-dialog_close` and :ref:`action-overlay_open`.
 
 
