@@ -28,11 +28,17 @@ Currently, the following subcommands are implemented:
 ``zotonic restart``
   Restart the background Zotonic server instance.
 
+``zotonic wait [timeout]``
+  Wait ``timeout`` seconds (default: 30) for Zotonic to be started, then return. 
+
 ``zotonic update``
   Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
 
 ``zotonic shell``
   Get an EShell on the running instance. See :ref:`guide-cli-shell`.
+
+``zotonic rpc``
+  Send an RPC request to the running Zotonic instance. Example: `zotonic rpc "zotonic ping"`
 
 ``zotonic addsite [options] <site_name>``
   Creates a new site with [site_name] as its name.  See :ref:`guide-cli-addsite` for a full overview of this command.

@@ -58,6 +58,6 @@ elif [ ! -f "$ZOTONIC_SCRIPTS/zotonic-$1" ]; then
     echo Command not found: $1 1>&2
     exit 127
 else
-    exec $ZOTONIC_SCRIPTS/zotonic-$1 ${@:2}
+    exec $ZOTONIC_SCRIPTS/zotonic-$1 "${@:2}"
 fi
 
