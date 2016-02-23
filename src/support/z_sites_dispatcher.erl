@@ -100,7 +100,7 @@ dispatch(Host, Path, ReqData, TracerPid) when (is_list(Host) orelse is_binary(Ho
                 {ok, Site} ->
                     dispatch_site(Site, DispReq, ReqDataUA);
                 Other ->
-                    Other
+                    handle_dispatch_result(Other, DispReq, ReqDataUA)
             end;
         [{_,Site}] ->
             dispatch_site(Site, DispReq, ReqDataUA);
@@ -470,8 +470,9 @@ handle_dispatch_result({redirect_protocol, NewProtocol, NewHost}, DispReq, ReqDa
     handle_dispatch_result({redirect_protocol, NewProtocol, NewHost, false}, DispReq, ReqDataUA);
 handle_dispatch_result({redirect_protocol, NewProtocol, NewHost, IsPermanent}, _DispReq, ReqDataUA) ->
     % Switch protocols (mostly http/https switch)
-    {handled, redirect(IsPermanent, z_convert:to_list(NewProtocol), NewHost, ReqDataUA)}.
-
+    {handled, redirect(IsPermanent, z_convert:to_list(NewProtocol), NewHost, ReqDataUA)};
+handle_dispatch_result({no_dispatch_match, _, _} = NoHostMatch, _DispReq, ReqData) ->
+    {NoHostMatch, ReqData}.
 
 %% Handle possible request rewrite; used when no dispatch rule matched
 handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, _Bindings, ReqDataHost, Context) when is_integer(Id) ->
