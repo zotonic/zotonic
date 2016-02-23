@@ -148,9 +148,9 @@ fetch_props(Id, Rev, Context) ->
 check_access(undefined, undefined, _Context) ->
     true;
 check_access({ok, PropsA}, undefined, Context) ->
-    z_acl:rsc_editable(proplists:get_value(id,PropsA), Context);
+    z_acl:rsc_editable(proplists:get_value(rsc_id,PropsA), Context);
 check_access(undefined, {ok, PropsA}, Context) ->
-    z_acl:rsc_editable(proplists:get_value(id,PropsA), Context);
+    z_acl:rsc_editable(proplists:get_value(rsc_id,PropsA), Context);
 check_access({ok, PropsA}, {ok, PropsB}, Context) ->
     case {proplists:get_value(rsc_id, PropsA),
           proplists:get_value(rsc_id, PropsB)}
