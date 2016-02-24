@@ -281,9 +281,8 @@ msgstr "Получить код проверки"
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_off.tpl:4
-#, fuzzy
 msgid "Sign in"
-msgstr "Войти"
+msgstr "Вход"
 
 #: modules/mod_authentication/templates/_logon_login_title.tpl:1
 #: modules/mod_authentication/templates/logon.tpl:11
