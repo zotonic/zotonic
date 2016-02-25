@@ -410,6 +410,8 @@ filter2arg(sharpen_small, Width, Height, _AllFilters) when Width < 400 andalso H
     {Width, Height, "-unsharp 0.3x0.7 "}; % 6x3+1+0
 filter2arg(sharpen_small, Width, Height, _AllFilters) ->
     {Width, Height, []};
+filter2arg({lossless, _}, Width, Height, _AllFilters) ->
+    {Width, Height, []};
 filter2arg(lossless, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg({quality, Q}, Width, Height, _AllFilters) ->
