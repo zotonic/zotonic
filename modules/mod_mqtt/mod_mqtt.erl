@@ -193,7 +193,7 @@ subscribe_topic(Topic, Qos, MFA, ModulePid, MyPid, Context) ->
     Sub = {
         {Topic, MFA, ModulePid},
         {z_mqtt_module_subscriber, start_link, [{Topic, Qos, MFA, ModulePid, z_context:site(Context)}]},
-        temporary, 5000, worker, [z_mqtt_module_subscriber]
+        transient, 5000, worker, [z_mqtt_module_subscriber]
     },
     lager:debug("MQTT subscribe ~p to ~p", [MFA, Topic]),
     case supervisor:start_child(MyPid, Sub) of
