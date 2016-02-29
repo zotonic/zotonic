@@ -728,7 +728,7 @@ schema_exists_conn(Connection, Schema) ->
         1 -> 
             true;
         0 ->
-            {ok, _, [{TableCt}]} = pgsql:equery(
+            {ok, _, [{TableCt}]} = epgsql:equery(
                 Connection,
                 "select count(*) from information_schema.tables where table_schema = $1",
                 [Schema]
