@@ -74,7 +74,9 @@
     flush/1,
     
     assert_table_name/1,
-    prepare_cols/2
+    prepare_cols/2,
+
+    schema_exists_conn/2
 ]).
 
 
@@ -660,7 +662,7 @@ ensure_schema(Site, Options) ->
     Database = proplists:get_value(dbdatabase, Options),
     Schema = proplists:get_value(dbschema, Options),
     {ok, DbConnection} = open_connection(Database, Options),
-    Result = case schema_exists(DbConnection, Schema) of
+    Result = case schema_exists_conn(DbConnection, Schema) of
         true ->
             ok;
         false ->
@@ -715,8 +717,8 @@ create_database(Site, Connection, Database) ->
     end.
     
 %% @doc Check whether schema exists
--spec schema_exists(pgsql:connection(), string()) -> boolean().
-schema_exists(Connection, Schema) ->
+-spec schema_exists_conn(pgsql:connection(), string()) -> boolean().
+schema_exists_conn(Connection, Schema) ->
     {ok, _, [{Count}]} = pgsql:equery(
         Connection,
         "select count(*) from information_schema.schemata where schema_name = $1",
