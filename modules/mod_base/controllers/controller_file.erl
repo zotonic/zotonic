@@ -101,8 +101,7 @@ expires(ReqData, {_Info,Context} = State) ->
     Date = calendar:universal_time(),
     case z_context:get(max_age, Context, ?MAX_AGE) of
         N when N >= ?MAX_AGE ->
-            {{Y,M,D},HIS} = Date,
-            {{{Y+1,M,D},HIS}, ReqData, State};
+            {z_datetime:next_year(Date), ReqData, State};
         MaxAge ->
             NowSecs = calendar:datetime_to_gregorian_seconds(Date),
             {calendar:gregorian_seconds_to_datetime(NowSecs + MaxAge), ReqData, State}
