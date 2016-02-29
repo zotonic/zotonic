@@ -8,7 +8,7 @@ This controller is used to show the HTML page of a
 page never existed or has been deleted.
 
 The user will be redirected to the ``logon`` URL when the current user
-is not allowed to view the page. 
+is not allowed to view the page.
 
 This controller also adds a ``noindex`` response header when the page’s
 “seo_noindex” flag is set.
@@ -72,6 +72,7 @@ The following options can be given to the dispatch rule:
 |                     |true.                                |                        |
 +---------------------+-------------------------------------+------------------------+
 
+.. _controller-page-acl-options:
 
 .. include:: acl_options.rst
 
