@@ -719,22 +719,12 @@ create_database(Site, Connection, Database) ->
 %% @doc Check whether schema exists
 -spec schema_exists_conn(epgsql:connection(), string()) -> boolean().
 schema_exists_conn(Connection, Schema) ->
-    {ok, _, [{Count}]} = epgsql:equery(
+    {ok, _, [{IsExisting}]} = epgsql:equery(
         Connection,
-        "select count(*) from information_schema.schemata where schema_name = $1",
+        "SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = $1)",
         [Schema]
     ),
-    case Count of
-        1 -> 
-            true;
-        0 ->
-            {ok, _, [{TableCt}]} = epgsql:equery(
-                Connection,
-                "select count(*) from information_schema.tables where table_schema = $1",
-                [Schema]
-            ),
-            TableCt > 0
-    end.
+    IsExisting.
 
 %% @doc Create a schema
 -spec create_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
