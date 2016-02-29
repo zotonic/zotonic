@@ -278,38 +278,53 @@ find_next_port(InUse) ->
 
 %% @doc Check if all certificates are available in the site's ssl directory
 check_certs(Context) ->
-	{ok, Opts} = cert_files(Context),
-	case filelib:is_file(proplists:get_value(certfile, Opts)) of
-		false ->
-			case filelib:is_file(proplists:get_value(keyfile, Opts)) of
-				false ->
-					generate_self_signed(Opts, Context);
-				true ->
-					{error, {missing_certfile, proplists:get_value(certfile, Opts)}}
-			end;
-		true ->
-			case filelib:is_file(proplists:get_value(keyfile, Opts)) of
-				false ->
-					{error, {missing_pemfile, proplists:get_value(keyfile, Opts)}};
-				true ->
-					check_keyfile(Opts)
-			end
+	{ok, Certs} = cert_files(Context),
+        CertFile = proplists:get_value(certfile, Certs),
+        KeyFile = proplists:get_value(keyfile, Certs),
+        case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
+            {false, false} -> generate_self_signed(Certs, Context);
+            {false, true} -> {error, {missing_certfile, CertFile}};
+            {true, false} -> {error, {missing_pemfile, KeyFile}};
+            {true, true} -> 
+                case check_keyfile(KeyFile) of 
+                    ok -> 
+                        case check_dhfile(proplists:get_value(dhfile, Certs)) of
+                            ok -> {ok, Certs};
+                            {error, _}=E -> E
+                        end;
+                    {error, _}=E -> E 
+                end
 	end.
 
-check_keyfile(Opts) ->
-	Filename = proplists:get_value(keyfile, Opts),
+check_keyfile(Filename) ->
 	case file:read_file(Filename) of
 		{ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
 			{error, {need_rsa_private_key, Filename, "use: openssl rsa -in sitename.key -out sitename.pem"}};
 		{ok, Bin} ->
 			case public_key:pem_decode(Bin) of
 				[] -> {error, {no_private_keys_found, Filename}};
-				_ -> {ok, Opts}
+				_ -> ok
 			end;
 		Error ->
 			{error, {cannot_read_pemfile, Filename, Error}}
 	end.
 
+check_dhfile(Filename) ->
+    case filelib:is_file(Filename) of
+        true -> 
+            case is_dhfile(Filename) of
+                true -> ok;
+                false -> {error, {no_dhfile, Filename}}
+            end;
+        false -> 
+            generate_dhfile(Filename)
+    end.
+
+is_dhfile(Filename) ->
+    case file:read_file(Filename) of
+        {ok, <<"-----BEGIN DH PARAMETERS", _/binary>>} -> true;
+        _ -> false
+    end.
 
 generate_self_signed(Opts, Context) ->
 	PemFile = proplists:get_value(keyfile, Opts),
@@ -341,6 +356,20 @@ generate_self_signed(Opts, Context) ->
 			{error, {ensure_dir, Error, PemFile}}
 	end. 
 
+generate_dhfile(Filename) ->
+    case filelib:ensure_dir(Filename) of
+        ok ->
+            Command = "openssl dhparam -out " ++ Filename ++ " 2048",
+            lager:info("SSL: ~p", [Command]),
+            Result = os:cmd(Command),
+            lager:info("SSL: ~p", [Result]),
+            case is_dhfile(Filename) of
+                true -> ok;
+                false -> {error, "Could not generate dh parameters"}
+            end;
+        {error, _} = Error ->
+            {error, {ensure_dir, Error, Filename}}
+    end.
 
 cert_files(Context) ->
 	SSLDir = filename:join(z_path:site_dir(Context), "ssl"),
@@ -348,7 +377,8 @@ cert_files(Context) ->
 	Files = [
 		{certfile, filename:join(SSLDir, Sitename++".crt")},
 		{keyfile, filename:join(SSLDir, Sitename++".pem")},
-		{password, m_config:get_value(mod_ssl, password, "", Context)}
+		{password, m_config:get_value(mod_ssl, password, "", Context)},
+                {dhfile, filename:join(SSLDir, "dh-params.pem")}
 	],
 	CaCertFile = filename:join(SSLDir, Sitename++".ca.crt"),
 	case filelib:is_file(CaCertFile) of
