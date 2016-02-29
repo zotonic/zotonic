@@ -360,10 +360,14 @@ parse_config([], SiteConfig) ->
     {ok, SiteConfig};
 parse_config([C|T], SiteConfig) ->
     case file:consult(C) of
-        {ok, [NewSiteConfig|_]} ->
+        {ok, [NewSiteConfig|_]} when is_list(NewSiteConfig) ->
             SortedNewConfig = lists:ukeysort(1, NewSiteConfig),
             MergedConfig = lists:ukeymerge(1, SortedNewConfig, SiteConfig),
             parse_config(T, MergedConfig);
+        {ok, [NotAList|_]} ->
+            lager:error("Expected a list in the site config ~s but got ~p", 
+                        [C, NotAList]),
+            parse_config(T, SiteConfig);
         {error, Reason} = Error ->
             lager:error("Could not consult site config: ~s: ~s",
                         [C, unicode:characters_to_binary(file:format_error(Reason))]),

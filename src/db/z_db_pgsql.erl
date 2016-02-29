@@ -58,8 +58,14 @@ start_link(Args) ->
 test_connection(Args) ->
     case connect(Args) of
         {ok, Conn} ->
-            epgsql:close(Conn),
-            ok;
+            case z_db:schema_exists_conn(Conn, proplists:get_value(dbschema, Args)) of
+                true ->
+                    epgsql:close(Conn),
+                    ok;
+                false ->
+                    epgsql:close(Conn),
+                    {error, noschema}
+            end;
         {error, _} = E ->
             E
     end.
