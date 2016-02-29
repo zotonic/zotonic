@@ -81,7 +81,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
 			    lager:info("[~p] Retrying install check after db creation.", [z_context:site(Context)]),
 			    check_db_and_upgrade(Context, Tries+1);
 			{error, _PrepReason} = Error ->
-			    lager:error("[~p] Could not create the database and schema."),
+			    lager:error("[~p] Could not create the database and schema.", [z_context:site(Context)]),
 			    Error
 		    end
 		end

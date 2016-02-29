@@ -724,9 +724,16 @@ schema_exists_conn(Connection, Schema) ->
         "select count(*) from information_schema.schemata where schema_name = $1",
         [Schema]
     ),
-    case z_convert:to_integer(Count) of
-        0 -> false;
-        1 -> true
+    case Count of
+        1 -> 
+            true;
+        0 ->
+            {ok, _, [{TableCt}]} = pgsql:equery(
+                Connection,
+                "select count(*) from information_schema.tables where table_schema = $1",
+                [Schema]
+            ),
+            TableCt > 0
     end.
 
 %% @doc Create a schema
@@ -738,11 +745,14 @@ create_schema(Site, Connection, Schema) ->
         Connection, 
         "CREATE SCHEMA \"" ++ Schema ++ "\""
     ) of  
+        {ok, _, _} ->
+            ok;
+        {error, {error, error, <<"42P06">>, _Msg, []}} ->
+            lager:warning("[~p] schema already exists ~p", [Site, Schema]),
+            ok;
         {error, Reason} = Error ->
             lager:error("[~p] z_db error ~p when creating schema ~p", [Site, Reason, Schema]),
-            Error;
-        {ok, _, _} ->
-            ok
+            Error
     end.    
     
 %% @doc Check the information schema if a certain table exists in the context database.
