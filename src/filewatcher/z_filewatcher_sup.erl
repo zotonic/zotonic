@@ -93,4 +93,4 @@ watch_dirs() ->
     ],
     LinkedDirs = string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n"),
     DepDirs = filelib:wildcard(filename:join(os:getenv("ZOTONIC"), "deps/*/ebin")),
-    ZotonicDirs ++ LinkedDirs ++ DepDirs.
+    lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs ++ LinkedDirs ++ DepDirs).
