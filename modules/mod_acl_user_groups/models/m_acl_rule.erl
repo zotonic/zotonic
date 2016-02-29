@@ -378,7 +378,7 @@ shared_table_columns() ->
      #column_def{name=modifier_id, type="integer", is_nullable=false},
      #column_def{name=created, type="timestamp", is_nullable=true},
      #column_def{name=modified, type="timestamp", is_nullable=true},
-     #column_def{name=managed_by, type="character varying", length=255, is_nullable=true}
+     #column_def{name=managed_by, type="character varying", length=255, is_nullable=true},
      #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
      #column_def{name=is_block, type="boolean", is_nullable=false, default="false"},
      #column_def{name=actions, type="character varying", length=300, is_nullable=true}
