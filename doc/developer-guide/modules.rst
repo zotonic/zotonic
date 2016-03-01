@@ -357,7 +357,7 @@ Data model notification
 
 In the ``#datamodel`` record you can manage categories, predicates, resources,
 media and edges. You can also set the ``data`` property, which will send out
-a first ref:`notification <guide-notification>`_. To subscribe to that
+a first ref:`notification <guide-notification>`. To subscribe to that
 notification, export ``observe_manage_data/2`` in your site or module.
 
 Using categories defined by other modules
