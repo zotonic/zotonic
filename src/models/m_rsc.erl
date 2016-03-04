@@ -66,7 +66,9 @@
     rid/2,
 
     name_lookup/2,
-    uri_lookup/2
+    uri_lookup/2,
+
+    common_properties/1
 ]).
 
 -export_type([resource/0, resource_id/0, resource_name/0]).
@@ -812,5 +814,77 @@ predicates_edit(Id, Context) ->
     ByCategory = m_predicate:for_subject(Id, Context),
     Present = m_edge:object_predicate_ids(Id, Context),
     ByCategory ++ Present.
-    
-    
+
+
+%% @doc Common properties, these are used by exporter and backup routines.
+common_properties(_Context) ->
+    [
+        title,
+
+        category_id, 
+        creator_id,
+        modifier_id,
+
+        created,
+        modified,
+
+        publication_start,
+        publication_end,
+
+        is_published,
+        is_featured,
+        is_protected,
+
+        chapeau,
+        subtitle,
+        short_title,
+        summary,
+
+        name_prefix,
+        name_first,
+        name_surname_prefix,
+        name_surname,
+
+        phone,
+        phone_mobile,
+        phone_alt,
+        phone_emergency,
+
+        email,
+        website,
+
+        date_start,
+        date_end,
+        date_remarks,
+
+        address_street_1,
+        address_street_2,
+        address_city,
+        address_state,
+        address_postcode,
+        address_country,
+
+        mail_street_1,
+        mail_street_2,
+        mail_city,
+        mail_state,
+        mail_postcode,
+        mail_country,
+
+        location_lng,
+        location_lat,
+
+        body,
+        body_extra,
+        blocks,
+
+        page_path,
+        name,
+
+        seo_noindex,
+        seo_title,
+        slug,
+        custom_slug,
+        seo_keywords,
+        seo_desc
+    ].  
