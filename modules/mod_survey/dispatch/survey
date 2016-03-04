@@ -1,6 +1,8 @@
 %% -*- mode: erlang -*-
 [
- {survey_results_download,  ["survey", "results", "download", id],   controller_survey_results, []},
+ {survey_results_download,  ["survey", "results", "download", id],  controller_export_resource, [ {content_type, xlsx} ]},
+ {survey_results_download,  ["survey", "results", "download", type, id], controller_export_resource, []},
+
  {survey_results_printable, ["survey", "results", "printable", id],  controller_page, [ {acl_action, update}, {is_canonical, false}, {template, "survey_results_printable.tpl"} ]},
  
  {survey_results, ["survey", "results", id],       controller_page, [ {is_canonical, false}, {template, "survey_results.tpl"} ]},
