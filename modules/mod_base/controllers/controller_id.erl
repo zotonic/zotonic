@@ -70,13 +70,15 @@ content_types_provided(ReqData, Context) ->
 
 see_other(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
-    Mime = z_context:get_resp_header("Content-Type", Context1),
+    Mime = wrq:resp_content_type(ReqData),
     {CT,Context2} = get_content_types(Context1),
     {Id, Context3} = get_id(Context2),
     {Location,Context4} = case proplists:get_value(Mime, CT) of
                             page_url ->
                                 ContextSession = z_context:continue_session(Context3),
                                 {m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
+                            {Dispatch, DispatchArgs} when is_list(DispatchArgs) -> 
+                                {z_dispatcher:url_for(Dispatch, [{id,Id} | DispatchArgs], Context3), Context3};
                             Dispatch -> 
                                 {z_dispatcher:url_for(Dispatch, [{id,Id}], Context3), Context3}
                           end,
