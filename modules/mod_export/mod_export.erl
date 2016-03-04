@@ -26,8 +26,6 @@
 
 -export([
     observe_content_types_dispatch/3,
-    observe_export_resource_data/2,
-
     rsc_props/1
     ]).
 
@@ -36,20 +34,6 @@
 %% @doc Add an extra content-type to the 'id' controller.
 observe_content_types_dispatch(#content_types_dispatch{id=Id}, Acc, Context) ->
     Acc ++ export_encoder:content_types_dispatch(Id, Context).
-
-%% @doc Fetch all ids making up the export, handles collections and search queries.
-observe_export_resource_data(#export_resource_data{id=Id}, Context) when is_integer(Id) ->
-    case m_rsc:is_a(Id, 'query', Context) of
-        true ->
-            {ok, z_search:query_([{query_id, Id}], Context)};
-        false ->
-            case m_rsc:is_a(Id, collection, Context) of
-                true -> {ok, m_edge:objects(Id, haspart, Context)};
-                false -> {ok, [Id]}
-            end
-    end;
-observe_export_resource_data(#export_resource_data{}, _Context) ->
-    {ok, []}.
 
 rsc_props(Context) ->
     m_rsc:common_properties(Context) ++ [page_url_abs].
