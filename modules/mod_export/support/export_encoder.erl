@@ -21,6 +21,7 @@
 
 -export([
     content_types/1,
+    content_types_dispatch/2,
     stream/5,
 
     lookup_header/2,
@@ -47,6 +48,17 @@ content_types(_Context) ->
                 Acc ++ Encoder:mime()
             end,
             [],
+            encoders())).
+
+%% todo: let the encoder check against the category of the id
+content_types_dispatch(_Id, _Context) ->
+    lists:flatten(
+        lists:map(
+            fun(Encoder) ->
+                Mimes = Encoder:mime(),
+                Type = hd(Encoder:extension()),
+                [ {Mime, {export_rsc, [{type, Type}]}} || Mime <- Mimes ]
+            end,
             encoders())).
 
 stream(Id, ContentType, Dispatch, IsQuery, Context) ->
