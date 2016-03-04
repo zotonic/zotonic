@@ -82,9 +82,12 @@ expires(ReqData, State) ->
     NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
     {calendar:gregorian_seconds_to_datetime(NowSecs - 1), ReqData, State}.
 
-
 provide_content(ReqData, Context) ->
     {Id, _} = ensure_id(Context),
+    Data = m_survey:survey_results(Id, Context),
+    Context1 = z_context:set(survey_data, Data, Context),
+    controller_
+
     Filename = lists:flatten([
                     "survey-",
                     integer_to_list(Id),
@@ -112,53 +115,4 @@ ensure_id(Context) ->
         {ok, Id} ->
             {Id, Context}
     end.
-
-
-to_csv(Rows) ->
-    to_csv(Rows, <<>>).
-
-to_csv([], Acc) ->
-    Acc;
-to_csv([R|Rows], Acc) ->
-    RB = to_csv_row(R),
-    to_csv(Rows, <<Acc/binary, RB/binary, 10>>).
-
-
-to_csv_row(R) ->
-    to_csv_row(R, <<>>).
-
-to_csv_row([], Acc) ->
-    Acc;
-to_csv_row([V], Acc) ->
-    B = filter(V),
-    <<Acc/binary, B/binary>>;
-to_csv_row([V|Vs], Acc) ->
-    B = filter(V),
-    to_csv_row(Vs, <<Acc/binary, B/binary, $,>>).
-
-
-filter(V) when is_integer(V); is_atom(V); is_float(V) ->
-    z_convert:to_binary(V);
-filter(V) ->
-    B = escape(z_convert:to_binary(V), <<$">>),
-    <<B/binary, $">>.
-    
-
-escape(<<>>, Acc) ->
-    Acc;
-escape(<<10, Rest/binary>>, Acc) ->
-    escape(Rest, <<Acc/binary, 10>>);
-escape(<<13, Rest/binary>>, Acc) ->
-    escape(Rest, Acc);
-escape(<<$\\, Rest/binary>>, Acc) ->
-    escape(Rest, <<Acc/binary, $\\, $\\>>);
-escape(<<$", Rest/binary>>, Acc) ->
-    escape(Rest, <<Acc/binary, $", $">>);
-escape(<<C, Rest/binary>>, Acc) when C =< 32 ->
-    escape(Rest, <<Acc/binary, 32>>);
-escape(<<C, Rest/binary>>, Acc) ->
-    escape(Rest, <<Acc/binary, C>>).
-
-
-
 

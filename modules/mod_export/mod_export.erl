@@ -27,7 +27,9 @@
 -export([
     observe_content_types_dispatch/3,
     observe_export_resource_data/2,
-    observe_export_resource_encode/2
+    observe_export_resource_encode/2,
+
+    rsc_props/1
     ]).
 
 -include_lib("zotonic.hrl").
@@ -62,14 +64,8 @@ observe_export_resource_encode(#export_resource_encode{}, _Context) ->
     undefined.
 
 rsc_data(Id, Context) ->
-    [ Id | [ m_rsc:p(Id, Prop, Context) || Prop <- rsc_fields() ] ].
+    [ Id | [ m_rsc:p(Id, Prop, Context) || Prop <- rsc_props(Context) ] ].
 
-rsc_fields() ->
-    [
-        title,
-        summary,
-        created,
-        modified,
-        page_url_abs
-    ].
+rsc_props(Context) ->
+    m_rsc:common_properties(Context) ++ [page_url_abs].
 
