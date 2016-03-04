@@ -56,8 +56,7 @@ content_types_provided(ReqData, Context0) ->
     Dispatch = z_context:get(zotonic_dispatch, Context),
     case controller_export_resource:get_content_type(undefined, Dispatch, Context) of
         {ok, ContentType} ->
-            Context2 = z_context:set(content_type_mime, ContentType, Context),
-            ?WM_REPLY([{ContentType, do_export}], Context2);
+            ?WM_REPLY([{ContentType, do_export}], Context);
         {error, Reason} = Error ->
             lager:error("~p: mod_export error when fetching content type for ~p ~p",
                         [z_context:site(Context), Dispatch, Reason]),
@@ -67,29 +66,15 @@ content_types_provided(ReqData, Context0) ->
 charsets_provided(ReqData, Context) ->
     {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
 
+
 do_export(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
-    Stream = {stream, {<<>>, fun() -> controller_export_resource:do_header(Context) end}},
-    Context1 = set_filename(Context),
+    ContentType = wrq:resp_content_type(ReqData),
+    Dispatch = z_context:get(zotonic_dispatch, Context),
+    Stream = export_encoder:stream(undefined, ContentType, Dispatch, Context),
+    Context1 = set_filename(ContentType, Dispatch, Context),
     ?WM_REPLY(Stream, Context1).
 
-
-set_filename(Context) ->
-    ContentType = z_context:get(content_type_mime, Context),
-    Dispatch = z_context:get(zotonic_dispatch, Context),
-    case z_notifier:first(#export_resource_filename{
-                                dispatch=Dispatch,
-                                content_type=ContentType}, Context)
-    of
-        undefined ->
-            Extension = case mimetypes:mime_to_exts(ContentType) of
-                            undefined -> "bin";
-                            Exts -> binary_to_list(hd(Exts))
-                        end, 
-            Filename = "export."++Extension,
-            z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename, Context);
-        {ok, Filename} ->
-            Filename1 = z_convert:to_list(Filename),
-            z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename1, Context)
-    end.
+set_filename(ContentType, Dispatch, Context) ->
+    controller_export_reosurce:set_filename(undefined, ContentType, Dispatch, Context).
 

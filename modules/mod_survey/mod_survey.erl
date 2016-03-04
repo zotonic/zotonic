@@ -34,6 +34,10 @@
     observe_admin_rscform/3,
     observe_survey_is_submit/2,
 
+    observe_export_resource_filename/2,
+    observe_export_resource_header/2,
+    observe_export_resource_data/2,
+
     get_page/3,
 
     do_submit/4,
@@ -140,6 +144,44 @@ observe_survey_is_submit(#survey_is_submit{block=Q}, _Context) ->
         <<"survey_", _/binary>> -> proplists:get_value(input_type, Q) =:= <<"submit">>;
         _ -> undefined
     end.
+
+
+%% @doc Fetch the filename for the export
+observe_export_resource_filename(#export_resource_filename{dispatch=survey_results_download, id=Id}, Context) ->
+    case m_survey:is_allowed_results_download(Id, Context) of
+        true ->
+            Filename = lists:flatten([
+                            "survey-",
+                            integer_to_list(Id),
+                            case m_rsc:p(Id, slug, Context) of 
+                                undefined -> "";
+                                <<>> -> "";
+                                Slug -> [$-|z_convert:to_list(Slug)]
+                            end]),
+            {ok, Filename};
+        false ->
+            throw({stop_request, 403})
+    end;
+observe_export_resource_filename(#export_resource_filename{}, _Context) ->
+    undefined.
+
+%% @doc Fetch the header for the survey download
+observe_export_resource_header(#export_resource_header{dispatch=survey_results_download, id=Id}, Context) ->
+    case m_survey:is_allowed_results_download(Id, Context) of
+        true ->
+            [Hs|Data] = m_survey:survey_results(Id, Context),
+            {ok, Hs, Data};
+        false ->
+            throw({stop_request, 403})
+    end;
+observe_export_resource_header(#export_resource_header{}, _Context) ->
+    undefined.
+
+%% @doc Fetch all ids making up the export, handles collections and search queries.
+observe_export_resource_data(#export_resource_data{dispatch=survey_results_download, state=Data}, _Context) ->
+    {ok, Data, undefined};
+observe_export_resource_data(#export_resource_data{}, _Context) ->
+    undefined.
 
 
 get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->

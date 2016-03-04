@@ -91,10 +91,16 @@
     <div class="form-group row">
 	    <div class="col-lg-12 col-md-12">
 		    {% if m.survey.is_allowed_results_download[id] %}
-			    <a id="{{ #download }}" class="btn btn-default btn-xs" href="{% url survey_results_download id=id %}">{_ Download CSV results _}</a>
-			    {% wire id=#download propagate 
-					action={alert text=_"Download will start in the background. Please check your download window."}
-			    %}
+				<a id="{{ #download1 }}" class="btn btn-default btn-xs" href="{% url survey_results_download type='csv' id=id %}">{_ Download CSV _}</a>
+				{% wire id=#download1 
+						action={alert text=_"Download will start in the background. Please check your download window."}
+						xaction={redirect dispatch=`survey_results_download` id=id type='csv'}
+				%}
+				<a id="{{ #download2 }}" class="btn btn-default btn-xs" href="{% url survey_results_download type='xlsx' id=id %}">{_ Download Excel _}</a>
+				{% wire id=#download2 
+						action={alert text=_"Download will start in the background. Please check your download window."}
+						xaction={redirect dispatch=`survey_results_download` id=id type='xlsx'}
+				%}
 		    {% endif %}
 		    <a class="btn btn-default btn-xs" href="{% url survey_results id=id %}">{_ Show survey results _}</a>
 		    <a class="btn btn-default btn-xs" href="#" id="{{ #email_addresses }}">{_ Show email addresses _}</a>

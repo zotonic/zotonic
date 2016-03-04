@@ -1,3 +1,9 @@
 [
-	{export_rsc_csv, ["export", "csv", id], controller_export_resource, [ {content_type, "text/csv"} ]}
+    {export_rsc,  ["export", "rsc"], controller_export_resource, []},
+    {export_rsc,  ["export", "rsc", id], controller_export_resource, []},
+    {export_rsc,  ["export", "rsc", type, id], controller_export_resource, []},
+
+    {export_rsc_query,  ["export", "query"], controller_export_resource, [ {is_query, true} ]},
+    {export_rsc_query,  ["export", "query", id], controller_export_resource, [ {is_query, true} ]},
+    {export_rsc_query,  ["export", "query", type, id], controller_export_resource, [ {is_query, true} ]}
 ].
