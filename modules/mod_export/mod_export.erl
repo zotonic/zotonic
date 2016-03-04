@@ -27,7 +27,6 @@
 -export([
     observe_content_types_dispatch/3,
     observe_export_resource_data/2,
-    observe_export_resource_encode/2,
 
     rsc_props/1
     ]).
@@ -36,8 +35,7 @@
 
 %% @doc Add an extra content-type to the 'id' controller.
 observe_content_types_dispatch(#content_types_dispatch{}, Acc, _Context) ->
-    [{"text/csv", export_rsc_csv} | Acc].
-
+    Acc.
 
 %% @doc Fetch all ids making up the export, handles collections and search queries.
 observe_export_resource_data(#export_resource_data{id=Id}, Context) when is_integer(Id) ->
@@ -52,19 +50,6 @@ observe_export_resource_data(#export_resource_data{id=Id}, Context) when is_inte
     end;
 observe_export_resource_data(#export_resource_data{}, _Context) ->
     {ok, []}.
-
-
-%% @doc Encode a "row" of data, according to the encoding requested
-observe_export_resource_encode(#export_resource_encode{content_type="text/csv", data=Id}, Context) when is_integer(Id) ->
-    Data = rsc_data(Id, Context),
-    {ok, export_encode_csv:encode(Data, Context)};
-observe_export_resource_encode(#export_resource_encode{content_type="text/csv", data=Data}, Context) when is_list(Data) ->
-    {ok, export_encode_csv:encode(Data, Context)};
-observe_export_resource_encode(#export_resource_encode{}, _Context) ->
-    undefined.
-
-rsc_data(Id, Context) ->
-    [ Id | [ m_rsc:p(Id, Prop, Context) || Prop <- rsc_props(Context) ] ].
 
 rsc_props(Context) ->
     m_rsc:common_properties(Context) ++ [page_url_abs].
