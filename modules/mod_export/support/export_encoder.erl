@@ -51,7 +51,12 @@ content_types(_Context) ->
 
 stream(Id, ContentType, Dispatch, IsQuery, Context) ->
     Enc = select_encoder(ContentType, encoders()),
-    {ok, EncState} = Enc:init([], Context),
+    EncOpts = [
+        {id, Id},
+        {dispatch, Dispatch},
+        {is_query, IsQuery}
+    ],
+    {ok, EncState} = Enc:init(EncOpts, Context),
     StreamState = #stream_state{
         id = Id,
         is_query = IsQuery,
@@ -73,7 +78,8 @@ select_encoder(CT, [M|Ms]) ->
 encoders() -> 
     [
         export_encoder_csv,
-        export_encoder_xlsx
+        export_encoder_xlsx,
+        export_encoder_ics
     ].
 
 do_header(StreamState, Context) ->

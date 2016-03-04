@@ -76,7 +76,7 @@ zip(Keys, Rows, Context) ->
         {lookup_value, fun export_encoder:lookup_value/2},
         {sheet_name, <<"Sheet1">>},
         {keys, Keys},
-        {rows, Rows}
+        {rows, lists:reverse(Rows)}
     ],
     Fs = lists:map(fun({Fn, Template}) ->
                      {Fn, file_render(Template, Vars, Context)}
