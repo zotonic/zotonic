@@ -35,5 +35,5 @@ types in front of the accumulator. The added entries are tuples:
 Example of adding a content type handler adding a text/plain handler
 with the dispatch rule ``rsc_text``::
 
-  observe_content_types_provided(content_types_dispatch, Acc, Context) ->
-      [{"text/plain", rsc_text} | Acc].
+    observe_content_types_dispatch(#content_types_dispatch{}, Acc, _Context) ->
+        [{"text/plain", rsc_text} | Acc].
