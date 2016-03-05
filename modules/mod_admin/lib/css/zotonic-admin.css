@@ -15,14 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
-.z-btn-remove:before,
-.z-btn-remove:hover:before,
-.z-btn-help:before,
-a.close:before,
-button.close:before,
-a.close:hover:before,
-button.close:hover:before,
-.zotonic-logo,
 ul.blocks.ui-sortable .widget-header:before {
   speak: none;
   font-style: normal;
@@ -34,34 +26,8 @@ ul.blocks.ui-sortable .widget-header:before {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-a.zotonic-logo:hover {
-  text-decoration: none;
-}
-.zotonic-logo em {
-  display: none;
-}
-.z-btn-remove:before,
-.z-btn-remove:hover:before,
-.z-btn-help:before,
-a.close:before,
-button.close:before,
-a.close:hover:before,
-button.close:hover:before,
-.zotonic-logo,
 ul.blocks.ui-sortable .widget-header:before {
   font-family: "Zotonic";
-}
-.z-btn-social .zotonic-logo {
-  position: absolute;
-  display: block;
-  font-size: 16px;
-  line-height: 16px;
-  height: 16px;
-  width: 16px;
-  text-align: center;
-  top: 50%;
-  left: .5em;
-  margin-top: -7.5px;
 }
 /* FONT PATH
  * -------------------------- */
@@ -73,7 +39,7 @@ ul.blocks.ui-sortable .widget-header:before {
   font-style: normal;
 }
 body {
-  color: #222222;
+  color: #222;
   background-color: #fff;
 }
 body.wait {
@@ -102,12 +68,12 @@ p {
 .unpublished a:not(.btn),
 .unpublished .text-muted,
 .unpublished .help-block {
-  color: #aaaaaa;
+  color: #aaa;
 }
 .z-drag-drop-placeholder,
 ul.blocks.ui-sortable .ui-sortable-placeholder,
 ul.media > li.ui-sortable-placeholder {
-  background: #dddddd;
+  background: #ddd;
   border: none;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -115,7 +81,7 @@ ul.media > li.ui-sortable-placeholder {
   visibility: visible !important;
 }
 .z-text-light {
-  color: #aaaaaa;
+  color: #aaa;
 }
 .z-button-row {
   *zoom: 1;
@@ -135,6 +101,9 @@ ul.media > li.ui-sortable-placeholder {
   margin: 15px;
   margin-top: 76px;
 }
+footer {
+  margin: 20px 0;
+}
 body.noframe > .admin-container {
   background: transparent;
 }
@@ -147,7 +116,7 @@ body.noframe > .admin-container {
 .widget .widget-section-header {
   font-size: 13px;
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
-  color: #777777;
+  color: #777;
 }
 .admin-word-break,
 .admin-header h2,
@@ -198,7 +167,7 @@ pre:empty {
   display: none;
 }
 .text-muted {
-  color: #999999;
+  color: #999;
 }
 .nav .dropdown-menu > li > a.has-icon,
 .nav .dropdown-toggle.has-icon {
@@ -206,9 +175,7 @@ pre:empty {
   padding-left: 34px;
 }
 .nav .dropdown-menu > li > a.has-icon .z-icon,
-.nav .dropdown-toggle.has-icon .z-icon,
-.nav .dropdown-menu > li > a.has-icon .zotonic-logo,
-.nav .dropdown-toggle.has-icon .zotonic-logo {
+.nav .dropdown-toggle.has-icon .z-icon {
   position: absolute;
   left: 15px;
   top: 50%;
@@ -274,7 +241,7 @@ pre:empty {
 }
 a.close,
 button.close {
-  color: #555555;
+  color: #555;
 }
 .radio-inline,
 .checkbox-inline,
@@ -285,7 +252,7 @@ button.close {
   margin-bottom: 5px;
 }
 .checkbox label {
-  color: #555555;
+  color: #555;
 }
 .pagination > li > a {
   -webkit-user-select: none;
@@ -298,7 +265,7 @@ button.close {
 }
 .control-label {
   font-weight: normal;
-  color: #777777;
+  color: #777;
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
 }
 @media (min-width: 768px) {
@@ -310,16 +277,15 @@ code {
   padding: 0;
 }
 .z-btn-remove {
-  color: #555555;
+  color: #555;
 }
 .z-btn-remove:hover {
-  color: #222222;
+  color: #222;
 }
 .btn {
   position: relative;
 }
-.btn > .z-icon,
-.btn > .zotonic-logo {
+.btn > .z-icon {
   width: 18px;
   height: 18px;
   margin-top: -9px;
@@ -402,7 +368,7 @@ fieldset[disabled] .btn-primary.active {
 .dashboard .table > thead > tr > th:last-child,
 .dashboard .table > tbody > tr > td:last-child {
   width: 40%;
-  color: #999999;
+  color: #999;
 }
 .dashboard .table th {
   display: none;
@@ -440,7 +406,7 @@ ul.blocks.ui-sortable .widget-header:before {
   line-height: 16px;
   left: 15px;
   top: 15px;
-  color: #999999;
+  color: #999;
 }
 ul.blocks.ui-sortable .form-control.block-name {
   background-color: transparent;
@@ -544,7 +510,7 @@ ul.media > li .bottom .caption a {
 }
 .edit-page .admin-header .admin-edit-dates,
 .edit-page .admin-header .admin-edit-dates a {
-  color: #aaaaaa;
+  color: #aaa;
 }
 .edit-page .admin-header .admin-edit-dates a {
   text-decoration: underline;
@@ -605,7 +571,7 @@ div + .admin-edit-no-features {
 .edit-message {
   background-color: #a6daf0;
   border-color: #a6daf0;
-  color: #555555;
+  color: #555;
 }
 .edit-message .btn {
   margin-top: -2px;
@@ -880,7 +846,7 @@ span.icon_status.icon_status_ok:before {
 }
 span.icon_status.icon_status_running:after,
 span.icon_status.icon_status_ok:after {
-  background: #00d100;
+  background: #00D100;
   box-shadow: inset 0 -7px 7px rgba(100, 100, 100, 0.1), inset 0 7px 7px rgba(255, 255, 255, 0.3);
 }
 span.icon_status.icon_status_error:before {
@@ -890,7 +856,7 @@ span.icon_status.icon_status_error:before {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b2613c', endColorstr='#f6a580', GradientType=0);
 }
 span.icon_status.icon_status_error:after {
-  background: #ed4a00;
+  background: #ED4A00;
   box-shadow: inset 0 -7px 7px rgba(100, 100, 100, 0.1), inset 0 7px 7px rgba(255, 255, 255, 0.3);
 }
 span.icon_status.icon_status_warning:before,
@@ -902,7 +868,7 @@ span.icon_status.icon_status_retrying:before {
 }
 span.icon_status.icon_status_warning:after,
 span.icon_status.icon_status_retrying:after {
-  background: #ffbd00;
+  background: #FFBD00;
   box-shadow: inset 0 -7px 7px rgba(100, 100, 100, 0.1), inset 0 7px 7px rgba(255, 255, 255, 0.3);
 }
 span.icon_status.icon_status_starting:before {
@@ -912,7 +878,7 @@ span.icon_status.icon_status_starting:before {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#adb83c', endColorstr='#f1fc80', GradientType=0);
 }
 span.icon_status.icon_status_starting:after {
-  background: #e2f800;
+  background: #E2F800;
   box-shadow: inset 0 -7px 7px rgba(100, 100, 100, 0.1), inset 0 7px 7px rgba(255, 255, 255, 0.3);
 }
 ul.suggestions-list {
@@ -934,7 +900,7 @@ ul.suggestions-list li a {
   padding: 2px 4px;
 }
 ul.suggestions-list li a .pull-right {
-  color: #999999;
+  color: #999;
 }
 ul.suggestions-list li a:hover span.pull-right,
 ul.suggestions-list li a:hover {
@@ -1010,7 +976,7 @@ table.do_adminLinkedTable .admin-list-thumb > img {
 .table tbody tr.clickable:hover th,
 .table tbody tr:hover td.clickable,
 .table tbody tr:hover th.clickable {
-  background-color: #eeeeee;
+  background-color: #eee;
 }
 table.table tr.unpublished td a.btn-success {
   color: white;
@@ -1082,7 +1048,7 @@ th a:hover .arrow.down {
 .minimalTabs > li:not(.disabled) > a,
 .nav.nav-pills > li:not(.disabled) > a,
 .widget ul.nav-tabs > li:not(.disabled) > a {
-  color: #555555;
+  color: #555;
 }
 .minimalTabs > li.disabled > a,
 .minimalTabs > li.disabled > a:hover,
@@ -1093,7 +1059,7 @@ th a:hover .arrow.down {
 .widget ul.nav-tabs > li.disabled > a,
 .widget ul.nav-tabs > li.disabled > a:hover,
 .widget ul.nav-tabs > li.disabled > a:focus {
-  color: #aaaaaa;
+  color: #aaa;
 }
 .minimalTabs li.active > a,
 .minimalTabs li.active > a:focus,
@@ -1107,7 +1073,7 @@ th a:hover .arrow.down {
   border-style: none none solid none;
   border-width: 2px;
   border-bottom-color: #00C853;
-  color: #555555;
+  color: #555;
 }
 .minimalTabs.nav-justified,
 .nav.nav-pills.nav-justified,
@@ -1169,10 +1135,10 @@ th a:hover .arrow.down {
 .thumbnails .thumbnail,
 .thumbnails .thumbnail a:link,
 .thumbnails .thumbnail a:visited {
-  color: #222222;
+  color: #222;
 }
 .thumbnails .thumbnail:hover {
-  border-color: #888888;
+  border-color: #888;
 }
 .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) {
   background-color: #f5f5f5;
@@ -1182,7 +1148,7 @@ th a:hover .arrow.down {
 .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) h6,
 .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) a:link,
 .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) a:visited {
-  color: #aaaaaa;
+  color: #aaa;
 }
 .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) img {
   opacity: .3;
@@ -1319,10 +1285,10 @@ ul.tree-list li.menu-item > div > span:not(.btns) {
   min-height: 34px;
 }
 ul.tree-list li.menu-item > div > a {
-  color: #777777;
+  color: #777;
 }
 ul.tree-list li.menu-item > div > a:hover {
-  color: #222222;
+  color: #222;
   text-decoration: none;
 }
 ul.tree-list li.menu-item > div a.menu-toggle {
@@ -1353,7 +1319,7 @@ ul.tree-list li.menu-item > div a.menu-toggle > i.menu-expand {
   display: block;
 }
 ul.tree-list li.menu-item > div .label {
-  color: #999999;
+  color: #999;
 }
 ul.tree-list li.menu-item img.admin-list-dashboard {
   position: absolute;
@@ -1575,14 +1541,13 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   text-align: right;
 }
 .widget .widget-header .widget-header-tools .z-btn-help,
-.widget .widget-header .widget-header-tools .z-icon,
-.widget .widget-header .widget-header-tools .zotonic-logo {
+.widget .widget-header .widget-header-tools .z-icon {
   display: inline-block;
   margin-left: 12px;
   line-height: inherit;
 }
 .widget .widget-header .widget-header-tools .z-btn-help {
-  color: #aaaaaa;
+  color: #aaa;
 }
 .widget .widget-header .z-icon-plus,
 .widget .widget-header .z-icon-minus {
