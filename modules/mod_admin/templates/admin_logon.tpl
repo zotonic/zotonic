@@ -25,5 +25,4 @@
         %}
     </div>
 </div>
-</div>
 {% endblock %}
