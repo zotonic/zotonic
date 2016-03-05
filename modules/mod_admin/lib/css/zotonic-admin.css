@@ -15,14 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
-.z-btn-remove:before,
-.z-btn-remove:hover:before,
-.z-btn-help:before,
-a.close:before,
-button.close:before,
-a.close:hover:before,
-button.close:hover:before,
-.zotonic-logo,
 ul.blocks.ui-sortable .widget-header:before {
   speak: none;
   font-style: normal;
@@ -34,34 +26,8 @@ ul.blocks.ui-sortable .widget-header:before {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-a.zotonic-logo:hover {
-  text-decoration: none;
-}
-.zotonic-logo em {
-  display: none;
-}
-.z-btn-remove:before,
-.z-btn-remove:hover:before,
-.z-btn-help:before,
-a.close:before,
-button.close:before,
-a.close:hover:before,
-button.close:hover:before,
-.zotonic-logo,
 ul.blocks.ui-sortable .widget-header:before {
   font-family: "Zotonic";
-}
-.z-btn-social .zotonic-logo {
-  position: absolute;
-  display: block;
-  font-size: 16px;
-  line-height: 16px;
-  height: 16px;
-  width: 16px;
-  text-align: center;
-  top: 50%;
-  left: .5em;
-  margin-top: -7.5px;
 }
 /* FONT PATH
  * -------------------------- */
@@ -135,6 +101,9 @@ ul.media > li.ui-sortable-placeholder {
   margin: 15px;
   margin-top: 76px;
 }
+footer {
+  margin: 20px 0;
+}
 body.noframe > .admin-container {
   background: transparent;
 }
@@ -206,9 +175,7 @@ pre:empty {
   padding-left: 34px;
 }
 .nav .dropdown-menu > li > a.has-icon .z-icon,
-.nav .dropdown-toggle.has-icon .z-icon,
-.nav .dropdown-menu > li > a.has-icon .zotonic-logo,
-.nav .dropdown-toggle.has-icon .zotonic-logo {
+.nav .dropdown-toggle.has-icon .z-icon {
   position: absolute;
   left: 15px;
   top: 50%;
@@ -318,8 +285,7 @@ code {
 .btn {
   position: relative;
 }
-.btn > .z-icon,
-.btn > .zotonic-logo {
+.btn > .z-icon {
   width: 18px;
   height: 18px;
   margin-top: -9px;
@@ -1574,8 +1540,7 @@ ul.tree-list.tree-list-menu li.menu-item span.category {
   text-align: right;
 }
 .widget .widget-header .widget-header-tools .z-btn-help,
-.widget .widget-header .widget-header-tools .z-icon,
-.widget .widget-header .widget-header-tools .zotonic-logo {
+.widget .widget-header .widget-header-tools .z-icon {
   display: inline-block;
   margin-left: 12px;
   line-height: inherit;
