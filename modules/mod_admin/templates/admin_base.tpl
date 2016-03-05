@@ -48,8 +48,9 @@
 
     <div class="admin-container">
         {% block content %}{% endblock %}
-        {% include "_admin_footer.tpl" %}
     </div>
+
+    {% include "_admin_footer.tpl" %}
 
     {% include "_admin_js_include.tpl" %}
     {% block js_extra %}{% endblock %}
