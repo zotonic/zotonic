@@ -5,7 +5,7 @@ This implements persistent storage of values between visits from the same browse
 
 Persistent storage is implemented using a cookie and database storage. The cookie contains the
 key for the stored values. If a visitor makes a request then the session will load the persistent
-values into the session process. These can then be accesses using ``{{ m.persistent.yourkey }} in
+values into the session process. These can then be accesses using ``{{ m.persistent.yourkey }}`` in
 templates (replace yourkey with the key you used to store the information).
 
 The persistent cookie (``z_pid``) is only set if persistent information is saved. This can be done
