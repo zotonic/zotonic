@@ -20,45 +20,52 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-	encode/2
+	encode/2,
+	encode/3
 	]).
 
 -include_lib("zotonic.hrl").
 
-encode([], _Context) ->
+encode(V, Context) ->
+	encode(V, true, Context).
+
+encode([], _IsRaw, _Context) ->
 	<<"\r\n">>;
-encode([V], Context) ->
+encode([V], IsRaw, Context) ->
 	iolist_to_binary([
-		encode_value(V, Context),
+		encode_value(V, IsRaw, Context),
 		<<"\r\n">>
 		]);
-encode([V|Xs], Context) ->
+encode([V|Xs], IsRaw, Context) ->
 	iolist_to_binary([
-		encode_value(V, Context),
-		[ [$,, encode_value(X, Context)] || X <- Xs ],
+		encode_value(V, IsRaw, Context),
+		[ [$,, encode_value(X, IsRaw, Context)] || X <- Xs ],
 		<<"\r\n">>
 		]).
 
-encode_value(undefined, _Context) ->
+encode_value(undefined, _IsRaw, _Context) ->
 	<<>>;
-encode_value(<<>>, _Context) ->
+encode_value(<<>>, _IsRaw, _Context) ->
 	<<>>;
-encode_value(N, _Context) when is_integer(N) ->
+encode_value(N, _IsRaw, _Context) when is_integer(N) ->
 	z_convert:to_binary(N);
-encode_value(N, _Context) when is_float(N) ->
+encode_value(N, _IsRaw, _Context) when is_float(N) ->
 	z_convert:to_binary(N);
-encode_value(B, _Context) when is_binary(B) ->
+encode_value(B, true, _Context) when is_binary(B) ->
 	quote(escape(B));
-encode_value({Y,M,D} = Date, Context)
+encode_value(B, false, _Context) when is_binary(B) ->
+	B1 = z_html:unescape(z_html:strip(B)),
+	quote(escape(B1));
+encode_value({Y,M,D} = Date, _IsRaw, Context)
 	when is_integer(Y), is_integer(M), is_integer(D) ->
 	quote(erlydtl_dateformat:format_utc({Date, {0,0,0}}, "Y-m-d", Context));
-encode_value(?ST_JUTTEMIS, _Context) ->
+encode_value(?ST_JUTTEMIS, _IsRaw, _Context) ->
 	<<>>;
-encode_value({{9999,M,D}, {H,I,S}}, _Context) 
+encode_value({{9999,M,D}, {H,I,S}}, _IsRaw, _Context) 
 	when is_integer(M), is_integer(D),
 		 is_integer(H), is_integer(I), is_integer(S) ->
 	<<>>;
-encode_value({{Y,M,D}, {H,I,S}} = Date, Context) 
+encode_value({{Y,M,D}, {H,I,S}} = Date, _IsRaw, Context) 
 	when is_integer(Y), is_integer(M), is_integer(D),
 		 is_integer(H), is_integer(I), is_integer(S) ->
 	try
@@ -67,10 +74,10 @@ encode_value({{Y,M,D}, {H,I,S}} = Date, Context)
 		_:_ ->
 			quote(erlydtl_dateformat:format_utc(Date, "Y-m-d H:i:s", Context))
 	end;
-encode_value({trans, _} = Trans, Context) ->
-	encode_value(z_trans:lookup_fallback(Trans, Context), Context);
-encode_value(N, Context) ->
-	encode_value(z_convert:to_binary(N), Context).
+encode_value({trans, _} = Trans, IsRaw, Context) ->
+	encode_value(z_trans:lookup_fallback(Trans, Context), IsRaw, Context);
+encode_value(N, IsRaw, Context) ->
+	encode_value(z_convert:to_binary(N), IsRaw, Context).
 
 quote(B) -> [$", B, $"].
 

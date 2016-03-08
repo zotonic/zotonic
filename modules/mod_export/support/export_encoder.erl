@@ -22,7 +22,7 @@
 -export([
     content_types/1,
     content_types_dispatch/2,
-    stream/5,
+    stream/4,
 
     lookup_header/2,
     lookup_value/2
@@ -61,19 +61,20 @@ content_types_dispatch(_Id, _Context) ->
             end,
             encoders())).
 
-stream(Id, ContentType, Dispatch, IsQuery, Context) ->
+stream(Id, ContentType, Options, Context) ->
     Enc = select_encoder(ContentType, encoders()),
     EncOpts = [
         {id, Id},
-        {dispatch, Dispatch},
-        {is_query, IsQuery}
+        {dispatch, proplists:get_value(dispatch, Options)},
+        {is_query, proplists:get_value(is_query, Options, false)},
+        {is_raw, proplists:get_value(is_raw, Options, false)}
     ],
     {ok, EncState} = Enc:init(EncOpts, Context),
     StreamState = #stream_state{
         id = Id,
-        is_query = IsQuery,
+        is_query = proplists:get_value(is_query, EncOpts),
         content_type = ContentType,
-        dispatch = Dispatch,
+        dispatch = proplists:get_value(dispatch, EncOpts),
         encoder = Enc,
         encoder_state = EncState
     },
