@@ -172,8 +172,8 @@ observe_export_resource_filename(#export_resource_filename{}, _Context) ->
 observe_export_resource_header(#export_resource_header{dispatch=survey_results_download, id=Id}, Context) ->
     case m_survey:is_allowed_results_download(Id, Context) of
         true ->
-            [Hs|Data] = m_survey:survey_results(Id, Context),
-            {ok, Hs, Data};
+            {Hs, Promps, Data} = m_survey:survey_results_prompts(Id, Context),
+            {ok, Hs, [Promps | Data]};
         false ->
             throw({stop_request, 403})
     end;
