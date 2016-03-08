@@ -21,7 +21,8 @@
 
 -record(state, {
     props :: list(atom()) | undefined,
-    rows = [] :: list()
+    rows = [] :: list(),
+    is_raw = false
     }).
 
 -export([
@@ -36,7 +37,7 @@
 % For testing
 -export([
     number_to_letter/1,
-    zip/3
+    zip/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -47,12 +48,13 @@ extension() ->
 mime() ->
     [ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ].
 
-init(_Options, Context) ->
+init(Options, Context) ->
+    IsRaw = proplists:get_value(is_raw, Options, false),
     case z_context:get(rsc_props, Context) of
         L when is_list(L) ->
-            {ok, #state{ props = L }};
+            {ok, #state{ props=L, is_raw=IsRaw}};
         undefined ->
-            {ok, #state{ props = undefined }}
+            {ok, #state{ props=undefined, is_raw=IsRaw }}
     end.
 
 header(undefined, #state{props=undefined} = State, Context) ->
@@ -67,11 +69,11 @@ row(Row, #state{rows=Rows} = State, _Context) ->
     {ok, <<>>, State#state{rows=[Row|Rows]}}.
 
 footer(_Row, State, Context) ->
-    zip(State#state.props, lists:reverse(State#state.rows), Context).
+    zip(State#state.props, lists:reverse(State#state.rows), State#state.is_raw, Context).
 
-zip(Keys, Rows, Context) ->
+zip(Keys, Rows, IsRaw, Context) ->
     Vars = [
-        {encode_cell, fun encode_cell/2},
+        {encode_cell, fun (V, Ctx) -> encode_cell(V, IsRaw, Ctx) end},
         {lookup_header, fun export_encoder:lookup_header/2},
         {lookup_value, fun export_encoder:lookup_value/2},
         {sheet_name, <<"Sheet1">>},
@@ -99,14 +101,14 @@ file_templates() ->
         {"[Content_Types].xml", <<"xlsx/content_types.xml.tpl">>}
     ].
 
-encode_cell([Row, Col, V], _Context) when is_integer(V); is_float(V) ->
+encode_cell([Row, Col, V], _IsRaw, _Context) when is_integer(V); is_float(V) ->
     iolist_to_binary([
         <<"<c r=\"">>, number_to_letter(Col), integer_to_list(Row), <<"\">">>,
             <<"<v>">>, z_convert:to_binary(V), <<"</v></c>">>
         ]);
-encode_cell([Row, Col, ?ST_JUTTEMIS], Context) ->
-    encode_cell([Row, Col, <<>>], Context);
-encode_cell([Row, Col, {{Y,M,D},{H,I,S}} = Date], _Context) when
+encode_cell([Row, Col, ?ST_JUTTEMIS], IsRaw, Context) ->
+    encode_cell([Row, Col, <<>>], IsRaw, Context);
+encode_cell([Row, Col, {{Y,M,D},{H,I,S}} = Date], _IsRaw, _Context) when
         is_integer(Y), is_integer(M), is_integer(D),
         is_integer(H), is_integer(I), is_integer(S) ->
     Secs = z_datetime:datetime_to_timestamp(Date) + 2209161600,
@@ -114,17 +116,28 @@ encode_cell([Row, Col, {{Y,M,D},{H,I,S}} = Date], _Context) when
         <<"<c r=\"">>, number_to_letter(Col), integer_to_list(Row), <<"\" s=\"2\">">>,
             <<"<v>">>, z_convert:to_binary(Secs / 86400), <<"</v></c>">>
         ]);
-% encode_cell([Row, Col, {{Y,M,D},{H,I,S}} = Date], Context) when
-%         is_integer(Y), is_integer(M), is_integer(D),
-%         is_integer(H), is_integer(I), is_integer(S) ->
-%     V = erlydtl_dateformat:format_utc(Date, "Y-m-d H:i:s", Context),
-%     encode_cell([Row, Col, V], Context);
-encode_cell([Row, Col, V], _Context) ->
+encode_cell([Row, Col, {Y,M,D} = Date], _IsRaw, _Context) when
+        is_integer(Y), is_integer(M), is_integer(D) ->
+    Secs = z_datetime:datetime_to_timestamp({Date, {0,0,0}}) + 2209161600,
+    iolist_to_binary([
+        <<"<c r=\"">>, number_to_letter(Col), integer_to_list(Row), <<"\" s=\"2\">">>,
+            <<"<v>">>, z_convert:to_binary(Secs / 86400), <<"</v></c>">>
+        ]);
+encode_cell([Row, Col, V], false, _Context) ->
+    B = z_xml:escape(
+            z_html:unescape(
+                z_html:strip(z_convert:to_binary(V)))),
+    encode_inlinestr(Row, Col, B);
+encode_cell([Row, Col, V], true, _Context) ->
     B = z_xml:escape(z_convert:to_binary(V)),
+    encode_inlinestr(Row, Col, B).
+
+encode_inlinestr(Row, Col, B) ->
     iolist_to_binary([
         <<"<c r=\"">>, number_to_letter(Col), integer_to_list(Row), <<"\" t=\"inlineStr\">">>,
             <<"<is><t>">>, B, <<"</t></is></c>">>
         ]).
+
 
 number_to_letter(0) ->
     <<>>;
