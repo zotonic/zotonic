@@ -35,6 +35,7 @@
     insert_survey_submission/5,
     survey_stats/2,
     survey_results/2,
+    survey_results_prompts/2,
     survey_results_sorted/3,
     prepare_results/2,
     single_result/4,
@@ -329,9 +330,13 @@ get_questions(SurveyId, Context) ->
             undefined
     end.
 
-
 %% @doc Return all results of a survey
 survey_results(SurveyId, Context) ->
+    {Hs, _Promps, Data} = survey_results_prompts(SurveyId, Context),
+    [ Hs | Data ].
+
+%% @doc Return all results of a survey with separate names, prompts and data
+survey_results_prompts(SurveyId, Context) ->
     case get_questions(SurveyId, Context) of
         NQs when is_list(NQs) ->
             Rows = z_db:q("select user_id, persistent, is_anonymous, question, name, value, text, created
@@ -342,14 +347,15 @@ survey_results(SurveyId, Context) ->
             IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)), 
             UnSorted = [ user_answer_row(IsAnonymous, User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
             Sorted = lists:sort(fun([_,_,A|_], [_,_,B|_]) -> A < B end, UnSorted), %% sort by created date
-            [
-                 lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
-                                 | [ answer_header(proplists:get_value(type, B), B, Context) || {_,B} <- NQs ]
-                               ])
-                 | Sorted
-            ];
+            Hs = lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
+                                 | [ answer_header(B, Context) || {_,B} <- NQs ]
+                               ]),
+            Prompts = lists:flatten([ <<>>, <<>>, <<>> 
+                        | [ z_trans:lookup_fallback(answer_prompt(B), Context) || {_,B} <- NQs ]
+                      ]),
+            {Hs, Prompts, Sorted};
         undefined ->
-            []
+            {[], [], []}
     end.
     
 %% @doc private
@@ -437,10 +443,18 @@ answer_row_question(Answer, Q, Context) ->
     end.
 
 %% @doc private
-answer_header(Type, Block, Context) ->
+answer_header(Block, Context) ->
+    Type = proplists:get_value(type, Block),
     case mod_survey:module_name(Type) of
         undefined -> [];
         M -> M:prep_answer_header(Block, Context)
+    end.
+
+answer_prompt(Block) ->
+    Type = proplists:get_value(type, Block),
+    case mod_survey:module_name(Type) of
+        undefined -> [];
+        _M -> proplists:get_value(prompt, Block, <<>>)
     end.
 
 
