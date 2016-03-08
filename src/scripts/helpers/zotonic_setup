@@ -47,9 +47,14 @@ function enablesite {
 export -f enablesite
 
 function major_version {
-    cat $ZOTONIC/src/zotonic.app.src |grep vsn,|sed 's/[^"]*\"\([0-9]\.[0-9]*\).*/\1/'
+    cat $ZOTONIC/src/zotonic.app.src |grep vsn,|sed 's/[^"]*\"\([0-9]*\).*/\1/'
 }
 export -f major_version
+
+function minor_version {
+    cat $ZOTONIC/src/zotonic.app.src |grep vsn,|sed 's/[^"]*\"\([0-9]\.[0-9]*\).*/\1/'
+}
+export -f minor_version
 
 function find_enabled_sites {
     # find enabled sites
@@ -67,8 +72,11 @@ export -f find_enabled_sites
 
 function find_config {
     filename="$1"
-    vsn=$(major_version)
-    for file in "$HOME/.zotonic/$NODENAME/$filename" "$HOME/.zotonic/$vsn/$filename" "$HOME/.zotonic/$filename" "/etc/zotonic/$NODENAME/$filename" "/etc/zotonic/$vsn/$filename" "/etc/zotonic/$filename"; do
+    vsn_minor=$(minor_version)
+    vsn_major=$(major_version)
+    for file in "$HOME/.zotonic/$NODENAME/$filename" "$HOME/.zotonic/$vsn_minor/$filename" "$HOME/.zotonic/$vsn_major/$filename" "$HOME/.zotonic/$filename" \
+                "/etc/zotonic/$NODENAME/$filename" "/etc/zotonic/$vsn_minor/$filename" "/etc/zotonic/$vsn_major/$filename" "/etc/zotonic/$filename"
+    do
         if [ -e "$file" ]; then
             echo "$file"
             break
