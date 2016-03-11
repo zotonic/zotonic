@@ -93,7 +93,9 @@ get_skeleton_modules(empty) ->
      mod_admin_config,
      mod_admin_identity,
      mod_admin_modules,
-     mod_admin_predicate
+     mod_admin_predicate,
+
+     mod_media_exif
     ];
 get_skeleton_modules(blog) ->
     [
@@ -123,6 +125,8 @@ get_skeleton_modules(blog) ->
      mod_admin_identity,
      mod_admin_modules,
      mod_admin_predicate,
+
+     mod_media_exif,
 
      mod_comment,
      mod_bootstrap
