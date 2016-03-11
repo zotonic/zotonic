@@ -553,18 +553,28 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                             },
                             Medium,
                             Context),
+    PropsM = z_notifier:foldl(
+                            #media_upload_rsc_props{
+                                    id=RscId,
+                                    mime=Mime, 
+                                    archive_file=ArchiveFile,
+                                    options=Opts,
+                                    medium=Medium1
+                            },
+                            Props,
+                            Context),
 
     IsImport = proplists:is_defined(is_import, Opts),
     NoTouch = proplists:is_defined(no_touch, Opts),
-    
+
     F = fun(Ctx) ->
                 %% If the resource is in the media category, then move it to the correct sub-category depending
                 %% on the mime type of the uploaded file.
-                Props1 = case      proplists:is_defined(category, Props)
-                            orelse proplists:is_defined(category_id, Props)
+                Props1 = case      proplists:is_defined(category, PropsM)
+                            orelse proplists:is_defined(category_id, PropsM)
                          of 
-                            true -> Props;
-                            false -> [{category, mime_to_category(Mime)} | Props]
+                            true -> PropsM;
+                            false -> [{category, mime_to_category(Mime)} | PropsM]
                         end,
                 {ok, Id} = case RscId of
                                insert_rsc ->
