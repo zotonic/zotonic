@@ -17,4 +17,4 @@ Outputs the HTML code::
      <img alt="activity indicator" src="/lib/images/spinner.gif" />
    </div>
 
-The spinner tag accepts a single argument “image”.  The “image” argument must contain the URL for the image displayed. It defaults to “`/lib/images/spinner.gif </lib/images/spinner.gif>`_”.
+The spinner tag accepts a single argument “image”.  The “image” argument must contain the URL for the image displayed. It defaults to “``/lib/images/spinner.gif``”.
