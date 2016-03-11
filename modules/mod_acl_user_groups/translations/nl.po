@@ -241,8 +241,8 @@ msgid "Remove"
 msgstr "Verwijder"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:53
-msgid "Reset"
-msgstr "Verwijder filter"
+msgid "All"
+msgstr "Alles"
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:41
 msgid "Revert"

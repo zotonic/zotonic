@@ -266,7 +266,15 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                           {mime, Mime}],
                 Props2 = case Mime of
                              "image/" ++ _ ->
-                                 [{orientation, exif_orientation(ImageFile)} | Props1];
+                                 Exif = exif(ImageFile),
+                                 Orientation = exif_orientation(Exif),
+                                 Orientation1 = correct_orientation(Orientation, Exif, W1, H1),
+                                 [
+                                    {orientation, Orientation1},
+                                    {exif, Exif},
+                                    {subject_point, exif_subject_point(Exif, Orientation, W1, H1)}
+                                  | Props1
+                                 ];
                              _ -> 
                                 Props1
                          end,
@@ -387,38 +395,97 @@ guess_mime(File) ->
 	end.
 
 
-%% Detect the exif rotation in an image and swaps width/height accordingly.
--spec exif_orientation(string()) -> 1|2|3|4|5|6|7|8.
-exif_orientation(InFile) ->
-    %% FIXME - don't depend on external command
-    case string:tokens(exif_orientation_cmd(InFile), "\n") of
-        [] -> 
-            1;
-        [Line|_] -> 
-            FirstLine = z_convert:to_list(z_string:to_lower(Line)),
-            case [z_convert:to_list(z_string:trim(X)) || X <- string:tokens(FirstLine, "-")] of
-                ["top", "left"] -> 1;
-                ["top", "right"] -> 2;
-                ["bottom", "right"] -> 3;
-                ["bottom", "left"] -> 4;
-                ["left", "top"] -> 5;
-                ["right", "top"] -> 6;
-                ["right", "bottom"] -> 7;
-                ["left", "bottom"] -> 8;
-                _ -> 1
-            end
+% Fetch the EXIF information from the file, we remove the maker_note as it can be huge
+exif(File) ->
+    case exif:read(File) of
+        {ok, Dict} ->
+            List = dict:to_list(Dict),
+            proplists:delete(maker_note, List);
+        {error, _} -> 
+            []
     end.
 
-exif_orientation_cmd(File) ->
-    exif_orientation_cmd_1(os:find_executable("exif"), os:type(), File).
+%% Detect the exif rotation in an image and swaps width/height accordingly.
+-spec exif_orientation(list()) -> 1|2|3|4|5|6|7|8.
+exif_orientation(undefined) ->
+    1;
+exif_orientation(Exif) when is_list(Exif) ->
+    case proplists:get_value(orientation, Exif) of
+        <<"Top-left">> -> 1;
+        <<"Top-right">> -> 2;
+        <<"Bottom-right">> -> 3;
+        <<"Bottom-left">> -> 4;
+        <<"Left-top">> -> 5;
+        <<"Right-top">> -> 6;
+        <<"Right-bottom">> -> 7;
+        <<"Left-bottom">> -> 8;
+        _ -> 1
+    end.
 
-exif_orientation_cmd_1(false, _OS, _File) ->
-    lager:error("Install 'exif' to determine the orientation of image files."),
-    [];
-exif_orientation_cmd_1(_Cmd, {win32, _}, File) ->
-    os:cmd("exif -m -t Orientation " ++ z_utils:os_filename(File));
-exif_orientation_cmd_1(Cmd, {_Unix, _}, File) ->
-    os:cmd("LANG=en "++z_utils:os_filename(Cmd)++" -m -t Orientation " ++ z_utils:os_filename(File)).
+%% See also http://www.awaresystems.be/imaging/tiff/tifftags/privateifd/exif/subjectarea.html
+exif_subject_point(Exif, Orientation, Width, Height) ->
+    Point = extract_subject_point(Exif),
+    Point1 = maybe_resize_point(Point, Exif, Width, Height),
+    maybe_rotate(Orientation, Point1, Width, Height).
+
+extract_subject_point(undefind) ->
+    undefined;
+extract_subject_point(Exif) ->
+    case proplists:get_value(subject_area, Exif) of
+        [X, Y] -> {X, Y};
+        [X, Y, _Radius] -> {X, Y};
+        [X, Y, W, H] -> {X + W div 2, Y + H div 2};
+        _ -> undefined
+    end.
+
+maybe_resize_point(undefined, _Exif, _Width, _Height) ->
+    undefined;
+maybe_resize_point({X, Y}, Exif, Width, Height) ->
+    ExifWidth = proplists:get_value(pixel_x_dimension, Exif),
+    ExifHeight = proplists:get_value(pixel_y_dimension, Exif),
+    case is_integer(ExifWidth) andalso is_integer(ExifHeight) of
+        true when ExifWidth =:= Width, ExifHeight =:= Height ->
+            {X, Y};
+        true when ExifWidth =:= 0; ExifHeight =:= 0 ->
+            {X, Y};
+        true ->
+            {round(X*Width/ExifWidth), round(Y*Height/ExifHeight)};
+        false ->
+            {X, Y}
+    end.
+
+
+maybe_rotate(_, undefined, _W, _H) -> undefined;
+maybe_rotate(1, {X, Y}, _W, _H) -> {X, Y};
+maybe_rotate(2, {X, Y}, _W, H) -> {X, H-Y}; % flip
+maybe_rotate(3, {X, Y}, W, H) -> {W-X, H-Y}; % rotate 180
+maybe_rotate(4, {X, Y}, W, _H) -> {W-X, Y}; % flop
+maybe_rotate(5, {X, Y}, W, H) -> {W-X, H-Y}; % transpose
+maybe_rotate(6, {X, Y}, _W, H) -> {H-Y, X}; % rotate 90
+maybe_rotate(7, {X, Y}, W, H) -> {W-X, H-Y}; % transverse
+maybe_rotate(8, {X, Y}, W, _H) -> {Y, W-X}. % rotate 270
+
+
+%% @doc Check that the orientation makes sense given the width/height of the image
+correct_orientation(1, _Exif, _Width, _Height) ->
+    1;
+correct_orientation(Orientation, Exif, Width, Height) ->
+    IsLandscape = Width > Height,
+    ExifWidth = proplists:get_value(pixel_x_dimension, Exif),
+    ExifHeight = proplists:get_value(pixel_y_dimension, Exif),
+    case is_integer(ExifWidth) andalso is_integer(ExifHeight) of
+        true when IsLandscape, ExifWidth < ExifHeight ->
+            % The image is landscape, but the exif describes a portrait orientated image
+            % We assume that the rotation has been done already
+            1;
+        true when not IsLandscape, ExifWidth > ExifHeight ->
+            % The image is portrait, but the exif describes a landscape orientated image.
+            % We assume that the rotation has been done already
+            1;
+        _ ->
+            Orientation
+    end.
+
 
 %% @doc Given a mime type, return whether its file contents is already compressed or not.
 -spec is_mime_compressed(string()) -> boolean().
