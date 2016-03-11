@@ -434,7 +434,7 @@ extract_subject_point(Exif) ->
     case proplists:get_value(subject_area, Exif) of
         [X, Y] -> {X, Y};
         [X, Y, _Radius] -> {X, Y};
-        [X, Y, W, H] -> {X + W div 2, Y + H div 2};
+        [X, Y, _W, _H] -> {X, Y};
         _ -> undefined
     end.
 
