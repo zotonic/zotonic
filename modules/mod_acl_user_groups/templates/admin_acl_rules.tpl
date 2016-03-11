@@ -50,7 +50,7 @@
                     <li class="divider"></li>
                     <li class="">
                         <a href="?g=" class="cskrft-option" data-value="353">
-                            <i class="glyphicon glyphicon-remove"></i> {_ Reset _}
+                            <i class="glyphicon glyphicon-remove"></i> {_ All _}
                         </a>
                     </li>
 
