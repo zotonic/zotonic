@@ -63,7 +63,7 @@ allowed_methods(ReqData, Context) ->
                  undefined ->
                      case z_convert:to_binary(z_context:get(method, Context1)) of
                          <<>> -> Module;
-                         Module1 -> Module1
+                         Mtd -> Mtd
                      end;
                  Mtd -> z_convert:to_binary(Mtd)
              end,
