@@ -3,11 +3,9 @@
         <label class="control-label">{_ Editor version _}</label>
         <div>
             {% for id, version, version_txt, date_txt in [
-                ["f", "newest", "always use newest available", ""],
-                ["e", "4.3.7",  "4.3.7", "Mar 03 2016"],
-                ["d", "4.2.4",  "4.2.4", "Aug 17 2015"],
-                ["c", "4.1.6",  "4.1.6", "Oct 08 2014"],
-                ["b", "4.0.26", "4.0.26", "May 06 2014"],
+                ["d", "newest", "always use newest available", ""],
+                ["c", "4.3.7",  "4.3.7", "Mar 03 2016"],
+                ["b", "4.2.4",  "4.2.4", "Aug 17 2015"],
                 ["a", "3.5.0",  "3.5.0", "May 03 2012"]
             ] %}
                 <div class="radio">
