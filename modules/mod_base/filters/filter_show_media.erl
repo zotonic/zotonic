@@ -109,6 +109,8 @@ filter_args([{link,"link"}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{link,true}|Acc], Context);
 filter_args([{link,_}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{link,undefined}|Acc], Context);
+filter_args([{caption,Caption}|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [{caption,z_html:escape(Caption)}|Acc], Context);
 filter_args([P|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [P|Acc], Context).
 

@@ -988,23 +988,26 @@ function z_editor_init()
     }
 }
 
-function z_editor_add($element)
+function z_editor_add(element)
 {
     if (z_editor !== undefined) {
+        var $element = (typeof element == "string") ? $(element) : element;
         z_editor.add($element);
     }
 }
 
-function z_editor_save($element)
+function z_editor_save(element)
 {
     if (z_editor !== undefined) {
+        var $element = (typeof element == "string") ? $(element) : element;
         z_editor.save($element);
     }
 }
 
-function z_editor_remove($element)
+function z_editor_remove(element)
 {
     if (z_editor !== undefined) {
+        var $element = (typeof element == "string") ? $(element) : element;
         z_editor.remove($element);
     }
 }

@@ -55,11 +55,11 @@
     {% include "_admin_js_include.tpl" %}
     {% block js_extra %}{% endblock %}
 
-    {% script %}
+    {% block html_body_admin %}{% all include "_html_body_admin.tpl" %}{% endblock %}
 
     {% block editor %}{% endblock %}
 
-    {% block html_body_admin %}{% all include "_html_body_admin.tpl" %}{% endblock %}
+    {% script %}
 
     {% block ua_probe %}
         {% include "_ua_probe.tpl"%}

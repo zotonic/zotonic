@@ -13,33 +13,6 @@
 
 	{% button action={zmedia id=id media_div_id=#media subject_id=id} text=_"Add media to body" id="zmedia-open-dialog" style="display:none" %}
 
-	{% wire name="zmedia" 
-		action={
-		    dialog_open
-		    template="_action_dialog_connect.tpl"
-		    title=_"Insert image" 
-            subject_id=id
-            predicate=`depiction`
-            is_zmedia
-            tab="depiction"
-            callback="window.zAdminMediaDone"
-            center=0
-        }
-	%}
-
-	{% wire name="zlink" 
-		action={
-		    dialog_open
-		    template="_action_dialog_connect.tpl"
-		    title=_"Add link"
-            subject_id=id
-            is_zlink
-            tab="find"
-            callback="window.zAdminLinkDone"
-            center=0
-        }
-	%}
-
 	<div class="form-group">
 		{% if explanation %}
 			<p class="help-block">{{ explanation }}</p>
