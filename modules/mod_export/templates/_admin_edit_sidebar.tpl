@@ -14,21 +14,34 @@
 <div class="form-group">
     {% if id.is_a.query %}
         <p>{_ Download all the pages matching the query _}</p>
-        <a class="btn btn-default" href="{% url export_rsc_query type='csv' id=id %}">{_ Download CSV _}</a>
-        <a class="btn btn-default" href="{% url export_rsc_query type='xlsx' id=id %}">{_ Download Excel _}</a>
-        <a class="btn btn-default" href="{% url export_rsc_query type='vevent' id=id %}">{_ Download Event _}</a>
+
+        <p>
+            <a class="btn btn-default" href="{% url export_rsc_query type='csv' id=id %}">{_ Download CSV _}</a>
+            <a class="btn btn-default" href="{% url export_rsc_query type='xlsx' id=id %}">{_ Download Excel _}</a>
+            <a class="btn btn-default" href="{% url export_rsc_query type='vevent' id=id %}">{_ Download Event _}</a>
+        </p>
+
+        <p class="help-block">
+            <span class="z-icon z-icon-info-circle"></span> {_ Download as Event if the query returns events and you want export for a calendar program. _}
+        </p>
     {% elseif id.is_a.collection %}
         <p>{_ Download all the pages in the collection _}</p>
-        <a class="btn btn-default" href="{% url export_rsc_query type='csv' id=id %}">{_ Download CSV _}</a>
-        <a class="btn btn-default" href="{% url export_rsc_query type='xlsx' id=id %}">{_ Download Excel _}</a>
-        <a class="btn btn-default" href="{% url export_rsc_query type='vevent' id=id %}">{_ Download Event _}</a>
-    {% elseif id.is_a.event %}
-        <a class="btn btn-default" href="{% url export_rsc type='vevent' id=id %}">{_ Download Event _}</a>
-        <a class="btn btn-default" href="{% url export_rsc type='csv' id=id %}">{_ Download CSV _}</a>
-        <a class="btn btn-default" href="{% url export_rsc type='xlsx' id=id %}">{_ Download Excel _}</a>
+
+        <p>
+            <a class="btn btn-default" href="{% url export_rsc_query type='csv' id=id %}">{_ Download CSV _}</a>
+            <a class="btn btn-default" href="{% url export_rsc_query type='xlsx' id=id %}">{_ Download Excel _}</a>
+            {% if id.o.haspart[1].is_a.event %}
+                <a class="btn btn-default" href="{% url export_rsc_query type='vevent' id=id %}">{_ Download Event _}</a>
+            {% endif %}
+        </p>
     {% else %}
-        <a class="btn btn-default" href="{% url export_rsc type='csv' id=id %}">{_ Download CSV _}</a>
-        <a class="btn btn-default" href="{% url export_rsc type='xlsx' id=id %}">{_ Download Excel _}</a>
+        <p>
+            <a class="btn btn-default" href="{% url export_rsc type='csv' id=id %}">{_ Download CSV _}</a>
+            <a class="btn btn-default" href="{% url export_rsc type='xlsx' id=id %}">{_ Download Excel _}</a>
+            {% if id.is_a.event %}
+                <a class="btn btn-default" href="{% url export_rsc type='vevent' id=id %}">{_ Download Event _}</a>
+            {% endif %}
+        </p>
     {% endif %}
 </div>
 {% endblock %}
