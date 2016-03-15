@@ -4,8 +4,36 @@ This template maintains the newest tinymce version.
 params:
 overrides_tpl: (optional) template location that contains JavaScript overrides for tinymce init
 #}
+
+{% wire name="zmedia" 
+    action={
+        dialog_open
+        template="_action_dialog_connect.tpl"
+        title=_"Insert image" 
+        subject_id=id
+        predicate=`depiction`
+        is_zmedia
+        tab="depiction"
+        callback="window.zAdminMediaDone"
+        center=0
+    }
+%}
+
+{% wire name="zlink" 
+    action={
+        dialog_open
+        template="_action_dialog_connect.tpl"
+        title=_"Add link"
+        subject_id=id
+        is_zlink
+        tab="find"
+        callback="window.zAdminLinkDone"
+        center=0
+    }
+%}
+
 {% with
-    "4.2.4",
+    "4.3.7",
     m.config.mod_editor_tinymce.version.value
     as
     newest,

@@ -6,7 +6,9 @@
 	{% else %}
 		<figure class="image-wrapper block-level-image">
 			{% media m.rsc[id].medium width=size.width|default:width height=size.height|default:height crop=crop class=align link=link alt=m.rsc[id].title %}
-			{% with id|summary as summary %}{% if summary %}<p class="image-caption">{{ summary }}</p>{% endif %}{% endwith %}
+			{% if caption|default:(id|summary) as caption %}
+				<figcaption class="image-caption">{{ caption }}</figcaption>
+			{% endif %}
 		</figure>
 	{% endifequal %}
 {% else %}
