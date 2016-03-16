@@ -110,8 +110,8 @@
               {git,"https://github.com/tim/erlang-oauth.git",
                    "3ad509d487a72f9437fef31a379bf3cfeeb166a2"}},
        {exif,".*",
-             {git,"git://github.com/zotonic/erlang-exif.git",
-                  "982706d3dbbaed5afdca28f0603dcc04681e9fff"}},
+             {git,"git://github.com/nlfiedler/erlang-exif.git",
+                  "55d9d6bc103d42ffc2a6659d1726224ee32d3565"}},
        {twerl,".*",
               {git,"https://github.com/mworrell/twerl.git",
                    "5674327a06d6fa60b8276d0ba8018a7fd18118a0"}}]}.
