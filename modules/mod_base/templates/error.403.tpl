@@ -3,11 +3,11 @@
 {% block title %}{_ No Access _}{% endblock %}
 
 {% block content %}
-  <h1>{_ No Access _}</h1>
-
   {% if m.acl.user %}
+    <h1>{_ No Access _}</h1>
     <p>{_ Sorry, you don’t have access to this page. _}</p>
   {% else %}
+    <h1>{_ You need to log on _}</h1>
     <p>{_ This page is only visible for authenticated users, log on to view this page. _}</p>
   {% endif %}
 

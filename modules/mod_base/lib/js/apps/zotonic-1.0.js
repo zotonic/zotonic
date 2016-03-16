@@ -905,7 +905,7 @@ function z_reload(args)
 {
     var page = $('#logon_form input[name="page"]');
     z_start_spinner();
-    if (page.length > 0 && page.val() !== "") {
+    if (page.length > 0 && page.val() !== "" && page.val() !== '#reload') {
         window.location.href = window.location.protocol+"//"+window.location.host+page.val();
     } else {
         if (typeof args == "undefined")

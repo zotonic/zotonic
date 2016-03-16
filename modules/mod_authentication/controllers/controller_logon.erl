@@ -497,7 +497,10 @@ get_by_reminder_secret(Code, Context) ->
 get_post_logon_actions(WireArgs, Context) ->
     case z_notifier:foldl(#logon_actions{args=WireArgs}, [], Context) of
         [] ->
-            [{redirect, [{location, cleanup_url(get_ready_page(Context))}]}];
+            case cleanup_url(get_ready_page(Context)) of
+                "#reload" -> [{reload, []}];
+                Location -> [{redirect, [{location, Location}]}]
+            end;
         Actions ->
             Actions
     end.
