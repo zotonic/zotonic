@@ -134,7 +134,6 @@
     get_cookies/2,
 
     cookie_domain/1,
-    streamhost/1,
     websockethost/1,
     has_websockethost/1
 ]).
@@ -1078,16 +1077,6 @@ cookie_domain(Context) ->
             undefined;
         Domain ->
             z_convert:to_list(Domain)
-    end.
-
-%% @doc Fetch the domain and port for stream (comet/websocket) connections
-%% @spec streamhost(Context) -> list()
-streamhost(Context) ->
-    case m_site:get(redirect, Context) of
-        false ->
-            wrq:get_req_header_lc("host", Context#context.wm_reqdata);
-        _ -> 
-            hostname_port(Context)
     end.
 
 %% @doc Fetch the domain and port for websocket connections

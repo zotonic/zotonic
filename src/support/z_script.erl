@@ -142,15 +142,7 @@ get_stream_start_script(Context) ->
     get_stream_start_script(z_context:has_websockethost(Context), Context).
 
 % Make the call of the start script.
-get_stream_start_script(false, Context) ->
-    [<<"z_stream_start(">>, js_domain(z_context:streamhost(Context)), ");"];
+get_stream_start_script(false, _Context) ->
+    [<<"z_stream_start();">>];
 get_stream_start_script(true, Context) ->
-    [<<"z_stream_start(">>, js_domain(z_context:streamhost(Context)), $,,
-        $', z_context:websockethost(Context), $', ");"].
-    
-% special case for the zotonic_status site
-js_domain(none) -> "window.location.host";
-js_domain(<<>>) -> "window.location.host";
-js_domain(undefined) ->"window.location.host";
-% Just connect to the hostname itself
-js_domain(Hostname) -> [$', Hostname, $'].
+    [<<"z_stream_start('">>, z_context:websockethost(Context), <<"');">>].
