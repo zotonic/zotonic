@@ -35,19 +35,19 @@ var z_session_valid         = false;
 var z_session_restart_count = 0;
 
 // Transport to/from server
+var z_websocket_host;
 var z_ws                    = false;
 var z_ws_pong_count         = 0;
 var z_ws_ping_timeout;
 var z_ws_ping_interval;
 var z_comet;
-var z_stream_host;
-var z_stream_starter;
-var z_stream_start_timeout;
-var z_websocket_host;
-var z_default_form_postback = false;
-var z_page_unloading        = false;
+var z_comet_poll_timeout;
 var z_comet_reconnect_timeout = 1000;
 var z_comet_poll_count      = 0;
+var z_stream_starter;
+var z_stream_start_timeout;
+var z_default_form_postback = false;
+var z_page_unloading        = false;
 var z_transport_check_timer;
 var z_transport_queue       = [];
 var z_transport_acks        = [];
@@ -1035,14 +1035,13 @@ function z_tinymce_remove($element)
 /* Comet long poll or WebSockets connection
 ---------------------------------------------------------- */
 
-function z_stream_start(host, websocket_host)
+function z_stream_start(_host, websocket_host)
 {
     if (!z_session_valid) {
         setTimeout(function() {
-            z_stream_start(host, websocket_host);
+            z_stream_start(_host, websocket_host);
         }, 100);
     } else {
-        z_stream_host = host;
         z_websocket_host = websocket_host || window.location.host;
         z_stream_restart();
     }
@@ -1051,7 +1050,7 @@ function z_stream_start(host, websocket_host)
 function z_stream_restart()
 {
     if (z_websocket_host) {
-        setTimeout(function() { z_comet_start(); }, 1000);
+        z_timeout_comet_poll_ajax(1000);
         if ("WebSocket" in window) {
             setTimeout(function() { z_websocket_start(); }, 200);
         }
@@ -1061,11 +1060,6 @@ function z_stream_restart()
 function z_stream_is_connected()
 {
     return z_websocket_is_connected() || z_comet_is_connected();
-}
-
-function z_comet_start()
-{
-    z_comet_poll_ajax();
 }
 
 function z_comet_poll_ajax()
@@ -1127,7 +1121,11 @@ function z_comet_is_connected()
 
 function z_timeout_comet_poll_ajax(timeout)
 {
-    setTimeout(function() {
+    if (z_comet_poll_timeout) {
+        clearTimeout(z_comet_poll_timeout);
+    }
+    z_comet_poll_timeout = setTimeout(function() {
+        z_comet_poll_timeout = false;
         z_comet_reconnect_timeout = 1000;
         z_comet_poll_ajax();
     }, timeout);
