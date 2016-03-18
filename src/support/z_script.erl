@@ -148,32 +148,7 @@ get_stream_start_script(Context) ->
     get_stream_start_script(z_context:has_websockethost(Context), Context).
 
 % Make the call of the start script.
-get_stream_start_script(false, Context) ->
-    [<<"z_stream_start(">>, add_subdomain(z_context:streamhost(Context)), ");"];
+get_stream_start_script(false, _Context) ->
+    <<"z_stream_start();">>;
 get_stream_start_script(true, Context) ->
-    [<<"z_stream_start(">>, add_subdomain(z_context:streamhost(Context)), $,,
-        $', z_context:websockethost(Context), $', ");"].
-    
-% Add random number 0-9
-add_subdomain([$?|Hostname]) ->
-    [$', integer_to_list(z_ids:number(10)), Hostname, $'];
-add_subdomain(<<$?,Hostname/binary>>) ->
-    [$', integer_to_list(z_ids:number(10)), Hostname, $'];
-
-% Add random number, no real limits
-add_subdomain([$*|Hostname]) ->
-    [$', integer_to_list(z_ids:number()),Hostname,$'];
-add_subdomain(<<$*,Hostname/binary>>) ->
-    [$',integer_to_list(z_ids:number()), Hostname, $'];
-add_subdomain([$.|_] = Hostname) ->
-    [$',integer_to_list(z_ids:number()), Hostname, $'];
-add_subdomain(<<$.,_/binary>> = Hostname) ->
-    [$', integer_to_list(z_ids:number()), Hostname, $'];
-    
-% special case for the zotonic_status site
-add_subdomain(none) ->
-    "window.location.host";
-    
-% Just connect to the hostname itself
-add_subdomain(Hostname) ->
-    [$', Hostname, $'].
+    [<<"z_stream_start('">>, z_context:websockethost(Context), <<"');">>].

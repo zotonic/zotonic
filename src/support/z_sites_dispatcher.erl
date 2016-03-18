@@ -610,9 +610,9 @@ collect_dispatchrules(Site) ->
 %% @doc Fetch dispatch rules for a specific site.
 fetch_dispatchinfo(Site) ->
     Name = z_utils:name_for_host(z_dispatcher, Site),
-    {Host, Hostname, StreamHost, SmtpHost, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
+    {Host, Hostname, SmtpHost, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
     #wm_host_dispatch_list{
-        host=Host, hostname=Hostname, streamhost=StreamHost, smtphost=SmtpHost, hostalias=Hostalias,
+        host=Host, hostname=Hostname, smtphost=SmtpHost, hostalias=Hostalias,
         redirect=Redirect, dispatch_list=DispatchList
     }.
 

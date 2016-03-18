@@ -135,7 +135,6 @@
 
     cookie_domain/1,
     document_domain/1,
-    streamhost/1,
     websockethost/1,
     has_websockethost/1
 ]).
@@ -1066,54 +1065,16 @@ get_req_path(Context) ->
 cookie_domain(Context) ->
     case m_site:get(cookie_domain, Context) of
         Empty when Empty == undefined; Empty == []; Empty == <<>> ->
-            %% When there is a stream domain, the check if the stream domain is a subdomain
-            %% of the hostname, if so then set a wildcard
-            case m_site:get(streamhost, Context) of
-                None when None == undefined; None == []; None == <<>> ->
-                    undefined;
-                StreamDomain ->
-                    [StreamDomain1|_] = string:tokens(z_convert:to_list(StreamDomain), ":"),
-                    Hostname = hostname(Context),
-                    case postfix(Hostname, StreamDomain1) of
-                        [] -> Hostname;
-                        [$.|_] = Prefix -> Prefix;
-                        Prefix -> [$.|Prefix]
-                    end
-            end;
+            undefined;
         Domain ->
             z_convert:to_list(Domain)
     end.
-
-
-    %% Return the longest matching postfix of two lists.
-    postfix(A, B) ->
-        postfix(lists:reverse(z_convert:to_list(A)), lists:reverse(z_convert:to_list(B)), []).
-    
-    postfix([X|A], [X|B], Acc) ->
-        postfix(A, B, [X|Acc]);
-    postfix(_A, _B, Acc) ->
-        Acc.
 
 %% @doc The document domain used for cross domain iframe javascripts
 document_domain(Context) ->
     case cookie_domain(Context) of
         [$.|Domain] -> Domain;
         Domain -> Domain
-    end.
-
-%% @doc Fetch the domain and port for stream (comet/websocket) connections
-%% @spec streamhost(Context) -> list()
-streamhost(Context) ->
-    case m_site:get(streamhost, Context) of
-        Empty when Empty == undefined; Empty == []; Empty == <<>> ->
-            case m_site:get(redirect, Context) of
-                false ->
-                    wrq:get_req_header_lc("host", Context#context.wm_reqdata);
-                _ -> 
-                    hostname_port(Context)
-            end;
-        Domain ->
-            Domain
     end.
 
 %% @doc Fetch the domain and port for websocket connections
