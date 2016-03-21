@@ -10,7 +10,6 @@
 
         <p>{_ Currently Zotonic supports services that are compatible with the S3 file services API. These include: _}</p>
         <ul>
-            <li><a target="_blank" href="https://www.greenqloud.com/">GreenQloud</a></li>
             <li><a target="_blank" href="http://aws.amazon.com/s3/">Amazon Simple Storage Service (S3)</a></li>
             <li><a target="_blank" href="https://developers.google.com/storage/">Google Cloud Storage</a></li>
         </ul>
@@ -34,7 +33,7 @@
                                 <div class="col-md-12">
                                     <input type="text" id="s3url" name="s3url" 
                                         value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
-                                        placeholder="https://s.greenqloud.com/account-bucket/mysite"
+                                        placeholder="https://mybucket.s3.amazonaws.com/mysite"
                                     />
                                 </div>
                             </div>
