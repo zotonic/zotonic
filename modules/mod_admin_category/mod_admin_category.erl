@@ -101,9 +101,8 @@ cat_move_and_delete(Ids, ToGroupId, Context) ->
     z_session_page:add_script(z_render:wire({unmask, []}, Context)),
     ok.
 
-in_categories(Ids, Context) ->
-    In = lists:flatten(z_utils:combine($,, [ integer_to_list(NId) || NId <- Ids ])),
-    z_db:q("select id from rsc where category_id in ("++In++")", [], Context, 60000).
+in_categories(Ids, Context) when is_list(Ids) ->
+    z_db:q("select id from rsc where category_id in (SELECT(unnest($1::int[])))", [Ids], Context, 60000).
 
 delete_all([], _N, _Total, _Context) ->
     ok;

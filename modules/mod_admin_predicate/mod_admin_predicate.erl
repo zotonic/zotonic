@@ -108,12 +108,10 @@ pred_move([], _ToPredId, _Ct, _N, _Context) ->
     ok;
 pred_move(EdgeIds, ToPredId, Ct, N, Context) ->
     {UpdIds, RestIds} = take(EdgeIds, 100),
-    UpdIdsS = lists:flatten(
-                    z_utils:combine($,, [ integer_to_list(Id) || {Id} <- UpdIds ])),
     z_db:q("update edge
             set predicate_id = $1
-            where id in ("++ UpdIdsS ++")",
-           [ToPredId],
+            where id in (SELECT(unnest($2::int[])))",
+           [ToPredId, UpdIds],
            Context,
            120000),
     Ct1 = Ct + length(UpdIds),

@@ -270,13 +270,11 @@ acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSq
             {Clause, Args};
         Ids when is_list(Ids) ->
             % User can see some content groups
-            SIds = [ integer_to_list(Id) || Id <- Ids ],
-            In = string:join(SIds, ","),
             Clause = lists:flatten([
                         " (",Alias,".content_group_id is null or ",
-                             Alias,".content_group_id in (",In,")) ",
-                             publish_check(Alias, SearchSql, Context)]),
-            {Clause, Args}
+                             Alias,".content_group_id in (SELECT(unnest($",integer_to_list(length(Args)+1),"::int[]))))",
+                        publish_check(Alias, SearchSql, Context)]),
+            {Clause, Args ++ [Ids]}
     end.
 
 publish_check(Alias, #search_sql{extra=Extra}, Context) ->
