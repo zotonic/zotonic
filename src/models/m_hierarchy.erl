@@ -26,6 +26,7 @@
     tree_flat/2,
     tree_flat/3,
     parents/3,
+    contains/3,
     children/3,
     menu/2,
     ensure/2,
@@ -105,7 +106,7 @@ tree(Name, Context) when is_binary(Name) ->
                 Context),
         build_tree(CatTuples, [], [])
     end,
-    z_depcache:memo(F, {hierarchy, Name}, ?DAY, [hierarchy], Context);
+    z_depcache:memo(F, {hierarchy, Name}, ?DAY, [hierarchy, {hierarchy,Name}], Context);
 tree(Name, Context) ->
     tree(z_convert:to_binary(Name), Context).
 
@@ -150,7 +151,24 @@ ids([], Acc) ->
 ids([N|Ns], Acc) ->
     Acc1 = [proplists:get_value(id,N) | ids(proplists:get_value(children, N), Acc)],
     ids(Ns, Acc1).
-                             
+
+%% @doc Return the list of ids contained within (and including) the id.
+contains(_Name, undefined, _Context) ->
+    [];
+contains(Name0, Id, Context) when is_integer(Id) ->
+    Name = z_convert:to_binary(Name0),
+    z_depcache:memo(
+            fun() ->
+                [{Lft, Rght}] = z_db:q("SELECT lft, rght FROM hierarchy WHERE name = 'content_group' AND id = $1", [Id], Context),
+                R = z_db:q("SELECT id FROM hierarchy WHERE name = 'content_group' AND lft >= $1 AND rght <= $2", [Lft, Rght], Context),
+                [CId || {CId} <- R]
+            end,
+            {hierarchy_contains, Name, Id},
+            [{hierarchy, Name}, Id],
+            Context);
+contains(Name, Id, Context) ->
+    contains(Name, m_rsc:rid(Id, Context), Context).
+
 %% @doc Make a flattened list with indentations showing the level of the tree entries.
 %%      Useful for select lists.
 tree_flat(Name, Context) ->

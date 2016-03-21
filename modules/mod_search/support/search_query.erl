@@ -169,17 +169,10 @@ parse_query([{filter, R}|Rest], Context, Result) ->
 %% content_group=id
 %% Include only resources which are member of the given content group (or one of its children)
 parse_query([{content_group, ContentGroup}|Rest], Context, Result) ->
-    List = z_depcache:memo(
-             fun() ->
-                     GrpId = m_rsc:rid(ContentGroup, Context),
-                     [{Lft, Rght}] = z_db:q("SELECT lft, rght FROM hierarchy WHERE name = 'content_group' AND id = $1", [GrpId], Context),
-                     R = z_db:q("SELECT id FROM hierarchy WHERE name = 'content_group' AND lft >= $1 AND rght <= $2", [Lft, Rght], Context),
-                     string:join([z_convert:to_list(I) || {I} <- R], ",")
-             end,
-             {search_query_content_group_list, ContentGroup},
-             Context),
-    Result1 = add_where("rsc.content_group_id IN (" ++ List ++ ")", Result),
-    parse_query(Rest, Context, Result1);
+    List = m_hierarchy:contains(<<"content_group">>, ContentGroup, Context),
+    {Arg, Result1} = add_arg(List, Result),
+    Result2 = add_where("rsc.content_group_id IN (SELECT(unnest("++Arg++"::int[])))", Result1),
+    parse_query(Rest, Context, Result2);
 
 %% id_exclude=resource-id
 %% Exclude an id from the result

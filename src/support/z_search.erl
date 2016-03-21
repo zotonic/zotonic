@@ -368,9 +368,9 @@ cat_check_joined1(CatAlias, true, {Left,Right}) ->
 add_cat_exact_check([], _Alias, WAcc, As, _Context) ->
     {WAcc, As};
 add_cat_exact_check(CatsExact, Alias, WAcc, As, Context) ->
-    NArgs = length(As),
     CatIds = [ m_rsc:rid(CId, Context) || CId <- CatsExact ],
-    CatArgs = [ [$$,integer_to_list(N)] || N <- lists:seq(NArgs+1,NArgs+length(CatIds))],
-    {WAcc ++ [[Alias, ".category_id in (", z_utils:combine($,, CatArgs), ")"]],
-     As ++ CatIds}.
+    {WAcc ++ [
+        [Alias, ".category_id in (SELECT(unnest($"++(integer_to_list(length(As)+1))++"::int[])))"]
+     ],
+     As ++ [CatIds]}.
 

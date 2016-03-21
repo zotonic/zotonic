@@ -289,10 +289,12 @@ delete_multiple(SubjectId, Preds, ObjectId, Context) ->
         true ->
             F = fun(Ctx) ->
                 m_rsc:touch(SubjectId, Ctx),
-                z_db:q("delete from edge where subject_id = $1 and object_id = $2 and predicate_id in ("
-                        ++ string:join(lists:map(fun erlang:integer_to_list/1, PredIds), ",")
-                        ++ ")",
-                        [SubjectId, ObjectId], Ctx)
+                z_db:q("delete 
+                        from edge 
+                        where subject_id = $1 
+                          and object_id = $2
+                          and predicate_id in (SELECT(unnest($3::int[])))",
+                       [SubjectId, ObjectId, PredIds], Ctx)
             end,
 
             case z_db:transaction(F, Context) of
@@ -307,10 +309,10 @@ delete_multiple(SubjectId, Preds, ObjectId, Context) ->
         AclError ->
             {error, {acl, AclError}}
     end.
-        
-    is_allowed([]) -> true;
-    is_allowed([true|Rest]) -> is_allowed(Rest);
-    is_allowed([Error|_]) -> Error. 
+
+is_allowed([]) -> true;
+is_allowed([true|Rest]) -> is_allowed(Rest);
+is_allowed([Error|_]) -> Error. 
 
 
 
