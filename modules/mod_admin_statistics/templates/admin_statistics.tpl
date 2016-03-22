@@ -11,8 +11,8 @@
     <div class="panel-heading">System</div>
     <div class="panel-body">
         {% for id, name in [
-                ["erlang-stats-system_info-process_count", "Process Count"], 
-                ["erlang-stats-statistics-run_queue", "Run Queue"], 
+                ["erlang-stats-system_info-process_count", "Process Count"],
+                ["erlang-stats-statistics-run_queue", "Run Queue"],
                 ["erlang-stats-system_info-port_count", "Port Count"]] %}
             {% include "_stat_info.tpl" id=id name=name %}
         {% endfor %}
@@ -25,9 +25,14 @@
     <div class="panel-heading">I/O</div>
     <div class="panel-body">
         {% for id, name in [
-                ["erlang-stats-io-input", "Input"], 
+                ["erlang-stats-io-input", "Input"],
                 ["erlang-stats-io-output", "Output"]] %}
             {% include "_stat_info.tpl" id=id name=name render="to_human" %}
+        {% endfor %}
+
+        {% for id, name in [
+                ["erlang-stats-network-tcp_port_count", "Open TCP Connections"]] %}
+            {% include "_stat_info.tpl" id=id name=name %}
         {% endfor %}
     </div>
   </div>
@@ -39,8 +44,8 @@
     <div class="panel-body">
       {% for id, name in [
                 ["erlang-stats-memory-total", "Total"],
-                ["erlang-stats-memory-binary", "Binary"], 
-                ["erlang-stats-memory-ets", "Ets"], 
+                ["erlang-stats-memory-binary", "Binary"],
+                ["erlang-stats-memory-ets", "Ets"],
                 ["erlang-stats-memory-code", "Code"],
                 ["erlang-stats-memory-system", "System"]]  %}
             {% include "_stat_info.tpl" id=id name=name render="to_human" %}
@@ -55,16 +60,16 @@
 function to_human(value) {
     if(value < 512) // .5 kb
         return value + "<small>B</small>";
-        
+
     if(value < 524288) // .5 Mb
         return (value/1024).toFixed(1) + "<small>Kb</small>";
-        
+
     if(value < 536870912) // .5 Gb
         return (value/1024/1024).toFixed(1) + "<small>Mb</small>";
-        
+
     if(value < 549755813888) // *.5 Tb
         return (value/1024/1024/1024).toFixed(1) + "<small>Gb</small>";
-        
+
     return (value/1024/1024/1024/1024).toFixed(1) + "<small>Tb</small>";
 }
 {% endjavascript %}
