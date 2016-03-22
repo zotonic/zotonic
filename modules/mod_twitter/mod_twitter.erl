@@ -289,8 +289,8 @@ stop_stream(#state{twerl_pid=TwerlPid}) ->
     twerl_stream_manager:stop_stream(TwerlPid).
 
 ensure_twerl(#state{twerl_pid=undefined} = State) ->
-    {ok, Pid} = twerl_stream_manager:start_link(),
     Self = self(),
+    {ok, Pid} = twerl_stream_manager:start_link([{monitor, Self}]),
     twerl_stream_manager:set_callback(Pid, fun(Data) -> Self ! {tweet, Data} end),
     State#state{twerl_pid=Pid};
 ensure_twerl(State) ->
