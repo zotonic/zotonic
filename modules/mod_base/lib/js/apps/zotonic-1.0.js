@@ -129,6 +129,20 @@ function z_set_page_id( page_id, user_id )
             setTimeout(function() { pubzub.publish("~pagesession/pageinit", page_id); }, 10);
         }
     }
+    $(window).bind("pageshow", function(event) {
+        // After back button on iOS / Safari
+        if (event.originalEvent.persisted) {
+            if (z_ws) {
+                try { z_ws.close(); } catch (e) { }
+                z_ws = undefined;
+            }
+            if (z_comet) {
+                try { z_comet.abort(); } catch(e) { }
+                z_comet = undefined;
+            }
+            z_stream_restart();
+        }
+    });
     $(window).bind('beforeunload', function() {
         z_page_unloading = true;
 
