@@ -132,15 +132,18 @@ function z_set_page_id( page_id, user_id )
     $(window).bind("pageshow", function(event) {
         // After back button on iOS / Safari
         if (event.originalEvent.persisted) {
-            if (z_ws) {
-                try { z_ws.close(); } catch (e) { }
-                z_ws = undefined;
-            }
-            if (z_comet) {
-                try { z_comet.abort(); } catch(e) { }
-                z_comet = undefined;
-            }
-            z_stream_restart();
+            z_page_unloading = false;
+            setTimeout(function() {
+                if (z_ws) {
+                    try { z_ws.close(); } catch (e) { }
+                    z_ws = undefined;
+                }
+                if (z_comet) {
+                    try { z_comet.abort(); } catch(e) { }
+                    z_comet = undefined;
+                }
+                z_stream_restart();
+            }, 10);
         }
     });
     $(window).bind('beforeunload', function() {
