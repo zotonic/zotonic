@@ -15,7 +15,7 @@
 {% with m.rsc[id] as r %}
 <fieldset>
 	<p class="notification notice">
-		{_ Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href="http://zotonic.com/docs/latest/manuals/datamodel/search.html">documentation on the query arguments</a> on the Zotonic website. _}
+		{_ Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href="http://zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments">documentation on the query arguments</a> on the Zotonic website. _}
 	</p>
 
     <div class="form-group">
@@ -38,7 +38,7 @@
     	    {_ Live query, send notifications when matching items are updated or inserted. _}
     	</label></div>
     </div>
-	
+
 	<h4>{_ Query preview _}</h4>
 
 	<div class="query-results" id="{{ #querypreview }}">
