@@ -33,6 +33,7 @@ var z_editor;
 // Session state
 var z_session_valid         = false;
 var z_session_restart_count = 0;
+var z_session_reload_check  = false;
 
 // Transport to/from server
 var z_websocket_host;
@@ -131,18 +132,10 @@ function z_set_page_id( page_id, user_id )
     }
     $(window).bind("pageshow", function(event) {
         // After back button on iOS / Safari
-        if (event.originalEvent.persisted) {
+        if (typeof event.originalEvent == 'object' && event.originalEvent.persisted) {
             z_page_unloading = false;
             setTimeout(function() {
-                if (z_ws) {
-                    try { z_ws.close(); } catch (e) { }
-                    z_ws = undefined;
-                }
-                if (z_comet) {
-                    try { z_comet.abort(); } catch(e) { }
-                    z_comet = undefined;
-                }
-                z_stream_restart();
+                z_stream_onreload();
             }, 10);
         }
     });
@@ -358,7 +351,7 @@ function z_session_restart(invalid_page_id)
         z_session_valid = false;
         z_session_restart_count = 0;
     }
-    setTimeout(function() { z_session_restart_check(invalid_page_id); }, 500);
+    setTimeout(function() { z_session_restart_check(invalid_page_id); }, 50);
 }
 
 function z_session_restart_check(invalid_page_id)
@@ -462,13 +455,27 @@ function z_transport_session_status(data, msg)
             if (window.z_sid) {
                 window.z_sid = undefined;
             }
-            z_session_restart(z_pageid);
+            if (z_session_reload_check) {
+                z_reload();
+            } else {
+                z_session_reload_check = false;
+                z_session_restart(z_pageid);
+            }
             break;
         case 'page_invalid':
-            z_session_restart(z_pageid);
+            if (z_session_reload_check) {
+                z_reload();
+            } else {
+                z_session_reload_check = false;
+                z_session_restart(z_pageid);
+            }
             break;
         case 'ok':
             z_session_valid = true;
+            if (z_session_reload_check) {
+                z_session_reload_check = false;
+                z_stream_restart();
+            }
             break;
         default:
             if (typeof data == 'object') {
@@ -1064,6 +1071,21 @@ function z_stream_start(_host, websocket_host)
         z_websocket_host = websocket_host || window.location.host;
         z_stream_restart();
     }
+}
+
+function z_stream_onreload()
+{
+    if (z_ws) {
+        try { z_ws.close(); } catch (e) { }
+        z_ws = undefined;
+    }
+    if (z_comet) {
+        try { z_comet.abort(); } catch(e) { }
+        z_comet = undefined;
+    }
+    z_session_reload_check = true;
+    z_page_unloading = false;
+    z_transport('session', 'ubf', 'check', { transport: 'ajax' });
 }
 
 function z_stream_restart()
