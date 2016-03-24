@@ -123,7 +123,7 @@
                   "55d9d6bc103d42ffc2a6659d1726224ee32d3565"}},
        {twerl,".*",
               {git,"https://github.com/mworrell/twerl.git",
-                   "d83ed4c3769ba3fb72343fa3b1d176072e94df51"}}]}.
+                   "511187da785903d64f5b284ae1d2888b07199e2f"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
 
