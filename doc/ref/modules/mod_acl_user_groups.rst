@@ -76,7 +76,7 @@ record::
                     {module,
                         [
                             {acl_user_group_id, acl_user_group_editors},
-                            {actions, use},
+                            {actions, [use]},
                             {module, mod_ginger_base}
                         ]
                     }
