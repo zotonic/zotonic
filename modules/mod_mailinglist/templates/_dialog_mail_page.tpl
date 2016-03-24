@@ -7,7 +7,7 @@
     <div class="control-label">
         <label class="control-label" for="email">{_ E-mail _}</label>
         <div>
-            <input id="{{ #email }}" type="text" value="" class="input-xlarge form-control" autofocus name="email" />
+            <input id="{{ #email }}" type="text" value="" class="input-xlarge form-control" autofocus name="email" value="" />
             {% validate id=#email name="email" type={presence} type={email} %}
         </div>
     </div>
