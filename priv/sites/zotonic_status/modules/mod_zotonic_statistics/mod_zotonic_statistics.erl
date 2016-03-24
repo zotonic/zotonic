@@ -27,7 +27,8 @@
 %% interface functions
 -export([
     observe_module_activate/2,
-    observe_module_deactivate/2
+    observe_module_deactivate/2,
+    get_tcp_port_count/0
 ]).
 
 -include("zotonic.hrl").
@@ -63,7 +64,9 @@ erlang_metrics() ->
         {[erlang, statistics], {function, erlang, statistics, ['$dp'],
                 value, [run_queue]}, []},
         {[erlang, io], {function, erlang, statistics, [io],
-                match, {{'_', input}, {'_', output}}}, []}        
+                match, {{'_', input}, {'_', output}}}, []},
+        {[erlang, network], {function, mod_zotonic_statistics, get_tcp_port_count, [],
+                value, [tcp_port_count]}, []}
     ].
 
 erlang_subscriptions() ->
@@ -75,7 +78,9 @@ erlang_subscriptions() ->
         {[erlang, statistics],
             [run_queue], 10000, undefined, true},
         {[erlang, io],
-            [input, output], 10000, undefined, true}
+            [input, output], 10000, undefined, true},
+        {[erlang, network],
+            [tcp_port_count], 10000, undefined, true}
     ].
 
 ensure_metrics([]) -> ok;
@@ -102,3 +107,5 @@ ensure_subscriptions([{Metric, DataPoint, Interval, Extra, Retry}|Rest]) ->
     ok = exometer_report:subscribe(z_exometer_mqtt, Metric, DataPoint, Interval, Extra, Retry),
     ensure_subscriptions(Rest).
 
+get_tcp_port_count() ->
+    [{tcp_port_count, length(recon:tcp())}].
