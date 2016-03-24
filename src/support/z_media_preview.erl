@@ -327,7 +327,7 @@ get_lossless_value(Options) ->
                            [{"lossless", true}, {"lossless-true", true}, {"lossless-auto", auto},
                             {"lossless-false", false}]),
     case ValueOpt of
-        undefined -> z_convert:to_atom(proplists:get_value(lossless, Options, auto));
+        undefined -> z_convert:to_atom(proplists:get_value(lossless, Options, false));
         V -> V
     end.
 
