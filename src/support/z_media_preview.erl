@@ -110,6 +110,8 @@ convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
             Error
     end.
 
+% We need to set a bigger density for PDF rendering, otherwise the resulting
+% image is too small.
 opt_density(Props) ->
     case proplists:get_value(mime, Props) of
         <<"application/pdf">> -> " -density 150x150 ";
@@ -224,7 +226,8 @@ cmd_args(FileProps, Filters, OutMime) ->
                     {correct_orientation, Orientation},
                     {resize, ResizeWidth, ResizeHeight, is_enabled(upscale, Filters)}, 
                     {crop, CropArgs},
-                    {colorspace, z_config:get(default_colorspace, "sRGB")} | Filters1],
+                    {colorspace, z_config:get(default_colorspace, "sRGB")},
+                    {density, 72} | Filters1],
     Filters3 = case {CropArgs,is_enabled(extent, Filters)} of
                     {none,true} -> Filters2 ++ [{extent, ReqWidth, ReqHeight}];
                     _ -> Filters2
@@ -354,6 +357,8 @@ filter2arg({layers, Method}, Width, Height, _AllFilters) ->
     {Width, Height, ["-layers ", $", z_utils:os_escape(Method), $"]};
 filter2arg({colorspace, Colorspace}, Width, Height, _AllFilters) ->
     {Width, Height, ["-colorspace ", $", z_utils:os_escape(Colorspace), $"]};
+filter2arg({density, DPI}, Width, Height, _AllFilters) when is_integer(DPI) ->
+    {Width, Height, ["-set units PixelsPerInch -density ", integer_to_list(DPI)]};
 filter2arg({width, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg({height, _}, Width, Height, _AllFilters) ->
