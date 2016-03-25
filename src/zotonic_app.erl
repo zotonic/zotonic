@@ -42,11 +42,12 @@ start(_Type, _StartArgs) ->
     inets:start(httpc,[{profile,zotonic}]),
     zotonic_deps:ensure(),
     ensure_started(mimetypes),
-    ensure_started(emqtt),
     ensure_started(gproc),
     ensure_started(jobs),
     z_tempfile_cleanup:start(),
-    zotonic_sup:start_link().
+    R = zotonic_sup:start_link(),
+    ensure_started(emqtt),
+    R.
 
 %% @spec stop(_State) -> ServerRet
 %% @doc application stop callback for zotonic.
