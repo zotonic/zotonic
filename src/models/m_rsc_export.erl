@@ -60,48 +60,90 @@
          simple/2
          ]).
 
-
 %% @doc Get the full representation of a resource.
 full(Id, Context) when is_integer(Id) ->
     case m_rsc:exists(Id, Context) of
         false -> undefined;
         true ->
+            Rsc0 = m_rsc:get_visible(Id, Context),
+            Rsc1 = filter_empty(Rsc0),
 
-            Rsc = m_rsc:get_raw(Id, Context),
+            Rsc = [
+                {category, m_rsc:p(m_rsc:p(Id, category_id, Context), name, Context)},
+                {content_group, m_rsc:p(m_rsc:p(Id, content_group_id, Context), name, Context)}
+                | Rsc1
+            ],
+
             %% This should probably be encapsulated in m_edges.
             Edges0 = z_db:assoc("
                                 select e.predicate_id, p.name as predicate_name, e.object_id, e.seq
-                                from edge e join rsc p on p.id = e.predicate_id
+                                from edge e 
+                                        join rsc p on p.id = e.predicate_id
                                 where e.subject_id = $1
                                 order by e.predicate_id, e.seq, e.id", [Id], Context),
-            Edges = [edge_details(E, Context) || E <- Edges0],
-
-            {ok, Medium} = z_db:select(medium, Id, Context),
+            Edges = [ edge_details(E, Context) || E <- Edges0],
+            Medium = m_media:get(Id, Context),
 
             PreviewUrl = case z_media_tag:url(Id, [{width, 800}, {height, 800}, {upscale, true}, {use_absolute_url, true}], Context) of
-                             {ok, P} -> P;
-                             _ -> undefined
+                            {ok, P} -> P;
+                            _ -> undefined
                          end,
-            
             Export = [
-                      %% Essential fields
-                      {id, Id},
-                      {uri, m_rsc:p(Id, uri, Context)},
-                      
-                      %% Parts
-                      {rsc, Rsc},
-                      {medium, Medium},
-                      {edges, Edges},
-                      {preview_url, PreviewUrl}
-                     ],
+                %% Essential fields
+                {id, Id},
+                {uri, m_rsc:p(Id, uri, Context)},
+
+                %% Parts
+                {rsc, Rsc},
+                {medium, Medium},
+                {edges, Edges},
+                {preview_url, PreviewUrl}
+            ],
 
             %% Filter empty lists
-            lists:filter(fun({_,L}) -> not(L == []) end, Export)
+            filter_empty(privacy_filter(Id, Export, Context))
     end;
-
+full(undefined, _Context) ->
+    undefined;
 full(Id, Context) ->
     full(m_rsc:rid(Id, Context), Context).
 
+
+filter_empty(List) ->
+    lists:filter(
+        fun({_,V}) ->
+            not is_empty(V)
+        end,
+        List).
+
+is_empty({trans, L}) ->
+    lists:all(fun({_,V}) -> z_utils:is_empty(V) end, L);
+is_empty(V) ->
+    z_utils:is_empty(V).
+
+% Rather crude privacy filter - to be fixed in issue 1211
+% @todo replace with real privacy control in ACL module
+privacy_filter(Id, Export, Context) ->
+    case m_rsc:is_a(Id, person, Context) of
+        false ->
+            Export;
+        true ->
+            case z_acl:rsc_editable(Id, Context) of
+                true -> Export;
+                false -> privacy_filter(Export)
+            end
+    end.
+
+privacy_filter(Export) ->
+    Drop = [
+        email
+    ],
+    lists:foldl(
+        fun(P, Acc) ->
+            proplists:delete(P, Acc)
+        end,
+        Drop,
+        Export).
 
 %% @doc Given an edge record, add the resource uris for the object and the predicate.
 edge_details(Edge, Context) ->
