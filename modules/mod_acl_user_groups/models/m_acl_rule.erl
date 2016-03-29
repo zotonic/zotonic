@@ -142,7 +142,10 @@ sort_by_user_group(Rs, undefined, Context) ->
                                UGId = proplists:get_value(acl_user_group_id, R),
                                Nr = proplists:get_value(UGId, Zipped),
                                IsBlock = proplists:get_value(is_block, R),
-                               {{Nr,not IsBlock}, R}
+                               {{Nr,
+                                 not IsBlock,
+                                 proplists:get_value(created,R),
+                                 proplists:get_value(id, R)}, R}
                        end,
                        Rs),
     Rs1 = lists:sort(WithNr),
@@ -206,7 +209,7 @@ update(Kind, Id, Props, Context) ->
                [{is_edit, true},
                 {modifier_id, z_acl:user(Context)},
                 {modified, calendar:universal_time()}
-                | Props], Context
+                | map_props(Props, Context)], Context
               ),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.

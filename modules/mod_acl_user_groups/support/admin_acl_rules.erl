@@ -95,7 +95,7 @@ normalize_values(Row) ->
             end,
             {[], []},
             Row),
-    [{actions, string:join(Actions, ",")} | Rest].
+    [{actions, Actions} | Rest].
 
 val([]) -> undefined;
 val(I) -> z_convert:to_integer(I).
