@@ -40,14 +40,31 @@
 
                 {% if kind == "rsc" %}
                     <div class="col-md-4">
-                        <select class="form-control" id="{{ #content_group_id }}" name="content_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
-                            <option value="">{_ All _}</option>
-                            {% for cg in m.hierarchy.content_group.tree_flat %}
-                                <option value="{{ cg.id }}" {% if cg.id == rule.content_group_id %}selected{% endif %}>
-                                    {{ cg.indent }} {{ cg.id.title }}
-                                </option>
-                            {% endfor %}
-                        </select>
+                        {% with m.hierarchy.content_group.tree_flat as cg_tree_flat %}
+                        {% with m.rsc.system_content_group.id as system_id %}
+                            <select class="form-control" id="{{ #content_group_id }}" name="content_group_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
+                                <optgroup label="{_ Content groups _}">
+                                    <option value="">{_ All _}</option>
+                                    {% for cg in cg_tree_flat %}
+                                        {% if cg.id /= system_id and not system_id|member:cg.path %}
+                                            <option value="{{ cg.id }}" {% if cg.id == rule.content_group_id %}selected{% endif %}>
+                                                {{ cg.indent }} {{ cg.id.title }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </optgroup>
+                                <optgroup label="{_ System content groups _}">
+                                    {% for cg in cg_tree_flat %}
+                                        {% if cg.id == system_id or system_id|member:cg.path%}
+                                            <option value="{{ cg.id }}" {% if cg.id == rule.content_group_id %}selected{% endif %}>
+                                                {{ cg.indent }} {{ cg.id.title }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </optgroup>
+                            </select>
+                        {% endwith %}
+                        {% endwith %}
                     </div>
                     <div class="col-md-4">
                         <select class="form-control" id="{{ #category_id }}" name="category_id" {% if rule %}onchange="$(this.form).submit()"{% endif %}>
