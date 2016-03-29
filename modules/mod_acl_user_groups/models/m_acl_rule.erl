@@ -236,6 +236,8 @@ map_props(Props, Context) ->
 
 map_prop({acl_user_group_id, Id}, Context) ->
     {acl_user_group_id, m_rsc:rid(Id, Context)};
+map_prop({content_group_id, Id}, Context) ->
+    {content_group_id, m_rsc:rid(Id, Context)};
 map_prop({category_id, Id}, Context) ->
     {category_id, m_rsc:rid(Id, Context)};
 map_prop({actions, Actions}, _Context) ->
@@ -259,7 +261,9 @@ delete(Kind, Id, Context) ->
 
 replace_managed(Rules, Module, Context) ->
     delete_managed(Module, Context),
-    [manage_acl_rule(Rule, Module, Context) || Rule <- Rules].
+    [manage_acl_rule(Rule, Module, Context) || Rule <- Rules],
+    m_acl_rule:publish(rsc, Context),
+    m_acl_rule:publish(module, Context).
 
 manage_acl_rule({Type, Props}, Module, Context) ->
     insert(Type, [{managed_by, Module} | Props], Context).
