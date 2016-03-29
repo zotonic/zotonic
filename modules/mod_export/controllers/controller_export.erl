@@ -45,10 +45,15 @@ forbidden(ReqData, Context) ->
     Context2 = z_context:ensure_qs(z_context:continue_session(Context1)),
     z_context:lager_md(Context2),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
-    case z_notifier:first(#export_resource_visible{dispatch=Dispatch}, Context2) of
-        undefined -> ?WM_REPLY(false, Context2);
-        {ok, true} -> ?WM_REPLY(false, Context2);
-        {ok, false} -> ?WM_REPLY(true, Context2)
+    case z_acl:is_allowed(use, mod_export, Context2) of
+        true ->
+            case z_notifier:first(#export_resource_visible{dispatch=Dispatch}, Context2) of
+                undefined -> ?WM_REPLY(false, Context2);
+                {ok, true} -> ?WM_REPLY(false, Context2);
+                {ok, false} -> ?WM_REPLY(true, Context2)
+            end;
+        false ->
+            ?WM_REPLY(true, Context2)
     end.
 
 content_types_provided(ReqData, Context0) ->
