@@ -24,7 +24,7 @@
     init/1,
     service_available/2,
     allowed_methods/2,
-    is_authorized/2,
+    forbidden/2,
     resource_exists/2,
     content_types_provided/2,
     content_types_accepted/2,
@@ -53,26 +53,31 @@ allowed_methods(ReqData, Context) ->
     {['GET', 'PUT', 'DELETE'], ReqData, Context}.
 
 
-is_authorized(ReqData, Context0) ->
+forbidden(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
-    IsAuthorized = case get_id(Context) of
-                       {ok, Id} ->
-                           case m_rsc:exists(Id, Context) of
-                               true ->
-                                    case webmachine_request:method(ReqData) of
-                                        'GET' -> z_acl:rsc_visible(Id, Context);
-                                        'DELETE' -> z_acl:rsc_deleteable(Id, Context);
-                                        'PUT' -> z_acl:rsc_editable(Id, Context)
+    case z_acl:is_allowed(use, mod_rest, Context) of
+        true ->
+            IsAuthorized = case get_id(Context) of
+                               {ok, Id} ->
+                                   case m_rsc:exists(Id, Context) of
+                                       true ->
+                                            case webmachine_request:method(ReqData) of
+                                                'GET' -> z_acl:rsc_visible(Id, Context);
+                                                'DELETE' -> z_acl:rsc_deleteable(Id, Context);
+                                                'PUT' -> z_acl:rsc_editable(Id, Context)
+                                            end;
+                                        false ->
+                                            true
                                     end;
-                                false ->
+                                _ ->
                                     true
-                            end;
-                        _ ->
-                            true
-                   end,
-    case IsAuthorized of
-        false -> ?WM_REPLY("Zotonic-Auth", Context);
-        true -> ?WM_REPLY(true, Context)
+                           end,
+            case IsAuthorized of
+                false -> ?WM_REPLY(true, Context);
+                true -> ?WM_REPLY(false, Context)
+            end;
+        false ->
+            ?WM_REPLY(true, Context)
     end.
 
 
