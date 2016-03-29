@@ -62,7 +62,9 @@ provide_content(ReqData, Context) ->
 logon_page(Context) ->
     Rendered = z_template:render("logon.tpl", z_context:get_all(Context), Context),
     {Output, OutputContext} = z_context:output(Rendered, Context),
-    ?WM_REPLY(Output, OutputContext).
+    ReqData = webmachine_request:set_response_code(503, Context#context.wm_reqdata),
+    ReqData1 = webmachine_request:set_resp_body(Output, ReqData),
+    {{halt, 503}, ReqData1, OutputContext#context{wm_reqdata=undefined}}.
 
 status_page(Context) ->
     Template = z_context:get(template, Context),
