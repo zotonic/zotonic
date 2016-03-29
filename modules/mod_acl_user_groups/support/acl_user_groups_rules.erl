@@ -73,7 +73,7 @@ expand_module(State, UserTree, Context) ->
     Modules1 = [ {<<>>, Modules} | [ {z_convert:to_binary(M),[M]} || M <- Modules ] ],
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(module, State, Context)),
     Rules = expand_rule_rows(module, Modules1, RuleRows, Context),
-    [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree) ].
+    [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree, Context) ].
 
 -spec expand_rsc(edit|publish, list(), list(), #context{}) -> list(rsc_rule()).
 expand_rsc(State, GroupTree, UserTree, Context) ->
@@ -81,7 +81,7 @@ expand_rsc(State, GroupTree, UserTree, Context) ->
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(rsc, State, Context)),
     Cs = [{undefined, tree_ids(CategoryTree)} | tree_expand(CategoryTree) ],
     Rules = expand_rule_rows(category_id, Cs, RuleRows, Context),
-    expand_rules(GroupTree, Rules, UserTree).
+    expand_rules(GroupTree, Rules, UserTree, Context).
 
 expand_rule_rows(category_id, Cs, RuleRows, Context) ->
     NonMetaCs = remove_meta_category(Cs, Context),
@@ -135,14 +135,19 @@ maybe_filter_meta(_ContentGroupName, _Prop, PropId, Cs, _NonMetaCs, _Context) ->
     proplists:get_value(PropId, Cs, [PropId]).
 
 %% @doc Given two id lists, return all possible combinations.
-expand_rules(TreeA, Rules, TreeB) ->
+expand_rules(TreeA, Rules, TreeB, Context) ->
     As = [{undefined, tree_ids(TreeA)} | tree_expand(TreeA) ],
     Bs = tree_expand(TreeB),
     lists:flatten(
         lists:map(fun({A, Pred, B}) ->
-                      {A, A1} = lists:keyfind(A, 1, As),
-                      {B, B1} = lists:keyfind(B, 1, Bs),
-                      expand_rule(A1, Pred, B1)
+                        case {lists:keyfind(A, 1, As), lists:keyfind(B, 1, Bs)} of
+                            {{A, A1}, {B, B1}} ->
+                                expand_rule(A1, Pred, B1);
+                            Other ->
+                                lager:warning("[~p] Tree expand of {~p, ~p, ~p} returned ~p",
+                                              [z_context:site(Context), A, Pred, B, Other]),
+                                []
+                        end
                   end,
                   Rules)).
 
