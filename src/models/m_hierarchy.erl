@@ -164,6 +164,7 @@ contains(Name0, Id, Context) when is_integer(Id) ->
                 [CId || {CId} <- R]
             end,
             {hierarchy_contains, Name, Id},
+            3600,
             [{hierarchy, Name}, Id],
             Context);
 contains(Name, Id, Context) ->
