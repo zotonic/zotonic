@@ -94,7 +94,7 @@ The following options can be configured:
   This overrides the default list of modules installed by the
   skeleton.
 
-.. versionadded:: 0.10
+.. versionadded:: 0.16
    To inherit the list of modules from a skeleton, add a ``{skeleton,
    <name>}`` and it will install the list of modules from that skeleton
    as well.
@@ -102,6 +102,13 @@ The following options can be configured:
   The list of installed modules will be updated on each site start,
   e.g. when you add a module to the ``install_modules`` list, it will
   be installed automatically when you restart the site.
+
+``{ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8"}``
+  List of TCP/IP addresses and their netmasks.
+  The admin user password *admin* will only be accepted if logging in
+  from a host matching the whitelisted IP addresses. This for protecting 
+  development systems that are exposed to the Internet.
+  This can also be configured in the :ref:`guide-configuration`.
 
 ``{smtphost, "..."}``
   Hostname you want e-mail messages to appear from. See :ref:`guide-email`.
