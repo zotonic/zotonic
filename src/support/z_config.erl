@@ -73,4 +73,5 @@ default(dbschema) -> "public";
 default(use_ua_classifier) -> true;
 default(filewatcher_enabled) -> true;
 default(filewatcher_scanner_enabled) -> false;
+default(ip_whitelist) -> "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8";
 default(_) -> undefined.
