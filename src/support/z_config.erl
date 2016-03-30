@@ -77,4 +77,5 @@ default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
 default(syslog_level) -> info;
+default(ip_whitelist) -> "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8";
 default(_) -> undefined.

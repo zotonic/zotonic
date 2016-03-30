@@ -103,6 +103,9 @@
 %%% be generated on first Zotonic startup, if the config file does not yet exist.
    {password, "%%GENERATED%%"}
 
+%%% IP whitelist, used for accessing sites with a default "admin" password
+   %% {ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8"},
+
 %%% Inet request backlog, increase when requests are being dropped.
    %% {inet_backlog, 500},
 
