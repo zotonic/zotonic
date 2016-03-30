@@ -393,14 +393,14 @@ ip_match(Peer, [IP|IPs]) ->
     end.
 
 ip_match_mask({_,_,_,_} = Peer, {_,_,_,_} = Match, Bits) ->
-    ip_match_mask_1(Peer, Match, Bits);
+    ip_match_mask_1(Peer, Match, 32-Bits);
 ip_match_mask({_,_,_,_,_,_,_,_} = Peer, {_,_,_,_,_,_,_,_} = Match, Bits) ->
-    ip_match_mask_1(Peer, Match, Bits);
+    ip_match_mask_1(Peer, Match, 128-Bits);
 ip_match_mask(_, _, _) ->
     false.
 
-ip_match_mask_1(PeerAdr, MatchAdr, Bits) ->
-    NetMask = ((1 bsl 128) - 1) bsl (32 - Bits),
+ip_match_mask_1(PeerAdr, MatchAdr, MaskBits) ->
+    NetMask = ((1 bsl 128) - 1) bsl MaskBits,
     (to_ip_number(MatchAdr) band NetMask) =:= (to_ip_number(PeerAdr) band NetMask).
 
 to_ip_number({A,B,C,D}) ->
