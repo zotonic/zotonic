@@ -39,17 +39,22 @@ search(Filter, Context) ->
         assoc=true
     }.
 
-    map_search({severity, [C]}, {Ws,As}, _Context) when C >= $0, C =< $9 ->
-        {["severity <= "++[C]|Ws], As};
-    map_search({severity, _}, {Ws,As}, _Context) ->
-        {["severity <= 1"|Ws], As};
+    map_search({severity, Status}, {Ws,As}, _Context) ->
+        case catch z_convert:to_integer(Status) of
+            StatusNr when is_integer(StatusNr) ->
+                {As1,N} = arg(StatusNr, As),
+                {[["severity <= $",N]|Ws], As1};
+            _ ->
+                {["severity <= 1"|Ws], As}
+        end;
     map_search({_, ""}, Acc, _Context) -> Acc;
+    map_search({_, <<>>}, Acc, _Context) -> Acc;
     map_search({_, undefined}, Acc, _Context) -> Acc;
     map_search({status, Status}, {Ws,As}, _Context) ->
         {As1,N} = arg(Status, As),
         {[["mailer_status = $",N]|Ws], As1};
     map_search({message_nr, MsgNr}, {Ws,As}, _Context) ->
-        {As1,N} = arg(MsgNr, As),
+        {As1,N} = arg(z_convert:to_integer(MsgNr), As),
         {[["message_nr like ($",N," || '%')"]|Ws], As1};
     map_search({template, Tpl}, {Ws,As}, _Context) ->
         {As1,N} = arg(Tpl, As),
@@ -66,24 +71,25 @@ search(Filter, Context) ->
     map_search({from, From}, {Ws,As}, _Context) ->
         case z_utils:only_digits(From) of
             true ->
-                {As1,N} = arg(list_to_integer(From), As),
+                {As1,N} = arg(z_convert:to_integer(From), As),
                 {[["from_id = $",N]|Ws], As1};
             false ->
-                {As1,N} = arg(From, As),
+                {As1,N} = arg(z_convert:to_binary(From), As),
                 {[["envelop_from like ($",N," || '%')"]|Ws], As1}
         end;
     map_search({content, RscId}, {Ws,As}, Context) ->
         case m_rsc:rid(RscId, Context) of
-            undefined -> {["content_id = -1"|Ws], As};
+            undefined -> 
+                {["content_id = -1"|Ws], As};
             Id -> 
-                {As1,N} = arg(integer_to_list(Id), As),
+                {As1,N} = arg(Id, As),
                 {[["content_id = $",N]|Ws], As1}
         end;
     map_search({other, RscId}, {Ws,As}, Context) ->
         case m_rsc:rid(RscId, Context) of
             undefined -> {["other_id = -1"|Ws], As};
             Id -> 
-                {As1,N} = arg(integer_to_list(Id), As),
+                {As1,N} = arg(Id, As),
                 {[["other_id = $",N]|Ws], As1}
         end.
     
