@@ -1,0 +1,25 @@
+%% Configuration of the test sandbox, used for unit testing. See
+%% The testsandbox is only started for testing and ignored otherwise.
+%% doc/UnitTesting.txt on how to use this.
+[
+    {enabled, true},
+
+    %% Atomic hostname, MUST be equal to the directory name of this site.
+    {host, testsandboxdb},
+
+    %% Hostname for the test sandbox. Do NOT change this! It will break the tests.
+    {hostname, "localhost:8041"},
+
+    {dbschema, "testsandboxdb"},
+    {skeleton, empty},
+
+    %% Admin password, used during installation. You can change it later
+    {admin_password, "admin"},
+
+    {modules, [
+        testsandboxdb,
+        mod_base,
+        mod_authentication,
+        mod_admin
+    ]}
+].
