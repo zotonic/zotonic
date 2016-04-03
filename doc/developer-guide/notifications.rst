@@ -4,15 +4,15 @@ Notifications
 =============
 
 Zotonic’s notifier system makes it possible to create modular
-components with pluggable interface. The notifier system is used by
+components with a pluggable interface. The notifier system is used by
 internal core Zotonic components like the authentication mechanism,
 the logging system and more.
 
 The notification system can not only act as a traditional event
-subscription system but also as an advance priority based function
-dispatch system. It uses the priority system which is used to select
-templates. This makes it possible to override pre-defined default
-behaviour of core Zotonic modules.
+subscription system but also as an advanced priority based function
+dispatch system. It uses the same priority system which is used to
+select templates. This makes it possible to override pre-defined
+default behaviour of core Zotonic modules.
 
 A notification message is a tagged tuple. The first element of the
 tuple is the type of notification message. An observer can use this
@@ -32,11 +32,9 @@ reference section.
 Sending notifications
 ---------------------
 
-As mentioned earlier, the notification system can not only be used
-to just send events to observers. Observers can also return values
-back. They can do this in various ways.
-
-Below you can find an overview of the notification methods.
+As mentioned earlier, the notification system can not only be used to
+just send events to observers. Observers can also return values
+back. They can do this in various ways described in the methods below.
 
 notify
   Send a message to all observers. This is used if you want to
@@ -87,7 +85,7 @@ Handler
   is a ``pid()`` and the notification is sent with ``notify`` or ``notify1``
   the gen_server process receives a ``handle_cast``. When an answer is
   expected back ``handle_call`` is used. This is the case for ``first``,
-  ``map``, ``foldr`` and ``foldr``.
+  ``map``, ``foldl`` and ``foldr``.
 
 Priority
   The priority of the observer. This influences the order in which
@@ -143,7 +141,7 @@ Call notification
 Fold notifications
 
   Fold notifications are called, with ``z_notifier:foldl/3`` or
-  ``z_notifier:foldr/3``. It works similar to the `lists:foldr and
+  ``z_notifier:foldr/3``. It works similarly to the `lists:foldr and
   lists:foldl <http://www.erlang.org/doc/man/lists.html#foldl-3>`_
   functions of Erlang’s `lists
   <http://www.erlang.org/doc/man/lists.html>`_ module.
