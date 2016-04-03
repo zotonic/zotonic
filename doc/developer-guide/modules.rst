@@ -63,13 +63,13 @@ properties, there is no real code in there. This is fine for a lot of
 modules: since Zotonic already provides so many functions, there is
 often little need to write custom code.
 
-The ``mod_title`` and ``mod_description`` properties describe your module
-in natural language: these properties will be visible on the admin
-modules page. The ``priority`` defines the how important the module
-is. The highest :ref:`module-priority` is 1, the default is 500. Modules with
-higher priority are checked first for templates, actions, custom tags,
-etc. Modules with the same priority are sorted by ascending module
-name.
+The ``mod_title`` and ``mod_description`` properties describe your
+module in natural language: these properties will be visible on the
+admin modules page. The ``mod_prio`` property defines the priority of
+the module. The highest :ref:`module-priority` is 1, the default
+is 500. Modules with higher priority are checked first for templates,
+actions, custom tags, etc. Modules with the same priority are sorted
+by ascending module name.
 
 In cases where you need to execute code when the module starts, you
 can export an optional ``init/1`` function. The parameter is a context
@@ -120,8 +120,8 @@ lib/
 
 The `lib` (short for `library`) directory contains static images, css
 and javascript files. These files will be served with via the
-:ref:`tag-lib` tag. the `lib` dispatch rule. The usual layout of the
-lib directory is::
+:ref:`tag-lib` tag using the `lib` dispatch rule. The usual layout of
+the lib directory is::
 
   lib/css/
   lib/images/
@@ -164,7 +164,7 @@ This directory contains Erlang modules, each of which is a :ref:`model
 
 The module name of a model always starts with ``m_``, for example
 ``m_comment``. This model is then to be used in the templates as
-``m.comment``.  Be careful to give your models an unique name to
+``m.comment``.  Be careful to give your models a unique name to
 prevent name clashes with other models and Erlang modules.
 
 .. seealso:: :ref:`guide-models`
