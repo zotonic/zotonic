@@ -283,3 +283,5 @@ class NewTocTree(TocTree):
 
 def setup(app):
     app.add_directive('toctree', NewTocTree)
+
+extlinks = {'issue': ('https://github.com/zotonic/zotonic/issues/%s', '#') }
