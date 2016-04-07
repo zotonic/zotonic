@@ -51,6 +51,19 @@ search(Query, Context) ->
         Other -> Other
     end.
 
+qargs(Context) ->
+    Args = z_context:get_q_all_noz(Context),
+    lists:filtermap(
+                fun
+                    ({"qargs", _}) -> false;
+                    ({<<"qargs">>, _}) -> false;
+                    ({"qs", V}) -> {true, {"text", V}};
+                    ({<<"qs">>, V}) -> {true, {"text", V}};
+                    ({"q"++Term, V}) -> {true, {Term, V}};
+                    ({<<"q", Term/binary>>, V}) -> {true, {Term, V}};
+                    (_) -> false
+                end,
+                Args).
 
 parse_request_args(Args) ->
     parse_request_args(Args, []).
@@ -115,6 +128,7 @@ request_arg("publication_month")   -> publication_month;
 request_arg("publication_year")    -> publication_year;
 request_arg("publication_after")   -> publication_after;
 request_arg("publication_before")  -> publication_before;
+request_arg("qargs")               -> qargs;
 request_arg("query_id")            -> query_id;
 request_arg("rsc_id")              -> rsc_id;
 request_arg("sort")                -> sort;
@@ -388,6 +402,12 @@ parse_query([{modifier_id, Integer}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_integer(Integer), Result),
     Result2 = add_where("rsc.modifier_id = " ++ Arg, Result1),
     parse_query(Rest, Context, Result2);
+
+%% qargs
+%% Add all query terms from the current query arguments
+parse_query([{qargs, true}|Rest], Context, Result) ->
+    Terms = parse_request_args(qargs(Context)),
+    parse_query(Terms++Rest, Context, Result);
 
 %% query_id=<rsc id>
 %% Get the query terms from given resource ID, and use those terms.
