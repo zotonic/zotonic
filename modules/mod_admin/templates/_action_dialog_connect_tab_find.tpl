@@ -1,6 +1,7 @@
 <div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-find">
 	<form id="dialog-connect-find" class="row form form-horizontal">
 		<input type="hidden" name="subject_id" value="{{ subject_id }}" />
+        <input type="hidden" name="object_id" value="{{ object_id }}" />
 		<input type="hidden" name="predicate" value="{{ predicate|default:'' }}" />
 
         <div class="col-md-8">
@@ -43,6 +44,7 @@
         postback={admin_connect_select
             id=id
             subject_id=subject_id
+            object_id=object_id
             predicate=predicate
             callback=callback
             language=language

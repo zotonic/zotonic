@@ -206,12 +206,13 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
 event(#postback_notify{message="feedback", trigger="dialog-connect-find", target=TargetId}, Context) ->
     % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
+    ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
     Category = z_context:get_q(find_category, Context),
     Predicate = z_context:get_q(predicate, Context, ""),
     Text = z_context:get_q(find_text, Context),
     Cats = case Category of
-                "p:"++Predicate -> m_predicate:object_category(Predicate, Context);
-                <<"p:", Predicate/binary>> -> m_predicate:object_category(Predicate, Context);
+                "p:"++Predicate -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 "" -> [];
                 <<>> -> [];
                 CatId -> [{z_convert:to_integer(CatId)}]
@@ -269,7 +270,6 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
 
 %% Called when a block connection is done
 event(#postback_notify{message="update", target=TargetId}, Context) ->
-    Template = filename:basename(z_context:get_q("template", Context)),
     Id = z_convert:to_integer(z_context:get_q("id", Context)),
     Predicate = get_predicate(z_context:get_q("predicate", Context), Context),
     Vars = [
@@ -277,11 +277,16 @@ event(#postback_notify{message="update", target=TargetId}, Context) ->
         {predicate, Predicate}
     ],
     Context1 = z_render:wire({unmask, [{target_id, TargetId}]}, Context),
-    z_render:update(TargetId, #render{template=Template, vars=Vars}, Context1);
+    z_render:update(TargetId, #render{template="_rsc_item.tpl", vars=Vars}, Context1);
 
 event(_E, Context) ->
     Context.
 
+
+feedback_categories(SubjectId, Predicate, _ObjectId, Context) when is_integer(SubjectId) ->
+    m_predicate:object_category(Predicate, Context);
+feedback_categories(_SubjectId, Predicate, ObjectId, Context) when is_integer(ObjectId) ->
+    m_predicate:subject_category(Predicate, Context).
 
 
 get_predicate(undefined, _Context) ->
