@@ -4,7 +4,7 @@ params:
 - language (optional)
 - actions (optional)
 - stay (optional)
-- subject_id
+- subject_id or object_id
 - tabs_enabled (optional): list of tab names: ["new", "depiction", "find",  "upload", "url"]
 - tab (optional)
 
@@ -92,6 +92,7 @@ find params:
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id
+                    object_id=object_id
                     is_active
                     title=""
                     cat=cat
@@ -105,6 +106,7 @@ find params:
                         predicate=predicate
                         delegate=delegate
                         subject_id=subject_id
+                        object_id=object_id
                         is_active=(tab == "depiction")
                         title=""
                     %}
@@ -116,6 +118,7 @@ find params:
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id 
+                    object_id=object_id
                     is_active=(not q.is_zmedia and tab == "find")
                     title=""
                     cat=cat
@@ -129,6 +132,7 @@ find params:
                         predicate=predicate
                         delegate=delegate
                         subject_id=subject_id
+                        object_id=object_id
                         title="" 
                         is_active=(tab == "new")
                         cat=cat
@@ -141,6 +145,7 @@ find params:
                         tab=#tab
                         predicate=predicate
                         subject_id=subject_id
+                        object_id=object_id
                         title="" 
                         is_active=(predicate.name=="depiction" and not is_zmedia and tab == "upload")
                     %}
@@ -151,6 +156,7 @@ find params:
                         predicate=predicate
                         delegate=delegate
                         subject_id=subject_id
+                        object_id=object_id
                         is_active=(tab == "url")
                         title=""
                     %}
@@ -160,6 +166,7 @@ find params:
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id
+                    object_id=object_id
                     title=""
                     delegate=delegate
                 %}

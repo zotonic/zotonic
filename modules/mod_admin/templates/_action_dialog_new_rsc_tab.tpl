@@ -1,13 +1,13 @@
 {% wire
     id=#form type="submit" 
-	postback={
-	    new_page
+	postback={new_page
 	    subject_id=subject_id
+        object_id=object_id
 	    predicate=predicate
 	    redirect=redirect 
 	    actions=actions
 	    callback=callback
-            objects=objects
+        objects=objects
 	}
 	delegate=delegate 
 %}
