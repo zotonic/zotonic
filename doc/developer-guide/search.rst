@@ -283,6 +283,23 @@ Query-model arguments
 
   .. seealso:: :ref:`guide-query-resources`
 
+**qargs**
+
+  Take all the arguments from the current request and use these.
+  The arguments have to start with a ``q``, for example:
+
+  ``http://example.com/search?qs=test&qcat=text``
+
+  With the query:
+
+  ``m.search.paged[{query qargs page=q.page pagelen=20}]``
+
+  Will find all pages containing the string *test* in the category *text*.
+
+  As ``qs`` is the usual text search argument in forms it is mapped to ``text``.
+  All other arguments have the ``q`` removed and should map to known query-model
+  arguments.
+
 **publication_month**
 
   Filter on month of publication date
