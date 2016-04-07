@@ -123,7 +123,7 @@ msgstr "E-mail"
 
 #: modules/mod_admin_identity/templates/_admin_identity_email.tpl:2
 msgid "E-mail address"
-msgstr "E-mail addres"
+msgstr "E-mailadres"
 
 #: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
 msgid "Email Status"

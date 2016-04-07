@@ -178,7 +178,7 @@
 	    var $block_page = $(window.zBlockConnectTrigger).closest(".block-page");
 	    var target_id = $(".rsc-item-wrapper", $block_page).attr('id');
 	    $("input[type=hidden]", $block_page).val(v.object_id);
-	    z_notify("update", {z_delegate: 'mod_admin', template: "_rsc_item.tpl", id: v.object_id, z_target_id: target_id});
+	    z_notify("update", {z_delegate: 'mod_admin', id: v.object_id, z_target_id: target_id});
 	    window.zAdminConnectDone(v);
 	}
 

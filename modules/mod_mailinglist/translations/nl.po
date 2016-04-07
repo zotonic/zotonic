@@ -437,7 +437,7 @@ msgstr "Voer het e-mailadres in waar je een test-mail naartoe wilt sturen."
 
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:5
 msgid "Please enter the e-mail address you want to send this page to."
-msgstr "Voer het e-mailadres in waar je een test-mail naartoe wilt sturen."
+msgstr "Voer het e-mailadres in waar je een email naartoe wilt sturen."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
