@@ -99,7 +99,8 @@ pred_move_and_delete(FromPredId, ToPredId, Context) ->
                    [FromPredId, ToPredId],
                    Context,
                    120000),
-    pred_move(Edges, ToPredId, 0, length(Edges), Context),
+    Edges1 = [ EdgeId || {EdgeId} <- Edges ],
+    pred_move(Edges1, ToPredId, 0, length(Edges), Context),
     z_db:q("delete from edge where predicate_id = $1", [FromPredId], Context, 120000),
     _ = m_rsc:delete(FromPredId, Context),
     z_session_page:add_script(z_render:wire({unmask, []}, Context)).

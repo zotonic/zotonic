@@ -102,7 +102,8 @@ cat_move_and_delete(Ids, ToGroupId, Context) ->
     ok.
 
 in_categories(Ids, Context) when is_list(Ids) ->
-    z_db:q("select id from rsc where category_id in (SELECT(unnest($1::int[])))", [Ids], Context, 60000).
+    RscIds = z_db:q("select id from rsc where category_id in (SELECT(unnest($1::int[])))", [Ids], Context, 60000),
+    [ RscId || {RscId} <- RscIds ].
 
 delete_all([], _N, _Total, _Context) ->
     ok;
