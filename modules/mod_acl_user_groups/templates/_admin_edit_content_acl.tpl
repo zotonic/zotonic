@@ -18,7 +18,7 @@
     	{_ This page is a _}
     	<strong>{{ id.category_id.title }}</strong>
     	{_ in the group _}
-    	<strong>{{ id.content_group_id.title }}</strong>
+    	<strong><a href="{% url admin_edit_rsc id=id.content_group_id %}">{{ id.content_group_id.title }}</strong>
     </p>
 
     {% if m.acl_rule.can_insert[id.content_group_id][id.category_id] %}

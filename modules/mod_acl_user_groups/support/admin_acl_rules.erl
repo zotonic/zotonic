@@ -31,10 +31,36 @@ event(Msg, Context) ->
             z_render:growl_error(?__("You are not allowed to perform this action", Context), Context)
     end.
 
+event1(#postback{message={admin_connect_select, _Args}}, Context) ->
+    SelectId = m_rsc:rid(z_context:get_q("select_id", Context), Context),
+    case m_rsc:is_a(SelectId, acl_collaboration_group, Context) of
+        true ->
+            Context1 = z_render:update(
+                            "acl-cg-collab-select",
+                            #render{
+                                template="_admin_acl_rule_collab_select.tpl", 
+                                vars=[{id, SelectId}]
+                            },
+                            Context),
+            z_render:dialog_close(Context1);
+        false ->
+            z_render:growl(?__("Please select a collaboration_group", Context), Context)
+    end;
+
 event1(#submit{message={add_rule, [{kind, Kind}]}}, Context) ->
     Row = z_context:get_q_all_noz(Context),
     Row1 = normalize_values(Row),
-    {ok, _NewRuleId} = m_acl_rule:insert(Kind, Row1, Context),
+    Row2 = case proplists:get_value(collab_group_id, Row1) of
+                undefined ->
+                    Row1;
+                CollabId ->
+                    [ 
+                        {content_group_id, CollabId}
+                        | proplists:delete(collab_group_id,
+                                proplists:delete(content_group_id, Row1))
+                    ]
+            end,
+    {ok, _NewRuleId} = m_acl_rule:insert(Kind, Row2, Context),
     Context;
 
 event1(#submit{message={update_rule, [{id, RuleId}, {kind, Kind}]}}, Context) ->
@@ -49,11 +75,13 @@ event1(#postback{message={remove_rule, [{id, RuleId}, {kind, Kind}]}}, Context) 
 
 event1(#postback{message={revert, _Args}}, Context) ->
     ok = m_acl_rule:revert(rsc, Context),
+    ok = m_acl_rule:revert(collab, Context),
     ok = m_acl_rule:revert(module, Context),
     z_render:growl(?__("Reverted rules", Context), Context);
 
 event1(#postback{message={publish, _Args}}, Context) ->
     ok = m_acl_rule:publish(rsc, Context),
+    ok = m_acl_rule:publish(collab, Context),
     ok = m_acl_rule:publish(module, Context),
     z_render:growl(?__("Publish successful", Context), Context);
 
@@ -75,7 +103,14 @@ event1(#submit{message={acl_rule_import, []}}, Context) ->
                     Data = binary_to_term(Binary),
                     acl_user_groups_export:import(Data, ContextAsync)
                  end),
-    z_render:dialog_close(z_render:growl(?__("Importing, the list of rules will refresh after importing.", Context), Context)).
+    z_render:dialog_close(z_render:growl(?__("Importing, the list of rules will refresh after importing.", Context), Context));
+
+event1(#submit{message=acl_collab_config}, Context) ->
+    CollabGroupLink = z_context:get_q(collab_group_link, Context),
+    CollabGroupEdit = z_context:get_q(collab_group_edit, Context),
+    m_config:set_value(mod_acl_user_groups, collab_group_link, CollabGroupLink, Context),
+    m_config:set_value(mod_acl_user_groups, collab_group_edit, CollabGroupEdit, Context),
+    z_render:growl(?__("Saved collaboration group settings", Context), Context).
 
 normalize_values(Row) ->
     {Actions, Rest} =

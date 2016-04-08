@@ -21,7 +21,7 @@
 -mod_title("ACL User Groups").
 -mod_description("Organize users into hierarchical groups").
 -mod_prio(400).
--mod_schema(6).
+-mod_schema(9).
 -mod_depends([menu, mod_content_groups]).
 -mod_provides([acl]).
 
@@ -343,6 +343,10 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("User groups", Context),
                 url={admin_menu_hierarchy, [{name, "acl_user_group"}]},
                 visiblecheck={acl, use, mod_acl_user_groups}},
+     #menu_item{id=admin_collaboration_groups,
+                parent=admin_auth,
+                label=?__("Collaboration groups", Context),
+                url={admin_overview_rsc, [{qcat, "acl_collaboration_group"}]}},
      #menu_item{id=admin_content_groups,
                 parent=admin_auth,
                 label=?__("Access control rules", Context),
@@ -534,20 +538,22 @@ drop_old_ets([]) ->
 %%====================================================================
 
 manage_schema(Version, Context) ->
-    m_acl_rule:manage_schema(Version, Context),
-    case m_rsc:is_a(acl_user_group_managers, acl_user_group, Context) of
+    % Perform the next outside the transaction
+    ContextDb = z_context:prune_for_spawn(Context),
+    m_acl_rule:manage_schema(Version, ContextDb),
+    case m_rsc:is_a(acl_user_group_managers, acl_user_group, ContextDb) of
         true ->
             % Basic groups are known, assume hierarchy is ok.
-            manage_datamodel(Context),
-            m_hierarchy:ensure(acl_user_group, Context),
+            manage_datamodel(z_context:prune_for_database(ContextDb)),
+            m_hierarchy:ensure(acl_user_group, ContextDb),
             ok;
         false ->
             % Initial install - create a simple user group hierarchy to start with
-            manage_datamodel(Context),
+            manage_datamodel(z_context:prune_for_database(ContextDb)),
 
             % TODO: remove the above ACL groups from the Tree
-            R = fun(N) -> m_rsc:rid(N, Context) end,
-            Tree = m_hierarchy:menu(acl_user_group, Context),
+            R = fun(N) -> m_rsc:rid(N, ContextDb) end,
+            Tree = m_hierarchy:menu(acl_user_group, ContextDb),
             NewTree = [ {R(acl_user_group_anonymous),
                          [ {R(acl_user_group_members),
                             [ {R(acl_user_group_editors),
@@ -557,7 +563,7 @@ manage_schema(Version, Context) ->
                               } ]
                            } ]
                         } | Tree ],
-            m_hierarchy:save(acl_user_group, NewTree, Context)
+            m_hierarchy:save(acl_user_group, NewTree, ContextDb)
     end,
     ok.
 
@@ -570,6 +576,10 @@ manage_datamodel(Context) ->
                     {acl_user_group, meta,
                         [
                             {title, {trans, [{en, "User Group"}, {nl, "Gebruikersgroep"}]}}
+                        ]},
+                    {acl_collaboration_group, meta,
+                        [
+                            {title, {trans, [{en, "Collaboration Group"}, {nl, "Samenwerkingsgroep"}]}}
                         ]}
                 ],
 
@@ -594,6 +604,14 @@ manage_datamodel(Context) ->
                     {hasusergroup, 
                         [{title, {trans, [{en, <<"In User Group">>},{nl, <<"In gebruikersgroep">>}]}}],
                         [{person, acl_user_group}]
+                    },
+                    {hascollabmember, 
+                        [{title, {trans, [{en, <<"Member">>},{nl, <<"Lid">>}]}}],
+                        [{acl_collaboration_group, person}]
+                    },
+                    {hascollabmanager, 
+                        [{title, {trans, [{en, <<"Manager">>},{nl, <<"Beheerder">>}]}}],
+                        [{acl_collaboration_group, person}]
                     }
                 ]
         },

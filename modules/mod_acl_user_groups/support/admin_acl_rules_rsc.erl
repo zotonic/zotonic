@@ -55,7 +55,7 @@ handle_cmd(<<"reload_cgsel">>, Data, Context) ->
     CGId1 = m_rsc:rid(proplists:get_value(<<"cg_id1">>, Data), Context),
     CGId2 = m_rsc:rid(proplists:get_value(<<"cg_id2">>, Data), Context),
     CGMenu = m_hierarchy:menu('content_group', Context),
-    CGAllowed = allowed_content_groups(CatId, CGMenu, Context),
+    CGAllowed = allowed_content_groups(CatId, [CGId1, CGId2], CGMenu, Context),
     CGId = case {lists:member(CGId1, CGAllowed),lists:member(CGId2, CGAllowed)} of
                 {true, _} -> CGId1;
                 {_, true} -> CGId2;
@@ -75,10 +75,13 @@ handle_cmd(<<"reload_cgsel">>, Data, Context) ->
                     },
                     Context).
 
-allowed_content_groups(CatId, CGMenu, Context) ->
-    CGIds = acl_user_groups_rules:tree_ids(CGMenu),
-    lists:filter(fun(CGId) ->
-                    acl_user_groups_checks:can_insert_category(CGId, CatId, Context)
+allowed_content_groups(CatId, ExtraIds, CGMenu, Context) ->
+    CGIds = acl_user_groups_rules:tree_ids(CGMenu)
+            ++ acl_user_groups_checks:has_collab_groups(Context)
+            ++ ExtraIds,
+    lists:filter(fun
+                    (undefined) -> false;
+                    (CGId) -> acl_user_groups_checks:can_insert_category(CGId, CatId, Context)
                  end,
                  CGIds).
 
