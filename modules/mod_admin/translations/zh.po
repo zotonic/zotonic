@@ -459,11 +459,11 @@ msgstr "题头"
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
 "its own line. For more information, see the <a href=\"http://zotonic.com/"
-"docs/latest/manuals/datamodel/search.html\">documentation on the query "
+"docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query "
 "arguments</a> on the Zotonic website."
 msgstr ""
 "这里可以编辑搜索查询词的参数。每个参数占一行。更多相关信息请参考 <a href="
-"\"http://zotonic.com/docs/latest/manuals/datamodel/search.html\">查询词参数文"
+"\"http://zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">查询词参数文"
 "档</a>。"
 
 #: modules/mod_admin/templates/admin_media.tpl:38

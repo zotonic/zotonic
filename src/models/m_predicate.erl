@@ -197,7 +197,7 @@ all(Context) ->
 
 
 %% @doc Insert a new predicate, sets some defaults.
-%% @spec insert(Title, Context) -> {ok, Id} | {error, Reason}
+-spec insert(binary()|list(), #context{}) -> {ok, integer()} | {error, any()}.
 insert(Title, Context) ->
     Name = z_string:to_name(Title),
     Uri  = "http://zotonic.net/predicate/" ++ Name,
@@ -224,17 +224,20 @@ flush(Context) ->
     z_depcache:flush(predicate, Context).
 
 
-%% @doc Update a predicate, save the reversed flag, reset the list of valid subjects and objects.
-%% @spec update_noflush(Id, Subjects, Objects, Context) -> void()
+%% @doc Reset the list of valid subjects and objects.
+-spec update_noflush(integer(), list(), list(), #context{}) -> ok.
 update_noflush(Id, Subjects, Objects, Context) ->
-    SubjectIds = [ z_convert:to_integer(N) || N <- Subjects, N /= [], N /= <<>> ],
-    ObjectIds = [ z_convert:to_integer(N) || N <- Objects, N /= [], N /= <<>> ],
-    F = fun(Ctx) ->
-        update_predicate_category(Id, true, SubjectIds, Ctx),
-        update_predicate_category(Id, false, ObjectIds, Ctx),
-        ok
-    end,
-    ok = z_db:transaction(F, Context).
+    SubjectIds0 = [ m_rsc:rid(N, Context) || N <- Subjects, N /= [], N /= <<>> ],
+    ObjectIds0 = [ m_rsc:rid(N, Context) || N <- Objects, N /= [], N /= <<>> ],
+    SubjectIds = [ N || N <- SubjectIds0, N =/= undefined ],
+    ObjectIds = [ N || N <- ObjectIds0, N =/= undefined ],
+    ok = z_db:transaction(
+        fun(Ctx) ->
+            update_predicate_category(Id, true, SubjectIds, Ctx),
+            update_predicate_category(Id, false, ObjectIds, Ctx),
+            ok
+        end,
+        Context).
 
 
 update_predicate_category(Id, IsSubject, CatIds, Context) ->

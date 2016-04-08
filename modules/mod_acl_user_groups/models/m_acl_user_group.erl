@@ -34,6 +34,8 @@
 
 -include_lib("zotonic.hrl").
 
+m_find_value(has_collaboration_groups, #m{value=undefined}, Context) ->
+    acl_user_groups_checks:has_collab_groups(Context);
 m_find_value(is_used, #m{value=undefined} = M, _Context) ->
     M#m{value=is_used};
 m_find_value(Cat, #m{value=is_used}, Context) ->

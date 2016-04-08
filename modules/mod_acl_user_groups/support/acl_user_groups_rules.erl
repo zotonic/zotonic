@@ -1,7 +1,7 @@
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2016 Marc Worrell
 %% @doc Expansion of all user groups and content groups, used to fill acl lookup tables.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 -export([
     expand/2,
     expand_rsc/2,
+    expand_collab/2,
     test/0
 ]).
 
@@ -59,6 +60,7 @@ expand(State, Context) ->
      tree_ids(UserTree),
      expand_group_path(UserTree),
      expand_module(State, UserTree, Context)
+        ++ expand_collab(State, Context)
         ++ expand_rsc(State, GroupTree, UserTree, Context)}.
 
 -spec expand_rsc(edit|publish, #context{}) -> list(rule()).
@@ -74,6 +76,14 @@ expand_module(State, UserTree, Context) ->
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(module, State, Context)),
     Rules = expand_rule_rows(module, Modules1, RuleRows, Context),
     [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree, Context) ].
+
+-spec expand_collab(edit|publish, #context{}) -> list(rsc_rule()).
+expand_collab(State,Context) ->
+    CategoryTree = m_category:menu(Context),
+    RuleRows = resort_deny_rules(m_acl_rule:all_rules(collab, State, Context)),
+    Cs = [{undefined, tree_ids(CategoryTree)} | tree_expand(CategoryTree) ],
+    Rules = expand_rule_rows(category_id, Cs, RuleRows, Context),
+    [ {collab, Action, collab} || {undefined, Action, undefined} <- Rules ].
 
 -spec expand_rsc(edit|publish, list(), list(), #context{}) -> list(rsc_rule()).
 expand_rsc(State, GroupTree, UserTree, Context) ->
@@ -143,6 +153,9 @@ expand_rules(TreeA, Rules, TreeB, Context) ->
                         case {lists:keyfind(A, 1, As), lists:keyfind(B, 1, Bs)} of
                             {{A, A1}, {B, B1}} ->
                                 expand_rule(A1, Pred, B1);
+                            {false, {B, B1}} ->
+                                % acl_collaboration_groups are not part of the group hierarchy
+                                expand_rule([A], Pred, B1);
                             Other ->
                                 lager:warning("[~p] Tree expand of {~p, ~p, ~p} returned ~p",
                                               [z_context:site(Context), A, Pred, B, Other]),
