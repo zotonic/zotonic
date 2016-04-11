@@ -259,6 +259,10 @@ acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) when is_integ
             {error, eacces}
     end.
 
+acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{acl=admin}) ->
+    true;
+acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{user_id=1}) ->
+    true;
 acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) ->
     can_insert_category(CGId, CatId, Context);
 acl_rsc_update_check_1(Id, CGId, CatId, Context) when is_integer(Id) ->
