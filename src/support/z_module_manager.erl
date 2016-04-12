@@ -33,6 +33,7 @@
          upgrade/1,
          deactivate/2,
          activate/2,
+         activate_wait/2,
          restart/2,
          module_reloaded/2,
          active/1,
@@ -84,38 +85,73 @@ start_link(SiteProps) ->
     gen_server:start_link({local, name(Context)}, ?MODULE, [{context, Context} | SiteProps], []).
 
 
-%% @spec upgrade(#context{}) -> ok
 %% @doc Reload the list of all modules, add processes if necessary.
+-spec upgrade(#context{}) -> ok.
 upgrade(Context) ->
+    upgrade(false, Context).
+
+-spec upgrade(boolean(), #context{}) -> ok.
+upgrade(false, Context) ->
     flush(Context),
-    gen_server:cast(name(Context), upgrade).
+    gen_server:cast(name(Context), upgrade);
+upgrade(true, Context) ->
+    flush(Context),
+    gen_server:call(name(Context), upgrade).
 
 
 %% @doc Deactivate a module. The module is marked as deactivated and stopped when it was running.
-%% @spec deactivate(Module, #context{}) -> ok
+-spec deactivate(atom(), #context{}) -> ok.
 deactivate(Module, Context) ->
     flush(Context),
     case z_db:q("update module set is_active = false, modified = now() where name = $1", [Module], Context) of
-        1 -> upgrade(Context);
+        1 -> upgrade(false, Context);
         0 -> ok
     end.
 
 
 %% @doc Activate a module. The module is marked as active and started as a child of the module z_supervisor.
 %% The module manager can be checked later to see if the module started or not.
-%% @spec activate(Module, #context{}) -> void()
-activate(Module, Context) ->
+-spec activate(atom(), #context{}) -> ok | {error, not_found}.
+activate(Module, Context) when is_atom(Module) ->
+    activate(Module, false, Context).
+
+-spec activate_wait(atom(), #context{}) -> ok | {error, not_active} | {error, not_found}.
+activate_wait(Module, Context) when is_atom(Module) ->
+    case activate(Module, true, Context) of
+        ok ->
+            case lists:member(Module, active(Context)) of
+                true -> ok;
+                false -> {error, not_active}
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+activate(Module, IsSync, Context) ->
     flush(Context),
-    Scanned = scan(Context),
-    {Module, _Dirname} = proplists:lookup(Module, Scanned),
-    F = fun(Ctx) ->
-                case z_db:q("update module set is_active = true, modified = now() where name = $1", [Module], Ctx) of
-                    0 -> z_db:q("insert into module (name, is_active) values ($1, true)", [Module], Ctx);
-                    1 -> 1
-                end
-        end,
-    1 = z_db:transaction(F, Context),
-    upgrade(Context).
+    case proplists:lookup(Module, scan(Context)) of
+        {Module, _Dirname} ->
+            F = fun(Ctx) ->
+                        case z_db:q("update module 
+                                     set is_active = true, 
+                                         modified = now()
+                                     where name = $1",
+                                    [Module], Ctx)
+                        of
+                            0 -> 
+                                z_db:q("insert into module (name, is_active) 
+                                        values ($1, true)",
+                                       [Module], Ctx);
+                            1 -> 1
+                        end
+                end,
+            1 = z_db:transaction(F, Context),
+            upgrade(IsSync, Context);
+        none ->
+            lager:error("[~p] Could not find module '~p'", 
+                        [z_context:site(Context), Module]),
+            {error, not_found}
+    end.
 
 
 %% @doc Restart a module, activates the module if it was not activated.
@@ -406,6 +442,11 @@ handle_call({whereis, Module}, _From, State) ->
               false -> {error, not_running}
           end,
     {reply, Ret, State};
+
+%% @doc Synchronous upgrade
+handle_call(upgrade, _From, State) ->
+    State1 = handle_upgrade(State),
+    {reply, ok, State1};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->

@@ -42,7 +42,11 @@
     first/2, 
     map/2, 
     foldl/3, 
-    foldr/3
+    foldr/3,
+    await/2,
+    await/3,
+    await_exact/2,
+    await_exact/3
 ]).
 
 %% internal
@@ -233,6 +237,64 @@ foldr(Msg, Acc0, Context) ->
             Observers).
 
 
+%% @doc Subscribe once to a notification, detach after receiving the notification.
+-spec await(tuple()|atom(), #context{}) -> 
+        {ok, tuple()|atom()} | 
+        {ok, {pid(), reference()}, tuple()|atom()} | 
+        {error, timeout}.
+await(Msg, Context) ->
+    await(Msg, 5000, Context).
+
+-spec await(tuple()|atom(), pos_integer(), #context{}) -> 
+        {ok, tuple()|atom()} | 
+        {ok, {pid(), reference()}, tuple()|atom()} | 
+        {error, timeout}.
+await(Msg, Timeout, Context) when is_atom(Msg) ->
+    observe(Msg, self(), Context),
+    await_1(Msg, Timeout, Context);
+await(Msg, Timeout, Context) when is_tuple(Msg) ->
+    observe(Msg, self(), Context),
+    await_1(element(1, Msg), Timeout, Context).
+
+await_1(Msg, Timeout, Context) ->
+    Result = await_receive(Msg, Timeout),
+    detach(Msg, self(), Context),
+    Result.
+
+await_receive(Msg, Timeout) when is_atom(Msg) ->
+    receive
+        Msg -> {ok, Msg};
+        M when is_tuple(M), element(1, M) =:= Msg -> {ok, M};
+        {'$gen_cast', Msg} -> {ok, Msg};
+        {'$gen_cast', M} when is_tuple(M), element(1, M) =:= Msg -> {ok, M};
+        {'$gen_call', From, Msg} -> {ok, From, Msg};
+        {'$gen_call', From, M} when is_tuple(M), element(1, M) =:= Msg -> {ok, From, M}
+    after Timeout ->
+        {error, timeout}
+    end.
+
+-spec await_exact(tuple()|atom(), #context{}) -> 
+        {ok, tuple()|atom()} | 
+        {ok, {pid(), reference()}, tuple()|atom()} | 
+        {error, timeout}.
+await_exact(Msg, Context) ->
+    await_exact(Msg, 5000, Context).
+
+-spec await_exact(tuple()|atom(), pos_integer(), #context{}) -> 
+        {ok, tuple()|atom()} | 
+        {ok, {pid(), reference()}, tuple()|atom()} | 
+        {error, timeout}.
+await_exact(Msg, Timeout, Context) ->
+    observe(Msg, self(), Context),
+    Result = receive
+        Msg -> {ok, Msg};
+        {'$gen_cast', Msg} -> {ok, Msg};
+        {'$gen_call', From, Msg} -> {ok, From, Msg}
+    after Timeout ->
+        {error, timeout}
+    end,
+    detach(Msg, self(), Context),
+    Result.
 
 %%====================================================================
 %% gen_server callbacks
