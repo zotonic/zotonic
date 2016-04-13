@@ -42,8 +42,17 @@ allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
     
 content_types_provided(ReqData, Context) ->
-    {[{"text/x-ubf", undefined}, 
-      {"text/plain", undefined}], ReqData, Context}.
+    % The user-agent won't handle the result of non-ajax form posts.
+    % Suppress text/x-ubf as that will give problems with Firefox (issue #1230)
+    case wrq:get_req_header_lc("content-type", ReqData) of
+        "multipart/form-data" ++ _ ->
+            {[{"text/plain", undefined}], ReqData, Context};
+        "application/x-www-form-urlencoded" ++ _ ->
+            {[{"text/plain", undefined}], ReqData, Context};
+        _ ->
+            {[{"text/x-ubf", undefined}, 
+              {"text/plain", undefined}], ReqData, Context}
+    end.
     
 process_post(ReqData, Context) ->
     case wrq:get_req_header_lc("content-type", ReqData) of
