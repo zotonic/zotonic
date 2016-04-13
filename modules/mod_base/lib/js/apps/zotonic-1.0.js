@@ -1436,6 +1436,7 @@ function z_sorter(sortBlock, sortOptions, sortPostbackInfo)
         var $source = $(ui.sender);
         $target.data('z_sort_tag', $source.data('z_drag_tag'));
     };
+    sortOptions.helper = 'clone';
     $(sortBlock).sortable(sortOptions);
 }
 
