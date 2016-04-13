@@ -33,7 +33,7 @@
          upgrade/1,
          deactivate/2,
          activate/2,
-         activate_wait/2,
+         activate_await/2,
          restart/2,
          module_reloaded/2,
          active/1,
@@ -115,8 +115,8 @@ deactivate(Module, Context) ->
 activate(Module, Context) when is_atom(Module) ->
     activate(Module, false, Context).
 
--spec activate_wait(atom(), #context{}) -> ok | {error, not_active} | {error, not_found}.
-activate_wait(Module, Context) when is_atom(Module) ->
+-spec activate_await(atom(), #context{}) -> ok | {error, not_active} | {error, not_found}.
+activate_await(Module, Context) when is_atom(Module) ->
     case activate(Module, true, Context) of
         ok ->
             case lists:member(Module, active(Context)) of
