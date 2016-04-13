@@ -1,7 +1,7 @@
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2016 Marc Worrell
 %% @doc Import/export of all ACL rules, including the group and user hierarchies
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@
 
 %% @doc Import an export
 import({acl_export, 1, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules}, Context) ->
+    import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, [], []}, Context);
+import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules, Configs}, Context) ->
     lager:notice("[~p] ACL import by ~p: starting",
                  [z_context:site(Context), z_acl:user(Context)]),
     import_all(content_group, CGs, [], Context),
@@ -38,6 +40,12 @@ import({acl_export, 1, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules}, Context) -
     m_hierarchy:ensure(acl_user_group, Context),
     m_acl_rule:import_rules(rsc, edit, RscRules, Context),
     m_acl_rule:import_rules(module, edit, ModRules, Context),
+    m_acl_rule:import_rules(collab, edit, CollabRules, Context),
+    lists:foreach(
+        fun(K,V) ->
+            m_config:set_value(mod_acl_user_groups, K, V, Context)
+        end,
+        Configs),
     lager:notice("[~p] ACL import by ~p: done",
                  [z_context:site(Context), z_acl:user(Context)]),
     ok.
@@ -52,14 +60,22 @@ export(Context) ->
                  [z_context:site(Context), z_acl:user(Context)]),
     ensure_name(content_group, Context),
     ensure_name(acl_user_group, Context),
-    {acl_export, 1,
+    {acl_export, 2,
         fetch_all(content_group, Context),
         fetch_all(acl_user_group, Context),
         menu_to_names(m_hierarchy:menu(content_group, Context), Context),
         menu_to_names(m_hierarchy:menu(acl_user_group, Context), Context),
         m_acl_rule:ids_to_names(m_acl_rule:all_rules(rsc, edit, Context), Context),
-        m_acl_rule:ids_to_names(m_acl_rule:all_rules(module, edit, Context), Context)}.
+        m_acl_rule:ids_to_names(m_acl_rule:all_rules(module, edit, Context), Context),
+        m_acl_rule:ids_to_names(m_acl_rule:all_rules(collab, edit, Context), Context),
+        [ {K, m_config:get_value(mod_acl_user_groups, K, Context)} || K <- configs() ]
+    }.
 
+configs() ->
+    [
+        collab_group_edit,
+        collab_group_link
+    ].
 
 % @doc Fetch all resources within the given category
 fetch_all(Category, Context) ->

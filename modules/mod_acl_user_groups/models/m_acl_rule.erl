@@ -49,7 +49,7 @@
 
 -include_lib("zotonic.hrl").
 
--define(valid_acl_kind(T), ((T) =:= rsc orelse (T) =:= module)).
+-define(valid_acl_kind(T), ((T) =:= rsc orelse (T) =:= module orelse (T) =:= collab)).
 -define(valid_acl_state(T), ((T) =:= edit orelse (T) =:= publish)).
 
 
@@ -73,6 +73,8 @@ m_find_value(ContentGroupId, #m{value=can_insert} = M, _Context) ->
     M#m{value={can_insert, ContentGroupId}};
 m_find_value(CategoryId, #m{value={can_insert, none}}, Context) ->
     acl_user_groups_checks:can_insert_category(CategoryId, Context);
+m_find_value(CategoryId, #m{value={can_insert, acl_collaboration_group}}, Context) ->
+    acl_user_groups_checks:can_insert_category_collab(CategoryId, Context);
 m_find_value(CategoryId, #m{value={can_insert, ContentGroupId}}, Context) ->
     acl_user_groups_checks:can_insert_category(ContentGroupId, CategoryId, Context);
 
@@ -122,17 +124,18 @@ is_valid_code(Code, Context) ->
 
 
 -type acl_rule() :: list().
--spec all_rules(rsc | module, edit | publish, #context{}) -> [acl_rule()].
+-spec all_rules(rsc | module | collab, edit | publish, #context{}) -> [acl_rule()].
 all_rules(Kind, State, Context) ->
     all_rules(Kind, State, [], Context).
 
 -type acl_rules_opt() :: {group, string()}.
--spec all_rules(rsc | module, edit | publish, [acl_rules_opt()], #context{}) -> [acl_rule()].
+-spec all_rules(rsc | module | collab, edit | publish, [acl_rules_opt()], #context{}) -> [acl_rule()].
 all_rules(Kind, State, Opts, Context) ->
     Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind)) 
         ++ " WHERE " ++ state_sql_clause(State),
     All = z_db:assoc(Query, Context),
     sort_by_user_group(normalize_actions(All), z_convert:to_integer(proplists:get_value(group, Opts)), Context).
+
 
 sort_by_user_group(Rs, undefined, Context) ->
     Tree = m_hierarchy:menu(acl_user_group, Context),
@@ -144,6 +147,7 @@ sort_by_user_group(Rs, undefined, Context) ->
                                IsBlock = proplists:get_value(is_block, R),
                                {{Nr,
                                  not IsBlock,
+                                 cat_key(proplists:get_value(category_id, R), Context),
                                  proplists:get_value(created,R),
                                  proplists:get_value(id, R)}, R}
                        end,
@@ -166,6 +170,11 @@ sort_by_user_group(Rs, Group, Context) ->
     Rs1 = lists:sort(WithNr),
     [ R1 || {_,R1} <- Rs1 ].
 
+cat_key(undefined, _Context) ->
+    -1;
+cat_key(CatId, Context) ->
+    {From, _To} = m_category:get_range(CatId, Context),
+    From.
 
 flatten_tree([], Acc) ->
     Acc;
@@ -174,7 +183,8 @@ flatten_tree([{Id,Sub}|Rest], Acc) ->
     flatten_tree(Rest, Acc1).
 
 table(rsc) -> acl_rule_rsc;
-table(module) -> acl_rule_module.
+table(module) -> acl_rule_module;
+table(collab) -> acl_rule_collab.
 
 state_sql_clause(edit) -> "is_edit = true";
 state_sql_clause(publish) -> "is_edit = false".
@@ -187,7 +197,7 @@ normalize_action(Row) ->
     [{actions, [{z_convert:to_atom(T), true} || T <- string:tokens(z_convert:to_list(Actions), ",")]}
      | proplists:delete(actions, Row)].
 
-actions(rsc, Context) ->
+actions(Kind, Context) when Kind =:= rsc; Kind =:= collab ->
     [
      {view, ?__("view (acl action)", Context)},
      {insert, ?__("insert (acl action)", Context)},
@@ -311,7 +321,8 @@ publish(Kind, Context) ->
 
 manage_schema(_Version, Context) ->
     ensure_acl_rule_rsc(Context),
-    ensure_acl_rule_module(Context).
+    ensure_acl_rule_module(Context),
+    ensure_acl_rule_collab(Context).
 
 ensure_acl_rule_rsc(Context) ->
     case z_db:table_exists(acl_rule_rsc, Context) of
@@ -319,21 +330,23 @@ ensure_acl_rule_rsc(Context) ->
             z_db:create_table(acl_rule_rsc,
                               shared_table_columns() ++
                                   [
+                                   #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
                                    #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
                                    #column_def{name=category_id, type="integer", is_nullable=true},
                                    #column_def{name=content_group_id, type="integer", is_nullable=true}
                                   ],
                               Context),
-            fk("acl_rule_rsc", "creator_id", Context),
-            fk("acl_rule_rsc", "modifier_id", Context),
-            fk("acl_rule_rsc", "acl_user_group_id", Context),
-            fk("acl_rule_rsc", "content_group_id", Context),
-            fk("acl_rule_rsc", "category_id", Context),
+            fk_setnull("acl_rule_rsc", "creator_id", Context),
+            fk_setnull("acl_rule_rsc", "modifier_id", Context),
+            fk_cascade("acl_rule_rsc", "acl_user_group_id", Context),
+            fk_cascade("acl_rule_rsc", "content_group_id", Context),
+            fk_cascade("acl_rule_rsc", "category_id", Context),
             ok;
 
         true ->
             ensure_column_is_block(acl_rule_rsc, Context),
             ensure_column_managed_by(acl_rule_rsc, Context),
+            ensure_fix_nullable(acl_rule_rsc, Context),
             ok
     end.
 
@@ -343,12 +356,36 @@ ensure_acl_rule_module(Context) ->
             z_db:create_table(acl_rule_module,
                               shared_table_columns() ++
                                   [
+                                   #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
                                    #column_def{name=module, type="character varying", length=300, is_nullable=false}
                                   ],
                               Context),
-            fk("acl_rule_module", "creator_id", Context),
-            fk("acl_rule_module", "modifier_id", Context),
-            fk("acl_rule_module", "acl_user_group_id", Context),
+            fk_setnull("acl_rule_module", "creator_id", Context),
+            fk_setnull("acl_rule_module", "modifier_id", Context),
+            fk_cascade("acl_rule_module", "acl_user_group_id", Context),
+            ok;
+        true ->
+            ensure_column_is_block(acl_rule_module, Context),
+            ensure_column_managed_by(acl_rule_module, Context),
+            ensure_fix_nullable(acl_rule_module, Context),
+            ok
+    end,
+    ok.
+
+ensure_acl_rule_collab(Context) ->
+    case z_db:table_exists(acl_rule_collab, Context) of
+        false ->
+            z_db:create_table(acl_rule_collab,
+                              shared_table_columns() ++
+                                  [
+                                   #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
+                                   #column_def{name=category_id, type="integer", is_nullable=true}
+                                  ],
+                              Context),
+            fk_setnull("acl_rule_collab", "creator_id", Context),
+            fk_setnull("acl_rule_collab", "modifier_id", Context),
+            fk_cascade("acl_rule_collab", "acl_user_group_id", Context),
+            fk_cascade("acl_rule_collab", "category_id", Context),
             ok;
         true ->
             ensure_column_is_block(acl_rule_module, Context),
@@ -377,22 +414,58 @@ ensure_column_managed_by(Table, Context) ->
             z_db:flush(Context)
     end.
 
+% Ensure that the creator_id/modifier_id are nullable and that the fk constraint doesn't cascade on delete
+ensure_fix_nullable(Table, Context) ->
+    Columns = z_db:columns(Table, Context),
+    [CreatorCol] = [ Col || Col <- Columns, Col#column_def.name =:= creator_id ],
+    case CreatorCol#column_def.is_nullable of
+        true ->
+            ok;
+        false ->
+            TableS = z_convert:to_list(Table),
+            [] = z_db:q(
+                "alter table " ++ TableS ++
+                " drop constraint fk_" ++ TableS ++ "_creator_id_id,"++
+                " drop constraint fk_" ++ TableS ++ "_modifier_id_id,"++
+                " alter column creator_id drop not null,"++
+                " alter column modifier_id drop not null",
+                Context),
+            fk_setnull(Table, creator_id, Context),
+            fk_setnull(Table, modifier_id, Context)
+    end.
+
 shared_table_columns() ->
     [
      #column_def{name=id, type="serial", is_nullable=false},
      #column_def{name=is_edit, type="boolean", is_nullable=false, default="false"},
-     #column_def{name=creator_id, type="integer", is_nullable=false},
-     #column_def{name=modifier_id, type="integer", is_nullable=false},
-     #column_def{name=created, type="timestamp", is_nullable=true},
-     #column_def{name=modified, type="timestamp", is_nullable=true},
+     #column_def{name=creator_id, type="integer", is_nullable=true},
+     #column_def{name=modifier_id, type="integer", is_nullable=true},
+     #column_def{name=created, type="timestamp with time zone", is_nullable=true},
+     #column_def{name=modified, type="timestamp with time zone", is_nullable=true},
      #column_def{name=managed_by, type="character varying", length=255, is_nullable=true},
-     #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
      #column_def{name=is_block, type="boolean", is_nullable=false, default="false"},
      #column_def{name=actions, type="character varying", length=300, is_nullable=true}
     ].    
 
-fk(Table, Field, Context) ->
-    z_db:equery("alter table " ++ Table ++ " add constraint fk_" ++ Table ++ "_" ++ Field ++ "_id foreign key (" ++ Field ++ ") references rsc(id) on update cascade on delete cascade", Context).
+fk_cascade(Table0, Field0, Context) ->
+    Table = z_convert:to_list(Table0),
+    Field = z_convert:to_list(Field0),
+    z_db:equery(
+        "alter table " ++ Table ++ 
+        " add constraint fk_" ++ Table ++ "_" ++ Field ++ "_id" ++
+        " foreign key (" ++ Field ++ ") references rsc(id) " ++
+        " on update cascade " ++
+        " on delete cascade", Context).
+
+fk_setnull(Table0, Field0, Context) ->
+    Table = z_convert:to_list(Table0),
+    Field = z_convert:to_list(Field0),
+    z_db:equery(
+        "alter table " ++ Table ++ 
+        " add constraint fk_" ++ Table ++ "_" ++ Field ++ "_id" ++
+        " foreign key (" ++ Field ++ ") references rsc(id) " ++
+        " on update cascade " ++
+        " on delete set null", Context).
 
 
 %% @doc Replace all rules of a certain kind/state

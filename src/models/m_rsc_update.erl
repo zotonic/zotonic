@@ -761,7 +761,9 @@ props_filter([{content_group_id, undefined}|T], Acc, Context) ->
     props_filter(T, [{content_group_id, undefined}|Acc], Context);
 props_filter([{content_group_id, CgId}|T], Acc, Context) ->
     CgId1 = m_rsc:rid(CgId, Context),
-    case m_rsc:is_a(CgId1, content_group, Context) of
+    case m_rsc:is_a(CgId1, content_group, Context) 
+        orelse m_rsc:is_a(CgId1, acl_collaboration_group, Context)
+    of
         true ->
             props_filter(T, [{content_group_id, CgId1}|Acc], Context);
         false ->

@@ -1,7 +1,7 @@
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2016 Marc Worrell
 %% @doc Routines for ACL notifications.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@
         user_groups/1,
         user_groups_all/1,
 
+        has_collab_groups/1,
+
         acl_is_allowed/2,
         acl_logon/2,
         acl_logoff/2,
@@ -40,6 +42,7 @@
 -export([
         can_insert_category/2,
         can_insert_category/3,
+        can_insert_category_collab/2,
         can_rsc_insert/3,
         can_move/3,
         default_content_group/2
@@ -51,6 +54,7 @@
 
 -record(aclug, {
         user_groups = [],
+        collab_groups = [],
         state = publish :: publish | edit
     }).
 
@@ -110,8 +114,46 @@ can_insert_category(_, _, #context{user_id=1}) ->
 can_insert_category(CGId, CatId, Context) ->
     CGId1 = m_rsc:rid(CGId, Context),
     CatId1 = m_rsc:rid(CatId, Context),
+    case lists:member(CGId1, has_collab_groups(Context)) of
+        true ->
+            case mod_acl_user_groups:await_lookup({collab, {CatId1, insert, false}, collab}, Context) of
+                true -> true;
+                false -> false;
+                undefined -> false
+            end
+            orelse can_insert_category_rsc_ug(CGId1, CatId1, true, Context);
+        false ->
+            can_insert_category_rsc_ug(CGId1, CatId1, false, Context)
+    end.
+
+% Check for insert permission on the content-group, or on collab groups iff the content group is a
+% collaboration group.
+can_insert_category_rsc_ug(CGId1, CatId1, IsCollabGroup, Context) ->
     UGs = user_groups(Context),
-    can_rsc_ug(CGId1, CatId1, insert, false, UGs, Context).
+    can_rsc_ug(CGId1, CatId1, insert, false, UGs, Context)
+    orelse (
+        (IsCollabGroup orelse m_rsc:is_a(CGId1, acl_collaboration_group, Context))
+        andalso can_rsc_ug(m_rsc:rid(acl_collaboration_group, Context), CatId1, insert, false, UGs, Context)
+    ).
+
+%% @doc API to check if a category can be inserted into (any) collaboration-group
+can_insert_category_collab(_, #context{acl=admin}) ->
+    true;
+can_insert_category_collab(_, #context{user_id=1}) ->
+    true;
+can_insert_category_collab(Cat, Context) ->
+    CatId = m_rsc:rid(Cat, Context),
+    case has_collab_groups(Context) of
+        [] ->
+            false;
+        _Groups ->
+            case mod_acl_user_groups:await_lookup({collab, {CatId, insert, false}, collab}, Context) of
+                true -> true;
+                false -> false;
+                undefined -> false
+            end
+    end.
+
 
 can_rsc_insert(_, _, #context{acl=admin}) ->
     true;
@@ -159,12 +201,22 @@ acl_is_allowed(#acl_is_allowed{}, _Context) ->
 
 
 acl_logon(#acl_logon{id=UserId}, Context) ->
-    UserGroups = has_user_groups(UserId, Context),
-    Context#context{acl=#aclug{user_groups=UserGroups, state=session_state(Context)}, user_id=UserId}.
+    Context#context{
+            acl=#aclug{
+                user_groups = has_user_groups(UserId, Context),
+                collab_groups = has_collab_groups(UserId, Context),
+                state = session_state(Context)
+            },
+            user_id=UserId}.
 
 acl_logoff(#acl_logoff{}, Context) ->
-    UserGroups = has_user_groups(undefined, Context),
-    Context#context{acl=#aclug{user_groups=UserGroups, state=session_state(Context)}, user_id=undefined}.
+     Context#context{
+            acl=#aclug{
+                user_groups = has_user_groups(undefined, Context),
+                collab_groups = [],
+                state = session_state(Context)
+            },
+            user_id=undefined}.
 
 %% @doc Set an anonymous context to the context of a 'typical' member.
 acl_context_authenticated(#context{user_id=undefined} = Context) ->
@@ -295,7 +347,7 @@ restrict_content_groups(#context{acl=admin}) ->
 restrict_content_groups(Context) ->
     UGs = user_groups(Context),
     CGs = lists:flatten([ mod_acl_user_groups:await_lookup({view,UId}, Context) || UId <- UGs ]),
-    lists:usort(CGs).
+    lists:usort(CGs) ++ has_collab_groups(Context).
 
 
 session_state(Context) ->
@@ -328,9 +380,45 @@ has_user_groups(UserId, Context) ->
             Us
     end.
 
+% Fetch all collaboration groups the current is member of.
+-spec has_collab_groups(#context{}) -> list(integer()).
+has_collab_groups(#context{acl=#aclug{collab_groups=Ids}}) ->
+    Ids;
+has_collab_groups(_Context) ->
+    [].
+
+% Fetch all collaboration groups the user is member of.
+-spec has_collab_groups(integer()|undefined, #context{}) -> list(integer()).
+has_collab_groups(undefined, _Context) ->
+    [];
+has_collab_groups(UserId, Context) ->
+    m_edge:subjects(UserId, hascollabmember, Context)
+    ++ m_edge:subjects(UserId, hascollabmanager, Context).
+
+%% @doc Check if the user is manager of a collaboration group.
+is_collab_group_manager(_GroupId, #context{acl=#aclug{collab_groups=[]}}) ->
+    false;
+is_collab_group_manager(GroupId, #context{user_id=UserId, acl=#aclug{collab_groups=CollabGroups}} = Context) ->
+    lists:member(GroupId, CollabGroups)
+    andalso lists:member(GroupId, m_edge:subjects(UserId, hascollabmanager, Context)).
 
 %% @doc Check if the user can insert the category in some content group
+can_insert(_Cat, #context{acl=admin}) ->
+    true;
+can_insert(_Cat, #context{user_id=1}) ->
+    true;
+can_insert(Cat, #context{acl=#aclug{collab_groups=[]}} = Context) ->
+    can_insert_with_ug(Cat, Context);
 can_insert(Cat, Context) ->
+    CatId = m_rsc:rid(Cat, Context),
+    case mod_acl_user_groups:await_lookup({CatId, insert, collab}, Context) of
+        true -> true;
+        false -> false;
+        undefined -> false
+    end
+    orelse can_insert_with_ug(CatId, Context).
+
+can_insert_with_ug(Cat, Context) ->
     CatId = m_rsc:rid(Cat, Context),
     lists:any(fun(GId) ->
                  case mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context) of
@@ -352,7 +440,69 @@ can_rsc(Id, Action, Context) when is_integer(Id); Id =:= insert_rsc ->
 can_rsc(Id, Action, Context) ->
     can_rsc(m_rsc:rid(Id, Context), Action, Context).
 
+can_rsc_1(Id, Action, CGId, CatId, UGs, #context{acl=#aclug{collab_groups=CollabGroups}} = Context) ->
+    case lists:member(CGId, CollabGroups) of
+        true ->
+            Action =:= view
+            orelse (
+                case mod_acl_user_groups:await_lookup({collab, {CatId, Action, false}, collab}, Context) of
+                    true -> true;
+                    false -> false;
+                    undefined -> false
+                end
+            )
+            orelse (
+                case mod_acl_user_groups:await_lookup({collab, {CatId, Action, true}, collab}, Context) of
+                    true -> true;
+                    false -> false;
+                    undefined -> false
+                end
+                andalso is_owner(Id, m_rsc:p_no_acl(Id, creator_id, Context), Context)
+            )
+            orelse (
+                is_integer(Id)
+                andalso Id =:= CGId
+                andalso is_collab_group_member_action_allowed(Id, Action, Context)
+            )
+            orelse can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context)
+            orelse can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context);
+        false ->
+            can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context)
+            orelse can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context)
+    end;
 can_rsc_1(Id, Action, CGId, CatId, UGs, Context) ->
+    can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context)
+    orelse can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context).
+
+
+is_collab_group_member_action_allowed(CGId, edit, Context) ->
+    case m_config:get_value(mod_acl_user_groups, collab_group_edit, Context) of
+        <<"member">> -> true;
+        <<"manager">> -> is_collab_group_manager(CGId, Context);
+        _ -> false
+    end;
+is_collab_group_member_action_allowed(CGId, link, Context) ->
+    case m_config:get_value(mod_acl_user_groups, collab_group_link, Context) of
+        <<"member">> -> true;
+        <<"manager">> -> is_collab_group_manager(CGId, Context);
+        _ -> false
+    end;
+is_collab_group_member_action_allowed(_CGId, _Action, _Context) ->
+    false.
+
+
+% If the content-group is a collab group then check if the user has permission to perform
+% the action on all collaboration groups.
+can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context) ->
+    case m_rsc:is_a(CGId, acl_collaboration_group, Context) of
+        true ->
+            CollabId = m_rsc:rid(acl_collaboration_group, Context),
+            can_rsc_non_collab_rules(Id, Action, CollabId, CatId, UGs, Context);
+        false ->
+            false
+    end.
+
+can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context) ->
     case can_rsc_ug(CGId, CatId, Action, false, UGs, Context) of
         true -> 
             true;
@@ -384,6 +534,14 @@ can_edge(#acl_edge{predicate=hasusergroup, subject_id=MemberId, object_id=UserGr
     andalso can_rsc(UserGroupId, link, Context)
     andalso can_rsc(MemberId, view, Context)
     andalso can_module(use, mod_acl_user_groups, Context);
+can_edge(#acl_edge{predicate=hascollabmanager, subject_id=CollabGroupId, object_id=UserId}, Context) ->
+    m_rsc:is_a(CollabGroupId, acl_collaboration_group, Context)
+    andalso can_rsc(CollabGroupId, edit, Context)
+    andalso can_rsc(UserId, view, Context);
+can_edge(#acl_edge{predicate=hascollabmember, subject_id=CollabGroupId, object_id=UserId}, Context) ->
+    m_rsc:is_a(CollabGroupId, acl_collaboration_group, Context)
+    andalso can_rsc(CollabGroupId, edit, Context)
+    andalso can_rsc(UserId, view, Context);
 can_edge(#acl_edge{predicate=P, subject_id=SubjectId, object_id=ObjectId}, Context) when is_atom(P) ->
     can_rsc(SubjectId, link, Context)
     andalso can_rsc(ObjectId, view, Context).
