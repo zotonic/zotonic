@@ -113,14 +113,6 @@ The following options can be configured:
 ``{smtphost, "..."}``
   Hostname you want e-mail messages to appear from. See :ref:`guide-email`.
 
-``{streamhost, "..."}``
-  The hostname that will be used for streaming comet/websocket
-  requests. This hostname will be used in the browser for the stream
-  connections instead of the main hostname, to circumvent browser
-  limitations on the number of open sockets per host. For example::
-
-    {streamhost, "stream.example.com"}
-
 ``{websockethost, "..."}``
   The hostname that will be used for websocket requests. This hostname
   will be used in the browser for setting up the websocket connection.
