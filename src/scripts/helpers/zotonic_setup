@@ -151,7 +151,7 @@ export KERNEL_POLL=${KERNEL_POLL:=true}
 export USER_EBIN_DIR=$(get_user_ebin_dir)
 
 # The include path for the erlang vm, add when needed for your application.
-export PA=${PA:="$ZOTONIC/ebin $USER_EBIN_DIR $ZOTONIC/deps/*/ebin $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
+export PA=${PA:="$ZOTONIC/_build/default/lib/*/ebin $ZOTONIC/ebin $USER_EBIN_DIR $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
 
 # The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
 export NODENAME=${NODENAME:=${SNAME:=zotonic001}}

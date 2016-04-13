@@ -131,10 +131,6 @@ compile_dirs() ->
 
 compile_zotonic_dirs() ->
     [
-     "*.erl",
-     "src/*.erl",
-     "src/*/*.erl",
-     "src/tests/erlydtl/*.erl",
      "modules/*/*.erl",
      "modules/*/*/*.erl",
      "modules/*/deps/*/src/*.erl",

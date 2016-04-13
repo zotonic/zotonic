@@ -21,9 +21,9 @@
 . $ZOTONIC_SCRIPTS/helpers/zotonic_setup
 
 # Make sure Zotonic is built
-if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
-       echo "Zotonic has not been compiled and cannot run. Exiting."
-       exit 1
+if [ ! -e "$ZOTONIC/_build/default/lib/zotonic/ebin/zotonic.app" ]; then
+    echo "Zotonic has not been compiled and cannot run. Exiting."
+    exit 1
 fi
 
 require_zotonic_not_running
