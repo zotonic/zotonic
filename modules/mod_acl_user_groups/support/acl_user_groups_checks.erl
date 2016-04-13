@@ -43,6 +43,7 @@
         can_insert_category/2,
         can_insert_category/3,
         can_insert_category_collab/2,
+        can_update_category/3,
         can_rsc_insert/3,
         can_move/3,
         default_content_group/2
@@ -97,6 +98,17 @@ user_groups_expand(Ids, Context) ->
     Ids2 = [ mod_acl_user_groups:lookup(Id, Context) || Id <- Ids ],
     Ids3 = [ Xs || Xs <- Ids2, Xs =/= undefined ],
     lists:usort(lists:flatten(Ids3)).
+
+%% @doc API to check if a category can be updated in a content-group
+can_update_category(_, _, #context{acl=admin}) ->
+    true;
+can_update_category(_, _, #context{user_id=1}) ->
+    true;
+can_update_category(CGId, CatId, Context) ->
+    CGId1 = m_rsc:rid(CGId, Context),
+    CatId1 = m_rsc:rid(CatId, Context),
+    UGs = user_groups(Context),
+    can_rsc_ug(CGId1, CatId1, update, false, UGs, Context).
 
 %% @doc API to check if a category can be inserted into any content-group
 can_insert_category(_, #context{acl=admin}) ->
@@ -229,12 +241,14 @@ acl_context_authenticated(#context{} = Context) ->
     Context.
 
 %% @doc Restrict the content group being updated, possible set default content group.
+%%      If the content-group or category is changed then we need insert permission.
+%%      If it is not changed (for existing rsc) then we need update permission.
 acl_rsc_update_check(#acl_rsc_update_check{}, {error, Reason}, _Context) ->
     {error, Reason};
-acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) ->
+acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) when is_integer(Id); Id =:= insert_rsc ->
     CatId = fetch_category_id(Id, Props, Context),
     CGId = fetch_content_group_id(Id, CatId, Props, Context),
-    case can_insert_category(CGId, CatId, Context) of
+    case acl_rsc_update_check_1(Id, CGId, CatId, Context) of
         true ->
             Props1 = proplists:delete(category_id, Props),
             Props2 = proplists:delete(content_group_id, Props1),
@@ -243,6 +257,23 @@ acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) ->
             lager:debug("[acl_user_group] denied user ~p insert/update on ~p of category ~p in content-group ~p",
                         [z_acl:user(Context), Id, CatId, CGId]),
             {error, eacces}
+    end.
+
+acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{acl=admin}) ->
+    true;
+acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{user_id=1}) ->
+    true;
+acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) ->
+    can_insert_category(CGId, CatId, Context);
+acl_rsc_update_check_1(Id, CGId, CatId, Context) when is_integer(Id) ->
+    OldCGId = m_rsc:p_no_acl(Id, content_group_id, Context),
+    OldCatId = m_rsc:p_no_acl(Id, category_id, Context),
+    case {OldCGId, OldCatId} of
+        {CGId, CatId} ->
+            UGs = user_groups(Context),
+            can_rsc_1(Id, update, CGId, CatId, UGs, Context);
+        _Changed ->
+            can_insert_category(CGId, CatId, Context)
     end.
 
 
