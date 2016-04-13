@@ -474,14 +474,11 @@ can_rsc(Id, Action, Context) ->
 can_rsc_1(Id, Action, CGId, CatId, UGs, #context{acl=#aclug{collab_groups=CollabGroups}} = Context) ->
     case lists:member(CGId, CollabGroups) of
         true ->
-            Action =:= view
-            orelse (
-                case mod_acl_user_groups:await_lookup({collab, {CatId, Action, false}, collab}, Context) of
-                    true -> true;
-                    false -> false;
-                    undefined -> false
-                end
-            )
+            case mod_acl_user_groups:await_lookup({collab, {CatId, Action, false}, collab}, Context) of
+                true -> true;
+                false -> false;
+                undefined -> false
+            end
             orelse (
                 case mod_acl_user_groups:await_lookup({collab, {CatId, Action, true}, collab}, Context) of
                     true -> true;
