@@ -451,14 +451,14 @@ msgstr "Kop"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
-"Here you can edit the arguments of the search query. Every argument goes on its "
-"own line. For more information, see the <a href=\"http://zotonic.com/docs/"
-"latest/manuals/datamodel/search.html\">documentation on the query arguments</a> "
-"on the Zotonic website."
+"Here you can edit the arguments of the search query. Every argument goes on "
+"its own line. For more information, see the <a href=\"http://zotonic.com/"
+"docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query "
+"arguments</a> on the Zotonic website."
 msgstr ""
 "Hier kan je de argumenten van de zoekopdracht invoeren. Elk argument moet op "
-"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://zotonic."
-"com/docs/latest/manuals/datamodel/search.html\">documentatie over "
+"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://"
+"zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentatie over "
 "zoekopdrachten</a> op de Zotonic website."
 
 #: modules/mod_admin/templates/admin_media.tpl:38
