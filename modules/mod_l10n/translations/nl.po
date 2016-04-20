@@ -80,7 +80,7 @@ msgstr "juni"
 
 #: modules/mod_l10n/support/l10n_date.erl:52
 msgid "Mar"
-msgstr "maa"
+msgstr "mrt"
 
 #: modules/mod_l10n/support/l10n_date.erl:37
 msgid "March"
