@@ -53,11 +53,11 @@ header(undefined, #state{props=undefined} = State, Context) ->
     Data = flatten_row(Ps, false, Context),
     {ok, Data, State#state{props=Ps}};
 header(undefined, #state{props=Ps} = State, Context) ->
-    Hs = [ export_encoder:lookup_header([P], Context) || P <- Ps ],
+    Hs = [ export_encoder:lookup_header(P, Context) || P <- Ps ],
     Data = flatten_row(Hs, false, Context),
     {ok, Data, State#state{props=Ps}};
 header(Row, State, Context) when is_list(Row) ->
-    Hs = [ export_encoder:lookup_header([P], Context) || P <- Row ],
+    Hs = [ export_encoder:lookup_header(P, Context) || P <- Row ],
     Data = flatten_row(Hs, false, Context),
     State1 = case State#state.props of
                 undefined -> State#state{props=Row};

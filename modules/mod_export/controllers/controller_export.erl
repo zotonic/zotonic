@@ -76,10 +76,15 @@ do_export(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
     ContentType = wrq:resp_content_type(ReqData),
     Dispatch = z_context:get(zotonic_dispatch, Context),
-    Stream = export_encoder:stream(undefined, ContentType, Dispatch, Context),
+    StreamOpts = [
+        {dispatch, Dispatch},
+        {is_query, z_convert:to_bool(z_context:get(is_query, Context))},
+        {is_raw, z_convert:to_bool(z_context:get_q(raw, Context))}
+    ],
+    Stream = export_encoder:stream(undefined, ContentType, StreamOpts, Context),
     Context1 = set_filename(ContentType, Dispatch, Context),
     ?WM_REPLY(Stream, Context1).
 
 set_filename(ContentType, Dispatch, Context) ->
-    controller_export_reosurce:set_filename(undefined, ContentType, Dispatch, Context).
+    controller_export_resource:set_filename(undefined, ContentType, Dispatch, Context).
 
