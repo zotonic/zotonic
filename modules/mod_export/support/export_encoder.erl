@@ -207,8 +207,10 @@ do_footer(#stream_state{encoder=E, encoder_state=ES} = StreamState, Context) ->
 
 
 %% @doc Used to lookup the header name, a header might be a tuple with lookup key and a textual representation.
-lookup_header({_Key, Header}, _Context) ->
-    Header;
+lookup_header({trans, _} = Tr, Context) ->
+    z_trans:lookup_fallback(Tr, Context);
+lookup_header({_Key, Header}, Context) ->
+    lookup_header(Header, Context);
 lookup_header(Key, _Context) ->
     z_convert:to_binary(Key).
 
