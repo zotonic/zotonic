@@ -18,11 +18,11 @@
         {% button class="btn btn-default" text=_"Cancel" action={redirect back} title=_"Go back." tag="a" %}
     </div>        
     {% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
-    {% if id.page_url %}
+    {% if id.page_url as page_url %}
         {% if is_editable %}
             {% button type="submit" id="save_view" class="btn btn-default" text=_"Save and View" title=_"Save and view the page." %}
         {% else %}
-            {% button id="save_view" class="btn btn-primary" text=_"View" title=_"View this page." action={redirect id=id} %}
+            <a href="{{ page_url }}" class="btn btn-primary">{_ View _}</a>
         {% endif %}
     {% endif %}
 
