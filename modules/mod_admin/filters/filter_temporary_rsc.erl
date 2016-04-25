@@ -95,22 +95,29 @@ make_rsc({ok, RscId}, _SessionId, _CatId, _Props, _Context) ->
 make_rsc({error, session}, _SessionId, _CatId, _Props, _Context) ->
     undefined;
 make_rsc({error, notfound}, SessionId, CatId, Props, Context) ->
-    case m_rsc:insert(Props, Context) of
-        {ok, RscId} ->
-            z_session:set({temporary_rsc, CatId}, RscId, Context),
-            spawn_session_monitor(RscId, SessionId, Context),
-            Args = [
-                RscId,
-                SessionId
-            ],
-            z_pivot_rsc:insert_task_after(
-                        ?INACTIVE_CHECK_DELAY,
-                        ?MODULE, task_delete_inactive, z_convert:to_binary(RscId), Args,
-                        Context),
-            RscId;
-        {error, _} = Error ->
+    try
+        case m_rsc:insert(Props, Context) of
+            {ok, RscId} ->
+                z_session:set({temporary_rsc, CatId}, RscId, Context),
+                spawn_session_monitor(RscId, SessionId, Context),
+                Args = [
+                    RscId,
+                    SessionId
+                ],
+                z_pivot_rsc:insert_task_after(
+                            ?INACTIVE_CHECK_DELAY,
+                            ?MODULE, task_delete_inactive, z_convert:to_binary(RscId), Args,
+                            Context),
+                RscId;
+            {error, _} = Error ->
+                lager:error("[~p] Can not make temporary resource error ~p on ~p", 
+                            [z_context:site(Context), Error, Props]),
+                undefined
+        end
+    catch
+        throw:{{error, Err}, _Trace} ->
             lager:error("[~p] Can not make temporary resource error ~p on ~p", 
-                        [z_context:site(Context), Error, Props]),
+                        [z_context:site(Context), Err, Props]),
             undefined
     end.
 
