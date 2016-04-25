@@ -18,6 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: modules/mod_base/templates/_session_info.tpl:5
+#, fuzzy
+msgid "# Pages"
+msgstr "Seite"
+
 #: modules/mod_base/actions/action_base_alert.erl:35
 msgid "Alert"
 msgstr ""
@@ -66,8 +71,20 @@ msgstr ""
 msgid "Function/ template"
 msgstr ""
 
+#: modules/mod_base/templates/error.403.tpl:13
+msgid "Go back"
+msgstr ""
+
 #: modules/mod_base/templates/error.tpl:10
 msgid "Gone"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:166
+msgid "Got a Comet Connection"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:160
+msgid "Got a Websocket"
 msgstr ""
 
 #: modules/mod_base/templates/email_base.tpl:4
@@ -91,12 +108,22 @@ msgstr ""
 msgid "Module"
 msgstr ""
 
-#: modules/mod_base/templates/text/_pager.tpl:7
+#: modules/mod_base/templates/text/_pager.tpl:10
 msgid "Next"
 msgstr ""
 
+#: modules/mod_base/templates/error.403.tpl:3
+#: modules/mod_base/templates/error.403.tpl:18
 #: modules/mod_base/templates/error.tpl:7
 msgid "No Access"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:168
+msgid "No Comet Connection"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:162
+msgid "No Websocket"
 msgstr ""
 
 #: modules/mod_base/templates/_action_dialog_alert.tpl:5
@@ -104,22 +131,31 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
+#: modules/mod_base/templates/_session_info.tpl:12
+#, fuzzy
+msgid "Page Id"
+msgstr "Seite"
+
 #: modules/mod_base/templates/text/_ua_select.tpl:4
 #: modules/mod_base/templates/phone/_ua_select.tpl:11
 msgid "Phone"
 msgstr ""
 
-#: modules/mod_base/templates/text/_pager.tpl:4
+#: modules/mod_base/templates/text/_pager.tpl:7
 #, fuzzy
 msgid "Previous"
 msgstr "Vorschau"
 
-#: modules/mod_base/templates/error.tpl:19
-msgid "Reason"
-msgstr ""
-
 #: modules/mod_base/templates/error.tpl:14
 msgid "Return to the homepage"
+msgstr ""
+
+#: modules/mod_base/templates/_session_info.tpl:2
+msgid "Session Id"
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:30
+msgid "Sign in"
 msgstr ""
 
 #: modules/mod_base/templates/directory_index.tpl:17
@@ -136,6 +172,10 @@ msgstr ""
 
 #: modules/mod_base/templates/error.tpl:23
 msgid "Stack trace"
+msgstr ""
+
+#: modules/mod_base/templates/_session_info.tpl:12
+msgid "Status"
 msgstr ""
 
 #: modules/mod_base/templates/text/_ua_select.tpl:3
@@ -157,8 +197,20 @@ msgid ""
 "builder did not overrule the <tt>body</tt> block."
 msgstr ""
 
+#: modules/mod_base/templates/error.403.tpl:25
+msgid "To view this page you must be signed in."
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:22
+msgid "To view this page, you need to have other access rights."
+msgstr ""
+
 #: modules/mod_base/templates/directory_index.tpl:15
 msgid "Type"
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:23
+msgid "You may try to sign in as a different user."
 msgstr ""
 
 #: modules/mod_base/templates/error.tpl:16
@@ -209,9 +261,6 @@ msgstr ""
 
 #~ msgid "More"
 #~ msgstr "Mehr"
-
-#~ msgid "Page"
-#~ msgstr "Seite"
 
 #~ msgid "Read more"
 #~ msgstr "Mehr dazu"

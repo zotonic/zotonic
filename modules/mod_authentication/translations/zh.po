@@ -157,6 +157,10 @@ msgstr "为了确保安全，密码重设码只在有限时间内可用，而且
 msgid "Forgot your password?"
 msgstr ""
 
+#: modules/mod_authentication/templates/error.403.tpl:14
+msgid "Go back"
+msgstr ""
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:32
@@ -213,6 +217,10 @@ msgstr ""
 msgid "New password"
 msgstr "新密码"
 
+#: modules/mod_authentication/templates/error.403.tpl:3
+msgid "No Access"
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_stage.tpl:9
 msgid "OK"
 msgstr ""
@@ -223,6 +231,7 @@ msgstr "稍等，正在登出..."
 
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:12
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
 msgid "Password"
 msgstr "密码"
@@ -275,6 +284,7 @@ msgstr "发送验证信息"
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_off.tpl:4
+#: modules/mod_authentication/templates/error.403.tpl:29
 msgid "Sign in"
 msgstr "登录"
 
@@ -344,6 +354,14 @@ msgid ""
 "address we have received from you."
 msgstr "为了找回你的账户，你需要输入用户名或者 e-mail 地址。"
 
+#: modules/mod_authentication/templates/error.403.tpl:23
+msgid "To view this page you must be signed in."
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:20
+msgid "To view this page, you need to have other access rights."
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_error.tpl:20
 #: modules/mod_authentication/templates/_logon_error.tpl:27
 msgid ""
@@ -352,6 +370,7 @@ msgstr "请不要使用纯字母或者纯数字的密码。"
 
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
 msgid "Username"
 msgstr "用户名"
 
@@ -382,6 +401,10 @@ msgstr "如果你没有请求重置密码，请忽略本邮件。可能是有人
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
 msgid "You have to share your email address to be able to sign in."
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:21
+msgid "You may try to sign in as a different user."
 msgstr ""
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:11

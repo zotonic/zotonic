@@ -68,7 +68,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
     [
      #menu_item{id=admin_authentication_services,
                 parent=admin_auth,
-                label=?__("App Keys & Authentication Services", Context),
+                label=?__("App Keys &amp; Authentication Services", Context),
                 url={admin_authentication_services},
                 visiblecheck={acl, use, mod_admin_config}}
      

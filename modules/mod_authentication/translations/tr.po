@@ -162,6 +162,10 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
+#: modules/mod_authentication/templates/error.403.tpl:14
+msgid "Go back"
+msgstr ""
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:32
@@ -218,6 +222,10 @@ msgstr ""
 msgid "New password"
 msgstr "Yeni şifre"
 
+#: modules/mod_authentication/templates/error.403.tpl:3
+msgid "No Access"
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_stage.tpl:9
 msgid "OK"
 msgstr ""
@@ -228,6 +236,7 @@ msgstr "Lütfen bekleyin, çıkış yapılıyor..."
 
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:12
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
 msgid "Password"
 msgstr "Şifre"
@@ -280,6 +289,7 @@ msgstr "Onay mesajı gönder"
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_off.tpl:4
+#: modules/mod_authentication/templates/error.403.tpl:29
 #, fuzzy
 msgid "Sign in"
 msgstr ""
@@ -356,6 +366,14 @@ msgstr ""
 "Hesabınızı bulabilmek için kullanıcı adınızı ya da e-posta adresinizi "
 "bildirmeniz gerekli"
 
+#: modules/mod_authentication/templates/error.403.tpl:23
+msgid "To view this page you must be signed in."
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:20
+msgid "To view this page, you need to have other access rights."
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_error.tpl:20
 #: modules/mod_authentication/templates/_logon_error.tpl:27
 msgid ""
@@ -366,6 +384,7 @@ msgstr ""
 
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
 msgid "Username"
 msgstr "Kullanıcı adı"
 
@@ -398,6 +417,10 @@ msgstr ""
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
 msgid "You have to share your email address to be able to sign in."
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:21
+msgid "You may try to sign in as a different user."
 msgstr ""
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:11

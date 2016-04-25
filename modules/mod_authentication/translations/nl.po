@@ -28,12 +28,12 @@ msgstr "Al gelinkt"
 
 #: modules/mod_authentication/mod_authentication.erl:71
 msgid "App Keys & Authentication Services"
-msgstr ""
+msgstr "App Keys & Authenticatie Services"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:3
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:7
 msgid "App Keys &amp; Authentication Services"
-msgstr ""
+msgstr "App Keys &amp; Authenticatie Services"
 
 #: modules/mod_authentication/templates/logon_service_done.tpl:5
 msgid "Authenticated"
@@ -118,8 +118,8 @@ msgid ""
 "Enable the signup module to automatically sign up users that are "
 "authenticating via the services below."
 msgstr ""
-"Activeer de signup module om gebruikers automatisch aan te laten melden via de "
-"onderstaande diensten."
+"Activeer de signup module om gebruikers automatisch aan te laten melden via "
+"de onderstaande diensten."
 
 #: modules/mod_authentication/templates/_logon_expired_form.tpl:16
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
@@ -167,6 +167,10 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "Wachtwoord vergeten?"
 
+#: modules/mod_authentication/templates/error.403.tpl:14
+msgid "Go back"
+msgstr "Ga terug"
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:32
@@ -182,7 +186,8 @@ msgid ""
 "Here you can set all the application keys, secrets and other configurations "
 "to integrate with external services like Facebook and Twitter."
 msgstr ""
-
+"Configureer hier de applicatie keys, geheimen en andere configuraties "
+"om te integreren met externe services zoals Facebook en Twitter."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
@@ -226,6 +231,10 @@ msgstr "Hulp nodig bij inloggen?"
 msgid "New password"
 msgstr "Nieuw wachtwoord"
 
+#: modules/mod_authentication/templates/error.403.tpl:3
+msgid "No Access"
+msgstr "Geen toegang"
+
 #: modules/mod_authentication/templates/_logon_stage.tpl:9
 msgid "OK"
 msgstr "OK"
@@ -236,6 +245,7 @@ msgstr "Een moment alsjeblieft, aan het uitloggen..."
 
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:12
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
 msgid "Password"
 msgstr "Wachtwoord"
@@ -274,7 +284,8 @@ msgstr "Verander je wachtwoord"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:32
 msgid "Safari 8 has a known problem with handling external authentications."
-msgstr "Safari 8 heeft een bekend probleem met het omgaan van externe authenticatie."
+msgstr ""
+"Safari 8 heeft een bekend probleem met het omgaan van externe authenticatie."
 
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:20
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:20
@@ -288,6 +299,7 @@ msgstr "Stuur verificatie bericht"
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_off.tpl:4
+#: modules/mod_authentication/templates/error.403.tpl:29
 msgid "Sign in"
 msgstr "Inloggen"
 
@@ -363,6 +375,14 @@ msgstr ""
 "Om je account te achterhalen moet je je gebruikersnaam invullen, of het e-"
 "mailadres dat we van je hebben ontvangen."
 
+#: modules/mod_authentication/templates/error.403.tpl:23
+msgid "To view this page you must be signed in."
+msgstr "Om deze pagina te bekijken moet je ingelogd zijn."
+
+#: modules/mod_authentication/templates/error.403.tpl:20
+msgid "To view this page, you need to have other access rights."
+msgstr "Om deze pagina te bekijken heb je andere toegangsrechten nodig."
+
 #: modules/mod_authentication/templates/_logon_error.tpl:20
 #: modules/mod_authentication/templates/_logon_error.tpl:27
 msgid ""
@@ -373,6 +393,7 @@ msgstr ""
 
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
 msgid "Username"
 msgstr "Gebruikersnaam"
 
@@ -410,12 +431,17 @@ msgstr ""
 msgid "You have to share your email address to be able to sign in."
 msgstr "Je moet je e-mailadres delen om in te kunnen loggen."
 
+#: modules/mod_authentication/templates/error.403.tpl:21
+msgid "You may try to sign in as a different user."
+msgstr "Je kunt proberen om als een andere gebruiker in te loggen."
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:11
 msgid ""
 "You need to be allowed to edit the system configuration to view or change "
 "the configured App Keys."
 msgstr ""
-""
+"Voor het bekijken en wijzigen van de geconfigureerde App Keys moet je toestemming "
+"hebben om de systeem configuratie te wijzigen."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:23
 msgid ""
@@ -485,5 +511,3 @@ msgstr "of"
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:8
 msgid "user@example.com"
 msgstr "gebruiker@voorbeeld.nl"
-
-
