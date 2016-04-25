@@ -18,6 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: modules/mod_base/templates/_session_info.tpl:5
+msgid "# Pages"
+msgstr ""
+
 #: modules/mod_base/actions/action_base_alert.erl:35
 msgid "Alert"
 msgstr "Aandacht"
@@ -64,9 +68,21 @@ msgstr "Map"
 msgid "Function/ template"
 msgstr "Functie / template"
 
+#: modules/mod_base/templates/error.403.tpl:13
+msgid "Go back"
+msgstr ""
+
 #: modules/mod_base/templates/error.tpl:10
 msgid "Gone"
 msgstr "Verdwenen"
+
+#: modules/mod_base/templates/connection_test.tpl:166
+msgid "Got a Comet Connection"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:160
+msgid "Got a Websocket"
+msgstr ""
 
 #: modules/mod_base/templates/email_base.tpl:4
 msgid "Hello from Zotonic"
@@ -89,34 +105,52 @@ msgstr "Mobiel of desktop"
 msgid "Module"
 msgstr "Module"
 
-#: modules/mod_base/templates/text/_pager.tpl:7
+#: modules/mod_base/templates/text/_pager.tpl:10
 msgid "Next"
 msgstr "Volgende"
 
+#: modules/mod_base/templates/error.403.tpl:3
+#: modules/mod_base/templates/error.403.tpl:18
 #: modules/mod_base/templates/error.tpl:7
 msgid "No Access"
 msgstr "Geen toegang"
+
+#: modules/mod_base/templates/connection_test.tpl:168
+msgid "No Comet Connection"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:162
+msgid "No Websocket"
+msgstr ""
 
 #: modules/mod_base/templates/_action_dialog_alert.tpl:5
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:7
 msgid "OK"
 msgstr "OK"
 
+#: modules/mod_base/templates/_session_info.tpl:12
+msgid "Page Id"
+msgstr ""
+
 #: modules/mod_base/templates/text/_ua_select.tpl:4
 #: modules/mod_base/templates/phone/_ua_select.tpl:11
 msgid "Phone"
 msgstr "Mobiel"
 
-#: modules/mod_base/templates/text/_pager.tpl:4
+#: modules/mod_base/templates/text/_pager.tpl:7
 msgid "Previous"
 msgstr "Vorige"
 
-#: modules/mod_base/templates/error.tpl:19
-msgid "Reason"
-msgstr "Reden"
-
 #: modules/mod_base/templates/error.tpl:14
 msgid "Return to the homepage"
+msgstr ""
+
+#: modules/mod_base/templates/_session_info.tpl:2
+msgid "Session Id"
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:30
+msgid "Sign in"
 msgstr ""
 
 #: modules/mod_base/templates/directory_index.tpl:17
@@ -134,6 +168,10 @@ msgstr "Sorry, je hebt geen toegang tot deze pagina."
 #: modules/mod_base/templates/error.tpl:23
 msgid "Stack trace"
 msgstr "Stack trace"
+
+#: modules/mod_base/templates/_session_info.tpl:12
+msgid "Status"
+msgstr ""
 
 #: modules/mod_base/templates/text/_ua_select.tpl:3
 #: modules/mod_base/templates/phone/_ua_select.tpl:10
@@ -156,10 +194,25 @@ msgstr ""
 "Dit is het standaardbericht. Als je deze tekst krijgt, heeft het\n"
 "template het <tt>body</tt> blok niet overschreven."
 
+#: modules/mod_base/templates/error.403.tpl:25
+msgid "To view this page you must be signed in."
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:22
+msgid "To view this page, you need to have other access rights."
+msgstr ""
+
 #: modules/mod_base/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "Type"
 
+#: modules/mod_base/templates/error.403.tpl:23
+msgid "You may try to sign in as a different user."
+msgstr ""
+
 #: modules/mod_base/templates/error.tpl:16
 msgid "error"
 msgstr "fout"
+
+#~ msgid "Reason"
+#~ msgstr "Reden"

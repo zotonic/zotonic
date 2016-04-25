@@ -19,6 +19,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
 
+#: modules/mod_base/templates/_session_info.tpl:5
+msgid "# Pages"
+msgstr ""
+
 #: modules/mod_base/actions/action_base_alert.erl:35
 msgid "Alert"
 msgstr "警告"
@@ -65,9 +69,21 @@ msgstr "文件夹"
 msgid "Function/ template"
 msgstr "函数/模版"
 
+#: modules/mod_base/templates/error.403.tpl:13
+msgid "Go back"
+msgstr ""
+
 #: modules/mod_base/templates/error.tpl:10
 msgid "Gone"
 msgstr "前进"
+
+#: modules/mod_base/templates/connection_test.tpl:166
+msgid "Got a Comet Connection"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:160
+msgid "Got a Websocket"
+msgstr ""
 
 #: modules/mod_base/templates/email_base.tpl:4
 msgid "Hello from Zotonic"
@@ -90,34 +106,52 @@ msgstr "移动平台或桌面"
 msgid "Module"
 msgstr "模块"
 
-#: modules/mod_base/templates/text/_pager.tpl:7
+#: modules/mod_base/templates/text/_pager.tpl:10
 msgid "Next"
 msgstr "下一页"
 
+#: modules/mod_base/templates/error.403.tpl:3
+#: modules/mod_base/templates/error.403.tpl:18
 #: modules/mod_base/templates/error.tpl:7
 msgid "No Access"
 msgstr "无法访问"
+
+#: modules/mod_base/templates/connection_test.tpl:168
+msgid "No Comet Connection"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:162
+msgid "No Websocket"
+msgstr ""
 
 #: modules/mod_base/templates/_action_dialog_alert.tpl:5
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:7
 msgid "OK"
 msgstr "好"
 
+#: modules/mod_base/templates/_session_info.tpl:12
+msgid "Page Id"
+msgstr ""
+
 #: modules/mod_base/templates/text/_ua_select.tpl:4
 #: modules/mod_base/templates/phone/_ua_select.tpl:11
 msgid "Phone"
 msgstr "手机"
 
-#: modules/mod_base/templates/text/_pager.tpl:4
+#: modules/mod_base/templates/text/_pager.tpl:7
 msgid "Previous"
 msgstr "前一页"
 
-#: modules/mod_base/templates/error.tpl:19
-msgid "Reason"
-msgstr "原因"
-
 #: modules/mod_base/templates/error.tpl:14
 msgid "Return to the homepage"
+msgstr ""
+
+#: modules/mod_base/templates/_session_info.tpl:2
+msgid "Session Id"
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:30
+msgid "Sign in"
 msgstr ""
 
 #: modules/mod_base/templates/directory_index.tpl:17
@@ -135,6 +169,10 @@ msgstr "对不起，你没有权限访问本页面。"
 #: modules/mod_base/templates/error.tpl:23
 msgid "Stack trace"
 msgstr "堆栈跟踪"
+
+#: modules/mod_base/templates/_session_info.tpl:12
+msgid "Status"
+msgstr ""
 
 #: modules/mod_base/templates/text/_ua_select.tpl:3
 #: modules/mod_base/templates/phone/_ua_select.tpl:10
@@ -156,13 +194,28 @@ msgid ""
 msgstr ""
 "这个是原始信息。当你看到这个信息的时候表示模版作者没有覆盖 <tt>body</tt> 块。"
 
+#: modules/mod_base/templates/error.403.tpl:25
+msgid "To view this page you must be signed in."
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:22
+msgid "To view this page, you need to have other access rights."
+msgstr ""
+
 #: modules/mod_base/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "类型"
 
+#: modules/mod_base/templates/error.403.tpl:23
+msgid "You may try to sign in as a different user."
+msgstr ""
+
 #: modules/mod_base/templates/error.tpl:16
 msgid "error"
 msgstr "错误"
+
+#~ msgid "Reason"
+#~ msgstr "原因"
 
 #~ msgid "second"
 #~ msgstr "秒"

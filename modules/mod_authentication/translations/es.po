@@ -164,6 +164,10 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
+#: modules/mod_authentication/templates/error.403.tpl:14
+msgid "Go back"
+msgstr ""
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:32
@@ -221,6 +225,10 @@ msgstr ""
 msgid "New password"
 msgstr "Nueva clave"
 
+#: modules/mod_authentication/templates/error.403.tpl:3
+msgid "No Access"
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_stage.tpl:9
 msgid "OK"
 msgstr ""
@@ -231,6 +239,7 @@ msgstr "Un momento por favor, desconectándose..."
 
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:12
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
 msgid "Password"
 msgstr "Clave"
@@ -284,6 +293,7 @@ msgstr "Enviar Mensaje de Verificación"
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_off.tpl:4
+#: modules/mod_authentication/templates/error.403.tpl:29
 msgid "Sign in"
 msgstr "Conectarse"
 
@@ -357,6 +367,14 @@ msgstr ""
 "Para encontrar su cuenta\tdebe ingresar su nombre de usuario o la dirección "
 "de correo electrónico que nos había dado."
 
+#: modules/mod_authentication/templates/error.403.tpl:23
+msgid "To view this page you must be signed in."
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:20
+msgid "To view this page, you need to have other access rights."
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_error.tpl:20
 #: modules/mod_authentication/templates/_logon_error.tpl:27
 msgid ""
@@ -367,6 +385,7 @@ msgstr ""
 
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
 msgid "Username"
 msgstr "Nombre de usuario"
 
@@ -405,6 +424,10 @@ msgstr ""
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
 msgid "You have to share your email address to be able to sign in."
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:21
+msgid "You may try to sign in as a different user."
 msgstr ""
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:11

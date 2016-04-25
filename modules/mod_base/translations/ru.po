@@ -20,6 +20,10 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+#: modules/mod_base/templates/_session_info.tpl:5
+msgid "# Pages"
+msgstr ""
+
 #: modules/mod_base/actions/action_base_alert.erl:35
 msgid "Alert"
 msgstr "Предупреждение"
@@ -66,9 +70,21 @@ msgstr "Папка"
 msgid "Function/ template"
 msgstr "Функция / шаблон"
 
+#: modules/mod_base/templates/error.403.tpl:13
+msgid "Go back"
+msgstr ""
+
 #: modules/mod_base/templates/error.tpl:10
 msgid "Gone"
 msgstr "Удалено"
+
+#: modules/mod_base/templates/connection_test.tpl:166
+msgid "Got a Comet Connection"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:160
+msgid "Got a Websocket"
+msgstr ""
 
 #: modules/mod_base/templates/email_base.tpl:4
 msgid "Hello from Zotonic"
@@ -91,34 +107,52 @@ msgstr "Режим отображения"
 msgid "Module"
 msgstr "Модуль"
 
-#: modules/mod_base/templates/text/_pager.tpl:7
+#: modules/mod_base/templates/text/_pager.tpl:10
 msgid "Next"
 msgstr "Далее"
 
+#: modules/mod_base/templates/error.403.tpl:3
+#: modules/mod_base/templates/error.403.tpl:18
 #: modules/mod_base/templates/error.tpl:7
 msgid "No Access"
 msgstr "Нет доступа"
+
+#: modules/mod_base/templates/connection_test.tpl:168
+msgid "No Comet Connection"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:162
+msgid "No Websocket"
+msgstr ""
 
 #: modules/mod_base/templates/_action_dialog_alert.tpl:5
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:7
 msgid "OK"
 msgstr "OK"
 
+#: modules/mod_base/templates/_session_info.tpl:12
+msgid "Page Id"
+msgstr ""
+
 #: modules/mod_base/templates/text/_ua_select.tpl:4
 #: modules/mod_base/templates/phone/_ua_select.tpl:11
 msgid "Phone"
 msgstr "Для телефона"
 
-#: modules/mod_base/templates/text/_pager.tpl:4
+#: modules/mod_base/templates/text/_pager.tpl:7
 msgid "Previous"
 msgstr "Назад"
 
-#: modules/mod_base/templates/error.tpl:19
-msgid "Reason"
-msgstr "Причина"
-
 #: modules/mod_base/templates/error.tpl:14
 msgid "Return to the homepage"
+msgstr ""
+
+#: modules/mod_base/templates/_session_info.tpl:2
+msgid "Session Id"
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:30
+msgid "Sign in"
 msgstr ""
 
 #: modules/mod_base/templates/directory_index.tpl:17
@@ -136,6 +170,10 @@ msgstr "Извините, у вас нет прав доступа к этой �
 #: modules/mod_base/templates/error.tpl:23
 msgid "Stack trace"
 msgstr "Трассировка стека"
+
+#: modules/mod_base/templates/_session_info.tpl:12
+msgid "Status"
+msgstr ""
 
 #: modules/mod_base/templates/text/_ua_select.tpl:3
 #: modules/mod_base/templates/phone/_ua_select.tpl:10
@@ -158,10 +196,25 @@ msgstr ""
 "Это базовое сообщение. Если вы его видите, значит в шаблоне не предусмотрена "
 "замена блоку <tt>body</tt>."
 
+#: modules/mod_base/templates/error.403.tpl:25
+msgid "To view this page you must be signed in."
+msgstr ""
+
+#: modules/mod_base/templates/error.403.tpl:22
+msgid "To view this page, you need to have other access rights."
+msgstr ""
+
 #: modules/mod_base/templates/directory_index.tpl:15
 msgid "Type"
 msgstr "Тип"
 
+#: modules/mod_base/templates/error.403.tpl:23
+msgid "You may try to sign in as a different user."
+msgstr ""
+
 #: modules/mod_base/templates/error.tpl:16
 msgid "error"
 msgstr "ошибка"
+
+#~ msgid "Reason"
+#~ msgstr "Причина"

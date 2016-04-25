@@ -1,12 +1,34 @@
+@_horizontal_spacing: 20px;
+@_button_spacing: 10px;
+@_vertical_element_spacing: 15px; // Bootstrap default
+@_border_color: #ddd;
+@_background_color: #fff;
+@_box_background_color: #f2f2f2;
+@_error_color: #C21C3D;
+@_error403_background_color: #e8e8e8;
+
+body.err403 {
+    background-color: @_error403_background_color;
+
+    .z-logon-box {
+        background-color: white;
+        padding: 20px 10px;
+    }
+}
+
+.z-logon-prompt {
+    text-align: center;
+    max-width: 300px;
+    margin: 40px auto;
+}
+
+.z-logon-back {
+    float: left;
+    margin: 40px 20px;
+}
+
 .z-logon-box {
     // width set in optional template var style_width
-    @_horizontal_spacing: 20px;
-    @_button_spacing: 10px;
-    @_vertical_element_spacing: 15px; // Bootstrap default
-    @_border_color: #ddd;
-    @_background_color: #fff;
-    @_box_background_color: #f2f2f2;
-    @_error_color: #C21C3D;
     
     float: none;
     margin: @_vertical_element_spacing auto;

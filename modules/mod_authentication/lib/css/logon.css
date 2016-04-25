@@ -1,3 +1,19 @@
+body.err403 {
+  background-color: #e8e8e8;
+}
+body.err403 .z-logon-box {
+  background-color: white;
+  padding: 20px 10px;
+}
+.z-logon-prompt {
+  text-align: center;
+  max-width: 300px;
+  margin: 40px auto;
+}
+.z-logon-back {
+  float: left;
+  margin: 40px 20px;
+}
 .z-logon-box {
   float: none;
   margin: 15px auto;
@@ -48,7 +64,7 @@
   height: 16px;
   top: 8px;
   width: 40px;
-  background-color: #ffffff;
+  background-color: #fff;
   content: "";
   margin: -8px 0 0 -20px;
   z-index: -1;
@@ -59,7 +75,7 @@
   top: 8px;
   content: " ";
   width: 100%;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #ddd;
   z-index: -2;
 }
 .z-logon-box .z-logon-extra .z-logon-extra-separator:first-child {
@@ -101,7 +117,7 @@
   margin-right: -20px;
   padding-left: 20px;
   padding-right: 20px;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #ddd;
 }
 .z-logon-box.z-logon-box-boxed .z-logon-support p:last-child {
   margin-bottom: 0;
