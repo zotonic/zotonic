@@ -53,7 +53,7 @@ copyright = u'2009-2015, The Zotonic Project (zotonic.com)'
 # built documents.
 #
 # The short X.Y version.
-version = '0.13'
+version = '0.15'
 # The full version, including alpha/beta/rc tags.
 release = '0.15.0'
 
