@@ -74,7 +74,7 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
                   {name_first, true},
                   {name_surname_prefix, false},
                   {name_surname, true}],
-    FormProps = z_notifier:foldl(signup_form_fields, FormProps0, Context),
+    FormProps = z_notifier:foldr(signup_form_fields, FormProps0, Context),
 
     Props = lists:map(fun({Prop, Validate}) ->
                               {Prop, fetch_prop(Prop, Validate, XsProps, Context)}
