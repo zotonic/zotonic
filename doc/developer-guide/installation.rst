@@ -51,19 +51,17 @@ back on track.
 Getting Zotonic
 ---------------
 
-1. Download the `latest Zotonic release`_ as a ZIP file from GitHub. For
+1. Download the latest Zotonic release ZIP file from the `GitHub releases page`_. For
    instance:
 
    .. parsed-literal::
-
-        $ wget https://github.com/zotonic/zotonic/archive/release-|version|.0.zip
+    $ wget \https://github.com/zotonic/zotonic/archive/|release|.zip
 
    Then unzip the file and rename the directory:
 
    .. parsed-literal::
-
-        $ unzip release-|version|.0.zip
-        $ mv zotonic-release-|version|.0 zotonic
+    $ unzip |release|.zip
+    $ mv zotonic-|release| zotonic
 
    Alternatively, clone the latest development version using Git::
 
@@ -78,16 +76,18 @@ Getting Zotonic
 
     $ bin/zotonic debug
 
-4. Now point your browser to: http://localhost:8000/.
-   You should see a welcome message, ‘Powered by Zotonic’.
+4. Now point your browser to: http://localhost:8000/.  You should see
+   a welcome message, ‘Powered by Zotonic’. This is the so-called
+   :ref:`status website <ref-status-site>`. So far, so good! Now it's
+   time to :ref:`create your first site <guide-create-site>`.
 
 Next steps
 ----------
 
 * :ref:`Create your first site <guide-create-site>`.
-* Log in to the :ref:`ref-status-site`.
+* Log in to the :ref:`status site <ref-status-site>`.
 * If something goes wrong, read the
   :ref:`troubleshooting reference <ref-troubleshooting-installation>`.
 * Read more about Zotonic :ref:`configuration <guide-configuration>`.
 
-.. _latest Zotonic release: https://github.com/zotonic/zotonic/releases
+.. _GitHub releases page: https://github.com/zotonic/zotonic/releases
