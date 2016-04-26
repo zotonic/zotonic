@@ -469,8 +469,8 @@ can_rsc(Id, view, Context) when is_integer(Id) ->
     UGs = user_groups(Context),
     can_rsc_1(Id, view, CGId, CatId, UGs, Context)
     andalso (
-        is_published_date(Id, Context)
-        orelse can_rsc_1(Id, edit, CGId, CatId, UGs, Context)
+        m_rsc:p_no_acl(Id, is_published_date, Context)
+        orelse can_rsc_1(Id, update, CGId, CatId, UGs, Context)
     );
 can_rsc(Id, Action, Context) when is_integer(Id); Id =:= insert_rsc ->
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
@@ -604,16 +604,3 @@ can_module(Action, ModuleName, Context) ->
                  end
               end,
               user_groups(Context)).
-
-
-%% @doc Check if a resource is published and in the publication date range
-is_published_date(Id, Context) when is_integer(Id) ->
-    case m_rsc:p_no_acl(Id, is_published, Context) of
-        true ->
-            Date = erlang:universaltime(),
-            m_rsc:p_no_acl(Id, publication_start, Context) =< Date 
-              andalso m_rsc:p_no_acl(Id, publication_end, Context) >= Date;
-        _ ->
-            false
-    end.
-
