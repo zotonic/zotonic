@@ -317,7 +317,12 @@ default_content_group(CatId, Context) ->
                     Default;
                 false ->
                     case find_first_content_group(CatId, UGs, Context) of
-                        undefined -> Default;
+                        undefined ->
+                            case find_first_collab_group(CatId, Context) of
+                                undefined ->
+                                    Default;
+                                CGId -> CGId
+                            end;
                         CGId -> CGId
                     end
             end
@@ -341,6 +346,18 @@ find_cg([{CGId, Sub}|Rest], CatId, UGs, Context) ->
                     Found
             end
     end.
+
+%% @doc Get first collaboration group where the user may insert in; otherwise return undefined.
+find_first_collab_group(CatId, Context) ->
+    CanInsert = lists:filter(
+                  fun(CGId) ->
+                          can_insert_category(CGId, CatId, Context)
+                  end, has_collab_groups(Context)),
+    case CanInsert of
+        [] -> undefined;
+        [First|_] -> First
+    end.
+
 
 %% @doc Add a restriction on the visible content groups to SQL searches
 acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) ->
