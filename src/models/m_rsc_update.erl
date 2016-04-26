@@ -781,9 +781,31 @@ props_filter([{pref_language, Lang}|T], Acc, Context) ->
             end,
     props_filter(T, [{pref_language, Lang1} | Acc], Context);
 
+props_filter([{language, Langs}|T], Acc, Context) ->
+    props_filter(T, [{language, filter_languages(Langs)}|Acc], Context);
+
 props_filter([{_Prop, _V}=H|T], Acc, Context) ->
     props_filter(T, [H|Acc], Context).
 
+
+%% Filter all given languages, drop unknown languages.
+%% Ensure that the languages are a list of atoms.
+filter_languages([]) -> [];
+filter_languages(<<>>) -> [];
+filter_languages(Lang) when is_binary(Lang); is_atom(Lang) ->
+    filter_languages([Lang]);
+filter_languages([C|_] = Lang) when is_integer(C) ->
+    filter_languages([Lang]);
+filter_languages([L|_] = Langs) when is_list(L); is_binary(L); is_atom(L) ->
+    lists:foldr(
+            fun(Lang, Acc) ->
+                case z_trans:to_language_atom(Lang) of
+                    {ok, LangAtom} -> [LangAtom|Acc];
+                    {error, not_a_language} -> Acc
+                end
+            end,
+            [],
+            Langs).
 
 %% @doc Automatically modify some props on update.
 %% @spec props_autogenerate(Id, Props1, Context) -> Props2
