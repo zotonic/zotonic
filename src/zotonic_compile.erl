@@ -1,10 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2014 Arjan Scherpenisse
+%% @copyright 2014, 2016 Arjan Scherpenisse
 %%
 %% @doc Compilation of Zotonic files
 
-%% Copyright 2014 Arjan Scherpenisse
-%%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
@@ -125,9 +123,6 @@ compile_worker_process(Options, Parent) ->
             Parent ! {done, self()},
             ok
     end.
-
-compile_dirs() ->
-    compile_zotonic_dirs() ++ compile_user_dirs().
 
 compile_zotonic_dirs() ->
     [
