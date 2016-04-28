@@ -39,3 +39,4 @@ deps/
 
 .rebar
 _build
+/log/
