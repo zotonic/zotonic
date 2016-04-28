@@ -40,7 +40,6 @@ start(_Type, _StartArgs) ->
     ensure_started(ssl),
     ensure_started(inets),
     inets:start(httpc,[{profile,zotonic}]),
-    zotonic_deps:ensure(),
     ensure_started(mimetypes),
     ensure_started(emqtt),
     ensure_started(gproc),

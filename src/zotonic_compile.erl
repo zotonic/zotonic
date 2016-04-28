@@ -172,14 +172,14 @@ compile_options() ->
      {i, "deps/webzmachine/include"},
      {i, Modules},
      {i, Sites},
-     {outdir, "ebin"},
+     {outdir, zotonic_ebin_dir()},
      {parse_transform, lager_transform},
      nowarn_deprecated_type,
      debug_info] ++ platform_defines_r17up().
 
 compile_user_options() ->
     application:load(zotonic),
-    Outdir = application:get_env(zotonic, user_ebin_dir, "ebin"),
+    Outdir = application:get_env(zotonic, user_ebin_dir, zotonic_ebin_dir()),
     [ {outdir, Outdir} | compile_options()].
 
 platform_defines_r17up() ->
@@ -189,6 +189,9 @@ platform_defines_r17up() ->
         nomatch ->
             []
     end.
+
+zotonic_ebin_dir() ->
+    "_build/default/lib/zotonic/ebin".
 
 %% @doc For a list of glob patterns, split all patterns which contain
 %% /*/* up in more patterns, so that we can parallelize it even more.

@@ -101,7 +101,6 @@ watch_dirs() ->
     ZotonicDirs = [
         filename:join(os:getenv("ZOTONIC"), "src"),
         filename:join(os:getenv("ZOTONIC"), "modules"),
-        filename:join(os:getenv("ZOTONIC"), "ebin"),
 
         filename:join(os:getenv("ZOTONIC"), "priv/sites"),
         filename:join(os:getenv("ZOTONIC"), "priv/modules"),
@@ -110,6 +109,5 @@ watch_dirs() ->
         z_path:user_modules_dir()
     ],
     LinkedDirs = string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n"),
-    DepDirs = z_utils:wildcard(filename:join(os:getenv("ZOTONIC"), "deps/*/ebin")),
-    lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs ++ LinkedDirs ++ DepDirs).
+    lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs ++ LinkedDirs).
 

@@ -13,11 +13,12 @@
   {registered, []},
   {mod, {zotonic_app, []}},
   {env, []},
-  {applications, [kernel, stdlib, crypto, mnesia,
-                  bert, dh_date, eiconv, lager, exometer,
-                  epgsql, depcache, mimetypes, webzmachine, z_stdlib,
-                  poolboy, sendfile, public_key, ssl,
-                  jobs, gproc, filezcache, s3filez,
+  {applications, [kernel, stdlib, crypto, public_key, ssl, inets, lager,
+                  mimetypes, mnesia, emqtt, gproc, jobs,
+                  bert, dh_date, eiconv, exometer,
+                  epgsql, depcache, webzmachine, z_stdlib,
+                  poolboy, sendfile,
+                  filezcache, s3filez,
                   qdate, syslog
   ]}
  ]}.
