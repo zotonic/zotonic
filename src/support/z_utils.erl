@@ -107,12 +107,10 @@ f(S, Args) -> lists:flatten(io_lib:format(S, Args)).
 
 %% @doc Return an abspath to a directory relative to the application root.
 lib_dir() ->
-    {ok, Path} = zotonic_app:get_path(),
-    Path.
+    zotonic_app:get_path().
 
 lib_dir(Dir) ->
-    {ok, Path} = zotonic_app:get_path(),
-    filename:join([Path, Dir]).
+    filename:join([lib_dir(), Dir]).
 
 %% @doc filename:wildcard version which filters dotfiles like unix does
 wildcard(Wildcard) ->
