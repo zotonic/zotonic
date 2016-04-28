@@ -10,7 +10,11 @@
  %% Hostname for the test sandbox. Do NOT change this! It will break the tests.
  {hostname, "localhost:8040"},
 
- {dbdatabase, none},
+ {dbhost, "127.0.0.1"},
+ {dbport, 5432},
+ {dbuser, "postgres"},
+ {dbpassword, ""},
+ {dbdatabase, "testsandbox"},
  {skeleton, empty},
 
  %% Admin password, used during installation. You can change it later
