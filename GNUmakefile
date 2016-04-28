@@ -20,10 +20,13 @@ $(REBAR):
 	chmod +x $(REBAR)
 
 # Use Rebar to get, update and compile dependencies
-.PHONY: delete-deps get-deps update-deps compile-deps compile-zotonic compile test
+.PHONY: upgrade-deps compile-zotonic compile test
 
 compile-zotonic:
 	bin/zotonic compile
+
+upgrade-deps: $(REBAR)
+	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) upgrade
 
 compile: $(REBAR)
 	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) compile
