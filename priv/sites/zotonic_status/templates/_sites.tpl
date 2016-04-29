@@ -1,3 +1,10 @@
+<thead>
+    <tr>
+        <th>{_ Status _}</th>
+        <th>{_ URL _}</th>
+        <th>{_ Actions _}</th>
+    </tr>
+</thead>
 <tbody>
     {% for name, status, childspec, pid, time in sites %}
         {% if name /= 'zotonic_status' and (has_user or not configs[name].hidden) %}
@@ -12,6 +19,7 @@
     
             <td>
                 <a href="http://{{ configs[name].hostname|escape }}/">http://{{ configs[name].hostname|escape }}/</a>
+                <small>({{ name }})</small>
             </td>
     
             {% if has_user %}
