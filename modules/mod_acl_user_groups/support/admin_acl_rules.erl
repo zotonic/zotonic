@@ -107,9 +107,9 @@ event1(#submit{message={acl_rule_import, []}}, Context) ->
 
 event1(#submit{message=acl_collab_config}, Context) ->
     CollabGroupLink = z_context:get_q(collab_group_link, Context),
-    CollabGroupEdit = z_context:get_q(collab_group_edit, Context),
+    CollabGroupUpdate = z_context:get_q(collab_group_update, Context),
     m_config:set_value(mod_acl_user_groups, collab_group_link, CollabGroupLink, Context),
-    m_config:set_value(mod_acl_user_groups, collab_group_edit, CollabGroupEdit, Context),
+    m_config:set_value(mod_acl_user_groups, collab_group_update, CollabGroupUpdate, Context),
     z_render:growl(?__("Saved collaboration group settings", Context), Context).
 
 normalize_values(Row) ->
