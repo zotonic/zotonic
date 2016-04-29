@@ -45,10 +45,10 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-6">
                         <label>{_ Edit the collaboration group _}</label>
-                        <select class="form-control" name="collab_group_edit" id="{{ #cgedit }}">
+                        <select class="form-control" name="collab_group_update" id="{{ #cgedit }}">
                             <option value=""></option>
-                            <option value="manager" {% if m.config.mod_acl_user_groups.collab_group_edit.value == 'manager' %}selected{% endif %}>{_ Group managers can edit _}</option>
-                            <option value="member" {% if m.config.mod_acl_user_groups.collab_group_edit.value == 'member' %}selected{% endif %}>{_ Group members and managers can edit _}</option>
+                            <option value="manager" {% if m.config.mod_acl_user_groups.collab_group_update.value == 'manager' %}selected{% endif %}>{_ Group managers can edit _}</option>
+                            <option value="member" {% if m.config.mod_acl_user_groups.collab_group_update.value == 'member' %}selected{% endif %}>{_ Group members and managers can edit _}</option>
                         </select>
                     </div>
                     <div class="col-md-4 col-sm-6">
