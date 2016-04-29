@@ -73,7 +73,7 @@ export(Context) ->
 
 configs() ->
     [
-        collab_group_edit,
+        collab_group_update,
         collab_group_link
     ].
 

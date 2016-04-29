@@ -484,11 +484,11 @@ can_rsc(Id, view, Context) when is_integer(Id) ->
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
     CGId = m_rsc:p_no_acl(Id, content_group_id, Context),
     UGs = user_groups(Context),
-    can_rsc_1(Id, view, CGId, CatId, UGs, Context)
-    andalso (
-        m_rsc:p_no_acl(Id, is_published_date, Context)
-        orelse can_rsc_1(Id, update, CGId, CatId, UGs, Context)
-    );
+    (
+        can_rsc_1(Id, view, CGId, CatId, UGs, Context)
+        andalso m_rsc:p_no_acl(Id, is_published_date, Context)
+    )
+    orelse can_rsc_1(Id, update, CGId, CatId, UGs, Context);
 can_rsc(Id, Action, Context) when is_integer(Id); Id =:= insert_rsc ->
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
     CGId = m_rsc:p_no_acl(Id, content_group_id, Context),
@@ -497,40 +497,56 @@ can_rsc(Id, Action, Context) when is_integer(Id); Id =:= insert_rsc ->
 can_rsc(Id, Action, Context) ->
     can_rsc(m_rsc:rid(Id, Context), Action, Context).
 
+
 can_rsc_1(Id, Action, CGId, CatId, UGs, #context{acl=#aclug{collab_groups=CollabGroups}} = Context) ->
-    case lists:member(CGId, CollabGroups) of
-        true ->
-            case mod_acl_user_groups:await_lookup({collab, {CatId, Action, false}, collab}, Context) of
-                true -> true;
-                false -> false;
-                undefined -> false
-            end
-            orelse (
-                case mod_acl_user_groups:await_lookup({collab, {CatId, Action, true}, collab}, Context) of
-                    true -> true;
-                    false -> false;
-                    undefined -> false
-                end
-                andalso is_owner(Id, m_rsc:p_no_acl(Id, creator_id, Context), Context)
-            )
-            orelse (
-                is_integer(Id)
-                andalso Id =:= CGId
-                andalso is_collab_group_member_action_allowed(Id, Action, Context)
-            )
-            orelse can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context)
-            orelse can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context);
-        false ->
-            can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context)
-            orelse can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context)
-    end;
+    (
+        lists:member(CGId, CollabGroups)
+        andalso can_rsc_collab_member(Id, Action, CGId, CatId, Context)
+    )
+    orelse (
+        lists:member(Id, CollabGroups)
+        andalso is_collab_group_member_action_allowed(Id, Action, Context)
+    )
+    orelse can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context)
+    orelse can_rsc_for_collab(Id, Action, CGId, CatId, UGs, Context);
 can_rsc_1(Id, Action, CGId, CatId, UGs, Context) ->
     can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context)
-    orelse can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context).
+    orelse can_rsc_for_collab(Id, Action, CGId, CatId, UGs, Context).
 
 
+% Check collaboration rules if the content group is a collaboration group
+can_rsc_for_collab(Id, Action, CGId, CatId, UGs, Context) ->
+    m_rsc:is_a(CGId, acl_collaboration_group, Context) 
+    andalso (
+        can_rsc_for_all_collab(Id, Action, CatId, UGs, Context)
+        orelse can_rsc_collab_group_content(Action, CGId, UGs, Context)
+    ).
+
+
+% User is member of collab group CGId, check ACL rules for collaboration groups
+can_rsc_collab_member(Id, Action, CGId, CatId, Context) ->
+    case mod_acl_user_groups:await_lookup({collab, {CatId, Action, false}, collab}, Context) of
+        true -> true;
+        false -> false;
+        undefined -> false
+    end
+    orelse (
+        case mod_acl_user_groups:await_lookup({collab, {CatId, Action, true}, collab}, Context) of
+            true -> true;
+            false -> false;
+            undefined -> false
+        end
+        andalso (
+            is_owner(Id, Context)
+            orelse is_collab_group_manager(CGId, Context)
+        )
+    ).
+
+% User is member of collab group: check configured permissions for the collab group resource itself.
+is_collab_group_member_action_allowed(_CGId, view, _Context) ->
+    true;
 is_collab_group_member_action_allowed(CGId, update, Context) ->
-    case m_config:get_value(mod_acl_user_groups, collab_group_edit, Context) of
+    case m_config:get_value(mod_acl_user_groups, collab_group_update, Context) of
         <<"member">> -> true;
         <<"manager">> -> is_collab_group_manager(CGId, Context);
         _ -> false
@@ -547,27 +563,29 @@ is_collab_group_member_action_allowed(_CGId, _Action, _Context) ->
 
 % If the content-group is a collab group then check if the user has permission to perform
 % the action on all collaboration groups.
-can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context) ->
-    case m_rsc:is_a(CGId, acl_collaboration_group, Context) of
-        true ->
-            CollabId = m_rsc:rid(acl_collaboration_group, Context),
-            can_rsc_non_collab_rules(Id, Action, CollabId, CatId, UGs, Context);
-        false ->
-            false
-    end.
+can_rsc_for_all_collab(Id, Action, CatId, UGs, Context) ->
+    CollabId = m_rsc:rid(acl_collaboration_group, Context),
+    can_rsc_non_collab_rules(Id, Action, CollabId, CatId, UGs, Context).
 
+% If the user can update/link/delete a collaboration group then the user is
+% considered to be a manager of the content group and can update/link/delete
+% all content in the collaboration group.
+can_rsc_collab_group_content(view, _CGId, _UGs, _Context) ->
+    false;
+can_rsc_collab_group_content(Action, CGId, UGs, Context) ->
+    % Do not consider 'is_owner' exceptions here.
+    CatId = m_rsc:p_no_acl(CGId, category_id, Context),
+    can_rsc_ug(CGId, CatId, Action, false, UGs, Context).
+
+% Perform a check using the normal ACL rules
 can_rsc_non_collab_rules(Id, Action, CGId, CatId, UGs, Context) ->
-    case can_rsc_ug(CGId, CatId, Action, false, UGs, Context) of
-        true -> 
-            true;
-        false when is_integer(Id) ->
-            CreatorId = m_rsc:p_no_acl(Id, creator_id, Context),
-            is_owner(Id, CreatorId, Context)
-            andalso can_rsc_ug(CGId, CatId, Action, true, UGs, Context);
-        false when Id =:= insert_rsc ->
-            can_rsc_ug(CGId, CatId, Action, true, UGs, Context)
-    end.
+    can_rsc_ug(CGId, CatId, Action, false, UGs, Context)
+    orelse (
+        is_owner(Id, Context)
+        andalso can_rsc_ug(CGId, CatId, Action, true, UGs, Context)
+    ).
 
+% Check against the ACL rules for user-groups and content-groups
 can_rsc_ug(CGId, CatId, Action, IsOwner, UGs, Context) ->
     lists:any(fun(GId) ->
                  case mod_acl_user_groups:await_lookup({CGId, {CatId, Action, IsOwner}, GId}, Context) of
@@ -577,6 +595,12 @@ can_rsc_ug(CGId, CatId, Action, IsOwner, UGs, Context) ->
                  end
               end,
               UGs).
+
+
+is_owner(insert_rsc, _Context) ->
+    true;
+is_owner(Id, Context) ->
+    is_owner(Id, m_rsc:p_no_acl(Id, creator_id, Context), Context).
 
 is_owner(Id, _CreatorId, #context{user_id=Id}) -> true;
 is_owner(_Id, CreatorId, #context{user_id=CreatorId}) -> true;
