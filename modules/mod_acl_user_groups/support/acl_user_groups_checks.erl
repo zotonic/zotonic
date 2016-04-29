@@ -440,8 +440,8 @@ has_collab_groups(_Context) ->
 has_collab_groups(undefined, _Context) ->
     [];
 has_collab_groups(UserId, Context) ->
-    m_edge:subjects(UserId, hascollabmember, Context)
-    ++ m_edge:subjects(UserId, hascollabmanager, Context).
+    m_edge:subjects(UserId, hascollabmanager, Context)
+    ++ m_edge:subjects(UserId, hascollabmember, Context).
 
 %% @doc Check if the user is manager of a collaboration group.
 is_collab_group_manager(_GroupId, #context{acl=#aclug{collab_groups=[]}}) ->
@@ -540,7 +540,14 @@ can_rsc_collab_member(Id, Action, CGId, CatId, Context) ->
             is_owner(Id, Context)
             orelse is_collab_group_manager(CGId, Context)
         )
+    )
+    orelse (
+        % Members can see each other
+        Action =:= view
+        andalso m_rsc:is_a(Id, person, Context)
+        andalso lists:member(CGId, has_collab_groups(Id, Context))
     ).
+
 
 % User is member of collab group: check configured permissions for the collab group resource itself.
 is_collab_group_member_action_allowed(_CGId, view, _Context) ->
