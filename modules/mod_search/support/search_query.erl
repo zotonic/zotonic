@@ -183,9 +183,17 @@ parse_query([{filter, R}|Rest], Context, Result) ->
 %% content_group=id
 %% Include only resources which are member of the given content group (or one of its children)
 parse_query([{content_group, ContentGroup}|Rest], Context, Result) ->
-    List = m_hierarchy:contains(<<"content_group">>, ContentGroup, Context),
-    {Arg, Result1} = add_arg(List, Result),
-    Result2 = add_where("rsc.content_group_id IN (SELECT(unnest("++Arg++"::int[])))", Result1),
+    ContentGroupId = m_rsc:rid(ContentGroup, Context),
+    Result2 =
+        case m_rsc:is_a(ContentGroupId, content_group, Context) of
+            true ->
+                List = m_hierarchy:contains(<<"content_group">>, ContentGroup, Context),
+                {Arg, Result1} = add_arg(List, Result),
+                add_where("rsc.content_group_id IN (SELECT(unnest("++Arg++"::int[])))", Result1);
+            false ->
+                {Arg, Result1} = add_arg(ContentGroupId, Result),
+                add_where("rsc.content_group_id = "++Arg, Result1)
+        end,
     parse_query(Rest, Context, Result2);
 
 %% id_exclude=resource-id
