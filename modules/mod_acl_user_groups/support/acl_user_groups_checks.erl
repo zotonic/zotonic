@@ -529,7 +529,7 @@ can_rsc_1(Id, Action, CGId, CatId, UGs, Context) ->
     orelse can_rsc_for_all_collab(Id, Action, CGId, CatId, UGs, Context).
 
 
-is_collab_group_member_action_allowed(CGId, edit, Context) ->
+is_collab_group_member_action_allowed(CGId, update, Context) ->
     case m_config:get_value(mod_acl_user_groups, collab_group_edit, Context) of
         <<"member">> -> true;
         <<"manager">> -> is_collab_group_manager(CGId, Context);
