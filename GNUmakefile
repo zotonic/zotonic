@@ -7,7 +7,6 @@ PARSER    := src/erlydtl_parser
 # see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
 REBAR := ./rebar3
 REBAR_URL := https://s3.amazonaws.com/rebar3/rebar3
-REBAR_ENV = EXOMETER_PACKAGES="-afunix -netlink -exo +setup"
 REBAR_OPTS ?=
 # Default target - update sources and call all compile rules in succession
 .PHONY: all
@@ -26,10 +25,10 @@ compile-zotonic:
 	bin/zotonic compile
 
 upgrade-deps: $(REBAR)
-	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) upgrade
+	$(REBAR) $(REBAR_OPTS) upgrade
 
 compile: $(REBAR)
-	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) compile
+	$(REBAR) $(REBAR_OPTS) compile
 	bin/zotonic compile
 
 test: compile
@@ -58,9 +57,9 @@ clean: clean_logs $(REBAR)
 	@echo "removing:"
 	rm -f $(PARSER).erl src/erlydtl/erlydtl_parser.erl
 	@echo "cleaning ebin:"
-	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) clean
+	$(REBAR) $(REBAR_OPTS) clean
 
 .PHONY: dist-clean
 dist-clean: clean
-	$(REBAR_ENV) $(REBAR) $(REBAR_OPTS) clean -a
+	$(REBAR) $(REBAR_OPTS) clean -a
 	rm -f ./rebar3
