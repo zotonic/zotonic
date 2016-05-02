@@ -16,9 +16,7 @@
 
 %% @doc Parse an expression to an expression tree.  Uses the erlydtl parser.
 parse(Expr) when is_binary(Expr) ->
-    parse(binary_to_list(Expr));
-parse(Expr) ->
-    case erlydtl_scanner:scan("{{" ++ Expr ++ "}}") of
+    case erlydtl_scanner:scan(<<"{{", Expr/binary, "}}">>) of
         {ok, Tokens} ->
             case erlydtl_parser:parse(Tokens) of
                 {ok, [Tree|_]} -> {ok, simplify(Tree)};
@@ -26,30 +24,37 @@ parse(Expr) ->
             end;
         Err ->
             Err
-    end.        
+    end;
+parse(Expr) ->
+    parse(z_convert:to_binary(Expr)).
 
-    simplify({expr, Op, Left, Right}) ->
-        {expr, list_to_atom(Op), simplify(Left), simplify(Right)};
-    simplify({expr, Op, Expr}) ->
-        {expr, list_to_atom(Op), simplify(Expr)};
-    simplify({variable, {identifier,_,"m"}}) ->
-        m;
-    simplify({variable, {identifier,_,Name}}) ->
-        {variable, Name};
-    simplify({number_literal, _, Val}) ->
-        list_to_integer(Val);
-    simplify({string_literal, _, Val}) ->
-        Val;
-    simplify({attribute, {identifier,_,Attr}, From}) ->
-        {attribute, list_to_atom(Attr), simplify(From)};
-    simplify({index_value, Array, Index}) ->
-        {index_value, simplify(Array), simplify(Index)};
-    simplify({value_list, List}) ->
-        {value_list, [ simplify(Elt) || Elt <- List ]};
-    simplify({apply_filter, Expr, {filter, {identifier,_,Filter}, Args}}) ->
-        {apply_filter, list_to_atom("filter_"++Filter), list_to_atom(Filter), simplify(Expr), [ simplify(Arg) || Arg <- Args ]};
-    simplify({value, Expr, []}) ->
-        simplify(Expr).
+
+simplify({expr, Op, Left, Right}) ->
+    {expr, z_convert:to_atom(Op), simplify(Left), simplify(Right)};
+simplify({expr, Op, Expr}) ->
+    {expr, z_convert:to_atom(Op), simplify(Expr)};
+simplify({variable, {identifier,_,"m"}}) ->
+    m;
+simplify({variable, {identifier,_,Name}}) ->
+    {variable, Name};
+simplify({number_literal, _, Val}) ->
+    z_convert:to_integer(Val);
+simplify({string_literal, _, Val}) ->
+    Val;
+simplify({attribute, {identifier,_,Attr}, From}) ->
+    {attribute, z_convert:to_atom(Attr), simplify(From)};
+simplify({index_value, Array, Index}) ->
+    {index_value, simplify(Array), simplify(Index)};
+simplify({value_list, List}) ->
+    {value_list, [ simplify(Elt) || Elt <- List ]};
+simplify({apply_filter, Expr, {filter, {identifier,_,Filter}, Args}}) ->
+    {apply_filter, 
+        z_convert:to_atom(<<"filter_", Filter/binary>>), 
+        z_convert:to_atom(Filter), 
+        simplify(Expr), 
+        [ simplify(Arg) || Arg <- Args ]};
+simplify({value, Expr, []}) ->
+    simplify(Expr).
 
 
 

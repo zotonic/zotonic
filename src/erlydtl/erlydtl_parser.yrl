@@ -231,7 +231,7 @@ Terminals
 	__keyword
  	hash
 	'==' '/=' '<' '>' '=<' '>='
-    '++'
+    '++' '--'
 	'+' '-'
 	'*' '/' '%'
 	'(' ')'.
@@ -244,7 +244,7 @@ Left 100 or_keyword.
 Left 105 xor_keyword.
 Left 110 and_keyword.
 Nonassoc 300 '==' '/=' '<' '>' '=<' '>='.
-Left 350 '++'.
+Left 350 '++' '--'.
 Left 400 '+' '-'.
 Left 500 '*' '/' '%'.
 Unary 600 Uminus Unot.
@@ -478,6 +478,7 @@ E -> E '>' E  : {expr, "gt", '$1', '$3'}.
 E -> E '=<' E  : {expr, "le", '$1', '$3'}.
 E -> E '>=' E  : {expr, "ge", '$1', '$3'}.
 E -> E '++' E  : {expr, "concat", '$1', '$3'}.
+E -> E '--' E  : {expr, "subtract", '$1', '$3'}.
 E -> E '+' E  : {expr, "add", '$1', '$3'}.
 E -> E '-' E  : {expr, "sub", '$1', '$3'}.
 E -> E '*' E  : {expr, "multiply", '$1', '$3'}.

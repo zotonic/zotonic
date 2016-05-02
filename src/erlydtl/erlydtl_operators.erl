@@ -26,6 +26,8 @@
     'xor'/3,
 
     concat/3,
+    subtract/3,
+
     add/3,
     sub/3,
     divide/3,
@@ -56,12 +58,31 @@
     erlydtl_runtime:is_true(A, Context) xor erlydtl_runtime:is_true(B, Context).
 
 
+concat(A, undefined, _Context) when is_binary(A) ->
+    A;
+concat(undefined, B, _Context) when is_binary(B) ->
+    B;
+concat(A, undefined, Context) ->
+    erlydtl_runtime:to_list(A, Context);
+concat(undefined, B, Context) ->
+    erlydtl_runtime:to_list(B, Context);
 concat(A, B, _Context) when is_list(A), is_list(B) ->
     A++B;
-concat(A, B, Context) ->
+concat(A, B, Context) when is_binary(A), is_binary(B) ->
     ABin = z_convert:to_binary(A, Context),
     BBin = z_convert:to_binary(B, Context),
-    <<ABin/binary, BBin/binary>>.
+    <<ABin/binary, BBin/binary>>;
+concat(A, B, Context) ->
+    concat(erlydtl_runtime:to_list(A, Context), erlydtl_runtime:to_list(B, Context), Context).
+
+subtract(A, undefined, _Context) ->
+    A;
+subtract(undefined, _, _Context) ->
+    undefined;
+subtract(A, B, _Context) when is_list(A), is_list(B) ->
+    A--B;
+subtract(A, B, Context) ->
+    subtract(erlydtl_runtime:to_list(A, Context), erlydtl_runtime:to_list(B, Context), Context).
 
 
 add(A, B, _Context) ->
