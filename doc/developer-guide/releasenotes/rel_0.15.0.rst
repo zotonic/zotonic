@@ -13,7 +13,7 @@ Main changes are:
 * Added mod_media_exif.
 * Improved mod_export.
 * Upgraded TinyMCE to 4.3.7.
-* Fixed issue:`1216` by changing ``lossless`` media option to ``false`` (instead
+* Fixed :issue:`1216` by changing ``lossless`` media option to ``false`` (instead
   of ``auto``).
 * Fixed :issue:`1148` by adding 403 page for logged in users that have no access
   to the current
