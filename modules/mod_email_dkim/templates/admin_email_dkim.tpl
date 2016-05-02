@@ -6,7 +6,7 @@
     <h1>{_ DKIM e-mail signing setup _}</h1>
 
     <p>
-        {_ The module has generated an RSI keypair for you which will be used when signing outgoing emails. _}
+        {_ The module has generated an RSA keypair for you which will be used when signing outgoing emails. _}
         {_ The location of these key files are the following: _}
         <li>Private key: <b>{{ info.privkey_filepath }}</b></li>
         <li>Public key: <b>{{ info.pubkey_filepath }}</b></li>
