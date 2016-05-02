@@ -58,7 +58,6 @@ start() -> start([]).
 start(_Args) ->
     test_erlang_version(),
     ensure_mnesia_schema(),
-    zotonic_deps:ensure(),    
     case ensure_started(zotonic) of
         ok ->
             ok;

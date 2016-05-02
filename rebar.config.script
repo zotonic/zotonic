@@ -1,3 +1,4 @@
+os:putenv("EXOMETER_PACKAGES", "-afunix -netlink -exo +setup"),
 [ConfigFile] = string:tokens(os:cmd("bin/zotonic configfile 2>/dev/null"), "\n"),
 case filelib:is_regular(ConfigFile) of
     true ->
