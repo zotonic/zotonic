@@ -1,0 +1,3 @@
+[
+ {admin_dkim, ["admin", "email", "dkim"], controller_admin, [{template, "admin_email_dkim.tpl"}, {acl, {use, mod_email_dkim}}]}
+].
