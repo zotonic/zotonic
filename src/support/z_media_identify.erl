@@ -91,7 +91,7 @@ maybe_extension(Filename) ->
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
 -spec identify_file_direct(File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
 identify_file_direct(File, OriginalFilename) ->
-    maybe_identify_extension(identify_file_direct_1(File, OriginalFilename), OriginalFilename).
+    check_acceptable(File, maybe_identify_extension(identify_file_direct_1(File, OriginalFilename), OriginalFilename)).
 
 identify_file_direct_1(File, OriginalFilename) ->
     {OsFamily, _} = os:type(),
@@ -108,6 +108,14 @@ identify_file_direct_1(File, OriginalFilename) ->
 				_Mime -> {ok, Props}
 			end
 	end.
+
+check_acceptable(_File, {error, _} = Error) ->
+    Error;
+check_acceptable(File, {ok, Props}) ->
+    case z_media_sanitize:is_file_acceptable(File, Props) of
+        false -> {ok, [{mime, "application/octet-stream"}]};
+        true -> {ok, Props}
+    end.
 
 maybe_identify_extension({error, "identify error: "++_}, OriginalFilename) ->
     {ok, [ {mime, guess_mime(OriginalFilename)} ]};
@@ -331,6 +339,8 @@ extension("image/jpeg", _PreferExtension) -> ".jpg";
 extension(<<"image/jpeg">>, _PreferExtension) -> ".jpg";
 extension("application/vnd.ms-excel", _) -> ".xls";
 extension(<<"application/vnd.ms-excel">>, _) -> ".xls";
+extension("text/plain", _PreferExtension) -> ".txt";
+extension(<<"text/plain">>, _PreferExtension) -> ".txt";
 extension(Mime, PreferExtension) ->
     Extensions = mimetypes:extensions(z_convert:to_binary(Mime)),
     case PreferExtension of
