@@ -621,11 +621,11 @@ can_edge(#acl_edge{predicate=hasusergroup, subject_id=MemberId, object_id=UserGr
     andalso can_module(use, mod_acl_user_groups, Context);
 can_edge(#acl_edge{predicate=hascollabmanager, subject_id=CollabGroupId, object_id=UserId}, Context) ->
     m_rsc:is_a(CollabGroupId, acl_collaboration_group, Context)
-    andalso can_rsc(CollabGroupId, edit, Context)
+    andalso can_rsc(CollabGroupId, update, Context)
     andalso can_rsc(UserId, view, Context);
 can_edge(#acl_edge{predicate=hascollabmember, subject_id=CollabGroupId, object_id=UserId}, Context) ->
     m_rsc:is_a(CollabGroupId, acl_collaboration_group, Context)
-    andalso can_rsc(CollabGroupId, edit, Context)
+    andalso can_rsc(CollabGroupId, update, Context)
     andalso can_rsc(UserId, view, Context);
 can_edge(#acl_edge{predicate=P, subject_id=SubjectId, object_id=ObjectId}, Context) when is_atom(P) ->
     can_rsc(SubjectId, link, Context)
