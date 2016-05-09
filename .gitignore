@@ -39,4 +39,5 @@ deps/
 
 .rebar
 _build
+_checkouts
 /log/
