@@ -39,7 +39,7 @@
                            "37ba6bb25576c225bf414d1517de908635612413"}},
        {dispatch_compiler,".*",
                           {git,"git://github.com/zotonic/dispatch_compiler.git",
-                               "9d2f4d5f4301d1c3a62a028c18d9dd11c5183971"}},
+                               "32e9ef367bf25c607c2b6744d3c3c5de701ff6a3"}},
        {sendfile,".*",
                  {git,"git://github.com/tuncer/sendfile.git",
                       "42355894adeb1fef9ec7b31642a9707c86dd0f23"}},
