@@ -107,7 +107,7 @@ locate_source([{module, Module} = M|Rs], Path, OriginalFile, Filters, Context) -
     end;
 locate_source([DirName|Rs], Path, OriginalFile, Filters, Context) ->
     NamePath = make_abs(filename:join([DirName,Path]), Context),
-    case part_file(NamePath) of
+    case part_file(NamePath, []) of
         {ok, Loc} ->
             Loc;
         {error, enoent} ->
@@ -122,7 +122,7 @@ locate_source_module_indexer(lib, Path, OriginalFile, [], Context) ->
 locate_source_module_indexer(ModuleIndex, Path, _OriginalFile, undefined, Context) ->
     case z_module_indexer:find(ModuleIndex, Path, Context) of
         {ok, #module_index{filepath=FoundFile}} ->
-            part_file(FoundFile);
+            part_file(FoundFile, []);
         {error, enoent} ->
             % Try to find ".tpl" version -> render and cache result
             TplFile = <<Path/binary, ".tpl">>,
@@ -187,16 +187,13 @@ locate_in_filestore(Path, InDir, Medium, Context) ->
                 acl=proplists:get_value(id, Medium)
             }};
         undefined ->
-            part_file(filename:join(InDir, Path))
+            part_file(filename:join(InDir, Path), [{acl,proplists:get_value(id, Medium)}])
     end.
 
 part_missing(Filename) ->
     {ok, #part_missing{
         file = Filename
     }}.
-
-part_file(Filename) ->
-    part_file(Filename, []).
 
 part_file(Filename, Opts) ->
     case file:read_file_info(Filename) of
@@ -241,7 +238,7 @@ generate_preview(true, _Mime, Path, OriginalFile, Filters, Medium, Context) ->
                     z_notifier:first(#filestore{action=upload, path=FileStorePath}, Context),
                     case proplists:get_value(id, Medium) of
                         undefined ->
-                            part_file(PreviewFilePath);
+                            part_file(PreviewFilePath, []);
                         RscId ->
                             part_file(PreviewFilePath, [{acl,RscId}])
                     end;

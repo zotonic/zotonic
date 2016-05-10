@@ -29,7 +29,6 @@
     service_available/2,
     allowed_methods/2,
     resource_exists/2,
-    is_authorized/2,
     forbidden/2,
     last_modified/2,
     expires/2,
@@ -56,7 +55,6 @@ service_available(ReqData, ConfigProps) ->
                         z_context:new(ReqData, ?MODULE))),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
     z_context:lager_md(Context1),
-
     case get_file_info(ConfigProps, Context1) of
         {ok, Info} ->
             {true, ReqData, {Info, Context1}};
@@ -79,18 +77,16 @@ resource_exists(ReqData, {#z_file_info{acls=Acls}, Context} = State) ->
                    end,
                    Acls), ReqData, State}.
 
-%% @TODO: merge this into the forbidden check?
-is_authorized(ReqData, {{error,enoent},_Context} = State) ->
-    {true, ReqData, State};
-is_authorized(ReqData, {FInfo,Context}) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    {Ret, RD1, Context2} = z_controller_helper:is_authorized(Context1),
-    {Ret, RD1, {FInfo, Context2}}.
-
 forbidden(ReqData, {{error,_},_Context} = State) ->
     {false, ReqData, State};
-forbidden(ReqData, {#z_file_info{} = Info,Context} = State) ->
-    {not z_file_request:is_visible(Info, Context), ReqData, State}.
+forbidden(ReqData, {#z_file_info{} = FInfo,Context}) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    case z_controller_helper:is_authorized(Context1) of
+        {false, RD1, Context2} ->
+            {true, RD1, {FInfo, Context2}};
+        {true, RD1, Context2} ->
+            {not z_file_request:is_visible(FInfo, Context2), RD1, {FInfo,Context2}}
+    end.
 
 last_modified(ReqData, {{error, _},_} = State) ->
     {calendar:universal_time(), ReqData, State};

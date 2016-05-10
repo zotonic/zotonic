@@ -47,6 +47,8 @@
         can_rsc_insert/3,
         can_move/3,
         default_content_group/2
+
+    ,can_rsc/3
     ]).
 
 -include_lib("zotonic.hrl").
@@ -192,7 +194,7 @@ acl_is_allowed(_, #context{user_id=1}) ->
     true;
 acl_is_allowed(#acl_is_allowed{object=undefined}, _Context) ->
     undefined;
-acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) ->
+acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) ->
     can_rsc(Id, view, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) -> 
     can_media(Mime, Size, Context);
