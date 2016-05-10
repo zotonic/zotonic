@@ -24,6 +24,8 @@
                             subject_id=id
                             edge_template="_rsc_edge_media.tpl"
                             predicate=`depiction`
+                            tab="upload"
+                            tabs_enabled=tabs_enabled
                             actions=[
                                 {postback postback={reload_media rsc_id=id div_id=["links-",id|make_list,"-depiction"]}
                                     delegate="controller_admin_edit"}
