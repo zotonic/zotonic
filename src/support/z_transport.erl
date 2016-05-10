@@ -87,7 +87,7 @@ msg(Queue, javascript, Data, Options) when not is_binary(Data) ->
 msg(Queue, Delegate, Data, Options) ->
     #z_msg_v1{
         qos=proplists:get_value(qos, Options, 0),
-        msg_id=z_convert:to_binary(z_ids:id(32)),
+        msg_id=z_ids:id(32),
         timestamp=now_msec(),
         delegate=Delegate,
         push_queue=Queue,

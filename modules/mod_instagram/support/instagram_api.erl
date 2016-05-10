@@ -140,7 +140,7 @@ tagged_1({error, _} = Error) ->
 verify_token(Context) ->
     case m_config:get_value(mod_instagram, verify_token, Context) of
         None when None =:= undefined; None =:= <<>> ->
-            Tk = z_convert:to_binary(z_ids:id()),
+            Tk = z_ids:id(),
             m_config:set_value(mod_instagram, verify_token, Tk, Context),
             Tk;
         Tk ->

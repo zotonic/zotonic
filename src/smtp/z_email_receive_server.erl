@@ -135,7 +135,7 @@ handle_RCPT_extension(_Extension, State) ->
 
 -spec handle_DATA(From :: binary(), To :: [binary(),...], Data :: binary(), State :: #state{}) -> {'ok', string(), #state{}} | {'error', string(), #state{}}.
 handle_DATA(From, To, Data, State) ->
-    MsgId = z_convert:to_binary(z_ids:id(32)),
+    MsgId = z_ids:id(32),
     DataRcvd = add_received_header(Data, MsgId, State),
     decode_and_receive(MsgId, From, To, DataRcvd, State).
 

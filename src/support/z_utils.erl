@@ -170,7 +170,7 @@ erase_process_dict() ->
 
 %% 50 usec on core2duo 2GHz
 encode_value(Value, Context) ->
-    Salt = z_ids:id(),
+    Salt = binary_to_list(z_ids:id()), %% convert to list for backwards compatibility
     Secret = z_ids:sign_key(Context),
     base64:encode(
       term_to_binary({Value, Salt, crypto:hmac(sha, Secret, term_to_binary([Value, Salt]))})
@@ -877,7 +877,7 @@ generate_username1(Name, Context) ->
     end.
 
 generate_username2(Name, Context) ->
-    N = integer_to_list(z_ids:number() rem 1000),
+    N = integer_to_list(z_ids:number(999)),
     case m_identity:lookup_by_username(Name++N, Context) of
         undefined -> Name;
         _ -> generate_username2(Name, Context)

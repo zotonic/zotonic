@@ -108,7 +108,7 @@ create_attachment(Data, ContentType, Name) ->
     ContentId = z_ids:id(30),
     Headers = [ 
         {<<"Content-ID">>, iolist_to_binary(["<", ContentId, ">"])},
-        {<<"X-Attachment-Id">>, z_convert:to_binary(ContentId)} 
+        {<<"X-Attachment-Id">>, ContentId} 
     ],
     {create_attachment_part(Data, ContentType, Name, Headers), ContentId}.
 

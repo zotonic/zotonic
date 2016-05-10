@@ -159,7 +159,7 @@ insert_task(Module, Function, UniqueKey, Context) ->
     
 %% @doc Insert a slow running pivot task with unique key and arguments.
 insert_task(Module, Function, undefined, Args, Context) ->
-    insert_task(Module, Function, z_ids:id(), Args, Context);
+    insert_task(Module, Function, binary_to_list(z_ids:id()), Args, Context);
 insert_task(Module, Function, UniqueKey, Args, Context) ->
     insert_task_after(undefined, Module, Function, UniqueKey, Args, Context).
 

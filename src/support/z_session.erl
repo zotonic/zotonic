@@ -689,4 +689,4 @@ find_page(PageId, Session) ->
     end.
 
 new_id() ->
-    z_convert:to_binary(z_ids:id()).
+    z_ids:id().

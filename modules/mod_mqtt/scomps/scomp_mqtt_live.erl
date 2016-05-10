@@ -63,7 +63,7 @@ render(Params, _Vars, Context) ->
     end.
 
 render_template(Template, Params, Context) ->
-    Target = proplists:get_value(target, Params, z_convert:to_binary(z_ids:identifier(16))),
+    Target = proplists:get_value(target, Params, z_ids:identifier(16)),
     Where = z_convert:to_binary(proplists:get_value(where, Params, <<"update">>)), 
     {LiveVars,TplVars} = lists:partition(
                 fun({topic,_}) -> true;

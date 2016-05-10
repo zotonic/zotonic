@@ -29,7 +29,7 @@ render(Params, _Vars, Context) ->
     Postback  = proplists:get_value(postback, Params),
 	Delegate  = proplists:get_value(delegate, Params),
     Text      = proplists:get_value(text, Params, <<"Submit">>),
-    Id        = z_ids:optid(proplists:get_value(id, Params)),
+    Id        = binary_to_list(z_ids:optid(proplists:get_value(id, Params))),
     Class     = proplists:get_all_values(class, Params),
     Icon      = proplists:get_all_values(icon, Params),
     Style     = proplists:get_value(style, Params),
@@ -54,12 +54,12 @@ render(Params, _Vars, Context) ->
     Context1 = case Options1 of
                     [] -> Context;
                     _  -> 
-					    Options2  = case Delegate of
-										undefined -> Options1;
-										_ -> [{delegate, Delegate} | Options1]
-									end,
+                       Options2  = case Delegate of
+                                       undefined -> Options1;
+				       _ -> [{delegate, Delegate} | Options1]
+                                   end,
                         Options3  = [ {qarg,X} || {qarg,X} <- Params ] ++ Options2,
-						z_render:wire(Id, {event,[{type,click}|Options3]}, Context)
+                        z_render:wire(Id, {event,[{type,click}|Options3]}, Context)
                end,
 
     Attrs = [
