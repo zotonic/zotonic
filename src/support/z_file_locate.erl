@@ -185,7 +185,7 @@ locate_in_filestore(Path, InDir, Medium, Context) ->
                 acl=proplists:get_value(id, Medium)
             }};
         undefined ->
-            part_file(filename:join(InDir, Path))
+            part_file(filename:join(InDir, Path), [{acl,proplists:get_value(id, Medium)}])
     end.
 
 part_missing(Filename) ->
