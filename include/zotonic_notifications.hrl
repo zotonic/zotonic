@@ -138,6 +138,9 @@
 %% @doc Rewrite an url before it will be dispatched using the z_sites_dispatcher (foldl)
 -record(dispatch_rewrite, {is_dir=false, path="", host}).
 
+%% @doc Request the SSL certificates for this site. The server_name property contains the hostname used by the client. (first)
+-record(ssl_options, {server_name}).
+
 %% @doc Used in the admin to fetch the possible blocks for display (foldl)
 -record(admin_edit_blocks, {id}).
 

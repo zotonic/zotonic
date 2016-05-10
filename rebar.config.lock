@@ -2,8 +2,9 @@
 
 {require_min_otp_vsn,"R16"}.
 {erl_opts,[{parse_transform,lager_transform},
-           {platform_define,"^[0-9]+",namespaced_dicts},
-           {platform_define,"^([0-9]+|R16)",coding_utf8}]}.
+           {platform_define,"^([0-9])+",namespaced_dicts},
+           {platform_define,"^([0-9]+|R16)",coding_utf8},
+           {platform_define,"^(R16|17)",no_ssl}]}.
 {deps,[{goldrush,".*",
                  {git,"git://github.com/DeadZen/goldrush.git",
                       "71e63212f12c25827e0c1b4198d37d5d018a7fec"}},

@@ -175,29 +175,36 @@ compile_options() ->
      {outdir, "ebin"},
      {parse_transform, lager_transform},
      nowarn_deprecated_type,
-     debug_info] ++ platform_defines_r17up() ++ platform_defines_r16up().
+     debug_info] ++ platform_defines().
 
-platform_defines_r16up() ->
-    case re:run(erlang:system_info(otp_release), "^(R16|[0-9]).*") of
-        {match, _} ->
-            [{d, coding_utf8}];
-        nomatch ->
-            []
-    end.
+%% Pick up the platform_defines set in rebar.config(.lock)
+%% 
+platform_defines() ->
+    opt_no_ssl(opt_coding_utf8(opt_namespaced_dicts([]))).
+
+-ifdef(coding_utf8).
+opt_coding_utf8(Defines) -> [{d, coding_utf8} | Defines].
+-else.
+opt_coding_utf8(Defines) -> Defines.
+-endif.
+
+-ifdef(namespaced_dicts).
+opt_namespaced_dicts(Defines) -> [{d, namespaced_dicts} | Defines].
+-else.
+opt_namespaced_dicts(Defines) -> Defines.
+-endif.
+
+-ifdef(no_ssl).
+opt_no_ssl(Defines) -> [{d, no_ssl} | Defines].
+-else.
+opt_no_ssl(Defines) -> Defines.
+-endif.
 
 compile_user_options() ->
     application:load(zotonic),
     Outdir = application:get_env(zotonic, user_ebin_dir, "ebin"),
     [ {outdir, Outdir} | compile_options()].
 
-platform_defines_r17up() ->
-    case re:run(erlang:system_info(otp_release), "^[0-9].*") of
-        {match, _} ->
-            [{d, namespaced_dicts}];
-        nomatch ->
-            []
-    end.
-             
 %% @doc For a list of glob patterns, split all patterns which contain
 %% /*/* up in more patterns, so that we can parallelize it even more.
 unglob(Patterns) ->
