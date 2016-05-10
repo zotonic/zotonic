@@ -516,18 +516,11 @@ p_no_acl(Id, translation, Context) ->
     end;
 p_no_acl(Id, default_page_url, Context) -> page_url(Id, Context);
 p_no_acl(Id, uri, Context) ->
-    case p_no_acl(Id, is_authoritative, Context) of
-        true ->
-            authoritative_uri(Id, Context);
-        false -> 
-            case p_cached(Id, uri, Context) of
-                Empty when Empty == <<>>; Empty == undefined ->
-                    authoritative_uri(Id, Context);
-                Uri ->
-                    Uri
-            end;
-        undefined ->
-            undefined
+    case p_cached(Id, uri, Context) of
+        Empty when Empty =:= <<>>; Empty =:= undefined ->
+            non_informational_uri(Id, Context);
+        Uri ->
+            Uri
     end;
 p_no_acl(Id, category, Context) -> 
     m_category:get(p_no_acl(Id, category_id, Context), Context);
@@ -582,7 +575,7 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
         end.
 
 
-authoritative_uri(Id, Context) ->
+non_informational_uri(Id, Context) ->
     case z_dispatcher:url_for(id, [{id, Id}], z_context:set_language(undefined, Context)) of
         undefined ->
             iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(Id))/binary>>, Context));
