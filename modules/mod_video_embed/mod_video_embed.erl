@@ -217,7 +217,7 @@ media_import(Service, Descr, MD, MI) ->
             undefined
     end.
 
-fetch_videoid_from_embed(Service, undefined) ->
+fetch_videoid_from_embed(_Service, undefined) ->
     {<<>>, undefined};
 fetch_videoid_from_embed(Service, EmbedCode) ->
     case re:run(EmbedCode, 
@@ -262,6 +262,7 @@ url_to_service(<<"www.youtube.com/", _/binary>>) -> youtube;
 url_to_service(<<"youtube.com/", _/binary>>) -> youtube;
 url_to_service(<<"www.vimeo.com/", _/binary>>) -> vimeo;
 url_to_service(<<"vimeo.com/", _/binary>>) -> vimeo;
+url_to_service(<<"player.vimeo.com/", _/binary>>) -> vimeo;
 url_to_service(<<"flv.video.yandex.ru/", _/binary>>) -> yandex;
 url_to_service(<<"static.video.yandex.ru/", _/binary>>) -> yandex;
 url_to_service(_) -> undefined.
@@ -371,42 +372,32 @@ spawn_preview_create(MediaId, InsertProps, Context) ->
 % @doc Fetch the preview image of a youtube video. The preview is located at: http://img.youtube.com/vi/[code]/0.jpg
 % @todo Make this more robust wrt http errors.
 preview_youtube(MediaId, InsertProps, Context) ->
-    case z_convert:to_binary(proplists:get_value(video_embed_code, InsertProps)) of
-        <<>> ->
-            nop;
-        Embed ->
-            case re:run(Embed, "youtube\\.com/(v|embed)/([a-zA-Z0-9_\\-]+)", [{capture,[2],list}]) of
-                {match, [Code]} ->
-                    Url = "http://img.youtube.com/vi/"++Code++"/0.jpg",
-                    m_media:save_preview_url(MediaId, Url, Context);
-                _ ->
-                    nop
-            end
+    case z_convert:to_binary(proplists:get_value(video_embed_id, InsertProps)) of
+        <<>> -> nop;
+        undefined -> nop;
+        EmbedId ->
+            Url = "http://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg",
+            m_media:save_preview_url(MediaId, Url, Context)
     end.
 
 
 % @doc Fetch the preview image of a vimeo video. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
 % @todo Make this more robust wrt http errors.
 preview_vimeo(MediaId, InsertProps, Context) ->
-    case z_convert:to_binary(proplists:get_value(video_embed_code, InsertProps)) of
-        <<>> -> 
-            nop;
-        Embed ->
-            case re:run(Embed, "clip_id=([0-9]+)", [{capture,[1],list}]) of
-                {match, [Code]} ->
-                    JsonUrl = "http://vimeo.com/api/v2/video/" ++ Code ++ ".json",
-                    case httpc:request(JsonUrl) of
-                        {ok, {_StatusLine, _Header, Data}} ->
-                            {array, [{struct, Props}]} = mochijson:decode(Data),
-                            case proplists:get_value("thumbnail_large", Props) of
-                                undefined -> nop;
-                                ImgUrl -> m_media:save_preview_url(MediaId, ImgUrl, Context)
-                            end;
-                        {error, _Reason} ->
-                            %% Too bad - no preview available - ignore for now (see todo above)
-                            nop
+    case z_convert:to_binary(proplists:get_value(video_embed_id, InsertProps)) of
+        <<>> -> nop;
+        undefined -> nop;
+        EmbedId ->
+            JsonUrl = "http://vimeo.com/api/v2/video/"++z_convert:to_list(EmbedId)++".json",
+            case httpc:request(JsonUrl) of
+                {ok, {_StatusLine, _Header, Data}} ->
+                    {array, [{struct, Props}]} = mochijson:decode(Data),
+                    case proplists:get_value("thumbnail_large", Props) of
+                        undefined -> nop;
+                        ImgUrl -> m_media:save_preview_url(MediaId, ImgUrl, Context)
                     end;
-                _ ->
+                {error, _Reason} ->
+                    %% Too bad - no preview available - ignore for now (see todo above)
                     nop
             end
     end.
