@@ -68,36 +68,49 @@ context_options(Context) ->
     [
         {elt_extra, m_config:get_value(site, html_elt_extra, <<"embed,iframe,object,script">>, Context)},
         {attr_extra, m_config:get_value(site, html_attr_extra, <<"data,allowfullscreen,flashvars,frameborder,scrolling,async,defer">>, Context)},
-        {element, fun(Element, Stack, _Opts) -> sanitize_element(Element, Stack, Context) end}
+        {element, fun(Element, Stack, Opts) -> sanitize_element(Element, Stack, Opts, Context) end}
     ].
 
 default_options() ->
     [
         {elt_extra, <<>>},
         {attr_extra, <<>>},
-        {element, fun(Element, _Stack, _Opts) -> Element end}
+        {element, fun sanitize_element_opts/3}
     ].
 
 
-sanitize_element(Element, Stack, Context) ->
+sanitize_element(Element, Stack, Opts, Context) ->
     case z_notifier:foldl(#sanitize_element{element=Element, stack=Stack}, Element, Context) of
         Element ->
-            sanitize_element_1(Element, Stack, Context);
+            sanitize_element_1(Element, Stack, Opts, Context);
         NewElement ->
             NewElement
     end.
 
-sanitize_element_1({<<"iframe">>, Props, _Inner}, _Stack, Context) ->
+sanitize_element_1({<<"iframe">>, Props, _Inner}, _Stack, _Opts, Context) ->
     sanitize_iframe(Props, Context);
-sanitize_element_1({<<"embed">>, Props, _Inner}, _Stack, Context) ->
+sanitize_element_1({<<"embed">>, Props, _Inner}, _Stack, _Opts, Context) ->
     sanitize_embed(Props, Context);
-sanitize_element_1({<<"object">>, Props, []}, _Stack, Context) ->
+sanitize_element_1({<<"object">>, Props, []}, _Stack, _Opts, Context) ->
     sanitize_object(Props, Context);
-sanitize_element_1({<<"object">>, _Props, Inner}, _Stack, _Context) ->
+sanitize_element_1({<<"object">>, _Props, Inner}, _Stack, _Opts, _Context) ->
     Inner;
-sanitize_element_1({<<"script">>, Props, _Inner}, _Stack, Context) ->
+sanitize_element_1({<<"script">>, Props, _Inner}, _Stack, _Opts, Context) ->
     sanitize_script(Props, Context);
-sanitize_element_1(Element, _Stack, _Context) ->
+sanitize_element_1(Element, Stack, Opts, _Context) ->
+    sanitize_element_opts(Element, Stack, Opts).
+
+
+sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts) ->
+    case proplists:is_defined(<<"target">>, Attrs) of
+        true ->
+            Attrs1 = [ Attr || Attr = {K,_} <- Attrs, K =/= <<"rel">> ],
+            Attrs2 = [ {<<"rel">>, <<"noopener noreferrer">>} | Attrs1 ],
+            {<<"a">>, Attrs2, Inner};
+        false ->
+            Element
+    end;
+sanitize_element_opts(Element, _Stack, _Opts) ->
     Element.
 
 
