@@ -35,10 +35,28 @@
 
 
 %% @doc Get value from config file (cached)
+%%
+%% Some config settings can be overruled by environment settings.
+get(listen_ip) ->
+    case os:getenv("ZOTONIC_IP") of
+        false -> ?MODULE:get(listen_ip, default(listen_ip));
+        Any when Any == []; Any == "*"; Any == "any" -> any;
+        Ip -> Ip
+    end;
+get(listen_port) ->
+    case os:getenv("ZOTONIC_PORT") of
+        false -> ?MODULE:get(listen_port, default(listen_port));
+        Port -> z_convert:to_integer(Port)
+    end;
+get(ssl_listen_port) ->
+    case os:getenv("ZOTONIC_SSL_PORT") of
+        false -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
+        Port -> z_convert:to_integer(Port)
+    end;
 get(Key) ->
     ?MODULE:get(Key, default(Key)).
 
-%% @doc Get value from config file, returning default value when not set (cached)
+%% @doc Get value from config file, returning default value when not set (cached).
 get(Key, Default) ->
 	case application:get_env(zotonic, Key) of
 		undefined ->
@@ -49,6 +67,7 @@ get(Key, Default) ->
 
 default(timezone) -> <<"UTC">>;
 default(listen_port) -> 8000;
+default(ssl_listen_port) -> 8443;
 default(listen_ip) -> any;
 default(smtp_verp_as_from) -> false;
 default(smtp_no_mx_lookups) -> false;

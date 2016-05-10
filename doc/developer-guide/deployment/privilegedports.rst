@@ -89,7 +89,7 @@ will cause Zotonic to crash on startup.
 Add the following entries to ``/home/zotonic/.profile``, then save file & exit::
 
   export ZOTONIC_PORT=80
-  export ZOTONIC_PORT_SSL=443
+  export ZOTONIC_SSL_PORT=443
   public_interface=eth0
   export ZOTONIC_IP=`/sbin/ifconfig $public_interface | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
   export ERL="authbind --deep erl"

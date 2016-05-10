@@ -175,10 +175,10 @@ this to the site's config::
 
   {mod_foo, [{key, value}, ...]}
 
-For instance, to set the ``mod_ssl.listen_port`` and
-``mod_ssl.is_secure`` configuration options from :ref:`mod_ssl`, do::
+For instance, to set the ``mod_ssl.is_secure`` configuration options 
+from :ref:`mod_ssl`, do::
 
-  {mod_ssl, [{listen_port, 443}, {is_secure, true}]}
+  {mod_ssl, [{is_secure, true}]}
 
 
 Reloading the site config
