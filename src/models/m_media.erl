@@ -522,7 +522,8 @@ replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
                     undefined -> PreProc;
                     #media_upload_preprocess{} = Mapped -> Mapped
                  end,
-    replace_file_db(RscId, NewPreProc, Props, Opts, Context).
+    NewPreProc2 = z_media_sanitize:sanitize(NewPreProc, Context),
+    replace_file_db(RscId, NewPreProc2, Props, Opts, Context).
 
 replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     SafeRootName = z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),
