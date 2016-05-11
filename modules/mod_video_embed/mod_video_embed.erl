@@ -373,8 +373,10 @@ spawn_preview_create(MediaId, InsertProps, Context) ->
 % @todo Make this more robust wrt http errors.
 preview_youtube(MediaId, InsertProps, Context) ->
     case z_convert:to_binary(proplists:get_value(video_embed_id, InsertProps)) of
-        <<>> -> nop;
-        undefined -> nop;
+        <<>> ->
+            static_preview(MediaId, "images/youtube.jpg", Context);
+        undefined ->
+            static_preview(MediaId, "images/youtube.jpg", Context);
         EmbedId ->
             Url = "http://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg",
             m_media:save_preview_url(MediaId, Url, Context)
@@ -385,20 +387,28 @@ preview_youtube(MediaId, InsertProps, Context) ->
 % @todo Make this more robust wrt http errors.
 preview_vimeo(MediaId, InsertProps, Context) ->
     case z_convert:to_binary(proplists:get_value(video_embed_id, InsertProps)) of
-        <<>> -> nop;
-        undefined -> nop;
+        <<>> ->
+            static_preview(MediaId, "images/vimeo.jpg", Context);
+        undefined ->
+            static_preview(MediaId, "images/vimeo.jpg", Context);
         EmbedId ->
             JsonUrl = "http://vimeo.com/api/v2/video/"++z_convert:to_list(EmbedId)++".json",
             case httpc:request(JsonUrl) of
-                {ok, {_StatusLine, _Header, Data}} ->
+                {ok, {{_Http, 200, _Ok}, _Header, Data}} ->
                     {array, [{struct, Props}]} = mochijson:decode(Data),
                     case proplists:get_value("thumbnail_large", Props) of
-                        undefined -> nop;
-                        ImgUrl -> m_media:save_preview_url(MediaId, ImgUrl, Context)
+                        undefined ->
+                            static_preview(MediaId, "images/vimeo.jpg", Context);
+                        ImgUrl ->
+                            m_media:save_preview_url(MediaId, ImgUrl, Context)
                     end;
+                {ok, {StatusCode, _Header, Data}} ->
+                    lager:warning("[~p] Vimeo metadata fetch returns ~p ~p",
+                                  [z_context:site(Context), StatusCode, Data]),
+                    static_preview(MediaId, "images/vimeo.jpg", Context);
                 {error, _Reason} ->
                     %% Too bad - no preview available - ignore for now (see todo above)
-                    nop
+                    static_preview(MediaId, "images/vimeo.jpg", Context)
             end
     end.
 
@@ -409,16 +419,27 @@ preview_vimeo(MediaId, InsertProps, Context) ->
 preview_yandex(MediaId, InsertProps, Context) ->
     case z_convert:to_binary(proplists:get_value(video_embed_code, InsertProps)) of
         <<>> -> 
-            nop;
+            static_preview(MediaId, "images/yandex.jpg", Context);
         Embed ->
             case re:run(Embed, "flv\\.video\\.yandex\\.ru/lite/([^/]+)/([^\"'&/#]+)", [{capture, [1, 2], list}]) of
                 {match, [User, Code]} ->
                     Url = lists:flatten(["http://static.video.yandex.ru/get/", User, $/, Code, "/1.m450x334.jpg"]),
                     m_media:save_preview_url(MediaId, Url, Context);
                 _ ->
-                    nop
+                    static_preview(MediaId, "images/yandex.jpg", Context)
             end
     end.
+
+static_preview(MediaId, LibFile, Context) ->
+    case z_module_indexer:find(lib, LibFile, Context) of
+        {ok, #module_index{filepath=File}} ->
+            Mime = z_media_identify:guess_mime(File),
+            {ok, Bin} = file:read_file(File),
+            m_media:save_preview(MediaId, Bin, Mime, Context);
+        {error, enoent} ->
+            nop
+    end.
+
 
 test() ->
     Html = <<"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/PSb4ZfKif4Y\" frameborder=\"0\" allowfullscreen></iframe>">>,
