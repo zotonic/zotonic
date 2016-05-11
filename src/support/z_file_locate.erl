@@ -243,8 +243,11 @@ generate_preview(true, _Mime, Path, OriginalFile, Filters, Medium, Context) ->
                             part_file(PreviewFilePath, [{acl,RscId}])
                     end;
                 {error, enoent} ->
-                    lager:warning("Convert error: input file disappeared, restarting ~p (~p)", [Path, Filename]),
+                    lager:warning("[~p] Convert error: input file disappeared, restarting ~p (~p)",
+                                  [z_context:site(Context), Path, Filename]),
                     {error, preview_source_gone};
+                {error, convert_error} ->
+                    convert_error_part(Medium, PreviewFilePath, Filters, Context);
                 {error, _} = Error ->
                     lager:warning("Convert error: ~p for path ~p", [Error, Path]),
                     Error
@@ -254,6 +257,33 @@ generate_preview(true, _Mime, Path, OriginalFile, Filters, Medium, Context) ->
     end;
 generate_preview(false, _Mime, _Path, _OriginalFile, _Filters, _Medium, _Context) ->
     {error, enoent}.
+
+
+% Copy error image to the OutFile
+% 1. Find correct error image
+% 2. Redo the resize with the error image as input
+convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
+    case z_module_indexer:find(lib, "images/placeholder.png", Context) of
+        {ok, #module_index{filepath=Path}} ->
+            case z_media_preview:convert(z_convert:to_list(Path), Path, z_convert:to_list(PreviewFilePath), Filters, Context) of
+                ok ->
+                    case proplists:get_value(id, Medium) of
+                        undefined ->
+                            part_file(PreviewFilePath, []);
+                        RscId ->
+                            part_file(PreviewFilePath, [{acl,RscId}])
+                    end;
+                {error, _} = Error ->
+                    lager:info("[~p] Error ~p generating fallback preview for ~p with filters ~p",
+                               [z_context:site(Context), Error, PreviewFilePath, Filters]),
+                    Error
+            end;
+        {error, enoent} ->
+            lager:info("[~p] Can't find 'images/placeholder.png' for convert error fallback.",
+                       [z_context:site(Context)]),
+            {error, convert_error}
+    end.
+
 
 fetch_archive(File, Context) ->
     case locate_in_filestore(File, z_path:media_archive(Context), [], Context) of

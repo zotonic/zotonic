@@ -16,7 +16,7 @@ youtube_object_test() ->
 
 
 svg_imagetragick_test() ->
-    ?assertEqual(false, z_media_sanitize:is_acceptable_svg(<<"
+    A = z_svg:sanitize(<<"
 <?xml version=\"1.0\" standalone=\"no\"?>
 <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">
 <svg width=\"800\" height=\"600\"
@@ -24,8 +24,10 @@ svg_imagetragick_test() ->
     xmlns:xlink=\"http://www.w3.org/1999/xlink\">
     <image width=\"800\" height=\"600\" xlink:href=\"https://upload.wikimedia.org/wikipedia/commons/c/ca/Triple-Spiral-4turns_green_transparent.png\"></image>
 </svg>
-">>)),
-    ?assertEqual(false, z_media_sanitize:is_acceptable_svg(<<"
+">>),
+    ?assertEqual(nomatch, binary:match(A, <<"upload.wikimedia">>)),
+
+    B = z_svg:sanitize(<<"
 <?xml version=\"1.0\" standalone=\"no\"?>
 <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">
 <svg width=\"800\" height=\"600\"
@@ -33,8 +35,10 @@ svg_imagetragick_test() ->
     xmlns:xlink=\"http://www.w3.org/1999/xlink\">
     <image width=\"800\" height=\"600\" clip-path=\"url(http://example.com)\"</image>
 </svg>
-">>)),
-    ?assertEqual(true, z_media_sanitize:is_acceptable_svg(<<"
+">>),
+    ?assertEqual(nomatch, binary:match(B, <<"example.com">>)),
+
+    C = z_svg:sanitize(<<"
 <?xml version=\"1.0\" standalone=\"no\"?>
 <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">
 <svg width=\"800\" height=\"600\"
@@ -42,5 +46,6 @@ svg_imagetragick_test() ->
     xmlns:xlink=\"http://www.w3.org/1999/xlink\">
     <image width=\"800\" height=\"600\" clip-path=\"url(#foobar)\"</image>
 </svg>
-">>)),
+">>),
+    ?assertMatch({_,_}, binary:match(C, <<"#foobar">>)),
     ok.

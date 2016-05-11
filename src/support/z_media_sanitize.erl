@@ -20,13 +20,26 @@
 -module(z_media_sanitize).
 
 -export([
+    sanitize/2,
     is_file_acceptable/2
     ]).
 
-% For testing
--export([
-    is_acceptable_svg/1
-    ]).
+-include("zotonic.hrl").
+
+
+%% @doc Sanitize uploaded media (SVG) files.
+sanitize(#media_upload_preprocess{mime="image/svg+xml"} = PP, _Context) ->
+    sanitize_svg(PP);
+sanitize(#media_upload_preprocess{mime=Mime} = PP, _Context) when is_list(Mime) ->
+    PP.
+
+sanitize_svg(#media_upload_preprocess{file=File} = PP) ->
+    {ok, Bin} = file:read_file(File),
+    Svg = z_svg:sanitize(Bin),
+    TmpFile = z_tempfile:new(".svg"),
+    ok = file:write_file(TmpFile, Svg),
+    PP#media_upload_preprocess{file=TmpFile}.
+
 
 %% @doc Check the contents of an identified file, to see if it is acceptable for further processing.
 %%      Catches files that might be problematic for ImageMagick or other file processors.
@@ -34,19 +47,8 @@ is_file_acceptable(File, MediaProps) when is_list(MediaProps) ->
     Mime = z_convert:to_binary(proplists:get_value(mime, MediaProps)),
     is_file_acceptable_1(Mime, File, MediaProps).
 
-is_file_acceptable_1(<<"image/svg+xml">>, File, _MediaProps) ->
-    {ok, Bin} = file:read_file(File),
-    is_acceptable_svg(Bin);
+% is_file_acceptable_1(<<"image/svg+xml">>, File, _MediaProps) ->
+%     {ok, Bin} = file:read_file(File),
+%     is_acceptable_svg(Bin);
 is_file_acceptable_1(_Mime, _File, _MediaProps) ->
     true.
-
-%% @doc Don't accept SVG files referring to an external resource. 
-%%      Refuses anything containing "href=" and "url(...)" not referring to local ids.
-is_acceptable_svg(Bin) ->
-    Bin1 = re:replace(Bin, <<"href=\"#">>, <<>>),
-    Bin2 = re:replace(Bin1, <<"url\\(#">>, <<>>),
-    case re:run(Bin2, "([^a-zA-Z][hH][rR][eE][fF]\\s*=|[uU][rR][lL]\\s*\\()") of
-        {match, _} -> false;
-        nomatch -> true
-    end.
-
