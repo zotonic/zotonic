@@ -64,7 +64,7 @@ init([{convert_v2, Id, Medium, Upload, QueueFilename, ProcessNr, PickledContext}
            }}.
 
 handle_call(_Msg, _From, State) ->
-    {reply, {error, uknown_msg}, State}.
+    {reply, {error, unknown_msg}, State}.
 
 handle_cast(convert, State) ->
     Context = z_context:depickle(State#state.pickled_context),
