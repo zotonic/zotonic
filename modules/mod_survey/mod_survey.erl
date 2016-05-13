@@ -531,18 +531,23 @@ maybe_mail(SurveyId, Answers, Context) ->
     case probably_email(SurveyId, Context) of
         true ->
             PrepAnswers = survey_answer_prep:readable(SurveyId, Answers, Context),
+            Attachments = uploads(Context),
             mail_respondent(SurveyId, Answers, PrepAnswers, Context),
-            mail_result(SurveyId, PrepAnswers, Context);
+            mail_result(SurveyId, PrepAnswers, Attachments, Context);
         false ->
             nop
     end.
+
+uploads(Context) ->
+    Qs = z_context:get_q_all_noz(Context),
+    [ Upload || {_, #upload{} = Upload} <- Qs ].
 
 probably_email(SurveyId, Context) ->
     not z_utils:is_empty(m_rsc:p_no_acl(SurveyId, survey_email, Context))
     orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)).
 
 %% @doc mail the survey result to an e-mail address
-mail_result(SurveyId, PrepAnswers, Context) ->
+mail_result(SurveyId, PrepAnswers, Attachments, Context) ->
     case m_rsc:p_no_acl(SurveyId, survey_email, Context) of
         undefined ->
             skip;
@@ -552,7 +557,13 @@ mail_result(SurveyId, PrepAnswers, Context) ->
                 {id, SurveyId},
                 {answers, PrepAnswers}
             ],
-            z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
+            E = #email{
+                to=Email,
+                html_tpl="email_survey_result.tpl",
+                vars=Vars,
+                attachments=Attachments
+            },
+            z_email:send(E, Context),
             ok
     end.
 
