@@ -130,7 +130,8 @@ provide_content(ReqData,  {Info,Context} = State) ->
     MaxAge = z_context:get(max_age, Context, ?MAX_AGE),
     RD2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context), MaxAge, RD1),
     RD3 = set_allow_origin(RD2),
-    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD3)), RD3, State}.
+    RD4 = set_content_policy(Info, RD3),
+    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD4)), RD4, State}.
 
 
 %%%%% -------------------------- Support functions ------------------------
@@ -157,6 +158,18 @@ is_public([Id|T], Context, _Answer) ->
 
 set_allow_origin(ReqData) ->
     wrq:set_resp_header("Access-Control-Allow-Origin", "*", ReqData).
+
+set_content_policy(#z_file_info{acls=[]}, ReqData) ->
+    ReqData;
+set_content_policy(#z_file_info{acls=Acls}, ReqData) ->
+    case lists:any(fun is_integer/1, Acls) of
+        true ->
+            RD1 = wrq:set_resp_header("Content-Security-Policy", "sandbox", ReqData),
+            % IE11 needs the X- variant, see http://caniuse.com/#feat=contentsecuritypolicy
+            wrq:set_resp_header("X-Content-Security-Policy", "sandbox", RD1);
+        false ->
+            ReqData
+    end.
 
 set_cache_control_public(true, MaxAge, ReqData) ->
     wrq:set_resp_header("Cache-Control", "public, max-age="++z_convert:to_list(MaxAge), ReqData);
