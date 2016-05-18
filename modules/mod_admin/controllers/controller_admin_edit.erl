@@ -31,7 +31,7 @@
 -include_lib("controller_html_helper.hrl").
 
 %% @todo Change this into "visible" and add a view instead of edit template.
-is_authorized(DefaultMod, ReqData, Context) ->
+is_authorized(ReqData, Context) ->
     ReqData1 = wrq:set_resp_header("X-Frame-Options", "SAMEORIGIN", ReqData),
     Context1 = z_admin_controller_helper:init_session(?WM_REQ(ReqData1, Context)),
     {Context2, Id} = ensure_id(Context1),
