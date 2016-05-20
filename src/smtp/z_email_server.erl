@@ -92,8 +92,7 @@ bounced(Peer, NoReplyEmail) ->
 
 %% @doc Generate a new message id
 generate_message_id() ->
-    z_convert:to_binary(z_string:to_lower(z_ids:id(20))).
-
+    z_ids:random_id('az09', 20).
 
 %% @doc Send an email
 send(#email{} = Email, Context) ->
@@ -104,10 +103,9 @@ send(Id, #email{} = Email, Context) ->
     case is_sender_enabled(Email, Context) of
         true ->
             Email1 = copy_attachments(Email),
-            Id1 = z_convert:to_binary(Id),
             Context1 = z_context:depickle(z_context:pickle(Context)),
-            gen_server:cast(?MODULE, {send, Id1, Email1, Context1}),
-            {ok, Id1};
+            gen_server:cast(?MODULE, {send, Id, Email1, Context1}),
+            {ok, Id};
         false ->
             {error, sender_disabled}
     end.

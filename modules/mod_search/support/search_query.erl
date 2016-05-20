@@ -272,7 +272,7 @@ parse_query([{hasobject, Id}|Rest], Context, Result) when is_list(Id) ->
 parse_query([{hasanyobject, ObjPreds}|Rest], Context, Result) ->
     OPs = expand_object_predicates(ObjPreds, Context),
     % rsc.id in (select subject_id from edge where (object_id = ... and predicate_id = ... ) or (...) or ...)
-    Alias = "edge_" ++ z_ids:identifier(),
+    Alias = "edge_" ++ binary_to_list(z_ids:identifier()),
     OPClauses = [ object_predicate_clause(Alias, Obj,Pred) || {Obj,Pred} <- OPs ],
     Where = lists:flatten([
                 "rsc.id in (select ", Alias ,".subject_id from edge ",Alias," where (",

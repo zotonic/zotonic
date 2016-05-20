@@ -18,59 +18,80 @@
 
 -module(z_ids).
 -author("Marc Worrell <marc@worrell.nl>").
--behaviour(gen_server).
+-include("zotonic.hrl").
 
-%% Length of session keys, used for the cookies, must be unique
 -define(ID_LENGTH,20).
 -define(OPTID_LENGTH,6).
 
-%% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
-
-%% id server exports
 -export([
-    start_tests/0,
-    start_link/0,
     unique/0, 
     id/0,
     id/1,
     identifier/0,
     identifier/1,
+    random_id/2,
     optid/1,
     sign_key/1,
     sign_key_simple/1,
     number/0,
-    number/1,
-    fix_seed/0
+    number/1
 ]).
 
--record(state, {is_fixed = false, unique_counter = 0}).
--include("zotonic.hrl").
+-type charset() :: 'az' | 'az09' | 'azAZ09'.
 
-start_tests() -> 
-    gen_server:start({local, ?MODULE}, ?MODULE, [[{fixed_seed,true}]], []).
-start_link() -> 
-    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+%%%--------------------------------------------------------------------------
+%%% API
+%%%--------------------------------------------------------------------------
 
-%% @doc Return an unique id to be used in javascript or html.  No randomness, just unique in the cluster.
+-spec unique() -> binary().
+%% @doc Return an unique id to be used in javascript or html.  No randomness,
+%% just unique for the current runtime system instance.
+%%
+%% Returns a binary of unspecified length starting with the character $t followed
+%% by a number of digits, example: `<<"t123456">>'.
+%% Note that ids are not unique among connected nodes or after a restart.
 unique() -> 
-    gen_server:call(?MODULE, unique).
+    make_unique().
 
-%% @doc Return a long random id, can be used for session ids.
+-spec id() -> binary().
+%% @doc Equivalent to `id(?ID_LENGTH)'.
 id() -> 
-    gen_server:call(?MODULE, {id, ?ID_LENGTH}).
+    id(?ID_LENGTH).
 
+-spec id(Length::integer()) -> binary().
+%% @doc Generate a random key consisting of numbers and upper and lower case 
+%% characters. 
+%%
+%% The version with the default Length can be used for session ids: the result 
+%% is sufficiently random and sufficiently unique.
 id(Len) -> 
-    gen_server:call(?MODULE, {id, Len}).
+    random_id('azAZ09', Len).
 
-%% @spec identifier() -> binary()
-%% @doc Get a random indentifier of a certain length, case insensitive
-identifier() -> 
-    gen_server:call(?MODULE, {identifier, ?OPTID_LENGTH}).
+-spec identifier() -> binary().
+%% @doc Equivalent to `identifier(?OPTID_LENGTH)'.
+identifier() ->
+    identifier(?OPTID_LENGTH).
 
-identifier(Len) -> 
-    gen_server:call(?MODULE, {identifier, Len}).
+-spec identifier(Length::integer()) -> binary().
+%% @doc Get a random identifier of a certain length, consisting of 
+%% lower case characters only.
+identifier(Len) ->
+    random_id('az', Len).
 
+-spec random_id(charset(), Length::integer()) -> binary().
+%% @doc Get a random identifier of the specified length, consisting of 
+%% characters from the specified set:
+%% - 'az'     [a-z]      : lower case characters only. 
+%% - 'az09'   [a-z0-9]   : lower case characters and numbers only. 
+%% - 'azAZ09' [a-zA-Z0-9]: lower and upper case characters and numbers. 
+random_id('az', Len) -> 
+    make_lower_id(Len);
+random_id('az09', Len) -> 
+    make_no_upper_id(Len);
+random_id('azAZ09', Len) -> 
+    make_any_char_id(Len).
+
+-spec optid(undefined | false | binary()) -> binary().
 optid(undefined) ->
     identifier(?OPTID_LENGTH);
 optid(false) ->
@@ -78,12 +99,12 @@ optid(false) ->
 optid(Id) ->
     Id.
 
-%% @spec sign_key(Context) -> binary()
+-spec sign_key(Context::term()) -> binary().
 %% @doc Get the key for signing requests stored in the user agent.
 sign_key(Context) ->
     case m_config:get_value(site, sign_key, Context) of
         undefined ->
-            Key = list_to_binary(generate_id(true, 50)),
+            Key = random_id('azAZ09', 50),
             m_config:set_value(site, sign_key, Key, Context),
             Key;
         <<>> ->
@@ -92,12 +113,12 @@ sign_key(Context) ->
             SignKey
     end.
 
-%% @spec sign_key_simple(Context) -> binary()
+-spec sign_key_simple(Context::term()) -> binary().
 %% @doc Get the key for less secure signing of data (without nonce).
 sign_key_simple(Context) -> 
     case m_config:get_value(site, sign_key_simple, Context) of
         undefined ->
-            Key = list_to_binary(generate_id(true, 10)),
+            Key = random_id('azAZ09', 10),
             m_config:set_value(site, sign_key_simple, Key, Context),
             Key;
         <<>> ->
@@ -106,135 +127,79 @@ sign_key_simple(Context) ->
             SignKey
     end.
 
+-spec application_key(atom()) -> binary().
 %% @doc Set/get a default sign key for the zotonic.
+%% Returns a binary of 50 random numbers and upper and lower case 
+%% characters.
 application_key(Name) when is_atom(Name) ->
     case application:get_env(zotonic, Name) of
         undefined ->
-            Key = list_to_binary(generate_id(true, 50)),
+            Key = random_id('azAZ09', 50),
             application:set_env(zotonic, Name, Key),
             Key;
         {ok, Key} ->
             Key
     end.
 
-%% @doc Return a big random integer, but smaller than maxint32
+-spec number() -> integer().
+%% @doc Equivalent to `number(1000000000)'.
 number() ->
     number(1000000000).
 
+-spec number(Max::integer()) -> integer().
+%% @doc Return a random integer less than or equal to Max. Max defaults to a 
+%% large number smaller than MaxInt.
 number(Max) ->
-    gen_server:call(?MODULE, {number, Max}).
-
-%% @doc Fix the seed of the random number generator, used for tests
-fix_seed() ->
-    gen_server:cast(?MODULE, fix_seed).
+    make_number(Max).
 
 
-init(Props) ->
-    case proplists:get_value(fixed_seed, Props, false) of
-        true -> 
-            random:seed(1,2,3),
-            {ok, #state{is_fixed=true, unique_counter=0}};
-        false ->
-            {ok, #state{is_fixed=false, unique_counter=0}}
-    end.
+%%%--------------------------------------------------------------------------
+%%% Internal functions
+%%%--------------------------------------------------------------------------
 
-%%% Really random generators below. These are used for production Zotonic.
-
-handle_call(unique, _From, #state{is_fixed=false} = State) ->
-    Id = make_unique(),
-    {reply, Id, State};
-
-handle_call({number, Max}, _From, #state{is_fixed=false} = State) ->
-    Number = crypto:rand_uniform(1, Max+1),
-    {reply, Number, State};
-
-handle_call({identifier, Len}, _From, #state{is_fixed=false} = State) ->
-    Id = generate_identifier(true, Len),
-    {reply, Id, State};
-
-handle_call({id, Len}, _From, #state{is_fixed=false} = State) ->
-    Id = generate_id(true, Len),
-    {reply, Id, State};
-
-
-%%% Fixed/predictable generators below. These are used when testing Zotonic.
-
-handle_call(unique, _From, #state{is_fixed=true, unique_counter=N} = State) ->
-    Id = make_unique_fixed(N),
-    {reply, Id, State#state{unique_counter=N+1}};
-
-handle_call({number, Max}, _From, #state{is_fixed=true} = State) ->
-    Number = random:uniform(Max),
-    {reply, Number, State};
-
-handle_call({identifier, Len}, _From, #state{is_fixed=true} = State) ->
-    Id = generate_identifier(false, Len),
-    {reply, Id, State};
-
-handle_call({id, Len}, _From, #state{is_fixed=true} = State) ->
-    Id = generate_id(false, Len),
-    {reply, Id, State};
-
-handle_call(Msg, _From, State) ->
-    {stop, {unknown_call, Msg}, State}.
-
-handle_cast(fix_seed, State) -> 
-    random:seed(1,2,3),
-    {noreply, State#state{is_fixed=true, unique_counter=0}};
-handle_cast(_Msg, State) -> 
-    {noreply, State}.
-
-handle_info(_Msg, State) -> {noreply, State}.
-terminate(_Reason, _State) -> ok.
-code_change(_OldVersion, State, _Extra) -> {ok, State}.
-
-
-
-%% @doc Create a predictable temporary id, safe to use in html and javascript
-make_unique_fixed(N) ->
-    [ $t | integer_to_list(N) ].
-
-%% @doc Create an unique temporary id, safe to use in html and javascript
+-spec make_unique() -> binary().
+%% @doc Create an unique temporary id, safe to use in html and javascript.
+%% Returns a binary that starts with t followed by a number of digits.
+%% The ids will be reused after a restart of the Erlang VM.
 make_unique() ->
-    Ref = lists:flatten(io_lib:format("~p",[make_ref()])),
-    "t" ++ unique1(Ref, []).
+    Unique = integer_to_binary(erlang:unique_integer([positive])),
+    <<"t", Unique/binary>>.
 
-unique1([], Acc) -> Acc;
-unique1([$.|T], Acc) -> 
-    unique1(T, [$_|Acc]);
-unique1([H|T], Acc) when H >= $0 andalso H =< $9 -> 
-    unique1(T, [H|Acc]);
-unique1([_|T], Acc) ->
-    unique1(T, Acc).
+make_number(Max) ->
+    crypto:rand_uniform(1, Max+1).
 
+-spec make_any_char_id(Length::integer()) -> binary().
+%% @doc Generate a random key consisting of numbers and upper and lower case 
+%% characters.
+make_any_char_id(Len) ->
+    << << case N of
+              C when C < 26 -> C  + $a;
+              C when C < 52 -> C - 26 + $A;
+              C -> C - 52 + $0
+          end >>
+      || N <- random_list(62, Len)
+    >>.
 
-%% @spec generate_id(boolean(), int()) -> string()
-%% @doc Generate a random key
-generate_id(IsUnique, Len) ->
-    [ case N of
-          C when C < 26 -> C  + $a;
-          C when C < 52 -> C - 26 + $A;
-          C -> C - 52 + $0
-      end
-      || N <- random_list(IsUnique, 62, Len)
-    ].
+-spec make_lower_id(Length::integer()) -> binary().
+%% @doc Generate a random identifier, only lower case letters
+make_lower_id(Len) ->
+    << << (N + $a) >> || N <- random_list(26, Len) >>.
 
-%% @spec generate_identifier(boolean(), int()) -> string()
-%% @doc Generate a random identifier, case insensitive, only letters
-generate_identifier(IsUnique, Len) ->
-    [ N + $a || N <- random_list(IsUnique, 26, Len) ].
+-spec make_no_upper_id(Length::integer()) -> binary().
+%% @doc Generate a random identifier, only lower case letters and
+%% numbers
+make_no_upper_id(Len) ->
+    << << case N of
+              C when C < 26 -> C  + $a;
+              C -> C - 26 + $0
+          end >>
+      || N <- random_list(32, Len)
+    >>.
 
-random_list(false, Radix, Length) ->
-    not_so_random_list(Radix, Length, []);
-random_list(true, Radix, Length) ->
+random_list(Radix, Length) ->
     N = (radix_bits(Radix) * Length + 7) div 8,
-    Val = bin2int(crypto:rand_bytes(N)),
+    Val = bin2int(random_bytes(N)),
     int2list(Val, Radix, Length, []).
-
-not_so_random_list(_Radix, 0, Acc) ->
-    Acc;
-not_so_random_list(Radix, N, Acc) ->
-    not_so_random_list(Radix, N-1, [ random:uniform(Radix)-1 | Acc ]).
 
 int2list(_, _, 0, Acc) -> 
     Acc;
@@ -247,3 +212,16 @@ bin2int(Bin) ->
 radix_bits(N) when N =< 16 -> 4;
 radix_bits(N) when N =< 26 -> 5;
 radix_bits(N) when N =< 64 -> 6.
+
+%% Note that this falls back to the "weak" version of rand_bytes 
+%% if strong_rand_bytes fails. I copied this approach from the 
+%% SSL implementation in the Erlang standard distribution...
+random_bytes(N) ->
+    try crypto:strong_rand_bytes(N) of
+	RandBytes ->
+	    RandBytes
+    catch
+	error:low_entropy ->
+            io:format("low entropy!~n"),
+	    crypto:rand_bytes(N)
+    end.

@@ -66,11 +66,6 @@ init([]) ->
 
     ensure_job_queues(),
 
-    %% Random id generation
-    Ids = {z_ids,
-           {z_ids, start_link, []},
-           permanent, 5000, worker, [z_ids]},
-
     %% Access Logger
     Logger = {z_access_syslog,
               {z_access_syslog, start_link, []},
@@ -100,7 +95,6 @@ init([]) ->
                 permanent, 10100, supervisor, dynamic},
 
     Processes = [
-                 Ids,
                  Logger,
                  SmtpServer, SmtpReceiveServer,
                  FilesSup,

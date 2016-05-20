@@ -86,7 +86,7 @@ get1(Notification, UserId, ResourceId, Context) ->
 
 % @doc Insert a new e-mail address, return the created unique e-mail address
 insert(Notification, UserId, ResourceId, Context) ->
-	Recipient = z_string:to_lower(z_ids:id(12)),
+	Recipient = binary_to_list(z_ids:random_id('az09', 12)),
 	case z_db:q1("select count(*) from email_receive_recipient where recipient = $1", [Recipient], Context) of
 		1 ->
 			insert(Notification, UserId, ResourceId, Context);

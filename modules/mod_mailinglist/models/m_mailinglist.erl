@@ -234,7 +234,7 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 					  from mailinglist_recipient 
 					  where mailinglist_id = $1
 					    and email = $2", [ListId, Email1], Context),
-	ConfirmKey = z_ids:id(20),
+	ConfirmKey = binary_to_list(z_ids:id(20)),
 	WelcomeMessageType1 = case Rec of
 		{RecipientId, true, _OldConfirmKey} ->
 			%% Present and enabled

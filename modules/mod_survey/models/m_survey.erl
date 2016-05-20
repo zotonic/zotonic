@@ -155,7 +155,7 @@ did_survey(SurveyId, Context) ->
 insert_survey_submission(SurveyId, Answers, Context) ->
     {UserId, SubmissionId} = case z_convert:to_bool(m_rsc:p(SurveyId, survey_multiple, Context)) of
                                  true ->
-                                     {undefined, z_ids:id(30)};
+                                     {undefined, binary_to_list(z_ids:id(30))};
                                  false ->
                                      case z_acl:user(Context) of
                                          undefined ->

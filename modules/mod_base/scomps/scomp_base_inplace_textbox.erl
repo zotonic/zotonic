@@ -41,7 +41,7 @@ render(Params, _Vars, Context) ->
     Class_hint     = proplists:get_value(class_hint,  Params),
     Hint_text      = proplists:get_value(hint_text,   Params, ?HINT_DEFAULT_TEXT),
     Hint_image     = render_image(proplists:get_value(hint_image,  Params)),
-    Id             = z_ids:optid( proplists:get_value(id, Params) ),
+    Id             = binary_to_list(z_ids:optid( proplists:get_value(id, Params))),
     No_data_text   = proplists:get_value(no_data_text, Params, ?NO_DATA_DEFAULT_TEXT),
     %% "nodata" label is shown when strlen(trim(value)) == 0 (==value is empty, null or contains only invisible spaces)
     Class_no_data  = proplists:get_value(class_no_data, Params),

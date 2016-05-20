@@ -78,7 +78,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
 do_media_upload_preprocess(Upload, Context) ->
     case z_module_indexer:find(lib, ?TEMP_IMAGE, Context) of
         {ok, #module_index{filepath=Filename}} ->
-            ProcessNr = z_convert:to_binary(z_ids:identifier(20)),
+            ProcessNr = z_ids:identifier(20),
             PostFun = fun(InsId, InsMedium, InsContext) ->
                               ?MODULE:post_insert_fun(InsId, InsMedium, Upload, ProcessNr, InsContext)
                       end,

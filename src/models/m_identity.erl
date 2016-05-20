@@ -259,7 +259,7 @@ ensure_username_pw(Id, Context) ->
             case z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id = $1", [Id], Context) of
                 0 ->
                     Username = generate_username(Id, Context),
-                    Password = z_ids:id(),
+                    Password = binary_to_list(z_ids:id()),
                     set_username_pw(Id, Username, Password, Context);
                 _N ->
                     ok
@@ -296,7 +296,7 @@ base_username(Id, Context) ->
     case nospace(z_string:trim(T1)) of
         <<>> ->
             case nospace(m_rsc:p_no_acl(Id, title, Context)) of
-                <<>> -> z_convert:to_binary(z_ids:identifier(6));
+                <<>> -> z_ids:identifier(6);
                 Title -> Title
             end;
         Name ->
@@ -480,7 +480,7 @@ reset_rememberme_token(UserId, Context) ->
         Context).
 
 new_unique_key(Type, Context) ->
-    Key = z_convert:to_binary(z_ids:id()),
+    Key = z_ids:id(),
     case z_db:q1("select id
                   from identity
                   where type = $1
@@ -545,7 +545,7 @@ get_rsc(Id, Type, Context) ->
 %% @doc Hash a password, using sha1 and a salt
 %% @spec hash(Password) -> tuple()
 hash(Pw) ->
-    Salt = z_ids:id(10),
+    Salt = binary_to_list(z_ids:id(10)),
     Hash = crypto:hash(sha, [Salt,Pw]),
     {hash, Salt, Hash}.
 
@@ -812,7 +812,7 @@ lookup_by_verify_key(Key, Context) ->
     z_db:assoc_row("select * from identity where verify_key = $1", [Key], Context).
 
 set_verify_key(Id, Context) ->
-    N = z_ids:id(10),
+    N = binary_to_list(z_ids:id(10)),
     case lookup_by_verify_key(N, Context) of
         undefined ->
             z_db:q("update identity set verify_key = $2 where id = $1", [Id, N], Context),

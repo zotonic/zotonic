@@ -29,7 +29,7 @@ render(Params, Vars, Context) ->
     case proplists:get_value(template, Params) of
         undefined ->
             Id = case proplists:get_value(id, Params) of
-                     undefined -> z_ids:identifier();
+                     undefined -> binary_to_list(z_ids:identifier());
                      FixedId -> FixedId
                  end,
             Class  = proplists:get_value(class, Params, "z-lazy"),
@@ -44,7 +44,7 @@ render(Params, Vars, Context) ->
         _Template ->
             {TargetId, Html} = case proplists:get_value(target, Params) of
                 undefined ->
-                    Target = z_ids:identifier(),
+                    Target = binary_to_list(z_ids:identifier()),
                     Div = [<<"<div id='">>, Target, <<"' class='z-lazy'><img src='/lib/images/spinner.gif' alt='' /></div>">>],
                     {Target, Div};
                 Target ->

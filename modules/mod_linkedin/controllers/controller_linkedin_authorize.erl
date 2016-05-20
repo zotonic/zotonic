@@ -55,7 +55,7 @@ moved_temporarily(ReqData, Context) ->
     ?WM_REPLY({true, Location}, Context1).
 
 redirect_location(Context) ->
-    LinkedInState = z_ids:id(),
+    LinkedInState = binary_to_list(z_ids:id()),
     z_context:set_session(linkedin_state, LinkedInState, Context),
     {AppId, _AppSecret, Scope} = mod_linkedin:get_config(Context),
     RedirectUrl = z_convert:to_list(

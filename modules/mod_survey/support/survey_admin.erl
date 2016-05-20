@@ -77,14 +77,14 @@ combine_conditions([B|Bs], Acc) ->
     combine_conditions(Bs, [B|Acc]).
 
 stop_block() ->
-    Id = z_ids:id(),
+    Id = binary_to_list(z_ids:id()),
     [
         {"block-"++Id++"-s-name", Id},
         {"block-"++Id++"-s-type", "survey_stop"}
     ].
 
 break_block(Cond1, Target1, Cond2, Target2) ->
-    Id = z_ids:id(),
+    Id = binary_to_list(z_ids:id()),
     [
         {"block-"++Id++"-s-name", Id},
         {"block-"++Id++"-s-type", "survey_page_break"},

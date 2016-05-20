@@ -378,7 +378,7 @@ rename_session(Pid, State) ->
     {ok, NewSessionId, State2}.
 
 make_session_id() ->
-    z_convert:to_binary(z_ids:id(32)).
+    z_ids:id(32).
 
 %% @doc Remove the pid from the session state
 -spec erase_session_pid(pid(), #session_srv{}) -> #session_srv{}.
