@@ -15,12 +15,12 @@ be overruled with your own.
 Images that are inlined in the body text can have these parameters:
 
 ``alignment``
-  Choose 'between', 'left' and 'right'.
+  Either ``between``, ``left`` or ``right``.
 
 ``size``
-  Choose between "small", "middle", "large". The actual sizes that are
-  taken come from the config key "site.media_dimensions", which
-  defaults to "200x200,300x300,500x500".
+  Choose between ``small``, ``middle``, ``large``. The actual sizes that are
+  taken come from the config key ``site.media_dimensions``, which
+  defaults to ``200x200,300x300,500x500``.
 
 ``crop``
   Checkbox if you want to crop your image to exactly the
@@ -30,6 +30,9 @@ Images that are inlined in the body text can have these parameters:
 ``link``
   Checkbox if you want to let the image include a link to its own page.
 
-These parameters can be set in the editor dialog "Insert a Zotonic media item".
+``caption``
+  Caption that will be displayed below the media item.
+
+These parameters can be set in the editor dialog ‘Insert a Zotonic media item’.
 
 .. seealso:: :ref:`filter-without_embedded_media`
