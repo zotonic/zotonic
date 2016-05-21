@@ -11,7 +11,7 @@ Cookbooks
    custom-pivot
    custom-tag
    writing-module
-
+   task-queue
 
 Frontend cookbook
 -----------------

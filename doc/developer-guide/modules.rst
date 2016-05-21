@@ -43,6 +43,8 @@ The generic structure is::
         actions/
         etcetera.../
 
+.. _module-file:
+
 The module file
 ^^^^^^^^^^^^^^^
 
