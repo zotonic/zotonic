@@ -69,8 +69,8 @@
 
 %% gen_server state record
 -record(state, {
-            site, 
-            is_rebuild_publish=true, 
+            site,
+            is_rebuild_publish=true,
             is_rebuild_edit=true,
             rebuilder_pid,
             rebuilder_mref,
@@ -248,7 +248,7 @@ observe_manage_data(#manage_data{}, _Context) ->
 
 observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->
     check_hasusergroup(Id, M#rsc_update_done.post_props, Context),
-    case  lists:member('acl_user_group', PreIsA) 
+    case  lists:member('acl_user_group', PreIsA)
         orelse lists:member('acl_user_group', PostIsA)
     of
         true -> m_hierarchy:ensure('acl_user_group', Context);
@@ -356,7 +356,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
 
 name(Context) ->
-    z_utils:name_for_host(?MODULE, Context).    
+    z_utils:name_for_host(?MODULE, Context).
 
 %%====================================================================
 %% API
@@ -416,18 +416,18 @@ handle_info(rebuild, #state{rebuilder_pid=Pid} = State) when is_pid(Pid) ->
     {noreply, State};
 
 handle_info({'DOWN', MRef, process, _Pid, normal}, #state{rebuilder_mref=MRef} = State) ->
-    lager:debug("[mod_acl_user_groups] rebuilder for ~p finished.", 
+    lager:debug("[mod_acl_user_groups] rebuilder for ~p finished.",
                 [State#state.rebuilding]),
     State1 = State#state{
-                    rebuilding=undefined, 
-                    rebuilder_pid=undefined, 
+                    rebuilding=undefined,
+                    rebuilder_pid=undefined,
                     rebuilder_mref=undefined
                 },
     State2 = maybe_rebuild(State1),
     {noreply, State2};
 
 handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{rebuilder_mref=MRef} = State) ->
-    lager:error("[mod_acl_user_groups] rebuilder for ~p down with reason ~p", 
+    lager:error("[mod_acl_user_groups] rebuilder for ~p down with reason ~p",
                 [State#state.rebuilding, Reason]),
     State1 = case State#state.rebuilding of
                 publish -> State#state{is_rebuild_publish=true};
@@ -435,8 +435,8 @@ handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{rebuilder_mref=MRef} =
              end,
     timer:send_after(500, rebuild),
     {noreply, State1#state{
-                    rebuilding=undefined, 
-                    rebuilder_pid=undefined, 
+                    rebuilding=undefined,
+                    rebuilder_pid=undefined,
                     rebuilder_mref=undefined
                 }};
 
@@ -491,8 +491,8 @@ maybe_rebuild(#state{is_rebuild_edit=true} = State) ->
     {Pid, MRef} = start_rebuilder(edit, State#state.site),
     State#state{
         is_rebuild_edit=false,
-        rebuilder_pid=Pid, 
-        rebuilding=edit, 
+        rebuilder_pid=Pid,
+        rebuilding=edit,
         rebuilder_mref=MRef
     };
 maybe_rebuild(#state{} = State) ->
@@ -601,19 +601,22 @@ manage_datamodel(Context) ->
 
             predicates=
                 [
-                    {hasusergroup, 
+                    {hasusergroup,
                         [{title, {trans, [{en, <<"In User Group">>},{nl, <<"In gebruikersgroep">>}]}}],
                         [{person, acl_user_group}]
                     },
-                    {hascollabmember, 
+                    {hascollabmember,
                         [{title, {trans, [{en, <<"Member">>},{nl, <<"Lid">>}]}}],
                         [{acl_collaboration_group, person}]
                     },
-                    {hascollabmanager, 
+                    {hascollabmanager,
                         [{title, {trans, [{en, <<"Manager">>},{nl, <<"Beheerder">>}]}}],
                         [{acl_collaboration_group, person}]
                     }
-                ]
+                ],
+            data = [
+                {acl_rules, acl_default_rules:get_default_rules()}
+            ]
         },
         Context).
 
@@ -623,7 +626,7 @@ check_hasusergroup(UserId, P, Context) ->
         0 ->
             %% not submitted, do nothing
             ok;
-        _ -> 
+        _ ->
             GroupIds = lists:map(fun z_convert:to_integer/1, lists:filter(fun(<<>>) -> false; (_) -> true end,
                                                                           HasUserGroup)),
             PredId = m_predicate:name_to_id_check(hasusergroup, Context),
