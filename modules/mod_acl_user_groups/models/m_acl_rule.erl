@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -139,7 +139,7 @@ all_rules(Kind, State, Context) ->
 -type acl_rules_opt() :: {group, string()}.
 -spec all_rules(rsc | module | collab, edit | publish, [acl_rules_opt()], #context{}) -> [acl_rule()].
 all_rules(Kind, State, Opts, Context) ->
-    Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind)) 
+    Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind))
         ++ " WHERE " ++ state_sql_clause(State),
     All = z_db:assoc(Query, Context),
     sort_by_user_group(normalize_actions(All), z_convert:to_integer(proplists:get_value(group, Opts)), Context).
@@ -220,8 +220,10 @@ actions(module, Context) ->
 
 
 update(Kind, Id, Props, Context) ->
-    lager:info("[~p] ACL user groups update by ~p of ~p:~p with ~p",
-               [z_context:site(Context), z_acl:user(Context), Kind, Id, Props]),
+    lager:debug(
+        "[~p] ACL user groups update by ~p of ~p:~p with ~p",
+       [z_context:site(Context), z_acl:user(Context), Kind, Id, Props]
+    ),
     Result = z_db:update(
                table(Kind), Id,
                [{is_edit, true},
@@ -239,8 +241,10 @@ get(Kind, Id, Context) ->
     end.
 
 insert(Kind, Props, Context) ->
-    lager:info("[~p] ACL user groups insert by ~p of ~p with ~p",
-               [z_context:site(Context), z_acl:user(Context), Kind, Props]),
+    lager:debug(
+        "[~p] ACL user groups insert by ~p of ~p with ~p",
+       [z_context:site(Context), z_acl:user(Context), Kind, Props]
+    ),
 
     Result = z_db:insert(
                table(Kind),
@@ -277,8 +281,10 @@ map_prop(Prop, _Context) ->
     Prop.
 
 delete(Kind, Id, Context) ->
-    lager:info("[~p] ACL user groups delete by ~p of ~p:~p",
-               [z_context:site(Context), z_acl:user(Context), Kind, Id]),
+    lager:debug(
+        "[~p] ACL user groups delete by ~p of ~p:~p",
+       [z_context:site(Context), z_acl:user(Context), Kind, Id]
+    ),
     %% Assertion, can only delete edit version of a rule
     {ok, Row} = z_db:select(table(Kind), Id, Context),
     true = proplists:get_value(is_edit, Row),
@@ -316,8 +322,10 @@ revert(Kind, Context) ->
 
 %% Remove all publish versions, add published versions of unpublished rules
 publish(Kind, Context) ->
-    lager:warning("[~p] ACL user groups publish by ~p",
-                  [z_context:site(Context), z_acl:user(Context)]),
+    lager:debug(
+        "[~p] ACL user groups publish by ~p",
+        [z_context:site(Context), z_acl:user(Context)]
+    ),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
                fun(Ctx) ->
@@ -459,13 +467,13 @@ shared_table_columns() ->
      #column_def{name=managed_by, type="character varying", length=255, is_nullable=true},
      #column_def{name=is_block, type="boolean", is_nullable=false, default="false"},
      #column_def{name=actions, type="character varying", length=300, is_nullable=true}
-    ].    
+    ].
 
 fk_cascade(Table0, Field0, Context) ->
     Table = z_convert:to_list(Table0),
     Field = z_convert:to_list(Field0),
     z_db:equery(
-        "alter table " ++ Table ++ 
+        "alter table " ++ Table ++
         " add constraint fk_" ++ Table ++ "_" ++ Field ++ "_id" ++
         " foreign key (" ++ Field ++ ") references rsc(id) " ++
         " on update cascade " ++
@@ -475,7 +483,7 @@ fk_setnull(Table0, Field0, Context) ->
     Table = z_convert:to_list(Table0),
     Field = z_convert:to_list(Field0),
     z_db:equery(
-        "alter table " ++ Table ++ 
+        "alter table " ++ Table ++
         " add constraint fk_" ++ Table ++ "_" ++ Field ++ "_id" ++
         " foreign key (" ++ Field ++ ") references rsc(id) " ++
         " on update cascade " ++
@@ -487,7 +495,7 @@ import_rules(Kind, State, Rules0, Context) ->
     Rules = names_to_ids(Rules0, Context),
     z_db:transaction(
         fun(Ctx) ->
-            Query = "DELETE FROM " ++ z_convert:to_list(table(Kind)) 
+            Query = "DELETE FROM " ++ z_convert:to_list(table(Kind))
                   ++ " WHERE " ++ state_sql_clause(State),
             z_db:equery(Query, Ctx),
             lists:foreach(
@@ -526,7 +534,7 @@ ids_to_names_row(R, Context) ->
                     case m_rsc:p_no_acl(Id, name, Context) of
                         undefined ->
                             % Problem this rule might be skipped on import
-                            z_utils:prop_replace(K, 
+                            z_utils:prop_replace(K,
                                                 {id, z_context:site(Context), m_rsc:is_a(Id, Context), Id},
                                                 Acc);
                         Name ->
