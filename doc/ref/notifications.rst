@@ -108,6 +108,8 @@ Add a property before the resource is persisted::
         {true, Props ++ [{extra_property, <<"special value!">>}].
 
 
+.. _rsc_update_done:
+
 rsc_update_done
 ---------------
 
