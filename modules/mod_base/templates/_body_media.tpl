@@ -7,9 +7,9 @@
 		<figure class="image-wrapper block-level-image">
 			{% media m.rsc[id].medium width=size.width height=size.height crop=crop class=align link=link alt=m.rsc[id].title %}
 			{% if caption|default:m.rsc[id].summary as caption %}
-				<figcaption> class="image-caption">{{ caption }}</figcaption>
+				<figcaption class="image-caption">{{ caption }}</figcaption>
 			{% endif %}
-		</figure>	
+		</figure>
 	{% endifequal %}
 {% else %}
 	{% media m.rsc[id].medium width=size.width height=size.height crop=crop class=align link=link alt=caption|default:m.rsc[id].title %}
