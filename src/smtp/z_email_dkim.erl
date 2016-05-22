@@ -20,7 +20,7 @@
 
 -module(z_email_dkim).
 
--include_lib("zotonic/include/zotonic.hrl").
+-include_lib("zotonic.hrl").
 
 -export([ensure_configured/1, cert_files/1, dns_entry/1, dns_entry_domain/1, mimemail_options/1]).
 
