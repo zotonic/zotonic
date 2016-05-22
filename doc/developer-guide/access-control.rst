@@ -112,8 +112,7 @@ the admin, have a look at :ref:`mod_acl_adminonly`.
 
 .. seealso::
 
-    :ref:`mod_acl_user_groups`, :ref:`mod_acl_simple_roles`,
-    :ref:`mod_acl_adminonly`
+    :ref:`mod_acl_user_groups`, :ref:`mod_acl_simple_roles`, :ref:`mod_acl_adminonly`
 
 Custom authorization
 ^^^^^^^^^^^^^^^^^^^^
