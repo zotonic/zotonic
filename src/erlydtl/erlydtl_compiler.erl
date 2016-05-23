@@ -251,8 +251,12 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker) ->
             BodyAutoIdAst = erl_syntax:match_expr(
                                     AutoIdVar,
                                     erl_syntax:application(
+                                        erl_syntax:atom(binary_to_list),
+                                        [erl_syntax:application(
+                                                erl_syntax:atom(z_ids),
                                                 erl_syntax:atom(identifier),
-                                                [erl_syntax:integer(8)]
+                                                [erl_syntax:integer(8)])
+                                        ]
                                     )
                              ),
             [BodyAutoIdAst, BodyLanguageAst, BodyAst]
@@ -733,14 +737,22 @@ include_ast(File, Args, All, Context, TreeWalker) ->
                                                            ContextInclude),
                             Ast1 = case InclTW2#treewalker.has_auto_id of
                                 false -> Ast;
-                                true ->  erl_syntax:block_expr(
-                                            [
-                                            erl_syntax:match_expr(
-                                                    erl_syntax:variable(AutoIdVar), 
-                                                    erl_syntax:application(
-                                                        erl_syntax:atom(identifier),
-                                                        [])),
-                                            Ast])
+                                true ->  
+                                    erl_syntax:block_expr(
+                                         [ erl_syntax:match_expr(
+                                               erl_syntax:variable(AutoIdVar), 
+                                               erl_syntax:application(
+                                                   erl_syntax:atom(binary_to_list),
+                                                   [ erl_syntax:application(
+                                                         erl_syntax:atom(z_ids),
+                                                         erl_syntax:atom(identifier),
+                                                         []
+                                                     )
+                                                   ]
+                                               )
+                                           ),
+                                           Ast
+                                         ])
                             end,
                             {[Ast1|AstList], merge_info(InclInfo, Info), InclTW2#treewalker{has_auto_id=TreeW#treewalker.has_auto_id}};
                         Err ->
