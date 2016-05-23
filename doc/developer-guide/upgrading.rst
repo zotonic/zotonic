@@ -7,12 +7,20 @@ These notes list the most important changes between Zotonic
 versions. Please read these notes carefully when upgrading to a new
 major Zotonic version.
 
+Upgrading from 0.x to 1.0
+-------------------------
+
+ACL
+^^^
+
+* mod_acl_adminonly was replaced by :ref:`mod_acl_user_groups`. To create users
+  that have access to the admin, add them to the ‘Managers’ user group.
 
 Upgrading to Zotonic 0.14 (next major release)
 ----------------------------------------------
 
 Button type
-...........
+^^^^^^^^^^^
 
 A change was made to have safer defaults for the ``{% button %}`` tag. We noticed that  buttons sometimes triggered unexpected changes to the page, because their default type was "submit".
 
@@ -24,7 +32,7 @@ Upgrading to Zotonic 0.12
 -------------------------
 
 Bootstrap CSS version 3
-.......................
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Zotonic has been switched over to the latest version of the Bootstrap
 Framework. When you are using Zotonic's ``mod_bootstrap`` or when you
@@ -42,7 +50,7 @@ Upgrading to Zotonic 0.11
 -------------------------
 
 Global configuration changes
-............................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The global file ``priv/config`` has been obsoleted in place of a new
 global configuration file, ``~/.zotonic/zotonic.config``.
@@ -66,7 +74,7 @@ topic.
 
 
 Changed location of sites and external modules
-..............................................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The default place for user-defined sites and external modules has been
 changed to the defaults ``user/sites`` and ``user/modules``,
@@ -84,7 +92,7 @@ changing ``user_sites_dir`` and ``user_modules`` dir settings in the
 
 
 Postback and javascript changes
-...............................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The file ``zotonic-1.0.js`` now uses ``lib/js/modules/ubf.js``. This file **must**
 be included for the Zotonic javascripts to work.
@@ -98,7 +106,7 @@ each page, unless ``nostream`` is given in the :ref:`scomp-script` tag.
 
 
 Dispatch rules for files
-........................
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``controller_lib`` and ``controller_file_readonly`` have been replaced
 by the ``controller_file``. This controller uses the new *filestore* system
@@ -118,7 +126,7 @@ See the documentation for :ref:`controller-file` and :ref:`controller-file_id`.
 
 
 Modules moved out of core
-.........................
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``mod_geomap`` repository has moved to its own dedicated
 repository. To keep using this module, you'll now need to install it
@@ -129,16 +137,16 @@ the admin.
 
 
 Database-driver changes
-.......................
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Due to the introduction of the new database driver, the behaviour of
 automatically serializing Erlang terms into the database (on ``bytea``
 columns) has been made explicit. To enable serialization of database
-values, you have to tag them with the new ``?DB_PROPS(...)``
+values, you have to tag them with the new ``?DB_PROPS(^^^)``
 macro. Unserialization of terms is still done automatically.
 
 Gotcha's
-........
+^^^^^^^^
 
 If you get this error on startup::
 
@@ -151,9 +159,9 @@ Upgrading to Zotonic 0.10
 -------------------------
 
 Site config changes
-...................
+^^^^^^^^^^^^^^^^^^^
 
-The site `hostalias` option has been changed to be a list of host
+The site ``hostalias`` option has been changed to be a list of host
 aliases instead of multiple pairs of hostalias attributes. Change your
 site's configuration from this::
 
@@ -169,7 +177,7 @@ Besides this change, a site's config file can now also be split into
 multiple files living under the ``config.d/`` folder within a site.
 
 Build process
-.............
+^^^^^^^^^^^^^
 
 The ``git`` tool is now **required** to build Zotonic, even when you
 downloaded the release zip file. This is due to Zotonic's external
@@ -177,18 +185,17 @@ dependencies now being managed with the ``rebar`` tool.
 
 
 Misc changes
-............
+^^^^^^^^^^^^
 
 All configuration options regarding logging are now in set in the ``priv/erlang.config`` file,
 which is created by default if missing from ``priv/erlang.config.in``.
-
 
 
 Upgrading to Zotonic 0.9
 ------------------------
 
 CSS changes
-...........
+^^^^^^^^^^^
 
 Due to the move to Bootstrap, the following CSS changes need to be
 made in your templates:
@@ -205,7 +212,7 @@ made in your templates:
 
 
 Controllers
-...........
+^^^^^^^^^^^
 
 The Erlang modules formerly known as `Webmachine Resources`
 (``resources/resource_*.erl``) have been renamed to
@@ -240,7 +247,7 @@ The following include files have been renamed:
 +-------------------------------+----------------------------------------+
 
 HTTPS support
-.............
+^^^^^^^^^^^^^
 
 HTTPS support was moved from the core into a new module, :ref:`mod_ssl`.
 
@@ -251,7 +258,7 @@ and up.
 
 
 Removed controller
-..................
+^^^^^^^^^^^^^^^^^^
 
 The under-used ``resource_home`` controller has been removed. Change
 your dispatch rules accordingly to use ``controller_template``::
@@ -263,7 +270,7 @@ to this::
   {home,  [],  controller_template, [{template, "home.tpl"}]},
 
 Removed filters
-...............
+^^^^^^^^^^^^^^^
 
 The ``lenght_is`` filter has gone. Replace constructs like this::
 
@@ -275,7 +282,7 @@ to::
 
 
 mod_backup
-..........
+^^^^^^^^^^
 
 mod_backup’s configuration values for binary path names (`pg_dump` and
 `tar`) is now coming from the global ``z_config`` instead of the
@@ -289,7 +296,7 @@ mod_backup is now dependent on mod_rest, so you should enable that module in the
 
 
 mod_survey
-..........
+^^^^^^^^^^
 
 The storage format changed slightly. For the correct display of the
 results of *narrative*-type questions answered before 2012-12-01, the
@@ -298,7 +305,8 @@ sub-question.
 
 
 z_logger
-........
+^^^^^^^^
+
 On startup you might see this message::
 
   ** /home/zotonic/zotonic/deps/z_logger/ebin/z_logger.beam hides /home/zotonic/zotonic/deps/webzmachine/ebin/z_logger.beam
@@ -312,7 +320,7 @@ Upgrading to Zotonic 0.8
 ------------------------
 
 Module versioning
-.................
+^^^^^^^^^^^^^^^^^
 
 From 0.8, modules have a schema version concept, which is used to
 install and update module-specific data (like managed tables, custom
@@ -327,7 +335,7 @@ handles installation and upgrade of data. See :ref:`guide-modules`
 for more information and example code.
 
 mod_mailinglist
-...............
+^^^^^^^^^^^^^^^
 
 The mailinglist has changed a bit. You need to manually enable the
 ``mod_logging`` module on upgrade. It should be enabled automatically,
@@ -342,7 +350,7 @@ Upgrading to Zotonic 0.7
 ------------------------
 
 Removed modules
-...............
+^^^^^^^^^^^^^^^
 To make Zotonic more lightweight and remove some of the build
 dependencies, some infrequently used modules have been removed from
 the core and moved to their own repository, at
@@ -363,7 +371,7 @@ help of the ``zotonic modules install`` command. The mod_emailer module
 sending/receiving capabilities.
 
 New SMTP architecture
-.....................
+^^^^^^^^^^^^^^^^^^^^^
 
 The mod_emailer module has been removed in favor of a separate mail
 server process and queueing system. For more information please read
@@ -373,7 +381,7 @@ The ``emailq`` table has become obsolete. You can remove the table from
 your existing Zotonic database.
 
 Admin password
-..............
+^^^^^^^^^^^^..
 
 The admin password is now hardcoded in your site’s config file. For sites that are upgrading, you have to add a line to your config file::
 
@@ -384,7 +392,7 @@ password (as opposed to zotonic < 0.6!) and thus the admin password
 can only be changed by changing it there.
 
 Admin extra richtext fields
-...........................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you have extra richtext (tinymce) fields in the admin, you need to
 rename the class tinymce of the textarea to the class name

@@ -7,7 +7,7 @@ admin.
 
 Users are part of one or more ACL roles. Each ACL roles dictates which
 resource categories its members can edit.
-   
+
 Enabling role-based access control (ACLs)
 -----------------------------------------
 
@@ -16,7 +16,7 @@ important to have some segregation of duties around who gets to
 control or change what on the site.  This guide provides step-by-step
 instructions for enabling ACL permissions in Zotonic to facilitate
 these kinds of controls.
-             
+
 
 Assumptions
 ...........
@@ -37,6 +37,3 @@ How
 - Save
 - Log out
 - Log in as `greg`. You should see only Pages and Media buttons.
-
-.. seealso:: :ref:`mod_acl_adminonly`             
-  
