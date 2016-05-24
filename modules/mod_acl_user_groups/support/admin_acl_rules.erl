@@ -60,36 +60,30 @@ event_admin(Msg, Context) ->
             z_render:growl_error(?__("You are not allowed to perform this action", Context), Context)
     end.
 
-event1(#postback{message={admin_connect_select, _Args}}, Context) ->
-    SelectId = m_rsc:rid(z_context:get_q("select_id", Context), Context),
-    case m_rsc:is_a(SelectId, acl_collaboration_group, Context) of
-        true ->
-            Context1 = z_render:update(
-                            "acl-cg-collab-select",
-                            #render{
-                                template="_admin_acl_rule_collab_select.tpl", 
-                                vars=[{id, SelectId}]
-                            },
-                            Context),
-            z_render:dialog_close(Context1);
-        false ->
-            z_render:growl(?__("Please select a collaboration_group", Context), Context)
-    end;
+event1(#postback_notify{message="feedback", target=TargetId}, Context) ->
+    Vars = [
+        {cat, acl_collaboration_group},
+        {text, z_context:get_q("triggervalue", Context)}
+    ],
+    z_render:wire([
+        {remove_class, [{target, TargetId}, {class, "loading"}]},
+        {update, [{target, TargetId}, {template, "_admin_acl_rule_collab_li_list.tpl"} | Vars]}
+    ], Context);
+event1(#postback{message={collab_select, Args}}, Context) ->
+    z_render:update(
+                "acl-cg-collab-select",
+                #render{
+                    template="_admin_acl_rule_collab_select.tpl", 
+                    vars=[
+                        {content_group_id, proplists:get_value(id, Args)}
+                    ]
+                },
+                Context);
 
 event1(#submit{message={add_rule, [{kind, Kind}]}}, Context) ->
     Row = z_context:get_q_all_noz(Context),
     Row1 = normalize_values(Row),
-    Row2 = case proplists:get_value(collab_group_id, Row1) of
-                undefined ->
-                    Row1;
-                CollabId ->
-                    [ 
-                        {content_group_id, CollabId}
-                        | proplists:delete(collab_group_id,
-                                proplists:delete(content_group_id, Row1))
-                    ]
-            end,
-    {ok, _NewRuleId} = m_acl_rule:insert(Kind, Row2, Context),
+    {ok, _NewRuleId} = m_acl_rule:insert(Kind, Row1, Context),
     Context;
 
 event1(#submit{message={update_rule, [{id, RuleId}, {kind, Kind}]}}, Context) ->

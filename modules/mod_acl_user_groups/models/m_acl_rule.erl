@@ -35,6 +35,7 @@
     manage_schema/2,
     all_rules/3,
 
+    get/3,
     update/4,
     insert/3,
     delete/3,
@@ -89,8 +90,15 @@ m_find_value(T, M=#m{value=undefined}, _Context) when ?valid_acl_kind(T) ->
     M#m{value=T};
 m_find_value(actions, #m{value=T}, Context) when ?valid_acl_kind(T) ->
     actions(T, Context);
-m_find_value(S, M=#m{value=T}, _) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
+m_find_value(S, M=#m{value=T}, _) when ?valid_acl_kind(T), ?valid_acl_kind(T), ?valid_acl_state(S) ->
     M#m{value={list, T, S}};
+m_find_value(Id, #m{value=T}, Context) when ?valid_acl_kind(T), is_integer(Id) ->
+    case get(T, Id, Context) of
+        {ok, Props} -> Props;
+        {error, _} -> undefined
+    end;
+m_find_value(undefined, #m{value=T}, _Context) when ?valid_acl_kind(T) ->
+    undefined;
 m_find_value({all, Opts}, #m{value={list, T, S}}, Context) ->
     all_rules(T, S, Opts, Context).
 
@@ -223,6 +231,12 @@ update(Kind, Id, Props, Context) ->
               ),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
+
+get(Kind, Id, Context) ->
+    case z_db:select(table(Kind), Id, Context) of
+        {ok, Row} -> {ok, normalize_action(Row)};
+        {error, _} = Error -> Error
+    end.
 
 insert(Kind, Props, Context) ->
     lager:info("[~p] ACL user groups insert by ~p of ~p with ~p",

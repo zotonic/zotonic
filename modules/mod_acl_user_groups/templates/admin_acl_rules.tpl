@@ -14,13 +14,15 @@
         </div>
     </div>
 
-    {% if is_editable %}
-        <div class="acl-well">
-            <h4>{_ New rule _}</h4>
-            {% include "_admin_acl_rules_list_header.tpl" %}
-            {% include "_admin_acl_rule_row.tpl" is_new %}
-        </div>
-    {% endif %}
+    {#
+        {% if is_editable %}
+            <div class="acl-well">
+                <h4>{_ New rule _}</h4>
+                {% include "_admin_acl_rules_list_header.tpl" %}
+                {% include "_admin_acl_rule_row.tpl" is_new %}
+            </div>
+        {% endif %}
+    #}
 {% endblock %}
 
 {% block filter %}
