@@ -10,6 +10,7 @@
                 in_sorter=in_sorter
                 tabs_enabled=["new"]
                 center=0
+                autoclose
             }
     %}
 {% elseif is_hierarchy %}
@@ -24,6 +25,7 @@
                 nocatselect
                 in_sorter=in_sorter
                 center=0
+                autoclose
             }
     %}
 {% else %}
@@ -36,6 +38,7 @@
                 category=cat_id
                 in_sorter=in_sorter
                 center=0
+                autoclose
             }
     %}
 {% endif %}

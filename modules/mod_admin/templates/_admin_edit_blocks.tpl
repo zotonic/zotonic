@@ -104,6 +104,7 @@ $('#edit-blocks-wrapper').on('click', '.rsc-item h5 a', function(event) {
         title=_"Find page"
         callback="window.zAdminBlockConnectDone"
         center=0
+        autoclose
     }
 %}
 
