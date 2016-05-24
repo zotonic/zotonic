@@ -200,7 +200,9 @@
                     predicate=""
                     template="_action_dialog_connect.tpl" 
                     title=_"Find page"
-                    callback="window.zAdminBlockConnectDone"}
+                    callback="window.zAdminBlockConnectDone"
+                    autoclose
+                }
 %}
 
 {% wire name="admin-edit-basics" action={dialog_edit_basics template="_rsc_item.tpl"} %}

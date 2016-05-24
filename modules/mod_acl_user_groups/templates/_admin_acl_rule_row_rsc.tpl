@@ -67,6 +67,7 @@
                                 tabs_enabled=["find"]
                                 delegate=`admin_acl_rules`
                                 nocatselect
+                                autoclose
                             }
                 %}
 

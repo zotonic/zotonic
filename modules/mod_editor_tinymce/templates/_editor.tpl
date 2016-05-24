@@ -16,6 +16,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
         tab="depiction"
         callback="window.zAdminMediaDone"
         center=0
+        autoclose
     }
 %}
 
@@ -29,6 +30,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
         tab="find"
         callback="window.zAdminLinkDone"
         center=0
+        autoclose
     }
 %}
 

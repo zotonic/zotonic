@@ -259,11 +259,11 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     
     case do_link(SubjectId, Predicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
-            Context2 = z_render:dialog_close(Context1),
-            case Actions of
-                [] -> Context2;
-                _ -> z_render:wire(Actions, Context2)
-            end;
+            Context2 = case z_convert:to_bool(proplists:get_value(autoclose, Args)) of
+                            true -> z_render:dialog_close(Context1);
+                            false -> Context1
+                       end,
+            z_render:wire(Actions, Context2);
         {error, Context1} ->
             Context1
     end;

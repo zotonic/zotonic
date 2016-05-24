@@ -7,6 +7,8 @@ params:
 - subject_id or object_id
 - tabs_enabled (optional): list of tab names: ["new", "depiction", "find",  "upload", "url"]
 - tab (optional)
+- autoclose (optional - defaults to false)
+- nocatselect (optional - defaults to false)
 
 find params:
 - predicate (optional) (atom)
@@ -97,6 +99,7 @@ find params:
                     title=""
                     cat=cat
                     nocatselect
+                    autoclose
                 %}
         {% else %}
             {% if not tabs_enabled or "depiction"|member:tabs_enabled %}
