@@ -66,6 +66,7 @@
                                 category=`acl_collaboration_group`
                                 tabs_enabled=["find"]
                                 delegate=`admin_acl_rules`
+                                nocatselect
                             }
                 %}
 

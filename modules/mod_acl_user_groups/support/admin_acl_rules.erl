@@ -21,7 +21,36 @@
 
 -export([event/2]).
 
+event(#postback{message={admin_connect_select, Args}} = Msg, Context) ->
+    case proplists:get_value(subject_id, Args) of
+        undefined ->
+            event_admin(Msg, Context);
+        SubjectId when is_integer(SubjectId) ->
+            % Select collab group dialog
+            SelectId = m_rsc:rid(z_context:get_q("select_id", Context), Context),
+            case m_rsc:is_a(SelectId, acl_collaboration_group, Context) of
+                true ->
+                    try
+                        {ok, _} = m_rsc:update(SubjectId, [{content_group_id, SelectId}], Context),
+                        z_render:wire([
+                                {dialog_close, []},
+                                {reload, []}
+                            ], Context)
+                    catch
+                        throw:{error, eacces} ->
+                            z_render:growl(?__("You are not allowed to move to this collaboration group.", Context), Context);
+                        throw:{error, _} ->
+                            z_render:growl(?__("Could not move to collaboration group.", Context), Context)
+                    end;
+                false ->
+                    z_render:growl(?__("Please select a collaboration_group", Context), Context)
+            end            
+    end;
 event(Msg, Context) ->
+    event_admin(Msg, Context).
+
+
+event_admin(Msg, Context) ->
     case      z_acl:is_allowed(use, mod_acl_user_groups, Context)
       andalso z_acl:is_allowed(insert, acl_user_group, Context)
     of
