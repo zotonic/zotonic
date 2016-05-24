@@ -10,26 +10,30 @@
 
         <div class="col-md-4">
 		    {% block category_select %}
-		        <select class="form-control" name="find_category">
-			        {% if predicate %}
-				        <option value="p:{{ predicate }}" selected="selected">{_ Valid for: _} {{ predicate.title }}</option>
-			        {% endif %}
-			        <option value="">{_ Any category _}</option>
-			        <option value="" disabled></option>
-                    {% if cat.is_a.meta %}
-                        {% for c in m.category.tree_flat_meta %}
-                            <option value="{{ c.id }}" {% if c.id == cat and not predicate %}selected="selected"{% endif %}>
-                                {{ c.indent }}{{ c.id.title|default:c.id.name }}
-                            </option>
-                        {% endfor %}
-                    {% else %}
-    		            {% for c in m.category.tree_flat %}
-    			            <option value="{{ c.id }}" {% if c.id == cat and not predicate %}selected="selected"{% endif %}>
-    					        {{ c.indent }}{{ c.id.title|default:c.id.name }}
-    			            </option>
-    		            {% endfor %}
-                    {% endif %}
-		        </select>
+                {% if nocatselect %}
+                    <input type="hidden" name="find_category" value="{{ cat.id }}" />
+                {% else %}
+    		        <select class="form-control" name="find_category">
+    			        {% if predicate %}
+    				        <option value="p:{{ predicate }}" selected="selected">{_ Valid for: _} {{ predicate.title }}</option>
+    			        {% endif %}
+    			        <option value="">{_ Any category _}</option>
+    			        <option value="" disabled></option>
+                        {% if cat.is_a.meta %}
+                            {% for c in m.category.tree_flat_meta %}
+                                <option value="{{ c.id }}" {% if c.id == cat and not predicate %}selected="selected"{% endif %}>
+                                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
+                                </option>
+                            {% endfor %}
+                        {% else %}
+        		            {% for c in m.category.tree_flat %}
+        			            <option value="{{ c.id }}" {% if c.id == cat and not predicate %}selected="selected"{% endif %}>
+        					        {{ c.indent }}{{ c.id.title|default:c.id.name }}
+        			            </option>
+        		            {% endfor %}
+                        {% endif %}
+    		        </select>
+                {% endif %}
 	        {% endblock %}
         </div>
 	</form>

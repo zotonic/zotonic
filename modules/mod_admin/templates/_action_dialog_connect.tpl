@@ -126,8 +126,7 @@ find params:
             {% endif %}
             {% if not tabs_enabled or "new"|member:tabs_enabled %}
                 {% if predicate.name /= "depiction" %}
-                    {% include
-                        "_action_dialog_connect_tab_new.tpl"
+                    {% include "_action_dialog_connect_tab_new.tpl"
                         tab=#tab
                         predicate=predicate
                         delegate=delegate
