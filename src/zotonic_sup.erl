@@ -26,6 +26,9 @@
 %% External exports
 -export([start_link/0, upgrade/0, upgrade/2]).
 
+%% SNI function
+-export([sni_fun/1]).
+
 %% supervisor callbacks
 -export([init/1]).
 
@@ -103,15 +106,9 @@ init([]) ->
                 ],
 
     %% Listen to IP address and Port
-    WebIp = case os:getenv("ZOTONIC_IP") of
-                false -> z_config:get(listen_ip);
-                Any when Any == []; Any == "*"; Any == "any" -> any;
-                ConfIP -> ConfIP
-            end,
-    WebPort = case os:getenv("ZOTONIC_PORT") of
-                  false -> z_config:get(listen_port);
-                  Anyport -> list_to_integer(Anyport)
-              end,
+    WebIp = z_config:get(listen_ip),
+    WebPort = z_config:get(listen_port),
+    SSLPort = z_config:get(ssl_listen_port),
 
     WebConfig = [
                   {dispatcher, z_sites_dispatcher},
@@ -120,19 +117,32 @@ init([]) ->
                   {acceptor_pool_size, z_config:get(inet_acceptor_pool_size)}
                 ],
 
+    SSLWebConfig = [
+                  {dispatcher, z_sites_dispatcher},
+                  {dispatch_list, []},
+                  {backlog, z_config:get(ssl_backlog)},
+                  {acceptor_pool_size, z_config:get(ssl_acceptor_pool_size)},
+                  {ssl, true},
+                  {ssl_opts, [{sni_fun, fun ?MODULE:sni_fun/1}]}
+              ],
+
     %% Listen to the ip address and port for all sites.
     IPv4Opts = [{port, WebPort}, {ip, WebIp}],
+    IPv4SSLOpts = [{port, SSLPort}, {ip, WebIp}],
     IPv6Opts = [{port, WebPort}, {ip, any6}],
+    IPv6SSLOpts = [{port, SSLPort}, {ip, any6}],
 
     %% Webmachine/Mochiweb processes
-    [IPv4Proc, IPv6Proc] =
+    [IPv4Proc, IPv4SSLProc, IPv6Proc, IPv6SSLProc] =
         [[{Name,
            {webmachine_mochiweb, start,
             [Name, Opts]},
            permanent, 5000, worker, dynamic}]
          || {Name, Opts}
                 <- [{webmachine_mochiweb, IPv4Opts ++ WebConfig},
-                    {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig}]],
+                    {webmachine_mochiweb_ssl, IPv4SSLOpts ++ SSLWebConfig},
+                    {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig},
+                    {webmachine_mochiweb_ssl_v6, IPv6SSLOpts ++ SSLWebConfig}]],
 
     %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses
     EnableIPv6 = case WebIp of
@@ -142,8 +152,8 @@ init([]) ->
 
     Processes1 =
         case EnableIPv6 of
-            true -> Processes ++ IPv4Proc ++ IPv6Proc;
-            false -> Processes ++ IPv4Proc
+            true -> Processes ++ IPv4Proc ++ IPv4SSLProc ++ IPv6Proc ++ IPv6SSLProc;
+            false -> Processes ++ IPv4Proc ++ IPv4SSLProc
         end,
 
     init_stats(),
@@ -158,9 +168,9 @@ init([]) ->
                   lager:info("Config files used:"),
                   [lager:info("- ~s", [Cfg]) || [Cfg] <- proplists:get_all_values(config, init:get_arguments())],
                   lager:info(""),
-                  lager:info("Web server listening on IPv4 ~p:~p", [WebIp, WebPort]),
+                  lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
                   case EnableIPv6 of
-                      true -> lager:info("Web server listening on IPv6 ::~p", [WebPort]);
+                      true -> lager:info("Web server listening on IPv6 ::~p, SSL ::~p", [WebPort, SSLPort]);
                       false -> lager:info("IPv6 support disabled.")
                   end,
                   lager:info(""),
@@ -242,3 +252,11 @@ get_extensions() ->
           permanent, 5000, worker, dynamic}
      end
      || F <- Files].
+
+%% @doc Let sites return their own keys and certificates.
+sni_fun(ServerName) ->
+    case z_sites_dispatcher:get_host_for_domain(ServerName) of
+        undefined -> undefined;
+        {ok, Host} -> 
+            z_notifier:first(#ssl_options{server_name=ServerName}, z_context:new(Host))
+    end.

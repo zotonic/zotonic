@@ -13,7 +13,9 @@ The following environment variables influence how Zotonic starts up.
 
 ``ZOTONIC_PORT``
   The port number to bind the web server to. Defaults to port 8000.
-
+  
+``ZOTONIC_SSL_PORT``
+  The port number to bind the ssl web server to. Defaults to port 8443.
 
 ``ZOTONIC_SMTP_LISTEN_IP``
   The IP address to bind the SMTP server to. Binds to any IP address
