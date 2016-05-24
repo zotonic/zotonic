@@ -1,40 +1,15 @@
-<div class="row acl-header">
-
-    <div class="col-md-1">
-        <label>{_ Deny _}</label>
-    </div>
-
+<tr>
+    <th></th>
     {% if kind == `rsc` %}
-        <div class="col-md-2">
-            <label>{_ ACL user group _}</label>
-        </div>
-        <div class="col-md-2">
-            <label>{_ Content group _}</label>
-        </div>
-        <div class="col-md-2">
-            <label>{_ Category _}</label>
-        </div>
+        <th>{_ ACL user group _}</th>
+        <th>{_ Content group _}</th>
+        <th>{_ Category _}</th>
     {% elseif kind == `collab` %}
-        {% if is_editable %}
-            <div class="col-md-3">
-                <label>{_ Category _}</label>
-            </div>
-        {% else %}
-            <div class="col-md-2">
-                <label>{_ Category _}</label>
-            </div>
-        {% endif %}
+        <th>{_ Category _}</th>
     {% elseif kind == `module` %}
-        <div class="col-md-2">
-            <label>{_ ACL user group _}</label>
-        </div>
-        <div class="col-md-4">
-            <label>{_ Module _}</label>
-        </div>
+        <th>{_ ACL user group _}</th>
+        <th>{_ Module _}</th>
     {% endif %}
-
-    <div class="col-md-5">
-        <label>{_ Permissions _}</label>
-    </div>
-
-</div>
+    <th>{_ Permissions _}</th>
+    <th></th>
+</tr>
