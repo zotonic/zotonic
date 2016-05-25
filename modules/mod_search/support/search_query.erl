@@ -182,18 +182,26 @@ parse_query([{filter, R}|Rest], Context, Result) ->
 
 %% content_group=id
 %% Include only resources which are member of the given content group (or one of its children)
-parse_query([{content_group, ContentGroup}|Rest], Context, Result) ->
-    ContentGroupId = m_rsc:rid(ContentGroup, Context),
-    Result2 =
-        case m_rsc:is_a(ContentGroupId, content_group, Context) of
-            true ->
-                List = m_hierarchy:contains(<<"content_group">>, ContentGroup, Context),
-                {Arg, Result1} = add_arg(List, Result),
-                add_where("rsc.content_group_id IN (SELECT(unnest("++Arg++"::int[])))", Result1);
-            false ->
-                {Arg, Result1} = add_arg(ContentGroupId, Result),
-                add_where("rsc.content_group_id = "++Arg, Result1)
-        end,
+parse_query([{content_group, ContentGroup}|Rest], Context, Result0) ->
+    Result = Result0#search_sql{extra=[no_content_group_check | Result0#search_sql.extra ]},
+    Result2 = case rid(ContentGroup, Context) of
+                    any ->
+                        Result;
+                    undefined ->
+                        % Force an empty result
+                        add_where("rsc.content_group_id = 0", Result);
+                    ContentGroupId ->
+                        % TODO: allow NULL for the default content group
+                        case m_rsc:is_a(ContentGroupId, content_group, Context) of
+                            true ->
+                                List = m_hierarchy:contains(<<"content_group">>, ContentGroup, Context),
+                                {Arg, Result1} = add_arg(List, Result),
+                                add_where("rsc.content_group_id IN (SELECT(unnest("++Arg++"::int[])))", Result1);
+                            false ->
+                                {Arg, Result1} = add_arg(ContentGroupId, Result),
+                                add_where("rsc.content_group_id = "++Arg, Result1)
+                        end
+              end,
     parse_query(Rest, Context, Result2);
 
 %% id_exclude=resource-id

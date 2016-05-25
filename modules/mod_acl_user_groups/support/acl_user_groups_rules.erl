@@ -56,18 +56,29 @@
 expand(State, Context) ->
     GroupTree = m_hierarchy:menu(content_group, Context),
     UserTree = m_hierarchy:menu(acl_user_group, Context),
-    {tree_ids(GroupTree),
+    RscRules = m_acl_rule:all_rules(rsc, State, Context),
+    RuleGroups = rule_content_groups(RscRules),
+    {lists:usort(tree_ids(GroupTree) ++ RuleGroups),
      tree_ids(UserTree),
      expand_group_path(UserTree),
      expand_module(State, UserTree, Context)
         ++ expand_collab(State, Context)
-        ++ expand_rsc(State, GroupTree, UserTree, Context)}.
+        ++ expand_rsc(State, RscRules, GroupTree, UserTree, Context)}.
+
+rule_content_groups(Rules) ->
+    lists:flatten([ 
+        case proplists:get_value(content_group_id, R) of
+            undefined -> [];
+            Id -> Id
+        end
+        || R <- Rules
+    ]).
 
 -spec expand_rsc(edit|publish, #context{}) -> list(rule()).
 expand_rsc(State, Context) ->
     GroupTree = m_hierarchy:menu(content_group, Context),
     UserTree = m_hierarchy:menu(acl_user_group, Context),
-    expand_rsc(State, GroupTree, UserTree, Context).
+    expand_rsc(State, m_acl_rule:all_rules(rsc, State, Context), GroupTree, UserTree, Context).
 
 -spec expand_module(edit|publish, list(), #context{}) -> list(module_rule()).
 expand_module(State, UserTree, Context) ->
@@ -85,10 +96,10 @@ expand_collab(State,Context) ->
     Rules = expand_rule_rows(category_id, Cs, RuleRows, Context),
     [ {collab, Action, collab} || {undefined, Action, undefined} <- Rules ].
 
--spec expand_rsc(edit|publish, list(), list(), #context{}) -> list(rsc_rule()).
-expand_rsc(State, GroupTree, UserTree, Context) ->
+-spec expand_rsc(edit|publish, list(), list(), list(), #context{}) -> list(rsc_rule()).
+expand_rsc(_State, RscRules, GroupTree, UserTree, Context) ->
     CategoryTree = m_category:menu(Context),
-    RuleRows = resort_deny_rules(m_acl_rule:all_rules(rsc, State, Context)),
+    RuleRows = resort_deny_rules(RscRules),
     Cs = [{undefined, tree_ids(CategoryTree)} | tree_expand(CategoryTree) ],
     Rules = expand_rule_rows(category_id, Cs, RuleRows, Context),
     expand_rules(GroupTree, Rules, UserTree, Context).
