@@ -363,28 +363,35 @@ find_first_collab_group(CatId, Context) ->
 
 %% @doc Add a restriction on the visible content groups to SQL searches
 acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) ->
-    case restrict_content_groups(Context) of
-        all ->
-            {[], Args};
-        [] ->
-            % User is not allowed to see anything
-            Clause = " false ",
-            {Clause, Args};
-        Ids when is_list(Ids) ->
-            % User can see some content groups
-            Clause = lists:flatten([
-                        " (",Alias,".content_group_id is null or ",
-                             Alias,".content_group_id in (SELECT(unnest($",integer_to_list(length(Args)+1),"::int[]))))",
-                        publish_check(Alias, SearchSql, Context)]),
-            {Clause, Args ++ [Ids]}
+    case lists:member(no_content_group_check, SearchSql#search_sql.extra) of
+        true ->
+            {publish_check("", Alias, SearchSql, Context), Args};
+        false ->
+            case restrict_content_groups(Context) of
+                all ->
+                    {[], Args};
+                all_published ->
+                    {publish_check("", Alias, SearchSql, Context), Args};
+                [] ->
+                    % User is not allowed to see anything
+                    Clause = " false ",
+                    {Clause, Args};
+                Ids when is_list(Ids) ->
+                    % User can see some content groups
+                    Clause = lists:flatten([
+                                " (",Alias,".content_group_id is null or ",
+                                     Alias,".content_group_id in (SELECT(unnest($",integer_to_list(length(Args)+1),"::int[]))))",
+                                publish_check(" and ", Alias, SearchSql, Context)]),
+                    {Clause, Args ++ [Ids]}
+            end
     end.
 
-publish_check(Alias, #search_sql{extra=Extra}, Context) ->
+publish_check(MaybeAnd, Alias, #search_sql{extra=Extra}, Context) ->
     case lists:member(no_publish_check, Extra) orelse z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             "";
         false ->
-            [" and ",
+            [MaybeAnd,
              Alias,".is_published and ",
              Alias,".publication_start <= now() and ",
              Alias,".publication_end >= now()"]
@@ -395,10 +402,15 @@ restrict_content_groups(#context{user_id=1}) ->
 restrict_content_groups(#context{acl=admin}) ->
     all;
 restrict_content_groups(Context) ->
+    % If user can see all collaboration groups, then give up on restricting (too many groups)
+    % TODO: might want to do a negative restriction for hidden content-groups
     UGs = user_groups(Context),
     CGs = lists:flatten([ mod_acl_user_groups:await_lookup({view,UId}, Context) || UId <- UGs ]),
-    lists:usort(CGs) ++ has_collab_groups(Context).
-
+    CollabId = m_rsc:rid(acl_collaboration_group, Context),
+    case lists:member(CollabId, CGs) of
+        true -> all_published;
+        false -> lists:usort(CGs) ++ has_collab_groups(Context)
+    end.
 
 session_state(Context) ->
     case z_context:get_session(acl_user_groups_state, Context) of
