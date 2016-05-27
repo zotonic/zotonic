@@ -35,7 +35,6 @@ question(Name, Answer, Blocks, Context) ->
     case z_convert:to_binary(proplists:get_value(type, Block)) of
         <<"survey_country">> ->
             Country = l10n_iso2country:iso2country(Answer),
-            Block = block(Name, Blocks),
             [
                 {answer_value, z_html:escape_check(Answer)},
                 {answer_text, z_html:escape_check(Country)},
@@ -72,7 +71,9 @@ answer_noempty(L) when is_list(L) -> [ A || A <- L, A /= <<>> ];
 answer_noempty(A) -> A.
 
 block(Name, []) ->
+    % Unknown block, but we have an answer, don't loose the answer.
     [
+        {type, <<"survey_short_answer">>},
         {name, z_html:escape_check(Name)},
         {prompt, z_html:escape_check(Name)}
     ];
