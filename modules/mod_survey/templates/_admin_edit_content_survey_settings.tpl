@@ -77,7 +77,7 @@
     {% if m.survey.handlers|length %}
         <div class="form-group row">
 	        <label class="control-label col-md-6">{_ Handle this survey with _}</label>
-	        <div clss="col-md-6">
+	        <div class="col-md-6">
 		        <select class="form-control" name="survey_handler" id="survey_handler">
 			        <option value=""></option>
 			        {% for val,desc in m.survey.handlers %}
