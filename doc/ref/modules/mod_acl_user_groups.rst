@@ -132,8 +132,8 @@ Managed rules
 -------------
 
 Above you’ve seen how you can add rules through the web interface. Using
-:ref:`module versioning <guide-modules-versioning>`, you can also writes rules
-in your code. These rules are callde ‘managed rules’ because they are defined
+:ref:`module versioning <guide-modules-versioning>`, you can also write rules
+in your code. These rules are called ‘managed rules’ because they are defined
 in the code of modules, including your own
 :ref:`site module <guide-site-anatomy>`.
 
@@ -148,7 +148,7 @@ have two important advantages:
   along with the feature code.
 
 If you haven’t yet done so, set up
-:ref:`module versioning <guide-modules-versioning>` in ``your_site.erl`` or
+:ref:`module versioning <guide-modules-versioning>` in ``yoursite.erl`` or
 ``mod_your_module.erl``. Then, in the ``manage_schema/2`` function, add an
 ``acl_rules`` section under the ``data`` property in the ``#datamodel{}``
 record::
