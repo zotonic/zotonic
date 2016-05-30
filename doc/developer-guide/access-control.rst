@@ -106,12 +106,9 @@ Zotonic ships with :ref:`mod_acl_user_groups`, a powerful user group-based
 authorization module. With this module you can define access control rules that
 determine which user groups are allowed to access which groups of content.
 
-If your ACL needs are simple, you may want to use :ref:`mod_acl_simple_roles`
-instead.
-
 .. seealso::
 
-    :ref:`mod_acl_user_groups`, :ref:`mod_acl_simple_roles`
+    :ref:`mod_acl_user_groups`
 
 Custom authorization
 ^^^^^^^^^^^^^^^^^^^^
