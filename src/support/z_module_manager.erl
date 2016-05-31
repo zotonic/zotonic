@@ -71,7 +71,8 @@
           module_schema = [] :: list({atom(), integer()|undefined}),
           start_wait  = none :: none | {atom(), pid(), erlang:timestamp()},
           start_queue = [] :: list(),
-          start_error = [] :: list()
+          start_error = [] :: list(),
+          upgrade_waiters = [] :: list()
       }).
 
 
@@ -155,22 +156,23 @@ activate(Module, IsSync, Context) ->
 
 
 %% @doc Restart a module, activates the module if it was not activated.
+-spec restart(Module::atom(), #context{}) -> ok | {error, not_found}.
 restart(Module, Context) ->
-    case z_db:q("select true from module where name = $1 and is_active = true", [Module], Context) of
-        [{true}] ->
-            gen_server:cast(name(Context), {restart_module, Module});
-        _ ->
-            activate(Module, Context)
+    case z_db:q1("select is_active from module where name = $1", [Module], Context) of
+        true -> gen_server:cast(name(Context), {restart_module, Module});
+        _ -> activate(Module, Context)
     end.
 
-
 %% @doc Check all observers of a module, ensure that they are all active. Used after a module has been reloaded
+-spec module_reloaded(Module::atom(), #context{}) -> ok.
 module_reloaded(Module, Context) ->
-    gen_server:cast(name(Context), {module_reloaded, Module}).
-
+    case z_db:q1("select is_active from module where name = $1", [Module], Context) of
+        true -> gen_server:cast(name(Context), {module_reloaded, Module});
+        _ -> ok
+    end.
 
 %% @doc Return the list of active modules.
-%% @spec active(#context{}) -> [ atom() ]
+-spec active(#context{}) -> list(Module::atom()).
 active(Context) ->
     case z_db:has_connection(Context) of
         true ->
@@ -444,9 +446,10 @@ handle_call({whereis, Module}, _From, State) ->
     {reply, Ret, State};
 
 %% @doc Synchronous upgrade
-handle_call(upgrade, _From, State) ->
-    State1 = handle_upgrade(State),
-    {reply, ok, State1};
+handle_call(upgrade, From, State) ->
+    State1 = State#state{upgrade_waiters=[From|State#state.upgrade_waiters]},
+    State2 = handle_upgrade(State1),
+    {noreply, State2};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
@@ -597,18 +600,26 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     % 4. Log non startable modules (remaining after all startable modules have started)
     case {StartList, sets:size(Kill)} of
         {[], 0} ->
-            State#state{start_queue=[]};
+            signal_upgrade_waiters(State#state{start_queue=[]});
         _ ->
             gen_server:cast(self(), start_next),
             State#state{start_queue=StartList}
     end.
+
+signal_upgrade_waiters(#state{upgrade_waiters = Waiters} = State) ->
+    lists:foreach(fun(From) -> 
+                      gen_server:reply(From, ok)
+                  end,
+                  Waiters),
+    State#state{upgrade_waiters=[]}.
+
 
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
     z_notifier:notify(module_ready, Context),
     lager:debug("[~p] Finished starting modules", [z_context:site(Context)]),
     spawn_link(fun() -> z_trans_server:load_translations(Context) end),
-    State;
+    signal_upgrade_waiters(State);
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
     % Filter all children on the capabilities of the loaded modules.
     Provided = handle_get_provided(State),
