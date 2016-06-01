@@ -1,8 +1,22 @@
 FROM debian
 MAINTAINER Andreas Stenius git@astekk.se
 
-RUN apt-get update                                                                                 && \
-    apt-get install -y erlang build-essential postgresql imagemagick exif wget git                 && \
+ENV DEBIAN_FRONTEND noninteractive
+
+# httpredir.debian.org/debian fails too much, so replace it with a fixed mirror.
+RUN echo \
+   'deb ftp://ftp.nl.debian.org/debian/ jessie main\n \
+    deb ftp://ftp.nl.debian.org/debian/ jessie-updates main\n \
+    deb http://security.debian.org jessie/updates main\n' \
+    > /etc/apt/sources.list
+
+ADD https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb .
+
+RUN apt-get clean \
+    && dpkg -i erlang-solutions_1.0_all.deb \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends erlang build-essential ca-certificates postgresql imagemagick wget git \
+    && rm -rf /var/lib/apt/lists/* && \
     useradd --system --create-home zotonic                                                         && \
     printf "# Zotonic settings \n\
 local   all         zotonic                           ident \n\
