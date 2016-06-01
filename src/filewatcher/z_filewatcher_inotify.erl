@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -89,7 +89,7 @@ handle_cast(Message, State) ->
 %% (e.g. if a editor saves a file twice for some reason).
 handle_info({Port, {data, {eol, Line}}}, State=#state{port=Port, timers=Timers}) ->
     case re:run(Line, "^(.+) (MODIFY|CREATE|DELETE) (.+)", [{capture, all_but_first, list}]) of
-        nomatch -> 
+        nomatch ->
             {noreply, State};
         {match, [Path, Verb, File]} ->
             Filename = filename:join(Path, File),
@@ -111,7 +111,7 @@ handle_info({'EXIT', Port, _}, State=#state{port=Port}) ->
     {noreply, State#state{port=undefined}, 5000};
 
 handle_info(timeout, #state{port=undefined} = State) ->
-    lager:info("[fswatch] Starting fswatch file monitor."),
+    lager:info("[inotify] Starting inotify file monitor."),
     {noreply, start_inotify(State)};
 handle_info(timeout, State) ->
     {noreply, State};
