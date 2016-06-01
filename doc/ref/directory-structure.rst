@@ -79,7 +79,7 @@ Erlang application::
 
   The directory containing sites which are internal to Zotonic. These
   are the ``zotonic_status`` site (see
-  :ref:`ref-status-site`), and the ``testsandbox`` site
+  :ref:`ref-status-site`), and the ``testsandbox`` and ``testsandboxdb`` sites
   for running the unit tests.
 
 ``zotonic/src/``
