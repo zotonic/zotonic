@@ -343,7 +343,8 @@ scan_sites(true) ->
     ParsedConfigs = [parse_config(CfgFile) || CfgFile <- ConfigFiles],
     [SiteConfig || {ok, SiteConfig} <- ParsedConfigs];
 scan_sites(false) ->
-    Builtin = [ parse_config(get_site_config_file(Builtin)) || Builtin <- get_builtin_sites(), Builtin =/= testsandbox ],
+    BuiltinSites = get_builtin_sites() -- [testsandbox, testsandboxdb],
+    Builtin = [ parse_config(get_site_config_file(Builtin)) || Builtin <- BuiltinSites ],
     [ BuiltinCfg || {ok, BuiltinCfg} <- Builtin ] ++ scan_directory(z_path:user_sites_dir()).
 
 scan_directory(Directory) ->
