@@ -3,6 +3,9 @@
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
 <div class="form-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
+{% if blk.explanation %}
+    <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
+{% endif %}
 {% if blk.input_type == 'multi' %}
     {% for val,item in props.answers %}
         {% with forloop.counter as index %}
@@ -42,9 +45,6 @@
             {% endif %}
         {% endwith %}
     {% endfor %}
-{% endif %}
-{% if blk.explanation %}
-    <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
 </div>
 {% endwith %}
