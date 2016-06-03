@@ -50,15 +50,16 @@ task_delete_inactive(RscId, SessionId, Context) ->
     case is_unmodified_rsc(RscId, Context) of
         true ->
             case is_session_alive(SessionId, Context) of
-                true ->
+                false ->
                     lager:debug("[~p] Deleting unmodified temporary resource ~p", 
                                 [z_context:site(Context), RscId]),
                     ok = m_rsc:delete(RscId, z_acl:sudo(Context)),
                     ok;
-                false ->
+                true ->
                     {delay, ?INACTIVE_CHECK_DELAY}
             end;
         false ->
+            m_rsc:update(RscId, [{session_owner, undefined}], [no_touch], Context),
             ok
     end.
 
@@ -96,7 +97,8 @@ make_rsc({error, session}, _SessionId, _CatId, _Props, _Context) ->
     undefined;
 make_rsc({error, notfound}, SessionId, CatId, Props, Context) ->
     try
-        case m_rsc:insert(Props, Context) of
+        Props0 = lists:keystore(session_owner, 1, Props, {session_owner, SessionId}),
+        case m_rsc:insert(Props0, Context) of
             {ok, RscId} ->
                 z_session:set({temporary_rsc, CatId}, RscId, Context),
                 spawn_session_monitor(RscId, SessionId, Context),
@@ -168,8 +170,8 @@ is_unmodified_rsc(Id, Context) ->
 
 is_session_alive(SessionId, Context) ->
     case z_session_manager:whereis(SessionId, Context) of
-        undefined -> true;
-        Pid when is_pid(Pid) -> false
+        undefined -> false;
+        Pid when is_pid(Pid) -> true
     end.
 
 ensure_category(Props, Context) ->
