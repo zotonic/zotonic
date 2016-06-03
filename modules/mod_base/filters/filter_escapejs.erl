@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010,2016 Marc Worrell
 %% @doc 'escapejs' filter, escape a value for output in javascript
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010,2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,10 +19,5 @@
 -module(filter_escapejs).
 -export([escapejs/2]).
 
-
-escapejs(undefined, _Context) ->
-    <<>>;
-escapejs(Input, _Context) when is_binary(Input) ->
-    z_utils:js_escape(Input);
-escapejs(Input, _Context) when is_list(Input) ->
-    z_utils:js_escape(Input).
+escapejs(Input, Context) ->
+    z_utils:js_escape(Input, Context).
