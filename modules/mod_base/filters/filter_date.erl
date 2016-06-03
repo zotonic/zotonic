@@ -55,7 +55,7 @@ date(Input, FormatStr, Context) when is_binary(Input) ->
     z_convert:to_binary(date(binary_to_list(Input), FormatStr, Context));
 date({{_,_,_} = Date,{_,_,_} = Time} = DT, FormatStr, Context) ->
     try
-        erlydtl_dateformat:format({Date, Time}, FormatStr, Context)
+        z_datetime:format({Date, Time}, FormatStr, Context)
     catch
         error:Error ->
             lager:warning("Date format on illegal date ~p (format ~p), error: ~p", [DT, FormatStr, Error]),
@@ -63,7 +63,7 @@ date({{_,_,_} = Date,{_,_,_} = Time} = DT, FormatStr, Context) ->
     end;
 date({_,_,_} = Date, FormatStr, Context) ->
     try
-        erlydtl_dateformat:format({Date, {0,0,0}}, FormatStr, Context)
+        z_datetime:format({Date, {0,0,0}}, FormatStr, Context)
     catch
         error:Error ->
             lager:warning("Date format on illegal date ~p (format ~p), error: ~p", [Date, FormatStr, Error]),

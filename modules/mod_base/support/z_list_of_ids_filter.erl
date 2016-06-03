@@ -23,11 +23,11 @@
 filter(Id, Fun, _Context) when is_integer(Id) ->
     Fun(Id);
 filter(List, Fun, Context) ->
-    lists:filter(Fun, erlydtl_runtime:to_list(List, Context)).
+    lists:filter(Fun, z_template_compiler_runtime:to_list(List, Context)).
 
 -spec filter([integer()], fun((integer()) -> boolean()), integer(), any()) -> [integer()].
 filter(List, Fun, N, Context) ->
-    filter1(erlydtl_runtime:to_list(List, Context), Fun, N, []).
+    filter1(z_template_compiler_runtime:to_list(List, Context), Fun, N, []).
 
 filter1([], _Fun, _N, Acc) ->
     lists:reverse(Acc);

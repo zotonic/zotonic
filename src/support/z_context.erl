@@ -499,32 +499,32 @@ output1([T|Rest], Context, Acc) when is_tuple(T) ->
 output1([C|Rest], Context, Acc) ->
     output1(Rest, Context, [C|Acc]).
     
-    render_script(Args, Context) ->
-        NoStartup = z_convert:to_bool(proplists:get_value(nostartup, Args, false)),
-        NoStream = z_convert:to_bool(proplists:get_value(nostream, Args, false)),
-        Extra = [ S || S <- z_notifier:map(#scomp_script_render{is_nostartup=NoStartup, args=Args}, Context), S /= undefined ],
-        Script = case NoStartup of
-            false ->
-                [ z_script:get_page_startup_script(Context),
-                  Extra,
-                  z_script:get_script(Context),
-                  case NoStream of
-                      false ->
-                          z_script:get_stream_start_script(Context);
-                      true ->
-                          []
-                  end];
-            true ->
-                [z_script:get_script(Context), Extra]
-        end,
-        case proplists:get_value(format, Args, "html") of
-            "html" ->
-                [ <<"\n\n<script type='text/javascript'>\n$(function() {\n">>, Script, <<"\n});\n</script>\n">> ];
-            "js" ->
-                [ $\n, Script, $\n ];
-            "escapejs" ->
-                z_utils:js_escape(Script)
-        end.
+render_script(Args, Context) ->
+    NoStartup = z_convert:to_bool(z_utils:get_value(nostartup, Args, false)),
+    NoStream = z_convert:to_bool(z_utils:get_value(nostream, Args, false)),
+    Extra = [ S || S <- z_notifier:map(#scomp_script_render{is_nostartup=NoStartup, args=Args}, Context), S /= undefined ],
+    Script = case NoStartup of
+        false ->
+            [ z_script:get_page_startup_script(Context),
+              Extra,
+              z_script:get_script(Context),
+              case NoStream of
+                  false ->
+                      z_script:get_stream_start_script(Context);
+                  true ->
+                      []
+              end];
+        true ->
+            [z_script:get_script(Context), Extra]
+    end,
+    case z_utils:get_value(format, Args, <<"html">>) of
+        <<"html">> ->
+            [ <<"\n\n<script type='text/javascript'>\n$(function() {\n">>, Script, <<"\n});\n</script>\n">> ];
+        <<"js">> ->
+            [ $\n, Script, $\n ];
+        <<"escapejs">> ->
+            z_utils:js_escape(Script)
+    end.
         
 
 %% @spec combine_results(Context1, Context2) -> Context

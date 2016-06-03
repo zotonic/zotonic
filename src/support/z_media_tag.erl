@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
-%% Date: 2009-03-03
+%% @copyright 2009-2016 Marc Worrell
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
 %%
@@ -9,7 +8,7 @@
 %% /media/inline/2007/03/31/wedding.jpg
 %% /media/attachment/2007/03/31/wedding.jpg
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -45,7 +44,7 @@
 
 -compile([{parse_transform, lager_transform}]).
 
-%% @doc Called from erlydtl, render the media viewer for some resource/medium
+%% @doc Called from template, render the media viewer for some resource/medium
 scomp_viewer(undefined, _Options, _Context) ->
     <<>>;
 scomp_viewer(IdOrName, Options, Context) ->
@@ -58,7 +57,7 @@ scomp_viewer(IdOrName, Options, Context) ->
             <<>>
     end.
 
-%% @doc Called from erlydtl, render the media tag for some resource/medium
+%% @doc Called from template, render the media tag for some resource/medium
 scomp_tag(undefined, _Options, _Context) ->
     <<>>;
 scomp_tag(IdOrName, Options, Context) ->
@@ -71,7 +70,7 @@ scomp_tag(IdOrName, Options, Context) ->
             <<>>
     end.
 
-%% @doc Called from erlydtl, render the media url for some resource/medium
+%% @doc Called from template, render the media url for some resource/medium
 scomp_url(undefined, _Options, _Context) ->
     <<>>;
 scomp_url(IdOrName, Options, Context) ->

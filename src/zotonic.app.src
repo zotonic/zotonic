@@ -19,6 +19,7 @@
                   epgsql, depcache, webzmachine, z_stdlib,
                   poolboy, sendfile,
                   filezcache, s3filez,
+                  template_compiler,
                   qdate, syslog
   ]}
  ]}.

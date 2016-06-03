@@ -26,6 +26,8 @@ striptags(In, _Context) when is_integer(In) ->
     In;
 striptags(In, _Context) when is_float(In) ->
     In;
+striptags({trans, _} = Trans, Context) ->
+    z_html:strip(z_trans:lookup_fallback(Trans, Context));
 striptags(In, _Context) ->
     z_html:strip(In).
 

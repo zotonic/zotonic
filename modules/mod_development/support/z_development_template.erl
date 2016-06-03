@@ -19,48 +19,53 @@
 -module(z_development_template).
 
 -export([
-	event/2,
+    event/2,
 
-	find_templates/3
-	]).
+    find_templates/3
+    ]).
 
 -include_lib("zotonic.hrl").
 -include_lib("wm_host_dispatch_list.hrl").
 
 event(#submit{message=explain_tpl}, Context) ->
-	case z_acl:is_allowed(use, mod_development, Context) of
-		true ->
-			CatName = z_context:get_q("tpl_cat", Context), 
-			TplName = z_string:trim(z_context:get_q("tpl_name", Context)),
-			Tpls = find_templates(CatName, TplName, Context),
-			Vars = [
-				{tpls, Tpls}
-			],
-			Context1 = z_render:update(
-							"explain-tpl-output", 
-							#render{template="_development_template.tpl", vars=Vars}, 
-							Context),
-			z_render:wire({fade_in, [{target, "explain-tpl-output"}]}, Context1);
-		false ->
-			z_render:growl(?__("You are not allowed to use the template debugging.", Context), Context) 
-	end.
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            CatName = z_context:get_q("tpl_cat", Context), 
+            TplName = z_string:trim(z_context:get_q("tpl_name", Context)),
+            Tpls = find_templates(CatName, TplName, Context),
+            Vars = [
+                {tpls, Tpls}
+            ],
+            Context1 = z_render:update(
+                            "explain-tpl-output", 
+                            #render{template="_development_template.tpl", vars=Vars}, 
+                            Context),
+            z_render:wire({fade_in, [{target, "explain-tpl-output"}]}, Context1);
+        false ->
+            z_render:growl(?__("You are not allowed to use the template debugging.", Context), Context) 
+    end.
 
 find_templates(CatName, TplName, Context) ->
-	[
-		{UA, index_props(find_template(CatName, TplName, z_user_agent:set_class(UA, Context)))}
-		|| UA <- z_user_agent:classes()
-	].
+    [
+        {UA, index_props(find_template(CatName, TplName, z_user_agent:set_class(UA, Context)))}
+        || UA <- z_user_agent:classes()
+    ].
 
 find_template(NoCat, TplName, Context) when NoCat =:= ""; NoCat =:= <<>> ->
-	z_template:find_template(TplName, Context);
+    z_module_indexer:find(template, TplName, Context);
 find_template(CatName, TplName, Context) ->
-	IsA = m_category:is_a(CatName, Context),
-	z_template:find_template_cat(TplName, IsA, Context).
+    IsA = m_category:is_a(CatName, Context),
+    z_module_indexer:map_template({cat, TplName, IsA}, Context).
 
 index_props({error, _}) ->
-	undefined;
+    undefined;
+index_props({filename, Path}) ->
+    [
+        {module, <<>>},
+        {path, Path}
+    ];
 index_props({ok, #module_index{filepath=Path, module=Module}}) ->
-	[
-		{module, Module},
-		{path, Path}
-	].
+    [
+        {module, Module},
+        {path, Path}
+    ].

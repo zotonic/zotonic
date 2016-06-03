@@ -597,7 +597,7 @@ templates_to_ets(List, Tag, Site) ->
                         ua_class=UAClass
                     },
                     module=Mod,
-                    erlang_module=z_template:filename_to_modulename(FP, UAClass, Site),
+                    erlang_module=undefined,
                     filepath=FP,
                     tag=Tag
                 },

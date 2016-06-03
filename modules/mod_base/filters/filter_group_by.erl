@@ -25,5 +25,8 @@ group_by(In, undefined, _Context) ->
 group_by(undefined, _, _Context) -> 
     undefined;
 group_by(In, Prop, Context) ->
-    z_utils:group_by(erlydtl_runtime:to_list(In, Context), z_convert:to_atom(Prop), Context).
+    z_utils:group_by(
+        z_template_compiler_runtime:to_list(In, Context),
+        z_convert:to_atom(Prop),
+        Context).
 

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @doc 'after' filter, return the element after another element in a list
+%% @copyright 2016 Marc Worrell
+%% @doc Escape filter, same as 'force_escape'
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,21 +16,10 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_after).
--export(['after'/3]).
+-module(filter_escape).
+-export([
+    escape/2
+    ]).
 
-
-'after'(undefined, _, _Context) ->
-    undefined;
-'after'(_, undefined, _Context) ->
-    undefined;
-'after'(L, V, Context) ->
-    next_of1(z_template_compiler_runtime:to_list(L, Context), V).
-
-next_of1([], _V) ->
-    undefined;
-next_of1([V,N|_T], V) ->
-    N;
-next_of1([_|T], V) ->
-    next_of1(T, V).
-
+escape(V, Context) ->
+    filter_force_escape:force_escape(V, Context).

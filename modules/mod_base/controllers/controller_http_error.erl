@@ -307,7 +307,7 @@ bt_table([{Module, Fun, ArityArgs, Loc} | T], Acc) ->
     bt_table(T, [bt_row(Module, Fun, ArityArgs, proplists:get_value(file, Loc), proplists:get_value(line, Loc)) | Acc]).
 
 bt_row(Module, Fun, ArityArgs, File, Line) ->
-    case is_template(atom_to_list(Module)) of
+    case is_template(Module) of
         {true, Mod, Template} ->
             [true, Mod, Template, simplify_args(ArityArgs), loc(File, Line)];
         false ->
@@ -342,28 +342,9 @@ simplify_args(L) ->
     simplify_arg(X) -> io_lib:format("~p", [X]).
 
 
-is_template("template_"++R) ->
-    case re:split(R, "_", [{return,list}]) of
-        [_Site,""|Rest] ->
-            case lists:last(Rest) of
-                "tpl" ->
-                    case re:run(R, "modules_(mod_.*)_templates_(.*)_tpl$", [{capture, all, list}]) of
-                        {match, [_, Module, Path]} ->
-                            {true, Module, Path++".tpl"};
-                        nomatch ->
-                            case re:run(R, "priv_sites_(.*)_templates_(.*)_tpl$", [{capture, all, list}]) of
-                                {match, [_, Module, Path]} ->
-                                    {true, Module, Path++".tpl"};
-                                nomatch ->
-                                    false
-                            end
-                    end;
-                _ -> 
-                    false
-            end;
-        _ ->
-            false
-    end;
-is_template(_) ->
-    false.
+is_template(Module) ->
+    case template_compiler:is_template_module(Module) of
+        true -> {true, Module, Module:filename()};
+        false -> false
+    end.
 

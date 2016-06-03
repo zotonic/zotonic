@@ -33,7 +33,7 @@ index_of(<<>>, _Value, _Context) ->
 index_of(Input, Value, _Context) when is_list(Input) ->
     get_index_of(Value, Input, 1);
 index_of(Input, Value, Context) ->
-    index_of(erlydtl_runtime:to_list(Input, Context), Value, Context).
+    index_of(z_template_compiler_runtime:to_list(Input, Context), Value, Context).
 
 get_index_of(_, [], _)  -> undefined;
 get_index_of(A, [B|Tail], Index) -> 

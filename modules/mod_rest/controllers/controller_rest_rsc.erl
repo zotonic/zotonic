@@ -140,7 +140,7 @@ do_get(Id, Data, Extension, Context) ->
                     $-, 
                     m_rsc:p(Id, slug, Context),
                     $-, 
-                    erlydtl_dateformat:format(Modified, "YmdHis", Context),
+                    z_datetime:format(Modified, "YmdHis", Context),
                     Extension
                 ]),
     Context1 = z_context:set_resp_header("Content-Disposition", z_convert:to_list(Disp), Context),

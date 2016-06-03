@@ -23,7 +23,9 @@
 -include("zotonic.hrl").
 
 -export (
-   [are_equal/2,
+   [get_value/2,
+    get_value/3,
+    are_equal/2,
     assert/2,
     encode_value/2,
     decode_value/2,
@@ -98,6 +100,17 @@
     url_unreserved_char/1,
     url_valid_char/1
    ]).
+
+
+get_value(Key, Map) when is_map(Map) ->
+    maps:get(Key, Map, undefined);
+get_value(Key, Map) when is_list(Map) ->
+    proplists:get_value(Key, Map, undefined).
+
+get_value(Key, Map, Default) when is_map(Map) ->
+    maps:get(Key, Map, Default);
+get_value(Key, Map, Default) when is_list(Map) ->
+    proplists:get_value(Key, Map, Default).
 
 
 %%% FORMAT %%%

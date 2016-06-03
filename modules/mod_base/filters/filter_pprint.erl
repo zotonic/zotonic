@@ -22,6 +22,6 @@
 -include("zotonic.hrl").
 
 pprint(#m{} = M, Context) ->
-    pprint(erlydtl_runtime:to_value(M, Context), Context);
+    pprint(z_template_compiler_runtime:to_simple_value(M, Context), Context);
 pprint(V, _Context) ->
 	z_html:nl2br(z_html:escape(io_lib:format("~p", [V]))).

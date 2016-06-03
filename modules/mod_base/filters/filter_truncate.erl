@@ -29,14 +29,14 @@ truncate(undefined, _N, _Append, _Context) ->
     undefined;
 truncate(S, N, Append, Context) when not is_integer(N) ->
     truncate(S, z_convert:to_integer(N), Append, Context);
-truncate({tr, _} = Tr, N, Append, Context) ->
+truncate({trans, _} = Tr, N, Append, Context) ->
     truncate(z_trans:lookup_fallback(Tr, Context), N, Append, Context);
 truncate(In, N, Append, _Context) when is_binary(In) ->
     z_string:truncate(In, N, z_convert:to_binary(Append));
 truncate(In, N, Append, _Context) when is_list(In) ->
     z_string:truncate(iolist_to_binary(In), N, z_convert:to_binary(Append));
 truncate(In, N, Append, Context) ->
-    case erlydtl_runtime:to_value(In, Context) of
+    case z_template_compiler_runtime:to_simple_value(In, Context) of
         L when is_list(L) ->
             truncate(L, N, Append, Context);
         B when is_binary(B) ->

@@ -58,7 +58,7 @@ encode_value(B, false, _Context) when is_binary(B) ->
 	quote(escape(B1));
 encode_value({Y,M,D} = Date, _IsRaw, Context)
 	when is_integer(Y), is_integer(M), is_integer(D) ->
-	quote(erlydtl_dateformat:format_utc({Date, {0,0,0}}, "Y-m-d", Context));
+	quote(z_datetime:format_utc({Date, {0,0,0}}, "Y-m-d", Context));
 encode_value(?ST_JUTTEMIS, _IsRaw, _Context) ->
 	<<>>;
 encode_value({{9999,M,D}, {H,I,S}}, _IsRaw, _Context) 
@@ -69,10 +69,10 @@ encode_value({{Y,M,D}, {H,I,S}} = Date, _IsRaw, Context)
 	when is_integer(Y), is_integer(M), is_integer(D),
 		 is_integer(H), is_integer(I), is_integer(S) ->
 	try
-		quote(erlydtl_dateformat:format(Date, "Y-m-d H:i:s", Context))
+		quote(z_datetime:format(Date, "Y-m-d H:i:s", Context))
 	catch
 		_:_ ->
-			quote(erlydtl_dateformat:format_utc(Date, "Y-m-d H:i:s", Context))
+			quote(z_datetime:format_utc(Date, "Y-m-d H:i:s", Context))
 	end;
 encode_value({trans, _} = Trans, IsRaw, Context) ->
 	encode_value(z_trans:lookup_fallback(Trans, Context), IsRaw, Context);
