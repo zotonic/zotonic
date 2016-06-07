@@ -59,6 +59,7 @@ task_delete_inactive(RscId, SessionId, Context) ->
                     {delay, ?INACTIVE_CHECK_DELAY}
             end;
         false ->
+            m_rsc:update(RscId, [{session_owner, undefined}], [no_touch], Context),
             ok
     end.
 
@@ -96,7 +97,8 @@ make_rsc({error, session}, _SessionId, _CatId, _Props, _Context) ->
     undefined;
 make_rsc({error, notfound}, SessionId, CatId, Props, Context) ->
     try
-        case m_rsc:insert(Props, Context) of
+        Props0 = lists:keystore(session_owner, 1, Props, {session_owner, SessionId}),
+        case m_rsc:insert(Props0, Context) of
             {ok, RscId} ->
                 z_session:set({temporary_rsc, CatId}, RscId, Context),
                 spawn_session_monitor(RscId, SessionId, Context),

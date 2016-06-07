@@ -623,6 +623,12 @@ is_owner(insert_rsc, _Context) ->
 is_owner(Id, Context) ->
     is_owner(Id, m_rsc:p_no_acl(Id, creator_id, Context), Context).
 
+is_owner(Id, undefined, #context{user_id=undefined, session_id=SessionId} = Context) ->
+    case m_rsc:p_no_acl(Id, session_owner, Context) of
+        undefined -> false;
+        SessionOwner -> SessionId == SessionOwner
+    end;
+is_owner(_Id, _CreatorId, #context{user_id=undefined}) -> false;
 is_owner(Id, _CreatorId, #context{user_id=Id}) -> true;
 is_owner(_Id, CreatorId, #context{user_id=CreatorId}) -> true;
 is_owner(_Id, _CreatorId, _Context) -> false.
