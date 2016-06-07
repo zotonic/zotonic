@@ -157,9 +157,6 @@ rsc_prop_visible(RscName, Property, Context) ->
     end.
 
 %% @doc Check if the resource is editable by the current user
-rsc_editable(_Id, #context{user_id=undefined}) ->
-    %% Anonymous visitors can't edit anything
-    false;
 rsc_editable(undefined, _Context) ->
     false;
 rsc_editable(Id, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
