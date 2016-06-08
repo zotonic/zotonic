@@ -44,7 +44,7 @@ observe_url_abs(#url_abs{url=Url}, Context) ->
 	end.
 
 secure_base_url(Context) ->
-	Base = case z_config:get(ssl_listen_port) of
+	Base = case z_config:get(ssl_port) of
 		443 ->
 			[<<"https://">>, z_context:hostname(Context)];
 		Port ->
@@ -77,8 +77,8 @@ is_secure_cookie(_) -> false.
 
 %% @doc Filter all dispatch rules, set the correct protocol options
 pid_observe_dispatch_rules(_Pid, dispatch_rules, #wm_host_dispatch_list{dispatch_list=Dispatch} = HD, Context) ->
-	SSLPort = z_config:get(ssl_listen_port),
-	Port = z_config:get(listen_port),
+	SSLPort = z_config:get(ssl_port),
+	Port = z_config:get(port),
 	IsSecure = z_convert:to_bool(m_config:get_value(mod_ssl, is_secure, false, Context)),
 	IsSSL = z_convert:to_bool(m_config:get_value(mod_ssl, is_ssl, false, Context)),
 	Dispatch1 = map_ssl_option(IsSecure, IsSSL, Port, SSLPort, Dispatch, []),
