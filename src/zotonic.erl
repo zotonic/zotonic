@@ -64,7 +64,7 @@ start(_Args) ->
             ok;
         Message ->
             lager:error("Zotonic start error: ~s~n", [Message]),
-            init:stop()
+            init:stop(1)
     end.
 
 %% @spec stop() -> ok
