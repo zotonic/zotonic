@@ -15,34 +15,21 @@ ADD https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb .
 RUN apt-get clean \
     && dpkg -i erlang-solutions_1.0_all.deb \
     && apt-get update \
-    && apt-get install -y --no-install-recommends erlang build-essential ca-certificates postgresql imagemagick wget git \
-    && rm -rf /var/lib/apt/lists/* && \
-    useradd --system --create-home zotonic                                                         && \
-    printf "# Zotonic settings \n\
-local   all         zotonic                           ident \n\
-host    all         zotonic     127.0.0.1/32          md5 \n\
-host    all         zotonic     ::1/128               md5" >> /etc/postgresql/9.4/main/pg_hba.conf && \
-    /etc/init.d/postgresql start                                                                   && \
-    echo "CREATE USER zotonic WITH PASSWORD 'zotonic'; \
-          ALTER ROLE zotonic WITH CREATEDB; \
-          CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8'; \
-          \c zotonic \
-          CREATE LANGUAGE \"plpgsql\";" | su -l postgres -c psql
+    && apt-get install -y --no-install-recommends erlang build-essential ca-certificates imagemagick inotify-tools libnotify-bin wget git \
+    && rm -rf /var/lib/apt/lists/*
 
-EXPOSE 8000
-ENV ERL_FLAGS -noinput
-ENTRYPOINT ["./bin/zotonic"]
+ADD . /opt/zotonic
+WORKDIR /opt/zotonic
+
+RUN DEBUG=1 make
+
+COPY docker/docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
+ENV PATH /opt/zotonic/bin:$PATH
+
 CMD ["debug"]
 
-WORKDIR /home/zotonic
-ADD . /home/zotonic/
-
-RUN make                                      && \
-    su -l zotonic -c 'bin/zotonic configfile' && \
-    mkdir /etc/zotonic                        && \
-    mv .zotonic /etc/zotonic/config           && \
-    mv user /etc/zotonic/user                 && \
-    chown -R zotonic:zotonic /home/zotonic /etc/zotonic
-
-USER zotonic
+EXPOSE 8000
 VOLUME /etc/zotonic
+VOLUME /opt/zotonic/user/sites
+VOLUME /opt/zotonic/user/modules
