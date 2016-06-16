@@ -209,6 +209,7 @@ binpath(P) ->
 %% @doc Check if a file is text based (influences the provided character sets)
 is_text(<<"text/", _/binary>>) -> true;
 is_text(<<"application/x-javascript">>) -> true;
+is_text(<<"application/javascript">>) -> true;
 is_text(<<"application/xhtml+xml">>) -> true;
 is_text(<<"application/xml">>) -> true;
 is_text(_Mime) -> false.
