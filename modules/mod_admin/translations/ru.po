@@ -64,10 +64,6 @@ msgstr ""
 msgid "Add a new media item"
 msgstr "Добавить новый материал"
 
-#: modules/mod_admin/templates/_admin_edit_body.tpl:34
-msgid "Add link"
-msgstr "Добавить ссылку"
-
 #: modules/mod_admin/templates/_admin_edit_media.tpl:59
 msgid "Add media item"
 msgstr ""
@@ -77,7 +73,7 @@ msgid "Add media to body"
 msgstr "Добавить материал в тело"
 
 #: modules/mod_admin/actions/action_admin_link.erl:80
-#: modules/mod_admin/mod_admin.erl:371
+#: modules/mod_admin/mod_admin.erl:376
 msgid "Added the connection to"
 msgstr "Добавлена связь с"
 
@@ -102,6 +98,7 @@ msgstr "Дополнительно"
 msgid "All Categories"
 msgstr "Все категории"
 
+#: modules/mod_admin/templates/admin_media.tpl:30
 #: modules/mod_admin/templates/admin_overview.tpl:27
 msgid "All Content"
 msgstr ""
@@ -111,13 +108,13 @@ msgid "All day"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:14
-#: modules/mod_admin/templates/admin_media.tpl:25
+#: modules/mod_admin/templates/admin_media.tpl:73
 #: modules/mod_admin/templates/admin_overview.tpl:96
 msgid "All media"
 msgstr "Все материалы"
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:13
-#: modules/mod_admin/templates/admin_media.tpl:24
+#: modules/mod_admin/templates/admin_media.tpl:72
 #: modules/mod_admin/templates/admin_overview.tpl:95
 msgid "All pages"
 msgstr "Все страницы"
@@ -126,11 +123,11 @@ msgstr "Все страницы"
 msgid "Alternative telephone"
 msgstr "Дополнительный телефон"
 
-#: modules/mod_admin/templates/admin_media.tpl:13
+#: modules/mod_admin/templates/admin_media.tpl:61
 msgid "And media can also be viewed on their own page."
 msgstr "Также материалы могут быть просмотрены на собственной странице."
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:16
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:20
 msgid "Any category"
 msgstr "Любая категория"
 
@@ -138,7 +135,7 @@ msgstr "Любая категория"
 msgid "Are you sure you want to delete the page"
 msgstr "Вы уверены, что желаете удалить страницу"
 
-#: modules/mod_admin/templates/_admin_menu.tpl:74
+#: modules/mod_admin/templates/_admin_menu.tpl:72
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Вы уверены, что желаете покинуть интерфейс администратора?"
 
@@ -150,7 +147,7 @@ msgstr "Примечание"
 msgid "Ask google to not index this page"
 msgstr "Не индексировать эту страницу в поисковых системах"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:43
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:45
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Прикрепленные материалы"
@@ -177,18 +174,19 @@ msgid "Block quote"
 msgstr "Цитату"
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:83
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:74
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:39
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
 msgid "Cancel"
 msgstr "Отмена"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:36
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:27
 #: modules/mod_admin/templates/_admin_overview_list.tpl:14
 #: modules/mod_admin/templates/admin_referrers.tpl:21
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
@@ -226,6 +224,10 @@ msgstr "Город"
 msgid "Click the image to set the cropping center."
 msgstr ""
 
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47
+msgid "Close"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
 msgid "Community members"
 msgstr "Членов сообщества"
@@ -238,7 +240,7 @@ msgstr "Подтвердите удаление блока"
 msgid "Confirm delete"
 msgstr "Подтвердите удаление"
 
-#: modules/mod_admin/templates/_admin_menu.tpl:74
+#: modules/mod_admin/templates/_admin_menu.tpl:72
 msgid "Confirm logoff"
 msgstr "Подтвердите выход"
 
@@ -256,8 +258,8 @@ msgstr "Контент"
 msgid "Country"
 msgstr "Страна"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:36
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:55
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:38
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:57
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
 msgid "Create Page"
 msgstr ""
@@ -416,11 +418,12 @@ msgstr "Содержимое файла / материала"
 msgid "Filter on category"
 msgstr "Фильтр категорий"
 
+#: modules/mod_admin/templates/admin_media.tpl:33
 #: modules/mod_admin/templates/admin_overview.tpl:30
 msgid "Filter on content group"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:49
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:51
 msgid "Find Page"
 msgstr "Найти страницу"
 
@@ -465,15 +468,15 @@ msgstr "Заголовок"
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
 "its own line. For more information, see the <a href=\"http://zotonic.com/"
-"docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query "
-"arguments</a> on the Zotonic website."
+"docs/latest/developer-guide/search.html#query-model-arguments"
+"\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
 "Здесь вы можете изменить аргументы поискового запроса. Каждый аргумент "
 "ставится на отдельной строке. Для дополнительных сведений смотрите <a href="
-"\"http://zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">справку по "
-"аргументам запросов</a> на сайте Zotonic."
+"\"http://zotonic.com/docs/latest/developer-guide/search.html#query-model-"
+"arguments\">справку по аргументам запросов</a> на сайте Zotonic."
 
-#: modules/mod_admin/templates/admin_media.tpl:38
+#: modules/mod_admin/templates/admin_media.tpl:86
 msgid "Info"
 msgstr "Информация"
 
@@ -485,10 +488,7 @@ msgstr "Справочную ссылку с модальным сообщени
 msgid "Inline block"
 msgstr "Встроенный блок"
 
-#: modules/mod_admin/templates/_admin_edit_body.tpl:20
-msgid "Insert image"
-msgstr "Вставить изображение"
-
+#: modules/mod_admin/templates/admin_media.tpl:48
 #: modules/mod_admin/templates/admin_overview.tpl:60
 msgid "Items per page"
 msgstr ""
@@ -520,7 +520,7 @@ msgstr ""
 "Живой запрос, уведомлять когда соответствующие элементы обновлены или "
 "вставлены."
 
-#: modules/mod_admin/templates/_admin_menu.tpl:73
+#: modules/mod_admin/templates/_admin_menu.tpl:71
 msgid "Log Off"
 msgstr "Выйти"
 
@@ -536,15 +536,15 @@ msgstr "Почтовый адрес"
 msgid "Main"
 msgstr "Основное"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:84
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:75
 msgid "Make"
 msgstr "Создать"
 
-#: modules/mod_admin/templates/admin_media.tpl:21
+#: modules/mod_admin/templates/admin_media.tpl:69
 msgid "Make a new media item"
 msgstr "Создать новый материал"
 
-#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:75
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:80
 msgid "Make a new page"
 msgstr ""
 
@@ -558,7 +558,7 @@ msgid "Make media item"
 msgstr "Создать материал"
 
 #: modules/mod_admin/templates/admin_media.tpl:3
-#: modules/mod_admin/templates/admin_media.tpl:9
+#: modules/mod_admin/templates/admin_media.tpl:57
 #: modules/mod_admin/mod_admin.erl:103
 msgid "Media"
 msgstr "Материалы"
@@ -567,7 +567,7 @@ msgstr "Материалы"
 msgid "Media URL"
 msgstr "URL материала"
 
-#: modules/mod_admin/templates/admin_media.tpl:12
+#: modules/mod_admin/templates/admin_media.tpl:60
 msgid ""
 "Media encompasses all uploaded images, movies and documents. Media can be "
 "attached to pages."
@@ -623,7 +623,7 @@ msgstr "Модули"
 msgid "More like this"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:55
 msgid "Name"
 msgstr "Имя"
 
@@ -652,12 +652,12 @@ msgstr ""
 msgid "No items"
 msgstr "Элементы отсутствуют"
 
-#: modules/mod_admin/templates/admin_media.tpl:86
+#: modules/mod_admin/templates/admin_media.tpl:134
 msgid "No media found."
 msgstr "Материалы не найдены."
 
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find_results_loop.tpl:12
-#: modules/mod_admin/templates/_admin_overview_list.tpl:53
+#: modules/mod_admin/templates/_admin_overview_list.tpl:59
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Страницы не найдены."
@@ -684,7 +684,7 @@ msgid "Page slug"
 msgstr "ЧПУ страницы"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:10
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:27
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:18
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
 msgid "Page title"
 msgstr "Название страницы"
@@ -720,7 +720,7 @@ msgstr "Почтовый индекс"
 msgid "Predicate"
 msgstr "Предикат"
 
-#: modules/mod_admin/templates/admin_media.tpl:36
+#: modules/mod_admin/templates/admin_media.tpl:84
 msgid "Preview"
 msgstr "Предварительный просмотр"
 
@@ -754,7 +754,7 @@ msgstr "Опубликовать эту страницу"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:41
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:73
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:34
 msgid "Published"
 msgstr "Опубликовано"
@@ -884,7 +884,7 @@ msgstr "Поиск прочих материалов"
 msgid "Search query"
 msgstr "Поисковый запрос"
 
-#: modules/mod_admin/templates/_admin_menu.tpl:88
+#: modules/mod_admin/templates/_admin_menu.tpl:86
 msgid "Search..."
 msgstr ""
 
@@ -920,7 +920,7 @@ msgstr "Что-то пошло не так. Извините."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Извините, у вас отсутствуют права для добавление связи."
 
-#: modules/mod_admin/mod_admin.erl:375
+#: modules/mod_admin/mod_admin.erl:380
 msgid "Sorry, you have no permission to add the connection."
 msgstr ""
 
@@ -1042,7 +1042,7 @@ msgstr "До"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
 #: modules/mod_admin/templates/_admin_overview_list.tpl:11
-#: modules/mod_admin/templates/admin_media.tpl:37
+#: modules/mod_admin/templates/admin_media.tpl:85
 #: modules/mod_admin/templates/admin_referrers.tpl:20
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
@@ -1053,7 +1053,7 @@ msgstr "Название"
 msgid "Toggle navigation"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:7
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:8
 msgid "Type text to search"
 msgstr "Введите строку для поиска"
 
@@ -1066,7 +1066,7 @@ msgstr "Уникальное имя"
 msgid "Unique uri"
 msgstr "Уникальный идентификатор ресурса"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:61
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:63
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:10
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
 msgid "Upload File"
@@ -1080,7 +1080,7 @@ msgstr "Закачать файл с вашего компьютера."
 msgid "Upload a file which is already on the internet."
 msgstr "Закачать файл, уже имеющийся в Интернете."
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:66
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:68
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
 msgid "Upload by URL"
@@ -1090,7 +1090,7 @@ msgstr ""
 msgid "Upload file"
 msgstr "Закачать файл"
 
-#: modules/mod_admin/templates/admin_media.tpl:39
+#: modules/mod_admin/templates/admin_media.tpl:87
 msgid "Uploaded"
 msgstr "Закачано"
 
@@ -1104,11 +1104,11 @@ msgstr ""
 "Используйте заголовок базового контента в качестве отображаемого имени этой "
 "персоны."
 
-#: modules/mod_admin/templates/_admin_menu.tpl:70
+#: modules/mod_admin/templates/_admin_menu.tpl:68
 msgid "User page"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:14
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:18
 msgid "Valid for:"
 msgstr "Действителен для:"
 
@@ -1125,7 +1125,6 @@ msgstr ""
 msgid "View all referrers"
 msgstr "Просмотр всех связей"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:25
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
 msgid "View this page."
 msgstr "Просмотреть эту страницу."
@@ -1214,13 +1213,13 @@ msgstr "блок"
 msgid "by"
 msgstr "пользователем"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:39
-#: modules/mod_admin/templates/_admin_overview_list.tpl:40
+#: modules/mod_admin/templates/_admin_overview_list.tpl:46
+#: modules/mod_admin/templates/_admin_overview_list.tpl:47
 #: modules/mod_admin/templates/admin_referrers.tpl:34
 msgid "d M Y, H:i"
 msgstr ""
 
-#: modules/mod_admin/templates/admin_media.tpl:65
+#: modules/mod_admin/templates/admin_media.tpl:113
 msgid "delete"
 msgstr "удалить"
 
@@ -1228,8 +1227,8 @@ msgstr "удалить"
 msgid "e.g. might change"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:45
-#: modules/mod_admin/templates/admin_media.tpl:76
+#: modules/mod_admin/templates/_admin_overview_list.tpl:52
+#: modules/mod_admin/templates/admin_media.tpl:124
 #: modules/mod_admin/templates/admin_referrers.tpl:39
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
@@ -1239,6 +1238,10 @@ msgstr "изменить"
 #: modules/mod_admin/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "изменить эту страницу"
+
+#: modules/mod_admin/templates/admin_overview.tpl:69
+msgid "excluding"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -1252,7 +1255,7 @@ msgstr "соответствующих"
 msgid "name"
 msgstr "имя"
 
-#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:57
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:61
 msgid "page"
 msgstr ""
 
@@ -1282,17 +1285,23 @@ msgstr "без названия"
 msgid "uploaded on"
 msgstr "загружено"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:44
+#: modules/mod_admin/templates/_admin_overview_list.tpl:51
 #: modules/mod_admin/templates/admin_referrers.tpl:38
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
 msgid "view"
 msgstr "просмотр"
 
-#: modules/mod_admin/templates/_admin_menu.tpl:12
+#: modules/mod_admin/templates/_admin_navbar_brand.tpl:1
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "перейти на сайт"
+
+#~ msgid "Add link"
+#~ msgstr "Добавить ссылку"
+
+#~ msgid "Insert image"
+#~ msgstr "Вставить изображение"
 
 #~ msgid "Find an existing page to connect"
 #~ msgstr "Найти готовую страницу для связи"
