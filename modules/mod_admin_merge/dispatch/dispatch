@@ -1,4 +1,4 @@
 [
-    {admin_merge_rsc, ["admin", "merge", id], controller_admin_edit, [{template, "admin_merge.tpl"}]},
-    {admin_merge_rsc_compare, ["admin", "merge", id, id2], controller_admin_edit, [{template, "admin_merge_compare.tpl"}]}
+    {admin_merge_rsc, ["admin", "merge", id], controller_admin_edit, [{template, "admin_merge.tpl"}, {ssl, true}]},
+    {admin_merge_rsc_compare, ["admin", "merge", id, id2], controller_admin_edit, [{template, "admin_merge_compare.tpl"}, {ssl, true}]}
 ].
