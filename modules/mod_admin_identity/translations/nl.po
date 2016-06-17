@@ -525,7 +525,7 @@ msgstr "als je het adminwachtwoord wilt wijzigen."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:15
 msgid "matching"
-msgstr "voldoet aan"
+msgstr "die voldoen aan"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:71
 msgid "set username / password"

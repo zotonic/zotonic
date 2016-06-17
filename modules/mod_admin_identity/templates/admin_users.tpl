@@ -34,7 +34,7 @@
         {% with m.acl.user as me %}
 
             <form method="GET" action="{% url admin_users %}">
-                <label style="font-weight: normal; margin: 0">
+                <label style="font-weight: normal; margin: 0; margin: 0 0 20px 0">
                     <input type="hidden" name="qs" value="{{ q.qs }}" />
                     <input type="checkbox" name="persons" value="1" {% if q.persons %}checked="checked"{% endif %}
                         onchange="this.form.submit()" />
@@ -48,9 +48,9 @@
                     <thead>
                         <tr>
                             <th width="20%">{_ Name _}</th>
-                            <th width="15%">{_ Username _}</th>
-                            <th width="10%">{_ Modified on _}</th>
-                            <th width="40%">{_ Created on _}</th>
+                            <th width="20%">{_ Username _}</th>
+                            <th width="15%">{_ Created on _}</th>
+                            <th width="40%">{_ Modified on _}</th>
                         </tr>
                     </thead>
 
@@ -64,15 +64,15 @@
                                     {% else %}
                                         {{ m.identity[id].username|escape }}{% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}</td>
                                 {% endif %}
-                                <td>{{ m.rsc[id].modified|date:_"d M, H:i" }}</td>
+                                <td>{{ id.created|date:_"d M Y, H:i" }}</td>
                                 <td>
+                                    {{ id.modified|date:_"d M Y, H:i" }}
                                     <div class="pull-right buttons">
                                         {% if is_users_editable %}
                                             {% button class="btn btn-default btn-xs" action={dialog_set_username_password id=id} text=_"set username / password" on_delete={slide_fade_out target=#tr.id} %}
                                         {% endif %}
                                         {% button class="btn btn-default btn-xs" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
                                     </div>
-                                    {{ m.rsc[id].created|date:_"d M, H:i" }}
                                 </td>
                             </tr>
                             {% wire id=" #"|append:#tr.id|append:" td" action={dialog_edit_basics id=id target=undefined} %}
