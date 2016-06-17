@@ -23,9 +23,9 @@
 
 -mod_title("HTTPS / SSL Self Signed Certificates").
 -mod_description("Provides simple diy https/ssl certificate management.").
+-mod_depends([]).
 -mod_provides([ssl_certificates]).
 -mod_prio(1000).
--mod_depends([ssl]).
 
 -author('Marc Worrell <marc@worrell.nl>').
 -author('Maas-Maarten Zeeman <mmzeeman@xs4all.nl>').

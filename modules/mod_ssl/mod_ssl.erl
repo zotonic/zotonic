@@ -22,6 +22,7 @@
 -mod_title("HTTPS / SSL").
 -mod_description("Provides https/ssl connectivity.").
 -mod_provides([ssl]).
+-mod_depends([ssl_certificates]).
 -mod_prio(100).
 
 -author('Marc Worrell <marc@worrell.nl>').
