@@ -515,8 +515,8 @@ msgstr "Laatste teksten"
 msgid ""
 "Live query, send notifications when matching items are updated or inserted."
 msgstr ""
-"\"Live\" zoekopdracht, kan een bericht sturen wanneer overeenkomende items "
-"worden geüpdatet of toegevoegd."
+"\"Live\" zoekopdracht, kan een bericht sturen wanneer er nieuwe items\n"
+"aan de zoekopdracht voldoen."
 
 #: modules/mod_admin/templates/_admin_menu.tpl:71
 msgid "Log Off"
