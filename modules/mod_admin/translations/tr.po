@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:37
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:39
 msgid "+ add"
 msgstr ""
 
@@ -48,31 +48,22 @@ msgstr ""
 msgid "Access control"
 msgstr "Erişim kontrolü"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:43
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:45
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection: "
 msgstr "Bir bağlantı ekle:"
-
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:59
-msgid "Add a new media file"
-msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:19
 msgid "Add a new media item"
 msgstr "Yeni bir medya öğesi ekle"
 
-#: modules/mod_admin/templates/_admin_edit_body.tpl:34
-msgid "Add link"
-msgstr "Bağlantı ekle"
+#: modules/mod_admin/templates/_admin_edit_media.tpl:60
+msgid "Add media item"
+msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:14
 msgid "Add media to body"
 msgstr "Gövdeye görsel ekle"
-
-#: modules/mod_admin/actions/action_admin_link.erl:78
-#: modules/mod_admin/mod_admin.erl:371
-msgid "Added the connection to"
-msgstr "Bağlantı eklendi"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:6
 msgid "Address"
@@ -95,6 +86,7 @@ msgstr "İleri seviye"
 msgid "All Categories"
 msgstr "Tüm kategoriler"
 
+#: modules/mod_admin/templates/admin_media.tpl:30
 #: modules/mod_admin/templates/admin_overview.tpl:27
 msgid "All Content"
 msgstr ""
@@ -104,13 +96,13 @@ msgid "All day"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:14
-#: modules/mod_admin/templates/admin_media.tpl:25
+#: modules/mod_admin/templates/admin_media.tpl:73
 #: modules/mod_admin/templates/admin_overview.tpl:96
 msgid "All media"
 msgstr "Tüm görseller"
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:13
-#: modules/mod_admin/templates/admin_media.tpl:24
+#: modules/mod_admin/templates/admin_media.tpl:72
 #: modules/mod_admin/templates/admin_overview.tpl:95
 msgid "All pages"
 msgstr "Tüm sayfalar"
@@ -119,11 +111,11 @@ msgstr "Tüm sayfalar"
 msgid "Alternative telephone"
 msgstr "Alternatif telefon"
 
-#: modules/mod_admin/templates/admin_media.tpl:13
+#: modules/mod_admin/templates/admin_media.tpl:61
 msgid "And media can also be viewed on their own page."
 msgstr "Görseller kendi sayfalarında da görüntülenebilirler."
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:17
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:20
 msgid "Any category"
 msgstr "Herhangi bir kategori"
 
@@ -131,7 +123,7 @@ msgstr "Herhangi bir kategori"
 msgid "Are you sure you want to delete the page"
 msgstr "Sayfayı silmek istediğinizden emin misiniz?"
 
-#: modules/mod_admin/templates/_admin_menu.tpl:74
+#: modules/mod_admin/templates/_admin_menu.tpl:72
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Yönetici arayüzünden çıkmak istediğinizden emin misiniz?"
 
@@ -143,7 +135,7 @@ msgstr "Yana"
 msgid "Ask google to not index this page"
 msgstr "Google bu sayfayı indekslemesin"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:31
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:45
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Ekli medya"
@@ -166,18 +158,19 @@ msgid "Block quote"
 msgstr "Blok alıntısı"
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:32
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:83
-#: modules/mod_admin/templates/_admin_edit_blocks.tpl:33
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:74
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:39
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
 msgid "Cancel"
 msgstr "İptal"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:36
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:27
 #: modules/mod_admin/templates/_admin_overview_list.tpl:14
 #: modules/mod_admin/templates/admin_referrers.tpl:21
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
@@ -215,19 +208,19 @@ msgstr "Şehir"
 msgid "Click the image to set the cropping center."
 msgstr ""
 
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47
+msgid "Close"
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
 msgid "Community members"
 msgstr "Topluluk üyeleri"
 
-#: modules/mod_admin/templates/_admin_edit_blocks.tpl:31
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:37
 msgid "Confirm block removal"
 msgstr "Bloğu kaldırmayı onayla"
 
-#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:48
-msgid "Confirm delete"
-msgstr "Silmeyi onayla"
-
-#: modules/mod_admin/templates/_admin_menu.tpl:74
+#: modules/mod_admin/templates/_admin_menu.tpl:72
 msgid "Confirm logoff"
 msgstr "Çıkışı onayla"
 
@@ -244,8 +237,8 @@ msgstr "İçerik"
 msgid "Country"
 msgstr "Ülke"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:24
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:43
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:38
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:57
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
 msgid "Create Page"
 msgstr ""
@@ -254,7 +247,7 @@ msgstr ""
 msgid "Created on"
 msgstr "Oluşturulduğu tarih"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:15
+#: modules/mod_admin/templates/_admin_edit_header.tpl:10
 msgid "Created:"
 msgstr ""
 
@@ -284,7 +277,7 @@ msgid "Define who can see or edit this page."
 msgstr "Bu sayfayı kimin görebileceğini ve düzenleyebileceğini tanımla."
 
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
-#: modules/mod_admin/templates/_admin_edit_blocks.tpl:34
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:40
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:81
 msgid "Delete"
 msgstr "Sil"
@@ -311,7 +304,7 @@ msgstr ""
 msgid "Disconnect"
 msgstr "Bağlantıyı kes"
 
-#: modules/mod_admin/templates/_admin_edit_blocks.tpl:32
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:38
 msgid "Do you want to remove this block?"
 msgstr "Bu bloğu kaldırmak istediğinizden emin misiniz?"
 
@@ -328,7 +321,6 @@ msgstr "Pozisyonu değiştirmek için sürükle"
 msgid "Duplicate"
 msgstr "Çoğalt"
 
-#: modules/mod_admin/actions/action_admin_dialog_duplicate_rsc.erl:45
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:30
 msgid "Duplicate page"
 msgstr "Sayfayı çoğalt"
@@ -347,21 +339,9 @@ msgstr ""
 msgid "Edit"
 msgstr "Düzenle"
 
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:70
-msgid "Edit:"
-msgstr "Düzenle:"
-
-#: modules/mod_admin/mod_admin.erl:160
-msgid "Embed page"
-msgstr "Sayfa yerleştir"
-
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:40
 msgid "Emergency telephone"
 msgstr "Acil telefonu"
-
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:181
-msgid "Error uploading the file."
-msgstr "Dosya yükleme hatası."
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
 msgid ""
@@ -383,10 +363,6 @@ msgstr ""
 "Kategoriler hiyerarşik olarak tanımlanır. Bu yolla araçlar kategorisinin "
 "altında bisiklet ve araba şeklinde kategoriler yaratabilirsiniz."
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:178
-msgid "Failed to download the file."
-msgstr "Dosya indirme hatası."
-
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:39
 msgid "Featured"
 msgstr "Özellikli"
@@ -404,15 +380,16 @@ msgstr "Dosya / medya içeriği"
 msgid "Filter on category"
 msgstr "Kategori filtresi"
 
+#: modules/mod_admin/templates/admin_media.tpl:33
 #: modules/mod_admin/templates/admin_overview.tpl:30
 msgid "Filter on content group"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:37
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:51
 msgid "Find Page"
 msgstr "Sayfayı bul"
 
-#: modules/mod_admin/templates/_admin_edit_blocks.tpl:98
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:104
 msgid "Find page"
 msgstr "Sayfayı bul"
 
@@ -445,7 +422,6 @@ msgid "Group members"
 msgstr "Grup üyeleri"
 
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:18
-#: modules/mod_admin/mod_admin.erl:158
 msgid "Header"
 msgstr "Başlık"
 
@@ -453,15 +429,15 @@ msgstr "Başlık"
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
 "its own line. For more information, see the <a href=\"http://zotonic.com/"
-"docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query "
-"arguments</a> on the Zotonic website."
+"docs/latest/developer-guide/search.html#query-model-arguments"
+"\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
 "Burada arama sorgusu argümanlarını düzenleyebilirsiniz. Her argüman kendi "
 "satırında devam eder. Daha fazla bilgi için <a href=\"http://zotonic.com/"
-"docs/latest/developer-guide/search.html#query-model-arguments\"> Zotonic dokümentasyon sayfasını "
-"ziyaret edin</a>."
+"docs/latest/developer-guide/search.html#query-model-arguments\"> Zotonic "
+"dokümentasyon sayfasını ziyaret edin</a>."
 
-#: modules/mod_admin/templates/admin_media.tpl:38
+#: modules/mod_admin/templates/admin_media.tpl:86
 msgid "Info"
 msgstr "Bilgi"
 
@@ -473,10 +449,7 @@ msgstr "Popup ile bilgi bağlantısı"
 msgid "Inline block"
 msgstr "Satıriçi bloğu"
 
-#: modules/mod_admin/templates/_admin_edit_body.tpl:20
-msgid "Insert image"
-msgstr "Mesaj ekle"
-
+#: modules/mod_admin/templates/admin_media.tpl:48
 #: modules/mod_admin/templates/admin_overview.tpl:60
 msgid "Items per page"
 msgstr ""
@@ -507,7 +480,7 @@ msgid ""
 msgstr ""
 "Canlı sorgu, eşleşen öğeler güncellendiğinde veya girildiğinde bilgilendir."
 
-#: modules/mod_admin/templates/_admin_menu.tpl:73
+#: modules/mod_admin/templates/_admin_menu.tpl:71
 msgid "Log Off"
 msgstr "Çıkış"
 
@@ -523,17 +496,13 @@ msgstr "Posta adresi"
 msgid "Main"
 msgstr "Ana"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:84
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:75
 msgid "Make"
 msgstr "Oluştur"
 
-#: modules/mod_admin/templates/admin_media.tpl:21
+#: modules/mod_admin/templates/admin_media.tpl:69
 msgid "Make a new media item"
 msgstr "Yeni bir medya öğesi oluştur"
-
-#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:75
-msgid "Make a new page"
-msgstr ""
 
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:4
 #: modules/mod_admin/templates/admin_overview.tpl:85
@@ -545,7 +514,7 @@ msgid "Make media item"
 msgstr "Yeni medya öğesi oluştur"
 
 #: modules/mod_admin/templates/admin_media.tpl:3
-#: modules/mod_admin/templates/admin_media.tpl:9
+#: modules/mod_admin/templates/admin_media.tpl:57
 msgid "Media"
 msgstr "Medya"
 
@@ -553,7 +522,7 @@ msgstr "Medya"
 msgid "Media URL"
 msgstr "Medya URL adresi"
 
-#: modules/mod_admin/templates/admin_media.tpl:12
+#: modules/mod_admin/templates/admin_media.tpl:60
 msgid ""
 "Media encompasses all uploaded images, movies and documents. Media can be "
 "attached to pages."
@@ -564,11 +533,6 @@ msgstr ""
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:26
 msgid "Media file"
 msgstr "Medya dosyası"
-
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:152
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:164
-msgid "Media item created."
-msgstr "Medya öğesi oluşturuldu."
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
@@ -597,7 +561,7 @@ msgstr "Değiştiren"
 msgid "Modified on"
 msgstr "Değiştirildiği tarih"
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:10
+#: modules/mod_admin/templates/_admin_edit_header.tpl:15
 msgid "Modified:"
 msgstr ""
 
@@ -605,7 +569,7 @@ msgstr ""
 msgid "More like this"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:55
 msgid "Name"
 msgstr "İsim"
 
@@ -634,12 +598,12 @@ msgstr ""
 msgid "No items"
 msgstr "Öğe yok"
 
-#: modules/mod_admin/templates/admin_media.tpl:86
+#: modules/mod_admin/templates/admin_media.tpl:134
 msgid "No media found."
 msgstr "Medya bulunamadı."
 
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find_results_loop.tpl:12
-#: modules/mod_admin/templates/_admin_overview_list.tpl:53
+#: modules/mod_admin/templates/_admin_overview_list.tpl:59
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
 msgstr "Sayfa bulunmadı."
@@ -666,7 +630,7 @@ msgid "Page slug"
 msgstr "Sayfa slug'ı"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:10
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:27
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:18
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
 msgid "Page title"
 msgstr "Sayfa başlığı"
@@ -701,7 +665,7 @@ msgstr "Posta kodu"
 msgid "Predicate"
 msgstr "Öncül"
 
-#: modules/mod_admin/templates/admin_media.tpl:36
+#: modules/mod_admin/templates/admin_media.tpl:84
 msgid "Preview"
 msgstr "Önizleme"
 
@@ -735,7 +699,7 @@ msgstr "Sayfayı yayınla"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:41
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:73
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:34
 msgid "Published"
 msgstr "Yayınlandı"
@@ -796,16 +760,12 @@ msgstr ""
 msgid "Renumber category tree"
 msgstr "Kategori ağacını tekrar numaralandır"
 
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:59
-msgid "Replace current medium"
-msgstr ""
-
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
 msgid "Replace media item"
 msgstr "Medya öğesini değiştir"
 
-#: modules/mod_admin/templates/_admin_edit_media.tpl:35
-#: modules/mod_admin/templates/_admin_edit_media.tpl:57
+#: modules/mod_admin/templates/_admin_edit_media.tpl:36
+#: modules/mod_admin/templates/_admin_edit_media.tpl:60
 msgid "Replace this media item"
 msgstr "Bu medya öğesini değiştir"
 
@@ -862,7 +822,7 @@ msgstr "Başka medya ara"
 msgid "Search query"
 msgstr "Arama sorgusu"
 
-#: modules/mod_admin/templates/_admin_menu.tpl:88
+#: modules/mod_admin/templates/_admin_menu.tpl:86
 msgid "Search..."
 msgstr ""
 
@@ -889,22 +849,6 @@ msgstr "Göster"
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:31
 msgid "Show page on multiple paths"
 msgstr ""
-
-#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:126
-msgid "Something went wrong. Sorry."
-msgstr "Bir hata oluştu. Üzgünüz."
-
-#: modules/mod_admin/actions/action_admin_link.erl:84
-msgid "Sorry, you don't have permission to add the connection."
-msgstr "Üzgünüz, bağlantı ekleme yetkiniz yok."
-
-#: modules/mod_admin/mod_admin.erl:375
-msgid "Sorry, you have no permission to add the connection."
-msgstr "Üzgünüz"
-
-#: modules/mod_admin/mod_admin.erl:157
-msgid "Standard"
-msgstr "Standart"
 
 #: modules/mod_admin/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
@@ -953,10 +897,6 @@ msgstr "Telefon"
 msgid "Test query"
 msgstr ""
 
-#: modules/mod_admin/mod_admin.erl:159
-msgid "Text"
-msgstr "Metin"
-
 #: modules/mod_admin/templates/_action_unlink_undo.tpl:15
 msgid "The page"
 msgstr "Sayfa"
@@ -972,10 +912,6 @@ msgstr "Bu sayfayla bağlantılı iki sayfa var"
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
 msgid "This can't be undone. Your page will be lost forever."
 msgstr "Geri alınamaz. Sayfa tamamen silinecek."
-
-#: modules/mod_admin/actions/action_admin_link.erl:81
-msgid "This connection already exists."
-msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_js.tpl:20
 msgid "This page has been deleted."
@@ -1007,7 +943,7 @@ msgstr "Kadar"
 
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5
 #: modules/mod_admin/templates/_admin_overview_list.tpl:11
-#: modules/mod_admin/templates/admin_media.tpl:37
+#: modules/mod_admin/templates/admin_media.tpl:85
 #: modules/mod_admin/templates/admin_referrers.tpl:20
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
@@ -1018,7 +954,7 @@ msgstr "Başlık"
 msgid "Toggle navigation"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:7
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:8
 msgid "Type text to search"
 msgstr "Arayacağınız metni giriniz"
 
@@ -1031,7 +967,7 @@ msgstr "Benzersiz isim"
 msgid "Unique uri"
 msgstr "Benzersiz uri"
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:49
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:63
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:10
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
 msgid "Upload File"
@@ -1045,7 +981,7 @@ msgstr "Bilgisayarınızdan bir dosya yükleyin."
 msgid "Upload a file which is already on the internet."
 msgstr "İnternetteki bir dosyayı yükleyin."
 
-#: modules/mod_admin/templates/_action_dialog_connect.tpl:54
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:68
 #: modules/mod_admin/templates/_action_dialog_media_upload.tpl:15
 #: modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
 msgid "Upload by URL"
@@ -1055,11 +991,11 @@ msgstr ""
 msgid "Upload file"
 msgstr "Dosya yükle"
 
-#: modules/mod_admin/templates/admin_media.tpl:39
+#: modules/mod_admin/templates/admin_media.tpl:87
 msgid "Uploaded"
 msgstr "Yüklendi"
 
-#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:36
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:37
 msgid "Use the autocompleter to search the media in this site."
 msgstr "Bu sitedeki medyaları aramak için otomatik tamamlayıcıyı kullanın."
 
@@ -1067,11 +1003,11 @@ msgstr "Bu sitedeki medyaları aramak için otomatik tamamlayıcıyı kullanın.
 msgid "Use the title of the base content for the display name of this person."
 msgstr "İçerik başlığını kullanarak bu kişinin ismini görüntüleyiniz."
 
-#: modules/mod_admin/templates/_admin_menu.tpl:70
+#: modules/mod_admin/templates/_admin_menu.tpl:68
 msgid "User page"
 msgstr ""
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:15
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:18
 msgid "Valid for:"
 msgstr "Geçerli:"
 
@@ -1084,11 +1020,10 @@ msgstr ""
 msgid "View all pages from this category"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:36
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:45
 msgid "View all referrers"
 msgstr "Tüm referansları göster"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:25
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
 msgid "View this page."
 msgstr "Bu sayfayı görüntüle."
@@ -1136,25 +1071,9 @@ msgstr ""
 msgid "You are going to duplicate the page"
 msgstr "Bu sayfayı çoğaltıyorsunuz"
 
-#: modules/mod_admin/actions/action_admin_delete_media.erl:52
-msgid "You are not allowed to delete this media."
-msgstr "Bu medyayı silmeye yetkiniz yok."
-
-#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:50
-msgid "You are not allowed to delete this page."
-msgstr "Bu sayfayı silmeye yetkiniz yok."
-
 #: modules/mod_admin/templates/admin_edit.tpl:15
 msgid "You are not allowed to edit this page."
 msgstr ""
-
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:174
-msgid "You don't have permission to change this media item."
-msgstr "Bu medya öğesini değiştirme yetkiniz yok."
-
-#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:176
-msgid "You don't have the proper permissions to upload this type of file."
-msgstr "Bu dosya tipini yükleme yetkiniz yok."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:6
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:5
@@ -1176,13 +1095,13 @@ msgstr "blok"
 msgid "by"
 msgstr "yazan"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:39
-#: modules/mod_admin/templates/_admin_overview_list.tpl:40
+#: modules/mod_admin/templates/_admin_overview_list.tpl:46
+#: modules/mod_admin/templates/_admin_overview_list.tpl:47
 #: modules/mod_admin/templates/admin_referrers.tpl:34
 msgid "d M Y, H:i"
 msgstr ""
 
-#: modules/mod_admin/templates/admin_media.tpl:65
+#: modules/mod_admin/templates/admin_media.tpl:113
 msgid "delete"
 msgstr "sil"
 
@@ -1190,8 +1109,8 @@ msgstr "sil"
 msgid "e.g. might change"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:45
-#: modules/mod_admin/templates/admin_media.tpl:76
+#: modules/mod_admin/templates/_admin_overview_list.tpl:52
+#: modules/mod_admin/templates/admin_media.tpl:124
 #: modules/mod_admin/templates/admin_referrers.tpl:39
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
@@ -1201,6 +1120,10 @@ msgstr "düzenle"
 #: modules/mod_admin/templates/_edit_button.tpl:7
 msgid "edit this page"
 msgstr "bu sayfayı düzenle"
+
+#: modules/mod_admin/templates/admin_overview.tpl:69
+msgid "excluding"
+msgstr ""
 
 #: modules/mod_admin/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -1213,10 +1136,6 @@ msgstr "eşleşme"
 #: modules/mod_admin/templates/_admin_edit_block_li.tpl:9
 msgid "name"
 msgstr "isim"
-
-#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:57
-msgid "page"
-msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:6
 msgid "pixels"
@@ -1240,21 +1159,75 @@ msgid "untitled"
 msgstr "başlıksız"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:13
-#: modules/mod_admin/templates/_admin_edit_media.tpl:53
+#: modules/mod_admin/templates/_admin_edit_media.tpl:55
 msgid "uploaded on"
 msgstr "yüklenme tarihi"
 
-#: modules/mod_admin/templates/_admin_overview_list.tpl:44
+#: modules/mod_admin/templates/_admin_overview_list.tpl:51
 #: modules/mod_admin/templates/admin_referrers.tpl:38
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
 msgid "view"
 msgstr "görüntüle"
 
-#: modules/mod_admin/templates/_admin_menu.tpl:12
+#: modules/mod_admin/templates/_admin_navbar_brand.tpl:1
 #: modules/mod_admin/templates/admin_logon.tpl:12
 msgid "visit site"
 msgstr "ziyaret et"
+
+#~ msgid "Add link"
+#~ msgstr "Bağlantı ekle"
+
+#~ msgid "Added the connection to"
+#~ msgstr "Bağlantı eklendi"
+
+#~ msgid "Confirm delete"
+#~ msgstr "Silmeyi onayla"
+
+#~ msgid "Edit:"
+#~ msgstr "Düzenle:"
+
+#~ msgid "Embed page"
+#~ msgstr "Sayfa yerleştir"
+
+#~ msgid "Error uploading the file."
+#~ msgstr "Dosya yükleme hatası."
+
+#~ msgid "Failed to download the file."
+#~ msgstr "Dosya indirme hatası."
+
+#~ msgid "Insert image"
+#~ msgstr "Mesaj ekle"
+
+#~ msgid "Media item created."
+#~ msgstr "Medya öğesi oluşturuldu."
+
+#~ msgid "Something went wrong. Sorry."
+#~ msgstr "Bir hata oluştu. Üzgünüz."
+
+#~ msgid "Sorry, you don't have permission to add the connection."
+#~ msgstr "Üzgünüz, bağlantı ekleme yetkiniz yok."
+
+#~ msgid "Sorry, you have no permission to add the connection."
+#~ msgstr "Üzgünüz"
+
+#~ msgid "Standard"
+#~ msgstr "Standart"
+
+#~ msgid "Text"
+#~ msgstr "Metin"
+
+#~ msgid "You are not allowed to delete this media."
+#~ msgstr "Bu medyayı silmeye yetkiniz yok."
+
+#~ msgid "You are not allowed to delete this page."
+#~ msgstr "Bu sayfayı silmeye yetkiniz yok."
+
+#~ msgid "You don't have permission to change this media item."
+#~ msgstr "Bu medya öğesini değiştirme yetkiniz yok."
+
+#~ msgid "You don't have the proper permissions to upload this type of file."
+#~ msgstr "Bu dosya tipini yükleme yetkiniz yok."
 
 #~ msgid "Find an existing page to connect"
 #~ msgstr "Bağlamak için varolan bir sayfayı bul"
