@@ -3,7 +3,7 @@
 {% block title %}{_ Pages _}{% endblock %}
 
 {% block content %}
-    {% with 
+    {% with
         20,
         "20"
         as
@@ -66,10 +66,10 @@
             {% endwith %}
             <div class="admin-header">
                 <h2>
-                    {% if not q.qcat %}{{ m.rsc[q.qquery].title|default:_"Pages overview" }}{% else %}{_ Pages overview _}{% endif %}{% if q.qcat == '*' %}: {_ All Categories _}{% elseif q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}
+                    {% if not q.qcat %}{{ m.rsc[q.qquery].title|default:_"Pages overview" }}{% else %}{_ Pages overview _}{% endif %}{% if q.qcat == '*' %}: {_ All Categories _}{% elseif q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qcat_exclude %}, {_ excluding _}: {{ m.rsc[q.qcat_exclude].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}
 
                     {% if q.qs %}
-                        {% button text=_"show all" class="btn btn-default btn-xs" 
+                        {% button text=_"show all" class="btn btn-default btn-xs"
                                   action={redirect dispatch="admin_overview_rsc" qcat=q.qcat qquery=q.qquery} %}
                     {% endif %}
                 </h2>
@@ -81,8 +81,8 @@
                 <a name="content-pager"></a>
 
                 {% button
-                    class="btn btn-primary" 
-                    text=_"Make a new page or media" 
+                    class="btn btn-primary"
+                    text=_"Make a new page or media"
                     action={
                         dialog_new_rsc
                         title=""
@@ -97,16 +97,22 @@
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 
-            {% with q.qcat|replace:'\\*':'' as qcat %}
+            {% with
+                q.qcat|replace:'\\*':'',
+                q.qcat_exclude
+                as
+                qcat,
+                qcat_exclude
+            %}
                 {% with q.qsort|default:"-modified" as qsort %}
                     {% with m.rsc[q.qquery|default:`admin_overview_query`].id as qquery_id %}
                           {% with (qquery_id.is_visible and not q.qcat)|
-                                    if:{query query_id=qquery_id cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort custompivot=q.qcustompivot}
-                                      :{query authoritative=1 cat=qcat content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort custompivot=q.qcustompivot}
+                                    if:{query query_id=qquery_id cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort custompivot=q.qcustompivot}
+                                      :{query authoritative=1 cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen sort=qsort custompivot=q.qcustompivot}
                              as query
                           %}
                               {% with m.search.paged[query] as result %}
-                                  {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort qcat=qcat custompivot=q.qcustompivot %}
+                                  {% catinclude "_admin_overview_list.tpl" m.category[qcat].is_a result=result qsort=qsort qcat=qcat qcat_exclude=qcat_exclude custompivot=q.qcustompivot %}
                                   {% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page %}
                               {% endwith %}
                           {% endwith %}
