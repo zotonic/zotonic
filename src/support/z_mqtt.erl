@@ -175,7 +175,7 @@ to_predicate_name("*", _Context) -> <<"+">>;
 to_predicate_name('*', _Context) -> <<"+">>;
 to_predicate_name(<<>>, _Context) -> <<"+">>;
 to_predicate_name(Id, Context) when is_integer(Id) ->
-    {ok, Name} = m_predicate:to_name(Id, Context),
+    {ok, Name} = m_predicate:id_to_name(Id, Context),
     z_convert:to_binary(Name);
 to_predicate_name(Pred, _Context) ->
     z_convert:to_binary(Pred).

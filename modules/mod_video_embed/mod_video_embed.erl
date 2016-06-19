@@ -332,7 +332,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                         {growl, [{text, "Made the media page."}]}
                         | Actions], ContextRedirect);
                 {error, _} = Error ->
-                    lager:eror("[mod_video_embed] Error in add_video_embed: ~p on ~p", [Error, Props]),
+                    lager:error("[mod_video_embed] Error in add_video_embed: ~p on ~p", [Error, Props]),
                     z_render:growl_error("Could not create the media page.", Context)
             end;
         

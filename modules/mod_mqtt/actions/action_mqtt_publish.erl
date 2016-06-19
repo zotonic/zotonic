@@ -43,7 +43,7 @@ render_action(_TriggerId, _TargetId, Args, Context) ->
 %%
 
 js_value(Str) when is_binary(Str) orelse is_list(Str) -> [$", Str, $"];
-js_value(Int) when is_integer(Int) -> z_convert:to_string(Int);
+js_value(Int) when is_integer(Int) -> z_convert:to_list(Int);
 js_value(true) -> <<"true">>;
 js_value(false) -> <<"false">>;
 js_value(undefined) -> <<"undefined">>.
