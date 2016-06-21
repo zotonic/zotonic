@@ -759,7 +759,6 @@ fetch_texts({F, _} = FV, Acc, Context) ->
         end.
 
 fetch_texts_block(Block, {A,B}, Context) ->
-    ?DEBUG(Block),
     Header = proplists:get_value(header, Block),
     Body = proplists:get_value(body, Block),
     RscTitle = m_rsc:p_no_acl(proplists:get_value(rsc_id, Block), title, Context),
