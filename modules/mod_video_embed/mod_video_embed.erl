@@ -288,10 +288,10 @@ embed_code(vimeo, H, W, V) ->
 event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
+    Callback = proplists:get_value(callback, EventProps), 
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
     EmbedService = z_context:get_q("video_embed_service", Context),
     EmbedCode = z_context:get_q_validated("video_embed_code", Context),
-    Callback = proplists:get_value("callback", EventProps), 
 
     case Id of
         %% Create a new page
