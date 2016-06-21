@@ -25,13 +25,13 @@ before(undefined, _, _Context) ->
 before(_, undefined, _Context) ->
     undefined;
 before(L, V, Context) ->
-    prev_of1(erlydtl_runtime:to_list(L, Context), V).
+    prev_of1(z_template_compiler_runtime:to_list(L, Context), V).
     
-    prev_of1([], _V) ->
-        undefined;
-    prev_of1([P,V|_T], V) ->
-        P;
-    prev_of1([_|T], V) ->
-        prev_of1(T, V).
+prev_of1([], _V) ->
+    undefined;
+prev_of1([P,V|_T], V) ->
+    P;
+prev_of1([_|T], V) ->
+    prev_of1(T, V).
 
 

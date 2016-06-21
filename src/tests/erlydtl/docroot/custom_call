@@ -1,7 +1,0 @@
->>>> before custom call tag 'erlydtl_functional_tests'
-{% call erlydtl_functional_tests %}
->>>> after custom call tag 'erlydtl_functional_tests'
-
->>>> before custom call with var tag 'erlydtl_functional_tests'
-{% call erlydtl_functional_tests with var1 %}
->>>> after custom call with var tag 'erlydtl_functional_tests'

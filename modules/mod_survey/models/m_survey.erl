@@ -435,7 +435,7 @@ user_answer_row_1(Created, Answers, Questions, Context) ->
     [
         case Created of 
            undefined -> <<>>;
-           _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
+           _ -> z_datetime:format(Created, "Y-m-d H:i", Context)
         end
         | answer_row(Answers, Questions, Created, Context)
     ].

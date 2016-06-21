@@ -25,6 +25,7 @@ append(Input, undefined, _Context) ->
 append(undefined, Append, _Context) ->
     Append;
 append(Input, Append, Context) ->
-    erlydtl_runtime:to_list(Input, Context) ++ erlydtl_runtime:to_list(Append, Context).
+    z_template_compiler_runtime:to_list(Input, Context) 
+    ++ z_template_compiler_runtime:to_list(Append, Context).
 
 

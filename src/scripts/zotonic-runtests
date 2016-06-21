@@ -25,39 +25,26 @@ export ZOTONIC_SMTP_BOUNCE_PORT=2535
 
 EBIN_DIR=_build/default/lib/zotonic/ebin
 
-case "$1" in
-    erlydtl)
-        # Test only erlydtl
-        MODULES=`ls $EBIN_DIR/erly*tests.beam|sed 's/.beam//'|sed 's/.*\///'`
-        echo $MODULES
-        ALL=""
-        for MODULE in $MODULES; do ALL="-s $MODULE run_tests $ALL"; done
-        exec erl erl -noshell -pa $PA -s erlydtl_tests_init init $ALL -s init stop
-        ;;
-    *)
-        if [ "$1" != "" ]; then
-            ALL="$1"
-            shift
-            while (( "$#" )); do
-                ALL="$ALL,$1"
-                shift
-            done
-        else
-            # Find all tests
-            MODULES=`ls $EBIN_DIR/*_tests.beam|sed 's/.beam//'|sed 's/.*\///'|grep -v pgsql|grep -v erlydtl|grep -v db_tests`
-            ALL="zotonic"
-            ALL=`echo $ALL|sed 's/^,//'`
-            for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
-        fi
+if [ "$1" != "" ]; then
+    ALL="$1"
+    shift
+    while (( "$#" )); do
+        ALL="$ALL,$1"
+        shift
+    done
+else
+    # Find all tests
+    MODULES=`ls $EBIN_DIR/*_tests.beam|sed 's/.beam//'|sed 's/.*\///'|grep -v pgsql|grep -v erlydtl|grep -v db_tests`
+    ALL="zotonic"
+    ALL=`echo $ALL|sed 's/^,//'`
+    for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done
+fi
 
-        echo 
-        echo "Running the following tests in the testsandbox:"
-        echo $ALL
-        echo
+echo 
+echo "Running the following tests in the testsandbox:"
+echo $ALL
+echo
 
-        # Run the tests
-        $ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$NODEHOST $(find_config_arg zotonic.config) -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(8000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
-        EXIT=$?
-        ;;
-esac
-
+# Run the tests
+$ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$NODEHOST $(find_config_arg zotonic.config) -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(8000),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
+EXIT=$?

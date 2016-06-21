@@ -1,3 +1,0 @@
-{% extends "base" %}
-
-{% block title %}before inherit|{% inherit %}|after inherit{% endblock %}

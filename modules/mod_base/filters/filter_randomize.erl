@@ -27,4 +27,4 @@ randomize(undefined, _Context) ->
 randomize(In, _Context) when is_list(In) ->
     z_utils:randomize(In);
 randomize(In, Context) ->
-    randomize(erlydtl_runtime:to_list(In, Context), Context).
+    randomize(z_template_compiler_runtime:to_list(In, Context), Context).

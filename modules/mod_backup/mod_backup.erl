@@ -217,7 +217,7 @@ handle_info({'EXIT', Pid, _Error}, State) ->
             z_mqtt:publish(<<"~site/backup">>, [{msg, <<"backup_error">>}], State#state.context),
             %% @todo Log the error
             %% Remove all files of this backup
-            Name = z_convert:to_list(erlydtl_dateformat:format(State#state.backup_start, "Ymd-His", State#state.context)),
+            Name = z_convert:to_list(z_datetime:format(State#state.backup_start, "Ymd-His", State#state.context)),
             [ file:delete(F) || F <- z_utils:wildcard(filename:join(dir(State#state.context), Name++"*")) ],
             {noreply, State#state{backup_pid=undefined, backup_start=undefined}};
         _ ->
@@ -316,7 +316,7 @@ name(Context) ->
     Now = calendar:universal_time(),
     iolist_to_binary(
       [atom_to_list(z_context:site(Context)), "-",
-       erlydtl_dateformat:format(Now, "Ymd-His", Context)]).
+       z_datetime:format(Now, "Ymd-His", Context)]).
 
 
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.

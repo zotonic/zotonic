@@ -98,8 +98,11 @@ event(#submit{message={new_page, Args}}, Context) ->
             mod_admin:do_link(SubjectId, Predicate, Id, Callback, Context);
         {_, true} ->
             mod_admin:do_link(Id, Predicate, ObjectId, Callback, Context);
+        {false, false} when Callback =/= undefined ->
+            % Call the optional callback
+            mod_admin:do_link(undefined, undefined, Id, Callback, Context);
         {false, false} ->
-            {x, Context}
+            {ok, Context}
     end,
 
     %% Optionally add outgoing edges from this new rsc to the given resources (id / name, predicate pairs)

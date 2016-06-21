@@ -59,7 +59,7 @@ json_escape([H|T], Acc) ->
 to_mochijson([{_,_}|_] = PS, Context) -> {struct, [ {K, to_mochijson(V, Context)} || {K,V} <- PS ]};
 to_mochijson(L, Context) when is_list(L) -> {array, [ to_mochijson(V, Context) || V <- L]};
 to_mochijson({trans, _} = Tr, Context) -> z_trans:lookup_fallback(Tr, Context);
-to_mochijson({{_,_,_},{_,_,_}} = Date, Context) -> erlydtl_dateformat:format(Date, "c", Context);
+to_mochijson({{_,_,_},{_,_,_}} = Date, Context) -> z_datetime:format(Date, "c", Context);
 to_mochijson(B, _Context) when is_binary(B) -> B;
 to_mochijson(B, _Context) when is_number(B) -> B;
 to_mochijson(undefined, _Context) -> null;

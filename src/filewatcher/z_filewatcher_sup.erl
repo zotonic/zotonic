@@ -102,6 +102,8 @@ watch_dirs() ->
         filename:join(os:getenv("ZOTONIC"), "src"),
         filename:join(os:getenv("ZOTONIC"), "modules"),
 
+        filename:join(os:getenv("ZOTONIC"), "_build/default"),
+
         filename:join(os:getenv("ZOTONIC"), "priv/sites"),
         filename:join(os:getenv("ZOTONIC"), "priv/modules"),
 

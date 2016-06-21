@@ -494,6 +494,8 @@ revjoin([S | Rest], Separator, Acc) ->
 
 
 %% @doc Append extra arguments to the url, depending if 'qargs' or 'varargs' is set.
+append_extra_args(Args, Context) when is_map(Args) ->
+    append_extra_args(maps:to_list(Args), Context);
 append_extra_args(Args, Context) ->
     append_qargs(append_varargs(Args, Context), Context).
 

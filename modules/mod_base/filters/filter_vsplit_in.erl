@@ -23,4 +23,4 @@
 vsplit_in(undefined, _N, _Context) ->
     undefined;
 vsplit_in(In, N, Context) ->
-    z_utils:vsplit_in(erlydtl_runtime:to_list(In, Context), N).
+    z_utils:vsplit_in(z_template_compiler_runtime:to_list(In, Context), N).

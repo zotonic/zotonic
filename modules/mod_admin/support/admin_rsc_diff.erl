@@ -147,7 +147,7 @@ format_value(_K, [], _Context) ->
 format_value(_K, {trans, []}, _Context) -> 
     <<>>;
 format_value(_K, {{_,_,_},{_,_,_}} = V, Context) -> 
-    erlydtl_dateformat:format(V, "Y-m-d H:i:s", Context);
+    z_datetime:format(V, "Y-m-d H:i:s", Context);
 format_value(uri, Uri, _Context) when is_binary(Uri) ->
     z_html:escape(Uri);
 format_value(_K, V, _Context) when is_binary(V) -> 

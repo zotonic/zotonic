@@ -29,7 +29,7 @@ first(undefined, _Context) ->
 first(<<First/utf8, _/binary>>, _Context) ->
     First;
 first(Other, Context) ->
-    case erlydtl_runtime:to_list(Other, Context) of
+    case z_template_compiler_runtime:to_list(Other, Context) of
         [] -> <<>>;
         [H|_] -> H
     end.
@@ -37,7 +37,7 @@ first(Other, Context) ->
 first(undefined, _Length, _Context) ->
     undefined;
 first(Value, Length, Context) ->
-    first1(erlydtl_runtime:to_list(Value, Context), Length, []).
+    first1(z_template_compiler_runtime:to_list(Value, Context), Length, []).
 
 
 first1([], _N, Acc) ->

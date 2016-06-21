@@ -21,7 +21,7 @@
 
 
 tail(In, Context) ->
-    case erlydtl_runtime:to_list(In, Context) of
+    case z_template_compiler_runtime:to_list(In, Context) of
         [_|T] -> T;
         _ -> []
     end.

@@ -29,7 +29,7 @@ render(Params, _Vars, Context) ->
     Postback  = proplists:get_value(postback, Params),
 	Delegate  = proplists:get_value(delegate, Params),
     Text      = proplists:get_value(text, Params, <<"Submit">>),
-    Id        = binary_to_list(z_ids:optid(proplists:get_value(id, Params))),
+    Id        = iolist_to_binary(z_ids:optid(proplists:get_value(id, Params))),
     Class     = proplists:get_all_values(class, Params),
     Icon      = proplists:get_all_values(icon, Params),
     Style     = proplists:get_value(style, Params),

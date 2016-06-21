@@ -118,11 +118,6 @@ handle_file(_Verb, _Basename, ".hrl", F) ->
           end),
     "Rebuilding due to change header file: " ++ filename:basename(F);
 
-handle_file(_Verb, "erlydtl_parser.yrl", ".yrl", F) ->
-    TargetDir = filename:join(os:getenv("ZOTONIC"), "src"),
-    os:cmd("erlc -o "++z_utils:os_escape(TargetDir)++" "++z_utils:os_escape(F)),
-    "Rebuilding yecc file: " ++ filename:basename(F);
-
 handle_file(_Verb, _Basename, ".erl", F) ->
     Libdir = z_utils:lib_dir(),
     L = length(Libdir),

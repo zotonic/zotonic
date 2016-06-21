@@ -21,7 +21,7 @@
 
 
 nthtail(In, N, Context) ->
-    case erlydtl_runtime:to_list(In, Context) of
+    case z_template_compiler_runtime:to_list(In, Context) of
         L when is_list(L) ->
             try
                 lists:nthtail(z_convert:to_integer(N), L)

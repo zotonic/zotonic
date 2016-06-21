@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ z_language }}">
     <head>
         <meta charset="utf-8" />
         <title>{% block title %}{_ Admin _}{% endblock %} &mdash; {{ m.config.site.title.value|default:"Zotonic" }} Admin</title>
@@ -9,7 +9,6 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="" />
-        <meta name="author" content="Arjan Scherpenisse" />
 
         {% lib
             "admin-bootstrap3/css/bootstrap.min.css"

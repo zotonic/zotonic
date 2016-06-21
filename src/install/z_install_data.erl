@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2016 Marc Worrell, Arjan Scherpenisse
 %%
 %% @doc Initialize the database with start data.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2016 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,30 +37,39 @@ install(Host, Context) ->
     ok = install_rsc(Context),
     ok = install_identity(Context),
     ok = install_predicate(Context),
+    ok = install_skeleton_modules(Context),
     z_db:equery("SELECT setval('rsc_id_seq', m) FROM (select 1 + max(id) as m from rsc) sub", Context),
     lager:info("~p: Install done.", [Host]),
     ok.
 
 %% @doc Install all modules for the site.
 %% The list of modules is read from either the site config file, 
-%% under the key <tt>install_modules</tt>, or if that key is not found
-%% in the site config file, a list of modules is installed based
-%% on the skeleton used to create the site.
+%% under the key <tt>install_modules</tt>.
 -spec install_modules(#context{}) -> ok.
 install_modules(Context) ->
     Host = Context#context.host,
     {ok, Config} = z_sites_manager:get_site_config(Host),
-    Modules = [Host
-               |proplists:get_value(
-                  install_modules, 
-                  Config,
-                  get_skeleton_modules(
-                    proplists:get_value(skeleton, Config))
-                 )
-              ],
+    Modules = [Host | proplists:get_value(install_modules, Config, [])],
     [install_module(M, Context) || M <- Modules],
     ok.
 
+%% @doc Install all skeleton modules for the site.
+%% If the <tt>install_modules</tt> is not defined then the standard list
+%% of modules from the skeleton is installed.
+-spec install_skeleton_modules(#context{}) -> ok.
+install_skeleton_modules(Context) ->
+    Host = Context#context.host,
+    {ok, Config} = z_sites_manager:get_site_config(Host),
+    case proplists:get_value(install_modules, Config, []) of
+        [] ->
+            install_module({skeleton, proplists:get_value(skeleton, Config)}, Context),
+            ok;
+        _ ->
+            ok
+    end.
+
+install_module({skeleton, undefined}, _C) ->
+    ok;
 install_module({skeleton, S}, C) ->
     [install_module(M, C) || M <- get_skeleton_modules(S)];
 install_module(M, Context) when is_atom(M); is_binary(M); is_list(M) ->

@@ -26,7 +26,7 @@
 
 vary(_Params, _Context) -> nocache.
 
-render(_Params, Vars, Context) ->
-    Vars1 = [{K, io_lib:format("~p", [V])} || {K, V} <- Vars],
+render(_Params, #{} = Vars, Context) ->
+    Vars1 = [{K, io_lib:format("~p", [V])} || {K, V} <- maps:to_list(Vars)],
     {ok, z_template:render("_debug.tpl", [{vars, Vars1}], Context)}.
 

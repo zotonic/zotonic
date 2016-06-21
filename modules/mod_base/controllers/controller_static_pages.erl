@@ -33,6 +33,7 @@
 	 moved_temporarily/2
 	 ]).
 
+-include_lib("template_compiler/include/template_compiler.hrl").
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
@@ -162,7 +163,11 @@ provide_content(ReqData, State) ->
                             Context = z_context:set_reqdata(ReqData, State#state.context),
                             Context1 = z_context:ensure_all(Context),
                             Vars = z_context:get_all(Context1)++State#state.config,
-                            Html = z_template:render({abs, FullPath}, Vars, Context1),
+                            Template = #template_file{
+                                filename=FullPath,
+                                template=State#state.path
+                            },
+                            Html = z_template:render(Template, Vars, Context1),
                             {Html1, Context2} = z_context:output(Html, Context1),
                             ReqData1 = z_context:get_reqdata(Context2),
                             State1 = State#state{context=Context2, use_cache=false, multiple_encodings=false},

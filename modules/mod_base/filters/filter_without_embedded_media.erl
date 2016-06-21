@@ -25,7 +25,7 @@
 without_embedded_media(undefined, _Id, _Context) ->
     undefined;
 without_embedded_media(Input, Id, Context) ->
-    case erlydtl_runtime:to_list(Input, Context) of
+    case z_template_compiler_runtime:to_list(Input, Context) of
         [] -> [];
         Ids ->
             Body = z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Id, body, Context), Context)),

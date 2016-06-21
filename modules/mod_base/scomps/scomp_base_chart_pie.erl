@@ -45,9 +45,9 @@ render(Params, Vars, Context) ->
         [[_,_]|_] -> lists:foldr(fun([A,B],{Acc,Bcc}) -> {[A|Acc],[B|Bcc]} end, {[],[]}, Data)
     end,
     Axes  = [ {axis, [{position,"bottom"},{labels,Labels}]} ],
-    Type  = case erlydtl_runtime:is_false(ThreeD) of
-        true -> "pie";
-        false -> "pie3d"
+    Type  = case z_template_compiler_runtime:to_bool(ThreeD, Context) of
+        true -> "pie3d";
+        false -> "pie"
     end,
     
     Data2 = case is_list(Colors) of

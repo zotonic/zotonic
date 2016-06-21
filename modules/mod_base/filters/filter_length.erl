@@ -31,4 +31,4 @@ length(Input, _Context) when is_list(Input) ->
 length(Input, _Context) when is_binary(Input) ->
     integer_to_list(size(Input));
 length(Input, Context) ->
-    erlang:length(erlydtl_runtime:to_list(Input, Context)).
+    erlang:length(z_template_compiler_runtime:to_list(Input, Context)).

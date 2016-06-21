@@ -23,17 +23,17 @@
 chunk(undefined, _N, _Context) ->
     undefined;
 chunk(In, N, Context) ->
-    chunk1(erlydtl_runtime:to_list(In, Context), N, []).
+    chunk1(z_template_compiler_runtime:to_list(In, Context), N, []).
     
-    chunk1([], _, Acc) ->
-        lists:reverse(Acc);
-    chunk1(List, N, Acc) ->
-        {Chunk, List1} = chunk_take(List, N, []),
-        chunk1(List1, N, [Chunk|Acc]).
+chunk1([], _, Acc) ->
+    lists:reverse(Acc);
+chunk1(List, N, Acc) ->
+    {Chunk, List1} = chunk_take(List, N, []),
+    chunk1(List1, N, [Chunk|Acc]).
 
-    chunk_take([], _, Acc) ->
-        {lists:reverse(Acc), []};
-    chunk_take(L, 0, Acc) ->
-        {lists:reverse(Acc), L};
-    chunk_take([H|T], N, Acc) ->
-        chunk_take(T, N-1, [H|Acc]).
+chunk_take([], _, Acc) ->
+    {lists:reverse(Acc), []};
+chunk_take(L, 0, Acc) ->
+    {lists:reverse(Acc), L};
+chunk_take([H|T], N, Acc) ->
+    chunk_take(T, N-1, [H|Acc]).
