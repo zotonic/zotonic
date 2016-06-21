@@ -1,7 +1,6 @@
 ERL       ?= erl
 ERLC      ?= $(ERL)c
 APP       := zotonic
-PARSER    := src/erlydtl_parser
 
 # Erlang Rebar downloading
 # see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
@@ -32,7 +31,7 @@ compile: $(REBAR)
 	bin/zotonic compile
 
 test: compile
-	bin/zotonic runtests erlydtl && bin/zotonic runtests
+	bin/zotonic runtests
 
 # Generate documentation
 .PHONY: docs edocs
@@ -54,8 +53,6 @@ clean_logs:
 
 .PHONY: clean
 clean: clean_logs $(REBAR)
-	@echo "removing:"
-	rm -f $(PARSER).erl src/erlydtl/erlydtl_parser.erl
 	@echo "cleaning ebin:"
 	$(REBAR) $(REBAR_OPTS) clean
 

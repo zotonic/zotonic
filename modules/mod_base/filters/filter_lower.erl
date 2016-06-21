@@ -25,7 +25,7 @@ lower(undefined, _Context) ->
 lower(Input, _Context) when is_list(Input) or is_binary(Input) ->
     z_string:to_lower(Input);
 lower(Input, Context) ->
-    lower(erlydtl_runtime:to_list(Input, Context), Context).
+    lower(z_template_compiler_runtime:to_list(Input, Context), Context).
 
 
 

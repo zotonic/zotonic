@@ -29,4 +29,4 @@ reversed(<<>>, _Context) ->
 reversed(Input, _Context) when is_list(Input) ->
     lists:reverse(Input);
 reversed(Input, Context) ->
-    lists:reverse(erlydtl_runtime:to_list(Input, Context)).
+    lists:reverse(z_template_compiler_runtime:to_list(Input, Context)).

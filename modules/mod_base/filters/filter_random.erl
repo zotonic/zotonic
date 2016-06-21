@@ -29,7 +29,7 @@ random(In, Context) when is_list(In) ->
     M = filter_rand:rand(length(In), Context),
     hd(lists:nthtail(M-1, In));
 random(In, Context) ->
-    random(erlydtl_runtime:to_list(In, Context), Context).
+    random(z_template_compiler_runtime:to_list(In, Context), Context).
 
 
 %% @doc create a sublist of using n random elements from source list
@@ -43,4 +43,4 @@ random(In, Count, _Context) when is_list(In) ->
 	true	   -> lists:nthtail(L - Count, RandomizedIn)
     end;
 random(In, Count, Context) ->
-    random(erlydtl_runtime:to_list(In, Context), Count, Context).
+    random(z_template_compiler_runtime:to_list(In, Context), Count, Context).

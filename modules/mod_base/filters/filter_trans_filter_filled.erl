@@ -27,7 +27,7 @@ trans_filter_filled(Var, _Context) ->
     filled_in(Var).
 
 trans_filter_filled(Var, Key, Context) ->
-    filled_in(erlydtl_runtime:find_value(Key, Var, Context)).
+    filled_in(z_template_compiler_runtime:find_value(Key, Var, Context)).
 
 filled_in({trans, Tr}) ->
     Tr1 = lists:filter(fun({_,T}) -> is_filled_in(T) end, Tr),

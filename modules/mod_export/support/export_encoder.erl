@@ -216,7 +216,7 @@ lookup_header(Key, _Context) ->
 
 %% @doc Used to lookup the row value, a key might be a tuple with lookup key and a textual representation.
 lookup_value([Id, {Key, _Header}], Context) ->
-    erlydtl_runtime:find_value(Key, Id, Context);
+    z_template_compiler_runtime:find_value(Key, Id, #{}, Context);
 lookup_value([Id, Key], Context) ->
-    erlydtl_runtime:find_value(Key, Id, Context).
+    z_template_compiler_runtime:find_value(Key, Id, #{}, Context).
 

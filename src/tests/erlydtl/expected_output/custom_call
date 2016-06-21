@@ -1,7 +1,0 @@
->>>> before custom call tag 'erlydtl_functional_tests'
--something-ok.
->>>> after custom call tag 'erlydtl_functional_tests'
-
->>>> before custom call with var tag 'erlydtl_functional_tests'
-something-something-ok.
->>>> after custom call with var tag 'erlydtl_functional_tests'

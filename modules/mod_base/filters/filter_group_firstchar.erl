@@ -32,7 +32,7 @@ group_firstchar(List, Column, Context) ->
 group_firstchar(undefined, _Field, _Cols, _Context) ->
     undefined;
 group_firstchar(In, Field, Cols, Context) ->
-    Ids = erlydtl_runtime:to_list(In, Context),
+    Ids = z_template_compiler_runtime:to_list(In, Context),
     Max = round(length(Ids)/Cols)+1,
     First = [ [{first, firstchar(Id, Field, Context)}, {id, Id}] || Id <- Ids],
     F = z_utils:group_by(First, first, Context),

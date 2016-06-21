@@ -240,7 +240,17 @@ can_see(Context) ->
 
 %% @doc Translate "visible_for" parameter to the appropriate visibility level.
 %% @spec args_to_visible_for(proplist()) -> 0 | 1 | 2 | 3
-args_to_visible_for(Args) ->
+args_to_visible_for(Args) when is_map(Args) ->
+    case maps:get(visible_for, Args, undefined) of
+        undefined       -> ?ACL_VIS_USER;
+        <<"user">>      -> ?ACL_VIS_USER;
+        <<"group">>     -> ?ACL_VIS_GROUP;
+        <<"community">> -> ?ACL_VIS_COMMUNITY;
+        <<"world">>     -> ?ACL_VIS_PUBLIC;
+        <<"public">>    -> ?ACL_VIS_PUBLIC;
+        N when is_integer(N), N >= 0 -> N
+    end;
+args_to_visible_for(Args) when is_list(Args) ->
     case proplists:get_value(visible_for, Args) of
         undefined   -> ?ACL_VIS_USER;
         "user"      -> ?ACL_VIS_USER;

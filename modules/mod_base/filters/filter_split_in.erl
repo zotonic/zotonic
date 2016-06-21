@@ -23,4 +23,4 @@
 split_in(undefined, _N, _Context) ->
     undefined;
 split_in(In, N, Context) ->
-    z_utils:split_in(erlydtl_runtime:to_list(In, Context), N).
+    z_utils:split_in(z_template_compiler_runtime:to_list(In, Context), N).

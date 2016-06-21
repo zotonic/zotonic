@@ -21,10 +21,6 @@ rebar3
 ebin/
 deps/
 
-/src/erlydtl_parser.erl
-/src/erlydtl/erlydtl_parser.erl
-/src/tests/erlydtl/rendered_output/
-
 /priv/*.config
 
 /priv/log/

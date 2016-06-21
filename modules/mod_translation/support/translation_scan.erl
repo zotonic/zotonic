@@ -67,7 +67,9 @@ merge_args([{Lang,Text}|Rest], Args) ->
     end.
 
 
-%% @doc Parse the Erlang module. Extract all translation tags.
+%% @doc Parse the template or Erlang module. Extract all translation tags.
+scan_file(<<".tpl">>, File) ->
+    template_compiler:translations(File);
 scan_file(<<".erl">>, File) ->
     case epp:open(File, [z_utils:lib_dir(include)]) of
         {ok, Epp} ->
@@ -75,69 +77,7 @@ scan_file(<<".erl">>, File) ->
         {error, Reason} ->
             lager:error("POT generation, erlang error in ~p: ~p~n", [File, Reason]),
             []
-    end;
-
-%% @doc Parse the template in the file. Extract all translation tags.
-scan_file(<<".tpl">>, File) ->
-    case parse_file(File) of
-        {ok, ParseTree} ->
-            extract(ParseTree, [], File);
-        {error, Reason} ->
-            lager:error("POT generation, template error in ~p: ~p~n", [File, Reason]),
-            []
-    end;
-
-%% Skip unknown extensions (like ".config")
-scan_file(_Ext, _File) ->
-    [].
-
-
-parse_file(File) ->  
-    case catch file:read_file(File) of
-        {ok, Data} ->
-            case parse_data(Data) of
-                {ok, Val} ->
-                    {ok, Val};
-                Err ->
-                    Err
-            end;
-        Error ->
-            {error, io_lib:format("reading ~p failed (~p)", [File, Error])}  
     end.
-
-parse_data(Data) when is_binary(Data) ->
-    case erlydtl_scanner:scan(Data) of
-        {ok, Tokens} ->
-            erlydtl_parser:parse(Tokens);
-        Err ->
-            Err
-    end.
-
-
-%% @doc Extract all translation tags from the parse tree.
-extract(ParseTree, Acc, F) when is_list(ParseTree) ->
-    lists:foldl(fun(Tree,A) -> extract(Tree, A, F) end, Acc, ParseTree);
-extract({trans, {trans_text, {_File, Line,_Col}, Text}}, Acc, F) ->
-    [{z_string:trim(Text), [], {F,Line}}|Acc];
-extract({trans_literal, {_File, Line,_Col}, Text}, Acc, F) ->
-    [{Text, [], {F,Line}}|Acc];
-extract({trans_ext, {string_literal, {_File, Line,_Col}, Text}, Args}, Acc, F) ->
-    [{Text, trans_ext_args(Args,[]), {F,Line}}|Acc];
-extract({text, _, _}, Acc, _F) -> Acc;
-extract({string_literal, _, _}, Acc, _F) -> Acc;
-extract({number_literal, _, _}, Acc, _F) -> Acc;
-extract({comment, _}, Acc, _F) -> Acc;
-extract({auto_id, _}, Acc, _F) -> Acc;
-extract({variable, _}, Acc, _F) -> Acc;
-extract(T, Acc, F) when is_tuple(T) ->
-    extract(tl(tuple_to_list(T)), Acc, F);
-extract(N, Acc, _F) when is_integer(N); is_atom(N); is_binary(N) ->
-    Acc.
-
-trans_ext_args([], Acc) ->
-    Acc;
-trans_ext_args([{{identifier,_,Lang}, {string_literal, _, Text}}|Args], Acc) ->
-    trans_ext_args(Args, [{list_to_atom(Lang), Text}|Acc]).
 
 
 %% Scan binary for erlang ?__(..., Context) syntax with either a binary or a string as first arg.

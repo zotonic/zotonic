@@ -80,5 +80,3 @@ Caching is enabled by defining one of the caching arguments:
 |            |in the included template.                               |                    |
 +------------+--------------------------------------------------------+--------------------+
 
-.. versionadded:: 0.6
-   Added the `sudo` option.
