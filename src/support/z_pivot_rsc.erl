@@ -762,10 +762,10 @@ fetch_texts_block(Block, {A,B}, Context) ->
     Header = proplists:get_value(header, Block),
     Body = proplists:get_value(body, Block),
     RscTitle = m_rsc:p_no_acl(proplists:get_value(rsc_id, Block), title, Context),
-    A1 = maybe_add_text(Header, A),
-    A2 = maybe_add_text(Body, A1),
-    A3 = maybe_add_text(RscTitle, A2),
-    {A3, B}.
+    B1 = maybe_add_text(Header, B),
+    B2 = maybe_add_text(Body, B1),
+    B3 = maybe_add_text(RscTitle, B2),
+    {A, B3}.
 
 maybe_add_text(Text, A) ->
     case z_utils:is_empty(Text) of
