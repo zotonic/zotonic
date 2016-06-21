@@ -115,5 +115,5 @@
   0},
  {<<"z_stdlib">>,
   {git,"git://github.com/zotonic/z_stdlib.git",
-       {ref,"1f3b41ecb97fa44ff3f389a0e0a41721dcd01e0a"}},
+       {ref,"b43f47293364df889acf8af90817e1b3cd724bef"}},
   0}].
