@@ -2,7 +2,7 @@
 
 {require_min_otp_vsn,"R16"}.
 {erl_opts,[{parse_transform,lager_transform},
-           {platform_define,"^([0-9])+",namespaced_dicts},
+           {platform_define,"^([0-9]+)",namespaced_dicts},
            {platform_define,"^([0-9]+|R16)",coding_utf8},
            {platform_define,"^(R16|17)",no_ssl}]}.
 {deps,[{goldrush,".*",
@@ -16,7 +16,7 @@
                                     "7a5835029c42b8138325405237ea7e8516a84800"}},
        {depcache,".*",
                  {git,"git://github.com/zotonic/depcache.git",
-                      "d4918add965d610ce2b10cb6c10fcd36211506b6"}},
+                      "96b1aea913b6fb6056992fd4e44dbbeec22e8dc3"}},
        {bert,".*",
              {git,"git://github.com/zotonic/bert.erl.git",
                   "1efd05a1a0288ec62e1df0b8af42f6d96cd0516b"}},
@@ -127,4 +127,6 @@
                    "511187da785903d64f5b284ae1d2888b07199e2f"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
+{xref_checks,[undefined_function_calls,locals_not_used,
+              deprecated_function_calls]}.
 
