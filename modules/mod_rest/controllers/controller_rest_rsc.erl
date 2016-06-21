@@ -63,7 +63,7 @@ forbidden(ReqData, Context0) ->
                                        true ->
                                             case webmachine_request:method(ReqData) of
                                                 'GET' -> z_acl:rsc_visible(Id, Context);
-                                                'DELETE' -> z_acl:rsc_deleteable(Id, Context);
+                                                'DELETE' -> z_acl:rsc_deletable(Id, Context);
                                                 'PUT' -> z_acl:rsc_editable(Id, Context)
                                             end;
                                         false ->

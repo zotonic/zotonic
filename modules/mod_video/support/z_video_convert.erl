@@ -171,7 +171,7 @@ video_convert_1(QueuePath, Orientation, _Mime, Context) ->
                   undefined -> ?CMDLINE;
                   <<>> -> ?CMDLINE;
                   [] -> ?CMDLINE;
-                  CmdLineCfg -> z_conver:to_list(CmdLineCfg)
+                  CmdLineCfg -> z_convert:to_list(CmdLineCfg)
               end,
     Logging = z_convert:to_bool(m_config:get_value(mod_video, logging, Context)),
     TmpFile = z_tempfile:new(),

@@ -27,7 +27,7 @@
 %% depcache exports
 -export([set/3, set/4, set/5, get/2, get_wait/2, get/3, get_subkey/3, flush/2, flush/1, size/1]).
 -export([memo/2, memo/3, memo/4, memo/5]).
--export([in_process/0, in_process/1, flush_process_dict/0]).
+-export([in_process_server/1, in_process/1, flush_process_dict/0]).
 
 
 -include_lib("zotonic.hrl").
@@ -116,8 +116,8 @@ size(#context{depcache=Server}) ->
 
 
 %% @doc Check if we use a local process dict cache
-in_process() ->
-    depcache:in_process().
+in_process_server(Server) ->
+    depcache:in_process_server(Server).
 
 %% @doc Enable or disable the in-process caching using the process dictionary
 in_process(Flag) ->
