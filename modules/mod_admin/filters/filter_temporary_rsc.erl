@@ -180,6 +180,6 @@ ensure_category(Props, Context) ->
 
 cat(Props, Context) ->
     case erlydtl_runtime:find_value(category, Props, Context) of
-        undefined -> erlydtl_runtime:find_value(category_id, Props);
+        undefined -> erlydtl_runtime:find_value(category_id, Props, Context);
         Cat -> Cat
     end.

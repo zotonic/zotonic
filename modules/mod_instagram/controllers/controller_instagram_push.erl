@@ -90,12 +90,7 @@ process_post(ReqData, Context0) ->
     {true, RD1, Context1}.
 
 hmac_sha(Key, Data) ->
-  case erlang:function_exported(crypto, hmac, 3) of
-    true ->
-      crypto:hmac(sha, Key, Data);
-    false ->
-      crypto:sha_mac(Key, Data)
-  end.
+    crypto:hmac(sha, Key, Data).
 
 
 handle_push(Data, Context) ->

@@ -61,7 +61,7 @@ previously_existed(ReqData, {Id, _M, Context} = MC) ->
         true ->
             {true, ReqData, MC};
         false ->
-            case m_rsc:is_gone(Id, Context) of
+            case m_rsc_gone:is_gone(Id, Context) of
                 true -> {true, ReqData, {Id, gone, Context}};
                 false -> {false, ReqData, MC}
             end
