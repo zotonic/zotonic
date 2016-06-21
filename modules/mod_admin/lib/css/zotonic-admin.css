@@ -111,6 +111,9 @@ body.noframe > .admin-container {
 .admin-edit-media {
   border: 1px solid #fff;
 }
+iframe, video, audio {
+  max-width: 100%;
+}
 .admin-text-header,
 .widget .widget-header,
 .widget .widget-section-header {
