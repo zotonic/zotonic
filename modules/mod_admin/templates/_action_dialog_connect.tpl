@@ -149,7 +149,7 @@ find params:
                         subject_id=subject_id
                         object_id=object_id
                         title="" 
-                        is_active=(predicate.name=="depiction" and not is_zmedia and tab == "upload")
+                        is_active=(not q.is_zmedia and tab == "upload")
                     %}
                 {% endif %}
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
