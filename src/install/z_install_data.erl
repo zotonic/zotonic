@@ -62,7 +62,8 @@ install_skeleton_modules(Context) ->
     {ok, Config} = z_sites_manager:get_site_config(Host),
     case proplists:get_value(install_modules, Config, []) of
         [] ->
-            install_module({skeleton, proplists:get_value(skeleton, Config)}, Context);
+            install_module({skeleton, proplists:get_value(skeleton, Config)}, Context),
+            ok;
         _ ->
             ok
     end.
