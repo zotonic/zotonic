@@ -55,7 +55,7 @@ Now you should write the acual contact form. You should decide what
 fields you want in the form, so for now, just put a name, e-mail and
 comment field::
 
-  {% wire id="contact-form" type="submit" postback={contact} delegate="resource_default_contact" %}
+  {% wire id="contact-form" type="submit" postback={contact} delegate="my_contactform" %}
   <form id="contact-form" method="post" action="postback">
 
     <label for="name">Name</label>
@@ -78,13 +78,13 @@ Create the contact-form handler Erlang file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As you see in the :ref:`scomp-wire` statement in the contact form, the
-`delegate` argument is set to ``resource_default_contact``, which is
+`delegate` argument is set to ``my_contactform``, which is
 the name of an erlang module which we still have to create. When the
 form submits, this module’s event/2 function gets called. Create a
-file ``user/sites/default/resources/resource_default_contact.erl``
+file ``user/sites/default/support/my_contactform.erl``
 with the following contents::
 
-  -module(resource_default_contact).
+  -module(my_contactform).
   -export([event/2]).
 
   -include_lib("zotonic.hrl").
