@@ -43,7 +43,7 @@
    mod_seo_google,
    mod_seo_sitemap,
 
-   mod_acl_adminonly,
+   mod_acl_user_groups,
    mod_authentication,
    mod_editor_tinymce,
 
