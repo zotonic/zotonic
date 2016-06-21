@@ -35,7 +35,7 @@ exclude(_, undefined, _, _Context) -> [];
 exclude(undefined, _, _, _Context) -> [];
 exclude(In, Prop, Value, Context) ->
     lists:filter(fun(Elt) -> 
-                         template_compiler_operators:ne(find_value(Prop, Elt, Context), Value, Context)
+                         template_compiler_operators:ne(find_value(Prop, Elt, Context), Value, z_template_compiler_runtime, Context)
                  end,
                  z_template_compiler_runtime:to_list(In, Context)).
 

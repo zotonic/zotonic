@@ -65,15 +65,15 @@ eval(Tree, Vars, Context) ->
     eval1(Tree, Vars, Context).
 
 eval1({expr, Op, Left, Right}, Vars, Context) ->
-    template_compiler_operators:Op(eval1(Left, Vars, Context), eval1(Right, Vars, Context), Context);
+    template_compiler_operators:Op(eval1(Left, Vars, Context), eval1(Right, Vars, Context), z_template_compiler_runtime, Context);
 eval1({expr, Op, Expr}, Vars, Context) ->
-    template_compiler_operators:Op(eval1(Expr, Vars, Context), Context);
+    template_compiler_operators:Op(eval1(Expr, Vars, Context), z_template_compiler_runtime, Context);
 eval1({variable, Name}, Vars, Context) ->
     z_template_compiler_runtime:find_value(Name, Vars, #{}, Context);
 eval1({index_value, Array, Index}, Vars, Context) ->
-    template_compiler_operators:find_value(eval1(Index, Vars, Context), eval1(Array, Vars, Context), Context);
+    z_template_compiler_runtime:find_value(eval1(Index, Vars, Context), eval1(Array, Vars, Context), #{}, Context);
 eval1({attribute, Attr, From}, Vars, Context) ->
-    template_compiler_operators:find_value(Attr, eval1(From, Vars, Context), Context);
+    z_template_compiler_runtime:find_value(Attr, eval1(From, Vars, Context), #{}, Context);
 eval1({value_list, List}, Vars, Context) ->
     [ eval1(Elt, Vars, Context) || Elt <- List ];
 eval1({apply_filter, filter_default, _Func, Expr, Args}, Vars, Context) ->

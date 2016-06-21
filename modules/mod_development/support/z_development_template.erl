@@ -55,7 +55,7 @@ find_template(NoCat, TplName, Context) when NoCat =:= ""; NoCat =:= <<>> ->
     z_module_indexer:find(template, TplName, Context);
 find_template(CatName, TplName, Context) ->
     IsA = m_category:is_a(CatName, Context),
-    z_module_indexer:map_template({cat, TplName, IsA}, Context).
+    z_template_compiler_runtime:map_template({cat, TplName, IsA}, #{}, Context).
 
 index_props({error, _}) ->
     undefined;
