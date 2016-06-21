@@ -746,12 +746,33 @@ fetch_texts({F, _} = FV, Acc, Context) ->
         end;
     fetch_texts_1({_, {trans, _} = V}, {A,B}, _Context) ->
         {A, [V|B]};
+    fetch_texts_1({blocks, Blocks}, AB, Context) ->
+        lists:foldl(fun(Block, ABAcc) ->
+                        fetch_texts_block(Block, ABAcc, Context)
+                    end,
+                    AB,
+                    Blocks);
     fetch_texts_1({_, V}, {A,B} = Acc, _Context) ->
         case z_string:is_string(V) of
             true -> {A, [V|B]};
             false -> Acc
         end.
 
+fetch_texts_block(Block, {A,B}, Context) ->
+    ?DEBUG(Block),
+    Header = proplists:get_value(header, Block),
+    Body = proplists:get_value(body, Block),
+    RscTitle = m_rsc:p_no_acl(proplists:get_value(rsc_id, Block), title, Context),
+    A1 = maybe_add_text(Header, A),
+    A2 = maybe_add_text(Body, A1),
+    A3 = maybe_add_text(RscTitle, A2),
+    {A3, B}.
+
+maybe_add_text(Text, A) ->
+    case z_utils:is_empty(Text) of
+        true -> A;
+        false -> [Text|A]
+    end.
 
 % Suppress some fields that are only for supporting the pivoting
 do_pivot_field(pivot_category_nr) -> false; 
