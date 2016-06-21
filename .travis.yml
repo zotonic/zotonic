@@ -15,6 +15,7 @@ script:
   - make test
   - make -C doc/ stubs
   - make -C doc/ SPHINXOPTS='-nW' html
+  - ./rebar3 xref
 sudo: false
 branches:
   only:
