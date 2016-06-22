@@ -26,11 +26,13 @@
     {% endif %}
     {% endwith %}
 
-    {% if id|is_a:"image" %}
+    {% if id.is_a.document or id.is_a.image %}
         <p class="thumbnail">
             <a href="{% url media_inline id=id %}" title="{_ Click to download _}"><img src="{% image_url id mediaclass="base-media-preview" %}" alt="{_ Preview _}"/></a>
         </p>
         {% include "_media_info.tpl" %}
+    {% else %}
+        {% media id %}
     {% endif %}
 
     {% include "_content_list.tpl" list=id.o.haspart in_collection=id is_large %}
