@@ -9,7 +9,9 @@
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="author" content="Marc Worrell" />
+	{% if id.o.author as author %}
+		<meta name="author" content="{% include '_name.tpl' id=author[1] %}" />
+	{% endif %}
 
 	{% all include "_html_head.tpl" %}
 	{% lib "bootstrap/css/bootstrap-text.css" %}

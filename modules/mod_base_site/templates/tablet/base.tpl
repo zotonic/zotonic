@@ -9,11 +9,13 @@
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="author" content="Marc Worrell" />
+	{% if id.o.author as author %}
+		<meta name="author" content="{% include '_name.tpl' id=author[1] %}" />
+	{% endif %}
 
 	{% all include "_html_head.tpl" %}
 	{% lib 
-	        "bootstrap/css/bootstrap.min.css"
+	        "bootstrap/css/bootstrap.css"
 	        "bootstrap/css/bootstrap-base-site.css" 
 	        "css/jquery.loadmask.css" 
 	        "css/z.icons.css"
@@ -34,12 +36,12 @@
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
 		{% block content %}
 			{% block above %}
-			<div class="page-title">
-				<div class="{% if z_language|is_rtl %}col-lg-8 col-md-8{% endif %}">
-					{% include "_breadcrumb.tpl" %}
-					{% include "_title.tpl" %}
+				<div class="page-title">
+					<div class="{% if z_language|is_rtl %}col-lg-8 col-md-8{% endif %}">
+						{% include "_breadcrumb.tpl" %}
+						{% include "_title.tpl" %}
+					</div>
 				</div>
-			</div>
 			{% endblock %}
 			<div class="row">
 				<div class="main col-lg-8 col-md-8">

@@ -9,7 +9,9 @@
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="author" content="Marc Worrell" />
+	{% if id.o.author as author %}
+		<meta name="author" content="{% include '_name.tpl' id=author[1] %}" />
+	{% endif %}
 
 	{% all include "_html_head.tpl" %}
 	{% lib 
@@ -34,15 +36,14 @@
 		    {% block content %}
  		    <div class="row">
 		    	<div class="main">
-                    		{% block main %}{% endblock %}
+            		{% block main %}{% endblock %}
 		    	</div>
 		    	<div class="subnavbar">
-                    		{% block subnavbar %}
-                        		{% include "_subnav.tpl" %}
-                    		{% endblock %}
-                    	</div>
-	            </div>
-                    {% endblock %}
+            		{% block subnavbar %}
+                		{% include "_subnav.tpl" %}
+            		{% endblock %}
+            	</div>
+            {% endblock %}
 		    {% block below %}{% endblock %}
 		</div>
 	{% endblock %}

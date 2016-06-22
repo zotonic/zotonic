@@ -5,6 +5,8 @@
 	"js/apps/zotonic-1.0.js"
 	"js/apps/z.widgetmanager.js"
 	"js/modules/ubf.js"
+	"js/pubzub.js"
+	"js/qlobber.js"
 	"js/modules/z.notice.js"
 	"js/modules/z.imageviewer.js"
 	"js/modules/z.dialog.js"
