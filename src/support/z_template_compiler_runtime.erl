@@ -53,7 +53,7 @@
 
 
 %% @doc Dynamic mapping of a template to a template name, context sensitive on the template vars.
--spec map_template(template_compiler:template(), #{}, term()) ->
+-spec map_template(template_compiler:template(), map(), term()) ->
             {ok, template_compiler:template_file()} | {error, enoent|term()}.
 map_template(#template_file{} = Tpl, _Vars, _Context) ->
     {ok, Tpl};
@@ -118,7 +118,7 @@ map_template_cat_1(Template, Stack, Context) when is_binary(Template) ->
 
 
 %% @doc Dynamically find all templates matching the template
--spec map_template_all(template_compiler:template(), #{}, term()) -> [template_compiler:template1()].
+-spec map_template_all(template_compiler:template(), map(), term()) -> [template_compiler:template1()].
 map_template_all({cat, Template}, Vars, Context) ->
     case maps:get(id, Vars, undefined) of
         undefined -> map_template_all_1(Template, Context);
@@ -231,7 +231,7 @@ find_nested_value_1(V, [K|Ks], TplVars, Context) ->
 
 
 %% @doc Find the value of key in some structure.
--spec find_value(Key :: term(), Vars :: term(), TplVars :: #{}, Context :: term()) -> term().
+-spec find_value(Key :: term(), Vars :: term(), TplVars :: map(), Context :: term()) -> term().
 find_value(undefined, _, _TplVars, _Context) ->
     undefined;
 find_value(_, undefined, _TplVars, _Context) ->
@@ -301,7 +301,7 @@ find_value(Key, Ps, TplVars, Context) ->
     template_compiler_runtime:find_value(Key, Ps, TplVars, Context).
 
 
--spec set_context_vars(#{}|[], term()) -> term().
+-spec set_context_vars(map()|list(), term()) -> term().
 set_context_vars(Args, Context) when is_map(Args); is_list(Args) ->
     Lang = z_context:language(Context),
     Context1 = case get(z_language, Args, Lang) of
@@ -334,20 +334,20 @@ get_translations(Text, Context) ->
     end.
 
 %% @doc Find the best fitting translation.
--spec lookup_translation({trans, list({atom(), binary()})}, TplVars :: #{}, Context :: term()) -> binary().
-lookup_translation({trans, _} = Trans, #{} = _TplVars, Context) ->
+-spec lookup_translation({trans, list({atom(), binary()})}, TplVars :: map(), Context :: term()) -> binary().
+lookup_translation({trans, _} = Trans, _TplVars, Context) ->
     z_trans:lookup_fallback(Trans, Context).
 
 
 %% @doc Render a custom tag (Zotonic scomp)
 %% @todo support render_optional/all
--spec custom_tag(Tag::atom(), Args::list(), Vars::#{}, Context::term()) -> template_compiler:render_result().
+-spec custom_tag(Tag::atom(), Args::list(), Vars::map(), Context::term()) -> template_compiler:render_result().
 custom_tag(Tag, Args, Vars, Context) ->
     z_scomp:render(Tag, Args, Vars, Context).
 
 
 %% @doc Render image/image_url/media/url/lib tag. The Expr is the media item or dispatch rule.
--spec builtin_tag(template_compiler:builtin_tag(), Expr::term(), Args::list(), Vars::#{}, Context::term()) -> 
+-spec builtin_tag(template_compiler:builtin_tag(), Expr::term(), Args::list(), Vars::map(), Context::term()) -> 
             template_compiler:render_result().
 builtin_tag(Tag, Expr, Args, Vars, Context) ->
     builtin_tag_1(Tag, Expr, to_simple_values(Args, Context), Vars, Context).
@@ -369,7 +369,7 @@ builtin_tag_1(Tag, _Expr, _Args, _Vars, Context) ->
 
 %% @doc Render a block, cache the result for some time. Caching should be implemented by the runtime.
 %% @todo This needs to be updated for the modern ACL modules (see z_acl, args_to_visible_for)
--spec cache_tag(MaxAge::integer(), Name::binary(), Args::list(), function(), TplVars::#{}, Context::term()) -> 
+-spec cache_tag(MaxAge::integer(), Name::binary(), Args::list(), function(), TplVars::map(), Context::term()) -> 
                 template_compiler:render_result().
 cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
     VisibleFor = z_acl:args_to_visible_for(Args),
@@ -408,7 +408,7 @@ do_cache1(false, _VisibleFor, _Args, _Context) ->
     false.
 
 %% @doc Render a script block, for Zotonic this is added to the scripts in the Context
--spec javascript_tag(template_compiler:render_result(), #{}, term()) -> template_compiler:render_result().
+-spec javascript_tag(template_compiler:render_result(), map(), term()) -> template_compiler:render_result().
 javascript_tag(Block, _TplVars, Context) when is_binary(Block) ->
     z_render:wire({script, [{script, Block}]}, z_context:new(Context));
 javascript_tag(Block, _TplVars, Context) ->
@@ -417,7 +417,7 @@ javascript_tag(Block, _TplVars, Context) ->
 
 
 %% @doc Remove spaces between HTML tags
--spec spaceless_tag(template_compiler:render_result(), #{}, term()) -> template_compiler:render_result().
+-spec spaceless_tag(template_compiler:render_result(), map(), term()) -> template_compiler:render_result().
 spaceless_tag(Value, TplVars, Context) ->
     template_compiler_runtime:spaceless_tag(Value, TplVars, Context).
 
@@ -472,7 +472,7 @@ to_simple_value(V, _Context) ->
 
 
 %% @doc Convert a value to an iolist, used for converting values in {{ ... }} expressions.
--spec to_render_result(Value::term(), TplVars:: #{}, Context::term()) -> template_compiler:render_result().
+-spec to_render_result(Value::term(), TplVars:: map(), Context::term()) -> template_compiler:render_result().
 to_render_result(undefined, _TplVars, _Context) ->
     <<>>;
 to_render_result({{Y,M,D},{H,I,S}} = Date, TplVars, Context)

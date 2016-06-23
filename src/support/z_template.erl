@@ -64,7 +64,7 @@ module_reindexed(module_reindexed, Context) ->
 render(#render{template=Template, vars=Vars}, Context) ->
     render(Template, Vars, Context).
 
--spec render(template_compiler:template()|#module_index{}, list()|#{}, #context{}) -> template_compiler:render_result().
+-spec render(template_compiler:template()|#module_index{}, list()|map(), #context{}) -> template_compiler:render_result().
 render(Template, Vars, Context) when is_list(Vars) ->
     render(Template, props_to_map(Vars, #{}), Context);
 render(#module_index{filepath=Filename, key=Key}, Vars, Context) ->
@@ -136,7 +136,7 @@ props_to_map([K|Rest], Map) ->
 
 %% @doc Render a template to an iolist().  This removes all scomp state etc from the rendered html and appends the
 %% information in the scomp states to the context for later rendering.
--spec render_to_iolist(template_compiler:template(), list()|#{}, #context{}) -> {iolist(), #context{}}.
+-spec render_to_iolist(template_compiler:template(), list()|map(), #context{}) -> {iolist(), #context{}}.
 render_to_iolist(File, Vars, Context) ->
     Html = render(File, Vars, Context),
     z_render:render_to_iolist(Html, Context).
