@@ -85,7 +85,7 @@
  {<<"proper">>,{pkg,<<"proper">>,<<"1.1.1-beta">>},0},
  {<<"qdate">>,
   {git,"git://github.com/mworrell/qdate.git",
-       {ref,"9f12a93900f04c3c872828575176ea29b74e6511"}},
+       {ref,"55110d2a2ee051fe8699dcab7fb6cdc9ebde59ba"}},
   0},
  {<<"recon">>,{pkg,<<"recon">>,<<"2.3.1">>},0},
  {<<"s3filez">>,
