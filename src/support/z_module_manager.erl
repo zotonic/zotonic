@@ -120,7 +120,8 @@ activate(Module, Context) when is_atom(Module) ->
 activate_await(Module, Context) when is_atom(Module) ->
     case activate(Module, true, Context) of
         ok ->
-            case lists:member(Module, active(Context)) of
+            Pid = whereis(Module, Context),
+            case is_pid(Pid) andalso erlang:is_process_alive(Pid) of
                 true -> ok;
                 false -> {error, not_active}
             end;
