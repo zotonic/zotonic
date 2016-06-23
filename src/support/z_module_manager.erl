@@ -120,10 +120,14 @@ activate(Module, Context) when is_atom(Module) ->
 activate_await(Module, Context) when is_atom(Module) ->
     case activate(Module, true, Context) of
         ok ->
-            Pid = whereis(Module, Context),
-            case is_pid(Pid) andalso erlang:is_process_alive(Pid) of
-                true -> ok;
-                false -> {error, not_active}
+            case whereis(Module, Context) of
+                {ok, Pid} ->
+                    case erlang:is_process_alive(Pid) of
+                        true -> ok;
+                        false -> {error, not_active}
+                    end;
+                {error, not_running} ->
+                    {error, not_active}
             end;
         {error, _} = Error ->
             Error
@@ -232,6 +236,7 @@ get_modules_status(Context) ->
 
 
 %% @doc Return the pid of a running module
+-spec whereis(atom(), #context{}) -> {ok, pid()} | {error, not_running}.
 whereis(Module, Context) ->
     gen_server:call(name(Context), {whereis, Module}).
 
