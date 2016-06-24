@@ -3,13 +3,6 @@ otp_release:
   - 19.0
   - 18.3
   - 18.0
-matrix:
-  include:
-      env: >
-        TRAVIS_OTP_RELEASE=19.prerelease
-        PATH=cache/OTP_19_INSTALL/bin:$PATH
-        CPATH=$PWD/cache/OTP_19_INSTALL/lib/erlang/include
-        LD_LIBRARY_PATH=$PWD/cache/OTP_19_INSTALL/lib/erlang/lib
 addons:
   apt:
     packages:
