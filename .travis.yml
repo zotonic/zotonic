@@ -9,6 +9,8 @@ addons:
       - python-sphinx
       - enchant
 before_script:
+  - kerl list installations
+  - kerl update releases
   - psql -c 'CREATE USER zotonic; ALTER USER zotonic CREATEDB;' -U postgres
 install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'
 script:
