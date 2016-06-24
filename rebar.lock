@@ -74,7 +74,7 @@
   0},
  {<<"mochiweb">>,
   {git,"git://github.com/zotonic/mochiweb.git",
-       {ref,"7741d14003150d6873444f74467f3f4d1792fc32"}},
+       {ref,"ffc76c4a4bf8cfe8a8cb0a7fa8ac14e1781c273b"}},
   0},
  {<<"oauth">>,
   {git,"https://github.com/tim/erlang-oauth.git",
