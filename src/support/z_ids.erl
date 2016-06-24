@@ -34,7 +34,8 @@
     sign_key/1,
     sign_key_simple/1,
     number/0,
-    number/1
+    number/1,
+    rand_bytes/1
 ]).
 
 -type charset() :: 'az' | 'az09' | 'azAZ09'.
@@ -198,7 +199,7 @@ make_no_upper_id(Len) ->
 
 random_list(Radix, Length) ->
     N = (radix_bits(Radix) * Length + 7) div 8,
-    Val = bin2int(random_bytes(N)),
+    Val = bin2int(rand_bytes(N)),
     int2list(Val, Radix, Length, []).
 
 int2list(_, _, 0, Acc) -> 
@@ -213,15 +214,14 @@ radix_bits(N) when N =< 16 -> 4;
 radix_bits(N) when N =< 26 -> 5;
 radix_bits(N) when N =< 64 -> 6.
 
-%% Note that this falls back to the "weak" version of rand_bytes 
-%% if strong_rand_bytes fails. I copied this approach from the 
-%% SSL implementation in the Erlang standard distribution...
-random_bytes(N) ->
-    try crypto:strong_rand_bytes(N) of
-	RandBytes ->
-	    RandBytes
+%% @doc Return N random bytes. This falls back to the pseudo random version of rand_uniform 
+%% if strong_rand_bytes fails.
+-spec rand_bytes(integer()) -> binary().
+rand_bytes(N) when N > 0 ->
+    try 
+        crypto:strong_rand_bytes(N)
     catch
-	error:low_entropy ->
-            io:format("low entropy!~n"),
-	    crypto:rand_bytes(N)
+        error:low_entropy ->
+            lager:info("Crypto is low on entropy"),
+            list_to_binary([ crypto:rand_uniform(0,256) || _X <- lists:seq(1, N) ])
     end.

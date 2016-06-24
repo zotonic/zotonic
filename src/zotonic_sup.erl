@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
+%% @copyright 2009-2016 Marc Worrell
 %% @doc Supervisor for the zotonic application.
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -64,9 +64,6 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    <<A1:32, B1:32, C1:32>> = crypto:rand_bytes(12),
-    random:seed({A1,B1,C1}),
-
     ensure_job_queues(),
 
     %% Access Logger
