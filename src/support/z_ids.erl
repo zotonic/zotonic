@@ -198,7 +198,7 @@ random_list(true, Radix, Length) ->
 not_so_random_list(_Radix, 0, Acc) ->
     Acc;
 not_so_random_list(Radix, N, Acc) ->
-    not_so_random_list(Radix, N-1, [ crypto:rand_uniform(0, Radix)-1 | Acc ]).
+    not_so_random_list(Radix, N-1, [ crypto:rand_uniform(0, Radix) | Acc ]).
 
 int2list(_, _, 0, Acc) -> 
     Acc;
