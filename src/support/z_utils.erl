@@ -195,7 +195,7 @@ checksum_assert(Data, Checksum, Context) ->
 %%% PICKLE / UNPICKLE %%%
 pickle(Data, Context) ->
     BData = erlang:term_to_binary(Data),
-    Nonce = crypto:rand_bytes(4), 
+    Nonce = z_ids:rand_bytes(4), 
     Sign  = z_ids:sign_key(Context),
     SData = <<BData/binary, Nonce:4/binary>>,
     <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),	
@@ -605,10 +605,8 @@ set_nth(N, V, L) when N >= 1 ->
 
 %% @doc Simple randomize of a list. Not good quality, but good enough for us
 randomize(List) ->
-    <<A1:32, B1:32, C1:32>> = crypto:rand_bytes(12),
-    random:seed({A1,B1,C1}),
-    D = lists:map(fun(A) ->
-                          {random:uniform(), A}
+   D = lists:map(fun(A) ->
+                          {crypto:rand_uniform(0,10000000), A}
                   end, List),
     {_, D1} = lists:unzip(lists:keysort(1, D)),
     D1.

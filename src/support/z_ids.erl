@@ -41,14 +41,15 @@
     sign_key_simple/1,
     number/0,
     number/1,
-    fix_seed/0
+    rand_bytes/1
 ]).
 
--record(state, {is_fixed = false, unique_counter = 0}).
+-record(state, {unique_counter = 0}).
 -include("zotonic.hrl").
 
-start_tests() -> 
-    gen_server:start({local, ?MODULE}, ?MODULE, [[{fixed_seed,true}]], []).
+start_tests() ->
+    start_link().
+    % gen_server:start({local, ?MODULE}, ?MODULE, [[{fixed_seed,true}]], []).
 start_link() -> 
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
@@ -124,63 +125,31 @@ number() ->
 number(Max) ->
     gen_server:call(?MODULE, {number, Max}).
 
-%% @doc Fix the seed of the random number generator, used for tests
-fix_seed() ->
-    gen_server:cast(?MODULE, fix_seed).
-
-
-init(Props) ->
-    case proplists:get_value(fixed_seed, Props, false) of
-        true -> 
-            random:seed(1,2,3),
-            {ok, #state{is_fixed=true, unique_counter=0}};
-        false ->
-            {ok, #state{is_fixed=false, unique_counter=0}}
-    end.
+init(_Props) ->
+    {ok, #state{unique_counter=0}}.
 
 %%% Really random generators below. These are used for production Zotonic.
 
-handle_call(unique, _From, #state{is_fixed=false} = State) ->
+handle_call(unique, _From, #state{} = State) ->
     Id = make_unique(),
     {reply, Id, State};
 
-handle_call({number, Max}, _From, #state{is_fixed=false} = State) ->
+handle_call({number, Max}, _From, #state{} = State) ->
     Number = crypto:rand_uniform(1, Max+1),
     {reply, Number, State};
 
-handle_call({identifier, Len}, _From, #state{is_fixed=false} = State) ->
+handle_call({identifier, Len}, _From, #state{} = State) ->
     Id = generate_identifier(true, Len),
     {reply, Id, State};
 
-handle_call({id, Len}, _From, #state{is_fixed=false} = State) ->
+handle_call({id, Len}, _From, #state{} = State) ->
     Id = generate_id(true, Len),
     {reply, Id, State};
 
 
-%%% Fixed/predictable generators below. These are used when testing Zotonic.
-
-handle_call(unique, _From, #state{is_fixed=true, unique_counter=N} = State) ->
-    Id = make_unique_fixed(N),
-    {reply, Id, State#state{unique_counter=N+1}};
-
-handle_call({number, Max}, _From, #state{is_fixed=true} = State) ->
-    Number = random:uniform(Max),
-    {reply, Number, State};
-
-handle_call({identifier, Len}, _From, #state{is_fixed=true} = State) ->
-    Id = generate_identifier(false, Len),
-    {reply, Id, State};
-
-handle_call({id, Len}, _From, #state{is_fixed=true} = State) ->
-    Id = generate_id(false, Len),
-    {reply, Id, State};
-
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
 
-handle_cast(fix_seed, State) -> 
-    random:seed(1,2,3),
-    {noreply, State#state{is_fixed=true, unique_counter=0}};
 handle_cast(_Msg, State) -> 
     {noreply, State}.
 
@@ -188,11 +157,6 @@ handle_info(_Msg, State) -> {noreply, State}.
 terminate(_Reason, _State) -> ok.
 code_change(_OldVersion, State, _Extra) -> {ok, State}.
 
-
-
-%% @doc Create a predictable temporary id, safe to use in html and javascript
-make_unique_fixed(N) ->
-    [ $t | integer_to_list(N) ].
 
 %% @doc Create an unique temporary id, safe to use in html and javascript
 make_unique() ->
@@ -228,13 +192,13 @@ random_list(false, Radix, Length) ->
     not_so_random_list(Radix, Length, []);
 random_list(true, Radix, Length) ->
     N = (radix_bits(Radix) * Length + 7) div 8,
-    Val = bin2int(crypto:rand_bytes(N)),
+    Val = bin2int(rand_bytes(N)),
     int2list(Val, Radix, Length, []).
 
 not_so_random_list(_Radix, 0, Acc) ->
     Acc;
 not_so_random_list(Radix, N, Acc) ->
-    not_so_random_list(Radix, N-1, [ random:uniform(Radix)-1 | Acc ]).
+    not_so_random_list(Radix, N-1, [ crypto:rand_uniform(0, Radix) | Acc ]).
 
 int2list(_, _, 0, Acc) -> 
     Acc;
@@ -247,3 +211,16 @@ bin2int(Bin) ->
 radix_bits(N) when N =< 16 -> 4;
 radix_bits(N) when N =< 26 -> 5;
 radix_bits(N) when N =< 64 -> 6.
+
+
+%% @doc Return N random bytes. This falls back to the pseudo random version of rand_uniform 
+%% if strong_rand_bytes fails.
+-spec rand_bytes(integer()) -> binary().
+rand_bytes(N) when N > 0 ->
+    try 
+        crypto:strong_rand_bytes(N)
+    catch
+        error:low_entropy ->
+            lager:info("Crypto is low on entropy"),
+            list_to_binary([ crypto:rand_uniform(0,256) || _X <- lists:seq(1, N) ])
+    end.
