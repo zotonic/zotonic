@@ -257,7 +257,7 @@ collect_files([UAClass|Rest], Acc, Context) ->
 
 
 reindex_files(Files, Site) ->
-    Tag = now(),
+    Tag = os:timestamp(),
     MCs = lists:flatten([ expand_file(MUP) || MUP <- Files ]),
     ByModulePrio = prio_sort(MCs),
     % Insert least prio first, later overwrite with higher priority modules

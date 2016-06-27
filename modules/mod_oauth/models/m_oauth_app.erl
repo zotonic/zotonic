@@ -171,7 +171,7 @@ check_nonce1(CKey, TK, TS, Nonce, Context) ->
 
 
 generate_key() ->
-    base64:encode_to_string(crypto:hash(sha, crypto:rand_bytes(100))).
+    base64:encode_to_string(crypto:hash(sha, rand_bytes:z_ids(100))).
 
 
 %%
