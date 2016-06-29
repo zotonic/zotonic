@@ -117,7 +117,7 @@ handle_info(timeout, State) ->
     {noreply, State};
 
 handle_info(_Info, State) ->
-    ?DEBUG(_Info),
+    %%?DEBUG(_Info),
     {noreply, State}.
 
 %% @spec terminate(Reason, State) -> void()
