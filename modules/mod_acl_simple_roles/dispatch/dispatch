@@ -1,5 +1,0 @@
-%% -*- mode: erlang -*-
-%% Dispatch rule for a predicate list page
-[
- {admin_acl, ["admin", "acl"], controller_admin, [{template, "admin_acl.tpl"}, {selected, "acl"}]}
-].
