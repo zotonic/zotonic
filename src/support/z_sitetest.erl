@@ -68,14 +68,12 @@ configure_test_schema(Site) ->
 %% @doc Drop the site's datbase schema
 ensure_drop_test_schema(Site) ->
     {ok, Config} = z_sites_manager:get_site_config(Site),
-    Database = proplists:get_value(dbdatabase, Config),
-    Schema = proplists:get_value(dbschema, Config),
-    {ok, Conn} = open_connection(Database, Config),
+    DbConfig = z_db_pool:db_opts(Config),
+    Database = proplists:get_value(dbdatabase, DbConfig),
+    Schema = proplists:get_value(dbschema, DbConfig),
+    {ok, Conn} = open_connection(Database, DbConfig),
     ok = drop_schema(Site, Conn, Schema),
     close_connection(Conn).
-
-
-
 
 %% @doc Drop a schema
 -spec drop_schema(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
@@ -96,7 +94,7 @@ drop_schema(Site, Connection, Schema) ->
 
 open_connection(DatabaseName, Options) ->
     pgsql:connect(
-      proplists:get_value(dbsite, Options),
+      proplists:get_value(dbhost, Options),
       proplists:get_value(dbuser, Options),
       proplists:get_value(dbpassword, Options),
       [
