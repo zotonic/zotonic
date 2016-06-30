@@ -20,58 +20,58 @@
 -module(z_sitetest).
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
--export([run/1, run/2, find_sitetest_modules/1]).
+-export([run/1, run/2]).
 
 -include_lib("zotonic/include/zotonic.hrl").
 -include_lib("epgsql/include/pgsql.hrl").
 
-%% @doc Run all _sitetest tests for the given host
-run(Host) when is_atom(Host) ->
-    run(Host, find_sitetest_modules(Host)).
+%% @doc Run all *_sitetest.erl tests for the given site.
+run(Site) when is_atom(Site) ->
+    run(Site, find_sitetest_modules(Site)).
 
-%% @doc Run the given _sitetest eunit modules for the given host.
-run(Host, Modules) when is_atom(Host), is_list(Modules) ->
+%% @doc Run the given _sitetest eunit modules for the given site.
+run(Site, Modules) when is_atom(Site), is_list(Modules) ->
     %% Stop the site
-    ok = maybe_stop_site(Host, z_sites_manager:get_site_status(Host)),
+    ok = maybe_stop_site(Site, z_sites_manager:get_site_status(Site)),
     timer:sleep(500),
 
     %% Override the site config to set the test schema
-    ok = configure_test_schema(Host),
+    ok = configure_test_schema(Site),
 
     %% And make sure its not there yet
-    ok = ensure_drop_test_schema(Host),
+    ok = ensure_drop_test_schema(Site),
 
     %% Now start the site and wait for it
-    ok = start_site(Host),
+    ok = start_site(Site),
 
     %% Run the tests
     Result = eunit:test(Modules, [verbose]),
 
     %% Start the site with the regular schema again
-    z_sites_manager:put_site_config_overrides(Host, []),
-    z_sites_manager:restart(Host),
+    z_sites_manager:put_site_config_overrides(Site, []),
+    z_sites_manager:restart(Site),
 
     Result.
 
 
-maybe_stop_site(Host, {ok, running}) ->
-    ok = z_sites_manager:stop(Host);
+maybe_stop_site(Site, {ok, running}) ->
+    ok = z_sites_manager:stop(Site);
 maybe_stop_site(_, {ok, stopped}) ->
     ok.
 
 
 %% @doc Configure the site config override to set the test schema.
-configure_test_schema(Host) ->
+configure_test_schema(Site) ->
     Schema = "z_sitetest",
-    z_sites_manager:put_site_config_overrides(Host, [{dbschema, Schema}]).
+    z_sites_manager:put_site_config_overrides(Site, [{dbschema, Schema}]).
 
 %% @doc Drop the site's datbase schema
-ensure_drop_test_schema(Host) ->
-    {ok, Config} = z_sites_manager:get_site_config(Host),
+ensure_drop_test_schema(Site) ->
+    {ok, Config} = z_sites_manager:get_site_config(Site),
     Database = proplists:get_value(dbdatabase, Config),
     Schema = proplists:get_value(dbschema, Config),
     {ok, Conn} = open_connection(Database, Config),
-    ok = drop_schema(Host, Conn, Schema),
+    ok = drop_schema(Site, Conn, Schema),
     close_connection(Conn).
 
 
@@ -96,7 +96,7 @@ drop_schema(Site, Connection, Schema) ->
 
 open_connection(DatabaseName, Options) ->
     pgsql:connect(
-      proplists:get_value(dbhost, Options),
+      proplists:get_value(dbsite, Options),
       proplists:get_value(dbuser, Options),
       proplists:get_value(dbpassword, Options),
       [
@@ -110,10 +110,10 @@ close_connection(Connection) ->
 
 
 %% @doc Start the site, and wait for it to be fully booted.
-start_site(Host) ->
-    ok = z_sites_manager:start(Host),
+start_site(Site) ->
+    ok = z_sites_manager:start(Site),
     timer:sleep(100), %% Sleep is needed to ensure the translation server has started
-    Context = z_context:new(Host),
+    Context = z_context:new(Site),
     ok = z_sites_manager:await_startup(Context).
 
 
