@@ -103,7 +103,7 @@ ensure_observer_table(Name) ->
 % Return the name of the observer table
 %
 observer_table_name(Context) when is_record(Context, context) ->
-    observer_table_name(Context#context.site);
+    observer_table_name(z_context:site(Context));
 observer_table_name(Name) when is_atom(Name) ->
     z_utils:name_for_site(observers, Name).
 

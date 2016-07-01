@@ -58,7 +58,7 @@ m_value(#m{value=undefined}, Context) ->
 %% @doc Return the complete site configuration
 all(Context) ->
     F = fun() ->
-        {ok, Cfg} = z_sites_manager:get_site_config(Context#context.site),
+        {ok, Cfg} = z_sites_manager:get_site_config(z_context:site(Context)),
         Cfg
     end,
     z_depcache:memo(F, site_config, Context).
@@ -83,7 +83,7 @@ get(Key, Context) when is_atom(Key) ->
     catch
         error:badarg ->
             % Special case on site setup where the depcache is not yet running
-            {ok, Cfg} = z_sites_manager:get_site_config(Context#context.site),
+            {ok, Cfg} = z_sites_manager:get_site_config(z_context:site(Context)),
             proplists:get_value(Key, Cfg)
     end.
 

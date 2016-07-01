@@ -185,7 +185,7 @@ active(Context) ->
                         Modules = z_db:q("select name from module where is_active = true order by name", Context),
                         [ z_convert:to_atom(M) || {M} <- Modules ]
                 end,
-            z_depcache:memo(F, {?MODULE, active, Context#context.site}, Context);
+            z_depcache:memo(F, {?MODULE, active, z_context:site(Context)}, Context);
         false ->
             case m_site:get(modules, Context) of
                 L when is_list(L) -> L;
@@ -206,7 +206,7 @@ active(Module, Context) ->
                             _ -> false
                         end
                 end,
-            z_depcache:memo(F, {?MODULE, {active, Module}, Context#context.site}, Context);
+            z_depcache:memo(F, {?MODULE, {active, Module}, z_context:site(Context)}, Context);
         false ->
             lists:member(Module, active(Context))
     end.
@@ -567,7 +567,7 @@ name(Module, #context{site=Site}) ->
     z_utils:name_for_site(Module, Site).
 
 flush(Context) ->
-    z_depcache:flush({?MODULE, active, Context#context.site}, Context).
+    z_depcache:flush({?MODULE, active, z_context:site(Context)}, Context).
 
 handle_restart_module(Module, #state{context=Context, sup=ModuleSup} = State) ->
     z_supervisor:delete_child(ModuleSup, Module),

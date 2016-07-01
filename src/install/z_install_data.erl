@@ -47,7 +47,7 @@ install(Site, Context) ->
 %% under the key <tt>install_modules</tt>.
 -spec install_modules(#context{}) -> ok.
 install_modules(Context) ->
-    Site = Context#context.site,
+    Site = z_context:site(Context),
     {ok, Config} = z_sites_manager:get_site_config(Site),
     Modules = [Site | proplists:get_value(install_modules, Config, [])],
     [install_module(M, Context) || M <- Modules],

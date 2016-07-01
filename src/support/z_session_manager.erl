@@ -541,7 +541,7 @@ clear_session_cookie(Context) ->
 %% @doc Update the metrics of the session count
 update_session_metrics(State) ->
     Value = dict:size(State#session_srv.pid2key),
-    exometer:update([zotonic, State#session_srv.context#context.site, session, sessions], Value).
+    exometer:update([zotonic, z_context:site(State#session_srv.context), session, sessions], Value).
 
 to_binary(undefined) -> undefined;
 to_binary(A) -> z_convert:to_binary(A).

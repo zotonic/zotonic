@@ -228,7 +228,7 @@ code_change(_OldVsn, State, _Extra) ->
 % Return the name of this module
 %
 name(Context) ->
-    name(?MODULE, Context#context.site).
+    name(?MODULE, z_context:site(Context)).
 name(Module, Site) ->
     z_utils:name_for_site(Module, Site).
 
