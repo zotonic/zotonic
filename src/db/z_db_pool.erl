@@ -29,6 +29,7 @@
          test_connection/1,
          db_pool_name/1,
          db_driver/1,
+         db_opts/1,
          get_connection/1,
          return_connection/2
         ]).
