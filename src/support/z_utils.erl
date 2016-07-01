@@ -63,6 +63,7 @@
     lib_dir/1,
     list_dir_recursive/1,
     name_for_host/2,
+    name_for_site/2,
     only_digits/1,
     only_letters/1,
     is_iolist/1,
@@ -785,10 +786,15 @@ are_equal(_Arg1, _Arg2) ->
 
 %% @doc Return the name used in the context of a hostname
 -spec name_for_host(Name :: atom(), atom() | #context{}) -> atom().
-name_for_host(Name, #context{} = Host) ->
-    name_for_host(Name, z_context:site(Host));
-name_for_host(Name, Host) ->
-    z_convert:to_atom(z_convert:to_list(Name) ++ [$$, z_convert:to_list(Host)]).
+name_for_host(Name, SiteOrContext) ->
+    name_for_site(Name, SiteOrContext).
+
+%% @doc Return the name used in the context of a hostname
+-spec name_for_site(Name :: atom(), atom() | #context{}) -> atom().
+name_for_site(Name, #context{} = Context) ->
+    name_for_site(Name, z_context:site(Context));
+name_for_site(Name, Site) when is_atom(Site) ->
+    z_convert:to_atom(z_convert:to_list(Name) ++ [$$, z_convert:to_list(Site)]).
 
 
 %% @doc Ensure that the given string matches an existing module. Used to prevent
