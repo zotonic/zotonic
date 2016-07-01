@@ -83,7 +83,7 @@ get_sites_all() ->
 %% @doc Get the status of a particular site
 get_site_status(Site) when is_atom(Site) ->
     gen_server:call(?MODULE, {site_status, Site});
-get_site_status(#context{host=Site}) ->
+get_site_status(#context{site=Site}) ->
     gen_server:call(?MODULE, {site_status, Site}).
 
 %% @doc Return a list of all sites and their status.
@@ -354,9 +354,10 @@ scan_directory(Directory) ->
 
 parse_config(CfgFile) ->
     SitePath = filename:dirname(CfgFile),
-    Host = z_convert:to_atom(filename:basename(SitePath)),
+    Site = z_convert:to_atom(filename:basename(SitePath)),
     ConfigFiles = [ CfgFile | config_d_files(SitePath) ],
-    parse_config(ConfigFiles, [{host,Host}]).
+    % For 0.x sites, also add the deprecated {host, ...}.
+    parse_config(ConfigFiles, [{site,Site}, {host,Site}]).
 
 %% @doc Parse configurations from multiple files, merging results. The last file wins.
 parse_config([], SiteConfig) ->
@@ -390,7 +391,7 @@ config_d_files(SitePath) ->
 has_zotonic_site([]) ->
     false;
 has_zotonic_site([SiteProps|Rest]) ->
-    case proplists:get_value(host, SiteProps) of
+    case proplists:get_value(site, SiteProps) of
         zotonic_status -> proplists:get_value(enabled, SiteProps, false);
         _ -> has_zotonic_site(Rest)
     end.
@@ -401,7 +402,7 @@ get_fallback_site([]) ->
 get_fallback_site([SiteProps|Rest]) ->
     case proplists:get_value(enabled, SiteProps, false) of
         true ->
-            {host, Name} = proplists:lookup(host, SiteProps),
+            {site, Name} = proplists:lookup(site, SiteProps),
             Name;
         false ->
             get_fallback_site(Rest)
@@ -411,8 +412,8 @@ get_fallback_site([SiteProps|Rest]) ->
 add_sites_to_sup(_Sup, []) ->
     ok;
 add_sites_to_sup(Sup, [SiteProps|Rest]) ->
-    case proplists:lookup(host, SiteProps) of
-        {host, Name} ->
+    case proplists:lookup(site, SiteProps) of
+        {site, Name} ->
             Spec = #child_spec{name=Name, mfa={z_site_sup, start_link, [Name]}},
             ok = z_supervisor:add_child(Sup, Spec),
             case proplists:get_value(enabled, SiteProps, false) of
@@ -457,7 +458,7 @@ supervised_sites(Sup) ->
         names(Rest, Acc ++ Names).
 
 hosted_sites(SiteProps) ->
-    L = [ proplists:get_value(host, Props) || Props <- SiteProps ],
+    L = [ proplists:get_value(site, Props) || Props <- SiteProps ],
     [ Name || Name <- L, Name /= undefined ].
 
 info(Grouped) ->

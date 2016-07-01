@@ -180,7 +180,7 @@ observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
 start_link(Args) ->
     {context, Context} = proplists:lookup(context, Args), 
     ensure_job_queues(),
-    supervisor:start_link({local, z_utils:name_for_host(?SERVER, Context)}, ?MODULE, []).
+    supervisor:start_link({local, z_utils:name_for_site(?SERVER, Context)}, ?MODULE, []).
 
 ensure_job_queues() ->
     case jobs:queue_info(video_jobs) of
@@ -241,14 +241,14 @@ post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
     end,
     Task = {convert_v2, Id, Medium, Upload, QueueFilename, ProcessNr, z_context:pickle(Context)},
     z_pivot_rsc:insert_task_after(?TASK_DELAY, ?MODULE, convert_task, QueueFilename, [Task], Context),
-    supervisor:start_child(z_utils:name_for_host(?SERVER, Context), [Task, z_context:prune_for_async(Context)]),
+    supervisor:start_child(z_utils:name_for_site(?SERVER, Context), [Task, z_context:prune_for_async(Context)]),
     ok.
 
 remove_task(QueueFilename, Context) ->
     z_pivot_rsc:delete_task(?MODULE, convert_task, QueueFilename, Context).
 
 convert_task(Task, Context) ->
-    _ = supervisor:start_child(z_utils:name_for_host(?SERVER, Context), [Task, Context]),
+    _ = supervisor:start_child(z_utils:name_for_site(?SERVER, Context), [Task, Context]),
     {delay, ?TASK_DELAY}.
 
 queue_path(Filename, Context) ->

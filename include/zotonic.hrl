@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2011 Marc Worrell
+%% @copyright 2009-2016 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009-2011 Marc Worrell
+%% Copyright 2009-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@
 
 %% @doc The request context, session information and other
 -record(context, {
-        %% The host
-        host=default :: atom(),
+        %% The site
+        site=default :: atom(),
 
         %% Webmachine request data (only set when this context is used because of a request)
         wm_reqdata=undefined :: #wm_reqdata{} | undefined,
@@ -43,7 +43,7 @@
         %% About the user-agent this context is used with.
         ua_class=undefined :: ua_classifier:device_type() | undefined,
         
-        %% Servers and supervisors for the site/host
+        %% Servers and supervisors for the site
         depcache,
         notifier,
         session_manager,
@@ -93,7 +93,7 @@
 -define(WM_REQ(ReqData, Context), z_context:set_reqdata(ReqData, Context)).
 -define(WM_REPLY(Reply, Context), {Reply, Context#context.wm_reqdata, Context#context{wm_reqdata=undefined}}).
 
--define(HOST(Context), Context#context.host).
+-define(SITE(Context), Context#context.site).
 -define(DBC(Context), Context#context.dbc).
 
 -define(ST_JUTTEMIS, {{9999,8,17}, {12,0,0}}).

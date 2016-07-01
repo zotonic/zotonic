@@ -56,7 +56,7 @@
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
-    case Context#context.host of
+    case Context#context.site of
         zotonic_status -> 
             ok;
         _Other ->

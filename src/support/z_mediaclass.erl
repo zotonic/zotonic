@@ -51,8 +51,8 @@
 %% @spec start_link(Props) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
-    Name = z_utils:name_for_host(?MODULE, Host),
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
 
@@ -146,7 +146,7 @@ expand_mediaclass_2(Props, ClassProps) ->
 %% @doc Call this to force a re-index and parse of all moduleclass definitions.
 -spec reset(#context{}) -> ok.
 reset(Context) ->
-    gen_server:cast(z_utils:name_for_host(?MODULE, Context), module_reindexed).
+    gen_server:cast(z_utils:name_for_site(?MODULE, Context), module_reindexed).
 
 
 %% @doc Observer, triggered when there are new module files indexed
@@ -165,12 +165,12 @@ module_reindexed(module_reindexed, Context) ->
 %% @doc Initiates the server.
 init(SiteProps) ->
     process_flag(trap_exit, true),
-    {host, Host} = proplists:lookup(host, SiteProps),
+    {site, Site} = proplists:lookup(site, SiteProps),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
-    Context = z_context:new(Host),
+    Context = z_context:new(Site),
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, Context),
     {ok, #state{context=Context}}.
 

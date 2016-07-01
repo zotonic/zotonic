@@ -356,7 +356,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
 
 name(Context) ->
-    z_utils:name_for_host(?MODULE, Context).
+    z_utils:name_for_site(?MODULE, Context).
 
 %%====================================================================
 %% API

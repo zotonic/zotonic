@@ -49,7 +49,7 @@
 -include_lib("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
--record(state, {host}).
+-record(state, { site :: atom() | undefined }).
 
 % Interval for checking for new and/or changed files.
 -define(DEV_POLL_INTERVAL, 10000).
@@ -106,12 +106,12 @@ pid_observe_development_make(Pid, development_make, _Context) ->
 %% @doc Initiates the server.
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
-    Host = z_context:site(Context),
+    Site = z_context:site(Context),
     lager:md([
-            {site, Host},
+            {site, Site},
             {module, ?MODULE}
         ]),
-    {ok, #state{host=Host}}.
+    {ok, #state{site=Site}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

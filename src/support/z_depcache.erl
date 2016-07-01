@@ -35,8 +35,8 @@
 
 %% @doc Start depcache instance based on site configuration
 start_link(SiteProps) -> 
-    Host = proplists:get_value(host, SiteProps),
-    Name = z_utils:name_for_host(?MODULE, Host),
+    Site = proplists:get_value(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
     depcache:start_link(Name, [{memory_max, proplists:get_value(depcache_memory_max, SiteProps)}]).
 
 

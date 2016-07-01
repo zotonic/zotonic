@@ -35,25 +35,25 @@
 
 %% @doc Return the path to the site folder of the given context.
 %% @spec site_dir(#context{}) -> filename()
-site_dir(Context=#context{host=Host}) ->
-    F = fun() -> site_dir(Host) end,
-    z_depcache:memo(F, {site_dir, Host}, ?HOUR, Context);
-site_dir(Host) when is_atom(Host) ->
+site_dir(Context=#context{site=Site}) ->
+    F = fun() -> site_dir(Site) end,
+    z_depcache:memo(F, {site_dir, Site}, ?HOUR, Context);
+site_dir(Site) when is_atom(Site) ->
     find_first_path(
       [
-       filename:join([z_path:user_sites_dir(), Host]),
-       filename:join([z_utils:lib_dir(priv), "sites", Host])
+       filename:join([z_path:user_sites_dir(), Site]),
+       filename:join([z_utils:lib_dir(priv), "sites", Site])
       ]).
 
 %% @doc Return the path to the given module in the given context.
 %% @spec module_dir(atom(), #context{}) -> string()
-module_dir(Module, Context=#context{host=Host}) ->
-    F = fun() -> module_dir(Module, Host) end,
+module_dir(Module, Context=#context{site=Site}) ->
+    F = fun() -> module_dir(Module, Site) end,
     z_depcache:memo(F, {module_dir, Module}, ?HOUR, Context);
-module_dir(Module, Host) when is_atom(Host) ->
+module_dir(Module, Site) when is_atom(Site) ->
     find_first_path(
       [
-       filename:join([z_path:user_sites_dir(), Host, "modules", Module]),
+       filename:join([z_path:user_sites_dir(), Site, "modules", Module]),
        filename:join([z_path:user_modules_dir(), Module]),
        filename:join([z_utils:lib_dir(modules)])
       ]).
@@ -86,8 +86,8 @@ abspath(Path, Context) ->
 
 %% @doc Return the path to a files subdirectory
 %% @spec files_subdir(SubDir::filename(), #context{}) -> filename()
-files_subdir(SubDir, #context{host=Host}) ->
-    filename:join([z_path:site_dir(Host), "files", SubDir]).
+files_subdir(SubDir, #context{site=Site}) ->
+    filename:join([z_path:site_dir(Site), "files", SubDir]).
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
 %% @spec files_subdir_ensure(SubDir::filename(), #context{}) -> filename()

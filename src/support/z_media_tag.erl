@@ -226,7 +226,7 @@ media_id([{_,_}|_] = List) ->
 
 %% @doc Give the filepath for the filename being served.
 %% @todo Ensure the file is really in the given directory (ie. no ..'s)
-filename_to_filepath(Filename, #context{host=Host} = Context) ->
+filename_to_filepath(Filename, #context{site=Site} = Context) ->
     case Filename of
         "/" ++ _ ->
             Filename;
@@ -236,7 +236,7 @@ filename_to_filepath(Filename, #context{host=Host} = Context) ->
                 _ -> Filename
             end;
         _ ->
-            filename:join([z_path:site_dir(Host), "files", "archive", Filename])
+            filename:join([z_path:site_dir(Site), "files", "archive", Filename])
     end.
 
 

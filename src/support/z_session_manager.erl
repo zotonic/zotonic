@@ -66,8 +66,8 @@
 %% @doc Starts the session manager server
 -spec start_link( SiteProps :: list() ) -> {ok, pid()} | ignore | {error, term()}.
 start_link(SiteProps) -> 
-    {host, Host} = proplists:lookup(host, SiteProps),
-    Name = z_utils:name_for_host(?MODULE, Host),
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
 %% @doc Continue an existing session. No new session will be created.
@@ -180,7 +180,7 @@ whereis(SessionId, #context{session_manager=SessionManager}) when is_binary(Sess
 
 %% @doc Find all the sessions for a certain user
 -spec whereis_user(integer()|undefined, #context{}) -> [pid()].
-whereis_user(UserId, #context{host=Site}) ->
+whereis_user(UserId, #context{site=Site}) ->
     gproc:lookup_pids({p, l, {Site, user_session, UserId}}).
 
 
@@ -225,13 +225,13 @@ broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, st
 %% @doc Initialize the session server with an empty session table.  We make the session manager a system process
 %%      so that crashes in sessions are isolated from each other.
 init(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
+    {site, Site} = proplists:lookup(site, SiteProps),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
     State = #session_srv{
-                    context=z_acl:sudo(z_context:new(Host)),
+                    context=z_acl:sudo(z_context:new(Site)),
                     key2pid=dict:new(), 
                     pid2key=dict:new()
               },
@@ -541,7 +541,7 @@ clear_session_cookie(Context) ->
 %% @doc Update the metrics of the session count
 update_session_metrics(State) ->
     Value = dict:size(State#session_srv.pid2key),
-    exometer:update([zotonic, State#session_srv.context#context.host, session, sessions], Value).
+    exometer:update([zotonic, State#session_srv.context#context.site, session, sessions], Value).
 
 to_binary(undefined) -> undefined;
 to_binary(A) -> z_convert:to_binary(A).

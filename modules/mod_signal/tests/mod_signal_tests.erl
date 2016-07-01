@@ -49,8 +49,8 @@ key_test() ->
 mod_signal_test_() ->
     {inorder, {foreach,
      fun() ->
-             mod_signal:start_link([{host, testsandbox}]),
-             #context{host=testsandbox}
+             mod_signal:start_link([{site, testsandbox}]),
+             #context{site=testsandbox}
      end,
      fun(Context) ->
              mod_signal:stop(Context)

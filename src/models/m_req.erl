@@ -55,6 +55,7 @@ m_value(#m{value=undefined}, Context) ->
 -spec get(atom(), #context{} | #wm_reqdata{} | undefined) -> any(). 
 get(undefined, _) -> undefined;
 get(_, undefined) -> undefined;
+get(site, #context{} = Context) -> z_context:site(Context);
 get(ua_class, #context{} = Context) -> z_user_agent:get_class(Context);
 get(ua_props, #context{} = Context) -> z_user_agent:get_props(Context);
 get(timezone, #context{} = Context) -> z_context:tz(Context);

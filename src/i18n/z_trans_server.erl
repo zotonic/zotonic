@@ -36,7 +36,7 @@
 
 -include_lib("zotonic.hrl").
 
--record(state, {table, host}).
+-record(state, {table, site}).
 
 %%====================================================================
 %% API
@@ -49,9 +49,9 @@ start_tests() ->
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
-    Name = z_utils:name_for_host(?MODULE, Host),
-    gen_server:start_link({local, Name}, ?MODULE, [Host, Name], []).
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
+    gen_server:start_link({local, Name}, ?MODULE, [Site, Name], []).
 
 
 %% @doc Parse all .po files and reload the found translations in the trans server
@@ -62,12 +62,12 @@ load_translations(Context) ->
 %% @doc Take a proplist with dicts and reload the translations table.
 %% After reloading the the template server is flushed.
 load_translations(Trans, Context) ->
-    Name = z_utils:name_for_host(?MODULE, z_context:site(Context)),
+    Name = z_utils:name_for_site(?MODULE, z_context:site(Context)),
     gen_server:cast(Name, {load_translations, Trans}).
 
 %% @doc Return the name of the ets table holding all translations
-table(Host) when is_atom(Host) ->
-    z_utils:name_for_host(?MODULE, Host);
+table(Site) when is_atom(Site) ->
+    z_utils:name_for_site(?MODULE, Site);
 table(#context{} = Context) ->
     Context#context.translation_table.
 
@@ -89,15 +89,15 @@ observe_module_ready(module_ready, Context) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init([Host, Name]) ->
+init([Site, Name]) ->
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
     process_flag(trap_exit, true),
-    z_notifier:observe(module_ready, {?MODULE, observe_module_ready}, Host),
+    z_notifier:observe(module_ready, {?MODULE, observe_module_ready}, Site),
     Table = ets:new(Name, [named_table, set, protected, {read_concurrency, true}]),
-    {ok, #state{table=Table, host=Host}}.
+    {ok, #state{table=Table, site=Site}}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -125,7 +125,7 @@ handle_cast({load_translations, Trans}, State) ->
         end,
     List = dict:fold(F, [], Trans),
     sync_to_table(List, State#state.table),
-    z_template:reset(State#state.host),
+    z_template:reset(State#state.site),
     {noreply, State};
 
 %% @doc Trap unknown casts
@@ -145,7 +145,7 @@ handle_info(_Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 terminate(_Reason, State) ->
-    z_notifier:detach(module_ready, {?MODULE, observe_module_ready}, State#state.host),
+    z_notifier:detach(module_ready, {?MODULE, observe_module_ready}, State#state.site),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}

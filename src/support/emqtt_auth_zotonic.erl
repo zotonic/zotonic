@@ -120,6 +120,6 @@ local_username(Parts) ->
 
 test() ->
     Fallback = z_sites_dispatcher:get_fallback_site(),
-    {ok, <<"admin">>, #context{host=Fallback}} = map_user_site(<<"admin">>),
-    {ok, <<"admin@foo.bar.not.exist">>, #context{host=Fallback}} = map_user_site(<<"admin@foo.bar.not.exist">>),
+    {ok, <<"admin">>, #context{site=Fallback}} = map_user_site(<<"admin">>),
+    {ok, <<"admin@foo.bar.not.exist">>, #context{site=Fallback}} = map_user_site(<<"admin@foo.bar.not.exist">>),
     ok.
