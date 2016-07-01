@@ -25,6 +25,7 @@ Developer Guide
    services
    email
    shell
+   testing
    deployment/index
    contributing
    releasenotes/index

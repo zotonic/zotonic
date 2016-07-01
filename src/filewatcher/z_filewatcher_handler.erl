@@ -105,8 +105,9 @@ handle_file(_Verb, "erlydtl_parser.yrl", ".yrl", F) ->
     os:cmd("erlc -o "++z_utils:os_escape(TargetDir)++" "++z_utils:os_escape(F)),
     "Rebuilding yecc file: " ++ filename:basename(F);
 
-handle_file(_Verb, _Basename, ".erl", F) ->
+handle_file(_Verb, Basename, ".erl", F) ->
     make:files([F], zotonic_compile:compile_options()),
+    check_run_sitetest(Basename),
     Libdir = z_utils:lib_dir(),
     L = length(Libdir),
     F2 = case string:substr(F, 1, L) of
@@ -297,3 +298,13 @@ send_message({unix, _Arch}, Msg) ->
     os:cmd("which notify-send && notify-send \"Zotonic\" " ++ z_utils:os_escape(Msg));
 send_message(_OS, _Msg) ->
     undefined.
+
+
+check_run_sitetest(Basename) ->
+    case re:run(Basename, "^((.+)_.*_sitetest).erl$", [{capture, [1, 2], list}]) of
+        nomatch ->
+            nop;
+        {match, [Module, Host]} ->
+            zotonic_compile:ld(z_convert:to_atom(Module)),
+            z_sitetest:run(z_convert:to_atom(Host), [z_convert:to_atom(Module)])
+    end.

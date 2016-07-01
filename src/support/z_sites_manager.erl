@@ -43,7 +43,11 @@
 
     stop/1,
     start/1,
-    restart/1
+    restart/1,
+    await_startup/1,
+
+    get_site_config_overrides/1,
+    put_site_config_overrides/2
 ]).
 
 
@@ -130,7 +134,12 @@ get_site_contexts() ->
 %% @doc Fetch the configuration of a specific site.
 -spec get_site_config(atom()) -> {ok, list()} | {error, term()}.
 get_site_config(Site) ->
-    parse_config(get_site_config_file(Site)).
+    case parse_config(get_site_config_file(Site)) of
+        {ok, Config} ->
+            {ok, z_utils:props_merge(get_site_config_overrides(Site), Config)};
+        Other ->
+            Other
+    end.
 
 %% @doc Return the name of the site to handle unknown Host requests
 -spec get_fallback_site() -> atom() | undefined.
@@ -515,3 +524,24 @@ is_module(Module) ->
         _ -> false
     end.
 
+%% @doc Wait for a site to complete its startup sequence. Note - due
+%% to the way the site startup works currently, we cannot know whether
+%% the site has already started or not. Therefore, this function
+%% should only be called when you are certain the site has not
+%% completed starting up, otherwise it will block infinitely.
+await_startup(Context = #context{}) ->
+    case z_notifier:await(module_ready, 30*1000, Context) of
+        {ok, _} ->
+            ok;
+        E -> E
+    end.
+
+get_site_config_overrides(Site) when is_atom(Site) ->
+    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
+    application:get_env(zotonic, Key, []).
+
+%% @doc Override a given site config with arbitrary key/value
+%% pairs. Should be called before the site is started.
+put_site_config_overrides(Site, Overrides) when is_atom(Site), is_list(Overrides) ->
+    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
+    application:set_env(zotonic, Key, Overrides).
