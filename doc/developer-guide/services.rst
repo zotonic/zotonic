@@ -186,6 +186,37 @@ tuple from the ``process_get/2`` and ``process_post/2`` calls::
 
 .. _guide-services-cors:
 
+Error handling
+--------------
+
+An HTTP status error code will be generated when ``process_get`` or ``process_post`` returns an error object::
+
+        {error, error_name, Details}
+
+For instance::
+
+    process_post(_ReqData, Context) ->
+        %% Do some processing here...
+        %% Found an error...
+        {
+            {error, missing_arg, "user"},
+            Context
+        }.
+
+These error names are supported:
+
+==============   ===================================   ===========
+Name             Generated message                     Status code
+==============   ===================================   ===========
+missing_arg      Missing argument: + Details           400
+unknown_arg      Unknown argument: + Details           400
+syntax           Syntax error: + Details               400
+unauthorized     Unauthorized.                         401
+access_denied    Access denied.                        403
+not_exists       Resource does not exist: + Details    404
+(other)          Generic error.                        500
+==============   ===================================   ===========
+
 Enabling Cross-Origin Resource Sharing (CORS)
 ---------------------------------------------
 
