@@ -108,7 +108,7 @@ is_authorized(ReqData, Context) ->
                     %% No; see if we can use OAuth.
                     case z_notifier:first(#service_authorize{service_module=Module}, Context2) of
                         undefined ->
-                            api_error(500, 0, "No service authorization method available", ReqData, Context2);
+                            api_error(500, 0, "No service authorization method available", [], ReqData, Context2);
                         Reply ->
                             Reply
                     end
@@ -164,35 +164,15 @@ set_cors_header(ReqData, Context) ->
             ReqData
     end.
 
-api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
-    R = {struct, [{error, {struct, [{code, ErrCode}, {message, Message}]}}]},
-    {{halt, HttpCode}, wrq:set_resp_body(mochijson:encode(R), ReqData), Context}.
-
 
 api_result(Context, Result) ->
     ReqData = z_context:get_reqdata(Context),
     case Result of
-        {error, Err=missing_arg, Arg} ->
-            api_error(400, Err, "Missing argument: " ++ Arg, ReqData, Context);
-
-        {error, Err=unknown_arg, Arg} ->
-            api_error(400, Err, "Unknown argument: " ++ Arg, ReqData, Context);
-
-        {error, Err=syntax, Arg} ->
-            api_error(400, Err, "Syntax error: " ++ Arg, ReqData, Context);
-
-        {error, Err=unauthorized, _Arg} ->
-            api_error(401, Err, "Unauthorized.", ReqData, Context);
-        
-        {error, Err=not_exists, Arg} ->
-            api_error(404, Err, "Resource does not exist: " ++ Arg, ReqData, Context);
-
-        {error, Err=access_denied, _Arg} ->
-            api_error(403, Err, "Access denied.", ReqData, Context);
-
-        {error, Err, _Arg} ->
-            api_error(500, Err, "Generic error.", ReqData, Context);
-
+        {error, Err, Arg, ErrData} ->
+            %% ErrData is a JSON structure
+            api_result_error(Err, Arg, ErrData, ReqData, Context);
+        {error, Err, Arg} ->
+            api_result_error(Err, Arg, [], ReqData, Context);
         Result2 ->
             try
                 JSON = result_to_json(Result2),
@@ -212,7 +192,41 @@ api_result(Context, Result) ->
     result_to_json(B) when is_binary(B) -> B;
     result_to_json({binary_json, R}) -> iolist_to_binary(mochijson:binary_encode(R));
     result_to_json(R) -> iolist_to_binary(mochijson:encode(R)).
-    
+
+
+api_result_error(Err, Arg, ErrData, ReqData, Context) ->
+    case Err of
+        missing_arg -> 
+            api_error(400, Err, "Missing argument: " ++ Arg, ErrData, ReqData, Context);
+        unknown_arg ->
+            api_error(400, Err, "Unknown argument: " ++ Arg, ErrData, ReqData, Context);
+        syntax ->
+            api_error(400, Err, "Syntax error: " ++ Arg, ErrData, ReqData, Context);
+        unauthorized ->
+            api_error(401, Err, "Unauthorized.", ErrData, ReqData, Context);
+        access_denied ->
+            api_error(403, Err, "Access denied.", ErrData, ReqData, Context);
+        not_exists ->
+            api_error(404, Err, "Resource does not exist: " ++ Arg, ErrData, ReqData, Context);
+        % 422: The server was unable to process the contained instructions
+        % https://tools.ietf.org/html/rfc4918#section-11.2
+        unprocessable ->
+            api_error(422, Err, "Unprocessable entity: " ++ Arg, ErrData, ReqData, Context);
+        _ ->
+            api_error(500, Err, "Generic error.", ErrData, ReqData, Context)
+    end.
+
+%% Combines error code and message with user provided error data (if any)
+api_error(HttpCode, ErrCode, Message, ErrData, ReqData, Context) ->
+    GeneralError = [{error, {struct, [{code, ErrCode}, {message, Message}]}}],
+    CombinedError = case ErrData of
+        [] -> GeneralError;
+        {struct, Data} -> GeneralError ++ Data
+    end,
+    Error = {struct, CombinedError},
+    Body = mochijson:encode(Error),
+    {{halt, HttpCode}, wrq:set_resp_body(Body, ReqData), Context}.
+
 
 to_json(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
