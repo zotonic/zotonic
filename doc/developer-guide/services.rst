@@ -191,31 +191,79 @@ Error handling
 
 An HTTP status error code will be generated when ``process_get`` or ``process_post`` returns an error object::
 
-        {error, error_name, Details}
+        {error, error_name, DetailsString}
+        {error, error_name, DetailsString, ErrorData}
 
-For instance::
+Simple error feedback
+.....................
+
+By providing the error name, a corresponding HTTP status code and message will be set. Supported error names are:
+
+=================  ===================================   ===========
+Name               Generated message                     Status code
+=================  ===================================   ===========
+``missing_arg``    Missing argument: + Details           400
+``unknown_arg``    Unknown argument: + Details           400
+``syntax``         Syntax error: + Details               400
+``unauthorized``   Unauthorized.                         401
+``access_denied``  Access denied.                        403
+``not_exists``     Resource does not exist: + Details    404
+``unprocessable``  Unprocessable entity: + Details       422
+(other)            Generic error.                        500
+=================  ===================================   ===========
+
+For example::
 
     process_post(_ReqData, Context) ->
         %% Do some processing here...
-        %% Found an error...
-        {
-            {error, missing_arg, "user"},
-            Context
-        }.
+        case Error of
+            true ->
+                {{error, missing_arg, "username"}, Context};
+            false ->
+                {z_convert:to_json(Data), Context}
+        end.
 
-These error names are supported:
 
-==============   ===================================   ===========
-Name             Generated message                     Status code
-==============   ===================================   ===========
-missing_arg      Missing argument: + Details           400
-unknown_arg      Unknown argument: + Details           400
-syntax           Syntax error: + Details               400
-unauthorized     Unauthorized.                         401
-access_denied    Access denied.                        403
-not_exists       Resource does not exist: + Details    404
-(other)          Generic error.                        500
-==============   ===================================   ===========
+Working with Error Objects
+..........................
+
+In some cases it is useful to return more detailed error feedback. The `JSON API <http://jsonapi.org>`_ has specified a format for this. The thinking behind the format is that the server, after encountering an error, may continue to process information, and instead of returning a single error code, returns multiple found errors.
+
+Taking this approach, this error information is returned as a JSON array, with a top key entry ``errors``::
+
+    ["errors": {
+        "detail": "...",
+        "source": "...",
+        "status": "...",
+        "title": "..."
+    }]
+
+Of course there is no obligation to use JSON API structure, but if you want, the code of one of those functions - for instance to log on - could look like this::
+
+    case User of
+        undefined ->
+            {error, [
+                {status, 422},
+                {source, "mod_webapp:logon"},
+                {title, "No user found"},
+                {detail, "Could not log on user"}
+            ]};
+        _ ->
+            {ok, User}
+    end.
+
+The return data of multiple functions may then be aggregated into a single error data object and returned as a list of Error Objects::
+
+    process_post(_ReqData, Context) ->
+        %% Do some processing here...
+        %% Accumulate all data...
+        %% Handle return:
+        case Data of
+            {error, ErrData} ->
+                {{error, unprocessable, "", z_convert:to_json(ErrData)}, Context};
+            _ ->
+                {z_convert:to_json(Data), Context}
+        end.
 
 Enabling Cross-Origin Resource Sharing (CORS)
 ---------------------------------------------

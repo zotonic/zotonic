@@ -99,7 +99,7 @@ is_authorized(ReqData, Context) ->
                 false ->
                     case z_notifier:first(#service_authorize{service_module=Module}, Context2) of
                         undefined ->
-                            api_error(500, 0, "No service authorization method available", ReqData, Context2);
+                            api_error(500, 0, "No service authorization method available", [], ReqData, Context2);
                         Reply ->
                             Reply
                     end
@@ -151,7 +151,7 @@ process_post(ReqData, Context0) ->
 %% set in site config file
 %%  [{service_api_cors, false}, %% 2nd is default value
 %%   {'Access-Control-Allow-Origin', "*"},
-%%   {'Access-Control-Allow-Credentials', undefined}, 
+%%   {'Access-Control-Allow-Credentials', undefined},
 %%   {'Access-Control-Max-Age', undefined},
 %%   {'Access-Control-Allow-Methods', undefined},
 %%   {'Access-Control-Allow-Headers', undefined}]
@@ -166,15 +166,15 @@ set_cors_header(ReqData, Context) ->
                                     undefined ->
                                         Acc;
                                     _ ->
-                                        wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(Def), Acc) 
+                                        wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(Def), Acc)
                                 end;
                             V ->
                                 wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(V), Acc)
                         end
-                    end, 
-                    ReqData, 
+                    end,
+                    ReqData,
                     [{'Access-Control-Allow-Origin', "*"},
-                     {'Access-Control-Allow-Credentials', undefined}, 
+                     {'Access-Control-Allow-Credentials', undefined},
                      {'Access-Control-Max-Age', undefined},
                      {'Access-Control-Allow-Methods', undefined},
                      {'Access-Control-Allow-Headers', undefined}]);
@@ -182,28 +182,39 @@ set_cors_header(ReqData, Context) ->
             ReqData
     end.
 
-api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
-    R = {struct, [{error, {struct, [{code, ErrCode}, {message, Message}]}}]},
-    {{halt, HttpCode}, wrq:set_resp_body(mochijson:encode(R), ReqData), Context}.
+
+api_error(HttpCode, ErrCode, Message, ErrData, ReqData, Context) ->
+    GeneralError = [{error, {struct, [{code, ErrCode}, {message, Message}]}}],
+    CombinedError = case ErrData of
+        [] -> GeneralError;
+        {struct, Data} -> GeneralError ++ Data
+    end,
+    Error = {struct, CombinedError},
+    Body = mochijson:encode(Error),
+    {{halt, HttpCode}, wrq:set_resp_body(Body, ReqData), Context}.
 
 
 api_result(Result, Context) ->
     api_result(Result, z_context:get_reqdata(Context), Context).
 
-api_result({error, Err=missing_arg, Arg}, ReqData, Context) ->
-    api_error(400, Err, "Missing argument: " ++ Arg, ReqData, Context);
-api_result({error, Err=unknown_arg, Arg}, ReqData, Context) ->
-    api_error(400, Err, "Unknown argument: " ++ Arg, ReqData, Context);
-api_result({error, Err=syntax, Arg}, ReqData, Context) ->
-    api_error(400, Err, "Syntax error: " ++ Arg, ReqData, Context);
-api_result({error, Err=unauthorized, _Arg}, ReqData, Context) ->
-    api_error(401, Err, "Unauthorized.", ReqData, Context);
-api_result({error, Err=not_exists, Arg}, ReqData, Context) ->
-    api_error(404, Err, "Resource does not exist: " ++ Arg, ReqData, Context);
-api_result({error, Err=access_denied, _Arg}, ReqData, Context) ->
-    api_error(403, Err, "Access denied.", ReqData, Context);
-api_result({error, Err, _Arg}, ReqData, Context) ->
-    api_error(500, Err, "Generic error.", ReqData, Context);
+api_result({error, Err, Arg}, ReqData, Context) ->
+    api_result({error, Err, Arg, []}, ReqData, Context);
+api_result({error, Err=missing_arg, Arg, ErrData}, ReqData, Context) ->
+    api_error(400, Err, "Missing argument: " ++ Arg, ErrData, ReqData, Context);
+api_result({error, Err=unknown_arg, Arg, ErrData}, ReqData, Context) ->
+    api_error(400, Err, "Unknown argument: " ++ Arg, ErrData, ReqData, Context);
+api_result({error, Err=syntax, Arg, ErrData}, ReqData, Context) ->
+    api_error(400, Err, "Syntax error: " ++ Arg, ErrData, ReqData, Context);
+api_result({error, Err=unauthorized, _Arg, ErrData}, ReqData, Context) ->
+    api_error(401, Err, "Unauthorized.", ErrData, ReqData, Context);
+api_result({error, Err=not_exists, Arg, ErrData}, ReqData, Context) ->
+    api_error(404, Err, "Resource does not exist: " ++ Arg, ErrData, ReqData, Context);
+api_result({error, Err=access_denied, _Arg, ErrData}, ReqData, Context) ->
+    api_error(403, Err, "Access denied.", ErrData, ReqData, Context);
+api_result({error, Err=unprocessable, Arg, ErrData}, ReqData, Context) ->
+    api_error(422, Err, "Unprocessable entity: " ++ Arg, ErrData, ReqData, Context);
+api_result({error, Err, _Arg, ErrData}, ReqData, Context) ->
+    api_error(500, Err, "Generic error.", ErrData, ReqData, Context);
 api_result(Result, ReqData, Context) ->
     try
         JSON = result_to_json(Result),
@@ -222,7 +233,7 @@ api_result(Result, ReqData, Context) ->
 result_to_json(B) when is_binary(B) -> B;
 result_to_json({binary_json, R}) -> iolist_to_binary(mochijson:binary_encode(R));
 result_to_json(R) -> iolist_to_binary(mochijson:encode(R)).
-    
+
 
 %% @doc Handle JSON request bodies.
 -spec handle_json_request(#wm_reqdata{}, #context{}) -> {ok, #context{}} | {error, string()}.
@@ -239,13 +250,13 @@ handle_json_request(ReqData, Context) ->
 decode_json_body(ReqData0, Context0) ->
     {ReqBody, ReqData} = wrq:req_body(ReqData0),
     Context = ?WM_REQ(ReqData, Context0),
-    case ReqBody of 
-        <<>> -> 
+    case ReqBody of
+        <<>> ->
             {ok, Context};
         NonEmptyBody ->
-            try 
+            try
                 case mochijson2:decode(NonEmptyBody) of
-                    {error, Error} -> 
+                    {error, Error} ->
                         {error, Error, Context};
                     {struct, JsonStruct} ->
                         %% A JSON object: set key/value pairs in the context
@@ -262,14 +273,14 @@ decode_json_body(ReqData0, Context0) ->
                         {ok, Context}
                 end
             catch
-                Type:Reason -> 
+                Type:Reason ->
                     {error, {Type, Reason}, Context}
             end
     end.
 
 get_callback(Context) ->
     case z_context:get_q("callback", Context) of
-        undefined -> 
+        undefined ->
             case z_context:get_q("jsonp", Context) of
                 undefined -> filter(z_context:get_q("jsoncallback", Context));
                 Callback -> filter(Callback)
@@ -279,17 +290,17 @@ get_callback(Context) ->
     end.
 
 get_q_all(Context) ->
-    proplists:delete("module", 
-    proplists:delete("method", 
-    proplists:delete("jsoncallback", 
-    proplists:delete("callback", 
-    proplists:delete("jsonp", 
+    proplists:delete("module",
+    proplists:delete("method",
+    proplists:delete("jsoncallback",
+    proplists:delete("callback",
+    proplists:delete("jsonp",
         z_context:get_q_all_noz(Context)))))).
 
 filter(undefined) ->
     undefined;
 filter(F) ->
-    [ C || C <- F,      (C >= $0 andalso C =< $9) 
+    [ C || C <- F,      (C >= $0 andalso C =< $9)
                  orelse (C >= $a andalso C =< $z)
                  orelse (C >= $A andalso C =< $Z)
                  orelse C =:= $_
