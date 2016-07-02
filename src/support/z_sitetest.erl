@@ -22,7 +22,7 @@
 
 -export([run/1, run/2]).
 
--include_lib("zotonic/include/zotonic.hrl").
+-include_lib("zotonic.hrl").
 -include_lib("epgsql/include/pgsql.hrl").
 
 %% @doc Run all *_sitetest.erl tests for the given site.
