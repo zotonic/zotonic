@@ -244,9 +244,9 @@ Of course there is no obligation to use JSON API structure, but if you want, the
         undefined ->
             {error, [
                 {status, 422},
-                {source, "mod_webapp:logon"},
-                {title, "No user found"},
-                {detail, "Could not log on user"}
+                {source, <<"mod_webapp:logon">>},
+                {title, <<"No user found">>},
+                {detail, <<"Could not log on user">>}
             ]};
         _ ->
             {ok, User}
@@ -260,7 +260,7 @@ The return data of multiple functions may then be aggregated into a single error
         %% Handle return:
         case Data of
             {error, ErrData} ->
-                {{error, unprocessable, "", z_convert:to_json(ErrData)}, Context};
+                {{error, unprocessable, <<"">>, ErrData}, Context};
             _ ->
                 {z_convert:to_json(Data), Context}
         end.

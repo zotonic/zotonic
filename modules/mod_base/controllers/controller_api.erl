@@ -187,10 +187,10 @@ api_error(HttpCode, ErrCode, Message, ErrData, ReqData, Context) ->
     GeneralError = [{error, {struct, [{code, ErrCode}, {message, Message}]}}],
     CombinedError = case ErrData of
         [] -> GeneralError;
-        {struct, Data} -> GeneralError ++ Data
+        {struct, Data} -> GeneralError ++ Data;
+        Data -> GeneralError ++ Data
     end,
-    Error = {struct, CombinedError},
-    Body = mochijson:encode(Error),
+    Body = mochijson2:encode({struct, CombinedError}),
     {{halt, HttpCode}, wrq:set_resp_body(Body, ReqData), Context}.
 
 
@@ -199,28 +199,30 @@ api_result(Result, Context) ->
 
 api_result({error, Err, Arg}, ReqData, Context) ->
     api_result({error, Err, Arg, []}, ReqData, Context);
+api_result({error, Err, Arg, ErrData}, ReqData, Context) when is_list(Arg) ->
+    api_result({error, Err, list_to_binary(Arg), ErrData}, ReqData, Context);
 api_result({error, Err=missing_arg, Arg, ErrData}, ReqData, Context) ->
-    api_error(400, Err, "Missing argument: " ++ Arg, ErrData, ReqData, Context);
+    api_error(400, Err, <<"Missing argument: ", Arg/binary>>, ErrData, ReqData, Context);
 api_result({error, Err=unknown_arg, Arg, ErrData}, ReqData, Context) ->
-    api_error(400, Err, "Unknown argument: " ++ Arg, ErrData, ReqData, Context);
+    api_error(400, Err, <<"Unknown argument: ", Arg/binary>>, ErrData, ReqData, Context);
 api_result({error, Err=syntax, Arg, ErrData}, ReqData, Context) ->
-    api_error(400, Err, "Syntax error: " ++ Arg, ErrData, ReqData, Context);
+    api_error(400, Err, <<"Syntax error: ", Arg/binary>>, ErrData, ReqData, Context);
 api_result({error, Err=unauthorized, _Arg, ErrData}, ReqData, Context) ->
-    api_error(401, Err, "Unauthorized.", ErrData, ReqData, Context);
+    api_error(401, Err, <<"Unauthorized.">>, ErrData, ReqData, Context);
 api_result({error, Err=not_exists, Arg, ErrData}, ReqData, Context) ->
-    api_error(404, Err, "Resource does not exist: " ++ Arg, ErrData, ReqData, Context);
+    api_error(404, Err, <<"Resource does not exist: ", Arg/binary>>, ErrData, ReqData, Context);
 api_result({error, Err=access_denied, _Arg, ErrData}, ReqData, Context) ->
-    api_error(403, Err, "Access denied.", ErrData, ReqData, Context);
+    api_error(403, Err, <<"Access denied.">>, ErrData, ReqData, Context);
 api_result({error, Err=unprocessable, Arg, ErrData}, ReqData, Context) ->
-    api_error(422, Err, "Unprocessable entity: " ++ Arg, ErrData, ReqData, Context);
+    api_error(422, Err, <<"Unprocessable entity: ", Arg/binary>>, ErrData, ReqData, Context);
 api_result({error, Err, _Arg, ErrData}, ReqData, Context) ->
-    api_error(500, Err, "Generic error.", ErrData, ReqData, Context);
+    api_error(500, Err, <<"Generic error.">>, ErrData, ReqData, Context);
 api_result(Result, ReqData, Context) ->
     try
         JSON = result_to_json(Result),
         Body = case get_callback(Context) of
                    undefined -> JSON;
-                   Callback -> [ Callback, $(, JSON, $), $; ]
+                   Callback -> [Callback, $(, JSON, $), $;]
                end,
         {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
     catch
@@ -231,8 +233,8 @@ api_result(Result, ReqData, Context) ->
     end.
 
 result_to_json(B) when is_binary(B) -> B;
-result_to_json({binary_json, R}) -> iolist_to_binary(mochijson:binary_encode(R));
-result_to_json(R) -> iolist_to_binary(mochijson:encode(R)).
+result_to_json({binary_json, R}) -> iolist_to_binary(mochijson2:binary_encode(R));
+result_to_json(R) -> iolist_to_binary(mochijson2:encode(R)).
 
 
 %% @doc Handle JSON request bodies.
