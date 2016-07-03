@@ -20,7 +20,7 @@
 -module(z_sitetest).
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
--export([run/1, run/2]).
+-export([run/1, run/2, watch/1, unwatch/1, is_watching/1]).
 
 -include_lib("zotonic/include/zotonic.hrl").
 -include_lib("epgsql/include/epgsql.hrl").
@@ -48,7 +48,7 @@ run(Site, Modules) when is_atom(Site), is_list(Modules) ->
     Result = eunit:test(Modules, [verbose]),
 
     %% Start the site with the regular schema again
-    z_sites_manager:put_site_config_overrides(Site, []),
+    ok = unconfigure_test_schema(Site),
     z_sites_manager:restart(Site),
 
     Result.
@@ -64,6 +64,30 @@ maybe_stop_site(_, {ok, stopped}) ->
 configure_test_schema(Site) ->
     Schema = "z_sitetest",
     z_sites_manager:put_site_config_overrides(Site, [{dbschema, Schema}]).
+
+%% @doc Remove the site config overrides.
+unconfigure_test_schema(Site) ->
+    z_sites_manager:put_site_config_overrides(Site, []).
+    
+%% @doc Start watching the given site for .erl file changes. As soon
+%% as any Erlang module inside the watched site is recompiled, all
+%% sitetests are run.
+watch(Site) ->
+    application:set_env(zotonic, sitetest_watched, 
+                        sets:to_list(sets:from_list(watches() ++ [Site]))).
+    
+%% @doc Stop the sitetests from being run when Erlang modules in the
+%% site are recompiled.
+unwatch(Site) ->
+    application:set_env(zotonic, sitetest_watched, [W || W <- watches(), W =/= Site]).
+
+%% @doc Returns whether the given site is being watched for sitetest runs.
+is_watching(Site) ->
+    lists:member(Site, watches()).
+
+watches() ->
+    application:get_env(zotonic, sitetest_watched, []).
+
 
 %% @doc Drop the site's datbase schema
 ensure_drop_test_schema(Site) ->
