@@ -107,7 +107,7 @@ handle_file(_Verb, "erlydtl_parser.yrl", ".yrl", F) ->
 
 handle_file(_Verb, Basename, ".erl", F) ->
     make:files([F], zotonic_compile:compile_options()),
-    check_run_sitetest(Basename),
+    check_run_sitetest(Basename, F),
     Libdir = z_utils:lib_dir(),
     L = length(Libdir),
     F2 = case string:substr(F, 1, L) of
@@ -300,11 +300,19 @@ send_message(_OS, _Msg) ->
     undefined.
 
 
-check_run_sitetest(Basename) ->
+check_run_sitetest(Basename, F) ->
+    %% check run individual test
     case re:run(Basename, "^((.+)_.*_sitetest).erl$", [{capture, [1, 2], list}]) of
-        nomatch ->
-            nop;
-        {match, [Module, Host]} ->
+        {match, [Module, SiteStr]} ->
             zotonic_compile:ld(z_convert:to_atom(Module)),
-            z_sitetest:run(z_convert:to_atom(Host), [z_convert:to_atom(Module)])
+            z_sitetest:run(z_convert:to_atom(SiteStr), [z_convert:to_atom(Module)]);
+        nomatch ->
+            %% check whether compiled file is part of a site; if so, run its sitetests when we're watching it.
+            case re:run(F, "/sites/([^/]+).*?/", [{capture, all_but_first, list}]) of
+                nomatch ->
+                    nop;
+                {match, [SiteStr]} ->
+                    Site = z_convert:to_atom(SiteStr),
+                    z_sitetest:is_watching(Site) andalso z_sitetest:run(Site)
+            end
     end.

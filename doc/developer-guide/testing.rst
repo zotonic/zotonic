@@ -41,12 +41,24 @@ Put the following inside the ``example`` site under the filename
        ok.
   
 
-Development
------------
+Test Driven Development
+-----------------------
 
 Running the sitetests is integrated into the filewatcher hooks. As
 soon as you edit a ``*_sitetest.erl`` file, all tests in that specific
 sitetest file will be executed.
+
+While developing a site it is often handy to continuously run the
+tests while you are developing the site.
+
+To establish this, you can call ``z_sitetest:watch(site)`` to start
+watching all Erlang files inside the site under development. When the
+filetest is watching a site, all filetests are triggered as soon as
+any Erlang module inside your site is being recompiled.
+
+To stop the automatic test running again, call
+``z_sitetest:unwatch(site)``.
+
 
 
 Example testing output
