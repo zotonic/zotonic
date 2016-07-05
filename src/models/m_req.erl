@@ -77,14 +77,16 @@ get_req(user_agent, RD) -> wrq:get_req_header_lc("user-agent", RD);
 get_req(referer, RD) -> wrq:get_req_header_lc("referer", RD);
 get_req(referrer, RD) -> wrq:get_req_header_lc("referer", RD);
 get_req(req_id, #wm_reqdata{log_data=#wm_log_data{req_id=ReqId}}) -> ReqId;
+get_req(is_bot, RD) -> z_user_agent:is_bot(get_req(user_agent, RD));
 get_req(_Key, _RD) -> undefined.
 
 
 -spec values(#context{}) -> list({atom(), any()}).
 values(Context) ->
     [ {K, get(K, Context)} || K <- [
-            method, version, peer, is_ssl, host, raw_path, path, qs, referrer, user_agent, req_id, headers,
-            ua_class, ua_props, timezone, language
+            method, version, peer, is_ssl, host, raw_path, path, qs, referrer, user_agent, is_bot,
+            req_id, headers, ua_class, ua_props, timezone, language
         ]
     ].
+
 
