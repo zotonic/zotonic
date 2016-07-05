@@ -36,7 +36,7 @@ This will show something like::
    {qs,[{"foo","bar"}]},
    {referrer,"http://test.dev:8000/"},
    {user_agent,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/601.4.4 (KHTML, like Gecko) Version/9.0.3 Safari/601.4.4"},
-   {is_bot, false},
+   {is_crawler,false},
    {req_id,525158920},
    {headers,[{"accept",
               "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},

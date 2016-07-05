@@ -59,6 +59,7 @@ get(ua_class, #context{} = Context) -> z_user_agent:get_class(Context);
 get(ua_props, #context{} = Context) -> z_user_agent:get_props(Context);
 get(timezone, #context{} = Context) -> z_context:tz(Context);
 get(language, #context{} = Context) -> z_context:language(Context);
+get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
 get(What, #context{} = Context) -> get_req(What, z_context:get_reqdata(Context));
 get(What, #wm_reqdata{} = RD) -> get_req(What, RD).
 
@@ -76,14 +77,14 @@ get_req(user_agent, RD) -> wrq:get_req_header_lc("user-agent", RD);
 get_req(referer, RD) -> wrq:get_req_header_lc("referer", RD);
 get_req(referrer, RD) -> wrq:get_req_header_lc("referer", RD);
 get_req(req_id, #wm_reqdata{log_data=#wm_log_data{req_id=ReqId}}) -> ReqId;
-get_req(is_bot, RD) -> z_user_agent:is_bot(get_req(user_agent, RD));
+get_req(is_crawler, RD) -> z_user_agent:is_crawler(RD);
 get_req(_Key, _RD) -> undefined.
 
 
 -spec values(#context{}) -> list({atom(), any()}).
 values(Context) ->
     [ {K, get(K, Context)} || K <- [
-            method, version, peer, is_ssl, host, raw_path, path, qs, referrer, user_agent, is_bot,
+            method, version, peer, is_ssl, host, raw_path, path, qs, referrer, user_agent, is_crawler,
             req_id, headers, ua_class, ua_props, timezone, language
         ]
     ].
