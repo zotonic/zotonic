@@ -31,7 +31,7 @@
     order_class/2,
     classes/0,
     classes_fallback/1,
-    is_bot/1
+    is_crawler/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -121,14 +121,34 @@ get_ua_req_data(ReqData) ->
         undefined -> 
             case wrq:get_req_header_lc("user-agent", ReqData) of
                 undefined ->
-                    {desktop, []};
+                    {desktop, [
+                        {is_crawler, not is_websocket_request(ReqData)}
+                    ]};
                 UserAgent ->
-                    ua_classify(UserAgent)
+                    {Class, Props} = ua_classify(UserAgent),
+                    case proplists:is_defined(is_crawler, Props) of
+                        true ->
+                            {Class, Props};
+                        false ->
+                            {Class, [
+                                {is_crawler, is_crawler_ua(UserAgent)}
+                                | Props
+                            ]}
+                    end
             end;
         Class ->
-            {Class, []}
+            {Class, [{is_crawler, false}]}
     end.
- 
+
+%% @doc Some user agents don't send the User-Agent header on websocket requests
+is_websocket_request(ReqData) ->
+    case wrq:get_req_header_lc("upgrade", ReqData) of
+        undefined -> false;
+        "websocket" -> true;
+        _ -> false
+    end.
+
+%% @doc We send the page's ua_class along with websocket connect requests
 get_ua_class_qs(ReqData) ->
     to_ua_class(wrq:get_qs_value(?SESSION_UA_CLASS_Q, ReqData)).
 
@@ -144,7 +164,7 @@ ua_classify(UserAgent) ->
             %% Note: Do not call z_config:get(use_ua_classifier) here. Otherwise 
             %% every request will call z_config gen_server making it a potential 
             %% bottleneck. 
-            {desktop, []};    
+            {desktop, []};
         {error, Reason} ->
             error_logger:warning_msg("z_user_agent: ua_classifier returned error. [UA: ~p] [Reason: ~p]~n", [UserAgent, Reason]),
             {desktop, []}
@@ -181,6 +201,23 @@ get_props(#wm_reqdata{} = ReqData) ->
     case webmachine_request:get_metadata(ua_props, ReqData) of
         undefined -> [{id, <<"desktop">>}];
         Props -> Props
+    end.
+
+%% @doc Check if the user agent is probably a bot.
+-spec is_crawler(string()|binary()|#context{}|#wm_reqdata{}|undefined) -> boolean().
+is_crawler(undefined) ->
+    false;
+is_crawler(#context{} = Context) ->
+    {_, Props} = get_props(Context),
+    proplists:get_value(is_crawler, Props, false);
+is_crawler(#wm_reqdata{} = RD) ->
+    {_, Props} = get_props(RD),
+    proplists:get_value(is_crawler, Props, false);
+is_crawler(UA) ->
+    {_, Props} = ua_classify(UA),
+    case proplists:get_value(is_crawler, Props) of
+        undefined -> is_crawler_ua(UA);
+        IsCrawler -> IsCrawler
     end.
 
 %% @doc The user selects an user agent by hand. Update cookie and session.
@@ -355,17 +392,10 @@ classes_fallback(UAClass) ->
     lists:dropwhile(fun(X) -> X =/= UAClass end, lists:reverse(classes())).
 
 
-
-%% @doc Check if the user agent is probably a bot.
--spec is_bot(string()|binary()|undefined) -> boolean().
-is_bot(#context{} = Context) ->
-    is_bot(m_req:get(user_agent, Context));
-is_bot(undefined) ->
-    % Normal user agents all have a "User-Agent" header.
-    true;
-is_bot(UA) when is_list(UA) ->
-    is_bot(z_convert:to_binary(UA));
-is_bot(UA) ->
+%% @doc List of hardcoded crawlers, as the ua_classifier doesn't have all crawlers.
+is_crawler_ua(UA) when is_list(UA) ->
+    is_crawler_ua(z_convert:to_binary(UA));
+is_crawler_ua(UA) when is_binary(UA) ->
     UAlower = z_string:to_lower(UA),
     is_bot_prefix(UAlower)
     orelse lists:any(fun(Bot) ->
@@ -376,6 +406,7 @@ is_bot(UA) ->
 %% @doc Quick check on prefix of the user-agent string
 is_bot_prefix(<<"mozilla/", _/binary>>) -> false;
 % Usual bots
+is_bot_prefix(<<"curl/", _/binary>>) -> true;
 is_bot_prefix(<<"facebookexternalhit", _/binary>>) -> true;
 is_bot_prefix(<<"facebot", _/binary>>) -> true;
 is_bot_prefix(<<"feedfetcher-google", _/binary>>) -> true;
