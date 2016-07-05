@@ -230,6 +230,7 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
 
 event(#postback{message={admin_connect_select, Args}}, Context) ->
     SelectId = z_context:get_q("select_id", Context),
+    IsConnected = z_convert:to_bool(z_context:get_q("is_connected", Context)),
     SubjectId0 = proplists:get_value(subject_id, Args),
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
@@ -257,7 +258,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
                  z_convert:to_integer(ObjectId0)}
         end,
     
-    case do_link(SubjectId, Predicate, ObjectId, Callback, Context) of
+    case do_link_unlink(IsConnected, SubjectId, Predicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
             Context2 = case z_convert:to_bool(proplists:get_value(autoclose, Args)) of
                             true -> z_render:dialog_close(Context1);
@@ -303,9 +304,11 @@ get_predicate(P, Context) when is_list(P) ->
     end. 
 
 
-do_link(SubjectId, Predicate, ObjectId, Callback, Context) 
-    when SubjectId =:= undefined; 
-         Predicate =:= ""; Predicate =:= undefined ->
+do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
+    do_link_unlink(false, SubjectId, Predicate, ObjectId, Callback, Context).
+
+do_link_unlink(_IsUnlink, undefined, Predicate, ObjectId, Callback, Context) 
+    when Predicate =:= ""; Predicate =:= undefined ->
     ContextP = context_language(Context),
     Title = m_rsc:p(ObjectId, title, Context),
     Vars = [
@@ -332,21 +335,73 @@ do_link(SubjectId, Predicate, ObjectId, Callback, Context)
                     $),$;
                 ]}]}, Context)}
     end;
-do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
+do_link_unlink(IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context) ->
     case z_acl:rsc_linkable(SubjectId, Context) of
         true ->
-            {EdgeId,IsNew} = case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
-                undefined ->
-                    {ok, EdgId} = m_edge:insert(SubjectId, Predicate, ObjectId, Context),
-                    {EdgId, true};
-                EdgId ->
-                    {EdgId, false}
-            end,
+            case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
+                undefined when IsUnlink ->
+                    do_link_unlink_feedback(
+                                    false, false, undefined, 
+                                    SubjectId, Predicate, ObjectId, 
+                                    Callback, Context);
+                undefined when not IsUnlink ->
+                    case m_edge:insert(SubjectId, Predicate, ObjectId, Context) of
+                        {ok, EdgeId} ->
+                            do_link_unlink_feedback(
+                                            true, false, EdgeId, 
+                                            SubjectId, Predicate, ObjectId, 
+                                            Callback, Context);
+                        {error, _} ->
+                            do_link_unlink_error(IsUnlink, Context)
+                    end;
+                EdgeId when IsUnlink ->
+                    case m_edge:delete(SubjectId, Predicate, ObjectId, Context) of
+                        ok ->
+                            do_link_unlink_feedback(
+                                            false, true, EdgeId, 
+                                            SubjectId, Predicate, ObjectId, 
+                                            Callback, Context);
+                        {error, _} ->
+                            do_link_unlink_error(IsUnlink, Context)
+                    end;
+                EdgeId when not IsUnlink->
+                    do_link_unlink_feedback(
+                                    false, false, EdgeId, 
+                                    SubjectId, Predicate, ObjectId, 
+                                    Callback, Context)
+            end;
+        false ->
+            do_link_unlink_error(IsUnlink, Context)
+    end.
 
-            ContextP = context_language(Context),
-            Title = m_rsc:p(ObjectId, title, Context),
+do_link_unlink_error(false = _IsUnlink, Context) ->
+    {error, z_render:growl_error(?__("Sorry, you have no permission to add the connection.", Context), Context)};
+do_link_unlink_error(true, Context) ->
+    {error, z_render:growl_error(?__("Sorry, you have no permission to delete the connection.", Context), Context)}.
+
+
+do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId, Callback, Context) ->
+    ContextP = context_language(Context),
+    Title = m_rsc:p(ObjectId, title, Context),
+    Context1 = case {IsNew, IsDelete} of
+        {true,false} ->
+            z_render:growl([
+                        ?__("Added the connection to", ContextP),<<" \"">>, Title, <<"\".">>
+                    ], Context);
+        {false,true} ->
+            z_render:growl([
+                        ?__("Removed the connection to", ContextP),<<" \"">>, Title, <<"\".">>
+                    ], Context);
+        {false,false} ->
+            Context
+    end,
+    case Callback of 
+        undefined ->
+            {ok, Context1};
+        _ ->
             Vars = [
                     {is_new, IsNew},
+                    {is_delete, IsDelete},
                     {subject_id, SubjectId},
                     {predicate, Predicate},
                     {object_id, ObjectId},
@@ -355,29 +410,20 @@ do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
                     {title_language, z_trans:lookup_fallback(Title, ContextP)},
                     {title, z_trans:lookup_fallback(Title, Context)}
                    ],
-            Context1 = case Callback of
-                    undefined -> 
-                        Context;
+            case Callback of
                     {CB, Args} ->
                         {ok, z_render:wire({script, [{script, [
                                 z_convert:to_binary(CB), $(,
-                                    z_utils:js_object(Vars++Args,Context),
+                                    z_utils:js_object(Vars++Args,ContextP),
                                 $),$;
-                            ]}]}, Context)};
+                            ]}]}, Context1)};
                     _ ->
-                        z_render:wire({script, [{script, [
+                        {ok, z_render:wire({script, [{script, [
                                 z_convert:to_binary(Callback), $(,
-                                    z_utils:js_object(Vars,Context),
+                                    z_utils:js_object(Vars,ContextP),
                                 $),$;
-                            ]}]}, Context)
-                end,
-
-            case IsNew of
-                true -> {ok, z_render:growl([?__("Added the connection to", Context1),<<" \"">>, Title, <<"\".">>], Context1)};
-                false -> {ok, Context1}
-            end;
-        false ->
-            {error, z_render:growl_error(?__("Sorry, you have no permission to add the connection.", Context), Context)}
+                            ]}]}, Context1)}
+            end
     end.
 
 context_language(Context) ->
