@@ -145,6 +145,7 @@ is_websocket_request(ReqData) ->
     case wrq:get_req_header_lc("upgrade", ReqData) of
         undefined -> false;
         "websocket" -> true;
+        "WebSocket" -> true;
         _ -> false
     end.
 
