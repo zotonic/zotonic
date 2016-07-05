@@ -109,7 +109,7 @@
   0},
  {<<"template_compiler">>,
   {git,"git://github.com/zotonic/template_compiler.git",
-       {ref,"3c8bebf44ad6a1fa110e9f78b9a4bea3a659ffd9"}},
+       {ref,"add7a715ad401d0e71b91fa4a798c4866d5dbc6a"}},
   0},
  {<<"twerl">>,
   {git,"https://github.com/mworrell/twerl.git",
@@ -122,5 +122,5 @@
   0},
  {<<"z_stdlib">>,
   {git,"git://github.com/zotonic/z_stdlib.git",
-       {ref,"b43f47293364df889acf8af90817e1b3cd724bef"}},
+       {ref,"ace6cf5e06b3ba9c3407c1de451953cbb1b48406"}},
   0}].
