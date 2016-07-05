@@ -34,18 +34,18 @@
 %% @spec start_link(SiteProps::proplist()) -> ignore
 %% @doc Perform all site startup routines.
 start_link(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
-    Name = z_utils:name_for_host(?MODULE, Host),
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
 
 init(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
+    {site, Site} = proplists:lookup(site, SiteProps),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
-    Context = z_context:new(Host),
+    Context = z_context:new(Site),
     {ok, #state{context=Context}, 0}.
 
 handle_call(_Msg, _From, State) ->

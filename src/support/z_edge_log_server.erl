@@ -38,12 +38,12 @@
 -define(CLEANUP_TIMEOUT_SHORT, 100).
 -define(CLEANUP_BATCH_SIZE, 100).
 
--record(state, {host}).
+-record(state, {site :: atom()}).
 
 
 %% @doc Force a check, useful after known edge operations.
 check(Context) ->
-    Name = z_utils:name_for_host(?MODULE, Context),
+    Name = z_utils:name_for_site(?MODULE, Context),
     gen_server:call(Name, check, infinity).
 
 
@@ -55,8 +55,8 @@ check(Context) ->
 start_link() -> 
     start_link([]).
 start_link(Args) when is_list(Args) ->
-    {host, Host} = proplists:lookup(host, Args),
-    Name = z_utils:name_for_host(?MODULE, Host),
+    {site, Site} = proplists:lookup(site, Args),
+    Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, Args, []).
 
 %%====================================================================
@@ -69,12 +69,12 @@ start_link(Args) when is_list(Args) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
-    {host, Host} = proplists:lookup(host, Args),
+    {site, Site} = proplists:lookup(site, Args),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
-    {ok, #state{host=Host}, ?CLEANUP_TIMEOUT_LONG}.
+    {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -83,7 +83,7 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 handle_call(check, _From, State) ->
-    case do_check(State#state.host) of
+    case do_check(State#state.site) of
         {ok, 0} = OK ->
             {reply, OK, State, ?CLEANUP_TIMEOUT_LONG};
         {ok, _} = OK ->
@@ -102,7 +102,7 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 handle_cast(check, State) ->
-    case do_check(State#state.host) of
+    case do_check(State#state.site) of
         {ok, 0} ->
             {noreply, State, ?CLEANUP_TIMEOUT_LONG};
         {ok, _} ->
@@ -146,8 +146,8 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-do_check(Host) ->
-    Context = z_acl:sudo(z_context:new(Host)),
+do_check(Site) ->
+    Context = z_acl:sudo(z_context:new(Site)),
     do_check_1(z_db:q("
                     select id,op,subject_id,predicate,object_id,edge_id
                     from edge_log

@@ -38,18 +38,18 @@
 
 
 start_link(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
-    z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Host)),
+    {site, Site} = proplists:lookup(site, SiteProps),
+    z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Site)),
     ignore.
 
 
 %% @doc Force a reset of all templates, used after a module has been activated or deactivated.
 -spec reset(atom()|#context{}) -> ok.
-reset(Host) when is_atom(Host) ->
-    z_filewatcher_mtime:flush_site(Host),
+reset(Site) when is_atom(Site) ->
+    z_filewatcher_mtime:flush_site(Site),
     lists:foreach(
             fun(UA) ->
-                template_compiler:flush_context_name({Host, UA})
+                template_compiler:flush_context_name({Site, UA})
             end,
             z_user_agent:classes());
 reset(Context) ->

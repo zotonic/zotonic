@@ -63,8 +63,8 @@
 %% @spec start_link(Props) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
-    Name = z_utils:name_for_host(?MODULE, Host),
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
 
@@ -161,12 +161,12 @@ all(What, Context) ->
 %% @doc Initiates the server.
 init(SiteProps) ->
     process_flag(trap_exit, true),
-    {host, Host} = proplists:lookup(host, SiteProps),
+    {site, Site} = proplists:lookup(site, SiteProps),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
-    Context = z_context:new(Host),
+    Context = z_context:new(Site),
     z_notifier:observe(module_ready, self(), Context),
     {ok, #state{context=Context}}.
 

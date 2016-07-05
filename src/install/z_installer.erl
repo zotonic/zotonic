@@ -36,12 +36,12 @@ start_link(SiteProps) when is_list(SiteProps) ->
 
 %% Check if the config table exists, if so then assume that all is ok
 install_check(SiteProps, RetryCt) when RetryCt =< 2 ->
-    {host, Host} = proplists:lookup(host, SiteProps),
+    {site, Site} = proplists:lookup(site, SiteProps),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
-    Context = z_context:new(Host),
+    Context = z_context:new(Site),
     case z_db:has_connection(Context) of
         true -> check_db_and_upgrade(Context, 1);
         false -> ignore

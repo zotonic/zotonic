@@ -44,7 +44,7 @@
 -include_lib("zotonic.hrl").
 
 -record(state, {dispatchlist=undefined, lookup=undefined, context,
-                host, hostname, hostname_port, smtphost, hostalias,
+                site, hostname, hostname_port, smtphost, hostalias,
 				redirect=true}).
 
 -record(dispatch_url, {url, dispatch_options}).
@@ -62,8 +62,8 @@ dispatcher_args() ->
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the dispatch server
 start_link(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
-    Name = z_utils:name_for_host(?MODULE, Host),
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
 
@@ -198,21 +198,21 @@ to_bool(N) -> z_convert:to_bool(N).
 %%                     {stop, Reason}
 %% @doc Initiates the server, loads the dispatch list into the webmachine dispatcher
 init(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
+    {site, Site} = proplists:lookup(site, SiteProps),
     {hostname, Hostname} = proplists:lookup(hostname, SiteProps),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
     Smtphost = proplists:get_value(smtphost, SiteProps),
     HostAlias = proplists:get_value(hostalias, SiteProps, []),
-    Context = z_context:new(Host),
+    Context = z_context:new(Site),
     process_flag(trap_exit, true),
     State  = #state{
                 dispatchlist=[],
                 lookup=dict:new(),
                 context=Context,
-                host=Host,
+                site=Site,
 				smtphost=drop_port(Smtphost),
                 hostname=drop_port(Hostname),
                 hostname_port=Hostname,
@@ -253,10 +253,10 @@ handle_call('hostname', _From, State) ->
 handle_call('hostname_port', _From, State) ->
     {reply, State#state.hostname_port, State};
 
-%% @doc Return the dispatchinfo for the site  {host, hostname, smtphost, hostaliases, redirect, dispatchlist}
+%% @doc Return the dispatchinfo for the site  {site, hostname, smtphost, hostaliases, redirect, dispatchlist}
 handle_call('dispatchinfo', _From, State) ->
     {reply,
-     {State#state.host, State#state.hostname, State#state.smtphost,
+     {State#state.site, State#state.hostname, State#state.smtphost,
       State#state.hostalias, State#state.redirect, State#state.dispatchlist},
      State};
 

@@ -5,7 +5,7 @@
  {enabled, true},
 
  %% Atomic hostname, MUST be equal to the directory name of this site.
- {host, testsandbox},
+ {site, testsandbox},
 
  %% Hostname for the test sandbox. Do NOT change this! It will break the tests.
  {hostname, "localhost:8040"},

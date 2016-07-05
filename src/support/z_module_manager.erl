@@ -82,7 +82,7 @@
 %% @spec start_link(SiteProps::proplist()) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the module manager
 start_link(SiteProps) ->
-    Context = z_acl:sudo(z_context:new(proplists:get_value(host, SiteProps))),
+    Context = z_acl:sudo(z_context:new(proplists:get_value(site, SiteProps))),
     gen_server:start_link({local, name(Context)}, ?MODULE, [{context, Context} | SiteProps], []).
 
 
@@ -185,7 +185,7 @@ active(Context) ->
                         Modules = z_db:q("select name from module where is_active = true order by name", Context),
                         [ z_convert:to_atom(M) || {M} <- Modules ]
                 end,
-            z_depcache:memo(F, {?MODULE, active, Context#context.host}, Context);
+            z_depcache:memo(F, {?MODULE, active, z_context:site(Context)}, Context);
         false ->
             case m_site:get(modules, Context) of
                 L when is_list(L) -> L;
@@ -206,7 +206,7 @@ active(Module, Context) ->
                             _ -> false
                         end
                 end,
-            z_depcache:memo(F, {?MODULE, {active, Module}, Context#context.host}, Context);
+            z_depcache:memo(F, {?MODULE, {active, Module}, z_context:site(Context)}, Context);
         false ->
             lists:member(Module, active(Context))
     end.
@@ -251,21 +251,21 @@ all(Context) ->
 %% @doc Scan for a list of modules present in the site's module directories. A module is always a directory,
 %% the name of the directory is the same as the name of the module.
 %% @spec scan(#context{}) -> [ {atom(), dirname()} ]
-scan(#context{host=Host}) ->
+scan(#context{site=Site}) ->
     All = [
            %% Zotonic modules
            [z_utils:lib_dir(modules), "mod_*"],
 
            %% User-installed Zotonic sites
-           [z_path:user_sites_dir(), Host, "modules", "mod_*"],
-           [z_path:user_sites_dir(), Host],
+           [z_path:user_sites_dir(), Site, "modules", "mod_*"],
+           [z_path:user_sites_dir(), Site],
 
            %% User-installed modules
            [z_path:user_modules_dir(), "mod_*"],
 
            %% Backward compatibility
-           [z_utils:lib_dir(priv), "sites", Host, "modules", "mod_*"],
-           [z_utils:lib_dir(priv), "sites", Host],
+           [z_utils:lib_dir(priv), "sites", Site, "modules", "mod_*"],
+           [z_utils:lib_dir(priv), "sites", Site],
            [z_utils:lib_dir(priv), "modules", "mod_*"]
 
           ],
@@ -563,11 +563,11 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Return the name for this site's module manager
 name(Context) ->
     name(?MODULE, Context).
-name(Module, #context{host=Host}) ->
-    z_utils:name_for_host(Module, Host).
+name(Module, #context{site=Site}) ->
+    z_utils:name_for_site(Module, Site).
 
 flush(Context) ->
-    z_depcache:flush({?MODULE, active, Context#context.host}, Context).
+    z_depcache:flush({?MODULE, active, z_context:site(Context)}, Context).
 
 handle_restart_module(Module, #state{context=Context, sup=ModuleSup} = State) ->
     z_supervisor:delete_child(ModuleSup, Module),
@@ -811,7 +811,7 @@ has_behaviour(M, Behaviour) ->
     end.
 
 
-%% @doc Check whether given module is valid for the given host
+%% @doc Check whether given module is valid for the given site
 %% @spec valid(atom(), #context{}) -> bool()
 valid(M, Context) ->
     lists:member(M, [Mod || {Mod,_} <- scan(Context)]).

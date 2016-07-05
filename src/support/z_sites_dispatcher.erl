@@ -137,7 +137,7 @@ dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = 
     end.
 
 dispatch_match(Tokens, Context) ->
-    Module = z_utils:name_for_host(dispatch, z_context:site(Context)),
+    Module = z_utils:name_for_site(dispatch, z_context:site(Context)),
     try
         dispatch_compiler:match(Module, Tokens, Context)
     catch
@@ -383,8 +383,8 @@ do_compile_modified(OldDs, NewDs) ->
     Ds = NewDs -- OldDs,
     lists:foreach(fun do_compile/1, Ds).
 
-do_compile(#wm_host_dispatch_list{host=Host, dispatch_list=DL}) ->
-    dispatch_compiler:compile_load(z_utils:name_for_host(dispatch, Host), map_z_language(DL)).
+do_compile(#wm_host_dispatch_list{host=Site, dispatch_list=DL}) ->
+    dispatch_compiler:compile_load(z_utils:name_for_site(dispatch, Site), map_z_language(DL)).
 
 map_z_language(DL) ->
     [ map_z_language_1(Disp) || Disp <- DL ].
@@ -613,7 +613,7 @@ collect_dispatchrules(Site) ->
 
 %% @doc Fetch dispatch rules for a specific site.
 fetch_dispatchinfo(Site) ->
-    Name = z_utils:name_for_host(z_dispatcher, Site),
+    Name = z_utils:name_for_site(z_dispatcher, Site),
     {Host, Hostname, SmtpHost, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
     #wm_host_dispatch_list{
         host=Host, hostname=Hostname, smtphost=SmtpHost, hostalias=Hostalias,

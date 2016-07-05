@@ -147,10 +147,10 @@ stop(Context) ->
 % @doc
 %
 start_link(Args) when is_list(Args) ->
-    Host = proplists:get_value(host, Args),
+    Site = proplists:get_value(site, Args),
 
     % Create the table in the supervisor and make it an heir...
-    Name = name(?MODULE, Host),
+    Name = name(?MODULE, Site),
     SlotTable = ensure_slot_table(Name),
 
     %% Give away the ownership of the table to the module...
@@ -167,9 +167,9 @@ start_link(Args) when is_list(Args) ->
 
 %% Gen server stuff.
 init(Args) ->
-    {host, Host} = proplists:lookup(host, Args),
+    {site, Site} = proplists:lookup(site, Args),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
     {ok, #state{slots=[]}}.
@@ -228,14 +228,14 @@ code_change(_OldVsn, State, _Extra) ->
 % Return the name of this module
 %
 name(Context) ->
-    name(?MODULE, Context#context.host).
-name(Module, Host) ->
-    z_utils:name_for_host(Module, Host).
+    name(?MODULE, z_context:site(Context)).
+name(Module, Site) ->
+    z_utils:name_for_site(Module, Site).
 
 % Return the name of the slot table
 %
 slot_table_name(Name) when is_atom(Name) ->
-    z_utils:name_for_host(?SLOT_TABLE, Name);
+    z_utils:name_for_site(?SLOT_TABLE, Name);
 slot_table_name(Context) ->
     slot_table_name(name(Context)).
 

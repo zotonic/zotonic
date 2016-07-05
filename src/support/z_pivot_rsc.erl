@@ -254,9 +254,9 @@ delete_task(Module, Function, UniqueKey, Context) ->
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->
-    {host, Host} = proplists:lookup(host, SiteProps),
-    Name = z_utils:name_for_host(?MODULE, Host),
-    gen_server:start_link({local, Name}, ?MODULE, Host, []).
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
+    gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 
 %%====================================================================
@@ -268,13 +268,13 @@ start_link(SiteProps) ->
 %%                     ignore               |
 %%                     {stop, Reason}
 %% @doc Initiates the server.
-init(Host) ->
+init(Site) ->
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {ok, #state{site=Host, is_pivot_delay=false}}.
+    {ok, #state{site=Site, is_pivot_delay=false}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

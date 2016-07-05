@@ -405,7 +405,7 @@ handle_cast({set, Key, Value}, Session) ->
 
 handle_cast({set, Props}, Session) ->
     Props1 = lists:foldl(fun({K,V}, Ps) ->
-                            prop_replace(K, V, Ps, Session#session.context#context.host)
+                            prop_replace(K, V, Ps, z_context:site(Session#session.context))
                          end,
                          Session#session.props,
                          Props),
@@ -484,7 +484,7 @@ handle_call({spawn_link, Module, Func, Args}, _From, Session) ->
     Pid    = spawn_link(Module, Func, Args),
     Linked = [Pid | Session#session.linked],
     erlang:monitor(process, Pid),
-    exometer:update([zotonic, Session#session.context#context.host, session, page_processes], 1),
+    exometer:update([zotonic, z_context:site(Session#session.context), session, page_processes], 1),
     {reply, Pid, Session#session{linked=Linked}};
 
 handle_call(start_page_session, _From, Session) ->
@@ -518,7 +518,7 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, Session) ->
     FIsUp  = fun(Page) -> Page#page.page_pid /= Pid end,
     Pages  = lists:filter(FIsUp, Session#session.pages),
     Linked = lists:delete(Pid, Session#session.linked),
-    exometer:update([zotonic, Session#session.context#context.host, session, page_processes], -1),
+    exometer:update([zotonic, z_context:site(Session#session.context), session, page_processes], -1),
     {noreply, Session#session{pages=Pages, linked=Linked}};
 
 %% @doc MQTT message, forward it to the page.
@@ -553,7 +553,7 @@ code_change(_OldVsn, Session, _Extra) ->
 
 
 handle_set(Key, Value, Session) ->
-    Session#session{ props = prop_replace(Key, Value, Session#session.props, Session#session.context#context.host)}.
+    Session#session{ props = prop_replace(Key, Value, Session#session.props, z_context:site(Session#session.context))}.
 
 
 maybe_auth_change(auth_user_id, UserId, Session, OldSession) ->
@@ -669,7 +669,7 @@ page_start(Context) ->
     case z_session_page:start_link(self(), PageId, Context) of
         {ok,PagePid} ->
             erlang:monitor(process, PagePid),
-            exometer:update([zotonic, Context#context.host, session, page_processes], 1),
+            exometer:update([zotonic, z_context:site(Context), session, page_processes], 1),
             {ok, #page{page_pid=PagePid, page_id=PageId}};
         {error, {already_started, _PagePid}} ->
             lager:error(z_context:lager_md(Context),

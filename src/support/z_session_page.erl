@@ -461,7 +461,7 @@ handle_info(check_timeout, State) ->
 handle_info({route, Msg}, State) ->
     lager:debug("Page ~p route ~p", [State#page_state.page_id, Msg]),
     MinimalContext = #context{
-        host=State#page_state.site,
+        site=State#page_state.site,
         page_id=State#page_state.page_id,
         session_pid=State#page_state.session_pid
     },

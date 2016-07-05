@@ -98,17 +98,17 @@ start_backup(Context) ->
 
 %% @doc Start a backup, either a full backup (including archived files) or a database only backup.
 start_backup(IsFullBackup, Context) ->
-    gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), {start_backup, IsFullBackup}).
+    gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), {start_backup, IsFullBackup}).
 
 %% @doc List all backups present.  Newest first.
 list_backups(Context) ->
-    InProgress = gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), in_progress_start),
+    InProgress = gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), in_progress_start),
     [ {F, D, IsFull, D =:= InProgress} || {F,D,IsFull} <- list_backup_files(Context) ].
 
 
 %% @doc Check if there is a backup in progress.
 backup_in_progress(Context) ->
-    case gen_server:call(z_utils:name_for_host(?MODULE, z_context:site(Context)), in_progress_start) of
+    case gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), in_progress_start) of
         undefined -> false;
         _ -> true
     end.
@@ -126,7 +126,7 @@ manage_schema(install, Context) ->
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     Context = proplists:get_value(context, Args),
-    Name = z_utils:name_for_host(?MODULE, z_context:site(Context)),
+    Name = z_utils:name_for_site(?MODULE, z_context:site(Context)),
     gen_server:start_link({local, Name}, ?MODULE, Args, []).
 
 

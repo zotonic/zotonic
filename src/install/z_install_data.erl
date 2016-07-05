@@ -31,15 +31,15 @@
 
 %% @doc Insert boot data into the database.
 %% @spec install(Host::atom(), Connection) -> ok
-install(Host, Context) ->
-    lager:info("~p: Install start.", [Host]),
+install(Site, Context) ->
+    lager:info("~p: Install start.", [Site]),
     ok = install_category(Context),
     ok = install_rsc(Context),
     ok = install_identity(Context),
     ok = install_predicate(Context),
     ok = install_skeleton_modules(Context),
     z_db:equery("SELECT setval('rsc_id_seq', m) FROM (select 1 + max(id) as m from rsc) sub", Context),
-    lager:info("~p: Install done.", [Host]),
+    lager:info("~p: Install done.", [Site]),
     ok.
 
 %% @doc Install all modules for the site.
@@ -47,9 +47,9 @@ install(Host, Context) ->
 %% under the key <tt>install_modules</tt>.
 -spec install_modules(#context{}) -> ok.
 install_modules(Context) ->
-    Host = Context#context.host,
-    {ok, Config} = z_sites_manager:get_site_config(Host),
-    Modules = [Host | proplists:get_value(install_modules, Config, [])],
+    Site = z_context:site(Context),
+    {ok, Config} = z_sites_manager:get_site_config(Site),
+    Modules = [Site | proplists:get_value(install_modules, Config, [])],
     [install_module(M, Context) || M <- Modules],
     ok.
 
@@ -58,8 +58,8 @@ install_modules(Context) ->
 %% of modules from the skeleton is installed.
 -spec install_skeleton_modules(#context{}) -> ok.
 install_skeleton_modules(Context) ->
-    Host = Context#context.host,
-    {ok, Config} = z_sites_manager:get_site_config(Host),
+    Site = Context#context.site,
+    {ok, Config} = z_sites_manager:get_site_config(Site),
     case proplists:get_value(install_modules, Config, []) of
         [] ->
             install_module({skeleton, proplists:get_value(skeleton, Config)}, Context),
