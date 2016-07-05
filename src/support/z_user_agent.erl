@@ -144,9 +144,7 @@ get_ua_req_data(ReqData) ->
 is_websocket_request(ReqData) ->
     case wrq:get_req_header_lc("upgrade", ReqData) of
         undefined -> false;
-        "websocket" -> true;
-        "WebSocket" -> true;
-        _ -> false
+        Upgrade -> <<"websocket">> == z_string:to_lower(Upgrade)
     end.
 
 %% @doc We send the page's ua_class along with websocket connect requests
