@@ -290,18 +290,6 @@
 %%      Foldr over all observers.
 -record(pivot_update, {id, raw_props}).
 
-%% @doc Foldr over a resource's pivot data, after 'pivot_rsc_data' fold.
-%% Further filtering/extending of pivot data.
--record(pivot_get, {id}).
-
-%% @doc Fetch the list of ids whose title and id will be added to the pivot data of a resource
-%% Foldr over the object ids of a resource.
--record(pivot_related, {id}).
-
-%% @doc Determine which ids will have their title indexed with the resource.
-%% Foldr over the related ids of a resource.
--record(pivot_related_text_ids, {id}).
-
 %% @doc Foldr to change or add pivot fields for the main pivot table.
 %%      The rsc contains all rsc properties for this resource, including pivot properties.
 -record(pivot_fields, {id, rsc}).

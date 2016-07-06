@@ -32,7 +32,6 @@
     event/2,
     observe_rsc_get/3,
     observe_rsc_delete/2,
-    observe_pivot_related/3,
     observe_rsc_update_done/2,
     observe_admin_menu/3,
     manage_schema/2
@@ -180,22 +179,6 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 url={admin_menu_hierarchy, [{name, "content_group"}]},
                 visiblecheck={acl, use, mod_admin_config}}
      |Acc].
-
-observe_pivot_related(#pivot_related{id=Id}, Ids, Context) ->
-    case m_rsc:p_no_acl(Id, content_group_id, Context) of
-        undefined ->
-            Ids;
-        CId ->
-            lists:foldl(
-                fun(PId,Acc) ->
-                    case lists:member(PId, Acc) of
-                        true -> Acc;
-                        false -> [PId|Acc]
-                    end
-                end,
-                Ids,
-                [CId | m_hierarchy:parents(content_group, CId, Context) ])
-    end.
 
 observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Context) ->
     case  lists:member('content_group', PreIsA) 
