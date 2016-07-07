@@ -226,6 +226,10 @@ api_result(Result, ReqData, Context) ->
                end,
         {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
     catch
+        _:{error, _Err, _Arg, _ErrData}=R ->
+            api_result(R, ReqData, Context);
+        _:{error, _Err, _Arg}=R ->
+            api_result(R, ReqData, Context);
         E:R ->
             lager:warning("API error: ~p:~p", [E,R]),
             ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
