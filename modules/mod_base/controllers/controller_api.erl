@@ -138,7 +138,7 @@ content_types_provided(ReqData, Context) ->
 %% set in site config file
 %%  [{service_api_cors, false}, %% 2nd is default value
 %%   {'Access-Control-Allow-Origin', "*"},
-%%   {'Access-Control-Allow-Credentials', undefined}, 
+%%   {'Access-Control-Allow-Credentials', undefined},
 %%   {'Access-Control-Max-Age', undefined},
 %%   {'Access-Control-Allow-Methods', undefined},
 %%   {'Access-Control-Allow-Headers', undefined}]
@@ -153,10 +153,10 @@ set_cors_header(ReqData, Context) ->
                             V ->
                                 wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(V), Acc)
                         end
-                    end, 
-                    ReqData, 
+                    end,
+                    ReqData,
                     [{'Access-Control-Allow-Origin', "*"},
-                     {'Access-Control-Allow-Credentials', undefined}, 
+                     {'Access-Control-Allow-Credentials', undefined},
                      {'Access-Control-Max-Age', undefined},
                      {'Access-Control-Allow-Methods', undefined},
                      {'Access-Control-Allow-Headers', undefined}]);
@@ -182,6 +182,11 @@ api_result(Context, Result) ->
                        end,
                 {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
             catch
+                _:{error, Err, Arg, ErrData} ->
+                    %% ErrData is a JSON structure
+                    api_result_error(Err, Arg, ErrData, ReqData, Context);
+                _:{error, Err, Arg} ->
+                    api_result_error(Err, Arg, [], ReqData, Context);
                 E:R ->
                     lager:warning("API error: ~p:~p", [E,R]),
                     ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
@@ -196,7 +201,7 @@ api_result(Context, Result) ->
 
 api_result_error(Err, Arg, ErrData, ReqData, Context) ->
     case Err of
-        missing_arg -> 
+        missing_arg ->
             api_error(400, Err, "Missing argument: " ++ Arg, ErrData, ReqData, Context);
         unknown_arg ->
             api_error(400, Err, "Unknown argument: " ++ Arg, ErrData, ReqData, Context);
@@ -231,7 +236,7 @@ api_error(HttpCode, ErrCode, Message, ErrData, ReqData, Context) ->
 to_json(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
     Module = z_context:get(service_module, Context0),
-    {Context1, Result} = 
+    {Context1, Result} =
         case Module:process_get(ReqData, Context0) of
             {R, C=#context{}} -> {C, R};
             R -> {Context0, R}
@@ -256,7 +261,7 @@ process_post(ReqData, Context0) ->
                     api_result(Context1, Result)
             end
     end.
-    
+
 %% @doc Handle JSON request bodies.
 -spec handle_json_request(#wm_reqdata{}, #context{}) -> {ok, #context{}} | {error, string()}.
 handle_json_request(ReqData, Context) ->
@@ -272,17 +277,17 @@ handle_json_request(ReqData, Context) ->
 decode_json_body(ReqData0, Context0) ->
     {ReqBody, ReqData} = wrq:req_body(ReqData0),
     Context = ?WM_REQ(ReqData, Context0),
-    
-    case ReqBody of 
+
+    case ReqBody of
         <<>> -> {ok, Context};
         NonEmptyBody ->
-            Json = try 
+            Json = try
                 mochijson2:decode(NonEmptyBody)
             catch
                 Type:Reason -> {error, {Type, Reason}}
             end,
-            
-            case Json of 
+
+            case Json of
                 {error, Error} -> {error, Error};
                 {struct, JsonStruct} ->
                     %% A JSON object: set key/value pairs in the context
@@ -302,7 +307,7 @@ decode_json_body(ReqData0, Context0) ->
 
 get_callback(Context) ->
     case z_context:get_q("callback", Context) of
-        undefined -> 
+        undefined ->
             case z_context:get_q("jsonp", Context) of
                 undefined -> filter(z_context:get_q("jsoncallback", Context));
                 Callback -> filter(Callback)
@@ -312,17 +317,17 @@ get_callback(Context) ->
     end.
 
 get_q_all(Context) ->
-    proplists:delete("module", 
-    proplists:delete("method", 
-    proplists:delete("jsoncallback", 
-    proplists:delete("callback", 
-    proplists:delete("jsonp", 
+    proplists:delete("module",
+    proplists:delete("method",
+    proplists:delete("jsoncallback",
+    proplists:delete("callback",
+    proplists:delete("jsonp",
         z_context:get_q_all_noz(Context)))))).
 
 filter(undefined) ->
     undefined;
 filter(F) ->
-    [ C || C <- F,      (C >= $0 andalso C =< $9) 
+    [ C || C <- F,      (C >= $0 andalso C =< $9)
                  orelse (C >= $a andalso C =< $z)
                  orelse (C >= $A andalso C =< $Z)
                  orelse C =:= $_

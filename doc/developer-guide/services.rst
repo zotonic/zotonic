@@ -194,6 +194,15 @@ An HTTP status error code will be generated when ``process_get`` or ``process_po
         {error, error_name, DetailsString}
         {error, error_name, DetailsString, ErrorData}
 
+Additionally, you may also ``throw()`` these error structures inside
+``process_get`` and ``process_post``, to easily short-circuit your
+error handling (e.g. for input validation)::
+
+    Title = z_context:get_q("title", Context),
+    z_utils:is_empty(Title) andalso
+        throw({error, missing_arg, "title"}),
+
+
 Simple error feedback
 .....................
 
@@ -216,10 +225,10 @@ For example::
 
     process_post(_ReqData, Context) ->
         %% Do some processing here...
-        case Error of 
-            true -> 
+        case Error of
+            true ->
                 {{error, missing_arg, "username"}, Context};
-            false -> 
+            false ->
                 {z_convert:to_json(Data), Context}
         end.
 
@@ -240,18 +249,18 @@ Taking this approach, this error information is returned as a JSON array, with a
 
 Of course there is no obligation to use JSON API structure, but if you want, the code of one of those functions - for instance to log on - could look like this::
 
-    case User of 
-        undefined -> 
+    case User of
+        undefined ->
             {error, [
                 {status, 422},
                 {source, "mod_webapp:logon"},
                 {title, "No user found"},
                 {detail, "Could not log on user"}
             ]};
-        _ -> 
+        _ ->
             {ok, User}
     end.
-    
+
 The return data of multiple functions may then be aggregated into a single error data object and returned as a list of Error Objects::
 
     process_post(_ReqData, Context) ->
@@ -259,12 +268,12 @@ The return data of multiple functions may then be aggregated into a single error
         %% Accumulate all data...
         %% Handle return:
         case Data of
-            {error, ErrData} -> 
+            {error, ErrData} ->
                 {{error, unprocessable, "", z_convert:to_json(ErrData)}, Context};
-            _ -> 
+            _ ->
                 {z_convert:to_json(Data), Context}
         end.
-    
+
 Enabling Cross-Origin Resource Sharing (CORS)
 ---------------------------------------------
 
