@@ -141,7 +141,7 @@ handle_file(_Verb, Basename, ".erl", F) ->
     catch
         error:{badmatch, {error, enoent}} ->
             %% File disappeared
-            "Not found " ++ F2
+            "Not found " ++ FileBase
     end;
 
 %% @doc SCSS / SASS files from lib/scss -> lib/css
