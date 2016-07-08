@@ -353,32 +353,55 @@ scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs) ->
                         "."++_ -> "\\" ++ Extension ++ "$"
                   end,
     Scan1 = fun({Module, Dir}, Acc) ->
-                {Dir1, Pattern, PrefixLen} =
-                        case Prefix of
-                                [] ->
-                                    {filename:join([Dir, Subdir]), ".*" ++ ExtensionRe, 0};
-                                _ ->
-                                    Prefix1 = Prefix ++ module2prefix(Module) ++ "_",
-                                    {filename:join([Dir, Subdir]), Prefix1 ++ ".*" ++ ExtensionRe, length(Prefix1)}
-                        end,
-                Files = filelib:fold_files(Dir1, Pattern, true, fun(F1,Acc1) -> [F1 | Acc1] end, []),
-                case Files of
-                    [] ->
-                        Acc;
-                    _  ->
-                        [[
-                            #mfile{
-                                filepath=F,
-                                name=convert_name(What, scan_remove_prefix_ext(F, PrefixLen, Extension)),
-                                module=Module,
-                                erlang_module=opt_erlang_module(F, Extension),
-                                prio=z_module_manager:prio(Module)
-                            }
-                            || F <- Files
-                        ] | Acc ]
-                end
+                scan_moddir(What, Module, Dir, Subdir, Prefix, Extension, ExtensionRe, Acc)
             end,
     lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], ActiveDirs))).
+
+scan_moddir(What, Module, Dir, Subdir, _Prefix, _Extension, _ExtensionRe, Acc)
+    when What =:= template; What =:= lib ->
+    case z_utils:list_dir_recursive(filename:join(Dir, Subdir)) of
+        [] ->
+            Acc;
+        Files ->
+            Prio = z_module_manager:prio(Module),
+            [[
+                #mfile{
+                    filepath=filename:join([Dir, Subdir, F]),
+                    name=convert_name(What, F),
+                    module=Module,
+                    erlang_module=undefined,
+                    prio=Prio
+                }
+                || F <- Files
+            ] | Acc ]
+    end;
+scan_moddir(What, Module, Dir, Subdir, Prefix, Extension, ExtensionRe, Acc) ->
+    {Dir1, Pattern, PrefixLen} =
+            case Prefix of
+                    [] ->
+                        {filename:join([Dir, Subdir]), ".*" ++ ExtensionRe, 0};
+                    _ ->
+                        Prefix1 = Prefix ++ module2prefix(Module) ++ "_",
+                        {filename:join([Dir, Subdir]), Prefix1 ++ ".*" ++ ExtensionRe, length(Prefix1)}
+            end,
+    Files = filelib:fold_files(Dir1, Pattern, true, fun(F1,Acc1) -> [F1 | Acc1] end, []),
+    case Files of
+        [] ->
+            Acc;
+        _  ->
+            [[
+                #mfile{
+                    filepath=F,
+                    name=convert_name(What, scan_remove_prefix_ext(F, PrefixLen, Extension)),
+                    module=Module,
+                    erlang_module=opt_erlang_module(F, Extension),
+                    prio=z_module_manager:prio(Module)
+                }
+                || F <- Files
+            ] | Acc ]
+    end.
+
+
 
 convert_name(template, Name) -> z_convert:to_binary(Name);
 convert_name(lib, Name) -> z_convert:to_binary(Name);
