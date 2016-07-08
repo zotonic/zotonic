@@ -106,15 +106,19 @@ handle_file(_Verb, "erlydtl_parser.yrl", ".yrl", F) ->
     "Rebuilding yecc file: " ++ filename:basename(F);
 
 handle_file(_Verb, Basename, ".erl", F) ->
-    make:files([F], zotonic_compile:compile_options()),
-    check_run_sitetest(Basename, F),
     Libdir = z_utils:lib_dir(),
     L = length(Libdir),
-    F2 = case string:substr(F, 1, L) of
+    FileBase = case string:substr(F, 1, L) of
              Libdir -> string:substr(F, L+2);
              _ -> F
          end,
-    "Recompile " ++ F2;
+    case make:files([F], zotonic_compile:compile_options()) of
+        up_to_date ->
+            check_run_sitetest(Basename, F),
+            "Recompile " ++ FileBase;
+        error ->
+            "ERROR: " ++ FileBase
+    end;
 
 %% @doc SCSS / SASS files from lib/scss -> lib/css
 handle_file(_Verb, _Basename, SASS, F) when SASS =:= ".scss"; SASS =:= ".sass" ->
