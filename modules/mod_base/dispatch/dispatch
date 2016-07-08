@@ -43,11 +43,6 @@
  %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
  {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}, {ssl, any} ]},
  
- %% User Agent handling
- {ua_probe,   ["useragent","probe.js"],         controller_user_agent_probe, [{ssl, any}]},
- {ua_select,  ["useragent","select", ua_class], controller_user_agent_select, [{ssl, any}]},
- {ua_select,  ["useragent","select"],           controller_user_agent_select, [{ssl, any}]},
-
  %% Session cookie retrieval. Collects cookies set in a websocket request.
  {session_cookies, ["z_session", "cookies"], controller_cookies, [{ssl, any}]},
  

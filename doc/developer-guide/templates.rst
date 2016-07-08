@@ -89,108 +89,6 @@ Exactly the same module priority is also valid for all files in the
 This allows any module to change the static css, javascript, images,
 favicon.ico, robots.txt and other static files with its own version.
 
-
-.. _guide-lookup-system-ua:
-
-User Agent selection
-^^^^^^^^^^^^^^^^^^^^
-
-The module priority is a very powerful mechanism for extending and
-adapting Zotonic.
-
-But what if a page requested with a mobile phone should be served with
-a different template than the same page requested with a desktop
-computer?
-
-For this there is another template selection mechanism, based on the
-categorization of the device requesting the page.
-
-User agent classes
-""""""""""""""""""
-
-Every request Zotonic classifies the device using the *User-Agent*
-request header. The possible classifications are:
-
- text
-   Screen readers, feature phones, text only browsers.
-
- phone
-   Smart phones, capable of javascript and having a touch interface or
-   other pointing device.
-
- tablet
-   Big screen, javascript, modern browser and touch interface.
-
- desktop
-   Big screen, javascript, modern browser and pointing device.
-
-The selected class is available in ``m.req.ua_class`` or from Erlang
-``z_user_agent:get_class/1``.
-
-.. note:: More properties can be found using ``m.req.ua_props`` or
-          ``z_user_agent:get_props/1``.
-
-The four user agent classes map to subdirectories of the
-:file:`templates` directory:
-
-  | mod_example/templates/desktop/...
-  | mod_example/templates/phone/...
-  | mod_example/templates/tablet/...
-  | mod_example/templates/text/...
-
-All templates that are not in those sub-directories are categorized as
-*generic*.
-
-Lookup by user agent class
-""""""""""""""""""""""""""
-
-The template system follows a strict hierarchy between the different
-user agent classes:
-
-	desktop → tablet → phone → text → generic
-
-Where the system starts looking from the current user agent class to
-the right.  So for a phone, the templates in the :file:`tablet` and
-:file:`desktop` directories will never be considered.
-
-Combination of user agent and module priority
-"""""""""""""""""""""""""""""""""""""""""""""
-
-The user agent class and the module priority are two dimensions of the
-template selection process.
-
-The module priority is more important than the user agent class.
-
-A mismatch in user agent class (e.g. a desktop template when looking
-for a phone version) will never be selected.  A sub-optimal version
-(e.g. a generic or text version instead of a phone version) will be
-selected if that sub-optimal version resides in a module with higher
-priority than the module with the better matching version.
-
-The *all include* tag will select the best version from all
-modules. Again skipping any user agent mismatches.
-
-
-.. note:: Building templates and mobile first.
-
-    The lookup strategy for templates conforms to a *mobile first*
-    strategy.  When adding a page or building a site, the idea is to
-    start with the simplest, text only, version of the site.  The text
-    only version is then placed in the :file:`templates/text`
-    directory.  Next will be adding more features, markup and
-    interaction for the phone version.  Only then moving up to the big
-    screen for tablet (touch) or desktop (mouse).
-
-
-.. note:: Seeing which template is selected.
-
-    `mod_development` implements a screen where it is possible to see
-    in real time which templates are included and compiled. The full
-    path of all templates can be seen, giving insight in the template
-    selection process.
-
-    See also :ref:`mod_development`
-
 .. _guide-template-variables:
 
 Template variables
@@ -401,22 +299,6 @@ resizing.
 
 See http://www.imagemagick.org/Usage/ for examples of using ImageMagick from the
 command line.
-
-User-agent specific images
-""""""""""""""""""""""""""
-
-Since ``mediaclass.config`` files are found using the
-:ref:`guide-lookup-system`, it is subject to the same selection rules that
-normal templates fall under.
-
-The consequence is that you can have multiple ``mediaclass.config``
-files, for instance one in `desktop/`, one in `phone/`. The media
-classes defined in those subdirectories can have the same names. This
-way you can make thumbnail sizes smaller for phones, or serve
-higher-quality JPEG file for desktop browsers.
-
-See :ref:`guide-lookup-system-ua` for the details on the user-agent
-selection mechanism.
 
 .. _guide-actions:
 

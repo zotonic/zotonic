@@ -15,7 +15,6 @@ The message is defined as::
         push_queue = page :: page | session | user,
 
         % Set by transports from user-agent to server
-        ua_class=undefined :: ua_classifier:device_type() | undefined,
         session_id :: binary(),
         page_id :: binary(),
 

@@ -109,6 +109,7 @@
         delegate = postback :: postback | mqtt | atom() | binary(),
         push_queue = page :: page | session | user,
 
+        % Set by transports from user-agent to server
         session_id :: binary(),
         page_id :: binary(),
 
