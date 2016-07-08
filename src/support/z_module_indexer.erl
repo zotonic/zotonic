@@ -87,7 +87,7 @@ find(What, Name, Context) when What =:= lib; What =:= template ->
     case ets:lookup(?MODULE_INDEX,
                     #module_index_key{
                         site=z_context:site(Context),
-                        type=template,
+                        type=What,
                         name=z_convert:to_binary(Name)
                     })
     of
@@ -314,12 +314,8 @@ lookup_first(Name, [_|T]) ->
 scan(Context) ->
     ActiveDirs = z_module_manager:active_dir(Context),
     [
-        {template, scan_subdir(template, ActiveDirs)},
-        {lib, scan_subdir(lib, ActiveDirs)}
-        | [
-            {What, scan_subdir(What, ActiveDirs)}
-            || What <- [ scomp, action, validator, model, service ]
-        ]
+        {What, scan_subdir(What, ActiveDirs)}
+        || What <- [ template, lib, scomp, action, validator, model, service ]
     ].
 
 
