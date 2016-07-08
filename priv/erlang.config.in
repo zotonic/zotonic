@@ -38,6 +38,15 @@
    {crash_log, "priv/log/crash.log"}
   ]},
 
+ {ssl, 
+  [
+%%% The number of maximum number of ssl sessions cached by the server. Increase if you 
+%%% of a lot of incoming connections.
+   {session_cache_server_max, 20000},
+%%% The maximum time the client side information is stored in the cache (in seconds)
+   {session_lifetime, 300}
+ ]},
+
  {webzmachine,
   [
 %%% Logger module, use this option to set your own.
@@ -66,4 +75,5 @@
    {use_sendfile, disable}
 
   ]}
+
 ].
