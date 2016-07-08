@@ -420,10 +420,14 @@ send_email(Id, Recipient, Email, Context, State) ->
 
 
 spawn_send(Id, Recipient, Email, Context, State) ->
+    lager:info("[~p] email: checking for active sender for <~p> (~p)",
+               [z_context:site(Context), Recipient, Id]),
     case lists:keyfind(Id, #email_sender.id, State#state.sending) =/= false of
         false ->
             spawn_send_check_email(Id, Recipient, Email, Context, State);
         _ ->
+            lager:info("[~p] email: active sender found for <~p> (~p)",
+                       [z_context:site(Context), Recipient, Id]),
             %% Is already being sent. Do nothing, it will retry later
             State
     end.
@@ -474,6 +478,8 @@ delete_email(Error, Id, Recipient, Email, Context) ->
 
 % Start a worker, prevent too many workers per domain.
 spawn_send_checked(Id, Recipient, Email, Context, State) ->
+    lager:info("[~p] email: spawning email sender for <~p> (~p)",
+               [z_context:site(Context), Recipient, Id]),
     Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
     Recipient2 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(Recipient1)))),
     {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
@@ -528,12 +534,15 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
         {error, wait} ->
-            lager:debug("[smtp] Delaying email to ~p (~p), too many parallel senders for relay ~p", 
+            lager:info("[smtp] Delaying email to ~p (~p), too many parallel senders for relay ~p", 
                         [RecipientEmail, Id, Relay]),
             timer:sleep(1000),
             spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
                                  Bcc, Email, SmtpOpts, BccSmtpOpts, Context);
         ok ->
+            lager:info("[smtp] Sending email to ~p (~p), via relay ~p", 
+                       [RecipientEmail, Id, Relay]),
+
             LogEmail = #log_email{
                 message_nr=Id,
                 envelop_to=RecipientEmail,
@@ -549,12 +558,12 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                 props=LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}
                               }, Context),
             
-            lager:info("[smtp] Sending email to ~p (~p), via relay ~p", 
-                       [RecipientEmail, Id, Relay]),
-
             %% use the unique id as 'envelope sender' (VERP)
             case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
                 {error, retries_exceeded, {_FailureType, Host, Message}} ->
+                    lager:info("[smtp] Error sending email to ~p (~p), via relay ~p: retries exceeded", 
+                               [RecipientEmail, Id, Relay]),
+
                     %% do nothing, it will retry later
                     z_notifier:notify(#email_failed{
                             message_nr=Id,
@@ -574,6 +583,9 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                       }, Context),
                     ok;
                 {error, no_more_hosts, {permanent_failure, Host, Message}} ->
+                    lager:info("[smtp] Error sending email to ~p (~p), via relay ~p: no more hosts", 
+                               [RecipientEmail, Id, Relay]),
+
                     % classify this as a permanent failure, something is wrong with the receiving server or the recipient
                     z_notifier:notify(#email_failed{
                             message_nr=Id,
@@ -594,6 +606,9 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     % delete email from the queue and notify the system
                     delete_emailq(Id);
                 {error, Reason} ->
+                    lager:info("[smtp] Error sending email to ~p (~p), via relay ~p: ~p", 
+                               [RecipientEmail, Id, Relay, Reason]),
+
                     % Returned when the options are not ok
                     z_notifier:notify(#email_failed{
                             message_nr=Id,
@@ -612,6 +627,9 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     %% delete email from the queue and notify the system
                     delete_emailq(Id);
                 Receipt when is_binary(Receipt) ->
+                    lager:info("[smtp] Sent email to ~p (~p), via relay ~p: ~p", 
+                               [RecipientEmail, Id, Relay, Receipt]),
+
                     z_notifier:notify(#email_sent{
                             message_nr=Id,
                             recipient=Recipient,
@@ -627,6 +645,10 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                       }, Context),
                     %% email accepted by relay
                     mark_sent(Id),
+
+                    lager:info("[smtp] Marked sent to ~p (~p)", 
+                               [RecipientEmail, Id]),
+
                     %% async send a copy for debugging if necessary
                     case z_utils:is_empty(Bcc) of
                         true -> 
@@ -955,9 +977,14 @@ poll_queued(State) ->
                 [] ->
                     State;
                 _  ->
+                    lager:info("email: Sending ~p emails...", [length(Ms)]),
                     State2 = update_config(State),
                     lists:foldl(
                       fun(QEmail, St) ->
+                          lager:info("[~p] email: set retry and starting sender for <~p> (~p)",
+                                     [z_context:site(QEmail#email_queue.pickled_context),
+                                      QEmail#email_queue.recipient,
+                                      QEmail#email_queue.id]),
                           update_retry(QEmail),
                           spawn_send(QEmail#email_queue.id, 
                                      QEmail#email_queue.recipient,
