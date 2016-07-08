@@ -345,8 +345,8 @@ scan_all(What, ActiveDirs) ->
     scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs).
 
 
-%% @doc Scan all module directories for templates/scomps/etc.  Example: scan("scomps", "scomp_", ".erl", Context)
-%% @spec scan_subdir(Subdir, Prefix, Extension, context()) -> [ {ModuleAtom, {ModuleDir, [{Name, File}]}} ]
+%% @doc Scan all module directories for templates/scomps/etc.  Example: scan(scomp, "scomps", "scomp_", ".erl", Context)
+%% @spec scan_subdir(What, Subdir, Prefix, Extension, context()) -> [ {ModuleAtom, {ModuleDir, [{Name, File}]}} ]
 scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs) ->
     ExtensionRe = case Extension of 
                         "" -> "";
