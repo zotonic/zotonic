@@ -147,7 +147,6 @@
 new(#context{} = C) ->
     #context{
         site=C#context.site,
-        ua_class=C#context.ua_class,
         language=C#context.language,
         tz=C#context.tz,
         depcache=C#context.depcache,
@@ -177,8 +176,7 @@ new(ReqData) ->
     Context = set_server_names(
                     #context{
                         site=site(ReqData),
-                        wm_reqdata=ReqData,
-                        ua_class=z_user_agent:get_class(ReqData)
+                        wm_reqdata=ReqData
                     }),
     set_dispatch_from_path(set_default_language_tz(Context)).
 
@@ -320,7 +318,6 @@ prune_for_async(#context{} = Context) ->
         db=Context#context.db,
         translation_table=Context#context.translation_table,
         language=Context#context.language,
-        ua_class=Context#context.ua_class,
         tz=Context#context.tz
     }.
 
@@ -824,7 +821,6 @@ lager_md(MD, #context{} = Context) when is_list(MD) ->
             {method, m_req:get(method, RD)},
             {remote_ip, m_req:get(peer, RD)},
             {is_ssl, m_req:get(is_ssl, RD)},
-            {ua_class, Context#context.ua_class},
             {session_id, Context#context.session_id},
             {page_id, Context#context.page_id},
             {req_id, m_req:get(req_id, RD)}

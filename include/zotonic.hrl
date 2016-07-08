@@ -40,9 +40,6 @@
         page_pid=undefined :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
         page_id=undefined :: string() | undefined,
 
-        %% About the user-agent this context is used with.
-        ua_class=undefined :: ua_classifier:device_type() | undefined,
-        
         %% Servers and supervisors for the site
         depcache,
         notifier,
@@ -112,8 +109,6 @@
         delegate = postback :: postback | mqtt | atom() | binary(),
         push_queue = page :: page | session | user,
 
-        % Set by transports from user-agent to server
-        ua_class=undefined :: ua_classifier:device_type() | undefined,
         session_id :: binary(),
         page_id :: binary(),
 
@@ -152,14 +147,14 @@
 
 
 %% Used for storing templates/scomps etc. in the lookup ets table
--record(module_index_key, {site, type, name, ua_class=generic}).
+-record(module_index_key, {site, type, name}).
 -record(module_index, {key, filepath, module, erlang_module, tag}).
 
 %% Name of the global module index table
 -define(MODULE_INDEX, 'zotonic$module_index').
 
 %% Index record for the mediaclass ets table.
--record(mediaclass_index_key, {site, mediaclass, ua_class=generic}).
+-record(mediaclass_index_key, {site, mediaclass}).
 -record(mediaclass_index, {key, props=[], checksum, tag}).
 
 %% Name of the global mediaclass index table
@@ -214,9 +209,6 @@
 
 %% @doc Call the translate function, 2nd parameter is context
 -define(__(T,Context), z_trans:trans(T,Context)).
-
-%% The name of the session user agent class parameter
--define(SESSION_UA_CLASS_Q, "z_ua").
 
 %% Number of seconds between two comet polls before the page expires
 -define(SESSION_PAGE_TIMEOUT, 30).
