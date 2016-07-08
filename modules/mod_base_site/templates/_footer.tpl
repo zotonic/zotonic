@@ -11,5 +11,4 @@
     {% endif %}
     {% endwith %}
     <span class="pull-right copyright">{% block copyright %}{% include "_copyright.tpl" %}{% endblock %}</span>
-    {% include "_ua_select.tpl" dropup %}
 </div>
