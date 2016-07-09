@@ -123,10 +123,18 @@ content_types_provided(ReqData, Context) ->
 to_json(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
     Module = z_context:get(service_module, Context),
-    case Module:process_get(ReqData, Context) of
-        {R, C=#context{}} -> api_result(R, C);
-        R -> api_result(R, Context)
+    try
+        case Module:process_get(ReqData, Context) of
+            {R, C=#context{}} -> api_result(R, C);
+            R -> api_result(R, Context)
+        end
+    catch
+        throw:{error, _, _} = R1 ->
+            api_result(Context, R1);
+        throw:{error, _, _, _} = R2 ->
+            api_result(Context, R2)
     end.
+
 
 
 %% @doc Called for 'POST' requests
@@ -137,13 +145,20 @@ process_post(ReqData, Context0) ->
         {ok, Context1} ->
             Module = z_context:get(service_module, Context1),
             ReqData1 = z_context:get_reqdata(Context1),
-            case Module:process_post(ReqData1, Context1) of
-                ok ->
-                    {true, ReqData1, Context1};
-                {Result, Context2=#context{}} ->
-                    api_result(Result, Context2);
-                Result ->
-                    api_result(Result, Context1)
+            try
+                case Module:process_post(ReqData1, Context1) of
+                    ok ->
+                        {true, ReqData1, Context1};
+                    {Result, Context2=#context{}} ->
+                        api_result(Result, Context2);
+                    Result ->
+                        api_result(Result, Context1)
+                end
+            catch
+                throw:{error, _, _} = R1 ->
+                    api_result(Context1, R1);
+                throw:{error, _, _, _} = R2 ->
+                    api_result(Context1, R2)
             end
     end.
 
@@ -226,10 +241,6 @@ api_result(Result, ReqData, Context) ->
                end,
         {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
     catch
-        _:{error, _Err, _Arg, _ErrData}=R ->
-            api_result(R, ReqData, Context);
-        _:{error, _Err, _Arg}=R ->
-            api_result(R, ReqData, Context);
         E:R ->
             lager:warning("API error: ~p:~p", [E,R]),
             ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
