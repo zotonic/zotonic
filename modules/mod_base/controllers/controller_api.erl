@@ -182,11 +182,6 @@ api_result(Context, Result) ->
                        end,
                 {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
             catch
-                _:{error, Err, Arg, ErrData} ->
-                    %% ErrData is a JSON structure
-                    api_result_error(Err, Arg, ErrData, ReqData, Context);
-                _:{error, Err, Arg} ->
-                    api_result_error(Err, Arg, [], ReqData, Context);
                 E:R ->
                     lager:warning("API error: ~p:~p", [E,R]),
                     ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
@@ -237,9 +232,16 @@ to_json(ReqData, Context) ->
     Context0 = ?WM_REQ(ReqData, Context),
     Module = z_context:get(service_module, Context0),
     {Context1, Result} =
-        case Module:process_get(ReqData, Context0) of
-            {R, C=#context{}} -> {C, R};
-            R -> {Context0, R}
+        try
+            case Module:process_get(ReqData, Context0) of
+                {R, C=#context{}} -> {C, R};
+                R -> {Context0, R}
+            end
+        catch
+            throw:{error, _, _} = R1 ->
+                {Context0, R1};
+            throw:{error, _, _, _} = R2 ->
+                {Context0, R2}
         end,
     api_result(Context1, Result).
 
@@ -252,13 +254,20 @@ process_post(ReqData, Context0) ->
         {ok, Context1} ->
             Module = z_context:get(service_module, Context1),
             ReqData1 = z_context:get_reqdata(Context1),
-            case Module:process_post(ReqData1, Context1) of
-                ok ->
-                    {true, ReqData1, Context1};
-                {Result, Context2=#context{}} ->
-                    api_result(Context2, Result);
-                Result ->
-                    api_result(Context1, Result)
+            try
+                case Module:process_post(ReqData1, Context1) of
+                    ok ->
+                        {true, ReqData1, Context1};
+                    {Result, Context2=#context{}} ->
+                        api_result(Context2, Result);
+                    Result ->
+                        api_result(Context1, Result)
+                end
+            catch
+                throw:{error, _, _} = R1 ->
+                    api_result(Context, R1);
+                throw:{error, _, _, _} = R2 ->
+                    api_result(Context, R2)
             end
     end.
 
