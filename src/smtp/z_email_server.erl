@@ -981,15 +981,16 @@ poll_queued(State) ->
                     State2 = update_config(State),
                     lists:foldl(
                       fun(QEmail, St) ->
+                          Context = z_context:depickle(QEmail#email_queue.pickled_context),
                           lager:info("[~p] email: set retry and starting sender for <~p> (~p)",
-                                     [z_context:site(QEmail#email_queue.pickled_context),
+                                     [z_context:site(Context),
                                       QEmail#email_queue.recipient,
                                       QEmail#email_queue.id]),
                           update_retry(QEmail),
                           spawn_send(QEmail#email_queue.id, 
                                      QEmail#email_queue.recipient,
                                      QEmail#email_queue.email,
-                                     z_context:depickle(QEmail#email_queue.pickled_context), 
+                                     Context, 
                                      St)
                       end,
                       State2, Ms)
