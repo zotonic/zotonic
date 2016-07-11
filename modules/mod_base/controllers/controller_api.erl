@@ -241,7 +241,10 @@ to_json(ReqData, Context) ->
             throw:{error, _, _} = R1 ->
                 {Context0, R1};
             throw:{error, _, _, _} = R2 ->
-                {Context0, R2}
+                {Context0, R2};
+            E:R3 ->
+                lager:error("controller_api error: ~p:~p", [E,R3]),
+                {Context0, {error, internal_server_error, []}}
         end,
     api_result(Context1, Result).
 
@@ -267,7 +270,10 @@ process_post(ReqData, Context0) ->
                 throw:{error, _, _} = R1 ->
                     api_result(Context, R1);
                 throw:{error, _, _, _} = R2 ->
-                    api_result(Context, R2)
+                    api_result(Context, R2);
+                E:R ->
+                    lager:error("controller_api error: ~p:~p", [E,R]),
+                    api_result(Context1, {error, internal_server_error, []})
             end
     end.
 
