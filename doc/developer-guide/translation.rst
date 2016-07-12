@@ -99,12 +99,16 @@ translations will be based.
 
 The basis for these files (the translation `template`), is the ``.pot``
 file which is located in the ``template/`` subdirectory of the translations
-directory. This ``.pot`` file is regenerated when you click on the `generate
-.pot files` button on the Translation page in the admin.
+directory. This ``.pot`` file is regenerated when you click on the ‘Generate
+.pot files’ button on the Translation page in the admin. Alternatively,
+from your Zotonic shell:
 
-After clicking generate .pot files, Zotonic will parse all your
-templates and Erlang modules for translatable strings. These strings
-are then added to the .pot file.
+.. code-block:: erlang
+
+    mod_translation:generate(Context).
+
+Zotonic will parse all your templates and Erlang modules for translatable
+strings. These strings are then added to the .pot file.
 
 Creating a new translation for a module
 .......................................
