@@ -68,7 +68,8 @@ observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) 
 
 observe_email_failed(#email_failed{reason=sender_disabled}, _Context) ->
     undefined;
-observe_email_failed(#email_failed{recipient=Recipient, is_final=IsFinal, status=Status}, Context) ->
+observe_email_failed(#email_failed{recipient=Recipient, is_final=IsFinal, status=Status} = EF, Context) ->
+    lager:info("[mod_email_status] email failed ~p", [EF]),
     m_email_status:mark_failed(Recipient, IsFinal, Status, Context).
 
 %% @doc Mark an email address as bouncing, only marks for messages which we know we have sent.
@@ -76,7 +77,8 @@ observe_email_bounced(#email_bounced{recipient=undefined}, _Context) ->
     ok;
 observe_email_bounced(#email_bounced{message_nr=undefined}, _Context) ->
     ok;
-observe_email_bounced(#email_bounced{recipient=Recipient}, Context) ->
+observe_email_bounced(#email_bounced{recipient=Recipient} = EB, Context) ->
+    lager:info("[mod_email_status] email bounced ~p", [EB]),
     m_email_status:mark_bounced(Recipient, Context).
 
 observe_email_received(#email_received{from=From}, Context) when is_binary(From) ->
