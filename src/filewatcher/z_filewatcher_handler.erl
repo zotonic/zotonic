@@ -340,6 +340,8 @@ check_run_sitetest(Basename, F) ->
                 nomatch ->
                     nop;
                 {match, [SiteStr]} ->
+                    Module = z_convert:to_atom(filename:basename(Basename, ".erl")),
+                    zotonic_compile:ld(z_convert:to_atom(Module)),
                     Site = z_convert:to_atom(SiteStr),
                     z_sitetest:is_watching(Site) andalso z_sitetest:run(Site)
             end
