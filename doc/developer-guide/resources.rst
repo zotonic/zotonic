@@ -125,13 +125,13 @@ Pivot columns
 If you want to search by or order on any custom defined
 property, you need to define your own database column in a *custom pivot*.
 
-.. seealso:: :ref:`cookbook-custom-pivots`
+.. seealso:: :ref:`cookbook-custom-pivots`, :ref:`cookbook-pivot-templates`
 
 .. note::
 
-    Zotonic is smart enough that when you enter any textual information
-    into any resource property, it will extract this and put it in the
-    ``pivot_tsv`` column, for use in full-text searches.
+    If you want to find resources on non standard content or texts, then 
+    you can change the texts that are pivoted. This can be done by adding
+    specific ``pivot.tpl`` templates. See :ref:`cookbook-pivot-templates`
 
 The pivot queue
 ^^^^^^^^^^^^^^^

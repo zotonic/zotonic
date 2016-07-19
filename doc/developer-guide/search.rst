@@ -83,7 +83,7 @@ Query-model arguments
 
   Filtering on columns.
 
-  ``filter=['pivot_title', 'Hello']``
+  ``filter=['pivot_title', 'hello']``
 
   In its most simple form, this does an 'equals' compare filter. The
   "filter" keywords expects a list. If the list is two elements long,
@@ -231,6 +231,8 @@ Query-model arguments
 
   ``sort='-rsc.modified'``
 
+.. seealso:: :ref:`cookbook-pivot-templates`
+
 **custompivot**
 
   Add a join on the given custom pivot table. The table is joined to
@@ -245,6 +247,7 @@ Query-model arguments
 
   ``{query custompivot="pivotname" filter=["pivot1.fieldname", `=`, "hello"]}``
 
+.. seealso:: :ref:`cookbook-custom-pivots`
 
 **hasobjectpredicate**
 
