@@ -55,5 +55,5 @@
 {% block location_lng %}{{ id.computed_location_lng|default:id.location_lng }}{% endblock %}
 
 {# Optional date when to repivot #}
-{# Useful to repivot events when they are past their date_end #}
-{% block date_repivot %}{{ now|add_month }}{% endblock %}
+{# Useful to repivot events when they are past their date_end, example: {{ id.date_end }} #}
+{% block date_repivot %}{% endblock %}
