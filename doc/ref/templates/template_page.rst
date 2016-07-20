@@ -1,4 +1,4 @@
 
-.. include:: meta-base-text.rst
+.. include:: meta-page.rst
 
 .. todo:: Not yet documented.

@@ -59,9 +59,5 @@
     {% block editor %}{% endblock %}
 
     {% script %}
-
-    {% block ua_probe %}
-        {% include "_ua_probe.tpl"%}
-    {% endblock %}
 </body>
 </html>

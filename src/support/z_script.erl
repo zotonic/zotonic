@@ -52,29 +52,18 @@ add_script(Script, Context) ->
     Context#context{scripts=[Script, "\n" | Context#context.scripts]}.
 
 get_page_startup_script(Context) ->
-    UAScript = [ ?SESSION_UA_CLASS_Q, $=, $", ua_class_to_script(z_user_agent:get_class(Context)), $", $;],
     case Context#context.page_id of
         undefined ->
             %% No page id, so no comet loop started and generated random page id for postback loop
-            [ <<"z_set_page_id(\"\",">>, str_user_id(z_acl:user(Context)), <<");">>, UAScript ];
+            [ <<"z_set_page_id(\"\",">>, str_user_id(z_acl:user(Context)), <<");">> ];
         PageId ->
-            [ <<"z_set_page_id(\"">>, PageId, $", $,, str_user_id(z_acl:user(Context)), $), $;, UAScript ]
+            [ <<"z_set_page_id(\"">>, PageId, $", $,, str_user_id(z_acl:user(Context)), $), $; ]
     end.
 
 str_user_id(undefined) ->
     <<"undefined">>;
 str_user_id(UserId) ->
     [ $", z_convert:to_binary(UserId), $" ].
-
-%%
-ua_class_to_script(desktop) ->
-    <<"desktop">>;
-ua_class_to_script(tablet) ->
-    <<"tablet">>;
-ua_class_to_script(phone) ->
-    <<"phone">>;
-ua_class_to_script(text) ->
-    <<"text">>.
 
 %% @doc Remove all scripts from the context, resetting it back to a clean sheet.
 %% @spec clean(Context1) -> Context2

@@ -154,7 +154,6 @@ init([]) ->
         end,
 
     init_stats(),
-    init_ua_classifier(),
     init_webmachine(),
 
     spawn(fun() ->
@@ -182,21 +181,6 @@ init([]) ->
 init_stats() ->
     z_stats:init().
 
-%% @doc Initializes the ua classifier. When it is enabled it is loaded and
-%% tested if it works.
-init_ua_classifier() ->
-    case z_config:get(use_ua_classifier) of
-        true ->
-            case ua_classifier:classify("") of
-                {error, ua_classifier_nif_not_loaded} = Error ->
-                    lager:error("ua_classifier: could not load the NIF. Check deps/ua_classifier or set Zotonic config {use_ua_classifier, false}."),
-                    Error;
-                {ok, _} ->
-                    ok
-            end;
-        false ->
-            ok
-    end.
 
 %% @doc Sets the application parameters for webmachine and starts the logger processes.
 %%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid
