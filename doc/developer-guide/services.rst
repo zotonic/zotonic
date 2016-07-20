@@ -194,6 +194,15 @@ An HTTP status error code will be generated when ``process_get`` or ``process_po
         {error, error_name, DetailsString}
         {error, error_name, DetailsString, ErrorData}
 
+Additionally, you may also ``throw()`` these error structures inside
+``process_get`` and ``process_post``, to easily short-circuit your
+error handling (e.g. for input validation)::
+
+    Title = z_context:get_q("title", Context),
+    z_utils:is_empty(Title) andalso
+        throw({error, missing_arg, "title"}),
+
+
 Simple error feedback
 .....................
 

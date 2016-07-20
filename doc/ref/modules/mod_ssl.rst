@@ -38,6 +38,24 @@ and will be either set or replaced with a default when not set.
   make redirects temporary redirects. 
 
 
+Erlang SSL Configuration
+------------------------
+
+The erlang ssl application is configured in the :file:`priv/erlang.config`. If this file is 
+missing then it can be copied from :file:`priv/erlang.config.in`.  It contains a couple of 
+important settings which we recommend you to change. The reason for this is that the default 
+settings Erlang uses are unsuitable for web servers. The most important settings are listed 
+below.
+
+``session_lifetime``
+  Sets the maximum lifetime of session data in seconds. 
+
+``session_cache_server_max``
+  Sets the maximum number of client sessions cached by the server. 
+
+For more information on configuration options, please see `Erlang SSL App`_.
+
+
 Serving a page via SSL
 ----------------------
 
@@ -91,8 +109,6 @@ authority.
   be dropped.
   
   
-  
 .. _Erlang SSL: http://erlang.org/doc/man/ssl.html
-  
+.. _Erlang SSL App: http://erlang.org/doc/man/ssl_app.html
 
-  

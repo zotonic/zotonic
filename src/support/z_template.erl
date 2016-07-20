@@ -52,11 +52,7 @@ start_link(SiteProps) ->
 -spec reset(atom()|#context{}) -> ok.
 reset(Site) when is_atom(Site) ->
     z_filewatcher_mtime:flush_site(Site),
-    lists:foreach(
-            fun(UA) ->
-                template_compiler:flush_context_name({Site, UA})
-            end,
-            z_user_agent:classes());
+    template_compiler:flush_context_name(Site);
 reset(Context) ->
     reset(z_context:site(Context)).
 
@@ -91,6 +87,7 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
     Vars1 = ensure_zotonic_vars(Vars, Context),
     Opts =  [
         {runtime, z_template_compiler_runtime},
+        {context_name, z_context:site(Context)},
         {context_vars, [
             <<"sudo">>,
             <<"anondo">>,

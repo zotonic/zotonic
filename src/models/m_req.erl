@@ -56,8 +56,6 @@ m_value(#m{value=undefined}, Context) ->
 get(undefined, _) -> undefined;
 get(_, undefined) -> undefined;
 get(site, #context{} = Context) -> z_context:site(Context);
-get(ua_class, #context{} = Context) -> z_user_agent:get_class(Context);
-get(ua_props, #context{} = Context) -> z_user_agent:get_props(Context);
 get(timezone, #context{} = Context) -> z_context:tz(Context);
 get(language, #context{} = Context) -> z_context:language(Context);
 get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
@@ -86,7 +84,7 @@ get_req(_Key, _RD) -> undefined.
 values(Context) ->
     [ {K, get(K, Context)} || K <- [
             method, version, peer, is_ssl, host, raw_path, path, qs, referrer, user_agent, is_crawler,
-            req_id, headers, ua_class, ua_props, timezone, language
+            req_id, headers, timezone, language
         ]
     ].
 

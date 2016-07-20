@@ -56,9 +56,5 @@
 
 {% include "_js_include.tpl" %}
 {% script %}
-
-{% block ua_probe %}
-	{% include "_ua_probe.tpl"%}
-{% endblock %}
 </body>
 </html>

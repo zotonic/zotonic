@@ -18,14 +18,14 @@
     </div>
 
     <div class="form-group view-expanded">
-       <label>{_ List of possible answers, one per line. Use <em>value#answer</em> for selecting values. _}</label>
-       <textarea class="form-control" id="block-{{name}}-answers{{ lang_code_for_id }}" name="block-{{name}}-answers{{ lang_code_with_dollar }}" rows="6"
-              placeholder="{_ Answers, one per line _} ({{ lang_code }})" >{{ blk.answers[lang_code]  }}</textarea>
+       <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" rows="2"
+              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
     </div>
 
     <div class="form-group view-expanded">
-       <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" rows="2"
-              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
+       <label>{_ List of possible answers, one per line. Use <em>value#answer</em> for selecting values. _}</label>
+       <textarea class="form-control" id="block-{{name}}-answers{{ lang_code_for_id }}" name="block-{{name}}-answers{{ lang_code_with_dollar }}" rows="6"
+              placeholder="{_ Answers, one per line _} ({{ lang_code }})" >{{ blk.answers[lang_code]  }}</textarea>
     </div>
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>

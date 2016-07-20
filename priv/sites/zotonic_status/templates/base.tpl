@@ -41,9 +41,5 @@
             {% include "_footer.tpl" %}
         </div>        
 	{% include "_js_include.tpl" %}
-
-	{% block ua_probe %}
-		{% include "_ua_probe.tpl"%}
-	{% endblock %}
 </body>
 </html>

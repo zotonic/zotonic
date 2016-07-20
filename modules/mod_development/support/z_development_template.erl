@@ -19,9 +19,7 @@
 -module(z_development_template).
 
 -export([
-    event/2,
-
-    find_templates/3
+    event/2
     ]).
 
 -include_lib("zotonic.hrl").
@@ -32,9 +30,9 @@ event(#submit{message=explain_tpl}, Context) ->
         true ->
             CatName = z_context:get_q("tpl_cat", Context), 
             TplName = z_string:trim(z_context:get_q("tpl_name", Context)),
-            Tpls = find_templates(CatName, TplName, Context),
+            Tpl = index_props(find_template(CatName, TplName, Context)),
             Vars = [
-                {tpls, Tpls}
+                {tpl, Tpl}
             ],
             Context1 = z_render:update(
                             "explain-tpl-output", 
@@ -44,12 +42,6 @@ event(#submit{message=explain_tpl}, Context) ->
         false ->
             z_render:growl(?__("You are not allowed to use the template debugging.", Context), Context) 
     end.
-
-find_templates(CatName, TplName, Context) ->
-    [
-        {UA, index_props(find_template(CatName, TplName, z_user_agent:set_class(UA, Context)))}
-        || UA <- z_user_agent:classes()
-    ].
 
 find_template(NoCat, TplName, Context) when NoCat =:= ""; NoCat =:= <<>> ->
     z_module_indexer:find(template, TplName, Context);

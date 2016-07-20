@@ -91,7 +91,6 @@ default(dbport) -> 5432;
 default(dbuser) -> "zotonic";
 default(dbpassword) -> "";
 default(dbschema) -> "public";
-default(use_ua_classifier) -> true;
 default(filewatcher_enabled) -> true;
 default(filewatcher_scanner_enabled) -> false;
 default(syslog_ident) -> "zotonic";
