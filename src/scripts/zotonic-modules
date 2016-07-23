@@ -46,7 +46,16 @@ Commands:
   search     <query>                      Search for a module
 """
 
-from urlparse import urlparse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
+
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib import urlopen
+
 import subprocess
 import optparse
 import urllib
@@ -54,7 +63,7 @@ import sys
 import os
 import re
 import pprint
-    
+
 try:
     import json
 except ImportError:
@@ -90,7 +99,7 @@ class ZMM():
 
     def _get_git_branches(self, path):
         return list(set([l[2:].split("/")[-1] for l in cmd("cd '%s' && git branch -a" % path).split("\n")]))
-        
+
     def _scan_modules(self):
         """Scan for modules
 
@@ -115,7 +124,7 @@ class ZMM():
                 r['scm'] = scm
                 r['url'] = self._get_repo_url(path)
             return r
-            
+
         # get remote repository links
         modules['_user'] = {}
         for (module, path) in [(os.path.basename(module), module)
@@ -173,13 +182,13 @@ class ZMM():
             if scm:
                 # clone repository
                 if self._clone_repo(modulename, repo, scm):
-                    print "**", modulename, "OK"
+                    print("** %s OK" % modulename)
                     return True
         else:
             modulename = module
         if not re.match("^mod_[a-z_]+$", modulename):
             # fixme - valid module name
-            print "** Invalid module name:", modulename
+            print("** Invalid module name:", modulename)
             return False
 
         # update the install path to point to the given site's install path
@@ -189,34 +198,34 @@ class ZMM():
                 self.install_path = install_path
         clonepath = os.path.join(self.install_path, modulename)
         if os.path.exists(clonepath):
-            print "** %s already installed at %s" % (modulename, clonepath)
+            print("** %s already installed at %s" % (modulename, clonepath))
             return False
 
         if os.path.exists(os.path.join(self.core_path, modulename)):
-            print "** Module already exists in zotonic core:", clonepath
+            print("** Module already exists in zotonic core:", clonepath)
             return False
 
         info = [mod for mod in self.search(modulename)
                 if mod['title'] == modulename]
         if not info:
-            print "** Module not found:", modulename
+            print("** Module not found:", modulename)
             return False
         info = info[0]
 
         # clone repository
         if self._clone_repo(modulename, info['repository'],
                             info['scm']):
-            print "**", modulename, "OK"
+            print("**", modulename, "OK")
             self._sync_branch(self._get_git_branch(ROOT_DIR), modulename, clonepath)
             return True
 
     def _clone_repo(self, modulename, repository, scm):
         clonepath = os.path.join(self.install_path, modulename)
         if scm not in ['hg', 'git']:
-            print "** ERROR: unsupported SCM: %s", scm
+            print("** ERROR: unsupported SCM: %s", scm)
             return False
 
-        print "** Installing ", modulename, "..."
+        print("** Installing %s ..." % modulename)
         if self.cmd_exists(scm):
             cmd = "%s clone %s %s" % (scm, repository, clonepath)
             code, signal = divmod(os.system(cmd), 1 << 8)
@@ -225,7 +234,7 @@ class ZMM():
             else:
                 return True
         else:
-            print "ERROR: please install %s and try again" % scm
+            print("ERROR: please install %s and try again" % scm)
             exit(1)
 
     def cmd_exists(self, cmd):
@@ -313,18 +322,18 @@ class ZMM():
         """
         if self.module_exists(module):
             if self.zotonic_call(command, module, site):
-                print "OK: %s %s" % (command, module)
+                print("OK: %s %s" % (command, module))
                 return True
             else:
-                print "ERROR: Could not %s %s" % (command, module)
+                print("ERROR: Could not %s %s" % (command, module))
                 return False
         else:
-            print "ERROR: module '%s' does not exist in %s" % (module, site)
+            print("ERROR: module '%s' does not exist in %s" % (module, site))
             return False
 
     def update_repo(self, path, module):
         os.chdir(path)
-        print "* Updating '%s'" % module
+        print("* Updating '%s'" % module)
         if os.path.exists(os.path.join(path, '.git')):
             cmd = "git pull origin --verbose"
         else:
@@ -343,23 +352,23 @@ class ZMM():
         """
         if site:
             if not self.module_exists(module, site):
-                print "ERROR: '%s' module was not found in '%s' site " % (module, site)
+                print("ERROR: '%s' module was not found in '%s' site " % (module, site))
                 exit(os.EX_DATAERR)
             modulepath = os.path.join(SITES_DIR, site, 'modules', module)
             if self.update_repo(modulepath, module):
-                print "OK: %s in %s updated" % (module, site)
+                print("OK: %s in %s updated" % (module, site))
             else:
-                print "ERROR: Could not update '%s' module" % module
+                print("ERROR: Could not update '%s' module" % module)
                 exit(os.EX_DATAERR)
         else:
             if not self.module_exists(module):
-                print "ERROR: '%s' module not found" % module
+                print("ERROR: '%s' module not found" % module)
                 exit(os.EX_DATAERR)
             modulepath = os.path.join(self.install_path, module)
             if self.update_repo(modulepath, module):
-                print "OK: %s updated" % module
+                print("OK: %s updated" % module)
             else:
-                print "ERROR: Could not update '%s' module" % module
+                print("ERROR: Could not update '%s' module" % module)
                 exit(os.EX_DATAERR)
 
     def uninstall(self, module, site=None):
@@ -369,7 +378,7 @@ class ZMM():
         """
         if site:
             if not self.module_exists(module, site):
-                print "ERROR: %s does not exist in '%s'site" % (module, site)
+                print("ERROR: %s does not exist in '%s'site" % (module, site))
                 return False
 
             module_path = os.path.join(SITES_DIR, site, 'modules', module)
@@ -378,18 +387,18 @@ class ZMM():
 
         else:
             if not self.module_exists(module):
-                print "ERROR: %s not found" % module
+                print("ERROR: %s not found" % module)
                 return False
             module_path = os.path.join(self.install_path, module)
 
         # handle error encounted when deleting directory
         def handle_error(func, path, exec_info):
-            print "ERROR: Failed to uninstall %s" % module
+            print("ERROR: Failed to uninstall %s" % module)
             return False
 
         import shutil
         shutil.rmtree(module_path, False, handle_error)
-        print "OK: %s uninstalled" % module
+        print("OK: %s uninstalled" % module)
         return True
 
     def _scan_sites(self):
@@ -404,19 +413,20 @@ class ZMM():
         The response can be filtered or by module name/title match.
 
         """
-        print "* Getting module index"
+        print("* Getting module index")
         try:
             url = self.zmr_server + '?q=%s' % query if query else self.zmr_server
-            fp = urllib.urlopen(url)
-            return json.loads(fp.read())
+            fp = urlopen(url)
+            return json.loads(fp.read().decode('utf-8'))
         except IOError:
-            print "ERROR: Network down or server unknown: " + self.zmr_server
+            print("ERROR: Network down or server unknown: " + self.zmr_server)
             exit(os.EX_NOINPUT)
-        except:
-            print "ERROR: can not parse data returned from " + self.zmr_server
+        except Exception as e:
+            print(e)
+            print("ERROR: can not parse data returned from " + self.zmr_server)
 
     def update_zotonic(self):
-        print "* Updating Zotonic..."
+        print("* Updating Zotonic...")
         os.system("make compile-zotonic")
         os.system("%s update" % ZOTONIC)
 
@@ -446,20 +456,19 @@ class ZMM():
     def _sync_branch(self, zotonicbranch, module, path):
         curbranch = self._get_git_branch(path)
         if curbranch == zotonicbranch:
-            print "** %s already on branch %s." % (module, zotonicbranch)
+            print("** %s already on branch %s." % (module, zotonicbranch))
             return False
 
         branches = self._get_git_branches(path)
         if zotonicbranch in branches:
-            print "** %s - checking out branch %s to align to Zotonic branch." % (module, zotonicbranch)
-            print cmd("cd '%s' && git checkout %s" % (path, zotonicbranch))
-            print
+            print("** %s - checking out branch %s to align to Zotonic branch." % (module, zotonicbranch))
+            print(cmd("cd '%s' && git checkout %s" % (path, zotonicbranch)))
             return True
         else:
-            print "** %s does not have branch %s." % (module, zotonicbranch)
+            print("** %s does not have branch %s." % (module, zotonicbranch))
             return False
-            
-                
+
+
     def sync_branches(self):
         modules = self._scan_modules()
         zotonicbranch = self._get_git_branch(ROOT_DIR)
@@ -471,7 +480,7 @@ class ZMM():
                 changed = changed or self._sync_branch(zotonicbranch, module, modinfo['path'])
         if changed:
             self.update_zotonic()
-                    
+
 
 def main():
     """Main script logic"""
@@ -499,20 +508,20 @@ def main():
         exit(os.EX_NOINPUT)
 
     elif args[0] not in subcommands:
-        print 'ERROR: unknown command "%s"' % args[0]
+        print("ERROR: unknown command '%s'" % args[0])
         exit(os.EX_NOINPUT)
 
     command, command_args = args[0], args[1:]
     # commands that require args
     required_cmds = list(set(subcommands) - set(['list', 'sync-branches']))
     if command in required_cmds and len(command_args) < 1:
-        print "ERROR: missing argument for '%s' command" % command
+        print("ERROR: missing argument for '%s' command" % command)
         exit(os.EX_DATAERR)
 
     # require sitename for certain commands
     if command in ['activate', 'deactivate', 'restart', 'reinstall']:
         if not opts.site:
-            print "ERROR: please provide a site name"
+            print("ERROR: please provide a site name")
             exit(os.EX_DATAERR)
 
     # affected Zotonic node
@@ -529,12 +538,12 @@ def main():
         if modules:
             table = [[module['title'], module['repository']]
                      for module in modules]
-            print "%-25s %s" % ("Module", "Description")
+            print("%-25s %s" % ("Module", "Description"))
             for row in table:
-                print "%-25s  %s" % (row[0], row[1])
+                print("%-25s  %s" % (row[0], row[1]))
 
         else:
-            print 'ERROR: "%s" did not match any module' % query
+            print("ERROR: '%s' did not match any module" % query)
 
     elif command == 'install':
         ok = False
@@ -655,7 +664,7 @@ class FixturesTest(unittest.TestCase):
 def run_tests(argv):
     def create_testsite(site):
         if not os.path.exists(test_sitepath):
-            print '***CREATING ZMM TEST SITE: %s' % site
+            print("***CREATING ZMM TEST SITE: %s" % site)
             cmd = ZOTONIC + ' addsite %s' % site
             return subprocess.Popen(cmd, shell=True,
                                     stdout=subprocess.PIPE).stdout.read()
@@ -663,7 +672,7 @@ def run_tests(argv):
 
     def delete_testsite(site):
         if os.path.isdir(test_sitepath):
-            print '***DELETING ZMM TEST SITE: %s' % site
+            print("***DELETING ZMM TEST SITE: %s" % site)
             import shutil
             cmd = ZOTONIC + ' disablesite %s' % site
             subprocess.Popen(cmd, shell=True,
