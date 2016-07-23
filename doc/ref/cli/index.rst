@@ -29,7 +29,7 @@ Currently, the following subcommands are implemented:
   Restart the background Zotonic server instance.
 
 ``zotonic wait [timeout]``
-  Wait ``timeout`` seconds (default: 30) for Zotonic to be started, then return. 
+  Wait ``timeout`` seconds (default: 30) for Zotonic to be started, then return.
 
 ``zotonic update``
   Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
@@ -108,6 +108,11 @@ Currently, the following subcommands are implemented:
 ``zotonic update``
   Update the server. Compiles and loads any new code, flushes caches and rescans all modules.
 
+``zotonic sitetest <sitename>``
+  Start Zotonic, and runs all sitetests for the given site, and exits
+  again. The exit code will be 1 if any of the tests fail, or 0
+  otherwise. See :ref:`dev-testing`.
+
 ``zotonic compile``
   Compiles all the Zotonic Erlang source files, modules and sites,
   including those in the user sites directory and user modules
@@ -134,4 +139,3 @@ Currently, the following subcommands are implemented:
 
 ``zotonic logtail``
   Starts a ``tail -F`` on the three Zotonic log files, console.log, error.log and crash.log
-

@@ -26,6 +26,14 @@ then run using Erlang's standard `EUnit test framework <http://erlang.org/doc/ap
    *only*). `testname` **cannot** contain any underscores.
 
 
+Besides running the tests from the Erlang shell, they can also be run
+from the terminal commandline::
+
+  zotonic sitetest example
+
+This is convenient for integration into CI systems. See :ref:`ref-cli`.
+
+
 Example ``sitetest`` module
 ---------------------------
 
