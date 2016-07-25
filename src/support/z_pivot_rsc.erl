@@ -819,8 +819,13 @@ stemmer_language(Context) ->
 stemmer_language_config(Context) ->
     StemmingLanguage = m_config:get_value(i18n, language_stemmer, Context),
     case z_utils:is_empty(StemmingLanguage) of
-        true -> z_trans:default_language(Context);
-        false -> z_trans:to_language_atom(StemmingLanguage)
+        true ->
+            z_trans:default_language(Context);
+        false -> 
+            case z_trans:to_language_atom(StemmingLanguage) of
+                {ok, LangAtom} -> LangAtom;
+                {error, not_a_language} -> z_trans:default_language(Context)
+            end
     end.
 
 %% @spec define_custom_pivot(Module, columns(), Context) -> ok
