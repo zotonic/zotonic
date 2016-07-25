@@ -27,7 +27,8 @@
     previously_existed/2,
     moved_temporarily/2,
     content_types_provided/2,
-    see_other/2
+    see_other/2,
+    get_rsc_content_types/2
 ]).
 
 -include_lib("controller_webmachine_helper.hrl").
@@ -88,21 +89,25 @@ see_other(ReqData, Context) ->
 
 %% @doc Fetch the list of content types provided, together with their dispatch rule name.
 %% text/html is moved to the front of the list as that is the default mime type to be returned.
+-spec get_rsc_content_types(m_rsc:resource(), #context{}) -> list().
+get_rsc_content_types(Id, Context) ->
+    z_notifier:foldr(#content_types_dispatch{id = Id}, [], Context).
+
 get_content_types(Context) ->
     case z_context:get(content_types_dispatch, Context) of
         undefined ->
             {Id, Context1} = get_id(Context),
-            CT = z_notifier:foldr(#content_types_dispatch{id=Id}, [], Context1),
+            CT = get_rsc_content_types(Id, Context),
             CT1 = case proplists:get_value("text/html", CT) of
                     undefined -> [{"text/html", page_url}|CT];
                     Prov -> [Prov|CT]
                   end,
             Context2 = z_context:set(content_types_dispatch, CT1, Context1),
             {CT1, Context2};
-        CT -> 
+        CT ->
             {CT, Context}
     end.
-    
+
 get_id(Context) ->
     case z_context:get(id, Context) of
         undefined ->
