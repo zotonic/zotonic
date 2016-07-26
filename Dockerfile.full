@@ -1,0 +1,13 @@
+FROM zotonic/zotonic:test
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends postgresql \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN printf "# Zotonic settings \n\
+local   all         zotonic                           ident \n\
+host    all         zotonic     127.0.0.1/32          md5 \n\
+host    all         zotonic     ::1/128               md5" >> /etc/postgresql/9.4/main/pg_hba.conf && \
+    /etc/init.d/postgresql start                                                                   && \
+    echo "CREATE USER zotonic; \
+          ALTER ROLE zotonic WITH CREATEDB;"

@@ -16,8 +16,9 @@ Start getting to know Zotonic on the [feature page](http://zotonic.com/features)
 Installation
 ------------
 
-* Download Zotonic from the [**official website**](http://zotonic.com/download). 
-* Read the [**Installation chapter**](http://zotonic.com/docs/latest/developer-guide/installation.html) 
+* Download Zotonic from the [**official website**](http://zotonic.com/download)
+  or start Zotonic from a [**Docker image**](http://zotonic.com/docs/latest/developer-guide/docker.html).
+* Read the [**Installation chapter**](http://zotonic.com/docs/latest/developer-guide/installation.html)
   in the documentation.
 
 Documentation
@@ -31,7 +32,7 @@ You can find out more about Zotonic on http://zotonic.com, including:
 Contributing
 ------------
 
-Zotonic is an open source project, made possible by the community. If you’d like to contribute, 
+Zotonic is an open source project, made possible by the community. If you’d like to contribute,
 please read the [Contributing chapter](http://zotonic.com/docs/latest/developer-guide/contributing.html)
 in the documentation.
 
