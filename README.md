@@ -16,8 +16,9 @@ Start getting to know Zotonic on the [feature page](http://zotonic.com/features)
 Installation
 ------------
 
-* Download Zotonic from the [**official website**](http://zotonic.com/download). 
-* Read the [**Installation chapter**](http://zotonic.com/docs/latest/developer-guide/installation.html) 
+* Download Zotonic from the [**official website**](http://zotonic.com/download)
+  or start Zotonic from a [**Docker image**](http://zotonic.com/docs/latest/developer-guide/docker.html).
+* Read the [**Installation chapter**](http://zotonic.com/docs/latest/developer-guide/installation.html)
   in the documentation.
 
 Documentation
@@ -31,27 +32,6 @@ You can find out more about Zotonic on http://zotonic.com, including:
 Contributing
 ------------
 
-Zotonic is an open source project, made possible by the community. If you’d like to contribute, 
+Zotonic is an open source project, made possible by the community. If you’d like to contribute,
 please read the [Contributing chapter](http://zotonic.com/docs/latest/developer-guide/contributing.html)
 in the documentation.
-
-Zotonic in Docker
------------------
-
-Try out Zotonic in a [Docker](https://www.docker.com/) container. Zotonic images
-are available on [Docker Hub](https://hub.docker.com/r/zotonic/zotonic/).
-
-To get started quickly, start a `zotonic/zotonic` image on your Docker machine:
-
-```bash
-# use a tagged version, or branch
-docker run -d -p 8000:8000 zotonic/zotonic:release-x.y.z
-
-# or run latest version from master
-docker run -d -p 8000:8000 zotonic/zotonic:latest
-```
-
-**Note** This image is for evaluation purposes, and not supposed
-to be used in production.
-
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=zotonic&url=https://github.com/zotonic/zotonic&title=zotonic&language=en_GB&tags=github&category=software) 

@@ -5,6 +5,10 @@
 Installation
 ============
 
+To get Zotonic running, you first need to install it. This chapter describes how
+to install Zotonic manually. Alternatively, you can run Zotonic from one of
+the :ref:`Docker images <guide-docker>`.
+
 Preparation
 -----------
 
