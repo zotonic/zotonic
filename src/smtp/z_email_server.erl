@@ -190,11 +190,11 @@ handle_cast({send, Id, #email{} = Email, Context}, State) ->
     end,
     State3 = case z_utils:is_empty(Email#email.cc) of
         true -> State2;
-        false -> send_email(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State2)
+        false -> send_email(<<Id/binary, ".cc">>, Email#email.cc, Email, Context, State2)
     end,
     State4 = case z_utils:is_empty(Email#email.bcc) of
         true -> State3;
-        false -> send_email(<<Id/binary, "+bcc">>, Email#email.bcc, Email, Context, State3)
+        false -> send_email(<<Id/binary, ".bcc">>, Email#email.bcc, Email, Context, State3)
     end,
     {noreply, State4};
 
