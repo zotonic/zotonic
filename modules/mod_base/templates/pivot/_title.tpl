@@ -1,1 +1,1 @@
-{% id.title %}
+{{ id.title }}
