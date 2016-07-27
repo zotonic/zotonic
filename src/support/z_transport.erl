@@ -240,17 +240,17 @@ incoming_with_session(#z_msg_v1{delegate='$comet'}, Context) ->
     z_transport_comet:comet_delegate(Context);
 incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Pb#postback_event.postback, Context),
-    TriggerId1 = to_list(case TriggerId of
+    TriggerId1 = case TriggerId of
                     undefined -> Pb#postback_event.trigger;
                     _         -> TriggerId
-                 end),
-    TargetId1 =  to_list(case TargetId of
+                 end,
+    TargetId1 =  case TargetId of
                     undefined -> Pb#postback_event.target;
                     _         -> TargetId
-                 end),
+                 end,
     case maybe_set_q(ubf, Pb#postback_event.data, Context) of
         {ok, Context1} ->
-            Context2 = z_context:set_q("triggervalue", to_list(Pb#postback_event.triggervalue), Context1),
+            Context2 = z_context:set_q(<<"triggervalue">>, Pb#postback_event.triggervalue, Context1),
             ContextRsc = z_context:set_controller_module(Module, Context2),
             ContextRes = incoming_postback_event(is_submit_event(EventType), Module, Tag, TriggerId1, TargetId1, ContextRsc),
             incoming_context_result(ok, Msg, ContextRes);
@@ -265,9 +265,9 @@ incoming_with_session(#z_msg_v1{delegate=notify, content_type=Type, data=#postba
         {ok, Context1} ->
             % MochiWeb compatible values...
             Notify1 = Notify#postback_notify{
-                            message=to_list(Notify#postback_notify.message),
-                            trigger=to_list(Notify#postback_notify.trigger),
-                            target=to_list(Notify#postback_notify.target)
+                            message=Notify#postback_notify.message,
+                            trigger=Notify#postback_notify.trigger,
+                            target=Notify#postback_notify.target
                       },
             Context2 = case z_notifier:first(Notify1, Context1) of
                             undefined -> Context1;
@@ -283,9 +283,9 @@ incoming_with_session(#z_msg_v1{delegate=Delegate, content_type=Type, data=#post
             {ok, Module} = z_utils:ensure_existing_module(Delegate),
             % MochiWeb compatible values...
             Notify1 = Notify#postback_notify{
-                            message=to_list(Notify#postback_notify.message),
-                            trigger=to_list(Notify#postback_notify.trigger),
-                            target=to_list(Notify#postback_notify.target)
+                            message=Notify#postback_notify.message,
+                            trigger=Notify#postback_notify.trigger,
+                            target=Notify#postback_notify.target
                       },
             incoming_context_result(ok, Msg, Module:event(Notify1, Context1));
         {error, ContextValidation} ->
@@ -445,13 +445,9 @@ set_q(Qs, Context) ->
              L when is_list(L) -> L;
              _ -> []
           end,
-    Qs1 = [ {to_list(K), to_list(V)} || {K,V} <- Qs ] ++ Qs0,
+    Qs1 = Qs ++ Qs0,
     z_validation:validate_query_args(
         z_context:set('q', Qs1, Context)).
-
-%% TODO: This can be removed when we switch to binary key/values for qs
-to_list(B) when is_binary(B) -> z_convert:to_list(B);
-to_list(V) -> V.
 
 decode_data(ubf, Data) ->
     Data;

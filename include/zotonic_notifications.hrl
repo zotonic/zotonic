@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2013 Marc Worrell
+%% @copyright 2011-2016 Marc Worrell
 %% @doc Notifications used in Zotonic core
 
-%% Copyright 2011-2013 Marc Worrell
+%% Copyright 2011-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,12 @@
 %%      Called when the request Host doesn't match any active site.
 %%      Result:   {ok, #dispatch_redirect{}}
 %%              | undefined.
--record(dispatch_host, {host, path=[], method='GET', protocol=http}).
+-record(dispatch_host, {
+        host = <<>> :: binary(),
+        path = <<>> :: binary(),
+        method = <<"GET">> :: binary(),
+        protocol = http :: http|https
+    }).
 
 %% @doc Final try for dispatch, try to match the request. Called with z_notifier:first/2
 %%      Called when the site is known, but no match is found for the path
@@ -28,10 +33,25 @@
 %%              | {ok, #dispatch_match{}} 
 %%              | {ok, #dispatch_redirect{}}
 %%              | undefined.
--record(dispatch, {host, path="", method='GET', protocol=http, tracer_pid}).
+-record(dispatch, {
+        host = <<>> :: binary(),
+        path = <<>> :: binary(),
+        method = <<"GET">> :: binary(),
+        protocol = http :: http|https,
+        tracer_pid = undefined :: pid()|undefined
+    }).
     
-    -record(dispatch_redirect, {location, is_permanent=false}).
-    -record(dispatch_match, {dispatch_name, mod, mod_opts=[], path_tokens=[], bindings=[], app_root="", string_path=""}).
+-record(dispatch_redirect, {
+        location = <<>> :: binary(),
+        is_permanent=false :: boolean()
+    }).
+-record(dispatch_match, {
+        dispatch_name = undefined :: atom(),
+        mod :: atom(),
+        mod_opts = [] :: list(),
+        path_tokens = [] :: list(binary()),
+        bindings = [] :: list({atom(),binary()})
+    }).
 
 
 %% @doc Modify cookie options, used for setting http_only and secure options. (foldl)
