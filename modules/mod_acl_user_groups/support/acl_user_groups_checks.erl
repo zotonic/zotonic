@@ -194,7 +194,7 @@ acl_is_allowed(_, #context{user_id=1}) ->
     true;
 acl_is_allowed(#acl_is_allowed{object=undefined}, _Context) ->
     undefined;
-acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) ->
+acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) orelse is_atom(Id) ->
     can_rsc(Id, view, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) ->
     can_media(Mime, Size, Context);

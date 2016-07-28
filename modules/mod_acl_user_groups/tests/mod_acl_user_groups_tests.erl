@@ -27,3 +27,7 @@ person_can_edit_own_resource_test() ->
 
     UserContext = z_acl:logon(Id, Context),
     {ok, Id} = m_rsc:update(Id, [{title, "Test"}], UserContext).
+
+is_allowed_accepts_rsc_name_object_test() ->
+    Context = z_context:new(testsandboxdb),
+    false = acl_user_groups_checks:acl_is_allowed(#acl_is_allowed{action = view, object = text}, Context).

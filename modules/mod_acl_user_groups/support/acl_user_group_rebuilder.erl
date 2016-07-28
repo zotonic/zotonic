@@ -22,7 +22,6 @@
 %%
 %% The action is one of the atoms: view, insert, delete, update, and link.
 %%
-%% @enddoc
 
 %% Copyright 2015-2016 Marc Worrell
 %%
