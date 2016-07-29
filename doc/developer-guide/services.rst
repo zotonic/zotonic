@@ -186,6 +186,18 @@ tuple from the ``process_get/2`` and ``process_post/2`` calls::
 
 .. _guide-services-cors:
 
+Uploading files
+---------------
+
+The simplest way to upload files is to use the ready-made API service :ref:`service-media_upload`. But if you want to have different behavior (for instance to connect an uploaded user picture to a user page), it is easy to create your own.
+
+The post payload should be ``multipart/form-data`` encoded (which is the standard for file uploads).
+
+The posted data is automatically retrieved by Zotonic and made available via ``z_context``. If you use ``"upload"`` for the form data ``name`` field, you get the upload data from ``z_context:get_q("upload", Context)``. The resulting value is an ``#upload{}`` record, and can be passed directly to ``m_media:insert_file``::
+
+    Upload = z_context:get_q("upload", Context),
+    m_media:insert_file(Upload, Context)
+
 Error handling
 --------------
 
