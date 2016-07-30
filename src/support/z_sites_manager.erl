@@ -136,10 +136,21 @@ get_site_contexts() ->
 get_site_config(Site) ->
     case parse_config(get_site_config_file(Site)) of
         {ok, Config} ->
-            {ok, z_utils:props_merge(get_site_config_overrides(Site), Config)};
+            {ok, z_utils:props_merge(get_site_config_overrides(Site), merge_os_env(Config))};
         Other ->
             Other
     end.
+
+%% @doc Resolve {env, "ENV_NAME"} tuples from site config into the site configuration.
+merge_os_env(SiteConfig) ->
+    lists:map(
+      fun({K, {env, Name}}) -> {K, os:getenv(Name)};
+         ({K, {env, Name, Default}}) -> {K, os:getenv(Name, Default)};
+         ({K, {env_int, Name}}) -> {K, z_convert:to_integer(os:getenv(Name))};
+         ({K, {env_int, Name, Default}}) -> {K, z_convert:to_integer(os:getenv(Name, Default))};
+         ({K, V}) -> {K, V}
+      end, SiteConfig).
+
 
 %% @doc Return the name of the site to handle unknown Host requests
 -spec get_fallback_site() -> atom() | undefined.
@@ -378,7 +389,7 @@ parse_config([C|T], SiteConfig) ->
             MergedConfig = lists:ukeymerge(1, SortedNewConfig, SiteConfig),
             parse_config(T, MergedConfig);
         {ok, [NotAList|_]} ->
-            lager:error("Expected a list in the site config ~s but got ~p", 
+            lager:error("Expected a list in the site config ~s but got ~p",
                         [C, NotAList]),
             parse_config(T, SiteConfig);
         {error, Reason} = Error ->
