@@ -28,31 +28,35 @@ Git shortlog
 ............
 
 Arjan Scherpenisse (9):
-    Implement running site-specific tests (#1332)
-    core: Add z_sitetest:{watch,unwatch} to speed up test driven development
-    API: Allow process_{post,get} to throw() error for shortcircuiting
-    core: Only run sitetests when compilation succeeds
-    mod_acl_user_groups: Documentation fixes; change 'edit' -> 'update'
-    API: Fix logic bug in try/catch clause handling for process_{get,post}
-    doc: Add note that testname cannot containing underscores
-    API: Log crashes, serve HTTP 500 on uncaught exception
-    filewatcher: reload module first when running all sitetests for a site
+
+   * Implement running site-specific tests (#1332)
+   * core: Add z_sitetest:{watch,unwatch} to speed up test driven development
+   * API: Allow process_{post,get} to throw() error for shortcircuiting
+   * core: Only run sitetests when compilation succeeds
+   * mod_acl_user_groups: Documentation fixes; change 'edit' -> 'update'
+   * API: Fix logic bug in try/catch clause handling for process_{get,post}
+   * doc: Add note that testname cannot containing underscores
+   * API: Log crashes, serve HTTP 500 on uncaught exception
+   * filewatcher: reload module first when running all sitetests for a site
 
 Arthur Clemens (3):
-    docs: Describe error handling from API service
-    Fix include_lib
-    mod_base: controller_api: add option to pass JSON error object
+
+   * docs: Describe error handling from API service
+   * Fix include_lib
+   * mod_base: controller_api: add option to pass JSON error object
 
 David de Boer (4):
-    core: Move mod_acl_simple_roles out of core into separate repo (#1328)
-    doc: Add .pot generation function call
-    admin: Add view dropdown menu (#1345)
-    doc: Fix build
+
+   * core: Move mod_acl_simple_roles out of core into separate repo (#1328)
+   * doc: Add .pot generation function call
+   * admin: Add view dropdown menu (#1345)
+   * doc: Fix build
 
 Marc Worrell (6):
-    core: add forward-compatible z_utils:name_for_site/2. Issue #1333
-    mod_admin: add possibility to disconnect connections via the connection-dialog Fixes #1339
-    core: add 'is_bot' property for m.req Fixes #1340
-    core: use the ua_classifier supplied is_crawler flag. Fallback to the hardcoded list for unknown user agents (example: curl). Fixes #1340
-    core: in z_user_agent allow WebSocket and websocket.
-    z_user_agent: make the upgrade comparison case insensitive
+
+   * core: add forward-compatible z_utils:name_for_site/2. Issue #1333
+   * mod_admin: add possibility to disconnect connections via the connection-dialog Fixes #1339
+   * core: add 'is_bot' property for m.req Fixes #1340
+   * core: use the ua_classifier supplied is_crawler flag. Fallback to the hardcoded list for unknown user agents (example: curl). Fixes #1340
+   * core: in z_user_agent allow WebSocket and websocket.
+   * z_user_agent: make the upgrade comparison case insensitive
