@@ -7,7 +7,7 @@ Welcome to Zotonic 0.18.0, released on 4 July, 2016.
 
 Main changes are:
 
-* Removed modules mod_acl_adminonly from core (:issue:`1289`). Please use
+* Removed module mod_acl_adminonly from core (:issue:`1289`). Please use
   :ref:`mod_acl_user_groups` instead. If you need mod_acl_adminonly, the module
   is available in a `separate repository <https://github.com/zotonic/mod_acl_adminonly>`_.
 * Added compatibility with OPT 19 (:issue:`1323`).
