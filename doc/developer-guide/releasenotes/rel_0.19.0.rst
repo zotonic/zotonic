@@ -7,7 +7,7 @@ Welcome to Zotonic 0.19.0, released on 1 August, 2016.
 
 Main changes are:
 
-* Removed module mod_acl_simple_roles from core (issue:`1328`). Please use
+* Removed module mod_acl_simple_roles from core (:issue:`1328`). Please use
   :ref:`mod_acl_user_groups` instead. If you need mod_acl_simple_roles, the module
   is available in a `separate repository <https://github.com/zotonic/mod_acl_simple_roles>`_.
 * Added `site tests <http://zotonic.com/docs/latest/developer-guide/testing.html>`_
