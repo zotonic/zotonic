@@ -109,10 +109,10 @@ are then added to the .pot file.
 Creating a new translation for a module
 .......................................
 
-First, add a language in the admin with the 2-letter code for that language.
+First, add a language in the admin with the ISO code for that language.
 
 Say, we're adding Polish, ``pl``. Now copy the ``.pot`` template file
-to the 2-letter code ``.po`` file::
+to the ISO code ``.po`` file::
 
   $ cd modules/mod_foo
   $ cp translations/template/mod_foo.pot translations/pl.po

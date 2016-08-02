@@ -942,7 +942,7 @@ function z_reload(args)
                 if (  window.location.pathname.substring(0,2+z_language.length) == "/"+z_language+"/") {
                     href = window.location.protocol+"//"+window.location.host
                             +"/"+args.z_language+"/"
-                            +window.location.pathname.substring(2+args.z_language.length);
+                            +window.location.pathname.substring(2+z_language.length);
                 } else {
                     href = window.location.protocol+"//"+window.location.host
                             +"/"+args.z_language
