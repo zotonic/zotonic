@@ -35,7 +35,7 @@ Template locations and the lookup system
 ----------------------------------------
 
 All templates are located in the :file:`templates` directory of
-modules.  Templates are referred to by their full filename. When a
+modules or sites.  Templates are referred to by their full filename. When a
 template is inside a directory then the full path of the template must
 be given.
 
@@ -45,12 +45,33 @@ For example, say we have two templates:
   | mod_example/templates/email/email_base.tpl
 
 The above are referred to as ``foobar.tpl`` and
-``email/email_base.tpl``.  Just ``email_base.tpl`` will not find the
+``email/email_base.tpl``; just ``email_base.tpl`` will not find the
 email template.
 
 All templates of all modules are grouped together, regardless of which
 module they are defined in. The module name is never given as part of
 the template name.
+
+Templates for pages
+^^^^^^^^^^^^^^^^^^^
+
+When showing a page, Zotonic looks up templates in order of specificity and
+renders the first template it finds:
+
+1. ``page.name.tpl`` (unique name)
+2. ``page.category.tpl`` (category)
+3. ``page.tpl`` (fallback)
+
+So if you have a page in the category ‘text’ and that page has a :ref:`unique name <model-rsc>`
+‘my_text_page’, Zotonic will look for the following templates:
+
+1. ``page.my_text_page.tpl`` (unique name)
+2. ``page.text.tpl`` (category)
+3. ``page.tpl`` (fallback)
+
+.. seealso::
+
+    * :ref:`controller-page`, :ref:`tag-catinclude`.
 
 Module priority and overriding templates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
