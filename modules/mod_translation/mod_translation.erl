@@ -183,7 +183,7 @@ observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
                     RewriteUrl = z_convert:to_bool(m_config:get_value(?MODULE, rewrite_url, true, Context)),
                     case RewriteUrl andalso is_multiple_languages_config(Context) of
                         true ->
-                                                % Insert the current language in front of the url
+                            % Insert the current language in front of the url
                             iolist_to_binary([$/, atom_to_list(Language), Url]);
                         false ->
                             Url
@@ -372,8 +372,8 @@ do_set_language(Code, Context) when is_atom(Code) ->
 
 %% @doc Add a language to the i18n configuration
 language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
-    IsoCodeNewAtom = z_convert:to_atom(z_string:to_name(z_string:trim(NewIsoCode))),
-    FallbackIsoCodeAtom = z_convert:to_atom(z_string:to_name(z_string:trim(FallbackIsoCode))),
+    IsoCodeNewAtom = z_convert:to_atom(z_string:trim(NewIsoCode)),
+    FallbackIsoCodeAtom = z_convert:to_atom(z_string:trim(FallbackIsoCode)),
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
     Languages2 = lists:usort([{IsoCodeNewAtom,
