@@ -183,7 +183,7 @@ api_result(Context, Result) ->
                 {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
             catch
                 E:R ->
-                    lager:warning("API error: ~p:~p", [E,R]),
+                    lager:error("controller_api error: ~p:~p - ~p", [E, R, erlang:get_stacktrace()]),
                     ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
                     {{halt, 500}, ReqData1, Context}
             end
@@ -243,7 +243,7 @@ to_json(ReqData, Context) ->
             throw:{error, _, _, _} = R2 ->
                 {Context0, R2};
             E:R3 ->
-                lager:error("controller_api error: ~p:~p", [E,R3]),
+                lager:error("controller_api error: ~p:~p - ~p", [E, R3, erlang:get_stacktrace()]),
                 {Context0, {error, internal_server_error, []}}
         end,
     api_result(Context1, Result).
@@ -272,7 +272,7 @@ process_post(ReqData, Context0) ->
                 throw:{error, _, _, _} = R2 ->
                     api_result(Context, R2);
                 E:R ->
-                    lager:error("controller_api error: ~p:~p", [E,R]),
+                    lager:error("controller_api error: ~p:~p - ~p", [E, R, erlang:get_stacktrace()]),
                     api_result(Context1, {error, internal_server_error, []})
             end
     end.
