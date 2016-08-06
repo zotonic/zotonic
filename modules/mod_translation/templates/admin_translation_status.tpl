@@ -24,7 +24,7 @@
 
 <div>
     <h3>{_ Active modules _}</h3>
-    
+
     <table class="table">
         <thead>
             <tr>
@@ -32,7 +32,7 @@
                 <th width="30%">{_ Title _}</th>
                 {% for code, lang in m.config.i18n.language_list.list %}
                 {% if code != "en" %}
-                <th>{{ lang.language }}</th>
+                <th>{{ lang.name }}</th>
                 {% endif %}
                 {% endfor %}
             </tr>

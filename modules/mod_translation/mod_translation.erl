@@ -70,17 +70,17 @@ init(Context) ->
 
 default_languages() ->
     [
-     {ar, [ {language, <<"العربية"/utf8>>}, {is_enabled, false}]},
-     {de, [ {language, <<"Deutsch"/utf8>>}, {is_enabled, true}]},
-     {en, [ {language, <<"English"/utf8>>}, {is_enabled, true}]},
-     {es, [ {language, <<"Español"/utf8>>}, {is_enabled, true}]},
-     {et, [ {language, <<"Eesti"/utf8>>}, {is_enabled, true}]},
-     {fr, [ {language, <<"Français"/utf8>>}, {is_enabled, true}]},
-     {nl, [ {language, <<"Nederlands"/utf8>>}, {is_enabled, true}]},
-     {pl, [ {language, <<"Polski"/utf8>>}, {is_enabled, true}]},
-     {ru, [ {language, <<"Русский"/utf8>>}, {is_enabled, true}]},
-     {tr, [ {language, <<"Türkçe"/utf8>>}, {is_enabled, true}]},
-     {zh, [ {language, <<"中文"/utf8>>}, {is_enabled, false}]}
+     {ar, [ {name, <<"العربية"/utf8>>}, {is_enabled, false}]},
+     {de, [ {name, <<"Deutsch"/utf8>>}, {is_enabled, true}]},
+     {en, [ {name, <<"English"/utf8>>}, {is_enabled, true}]},
+     {es, [ {name, <<"Español"/utf8>>}, {is_enabled, true}]},
+     {et, [ {name, <<"Eesti"/utf8>>}, {is_enabled, true}]},
+     {fr, [ {name, <<"Français"/utf8>>}, {is_enabled, true}]},
+     {nl, [ {name, <<"Nederlands"/utf8>>}, {is_enabled, true}]},
+     {pl, [ {name, <<"Polski"/utf8>>}, {is_enabled, true}]},
+     {ru, [ {name, <<"Русский"/utf8>>}, {is_enabled, true}]},
+     {tr, [ {name, <<"Türkçe"/utf8>>}, {is_enabled, true}]},
+     {zh, [ {name, <<"中文"/utf8>>}, {is_enabled, false}]}
     ].
 
 

@@ -11,7 +11,7 @@
 </div>
 
 <div class="well">
-    {% button class="btn btn-primary" text=_"Add language" 
+    {% button class="btn btn-primary" text=_"Add language"
         action={dialog_open title=_"Add language" template="_dialog_language_edit.tpl" new}
     %}
 </div>
@@ -23,8 +23,7 @@
                     <th width="10%">{_ Enabled _}</th>
                     <th width="10%">{_ Default _}</th>
                     <th width="15%">{_ Language _}</th>
-                    <th width="15%">{_ ISO Code _}</th>
-                    <th width="15%">{_ Fallback language _}</th>
+                    <th width="15%">{_ Fallback _}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -44,22 +43,22 @@
                                 {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
                             </td>
                             <td class="clickable" id="{{ #b.code }}">
-                                {{ lang.language|default:"-" }}
+                                {{ lang.name|default:"-" }}<br />
+                                <code class="text-muted">{{ code|default:"-" }}</code>
                             </td>
-                            <td class="clickable" id="{{ #a.code }}">{{ code|default:"-" }}</td>
                             <td class="clickable" id="{{ #a.fallback }}">{{ lang.fallback|default:"-" }}</td>
                             <td class="clickable">
                                 <div class="pull-right">
-                                    {% button class="btn btn-default btn-xs" text=_"Delete" 
+                                    {% button class="btn btn-default btn-xs" text=_"Delete"
                                         action={dialog_open
                                             title=_"Delete language"
                                             template="_dialog_language_delete.tpl"
                                             code=code lang=lang
                                         }
                                     %}
-                                    {% button class="btn btn-default btn-xs"text=_"Edit" 
-                                        action={dialog_open 
-                                            title=_"Edit language"|append:": "|append:lang.language template="_dialog_language_edit.tpl"
+                                    {% button class="btn btn-default btn-xs"text=_"Edit"
+                                        action={dialog_open
+                                            title=_"Edit language"|append:": "|append:lang.name template="_dialog_language_edit.tpl"
                                             code=code lang=lang fallback=lang.fallback}
                                     %}
                                 </div>
@@ -77,7 +76,7 @@
         {% endwith %}
         </tbody>
     </table>
-    
+
 </div>
 
 <div>
@@ -87,7 +86,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    {% wire id=#redir 
+                    {% wire id=#redir
                         action={config_toggle module="mod_translation" key="rewrite_url"}
                     %}
                     <label class="checkbox-inline">
@@ -100,7 +99,7 @@
                 </div>
 
                 <div class="form-group">
-                    {% wire id=#force 
+                    {% wire id=#force
                         action={config_toggle module="mod_translation" key="force_default"}
                     %}
                     <label class="checkbox-inline">
@@ -146,7 +145,7 @@
                     </select>
                     {% endwith %}
                     <p class="help-block">
-                        {_ If you change the stemmer language then you will need to reindex all data. _} 
+                        {_ If you change the stemmer language then you will need to reindex all data. _}
                         {% button
                             class="btn btn-default"
                             id="btn-rebuild-indices"
@@ -166,14 +165,14 @@
 
         <div class="form-group">
             <div>
-                {% button class="btn btn-default" text=_"Generate .pot files" 
+                {% button class="btn btn-default" text=_"Generate .pot files"
                     action={postback postback="translation_generate" delegate="mod_translation"} %}
                 <span class="help-block">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
             </div>
         </div>
         <div class="form-group">
             <div>
-                {% button class="btn btn-default" text=_"Reload Translations" 
+                {% button class="btn btn-default" text=_"Reload Translations"
                     action={postback postback="translation_reload" delegate="mod_translation"} %}
                 <span class="help-block">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
             </div>
@@ -186,7 +185,7 @@
         </div>
 
     </div>
-    
+
 </div>
 
 {% endblock %}

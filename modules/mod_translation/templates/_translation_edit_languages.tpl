@@ -5,8 +5,8 @@
             {% if lang.is_enabled %}
             <label class="checkbox-inline">
     	    <input type="checkbox" id="{{ #language.code }}" name="language" value="{{ code }}"
-    	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} /> 
-    	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.language }}</span>
+    	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} />
+    	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.name }}</span>
             </label>
             {% wire id=#language.code action={toggle selector=[".tab-",code|make_list]} %}
             {% endif %}

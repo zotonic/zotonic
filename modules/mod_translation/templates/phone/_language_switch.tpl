@@ -4,14 +4,14 @@
     {# Bootstrap nav item #}
     <li class="dropdown" id="languages">
         <a class="dropdown-toggle" data-toggle="dropdown" href="{% url language_switch p=m.req.raw_path %}" data-target="#">
-            {{ list[z_language].language|default:z_language }}
+            {{ list[z_language].name|default:z_language }}
             <b class="caret"></b>
         </a>
         <ul class="dropdown-menu admin-dropdown-menu-has-icons">
             {% for code,lang in list %}
                 {% if all or lang.is_enabled %}
                     <li>
-                        <a id="{{ #lang.code }}" href="{% url language_select code=code p=m.req.raw_path %}">{% if code == z_language %}<i class="glyphicon glyphicon-ok"></i> {% endif %}{{ lang.language }}</a>
+                        <a id="{{ #lang.code }}" href="{% url language_select code=code p=m.req.raw_path %}">{% if code == z_language %}<i class="glyphicon glyphicon-ok"></i> {% endif %}{{ lang.name }}</a>
                     </li>
                 {% endif %}
             {% endfor %}
@@ -22,7 +22,7 @@
 	<select class="form-control" id="{{ #lang }}">
 	{% for code,lang in list %}
 		{% if all or lang.is_enabled %}
-			<option {% if z_language == code %}selected="selected"{% endif %} value="{{ code }}">{{ lang.language }}</option>
+			<option {% if z_language == code %}selected="selected"{% endif %} value="{{ code }}">{{ lang.name }}</option>
 		{% endif %}
 	{% endfor %}
 	</select>

@@ -1,7 +1,7 @@
-{% with m.modules.active.mod_translation, 
-        r_language|default:(m.rsc[id].language)|default:[z_language]
-   as is_i18n, 
-      r_language 
+{% with m.modules.active.mod_translation,
+        r_language|default:(m.rsc[id].name)|default:[z_language]
+   as is_i18n,
+      r_language
 %}
 {% with edit_language|default:z_language as edit_language %}
 {% with edit_language|member:r_language|if:edit_language:(r_language[1]) as edit_language %}
@@ -24,10 +24,10 @@
 		<div class="tab-content widget-content">
 			{% for lang_code, lang in m.config.i18n.language_list.list|default:[[z_language,[]]] %}
 			{# to define some helper vars that will be useful in widget_content: #}
-			{% with ["$", lang_code]|join, 
+			{% with ["$", lang_code]|join,
 					["(", lang_code, ")"]|join,
-					["--", lang_code]|join  
-				as  lang_code_with_dollar, 
+					["--", lang_code]|join
+				as  lang_code_with_dollar,
 					lang_code_with_brackets,
 					lang_code_for_id
 			%}

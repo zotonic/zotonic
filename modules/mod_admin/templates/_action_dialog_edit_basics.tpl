@@ -1,6 +1,6 @@
 {% with m.config.i18n.language_list.list as languages %}
-    {% with m.rsc[id].language as r_lang %}
-        {% wire id=#form type="submit" 
+    {% with m.rsc[id].name as r_lang %}
+        {% wire id=#form type="submit"
 	        postback={
 	            rsc_edit_basics
 	            id=id
@@ -11,7 +11,7 @@
 				callback=callback
 				is_update=is_update
 			}
-	        delegate=delegate 
+	        delegate=delegate
         %}
         <form id="{{ #form }}" method="POST" action="postback" class="form">
             <div class="tabbable">
@@ -26,7 +26,7 @@
 	                    <div class="tab-pane form-horizontal active" id="{{ #main }}">
 
 	                        {% catinclude "_admin_edit_basics.tpl" id in_dialog is_editable=id.is_editable languages=languages show_header %}
-			                
+
 	                        {% if id.is_a.category or id.is_a.predicate %}
 	                            <div class="form-group row">
 		                            <label class="control-label col-md-3" for="{{ #unique }}">{_ Unique name _}</label>
@@ -34,9 +34,9 @@
 		                                <input class="form-control" type="text" id="{{ #unique }}" name="name" value="{{ id.name }}" />
 		                                {% validate id=#unique name="name" type={presence} %}
                                     </div>
-	                            </div>	
+	                            </div>
 	                        {% endif %}
-                            
+
 	                        <div class="form-group row">
 	                            <label class="control-label col-md-3" for="{{ #published }}">{_ Published _}</label>
                                 <div class="col-md-9">
@@ -49,7 +49,7 @@
 	                        </div>
 	                    </div>
                     {% endblock %}
-                    
+
                     {% block tab_visible_for %}
 	                    <div class="tab-pane form-horizontal" id="{{ #acl }}">
 	                        {% include "_admin_edit_visible_for.tpl" id=id %}
@@ -60,7 +60,7 @@
                     {% endblock %}
                 </div>
             </div>
-            
+
             <div class="modal-footer">
 	            {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 	            {% if m.acl.use.mod_admin or m.acl.use.mod_admin_frontend %}
