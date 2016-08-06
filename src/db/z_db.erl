@@ -87,6 +87,8 @@
 
 -compile([{parse_transform, lager_transform}]).
 
+-type table_name() :: atom() | string().
+
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
 %% @spec transaction(Function, Context) -> FunctionResult | {error, Reason}
 transaction(Function, Context) ->
@@ -168,6 +170,7 @@ transaction_clear(Context) ->
 
 
 %% @doc Check if we have database connection
+-spec has_connection(#context{}) -> boolean().
 has_connection(Context) ->
     is_pid(erlang:whereis(z_context:db_pool(Context))).
 
@@ -191,6 +194,7 @@ return_connection(_C, _Context) ->
 
 %% @doc Apply function F with a connection as parameter. Make sure the
 %% connection is returned after usage.
+-spec with_connection(fun(), #context{}) -> any().
 with_connection(F, Context) ->
     with_connection(F, get_connection(Context), Context).
 
@@ -207,9 +211,11 @@ with_connection(F, Connection, Context) when is_pid(Connection) ->
 end.
 
 
+-spec assoc_row(string(), #context{}) -> list(tuple()).
 assoc_row(Sql, Context) ->
     assoc_row(Sql, [], Context).
 
+-spec assoc_row(string(), list(tuple()), #context{}) -> list(tuple()).
 assoc_row(Sql, Parameters, Context) ->
     case assoc(Sql, Parameters, Context) of
         [Row|_] -> Row;
@@ -227,7 +233,7 @@ assoc_props_row(Sql, Parameters, Context) ->
 
 
 %% @doc Return property lists of the results of a query on the database in the Context
-%% @spec assoc(SqlQuery, Context) -> Rows
+-spec assoc(string(), #context{}) -> list().
 assoc(Sql, Context) ->
     assoc(Sql, [], Context).
 
@@ -302,6 +308,7 @@ q1(Sql, Parameters, #context{} = Context) ->
 q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q1(Sql, [], Context, Timeout).
 
+-spec q1(string(), list(tuple()), #context{}, pos_integer()) -> term() | undefined.
 q1(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> undefined;
@@ -750,7 +757,7 @@ create_schema(_Site, Connection, Schema) ->
     end.
 
 %% @doc Check the information schema if a certain table exists in the context database.
--spec table_exists(string(), #context{}) -> boolean().
+-spec table_exists(table_name(), #context{}) -> boolean().
 table_exists(Table, Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
@@ -767,11 +774,12 @@ table_exists(Table, Context) ->
 
 
 %% @doc Make sure that a table is dropped, only when the table exists
+-spec drop_table(table_name(), #context{}) -> ok.
 drop_table(Name, Context) when is_atom(Name) ->
     drop_table(atom_to_list(Name), Context);
 drop_table(Name, Context) ->
     case table_exists(Name, Context) of
-        true -> q("drop table \""++Name++"\"", Context);
+        true -> q("drop table \""++Name++"\"", Context), ok;
         false -> ok
     end.
 
@@ -779,6 +787,7 @@ drop_table(Name, Context) ->
 %% @doc Ensure that a table with the given columns exists, alter any existing table
 %% to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
 %% when creating the table.
+-spec create_table(table_name(), list(), #context{}) -> ok.
 create_table(Table, Cols, Context) when is_atom(Table)->
     create_table(atom_to_list(Table), Cols, Context);
 create_table(Table, Cols, Context) ->
@@ -830,7 +839,7 @@ assert_table_name1([H|T]) when (H >= $a andalso H =< $z) orelse (H >= $0 andalso
 
 
 %% @doc Merge the contents of the props column into the result rows
-%% @spec merge_props(list()) -> list()
+-spec merge_props(list() | undefined) -> list().
 merge_props(undefined) ->
     undefined;
 merge_props(List) ->
@@ -849,6 +858,7 @@ merge_props([R|Rest], Acc) ->
     end.
 
 
+-spec assoc1(atom(), #context{}, string(), [tuple()], pos_integer()) -> {ok, [[tuple()]]}.
 assoc1(DbDriver, C, Sql, Parameters, Timeout) ->
     case DbDriver:equery(C, Sql, Parameters, Timeout) of
         {ok, Columns, Rows} ->

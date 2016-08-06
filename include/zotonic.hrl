@@ -55,7 +55,7 @@
         dbc=undefined :: pid() | undefined,
 
         %% The pid of the database pool of this site and the db driver in use (usually z_db_pgsql)
-        db=undefined :: {pid(), atom()} | undefined,
+        db=undefined :: {atom(), atom()} | undefined,
 
         %% The language selected, used by z_trans and others
         %% The first language in the list is the selected language, the tail are the fallback languages

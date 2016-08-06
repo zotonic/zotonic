@@ -18,6 +18,7 @@ script:
   - make -C doc/ stubs
   - make -C doc/ SPHINXOPTS='-nW' html
   - ./rebar3 xref
+  - ./rebar3 dialyzer
 sudo: false
 branches:
   only:

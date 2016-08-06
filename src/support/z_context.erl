@@ -187,6 +187,7 @@ new(Req, Module) when is_map(Req) ->
     Context#context{controller_module=Module}.
 
 
+-spec set_default_language_tz(#context{}) -> #context{}.
 set_default_language_tz(Context) ->
     F = fun() -> {z_language:default_language(Context), tz_config(Context)} end,
     {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
@@ -416,10 +417,12 @@ abs_url(Url, Context) ->
 
 
 %% @doc Fetch the pid of the database worker pool for this site
+-spec db_pool(#context{}) -> atom().
 db_pool(#context{db={Pool, _Driver}}) ->
     Pool.
 
 %% @doc Fetch the database driver module for this site
+-spec db_driver(#context{}) -> atom().
 db_driver(#context{db={_Pool, Driver}}) ->
     Driver.
 
