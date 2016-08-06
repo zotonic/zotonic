@@ -6,7 +6,7 @@
 
  Copyright 2009 Tim Benniks
  Copyright 2012 Arjan Scherpenisse
- Copyright 2015-2016 Arthur Clemens
+ Copyright 2015, 2016 Arthur Clemens
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,23 +23,6 @@
  ---------------------------------------------------------- */
 
 (function($) {
-
-    function dialogReposition() {
-        var $dialog,
-            minMargin,
-            newMarginTop;
-        $dialog = $('#zmodal:visible').find('.modal-dialog');
-        minMargin = parseInt($dialog.css('margin-top') || 0, 0);
-        if (!$dialog.data('minMargin')) {
-            $dialog.data('minMargin', minMargin);
-        }
-        newMarginTop = Math.max(0, ($(window).height() - $dialog.height()) / 2);
-        newMarginTop *= .96; // visual coherence
-        if (newMarginTop > $dialog.data('minMargin')) {
-            $dialog.css('margin-top', newMarginTop);
-        }
-    }
-
     $.extend({
         dialogAdd: function(options) {
             var width,
@@ -109,7 +92,7 @@
 
             if (options.center) {
                 setTimeout(function() {
-                    dialogReposition();
+                    $.dialogReposition();
                     $modalDialog.show();
                 }, 0);
             }
@@ -133,11 +116,21 @@
               .fadeOut(300, function() {
                   $(this).remove();
               });
+        },
+
+        dialogReposition: function() {
+            var $dialog,
+                newMarginTop;
+            $dialog = $('#zmodal:visible').find('.modal-dialog');
+            newMarginTop = Math.max(0, ($(window).height() - $dialog.height()) / 2);
+            newMarginTop *= .96; // visual coherence
+            newMarginTop = Math.max(newMarginTop, 0);
+            $dialog.css('margin-top', newMarginTop);
         }
     });
 
     $(window).on('resize', function() {
-        dialogReposition();
+        $.dialogReposition();
     });
 
     $.widget('ui.show_dialog', {
