@@ -6,14 +6,14 @@
 
  Copyright 2009 Tim Benniks
  Copyright 2012 Arjan Scherpenisse
- Copyright 2015 Arthur Clemens
- 
+ Copyright 2015-2016 Arthur Clemens
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
  http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@
  ---------------------------------------------------------- */
 
 (function($) {
-    
+
     function dialogReposition() {
         var $dialog,
             minMargin,
@@ -39,7 +39,7 @@
             $dialog.css('margin-top', newMarginTop);
         }
     }
-    
+
     $.extend({
         dialogAdd: function(options) {
             var width,
@@ -50,7 +50,7 @@
                 dialogClass,
                 $modalDialog,
                 $dialog;
-            
+
             $('#zmodal').remove();
             $('.modal-backdrop').remove();
 
@@ -76,7 +76,7 @@
                   .addClass('modal-body')
                   .html(options.text);
             }
-            
+
             $modalContent = $('<div>')
               .addClass('modal-content')
               .append($title)
@@ -89,13 +89,14 @@
 
             $modalDialog = $('<div>')
               .addClass('modal-dialog')
-              .append($modalContent);
+              .append($modalContent)
+              .hide();
 
             width = options.width;
             if (width) {
                 $modalDialog.css({'width': width + 'px'});
             }
-            
+
             $dialog = $('<div>')
               .attr('id', 'zmodal')
               .addClass(dialogClass)
@@ -107,9 +108,12 @@
               .css({'overflow-x': 'hidden', 'overflow-y': 'auto'});
 
             if (options.center) {
-                dialogReposition();
+                setTimeout(function() {
+                    dialogReposition();
+                    $modalDialog.show();
+                }, 0);
             }
-            
+
             if (typeof($.widgetManager) != 'undefined') {
                 $dialog.widgetManager();
             }
@@ -131,11 +135,11 @@
               });
         }
     });
-    
+
     $(window).on('resize', function() {
         dialogReposition();
     });
-    
+
     $.widget('ui.show_dialog', {
         _init: function() {
             var self = this;
@@ -150,7 +154,7 @@
             });
         }
     });
- 
+
     /*
     Default dialog parameters:
     title: text, will be inserted in h4
