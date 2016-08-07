@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,9 @@ m_find_value(language_list, #m{value=undefined}, Context) ->
 m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
 	language_list_enabled(Context);
 m_find_value(language_list_all, #m{value=undefined}, Context) ->
-	language_list_all(Context).
+	language_list_all(Context);
+m_find_value(language_list_all_stats, #m{value=undefined}, Context) ->
+	language_list_all_stats(Context).
 
 m_to_list(#m{}, _Context) ->
 	[].
@@ -54,7 +56,7 @@ m_value(#m{}, _Context) ->
 
 language_list(Context) ->
 	case m_config:get(i18n, language_list, Context) of
-		undefined -> 
+		undefined ->
 			[];
 		Config ->
 			case proplists:get_value(list, Config, Context) of
@@ -63,12 +65,20 @@ language_list(Context) ->
 			end
 	end.
 
+
 language_list_enabled(Context) ->
 	lists:filter(fun({_Code,Props}) ->
 					proplists:get_value(is_enabled, Props)
 				 end,
 				 language_list(Context)).
 
+
+%% Makes languages list available in templates.
 language_list_all(_Context) ->
-	[ {Code, [{language, Title}]} || {Code,Title} <- iso639:all2lang() ].
+	languages:languages().
+
+
+%% Gets languages list with sub-language statistics.
+language_list_all_stats(_Context) ->
+	languages:languages_stats().
 

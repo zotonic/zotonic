@@ -32,8 +32,7 @@
     lookup_fallback_language/3,
     default_language/1,
     is_language/1,
-    to_language_atom/1,
-    lc2descr/1
+    to_language_atom/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -245,28 +244,23 @@ default_language(Context) ->
 
 
 %% @doc check if the ISO code is a valid language
--spec is_language(Language :: string() | binary()) -> boolean().
-is_language(<<A,B>>) ->
-    iso639:lc2lang([A,B]) /= <<>>;
-is_language(IsoCode) ->
-    iso639:lc2lang(IsoCode) /= <<>>.
+-spec is_language(LangCode :: binary()) -> boolean().
+is_language(LangCode) when is_list(LangCode) ->
+    is_language(list_to_binary(LangCode));
+is_language(LangCode) ->
+    languages:lc2lang(LangCode) /= undefined.
+
 
 %% @doc Translate a language-code to an atom.
--spec to_language_atom(IsoCode:: list() | binary()) -> {ok, atom()} | {error, not_a_language}.
-to_language_atom(IsoCode) when is_list(IsoCode) ->
-    case is_language(IsoCode) of
+-spec to_language_atom(LanguageCode:: list() | binary()) -> {ok, atom()} | {error, not_a_language}.
+to_language_atom(LanguageCode) when is_list(LanguageCode) ->
+    case is_language(LanguageCode) of
         false -> {error, not_a_language};
-        true -> {ok, list_to_atom(IsoCode)}
+        true -> {ok, list_to_atom(LanguageCode)}
     end;
-to_language_atom(IsoCode) when is_atom(IsoCode) ->
-    to_language_atom(atom_to_list(IsoCode));
-to_language_atom(IsoCode) when is_binary(IsoCode) ->
-    to_language_atom(binary_to_list(IsoCode));
+to_language_atom(LanguageCode) when is_atom(LanguageCode) ->
+    to_language_atom(atom_to_list(LanguageCode));
+to_language_atom(LanguageCode) when is_binary(LanguageCode) ->
+    to_language_atom(binary_to_list(LanguageCode));
 to_language_atom(_) ->
     {error, not_a_language}.
-
-
-%% @doc Return a descriptive (english) string for the language
--spec lc2descr(atom()) -> binary().
-lc2descr(Language) ->
-    iso639:lc2lang(atom_to_list(Language)).

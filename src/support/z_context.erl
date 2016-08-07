@@ -22,7 +22,7 @@
 -export([
     new/1,
     new/2,
-    
+
     new_tests/0,
 
     site/1,
@@ -32,7 +32,7 @@
 
     db_pool/1,
     db_driver/1,
-         
+
     is_request/1,
 
     prune_for_spawn/1,
@@ -52,7 +52,7 @@
 
     has_session/1,
     has_session_page/1,
-    
+
     ensure_all/1,
     ensure_session/1,
     ensure_qs/1,
@@ -217,8 +217,8 @@ new_tests() ->
                 notifier='z_notifier$test'
             }),
     case ets:info(Context#context.translation_table) of
-        undefined -> 
-            ets:new(Context#context.translation_table, 
+        undefined ->
+            ets:new(Context#context.translation_table,
                     [named_table, set, protected,  {read_concurrency, true}]);
         _TabInfo ->
             ok
@@ -390,7 +390,7 @@ prune_reqdata(ReqData) ->
 
 %% @doc Make the url an absolute url by prepending the hostname.
 %% @spec abs_url(iolist(), Context) -> binary()
-abs_url(<<"http:", _/binary>> = Url, _Context) -> 
+abs_url(<<"http:", _/binary>> = Url, _Context) ->
     Url;
 abs_url(<<"https", _/binary>> = Url, _Context) ->
     Url;
@@ -400,7 +400,7 @@ abs_url(Url, Context) when is_list(Url) ->
     abs_url(iolist_to_binary(Url), Context);
 abs_url(Url, Context) ->
     case has_url_protocol(Url) of
-        true -> 
+        true ->
             Url;
         false ->
             case z_notifier:first(#url_abs{url=Url}, Context) of
@@ -442,7 +442,7 @@ site_protocol(Context) ->
 %% @spec pickle(Context) -> tuple()
 pickle(Context) ->
     {pickled_context,
-        Context#context.host, 
+        Context#context.host,
         Context#context.user_id,
         Context#context.language,
         Context#context.tz,
@@ -498,7 +498,7 @@ output1([T|Rest], Context, Acc) when is_tuple(T) ->
     output1([iolist_to_binary(io_lib:format("~p", [T]))|Rest], Context, Acc);
 output1([C|Rest], Context, Acc) ->
     output1(Rest, Context, [C|Acc]).
-    
+
 render_script(Args, Context) ->
     NoStartup = z_convert:to_bool(z_utils:get_value(nostartup, Args, false)),
     NoStream = z_convert:to_bool(z_utils:get_value(nostream, Args, false)),
@@ -525,7 +525,7 @@ render_script(Args, Context) ->
         <<"escapejs">> ->
             z_utils:js_escape(Script)
     end.
-        
+
 
 %% @spec combine_results(Context1, Context2) -> Context
 %% @doc Merge the scripts and the rendered content of two contexts into Context1
@@ -546,7 +546,7 @@ merge_scripts(C, Acc) ->
         wire=combine(Acc#context.wire, C#context.wire),
         validators=combine(Acc#context.validators, C#context.validators)
     }.
-    
+
 combine([],X) -> X;
 combine(X,[]) -> X;
 combine(X,Y) -> [X,Y].
@@ -580,7 +580,7 @@ continue_session(Context) ->
         {error, _} ->
             Context
     end.
-    
+
 
 %% @doc Check if the current context has a session page attached
 has_session_page(#context{page_pid=PagePid}) when is_pid(PagePid) ->
@@ -625,7 +625,7 @@ maybe_logon_from_session(Context) ->
 %% @doc Ensure that we have a page session process for this request.
 ensure_page_session(#context{session_pid=undefined} = Context) ->
     Context;
-    
+
 ensure_page_session(Context) ->
     z_session:ensure_page_session(Context).
 
@@ -679,7 +679,7 @@ set_controller_module(Module, Context) ->
 set_q(Key, Value, Context) ->
     Qs = get_q_all(Context),
     Qs1 = proplists:delete(Key, Qs),
-    z_context:set('q', [{Key,Value}|Qs1], Context). 
+    z_context:set('q', [{Key,Value}|Qs1], Context).
 
 
 %% @spec get_q(Key::string(), Context) -> Value::string() | undefined
@@ -984,7 +984,8 @@ incr(Key, Value, Context) ->
 %% @doc Return the selected language of the Context
 -spec language(#context{}) -> atom().
 language(Context) ->
-    % A check on atom must exist because the language setting may be stored in mnesia and passed to the context when the site starts
+    % A check on atom must exist because the language setting may be stored in mnesia and
+    % passed to the context when the site starts
     case Context#context.language of
         [Language|_] -> Language;
         Language -> Language
@@ -1006,9 +1007,8 @@ set_language(Lang, Context) when is_atom(Lang) ->
 set_language(Langs, Context) when is_list(Langs) ->
     Context#context{language=Langs};
 set_language(Lang, Context) ->
-    Lang1 = z_convert:to_list(Lang),
-    case z_trans:is_language(Lang1) of
-        true -> set_language(list_to_atom(Lang1), Context);
+    case z_trans:is_language(Lang) of
+        true -> set_language(z_convert:to_atom(Lang), Context);
         false -> Context
     end.
 
@@ -1189,5 +1189,5 @@ get_cookie(Key, #context{wm_reqdata=RD}) ->
 get_cookies(Key, #context{wm_reqdata=RD}) ->
     case wrq:req_cookie(RD) of
         undefined -> [];
-        Cookies -> proplists:get_all_values(Key, Cookies) 
+        Cookies -> proplists:get_all_values(Key, Cookies)
     end.
