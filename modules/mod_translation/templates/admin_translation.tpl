@@ -17,54 +17,66 @@
 </div>
 
 <div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th width="10%">{_ Enabled _}</th>
-                    <th width="10%">{_ Default _}</th>
-                    <th width="15%">{_ Language _}</th>
-                    <th width="15%">{_ Fallback _}</th>
-                    <th></th>
-                </tr>
-            </thead>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th width="10%">{_ Enabled _}</th>
+                <th width="10%">{_ Default _}</th>
+                <th width="20%">{_ Language _}</th>
+                <th width="10%">{_ Code _}</th>
+                <th width="10%">{_ Territory _}</th>
+                <th width="10%">{_ Script _}</th>
+                <th></th>
+            </tr>
+        </thead>
 
-            <tbody>
-                {% with m.config.i18n.language.value as default_code %}
-                    {% for code, lang in m.config.i18n.language_list.list %}
-                        <tr id="{{ #li.code }}">
-                            <td>
-                                <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"
-                                {% if lang.is_enabled %}checked="checked"{% endif %} />
-                                {% wire id=#enabled.code postback={language_enable code=code} delegate="mod_translation" %}
-                            </td>
-                            <td>
-                                <input type="radio" id="{{ #default.code }}" name="is_default" value="{{ code }}"
-                                {% if code == default_code %}checked="checked"{% endif %} />
-                                {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
-                            </td>
-                            <td class="clickable" id="{{ #b.code }}">
-                                {{ lang.name|default:"-" }}<br />
-                                <code class="text-muted">{{ code|default:"-" }}</code>
-                            </td>
-                            <td class="clickable" id="{{ #a.fallback }}">{{ lang.fallback|default:"-" }}</td>
-                            <td class="clickable">
-                                <div class="pull-right">
-                                    {% button class="btn btn-default btn-xs" text=_"Delete"
-                                        action={dialog_open
-                                            title=_"Delete language"
-                                            template="_dialog_language_delete.tpl"
-                                            code=code lang=lang
-                                        }
-                                    %}
-                                    {% button class="btn btn-default btn-xs"text=_"Edit"
-                                        action={dialog_open
-                                            title=_"Edit language"|append:": "|append:lang.name template="_dialog_language_edit.tpl"
-                                            code=code lang=lang fallback=lang.fallback}
-                                    %}
-                                </div>
-                            </td>
-                            {% wire id=#a.code action={dialog_open title=_"Edit language" template="_dialog_language_edit.tpl" code=code lang=lang} %}
-            {% wire id=#b.code action={dialog_open title=_"Edit language" template="_dialog_language_edit.tpl" code=code lang=lang} %}
+        <tbody>
+            {% with m.config.i18n.language.value as default_code %}
+                {% for code, lang in m.config.i18n.language_list.list %}
+                    <tr id="{{ #li.code }}">
+                        <td>
+                            <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"
+                            {% if lang.is_enabled %}checked="checked"{% endif %} />
+                            {% wire id=#enabled.code postback={language_enable code=code} delegate="mod_translation" %}
+                        </td>
+                        <td>
+                            <input type="radio" id="{{ #default.code }}" name="is_default" value="{{ code }}"
+                            {% if code == default_code %}checked="checked"{% endif %} />
+                            {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
+                        </td>
+                        <td>
+                            {{ lang.name_en|default:"-" }}
+                        </td>
+                        <td>
+                            {{ code|default:"-" }}
+                        </td>
+                        <td>
+                            {{ lang.territory|default:"<span class='text-muted'>-</span>" }}
+                        </td>
+                        <td>
+                            {{ lang.script|default:"<span class='text-muted'>-</span>" }}
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                {% button class="btn btn-default btn-xs" text=_"Deactivate"
+                                    action={
+                                        dialog_open
+                                        title=_"Deactivate language"|append:": "|append:lang.name_en
+                                        template="_dialog_language_delete.tpl"
+                                        code=code
+                                        lang=lang
+                                    }
+                                %}
+                                {% button class="btn btn-default btn-xs"text=_"Details"
+                                    action={
+                                        dialog_open
+                                        title=_"Language"|append:": "|append:lang.name_en
+                                        template="_dialog_language_edit.tpl"
+                                        code=code
+                                    }
+                                %}
+                            </div>
+                        </td>
         </tr>
         {% empty %}
         <tr>
