@@ -123,10 +123,21 @@ content_types_provided(ReqData, Context) ->
 to_json(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
     Module = z_context:get(service_module, Context),
-    case Module:process_get(ReqData, Context) of
-        {R, C=#context{}} -> api_result(R, C);
-        R -> api_result(R, Context)
+    try
+        case Module:process_get(ReqData, Context) of
+            {R, C=#context{}} -> api_result(R, C);
+            R -> api_result(R, Context)
+        end
+    catch
+        throw:{error, _, _} = R1 ->
+            api_result(Context, R1);
+        throw:{error, _, _, _} = R2 ->
+            api_result(Context, R2);
+        E:R3 ->
+            lager:error("controller_api error: ~p:~p - ~p", [E, R3, erlang:get_stacktrace()]),
+            api_result(Context, {error, internal_server_error, []})
     end.
+
 
 
 %% @doc Called for 'POST' requests
@@ -137,13 +148,23 @@ process_post(ReqData, Context0) ->
         {ok, Context1} ->
             Module = z_context:get(service_module, Context1),
             ReqData1 = z_context:get_reqdata(Context1),
-            case Module:process_post(ReqData1, Context1) of
-                ok ->
-                    {true, ReqData1, Context1};
-                {Result, Context2=#context{}} ->
-                    api_result(Result, Context2);
-                Result ->
-                    api_result(Result, Context1)
+            try
+                case Module:process_post(ReqData1, Context1) of
+                    ok ->
+                        {true, ReqData1, Context1};
+                    {Result, Context2=#context{}} ->
+                        api_result(Result, Context2);
+                    Result ->
+                        api_result(Result, Context1)
+                end
+            catch
+                throw:{error, _, _} = R1 ->
+                    api_result(Context1, R1);
+                throw:{error, _, _, _} = R2 ->
+                    api_result(Context1, R2);
+                E:R ->
+                    lager:error("controller_api error: ~p:~p - ~p", [E, R, erlang:get_stacktrace()]),
+                    api_result(Context1, {error, internal_server_error, []})
             end
     end.
 
@@ -227,13 +248,13 @@ api_result(Result, ReqData, Context) ->
         {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
     catch
         E:R ->
-            lager:warning("API error: ~p:~p", [E,R]),
+            lager:error("controller_api error: ~p:~p - ~p", [E, R, erlang:get_stacktrace()]),
             ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
             {{halt, 500}, ReqData1, Context}
     end.
 
 result_to_json(B) when is_binary(B) -> B;
-result_to_json({binary_json, R}) -> iolist_to_binary(mochijson2:binary_encode(R));
+result_to_json({binary_json, R}) -> iolist_to_binary(mochijson2:encode(R));
 result_to_json(R) -> iolist_to_binary(mochijson2:encode(R)).
 
 

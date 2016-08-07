@@ -25,7 +25,6 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 // Client state
 var z_language              = "en";
-var z_ua                    = "desktop";
 var z_pageid                = '';
 var z_userid;
 var z_editor;
@@ -77,7 +76,7 @@ function z_set_page_id( page_id, user_id )
 {
     ubf.add_spec('z_msg_v1', [
         "qos", "dup", "msg_id", "timestamp", "content_type", "delegate",
-        "push_queue", "ua_class", "session_id", "page_id",
+        "push_queue", "session_id", "page_id",
         "data"
         ]);
     ubf.add_spec('z_msg_ack', [
@@ -525,7 +524,6 @@ function z_transport(delegate, content_type, data, options)
             "timestamp": timestamp,
             "content_type": z_transport_content_type(content_type),
             "delegate": z_transport_delegate(delegate),
-            "ua_class": ubf.constant(z_ua),
             "page_id": z_pageid,
             "session_id": window.z_sid || undefined,
             "data": data
@@ -1122,7 +1120,6 @@ function z_comet_poll_ajax()
                 "timestamp": new Date().getTime(),
                 "content_type": ubf.constant("ubf"),
                 "delegate": ubf.constant('$comet'),
-                "ua_class": ubf.constant(z_ua),
                 "page_id": z_pageid,
                 "session_id": window.z_sid || undefined,
                 "data": z_comet_poll_count
@@ -1229,7 +1226,6 @@ function z_websocket_ping()
                     "timestamp": new Date().getTime(),
                     "content_type": ubf.constant("ubf"),
                     "delegate": ubf.constant('$ping'),
-                    "ua_class": ubf.constant(z_ua),
                     "page_id": z_pageid,
                     "session_id": window.z_sid || undefined,
                     "data": z_ws_pong_count

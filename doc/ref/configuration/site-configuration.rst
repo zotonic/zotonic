@@ -106,7 +106,7 @@ The following options can be configured:
 ``{ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8"}``
   List of TCP/IP addresses and their netmasks.
   The admin user password *admin* will only be accepted if logging in
-  from a host matching the whitelisted IP addresses. This for protecting 
+  from a host matching the whitelisted IP addresses. This for protecting
   development systems that are exposed to the Internet.
   This can also be configured in the :ref:`guide-configuration`.
 
@@ -175,7 +175,7 @@ this to the site's config::
 
   {mod_foo, [{key, value}, ...]}
 
-For instance, to set the ``mod_ssl.is_secure`` configuration options 
+For instance, to set the ``mod_ssl.is_secure`` configuration options
 from :ref:`mod_ssl`, do::
 
   {mod_ssl, [{is_secure, true}]}
@@ -190,6 +190,35 @@ site for them to have effect. From the Zotonic shell, do::
   z_sites_manager:restart(yoursitename).
 
 to restart your site.
+
+
+Using environment variables in the site config
+----------------------------------------------
+
+Any variable in your site's ``config`` file can be retrieved from the
+OS environment variables. To do so, wrap the config value in a ``{env,
+...}`` tuple. For instance, to use the ``DB_HOST`` environment
+variable as the database host, put the following as the ``dbhost``
+config value::
+
+  {dbhost, {env, "DB_HOST"}},
+
+Besides ``{env, "NAME"}`` tuple, you can also specify ``{env, "NAME",
+"default value"}`` for the case the environment variable is not set::
+
+  {dbhost, {env, "DB_HOST", "localhost"}},
+
+To convert environment variables to integer (e.g. for the database
+port), use ``env_int``::
+
+  {dbhost, {env_int, "DB_PORT"}},
+
+or, with default value::
+
+  {dbhost, {env_int, "DB_PORT", "5432"}},
+
+(note that the default value needs to be a string in this case, not an
+int).
 
 
 Tip: multiple sites using one database
@@ -211,4 +240,3 @@ schema::
 And then in your site config put a ``{dbschema, "anothersite"}`` entry
 next to the regular database config keys. Restart zotonic and off you
 go.
-

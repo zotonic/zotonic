@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,14 +68,14 @@ configure_test_schema(Site) ->
 %% @doc Remove the site config overrides.
 unconfigure_test_schema(Site) ->
     z_sites_manager:put_site_config_overrides(Site, []).
-    
+
 %% @doc Start watching the given site for .erl file changes. As soon
 %% as any Erlang module inside the watched site is recompiled, all
 %% sitetests are run.
 watch(Site) ->
-    application:set_env(zotonic, sitetest_watched, 
+    application:set_env(zotonic, sitetest_watched,
                         sets:to_list(sets:from_list(watches() ++ [Site]))).
-    
+
 %% @doc Stop the sitetests from being run when Erlang modules in the
 %% site are recompiled.
 unwatch(Site) ->
@@ -102,10 +102,10 @@ ensure_drop_test_schema(Site) ->
 %% @doc Drop a schema
 -spec drop_schema(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
 drop_schema(Site, Connection, Schema) ->
-    case pgsql:equery(
-           Connection, 
+    case epgsql:equery(
+           Connection,
            "DROP SCHEMA \"" ++ Schema ++ "\" CASCADE"
-          ) of  
+          ) of
         {ok, _, _} ->
             ok;
         {error, {error, error, <<"3F000">>, _, _}} ->
@@ -113,11 +113,11 @@ drop_schema(Site, Connection, Schema) ->
         {error, Reason} = Error ->
             lager:error("[~p] z_sitetest: error while dropping schema ~p: ~p", [Site, Schema, Reason]),
             Error
-    end.    
+    end.
 
 
 open_connection(DatabaseName, Options) ->
-    pgsql:connect(
+    epgsql:connect(
       proplists:get_value(dbhost, Options),
       proplists:get_value(dbuser, Options),
       proplists:get_value(dbpassword, Options),
@@ -128,7 +128,7 @@ open_connection(DatabaseName, Options) ->
      ).
 
 close_connection(Connection) ->
-    pgsql:close(Connection).
+    epgsql:close(Connection).
 
 
 %% @doc Start the site, and wait for it to be fully booted.

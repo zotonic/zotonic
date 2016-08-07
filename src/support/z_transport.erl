@@ -186,28 +186,27 @@ incoming_msgs(#z_msg_v1{page_id=undefined}, #context{page_id=undefined} = Contex
               "Transport with 'undefined' page_id from ~p",
               [m_req:get(peer, Context)]),
     {ok, [msg(undefined, session, <<"page_invalid">>, [])], Context};
-incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_class=UA, content_type=CT} = Msg, Context) ->
+incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content_type=CT} = Msg, Context) ->
     Context1 = maybe_logon(maybe_set_sessions(SessionId, PageId, Context)),
-    Context2 = maybe_set_uaclass(UA, Context1),
     try
-        maybe_auth_change(incoming_1(Msg#z_msg_v1{data=decode_data(CT,Data)}, Context2), Context2)
+        maybe_auth_change(incoming_1(Msg#z_msg_v1{data=decode_data(CT,Data)}, Context1), Context1)
     catch
         throw:Reason ->
             Stacktrace = erlang:get_stacktrace(),
-            lager:error(z_context:lager_md(Context2),
+            lager:error(z_context:lager_md(Context1),
                         "Throw '~p' for transport message ~p",
                         [Reason, Msg]),
-            lager:error(z_context:lager_md(Context2),
+            lager:error(z_context:lager_md(Context1),
                         "Stack: ~p", [Stacktrace]),
-            {ok, maybe_ack({error, Reason}, Msg, Context2), Context2};
+            {ok, maybe_ack({error, Reason}, Msg, Context1), Context1};
         error:Reason ->
             Stacktrace = erlang:get_stacktrace(),
-            lager:error(z_context:lager_md(Context2),
+            lager:error(z_context:lager_md(Context1),
                         "Error '~p' for transport message ~p",
                         [Reason, Msg]),
-            lager:error(z_context:lager_md(Context2),
+            lager:error(z_context:lager_md(Context1),
                         "Stack: ~p", [Stacktrace]),
-            {ok, maybe_ack({error, error}, Msg, Context2), Context2}
+            {ok, maybe_ack({error, error}, Msg, Context1), Context1}
     end;
 incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
     Context1 = maybe_set_sessions(SessionId, PageId, Context),
@@ -384,13 +383,6 @@ maybe_set_page_session(PageId, Context) ->
             lager:info("PageId without page session (session_id ~p)", [Context#context.session_id]),
             Context#context{session_pid=undefined}
     end.
-
-maybe_set_uaclass(undefined, Context) ->
-    Context;
-maybe_set_uaclass(UA, #context{ua_class=UA} = Context) ->
-    Context;
-maybe_set_uaclass(UA, Context) when is_atom(UA) ->
-    z_user_agent:set_class(UA, Context).
 
 maybe_set_q(form, Qs, Context) -> 
     set_q(Qs, Context);

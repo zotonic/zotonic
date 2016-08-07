@@ -36,12 +36,12 @@
 -define(CLEANUP_TIMEOUT_LONG, 600000).
 -define(CLEANUP_TIMEOUT_SHORT, 10000).
 
--record(state, {host}).
+-record(state, {site :: atom()}).
 
 
 %% @doc Force a cleanup - useful after mass deletes, or when disk space is getting low.
 cleanup(Context) ->
-    Name = z_utils:name_for_host(?MODULE, Context),
+    Name = z_utils:name_for_site(?MODULE, Context),
     gen_server:cast(Name, cleanup).
 
 
@@ -53,8 +53,8 @@ cleanup(Context) ->
 start_link() ->
     start_link([]).
 start_link(Args) when is_list(Args) ->
-    {host, Host} = proplists:lookup(host, Args),
-    Name = z_utils:name_for_host(?MODULE, Host),
+    {site, Site} = proplists:lookup(site, Args),
+    Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, Args, []).
 
 %%====================================================================
@@ -67,12 +67,12 @@ start_link(Args) when is_list(Args) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
-    {host, Host} = proplists:lookup(host, Args),
+    {site, Site} = proplists:lookup(site, Args),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
-    {ok, #state{host=Host}, ?CLEANUP_TIMEOUT_LONG}.
+    {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -89,7 +89,7 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @doc Trap unknown casts
 handle_cast(cleanup, State) ->
-    case do_cleanup(State#state.host) of
+    case do_cleanup(State#state.site) of
         {ok, 0} ->
             {noreply, State, ?CLEANUP_TIMEOUT_LONG};
         {ok, _} ->
@@ -130,8 +130,8 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-do_cleanup(Host) ->
-    Context = z_context:new(Host),
+do_cleanup(Site) ->
+    Context = z_context:new(Site),
     do_cleanup_1(z_db:q("
                     select id, filename, deleted
                     from medium_deleted

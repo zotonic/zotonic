@@ -19,27 +19,41 @@ into the new schema), and then scans all compiled Erlang modules for
 modules named ``example_*_sitetest.erl``. These found test modules are
 then run using Erlang's standard `EUnit test framework <http://erlang.org/doc/apps/eunit/chapter.html>`_.
 
+.. note:: The filename pattern of the tests is
+   `(sitename)_(testname)_sitetest.erl`, where `sitename` is the name
+   of the site under test (lowercase alphanumerics + underscores), and
+   `testname` is a name for the test suite (lowercase alphanumerics
+   *only*). `testname` **cannot** contain any underscores.
+
+
+Besides running the tests from the Erlang shell, they can also be run
+from the terminal commandline::
+
+  zotonic sitetest example
+
+This is convenient for integration into CI systems. See :ref:`ref-cli`.
+
 
 Example ``sitetest`` module
 ---------------------------
 
 Put the following inside the ``example`` site under the filename
-``tests/example_administrator_name_sitetest.erl``:
+``tests/example_administrator_sitetest.erl``:
 
 .. code-block:: erlang
 
-     -module(example_administrator_name_sitetest).
+     -module(example_administrator_sitetest).
      -compile(export_all).
-  
+
      -include_lib("eunit/include/eunit.hrl").
-  
+
      sudo_context() ->
        z_acl:sudo(z:c(example)).
-  
+
      administrator_name_test() ->
        ?assertEqual(<<"Site Administrator">>, m_rsc:p(1, title, sudo_context())),
        ok.
-  
+
 
 Test Driven Development
 -----------------------
@@ -66,7 +80,7 @@ Example testing output
 
 Running the test command ``z_sitetest:run(example).``, will produce output similar to the following::
 
-    (zotonic001@host)33> z_sitetest:run(example).                                          
+    (zotonic001@host)33> z_sitetest:run(example).
     15:45:18.162 [info] Site stopped: example (<0.17763.0>)
     15:45:18.682 [warning] [example] Database connection failure: noschema
     15:45:18.688 [warning] [example] Creating schema "z_sitetest" in database "example"
@@ -95,8 +109,7 @@ Running the test command ``z_sitetest:run(example).``, will produce output simil
     15:45:20.086 [info] [example] info @ z_datamodel:169  Creating new acl_user_group 'acl_user_group_managers'
     15:45:20.393 [info] [example] info @ z_datamodel:169  Creating new category 'admin_content_query'
     ======================== EUnit ========================
-    example_testone_sitetest: administrator_name_test (module 'example_administrator_name_sitetest')...[0.022 s] ok
+    example_testone_sitetest: administrator_name_test (module 'example_administrator_sitetest')...[0.022 s] ok
     =======================================================
       Test passed.
     ok
-    

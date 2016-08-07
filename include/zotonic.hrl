@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2011 Marc Worrell
+%% @copyright 2009-2016 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009-2011 Marc Worrell
+%% Copyright 2009-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@
 
 %% @doc The request context, session information and other
 -record(context, {
-        %% The host
-        host=default :: atom(),
+        %% The site
+        site=default :: atom(),
 
         %% Webmachine request data (only set when this context is used because of a request)
         wm_reqdata=undefined :: #wm_reqdata{} | undefined,
@@ -40,10 +40,7 @@
         page_pid=undefined :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
         page_id=undefined :: string() | undefined,
 
-        %% About the user-agent this context is used with.
-        ua_class=undefined :: ua_classifier:device_type() | undefined,
-        
-        %% Servers and supervisors for the site/host
+        %% Servers and supervisors for the site
         depcache,
         notifier,
         session_manager,
@@ -93,7 +90,7 @@
 -define(WM_REQ(ReqData, Context), z_context:set_reqdata(ReqData, Context)).
 -define(WM_REPLY(Reply, Context), {Reply, Context#context.wm_reqdata, Context#context{wm_reqdata=undefined}}).
 
--define(HOST(Context), Context#context.host).
+-define(SITE(Context), Context#context.site).
 -define(DBC(Context), Context#context.dbc).
 
 -define(ST_JUTTEMIS, {{9999,8,17}, {12,0,0}}).
@@ -113,7 +110,6 @@
         push_queue = page :: page | session | user,
 
         % Set by transports from user-agent to server
-        ua_class=undefined :: ua_classifier:device_type() | undefined,
         session_id :: binary(),
         page_id :: binary(),
 
@@ -152,14 +148,14 @@
 
 
 %% Used for storing templates/scomps etc. in the lookup ets table
--record(module_index_key, {site, type, name, ua_class=generic}).
+-record(module_index_key, {site, type, name}).
 -record(module_index, {key, filepath, module, erlang_module, tag}).
 
 %% Name of the global module index table
 -define(MODULE_INDEX, 'zotonic$module_index').
 
 %% Index record for the mediaclass ets table.
--record(mediaclass_index_key, {site, mediaclass, ua_class=generic}).
+-record(mediaclass_index_key, {site, mediaclass}).
 -record(mediaclass_index, {key, props=[], checksum, tag}).
 
 %% Name of the global mediaclass index table
@@ -214,9 +210,6 @@
 
 %% @doc Call the translate function, 2nd parameter is context
 -define(__(T,Context), z_trans:trans(T,Context)).
-
-%% The name of the session user agent class parameter
--define(SESSION_UA_CLASS_Q, "z_ua").
 
 %% Number of seconds between two comet polls before the page expires
 -define(SESSION_PAGE_TIMEOUT, 30).

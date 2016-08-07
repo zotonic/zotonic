@@ -112,7 +112,7 @@ poll(Tag, Time, Context) when is_binary(Tag) ->
     gen_server:cast(name(Context), {poll, Time, Tag}).
 
 name(Context) ->
-    z_utils:name_for_host(?MODULE, Context).    
+    z_utils:name_for_site(?MODULE, Context).    
 
 %%====================================================================
 %% API

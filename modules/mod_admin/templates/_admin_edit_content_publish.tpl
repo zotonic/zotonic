@@ -16,16 +16,15 @@
 <div class="form-group">
     <div class="pull-right">
         {% button class="btn btn-default" text=_"Cancel" action={redirect back} title=_"Go back." tag="a" %}
-    </div>        
+    </div>
     {% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
     {% if id.page_url as page_url %}
         {% if is_editable %}
             {% button type="submit" id="save_view" class="btn btn-default" text=_"Save and View" title=_"Save and view the page." %}
-        {% else %}
-            <a href="{{ page_url }}" class="btn btn-primary">{_ View _}</a>
         {% endif %}
-    {% endif %}
 
+        {% include "_admin_edit_content_publish_view.tpl" %}
+    {% endif %}
 </div>
 
 <div class="form-group">
@@ -33,7 +32,7 @@
         <input type="checkbox" id="is_published" name="is_published" value="1" {% if r.is_published %}checked="checked"{% endif %}/>
         {_ Published _}
     </label>
-    
+
     <label for="is_featured" class="checkbox-inline">
         <input type="checkbox" id="is_featured" name="is_featured" value="1" {% if r.is_featured %}checked="checked"{% endif %}/>
         {_ Featured _}
@@ -52,7 +51,7 @@
 
 <div class="form-group">
     <div class="pull-right">
-        {% with 
+        {% with
            m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}],
            m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}]
            as
@@ -66,7 +65,7 @@
                     {% empty %}
                         {% button class="btn btn-default btn-sm disabled" text="<span class='glyphicon glyphicon-arrow-left'></span>" %}
                     {% endfor %}
-                    
+
                     {% for id in next_items %}
                         {% button class="btn btn-default btn-sm" text="<span class='glyphicon glyphicon-arrow-right'></span>" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Next in category: "|append:m.rsc[id].title %}
                     {% empty %}
@@ -84,9 +83,9 @@
     {% if is_editable %}
         {% button type="submit" id="save_duplicate" class="btn btn-default btn-sm" text=_"Duplicate" title=_"Duplicate this page." %}
     {% else %}
-        {% button	class="btn btn-default btn-sm" 
-            text=_"Duplicate" 
-            action={dialog_duplicate_rsc id=id} 
+        {% button class="btn btn-default btn-sm"
+            text=_"Duplicate"
+            action={dialog_duplicate_rsc id=id}
             title=_"Duplicate this page."
             disabled=(not m.acl.insert[r.category.name]) %}
     {% endif %}

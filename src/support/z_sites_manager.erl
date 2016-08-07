@@ -87,7 +87,7 @@ get_sites_all() ->
 %% @doc Get the status of a particular site
 get_site_status(Site) when is_atom(Site) ->
     gen_server:call(?MODULE, {site_status, Site});
-get_site_status(#context{host=Site}) ->
+get_site_status(#context{site=Site}) ->
     gen_server:call(?MODULE, {site_status, Site}).
 
 %% @doc Return a list of all sites and their status.
@@ -136,10 +136,21 @@ get_site_contexts() ->
 get_site_config(Site) ->
     case parse_config(get_site_config_file(Site)) of
         {ok, Config} ->
-            {ok, z_utils:props_merge(get_site_config_overrides(Site), Config)};
+            {ok, z_utils:props_merge(get_site_config_overrides(Site), merge_os_env(Config))};
         Other ->
             Other
     end.
+
+%% @doc Resolve {env, "ENV_NAME"} tuples from site config into the site configuration.
+merge_os_env(SiteConfig) ->
+    lists:map(
+      fun({K, {env, Name}}) -> {K, os:getenv(Name)};
+         ({K, {env, Name, Default}}) -> {K, os:getenv(Name, Default)};
+         ({K, {env_int, Name}}) -> {K, z_convert:to_integer(os:getenv(Name))};
+         ({K, {env_int, Name, Default}}) -> {K, z_convert:to_integer(os:getenv(Name, Default))};
+         ({K, V}) -> {K, V}
+      end, SiteConfig).
+
 
 %% @doc Return the name of the site to handle unknown Host requests
 -spec get_fallback_site() -> atom() | undefined.
@@ -363,9 +374,10 @@ scan_directory(Directory) ->
 
 parse_config(CfgFile) ->
     SitePath = filename:dirname(CfgFile),
-    Host = z_convert:to_atom(filename:basename(SitePath)),
+    Site = z_convert:to_atom(filename:basename(SitePath)),
     ConfigFiles = [ CfgFile | config_d_files(SitePath) ],
-    parse_config(ConfigFiles, [{host,Host}]).
+    % For 0.x sites, also add the deprecated {host, ...}.
+    parse_config(ConfigFiles, [{site,Site}, {host,Site}]).
 
 %% @doc Parse configurations from multiple files, merging results. The last file wins.
 parse_config([], SiteConfig) ->
@@ -377,7 +389,7 @@ parse_config([C|T], SiteConfig) ->
             MergedConfig = lists:ukeymerge(1, SortedNewConfig, SiteConfig),
             parse_config(T, MergedConfig);
         {ok, [NotAList|_]} ->
-            lager:error("Expected a list in the site config ~s but got ~p", 
+            lager:error("Expected a list in the site config ~s but got ~p",
                         [C, NotAList]),
             parse_config(T, SiteConfig);
         {error, Reason} = Error ->
@@ -399,7 +411,7 @@ config_d_files(SitePath) ->
 has_zotonic_site([]) ->
     false;
 has_zotonic_site([SiteProps|Rest]) ->
-    case proplists:get_value(host, SiteProps) of
+    case proplists:get_value(site, SiteProps) of
         zotonic_status -> proplists:get_value(enabled, SiteProps, false);
         _ -> has_zotonic_site(Rest)
     end.
@@ -410,7 +422,7 @@ get_fallback_site([]) ->
 get_fallback_site([SiteProps|Rest]) ->
     case proplists:get_value(enabled, SiteProps, false) of
         true ->
-            {host, Name} = proplists:lookup(host, SiteProps),
+            {site, Name} = proplists:lookup(site, SiteProps),
             Name;
         false ->
             get_fallback_site(Rest)
@@ -420,8 +432,8 @@ get_fallback_site([SiteProps|Rest]) ->
 add_sites_to_sup(_Sup, []) ->
     ok;
 add_sites_to_sup(Sup, [SiteProps|Rest]) ->
-    case proplists:lookup(host, SiteProps) of
-        {host, Name} ->
+    case proplists:lookup(site, SiteProps) of
+        {site, Name} ->
             Spec = #child_spec{name=Name, mfa={z_site_sup, start_link, [Name]}},
             ok = z_supervisor:add_child(Sup, Spec),
             case proplists:get_value(enabled, SiteProps, false) of
@@ -466,7 +478,7 @@ supervised_sites(Sup) ->
         names(Rest, Acc ++ Names).
 
 hosted_sites(SiteProps) ->
-    L = [ proplists:get_value(host, Props) || Props <- SiteProps ],
+    L = [ proplists:get_value(site, Props) || Props <- SiteProps ],
     [ Name || Name <- L, Name /= undefined ].
 
 info(Grouped) ->

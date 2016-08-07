@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,7 @@
 -include("zotonic.hrl").
 
 %% Which files do we not consider at all in the file_changed handler
--define(FILENAME_BLACKLIST_RE, 
+-define(FILENAME_BLACKLIST_RE,
         "_flymake|\\.#|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/").
 
 
@@ -49,8 +49,8 @@ file_changed(Verb, F) ->
         false ->
             z_filewatcher_mtime:modified(F),
             Message = handle_file(
-                            check_deleted(F, Verb), 
-                            filename:basename(F), 
+                            check_deleted(F, Verb),
+                            filename:basename(F),
                             filename:extension(F),
                             F),
             send_message(Message)
@@ -124,21 +124,24 @@ handle_file(_Verb, "erlydtl_parser.yrl", ".yrl", F) ->
     "Rebuilding yecc file: " ++ filename:basename(F);
 
 handle_file(_Verb, Basename, ".erl", F) ->
-    make:files([F], zotonic_compile:compile_options()),
-    check_run_sitetest(Basename, F),
     Libdir = z_utils:lib_dir(),
     L = length(Libdir),
-    F2 = case string:substr(F, 1, L) of
+    FileBase = case string:substr(F, 1, L) of
              Libdir -> string:substr(F, L+2);
              _ -> F
          end,
     try
-        make:files([F], zotonic_compile:compile_options()),
-        "Recompile " ++ F2
+        case make:files([F], zotonic_compile:compile_options()) of
+            up_to_date ->
+                check_run_sitetest(Basename, F),
+                "Recompile " ++ FileBase;
+            error ->
+                "ERROR: " ++ FileBase
+        end
     catch
         error:{badmatch, {error, enoent}} ->
-            % File disappeared
-            "Not found " ++ F2
+            %% File disappeared
+            "Not found " ++ FileBase
     end;
 
 %% @doc SCSS / SASS files from lib/scss -> lib/css
@@ -156,7 +159,7 @@ handle_file(_Verb, _Basename, SASS, F) when SASS =:= ".scss"; SASS =:= ".sass" -
 handle_file(_Verb, _Basename, ".less", F) ->
     InPath = filename:dirname(F),
     case handle_config_command(InPath, ".less") of
-        undefined -> 
+        undefined ->
             OutPath = filename:join(filename:dirname(InPath), "css"),
             case filelib:is_dir(OutPath) of
                 true ->
@@ -189,13 +192,13 @@ handle_file(Verb, "mediaclass.config", ".config", F) when Verb =:= create; Verb 
 handle_file(modify, "mediaclass.config", ".config", F) ->
     reindex_templates(F);
 
-%% @doc Translations 
+%% @doc Translations
 handle_file(_Verb, _Basename, ".po", F) ->
     case re:run(F, "/sites/([^/]+).*?/translations/(.*)", [{capture, all_but_first, list}]) of
         nomatch ->
             %% Flush the cache when a new zotonic-wide .po file is changed
             case re:run(F, ".*?/translations/(.*)", [{capture, all_but_first, list}]) of
-                nomatch -> 
+                nomatch ->
                     undefined;
                 {match, [TranslationFile]} ->
                     z_sites_manager:foreach(
@@ -229,8 +232,8 @@ handle_file(_Verb, _Basename, _Extension, F) ->
 %% @doc Check for config file on path and read proplist values from, to, params, return as tuple. Path values are local to Path.
 config_command(Path) ->
     ConfigFile = filename:join(Path, "config"),
-    case filelib:is_regular(ConfigFile) of 
-        true -> 
+    case filelib:is_regular(ConfigFile) of
+        true ->
             {ok, C} = file:consult(ConfigFile),
             [Config] = C,
             From = proplists:get_value(from, Config),
@@ -253,7 +256,7 @@ handle_config_command(Path, ".less") ->
             os:cmd(Cmd),
             "Compiled " ++ To
     end.
- 
+
 maybe_handle_lib(F) ->
     case re:run(F, "^.*/lib/(.*)") of
         nomatch ->
@@ -285,7 +288,7 @@ reindex_templates(F) ->
         nomatch ->
             %% Flush the cache when a new zotonic-wide .tpl file is used
             case re:run(F, ".*?/templates/(.*)", [{capture, all_but_first, list}]) of
-                nomatch -> 
+                nomatch ->
                     undefined;
                 {match, [TemplateFile]} ->
                     z_sites_manager:foreach(
@@ -337,6 +340,8 @@ check_run_sitetest(Basename, F) ->
                 nomatch ->
                     nop;
                 {match, [SiteStr]} ->
+                    Module = z_convert:to_atom(filename:basename(Basename, ".erl")),
+                    zotonic_compile:ld(z_convert:to_atom(Module)),
                     Site = z_convert:to_atom(SiteStr),
                     z_sitetest:is_watching(Site) andalso z_sitetest:run(Site)
             end

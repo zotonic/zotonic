@@ -5,7 +5,7 @@
 %% Date: 2010-05-19
 %% @doc Translation support for i18n.  Generates .po files by scanning templates.
 
-%% Copyright 2010-2011 Marc Worrell
+%% Copyright 2010-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
-    case Context#context.host of
+    case z_context:site(Context) of
         zotonic_status ->
             ok;
         _Other ->

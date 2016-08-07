@@ -74,7 +74,7 @@ properties:
 * User group
 * Content group
 * Resource category (or ‘all categories’)
-* Permissions: ‘view’, ‘insert’, ‘edit’, ‘delete’, ‘link’, ‘manage own’.
+* Permissions: ‘view’, ‘insert’, ‘update’, ‘delete’, ‘link’, ‘manage own’.
 
 If you wish to narrow down the rule, you can select a single resource category
 it applies to. The default is ‘all categories’.
@@ -85,7 +85,7 @@ The content group dropdown contains:
 * all your :ref:`collaboration groups`
 
 The permissions include simple resource permissions that determine whether users
-in the group are allowed to view, insert, edit or delete resources. The
+in the group are allowed to view, insert, update or delete resources. The
 ‘link’ permission is about creating outgoing edges from resources in the
 content group to other resources.
 
@@ -96,9 +96,9 @@ interface.
 Module access rules
 ^^^^^^^^^^^^^^^^^^^
 
-Each module access rule give grants some user group use permissions on some
+Each module access rule grants some user group `use` permissions on some
 module. In the admin, go to *Auth > Access control rules > Modules* tab to
-the module access rule sedit them.
+edit them.
 
 Deny rules
 ^^^^^^^^^^
@@ -177,8 +177,7 @@ record::
                     ]},
 
                     %% A module rule is defined as {module, Properties}
-                    {module,
-                        [
+                    {module, [
                             {acl_user_group_id, acl_user_group_editors},
                             {actions, [use]},
                             {module, mod_ginger_base}
@@ -198,7 +197,7 @@ added and immediately :ref:`published <publishing rules>`.
 The set of rules defined in ``manage_schema/2`` is *declarative* and *complete*.
 That is to say, you declare the full set of rules that you wish to define. Any
 changes or deletions that you make to the rules in your code, will propagate to
-the site’s rules. The protect the set’s completeness, managed rules cannot be
+the site’s rules. To protect the set’s completeness, managed rules cannot be
 altered in the web interface.
 
 Exporting and importing rules

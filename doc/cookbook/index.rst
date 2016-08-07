@@ -9,6 +9,7 @@ Cookbooks
    custom-action
    custom-model
    custom-pivot
+   pivot-templates
    custom-tag
    writing-module
    task-queue

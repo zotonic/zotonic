@@ -42,7 +42,7 @@ import({acl_export, 2, CGs, UGs, CGMenu, UGMenu, RscRules, ModRules, CollabRules
     m_acl_rule:import_rules(module, edit, ModRules, Context),
     m_acl_rule:import_rules(collab, edit, CollabRules, Context),
     lists:foreach(
-        fun(K,V) ->
+        fun({K,V}) ->
             m_config:set_value(mod_acl_user_groups, K, V, Context)
         end,
         Configs),

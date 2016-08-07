@@ -9,6 +9,7 @@ Developer Guide
 
    introduction
    installation
+   docker
    sites
    controllers
    dispatch-rules

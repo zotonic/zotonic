@@ -36,7 +36,7 @@
 -include("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
--record(state, {host, admin_log_pages=[]}).
+-record(state, {site :: atom() | undefined, admin_log_pages=[] :: list()}).
 
 %% interface functions
 
@@ -76,12 +76,12 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Context1 = z_acl:sudo(z_context:new(Context)),
     install_check(Context1),
-    Host = z_context:site(Context1),
+    Site = z_context:site(Context1),
     lager:md([
-            {site, Host},
+            {site, Site},
             {module, ?MODULE}
         ]),
-    {ok, #state{host=Host}}.
+    {ok, #state{site=Site}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -156,7 +156,7 @@ search(_, _, _) ->
 
 %% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
 handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Props}, State) ->
-    Context = z_acl:sudo(z_context:new(State#state.host)),
+    Context = z_acl:sudo(z_context:new(State#state.site)),
     {ok, Id} = z_db:insert(log, [
                     {user_id, UserId},
                     {type, Type},
@@ -167,7 +167,7 @@ handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Pro
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
 % it is also sent to the main log.  
 handle_other_log(Record, State) ->
-    Context = z_acl:sudo(z_context:new(State#state.host)),
+    Context = z_acl:sudo(z_context:new(State#state.site)),
     LogType = element(1, Record),
     Fields = record_to_proplist(Record),
     case z_db:table_exists(LogType, Context) of

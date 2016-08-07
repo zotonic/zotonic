@@ -83,12 +83,11 @@ dispatch(Host, Path, ReqData) ->
 dispatch(Host, Path, ReqData, TracerPid) when (is_list(Host) orelse is_binary(Host)), is_list(Path) ->
     % Classify the user agent
     z_depcache:in_process(true),
-    {ok, ReqDataUA} = z_user_agent:set_class(ReqData),
-    Protocol = case wrq:is_ssl(ReqDataUA) of true -> https; false -> http end,
+    Protocol = case wrq:is_ssl(ReqData) of true -> https; false -> http end,
     DispReq = #dispatch{
                     host=Host,
                     path=Path,
-                    method=wrq:method(ReqDataUA),
+                    method=wrq:method(ReqData),
                     protocol=Protocol,
                     tracer_pid=TracerPid
               },
@@ -96,20 +95,20 @@ dispatch(Host, Path, ReqData, TracerPid) when (is_list(Host) orelse is_binary(Ho
     case ets:lookup(?MODULE, Hostname) of
         [] ->
             % Check for fallback sites or other site handling this hostname
-            case find_no_host_match(DispReq, ReqDataUA) of
+            case find_no_host_match(DispReq, ReqData) of
                 {ok, Site} ->
-                    dispatch_site(Site, DispReq, ReqDataUA);
+                    dispatch_site(Site, DispReq, ReqData);
                 Other ->
-                    handle_dispatch_result(Other, DispReq, ReqDataUA)
+                    handle_dispatch_result(Other, DispReq, ReqData)
             end;
         [{_,Site}] ->
-            dispatch_site(Site, DispReq, ReqDataUA);
+            dispatch_site(Site, DispReq, ReqData);
         [{_,Site,_Redirect}] ->
-            handle_dispatch_result({redirect, Site}, DispReq, ReqDataUA)
+            handle_dispatch_result({redirect, Site}, DispReq, ReqData)
     end.
 
-dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = DispReq, ReqDataUA) ->
-    {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, Site, ReqDataUA),
+dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = DispReq, ReqData) ->
+    {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, Site, ReqData),
     count_request(Site),
     try
         Context = z_context:set_reqdata(ReqDataHost, z_context:new(Site)),
@@ -133,11 +132,11 @@ dispatch_site(Site, #dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = 
         end
     catch
         throw:{stop_request, RespCode} ->
-            {{stop_request, RespCode}, ReqDataUA}
+            {{stop_request, RespCode}, ReqData}
     end.
 
 dispatch_match(Tokens, Context) ->
-    Module = z_utils:name_for_host(dispatch, z_context:site(Context)),
+    Module = z_utils:name_for_site(dispatch, z_context:site(Context)),
     try
         dispatch_compiler:match(Module, Tokens, Context)
     catch
@@ -383,8 +382,8 @@ do_compile_modified(OldDs, NewDs) ->
     Ds = NewDs -- OldDs,
     lists:foreach(fun do_compile/1, Ds).
 
-do_compile(#wm_host_dispatch_list{host=Host, dispatch_list=DL}) ->
-    dispatch_compiler:compile_load(z_utils:name_for_host(dispatch, Host), map_z_language(DL)).
+do_compile(#wm_host_dispatch_list{host=Site, dispatch_list=DL}) ->
+    dispatch_compiler:compile_load(z_utils:name_for_site(dispatch, Site), map_z_language(DL)).
 
 map_z_language(DL) ->
     [ map_z_language_1(Disp) || Disp <- DL ].
@@ -613,7 +612,7 @@ collect_dispatchrules(Site) ->
 
 %% @doc Fetch dispatch rules for a specific site.
 fetch_dispatchinfo(Site) ->
-    Name = z_utils:name_for_host(z_dispatcher, Site),
+    Name = z_utils:name_for_site(z_dispatcher, Site),
     {Host, Hostname, SmtpHost, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
     #wm_host_dispatch_list{
         host=Host, hostname=Hostname, smtphost=SmtpHost, hostalias=Hostalias,

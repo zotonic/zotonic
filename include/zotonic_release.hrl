@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009,2010,2011,2012 Marc Worrell
+%% @copyright 2009-2015 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009,2010,2011,2012 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2015 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

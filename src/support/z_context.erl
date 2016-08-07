@@ -146,8 +146,7 @@
 -spec new( #context{} | #wm_reqdata{} | atom() ) -> #context{}.
 new(#context{} = C) ->
     #context{
-        host=C#context.host,
-        ua_class=C#context.ua_class,
+        site=C#context.site,
         language=C#context.language,
         tz=C#context.tz,
         depcache=C#context.depcache,
@@ -167,24 +166,23 @@ new(undefined) ->
         undefined -> throw({error, no_site_enabled});
         Site -> new(Site)
     end;
-new(Host) when is_atom(Host) ->
+new(Site) when is_atom(Site) ->
     set_default_language_tz(
-        set_server_names(#context{host=Host}));
+        set_server_names(#context{site=Site}));
 new(ReqData) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
     z_depcache:in_process(true),
     Context = set_server_names(
                     #context{
-                        host=site(ReqData),
-                        wm_reqdata=ReqData,
-                        ua_class=z_user_agent:get_class(ReqData)
+                        site=site(ReqData),
+                        wm_reqdata=ReqData
                     }),
     set_dispatch_from_path(set_default_language_tz(Context)).
 
-%% @doc Create a new context record for a host with a certain language.
-new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
-    Context = set_server_names(#context{host=Host}),
+%% @doc Create a new context record for a site with a certain language.
+new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
+    Context = set_server_names(#context{site=Site}),
     Context#context{
         language=[Lang],
         tz=tz_config(Context)
@@ -194,7 +192,7 @@ new(ReqData, Module) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
     z_depcache:in_process(true),
-    Context = set_server_names(#context{wm_reqdata=ReqData, controller_module=Module, host=site(ReqData)}),
+    Context = set_server_names(#context{wm_reqdata=ReqData, controller_module=Module, site=site(ReqData)}),
     set_dispatch_from_path(
         set_default_language_tz(Context)).
 
@@ -211,7 +209,7 @@ set_default_language_tz(Context) ->
 new_tests() ->
     Context = z_trans_server:set_context_table(
             #context{
-                host=test,
+                site=test,
                 language=[en],
                 tz= <<"UTC">>,
                 notifier='z_notifier$test'
@@ -233,41 +231,41 @@ set_dispatch_from_path(Context) ->
         error -> Context
     end.
 
-%% @doc Set all server names for the given host.
-%% @spec set_server_names(Context1) -> Context2
-set_server_names(#context{host=Host} = Context) ->
-    HostAsList = [$$ | atom_to_list(Host)],
-    Depcache = list_to_atom("z_depcache"++HostAsList),
+%% @doc Set all server names for the given site.
+-spec set_server_names(#context{}) -> #context{}.
+set_server_names(#context{site=Site} = Context) ->
+    SiteAsList = [$$ | atom_to_list(Site)],
+    Depcache = list_to_atom("z_depcache"++SiteAsList),
     Context#context{
         depcache=Depcache,
-        notifier=list_to_atom("z_notifier"++HostAsList),
-        session_manager=list_to_atom("z_session_manager"++HostAsList),
-        dispatcher=list_to_atom("z_dispatcher"++HostAsList),
-        template_server=list_to_atom("z_template"++HostAsList),
-        scomp_server=list_to_atom("z_scomp"++HostAsList),
-        dropbox_server=list_to_atom("z_dropbox"++HostAsList),
-        pivot_server=list_to_atom("z_pivot_rsc"++HostAsList),
-        module_indexer=list_to_atom("z_module_indexer"++HostAsList),
-        db={z_db_pool:db_pool_name(Host), z_db_pool:db_driver(Context#context{depcache=Depcache})},
-        translation_table=z_trans_server:table(Host)
+        notifier=list_to_atom("z_notifier"++SiteAsList),
+        session_manager=list_to_atom("z_session_manager"++SiteAsList),
+        dispatcher=list_to_atom("z_dispatcher"++SiteAsList),
+        template_server=list_to_atom("z_template"++SiteAsList),
+        scomp_server=list_to_atom("z_scomp"++SiteAsList),
+        dropbox_server=list_to_atom("z_dropbox"++SiteAsList),
+        pivot_server=list_to_atom("z_pivot_rsc"++SiteAsList),
+        module_indexer=list_to_atom("z_module_indexer"++SiteAsList),
+        db={z_db_pool:db_pool_name(Site), z_db_pool:db_driver(Context#context{depcache=Depcache})},
+        translation_table=z_trans_server:table(Site)
     }.
 
 
-%% @doc Maps the host in the request to a site in the sites folder.
-%% @spec site(wm_reqdata) -> atom()
-site(#context{host=Host}) ->
-    Host;
+%% @doc Maps the site in the request to a site in the sites folder.
+-spec site(#context{}|#wm_reqdata{}) -> atom().
+site(#context{site=Site}) ->
+    Site;
 %% @spec site(wm_reqdata) -> atom()
 site(ReqData = #wm_reqdata{}) ->
     PathInfo = wrq:path_info(ReqData),
     case dict:find(zotonic_host, PathInfo) of
-        {ok, Host} -> Host;
+        {ok, Site} -> Site;
         error -> z_sites_dispatcher:get_fallback_site()
     end.
 
 
 %% @doc Return the preferred hostname from the site configuration
-%% @spec hostname(Context) -> string()
+-spec hostname(#context{}) -> string().
 hostname(Context) ->
     case z_dispatcher:hostname(Context) of
         Empty when Empty == undefined; Empty == []; Empty == <<>> ->
@@ -277,7 +275,7 @@ hostname(Context) ->
     end.
 
 %% @doc Return the preferred hostname, including port, from the site configuration
-%% @spec hostname_port(Context) -> string()
+-spec hostname_port(#context{}) -> string().
 hostname_port(Context) ->
     case z_dispatcher:hostname_port(Context) of
         Empty when Empty == undefined; Empty == [] ->
@@ -302,7 +300,7 @@ prune_for_spawn(#context{} = Context) ->
 prune_for_async(#context{} = Context) ->
     #context{
         wm_reqdata=Context#context.wm_reqdata,
-        host=Context#context.host,
+        site=Context#context.site,
         user_id=Context#context.user_id,
         session_pid=Context#context.session_pid,
         page_pid=Context#context.page_pid,
@@ -320,7 +318,6 @@ prune_for_async(#context{} = Context) ->
         db=Context#context.db,
         translation_table=Context#context.translation_table,
         language=Context#context.language,
-        ua_class=Context#context.ua_class,
         tz=Context#context.tz
     }.
 
@@ -344,7 +341,7 @@ prune_for_template(Output) -> Output.
 %% @doc Cleanup a context so that it can be used exclusively for database connections
 prune_for_database(Context) ->
     #context{
-        host=Context#context.host,
+        site=Context#context.site,
         dbc=Context#context.dbc,
         depcache=Context#context.depcache,
         notifier=Context#context.notifier,
@@ -442,7 +439,7 @@ site_protocol(Context) ->
 %% @spec pickle(Context) -> tuple()
 pickle(Context) ->
     {pickled_context,
-        Context#context.host,
+        Context#context.site,
         Context#context.user_id,
         Context#context.language,
         Context#context.tz,
@@ -450,10 +447,10 @@ pickle(Context) ->
 
 %% @doc Depickle a context for restoring from a database
 %% @todo pickle/depickle the visitor id (when any)
-depickle({pickled_context, Host, UserId, Language, _VisitorId}) ->
-    depickle({pickled_context, Host, UserId, Language, 0, _VisitorId});
-depickle({pickled_context, Host, UserId, Language, Tz, _VisitorId}) ->
-    Context = set_server_names(#context{host=Host, language=Language, tz=Tz}),
+depickle({pickled_context, Site, UserId, Language, _VisitorId}) ->
+    depickle({pickled_context, Site, UserId, Language, 0, _VisitorId});
+depickle({pickled_context, Site, UserId, Language, Tz, _VisitorId}) ->
+    Context = set_server_names(#context{site=Site, language=Language, tz=Tz}),
     case UserId of
         undefined -> Context;
         _ -> z_acl:logon(UserId, Context)
@@ -653,23 +650,23 @@ ensure_qs(Context) ->
     end.
 
 
-%% @spec get_reqdata(Context) -> #wm_reqdata{}
 %% @doc Return the webmachine request data of the context
+-spec get_reqdata(#context{}) -> #wm_reqdata{}.
 get_reqdata(Context) ->
     Context#context.wm_reqdata.
 
-%% @spec set_reqdata(ReqData, Context) -> #wm_reqdata{}
 %% @doc Set the webmachine request data of the context
+-spec set_reqdata(#wm_reqdata{}, #context{}) -> #wm_reqdata{}.
 set_reqdata(ReqData = #wm_reqdata{}, Context) ->
     Context#context{wm_reqdata=ReqData}.
 
 
-%% @spec get_controller_module(Context) -> term()
 %% @doc Get the resource module handling the request.
+-spec get_controller_module(#context{}) -> atom() | undefined.
 get_controller_module(Context) ->
     Context#context.controller_module.
 
-%% @spec set_controller_module(Module::atom(), Context) -> NewContext
+-spec set_controller_module(Module::atom(), #context{}) -> #context{}.
 set_controller_module(Module, Context) ->
     Context#context{controller_module=Module}.
 
@@ -682,8 +679,8 @@ set_q(Key, Value, Context) ->
     z_context:set('q', [{Key,Value}|Qs1], Context).
 
 
-%% @spec get_q(Key::string(), Context) -> Value::string() | undefined
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
+-spec get_q(string()|atom()|binary(), #context{}) -> string() | term() | undefined.
 get_q([Key|_] = Keys, Context) when is_list(Key); is_atom(Key) ->
     lists:foldl(fun(K, Acc) ->
                     case get_q(K, Context) of
@@ -700,8 +697,8 @@ get_q(Key, Context) ->
     end.
 
 
-%% @spec get_q(Key::string(), Context, Default) -> Value::string()
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
+-spec get_q(string(), #context{}, term()) -> string() | #upload{}.
 get_q(Key, Context, Default) ->
     case proplists:lookup('q', Context#context.props) of
         {'q', Qs} -> proplists:get_value(z_convert:to_list(Key), Qs, Default);
@@ -709,8 +706,8 @@ get_q(Key, Context, Default) ->
     end.
 
 
-%% @spec get_q_all(Context) -> [{Key::string(), [Values]}]
 %% @doc Get all parameters.
+-spec get_q_all(#context{}) -> list({string(), term()}).
 get_q_all(Context) ->
     case proplists:lookup('q', Context#context.props) of
         {'q', Qs} -> Qs;
@@ -718,8 +715,8 @@ get_q_all(Context) ->
     end.
 
 
-%% @spec get_q_all(Key::string(), Context) -> [Values]
 %% @doc Get the all the parameters with the same name, returns the empty list when non found.
+-spec get_q_all(string()|atom()|binary(), #context{}) -> list().
 get_q_all(Key, Context) ->
     case proplists:lookup('q', Context#context.props) of
         none -> [];
@@ -727,31 +724,32 @@ get_q_all(Key, Context) ->
     end.
 
 
-%% @spec get_q_all_noz(Context) -> [{Key::string(), [Values]}]
 %% @doc Get all query/post args, filter the zotonic internal args.
+-spec get_q_all_noz(#context{}) -> list({string(), term()}).
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
 
-    is_zotonic_arg("zotonic_host") -> true;
-    is_zotonic_arg("zotonic_dispatch") -> true;
-    is_zotonic_arg("zotonic_dispatch_path") -> true;
-    is_zotonic_arg("zotonic_dispatch_path_rewrite") -> true;
-    is_zotonic_arg("postback") -> true;
-    is_zotonic_arg("triggervalue") -> true;
-    is_zotonic_arg("z_trigger_id") -> true;
-    is_zotonic_arg("z_target_id") -> true;
-    is_zotonic_arg("z_delegate") -> true;
-    is_zotonic_arg("z_sid") -> true;
-    is_zotonic_arg("z_pageid") -> true;
-    is_zotonic_arg("z_v") -> true;
-    is_zotonic_arg("z_msg") -> true;
-    is_zotonic_arg("z_comet") -> true;
-    is_zotonic_arg(_) -> false.
+is_zotonic_arg("zotonic_host") -> true;  % backwards compatibility
+is_zotonic_arg("zotonic_site") -> true;
+is_zotonic_arg("zotonic_dispatch") -> true;
+is_zotonic_arg("zotonic_dispatch_path") -> true;
+is_zotonic_arg("zotonic_dispatch_path_rewrite") -> true;
+is_zotonic_arg("postback") -> true;
+is_zotonic_arg("triggervalue") -> true;
+is_zotonic_arg("z_trigger_id") -> true;
+is_zotonic_arg("z_target_id") -> true;
+is_zotonic_arg("z_delegate") -> true;
+is_zotonic_arg("z_sid") -> true;
+is_zotonic_arg("z_pageid") -> true;
+is_zotonic_arg("z_v") -> true;
+is_zotonic_arg("z_msg") -> true;
+is_zotonic_arg("z_comet") -> true;
+is_zotonic_arg(_) -> false.
 
 
-%% @spec get_q_validated(Key, Context) -> Value
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
 %%      is thrown when there was no validator, when the validator is invalid or when the validation failed.
+-spec get_q_validated(string()|atom()|binary(), #context{}) -> string() | term() | undefined.
 get_q_validated([Key|_] = Keys, Context) when is_list(Key); is_atom(Key) ->
     lists:foldl(fun (K, Acc) ->
                     case get_q_validated(K, Context) of
@@ -823,7 +821,6 @@ lager_md(MD, #context{} = Context) when is_list(MD) ->
             {method, m_req:get(method, RD)},
             {remote_ip, m_req:get(peer, RD)},
             {is_ssl, m_req:get(is_ssl, RD)},
-            {ua_class, Context#context.ua_class},
             {session_id, Context#context.session_id},
             {page_id, Context#context.page_id},
             {req_id, m_req:get(req_id, RD)}
