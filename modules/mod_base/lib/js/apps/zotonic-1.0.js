@@ -935,25 +935,33 @@ function z_reload(args)
         if (typeof args == "undefined")
             window.location.reload(true);
         else {
-            var qs = ensure_name_value(args);
-            var href;
-
-            if (qs.length == 1 &&  typeof args.z_language == "string") {
-                if (  window.location.pathname.substring(0,2+z_language.length) == "/"+z_language+"/") {
-                    href = window.location.protocol+"//"+window.location.host
-                            +"/"+args.z_language+"/"
-                            +window.location.pathname.substring(2+z_language.length);
+            var qs = ensure_name_value(args),
+                href,
+                dashCount;
+            dashCount = args.z_language === "" ? 1 : 2;
+            if (qs.length == 1 && typeof args.z_language == "string") {
+                if (window.location.pathname.substring(0, dashCount + z_language.length) == "/" + z_language + "/") {
+                    href = window.location.protocol
+                            + "//"
+                            + window.location.host
+                            + (args.z_language ? "/" : "")
+                            + args.z_language
+                            + "/"
+                            + window.location.pathname.substring(dashCount + args.z_language.length);
                 } else {
-                    href = window.location.protocol+"//"+window.location.host
-                            +"/"+args.z_language
-                            +window.location.pathname;
+                    href = window.location.protocol
+                            + "//"
+                            + window.location.host
+                            + (args.z_language ? "/" : "")
+                            + args.z_language
+                            + window.location.pathname;
                 }
                 if (window.location.search == "")
                     window.location.href = href;
                 else
                     window.location.href = href + "?" + window.location.search;
             } else {
-                href = window.location.protocol+"//"+window.location.host+window.location.pathname;
+                href = window.location.protocol + "//" + window.location.host + window.location.pathname;
                 if (window.location.search == "") {
                     window.location.href = href + '?' + $.param(qs);
                 } else {
@@ -962,7 +970,7 @@ function z_reload(args)
                         if (typeof loc_qs[prop] != "undefined" && typeof args[prop] == "undefined")
                             qs.push({name: prop, value: loc_qs[prop]});
                     }
-                    window.location.href = href+"?" + $.param(qs);
+                    window.location.href = href + "?" + $.param(qs);
                 }
             }
         }
