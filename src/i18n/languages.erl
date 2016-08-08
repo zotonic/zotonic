@@ -105,21 +105,21 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"AE">>},
-            {name, <<"الإمارات العربية المتحدة"/utf8>>},
+            {name, <<"العربية - الإمارات العربية المتحدة."/utf8>>},
             {name_en, <<"Arabic - U.A.E."/utf8>>}
         ]},
         {<<"ar-bh">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"BH">>},
-            {name, <<"البحرين"/utf8>>},
+            {name, <<"العربية - البحرين"/utf8>>},
             {name_en, <<"Arabic - Bahrain"/utf8>>}
         ]},
         {<<"ar-dz">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"DZ">>},
-            {name, <<"الجزائر"/utf8>>},
+            {name, <<"العربية - الجزائر"/utf8>>},
             {name_en, <<"Arabic - Algeria"/utf8>>}
         ]},
         {<<"ar-eg">>, [
@@ -133,84 +133,84 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"IQ">>},
-            {name, <<"العراق"/utf8>>},
+            {name, <<"العربية - مصر"/utf8>>},
             {name_en, <<"Arabic - Iraq"/utf8>>}
         ]},
         {<<"ar-jo">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"JO">>},
-            {name, <<"الأردن"/utf8>>},
+            {name, <<"العربية - الأردن"/utf8>>},
             {name_en, <<"Arabic - Jordan"/utf8>>}
         ]},
         {<<"ar-kw">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"KW">>},
-            {name, <<"الكويت"/utf8>>},
+            {name, <<"العربية - الكويت"/utf8>>},
             {name_en, <<"Arabic - Kuwait"/utf8>>}
         ]},
         {<<"ar-lb">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"LB">>},
-            {name, <<"لبنان"/utf8>>},
+            {name, <<"العربية - لبنان"/utf8>>},
             {name_en, <<"Arabic - Lebanon"/utf8>>}
         ]},
         {<<"ar-ly">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"LY">>},
-            {name, <<"ليبيا"/utf8>>},
+            {name, <<"العربية - ليبيا"/utf8>>},
             {name_en, <<"Arabic - Libya"/utf8>>}
         ]},
         {<<"ar-ma">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"MA">>},
-            {name, <<"المغرب"/utf8>>},
+            {name, <<"العربية - المغرب"/utf8>>},
             {name_en, <<"Arabic - Morocco"/utf8>>}
         ]},
         {<<"ar-om">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"OM">>},
-            {name, <<"مان"/utf8>>},
+            {name, <<"العربية - عمان"/utf8>>},
             {name_en, <<"Arabic - Oman"/utf8>>}
         ]},
         {<<"ar-qa">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"QA">>},
-            {name, <<"قطر"/utf8>>},
+            {name, <<"العربية - قطر"/utf8>>},
             {name_en, <<"Arabic - Qatar"/utf8>>}
         ]},
         {<<"ar-sa">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"SA">>},
-            {name, <<"المملكة العربية السعودية"/utf8>>},
+            {name, <<"العربية - المملكة العربية السعودية"/utf8>>},
             {name_en, <<"Arabic - Saudi Arabia"/utf8>>}
         ]},
         {<<"ar-sy">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"SY">>},
-            {name, <<"سوريا"/utf8>>},
+            {name, <<"العربية - سوريا"/utf8>>},
             {name_en, <<"Arabic - Syria"/utf8>>}
         ]},
         {<<"ar-tn">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"TN">>},
-            {name, <<"تونس"/utf8>>},
+            {name, <<"العربية - تونس"/utf8>>},
             {name_en, <<"Arabic - Tunisia"/utf8>>}
         ]},
         {<<"ar-ye">>, [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"YE">>},
-            {name, <<"اليمن"/utf8>>},
+            {name, <<"العربية - اليمن"/utf8>>},
             {name_en, <<"Arabic - Yemen"/utf8>>}
         ]},
     {<<"bg">>, [
@@ -587,7 +587,7 @@ languages() -> [
             {language, <<"zh">>},
             {script, <<"Hans">>},
             {direction, <<"LTR">>},
-            {name, <<"Chinese (Simplified)"/utf8>>},
+            {name, <<"简体中文"/utf8>>},
             {name_en, <<"Chinese (Simplified)"/utf8>>}
         ]},
         {<<"zh-hans-cn">>, [
@@ -595,14 +595,14 @@ languages() -> [
             {territory, <<"CN">>},
             {script, <<"Hans">>},
             {direction, <<"LTR">>},
-            {name, <<"Chinese (Simplified) - China"/utf8>>},
+            {name, <<"中国 - 简体 - 中国"/utf8>>},
             {name_en, <<"Chinese (Simplified) - China"/utf8>>}
         ]},
         {<<"zh-hant">>, [
             {language, <<"zh">>},
             {script, <<"Hant">>},
             {direction, <<"LTR">>},
-            {name, <<"Chinese (Traditional)"/utf8>>},
+            {name, <<"中國傳統的"/utf8>>},
             {name_en, <<"Chinese (Traditional)"/utf8>>}
         ]}
 ].
