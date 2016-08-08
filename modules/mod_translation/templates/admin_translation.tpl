@@ -58,10 +58,10 @@
                         </td>
                         <td>
                             <div class="pull-right">
-                                {% button class="btn btn-default btn-xs" text=_"Deactivate"
+                                {% button class="btn btn-default btn-xs" text=_"Remove"
                                     action={
                                         dialog_open
-                                        title=_"Deactivate language"|append:": "|append:lang.name_en
+                                        title=_"Remove language"|append:": "|append:lang.name_en
                                         template="_dialog_language_delete.tpl"
                                         code=code
                                         lang=lang

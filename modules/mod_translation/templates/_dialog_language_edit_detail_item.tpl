@@ -18,10 +18,10 @@ language
 
         {% if not selected %}
             {% if initial_lang_code == undefined %}
-                <button class="btn btn-primary pull-right" type="submit">{_ Activate _}</button>
+                <button class="btn btn-primary pull-right" type="submit">{_ Add _}</button>
             {% endif %}
         {% else %}
-            <span class="pull-right mod_translation-activated">{_ Activated _}</span>
+            <span class="pull-right mod_translation-added">{_ Added _}</span>
         {% endif %}
         <h4>{{ language.name_en }}</h4>
         <table>
@@ -50,7 +50,7 @@ language
                     <td>{_ Available sub-languages _}</td>
                     <td>{% for lang_code in language.sub_languages %}
                         {% if m.config.i18n.language_list.list[lang_code] %}
-                            <span class="mod_translation-code mod_translation-activated">{{ lang_code }}</span>
+                            <span class="mod_translation-code mod_translation-added">{{ lang_code }}</span>
                         {% else %}
                             <a href="#" id="{{ #item.lang_code }}" class="mod_translation-code">{{ lang_code }}</a>
                             {% wire id=#item.lang_code

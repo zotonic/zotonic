@@ -56,7 +56,7 @@ $.dialogReposition()
 .mod_translation-language-detail table td:first-child {
     opacity: .6;
 }
-.mod_translation-language-detail .mod_translation-activated {
+.mod_translation-language-detail .mod_translation-added {
     color: #00ab6b; /* light green */
 }
 .mod_translation-language-detail .mod_translation-code {
