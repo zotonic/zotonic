@@ -18,7 +18,7 @@
 %%          http://data.okfn.org/data/core/country-list
 %%      [4] http://www.iana.org/assignments/language-tags
 %%      [5] http://www.unicode.org/iso15924/codelists.html and
-%%          http://www.unicode.org/iso15924/iso15924-codes.html
+%%          https://en.wikipedia.org/wiki/ISO_15924
 
 -export([
     lc2lang/1,
@@ -102,6 +102,7 @@ languages() -> [
     {<<"ar">>, [
         {language, <<"ar">>},
         {direction, <<"RTL">>},
+        {script, <<"Arab">>},
         {name, <<"العربية"/utf8>>},
         {name_en, <<"Arabic"/utf8>>}
     ]},
@@ -109,6 +110,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"AE">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - الإمارات العربية المتحدة."/utf8>>},
             {name_en, <<"Arabic - U.A.E."/utf8>>}
         ]},
@@ -116,6 +118,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"BH">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - البحرين"/utf8>>},
             {name_en, <<"Arabic - Bahrain"/utf8>>}
         ]},
@@ -123,6 +126,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"DZ">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - الجزائر"/utf8>>},
             {name_en, <<"Arabic - Algeria"/utf8>>}
         ]},
@@ -130,6 +134,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"EG">>},
+            {script, <<"Arab">>},
             {name, <<"مصر"/utf8>>},
             {name_en, <<"Arabic - Egypt"/utf8>>}
         ]},
@@ -137,6 +142,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"IQ">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - مصر"/utf8>>},
             {name_en, <<"Arabic - Iraq"/utf8>>}
         ]},
@@ -144,6 +150,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"JO">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - الأردن"/utf8>>},
             {name_en, <<"Arabic - Jordan"/utf8>>}
         ]},
@@ -151,6 +158,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"KW">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - الكويت"/utf8>>},
             {name_en, <<"Arabic - Kuwait"/utf8>>}
         ]},
@@ -158,6 +166,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"LB">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - لبنان"/utf8>>},
             {name_en, <<"Arabic - Lebanon"/utf8>>}
         ]},
@@ -165,6 +174,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"LY">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - ليبيا"/utf8>>},
             {name_en, <<"Arabic - Libya"/utf8>>}
         ]},
@@ -172,6 +182,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"MA">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - المغرب"/utf8>>},
             {name_en, <<"Arabic - Morocco"/utf8>>}
         ]},
@@ -179,6 +190,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"OM">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - عمان"/utf8>>},
             {name_en, <<"Arabic - Oman"/utf8>>}
         ]},
@@ -186,6 +198,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"QA">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - قطر"/utf8>>},
             {name_en, <<"Arabic - Qatar"/utf8>>}
         ]},
@@ -193,6 +206,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"SA">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - المملكة العربية السعودية"/utf8>>},
             {name_en, <<"Arabic - Saudi Arabia"/utf8>>}
         ]},
@@ -200,6 +214,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"SY">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - سوريا"/utf8>>},
             {name_en, <<"Arabic - Syria"/utf8>>}
         ]},
@@ -207,6 +222,7 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"TN">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - تونس"/utf8>>},
             {name_en, <<"Arabic - Tunisia"/utf8>>}
         ]},
@@ -214,14 +230,21 @@ languages() -> [
             {language, <<"ar">>},
             {direction, <<"RTL">>},
             {territory, <<"YE">>},
+            {script, <<"Arab">>},
             {name, <<"العربية - اليمن"/utf8>>},
             {name_en, <<"Arabic - Yemen"/utf8>>}
         ]},
     {<<"bg">>, [
         {language, <<"bg">>},
-        {direction, <<"RTL">>},
+        {direction, <<"LTR">>},
         {name, <<"български"/utf8>>},
         {name_en, <<"Bulgarian"/utf8>>}
+    ]},
+    {<<"bs">>, [
+        {language, <<"bs">>},
+        {direction, <<"LTR">>},
+        {name, <<"bosanski"/utf8>>},
+        {name_en, <<"Bosnian"/utf8>>}
     ]},
     {<<"cs">>, [
         {language, <<"cs">>},
@@ -590,9 +613,16 @@ languages() -> [
         {name, <<"West-Frysk"/utf8>>},
         {name_en, <<"Frisian"/utf8>>}
     ]},
+    {<<"ga">>, [
+        {language, <<"ga">>},
+        {direction, <<"LTR">>},
+        {name, <<"Gaeilge"/utf8>>},
+        {name_en, <<"Gaelic"/utf8>>}
+    ]},
     {<<"he">>, [
         {language, <<"he">>},
         {direction, <<"RTL">>},
+        {script, <<"Hebr">>},
         {name, <<"עברית"/utf8>>},
         {name_en, <<"Hebrew"/utf8>>}
     ]},
@@ -640,6 +670,18 @@ languages() -> [
         {name, <<"italiano"/utf8>>},
         {name_en, <<"Italian"/utf8>>}
     ]},
+        {<<"it-ch">>, [
+            {language, <<"it">>},
+            {territory, <<"CH">>},
+            {name, <<"italiano - Svizzera"/utf8>>},
+            {name_en, <<"Italian - Switzerland"/utf8>>}
+        ]},
+        {<<"it-it">>, [
+            {language, <<"it">>},
+            {territory, <<"IT">>},
+            {name, <<"italiano - Italia"/utf8>>},
+            {name_en, <<"Italian - Italy"/utf8>>}
+        ]},
     {<<"ja">>, [
         {language, <<"ja">>},
         {direction, <<"LTR">>},
@@ -871,7 +913,6 @@ languages() -> [
 % "bn" <<"Bengali; Bangla"/utf8>>;
 % "bo" <<"Tibetan"/utf8>>;
 % "br" <<"Breton"/utf8>>;
-% "bs" <<"Bosnian"/utf8>>;
 % "ca" <<"Catalan"/utf8>>;
 % "ce" <<"Chechen"/utf8>>;
 % "ch" <<"Chamorro"/utf8>>;
@@ -885,7 +926,6 @@ languages() -> [
 % "fa" <<"Persian"/utf8>>;
 % "fj" <<"Fijian; Fiji"/utf8>>;
 % "fo" <<"Faroese"/utf8>>;
-% "ga" <<"Irish"/utf8>>;
 % "gd" <<"Scots; Gaelic"/utf8>>;
 % "gl" <<"Gallegan; Galician"/utf8>>;
 % "gn" <<"Guarani"/utf8>>;
@@ -893,7 +933,6 @@ languages() -> [
 % "gv" <<"Manx"/utf8>>;
 % "ha" <<"Hausa"/utf8>>;
 % "ho" <<"Hiri Motu"/utf8>>;
-
 % "hy" <<"Armenian"/utf8>>;
 % "hz" <<"Herero"/utf8>>;
 % "ia" <<"Interlingua"/utf8>>;
