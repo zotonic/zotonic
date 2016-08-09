@@ -37,14 +37,6 @@ function require_zotonic_not_running {
 }
 export -f require_zotonic_not_running
 
-function enablesite {
-    config="priv/sites/$1/config"
-    expr="s/enabled, \(true\|false\)/enabled, $2/"
-    sed -e "$expr" -i.bak $config
-    echo "$1 enabled: $2"
-}
-export -f enablesite
-
 function major_version {
     cat $ZOTONIC/src/zotonic.app.src |grep vsn,|sed 's/[^"]*\"\([0-9]*\).*/\1/'
 }
