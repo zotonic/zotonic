@@ -432,7 +432,7 @@ context_language(Context) ->
         [] -> Context;
         Lang ->
             case z_trans:to_language_atom(Lang) of
-                {ok, IsoCode} -> z_context:set_language(IsoCode, Context);
+                {ok, LanguageCode} -> z_context:set_language(LanguageCode, Context);
                 _ -> Context
             end
     end.

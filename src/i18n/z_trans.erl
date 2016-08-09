@@ -243,7 +243,7 @@ default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).
 
 
-%% @doc check if the ISO code is a valid language
+%% @doc check if the language code code is a valid language
 -spec is_language(LangCode :: binary()) -> boolean().
 is_language(LangCode) when is_list(LangCode) ->
     is_language(list_to_binary(LangCode));
