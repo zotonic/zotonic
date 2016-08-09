@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Just call the entrypoint-script again
+exec /opt/zotonic/docker/docker-entrypoint.sh start-nodaemon

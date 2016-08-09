@@ -1,0 +1,15 @@
+FROM zotonic/zotonic:latest
+
+# This Docker image extends the regular Zotonic image to add
+# a PostgresQL database and, since multiple processes are run,
+# process supervision. When run, it considers Zotonic the "main"
+# process, and exits if it does.
+
+RUN apk --no-cache add postgresql postgresql-client s6 \
+    && gosu postgres initdb -D /var/lib/postgresql -U zotonic
+
+COPY docker/s6-service /service
+
+VOLUME /var/lib/postgresql
+
+CMD ["s6-svscan", "/service"]

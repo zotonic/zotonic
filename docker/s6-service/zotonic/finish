@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Stop all the services
+/bin/s6-svscanctl -t /service

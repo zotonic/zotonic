@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export PGDATA=/var/lib/postgresql
+
+exec gosu postgres /usr/bin/postgres
+
