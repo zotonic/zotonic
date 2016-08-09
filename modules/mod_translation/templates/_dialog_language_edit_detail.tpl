@@ -4,7 +4,12 @@ code
 initial_lang_code
 #}
 {% with
-    m.translation.language_list_with_data[code]
+    m.translation.language_list_with_data
+    as
+    languages
+%}
+{% with
+    languages[code]
     as
     language
 %}
@@ -23,13 +28,14 @@ initial_lang_code
         {% include "_dialog_language_edit_detail_item.tpl" code=code initial_lang_code=initial_lang_code language=language  %}
         {% if initial_lang_code == undefined %}
             {% for sub_code in language.sub_languages %}
-                {% with m.translation.language_list_with_data[sub_code] as sub_language %}
+                {% with languages[sub_code] as sub_language %}
                     {% include "_dialog_language_edit_detail_item.tpl" code=sub_code initial_lang_code=initial_lang_code language=sub_language  %}
                 {% endwith %}
             {% endfor %}
         {% endif %}
     </div>
 </div>
+{% endwith %}
 {% endwith %}
 
 {% javascript %}
