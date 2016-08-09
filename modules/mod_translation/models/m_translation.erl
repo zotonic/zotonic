@@ -44,8 +44,8 @@ m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
 	language_list_enabled(Context);
 m_find_value(language_list_all, #m{value=undefined}, Context) ->
 	language_list_all(Context);
-m_find_value(language_list_all_stats, #m{value=undefined}, Context) ->
-	language_list_all_stats(Context).
+m_find_value(language_list_with_data, #m{value=undefined}, Context) ->
+	language_list_with_data(Context).
 
 m_to_list(#m{}, _Context) ->
 	[].
@@ -78,7 +78,7 @@ language_list_all(_Context) ->
 	languages:languages().
 
 
-%% Gets languages list with sub-language statistics.
-language_list_all_stats(_Context) ->
-	languages:languages_stats().
+%% Gets languages list with sub-language data.
+language_list_with_data(_Context) ->
+	languages:languages_data().
 

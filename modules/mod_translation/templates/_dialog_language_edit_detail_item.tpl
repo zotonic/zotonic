@@ -25,6 +25,10 @@ language
         {% endif %}
         <h4>{{ language.name_en }}</h4>
         <table>
+            <tr>
+                <td>{_ Name in menu _}</td>
+                <td>{{ language.name }}</td>
+            </tr>
             {% if language.territory %}
                 <tr>
                     <td>{_ Territory _}</td>
@@ -37,10 +41,6 @@ language
                     <td>{{ language.script }}</td>
                 </tr>
             {% endif %}
-            <tr>
-                <td>{_ Name in menu _}</td>
-                <td>{{ language.name }}</td>
-            </tr>
             <tr>
                 <td>{_ Language code in URL _}</td>
                 <td>{{ code }}</td>

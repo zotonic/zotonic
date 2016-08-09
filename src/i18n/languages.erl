@@ -23,7 +23,7 @@
 -export([
     lc2lang/1,
     languages/0,
-    languages_stats/0
+    languages_data/0
 ]).
 
 
@@ -34,7 +34,7 @@
 
 
 %% @doc Returns the language code, if the language is defined; otherwise undefined.
-%% @spec lc2lang(binary()) -> binary() | undefined.
+-spec lc2lang(binary()) -> binary() | undefined.
 lc2lang(LangCode) ->
     case proplists:get_value(LangCode, languages()) of
         undefined -> undefined;
@@ -42,37 +42,41 @@ lc2lang(LangCode) ->
     end.
 
 
-%% @doc Returns language data. Adds optional properties sub_languages and is_main:
-%%      {sub_languages, list()}
-%%      {is_main, boolean()}
-%% @spec languages_stats( list().
-languages_stats() ->
+%% @doc Returns language data. Used to present language options in the admin interface.
+%%      Adds a couple of properties.
+%%      Added for each language:
+%%      -   is_main (boolean)
+%%      -   sub_languages (list of language codes)
+-spec languages_data() -> list().
+languages_data() ->
     Languages = languages(),
-    Stats = lists:foldl(fun({Code, Props}, Acc=#language_data{}) ->
+    % First create a dictionary of main_language:[sub_language1, ...]
+    Data = lists:foldl(fun({Code, Props}, Acc=#language_data{}) ->
         Language = proplists:get_value(language, Props),
-        Territory = proplists:get_value(territory, Props),
-        Script = proplists:get_value(script, Props),
-        case ((Territory /= undefined) or (Script /= undefined)) of
-            false -> Acc;
-            true ->
-                D0 = Acc#language_data.sub_languages,
-                D1 = case dict:is_key(Language, D0) of
-                    true -> D0;
-                    false -> dict:store(Language, [], D0)
-                end,
-                Acc#language_data{sub_languages=dict:append(Language, Code, D1)}
+        Dict = Acc#language_data.sub_languages,
+        Dict1 = case dict:is_key(Language, Dict) of
+            true -> Dict;
+            false -> dict:store(Language, [], Dict)
+        end,
+        case (Language == Code) of
+            true -> Acc#language_data{sub_languages=Dict1};
+            false -> Acc#language_data{sub_languages=dict:append(Language, Code, Dict1)}
         end
     end, #language_data{}, Languages),
-    SubLanguages = Stats#language_data.sub_languages,
-    lists:map(fun(L) ->
-        {Code, Props} = L,
+    SubLanguages = Data#language_data.sub_languages,
+    % Use the dictionary to add is_main and sub_languages to the original list
+    % of languages.
+    WithStats = lists:map(fun({Code, Props}) ->
         Language = proplists:get_value(language, Props),
         Props1 = [{is_main, Language == Code} | Props],
         case dict:is_key(Code, SubLanguages) of
             false -> {Code, Props1};
             true -> {Code, [{sub_languages, dict:fetch(Code, SubLanguages)} | Props1]}
         end
-    end, Languages).
+    end, Languages),
+    lists:sort(fun({_, PropsA}, {_, PropsB}) ->
+        proplists:get_value(name_en, PropsA) =< proplists:get_value(name_en, PropsB)
+    end, WithStats).
 
 
 %% @doc List of language data.
@@ -87,7 +91,7 @@ languages_stats() ->
 %%      -   direction (binary): LTR or RTL
 %%      -   name (binary): native language name
 %%      -   name_en (binary): English language name
-%% @spec languages() -> list().
+-spec languages() -> list().
 languages() -> [
     {<<"af">>, [
         {language, <<"af">>},
@@ -276,13 +280,7 @@ languages() -> [
         {language, <<"dk">>},
         {direction, <<"LTR">>},
         {name, <<"dansk"/utf8>>},
-        {name_en, <<"Danisch"/utf8>>}
-    ]},
-    {<<"dk-da">>, [
-        {language, <<"dk">>},
-        {direction, <<"LTR">>},
-        {name, <<"dansk - Danmark"/utf8>>},
-        {name_en, <<"Danish - Denmark"/utf8>>}
+        {name_en, <<"Danish"/utf8>>}
     ]},
     {<<"el">>, [
         {language, <<"el">>},
@@ -393,6 +391,139 @@ languages() -> [
         {name, <<"español"/utf8>>},
         {name_en, <<"Spanish"/utf8>>}
     ]},
+        {<<"es-ar">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"AR">>},
+            {name, <<"Español - Argentina"/utf8>>},
+            {name_en, <<"Spanish - Argentina"/utf8>>}
+        ]},
+        {<<"es-bo">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"BO">>},
+            {name, <<"Español - Bolivia"/utf8>>},
+            {name_en, <<"Spanish - Bolivia"/utf8>>}
+        ]},
+        {<<"es-cl">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"CL">>},
+            {name, <<"Español - Chile"/utf8>>},
+            {name_en, <<"Spanish - Chile"/utf8>>}
+        ]},
+        {<<"es-co">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"CO">>},
+            {name, <<"Español - Colombia"/utf8>>},
+            {name_en, <<"Spanish - Colombia"/utf8>>}
+        ]},
+        {<<"es-cr">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"CR">>},
+            {name, <<"Español - Costa Rica"/utf8>>},
+            {name_en, <<"Spanish - Costa Rica"/utf8>>}
+        ]},
+        {<<"es-do">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"DO">>},
+            {name, <<"Español - República Dominicana"/utf8>>},
+            {name_en, <<"Spanish - Dominican Republic"/utf8>>}
+        ]},
+        {<<"es-ec">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"EC">>},
+            {name, <<"Español - Ecuador"/utf8>>},
+            {name_en, <<"Spanish - Ecuador"/utf8>>}
+        ]},
+        {<<"es-es">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"ES">>},
+            {name, <<"Español - España"/utf8>>},
+            {name_en, <<"Spanish - Spain"/utf8>>}
+        ]},
+        {<<"es-gt">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"GT">>},
+            {name, <<"Español - Guatemala"/utf8>>},
+            {name_en, <<"Spanish - Guatemala"/utf8>>}
+        ]},
+        {<<"es-hn">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"HN">>},
+            {name, <<"Español - Honduras"/utf8>>},
+            {name_en, <<"Spanish - Honduras"/utf8>>}
+        ]},
+        {<<"es-mx">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"MX">>},
+            {name, <<"Español - México"/utf8>>},
+            {name_en, <<"Spanish - Mexico"/utf8>>}
+        ]},
+        {<<"es-ni">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"NI">>},
+            {name, <<"Español - Nicaragua"/utf8>>},
+            {name_en, <<"Spanish - Nicaragua"/utf8>>}
+        ]},
+        {<<"es-pa">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"PA">>},
+            {name, <<"Español - Panamá"/utf8>>},
+            {name_en, <<"Spanish - Panama"/utf8>>}
+        ]},
+        {<<"es-pe">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"PE">>},
+            {name, <<"Español - Perú"/utf8>>},
+            {name_en, <<"Spanish - Peru"/utf8>>}
+        ]},
+        {<<"es-pr">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"PR">>},
+            {name, <<"Español - Puerto Rico"/utf8>>},
+            {name_en, <<"Spanish - Puerto Rico"/utf8>>}
+        ]},
+        {<<"es-py">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"PY">>},
+            {name, <<"Español - Paraguay"/utf8>>},
+            {name_en, <<"Spanish - Paraguay"/utf8>>}
+        ]},
+        {<<"es-sv">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"SV">>},
+            {name, <<"Español - El Salvador"/utf8>>},
+            {name_en, <<"Spanish - El Salvador"/utf8>>}
+        ]},
+        {<<"es-uy">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"UY">>},
+            {name, <<"Español - Uruguay"/utf8>>},
+            {name_en, <<"Spanish - Uruguay"/utf8>>}
+        ]},
+        {<<"es-ve">>, [
+            {language, <<"es">>},
+            {direction, <<"LTR">>},
+            {territory, <<"VE">>},
+            {name, <<"Español - Venezuela"/utf8>>},
+            {name_en, <<"Spanish - Venezuela"/utf8>>}
+        ]},
     {<<"et">>, [
         {language, <<"et">>},
         {direction, <<"LTR">>},
@@ -411,6 +542,48 @@ languages() -> [
         {name, <<"français"/utf8>>},
         {name_en, <<"French"/utf8>>}
     ]},
+        {<<"fr-be">>, [
+            {language, <<"fr">>},
+            {direction, <<"LTR">>},
+            {territory, <<"BE">>},
+            {name, <<"Français - Belgique"/utf8>>},
+            {name_en, <<"French - Belgium"/utf8>>}
+        ]},
+        {<<"fr-ca">>, [
+            {language, <<"fr">>},
+            {direction, <<"LTR">>},
+            {territory, <<"CA">>},
+            {name, <<"Français - Canada"/utf8>>},
+            {name_en, <<"French - Canada"/utf8>>}
+        ]},
+        {<<"fr-ch">>, [
+            {language, <<"fr">>},
+            {direction, <<"LTR">>},
+            {territory, <<"CH">>},
+            {name, <<"Français - Suisse"/utf8>>},
+            {name_en, <<"French - Switzerland"/utf8>>}
+        ]},
+        {<<"fr-fr">>, [
+            {language, <<"fr">>},
+            {direction, <<"LTR">>},
+            {territory, <<"FR">>},
+            {name, <<"Français - France"/utf8>>},
+            {name_en, <<"French - France"/utf8>>}
+        ]},
+        {<<"fr-lu">>, [
+            {language, <<"fr">>},
+            {direction, <<"LTR">>},
+            {territory, <<"LU">>},
+            {name, <<"Français - Luxembourg"/utf8>>},
+            {name_en, <<"French - Luxembourg"/utf8>>}
+        ]},
+        {<<"fr-mc">>, [
+            {language, <<"fr">>},
+            {direction, <<"LTR">>},
+            {territory, <<"MC">>},
+            {name, <<"Français - Monaco"/utf8>>},
+            {name_en, <<"French - Monaco"/utf8>>}
+        ]},
     {<<"fy">>, [
         {language, <<"fy">>},
         {direction, <<"LTR">>},
@@ -429,6 +602,26 @@ languages() -> [
         {name, <<"हिन्दी"/utf8>>},
         {name_en, <<"Hindi"/utf8>>}
     ]},
+    {<<"hr">>, [
+        {language, <<"hr">>},
+        {direction, <<"LTR">>},
+        {name, <<"hrvatski"/utf8>>},
+        {name_en, <<"Croatian"/utf8>>}
+    ]},
+        {<<"hr-ba">>, [
+            {language, <<"hr">>},
+            {direction, <<"LTR">>},
+            {territory, <<"BA">>},
+            {name, <<"hrvatski - Bosna i Hercegovina"/utf8>>},
+            {name_en, <<"Croatian - Bosnia and Herzegovina"/utf8>>}
+        ]},
+        {<<"hr-hr">>, [
+            {language, <<"hr">>},
+            {direction, <<"LTR">>},
+            {territory, <<"HR">>},
+            {name, <<"hrvatski - Hrvatska"/utf8>>},
+            {name_en, <<"Croatian - Croatia"/utf8>>}
+        ]},
     {<<"hu">>, [
         {language, <<"hu">>},
         {direction, <<"LTR">>},
@@ -489,7 +682,7 @@ languages() -> [
             {direction, <<"LTR">>},
             {territory, <<"NL">>},
             {name, <<"Nederlands - Nederland"/utf8>>},
-            {name_en, <<"Dutch - The Netherlands"/utf8>>}
+            {name_en, <<"Dutch - Netherlands"/utf8>>}
         ]},
     {<<"no">>, [
         {language, <<"no">>},
@@ -559,6 +752,34 @@ languages() -> [
         {name, <<"slovenščina"/utf8>>},
         {name_en, <<"Slovenian"/utf8>>}
     ]},
+    {<<"sr-latn">>, [
+        {language, <<"sr-latn">>},
+        {direction, <<"LTR">>},
+        {script, <<"Latn">>},
+        {name, <<"srpski"/utf8>>},
+        {name_en, <<"Serbian (Latin)"/utf8>>}
+    ]},
+        {<<"sr-latn-ba">>, [
+            {language, <<"sr-latn">>},
+            {direction, <<"LTR">>},
+            {script, <<"Latn">>},
+            {name, <<"srpski (latinica) - Bosna i Hercegovina"/utf8>>},
+            {name_en, <<"Serbian (Latin) - Bosnia and Herzegovina"/utf8>>}
+        ]},
+    {<<"sr-cyrl">>, [
+        {language, <<"sr-cyrl">>},
+        {direction, <<"LTR">>},
+        {script, <<"Cyrl">>},
+        {name, <<"Српски језик (Ћирилица)"/utf8>>},
+        {name_en, <<"Serbian (Cyrillic)"/utf8>>}
+    ]},
+        {<<"sr-cyrl-ba">>, [
+            {language, <<"sr-cyrl">>},
+            {direction, <<"LTR">>},
+            {script, <<"Cyrl">>},
+            {name, <<"Српски језик (Ћирилица) - Босна и Херцеговина"/utf8>>},
+            {name_en, <<"Serbian (Cyrillic) - Bosnia and Herzegovina"/utf8>>}
+        ]},
     {<<"sv">>, [
         {language, <<"sv">>},
         {direction, <<"LTR">>},
@@ -579,34 +800,60 @@ languages() -> [
     ]},
     {<<"zh">>, [
         {language, <<"zh">>},
+        {script, <<"Hans">>},
         {direction, <<"LTR">>},
         {name, <<"中文"/utf8>>},
-        {name_en, <<"Chinese"/utf8>>}
+        {name_en, <<"Chinese (Simplified)"/utf8>>}
     ]},
-        {<<"zh-hans">>, [
-            {language, <<"zh">>},
-            {script, <<"Hans">>},
-            {direction, <<"LTR">>},
-            {name, <<"简体中文"/utf8>>},
-            {name_en, <<"Chinese (Simplified)"/utf8>>}
-        ]},
+        % Omitting 'zh-hans' as 'zh' is implicitly using Hans
         {<<"zh-hans-cn">>, [
             {language, <<"zh">>},
             {territory, <<"CN">>},
             {script, <<"Hans">>},
             {direction, <<"LTR">>},
-            {name, <<"中国 - 简体 - 中国"/utf8>>},
-            {name_en, <<"Chinese (Simplified) - China"/utf8>>}
+            {name, <<"中国大陆简体脚本"/utf8>>},
+            {name_en, <<"Mainland Chinese (Simplified)"/utf8>>}
         ]},
-        {<<"zh-hant">>, [
+        {<<"zh-hans-sg">>, [
             {language, <<"zh">>},
+            {territory, <<"SG">>},
+            {script, <<"Hans">>},
+            {direction, <<"LTR">>},
+            {name, <<"新加坡中国简体脚本"/utf8>>},
+            {name_en, <<"Singapore Chinese (Simplified)"/utf8>>}
+        ]},
+    {<<"zh-hant">>, [
+        {language, <<"zh-hant">>},
+        {script, <<"Hant">>},
+        {direction, <<"LTR">>},
+        {name, <<"中國傳統的腳本"/utf8>>},
+        {name_en, <<"Chinese (Traditional)"/utf8>>}
+    ]},
+        {<<"zh-hant-hk">>, [
+            {language, <<"zh-hant">>},
+            {territory, <<"HK">>},
             {script, <<"Hant">>},
             {direction, <<"LTR">>},
-            {name, <<"中國傳統的"/utf8>>},
-            {name_en, <<"Chinese (Traditional)"/utf8>>}
+            {name, <<"香港中國傳統腳本"/utf8>>},
+            {name_en, <<"Hong Kong Chinese (Traditional)"/utf8>>}
+        ]},
+        {<<"zh-hant-mo">>, [
+            {language, <<"zh-hant">>},
+            {territory, <<"MO">>},
+            {script, <<"Hant">>},
+            {direction, <<"LTR">>},
+            {name, <<"澳門中國人在傳統的腳本"/utf8>>},
+            {name_en, <<"Macau Chinese (Traditional)"/utf8>>}
+        ]},
+        {<<"zh-hant-tw">>, [
+            {language, <<"zh-hant">>},
+            {territory, <<"TW">>},
+            {script, <<"Hant">>},
+            {direction, <<"LTR">>},
+            {name, <<"台灣中國傳統腳本"/utf8>>},
+            {name_en, <<"Taiwan Chinese (Traditional)"/utf8>>}
         ]}
 ].
-
 
 %% TODO:
 
@@ -646,7 +893,7 @@ languages() -> [
 % "gv" <<"Manx"/utf8>>;
 % "ha" <<"Hausa"/utf8>>;
 % "ho" <<"Hiri Motu"/utf8>>;
-% "hr" <<"Croatian"/utf8>>;
+
 % "hy" <<"Armenian"/utf8>>;
 % "hz" <<"Herero"/utf8>>;
 % "ia" <<"Interlingua"/utf8>>;

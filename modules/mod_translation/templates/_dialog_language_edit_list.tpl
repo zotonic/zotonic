@@ -5,7 +5,7 @@ initial_lang_code
 #}
 <div id="dialog_language_edit_content">
     <div class="list-group mod_translation-language-list">
-        {% for lang_code, lang in m.translation.language_list_all_stats %}
+        {% for lang_code, lang in m.translation.language_list_with_data %}
             {% if lang.is_main %}
                 <a class="list-group-item" id="{{ #item.lang_code }}">
                     <i class="fa fa-chevron-right pull-right"></i>
