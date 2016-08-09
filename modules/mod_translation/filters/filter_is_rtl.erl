@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,37 +31,14 @@ is_rtl(Id, Context) when is_integer(Id) ->
 is_rtl([Lang|_] = Langs, Context) when is_atom(Lang) ->
     is_rtl(filter_language:language(Langs, Context), Context);
 
-is_rtl(ar, _Context) -> true;
-is_rtl(dv, _Context) -> true;
-is_rtl(fa, _Context) -> true;
-is_rtl(he, _Context) -> true;
-is_rtl(ku, _Context) -> true;
-is_rtl(ps, _Context) -> true;
-is_rtl(sd, _Context) -> true;
-is_rtl(ug, _Context) -> true;
-is_rtl(ur, _Context) -> true;
-is_rtl(yi, _Context) -> true;
+is_rtl(LanguageCode, _Context) ->
+    is_rtl(LanguageCode).
 
-is_rtl("ar", _Context) -> true;
-is_rtl("dv", _Context) -> true;
-is_rtl("fa", _Context) -> true;
-is_rtl("he", _Context) -> true;
-is_rtl("ku", _Context) -> true;
-is_rtl("ps", _Context) -> true;
-is_rtl("sd", _Context) -> true;
-is_rtl("ug", _Context) -> true;
-is_rtl("ur", _Context) -> true;
-is_rtl("yi", _Context) -> true;
-
-is_rtl(<<"ar">>, _Context) -> true;
-is_rtl(<<"dv">>, _Context) -> true;
-is_rtl(<<"fa">>, _Context) -> true;
-is_rtl(<<"he">>, _Context) -> true;
-is_rtl(<<"ku">>, _Context) -> true;
-is_rtl(<<"ps">>, _Context) -> true;
-is_rtl(<<"sd">>, _Context) -> true;
-is_rtl(<<"ug">>, _Context) -> true;
-is_rtl(<<"ur">>, _Context) -> true;
-is_rtl(<<"yi">>, _Context) -> true;
-
-is_rtl(_, _Context) -> false.
+is_rtl(LanguageCode) when is_binary(LanguageCode) ->
+    Language = proplists:get_value(LanguageCode, languages:languages()),
+    case Language of
+        undefined -> false;
+        _ -> proplists:get_value(direction, Language) == <<"RTL">>
+    end;
+is_rtl(LanguageCode) ->
+    is_rtl(z_convert:to_binary(LanguageCode)).
