@@ -40,7 +40,7 @@ export -f require_zotonic_not_running
 function enablesite {
     config="priv/sites/$1/config"
     expr="s/enabled, \(true\|false\)/enabled, $2/"
-    sed -e "$expr" -i.bak -e $config
+    sed -e "$expr" -i.bak $config
     echo "$1 enabled: $2"
 }
 export -f enablesite
