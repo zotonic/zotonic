@@ -180,8 +180,7 @@ observe_auth_logon(auth_logon, Context, _Context) ->
             Context;
         Code ->
             % Switch the session to the default language of the user
-            ConfigLanguages = get_language_config(Context),
-            Context1 = set_language(z_convert:to_list(Code), ConfigLanguages, Context),
+            Context1 = set_language(Code, Context),
             z_context:set_persistent(language, z_context:language(Context1), Context1),
             Context1
     end.
@@ -321,25 +320,37 @@ event(#postback{message={language_enable, Args}}, Context) ->
     end.
 
 
-%% @doc Strip any language from the URL (iff the first part of the url is a known language)
+%% @doc Strip the language code from the location (if the language code is recognized).
+%%      For instance: <<"/nl-nl/admin/translation">> becomes <<"/admin/translation">>
 url_strip_language([$/,A,B,$/ | Rest] = Url) ->
-    case z_trans:is_language([A,B]) of
+    url_strip_language1(Url, [A,B], Rest);
+url_strip_language([$/,A,B,$-,C,D,$/ | Rest] = Url) ->
+    url_strip_language1(Url, [A,B,"-",C,D], Rest);
+url_strip_language(<<$/,A,B,$/, Rest/binary>> = Url) ->
+    url_strip_language1(Url, [A,B], Rest);
+url_strip_language(<<$/,A,B,$-,C,D,$/, Rest/binary>> = Url) ->
+    url_strip_language1(Url, [A,B,<<"-">>,C,D], Rest);
+url_strip_language(Url) ->
+    Url.
+
+url_strip_language1(Url, LanguageCode, Rest) when is_list(Url) ->
+    case z_trans:is_language(LanguageCode) of
         true -> [$/|Rest];
         false -> Url
     end;
-url_strip_language(<<$/,A,B,$/, Rest/binary>> = Url) ->
-    case z_trans:is_language([A,B]) of
+url_strip_language1(Url, LanguageCode, Rest) when is_binary(Url) ->
+    case z_trans:is_language(LanguageCode) of
         true -> <<$/, Rest/binary>>;
         false -> Url
     end;
-url_strip_language(Url) ->
+url_strip_language1(Url, _LanguageCode, _Rest) ->
     Url.
 
 
 %% @doc Set the language, as selected by the user. Persist this choice.
+-spec set_user_language(binary(), #context{}) -> #context{}.
 set_user_language(Code, Context) ->
-    ConfigLanguages = get_language_config(Context),
-    Context1 = set_language(z_convert:to_list(Code), ConfigLanguages, Context),
+    Context1 = set_language(Code, Context),
     z_context:set_persistent(language, z_context:language(Context1), Context1),
     case z_acl:user(Context1) of
         undefined ->
@@ -375,11 +386,21 @@ try_set_language(LanguageRequested, Context) when is_list(LanguageRequested) ->
     end.
 
 
-%% @doc Set the language of the current user/session
-set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
-    case z_convert:to_list(CodeAtom) of
-        Code ->   do_set_language(CodeAtom, Context);
-        _Other -> set_language(Code, Other, Context)
+%% @doc Set the language of the current user/session.
+set_language(Code, Context) ->
+    ConfigLanguages = get_language_config(Context),
+    Language = proplists:get_value(Code, ConfigLanguages),
+    case Language of
+        undefined ->
+            % Error, desired language is not in config
+            Context;
+        _ ->
+            case proplists:get_value(is_enabled, Language) of
+                true -> do_set_language(Code, Context);
+                _ ->
+                    % Error, desired language is not enabled
+                    Context
+            end
     end.
 
 
@@ -410,6 +431,7 @@ language_add(OldLanguageCode, NewLanguageCode, _FallbackLanguageCode, IsEnabled,
     NewCode = z_convert:to_binary(z_string:trim(NewLanguageCode)),
     Languages = languages:languages(),
     Props = proplists:get_value(NewCode, Languages),
+
     Props1 = [
         {is_enabled, z_convert:to_bool(IsEnabled)},
         {fallback, proplists:get_value(language, Props)}
@@ -441,10 +463,10 @@ is_multiple_languages_config(Context) ->
 
 
 -spec is_enabled_language(binary(), #context{}) -> boolean().
-is_enabled_language(Lang, Context) ->
-    case z_trans:is_language(Lang) of
+is_enabled_language(LanguageCode, Context) ->
+    case z_trans:is_language(LanguageCode) of
         true ->
-            case lists:keyfind(Lang, 1, get_enabled_languages(Context)) of
+            case lists:keyfind(LanguageCode, 1, get_enabled_languages(Context)) of
                 false -> false;
                 _ -> true
             end;
