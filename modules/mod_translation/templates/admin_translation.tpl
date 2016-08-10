@@ -178,14 +178,14 @@
         <div class="form-group">
             <div>
                 {% button class="btn btn-default" text=_"Generate .pot files"
-                    action={postback postback="translation_generate" delegate="mod_translation"} %}
+                    postback={translation_generate} delegate="mod_translation" %}
                 <span class="help-block">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
             </div>
         </div>
         <div class="form-group">
             <div>
                 {% button class="btn btn-default" text=_"Reload Translations"
-                    action={postback postback="translation_reload" delegate="mod_translation"} %}
+                    postback={translation_reload} delegate="mod_translation" %}
                 <span class="help-block">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
             </div>
         </div>

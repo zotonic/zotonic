@@ -21,9 +21,9 @@
 
 
 %% About variable types:
-%% Language codes are binary strings;
+%% Language codes (and other language data) are binary strings;
 %% In the language config the language objects are stored with binary strings as keys;
-%% The current language in the global Context is an atom, as well as the
+%% The selected language in the global Context is an atom, as well as the
 %% fallback language.
 
 
@@ -270,7 +270,7 @@ event(#postback{message={language_default, Args}}, Context) ->
     end;
 
 %% @doc Start rescanning all templates for translation tags.
-event(#postback{message=translation_generate}, Context) ->
+event(#postback{message={translation_generate, _Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> generate(Context) end),
@@ -278,7 +278,7 @@ event(#postback{message=translation_generate}, Context) ->
         false ->
             z_render:growl_error(?__("Sorry, you don't have permission to scan for translations.", Context), Context)
     end;
-event(#postback{message=translation_reload}, Context) ->
+event(#postback{message={translation_reload, _Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> z_trans_server:load_translations(Context) end),
