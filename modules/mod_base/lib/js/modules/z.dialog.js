@@ -72,8 +72,7 @@
 
             $modalDialog = $('<div>')
               .addClass('modal-dialog')
-              .append($modalContent)
-              .hide();
+              .append($modalContent);
 
             width = options.width;
             if (width) {
@@ -90,9 +89,11 @@
               .modal({backdrop: options.backdrop})
               .css({'overflow-x': 'hidden', 'overflow-y': 'auto'});
 
+
             if (options.center) {
+                $modalDialog.hide();
                 setTimeout(function() {
-                    $.dialogReposition();
+                    $.dialogCenter();
                     $modalDialog.show();
                 }, 0);
             }
@@ -118,19 +119,19 @@
               });
         },
 
-        dialogReposition: function() {
+        dialogCenter: function() {
             var $dialog,
                 newMarginTop;
             $dialog = $('#zmodal:visible').find('.modal-dialog');
             newMarginTop = Math.max(0, ($(window).height() - $dialog.height()) / 2);
             newMarginTop *= .96; // visual coherence
-            newMarginTop = Math.max(newMarginTop, 0);
+            newMarginTop = Math.max(newMarginTop, 30);
             $dialog.css('margin-top', newMarginTop);
         }
     });
 
     $(window).on('resize', function() {
-        $.dialogReposition();
+        $.dialogCenter();
     });
 
     $.widget('ui.show_dialog', {
