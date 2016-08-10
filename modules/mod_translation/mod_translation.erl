@@ -73,6 +73,11 @@ init(Context) ->
                     m_config:set_prop(i18n, language_list, list, default_languages(), Context);
                 _Exists ->
                     ok
+            end,
+            % set default language
+            case m_config:get_value(i18n, language, Context) of
+                undefined -> m_config:set_value(i18n, language, <<"en">>, Context);
+                _ -> ok
             end
     end.
 
