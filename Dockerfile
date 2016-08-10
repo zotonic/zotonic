@@ -26,4 +26,3 @@ CMD ["start-nodaemon"]
 
 EXPOSE 8000 8443
 
-VOLUME /opt/zotonic/user
