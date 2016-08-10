@@ -327,10 +327,22 @@ remove_invisible([Id|Rest], Acc, Context) ->
     end.
 
 
-%% @doc Save the default menu.
+%% @doc Save the default menu, ensure that the resource 'main_menu' is defined.
 set_menu(Menu, Context) ->
-    Id = m_rsc:rid(main_menu, Context),
-    set_menu(Id, Menu, Context).
+    case m_rsc:rid(main_menu, Context) of
+        undefined ->
+            Props = [
+                {category, menu},
+                {is_published, true},
+                {title, <<"Main menu">>},
+                {menu, Menu}
+            ],
+            {ok, _Id} = m_rsc:insert(Props, z_acl:sudo(Context)),
+            ok;
+        Id ->
+            set_menu(Id, Menu, Context)
+    end.
+
 
 
 %% @doc Save the current menu.
