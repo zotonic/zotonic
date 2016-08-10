@@ -127,6 +127,11 @@
             newMarginTop *= .96; // visual coherence
             newMarginTop = Math.max(newMarginTop, 30);
             $dialog.css('margin-top', newMarginTop);
+        },
+
+        dialogScrollTo: function(position) {
+            position = position || 0;
+            $("#zmodal")[0].scrollTop = position
         }
     });
 
