@@ -405,17 +405,20 @@ set_language(Code, Context) ->
 
 
 -spec do_set_language(atom(), #context{}) -> #context{}.
-do_set_language(Code, Context) when is_atom(Code) ->
+do_set_language(CodeAtom, Context) when is_atom(CodeAtom) ->
     ConfigLanguages = get_language_config(Context),
-    LangProps = proplists:get_value(z_convert:to_binary(Code), ConfigLanguages),
-    FallbackLangCode = proplists:get_value(fallback, LangProps),
-    Langs = case FallbackLangCode of
-        undefined -> [Code];
-        _ -> [Code, z_convert:to_atom(FallbackLangCode)]
+    FallbackCodeAtom = fallback_language_code(CodeAtom),
+    {CodeAtom1, FallbackCodeAtom1} = case proplists:is_defined(z_convert:to_binary(CodeAtom), ConfigLanguages) of
+        true -> {CodeAtom, FallbackCodeAtom};
+        false -> {FallbackCodeAtom, undefined}
+    end,
+    Langs = case FallbackCodeAtom1 of
+        undefined -> [CodeAtom1];
+        _ -> [CodeAtom1, FallbackCodeAtom1]
     end,
     Context1 = z_context:set_language(Langs, Context),
     case {z_context:language(Context), z_context:language(Context1)} of
-        {Code, Code} ->
+        {CodeAtom1, CodeAtom1} ->
             Context1;
         _ ->
             z_context:set_session(language, Langs, Context1),
@@ -423,6 +426,17 @@ do_set_language(Code, Context) when is_atom(Code) ->
     end;
 do_set_language(Code, Context) ->
     do_set_language(z_convert:to_atom(Code), Context).
+
+
+-spec fallback_language_code(atom()) -> atom().
+fallback_language_code(CodeAtom) ->
+    Languages = languages:languages(),
+    case proplists:get_value(z_convert:to_binary(CodeAtom), Languages) of
+        undefined -> en; % ultimate fallback
+        Props ->
+            FallbackLanguage = proplists:get_value(language, Props),
+            z_convert:to_atom(FallbackLanguage)
+    end.
 
 
 %% @doc Add a language to the i18n configuration
