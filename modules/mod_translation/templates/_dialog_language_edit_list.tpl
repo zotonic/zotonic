@@ -32,7 +32,8 @@ initial_lang_code
 </div>
 
 {% javascript %}
-$.dialogReposition()
+$.dialogCenter();
+$.dialogScrollTo(0);
 {% endjavascript %}
 
 <style>
