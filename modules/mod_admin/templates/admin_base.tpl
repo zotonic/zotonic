@@ -25,6 +25,7 @@
             "css/zotonic-admin.css"
         %}
 
+        {% all include "_html_head.tpl" %}
         {% all include "_html_head_admin.tpl" %}
 
         {% include "_js_include_jquery.tpl" %}
