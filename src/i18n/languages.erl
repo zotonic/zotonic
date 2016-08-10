@@ -685,6 +685,7 @@ languages() -> [
     {<<"ja">>, [
         {language, <<"ja">>},
         {direction, <<"LTR">>},
+        {script, <<"Jpan">>}, % alias for Han + Hiragana + Katakana
         {name, <<"日本語"/utf8>>},
         {name_en, <<"Japanese"/utf8>>}
     ]},
