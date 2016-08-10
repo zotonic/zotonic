@@ -1,0 +1,11 @@
+.dropdown-menu.mod_translation_menu-has-icons > li > a {
+  padding-left: 40px;
+  position: relative;
+}
+.dropdown-menu.mod_translation_menu-has-icons > li > a .glyphicon {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  line-height: 24px;
+}

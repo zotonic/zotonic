@@ -1,0 +1,8 @@
+%% Less config for Zotonic's file watcher
+%% Params 'from' and 'to' are mandatory.
+%% Path values are local to this config file.
+[
+    {from, "mod_translation.less"},
+    {to, "../css/mod_translation.css"},
+    {params, "--include-path='../../../mod_admin/lib/less'"}
+].
