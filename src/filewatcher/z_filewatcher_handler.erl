@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@
 -type verb() :: create|modify|delete.
 
 %% Which files do we not consider at all in the file_changed handler
--define(FILENAME_BLACKLIST_RE, 
+-define(FILENAME_BLACKLIST_RE,
         "_flymake|\\.#|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/").
 
 
@@ -135,7 +135,7 @@ handle_file(_Verb, _Basename, SASS, F) when SASS =:= ".scss"; SASS =:= ".sass" -
 handle_file(_Verb, _Basename, ".less", F) ->
     InPath = filename:dirname(F),
     case handle_config_command(InPath, ".less") of
-        undefined -> 
+        undefined ->
             OutPath = filename:join(filename:dirname(InPath), "css"),
             case filelib:is_dir(OutPath) of
                 true ->
@@ -168,13 +168,13 @@ handle_file(Verb, "mediaclass.config", ".config", F) when Verb =:= create; Verb 
 handle_file(modify, "mediaclass.config", ".config", F) ->
     reindex_templates(F);
 
-%% @doc Translations 
+%% @doc Translations
 handle_file(_Verb, _Basename, ".po", F) ->
     case re:run(F, "/sites/([^/]+).*?/translations/(.*)", [{capture, all_but_first, list}]) of
         nomatch ->
             %% Flush the cache when a new zotonic-wide .po file is changed
             case re:run(F, ".*?/translations/(.*)", [{capture, all_but_first, list}]) of
-                nomatch -> 
+                nomatch ->
                     undefined;
                 {match, [TranslationFile]} ->
                     z_sites_manager:foreach(
@@ -208,8 +208,8 @@ handle_file(_Verb, _Basename, _Extension, F) ->
 %% @doc Check for config file on path and read proplist values from, to, params, return as tuple. Path values are local to Path.
 config_command(Path) ->
     ConfigFile = filename:join(Path, "config"),
-    case filelib:is_regular(ConfigFile) of 
-        true -> 
+    case filelib:is_regular(ConfigFile) of
+        true ->
             {ok, C} = file:consult(ConfigFile),
             [Config] = C,
             From = proplists:get_value(from, Config),
@@ -232,7 +232,7 @@ handle_config_command(Path, ".less") ->
             os:cmd(Cmd),
             "Compiled " ++ To
     end.
- 
+
 maybe_handle_lib(F) ->
     case re:run(F, "^.*/lib/(.*)") of
         nomatch ->
@@ -264,7 +264,7 @@ reindex_templates(F) ->
         nomatch ->
             %% Flush the cache when a new zotonic-wide .tpl file is used
             case re:run(F, ".*?/templates/(.*)", [{capture, all_but_first, list}]) of
-                nomatch -> 
+                nomatch ->
                     undefined;
                 {match, [TemplateFile]} ->
                     z_sites_manager:foreach(

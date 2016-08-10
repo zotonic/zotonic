@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -120,7 +120,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% Put this in a request to have it optionally served over OAuth.
 %% Returns {true, NewContext} when succeeded, or {false, WebmachineResponse} when not.
 %% Note that when the request is not signed, it will succeed as well, indicated with a 'none' atom.
-%%     
+%%
 check_request_logon(ReqData, Context) ->
     % request is signed; verify it.
     case request_is_signed(ReqData) of
@@ -128,7 +128,7 @@ check_request_logon(ReqData, Context) ->
             % Request was not signed.
             {none, Context};
         true ->
-            case serve_oauth(ReqData, Context, 
+            case serve_oauth(ReqData, Context,
                 fun(URL, Params, Consumer, Signature) ->
                         case oauth_param("oauth_token", ReqData) of
                             undefined ->
@@ -244,7 +244,7 @@ serve_oauth(ReqData, Context, Fun) ->
             end;
         _ ->
             authenticate("Unsupported OAuth version: " ++ Version ++ "\n", ReqData, Context)
-    end.    
+    end.
 
 %%
 %% Helper functions
@@ -269,7 +269,7 @@ to_oauth_consumer(Consumer, "RSA-SHA1") ->
 
 
 %%
-%% Send a WWW-Authenticate header 
+%% Send a WWW-Authenticate header
 %%
 authenticate(Reason, ReqData, Context) ->
     ReqData1 = wrq:set_resp_body(Reason ++ "\n", ReqData),
@@ -280,7 +280,7 @@ authenticate(Reason, ReqData, Context) ->
 %% @doc Check is the shop module has been installed.  If not then install all db tables and rscs.
 install_check(Context) ->
     case z_db:table_exists("oauth_application_registry", Context) of
-        true -> 
+        true ->
             ok;
         false ->
             oauth_install_data:install(Context)
@@ -307,7 +307,7 @@ observe_service_authorize(#service_authorize{service_module=Module}, Context) ->
     case check_request_logon(ReqData, Context) of
         {none, Context} ->
             %% No OAuth; Authentication is required for this module...
-            ServiceInfo = z_service:serviceinfo(Module, Context),			    
+            ServiceInfo = z_service:serviceinfo(Module, Context),
             authenticate(proplists:get_value(method, ServiceInfo) ++ ": " ++
                              z_service:title(Module) ++ "\n\nThis API call requires authentication.", ReqData, Context);
 

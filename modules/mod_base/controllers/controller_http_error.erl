@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -228,8 +228,8 @@ do_json(ReqData, Context0) ->
     Context = set_headers(ReqData, Context0),
     StatusCode = webmachine_request:get_metadata(http_status_code, ReqData),
     JSON = iolist_to_binary([
-            <<"{ code: ">>, z_convert:to_binary(StatusCode), 
-            <<", status: \"">>, httpd_util:reason_phrase(StatusCode), 
+            <<"{ code: ">>, z_convert:to_binary(StatusCode),
+            <<", status: \"">>, httpd_util:reason_phrase(StatusCode),
             <<"\" }">>
         ]),
     ?WM_REPLY(JSON, Context).
@@ -238,8 +238,8 @@ do_c_comment(ReqData, Context0) ->
     Context = set_headers(ReqData, Context0),
     StatusCode = webmachine_request:get_metadata(http_status_code, ReqData),
     JSON = iolist_to_binary([
-            <<"/* ">>, z_convert:to_binary(StatusCode), 
-            <<" ">>, httpd_util:reason_phrase(StatusCode), 
+            <<"/* ">>, z_convert:to_binary(StatusCode),
+            <<" ">>, httpd_util:reason_phrase(StatusCode),
             <<" */">>
         ]),
     ?WM_REPLY(JSON, Context).
@@ -282,7 +282,7 @@ bt_simplify({_E, {Reason, BT}}) when is_list(BT) ->
 bt_simplify(X) ->
     {raw, X}.
 
-stringify(B) when is_binary(B) -> 
+stringify(B) when is_binary(B) ->
     B;
 stringify(L) when is_list(L) ->
     try
@@ -358,7 +358,7 @@ is_template("template_"++R) ->
                                     false
                             end
                     end;
-                _ -> 
+                _ ->
                     false
             end;
         _ ->

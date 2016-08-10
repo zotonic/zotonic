@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,7 +53,7 @@ subscriptions(Context) ->
                     {type, v(<<"type">>, D)}
                 ]
                 || {struct, D} <- proplists:get_value(<<"data">>, MD)
-            ]}; 
+            ]};
         {ok, Other} ->
             {error, Other};
         {error, _} = Error ->
@@ -111,7 +111,7 @@ tagged(Tag, Context) ->
             {error, access_token};
         AccessToken ->
             Url = iolist_to_binary([
-                        "https://api.instagram.com/v1/tags/", 
+                        "https://api.instagram.com/v1/tags/",
                         z_utils:url_encode(Tag),
                         "/media/recent",
                         "?access_token=", z_utils:url_encode(AccessToken)
@@ -147,7 +147,7 @@ verify_token(Context) ->
             Tk
     end.
 
-httpc_options() -> 
+httpc_options() ->
     [
         {sync, true},
         {body_format, binary}

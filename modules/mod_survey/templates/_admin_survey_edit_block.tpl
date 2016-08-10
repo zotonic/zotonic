@@ -9,7 +9,7 @@
         .attr('name', 'block-{{#s}}-name')
         .attr('id', 'block-{{#s}}-name');
 
-    setTimeout(function() { 
+    setTimeout(function() {
         z_editor_init();
         z_admin_ensure_block_names();
     }, 100);

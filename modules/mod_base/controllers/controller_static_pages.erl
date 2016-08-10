@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -73,7 +73,7 @@ init(ConfigProps) ->
 service_available(ReqData, State) ->
     z_context:lager_md([{controller, ?MODULE}], ReqData),
     {true, ReqData, State}.
-    
+
 allowed_methods(ReqData, State) ->
     {['HEAD', 'GET'], ReqData, State}.
 
@@ -92,7 +92,7 @@ previously_existed(ReqData, State) ->
 	{false, ReqData, State}.
 
 moved_temporarily(ReqData, #state{fullpath=redir} = State) ->
-    Location = case mochiweb_util:unquote(wrq:path(ReqData)) of 
+    Location = case mochiweb_util:unquote(wrq:path(ReqData)) of
         [] -> "/";
         [$/ | Path] -> [$/ | mochiweb_util:safe_relative_path(Path)] ++ "/"
     end,
@@ -104,7 +104,7 @@ content_types_provided(ReqData, State) ->
         undefined ->
             CT = z_media_identify:guess_mime(filename:basename(State1#state.fullpath, ".tpl")),
             {[{CT, provide_content}], ReqData1, State1#state{mime=CT}};
-        Mime -> 
+        Mime ->
             {[{Mime, provide_content}], ReqData1, State1}
     end.
 
@@ -113,17 +113,17 @@ charsets_provided(ReqData, State) ->
         true -> {["utf-8"], ReqData, State};
         _ -> {no_charset, ReqData, State}
     end.
-    
+
 last_modified(ReqData, State) ->
     {ReqData1, State1} = check_resource(ReqData, State),
     case filename:extension(State1#state.fullpath) of
-        ".tpl" -> 
+        ".tpl" ->
             NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
             {calendar:gregorian_seconds_to_datetime(NowSecs - 86400), ReqData1, State1};
         _ ->
             RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData1),
             case State#state.last_modified of
-                undefined -> 
+                undefined ->
                     LMod = filelib:last_modified(State#state.fullpath),
                     [LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
                     {LModUTC, RD1, State1#state{last_modified=LModUTC}};
@@ -157,7 +157,7 @@ provide_content(ReqData, State) ->
                     {iolist_to_binary(Html1), ReqData1, State1};
                 false ->
                     case filename:extension(FullPath) of
-                        ".tpl" -> 
+                        ".tpl" ->
                             %% Render template, prevent caching
                             Context = z_context:set_reqdata(ReqData, State#state.context),
                             Context1 = z_context:ensure_all(Context),
@@ -182,12 +182,12 @@ provide_content(ReqData, State) ->
             {select_encoding(Body, ReqData), ReqData, State}
     end.
 
-    
+
 finish_request(ReqData, State) ->
     case State#state.is_cached of
         false ->
             case State#state.body of
-                undefined ->  
+                undefined ->
                     {ok, ReqData, State};
                 _ ->
                     case State#state.use_cache andalso State#state.multiple_encodings of
@@ -214,7 +214,7 @@ finish_request(ReqData, State) ->
 
 
 %%%%%%%%%%%%%% Helper functions %%%%%%%%%%%%%%
-    
+
 cache_key(Path) ->
     {?MODULE, Path}.
 
@@ -231,8 +231,8 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
             case Cached of
                 undefined ->
                     Root = abs_root(State#state.root, Context),
-                    case find_file(Root, SafePath, Context) of 
-                    	{ok, FullPath} -> 
+                    case find_file(Root, SafePath, Context) of
+                    	{ok, FullPath} ->
             	            case filename:basename(FullPath, ".tpl") of
             	                "index.html" ->
             	                    case last(wrq:path(ReqData)) /= $/ andalso filename:basename(SafePath) /= "index.html" of
@@ -246,7 +246,7 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
                     	    end;
                         {error, eacces} ->
                             {ReqData, State#state{path=SafePath, fullpath=false, context=Context, mime="text/html"}};
-                    	{error, _Reason} -> 
+                    	{error, _Reason} ->
                             Dir = filename:join(Root, SafePath),
                             case filelib:is_dir(Dir) andalso State#state.allow_directory_index of
                                 true ->
@@ -274,7 +274,7 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
     end;
 check_resource(ReqData, State) ->
     {ReqData, State}.
-    
+
 last([]) -> undefined;
 last(L) -> lists:last(L).
 
@@ -288,21 +288,21 @@ find_file(Root, File, Context) ->
         true ->
             {error, eacces};
         false ->
-            T = [ RelName, 
-                  RelName ++ ".tpl", 
-                  filename:join(RelName, "index.html.tpl"), 
+            T = [ RelName,
+                  RelName ++ ".tpl",
+                  filename:join(RelName, "index.html.tpl"),
                   filename:join(RelName, "index.html")
                 ],
             case find_template(T, Context) of
                 {error, enoent} ->
                     RelName1 = filename:join(Root, RelName),
                     T1 = [  RelName1,
-                            RelName1 ++ ".tpl", 
+                            RelName1 ++ ".tpl",
                             filename:join(RelName1, "index.html.tpl"),
-                            filename:join(RelName1, "index.html") 
+                            filename:join(RelName1, "index.html")
                          ],
                     find_file1(T1);
-                {ok, File} = Found -> 
+                {ok, File} = Found ->
                     Found
             end
     end.
@@ -365,14 +365,14 @@ abs_root(Root, Context) ->
         "/" ++ _ -> Root;
         _ -> filename:join(z_path:site_dir(Context), Root)
     end.
-    
+
 directory_index_vars(FullPath, RelRoot, Context) ->
     Root = abs_root(RelRoot, Context),
     UpFileEntry = case Root =:= FullPath of
                       true -> [];
                       false -> [fileinfo(filename:dirname(FullPath), "..")]
                   end,
-    
+
     Files = lists:sort(fun fileinfo_cmp/2, lists:map(fun fileinfo/1, lists:sort(filelib:wildcard(filename:join(FullPath, "*"))))),
     [{basename, filename:basename(FullPath)},
      {files, UpFileEntry ++ Files}

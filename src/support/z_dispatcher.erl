@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,8 +43,8 @@
 
 -include_lib("zotonic.hrl").
 
--record(state, {dispatchlist=undefined, lookup=undefined, context, 
-                host, hostname, hostname_port, smtphost, hostalias, 
+-record(state, {dispatchlist=undefined, lookup=undefined, context,
+                host, hostname, hostname_port, smtphost, hostalias,
 				redirect=true}).
 
 -record(dispatch_url, {url, dispatch_options}).
@@ -55,7 +55,7 @@
 
 %% @doc A list of dispatch rule arguments that shouldn't be considered with redirects.
 %%      Used by controller_file_id and controller_redirect
-%% TODO: this behaviour should be changed to an _inclusive_ list instead of a filter list 
+%% TODO: this behaviour should be changed to an _inclusive_ list instead of a filter list
 dispatcher_args() ->
     [ is_permanent, dispatch, q, qargs, zotonic_dispatch, ssl, protocol, session_id, set_session_id ].
 
@@ -72,7 +72,7 @@ start_link(SiteProps) ->
 url_for(Name, #context{dispatcher=Dispatcher} = Context) ->
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, [], html}), 
+            rewrite(gen_server:call(Dispatcher, {'url_for', Name, [], html}),
                     Name, [], Context),
             Name, [], Context)).
 
@@ -84,7 +84,7 @@ url_for(Name, Args, #context{dispatcher=Dispatcher} = Context) ->
     Args1 = append_extra_args(Args, Context),
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, Args1, html}), 
+            rewrite(gen_server:call(Dispatcher, {'url_for', Name, Args1, html}),
                     Name, Args1, Context),
             Name, Args1, Context)).
 
@@ -96,7 +96,7 @@ url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
     Args1 = append_extra_args(Args, Context),
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, Args1, Escape}), 
+            rewrite(gen_server:call(Dispatcher, {'url_for', Name, Args1, Escape}),
                     Name, Args1, Context),
             Name, Args1, Context)).
 
@@ -117,9 +117,9 @@ abs_url(Url, Context) ->
 
 %% @spec dispatchinfo(Context) -> {host, hostname, smtphost, hostaliases, redirect, dispatchlist}
 %% @doc Fetch the dispatchlist for the site.
-dispatchinfo(#context{dispatcher=Dispatcher}) -> 
+dispatchinfo(#context{dispatcher=Dispatcher}) ->
     gen_server:call(Dispatcher, 'dispatchinfo', infinity);
-dispatchinfo(Server) when is_pid(Server) orelse is_atom(Server) -> 
+dispatchinfo(Server) when is_pid(Server) orelse is_atom(Server) ->
     gen_server:call(Server, 'dispatchinfo', infinity).
 
 
@@ -186,7 +186,7 @@ use_absolute_url(Args, Options, Context) ->
 
 
 to_bool(undefined) -> undefined;
-to_bool(N) -> z_convert:to_bool(N). 
+to_bool(N) -> z_convert:to_bool(N).
 
 %%====================================================================
 %% gen_server callbacks
@@ -209,10 +209,10 @@ init(SiteProps) ->
     Context = z_context:new(Host),
     process_flag(trap_exit, true),
     State  = #state{
-                dispatchlist=[], 
+                dispatchlist=[],
                 lookup=dict:new(),
-                context=Context, 
-                host=Host, 
+                context=Context,
+                host=Host,
 				smtphost=drop_port(Smtphost),
                 hostname=drop_port(Hostname),
                 hostname_port=Hostname,
@@ -257,7 +257,7 @@ handle_call('hostname_port', _From, State) ->
 handle_call('dispatchinfo', _From, State) ->
     {reply,
      {State#state.host, State#state.hostname, State#state.smtphost,
-      State#state.hostalias, State#state.redirect, State#state.dispatchlist}, 
+      State#state.hostalias, State#state.redirect, State#state.dispatchlist},
      State};
 
 %% @doc Reload the dispatch list, signal the sites supervisor that the dispatch list has been changed.
@@ -303,7 +303,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Reload the dispatch list and send it to the webmachine dispatcher.
 reload_dispatch_list(#state{context=Context} = State) ->
-    DispatchList = try 
+    DispatchList = try
                        collect_dispatch_lists(Context)
                    catch
                        _:{error, Msg} ->
@@ -333,16 +333,16 @@ get_file_dispatch(File) ->
             true ->
                 Basename = filename:basename(File),
                 case Basename of
-                    "." ++ _ -> 
+                    "." ++ _ ->
                         [];
                     _Other  ->
                         {ok, Disp} = file:consult(File),
                         Disp
                 end;
-            false -> 
+            false ->
                 []
         end
-    catch 
+    catch
         M:E ->
             lager:error("File dispatch error: ~p  ~p", [File, {M,E}]),
             throw({error, "Parse error in " ++ z_convert:to_list(File)})
@@ -353,7 +353,7 @@ get_file_dispatch(File) ->
 %% Datastructure needed is:   name -> [vars, pattern]
 dispatch_for_uri_lookup(DispatchList) ->
     dispatch_for_uri_lookup1(DispatchList, dict:new()).
-    
+
 dispatch_for_uri_lookup1([], Dict) ->
     Dict;
 dispatch_for_uri_lookup1([{Name, Pattern, _Resource, DispatchOptions}|T], Dict) ->
@@ -376,14 +376,14 @@ make_url_for(Name, Args, Escape, UriLookup) ->
     Name1 = z_convert:to_atom(Name),
     Args1 = filter_empty_args(Args),
     case dict:find(Name1, UriLookup) of
-        {ok, Patterns} -> 
+        {ok, Patterns} ->
             case make_url_for1(Args1, Patterns, Escape, undefined) of
                 undefined ->
                     case Name of
-                        image -> 
+                        image ->
                             skip;
                         _ ->
-                            lager:warning("make_url_for: dispatch rule `~p' failed when processing ~p.~n", 
+                            lager:warning("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
                                  [
                                   Name1,
                                   [{'Args', Args1},
@@ -393,10 +393,10 @@ make_url_for(Name, Args, Escape, UriLookup) ->
                                  ])
                     end,
                     #dispatch_url{};
-                Url -> 
+                Url ->
                     Url
             end;
-        error -> 
+        error ->
             #dispatch_url{}
     end.
 
@@ -412,24 +412,24 @@ filter_empty_args(Args) ->
           (use_absolute_url) -> false;
           (_) -> true
       end, Args).
-    
+
 
 %% @doc Try to match all patterns with the arguments
 make_url_for1(_Args, [], _Escape, undefined) ->
     #dispatch_url{};
-make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) -> 
-    ReplArgs =  fun 
+make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
+    ReplArgs =  fun
                     ('*') -> proplists:get_value(star, Args);
                     (V) when is_atom(V) -> mochiweb_util:quote_plus(proplists:get_value(V, Args));
                     ({V, _Pattern}) when is_atom(V) -> mochiweb_util:quote_plus(proplists:get_value(V, Args));
                     (S) -> S
                 end,
-    UriParts = lists:map(ReplArgs, Pattern), 
+    UriParts = lists:map(ReplArgs, Pattern),
     Uri      = [$/ | z_utils:combine($/, UriParts)],
     case QueryStringArgs of
-        [] -> 
+        [] ->
             #dispatch_url{
-                url=z_convert:to_binary(Uri), 
+                url=z_convert:to_binary(Uri),
                 dispatch_options=DispOpts
             };
         _  ->
@@ -446,10 +446,10 @@ make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
 make_url_for1(Args, [Pattern|T], Escape, Best) ->
     Best1 = select_best_pattern(Args, Pattern, Best),
     make_url_for1(Args, T, Escape, Best1).
-    
+
 
 select_best_pattern(Args, {PCount, PArgs, Pattern, DispOpts}, Best) ->
-    if 
+    if
         length(Args) >= PCount ->
             %% Check if all PArgs are part of Args
             {PathArgs, QueryStringArgs} = lists:partition(
@@ -468,10 +468,10 @@ select_best_pattern(Args, {PCount, PArgs, Pattern, DispOpts}, Best) ->
             Best
     end.
 
-select_best_pattern1(A, undefined) -> 
+select_best_pattern1(A, undefined) ->
     A;
 select_best_pattern1({AQS, _APat, _AOpts}=A, {BQS, _BPat, _BOpts}=B) ->
-    if 
+    if
         length(BQS) > length(AQS) -> A;
         true -> B
     end.
@@ -503,18 +503,18 @@ append_qargs(Args, Context) ->
     case proplists:get_value(qargs, Args) of
         undefined ->
             Args;
-        false -> 
+        false ->
             proplists:delete(qargs, Args);
         true ->
             Args1 = proplists:delete(qargs, Args),
             Qs = z_context:get_q_all(Context),
-            lists:foldr(fun 
+            lists:foldr(fun
                             ({[$q|_]=Key,_Value}=A, Acc) ->
                                 case proplists:is_defined(Key, Args) of
                                     true -> Acc;
                                     false -> [A|Acc]
                                 end;
-                            (_, Acc) -> 
+                            (_, Acc) ->
                                 Acc
                         end,
                         Args1,

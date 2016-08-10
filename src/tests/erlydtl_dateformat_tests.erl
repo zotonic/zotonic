@@ -188,7 +188,7 @@ is(TestNum, Text, Input1, Input2) when is_binary(Input1) ->
 %     1;
 is(_TestNum, _Text, Input1, Input2) when Input1 =:= Input2 ->
     1;
-is(TestNum, Text, Input1, Input2) -> 
+is(TestNum, Text, Input1, Input2) ->
     io:format("~nnot ok ~p - ~s~n     got : ~p~n expected : ~p", [
        TestNum, Text, Input1, Input2]),
     0.

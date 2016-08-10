@@ -3,9 +3,9 @@
 %%% @author    Roberto Saccon <rsaccon@gmail.com> [http://rsaccon.com]
 %%% @author    Evan Miller <emmiller@gmail.com>
 %%% @copyright 2008 Roberto Saccon, Evan Miller
-%%% @doc 
+%%% @doc
 %%% Template language scanner
-%%% @end  
+%%% @end
 %%%
 %%% The MIT License
 %%%
@@ -40,7 +40,7 @@
 -author('rsaccon@gmail.com').
 -author('emmiller@gmail.com').
 
--export([scan/1, scan/2]). 
+-export([scan/1, scan/2]).
 
 
 %%====================================================================
@@ -61,11 +61,11 @@ scan(SourceRef, Template) ->
     scan(Template, [], {SourceRef, 1, 1}, in_text).
 
 
-identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) 
-  when PrevToken == open_tag; 
+identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc})
+  when PrevToken == open_tag;
        PrevToken == all_keyword;
        PrevToken == optional_keyword ->
-    %% the last two guards really ought to be for it's own fun, 
+    %% the last two guards really ought to be for it's own fun,
     %% since they only apply for [cat]include (the last one only for include)
 
     %% At the start of a {% .... %} tag we accept all keywords
@@ -82,12 +82,12 @@ identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc})
         "cache", "endcache", "filter", "endfilter", "javascript",
         "endjavascript", "optional" ],
     Type = case lists:member(RevString, Keywords) of
-        true -> 
+        true ->
             case list_to_atom(RevString ++ "_keyword") of
                 elseif_keyword -> elif_keyword;
                 KWA -> KWA
             end;
-        _ -> 
+        _ ->
             identifier
     end,
     {Type, [{Type, Pos, RevString}|Acc]};
@@ -103,7 +103,7 @@ identifier_to_keyword({identifier, Pos, String}, {PrevToken, Acc}) when PrevToke
 identifier_to_keyword({identifier, Pos, String}, {_PrevToken, Acc}) ->
     %% After the first keyword of a tag we accept a limited set of keywords
     RevString = lists:reverse(String),
-    Keywords = ["in", "not", "or", "and", "xor", "firstof", "regroup", "templatetag", "with", "as"], 
+    Keywords = ["in", "not", "or", "and", "xor", "firstof", "regroup", "templatetag", "with", "as"],
     Type = case lists:member(RevString, Keywords) of
         true -> list_to_atom(RevString ++ "_keyword");
         _ ->    identifier
@@ -111,7 +111,7 @@ identifier_to_keyword({identifier, Pos, String}, {_PrevToken, Acc}) ->
     {Type, [{Type, Pos, RevString}|Acc]};
 identifier_to_keyword({Type, Pos, String}, {_PrevToken, Acc}) ->
     {Type, [{Type, Pos, lists:reverse(String)}|Acc]}.
-    
+
 
 scan([], Scanned, _, in_text) ->
     {_Token, ScannedKeyword} = lists:foldr(fun identifier_to_keyword/2, {'$eof', []}, Scanned),
@@ -173,13 +173,13 @@ scan("{{" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
 scan("<!--{_" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
     scan(T, [
 			{trans_text, {SourceRef, Row, Column + length("<!--{_")}, ""},
-			{open_trans, {SourceRef, Row, Column}, "<!--{_"} | Scanned], 
+			{open_trans, {SourceRef, Row, Column}, "<!--{_"} | Scanned],
     {SourceRef, Row, Column + length("<!--{_")}, {in_trans, "_}-->"});
 
 scan("{_" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
     scan(T, [
 			{trans_text, {SourceRef, Row, Column + 2}, ""},
-			{open_trans, {SourceRef, Row, Column}, "{_"} | Scanned], 
+			{open_trans, {SourceRef, Row, Column}, "{_"} | Scanned],
 		{SourceRef, Row, Column + 2}, {in_trans, "_}"});
 
 scan("_}-->" ++ T, Scanned, {SourceRef, Row, Column}, {in_trans, "_}-->"}) ->
@@ -210,11 +210,11 @@ scan([_ | T], Scanned, {SourceRef, Row, Column}, {in_comment, Closer}) ->
     scan(T, Scanned, {SourceRef, Row, Column + 1}, {in_comment, Closer});
 
 scan("<!--{%" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
-    scan(T, [{open_tag, {SourceRef, Row, Column}, lists:reverse("<!--{%")} | Scanned], 
+    scan(T, [{open_tag, {SourceRef, Row, Column}, lists:reverse("<!--{%")} | Scanned],
         {SourceRef, Row, Column + length("<!--{%")}, {in_code, "%}-->"});
 
 scan("{%" ++ T, Scanned, {SourceRef, Row, Column}, in_text) ->
-    scan(T, [{open_tag, {SourceRef, Row, Column}, lists:reverse("{%")} | Scanned], 
+    scan(T, [{open_tag, {SourceRef, Row, Column}, lists:reverse("{%")} | Scanned],
         {SourceRef, Row, Column + 2}, {in_code, "%}"});
 
 scan([H | T], Scanned, {SourceRef, Row, Column}, {in_trans, Closer}) ->
@@ -468,7 +468,7 @@ append_text_char(Scanned, {SourceRef, Row, Column}, Char) ->
     end.
 
 char_type(Char) ->
-    case Char of 
+    case Char of
         C when ((C >= $a) and (C =< $z)) or ((C >= $A) and (C =< $Z)) or (C == $_) ->
             letter_underscore;
         C when ((C >= $0) and (C =< $9)) ->

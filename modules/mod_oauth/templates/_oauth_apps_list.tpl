@@ -34,7 +34,7 @@
             </td>
         </tr>
         {% wire id=#tr.id postback={start_edit_app id=id} %}
-        
+
         {% endwith %}
         {% empty %}
         <tr>

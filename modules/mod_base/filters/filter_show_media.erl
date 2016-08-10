@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -80,7 +80,7 @@ show_media_html(Id, Context) ->
 show_media_html(Id, {struct, Args}, Context) ->
     Args2 = [ {list_to_atom(A), B} || {A,B} <- Args],
     Args3 = filter_args(Args2, false, [], Context),
-    Id1 = try 
+    Id1 = try
               list_to_integer(z_convert:to_list(Id))
           catch
               _:_ -> Id

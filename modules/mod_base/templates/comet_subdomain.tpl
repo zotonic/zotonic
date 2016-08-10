@@ -1,5 +1,5 @@
 <html>
-  <head>	
+  <head>
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Comet subdomain handler of: {{ m.site.title }} </title>
   </head>
@@ -40,20 +40,20 @@
 		}
 	}
 
-	function z_comet_poll_subdomain() 
+	function z_comet_poll_subdomain()
 	{
 		if (get_poll_count() === 0) {
-			$.ajax({ 
+			$.ajax({
 				url: '/comet',
 				type: 'post',
 				data: "z_pageid={{ q.z_pageid|urlencode }}",
 				dataType: 'text',
-				success: function(data, textStatus) 
+				success: function(data, textStatus)
 				{
 					handle_poll_data(data);
 					setTimeout(function() { z_comet_poll_subdomain(); }, 500);
 				},
-				error: function(xmlHttpRequest, textStatus, errorThrown) 
+				error: function(xmlHttpRequest, textStatus, errorThrown)
 				{
 					setTimeout(function() { z_comet_poll_subdomain(); }, 1000);
 				}

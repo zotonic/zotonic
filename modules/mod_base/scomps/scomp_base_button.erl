@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,7 +48,7 @@ render(Params, _Vars, Context) ->
 
     Context1 = case Options1 of
                     [] -> Context;
-                    _  -> 
+                    _  ->
 					    Options2  = case Delegate of
 										undefined -> Options1;
 										_ -> [{delegate, Delegate} | Options1]
@@ -64,12 +64,12 @@ render(Params, _Vars, Context) ->
         {<<"title">>, Title},
         {<<"tabindex">>, TabIndex}
     ],
-    
+
     {Class1, Attrs1} = case z_convert:to_bool(Disabled) of
         false -> {Class, Attrs};
         true -> { ["disabled"|Class], [ {<<"disabled">>,"disabled"}|Attrs] }
     end,
-    
+
     Attrs2 = case Type of
         undefined -> Attrs1;
         _ -> [ {<<"type">>, Type} | Attrs1 ]

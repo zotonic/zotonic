@@ -232,7 +232,7 @@ handle_cast({scanned_items, Scanned}, State) ->
             % Reset the template server (and others) when there the index is changed.
             z_depcache:set(module_index_ref, erlang:make_ref(), NewState#state.context),
             z_notifier:notify(module_reindexed, NewState#state.context),
-            z_depcache:flush(module_index, NewState#state.context), 
+            z_depcache:flush(module_index, NewState#state.context),
             {noreply, NewState};
         false ->
             {noreply, State1}

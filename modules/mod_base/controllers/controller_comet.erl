@@ -55,7 +55,7 @@ malformed_request(ReqData, Context0) ->
 
 allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
-    
+
 content_types_provided(ReqData, Context) ->
     {[{"text/x-ubf", undefined}], ReqData, Context}.
 

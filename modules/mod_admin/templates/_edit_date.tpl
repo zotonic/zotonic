@@ -5,10 +5,10 @@
         value="{{ date|date:'Y-m-d':date_is_all_day }}"
         class="do_datepicker {{ class }} {{ date_class }} form-control"
     />
-    <input  
-        type="text" 
+    <input
+        type="text"
         name="dt:hi:{{ is_end|if:1:0 }}:{{ name }}"
-        value="{% if not date_is_all_day %}{{ date|date:'H:i' }}{% endif %}" 
+        value="{% if not date_is_all_day %}{{ date|date:'H:i' }}{% endif %}"
         {% if date_is_all_day %}
             style="display: none;"
         {% endif %}

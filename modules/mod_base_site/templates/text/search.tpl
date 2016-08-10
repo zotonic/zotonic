@@ -5,13 +5,13 @@
 {% block content %}
 {% if q.qs or q.qcat %}
 {% with result|default_if_undefined:m.search.paged[{query
-        text=q.qs 
+        text=q.qs
         cat=q.qcat|default:[`text`,`collection`,`document`,`location`,`mailinglist`]
-        pagelen=10 page=q.page}] as result 
+        pagelen=10 page=q.page}] as result
 %}
     {% if result.total > 0 %}
         <p id="content-pager">
-            <span class="pull-left">{_ Searching for _} 
+            <span class="pull-left">{_ Searching for _}
                 {% if q.qs %}<b class="qs">{{ q.qs|escape }}</b>{% endif %}
                 {% if q.qcat %}<span class="qcat">{{ m.rsc[q.qcat].title }}</span>{% endif %}
             </span>

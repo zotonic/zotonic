@@ -2,7 +2,7 @@
 %% @copyright 2009 Marc Worrell
 %% Date: 2009-04-09
 %%
-%% @doc Model for the zotonic config table. Performs a fallback to the site configuration when 
+%% @doc Model for the zotonic config table. Performs a fallback to the site configuration when
 %% a key is not defined in the configuration table.
 
 %% Copyright 2009 Marc Worrell
@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,7 +62,7 @@ m_value(#m{value=undefined}, Context) ->
     all(Context);
 m_value(#m{value=Module}, Context) ->
     get(Module, Context).
-    
+
 
 %% @doc Return all configurations from the configuration table. Returns a nested proplist (module, key)
 all(Context) ->
@@ -100,7 +100,7 @@ get(Module, Context) when is_atom(Module) ->
 		L when is_list(L) -> z_convert:to_list(ConfigProps) ++ L;
 		_ -> ConfigProps
 	end.
-	
+
 %% @doc Get a configuration value for the given module/key combination.
 %% @spec get(Module::atom(), Key::atom(), #context{}) -> Value | undefined
 get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
@@ -116,7 +116,7 @@ get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
                 Cs -> proplists:get_value(Key, Cs)
             end
     end,
-	case Value of 
+	case Value of
 		undefined ->
 			case m_site:get(Module, Key, Context) of
 				undefined -> Value;
@@ -181,6 +181,6 @@ delete(Module, Key, Context) ->
 
 %% @doc Lookup the unique id in the config table from the module/key combination.
 get_id(Module, Key, Context) ->
-    z_db:q1("select id from config where module = $1 and key = $2", [Module, Key], Context).    
+    z_db:q1("select id from config where module = $1 and key = $2", [Module, Key], Context).
 
 

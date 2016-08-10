@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,12 +27,12 @@
 
 render_action(TriggerId, TargetId, Args, Context) ->
     render_update(update, TriggerId, TargetId, Args, Context).
-    
+
 render_update(Method, TriggerId, TargetId, Args, Context) ->
     Html = case proplists:get_value(template, Args) of
         undefined ->
             proplists:get_value(text, Args, "");
-        Template -> 
+        Template ->
             IsAll = proplists:get_value('include_all', Args),
             case z_convert:to_bool(proplists:get_value('catinclude', Args)) of
                 true ->
@@ -60,7 +60,7 @@ render_inline(Method, TargetId, Html, Args, Context) ->
                 insert_after  -> {[], z_render:appear_after_selector(Sel, Html, Context)};
                 iframe        -> {[], z_render:update_iframe(TargetId, Html, Context)}
             end;
-        _ -> 
+        _ ->
             case Method of
                 update        -> {[], z_render:update_selector(Sel, Html, Context)};
                 replace       -> {[], z_render:replace_selector(Sel, Html, Context)};
@@ -75,7 +75,7 @@ render_inline(Method, TargetId, Html, Args, Context) ->
 render_static(Method, TargetId, Html, Args, Context) ->
     Sel = z_render:css_selector(TargetId, Args),
     case proplists:get_value(appear, Args) of
-        true -> 
+        true ->
             case Method of
                 update        -> {z_render:appear_selector_js(Sel, Html), Context};
                 replace       -> {z_render:appear_replace_selector_js(Sel, Html), Context};
@@ -84,8 +84,8 @@ render_static(Method, TargetId, Html, Args, Context) ->
                 insert_before -> {z_render:appear_before_selector_js(Sel, Html), Context};
                 insert_after  -> {z_render:appear_after_selector_js(Sel, Html), Context}
             end;
-        _ -> 
-            case Method of 
+        _ ->
+            case Method of
                 update        -> {z_render:update_selector_js(Sel, Html), Context};
                     replace   -> {z_render:replace_selector_js(Sel, Html), Context};
                 insert_top    -> {z_render:insert_top_selector_js(Sel, Html), Context};

@@ -104,11 +104,11 @@
 
 {% javascript %}
 $('#custom-redirects').on('keyup', function() {
-    $(this).trigger("check-placeholder"); 
+    $(this).trigger("check-placeholder");
 });
 $('#custom-redirects').on('click', '.delete', function(e) {
-    $(this).closest('tr').fadeOut('normal', function() { 
-        $(this).remove(); 
+    $(this).closest('tr').fadeOut('normal', function() {
+        $(this).remove();
         $('#custom-redirects ').trigger("check-placeholder");
     });
     e.preventDefault();

@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,8 +56,8 @@
 
 -record(child_state, {name, pid,
                       state=waiting, time,
-                      crash_time, crashes=0, 
-                      retry_time, retries=0, 
+                      crash_time, crashes=0,
+                      retry_time, retries=0,
                       fail_time,
                       child}).
 
@@ -133,7 +133,7 @@ init(InitialChildren) ->
     {ok, TimerRef} = timer:apply_interval(?INTERVAL, ?MODULE, check_children, [self()]),
     {ok, #state{
             waiting=[ #child_state{name=C#child_spec.name, child=C, state=starting, time=erlang:universaltime()}
-                        || C <- InitialChildren ], 
+                        || C <- InitialChildren ],
             timer_ref=TimerRef
         }
     }.
@@ -161,7 +161,7 @@ handle_call({start_child, Name}, _From, State) ->
             {reply, {ok, Pid}, State};
         error ->
             case do_remove_child(Name, State) of
-                {CS, State1} -> 
+                {CS, State1} ->
                     State2 = do_start_child(CS, State1),
                     case find_running(Name, State2) of
                         {ok, Pid} ->
@@ -169,7 +169,7 @@ handle_call({start_child, Name}, _From, State) ->
                         error ->
                             {reply, {error, not_started}, State2}
                     end;
-                error -> 
+                error ->
                     {reply, {error, unknown_child}, State}
             end
     end;
@@ -383,7 +383,7 @@ do_start_child(#child_state{child=Child} = CS, State) ->
 do_maybe_restart(CS, State) ->
     case may_restart(CS) of
         first_restart ->
-            CS1 = CS#child_state{state=crashed, time=erlang:universaltime(), 
+            CS1 = CS#child_state{state=crashed, time=erlang:universaltime(),
                             crashes=1, crash_time=z_utils:now(), retries=0},
             do_start_child(CS1, State);
         restart ->
@@ -433,7 +433,7 @@ start_child_mfa({M,F,A}) ->
     case catch apply(M, F, A) of
         {ok, Pid} when is_pid(Pid) ->
             {ok, Pid};
-        ignore -> 
+        ignore ->
             {ok, undefined};
         {error, What} ->
             {error, What};
@@ -491,7 +491,7 @@ append_stopped(CS, State) ->
 %% @doc Remove a child from the running list
 remove_running_pid(Pid, State) ->
     case remove_by_pid(Pid, State#state.running, []) of
-        {CS, Running} -> 
+        {CS, Running} ->
             notify_exit(CS, State),
             {CS#child_state{pid=undefined}, State#state{running=Running}};
         error ->
@@ -518,7 +518,7 @@ remove_by_pid(Pid, [CS|Rest], Acc) ->
 %% @doc Find the pid() of a running child
 find_running(Name, State) ->
     find_running1(Name, State#state.running).
-    
+
     find_running1(_Name, []) -> error;
     find_running1(Name, [#child_state{name=Name, pid=Pid}|_]) -> {ok, Pid};
     find_running1(Name, [_|Running]) -> find_running1(Name, Running).
@@ -563,14 +563,14 @@ notify_start(ChildState, #state{manager_pid=ManagerPid}) ->
 %%-----------------------------------------------------------------
 %% shutdown/2 and monitor_child/1 are from supervisor.erl
 %% Copyright Ericsson AB 1996-2010. All Rights Reserved.
-%% 
-%% Shutdowns a child. We must check the EXIT value 
+%%
+%% Shutdowns a child. We must check the EXIT value
 %% of the child, because it might have died with another reason than
-%% the wanted. In that case we want to report the error. We put a 
-%% monitor on the child an check for the 'DOWN' message instead of 
-%% checking for the 'EXIT' message, because if we check the 'EXIT' 
-%% message a "naughty" child, who does unlink(Sup), could hang the 
-%% supervisor. 
+%% the wanted. In that case we want to report the error. We put a
+%% monitor on the child an check for the 'DOWN' message instead of
+%% checking for the 'EXIT' message, because if we check the 'EXIT'
+%% message a "naughty" child, who does unlink(Sup), could hang the
+%% supervisor.
 %% Returns: ok | {error, OtherReason}  (this should be reported)
 %%-----------------------------------------------------------------
 shutdown(Pid, brutal_kill) ->
@@ -583,14 +583,14 @@ shutdown(Pid, brutal_kill) ->
         {'DOWN', _MRef, process, Pid, OtherReason} ->
             {error, OtherReason}
         end;
-    {error, Reason} ->      
+    {error, Reason} ->
         {error, Reason}
     end;
 shutdown(Pid, Time) ->
     case monitor_child(Pid) of
     ok ->
         exit(Pid, shutdown), %% Try to shutdown gracefully
-        receive 
+        receive
         {'DOWN', _MRef, process, Pid, shutdown} ->
             ok;
         {'DOWN', _MRef, process, Pid, OtherReason} ->
@@ -602,7 +602,7 @@ shutdown(Pid, Time) ->
                 {error, OtherReason}
             end
         end;
-    {error, Reason} ->      
+    {error, Reason} ->
         {error, Reason}
     end.
 
@@ -610,7 +610,7 @@ shutdown(Pid, Time) ->
 %% Help function to shutdown/2 switches from link to monitor approach
 monitor_child(Pid) ->
 
-    %% Do the monitor operation first so that if the child dies 
+    %% Do the monitor operation first so that if the child dies
     %% before the monitoring is done causing a 'DOWN'-message with
     %% reason noproc, we will get the real reason in the 'EXIT'-message
     %% unless a naughty child has already done unlink...
@@ -620,18 +620,18 @@ monitor_child(Pid) ->
     receive
     %% If the child dies before the unlik we must empty
     %% the mail-box of the 'EXIT'-message and the 'DOWN'-message.
-    {'EXIT', Pid, Reason} -> 
-        receive 
+    {'EXIT', Pid, Reason} ->
+        receive
         {'DOWN', _, process, Pid, _} ->
             {error, Reason}
         end
-    after 0 -> 
+    after 0 ->
         %% If a naughty child did unlink and the child dies before
-        %% monitor the result will be that shutdown/2 receives a 
+        %% monitor the result will be that shutdown/2 receives a
         %% 'DOWN'-message with reason noproc.
         %% If the child should die after the unlink there
         %% will be a 'DOWN'-message with a correct reason
-        %% that will be handled in shutdown/2. 
-        ok   
+        %% that will be handled in shutdown/2.
+        ok
     end.
 

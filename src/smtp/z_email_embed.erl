@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,8 +39,8 @@ embed_images_part({<<"text">>, <<"html">>, Hs, Ps, Html} = HtmlPart, Context) ->
         {ImageParts, Html1} ->
             Html1,
             {   <<"multipart">>, <<"related">>,
-                [], 
-                [], 
+                [],
+                [],
                 [ {<<"text">>, <<"html">>, Hs, Ps, z_convert:to_binary(Html1)} | ImageParts ]
             }
     end;
@@ -60,7 +60,7 @@ embed_images_html(Html, Context) ->
 find_images(Html) ->
     Re = <<"src=([\"']/(lib|image)/(.*?)[\"'])">>,
     case re:run(Html, Re, [{capture, all_but_first, binary}, global]) of
-        nomatch -> 
+        nomatch ->
             [];
         {match, Matches} ->
             sets:to_list(sets:from_list(Matches))
@@ -106,9 +106,9 @@ lookup_decoded(<<"image">>, Path, Context) ->
 
 create_attachment(Data, ContentType, Name) ->
     ContentId = z_ids:id(30),
-    Headers = [ 
+    Headers = [
         {<<"Content-ID">>, iolist_to_binary(["<", ContentId, ">"])},
-        {<<"X-Attachment-Id">>, z_convert:to_binary(ContentId)} 
+        {<<"X-Attachment-Id">>, z_convert:to_binary(ContentId)}
     ],
     {create_attachment_part(Data, ContentType, Name, Headers), ContentId}.
 
@@ -118,7 +118,7 @@ create_attachment_part(Data, ContentType, Name, Headers) ->
       Headers,
       [
         {<<"transfer-encoding">>, <<"base64">>},
-        {<<"disposition">>, <<"inline">>}, 
+        {<<"disposition">>, <<"inline">>},
         {<<"disposition-params">>, [{<<"filename">>, z_convert:to_binary(Name)}]}
       ],
       Data

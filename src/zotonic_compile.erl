@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@
 %% @doc Load all changed beam files
 ld() ->
     Ms = reloader:all_changed(),
-    [ ld(M) || M <- Ms ]. 
+    [ ld(M) || M <- Ms ].
 
 %% @doc Load a specific beam file, reattach any observers etc.
 ld(Module) when is_atom(Module) ->
@@ -67,7 +67,7 @@ compile(Options, Work) ->
 
     spawn_link(fun() -> compile(Self, Ref, Work, Options) end),
     receive
-        {Ref, Result} -> 
+        {Ref, Result} ->
             z:ld(),
             Result
     end.
@@ -90,7 +90,7 @@ compile_loop(_WorkQueue, Workers, error) ->
 
 %% No more work, but workers are still busy compiling.
 compile_loop([], Workers, Result) ->
-    receive 
+    receive
         {want_file, Worker} ->
             Worker ! done,
             compile_loop([], Workers, Result);
@@ -178,7 +178,7 @@ compile_options() ->
      debug_info] ++ platform_defines().
 
 %% Pick up the platform_defines set in rebar.config(.lock)
-%% 
+%%
 platform_defines() ->
     opt_no_ssl(opt_coding_utf8(opt_namespaced_dicts([]))).
 

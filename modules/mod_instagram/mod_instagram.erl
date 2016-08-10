@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015 Marc Worrell
-%% 
+%%
 %% @doc Instagram integration. Adds Instagram login and other functionalities.
 
 %% Copyright 2015 Marc Worrell
@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@
     event/2,
     poll/2,
     poll/3,
-    check_subscription/1   
+    check_subscription/1
 ]).
 -export([
     get_config/1
@@ -44,7 +44,7 @@
 -define(RETRY_DELAY, 600*1000).
 
 %% Max API calls per hour, Instagram limit is 500, leave those 1000 for other calls.
--define(API_LIMIT, 4000).   
+-define(API_LIMIT, 4000).
 
 -record(state, {
         site :: atom(),                             % Name of this site, for #context{}
@@ -59,7 +59,7 @@
 
 % You have to add your Instagram appid and secret to the config.
 % By default, we only request access to the Instagram user's e-mail address.
--define(INSTAGRAM_SCOPE, ""). 
+-define(INSTAGRAM_SCOPE, "").
 
 
 %% @doc Return the instagram appid, secret and scope
@@ -112,7 +112,7 @@ poll(Tag, Time, Context) when is_binary(Tag) ->
     gen_server:cast(name(Context), {poll, Time, Tag}).
 
 name(Context) ->
-    z_utils:name_for_host(?MODULE, Context).    
+    z_utils:name_for_host(?MODULE, Context).
 
 %%====================================================================
 %% API
@@ -234,7 +234,7 @@ handle_check_subscription_1(_Follow, _Subs, _Context, State) ->
 
 %% TODO: stop on API error (esp. access token error)
 sync_subscription(Tags, Subs, Context) ->
-    lager:info("[instagram] subscribe to tags ~p", [Tags]),    
+    lager:info("[instagram] subscribe to tags ~p", [Tags]),
     SubTags = [ T || {T,_} <- Subs ],
     New = Tags -- SubTags,
     Del = SubTags -- Tags,
@@ -255,9 +255,9 @@ get_subscription(Context) ->
                         lists:map(
                             fun(Sub) ->
                                 case proplists:get_value(object, Sub) of
-                                    <<"tag">> -> 
+                                    <<"tag">> ->
                                         {proplists:get_value(object_id, Sub),proplists:get_value(id, Sub)};
-                                    _ -> 
+                                    _ ->
                                         []
                                 end
                             end,

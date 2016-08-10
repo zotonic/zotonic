@@ -22,13 +22,13 @@ tests() ->
                 {"translatable",
                     <<"{{ _'Text' }}">>,
                     [], <<"Text">>},
-                {"array - empty", 
+                {"array - empty",
                     <<"{{ [] }}">>,
                     [], <<"">>},
-                {"array - single value", 
+                {"array - single value",
                     <<"{{ [1] }}">>,
                     [], <<1>>},
-                {"array - values", 
+                {"array - values",
                     <<"{{ [1,2] }}">>,
                     [], <<1,2>>},
                 {"array - undefined end",
@@ -154,16 +154,16 @@ tests() ->
                     <<"{% for number in person.home.numbers %}{{ number }}\n{% endfor %}">>, [{person, [{home, [{numbers, ["411", "911"]}]}]}],
                     <<"411\n911\n">>},
                 {"Counter0",
-                    <<"{% for number in numbers %}{{ forloop.counter0 }}. {{ number }}\n{% endfor %}">>, 
+                    <<"{% for number in numbers %}{{ forloop.counter0 }}. {{ number }}\n{% endfor %}">>,
                     [{numbers, ["Zero", "One", "Two"]}], <<"0. Zero\n1. One\n2. Two\n">>},
                 {"Counter",
-                    <<"{% for number in numbers %}{{ forloop.counter }}. {{ number }}\n{% endfor %}">>, 
+                    <<"{% for number in numbers %}{{ forloop.counter }}. {{ number }}\n{% endfor %}">>,
                     [{numbers, ["One", "Two", "Three"]}], <<"1. One\n2. Two\n3. Three\n">>},
                 {"Reverse Counter0",
-                    <<"{% for number in numbers %}{{ forloop.revcounter0 }}. {{ number }}\n{% endfor %}">>, 
+                    <<"{% for number in numbers %}{{ forloop.revcounter0 }}. {{ number }}\n{% endfor %}">>,
                     [{numbers, ["Two", "One", "Zero"]}], <<"2. Two\n1. One\n0. Zero\n">>},
                 {"Reverse Counter",
-                    <<"{% for number in numbers %}{{ forloop.revcounter }}. {{ number }}\n{% endfor %}">>, 
+                    <<"{% for number in numbers %}{{ forloop.revcounter }}. {{ number }}\n{% endfor %}">>,
                     [{numbers, ["Three", "Two", "One"]}], <<"3. Three\n2. Two\n1. One\n">>},
                 {"Counter \"first\"",
                     <<"{% for number in numbers %}{% if forloop.first %}{{ number }}{% endif %}{% endfor %}">>,
@@ -188,19 +188,19 @@ tests() ->
                     <<"1">>}
             ]},
         {"with", [
-                {"With", 
+                {"With",
                     <<"{% with a as b %}{{ b }}{% endwith %}">>, [{a,"a"}],
                     <<"a">>},
-                {"With list", 
+                {"With list",
                     <<"{% with a as b,c %}{{ b }}{{ c }}{% endwith %}">>, [{a,["a","b"]}],
                     <<"ab">>},
-                {"With record", 
+                {"With record",
                     <<"{% with a as b,c %}{{ b }}{{ c }}{% endwith %}">>, [{a,{"a","b"}}],
                     <<"ab">>},
-                {"With list", 
+                {"With list",
                     <<"{% with a,b as c,d %}{{ c }}{{ d }}{% endwith %}">>, [{a,"a"}, {b,"b"}],
                     <<"ab">>},
-                {"With list nested vars", 
+                {"With list nested vars",
                     <<"{% with a,b as b,a %}{{ a }}{{ b }}{% endwith %}">>, [{a,"a"}, {b,"b"}],
                     <<"ba">>}
             ]},
@@ -280,13 +280,13 @@ tests() ->
                     <<"{{ var1|escape|linebreaksbr }}">>, [{var1, <<"\n">>}],
                     <<"&lt;br /&gt;">>},
                 {"|capfirst",
-                    <<"{{ var1|capfirst }}">>, [{var1, "dana boyd"}], 
+                    <<"{{ var1|capfirst }}">>, [{var1, "dana boyd"}],
                     <<"Dana boyd">>},
                 {"|center:10",
-                    <<"{{ var1|center:10 }}">>, [{var1, "MB"}], 
+                    <<"{{ var1|center:10 }}">>, [{var1, "MB"}],
                     <<"    MB    ">>},
                 {"|center:1",
-                    <<"{{ var1|center:1 }}">>, [{var1, "KBR"}], 
+                    <<"{{ var1|center:1 }}">>, [{var1, "KBR"}],
                     <<"B">>},
                 {"|date 1",
                    <<"{{ var1|date:\"jS F Y H:i\" }}">>,
@@ -297,13 +297,13 @@ tests() ->
                    [{var1, {{1975,7,24}, {7,13,1}}}],
                    <<"24th July 1975 07:13">>},
                 {"|escapejs",
-                    <<"{{ var1|escapejs }}">>, [{var1, "Skip's \"Old-Timey\" Diner"}], 
+                    <<"{{ var1|escapejs }}">>, [{var1, "Skip's \"Old-Timey\" Diner"}],
                     <<"Skip\\x27s \\x22Old-Timey\\x22 Diner">>},
                 {"|first",
-                    <<"{{ var1|first }}">>, [{var1, "James"}], 
+                    <<"{{ var1|first }}">>, [{var1, "James"}],
                     <<"74">>},
                 {"|fix_ampersands",
-                    <<"{{ var1|fix_ampersands }}">>, [{var1, "Ben & Jerry's"}], 
+                    <<"{{ var1|fix_ampersands }}">>, [{var1, "Ben & Jerry's"}],
                     <<"Ben &amp; Jerry's">>},
                 {"|force_escape",
                     <<"{{ var1|force_escape }}">>, [{var1, "Ben & Jerry's <=> \"The World's Best Ice Cream\""}],
@@ -322,7 +322,7 @@ tests() ->
                     <<"{{ var1|format_number }}">>, [{var1, fun() -> 29 end}], <<"29">>},
                 {"|format_number 6",
                     <<"{{ var1|format_number }}">>, [{var1, fun() -> fun() -> 31 end end}], <<"31">>},
- 
+
                 {"|join:\", \"",
                     <<"{{ var1|join:\", \" }}">>, [{var1, ["Liberte", "Egalite", "Fraternite"]}],
                     <<"Liberte, Egalite, Fraternite">>},
@@ -425,7 +425,7 @@ run_tests() ->
                                         {Unexpected, Output} ->
                                             [{Group, Name, 'list', Unexpected, Output} | Acc];
                                         {Unexpected1, Unexpected2} ->
-                                            [{Group, Name, 'list', Unexpected1, Output}, 
+                                            [{Group, Name, 'list', Unexpected1, Output},
                                                 {Group, Name, 'binary', Unexpected2, Output} | Acc]
                                     end;
                                 Err ->
@@ -433,7 +433,7 @@ run_tests() ->
                             end
                     end, GroupAcc, Assertions)
         end, [], tests()),
-    
+
     io:format("Unit test failures: ~p~n", [Failures]).
 
 vars_to_binary(Vars) when is_list(Vars) ->

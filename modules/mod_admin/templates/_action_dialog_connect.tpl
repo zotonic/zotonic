@@ -120,7 +120,7 @@ find params:
                     tab=#tab
                     predicate=predicate
                     delegate=delegate
-                    subject_id=subject_id 
+                    subject_id=subject_id
                     object_id=object_id
                     is_active=(not q.is_zmedia and tab == "find")
                     title=""
@@ -135,7 +135,7 @@ find params:
                         delegate=delegate
                         subject_id=subject_id
                         object_id=object_id
-                        title="" 
+                        title=""
                         is_active=(tab == "new")
                         cat=cat
                     %}
@@ -148,7 +148,7 @@ find params:
                         predicate=predicate
                         subject_id=subject_id
                         object_id=object_id
-                        title="" 
+                        title=""
                         is_active=(not q.is_zmedia and tab == "upload")
                     %}
                 {% endif %}

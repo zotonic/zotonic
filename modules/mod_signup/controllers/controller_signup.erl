@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -80,7 +80,7 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
                               {Prop, fetch_prop(Prop, Validate, XsProps, Context)}
                       end,
                       FormProps),
-    
+
     Agree = z_convert:to_bool(z_context:get_q_validated("signup_tos_agree", Context)),
     case Agree of
         true ->
@@ -94,8 +94,8 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
                                                  false -> z_string:trim(z_context:get_q_validated("username", Context));
                                                  true -> Email
                                              end,
-                                  [ {identity, {username_pw, 
-                                                {Username, 
+                                  [ {identity, {username_pw,
+                                                {Username,
                                                  z_context:get_q_validated("password1", Context)},
                                                 true,
                                                 true}}
@@ -165,7 +165,7 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
             ensure_published(UserId, z_acl:sudo(Context)),
             {ok, ContextUser} = z_auth:logon(UserId, Context),
             Location = case get_redirect_page(SignupProps) of
-                [] -> 
+                [] ->
                     case z_notifier:first(#signup_confirm_redirect{id=UserId}, ContextUser) of
                         undefined -> m_rsc:p(UserId, page_url, ContextUser);
                         Loc -> Loc

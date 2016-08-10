@@ -6,9 +6,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,11 +51,11 @@ ensure_option([], _Options, _Answers, Acc) ->
     {ok, Acc};
 ensure_option([Name|Ns], Options, Answers, Acc) ->
     case proplists:get_value(Name, Answers) of
-        [] -> 
+        [] ->
             {error, missing};
         undefined ->
             {error, missing};
-        Value -> 
+        Value ->
             case lists:member(Value, Options) of
                 true -> ensure_option(Ns, Options, Answers, [{Name,Value}|Acc]);
                 false -> {error, missing}
@@ -74,7 +74,7 @@ prep_chart(Block, Answers, Context) ->
     LabelsB = [ Lab || {Lab, _} <- Labels ],
     [
         {question, proplists:get_value(prompt, Block)},
-        {charts, [ prep_chart1(ItemText, proplists:get_value(ItemName, Answers, []), LabelsB) 
+        {charts, [ prep_chart1(ItemText, proplists:get_value(ItemName, Answers, []), LabelsB)
                     || {ItemText,ItemName} <- lists:zip(Items, ItemNames)
                  ]}
     ].

@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,7 +62,7 @@ extract_filters(Path, OptFilters, Context) ->
                 nomatch ->
                     {SafePath, SafePath, OptFilters};
                 {_,_} ->
-                    case z_media_tag:url2props(SafePath, Context) of 
+                    case z_media_tag:url2props(SafePath, Context) of
                         {ok, {OriginalFile, PreviewPropList, _Checksum, _ChecksumBaseString}} ->
                             {SafePath, OriginalFile, case OptFilters of undefined -> []; _ -> OptFilters end ++ PreviewPropList};
                         {error, _} ->
@@ -147,9 +147,9 @@ locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) 
     end.
 
 %% @doc Locate an uploaded file, stored in the archive.
-locate_source_uploaded(<<"preview/", _/binary>> = Path, OriginalFile, Filters, Context) -> 
+locate_source_uploaded(<<"preview/", _/binary>> = Path, OriginalFile, Filters, Context) ->
     locate_source_uploaded_1([], Path, OriginalFile, Filters, Context);
-locate_source_uploaded(Path, OriginalFile, Filters, Context) -> 
+locate_source_uploaded(Path, OriginalFile, Filters, Context) ->
     case m_media:get_by_filename(OriginalFile, Context) of
         undefined ->
             {error, enoent};
@@ -173,7 +173,7 @@ locate_in_filestore(Path, InDir, Medium, Context) ->
         {ok, {filezcache, Pid, Opts}} when is_pid(Pid) ->
             {ok, #part_cache{
                 cache_pid=Pid,
-                cache_monitor=erlang:monitor(process, Pid), 
+                cache_monitor=erlang:monitor(process, Pid),
                 modified=proplists:get_value(created, Opts),
                 acl=proplists:get_value(id, Medium),
                 size=proplists:get_value(size, Opts)
@@ -301,7 +301,7 @@ fetch_archive(File, Context) ->
 
 make_abs([$/|_] = Path, _Context) -> Path;
 make_abs(<<$/, _/binary>> = Path, _Context) -> Path;
-make_abs(Path, Context) -> z_path:files_subdir(Path, Context). 
+make_abs(Path, Context) -> z_path:files_subdir(Path, Context).
 
 
 safe_path(<<$/, P/binary>>) ->

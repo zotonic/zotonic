@@ -32,7 +32,7 @@
 -author('emmiller@gmail.com').
 
 
-force_escape(undefined, _Context) -> 
+force_escape(undefined, _Context) ->
     <<>>;
 force_escape(Input, _Context) when is_atom(Input) ->
     escape1(atom_to_list(Input), []);
@@ -50,7 +50,7 @@ force_escape(true, _Context) ->
     filter_yesno:yesno(true, _Context);
 force_escape(false, _Context) ->
     filter_yesno:yesno(false, _Context).
-    
+
 
 
 escape1(Binary, Index) when is_binary(Binary) ->

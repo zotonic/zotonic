@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@
 -export([
     start_tests/0,
     start_link/0,
-    unique/0, 
+    unique/0,
     id/0,
     id/1,
     identifier/0,
@@ -50,26 +50,26 @@
 start_tests() ->
     start_link().
     % gen_server:start({local, ?MODULE}, ?MODULE, [[{fixed_seed,true}]], []).
-start_link() -> 
+start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 %% @doc Return an unique id to be used in javascript or html.  No randomness, just unique in the cluster.
-unique() -> 
+unique() ->
     gen_server:call(?MODULE, unique).
 
 %% @doc Return a long random id, can be used for session ids.
-id() -> 
+id() ->
     gen_server:call(?MODULE, {id, ?ID_LENGTH}).
 
-id(Len) -> 
+id(Len) ->
     gen_server:call(?MODULE, {id, Len}).
 
 %% @spec identifier() -> binary()
 %% @doc Get a random indentifier of a certain length, case insensitive
-identifier() -> 
+identifier() ->
     gen_server:call(?MODULE, {identifier, ?OPTID_LENGTH}).
 
-identifier(Len) -> 
+identifier(Len) ->
     gen_server:call(?MODULE, {identifier, Len}).
 
 optid(undefined) ->
@@ -89,13 +89,13 @@ sign_key(Context) ->
             Key;
         <<>> ->
             application_key(sign_key);
-        SignKey -> 
+        SignKey ->
             SignKey
     end.
 
 %% @spec sign_key_simple(Context) -> binary()
 %% @doc Get the key for less secure signing of data (without nonce).
-sign_key_simple(Context) -> 
+sign_key_simple(Context) ->
     case m_config:get_value(site, sign_key_simple, Context) of
         undefined ->
             Key = list_to_binary(generate_id(true, 10)),
@@ -150,7 +150,7 @@ handle_call({id, Len}, _From, #state{} = State) ->
 handle_call(Msg, _From, State) ->
     {stop, {unknown_call, Msg}, State}.
 
-handle_cast(_Msg, State) -> 
+handle_cast(_Msg, State) ->
     {noreply, State}.
 
 handle_info(_Msg, State) -> {noreply, State}.
@@ -164,9 +164,9 @@ make_unique() ->
     "t" ++ unique1(Ref, []).
 
 unique1([], Acc) -> Acc;
-unique1([$.|T], Acc) -> 
+unique1([$.|T], Acc) ->
     unique1(T, [$_|Acc]);
-unique1([H|T], Acc) when H >= $0 andalso H =< $9 -> 
+unique1([H|T], Acc) when H >= $0 andalso H =< $9 ->
     unique1(T, [H|Acc]);
 unique1([_|T], Acc) ->
     unique1(T, Acc).
@@ -200,7 +200,7 @@ not_so_random_list(_Radix, 0, Acc) ->
 not_so_random_list(Radix, N, Acc) ->
     not_so_random_list(Radix, N-1, [ crypto:rand_uniform(0, Radix) | Acc ]).
 
-int2list(_, _, 0, Acc) -> 
+int2list(_, _, 0, Acc) ->
     Acc;
 int2list(Val, Radix, Length, Acc) ->
     int2list(Val div Radix, Radix, Length-1, [ Val rem Radix | Acc]).
@@ -213,11 +213,11 @@ radix_bits(N) when N =< 26 -> 5;
 radix_bits(N) when N =< 64 -> 6.
 
 
-%% @doc Return N random bytes. This falls back to the pseudo random version of rand_uniform 
+%% @doc Return N random bytes. This falls back to the pseudo random version of rand_uniform
 %% if strong_rand_bytes fails.
 -spec rand_bytes(integer()) -> binary().
 rand_bytes(N) when N > 0 ->
-    try 
+    try
         crypto:strong_rand_bytes(N)
     catch
         error:low_entropy ->

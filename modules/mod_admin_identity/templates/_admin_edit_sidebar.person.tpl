@@ -34,7 +34,7 @@
 				{% endfor %}
 			</select>
 	    </div>
-    </div>	
+    </div>
 {% endif %}
 
 {% if m.modules.active.mod_l10n %}

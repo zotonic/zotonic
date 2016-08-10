@@ -20,7 +20,7 @@
                     <th width="30%">{_ Author _}</th>
                 </tr>
             </thead>
-            
+
             <tbody>
                 {% for sort, prio, module, props in modules %}
                     {% with configurable[module] as config_template %}
@@ -52,7 +52,7 @@
                                     {% else %}
                                         {% button text=_"Activate"
                                             class="btn btn-xs btn-success"
-                                            action={module_toggle module=module status_id=#status.module} 
+                                            action={module_toggle module=module status_id=#status.module}
                                             action={toggle_class id=#li.module class="enabled"} %}
                                     {% endif %}
                                 </div>

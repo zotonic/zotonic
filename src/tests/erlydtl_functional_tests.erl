@@ -43,13 +43,13 @@
 test_list() ->
 % order is important.
     [   "inherit", "autoescape", "comment", "extends", "overrules",
-        "filters", 
+        "filters",
         "for", "for_list", "for_tuple", "for_records",
-        "include", 
-        "if", "ifequal", "ifnotequal", 
+        "include",
+        "if", "ifequal", "ifnotequal",
         %"now",
-        "var", "cycle", 
-        "custom_tag", 
+        "var", "cycle",
+        "custom_tag",
         % "custom_tag_error",
         "block_recurse_error",
         "custom_call",
@@ -57,8 +57,8 @@ test_list() ->
     ].
 
 % Not supported for now (due to compile vars)
-% "for_list_preset", "for_preset", "for_records_preset", "if_preset", "ifnotequal_preset", 
-% "ifequal_preset", "var_preset", 
+% "for_list_preset", "for_preset", "for_records_preset", "if_preset", "ifnotequal_preset",
+% "ifequal_preset", "var_preset",
 
 setup_compile("for_list_preset") ->
     CompileVars = [{fruit_list, [["apple", "apples"], ["banana", "bananas"], ["coconut", "coconuts"]]}],
@@ -70,7 +70,7 @@ setup_compile("for_records_preset") ->
     Link1a = [{name, "Amazon (preset)"}, {url, "http://amazon.com"}],
     Link2a = [{name, "Google (preset)"}, {url, "http://google.com"}],
     Link3a = [{name, "Microsoft (preset)"}, {url, "http://microsoft.com"}],
-    CompileVars = [{software_links, [Link1a, Link2a, Link3a]}], 
+    CompileVars = [{software_links, [Link1a, Link2a, Link3a]}],
     {ok, CompileVars};
 setup_compile("if_preset") ->
     CompileVars = [{var1, "something"}],
@@ -93,14 +93,14 @@ setup_compile("block_recurse_error") ->
 setup_compile(_) ->
     {ok, []}.
 
-%% @spec (Name::string()) -> {CompileStatus::atom(), PresetVars::list(), 
+%% @spec (Name::string()) -> {CompileStatus::atom(), PresetVars::list(),
 %%     RenderStatus::atom(), RenderVars::list()} | skip
 %% @doc
-%% @end 
+%% @end
 %%--------------------------------------------------------------------
 setup("autoescape") ->
     RenderVars = [{var1, "<b>bold</b>"}],
-    {ok, RenderVars};  
+    {ok, RenderVars};
 setup("extends") ->
     RenderVars = [{base_var, "base-barstring"}, {test_var, "test-barstring"}],
     {ok, RenderVars};
@@ -125,7 +125,7 @@ setup("for_records") ->
     Link2 = [{name, "Google"}, {url, "http://google.com"}],
     Link3 = [{name, "Microsoft"}, {url, "http://microsoft.com"}],
     RenderVars = [{link_list, [Link1, Link2, Link3]}],
-    {ok, RenderVars};  
+    {ok, RenderVars};
 setup("for_records_preset") ->
     Link1b = [{name, "Canon"}, {url, "http://canon.com"}],
     Link2b = [{name, "Leica"}, {url, "http://leica.com"}],
@@ -137,22 +137,22 @@ setup("include") ->
     {ok, RenderVars};
 setup("if") ->
     RenderVars = [{var1, "something"}],
-    {ok, RenderVars}; 
+    {ok, RenderVars};
 setup("ifequal") ->
     RenderVars = [{var1, "foo"}, {var2, "foo"}, {var3, "bar"}],
-    {ok, RenderVars};      
+    {ok, RenderVars};
 setup("ifequal_preset") ->
     RenderVars = [{var3, "bar"}],
-    {ok, RenderVars};   
+    {ok, RenderVars};
 setup("ifnotequal") ->
     RenderVars = [{var1, "foo"}, {var2, "foo"}, {var3, "bar"}],
-    {ok, RenderVars};        
+    {ok, RenderVars};
 setup("var") ->
     RenderVars = [{var1, "foostring1"}, {var2, "foostring2"}, {var_not_used, "foostring3"}],
     {ok, RenderVars};
 setup("var_preset") ->
     RenderVars = [{var1, "foostring1"}, {var2, "foostring2"}],
-    {ok, RenderVars}; 
+    {ok, RenderVars};
 setup("cycle") ->
     RenderVars = [{test, [integer_to_list(X) || X <- lists:seq(1, 20)]},
                   {a, "Apple"}, {b, "Banana"}, {c, "Cherry"}],
@@ -172,21 +172,21 @@ setup("extends_path2") ->
 
 
 
-%%--------------------------------------------------------------------       
+%%--------------------------------------------------------------------
 %% Custom tags
 %%--------------------------------------------------------------------
 setup("custom_tag_error") ->
     RenderVars = [],
-    {skip, RenderVars};        
+    {skip, RenderVars};
 setup("custom_call") ->
     RenderVars = [{var1, "something"}],
-    {ok, RenderVars};    
+    {ok, RenderVars};
 
 setup(_) ->
     {ok, []}.
-    
 
-run_tests() ->    
+
+run_tests() ->
     io:format("Running functional tests...~n"),
     case fold_tests() of
         {N, []}->
@@ -210,21 +210,21 @@ run_test(Name) ->
 fold_tests() ->
     lists:foldl(fun(Name, {AccCount, AccErrs}) ->
                 case test_compile_render(Name) of
-                    ok -> 
+                    ok ->
                         {AccCount + 1, AccErrs};
-                    {error, Reason} -> 
+                    {error, Reason} ->
                         {AccCount + 1, [{Name, Reason} | AccErrs]}
                 end
         end, {0, []}, test_list()
     ).
 
-test_compile_render(Name) ->  
+test_compile_render(Name) ->
     File = filename:join([templates_docroot(), Name]),
     Module = "example_" ++ Name,
     case setup_compile(Name) of
         {CompileStatus, CompileVars} ->
             Options = [
-                {vars, CompileVars}, 
+                {vars, CompileVars},
                 {force_recompile, true},
                 {finder, {?MODULE,find_file}}],
             io:format(" Template: ~p, ... compiling ... ", [Name]),
@@ -237,10 +237,10 @@ test_compile_render(Name) ->
                 {error, Err} ->
                     case CompileStatus of
                         error ->
-                            io:format("~n"),  
+                            io:format("~n"),
                             ok;
                         _ ->
-                            io:format("~nCompile errror: ~p~n",[lists:flatten(Err)]), 
+                            io:format("~nCompile errror: ~p~n",[lists:flatten(Err)]),
                             Err
                     end
             end;
@@ -256,7 +256,7 @@ test_render(Name, Module) ->
     {RenderStatus, Vars} = setup(Name),
     case catch Module:render(Vars, context()) of
         {ok, Data} ->
-            io:format("rendering~n"), 
+            io:format("rendering~n"),
             case RenderStatus of
                 ok ->
                     File = Module:source(),
@@ -292,7 +292,7 @@ test_render(Name, Module) ->
                 error ->  ok;
                 _ -> Err
             end
-    end.   
+    end.
 
 find_file(File) ->
     hd(find_file(File, true)).
@@ -308,10 +308,10 @@ find_file(File, true) ->
     DocRoot = templates_docroot(),
     DocRoot2 = templates_docroot2(),
     case lists:prefix(DocRoot, File) or lists:prefix(DocRoot2, File) of
-        true -> 
+        true ->
             [File];
-        false -> 
-            lists:filter(fun(F) -> filelib:is_file(F) end, 
+        false ->
+            lists:filter(fun(F) -> filelib:is_file(F) end,
                         [ filename:join([DocRoot, File]),
                           filename:join([DocRoot2, File]) ])
     end.
@@ -322,12 +322,12 @@ templates_docroot() ->
 templates_docroot2() ->
     filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "docroot2"]).
 
-templates_outdir() ->   
+templates_outdir() ->
     Dir = filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "rendered_output"]),
     ok = filelib:ensure_dir(filename:join([Dir,"test"])),
     Dir.
 
-templates_expectdir() ->   
+templates_expectdir() ->
     filename:join([erlydtl_deps:get_base_dir(), "src", "tests", "erlydtl", "expected_output"]).
 
 
@@ -339,4 +339,4 @@ render(undefined, Vars, _Context) ->
     {ok, "<<undefined>>-" ++ proplists:get_value(var1, Vars, "") ++ "-ok."};
 render(Arg, Vars, _Context) ->
     {ok, Arg ++ "-" ++ proplists:get_value(var1, Vars, "") ++ "-ok."}.
-    
+

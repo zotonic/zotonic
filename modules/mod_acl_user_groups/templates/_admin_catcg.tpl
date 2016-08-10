@@ -23,8 +23,8 @@
         {% wire id=#collab_select
                 action={dialog_open
                         subject_id=id
-                        template="_action_dialog_connect.tpl" 
-                        title=[_"Move to another", " ", m.rsc.acl_collaboration_group.title] 
+                        template="_action_dialog_connect.tpl"
+                        title=[_"Move to another", " ", m.rsc.acl_collaboration_group.title]
                         category=`acl_collaboration_group`
                         tabs_enabled=["find"]
                         delegate=`admin_acl_rules`

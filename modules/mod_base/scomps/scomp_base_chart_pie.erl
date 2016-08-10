@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,8 +33,8 @@ render(Params, Vars, Context) ->
     Data   = proplists:get_value(data, Params, []),
     Colors = proplists:get_value(colors, Params),
     ThreeD = proplists:get_value(threed, Params, false),
-    
-    Params1 = proplists:delete(labels, 
+
+    Params1 = proplists:delete(labels,
                 proplists:delete(data,
                     proplists:delete(colors,
                         proplists:delete(threed, Params)))),
@@ -49,11 +49,11 @@ render(Params, Vars, Context) ->
         true -> "pie";
         false -> "pie3d"
     end,
-    
+
     Data2 = case is_list(Colors) of
         true ->  [{data, [{values, Values}, {color, Colors}]}];
         false -> [{data, [{values, Values}]}]
     end,
-    
+
     Params2 = [{axis,Axes}, {type,Type}, {data,Data2} | Params1],
     scomp_base_google_chart:render(Params2, Vars, Context).

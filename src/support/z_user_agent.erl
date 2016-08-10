@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,12 +67,12 @@ set_class(#wm_reqdata{} = ReqData) ->
             RD1).
 
     %% @doc Try to find the user agent class from the ua classifier and the ua cookie.
-    derive_class_from_reqdata(ReqData) ->   
+    derive_class_from_reqdata(ReqData) ->
         {UAClass, UAProps} = get_ua_req_data(ReqData),
         case get_cookie(ReqData) of
             {UAClassCookie, UAPropsCookie, IsUserDefined} ->
                 % Cookie with result of previous tests, merge with classifier props
-                {UAClassCookie, 
+                {UAClassCookie,
                  lists:foldl(fun({K,V}, Acc) ->
                                 lists:keyreplace(K, 1, Acc, {K,V})
                              end,
@@ -110,15 +110,15 @@ set_class(#wm_reqdata{} = ReqData) ->
                         end
                 end
         end.
-        
+
 
 %% @doc Let the ua-classifier do its work on the user-agent request header or qs parameter.
-get_ua_req_data(ReqData) -> 
+get_ua_req_data(ReqData) ->
     % Try to get the ua class from a qs. This is a workarond for a problem in
-    % Chrome and Safari which do not include the user-agent header in the 
+    % Chrome and Safari which do not include the user-agent header in the
     % websocket request.
     case get_ua_class_qs(ReqData) of
-        undefined -> 
+        undefined ->
             case wrq:get_req_header_lc("user-agent", ReqData) of
                 undefined ->
                     {desktop, [
@@ -152,23 +152,23 @@ get_ua_class_qs(ReqData) ->
     to_ua_class(wrq:get_qs_value(?SESSION_UA_CLASS_Q, ReqData)).
 
 
-%% @doc classify the UserAgent string. 
+%% @doc classify the UserAgent string.
 ua_classify(UserAgent) ->
     case ua_classifier:classify(UserAgent) of
         {ok, Props} ->
             {ua_classifier:device_type(Props), Props};
         {error, ua_classifier_nif_not_loaded} ->
-            %% Ignore ua_classifier_nif_not_loaded error. It is a configuration error 
+            %% Ignore ua_classifier_nif_not_loaded error. It is a configuration error
             %% and handled during startup.
-            %% Note: Do not call z_config:get(use_ua_classifier) here. Otherwise 
-            %% every request will call z_config gen_server making it a potential 
-            %% bottleneck. 
+            %% Note: Do not call z_config:get(use_ua_classifier) here. Otherwise
+            %% every request will call z_config gen_server making it a potential
+            %% bottleneck.
             {desktop, []};
         {error, Reason} ->
             error_logger:warning_msg("z_user_agent: ua_classifier returned error. [UA: ~p] [Reason: ~p]~n", [UserAgent, Reason]),
             {desktop, []}
     end.
-        
+
 
 to_ua_class("desktop") -> desktop;
 to_ua_class("tablet") -> tablet;
@@ -231,7 +231,7 @@ ua_select(automatic, Context) ->
                CurrHasPointer,
                CurrWidth,
                CurrHeight,
-               Context);    
+               Context);
 ua_select(UAClass, Context) ->
     case get_class(Context) of
         UAClass ->
@@ -272,7 +272,7 @@ ua_probe(SetManual, ProbePs, Context) ->
     IsChanged = CurrWidth =/= ProbeWidth
             orelse CurrHeight =/= ProbeHeight
             orelse CurrHasPointer =/= ProbeHasPointer,
-            
+
     case CurrIsUser of
         false ->
             % As we got a probe back we know JS is working.
@@ -333,7 +333,7 @@ ua_probe(SetManual, ProbePs, Context) ->
                             {"h", H}
                         ]),
         Options = [
-            {max_age, ?UA_COOKIE_MAX_AGE}, 
+            {max_age, ?UA_COOKIE_MAX_AGE},
             {path, "/"},
             {http_only, false}
         ],

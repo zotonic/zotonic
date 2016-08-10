@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -84,7 +84,7 @@ event(#postback{message={survey_back, Args}}, Context) ->
 event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, PersistentId}, {user_id, UserId}]}}, Context) ->
     m_survey:delete_result(SurveyId, UserId, PersistentId, Context),
     Target = "survey-result-"++z_convert:to_list(UserId)++"-"++z_convert:to_list(PersistentId),
-    z_render:wire([ 
+    z_render:wire([
             {growl, [{text, ?__("Survey result deleted.", Context)}]},
             {slide_fade_out, [{target, Target}]}
         ], Context);
@@ -156,7 +156,7 @@ observe_export_resource_filename(#export_resource_filename{dispatch=survey_resul
             Filename = lists:flatten([
                             "survey-",
                             integer_to_list(Id),
-                            case m_rsc:p(Id, slug, Context) of 
+                            case m_rsc:p(Id, slug, Context) of
                                 undefined -> "";
                                 <<>> -> "";
                                 Slug -> [$-|z_convert:to_list(Slug)]
@@ -191,7 +191,7 @@ get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
     case m_rsc:p(Id, blocks, Context) of
         Qs when is_list(Qs) ->
             go_page(Nr, Qs, [], exact, Context);
-        _ -> 
+        _ ->
             []
     end.
 
@@ -210,7 +210,7 @@ normalize_answer({A, true}) -> {z_convert:to_binary(A), <<"1">>};
 normalize_answer({A, false}) -> {z_convert:to_binary(A), <<"0">>};
 normalize_answer({A,V}) -> {z_convert:to_binary(A), z_convert:to_binary(V)};
 normalize_answer([A,V]) -> normalize_answer({A,V}).
-    
+
 
 render_update(#context{} = RenderContext, _Args, _Context) ->
     RenderContext;
@@ -231,9 +231,9 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
         Questions when is_list(Questions) ->
 
             Next = case Submitter of
-                       undefined -> 
+                       undefined ->
                             go_page(PageNr, Questions, Answers2, Direction, Context);
-                       _ButtonName ->  
+                       _ButtonName ->
                             go_button_target(Submitter, Questions, Answers2, Context)
                    end,
 
@@ -268,14 +268,14 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
                             case z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)) of
                                 true ->
                                     #render{
-                                        template="_survey_results.tpl", 
+                                        template="_survey_results.tpl",
                                         vars=[
                                             {id,Id}, {inline, true}, {history, History}, {q, As}
                                         ]
                                     };
                                 false ->
                                     #render{
-                                        template="_survey_end.tpl", 
+                                        template="_survey_end.tpl",
                                         vars=[
                                             {id,Id}, {history, History}, {q, As}
                                         ]
@@ -296,12 +296,12 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
     end.
 
     get_args(Context) ->
-        Args = [ {z_convert:to_binary(K), z_convert:to_binary(V)} 
+        Args = [ {z_convert:to_binary(K), z_convert:to_binary(V)}
                 || {K,V} <- z_context:get_q_all_noz(Context), not is_tuple(V)
                ],
         Submitter = proplists:get_value(<<"z_submitter">>, Args),
         Buttons = proplists:get_all_values(<<"survey$button">>, Args),
-        WithButtons = lists:foldl(fun(B, Acc) -> 
+        WithButtons = lists:foldl(fun(B, Acc) ->
                                       case B of
                                           Submitter -> [{B,<<"yes">>} | proplists:delete(B, Acc) ];
                                           _ -> [{B, <<"no">>} | Acc]
@@ -320,7 +320,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
         [];
     group_multiselect(As) ->
         group_multiselect(lists:sort(As), undefined, [], []).
-    
+
         group_multiselect([], K, [V], Acc) -> [{K,V}|Acc];
         group_multiselect([], K, Vs, Acc) -> [{K,Vs}|Acc];
         group_multiselect([{K,V}|KVs], undefined, [], Acc) -> group_multiselect(KVs, K, [V], Acc);
@@ -390,7 +390,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
         case is_page_end(Q) of
             true ->
                 case test(Q, Answers, Context) of
-                    ok -> 
+                    ok ->
                         eval_page_jumps({L,Nr}, Answers, Context);
                     {jump, Name} ->
                         % Go to question 'name', count pagebreaks in between for the new page nr
@@ -399,7 +399,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
                             stop -> stop;
                             submit -> submit;
                             {[], _Nr} -> {error, {not_found, Name}};
-                            NextQsNr -> 
+                            NextQsNr ->
                                 eval_page_jumps(NextQsNr, Answers, Context)
                         end;
                     {error, Reason} ->
@@ -417,10 +417,10 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
                 survey_q_page_break:test(Q, Answers, Context);
             <<"survey_button">> ->
                 % Assume button
-                Name = proplists:get_value(name, Q), 
+                Name = proplists:get_value(name, Q),
                 case proplists:get_value(Name, Answers) of
                     <<"yes">> ->
-                        Target = proplists:get_value(target, Q), 
+                        Target = proplists:get_value(target, Q),
                         case z_utils:is_empty(Target) of
                             true -> ok;
                             false -> {jump, Target}
@@ -510,7 +510,7 @@ is_page_end(Block) ->
 do_submit(SurveyId, Questions, Answers, Context) ->
     {FoundAnswers, Missing} = collect_answers(Questions, Answers, Context),
     case z_notifier:first(#survey_submit{id=SurveyId, handler=m_rsc:p(SurveyId, survey_handler, Context),
-                                         answers=FoundAnswers, missing=Missing, answers_raw=Answers}, 
+                                         answers=FoundAnswers, missing=Missing, answers_raw=Answers},
                           Context)
     of
         undefined ->
@@ -616,9 +616,9 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
             case Module:answer(Q, Answers, Context) of
                 {ok, none} ->
                     collect_answers(Qs, Answers, FoundAnswers, Missing, Context);
-                {ok, AnswerList} -> 
+                {ok, AnswerList} ->
                     collect_answers(Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
-                {error, missing} -> 
+                {error, missing} ->
                     case z_convert:to_bool(proplists:get_value(is_required, Q)) of
                         true ->
                             collect_answers(Qs, Answers, FoundAnswers, [QName|Missing], Context);

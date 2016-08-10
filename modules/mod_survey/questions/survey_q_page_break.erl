@@ -6,9 +6,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,7 +61,7 @@ test(Q, Answers, Context) ->
         {jump, _} = Jump1 -> Jump1;
         _ -> eval(proplists:get_value(condition2, Q), proplists:get_value(target2, Q), Answers, Context)
     end.
-    
+
 eval(_, undefined, _, _Context) ->
     ok;
 eval(undefined, Target, _, _Context) ->
@@ -80,7 +80,7 @@ eval1(Expr, Target, Answers, Context) ->
     case z_expression:parse(z_html:unescape(Expr)) of
         {ok, Tree} ->
             case z_convert:to_bool(
-                    z_expression:eval(Tree, 
+                    z_expression:eval(Tree,
                                       fun(Var) ->
                                           proplists:get_value(z_convert:to_binary(Var), Answers)
                                       end,

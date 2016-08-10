@@ -2,7 +2,7 @@
 <li {% include "_language_attrs.tpl" id=id class="tweet" %}>
     {% with id.depiction as dep %}
     {% if dep %}
-    <img src="{% image_url dep mediaclass="base-list-item-small" %}" alt="" /> 
+    <img src="{% image_url dep mediaclass="base-list-item-small" %}" alt="" />
     {% endif %}
     {% endwith %}
     <h3>{{ m.rsc.tweet.title }}</h3>

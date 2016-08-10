@@ -3,11 +3,11 @@
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<title>Webmachine trace {{ filename|escape }}</title>
 
-	{% lib 
-		"css/wmtrace.css" 
+	{% lib
+		"css/wmtrace.css"
 		"js/wmtrace.js"
 	%}
-	
+
 	<script type="text/javascript">
 		var request = {{ request }};
 		var response = {{ response }};
@@ -23,7 +23,7 @@
 		<div id="canvaspanel">
                     <canvas id="v3map" width="3138" height="2184"></canvas>
                 </div>
-		
+
 		<div id="sizetest"></div>
 		<div id="preview">
 			<div id="previewid"</div>

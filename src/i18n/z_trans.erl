@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,9 +30,9 @@
     lookup_fallback/3,
     lookup_fallback_language/2,
     lookup_fallback_language/3,
-    default_language/1, 
-    is_language/1, 
-    to_language_atom/1, 
+    default_language/1,
+    is_language/1,
+    to_language_atom/1,
     lc2descr/1
 ]).
 
@@ -77,17 +77,17 @@ parse_translations(Context) ->
     parse_mod_trans([{_Module, POList}|Rest], Acc) ->
         Acc1 = parse_trans(POList, Acc),
         parse_mod_trans(Rest, Acc1).
-    
+
     parse_trans([], Acc) ->
         Acc;
     parse_trans([{Lang,File}|Rest], Acc) ->
         parse_trans(Rest, [{Lang, z_gettext:parse_po(File)}|Acc]).
-    
+
     build_index([], Dict) ->
         Dict;
     build_index([{Lang, Labels}|Rest], Dict) ->
         build_index(Rest, add_labels(Lang, Labels, Dict)).
-    
+
     add_labels(_Lang, [], Dict) ->
         Dict;
     add_labels(Lang, [{header,_}|Rest],Dict) ->
@@ -100,20 +100,20 @@ parse_translations(Context) ->
                     undefined -> add_labels(Lang, Rest, dict:store(LabelB, [{Lang,list_to_binary(Trans)}|Ts], Dict));
                     _PrevTrans -> add_labels(Lang, Rest, Dict)
                 end;
-            error -> 
+            error ->
                 add_labels(Lang, Rest, dict:store(LabelB,[{Lang,to_binary(Trans)}],Dict))
         end.
-        
+
         to_binary(header) -> "";
         to_binary(L) -> list_to_binary(L).
-            
+
 
 
 %% @doc Strict translation lookup of a language version
 -spec lookup({trans, list()}|binary()|string(), #context{}) -> binary() | string() | undefined.
 lookup(Trans, Context) ->
     lookup(Trans, z_context:language(Context), Context).
-    
+
 -spec lookup({trans, list()}|binary()|string(), atom(), #context{}) -> binary() | string() | undefined.
 lookup({trans, Tr}, Lang, _Context) ->
     proplists:get_value(Lang, Tr);
@@ -139,7 +139,7 @@ lookup_fallback({trans, Tr}, Lang, Context) ->
                 _ -> z_context:fallback_language(Context)
             end,
             case proplists:get_value(FallbackLang, Tr) of
-                undefined -> 
+                undefined ->
                     case default_language(Context) of
                         undefined -> take_english_or_first(Tr);
                         CfgLang ->
@@ -151,12 +151,12 @@ lookup_fallback({trans, Tr}, Lang, Context) ->
                 Text ->
                     Text
             end;
-        Text -> 
+        Text ->
             Text
     end;
 lookup_fallback(Text, _Lang, _Context) ->
     Text.
-    
+
     take_english_or_first(Tr) ->
         case proplists:get_value(en, Tr) of
             undefined ->
@@ -164,7 +164,7 @@ lookup_fallback(Text, _Lang, _Context) ->
                     [{_,Text}|_] -> Text;
                     _ -> undefined
                 end;
-            EnglishText -> 
+            EnglishText ->
                 EnglishText
         end.
 
@@ -179,7 +179,7 @@ lookup_fallback_language(Langs, Lang, Context) ->
     case lists:member(Lang, Langs) of
         false ->
             case default_language(Context) of
-                undefined -> 
+                undefined ->
                     case lists:member(en, Langs) of
                         true ->
                             en;
@@ -206,7 +206,7 @@ lookup_fallback_language(Langs, Lang, Context) ->
                             CfgLangAtom
                     end
             end;
-        true -> 
+        true ->
             Lang
     end.
 

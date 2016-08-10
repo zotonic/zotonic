@@ -12,9 +12,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -142,7 +142,7 @@ model_pgsql() ->
 
       -- pivot fields for searching
       pivot_category_nr int,
-      pivot_tsv tsvector,       -- texts 
+      pivot_tsv tsvector,       -- texts
       pivot_rtsv tsvector,      -- related ids (cat, prop, rsc)
 
       pivot_first_name character varying(100),
@@ -250,7 +250,7 @@ model_pgsql() ->
 
     "CREATE TABLE edge
     (
-      id serial NOT NULL,      
+      id serial NOT NULL,
       subject_id int NOT NULL,
       predicate_id int NOT NULL,
       object_id int NOT NULL,
@@ -301,8 +301,8 @@ model_pgsql() ->
       preview_filename character varying(400),
       preview_width int NOT NULL DEFAULT 0,
       preview_height int NOT NULL DEFAULT 0,
-      is_deletable_file boolean NOT NULL DEFAULT false, 
-      is_deletable_preview boolean NOT NULL DEFAULT false, 
+      is_deletable_file boolean NOT NULL DEFAULT false,
+      is_deletable_preview boolean NOT NULL DEFAULT false,
       props bytea,
       created timestamp with time zone NOT NULL DEFAULT now(),
 
@@ -336,14 +336,14 @@ model_pgsql() ->
         ON UPDATE CASCADE
         ON DELETE CASCADE
     )",
-    
+
     "CREATE INDEX fki_predicate_category_predicate_id ON predicate_category (predicate_id)",
     "CREATE INDEX fki_predicate_category_category_id ON predicate_category (category_id)",
 
     % Table persistent
     % Holds persistent information coupled to an user agent.  Can be shopping cart, click history etc
 
-	"CREATE TABLE persistent 
+	"CREATE TABLE persistent
 	 (
 	  id character varying(32) not null,
 	  props bytea,
@@ -351,7 +351,7 @@ model_pgsql() ->
 	  modified timestamp with time zone NOT NULL DEFAULT now(),
 	  CONSTRAINT persistent_pkey PRIMARY KEY (id)
 	)",
-	
+
 
     % Table identity
     % Identities of an user, used for authentication.  Examples are password, openid, msn, xmpp etc.
@@ -411,7 +411,7 @@ model_pgsql() ->
         serial int NOT NULL DEFAULT 1,
         due timestamp with time zone,
         is_update boolean NOT NULL default true,
-        
+
         CONSTRAINT rsc_pivot_queue_pkey PRIMARY KEY (rsc_id),
         CONSTRAINT fk_rsc_pivot_queue_rsc_id FOREIGN KEY (rsc_id)
           REFERENCES rsc(id)
@@ -430,7 +430,7 @@ model_pgsql() ->
         key character varying(100) NOT NULL DEFAULT ''::character varying,
         due timestamp with time zone ,
         props bytea,
-        
+
         CONSTRAINT pivot_task_queue_pkey PRIMARY KEY (id),
         CONSTRAINT pivot_task_queue_module_funcion_key_key UNIQUE (module, function, key)
     )
@@ -441,7 +441,7 @@ model_pgsql() ->
     % Also checks if the rsc is set to protected, if so makes an entry in the 'protect' table.
     "
     CREATE FUNCTION rsc_pivot_update() RETURNS trigger AS $$
-    declare 
+    declare
         duetime timestamp;
         do_queue boolean;
     begin
@@ -456,13 +456,13 @@ model_pgsql() ->
         if (do_queue) then
             <<insert_update_queue>>
             loop
-                update rsc_pivot_queue 
+                update rsc_pivot_queue
                 set due = (case when now() < due then now() else due end),
                     serial = serial + 1
                 where rsc_id = new.id;
-            
+
                 exit insert_update_queue when found;
-            
+
                 begin
                     insert into rsc_pivot_queue (rsc_id, due, is_update) values (new.id, now(), tg_op = 'UPDATE');
                     exit insert_update_queue;
@@ -472,7 +472,7 @@ model_pgsql() ->
                 end;
             end loop insert_update_queue;
         end if;
-            
+
         if (new.is_protected) then
             begin
                 insert into protect (id) values (new.id);
@@ -498,7 +498,7 @@ model_pgsql() ->
         id serial NOT NULL,
         filename character varying (400) NOT NULL,
         deleted timestamp with time zone NOT NULL default now(),
-        
+
         CONSTRAINT medium_deleted_pkey PRIMARY KEY (id)
     )",
 
@@ -584,7 +584,7 @@ edge_log_table() ->
         object_id int not null,
         seq integer not null,
         created timestamp with time zone NOT NULL default now(),
-        
+
         CONSTRAINT edge_log_pkey PRIMARY KEY (id)
     )".
 
@@ -627,7 +627,7 @@ medium_log_table() ->
         usr_id int,
         filename character varying (400) NOT NULL,
         created timestamp with time zone NOT NULL default now(),
-        
+
         CONSTRAINT medium_log_pkey PRIMARY KEY (id),
         CONSTRAINT medium_log_filename_key UNIQUE (filename)
     )".
@@ -678,12 +678,12 @@ medium_update_trigger() ->
     ".
 
 rsc_page_path_log() ->
-   "CREATE TABLE rsc_page_path_log ( 
+   "CREATE TABLE rsc_page_path_log (
       page_path character varying(80),
       id int not null,
       created timestamp with time zone NOT NULL DEFAULT now(),
       CONSTRAINT rsc_page_path_log_pkey PRIMARY KEY (page_path),
-      CONSTRAINT fk_rsc_page_path_log_id FOREIGN KEY (id) 
+      CONSTRAINT fk_rsc_page_path_log_id FOREIGN KEY (id)
         REFERENCES rsc(id)
         ON UPDATE CASCADE ON DELETE CASCADE
     )".
@@ -696,17 +696,17 @@ rsc_page_path_log_fki() ->
 %    -- TODO: Also mix in the shop product id, brand, group and properties
 %    -- TODO: Use ispell for handling typos
 %    CREATE INDEX shop_product_tsv ON shop_product USING gin(tsv);
-%    CREATE FUNCTION shop_product_trigger() RETURNS trigger AS $$ 
+%    CREATE FUNCTION shop_product_trigger() RETURNS trigger AS $$
 %    begin
-%      new.tsv := 
-%        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.title_nl,'')), 'A') || 
+%      new.tsv :=
+%        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.title_nl,'')), 'A') ||
 %        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.desc_nl,'')),  'D') ||
-%        setweight(to_tsvector('pg_catalog.english', coalesce(new.title_en,'')), 'A') || 
-%        setweight(to_tsvector('pg_catalog.english', coalesce(new.desc_en,'')),  'D'); 
-%      return new; 
-%    end 
-%    $$ LANGUAGE plpgsql; 
-%    CREATE TRIGGER tsvectorupdate_shop_product BEFORE INSERT OR UPDATE 
+%        setweight(to_tsvector('pg_catalog.english', coalesce(new.title_en,'')), 'A') ||
+%        setweight(to_tsvector('pg_catalog.english', coalesce(new.desc_en,'')),  'D');
+%      return new;
+%    end
+%    $$ LANGUAGE plpgsql;
+%    CREATE TRIGGER tsvectorupdate_shop_product BEFORE INSERT OR UPDATE
 %    ON shop_product FOR EACH ROW EXECUTE PROCEDURE shop_product_trigger();
 
 

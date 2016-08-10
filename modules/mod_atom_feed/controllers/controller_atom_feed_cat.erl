@@ -98,7 +98,7 @@ provide_content(ReqData, Context) ->
         ],
         {Content, _Context2} = z_template:render_to_iolist("atom_feed_cat.tpl", Vars, Context1),
         Content
-    end,    
+    end,
     Content = F(), %%z_depcache:memo(F, {atom_feed, CatName}, ?MAX_AGE, [CatName], Context1),
     Content1 = wrq:encode_content(Content, ReqData),
     ?WM_REPLY(Content1, Context1).

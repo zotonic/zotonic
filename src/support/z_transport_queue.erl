@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -69,7 +69,7 @@ new() ->
     }.
 
 is_empty(TQ) ->
-    queue:is_empty(TQ#tq.send_ack) 
+    queue:is_empty(TQ#tq.send_ack)
     andalso queue:is_empty(TQ#tq.qos2)
     andalso queue:is_empty(TQ#tq.qos1)
     andalso queue:is_empty(TQ#tq.qos0).
@@ -130,8 +130,8 @@ to_list(TQ) ->
 ack(#z_msg_ack{msg_id=MsgId}, TQ) ->
     Ack1 = lists:filter(
                 fun (#z_msg_v1{msg_id=Id}) ->
-                    Id =/= MsgId 
-                end, 
+                    Id =/= MsgId
+                end,
                 TQ#tq.wait_ack),
     TQ#tq{wait_ack = Ack1}.
 

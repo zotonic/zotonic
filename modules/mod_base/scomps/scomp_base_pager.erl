@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,7 +41,7 @@ render(Params, _Vars, Context) ->
                    end,
     HideSinglePage  = proplists:get_value(hide_single_page, Params),
     CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
-    
+
     DispatchArgs = case proplists:is_defined(qargs, CleanedArgs) of
         true -> CleanedArgs;
         false -> [{qargs,true}|CleanedArgs]
@@ -85,12 +85,12 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
     Props = [
-        {prev_url, case Page =< 1 of 
-                        true -> undefined; 
+        {prev_url, case Page =< 1 of
+                        true -> undefined;
                         false ->  url_for(Dispatch, [{page,Page-1}|DispatchArgs], Context)
                    end},
-        {next_url, case Page >= Pages of 
-                        true -> undefined; 
+        {next_url, case Page >= Pages of
+                        true -> undefined;
                         false ->  url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context)
                    end},
         {pages, Urls},
@@ -124,18 +124,18 @@ append_qargs(Args, Context) ->
     case proplists:get_value(qargs, Args) of
         undefined ->
             Args;
-        false -> 
+        false ->
             proplists:delete(qargs, Args);
         true ->
             Args1 = proplists:delete(qargs, Args),
             Qs = z_context:get_q_all(Context),
-            lists:foldr(fun 
+            lists:foldr(fun
                             ({[$q|_]=Key,_Value}=A, Acc) ->
                                 case proplists:is_defined(Key, Args) of
                                     true -> Acc;
                                     false -> [A|Acc]
                                 end;
-                            (_, Acc) -> 
+                            (_, Acc) ->
                                 Acc
                         end,
                         Args1,
@@ -181,7 +181,7 @@ urls(Start, Middle, End, Dispatch, DispatchArgs, Context) ->
     {Part1,Next} = case Middle of
         [] ->
             {UrlStart, max(Start) + 1};
-        [N|_] when N == 2 -> 
+        [N|_] when N == 2 ->
             % Now Start is always of the format [1]
             {UrlStart ++ UrlMiddle, lists:max(Middle) + 1};
         _ ->
@@ -190,7 +190,7 @@ urls(Start, Middle, End, Dispatch, DispatchArgs, Context) ->
     case End of
         [] ->
             Part1;
-        [M|_] -> 
+        [M|_] ->
             if
                 M == Next -> Part1 ++ UrlEnd;
                 true -> Part1 ++ [{undefined, sep}|UrlEnd]
@@ -210,4 +210,4 @@ test() ->
     R = #search_result{result=[a], pages=100, page=10},
     {ok, H} = render([{result,R}], [], C),
     list_to_binary(H).
-    
+

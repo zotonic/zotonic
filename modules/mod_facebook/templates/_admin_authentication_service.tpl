@@ -15,14 +15,14 @@
                             <input type="text" id="facebook_appid" name="appid" value="{{ m.config.mod_facebook.appid.value|escape }}" class="form-control" />
                         </div>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="control-label col-md-3" for="facebook_appsecret">{_ App Secret _}</label>
                         <div class="col-md-9">
                             <input type="text" id="facebook_appsecret" name="appsecret" value="{{ m.config.mod_facebook.appsecret.value|escape }}" class="form-control" />
                         </div>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="control-label col-md-3" for="facebook_scope">{_ Scope _}</label>
                         <div class="col-md-9">
@@ -46,7 +46,7 @@
                             <button class="btn btn-primary" type="submit">{_ Save Facebook Settings _}</button>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

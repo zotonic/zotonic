@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@
 -export([
     is_auth/1,
     is_auth_recent/1,
-    
+
     logon/2,
     confirm/2,
     logon_pw/3,
@@ -33,7 +33,7 @@
     logon_from_session/1,
 
     switch_user/2,
-         
+
     user_from_page/1,
     user_from_session/1,
 
@@ -78,7 +78,7 @@ logon_pw(Username, Password, Context) ->
 confirm(UserId, Context) ->
     % check if auth_user_id == userId??
     case is_enabled(UserId, Context) of
-        true ->        
+        true ->
             Context1 = z_context:set_session(auth_confirm_timestamp, z_utils:now(), Context),
             Context2 = z_notifier:foldl(auth_confirm, Context1, Context1),
             z_notifier:notify(auth_confirm_done, Context2),
@@ -86,7 +86,7 @@ confirm(UserId, Context) ->
         false ->
             {error, user_not_enabled}
     end.
-    
+
 
 %% @doc Logon an user whose id we know, invalidate the current session id.
 %%      This sets a cookie with the new session id in the Context.
@@ -134,8 +134,8 @@ user_from_session(SessionPid) ->
 user_from_page(PagePid) ->
     user_from_session(z_session_page:session_pid(PagePid)).
 
-%% @doc Called after z_context:ensure_session. 
-%% Check if the session contains an authenticated user id. 
+%% @doc Called after z_context:ensure_session.
+%% Check if the session contains an authenticated user id.
 %% When found then the user_id of the context is set.
 %% Also checks any automatic logon methods like "remember me" cookies.
 %% @spec logon_from_session(#context{}) -> #context{}
@@ -147,15 +147,15 @@ logon_from_session(Context) ->
         undefined ->
             % New session, check if some module wants to log on
             case z_notifier:first(auth_autologon, Context) of
-                undefined -> 
+                undefined ->
                     z_memo:set_userid(undefined),
                     z_context:set_session(auth_user_id, none, Context);
                 {ok, UserId} ->
                     case logon(UserId, Context) of
-                        {ok, ContextLogon} -> 
+                        {ok, ContextLogon} ->
                             z_memo:set_userid(UserId),
                             ContextLogon;
-                        {error, _Reason} -> 
+                        {error, _Reason} ->
                             z_memo:set_userid(undefined),
                             z_acl:logoff(Context)
                     end
@@ -172,7 +172,7 @@ is_enabled(UserId, Context) ->
         undefined ->
             Acl = m_rsc:get_acl_props(UserId, Context),
             case Acl#acl_props.is_published of
-                false -> 
+                false ->
                     false;
                 true ->
                     Date = calendar:universal_time(),

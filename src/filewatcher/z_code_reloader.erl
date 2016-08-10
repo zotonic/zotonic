@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -119,7 +119,7 @@ handle_cast(Message, State) ->
 %% @doc Periodic check for changed beam files.
 handle_info(reload_beams, State) ->
 	reload_all(),
-    z_utils:flush_message(reload_beams), 
+    z_utils:flush_message(reload_beams),
     {noreply, State};
 
 %% @doc Handling all non call/cast messages
@@ -147,14 +147,14 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Check if any of the loaded modules has been changed. If so reload the module's beam file. Also rescan for templates and files.
 reload_all() ->
 	case reload_loaded_modules() of
-		[] -> 
+		[] ->
 		    z_sites_dispatcher:update_dispatchinfo(),
 		    [ z_module_indexer:reindex(C) || C <- z_sites_manager:get_site_contexts() ],
 		    ok;
-		_ -> 
+		_ ->
 		    z:flush()
 	end.
-	
+
 
 %% @doc Remake beam files from source. Do not load the new files (yet).
 make_all() ->
@@ -167,7 +167,7 @@ reload_module(M) ->
 	code:purge(M),
 	code:soft_purge(M),
 	case code:load_file(M) of
-		{module, M} -> 
+		{module, M} ->
 			{ok, M};
 		{error, Reason} = Error ->
 			lager:warning("Could not reload '~p': ~p", [M, Reason]),
@@ -180,12 +180,12 @@ reload_loaded_modules() ->
 	Dir = z_utils:lib_dir(),
 	Modules = [{M,P} || {M, P} <- code:all_loaded(), is_list(P) andalso string:str(P, Dir) > 0],
 	[reload_module(M) || {M,Path} <- Modules, module_changed(M,Path)].
-	
+
 %% @doc Check if the version number of the module has been changed.  Skip template modules.
 %% @spec module_changed(atom(), filename()) -> bool()
 module_changed(Module, BeamFile) ->
 	case z_template:is_template_module(Module) of
-		true -> 
+		true ->
 			false;
 		false ->
 			Props = Module:module_info(attributes),

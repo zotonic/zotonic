@@ -71,7 +71,7 @@
     <div class="form-group">
     	<div class="widget-section-header">{_ Visiting address _}</div>
     </div>
-	
+
 	<div class="form-group">
 		<label class="control-label" for="address_country">{_ Country _}</label>
 		<div>
@@ -85,14 +85,14 @@
 		{% endif %}
 		</div>
 	</div>
-	{% wire id="address_country" 
-			type="change" 
+	{% wire id="address_country"
+			type="change"
 			action={script script="
 				if ($(this).val() != '') $('#visit_address').slideDown();
 				else $('#visit_address').slideUp();
 			"}
 	%}
-	
+
 	<div id="visit_address" {% if not r.address_country %}style="display:none"{% endif %}>
 		<div class="form-group">
 			<label class="control-label" for="address_street_1">{_ Street Line 1 _}</label>
@@ -150,14 +150,14 @@
 		{% endif %}
 		</div>
 	</div>
-	{% wire id="mail_country" 
-			type="change" 
+	{% wire id="mail_country"
+			type="change"
 			action={script script="
 				if ($(this).val() != '') $('#mail_address').slideDown();
 				else $('#mail_address').slideUp();
 			"}
 	%}
-	
+
 	<div id="mail_address" {% if not r.mail_country %}style="display:none"{% endif %}>
 		<div class="form-group">
 			<label class="control-label" for="mail_street_1">{_ Street Line 1 _}</label>

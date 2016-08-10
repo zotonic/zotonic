@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,7 +51,7 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
                                 {_, _, OId} = m_edge:get_triple(EdgeId, Context),
                                 OId
                         end;
-                    _ -> 
+                    _ ->
                         RscId
                end,
     TargetId1 = z_context:get_q("element_id", Context, TargetId),
@@ -97,8 +97,8 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
                             window -> Context;
                             undefined -> Context;
                              UpdateElt ->
-                                Html = z_template:render(case proplists:get_value(template, Args) of 
-                                                            undefined -> "_rsc_edge.tpl"; 
+                                Html = z_template:render(case proplists:get_value(template, Args) of
+                                                            undefined -> "_rsc_edge.tpl";
                                                             X -> X
                                                           end,
                                                           Vars,
@@ -112,7 +112,7 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
             %% wire any custom actions
             Context3 = case proplists:get_value(callback, Args) of
                             undefined -> Context2;
-                            Callback -> 
+                            Callback ->
                                 Title = m_rsc:p(Id, title, Context2),
                                 z_render:wire({script, [{script, [
                                                 Callback,

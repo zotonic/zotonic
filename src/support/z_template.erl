@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -102,7 +102,7 @@ render1(File, #module_index{filepath=FoundFile, erlang_module=undefined}, Variab
     render1(File, FoundFile, Module, Variables, Context);
 render1(File, #module_index{filepath=FoundFile, erlang_module=Module}, Variables, Context) ->
     render1(File, FoundFile, Module, Variables, Context).
-    
+
 render1(File, FoundFile, Module, Variables, Context) ->
     Result = case gen_server:call(Context#context.template_server, {check_modified, Module}, ?TIMEOUT) of
                 modified -> compile(File, FoundFile, Module, Context);
@@ -113,7 +113,7 @@ render1(File, FoundFile, Module, Variables, Context) ->
             %% @todo Move the in_process caching to the template compiler?
             OldCaching = z_depcache:in_process(true),
             case Module:render(Variables, Context) of
-                {ok, Output}   -> 
+                {ok, Output}   ->
                     z_depcache:in_process(OldCaching),
                     runtime_wrap_debug_comments(FoundFile, Output, Context);
                 {error, Reason} ->
@@ -130,8 +130,8 @@ render1(File, FoundFile, Module, Variables, Context) ->
             lager:error("Error compiling template: ~p (~p)~n", [FoundFile, Reason1]),
             throw({error, {template_compile_error, FoundFile, Reason1}})
     end.
-    
-            
+
+
 %% @doc Render a template to an iolist().  This removes all scomp state etc from the rendered html and appends the
 %% information in the scomp states to the context for later rendering.
 %% @spec render_to_iolist(File, Vars, Context) -> {iolist(), Context}
@@ -160,8 +160,8 @@ compile(File, FoundFile, Module, Context) ->
     z_notifier:notify(#debug{what=template, arg={compile, File, FoundFile, Module}}, Context),
     % swap basenames for the File and FoundFile
     File1 = set_filename(File, FoundFile),
-    gen_server:call(Context#context.template_server, 
-                    {compile, File1, FoundFile, Module, z_context:prune_for_async(Context)}, 
+    gen_server:call(Context#context.template_server,
+                    {compile, File1, FoundFile, Module, z_context:prune_for_async(Context)},
                     ?TIMEOUT).
 
 set_filename(File, FoundFile) ->
@@ -174,7 +174,7 @@ set_filename_1(".", FoundFile) ->
 set_filename_1(FilePath, FoundFile) ->
     filename:join([FilePath, filename:basename(FoundFile)]).
 
-%% @spec find_template(File, Context) -> {ok, filename()} | {ok, #module_index{}} | {error, code} 
+%% @spec find_template(File, Context) -> {ok, filename()} | {ok, #module_index{}} | {error, code}
 %% @doc Finds the template designated by the file, check modules.
 %% When the file is tagged with 'abs' path, then do nothing and assume the file exists.
 find_template({abs, File}, _Context) ->
@@ -196,7 +196,7 @@ find_template(File, true, Context) ->
     z_module_indexer:find_all(template, File, Context).
 
 
-%% @spec find_template_cat(File, Id, Context) -> {ok, filename()} | {error, code} 
+%% @spec find_template_cat(File, Id, Context) -> {ok, filename()} | {error, code}
 %% @doc Finds the template designated by the file, for the category of the rsc with id, check modules.
 %% When the file is an absolute path, then do nothing and assume the file exists.
 find_template_cat(File, None, Context) when None =:= <<>>; None =:= undefined; None =:= [] ->
@@ -216,8 +216,8 @@ find_template_cat_stack(File, Stack, Context) ->
     case lists:foldr(fun(Cat, {error, enoent}) ->
                             find_template(Root ++ [$.|z_convert:to_list(Cat)] ++ Ext, Context);
                         (_Cat, Found) ->
-                            Found  
-                     end, 
+                            Found
+                     end,
                      {error, enoent},
                      Stack)
     of
@@ -249,7 +249,7 @@ init(SiteProps) ->
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Host)),
     Flag = z_config:get(template_modified_check, true),
     {ok, #state{
-            reset_counter=z_utils:now_msec(), 
+            reset_counter=z_utils:now_msec(),
             host=Host,
             compile_queue=[],
             do_modified_check=Flag
@@ -266,20 +266,20 @@ handle_call({check_modified, Module}, _From, State) when Module =/= undefined ->
     {reply, Result, State};
 
 
-%% @doc Compile the template, loads the compiled template in memory.  Make sure that we only compile 
+%% @doc Compile the template, loads the compiled template in memory.  Make sure that we only compile
 %% one template at a time to prevent overloading the server on restarts.
 handle_call({compile, _File, _FoundFile, Module, _Context} = Compile, From, State) ->
     case template_is_modified(Module, State) of
         true  ->
             {noreply, queue_compile(Compile, From, State)};
-        false -> 
+        false ->
             {reply, {ok, Module}, State}
     end.
 
 %% @doc Reset all compiled templates, done by the module_indexer after the module list changed.
-handle_cast(module_reindexed, State) -> 
+handle_cast(module_reindexed, State) ->
     {noreply, State#state{reset_counter=State#state.reset_counter+1}};
-handle_cast(_Msg, State) -> 
+handle_cast(_Msg, State) ->
     {noreply, State}.
 
 %% @doc Handle result of the compilation server
@@ -298,7 +298,7 @@ handle_info({'EXIT', Pid, Reason}, #state{compile_job_pid=Pid} = State) ->
                   end,
                   Wait),
     {noreply, maybe_start_compile(State#state{compile_queue=CQ, compile_job=undefined, compile_job_pid=undefined})};
-handle_info(_Msg, State) -> 
+handle_info(_Msg, State) ->
     {noreply, State}.
 
 terminate(_Reason, State) ->
@@ -354,7 +354,7 @@ compile_job(Server, {compile, File, FoundFile, Module, Context}, ResetCounter) -
                  end,
     Result = erlydtl:compile(FoundFile,
                              File,
-                             Module, 
+                             Module,
                              [{finder, FinderFun}, {template_reset_counter, ResetCounter},
                               {debug_includes, get_debug_includes(Context)},
                               {debug_blocks, get_debug_blocks(Context)}
@@ -407,7 +407,7 @@ template_is_modified(Module, State) ->
                             is_modified(Deps)
                     end
             end;
-        _Error -> 
+        _Error ->
             true
     end.
 
@@ -416,7 +416,7 @@ is_modified([]) ->
     false;
 is_modified([{File, DateTime}|Rest]) ->
     case filelib:last_modified(File) of
-        0 -> 
+        0 ->
             true;
         FileMod when FileMod =/= DateTime ->
             true;
@@ -427,10 +427,10 @@ is_modified([{File, DateTime}|Rest]) ->
 
 get_debug_includes(Context) ->
     z_convert:to_bool(m_config:get_value(mod_development, debug_includes, Context)).
-    
+
 get_debug_blocks(Context) ->
     z_convert:to_bool(m_config:get_value(mod_development, debug_blocks, Context)).
-    
+
 
 runtime_wrap_debug_comments(FilePath, Output, Context) ->
     case get_debug_includes(Context) of

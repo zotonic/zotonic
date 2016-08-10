@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,7 @@ observe_acl_is_allowed(#acl_is_allowed{object=undefined}, _Context) ->
 observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id=undefined} = Context) ->
     Acl = m_rsc:get_acl_props(Id, Context),
     case Acl#acl_props.is_published of
-        false -> 
+        false ->
             false;
         true ->
             case Acl#acl_props.visible_for == 0 of
@@ -54,7 +54,7 @@ observe_acl_is_allowed(#acl_is_allowed{action=view, object=Id}, #context{user_id
                     Date = calendar:universal_time(),
                     Acl#acl_props.publication_start =< Date andalso Acl#acl_props.publication_end >= Date
             end
-    end;	
+    end;
 observe_acl_is_allowed(#acl_is_allowed{}, #context{user_id=undefined}) ->
 	false;
 observe_acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
@@ -70,7 +70,7 @@ observe_acl_can_see(#acl_can_see{}, #context{user_id=undefined}) ->
 	?ACL_VIS_PUBLIC;
 observe_acl_can_see(#acl_can_see{}, _Context) ->
 	?ACL_VIS_USER.
-	
+
 %% @doc Let the user log on, this is the moment to start caching information.
 observe_acl_logon(#acl_logon{id=UserId}, Context) ->
 	z_acl:sudo(Context#context{acl=?MODULE, user_id=UserId}).

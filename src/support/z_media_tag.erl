@@ -4,7 +4,7 @@
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
 %%
-%% Typical urls are like: 
+%% Typical urls are like:
 %% /image/2007/03/31/wedding.jpg(300x300)(crop-center)(a3ab6605e5c8ce801ac77eb76289ac12).jpg
 %% /media/inline/2007/03/31/wedding.jpg
 %% /media/attachment/2007/03/31/wedding.jpg
@@ -14,9 +14,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +36,7 @@
     tag/3,
     url/3,
     url2props/2,
-    
+
     % Export for tests
     props2url/2
 ]).
@@ -122,13 +122,13 @@ viewer(Filename, Options, Context) ->
     case z_media_identify:identify(FilePath, Context) of
         {ok, Props} ->
             viewer1(undefined, Props, FilePath, Options, Context);
-        {error, _} -> 
+        {error, _} ->
             % Unknown content type, we just can't display it.
             {ok, []}
     end.
 
-    
-    %% @doc Try to generate Html for the media reference.  First check if a module can do this, then 
+
+    %% @doc Try to generate Html for the media reference.  First check if a module can do this, then
     %% check the normal image tag.
     viewer1(Id, Props, FilePath, Options, Context) ->
         case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options}, Context) of
@@ -160,7 +160,7 @@ tag([{_Prop, _Value}|_] = Props, Options, Context) ->
     case mediaprops_filename(proplists:get_value(id, Props), Props, Context) of
         None when None =:= []; None =:= <<>>; None =:= undefined ->
             {ok, []};
-        Filename -> 
+        Filename ->
             Options1 = opt_crop_center(proplists:get_value(id, Props), Options, Context),
             tag1(Props, Filename, Options1, Context)
     end;
@@ -231,7 +231,7 @@ filename_to_filepath(Filename, #context{host=Host} = Context) ->
     case Filename of
         "/" ++ _ ->
             Filename;
-        "lib/" ++ RelFilename -> 
+        "lib/" ++ RelFilename ->
             case z_module_indexer:find(lib, RelFilename, Context) of
                 {ok, #module_index{filepath=Libfile}} -> Libfile;
                 _ -> Filename
@@ -270,7 +270,7 @@ url([{_Prop, _Value}|_] = Props, Options, Context) ->
 url(Filename, Options, Context) ->
     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
     {ok, Url}.
-    
+
 
 %% @spec url1(Filename, Options, Context) -> {url, Url::binary(), TagOptions, ImageOpts} | {error, Reason}
 %% @doc Creates an url for the given filename and filters.  This does not check the filename or if it is convertible.
@@ -278,9 +278,9 @@ url1(File, Options, Context) ->
     UrlAndOpts = url2(File, Options, Context),
     case use_absolute_url(Options, Context) of
         true ->
-            {url, Url, TagOpts, ImageOpts} = UrlAndOpts, 
+            {url, Url, TagOpts, ImageOpts} = UrlAndOpts,
             {url, z_dispatcher:abs_url(Url, Context), TagOpts, ImageOpts};
-        false -> 
+        false ->
             UrlAndOpts
     end.
 
@@ -328,13 +328,13 @@ url2(File, Options, Context) ->
     case props2url(ImageOpts, Context) of
         {no_checksum, UrlProps} ->
             PropsQuoted = mochiweb_util:quote_plus(UrlProps),
-            {url, filename_to_urlpath(lists:flatten([Filename,PropsQuoted,Extension]), Context), 
+            {url, filename_to_urlpath(lists:flatten([Filename,PropsQuoted,Extension]), Context),
                   TagOpts,
                   ImageOpts};
         {checksum, UrlProps} ->
             Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
             PropCheck = mochiweb_util:quote_plus(iolist_to_binary([UrlProps,$(,Checksum,$)])),
-            {url, filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]), Context), 
+            {url, filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]), Context),
                   TagOpts,
                   ImageOpts}
     end.
@@ -370,22 +370,22 @@ is_tagopt({Prop, _}) ->
     end.
 
 
-props2url([{mediaclass, _}] = Props, Context) -> 
+props2url([{mediaclass, _}] = Props, Context) ->
     {_Width, _Height, Acc} = props2url(Props, undefined, undefined, [], Context),
     {no_checksum, iolist_to_binary([$(,Acc,$)])};
-props2url(Props, Context) -> 
+props2url(Props, Context) ->
     {Width, Height, Acc} = props2url(Props, undefined, undefined, [], Context),
     case {Width,Height} of
-        {undefined,undefined} -> 
+        {undefined,undefined} ->
             case Acc of
                 [[<<"mediaclass-">>|_]] ->
                     {no_checksum, iolist_to_binary([$(,Acc,$)])};
                 _ ->
                     with_checksum([], Acc)
             end;
-        {_W,undefined} -> 
+        {_W,undefined} ->
             with_checksum([integer_to_list(Width)] ++ "x", Acc);
-        {undefined,_H} -> 
+        {undefined,_H} ->
             with_checksum([$x|integer_to_list(Height)], Acc);
         {_W,_H} ->
             with_checksum(integer_to_list(Width) ++ [$x|integer_to_list(Height)], Acc)
@@ -433,7 +433,7 @@ props2url([{Prop,Value}|Rest], Width, Height, Acc, Context) ->
 
 %% @doc Translate an url of the format "image.jpg(300x300)(crop-center)(checksum).jpg" to parts
 %% @todo Map the extension to the format of the preview (.jpg or .png)
--spec url2props(binary()|string(), #context{}) -> 
+-spec url2props(binary()|string(), #context{}) ->
             {ok, {FilePath :: string(), Props :: list(), Checksum :: string(), ChecksumBaseString :: string()}} |
             {error, no_lparen|checksum_invalid|badarg}.
 url2props(Url, Context) when is_binary(Url) ->
@@ -465,16 +465,16 @@ url2props(Url, Context) ->
                             try
                                 z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
                                 PropList1 = case PropList of
-                                                [] -> 
+                                                [] ->
                                                     [];
                                                 [Size|RestProps]->
                                                     {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
                                                     SizeProps = case {W,XH} of
                                                                     {"", "x"}            -> [];
                                                                     {"", ""}             -> [];
-                                                                    {Width, ""}          -> [{width,list_to_integer(Width)}]; 
-                                                                    {Width, "x"}         -> [{width,list_to_integer(Width)}]; 
-                                                                    {"", [$x|Height]}    -> [{height,list_to_integer(Height)}]; 
+                                                                    {Width, ""}          -> [{width,list_to_integer(Width)}];
+                                                                    {Width, "x"}         -> [{width,list_to_integer(Width)}];
+                                                                    {"", [$x|Height]}    -> [{height,list_to_integer(Height)}];
                                                                     {Width, [$x|Height]} -> [{width,list_to_integer(Width)},{height,list_to_integer(Height)}]
                                                                 end,
                                                     SizeProps ++ url2props1(RestProps, [])
@@ -499,7 +499,7 @@ map_mime_prop("lossless") ->
     lossless;
 map_mime_prop("mediaclass-"++Rest) ->
     {mediaclass, lists:takewhile(fun(C) -> C =/= $. end, Rest)};
-map_mime_prop(X) -> 
+map_mime_prop(X) ->
     X.
 
 

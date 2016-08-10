@@ -33,7 +33,7 @@ test() ->
     test(fun test_z_db_q1/4, z_db, Context, "select count(*) from rsc", []),
 
     ok.
-    
+
 
 
 test(Fun, Name, Conn, Sql, Args) ->

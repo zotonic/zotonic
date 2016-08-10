@@ -36,7 +36,7 @@
 
 {% if m.acl.use.mod_acl_user_groups %}
     {% with m.acl.insert.acl_user_group as is_editable %}
-        
+
         {% if is_editable %}
             {% include "_admin_acl_rules_publish_buttons.tpl" %}
         {% endif %}
@@ -58,7 +58,7 @@
 
         {% block filter %}
         {% endblock %}
-        
+
         <div class="acl">
             {% block content_acl %}
             {% endblock %}

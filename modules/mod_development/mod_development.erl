@@ -200,6 +200,6 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("Development", Context),
                 url={admin_development},
                 visiblecheck={acl, use, mod_development}}
-     
+
      |Acc].
 

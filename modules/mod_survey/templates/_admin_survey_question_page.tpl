@@ -32,7 +32,7 @@
 	<div class="jumps">
 		<div class="form-group">
 			<div class="checkbox"><label>
-				<input type="checkbox" class="is_stop_page {% if nosubmit %}nosubmit{% endif %}" name="is_stop_page" {% if is_stop %}checked{% endif %} /> 
+				<input type="checkbox" class="is_stop_page {% if nosubmit %}nosubmit{% endif %}" name="is_stop_page" {% if is_stop %}checked{% endif %} />
 				{_ Stop the survey after this page. No questions are submitted. _}
 			</label></div>
 		</div>

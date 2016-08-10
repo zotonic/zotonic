@@ -30,7 +30,7 @@ event(#postback{message={admin_tasks, [{task, "templates_reset"}]}}, Context) ->
 
 %% @doc Pivot everything
 event(#postback{message={admin_tasks, [{task, "pivot_all"}]}}, Context) ->
-    do(fun() -> z_pivot_rsc:queue_all(Context) end, 
+    do(fun() -> z_pivot_rsc:queue_all(Context) end,
        "The search index is rebuilding. Depending on the database size, this can take a long time.", Context);
 
 %% @doc Renumber the category tree
@@ -40,7 +40,7 @@ event(#postback{message={admin_tasks, [{task, "site_reinstall"}]}}, Context) ->
 
 %% @doc Renumber the category tree
 event(#postback{message={admin_tasks, [{task, "renumber_categories"}]}}, Context) ->
-    do(fun() -> m_category:renumber(Context) end, 
+    do(fun() -> m_category:renumber(Context) end,
        "The category tree is rebuilding. This can take a long time.", Context).
 
 

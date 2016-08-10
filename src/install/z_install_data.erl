@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@ install(Host, Context) ->
     ok.
 
 %% @doc Install all modules for the site.
-%% The list of modules is read from either the site config file, 
+%% The list of modules is read from either the site config file,
 %% under the key <tt>install_modules</tt>.
 -spec install_modules(#context{}) -> ok.
 install_modules(Context) ->
@@ -142,16 +142,16 @@ get_skeleton_modules(blog) ->
     ];
 get_skeleton_modules(_) ->
     %% nodb | undefined | OtherUnknown -> []
-    []. 
+    [].
 
 
 install_category(C) ->
     lager:info("Inserting categories"),
     %% The egg has to lay a fk-checked chicken here, so the insertion order is sensitive.
 
-    %% 1. Insert the categories "meta" and "category" 
+    %% 1. Insert the categories "meta" and "category"
     {ok, 2} = z_db:equery("
-                    insert into hierarchy (name, id, parent_id, nr, lvl, lft, rght) 
+                    insert into hierarchy (name, id, parent_id, nr, lvl, lft, rght)
                     values
                         ('$category', 115, null, 90000000, 1, 90000000, 92000000),
                         ('$category', 116, null, 91000000, 2, 91000000, 91000000)
@@ -164,17 +164,17 @@ install_category(C) ->
     {ok, 1} = z_db:equery("
             insert into rsc (id, is_protected, visible_for, category_id, name, uri, props)
             values (116, true, 0, 116, 'category', $1, $2)
-            ", [    undefined, 
+            ", [    undefined,
                     ?DB_PROPS([{title, {trans, [{en, <<"Category">>}, {nl, <<"Categorie">>}]}}])
                 ], C),
 
     {ok, 1} = z_db:equery("
             insert into rsc (id, is_protected, visible_for, category_id, name, uri, props)
             values (115, true, 0, 116, 'meta', $1, $2)
-            ", [    undefined, 
+            ", [    undefined,
                     ?DB_PROPS([{title, {trans, [{en, <<"Meta">>}, {nl, <<"Meta">>}]}}])
                 ], C),
-    
+
     %% Now that we have the category "category" we can insert all other categories.
     Cats = [
         {101,undefined,  1,1,1,1, other,       true,  undefined,                                   [{title, {trans, [{en, <<"Uncategorized">>}, {nl, <<"Zonder categorie">>}]}}] },
@@ -192,7 +192,7 @@ install_category(C) ->
 
         {103,undefined,  9,1,9,9, artifact,    false, "http://purl.org/dc/dcmitype/PhysicalObject",[{title, {trans, [{en, <<"Artifact">>}, {nl, <<"Artefact">>}]}}] },
 
-        {110,undefined,  10,1,10,14, media,       true,  "http://purl.org/dc/dcmitype/Image",         [{title, {trans, [{en, <<"Media">>}, {nl, <<"Media">>}]}}] }, 
+        {110,undefined,  10,1,10,14, media,       true,  "http://purl.org/dc/dcmitype/Image",         [{title, {trans, [{en, <<"Media">>}, {nl, <<"Media">>}]}}] },
             {111,110,    11,2,11,11, image,       true,  "http://purl.org/dc/dcmitype/StillImage",    [{title, {trans, [{en, <<"Image">>}, {nl, <<"Afbeelding">>}]}}] },
             {112,110,    12,2,12,12, video,       true,  "http://purl.org/dc/dcmitype/MovingImage",   [{title, {trans, [{en, <<"Video">>}, {nl, <<"Video">>}]}}] },
             {113,110,    13,2,13,13, audio,       true,  "http://purl.org/dc/dcmitype/Sound",         [{title, {trans, [{en, <<"Audio">>}, {nl, <<"Geluid">>}]}}] },
@@ -207,7 +207,7 @@ install_category(C) ->
         % 115. Meta (see above)
             % 116. Category (see above)
             {117,115,    92,2,92,92, predicate,   true,  undefined,                                   [{title, {trans, [{en, <<"Predicate">>},     {nl, <<"Predikaat">>}]}}] }
-        
+
         % Next id: 124
     ],
 
@@ -218,12 +218,12 @@ install_category(C) ->
                 ", [ Id, Protected, Name, Uri, ?DB_PROPS(Props) ], C),
         {ok, 1} = z_db:equery("
                 insert into hierarchy (name, id, parent_id, nr, lvl, lft, rght)
-                values ('$category', $1, $2, $3, $4, $5, $6)", 
+                values ('$category', $1, $2, $3, $4, $5, $6)",
                 [Id, ParentId, Nr*1000000, Lvl, Left*1000000, Right*1000000-1], C)
     end,
     lists:foreach(InsertCatFun, Cats),
     ok.
-    
+
 
 %% @doc Install some initial resources, most important is the system administrator
 %% @todo Add the hostname to the uri
@@ -233,7 +233,7 @@ install_rsc(C) ->
         % id  vsfr  cat   protect name,         props
         [   1,  0,  102,  true,    "administrator",   ?DB_PROPS([{title,<<"Site Administrator">>}]) ]
     ],
-    
+
     [ {ok,1} = z_db:equery("
             insert into rsc (id, visible_for, category_id, is_protected, name, props)
             values ($1, $2, $3, $4, $5, $6)
@@ -250,7 +250,7 @@ install_identity(C) ->
         insert into identity (rsc_id, type, key, is_unique, propb)
         values (1, 'username_pw', 'admin', true, $1)", [{term, Hash}], C),
     ok.
-    
+
 
 %% @doc Install some initial predicates, this list should be extended with common and useful predicates
 %% See http://dublincore.org/documents/dcmi-terms/
@@ -269,7 +269,7 @@ install_predicate(C) ->
     ],
 
     CatId   = z_db:q1("select id from rsc where name = 'predicate'", C),
-    
+
     [ {ok,1} = z_db:equery("
             insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id)
             values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1)
@@ -297,8 +297,8 @@ install_predicate(C) ->
 
         [310, true,  120]  %  collection -> haspart -> _
     ],
-    
+
     [ {ok, 1} = z_db:equery("
-            insert into predicate_category (predicate_id, is_subject, category_id) 
+            insert into predicate_category (predicate_id, is_subject, category_id)
             values ($1, $2, $3)", OS, C) || OS <- ObjSubj ],
     ok.

@@ -24,7 +24,7 @@
 
 <div>
     <h3>{_ Active modules _}</h3>
-    
+
     <table class="table">
         <thead>
             <tr>

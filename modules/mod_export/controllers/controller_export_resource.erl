@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@
     forbidden/2,
     content_types_provided/2,
     charsets_provided/2,
-    
+
     do_export/2,
 
     % Exports for controller_export
@@ -111,7 +111,7 @@ set_filename(Id, ContentType, Dispatch, Context) ->
     Extension = case mimetypes:mime_to_exts(ContentType) of
                     undefined -> "bin";
                     Exts -> binary_to_list(hd(Exts))
-                end, 
+                end,
     case z_notifier:first(#export_resource_filename{
                                 id=Id,
                                 dispatch=Dispatch,
@@ -139,13 +139,13 @@ set_filename(Id, ContentType, Dispatch, Context) ->
 %% @doc Fetch the content type being served
 get_content_type(Id, Dispatch, Context) ->
     case z_context:get(content_type, Context) of
-        undefined -> 
+        undefined ->
             get_content_type_observer(Id, Dispatch, Context);
         Type when is_atom(Type) ->
             get_content_type_extension(z_convert:to_list(Type), Id, Dispatch, Context);
-        ContentType when is_binary(ContentType) -> 
+        ContentType when is_binary(ContentType) ->
             {ok, z_convert:to_list(ContentType)};
-        ContentType when is_list(ContentType) -> 
+        ContentType when is_list(ContentType) ->
             {ok, ContentType}
     end.
 

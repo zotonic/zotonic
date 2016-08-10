@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,15 +26,15 @@
     email_domain/1,
     ensure_domain/2,
     bounce_domain/1,
-    
+
 	get_admin_email/1,
 	send_admin/3,
-	
+
 	send_page/3,
 
 	send/2,
 	send/3,
-	
+
     send/4,
     send_render/4,
     send_render/5,
@@ -42,7 +42,7 @@
     sendq/4,
     sendq_render/4,
     sendq_render/5,
-    
+
     split_name_email/1,
     combine_name_email/2
 ]).
@@ -80,9 +80,9 @@ bounce_domain(Context) ->
 %% @doc Fetch the e-mail address of the site administrator
 get_admin_email(Context) ->
 	case m_config:get_value(zotonic, admin_email, Context) of
-		undefined -> 
+		undefined ->
 			case m_site:get(admin_email, Context) of
-				undefined -> 
+				undefined ->
 					case m_rsc:p_no_acl(1, email_raw, Context) of
 						Empty when Empty == undefined orelse Empty == <<>> ->
 							hd(string:tokens("wwwadmin@" ++ z_convert:to_list(m_site:get(hostname, Context)), ":"));
@@ -96,7 +96,7 @@ get_admin_email(Context) ->
 %% @doc Send a simple text message to the administrator
 send_admin(Subject, Message, Context) ->
 	case get_admin_email(Context) of
-		undefined -> 
+		undefined ->
 			{error, no_admin_email};
 		Email ->
 			Subject1 = [
@@ -106,7 +106,7 @@ send_admin(Subject, Message, Context) ->
 				Subject
 			],
 			Message1 = [
-				Message, 
+				Message,
 				"\n\n-- \nYou receive this e-mail because you are registered as the admin of the site ",
 				z_context:abs_url("/", Context)
 			],
@@ -162,7 +162,7 @@ send_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Send a html and text message to an email address, render the message using two templates.
 send_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	z_email_server:send(#email{queue=false, to=To, from=proplists:get_value(email_from, Vars), 
+	z_email_server:send(#email{queue=false, to=To, from=proplists:get_value(email_from, Vars),
 	                        html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
 
 %% @doc Queue a html message to an email address, render the message using a template.
@@ -183,7 +183,7 @@ combine_name_email(Name, Email) ->
         [] -> Email1;
         _ -> [$"|rfc2047:encode(filter_name(Name1))] ++ "\" <" ++ Email1 ++ ">"
     end.
-    
+
     filter_name(Name) ->
         filter_name(Name, []).
     filter_name([], Acc) ->

@@ -1,6 +1,6 @@
 {% if medium.mime %}
     <p>
-        {{ medium.mime }} 
+        {{ medium.mime }}
         {% if medium.filename %}
             {% if medium.width and medium.height %}
             &ndash; {{ medium.width }} x {{ medium.height }} {_ pixels _}
@@ -18,7 +18,7 @@
             {% media medium mediaclass="admin-media-cropcenter" %}
         {% else %}
             {% media medium mediaclass="admin-media" %}
-        {% endif %}   
+        {% endif %}
     </div>
 
     <div class="form-group clearfix">
@@ -43,7 +43,7 @@
     	            id=id
     	        }
     	        center=0
-    	    } 
+    	    }
     	    disabled=not id.is_editable %}
 
         </div>
@@ -67,7 +67,7 @@
     	                id=id
     	            }
     	            center=0
-    	        } 
+    	        }
     	        disabled=not id.is_editable
     	    %}
         </div>

@@ -26,7 +26,7 @@ parse(Expr) ->
             end;
         Err ->
             Err
-    end.        
+    end.
 
     simplify({expr, Op, Left, Right}) ->
         {expr, list_to_atom(Op), simplify(Left), simplify(Right)};
@@ -72,14 +72,14 @@ eval1({value_list, List}, Vars, Context) ->
 eval1({apply_filter, filter_default, _Func, Expr, Args}, Vars, Context) ->
     A = eval1(Expr, Vars, Context),
     case A of
-        Empty when Empty =:= undefined; Empty =:= []; Empty =:= <<>> -> 
+        Empty when Empty =:= undefined; Empty =:= []; Empty =:= <<>> ->
             case Args of
                 [B|_] -> eval1(B, Vars, Context);
                 _ -> undefined
             end;
         _ -> A
     end;
-eval1({apply_filter, IfNone, _Func, Expr, Args}, Vars, Context) 
+eval1({apply_filter, IfNone, _Func, Expr, Args}, Vars, Context)
     when IfNone =:= filter_if_undefined; IfNone =:= filter_if_none ->
     case eval1(Expr, Vars, Context) of
         undefined ->

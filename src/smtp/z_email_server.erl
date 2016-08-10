@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,10 +59,10 @@
 
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
-                smtp_verp_as_from, smtp_bcc, override, 
+                smtp_verp_as_from, smtp_bcc, override,
                 sending=[], delete_sent_after}).
--record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0, 
-                      recipient, email, created=os:timestamp(), sent, 
+-record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0,
+                      recipient, email, created=os:timestamp(), sent,
                       pickled_context}).
 
 -record(email_sender, {id, sender_pid, domain, is_connected=false}).
@@ -88,7 +88,7 @@ is_bounce_email_address(_) -> false.
 %% @doc Handle a bounce
 bounced(Peer, NoReplyEmail) ->
     gen_server:cast(?MODULE, {bounced, Peer, NoReplyEmail}).
-    
+
 
 %% @doc Generate a new message id
 generate_message_id() ->
@@ -186,7 +186,7 @@ init(_Args) ->
     State = update_config(#state{}),
     process_flag(trap_exit, true),
     {ok, State}.
-    
+
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -196,7 +196,7 @@ init(_Args) ->
 %%                                      {stop, Reason, State}
 handle_call({is_sending_allowed, Pid, Relay}, _From, State) ->
     DomainWorkers = length(lists:filter(
-                                fun(#email_sender{domain=Domain, is_connected=IsConnected}) -> 
+                                fun(#email_sender{domain=Domain, is_connected=IsConnected}) ->
                                     IsConnected andalso Relay =:= Domain
                                 end,
                                 State#state.sending)),
@@ -246,8 +246,8 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
     <<"noreply+", MsgId/binary>> = BounceLocalName,
 
     % Find the original message in our database of recent sent e-mail
-    TrFun = fun()-> 
-                    [QEmail] = mnesia:read(email_queue, MsgId), 
+    TrFun = fun()->
+                    [QEmail] = mnesia:read(email_queue, MsgId),
                     mnesia:delete_object(QEmail),
                     {(QEmail#email_queue.email)#email.to, QEmail#email_queue.pickled_context}
             end,
@@ -255,7 +255,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
         {atomic, {Recipient, PickledContext}} ->
             Context = z_context:depickle(PickledContext),
             z_notifier:notify(#email_bounced{
-                                message_nr=MsgId, 
+                                message_nr=MsgId,
                                 recipient=Recipient
                             }, Context),
             z_notifier:notify(#zlog{
@@ -264,7 +264,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                                     severity = ?LOG_ERROR,
                                     message_nr = MsgId,
                                     mailer_status = bounce,
-                                    mailer_host = z_convert:ip_to_list(Peer), 
+                                    mailer_host = z_convert:ip_to_list(Peer),
                                     envelop_to = BounceEmail,
                                     envelop_from = "<>",
                                     to_id = z_acl:user(Context),
@@ -277,7 +277,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                 {ok, Host} ->
                     Context = z_context:new(Host),
                     z_notifier:notify(#email_bounced{
-                                    message_nr=MsgId, 
+                                    message_nr=MsgId,
                                     recipient=undefined
                                 }, Context),
                     z_notifier:notify(#zlog{
@@ -286,7 +286,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                                     severity = ?LOG_WARNING,
                                     message_nr = MsgId,
                                     mailer_status = bounce,
-                                    mailer_host = z_convert:ip_to_list(Peer), 
+                                    mailer_host = z_convert:ip_to_list(Peer),
                                     envelop_to = BounceEmail,
                                     envelop_from = "<>",
                                     props = []
@@ -356,8 +356,8 @@ create_email_queue() ->
 %% @doc Refetch the emailer configuration so that we adapt to any config changes.
 update_config(State) ->
     SmtpRelay = z_config:get(smtp_relay),
-    SmtpRelayOpts = 
-        case SmtpRelay of 
+    SmtpRelayOpts =
+        case SmtpRelay of
             true ->
                 [{relay, z_config:get(smtp_host, "localhost")},
                  {port, z_config:get(smtp_port, 25)},
@@ -391,7 +391,7 @@ update_config(State) ->
 %% @doc Get the bounce email address. Can be overridden per site in config setting site.bounce_email_override.
 bounce_email(MessageId, Context) ->
     case m_config:get_value(site, bounce_email_override, Context) of
-        undefined -> 
+        undefined ->
             case z_config:get(smtp_bounce_email_override) of
                 undefined -> "noreply+"++MessageId;
                 VERP -> z_convert:to_list(VERP)
@@ -407,7 +407,7 @@ reply_email(MessageId, Context) ->
 % The 'From' is either the message id (and bounce domain) or the set from.
 get_email_from(EmailFrom, VERP, State, Context) ->
     From = case EmailFrom of
-        L when L =:= [] orelse L =:= undefined orelse L =:= <<>> -> 
+        L when L =:= [] orelse L =:= undefined orelse L =:= <<>> ->
             get_email_from(Context);
         _ -> EmailFrom
     end,
@@ -453,7 +453,7 @@ send_email(Id, Recipient, Email, Context, State) ->
                           sent=undefined,
                           pickled_context=z_context:pickle(Context)},
     QEmailTransFun = fun() -> mnesia:write(QEmail) end,
-    {atomic, ok} = mnesia:transaction(QEmailTransFun),        
+    {atomic, ok} = mnesia:transaction(QEmailTransFun),
     case Email#email.queue orelse length(State#state.sending) > ?EMAIL_MAX_SENDING of
         true -> State;
         false -> spawn_send(Id, Recipient, Email, Context, State)
@@ -498,7 +498,7 @@ delete_email(Error, Id, Recipient, Email, Context) ->
             reason=Error
         }, Context),
     LogEmail = #log_email{
-        severity=?LOG_ERROR, 
+        severity=?LOG_ERROR,
         mailer_status=error,
         props=[{reason, Error}],
         message_nr=Id,
@@ -528,7 +528,7 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
           end
     ],
     BccSmtpOpts = case z_utils:is_empty(State#state.smtp_bcc) of
-                      true -> 
+                      true ->
                             [];
                       false ->
                             {_BccName, BccEmail} = z_email:split_name_email(State#state.smtp_bcc),
@@ -558,21 +558,21 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
                 #email_sender{id=Id, sender_pid=SenderPid, domain=Relay} | State#state.sending
             ]}.
 
-spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
+spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                      Bcc, Email, SmtpOpts, BccSmtpOpts, Context) ->
     EncodedMail = encode_email(Id, Email, "<"++MessageId++">", From, Context),
-    spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
+    spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                               Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, Context).
 
-spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
+spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                           Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, Context) ->
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
         {error, wait} ->
-            lager:debug("[smtp] Delaying email to ~p (~p), too many parallel senders for relay ~p", 
+            lager:debug("[smtp] Delaying email to ~p (~p), too many parallel senders for relay ~p",
                         [RecipientEmail, Id, Relay]),
             timer:sleep(1000),
-            spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From, 
+            spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                  Bcc, Email, SmtpOpts, BccSmtpOpts, Context);
         ok ->
             LogEmail = #log_email{
@@ -589,8 +589,8 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                 user_id=LogEmail#log_email.from_id,
                                 props=LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}
                               }, Context),
-            
-            lager:info("[smtp] Sending email to ~p (~p), via relay ~p", 
+
+            lager:info("[smtp] Sending email to ~p (~p), via relay ~p",
                        [RecipientEmail, Id, Relay]),
 
             %% use the unique id as 'envelope sender' (VERP)
@@ -607,7 +607,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     z_notifier:notify(#zlog{
                                         user_id=LogEmail#log_email.from_id,
                                         props=LogEmail#log_email{
-                                                severity=?LOG_WARNING, 
+                                                severity=?LOG_WARNING,
                                                 mailer_status=retry,
                                                 mailer_message=Message,
                                                 mailer_host=Host
@@ -645,7 +645,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     z_notifier:notify(#zlog{
                                         user_id=LogEmail#log_email.from_id,
                                         props=LogEmail#log_email{
-                                                severity=?LOG_ERROR, 
+                                                severity=?LOG_ERROR,
                                                 mailer_status=error,
                                                 props=[{reason, Reason}]
                                             }
@@ -661,7 +661,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     z_notifier:notify(#zlog{
                                         user_id=LogEmail#log_email.from_id,
                                         props=LogEmail#log_email{
-                                                severity=?LOG_INFO, 
+                                                severity=?LOG_INFO,
                                                 mailer_status=sent,
                                                 mailer_message=Receipt
                                             }
@@ -670,9 +670,9 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     mark_sent(Id),
                     %% async send a copy for debugging if necessary
                     case z_utils:is_empty(Bcc) of
-                        true -> 
+                        true ->
                             ok;
-                        false -> 
+                        false ->
                             catch gen_smtp_client:send({VERP, [Bcc], EncodedMail}, BccSmtpOpts)
                     end
             end
@@ -681,7 +681,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary([
-        "X-Mailer: Zotonic ", ?ZOTONIC_VERSION, " (http://zotonic.com)\r\n", 
+        "X-Mailer: Zotonic ", ?ZOTONIC_VERSION, " (http://zotonic.com)\r\n",
         Raw
     ]);
 encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
@@ -698,7 +698,7 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                       {_Html, undefined} ->
                           {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*?)</title>", [dotall, caseless]),
                           string:strip(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len))));
-                      {_Html, Sub} -> 
+                      {_Html, Sub} ->
                           Sub
                   end,
     Headers = [{"From", From},
@@ -767,20 +767,20 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     Parts = case z_utils:is_empty(Text) of
         true ->
             case z_utils:is_empty(Html) of
-                true -> 
+                true ->
                     [];
-                false -> 
-                    [{<<"text">>, <<"plain">>, [], Params, 
+                false ->
+                    [{<<"text">>, <<"plain">>, [], Params,
                      expand_cr(z_convert:to_binary(z_markdown:to_markdown(Html, [no_html])))}]
             end;
-        false -> 
-            [{<<"text">>, <<"plain">>, [], Params, 
+        false ->
+            [{<<"text">>, <<"plain">>, [], Params,
              expand_cr(z_convert:to_binary(Text))}]
     end,
     Parts1 = case z_utils:is_empty(Html) of
-        true -> 
+        true ->
             Parts;
-        false -> 
+        false ->
             z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, z_convert:to_binary(Html)}], Context)
     end,
     case Attachment of
@@ -801,11 +801,11 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
 
     encode_attachment(Att, Context) when is_integer(Att) ->
         case m_media:get(Att, Context) of
-            undefined -> 
+            undefined ->
                 {error, no_medium};
             Props ->
                 Upload = #upload{
-                            tmpfile=filename:join(z_path:media_archive(Context), 
+                            tmpfile=filename:join(z_path:media_archive(Context),
                                                    proplists:get_value(filename, Props)),
                             mime=proplists:get_value(mime, Props)
                         },
@@ -841,7 +841,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
             ],
             Data
         }.
-        
+
         filename(#upload{filename=undefined, tmpfile=undefined}) ->
             <<"untitled">>;
         filename(#upload{filename=undefined, tmpfile=Tmpfile}) ->
@@ -861,11 +861,11 @@ expand_cr(B) -> expand_cr(B, <<>>).
     expand_cr(<<C, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C>>).
 
 
-   
+
 check_override(EmailAddr, _SiteOverride, _State) when EmailAddr == undefined; EmailAddr == []; EmailAddr == <<>> ->
     undefined;
 check_override(EmailAddr, SiteOverride, #state{override=ZotonicOverride}) ->
-    UseOverride = case z_utils:is_empty(ZotonicOverride) of 
+    UseOverride = case z_utils:is_empty(ZotonicOverride) of
         true -> SiteOverride;
         false -> ZotonicOverride
     end,
@@ -900,9 +900,9 @@ set_recipient_prefs(Vars, Context) ->
             z_notifier:foldl(#user_context{id=UserId}, Context, Context);
         _Other ->
             Context
-    end.    
+    end.
 
-%% @doc Mark email as sent by adding the 'sent' timestamp. 
+%% @doc Mark email as sent by adding the 'sent' timestamp.
 %%      This will schedule it for deletion as well.
 mark_sent(Id) ->
     Tr = fun() ->
@@ -931,7 +931,7 @@ delete_emailq(Id) ->
 poll_queued(State) ->
     %% delete sent messages
     Now = os:timestamp(),
-    DelTransFun = fun() -> 
+    DelTransFun = fun() ->
                           DelQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
                                                       QEmail#email_queue.sent =/= undefined andalso
                                                         timer:now_diff(
@@ -974,8 +974,8 @@ poll_queued(State) ->
     %% notify the system that these emails were failed to be sent
     lists:foreach(fun({Id, Recipient, PickledContext}) ->
                       z_notifier:first(#email_failed{
-                                message_nr=Id, 
-                                recipient=Recipient, 
+                                message_nr=Id,
+                                recipient=Recipient,
                                 is_final=true,
                                 reason=retry,
                                 status= <<"Retries exceeded">>
@@ -983,7 +983,7 @@ poll_queued(State) ->
                   end,
                   NotifyList2),
 
-    MaxListSize = ?EMAIL_MAX_SENDING - length(State#state.sending), 
+    MaxListSize = ?EMAIL_MAX_SENDING - length(State#state.sending),
     case MaxListSize > 0 of
         true ->
             %% fetch a batch of messages for sending
@@ -1011,10 +1011,10 @@ poll_queued(State) ->
                     lists:foldl(
                       fun(QEmail, St) ->
                           update_retry(QEmail),
-                          spawn_send(QEmail#email_queue.id, 
+                          spawn_send(QEmail#email_queue.id,
                                      QEmail#email_queue.recipient,
                                      QEmail#email_queue.email,
-                                     z_context:depickle(QEmail#email_queue.pickled_context), 
+                                     z_context:depickle(QEmail#email_queue.pickled_context),
                                      St)
                       end,
                       State2, Ms)
@@ -1037,7 +1037,7 @@ period(0) -> 10;
 period(1) -> 60;
 period(2) -> 12 * 60;
 period(_) -> 24 * 60. % Retry every day for extreme cases
-    
+
 
 %% @doc Increases a timestamp (as returned by now/0) with a value provided in minutes
 inc_timestamp({MegaSec, Sec, MicroSec}, MinToAdd) when is_integer(MinToAdd) ->
@@ -1082,7 +1082,7 @@ encode_header({Header, [V|Vs]}) when is_list(V) ->
                     [V|Vs]),
     Header ++ ": " ++ string:join(Hdr, ";\r\n  ");
 encode_header({Header, Value})
-    when Header =:= "To"; Header =:= "From"; Header =:= "Reply-To"; 
+    when Header =:= "To"; Header =:= "From"; Header =:= "Reply-To";
          Header =:= "Cc"; Header =:= "Bcc"; Header =:= "Date";
          Header =:= "Content-Type"; Header =:= "Mime-Version"; Header =:= "MIME-Version";
          Header =:= "Content-Transfer-Encoding" ->

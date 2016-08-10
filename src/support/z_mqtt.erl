@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -109,7 +109,7 @@ publish(Topic, #z_mqtt_payload{} = Payload, Context) ->
     end;
 publish(Topic, Data, Context) ->
     Payload = #z_mqtt_payload{
-        site=z_context:site(Context), 
+        site=z_context:site(Context),
         user_id=z_acl:user(Context),
         payload=Data
     },
@@ -189,7 +189,7 @@ flatten_topic(Topic) when is_binary(Topic) ->
 flatten_topic(Topic) when is_list(Topic) ->
     case lists:all(fun erlang:is_integer/1, Topic) of
         true ->
-            iolist_to_binary(Topic); 
+            iolist_to_binary(Topic);
         false ->
             iolist_to_binary(
                 z_utils:combine($/, [
@@ -205,7 +205,7 @@ flatten_topic(Topic) when is_list(Topic) ->
 %doc Add a decode wrapper around the payload we received from via a postback event.
 wrap_payload(Data, Context) ->
     #z_mqtt_payload{
-        site=z_context:site(Context), 
+        site=z_context:site(Context),
         user_id=z_acl:user(Context),
         payload=Data
     }.
@@ -244,13 +244,13 @@ expand_context_topic(Topic, Context) when is_integer(Topic) ->
 expand_context_topic(Topic, Context) when not is_binary(Topic) ->
     expand_context_topic(map_topic(Topic, Context), Context);
 expand_context_topic(<<"~site", Topic/binary>>, Context) ->
-    localsite(Topic, Context);    
+    localsite(Topic, Context);
 expand_context_topic(<<"~user", Topic/binary>>, Context) ->
-    localuser(Topic, Context);    
+    localuser(Topic, Context);
 expand_context_topic(<<"~session", Topic/binary>>, Context) ->
-    localsession(Topic, Context);    
+    localsession(Topic, Context);
 expand_context_topic(<<"~pagesession", Topic/binary>>, Context) ->
-    localpagesession(Topic, Context);    
+    localpagesession(Topic, Context);
 expand_context_topic(<<$~, T/binary>> = Topic, Context) ->
     lager:error(z_context:lager_md(Context), "Illegal MQTT topic ~p, mapped to ~p", [Topic, T]),
     T;
@@ -300,7 +300,7 @@ make_context_topic(<<"site/", Topic/binary>> = ST, Context) ->
         [SiteBin] -> <<"~site">>;
         [SiteBin, LocalTopic] -> make_localsite(LocalTopic, Context);
         _ -> ST
-    end; 
+    end;
 make_context_topic(Topic, _Site) ->
     Topic.
 

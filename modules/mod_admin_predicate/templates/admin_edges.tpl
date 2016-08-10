@@ -3,7 +3,7 @@
 {% block title %}{_ Page connections _}{% endblock %}
 
 {% block content %}
-    {% with 
+    {% with
         20,
         "20"
         as
@@ -56,8 +56,8 @@
                 <a name="content-pager"></a>
 
                 {% button
-                    class="btn btn-primary" 
-                    text=_"Make a new page or media" 
+                    class="btn btn-primary"
+                    text=_"Make a new page or media"
                     action={
                         dialog_new_rsc
                         title=""

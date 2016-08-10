@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,7 @@
     m_find_value/3,
     m_to_list/2,
     m_value/2,
-    
+
     list_rsc/2,
     get/2,
     insert/6,
@@ -36,7 +36,7 @@
     toggle/2,
     gravatar_code/1,
     merge/3,
-    
+
     search/3
 ]).
 
@@ -93,7 +93,7 @@ count_rsc(RscId, Context) when is_integer(RscId) ->
         z_db:q1("select count(*) from comment where rsc_id = $1", [RscId], Context)
     end,
     z_depcache:memo(F, {comment_rsc_count, RscId}, ?MAXAGE_COMMENT, [{comment_rsc, RscId}], Context).
-    
+
 
 %% @doc Fetch a specific comment from the database.
 %% @spec get(int(), Context) -> PropList
@@ -105,8 +105,8 @@ get(CommentId, Context) ->
 %% @spec insert(Id::int(), Name::string(), Email::string(), Message::string(), Is_visible::boolean(), Context) -> {ok, CommentId} | {error, Reason}
 %% @todo Insert external ip address and user agent string
 insert(RscId, Name, Email, Message, Is_visible, Context) ->
-    case z_acl:rsc_visible(RscId, Context) 
-        and (z_auth:is_auth(Context) 
+    case z_acl:rsc_visible(RscId, Context)
+        and (z_auth:is_auth(Context)
             orelse z_convert:to_bool(m_config:get_value(mod_comment, anonymous, true, Context))) of
         true ->
             Email = z_string:trim(Email),
@@ -161,7 +161,7 @@ delete(CommentId, Context) ->
 toggle(CommentId, Context) ->
     case check_editable(CommentId, Context) of
         {ok, RscId} ->
-            z_db:q("update comment 
+            z_db:q("update comment
                     set is_visible = not is_visible
                     where id = $1",
                    [CommentId],

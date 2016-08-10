@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,12 +51,12 @@ observe_module_activate(#module_activate{module=?MODULE}, Context) ->
     end;
 observe_module_activate(#module_activate{}, _Context) ->
     ok.
-    
+
 %% @doc Return the certificates of this site.
 observe_ssl_options(#ssl_options{}, Context) ->
     {ok, CertFiles} = cert_files(Context),
-    CertFiles.    
-	
+    CertFiles.
+
 %% @doc Check if all certificates are available in the site's ssl directory
 check_certs(Context) ->
 	{ok, Certs} = cert_files(Context),
@@ -66,17 +66,17 @@ check_certs(Context) ->
             {false, false} -> generate_self_signed(Certs, Context);
             {false, true} -> {error, {missing_certfile, CertFile}};
             {true, false} -> {error, {missing_pemfile, KeyFile}};
-            {true, true} -> 
-                case check_keyfile(KeyFile) of 
-                    ok -> 
+            {true, true} ->
+                case check_keyfile(KeyFile) of
+                    ok ->
                         case check_dhfile(proplists:get_value(dhfile, Certs)) of
                             ok -> {ok, Certs};
                             {error, _}=E -> E
                         end;
-                    {error, _}=E -> E 
+                    {error, _}=E -> E
                 end
 	end.
-	
+
 check_keyfile(Filename) ->
 	case file:read_file(Filename) of
 		{ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
@@ -92,12 +92,12 @@ check_keyfile(Filename) ->
 
 check_dhfile(Filename) ->
     case filelib:is_file(Filename) of
-        true -> 
+        true ->
             case is_dhfile(Filename) of
                 true -> ok;
                 false -> {error, {no_dhfile, Filename}}
             end;
-        false -> 
+        false ->
             generate_dhfile(Filename)
     end.
 
@@ -106,7 +106,7 @@ is_dhfile(Filename) ->
         {ok, <<"-----BEGIN DH PARAMETERS", _/binary>>} -> true;
         _ -> false
     end.
-    
+
 generate_self_signed(Opts, Context) ->
 	PemFile = proplists:get_value(keyfile, Opts),
 	case filelib:ensure_dir(PemFile) of
@@ -128,15 +128,15 @@ generate_self_signed(Opts, Context) ->
 					os:cmd("openssl rsa -in "++KeyFile++" -out "++PemFile),
 					{ok, Opts};
 				{ok, <<"-----BEGIN RSA PRIVATE KEY", _/binary>>} ->
-					file:rename(KeyFile, PemFile), 
+					file:rename(KeyFile, PemFile),
 					{ok, Opts};
 				_Error ->
 					{error, "Could not generate self signed certificate"}
 			end;
 		{error, _} = Error ->
 			{error, {ensure_dir, Error, PemFile}}
-	end. 
-    
+	end.
+
 generate_dhfile(Filename) ->
     case filelib:ensure_dir(Filename) of
         ok ->
@@ -151,10 +151,10 @@ generate_dhfile(Filename) ->
         {error, _} = Error ->
             {error, {ensure_dir, Error, Filename}}
     end.
-    
+
 cert_files(Context) ->
 	SSLDir = filename:join(z_path:site_dir(Context), "ssl"),
-	Sitename = z_convert:to_list(z_context:site(Context)), 
+	Sitename = z_convert:to_list(z_context:site(Context)),
 	Files = [
 		{certfile, filename:join(SSLDir, Sitename++".crt")},
 		{keyfile, filename:join(SSLDir, Sitename++".pem")},

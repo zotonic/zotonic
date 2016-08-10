@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -91,12 +91,12 @@ check_db_and_upgrade(Context, _Tries) ->
     {error, database}.
 
 
-has_table(C, Table, Database, Schema) ->    
+has_table(C, Table, Database, Schema) ->
     {ok, _, [{HasTable}]} = pgsql:equery(C, "
-            select count(*) 
-            from information_schema.tables 
-            where table_catalog = $1 
-              and table_name = $3 
+            select count(*)
+            from information_schema.tables
+            where table_catalog = $1
+              and table_name = $3
               and table_schema = $2
               and table_type = 'BASE TABLE'", [Database, Schema, Table]),
     HasTable =:= 1.
@@ -105,21 +105,21 @@ has_table(C, Table, Database, Schema) ->
 %% Check if a column in a table exists by querying the information schema.
 has_column(C, Table, Column, Database, Schema) ->
     {ok, _, [{HasColumn}]} = pgsql:equery(C, "
-            select count(*) 
-            from information_schema.columns 
-            where table_catalog = $1 
+            select count(*)
+            from information_schema.columns
+            where table_catalog = $1
               and table_schema = $2
-              and table_name = $3 
+              and table_name = $3
               and column_name = $4", [Database, Schema, Table, Column]),
     HasColumn =:= 1.
 
 get_column_type(C, Table, Column, Database, Schema) ->
     {ok, _, [{ColumnType}]} = pgsql:equery(C, "
             select data_type
-            from information_schema.columns 
-            where table_catalog = $1 
+            from information_schema.columns
+            where table_catalog = $1
               and table_schema = $2
-              and table_name = $3 
+              and table_name = $3
               and column_name = $4", [Database, Schema, Table, Column]),
     ColumnType.
 
@@ -152,7 +152,7 @@ upgrade(C, Database, Schema) ->
 
 upgrade_config_schema(C, Database, Schema) ->
     case get_column_type(C, "config", "value", Database, Schema) of
-        <<"text">> -> 
+        <<"text">> ->
             ok;
         _ ->
             {ok,[],[]} = pgsql:squery(C, "alter table config alter column value type text"),
@@ -224,7 +224,7 @@ install_rsc_page_path_log(C, Database, Schema) ->
 drop_visitor(C, Database, Schema) ->
     case has_table(C, "visitor_cookie", Database, Schema) of
         true ->
-            {ok, _N} = pgsql:squery(C, 
+            {ok, _N} = pgsql:squery(C,
                                     "insert into persistent (id,props) "
                                     "select c.cookie, v.props from visitor_cookie c join visitor v on c.visitor_id = v.id"),
             pgsql:squery(C, "drop table visitor_cookie cascade"),
@@ -237,11 +237,11 @@ drop_visitor(C, Database, Schema) ->
 
 extent_mime(C, Database, Schema) ->
     {ok, _, [{Length}]} = pgsql:equery(C, "
-            select character_maximum_length 
-                                       from information_schema.columns 
-                                       where table_catalog = $1 
+            select character_maximum_length
+                                       from information_schema.columns
+                                       where table_catalog = $1
                                        and table_schema = $2
-                                       and table_name = $3 
+                                       and table_name = $3
                                        and column_name = $4", [Database, Schema, "medium", "mime"]),
     case Length < 128 of
         true ->
@@ -254,7 +254,7 @@ extent_mime(C, Database, Schema) ->
 
 install_identity_is_verified(C, Database, Schema) ->
     case has_column(C, "identity", "is_verified", Database, Schema) of
-        true -> 
+        true ->
             ok;
         false ->
             {ok, [], []} = pgsql:squery(C, "alter table identity "
@@ -265,7 +265,7 @@ install_identity_is_verified(C, Database, Schema) ->
 
 install_identity_verify_key(C, Database, Schema) ->
     case has_column(C, "identity", "verify_key", Database, Schema) of
-        true -> 
+        true ->
             ok;
         false ->
             {ok, [], []} = pgsql:squery(C, "alter table identity "
@@ -277,7 +277,7 @@ install_identity_verify_key(C, Database, Schema) ->
 
 install_task_due(C, Database, Schema) ->
     case has_column(C, "pivot_task_queue", "due", Database, Schema) of
-        true -> 
+        true ->
             ok;
         false ->
             {ok, [], []} = pgsql:squery(C, "alter table pivot_task_queue add column due timestamp with time zone"),
@@ -287,7 +287,7 @@ install_task_due(C, Database, Schema) ->
 
 install_module_schema_version(C, Database, Schema) ->
     case has_column(C, "module", "schema_version", Database, Schema) of
-        true -> 
+        true ->
             ok;
         false ->
             {ok, [], []} = pgsql:squery(C, "alter table module add column schema_version int "),
@@ -310,7 +310,7 @@ install_geocode(C, Database, Schema) ->
         <<"bigint">> ->
             %% 0.9dev was missing a column definition in the z_install.erl
             case has_column(C, "rsc", "pivot_geocode_qhash", Database, Schema) of
-                true -> 
+                true ->
                     ok;
                 false ->
                     {ok, [], []} = pgsql:squery(C, "alter table rsc add column pivot_geocode_qhash bytea"),
@@ -388,7 +388,7 @@ install_medium_log(C, Database, Schema) ->
 install_pivot_location(C, Database, Schema) ->
     Added = lists:foldl(fun(Col, Acc) ->
                           case has_column(C, "rsc", Col, Database, Schema) of
-                              true -> 
+                              true ->
                                   Acc;
                               false ->
                                   {ok, [], []} = pgsql:squery(C, "alter table rsc add column " ++ Col ++ " float"),
@@ -450,8 +450,8 @@ fix_timestamptz_column(C, Table, Col, Database, Schema) ->
 get_timestamp_without_timezone_columns(C, Database, Schema) ->
     {ok, _, Cols} = pgsql:equery(C, "
                                    select table_name, column_name
-                                   from information_schema.columns 
-                                   where table_catalog = $1 
+                                   from information_schema.columns
+                                   where table_catalog = $1
                                      and table_schema = $2
                                      and data_type = 'timestamp without time zone'",
                                 [Database, Schema]),
@@ -461,11 +461,11 @@ get_timestamp_without_timezone_columns(C, Database, Schema) ->
 %% 0.12.5: Add content groups for the content- and user-group based ACL modules
 install_content_group_dependent(C, Database, Schema) ->
     case has_column(C, "rsc", "content_group_id", Database, Schema) of
-        true -> 
+        true ->
             ok;
         false ->
             lager:info("[database: ~p ~p] Adding rsc.is_dependent and rsc.content_group_id", [Database, Schema]),
-            {ok, [], []} = pgsql:squery(C, 
+            {ok, [], []} = pgsql:squery(C,
                               "ALTER TABLE rsc "
                               "ADD COLUMN is_dependent BOOLEAN NOT NULL DEFAULT false,"
                               "ADD COLUMN content_group_id INT,"

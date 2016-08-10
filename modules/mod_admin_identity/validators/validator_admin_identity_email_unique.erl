@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,9 +55,9 @@ validate(email_unique, Id, Value, Args, Context) ->
 event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     {IsValid, ContextValidated} = case validate(email_unique, TriggerId, Value, Args, Context) of
-        {{ok, _}, ContextOk} -> 
+        {{ok, _}, ContextOk} ->
             {"true", z_render:wire({fade_out, [{target, TriggerId ++ "_email_unique_error"}]}, ContextOk)};
-        {{error, Id, _} = Error, ContextScript} -> 
+        {{error, Id, _} = Error, ContextScript} ->
             {"false", z_render:wire({fade_in, [{target, TriggerId ++ "_email_unique_error"}]},
                                     z_validation:report_errors([{Id,Error}], ContextScript))}
     end,

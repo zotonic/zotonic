@@ -1,6 +1,6 @@
 %% @doc SMTP server for handling bounced messages.
-%%      Code based on the example callback module supplied 
-%%      with gen_smtp. 
+%%      Code based on the example callback module supplied
+%%      with gen_smtp.
 %%      Original author: Andrew Thompson (andrew@hijacked.us)
 %% @author Atilla Erdodi <atilla@maximonster.com>
 %% @copyright 2010-2013 Maximonster Interactive Things
@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,21 +42,21 @@
     rcpt :: binary(),
     from :: binary()
 }).
-        
+
 
 start_link() ->
-    %% Collect the configuration args of the bounce server 
+    %% Collect the configuration args of the bounce server
     Args1 = case get_listen_domain() of
         undefined -> [];
         ListenDomain -> [{domain, ListenDomain}]
-    end,    
+    end,
     Args2 = case get_listen_ip() of
         undefined -> [];
         any -> [{address, {0,0,0,0}} | Args1];
-        ListenIp -> 
+        ListenIp ->
             {ok, Address} = inet:getaddr(ListenIp, inet),
             [{address, Address} | Args1]
-    end,    
+    end,
     Args3 = case get_listen_port() of
         undefined -> Args2;
         ListenPort -> [{port, ListenPort} | Args2]
@@ -106,9 +106,9 @@ check_dnsbl(State) ->
         {ok, {blocked, Service}} ->
             lager:info("SMTP DNSBL check for ~s blocked by ~p -- closing connection with a 451",
                        [inet:ntoa(State#state.peer), Service]),
-            Error = io_lib:format("451 ~s has recently sent spam. If you are not a spammer, please try later. Listed at ~s", 
+            Error = io_lib:format("451 ~s has recently sent spam. If you are not a spammer, please try later. Listed at ~s",
                                  [inet:ntoa(State#state.peer), Service]),
-            {error, Error, State};           
+            {error, Error, State};
         {error, _} = Error ->
             lager:warning("SMTP DNSBL check for ~p returns ~p -- accepting connection",
                           [State#state.peer, Error]),
@@ -125,7 +125,7 @@ handle_RCPT(_To, State) ->
     % Check if the "To" address exists
     % Check domain, check addressee in domain.
     % For bounces:
-    % - To = <noreply+MSGID@example.org> 
+    % - To = <noreply+MSGID@example.org>
     % - Return-Path header should be present and contains <>
     {ok, State}.
 
@@ -197,13 +197,13 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
     end.
 
 receive_data({ok, {ham, SpamStatus, _SpamHeaders}}, {Type, Subtype, Headers, Params, Body}, MsgId, From, To, DataRcvd, State) ->
-    lager:debug("Handling email from ~s to ~p (id ~s) (peer ~s) [~p]", 
+    lager:debug("Handling email from ~s to ~p (id ~s) (peer ~s) [~p]",
                 [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
-    Received = z_email_receive:received(To, From, State#state.peer, MsgId, 
+    Received = z_email_receive:received(To, From, State#state.peer, MsgId,
                                         {Type, Subtype}, Headers, Params, Body, DataRcvd),
     reply_handled_status(Received, MsgId, reset_state(State));
 receive_data({ok, {spam, SpamStatus, _SpamHeaders}}, _Decoded, MsgId, From, To, _DataRcvd, State) ->
-    lager:info("Refusing spam from ~s to ~p (id ~s) (peer ~s) [~p]", 
+    lager:info("Refusing spam from ~s to ~p (id ~s) (peer ~s) [~p]",
                [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
     {error, z_email_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)};
 receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
@@ -276,7 +276,7 @@ get_listen_port() ->
 
 
 decode(Data) ->
-    try 
+    try
         {ok, mimemail:decode(Data)}
     catch
         Type:Reason ->
@@ -290,8 +290,8 @@ add_received_header(Data, MsgId, State) ->
         <<"Received:">>,
         <<" from [">>, inet_parse:ntoa(State#state.peer), <<"] (helo=">>, filter_string(State#state.helo), <<")">>,
         <<"\r\n\tby ">>, State#state.hostname, <<" with ESMTP (Zotonic ">>, ?ZOTONIC_VERSION, <<")">>,
-        <<"\r\n\t(envelope-from <">>, filter_string(State#state.from), <<">)">>, 
-        <<"\r\n\tid ">>, MsgId, 
+        <<"\r\n\t(envelope-from <">>, filter_string(State#state.from), <<">)">>,
+        <<"\r\n\tid ">>, MsgId,
         <<"; ">>, z_dateformat:format(calendar:local_time(), "r", []),
         <<"\r\n">>,
         Data
@@ -299,7 +299,7 @@ add_received_header(Data, MsgId, State) ->
 
 filter_string(S) ->
     lists:filter(fun(C) ->
-                            C >= 32 
+                            C >= 32
                     andalso C =< 126
                     andalso C =/= $[
                     andalso C =/= $]

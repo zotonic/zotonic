@@ -9,7 +9,7 @@
 		<div class="block clearfix">
 
                         <h2>Webmachine Trace Configuration</h2>
-                                             
+
                         <div class="clearfix">
                             <label for="trace_dd">Global tracing:</label>
                             {% wire id="trace_dd" type="change" postback={set_global} %}
@@ -17,9 +17,9 @@
                             <option {% ifequal trace_global "disable" %} selected {% endifequal %} value="disable">No global resource tracing</option>
                             <option {% ifequal trace_global "5xx" %} selected {% endifequal %} value="5xx">Log all requests with 5xx response code</option>
                             <option {% ifequal trace_global "4xx&5xx" %} selected {% endifequal %} value="4xx&5xx">Log all requests with 4xx and 5xx response codes</option>
-                            </select>				
-			</div>						
-                        
+                            </select>
+			</div>
+
                         <br /><hr />
 
                         <div class="clearfix">
@@ -34,9 +34,9 @@
 				</li>
 
 			{% for traced_res in trace_conf %}
-                                <li class="clearfix">	
+                                <li class="clearfix">
 
-                                    <span class="zp-90">{{ traced_res|escape }}</span>	
+                                    <span class="zp-90">{{ traced_res|escape }}</span>
                                     <span class="zp-10">
                                             {% button text="Delete" postback={delete res_to_del=traced_res} %}
                                     </span>

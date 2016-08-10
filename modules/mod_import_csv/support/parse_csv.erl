@@ -6,9 +6,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,15 +42,15 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
     case {Chunk, Quoted} of
         % Chunk is empty. Get the next chunk from the file.
         {EmptyChunk, _}
-            when 
+            when
                 EmptyChunk =:= <<>>;
                 EmptyChunk =:= <<$\\>>;
                 (EmptyChunk =:= <<$">> andalso Quoted);
                 EmptyChunk =:= <<13>> ->
             case io:get_chars(Device, "", ?CHUNK_SIZE) of
                 eof ->
-                    All = case Remainder of 
-                              <<>> -> 
+                    All = case Remainder of
+                              <<>> ->
                                 Acc;
                               _ ->
                                 case EmptyChunk of
@@ -121,7 +121,7 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
 
         {<<_Field:Index/binary, _, _Rest/binary>>, false} ->
             scan_lines(Device, Fs, Chunk, Index + 1, Acc, Remainder, false);
- 
+
         % Long line; add to remainder.
         {LongLine, _} ->
             scan_lines(Device, Fs, <<>>, 0, Acc, <<Remainder/binary, LongLine/binary>>, Quoted)
@@ -151,7 +151,7 @@ utf8(S) ->
     case mochiutf8:valid_utf8_bytes(S) of
         S ->
             S;
-        Stripped -> 
+        Stripped ->
             case eiconv:convert("Windows-1250", S) of
                 {ok, Utf8} -> Utf8;
                 {error, _} -> Stripped

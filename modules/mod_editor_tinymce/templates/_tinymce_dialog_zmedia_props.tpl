@@ -18,7 +18,7 @@
                                    <div class="radio">
                                         <label>
                                              <input type="radio" name="align" {% if options.align == 'left' %}checked{% endif %} value="left" id="a-left">
-                                             {_ Aligned left _}  
+                                             {_ Aligned left _}
                                         </label>
                                    </div>
                                    <div class="radio">

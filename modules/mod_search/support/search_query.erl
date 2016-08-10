@@ -95,7 +95,7 @@ split_arg(B) ->
     case binary:split(B, <<"=">>) of
         [K,V] -> {z_string:trim(K), z_string:trim(V)};
         [K] -> {z_string:trim(K), <<"true">>}
-    end. 
+    end.
 
 
                                                 % Convert request arguments to atom. Doing it this way avoids atom
@@ -468,7 +468,7 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
 %% text=...
 %% Perform a fulltext search
 parse_query([{text, Text}|Rest], Context, Result) ->
-    case z_string:trim(Text) of 
+    case z_string:trim(Text) of
         "id:"++ S ->
             mod_search:find_by_id(S, Context);
         [] ->
@@ -654,10 +654,10 @@ add_order("seq", Search) ->
     add_order("+seq", Search);
 add_order([C,$s,$e,$q], Search) when C =:= $-; C =:= $+ ->
     case proplists:get_value(edge, Search#search_sql.tables) of
-        L when is_list(L) -> 
+        L when is_list(L) ->
             Search1 = add_order([C|L]++".seq", Search),
             add_order([C|L]++".id", Search1);
-        undefined -> 
+        undefined ->
             Search
     end;
 add_order("edge."++_ = Order, Search) ->
@@ -668,10 +668,10 @@ add_order([C,$e,$d,$g,$e,$.|Order], Search) when C =:= $-; C =:= $+ ->
         undefined -> Search
     end;
 add_order(Sort, Search) ->
-    Clause = case Sort of 
+    Clause = case Sort of
                  "random" ->
                      "random()";
-                 _ -> 
+                 _ ->
                      case Sort of
                          [$-|F1] -> sql_safe(F1) ++ " DESC";
                          [$+|F1] -> sql_safe(F1) ++ " ASC";
@@ -729,9 +729,9 @@ assure_categories(Name, Context) ->
 assure_cat_flatten(Name) when not is_list(Name) ->
     assure_cat_flatten([Name]);
 assure_cat_flatten(Names) when is_list(Names) ->
-    lists:flatten([  
+    lists:flatten([
                      case is_list(N) of
-                         true -> 
+                         true ->
                              case z_string:is_string(N) of
                                  true -> iolist_to_binary(N);
                                  false -> assure_cat_flatten(N)
@@ -772,7 +772,7 @@ assure_category_1(Name, Context) ->
     case m_category:name_to_id(Name, Context) of
         {ok, _Id} ->
             {ok, Name};
-        _ -> 
+        _ ->
             case m_rsc:rid(Name, Context) of
                 undefined ->
                     lager:warning("[~p] Query: unknown category '~p'", [z_context:site(Context), Name]),
@@ -969,5 +969,5 @@ object_predicate_clause(Alias, any, PredicateId) when is_integer(PredicateId) ->
 object_predicate_clause(Alias, ObjectId, any) when is_integer(ObjectId) ->
     [Alias, ".object_id = ", integer_to_list(ObjectId)];
 object_predicate_clause(Alias, ObjectId, PredicateId) when is_integer(PredicateId), is_integer(ObjectId) ->
-    [Alias, ".object_id=", integer_to_list(ObjectId), 
+    [Alias, ".object_id=", integer_to_list(ObjectId),
      " and ", Alias, ".predicate_id=", integer_to_list(PredicateId)].

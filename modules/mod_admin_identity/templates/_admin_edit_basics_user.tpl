@@ -20,7 +20,7 @@
                         {% button class="btn btn-default" text=_"delete username" action={dialog_delete_username id=id on_success={slide_fade_out target=#tr.id}} %}
                 </div>
             {% endif %}
-        </div>        
+        </div>
 	</div>
 {% endif %}
 

@@ -11,7 +11,7 @@
 
 event(#postback{message={insert_block, Args}}, Context) ->
     {id, QId} = proplists:lookup(id, Args),
-    Id = m_rsc:rid(QId, Context), 
+    Id = m_rsc:rid(QId, Context),
     Block = z_context:get_q("block", Context),
     Element = z_context:get_q("element", Context),
     Vars = [
@@ -31,21 +31,21 @@ event(#postback{message={insert_block, Args}}, Context) ->
 edit_language(Context) ->
     case z_context:get_q("edit_language", Context) of
         undefined ->
-            z_context:language(Context); 
-        "" -> 
             z_context:language(Context);
-        Lang -> 
+        "" ->
+            z_context:language(Context);
+        Lang ->
             case z_trans:to_language_atom(Lang) of
                 {ok, Code} -> Code;
-                {error, _} -> z_context:language(Context) 
+                {error, _} -> z_context:language(Context)
             end
     end.
 
 r_language(Context) ->
     case z_context:get_q("language", Context) of
-        undefined -> 
+        undefined ->
             [];
-        Ls -> 
+        Ls ->
             Ls1 = string:tokens(Ls, ","),
             [ list_to_atom(L) || L <- lists:filter(fun z_trans:is_language/1, Ls1) ]
     end.

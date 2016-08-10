@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="form-group row">
         <label class="control-label col-md-3" for="operation">{_ Target mailing list _}</label>
         <div class="col-md-9">

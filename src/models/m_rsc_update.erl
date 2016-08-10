@@ -30,7 +30,7 @@
     merge_delete/3,
 
     flush/2,
-    
+
     normalize_props/3,
     normalize_props/4,
 
@@ -89,7 +89,7 @@ delete_nocheck(Id, OptFollowUpId, Context) ->
     Referrers = m_edge:subjects(Id, Context),
     CatList = m_rsc:is_a(Id, Context),
     Props = m_rsc:get(Id, Context),
-    
+
     F = fun(Ctx) ->
         z_notifier:notify_sync(#rsc_delete{id=Id, is_a=CatList}, Ctx),
         m_rsc_gone:gone(Id, OptFollowUpId, Ctx),
@@ -144,7 +144,7 @@ merge_delete_nocheck(WinnerId, LoserId, Context) ->
     PropsLooser = m_rsc:get(LoserId, Context),
     ok = delete_nocheck(LoserId, WinnerId, Context),
     case merge_copy_props(WinnerId, PropsLooser, Context) of
-        [] -> 
+        [] ->
             ok;
         UpdProps ->
             {ok, _} = update(WinnerId, UpdProps, [{escape_texts, false}], Context)
@@ -153,9 +153,9 @@ merge_delete_nocheck(WinnerId, LoserId, Context) ->
 
 move_creator_modifier_ids(WinnerId, LoserId, Context) ->
     Ids = z_db:q("select id
-                  from rsc 
+                  from rsc
                   where (creator_id = $1 or modifier_id = $1)
-                    and id <> $1", 
+                    and id <> $1",
                  [LoserId],
                  Context),
     z_db:q("update rsc set creator_id = $1 where creator_id = $2",
@@ -177,7 +177,7 @@ merge_copy_props(WinnerId, Props, Context) ->
 
 merge_copy_props(_WinnerId, [], Acc, _Context) ->
     lists:reverse(Acc);
-merge_copy_props(WinnerId, [{P,_}|Ps], Acc, Context) 
+merge_copy_props(WinnerId, [{P,_}|Ps], Acc, Context)
     when P =:= creator; P =:= creator_id; P =:= modifier; P =:= modifier_id;
          P =:= created; P =:= modified; P =:= version;
          P =:= id; P =:= is_published; P =:= is_protected; P =:= is_dependent;
@@ -200,7 +200,7 @@ merge_copy_props(WinnerId, [{P,_} = PV|Ps], Acc, Context) ->
 flush(Id, Context) ->
     CatList = m_rsc:is_a(Id, Context),
     flush(Id, CatList, Context).
-    
+
 flush(Id, CatList, Context) ->
     z_depcache:flush(Id, Context),
     [ z_depcache:flush(Cat, Context) || Cat <- CatList ],
@@ -266,12 +266,12 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id =:= insert_rsc
 update_imported_check(#rscupd{is_import=true, id=Id} = RscUpd, Props, Context) when is_integer(Id) ->
     case m_rsc:exists(Id, Context) of
         false ->
-            {ok, CatId} = m_category:name_to_id(other, Context), 
+            {ok, CatId} = m_category:name_to_id(other, Context),
             1 = z_db:q("insert into rsc (id, creator_id, is_published, category_id)
-                        values ($1, $2, false, $3)", 
-                       [Id, z_acl:user(Context), CatId], 
+                        values ($1, $2, false, $3)",
+                       [Id, z_acl:user(Context), CatId],
                        Context);
-        true -> 
+        true ->
             ok
     end,
     update_editable_check(RscUpd, Props, Context);
@@ -427,7 +427,7 @@ update_transaction_fun_insert(#rscupd{id=Id} = RscUpd, Props, Raw, UpdateProps, 
                             [{creator_id, Id} | Props1];
                         CreatorId when is_integer(CreatorId) ->
                             [{creator_id, CreatorId} | Props1 ];
-                        undefined -> 
+                        undefined ->
                             Props1
                     end;
                 false ->
@@ -465,13 +465,13 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     UpdateProps1 = set_if_normal_update(RscUpd, modified, erlang:universaltime(), UpdateProps),
     UpdateProps2 = set_if_normal_update(RscUpd, modifier_id, z_acl:user(Context), UpdateProps1),
     {IsChanged, UpdatePropsN} = z_notifier:foldr(#rsc_update{
-                                            action=case RscUpd#rscupd.id of 
-                                                        insert_rsc -> insert; 
+                                            action=case RscUpd#rscupd.id of
+                                                        insert_rsc -> insert;
                                                         _ -> update
                                                    end,
-                                            id=Id, 
+                                            id=Id,
                                             props=Raw
-                                        }, 
+                                        },
                                         {false, UpdateProps2},
                                         Context),
 
@@ -481,7 +481,7 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
                             UpdatePropsN;
                         CatId ->
                             CatNr = z_db:q1("select nr
-                                             from hierarchy 
+                                             from hierarchy
                                              where id = $1
                                                and name = '$category'",
                                             [CatId],
@@ -561,11 +561,11 @@ preflight_check(_Id, [], _Context) ->
     ok;
 preflight_check(Id, [{name, Name}|T], Context) when Name =/= undefined ->
     case z_db:q1("select count(*) from rsc where name = $1 and id <> $2", [Name, Id], Context) of
-        0 -> 
+        0 ->
             preflight_check(Id, T, Context);
         _N ->
-            lager:warning("[~p] Trying to insert duplicate name ~p", 
-                          [z_context:site(Context), Name]), 
+            lager:warning("[~p] Trying to insert duplicate name ~p",
+                          [z_context:site(Context), Name]),
             throw({error, duplicate_name})
     end;
 preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
@@ -573,8 +573,8 @@ preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
         0 ->
             preflight_check(Id, T, Context);
         _N ->
-            lager:warning("[~p] Trying to insert duplicate page_path ~p", 
-                          [z_context:site(Context), Path]), 
+            lager:warning("[~p] Trying to insert duplicate page_path ~p",
+                          [z_context:site(Context), Path]),
             throw({error, duplicate_page_path})
     end;
 preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
@@ -582,15 +582,15 @@ preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
         0 ->
             preflight_check(Id, T, Context);
         _N ->
-            lager:warning("[~p] Trying to insert duplicate uri ~p", 
-                          [z_context:site(Context), Uri]), 
+            lager:warning("[~p] Trying to insert duplicate uri ~p",
+                          [z_context:site(Context), Uri]),
             throw({error, duplicate_uri})
     end;
 preflight_check(Id, [{'query', Query}|T], Context) ->
     Valid = case m_rsc:is_a(Id, 'query', Context) of
                 true ->
                     try
-                        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), Context), 
+                        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), Context),
                         true
                     catch
                         _: {error, {_, _}} ->
@@ -610,7 +610,7 @@ throw_if_category_not_allowed(_Id, _SafeProps, false, _Context) ->
     ok;
 throw_if_category_not_allowed(insert_rsc, SafeProps, _True, Context) ->
     case proplists:get_value(category_id, SafeProps) of
-        undefined -> 
+        undefined ->
             throw({error, nocategory});
         CatId ->
             throw_if_category_not_allowed_1(undefined, CatId, Context)
@@ -695,20 +695,20 @@ props_filter([{slug, Slug}|T], Acc, Context) ->
 props_filter([{custom_slug, P}|T], Acc, Context) ->
     props_filter(T, [{custom_slug, z_convert:to_bool(P)} | Acc], Context);
 
-props_filter([{B, P}|T], Acc, Context) 
+props_filter([{B, P}|T], Acc, Context)
     when  B =:= is_published; B =:= is_featured; B=:= is_protected;
           B =:= is_dependent; B =:= is_query_live; B =:= date_is_all_day;
           B =:= is_website_redirect; B =:= is_page_path_multiple;
           B =:= is_authoritative ->
     props_filter(T, [{B, z_convert:to_bool(P)} | Acc], Context);
 
-props_filter([{P, DT}|T], Acc, Context) 
-    when P =:= created; P =:= modified; 
+props_filter([{P, DT}|T], Acc, Context)
+    when P =:= created; P =:= modified;
          P =:= date_start; P =:= date_end;
          P =:= publication_start; P =:= publication_end  ->
     props_filter(T, [{P,z_datetime:to_datetime(DT)}|Acc], Context);
 
-props_filter([{P, Id}|T], Acc, Context) 
+props_filter([{P, Id}|T], Acc, Context)
     when P =:= creator_id; P =:= modifier_id ->
     case m_rsc:rid(Id, Context) of
         undefined ->
@@ -754,7 +754,7 @@ props_filter([{content_group_id, undefined}|T], Acc, Context) ->
     props_filter(T, [{content_group_id, undefined}|Acc], Context);
 props_filter([{content_group_id, CgId}|T], Acc, Context) ->
     CgId1 = m_rsc:rid(CgId, Context),
-    case m_rsc:is_a(CgId1, content_group, Context) 
+    case m_rsc:is_a(CgId1, content_group, Context)
         orelse m_rsc:is_a(CgId1, acl_collaboration_group, Context)
     of
         true ->
@@ -765,7 +765,7 @@ props_filter([{content_group_id, CgId}|T], Acc, Context) ->
             props_filter(T, Acc, Context)
     end;
 
-props_filter([{Location, P}|T], Acc, Context) 
+props_filter([{Location, P}|T], Acc, Context)
     when Location =:= location_lat; Location =:= location_lng ->
     X = try
             z_convert:to_float(P)
@@ -850,14 +850,14 @@ props_defaults(Props, Context) ->
 props_filter_protected(Props, RscUpd) ->
     IsNormal = is_normal_update(RscUpd),
     lists:filter(fun
-                    ({K, _}) -> not is_protected(K, IsNormal) 
+                    ({K, _}) -> not is_protected(K, IsNormal)
                  end,
                  Props).
 
 
 to_slug(undefined, _Context) -> undefined;
 to_slug({trans, _} = Tr, Context) -> to_slug(z_trans:lookup_fallback(Tr, en, Context), Context);
-to_slug(B, _Context) when is_binary(B) -> truncate_slug(z_string:to_slug(B)); 
+to_slug(B, _Context) when is_binary(B) -> truncate_slug(z_string:to_slug(B));
 to_slug(X, Context) -> to_slug(z_convert:to_binary(X), Context).
 
 truncate_slug(<<Slug:78/binary, _/binary>>) -> Slug;
@@ -917,9 +917,9 @@ recombine_dates(Id, Props, Context) ->
                     fun({Name, {S, E}}, Acc) ->
                         [
                             {Name++"_start", S},
-                            {Name++"_end", E} 
+                            {Name++"_end", E}
                             | Acc
-                        ] 
+                        ]
                     end,
                     Dates3,
                     DateGroups2),
@@ -1138,7 +1138,7 @@ recombine_languages(Props, Context) ->
     case props_languages(Props) of
         [] ->
             Props;
-        L -> 
+        L ->
             Cfg = [ atom_to_list(Code) || Code <- config_langs(Context) ],
             L1 = filter_langs(edited_languages(Props, L), Cfg),
             {LangProps, OtherProps} = comb_lang(Props, L1, [], []),
@@ -1203,7 +1203,7 @@ recombine_blocks_form(Props, OrgProps, Context) ->
         _ ->
             Keys = block_ids(OrgProps, []),
             Dict = lists:foldr(
-                            fun ({"block-", _}, Acc) -> 
+                            fun ({"block-", _}, Acc) ->
                                     Acc;
                                 ({"block-"++Name, Val}, Acc) ->
                                     Ts = string:tokens(Name, "-"),
@@ -1238,7 +1238,7 @@ recombine_blocks_import(Props, _OrgProps, Context) ->
             [{blocks, Blocks++proplists:get_value(blocks, Ps, [])} | proplists:delete(blocks, Ps) ]
     end.
 
-block_ids([], Acc) -> 
+block_ids([], Acc) ->
     lists:reverse(Acc);
 block_ids([{"block-"++Name,_}|Rest], Acc) when Name =/= [] ->
     Ts = string:tokens(Name, "-"),
@@ -1296,7 +1296,7 @@ filter_langs(L, Cfg) ->
                  end,
                  L).
 
-    
+
 
 config_langs(Context) ->
     case m_config:get(i18n, language_list, Context) of

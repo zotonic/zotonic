@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2014 Marc Worrell
 %% @doc User agent session management for zotonic.  A ua session is a process started for every
-%%      user agent visiting the site.  The session is alive for a fixed period after the 
+%%      user agent visiting the site.  The session is alive for a fixed period after the
 %%      last request has been done.  The session manager manages all the ua session processes.
 
 %% Copyright 2009-2014 Marc Worrell
@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,16 +34,16 @@
 -export([
     start_session/3,
     continue_session/1,
-    ensure_session/1, 
+    ensure_session/1,
     stop_session/1,
     stop_session/2,
-    rename_session/1, 
+    rename_session/1,
     whereis/2,
     whereis_user/2,
     add_script/1,
     add_script/2,
-    count/1, 
-    dump/1, 
+    count/1,
+    dump/1,
     get_session_id/1,
     tick/1,
     foreach/2,
@@ -65,7 +65,7 @@
 
 %% @doc Starts the session manager server
 -spec start_link( SiteProps :: list() ) -> {ok, pid()} | ignore | {error, term()}.
-start_link(SiteProps) -> 
+start_link(SiteProps) ->
     {host, Host} = proplists:lookup(host, SiteProps),
     Name = z_utils:name_for_host(?MODULE, Host),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
@@ -86,7 +86,7 @@ ensure_session(#context{session_pid=Pid} = Context) when is_pid(Pid) ->
     {ok, Context};
 ensure_session(Context) ->
     start_session(ensure, get_session_cookie(Context), Context).
-    
+
 
 %% @doc Explicitly stop an existing session
 -spec stop_session(#context{}) -> {ok, #context{}} | {error, term()}.
@@ -131,7 +131,7 @@ rename_session(#context{session_manager=SessionManager, session_pid=SessionPid} 
 rename_session(Context) ->
     % Ignore, there is no session set.
     {ok, Context}.
-        
+
 
 %% @spec add_script(Context) -> none()
 %% @doc Send the scripts in the context to all pages of all sessions
@@ -159,14 +159,14 @@ dump(#context{session_manager=SessionManager}) ->
 -spec get_session_id(#context{}) -> undefined | session_id().
 get_session_id(Context) ->
     case Context#context.session_id of
-        undefined -> 
+        undefined ->
             case Context#context.session_pid of
                 undefined ->
                     get_session_cookie(Context);
                 Pid when is_pid(Pid) ->
                     z_session:session_id(Pid)
             end;
-        SessionId -> 
+        SessionId ->
             SessionId
     end.
 
@@ -232,7 +232,7 @@ init(SiteProps) ->
       ]),
     State = #session_srv{
                     context=z_acl:sudo(z_context:new(Host)),
-                    key2pid=dict:new(), 
+                    key2pid=dict:new(),
                     pid2key=dict:new()
               },
     update_session_metrics(State),
@@ -297,7 +297,7 @@ handle_call({fold, Function, Acc0}, From,
 			  gen_server:reply(From, Res)
 		  end)
     end,
-    {noreply, State};    
+    {noreply, State};
 
 %% Find a specific session.
 handle_call({whereis, SessionId}, _From,  #session_srv{key2pid=Key2Pid} = State) ->
@@ -325,7 +325,7 @@ handle_call(Msg, _From, State) ->
 %% running functions and to protect the session manager from crashes.
 handle_cast({foreach, Function}, #session_srv{context=Context, pid2key=Pid2Key} = State) ->
     SesPids = dict:fetch_keys(Pid2Key),
-    if 
+    if
         is_function(Function, 1) ->
             spawn(fun() -> lists:foreach(fun(Pid) -> Function(Pid) end, SesPids) end);
         is_function(Function, 2) ->
@@ -333,7 +333,7 @@ handle_cast({foreach, Function}, #session_srv{context=Context, pid2key=Pid2Key} 
     end,
     {noreply, State};
 
-handle_cast(_Msg, State) -> 
+handle_cast(_Msg, State) ->
     {noreply, State}.
 
 
@@ -342,7 +342,7 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
     State1 = erase_session_pid(Pid, State),
     update_session_metrics(State1),
     {noreply, State1};
-handle_info(_Msg, State) -> 
+handle_info(_Msg, State) ->
     {noreply, State}.
 
 terminate(_Reason, _State) -> ok.
@@ -466,7 +466,7 @@ start_session(Action, CurrentSessionId, Context) ->
                                z_session:set(Props, Context2),
                                z_notifier:notify(session_init, Context2),
                                z_notifier:foldl(session_init_fold, Context2, Context2);
-                           restart -> 
+                           restart ->
                                Props = [
                                    {remote_ip, m_req:get(peer, Context2)},
                                    {ua_class, z_user_agent:get_class(Context2)},
@@ -474,7 +474,7 @@ start_session(Action, CurrentSessionId, Context) ->
                                ],
                                z_session:set(Props, Context2),
                                Context2;
-                           alive -> 
+                           alive ->
                                Props = [
                                    {remote_ip, m_req:get(peer, Context2)}
                                ],
@@ -522,7 +522,7 @@ set_session_cookie(SessionId, Context) ->
     Options = [{path, "/"},
                {http_only, true}],
     z_context:set_cookie(
-                    get_session_cookie_name(Context), 
+                    get_session_cookie_name(Context),
                     SessionId,
                     Options,
                     z_context:set(set_session_id, true, Context)).
@@ -531,8 +531,8 @@ set_session_cookie(SessionId, Context) ->
 %% @doc Remove the session id from the user agent and clear the session pid in the context
 -spec clear_session_cookie( #context{} ) -> #context{}.
 clear_session_cookie(Context) ->
-    Options = [{max_age, 0}, 
-               {path, "/"}, 
+    Options = [{max_age, 0},
+               {path, "/"},
                {http_only, true}],
     Context1 = z_context:set_cookie(get_session_cookie_name(Context), "", Options, Context),
     Context1#context{session_id=undefined, session_pid=undefined}.

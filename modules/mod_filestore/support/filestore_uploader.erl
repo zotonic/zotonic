@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +46,7 @@
     }).
 
 start_link(Id, Path, Props, Context) ->
-    Path1 = z_convert:to_binary(Path), 
+    Path1 = z_convert:to_binary(Path),
     gen_server:start_link({via, z_proc, {{upload, Path1}, Context}}, ?MODULE, [Id, Path1, Props, Context], []).
 
 init([Id, Path, Props, Context]) ->
@@ -77,7 +77,7 @@ handle_cast(start, #state{id=Id, path=Path, context=Context, props=Props} = Stat
                         fatal ->
                             m_filestore:dequeue(Id, Context),
                             {stop, normal, State};
-                        retry -> 
+                        retry ->
                             lager:debug("[~p] Filestore upload of ~p, sleeping 30m for retry.", [z_context:site(Context), Path]),
                             timer:send_after(?RETRY_DELAY, restart),
                             {noreply, State, hibernate}
@@ -99,7 +99,7 @@ handle_cast(Msg, State) ->
 
 handle_info(restart, State) ->
     gen_server:cast(self(), start),
-    {noreply, State}; 
+    {noreply, State};
 handle_info(_Info, State) ->
     {noreply, State}.
 

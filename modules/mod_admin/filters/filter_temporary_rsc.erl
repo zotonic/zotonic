@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,7 @@
 
 -module(filter_temporary_rsc).
 -export([
-    temporary_rsc/2, 
+    temporary_rsc/2,
     temporary_rsc/3,
 
     task_delete_inactive/3
@@ -51,7 +51,7 @@ task_delete_inactive(RscId, SessionId, Context) ->
         true ->
             case is_session_alive(SessionId, Context) of
                 false ->
-                    lager:debug("[~p] Deleting unmodified temporary resource ~p", 
+                    lager:debug("[~p] Deleting unmodified temporary resource ~p",
                                 [z_context:site(Context), RscId]),
                     ok = m_rsc:delete(RscId, z_acl:sudo(Context)),
                     ok;
@@ -68,8 +68,8 @@ task_delete_inactive(RscId, SessionId, Context) ->
 make_temporary_rsc(Props, Context) ->
     make_temporary_rsc(
                 z_session:session_id(Context),
-                z_session_page:page_id(Context), 
-                Props, 
+                z_session_page:page_id(Context),
+                Props,
                 Context).
 
 make_temporary_rsc(undefined, _PageId, _Props, _Context) ->
@@ -80,13 +80,13 @@ make_temporary_rsc(SessionId, PageId, Props, Context) ->
     {Cat, Props1} = ensure_category(Props, Context),
     case m_rsc:rid(Cat, Context) of
         undefined ->
-            lager:warning("[~p] filter_temporary_rsc: could not find category '~p'", 
+            lager:warning("[~p] filter_temporary_rsc: could not find category '~p'",
                           [z_context:site(Context), Cat]),
             undefined;
         CatId ->
             make_rsc(
-                    find_existing(SessionId, PageId, CatId, Context), 
-                    SessionId, CatId, Props1, 
+                    find_existing(SessionId, PageId, CatId, Context),
+                    SessionId, CatId, Props1,
                     Context)
     end.
 
@@ -110,13 +110,13 @@ make_rsc({error, notfound}, SessionId, CatId, Props, Context) ->
                             Context),
                 RscId;
             {error, _} = Error ->
-                lager:error("[~p] Can not make temporary resource error ~p on ~p", 
+                lager:error("[~p] Can not make temporary resource error ~p on ~p",
                             [z_context:site(Context), Error, Props]),
                 undefined
         end
     catch
         throw:{{error, Err}, _Trace} ->
-            lager:error("[~p] Can not make temporary resource error ~p on ~p", 
+            lager:error("[~p] Can not make temporary resource error ~p on ~p",
                         [z_context:site(Context), Err, Props]),
             undefined
     end.

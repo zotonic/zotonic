@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,11 +60,11 @@ save_revision(Id, Props, Context) ->
         _ ->
             UserId = z_acl:user(Context),
             1 = z_db:q("
-                insert into backup_revision 
+                insert into backup_revision
                     (rsc_id, type, version, user_id, user_name, data_type, data)
                 values ($1, $2, $3, $4, $5, $6, $7)
                 ", [
-                    Id, 
+                    Id,
                     ?BACKUP_TYPE_PROPS,
                     proplists:get_value(version, Props),
                     UserId,
@@ -84,7 +84,7 @@ save_revision(Id, Props, Context) ->
 
 get_revision(RevId, Context) ->
     case z_db:assoc_row("select * from backup_revision where id = $1", [RevId], Context) of
-        undefined -> 
+        undefined ->
             {error, notfound};
         Row ->
             R1 = proplists:delete(data, Row),

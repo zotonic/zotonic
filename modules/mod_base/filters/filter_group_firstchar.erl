@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@ group_firstchar(In, Field, Cols, Context) ->
     First = [ [{first, firstchar(Id, Field, Context)}, {id, Id}] || Id <- Ids],
     F = z_utils:group_by(First, first, Context),
 
-    X = [ [{first, [proplists:get_value(first, hd(P))]}, 
+    X = [ [{first, [proplists:get_value(first, hd(P))]},
            {result, [proplists:get_value(id, Pl) || Pl <- P]}]
           || P <- F],
     Grouped = grouped(X, Max),

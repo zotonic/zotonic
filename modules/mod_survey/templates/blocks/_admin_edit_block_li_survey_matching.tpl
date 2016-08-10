@@ -20,7 +20,7 @@
     <div class="form-group view-expanded">
        <textarea class="form-control" id="block-{{name}}-matching{{ lang_code_for_id }}" name="block-{{name}}-matching{{ lang_code_with_dollar }}" rows="4"
               placeholder="{_ Cat = Picture _} ({{ lang_code }})" >{{ blk.matching[lang_code]  }}</textarea>
-              
+
         <p class="help-block"><strong>{_ Example: _}</strong><br/>{_ Apple = Red<br/>
 Milk = White<br/>
 Vienna = Austria<br/>

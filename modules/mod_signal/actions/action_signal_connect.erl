@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,10 +32,10 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
     %% Genereer postback code voor het emitten van een signal.
     {Script, _Context} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
-    
+
     {Script, Context}.
 
-%% @doc Connect a signal to a collection of actions.  
+%% @doc Connect a signal to a collection of actions.
 %
 event(#postback{message={connect, [{signal, Signal}, {name, Name}, {actions, Actions}]}}, Context) ->
     Slot = z_connect:page(Signal, Actions, Context),
@@ -63,7 +63,7 @@ delete_slot(Name, Context) ->
 		end,
     UpdatedPageSlots = lists:keydelete(Name, 1, PageSlots),
     z_context:set_page(slot_names, [UpdatedPageSlots], Context).
-    
+
 
 % @doc retrieve the slot with name
 %

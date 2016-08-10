@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,8 +44,8 @@
 
 
 %% @doc Fix tinymce images that are the result of copying
-%% <img class="z-tinymce-media z-tinymce-media-align-block z-tinymce-media-size-small z-tinymce-media-crop- z-tinymce-media-link- " 
-%%      src="/admin/media/preview/41113" 
+%% <img class="z-tinymce-media z-tinymce-media-align-block z-tinymce-media-size-small z-tinymce-media-crop- z-tinymce-media-link- "
+%%      src="/admin/media/preview/41113"
 %%      alt="" />
 observe_sanitize_element(#sanitize_element{}, {<<"img">>, Attrs, _Enclosed} = Element, Context) ->
     case proplists:get_value(<<"src">>, Attrs) of
@@ -83,7 +83,7 @@ class_to_opts(Class) ->
             ]
     end.
 
-    
+
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
      #menu_item{id=admin_dashboard,
@@ -110,7 +110,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      #menu_item{id=admin_structure,
                 label=?__("Structure", Context)},
 
-     
+
      %% MODULES %%
      #menu_item{id=admin_modules,
                 label=?__("Modules", Context)},
@@ -169,14 +169,14 @@ observe_module_ready(module_ready, Context) ->
 
 event(#postback_notify{message="admin-insert-block"}, Context) ->
     Language = case z_context:get_q("language", Context) of
-                    undefined -> 
+                    undefined ->
                         [];
-                    Ls -> 
+                    Ls ->
                         Ls1 = string:tokens(Ls, ","),
                         [ list_to_atom(L) || L <- lists:filter(fun z_trans:is_language/1, Ls1) ]
                end,
     EditLanguage = case z_context:get_q("edit_language", Context) of
-                    undefined -> 
+                    undefined ->
                         z_context:language(Context);
                     EL ->
                         case z_trans:is_language(EL) of
@@ -235,7 +235,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
-    
+
     QAction = proplists:get_all_values(action, Args),
     QActions = proplists:get_value(actions, Args, []),
     QAction1 = case QAction of
@@ -257,7 +257,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
                 {z_convert:to_integer(SelectId),
                  z_convert:to_integer(ObjectId0)}
         end,
-    
+
     case do_link_unlink(IsConnected, SubjectId, Predicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
             Context2 = case z_convert:to_bool(proplists:get_value(autoclose, Args)) of
@@ -300,8 +300,8 @@ get_predicate(P, Context) when is_list(P) ->
             RscId = m_rsc:rid(P, Context),
             z_convert:to_atom(m_rsc:p(RscId, name, Context));
         false ->
-            list_to_existing_atom(P) 
-    end. 
+            list_to_existing_atom(P)
+    end.
 
 
 do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
@@ -320,7 +320,7 @@ do_link_unlink(_IsUnlink, _SubjectId, Predicate, ObjectId, Callback, Context)
             {title, z_trans:lookup_fallback(Title, Context)}
            ],
     case Callback of
-        undefined -> 
+        undefined ->
             {ok, Context};
         {CB, Args} ->
             {ok, z_render:wire({script, [{script, [
@@ -341,15 +341,15 @@ do_link_unlink(IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context) ->
             case m_edge:get_id(SubjectId, Predicate, ObjectId, Context) of
                 undefined when IsUnlink ->
                     do_link_unlink_feedback(
-                                    false, false, undefined, 
-                                    SubjectId, Predicate, ObjectId, 
+                                    false, false, undefined,
+                                    SubjectId, Predicate, ObjectId,
                                     Callback, Context);
                 undefined when not IsUnlink ->
                     case m_edge:insert(SubjectId, Predicate, ObjectId, Context) of
                         {ok, EdgeId} ->
                             do_link_unlink_feedback(
-                                            true, false, EdgeId, 
-                                            SubjectId, Predicate, ObjectId, 
+                                            true, false, EdgeId,
+                                            SubjectId, Predicate, ObjectId,
                                             Callback, Context);
                         {error, _} ->
                             do_link_unlink_error(IsUnlink, Context)
@@ -358,16 +358,16 @@ do_link_unlink(IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context) ->
                     case m_edge:delete(SubjectId, Predicate, ObjectId, Context) of
                         ok ->
                             do_link_unlink_feedback(
-                                            false, true, EdgeId, 
-                                            SubjectId, Predicate, ObjectId, 
+                                            false, true, EdgeId,
+                                            SubjectId, Predicate, ObjectId,
                                             Callback, Context);
                         {error, _} ->
                             do_link_unlink_error(IsUnlink, Context)
                     end;
                 EdgeId when not IsUnlink->
                     do_link_unlink_feedback(
-                                    false, false, EdgeId, 
-                                    SubjectId, Predicate, ObjectId, 
+                                    false, false, EdgeId,
+                                    SubjectId, Predicate, ObjectId,
                                     Callback, Context)
             end;
         false ->
@@ -395,7 +395,7 @@ do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId,
         {false,false} ->
             Context
     end,
-    case Callback of 
+    case Callback of
         undefined ->
             {ok, Context1};
         _ ->
@@ -430,7 +430,7 @@ context_language(Context) ->
     case z_context:get_q("language", Context) of
         undefined -> Context;
         [] -> Context;
-        Lang -> 
+        Lang ->
             case z_trans:to_language_atom(Lang) of
                 {ok, IsoCode} -> z_context:set_language(IsoCode, Context);
                 _ -> Context

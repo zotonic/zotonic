@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,7 +68,7 @@ init([]) ->
 
     %% Random id generation
     Ids = {z_ids,
-           {z_ids, start_link, []}, 
+           {z_ids, start_link, []},
            permanent, 5000, worker, [z_ids]},
 
     %% SMTP gen_servers: one for sending mails, the other for receiving email
@@ -80,7 +80,7 @@ init([]) ->
                         {z_email_receive_server, start_link, []},
                         permanent, 5000, worker, [z_email_receive_server]},
 
-    FilesSup = {z_file_sup, 
+    FilesSup = {z_file_sup,
                  {z_file_sup, start_link, []},
                  permanent, 5000, supervisor, dynamic},
 
@@ -97,7 +97,7 @@ init([]) ->
     Processes = [
                  Ids,
                  SmtpServer, SmtpReceiveServer,
-                 FilesSup, 
+                 FilesSup,
                  SitesSup,
                  FSWatchSup| get_extensions()
                 ],
@@ -107,7 +107,7 @@ init([]) ->
     WebPort = z_config:get(listen_port),
     SSLPort = z_config:get(ssl_listen_port),
 
-    WebConfig = [ 
+    WebConfig = [
                   {dispatcher, z_sites_dispatcher},
                   {dispatch_list, []},
                   {backlog, z_config:get(inet_backlog)},
@@ -133,9 +133,9 @@ init([]) ->
     [IPv4Proc, IPv4SSLProc, IPv6Proc, IPv6SSLProc] =
         [[{Name,
            {webmachine_mochiweb, start,
-            [Name, Opts]},                                 
+            [Name, Opts]},
            permanent, 5000, worker, dynamic}]
-         || {Name, Opts} 
+         || {Name, Opts}
                 <- [{webmachine_mochiweb, IPv4Opts ++ WebConfig},
                     {webmachine_mochiweb_ssl, IPv4SSLOpts ++ SSLWebConfig},
                     {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig},
@@ -189,12 +189,12 @@ init([]) ->
 
     {ok, {{one_for_one, 1000, 10}, Processes1}}.
 
-%% @doc Initializes the stats collector. 
+%% @doc Initializes the stats collector.
 %%
 init_stats() ->
     z_stats:init().
 
-%% @doc Initializes the ua classifier. When it is enabled it is loaded and 
+%% @doc Initializes the ua classifier. When it is enabled it is loaded and
 %% tested if it works.
 init_ua_classifier() ->
     case z_config:get(use_ua_classifier) of
@@ -213,7 +213,7 @@ init_ua_classifier() ->
 %% @doc Sets the application parameters for webmachine and starts the logger processes.
 %%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid
 %%      messing with application parameters when starting up a new wm-mochiweb process.
-init_webmachine() -> 
+init_webmachine() ->
     ServerHeader = webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
     application:set_env(webzmachine, server_header, ServerHeader),
     set_webzmachine_default(webmachine_logger_module, z_stats),
@@ -265,7 +265,7 @@ get_extensions() ->
 sni_fun(ServerName) ->
     case z_sites_dispatcher:get_host_for_domain(ServerName) of
         undefined -> undefined;
-        {ok, Host} -> 
+        {ok, Host} ->
             z_notifier:first(#ssl_options{server_name=ServerName}, z_context:new(Host))
     end.
 

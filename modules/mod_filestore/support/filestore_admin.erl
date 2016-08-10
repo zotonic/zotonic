@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ event(#submit{message=admin_filestore}, Context) ->
             S3Url = noslash(z_convert:to_binary(z_string:trim(z_context:get_q(s3url, Context)))),
             S3Key = z_convert:to_binary(z_string:trim(z_context:get_q(s3key, Context))),
             S3Secret = z_convert:to_binary(z_string:trim(z_context:get_q(s3secret, Context))),
-            IsUploadEnabled = z_convert:to_bool(z_context:get_q(is_upload_enabled, Context)), 
+            IsUploadEnabled = z_convert:to_bool(z_context:get_q(is_upload_enabled, Context)),
             case testcred(S3Url, S3Key, S3Secret) of
                 ok ->
                     m_config:set_value(mod_filestore, s3url, S3Url, Context),
@@ -50,10 +50,10 @@ event(#submit{message=admin_filestore}, Context) ->
                     z_render:wire([
                             {hide, [{target, "s3ok"}]},
                             {fade_in, [{target, "s3error"}]}
-                        ], Context) 
+                        ], Context)
             end;
         false ->
-            z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context) 
+            z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
     end;
 event(#submit{message=admin_filestore_queue}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
@@ -65,7 +65,7 @@ event(#submit{message=admin_filestore_queue}, Context) ->
                     queue_upload_all(Context)
             end;
         false ->
-            z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context) 
+            z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
     end.
 
 
@@ -128,7 +128,7 @@ queue_upload_all(Context) ->
                     {hide, [{target, "s3ok-queue"}]},
                     {hide, [{target, "s3ok-queue-local"}]},
                     {fade_in, [{target, "s3error-queue"}]}
-                ], Context) 
+                ], Context)
     end.
 
 queue_local_all(Context) ->

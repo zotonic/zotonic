@@ -19,7 +19,7 @@
             <div class="form-group col-lg-4 col-md-4">
                 <label class="control-label" for="name_first">{_ First _}</label>
                 <div>
-                    <input class="form-control" id="name_first" type="text" name="name_first" value="{{ r.name_first }}" /> 
+                    <input class="form-control" id="name_first" type="text" name="name_first" value="{{ r.name_first }}" />
                 </div>
             </div>
             <div class="form-group col-lg-2 col-md-2">

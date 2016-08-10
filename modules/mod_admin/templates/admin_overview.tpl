@@ -3,7 +3,7 @@
 {% block title %}{_ Pages _}{% endblock %}
 
 {% block content %}
-    {% with 
+    {% with
         20,
         "20"
         as
@@ -69,7 +69,7 @@
                     {% if not q.qcat %}{{ m.rsc[q.qquery].title|default:_"Pages overview" }}{% else %}{_ Pages overview _}{% endif %}{% if q.qcat == '*' %}: {_ All Categories _}{% elseif q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qcat_exclude %}, {_ excluding _}: {{ m.rsc[q.qcat_exclude].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}
 
                     {% if q.qs %}
-                        {% button text=_"show all" class="btn btn-default btn-xs" 
+                        {% button text=_"show all" class="btn btn-default btn-xs"
                                   action={redirect dispatch="admin_overview_rsc" qcat=q.qcat qquery=q.qquery} %}
                     {% endif %}
                 </h2>
@@ -81,8 +81,8 @@
                 <a name="content-pager"></a>
 
                 {% button
-                    class="btn btn-primary" 
-                    text=_"Make a new page or media" 
+                    class="btn btn-primary"
+                    text=_"Make a new page or media"
                     action={
                         dialog_new_rsc
                         title=""

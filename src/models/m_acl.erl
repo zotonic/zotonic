@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,7 +41,7 @@ m_find_value(is_admin, #m{value=undefined}, Context) ->
     z_acl:is_admin(Context);
 m_find_value(authenticated, #m{value=undefined} = M, _Context) ->
     M#m{value=authenticated};
-m_find_value(Action, #m{value=Auth} = M, _Context) 
+m_find_value(Action, #m{value=Auth} = M, _Context)
     when (Action == use orelse Action == admin orelse Action == view
     orelse Action == delete orelse Action == update orelse Action == insert
     orelse Action == link), (Auth =:= undefined orelse Auth =:= authenticated) ->

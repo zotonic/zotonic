@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@
          get/2,
          get_all/2,
          set/3,
-         
+
          all_services_for/2,
          humanreadable/2
          ]).
@@ -64,7 +64,7 @@ m_value(#m{value=undefined}, _Context) ->
     undefined;
 m_value(#m{value=_Module}, _Context) ->
     undefined.
-    
+
 
 %%
 %% Get permissions for consumer <Id>.
@@ -86,7 +86,7 @@ insert_all([[] | Rest], Id, Context) ->
 insert_all([Perm | Rest], Id, Context) ->
     z_db:q("INSERT INTO oauth_application_perm (application_id, perm) VALUES ($1, $2)", [Id, Perm], Context),
     insert_all(Rest, Id, Context).
-    
+
 
 %%
 %% Set permissions for consumer <Id>.
@@ -108,7 +108,7 @@ all_services_for(Id, Context) ->
         end,
     z_depcache:memo(F, {z_services_for, Id}, ?WEEK, [z_services, {oauth_consumer, Id}], Context).
 
-    
+
 
 
 %%

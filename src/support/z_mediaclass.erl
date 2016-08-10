@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,11 +30,11 @@
 -export([
     get/2,
     get/3,
-    
+
     expand_mediaclass_checksum/1,
     expand_mediaclass_checksum/2,
     expand_mediaclass/2,
-    
+
     reset/1,
     module_reindexed/2
 ]).
@@ -63,13 +63,13 @@ get(MediaClass, Context) ->
 
 
 %% @doc Fetch the mediaclass definition, returns a property list and a checksum.
-%%      When there is no mediaclass definition for the current context then 
+%%      When there is no mediaclass definition for the current context then
 -spec get(ua_classifier:device_type(), MediaClass :: list() | binary(), #context{}) -> {ok, Props :: list(), Checksum :: binary()} | {error, term()}.
 get(UAClass, MediaClass, Context) ->
-    case ets:lookup(?MEDIACLASS_INDEX, 
+    case ets:lookup(?MEDIACLASS_INDEX,
                     #mediaclass_index_key{
-                        site=z_context:site(Context), 
-                        mediaclass=z_convert:to_binary(MediaClass), 
+                        site=z_context:site(Context),
+                        mediaclass=z_convert:to_binary(MediaClass),
                         ua_class=UAClass})
     of
         [] -> {ok, [], <<>>};
@@ -128,7 +128,7 @@ expand_mediaclass_1(MC, Props, Context) ->
         Error ->
             Error
     end.
-    
+
 expand_mediaclass_2(Props, ClassProps) ->
     lists:foldl(fun(KV, Acc) ->
                     K = key(KV),
@@ -139,10 +139,10 @@ expand_mediaclass_2(Props, ClassProps) ->
                 end,
                 proplists:delete(mediaclass, Props),
                 ClassProps).
-    
+
     key({K,_}) -> K;
     key(K) -> K.
-        
+
 %% @doc Call this to force a re-index and parse of all moduleclass definitions.
 -spec reset(#context{}) -> ok.
 reset(Context) ->
@@ -247,7 +247,7 @@ collect_files([], Acc, _Context) ->
     {ok, lists:reverse(Acc)};
 collect_files([UAClass|Rest], Acc, Context) ->
     case z_module_indexer:find_ua_class_all(template, UAClass, ?MEDIACLASS_FILENAME, Context) of
-        [] -> 
+        [] ->
             collect_files(Rest, Acc, Context);
         Ms ->
             Paths = [ {Module, UAClass, Path} || #module_index{filepath=Path, module=Module} <- Ms ],
@@ -261,7 +261,7 @@ reindex_files(Files, Site) ->
     MCs = lists:flatten([ expand_file(MUP) || MUP <- Files ]),
     ByModulePrio = prio_sort(MCs),
     % Insert least prio first, later overwrite with higher priority modules
-    [ insert_mcs(UAClass, UAMCs, Tag, Site) || {UAClass, UAMCs} <- ByModulePrio ], 
+    [ insert_mcs(UAClass, UAMCs, Tag, Site) || {UAClass, UAMCs} <- ByModulePrio ],
     cleanup_ets(Tag, Site),
     ok.
 
@@ -272,7 +272,7 @@ prio_sort(MUAProps) ->
     [ {UA, X} || {_Prio, _M, UA, X} <- Sorted ].
 
 prio_comp({P1, M1, UA1, _}, {P1, M1, UA2, _}) ->
-    not z_user_agent:order_class(UA1, UA2); 
+    not z_user_agent:order_class(UA1, UA2);
 prio_comp({P1, M1, _UA1, _}, {P2, M2, _UA2, _}) ->
     {P1, M1} > {P2, M2}.
 
@@ -331,7 +331,7 @@ consult_file(Path) ->
 %% @doc Remove all ets entries for this host with an old tag
 cleanup_ets(Tag, Site) ->
     cleanup_ets_1(ets:first(?MEDIACLASS_INDEX), Tag, Site, []).
-    
+
     cleanup_ets_1('$end_of_table', _Tag, _Site, Acc) ->
         [ ets:delete(?MEDIACLASS_INDEX, K) || K <- Acc ];
     cleanup_ets_1(#mediaclass_index_key{site=Site} = K, Tag, Site, Acc) ->

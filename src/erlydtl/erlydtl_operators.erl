@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@
     modulo/3,
 
     negate/2,
-    
+
     ge/3,
     le/3,
     gt/3,
@@ -175,19 +175,19 @@ to_values(undefined, B) ->
     {undefined, B};
 to_values(A, undefined) ->
     {A, undefined};
-to_values(A, B) when is_number(A), is_number(B) -> 
+to_values(A, B) when is_number(A), is_number(B) ->
     {A,B};
-to_values(A, B) when is_boolean(A); is_boolean(B) -> 
+to_values(A, B) when is_boolean(A); is_boolean(B) ->
     {z_convert:to_bool(A), z_convert:to_bool(B)};
-to_values(A, B) when is_integer(A); is_integer(B) -> 
+to_values(A, B) when is_integer(A); is_integer(B) ->
     {z_convert:to_integer(A), z_convert:to_integer(B)};
-to_values(A, B) when is_float(A); is_float(B) -> 
+to_values(A, B) when is_float(A); is_float(B) ->
     {z_convert:to_float(A), z_convert:to_float(B)};
-to_values(A, B) when is_binary(A), is_binary(B) -> 
+to_values(A, B) when is_binary(A), is_binary(B) ->
     {A,B};
-to_values(A, B) when is_tuple(A), is_tuple(B) -> 
+to_values(A, B) when is_tuple(A), is_tuple(B) ->
     {A, B};
-to_values(A, B) -> 
+to_values(A, B) ->
     {z_convert:to_list(A), z_convert:to_list(B)}.
 
 
@@ -196,11 +196,11 @@ to_numbers(undefined, B) ->
     {undefined, B};
 to_numbers(A, undefined) ->
     {A, undefined};
-to_numbers(A, B) when is_number(A), is_number(B) -> 
+to_numbers(A, B) when is_number(A), is_number(B) ->
     {A,B};
-to_numbers(A, B) when is_integer(A); is_integer(B) -> 
+to_numbers(A, B) when is_integer(A); is_integer(B) ->
     {z_convert:to_integer(A), z_convert:to_integer(B)};
-to_numbers(A, B) when is_float(A); is_float(B) -> 
+to_numbers(A, B) when is_float(A); is_float(B) ->
     {z_convert:to_float(A), z_convert:to_float(B)};
-to_numbers(A, B) -> 
+to_numbers(A, B) ->
     {z_convert:to_integer(A), z_convert:to_integer(B)}.

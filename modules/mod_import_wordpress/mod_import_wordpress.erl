@@ -41,7 +41,7 @@ event(#submit{message={wxr_upload, []}}, Context) ->
     z_render:wire([{dialog_close, []}], Context2).
 
 do_import(TmpFile, Reset, OriginalFilename, Context) ->
-    Context1 = 
+    Context1 =
         try
             ok = import_wordpress:wxr_import(TmpFile, Reset, Context),
             Msg = lists:flatten(io_lib:format("The import of ~p has completed.", [OriginalFilename])),

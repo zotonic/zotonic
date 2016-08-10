@@ -18,7 +18,7 @@ find_value(Key, #m{model=Model} = M, Context) ->
 
 find_value(Key, [{Nr,_}|_] = L, _Context) when is_integer(Key), is_integer(Nr) ->
     proplists:get_value(Key, L);
-    
+
 % Index of list with an integer like "a[2]"
 find_value(Key, L, _Context) when is_integer(Key), is_list(L) ->
     try
@@ -112,9 +112,9 @@ find_value(Key, {GBSize, GBData} = GB, _Context) when is_integer(GBSize), is_tup
 %% Other cases: context or dict module lookup.
 find_value(Key, Tuple, _Context) when is_tuple(Tuple) ->
     case element(1, Tuple) of
-        context -> 
+        context ->
             z_context:get_value(Key, Tuple);
-        dict -> 
+        dict ->
             case dict:find(Key, Tuple) of
                 {ok, Val} -> Val;
                 _ -> undefined
@@ -122,7 +122,7 @@ find_value(Key, Tuple, _Context) when is_tuple(Tuple) ->
         _ when is_integer(Key) ->
             try
                 element(Key, Tuple)
-            catch 
+            catch
                 _:_ -> undefined
             end;
         _ ->
@@ -180,7 +180,7 @@ fetch_value(Key, Data, Context) ->
 
 are_equal(Arg1, Arg2) ->
     z_utils:are_equal(Arg1, Arg2).
-    
+
 is_false(A, Context) ->
     not is_true(A, Context).
 
@@ -204,11 +204,11 @@ init_counter_stats(List) ->
 
 init_counter_stats(List, Parent) ->
     N = length(List),
-    [{counter, 1}, 
-        {counter0, 0}, 
-        {revcounter, N}, 
-        {revcounter0, N - 1}, 
-        {first, true}, 
+    [{counter, 1},
+        {counter0, 0},
+        {revcounter, N},
+        {revcounter0, N - 1},
+        {first, true},
         {last, N =:= 1},
         {parentloop, Parent}].
 
@@ -230,7 +230,7 @@ to_value(#m_search_result{result=#search_result{result=Result}}, _Context) ->
     Result;
 to_value(V, _Context) ->
     V.
-    
+
 increment_counter_stats([{counter, Counter}, {counter0, Counter0}, {revcounter, RevCounter},
          {revcounter0, RevCounter0}, {first, _}, {last, _}, {parentloop, Parent}]) ->
     [{counter, Counter + 1},

@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -63,9 +63,9 @@ disconnect_slot(_Slot) ->
 emit(Signal, Context) ->
     Slots = slots(Signal, Context),
     AsyncContext = z_context:prune_for_async(Context),
-    lists:foreach(fun(Slot) -> 
+    lists:foreach(fun(Slot) ->
               try
-                  emit_signal(Signal, Slot, AsyncContext) 
+                  emit_signal(Signal, Slot, AsyncContext)
               catch M:E ->
                   lager:error("Error emitting signal %p to slot %p. %p:%p. Disconnecting...", [Signal, Slot, M, E]),
                   disconnect(Signal, Slot, AsyncContext)
@@ -75,12 +75,12 @@ emit(Signal, Context) ->
 emit_script(Signal, Context) ->
     {Scripts, CleanContext} = z_script:split(Context),
     emit_script(Signal, Scripts, CleanContext).
-    
+
 emit_script(Signal, Script, Context) ->
     Slots = slots(Signal, Context),
-    lists:foreach(fun(Slot) -> 
+    lists:foreach(fun(Slot) ->
             try
-                emit_signal_script(Script, Slot) 
+                emit_signal_script(Script, Slot)
             catch M:E ->
                 lager:error("Error emitting signal %p to slot %p. %p:%p. Disconnecting...", [Signal, Slot, M, E]),
                 disconnect(Signal, Slot, z_context:prune_for_async(Context))
@@ -112,7 +112,7 @@ slots(Signal, Context) ->
         _ ->
             Tags = ets:lookup(Table, SignalType),
 
-            % Get the list of keys we have to 
+            % Get the list of keys we have to
             Keys = [key(Signal, Tag) || {tags, _S, Tag} <- Tags],
 
             slots1([], Table, Keys)
@@ -125,10 +125,10 @@ slots1(Slots, Table, [undefined|T]) ->
 slots1(Slots, Table, [H|T]) ->
     slots1([ets:lookup(Table, H) | Slots], Table, T).
 
-% @doc Return how many items there 
+% @doc Return how many items there
 %
 item_count(Context) ->
-    case ets:info(slot_table_name(Context)) of 
+    case ets:info(slot_table_name(Context)) of
         undefined -> 0;
         Info ->
             proplists:get_value(size, Info, 0)
@@ -180,14 +180,14 @@ handle_call({'connect', Signal, Slot}, _From, State) ->
     SignalTags = proplists:get_keys(SignalProps),
 
     TagSet = ets:lookup(State#state.slots, SignalType),
-    
+
     Objects = case lists:member({tags, SignalType, SignalTags}, TagSet) of
                   true ->
                       {slot, Key, Slot};
                   false ->
                       [{slot, Key, Slot}, {tags, SignalType, SignalTags}]
               end,
-                  
+
     % Important, this is one atomic operation! The table is read
     % asynchronously, so it must be updated in one operation.
     ets:insert(State#state.slots, Objects),
@@ -239,7 +239,7 @@ slot_table_name(Name) when is_atom(Name) ->
 slot_table_name(Context) ->
     slot_table_name(name(Context)).
 
-% Make sure there is a slot_table. 
+% Make sure there is a slot_table.
 %
 ensure_slot_table(Name) ->
     SlotTable = slot_table_name(Name),
@@ -262,7 +262,7 @@ signal_type({SignalType, Props}) when is_atom(SignalType), is_list(Props) ->
 key(SignalType) when is_atom(SignalType) ->
     {SignalType, []};
 key(Signal={SignalType, Props}) when is_atom(SignalType), is_list(Props) ->
-    key(Signal, proplists:get_keys(Props)). 
+    key(Signal, proplists:get_keys(Props)).
 
 key(SignalType, []) when is_atom(SignalType) ->
     {SignalType, []};

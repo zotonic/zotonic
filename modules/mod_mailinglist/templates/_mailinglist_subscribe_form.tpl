@@ -45,7 +45,7 @@
 			<input class="form-control" id="{{ #name_surname }}" type="text" name="name_surname" value="{{ rcpt.props.name_surname|default:r.name_surname|default:q.name_surname|escape }}" />
 		</div>
 	</div>
-	
+
 		{% if not in_admin %}
 			{% validate id=#name_first name="name_first" type={presence} %}
 			{% validate id=#name_surname name="name_surname" type={presence} %}

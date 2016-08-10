@@ -86,8 +86,8 @@ handle_result({error, _} = Error) ->
 
 
 get_consumer(Context) ->
-    case {m_config:get_value(mod_twitter, consumer_key, undefined, Context), 
-          m_config:get_value(mod_twitter, consumer_secret, undefined, Context)} 
+    case {m_config:get_value(mod_twitter, consumer_key, undefined, Context),
+          m_config:get_value(mod_twitter, consumer_secret, undefined, Context)}
     of
         {None, _} when None =:= undefined; None =:= <<>> ->
             undefined;

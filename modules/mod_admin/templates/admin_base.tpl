@@ -49,7 +49,7 @@
     <div class="admin-container">
         {% block content %}{% endblock %}
     </div>
-    
+
     {% include "_admin_footer.tpl" %}
 
     {% include "_admin_js_include.tpl" %}

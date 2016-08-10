@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,7 +52,7 @@ check(Username, Password) when is_binary(Username), is_binary(Password) ->
                     lager:debug("MQTT logon success for ~p on ~p", [SiteUser, z_context:site(UserContext)]),
                     {true, {zauth, z_acl:user(UserContext), z_context:site(UserContext)}}
             end;
-        {error, _} -> 
+        {error, _} ->
             lager:debug("MQTT could not map user ~p to any site.", [Username]),
             false
     end.
@@ -104,7 +104,7 @@ map_user_site(Username) when is_binary(Username) ->
                             lager:info("MQTT: no site found for ~p, using fallback", [Hostname]),
                             fallback_site(Username)
                     end;
-                {ok, Host} -> 
+                {ok, Host} ->
                     {ok, local_username(Parts), z_context:new(Host)}
             end
         end.
@@ -114,7 +114,7 @@ fallback_site(Username) ->
 
 local_username(Parts) ->
     UserParts = lists:reverse(tl(lists:reverse(Parts))),
-    iolist_to_binary(z_utils:combine($@, UserParts)). 
+    iolist_to_binary(z_utils:combine($@, UserParts)).
 
 
 

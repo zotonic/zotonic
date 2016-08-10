@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,7 +49,7 @@ m_find_value(Key, #m{value=Type}, Context) ->
 %% @spec m_to_list(Source, Context) -> list()
 m_to_list(_, _Context) ->
     [].
-    
+
 %% @doc Transform a model value so that it can be formatted or piped through filters
 %% @spec m_value(Source, Context) -> term()
 m_value(#m{}, _Context) ->
@@ -90,8 +90,8 @@ init(Context) ->
                     type character varying(32) not null,
                     key character varying(64) not null,
                     props bytea,
-                    
-                    constraint tkvstore_pkey primary key (type, key) 
+
+                    constraint tkvstore_pkey primary key (type, key)
                 )
                 ", Context),
             z_db:flush(Context)

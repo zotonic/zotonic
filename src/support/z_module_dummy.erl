@@ -2,7 +2,7 @@
 %% @copyright 2010 Marc Worrell
 %% Date: 2010-07-05
 %% @doc Dummy gen_server for modules without any gen_server code.
-%% We use this dummy gen_server so that we still can use a simple otp supervisor to oversee the 
+%% We use this dummy gen_server so that we still can use a simple otp supervisor to oversee the
 %% running modules.
 
 %% Copyright 2010 Marc Worrell
@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -80,7 +80,7 @@ handle_call(Message, _From, State) ->
 handle_cast(init, #state{module=Module, host=Host}=State) ->
     dummy_module_init(Module, z_context:new(Host)),
     {noreply, State};
-    
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -130,4 +130,4 @@ dummy_module_terminate(Reason, Module, Context) ->
         true -> Module:terminate(Reason, z_acl:sudo(Context));
         false -> nop
     end.
-    
+

@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -82,7 +82,7 @@ archive_file(Filename, NewBasename, Context) ->
                 {error, exdev} ->
                     {ok, _BytesCopied} = file:copy(Fileabs, AbsPath),
                     ok = file:delete(Fileabs);
-                ok -> 
+                ok ->
                     ok
             end,
             NewFile
@@ -132,7 +132,7 @@ archive_copy_opt(Filename, NewBasename, Context) ->
 %% @doc Delete a filename in the archive
 archive_delete(Filename, Context) ->
     AbsPath = abspath(Filename, Context),
-    file:delete(AbsPath). 
+    file:delete(AbsPath).
 
 
 %% Return an unique filename for archiving the file
@@ -147,7 +147,7 @@ preview_filename(Filename, Context) ->
     Rootname = filename:rootname(filename:basename(Filename)),
     Extension = filename:extension(Filename),
     RelRoot = filename:join([
-                    "preview", 
+                    "preview",
                     z_ids:identifier(2),
                     z_ids:identifier(2),
                     safe_filename(Rootname)]),
@@ -164,14 +164,14 @@ safe_filename(L) when is_list(L) ->
 
 safe_filename_1(<<>>, Acc) ->
     Acc;
-safe_filename_1(<<C/utf8, Rest/binary>>, Acc) 
-    when (C >= $a andalso C =< $z) 
+safe_filename_1(<<C/utf8, Rest/binary>>, Acc)
+    when (C >= $a andalso C =< $z)
         orelse (C >= $0 andalso C =< $9)
         orelse C == $. orelse C == $- orelse C == $_ ->
     safe_filename_1(Rest, <<Acc/binary,C>>);
 safe_filename_1(<<_/utf8, Rest/binary>>, Acc) ->
     safe_filename_1(Rest, <<Acc/binary, $_>>).
-    
+
 
 %% @doc Make sure that the filename is unique by appending a number on filename clashes
 make_unique(Rootname, Extension, Context) ->
@@ -179,7 +179,7 @@ make_unique(Rootname, Extension, Context) ->
     case m_media:is_unique_file(File, Context) of
         true ->
             File;
-        false -> 
+        false ->
             make_unique(Rootname, Extension, z_ids:number(), Context)
     end.
 
@@ -188,7 +188,7 @@ make_unique(Rootname, Extension, Nr, Context) ->
     case m_media:is_unique_file(File, Context) of
         true ->
             File;
-        false -> 
+        false ->
             make_unique(Rootname, Extension, z_ids:number(), Context)
     end.
 
@@ -200,7 +200,7 @@ is_archived(Filename, Context) ->
     Fileabs = z_convert:to_list(filename:absname(Filename)),
     Archive = z_convert:to_list(z_path:media_archive(Context)) ++ "/",
     lists:prefix(Archive, Fileabs).
-    
+
 
 %% @doc Remove the path to the archive directory, return a filename relative to the archive directory
 rel_archive(Filename, Context) ->
@@ -208,4 +208,4 @@ rel_archive(Filename, Context) ->
     Archive = z_convert:to_list(z_path:media_archive(Context)) ++ "/",
     true = lists:prefix(Archive, Fileabs),
     lists:nthtail(length(Archive), Fileabs).
-	
+

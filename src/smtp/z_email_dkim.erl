@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@ ensure_configured(Context) ->
 %% and public key files
 cert_files(Context) ->
 	KeyDir = filename:join(z_path:site_dir(Context), "dkim"),
-	Sitename = z_convert:to_list(z_context:site(Context)), 
+	Sitename = z_convert:to_list(z_context:site(Context)),
     {
       filename:join(KeyDir, Sitename++".dkim.key"),
       filename:join(KeyDir, Sitename++".dkim.pub")
@@ -94,12 +94,12 @@ dkim_selector(Context) ->
 is_configured(Context) ->
     {PrivKeyFile, PubKeyFile} = cert_files(Context),
     filelib:is_regular(PrivKeyFile) andalso filelib:is_regular(PubKeyFile).
-    
+
 %% @doc Return the key contents, used in the actual signing. Cached to
 %% prevent file access on every mail sent.
 get_priv_key(Context) ->
     z_depcache:memo(
-      fun() -> 
+      fun() ->
               {PrivKeyFile, _} = cert_files(Context),
               {ok, Contents} = file:read_file(PrivKeyFile),
               Contents

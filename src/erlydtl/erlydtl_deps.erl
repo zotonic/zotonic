@@ -3,9 +3,9 @@
 %%% @author    Roberto Saccon <rsaccon@gmail.com> [http://rsaccon.com]
 %%% @author    Evan Miller <emmiller@gmail.com>
 %%% @copyright 2008 Roberto Saccon, Evan Miller
-%%% @doc  
+%%% @doc
 %%% ErlyDTL helper module
-%%% @end  
+%%% @end
 %%%
 %%% The MIT License
 %%%
@@ -53,7 +53,7 @@ get_base_dir(Module) ->
 %%      get_base_dir(?MODULE).
 get_base_dir() ->
     get_base_dir(?MODULE).
-    
+
 %%====================================================================
 %% Internal functions
 %%====================================================================

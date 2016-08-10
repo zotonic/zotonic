@@ -11,9 +11,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,7 +60,7 @@ url(Files, Context) ->
 %% @doc Generate a url with the given files.
 url(Files, Args, Context) ->
     {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
-    CssFiles = url_for(Css, CssPath, <<".css">>, Args, Context), 
+    CssFiles = url_for(Css, CssPath, <<".css">>, Args, Context),
     JsFiles = url_for(Js, JsPath, <<".js">>, Args, Context),
     CssFiles ++ JsFiles.
 
@@ -119,7 +119,7 @@ collapsed_paths(Files) ->
     CssPath = string:join(CssSort, [?SEP]),
     JsPath = string:join(JsSort, [?SEP]),
     {Css, CssPath, Js, JsPath}.
-    
+
 
 %% @doc Given the filepath of the request, return all files collapsed in the path.
 %% @spec uncollapse(string()|binary()) -> list()
@@ -135,7 +135,7 @@ add_extension([File]) ->
 add_extension([TimestampExt | Files]) ->
     Extension = filename:extension(TimestampExt),
     lists:foldl(fun(F, Acc) -> [add_extension_1(F,Extension)|Acc] end, [], Files).
-    
+
 add_extension_1(F, Ext) when is_binary(F) ->
     Ext1 = z_convert:to_binary(Ext),
     <<F/binary, Ext1/binary>>;
@@ -192,12 +192,12 @@ collapse_dirs([File|Files]) ->
                 % File is in a (sub-)directory higher from the previous one, reset to top level
                 collapse_dirs(Files, FileTk, [ensure_abspath(filename:rootname(File)) | Acc ])
         end.
-    
+
     drop_prefix([A|RestA], [A|RestB]) ->
         drop_prefix(RestA, RestB);
     drop_prefix(A, B) ->
         {A, B}.
-        
+
     dirname(F) ->
         case filename:dirname(F) of
             "." -> [];
@@ -228,7 +228,7 @@ checksum([File|Files], State, Context) ->
     end.
 
 dt_checksum({{Year, Month, Day}, {Hour, Minute, Second}}, State) ->
-    fletcher_sum(Year, fletcher_sum(Month, fletcher_sum(Day, 
+    fletcher_sum(Year, fletcher_sum(Month, fletcher_sum(Day,
         fletcher_sum(Hour, fletcher_sum(Minute, fletcher_sum(Second, State)))))).
 
 %% Calculation of Fletcher32 checksum
@@ -242,7 +242,7 @@ fletcher_sum(Val, {Sum1, Sum2}) ->
 %% @doc Split the list of files in js and css files, remove leading '/'
 split_css_js(Files) ->
     split_css_js(Files, [], []).
-    
+
     split_css_js([], CssAcc, JsAcc) ->
         {lists:reverse(CssAcc), lists:reverse(JsAcc)};
     split_css_js([[$/|File]|Rest], CssAcc, JsAcc) ->

@@ -9,7 +9,7 @@
 		{% if username %}
 			- sign in for editing
 		{% else %}
-			- use unique id in identity table for mailing list access 
+			- use unique id in identity table for mailing list access
 				[later: signup/claim by "all include"]
 		{% endif %}
 	{% endwith %}

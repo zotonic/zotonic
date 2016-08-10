@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ stringify([], _Context) ->
 stringify(#m{} = M, Context) ->
     erlydtl_runtime:to_value(M, Context);
 stringify(N, _Context) when is_integer(N) ->
-	z_convert:to_binary(N); 
+	z_convert:to_binary(N);
 stringify(L, Context) when is_list(L) ->
     iolist_to_binary(stringify_1(L, Context));
 stringify(X, Context) ->

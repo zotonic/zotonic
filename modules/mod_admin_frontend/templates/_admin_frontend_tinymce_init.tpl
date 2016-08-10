@@ -7,20 +7,20 @@
 		theme_advanced_buttons2: "tablecontrols,outdent,indent",
 		theme_advanced_buttons3: "",
 		theme_advanced_buttons4: "",
-		theme_advanced_toolbar_location: "top", 
-		theme_advanced_toolbar_align: "left", 
-		theme_advanced_statusbar_location: "bottom", 
-		theme_advanced_resizing: "1", 
+		theme_advanced_toolbar_location: "top",
+		theme_advanced_toolbar_align: "left",
+		theme_advanced_statusbar_location: "bottom",
+		theme_advanced_resizing: "1",
 		theme_advanced_resize_horizontal: "",
 		theme_advanced_blockformats: "p,h1,h2,h3,h4,pre",
-		dialog_type: "modal", 
-		relative_urls: "", 
-		remove_script_host: "", 
-		convert_urls: "", 
-		apply_source_formatting: "", 
-		remove_linebreaks: "1", 
-		gecko_spellcheck: "1", 
-		
+		dialog_type: "modal",
+		relative_urls: "",
+		remove_script_host: "",
+		convert_urls: "",
+		apply_source_formatting: "",
+		remove_linebreaks: "1",
+		gecko_spellcheck: "1",
+
 		formats : {
 			bdo_rtl : {inline : 'bdo', attributes : {dir: 'rtl'}},
 			bdo_ltr : {inline : 'bdo', attributes : {dir: 'ltr'}}
@@ -28,7 +28,7 @@
 
 		/* Cleanup pasted html code */
 		paste_auto_cleanup_on_paste : true,
-		paste_convert_middot_lists: true, 
+		paste_convert_middot_lists: true,
 		paste_remove_spans: true,
 		paste_remove_styles: true,
 		paste_remove_styles_if_webkit: true,
@@ -37,13 +37,13 @@
 		/* below is a workaround for problem where tinyMCE setEntities skips the ones below and the doesn't initialize the entityLookup array
 		 * which results in an error in the _encode function.
 		 */
-		entity_encoding: "raw",		
-		entities: "38,amp,60,lt,62,gt", 
+		entity_encoding: "raw",
+		entities: "38,amp,60,lt,62,gt",
 
-		accessibility_focus: "1", 
-		tab_focus: ":prev,:next", 
-		content_css: "/lib/js/modules/tinymce3.5.0/zotonic.css", 
-		wpeditimage_disable_captions: "", 
+		accessibility_focus: "1",
+		tab_focus: ":prev,:next",
+		content_css: "/lib/js/modules/tinymce3.5.0/zotonic.css",
+		wpeditimage_disable_captions: "",
 		plugins: "codemagic,paste,table,zlink,zmedia,autosave,directionality,zbdo,inlinepopups",
 		table_row_limit: 100,
 		table_col_limit: 10,
@@ -84,13 +84,13 @@
 		],
 
 		codemirror: {
-			indentOnInit: true, // Whether or not to indent code on init. 
+			indentOnInit: true, // Whether or not to indent code on init.
 			path: 'codemirror-4.1', // Path to CodeMirror distribution
 		},
-		
-		content_css: "/lib/js/tinymce-4.0.26/zotonic.css", 
+
+		content_css: "/lib/js/tinymce-4.0.26/zotonic.css",
 	//    language : "en", // set in _admin_tinymce_overrides_js.tpl
-		
+
 		/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
 		/* See: http://www.tinymce.com/wiki.php/Configuration:valid_elements */
 		valid_elements : "@[class|style|title|dir<ltr?rtl|lang|xml::lang],"
@@ -111,26 +111,26 @@
 		+ "q[cite],samp,small,"
 		+ "tt,var,big,"
 		+ "section,header,nav,article,footer,audio,video",
-		
-		relative_urls: "", 
-		remove_script_host: "", 
-		convert_urls: "", 
-		apply_source_formatting: "", 
-		remove_linebreaks: "1", 
-		gecko_spellcheck: "1", 
-		
+
+		relative_urls: "",
+		remove_script_host: "",
+		convert_urls: "",
+		apply_source_formatting: "",
+		remove_linebreaks: "1",
+		gecko_spellcheck: "1",
+
 		formats : {
 			bdo_rtl : {inline : 'bdo', attributes : {dir: 'rtl'}},
 			bdo_ltr : {inline : 'bdo', attributes : {dir: 'ltr'}}
 		},
-		
+
 		setup: function(editor) {
 			// setup code here; override in _admin_tinymce_overrides_js.tpl
 		},
-		
+
 		/* Cleanup pasted html code */
 		paste_auto_cleanup_on_paste : true,
-		paste_convert_middot_lists: true, 
+		paste_convert_middot_lists: true,
 		paste_remove_spans: true,
 		paste_remove_styles: true,
 		paste_remove_styles_if_webkit: true,
@@ -139,12 +139,12 @@
 		/* below is a workaround for problem where tinyMCE setEntities skips the ones below and the doesn't initialize the entityLookup array
 		 * which results in an error in the _encode function.
 		 */
-		entity_encoding: "raw",		
-		entities: "38,amp,60,lt,62,gt", 
+		entity_encoding: "raw",
+		entities: "38,amp,60,lt,62,gt",
 
-		accessibility_focus: "1", 
-		tab_focus: ":prev,:next", 
-		wpeditimage_disable_captions: "", 
+		accessibility_focus: "1",
+		tab_focus: ":prev,:next",
+		wpeditimage_disable_captions: "",
 		table_row_limit: 100,
 		table_col_limit: 10
 	};

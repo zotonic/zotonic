@@ -66,7 +66,7 @@
 
                     <div style="padding: 10px 0">
                         <input id="dialog-collab-search" name="dialog-collab-search"
-                               class="form-control nosubmit" type="text" 
+                               class="form-control nosubmit" type="text"
                                placeholder="{_ Find collaboration group _}" value="" />
                     </div>
                     <ul id="dialog-collab-found" class="do_feedback list-unstyled"
@@ -151,7 +151,7 @@
             {% button type="submit" class="btn btn-primary" text=_"Save" %}
 
             {% if rule %}
-                {% button class="btn btn-danger pull-left" 
+                {% button class="btn btn-danger pull-left"
                             action={dialog_close}
                             postback={remove_rule id=rule.id kind=kind}
                             delegate=`admin_acl_rules`

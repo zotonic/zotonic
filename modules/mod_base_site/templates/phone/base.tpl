@@ -14,14 +14,14 @@
 	{% endif %}
 
 	{% all include "_html_head.tpl" %}
-	{% lib 
-	        "bootstrap/css/bootstrap.css" 
-	        "bootstrap/css/bootstrap-base-site.css" 
-	        "css/jquery.loadmask.css" 
-	        "css/z.growl.css" 
-	        "css/z.modal.css" 
-	        "css/z.icons.css" 
-	        "css/site.css" 
+	{% lib
+	        "bootstrap/css/bootstrap.css"
+	        "bootstrap/css/bootstrap-base-site.css"
+	        "css/jquery.loadmask.css"
+	        "css/z.growl.css"
+	        "css/z.modal.css"
+	        "css/z.icons.css"
+	        "css/site.css"
 	%}
 	{% block html_head_extra %}{% endblock %}
 </head>

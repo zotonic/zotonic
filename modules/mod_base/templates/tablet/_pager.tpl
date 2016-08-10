@@ -1,4 +1,4 @@
-{% lib 
+{% lib
     "css/scomp_base_pager.css"
 %}
 <ul class="pagination pagination-centered">

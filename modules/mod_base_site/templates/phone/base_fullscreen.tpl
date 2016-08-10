@@ -12,19 +12,19 @@
 	<meta name="author" content="Marc Worrell" />
 
 	{% all include "_html_head.tpl" %}
-	{% lib 
-			"bootstrap/css/bootstrap.css" 
-			"bootstrap/css/bootstrap-responsive.css" 
-			"bootstrap/css/bootstrap-base-site.css" 
-			"css/z.icons.css" 
-	        "css/site.css" 
+	{% lib
+			"bootstrap/css/bootstrap.css"
+			"bootstrap/css/bootstrap-responsive.css"
+			"bootstrap/css/bootstrap-base-site.css"
+			"css/z.icons.css"
+	        "css/site.css"
 	%}
 	{% block html_head_extra %}{% endblock %}
 	<style type="text/css">
 	{% block head_css_extra %}
 		.container-fluid,
-		.row-fluid { 
-			height: inherit; 
+		.row-fluid {
+			height: inherit;
 			padding: 0;
 		}
 		.navbar-fixed-top {

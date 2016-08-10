@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,7 +56,7 @@ pager(SearchResult, Page, Context) ->
 
 pager(#search_result{result=Result} = SearchResult, Page, PageLen, _Context) ->
     Total = length(Result),
-    Pages = mochinum:int_ceil(Total / PageLen), 
+    Pages = mochinum:int_ceil(Total / PageLen),
     Offset = (Page-1) * PageLen + 1,
     OnPage = case Offset =< Total of
         true ->
@@ -103,7 +103,7 @@ search({SearchName, Props} = Search, OffsetLimit, Context) ->
             Stack = erlang:get_stacktrace(),
             lager:info("[~p] Unknown search query ~p~n~p~n", [z_context:site(Context), Search, Stack]),
             #search_result{};
-        Result when Result /= undefined -> 
+        Result when Result /= undefined ->
             search_result(Result, OffsetLimit, Context)
     end;
 search(Name, OffsetLimit, Context) ->
@@ -128,7 +128,7 @@ search_result(#search_sql{} = Q, Limit, Context) ->
     case Q#search_sql.run_func of
         F when is_function(F) ->
             F(Q, Sql, Args, Context);
-        _ -> 
+        _ ->
             Rows = case Q#search_sql.assoc of
                 false ->
                     Rs = z_db:q(Sql, Args, Context),
@@ -172,11 +172,11 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
                                  {["select", Select, "from", From1, Where1, GroupBy1, Order1, SearchLimit], Args}
                          end,
     {string:join(Parts, " "), FinalArgs}.
-    
+
 
 %% @doc Inject the ACL checks in the SQL query.
 %% @spec reformat_sql_query(#search_sql{}, Context) -> #search_sql{}
-reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args, 
+reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args,
                                cats=TabCats, cats_exclude=TabCatsExclude,
                                cats_exact=TabCatsExact} = Q, Context) ->
     {ExtraWhere, Args1} = lists:foldl(
@@ -209,11 +209,11 @@ reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args,
 
 %% @doc Concatenate the where clause with the extra ACL checks using "and".  Skip empty clauses.
 %% @spec concat_where(ClauseList, CurrentWhere) -> NewClauseList
-concat_where([], Acc) -> 
+concat_where([], Acc) ->
     Acc;
-concat_where([[]|Rest], Acc) -> 
+concat_where([[]|Rest], Acc) ->
     concat_where(Rest, Acc);
-concat_where([W|Rest], []) -> 
+concat_where([W|Rest], []) ->
     concat_where(Rest, [W]);
 concat_where([W|Rest], Acc) ->
     concat_where(Rest, [W, " and "|Acc]).
@@ -221,7 +221,7 @@ concat_where([W|Rest], Acc) ->
 
 %% @doc Process SQL from clause. We analyzing the input (it may be a string, list of #search_sql or/and other strings)
 %% @spec concat_sql_from(From) -> From1::string()
-concat_sql_from(From) -> 
+concat_sql_from(From) ->
     Froms = concat_sql_from1(From),
     string:join(Froms, ",").
 
@@ -265,11 +265,11 @@ add_acl_check_rsc(Alias, Args, SearchSql, Context) ->
                 ?ACL_VIS_USER ->
                     % Admin or supervisor, can see everything
                     {[], Args};
-                ?ACL_VIS_PUBLIC -> 
+                ?ACL_VIS_PUBLIC ->
                     % Anonymous users can only see public published content
                     Sql = Alias ++ ".visible_for = 0" ++ publish_check(Alias, SearchSql),
                     {Sql, Args};
-                ?ACL_VIS_COMMUNITY -> 
+                ?ACL_VIS_COMMUNITY ->
                     % Only see published public or community content
                     Sql = Alias ++ ".visible_for in (0,1) " ++ publish_check(Alias, SearchSql),
                     {Sql, Args};

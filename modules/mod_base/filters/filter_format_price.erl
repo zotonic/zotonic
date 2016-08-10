@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,10 +26,10 @@ insert_thousands_separator(Sep, Output, Input) when is_list(Input) ->
     case length(Input) > 3 of
         true ->
             case length(Input) rem 3 of
-                0 -> 
+                0 ->
                      [Head | Input2] = Input,
                      insert_thousands_separator(Sep, lists:append(Output, [Head]), Input2);
-                1 -> 
+                1 ->
                      [Head | Input2] = Input,
                      Head1 = lists:append([Head], [Sep]),
                      insert_thousands_separator(Sep, lists:append(Output, Head1), Input2);
@@ -47,11 +47,11 @@ format_price(Input, DSep, TSep, Context) when is_integer(Input), Input < 0 ->
     iolist_to_binary([$-, format_price(-Input, DSep, TSep, Context)]);
 format_price(Input, DSep, TSep, _Context) when is_integer(Input) ->
     case Input rem 100 of
-        0 -> 
+        0 ->
             iolist_to_binary([insert_thousands_separator(TSep, Input div 100), DSep, $0, $0 ]);
-        Cents when Cents < 10 -> 
+        Cents when Cents < 10 ->
             iolist_to_binary([insert_thousands_separator(TSep, Input div 100), DSep, $0, Cents + $0 ]);
-        Cents -> 
+        Cents ->
             iolist_to_binary([insert_thousands_separator(TSep, Input div 100), DSep, integer_to_list(Cents) ])
     end;
 format_price(Input, DSep, TSep, Context) when is_float(Input) ->

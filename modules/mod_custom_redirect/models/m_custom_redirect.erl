@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,7 +70,7 @@ delete(Id, Context) ->
     z_db:delete(custom_redirect, Id, Context).
 
 list(Context) ->
-    z_db:assoc("select * 
+    z_db:assoc("select *
                 from custom_redirect
                 order by host, path", Context).
 
@@ -80,17 +80,17 @@ list_ids(Context) ->
 
 list_dispatch_host(Host, Path, Context) ->
     z_db:q("select path, redirect, is_permanent
-            from custom_redirect 
-            where host = lower($1) 
-              and (path = $2 or path = '')", 
+            from custom_redirect
+            where host = lower($1)
+              and (path = $2 or path = '')",
            [Host, remove_slash(Path)],
            Context).
 
 get_dispatch(Path, Context) ->
     z_db:q_row("select redirect, is_permanent
-                from custom_redirect 
-                where host = '' 
-                  and path = $1", 
+                from custom_redirect
+                where host = ''
+                  and path = $1",
                [remove_slash(Path)],
                Context).
 
