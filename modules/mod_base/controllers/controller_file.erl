@@ -161,6 +161,14 @@ set_allow_origin(ReqData) ->
 
 set_content_policy(#z_file_info{acls=[]}, ReqData) ->
     ReqData;
+set_content_policy(#z_file_info{acls = Acls, mime = <<"application/pdf">>}, ReqData) ->
+    case lists:any(fun is_integer/1, Acls) of
+        true ->
+            RD1 = wrq:set_resp_header("Content-Security-Policy", "object-src 'self'; plugin-types application/pdf", ReqData),
+            wrq:set_resp_header("X-Content-Security-Policy", "plugin-types: application/pdf", RD1);
+        false ->
+            ReqData
+    end;
 set_content_policy(#z_file_info{acls=Acls}, ReqData) ->
     case lists:any(fun is_integer/1, Acls) of
         true ->
