@@ -9,7 +9,7 @@ initial_lang_code
     languages
 %}
 {% with
-    languages[code]
+    languages[code|to_binary]
     as
     language
 %}

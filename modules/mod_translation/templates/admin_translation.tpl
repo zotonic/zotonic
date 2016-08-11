@@ -32,7 +32,7 @@
 
         <tbody>
             {% with m.config.i18n.language.value as default_code %}
-                {% for code, lang in m.config.i18n.language_list.list %}
+                {% for code, lang in m.translation.language_list %}
                     <tr id="{{ #li.code }}" class="{% if not lang.is_enabled %}unpublished{% endif %}">
                         <td>
                             <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"

@@ -4,7 +4,7 @@ code
 initial_lang_code
 language
 #}
-{% with m.config.i18n.language_list.list[code] != undefined
+{% with m.translation.language_list[code] != undefined
     as
     selected
 %}
@@ -49,7 +49,7 @@ language
                 <tr>
                     <td>{_ Available sub-languages _}</td>
                     <td>{% for lang_code in language.sub_languages %}
-                        {% if m.config.i18n.language_list.list[lang_code] %}
+                        {% if m.translation.language_list[lang_code] %}
                             <span class="mod_translation-code mod_translation-added">{{ lang_code }}</span>
                         {% else %}
                             <a href="#" id="{{ #item.lang_code }}" class="mod_translation-code">{{ lang_code }}</a>

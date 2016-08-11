@@ -13,7 +13,7 @@ initial_lang_code
                     <h4 class="mod_translation-codes text-muted">
                         {% with lang_code ++ lang.sub_languages as all %}
                             {% for lang_code in all %}
-                                <span class="mod_translation-code {% if  m.config.i18n.language_list.list[lang_code] %}mod_translation-added{% endif %}">{{ lang_code }}</span>
+                                <span class="mod_translation-code {% if  m.translation.language_list[lang_code] %}mod_translation-added{% endif %}">{{ lang_code }}</span>
                             {% endfor %}
                         {% endwith %}
                     </h4>
