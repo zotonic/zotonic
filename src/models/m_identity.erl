@@ -796,8 +796,10 @@ delete_by_type(RscId, Type, Context) ->
     end.
 
 delete_by_type_and_key(RscId, Type, Key, Context) ->
-    z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3", [RscId, Type, Key], Context).
-
+    case z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3", [RscId, Type, Key], Context) of
+        0 -> ok;
+        _N -> z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context)
+    end.
 
 lookup_by_username(Key, Context) ->
 	lookup_by_type_and_key("username_pw", z_string:to_lower(Key), Context).
