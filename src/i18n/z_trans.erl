@@ -243,10 +243,13 @@ default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).
 
 
-%% @doc check if the language code code is a valid language
--spec is_language(LangCode :: binary()) -> boolean().
+%% @doc Check if the language code code is a valid language - that is, listed in
+%%      languages.erl.
+-spec is_language(list() | binary() | atom()) -> boolean().
 is_language(LangCode) when is_list(LangCode) ->
     is_language(list_to_binary(LangCode));
+is_language(LangCode) when is_atom(LangCode) ->
+    is_language(atom_to_binary(LangCode, latin1));
 is_language(LangCode) ->
     languages:lc2lang(LangCode) /= undefined.
 
