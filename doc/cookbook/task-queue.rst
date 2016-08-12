@@ -18,7 +18,7 @@ To add a task to the queue, provide a module and function that should be called
 when the task is popped from the queue. So to add a task that will call the
 ``external_api_client::update_external_rsc()`` function::
 
-	z_pivot_rsc:insert_task(
+    z_pivot_rsc:insert_task(
         external_api_client,
         update_external_rsc,
         Context
