@@ -66,17 +66,14 @@ languages_data() ->
     SubLanguages = Data#language_data.sub_languages,
     % Use the dictionary to add is_main and sub_languages to the original list
     % of languages.
-    WithStats = lists:map(fun({Code, Props}) ->
+    lists:map(fun({Code, Props}) ->
         Language = proplists:get_value(language, Props),
         Props1 = [{is_main, Language == Code} | Props],
         case dict:is_key(Code, SubLanguages) of
             false -> {Code, Props1};
             true -> {Code, [{sub_languages, dict:fetch(Code, SubLanguages)} | Props1]}
         end
-    end, Languages),
-    lists:sort(fun({_, PropsA}, {_, PropsB}) ->
-        proplists:get_value(name_en, PropsA) =< proplists:get_value(name_en, PropsB)
-    end, WithStats).
+    end, Languages).
 
 
 %% @doc List of language data.

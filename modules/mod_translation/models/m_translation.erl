@@ -55,11 +55,11 @@ m_value(#m{}, _Context) ->
 
 
 language_list(Context) ->
-    mod_translation:language_config(Context).
+    sort_by_english_name(mod_translation:language_config(Context)).
 
 
 language_list_enabled(Context) ->
-	mod_translation:enabled_languages(Context).
+	sort_by_english_name(mod_translation:enabled_languages(Context)).
 
 
 %% Makes languages list available in templates.
@@ -69,5 +69,10 @@ language_list_all(_Context) ->
 
 %% Gets languages list with sub-language data.
 language_list_with_data(_Context) ->
-	languages:languages_data().
+	sort_by_english_name(languages:languages_data()).
 
+
+sort_by_english_name(List) ->
+    lists:sort(fun({_, PropsA}, {_, PropsB}) ->
+        proplists:get_value(name_en, PropsA) =< proplists:get_value(name_en, PropsB)
+    end, List).
