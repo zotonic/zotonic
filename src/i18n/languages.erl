@@ -658,6 +658,12 @@ languages() -> [
         {name, <<"magyar"/utf8>>},
         {name_en, <<"Hungarian"/utf8>>}
     ]},
+    {<<"id">>, [
+        {language, <<"id">>},
+        {direction, <<"LTR">>},
+        {name, <<"Indonesia"/utf8>>},
+        {name_en, <<"Indonesian"/utf8>>}
+    ]},
     {<<"is">>, [
         {language, <<"is">>},
         {direction, <<"LTR">>},

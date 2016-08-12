@@ -42,8 +42,6 @@ m_find_value(language_list, #m{value=undefined}, Context) ->
 	language_list(Context);
 m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
 	language_list_enabled(Context);
-m_find_value(stemmer_languages, #m{value=undefined}, Context) ->
-	language_list_enabled(Context);
 m_find_value(language_list_all, #m{value=undefined}, Context) ->
 	language_list_all(Context);
 m_find_value(language_list_with_data, #m{value=undefined}, Context) ->
@@ -57,11 +55,11 @@ m_value(#m{}, _Context) ->
 
 
 language_list(Context) ->
-    mod_translation:get_language_config(Context).
+    mod_translation:language_config(Context).
 
 
 language_list_enabled(Context) ->
-	mod_translation:get_enabled_languages(Context).
+	mod_translation:enabled_languages(Context).
 
 
 %% Makes languages list available in templates.

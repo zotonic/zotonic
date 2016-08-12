@@ -92,14 +92,15 @@
 </div>
 
 <div>
-    <h3>{_ Translation configuration and tools _}</h3>
+    <h3>{_ Configuration _}</h3>
 
     <div class="well">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     {% wire id=#redir
-                        action={config_toggle module="mod_translation" key="rewrite_url"}
+                        postback={toggle_url_rewrite}
+                        delegate="mod_translation"
                     %}
                     <label class="checkbox-inline">
                         <input type="checkbox" id="{{ #redir }}" value="1"
@@ -172,6 +173,8 @@
             </div>
         </div>
     </div>
+
+    <h3>{_ For Developers _}</h3>
 
     <div class="well">
 
