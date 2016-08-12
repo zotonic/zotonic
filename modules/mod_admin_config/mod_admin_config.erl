@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,8 @@
 %% interface functions
 -export([
     observe_admin_menu/3,
-    event/2
+    event/2,
+    config_toggle/3
 ]).
 
 -include("zotonic.hrl").
@@ -44,7 +45,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("Config", Context),
                 url={admin_config},
                 visiblecheck={acl, use, mod_admin_config}}
-     
+
      |Acc].
 
 event(#submit{message={config_save, Args}}, Context) ->
@@ -62,3 +63,14 @@ event(#submit{message={config_save, Args}}, Context) ->
             z_render:growl_error("Only administrators can delete configurations.", Context)
     end.
 
+
+%% @doc Change a config key.
+-spec config_toggle(list(), list(), #context{}) -> #context{}.
+config_toggle(Module, Key, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            m_config:set_value(Module, Key, z_context:get_q("triggervalue", Context), Context),
+            z_render:growl("Changed config setting.", Context);
+        false ->
+            z_render:growl_error("Only administrators can change configurations.", Context)
+    end.
