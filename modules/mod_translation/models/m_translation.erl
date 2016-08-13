@@ -55,20 +55,8 @@ m_value(#m{}, _Context) ->
 
 
 language_list(Context) ->
-<<<<<<< HEAD
     sort_by_english_name(mod_translation:language_config(Context)).
 
-=======
-	case m_config:get(i18n, language_list, Context) of
-		undefined ->
-			[];
-		Config ->
-			case proplists:get_value(list, Config, Context) of
-				L when is_list(L) -> L;
-				_ -> []
-			end
-	end.
->>>>>>> master
 
 language_list_enabled(Context) ->
 	sort_by_english_name(mod_translation:enabled_languages(Context)).

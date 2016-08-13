@@ -1,9 +1,5 @@
 {% with m.modules.active.mod_translation,
-<<<<<<< HEAD
         r_language|default:(m.rsc[id].name)|default:[z_language]
-=======
-        r_language|default:(m.rsc[id].language)|default:[z_language]
->>>>>>> master
    as is_i18n,
       r_language
 %}
