@@ -28,10 +28,10 @@
 
 %% @doc Create an empty, non-authoritative resource, with the given uri.
 %% @spec create_empty(Uri, Context) -> {ok, Id} | {error, Reason}
-create_empty(Uri, Context) ->    
+create_empty(Uri, Context) ->
     create_empty(Uri, [], Context).
 
-create_empty(Uri, Props, Context) -> 
+create_empty(Uri, Props, Context) ->
     Props1 = [{category_id, m_category:name_to_id_check(other, Context)},
               {note, "Pending import"},
               {is_published, false},
@@ -82,4 +82,4 @@ import(RscImport, Context) ->
         true ->
             {error, cannot_import_authoritative_rsc}
     end.
-			
+

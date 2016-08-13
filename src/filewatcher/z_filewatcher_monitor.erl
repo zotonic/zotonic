@@ -21,7 +21,7 @@
 %% @author Richard Carlsson <carlsson.richard@gmail.com>
 %% @copyright 2006-2009 Richard Carlsson
 %% @doc Erlang file monitoring service
-%% 
+%%
 %% The behaviour of this service is inspired by the open source FAM
 %% daemon ([http://oss.sgi.com/projects/fam/]). It allows file system
 %% paths to be monitored, so that a message will be sent to the client
@@ -63,7 +63,7 @@
 %% (both initially and for subsequent changes). In other words, the
 %% first event for a path is always either `found' or `error', and later
 %% events are either `changed' or `error'.
-%% 
+%%
 %% === Detection of file type changes ===
 %%
 %% If the object found at a path changes type in the interval between
@@ -72,7 +72,7 @@
 %% and dispatch an `enoent' error event before the new status event. A
 %% client can thus rely on always seeing the old file disappear before
 %% any change that reports a different file type.
-%% 
+%%
 %% == Monitoring types ==
 %%
 %% There are two ways in which a path can be monitored: as a `file',
@@ -86,7 +86,7 @@
 %% generated. An existing directory can however both be monitored as a
 %% directory and as a file - the difference is that in the latter case,
 %% the reported list of entries will always be empty.
-%% 
+%%
 %% == Automatic (recursive) monitoring ==
 %%
 %% Automatic monitoring (automonitoring for short) can be used to watch
@@ -135,7 +135,7 @@
 
 
 %% NOTE: Monitored paths should be absolute, but this is not checked.
-%% 
+%%
 %% We never rewrite the paths, e.g. from relative to absolute, but we
 %% convert every path into a binary internally, for the sake of
 %% comparisons, and return it to the caller for reference.
@@ -616,7 +616,7 @@ unsafe_automonitor_path(Path, Pid, Ref, St) ->
     add_automonitor(Object, Pid, Ref, St).
 
 autodemonitor_path(Path, Pid, Ref, St0) ->
-    St1 = try demonitor_path(Pid, Ref, {file, Path}, St0) 
+    St1 = try demonitor_path(Pid, Ref, {file, Path}, St0)
  	  catch
  	      not_owner -> St0
  	  end,
@@ -830,7 +830,7 @@ purge_monitor_path(Ref, {directory, Path}, St) ->
 
 purge_monitor_path_1(Path, Ref, Dict) ->
     case dict:find(Path, Dict) of
-	{ok, Entry} -> 
+	{ok, Entry} ->
 	    Monitors = sets:del_element(Ref, Entry#entry.monitors),
 	    case sets:size(Monitors) > 0 of
 		true ->
@@ -843,7 +843,7 @@ purge_monitor_path_1(Path, Ref, Dict) ->
     end.
 
 %% Generating events upon state changes by comparing old and new states
-%% 
+%%
 %% Event formats:
 %%   {found, Path, Type, #file_info{}, Files}
 %%   {changed, Path, Type, #file_info{}, Files}
@@ -869,7 +869,7 @@ purge_monitor_path_1(Path, Ref, Dict) ->
 
 event(#entry{info = Info, stable = Stable},
       #entry{info = Info, stable = Stable}, _Type, _Path, _St) ->
-    ok;    % no change in state 
+    ok;    % no change in state
 event(#entry{info = undefined}, #entry{info = NewInfo}=Entry,
       Type, Path, St)
   when not is_atom(NewInfo) ->

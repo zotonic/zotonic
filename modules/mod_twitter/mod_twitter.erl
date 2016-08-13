@@ -15,9 +15,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,7 +55,7 @@
 -include_lib("zotonic.hrl").
 
 -record(state, {
-            context, 
+            context,
             twerl_pid=undefined,
             follow={[],[]}
         }).
@@ -189,7 +189,7 @@ handle_cast(Message, State) ->
 
 %% @doc Reconnect the follower process if it stopped.
 handle_info({'EXIT', Pid, Reason}, #state{twerl_pid=Pid} = State) ->
-    lager:warning("[~p] Twitter: received from twerl 'EXIT' ~p", 
+    lager:warning("[~p] Twitter: received from twerl 'EXIT' ~p",
                   [z_context:site(State#state.context), Reason]),
     timer:send_after(15000, ensure_started),
     {noreply, State#state{twerl_pid=undefined}};
@@ -204,9 +204,9 @@ handle_info({tweet, JSON}, State) ->
         handle_tweet(JSON, State#state.context)
     catch
         X:Y ->
-            lager:error("[~p] Twitter: exception during tweet import ~p:~p, stacktrace: ~p", 
+            lager:error("[~p] Twitter: exception during tweet import ~p:~p, stacktrace: ~p",
                         [z_context:site(State#state.context), X, Y, erlang:get_stacktrace()]),
-            lager:info("[~p] Twitter: error tweet is: ~p", 
+            lager:info("[~p] Twitter: error tweet is: ~p",
                         [z_context:site(State#state.context), JSON])
     end,
     {noreply, State};
@@ -311,7 +311,7 @@ start_stream(Follow, Phrases, Consumer, AccessToken, AccessTokenSecret, #state{t
             Auth = [
                 z_convert:to_list(ConsumerKey),
                 z_convert:to_list(ConsumerSecret),
-                z_convert:to_list(AccessToken), 
+                z_convert:to_list(AccessToken),
                 z_convert:to_list(AccessTokenSecret)
             ],
             twerl_stream_manager:set_endpoint(TwerlPid, {post, "https://stream.twitter.com/1.1/statuses/filter.json"}),
@@ -320,7 +320,7 @@ start_stream(Follow, Phrases, Consumer, AccessToken, AccessTokenSecret, #state{t
             ok = twerl_stream_manager:start_stream(TwerlPid),
             {ok, State#state{follow={Follow,Phrases}}};
         {error, _} = Error ->
-            lager:error("[~p] Twitter: error looking up user-ids for stream: ~p  (ids: ~p)", 
+            lager:error("[~p] Twitter: error looking up user-ids for stream: ~p  (ids: ~p)",
                         [z_context:site(State#state.context), Error, Follow]),
             {Error, State}
     end.
@@ -370,8 +370,8 @@ handle_tweet(Tweet, Context) ->
 twitter_message_types() ->
     [
         <<"limit">>,
-        <<"event">>, 
-        <<"delete">>, 
+        <<"event">>,
+        <<"delete">>,
         <<"disconnect">>,
         <<"warning">>,
         <<"status_withheld">>,
@@ -393,17 +393,17 @@ handle_tweet_type(<<"delete">>, _Tweet, Context) ->
     lager:debug("[~p] Twitter: streamer ignored delete request.", [z_context:site(Context)]);
 handle_tweet_type(<<"limit">>, Tweet, Context) ->
     {Limit} = proplists:get_value(<<"limit">>, Tweet),
-    lager:debug("[~p] Twitter: streamer received limit (~p).", 
+    lager:debug("[~p] Twitter: streamer received limit (~p).",
                [z_context:site(Context), proplists:get_value(<<"track">>, Limit)]);
 handle_tweet_type(<<"disconnect">>, Tweet, Context) ->
     {Disconnect} = proplists:get_value(<<"disconnect">>, Tweet),
-    lager:warning("[~p] Twitter: streamer disconnect by Twitter because ~p, ~p", 
+    lager:warning("[~p] Twitter: streamer disconnect by Twitter because ~p, ~p",
                   [z_context:site(Context),
                    proplists:get_value(<<"code">>, Disconnect),
                    proplists:get_value(<<"reason">>, Disconnect)]);
 handle_tweet_type(<<"warning">>, Tweet, Context) ->
     {Warning} = proplists:get_value(<<"warning">>, Tweet),
-    lager:warning("[~p] Twitter: streamer warning ~p, ~p", 
+    lager:warning("[~p] Twitter: streamer warning ~p, ~p",
                   [z_context:site(Context),
                    proplists:get_value(<<"code">>, Warning),
                    proplists:get_value(<<"message">>, Warning)]);
@@ -433,7 +433,7 @@ handle_author_edges_upgrade(C) ->
         {ok, Tweeted} ->
             lager:info("[~p] Twitter: Found old 'tweeted' predicate, upgrading...", [z_context:site(Context)]),
             Author = m_rsc:name_to_id_cat_check(author, predicate, Context),
-            z_db:q("update edge set subject_id = object_id, object_id = subject_id, predicate_id = $1 where predicate_id = $2", 
+            z_db:q("update edge set subject_id = object_id, object_id = subject_id, predicate_id = $1 where predicate_id = $2",
                    [Author, Tweeted],
                    Context),
             m_rsc:delete(Tweeted, Context),

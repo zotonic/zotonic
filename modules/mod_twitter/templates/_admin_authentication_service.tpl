@@ -17,7 +17,7 @@
                                 <input type="text" id="twitter_consumer_key" name="consumer_key" value="{{ m.config.mod_twitter.consumer_key.value|escape }}" class="form-control" />
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="control-label col-md-3" for="consumer_secret">{_ Consumer Secret _}</label>
                             <div class="col-md-9">
@@ -70,7 +70,7 @@
                             <button class="btn btn-primary" type="submit">{_ Save Twitter Settings _}</button>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

@@ -13,9 +13,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -77,16 +77,16 @@ init(SiteProps) ->
 	DefaultDropBoxDir = z_path:files_subdir_ensure("dropbox", Context),
 	DefaultProcessingDir = z_path:files_subdir_ensure("processing", Context),
 	DefaultUnhandledDir = z_path:files_subdir_ensure("unhandled", Context),
-    DropBox  = string:strip(proplists:get_value(dropbox_dir,            SiteProps, DefaultDropBoxDir),    right, $/), 
-    ProcDir  = string:strip(proplists:get_value(dropbox_processing_dir, SiteProps, DefaultProcessingDir), right, $/), 
-    UnDir    = string:strip(proplists:get_value(dropbox_unhandled_dir,  SiteProps, DefaultUnhandledDir),  right, $/), 
+    DropBox  = string:strip(proplists:get_value(dropbox_dir,            SiteProps, DefaultDropBoxDir),    right, $/),
+    ProcDir  = string:strip(proplists:get_value(dropbox_processing_dir, SiteProps, DefaultProcessingDir), right, $/),
+    UnDir    = string:strip(proplists:get_value(dropbox_unhandled_dir,  SiteProps, DefaultUnhandledDir),  right, $/),
     State    = #state{
-                    dropbox_dir=DropBox, 
-                    processing_dir=ProcDir, 
-                    unhandled_dir=UnDir, 
-                    min_age = proplists:get_value(dropbox_min_age, SiteProps, 10), 
-                    max_age = proplists:get_value(dropbox_max_age, SiteProps, 3600), 
-                    site=Site, 
+                    dropbox_dir=DropBox,
+                    processing_dir=ProcDir,
+                    unhandled_dir=UnDir,
+                    min_age = proplists:get_value(dropbox_min_age, SiteProps, 10),
+                    max_age = proplists:get_value(dropbox_max_age, SiteProps, 3600),
+                    site=Site,
                     context=Context
                 },
     Interval = proplists:get_value(dropbox_interval, SiteProps, 10000),
@@ -117,7 +117,7 @@ handle_cast(scan, State) ->
 
 % Move all files in the processing directory to the unhandled directory
 handle_cast(cleanup, #state{processing_dir=ProcDir, unhandled_dir=UnDir} = State) ->
-    lists:foreach(fun(F) -> 
+    lists:foreach(fun(F) ->
                        move_file(ProcDir, F, true, UnDir)
                   end,
                   scan_directory(ProcDir)),
@@ -159,7 +159,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Perform a scan of the dropbox, broadcast all to be processed files.
 do_scan(State) ->
     #state{processing_dir=ProcDir, dropbox_dir=DropDir, unhandled_dir=UnhandledDir, min_age=MinAge, max_age=MaxAge} = State,
-     
+
     % Move all old files in the processing directory to the unhandled directory
     ProcFiles = scan_directory(ProcDir),
     {ToProcess,ToRemove} = lists:foldl(fun(F, Acc) -> max_age_split(F, MaxAge, Acc) end,
@@ -171,7 +171,7 @@ do_scan(State) ->
     AllDropFiles  = scan_directory(DropDir),
     SafeDropFiles = lists:foldl(fun(F, Acc)-> min_age_check(F, MinAge, Acc) end,
                                 [],
-                                AllDropFiles), 
+                                AllDropFiles),
     Moved      = lists:map(fun(F) -> {F,move_file(DropDir, F, false, ProcDir)} end, SafeDropFiles),
     ToProcess1 = lists:foldl(   fun
                                     ({_, {ok, File}}, Acc) -> [File|Acc];

@@ -6,8 +6,8 @@
 <div class="tab-pane" id="{{ tab }}-embed">
     <p>{_ Embed a video or other media. Here you can paste embed code from YouTube, Vimeo or other services. _}</p>
 
-    {% wire id=#form type="submit" 
-    		postback={add_video_embed predicate=predicate actions=actions id=id subject_id=subject_id callback=callback stay=stay} 
+    {% wire id=#form type="submit"
+    		postback={add_video_embed predicate=predicate actions=actions id=id subject_id=subject_id callback=callback stay=stay}
     		delegate="mod_video_embed" %}
 
     <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
@@ -29,7 +29,7 @@
                 </select>
             </div>
 	</div>
-	
+
 	<div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #embed_code }}">{_ Embed code _}</label>
         <div class="col-md-9">
@@ -38,7 +38,7 @@
 	        <p class="help-block">{_ The embed code will be sanitized. Only whitelisted sites are allowed. _}</p>
             </div>
 	</div>
-	
+
 	<div class="modal-footer">
 	    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 	    <button class="btn btn-primary" type="submit">{% if id %}{_ Replace media item _}{% else %}{_ Make media item _}{% endif %}</button>

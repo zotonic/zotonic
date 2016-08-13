@@ -5,11 +5,11 @@ params:
 overrides_tpl: (optional) template location that contains JavaScript overrides for tinymce init
 #}
 
-{% wire name="zmedia" 
+{% wire name="zmedia"
     action={
         dialog_open
         template="_action_dialog_connect.tpl"
-        title=_"Insert image" 
+        title=_"Insert image"
         subject_id=id
         predicate=`depiction`
         is_zmedia
@@ -20,7 +20,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
     }
 %}
 
-{% wire name="zlink" 
+{% wire name="zlink"
     action={
         dialog_open
         template="_action_dialog_connect.tpl"

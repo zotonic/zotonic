@@ -13,7 +13,7 @@
 {% with m.predicate[id] as p %}
 <fieldset>
     <p>{_ This predicate can be used between two pages of the following categories. _}</p>
-    
+
     <div class="row">
 
         <div class="col-lg-6 col-md-6">
@@ -23,7 +23,7 @@
                 {% with c.id as cat_id %}
                     <div class="checkbox">
                         <label>
-                            {{ c.indent }}<input type="checkbox" id="{{ #subject.cat_id }}" name="predicate_subject" 
+                            {{ c.indent }}<input type="checkbox" id="{{ #subject.cat_id }}" name="predicate_subject"
                             {% if cat_id|member:p.subject %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ cat_id.title }}
                         </label>
                     </div>
@@ -38,7 +38,7 @@
                 {% with c.id as cat_id %}
                     <div class="checkbox">
                         <label>
-                            {{ c.indent }}<input type="checkbox" id="{{ #object.cat_id }}" name="predicate_object"  
+                            {{ c.indent }}<input type="checkbox" id="{{ #object.cat_id }}" name="predicate_object"
                             {% if cat_id|member:p.object %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ cat_id.title }}<br/>
                         </label>
                     </div>

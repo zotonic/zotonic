@@ -6,9 +6,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@
 
 survey_prepare_narrative(Blk, Context) ->
     Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Blk, <<>>), 
+                    proplists:get_value(narrative, Blk, <<>>),
                     Context),
     {Parts, _Inputs} = parse(z_convert:to_list(Narrative)),
     [
@@ -41,7 +41,7 @@ parse([$[|T], Acc, InputAcc) ->
     {Input1,T1} = lists:splitwith(fun(C) -> C /= $] end, T),
     IsSelect = is_select(Input1),
     Elt = case IsSelect of
-        true -> 
+        true ->
             {Name, Options} = split_select(Input1),
             {select, z_convert:to_binary(Name), filter_survey_prepare_matching:split_markers(Options)};
         false ->

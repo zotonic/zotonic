@@ -1,5 +1,5 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2011 Maas-Maarten Zeeman 
+%% @copyright 2011 Maas-Maarten Zeeman
 %%
 %% @doc Model for accessing facebook data via the graph api.
 
@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@
     m_value/2,
 
     search/3,
-	 
+
     do_graph_call/5
 ]).
 
@@ -37,8 +37,8 @@
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(CT, M=#m{value=undefined}, _Context)  
-  when CT == friends; 
+m_find_value(CT, M=#m{value=undefined}, _Context)
+  when CT == friends;
        CT == home;
        CT == feed;
        CT == likes;
@@ -52,7 +52,7 @@ m_find_value(CT, M=#m{value=undefined}, _Context)
        CT == albums;
        CT == videos;
        CT == events;
-       CT == groups; 
+       CT == groups;
        CT == checkins ->
     M#m{value=CT};
 m_find_value(Key, #m{value=picture}, Context) ->
@@ -60,7 +60,7 @@ m_find_value(Key, #m{value=picture}, Context) ->
     P = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
     proplists:get_value(picture, P);
 m_find_value(Key, #m{value=ConnectionType}, Context) ->
-    do_graph_call(get, Key, ConnectionType, [], Context). 
+    do_graph_call(get, Key, ConnectionType, [], Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> []
@@ -81,7 +81,7 @@ facebook_q(_Q, _Sql, Args, Context) ->
     Query = proplists:get_value('query', Args),
     FqlUrl = fql_url(Query, Context),
 
-    %% 
+    %%
     Payload = case httpc:request(FqlUrl) of
         {ok, {{_, 200, _}, _Headers, Body}} ->
             mochijson2:decode(Body);
@@ -99,12 +99,12 @@ facebook_q(_Q, _Sql, Args, Context) ->
 		   ?DEBUG(Payload),
 		   z_convert:convert_json(Payload)
     end,
-  
+
     #search_result{result=Rows}.
 
 %% @doc Do a facebook graph call. See http://developers.facebook.com/docs/reference/api/ for more info
 %%
-do_graph_call(Method, Id, Connection, Args, Context) 
+do_graph_call(Method, Id, Connection, Args, Context)
   when Method == get; Method == post; Method == delete ->
     ReqArgs = case z_context:get_session(facebook_access_token, Context) of
 		  undefined -> Args;
@@ -131,7 +131,7 @@ do_graph_call(Method, Id, Connection, Args, Context)
 make_httpc_request(post, Scheme, Server, Path, Query) ->
     Url = mochiweb_util:urlunsplit({Scheme, Server, Path, [], []}),
     {Url, [], "application/x-www-form-urlencoded", Query};
-make_httpc_request(Method, Scheme, Server, Path, Query) when Method == get; 
+make_httpc_request(Method, Scheme, Server, Path, Query) when Method == get;
 								   Method == delete ->
     Url = mochiweb_util:urlunsplit({Scheme, Server, Path, Query, []}),
     {Url, []}.
@@ -145,12 +145,12 @@ fql_url(Query, Context) ->
         undefined -> Fql;
         AccessToken -> Fql ++ "&access_token=" ++ z_utils:url_encode(AccessToken)
     end.
-    
-    
 
 
 
-		  
-					   
-    
-    
+
+
+
+
+
+

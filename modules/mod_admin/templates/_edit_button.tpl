@@ -1,5 +1,5 @@
-{# 
-	Simple edit button for use on pages.  
+{#
+	Simple edit button for use on pages.
 	Parameters:
 		id		id of the page
 #}

@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,7 @@
     m_find_value/3,
     m_to_list/2,
     m_value/2,
-    
+
     get/2
 ]).
 
@@ -52,7 +52,7 @@ m_value(#m{value=undefined}, Context) ->
 
 
 %% @doc Fetch the field from the wrq interface.
--spec get(atom(), #context{} | #wm_reqdata{} | undefined) -> any(). 
+-spec get(atom(), #context{} | #wm_reqdata{} | undefined) -> any().
 get(undefined, _) -> undefined;
 get(_, undefined) -> undefined;
 get(site, #context{} = Context) -> z_context:site(Context);

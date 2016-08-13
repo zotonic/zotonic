@@ -34,7 +34,7 @@
                     list_id=list_id
                     is_editable=is_editable
                 %}
-           
+
                 <hr />
             {% endifnotequal %}
         {% endif %}

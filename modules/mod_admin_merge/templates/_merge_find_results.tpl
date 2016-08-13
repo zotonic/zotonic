@@ -7,7 +7,7 @@
             action={
                 moreresults
                 result=result
-                target="merge_loop_results" 
+                target="merge_loop_results"
                 template="_merge_find_results_loop.tpl"
                 is_result_render
                 visible

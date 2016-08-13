@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,7 +52,7 @@ all(Context) ->
                     _ -> {not proplists:get_value(is_active, Props), 1, proplists:get_value(mod_title, Props)}
                   end,
         {SortKey, Prio, M, Props}.
-        
+
 
 %% @spec descr(ModuleName) -> proplist()
 %% @doc Return a property list with the title and other attributes of the module.
@@ -61,7 +61,7 @@ descr(Module) ->
         true ->
             try
                 erlang:get_module_info(Module, attributes)
-            catch 
+            catch
                 _M:E -> [{error, E}]
             end;
         false ->
@@ -70,7 +70,7 @@ descr(Module) ->
     case proplists:get_value(title, Descr) of
         undefined ->
             Title = case atom_to_list(Module) of
-                        "mod_" ++ T -> 
+                        "mod_" ++ T ->
                             string:join(string:tokens(T, "_"), " ");
                         T ->
                             string:join(string:tokens(T, "_"), " ")
@@ -88,6 +88,6 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("Modules", Context),
                 url={admin_modules},
                 visiblecheck={acl, use, mod_admin_modules}}
-     
+
      |Acc].
 

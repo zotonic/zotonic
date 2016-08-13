@@ -13,9 +13,9 @@
 {% with not id or id.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
 {% with id.is_a|default:(m.category[cat].is_a) as cats %}
-{% wire id="rscform" 
-		type="submit" 
-		postback={rscform view_location=view_location cat=cat id=id} 
+{% wire id="rscform"
+		type="submit"
+		postback={rscform view_location=view_location cat=cat id=id}
 		delegate=`controller_admin_edit`
 %}
 {% wire id="rscform" type="submit" postback={rscform view_location=view_location} delegate=`controller_admin_edit` %}
@@ -40,7 +40,7 @@
 
 					{% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 %}
 					{% if is_editable or id.publication_end %}
-						{_ till _} 
+						{_ till _}
 						{% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 %}
 					{% endif %}
 					{{ m.req.timezone }}
@@ -69,7 +69,7 @@
 				{% if id.category_id.feature_show_address %}
 					{% catinclude "_admin_edit_content_address.tpl" cats is_editable=is_editable languages=languages %}
 				{% endif %}
-				
+
 				{% all catinclude "_admin_edit_content.tpl" cats is_editable=is_editable languages=languages %}
 
 				{% if `media`|member:cats or id.medium %}
@@ -104,7 +104,7 @@
 
 		{% block buttons %}
 			{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
-		
+
 			{% if is_editable %}
 				{% button type="submit" id="save_view" class="btn btn-default" text=_"Save &amp; view" title=_"Save and view the page." %}
 			{% elseif id %}

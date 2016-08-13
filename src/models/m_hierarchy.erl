@@ -101,7 +101,7 @@ tree(Name, Context) when is_binary(Name) ->
                 select id, parent_id, lvl, lft, rght
                 from hierarchy h
                 where name = $1
-                order by nr", 
+                order by nr",
                 [Name],
                 Context),
         build_tree(CatTuples, [], [])
@@ -174,7 +174,7 @@ contains(Name, Id, Context) ->
 %%      Useful for select lists.
 tree_flat(Name, Context) ->
     List = flatten_tree(tree(Name, Context)),
-    [ 
+    [
         [{indent,indent(proplists:get_value(level, E, 0))} | E ]
         || E <- List
     ].
@@ -276,10 +276,10 @@ save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
 save_nocheck_trans(Name, NewFlat, Context) ->
     OldFlatNr = z_db:q("
                 select id, parent_id, lvl, nr
-                from hierarchy 
+                from hierarchy
                 where name = $1
                 order by nr
-                for update", 
+                for update",
                 [Name],
                 Context),
     OldFlat = [ {Id,P,Lvl} || {Id,P,Lvl,_Nr} <- OldFlatNr ],
@@ -491,7 +491,7 @@ build_tree([], _Stack, Acc) ->
 build_tree([{Id, _Parent, _Lvl, _Left, _Right} = C|Rest], Stack, Acc) ->
     {C1, Rest1} = build_tree(C, [Id|Stack], [], Rest),
     build_tree(Rest1, Stack, [C1|Acc]).
-    
+
 build_tree({Id, _Parent, _Lvl, _Left, _Right} = P, Stack, Acc, [{Id2, Id, _Lvl2, _Left2, _Right2} = C|Rest]) ->
     {C1, Rest1} = build_tree(C, [Id2|Stack], [], Rest),
     build_tree(P, Stack, [C1|Acc], Rest1);
@@ -503,7 +503,7 @@ build_tree({Id, Parent, Lvl, Left, Right}, Stack, Acc, Rest) ->
         {path, lists:reverse(Stack)},
         {left, Left},
         {right, Right}
-     ], 
+     ],
      Rest}.
 
 

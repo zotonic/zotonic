@@ -17,7 +17,7 @@
                                 <input type="text" id="instagram_consumer_key" name="consumer_key" value="{{ m.config.mod_instagram.consumer_key.value|escape }}" class="form-control" />
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="control-label col-md-3" for="instagram_consumer_secret">{_ Client Secret _}</label>
                             <div class="col-md-9">
@@ -84,7 +84,7 @@
                             <button class="btn btn-primary" type="submit">{_ Save Instagram Settings _}</button>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

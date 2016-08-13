@@ -53,11 +53,11 @@ exometer_report(Metric, DataPoint, Extra, Value, State) ->
 exometer_call(Unknown, From, State) ->
     lager:debug("Unknown call ~p from ~p", [Unknown, From]),
     {ok, State}.
- 
+
 exometer_cast(Unknown, State) ->
     lager:debug("Unknown cast: ~p", [Unknown]),
     {ok, State}.
- 
+
 exometer_info(Unknown, State) ->
     lager:debug("Unknown info: ~p", [Unknown]),
     {ok, State}.
@@ -83,11 +83,11 @@ get_context(#context{}=Context) ->
     Context.
 
 make_topic([erlang|Metric], DataPoint) ->
-    Topic = [<<"erlang">>, <<"stats">>, [z_convert:to_binary(M) || M <- Metric], 
+    Topic = [<<"erlang">>, <<"stats">>, [z_convert:to_binary(M) || M <- Metric],
         z_convert:to_binary(DataPoint)],
     join_topic(Topic);
 make_topic(Metric, DataPoint) ->
-    Topic = [<<"~site">>, <<"stats">>, [z_convert:to_binary(M) || M <- Metric], 
+    Topic = [<<"~site">>, <<"stats">>, [z_convert:to_binary(M) || M <- Metric],
         z_convert:to_binary(DataPoint)],
     join_topic(Topic).
 

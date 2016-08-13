@@ -34,7 +34,7 @@ render_tag(TagName, Props, #context{} = Context) ->
 
 render_tag(TagName, Props, Content) ->
 	[ $<, TagName, write_props(Props), $>, Content, $<, $/, TagName, $> ].
-	
+
 
 %%% Tags with child content %%%
 render_tag(TagName, Props, undefined, Context) ->
@@ -44,10 +44,10 @@ render_tag(TagName, Props, [], Context) ->
 render_tag(TagName, Props, Content, Context) ->
 	Render   = [ $<, TagName, write_props(Props), $>, Content, $<, $/, TagName, $> ],
 	z_render:render(Render, Context).
-   
-    
+
+
 %%% Property display functions %%%
-    
+
 write_props(Props) ->
     [ display_property(optional_escape_property(P)) || P <- Props ].
 
@@ -63,7 +63,7 @@ display_property({Prop, Value}) when is_float(Value) ->
 	[32, correct_data(Prop), $=, $', list_to_binary(io_lib:format("~f",[Value])), $'];
 display_property({Prop, Value}) when is_list(Value) ->
     case io_lib:char_list(Value) of
-        true -> 
+        true ->
             [32, correct_data(Prop), $=, $', Value, $'];
         false ->
             [32, correct_data(Prop), $=, $', z_utils:combine_defined(32, Value), $']

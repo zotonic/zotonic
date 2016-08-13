@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -77,10 +77,10 @@ n1(Msg, Context) ->
     z_notifier:notify1(Msg, Context).
 
 %% @doc (Re)make all erlang source modules and reset the caches.
-m() -> 
+m() ->
     m([]).
 
-%% @doc (Re)make all erlang source modules with the supplied compile 
+%% @doc (Re)make all erlang source modules with the supplied compile
 %% options and reset the caches.
 m(Options) ->
     case compile(Options) of
@@ -88,7 +88,7 @@ m(Options) ->
         error -> error
     end.
 
-%% @doc (Re)make all erlang source modules with the supplied compile 
+%% @doc (Re)make all erlang source modules with the supplied compile
 %% options. Do not reset the caches.
 compile() ->
     zotonic_compile:all().
@@ -191,9 +191,9 @@ log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
             user_id=z_acl:user(Context),
             timestamp=os:timestamp(),
             props=Props
-        }, 
+        },
         Context).
-    
+
 log(Type, Msg, Args, Props, Context) ->
     Msg1 = lists:flatten(io_lib:format(Msg, Args)),
     log(Type, Msg1, Props, Context).
@@ -202,7 +202,7 @@ log(Type, Msg, Props, Context) ->
     Msg1 = erlang:iolist_to_binary(Msg),
     Line = proplists:get_value(line, Props, 0),
     Module = proplists:get_value(module, Props, unknown),
-    lager:log(Type, Props, "[~p] ~p @ ~p:~p  ~s~n", 
+    lager:log(Type, Props, "[~p] ~p @ ~p:~p  ~s~n",
              [z_context:site(Context), Type, Module, Line, binary_to_list(Msg1)]),
     z_notifier:notify(
         #zlog{
@@ -210,6 +210,6 @@ log(Type, Msg, Props, Context) ->
             user_id=z_acl:user(Context),
             timestamp=os:timestamp(),
             props=#log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}
-        }, 
+        },
         Context).
 

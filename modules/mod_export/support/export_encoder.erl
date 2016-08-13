@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -88,7 +88,7 @@ select_encoder(CT, [M|Ms]) ->
         false -> select_encoder(CT,Ms)
     end.
 
-encoders() -> 
+encoders() ->
     [
         export_encoder_csv,
         export_encoder_xlsx,
@@ -97,13 +97,13 @@ encoders() ->
 
 do_header(StreamState, Context) ->
     case z_notifier:first(#export_resource_header{
-                                id=StreamState#stream_state.id, 
+                                id=StreamState#stream_state.id,
                                 content_type=StreamState#stream_state.content_type,
                                 dispatch=StreamState#stream_state.dispatch
                           },
                           Context)
     of
-        undefined -> 
+        undefined ->
             do_header_1(undefined, StreamState, Context);
         {ok, Header, State} ->
             do_header_1(Header, StreamState#stream_state{exporter_state=State}, Context);
@@ -130,9 +130,9 @@ do_body(#stream_state{is_query=true, id=Id} = StreamState, Context) ->
     do_body_data(Ids, StreamState, Context);
 do_body(StreamState, Context) ->
     case z_notifier:first(#export_resource_data{
-                                id=StreamState#stream_state.id, 
-                                content_type=StreamState#stream_state.content_type, 
-                                dispatch=StreamState#stream_state.dispatch, 
+                                id=StreamState#stream_state.id,
+                                content_type=StreamState#stream_state.content_type,
+                                dispatch=StreamState#stream_state.dispatch,
                                 state=StreamState#stream_state.exporter_state
                           },
                           Context)
@@ -155,7 +155,7 @@ do_body_data(List, StreamState, Context) ->
                                 end,
                                 {[], StreamState},
                                 List),
-    DataBin = iolist_to_binary(Data), 
+    DataBin = iolist_to_binary(Data),
     NextFun = case NewStreamState#stream_state.exporter_state of
                   undefined -> fun() -> do_footer(NewStreamState, Context) end;
                   _ -> fun() -> do_body(NewStreamState, Context) end
@@ -200,7 +200,7 @@ do_footer(#stream_state{encoder=E, encoder_state=ES} = StreamState, Context) ->
         undefined ->
             {ok, Data} = E:footer(undefined, ES, Context),
             {Data, done};
-        {ok, Row} -> 
+        {ok, Row} ->
             {ok, Data} = E:footer(Row, ES, Context),
             {Data, done}
     end.

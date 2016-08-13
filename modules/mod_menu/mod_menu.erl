@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,7 +52,7 @@
 init(Context) ->
     case m_config:get(menu, menu_default, Context) of
         undefined -> ok;
-        Props -> 
+        Props ->
             %% upgrade from previous menu
             OldMenu = proplists:get_value(menu, Props, []),
             ?zInfo("Upgrading old menu structure", Context),
@@ -100,7 +100,7 @@ handle_cmd(<<"copy">>, Data, Context) ->
                                     $),$;
                                 ]}]}, Context1);
                 {error, _Reason} ->
-                    z_render:growl_error(?__("Sorry, can’t copy that page.", Context), Context) 
+                    z_render:growl_error(?__("Sorry, can’t copy that page.", Context), Context)
             end;
         false ->
             Context
@@ -131,7 +131,7 @@ handle_cmd(<<"delete">>, Data, Context) ->
 make_copy_title(Title, Context) when is_binary(Title) ->
     iolist_to_binary([?__("COPY", Context), " ", Title]);
 make_copy_title({trans, Ts}, Context) ->
-    {trans, [ 
+    {trans, [
         {Lang, make_copy_title(Title, z_context:set_language(Lang, Context))}
         || {Lang,Title} <- Ts
     ]}.
@@ -223,8 +223,8 @@ create_new(List, Context) ->
         {Id1, Context1} = create_new_if_needed(Id, Context),
         {Sub1, Context2} = create_new(Sub, Context1),
         create_new(Rest, [{Id1,Sub1}|Acc], Context2).
-    
-    
+
+
     create_new_if_needed(Id, Context) when is_integer(Id) ->
         {Id, Context};
     create_new_if_needed(Id, Context) ->
@@ -249,14 +249,14 @@ create_new(List, Context) ->
             [
                 {script, [{script, ["$('#",Id,"').attr('id','",OuterId,"');"]}]},
                 {dialog_edit_basics, [
-                            {id, RscId}, 
+                            {id, RscId},
                             {target, InnerId},
                             {template, "_menu_edit_item.tpl"}
                     ]},
                 {update, [
-                            {target, OuterId}, 
-                            {menu_id, InnerId}, 
-                            {id, RscId}, 
+                            {target, OuterId},
+                            {menu_id, InnerId},
+                            {id, RscId},
                             {template, "_menu_edit_item.tpl"}
                     ]}
             ], Context),
@@ -366,16 +366,16 @@ menu_flat(X, MaxDepth, Context) ->
 menu_flat([], _MaxDepth, _Path, Acc, _Context) ->
     lists:reverse(Acc);
 menu_flat([ {MenuId, []} | Rest], MaxDepth, [Idx|PR], Acc, Context ) ->
-    [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ] 
+    [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ]
         ++ menu_flat(Rest, MaxDepth, [Idx+1|PR], [], Context)
         ++  Acc;
 menu_flat([ {MenuId, _Children} | Rest], 1, [Idx|PR], Acc, Context ) ->
-    [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ] 
+    [ {m_rsc:rid(MenuId, Context), [Idx|PR], undefined} ]
         ++ menu_flat(Rest, 1, [Idx+1|PR], [], Context)
         ++  Acc;
 menu_flat([ {MenuId, Children} | Rest], MaxDepth, [Idx|PR], Acc, Context ) ->
-    [ {m_rsc:rid(MenuId, Context), [Idx|PR], down} ] 
-        ++ menu_flat(Children, MaxDepth-1, [1,Idx|PR], [], Context) 
+    [ {m_rsc:rid(MenuId, Context), [Idx|PR], down} ]
+        ++ menu_flat(Children, MaxDepth-1, [1,Idx|PR], [], Context)
         ++ [{undefined, undefined, up}]
         ++ menu_flat(Rest, MaxDepth, [Idx+1|PR], [], Context)
         ++  Acc;
@@ -388,7 +388,7 @@ menu_flat([ MenuId | Rest ], MaxDepth, P, A, C) when is_integer(MenuId) ->
 -spec menu_subtree(Menu::list(), PageId :: term(), #context{}) -> list() | undefined.
 menu_subtree(Menu, PageId, Context) ->
     menu_subtree(Menu, PageId, false, Context).
-    
+
 -spec menu_subtree(Menu::list(), PageId :: term(), AddSiblings :: boolean(), #context{}) -> list() | undefined.
 menu_subtree([], _BelowId, _AddSiblings, _Context) ->
     undefined;
@@ -400,7 +400,7 @@ menu_subtree(Menu, BelowId, AddSiblings, Context) when not is_integer(BelowId) -
     menu_subtree(Menu, m_rsc:rid(BelowId, Context), AddSiblings, Context);
 menu_subtree(Menu, BelowId, AddSiblings, Context) ->
     menu_subtree_1(Menu, BelowId, AddSiblings, Menu, Context).
-    
+
     menu_subtree_1([], _BelowId, _AddSiblings, _CurrMenu, _Context) ->
         undefined;
     menu_subtree_1([{BelowId, Menu}|_Rest], BelowId, false, _CurrMenu, _Context) ->
@@ -428,8 +428,8 @@ menu_subtree(Menu, BelowId, AddSiblings, Context) ->
           case Id of
             {MenuId,_} -> {MenuId, []};
             _ -> {Id,[]}
-          end 
-          || Id <- CurrMenu 
+          end
+          || Id <- CurrMenu
         ];
     menu_subtree_1([_|Rest], BelowId, AddSiblings, CurrMenu, Context) ->
         menu_subtree_1(Rest, BelowId, AddSiblings, CurrMenu, Context).

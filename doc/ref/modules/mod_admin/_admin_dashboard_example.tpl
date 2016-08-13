@@ -6,7 +6,7 @@
 {# Headline block. Caption, some buttons, etc #}
 {% block widget_headline %}
 	{_ My stuff _}
-	
+
 	{# A button may be displayed at right corner of widget heading. #}
 	{% button class="right" action={redirect dispatch="admin_overview_rsc" qcat="mycat"} text=_"show all" %}
 {% endblock %}

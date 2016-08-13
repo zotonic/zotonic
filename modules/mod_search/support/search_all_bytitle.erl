@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% Date: 2009-07-04
-%% @doc Return a list of ids of a category, sorted by title.  This needs to fetch and sort all 
+%% @doc Return a list of ids of a category, sorted by title.  This needs to fetch and sort all
 %% resources of that category, so use this with care for situations where you know that the number
 %% of returned resources is relatively low.
 
@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.

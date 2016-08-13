@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,10 +52,10 @@ event(#submit{message={mailing_page, Args}}, Context) ->
 	ListId = z_convert:to_integer(z_context:get_q("list_id", Context)),
     When = z_context:get_q("mail_when", Context),
 	Context1 = case z_acl:rsc_visible(PageId, z_acl:anondo(Context)) orelse When =:= "now" of
-		true -> 
+		true ->
 			z_notifier:notify(#mailinglist_mailing{list_id=ListId, page_id=PageId}, Context),
 			z_render:growl(?__("The e-mails are being sent...", Context), Context);
-		false -> 
+		false ->
 			m_mailinglist:insert_scheduled(ListId, PageId, Context),
             mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
 			z_render:growl(?__("The mailing will be send when the page becomes visible.", Context), Context)

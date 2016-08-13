@@ -2,7 +2,7 @@
     <p>
         {_ The password of the admin user cannot be changed in the database. Please edit your site's configuration file at _} <strong>priv/sites/{{ m.site.host }}/config</strong> {_ if you want to change the admin password. _}
     </p>
-    
+
 {% else %}
     <p>
 	    {_ Enter a (unique) username and password. Usernames and passwords are case sensitive, so be careful when entering them. _}
@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="modal-footer">
 	        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 

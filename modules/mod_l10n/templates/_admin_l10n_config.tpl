@@ -4,7 +4,7 @@
             <option></option>
             {% include "_l10n_timezone_options.tpl" timezone=m.config.mod_l10n.timezone.value %}
         </select>
-        {% wire id="pref_tz" 
+        {% wire id="pref_tz"
             action={config_toggle module="mod_l10n" key="timezone"}
         %}
 
@@ -23,7 +23,7 @@
             {_ Fix timezone, show all dates in the above timezone. _}
         </label>
     </div>
-    {% wire id="pref_tz_fixed" 
+    {% wire id="pref_tz_fixed"
         action={config_toggle module="mod_l10n" key="timezone_is_fixed"}
     %}
 

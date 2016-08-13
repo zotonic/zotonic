@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -81,7 +81,7 @@ resource_exists(ReqData, Context) ->
     end.
 
 
-%% @doc Check if the current user is allowed to view the resource. 
+%% @doc Check if the current user is allowed to view the resource.
 is_authorized(ReqData, Context) ->
     Context1  = ?WM_REQ(ReqData, Context),
     ContextQs = z_context:ensure_qs(Context1),

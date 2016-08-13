@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,7 @@
 
 -export([
         init/2,
-	get/2, 
+	get/2,
 	maybe_reply/2,
 	ensure_response/2,
 	upgrade_reply/3,
@@ -82,7 +82,7 @@ init(ReqData, RespCompress) ->
 %
 -spec get(atom() | list(), req()) -> any() | list().
 get(socket, ReqAdapter) ->
-    Req = ReqAdapter#req_adapter.req, 
+    Req = ReqAdapter#req_adapter.req,
     Req#wm_reqdata.socket;
 get(resp_compress, ReqAdapter) ->
     ReqAdapter#req_adapter.resp_compress;
@@ -105,7 +105,7 @@ maybe_reply(400, ReqAdapter) ->
     case ReqAdapter#req_adapter.sent_upgrade_reply of
         true ->
             ok;
-        false ->	
+        false ->
             reply(400, ReqAdapter)
     end.
 
@@ -117,8 +117,8 @@ ensure_response(ReqAdapter, 400) ->
     reply(400, ReqAdapter).
 
 
-%% 
-%% Send an upgrade reply to the 
+%%
+%% Send an upgrade reply to the
 %-spec upgrade_reply(101, elli:headers(), req()) -> {ok, req()}.
 upgrade_reply(101, Headers, #req_adapter{req=Req}=RA) ->
     UpgradeHeaders = [{<<"Connection">>, <<"Upgrade">>} | Headers],
@@ -162,7 +162,7 @@ port(Socket) ->
     Socket.
 
 % @doc Mimics cowboy_req:set_meta/3
-% 
+%
 set_meta(websocket_version, Version, ReqAdapter) ->
     ReqAdapter#req_adapter{websocket_version = Version};
 set_meta(websocket_compress, Bool, ReqAdapter) ->
@@ -173,11 +173,11 @@ set_meta(websocket_compress, Bool, ReqAdapter) ->
 %
 % calls websocket_init(Req, HandlerOpts) ->
 %     {ok, Headers, HandlerState} - We can upgrade, headers are added to the upgrade response.
-%     {ok, Headers, hibernate, HandlerState} - We can upgrade, but this process will hibernate, headers 
+%     {ok, Headers, hibernate, HandlerState} - We can upgrade, but this process will hibernate, headers
 %         are added to the upgrade response
-%     {ok, Headers, Timeout, HandlerState} - We can upgrade, we will timout, headers are added to the 
+%     {ok, Headers, Timeout, HandlerState} - We can upgrade, we will timout, headers are added to the
 %         upgrade respose.
-%     {ok, Headers, hibernate, Timeout, HandlerState} - We can upgrade, set a timeout and hibernate. 
+%     {ok, Headers, hibernate, Timeout, HandlerState} - We can upgrade, set a timeout and hibernate.
 %         Headers are added to the response.
 %     {shutdown, Headers} - We can't upgrade, a bad request response will be sent to the client.
 %
@@ -205,11 +205,11 @@ websocket_handler_init(#req_adapter{req=Req}=RA, Handler, HandlerOpts) ->
 -spec websocket_handler_callback(req(), Handler :: module(), websocket_info | websocket_handle, Message :: any(), HandlerState :: any()) ->
     {ok, req(), any()} |
     {ok, req(), any(), hibernate} |
-    {reply, binary() | iolist(), req(), any()} | 
-    {reply, binary() | iolist(), hibernate, req(), any()} | 
-    {shutdown, req(), any()}. 
+    {reply, binary() | iolist(), req(), any()} |
+    {reply, binary() | iolist(), hibernate, req(), any()} |
+    {shutdown, req(), any()}.
 websocket_handler_callback(#req_adapter{req=Req}=RA, Handler, Callback, Message, HandlerState) ->
-    case Handler:Callback(Req, Message, HandlerState) of 
+    case Handler:Callback(Req, Message, HandlerState) of
         {ok, HandlerState1} ->
             {ok, RA, HandlerState1};
         {ok, hibernate, HandlerState1} ->
@@ -235,11 +235,11 @@ websocket_handler_handle_event(#req_adapter{req=Req}, Handler, Name, EventArgs, 
     end.
 
 % @doc Atoms used to identify messages in {active, once | true} mode.
--spec messages(RA :: req()) -> 
+-spec messages(RA :: req()) ->
     {tcp, tcp_closed, tcp_error} | {ssl, ssl_closed, ssl_error}.
 messages(#req_adapter{req=Req}) ->
     case Req#wm_reqdata.socket of
-        undefined -> 
+        undefined ->
             undefined;
         Socket ->
             socket_messages(Socket)
@@ -292,7 +292,7 @@ encode_headers([{K, V} | H]) ->
 encode_value(V) when is_integer(V) -> list_to_binary(integer_to_list(V));
 encode_value(V) when is_binary(V) -> V;
 encode_value(V) when is_list(V) -> list_to_binary(V).
-            
+
 
 % @doc Get all header values for Key
 get_header_values(Key, #wm_reqdata{}=ReqData) ->
@@ -305,13 +305,13 @@ get_header_value(Key, #wm_reqdata{}=ReqData) ->
     case wrq:get_req_header(binary:bin_to_list(Key), ReqData) of
         undefined -> undefined;
         L -> binary:list_to_bin(L)
-    end. 
+    end.
 
 %%
 %% Helpers
-%% 
+%%
 
-%% @doc Parse tokens 
+%% @doc Parse tokens
 tokens(L) when is_list(L) ->
     lists:flatten([tokens(V) || V <- L]);
 

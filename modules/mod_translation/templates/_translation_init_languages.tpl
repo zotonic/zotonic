@@ -3,9 +3,9 @@
 if ($(".translations").length) {
 	$(".translations").on('show', 'ul li a', function(event) {
 			var panel = $($(event.currentTarget).attr("href"));
-			$(".tinymce-init", panel).each(function() { 
+			$(".tinymce-init", panel).each(function() {
 				var self = $(this);
-				setTimeout(function() { 
+				setTimeout(function() {
 					var ti = jQuery.extend({}, tinyInit);
 					if (self.attr('dir')) {
 						ti.directionality = self.attr('dir');

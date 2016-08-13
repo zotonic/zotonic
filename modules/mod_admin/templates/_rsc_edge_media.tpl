@@ -26,22 +26,22 @@
 
 {% wire id=#unlink.object_id
     action={
-        unlink 
-        subject_id=subject_id 
-        predicate="depiction" 
-        object_id=object_id 
+        unlink
+        subject_id=subject_id
+        predicate="depiction"
+        object_id=object_id
         hide=#unlink_wrapper
-        undo_message_id=unlink_message 
+        undo_message_id=unlink_message
         undo_action={
             postback
             postback={
                 reload_media
                 rsc_id=id
                 div_id=["links-",id|make_list,"-depiction"]
-            } 
+            }
             delegate="controller_admin_edit"
         }
-    } 
+    }
 %}
 {% wire
     id=#edit

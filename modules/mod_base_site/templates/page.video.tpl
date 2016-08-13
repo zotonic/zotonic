@@ -13,7 +13,7 @@
 	{{ m.rsc[id].body }}
 	{% include "_blocks.tpl" %}
     </div>
-    
+
     {% with id.o.depiction as ds %}
     {% if ds %}
     <ul class="thumbnails">
@@ -25,7 +25,7 @@
     </ul>
     {% endif %}
     {% endwith %}
-    
+
     {% if id|is_a:"video" %}
         <!-- 16:9 aspect ratio -->
         <div class="embed-responsive embed-responsive-16by9">

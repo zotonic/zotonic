@@ -15,10 +15,10 @@ style_width
     1,
     0,
     1,
-    1, 
+    1,
     style_boxed|if_undefined:0,
     style_width|if_undefined:"300px"
-as  
+as
     show_signup_name_title,
     show_signup_name_prefix,
     show_signup_username_title,

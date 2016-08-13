@@ -1,7 +1,7 @@
 <div class="modal-body">
     <div class="control-group">
         <div>
-            {% wire id="pubsubdbg" 
+            {% wire id="pubsubdbg"
                 action={config_toggle module="mod_mqtt" key="debug_pubsub"}
             %}
             <label class="checkbox inline">

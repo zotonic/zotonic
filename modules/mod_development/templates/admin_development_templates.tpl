@@ -9,7 +9,7 @@
 </ul>
 
 <div class="admin-header">
-    <h2>{_ Included templates _}</h2>    
+    <h2>{_ Included templates _}</h2>
     <p>{_ Below you see in real time which templates are compiled and included. _}</p>
 </div>
 
@@ -18,8 +18,8 @@
     {% button class="btn btn-default" text=_"Empty log" action={update target="dev_templates" text=""} %}
 </div>
 
-<div>    
+<div>
     <pre id="dev_templates"></pre>
-    {% wire action={development_templates_stream target="dev_templates"} %}    
+    {% wire action={development_templates_stream target="dev_templates"} %}
 </div>
 {% endblock %}

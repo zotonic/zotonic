@@ -17,7 +17,7 @@
             {% endblock %}
             </a>
         </div>
-        
+
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 {% include "_language_switch.tpl" is_nav %}

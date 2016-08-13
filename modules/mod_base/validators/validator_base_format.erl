@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@ validate(format, Id, Value, [Negate,Pattern], Context) ->
 			     false ->
 				 {Value, Options}
 			 end,
-		 
+
     Ok = not Negate,
     Match = case re:run(Value1, Re, Options1) of
                 {match, _} -> true;
@@ -54,41 +54,41 @@ validate(format, Id, Value, [Negate,Pattern], Context) ->
         Ok -> {{ok, Value}, Context};
         _  -> {{error, Id, invalid}, Context}
     end.
-    
+
 %% @doc Translate a regular expression in javascript format to erlang re module format
 pattern_to_re([$/|Rest]=Pattern) ->
     case string:rchr(Rest, $/) of
-        0 -> 
+        0 ->
             {Pattern,[]};
-        N -> 
+        N ->
             {Re, [$/|Options]} = lists:split(N-1,Rest),
             ReOptions = [anycrlf|trans_options(Options, [])],
             {Re, ReOptions}
     end;
 pattern_to_re(Pattern) ->
     {Pattern, []}.
-    
-trans_options([], Acc) -> 
+
+trans_options([], Acc) ->
     Acc;
-trans_options([$i|T], Acc) -> 
+trans_options([$i|T], Acc) ->
     trans_options(T, [caseless|Acc]);
-trans_options([$m|T], Acc) -> 
+trans_options([$m|T], Acc) ->
     trans_options(T, [multiline|Acc]);
-trans_options([$s|T], Acc) -> 
+trans_options([$s|T], Acc) ->
     trans_options(T, [dotall|Acc]);
-trans_options([$x|T], Acc) -> 
+trans_options([$x|T], Acc) ->
     trans_options(T, [extended|Acc]);
-trans_options([$A|T], Acc) -> 
+trans_options([$A|T], Acc) ->
     trans_options(T, [anchored|Acc]);
-trans_options([$D|T], Acc) -> 
+trans_options([$D|T], Acc) ->
     trans_options(T, [dollar_endonly|Acc]);
-trans_options([$U|T], Acc) -> 
+trans_options([$U|T], Acc) ->
     trans_options(T, [ungreedy|Acc]);
-trans_options([_|T], Acc) -> 
+trans_options([_|T], Acc) ->
     trans_options(T, Acc).
 
 %% @doc Make a javascript regular expression pcre compatible.
-javascript_to_pcre_pattern(Pattern) ->    
+javascript_to_pcre_pattern(Pattern) ->
     %% convert \uXXXX to \x{XXXX}
     R1 = re:replace(Pattern, "([\\\\]{1}[u]{1}[0-9a-fA-F]{4,6})", "@@--@@&}", [global]),
     re:replace(R1, "@@--@@[\\\\]u", "\\\\x{", [{return, list}, global]).

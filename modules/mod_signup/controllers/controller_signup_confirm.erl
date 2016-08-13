@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,7 +49,7 @@ provide_content(ReqData, Context) ->
     z_context:lager_md(Context2),
     Key = z_context:get_q(key, Context2, []),
     {Vars, ContextConfirm} = case Key of
-                                [] -> 
+                                [] ->
                                     {[], Context2};
                                 _ ->
                                     case confirm(Key, Context2) of
@@ -74,7 +74,7 @@ event(#submit{}, Context) ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
             Location = confirm_location(UserId, ContextUser),
             z_render:wire({redirect, [{location, Location}]}, ContextUser);
-        {error, _Reason} -> 
+        {error, _Reason} ->
             z_render:wire({show, [{target,"confirm_error"}]}, Context)
     end.
 

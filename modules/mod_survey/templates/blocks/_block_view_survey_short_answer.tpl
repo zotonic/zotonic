@@ -9,11 +9,11 @@
     {% if blk.validation == "date" %}
         {% include "blocks/_block_view_survey_short_answer_date.tpl" %}
     {% else %}
-        <input type="text" 
-                class="form-control" 
-                name="{{ blk.name }}" 
-                id="{{ #id }}" 
-                value="{% if answers[blk.name]|is_defined %}{{ answers[blk.name]|escape }}{% elseif blk.validation == 'phone' %}{{ m.acl.user.phone }}{% elseif blk.validation == 'email' %}{{ m.acl.user.email }}{% elseif blk.name == 'name' %}{{ m.acl.user.name_first }} {% if m.acl.user.name_surname_prefix %}{{ m.acl.user.name_surname_prefix }} {% endif %}{{ m.acl.user.name_surname }}{% elseif blk.name|make_list|member:['phone','phone_mobile','email','name_first','name_surname','name_surname_prefix','address_street_1','address_street_2','address_city','address_state','address_postcode'] %}{{ m.acl.user[blk.name|as_atom] }}{% endif %}" 
+        <input type="text"
+                class="form-control"
+                name="{{ blk.name }}"
+                id="{{ #id }}"
+                value="{% if answers[blk.name]|is_defined %}{{ answers[blk.name]|escape }}{% elseif blk.validation == 'phone' %}{{ m.acl.user.phone }}{% elseif blk.validation == 'email' %}{{ m.acl.user.email }}{% elseif blk.name == 'name' %}{{ m.acl.user.name_first }} {% if m.acl.user.name_surname_prefix %}{{ m.acl.user.name_surname_prefix }} {% endif %}{{ m.acl.user.name_surname }}{% elseif blk.name|make_list|member:['phone','phone_mobile','email','name_first','name_surname','name_surname_prefix','address_street_1','address_street_2','address_city','address_state','address_postcode'] %}{{ m.acl.user[blk.name|as_atom] }}{% endif %}"
                 {% if blk.placeholder %}placeholder="{{ blk.placeholder|escape }}"{% endif %}
         />
         {% if blk.is_required %}

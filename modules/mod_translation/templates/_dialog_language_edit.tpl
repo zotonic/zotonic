@@ -28,7 +28,7 @@ fallback
 	        {% validate id=#language name="language" type={presence} %}
         </div>
     </div>
-    
+
     <div class="form-group row">
         <div class="clearfix">{# clean wrap for hint #}
             <label class="control-label col-md-3" for="{{ #fallback }}">{_ Fallback language _}</label>
@@ -48,7 +48,7 @@ fallback
             <p class="help-block">{_ Use this with region-specific languages, for instance 'fr-be'. The fallback language is used to find missing translations in the 'parent' language instead of substituting with English. _}</p>
         </div>
     </div>
-    
+
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #enabled }}">{_ Show in menu _}</label>
         <div class="col-md-9">

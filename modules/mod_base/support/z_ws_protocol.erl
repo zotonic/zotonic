@@ -28,9 +28,9 @@
 %%   * Uses z_ws_request_adapter.
 %%   * in handler_loop change socket=Socket to {_,Port} and change all receive clauses.
 %%   * same for websocket_payload_loop.
-%%   * Uppercased response headers. 
+%%   * Uppercased response headers.
 %%   * Improved error reporting, all handler exceptions are reported to the handler.
-%%   * Improved status reporting, events are fired when the websocket is open and when 
+%%   * Improved status reporting, events are fired when the websocket is open and when
 %%     it closes.
 %%   * Checked types with dialyzer.
 %%	 * Renamed ping/pong messages to ws_ping and ws_pong
@@ -78,18 +78,18 @@
 %% You do not need to call this function manually. To upgrade to the Websocket
 %% protocol, you simply need to return <em>{upgrade, protocol, {@module}}</em>
 %% in your <em>cowboy_http_handler:init/3</em> handler function.
--spec upgrade(Req, Env, Handler :: module(), HandlerOpts :: any()) -> 
+-spec upgrade(Req, Env, Handler :: module(), HandlerOpts :: any()) ->
 	{ok, Req, Env} | {error, 400, Req} | {suspend, module(), atom(), [any()]}
  	when Req::z_ws_request_adapter:req(), Env::list().
 upgrade(Req, Env, Handler, HandlerOpts) ->
 	Socket = z_ws_request_adapter:get(socket, Req),
 	State = #state{env=Env, socket=Socket, handler=Handler},
 	try websocket_upgrade(State, Req) of
-            {ok, State2, Req2} -> 
+            {ok, State2, Req2} ->
                 handler_init(State2, Req2, HandlerOpts);
             {bad_request, Req2} ->
                 z_ws_request_adapter:maybe_reply(400, Req2)
-	catch 
+	catch
             throw:Exc ->
                 handle_event(Req, Handler, websocket_throw, [Exc, erlang:get_stacktrace()], HandlerOpts),
                 z_ws_request_adapter:maybe_reply(400, Req);
@@ -115,17 +115,17 @@ websocket_upgrade(State, Req) ->
                     case Version of
                         undefined -> {bad_request, Req4};
                         _ ->
-                            IntVersion = case catch list_to_integer(binary_to_list(Version)) of 
+                            IntVersion = case catch list_to_integer(binary_to_list(Version)) of
                                 Int when is_integer(Int) -> Int;
-                                {'EXIT', _} -> undefined 
+                                {'EXIT', _} -> undefined
                             end,
                             case (IntVersion =:= 7) orelse (IntVersion =:= 8) orelse (IntVersion =:= 13) of
-                                true -> 
+                                true ->
                                     {Key, Req5} = z_ws_request_adapter:header(<<"sec-websocket-key">>, Req4),
                                     case Key of
                                         undefined -> {bad_request, Req5};
                                         _ ->
-                                            websocket_extensions(State#state{key=Key}, 
+                                            websocket_extensions(State#state{key=Key},
                                                 z_ws_request_adapter:set_meta(websocket_version, IntVersion, Req5))
                                     end;
                                 _ ->
@@ -219,13 +219,13 @@ websocket_handshake(State=#state{key=Key, deflate_frame=DeflateFrame, handler=Ha
 		Req),
 
 	%% Upgrade reply is sent, report that the websocket is open.
-	handle_event(Req, Handler, websocket_open, 
+	handle_event(Req, Handler, websocket_open,
 		[z_ws_request_adapter:get(websocket_version, Req), DeflateFrame], HandlerState),
 
 	%% Flush the resp_sent message before moving on.
 	%% receive {z_ws_request_adapter, resp_sent} -> ok after 0 -> ok end,
 	State2 = handler_loop_timeout(State),
-	handler_before_loop(State2#state{key=undefined, messages=z_ws_request_adapter:messages(Req)}, 
+	handler_before_loop(State2#state{key=undefined, messages=z_ws_request_adapter:messages(Req)},
 		Req2, HandlerState, <<>>).
 
 % -spec handler_before_loop(#state{}, Req, any(), binary())
@@ -560,7 +560,7 @@ is_utf8(_) ->
 % 	-> {ok, Req, cowboy_middleware:env()}
 % 	| {suspend, module(), atom(), [any()]}
 % 	when Req::z_ws_request_adapter:req().
-websocket_payload_loop(State=#state{socket=Socket, 
+websocket_payload_loop(State=#state{socket=Socket,
 		messages={OK, Closed, Error}, timeout_ref=TRef},
 		Req, HandlerState, Opcode, Len, MaskKey, Unmasked, UnmaskedLen, Rsv) ->
         Port = z_ws_request_adapter:port(Socket),
@@ -686,7 +686,7 @@ handler_call(State=#state{handler=Handler}, Req, HandlerState,
 			end;
 		{shutdown, Req2, HandlerState2} ->
 			websocket_close(State, Req2, HandlerState2, {normal, shutdown})
-	catch 
+	catch
 		throw:Exc ->
 			handle_event(Req, Handler, websocket_throw, [Exc, erlang:get_stacktrace()], HandlerState);
 		error:Error ->
@@ -807,7 +807,7 @@ payload_length_to_binary(N) ->
 
 
 %%
-%% Helper 
+%% Helper
 %%
 
 % @doc Report the error to the websocket handler.

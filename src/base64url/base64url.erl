@@ -1,23 +1,23 @@
-%% Taken from erlang stdlib implementation. 
-%% Adapted by mmzeeman@xs4all.nl to encode and decode base64url. This is 
-%% a url and filename friendly version of base64. See also RFC4648. 
+%% Taken from erlang stdlib implementation.
+%% Adapted by mmzeeman@xs4all.nl to encode and decode base64url. This is
+%% a url and filename friendly version of base64. See also RFC4648.
 
 %%
 %% %CopyrightBegin%
-%% 
+%%
 %% Copyright Ericsson AB 2007-2009. All Rights Reserved.
-%% 
+%%
 %% The contents of this file are subject to the Erlang Public License,
 %% Version 1.1, (the "License"); you may not use this file except in
 %% compliance with the License. You should have received a copy of the
 %% Erlang Public License along with this software. If not, it can be
 %% retrieved online at http://www.erlang.org/.
-%% 
+%%
 %% Software distributed under the License is distributed on an "AS IS"
 %% basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
 %% the License for the specific language governing rights and limitations
 %% under the License.
-%% 
+%%
 %% %CopyrightEnd%
 %%
 %% Description: Implements base 64 encode and decode. See RFC4648.
@@ -40,7 +40,7 @@
 %% encode_to_string(ASCII) -> Base64String
 %%	ASCII - string() | binary()
 %%	Base64String - string()
-%%                                   
+%%
 %% Description: Encodes a plain ASCII string (or binary) into base64.
 %%-------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ encode_to_string(List) when is_list(List) ->
 %% encode(ASCII) -> Base64
 %%	ASCII - string() | binary()
 %%	Base64 - binary()
-%%                                   
+%%
 %% Description: Encodes a plain ASCII string (or binary) into base64.
 %%-------------------------------------------------------------------------
 
@@ -75,12 +75,12 @@ encode_l([A]) ->
      b64e((A band 3) bsl 4)];
 encode_l([A,B]) ->
     [b64e(A bsr 2),
-     b64e(((A band 3) bsl 4) bor (B bsr 4)), 
+     b64e(((A band 3) bsl 4) bor (B bsr 4)),
      b64e((B band 15) bsl 2)];
 encode_l([A,B,C|Ls]) ->
     BB = (A bsl 16) bor (B bsl 8) bor C,
     [b64e(BB bsr 18),
-     b64e((BB bsr 12) band 63), 
+     b64e((BB bsr 12) band 63),
      b64e((BB bsr 6) band 63),
      b64e(BB band 63) | encode_l(Ls)].
 
@@ -102,7 +102,7 @@ encode_binary(Bin) ->
 %% decode(Base64) -> ASCII
 %%	Base64 - string() | binary()
 %%	ASCII - binary()
-%%                                    
+%%
 %% Description: Decodes an base64 encoded string to plain ASCII.
 %% mime_decode strips away all characters not Base64 before converting,
 %% whereas decode crashes if an illegal character is found
@@ -312,8 +312,8 @@ strip_illegal_end([], A) -> A.
 tail_contains_equal(<<$=,_/binary>>) -> true;
 tail_contains_equal(<<_,T/binary>>) -> tail_contains_equal(T);
 tail_contains_equal(<<>>) -> false.
-    
-%% accessors 
+
+%% accessors
 b64e(X) ->
     element(X+1,
 	    {$A, $B, $C, $D, $E, $F, $G, $H, $I, $J, $K, $L, $M, $N,

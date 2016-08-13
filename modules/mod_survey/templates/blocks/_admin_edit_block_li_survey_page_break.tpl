@@ -17,7 +17,7 @@
             <label>{_ To question _}</label>
             <input class="form-control" type="text" id="block-{{name}}-target1" name="block-{{name}}-target1" value="{{ blk.target1 }}"
                    placeholder="{_ name _}" />
-        </div> 
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-6">

@@ -66,7 +66,7 @@ expand(State, Context) ->
         ++ expand_rsc(State, RscRules, GroupTree, UserTree, Context)}.
 
 rule_content_groups(Rules) ->
-    lists:flatten([ 
+    lists:flatten([
         case proplists:get_value(content_group_id, R) of
             undefined -> [];
             Id -> Id
@@ -134,12 +134,12 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) ->
     CIdsEdit = maybe_filter_meta(ContentGroupName, Prop, PropId, Cs, NonMetaCs, Context),
     CIdsView = proplists:get_value(PropId, Cs, [PropId]),
     lists:flatten(
-        [ 
+        [
             [
-              {ContentGroupId, {CId, Action, IsOwner, IsAllow}, UserGroupId} 
+              {ContentGroupId, {CId, Action, IsOwner, IsAllow}, UserGroupId}
               || CId <- select_cids(Action, CIdsEdit, CIdsView)
             ]
-            || Action <- Actions 
+            || Action <- Actions
         ]).
 
 select_cids(view, _Edit, View) -> View;

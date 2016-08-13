@@ -15,7 +15,7 @@
                 {_ Status _}
             </a>
         </div><!-- /.navbar-header -->
-        
+
         {% if m.acl.user %}
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

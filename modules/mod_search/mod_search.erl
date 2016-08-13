@@ -2,7 +2,7 @@
 %% @copyright 2009 Marc Worrell
 %% Date: 2009-06-09
 %% @doc Defines PostgreSQL queries for basic content searches in Zotonic.
-%% This module needs to be split in specific PostgreSQL queries and standard SQL queries when you want to 
+%% This module needs to be split in specific PostgreSQL queries and standard SQL queries when you want to
 %% support other databases (like MySQL).
 
 %% Copyright 2009 Marc Worrell
@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -207,7 +207,7 @@ search_prevnext(Type, Args, Context) ->
                }.
 
 
-%% Retrieve the previous/next id(s) (on sort field, defaults to publication date) 
+%% Retrieve the previous/next id(s) (on sort field, defaults to publication date)
 search({previous, Args}, _OffsetLimit, Context) ->
     search_prevnext(previous, Args, Context);
 search({next, Args}, _OffsetLimit, Context) ->
@@ -216,7 +216,7 @@ search({next, Args}, _OffsetLimit, Context) ->
 search({keyword_cloud, Props}, _OffsetLimit, Context) ->
     Cat = proplists:get_value(cat, Props),
     KeywordCatName = proplists:get_value(keywordcat, Props, "keyword"),
-    KeywordCat = list_to_atom(KeywordCatName),    
+    KeywordCat = list_to_atom(KeywordCatName),
     KeywordPredName = proplists:get_value(keywordpred, Props, "subject"),
     Subject = m_predicate:name_to_id_check(KeywordPredName, Context),
     #search_sql{
@@ -313,7 +313,7 @@ search({match_objects_cats, [{cat,Cat},{id,Id}]}, OffsetLimit, Context) ->
 
 %% @doc Return a list of resource ids, featured ones first
 %% @spec search(SearchSpec, Range, Context) -> #search_sql{}
-search({featured, []}, OffsetLimit, Context) -> 
+search({featured, []}, OffsetLimit, Context) ->
    search({'query', [{sort, "-rsc.is_featured"}, {sort, "-rsc.publication_start"}]}, OffsetLimit, Context);
 
 %% @doc Return a list of resource ids inside a category, featured ones first
@@ -491,7 +491,7 @@ search({media, []}, _OffsetLimit, _Context) ->
         args=[],
         assoc=true
     };
-    
+
 search({all_bytitle, [{cat, Cat}]}, _OffsetLimit, Context) ->
     search_all_bytitle:search(Cat, all_bytitle, Context);
 
@@ -555,7 +555,7 @@ to_tsquery(Text, Context) when is_binary(Text) ->
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
     [{TsQuery, Version}] = z_db:q("select plainto_tsquery($2, $1), version()",
-                                  [z_pivot_rsc:cleanup_tsv_text(Text), Stemmer], 
+                                  [z_pivot_rsc:cleanup_tsv_text(Text), Stemmer],
                                   Context),
     % Version is something like "PostgreSQL 8.3.5 on i386-apple-darwin8.11.1, compiled by ..."
     fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text, TsQuery, Version)).
@@ -613,7 +613,7 @@ find_by_id(S, Rank, Context) ->
         end
     end, [], string:tokens(S, ", ")),
     Ids1 = lists:sort(sets:to_list(sets:from_list(Ids))),
-    Ids2 = case Rank of 
+    Ids2 = case Rank of
         false -> Ids1;
         true ->
             lists:map(fun(Id) ->

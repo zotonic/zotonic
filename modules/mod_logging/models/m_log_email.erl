@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -79,30 +79,30 @@ search(Filter, Context) ->
         end;
     map_search({content, RscId}, {Ws,As}, Context) ->
         case m_rsc:rid(RscId, Context) of
-            undefined -> 
+            undefined ->
                 {["content_id = -1"|Ws], As};
-            Id -> 
+            Id ->
                 {As1,N} = arg(Id, As),
                 {[["content_id = $",N]|Ws], As1}
         end;
     map_search({other, RscId}, {Ws,As}, Context) ->
         case m_rsc:rid(RscId, Context) of
             undefined -> {["other_id = -1"|Ws], As};
-            Id -> 
+            Id ->
                 {As1,N} = arg(Id, As),
                 {[["other_id = $",N]|Ws], As1}
         end.
-    
-    
+
+
     arg(V, As) ->
         As1 = [V|As],
         N = integer_to_list(length(As1)),
         {As1, N}.
-        
+
 
 install(Context) ->
     case z_db:table_exists(log_email, Context) of
-        true -> 
+        true ->
             ok;
         false ->
             z_db:q("
@@ -121,7 +121,7 @@ install(Context) ->
                     other_id int,
                     message_template character varying(64),
                     props bytea,
-                    created timestamp with time zone not null default now(), 
+                    created timestamp with time zone not null default now(),
 
                     constraint log_email_pkey primary key (id)
                 )

@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@
          set_user_language/2,
          try_set_language/2,
 
-         init/1, 
+         init/1,
          event/2,
          generate/1,
 
@@ -57,7 +57,7 @@
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
     case z_context:site(Context) of
-        zotonic_status -> 
+        zotonic_status ->
             ok;
         _Other ->
             case m_config:get(i18n, language_list, Context) of
@@ -68,7 +68,7 @@ init(Context) ->
             end
     end.
 
-default_languages() -> 
+default_languages() ->
     [
      {ar, [ {language, <<"العربية"/utf8>>}, {is_enabled, false}]},
      {de, [ {language, <<"Deutsch"/utf8>>}, {is_enabled, true}]},
@@ -141,7 +141,7 @@ observe_session_context(session_context, Context, _Context) ->
 
 observe_user_context(#user_context{id=UserId}, Context, _Context) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
-        Code when is_atom(Code), Code /= undefined -> 
+        Code when is_atom(Code), Code /= undefined ->
             do_set_language(Code, Context);
         _ ->
             Context
@@ -154,7 +154,7 @@ observe_auth_logon(auth_logon, Context, _Context) ->
                                                 % Ensure that the user has a default language
             catch m_rsc:update(UserId, [{pref_language, z_context:language(Context)}], Context),
             Context;
-        Code -> 
+        Code ->
                                                 % Switch the session to the default language of the user
             List = get_language_config(Context),
             Context1 = set_language(z_convert:to_list(Code), List, Context),
@@ -164,7 +164,7 @@ observe_auth_logon(auth_logon, Context, _Context) ->
 
 observe_set_user_language(#set_user_language{id=UserId}, Context, _Context) when is_integer(UserId) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
-        Code when is_atom(Code), Code /= undefined -> 
+        Code when is_atom(Code), Code /= undefined ->
             do_set_language(Code, Context);
         _ ->
             Context
@@ -261,7 +261,7 @@ event(#submit{message={language_edit, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             OldCode = proplists:get_value(code, Args, '$empty'),
-            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context), z_context:get_q("fallback", Context), 
+            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context), z_context:get_q("fallback", Context),
                          z_context:get_q("is_enabled", Context), Context),
             Context1 = z_render:dialog_close(Context),
             z_render:wire({reload, []}, Context1);
@@ -312,7 +312,7 @@ set_user_language(Code, Context) ->
     Context1 = set_language(z_convert:to_list(Code), List, Context),
     z_context:set_persistent(language, z_context:language(Context1), Context1),
     case z_acl:user(Context1) of
-        undefined -> 
+        undefined ->
             nop;
         UserId ->
             case m_rsc:p_no_acl(UserId, pref_language, Context1) of
@@ -330,8 +330,8 @@ try_set_language(LanguagesRequested, Context) when is_binary(LanguagesRequested)
     try_set_language(binary_to_list(LanguagesRequested), Context);
 try_set_language(LanguagesRequested, Context) when is_list(LanguagesRequested) ->
     LanguagesAvailable = [ atom_to_list(Lang)
-                           || {Lang, Props} <- get_language_config(Context), 
-                              proplists:get_value(is_enabled, Props) =:= true 
+                           || {Lang, Props} <- get_language_config(Context),
+                              proplists:get_value(is_enabled, Props) =:= true
                          ],
     case catch do_choose(LanguagesAvailable, LanguagesRequested) of
         Lang when is_list(Lang) ->
@@ -375,7 +375,7 @@ language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Conte
     FallbackIsoCodeAtom = z_convert:to_atom(z_string:to_name(z_string:trim(FallbackIsoCode))),
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
-    Languages2 = lists:usort([{IsoCodeNewAtom, 
+    Languages2 = lists:usort([{IsoCodeNewAtom,
                                [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
                                 {fallback, FallbackIsoCodeAtom},
                                 {is_enabled, z_convert:to_bool(IsEnabled)}
@@ -473,7 +473,7 @@ do_choose(AnyOkay, Choices, [AccPair|AccRest]) ->
                                                 % doing this a little more work than needed in
                                                 % order to be easily insensitive but preserving
             case lists:member(LAcc, LChoices) of
-                true -> 
+                true ->
                     hd([X || X <- Choices,
                              string:to_lower(X) =:= LAcc]);
                 false -> do_choose(AnyOkay, Choices, AccRest)
@@ -488,7 +488,7 @@ build_conneg_list([Acc|AccRest], Result) ->
     Pair = case XPair of
                {Choice, "q=" ++ PrioStr} ->
                                                 % Simplify "en-us" to "en"
-                   [Choice1|_] = string:tokens(Choice, "-"), 
+                   [Choice1|_] = string:tokens(Choice, "-"),
                    case PrioStr of
                        "0" -> {0.0, Choice1};
                        "1" -> {1.0, Choice1};

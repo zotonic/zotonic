@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,9 +32,9 @@ html(Context) ->
     Status = z_module_manager:get_modules_status(Context),
     Selected = z_context:get(selected, Context, "modules"),
     Status1 = lists:flatten(
-                    [ 
-                        [ {Module, atom_to_list(State)} || {Module, _, _Pid, _Date} <- Specs ] 
-                        || {State, Specs} <- Status 
+                    [
+                        [ {Module, atom_to_list(State)} || {Module, _, _Pid, _Date} <- Specs ]
+                        || {State, Specs} <- Status
                     ]),
     Configurable = [{M#module_index.module, M} || M <- z_module_indexer:find_all(template, "_admin_configure_module.tpl", Context)],
     Vars =

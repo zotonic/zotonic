@@ -23,7 +23,7 @@
         <div class="form-group row">
             <div class="col-md-9 col-md-offset-3 checkbox">
                 <label class="control-label">
-                    <input type="checkbox" id="field-is-page-path-multiple" 
+                    <input type="checkbox" id="field-is-page-path-multiple"
                         name="is_page_path_multiple" value="1"
                         {% if r.is_page_path_multiple %}checked{% endif %}
                         {% if not is_editable %}disabled="disabled"{% endif %}

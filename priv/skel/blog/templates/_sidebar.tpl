@@ -36,7 +36,7 @@
 		    {% endfor %}
 	    </ul>
     </div>
-    
+
     <div class="well">
 	    <h2>{_ Keywords _}</h2>
 	    <ul class="inline-list clearfix">
@@ -45,7 +45,7 @@
 		    {% endfor %}
 	    </ul>
     </div>
-    
+
 {% endcache %}
 
 {% include "_edit_button.tpl" %}

@@ -9,7 +9,7 @@
 -export([render_action/4]).
 
 
-render_action(_TriggerId, _TargetId, Args, Context) -> 
+render_action(_TriggerId, _TargetId, Args, Context) ->
 	Text   = z_utils:js_escape(proplists:get_value(text,Args,"")),
 	Script = [
 		    <<"var v = new LiveValidation(obj('me'), { onlyOnSubmit: true }); ">>,

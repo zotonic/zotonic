@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +46,7 @@ observe_module_activate(#module_activate{}, _Context) ->
     ok.
 
 observe_module_deactivate(#module_deactivate{module=?MODULE}, _Context) ->
-    [exometer_report:unsubscribe(z_exometer_mqtt, Metric, DataPoint) || 
+    [exometer_report:unsubscribe(z_exometer_mqtt, Metric, DataPoint) ||
         {Metric, DataPoint, _, _, _} <- erlang_subscriptions()];
 observe_module_deactivate(#module_deactivate{}, _Context) ->
     ok.
@@ -59,7 +59,7 @@ erlang_metrics() ->
     [
         {[erlang, memory], {function, erlang, memory, [],
                 proplist, [total, processes, system, atom, binary, code, ets]}, [{cache, 500}]},
-        {[erlang, system_info], {function, erlang, system_info, ['$dp'], 
+        {[erlang, system_info], {function, erlang, system_info, ['$dp'],
                 value, [process_limit, process_count, port_limit, port_count]}, []},
         {[erlang, statistics], {function, erlang, statistics, ['$dp'],
                 value, [run_queue]}, []},

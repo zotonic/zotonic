@@ -10,7 +10,7 @@
         <th width="35%">{_ Email _}</th>
         <th width="60%"></th>
     </tr>
-    
+
     {% for rid, email, is_enabled in r %}
         <tr id="{{ #rcpt.rid }}">
             <td>
@@ -28,7 +28,7 @@
                     {% button text=_"edit" class="btn btn-default btn-xs" %}
                     {% button text=_"delete" class="btn btn-default btn-xs" postback={recipient_delete recipient_id=rid target=#rcpt.rid} delegate="controller_admin_mailinglist_recipients" %}
                 </div>
-                
+
                 {% with m.mailinglist.bounce_reason[email] as log %}
                     <span style="color: #999">{{ log.mailer_host }} {{ log.mailer_message }}</span>
                 {% endwith %}

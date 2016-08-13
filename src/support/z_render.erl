@@ -5,25 +5,25 @@
 %% Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
 
 %% This is the MIT license.
-%% 
+%%
 %% Copyright (c) 2008-2009 Rusty Klophaus
 %% Copyright (c) 2009 Marc Worrell
-%% 
-%% Permission is hereby granted, free of charge, to any person obtaining a copy 
-%% of this software and associated documentation files (the "Software"), to deal 
-%% in the Software without restriction, including without limitation the rights 
+%%
+%% Permission is hereby granted, free of charge, to any person obtaining a copy
+%% of this software and associated documentation files (the "Software"), to deal
+%% in the Software without restriction, including without limitation the rights
 %% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-%% of the Software, and to permit persons to whom the Software is furnished to do 
+%% of the Software, and to permit persons to whom the Software is furnished to do
 %% so, subject to the following conditions:
-%% 
-%% The above copyright notice and this permission notice shall be included in all 
+%%
+%% The above copyright notice and this permission notice shall be included in all
 %% copies or substantial portions of the Software.
-%% 
-%% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-%% INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-%% PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE 
-%% LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
-%% TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+%%
+%% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+%% INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+%% PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+%% LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+%% TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 %% OR OTHER DEALINGS IN THE SOFTWARE.
 
 
@@ -37,7 +37,7 @@
     render/2,
     render_actions/4,
     render_to_iolist/2,
-    
+
     validator/4,
     render_validator/4,
 
@@ -87,12 +87,12 @@
 
     set_value/3,
     set_value_selector/3,
-    
+
     css_selector/1,
     css_selector/2,
     quote_css_selector/1,
     render_css_selector/1,
-    
+
     dialog/4,
     dialog_close/1,
 
@@ -102,7 +102,7 @@
     growl/2,
     growl_error/2,
     growl/4,
-    
+
     make_postback/6,
     make_postback/7,
     make_postback_info/6,
@@ -114,13 +114,13 @@
 
 
 %% @doc Render adds output to the render field of the context state, makes sure that the added output is an iolist
-render(undefined, Context) -> 
+render(undefined, Context) ->
     Context;
-render(<<>>, Context) -> 
+render(<<>>, Context) ->
     Context;
-render([], Context) -> 
+render([], Context) ->
     Context;
-render({script, _Args} = Script, Context) -> 
+render({script, _Args} = Script, Context) ->
     %% Renders the script tag - might not be correct as it adds everything collected in Context and not what was collected
     %% in the added iolist().  So maybe we should just ignore the {script} tag here.
     %% When the script tag should be rendered then it is better to call z_context:output/2 instead of z_render:render/2.
@@ -131,13 +131,13 @@ render(#context{} = C, Context) ->
     z_context:merge_scripts(C, C1);
 render({javascript, Script}, Context) ->
     z_script:add_content_script(Script, Context);
-render(B, Context) when is_binary(B) -> 
+render(B, Context) when is_binary(B) ->
     Context#context{render=[Context#context.render, B]};
-render(N, Context) when is_integer(N), N >= 0, N =< 255 -> 
+render(N, Context) when is_integer(N), N >= 0, N =< 255 ->
     Context#context{render=[Context#context.render, N]};
-render(N, Context) when is_integer(N) -> 
+render(N, Context) when is_integer(N) ->
     Context#context{render=[Context#context.render, z_convert:to_binary(N)]};
-render(A, Context) when is_atom(A) -> 
+render(A, Context) when is_atom(A) ->
     Context#context{render=[Context#context.render, atom_to_list(A)]};
 render(List=[H|_], Context) when is_integer(H) orelse is_binary(H) ->
     %% Optimization for rendering lists of characters, aka strings
@@ -175,13 +175,13 @@ render_actions(_, _, undefined, Context) ->
     {[], Context};
 render_actions(_, _, [], Context) ->
     {[], Context};
-render_actions(TriggerId, TargetId, [H|T], Context) -> 
+render_actions(TriggerId, TargetId, [H|T], Context) ->
     {Script1, Context1} = render_actions(TriggerId, TargetId, H, Context),
     {Script2, Context2} = render_actions(TriggerId, TargetId, T, Context1),
     {[Script1,Script2], Context2};
 render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
-    case z_utils:is_true(proplists:get_value(show_if, Args, true)) of 
-        true -> 
+    case z_utils:is_true(proplists:get_value(show_if, Args, true)) of
+        true ->
             Trigger = proplists:get_value(trigger, Args, TriggerId),
             Target = proplists:get_value(target,  Args, TargetId),
             case z_module_indexer:find(action, Action, Context) of
@@ -191,7 +191,7 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
                     lager:info("No action enabled for \"~p\"", [Action]),
                     {[], Context}
             end;
-        false -> 
+        false ->
             {[],Context}
     end.
 
@@ -218,20 +218,20 @@ render_validator(TriggerId, TargetId, Args, Context) ->
     % The validator object, can have parameters for failureMessage.
     VldOptions  = z_utils:js_object(Args, [type,trigger,id,target], Context),
     VldScript   = [<<"z_init_validator(\"">>,Trigger,<<"\", ">>,VldOptions,<<");\n">>],
-    
+
     % Now render and append all individual validations
     % The Postback contains all information to perform a server side validation
     % The Script is the script that ties the client side validation to the element
     RValidation = fun({VType,VArgs}, {PostbackAcc,ScriptAcc,Ctx}) ->
                     VMod = case proplists:get_value(delegate, VArgs) of
-                                undefined -> 
+                                undefined ->
                                     case z_module_indexer:find(validator, VType, Context) of
                                         {ok, #module_index{erlang_module=Mod}} ->
                                             {ok, Mod};
                                         {error, enoent} ->
                                             lager:info("No validator found for \"~p\"", [VType])
                                     end;
-                                Delegate  -> 
+                                Delegate  ->
                                     {ok, Delegate}
                              end,
                      case VMod of
@@ -258,14 +258,14 @@ render_validator(TriggerId, TargetId, Args, Context) ->
 
 %%% AJAX UPDATES %%%
 
-%% @doc Set the contents of an element to the the html fragment 
+%% @doc Set the contents of an element to the the html fragment
 update(TargetId, Html, Context) ->
     update_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Replace an element to the the html fragment
 replace(TargetId, Html, Context) ->
     replace_selector(css_selector(TargetId), Html, Context).
-    
+
 %% @doc Insert a html fragment at the top of the contents of an element
 insert_top(TargetId, Html, Context) ->
     insert_top_selector(css_selector(TargetId), Html, Context).
@@ -282,7 +282,7 @@ insert_before(TargetId, Html, Context) ->
 insert_after(TargetId, Html, Context) ->
     insert_after_selector(css_selector(TargetId), Html, Context).
 
-%% @doc Set the contents of an element to the the html fragment 
+%% @doc Set the contents of an element to the the html fragment
 appear(TargetId, Html, Context) ->
     appear_selector(css_selector(TargetId), Html, Context).
 
@@ -314,7 +314,7 @@ update_iframe(IFrameId, Html, Context) ->
     ],
     Context1#context{updates=[{Update}|Context1#context.updates]}.
 
-%% @doc Set the contents of all elements matching the css selector to the the html fragment 
+%% @doc Set the contents of all elements matching the css selector to the the html fragment
 update_selector(CssSelector, Html, Context) ->
     update_context(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
 
@@ -367,9 +367,9 @@ update_context(CssSelector, Html, Function, AfterEffects, Context) ->
     {Html1, Context1} = render_html(Html, Context),
     Update = update_js(CssSelector, Html1, Function, AfterEffects),
     Context1#context{updates=[{Update}|Context1#context.updates]}.
-    
 
-%% @doc Set the contents of all elements matching the css selector to the the html fragment 
+
+%% @doc Set the contents of all elements matching the css selector to the the html fragment
 update_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"html">>, <<".widgetManager()">>).
 
@@ -415,15 +415,15 @@ update_js(CssSelector, Html, <<"val">>, AfterEffects) ->
 update_js(CssSelector, Html, <<"replaceWith">>, AfterEffects) ->
     update_js_selector_first(CssSelector, Html, <<"replaceWith">>, AfterEffects);
 update_js(CssSelector, Html, Function, AfterEffects) ->
-    [ <<"z_text_to_nodes(\"">>, z_utils:js_escape(Html), $", $), 
-      $., Function, $(, quote_css_selector(CssSelector), $), 
-      AfterEffects, 
+    [ <<"z_text_to_nodes(\"">>, z_utils:js_escape(Html), $", $),
+      $., Function, $(, quote_css_selector(CssSelector), $),
+      AfterEffects,
       $;].
 
 update_js_selector_first(CssSelector, Html, Function, AfterEffects) ->
-    [ $$, $(, quote_css_selector(CssSelector), 
-      <<").">>, Function, <<"(\"">>, z_utils:js_escape(Html), $", $), 
-      AfterEffects, 
+    [ $$, $(, quote_css_selector(CssSelector),
+      <<").">>, Function, <<"(\"">>, z_utils:js_escape(Html), $", $),
+      AfterEffects,
       $;].
 
     render_html(#render{template=Template, is_all=All, vars=Vars}, Context) ->
@@ -503,7 +503,7 @@ make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
     z_utils:pickle(PostbackInfo, Context).
 
 
-%% @doc Make a javascript to call the postback, posting an encoded string containing callback information. 
+%% @doc Make a javascript to call the postback, posting an encoded string containing callback information.
 %% The PostbackTag is send to the server, EventType is normally the atom 'postback'.
 %% @spec make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) -> {JavascriptString, PickledPostback}
 make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) ->
@@ -521,7 +521,7 @@ make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, QArgs, Cont
             <<", '">>,PickledPostbackInfo,
             <<"', ">>, ZEvtArgs,
             <<");">>
-     ], 
+     ],
      PickledPostbackInfo}.
 
 postback_trigger_id(undefined) -> <<"undefined">>;
@@ -540,7 +540,7 @@ make_postback_zevtargs(QArgs) when is_list(QArgs) ->
                     QArgB = z_convert:to_binary(QArg),
                     [<<"zEvtQArgs.push({name:$('#">>, QArgB, <<"').attr('name'), value:$('#">>,QArgB,<<"').val()});">>]
                 end
-                || QArg <- QArgs 
+                || QArg <- QArgs
             ]
         ],
         <<"zEvtQArgs">>
@@ -556,12 +556,12 @@ make_validation_postback(Validator, Args, Context) ->
 
 %% Add to the queue of wired actions. These will be rendered in get_script().
 
-wire(Actions, Context) -> 
+wire(Actions, Context) ->
     wire(<<>>, <<>>, Actions, Context).
 
-wire(undefined, Actions, Context) ->    
+wire(undefined, Actions, Context) ->
     wire(<<>>, <<>>, Actions, Context);
-wire(TriggerId, Actions, Context) ->    
+wire(TriggerId, Actions, Context) ->
     wire(TriggerId, TriggerId, Actions, Context).
 
 wire(undefined, TargetId, Actions, Context) ->
@@ -612,7 +612,7 @@ quote_css_selector([$$|_] = S) -> S;
 quote_css_selector(S) -> [$", S, $"].
 
 
-%% @doc Render a css selector, allow direct expressions like 
+%% @doc Render a css selector, allow direct expressions like
 render_css_selector(Selector) ->
     case quote_css_selector(Selector) of
         [$$|_] = Sel -> Sel;

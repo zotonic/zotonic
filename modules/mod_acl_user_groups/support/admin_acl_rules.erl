@@ -44,7 +44,7 @@ event(#postback{message={admin_connect_select, Args}} = Msg, Context) ->
                     end;
                 false ->
                     z_render:growl(?__("Please select a collaboration_group", Context), Context)
-            end            
+            end
     end;
 event(Msg, Context) ->
     event_admin(Msg, Context).
@@ -73,7 +73,7 @@ event1(#postback{message={collab_select, Args}}, Context) ->
     z_render:update(
                 "acl-cg-collab-select",
                 #render{
-                    template="_admin_acl_rule_collab_select.tpl", 
+                    template="_admin_acl_rule_collab_select.tpl",
                     vars=[
                         {content_group_id, proplists:get_value(id, Args)}
                     ]

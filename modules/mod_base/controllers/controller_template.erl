@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,11 +47,11 @@ content_types_provided(ReqData, Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
             {[{"text/html", provide_content}], ReqData, Context};
-        Mime -> 
+        Mime ->
             {[{Mime, provide_content}], ReqData, Context}
     end.
 
-%% @doc Check if the current user is allowed to view the resource. 
+%% @doc Check if the current user is allowed to view the resource.
 is_authorized(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     case z_context:get(anonymous, Context1) of
@@ -86,5 +86,5 @@ set_optional_cache_header(Context) ->
             z_context:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(MaxAge), Context)
     end.
 
-            
-            
+
+

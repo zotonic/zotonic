@@ -4,7 +4,7 @@
 %}
 <form id="dialog-merge-find" class="row form form-horizontal">
     <input type="hidden" name="id" value="{{ id }}" />
-    
+
     <div class="col-md-8">
         <input name="find_text" type="text" value="{{ text|default:'' }}" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
     </div>
@@ -26,7 +26,7 @@
 <p><br/></p>
 
 <div id="dialog-merge-found"
-     class="do_feedback" 
+     class="do_feedback"
      data-feedback="trigger: 'dialog-merge-find', delegate: 'mod_admin_merge'">
 </div>
 
@@ -41,7 +41,7 @@
     $('#dialog-merge-find').change();
     $("#dialog-merge-found").on('click', '.thumbnail', function(e) {
         e.preventDefault();
-        z_event('dialog_merge_find', { 
+        z_event('dialog_merge_find', {
             select_id: $(this).data('id')
         });
     });

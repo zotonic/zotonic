@@ -47,7 +47,7 @@ modify_rsc_test() ->
     %% Delete
     ?assertThrow({error, eacces}, m_rsc:delete(Id, C)),
     ?assertEqual(ok, m_rsc:delete(Id, AdminC)),
-    
+
     %% verify that it's gone
     ?assertEqual(undefined, m_rsc:p(Id, title, AdminC)),
 

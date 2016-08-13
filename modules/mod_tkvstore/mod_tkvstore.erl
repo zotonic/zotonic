@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %%
-%% @doc Simple (type,key)/value store. Stores data in the store with minimal latency 
+%% @doc Simple (type,key)/value store. Stores data in the store with minimal latency
 %% and (local) serialization of get/put requests.
 
 %% Copyright 2010 Marc Worrell
@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@
     pid_observe_tkvstore_get/3,
     pid_observe_tkvstore_put/3,
     pid_observe_tkvstore_delete/3,
-    
+
     writer_loop/2
 ]).
 
@@ -49,7 +49,7 @@
 %%====================================================================
 %% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link() -> 
+start_link() ->
     start_link([]).
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
@@ -87,8 +87,8 @@ init(Args) ->
     m_tkvstore:init(Context),
     WriterPid = erlang:spawn_link(?MODULE, writer_loop, [self(), Context]),
     {ok, #state{
-            context=z_context:new(Context), 
-            data=dict:new(), 
+            context=z_context:new(Context),
+            data=dict:new(),
             writer_pid=WriterPid
         }}.
 
@@ -104,7 +104,7 @@ handle_call(#tkvstore_get{type=Type, key=Key}, _From, State) ->
         {ok, Data} ->
             % Data is being written, return the data that is not yet in the store
             {reply, Data, State};
-        error -> 
+        error ->
             %% @todo Spawn this process when it starts to be a blocker
             {reply, m_tkvstore:get(Type, Key, State#state.context), State}
     end;
@@ -122,7 +122,7 @@ handle_cast(#tkvstore_put{type=Type, key=Key, value=Data}, State) ->
     State#state.writer_pid ! {data, Type, Key, Data},
     {noreply, State#state{ data=dict:store({Type, Key}, Data, State#state.data) }};
 
-%% @doc Delete a value from the tkvstore    
+%% @doc Delete a value from the tkvstore
 handle_cast(#tkvstore_delete{type=Type, key=Key}, State) ->
     State#state.writer_pid ! {delete, Type, Key},
     {noreply, State#state{ data=dict:store({Type, Key}, undefined, State#state.data) }};

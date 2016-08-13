@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -71,7 +71,7 @@ event(#submit{message={user_add, Props}}, Context) ->
                 {email, Email},
                 {creator_id, self}
             ],
-            
+
             F = fun(Ctx) ->
                 case m_rsc:insert(PersonProps, Ctx) of
                     {ok, PersonId} ->
@@ -95,7 +95,7 @@ event(#submit{message={user_add, Props}}, Context) ->
                         throw({error, InsReason})
                 end
             end,
-            
+
             case z_db:transaction(F, Context) of
                 {ok, _PersonId} ->
                     Context1 = z_render:growl(["Created the user ",z_html:escape(Title), "."], Context),
