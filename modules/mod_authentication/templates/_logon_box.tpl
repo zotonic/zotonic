@@ -13,21 +13,21 @@ Params:
     {% if form_title_tpl %}
         {% include form_title_tpl %}
     {% endif %}
-    
+
     <div class="z-logon-form">
         {% if m.rsc.page_logon.body %}
             <div class="alert">{{ m.rsc.page_logon.body }}</div>
         {% endif %}
-    
+
         {% if form_extra_tpl %}
             {% include form_extra_tpl %}
         {% endif %}
-    
+
         <div id="logon_error" class="alert alert-danger">
             {% include "_logon_error.tpl" reason=error_reason %}
         </div>
-    
-        {% if form_form_tpl %}    
+
+        {% if form_form_tpl %}
             {% include form_form_tpl
                 page=page
                 use_wire=use_wire
@@ -36,8 +36,8 @@ Params:
                 style_width=style_width
             %}
         {% endif %}
-    
-        {% if form_support_tpl %}            
+
+        {% if form_support_tpl %}
             {% include form_support_tpl
                 update_target=update_target
                 update_template=update_template
@@ -59,7 +59,7 @@ Params:
             style_width=style_width
         %}
     {% endif %}
-    
+
 </div>
 {# Use a real post for all forms on this page, and not AJAX or Websockets. This will enforce all cookies to be set correctly. #}
 {% javascript %}

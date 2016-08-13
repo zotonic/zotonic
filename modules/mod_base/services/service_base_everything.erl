@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,12 +41,12 @@ process_get(_ReqData, Context) ->
 
 get_ids(true, PageNr, Context) ->
     Ids = z_db:q("SELECT id
-                  FROM rsc 
+                  FROM rsc
                   WHERE visible_for = 0
                     AND is_published
                     AND publication_start <= now()
                     AND publication_end >= now()
-                  ORDER BY id 
+                  ORDER BY id
                   LIMIT $1
                   OFFSET $2",
                  [?IDS_PAGE_LENGTH, (PageNr-1) * ?IDS_PAGE_LENGTH],
@@ -54,8 +54,8 @@ get_ids(true, PageNr, Context) ->
     [ Id || {Id} <- Ids ];
 get_ids(false, PageNr, Context) ->
     Ids = z_db:q("SELECT id
-                  FROM rsc 
-                  ORDER BY id 
+                  FROM rsc
+                  ORDER BY id
                   LIMIT $1
                   OFFSET $2",
                  [?IDS_PAGE_LENGTH, (PageNr-1) * ?IDS_PAGE_LENGTH],

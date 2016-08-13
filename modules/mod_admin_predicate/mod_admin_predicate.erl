@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -88,7 +88,7 @@ pred_delete(Id, Context) ->
 
 pred_move_and_delete(FromPredId, ToPredId, Context) ->
     z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
-    Edges = z_db:q("select a.id 
+    Edges = z_db:q("select a.id
                     from edge a
                             left join edge b
                             on  a.subject_id = b.subject_id
@@ -146,7 +146,7 @@ take([Id|L], N, Acc) ->
 %% the predicate information in the db and remove it from the update props.
 %% @spec observe_rsc_update({rsc_update, ResourceId, OldResourceProps}, {Changed, UpdateProps}, Context) -> {NewChanged, NewUpdateProps}
 observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
-    case       proplists:is_defined(predicate_subject, Props) 
+    case       proplists:is_defined(predicate_subject, Props)
         orelse proplists:is_defined(predicate_object, Props) of
 
         true ->
@@ -154,7 +154,7 @@ observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
             Objects  = proplists:get_all_values(predicate_object, Props),
             m_predicate:update_noflush(Id, Subjects, Objects, Context),
 
-            Props1 = proplists:delete(predicate_subject, 
+            Props1 = proplists:delete(predicate_subject,
                         proplists:delete(predicate_object, Props)),
             {true, Props1};
         false ->
@@ -194,7 +194,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 url={admin_edges}}
      |Acc].
 
-observe_search_query({search_query, {edges, [{predicate,Predicate}]}, _OffsetLimit}, Context) 
+observe_search_query({search_query, {edges, [{predicate,Predicate}]}, _OffsetLimit}, Context)
    when Predicate =/= undefined, Predicate =/= <<>>, Predicate =/= [] ->
     PredId = m_rsc:rid(Predicate, Context),
     #search_sql{

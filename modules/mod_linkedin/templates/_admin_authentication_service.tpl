@@ -16,7 +16,7 @@
                             <input type="text" id="linkedin_appid" name="appid" value="{{ m.config.mod_linkedin.appid.value|escape }}" class="form-control" />
                         </div>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="control-label col-md-3" for="appsecret">{_ Secret Key _}</label>
                         <div class="col-md-9">
@@ -40,7 +40,7 @@
                             <button class="btn btn-primary" type="submit">{_ Save LinkedIn Settings _}</button>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

@@ -69,7 +69,7 @@
     {% empty %}
     <p>{_ No recipients _}</p>
     {% endfor %}
-	
+
 </div>
 {% pager result=recipients dispatch="admin_mailinglist_recipients" id=id qargs %}
     {% endwith %}

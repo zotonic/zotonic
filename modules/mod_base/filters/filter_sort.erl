@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ sort(Input, Context) when is_record(Input, rsc_list) ->
 sort(undefined, _Arg, _Context) ->
     undefined;
 sort(Input, Arg, _Context) when is_list(Input) ->
-    case is_opt(Arg) of 
+    case is_opt(Arg) of
         false -> Input;
         ascending -> lists:sort(Input);
         descending -> lists:reverse(lists:sort(Input))
@@ -95,7 +95,7 @@ is_opt(Opt) ->
     %% and I don't want to use nested case statments, so this was the most concise
     %% I could come up with... :p
     proplists:get_value(
-      true, 
+      true,
       [{lists:member(Opt, ascending_keywords()), ascending},
        {lists:member(Opt, descending_keywords()), descending}],
       false).

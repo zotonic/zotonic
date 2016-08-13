@@ -12,7 +12,7 @@
 render_action(_TriggerId, _TargetId, Args, Context) ->
     InitScript = iolist_to_binary(proplists:get_value(init_script, Args, [])),
     Name = proplists:get_value(name, Args),
-    Files = proplists:get_value(files, Args, []), 
+    Files = proplists:get_value(files, Args, []),
 
     Urls = [begin
                 [Url] = z_lib_include:url([U], Context),

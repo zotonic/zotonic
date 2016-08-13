@@ -9,10 +9,10 @@
 	<fieldset class="admin-form">
 		<div class="form-item clearfix">
 			{% if is_editable %}
-				<textarea rows="10" 
-				    id="email_text_html{{ lang_code_for_id }}" 
-				    name="email_text_html{{ lang_code_with_dollar }}" 
-				    class="input-block-level body tinymce-init" 
+				<textarea rows="10"
+				    id="email_text_html{{ lang_code_for_id }}"
+				    name="email_text_html{{ lang_code_with_dollar }}"
+				    class="input-block-level body tinymce-init"
 				    {% include "_language_attrs.tpl" language=lang_code %}>{{ id.email_text_html[lang_code] |escape }}</textarea>
 			{% else %}
 				{{ id.email_text_html[lang_code]  }}

@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -99,7 +99,7 @@ convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
             case filelib:is_regular(OutFile) of
                 true ->
                     ok;
-                false -> 
+                false ->
                     case filelib:is_regular(InFile) of
                         false -> {error, enoent};
                         true -> {error, convert_error}
@@ -140,7 +140,7 @@ once(Cmd, OutFile) ->
             case filelib:is_regular(OutFile) of
                 true ->
                     ok;
-                false -> 
+                false ->
                     lager:error("convert cmd ~p failed, result ~p", [Cmd, Result]),
                     {error, convert_error}
             end;
@@ -148,9 +148,9 @@ once(Cmd, OutFile) ->
             lager:debug("Waiting for parallel: ~p", [Cmd]),
             Ref = gproc:monitor(Key),
             receive
-                {gproc, unreg, Ref, Key} -> 
+                {gproc, unreg, Ref, Key} ->
                     ok
-            end 
+            end
     end.
 
 
@@ -159,7 +159,7 @@ once(Cmd, OutFile) ->
 %% @spec infile_suffix(Mime) -> Suffix::string()
 infile_suffix(<<"image/gif">>) -> [];
 infile_suffix(_) -> "[0]".
-     
+
 
 %% @spec size(MediaRef, Filters, Context) -> {size, Width, Height, ResizedMime} | {error, Reason}
 %%   MediaRef = Filename | MediaProps
@@ -173,8 +173,8 @@ size(InFile, Filters, Context) ->
         {error, Reason} ->
             {error, Reason}
     end.
-    
-    
+
+
     size_props(FileProps, Filters) ->
         {mime, Mime} = proplists:lookup(mime, FileProps),
         case can_generate_preview(Mime) of
@@ -182,13 +182,13 @@ size(InFile, Filters, Context) ->
                 {width, ImageWidth}   = proplists:lookup(width, FileProps),
                 {height, ImageHeight} = proplists:lookup(height, FileProps),
                 Orientation = proplists:get_value(orientation, FileProps, 1),
-                
+
                 ReqWidth   = z_convert:to_integer(proplists:get_value(width, Filters)),
                 ReqHeight  = z_convert:to_integer(proplists:get_value(height, Filters)),
                 {CropPar,_Filters1} = fetch_crop(Filters),
                 {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation, is_enabled(upscale, Filters)),
                 case CropArgs of
-                    none -> 
+                    none ->
                         case is_enabled(extent, Filters) of
                             true when is_integer(ReqWidth) andalso is_integer(ReqHeight) ->
                                 {size, ReqWidth, ReqHeight, "image/jpeg"};
@@ -224,7 +224,7 @@ cmd_args(FileProps, Filters, OutMime) ->
     {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation, is_enabled(upscale, Filters)),
     Filters2   = [  {make_image, Mime},
                     {correct_orientation, Orientation},
-                    {resize, ResizeWidth, ResizeHeight, is_enabled(upscale, Filters)}, 
+                    {resize, ResizeWidth, ResizeHeight, is_enabled(upscale, Filters)},
                     {crop, CropArgs},
                     {colorspace, z_config:get(default_colorspace, "sRGB")},
                     {density, 72} | Filters1],
@@ -245,9 +245,9 @@ cmd_args(FileProps, Filters, OutMime) ->
                end,
     Filters6 = add_optional_quality(Filters5, is_lossless(OutMime), ResizeWidth, ResizeHeight),
     Filters7 = move_pre_post_filters(Filters6),
-    {EndWidth,EndHeight,Args} = lists:foldl(fun (Filter, {W,H,Acc}) -> 
+    {EndWidth,EndHeight,Args} = lists:foldl(fun (Filter, {W,H,Acc}) ->
                                                 {NewW,NewH,Arg} = filter2arg(Filter, W, H, Filters6),
-                                                {NewW,NewH,[Arg|Acc]} 
+                                                {NewW,NewH,[Arg|Acc]}
                                             end,
                                             {ImageWidth,ImageHeight,[]},
                                             Filters7),
@@ -274,7 +274,7 @@ is_enabled(F, [{F, Val}|_]) -> z_convert:to_bool(Val);
 is_enabled(F, [_|R]) -> is_enabled(F, R).
 
 move_pre_post_filters(Fs) ->
-    lists:filter(fun is_pre_filter/1, Fs) 
+    lists:filter(fun is_pre_filter/1, Fs)
         ++ lists:filter(fun(F) -> not is_pre_filter(F) andalso not is_post_filter(F) end, Fs)
         ++ lists:filter(fun is_post_filter/1, Fs).
 
@@ -365,11 +365,11 @@ filter2arg({height, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg({resize, Width, Height, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
-filter2arg({resize, EndWidth, EndHeight, false}, Width, Height, _AllFilters) 
+filter2arg({resize, EndWidth, EndHeight, false}, Width, Height, _AllFilters)
   when Width =< EndWidth andalso Height =< EndHeight ->
     %% No scaling up, keep original image dimensions
     {Width, Height, []};
-filter2arg({resize, EndWidth, EndHeight, true}, Width, Height, _AllFilters) 
+filter2arg({resize, EndWidth, EndHeight, true}, Width, Height, _AllFilters)
   when Width < EndWidth andalso Height < EndHeight ->
     % Scale up
     EArg = ["-resize ", integer_to_list(EndWidth),$x,integer_to_list(EndHeight)],
@@ -389,7 +389,7 @@ filter2arg({crop, none}, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg({crop, {CropL, CropT, CropWidth, CropHeight}}, _Width, _Height, _AllFilters) ->
     GArg = "-gravity NorthWest",
-    CArg = ["-crop ",   integer_to_list(CropWidth),$x,integer_to_list(CropHeight), 
+    CArg = ["-crop ",   integer_to_list(CropWidth),$x,integer_to_list(CropHeight),
                         $+,integer_to_list(CropL),$+,integer_to_list(CropT)],
     EArg = ["-extent ",   integer_to_list(CropWidth),$x,integer_to_list(CropHeight)],
     RArg = "+repage",
@@ -422,7 +422,7 @@ filter2arg(lossless, Width, Height, _AllFilters) ->
 filter2arg({quality, Q}, Width, Height, _AllFilters) ->
     {Width,Height, ["-quality ",integer_to_list(Q)]};
 filter2arg({removebg, Fuzz}, Width, Height, AllFilters) ->
-    Filter = case lists:member(lossless, AllFilters) of 
+    Filter = case lists:member(lossless, AllFilters) of
                  true ->
                      %% PNG images get the alpha channel flood-filled to remove the background.
                      ["-matte -fill none -fuzz ", integer_to_list(Fuzz), "% ",
@@ -514,7 +514,7 @@ calc_size(Width, undefined, ImageWidth, ImageHeight, CropPar, Orientation, IsUps
     Height = round((ImageHeight / ImageWidth) * Width),
     calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, Orientation, IsUpscale);
 
-calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, false) 
+calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, false)
     when CropPar /= none, Width > ImageWidth, Height > ImageHeight ->
     {Width, Height, none};
 
@@ -529,18 +529,18 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
             end;
         _ ->
         %% When we are doing a crop then we have to calculate the
-        %% maximum inner bounding box, and not the maximum outer 
+        %% maximum inner bounding box, and not the maximum outer
         %% bounding box for the image
         {W,H} = case Aspect > ImageAspect of
         % width is the larger one
         true  -> {Width, Width / ImageAspect};
-        
+
         % height is the larger one
         false -> {ImageAspect * Height, Height}
         end,
 
         Scale = ImageWidth / W,
-            
+
         CropL = case CropPar of
         X when X == north_west; X == west; X == south_west -> 0;
         X when X == north_east; X == east; X == south_east -> ceil(W - Width);
@@ -567,7 +567,7 @@ string2filter("crop", "none") ->
     {crop,none};
 string2filter("crop", []) ->
     {crop,center};
-string2filter("crop", Where) -> 
+string2filter("crop", Where) ->
     Dir = case Where of
             "north"      -> north;
             "north_east" -> north_east;

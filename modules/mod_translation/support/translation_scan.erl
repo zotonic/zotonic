@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ scan(Context) ->
               [z_module_indexer:all(What, Context)
                || What <- [template, scomp, action, validator, model, service, erlang]]),
     ModFiles = [{Mod, Path} || #module_index{module=Mod, filepath=Path} <- Files ],
-    Combined = [{ModDir, [ModDir++"/"++z_convert:to_list(Mod)++".erl" 
+    Combined = [{ModDir, [ModDir++"/"++z_convert:to_list(Mod)++".erl"
                           | proplists:get_all_values(Mod, ModFiles)]}
                 || {Mod, ModDir} <- Modules],
     [ scan_module(Mod) || Mod <- Combined ].
@@ -88,7 +88,7 @@ parse_erl_form({eof, _}, _File, Epp, Acc) ->
     epp:close(Epp),
     Acc;
 parse_erl_form({ok, Other}, File, Epp, Acc) ->
-    parse_erl_form(epp:parse_erl_form(Epp), File, Epp, 
+    parse_erl_form(epp:parse_erl_form(Epp), File, Epp,
                    parse_erl_form_part(Other, File, Acc));
 parse_erl_form({error, _}, File, Epp, Acc) ->
     parse_erl_form(epp:parse_erl_form(Epp), File, Epp, Acc).
@@ -106,7 +106,7 @@ parse_erl_form_part({cons, _, X, Y}, File, Acc) ->
 parse_erl_form_part({op, _, '++', X, Y}, File, Acc) ->
     parse_erl_form_part(X, File, []) ++ parse_erl_form_part(Y, File, []) ++ Acc;
 parse_erl_form_part({'case', _, Expr, Exprs}, File, Acc) ->
-    parse_erl_form_part(Expr, File, []) ++ 
+    parse_erl_form_part(Expr, File, []) ++
         lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Exprs);
 
 parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},

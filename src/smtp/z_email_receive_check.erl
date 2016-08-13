@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,9 +35,9 @@ is_bulk(#email_received{headers=Headers}) ->
            is_bulk_precedence(lists:keyfind(<<"x-precedence">>, 1, Headers))
     orelse is_bulk_precedence(lists:keyfind(<<"precedence">>, 1, Headers)).
 
-is_bulk_precedence(false) -> 
+is_bulk_precedence(false) ->
     false;
-is_bulk_precedence({_, S}) -> 
+is_bulk_precedence({_, S}) ->
     case z_convert:to_binary(z_string:to_lower(S)) of
         <<"bulk">> -> true;
         <<"junk">> -> true;
@@ -57,14 +57,14 @@ is_auto(#email_received{headers=Headers, email=Email, from=EnvelopFrom}) ->
     orelse is_auto_subject(Email#email.subject)
     orelse is_auto_from(EnvelopFrom).
 
-is_auto_precedence(false) -> 
+is_auto_precedence(false) ->
     false;
-is_auto_precedence({_, S}) -> 
+is_auto_precedence({_, S}) ->
     z_convert:to_binary(z_string:to_lower(S)) =:= <<"auto_reply">>.
 
-is_auto_submitted(false) -> 
+is_auto_submitted(false) ->
     false;
-is_auto_submitted({_, S}) -> 
+is_auto_submitted({_, S}) ->
     z_convert:to_binary(z_string:to_lower(S)) =/= <<"no">>.
 
 is_auto_from(undefined) -> false;
@@ -97,7 +97,7 @@ is_auto_subject_1(_) -> false.
 -spec is_bounce({binary(),binary()}, [{binary(),binary()}]) -> boolean().
 is_bounce(Type, Headers) ->
     case proplists:get_value(<<"Return-Path">>, Headers) of
-        <<"<>">> -> 
+        <<"<>">> ->
             % Could still be an auto-away message, do some further checks
             %
             % See: http://tools.ietf.org/html/rfc6522
@@ -111,7 +111,7 @@ is_bounce(Type, Headers) ->
             orelse lists:keymember(<<"X-Failed-Recipients">>, 1, Headers)
             orelse is_from_daemon(Headers)
             orelse is_delivery_status(Headers);
-        _ -> 
+        _ ->
             false
     end.
 
@@ -161,7 +161,7 @@ is_nonfatal_bounce(Type, Headers, Parts) ->
 
 is_nonfatal_subject(Headers) ->
     case lists:keyfind(<<"Subject">>, 1, Headers) of
-        false -> 
+        false ->
             false;
         {_, Subject} ->
             Subject1 = z_convert:to_binary(z_string:to_lower(Subject)),
@@ -173,7 +173,7 @@ contains_1(V, S) ->
     case binary:split(V, S) of
         [_] -> false;
         _ -> true
-    end. 
+    end.
 
 %% @doc Find the "message/delivery-status" part
 is_nonfatal_status({<<"multipart">>,<<"report">>}, Parts) ->
@@ -182,12 +182,12 @@ is_nonfatal_status({<<"multipart">>,<<"report">>}, Parts) ->
     ],
     case Status of
         [Body|_] ->
-            Body1 = binary:replace(Body, <<"\r\n\r\n">>, <<"\r\n">>, [global]), 
+            Body1 = binary:replace(Body, <<"\r\n\r\n">>, <<"\r\n">>, [global]),
             Hs = mochiweb_headers:to_list(mochiweb_headers:from_binary(<<Body1/binary, "\r\n\r\n">>)),
                    is_action_delayed(Hs)
             orelse is_nonfatal_diagnostic(Hs)
             orelse is_nonfatal_code(Hs);
-        [] -> 
+        [] ->
             false
     end;
 is_nonfatal_status(_Type, _Parts) ->

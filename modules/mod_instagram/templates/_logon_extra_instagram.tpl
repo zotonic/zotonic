@@ -7,8 +7,8 @@
 <li id="logon_instagram">
 	{% if is_connect and 'instagram'|member:identity_types %}
 		<a id="{{ #twdis }}" href="#disconnect" class="btn z-btn-social" style="background-color: #517fa4"><span class="z-icon z-icon-instagram"></span> {_ Disconnect from Instagram _}</a>
-		{% wire id=#twdis 
-				action={confirm title=_"Disconnect from Instagram" 
+		{% wire id=#twdis
+				action={confirm title=_"Disconnect from Instagram"
 								text=_"Do you want to disconnect your Instagram account?"
 								ok=_"Disconnect"
 								action={auth_disconnect id=m.acl.user type="instagram"}

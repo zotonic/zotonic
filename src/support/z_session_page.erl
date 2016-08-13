@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2013 Marc Worrell
 %% @doc Page session for interaction with the page displayed on the user agent. Support for comet polls and websocket.
-%%      The page session is the switchboard for getting data pushed to the user agent.  All queued requests 
+%%      The page session is the switchboard for getting data pushed to the user agent.  All queued requests
 %%      can be sent via the current request being handled, via a comet poll or a websocket connection.
 
 %% Copyright 2009-2013 Marc Worrell
@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,16 +36,16 @@
 
 %% session exports
 -export([
-    start_link/3, 
-    stop/1, 
+    start_link/3,
+    stop/1,
 
     whereis/2,
     ping/1,
-    
+
     session_pid/1,
-    set/3, 
-    get/2, 
-    incr/3, 
+    set/3,
+    get/2,
+    incr/3,
     append/3,
 
     auth_change/1,
@@ -66,9 +66,9 @@
     websocket_attach/3,
 
     get_attach_state/1,
-    
+
     check_timeout/1,
-    
+
     spawn_link/4
 ]).
 
@@ -92,7 +92,7 @@
 -spec start_link(pid(), binary(), #context{}) -> {ok, pid()} | {error, term()}.
 start_link(SessionPid, PageId, Context) when is_binary(PageId) ->
     % lager:debug(z_context:lager_md(Context), "[~p] register page ~p", [z_context:site(Context), PageId]),
-    gen_server:start_link({via, z_proc, {{session_page,PageId}, Context}}, 
+    gen_server:start_link({via, z_proc, {{session_page,PageId}, Context}},
                           ?MODULE,
                           {SessionPid, PageId, z_context:site(Context)},
                           []).
@@ -104,12 +104,12 @@ stop(undefined) ->
 stop(Pid) ->
     try
         gen_server:cast(Pid, stop)
-    catch _Class:_Term -> 
-        error 
+    catch _Class:_Term ->
+        error
     end.
 
 whereis(PageId, Context) when is_binary(PageId) ->
-    z_proc:whereis({session_page, PageId}, Context). 
+    z_proc:whereis({session_page, PageId}, Context).
 
 %% @doc Receive a ping, makes sure that we stay alive
 ping(Pid) ->
@@ -129,8 +129,8 @@ get_attach_state(undefined) ->
 get_attach_state(Pid) ->
     try
         gen_server:call(Pid, get_attach_state)
-    catch _Class:_Term -> 
-        error 
+    catch _Class:_Term ->
+        error
     end.
 
 auth_change(Pid) when is_pid(Pid) ->
@@ -273,7 +273,7 @@ init({SessionPid, PageId, Site}) ->
     trigger_check_timeout(),
     {ok, #page_state{
             session_pid=SessionPid,
-            page_id=PageId, 
+            page_id=PageId,
             last_detach=z_utils:now(),
             site=Site,
             transport=z_transport_queue:new()
@@ -293,7 +293,7 @@ handle_cast({append, Key, Value}, State) ->
     NewValue = case proplists:lookup(Key, State#page_state.vars) of
         {Key, L} -> L ++ [Value];
         none -> [Value]
-    end, 
+    end,
     State1 = State#page_state{vars = z_utils:prop_replace(Key, NewValue, State#page_state.vars)},
     {noreply, State1};
 
@@ -325,7 +325,7 @@ handle_cast({transport, Msg}, State) ->
     State1 = State#page_state{transport=z_transport_queue:in(Msg, State#page_state.transport)},
     State2 = ping_comet_ws(State1),
     {noreply, State2};
-    
+
 %% @doc Handle the ack of a sent message
 handle_cast({receive_ack, Ack}, State) ->
     {noreply, State#page_state{transport=z_transport_queue:ack(Ack, State#page_state.transport)}};
@@ -335,14 +335,14 @@ handle_cast(ping, State) ->
 
 %% The user of the session changed, signal any connected push connections, stop this page.
 handle_cast(auth_change, #page_state{comet_pid=CometPid, websocket_pid=WsPid} = State) ->
-    Msg = z_transport:msg(page, <<"session">>, #auth_change{page_id=State#page_state.page_id}, []), 
+    Msg = z_transport:msg(page, <<"session">>, #auth_change{page_id=State#page_state.page_id}, []),
     case WsPid of
         undefined when is_pid(CometPid) ->
             CometPid ! {final, [Msg]};
         undefined ->
             ok;
         _ ->
-            {ok, Data} = z_ubf:encode([Msg]), 
+            {ok, Data} = z_ubf:encode([Msg]),
             controller_websocket:websocket_send_data(WsPid, Data)
     end,
     {stop, normal, State};
@@ -452,7 +452,7 @@ handle_info(check_timeout, State) ->
         false ->
             State1 = State#page_state{transport=z_transport_queue:periodic(State#page_state.transport)},
             State2 = ping_comet_ws(State1),
-            trigger_check_timeout(), 
+            trigger_check_timeout(),
             {noreply, State2}
     end;
 
@@ -505,7 +505,7 @@ do_transport_data(State) ->
         [] ->
             {<<>>, State};
         _ ->
-            {ok, Data} = z_ubf:encode(Msgs), 
+            {ok, Data} = z_ubf:encode(Msgs),
             {Data, State1}
     end.
 
@@ -514,7 +514,7 @@ do_fetch_transport_msgs(State) ->
     Transport2 = lists:foldl(fun(Msg,TQ) ->
                                 z_transport_queue:wait_ack(Msg, page, TQ)
                              end,
-                             Transport1, 
+                             Transport1,
                              Msgs),
     {Msgs, State#page_state{transport=Transport2}}.
 
@@ -533,7 +533,7 @@ ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
 ping_comet_ws(#page_state{transport=TQ, comet_pid=CometPid} = State) when is_pid(CometPid) ->
     case z_transport_queue:is_empty(TQ) of
         true -> nop;
-        false -> 
+        false ->
             CometPid ! transport
     end,
     State;

@@ -5,7 +5,7 @@
         <a href="#" id="{{ #collab_group_id_rm }}" class="btn">&times;</a>
         {% wire id=#collab_group_id_rm
                 action={update target="acl-cg-collab-select"
-                            template="_admin_acl_rule_collab_select.tpl" 
+                            template="_admin_acl_rule_collab_select.tpl"
                             content_group_id=`undefined`}
         %}
     </p>

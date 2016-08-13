@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -78,7 +78,7 @@ render_block(OptBlock, Template, Vars, Context) when is_list(Vars) ->
     render_block(OptBlock, Template, props_to_map(Vars, #{}), Context);
 render_block(OptBlock, #module_index{filepath=Filename, key=Key}, Vars, Context) ->
     Template = #template_file{
-        filename=Filename, 
+        filename=Filename,
         template=Key#module_index_key.name
     },
     render_block(OptBlock, Template, Vars, Context);
@@ -99,28 +99,28 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
                     template_compiler:render(Template, Vars1, Opts, Context);
                 Block when is_atom(Block) ->
                     template_compiler:render_block(Block, Template, Vars1, Opts, Context)
-             end, 
+             end,
     z_depcache:in_process(OldCaching),
     case Result of
         {ok, Output} ->
             Output;
         {error, {{ErrFile,Line,Col}, _YeccModule, Error}} ->
-            try 
+            try
                 Error1 = iolist_to_binary(Error),
                 lager:error("[~p] Error rendering template: ~s:~p (~s)~n",
                            [z_context:site(Context), ErrFile, Line, Col, Error1])
-            catch 
+            catch
                 _:_ ->
                     lager:error("[~p] Error rendering template: ~s:~p (~p)~n",
                                [z_context:site(Context), ErrFile, Line, Col, Error])
             end,
             <<>>;
         {error, Reason} when is_list(Reason); is_binary(Reason) ->
-            try 
+            try
                 Reason1 = iolist_to_binary(Reason),
                 lager:error("[~p] Error rendering template: ~s (~s)~n",
                            [z_context:site(Context), Template, Reason1])
-            catch 
+            catch
                 _:_ ->
                     lager:error("[~p] Error rendering template: ~s (~p)~n",
                                [z_context:site(Context), Template, Reason])
@@ -138,7 +138,7 @@ ensure_zotonic_vars(Vars, Context) ->
         _ -> Vars
     end.
 
-props_to_map([], Map) -> 
+props_to_map([], Map) ->
     Map;
 props_to_map([{K,V}|Rest], Map) ->
     props_to_map(Rest, Map#{K => V});

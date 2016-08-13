@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,12 +48,12 @@ resource_exists(RD, Ctx) ->
                      Ctx}
             end;
         TraceName ->
-            Rootname = filename:rootname(filename:basename(TraceName)), 
+            Rootname = filename:rootname(filename:basename(TraceName)),
             [{trace_dir, TraceDir}] = ets:lookup(?WMTRACE_CONF_TBL, trace_dir),
             TracePath = filename:join([TraceDir, Rootname ++ ".wmtrace"]),
             {filelib:is_file(TracePath), RD, z_context:set(trace, TracePath, Ctx)}
     end.
-	
+
 html(Context) ->
     case z_context:get(trace, Context) of
         undefined ->
@@ -98,8 +98,8 @@ encode_trace(Data) ->
      {TrReqId, json_encode({array, [ encode_trace_part(P) || P <- Trace ]})}}.
 
 aggregate_trace(RawTrace) ->
-    {TrReqId, RestRawTrace} = case RawTrace of        
-                                  [{req_id, ReqId} | RestRawTrace_] -> 
+    {TrReqId, RestRawTrace} = case RawTrace of
+                                  [{req_id, ReqId} | RestRawTrace_] ->
                                       {ReqId, RestRawTrace_};
                                   RawTrace_ -> {undefined, RawTrace_}
                               end,
@@ -163,7 +163,7 @@ encode_request(ReqData) when is_record(ReqData, wm_reqdata) ->
                                atom_to_list(Body);
                            Body -> lists:flatten(io_lib:format("~s", [Body]))
                        end}]}.
-    
+
 encode_response(ReqData) ->
     {struct, [{"code", integer_to_list(
         wrq:response_code(ReqData))},
@@ -190,8 +190,8 @@ encode_trace_io(wmtrace_null) -> null;
 encode_trace_io(wmtrace_not_exported) -> "wmtrace_not_exported";
 encode_trace_io(Data) ->
     lists:flatten(io_lib:format("~p", [Data])).
-    
-    
+
+
 %% Adapted mochijson:encode, also escapes $<
 
 json_encode(true) ->
@@ -224,7 +224,7 @@ json_encode_proplist([]) ->
     "{}";
 json_encode_proplist(Props) ->
     F = fun ({K, V}, Acc) ->
-                KS = case K of 
+                KS = case K of
                          K when is_atom(K) ->
                              json_encode_string(atom_to_list(K));
                          K when is_integer(K) ->

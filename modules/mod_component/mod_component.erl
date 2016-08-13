@@ -1,4 +1,4 @@
-%% @copyright 2014 Maas-Maarten Zeeman 
+%% @copyright 2014 Maas-Maarten Zeeman
 %% @doc Create modular, dynamic user interfaces with components and rich interactions.
 
 %% Copyright 2014 Maas-Maarten Zeeman
@@ -31,11 +31,11 @@
 -export([event/2]).
 
 %%
-%% Incoming request to dynamically load a component on a page. 
+%% Incoming request to dynamically load a component on a page.
 %%
-%% We send a inject_component notification. 
+%% We send a inject_component notification.
 %%
-%% When we get an answer back we figure out what js/css or possibly other componets 
+%% When we get an answer back we figure out what js/css or possibly other componets
 %% need to be loaded, and inject a script on the page which downloades the resoures.
 %%
 %% When everything is loaded, the init function is called.
@@ -72,8 +72,8 @@ collect(List) ->
 
 collect([], Acc) ->
     lists:reverse(lists:flatten(Acc));
-collect([{Type, Resources}|Rest], Acc) 
-        when Type =:= js orelse Type =:= css 
+collect([{Type, Resources}|Rest], Acc)
+        when Type =:= js orelse Type =:= css
         orelse Type =:= <<"js">> orelse Type =:= <<"css">> ->
     collect(Rest, [Resources | Acc]);
 collect([Resource|Rest], Acc) ->

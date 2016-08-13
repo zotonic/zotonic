@@ -11,9 +11,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,12 +42,12 @@ render(Params, _Vars, Context) ->
     Opacity = proplists:get_value(opacity, Params, <<"0.8">>),
     Delegate= proplists:get_value(delegate, Params),
     ConnectToSortable= proplists:get_value(to_sorter, Params),
-    
+
     Groups1 = case Groups of
                 [] -> ["dragdrop"];
                 _ -> Groups
                end,
-               
+
 	% Get properties...
 	Delegate1    = case Delegate of
 	                undefined -> z_context:get_controller_module(Context);
@@ -60,14 +60,14 @@ render(Params, _Vars, Context) ->
             	        true  -> "'clone'";
             		    false -> "'original'"
             	    end,
-	
+
 	RevertText   =  case z_convert:to_binary(Revert) of
                 		<<"true">>    -> <<"true">>;
                 		<<"false">>   -> <<"false">>;
                 		<<"valid">>   -> <<"'valid'">>;
                 		<<"invalid">> -> <<"'invalid'">>
                     end,
-    
+
     HandleText   = case z_convert:to_binary(Handle) of
                         <<>> -> "null";
                         _ -> [$',z_utils:js_escape(Handle),$']
@@ -78,17 +78,17 @@ render(Params, _Vars, Context) ->
                         <<"y">> -> "'y'";
                         _ -> "null"
                     end,
-    
+
     ConnectToSortableText = case ConnectToSortable of
                         undefined -> "false";
                         _ ->  [$', $#, z_utils:js_escape(ConnectToSortable),$']
                     end,
-                    
+
 	% Write out the script to make this element draggable...
 	Script = io_lib:format("z_draggable($('#~s'), { handle: ~s, helper: ~s, revert: ~s, opacity: ~s, scroll: true, cursor: 'hand', axis: ~s, connectToSortable: ~s }, '~s');", [
-            		Id, 
-            		HandleText, 
-            		Helper, 
+            		Id,
+            		HandleText,
+            		Helper,
             		RevertText,
             		Opacity,
             		AxisText,
@@ -103,10 +103,10 @@ render(Params, _Vars, Context) ->
             ],
     {ok, z_render:wire(Id, Actions, Context)}.
 
-	
+
 groups_to_classes([]) -> "";
 groups_to_classes(undefined) -> "";
 groups_to_classes(Groups) ->
 	Groups1 = ["drag_group_" ++ z_convert:to_list(X) || X <- Groups],
 	string:join(Groups1, " ").
-	
+

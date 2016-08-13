@@ -31,7 +31,7 @@
             <td>
                 <div>
                         {% if rsc_stats[mid].bounce %}
-                                {% button class="btn btn-default btn-xs" text=_"Bounces" title=_"View and edit the bounced addresses and re-send the mailing." 
+                                {% button class="btn btn-default btn-xs" text=_"Bounces" title=_"View and edit the bounced addresses and re-send the mailing."
                                         action={dialog_open template="_dialog_mailing_bounces.tpl" title=_"Bounces" id=id mid=mid} %}
                         {% endif %}
                         {% if mid|member:scheduled %}
@@ -45,7 +45,7 @@
                         {% endif %}
                 </div>
             </td>
-            
+
             <td>{{ stats[1]|format_number }}</td>
 
             <td>

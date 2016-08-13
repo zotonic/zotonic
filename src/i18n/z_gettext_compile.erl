@@ -1,28 +1,28 @@
 %% Copyright (c) 2006, Torbjorn Tornkvist, tobbe@tornkvist.org
 %% All rights reserved.
-%% 
-%% Redistribution and use in source and binary forms, with or without 
+%%
+%% Redistribution and use in source and binary forms, with or without
 %% modification, are permitted provided that the following conditions are met:
-%% 
-%%     * Redistributions of source code must retain the above copyright 
+%%
+%%     * Redistributions of source code must retain the above copyright
 %%       notice, this list of conditions and the following disclaimer.
-%%     * Redistributions in binary form must reproduce the above copyright 
-%%       notice, this list of conditions and the following disclaimer in the 
+%%     * Redistributions in binary form must reproduce the above copyright
+%%       notice, this list of conditions and the following disclaimer in the
 %%       documentation and/or other materials provided with the distribution.
 %%     * Neither the name of "Torbjorn Tornkvist" nor the names of any other
 %%       contributors may be used to endorse or promote products derived from
 %%       this software without specific prior written permission.
-%% 
-%% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-%% AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-%% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-%% ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-%% LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-%% CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
-%% SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-%% INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-%% CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-%% ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+%%
+%% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+%% AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+%% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+%% ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+%% LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+%% CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+%% SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+%% INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+%% CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+%% ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 %% POSSIBILITY OF SUCH DAMAGE.
 
 %%%----------------------------------------------------------------------
@@ -94,7 +94,7 @@ write_string(Str, Fd) ->
     file:write(Fd, "\"\n").
 
 
-%%% Split the string into substrings, 
+%%% Split the string into substrings,
 %%% aligned around a specific column.
 get_line(Str) ->
     get_line(Str, ?SEP, 1, ?ENDCOL, []).
@@ -135,7 +135,7 @@ find_end([H|T], Sep, N, Pivot, Acc) ->
     find_end(T, Sep, N+1, Pivot, [H|Acc]);
 find_end([], _Sep, _N, _Pivot, Acc) ->
     {true, Acc, []}.
-    
+
 reverse_tape(Acc, Str) ->
     reverse_tape(Acc, Str, ?SEP).
 
@@ -155,7 +155,7 @@ split_string([H|T], End, N, Acc) when N < End ->
     split_string(T, End, N+1, [H|Acc]);
 split_string([], _End, _N, Acc) ->
     {lists:reverse(Acc), []}.
-    
+
 
 
 fmt_fileinfo(Finfo, LibDir) ->
@@ -196,16 +196,16 @@ write_header(Fd) ->
 %    % 2003-10-21 16:45+0200
 %    {{Y,M,D},{H,I,_S}} = erlang:universaltime(),
 %    lists:flatten(io_lib:format("~4..0B-~2..0B-~2..0B ~2..0B:~2..0B+0000", [Y,M,D,H,I])).
-    
- 
+
+
 %%% --------------------------------------------------------------------
 %%% NB: We assume that the surrounding code does some preparations:
 %%%
 %%%   1. Setup the environment variables: 'gettext_dir' and 'gettext_tmp_name'
-%%%   
+%%%
 %%%   2. The compiler is called with the 'gettext' flag.
 %%%
-%%%   3. The file $(gettext_dir)/lang/$(gettext_tmp_name)/epot.dets is 
+%%%   3. The file $(gettext_dir)/lang/$(gettext_tmp_name)/epot.dets is
 %%%      removed before the first erlang/yaws file is processed.
 %%%      (entrys are appended to the file)
 %%% --------------------------------------------------------------------
@@ -294,7 +294,7 @@ while(0,T,_,_) ->
     T.
 
 
-dump(Str,L) -> 
+dump(Str,L) ->
     Fname = get(fname),
     Finfo = get_file_info(Str),
     dets:insert(?EPOT_TABLE, {escape_chars(Str), [{Fname,L}|Finfo]}).
@@ -309,7 +309,7 @@ escape_chars(Str) ->
     F = fun($", Acc)  -> [$\\,$"|Acc];
            ($\\, Acc) -> [$\\,$\\|Acc];
            ($\n, Acc) -> [$\\,$n|Acc];
-	   (C, Acc)   -> [C|Acc] 
+	   (C, Acc)   -> [C|Acc]
 	end,
     lists:foldr(F, [], Str).
 

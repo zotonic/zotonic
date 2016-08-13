@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    {% with 
+    {% with
         20,
         "20"
         as
@@ -52,7 +52,7 @@
                     </div>
                 </form>
             {% endwith %}
-            
+
             <div class="admin-header">
                 <h2>{_ Media _}</h2>
 
@@ -66,7 +66,7 @@
                 <a name="content-pager"></a>
                 {% button
                     class="btn btn-primary"
-                    text=_"Make a new media item" 
+                    text=_"Make a new media item"
                     action={dialog_media_upload}
                 %}
                 <a class="btn btn-default" href="{% url admin_overview_rsc %}">{_ All pages _}</a>

@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1, 
+    init/1,
     service_available/2,
     malformed_request/2,
     allowed_methods/2,
@@ -55,7 +55,7 @@ malformed_request(ReqData, Context0) ->
 
 allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
-    
+
 content_types_provided(ReqData, Context) ->
     {[{"text/x-ubf", undefined}], ReqData, Context}.
 
@@ -68,7 +68,7 @@ process_post(ReqData, Context) ->
             process_post_ubf(ReqData, Context);
         _ ->
             {{halt, 415}, ReqData, Context}
-    end. 
+    end.
 
 process_post_ubf(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),

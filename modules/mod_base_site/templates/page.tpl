@@ -26,12 +26,12 @@
 
 	{% block below_body %}
 	{% endblock %}
-	
+
 	{% block seealso %}
         {% include "_content_list.tpl" list=id.o.haspart in_collection=id is_large %}
         {% include "_content_list.tpl" list=id.o.relation is_large %}
 	{% endblock %}
-	
+
 	{% block thumbnails %}
 	    {% include "_page_thumbnails.tpl" %}
 	{% endblock %}

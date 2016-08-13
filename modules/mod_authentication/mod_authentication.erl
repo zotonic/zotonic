@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,7 @@
 
 init(Context) ->
     % Ensure password_min_length config
-    case m_config:get(?MODULE, password_min_length, Context) of 
+    case m_config:get(?MODULE, password_min_length, Context) of
         undefined -> m_config:set_value(?MODULE, password_min_length, "6", Context);
         _ -> nop
     end,
@@ -63,7 +63,7 @@ event(#submit{message={reset, _Args}}, Context) ->
     lager:info("reset"),
     Args = z_context:get_q_all(Context),
     controller_logon:reset(Args, Context).
-    
+
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
      #menu_item{id=admin_authentication_services,
@@ -71,7 +71,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("App Keys &amp; Authentication Services", Context),
                 url={admin_authentication_services},
                 visiblecheck={acl, use, mod_admin_config}}
-     
+
      |Acc].
 
 %% @doc Check the logon event for the Zotonic native username/password registration.
@@ -94,7 +94,7 @@ observe_logon_submit(#logon_submit{query_args=Args}, Context) ->
         false ->
             undefined
     end.
-    
+
 observe_auth_autologon(auth_autologon, Context) ->
     case controller_logon:get_rememberme_cookie(Context) of
         undefined -> undefined;

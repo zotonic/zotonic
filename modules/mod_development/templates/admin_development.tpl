@@ -5,7 +5,7 @@
 {% block content %}
 <div class="admin-header">
     <h2>{_ Site Development _}</h2>
-    
+
     <p>{_ Tools and settings that are useful for site development. _}</p>
 </div>
 
@@ -13,9 +13,9 @@
 <div class="well">
 
     <div>
-        {% wire id="tpldbg" 
+        {% wire id="tpldbg"
             action={config_toggle module="mod_development" key="debug_includes"}
-            action={admin_tasks task='flush'} 
+            action={admin_tasks task='flush'}
         %}
         <label class="checkbox-inline">
             <input type="checkbox" id="tpldbg" value="1" {% if m.config.mod_development.debug_includes.value %}checked="checked"{% endif %} />
@@ -24,20 +24,20 @@
     </div>
 
     <div>
-        {% wire id="blkdbg" 
+        {% wire id="blkdbg"
             action={config_toggle module="mod_development" key="debug_blocks"}
-            action={admin_tasks task='flush'} 
+            action={admin_tasks task='flush'}
         %}
         <label class="checkbox-inline">
             <input type="checkbox" id="blkdbg" value="1" {% if m.config.mod_development.debug_blocks.value %}checked="checked"{% endif %} />
             {_ Show defined blocks in generated templates _}
         </label>
     </div>
-    
+
     <div>
-        {% wire id="libsep" 
+        {% wire id="libsep"
             action={config_toggle module="mod_development" key="libsep"}
-            action={admin_tasks task='flush'} 
+            action={admin_tasks task='flush'}
         %}
         <label class="checkbox-inline">
             <input type="checkbox" id="libsep" value="1" {% if m.config.mod_development.libsep.value %}checked="checked"{% endif %} />
@@ -46,7 +46,7 @@
     </div>
 
     <div>
-        {% wire id="devapi" 
+        {% wire id="devapi"
             action={config_toggle module="mod_development" key="enable_api"}
         %}
         <label class="checkbox-inline">

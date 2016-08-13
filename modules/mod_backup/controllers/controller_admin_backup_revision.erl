@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,10 +32,10 @@ is_authorized(ReqData, Context0) ->
         true ->
             Id = m_rsc:rid(z_context:get_q("id", Context), Context),
             case m_rsc:exists(Id, Context) of
-                false -> 
+                false ->
                     z_acl:wm_is_authorized(true, Context);
                 true ->
-                    z_acl:wm_is_authorized(z_acl:rsc_editable(Id, Context), Context) 
+                    z_acl:wm_is_authorized(z_acl:rsc_editable(Id, Context), Context)
             end;
         false ->
             z_acl:wm_is_authorized(true, Context)
@@ -61,12 +61,12 @@ event(#postback_notify{message="rev-diff"}, Context) ->
             PropsB = fetch_props(Id, B, Context),
             case check_access(PropsA, PropsB, Context) of
                 true ->
-                    update_diff(Id, PropsA, PropsB, Context); 
+                    update_diff(Id, PropsA, PropsB, Context);
                 false ->
-                    z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context) 
+                    z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context)
             end;
         false ->
-            z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context) 
+            z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context)
     end;
 event(#postback{message={revert, Args}}, Context) ->
     RscId = proplists:get_value(rsc_id, Args),
@@ -75,7 +75,7 @@ event(#postback{message={revert, Args}}, Context) ->
         true ->
             do_revert(RscId, RevId, Context);
         false ->
-            z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context) 
+            z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context)
     end.
 
 

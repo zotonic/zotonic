@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -102,12 +102,12 @@ provide_content(ReqData, Context) ->
         | z_context:get_all(Context2)
     ],
     Vars1 = case get_by_reminder_secret(Secret, Context2) of
-                {ok, UserId} -> 
-                    [ {user_id, UserId}, 
+                {ok, UserId} ->
+                    [ {user_id, UserId},
                       {secret, Secret},
                       {username, m_identity:get_username(UserId, Context2)}
                       | Vars ];
-                undefined -> 
+                undefined ->
                     Vars
             end,
     ErrorUId = z_context:get_q("error_uid", Context2),
@@ -225,14 +225,14 @@ logon(Args, WireArgs, Context) ->
             logon_error("pw", Context)
     end.
 
-%%@doc Handle submit data.  
+%%@doc Handle submit data.
 reminder(Args, Context) ->
     case z_string:trim(proplists:get_value("reminder_address", Args, [])) of
         [] ->
             logon_error("reminder", Context);
         Reminder ->
             case lookup_identities(Reminder, Context) of
-                [] -> 
+                [] ->
                     logon_error("reminder", Context);
                 Identities ->
                     % @todo TODO check if reminder could be sent (maybe there is no e-mail address)
@@ -251,7 +251,7 @@ reset(Args, Context) ->
     Password1 = z_string:trim(proplists:get_value("password_reset1", Args)),
     Password2 = z_string:trim(proplists:get_value("password_reset2", Args)),
     PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, "6", Context)),
-    
+
     case {Password1,Password2} of
         {A,_} when length(A) < PasswordMinLength ->
             logon_error("tooshort", Context);
@@ -287,7 +287,7 @@ logon_stage(Stage, Context) ->
 logon_stage(Stage, Args, Context) ->
     Context1 = remove_logon_error(Context),
     z_render:update("signup_logon_box", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
-    
+
 
 logon_user(UserId, WireArgs, Context) ->
     case z_auth:logon(UserId, Context) of
@@ -329,7 +329,7 @@ get_rememberme_cookie(Context) ->
             try
                 Value1 = mochiweb_util:unquote(Value),
                 case z_utils:decode_value_expire(Value1, Context) of
-                    {error, expired} -> 
+                    {error, expired} ->
                         undefined;
                     {ok, Cookie} ->
                         case check_rememberme_cookie_value(Cookie, Context) of
@@ -409,7 +409,7 @@ lookup_identities(Handle, Context) ->
     Handle1 = z_string:trim(Handle),
     Set = sets:from_list(lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context)),
     sets:to_list(Set).
-    
+
 
 lookup_by_username("admin", _Context) ->
     [];
@@ -423,7 +423,7 @@ lookup_by_username(Handle, Context) ->
 %% @doc Find all users with a certain e-mail address
 lookup_by_email(Handle, Context) ->
     case lists:member($@, Handle) of
-        true -> 
+        true ->
             Rows = m_identity:lookup_by_type_and_key_multi(email, Handle, Context),
             [ proplists:get_value(rsc_id, Row) || Row <- Rows ];
         false ->
@@ -437,14 +437,14 @@ send_reminder(Ids, Context) ->
         [] -> {error, no_email};
         _ -> ok
     end.
-    
+
 send_reminder([], _Context, Acc) ->
     Acc;
 send_reminder([Id|Ids], Context, Acc) ->
     case find_email(Id, Context) of
-        undefined -> 
+        undefined ->
             send_reminder(Ids, Context, Acc);
-        Email -> 
+        Email ->
             case m_identity:get_username(Id, Context) of
                 undefined ->
                     send_reminder(Ids, Context, Acc);
@@ -483,7 +483,7 @@ set_reminder_secret(Id, Context) ->
 %% @doc Delete the reminder secret of the user
 delete_reminder_secret(Id, Context) ->
     m_identity:delete_by_type(Id, "logon_reminder_secret", Context).
-    
+
 
 get_by_reminder_secret(Code, Context) ->
     case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of

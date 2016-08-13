@@ -1,7 +1,7 @@
 {% if use_wire %}
     {#
         Use a wired postback when we are not using the default logon page with
-        its logon_controller. 
+        its logon_controller.
     #}
     {% wire id="password_reminder" type="submit" postback={reminder} delegate=`mod_authentication` %}
 {% endif %}

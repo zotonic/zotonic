@@ -78,8 +78,8 @@ manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Options, Context
         ok ->
             ok;
         {ok, Id} ->
-            MediaProps = [{mime, "text/html-video-embed"}, 
-                          {video_embed_service, EmbedService}, 
+            MediaProps = [{mime, "text/html-video-embed"},
+                          {video_embed_service, EmbedService},
                           {video_embed_code, EmbedCode}
                          ],
             m_media:replace(Id, MediaProps, Context),
@@ -131,7 +131,7 @@ manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) ->
 
 manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
     case m_category:name_to_id(Category, Context) of
-        {ok, CatId} -> 
+        {ok, CatId} ->
             Props = map_props(Props0, Context),
             case m_rsc:name_to_id(Name, Context) of
                 {ok, Id} ->
@@ -202,7 +202,7 @@ update_new_props(Module, Id, NewProps, Options, Context) ->
                                         %% New value == current value
                                         Props;
                                     DbVal ->
-                                        case proplists:get_value(K, PreviousProps) of 
+                                        case proplists:get_value(K, PreviousProps) of
                                             DbVal ->
                                                 %% New value in NewProps, unchanged in DB
                                                 [{K,V} | Props];
@@ -249,7 +249,7 @@ manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Options, Context
         end,
     case SubjectCat of
         undefined -> nop;
-        _ -> 
+        _ ->
             F(Id, true, m_rsc:name_to_id_check(SubjectCat, Context))
     end,
     case ObjectCat of

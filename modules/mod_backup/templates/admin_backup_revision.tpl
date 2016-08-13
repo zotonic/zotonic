@@ -114,24 +114,24 @@ $('#revisions input').change(function(event) {
 	});
 
 	if (a == b) {
-		z_notify("rev-diff", { 
+		z_notify("rev-diff", {
 			id: {{ id }},
-			a: a, 
+			a: a,
 			z_delegate: `controller_admin_backup_revision`
 		});
 	} else {
-		z_notify("rev-diff", { 
+		z_notify("rev-diff", {
 			id: {{ id  }},
-			a: a, 
-			b: b, 
+			a: a,
+			b: b,
 			z_delegate: `controller_admin_backup_revision`
 		});
 	}
 });
 
-z_notify("rev-diff", { 
+z_notify("rev-diff", {
 	id: {{ id }},
-	a: "latest", 
+	a: "latest",
 	z_delegate: `controller_admin_backup_revision`
 });
 {% endjavascript %}

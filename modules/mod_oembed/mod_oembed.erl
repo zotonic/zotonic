@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,11 +53,11 @@ init(Context) ->
 -spec observe_rsc_update(#rsc_update{}, {boolean(), list()}, #context{}) -> {boolean(), list()}.
 observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context) ->
     case proplists:get_value(oembed_url, Props) of
-        undefined -> 
+        undefined ->
             {Changed, Props};
-        [] -> 
+        [] ->
             {true, proplists:delete(oembed_url, Props)};
-        <<>> -> 
+        <<>> ->
             {true, proplists:delete(oembed_url, Props)};
         EmbedUrl ->
             case z_acl:is_allowed(insert, #acl_media{mime=?OEMBED_MIME}, Context) of
@@ -82,7 +82,7 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
     end;
 observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed, UpdateProps}, Context) ->
     case proplists:is_defined(oembed_url, UpdateProps) of
-        true -> 
+        true ->
             OldMediaProps = m_media:get(Id, Context),
             {EmbedChanged, OEmbedTitle} = case proplists:get_value(oembed_url, UpdateProps) of
                 Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= [] ->
@@ -92,10 +92,10 @@ observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed,
                             {false, undefined};
                         _ ->
                             case proplists:get_value(mime, OldMediaProps) of
-                                ?OEMBED_MIME -> 
+                                ?OEMBED_MIME ->
                                     m_media:delete(Id, Context),
                                     {true, undefined};
-                                _ -> 
+                                _ ->
                                     {false, undefined}
                             end
                     end;
@@ -185,7 +185,7 @@ is_ssl(Context) ->
     case m_req:get(is_ssl, Context) of
         true -> true;
         false -> false;
-        undefined -> z_convert:to_bool(z_context:get(is_ssl, Context)) 
+        undefined -> z_convert:to_bool(z_context:get(is_ssl, Context))
     end.
 
 % @doc Recognize youtube and vimeo URLs, generate the correct embed code
@@ -274,8 +274,8 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
             case m_rsc:insert(Props, Context) of
                 {ok, MediaId} ->
                     spawn(fun() -> preview_create(MediaId, Props, Context) end),
-                    
-                    {_, ContextLink} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, 
+
+                    {_, ContextLink} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate,
                                                          MediaId, Callback, Context),
 
                     ContextRedirect = case SubjectId of
@@ -287,8 +287,8 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                         _ -> ContextLink
                     end,
                     z_render:wire([
-                                {dialog_close, []}, 
-                                {growl, [{text, ?__("Made the media page.", ContextRedirect)}]} 
+                                {dialog_close, []},
+                                {growl, [{text, ?__("Made the media page.", ContextRedirect)}]}
                                 | Actions], ContextRedirect);
                 {error, _} = Error ->
                     lager:error("[mod_oembed] Error in add_video_embed: ~p on ~p", [Error, Props]),
@@ -311,7 +311,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 %% @doc When entering the embed URL for a new media item, we trigger the detecting early to guess title/description.
 event(#postback_notify{message="do_oembed"}, Context) ->
     case z_string:trim(z_context:get_q("url", Context)) of
-        "" -> 
+        "" ->
             z_context:add_script_page([
                     "$('#oembed-title').val('""').attr('disabled',true);",
                     "$('#oembed-summary').val('""').attr('disabled',true);",
@@ -338,9 +338,9 @@ event(#postback_notify{message="do_oembed"}, Context) ->
                         "$('#oembed-save').removeAttr('disabled');"
                         ], Context),
                     case preview_url_from_json(proplists:get_value(type, Json), Json) of
-                        undefined -> 
+                        undefined ->
                             z_context:add_script_page(["$('#oembed-image').closest('.control-group').hide();"], Context);
-                        PreviewUrl -> 
+                        PreviewUrl ->
                             z_context:add_script_page(["$('#oembed-image').attr('src', '", z_utils:js_escape(PreviewUrl), "').closest('.control-group').show();"], Context)
                     end,
                     z_render:growl(?__("Detected media item", Context), Context)
@@ -385,14 +385,14 @@ preview_create(Id, Context) ->
 %% that need to be set on the rsc if the rsc has no title.
 preview_create(MediaId, MediaProps, Context) ->
     case z_convert:to_list(proplists:get_value(oembed_url, MediaProps)) of
-        [] -> 
+        [] ->
             undefined;
-        Url -> 
+        Url ->
             case oembed_request(Url, Context) of
                 {ok, Json} ->
                     %% store found properties in the media part of the rsc
                     {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, proplists:get_value(html, Json)),
-                    ok = m_media:replace(MediaId, 
+                    ok = m_media:replace(MediaId,
                                          [
                                             {oembed, Json},
                                             {video_embed_service, EmbedService},
@@ -415,7 +415,7 @@ preview_create(MediaId, MediaProps, Context) ->
 preview_create_from_json(MediaId, Json, Context) ->
     Type = proplists:get_value(type, Json),
     case preview_url_from_json(Type, Json) of
-        undefined -> 
+        undefined ->
             nop;
         ThumbUrl ->
             case thumbnail_request(ThumbUrl, Context) of
@@ -519,7 +519,7 @@ type_to_category(_rich) -> document.
 fetch_videoid_from_embed(Service, undefined) ->
     {<<>>, undefined};
 fetch_videoid_from_embed(Service, EmbedCode) ->
-    case re:run(EmbedCode, 
+    case re:run(EmbedCode,
                 <<"(src|href)=\"([^\"]*)\"">>,
                 [global, notempty, {capture, all, binary}])
     of

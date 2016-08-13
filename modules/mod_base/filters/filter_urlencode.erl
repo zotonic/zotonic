@@ -34,7 +34,7 @@
 -define(NO_ENCODE(C), ((C >= $a andalso C =< $z) orelse
                                   (C >= $A andalso C =< $Z) orelse
                                   (C >= $0 andalso C =< $9) orelse
-                                  (C =:= $. orelse C =:= $- 
+                                  (C =:= $. orelse C =:= $-
                                   orelse C =:= $~ orelse C =:= $_))).
 
 

@@ -6,10 +6,10 @@
 <div class="tab-pane" id="{{ tab }}-oembed">
     <p>{_ Embed a video or other media URL. Here you can paste any URL from YouTube, Vimeo or other services. _}</p>
 
-    {% wire id=#form type="submit" 
-        postback={add_video_embed predicate=predicate actions=actions id=id 
+    {% wire id=#form type="submit"
+        postback={add_video_embed predicate=predicate actions=actions id=id
                                 subject_id=subject_id stay=stay callback=callback}
-        delegate="mod_oembed" 
+        delegate="mod_oembed"
     %}
     <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 
@@ -50,7 +50,7 @@
                 <img id="oembed-image" src="" width="180" />
             </div>
         </div>
-        
+
         {% if not id %}
             <div class="form-group row">
                 <label class="control-label col-md-3" for="oembed-title">{_ Media title _}</label>
@@ -59,7 +59,7 @@
                     {% validate id="oembed-title" name="title" type={presence} %}
                 </div>
             </div>
-        
+
             <div class="form-group row">
                 <label class="control-label col-md-3" for="oembed-summary">{_ Summary _}</label>
                 <div class="col-md-9">

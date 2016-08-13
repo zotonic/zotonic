@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -83,7 +83,7 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
-%% @doc Reading a line from the fswatch program. 
+%% @doc Reading a line from the fswatch program.
 handle_info({Port, {data, FilenameFlags}}, State=#state{port=Port, timers=Timers}) ->
     Fs = extract_filename_verb(FilenameFlags),
     {Timers1,_N1} = lists:foldl(
@@ -167,7 +167,7 @@ get_filepath(Line) ->
 		case extract_filepath(Part) of
 			<<>> -> Acc;
 			P -> <<Acc/binary, P/binary, Space/binary>>
-		end		
+		end
 	end, <<>>, binary:split(Line, Space, [global])),
 	string:strip(unicode:characters_to_list(Parts), both, $ ).
 

@@ -3,11 +3,11 @@
 
     Ascending for alphabet and numbers: A to Z, 0 to 9
     Ascending for dates: old to new. The default for dates should thus be descending.
-    
+
     Ascending is identified as: 1
     Descending is identified as: -1
     Unsorted is identified as: 0
-    
+
     Params:
     field: database column
     caption: display text

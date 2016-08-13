@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -64,7 +64,7 @@ render(Params, _Vars, Context) ->
 
 render_template(Template, Params, Context) ->
     Target = proplists:get_value(target, Params, z_ids:identifier(16)),
-    Where = z_convert:to_binary(proplists:get_value(where, Params, <<"update">>)), 
+    Where = z_convert:to_binary(proplists:get_value(where, Params, <<"update">>)),
     {LiveVars,TplVars} = lists:partition(
                 fun({topic,_}) -> true;
                    ({template,_}) -> true;
@@ -77,7 +77,7 @@ render_template(Template, Params, Context) ->
         <<"update">> ->
             TplVars1 = [ {target, Target} | TplVars ],
             Html = opt_wrap_element(
-                        proplists:get_value(element, LiveVars, "div"), 
+                        proplists:get_value(element, LiveVars, "div"),
                         Target,
                         z_template:render(Template, TplVars1, Context)),
             {ok, [
@@ -95,7 +95,7 @@ render_postback(Params, Context) ->
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, Delegate, Context),
     Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, Params) ],
     Script = iolist_to_binary([
-        <<"z_live.subscribe(">>, 
+        <<"z_live.subscribe(">>,
             z_utils:js_array(Topics),$,,
             $',z_utils:js_escape(Target), $',$,,
             $',Postback,$',
@@ -128,7 +128,7 @@ script(Target, Where, LiveVars, TplVars, Context) ->
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, ?MODULE, Context),
     Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, LiveVars) ],
     iolist_to_binary([
-        <<"z_live.subscribe(">>, 
+        <<"z_live.subscribe(">>,
             z_utils:js_array(Topics),$,,
             $',z_utils:js_escape(Target), $',$,,
             $',Postback,$',

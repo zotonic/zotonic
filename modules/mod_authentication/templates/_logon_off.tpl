@@ -3,4 +3,4 @@
 {% else %}
 	<a href="{% url logon %}">{_ Sign in _}</a>
 {% endif %}
-	
+

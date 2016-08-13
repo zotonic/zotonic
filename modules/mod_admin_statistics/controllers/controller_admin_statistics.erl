@@ -1,6 +1,6 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2015 Maas-Maarten Zeeman
-%% @doc View zotonic system statistics 
+%% @doc View zotonic system statistics
 
 %% Copyright 2015 Maas-Maarten Zeeman
 %%

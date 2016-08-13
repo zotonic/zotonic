@@ -67,7 +67,7 @@ country2iso(<<"United Republic of Tanzania"/utf8>>) -> <<"tz">>;
 country2iso(<<"Untied Arab Emirates"/utf8>>) -> <<"ae">>;
 country2iso(<<"United States Virgin Islands"/utf8>>) -> <<"vi">>;
 country2iso(<<"Viet Nam"/utf8>>) -> <<"vn">>;
-country2iso(A) -> 
+country2iso(A) ->
     case lists:keyfind(A, 2, l10n_iso2country:iso2country()) of
         {Iso, _} -> Iso;
         false -> undefined

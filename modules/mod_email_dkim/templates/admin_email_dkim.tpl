@@ -2,7 +2,7 @@
 
 {% block content %}
     {% with m.notifier.first.dkim_admin_info as info %}
-        
+
     <h1>{_ DKIM e-mail signing setup _}</h1>
 
     <p>
@@ -20,7 +20,7 @@
     <pre>{{ info.dns_entry }}</pre>
 
     <p>{_ When all is setup, you can use the <a href="http://dkimcore.org/c/keycheck">DKIM keycheck</a> website to verify your domain's DKIM record. _}</p>
-        
+
     {% endwith %}
 
 {% endblock %}

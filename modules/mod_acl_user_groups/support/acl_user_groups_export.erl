@@ -84,7 +84,7 @@ fetch_all(Category, Context) ->
                         Ps = m_rsc:get(Id, Ctx),
                         Ps1 = cleanup_rsc(Ps),
                         Rsc = {rsc,
-                               m_rsc:is_a(Id, Ctx), 
+                               m_rsc:is_a(Id, Ctx),
                                m_rsc:p_no_acl(proplists:get_value(content_group_id, Ps), name, Ctx),
                                Ps1},
                         [Rsc | Acc]
@@ -214,7 +214,7 @@ menu_from_names([{Name,Sub}|Rest], Acc, Context) ->
 
 %% @doc Ensure that all things of a category have an unique name.
 ensure_name(Cat, Context) ->
-    m_category:foreach(Cat, 
+    m_category:foreach(Cat,
                        fun(Id, Ctx) ->
                             m_rsc:ensure_name(Id, Ctx)
                        end,

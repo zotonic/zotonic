@@ -11,9 +11,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@ render(Params, _Vars, Context) ->
     HoverClass   = proplists:get_value(active_class, Params, "hover"),
     AcceptGroups = proplists:get_all_values(accept, Params),
     Delegate     = proplists:get_value(delegate, Params),
-    
+
     case Id of
         undefined ->
             {error, "droppable scomp, please give the id of the droppable"};
@@ -50,8 +50,8 @@ render(Params, _Vars, Context) ->
 
         	AcceptGroups1       = groups_to_accept(AcceptGroups),
         	PickledPostbackInfo = z_render:make_postback_info({Tag,Delegate1}, sort, Id, Id, ?MODULE, Context),
-            
-        	Script = io_lib:format( "z_droppable($('#~s'), { activeClass: '~s', hoverClass: '~s', accept: '~s' }, '~s');", 
+
+        	Script = io_lib:format( "z_droppable($('#~s'), { activeClass: '~s', hoverClass: '~s', accept: '~s' }, '~s');",
         	                        [Id, ActiveClass, HoverClass, AcceptGroups1, PickledPostbackInfo]),
 
             % Hook the actions to the element
@@ -70,7 +70,7 @@ event(#postback{message={DropTag,DropDelegate}, trigger=TriggerId}, Context) ->
 
 	try
 	    Context1 = DropDelegate:event(#drop{drag=Drag, drop=Drop}, z_context:set_controller_module(DropDelegate, Context)),
-	    
+
 	    % also notify the dragged element that it has been dragged
 	    try
 	        DragDelegate:event(#drag{drag=Drag, drop=Drop}, z_context:set_controller_module(DragDelegate, Context1))

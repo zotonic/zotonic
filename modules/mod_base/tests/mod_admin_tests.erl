@@ -18,4 +18,4 @@ wire_update_test() ->
 % en in _test.tpl dan dit zet:
 % Een button:
 %    {% button text="Click Me!" action={alert text="Thank you"} %}
-   
+

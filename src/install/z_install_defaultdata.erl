@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,13 +46,13 @@ install(basesite, Context) ->
 
 install(blog, Context) ->
     Now = {{2012,12,14},{9,12,0}},
-    Datamodel = 
+    Datamodel =
         #datamodel{
       resources =
       [
-       
+
        %% MENU ENTRIES
-       
+
        {page_home,
         text,
         [{title, <<"Home">>},
@@ -134,21 +134,21 @@ install(blog, Context) ->
        }
       ],
 
-      edges = 
+      edges =
       [
        {blog_article_learnmore, author, administrator},
        {blog_article_welcome, author, administrator},
        {blog_article_demo, author, administrator},
-       
+
        {blog_article_learnmore, subject, kw_support},
        {blog_article_demo, subject, kw_technical},
        {blog_article_welcome, subject, kw_support},
        {blog_article_welcome, subject, kw_announcement},
-       
+
        {blog_article_welcome, depiction, media_welcome},
        {blog_article_learnmore, depiction, media_learning},
        {blog_article_demo, depiction, media_welcome}
-       
+
       ]
      },
 

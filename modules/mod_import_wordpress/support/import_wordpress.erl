@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@
 -define(WP_NS, "http://wordpress.org/export/1.0/").
 
 
-%% @doc Import a .wxr wordpress file. 
+%% @doc Import a .wxr wordpress file.
 wxr_import(Filename, Context) ->
     wxr_import(Filename, false, Context).
 
@@ -72,7 +72,7 @@ wxr_to_datamodel(Filename, Context) ->
     Keywords = xmerl_xpath:string("wp:category", Channel),
     {Data1, _, _} = lists:foldl(fun import_wxr_category/2, {Data, Base, Context}, Keywords),
 
-    %% Import all tags 
+    %% Import all tags
     Tags = xmerl_xpath:string("//category[@domain=\"tag\"]", Channel),
     {Data2, _, _} = lists:foldl(fun import_wxr_tag/2, {Data1, Base, Context}, Tags),
 
@@ -102,7 +102,7 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
     Name = "wordpress_" ++ z_convert:to_list(element_content("wp:post_id", Item)),
     Body = element_content("content:encoded", Item),
     Summary = element_content("description", Item),
-    Link = element_content("link", Item),    
+    Link = element_content("link", Item),
     IsPublished = map_wp_status(element_content("wp:status", Item)),
     PostParent = z_convert:to_integer(element_content("wp:post_parent", Item)),
 
@@ -110,7 +110,7 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
         [{title, Title},
          {body, wp_embed_tags(Body)},
          {summary, Summary},
-         {wp_link, Link},         
+         {wp_link, Link},
          {is_published, IsPublished},
          {custom_slug, true},
          {slug, element_content("wp:post_name", Item)},
@@ -155,12 +155,12 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
             %% Skip unknown categories
             {Data, Base, Context};
         Cat ->
-            Edges4 = case Cat =:= media andalso PostParent =/= 0 of 
-                         true -> 
+            Edges4 = case Cat =:= media andalso PostParent =/= 0 of
+                         true ->
                              %% When its a media, look at post parent and insert parent->depiction->media edge.
                              P = lists:flatten(io_lib:format("wordpress_~p", [PostParent])),
                              [ {P, depiction, Name} | Edges3];
-                         _ -> 
+                         _ ->
                              Edges3
                      end,
             Data2 = Data#datamodel{resources=[{Name,Cat,Props2}|R],edges=Edges4++E},
@@ -264,13 +264,13 @@ wp_embed_tags(BodyText0) ->
         {match, [{Start, Len}, {-1,0}, {CS, CL}, {IdStart,IdL}]} ->
             Class = string:substr(BodyText, CS+1,CL),
             Opts = class_to_embed_opts(Class, false),
-            string:substr(BodyText, 1, Start) 
+            string:substr(BodyText, 1, Start)
                 ++ "<!-- z-media wordpress_" ++ string:substr(BodyText, IdStart+1, IdL) ++ " " ++ Opts ++ " -->"
                 ++ wp_embed_tags(string:substr(BodyText, Start+Len+1));
         {match, [{Start, Len}, {_AS,_AL}, {CS, CL}, {IdStart,IdL}, {_,4}]} ->
             Class = string:substr(BodyText, CS+1,CL),
             Opts = class_to_embed_opts(Class, true),
-            string:substr(BodyText, 1, Start) 
+            string:substr(BodyText, 1, Start)
                 ++ "<!-- z-media wordpress_" ++ string:substr(BodyText, IdStart+1, IdL) ++ " " ++ Opts ++ " -->"
                 ++ wp_embed_tags(string:substr(BodyText, Start+Len+1))
 %%            ?DEBUG(F)
@@ -280,7 +280,7 @@ wp_embed_tags(BodyText0) ->
 
 
 class_to_embed_opts(Class, Link) ->
-    Ln = case Link of 
+    Ln = case Link of
              true -> "\"link\":true, ";
              false -> []
          end,
@@ -301,7 +301,7 @@ test() ->
 
     "foobar <!-- z-media wordpress_29 {align:\"left\", size:\"middle\"} -->baz" = wp_embed_tags("foobar <img class=\"alignleft size-medium wp-image-29\" style=\"border: 0pt none; margin-left: 10px;\" title=\"Announcement Retroweek\" src=\"http://idum5.net/blog/wp-content/uploads/poster-klein.jpg\" alt=\"Announcement Retroweek\" width=\"217\" height=\"307\" />baz"),
 
-    "foo<!-- z-media wordpress_29 {align:\"right\", size:\"large\"} -->bar<!-- z-media wordpress_29 {align:\"right\", size:\"large\"} -->baz" = 
+    "foo<!-- z-media wordpress_29 {align:\"right\", size:\"large\"} -->bar<!-- z-media wordpress_29 {align:\"right\", size:\"large\"} -->baz" =
         wp_embed_tags("foo<img class=\"alignright size-full wp-image-29\" style=\"border: 0pt none; margin-left: 10px;\" title=\"Announcement Retroweek\" src=\"http://idum5.net/blog/wp-content/uploads/poster-klein.jpg\" alt=\"Announcement Retroweek\" width=\"217\" height=\"307\" />bar<img class=\"alignright size-full wp-image-29\" style=\"border: 0pt none; margin-left: 10px;\" title=\"Announcement Retroweek\" src=\"http://idum5.net/blog/wp-content/uploads/poster-klein.jpg\" alt=\"Announcement Retroweek\" width=\"217\" height=\"307\" />baz"),
 
 
@@ -309,4 +309,4 @@ test() ->
 
     ok.
 
-    
+

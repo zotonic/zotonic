@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -78,9 +78,9 @@ see_other(ReqData, Context) ->
                             page_url ->
                                 ContextSession = z_context:continue_session(Context3),
                                 {m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
-                            {Dispatch, DispatchArgs} when is_list(DispatchArgs) -> 
+                            {Dispatch, DispatchArgs} when is_list(DispatchArgs) ->
                                 {z_dispatcher:url_for(Dispatch, [{id,Id} | DispatchArgs], Context3), Context3};
-                            Dispatch -> 
+                            Dispatch ->
                                 {z_dispatcher:url_for(Dispatch, [{id,Id}], Context3), Context3}
                           end,
     AbsUrl = z_context:abs_url(Location, Context4),

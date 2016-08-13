@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1, 
+    init/1,
     service_available/2,
     allowed_methods/2,
     content_types_provided/2,
@@ -40,7 +40,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
 
 allowed_methods(ReqData, Context) ->
     {['POST'], ReqData, Context}.
-    
+
 content_types_provided(ReqData, Context) ->
     % The user-agent won't handle the result of non-ajax form posts.
     % Suppress text/x-ubf as that will give problems with Firefox (issue #1230)
@@ -50,10 +50,10 @@ content_types_provided(ReqData, Context) ->
         "application/x-www-form-urlencoded" ++ _ ->
             {[{"text/plain", undefined}], ReqData, Context};
         _ ->
-            {[{"text/x-ubf", undefined}, 
+            {[{"text/x-ubf", undefined},
               {"text/plain", undefined}], ReqData, Context}
     end.
-    
+
 process_post(ReqData, Context) ->
     case wrq:get_req_header_lc("content-type", ReqData) of
         "text/x-ubf" ++ _ ->
@@ -69,7 +69,7 @@ process_post(ReqData, Context) ->
     end.
 
 %% @doc AJAX postback, the received data is UBF which can be directly decoded
-%% and handled by the z_transport:incoming/2 routines. 
+%% and handled by the z_transport:incoming/2 routines.
 process_post_ubf(ReqData, Context) ->
     {Data,RD1} = wrq:req_body(ReqData),
     Context1 = ?WM_REQ(RD1, Context),
@@ -79,13 +79,13 @@ process_post_ubf(ReqData, Context) ->
               [] -> Rs;
               Msgs -> mklist(Rs) ++ mklist(Msgs)
           end,
-    {ok, ReplyData} = z_transport:data_encode(Rs1), 
+    {ok, ReplyData} = z_transport:data_encode(Rs1),
     post_return(ReplyData, Context2).
 
 mklist(L) when is_list(L) -> L;
 mklist(V) -> [V].
 
-%% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2 
+%% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2
 process_post_form(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
     Context1 = z_context:ensure_qs(Context),
@@ -108,7 +108,7 @@ process_post_form(ReqData, Context0) ->
             ok = z_transport:transport(Reply, Context2),
             post_form_return(Context2)
     end.
-    
+
 post_form_return(Context) ->
     % Make sure that we return 200, otherwise the form onload is not triggered.
     post_return(<<"#$">>, Context).

@@ -3,7 +3,7 @@
 		<p>{_ Subscribe to _} {{ m.rsc[id].title }}.</p>
 	{% else %}
 		<p>
-			{_ Give your e-mail address to subscribe to _} {{ m.rsc[id].title }}.  
+			{_ Give your e-mail address to subscribe to _} {{ m.rsc[id].title }}.
 			{_ You will receive a confirmation in your e-mail._}
 		</p>
 	{% endif %}
@@ -24,7 +24,7 @@
 		{_ Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder. _}
 		</p>
 	</div>
-	
+
 	<p id="mailinglist_subscribe_error" style="display:none" class="error">
 		{_ Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address. _}
 	</p>

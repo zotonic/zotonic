@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ event(#postback{message={vcs_up, Args}}, Context) ->
     case proplists:get_value(zotonic, Args) of
         true ->
             case has_vcs() of
-                undefined -> 
+                undefined ->
                     notice('Zotonic', "Zotonic hasn’t been checked out using version control.", Context);
                 {hg, Path} ->
                     show_notice('Zotonic', "Fetching updates…", Context),
@@ -50,7 +50,7 @@ event(#postback{message={vcs_up, Args}}, Context) ->
                     Command = lists:flatten(["(cd \"", Path, "\"; git pull)"]),
                     notice('Zotonic', os:cmd(Command), Context)
             end;
-        undefined -> 
+        undefined ->
             Site = proplists:get_value(site, Args),
             case has_vcs(Site) of
                 {hg, Path} ->
@@ -67,7 +67,7 @@ event(#postback{message={vcs_up, Args}}, Context) ->
     end;
 event(#postback{message=make}, Context) ->
     true = z_auth:is_auth(Context),
-    spawn(fun() -> 
+    spawn(fun() ->
             z:m(),
             show_notice('Zotonic', "Finished rebuilding Zotonic.", Context)
           end),
@@ -81,8 +81,8 @@ show_notice(SiteName, Text, Context) ->
 % @doc Render a notice.
 notice(SiteName, Text, Context) ->
     Context1 = z_render:appear_top(
-                        "notices", 
-                        #render{template="_notice.tpl", vars=[{site,SiteName},{notice,Text}]}, 
+                        "notices",
+                        #render{template="_notice.tpl", vars=[{site,SiteName},{notice,Text}]},
                         Context),
     z_render:wire({fade_out, [{selector, "#notices > p:gt(0)"}, {speed, 2000}]}, Context1).
 
@@ -96,7 +96,7 @@ observe_zotonic_status_init(zotonic_status_init, Vars, _Context) ->
             Vcs = [ {SiteName, has_vcs(SiteName)} || SiteName <- Sites ],
             [{vcs, Vcs}, {vcs_zotonic, has_vcs()} | Vars]
     end.
-    
+
 % @doc Check if the site directory has a mercurial .hg subdirectory
 has_vcs(Site) ->
     has_vcs_dir(z_path:site_dir(Site)).
@@ -109,7 +109,7 @@ has_vcs_dir(Dir) ->
     HgDir = filename:join([Dir, ".hg"]),
     case filelib:is_dir(HgDir)  of
         true -> {hg, Dir};
-        false -> 
+        false ->
             GitDir = filename:join([Dir, ".git"]),
             case filelib:is_dir(GitDir) of
                 true -> {git, Dir};

@@ -14,7 +14,7 @@
 
         <div class="row">
             <div class="col-md-7">
-                
+
                 <div class="widget">
                     <h3 class="widget-header">{_ General SEO Optimization _}</h3>
                     <div class="widget-content">
@@ -58,7 +58,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="seo_google-analytics" name="seo_google-analytics" value="{{ m.config.seo_google.analytics.value|escape }}" class="form-control" />
                                 <p class="help-block">
-                                    {_ You find this id in the tracking script, it has the format _} <strong>UA-123456-1</strong>. 
+                                    {_ You find this id in the tracking script, it has the format _} <strong>UA-123456-1</strong>.
                                     <a href="https://support.google.com/analytics/bin/answer.py?hl=en&amp;answer=1008080" title="Google Analytics Help">{_ Where can I find my tracking script? _}</a>
                                 </p>
                             </div>
@@ -85,13 +85,13 @@
                                 <input type="text" id="seo_bing-webmaster_verify" name="seo_bing-webmaster_verify" value="{{ m.config.seo_bing.webmaster_verify.value|escape }}" class="form-control" />
                                 <p class="help-block">
                                     {_ Enter here the verification code for _} <a href="https://ssl.bing.com/webmaster/home/mysites">{_ Bing Webmaster _}</a>.<br/>
-                                    {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>8103A84C247E45185F39A97C50D40731</strong>. 
+                                    {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>8103A84C247E45185F39A97C50D40731</strong>.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
 
             <div class="col-md-5">
@@ -101,10 +101,10 @@
                     <button class="btn btn-primary" type="submit">{_ Save SEO settings _}</button>
                 </div>
             </div>
-            
+
         </div>
 
-        
+
     </form>
 
 

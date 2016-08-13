@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,7 +52,7 @@ forced_props(Medium) ->
     ].
 
 overlay_props(Exif) ->
-    DateStart = to_dt(proplists:get_value(date_time, Exif, 
+    DateStart = to_dt(proplists:get_value(date_time, Exif,
                          proplists:get_value(date_time_digitized, Exif))),
     PropsOverlay = [
         {date_start, DateStart},
@@ -66,7 +66,7 @@ overlay_props(Exif) ->
 to_binary_point({X,Y}) ->
     iolist_to_binary([ $+, integer_to_list(X), $+, integer_to_list(Y) ]);
 to_binary_point(undefined) ->
-    undefined. 
+    undefined.
 
 % http://www.awaresystems.be/imaging/tiff/tifftags/privateifd/gps/gpslongitude.html
 gps([{ratio,D,DFrac},{ratio,M,MFrac},{ratio,S,SFrac}]) ->

@@ -75,8 +75,8 @@ html_ok(Context) ->
 
 html_error(Error, Context) ->
     Vars = [
-        {service, "Facebook"}, 
-        {error, Error}, 
+        {service, "Facebook"},
+        {error, Error},
         {auth_link, controller_facebook_authorize:redirect_location(Context)++"&auth_type=rerequest"}
     ],
     Html = z_template:render("logon_service_error.tpl", Vars, Context),

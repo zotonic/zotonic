@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@
 -define(OPTID_LENGTH,6).
 
 -export([
-    unique/0, 
+    unique/0,
     id/0,
     id/1,
     identifier/0,
@@ -51,21 +51,21 @@
 %% Returns a binary of unspecified length starting with the character $t followed
 %% by a number of digits, example: `<<"t123456">>'.
 %% Note that ids are not unique among connected nodes or after a restart.
-unique() -> 
+unique() ->
     make_unique().
 
 -spec id() -> binary().
 %% @doc Equivalent to `id(?ID_LENGTH)'.
-id() -> 
+id() ->
     id(?ID_LENGTH).
 
 -spec id(Length::integer()) -> binary().
-%% @doc Generate a random key consisting of numbers and upper and lower case 
-%% characters. 
+%% @doc Generate a random key consisting of numbers and upper and lower case
+%% characters.
 %%
-%% The version with the default Length can be used for session ids: the result 
+%% The version with the default Length can be used for session ids: the result
 %% is sufficiently random and sufficiently unique.
-id(Len) -> 
+id(Len) ->
     random_id('azAZ09', Len).
 
 -spec identifier() -> binary().
@@ -74,22 +74,22 @@ identifier() ->
     identifier(?OPTID_LENGTH).
 
 -spec identifier(Length::integer()) -> binary().
-%% @doc Get a random identifier of a certain length, consisting of 
+%% @doc Get a random identifier of a certain length, consisting of
 %% lower case characters only.
 identifier(Len) ->
     random_id('az', Len).
 
 -spec random_id(charset(), Length::integer()) -> binary().
-%% @doc Get a random identifier of the specified length, consisting of 
+%% @doc Get a random identifier of the specified length, consisting of
 %% characters from the specified set:
-%% - 'az'     [a-z]      : lower case characters only. 
-%% - 'az09'   [a-z0-9]   : lower case characters and numbers only. 
-%% - 'azAZ09' [a-zA-Z0-9]: lower and upper case characters and numbers. 
-random_id('az', Len) -> 
+%% - 'az'     [a-z]      : lower case characters only.
+%% - 'az09'   [a-z0-9]   : lower case characters and numbers only.
+%% - 'azAZ09' [a-zA-Z0-9]: lower and upper case characters and numbers.
+random_id('az', Len) ->
     make_lower_id(Len);
-random_id('az09', Len) -> 
+random_id('az09', Len) ->
     make_no_upper_id(Len);
-random_id('azAZ09', Len) -> 
+random_id('azAZ09', Len) ->
     make_any_char_id(Len).
 
 -spec optid(undefined | false | binary()) -> binary().
@@ -110,13 +110,13 @@ sign_key(Context) ->
             Key;
         <<>> ->
             application_key(sign_key);
-        SignKey -> 
+        SignKey ->
             SignKey
     end.
 
 -spec sign_key_simple(Context::term()) -> binary().
 %% @doc Get the key for less secure signing of data (without nonce).
-sign_key_simple(Context) -> 
+sign_key_simple(Context) ->
     case m_config:get_value(site, sign_key_simple, Context) of
         undefined ->
             Key = random_id('azAZ09', 10),
@@ -130,7 +130,7 @@ sign_key_simple(Context) ->
 
 -spec application_key(atom()) -> binary().
 %% @doc Set/get a default sign key for the zotonic.
-%% Returns a binary of 50 random numbers and upper and lower case 
+%% Returns a binary of 50 random numbers and upper and lower case
 %% characters.
 application_key(Name) when is_atom(Name) ->
     case application:get_env(zotonic, Name) of
@@ -148,7 +148,7 @@ number() ->
     number(1000000000).
 
 -spec number(Max::integer()) -> integer().
-%% @doc Return a random integer less than or equal to Max. Max defaults to a 
+%% @doc Return a random integer less than or equal to Max. Max defaults to a
 %% large number smaller than MaxInt.
 number(Max) ->
     make_number(Max).
@@ -170,7 +170,7 @@ make_number(Max) ->
     crypto:rand_uniform(1, Max+1).
 
 -spec make_any_char_id(Length::integer()) -> binary().
-%% @doc Generate a random key consisting of numbers and upper and lower case 
+%% @doc Generate a random key consisting of numbers and upper and lower case
 %% characters.
 make_any_char_id(Len) ->
     << << case N of
@@ -202,7 +202,7 @@ random_list(Radix, Length) ->
     Val = bin2int(rand_bytes(N)),
     int2list(Val, Radix, Length, []).
 
-int2list(_, _, 0, Acc) -> 
+int2list(_, _, 0, Acc) ->
     Acc;
 int2list(Val, Radix, Length, Acc) ->
     int2list(Val div Radix, Radix, Length-1, [ Val rem Radix | Acc]).
@@ -214,11 +214,11 @@ radix_bits(N) when N =< 16 -> 4;
 radix_bits(N) when N =< 26 -> 5;
 radix_bits(N) when N =< 64 -> 6.
 
-%% @doc Return N random bytes. This falls back to the pseudo random version of rand_uniform 
+%% @doc Return N random bytes. This falls back to the pseudo random version of rand_uniform
 %% if strong_rand_bytes fails.
 -spec rand_bytes(integer()) -> binary().
 rand_bytes(N) when N > 0 ->
-    try 
+    try
         crypto:strong_rand_bytes(N)
     catch
         error:low_entropy ->

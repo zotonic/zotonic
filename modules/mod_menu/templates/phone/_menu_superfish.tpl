@@ -5,7 +5,7 @@
     {% for mid, path, action in menu %}
         {% if mid %}
         <li>
-            <a href="{{ m.rsc[mid].page_url }}" 
+            <a href="{{ m.rsc[mid].page_url }}"
                class="{{ m.rsc[mid].name }}{% if mid|member:parents %}{% if m.rsc[mid].name %} {% endif %}current{% endif %}">{{ m.rsc[mid].short_title|default:m.rsc[mid].title }}</a>
             {% if action == "down" %}
             <ul>

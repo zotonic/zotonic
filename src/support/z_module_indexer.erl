@@ -219,7 +219,7 @@ handle_cast({scanned_items, Scanned}, State) ->
             % Reset the template server (and others) when there the index is changed.
             z_depcache:set(module_index_ref, erlang:make_ref(), NewState#state.context),
             z_notifier:notify(module_reindexed, NewState#state.context),
-            z_depcache:flush(module_index, NewState#state.context), 
+            z_depcache:flush(module_index, NewState#state.context),
             {noreply, NewState};
         false ->
             {noreply, State1}
@@ -344,7 +344,7 @@ scan_all(What, ActiveDirs) ->
 %% @doc Scan all module directories for templates/scomps/etc.  Example: scan(scomp, "scomps", "scomp_", ".erl", Context)
 %% @spec scan_subdir(What, Subdir, Prefix, Extension, context()) -> [ {ModuleAtom, {ModuleDir, [{Name, File}]}} ]
 scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs) ->
-    ExtensionRe = case Extension of 
+    ExtensionRe = case Extension of
                         "" -> "";
                         "."++_ -> "\\" ++ Extension ++ "$"
                   end,

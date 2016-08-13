@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ is_allowed(Action, Topic, Context) when is_list(Topic) ->
 is_allowed(Action, <<$~, _/binary>> = Topic, Context) ->
     is_allowed(Action, z_mqtt:expand_context_topic(Topic, Context), Context);
 is_allowed(Action, Topic, #context{} = Context) when Action =:= subscribe; Action =:= publish ->
-    LocalSite = z_convert:to_binary(z_context:site(Context)), 
+    LocalSite = z_convert:to_binary(z_context:site(Context)),
     Parts = emqtt_topic:words(Topic),
     case z_acl:is_admin(Context) of
         true ->
@@ -63,20 +63,20 @@ is_allowed_acl(Action, Topic, Words, LocalSite, Context) ->
     end.
 
 
-is_allowed(_Action, _Topic, [<<"test">>], _Site, _Context) -> 
+is_allowed(_Action, _Topic, [<<"test">>], _Site, _Context) ->
     true;
-is_allowed(_Action, _Topic, [<<"site">>, Site, <<"test">>], Site, _Context) -> 
+is_allowed(_Action, _Topic, [<<"site">>, Site, <<"test">>], Site, _Context) ->
     true;
 
-is_allowed(subscribe, _Topic, [<<"public">>], _Site, _Context) -> 
+is_allowed(subscribe, _Topic, [<<"public">>], _Site, _Context) ->
     true;
 is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"public">>], Site, _Context) ->
     true;
 
-is_allowed(subscribe, _Topic, [<<"user">>], _Site, Context) -> 
-    z_auth:is_auth(Context); 
-is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"user">>], Site, Context) -> 
-    z_auth:is_auth(Context); 
+is_allowed(subscribe, _Topic, [<<"user">>], _Site, Context) ->
+    z_auth:is_auth(Context);
+is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"user">>], Site, Context) ->
+    z_auth:is_auth(Context);
 is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User], Site, Context) ->
     case z_convert:to_binary(z_acl:user(Context)) of
         User ->
@@ -85,7 +85,7 @@ is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User], Site, Context)
             case m_identity:get_username(Context) of
                 User -> true;
                 _ -> false
-            end 
+            end
     end;
 is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"pagesession">>], Site, _Context) ->
     true;

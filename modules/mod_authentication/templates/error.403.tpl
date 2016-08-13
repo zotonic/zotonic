@@ -5,8 +5,8 @@
 {% block page_class %}err403{% endblock %}
 
 {% block content_area %}
-    {% with (not m.config.mod_ssl.is_ssl.value or m.req.is_ssl) 
-            or m.config.site.protocol.value|default:"http" /= 'http' 
+    {% with (not m.config.mod_ssl.is_ssl.value or m.req.is_ssl)
+            or m.config.site.protocol.value|default:"http" /= 'http'
        as is_show_login
     %}
       {% if m.req.referer %}

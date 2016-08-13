@@ -1,6 +1,6 @@
 {% extends "admin_widget_dashboard.tpl" %}
 
-{# 
+{#
     Display latest modified rscs
 
     Required arguments:

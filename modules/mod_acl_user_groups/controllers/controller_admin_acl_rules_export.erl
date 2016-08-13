@@ -13,7 +13,7 @@
 -include_lib("controller_webmachine_helper.hrl").
 
 
-init(DispatchArgs) -> 
+init(DispatchArgs) ->
     {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->

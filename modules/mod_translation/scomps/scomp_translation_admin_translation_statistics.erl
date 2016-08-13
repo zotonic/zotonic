@@ -6,9 +6,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,8 +43,8 @@ render(Params, _Vars, Context) ->
                     C = count_translated(PoFile),
                     Cls = erlang:min(100, trunc(((C/TotalLines) * 100)/20)*20),
                     {ok, [
-                        "<td class=\"perc perc-", z_convert:to_list(Cls), "\"><span>", 
-                        z_convert:to_list(C), " / ", z_convert:to_list(TotalLines), 
+                        "<td class=\"perc perc-", z_convert:to_list(Cls), "\"><span>",
+                        z_convert:to_list(C), " / ", z_convert:to_list(TotalLines),
                         "</span></td>"
                     ]};
                 false ->

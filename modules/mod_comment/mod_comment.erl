@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -101,7 +101,7 @@ init(Context) ->
     ok = z_db:transaction(fun install1/1, Context),
     z_depcache:flush(Context),
     ok.
-    
+
     install1(Context) ->
         ok = remove_old_comment_rsc_fields(Context),
         ok = remove_old_rating_table(Context),
@@ -157,7 +157,7 @@ install_comment_table(false, Context) ->
             keep_informed boolean not null default false,
             props bytea,
             created timestamp with time zone not null default now(),
-            
+
             constraint comment_pkey primary key (id),
             constraint fk_comment_rsc_id foreign key (rsc_id)
                 references rsc(id)
@@ -193,7 +193,7 @@ remove_old_comment_rsc_fields(Context) ->
     case R4 of
         [] ->
             ok;
-        L -> 
+        L ->
             z_db:q("alter table rsc " ++ string:join(L, ", "), Context),
             ok
     end.
@@ -210,6 +210,6 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 		parent=admin_modules,
 		label=?__("Comment settings", Context),
 		url={admin_comments_settings},
-		visiblecheck={acl, use, ?MODULE}}     
+		visiblecheck={acl, use, ?MODULE}}
      |Acc].
 

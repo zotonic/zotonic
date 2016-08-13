@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,7 +68,7 @@ do_redirect(ReqData, Context) ->
 						undefined -> "/";
 						Id -> m_rsc:p(Id, page_url, Context)
 					end;
-				Dispatch -> 
+				Dispatch ->
                     Args = z_context:get_all(Context),
 
                     Args1 = case z_context:get(qargs, Context) of
@@ -77,9 +77,9 @@ do_redirect(ReqData, Context) ->
                                     A = z_context:get_q_all(Context),
                                     lists:foldl(fun(K, Acc) -> [{K, proplists:get_value(atom_to_list(K), A)}|Acc] end, Args, ArgList)
                             end,
-					Args2 = lists:foldl(fun(K, Acc) -> 
-											proplists:delete(K, Acc) 
-										end, 
+					Args2 = lists:foldl(fun(K, Acc) ->
+											proplists:delete(K, Acc)
+										end,
 										Args1,
 										z_dispatcher:dispatcher_args()),
 					z_dispatcher:url_for(Dispatch, Args2, Context)

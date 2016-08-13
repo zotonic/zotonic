@@ -8,9 +8,9 @@
 
 {% block content_area %}
 	<h1>{_ One moment please, signing out... _}</h1>
-	
+
 	<p>{_ You will be redirected to the home page. _}</p>
-	
+
 	{% all include "_logoff_extra.tpl" %}
 {% endblock %}
 

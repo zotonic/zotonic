@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,7 +59,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("Domains and redirects", Context),
                 url={admin_custom_redirect},
                 visiblecheck={acl, use, mod_custom_redirect}}
-     
+
      |Acc].
 
 event(#submit{message=custom_redirects}, Context) ->
@@ -70,7 +70,7 @@ event(#submit{message=custom_redirects}, Context) ->
             ok = save_rows(Rows, Context),
             z_render:wire({reload, []}, Context);
         false ->
-            z_render:growl_error(?__("You are not allowed to change this.", Context), Context) 
+            z_render:growl_error(?__("You are not allowed to change this.", Context), Context)
     end.
 
 manage_schema(Version, Context) ->
@@ -129,7 +129,7 @@ do_save_rows([{Id,Host,Path,Redirect,IsPermanent}|Rows], Acc, Context) ->
         {host, Host1},
         {path, Path1},
         {redirect, z_string:trim(Redirect)},
-        {is_permanent, z_convert:to_bool(IsPermanent)} 
+        {is_permanent, z_convert:to_bool(IsPermanent)}
     ],
     case do_save_redirect(Id, Host1, Path1, Props, Context) of
         skip -> do_save_rows(Rows, Acc, Context);

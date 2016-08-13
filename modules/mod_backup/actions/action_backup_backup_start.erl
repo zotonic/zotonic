@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,13 +19,13 @@
 -module(action_backup_backup_start).
 -include("zotonic.hrl").
 -export([
-    render_action/4, 
+    render_action/4,
     event/2
 ]).
 
 render_action(TriggerId, TargetId, Args, Context) ->
     IsFullBackup = z_convert:to_bool(proplists:get_value(is_full_backup, Args, false)),
-	{PostbackMsgJS, _PickledPostback} = z_render:make_postback({backup_start, IsFullBackup}, undefined, 
+	{PostbackMsgJS, _PickledPostback} = z_render:make_postback({backup_start, IsFullBackup}, undefined,
                                                                TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 

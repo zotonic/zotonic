@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -87,7 +87,7 @@ do_media_upload_preprocess(Upload, Context) ->
                mime = "video/mp4",
                file = undefined,
                post_insert_fun = PostFun,
-               original_filename = undefined, 
+               original_filename = undefined,
                medium = [
                          {preview_filename, "lib/"++?TEMP_IMAGE},
                          {preview_width, proplists:get_value(width, MInfo)},
@@ -110,7 +110,7 @@ do_media_upload_broken(Context) ->
             #media_upload_preprocess{
                mime = "video/mp4",
                file = undefined,
-               original_filename = undefined, 
+               original_filename = undefined,
                medium = [
                          {preview_filename, "lib/"++?BROKEN_IMAGE},
                          {preview_width, proplists:get_value(width, MInfo)},
@@ -136,7 +136,7 @@ observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime="v
                     PreviewFilename = preview_filename(Id, Context),
                     PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
                     ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
-                    _ = file:delete(TmpFile), 
+                    _ = file:delete(TmpFile),
                     [
                      {preview_filename, PreviewFilename},
                      {preview_width, proplists:get_value(width, Info)},
@@ -147,7 +147,7 @@ observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime="v
                 {error, _} ->
                     Info
             end,
-    z_utils:props_merge(Info2, Medium); 
+    z_utils:props_merge(Info2, Medium);
 observe_media_upload_props(#media_upload_props{}, Medium, _Context) ->
     Medium.
 
@@ -178,7 +178,7 @@ observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
 
 
 start_link(Args) ->
-    {context, Context} = proplists:lookup(context, Args), 
+    {context, Context} = proplists:lookup(context, Args),
     ensure_job_queues(),
     supervisor:start_link({local, z_utils:name_for_site(?SERVER, Context)}, ?MODULE, []).
 
@@ -233,7 +233,7 @@ post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
                 {error, exdev} ->
                     {ok, _BytesCopied} = file:copy(UploadedFile, QueuePath),
                     ok = file:delete(UploadedFile);
-                ok -> 
+                ok ->
                     ok
             end;
         false ->
@@ -265,7 +265,7 @@ video_info(Path, Context) ->
               end,
     FfprobeCmd = lists:flatten([
                                 Cmdline, " ",
-                                z_utils:os_filename(Path) 
+                                z_utils:os_filename(Path)
                                ]),
     lager:warning("Video info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
@@ -304,8 +304,8 @@ fetch_duration(Ps) ->
 fetch_size(Ps) ->
     Streams = proplists:get_value(<<"streams">>, Ps),
     [{struct, Video}|_] = lists:dropwhile(
-                            fun({struct,S}) -> 
-                                    proplists:get_value(<<"codec_type">>, S) =/= <<"video">> 
+                            fun({struct,S}) ->
+                                    proplists:get_value(<<"codec_type">>, S) =/= <<"video">>
                             end, Streams),
     {<<"width">>, Width} = proplists:lookup(<<"width">>, Video),
     {<<"height">>, Height} = proplists:lookup(<<"height">>, Video),
@@ -319,7 +319,7 @@ fetch_size(Ps) ->
 
 orientation({struct, Tags}) ->
     case proplists:get_value(<<"rotate">>, Tags) of
-        undefined -> 
+        undefined ->
             1;
         Angle ->
             try
@@ -361,7 +361,7 @@ video_preview(MovieFile, Props, Context) ->
                      end,
                      " ",
                      orientation_to_transpose(proplists:get_value(orientation, Props)),
-                     z_utils:os_filename(TmpFile) 
+                     z_utils:os_filename(TmpFile)
                     ]
                    )),
     jobs:run(media_preview_jobs,
