@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,12 +59,12 @@ save_settings([{"seo" ++ _ = Key, Value} | T], Context) ->
     save_settings(T, Context);
 save_settings([_|T], Context) ->
     save_settings(T, Context).
-    
 
-clean([], Acc) -> 
+
+clean([], Acc) ->
     lists:reverse(Acc);
-clean([H|T], Acc) when 
-    H =:= 10 orelse H =:= 13 orelse H =:= $" orelse H =:= $' orelse 
+clean([H|T], Acc) when
+    H =:= 10 orelse H =:= 13 orelse H =:= $" orelse H =:= $' orelse
     H =:= $& orelse H =:= $< orelse H =:= $> ->
         clean(T, [32|Acc]);
 clean([H|T], Acc) ->

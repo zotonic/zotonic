@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -111,7 +111,7 @@ url_import_props(Url, Context) when is_list(Url); is_binary(Url) ->
             Error
     end.
 
-%% @doc Return the reversed list of parts of the hostname in an url. 
+%% @doc Return the reversed list of parts of the hostname in an url.
 host_parts(Url) ->
     {_Protocol, Host, _Path, _Qs, _Frag} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
     Ws = lists:reverse(string:tokens(Host, ".")),
@@ -134,7 +134,7 @@ import_as_website(MD, Context) ->
         preview_url = z_url_metadata:p(image, MD)
     }.
 
-%% @doc Id the URL refers to a file of some sorts, try to 
+%% @doc Id the URL refers to a file of some sorts, try to
 import_as_media(MD, Context) ->
     Mime = z_url_metadata:p(mime, MD),
     case is_html(Mime) of

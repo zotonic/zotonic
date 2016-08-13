@@ -8,7 +8,7 @@
     	</a>
 	{% else %}
 	    <a href="{{ id.page_url }}">
-		    <img src="{% image_url dep mediaclass="base-list-item-small" %}" alt="" /> 
+		    <img src="{% image_url dep mediaclass="base-list-item-small" %}" alt="" />
 		</a>
     {% endif %}
 {% else %}

@@ -18,7 +18,7 @@
         <div class="col-md-12">
             <label class="control-label">{_ Remarks _} {{ lang_code_with_brackets }}</label>
             <div>
-                <input type="text" id="{{ #remarks }}{{ lang_code_for_id }}" name="date_remarks{{ lang_code_with_dollar }}" 
+                <input type="text" id="{{ #remarks }}{{ lang_code_for_id }}" name="date_remarks{{ lang_code_with_dollar }}"
                     value="{{ is_i18n|if : id.translation[lang_code].date_remarks : id.date_remarks }}"
                     {% if not is_editable %}disabled="disabled"{% endif %}
                     {% include "_language_attrs.tpl" language=lang_code class="field-title form-control" %}

@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,8 +42,8 @@ render(Params, _Vars, Context) ->
 	Containment	 = proplists:get_value(containment, Params),
 	Opacity	 	 = proplists:get_value(opacity, Params),
 	Placeholder	 = proplists:get_value(placeholder, Params),
-	
-    
+
+
     case Id of
         undefined ->
             {error, "sorter scomp, please give the id of the sorter container"};
@@ -59,19 +59,19 @@ render(Params, _Vars, Context) ->
 									undefined -> "null";
 									_		  -> [$', Handle, $']
 								end,
-								
+
 			ConnectWithGroups = case ConnectGroups of
 									[All] when All == "all" orelse All == <<"all">> -> ["*"];
 									[None] when None == "none" orelse None == <<"none">> -> [];
 									_ -> groups_to_connect_with(lists:usort(ConnectGroups ++ Groups))
 								end,
 			GroupClasses	  = groups_to_classes(Groups),
-			
+
 			Axis1				= case Axis of
 									undefined -> "null";
 									_		  -> [$', Axis, $']
 								end,
-		
+
 			Containment1	   = case Containment of
 									undefined -> "null";
 									_		  -> [$', Containment, $']
@@ -87,16 +87,16 @@ render(Params, _Vars, Context) ->
 									_		  -> [$', Placeholder, $']
 								end,
 
-		
+
         	% Emit the javascript...
-        	Script = io_lib:format( "z_sorter($('#~s'), { handle: ~s, connectWith: [~s], axis: ~s, containment: ~s, opacity: ~s, placeholder: ~s }, '~s');", 
+        	Script = io_lib:format( "z_sorter($('#~s'), { handle: ~s, connectWith: [~s], axis: ~s, containment: ~s, opacity: ~s, placeholder: ~s }, '~s');",
         	                        [Id, Handle1, string:join(ConnectWithGroups, ", "), Axis1, Containment1, Opacity1, Placeholder1, PickledPostbackInfo]),
 
             Actions = [
                         {script,    [{script, Script}]},
                         {add_class, [{class, "sorter " ++ string:join(GroupClasses, " ") ++ " " ++ z_convert:to_list(Class)}]}
                     ],
-	
+
     	    {ok, z_render:wire(Id, Actions, Context)}
     end.
 
@@ -126,6 +126,6 @@ event(#postback{message={SortTag,SortDelegate}, trigger=TriggerId}, Context) ->
 
 groups_to_classes(Groups) ->
 	["drag_group_" ++ z_convert:to_list(X) || X <- Groups].
-	
+
 groups_to_connect_with(Groups) ->
 	["'.drag_group_" ++ z_convert:to_list(X) ++ "'" || X <- Groups].

@@ -1,4 +1,4 @@
-{% lib 
+{% lib
     "js/tinymce-4.3.7/tiny-init.js"
     "js/tinymce-4.3.7/z_editor.js"
 %}

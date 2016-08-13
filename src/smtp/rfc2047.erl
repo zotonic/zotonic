@@ -11,7 +11,7 @@
 
 encode(B) when is_binary(B) ->
 	encode(binary_to_list(B));
-encode([]) -> 
+encode([]) ->
 	[];
 encode(Text) ->
     encode(Text, Text).
@@ -29,7 +29,7 @@ encode([], Acc, _WordLen) ->
 encode(T, Acc, WordLen) when WordLen >= 55 ->
     %% Make sure that the individual encoded words are not longer than 76 chars (including charset etc)
     encode(T, [$?,$Q,$?,$8,$-,$F,$T,$U,$?,$=,32,10,13,$=,$?|Acc], 0);
-encode([C|T], Acc, WordLen) when C > 32 andalso C < 127 andalso C /= 32 
+encode([C|T], Acc, WordLen) when C > 32 andalso C < 127 andalso C /= 32
     andalso C /= $? andalso C /= $_ andalso C /= $= andalso C /= $. ->
     encode(T, [C|Acc], WordLen+1);
 encode([C|T], Acc, WordLen) ->
@@ -41,7 +41,7 @@ decode(Text) ->
     decode(Text, in_text, []).
 
 decode([], _, Acc) ->
-    lists:reverse(Acc);    
+    lists:reverse(Acc);
 decode("=?UTF-8?Q?" ++ T, in_text, Acc) ->
     decode(T, in_utf8, Acc);
 decode("?= \r\n" ++ T, in_utf8, Acc) ->

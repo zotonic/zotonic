@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -97,7 +97,7 @@ signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) ->
 request_verification(UserId, Context) ->
     Unverified = [ R || R <- m_identity:get_rsc(UserId, Context), proplists:get_value(is_verified, R) == false ],
     request_verification(UserId, Unverified, false, Context).
-    
+
     request_verification(_, [], false, _Context) ->
         {error, no_verifiable_identities};
     request_verification(_, [], true, _Context) ->
@@ -119,7 +119,7 @@ check_signup(Props, SignupProps, Context) ->
         {ok, Props1, SignupProps1} ->
             UserId = proplists:get_value(user_id, SignupProps),
             case check_identity(UserId, SignupProps1, Context) of
-                ok -> 
+                ok ->
                     case check_props(Props1, Context) of
                         ok -> {ok, Props1, SignupProps1};
                         {error, _} = Error -> Error
@@ -180,18 +180,18 @@ maybe_add_depiction(Id, Props, Context) ->
                 Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
                     case m_media:insert_url(Url, z_acl:logon(Id, Context)) of
                         {ok, MediaId} ->
-                            lager:info("[~p] Added depiction from depiction_url for ~p: ~p", 
+                            lager:info("[~p] Added depiction from depiction_url for ~p: ~p",
                                        [z_context:site(Context), Id, Url]),
                             m_edge:insert(Id, depiction, MediaId, Context);
                         {error, _} = Error ->
-                            lager:warning("[~p] Could not insert depiction_url for ~p: ~p", 
+                            lager:warning("[~p] Could not insert depiction_url for ~p: ~p",
                                           [z_context:site(Context), Id, Url]),
                             Error
                     end;
                 _ ->
                     ok
             end;
-        _ -> 
+        _ ->
             ok
     end.
 
@@ -233,7 +233,7 @@ props_to_rsc(Props, IsVerified, Context) ->
         | Props
     ],
     case proplists:is_defined(title, Props1) of
-        true -> 
+        true ->
             Props1;
         false ->
             Name = [

@@ -6,9 +6,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ to_block(Q) ->
 
 answer(Block, Answers, Context) ->
     Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Block, <<>>), 
+                    proplists:get_value(narrative, Block, <<>>),
                     Context),
     {_Parts, Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
     answer_inputs(Inputs, Answers, []).
@@ -53,7 +53,7 @@ answer_inputs([{IsSelect,Name}|Rest], Answers, Acc) ->
         Value -> case z_string:trim(Value) of
                     [] -> {error, missing};
                     V ->
-                        V1 = case IsSelect of true -> V; false -> {text, V} end, 
+                        V1 = case IsSelect of true -> V; false -> {text, V} end,
                         answer_inputs(Rest, Answers, [{Name,V1}|Acc])
                  end
     end.
@@ -64,7 +64,7 @@ prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, Answers, Context) ->
     Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Block, <<>>), 
+                    proplists:get_value(narrative, Block, <<>>),
                     Context),
     {Parts, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
     [
@@ -93,7 +93,7 @@ prep_chart1(Parts, {Name, Vals}) ->
 prep_answer_header(Block, _Context) ->
     Parts = proplists:get_value(parts, Block),
     [ z_convert:to_binary(Name) || {_, Name, _} <- Parts ].
-    
+
 prep_answer(Block, Answers, _Context) ->
     Parts = proplists:get_value(parts, Block),
     [ z_convert:to_binary(value(Type, proplists:get_value(z_convert:to_binary(Name), Answers), TypeArgs)) || {Type, Name, TypeArgs} <- Parts ].
@@ -108,7 +108,7 @@ value(_, {X, _}, _) -> X.
 
 prep_block(Block, Context) ->
     Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Block, <<>>), 
+                    proplists:get_value(narrative, Block, <<>>),
                     Context),
     {Parts0, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
     Parts = [ Part || Part <- Parts0, is_answerable(Part) ],
@@ -125,8 +125,8 @@ find_select([{select, Sel, _} = S|Rest], Name) ->
     end;
 find_select([_|Rest], Name) ->
     find_select(Rest, Name).
-    
-     
+
+
 result_title([], Acc) ->
      lists:reverse(Acc);
 result_title([{input, _, _}|Parts], Acc) ->

@@ -13,8 +13,8 @@ Params:
 #}
 {% with list_id|default:("links-" ++ id ++ "-" ++ predicate) as list_id %}
 <div class="unlink-wrapper">
-    {% sorter id=["links",id|format_integer,predicate]|join:"-" 
-              tag={object_sorter predicate=predicate id=id} 
+    {% sorter id=["links",id|format_integer,predicate]|join:"-"
+              tag={object_sorter predicate=predicate id=id}
               group="edges"
               delegate=delegate|default:`controller_admin_edit`
     %}
@@ -41,7 +41,7 @@ Params:
        id=#connect.predicate
        action={
           dialog_open
-          template="_action_dialog_connect.tpl" 
+          template="_action_dialog_connect.tpl"
           title=dialog_title_add|default:[_"Add a connection: ", predicate.title]
           subject_id=id
           predicate=predicate

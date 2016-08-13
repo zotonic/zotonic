@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -132,8 +132,8 @@ parse_email({<<"multipart">>, Mergeable}, Headers, _Params, Body)
              parse_email({PartType, PartSubType}, PartHs, PartPs, PartBody)
              || {PartType, PartSubType, PartHs, PartPs, PartBody} <- Body
             ],
-    lists:foldr(fun(A,B) -> merge_email(A,B) end, 
-                #email{subject=proplists:get_value(<<"Subject">>, Headers)}, 
+    lists:foldr(fun(A,B) -> merge_email(A,B) end,
+                #email{subject=proplists:get_value(<<"Subject">>, Headers)},
                 Parts);
 
 parse_email({<<"multipart">>, Appendable}, Headers, _Params, Body)
@@ -142,8 +142,8 @@ parse_email({<<"multipart">>, Appendable}, Headers, _Params, Body)
              parse_email({PartType, PartSubType}, PartHs, PartPs, PartBody)
              || {PartType, PartSubType, PartHs, PartPs, PartBody} <- Body
             ],
-    lists:foldr(fun(A,B) -> append_email(A,B) end, 
-                #email{subject=proplists:get_value(<<"Subject">>, Headers)}, 
+    lists:foldr(fun(A,B) -> append_email(A,B) end,
+                #email{subject=proplists:get_value(<<"Subject">>, Headers)},
                 Parts);
 
 parse_email({<<"message">>, <<"rfc822">>}, _Headers, _Params, Body) ->
@@ -186,8 +186,8 @@ parse_email(Mime, _Headers, Params, Body) ->
 merge_email(A, B) ->
     A#email{
       subject=take_defined(A#email.subject, B#email.subject),
-      text=take_defined(A#email.text, B#email.text), 
-      html=take_defined(A#email.html, B#email.html), 
+      text=take_defined(A#email.text, B#email.text),
+      html=take_defined(A#email.html, B#email.html),
       attachments=A#email.attachments++B#email.attachments
      }.
 

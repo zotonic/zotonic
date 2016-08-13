@@ -23,8 +23,8 @@
                 </label>
             </div>
         </div>
-    </div>    
-    
+    </div>
+
     <div class="modal-footer">
 	    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
 	    {% button class="btn btn-primary" type="submit" text=_"Duplicate page" %}

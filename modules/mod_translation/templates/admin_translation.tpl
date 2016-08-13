@@ -17,6 +17,7 @@
 </div>
 
 <div>
+<<<<<<< HEAD
     <table class="table table-striped">
         <thead>
             <tr>
@@ -77,6 +78,57 @@
                                 %}
                             </div>
                         </td>
+=======
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="10%">{_ Enabled _}</th>
+                    <th width="10%">{_ Default _}</th>
+                    <th width="15%">{_ Language _}</th>
+                    <th width="15%">{_ ISO Code _}</th>
+                    <th width="15%">{_ Fallback language _}</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% with m.config.i18n.language.value as default_code %}
+                    {% for code, lang in m.config.i18n.language_list.list %}
+                        <tr id="{{ #li.code }}">
+                            <td>
+                                <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"
+                                {% if lang.is_enabled %}checked="checked"{% endif %} />
+                                {% wire id=#enabled.code postback={language_enable code=code} delegate="mod_translation" %}
+                            </td>
+                            <td>
+                                <input type="radio" id="{{ #default.code }}" name="is_default" value="{{ code }}"
+                                {% if code == default_code %}checked="checked"{% endif %} />
+                                {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
+                            </td>
+                            <td class="clickable" id="{{ #b.code }}">
+                                {{ lang.language|default:"-" }}
+                            </td>
+                            <td class="clickable" id="{{ #a.code }}">{{ code|default:"-" }}</td>
+                            <td class="clickable" id="{{ #a.fallback }}">{{ lang.fallback|default:"-" }}</td>
+                            <td class="clickable">
+                                <div class="pull-right">
+                                    {% button class="btn btn-default btn-xs" text=_"Delete"
+                                        action={dialog_open
+                                            title=_"Delete language"
+                                            template="_dialog_language_delete.tpl"
+                                            code=code lang=lang
+                                        }
+                                    %}
+                                    {% button class="btn btn-default btn-xs"text=_"Edit"
+                                        action={dialog_open
+                                            title=_"Edit language"|append:": "|append:lang.language template="_dialog_language_edit.tpl"
+                                            code=code lang=lang fallback=lang.fallback}
+                                    %}
+                                </div>
+                            </td>
+                            {% wire id=#a.code action={dialog_open title=_"Edit language" template="_dialog_language_edit.tpl" code=code lang=lang} %}
+            {% wire id=#b.code action={dialog_open title=_"Edit language" template="_dialog_language_edit.tpl" code=code lang=lang} %}
+>>>>>>> master
         </tr>
         {% empty %}
         <tr>
@@ -99,8 +151,12 @@
             <div class="col-md-6">
                 <div class="form-group">
                     {% wire id=#redir
+<<<<<<< HEAD
                         postback={toggle_url_rewrite}
                         delegate="mod_translation"
+=======
+                        action={config_toggle module="mod_translation" key="rewrite_url"}
+>>>>>>> master
                     %}
                     <label class="checkbox-inline">
                         <input type="checkbox" id="{{ #redir }}" value="1"
@@ -181,14 +237,22 @@
         <div class="form-group">
             <div>
                 {% button class="btn btn-default" text=_"Generate .pot files"
+<<<<<<< HEAD
                     postback={translation_generate} delegate="mod_translation" %}
+=======
+                    action={postback postback="translation_generate" delegate="mod_translation"} %}
+>>>>>>> master
                 <span class="help-block">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
             </div>
         </div>
         <div class="form-group">
             <div>
                 {% button class="btn btn-default" text=_"Reload Translations"
+<<<<<<< HEAD
                     postback={translation_reload} delegate="mod_translation" %}
+=======
+                    action={postback postback="translation_reload" delegate="mod_translation"} %}
+>>>>>>> master
                 <span class="help-block">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
             </div>
         </div>

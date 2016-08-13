@@ -69,7 +69,7 @@ address{display:block;margin-bottom:18px;font-style:normal;line-height:18px;}
 small{font-size:100%;}
 cite{font-style:normal;}
 
-	
+
 /* basic e-mail styles
 -------------------------------------*/
 

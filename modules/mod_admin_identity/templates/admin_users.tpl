@@ -21,7 +21,7 @@
             {_ Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record. _}
         </p>
     </div>
-    
+
     {% if is_users_editable %}
         <div class="well">
             {% button class="btn btn-primary" text=_"Make a new user" action={dialog_user_add on_success={reload}} %}
@@ -41,7 +41,7 @@
                     {_ Also show persons without user account _}
                 </label>
             </form>
-            
+
             {% with m.search.paged[{users text=q.qs page=q.page users_only=not(q.persons)}] as result %}
 
                 <table class="table table-striped do_adminLinkedTable">

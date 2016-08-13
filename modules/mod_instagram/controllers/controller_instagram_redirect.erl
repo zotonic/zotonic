@@ -73,7 +73,7 @@ html_ok(Context) ->
 
 html_error(Error, Context) when is_atom(Error) ->
     Vars = [
-        {service, "Instagram"}, 
+        {service, "Instagram"},
         {error, Error}
     ],
     Html = z_template:render("logon_service_error.tpl", Vars, Context),
@@ -98,7 +98,7 @@ auth_user(InstProps, AccessToken, Context) ->
             service=instagram,
             service_uid=InstagramUserId,
             service_props=[
-                {access_token, AccessToken}, 
+                {access_token, AccessToken},
                 {username, proplists:get_value(<<"username">>, InstProps)}
             ],
             props=PersonProps,
@@ -119,9 +119,9 @@ fetch_access_token(Code, Context) ->
             "&grant_type=authorization_code",
             "&code=", z_utils:url_encode(Code)
         ]),
-    case httpc:request(post, 
+    case httpc:request(post,
                        {InstagramUrl, [], "application/x-www-form-urlencoded", FormData},
-                       httpc_http_options(), httpc_options())                   
+                       httpc_http_options(), httpc_options())
     of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
@@ -146,7 +146,7 @@ fetch_user_data(_AccessToken, UserData) ->
     %         {error, {http_error, FacebookUrl, Other}}
     % end.
 
-httpc_options() -> 
+httpc_options() ->
     [
         {sync, true},
         {body_format, binary}

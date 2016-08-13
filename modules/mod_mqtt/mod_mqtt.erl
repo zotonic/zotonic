@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -92,43 +92,43 @@ local_topic(Topic) -> Topic.
 
 observe_rsc_update_done(#rsc_update_done{id=Id} = UpdateDone, Context) ->
     z_mqtt:publish(
-        <<"~site/rsc/",(z_convert:to_binary(Id))/binary>>, 
+        <<"~site/rsc/",(z_convert:to_binary(Id))/binary>>,
         UpdateDone#rsc_update_done{pre_props=undefined, post_props=undefined},
         Context).
 
 observe_media_replace_file(#media_replace_file{id=Id} = MediaReplace, Context) ->
     z_mqtt:publish(
-        <<"~site/rsc/",(z_convert:to_binary(Id))/binary, "/medium">>, 
+        <<"~site/rsc/",(z_convert:to_binary(Id))/binary, "/medium">>,
         MediaReplace#media_replace_file{medium=[]},
         Context).
 
 observe_edge_delete(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId} = EdgeDelete, Context) ->
     z_mqtt:publish(
-        <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>, 
+        <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>,
         EdgeDelete,
         Context),
     z_mqtt:publish(
-        <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>, 
+        <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>,
         EdgeDelete,
         Context).
 
 observe_edge_insert(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId} = EdgeInsert, Context) ->
     z_mqtt:publish(
-        <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>, 
+        <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>,
         EdgeInsert,
         Context),
     z_mqtt:publish(
-        <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>, 
+        <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>,
         EdgeInsert,
         Context).
 
 observe_edge_update(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId} = EdgeUpdate, Context) ->
     z_mqtt:publish(
-        <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>, 
+        <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>,
         EdgeUpdate,
         Context),
     z_mqtt:publish(
-        <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>, 
+        <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>,
         EdgeUpdate,
         Context).
 
@@ -202,13 +202,13 @@ subscribe_topic(Topic, Qos, MFA, ModulePid, MyPid, Context) ->
     end.
 
 unsubscribe_topic(Topic, MFA, MyPid) ->
-    supervisor:delete_child(MyPid, {Topic,MFA}). 
+    supervisor:delete_child(MyPid, {Topic,MFA}).
 
 
 add_lastwill(Pid, WillId, Msg, Context) when is_pid(Pid) ->
     case is_pid(Pid) of
         true ->
-            WillId1 = z_convert:to_binary(WillId), 
+            WillId1 = z_convert:to_binary(WillId),
             case start_lastwill_proc(Pid, WillId1, Msg, Context) of
                 {ok, _} ->
                     ok;
@@ -223,7 +223,7 @@ add_lastwill(_Pid, _WillId, Msg, Context) ->
 
 
 del_lastwill(Pid, WillId, Context) when is_pid(Pid) ->
-    WillId1 = z_convert:to_binary(WillId), 
+    WillId1 = z_convert:to_binary(WillId),
     case start_lastwill_proc(Pid, undefined, undefined, Context) of
                 {ok, _} ->
                     ok;

@@ -6,9 +6,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,14 +35,14 @@ answer(Block, Answers, Context) ->
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
     Options = proplists:get_value(answers, Props),
     case proplists:get_value(Name, Answers) of
-        undefined -> 
+        undefined ->
             {error, missing};
         Label when is_binary(Label) ->
             case proplists:is_defined(Label, Options) of
                 true -> {ok, [{Name, Label}]};
                 false -> {error, missing}
             end;
-        Value when is_list(Value) -> 
+        Value when is_list(Value) ->
             Defined = lists:filter(fun(Lab) -> proplists:is_defined(Lab, Options) end, Value),
             Flattened = string:join([ z_convert:to_list(V) || V <- Defined ], "#"),
             {ok, [{Name, {text, list_to_binary(Flattened)}}]}
@@ -85,7 +85,7 @@ prep_answer(Q, [{_Name, {Value, _Text}}|_], _Context) ->
 prep(Q, Vs) ->
     case is_multiple(Q) of
         false ->
-            case Vs of 
+            case Vs of
                 [V|_] -> V;
                 [] -> undefined
             end;
@@ -101,16 +101,16 @@ prep(Q, Vs) ->
 
 is_multiple(Q) ->
     case proplists:get_value(input_type, Q) of
-        <<"multi">> -> 
+        <<"multi">> ->
             true;
         undefined ->
             % Older surveys had the is_multiple property
             z_convert:to_bool(proplists:get_value(is_multiple, Q));
-        _ ->    
+        _ ->
             false
     end.
-    
-    
+
+
 prep_block(Block, Context) ->
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
     Props ++ Block.

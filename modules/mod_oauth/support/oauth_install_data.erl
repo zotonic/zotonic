@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ install1(Context) ->
     ok = z_db:transaction(F, Context),
     z_depcache:flush(Context),
     ok.
-    
+
 
 
 install_tables(Context) ->
@@ -42,13 +42,13 @@ install_tables(Context) ->
 
 tables_sql() ->
     [
-     
+
      %%  ////////////////// SERVER SIDE /////////////////
 
-     %% Table holding consumer key/secret combos an user issued to consumers. 
+     %% Table holding consumer key/secret combos an user issued to consumers.
      %% Used for verification of incoming requests.
      "
-    CREATE TABLE oauth_application_registry 
+    CREATE TABLE oauth_application_registry
     (
     id                      serial NOT NULL,
     user_id                 integer,
@@ -77,7 +77,7 @@ tables_sql() ->
      %% maximum timestamp received.
 
      "
-    CREATE TABLE oauth_nonce 
+    CREATE TABLE oauth_nonce
     (
     id                  serial NOT NULL,
     consumer_key        varchar(64) not null,
@@ -95,7 +95,7 @@ tables_sql() ->
      "CREATE TYPE oauth_token_type AS ENUM('request', 'access')",
 
      "
-    CREATE TABLE oauth_application_token 
+    CREATE TABLE oauth_application_token
     (
     id                  serial NOT NULL,
     application_id      integer not null,
@@ -111,7 +111,7 @@ tables_sql() ->
 	CONSTRAINT oauth_application_token_pkey PRIMARY KEY (id),
     CONSTRAINT oauth_application_token_token UNIQUE (token),
 
-	CONSTRAINT oauth_application_appid 
+	CONSTRAINT oauth_application_appid
     FOREIGN KEY (application_id) REFERENCES oauth_application_registry (id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -123,14 +123,14 @@ tables_sql() ->
     ",
 
      "
-    CREATE TABLE oauth_application_perm 
+    CREATE TABLE oauth_application_perm
     (
     application_id      integer not null,
     perm                varchar(64) not null,
 
 	CONSTRAINT oauth_application_perm_pkey PRIMARY KEY (application_id, perm),
 
-	CONSTRAINT oauth_application_perm_appid 
+	CONSTRAINT oauth_application_perm_appid
     FOREIGN KEY (application_id) REFERENCES oauth_application_registry (id)
         ON UPDATE CASCADE
         ON DELETE CASCADE

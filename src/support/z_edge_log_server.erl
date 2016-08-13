@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,7 @@
 -include_lib("zotonic.hrl").
 
 % Check every 10 minutes if we have anything to handle.
-% Check every 100msec when working through a backlog. 
+% Check every 100msec when working through a backlog.
 -define(CLEANUP_TIMEOUT_LONG, 600000).
 -define(CLEANUP_TIMEOUT_SHORT, 100).
 -define(CLEANUP_BATCH_SIZE, 100).
@@ -52,7 +52,7 @@ check(Context) ->
 %%====================================================================
 %% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link() -> 
+start_link() ->
     start_link([]).
 start_link(Args) when is_list(Args) ->
     {site, Site} = proplists:lookup(site, Args),
@@ -164,9 +164,9 @@ do_check_1(Rs, Context) ->
     lists:foreach(fun(RscId) ->
                     z_depcache:flush(RscId, Context)
                   end,
-                  RscIds), 
+                  RscIds),
     lists:foreach(fun({_Id,Op,SubjectId,Predicate,ObjectId,EdgeId}) ->
-                    PredName = z_convert:to_atom(Predicate), 
+                    PredName = z_convert:to_atom(Predicate),
                     do_edge_notify(Op, SubjectId, PredName, ObjectId, EdgeId, Context)
                   end, Rs),
     Ranges = z_utils:ranges([ element(1,R) || R <- Rs ]),
@@ -199,7 +199,7 @@ do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
 maybe_delete_dependent(Id, Context) ->
     case m_rsc:p_no_acl(Id, is_dependent, Context) of
         true ->
-            Key = iolist_to_binary([<<"delete_if_unconnected-">>, integer_to_list(Id)]), 
+            Key = iolist_to_binary([<<"delete_if_unconnected-">>, integer_to_list(Id)]),
             z_pivot_rsc:insert_task_after(20, ?MODULE, delete_if_unconnected, Key, [Id], Context);
         _False ->
             ok
@@ -207,7 +207,7 @@ maybe_delete_dependent(Id, Context) ->
 
 delete_if_unconnected(Id, Context) ->
     case z_db:q_row("select r.is_dependent, r.is_protected, e.object_id
-                     from rsc r 
+                     from rsc r
                           left join edge e on e.object_id = r.id
                      where r.is_dependent
                        and r.id = $1

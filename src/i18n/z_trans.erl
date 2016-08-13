@@ -32,7 +32,12 @@
     lookup_fallback_language/3,
     default_language/1,
     is_language/1,
+<<<<<<< HEAD
     to_language_atom/1
+=======
+    to_language_atom/1,
+    lc2descr/1
+>>>>>>> master
 ]).
 
 -include_lib("zotonic.hrl").

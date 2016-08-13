@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,13 +20,13 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1, 
+    init/1,
     service_available/2,
     upgrades_provided/2,
     charsets_provided/2,
     content_types_provided/2,
     provide_content/2,
-    websocket_start/2,    
+    websocket_start/2,
     websocket_send_data/2,
     is_websocket_request/1
 ]).
@@ -116,9 +116,9 @@ websocket_message(Data, SenderPid, Context) ->
             {ok, Context}
     end.
 
-websocket_info(_Msg, _Context) -> 
+websocket_info(_Msg, _Context) ->
     ok.
 
-websocket_terminate(_Reason, _Context) -> 
+websocket_terminate(_Reason, _Context) ->
     ok.
 

@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2010  Marc Worrell
-%% @doc Handle parameter validation of a request. Checks for the presence 
+%% @doc Handle parameter validation of a request. Checks for the presence
 %% of z_v elements containing validation information.
 
 %% Copyright 2009-2010 Marc Worrell
@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -81,7 +81,7 @@ validate_query_args(Context) ->
         undefined ->
             Validations = z_context:get_q_all("z_v", Context),
             {Validated,Context1} = lists:foldl(
-                                            fun(X, {Acc, Ctx}) -> 
+                                            fun(X, {Acc, Ctx}) ->
                                                 {XV, Ctx1} = validate(X,Ctx),
                                                 {[XV|Acc], Ctx1}
                                             end,
@@ -91,7 +91,7 @@ validate_query_args(Context) ->
             % format is like: [{"email",{ok,"me@example.com"}}]
             % Grep all errors, make scripts for the context var
             % Move all ok values to the q_validated dict
-            IsError  = fun 
+            IsError  = fun
                             ({_Id, {error, _, _}}) -> true;
                             (_X) -> false
                        end,
@@ -106,7 +106,7 @@ validate_query_args(Context) ->
 
             Context2 = z_context:set(q_validated, QsValidated, Context1),
             Context3 = report_errors(Errors, Context2),
-            
+
             case Errors of
                 [] -> {ok, Context3};
                 _  -> {error, Context3}
@@ -117,7 +117,7 @@ validate_query_args(Context) ->
 
 
 %% @doc Add all errors as javascript message to the request result.
-report_errors([], Context) -> 
+report_errors([], Context) ->
     Context;
 report_errors([{_Id, {error, _ErrId, {script, Script}}}|T], Context) ->
     Context1 = z_script:add_script(Script, Context),

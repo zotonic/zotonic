@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@
     m_find_value/3,
     m_to_list/2,
     m_value/2,
-    
+
     is_user/2,
     get_username/1,
     get_username/2,
@@ -59,7 +59,7 @@
 	set_by_type/5,
 	delete_by_type/3,
     delete_by_type_and_key/4,
-	
+
     insert/4,
     insert/5,
     insert_unique/4,
@@ -69,7 +69,7 @@
     set_verified/2,
     set_verified/4,
     is_verified/2,
-    
+
     delete/2,
     merge/3,
     is_reserved_name/1,
@@ -145,7 +145,7 @@ get_username(Id, Context) ->
 %% @spec delete_username(ResourceId, Context) -> void
 delete_username(Id, Context) when is_integer(Id), Id /= 1 ->
     case z_acl:is_allowed(delete, Id, Context) orelse z_acl:user(Context) == Id of
-        true ->  
+        true ->
             z_db:q("delete from identity where rsc_id = $1 and type = 'username_pw'", [Id], Context),
             z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
             ok;
@@ -206,7 +206,7 @@ set_username_pw_1(Id, Username, Password, Context) ->
             z_depcache:flush(Id, Context),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
-            lager:error("[~p] set_username_pw error for ~p, setting username ~p: ~p", 
+            lager:error("[~p] set_username_pw error for ~p, setting username ~p: ~p",
                         [z_context:site(Context), Username, ErrTrace]),
             Error;
         {error, _} = Error ->
@@ -215,14 +215,14 @@ set_username_pw_1(Id, Username, Password, Context) ->
 
 set_username_pw_trans(Id, Username, Hash, Context) ->
     case z_db:q("
-                update identity 
+                update identity
                 set key = $2,
                     propb = $3,
                     is_verified = true,
                     modified = now()
                 where type = 'username_pw'
-                  and rsc_id = $1", 
-                [Id, Username, ?DB_PROPS(Hash)], 
+                  and rsc_id = $1",
+                [Id, Username, ?DB_PROPS(Hash)],
                 Context)
     of
         0 ->
@@ -230,13 +230,13 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                 true ->
                     {rollback, {error, eexist}};
                 false ->
-                    UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1", 
+                    UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and key = $1",
                                          [Username],
                                          Context),
                     case UniqueTest of
                         0 ->
-                            1 = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb) 
-                                        values ($1, true, true, 'username_pw', $2, $3)", 
+                            1 = z_db:q("insert into identity (rsc_id, is_unique, is_verified, type, key, propb)
+                                        values ($1, true, true, 'username_pw', $2, $3)",
                                         [Id, Username, {term, Hash}],
                                         Context),
                             z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Context),
@@ -245,7 +245,7 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                             {rollback, {error, eexist}}
                     end
             end;
-        1 -> 
+        1 ->
             ok
     end.
 
@@ -324,7 +324,7 @@ nodash(S) ->
 
 
 
-%% @doc Return the rsc_id with the given username/password.  
+%% @doc Return the rsc_id with the given username/password.
 %%      If succesful then updates the 'visited' timestamp of the entry.
 %% @spec check_username_pw(Username, Password, Context) -> {ok, Id} | {error, Reason}
 check_username_pw(<<"admin">>, Password, Context) ->
@@ -432,10 +432,10 @@ check_email_pw_1([], _Email, _Password, _Context) ->
     {error, password};
 check_email_pw_1([Idn|Rest], Email, Password, Context) ->
     UserId = proplists:get_value(rsc_id, Idn),
-    Row = z_db:q_row("select rsc_id, key, propb from identity where type = 'username_pw' and rsc_id = $1", 
+    Row = z_db:q_row("select rsc_id, key, propb from identity where type = 'username_pw' and rsc_id = $1",
                      [UserId], Context),
     case Row of
-        undefined -> 
+        undefined ->
             check_email_pw_1(Rest, Email, Password, Context);
         {RscId, Username, Hash} ->
             case check_hash(RscId, Username, Password, Hash, Context) of
@@ -569,15 +569,15 @@ insert(RscId, Type, Key, Props, Context) ->
     end.
 
 insert_1(RscId, Type, Key, Props, Context) ->
-    case z_db:q1("select id 
-                  from identity 
+    case z_db:q1("select id
+                  from identity
                   where rsc_id = $1
                     and type = $2
                     and key = $3",
                 [RscId, Type, Key],
                 Context)
     of
-        undefined -> 
+        undefined ->
             Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
             Result = z_db:insert(identity, validate_is_unique(Props1), Context),
             z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
@@ -640,8 +640,8 @@ set_visited(UserId, Context) ->
 set_verified(Id, Context) ->
     case z_db:q_row("select rsc_id, type from identity where id = $1", [Id], Context) of
         {RscId, Type} ->
-            case z_db:q("update identity set is_verified = true, verify_key = null where id = $1", 
-                   [Id], 
+            case z_db:q("update identity set is_verified = true, verify_key = null where id = $1",
+                   [Id],
                    Context)
             of
                 1 ->
@@ -656,9 +656,9 @@ set_verified(Id, Context) ->
 
 
 %% @doc Set the verified flag on a record by rescource id, identity type and value (eg an user's email address).
-set_verified(RscId, Type, Key, Context) 
-    when is_integer(RscId), 
-         Type =/= undefined, 
+set_verified(RscId, Type, Key, Context)
+    when is_integer(RscId),
+         Type =/= undefined,
          Key =/= undefined, Key =/= <<>>, Key =/= [] ->
     Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context),
     z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
@@ -667,26 +667,26 @@ set_verified(_RscId, _Type, _Key, _Context) ->
     {error, badarg}.
 
 set_verified_trans(RscId, Type, Key, Context) ->
-    case z_db:q("update identity 
-                 set is_verified = true, 
-                     verify_key = null 
-                 where rsc_id = $1 and type = $2 and key = $3", 
-                [RscId, Type, Key], 
+    case z_db:q("update identity
+                 set is_verified = true,
+                     verify_key = null
+                 where rsc_id = $1 and type = $2 and key = $3",
+                [RscId, Type, Key],
                 Context)
     of
         0 ->
-            1 = z_db:q("insert into identity (rsc_id, type, key, is_verified) 
-                        values ($1,$2,$3,true)", 
-                       [RscId, Type, Key], 
+            1 = z_db:q("insert into identity (rsc_id, type, key, is_verified)
+                        values ($1,$2,$3,true)",
+                       [RscId, Type, Key],
                        Context),
             ok;
-        N when N > 0 -> 
+        N when N > 0 ->
             ok
     end.
 
 %% @doc Check if there is a verified identity for the user, beyond the username_pw
 is_verified(RscId, Context) ->
-    case z_db:q1("select id from identity where rsc_id = $1 and is_verified = true and type <> 'username_pw'", 
+    case z_db:q1("select id from identity where rsc_id = $1 and is_verified = true and type <> 'username_pw'",
                 [RscId], Context) of
         undefined -> false;
         _ -> true
@@ -695,7 +695,7 @@ is_verified(RscId, Context) ->
 set_by_type(RscId, Type, Key, Context) ->
     set_by_type(RscId, Type, Key, [], Context).
 set_by_type(RscId, Type, Key, Props, Context) ->
-	F = fun(Ctx) -> 
+	F = fun(Ctx) ->
 		case z_db:q("update identity set key = $3, propb = $4 where rsc_id = $1 and type = $2", [RscId, Type, Key, {term, Props}], Ctx) of
 			0 -> z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)", [RscId, Type, Key, {term, Props}], Ctx);
             N when N > 0 -> ok
@@ -743,7 +743,7 @@ merge(WinnerId, LooserId, Context) ->
                                 LooserIdns),
                 lists:foreach(
                             fun({_Type, _Key, Id}) ->
-                                z_db:q("update identity set rsc_id = $1 where id = $2", 
+                                z_db:q("update identity set rsc_id = $1 where id = $2",
                                        [WinnerId, Id],
                                        Ctx)
                             end,
@@ -772,8 +772,8 @@ maybe_reset_email_property(Id, <<"email">>, Email, Context) when is_binary(Email
     case normalize_key(email, m_rsc:p_no_acl(Id, email_raw, Context)) of
         Email ->
             NewEmail = z_db:q1("
-                    select key 
-                    from identity 
+                    select key
+                    from identity
                     where rsc_id = $1
                       and type = 'email'
                     order by is_verified desc, modified desc",
@@ -796,8 +796,10 @@ delete_by_type(RscId, Type, Context) ->
     end.
 
 delete_by_type_and_key(RscId, Type, Key, Context) ->
-    z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3", [RscId, Type, Key], Context).
-
+    case z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3", [RscId, Type, Key], Context) of
+        0 -> ok;
+        _N -> z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context)
+    end.
 
 lookup_by_username(Key, Context) ->
 	lookup_by_type_and_key("username_pw", z_string:to_lower(Key), Context).

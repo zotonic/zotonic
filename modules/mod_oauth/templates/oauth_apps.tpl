@@ -3,7 +3,7 @@
 {% block title %}{_ OAuth applications _}{% endblock %}
 
 {% block content %}
-<div class="admin-header"> 
+<div class="admin-header">
     <h2>{_ Registered OAuth applications _}</h2>
     <p>
         {_ This page allows you to register API keys with which 3rd parties can gain access to specific parts of the API and database. _}

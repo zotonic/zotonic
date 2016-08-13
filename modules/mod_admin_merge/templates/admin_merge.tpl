@@ -14,7 +14,7 @@
     </div>
 
     {% if id.is_editable %}
-        {% include "_merge_find.tpl" 
+        {% include "_merge_find.tpl"
             tab=#tab
             text=id.title
             delegate=`mod_admin_merge`

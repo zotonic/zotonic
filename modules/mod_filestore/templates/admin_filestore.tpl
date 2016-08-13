@@ -16,12 +16,12 @@
     </div>
 
     {% if m.acl.is_allowed.use.mod_admin_config %}
-        {% wire id="admin_filestore" 
-            type="submit" 
+        {% wire id="admin_filestore"
+            type="submit"
             postback=`admin_filestore`
             delegate=`filestore_admin`
         %}
-        
+
         <div class="row">
             <div class="col-md-6">
                 <form name="admin_filestore" id="admin_filestore" method="POST" action="postback" class="form">
@@ -31,20 +31,20 @@
                             <div class="form-group row">
                                 <label class="control-label col-md-12" for="s3url">{_ Base Url _}</label>
                                 <div class="col-md-12">
-                                    <input type="text" id="s3url" name="s3url" 
+                                    <input type="text" id="s3url" name="s3url"
                                         value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
                                         placeholder="https://mybucket.s3.amazonaws.com/mysite"
                                     />
                                 </div>
                             </div>
-                        
+
                             <div class="form-group row">
                                 <label class="control-label col-md-12" for="s3key">{_ API Key _}</label>
                                 <div class="col-md-12">
                                     <input type="text" id="s3key" name="s3key" value="{{ m.config.mod_filestore.s3key.value|escape }}" class="form-control" />
                                 </div>
                             </div>
-                        
+
                             <div class="form-group row">
                                 <label class="control-label col-md-12" for="s3secret">{_ API Secret _}</label>
                                 <div class="col-md-12">
@@ -154,7 +154,7 @@
             </div>
         </div>
         </div>
-    
+
     {% else %}
         <p class="alert alert-danger">
             {_ You are not allowed to change these settings. _}

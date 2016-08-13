@@ -30,7 +30,7 @@
     #}
     <td>
         {% if id.to_id %}
-            <a href="{% url admin_log_email severity=4 to=result_row.to_id %}" title="{{result_row.to_id|escape}}">{{ result_row.to_id }}</a> / 
+            <a href="{% url admin_log_email severity=4 to=result_row.to_id %}" title="{{result_row.to_id|escape}}">{{ result_row.to_id }}</a> /
             <a href="{% url admin_log_email severity=4 to=result_row.envelop_to %}" title="{{result_row.envelop_to|escape}}">
                 {{ result_row.envelop_to|truncate:10|escape }}
             </a>

@@ -12,5 +12,5 @@
 	<div class="tab-pane" id="{{ #user }}">
 	    {% include "_admin_edit_basics_user.tpl" id=id %}
     </div>
-    
+
 {% endblock %}

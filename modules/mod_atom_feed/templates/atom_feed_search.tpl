@@ -9,5 +9,5 @@
 	{% for id in ids %}
 		{% include "_atom_entry.tpl" id=id %}
 	{% endfor %}
-	
+
 </feed>

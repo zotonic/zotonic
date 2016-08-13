@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,7 +68,7 @@ observe_media_update_done(#media_update_done{}, _Context) ->
 observe_filestore(#filestore{action=lookup, path=Path}, Context) ->
     lookup(Path, Context);
 observe_filestore(#filestore{action=upload, path=Path, mime=undefined} = Upload, Context) ->
-    Mime = z_media_identify:guess_mime(Path), 
+    Mime = z_media_identify:guess_mime(Path),
     observe_filestore(Upload#filestore{mime=Mime}, Context);
 observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
     maybe_queue_file(<<>>, Path, true, [{mime,Mime}], Context),
@@ -115,7 +115,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("Cloud File Store", Context),
                 url={admin_filestore},
                 visiblecheck={acl, use, mod_config}}
-     
+
      |Acc].
 
 
@@ -159,7 +159,7 @@ lookup(Path, Context) ->
             end
     end.
 
-load_cache(Props, Context) ->          
+load_cache(Props, Context) ->
     Service = proplists:get_value(service, Props),
     Location = proplists:get_value(location, Props),
     Size = proplists:get_value(size, Props),
@@ -167,9 +167,9 @@ load_cache(Props, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
             lager:debug("[~p] File store cache load of ~p", [z_context:site(Context), Location]),
-            Ctx = z_context:prune_for_async(Context), 
+            Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
-                            s3filez:stream(Cred, 
+                            s3filez:stream(Cred,
                                            Location1,
                                            fun({error, enoent}) ->
                                                     lager:error("[~p] File store remote file is gone ~p", [z_context:site(Ctx), Location]),
@@ -208,7 +208,7 @@ queue_all_stop(Context) ->
 task_queue_all(Offset, Max, Context) when Offset =< Max ->
     Media = z_db:assoc_props("
                     select *
-                    from medium 
+                    from medium
                     order by id asc
                     limit $1
                     offset $2",
@@ -239,7 +239,7 @@ maybe_queue_file(_Prefix, <<>>, _IsDeletable, _Props, _Context) ->
 maybe_queue_file(_Prefix, _Path, false, _Props, _Context) ->
     nop;
 maybe_queue_file(Prefix, Filename, true, Props, Context) ->
-    FilenameBin = z_convert:to_binary(Filename), 
+    FilenameBin = z_convert:to_binary(Filename),
     case m_filestore:queue(<<Prefix/binary, FilenameBin/binary>>, Props, Context) of
         ok -> ok;
         {error, duplicate} -> ok
@@ -286,7 +286,7 @@ start_deleter(R, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
             lager:debug("Queue delete for ~p", [Location1]),
-            ContextAsync = z_context:prune_for_async(Context), 
+            ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
         undefined ->
             lager:debug("No credentials for ~p", [R])
@@ -313,9 +313,9 @@ start_downloader(R, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
             LocalPath = z_path:files_subdir(Path, Context),
-            ok = filelib:ensure_dir(LocalPath), 
+            ok = filelib:ensure_dir(LocalPath),
             lager:debug("Queue move to local for ~p", [Location1]),
-            ContextAsync = z_context:prune_for_async(Context), 
+            ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]});
         undefined ->
             lager:debug("No credentials for ~p", [R])
@@ -323,14 +323,14 @@ start_downloader(R, Context) ->
 
 download_stream(_Id, _Path, LocalPath, Context, {content_type, _}) ->
     lager:debug("Download remote file ~p started (~p)", [LocalPath, z_context:site(Context)]),
-    file:delete(temp_path(LocalPath)); 
+    file:delete(temp_path(LocalPath));
 download_stream(_Id, _Path, LocalPath, _Context, Data) when is_binary(Data) ->
     file:write_file(temp_path(LocalPath), Data, [append,raw,binary]);
 download_stream(Id, Path, LocalPath, Context, eof) ->
     lager:debug("Download remote file ~p ready (~p)", [LocalPath, z_context:site(Context)]),
-    ok = file:rename(temp_path(LocalPath), LocalPath), 
+    ok = file:rename(temp_path(LocalPath), LocalPath),
     m_filestore:purge_move_to_local(Id, Context),
-    filezcache:delete({z_context:site(Context), Path}), 
+    filezcache:delete({z_context:site(Context), Path}),
     filestore_uploader:force_stale(Path, Context);
 download_stream(Id, _Path, LocalPath, Context, {error, _} = Error) ->
     lager:debug("Download error ~p file ~p (~p)", [Error, LocalPath, z_context:site(Context)]),

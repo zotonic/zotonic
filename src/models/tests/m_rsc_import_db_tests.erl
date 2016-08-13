@@ -10,7 +10,7 @@ modify_rsc_test() ->
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
 	SudoC = z_acl:sudo(C),
-	
+
     %% cleanup eventual remains of earlier failed tests
     case m_rsc:uri_lookup("http://foo.com/id/333", AdminC) of
         undefined -> nop;

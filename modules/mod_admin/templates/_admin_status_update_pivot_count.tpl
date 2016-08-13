@@ -6,7 +6,7 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
         RETRY_REPEAT_MS = 3000,
         UPDATE_REPEAT_MS = 1000,
         COUNT_SIZE_MSG = "{_ Pivot queue count size: _}",
-        
+
         $feedback = $(feedbackSelector),
         $btn = $(invokeSelector),
         isUpdating = false,
@@ -75,7 +75,7 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
             }
         }
     };
-    
+
     // it make take a short while before the info is available
     // so we try a couple of times
     startTrying = function() {
@@ -96,14 +96,14 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
         $btn.removeAttr("disabled");
         $feedback.hide("slow");
     };
-    
+
     initUI = function () {
         $btn.attr("disabled", "disabled");
         $feedback.addClass("label label-info");
         setFeedback("{_ Retrieving status... _}");
         startTrying();
     };
-    
+
     initUI();
 }
 {% endjavascript %}

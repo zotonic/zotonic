@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Actions   = proplists:get_all_values(action, Args),
     QArgs     = proplists:get_all_values(qarg, Args),
 
-    {PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, EventType, Trigger, TargetId, 
+    {PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, EventType, Trigger, TargetId,
                                                               Delegate, QArgs, Context),
     {ActionsJS,Context1} = z_render:render_actions(Trigger, TargetId, Actions, Context),
 
@@ -62,11 +62,11 @@ map_type(Type) -> Type.
 
 script(enterkey, _TriggerId, Trigger, PostbackMsgJS, _PickledPostback, ActionsJS, Propagate, Args, Context) ->
     {[
-        z_render:render_css_selector(z_render:css_selector(Trigger, Args)), 
+        z_render:render_css_selector(z_render:css_selector(Trigger, Args)),
         <<"'.on('keypress', ">>,
-        <<"function(event) { if (z_is_enter_key(event)) { ">>, PostbackMsgJS, ActionsJS, 
-        case Propagate of 
-            true -> $;; 
+        <<"function(event) { if (z_is_enter_key(event)) { ">>, PostbackMsgJS, ActionsJS,
+        case Propagate of
+            true -> $;;
             false -> <<"; return false;">>
         end,
         <<" } } );\n">>
@@ -148,9 +148,9 @@ script(EventType, _TriggerId, Trigger, PostbackMsgJS, _PickledPostback, ActionsJ
     {[
         z_render:render_css_selector(z_render:css_selector(Trigger, Args)),
         <<".on('">>, z_convert:to_list(EventType), <<"', ">>,
-        <<"function(event) { ">>, PostbackMsgJS, ActionsJS, 
-        case Propagate of 
-            true -> <<>>; 
+        <<"function(event) { ">>, PostbackMsgJS, ActionsJS,
+        case Propagate of
+            true -> <<>>;
             false -> <<" return z_opt_cancel(this);">>
         end,
         <<" } );\n">>

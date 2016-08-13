@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +36,7 @@ twitter(Input, _Context) -> Input.
 %% @doc filter with options, only option for now: url_location (follows url shorteners)
 twitter(Input, Options, Context) ->
     twitter1(Input, 0, Options, Context).
-    
+
 
 twitter1(Input, Index, Opts, Context) when is_binary(Input) ->
     case Input of
@@ -84,7 +84,7 @@ twitter1_url(Pre, Input, Index, Opts, Context) ->
     % Create the html link, follow the url to remove any url shortener.
     twitter1_url_html(Pre, Url, Opts) ->
         case proplists:get_value(url_location, Opts, false) of
-            true -> 
+            true ->
                 Url2 = z_url:location(<<Pre/binary,Url/binary>>),
                 Text = z_string:truncate(z_url:remove_protocol(Url2), ?URL_TRUNCATE),
                 ["<a href=\"", Url2, "\">", Text, "</a>"];

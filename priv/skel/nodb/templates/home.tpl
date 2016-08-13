@@ -24,7 +24,7 @@
             framework-like applications which use their own, custom
             data storage.
         </p>
-        
+
     </div>
 </div>
 </body>

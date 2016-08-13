@@ -5,7 +5,7 @@
         {% endif %}
 
 	    {% chart_pie3d height=100 width=400 data=chart.data %}
-	    
+
 	    <div class="table tabel-compact values">
 		    <table>
 		        {% for label,value in chart.values %}

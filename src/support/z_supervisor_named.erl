@@ -71,9 +71,9 @@ start_link() ->
     gen_server:start_link(?MODULE, [], []).
 
 %%% ---------------------------------------------------
-%%% 
+%%%
 %%% External functions.
-%%% 
+%%%
 %%% ---------------------------------------------------
 
 start_child(SupRef, ChildSpecOrPid) ->
@@ -147,9 +147,9 @@ call(Supervisor, Req) ->
 
 
 %%% ---------------------------------------------------
-%%% 
+%%%
 %%% Callback functions.
-%%% 
+%%%
 %%% ---------------------------------------------------
 
 init(_Args) ->
@@ -162,7 +162,7 @@ handle_call({start_child, Pid}, _From, State) when is_pid(Pid) ->
             {error, {already_present, Pid}};
         error ->
             MonitorRef = erlang:monitor(process, Pid),
-            State1 = State#state{ 
+            State1 = State#state{
                         dynamics=dict:store(Pid, {'$MONITOR', MonitorRef}, State#state.dynamics)
                     },
             {reply, {ok, Pid}, State1}
@@ -233,7 +233,7 @@ handle_call({delete_child, Pid}, From, State) when is_pid(Pid) ->
         error ->
             {reply, {error, not_found}, State}
     end;
-        
+
 handle_call({delete_child, Name}, _From, State) ->
     case dict:find(Name, State#state.children) of
         {ok, Child} when Child#child.pid =:= undefined ->
@@ -268,7 +268,7 @@ handle_call(running_children, _From, State) ->
 handle_call(count_children, _From, State) ->
     %% Specs and children are together on the children list...
     {Specs, Active, Supers, Workers} =
-            dict:fold(fun(_Key, Child, Counts) -> 
+            dict:fold(fun(_Key, Child, Counts) ->
                         count_child(Child, Counts)
                       end,
                       {0,0,0,0},
@@ -281,9 +281,9 @@ handle_call(count_children, _From, State) ->
 
     %% Reformat counts to a property list.
     Reply = [
-        {specs, Specs}, 
-        {active, Active+OnlyPid}, 
-        {supervisors, Supers}, 
+        {specs, Specs},
+        {active, Active+OnlyPid},
+        {supervisors, Supers},
         {workers, Workers},
         {monitors, OnlyPid}
     ],
@@ -320,7 +320,7 @@ handle_info({'EXIT', Pid, Reason}, State) ->
 
 handle_info({'DOWN', _MonitorRef, process, Pid, _Reason}, State) ->
     case dict:find(Pid, State#state.dynamics) of
-        {ok, {'$MONITOR', _Ref}} -> 
+        {ok, {'$MONITOR', _Ref}} ->
             {noreply, State#state{
                 dynamics=dict:erase(Pid, State#state.dynamics)
             }};
@@ -345,9 +345,9 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 %%% ---------------------------------------------------
-%%% 
+%%%
 %%% Internal functions.
-%%% 
+%%%
 %%% ---------------------------------------------------
 
 do_start_child(#child{mfa = Pid}) when is_pid(Pid) ->
@@ -363,7 +363,7 @@ do_start_child(#child{mfa = {M, F, A}}) ->
             {ok, Pid};
         {ok, Pid, Extra} when is_pid(Pid) ->
             {ok, Pid, Extra};
-        ignore -> 
+        ignore ->
             {ok, undefined};
         {error, What} ->
             {error, What};
@@ -381,7 +381,7 @@ save_child(undefined, Child, State) ->
 save_child(Pid, Child, State) ->
     Child1 = Child#child{pid=Pid},
     State#state{
-        dynamics = dict:store(Pid, Child1#child.name, 
+        dynamics = dict:store(Pid, Child1#child.name,
                                 dict:erase(Child#child.pid, State#state.dynamics)),
         children = dict:store(Child1#child.name, Child1, State#state.children)
     }.
@@ -487,7 +487,7 @@ restart(Child, State) ->
 %%% Returns: {ok, State'} | {terminate, State'}
 %%% ------------------------------------------------------
 
-add_restart(State) ->  
+add_restart(State) ->
     I = State#state.intensity,
     P = State#state.period,
     R = State#state.restarts,
@@ -534,13 +534,13 @@ difference({_, TimeS, _}, {_, CurS, _}) ->
 
 
 %%-----------------------------------------------------------------
-%% Shutdowns a child. We must check the EXIT value 
+%% Shutdowns a child. We must check the EXIT value
 %% of the child, because it might have died with another reason than
-%% the wanted. In that case we want to report the error. We put a 
-%% monitor on the child an check for the 'DOWN' message instead of 
-%% checking for the 'EXIT' message, because if we check the 'EXIT' 
-%% message a "naughty" child, who does unlink(Sup), could hang the 
-%% supervisor. 
+%% the wanted. In that case we want to report the error. We put a
+%% monitor on the child an check for the 'DOWN' message instead of
+%% checking for the 'EXIT' message, because if we check the 'EXIT'
+%% message a "naughty" child, who does unlink(Sup), could hang the
+%% supervisor.
 %% Returns: ok | {error, OtherReason}  (this should be reported)
 %%-----------------------------------------------------------------
 shutdown(Pid, brutal_kill) ->
@@ -553,14 +553,14 @@ shutdown(Pid, brutal_kill) ->
                 {'DOWN', _MRef, process, Pid, OtherReason} ->
                     {error, OtherReason}
             end;
-        {error, Reason} ->      
+        {error, Reason} ->
             {error, Reason}
     end;
 shutdown(Pid, Time) ->
     case monitor_child(Pid) of
         ok ->
             exit(Pid, shutdown), %% Try to shutdown gracefully
-            receive 
+            receive
                 {'DOWN', _MRef, process, Pid, shutdown} ->
                     ok;
                 {'DOWN', _MRef, process, Pid, OtherReason} ->
@@ -572,13 +572,13 @@ shutdown(Pid, Time) ->
                         {error, OtherReason}
                 end
             end;
-        {error, Reason} ->      
+        {error, Reason} ->
             {error, Reason}
     end.
 
 %% Help function to shutdown/2 switches from link to monitor approach
 monitor_child(Pid) ->
-    %% Do the monitor operation first so that if the child dies 
+    %% Do the monitor operation first so that if the child dies
     %% before the monitoring is done causing a 'DOWN'-message with
     %% reason noproc, we will get the real reason in the 'EXIT'-message
     %% unless a naughty child has already done unlink...
@@ -587,19 +587,19 @@ monitor_child(Pid) ->
     receive
         %% If the child dies before the unlik we must empty
         %% the mail-box of the 'EXIT'-message and the 'DOWN'-message.
-        {'EXIT', Pid, Reason} -> 
-            receive 
+        {'EXIT', Pid, Reason} ->
+            receive
                 {'DOWN', _, process, Pid, _} ->
                     {error, Reason}
             end
-    after 0 -> 
+    after 0 ->
         %% If a naughty child did unlink and the child dies before
-        %% monitor the result will be that shutdown/2 receives a 
+        %% monitor the result will be that shutdown/2 receives a
         %% 'DOWN'-message with reason noproc.
         %% If the child should die after the unlink there
         %% will be a 'DOWN'-message with a correct reason
-        %% that will be handled in shutdown/2. 
-        ok   
+        %% that will be handled in shutdown/2.
+        ok
     end.
 
 

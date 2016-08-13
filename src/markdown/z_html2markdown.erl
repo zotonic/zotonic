@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -101,7 +101,7 @@ to_md({<<"a">>, Args, Enclosed}, M, S) ->
             {M2,RefNr} = add_anchor(Href, M1),
             {[ $[, trl(EncText), $],$[,integer_to_list(RefNr),$] ], M2}
     end;
-    
+
 to_md({<<"code">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
     {[$`, z_string:trim(EncText), $`], M1};
@@ -144,7 +144,7 @@ to_md({<<"script">>, _Args, _Enclosed}, M, _S) ->
 to_md({_, _, Enclosed}, M, S) ->
     to_md(Enclosed, M, S);
 to_md(L, M, S) when is_list(L) ->
-    lists:foldl(fun(Elt,{AT,AM}) -> 
+    lists:foldl(fun(Elt,{AT,AM}) ->
                     {AT1,AM1} = to_md(Elt, AM, S),
                     {AT++[AT1], AM1}
                 end, {[], M}, L).
@@ -172,15 +172,15 @@ nl(#ms{indent=[]}) ->
 nl(#ms{indent=Indent}) ->
     nl1(Indent, []).
 
-    nl1([], Acc) -> 
+    nl1([], Acc) ->
         [$\n|Acc];
-    nl1([ul|Rest], Acc) -> 
+    nl1([ul|Rest], Acc) ->
         nl1(Rest, ["   "|Acc]);
-    nl1([ol|Rest], Acc) -> 
+    nl1([ol|Rest], Acc) ->
         nl1(Rest, ["    "|Acc]);
-    nl1([code|Rest], Acc) -> 
+    nl1([code|Rest], Acc) ->
         nl1(Rest, ["    "|Acc]);
-    nl1([quote|Rest], Acc) -> 
+    nl1([quote|Rest], Acc) ->
         nl1(Rest, ["> "|Acc]).
 
 
@@ -197,7 +197,7 @@ len([]) ->
 
 
 %% @doc Escape pointy brackets, single and double quotes in texts (ampersand is already removed or escaped).
-escape_html_text(<<>>, Acc) -> 
+escape_html_text(<<>>, Acc) ->
     Acc;
 escape_html_text(<<${, T/binary>>, Acc) ->
     escape_html_text(T, <<Acc/binary, "\\{">>);
@@ -249,7 +249,7 @@ add_anchor(Href, M) ->
         N ->
             {M, N}
     end.
-    
+
     indexof(_A, [], _N) -> undefined;
     indexof(A, [A|_], N) -> N;
     indexof(A, [_|R], N) -> indexof(A, R, N+1).
@@ -259,14 +259,14 @@ expand_anchors(#md{a = []}) ->
     [];
 expand_anchors(#md{a = As}) ->
     [10 | expand_anchor(As, 1, []) ].
-    
+
     expand_anchor([], _, Acc) ->
         lists:reverse(Acc);
     expand_anchor([A|As], N, Acc) ->
         Link = [ 32, 32, $[, integer_to_list(N), $], $:, 32, A, 10 ],
         expand_anchor(As, N+1, [Link|Acc]).
 
-        
+
 
 flatten_html(Text) when is_binary(Text) ->
     z_html:escape(Text);
@@ -283,7 +283,7 @@ flatten_html({Tag, Args, Enclosed}) ->
                 $<, $/, Tag, $>
             ]
     end.
-    
+
     is_self_closing(<<"img">>) -> true;
     is_self_closing(<<"br">>) -> true;
     is_self_closing(<<"hr">>) -> true;
@@ -291,6 +291,6 @@ flatten_html({Tag, Args, Enclosed}) ->
 
     flatten_args(Args) ->
         [ flatten_arg(Arg) || Arg <- Args ].
-    
+
     flatten_arg({Name, Value}) ->
         [ 32, Name, $=, $", z_html:escape(Value), $" ].

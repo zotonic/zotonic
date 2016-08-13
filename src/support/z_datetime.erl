@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,32 +38,32 @@
     timesince/3,
     timesince/4,
     timesince/5,
-    
+
     week_start/0,
     week_start/2,
 
     days_in_year/1,
-    
+
     prev_year/1,
     prev_month/1,
     prev_day/1,
     prev_hour/1,
     prev_minute/1,
     prev_second/1,
-    
+
     next_year/1,
     next_month/1,
     next_day/1,
     next_hour/1,
     next_minute/1,
     next_second/1,
-    
+
     diff/2,
 
     month_boundaries/1,
     week_boundaries/1,
     week_boundaries/2,
-    
+
     timestamp/0,
 
     timestamp_to_datetime/1,
@@ -299,20 +299,20 @@ reldate(D1, D2, 2, Context) ->
     case diff(D1,D2) of
         {{0,0,0},{0,0,0}} -> {?__(<<"now">>,Context),[]};
         {{0,0,0},{0,0,S}} when S < 10 -> {?__(<<"moments">>,Context),[]};
-        {{0,0,0},{0,0,S}} -> {plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context)), 
+        {{0,0,0},{0,0,S}} -> {plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context)),
                               []};
-        {{0,0,0},{0,I,S}} -> {plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context)), 
+        {{0,0,0},{0,I,S}} -> {plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context)),
                               plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context))};
-        {{0,0,0},{H,I,_}} -> {plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context)), 
+        {{0,0,0},{H,I,_}} -> {plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context)),
                               plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context))};
         {{0,0,D},{H,_,_}} -> {plural(D, ?__(<<"day">>,Context),    ?__(<<"days">>,Context)),
                               plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context))};
-        {{0,M,D},{_,_,_}} -> {plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context)), 
+        {{0,M,D},{_,_,_}} -> {plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context)),
                               plural(D, ?__(<<"day">>,Context),    ?__(<<"days">>,Context))};
-        {{Y,M,_},{_,_,_}} -> {plural(Y, ?__(<<"year">>,Context),   ?__(<<"years">>,Context)), 
+        {{Y,M,_},{_,_,_}} -> {plural(Y, ?__(<<"year">>,Context),   ?__(<<"years">>,Context)),
                               plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context))}
     end.
-        
+
 
 plural(0,_Single,_Plural) ->
     "";
@@ -329,7 +329,7 @@ week_start() ->
 week_start(StartDayNr, {D,_}) ->
     Today = {D,{0,0,0}},
     WeekDay = calendar:day_of_the_week(D),
-    if 
+    if
         WeekDay > StartDayNr -> relative_time_n(WeekDay - StartDayNr, fun prev_day/1, Today);
         WeekDay =:= StartDayNr -> Today;
         WeekDay < StartDayNr -> relative_time_n(WeekDay - StartDayNr + 7, fun prev_day/1, Today)
@@ -389,7 +389,7 @@ next_month({{Y,M,D},T}) -> {{Y,M+1,D}, T}.
 %% @doc Return the date one day later.
 next_day({{Y,M,D},T} = Date) ->
     case calendar:last_day_of_the_month(Y,M) of
-        D -> 
+        D ->
             {{Y1,M1,_},T1} = next_month(Date),
             {{Y1,M1,1},T1};
         _ ->
@@ -525,22 +525,22 @@ undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
                     2 ->
                         case Y rem 400 of
                             0 -> 29;
-                            _ -> 
-                                case Y rem 100 of 
+                            _ ->
+                                case Y rem 100 of
                                     0 -> 28;
                                     _ ->
                                         case Y rem 4 of
-                                            0 -> 29; 
+                                            0 -> 29;
                                             _ -> 28
                                         end
                                 end
                         end;
-                    _ -> 
+                    _ ->
                         30
                   end,
         case D =< MaxDays of
             true -> Date;
-            false -> undefined 
+            false -> undefined
         end;
 undefined_if_invalid_date(_) ->
     undefined.

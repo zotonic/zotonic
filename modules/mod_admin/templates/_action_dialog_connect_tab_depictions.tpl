@@ -2,7 +2,7 @@
 	<p>{_ Select a connected image _}</p>
 
 	<div id="dialog_connect_depictions" class="connect-results thumbnails">
-	    
+
 		<div class="row">
 		    {% with m.rsc[subject_id].o.depiction as depictions %}
 		        {% if depictions %}
@@ -34,7 +34,7 @@
 {% javascript %}
     $("#dialog_connect_depictions").on('click', '.thumbnail', function(e) {
         e.preventDefault();
-        z_event('dialog_connect_depiction', { 
+        z_event('dialog_connect_depiction', {
             select_id: $(this).data('id')
         });
     });

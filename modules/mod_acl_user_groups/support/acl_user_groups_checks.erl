@@ -196,11 +196,11 @@ acl_is_allowed(#acl_is_allowed{object=undefined}, _Context) ->
     undefined;
 acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) ->
     can_rsc(Id, view, Context);
-acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) -> 
+acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) ->
     can_media(Mime, Size, Context);
-acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat}}, Context) -> 
+acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat}}, Context) ->
     can_insert(Cat, Context);
-acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) -> 
+acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) ->
     can_insert(Cat, Context);
 acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
     can_rsc(Id, update, Context);
@@ -530,7 +530,7 @@ can_rsc_1(Id, Action, CGId, CatId, UGs, Context) ->
 
 % Check collaboration rules if the content group is a collaboration group
 can_rsc_for_collab(Id, Action, CGId, CatId, UGs, Context) ->
-    m_rsc:is_a(CGId, acl_collaboration_group, Context) 
+    m_rsc:is_a(CGId, acl_collaboration_group, Context)
     andalso (
         can_rsc_for_all_collab(Id, Action, CatId, UGs, Context)
         orelse can_rsc_collab_group_content(Action, CGId, UGs, Context)

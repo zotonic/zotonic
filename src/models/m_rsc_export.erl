@@ -22,7 +22,7 @@
 %%  {uri, <<"http://www.example.com/id/112233">>},
 %%  {rsc,
 %%   %% Resource properties, e.g.:
-%%   [{title, <<"Foo">>}, 
+%%   [{title, <<"Foo">>},
 %%    ...
 %%   ]
 %%  },
@@ -77,7 +77,7 @@ full(Id, Context) when is_integer(Id) ->
             %% This should probably be encapsulated in m_edges.
             Edges0 = z_db:assoc("
                                 select e.predicate_id, p.name as predicate_name, e.object_id, e.seq
-                                from edge e 
+                                from edge e
                                         join rsc p on p.id = e.predicate_id
                                 where e.subject_id = $1
                                 order by e.predicate_id, e.seq, e.id", [Id], Context),

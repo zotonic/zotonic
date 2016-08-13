@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,7 +57,7 @@ resource_to_atom(RscExport, Context) ->
 
     Content3 = Content2 ++ author_element(RscExport),
 
-    RootElem = #xmlElement{name=entry, 
+    RootElem = #xmlElement{name=entry,
                            namespace=#xmlNamespace{default=?ATOM_NS},
                            attributes=[#xmlAttribute{name=xmlns, value=?ATOM_NS}],
                            content=Content3},
@@ -162,12 +162,12 @@ find_author(Elem) ->
         [] -> []; % no author found
         Authors ->
             lists:map(fun(A) ->
-                              Name = case xmerl_xpath:string("/author/name", A) of 
+                              Name = case xmerl_xpath:string("/author/name", A) of
                                          [] -> <<>>;
                                          [#xmlElement{content=[#xmlText{value=N}]}] ->
                                              list_to_binary(N)
                                      end,
-                              Uri = case xmerl_xpath:string("/author/uri", A) of 
+                              Uri = case xmerl_xpath:string("/author/uri", A) of
                                         [] -> <<>>;
                                         [#xmlElement{content=[#xmlText{value=U}]}] ->
                                             list_to_binary(U)

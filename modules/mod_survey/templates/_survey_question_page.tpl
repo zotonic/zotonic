@@ -5,15 +5,15 @@
 		{% endblock %}
 	{% endif %}
 
-	{% wire id=#q type="submit" 
+	{% wire id=#q type="submit"
 		postback={survey_next id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
-		delegate="mod_survey" 
+		delegate="mod_survey"
 	%}
 	<form class="form-survey survey-{{ id.name }}" id="{{ #q }}" method="post" action="postback">
 		<fieldset>
 			{% if not id.is_a.poll and pages > 1 %}
 				{% if id.survey_progress == 'nr' %}
-					<legend>{{ page_nr }}<span class="total">/{{ pages }}</span></legend> 
+					<legend>{{ page_nr }}<span class="total">/{{ pages }}</span></legend>
 				{% elseif id.survey_progress == 'bar' %}
 					<div class="progress">
 					  <div class="bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
@@ -33,7 +33,7 @@
 		<div class="form-actions">
 			{% if page_nr > 1 %}
 				<a id="{{ #back }}" href="#" class="btn btn-default">{_ Back _}</a>
-				{% wire id=#back 
+				{% wire id=#back
 						postback={survey_back id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
 						delegate="mod_survey"
 				%}

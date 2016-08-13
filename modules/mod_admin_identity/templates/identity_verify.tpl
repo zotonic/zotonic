@@ -27,7 +27,7 @@
 
 		<div id="verify-error" class="alert" style="display: none">
 			<h1>{_ Sorry _}</h1>
-	
+
 			<p>{_ This verification key is unknown. _}</p>
 
 			<p>

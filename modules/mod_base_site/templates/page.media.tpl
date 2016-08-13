@@ -13,7 +13,7 @@
 	{{ m.rsc[id].body }}
 	{% include "_blocks.tpl" %}
     </div>
-    
+
     {% with id.o.depiction as ds %}
     {% if ds %}
     <ul class="thumbnails">

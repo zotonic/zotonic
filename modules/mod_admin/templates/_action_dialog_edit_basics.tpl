@@ -1,5 +1,9 @@
 {% with m.config.i18n.language_list.list as languages %}
+<<<<<<< HEAD
     {% with m.rsc[id].name as r_lang %}
+=======
+    {% with m.rsc[id].language as r_lang %}
+>>>>>>> master
         {% wire id=#form type="submit"
 	        postback={
 	            rsc_edit_basics

@@ -28,7 +28,7 @@
 <div class="row">
   <div class="well well-sm col-md-12 col-lg-12 col-sm-12">
     {% if q.no_websocket %}<strong>WebSockets are currently disabled</strong>
-      {% button class="btn btn-default" text="Enable" action={redirect dispatch="connection_test"} %}    
+      {% button class="btn btn-default" text="Enable" action={redirect dispatch="connection_test"} %}
     {% else %}<strong>WebSockets are currently enabled</strong>
      {% button class="btn btn-default" text="Disable" action={redirect dispatch="connection_test" no_websocket=1 } %}
     {% endif %}
@@ -41,7 +41,7 @@
     delete window.WebSocket;
 {% endjavascript %}
 {% endif %}
- 
+
 {% javascript %}
 function abort_connection() {
     if(z_ws) z_ws.close();
@@ -81,38 +81,38 @@ function abort_connection() {
       </div>
     </div>
   </div>
-  <div class="col-md-6 col-lg-6 col-sm-6"> 
+  <div class="col-md-6 col-lg-6 col-sm-6">
     <div class="panel panel-info">
       <div class="panel-heading">
           <h3 class="panel-title">Page Connection Status</h3>
       </div>
       <div class="panel-body">
-      
+
       <dl class="dl-horizontal">
           <dt>Status</dt>
           <dd><span id="connect-status"></span></dd>
-      
+
           <dt>PageId</dt>
           <dd><span id="z_pageid"></span></dd>
-          
+
           <dt class="text-right">Session</dt>
           <dd><span id="z_session_valid"></span></dd>
-          
+
           <dt class="text-right">Websocket Support?</dt>
           <dd><span id="ws_support"></span></dd>
-          
+
           <dt class="text-right">Websocket</dt>
           <dd><span id="z_ws"></span></dd>
-          
+
           <dt class="text-right">Pong Count</dt>
           <dd><span id="z_ws_pong_count" ></span></dd>
-          
+
           <dt class="text-right">Comet</dt>
           <dd><span id="z_comet_status"></span></dd>
-          
+
           <dt class="text-right">Reconnect Timeout</dt>
           <dd><span id="z_comet_reconnect_timeout"></span></dd>
-          
+
           <dt class="text-right">Comet Poll Count</dt>
           <dd><span id="z_comet_poll_count"></span></dd>
       </dl>
@@ -132,7 +132,7 @@ var google_pinger = new http_ping("//www.google.com/gen_204", 2000);
 
 function update() {
     z_event('update_session_info');
-    
+
     function pinger_info(id, info) {
        if(info.tries) {
         $(id).text("Sent: " + info.tries + " Timeouts: " + info.loss.toFixed(1) + "%" +
@@ -143,25 +143,25 @@ function update() {
             );
       }
     }
-    
+
     pinger_info("#google-ping", google_pinger?(google_pinger.info()):{});
     pinger_info("#ping", site_pinger?(site_pinger.info()):{});
-    
+
     $("#ws_support").text(window.WebSocket?"Yes":"No");
-     
+
     $("#z_pageid").text(z_pageid);
     $("#z_session_valid").text(z_session_valid?"Session Valid":"Session Invalid");
     $("#z_comet_poll_count").text(z_comet_poll_count);
     $("#z_comet_reconnect_timeout").text(z_comet_reconnect_timeout);
     $("#z_ws_pong_count").text(z_ws_pong_count);
     $("#connect-status").text(z_stream_is_connected()?"Connected":"Not Connected");
-     
+
     if(z_ws) {
         $("#z_ws").text("{_ Got a Websocket _}: readyState, " + z_ws.readyState);
     } else {
         $("#z_ws").text("{_ No Websocket _}");
     }
-     
+
     if(z_comet) {
         $("#z_comet_status").text("{_ Got a Comet Connection _}: readyState, " + z_comet.readyState);
     } else {

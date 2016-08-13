@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,11 +29,11 @@
 %% API exports
 -export([
     get/2,
-    
+
     expand_mediaclass_checksum/1,
     expand_mediaclass_checksum/2,
     expand_mediaclass/2,
-    
+
     reset/1,
     module_reindexed/2
 ]).
@@ -58,9 +58,9 @@ start_link(SiteProps) ->
 %% @doc Fetch the mediaclass definition for the current context.
 -spec get(MediaClass :: list() | binary(), #context{}) -> {ok, PreviewProps :: list(), Checksum :: binary()} | {error, term()}.
 get(MediaClass, Context) ->
-    case ets:lookup(?MEDIACLASS_INDEX, 
+    case ets:lookup(?MEDIACLASS_INDEX,
                     #mediaclass_index_key{
-                        site=z_context:site(Context), 
+                        site=z_context:site(Context),
                         mediaclass=z_convert:to_binary(MediaClass)})
     of
         [] -> {ok, [], <<>>};
@@ -119,7 +119,7 @@ expand_mediaclass_1(MC, Props, Context) ->
         Error ->
             Error
     end.
-    
+
 expand_mediaclass_2(Props, ClassProps) ->
     lists:foldl(fun(KV, Acc) ->
                     K = key(KV),
@@ -130,10 +130,10 @@ expand_mediaclass_2(Props, ClassProps) ->
                 end,
                 proplists:delete(mediaclass, Props),
                 ClassProps).
-    
+
     key({K,_}) -> K;
     key(K) -> K.
-        
+
 %% @doc Call this to force a re-index and parse of all moduleclass definitions.
 -spec reset(#context{}) -> ok.
 reset(Context) ->
@@ -250,7 +250,7 @@ reindex_files(Files, Site) ->
     MCs = lists:flatten([ expand_file(MP) || MP <- Files ]),
     ByModulePrio = prio_sort(MCs),
     % Insert least prio first, later overwrite with higher priority modules
-    [ insert_mcs(MCs1, Tag, Site) || MCs1 <- ByModulePrio ], 
+    [ insert_mcs(MCs1, Tag, Site) || MCs1 <- ByModulePrio ],
     cleanup_ets(Tag, Site),
     ok.
 
@@ -322,7 +322,7 @@ cleanup_ets(Tag, Site) ->
     after
         ets:safe_fixtable(?MEDIACLASS_INDEX, false)
     end.
-    
+
 cleanup_ets_1('$end_of_table', _Tag, _Site, Acc) ->
     [ ets:delete(?MEDIACLASS_INDEX, K) || K <- Acc ];
 cleanup_ets_1(#mediaclass_index_key{site=Site} = K, Tag, Site, Acc) ->

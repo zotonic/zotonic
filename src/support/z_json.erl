@@ -68,8 +68,8 @@ to_mochijson(_, _Context) -> unmappable.
 
 
 %% @doc Convert a (nested) JSON document to nested property lists
-%%      Properties are not converted to 
-%% @todo Translate 
+%%      Properties are not converted to
+%% @todo Translate
 from_mochijson({struct, Props}, Context) -> [ opt_convert({K,from_mochijson(V, Context)}) || {K,V} <- Props ];
 from_mochijson({array, Values}, Context) -> [ from_mochijson(V, Context) || V <- Values ];
 from_mochijson(N, _Context) when is_number(N) -> N;

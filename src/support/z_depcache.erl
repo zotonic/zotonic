@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@
 
 
 %% @doc Start depcache instance based on site configuration
-start_link(SiteProps) -> 
+start_link(SiteProps) ->
     Site = proplists:get_value(site, SiteProps),
     Name = z_utils:name_for_site(?MODULE, Site),
     depcache:start_link(Name, [{memory_max, proplists:get_value(depcache_memory_max, SiteProps)}]).
@@ -72,7 +72,7 @@ set(Key, Data, MaxAge, Depend, #context{depcache=Server}) ->
 
 
 %% @spec get_wait(Key, Context) -> {ok, Data} | undefined
-%% @doc Fetch the key from the cache, when the key does not exist then lock the entry and let 
+%% @doc Fetch the key from the cache, when the key does not exist then lock the entry and let
 %% the calling process insert the value. All other processes requesting the key will wait till
 %% the key is updated and receive the key's new value.
 get_wait(Key, #context{depcache=Server}) ->

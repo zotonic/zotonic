@@ -83,6 +83,7 @@ init(Context) ->
             end
     end.
 
+<<<<<<< HEAD
 
 default_languages() ->
     Languages = languages:languages(),
@@ -115,6 +116,22 @@ default_languages() ->
         {tr, true},
         {zh, false}
     ]).
+=======
+default_languages() ->
+    [
+     {ar, [ {language, <<"العربية"/utf8>>}, {is_enabled, false}]},
+     {de, [ {language, <<"Deutsch"/utf8>>}, {is_enabled, true}]},
+     {en, [ {language, <<"English"/utf8>>}, {is_enabled, true}]},
+     {es, [ {language, <<"Español"/utf8>>}, {is_enabled, true}]},
+     {et, [ {language, <<"Eesti"/utf8>>}, {is_enabled, true}]},
+     {fr, [ {language, <<"Français"/utf8>>}, {is_enabled, true}]},
+     {nl, [ {language, <<"Nederlands"/utf8>>}, {is_enabled, true}]},
+     {pl, [ {language, <<"Polski"/utf8>>}, {is_enabled, true}]},
+     {ru, [ {language, <<"Русский"/utf8>>}, {is_enabled, true}]},
+     {tr, [ {language, <<"Türkçe"/utf8>>}, {is_enabled, true}]},
+     {zh, [ {language, <<"中文"/utf8>>}, {is_enabled, false}]}
+    ].
+>>>>>>> master
 
 
 %% @doc Check if the user has a prefered language (in the user's persistent data). If not
@@ -176,8 +193,13 @@ observe_session_context(session_context, Context, _Context) ->
 
 observe_user_context(#user_context{id=UserId}, Context, _Context) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
+<<<<<<< HEAD
         Code when Code /= undefined ->
             set_language(Code, Context);
+=======
+        Code when is_atom(Code), Code /= undefined ->
+            do_set_language(Code, Context);
+>>>>>>> master
         _ ->
             Context
     end.
@@ -191,8 +213,14 @@ observe_auth_logon(auth_logon, Context, _Context) ->
             catch m_rsc:update(UserId, [{pref_language, z_context:language(Context)}], Context),
             Context;
         Code ->
+<<<<<<< HEAD
             % Switch the session to the default language of the user
             Context1 = set_language(Code, Context),
+=======
+                                                % Switch the session to the default language of the user
+            List = get_language_config(Context),
+            Context1 = set_language(z_convert:to_list(Code), List, Context),
+>>>>>>> master
             z_context:set_persistent(language, z_context:language(Context1), Context1),
             Context1
     end.
@@ -200,8 +228,15 @@ observe_auth_logon(auth_logon, Context, _Context) ->
 
 observe_set_user_language(#set_user_language{id=UserId}, Context, _Context) when is_integer(UserId) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
+<<<<<<< HEAD
         Code when Code /= undefined -> set_language(Code, Context);
         _ -> Context
+=======
+        Code when is_atom(Code), Code /= undefined ->
+            do_set_language(Code, Context);
+        _ ->
+            Context
+>>>>>>> master
     end;
 observe_set_user_language(#set_user_language{}, Context, _Context) ->
     Context.
@@ -303,7 +338,12 @@ event(#submit{message={language_edit, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             OldCode = proplists:get_value(code, Args, '$empty'),
+<<<<<<< HEAD
             language_add(z_string:trim(OldCode), z_string:trim(z_context:get_q("code", Context)), z_context:get_q("is_enabled", Context), Context),
+=======
+            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context), z_context:get_q("fallback", Context),
+                         z_context:get_q("is_enabled", Context), Context),
+>>>>>>> master
             Context1 = z_render:dialog_close(Context),
             z_render:wire({reload, []}, Context1);
         false ->
@@ -387,12 +427,51 @@ set_user_language(Code, Context) ->
     Context1.
 
 
+<<<<<<< HEAD
 %% @doc Set the language of the current user/session. Sets to the given language if the language exists in the config language and is enabled; otherwise tries the language's fallback language; if this fails too, sets language to English.
 -spec set_language(atom(), #context{}) -> #context{}.
 set_language(Code0, Context) when is_atom(Code0) ->
     {Code, LanguageData} = valid_config_language(Code0, Context),
     FallbackCode = proplists:get_value(fallback, LanguageData),
     Langs = [L || L <- [Code, FallbackCode], L /= undefined],
+=======
+%% @doc Set the language of the user. Only done when the found language is a known language.
+try_set_language(LanguagesRequested, Context) when is_atom(LanguagesRequested) ->
+    try_set_language(atom_to_list(LanguagesRequested), Context);
+try_set_language(LanguagesRequested, Context) when is_binary(LanguagesRequested) ->
+    try_set_language(binary_to_list(LanguagesRequested), Context);
+try_set_language(LanguagesRequested, Context) when is_list(LanguagesRequested) ->
+    LanguagesAvailable = [ atom_to_list(Lang)
+                           || {Lang, Props} <- get_language_config(Context),
+                              proplists:get_value(is_enabled, Props) =:= true
+                         ],
+    case catch do_choose(LanguagesAvailable, LanguagesRequested) of
+        Lang when is_list(Lang) ->
+            do_set_language(list_to_atom(Lang), Context);
+        none ->
+            Context;
+        _Error ->
+                                                % @todo log the error, might be a problem in the accept-language header
+            Context
+    end.
+
+
+%% @doc Set the language of the current user/session
+set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
+    case z_convert:to_list(CodeAtom) of
+        Code ->   do_set_language(CodeAtom, Context);
+        _Other -> set_language(Code, Other, Context)
+    end.
+
+do_set_language(Code, Context) when is_atom(Code) ->
+    List = get_language_config(Context),
+    LangProps = proplists:get_value(Code, List),
+    FallbackLangCode = proplists:get_value(fallback, LangProps),
+    Langs = case FallbackLangCode of
+        undefined -> [Code];
+        _ -> [Code, z_convert:to_atom(FallbackLangCode)]
+    end,
+>>>>>>> master
     Context1 = z_context:set_language(Langs, Context),
     case {z_context:language(Context), z_context:language(Context1)} of
         {Code, Code} ->
@@ -442,6 +521,7 @@ fallback_language_code(Code) ->
 
 
 %% @doc Add a language to the i18n configuration
+<<<<<<< HEAD
 language_add(OldLanguageCode, NewLanguageCode, IsEnabled, Context) ->
     OldCode = z_convert:to_atom(OldLanguageCode),
     NewCode = z_convert:to_atom(NewLanguageCode),
@@ -462,6 +542,19 @@ language_add(OldLanguageCode, NewLanguageCode, IsEnabled, Context) ->
             ConfigLanguages2 = lists:usort([{NewCode, Props1} | ConfigLanguages1]),
             set_language_config(ConfigLanguages2, Context)
     end.
+=======
+language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
+    IsoCodeNewAtom = z_convert:to_atom(z_string:to_name(z_string:trim(NewIsoCode))),
+    FallbackIsoCodeAtom = z_convert:to_atom(z_string:to_name(z_string:trim(FallbackIsoCode))),
+    Languages = get_language_config(Context),
+    Languages1 = proplists:delete(OldIsoCode, Languages),
+    Languages2 = lists:usort([{IsoCodeNewAtom,
+                               [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
+                                {fallback, FallbackIsoCodeAtom},
+                                {is_enabled, z_convert:to_bool(IsEnabled)}
+                               ]} | Languages1]),
+    set_language_config(Languages2, Context).
+>>>>>>> master
 
 
 %% @doc Remove a language from the i18n configuration
@@ -578,7 +671,11 @@ build_conneg_list([Acc|AccRest], Result) ->
     XPair = list_to_tuple([string:strip(X) || X <- string:tokens(Acc, ";")]),
     Pair = case XPair of
                {Choice, "q=" ++ PrioStr} ->
+<<<<<<< HEAD
                     % Simplify "en-us" to "en"
+=======
+                                                % Simplify "en-us" to "en"
+>>>>>>> master
                    [Choice1|_] = string:tokens(Choice, "-"),
                    case PrioStr of
                        "0" -> {0.0, Choice1};

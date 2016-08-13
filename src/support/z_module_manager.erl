@@ -138,14 +138,14 @@ activate(Module, IsSync, Context) ->
     case proplists:lookup(Module, scan(Context)) of
         {Module, _Dirname} ->
             F = fun(Ctx) ->
-                        case z_db:q("update module 
-                                     set is_active = true, 
+                        case z_db:q("update module
+                                     set is_active = true,
                                          modified = now()
                                      where name = $1",
                                     [Module], Ctx)
                         of
-                            0 -> 
-                                z_db:q("insert into module (name, is_active) 
+                            0 ->
+                                z_db:q("insert into module (name, is_active)
                                         values ($1, true)",
                                        [Module], Ctx);
                             1 -> 1
@@ -154,7 +154,7 @@ activate(Module, IsSync, Context) ->
             1 = z_db:transaction(F, Context),
             upgrade(IsSync, Context);
         none ->
-            lager:error("[~p] Could not find module '~p'", 
+            lager:error("[~p] Could not find module '~p'",
                         [z_context:site(Context), Module]),
             {error, not_found}
     end.
@@ -613,7 +613,7 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     end.
 
 signal_upgrade_waiters(#state{upgrade_waiters = Waiters} = State) ->
-    lists:foreach(fun(From) -> 
+    lists:foreach(fun(From) ->
                       gen_server:reply(From, ok)
                   end,
                   Waiters),

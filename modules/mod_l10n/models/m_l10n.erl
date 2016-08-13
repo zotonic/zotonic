@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@
     m_find_value/3,
     m_value/2,
     m_to_list/2,
-    
+
     countries/1,
     country_name/2,
     country_name/3,
@@ -67,12 +67,12 @@ country_name(Code, Context) ->
 country_name(Code, Language, Context) ->
     B = z_convert:to_binary(Code),
     case proplists:get_value(B, l10n_iso2country:iso2country()) of
-        undefined -> 
+        undefined ->
 			B;
-        CountryEN -> 
+        CountryEN ->
 			z_trans:lookup_fallback(z_trans:translations(CountryEN, Context), Language, Context)
     end.
-	
+
 %% Extracted from the timezone javascript.
 timezones() ->
     [

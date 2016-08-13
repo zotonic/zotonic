@@ -32,11 +32,11 @@
 -author('emmiller@gmail.com').
 
 
-ljust(undefined, _Number, _Context) -> 
+ljust(undefined, _Number, _Context) ->
     undefined;
 ljust(Input, Number, Context) when is_binary(Input) ->
     list_to_binary(ljust(binary_to_list(Input), Number, Context));
 ljust(Input, Number, _Context) when is_list(Input) ->
     string:left(Input, z_convert:to_integer(Number));
-ljust(Input, _Number, _Context) -> 
+ljust(Input, _Number, _Context) ->
     Input.

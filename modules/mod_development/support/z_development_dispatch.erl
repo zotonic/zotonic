@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,15 +45,15 @@ event(#submit{message=explain_dispatch}, Context) ->
 						{protocol, Protocol}
 					],
 					Context1 = z_render:update(
-									"explain-dispatch-output", 
-									#render{template="_development_dispatch_trace.tpl", vars=Vars}, 
+									"explain-dispatch-output",
+									#render{template="_development_dispatch_trace.tpl", vars=Vars},
 									Context),
 					z_render:wire({fade_in, [{target, "explain-dispatch-output"}]}, Context1)
 				after 5000 ->
-					z_render:growl(?__("Could not fetch tracer output, please try again.", Context), Context) 
+					z_render:growl(?__("Could not fetch tracer output, please try again.", Context), Context)
 			end;
 		false ->
-			z_render:growl(?__("You are not allowed to use the dispatch debugging.", Context), Context) 
+			z_render:growl(?__("You are not allowed to use the dispatch debugging.", Context), Context)
 	end.
 
 ensure_abs([]) -> [$/];

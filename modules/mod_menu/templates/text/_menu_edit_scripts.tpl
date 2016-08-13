@@ -1,9 +1,9 @@
 {% if in_sorter == 'category' %}
 	{# Category - items can only appear once, strict handling #}
-    {% wire name="admin-menu-select" 
+    {% wire name="admin-menu-select"
             action={
-                dialog_open 
-                template="_action_dialog_connect.tpl" 
+                dialog_open
+                template="_action_dialog_connect.tpl"
                 title=_"Add category"
                 callback="window.zMenuEditDone"
                 category=`category`
@@ -15,10 +15,10 @@
     %}
 {% elseif is_hierarchy %}
 	{# Hierarchy - items can only appear once #}
-    {% wire name="admin-menu-select" 
+    {% wire name="admin-menu-select"
             action={
-                dialog_open 
-                template="_action_dialog_connect.tpl" 
+                dialog_open
+                template="_action_dialog_connect.tpl"
                 title=_"Add item"
                 callback="window.zMenuEditDone"
                 category=cat_id
@@ -30,9 +30,9 @@
     %}
 {% else %}
 	{# Menu - items can appear multiple times #}
-    {% wire name="admin-menu-select" 
-            action={dialog_open 
-                template="_action_dialog_connect.tpl" 
+    {% wire name="admin-menu-select"
+            action={dialog_open
+                template="_action_dialog_connect.tpl"
                 title=_"Add menu item"
                 callback="window.zMenuEditDone"
                 category=cat_id
@@ -45,11 +45,11 @@
 
 {% if admin_menu_edit_action /= `none` %}
 	{% wire
-	    name="admin-menu-edit" 
+	    name="admin-menu-edit"
         action=admin_menu_edit_action|default:{
             dialog_edit_basics
             callback="window.zMenuEditDone"
-        } 
+        }
 	%}
 {% endif %}
 
@@ -110,7 +110,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				id: $menu_item.children('div').data('page-id')
 			});
 		{% else %}
-			$(this).closest('li.menu-item').fadeOut(500, function() { 
+			$(this).closest('li.menu-item').fadeOut(500, function() {
 				$(this).remove();
 				$sorter.trigger('sortupdate')
 			});
@@ -159,7 +159,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 
 			z_transport("mod_menu", "ubf", {
 					cmd: "menu-item-render",
-					id: v.object_id, 
+					id: v.object_id,
 					callback: "window.zMenuNewItem"
 				});
 		};

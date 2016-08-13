@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,7 @@ m_find_value(user, #m{value=undefined}, Context) ->
     z_acl:user(Context);
 m_find_value(is_admin, #m{value=undefined}, Context) ->
     z_acl:is_allowed(use, mod_admin_config, Context);
-m_find_value(Action, #m{value=undefined} = M, _Context) 
+m_find_value(Action, #m{value=undefined} = M, _Context)
     when Action == use orelse Action == admin orelse Action == view
     orelse Action == delete orelse Action == update orelse Action == insert ->
     M#m{value={is_allowed, Action}};
@@ -72,7 +72,7 @@ menu(Context) ->
                         Menu = z_notifier:foldl(admin_menu, [], Context),
                         hierarchize(Menu, Context)
                 end,
-            z_depcache:memo(F, 
+            z_depcache:memo(F,
                             {admin_menu, z_acl:user(Context), z_context:language(Context)},
                             ?HOUR,
                             [admin_menu, admin_content_query],
@@ -88,7 +88,7 @@ hierarchize(Id, All, Context) ->
     {Matches, Rest} = partition(Id, All),
     Matches1 = [mixin(C, Rest, Context) || C <- Matches],
     lists:filter(fun(I) -> item_visible(I, Context) end, Matches1).
-    
+
 
 partition(Key, Items) ->
     lists:partition(fun(#menu_item{parent=K}) when K =:= Key ->
@@ -125,12 +125,12 @@ item_visible({_Key, ItemProps}, Context) ->
        {acl, Action, Object} ->
             z_acl:is_allowed(Action, Object, Context)
     end.
-                     
+
 
 
 test() ->
     C = z:c(zotonic_status),
-    
+
     %% simple test
     Items1 = [
               #menu_item{id=top1, label="Label", url="/"}
@@ -177,7 +177,7 @@ test() ->
                       {sub1, [{url, "/xx"}, {label, "Label1"}, {items, []}]},
                       {sub2, [{url, "/yy"}, {label, "Label2"}, {items, []}]}
                      ]}]}] = hierarchize(Items2a, C),
-    
+
     %% test w/ callback
     Items3 = [
               {top1, {undefined, "Label", "/"}},
@@ -187,4 +187,4 @@ test() ->
              {label, "Label"},
              {items, []}]}] = hierarchize(Items3, C),
     ok.
-       
+

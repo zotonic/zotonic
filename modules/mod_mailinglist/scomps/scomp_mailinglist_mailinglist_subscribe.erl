@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,10 +55,10 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 			    {name_surname, z_string:trim(z_context:get_q(name_surname, Context, ""))}
 			],
 			case m_mailinglist:insert_recipient(Id, Email, RecipientProps, Notification, Context) of
-				ok -> 
+				ok ->
 				    case InAdmin of
 				        true ->
-        					z_render:wire([	{growl, [{text, ?__("Added the recipient.", Context)}]}, 
+        					z_render:wire([	{growl, [{text, ?__("Added the recipient.", Context)}]},
         									{dialog_close, []},
         									{reload, []}], Context);
         				false ->
@@ -97,7 +97,7 @@ event(#submit{message={recipient_edit, Props}}, Context) ->
 			    {name_surname, z_string:trim(z_context:get_q(name_surname, Context, ""))}
 			],
             ok = m_mailinglist:update_recipient(RcptId, RecipientProps, Context),
-            z_render:wire([	{growl, [{text, ?__("Updated the recipient.", Context)}]}, 
+            z_render:wire([	{growl, [{text, ?__("Updated the recipient.", Context)}]},
                             {dialog_close, []},
                             {reload, []}], Context);
 		false ->

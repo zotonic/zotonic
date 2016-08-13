@@ -3,7 +3,7 @@
 -compile(export_all).
 
 -define(TESTTIME, 15000).
--define(NUM_WORKERS, 15). 
+-define(NUM_WORKERS, 15).
 
 ts() ->
     z_utils:now_msec().
@@ -16,7 +16,7 @@ test() ->
     test(fun test_z_db_q1/3, z_db, "select 'hello'", [], Context),
     test(fun test_z_db_q1/3, z_db, "select count(*) from rsc", [], Context),
     ok.
-    
+
 
 
 test(Fun, Name, Sql, Args, Context) ->
@@ -39,7 +39,7 @@ work_dispatch_loop(Workers, Start, MaxT, Count) ->
             nop;%lager:warning("Pool status: ~p", [poolboy:status(whereis('z_db_pool$zanymeta'))]);
         false -> nop
     end,
-            
+
     case ts() - Start > MaxT of
         true ->
             [begin
@@ -56,8 +56,8 @@ work_dispatch_loop(Workers, Start, MaxT, Count) ->
                     work_dispatch_loop(Workers, Start, MaxT, Count+1)
             end
     end.
-                                
-                                   
+
+
 worker_loop(Parent, Fun, Args) ->
     Parent ! {want_work, self()},
     receive

@@ -11,7 +11,7 @@
 	<div id="confirm">
 		{% button
 		    text=_"Unsubscribe"
-            action={mailinglist_unsubscribe id=sub.id 
+            action={mailinglist_unsubscribe id=sub.id
                     on_success={update target="confirm" text=_"<p>Thank you. You are now unsubscribed.</p>"}
                     on_error={update target="confirm" text=_"<p>Sorry, something went wrong. Please try again later.</p>"}} %}
 	</div>

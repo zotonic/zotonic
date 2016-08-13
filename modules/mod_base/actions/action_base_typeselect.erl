@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,9 +32,9 @@ render_action(TriggerId, TargetId, Args, Context) ->
     ActionsWithId = proplists:get_all_values(action_with_id, Args),
     Cats = proplists:get_all_values(cat, Args),
     Template = proplists:get_value(template, Args, "_action_typeselect_result.tpl"),
-    OtherArgs = proplists:delete(action, 
-                    proplists:delete(action_with_id, 
-                        proplists:delete(cat, 
+    OtherArgs = proplists:delete(action,
+                    proplists:delete(action_with_id,
+                        proplists:delete(cat,
                             proplists:delete(template, Args)))),
     Postback = {typeselect, Cats, Template, Actions, ActionsWithId, OtherArgs},
     {_PostbackMsgJS, PickledPostback} = z_render:make_postback(Postback, key, TriggerId, TargetId, ?MODULE, Context),

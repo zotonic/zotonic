@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -248,7 +248,7 @@ handle_call(Message, _From, State) ->
 handle_cast({#mailinglist_mailing{list_id=ListId, page_id=PageId}, SenderContext}, State) ->
 	send_mailing(ListId, PageId, SenderContext),
 	{noreply, State};
-	
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -259,7 +259,7 @@ handle_cast(Message, State) ->
 %% @doc Poll the database for scheduled mailings.
 handle_info(poll, State) ->
     poll_scheduled(z_acl:sudo(State#state.context)),
-    z_utils:flush_message(poll),    
+    z_utils:flush_message(poll),
     {noreply, State};
 
 %% @doc Handling all non call/cast messages
@@ -311,7 +311,7 @@ poll_scheduled(Context) ->
 		undefined ->
 			ok
 	end.
-	
+
 
 %% @doc Send the page to the mailinglist.
 send_mailing(ListId, PageId, Context) ->
@@ -345,17 +345,17 @@ send_mailing_process(ListId, Recipients, PageId, Context) ->
         send(m_rsc:p_no_acl(Id, email_raw, Context), From, [{recipient_id,Id}|Options], Context);
     send(Email, From, Options, Context) ->
         case z_convert:to_list(z_string:trim(Email)) of
-            [] -> 
+            [] ->
                 skip;
             Email1 ->
                 Id = proplists:get_value(id, Options),
                 Attachments = mod_mailinglist:page_attachments(Id, Context),
-                z_email_server:send(#email{to=Email1, 
+                z_email_server:send(#email{to=Email1,
                                            from=From,
-                                           html_tpl={cat, "mailing_page.tpl"}, 
-                                           vars=[{email,Email1}|Options], 
+                                           html_tpl={cat, "mailing_page.tpl"},
+                                           vars=[{email,Email1}|Options],
                                            attachments=Attachments
-                                    }, 
+                                    },
                                     Context)
         end.
 
@@ -380,7 +380,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("Mailing lists", Context),
                 url={admin_mailinglist},
                 visiblecheck={acl, use, ?MODULE}}
-     
+
      |Acc].
 
 

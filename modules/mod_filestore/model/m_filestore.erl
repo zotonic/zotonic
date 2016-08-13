@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,7 +67,7 @@ queue(Path, Props, Context) ->
 
 %% @doc Fetch the next batch of queued uploads, at least 10 minutes old.
 fetch_queue(Context) ->
-    z_db:assoc("select * 
+    z_db:assoc("select *
                 from filestore_queue
                 where created < now() - interval '10 min'
                 limit 200", Context).
@@ -94,7 +94,7 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
                                 is_move_to_local = false,
                                 error = null,
                                 modified = now()
-                            where id = $4", 
+                            where id = $4",
                             [Location, Service, Size, Id],
                             Ctx),
                     {ok, Id}
@@ -103,8 +103,8 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
 
 lookup(Path, Context) ->
     z_db:assoc_row("select *
-                    from filestore 
-                    where path = $1 
+                    from filestore
+                    where path = $1
                       and error is null
                       and not is_deleted",
                    [Path], Context).
@@ -151,7 +151,7 @@ mark_move_to_local_limit(Limit, Context) ->
                                      limit $1
                                      for update
                                 ) mv
-                                where mv.id = f.id", 
+                                where mv.id = f.id",
                                 [Limit],
                                 Ctx)
                         of
@@ -185,7 +185,7 @@ unmark_move_to_local_limit(Limit, Context) ->
                                      limit $1
                                      for update
                                 ) mv
-                                where mv.id = f.id", 
+                                where mv.id = f.id",
                                 [Limit],
                                 Ctx)
                         of
@@ -223,7 +223,7 @@ stats(Context) ->
                               and is_deletable_file", Context),
     Queued = z_db:q1("select count(*) from filestore_queue", Context),
     {Cloud, CloudSize, ToLocal, Deleted} = z_db:q_row("
-                            select count(*), sum(size), 
+                            select count(*), sum(size),
                                    sum(is_move_to_local::integer), sum(is_deleted::integer)
                             from filestore", Context),
 
@@ -269,7 +269,7 @@ install_filestore(Context) ->
                     size int not null default 0,
                     modified timestamp with time zone not null default now(),
                     created timestamp with time zone not null default now(),
-                    
+
                     constraint filestore_pkey primary key (id),
                     constraint filestore_path_key unique (path),
                     constraint filestore_location_key unique (location)
@@ -277,7 +277,7 @@ install_filestore(Context) ->
                 ", Context),
             {ok, _, _} = z_db:equery("create index filestore_is_deleted_key on filestore(is_deleted) where is_deleted", Context),
             {ok, _, _} = z_db:equery("create index filestore_is_move_to_local_key on filestore(is_move_to_local) where is_move_to_local", Context),
-            z_db:flush(Context), 
+            z_db:flush(Context),
             ok;
         true ->
             ok
@@ -292,12 +292,12 @@ install_filequeue(Context) ->
                     path character varying(255) not null,
                     props bytea,
                     created timestamp with time zone not null default now(),
-                    
+
                     constraint filestore_queue_pkey primary key (id),
                     constraint filestore_queue_path_key unique (path)
                 )
                 ", Context),
-            z_db:flush(Context), 
+            z_db:flush(Context),
             ok;
         true ->
             ok

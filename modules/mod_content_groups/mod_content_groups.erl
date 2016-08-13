@@ -147,7 +147,7 @@ observe_rsc_get(#rsc_get{}, Props, Context) ->
     case proplists:get_value(content_group_id, Props) of
         undefined ->
             [
-                {content_group_id, 
+                {content_group_id,
                         case m_category:is_meta(proplists:get_value(category_id, Props), Context) of
                             true -> m_rsc:rid(system_content_group, Context);
                             false -> m_rsc:rid(default_content_group, Context)
@@ -181,7 +181,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      |Acc].
 
 observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Context) ->
-    case  lists:member('content_group', PreIsA) 
+    case  lists:member('content_group', PreIsA)
         orelse lists:member('content_group', PostIsA)
     of
         true -> m_hierarchy:ensure(content_group, Context);

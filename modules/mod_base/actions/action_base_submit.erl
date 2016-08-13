@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@ render_action(TriggerId, _TargetId, Args, Context) ->
     case proplists:get_value(closest, Args) of
         undefined ->
             case proplists:get_value(id, Args, proplists:get_value(target, Args)) of
-                undefined -> 
+                undefined ->
                     {["$(\"#", TriggerId, "\").closest(\"form\").submit();"], Context};
                 Id ->
                     {[ $$, $(, $", $#, z_utils:js_escape(z_convert:to_list(Id)), <<"\").submit();">> ], Context}

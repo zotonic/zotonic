@@ -35,7 +35,7 @@
                     </label></div>
             </div>
         </div>
-        
+
         <div class="form-group row">
             <label class="control-label col-md-3" for="seo_title">{_ Page title _}</label>
             <div class="col-md-9">

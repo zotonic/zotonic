@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -58,7 +58,7 @@ redirect(Location, Context) ->
     ?WM_REPLY({true, Location}, Context).
 
 
-%% @doc Check if the current user is allowed to view the resource. 
+%% @doc Check if the current user is allowed to view the resource.
 is_authorized(ReqData, Context) ->
     controller_template:is_authorized(ReqData, Context).
 
@@ -81,7 +81,7 @@ html(Context) ->
 
 	MaxAge = z_context:get(cache_anonymous_maxage, Context1),
 	Html = case not z_auth:is_auth(Context1) of
-		true when is_integer(MaxAge), MaxAge > 0 -> 
+		true when is_integer(MaxAge), MaxAge > 0 ->
 			QueryArgs = z_context:get_q_all(Context1),
 		    z_depcache:memo(RenderFunc, {page_template_anonymous, RenderArgs, QueryArgs}, MaxAge, [Id], Context1);
 		true when is_integer(MaxAge), MaxAge == 0 ->

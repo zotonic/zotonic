@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@ html(Context) ->
 event(#postback{message={comment_delete, Args}}, Context) ->
     CommentId = proplists:get_value(id, Args),
     case m_comment:delete(CommentId, Context) of
-        ok -> 
+        ok ->
             OnSuccess = proplists:get_all_values(on_success, Args),
             Context1 = z_render:wire(OnSuccess, Context),
             z_render:growl(?__("The comment has been deleted.", Context1), Context1);
@@ -57,7 +57,7 @@ event(#postback{message={comment_toggle, Args}}, Context) ->
             case proplists:get_value(element, Args) of
                 undefined ->
                     Context1;
-                ElementId -> 
+                ElementId ->
                     case IsVisible of
                         true ->
                             z_render:wire([
