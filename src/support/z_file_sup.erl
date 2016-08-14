@@ -1,4 +1,4 @@
-%% @doc Supervisor for file processes, these processes cache and maintain file information for 
+%% @doc Supervisor for file processes, these processes cache and maintain file information for
 %% other file services.  They can also resize, combine files and compress files.
 
 -module(z_file_sup).

@@ -27,13 +27,13 @@
 		        {% validate id="message" type={presence} %}
 	        </div>
         </div>
-        
+
         <div class="form-group row">
 	        <div class="col-md-9 col-md-offset-3">
 		        <button class="btn btn-primary" type="submit">Send</button>
 	        </div>
         </div>
-        
+
     </form>
 
 {% endblock %}

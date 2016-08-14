@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,10 +26,10 @@
 % This is to make a distinction between pages fetched by visitors (with executing callbacks etc)
 % and bots (without executing callbacks).
 %
-% Pages fetched by bots won't setup the web socket connection, or perform postbacks, so we can 
+% Pages fetched by bots won't setup the web socket connection, or perform postbacks, so we can
 % quickly stop the page and session-process.
 %
-% Real visitors will perform interaction with the page, for this we keep the session and 
+% Real visitors will perform interaction with the page, for this we keep the session and
 % page-process. Even during some inactivity.
 
 -module(z_session).
@@ -46,20 +46,20 @@
 %% session exports
 -export([
     start_link/3,
-    stop/1, 
+    stop/1,
     set/2,
     set/3,
-    get/2, 
-    get/3, 
-    incr/3, 
+    get/2,
+    get/3,
+    incr/3,
     session_id/1,
     rename_session/2,
     persistent_id/1,
     set_persistent/3,
-    get_persistent/2, 
-    get_persistent/3, 
-    keepalive/1, 
-    keepalive/2, 
+    get_persistent/2,
+    get_persistent/3,
+    keepalive/1,
+    keepalive/2,
     ensure_page_session/1,
     lookup_page_session/2,
     get_pages/1,
@@ -177,7 +177,7 @@ set_persistent(Key, Value, Context) ->
                  {path, "/"},
                  {http_only, true}],
              z_context:set_cookie(?PERSIST_COOKIE, NewPersistCookieId, Options, Context);
-        ok -> 
+        ok ->
             Context
     end.
 
@@ -336,13 +336,13 @@ handle_cast({check_expire, Now}, Session) ->
                 },
     case Session1#session.pages of
         [] ->
-            if 
+            if
                 Session1#session.expire < Now -> {stop, normal, Session1};
                 true -> {noreply, Session1}
             end;
         _ ->
             Expire   = Now + ?SESSION_PAGE_TIMEOUT,
-            Session2 = if 
+            Session2 = if
                             Expire > Session1#session.expire -> Session1#session{expire=Expire};
                             true -> Session1
                        end,
@@ -352,7 +352,7 @@ handle_cast({check_expire, Now}, Session) ->
 %% @doc Add a script to a specific page's script queue
 handle_cast({send_script, Script, PageId}, Session) ->
     case find_page(PageId, Session) of
-        undefined -> 
+        undefined ->
             Session;
         #page{page_pid=Pid} ->
             z_session_page:add_script(Script, Pid)
@@ -369,12 +369,12 @@ handle_cast({transport, Msg}, #session{pages=Pages} = Session) ->
                 z_session_page:transport(Msg, P#page.page_pid)
             end,
             Pages),
-    Transport1 = z_transport_queue:wait_ack(Msg, session, Session#session.transport), 
+    Transport1 = z_transport_queue:wait_ack(Msg, session, Session#session.transport),
     {noreply, Session#session{transport=Transport1}};
 
 %% @doc Receive a message ack
 handle_cast({receive_ack, Ack}, Session) ->
-    Transport1 = z_transport_queue:ack(Ack, Session#session.transport), 
+    Transport1 = z_transport_queue:ack(Ack, Session#session.transport),
     {noreply, Session#session{transport=Transport1}};
 
 
@@ -429,7 +429,7 @@ handle_cast(Msg, Session) ->
 handle_call(persistent_id, _From, Session) ->
     PersistedSession = case Session#session.persist_is_saved of
         true -> Session;
-        false -> save_persist(Session#session{persist_is_dirty=true}) 
+        false -> save_persist(Session#session{persist_is_dirty=true})
     end,
     {reply, PersistedSession#session.persist_id, PersistedSession};
 
@@ -446,8 +446,8 @@ handle_call({rename_session, NewSessionId}, _From, Session) ->
 handle_call({set_persistent, Key, Value}, _From, #session{persist_id=undefined}=Session) ->
     PersistId = new_id(),
     Session1 = Session#session{
-        persist_id=PersistId, 
-        props_persist=[{Key, Value}], 
+        persist_id=PersistId,
+        props_persist=[{Key, Value}],
         persist_is_dirty=true},
     {reply, {new_persist_id, PersistId}, save_persist(Session1)};
 handle_call({set_persistent, Key, Value}, _From, Session) ->
@@ -457,7 +457,7 @@ handle_call({set_persistent, Key, Value}, _From, Session) ->
         _Other ->
             % @todo Save the persistent state on tick, and not every time it is changed.
             %       For now (and for testing) this is ok.
-            Session1 = Session#session{ 
+            Session1 = Session#session{
                             props_persist = z_utils:prop_replace(Key, Value, Session#session.props_persist),
                             persist_is_dirty = true
                     },
@@ -496,7 +496,7 @@ handle_call({lookup_page_session, PageId}, _From, Session) ->
     case find_page(PageId, Session) of
         undefined ->
             {reply, {error, notfound}, Session};
-        #page{page_pid=Pid} -> 
+        #page{page_pid=Pid} ->
             z_session_page:ping(Pid),
             {reply, {ok, Pid}, Session}
     end;
@@ -595,8 +595,8 @@ transport_all(#session{transport=Transport, pages=Pages} = Session) ->
                             end,
                             Transport1,
                             Ms),
-            Session#session{transport=Transport2}  
-    end. 
+            Session#session{transport=Transport2}
+    end.
 
 
 %% @doc Initialize a new session record
@@ -617,15 +617,15 @@ new_session(Host, SessionId, PersistId) ->
 
 %% @doc Load the persistent data from the database, used on session start.
 load_persist(Session) ->
-    {PropsPersist, PersistIsSaved} = 
+    {PropsPersist, PersistIsSaved} =
             case m_persistent:get(Session#session.persist_id, Session#session.context) of
                 L when is_list(L) -> {L,  true};
                 _ -> {[], false}
             end,
-    Session#session{ 
-        props_persist    = PropsPersist, 
-        persist_is_dirty = false, 
-        persist_is_saved = PersistIsSaved 
+    Session#session{
+        props_persist    = PropsPersist,
+        persist_is_dirty = false,
+        persist_is_saved = PersistIsSaved
     }.
 
 
@@ -640,14 +640,14 @@ save_persist(Session) ->
 %% @doc Replace properties, special handling for tracking sessions belonging to an user_id
 prop_replace(auth_user_id, NewUserId, Props, Site) when is_list(Props) ->
     case lists:keyfind(auth_user_id, 1, Props) of
-        {auth_user_id, NewUserId} -> 
+        {auth_user_id, NewUserId} ->
             Props;
         {auth_user_id, PrefUserId} ->
-            gproc:unreg({p, l, {Site, user_session, PrefUserId}}), 
+            gproc:unreg({p, l, {Site, user_session, PrefUserId}}),
             gproc:reg({p, l, {Site, user_session, NewUserId}}),
             z_utils:prop_replace(auth_user_id, NewUserId, Props);
         false ->
-            gproc:unreg({p, l, {Site, user_session, undefined}}), 
+            gproc:unreg({p, l, {Site, user_session, undefined}}),
             gproc:reg({p, l, {Site, user_session, NewUserId}}),
             [{auth_user_id, NewUserId} | Props]
     end;
@@ -676,7 +676,7 @@ page_start(Context) ->
                         "Page-session process already running ~p",
                         [PageId]),
             {error, already_started}
-    end. 
+    end.
 
 
 %% @doc Find the page record in the list of known pages

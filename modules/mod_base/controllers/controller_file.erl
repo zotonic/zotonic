@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,7 @@
 %% limitations under the License.
 
 %% Serves files like:
-%% 
+%%
 %% /image/2007/03/31/wedding.jpg(300x300)(crop-center)(709a-a3ab6605e5c8ce801ac77eb76289ac12).jpg
 %% /media/inline/<filepath>
 %% /media/attachment/<filepath>
@@ -161,6 +161,14 @@ set_allow_origin(ReqData) ->
 
 set_content_policy(#z_file_info{acls=[]}, ReqData) ->
     ReqData;
+set_content_policy(#z_file_info{acls = Acls, mime = <<"application/pdf">>}, ReqData) ->
+    case lists:any(fun is_integer/1, Acls) of
+        true ->
+            RD1 = wrq:set_resp_header("Content-Security-Policy", "object-src 'self'; plugin-types application/pdf", ReqData),
+            wrq:set_resp_header("X-Content-Security-Policy", "plugin-types: application/pdf", RD1);
+        false ->
+            ReqData
+    end;
 set_content_policy(#z_file_info{acls=Acls}, ReqData) ->
     case lists:any(fun is_integer/1, Acls) of
         true ->

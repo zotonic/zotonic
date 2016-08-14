@@ -6,7 +6,7 @@
 <article id="content" class="zp-67">
     <div class="padding">
 	<h1>{_ Statistics _}</h1>
-	
+
         fixme stats here P
     </div>
 </article>

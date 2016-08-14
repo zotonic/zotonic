@@ -4,7 +4,7 @@
 
 {% block html_head_extra %}
 	{% inherit %}
-	{% lib 
+	{% lib
 	    "css/logon.css"
 	%}
 {% endblock %}

@@ -3,7 +3,7 @@
     {% with m.rsc[id] as r %}
     <a id="{{ #connect.id }}" href="#add-connection">
         <span class="pull-right">{{ m.rsc[r.category.id].title|default:r.category.name }}</span>
-        {% image r.depiction width=40 height=18 crop %} 
+        {% image r.depiction width=40 height=18 crop %}
         {{ r.title }}
     </a>
     {% endwith %}

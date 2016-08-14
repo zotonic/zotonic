@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,7 +51,7 @@ urlize_word1(Word) ->
         {match, [Lead, Middle, Tail]} ->
             case make_url(Middle) of
                undefined -> z_html:escape(Word); % do nothing, just return the word
-               Url -> 
+               Url ->
                    Link = z_tags:render_tag(<<"a">>, [{href, Url}],
 z_html:escape(Middle)),
                    [z_html:escape(Lead), Link, z_html:escape(Tail)]
@@ -60,7 +60,7 @@ z_html:escape(Middle)),
     end.
 
 %% @doc Given a word, convert it to a url if it looks like one. When
-%% it doesn't look like a url, return undefined 
+%% it doesn't look like a url, return undefined
 %%
 %% @spec(string()) ->string() | undefined
 make_url(Word) ->
@@ -70,12 +70,12 @@ make_url(Word) ->
     end.
 make_url1(Word) ->
     case smells_like_a_domain_name(Word) of
-        true -> iolist_to_binary(["http://", safe_escape_url(Word)]); 
+        true -> iolist_to_binary(["http://", safe_escape_url(Word)]);
         false-> make_url2(Word)
     end.
 make_url2(Word) ->
     case smells_like_an_email_address(Word) of
-        true -> iolist_to_binary(["mailto://", safe_escape_url(Word)]); 
+        true -> iolist_to_binary(["mailto://", safe_escape_url(Word)]);
         false -> undefined
 end.
 
@@ -86,7 +86,7 @@ smells_like_something_interesting(Word) ->
     case re:run(Word, "@|:|\\.") of
         nomatch -> false;
         {match, _Match} -> true
-    end.    
+    end.
 
 smells_like_a_uri(Word) ->
     z_string:starts_with(<<"http://">>, Word) orelse
@@ -95,7 +95,7 @@ smells_like_a_uri(Word) ->
 smells_like_a_domain_name(Word) ->
     Tlds = [<<".com">>, <<".gov">>, <<".org">>, <<".net">>, <<".nl">>, <<".me">>,
 <<".io">>],
-    z_string:starts_with(<<"www.">>, Word) orelse 
+    z_string:starts_with(<<"www.">>, Word) orelse
                                     (not z_string:contains(<<"@">>, Word) and (ends_with_one_of(Tlds, Word))).
 
 smells_like_an_email_address(Word) ->
@@ -108,7 +108,7 @@ smells_like_an_email_address(Word) ->
             end;
         false ->false
     end.
-                     
+
 ends_with_one_of([], _String) ->
     false;
 ends_with_one_of([H|T], String) ->

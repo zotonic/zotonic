@@ -1,15 +1,15 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @doc Postback validator, checks using a server callback against an Erlang function.  
+%% @doc Postback validator, checks using a server callback against an Erlang function.
 
 %% Copyright 2010 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,9 +55,9 @@ validate(postback, Id, Value, Args, Context) ->
 event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     IsValid = case validate(postback, TriggerId, Value, Args, Context) of
-        {{ok, _},ContextValidated} -> 
+        {{ok, _},ContextValidated} ->
             "true";
-        {{error, Id, _} = Error, ContextScript} -> 
+        {{error, Id, _} = Error, ContextScript} ->
             ContextValidated = z_validation:report_errors([{Id,Error}], ContextScript),
             "false"
     end,

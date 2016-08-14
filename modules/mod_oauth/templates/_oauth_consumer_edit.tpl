@@ -73,7 +73,7 @@ $("a[data-link='tab-auth']").on("click", function() {
             <div class="tab-pane" id="{{ #tab }}-auth">
 
                 <p>{_ Allow users of this application access to the following API calls: _}</p>
-                
+
                 {% with m.oauth_perms.selected[consumer.id] as perms %}
                     <table class="table" >
                         {% for perm in m.oauth_perms %}

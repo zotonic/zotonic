@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -76,7 +76,7 @@ event(#submit{message={consumer_save, Arg}}, Context) ->
                        Consumer = m_oauth_app:create_consumer(Title, URL, Descr, Callback, Context),
                        m_oauth_perms:set(proplists:get_value(id, Consumer), Perms, Context),
                        z_render:wire({growl, [{text, ?__("Created new application.", Context)}]}, Context);
-                   
+
                    Id ->
                        m_oauth_app:update_consumer(Id, [{application_title, Title},
                                                         {application_descr, Descr},
@@ -103,7 +103,7 @@ event(#postback{message={start_tokens, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Vars = [{id, Id}],
     z_render:dialog(?__("Tokens", Context), "_oauth_consumer_tokens.tpl", Vars, Context);
-    
+
 
 event(#postback{message={confirm_del_app, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),

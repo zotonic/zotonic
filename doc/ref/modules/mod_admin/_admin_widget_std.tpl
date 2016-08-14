@@ -1,6 +1,6 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
-{# 
+{#
     Example of standard and simple widget for /admin/edit/N page.
     Similar skeleton also used for basis of sidebar widgets.
 #}
@@ -36,7 +36,7 @@
 {% endblock %}
 
 
-{# Some optional tags, that will be rendered immediately after widget container. 
+{# Some optional tags, that will be rendered immediately after widget container.
    For example, some javascript: #}
 {% block widget_after %}
     <script type="text/javascript">

@@ -10,7 +10,7 @@
 	        action={
 	            moreresults
 	            result=result
-	            target="dialog_connect_loop_results" 
+	            target="dialog_connect_loop_results"
 				template="_action_dialog_connect_tab_find_results_loop.tpl"
                 predicate=predicate|as_atom
                 subject_id=subject_id

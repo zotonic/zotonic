@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@
          m_value/2,
 
          consumer_tokens/2,
-         
+
          consumer_lookup/2,
          secrets_for_verify/4,
          check_nonce/5,
@@ -81,7 +81,7 @@ m_value(#m{value=undefined}, _Context) ->
     undefined;
 m_value(#m{value=_Module}, _Context) ->
     undefined.
-    
+
 
 
 all_apps(Context) ->
@@ -89,20 +89,20 @@ all_apps(Context) ->
                      [Context#context.user_id], Context).
 
 consumer_tokens(Id, Context) ->
-    z_db:assoc_props("SELECT * FROM oauth_application_token 
+    z_db:assoc_props("SELECT * FROM oauth_application_token
                         WHERE application_id = $1 ORDER BY timestamp DESC",
                      [Id], Context).
 
 
 
-%% 
+%%
 %% Lookup a application in the application registry.
 %%
 %% Return a tuple: {Key, Secret, Signature method}
 consumer_lookup(Key, Context) ->
     z_db:assoc_props_row("
         SELECT id, consumer_key, consumer_secret, callback_uri
-                FROM oauth_application_registry 
+                FROM oauth_application_registry
                 WHERE consumer_key = $1 AND enabled = true", [Key], Context).
 
 
@@ -178,7 +178,7 @@ generate_key() ->
 %% Create a request token for given consumer.
 %%
 request_token(Consumer, Context) ->
-    case z_db:insert("oauth_application_token", 
+    case z_db:insert("oauth_application_token",
                 [ {application_id, proplists:get_value(id, Consumer)},
                   {user_id, 1},
                   {token, generate_key()},
@@ -204,7 +204,7 @@ exchange_request_for_access(Token, Context) ->
                                 token_type = 'request' AND
                                 authorized = true", [proplists:get_value(application_id, Token), proplists:get_value(token, Token)], Context) of
         [{id, TokenId}] ->
-            z_db:update("oauth_application_token", TokenId, 
+            z_db:update("oauth_application_token", TokenId,
                         [{token, generate_key()},
                          {token_secret, generate_key()},
                          {token_type, "access"}], Context),
@@ -217,7 +217,7 @@ exchange_request_for_access(Token, Context) ->
 
 %%
 %% Create an application for the a consumer associated with the current user.
-%% 
+%%
 create_app(ConsumerId, Context) ->
     create_app(ConsumerId, z_acl:user(Context), Context).
 
@@ -238,9 +238,9 @@ create_app(ConsumerId, UserId, Context) when is_integer(ConsumerId), is_integer(
 
 get_app_tokens(AppId, Context) ->
     z_db:assoc_row("
-                select cons.consumer_key, cons.consumer_secret, tk.token, tk.token_secret 
+                select cons.consumer_key, cons.consumer_secret, tk.token, tk.token_secret
                 from oauth_application_token tk join
-                     oauth_application_registry cons 
+                     oauth_application_registry cons
                      on tk.application_id = cons.id
                 where tk.id = $1",
                 [AppId],
@@ -248,16 +248,16 @@ get_app_tokens(AppId, Context) ->
 
 %%
 %% Get a token from the database.
-%% 
+%%
 get_request_token(Tok, Context) ->
     z_db:assoc_props_row("SELECT * FROM oauth_application_token tok JOIN oauth_application_registry app
                         ON (tok.application_id = app.id)
                         WHERE tok.token = $1 LIMIT 1" ,
                          [Tok], Context).
 
-    
+
 create_consumer(Title, URL, Desc, Callback, Context) ->
-    case z_db:insert("oauth_application_registry", 
+    case z_db:insert("oauth_application_registry",
                 [ {user_id, z_acl:user(Context)},
                   {consumer_key, generate_key()},
                   {consumer_secret, generate_key()},
@@ -281,7 +281,7 @@ update_consumer(Id, Update, Context) ->
 get_consumer(Id, Context) ->
     {ok, C} = z_db:select("oauth_application_registry", Id, Context),
     C.
-    
+
 delete_consumer(Id, Context) ->
     {ok, _} = z_db:delete("oauth_application_registry", Id, Context).
 

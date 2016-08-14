@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@
     m_find_value/3,
     m_to_list/2,
     m_value/2,
-    
+
     get/2,
     get_new_location/2,
     is_gone/2,
@@ -57,7 +57,7 @@ m_value(#m{value=undefined}, _Context) ->
 %% @doc Get the possible 'rsc_gone' resource for the id.
 get(Id, Context) when is_integer(Id) ->
     F = fun() ->
-            z_db:assoc_row("select * from rsc_gone where id = $1", [Id], Context) 
+            z_db:assoc_row("select * from rsc_gone where id = $1", [Id], Context)
         end,
     z_depcache:memo(F, {rsc_gone, Id}, Context).
 
@@ -77,7 +77,7 @@ get_new_location(Id, Context) when is_integer(Id) ->
             undefined;
         {NewId, _} when is_integer(NewId) ->
             NewUri = case z_context:get(zotonic_dispatch, Context) of
-                        undefined -> 
+                        undefined ->
                             z_dispatcher:url_for(id, [{id,NewId}], Context);
                         Dispatch ->
                             case z_dispatcher:url_for(Dispatch, [{id,NewId}], Context) of
@@ -86,7 +86,7 @@ get_new_location(Id, Context) when is_integer(Id) ->
                             end
                      end,
             z_context:abs_url(NewUri, Context);
-        {undefined, NewUri} ->    
+        {undefined, NewUri} ->
             z_context:abs_url(NewUri, Context)
     end.
 
@@ -125,13 +125,13 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                             {new_id, NewId},
                             {new_uri, undefined},
                             {modifier_id, z_acl:user(Ctx)}
-                            | Props 
+                            | Props
                         ],
                         case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Ctx) of
                             1 ->
-                                lager:warning(z_context:lager_md(Ctx), 
+                                lager:warning(z_context:lager_md(Ctx),
                                               "[~p] Second rsc_gone entry for id ~p",
-                                              [z_context:site(Ctx), Id]), 
+                                              [z_context:site(Ctx), Id]),
                                 z_db:update(rsc_gone, Id, Props1, Ctx);
                             0 ->
                                 z_db:insert(rsc_gone, Props1, Ctx)

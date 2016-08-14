@@ -32,7 +32,7 @@
 					</a>
 				</p>
 				{% wire id=#doreset
-						postback={email_status_reset email=email id=id 
+						postback={email_status_reset email=email id=id
 								  on_success={hide target=#doreset}
 								  on_success={show target=#didreset}}
 						delegate=`mod_email_status`

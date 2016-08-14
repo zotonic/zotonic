@@ -32,7 +32,7 @@
 -author('emmiller@gmail.com').
 
 
-force_escape(undefined, _Context) -> 
+force_escape(undefined, _Context) ->
     <<>>;
 force_escape({trans, _} = Trans, Context) ->
     force_escape(z_trans:lookup_fallback(Trans, Context), Context);
@@ -52,7 +52,7 @@ force_escape({{Y,M,D}, {_H,_I,_S}} = Input, Context) when is_integer(Y) andalso 
     filter_date:date(Input, "Y-m-d H:i:s", Context);
 force_escape({Y,M,D} = Input, Context) when is_integer(Y) andalso is_integer(M) andalso is_integer(D) ->
     filter_date:date(Input, "Y-m-d", Context).
-    
+
 
 
 escape1(Binary, Index) when is_binary(Binary) ->

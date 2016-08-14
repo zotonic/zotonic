@@ -26,7 +26,7 @@
         <input class="form-control" type="text" id="block-{{name}}-placeholder{{ lang_code_for_id }}" name="block-{{name}}-placeholder{{ lang_code_with_dollar }}" value="{{ blk.placeholder[lang_code]  }}"
                placeholder="{_ Input value placeholder text _} ({{ lang_code }})" />
     </div>
-       
+
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}

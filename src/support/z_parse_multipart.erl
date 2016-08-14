@@ -4,30 +4,30 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% Date: 2009-05-13
 %%
-%% @doc Parse multipart/form-data request bodies. Uses a callback function to receive the next parts, can call 
+%% @doc Parse multipart/form-data request bodies. Uses a callback function to receive the next parts, can call
 %% a progress function to report back the progress on receiving the data.
 %%
 %% Adapted from mochiweb_multipart.erl, integrated with webmachine and zotonic
 
 %% This is the MIT license.
-%% 
+%%
 %% Copyright (c) 2007 Mochi Media, Inc.
-%% 
-%% Permission is hereby granted, free of charge, to any person obtaining a copy 
-%% of this software and associated documentation files (the "Software"), to deal 
-%% in the Software without restriction, including without limitation the rights 
+%%
+%% Permission is hereby granted, free of charge, to any person obtaining a copy
+%% of this software and associated documentation files (the "Software"), to deal
+%% in the Software without restriction, including without limitation the rights
 %% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-%% of the Software, and to permit persons to whom the Software is furnished to do 
+%% of the Software, and to permit persons to whom the Software is furnished to do
 %% so, subject to the following conditions:
-%% 
-%% The above copyright notice and this permission notice shall be included in all 
+%%
+%% The above copyright notice and this permission notice shall be included in all
 %% copies or substantial portions of the Software.
-%% 
-%% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-%% INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-%% PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE 
-%% LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
-%% TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+%%
+%% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+%% INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+%% PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+%% LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+%% TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 %% OR OTHER DEALINGS IN THE SOFTWARE.
 
 
@@ -37,7 +37,7 @@
 %% interface functions
 -export([
    recv_parse/1,
-   
+
    find_boundary/2
 ]).
 
@@ -49,7 +49,7 @@
         boundary :: binary(),
         content_length :: integer(),
         length :: integer(),
-        percentage = 0 :: pos_integer(), 
+        percentage = 0 :: pos_integer(),
         buffer :: binary(),
         next_chunk :: more | ok,
         form = #multipart_form{},
@@ -58,7 +58,7 @@
     }).
 
 
-%% @doc Receive and parse the form data in the request body.  
+%% @doc Receive and parse the form data in the request body.
 %% The progress function should accept the parameters [Percentage, Context]
 -spec recv_parse(#context{}) -> {#multipart_form{}, #context{}}.
 recv_parse(Context) ->
@@ -174,9 +174,9 @@ maybe_z_msg_context(#mp{} = State) ->
 %% @doc Report progress back to the page.
 progress(0, _ContentLength, _ZMsg, _Context) ->
     ok;
-progress(Percentage, ContentLength, 
-         #z_msg_v1{data=#postback_event{trigger=TriggerId}}, 
-         Context) 
+progress(Percentage, ContentLength,
+         #z_msg_v1{data=#postback_event{trigger=TriggerId}},
+         Context)
     when ContentLength > ?CHUNKSIZE*5, TriggerId =/= undefined, TriggerId =/= "", TriggerId =/= <<>> ->
     case is_push_attached(Context) of
         true ->
@@ -185,12 +185,12 @@ progress(Percentage, ContentLength,
                             "',", integer_to_list(Percentage),");"
                     ]),
             z_transport:page(javascript, JS, Context);
-        false -> 
+        false ->
             ok
     end;
 progress(_Percentage, _ContentLength, _ZMsg, _Context) ->
     ok.
-    
+
 is_push_attached(Context) ->
     z_session_page:get_attach_state(Context) =:= attached.
 
@@ -220,8 +220,8 @@ handle_data({headers, Headers}, Form) ->
                                         {MimeA, MimeB, _Opts} -> <<MimeA/binary, $/, MimeB/binary>>
                                   end,
                     Form#multipart_form{name=Name,
-                                        filename=Filename, 
-                                        content_length=ContentLength, 
+                                        filename=Filename,
+                                        content_length=ContentLength,
                                         content_type=ContentType,
                                         tmpfile=z_tempfile:new()}
             end;
@@ -283,7 +283,7 @@ read_more(State=#mp{next_chunk=ok, content_length=ContentLength, length=Length} 
 read_more(State=#mp{next_chunk=ok, context=Context} = State) ->
     lager:info(z_context:lager_md(Context), "Multipart post with wrong content length"),
     throw({error, wrong_content_length});
-read_more(State=#mp{length=Length, content_length=ContentLength, 
+read_more(State=#mp{length=Length, content_length=ContentLength,
                 percentage=Percentage,
                 buffer=Buffer, next_chunk=more, context=Context}) ->
     {Next1, Data, Context1} = cowmachine_req:stream_req_body(?CHUNKSIZE, Context),

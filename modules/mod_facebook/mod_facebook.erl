@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% 
+%%
 %% @doc Facebook integration. Adds Facebook login and other functionalities.
 
 %% Copyright 2010 Marc Worrell
@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@
 
 % You have to add your Facebook appid and secret to the config.
 % By default, we only request access to the Facebook user's e-mail address.
--define(FACEBOOK_SCOPE, "email"). 
+-define(FACEBOOK_SCOPE, "email").
 
 
 %% @doc Reset the received facebook access token (as set in the session)
@@ -56,7 +56,7 @@ get_config(Context) ->
     }.
 
 
-%% @doc 
+%% @doc
 observe_search_query({search_query, {fql, Args}, OffsetLimit}, Context) ->
     m_facebook:search({fql, Args}, OffsetLimit, Context);
 observe_search_query(_, _Context) ->

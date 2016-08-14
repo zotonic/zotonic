@@ -16,7 +16,7 @@
 {% endwith %}
 
 {% if is_editable %}
-	{% button 
+	{% button
 			class="btn btn-primary"
 			text=_"Add Rule"
             action={dialog_open

@@ -18,10 +18,10 @@
   {% if error_erlang %}
       <p><strong>{{ error_erlang|escape }}</strong></p>
   {% endif %}
-  
+
   {% if error_table %}
       <h2>{_ Stack trace _}</h2>
-      
+
       <style type="text/css">
           table {
               background-color: transparent;
@@ -65,7 +65,7 @@
                 font-weight: bold;
             }
       </style>
-      
+
       <table class="tablex table-striped" style="border-collapse: transparent; border-spacing: 0;">
           <thead>
               <tr>

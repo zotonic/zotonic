@@ -39,12 +39,12 @@
 			    	</div>
 
 			    	{% wire id=#size.id
-			    			type="change" 
+			    			type="change"
 			    			postback={set_upload_size id=id}
 			    			delegate=`admin_acl_rules`
 			    	%}
 			    	{% wire id=#size.id
-			    			type="click" 
+			    			type="click"
 			    			postback={set_upload_size id=id}
 			    			delegate=`admin_acl_rules`
 			    	%}

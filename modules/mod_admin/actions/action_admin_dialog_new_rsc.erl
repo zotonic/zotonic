@@ -128,7 +128,7 @@ maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
 maybe_add_objects(_Id, undefined, _Context) ->
     ok;
 maybe_add_objects(_Id, Objects, Context) ->
-    lager:warning("[~p] action_admin_dialog_new_rsc: objects are not a list: ~p", 
+    lager:warning("[~p] action_admin_dialog_new_rsc: objects are not a list: ~p",
                   [z_context:site(Context), Objects]),
     ok.
 
@@ -162,7 +162,7 @@ get_base_props(NewRscTitle, Context) ->
 
 maybe_add_prop("new_rsc_title", _, Acc) ->
     Acc;
-maybe_add_prop("category_id", Cat, Acc) -> 
+maybe_add_prop("category_id", Cat, Acc) ->
     [{category_id, z_convert:to_integer(Cat)} | Acc];
 maybe_add_prop("is_published", IsPublished, Acc) ->
     [{is_published, z_convert:to_bool(IsPublished)} | Acc];

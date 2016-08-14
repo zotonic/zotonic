@@ -3,11 +3,11 @@
 {% block title %}{_ Edit _}{% if id %}: {{ id.title|default:"-" }}{% elseif tree_id %}: {{ tree_id.title|default:"-" }}{% endif %}{% endblock%}
 
 {% block html_head_extra %}
-	{% lib 
-			"css/zp-menuedit.css" 
-			"css/zotonic-admin.css" 
+	{% lib
+			"css/zp-menuedit.css"
+			"css/zotonic-admin.css"
 			"admin-bootstrap3/css/bootstrap.css"
-			"css/admin-frontend.css" 
+			"css/admin-frontend.css"
 			"css/jquery-ui.datepicker.css"
             "css/jquery.timepicker.css"
             "font-awesome/css/font-awesome.min.css"
@@ -66,11 +66,11 @@
 			<div class="col-lg-8 col-md-8" id="save-buttons" style="display:none">
 				<span class="navbar-brand visible-desktop">{_ This page _}</span>
 
-				{% button class="btn btn-primary" text=_"Save" title=_"Save this page." 
+				{% button class="btn btn-primary" text=_"Save" title=_"Save this page."
 						  action={script script="$('#save_stay').click();"}
 				 %}
 
-				{% button class="btn btn-default" text=_"Save &amp; view" title=_"Save and view the page." 
+				{% button class="btn btn-default" text=_"Save &amp; view" title=_"Save and view the page."
 						  action={script script="$('#save_view').click();"}
 				 %}
 

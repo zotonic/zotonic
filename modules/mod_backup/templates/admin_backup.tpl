@@ -36,11 +36,11 @@
                         {% wire id="backup_daily" postback=`config_backup_daily` %}
                     </div>
                 {% endif %}
-                
+
                 <div class="well">
-                    <p>{_ At any moment you can make a backup of your system. _} {_ The backup comprises two parts, the database and the uploaded files. _}<br/> 
+                    <p>{_ At any moment you can make a backup of your system. _} {_ The backup comprises two parts, the database and the uploaded files. _}<br/>
                         {_ You can have 10 backups, older ones will be deleted automatically. _}</p>
-                    
+
                     {% if backup_config.ok and is_editable %}
                         {% button class="btn btn-primary" text=_"Start backup now" action={backup_start is_full_backup} %}
                         {% button class="btn btn-primary" text=_"Start database-only backup now" action={backup_start is_full_backup=0} %}
@@ -54,7 +54,7 @@
                         </div>
                     {% endif %}
                 </div>
-                
+
                 {% if `mod_filestore`|member:m.modules.enabled  %}
                     {% if m.filestore.stats.cloud > 0 %}
                         <div class="alert alert-warning">
@@ -65,7 +65,7 @@
                     {% endif %}
                 {% endif %}
             </div>
-            
+
         </div>
     {% endwith %}
 {% endblock %}

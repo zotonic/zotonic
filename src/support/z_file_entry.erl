@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -119,7 +119,7 @@ stop(undefined) ->
 stop(RequestPath, Context) when is_binary(RequestPath) ->
     stop(where(RequestPath, Context)).
 
-force_stale(undefined) -> 
+force_stale(undefined) ->
     {error, noproc};
 force_stale(Pid) ->
     try
@@ -168,7 +168,7 @@ init([RequestPath, Root, OptFilterProps, Site]) ->
 
 locate(timeout, State) ->
     Context = z_context:new(State#state.site),
-    IndexRef = z_module_indexer:index_ref(Context), 
+    IndexRef = z_module_indexer:index_ref(Context),
     Mime = z_convert:to_binary(z_media_identify:guess_mime(State#state.request_path)),
     Files = z_lib_include:uncollapse(State#state.request_path),
     try
@@ -217,7 +217,7 @@ content_encoding_gzip(timeout, State) ->
         true ->
             % Start compression in separate process
             State1 = State#state{gzipper = start_link_gzip(State#state.parts)},
-            {next_state, serving, State1, ?SERVING_TIMEOUT};   
+            {next_state, serving, State1, ?SERVING_TIMEOUT};
         false ->
             {next_state, serving, State, ?SERVING_TIMEOUT}
     end.
@@ -307,7 +307,7 @@ is_mref_part(MRef, Parts) ->
     lists:any(fun(#part_cache{cache_monitor=Ref}) -> Ref =:= MRef ; (_) -> false end, Parts).
 
 check_current(#state{index_ref=IndexRef} = State) ->
-    case z_module_indexer:index_ref(z_context:new(State#state.site)) of   
+    case z_module_indexer:index_ref(z_context:new(State#state.site)) of
         IndexRef ->
             Now = os:timestamp(),
             check_current_1(timer:now_diff(Now, State#state.last_stale_check), Now, State);
@@ -338,7 +338,7 @@ reply_waiting(State) ->
     lists:foreach(fun(From) ->
                         gen_fsm:reply(From, Reply)
                   end, State#state.waiting),
-    State#state{waiting=[], last_stale_check=os:timestamp()}. 
+    State#state{waiting=[], last_stale_check=os:timestamp()}.
 
 lookup_file_info(#state{is_found = false}) ->
     {error, enoent};
@@ -376,11 +376,11 @@ lookup_acls([#part_missing{}|Ps], Acc) ->
 
 newest_part([], M) ->
     M;
-newest_part([#part_file{modified=M1}|Ps], M) when M =/= undefined, M1 > M -> 
+newest_part([#part_file{modified=M1}|Ps], M) when M =/= undefined, M1 > M ->
     newest_part(Ps, M1);
-newest_part([#part_cache{modified=M1}|Ps], M) when M =/= undefined, M1 > M -> 
+newest_part([#part_cache{modified=M1}|Ps], M) when M =/= undefined, M1 > M ->
     newest_part(Ps, M1);
-newest_part([#part_data{modified=M1}|Ps], M) when M =/= undefined, M1 > M -> 
+newest_part([#part_data{modified=M1}|Ps], M) when M =/= undefined, M1 > M ->
     newest_part(Ps, M1);
 newest_part([_|Ps], M) ->
     newest_part(Ps, M).

@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +36,7 @@
 	insert_recipient/5,
 
 	update_recipient/3,
-	
+
 	recipient_get/2,
 	recipient_get/3,
 	recipient_delete/2,
@@ -128,7 +128,7 @@ get_stats(Id, Context) ->
 %% @spec get_rsc_stats(int(), Context) -> [ {ListId::int(), Statuslist} ]
 get_rsc_stats(Id, Context) ->
     F = fun() ->
-                Stats = [ {ListId, [{created, Created}, {total, Total}]} || 
+                Stats = [ {ListId, [{created, Created}, {total, Total}]} ||
                             {ListId, Created, Total} <- z_db:q("select other_id, min(created) as sent_on, count(distinct(envelop_to)) from log_email where content_id = $1 group by other_id", [Id], Context)],
                 %% merge in all mailer statuses
                 lists:foldl(fun({ListId, Status, Count}, St) ->
@@ -231,7 +231,7 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 	true = z_acl:rsc_visible(ListId, Context),
 	Email1 = z_string:to_lower(Email),
 	Rec = z_db:q_row("select id, is_enabled, confirm_key
-					  from mailinglist_recipient 
+					  from mailinglist_recipient
 					  where mailinglist_id = $1
 					    and email = $2", [ListId, Email1], Context),
 	ConfirmKey = binary_to_list(z_ids:id(20)),
@@ -243,16 +243,16 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 			%% Present, but not enabled
 			NewConfirmKey = case OldConfirmKey of undefined -> ConfirmKey; _ -> OldConfirmKey end,
 			case WelcomeMessageType of
-				send_confirm -> 
+				send_confirm ->
 					case NewConfirmKey of
 						OldConfirmKey -> nop;
-						_ -> z_db:q("update mailinglist_recipient 
+						_ -> z_db:q("update mailinglist_recipient
 									 set confirm_key = $2
 									 where id = $1", [RecipientId, NewConfirmKey], Context)
 					end,
 					{send_confirm, NewConfirmKey};
 				_ ->
-					z_db:q("update mailinglist_recipient 
+					z_db:q("update mailinglist_recipient
 							set is_enabled = true,
 							    confirm_key = $2
 							where id = $1", [RecipientId, NewConfirmKey], Context),
@@ -297,28 +297,28 @@ insert_recipients(ListId, Recipients, IsTruncate, Context) ->
     case z_acl:rsc_editable(ListId, Context) of
         true ->
             ok = z_db:transaction(
-                            fun(Ctx) -> 
+                            fun(Ctx) ->
                                 {ok, Now} = insert_recipients1(ListId, Recipients, Ctx),
                                 optional_truncate(ListId, IsTruncate, Now, Ctx)
                             end, Context);
         false ->
             {error, eacces}
     end.
-    
+
     insert_recipients1(ListId, Recipients, Context) ->
         Now = erlang:universaltime(),
         [ replace_recipient(ListId, R, Now, Context) || R <- Recipients ],
         {ok, Now}.
-        
+
     optional_truncate(_, false, _, _) ->
         ok;
     optional_truncate(ListId, true, Now, Context) ->
         z_db:q("
-            delete from mailinglist_recipient 
-            where mailinglist_id = $1 
+            delete from mailinglist_recipient
+            where mailinglist_id = $1
               and timestamp < $2", [ListId, Now], Context),
         ok.
-    
+
 replace_recipient(ListId, Recipient, Now, Context) when is_binary(Recipient) ->
     replace_recipient(ListId, Recipient, [], Now, Context);
 replace_recipient(ListId, Recipient, Now, Context) ->
@@ -330,9 +330,9 @@ replace_recipient(ListId, Email, Props, Now, Context) ->
         Empty when Empty =:= ""; Empty =:= <<>>; Empty =:= undefined ->
             skip;
         Email1 ->
-            case z_db:q1("select id from mailinglist_recipient where mailinglist_id = $1 and email = $2", 
+            case z_db:q1("select id from mailinglist_recipient where mailinglist_id = $1 and email = $2",
                          [ListId, Email1], Context) of
-                undefined -> 
+                undefined ->
                     ConfirmKey = z_ids:id(20),
                     Props1 = [{confirm_key, ConfirmKey},
                               {email, Email1},
@@ -365,22 +365,22 @@ lines_to_recipients([Line|Lines], Acc) ->
                 end,
             lines_to_recipients(Lines, [R|Acc])
     end.
-            
+
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Context) ->
 	true = z_acl:rsc_editable(ListId, Context),
 	Exists = z_db:q1("
-				select count(*) 
-				from mailinglist_scheduled 
+				select count(*)
+				from mailinglist_scheduled
 				where page_id = $1 and mailinglist_id = $2", [PageId,ListId], Context),
 	case Exists of
 		0 ->
 			z_db:q("insert into mailinglist_scheduled (page_id, mailinglist_id) values ($1,$2)",
 					[PageId, ListId], Context);
-		1 -> 
+		1 ->
 			nop
 	end.
-	
+
 %% @doc Delete a scheduled mailing
 delete_scheduled(ListId, PageId, Context) ->
 	true = z_acl:rsc_editable(ListId, Context),
@@ -396,11 +396,11 @@ get_scheduled(Id, Context) ->
 %% @doc Fetch the next scheduled mailing that is publicly visible, published and in the publication date range.
 check_scheduled(Context) ->
 	z_db:q_row("
-		select m.mailinglist_id, m.page_id  
+		select m.mailinglist_id, m.page_id
 		from mailinglist_scheduled m
 		where (
-		    select r.is_published 
-		          and r.visible_for = 0 
+		    select r.is_published
+		          and r.visible_for = 0
 		          and r.publication_start <= now()
 		          and r.publication_end >= now()
 		    from rsc r
@@ -426,7 +426,7 @@ get_email_from(ListId, Context) ->
                 end,
     FromName = case m_rsc:p(ListId, mailinglist_sender_name, Context) of
                   undefined -> [];
-                  <<>> -> []; 
+                  <<>> -> [];
                   SenderName -> z_convert:to_list(SenderName)
                end,
     z_email:combine_name_email(FromName, FromEmail).

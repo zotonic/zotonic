@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@
 
 -export([
     manage_schema/2,
-    
+
     survey_to_blocks/2
 ]).
 
@@ -35,7 +35,7 @@
 manage_schema(install, Context) ->
     %% This is a workaround for async initialization of the database tables; see github issues #734, #497
     install_survey_answer_table(z_context:prune_for_spawn(Context)),
-    
+
     #datamodel{
         categories=[
             {survey, undefined, [{title, <<"Survey">>}]},
@@ -74,13 +74,13 @@ install_survey_answer_table(Context) ->
 
             % Add some indices and foreign keys, ignore errors
             z_db:equery("create index fki_survey_answer_survey_id on survey_answer(survey_id)", Context),
-            z_db:equery("alter table survey_answer add 
-                        constraint fk_survey_answer_survey_id foreign key (survey_id) references rsc(id) 
+            z_db:equery("alter table survey_answer add
+                        constraint fk_survey_answer_survey_id foreign key (survey_id) references rsc(id)
                         on update cascade on delete cascade", Context),
 
             z_db:equery("create index fki_survey_answer_user_id on survey_answer(user_id)", Context),
-            z_db:equery("alter table survey_answer add 
-                        constraint fk_survey_answer_user_id foreign key (user_id) references rsc(id) 
+            z_db:equery("alter table survey_answer add
+                        constraint fk_survey_answer_user_id foreign key (user_id) references rsc(id)
                         on update cascade on delete cascade", Context),
 
             %% For aggregating answers to survey questions (group by name)
@@ -88,16 +88,16 @@ install_survey_answer_table(Context) ->
             z_db:equery("create index survey_answer_survey_question_key on survey_answer(survey_id, question)", Context),
             z_db:equery("create index survey_answer_survey_user_key on survey_answer(survey_id, user_id)", Context),
             z_db:equery("create index survey_answer_survey_persistent_key on survey_answer(survey_id, persistent)", Context);
-                        
+
         true ->
             ok
     end.
-    
-    
+
+
 
 survey_to_blocks(Id, Context) ->
     case m_rsc:p_no_acl(Id, survey, Context) of
-        undefined -> 
+        undefined ->
             ok;
         {survey, QIds, Qs} ->
             QBlocks = [
@@ -109,11 +109,11 @@ survey_to_blocks(Id, Context) ->
                                 [
                                     {survey, undefined},
                                     {blocks, CurrBlocks++QBlocks}
-                                ], 
+                                ],
                                 z_acl:sudo(Context)),
             ok
     end.
-    
+
     to_list(undefined) -> [];
     to_list(<<>>) -> [];
     to_list(L) when is_list(L) -> L.
@@ -148,4 +148,4 @@ survey_to_blocks(Id, Context) ->
         ].
 
 
-    
+

@@ -41,7 +41,7 @@
     content=q.content
     other=q.other
     template=q.template
-}] as result 
+}] as result
 %}
 <form id="log_filter" method="GET" action="{% url log_email %}">
     <table class="table">
@@ -102,7 +102,7 @@
             <td class="col-lg-2 col-md-2">
             <button class="btn btn-primary btn-xs" type="submit">{_ Filter _}</button>
             <button class="btn btn-default btn-xs" id="filter_clear">{_ All _}</button>
-            {% wire id="filter_clear" 
+            {% wire id="filter_clear"
                 action={set_value selector="#log_filter input" value=""}
                 action={set_value selector="#log_status" value=""}
                 action={set_value selector="#log_severity" value="4"}
@@ -128,7 +128,7 @@
                 <td colspan="9">
                 {% button
                     class="btn btn-primary"
-                    text="More..." 
+                    text="More..."
                     action={moreresults
                         result=result
                         target="log-area"

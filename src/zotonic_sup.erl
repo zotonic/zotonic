@@ -238,6 +238,6 @@ get_extensions() ->
 sni_fun(ServerName) ->
     case z_sites_dispatcher:get_host_for_domain(ServerName) of
         undefined -> undefined;
-        {ok, Host} -> 
+        {ok, Host} ->
             z_notifier:first(#ssl_options{server_name=ServerName}, z_context:new(Host))
     end.

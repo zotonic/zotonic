@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -97,17 +97,17 @@ event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, Mo
               false ->
                   IsCatInclude = z_convert:to_bool(proplists:get_value(catinclude, Args)),
                   IdRows = lists:zip3(lists:map(fun to_id/1, Rows), Rows, lists:seq(FirstRow, FirstRow+length(Rows)-1)),
-                  lists:map(fun({Id, ResultRow, RowNr}) -> 
+                  lists:map(fun({Id, ResultRow, RowNr}) ->
                                 Vars = [
-                                        {id, Id}, {result_row, ResultRow}, 
+                                        {id, Id}, {result_row, ResultRow},
                                         {row, RowNr}, {is_first, RowNr == FirstRow}
-                                        | Args 
+                                        | Args
                                        ],
                                 case IsCatInclude of
                                     true -> z_template:render({cat, Template}, Vars, Context1);
                                     false -> z_template:render(Template, Vars, Context1)
                                 end
-                            end, 
+                            end,
                             IdRows)
                   end,
     z_render:appear_bottom(TargetId, Html, Context1).

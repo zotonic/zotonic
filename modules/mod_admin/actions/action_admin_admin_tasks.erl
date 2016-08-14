@@ -21,21 +21,21 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Flush the caches of all sites.
 event(#postback{message={admin_tasks, [{task, <<"flush">>}]}}, Context) ->
-    do(fun z:flush/0, 
-       ?__(<<"Caches have been flushed."/utf8>>, Context), 
+    do(fun z:flush/0,
+       ?__(<<"Caches have been flushed."/utf8>>, Context),
        Context);
 
 %% @doc Reset templates.
 event(#postback{message={admin_tasks, [{task, <<"templates_reset">>}]}}, Context) ->
-    do(fun() -> z_template:reset(Context) end, 
-       ?__(<<"Templates will be recompiled."/utf8>>, Context), 
+    do(fun() -> z_template:reset(Context) end,
+       ?__(<<"Templates will be recompiled."/utf8>>, Context),
        Context);
 
 
 %% @doc Pivot everything
 event(#postback{message={admin_tasks, [{task, <<"pivot_all">>}]}}, Context) ->
-    do(fun() -> z_pivot_rsc:queue_all(Context) end, 
-       ?__(<<"The search index is rebuilding. Depending on the database size, this can take a long time."/utf8>>, Context), 
+    do(fun() -> z_pivot_rsc:queue_all(Context) end,
+       ?__(<<"The search index is rebuilding. Depending on the database size, this can take a long time."/utf8>>, Context),
        Context);
 
 %% @doc Renumber the category tree
@@ -46,7 +46,7 @@ event(#postback{message={admin_tasks, [{task, <<"site_reinstall">>}]}}, Context)
 
 %% @doc Renumber the category tree
 event(#postback{message={admin_tasks, [{task, <<"renumber_categories">>}]}}, Context) ->
-    do(fun() -> m_category:renumber(Context) end, 
+    do(fun() -> m_category:renumber(Context) end,
        ?__(<<"The category tree is rebuilding. This can take a long time."/utf8>>, Context),
        Context).
 

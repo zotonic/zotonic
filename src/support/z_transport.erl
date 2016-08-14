@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@
     session/4,
     user/3,
     user/4,
-    
+
     msg/4,
 
     transport/2,
@@ -149,8 +149,8 @@ data_decode(Bin) ->
     z_ubf:decode(Bin).
 
 -spec data_encode(any()) -> {ok, binary()}.
-data_encode([]) -> {ok, <<>>}; 
-data_encode(<<>>) -> {ok, <<>>}; 
+data_encode([]) -> {ok, <<>>};
+data_encode(<<>>) -> {ok, <<>>};
 data_encode(Data) ->
     z_ubf:encode(Data).
 
@@ -300,22 +300,22 @@ is_submit_event("submit") -> true;
 is_submit_event(submit) -> true;
 is_submit_event(_Type) -> false.
 
-incoming_postback_event(true, Module, Tag, Trigger, Target, Context) -> 
+incoming_postback_event(true, Module, Tag, Trigger, Target, Context) ->
     case z_validation:validate_query_args(Context) of
-        {ok, ContextEval} ->   
+        {ok, ContextEval} ->
             Module:event(#submit{message=Tag, form=Trigger, target=Target}, ContextEval);
         {error, ContextEval} ->
             %% TODO: Posted form did not validate, return any errors.
             ContextEval
     end;
-incoming_postback_event(false, Module, Tag, Trigger, Target, Context) -> 
+incoming_postback_event(false, Module, Tag, Trigger, Target, Context) ->
     Module:event(#postback{message=Tag, trigger=Trigger, target=Target}, Context).
 
 incoming_context_result(Result, Msg, Context) ->
     OptAck = maybe_ack(Result, Msg, Context),
     {Script, ContextClean} = z_script:split(Context),
     case iolist_to_binary(Script) of
-        <<>> -> 
+        <<>> ->
             {ok, OptAck, ContextClean};
         ScriptBin ->
             {ok, lists:flatten([OptAck, msg(page, javascript, ScriptBin, [{qos,0}])]), ContextClean}
@@ -384,7 +384,7 @@ maybe_set_page_session(PageId, Context) ->
             Context#context{session_pid=undefined}
     end.
 
-maybe_set_q(form, Qs, Context) -> 
+maybe_set_q(form, Qs, Context) ->
     set_q(Qs, Context);
 maybe_set_q(_Type, {q, Qs}, Context) ->
     set_q(Qs, Context);
@@ -397,7 +397,7 @@ maybe_auth_change({ok, Msgs, ContextOut} = Res, ContextIn) ->
     case is_auth_change(ContextOut, ContextIn) of
         true ->
             % Assume the new session-id comes along in the z_sid cookie
-            StatusMsg = msg(page, session, 
+            StatusMsg = msg(page, session,
                             #session_state{page_id=ContextOut#context.page_id, user_id=ContextOut#context.user_id},
                             []),
             {ok, lists:flatten([StatusMsg,Msgs]), ContextOut};
@@ -433,7 +433,7 @@ session_status_message(Context) ->
 session_status_ensure(Context) ->
     Context1 = z_context:ensure_all(Context),
     Reply = msg(page,
-                session, 
+                session,
                 #session_state{page_id=Context1#context.page_id, user_id=z_acl:user(Context1)},
                 []),
     {ok, Reply, Context1}.
@@ -460,8 +460,8 @@ decode_data(_Other, Data) ->
 
 maybe_ack(Result, #z_msg_v1{qos=N, msg_id=MsgId}, Context) when N > 0; Result =/= undefined ->
     #z_msg_ack{
-        qos=N, 
-        msg_id=MsgId, 
+        qos=N,
+        msg_id=MsgId,
         result=Result,
         page_id=Context#context.page_id
     };

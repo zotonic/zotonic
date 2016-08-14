@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -76,16 +76,16 @@ import_items([], _Types, _Context, ImportCount) ->
 import_items([D|Ds], Types, Context, ImportCount) ->
     MediaType = media_type(D),
     case lists:member(MediaType, Types) of
-        true -> 
+        true ->
             case import_item(import_rsc(MediaType, D, Context), Context) of
-                ok -> 
+                ok ->
                     import_items(Ds, Types, Context, ImportCount+1);
                 {error, _} ->
                     import_items(Ds, Types, Context, ImportCount)
             end;
         false ->
             import_items(Ds, Types, Context, ImportCount)
-    end.  
+    end.
 
 import_item(#import_resource{name=UniqueName} = Rsc, Context) ->
     case m_rsc:rid(UniqueName, Context) of

@@ -13,8 +13,8 @@
 <div class="tab-content">
 	 <div class="tab-pane active" id="survey-basics">
 		{% catinclude "_admin_edit_basics.tpl" id is_editable=is_editable languages=languages %}
-		{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages 
-			explanation=_"This text is shown as an introduction to the survey." 
+		{% catinclude "_admin_edit_body.tpl" id is_editable=is_editable languages=languages
+			explanation=_"This text is shown as an introduction to the survey."
 		%}
 		{% include "_admin_survey_edit_feedback.tpl" %}
 		{% catinclude "_admin_edit_depiction.tpl" id is_editable=is_editable languages=languages %}
@@ -57,7 +57,7 @@
 	window.z_survey_editor = new ZSurveyEditor();
 {% endjavascript %}
 
-{% wire name="insert-block" 
+{% wire name="insert-block"
 		delegate=`survey_admin`
 		postback={insert_block id=id}
 %}

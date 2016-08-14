@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -76,7 +76,7 @@ handle_info({'DOWN', _MRef, _, _, _}, State) ->
     lists:foreach(fun({_WillId, Msg, UserId}) ->
                         z_mqtt:publish(Msg, z_acl:logon(UserId,Context))
                   end,
-                  State#state.wills), 
+                  State#state.wills),
     {stop, normal, State}.
 
 terminate(_Reason, _State) ->
@@ -86,7 +86,7 @@ code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
 maybe_delete_will(Id, Wills) ->
-    lists:keydelete(Id, 1, Wills). 
+    lists:keydelete(Id, 1, Wills).
 
 prune(Wills) ->
     case length(Wills) > ?MAX_WILLS of

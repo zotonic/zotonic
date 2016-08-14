@@ -23,7 +23,7 @@ order_by_blocks(As, Bs) ->
 order_by_blocks(Rest, [], Acc) ->
     lists:reverse(Acc, Rest);
 order_by_blocks(As, [B|Bs], Acc) ->
-    Name = proplists:get_value(name, B), 
+    Name = proplists:get_value(name, B),
     case proplists:lookup(Name, As) of
         none -> order_by_blocks(As, Bs, Acc);
         Answer -> order_by_blocks(proplists:delete(Name, As), Bs, [Answer|Acc])
@@ -61,7 +61,7 @@ escape_check(V) ->
 
 qprops(Block) when is_list(Block) ->
     lists:filter(fun keep_qprop/1, Block);
-qprops(Block) -> 
+qprops(Block) ->
     Block.
 
 keep_qprop({prompt, _}) -> true;
@@ -81,7 +81,7 @@ block(Name, [B|Rest]) ->
     case proplists:get_value(name, B) of
         Name -> B;
         _ -> block(Name, Rest)
-    end. 
+    end.
 
 answer(N, Block, Context) ->
     answer_1(proplists:get_value(type, Block), N, Block, Context).
@@ -96,21 +96,21 @@ answer_1(<<"survey_thurstone">>, N, Block, Context) ->
     end;
 answer_1(<<"survey_yesno">>, N, Block, Context) ->
     case z_convert:to_bool(N) of
-        true -> default(proplists:get_value(yes, Block), <<"yes">>, Context); 
+        true -> default(proplists:get_value(yes, Block), <<"yes">>, Context);
         false -> default(proplists:get_value(no, Block), <<"no">>, Context)
     end;
 answer_1(<<"survey_truefalse">>, N, Block, Context) ->
     case z_convert:to_bool(N) of
-        true -> default(proplists:get_value(true, Block), <<"true">>, Context); 
+        true -> default(proplists:get_value(true, Block), <<"true">>, Context);
         false -> default(proplists:get_value(false, Block), <<"false">>, Context)
     end;
-answer_1(_, N, _, _Context) -> 
+answer_1(_, N, _, _Context) ->
     N.
 
 thurs_answer(N1, Ans) ->
     proplists:get_value(N1, Ans, N1).
 
-default({trans, _} = Tr, A, Context) -> 
+default({trans, _} = Tr, A, Context) ->
     case default(z_trans:lookup_fallback(Tr, Context), xx, Context) of
         xx -> A;
         _ -> Tr

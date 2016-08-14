@@ -3,28 +3,28 @@
     <head>
         <title>zotonic</title>
 
-        {% lib 
+        {% lib
         "/css/zp-base.css"
         "/css/zp-type.css"
         "/css/zp-forms.css"
         "/css/zp-project.css"
-        "/css/zp-growl.css" 
-        "/css/zp-dialog.css" 
+        "/css/zp-growl.css"
+        "/css/zp-dialog.css"
         %}
 
-		<!--[if IE]><link href="/lib/css/zp-ie.css" type="text/css" media="screen" rel="stylesheet" /><![endif]--> 
+		<!--[if IE]><link href="/lib/css/zp-ie.css" type="text/css" media="screen" rel="stylesheet" /><![endif]-->
     </head>
 
     <body>
 		{% wire type="unload" action={alert text="Bye"} %}
-		<div class="zp-wrapper"> 
+		<div class="zp-wrapper">
 	        <h1>Hello, new world {{ helloworld_counter }}</h1>
-		
-			<div class="zp-50 content"> 
-				<div class="padding"> 
+
+			<div class="zp-50 content">
+				<div class="padding">
 
 					<h2>The menu should be below</h2>
-					
+
 					{% menu %}
 
 					<h2>Postbacks which give some content</h2>
@@ -33,13 +33,13 @@
 						{% button text="Insert Top" postback="insert_top"  %}
 						{% button text="Insert Bottom" postback="insert_bottom" %}
 					</p>
-	
+
 					<div class="clear"></div>
 
 					<div id="content" style="border: 1px solid green; padding: 10px; width: 100px">
 						This is the content div
 					</div>
-		
+
 					<h2>Some drag/drop testing</h2>
 
 					{% draggable id="drag1" tag="drag1" %}
@@ -48,7 +48,7 @@
 							Drag Me
 						</p>
 					</div>
-		
+
 					<div class="clear">&nbsp;</div>
 
 					{% droppable id="drop1" tag="drop1" %}
@@ -84,16 +84,16 @@
 					{% sortable id="s3" %}
 					{% sortable id="s4" %}
 					{% sortable id="s5" %}
-					
+
 					<h2>Some effects</h2>
-					
+
 					<div class="zp-20">
 						{% button text="Hide" action={hide target="ef"} %}
 						{% button text="Show" action={show target="ef"} %}<br/><br/>
 						{% button text="Fade" action={fade_out target="ef"} %}
 						{% button text="Appear" action={fade_in target="ef"} %}<br/><br/>
 						{% button text="Toggle" action={toggle target="ef"} %}<br/><br/>
-						
+
 						<a id="tgl" href="#">wired toggle</a>
 						{% wire id="tgl" action={toggle target="ef"} %}
 					</div>
@@ -107,25 +107,25 @@
 				</div>
 			</div>
 
-			<div class="zp-50"> 
-				<div class="padding"> 
+			<div class="zp-50">
+				<div class="padding">
 					<h2>Some postbacks</h2>
 
 					<h3>Javascript confirm</h3>
 					<p>
 						{% button text="Show Confirm" postback="show_confirm" %}<br/><br/>
 					</p>
-				
+
 					<h3>Growl</h3>
 					<p>
 						{% button text="Show Temporary Growl" postback="show_growl"  %}<br/><br/>
 						{% button text="Show Permanent Growl" postback="show_growl_stay" %}<br/><br/>
 					</p>
-					
+
 					<hr/>
-					
+
 					<h2>Form validation</h2>
-				
+
 					{% wire id="myform" type="submit" postback="some_tag" action={toggle target="ef"} %}
 					<form id="myform" method="POST" action="postback">
 					{# You could also use: delegate="module_handling_form" #}
@@ -133,7 +133,7 @@
 						<label for="email">e-mail</label>
 						<input class="form-control" type="text" id="email" name="email" value="" />
 						{% validate id="email" type={presence} type={email} %}
-						
+
 						<div class="clear"></div>
 						<button type="submit">Submit</button>
 						<div class="clear"></div>
@@ -141,14 +141,14 @@
 					</form>
 
 					<h2>Redirect to somewhere</h2>
-					
+
 					{% button text="Redirect to /" action={redirect location="/"} %}
 				</div>
 			</div>
 		</div>
-		
+
 		<hr/>
-		
+
 		<div class="zp-wrapper">
 			<div class="padding">
 				<h2>Dynamic id with <tt>#id</tt></h2>
@@ -161,7 +161,7 @@
 				<h2>Cached include</h2>
 
 				<p>Include below is cached for 10 seconds</p>
-				
+
 				{% include "test_included.tpl" maxage=10 %}
 
 				<h2>Some images</h2>
@@ -189,9 +189,9 @@
 				<h2>Id test (cont)</h2>
 
 				And the id of above again: {{ #id }}
-				
+
 				<h2>catinclude test</h2>
-				
+
 				<p><strong>A person</strong></p>
 				{% catinclude "catinclude_test.tpl" 1 %}
 
@@ -199,7 +199,7 @@
 				{% catinclude "catinclude_test.tpl" 2 %}
 
 				<h2>all catinclude test</h2>
-				
+
 				{% all catinclude "catinclude_test.tpl" 1 %}
 			</div>
 		</div>

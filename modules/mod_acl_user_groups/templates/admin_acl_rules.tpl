@@ -7,8 +7,8 @@
         <div id="acl-rules">
             {% live template="_admin_acl_rules_list.tpl"
                     topic="~site/acl-rules/edit-rebuild"
-                    kind=kind 
-                    group=q.g 
+                    kind=kind
+                    group=q.g
                     is_editable=is_editable
             %}
         </div>
@@ -36,9 +36,9 @@
     </div>
 
     {% if is_editable %}
-        {% wire id=#cgrights 
+        {% wire id=#cgrights
             type="submit"
-            postback=`acl_collab_config` 
+            postback=`acl_collab_config`
             delegate=`admin_acl_rules`
         %}
         <fieldset>

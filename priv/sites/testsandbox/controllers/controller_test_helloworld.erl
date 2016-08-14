@@ -46,7 +46,7 @@ event(#sort{items=Drags, drop=Drop}, Context) ->
 event(#submit{}, Context) ->
     Email = z_context:get_q_validated("email", Context),
     z_render:wire({growl, [{text,["You posted a valid email address \"",Email,"\""]}]}, Context);
-    
+
 event(Event, Context) ->
     Error = io_lib:format("~p: unknown event ~p", [?MODULE,Event]),
     z_render:wire({growl, [{text,Error},{stay,1}]}, Context).
@@ -60,4 +60,4 @@ periodic(_Args, Context) ->
     ?MODULE:periodic([], Context).
 
 
-    
+

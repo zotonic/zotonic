@@ -1,4 +1,4 @@
-{% extends "base.tpl" %}	
+{% extends "base.tpl" %}
 
 {% block title %}MQTT Test{% endblock %}
 

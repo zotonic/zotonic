@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,8 +51,8 @@ import(Def, IsReset, Context) ->
     file:delete(Def#filedef.filename),
 
     %% Drop (optionally) the first row, empty rows and the comment rows (starting with a '#')
-    Rows1 = case Def#filedef.skip_first_row of 
-                true -> tl(Rows); 
+    Rows1 = case Def#filedef.skip_first_row of
+                true -> tl(Rows);
                 _ -> Rows
             end,
     State = import_rows(Rows1, 1, Def, new_importstate(IsReset), Context),
@@ -84,7 +84,7 @@ new_importstate(IsReset) ->
 %%====================================================================
 
 %% @doc Import all rows.
-import_rows([], _RowNr, _Def, ImportState, _Context) -> 
+import_rows([], _RowNr, _Def, ImportState, _Context) ->
     ImportState;
 import_rows([[<<$#, _/binary>>|_]|Rows], RowNr, Def, ImportState, Context) ->
     import_rows(Rows, RowNr+1, Def, ImportState, Context);
@@ -206,7 +206,7 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, C
             %    For this we will update a second time with all the changed values
             %    (also pass any import-data from an older import module)
             RawRscPre = get_updated_props(Id, NormalizedRow, Context),
-            Edited = diff_raw_props(RawRscPre, 
+            Edited = diff_raw_props(RawRscPre,
                                     get_value(rsc_data, PrevImportData, []),
                                     m_rsc:p_no_acl(Id, import_csv_original, Context)),
 
@@ -248,7 +248,7 @@ diff_raw_props(Current, LastImport, undefined) ->
     % updated in the last import.
     % Bit primitive for now ....
     case LastImport -- Current of
-        [] -> 
+        [] ->
             [];
         Diff ->
             Keys = [ K || {K, _} <- Diff ],
@@ -334,12 +334,12 @@ import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Cont
 import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context) ->
     % Find the object
     Name = map_one_normalize(name, ObjectCat, map_one(ObjectRowField, Row, State)),
-    case Name of 
+    case Name of
         <<>> -> fail;
         Name ->
             case name_lookup(Name, State, Context) of
                 %% Object doesn't exist
-                {undefined, _State1} -> 
+                {undefined, _State1} ->
                     fail;
                 %% Object exists
                 {RscId, _State1} ->
@@ -349,19 +349,19 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context
     end;
 import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, State, Context) ->
     Name = map_one_normalize(name, ObjectCat, map_one(ObjectRowField, Row, State)),
-    case Name of 
+    case Name of
         <<>> ->
             fail;
         Name ->
             case name_lookup(Name, State, Context) of
                 %% Object doesn't exist, create it using the objectprops
-                {undefined, _State1} -> 
+                {undefined, _State1} ->
                     lager:debug("Import CSV: creating object: ~p", [[{category, ObjectCat}, {name, Name} | ObjectProps]]),
                     case m_rsc:insert([{category, ObjectCat}, {name, Name} | ObjectProps], Context) of
                         {ok, RscId} ->
                             {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),
                             EdgeId;
-                        {error, _Reason} -> 
+                        {error, _Reason} ->
                             fail
                     end;
                 %% Object exists
@@ -392,7 +392,7 @@ name_lookup(Name, #importstate{name_to_id=Tree} = State, Context) ->
     case gb_trees:lookup(Name, Tree) of
         {value, V} ->
             {V, State};
-        none -> 
+        none ->
             V = m_rsc:rid(Name, Context),
             {V, add_name_lookup(State, Name, V)}
     end.
@@ -412,12 +412,12 @@ map_fields(Mapping, Row, State) ->
         {"visible_for", 0}
     ],
     Mapped = [map_def(MapOne, Row, State) || MapOne <- Mapping],
-    Type = case proplists:get_value("category", Mapped) of 
+    Type = case proplists:get_value("category", Mapped) of
                undefined -> throw({import_error, no_category_in_import_definition});
                T -> T
            end,
 	% Normalize and remove undefined values
-    P = lists:filter(fun({_K,undefined}) -> false; (_) -> true end, 
+    P = lists:filter(fun({_K,undefined}) -> false; (_) -> true end,
 					 [{K, map_one_normalize(K, Type, V)} || {K,V} <- Mapped]),
     add_defaults(Defaults, P).
 
@@ -435,7 +435,7 @@ map_one_normalize("name", _Type, {name_prefix, Prefix, V}) ->
                L when L > CheckL ->
                    % If name is too long, make a unique thing out of it.
                    z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ base64:encode_to_string(checksum(V)));
-               _ -> 
+               _ ->
                    z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ z_string:to_name(V))
            end,
     z_convert:to_binary(Name);
@@ -467,7 +467,7 @@ map_one({surroundspace, Field}, Row, State) ->
     case z_string:trim(map_one(Field, Row, State)) of
         <<>> ->  <<" ">>;
         Val -> <<32, Val/binary, 32>>
-    end;           
+    end;
 map_one({name_prefix, Prefix, Rest}, Row, State) ->
     {name_prefix, Prefix, map_one(Rest, Row, State)};
 
@@ -516,13 +516,13 @@ concat([X]) when is_atom(X); is_tuple(X) ->
 concat(L) ->
     iolist_to_binary(L).
 
-concat_spaces([]) -> 
+concat_spaces([]) ->
     <<>>;
 concat_spaces([X]) when is_atom(X); is_tuple(X) ->
     X;
 concat_spaces([H|L]) ->
     iolist_to_binary(concat_spaces(L, [H])).
-    
+
 concat_spaces([], Acc) ->
     lists:reverse(Acc);
 concat_spaces([C], Acc) ->
@@ -542,7 +542,7 @@ add_defaults(D, P) ->
 add_defaults([], _P, Acc) ->
     Acc;
 add_defaults([{K,V}|Rest], P, Acc) ->
-    case proplists:get_value(K, P) of 
+    case proplists:get_value(K, P) of
         undefined ->
             add_defaults(Rest, P, [{K,V}|Acc]);
         _ ->

@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,11 +61,11 @@ encode_value({Y,M,D} = Date, _IsRaw, Context)
 	quote(z_datetime:format_utc({Date, {0,0,0}}, "Y-m-d", Context));
 encode_value(?ST_JUTTEMIS, _IsRaw, _Context) ->
 	<<>>;
-encode_value({{9999,M,D}, {H,I,S}}, _IsRaw, _Context) 
+encode_value({{9999,M,D}, {H,I,S}}, _IsRaw, _Context)
 	when is_integer(M), is_integer(D),
 		 is_integer(H), is_integer(I), is_integer(S) ->
 	<<>>;
-encode_value({{Y,M,D}, {H,I,S}} = Date, _IsRaw, Context) 
+encode_value({{Y,M,D}, {H,I,S}} = Date, _IsRaw, Context)
 	when is_integer(Y), is_integer(M), is_integer(D),
 		 is_integer(H), is_integer(I), is_integer(S) ->
 	try

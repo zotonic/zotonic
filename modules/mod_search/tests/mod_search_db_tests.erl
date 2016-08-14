@@ -5,7 +5,7 @@
 
 
 wait_for(QueryId, ItemId) ->
-    receive 
+    receive
         {'$gen_cast',
          {#rsc_query_item{query_id=QueryId, match_id=ItemId}, _}} ->
             ok;
@@ -23,7 +23,7 @@ query_hooks_test() ->
     C = z_acl:sudo(z_context:new(testsandboxdb)),
 
     z_notifier:observe(rsc_query_item, self(), C),
-    
+
     %% Create a new query
     {ok, Query1} = m_rsc:insert([{category, 'query'},
                                  {title, <<"All featured articles">>},

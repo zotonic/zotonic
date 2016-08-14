@@ -7,6 +7,6 @@ get_admin_url(Site, _Context) ->
     case z_dispatcher:url_for(admin, SiteContext) of
         undefined ->
             undefined;
-        U -> 
+        U ->
             z_dispatcher:abs_url(U, SiteContext)
     end.

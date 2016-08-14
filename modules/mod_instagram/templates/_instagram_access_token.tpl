@@ -3,7 +3,7 @@
 <p class="help-block">
     {% if m.identity[m.acl.user].instagram %}
         <a href="#copy" id="{{ #copytoken }}">{_ Use the access token for the Instagram account _}: <b>{{ m.identity[m.acl.user].instagram.propb.username|escape }}</b></a>
-        {% wire id=#copytoken 
+        {% wire id=#copytoken
                 action={set_value target="instagram_access_token" value=m.identity[m.acl.user].instagram.propb.access_token}
         %}
     {% else %}

@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
     Script = case z_convert:to_atom(Type) of
         'show'          -> [<<"show(">>, map_speed(Speed), $), $;];
         'hide'          -> [<<"hide(">>, map_speed(Speed), $), $;];
-        'remove'        -> 
+        'remove'        ->
             case proplists:get_value(fadeout, Args) of
                 true -> [<<"fadeOut(">>, map_speed_default(Speed), <<",function() { $(this).remove(); });">>];
                 _ -> <<"remove();">>
@@ -78,16 +78,16 @@ map_speed("normal") -> [];
 map_speed(undefined) -> [];
 map_speed(<<>>) -> [];
 map_speed([]) -> [];
-map_speed(Speed) -> 
+map_speed(Speed) ->
     case z_utils:only_digits(Speed) of
         true -> Speed;
         false -> [$', z_utils:js_escape(Speed), $']
     end.
 
-    
+
 to_js(Options) ->
     F = fun({Key, Value}) ->
-        case Value of 
+        case Value of
             true -> [Key, <<": true">>];
             false -> [Key, <<": false">>];
             V -> [Key, $', z_utils:js_escape(V), $']

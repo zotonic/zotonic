@@ -1,4 +1,4 @@
-{% lib 
+{% lib
     "admin-bootstrap3/js/bootstrap.min.js"
 %}
 
@@ -17,7 +17,7 @@
     "js/jquery.ui.nestedSortable.js"
 
     "js/modules/z.adminwidget.js"
-   
+
     "js/modules/z.live.js"
     "js/modules/z.notice.js"
     "js/modules/z.tooltip.js"

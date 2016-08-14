@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@
 
 
 
-init(_Args) -> 
+init(_Args) ->
     {ok, []}.
 
 
@@ -63,7 +63,7 @@ response(ReqData, Context) ->
             % Request was not signed.
             mod_oauth:authenticate("Not an OAuth request.", ReqData, Context);
         true ->
-            mod_oauth:serve_oauth(ReqData, Context, 
+            mod_oauth:serve_oauth(ReqData, Context,
                           fun(URL, Params, Consumer, Signature) ->
                                   %Token = m_oauth_app:secrets_for_verify(none, Consumer, mod_oauth:oauth_param("oauth_token", ReqData), Context),
                                   SigMethod = mod_oauth:oauth_param("oauth_signature_method", ReqData),

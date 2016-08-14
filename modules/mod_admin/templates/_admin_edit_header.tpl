@@ -15,7 +15,7 @@ languages
             {_ Modified: _} {{ r.modified|date:"Y-m-d H:i" }}
             {% if r.modifier_id %}
                 {_ by _} <a href="{% url admin_edit_rsc id=r.modifier_id %}">{{ m.rsc[r.modifier_id].title }}</a>
-            {% endif %}  
+            {% endif %}
         </span>
     </div>
 

@@ -11,7 +11,7 @@
 		<li><a href="{% url admin_comments %}">{_ Comments _}</a></li>
 		<li class="active">{_ Settings _}</li>
     </ul>
-    
+
     <div class="admin-header">
         <h2>{_ Comment Form Settings _}</h2>
         <p>{_ Here you find settings to configure the comment module to suit your needs. _}</p>
@@ -37,7 +37,7 @@
 
         </div>
     </div>
-    
+
 </form>
 
 

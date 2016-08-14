@@ -8,7 +8,7 @@
     {% else %}
         <p><a id="back_to_logon" class="btn btn-default" href="{% url logon %}">{_ OK _}</a></p>
     {% endif %}
-    
+
 {% elseif stage == "verification_pending" %}
 
     <h2 class="z-logon-title">{_ Verify your account _}</h2>
@@ -23,7 +23,7 @@
     <h2 class="z-logon-title">{_ Check your email _}</h2>
     <p>{_ In the email you will find instructions on how to confirm your account. _}</p>
     <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
-    
+
 {% elseif stage == "verification_error" %}
 
     <h2 class="z-logon-title error">{_ Sorry, could not send the verification message. _}</h2>

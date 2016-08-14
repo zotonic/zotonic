@@ -69,7 +69,7 @@
     <input style="position:absolute;top:-9999px;" type="text" id="fake-username" name="fake-username" class="nosubmit" value="" />
     <input style="position:absolute;top:-9999px;" type="password" id="fake-password" name="fake-password" class="nosubmit" value="" />
     <!-- End Safari -->
-	
+
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="new_username">{_ Username _}</label>
         <div class="col-md-9">

@@ -10,9 +10,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@
 render(ScompName, Args, Vars, Context) ->
     case z_module_indexer:find(scomp, ScompName, Context) of
         {ok, #module_index{erlang_module=ModuleName}} ->
-            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context), 
+            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context),
             render_scomp_module(ModuleName, Args, Vars, ScompContext, Context);
         {error, enoent} ->
             %% No such scomp, as we can switch on/off functionality we do a quiet skip
@@ -43,7 +43,7 @@ render(ScompName, Args, Vars, Context) ->
 render_optional(ScompName, Args, Vars, Context) ->
     case z_module_indexer:find(scomp, ScompName, Context) of
         {ok, #module_index{erlang_module=ModuleName}} ->
-            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context), 
+            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context),
             render_scomp_module(ModuleName, ['$optional'|Args], Vars, ScompContext, Context);
         {error, enoent} ->
             <<>>
@@ -52,7 +52,7 @@ render_optional(ScompName, Args, Vars, Context) ->
 render_all(ScompName, Args, Vars, Context) ->
     case z_module_indexer:find(scomp, ScompName, Context) of
         {ok, #module_index{erlang_module=ModuleName}} ->
-            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context), 
+            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context),
             render_scomp_module(ModuleName, [{'$all', true}|Args], Vars, ScompContext, Context);
         {error, enoent} ->
             <<>>
@@ -90,8 +90,8 @@ vary(ModuleName, Args, ScompContext) ->
             %% Scomp asks default behaviour, check the arguments for caching args
             MaxAge = proplists:get_value(maxage, Args),
             case z_convert:to_integer(MaxAge) of
-                undefined -> 
-                    nocache; 
+                undefined ->
+                    nocache;
                 Max ->
                     Vary  = proplists:get_all_values(vary, Args),
                     Args1 = proplists:delete(maxage, Args),

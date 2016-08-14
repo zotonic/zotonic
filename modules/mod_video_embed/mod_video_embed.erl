@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,11 +53,11 @@
 -spec observe_rsc_update(#rsc_update{}, {boolean(), list()}, #context{}) -> {boolean(), list()}.
 observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context) ->
     case proplists:get_value(video_embed_code, Props) of
-        undefined -> 
+        undefined ->
             {Changed, Props};
-        [] -> 
+        [] ->
             {true, proplists:delete(video_embed_code, Props)};
-        <<>> -> 
+        <<>> ->
             {true, proplists:delete(video_embed_code, Props)};
         EmbedCodeRaw ->
             case z_acl:is_allowed(insert, #acl_media{mime=?EMBED_MIME}, Context) of
@@ -77,13 +77,13 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
                 false ->
                     ok
             end,
-            Props1 = proplists:delete(video_embed_code, 
+            Props1 = proplists:delete(video_embed_code,
                         proplists:delete(video_embed_service, Props)),
             {true, Props1}
     end;
 observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, Props}, Context) ->
     case proplists:is_defined(video_embed_code, Props) of
-        true -> 
+        true ->
             OldMediaProps = m_media:get(Id, Context),
             EmbedChanged = case proplists:get_value(video_embed_code, Props) of
                 Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= [] ->
@@ -93,10 +93,10 @@ observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, Props}, Context)
                             false;
                         _ ->
                             case proplists:get_value(mime, OldMediaProps) of
-                                ?EMBED_MIME -> 
+                                ?EMBED_MIME ->
                                     m_media:delete(Id, Context),
                                     true;
-                                _ -> 
+                                _ ->
                                     false
                             end
                     end;
@@ -121,15 +121,15 @@ observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, Props}, Context)
                                 andalso z_utils:are_equal(proplists:get_value(video_embed_service, OldMediaProps), EmbedService)
                             of
                                 true ->
-                                    false; 
-                                false -> 
+                                    false;
+                                false ->
                                     ok = m_media:replace(Id, MediaProps, Context),
                                     spawn_preview_create(Id, MediaProps, Context),
                                     true
                             end
                     end
             end,
-            Props1 = proplists:delete(video_embed_code, 
+            Props1 = proplists:delete(video_embed_code,
                         proplists:delete(video_embed_service, Props)),
             {Changed or EmbedChanged, Props1};
         false ->
@@ -187,8 +187,8 @@ observe_media_import(#media_import{host_rev=[<<"com">>, <<"vimeo">> | _], metada
 observe_media_import(#media_import{}, _Context) ->
     undefined.
 
-media_import(Service, Descr, MD, MI) ->    
-    H = z_convert:to_integer(z_url_metadata:p([<<"og:video:height">>, <<"twitter:player:height">>], MD)), 
+media_import(Service, Descr, MD, MI) ->
+    H = z_convert:to_integer(z_url_metadata:p([<<"og:video:height">>, <<"twitter:player:height">>], MD)),
     W = z_convert:to_integer(z_url_metadata:p([<<"og:video:width">>, <<"twitter:player:width">>], MD)),
     VideoId = fetch_videoid(Service, MI#media_import.url),
     case is_integer(H) andalso is_integer(W) andalso VideoId =/= <<>> of
@@ -220,7 +220,7 @@ media_import(Service, Descr, MD, MI) ->
 fetch_videoid_from_embed(_Service, undefined) ->
     {<<>>, undefined};
 fetch_videoid_from_embed(Service, EmbedCode) ->
-    case re:run(EmbedCode, 
+    case re:run(EmbedCode,
                 <<"(src|href)=\"([^\"]*)\"">>,
                 [global, notempty, {capture, all, binary}])
     of
@@ -288,7 +288,7 @@ embed_code(vimeo, H, W, V) ->
 event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
-    Callback = proplists:get_value(callback, EventProps), 
+    Callback = proplists:get_value(callback, EventProps),
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
     EmbedService = z_context:get_q("video_embed_service", Context),
     EmbedCode = z_context:get_q_validated("video_embed_code", Context),
@@ -316,7 +316,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 {ok, MediaId} ->
                     spawn_preview_create(MediaId, Props, Context),
 
-                    {_, ContextLink} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, 
+                    {_, ContextLink} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate,
                                                          MediaId, Callback, Context),
 
                     ContextRedirect = case SubjectId of
@@ -335,7 +335,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                     lager:error("[mod_video_embed] Error in add_video_embed: ~p on ~p", [Error, Props]),
                     z_render:growl_error("Could not create the media page.", Context)
             end;
-        
+
         %% Update the current page
         N when is_integer(N) ->
             Props = [
@@ -350,7 +350,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                     z_render:growl_error("Could not update the page with the new embed code.", Context)
             end
     end.
-    
+
 
 %%====================================================================
 %% support functions
@@ -360,11 +360,11 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 %% Fetch or create a preview for the movie
 spawn_preview_create(MediaId, InsertProps, Context) ->
     case z_convert:to_binary(proplists:get_value(video_embed_service, InsertProps)) of
-        <<"youtube">> -> 
+        <<"youtube">> ->
             spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
-        <<"vimeo">> -> 
+        <<"vimeo">> ->
             spawn(fun() -> preview_vimeo(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
-        <<"yandex">> -> 
+        <<"yandex">> ->
             spawn(fun() -> preview_yandex(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
         _ -> nop
     end.
@@ -418,7 +418,7 @@ preview_vimeo(MediaId, InsertProps, Context) ->
 %% @todo Make this more robust wrt http errors.
 preview_yandex(MediaId, InsertProps, Context) ->
     case z_convert:to_binary(proplists:get_value(video_embed_code, InsertProps)) of
-        <<>> -> 
+        <<>> ->
             static_preview(MediaId, "images/yandex.jpg", Context);
         Embed ->
             case re:run(Embed, "flv\\.video\\.yandex\\.ru/lite/([^/]+)/([^\"'&/#]+)", [{capture, [1, 2], list}]) of

@@ -1,15 +1,15 @@
 {% wire
-    id=#form type="submit" 
+    id=#form type="submit"
 	postback={new_page
 	    subject_id=subject_id
         object_id=object_id
 	    predicate=predicate
-	    redirect=redirect 
+	    redirect=redirect
 	    actions=actions
 	    callback=callback
         objects=objects
 	}
-	delegate=delegate 
+	delegate=delegate
 %}
 <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 {% with #form as form %}
@@ -64,7 +64,7 @@
 	    <label class="control-label col-md-3" for="{{ #published }}">{_ Published _}</label>
 	    <div class="checkbox col-md-9">
 		    <label>
-		        <input type="checkbox" id="{{ #published }}" name="is_published" value="1" 
+		        <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
 				    {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked="checked"{% endif %} />
 		    </label>
 	    </div>

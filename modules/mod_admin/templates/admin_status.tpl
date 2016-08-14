@@ -14,7 +14,7 @@
             <div class="well">
 	            <div class="form-group">
                     <div>
-                        {% button class="btn btn-default" text=_"Flush system caches" action={admin_tasks task='flush'} %} 
+                        {% button class="btn btn-default" text=_"Flush system caches" action={admin_tasks task='flush'} %}
                         <span class="help-block">{_ Flush all URL dispatch rules, template- and library caches and other in-memory cached data. _}</span>
                     </div>
                 </div>
@@ -55,11 +55,11 @@
 
 	        <div class="form-group">
                 <div>
-                    {% button class="btn btn-default" text=_"Reinstall site datamodel" action={admin_tasks task='site_reinstall'} %} 
+                    {% button class="btn btn-default" text=_"Reinstall site datamodel" action={admin_tasks task='site_reinstall'} %}
                     <span class="help-block">{_ Runs the schema install command from the site's module again. _}</span>
                 </div>
             </div>
-            
+
         </div>
     </div>
 

@@ -83,7 +83,7 @@ html_ok(Context) ->
 
 html_error(Error, Context) ->
     Vars = [
-        {service, "LinkedIn"}, 
+        {service, "LinkedIn"},
         {is_safari8problem, is_safari8problem(Context)},
         {error, Error}
     ],
@@ -172,8 +172,8 @@ fetch_access_token(Code, Context) ->
     case httpc:request(post, {LinkedInUrl, [], "application/x-www-form-urlencoded", Body}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Json} = mochijson:binary_decode(Payload),
-            {<<"access_token">>, AccessToken} = proplists:lookup(<<"access_token">>, Json), 
-            {<<"expires_in">>, ExpiresIn} = proplists:lookup(<<"expires_in">>, Json), 
+            {<<"access_token">>, AccessToken} = proplists:lookup(<<"access_token">>, Json),
+            {<<"expires_in">>, ExpiresIn} = proplists:lookup(<<"expires_in">>, Json),
             {ok, AccessToken, ExpiresIn};
         Other ->
             lager:error("[linkedin] error fetching access token [code ~p] ~p", [Code, Other]),
@@ -200,7 +200,7 @@ fetch_user_data(AccessToken) ->
 
 % ensure_inets_profile(Profile) ->
 %     case inets:start(httpc, [{profile, Profile}]) of
-%         {ok, _Pid} -> 
+%         {ok, _Pid} ->
 %             httpc:set_options([{keep_alive_timeout, 1}], Profile),
 %             ok;
 %         {error, {already_started, _Pid}} ->
@@ -233,7 +233,7 @@ fields() ->
         $)
         ]).
 
-httpc_options() -> 
+httpc_options() ->
     [
         {sync, true},
         {body_format, binary}

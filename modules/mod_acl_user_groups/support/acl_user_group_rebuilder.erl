@@ -44,7 +44,7 @@
 	rebuild/3
 	]).
 
-%% @doc Fetch a the new rules and store them in a fresh ets table. 
+%% @doc Fetch a the new rules and store them in a fresh ets table.
 %%      The completed table is transfered to the acl module gen_server.
 rebuild(ModulePid, State, Context) ->
 	{ContentGroupIds, UserGroupIds, UserGroupPaths, Rules} = acl_user_groups_rules:expand(State, Context),
@@ -57,7 +57,7 @@ rebuild(ModulePid, State, Context) ->
 				]),
 	lists:foreach(
 		fun(K0) ->
-			{IsAllow, K} = extract_is_allow(K0), 
+			{IsAllow, K} = extract_is_allow(K0),
 			case K of
 				{CId, {CatId, insert, _IfOwner}, GId} ->
 					ets:insert(Table, {{CId, {CatId, insert, false}, GId}, IsAllow}),

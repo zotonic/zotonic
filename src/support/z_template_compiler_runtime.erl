@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -76,12 +76,12 @@ map_template(Template, _Vars, Context) ->
     map_template_1(Template, Context).
 
 
-find_next_template(_Filename, []) -> 
+find_next_template(_Filename, []) ->
     {error, enoent};
 find_next_template(Filename, [#module_index{filepath=Filename},Next|_]) ->
     Key = Next#module_index.key,
     {ok, #template_file{
-        filename=Next#module_index.filepath, 
+        filename=Next#module_index.filepath,
         template=Key#module_index_key.name
     }};
 find_next_template(Filename, [_|Rest]) ->
@@ -107,7 +107,7 @@ map_template_cat_1(Template, Stack, Context) when is_binary(Template) ->
                                 <<Root/binary, $., (z_convert:to_binary(Cat))/binary, Ext/binary>>,
                                 Context);
                     (_Cat, Found) ->
-                        Found  
+                        Found
                  end,
                  {error, enoent},
                  Stack)
@@ -137,7 +137,7 @@ map_template_all(Template, _Vars, Context) when is_binary(Template) ->
 map_template_all_1(Template, Context) ->
     Tpls = z_module_indexer:find_all(template, Template, Context),
     [ #template_file{
-                filename=Filename, 
+                filename=Filename,
                 template=Key#module_index_key.name
       } || #module_index{filepath=Filename, key=Key} <- Tpls ].
 
@@ -163,7 +163,7 @@ map_template_all_cat_1(Template, Stack, Context) when is_binary(Template) ->
                             Stack),
     Tpls = Templates ++ z_module_indexer:find_all(template, Template, Context),
     [ #template_file{
-                filename=Filename, 
+                filename=Filename,
                 template=Key#module_index_key.name
       } || #module_index{filepath=Filename, key=Key} <- Tpls ].
 
@@ -175,7 +175,7 @@ map_template_1(Template, Context) when is_binary(Template) ->
     case z_module_indexer:find(template, Template, Context) of
         {ok, #module_index{filepath=Filename, key=Key}} ->
             {ok, #template_file{
-                filename=Filename, 
+                filename=Filename,
                 template=Key#module_index_key.name
             }};
         {error, _} = Error ->
@@ -347,7 +347,7 @@ custom_tag(Tag, Args, Vars, Context) ->
 
 
 %% @doc Render image/image_url/media/url/lib tag. The Expr is the media item or dispatch rule.
--spec builtin_tag(template_compiler:builtin_tag(), Expr::term(), Args::list(), Vars::map(), Context::term()) -> 
+-spec builtin_tag(template_compiler:builtin_tag(), Expr::term(), Args::list(), Vars::map(), Context::term()) ->
             template_compiler:render_result().
 builtin_tag(Tag, Expr, Args, Vars, Context) ->
     builtin_tag_1(Tag, Expr, to_simple_values(Args, Context), Vars, Context).
@@ -369,7 +369,7 @@ builtin_tag_1(Tag, _Expr, _Args, _Vars, Context) ->
 
 %% @doc Render a block, cache the result for some time. Caching should be implemented by the runtime.
 %% @todo This needs to be updated for the modern ACL modules (see z_acl, args_to_visible_for)
--spec cache_tag(MaxAge::integer(), Name::binary(), Args::list(), function(), TplVars::map(), Context::term()) -> 
+-spec cache_tag(MaxAge::integer(), Name::binary(), Args::list(), function(), TplVars::map(), Context::term()) ->
                 template_compiler:render_result().
 cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
     VisibleFor = z_acl:args_to_visible_for(Args),
@@ -430,7 +430,7 @@ to_bool({trans, _} = Tr, Context) ->
         <<>> -> false;
         _ -> true
     end;
-to_bool(#m{model=Model} = M, Context) -> 
+to_bool(#m{model=Model} = M, Context) ->
     to_bool(Model:m_value(M, Context), Context);
 to_bool(#search_result{result=L}, Context) ->
     to_bool(L, Context);
@@ -502,7 +502,7 @@ trace_compile(Module, Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
     z_notifier:notify(
         #debug{
-            what=template, 
+            what=template,
             arg={compile, Filename, SrcPos, Module}
         }, Context),
     case SrcPos of
@@ -525,7 +525,7 @@ trace_render(Filename, Options, Context) ->
                     lager:info("[~p] Include \"~s\" by \"~s:~p\"",
                                [z_context:site(Context), Filename, File, Line]),
                     {ok,
-                        [ <<"\n<!-- START ">>, relpath(Filename), 
+                        [ <<"\n<!-- START ">>, relpath(Filename),
                           <<" by ">>, relpath(File), $:, integer_to_binary(Line),
                           <<" -->\n">> ],
                         [ <<"\n<!-- END ">>, relpath(Filename),  <<" -->\n">> ]
@@ -550,7 +550,7 @@ trace_block({File, Line, _Col}, Name, Module, Context) ->
             lager:info("[~p] Call block \"~p\" in \"~s\" by \"~s:~p\"",
                        [z_context:site(Context), Name, Module:filename(), File, Line]),
             {ok,
-                [ <<"\n<!-- BLOCK ">>, atom_to_binary(Name, 'utf8'), " @ ", relpath(Module:filename()), 
+                [ <<"\n<!-- BLOCK ">>, atom_to_binary(Name, 'utf8'), " @ ", relpath(Module:filename()),
                   <<" by ">>, relpath(File), $:, integer_to_binary(Line),
                   <<" -->\n">> ],
                 [ <<"\n<!-- ENDBLOCK ">>, atom_to_binary(Name, 'utf8'),  <<" -->\n">> ]

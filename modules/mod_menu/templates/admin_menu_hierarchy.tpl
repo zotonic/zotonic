@@ -24,9 +24,9 @@
 							</div>
 						</div>
 
-						{% include "_admin_menu_hierarchy_sorter.tpl" 
-									sorter=#sorter name=id.name is_editable 
-									cat_id=id is_unique_ids 
+						{% include "_admin_menu_hierarchy_sorter.tpl"
+									sorter=#sorter name=id.name is_editable
+									cat_id=id is_unique_ids
 						%}
 					</div>
 

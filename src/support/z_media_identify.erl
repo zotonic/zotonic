@@ -9,9 +9,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,7 +59,7 @@ identify(File, MediumFilename, OriginalFilename, Context) ->
             end
     end,
     z_depcache:memo(F, {media_identify, MediumFilename}, ?DAY, [media_identify], Context).
-    
+
 
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.  First checks if a module
@@ -74,7 +74,7 @@ identify_file(File, OriginalFilename, Context) ->
     case z_notifier:first(#media_identify_file{filename=File, original_filename=OriginalFilename, extension=Extension}, Context) of
         {ok, Props} ->
 			{ok, Props};
-        undefined -> 
+        undefined ->
             identify_file_direct(File, OriginalFilename)
 	end.
 
@@ -86,7 +86,7 @@ maybe_extension(_File, OriginalFilename) ->
 maybe_extension(undefined) ->
     "";
 maybe_extension(Filename) ->
-    z_convert:to_list(z_string:to_lower(filename:extension(Filename))). 
+    z_convert:to_list(z_string:to_lower(filename:extension(Filename))).
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
 -spec identify_file_direct(File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
@@ -140,8 +140,8 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         ++" -b --mime-type "
                         ++ z_utils:os_filename(File))),
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
-        nomatch -> 
-            case Mime of 
+        nomatch ->
+            case Mime of
                 "CDF V2 Document, corrupt:" ++ _ ->
                     % Probably just a semi-illegal variation on a MS Office file, use the extension
                     case guess_mime(OriginalFilename) of
@@ -258,10 +258,10 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                 Words = string:tokens(Line1, " "),
                 WordCount = length(Words),
                 Words1 = if
-                             WordCount > 4 -> 
+                             WordCount > 4 ->
                                  {A,_B} = lists:split(4, Words),
                                  A;
-                             true -> 
+                             true ->
                                  Words
                          end,
 
@@ -283,7 +283,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                                     {subject_point, exif_subject_point(Exif, Orientation, W1, H1)}
                                   | Props1
                                  ];
-                             _ -> 
+                             _ ->
                                 Props1
                          end,
                 {ok, Props2}
@@ -359,7 +359,7 @@ extension(Mime, PreferExtension, Context) ->
     end.
 
 maybe_binary(undefined) -> undefined;
-maybe_binary(L) -> z_convert:to_binary(L). 
+maybe_binary(L) -> z_convert:to_binary(L).
 
 -spec extension(string()|binary(), string()|binary()|undefined) -> string().
 extension("image/jpeg", _PreferExtension) -> ".jpg";
@@ -411,7 +411,7 @@ exif(File) ->
         {ok, Dict} ->
             List = dict:to_list(Dict),
             proplists:delete(maker_note, List);
-        {error, _} -> 
+        {error, _} ->
             []
     end.
 

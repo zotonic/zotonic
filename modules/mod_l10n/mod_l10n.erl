@@ -11,9 +11,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -121,7 +121,7 @@ observe_rsc_update_done(#rsc_update_done{id=Id, pre_props=Pre, post_props=Post},
         false ->
             case z_acl:user(Context) of
                 Id ->
-                    PreTz = z_convert:to_binary(proplists:get_value(pref_tz, Pre)), 
+                    PreTz = z_convert:to_binary(proplists:get_value(pref_tz, Pre)),
                     PostTz = z_convert:to_binary(proplists:get_value(pref_tz, Post)),
                     case PostTz of
                         PreTz ->
@@ -146,7 +146,7 @@ set_user_timezone(Tz, Context) ->
     Context1 = try_set_timezone(Tz, Context),
     z_context:set_persistent(tz, z_context:tz(Context1), Context1),
     case z_acl:user(Context1) of
-        undefined -> 
+        undefined ->
             nop;
         UserId ->
             case m_rsc:p_no_acl(UserId, pref_tz, Context1) of
@@ -173,7 +173,7 @@ try_set_timezone(Tz, Context) ->
 %% @doc Set the timezone of the current context/session
 set_timezone(Tz, Context) ->
     case z_context:tz(Context) of
-        Tz -> 
+        Tz ->
             Context;
         _ ->
             Context1 = z_context:set_tz(Tz, Context),
@@ -189,7 +189,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 label=?__("Localization", Context),
                 url={admin_l10n},
                 visiblecheck={acl, use, mod_config}}
-     
+
      |Acc].
 
 %% @doc Expand the two letter iso code country depending on the languages in the resource.
@@ -205,7 +205,7 @@ expand_country(Prop, Rsc, Languages, Context) ->
         undefined -> Rsc1;
         <<_,_>> = Iso ->
             Countries = lists:map(
-                            fun(Lang) -> 
+                            fun(Lang) ->
                                 m_l10n:country_name(Iso, Lang, Context)
                             end,
                             Languages),

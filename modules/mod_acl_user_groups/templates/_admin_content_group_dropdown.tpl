@@ -7,7 +7,7 @@
         {% endif %}
         {% for cg in m.hierarchy.content_group.tree_flat %}
             {% if m.acl_rule.can_insert[cg.id][cat_id] %}
-                <option value="{{ cg.id }}" 
+                <option value="{{ cg.id }}"
                     {% if not content_group_id and cg.id.name == 'default_content_group'%}
                         selected
                     {% endif %}
@@ -39,7 +39,7 @@
         {% endif %}
         {% for cg in m.hierarchy.content_group.tree_flat %}
             {% if cg.id|member:cg_allowed %}
-                <option value="{{ cg.id }}" 
+                <option value="{{ cg.id }}"
                     {% if cg_id == cg.id or (not cg_id and cg.id.name == 'default_content_group') %}
                         selected
                     {% endif %}
@@ -51,8 +51,8 @@
         {% if collabs or cg_id.is_a.acl_collaboration_group %}
             </optgroup>
             <optgroup label="{{ m.rsc.acl_collaboration_group.title }}">
-                {% if cg_id 
-                    and cg_id.is_a.acl_collaboration_group 
+                {% if cg_id
+                    and cg_id.is_a.acl_collaboration_group
                     and not cg_id|member:collabs
                 %}
                     <option value="{{ cg_id }}" selected {% if not cid|member:cg_allowed %}disabled{% endif %}>
@@ -86,7 +86,7 @@
                             {{ cg.indent }}{{ cg.id.title }}
                         </option>
                     {% elseif m.acl_rule.can_insert[cg.id][category_id] %}
-                        <option value="{{ cg.id }}" 
+                        <option value="{{ cg.id }}"
                             {% if not content_group_id and cg.id.name == 'default_content_group'%}
                                 selected
                             {% endif %}
@@ -98,8 +98,8 @@
                 {% if collabs or content_group_id.is_a.acl_collaboration_group %}
                     </optgroup>
                     <optgroup label="{{ m.rsc.acl_collaboration_group.title }}">
-                        {% if content_group_id 
-                            and content_group_id.is_a.acl_collaboration_group 
+                        {% if content_group_id
+                            and content_group_id.is_a.acl_collaboration_group
                             and not content_group_id|member:collabs
                         %}
                             <option value="{{ content_group_id }}" selected>

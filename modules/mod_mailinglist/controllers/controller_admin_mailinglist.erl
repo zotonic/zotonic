@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,13 +46,13 @@ event(#postback{message={mailinglist_delete_confirm, [{id,Id}]}}, Context) ->
 event(#postback{message={mailinglist_delete, [{id,Id}]}}, Context) ->
 	case m_rsc:delete(Id, Context) of
 		ok ->
-			z_render:wire([	{growl, [{text, ?__("Deleted the mailing list.", Context)}]}, 
+			z_render:wire([	{growl, [{text, ?__("Deleted the mailing list.", Context)}]},
 							{slide_fade_out, [{target,"mailinglist-"++z_convert:to_list(Id)}]},
 							{dialog_close, []}], Context);
 		{error, eacces} ->
-			z_render:wire([	{growl, [{text, ?__("You are not allowed to delete the mailing list.", Context)}, {type, "error"}]}, 
+			z_render:wire([	{growl, [{text, ?__("You are not allowed to delete the mailing list.", Context)}, {type, "error"}]},
 							{dialog_close, []}], Context);
 		{error, _Reason} ->
-			z_render:wire([	{growl, [{text, ?__("Could not delete the mailing list.", Context)}, {type, "error"}]}, 
+			z_render:wire([	{growl, [{text, ?__("Could not delete the mailing list.", Context)}, {type, "error"}]},
 							{dialog_close, []}], Context)
 	end.

@@ -8,9 +8,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@
 
 % @doc Connect the signal to the page, when the signal is emitted, the
 % actions are rendered.
-% 
+%
 page(Signal, Actions, Context) ->
     AsyncContext = z_context:prune_for_async(Context),
     z_context:spawn_link_page(?MODULE, slot, [Signal, Actions, AsyncContext], Context).
@@ -44,7 +44,7 @@ slot(SignalPrototype, Actions, ConnectorContext) ->
 % to the page.
 %
 receive_loop(SignalPrototype, Actions, ConnectorContext) ->
-    receive 
+    receive
     {signal, Signal, _EmitterContext} ->
         render_page_actions(Signal, Actions, ConnectorContext),
         receive_loop(SignalPrototype, Actions, ConnectorContext);
@@ -66,5 +66,5 @@ render_page_actions(Signal, Actions, Context) ->
 
     %% What parameters should be used here?
     Script = z_script:get_script(z_render:wire(undefined, undefined, {event, Options}, Context)),
-    
+
     z_context:add_script_page(Script, Context).

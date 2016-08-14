@@ -6,7 +6,7 @@
 
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="author" content="Arjan Scherpenisse">
 
@@ -14,7 +14,7 @@
 
         {% lib
             "bootstrap/css/bootstrap.min.css"
-            "css/jquery.loadmask.css" 
+            "css/jquery.loadmask.css"
             "css/z.icons.css"
             "css/zotonic-status.css"
         %}
@@ -39,7 +39,7 @@
         </div>
         <div class="footer">
             {% include "_footer.tpl" %}
-        </div>        
+        </div>
 	{% include "_js_include.tpl" %}
 </body>
 </html>
