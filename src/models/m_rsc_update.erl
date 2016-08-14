@@ -775,7 +775,7 @@ props_filter([{Location, P}|T], Acc, Context)
     props_filter(T, [{Location, X} | Acc], Context);
 
 props_filter([{pref_language, Lang}|T], Acc, Context) ->
-    Lang1 = case z_trans:to_language_atom(Lang) of
+    Lang1 = case z_language:to_language_atom(Lang) of
                 {ok, LangAtom} -> LangAtom;
                 {error, not_a_language} -> undefined
             end,
@@ -799,7 +799,7 @@ filter_languages([C|_] = Lang) when is_integer(C) ->
 filter_languages([L|_] = Langs) when is_list(L); is_binary(L); is_atom(L) ->
     lists:foldr(
             fun(Lang, Acc) ->
-                case z_trans:to_language_atom(Lang) of
+                case z_language:to_language_atom(Lang) of
                     {ok, LangAtom} -> [LangAtom|Acc];
                     {error, not_a_language} -> Acc
                 end

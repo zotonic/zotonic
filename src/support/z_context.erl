@@ -1004,7 +1004,7 @@ set_language(Lang, Context) when is_atom(Lang) ->
 set_language(Langs, Context) when is_list(Langs) ->
     Context#context{language=Langs};
 set_language(Lang, Context) ->
-    case z_trans:is_language(Lang) of
+    case z_language:is_valid(Lang) of
         true -> set_language(z_convert:to_atom(Lang), Context);
         false -> Context
     end.

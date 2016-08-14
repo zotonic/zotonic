@@ -145,7 +145,7 @@ extract_language(Tweet, Context) ->
             z_context:language(Context);
         Lang ->
             [LanguageCode|_] = binary:split(Lang, <<"-">>),
-            case z_trans:to_language_atom(LanguageCode) of
+            case z_language:to_language_atom(LanguageCode) of
                 {ok, Code} ->
                     Enabled = m_translation:language_list_enabled(Context),
                     case proplists:is_defined(LanguageCode, Enabled) of

@@ -32,7 +32,7 @@
 
         <tbody>
             {% with m.config.i18n.language.value as default_code %}
-                {% for code, lang in m.translation.language_list %}
+                {% for code, lang in m.translation.language_list_configured %}
                     <tr id="{{ #li.code }}" class="{% if not lang.is_enabled %}unpublished{% endif %}">
                         <td>
                             <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"
@@ -107,7 +107,7 @@
                         {% if m.config.mod_translation.rewrite_url.value
                             or m.config.mod_translation.rewrite_url.value|is_undefined %}checked="checked"{% endif %}
                         />
-                        <span>{_ Put the current language in the URL _} (<tt>/en/page/...</tt>).</span>
+                        <span>{_ Show the language in the URL _} (<tt>/en/page/...</tt>).</span>
                     </label>
                 </div>
 
@@ -119,7 +119,8 @@
                         <input type="checkbox" id="{{ #force }}" value="1"
                         {% if m.config.mod_translation.force_default.value %}checked="checked"{% endif %}
                         />
-                        <span>{_ Set initial language to the default language. _}</span>
+                        <span>{_ For new visitors, set the language to the default language _} {% with m.translation.default_language as code %}({{ m.translation.language_list_configured[code].name }}){% endwith %}
+                        </span>
                     </label>
                 </div>
             </div>

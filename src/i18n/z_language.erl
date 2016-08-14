@@ -1,5 +1,5 @@
 %% coding: utf-8
--module(languages).
+-module(z_language).
 
 %% @doc Quoting http://www.i18nguy.com/unicode/language-identifiers.html:
 %%      Language identifiers as specified by RFC 3066 [1], can have the form language,
@@ -21,6 +21,8 @@
 %%          https://en.wikipedia.org/wiki/ISO_15924
 
 -export([
+    is_valid/1,
+    to_language_atom/1,
     lc2lang/1,
     languages/0,
     languages_data/0
@@ -31,6 +33,31 @@
 -record(language_data, {
     sub_languages = dict:new()
 }).
+
+
+%% @doc Check if the language code code is a valid language.
+-spec is_valid(list() | binary() | atom()) -> boolean().
+is_valid(LangCode) when is_list(LangCode) ->
+    is_valid(list_to_binary(LangCode));
+is_valid(LangCode) when is_atom(LangCode) ->
+    is_valid(atom_to_binary(LangCode, latin1));
+is_valid(LangCode) ->
+    lc2lang(LangCode) /= undefined.
+
+
+%% @doc Translate a language-code to an atom.
+-spec to_language_atom(LanguageCode:: list() | binary()) -> {ok, atom()} | {error, not_a_language}.
+to_language_atom(LanguageCode) when is_list(LanguageCode) ->
+    case is_valid(LanguageCode) of
+        false -> {error, not_a_language};
+        true -> {ok, list_to_atom(LanguageCode)}
+    end;
+to_language_atom(LanguageCode) when is_atom(LanguageCode) ->
+    to_language_atom(atom_to_list(LanguageCode));
+to_language_atom(LanguageCode) when is_binary(LanguageCode) ->
+    to_language_atom(binary_to_list(LanguageCode));
+to_language_atom(_) ->
+    {error, not_a_language}.
 
 
 %% @doc Returns the language code, if the language is defined; otherwise undefined.
@@ -858,7 +885,7 @@ languages() -> [
             {script, <<"Hans">>},
             {direction, <<"LTR">>},
             {name, <<"中国大陆简体脚本"/utf8>>},
-            {name_en, <<"Mainland Chinese (Simplified)"/utf8>>}
+            {name_en, <<"Chinese - Mainland (Simplified)"/utf8>>}
         ]},
         {<<"zh-hans-sg">>, [
             {language, <<"zh">>},
@@ -866,7 +893,7 @@ languages() -> [
             {script, <<"Hans">>},
             {direction, <<"LTR">>},
             {name, <<"新加坡中国简体脚本"/utf8>>},
-            {name_en, <<"Singapore Chinese (Simplified)"/utf8>>}
+            {name_en, <<"Chinese - Singapore (Simplified)"/utf8>>}
         ]},
     {<<"zh-hant">>, [
         {language, <<"zh-hant">>},
@@ -881,7 +908,7 @@ languages() -> [
             {script, <<"Hant">>},
             {direction, <<"LTR">>},
             {name, <<"香港中國傳統腳本"/utf8>>},
-            {name_en, <<"Hong Kong Chinese (Traditional)"/utf8>>}
+            {name_en, <<"Chinese - Hong Kong (Traditional)"/utf8>>}
         ]},
         {<<"zh-hant-mo">>, [
             {language, <<"zh-hant">>},
@@ -889,7 +916,7 @@ languages() -> [
             {script, <<"Hant">>},
             {direction, <<"LTR">>},
             {name, <<"澳門中國人在傳統的腳本"/utf8>>},
-            {name_en, <<"Macau Chinese (Traditional)"/utf8>>}
+            {name_en, <<"Chinese - Macau (Traditional)"/utf8>>}
         ]},
         {<<"zh-hant-tw">>, [
             {language, <<"zh-hant">>},
@@ -897,7 +924,7 @@ languages() -> [
             {script, <<"Hant">>},
             {direction, <<"LTR">>},
             {name, <<"台灣中國傳統腳本"/utf8>>},
-            {name_en, <<"Taiwan Chinese (Traditional)"/utf8>>}
+            {name_en, <<"Chinese - Taiwan (Traditional)"/utf8>>}
         ]}
 ].
 

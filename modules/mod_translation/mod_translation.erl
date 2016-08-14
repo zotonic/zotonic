@@ -22,7 +22,7 @@
 
 
 %% About variable types:
-%% Language data (read from languages.erl) are binary strings.
+%% Language data (read from z_language) are binary strings.
 %% When used in code (such as the language config), language codes are atoms;
 %% the selected language in the global Context is an atom, as well as the
 %% fallback language.
@@ -48,16 +48,19 @@
          observe_scomp_script_render/2,
          observe_admin_menu/3,
 
-         url_strip_language/1,
          set_user_language/2,
+         set_default_language/2,
+         language_add/3,
+         language_delete/2,
+         language_enable/3,
+         set_language_url_rewrite/2,
          language_config/1,
          enabled_languages/1,
+         url_strip_language/1,
 
          init/1,
          event/2,
-         generate/1,
-
-         do_choose/2
+         generate/1
         ]).
 
 -include("zotonic.hrl").
@@ -78,19 +81,19 @@ init(Context) ->
             end,
             % set default language
             case m_config:get_value(i18n, language, Context) of
-                undefined -> m_config:set_value(i18n, language, <<"en">>, Context);
+                undefined -> m_config:set_value(i18n, language, en, Context);
                 _ -> ok
             end
     end.
 
 
 default_languages() ->
-    Languages = languages:languages(),
+    Languages = z_language:languages(),
     lists:map(fun({Code, IsEnabled}) ->
         Props = proplists:get_value(atom_to_binary(Code, utf8), Languages),
         case Props of
             undefined ->
-                lager:warning("Error: default_languages: language ~p does not exist in languages.erl", [Code]),
+                lager:warning("Error: default_languages: language ~p does not exist in z_language", [Code]),
                 [];
             _ ->
                 Fallback = case ((proplists:is_defined(territory, Props)) or (proplists:is_defined(script, Props))) of
@@ -261,73 +264,43 @@ observe_scomp_script_render(#scomp_script_render{}, Context) ->
     [<<"z_language=\"", Language/binary, "\"">>, $; ].
 
 
-%% @doc Set the current session (and user) language, reload the user agent's page.
+%% @doc Set the current session (and user) language, reload the user agent's page. Called from language switch. Reloads the page to reflect the new setting.
 event(#postback{message={set_language, Args}}, Context) ->
-    Code = case proplists:get_value(code, Args) of
+    LanguageCode = case proplists:get_value(code, Args) of
         undefined -> z_context:get_q("triggervalue", Context);
         ArgCode -> ArgCode
     end,
-    Context1 = set_user_language(Code, Context),
+    Context1 = set_user_language(LanguageCode, Context),
     reload_page(Context1);
 
-%% @doc Set the default language.
+%% @doc Set the default language. Reloads the page to reflect the new setting.
 event(#postback{message={language_default, Args}}, Context) ->
-    case z_acl:is_allowed(use, ?MODULE, Context) of
-        true ->
-            {code, Code} = proplists:lookup(code, Args),
-            m_config:set_value(i18n, language, Code, Context),
-            Context;
-        false ->
-            z_render:growl_error(?__("Sorry, you don't have permission to set the default language.", Context), Context)
-    end;
+    {code, LanguageCode} = proplists:lookup(code, Args),
+    Context1 = set_default_language(LanguageCode, Context),
+    reload_page(Context1);
 
-%% @doc Start rescanning all templates for translation tags.
-event(#postback{message={translation_generate, _Args}}, Context) ->
+%% @doc Add a language to the config. Reloads the page to reflect the updated list.
+event(#submit{message={language_add, _Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
-            spawn(fun() -> generate(Context) end),
-            z_render:growl(?__("Started building the .pot files. This may take a while...", Context), Context);
-        false ->
-            z_render:growl_error(?__("Sorry, you don't have permission to scan for translations.", Context), Context)
-    end;
-event(#postback{message={translation_reload, _Args}}, Context) ->
-    case z_acl:is_allowed(use, ?MODULE, Context) of
-        true ->
-            spawn(fun() -> z_trans_server:load_translations(Context) end),
-            z_render:growl(?__("Reloading all .po files in the background.", Context), Context);
-        false ->
-            z_render:growl_error(?__("Sorry, you don't have permission to reload translations.", Context), Context)
-    end;
-
-event(#submit{message={language_edit, Args}}, Context) ->
-    case z_acl:is_allowed(use, ?MODULE, Context) of
-        true ->
-            OldCode = proplists:get_value(code, Args, '$empty'),
-            language_add(z_string:trim(OldCode), z_string:trim(z_context:get_q("code", Context)), z_context:get_q("is_enabled", Context), Context),
-            Context1 = z_render:dialog_close(Context),
-            z_render:wire({reload, []}, Context1);
+            language_add(z_string:trim(z_context:get_q("code", Context)), z_context:get_q("is_enabled", Context), Context),
+            z_render:wire({reload, []}, Context);
         false ->
             z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
     end;
 
+%% @doc Removes the language from the config. Reloads the page to reflect the updated list.
 event(#postback{message={language_delete, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
-            {code, Code} = proplists:lookup(code, Args),
-            DeletesCurrentLanguage = z_context:language(Context) =:= Code,
-            language_delete(Code, Context),
-            Context1 = case DeletesCurrentLanguage of
-                true ->
-                    Fallback = fallback_language_code(Code),
-                    set_language(Fallback, Context);
-                false -> Context
-            end,
-            Context2 = z_render:dialog_close(Context1),
-            reload_page(Context2);
+            {code, LanguageCode} = proplists:lookup(code, Args),
+            Context1 = language_delete(LanguageCode, Context),
+            reload_page(Context1);
         false ->
             z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
     end;
 
+%% @doc Toggles the enabled state of a language. Reloads the page to reflect the new setting.
 event(#postback{message={language_enable, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
@@ -338,9 +311,31 @@ event(#postback{message={language_enable, Args}}, Context) ->
             z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
     end;
 
+%% @doc Toggles the state of the 'rewrite URL' setting. Reloads the page to reflect the new setting.
 event(#postback{message={toggle_url_rewrite, _Args}}, Context) ->
-    Context1 = mod_admin_config:config_toggle("mod_translation", "rewrite_url", Context),
-    reload_page(Context1).
+    Value = z_context:get_q("triggervalue", Context),
+    set_language_url_rewrite(Value, Context),
+    reload_page(Context);
+
+%% @doc Start rescanning all templates for translation tags.
+event(#postback{message={translation_generate, _Args}}, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            spawn(fun() -> generate(Context) end),
+            z_render:growl(?__("Started building the .pot files. This may take a while...", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, you don't have permission to scan for translations.", Context), Context)
+    end;
+
+%% @doc Reload all translations from the modules and site. All templates will be recompiled.
+event(#postback{message={translation_reload, _Args}}, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            spawn(fun() -> z_trans_server:load_translations(Context) end),
+            z_render:growl(?__("Reloading all .po files in the background.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, you don't have permission to reload translations.", Context), Context)
+    end.
 
 
 %% @doc Strip the language code from the location (if the language code is recognized).
@@ -357,12 +352,12 @@ url_strip_language(Url) ->
     Url.
 
 url_strip_language1(Url, LanguageCode, Rest) when is_list(Url) ->
-    case z_trans:is_language(LanguageCode) of
+    case z_language:is_valid(LanguageCode) of
         true -> [$/|Rest];
         false -> Url
     end;
 url_strip_language1(Url, LanguageCode, Rest) when is_binary(Url) ->
-    case z_trans:is_language(LanguageCode) of
+    case z_language:is_valid(LanguageCode) of
         true -> <<$/, Rest/binary>>;
         false -> Url
     end;
@@ -374,17 +369,17 @@ url_strip_language1(Url, _LanguageCode, _Rest) ->
 -spec set_user_language(atom(), #context{}) -> #context{}.
 set_user_language(Code, Context) ->
     Context1 = set_language(Code, Context),
-    z_context:set_persistent(language, z_context:language(Context1), Context1),
-    case z_acl:user(Context1) of
+    Context2 = z_context:set_persistent(language, z_context:language(Context1), Context1),
+    case z_acl:user(Context2) of
         undefined ->
             nop;
         UserId ->
-            case m_rsc:p_no_acl(UserId, pref_language, Context1) of
+            case m_rsc:p_no_acl(UserId, pref_language, Context2) of
                 Code -> nop;
-                _ -> catch m_rsc:update(UserId, [{pref_language, z_context:language(Context1)}], Context1)
+                _ -> catch m_rsc:update(UserId, [{pref_language, z_context:language(Context2)}], Context2)
             end
     end,
-    Context1.
+    Context2.
 
 
 %% @doc Set the language of the current user/session. Sets to the given language if the language exists in the config language and is enabled; otherwise tries the language's fallback language; if this fails too, sets language to English.
@@ -406,9 +401,21 @@ set_language(Code, Context) ->
     set_language(z_convert:to_atom(Code), Context).
 
 
+%% @doc Set the default language.
+-spec set_default_language(atom(), #context{}) -> #context{}.
+set_default_language(Code, Context) ->
+    case z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            m_config:set_value(i18n, language, Code, Context),
+            Context;
+        false ->
+            z_render:growl_error(?__("Sorry, you don't have permission to set the default language.", Context), Context)
+    end.
+
+
 %% @doc Returns a valid language from the config language. If the language is not
 %%      available or not enabled, tries the language's fallback language (retrieve from
-%%      languages.erl); if this fails too, returns the data for the English language.
+%%      z_language); if this fails too, returns the data for the English language.
 -spec valid_config_language(atom(), #context{}) -> {atom(), list()}.
 valid_config_language(Code, Context) when Code =:= undefined ->
     valid_config_language(en, Context);
@@ -428,7 +435,7 @@ valid_config_language(Code, Context) ->
 fallback_language_code(Code) when Code =:= undefined ->
     en;
 fallback_language_code(Code) ->
-    Languages = languages:languages(),
+    Languages = z_language:languages(),
     case proplists:get_value(atom_to_binary(Code, latin1), Languages) of
         undefined -> en;
         LanguageData ->
@@ -442,15 +449,15 @@ fallback_language_code(Code) ->
 
 
 %% @doc Add a language to the i18n configuration
-language_add(OldLanguageCode, NewLanguageCode, IsEnabled, Context) ->
-    OldCode = z_convert:to_atom(OldLanguageCode),
+-spec language_add(atom(), boolean(), #context{}) -> #context{}.
+language_add(NewLanguageCode, IsEnabled, Context) ->
     NewCode = z_convert:to_atom(NewLanguageCode),
     NewCodeBin = z_convert:to_binary(NewCode),
-    Languages = languages:languages(),
+    Languages = z_language:languages(),
     case proplists:is_defined(NewCodeBin, Languages) of
         false ->
             lager:warning("Error: language_add: language ~p does not exist", [NewLanguageCode]),
-            ok;
+            Context;
         true ->
             Props = proplists:get_value(NewCodeBin, Languages),
             Props1 = [
@@ -458,15 +465,26 @@ language_add(OldLanguageCode, NewLanguageCode, IsEnabled, Context) ->
                 {fallback, proplists:get_value(language, Props)}
             | Props],
             ConfigLanguages = language_config(Context),
-            ConfigLanguages1 = proplists:delete(OldCode, ConfigLanguages),
-            ConfigLanguages2 = lists:usort([{NewCode, Props1} | ConfigLanguages1]),
-            set_language_config(ConfigLanguages2, Context)
+            ConfigLanguages1 = lists:usort([{NewCode, Props1} | ConfigLanguages]),
+            set_language_config(ConfigLanguages1, Context)
     end.
 
 
 %% @doc Remove a language from the i18n configuration
--spec language_delete(atom(), #context{}) -> undefined.
+-spec language_delete(atom(), #context{}) -> #context{}.
 language_delete(LanguageCode, Context) ->
+    DeletesCurrentLanguage = z_context:language(Context) =:= LanguageCode,
+    remove_from_config(LanguageCode, Context),
+    case DeletesCurrentLanguage of
+        true ->
+            Fallback = fallback_language_code(LanguageCode),
+            set_language(Fallback, Context);
+        false -> Context
+    end.
+
+%% @doc Remove a language from the i18n configuration
+-spec remove_from_config(atom(), #context{}) -> undefined.
+remove_from_config(LanguageCode, Context) ->
     ConfigLanguages = language_config(Context),
     ConfigLanguages1 = proplists:delete(LanguageCode, ConfigLanguages),
     set_language_config(ConfigLanguages1, Context).
@@ -480,6 +498,13 @@ language_enable(Code, IsEnabled, Context) ->
     Language1 = [{is_enabled, IsEnabled} | proplists:delete(is_enabled, Language)],
     ConfigLanguages1 = lists:usort([{Code, Language1} | proplists:delete(Code, ConfigLanguages)]),
     set_language_config(ConfigLanguages1, Context).
+
+
+%% @doc Set/reset the state of the 'rewrite URL' setting.
+-spec set_language_url_rewrite(boolean(), #context{}) -> undefined.
+set_language_url_rewrite(Value, Context) ->
+    m_config:set_value("mod_translation", "rewrite_url", Value, Context),
+    reload_page(Context).
 
 
 %% @doc Reloads the page via javascript (zotonic-1.0.js).
@@ -532,64 +557,6 @@ generate(#context{} = Context) ->
     translation_po:generate(translation_scan:scan(Context));
 generate(Host) when is_atom(Host) ->
     translation_po:generate(translation_scan:scan(z_context:new(Host))).
-
-
-%% do_choose/2 is adapted from webmachine_util:do_choose/3
-%% Original code copyright 2007-2008 Basho Technologies
-do_choose(Choices, Header) ->
-    Accepted = build_conneg_list(string:tokens(Header, ",")),
-    StarPrio = [P || {P,C} <- Accepted, C =:= "*"],
-    AnyOkay = case StarPrio of
-                  [] -> no;
-                  [0.0] -> no;
-                  _ -> yes
-              end,
-    do_choose(AnyOkay, Choices, Accepted).
-do_choose(_AnyOkay, [], []) ->
-    none;
-do_choose(_AnyOkay, [], _Accepted) ->
-    none;
-do_choose(yes, Choices, []) ->
-    hd(Choices);
-do_choose(no, _Choices, []) ->
-    none;
-do_choose(AnyOkay, Choices, [AccPair|AccRest]) ->
-    {Prio, Acc} = AccPair,
-    case Prio of
-        0.0 ->
-            do_choose(AnyOkay, lists:delete(Acc, Choices), AccRest);
-        _ ->
-            LAcc = string:to_lower(Acc),
-            LChoices = [string:to_lower(X) || X <- Choices],
-                                                % doing this a little more work than needed in
-                                                % order to be easily insensitive but preserving
-            case lists:member(LAcc, LChoices) of
-                true ->
-                    hd([X || X <- Choices,
-                             string:to_lower(X) =:= LAcc]);
-                false -> do_choose(AnyOkay, Choices, AccRest)
-            end
-    end.
-
-build_conneg_list(AccList) ->
-    build_conneg_list(AccList, []).
-build_conneg_list([], Result) -> lists:reverse(lists:sort(Result));
-build_conneg_list([Acc|AccRest], Result) ->
-    XPair = list_to_tuple([string:strip(X) || X <- string:tokens(Acc, ";")]),
-    Pair = case XPair of
-               {Choice, "q=" ++ PrioStr} ->
-                    % Simplify "en-us" to "en"
-                   [Choice1|_] = string:tokens(Choice, "-"),
-                   case PrioStr of
-                       "0" -> {0.0, Choice1};
-                       "1" -> {1.0, Choice1};
-                       [$.|_] -> {list_to_float([$0|PrioStr]), Choice1};
-                       _ -> {list_to_float(PrioStr), Choice1}
-                   end;
-               {Choice} ->
-                   {1.0, hd(string:tokens(Choice, "-"))}
-           end,
-    build_conneg_list(AccRest,[Pair|Result]).
 
 
 observe_admin_menu(admin_menu, Acc, Context) ->

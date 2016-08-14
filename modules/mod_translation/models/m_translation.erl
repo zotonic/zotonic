@@ -28,7 +28,7 @@
     m_to_list/2,
     m_value/2,
 
-    language_list/1,
+    language_list_configured/1,
     language_list_enabled/1
 ]).
 
@@ -37,9 +37,9 @@
 m_find_value(language, #m{value=undefined}, Context) ->
 	z_context:language(Context);
 m_find_value(default_language, #m{value=undefined}, Context) ->
-	z_trans:default_language(Context);
-m_find_value(language_list, #m{value=undefined}, Context) ->
-	language_list(Context);
+	default_language(Context);
+m_find_value(language_list_configured, #m{value=undefined}, Context) ->
+	language_list_configured(Context);
 m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
 	language_list_enabled(Context);
 m_find_value(language_list_all, #m{value=undefined}, Context) ->
@@ -54,25 +54,29 @@ m_value(#m{}, _Context) ->
 	undefined.
 
 
-language_list(Context) ->
-    sort_by_english_name(mod_translation:language_config(Context)).
+default_language(Context) ->
+    z_trans:default_language(Context).
+
+
+language_list_configured(Context) ->
+    sort(mod_translation:language_config(Context), name_en).
 
 
 language_list_enabled(Context) ->
-	sort_by_english_name(mod_translation:enabled_languages(Context)).
+	sort(mod_translation:enabled_languages(Context), name).
 
 
 %% Makes languages list available in templates.
 language_list_all(_Context) ->
-	languages:languages().
+	z_language:languages().
 
 
 %% Gets languages list with sub-language data.
 language_list_with_data(_Context) ->
-	sort_by_english_name(languages:languages_data()).
+	sort(z_language:languages_data(), name_en).
 
 
-sort_by_english_name(List) ->
+sort(List, SortKey) ->
     lists:sort(fun({_, PropsA}, {_, PropsB}) ->
-        proplists:get_value(name_en, PropsA) =< proplists:get_value(name_en, PropsB)
+        z_string:to_lower(proplists:get_value(SortKey, PropsA)) =< z_string:to_lower(proplists:get_value(SortKey, PropsB))
     end, List).

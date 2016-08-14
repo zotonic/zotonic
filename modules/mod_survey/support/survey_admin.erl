@@ -35,7 +35,7 @@ edit_language(Context) ->
         "" ->
             z_context:language(Context);
         Lang ->
-            case z_trans:to_language_atom(Lang) of
+            case z_language:to_language_atom(Lang) of
                 {ok, Code} -> Code;
                 {error, _} -> z_context:language(Context)
             end
@@ -47,7 +47,7 @@ r_language(Context) ->
             [];
         Ls ->
             Ls1 = string:tokens(Ls, ","),
-            [ list_to_atom(L) || L <- lists:filter(fun z_trans:is_language/1, Ls1) ]
+            [ list_to_atom(L) || L <- lists:filter(fun z_language:is_valid/1, Ls1) ]
     end.
 
 

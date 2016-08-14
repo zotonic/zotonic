@@ -775,7 +775,7 @@ pg_lang(_) -> "english".
 %% Map extra languages, these are from the i18n.language_stemmer configuration and not
 %% per default installed in PostgreSQL
 pg_lang_extra(LangCode) ->
-    case languages:lc2lang(z_convert:to_binary(LangCode)) of
+    case z_language:lc2lang(z_convert:to_binary(LangCode)) of
         undefined ->
             pg_lang(LangCode);
         Lang ->
@@ -822,7 +822,7 @@ stemmer_language_config(Context) ->
         true ->
             z_trans:default_language(Context);
         false ->
-            case z_trans:to_language_atom(StemmingLanguage) of
+            case z_language:to_language_atom(StemmingLanguage) of
                 {ok, LangAtom} -> LangAtom;
                 {error, not_a_language} -> z_trans:default_language(Context)
             end

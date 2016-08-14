@@ -35,7 +35,7 @@ is_rtl(LanguageCode, _Context) ->
     is_rtl(LanguageCode).
 
 is_rtl(LanguageCode) when is_binary(LanguageCode) ->
-    Language = proplists:get_value(LanguageCode, languages:languages()),
+    Language = proplists:get_value(LanguageCode, z_language:languages()),
     case Language of
         undefined -> false;
         _ -> proplists:get_value(direction, Language) == <<"RTL">>

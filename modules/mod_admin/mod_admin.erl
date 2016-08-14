@@ -173,13 +173,13 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
                         [];
                     Ls ->
                         Ls1 = string:tokens(Ls, ","),
-                        [ list_to_atom(L) || L <- lists:filter(fun z_trans:is_language/1, Ls1) ]
+                        [ list_to_atom(L) || L <- lists:filter(fun z_language:is_valid/1, Ls1) ]
                end,
     EditLanguage = case z_context:get_q("edit_language", Context) of
                     undefined ->
                         z_context:language(Context);
                     EL ->
-                        case z_trans:is_language(EL) of
+                        case z_language:is_valid(EL) of
                             true -> list_to_atom(EL);
                             false -> z_context:language(Context)
                         end
@@ -431,7 +431,7 @@ context_language(Context) ->
         undefined -> Context;
         [] -> Context;
         Lang ->
-            case z_trans:to_language_atom(Lang) of
+            case z_language:to_language_atom(Lang) of
                 {ok, LanguageCode} -> z_context:set_language(LanguageCode, Context);
                 _ -> Context
             end

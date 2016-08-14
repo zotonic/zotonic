@@ -30,8 +30,7 @@
 %% interface functions
 -export([
     observe_admin_menu/3,
-    event/2,
-    config_toggle/3
+    event/2
 ]).
 
 -include("zotonic.hrl").
@@ -61,16 +60,4 @@ event(#submit{message={config_save, Args}}, Context) ->
             z_render:wire(proplists:get_all_values(on_success, Args), Context);
         false ->
             z_render:growl_error("Only administrators can delete configurations.", Context)
-    end.
-
-
-%% @doc Change a config key.
--spec config_toggle(list(), list(), #context{}) -> #context{}.
-config_toggle(Module, Key, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
-        true ->
-            m_config:set_value(Module, Key, z_context:get_q("triggervalue", Context), Context),
-            z_render:growl("Changed config setting.", Context);
-        false ->
-            z_render:growl_error("Only administrators can change configurations.", Context)
     end.

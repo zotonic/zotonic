@@ -30,10 +30,10 @@
             <tr>
                 <th width="1%"></th>
                 <th width="30%">{_ Title _}</th>
-                {% for code, lang in m.translation.language_list %}
-                {% if code != "en" %}
-                <th>{{ lang.name }}</th>
-                {% endif %}
+                {% for code, lang in m.translation.language_list_configured %}
+                    {% if code != "en" %}
+                        <th>{{ lang.name }}</th>
+                    {% endif %}
                 {% endfor %}
             </tr>
         </thead>
@@ -44,10 +44,10 @@
 	    <tr id="{{ #li.module }}">
 		    <td>{% include "_icon_status.tpl" status=status[module] status_id=#status.module %}</td>
 		    <td>{{ props.mod_title|default:props.title }}</td>
-                {% for code, lang in m.translation.language_list %}
-                {% if code != "en" %}
-                {% admin_translation_statistics module=module lang=code %}
-                {% endif %}
+                {% for code, lang in m.translation.language_list_configured %}
+                    {% if code != "en" %}
+                        {% admin_translation_statistics module=module lang=code %}
+                    {% endif %}
                 {% endfor %}
             </tr>
             {% endfor %}

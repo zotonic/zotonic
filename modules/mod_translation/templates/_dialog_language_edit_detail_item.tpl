@@ -4,12 +4,12 @@ code
 initial_lang_code
 language
 #}
-{% with m.translation.language_list[code|as_atom] != undefined
+{% with m.translation.language_list_configured[code|as_atom] != undefined
     as
     selected
 %}
 <div class="list-group-item">
-    {% wire id=#form.code type="submit" postback={language_edit code=code} delegate="mod_translation" %}
+    {% wire id=#form.code type="submit" postback={language_add code=code} delegate="mod_translation" %}
     <form id="{{ #form.code }}" method="POST" action="postback" class="form-horizontal">
         {# Get values from form fields, in case this needs to be editable in the future. #}
         <input type="hidden" name="code" value="{{ code }}" />

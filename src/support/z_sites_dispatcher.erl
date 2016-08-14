@@ -227,7 +227,7 @@ get_host_for_domain(Domain) ->
 
 %% @doc Callback for the dispatch compiler, try to bind a language
 is_bind_language(Match, _Context) ->
-    z_trans:is_language(Match).
+    z_language:is_valid(Match).
 
 
 %%====================================================================
@@ -559,7 +559,7 @@ language_from_bindings(Bindings) ->
     language_from_bindings_1(lists:keyfind(z_language, 1, Bindings)).
 
 language_from_bindings_1({z_language, Language}) ->
-    z_trans:to_language_atom(Language);
+    z_language:to_language_atom(Language);
 language_from_bindings_1(false) ->
     {error, not_a_language}.
 

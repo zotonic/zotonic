@@ -30,9 +30,7 @@
     lookup_fallback/3,
     lookup_fallback_language/2,
     lookup_fallback_language/3,
-    default_language/1,
-    is_language/1,
-    to_language_atom/1
+    default_language/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -241,29 +239,3 @@ trans(Text, Language, Context) ->
 default_language(undefined) -> en;
 default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).
-
-
-%% @doc Check if the language code code is a valid language - that is, listed in
-%%      languages.erl.
--spec is_language(list() | binary() | atom()) -> boolean().
-is_language(LangCode) when is_list(LangCode) ->
-    is_language(list_to_binary(LangCode));
-is_language(LangCode) when is_atom(LangCode) ->
-    is_language(atom_to_binary(LangCode, latin1));
-is_language(LangCode) ->
-    languages:lc2lang(LangCode) /= undefined.
-
-
-%% @doc Translate a language-code to an atom.
--spec to_language_atom(LanguageCode:: list() | binary()) -> {ok, atom()} | {error, not_a_language}.
-to_language_atom(LanguageCode) when is_list(LanguageCode) ->
-    case is_language(LanguageCode) of
-        false -> {error, not_a_language};
-        true -> {ok, list_to_atom(LanguageCode)}
-    end;
-to_language_atom(LanguageCode) when is_atom(LanguageCode) ->
-    to_language_atom(atom_to_list(LanguageCode));
-to_language_atom(LanguageCode) when is_binary(LanguageCode) ->
-    to_language_atom(binary_to_list(LanguageCode));
-to_language_atom(_) ->
-    {error, not_a_language}.
