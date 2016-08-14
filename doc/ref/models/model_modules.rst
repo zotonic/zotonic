@@ -1,7 +1,7 @@
 
 .. include:: meta-modules.rst
 
-Access information about which :ref:`modules <manual-modules>` are installed
+Access information about which :ref:`modules <guide-modules>` are installed
 and which ones are active.
 
 To test if a module is activated, for instance mod_signup::
