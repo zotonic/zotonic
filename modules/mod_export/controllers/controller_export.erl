@@ -69,7 +69,7 @@ content_types_provided(ReqData, Context0) ->
     end.
 
 charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+    {[<<"utf-8">>], ReqData, Context}.
 
 
 do_export(ReqData, Context0) ->

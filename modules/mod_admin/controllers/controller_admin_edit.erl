@@ -19,10 +19,10 @@
 -module(controller_admin_edit).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([resource_exists/2,
-         previously_existed/2,
-         moved_temporarily/2,
-         is_authorized/2,
+-export([resource_exists/1,
+         previously_existed/1,
+         moved_temporarily/1,
+         is_authorized/1,
          event/2,
          filter_props/1,
          ensure_id/1
@@ -31,33 +31,33 @@
 -include_lib("controller_html_helper.hrl").
 
 %% @todo Change this into "visible" and add a view instead of edit template.
-is_authorized(ReqData, Context) ->
-    ReqData1 = wrq:set_resp_header("X-Frame-Options", "SAMEORIGIN", ReqData),
-    Context1 = z_admin_controller_helper:init_session(?WM_REQ(ReqData1, Context)),
-    {Context2, Id} = ensure_id(Context1),
-    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], admin_logon, Context2).
+is_authorized(Context) ->
+    Context1 = wrq:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
+    Context2 = z_admin_controller_helper:init_session(Context1),
+    {Context3, Id} = ensure_id(Context2),
+    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], admin_logon, Context3).
 
 
-resource_exists(ReqData, Context) ->
-    {Context2, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+resource_exists(Context) ->
+    {Context2, Id} = ensure_id(Context),
     case Id of
-        undefined -> ?WM_REPLY(false, Context2);
-        _N -> ?WM_REPLY(m_rsc:exists(Id, Context2), Context2)
+        undefined -> {false, Context2};
+        _N -> {m_rsc:exists(Id, Context2), Context2}
     end.
 
-previously_existed(ReqData, Context) ->
-    {Context1, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+previously_existed(Context) ->
+    {Context1, Id} = ensure_id(Context),
     IsGone = m_rsc_gone:is_gone(Id, Context1),
-    ?WM_REPLY(IsGone, Context1).
+    {IsGone, Context1}.
 
-moved_temporarily(ReqData, Context) ->
-    {Context1, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+moved_temporarily(Context) ->
+    {Context1, Id} = ensure_id(Context),
     redirect(m_rsc_gone:get_new_location(Id, Context1), Context1).
 
 redirect(undefined, Context) ->
-    ?WM_REPLY(false, Context);
+    {false, Context};
 redirect(Location, Context) ->
-    ?WM_REPLY({true, Location}, Context).
+    {{true, Location}, Context}.
 
 
 html(Context) ->

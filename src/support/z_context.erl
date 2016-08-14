@@ -839,14 +839,11 @@ lager_md(MD, #context{} = Context) when is_list(MD) ->
             {req_id, m_req:get(req_id, RD)}
             | MD
         ]);
-lager_md(MD, Req) when is_map(MD) ->
-    % DispRule = case dict:find(zotonic_dispatch, wrq:path_info(RD)) of
-    %                 {ok, Dispatch} -> Dispatch;
-    %                 error -> undefined
-    %            end,
+lager_md(MD, Req) when is_map(Req) ->
+    PathInfo = cowmachine_req:path_info(Req),
     lager:md([
             {site, z_context:site(Req)},
-            % {dispatch, DispRule},
+            {dispatch, proplists:get_value(zotonic_dispatch, PathInfo)},
             {method, m_req:get(method, Req)},
             {remote_ip, m_req:get(peer, Req)},
             {is_ssl, m_req:get(is_ssl, Req)},

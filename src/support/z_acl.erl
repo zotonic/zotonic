@@ -379,11 +379,11 @@ wm_is_authorized(Action, Object, Redirect, ReqData, Context) ->
 
 -spec wm_set_location(Redirect::atom(), #context{}) -> #context{}.
 wm_set_location(Redirect, Context) ->
-    RequestPath = wrq:raw_path(z_context:get_reqdata(Context)),
+    RequestPath = m_req:get(raw_path, Context),
     Location = z_context:abs_url(
                     z_dispatcher:url_for(Redirect, [{p,RequestPath}], Context),
                     Context),
-    z_context:set_resp_header("Location", Location, Context).
+    z_context:set_resp_header(<<"location">>, Location, Context).
 
 %% Check list of {Action,Object} ACL pairs
 -spec wm_is_allowed(acl(), #context{}) -> boolean().

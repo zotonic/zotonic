@@ -54,7 +54,7 @@ allowed_methods(ReqData, Context) ->
     {['GET', 'HEAD'], ReqData, Context}.
 
 charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+    {[<<"utf-8">>], ReqData, Context}.
 
 content_types_provided(ReqData, Context) ->
     { [{"text/csv", to_text_csv}], ReqData, Context }.

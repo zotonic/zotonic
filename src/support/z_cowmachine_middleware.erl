@@ -37,5 +37,8 @@ execute(Req, #{controller=Controller, controller_options=ControllerOpts} = Env) 
     Context2 = z_context:set_controller_module(Controller, Context1),
     Context3 = z_context:set_reqdata(Req, Context2),
     z_context:lager_md(Context3),
-    cowmachine:request(Controller, ControllerOpts, Req, Env, Context3).
+    Options = #{
+        on_welformed => fun(Ctx) -> z_context:ensure_qs(Ctx) end
+    },
+    cowmachine:request(Controller, ControllerOpts, Req, Env, Options, Context3).
 

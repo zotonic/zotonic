@@ -19,9 +19,9 @@
 -module(controller_logon).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
--export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
--export([provide_content/2]).
+-export([charsets_provided/1, content_types_provided/1]).
+-export([resource_exists/1, previously_existed/1, moved_temporarily/1]).
+-export([to_html/1]).
 -export([event/2]).
 -export([get_rememberme_cookie/1, set_rememberme_cookie/2, reset_rememberme_cookie/1]).
 
@@ -31,72 +31,55 @@
 %% Convenience export for other auth implementations.
 -export([send_reminder/2, lookup_identities/2]).
 
-
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
--define(LOGON_REMEMBERME_COOKIE, "z_logon").
+-define(LOGON_REMEMBERME_COOKIE, <<"z_logon">>).
 -define(LOGON_REMEMBERME_DAYS, 365).
 
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
-
-content_types_provided(ReqData, Context) ->
-    {[{"text/html", provide_content}], ReqData, Context}.
-
-
-resource_exists(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
+resource_exists(Context) ->
+    Context2 = z_context:ensure_all(Context),
     case z_convert:to_bool(z_context:get(is_only_anonymous, Context2)) of
         true -> check_auth(Context2);
-        false -> ?WM_REPLY(true, Context2)
+        false -> {true, Context2}
     end.
 
 check_auth(Context) ->
     case z_auth:is_auth(Context) of
         true ->
-            case z_utils:is_empty(z_context:get_q("p", Context, [])) of
-                true -> ?WM_REPLY(false, Context);
-                false -> ?WM_REPLY(true, Context)
+            case z_utils:is_empty(z_context:get_q(<<"p">>, Context)) of
+                true -> {false, Context};
+                false -> {true, Context}
             end;
         false ->
             case get_rememberme_cookie(Context) of
                 {ok, UserId} ->
                     Context1 = z_context:set(user_id, UserId, Context),
                     case z_auth:logon(UserId, Context1) of
-                        {ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
-                        {error, _Reason} -> ?WM_REPLY(true, Context1)
+                        {ok, ContextUser} -> {false, ContextUser};
+                        {error, _Reason} -> {true, Context1}
                     end;
                 undefined ->
-                    ?WM_REPLY(true, Context)
+                    {true, Context}
             end
     end.
 
 
-previously_existed(ReqData, Context) ->
-    {true, ReqData, Context}.
+previously_existed(Context) ->
+    {true, Context}.
 
 %% @doc Temporary redirect if we have an automatic log on due to a rememberme cookie or if
 %% the user was already logged on and we don't have a redirect page.
-moved_temporarily(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Location = z_context:abs_url(cleanup_url(get_page(Context1)), Context1),
-    ?WM_REPLY({true, Location}, Context1).
+moved_temporarily(Context) ->
+    Location = z_context:abs_url(cleanup_url(get_page(Context)), Context),
+    {{true, Location}, Context}.
 
 
-provide_content(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context1),
-    Secret = z_context:get_q("secret", Context2),
+to_html(Context) ->
+    Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
+    Secret = z_context:get_q(<<"secret">>, Context2),
     Vars = [
         {page, get_page(Context2)}
         | z_context:get_all(Context2)
@@ -110,25 +93,23 @@ provide_content(ReqData, Context) ->
                 undefined ->
                     Vars
             end,
-    ErrorUId = z_context:get_q("error_uid", Context2),
+    ErrorUId = z_context:get_q(<<"error_uid">>, Context2),
     ContextVerify = case ErrorUId /= undefined andalso z_utils:only_digits(ErrorUId) of
                         false -> Context2;
-                        true -> check_verified(list_to_integer(ErrorUId), Context2)
+                        true -> check_verified(z_convert:to_integer(ErrorUId), Context2)
                     end,
     Template = z_context:get(template, ContextVerify, "logon.tpl"),
     Rendered = z_template:render(Template, Vars1, ContextVerify),
-    {Output, OutputContext} = z_context:output(Rendered, ContextVerify),
-    ?WM_REPLY(Output, OutputContext).
+    z_context:output(Rendered, ContextVerify).
 
 
 %% @doc Get the page we should redirect to after a successful log on.
 %%      This location will be stored in the logon form ("page" on submit).
 get_page(Context) ->
-    HasBackArg = z_convert:to_bool(z_context:get_q("back", Context)),
-    case z_context:get_q("p", Context, []) of
-        [] when HasBackArg ->
-            RD = z_context:get_reqdata(Context),
-            case wrq:get_req_header("referer", RD) of
+    HasBackArg = z_convert:to_bool(z_context:get_q(<<"back">>, Context)),
+    case z_context:get_q(<<"p">>, Context, <<>>) of
+        <<>> when HasBackArg ->
+            case cowmachine_req:get_req_header(<<"referer">>, Context) of
                 undefined -> [];
                 Referrer -> z_html:noscript(Referrer)
             end;
@@ -138,21 +119,21 @@ get_page(Context) ->
 
 %% @doc User logged on, fetch the location of the next page to show
 get_ready_page(Context) ->
-    get_ready_page(z_context:get_q("page", Context, []), Context).
+    get_ready_page(z_context:get_q(<<"page">>, Context, <<>>), Context).
 
 get_ready_page(undefined, Context) ->
-    get_ready_page([], Context);
+    get_ready_page(<<>>, Context);
 get_ready_page(Page, Context) when is_binary(Page) ->
-    get_ready_page(z_convert:to_list(Page), Context);
-get_ready_page(Page, Context) when is_list(Page) ->
+    get_ready_page(z_convert:to_binary(Page), Context);
+get_ready_page(Page, Context) when is_binary(Page) ->
     case z_notifier:first(#logon_ready_page{request_page=Page}, Context) of
         undefined -> Page;
         Url -> Url
     end.
 
 
-cleanup_url(undefined) -> "/";
-cleanup_url([]) -> "/";
+cleanup_url(undefined) -> <<"/">>;
+cleanup_url(<<>>) -> <<"/">>;
 cleanup_url(Url) -> z_html:noscript(Url).
 
 
@@ -227,8 +208,8 @@ logon(Args, WireArgs, Context) ->
 
 %%@doc Handle submit data.
 reminder(Args, Context) ->
-    case z_string:trim(proplists:get_value("reminder_address", Args, [])) of
-        [] ->
+    case z_string:trim(proplists:get_value(<<"reminder_address">>, Args, <<>>)) of
+        <<>> ->
             logon_error("reminder", Context);
         Reminder ->
             case lookup_identities(Reminder, Context) of
@@ -241,15 +222,13 @@ reminder(Args, Context) ->
             end
     end.
 
-
 expired(Args, Context) ->
     reset(Args, Context).
 
-
 reset(Args, Context) ->
-    Secret = proplists:get_value("secret", Args),
-    Password1 = z_string:trim(proplists:get_value("password_reset1", Args)),
-    Password2 = z_string:trim(proplists:get_value("password_reset2", Args)),
+    Secret = proplists:get_value(<<"secret">>, Args),
+    Password1 = z_string:trim(proplists:get_value(<<"password_reset1">>, Args)),
+    Password2 = z_string:trim(proplists:get_value(<<"password_reset2">>, Args)),
     PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, "6", Context)),
 
     case {Password1,Password2} of
@@ -292,8 +271,8 @@ logon_stage(Stage, Args, Context) ->
 logon_user(UserId, WireArgs, Context) ->
     case z_auth:logon(UserId, Context) of
         {ok, ContextUser} ->
-            ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
-                [] -> ContextUser;
+            ContextRemember = case z_context:get_q(<<"rememberme">>, ContextUser, <<>>) of
+                <<>> -> ContextUser;
                 _ -> set_rememberme_cookie(UserId, ContextUser)
             end,
             Actions = get_post_logon_actions(WireArgs, ContextRemember),
@@ -307,7 +286,7 @@ logon_user(UserId, WireArgs, Context) ->
 
 
 check_verified(UserId, Context) ->
-    case m_rsc:p(UserId, is_verified_account, z_acl:sudo(Context)) of
+    case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
         false ->
             % The account is awaiting verification
             logon_stage("verification_pending", [{user_id, UserId}], Context);
@@ -321,8 +300,7 @@ check_verified(UserId, Context) ->
 %% @doc Check if there is a "rememberme" cookie.  If so then return the user id
 %% belonging to the cookie.
 get_rememberme_cookie(Context) ->
-    Rq = z_context:get_reqdata(Context),
-    case wrq:get_cookie_value(?LOGON_REMEMBERME_COOKIE, Rq) of
+    case cowmachine_req:get_cookie_value(?LOGON_REMEMBERME_COOKIE, Context) of
         undefined ->
             undefined;
         Value ->
@@ -359,35 +337,29 @@ get_rememberme_cookie(Context) ->
 set_rememberme_cookie(UserId, Context) ->
     Expire = add_days(?LOGON_REMEMBERME_DAYS, calendar:universal_time()),
     ToEncode = make_rememberme_cookie_value(UserId, Context),
-    Value = z_utils:url_encode(z_convert:to_list(z_utils:encode_value_expire(ToEncode, Expire, Context))),
-    RD = z_context:get_reqdata(Context),
+    Value = z_url:url_encode(z_convert:to_list(z_utils:encode_value_expire(ToEncode, Expire, Context))),
     Options = [
         {max_age, ?LOGON_REMEMBERME_DAYS*3600*24},
-        {path, "/"},
+        {path, <<"/">>},
         {http_only, true},
         {domain, z_context:cookie_domain(Context)}
     ],
-    Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, Value, Options),
-    RD1 = wrq:merge_resp_headers([Hdr], RD),
-    z_context:set_reqdata(RD1, Context).
+    z_context:set_cookie(?LOGON_REMEMBERME_COOKIE, z_convert:to_binary(Value), Options, Context).
 
-    add_days(N, Date) when N =< 0 ->
-        Date;
-    add_days(N, Date) ->
-        add_days(N-1, z_datetime:next_day(Date)).
+add_days(N, Date) when N =< 0 ->
+    Date;
+add_days(N, Date) ->
+    add_days(N-1, z_datetime:next_day(Date)).
 
 
 % @doc Reset the rememberme cookie.
 reset_rememberme_cookie(Context) ->
-    RD = z_context:get_reqdata(Context),
     Options = [
-        {path, "/"},
+        {path, <<"/">>},
         {http_only, true},
         {domain, z_context:cookie_domain(Context)}
     ],
-    Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, "", Options),
-    RD1 = wrq:merge_resp_headers([Hdr], RD),
-    z_context:set_reqdata(RD1, Context).
+    z_context:set_cookie(?LOGON_REMEMBERME_COOKIE, <<>>, Options, Context).
 
 
 check_rememberme_cookie_value({ok, UserId}, _Context) when is_integer(UserId) ->
@@ -411,7 +383,7 @@ lookup_identities(Handle, Context) ->
     sets:to_list(Set).
 
 
-lookup_by_username("admin", _Context) ->
+lookup_by_username(<<"admin">>, _Context) ->
     [];
 lookup_by_username(Handle, Context) ->
     case m_identity:lookup_by_username(Handle, Context) of
@@ -422,7 +394,7 @@ lookup_by_username(Handle, Context) ->
 
 %% @doc Find all users with a certain e-mail address
 lookup_by_email(Handle, Context) ->
-    case lists:member($@, Handle) of
+    case z_email_utils:is_email(Handle) of
         true ->
             Rows = m_identity:lookup_by_type_and_key_multi(email, Handle, Context),
             [ proplists:get_value(rsc_id, Row) || Row <- Rows ];

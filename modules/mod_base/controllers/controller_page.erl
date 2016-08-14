@@ -20,7 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    resource_exists/2,
+    resource_exists/1,
     previously_existed/2,
     moved_temporarily/2,
     is_authorized/2,
@@ -30,14 +30,13 @@
 -include_lib("controller_html_helper.hrl").
 
 %% @doc Check if the id in the request (or dispatch conf) exists.
-resource_exists(ReqData, Context) ->
-    Context1  = ?WM_REQ(ReqData, Context),
-    ContextQs = z_context:ensure_qs(Context1),
+resource_exists(Context) ->
+    ContextQs = z_context:ensure_qs(Context),
     try
         Id = z_controller_helper:get_id(ContextQs),
         maybe_redirect(Id, ContextQs)
     catch
-        _:_ -> ?WM_REPLY(false, ContextQs)
+        _:_ -> {false, ContextQs}
     end.
 
 %% @doc Check if the resource used to exist

@@ -37,7 +37,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     ?WM_REPLY(true, Context1).
 
 charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+    {[<<"utf-8">>], ReqData, Context}.
 
 content_types_provided(ReqData, Context) ->
     {[{"text/html", provide_content}], ReqData, Context}.

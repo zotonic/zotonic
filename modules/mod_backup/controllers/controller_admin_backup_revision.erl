@@ -20,14 +20,14 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    is_authorized/2,
+    is_authorized/1,
     event/2
 ]).
 
 -include_lib("controller_html_helper.hrl").
 
-is_authorized(ReqData, Context0) ->
-    Context = z_admin_controller_helper:init_session(?WM_REQ(ReqData, Context0)),
+is_authorized(Context0) ->
+    Context = z_admin_controller_helper:init_session(Context0),
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             Id = m_rsc:rid(z_context:get_q("id", Context), Context),

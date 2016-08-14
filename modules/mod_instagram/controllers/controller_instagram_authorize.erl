@@ -38,7 +38,7 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     ?WM_REPLY(true, Context2).
 
 charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+    {[<<"utf-8">>], ReqData, Context}.
 
 resource_exists(ReqData, Context) ->
     {false, ReqData, Context}.

@@ -21,99 +21,74 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-    init/1,
-    service_available/2,
-    is_authorized/2,
-    allowed_methods/2,
-    content_encodings_provided/2,
-	resource_exists/2,
-	last_modified/2,
-	expires/2,
-	content_types_provided/2,
-	charsets_provided/2,
-	provide_content/2
+    is_authorized/1,
+    allowed_methods/1,
+    content_encodings_provided/1,
+	resource_exists/1,
+	last_modified/1,
+	expires/1,
+	content_types_provided/1,
+	charsets_provided/1,
+	provide_content/1
 ]).
 
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 %% Let cached versions expire in an hour.
 -define(MAX_AGE, 3600).
 
 
-init(DispatchArgs) ->
-    {ok, DispatchArgs}.
+allowed_methods(Context) ->
+    {[<<"HEAD">>, <<"GET">>], Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:ensure_qs(Context1),
-    ?WM_REPLY(true, Context2).
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
+content_encodings_provided(Context) ->
+    {[<<"identity">>, <<"gzip">>], Context}.
 
-allowed_methods(ReqData, Context) ->
-    {['HEAD', 'GET'], ReqData, Context}.
-
-
-charsets_provided(ReqData, Context) ->
-    {["utf-8"], ReqData, Context}.
-
-
-content_encodings_provided(ReqData, Context) ->
-    {["identity", "gzip"], ReqData, Context}.
-
-
-content_types_provided(ReqData, Context) ->
-    {[{"application/atom+xml;type=entry", provide_content},
-      {"application/atom+xml", provide_content}],
-     ReqData, Context}.
-
+content_types_provided(Context) ->
+    {[{<<"application/atom+xml;type=entry">>, provide_content},
+      {<<"application/atom+xml">>, provide_content}],
+     Context}.
 
 %% @doc Check if the id in the request (or dispatch conf) exists.
-resource_exists(ReqData, Context) ->
-    Context1  = ?WM_REQ(ReqData, Context),
-    ContextQs = z_context:ensure_qs(Context1),
+resource_exists(Context) ->
     try
-        ?WM_REPLY(m_rsc:exists(get_id(ContextQs), ContextQs), ContextQs)
+        {m_rsc:exists(get_id(Context), Context), Context}
     catch
-        _:_ -> ?WM_REPLY(false, ContextQs)
+        _:_ -> {false, Context}
     end.
 
+%% @doc Check if the current user is allowed to view the resource. 
+is_authorized(Context) ->
+    z_acl:wm_is_authorized(view, get_id(Context), Context).
 
-%% @doc Check if the current user is allowed to view the resource.
-is_authorized(ReqData, Context) ->
-    Context1  = ?WM_REQ(ReqData, Context),
-    ContextQs = z_context:ensure_qs(Context1),
-    z_acl:wm_is_authorized(view, get_id(ContextQs), ContextQs).
+last_modified(Context) ->
+    MaxAge = integer_to_binary(?MAX_AGE),
+    Context1 = z_context:set_resp_header(<<"cache-control">>, <<"public, max-age=", MaxAge/binary>>, Context),
+    Modified = m_rsc:p(get_id(Context), modified, Context1),
+    Context2 = z_context:set(last_modified, Modified, Context1),
+    {Modified, Context2}.
 
-
-last_modified(ReqData, Context) ->
-    RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData),
-    Modified = m_rsc:p(get_id(Context), modified, Context),
-    Context1 = z_context:set(last_modified, Modified, Context),
-    {Modified, RD1, Context1}.
-
-
-expires(ReqData, State) ->
+expires(Context) ->
     NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
-    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), ReqData, State}.
+    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), Context}.
 
-
-provide_content(ReqData, Context) ->
-    Context1 = z_context:set_reqdata(ReqData, Context),
-    Id = get_id(Context1),
-    RscExport = m_rsc_export:full(Id, Context1),
+provide_content(Context) ->
+    Id = get_id(Context),
+    RscExport = m_rsc_export:full(Id, Context),
     Content = atom_convert:resource_to_atom(RscExport, Context),
-    Content1 = wrq:encode_content(Content, ReqData),
-    ?WM_REPLY(Content1, Context1).
+    Content1 = wrq:encode_content(Content, Context),
+    {Content1, Context}.
 
 
 %% @doc Fetch the id from the request or the dispatch configuration.
-%% @spec get_id(Context) -> int() | false
+-spec get_id(#context{}) -> integer() | false.
 get_id(Context) ->
     ReqId = case z_context:get(id, Context) of
-        undefined -> z_context:get_q("id", Context);
+        undefined -> z_context:get_q(<<"id">>, Context);
         ConfId -> ConfId
     end,
     case m_rsc:name_to_id(ReqId, Context) of
