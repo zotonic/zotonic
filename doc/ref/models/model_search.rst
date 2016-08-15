@@ -22,7 +22,7 @@ Another example, searching for a text and requesting the second page with 20 res
       {{ m.rsc[id].title }}
   {% endfor %}
 
-.. seealso:: the :ref:`scomp-pager` scomp, and the :ref:`mod_search` module.
+.. seealso:: :ref:`guide-datamodel-query-model`, the :ref:`scomp-pager` scomp, and the :ref:`mod_search` module.
 
 
 
