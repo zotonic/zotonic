@@ -5,9 +5,9 @@
 {% block content %}
 <div class="admin-header">
     <h2>{_ Languages overview _}</h2>
-
-    <p>{_ All languages known to the system. You can add or remove languages. _}
-        <br/>{_ Enabled languages show up in the language selection menu. The default language is used for new visitors without a selected language. _}</p>
+    <p>
+        {_ Part of _} <a href="http://zotonic.com/docs/latest/ref/modules/mod_translation.html">mod_translation</a>. {_ See also: _} <a href="http://zotonic.com/docs/latest/developer-guide/translation.html">{_ Developer Documentation _}</a></li>
+    </p>
 </div>
 
 <div class="well">
@@ -24,7 +24,7 @@
                 <th width="10%">{_ Default _}</th>
                 <th width="20%">{_ Language _}</th>
                 <th width="10%">{_ Code _}</th>
-                <th width="10%">{_ Territory _}</th>
+                <th width="10%">{_ Region _}</th>
                 <th width="10%">{_ Script _}</th>
                 <th></th>
             </tr>
@@ -35,8 +35,7 @@
                 {% for code, lang in m.translation.language_list_configured %}
                     <tr id="{{ #li.code }}" class="{% if not lang.is_enabled %}unpublished{% endif %}">
                         <td>
-                            <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"
-                            {% if lang.is_enabled %}checked="checked"{% endif %} />
+                            <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"{% if lang.is_enabled %} checked="checked"{% endif %}{% if m.translation.default_language == code %} disabled="disabled"{% endif %} />
                             {% wire id=#enabled.code postback={language_enable code=code} delegate="mod_translation" %}
                         </td>
                         <td>
@@ -51,7 +50,7 @@
                             {{ code|default:"-" }}
                         </td>
                         <td>
-                            {{ lang.territory|default:"<span class='text-muted'>-</span>" }}
+                            {{ lang.region|default:"<span class='text-muted'>-</span>" }}
                         </td>
                         <td>
                             {{ lang.script|default:"<span class='text-muted'>-</span>" }}

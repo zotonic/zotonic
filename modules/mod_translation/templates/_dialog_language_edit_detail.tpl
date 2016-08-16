@@ -2,14 +2,15 @@
 Params:
 code
 initial_lang_code
+is_sublanguage
 #}
 {% with
-    m.translation.language_list_with_data
+    m.translation.all_languages
     as
     languages
 %}
 {% with
-    languages[code|to_binary]
+    language|default:languages[code|to_binary]
     as
     language
 %}
@@ -26,13 +27,19 @@ initial_lang_code
     {% endif %}
     <div class="list-group mod_translation-language-detail">
         {% include "_dialog_language_edit_detail_item.tpl" code=code initial_lang_code=initial_lang_code language=language  %}
-        {% if initial_lang_code == undefined %}
-            {% for sub_code in language.sub_languages %}
-                {% with languages[sub_code] as sub_language %}
-                    {% include "_dialog_language_edit_detail_item.tpl" code=sub_code initial_lang_code=initial_lang_code language=sub_language  %}
-                {% endwith %}
-            {% endfor %}
-        {% endif %}
+        {% with language.sublanguages as sublanguages %}
+            {% if initial_lang_code == undefined %}
+                {% if sublanguages or is_sublanguage %}
+                    {% include "_dialog_language_edit_detail_sublanguage_note.tpl" %}
+                {% endif %}
+                {% for sub_code in sublanguages|element:1 %}
+                    {% with languages[sub_code] as sub_language %}
+                        {% include "_dialog_language_edit_detail_item.tpl" code=sub_code initial_lang_code=initial_lang_code language=sub_language languages=languages  %}
+                    {% endwith %}
+                {% endfor %}
+
+            {% endif %}
+        {% endwith %}
     </div>
 </div>
 {% endwith %}
@@ -42,31 +49,3 @@ initial_lang_code
 $.dialogCenter();
 $.dialogScrollTo(0);
 {% endjavascript %}
-
-<style>
-#mod_translation_details_back {
-    display: inline-block;
-    margin-bottom: 1.5em;
-}
-.mod_translation-language-detail h4 {
-    margin: .5em 0 1em 0;
-}
-.mod_translation-language-detail table {
-    width: 100%;
-}
-.mod_translation-language-detail table td {
-    padding: .3em 0;
-    width: 50%;
-    font-size: 1em;
-    line-height: 1.3;
-}
-.mod_translation-language-detail table td:first-child {
-    opacity: .6;
-}
-.mod_translation-language-detail .mod_translation-added {
-    color: #00ab6b; /* light green */
-}
-.mod_translation-language-detail .mod_translation-code {
-    margin-right: .5em;
-}
-</style>

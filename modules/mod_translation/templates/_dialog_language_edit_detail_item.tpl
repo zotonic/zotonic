@@ -3,6 +3,7 @@ Params:
 code
 initial_lang_code
 language
+languages
 #}
 {% with m.translation.language_list_configured[code|as_atom] != undefined
     as
@@ -14,11 +15,10 @@ language
         {# Get values from form fields, in case this needs to be editable in the future. #}
         <input type="hidden" name="code" value="{{ code }}" />
         <input type="hidden" name="is_enabled" value="1" />
-        <input type="hidden" name="fallback" value="{% if language.territory or language.script %}{{ language.language }}{% endif %}" />
 
         {% if not selected %}
             {% if initial_lang_code == undefined %}
-                <button class="btn btn-primary pull-right" type="submit">{_ Add _}</button>
+                <button class="btn btn-primary pull-right mod_translation-add-button" type="submit">{_ Add _}</button>
             {% endif %}
         {% else %}
             <span class="pull-right mod_translation-added">{_ Added _}</span>
@@ -29,10 +29,10 @@ language
                 <td>{_ Name in menu _}</td>
                 <td>{{ language.name }}</td>
             </tr>
-            {% if language.territory %}
+            {% if language.region %}
                 <tr>
-                    <td>{_ Territory _}</td>
-                    <td>{{ language.territory }}</td>
+                    <td>{_ Region _}</td>
+                    <td>{{ language.region }}</td>
                 </tr>
             {% endif %}
             {% if language.script %}
@@ -41,14 +41,41 @@ language
                     <td>{{ language.script }}</td>
                 </tr>
             {% endif %}
+            {% with
+                m.translation.default_language,
+                language.language|as_atom
+                as
+                default_language,
+                fallback_language
+            %}
+                {% if (fallback_language != code) or (default_language != code) %}
+                    <tr>
+                        <td>{_ Fallback language _}</td>
+                        <td>
+                            {% if fallback_language != code %}
+                                {{ fallback_language }}
+                                {% if not fallback_language|member:(m.translation.language_list_enabled|element:1) %}
+                                    <em class="mod_translation-warning">{_ not enabled _}</em>, {{ default_language }}
+                                {% endif %}
+                            {% else %}
+                                {{ default_language }}
+                                {% if not default_language|member:(m.translation.language_list_enabled|element:1) %}
+                                    <em class="mod_translation-warning">{_ not enabled _}</em>
+                                {% endif %}
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endwith %}
             <tr>
-                <td>{_ Language code in URL _}</td>
+                <td>{_ Language in URL _}</td>
                 <td>{{ code }}</td>
             </tr>
-            {% if initial_lang_code and language.sub_languages %}
+            {% if initial_lang_code and language.sublanguages %}
                 <tr>
                     <td>{_ Available sub-languages _}</td>
-                    <td>{% for lang_code in language.sub_languages %}
+                    <td>{% for lang_code in language.sublanguages|element:1 %}
                         {% if m.translation.language_list_enabled[lang_code|as_atom] %}
                             <span class="mod_translation-code mod_translation-added">{{ lang_code }}</span>
                         {% else %}
@@ -59,17 +86,12 @@ language
                                     target="dialog_language_edit_content"
                                     code=lang_code
                                     initial_lang_code=undefined
+                                    is_sublanguage=1
                                 }
                             %}
                         {% endif %}
                         {% endfor %}
                     </td>
-                </tr>
-            {% endif %}
-            {% if language.language != code %}
-                <tr>
-                    <td>{_ Fallback language _}</td>
-                    <td>{{ language.language }}</td>
                 </tr>
             {% endif %}
         </table>
