@@ -563,7 +563,7 @@ mail_result(SurveyId, PrepAnswers, Attachments, Context) ->
                 vars=Vars,
                 attachments=Attachments
             },
-            ContextLang = z_context:set_language(z_trans:default_language(Context), Context),
+            ContextLang = z_context:set_language(z_language:default_language(Context), Context),
             z_email:send(E, ContextLang),
             ok
     end.

@@ -29,8 +29,7 @@
     lookup_fallback/2,
     lookup_fallback/3,
     lookup_fallback_language/2,
-    lookup_fallback_language/3,
-    default_language/1
+    lookup_fallback_language/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -131,7 +130,7 @@ lookup_fallback({trans, Tr}, Lang, Context) ->
             end,
             case proplists:get_value(FallbackLang, Tr) of
                 undefined ->
-                    case default_language(Context) of
+                    case z_language:default_language(Context) of
                         undefined -> take_english_or_first(Tr);
                         CfgLang ->
                             case proplists:get_value(z_convert:to_atom(CfgLang), Tr) of
@@ -169,7 +168,7 @@ lookup_fallback_language([], Lang, _Context) ->
 lookup_fallback_language(Langs, Lang, Context) ->
     case lists:member(Lang, Langs) of
         false ->
-            case default_language(Context) of
+            case z_language:default_language(Context) of
                 undefined ->
                     case lists:member(en, Langs) of
                         true ->
@@ -232,10 +231,3 @@ trans(Text, Language, Context) ->
             proplists:get_value(Language, Tr, Text);
         _ -> Text
     end.
-
-
-%% @doc Return the configured default language for this server
--spec default_language(#context{}) -> atom().
-default_language(undefined) -> en;
-default_language(Context) ->
-    z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).

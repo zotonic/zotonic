@@ -198,7 +198,7 @@ new(ReqData, Module) ->
 
 
 set_default_language_tz(Context) ->
-    F = fun() -> {z_trans:default_language(Context), tz_config(Context)} end,
+    F = fun() -> {z_language:default_language(Context), tz_config(Context)} end,
     {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
     Context#context{
         language= [DefaultLang],

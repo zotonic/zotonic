@@ -28,7 +28,6 @@
     m_to_list/2,
     m_value/2,
 
-    language_list_configured/1,
     language_list_enabled/1
 ]).
 
@@ -36,16 +35,18 @@
 
 m_find_value(language, #m{value=undefined}, Context) ->
 	z_context:language(Context);
-m_find_value(default_language, #m{value=undefined}, Context) ->
-	default_language(Context);
+%% mod_translation lookups
 m_find_value(language_list_configured, #m{value=undefined}, Context) ->
 	language_list_configured(Context);
 m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
 	language_list_enabled(Context);
-m_find_value(language_list_all, #m{value=undefined}, Context) ->
-	language_list_all(Context);
-m_find_value(language_list_with_data, #m{value=undefined}, Context) ->
-	language_list_with_data(Context).
+%% z_language lookups
+m_find_value(default_language, #m{value=undefined}, Context) ->
+	default_language(Context);
+m_find_value(main_languages, #m{value=undefined}, _Context) ->
+	main_languages();
+m_find_value(all_languages, #m{value=undefined}, _Context) ->
+	all_languages().
 
 m_to_list(#m{}, _Context) ->
 	[].
@@ -55,28 +56,17 @@ m_value(#m{}, _Context) ->
 
 
 default_language(Context) ->
-    z_trans:default_language(Context).
-
+    z_language:default_language(Context).
 
 language_list_configured(Context) ->
-    sort(mod_translation:language_config(Context), name_en).
-
+    z_language:sort_properties(mod_translation:language_config(Context), name_en).
 
 language_list_enabled(Context) ->
-	sort(mod_translation:enabled_languages(Context), name).
+	z_language:sort_properties(mod_translation:enabled_languages(Context), name).
 
+main_languages() ->
+    z_language:sort_properties(z_language:main_languages(), name_en).
 
-%% Makes languages list available in templates.
-language_list_all(_Context) ->
-	z_language:languages().
+all_languages() ->
+    z_language:sort_properties(z_language:all_languages(), name_en).
 
-
-%% Gets languages list with sub-language data.
-language_list_with_data(_Context) ->
-	sort(z_language:languages_data(), name_en).
-
-
-sort(List, SortKey) ->
-    lists:sort(fun({_, PropsA}, {_, PropsB}) ->
-        z_string:to_lower(proplists:get_value(SortKey, PropsA)) =< z_string:to_lower(proplists:get_value(SortKey, PropsB))
-    end, List).
