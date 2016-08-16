@@ -968,7 +968,8 @@ function z_reload(args)
                 + "//"
                 + window.location.host
                 + "/"
-                + parts.join("/");
+                + parts.join("/")
+                + ((pathname === "" || pathname === "/") ? "/" : "")
         } else {
             href = window.location.protocol
                 + "//"
