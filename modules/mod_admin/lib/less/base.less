@@ -29,6 +29,12 @@ p {
     margin: 0 0 @baseMargin 0;
 }
 
+table {
+    td, th {
+        vertical-align: top;
+    }
+}
+
 // zotonic specific
 
 .unpublished {
@@ -51,7 +57,7 @@ p {
     color: @textColorLight;
 }
 
-.z-button-row {  
+.z-button-row {
     // see also bootstrap-overrides.less
     #3L > .clearfix;
 
@@ -105,11 +111,11 @@ p .z-btn-help {
 .admin-header {
     margin-bottom: 24px;
     #3L > .clearfix;
-    
+
     > :last-child {
         margin-bottom: 0;
     }
-    
+
     h2 {
         margin-top: 0;
         margin-bottom: 0;
