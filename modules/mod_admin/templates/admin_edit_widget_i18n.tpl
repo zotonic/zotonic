@@ -1,7 +1,9 @@
-{% with m.modules.active.mod_translation,
-        r_language|default:(m.rsc[id].name)|default:[z_language]
-   as is_i18n,
-      r_language
+{% with
+    m.modules.active.mod_translation,
+    r_language|default:(m.rsc[id].language)|default:[z_language]
+    as
+    is_i18n,
+    r_language
 %}
 {% with edit_language|default:z_language as edit_language %}
 {% with edit_language|member:r_language|if:edit_language:(r_language[1]) as edit_language %}
