@@ -75,7 +75,7 @@ is_valid(Code) ->
 to_language_atom(Code) when is_binary(Code) ->
     case is_valid(Code) of
         false -> {error, not_a_language};
-        true -> {ok, list_to_atom(Code)}
+        true -> {ok, z_convert:to_atom(Code)}
     end;
 to_language_atom(Code) ->
     to_language_atom(z_convert:to_binary(Code)).
@@ -1167,99 +1167,100 @@ languages() -> [
 
 %% TODO:
 
-% "gu" <<"Gujarati"/utf8>>;
-% "gv" <<"Manx"/utf8>>;
-% "ha" <<"Hausa"/utf8>>;
-% "ho" <<"Hiri Motu"/utf8>>;
-% "hy" <<"Armenian"/utf8>>;
-% "hz" <<"Herero"/utf8>>;
 % "ia" <<"Interlingua"/utf8>>;
 % "ie" <<"Interlingue"/utf8>>;
-% "ik" <<"Inupiak"/utf8>>;
-% "io" <<"Ido"/utf8>>;
-% "iu" <<"Inuktitut"/utf8>>;
-% "jv" <<"Javanese"/utf8>>;
 % "ka" <<"Georgian"/utf8>>;
-% "ki" <<"Kikuyu"/utf8>>;
-% "kj" <<"Kuanyama"/utf8>>;
-% "kk" <<"Kazakh"/utf8>>;
-% "kl" <<"Kalaallisut; Greenlandic"/utf8>>;
-% "km" <<"Khmer; Cambodian"/utf8>>;
-% "kn" <<"Kannada"/utf8>>;
 % "ko" <<"Korean"/utf8>>;
-% "ks" <<"Kashmiri"/utf8>>;
-% "ku" <<"Kurdish"/utf8>>;
-% "kv" <<"Komi"/utf8>>;
-% "kw" <<"Cornish"/utf8>>;
-% "ky" <<"Kirghiz"/utf8>>;
-% "la" <<"Latin"/utf8>>;
-% "lb" <<"Letzeburgesch"/utf8>>;
-% "ln" <<"Lingala"/utf8>>;
-% "lo" <<"Lao; Laotian"/utf8>>;
-% "mh" <<"Marshall"/utf8>>;
-% "mi" <<"Maori"/utf8>>;
 % "mk" <<"Macedonian"/utf8>>;
-% "ml" <<"Malayalam"/utf8>>;
 % "mn" <<"Mongolian"/utf8>>;
-% "mo" <<"Moldavian"/utf8>>;
-% "mr" <<"Marathi"/utf8>>;
-% "ms" <<"Malay"/utf8>>;
 % "mt" <<"Maltese"/utf8>>;
-% "my" <<"Burmese"/utf8>>;
-% "na" <<"Nauru"/utf8>>;
-% "nb" <<"Norwegian Bokmål"/utf8>>;
-% "nd" <<"Ndebele, North"/utf8>>;
-% "ne" <<"Nepali"/utf8>>;
-% "ng" <<"Ndonga"/utf8>>;
-% "nr" <<"Ndebele, South"/utf8>>;
-% "nv" <<"Navajo"/utf8>>;
-% "ny" <<"Chichewa; Nyanja"/utf8>>;
-% "oc" <<"Occitan; Provençal"/utf8>>;
-% "om" <<"(Afan) Oromo"/utf8>>;
-% "or" <<"Oriya"/utf8>>;
-% "os" <<"Ossetian; Ossetic"/utf8>>;
 % "pa" <<"Panjabi; Punjabi"/utf8>>;
-% "pi" <<"Pali"/utf8>>;
-% "qu" <<"Quechua"/utf8>>;
-% "rm" <<"Rhaeto-Romance"/utf8>>;
-% "rn" <<"Rundi; Kirundi"/utf8>>;
-% "rw" <<"Kinyarwanda"/utf8>>;
-% "sa" <<"Sanskrit"/utf8>>;
-% "sc" <<"Sardinian"/utf8>>;
-% "sd" <<"Sindhi"/utf8>>;
-% "se" <<"Northern Sami"/utf8>>;
-% "sg" <<"Sango; Sangro"/utf8>>;
-% "si" <<"Sinhalese"/utf8>>;
-% "sm" <<"Samoan"/utf8>>;
-% "sn" <<"Shona"/utf8>>;
-% "so" <<"Somali"/utf8>>;
 % "sq" <<"Albanian"/utf8>>;
-% "ss" <<"Swati; Siswati"/utf8>>;
-% "st" <<"Sesotho; Sotho, Southern"/utf8>>;
-% "su" <<"Sundanese"/utf8>>;
-% "sw" <<"Swahili"/utf8>>;
-% "ta" <<"Tamil"/utf8>>;
-% "te" <<"Telugu"/utf8>>;
-% "tg" <<"Tajik"/utf8>>;
-% "ti" <<"Tigrinya"/utf8>>;
-% "tk" <<"Turkmen"/utf8>>;
-% "tl" <<"Tagalog"/utf8>>;
-% "tn" <<"Tswana; Setswana"/utf8>>;
-% "to" <<"Tonga"/utf8>>;
-% "ts" <<"Tsonga"/utf8>>;
-% "tt" <<"Tatar"/utf8>>;
-% "tw" <<"Twi"/utf8>>;
-% "ty" <<"Tahitian"/utf8>>;
-% "ug" <<"Uighur"/utf8>>;
-% "ur" <<"Urdu"/utf8>>;
-% "uz" <<"Uzbek"/utf8>>;
 % "vi" <<"Vietnamese"/utf8>>;
-% "vo" <<"Volapuk"/utf8>>;
-% "wa" <<"Walloon"/utf8>>;
-% "wo" <<"Wolof"/utf8>>;
-% "xh" <<"Xhosa"/utf8>>;
-% "yi" <<"Yiddish"/utf8>>;
-% "yo" <<"Yoruba"/utf8>>;
-% "za" <<"Zhuang"/utf8>>;
-% "zu" <<"Zulu"/utf8>>
+
+%% Other, less used languages:
+
+% gu: Gujarati
+% gv: Manx
+% ha: Hausa
+% ho: Hiri Motu
+% hy: Armenian
+% hz: Herero
+% ik: Inupiak
+% io: Ido
+% iu: Inuktitut
+% jv: Javanese
+% ki: Kikuyu
+% kj: Kuanyama
+% kk: Kazakh
+% kl: Kalaallisut Greenlandic
+% km: Khmer Cambodian
+% kn: Kannada
+% ks: Kashmiri
+% ku: Kurdish
+% kv: Komi
+% kw: Cornish
+% ky: Kirghiz
+% lb: Letzeburgesch
+% ln: Lingala
+% lo: Lao Laotian
+% mh: Marshall
+% mi: Maori
+% ml: Malayalam
+% mo: Moldavian
+% mr: Marathi
+% ms: Malay
+% my: Burmese
+% na: Nauru
+% nb: Norwegian Bokmål
+% nd: Ndebele, North
+% ne: Nepali
+% ng: Ndonga
+% nr: Ndebele, South
+% nv: Navajo
+% ny: Chichewa Nyanja
+% oc: Occitan Provençal
+% om: (Afan) Oromo
+% or: Oriya
+% os: Ossetian Ossetic
+% pi: Pali
+% qu: Quechua
+% rm: Rhaeto-Romance
+% rn: Rundi Kirundi
+% rw: Kinyarwanda
+% sa: Sanskrit
+% sc: Sardinian
+% sd: Sindhi
+% se: Northern Sami
+% sg: Sango Sangro
+% si: Sinhalese
+% sm: Samoan
+% sn: Shona
+% so: Somali
+% ss: Swati Siswati
+% st: Sesotho Sotho, Southern
+% su: Sundanese
+% sw: Swahili
+% ta: Tamil
+% te: Telugu
+% tg: Tajik
+% ti: Tigrinya
+% tk: Turkmen
+% tl: Tagalog
+% tn: Tswana Setswana
+% to: Tonga
+% ts: Tsonga
+% tt: Tatar
+% tw: Twi
+% ty: Tahitian
+% ug: Uighur
+% ur: Urdu
+% uz: Uzbek
+% vo: Volapuk
+% wa: Walloon
+% wo: Wolof
+% xh: Xhosa
+% yo: Yoruba
+% za: Zhuang
+% zu: Zulu
 
