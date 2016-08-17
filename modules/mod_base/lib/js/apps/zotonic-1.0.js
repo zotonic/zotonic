@@ -969,7 +969,7 @@ function z_reload(args)
                 + window.location.host
                 + "/"
                 + parts.join("/")
-                + ((pathname === "" || pathname === "/") ? "/" : "")
+                + ((rewriteUrl && (pathname === "" || pathname === "/")) ? "/" : "")
         } else {
             href = window.location.protocol
                 + "//"
