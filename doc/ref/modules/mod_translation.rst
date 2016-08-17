@@ -17,8 +17,7 @@ of a :term:`resource` gets its own URL, and is as such indexable for
 Google.
 
 This behaviour is enabled by default, but can be switched off in the
-admin, by going to `Structure`, `Translation`. There is a checkbox at
-the bottom of the page.
+admin, by going to `Structure`, `Translation`. There is a checkbox labelled "Show the language in the URL".
 
 Alternatively you can set the config key
 ``mod_translation.rewrite_url`` to ``false``.
@@ -40,14 +39,12 @@ Creates a button which switches to Dutch. And another one for english::
 Supporting right-to-left languages
 ----------------------------------
 
-To support right-to-left languages like Arabic and Hebrew, you need to
-make some changes to your templates. mod_translation adds some support to help you.
+For basic use you don't need to do anything. Zotonic base site adds a ``lang`` attribute to the html tag, and when a right-to-left language is selected (for instance Arabic), the browser will interpret ``lang="ar"`` and automatically adapt the content to right-to-left.
 
-The idea is to give your ``<body/>`` tag the text direction of the main
-item visible on the page. Individual items, for example in menus or
-context lists, need their own text direction.
+Custom right-to-left content
+............................
 
-You can specify the text direction element attributes by including a template::
+If you write your own templates, you can add the ``lang`` tag in the html or body tag, for instance::
 
   <body {% include "_language_attrs.tpl" id=id %} >
 
@@ -59,7 +56,12 @@ When you want to add an extra class added to the rtl or ltr class you can use::
 
   <body {% include "_language_attrs.tpl" id=id class="my-body-class" %} >
 
+
+To create individual right-to-left elements, you can use the same principle::
+
+  <div {% include "_language_attrs.tpl" %}></div>
+
 And when you want to force a specific language::
 
-  <body {% include "_language_attrs.tpl" language=`en` %} >
+  <div {% include "_language_attrs.tpl" language=`en` %} >This is English content</div>
 
