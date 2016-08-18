@@ -903,6 +903,12 @@ languages() -> [
         {name, <<"avañe'ẽ"/utf8>>},
         {name_en, <<"Guarani"/utf8>>}
     ]},
+    {<<"gu">>, [
+        {language, <<"gu">>},
+        {script, <<"Gujr">>},
+        {name, <<"ગુજરાતી"/utf8>>},
+        {name_en, <<"Gujarati"/utf8>>}
+    ]},
     {<<"he">>, [
         {language, <<"he">>},
         {direction, <<"RTL">>},
@@ -947,6 +953,11 @@ languages() -> [
         {name, <<"Indonesia"/utf8>>},
         {name_en, <<"Indonesian"/utf8>>}
     ]},
+    {<<"ia">>, [
+        {language, <<"ia">>},
+        {name, <<"Interlingua"/utf8>>},
+        {name_en, <<"Interlingua"/utf8>>}
+    ]},
     {<<"is">>, [
         {language, <<"is">>},
         {region, <<"IS">>},
@@ -978,6 +989,25 @@ languages() -> [
         {name, <<"日本語"/utf8>>},
         {name_en, <<"Japanese"/utf8>>}
     ]},
+    {<<"jv">>, [
+        {language, <<"jv">>},
+        {region, <<"ID">>},
+        {name, <<"basa jawa"/utf8>>},
+        {name_en, <<"Javanese"/utf8>>}
+    ]},
+    {<<"ka">>, [
+        {language, <<"ka">>},
+        {script, <<"Geor">>},
+        {region, <<"GE">>},
+        {name, <<"ქართული"/utf8>>},
+        {name_en, <<"Georgian"/utf8>>}
+    ]},
+    {<<"ko">>, [
+        {language, <<"ko">>},
+        {script, <<"Kore">>},
+        {name, <<"한국어"/utf8>>},
+        {name_en, <<"Korean"/utf8>>}
+    ]},
     {<<"lt">>, [
         {language, <<"lt">>},
         {name, <<"lietuvių"/utf8>>},
@@ -994,6 +1024,24 @@ languages() -> [
         {region, <<"MG">>},
         {name, <<"Malagasy"/utf8>>},
         {name_en, <<"Malagasy"/utf8>>}
+    ]},
+    {<<"mk">>, [
+        {language, <<"mk">>},
+        {region, <<"MK">>},
+        {script, <<"Cyrl">>},
+        {name, <<"македонски"/utf8>>},
+        {name_en, <<"Macedonian"/utf8>>}
+    ]},
+    {<<"mn">>, [
+        {language, <<"mn">>},
+        {name, <<"монгол"/utf8>>},
+        {name_en, <<"Mongolian"/utf8>>}
+    ]},
+    {<<"mt">>, [
+        {language, <<"mt">>},
+        {region, <<"MT">>},
+        {name, <<"Malti"/utf8>>},
+        {name_en, <<"Maltese"/utf8>>}
     ]},
     {<<"nl">>, [
         {language, <<"nl">>},
@@ -1024,6 +1072,26 @@ languages() -> [
         {region, <<"NO">>},
         {name, <<"nynorsk"/utf8>>},
         {name_en, <<"Norwegian Nynorsk"/utf8>>}
+    ]},
+    {<<"pa">>, [
+        {language, <<"pa">>},
+        {script, <<"Arab">>},
+        {name, <<"ਪੰਜਾਬੀ"/utf8>>},
+        {name_en, <<"Punjabi"/utf8>>},
+        {sublanguages, [
+            {<<"pa-arab">>, [
+                {language, <<"pa">>},
+                {script, <<"Arab">>},
+                {name, <<"ابی"/utf8>>},
+                {name_en, <<"Punjabi - Arab"/utf8>>}
+            ]},
+            {<<"pa-guru">>, [
+                {language, <<"pa">>},
+                {script, <<"Guru">>},
+                {name, <<"ਪੰਜਾਬੀ ਦੇ - ਗੁਰਮੁਖੀ"/utf8>>},
+                {name_en, <<"Punjabi - Arab"/utf8>>}
+            ]}
+        ]}
     ]},
     {<<"pl">>, [
         {language, <<"pl">>},
@@ -1088,6 +1156,11 @@ languages() -> [
         {name, <<"svenska"/utf8>>},
         {name_en, <<"Swedish"/utf8>>}
     ]},
+    {<<"sq">>, [
+        {language, <<"sq">>},
+        {name, <<"shqip"/utf8>>},
+        {name_en, <<"Albanian"/utf8>>}
+    ]},
     {<<"th">>, [
         {language, <<"th">>},
         {script, <<"Thai">>},
@@ -1104,6 +1177,12 @@ languages() -> [
         {script, <<"Cyrl">>},
         {name, <<"українська"/utf8>>},
         {name_en, <<"Ukrainian"/utf8>>}
+    ]},
+    {<<"vi">>, [
+        {language, <<"vi">>},
+        {region, <<"VN">>},
+        {name, <<"Tiếng Việt"/utf8>>},
+        {name_en, <<"Vietnamese"/utf8>>}
     ]},
     {<<"zh">>, [
         {type, <<"macro_language">>},
@@ -1165,22 +1244,8 @@ languages() -> [
     ]}
 ].
 
-%% TODO:
-
-% "ia" <<"Interlingua"/utf8>>;
-% "ie" <<"Interlingue"/utf8>>;
-% "ka" <<"Georgian"/utf8>>;
-% "ko" <<"Korean"/utf8>>;
-% "mk" <<"Macedonian"/utf8>>;
-% "mn" <<"Mongolian"/utf8>>;
-% "mt" <<"Maltese"/utf8>>;
-% "pa" <<"Panjabi; Punjabi"/utf8>>;
-% "sq" <<"Albanian"/utf8>>;
-% "vi" <<"Vietnamese"/utf8>>;
-
 %% Other, less used languages:
 
-% gu: Gujarati
 % gv: Manx
 % ha: Hausa
 % ho: Hiri Motu
@@ -1189,7 +1254,6 @@ languages() -> [
 % ik: Inupiak
 % io: Ido
 % iu: Inuktitut
-% jv: Javanese
 % ki: Kikuyu
 % kj: Kuanyama
 % kk: Kazakh
