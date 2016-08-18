@@ -5,7 +5,7 @@ initial_lang_code
 #}
 <div id="dialog_language_edit_content">
     <div class="mod_translation-filter">
-        <input id="mod_translation_filter" class="form-control" type="text" value="" placeholder="Find language by name or code" />
+        <input id="mod_translation_filter" class="form-control" type="text" value="" placeholder="Find language by name or code" autofocus="1" />
     </div>
     <div id="mod_translation_list" class="list-group mod_translation-language-list">
         {% for lang_code, lang_data in m.translation.main_languages %}
