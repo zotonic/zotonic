@@ -9,12 +9,14 @@ For example::
    <input type="text" id="email" name="email" value="" />
    {% validate id="email" type={email} %}
 
-Arguments:
+Arguments
+---------
 
 ===============  =================================================  =======
 Argument         Description                                        Example
 ===============  =================================================  =======
 failure_message  Message to show when the entered value is not
-                 an e-mail address. Defaults to "Incorrect E-mail"  failure_message="Please enter your e-mail address."
+                 an e-mail address. Defaults to "Incorrect E-mail"  ``failure_message="Please enter your e-mail address."``
 ===============  =================================================  =======
 
+.. seealso:: :ref:`guide-validators`
