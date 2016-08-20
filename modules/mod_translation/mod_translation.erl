@@ -333,7 +333,7 @@ event(#postback{message={translation_reload, _Args}}, Context) ->
 
 
 %% @doc Strip the language code from the location (if the language code is recognized).
-%%      For instance: <<"/nl-nl/admin/translation">> becomes <<"/admin/translation">>
+%%      For instance: `<<"/nl-nl/admin/translation">>' becomes `<<"/admin/translation">>'
 url_strip_language([$/,A,B,$/ | Rest] = Url) ->
     url_strip_language1(Url, [A,B], Rest);
 url_strip_language([$/,A,B,$-,C,D,$/ | Rest] = Url) ->

@@ -1,6 +1,3 @@
-%% coding: utf-8
--module(z_language).
-
 %% @doc Mandatory background read on language tags: [1].
 %%
 %%      Some quotes from [1]:
@@ -35,6 +32,7 @@
 %%      For a list of language, region and script codes, see [2].
 %%      [1] http://www.w3.org/International/articles/language-tags/
 %%      [2] http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+-module(z_language).
 
 -export([
     default_language/1,
