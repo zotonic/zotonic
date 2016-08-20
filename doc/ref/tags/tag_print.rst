@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. index:: tag;  print
 
 .. _tag-print:
@@ -14,13 +14,13 @@ variables during template development.
 
 For example::
 
-  {% print value %}
+    {% print value %}
 
 When value is “<b>Hello</b> world!” then the example above returns the output::
 
-  <pre>
-  &lt;b&gt;Hello&lt;/b&gt; world!
-  </pre>
+    <pre>
+    &lt;b&gt;Hello&lt;/b&gt; world!
+    </pre>
 
 It can also print complex values like nested lists and tuples, for
 which it uses Erlang’s ``io_lib:format/2`` function.
