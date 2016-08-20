@@ -275,7 +275,7 @@ languages() -> [
             {<<"ar-ae">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"AE">>},
+                {region, <<"AE">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - الإمارات العربية المتحدة."/utf8>>},
                 {name_en, <<"Arabic - U.A.E."/utf8>>}
@@ -283,7 +283,7 @@ languages() -> [
             {<<"ar-bh">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"BH">>},
+                {region, <<"BH">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - البحرين"/utf8>>},
                 {name_en, <<"Arabic - Bahrain"/utf8>>}
@@ -291,7 +291,7 @@ languages() -> [
             {<<"aao">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"DZ">>},
+                {region, <<"DZ">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية الصحراء الجزائرية"/utf8>>},
                 {name_en, <<"Arabic - Algerian Sahara"/utf8>>}
@@ -299,7 +299,7 @@ languages() -> [
             {<<"ary">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"DZ">>},
+                {region, <<"DZ">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - المغرب"/utf8>>},
                 {name_en, <<"Arabic - Marocco"/utf8>>}
@@ -307,7 +307,7 @@ languages() -> [
             {<<"arz">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"EG">>},
+                {region, <<"EG">>},
                 {script, <<"Arab">>},
                 {name, <<"مصر"/utf8>>},
                 {name_en, <<"Arabic - Egypt"/utf8>>}
@@ -315,7 +315,7 @@ languages() -> [
             {<<"ar-iq">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"IQ">>},
+                {region, <<"IQ">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - مصر"/utf8>>},
                 {name_en, <<"Arabic - Iraq"/utf8>>}
@@ -323,7 +323,7 @@ languages() -> [
             {<<"ar-jo">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"JO">>},
+                {region, <<"JO">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - الأردن"/utf8>>},
                 {name_en, <<"Arabic - Jordan"/utf8>>}
@@ -331,7 +331,7 @@ languages() -> [
             {<<"ar-kw">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"KW">>},
+                {region, <<"KW">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - الكويت"/utf8>>},
                 {name_en, <<"Arabic - Kuwait"/utf8>>}
@@ -339,7 +339,7 @@ languages() -> [
             {<<"ar-lb">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"LB">>},
+                {region, <<"LB">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - لبنان"/utf8>>},
                 {name_en, <<"Arabic - Lebanon"/utf8>>}
@@ -347,7 +347,7 @@ languages() -> [
             {<<"ayl">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"LY">>},
+                {region, <<"LY">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - ليبيا"/utf8>>},
                 {name_en, <<"Arabic - Libya"/utf8>>}
@@ -355,7 +355,7 @@ languages() -> [
             {<<"ar-ma">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"MA">>},
+                {region, <<"MA">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - المغرب"/utf8>>},
                 {name_en, <<"Arabic - Morocco"/utf8>>}
@@ -363,7 +363,7 @@ languages() -> [
             {<<"acx">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"OM">>},
+                {region, <<"OM">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - عمان"/utf8>>},
                 {name_en, <<"Arabic - Oman"/utf8>>}
@@ -371,7 +371,7 @@ languages() -> [
             {<<"ar-qa">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"QA">>},
+                {region, <<"QA">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - قطر"/utf8>>},
                 {name_en, <<"Arabic - Qatar"/utf8>>}
@@ -379,7 +379,7 @@ languages() -> [
             {<<"ar-sa">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"SA">>},
+                {region, <<"SA">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - المملكة العربية السعودية"/utf8>>},
                 {name_en, <<"Arabic - Saudi Arabia"/utf8>>}
@@ -387,7 +387,7 @@ languages() -> [
             {<<"ar-sy">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"SY">>},
+                {region, <<"SY">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - سوريا"/utf8>>},
                 {name_en, <<"Arabic - Syria"/utf8>>}
@@ -395,7 +395,7 @@ languages() -> [
             {<<"aeb">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"TN">>},
+                {region, <<"TN">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - تونس"/utf8>>},
                 {name_en, <<"Arabic - Tunisia"/utf8>>}
@@ -403,7 +403,7 @@ languages() -> [
             {<<"ar-ye">>, [
                 {language, <<"ar">>},
                 {direction, <<"RTL">>},
-                {territory, <<"YE">>},
+                {region, <<"YE">>},
                 {script, <<"Arab">>},
                 {name, <<"العربية - اليمن"/utf8>>},
                 {name_en, <<"Arabic - Yemen"/utf8>>}
@@ -1197,14 +1197,14 @@ languages() -> [
             ]},
             {<<"zh-hans-cn">>, [
                 {language, <<"zh-hans">>},
-                {territory, <<"CN">>},
+                {region, <<"CN">>},
                 {script, <<"Hans">>},
                 {name, <<"中国大陆简体脚本"/utf8>>},
                 {name_en, <<"Chinese - Mainland (Simplified)"/utf8>>}
             ]},
             {<<"zh-hans-sg">>, [
                 {language, <<"zh-hans">>},
-                {territory, <<"SG">>},
+                {region, <<"SG">>},
                 {script, <<"Hans">>},
                 {name, <<"新加坡中国简体脚本"/utf8>>},
                 {name_en, <<"Chinese - Singapore (Simplified)"/utf8>>}
@@ -1219,21 +1219,21 @@ languages() -> [
         {sublanguages, [
             {<<"zh-hant-hk">>, [
                 {language, <<"zh-hant">>},
-                {territory, <<"HK">>},
+                {region, <<"HK">>},
                 {script, <<"Hant">>},
                 {name, <<"香港中國傳統腳本"/utf8>>},
                 {name_en, <<"Chinese - Hong Kong (Traditional)"/utf8>>}
             ]},
             {<<"zh-hant-mo">>, [
                 {language, <<"zh-hant">>},
-                {territory, <<"MO">>},
+                {region, <<"MO">>},
                 {script, <<"Hant">>},
                 {name, <<"澳門中國人在傳統的腳本"/utf8>>},
                 {name_en, <<"Chinese - Macau (Traditional)"/utf8>>}
             ]},
             {<<"zh-hant-tw">>, [
                 {language, <<"zh-hant">>},
-                {territory, <<"TW">>},
+                {region, <<"TW">>},
                 {script, <<"Hant">>},
                 {name, <<"台灣中國傳統腳本"/utf8>>},
                 {name_en, <<"Chinese - Taiwan (Traditional)"/utf8>>}
