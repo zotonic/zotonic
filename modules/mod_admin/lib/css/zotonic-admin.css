@@ -64,6 +64,11 @@ ol,
 p {
   margin: 0 0 15px 0;
 }
+iframe,
+video,
+audio {
+  max-width: 100%;
+}
 .unpublished,
 .unpublished a:not(.btn),
 .unpublished .text-muted,
@@ -110,9 +115,6 @@ body.noframe > .admin-container {
 .admin-image-border,
 .admin-edit-media {
   border: 1px solid #fff;
-}
-iframe, video, audio {
-  max-width: 100%;
 }
 .admin-text-header,
 .widget .widget-header,
