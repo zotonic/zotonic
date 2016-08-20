@@ -9,7 +9,6 @@
     [
         {language, <<"zh-hant">>},
         {script, <<"Hant">>},
-        {direction, <<"LTR">>},
         {name, <<"中國傳統的腳本"/utf8>>},
         {name_en, <<"Chinese (Traditional)"/utf8>>},
         {sublanguages, [
@@ -17,7 +16,6 @@
                 {language, <<"zh-hant">>},
                 {region, <<"HK">>},
                 {script, <<"Hant">>},
-                {direction, <<"LTR">>},
                 {name, <<"香港中國傳統腳本"/utf8>>},
                 {name_en, <<"Chinese - Hong Kong (Traditional)"/utf8>>}
             ]},
@@ -25,7 +23,6 @@
                 {language, <<"zh-hant">>},
                 {region, <<"MO">>},
                 {script, <<"Hant">>},
-                {direction, <<"LTR">>},
                 {name, <<"澳門中國人在傳統的腳本"/utf8>>},
                 {name_en, <<"Chinese - Macau (Traditional)"/utf8>>}
             ]},
@@ -33,7 +30,6 @@
                 {language, <<"zh-hant">>},
                 {region, <<"TW">>},
                 {script, <<"Hant">>},
-                {direction, <<"LTR">>},
                 {name, <<"台灣中國傳統腳本"/utf8>>},
                 {name_en, <<"Chinese - Taiwan (Traditional)"/utf8>>}
             ]}
@@ -134,6 +130,8 @@ test_get_properties_8() ->
     Result = z_language:properties(Code),
     [{_ExpectedCode, ExpectedData}|_] = proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES),
     [{_ResultCode, ResultData}|_] = proplists:get_value(sublanguages, Result),
+    lager:info("ExpectedData=~p", [ExpectedData]),
+    lager:info("ResultData=~p", [ResultData]),
     ?assertEqual(
         proplists:get_value(region, ExpectedData),
         proplists:get_value(region, ResultData)
