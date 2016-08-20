@@ -548,8 +548,8 @@ maybe_update_config_list(Existing, Context) ->
         undefined -> ok;
         List ->
             [{_Key, Props}|_] = List,
-            case proplists:is_defined(language, Props) of
-                true ->
+            case proplists:is_defined(name, Props) of
+                false ->
                     lager:info("mod_translation: Converting language config list from 0.x to 1.0."),
                     m_config:delete(i18n, language_list, Context),
                     NewList = lists:foldl(fun({Code, ItemProps}, Acc) ->
@@ -560,7 +560,7 @@ maybe_update_config_list(Existing, Context) ->
                         end
                     end, [], List),
                     m_config:set_prop(i18n, language_list, list, NewList, Context);
-                false -> ok
+                true -> ok
             end
     end.
 
