@@ -4,7 +4,7 @@
 %%
 %% Setup instructions:
 %% * Enable the mod_linkedin module
-%% * Configure in the admin the linkedin keys (Auth -> App Keys &amp; Authentication Services)
+%% * Configure in the admin the linkedin keys (Auth -> External Services)
 
 %% Copyright 2014 Marc Worrell
 %%

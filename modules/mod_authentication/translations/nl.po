@@ -26,15 +26,6 @@ msgstr "Toegang geweigerd"
 msgid "Already Connected"
 msgstr "Al gelinkt"
 
-#: modules/mod_authentication/mod_authentication.erl:71
-msgid "App Keys & Authentication Services"
-msgstr "App Keys & Authenticatie Services"
-
-#: modules/mod_authentication/templates/admin_authentication_services.tpl:3
-#: modules/mod_authentication/templates/admin_authentication_services.tpl:7
-msgid "App Keys &amp; Authentication Services"
-msgstr "App Keys &amp; Authenticatie Services"
-
 #: modules/mod_authentication/templates/logon_service_done.tpl:5
 msgid "Authenticated"
 msgstr "Geauthenticeerd"
@@ -155,6 +146,12 @@ msgstr "Vul je gebruikersnaam in"
 msgid "Error"
 msgstr "Foutmelding"
 
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:3
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:7
+#: modules/mod_authentication/mod_authentication.erl:71
+msgid "External Services"
+msgstr "Externe diensten"
+
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:20
 msgid ""
 "For security reasons, password reset codes are only kept for a limited "
@@ -186,8 +183,8 @@ msgid ""
 "Here you can set all the application keys, secrets and other configurations "
 "to integrate with external services like Facebook and Twitter."
 msgstr ""
-"Configureer hier de applicatie keys, geheimen en andere configuraties "
-"om te integreren met externe services zoals Facebook en Twitter."
+"Configureer hier de applicatie keys, geheimen en andere configuraties om te "
+"integreren met externe services zoals Facebook en Twitter."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
@@ -440,8 +437,8 @@ msgid ""
 "You need to be allowed to edit the system configuration to view or change "
 "the configured App Keys."
 msgstr ""
-"Voor het bekijken en wijzigen van de geconfigureerde App Keys moet je toestemming "
-"hebben om de systeem configuratie te wijzigen."
+"Voor het bekijken en wijzigen van de geconfigureerde App Keys moet je "
+"toestemming hebben om de systeem configuratie te wijzigen."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:23
 msgid ""
