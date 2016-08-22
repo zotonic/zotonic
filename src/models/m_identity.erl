@@ -37,6 +37,7 @@
     ensure_username_pw/2,
     check_username_pw/3,
     hash/1,
+    needs_rehash/1,
     hash_is_equal/2,
     get/2,
     get_rsc/2,
@@ -438,6 +439,7 @@ check_email_pw_1([Idn|Rest], Email, Password, Context) ->
         undefined ->
             check_email_pw_1(Rest, Email, Password, Context);
         {RscId, Username, Hash} ->
+            ?DEBUG(Hash),
             case check_hash(RscId, Username, Password, Hash, Context) of
                 {ok, Id} -> {ok, Id};
                 {error, password} ->
@@ -542,21 +544,33 @@ get_rsc(Id, Type, Context) ->
     z_db:assoc_row("select * from identity where rsc_id = $1 and type = $2", [Id, Type], Context).
 
 
-%% @doc Hash a password, using sha1 and a salt
+%% @doc Hash a password, using bcrypt
 %% @spec hash(Password) -> tuple()
 hash(Pw) ->
-    Salt = binary_to_list(z_ids:id(10)),
-    Hash = crypto:hash(sha, [Salt,Pw]),
-    {hash, Salt, Hash}.
+    {bcrypt, erlpass:hash(Pw)}.
 
+
+%% @doc Hash a password, with bcrypt
+%% @spec bcrypt_hash(Password) -> tuple
 
 %% @doc Compare if a password is the same as a hash.
 %% @spec hash_is_equal(Password, Hash) -> bool()
+hash_is_equal(Pw, {bcrypt, Hash}) ->
+    erlpass:match(Pw, Hash);
 hash_is_equal(Pw, {hash, Salt, Hash}) ->
     NewHash = crypto:hash(sha, [Salt, Pw]),
     Hash =:= NewHash;
 hash_is_equal(_, _) ->
     false.
+
+
+%% @doc Check if the password hash needs to be rehashed.
+%% @spec needs_rehash(Hash) -> bool()
+needs_rehash({bcrypt, _}) ->
+   false;
+needs_rehash({hash, _, _}) -> 
+    true.
+
 
 %% @doc Create an identity record.
 insert(RscId, Type, Key, Context) ->
