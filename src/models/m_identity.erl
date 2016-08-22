@@ -439,7 +439,6 @@ check_email_pw_1([Idn|Rest], Email, Password, Context) ->
         undefined ->
             check_email_pw_1(Rest, Email, Password, Context);
         {RscId, Username, Hash} ->
-            ?DEBUG(Hash),
             case check_hash(RscId, Username, Password, Hash, Context) of
                 {ok, Id} -> {ok, Id};
                 {error, password} ->
