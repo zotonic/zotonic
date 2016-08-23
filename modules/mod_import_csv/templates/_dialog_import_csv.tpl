@@ -23,7 +23,7 @@
     </div>
 
     <div class="modal-footer">
-        {% button class="btn btn-default" action={dialog_close} text="Cancel" tag="a" %}
+        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
         <button class="btn btn-primary" type="submit">{_ Start import _}</button>
     </div>
 </form>
