@@ -11,8 +11,9 @@ modify_rsc_test() ->
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     CatId = m_rsc:rid(text, C),
 
-    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}], C)),
-    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
+%%    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}], C)),
+    ?assertException(throw, {error, eacces}, m_rsc:insert([{title, "bla"}], C)),
+%%    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
 
     {ok, Id} = m_rsc:insert([{title, "Hello."}, {category_id, CatId}], AdminC),
 
@@ -75,5 +76,5 @@ name_rid_test() ->
     m_rsc:get_raw(rose, AdminC),
     ok = m_rsc_update:flush(rose, AdminC),
     {ok, Id} = m_rsc:update(rose, [], AdminC),
-    {ok, Id} = m_rsc:duplicate(rose, [], AdminC),
-    {ok, Id} = m_rsc:delete(rose, AdminC).
+    {ok, _DuplicateId} = m_rsc:duplicate(rose, [], AdminC),
+    ok = m_rsc:delete(rose, AdminC).

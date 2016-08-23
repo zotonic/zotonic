@@ -49,7 +49,7 @@ query_hooks_test() ->
 
 
 search_query_notify_test() ->
-    C = z_acl:sudo(z_context:new(testsandbox)),
+    C = z_acl:sudo(z_context:new(testsandboxdb)),
 
     Q = <<"cat=keyword\nis_featured">>,
 
