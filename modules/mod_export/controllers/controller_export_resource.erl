@@ -20,83 +20,66 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    resource_exists/2,
-    previously_existed/2,
-    forbidden/2,
-    content_types_provided/2,
-    charsets_provided/2,
+    resource_exists/1,
+    previously_existed/1,
+    forbidden/1,
+    content_types_provided/1,
+    charsets_provided/1,
 
-    do_export/2,
+    do_export/1,
 
     % Exports for controller_export
     get_content_type/3,
     set_filename/4
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-resource_exists(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    {Id, ContextQs} = get_id(z_context:ensure_qs(z_context:continue_session(Context1))),
+resource_exists(Context) ->
+    {Id, ContextQs} = get_id(z_context:ensure_qs(z_context:continue_session(Context))),
     z_context:lager_md(ContextQs),
-    ?WM_REPLY(m_rsc:exists(Id, ContextQs), ContextQs).
+    {m_rsc:exists(Id, ContextQs), ContextQs}.
 
-previously_existed(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    {Id, Context2} = get_id(Context1),
-    IsGone = m_rsc_gone:is_gone(Id, Context2),
-    ?WM_REPLY(IsGone, Context2).
+previously_existed(Context) ->
+    {Id, Context2} = get_id(Context),
+    {m_rsc_gone:is_gone(Id, Context2), Context2}.
 
-forbidden(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    {Id, Context2} = get_id(z_context:ensure_qs(z_context:continue_session(Context1))),
+forbidden(Context) ->
+    {Id, Context2} = get_id(z_context:ensure_qs(z_context:continue_session(Context))),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_acl:is_allowed(use, mod_export, Context2) of
         true ->
             case z_notifier:first(#export_resource_visible{id=Id, dispatch=Dispatch}, Context2) of
-                undefined -> ?WM_REPLY(not z_acl:rsc_visible(Id, Context2), Context2);
-                true -> ?WM_REPLY(false, Context2);
-                false -> ?WM_REPLY(true, Context2)
+                undefined -> {not z_acl:rsc_visible(Id, Context2), Context2};
+                true -> {false, Context2};
+                false -> {true, Context2}
             end;
         false ->
-            ?WM_REPLY(true, Context2)
+            {true, Context2}
     end.
 
-content_types_provided(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+content_types_provided(Context) ->
     {Id, Context1} = get_id(z_context:ensure_qs(z_context:continue_session(Context))),
     Dispatch = z_context:get(zotonic_dispatch, Context1),
     case get_content_type(Id, Dispatch, Context1) of
         {ok, ContentType} ->
-            ?WM_REPLY([{ContentType, do_export}], Context);
+            {[{ContentType, do_export}], Context};
         {error, no_content_type} ->
             ContentTypes = export_encoder:content_types(Context),
             Accepted = [ {Mime, do_export} || Mime <- ContentTypes ],
-            ?WM_REPLY(Accepted, Context);
+            {Accepted, Context};
         {error, Reason} = Error ->
             lager:error("~p: mod_export error when fetching content type for ~p:~p: ~p",
                         [z_context:site(Context1), Dispatch, Id, Reason]),
             throw(Error)
     end.
 
-charsets_provided(ReqData, Context) ->
-    {[<<"utf-8">>], ReqData, Context}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-do_export(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+do_export(Context) ->
     {Id, _} = get_id(Context),
-    ContentType = wrq:resp_content_type(ReqData),
+    ContentType = cowmachine_req:resp_content_type(Context),
     Dispatch = z_context:get(zotonic_dispatch, Context),
     StreamOpts = [
         {dispatch, Dispatch},
@@ -105,12 +88,12 @@ do_export(ReqData, Context0) ->
     ],
     Stream = export_encoder:stream(Id, ContentType, StreamOpts, Context),
     Context1 = set_filename(Id, ContentType, Dispatch, Context),
-    ?WM_REPLY(Stream, Context1).
+    {Stream, Context1}.
 
 set_filename(Id, ContentType, Dispatch, Context) ->
     Extension = case mimetypes:mime_to_exts(ContentType) of
-                    undefined -> "bin";
-                    Exts -> binary_to_list(hd(Exts))
+                    undefined -> <<"bin">>;
+                    Exts -> hd(Exts)
                 end,
     case z_notifier:first(#export_resource_filename{
                                 id=Id,
@@ -119,21 +102,29 @@ set_filename(Id, ContentType, Dispatch, Context) ->
     of
         undefined ->
             Cat = m_rsc:p_no_acl(Id, category, Context),
-            Filename = "export-"
-                        ++z_convert:to_list(proplists:get_value(name, Cat))
-                        ++"-"
-                        ++z_convert:to_list(Id)
-                        ++"."
-                        ++Extension,
-            z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename, Context);
+            Filename = iolist_to_binary([
+                        "export-",
+                        z_convert:to_binary(proplists:get_value(name, Cat)),
+                        "-",
+                        z_convert:to_binary(Id),
+                        ".",
+                        Extension
+                    ]),
+            z_context:set_resp_header(
+                    <<"content-disposition">>,
+                    <<"attachment; filename=", Filename/binary>>,
+                    Context);
         {ok, Filename} ->
-            Filename1 = z_convert:to_list(Filename),
+            Filename1 = z_convert:to_binary(Filename),
             Filename2 = case filename:extension(Filename1) of
-                            "." ++ Extension -> Filename1;
-                            "" -> Filename1 ++ [$.|Extension];
-                            _Ext -> filename:rootname(Filename1) ++ [$.|Extension]
+                            <<".", Extension/binary>> -> Filename1;
+                            <<>> -> <<Filename1/binary, $., Extension/binary>>;
+                            _Ext -> <<(filename:rootname(Filename1))/binary, $., Extension/binary>>
                         end,
-            z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename2, Context)
+            z_context:set_resp_header(
+                    <<"content-disposition">>,
+                    <<"attachment; filename=", Filename2/binary>>,
+                    Context)
     end.
 
 %% @doc Fetch the content type being served
@@ -142,17 +133,15 @@ get_content_type(Id, Dispatch, Context) ->
         undefined ->
             get_content_type_observer(Id, Dispatch, Context);
         Type when is_atom(Type) ->
-            get_content_type_extension(z_convert:to_list(Type), Id, Dispatch, Context);
-        ContentType when is_binary(ContentType) ->
-            {ok, z_convert:to_list(ContentType)};
-        ContentType when is_list(ContentType) ->
-            {ok, ContentType}
+            get_content_type_extension(z_convert:to_binary(Type), Id, Dispatch, Context);
+        ContentType when is_binary(ContentType); is_list(ContentType) ->
+            {ok, z_convert:to_binary(ContentType)}
     end.
 
 get_content_type_observer(Id, Dispatch, Context) ->
     case z_notifier:first(#export_resource_content_type{id=Id, dispatch=Dispatch}, Context) of
         undefined ->
-            get_content_type_extension(z_context:get_q("type", Context), Id, Dispatch, Context);
+            get_content_type_extension(z_context:get_q(<<"type">>, Context), Id, Dispatch, Context);
         {error, _} = Error ->
             Error;
         {ok, _} = Ok ->
@@ -169,9 +158,8 @@ get_content_type_extension(Type, _Id, _Dispatch, Context) ->
         _ ->
             % Must have an exporter
             ContentTypes = export_encoder:content_types(Context),
-            MimeS = z_convert:to_list(Mime),
-            case lists:member(MimeS, ContentTypes) of
-                true -> {ok, MimeS};
+            case lists:member(Mime, ContentTypes) of
+                true -> {ok, Mime};
                 false -> {error, no_content_type}
             end
     end.
@@ -180,10 +168,10 @@ get_content_type_extension(Type, _Id, _Dispatch, Context) ->
 get_id(Context) ->
     case z_context:get(id, Context) of
         undefined ->
-            case z_context:get_q("id", Context) of
+            case z_context:get_q(<<"id">>, Context) of
                 undefined ->
                     {undefined, Context};
-                [] ->
+                <<>> ->
                     {undefined, Context};
                 Id ->
                     RscId = m_rsc:rid(Id, Context),

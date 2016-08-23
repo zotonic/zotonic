@@ -20,54 +20,40 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    charsets_provided/2,
-    content_types_provided/2,
-    is_authorized/2,
-    provide_content/2
+    charsets_provided/1,
+    content_types_provided/1,
+    is_authorized/1,
+    provide_content/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-charsets_provided(ReqData, Context) ->
-    {[<<"utf-8">>], ReqData, Context}.
-
-content_types_provided(ReqData, Context) ->
+content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
-            {[{"text/html", provide_content}], ReqData, Context};
+            {[{<<"text/html">>, provide_content}], Context};
         Mime ->
-            {[{Mime, provide_content}], ReqData, Context}
+            {[{z_convert:to_binary(Mime), provide_content}], Context}
     end.
 
 %% @doc Check if the current user is allowed to view the resource.
-is_authorized(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    case z_context:get(anonymous, Context1) of
+is_authorized(Context) ->
+    case z_context:get(anonymous, Context) of
         true ->
-            ContextQs = z_context:ensure_qs(Context1),
-            ?WM_REPLY(true, ContextQs);
+            ContextQs = z_context:ensure_qs(Context),
+            {true, ContextQs};
         _ ->
-            Context2 = z_context:ensure_all(Context1),
+            Context2 = z_context:ensure_all(Context),
             z_context:lager_md(Context2),
             z_controller_helper:is_authorized(Context2)
     end.
 
 
-provide_content(ReqData, Context) ->
-    Context2 = ?WM_REQ(ReqData, Context),
-    Context3 = z_context:set_noindex_header(Context2),
+provide_content(Context) ->
+    Context3 = z_context:set_noindex_header(Context),
     Context4 = set_optional_cache_header(Context3),
     Template = z_context:get(template, Context4),
     Vars = [
@@ -75,15 +61,17 @@ provide_content(ReqData, Context) ->
         | z_context:get_all(Context3)
     ],
     Rendered = z_template:render(Template, Vars, Context4),
-    {Output, OutputContext} = z_context:output(Rendered, Context4),
-    ?WM_REPLY(Output, OutputContext).
+    z_context:output(Rendered, Context4).
 
 set_optional_cache_header(Context) ->
     case z_context:get(maxage, Context) of
         undefined ->
             Context;
         MaxAge when is_integer(MaxAge) ->
-            z_context:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(MaxAge), Context)
+            z_context:set_resp_header(
+                <<"cache-control">>, 
+                <<"public, max-age=", (z_conver:to_binary(MaxAge))/binary>>,
+                Context)
     end.
 
 

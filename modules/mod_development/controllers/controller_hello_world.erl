@@ -21,15 +21,8 @@
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
 
 -export([
-    init/1,
-    to_html/2
+    to_html/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
--include_lib("zotonic.hrl").
-
-init(_Args) ->
-    {ok, []}.
-
-to_html(ReqData, State) ->
-    {<<"Hello, World!">>, ReqData, State}.
+to_html(Context) ->
+    {<<"Hello, World!">>, Context}.

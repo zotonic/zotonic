@@ -32,7 +32,7 @@
 
 %% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(Context) ->
-    Context1 = wrq:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
+    Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
     Context2 = z_admin_controller_helper:init_session(Context1),
     {Context3, Id} = ensure_id(Context2),
     z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], admin_logon, Context3).

@@ -21,28 +21,28 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-         is_authorized/2,
+         is_authorized/1,
          event/2
 ]).
 
 -include_lib("controller_html_helper.hrl").
 
 
-is_authorized(ReqData, Context) ->
-    z_admin_controller_helper:is_authorized(mod_oauth, ReqData, Context).
+is_authorized(Context) ->
+    z_admin_controller_helper:is_authorized(mod_oauth, Context).
 
 
 html(Context) ->
-    Html = z_template:render("oauth_apps.tpl", [{page_admin_oauth, true}], Context),
+    Html = z_template:render(<<"oauth_apps.tpl">>, [{page_admin_oauth, true}], Context),
 	z_context:output(Html, Context).
 
 
 
 del_consumer(Id, Context) ->
     m_oauth_app:delete_consumer(Id, Context),
-    Html = z_template:render("_oauth_apps_list.tpl", [], Context),
-    Context1 = z_render:update("oauth-apps", Html, Context),
-    z_render:wire({growl, [{text, "Application removed."}]}, Context1).
+    Html = z_template:render(<<"_oauth_apps_list.tpl">>, [], Context),
+    Context1 = z_render:update(<<"oauth-apps">>, Html, Context),
+    z_render:wire({growl, [{text, ?__("Application removed.", Context)}]}, Context1).
 
 
 
@@ -50,7 +50,7 @@ del_consumer(Id, Context) ->
 %% Start add oauth application (consumer)
 %%
 event(#postback{message=start_add_app}, Context) ->
-    z_render:dialog("Add application", "_oauth_consumer_edit.tpl", [], Context);
+    z_render:dialog(?__("Add application", Context), <<"_oauth_consumer_edit.tpl">>, [], Context);
 
 %%
 %% Start edit oauth application (consumer)
@@ -59,17 +59,17 @@ event(#postback{message={start_edit_app, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Consumer = m_oauth_app:get_consumer(Id, Context),
     Vars = [{consumer, Consumer}],
-    z_render:dialog("Edit application", "_oauth_consumer_edit.tpl", Vars, Context);
+    z_render:dialog(?__("Edit application", Context), <<"_oauth_consumer_edit.tpl">>, Vars, Context);
 
 %%
 %% Consumer save handler
 %%
 event(#submit{message={consumer_save, Arg}}, Context) ->
-    Title = z_context:get_q("zp-title", Context),
-    Descr = z_context:get_q("zp-text", Context),
-    URL = z_context:get_q("zp-url", Context),
-    Callback = z_context:get_q("zp-callback", Context),
-    Perms = z_context:get_q_all("zp-perm", Context),
+    Title = z_context:get_q(<<"zp-title">>, Context),
+    Descr = z_context:get_q(<<"zp-text">>, Context),
+    URL = z_context:get_q(<<"zp-url">>, Context),
+    Callback = z_context:get_q(<<"zp-callback">>, Context),
+    Perms = z_context:get_q_all(<<"zp-perm">>, Context),
 
     Context1 = case proplists:get_value(id, Arg) of
                    undefined ->
@@ -85,8 +85,8 @@ event(#submit{message={consumer_save, Arg}}, Context) ->
                        m_oauth_perms:set(Id, Perms, Context),
                        z_render:wire({growl, [{text, ?__("Application details saved.", Context)}]}, Context)
     end,
-    Html = z_template:render("_oauth_apps_list.tpl", [], Context1),
-    Context2 = z_render:update("oauth-apps", Html, Context1),
+    Html = z_template:render(<<"_oauth_apps_list.tpl">>, [], Context1),
+    Context2 = z_render:update(<<"oauth-apps">>, Html, Context1),
     z_render:wire({dialog_close, []}, Context2);
 
 
@@ -96,13 +96,13 @@ event(#submit{message={consumer_save, Arg}}, Context) ->
 event(#postback{message={start_del_app, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Vars = [{id, Id}, {delete, true}],
-    z_render:dialog(?__("Delete application", Context), "_oauth_consumer_tokens.tpl", Vars, Context);
+    z_render:dialog(?__("Delete application", Context), <<"_oauth_consumer_tokens.tpl">>, Vars, Context);
 
 
 event(#postback{message={start_tokens, Arg}}, Context) ->
     Id = proplists:get_value(id, Arg),
     Vars = [{id, Id}],
-    z_render:dialog(?__("Tokens", Context), "_oauth_consumer_tokens.tpl", Vars, Context);
+    z_render:dialog(?__("Tokens", Context), <<"_oauth_consumer_tokens.tpl">>, Vars, Context);
 
 
 event(#postback{message={confirm_del_app, Arg}}, Context) ->

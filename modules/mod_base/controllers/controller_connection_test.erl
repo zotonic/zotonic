@@ -21,42 +21,35 @@
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    charsets_provided/2,
-    content_types_provided/2,
-    is_authorized/2,
-    provide_content/2
+    service_available/1,
+    charsets_provided/1,
+    content_types_provided/1,
+    is_authorized/1,
+    provide_content/1
 ]).
 
 -export([
     event/2
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
-init(DispatchArgs) ->
-    {ok, DispatchArgs}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:continue_session(Context1),
-    z_context:lager_md(Context2),
-    ?WM_REPLY(true, Context2).
+service_available(Context) ->
+    Context1 = z_context:continue_session(Context),
+    {true, Context1}.
 
-charsets_provided(ReqData, Context) ->
-    controller_template:charsets_provided(ReqData, Context).
+charsets_provided(Context) ->
+    controller_template:charsets_provided(Context).
 
-content_types_provided(ReqData, Context) ->
-    controller_template:content_types_provided(ReqData, Context).
+content_types_provided(Context) ->
+    controller_template:content_types_provided(Context).
 
-is_authorized(ReqData, Context) ->
-    controller_template:is_authorized(ReqData, Context).
+is_authorized(Context) ->
+    controller_template:is_authorized(Context).
 
-provide_content(ReqData, Context) ->
-    controller_template:provide_content(ReqData, Context).
+provide_content(Context) ->
+    controller_template:provide_content(Context).
 
 
 %%
@@ -74,4 +67,4 @@ event(#postback{message={session_info, []}, target=TargetId}, Context) ->
 
     Vars1 = [{pages, Combi} | Vars],
 
-    z_render:update(TargetId, #render{template="_session_info.tpl", vars=Vars1}, Context).
+    z_render:update(TargetId, #render{template = <<"_session_info.tpl">>, vars = Vars1}, Context).

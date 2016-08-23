@@ -21,13 +21,11 @@
 
 -export([
     resource_exists/1,
-    previously_existed/2,
-    moved_temporarily/2,
-    is_authorized/2,
+    previously_existed/1,
+    moved_temporarily/1,
+    is_authorized/1,
     html/1
 ]).
-
--include_lib("controller_html_helper.hrl").
 
 %% @doc Check if the id in the request (or dispatch conf) exists.
 resource_exists(Context) ->
@@ -40,32 +38,29 @@ resource_exists(Context) ->
     end.
 
 %% @doc Check if the resource used to exist
-previously_existed(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Id = z_controller_helper:get_id(Context1),
-    IsGone = m_rsc_gone:is_gone(Id, Context1),
-    ?WM_REPLY(IsGone, Context1).
+previously_existed(Context) ->
+    Id = z_controller_helper:get_id(Context),
+    {m_rsc_gone:is_gone(Id, Context), Context}.
 
-moved_temporarily(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Id = z_controller_helper:get_id(Context1),
-    redirect(m_rsc_gone:get_new_location(Id, Context1), Context1).
+moved_temporarily(Context) ->
+    Id = z_controller_helper:get_id(Context),
+    redirect(m_rsc_gone:get_new_location(Id, Context), Context).
 
 redirect(undefined, Context) ->
-    ?WM_REPLY(false, Context);
+    {false, Context};
 redirect(Location, Context) ->
-    ?WM_REPLY({true, Location}, Context).
+    {{true, Location}, Context}.
 
 
 %% @doc Check if the current user is allowed to view the resource.
-is_authorized(ReqData, Context) ->
-    controller_template:is_authorized(ReqData, Context).
+is_authorized(Context) ->
+    controller_template:is_authorized(Context).
 
 
 %% @doc Show the page.  Add a noindex header when requested by the editor.
 html(Context) ->
     Id = z_controller_helper:get_id(Context),
-    Context1 = z_context:set_noindex_header(m_rsc:p(Id, seo_noindex, Context), Context),
+    Context1 = z_context:set_noindex_header(m_rsc:p_no_acl(Id, seo_noindex, Context), Context),
 
 	%% EXPERIMENTAL:
 	%%
@@ -74,7 +69,7 @@ html(Context) ->
 	%% @todo Add the 'vary' headers to the cache key
 	RenderArgs = [ {id, Id} | z_context:get_all(Context1) ],
 	RenderFunc = fun() ->
-		Template = z_context:get(template, Context1, "page.tpl"),
+		Template = z_context:get(template, Context1, <<"page.tpl">>),
 	    z_template:render(Template, RenderArgs, Context1)
 	end,
 
@@ -134,14 +129,14 @@ maybe_redirect_page_path(PagePath, Id, Context) ->
                     maybe_exists(Id, Context);
                 _ ->
                     AbsUrl = m_rsc:p(Id, page_url_abs, Context),
-                    AbsUrlQs = append_qs(AbsUrl, wrq:req_qs(z_context:get_reqdata(Context))),
+                    AbsUrlQs = append_qs(AbsUrl, cowmachine_req:req_qs(Context)),
                     do_temporary_redirect(AbsUrlQs, Context)
             end
     end.
 
 do_temporary_redirect(Location, Context) ->
-    ContextRedirect = z_context:set_resp_header("Location", Location, Context),
-    ?WM_REPLY({halt, 302}, ContextRedirect).
+    ContextRedirect = z_context:set_resp_header(<<"location">>, Location, Context),
+    {{halt, 302}, ContextRedirect}.
 
 current_path(Context) ->
     case z_context:get_q(zotonic_dispatch_path, Context) of
@@ -158,15 +153,15 @@ is_canonical(Id, Context) ->
 append_qs(AbsUrl, []) ->
     AbsUrl;
 append_qs(AbsUrl, Qs) ->
-    iolist_to_binary([AbsUrl, $?, mochiweb_util:urlencode(Qs)]).
+    iolist_to_binary([AbsUrl, $?, cow_qs:urlencode(Qs)]).
 
 maybe_exists(Id, Context) ->
     case {m_rsc:exists(Id, Context), z_context:get(cat, Context)} of
         {Exists, undefined} ->
-            ?WM_REPLY(Exists, Context);
+            {Exists, Context};
         {true, Cat} ->
-            ?WM_REPLY(m_rsc:is_a(Id, Cat, Context), Context);
+            {m_rsc:is_a(Id, Cat, Context), Context};
         {false, _} ->
-            ?WM_REPLY(false, Context)
+            {false, Context}
     end.
 

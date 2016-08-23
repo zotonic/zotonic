@@ -20,88 +20,94 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    resource_exists/2,
-    forbidden/2,
-    previously_existed/2,
-    moved_temporarily/2,
-    moved_permanently/2
+    service_available/1,
+    resource_exists/1,
+    forbidden/1,
+    previously_existed/1,
+    moved_temporarily/1,
+    moved_permanently/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs,
-                    z_context:continue_session(
-                        z_context:ensure_qs(Context))),
+service_available(Context) ->
+    Context1 = z_context:continue_session(
+                        z_context:ensure_qs(Context)),
     z_context:lager_md(Context1),
-    Id = get_id(DispatchArgs, Context1),
+    Id = get_id(Context1),
     Medium = m_media:get(Id, Context1),
-    {true, ReqData, {Id, Medium, Context1}}.
+    {true, z_context:set(?MODULE, {Id, Medium}, Context1)}.
 
-resource_exists(ReqData, {undefined, _Medium, _Context} = MC) ->
-    {false, ReqData, MC};
-resource_exists(ReqData, {_Id, undefined, _Context} = MC) ->
-    {false, ReqData, MC};
-resource_exists(ReqData, {Id, _Medium, Context} = MC) ->
-    {not m_rsc:exists(Id, Context), ReqData, MC}.
+resource_exists(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {undefined, _Medium} -> 
+            {false, Context};
+        {_Id, undefined} ->
+            {false, Context};
+        {Id, _Medium} ->
+            {not m_rsc:exists(Id, Context), Context}
+    end.
 
-previously_existed(ReqData, {undefined, _M, _Context} = MC) ->
-    {false, ReqData, MC};
-previously_existed(ReqData, {_Id, undefined, _Context} = MC) ->
-    {false, ReqData, MC};
-previously_existed(ReqData, {Id, _M, Context} = MC) ->
-    case m_rsc:exists(Id, Context) of
-        true ->
-            {true, ReqData, MC};
-        false ->
-            case m_rsc_gone:is_gone(Id, Context) of
-                true -> {true, ReqData, {Id, gone, Context}};
-                false -> {false, ReqData, MC}
+previously_existed(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {undefined, _M} ->
+            {false, Context};
+        {_Id, undefined} ->
+            {false, Context};
+        {Id, _M} ->
+            case m_rsc:exists(Id, Context) of
+                true ->
+                    {true, Context};
+                false ->
+                    case m_rsc_gone:is_gone(Id, Context) of
+                        true ->
+                            {true, z_context:set(?MODULE, {Id, gone}, Context)};
+                        false -> {false, Context}
+                    end
             end
     end.
 
-forbidden(ReqData, {undefined, _M, _Context} = MC) ->
-    {false, ReqData, MC};
-forbidden(ReqData, {_Id, undefined, _Context} = MC) ->
-    {false, ReqData, MC};
-forbidden(ReqData, {Id, _M, Context} = MC) ->
-    {not z_acl:rsc_visible(Id, Context), ReqData, MC}.
-
-moved_temporarily(ReqData, {Id, gone, Context} = MC) ->
-    case m_rsc_gone:get_new_location(Id, Context) of
-        undefined -> {false, ReqData, MC};
-        Location -> {{true, Location}, ReqData, MC}
-    end;
-moved_temporarily(ReqData, {Id, Medium, Context} = MC) ->
-    case z_context:get(is_permanent, Context, false) of
-        true -> {false, ReqData, MC};
-        false -> do_redirect(Id, Medium, ReqData, Context)
+forbidden(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {undefined, _M} ->
+            {false, Context};
+        {_Id, undefined} ->
+            {false, Context};
+        {Id, _M} ->
+            {not z_acl:rsc_visible(Id, Context), Context}
     end.
 
-moved_permanently(ReqData, {Id, Medium, Context} = MC) ->
-    case z_context:get(is_permanent, Context, false) of
-        true -> do_redirect(Id, Medium, ReqData, Context);
-        false -> {false, ReqData, MC}
+moved_temporarily(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {Id, gone} ->
+            case m_rsc_gone:get_new_location(Id, Context) of
+                undefined -> {false, Context};
+                Location -> {{true, Location}, Context}
+            end;
+        {Id, Medium} ->
+            case z_context:get(is_permanent, Context, false) of
+                true -> {false, Context};
+                false -> do_redirect(Id, Medium, Context)
+            end
     end.
 
+moved_permanently(Context) ->
+    {Id, Medium} = z_context:get(?MODULE, Context),
+    case z_context:get(is_permanent, Context, false) of
+        true -> do_redirect(Id, Medium, Context);
+        false -> {false, Context}
+    end.
 
-do_redirect(Id, undefined, ReqData, Context) ->
-    {false, ReqData, {Id, undefined, Context}};
-do_redirect(undefined, Medium, ReqData, Context) ->
-    {false, ReqData, {undefined, Medium, Context}};
-do_redirect(Id, Medium, ReqData, Context) ->
+do_redirect(_Id, undefined, Context) ->
+    {false, Context};
+do_redirect(undefined, _Medium, Context) ->
+    {false, Context};
+do_redirect(_Id, Medium, Context) ->
     case proplists:get_value(filename, Medium) of
         <<>> ->
-            {false, ReqData, {Id, Medium, Context}};
+            {false, Context};
         undefined ->
-            {false, ReqData, {Id, Medium, Context}};
+            {false, Context};
         Filename ->
             Dispatch = z_context:get(dispatch, Context, media_inline),
             Args = z_context:get_all(Context),
@@ -117,15 +123,15 @@ do_redirect(Id, Medium, ReqData, Context) ->
                                     proplists:delete(K, Acc)
                                 end,
                                 Args1,
-                                [id, star | z_dispatcher:dispatcher_args()]),
+                                [ id, star | z_dispatcher:dispatcher_args() ]),
             Location = z_dispatcher:url_for(Dispatch, [{star, Filename}|Args2], Context),
-            {{true, z_context:abs_url(Location, Context)}, ReqData, {Id, Medium, Context}}
+            {{true, z_context:abs_url(Location, Context)}, Context}
     end.
 
 
-get_id(Args, Context) ->
-    case proplists:get_value(id, Args) of
-        undefined -> m_rsc:rid(z_context:get_q("id", Context), Context);
+get_id(Context) ->
+    case z_context:get(id, Context) of
+        undefined -> m_rsc:rid(z_context:get_q(<<"id">>, Context), Context);
         ArgId -> m_rsc:rid(ArgId, Context)
     end.
 

@@ -19,34 +19,27 @@
 -module(controller_signup).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
--export([provide_content/2]).
+-export([
+    charsets_provided/1,
+    content_types_provided/1,
+    provide_content/1
+]).
 -export([event/2]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-charsets_provided(ReqData, Context) ->
-    {[<<"utf-8">>], ReqData, Context}.
-
-content_types_provided(ReqData, Context) ->
-    {[{"text/html", provide_content}], ReqData, Context}.
+content_types_provided(Context) ->
+    {[{<<"text/html">>, provide_content}], Context}.
 
 
-provide_content(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
+provide_content(Context) ->
+    Context2 = z_context:ensure_all(Context),
     z_context:lager_md(Context2),
-    Vars = case z_context:get_q("xs", Context2) of
+    Vars = case z_context:get_q(<<"xs">>, Context2) of
                 undefined ->
                     [];
                 Check ->
@@ -56,13 +49,12 @@ provide_content(ReqData, Context) ->
                     end
             end,
     z_session:set(signup_xs, undefined, Context),
-    Rendered = z_template:render("signup.tpl", Vars, Context2),
-    {Output, OutputContext} = z_context:output(Rendered, Context2),
-    ?WM_REPLY(Output, OutputContext).
+    Rendered = z_template:render(<<"signup.tpl">>, Vars, Context2),
+    z_context:output(Rendered, Context2).
 
 
 %% @doc Handle the submit of the signup form.
-event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
+event(#submit{message={signup, Args}, form= <<"signup_form">>}, Context) ->
     {XsProps0,XsSignupProps} = case proplists:get_value(xs_props, Args) of
         {A,B} -> {A,B};
         undefined -> {undefined, undefined}
@@ -81,7 +73,7 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
                       end,
                       FormProps),
 
-    Agree = z_convert:to_bool(z_context:get_q_validated("signup_tos_agree", Context)),
+    Agree = z_convert:to_bool(z_context:get_q_validated(<<"signup_tos_agree">>, Context)),
     case Agree of
         true ->
             {email, Email} = proplists:lookup(email, Props),
@@ -91,12 +83,12 @@ event(#submit{message={signup, Args}, form="signup_form"}, Context) ->
                                   XsSignupProps;
                               false ->
                                   Username = case z_convert:to_bool(m_config:get_value(mod_signup, username_equals_email, false, Context)) of
-                                                 false -> z_string:trim(z_context:get_q_validated("username", Context));
+                                                 false -> z_string:trim(z_context:get_q_validated(<<"username">>, Context));
                                                  true -> Email
                                              end,
                                   [ {identity, {username_pw,
                                                 {Username,
-                                                 z_context:get_q_validated("password1", Context)},
+                                                 z_context:get_q_validated(<<"password1">>, Context)},
                                                 true,
                                                 true}}
                                   ]
@@ -123,7 +115,7 @@ fetch_prop(Prop, Validated, SignupProps, Context) ->
                 false -> z_context:get_q(Prop, Context)
             end,
             V1 = case {V,Prop} of
-                {undefined, name_surname_prefix} -> z_context:get_q("surprefix", Context);
+                {undefined, name_surname_prefix} -> z_context:get_q(<<"surprefix">>, Context);
                 _ -> V
             end,
             z_string:trim(z_convert:to_list(V1));

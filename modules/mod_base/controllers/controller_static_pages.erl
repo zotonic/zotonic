@@ -18,29 +18,25 @@
 %% limitations under the License.
 
 -module(controller_static_pages).
--export([init/1]).
 -export([
-     service_available/2,
-     allowed_methods/2,
-	 resource_exists/2,
-	 last_modified/2,
-	 expires/2,
-	 content_types_provided/2,
-	 charsets_provided/2,
-	 provide_content/2,
-	 finish_request/2,
-	 previously_existed/2,
-	 moved_temporarily/2
-	 ]).
+     allowed_methods/1,
+     resource_exists/1,
+     last_modified/1,
+     expires/1,
+     content_types_provided/1,
+     charsets_provided/1,
+     provide_content/1,
+     finish_request/1,
+     previously_existed/1,
+     moved_temporarily/1
+     ]).
 
 -include_lib("template_compiler/include/template_compiler.hrl").
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 %% These are used for file serving (move to metadata)
 -record(state, {
         root=undefined,                 % Preconfigured media preview directory
-        config=[],
         use_cache=false,
         multiple_encodings=false,
         path=undefined,
@@ -64,157 +60,186 @@
 -define(MAX_AGE, 86400).
 
 
-init(ConfigProps) ->
-    Root     = proplists:get_value(root, ConfigProps),
-    DirIndex = z_convert:to_bool(proplists:get_value(allow_directory_index, ConfigProps)),
-    UseCache = proplists:get_value(use_cache, ConfigProps, false),
-    {ok, #state{root=Root, use_cache=UseCache, config=ConfigProps, allow_directory_index=DirIndex}}.
+% service_available(Context) ->
+%     Root     = z_context:get(root, Context),
+%     DirIndex = z_convert:to_bool(z_context:get(allow_directory_index, Context, false)),
+%     UseCache = z_context:get(use_cache, Context, false),
+%     State = #state{
+%         root = Root,
+%         use_cache = UseCache,
+%         allow_directory_index=DirIndex
+%     }}.
 
+allowed_methods(Context) ->
+    {[<<"HEAD">>, <<"GET">>], Context}.
 
-service_available(ReqData, State) ->
-    z_context:lager_md([{controller, ?MODULE}], ReqData),
-    {true, ReqData, State}.
-
-allowed_methods(ReqData, State) ->
-    {['HEAD', 'GET'], ReqData, State}.
-
-resource_exists(ReqData, State) ->
-    {ReqData1, State1} = check_resource(ReqData, State),
-    case State1#state.fullpath of
-        false -> {false, ReqData1, State1};
-        redir -> {false, ReqData1, State1};
-        _ -> {true, ReqData1, State1}
+resource_exists(Context) ->
+    Context1 = check_resource(Context),
+    case z_context:get(fullpath, Context1) of
+        false -> {false, Context1};
+        redir -> {false, Context1};
+        _ -> {true, Context1}
     end.
 
 
-previously_existed(ReqData, #state{fullpath=redir} = State) ->
-	{true, ReqData, State};
-previously_existed(ReqData, State) ->
-	{false, ReqData, State}.
+previously_existed(Context) ->
+    case z_context:get(fullpath, Context) of
+        redir -> {true, Context};
+        _ -> {false, Context}
+    end.
 
-moved_temporarily(ReqData, #state{fullpath=redir} = State) ->
-    Location = case mochiweb_util:unquote(wrq:path(ReqData)) of
-        [] -> "/";
-        [$/ | Path] -> [$/ | mochiweb_util:safe_relative_path(Path)] ++ "/"
+% Moved if fullpath =:= redir
+moved_temporarily(Context) ->
+    RawPath = cowmachine_req:raw_path(Context),
+    Location = case cow_qs:urldecode(RawPath) of
+        <<>> ->
+            <<"/">>;
+        <<$/, Path/binary>> ->
+            iolist_to_binary([
+                    $/,
+                    mochiweb_util:safe_relative_path(z_convert:to_list(Path)),
+                    $/
+                ])
     end,
-	{{true, z_context:abs_url(Location, State#state.context)}, ReqData, State}.
+    {{true, z_context:abs_url(Location, Context)}, Context}.
 
-content_types_provided(ReqData, State) ->
-    {ReqData1, State1} = check_resource(ReqData, State),
-    case State1#state.mime of
+content_types_provided(Context) ->
+    Context1 = check_resource(Context),
+    case z_context:get(mime, Context1) of
         undefined ->
-            CT = z_media_identify:guess_mime(filename:basename(State1#state.fullpath, ".tpl")),
-            {[{CT, provide_content}], ReqData1, State1#state{mime=CT}};
+            FullPath = z_context:get(fullpath, Context1),
+            CT = z_media_identify:guess_mime(filename:basename(FullPath, <<".tpl">>)),
+            Context2 = z_context:set(mime, CT, Context1),
+            {[{CT, provide_content}], Context2};
         Mime ->
-            {[{Mime, provide_content}], ReqData1, State1}
+            {[{Mime, provide_content}], Context1}
     end.
 
-charsets_provided(ReqData, State) ->
-    case is_text(State#state.mime) of
-        true -> {["utf-8"], ReqData, State};
-        _ -> {no_charset, ReqData, State}
+charsets_provided(Context) ->
+    case is_text(z_context:get(mime, Context)) of
+        true -> {[<<"utf-8">>], Context};
+        _ -> {no_charset, Context}
     end.
 
-last_modified(ReqData, State) ->
-    {ReqData1, State1} = check_resource(ReqData, State),
-    case filename:extension(State1#state.fullpath) of
-        ".tpl" ->
+last_modified(Context) ->
+    Context1 = check_resource(Context),
+    FullPath = z_context:get(fullpath, Context1),
+    case filename:extension(FullPath) of
+        <<".tpl">> ->
             NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
-            {calendar:gregorian_seconds_to_datetime(NowSecs - 86400), ReqData1, State1};
+            {calendar:gregorian_seconds_to_datetime(NowSecs - 86400), Context1};
         _ ->
-            RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData1),
-            case State#state.last_modified of
+            Context2 = z_context:set_resp_header(
+                    <<"cache-control">>, 
+                    <<"public, max-age=", (z_convert:to_binary(?MAX_AGE))/binary>>,
+                    Context1),
+            case z_context:get(last_modified, Context) of
                 undefined ->
-                    LMod = filelib:last_modified(State#state.fullpath),
+                    LMod = filelib:last_modified(FullPath),
                     [LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
-                    {LModUTC, RD1, State1#state{last_modified=LModUTC}};
+                    Context3 = z_context:set(last_modified, LModUTC),
+                    {LModUTC, Context3};
                 LModUTC ->
-                    {LModUTC, RD1, State1}
+                    {LModUTC, Context2}
             end
     end.
 
-expires(ReqData, State) ->
-    {ReqData1, State1} = check_resource(ReqData, State),
-    MaxAge = case filename:extension(State1#state.fullpath) of
-        ".tpl" -> -86400;
+expires(Context) ->
+    Context1 = check_resource(Context),
+    FullPath = z_context:get(fullpath, Context1),
+    MaxAge = case filename:extension(FullPath) of
+        <<".tpl">> -> -86400;
         _ -> ?MAX_AGE
     end,
     NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
-    {calendar:gregorian_seconds_to_datetime(NowSecs + MaxAge), ReqData1, State1}.
+    {calendar:gregorian_seconds_to_datetime(NowSecs + MaxAge), Context1}.
 
-provide_content(ReqData, State) ->
-    case State#state.body of
+provide_content(Context) ->
+    case z_context:get(body, Context) of
         undefined ->
-            FullPath = State#state.fullpath,
+            FullPath = z_context:get(fullpath, Context),
             case filelib:is_dir(FullPath) of
                 true ->
                     %% Render directory index
-                    Context = z_context:set_reqdata(ReqData, State#state.context),
                     Context1 = z_context:ensure_all(Context),
-                    Html = z_template:render("directory_index.tpl", directory_index_vars(FullPath, State#state.root, Context) ++ State#state.config, Context1),
+                    Root = z_context:get(root, Context),
+                    Vars = directory_index_vars(FullPath, Root, Context)
+                            ++ z_context:get_all(Context),
+                    Html = z_template:render(
+                                    <<"directory_index.tpl">>,
+                                    Vars, 
+                                    Context1),
                     {Html1, Context2} = z_context:output(Html, Context1),
-                    ReqData1 = z_context:get_reqdata(Context2),
-                    State1 = State#state{context=Context2, use_cache=false, multiple_encodings=false},
-                    {iolist_to_binary(Html1), ReqData1, State1};
+                    Context3 = z_context:set([
+                            {use_cache, false},
+                            {multiple_encodings, false}
+                        ],
+                        Context2),
+                    {iolist_to_binary(Html1), Context3};
                 false ->
                     case filename:extension(FullPath) of
-                        ".tpl" ->
+                        <<".tpl">> ->
                             %% Render template, prevent caching
-                            Context = z_context:set_reqdata(ReqData, State#state.context),
                             Context1 = z_context:ensure_all(Context),
-                            Vars = z_context:get_all(Context1)++State#state.config,
+                            Vars = z_context:get_all(Context1),
                             Template = #template_file{
-                                filename=FullPath,
-                                template=State#state.path
+                                filename = FullPath,
+                                template = z_context:get(path, Context)
                             },
                             Html = z_template:render(Template, Vars, Context1),
                             {Html1, Context2} = z_context:output(Html, Context1),
-                            ReqData1 = z_context:get_reqdata(Context2),
-                            State1 = State#state{context=Context2, use_cache=false, multiple_encodings=false},
-                            {iolist_to_binary(Html1), ReqData1, State1};
+                            Context3 = z_context:set([
+                                    {use_cache, false},
+                                    {multiple_encodings, false}
+                                ],
+                                Context2),
+                            {iolist_to_binary(Html1), Context3};
                         _ ->
-                            case State#state.multiple_encodings of
+                            case z_convert:to_bool(z_context:get(multiple_encodings, Context)) of
                                 true ->
-                                    {ok, Data} = file:read_file(State#state.fullpath),
+                                    {ok, Data} = file:read_file(z_context:get(fullpath, Context)),
                                     Body = encode_data(Data),
-                                    {select_encoding(Body, ReqData), ReqData, State#state{body=Body}};
+                                    Context1 = z_context:set(body, Body, Context),
+                                    {select_encoding(Body, Context1), Context1};
                                 false ->
-                                    {{file, FullPath}, ReqData, State}
+                                    {{file, FullPath}, Context}
                             end
                     end
             end;
         Body ->
-            {select_encoding(Body, ReqData), ReqData, State}
+            {select_encoding(Body, Context), Context}
     end.
 
 
-finish_request(ReqData, State) ->
-    case State#state.is_cached of
+finish_request(Context) ->
+    case z_context:get(is_cached, Context, false) of
         false ->
-            case State#state.body of
+            case z_context:get(body, Context) of
                 undefined ->
-                    {ok, ReqData, State};
+                    {ok, Context};
                 _ ->
-                    case State#state.use_cache andalso State#state.multiple_encodings of
+                    UseCache = z_convert:to_bool(z_context:get(use_cache, Context)),
+                    MultipleEncodings = z_convert:to_bool(z_context:get(multiple_encodings, Context)),
+                    case UseCache andalso MultipleEncodings of
                         true ->
                             % Cache the served file in the depcache.  Cache it for 3600 secs.
+                            Path = z_context:get(path, Context),
                             Cache = #cache{
-                                        path=State#state.path,
-                                        fullpath=State#state.fullpath,
-                                        mime=State#state.mime,
-                                        last_modified=State#state.last_modified,
-                                        body=State#state.body
+                                        path = Path,
+                                        fullpath = z_context:get(fullpath, Context),
+                                        mime = z_context:get(mime, Context),
+                                        last_modified = z_context:get(last_modified, Context),
+                                        body = z_context:get(body, Context)
                                     },
-                            Context = z_context:new(ReqData, ?MODULE),
-                            z_depcache:set(cache_key(State#state.path), Cache, Context),
-                            {ok, ReqData, State};
+                            z_depcache:set(cache_key(Path), Cache, Context),
+                            {ok, Context};
                         _ ->
                             % No cache or no gzip'ed version (file system cache is fast enough for static file serving)
-                            {ok, ReqData, State}
+                            {ok, Context}
                     end
             end;
         true ->
-            {ok, ReqData, State}
+            {ok, Context}
     end.
 
 
@@ -223,70 +248,102 @@ finish_request(ReqData, State) ->
 cache_key(Path) ->
     {?MODULE, Path}.
 
-check_resource(ReqData, #state{fullpath=undefined} = State) ->
-    Context = z_context:set_noindex_header(z_context:new(ReqData, ?MODULE)),
-    case mochiweb_util:safe_relative_path(mochiweb_util:unquote(wrq:disp_path(ReqData))) of
+check_resource(Context) ->
+    case z_context:get(fullpath, Context) of
         undefined ->
-            {error, enoent};
-        SafePath ->
-            Cached = case State#state.use_cache of
-                true -> z_depcache:get(cache_key(SafePath), Context);
-                _    -> undefined
-            end,
-            case Cached of
-                undefined ->
-                    Root = abs_root(State#state.root, Context),
-                    case find_file(Root, SafePath, Context) of
-                    	{ok, FullPath} ->
-            	            case filename:basename(FullPath, ".tpl") of
-            	                "index.html" ->
-            	                    case last(wrq:path(ReqData)) /= $/ andalso filename:basename(SafePath) /= "index.html" of
-            	                        true ->
-                            	            {ReqData, State#state{path=SafePath, fullpath=redir, context=Context}};
-            	                        false ->
-                            	            {ReqData, State#state{path=SafePath, fullpath=FullPath, context=Context}}
-            	                    end;
-            	                _ ->
-                    	            {ReqData, State#state{path=SafePath, fullpath=FullPath, context=Context}}
-                    	    end;
-                        {error, eacces} ->
-                            {ReqData, State#state{path=SafePath, fullpath=false, context=Context, mime="text/html"}};
-                    	{error, _Reason} ->
-                            Dir = filename:join(Root, SafePath),
-                            case filelib:is_dir(Dir) andalso State#state.allow_directory_index of
-                                true ->
-                                    case last(wrq:path(ReqData)) /= $/ of
-                                        true ->
-                            	            {ReqData, State#state{path=SafePath, fullpath=redir, context=Context}};
-                                        false ->
-                                            {ReqData, State#state{path=SafePath, fullpath=Dir, context=Context, mime="text/html"}}
-                                        end;
-                                false ->
-                                    {ReqData, State#state{path=SafePath, fullpath=false, context=Context, mime="text/html"}}
-                            end
-                    end;
-                {ok, Cache} ->
-                    {ReqData, State#state{
-                                    is_cached=true,
-                                    path=Cache#cache.path,
-                                    fullpath=Cache#cache.fullpath,
-                                    mime=Cache#cache.mime,
-                                    last_modified=Cache#cache.last_modified,
-                                    body=Cache#cache.body,
-                                    context=Context
-                                }}
-            end
-    end;
-check_resource(ReqData, State) ->
-    {ReqData, State}.
+            check_resource_1(Context);
+        _FullPath ->
+            Context
+    end.
 
-last([]) -> undefined;
-last(L) -> lists:last(L).
+check_resource_1(Context) ->
+    Context1 = z_context:set_noindex_header(Context),
+    DispPath = cow_qs:urldecode(cowmachine_req:disp_path(Context1)),
+    SafePath = z_convert:to_binary(
+                    mochiweb_util:safe_relative_path(
+                        z_convert:to_list(DispPath))),
+    Cached = case z_context:get(use_cache, Context, false) of
+        true -> z_depcache:get(cache_key(SafePath), Context);
+        false -> undefined
+    end,
+    case Cached of
+        undefined ->
+            Root = abs_root(z_context:get(root, Context), Context),
+            case find_file(Root, SafePath, Context) of
+                {ok, FullPath} ->
+                    case filename:basename(FullPath, <<".tpl">>) of
+                        <<"index.html">> ->
+                            case last(DispPath) /= $/
+                                andalso filename:basename(SafePath) /= <<"index.html">>
+                            of
+                                true ->
+                                    z_context:set([
+                                            {path, SafePath},
+                                            {fullpath, redir}
+                                        ], Context);
+                                false ->
+                                    z_context:set([
+                                            {path, SafePath},
+                                            {fullpath, FullPath}
+                                        ], Context)
+                            end;
+                        _ ->
+                            z_context:set([
+                                    {path, SafePath},
+                                    {fullpath, FullPath}
+                                ], Context)
+                    end;
+                {error, eacces} ->
+                    z_context:set([
+                            {path, SafePath},
+                            {fullpath, false},
+                            {mime, <<"text/html">>}
+                        ], Context);
+                {error, _Reason} ->
+                    Dir = filename:join(Root, SafePath),
+                    AllowDirIndex = z_context:get(allow_directory_index, Context, false),
+                    case filelib:is_dir(Dir) andalso AllowDirIndex of
+                        true ->
+                            case last(DispPath) /= $/ of
+                                true ->
+                                    z_context:set([
+                                            {path, SafePath},
+                                            {fullpath, redir}
+                                        ], Context);
+                                false ->
+                                    z_context:set([
+                                            {path, SafePath},
+                                            {fullpath, false},
+                                            {mime, <<"text/html">>}
+                                        ], Context)
+                            end;
+                        false ->
+                            z_context:set([
+                                    {path, SafePath},
+                                    {fullpath, false},
+                                    {mime, <<"text/html">>}
+                                ], Context)
+                    end
+            end;
+        {ok, Cache} ->
+            z_context:set([
+                    {is_cached, true},
+                    {path, Cache#cache.path},
+                    {fullpath, Cache#cache.fullpath},
+                    {mime, Cache#cache.mime},
+                    {last_modified, Cache#cache.last_modified},
+                    {body, Cache#cache.body}
+                ], Context)
+    end.
+
+last(undefined) -> undefind;
+last(<<>>) -> undefined;
+last(B) when is_binary(B) -> binary:last(B).
 
 find_file(Root, File, Context) ->
     RelName = case File of
-        "" -> "";
-        "/" ++ RelFile -> RelFile;
+        <<>> -> <<>>;
+        <<"/", RelFile/binary>> -> RelFile;
         _ -> File
     end,
     case is_protected(RelName) of
@@ -294,7 +351,7 @@ find_file(Root, File, Context) ->
             {error, eacces};
         false ->
             T = [ RelName,
-                  RelName ++ ".tpl",
+                  <<RelName/binary, ".tpl"/binary>>,
                   filename:join(RelName, "index.html.tpl"),
                   filename:join(RelName, "index.html")
                 ],
@@ -302,7 +359,7 @@ find_file(Root, File, Context) ->
                 {error, enoent} ->
                     RelName1 = filename:join(Root, RelName),
                     T1 = [  RelName1,
-                            RelName1 ++ ".tpl",
+                            <<RelName/binary, ".tpl"/binary>>,
                             filename:join(RelName1, "index.html.tpl"),
                             filename:join(RelName1, "index.html")
                          ],
@@ -312,14 +369,14 @@ find_file(Root, File, Context) ->
             end
     end.
 
-is_protected("." ++ _) -> true;
-is_protected("/." ++ _) -> true;
+is_protected(<<".", _/binary>>) -> true;
+is_protected(<<"/.", _/binary>>) -> true;
 is_protected(Filename) -> is_protected_1(Filename).
 
-is_protected_1([]) -> false;
-is_protected_1("/." ++ _) -> true;
-is_protected_1("\\." ++ _) -> true;
-is_protected_1([_|Rest]) -> is_protected_1(Rest).
+is_protected_1(<<>>) -> false;
+is_protected_1(<<"/.", _/binary>>) -> true;
+is_protected_1(<<"\\.", _/binary>>) -> true;
+is_protected_1(<<_, Rest/binary>>) -> is_protected_1(Rest).
 
 find_file1([]) ->
     {error, enoent};
@@ -339,35 +396,34 @@ find_template([F|R], Context) ->
 
 
 
-%% @spec is_text(Mime) -> bool()
 %% @doc Check if a mime type is textual
-is_text("text/" ++ _) -> true;
-is_text("application/x-javascript") -> true;
-is_text("application/xhtml+xml") -> true;
-is_text("application/xml") -> true;
+-spec is_text(binary()) -> boolean().
+is_text(<<"text/", _/binary>>) -> true;
+is_text(<<"application/x-javascript">>) -> true;
+is_text(<<"application/xhtml+xml">>) -> true;
+is_text(<<"application/xml">>) -> true;
 is_text(_Mime) -> false.
 
 
-
-select_encoding(Data, ReqData) ->
-    decode_data(wrq:resp_content_encoding(ReqData), Data).
+select_encoding(Data, Context) ->
+    decode_data(cowmachine_req:resp_content_encoding(Context), Data).
 
 %% Encode the data so that the identity variant comes first and then the gzip'ed variant
 encode_data(Data) when is_binary(Data) ->
     {encoded, Data, zlib:gzip(Data)}.
 
-decode_data("identity", Data) when is_binary(Data) ->
+decode_data(<<"identity">>, Data) when is_binary(Data) ->
     Data;
-decode_data("gzip", Data) when is_binary(Data) ->
+decode_data(<<"gzip">>, Data) when is_binary(Data) ->
     zlib:gzip(Data);
-decode_data("identity", {encoded, Data, _Gzip}) ->
+decode_data(<<"identity">>, {encoded, Data, _Gzip}) ->
     Data;
-decode_data("gzip", {encoded, _Data, Gzip}) ->
+decode_data(<<"gzip">>, {encoded, _Data, Gzip}) ->
     Gzip.
 
 abs_root(Root, Context) ->
     case Root of
-        "/" ++ _ -> Root;
+        <<"/", _/binary>> -> Root;
         _ -> filename:join(z_path:site_dir(Context), Root)
     end.
 
@@ -375,10 +431,14 @@ directory_index_vars(FullPath, RelRoot, Context) ->
     Root = abs_root(RelRoot, Context),
     UpFileEntry = case Root =:= FullPath of
                       true -> [];
-                      false -> [fileinfo(filename:dirname(FullPath), "..")]
+                      false -> [fileinfo(filename:dirname(FullPath), <<"..">>)]
                   end,
 
-    Files = lists:sort(fun fileinfo_cmp/2, lists:map(fun fileinfo/1, lists:sort(z_utils:wildcard(filename:join(FullPath, "*"))))),
+    Files = lists:sort(
+                fun fileinfo_cmp/2, 
+                    lists:map(
+                        fun fileinfo/1, 
+                        lists:sort(z_utils:wildcard(filename:join(FullPath, <<"*">>))))),
     [{basename, filename:basename(FullPath)},
      {files, UpFileEntry ++ Files}
     ].

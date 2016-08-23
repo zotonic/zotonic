@@ -19,39 +19,30 @@
 -module(controller_zotonic_status).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
 -export([
-	provide_content/2,
+    charsets_provided/1,
+    content_types_provided/1,
+	provide_content/1,
 	event/2,
 	updater/2
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-charsets_provided(ReqData, Context) ->
-    {[<<"utf-8">>], ReqData, Context}.
-
-content_types_provided(ReqData, Context) ->
+content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
-            {[{"text/html", provide_content}], ReqData, Context};
+            {[{<<"text/html">>, provide_content}], Context};
         Mime ->
-            {[{Mime, provide_content}], ReqData, Context}
+            {[{z_convert:to_binary(Mime), provide_content}], Context}
     end.
 
-provide_content(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
-
+provide_content(Context) ->
+    Context2 = z_context:ensure_all(Context),
     case z_acl:user(Context2) of
         undefined ->
             logon_page(Context2);
@@ -62,9 +53,9 @@ provide_content(ReqData, Context) ->
 logon_page(Context) ->
     Rendered = z_template:render("logon.tpl", z_context:get_all(Context), Context),
     {Output, OutputContext} = z_context:output(Rendered, Context),
-    ReqData = webmachine_request:set_response_code(503, Context#context.wm_reqdata),
-    ReqData1 = webmachine_request:set_resp_body(Output, ReqData),
-    {{halt, 503}, ReqData1, OutputContext#context{wm_reqdata=undefined}}.
+    Context1 = cowmachine_req:set_response_code(503, OutputContext),
+    Context2 = cowmachine_req:set_resp_body(Output, Context1),
+    {{halt, 503}, Context2}.
 
 status_page(Context) ->
     Template = z_context:get(template, Context),
@@ -79,7 +70,7 @@ status_page(Context) ->
     Rendered = z_template:render(Template, Vars1, Context),
     {Output, OutputContext} = z_context:output(Rendered, Context),
     start_stream(SitesStatus, OutputContext),
-    ?WM_REPLY(Output, OutputContext).
+    {Output, OutputContext}.
 
 
 %% -----------------------------------------------------------------------------------------------
@@ -87,7 +78,7 @@ status_page(Context) ->
 %% -----------------------------------------------------------------------------------------------
 
 event(#submit{message=[], form=FormId}, Context) ->
-    case z_context:get_q(password, Context) == z_config:get(password) of
+    case z_context:get_q(<<"password">>, Context) =:= z_convert:to_binary(z_config:get(password)) of
         true ->
             {ok, ContextAuth} = z_auth:logon(1, Context),
             z_render:wire({reload, []}, ContextAuth);

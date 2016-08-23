@@ -22,73 +22,63 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-         init/1,
-         resource_exists/2,
-         allowed_methods/2,
-         content_types_provided/2,
-         process_post/2,
-         response/2
+         allowed_methods/1,
+         content_types_provided/1,
+         process_post/1,
+         response/1
         ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
+allowed_methods(Context) ->
+    {[<<"POST">>, <<"GET">>, <<"HEAD">>], Context}.
 
+content_types_provided(Context) ->
+    {[{<<"text/html">>, response}], Context}.
 
-init(_Args) ->
-    {ok, []}.
+process_post(Context) ->
+    response(Context).
 
-
-resource_exists(ReqData, _Context) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:ensure_qs(Context),
-    {true, ReqData, Context1}.
-
-
-allowed_methods(ReqData, Context) ->
-    {['POST', 'GET', 'HEAD'], ReqData, Context}.
-
-
-content_types_provided(ReqData, Context) ->
-    {[{"text/html", response}], ReqData, Context}.
-
-
-process_post(ReqData, Context) ->
-    response(ReqData, Context).
-
-response(ReqData, Context) ->
-    case mod_oauth:request_is_signed(ReqData) of
+response(Context) ->
+    case mod_oauth:request_is_signed(Context) of
         false ->
             % Request was not signed.
-            mod_oauth:authenticate("Not an OAuth request.", ReqData, Context);
+            mod_oauth:authenticate(<<"Not an OAuth request.">>, Context);
         true ->
-            mod_oauth:serve_oauth(ReqData, Context,
+            mod_oauth:serve_oauth(Context,
                 fun(URL, Params, Consumer, Signature) ->
-                        case mod_oauth:oauth_param("oauth_token", ReqData) of
+                        case mod_oauth:oauth_param(<<"oauth_token">>, Context) of
                             undefined ->
-                                mod_oauth:authenticate("Missing oauth_token.", ReqData, Context);
+                                mod_oauth:authenticate(<<"Missing oauth_token.">>, Context);
                             ParamToken ->
                                 case m_oauth_app:secrets_for_verify(request, Consumer, ParamToken, Context) of
                                     undefined ->
-                                        mod_oauth:authenticate("Request token not found.", ReqData, Context);
+                                        mod_oauth:authenticate(<<"Request token not found.">>, Context);
                                     Token ->
-                                        SigMethod = mod_oauth:oauth_param("oauth_signature_method", ReqData),
-                                        case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
-                                                          Params, mod_oauth:to_oauth_consumer(Consumer, SigMethod), mod_oauth:str_value(token_secret, Token)) of
+                                        SigMethod = mod_oauth:oauth_param(<<"oauth_signature_method">>, Context),
+                                        case oauth:verify(z_convert:to_list(Signature),
+                                                          z_convert:to_list(cowmachine_req:method(Context)),
+                                                          URL,
+                                                          Params,
+                                                          mod_oauth:to_oauth_consumer(Consumer, SigMethod),
+                                                          mod_oauth:str_value(token_secret, Token))
+                                        of
                                             true ->
                                                 case m_oauth_app:exchange_request_for_access(Token, Context) of
                                                     {ok, NewToken} ->
-                                                        ReqData1 = wrq:set_resp_body(oauth:uri_params_encode(
-                                                                                       [{"oauth_token", binary_to_list(proplists:get_value(token, NewToken))},
-                                                                                        {"oauth_token_secret", binary_to_list(proplists:get_value(token_secret, NewToken))}]), ReqData),
-                                                        {{halt, 200}, ReqData1, Context};
+                                                        Context1 = cowmachine_req:set_resp_body(
+                                                                        oauth:uri_params_encode([
+                                                                            {"oauth_token", binary_to_list(proplists:get_value(token, NewToken))},
+                                                                            {"oauth_token_secret", binary_to_list(proplists:get_value(token_secret, NewToken))}
+                                                                        ]), 
+                                                                        Context),
+                                                        {{halt, 200}, Context1};
 
                                                     {false, Reason} ->
-                                                        mod_oauth:authenticate(Reason, ReqData, Context)
+                                                        mod_oauth:authenticate(Reason, Context)
                                                 end;
                                             false ->
-                                                mod_oauth:authenticate("Signature verification failed.", ReqData, Context)
+                                                mod_oauth:authenticate(<<"Signature verification failed.">>, Context)
                                         end
                                 end
                         end

@@ -20,49 +20,42 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    resource_exists/2,
-    previously_existed/2,
-    moved_temporarily/2,
-    moved_permanently/2
+    service_available/1,
+    resource_exists/1,
+    previously_existed/1,
+    moved_temporarily/1,
+    moved_permanently/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
-
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, z_context:ensure_qs(Context)),
-    Context2 = z_context:ensure_session(Context1),
+service_available(Context) ->
+    Context2 = z_context:ensure_session(z_context:ensure_qs(Context)),
     z_context:lager_md(Context2),
-    ?WM_REPLY(true, Context2).
+    {true, Context2}.
 
-resource_exists(ReqData, Context) ->
-    {false, ReqData, Context}.
+resource_exists(Context) ->
+    {false, Context}.
 
-previously_existed(ReqData, Context) ->
-    {true, ReqData, Context}.
+previously_existed(Context) ->
+    {true, Context}.
 
-moved_temporarily(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
-    Context1 = mod_translation:set_user_language(z_context:get_q("code", Context), Context),
-    Page = z_context:get_q("p", Context1),
+moved_temporarily(Context) ->
+    Context1 = mod_translation:set_user_language(z_context:get_q(<<"code">>, Context), Context),
+    Page = z_context:get_q(<<"p">>, Context1),
     Location = case z_utils:is_empty(Page) of
-                   true -> "/";
+                   true -> <<"/">>;
                    false -> Page
                end,
-    AbsUrl = z_context:abs_url(add_language(mod_translation:url_strip_language(Location), Context1), Context1),
-    ?WM_REPLY({true, AbsUrl}, Context1).
+    AbsUrl = z_context:abs_url(
+                    add_language(mod_translation:url_strip_language(Location), Context1),
+                    Context1),
+    {{true, AbsUrl}, Context1}.
 
-moved_permanently(ReqData, Context) ->
-    {false, ReqData, Context}.
+moved_permanently(Context) ->
+    {false, Context}.
 
 
 add_language(Url, Context) ->
-    Lang = z_convert:to_list(z_context:language(Context)),
-    iolist_to_binary([$/, Lang, Url]).
+    iolist_to_binary([$/, z_context:language(Context), Url]).
 

@@ -85,9 +85,6 @@
         props=[]
     }).
     
-    
--define(WM_REQ(Req, Context), z_context:set_reqdata(Req, Context)).
--define(WM_REPLY(Reply, Context), {Reply, Context#context.req, Context#context{req=undefined}}).
 
 -define(SITE(Context), Context#context.site).
 -define(DBC(Context), Context#context.dbc).

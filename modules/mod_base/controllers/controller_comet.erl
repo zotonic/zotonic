@@ -20,62 +20,53 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    malformed_request/2,
-    allowed_methods/2,
-    content_types_provided/2,
-    process_post/2
+    service_available/1,
+    malformed_request/1,
+    allowed_methods/1,
+    content_types_provided/1,
+    process_post/1
     ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 
-init(_Args) -> {ok, []}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:continue_session(z_context:set(DispatchArgs, Context)),
+service_available(Context) ->
+    Context1 = z_context:continue_session(Context),
     z_context:lager_md(Context1),
-    ?WM_REPLY(true, Context1).
+    {true, Context1}.
 
 %% @doc Expect an UBF encoded #z_msg_v1 record in the POST
-malformed_request(ReqData, Context0) ->
+malformed_request(Context0) ->
     try
-        {Data, RD1} = wrq:req_body(ReqData),
+        {Data, Context} = cowmachine_req:req_body(Context0),
         {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
-        Context = ?WM_REQ(RD1, Context0),
-        z_context:lager_md(Context),
         Context1 = z_context:set(z_msg, ZMsg, Context),
-        ?WM_REPLY(ZMsg#z_msg_v1.delegate =/= '$comet', Context1)
+        {ZMsg#z_msg_v1.delegate =/= '$comet', Context1}
     catch _:_ ->
-        {true, ReqData, Context0}
+        {true, Context0}
     end.
 
-allowed_methods(ReqData, Context) ->
-    {['POST'], ReqData, Context}.
+allowed_methods(Context) ->
+    {[<<"POST">>], Context}.
 
-content_types_provided(ReqData, Context) ->
-    {[{"text/x-ubf", undefined}], ReqData, Context}.
+content_types_provided(Context) ->
+    {[<<"text/x-ubf">>], Context}.
 
 %% @doc Collect all data to be pushed back to the user agent
-process_post(ReqData, Context) ->
-    case wrq:get_req_header_lc("content-type", ReqData) of
-        "text/x-ubf" ++ _ ->
-            process_post_ubf(ReqData, Context);
-        "text/plain" ++ _ ->
-            process_post_ubf(ReqData, Context);
+process_post(Context) ->
+    case z_context:get_req_header(<<"content-type">>, Context) of
+        <<"text/x-ubf", _/binary>> ->
+            process_post_ubf(Context);
+        <<"text/plain", _/binary>> ->
+            process_post_ubf(Context);
         _ ->
-            {{halt, 415}, ReqData, Context}
+            {{halt, 415}, Context}
     end.
 
-process_post_ubf(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Term = z_context:get(z_msg, Context1),
-    {ok, Rs, Context2} = z_transport:incoming(Term, Context1),
+process_post_ubf(Context) ->
+    Term = z_context:get(z_msg, Context),
+    {ok, Rs, Context2} = z_transport:incoming(Term, Context),
     {ok, ReplyData} = z_transport:data_encode(Rs),
-    {x, RD, Context3} = ?WM_REPLY(x, Context2),
-    RD1 = wrq:append_to_resp_body(ReplyData, RD),
-    {true, RD1, Context3}.
+    Context3 = cowmachine_req:set_resp_body(ReplyData, Context2),
+    {true, Context3}.
 
