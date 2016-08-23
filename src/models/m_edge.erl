@@ -132,6 +132,7 @@ get(Id, Context) ->
     z_db:assoc_row("select * from edge where id = $1", [Id], Context).
 
 %% @doc Get the edge as a triple {subject_id, predicate, object_id}
+-spec get_triple(pos_integer(), #context{}) -> {m_rsc:resource_id(), atom(), m_rsc:resource_id()}.
 get_triple(Id, Context) ->
     {SubjectId, Predicate, ObjectId} = z_db:q_row("
             select e.subject_id, r.name, e.object_id
@@ -140,8 +141,9 @@ get_triple(Id, Context) ->
     {SubjectId, z_convert:to_atom(Predicate), ObjectId}.
 
 %% @doc Get the edge id of a subject/pred/object combination
+-spec get_id(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), #context{}) -> pos_integer() | undefined.
 get_id(SubjectId, PredId, ObjectId, Context) when is_integer(PredId) ->
-    z_db:q1("select id from edge where subject_id = $1 and object_id = $3 and predicate_id = $2", [SubjectId, PredId, ObjectId], Context);
+    z_db:q1("select id from edge where subject_id = $1 and object_id = $3 and predicate_id = $2", [m_rsc:rid(SubjectId, Context), PredId, m_rsc:rid(ObjectId, Context)], Context);
 get_id(SubjectId, Pred, ObjectId, Context) ->
     PredId = m_predicate:name_to_id_check(Pred, Context),
     get_id(SubjectId, PredId, ObjectId, Context).
@@ -163,7 +165,8 @@ get_edges(SubjectId, Context) ->
             Edges1
     end.
 
-%% Insert a new edge
+%% @doc Insert a new edge
+-spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), #context{}) -> {ok, EdgeId :: pos_integer()} | {error, term()}.
 insert(Subject, Pred, Object, Context) ->
     insert(Subject, Pred, Object, [], Context).
 
@@ -255,6 +258,7 @@ delete(Id, Context) ->
     end.
 
 %% @doc Delete an edge by subject, object and predicate id
+-spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), any()) -> ok | {error, atom()}.
 delete(SubjectId, Pred, ObjectId, Context) ->
     delete(SubjectId, Pred, ObjectId, [], Context).
 
@@ -317,6 +321,7 @@ is_allowed([Error|_]) -> Error.
 
 
 %% @doc Replace the objects with the new list
+-spec replace(m_rsc:resource(), pos_integer() | atom(), m_rsc:resource(), #context{}) -> ok | {error, atom()}.
 replace(SubjectId, PredId, NewObjects, Context) when is_integer(PredId) ->
     case m_predicate:is_predicate(PredId, Context) of
         true -> replace1(SubjectId, PredId, NewObjects, Context);
@@ -356,6 +361,7 @@ replace(SubjectId, Pred, NewObjects, Context) ->
 
 
 %% @doc Duplicate all edges from one id to another id. Skip all edges that give ACL errors.
+-spec duplicate(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok | {error, {atom(), m_rsc:resource_id()}}.
 duplicate(Id, ToId, Context) ->
     case z_acl:rsc_editable(Id, Context) andalso z_acl:rsc_editable(ToId, Context) of
         true ->
@@ -366,9 +372,9 @@ duplicate(Id, ToId, Context) ->
                                 from edge
                                 where subject_id = $1
                                 order by seq, id",
-                                [Id],
+                                [m_rsc:rid(Id, Context)],
                                 Ctx),
-                ToEdges = z_db:q("select predicate_id, object_id from edge where subject_id = $1", [ToId], Ctx),
+                ToEdges = z_db:q("select predicate_id, object_id from edge where subject_id = $1", [m_rsc:rid(ToId, Context)], Ctx),
                 FromEdges1 = lists:filter(
                                 fun({PredId, ObjectId, _Seq}) ->
                                     Pair = {PredId, ObjectId},
@@ -389,7 +395,7 @@ duplicate(Id, ToId, Context) ->
                         fun({PredId, ObjectId, Seq}) ->
                             z_db:insert(
                                     edge,
-                                    [{subject_id, ToId},
+                                    [{subject_id, m_rsc:rid(ToId, Context)},
                                      {predicate_id, PredId},
                                      {object_id, ObjectId},
                                      {seq, Seq},
@@ -545,6 +551,7 @@ subject(Id, Pred, N, Context) ->
 
 %% @doc Return all object ids of an id with a certain predicate. The order of the ids is deterministic.
 %% @spec objects(Id, Pred, Context) -> List
+-spec objects(m_rsc:resource(), atom() | pos_integer(), #context{}) -> list().
 objects(_Id, undefined, _Context) ->
     [];
 objects(Id, Pred, Context) when is_integer(Pred) ->
@@ -552,7 +559,7 @@ objects(Id, Pred, Context) when is_integer(Pred) ->
         {ok, Objects} ->
             Objects;
         undefined ->
-            Ids = z_db:q("select object_id from edge where subject_id = $1 and predicate_id = $2 order by seq,id", [Id, Pred], Context),
+            Ids = z_db:q("select object_id from edge where subject_id = $1 and predicate_id = $2 order by seq,id", [m_rsc:name_to_id_check(Id, Context), Pred], Context),
             Objects = [ ObjId || {ObjId} <- Ids ],
             z_depcache:set({objects, Pred, Id}, Objects, ?DAY, [Id], Context),
             Objects
@@ -723,7 +730,7 @@ set_sequence(Id, Pred, ObjectIds, Context) ->
                             select object_id, id
                             from edge
                             where predicate_id = $1
-                              and subject_id = $2", [PredId, Id], Ctx),
+                              and subject_id = $2", [PredId, m_rsc:name_to_id_check(Id, Context)], Ctx),
 
                         [ delete(EdgeId, Context) || {ObjectId, EdgeId} <- All, not lists:member(ObjectId, ObjectIds) ],
                         NewEdges = [ begin
