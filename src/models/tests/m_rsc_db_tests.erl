@@ -66,14 +66,14 @@ page_path_test() ->
 
     ok.
 
-%% @doc Resource namd instead of id as argument.
+%% @doc Resource name instead of id as argument.
 name_rid_test() ->
     C = z_context:new(testsandbox),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     {ok, Id} = m_rsc:insert([{title, "What’s in a name?"}, {category_id, text}, {name, rose}], AdminC),
 
     m_rsc:get_raw(rose, AdminC),
-    ok = m_rsc:flush(rose, AdminC),
+    ok = m_rsc_update:flush(rose, AdminC),
     {ok, Id} = m_rsc:update(rose, [], AdminC),
     {ok, Id} = m_rsc:duplicate(rose, [], AdminC),
     {ok, Id} = m_rsc:delete(rose, AdminC).
