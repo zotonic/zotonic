@@ -4,7 +4,7 @@
 %%
 %% Setup instructions:
 %% * Enable the mod_twitter module
-%% * Configure in the admin the twitter keys (Auth -> App Keys &amp; Authentication Services)
+%% * Configure in the admin the twitter keys (Auth -> External Services)
 %% * Create a person in the Zotonic database, find a twitter ID on
 %%   twitter, and put it in the person record on the admin edit page (sidebar)
 %% * The module will start automatically to follow the users which have a twitter id set.
