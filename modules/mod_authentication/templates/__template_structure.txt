@@ -61,7 +61,7 @@ signup.tpl // sign up page
     `-- _signup.tpl
         `-- _signup_form.tpl
             `-- _signup_stage.tpl // feedback message
-     
+
 _signup_form.tpl is populated by sub templates:
 |-- _signup_title.tpl // header "Sign up"
 |-- _signup_extra.tpl // space for other auth modules, for instance mod_facebook
@@ -83,7 +83,7 @@ email_base.tpl
 
 
 admin_base.tpl
-|-- admin_authentication_services.tpl // admin menu: App Keys & Authentication Services
+|-- admin_authentication_services.tpl // admin menu: External Services
     `-- _admin_authentication_service.tpl // all-include from other modules
 
 
