@@ -22,6 +22,8 @@
 -spec filter(integer() | [integer()], fun((integer()) -> boolean()), any()) -> boolean() | [integer()].
 filter(Id, Fun, _Context) when is_integer(Id) ->
     Fun(Id);
+filter(Id, Fun, _Context) when is_binary(Id) ->
+    Fun(Id);
 filter(List, Fun, Context) ->
     lists:filter(Fun, z_template_compiler_runtime:to_list(List, Context)).
 
