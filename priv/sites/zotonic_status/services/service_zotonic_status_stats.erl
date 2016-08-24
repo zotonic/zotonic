@@ -24,13 +24,13 @@
 -svc_needauth(false). % We use authorization via z_sid
 
 -export([
-    process_get/2
+    process_get/1
 ]).
 
 -include_lib("zotonic.hrl").
 
 
-process_get(_ReqData, Context) ->
+process_get(Context) ->
     case z_acl:user(Context) of
         undefined ->
             <<>>;

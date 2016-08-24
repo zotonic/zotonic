@@ -23,11 +23,11 @@
 -svc_title("Basic information about the admin module.").
 -svc_needauth(true).
 
--export([process_get/2]).
+-export([process_get/1]).
 
 -include_lib("zotonic.hrl").
 
-process_get(_ReqData, Context) ->
+process_get(Context) ->
     {struct, [
         {pivot_queue_count, z_db:q1("SELECT COUNT(*) FROM rsc_pivot_queue", Context)}
     ]}.
