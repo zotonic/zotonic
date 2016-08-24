@@ -18,7 +18,7 @@ modify_rsc_test() ->
     end,
 
     %% perform the tests
-    ?assertThrow({error, eacces}, m_rsc_import:create_empty("http://foo.com/id/333", C)),
+    ?assertThrow({{error, eacces, _Trace}}, m_rsc_import:create_empty("http://foo.com/id/333", C)),
 
     {ok, Id} = m_rsc_import:create_empty("http://foo.com/id/333", AdminC),
 
