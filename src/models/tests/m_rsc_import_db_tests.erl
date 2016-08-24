@@ -18,7 +18,7 @@ modify_rsc_test() ->
     end,
 
     %% perform the tests
-    ?assertThrow({{error, eacces, _Trace}}, m_rsc_import:create_empty("http://foo.com/id/333", C)),
+    ?assertThrow({{error, eacces}, _Trace}, m_rsc_import:create_empty("http://foo.com/id/333", C)),
 
     {ok, Id} = m_rsc_import:create_empty("http://foo.com/id/333", AdminC),
 
@@ -49,7 +49,7 @@ modify_rsc_test() ->
                         {body, <<"This is a <strong>statement</strong>.">>}
                        ]}
                 ],
-    ?assertThrow({error, eacces}, m_rsc_import:import(RscImport, C)),
+    ?assertThrow({{error, eacces}, _Trace}, m_rsc_import:import(RscImport, C)),
 
     {ok, NewId} = m_rsc_import:import(RscImport, SudoC),
     ?assertEqual(Id, NewId),
