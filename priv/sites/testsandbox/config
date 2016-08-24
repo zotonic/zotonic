@@ -21,8 +21,9 @@
    testsandbox,
    mod_base,
    mod_authentication,
-   mod_acl_adminonly,
-   mod_admin
+   mod_admin,
+   mod_mqtt,
+   mod_search
   ]}
 
 ].
