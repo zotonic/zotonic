@@ -106,7 +106,7 @@
   0},
  {<<"template_compiler">>,
   {git,"https://github.com/zotonic/template_compiler.git",
-       {ref,"6b09f1bda704bfe1df778763584b4cc406604e92"}},
+       {ref,"f0d09cc9abff5aa9daeaca334aa3f47055625ea0"}},
   0},
  {<<"twerl">>,
   {git,"https://github.com/mworrell/twerl.git",
