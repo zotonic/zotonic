@@ -220,7 +220,7 @@
 -define(SESSION_EXPIRE_N, 3600).
 
 %% The name of the persistent data cookie
--define(PERSIST_COOKIE, "z_pid").
+-define(PERSIST_COOKIE, <<"z_pid">>).
 
 %% Max age of the person cookie, 10 years or so.
 -define(PERSIST_COOKIE_MAX_AGE, 3600*24*3650).
@@ -236,7 +236,7 @@
 -define(YEAR, 31557600).
 
 %% Our default WWW-Authenticate header
--define(WWW_AUTHENTICATE, "OAuth-rsn").
+-define(WWW_AUTHENTICATE, <<"OAuth-1.0">>).
 
 %% Notifier defines
 -define(NOTIFIER_DEFAULT_PRIORITY, 500).

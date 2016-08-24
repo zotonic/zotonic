@@ -141,9 +141,7 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Return a new empty context, no request is initialized.
-%% @spec new(HostDescr) -> Context2
-%%      HostDescr = Context | atom() | ReqData
--spec new( #context{} | atom() ) -> #context{}.
+-spec new( #context{} | atom() | cowboy_req:req() ) -> #context{}.
 new(#context{} = C) ->
     #context{
         site=C#context.site,
@@ -176,7 +174,8 @@ new(Req) when is_map(Req) ->
     Context = set_server_names(#context{req=Req, site=site(Req)}),
     set_dispatch_from_path(set_default_language_tz(Context)).
 
-%% @doc Create a new context record for a site with a certain language.
+%% @doc Create a new context record for a site with a certain language
+-spec new( atom() | cowboy_req:req(), atom() ) -> #context{}.
 new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
     Context = set_server_names(#context{site=Site}),
     Context#context{
@@ -821,8 +820,8 @@ spawn_link_page(Module, Func, Args, Context) ->
 %% Set lager metadata for the current process
 %% ------------------------------------------------------------------------------------
 
-lager_md(ContextOrReqData) ->
-    lager_md([], ContextOrReqData).
+lager_md(ContextOrReq) ->
+    lager_md([], ContextOrReq).
 
 lager_md(MD, #context{} = Context) when is_list(MD) ->
     RD = get_reqdata(Context),

@@ -248,7 +248,7 @@ serve_oauth(Context, Fun) ->
     case Version of
         "1.0" ->
             ConsumerKey = oauth_param(<<"oauth_consumer_key">>, Context),
-            %SigMethod = oauth_param("oauth_signature_method", ReqData),
+            %SigMethod = oauth_param(<<"oauth_signature_method">>, Context),
             case m_oauth_app:consumer_lookup(ConsumerKey, Context) of
                 undefined ->
                     authenticate(<<"Consumer key not found.">>, Context);

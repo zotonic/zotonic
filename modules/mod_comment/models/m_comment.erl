@@ -143,7 +143,7 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
 peer(undefined) ->
     <<>>;
 peer(RD) ->
-    wrq:peer(RD).
+    cowmachine_req:peer(RD).
 
 %% @doc Delete a comment.  Only possible if the user has edit permission on the page.
 delete(CommentId, Context) ->

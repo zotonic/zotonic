@@ -47,7 +47,6 @@ response(Context) ->
         true ->
             mod_oauth:serve_oauth(Context,
                     fun(URL, Params, Consumer, Signature) ->
-                          %Token = m_oauth_app:secrets_for_verify(none, Consumer, mod_oauth:oauth_param("oauth_token", ReqData), Context),
                           SigMethod = mod_oauth:oauth_param(<<"oauth_signature_method">>, Context),
                           case oauth:verify(
                                     Signature,
