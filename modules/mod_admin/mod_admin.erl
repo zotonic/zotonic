@@ -207,13 +207,11 @@ event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-connect-find"
     % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
-    Category = z_context:get_q(find_category, Context),
-    Predicate = z_context:get_q(predicate, Context, ""),
-    Text = z_context:get_q(find_text, Context),
+    Category = z_context:get_q(<<"find_category">>, Context),
+    Predicate = z_context:get_q(<<"predicate">>, Context, <<>>),
+    Text = z_context:get_q(<<"find_text">>, Context),
     Cats = case Category of
-                "p:"++Predicate -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
-                "" -> [];
                 <<>> -> [];
                 CatId -> [{z_convert:to_integer(CatId)}]
            end,
@@ -229,8 +227,8 @@ event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-connect-find"
     ], Context);
 
 event(#postback{message={admin_connect_select, Args}}, Context) ->
-    SelectId = z_context:get_q("select_id", Context),
-    IsConnected = z_convert:to_bool(z_context:get_q("is_connected", Context)),
+    SelectId = z_context:get_q(<<"select_id">>, Context),
+    IsConnected = z_convert:to_bool(z_context:get_q(<<"is_connected">>, Context)),
     SubjectId0 = proplists:get_value(subject_id, Args),
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),

@@ -46,25 +46,25 @@ options(Context) ->
 allowed_methods(Context) ->
     Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
     z_context:lager_md(Context1),
-    Module = case z_context:get_q("module", Context1) of
+    Module = case z_context:get_q(<<"module">>, Context1) of
                  undefined -> z_convert:to_binary(z_context:get(module, Context1));
-                 Mod -> z_convert:to_binary(Mod)
+                 Mod -> Mod
              end,
-    Method = case z_context:get_q("method", Context1) of
+    Method = case z_context:get_q(<<"method">>, Context1) of
                  undefined ->
                      case z_convert:to_binary(z_context:get(method, Context1)) of
                          <<>> -> Module;
                          Mtd -> Mtd
                      end;
-                 Mtd -> z_convert:to_binary(Mtd)
+                 Mtd -> Mtd
              end,
     case ensure_existing_module(Module, Method, Context1) of
         {ok, ServiceModule} ->
             Context2 = z_context:set(service_module, ServiceModule, Context1),
-            {['OPTIONS' | z_service:http_methods(ServiceModule)], Context2};
+            {[<<"OPTIONS">> | z_service:http_methods(ServiceModule)], Context2};
         {error, enoent} ->
             Context2 = z_context:set(service_module, undefined, Context1),
-            {['OPTIONS', 'GET', 'HEAD', 'POST'], Context2}
+            {[<<"OPTIONS">>, <<"GET">>, <<"HEAD">>, <<"POST">>], Context2}
     end.
 
 ensure_existing_module(Module, Method, Context) ->

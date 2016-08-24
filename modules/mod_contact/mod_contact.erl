@@ -47,8 +47,8 @@ event(#submit{message={contact, Args}, form=FormId}, Context) ->
 	From_ -> From_
     end,
     Vars = [{email_from, From},
-            {name, z_context:get_q("name", Context)},
-            {message, z_context:get_q("message", Context)},
+            {name, z_context:get_q(<<"name">>, Context)},
+            {message, z_context:get_q(<<"message">>, Context)},
             {fields, z_context:get_q_all_noz(Context)}],
     z_email:send_render(To, Template, Vars, Context),
     z_render:wire([ {slide_up, [{target, FormId}]},

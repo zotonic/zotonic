@@ -28,8 +28,8 @@
 event(#submit{message=explain_dispatch}, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
-            ReqPath = ensure_abs(z_convert:to_list(z_string:trim(z_context:get_q("explain_req", Context)))),
-            Protocol = list_to_existing_atom(z_context:get_q("explain_protocol", Context)),
+            ReqPath = ensure_abs(z_string:trim(z_context:get_q(<<"explain_req">>, Context, <<>>))),
+            Protocol = to_protocol(z_context:get_q(<<"explain_protocol">>, Context)),
             TracerPid = erlang:spawn_link(fun tracer/0),
             z_sites_dispatcher:dispatch(
                     <<"GET">>,
@@ -42,7 +42,7 @@ event(#submit{message=explain_dispatch}, Context) ->
                 {trace, Trace} ->
                     Vars = [
                         {trace, Trace},
-                        {path, z_convert:to_binary(ReqPath)},
+                        {path, ReqPath},
                         {protocol, Protocol}
                     ],
                     Context1 = z_render:update(
@@ -57,9 +57,12 @@ event(#submit{message=explain_dispatch}, Context) ->
             z_render:growl(?__("You are not allowed to use the dispatch debugging.", Context), Context)
     end.
 
-ensure_abs([]) -> [$/];
-ensure_abs([$/|_] = P) -> P;
-ensure_abs(P) -> [$/|P].
+ensure_abs(<<>>) -> <<"/">>;
+ensure_abs(<<$/, _/binary>> = P) -> P;
+ensure_abs(P) -> <<$/, P/binary>>.
+
+to_protocol(<<"http">>) -> http;
+to_protocol(<<"https">>) -> https.
 
 tracer() ->
     tracer_loop([]).

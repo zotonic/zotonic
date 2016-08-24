@@ -29,10 +29,10 @@
 
 
 process_get(Context) ->
-    case z_context:get_q("id", Context) of
+    case z_context:get_q(<<"id">>, Context) of
         undefined ->
             {error, missing_arg, "id"};
-        [] ->
+        <<>> ->
             {error, missing_arg, "id"};
         Id ->
             case m_rsc:exists(Id, Context) of

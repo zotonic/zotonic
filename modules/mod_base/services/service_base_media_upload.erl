@@ -29,13 +29,11 @@
 -include_lib("zotonic.hrl").
 
 process_post(Context) ->
-    Upload = #upload{} = z_context:get_q("file", Context),
-
-    Props
-        = lists:flatten(
+    Upload = #upload{} = z_context:get_q(<<"file">>, Context),
+    Props = lists:flatten(
             lists:map(
               fun(Prop) ->
-                      Value = z_context:get_q(atom_to_list(Prop), Context, <<>>),
+                      Value = z_context:get_q(Prop, Context, <<>>),
                       case z_utils:is_empty(Value) of
                           false -> [{Prop, Value}];
                           true -> []

@@ -63,8 +63,7 @@ get_ids(false, PageNr, Context) ->
     [ Id || {Id} <- Ids ].
 
 get_page_nr(Context) ->
-    case z_context:get_q("page", Context) of
-        "" -> 1;
+    case z_context:get_q(<<"page">>, Context) of
         <<>> -> 1;
         undefined -> 1;
         N ->

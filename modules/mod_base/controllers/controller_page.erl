@@ -139,7 +139,7 @@ do_temporary_redirect(Location, Context) ->
     {{halt, 302}, ContextRedirect}.
 
 current_path(Context) ->
-    case z_context:get_q(zotonic_dispatch_path, Context) of
+    case z_context:get_q(<<"zotonic_dispatch_path">>, Context, []) of
         [] -> <<"/">>;
         DP -> z_convert:to_binary([[ $/, P ] || P <- DP ])
     end.

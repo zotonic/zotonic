@@ -33,15 +33,14 @@
 
 event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-merge-find">>, target=TargetId}, Context) ->
     % Find pages matching the search criteria.
-    Category = z_context:get_q(find_category, Context),
-    Text = z_context:get_q(find_text, Context),
+    Category = z_context:get_q(<<"find_category">>, Context, <<>>),
+    Text = z_context:get_q(<<"find_text">>, Context),
     Cats = case Category of
-                "" -> [];
                 <<>> -> [];
                 CatId -> [{z_convert:to_integer(CatId)}]
            end,
     Vars = [
-        {id, m_rsc:rid(z_context:get_q("id", Context), Context)},
+        {id, m_rsc:rid(z_context:get_q(<<"id">>, Context), Context)},
         {cat, Cats},
         {text, Text}
     ],
@@ -52,7 +51,7 @@ event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-merge-find">>
 
 event(#postback{message={merge_select, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
-    SelectId = m_rsc:rid(z_context:get_q(select_id, Context), Context),
+    SelectId = m_rsc:rid(z_context:get_q(<<"select_id">>, Context), Context),
     case z_acl:rsc_editable(Id, Context) andalso z_acl:rsc_editable(SelectId, Context) of
         true ->
             z_render:wire({redirect, [{dispatch, admin_merge_rsc_compare}, {id,Id}, {id2, SelectId}]}, Context);
