@@ -6,7 +6,7 @@
  {<<"cf">>,{pkg,<<"cf">>,<<"0.2.1">>},1},
  {<<"cowboy">>,
   {git,"git://github.com/ninenines/cowboy.git",
-       {ref,"0ba3a9a22269d21b2962fec78c03e5671294d20d"}},
+       {ref,"7839f1367194813c70d7e223a476f96a62b298ae"}},
   1},
  {<<"cowlib">>,
   {git,"https://github.com/ninenines/cowlib",

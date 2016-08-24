@@ -83,7 +83,7 @@ default(smtp_spamd_port) -> 783;
 default(smtp_dnsbl) -> z_email_dnsbl:dnsbl_list();
 default(smtp_delete_sent_after) -> 240;
 default(inet_backlog) -> 500;
-default(inet_acceptor_pool_size) -> 75;
+default(inet_acceptor_pool_size) -> 100;
 default(ssl_backlog) -> ?MODULE:get(inet_backlog);
 default(ssl_acceptor_pool_size) -> ?MODULE:get(inet_acceptor_pool_size);
 default(dbhost) -> "localhost";

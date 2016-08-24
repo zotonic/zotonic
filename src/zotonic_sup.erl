@@ -99,63 +99,12 @@ init([]) ->
                  SmtpServer, SmtpReceiveServer,
                  FilesSup,
                  SitesSup,
-                 FSWatchSup| get_extensions()
+                 FSWatchSup
+                 | get_extensions()
                 ],
-
-    %% Listen to IP address and Port
-    WebIp = z_config:get(listen_ip),
-    WebPort = z_config:get(listen_port),
-    SSLPort = z_config:get(ssl_listen_port),
-
-    WebConfig = [
-                  {dispatcher, z_sites_dispatcher},
-                  {dispatch_list, []},
-                  {backlog, z_config:get(inet_backlog)},
-                  {acceptor_pool_size, z_config:get(inet_acceptor_pool_size)}
-                ],
-
-    SSLWebConfig = [
-                  {dispatcher, z_sites_dispatcher},
-                  {dispatch_list, []},
-                  {backlog, z_config:get(ssl_backlog)},
-                  {acceptor_pool_size, z_config:get(ssl_acceptor_pool_size)},
-                  {ssl, true},
-                  {ssl_opts, [{sni_fun, fun ?MODULE:sni_fun/1}]}
-              ],
-
-    %% Listen to the ip address and port for all sites.
-    IPv4Opts = [{port, WebPort}, {ip, WebIp}],
-    IPv4SSLOpts = [{port, SSLPort}, {ip, WebIp}],
-    IPv6Opts = [{port, WebPort}, {ip, any6}],
-    IPv6SSLOpts = [{port, SSLPort}, {ip, any6}],
-
-    %% Webmachine/Mochiweb processes
-    [IPv4Proc, IPv4SSLProc, IPv6Proc, IPv6SSLProc] =
-        [[{Name,
-           {webmachine_mochiweb, start,
-            [Name, Opts]},
-           permanent, 5000, worker, dynamic}]
-         || {Name, Opts}
-                <- [{webmachine_mochiweb, IPv4Opts ++ WebConfig},
-                    {webmachine_mochiweb_ssl, IPv4SSLOpts ++ SSLWebConfig},
-                    {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig},
-                    {webmachine_mochiweb_ssl_v6, IPv6SSLOpts ++ SSLWebConfig}]],
-
-    %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses
-    EnableIPv6 = case WebIp of
-                     any -> ipv6_supported();
-                     _ -> false
-                 end,
-
-    Processes1 =
-        case EnableIPv6 of
-            true -> Processes ++ IPv4Proc ++ IPv4SSLProc ++ IPv6Proc ++ IPv6SSLProc;
-            false -> Processes ++ IPv4Proc ++ IPv4SSLProc
-        end,
 
     init_stats(),
-    init_webmachine(),
-
+    start_http_listeners(),
     spawn(fun() ->
                   timer:sleep(4000),
                   lager:info(""),
@@ -164,38 +113,70 @@ init([]) ->
                   lager:info("Config files used:"),
                   [lager:info("- ~s", [Cfg]) || [Cfg] <- proplists:get_all_values(config, init:get_arguments())],
                   lager:info(""),
-                  lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
-                  case EnableIPv6 of
-                      true -> lager:info("Web server listening on IPv6 ::~p, SSL ::~p", [WebPort, SSLPort]);
-                      false -> lager:info("IPv6 support disabled.")
-                  end,
-                  lager:info(""),
                   [lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status]) ||
                       [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status]
           end),
-
-    {ok, {{one_for_one, 1000, 10}, Processes1}}.
+    {ok, {{one_for_one, 1000, 10}, Processes}}.
 
 %% @doc Initializes the stats collector.
-%%
 init_stats() ->
     z_stats:init().
 
+%% @doc Start the HTTP listeners
+start_http_listeners() ->
+    WebIp = z_config:get(listen_ip),
+    WebPort = z_config:get(listen_port),
+    SSLPort = z_config:get(ssl_listen_port),
+    CowboyOpts = #{
+        middlewares => [ z_sites_dispatcher, z_cowmachine_middleware ],
+        env => #{
+            server_header => <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>
+        }
+    },
 
-%% @doc Sets the application parameters for webmachine and starts the logger processes.
-%%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid
-%%      messing with application parameters when starting up a new wm-mochiweb process.
-init_webmachine() ->
-    ServerHeader = webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
-    application:set_env(webzmachine, server_header, ServerHeader),
-    set_webzmachine_default(webmachine_logger_module, z_stats),
-    set_webzmachine_default(error_handler, controller),
-    webmachine_sup:start_logger().
+    lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
+    {ok, _} = cowboy:start_clear(
+        zotonic_http_listener_ip4,
+        z_config:get(inet_acceptor_pool_size),
+        [   inet,
+            {port, WebPort},
+            {backlog, z_config:get(inet_backlog)}
+            | case WebIp of any -> []; _ -> [{ip, WebIp}] end
+        ],
+        CowboyOpts),
+    {ok, _} = cowboy:start_tls(
+        zotonic_https_listener_ip4,
+        z_config:get(ssl_acceptor_pool_size),
+        [   inet,
+            {port, SSLPort},
+            {backlog, z_config:get(ssl_backlog)},
+            {sni_fun, fun ?MODULE:sni_fun/1}
+            | case WebIp of any -> []; _ -> [{ip, WebIp}] end
+        ],
+        CowboyOpts),
 
-set_webzmachine_default(Par, Def) ->
-    case application:get_env(webzmachine, Par) of
-        undefined -> application:set_env(webzmachine, Par, Def);
-        _ -> nop
+    case {WebIp, ipv6_supported()} of
+        {any, true} ->
+            lager:info("Web server listening on IPv6 ::~p, SSL ::~p", [WebPort, SSLPort]),
+            {ok, _} = cowboy:start_clear(
+                zotonic_http_listener_ip6,
+                z_config:get(inet_acceptor_pool_size),
+                [   inet6,
+                    {port, WebPort},
+                    {backlog, z_config:get(inet_backlog)}
+                ],
+                CowboyOpts),
+            {ok, _} = cowboy:start_tls(
+                zotonic_https_listener_ip6,
+                z_config:get(ssl_acceptor_pool_size),
+                [   inet6,
+                    {port, SSLPort},
+                    {backlog, z_config:get(ssl_backlog)},
+                    {sni_fun, fun ?MODULE:sni_fun/1}
+                ],
+                CowboyOpts),
+        _ ->
+            ok
     end.
 
 %% @doc Ensure all job queues
@@ -235,9 +216,9 @@ get_extensions() ->
      || F <- Files].
 
 %% @doc Let sites return their own keys and certificates.
-sni_fun(ServerName) ->
-    case z_sites_dispatcher:get_host_for_domain(ServerName) of
+sni_fun(Hostname) ->
+    case z_sites_dispatcher:get_site_for_hostname(Hostname) of
         undefined -> undefined;
         {ok, Host} ->
-            z_notifier:first(#ssl_options{server_name=ServerName}, z_context:new(Host))
+            z_notifier:first(#ssl_options{server_name=Hostname}, z_context:new(Host))
     end.
