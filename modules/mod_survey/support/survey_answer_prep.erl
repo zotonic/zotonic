@@ -101,8 +101,8 @@ answer_1(<<"survey_yesno">>, N, Block, Context) ->
     end;
 answer_1(<<"survey_truefalse">>, N, Block, Context) ->
     case z_convert:to_bool(N) of
-        true -> default(proplists:get_value(true, Block), <<"true">>, Context);
-        false -> default(proplists:get_value(false, Block), <<"false">>, Context)
+        true -> default(proplists:get_value(yes, Block), <<"true">>, Context);
+        false -> default(proplists:get_value(no, Block), <<"false">>, Context)
     end;
 answer_1(_, N, _, _Context) ->
     N.

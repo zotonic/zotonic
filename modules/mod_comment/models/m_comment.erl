@@ -78,19 +78,20 @@ m_value(#m{value=undefined}, _Context) ->
 
 
 %% @doc List all comments of the resource.
-%% @spec list_rsc(int(), Context) -> [ PropList ]
-list_rsc(RscId, Context) when is_integer(RscId) ->
+-spec list_rsc(m_rsc:resource(), #context{}) -> list().
+list_rsc(RscId, Context) ->
     F = fun() ->
-        z_db:assoc_props("select * from comment where rsc_id = $1 order by created asc", [RscId], Context)
+        z_db:assoc_props("select * from comment where rsc_id = $1 order by created asc", [m_rsc:rid(RscId, Context)], Context)
     end,
     z_depcache:memo(F, {comment_rsc, RscId}, ?MAXAGE_COMMENT, Context).
 
 
 %% @doc Count comments of the resource.
 %% @spec count_rsc(int(), Context) -> [ PropList ]
-count_rsc(RscId, Context) when is_integer(RscId) ->
+-spec count_rsc(m_rsc:resource(), #context{}) -> list().
+count_rsc(RscId, Context) ->
     F = fun() ->
-        z_db:q1("select count(*) from comment where rsc_id = $1", [RscId], Context)
+        z_db:q1("select count(*) from comment where rsc_id = $1", [m_rsc:rid(RscId, Context)], Context)
     end,
     z_depcache:memo(F, {comment_rsc_count, RscId}, ?MAXAGE_COMMENT, [{comment_rsc, RscId}], Context).
 
@@ -102,8 +103,8 @@ get(CommentId, Context) ->
 
 
 %% @doc Insert a new comment. Fetches the submitter information from the Context.
-%% @spec insert(Id::int(), Name::string(), Email::string(), Message::string(), Is_visible::boolean(), Context) -> {ok, CommentId} | {error, Reason}
 %% @todo Insert external ip address and user agent string
+-spec insert(m_rsc:resource(), Name::string(), Email::string(), Message::string(), Is_visible::boolean(), #context{}) -> {ok, pos_integer()} | {error, any()}.
 insert(RscId, Name, Email, Message, Is_visible, Context) ->
     case z_acl:rsc_visible(RscId, Context)
         and (z_auth:is_auth(Context)
@@ -116,7 +117,7 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
             UserAgent = z_context:get_q("user_agent", Context, <<"">>),
             IPAddress = peer(z_context:get_reqdata(Context)),
             Props = [
-                {rsc_id, z_convert:to_integer(RscId)},
+                {rsc_id, m_rsc:rid(RscId, Context)},
                 {is_visible, Is_visible},
                 {user_id, z_acl:user(Context)},
                 {persistent_id, z_context:persistent_id(Context)},
@@ -194,14 +195,15 @@ gravatar_code(Email) ->
 
 
 %% @doc Move all comments from one resource to another
+-spec merge(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok.
 merge(WinnerId, LooserId, Context) ->
     z_db:q("update comment
             set rsc_id = $1
             where rsc_id = $2",
-           [WinnerId, LooserId],
+           [m_rsc:rid(WinnerId, Context), m_rsc:rid(LooserId, Context)],
            Context),
-    z_depcache:flush({comment_rsc, LooserId}, Context),
-    z_depcache:flush({comment_rsc, WinnerId}, Context),
+    z_depcache:flush({comment_rsc, m_rsc:rid(LooserId, Context)}, Context),
+    z_depcache:flush({comment_rsc, m_rsc:rid(WinnerId, Context)}, Context),
     ok.
 
 

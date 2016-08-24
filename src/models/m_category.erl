@@ -169,10 +169,10 @@ insert(ParentId, Name, Props, Context) ->
 %% @doc Delete the category, move referring pages to another category.
 %%      After this routine the caches are dirty and child-categories might need renumbering if a TransferId
 %%      was defined and there were sub-categories.
--spec delete(integer(), integer()|undefined, #context{}) -> ok | {error, term()}.
+-spec delete(m_rsc:resource(), integer() | undefined, #context{}) -> ok | {error, term()}.
 delete(Id, TransferId, Context) ->
     % fail when deleting 'other', 'meta', 'category' or 'predicate'
-    case z_db:q("select name from rsc where id = $1", [Id], Context) of
+    case z_db:q("select name from rsc where id = $1", [m_rsc:rid(Id, Context)], Context) of
         N when  N == <<"other">>;
                 N == <<"meta">>;
                 N == <<"category">>;
@@ -186,9 +186,9 @@ delete(Id, TransferId, Context) ->
                     F = fun(Ctx) ->
                         ParentId = z_db:q1("select parent_id
                                               from hierarchy
-                                               where id = $1
+                                                where id = $1
                                                  and name = '$category'",
-                                              [Id],
+                                              [m_rsc:rid(Id, Context)],
                                               Ctx),
                         ToId = case {TransferId,ParentId} of
                                     {undefined,undefined} ->
@@ -235,7 +235,7 @@ delete(Id, TransferId, Context) ->
                                 set category_id = $1,
                                     pivot_category_nr = $2
                                 where category_id = $3",
-                               [ToId, ToNr, Id],
+                               [ToId, ToNr, m_rsc:rid(Id, Context)],
                                Ctx),
                         ok = m_rsc_update:delete_nocheck(Id, Ctx)
                     end,
@@ -367,7 +367,7 @@ prune(N, CS) ->
 
 
 %% @doc Get the basic properties of a category
--spec get(integer()|binary()|list()|atom(), #context{}) -> list() | undefined.
+-spec get(m_rsc:resource(), #context{}) -> list() | undefined.
 get(undefined, _Context) ->
     undefined;
 get(Id, Context) when is_integer(Id) ->
@@ -491,7 +491,7 @@ get_path(Id, Context) ->
     end.
 
 %% @doc Return the categories (as atoms) the category is part of, including the category itself (as last member).
--spec is_a(integer()|binary()|string(), #context{}) -> list(atom()).
+-spec is_a(m_rsc:resource(), #context{}) -> list(atom()).
 is_a(Id, Context) ->
     case get(Id, Context) of
         undefined -> [];
@@ -530,7 +530,7 @@ is_meta(CatId, Context) when is_integer(CatId) ->
         Context).
 
 %% @doc Map a category name to an id, be flexible with the input
--spec name_to_id(binary()|list()|integer()|{integer()}, #context{}) -> {ok, integer()} | {error, {unknown_category, term()}}.
+-spec name_to_id(m_rsc:resource() | {m_rsc:resource_id()}, #context{}) -> {ok, m_rsc:resource_id()} | {error, {unknown_category, term()}}.
 name_to_id({Id}, _Context) when is_integer(Id) ->
     {ok, Id};
 name_to_id(Id, _Context) when is_integer(Id) ->

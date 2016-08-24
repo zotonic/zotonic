@@ -1,10 +1,10 @@
 .. highlight:: django
 .. include:: meta-twitter.rst
 
-Format a plain text tweet into HTML.
+Format a plain text Tweet into HTML.
 
-This filter creates hyperlinks out of the embedded URLs, @-referencfes
-and hashtags in a tweet, like Twitter does.
+This filter creates hyperlinks out of the embedded URLs, @-references
+and hashtags in a Tweet, like Twitter does.
 
 For example::
 
