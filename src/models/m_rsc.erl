@@ -458,6 +458,8 @@ p(Id, Property, Context)
     orelse Property =:= uri
     orelse Property =:= is_authoritative
     orelse Property =:= is_published
+    orelse Property =:= exists
+    orelse Property =:= id
     orelse Property =:= visible_for
     orelse Property =:= default_page_url ->
         p_no_acl(rid(Id, Context), Property, Context);
