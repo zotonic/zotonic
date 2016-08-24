@@ -240,7 +240,7 @@ event(#postback{message={language_default, Args}}, Context) ->
     end;
 
 %% @doc Start rescanning all templates for translation tags.
-event(#postback{message=translation_generate}, Context) ->
+event(#postback{message= <<"translation_generate">>}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             spawn(fun() -> generate(Context) end),
@@ -288,7 +288,12 @@ event(#postback{message={language_enable, Args}}, Context) ->
             Context;
         false ->
             z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
-    end.
+    end;
+    
+event(X, Y) ->
+  ?DEBUG(X),
+  ?DEBUG(Y),
+  Y.
 
 
 %% @doc Strip any language from the URL (iff the first part of the url is a known language)
