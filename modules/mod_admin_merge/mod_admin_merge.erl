@@ -31,7 +31,7 @@
 
 -include_lib("zotonic.hrl").
 
-event(#postback_notify{message="feedback", trigger="dialog-merge-find", target=TargetId}, Context) ->
+event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-merge-find">>, target=TargetId}, Context) ->
     % Find pages matching the search criteria.
     Category = z_context:get_q(find_category, Context),
     Text = z_context:get_q(find_text, Context),

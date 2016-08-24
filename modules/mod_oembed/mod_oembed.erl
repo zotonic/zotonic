@@ -309,9 +309,9 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
     end;
 
 %% @doc When entering the embed URL for a new media item, we trigger the detecting early to guess title/description.
-event(#postback_notify{message="do_oembed"}, Context) ->
-    case z_string:trim(z_context:get_q("url", Context)) of
-        "" ->
+event(#postback_notify{message= <<"do_oembed">>}, Context) ->
+    case z_string:trim(z_context:get_q(<<"url">>, Context)) of
+        <<>> ->
             z_context:add_script_page([
                     "$('#oembed-title').val('""').attr('disabled',true);",
                     "$('#oembed-summary').val('""').attr('disabled',true);",

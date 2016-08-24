@@ -30,7 +30,7 @@ is_authorized(Context0) ->
     Context = z_admin_controller_helper:init_session(Context0),
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
-            Id = m_rsc:rid(z_context:get_q("id", Context), Context),
+            Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
             case m_rsc:exists(Id, Context) of
                 false ->
                     z_acl:wm_is_authorized(true, Context);
@@ -44,19 +44,19 @@ is_authorized(Context0) ->
 
 html(Context) ->
     Vars = [
-        {id, m_rsc:rid(z_context:get_q("id", Context), Context)},
+        {id, m_rsc:rid(z_context:get_q(<<"id">>, Context), Context)},
         {page_admin_backup, true}
     ],
 	Html = z_template:render("admin_backup_revision.tpl", Vars, Context),
 	z_context:output(Html, Context).
 
 
-event(#postback_notify{message="rev-diff"}, Context) ->
-    Id = m_rsc:rid(z_context:get_q("id", Context), Context),
+event(#postback_notify{message= <<"rev-diff">>}, Context) ->
+    Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            A = z_convert:to_list(z_context:get_q("a", Context)),
-            B = z_convert:to_list(z_context:get_q("b", Context)),
+            A = z_context:get_q(<<"a">>, Context),
+            B = z_context:get_q(<<"b">>, Context),
             PropsA = fetch_props(Id, A, Context),
             PropsB = fetch_props(Id, B, Context),
             case check_access(PropsA, PropsB, Context) of
@@ -121,9 +121,9 @@ update_diff(Id, {ok, A}, {ok, B}, Context) ->
 
 fetch_props(_Id, undefined, _Context) ->
     undefined;
-fetch_props(Id, <<"latest">>, Context) ->
-    fetch_props(Id, "latest", Context);
 fetch_props(Id, "latest", Context) ->
+    fetch_props(Id, <<"latest">>, Context);
+fetch_props(Id, <<"latest">>, Context) ->
     {ok, [
             {id, 0},
             {rsc_id, Id},

@@ -27,7 +27,7 @@ event(#postback{message={admin_connect_select, Args}} = Msg, Context) ->
             event_admin(Msg, Context);
         SubjectId when is_integer(SubjectId) ->
             % Select collab group dialog
-            SelectId = m_rsc:rid(z_context:get_q("select_id", Context), Context),
+            SelectId = m_rsc:rid(z_context:get_q(<<"select_id">>, Context), Context),
             case m_rsc:is_a(SelectId, acl_collaboration_group, Context) of
                 true ->
                     try
@@ -60,10 +60,10 @@ event_admin(Msg, Context) ->
             z_render:growl_error(?__("You are not allowed to perform this action", Context), Context)
     end.
 
-event1(#postback_notify{message="feedback", target=TargetId}, Context) ->
+event1(#postback_notify{message= <<"feedback">>, target=TargetId}, Context) ->
     Vars = [
         {cat, acl_collaboration_group},
-        {text, z_context:get_q("triggervalue", Context)}
+        {text, z_context:get_q(<<"triggervalue">>, Context)}
     ],
     z_render:wire([
         {remove_class, [{target, TargetId}, {class, "loading"}]},

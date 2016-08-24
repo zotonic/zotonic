@@ -146,21 +146,21 @@ event(#postback{message={send_verification, [{user_id, UserId}]}}, Context) ->
         _Other -> logon_stage("verification_error", Context)
     end;
 
-event(#submit{message=[], form="password_expired"}, Context) ->
+event(#submit{message= <<>>, form= <<"password_expired">>}, Context) ->
     Args = z_context:get_q_all(Context),
     expired(Args, Context);
 
-event(#submit{message=[], form="password_reset"}, Context) ->
+event(#submit{message= <<>>, form= <<"password_reset">>}, Context) ->
     Args = z_context:get_q_all(Context),
     reset(Args, Context);
 
 %%@doc Handle submit form post.
-event(#submit{message=[], form="password_reminder"}, Context) ->
+event(#submit{message= <<>>, form= <<"password_reminder">>}, Context) ->
     Args = z_context:get_q_all(Context),
     reminder(Args, Context);
 
-event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context) ->
-    LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
+event(#submit{message={logon_confirm, Args}, form= <<"logon_confirm_form">>}, Context) ->
+    LogonArgs = [{<<"username">>, m_identity:get_username(Context)}
                   | z_context:get_q_all(Context)],
     case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
         {ok, UserId} when is_integer(UserId) ->

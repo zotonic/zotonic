@@ -167,7 +167,7 @@ observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 
 
-event(#postback_notify{message="admin-insert-block"}, Context) ->
+event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
     Language = case z_context:get_q("language", Context) of
                     undefined ->
                         [];
@@ -203,7 +203,7 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
 
-event(#postback_notify{message="feedback", trigger="dialog-connect-find", target=TargetId}, Context) ->
+event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-connect-find">>, target=TargetId}, Context) ->
     % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
@@ -270,9 +270,9 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     end;
 
 %% Called when a block connection is done
-event(#postback_notify{message="update", target=TargetId}, Context) ->
-    Id = z_convert:to_integer(z_context:get_q("id", Context)),
-    Predicate = get_predicate(z_context:get_q("predicate", Context), Context),
+event(#postback_notify{message= <<"update">>, target=TargetId}, Context) ->
+    Id = z_convert:to_integer(z_context:get_q(<<"id">>, Context)),
+    Predicate = get_predicate(z_context:get_q(<<"predicate">>, Context), Context),
     Vars = [
         {id, Id},
         {predicate, Predicate}
