@@ -136,7 +136,7 @@ start_http_listeners() ->
 
     lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
     {ok, _} = cowboy:start_clear(
-        zotonic_http_listener_ip4,
+        zotonic_http_listener_ipv4,
         z_config:get(inet_acceptor_pool_size),
         [   inet,
             {port, WebPort},
@@ -145,7 +145,7 @@ start_http_listeners() ->
         ],
         CowboyOpts),
     {ok, _} = cowboy:start_tls(
-        zotonic_https_listener_ip4,
+        zotonic_https_listener_ipv4,
         z_config:get(ssl_acceptor_pool_size),
         [   inet,
             {port, SSLPort},
@@ -159,17 +159,19 @@ start_http_listeners() ->
         {any, true} ->
             lager:info("Web server listening on IPv6 ::~p, SSL ::~p", [WebPort, SSLPort]),
             {ok, _} = cowboy:start_clear(
-                zotonic_http_listener_ip6,
+                zotonic_http_listener_ipv6,
                 z_config:get(inet_acceptor_pool_size),
                 [   inet6,
+                    % {ipv6_v6only, true},      % Not supported by ranch_tcp
                     {port, WebPort},
                     {backlog, z_config:get(inet_backlog)}
                 ],
                 CowboyOpts),
             {ok, _} = cowboy:start_tls(
-                zotonic_https_listener_ip6,
+                zotonic_https_listener_ipv6,
                 z_config:get(ssl_acceptor_pool_size),
                 [   inet6,
+                    % {ipv6_v6only, true},      % Not supported by ranch_tcp
                     {port, SSLPort},
                     {backlog, z_config:get(ssl_backlog)},
                     {sni_fun, fun ?MODULE:sni_fun/1}
