@@ -20,7 +20,6 @@
 -module(z_stats).
 
 -include_lib("zotonic.hrl").
--include_lib("webzmachine/include/webmachine_logger.hrl").
 
 -export([init/0, init_site/1]).
 
@@ -52,16 +51,19 @@ init_site(Host) ->
 
 %% @doc Collect log data from webzmachine and update webzmachine metrics
 %%
-log_access(#wm_log_data{finish_time=undefined}=LogData) ->
-    log_access(LogData#wm_log_data{finish_time=os:timestamp()});
-log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
-                        response_length=ResponseLength}=LogData) when StartTime =/= undefined ->
-    try
-        %% The request has already been counted by z_sites_dispatcher.
-        Host = webmachine_logger:get_metadata(zotonic_host, LogData),
-        exometer:update([zotonic, Host, webzmachine, duration], timer:now_diff(FinishTime, StartTime)),
-        exometer:update([zotonic, Host, webzmachine, data_out], ResponseLength)
-    after
-        z_access_syslog:log_access(LogData)
-    end.
+log_access(_LogData) ->
+    ok.
+
+% log_access(#wm_log_data{finish_time=undefined}=LogData) ->
+%     log_access(LogData#wm_log_data{finish_time=os:timestamp()});
+% log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
+%                         response_length=ResponseLength}=LogData) when StartTime =/= undefined ->
+%     try
+%         %% The request has already been counted by z_sites_dispatcher.
+%         Host = webmachine_logger:get_metadata(zotonic_host, LogData),
+%         exometer:update([zotonic, Host, webzmachine, duration], timer:now_diff(FinishTime, StartTime)),
+%         exometer:update([zotonic, Host, webzmachine, data_out], ResponseLength)
+%     after
+%         z_access_syslog:log_access(LogData)
+%     end.
 

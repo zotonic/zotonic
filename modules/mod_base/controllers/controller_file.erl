@@ -90,7 +90,7 @@ last_modified(Context) ->
     case z_context:get(?MODULE, Context) of
         {error, _} ->
             {calendar:universal_time(), Context};
-        #z_file_info{} = {modifiedUTC=LModUTC} ->
+        #z_file_info{modifiedUTC=LModUTC} ->
             {LModUTC, Context}
     end.
 
@@ -143,8 +143,7 @@ provide_content(Context) ->
             Context3 = set_allow_origin(Context2),
             Context4 = set_content_policy(Info, Context3),
             {z_file_request:content_stream(Info, cowmachine_req:resp_content_encoding(Context4))}
-    end,
-
+    end.
 
 %%%%% -------------------------- Support functions ------------------------
 

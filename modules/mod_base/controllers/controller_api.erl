@@ -210,9 +210,6 @@ api_error(HttpCode, ErrCode, Message, ErrData, Context) ->
     {{halt, HttpCode}, cowmachine_req:set_resp_body(Body, Context)}.
 
 
-api_result(Result, Context) ->
-    api_result(Result, Context).
-
 api_result({error, Err, Arg}, Context) ->
     api_result({error, Err, Arg, []}, Context);
 api_result({error, Err, Arg, ErrData}, Context) when is_list(Arg) ->

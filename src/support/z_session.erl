@@ -245,7 +245,7 @@ keepalive(PageId, Pid) ->
 %% @doc Make sure that the request has a page session, when the page session was alive then
 %%      adjust the expiration of the page.  Returns a new context with the page id set.
 -spec ensure_page_session(#context{}) -> #context{}.
-ensure_page_session(#context{wm_reqdata=undefined} = Context) ->
+ensure_page_session(#context{req=undefined} = Context) ->
     Context;
 ensure_page_session(#context{session_pid=undefined} = Context) ->
     lager:debug("[~p] ensure page session without a session_pid", [z_context:site(Context)]),

@@ -19,7 +19,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(cowmachine).
+-module(z_cowmachine_middleware).
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(cowboy_middleware).
@@ -32,9 +32,9 @@
 %%      metadata for lager and set the relevant Context arguments.
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req::cowboy_req:req(), Env::cowboy_middleware:env().
-execute(Req, #{controller=Controller, controller_options=ControllerOpts} = Env) ->
+execute(Req, #{controller := Controller, controller_options := ControllerOpts} = Env) ->
     Context1 = z_context:set([
-                    {controller_options, ControllerOpts} | DispatchArgs
+                    {controller_options, ControllerOpts}
                 ], 
                 maps:get(context, Env)),
     Context2 = z_context:set_controller_module(Controller, Context1),

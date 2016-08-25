@@ -10,7 +10,7 @@
 -svc_title("Set a value in the Zotonic persistent record.").
 -svc_needauth(false).
 
--export([process_get/2]).
+-export([process_get/1]).
 
 -include_lib("zotonic.hrl").
 

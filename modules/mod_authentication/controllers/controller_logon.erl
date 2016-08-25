@@ -19,7 +19,7 @@
 -module(controller_logon).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([charsets_provided/1, content_types_provided/1]).
+-export([charsets_provided/1]).
 -export([resource_exists/1, previously_existed/1, moved_temporarily/1]).
 -export([to_html/1]).
 -export([event/2]).

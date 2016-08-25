@@ -176,7 +176,7 @@ start_http_listeners() ->
                     {backlog, z_config:get(ssl_backlog)},
                     {sni_fun, fun ?MODULE:sni_fun/1}
                 ],
-                CowboyOpts),
+                CowboyOpts);
         _ ->
             ok
     end.
