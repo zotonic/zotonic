@@ -28,17 +28,17 @@ yesno(B, Context) ->
     end.
 
 yesno(undefined, Values, _Context) ->
-    case string:tokens(z_convert:to_list(Values), ",") of
+    case binary:split(z_convert:to_binary(Values), <<",">>, [global]) of
         [_Yes, _No, Maybe] -> Maybe;
         [_Yes, No] -> No
     end;
 yesno(B, Values, Context) ->
     case z_template_compiler_runtime:to_bool(B, Context) of
         true ->
-            [_Yes,No|_Rest] = string:tokens(z_convert:to_list(Values), ","),
-            No;
+            [Yes|_Rest] = binary:split(z_convert:to_binary(Values), <<",">>, [global]),
+            Yes;
         false ->
-            [Yes|_Rest] = string:tokens(z_convert:to_list(Values), ","),
-            Yes
+            [_Yes,No|_Rest] = binary:split(z_convert:to_binary(Values), <<",">>, [global]),
+            No
     end.
 
