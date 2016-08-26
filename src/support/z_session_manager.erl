@@ -496,7 +496,7 @@ get_session_cookie(Context) ->
             to_binary(SessionId)
     end.
 
-%% @doc Fetch the name of the session cookie. Default to <<"z_sid">>
+%% @doc Fetch the name of the session cookie. Default to "z_sid"
 -spec get_session_cookie_name(#context{}) -> binary().
 get_session_cookie_name(Context) ->
     case m_config:get_value(site, session_cookie_name, Context) of
