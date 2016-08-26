@@ -108,8 +108,8 @@ websocket_handle({Type, Data}, Context) when Type =:= text; Type =:= binary ->
 websocket_handle(_Data, Context) ->
     {ok, Context}.
 
-websocket_info(_Msg, _Context) ->
-    ok.
+websocket_info(_Msg, Context) ->
+    {ok, Context}.
 
 
 %% ---------------------------------------------------------------------------------------------

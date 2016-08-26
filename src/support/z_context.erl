@@ -652,8 +652,8 @@ get_reqdata(Context) ->
     Context#context.req.
 
 %% @doc Set the webmachine request data of the context
--spec set_reqdata(cowboy_req:req(), #context{}) -> #context{}.
-set_reqdata(Req, Context) when is_map(Req) ->
+-spec set_reqdata(cowboy_req:req() | undefined, #context{}) -> #context{}.
+set_reqdata(Req, Context) when is_map(Req); Req =:= undefined ->
     Context#context{req=Req}.
 
 
