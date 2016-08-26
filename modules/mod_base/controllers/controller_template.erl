@@ -70,7 +70,7 @@ set_optional_cache_header(Context) ->
         MaxAge when is_integer(MaxAge) ->
             z_context:set_resp_header(
                 <<"cache-control">>, 
-                <<"public, max-age=", (z_conver:to_binary(MaxAge))/binary>>,
+                <<"public, max-age=", (z_convert:to_binary(MaxAge))/binary>>,
                 Context)
     end.
 

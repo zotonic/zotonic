@@ -213,7 +213,7 @@ get_site_for_hostname(Hostname) ->
 
 raw_path(Req) ->
     Path = cowboy_req:path(Req),
-    case cowboy_req:qs() of
+    case cowboy_req:qs(Req) of
         undefined -> Path;
         <<>> -> Path;
         Qs -> <<Path/binary, $?, Qs/binary>>

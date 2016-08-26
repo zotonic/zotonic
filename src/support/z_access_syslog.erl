@@ -92,11 +92,11 @@ handle_flush_done(_Pid, _State) ->
 %% Helpers
 %%
 
-get_header_value(Name, Headers) ->
-    case mochiweb_headers:get_value(Name, Headers) of
-        undefined -> <<>>;
-	   Value -> z_convert:to_binary(Value)
-    end.
+% get_header_value(Name, Headers) ->
+%     case mochiweb_headers:get_value(Name, Headers) of
+%         undefined -> <<>>;
+% 	   Value -> z_convert:to_binary(Value)
+%     end.
 
 %%
 %% Formats

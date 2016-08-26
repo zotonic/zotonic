@@ -254,7 +254,7 @@ serve_oauth(Context, Fun) ->
                     authenticate(<<"Consumer key not found.">>, Context);
                 Consumer ->
                     Signature = oauth_param(<<"oauth_signature">>, Context),
-                    URL = z_convert:to_list(z_context:abs_url(m_req:path(Context), Context)),
+                    URL = z_convert:to_list(z_context:abs_url(m_req:get(path, Context), Context)),
                     Fun(URL, to_oauth_params(Context), Consumer, Signature)
             end;
         _ ->

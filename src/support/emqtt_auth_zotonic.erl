@@ -89,7 +89,7 @@ map_user_site(Username) when is_binary(Username) ->
             fallback_site(Username);
         Parts ->
             Hostname = lists:last(Parts),
-            case z_sites_dispatcher:get_host_for_domain(Hostname) of
+            case z_sites_dispatcher:get_site_for_hostname(Hostname) of
                 undefined ->
                     case catch list_to_existing_atom(binary_to_list(Hostname)) of
                         Host when is_atom(Host) ->

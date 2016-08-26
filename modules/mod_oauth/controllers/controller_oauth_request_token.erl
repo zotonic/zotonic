@@ -50,7 +50,7 @@ response(Context) ->
                           SigMethod = mod_oauth:oauth_param(<<"oauth_signature_method">>, Context),
                           case oauth:verify(
                                     Signature,
-                                    z_convert:to_list(m_req:method(Context)),
+                                    z_convert:to_list(m_req:get(method, Context)),
                                     URL,
                                     Params,
                                     mod_oauth:to_oauth_consumer(Consumer, SigMethod), 

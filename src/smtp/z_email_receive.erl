@@ -86,7 +86,7 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
 get_host(Recipient) ->
     [Username, Domain] = binstr:split(Recipient, <<"@">>, 2),
     [LocalPart|LocalTags] = binstr:split(Username, <<"+">>),
-    case z_sites_dispatcher:get_host_for_domain(Domain) of
+    case z_sites_dispatcher:get_site_for_hostname(Domain) of
         {ok, Host} ->
             {ok, LocalPart, LocalTags, Domain, Host};
         undefined ->

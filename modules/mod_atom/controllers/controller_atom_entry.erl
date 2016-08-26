@@ -80,7 +80,7 @@ provide_content(Context) ->
     Id = get_id(Context),
     RscExport = m_rsc_export:full(Id, Context),
     Content = atom_convert:resource_to_atom(RscExport, Context),
-    Content1 = wrq:encode_content(Content, Context),
+    Content1 = cowmachine_req:encode_content(Content, Context),
     {Content1, Context}.
 
 
