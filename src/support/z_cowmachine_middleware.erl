@@ -33,15 +33,11 @@
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req::cowboy_req:req(), Env::cowboy_middleware:env().
 execute(Req, #{controller := Controller, controller_options := ControllerOpts} = Env) ->
-    Context1 = z_context:set([
-                    {controller_options, ControllerOpts}
-                ], 
-                maps:get(context, Env)),
+    Context1 = z_context:set(ControllerOpts, maps:get(context, Env)),
     Context2 = z_context:set_controller_module(Controller, Context1),
     Context3 = z_context:set_reqdata(Req, Context2),
-    z_context:lager_md(Context3),
     Options = #{
-        on_welformed => fun(Ctx) -> z_context:ensure_qs(Ctx) end
+        on_welformed => fun(Ctx) -> z_context:lager_md(Ctx), z_context:ensure_qs(Ctx) end
     },
     cowmachine:request(Controller, ControllerOpts, Req, Env, Options, Context3).
 

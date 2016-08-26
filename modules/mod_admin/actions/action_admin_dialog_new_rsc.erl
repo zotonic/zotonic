@@ -160,11 +160,11 @@ get_base_props(NewRscTitle, Context) ->
         | Props
     ].
 
-maybe_add_prop("new_rsc_title", _, Acc) ->
+maybe_add_prop(<<"new_rsc_title">>, _, Acc) ->
     Acc;
-maybe_add_prop("category_id", Cat, Acc) ->
+maybe_add_prop(<<"category_id">>, Cat, Acc) ->
     [{category_id, z_convert:to_integer(Cat)} | Acc];
-maybe_add_prop("is_published", IsPublished, Acc) ->
+maybe_add_prop(<<"is_published">>, IsPublished, Acc) ->
     [{is_published, z_convert:to_bool(IsPublished)} | Acc];
 maybe_add_prop(P, V, Acc) ->
     [{P, V} | Acc].

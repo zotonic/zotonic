@@ -142,7 +142,7 @@ provide_content(Context) ->
             Context2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context1), MaxAge, Context1),
             Context3 = set_allow_origin(Context2),
             Context4 = set_content_policy(Info, Context3),
-            {z_file_request:content_stream(Info, cowmachine_req:resp_content_encoding(Context4))}
+            {z_file_request:content_stream(Info, cowmachine_req:resp_content_encoding(Context4)), Context4}
     end.
 
 %%%%% -------------------------- Support functions ------------------------
@@ -211,13 +211,13 @@ get_file_info(Context) ->
     get_file_info_cfg(z_context:get(path, Context), Context).
 
 get_file_info_cfg(undefined, Context) ->
-    DispPath = cowmachine_req:disp_path(Context),
-    get_file_info_path(binpath(DispPath), Context);
+    DispPath = drop_dotdot(maybe_urldecode(rootless(cowmachine_req:disp_path(Context)))),
+    get_file_info_path(DispPath, Context);
 get_file_info_cfg(id, _Context) ->
     lager:error("controller_file does not support the 'id' config, use controller_file_id instead."),
     {error, enoent};
 get_file_info_cfg(ConfiguredPath, Context) when is_list(ConfiguredPath); is_binary(ConfiguredPath) ->
-    get_file_info_path(binpath(ConfiguredPath), Context).
+    get_file_info_path(rootless(z_convert:to_binary(ConfiguredPath)), Context).
 
 get_file_info_path(undefined, _Context) ->
     {error, enoent};
@@ -226,15 +226,40 @@ get_file_info_path(Path, Context) when is_binary(Path) ->
     OptFilters = z_context:get(media_tag_url2props, Context, undefined),
     z_file_request:lookup_file(Path, Root, OptFilters, z_context:set(path, Path, Context)).
 
-%% @doc Ensure path is binary and non-root
-binpath(undefined) ->
-    <<>>;
-binpath(<<"/", Rest/binary>>) ->
-    binpath(Rest);
-binpath(B) when is_binary(B) ->
-    B;
-binpath(P) ->
-    binpath(z_convert:to_binary(P)).
+%% @doc Ensure path is non-root
+rootless(undefined) -> <<>>;
+rootless(<<"/", Rest/binary>>) -> rootless(Rest);
+rootless(<<"./", Rest/binary>>) -> rootless(Rest);
+rootless(<<"../", Rest/binary>>) -> rootless(Rest);
+rootless(B) when is_binary(B) -> B.
+
+maybe_urldecode(Path) ->
+    case binary:match(Path, <<"%">>) of
+        nomatch -> Path;
+        {_,_} -> rootless(cow_qs:urldecode(Path))
+    end.
+
+drop_dotdot(Path) ->
+    case binary:match(Path, <<"../">>) =/= nomatch
+        orelse binary:match(Path, <<"./">>) =/= nomatch
+    of
+        false ->
+            Path;
+        true ->
+            Parts = binary:split(Path, <<"/">>, [global]),
+            Parts1 = drop_dotdot_1(Parts, []),
+            rootless(iolist_to_binary(z_utils:combine($/, Parts1)))
+    end.
+
+drop_dotdot_1([], Acc) ->
+    lists:reverse(Acc);
+drop_dotdot_1([_Dir,<<"..">>|Rest], Acc) ->
+    drop_dotdot_1(Rest, Acc);
+drop_dotdot_1([<<"..">>|Rest], Acc) ->
+    drop_dotdot_1(Rest, Acc);
+drop_dotdot_1([<<".">>|Rest], Acc) ->
+    drop_dotdot_1(Rest, Acc).
+
 
 %% @doc Check if a file is text based (influences the provided character sets)
 is_text(<<"text/", _/binary>>) -> true;

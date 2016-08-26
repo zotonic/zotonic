@@ -138,15 +138,15 @@ event1(#submit{message=acl_collab_config}, Context) ->
 normalize_values(Row) ->
     {Actions, Rest} =
         lists:foldl(
-            fun({"action$" ++ A, "on"}, {Actions, Rest}) ->
+            fun({<<"action$", A/binary>>, <<"on">>}, {Actions, Rest}) ->
                   {[A|Actions], Rest};
-               ({"action$"++ _, _}, Acc) ->
+               ({<<"action$", _/binary>>, _}, Acc) ->
                   Acc;
-               ({"module", M}, {A,Rest}) ->
+               ({<<"module">>, M}, {A,Rest}) ->
                   {A, [{module, M} | Rest]};
-               ({"is_owner", V}, {A, Rest}) ->
+               ({<<"is_owner">>, V}, {A, Rest}) ->
                   {A, [{is_owner,z_convert:to_bool(V)}|Rest]};
-               ({"is_block", V}, {A, Rest}) ->
+               ({<<"is_block">>, V}, {A, Rest}) ->
                   {A, [{is_block,z_convert:to_bool(V)}|Rest]};
                ({K, V}, {A, Rest}) ->
                   {A, [{z_convert:to_atom(K),val(V)}|Rest]}

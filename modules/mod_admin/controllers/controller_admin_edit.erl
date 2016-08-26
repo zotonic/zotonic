@@ -79,7 +79,7 @@ ensure_id(Context) ->
             {Context, N};
         undefined ->
             try
-                {ok, IdN} = m_rsc:name_to_id(z_context:get_q("id", Context), Context),
+                {ok, IdN} = m_rsc:name_to_id(z_context:get_q(<<"id">>, Context), Context),
                 {z_context:set(id, IdN, Context), IdN}
             catch
                 _:_ -> {Context, undefined}
@@ -93,13 +93,13 @@ event(#submit{message=rscform} = Msg, Context) ->
 event(#submit{message={rscform, Args}}, Context) ->
     Post = z_context:get_q_all_noz(Context),
     Props = filter_props(Post),
-    Id = z_convert:to_integer(proplists:get_value("id", Props)),
-    Props1 = proplists:delete("id", Props),
+    Id = z_convert:to_integer(proplists:get_value(<<"id">>, Props)),
+    Props1 = proplists:delete(<<"id">>, Props),
     CatBefore = m_rsc:p(Id, category_id, Context),
     Props2 = z_notifier:foldl(#admin_rscform{id=Id, is_a=m_rsc:is_a(Id, Context)}, Props1, Context),
     try
         {ok, _} = m_rsc:update(Id, Props2, Context),
-        case proplists:is_defined("save_view", Post) of
+        case proplists:is_defined(<<"save_view">>, Post) of
             true ->
                 case proplists:get_value(view_location, Args) of
                     undefined ->
@@ -182,14 +182,14 @@ event(#postback{message={query_preview, Opts}}, Context) ->
 %% @doc Remove some properties that are part of the postback
 filter_props(Fs) ->
     Remove = [
-              "triggervalue",
-              "postback",
-              "z_trigger_id",
-              "z_pageid",
-              "z_submitter",
-              "trigger_value",
-              "save_view",
-              "save_duplicate",
-              "save_stay"
+              <<"triggervalue">>,
+              <<"postback">>,
+              <<"z_trigger_id">>,
+              <<"z_pageid">>,
+              <<"z_submitter">>,
+              <<"trigger_value">>,
+              <<"save_view">>,
+              <<"save_duplicate">>,
+              <<"save_stay">>
              ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).

@@ -124,8 +124,6 @@ get_ready_page(Context) ->
 get_ready_page(undefined, Context) ->
     get_ready_page(<<>>, Context);
 get_ready_page(Page, Context) when is_binary(Page) ->
-    get_ready_page(z_convert:to_binary(Page), Context);
-get_ready_page(Page, Context) when is_binary(Page) ->
     case z_notifier:first(#logon_ready_page{request_page=Page}, Context) of
         undefined -> Page;
         Url -> Url
@@ -174,7 +172,7 @@ event(#submit{message={logon_confirm, Args}, form= <<"logon_confirm_form">>}, Co
     end;
 
 %%@doc Handle submit form post.
-event(#submit{message=[]}, Context) ->
+event(#submit{message= <<>>}, Context) ->
     Args = z_context:get_q_all(Context),
     logon(Args, Context);
 

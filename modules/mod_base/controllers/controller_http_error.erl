@@ -265,6 +265,8 @@ bt_simplify({_E1, {throw, Reason, BT}}) when is_list(BT) ->
     {reason, stringify(Reason), bt_table(BT)};
 bt_simplify({_E, {Reason, BT}}) when is_list(BT) ->
     {reason, stringify(Reason), bt_table(BT)};
+bt_simplify({throw, {Reason, BT}}) when is_list(BT) ->
+    {reason, stringify(Reason), bt_table(BT)};
 bt_simplify(X) ->
     {raw, X}.
 
@@ -277,7 +279,7 @@ stringify(L) when is_list(L) ->
         _:_ -> io_lib:format("~p", [L])
     end;
 stringify(A) when is_atom(A) ->
-    binary_to_list(A);
+    atom_to_binary(A, 'utf8');
 stringify(X) ->
     io_lib:format("~p", [X]).
 

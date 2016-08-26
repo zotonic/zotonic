@@ -114,7 +114,7 @@ maybe_configuration(Context) ->
 
 
 maybe_accept_header(Context) ->
-    case z_context:get_req_header("accept-language", Context) of
+    case z_context:get_req_header(<<"accept-language">>, Context) of
         undefined ->
             Context;
         AcceptLanguage ->

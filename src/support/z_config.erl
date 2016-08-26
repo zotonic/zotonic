@@ -97,5 +97,7 @@ default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
 default(syslog_level) -> info;
+default(user_sites_dir) -> "user/sites";
+default(user_modules_dir) -> "user/modules";
 default(ip_whitelist) -> "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10";
 default(_) -> undefined.

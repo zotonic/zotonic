@@ -157,14 +157,14 @@ dispatch(Req) ->
     Host = cowboy_req:host(Req),
     Path = cowboy_req:path(Req),
     Method = cowboy_req:method(Req),
-    Transport = cowboy_req:transport(Req),
+    Scheme = cowboy_req:scheme(Req),
     DispReq = #dispatch{
                     host=Host,
                     path=Path,
                     method=Method,
-                    protocol=case Transport:secure() of
-                                true -> https;
-                                false -> http
+                    protocol=case Scheme of
+                                <<"https">> -> https;
+                                <<"http">> -> http
                              end,
                     tracer_pid=undefined
               },
@@ -308,7 +308,7 @@ fix_match_bindings(Ms, IsDir) ->
     [ fix_match_binding(M, IsDir) || M <- Ms ].
 
 fix_match_binding({'*', List}, IsDir) when is_list(List) ->
-    List1 = [ cowlib_qs:urlencode(B) || B <- List ],
+    List1 = [ cow_qs:urlencode(B) || B <- List ],
     Path = z_utils:combine($/, List1),
     case IsDir of
         true -> {'*', iolist_to_binary([Path, $/])};
@@ -344,7 +344,7 @@ remove_dotdot([A|Rest], Acc) ->
 unescape(P) ->
     case binary:match(P, <<"%">>) of
         nomatch -> P;
-        _ -> cowlib_qs:urldecode(P)
+        _ -> cow_qs:urldecode(P)
     end.
 
 dispatch_rewrite(Hostname, Path, Tokens, IsDir, TracerPid, Context) ->
@@ -759,7 +759,7 @@ split_host(<<>>) -> {<<>>, 80};
 split_host(Host) when is_list(Host) ->
     split_host(unicode:characters_to_binary(Host));
 split_host(Host) when is_binary(Host) ->
-    case binary:split(z_convert:to_lower(Host), <<":">>) of
+    case binary:split(z_string:to_lower(Host), <<":">>) of
         [H,P] -> {H, z_convert:to_integer(P)};
         [H] -> {H, 80}
     end.

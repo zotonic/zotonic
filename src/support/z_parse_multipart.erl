@@ -75,7 +75,7 @@ recv_parse(Context) ->
 %% @doc Parse the multipart request
 parse_multipart_request(Context) ->
     Length = binary_to_integer(cowmachine_req:get_req_header(<<"content-length">>, Context)),
-    Boundary = get_boundary(cowmachine_req:get_req_header_lc(<<"content-type">>, Context)),
+    Boundary = get_boundary(cowmachine_req:get_req_header(<<"content-type">>, Context)),
     Prefix = <<"\r\n--", Boundary/binary>>,
     BS = size(Boundary),
     {Next, Chunk, Context1} = cowmachine_req:stream_req_body(?CHUNKSIZE, Context),
@@ -158,14 +158,14 @@ feed_maybe_eof(#mp{} = State) ->
 
 maybe_z_msg_context(#mp{
             z_msg=undefined,
-            form=#multipart_form{args=[{"z_msg",Data}|RestArgs]} = Form,
+            form=#multipart_form{args=[{<<"z_msg">>,Data}|RestArgs]} = Form,
             context=#context{page_pid=undefined} = Context
         } = State) ->
     {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
     #z_msg_v1{page_id=PageId, session_id=SessionId} = ZMsg,
     Context1 = z_transport:maybe_logon(
                     z_transport:maybe_set_sessions(SessionId, PageId, Context)),
-    Form1 = Form#multipart_form{args=[{"z_msg", ZMsg}|RestArgs]},
+    Form1 = Form#multipart_form{args=[{<<"z_msg">>, ZMsg}|RestArgs]},
     State#mp{z_msg=ZMsg, form=Form1, context=Context1};
 maybe_z_msg_context(#mp{} = State) ->
     State.
@@ -318,7 +318,7 @@ parse_headers(Binary, Acc) ->
 split_header(Line) ->
     [Name,Value] = binary:split(Line, <<":">>),
     Name1 = z_string:to_lower(z_string:trim(Name)),
-    {Name1, parse_header(Name1, Value)}.
+    {Name1, parse_header(Name1, z_string:trim(Value))}.
 
 parse_header(<<"content-length">>, Value) ->
     cow_http_hd:parse_content_length(Value);

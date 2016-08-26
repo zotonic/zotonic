@@ -65,8 +65,7 @@ provide_content(Context) ->
 websocket_start(Context) ->
     Context1 = z_context:continue_session(Context),
     Context2 = z_context:set(ws_request, true, Context1),
-    PrunedContext = z_context:prune_for_scomp(Context2),
-    cowmachine_websocket_upgrade:upgrade(?MODULE, PrunedContext).
+    cowmachine_websocket_upgrade:upgrade(?MODULE, Context2).
 
 %% ---------------------------------------------------------------------------------------------
 %% External entry points
@@ -92,7 +91,8 @@ websocket_send_data(WsControllerPid, Data) ->
 %% ---------------------------------------------------------------------------------------------
 
 websocket_init(Context) ->
-    {ok, Context}.
+    PrunedContext = z_context:prune_for_scomp(Context),
+    {ok, PrunedContext}.
 
 %% @doc Handle a message from the browser, should contain an ubf encoded request.
 websocket_handle({Type, Data}, Context) when Type =:= text; Type =:= binary ->

@@ -367,9 +367,17 @@ prune_for_scomp(VisibleFor, Context) ->
 prune_reqdata(undefined) ->
     undefined;
 prune_reqdata(Req) ->
-    %% @todo: prune this, also used by the websocket connection.
-    lager:error("TODO: PRUNE FOR SCOMP"),
-    Req.
+    %% @todo: prune this better, also used by the websocket connection.
+    Req#{
+        bindings => [],
+        cowmachine_cookies => [],
+        cowmachine_resp_body => <<>>,
+        headers => #{},
+        path => <<>>,
+        qs => <<>>,
+        pid => undefined,
+        streamid => undefined
+    }.
     % #wm_reqdata{
     %     socket=ReqData#wm_reqdata.socket,
     %     peer=ReqData#wm_reqdata.peer,
@@ -629,7 +637,7 @@ ensure_qs(Context) ->
         none ->
             Query = cowmachine_req:req_qs(Context),
             PathInfo = cowmachine_req:path_info(Context),
-            PathArgs = [ {z_convert:to_binary(T), z_convert:to_binary(V)} || {T,V} <- PathInfo ],
+            PathArgs = [ {z_convert:to_binary(T), V} || {T,V} <- PathInfo ],
             QPropsUrl = z_utils:prop_replace('q', PathArgs++Query, Context#context.props),
             {Body, ContextParsed} = parse_post_body(Context#context{props=QPropsUrl}),
             QPropsAll = z_utils:prop_replace('q', PathArgs++Body++Query, ContextParsed#context.props),
@@ -699,7 +707,7 @@ get_q(Key, Context, Default) when is_list(Key) ->
     end;
 get_q(Key, Context, Default) ->
     case proplists:lookup('q', Context#context.props) of
-        {'q', Qs} -> proplists:get_value(z_convert:to_list(Key), Qs, Default);
+        {'q', Qs} -> proplists:get_value(z_convert:to_binary(Key), Qs, Default);
         none -> Default
     end.
 
@@ -716,7 +724,7 @@ get_q_all(Context) ->
 %% @doc Get the all the parameters with the same name, returns the empty list when non found.
 -spec get_q_all(string()|atom()|binary(), #context{}) -> list().
 get_q_all(Key, Context) when is_list(Key) ->
-    Values = get_q_all(Key, Context),
+    Values = get_q_all(z_convert:to_binary(Key), Context),
     [
         case is_binary(V) of
             true -> binary_to_list(V);
@@ -1173,7 +1181,7 @@ set_cookie(Key, Value, Options, Context) ->
                            none -> [{domain, z_context:cookie_domain(Context)}|Options]
                        end,
             Options2 = z_notifier:foldl(#cookie_options{name=Key, value=ValueBin}, Options1, Context),
-            cowmachine_req:set_cookie(Key, ValueBin, Options2, Context)
+            cowmachine_req:set_resp_cookie(Key, ValueBin, Options2, Context)
     end.
 
 

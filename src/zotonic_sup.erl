@@ -105,17 +105,17 @@ init([]) ->
 
     init_stats(),
     start_http_listeners(),
-    spawn(fun() ->
-                  timer:sleep(4000),
-                  lager:info(""),
-                  lager:info("Zotonic started"),
-                  lager:info("==============="),
-                  lager:info("Config files used:"),
-                  [lager:info("- ~s", [Cfg]) || [Cfg] <- proplists:get_all_values(config, init:get_arguments())],
-                  lager:info(""),
-                  [lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status]) ||
-                      [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status]
-          end),
+
+    lager:info(""),
+    lager:info("Zotonic starting"),
+    lager:info("================"),
+    lager:info("Config files used:"),
+    [ lager:info("- ~s", [Cfg]) 
+      || [Cfg] <- proplists:get_all_values(config, init:get_arguments()) ],
+    % lager:info(""),
+    % [ lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status])
+    %   || [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status],
+
     {ok, {{one_for_one, 1000, 10}, Processes}}.
 
 %% @doc Initializes the stats collector.
@@ -124,14 +124,13 @@ init_stats() ->
 
 %% @doc Start the HTTP listeners
 start_http_listeners() ->
+    application:set_env(cowmachine, server_header, <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>),
     WebIp = z_config:get(listen_ip),
     WebPort = z_config:get(listen_port),
     SSLPort = z_config:get(ssl_listen_port),
     CowboyOpts = #{
         middlewares => [ z_sites_dispatcher, z_cowmachine_middleware ],
-        env => #{
-            server_header => <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>
-        }
+        env => #{}
     },
 
     lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
@@ -150,6 +149,7 @@ start_http_listeners() ->
         [   inet,
             {port, SSLPort},
             {backlog, z_config:get(ssl_backlog)},
+            {certfile, "via_sni_fun"},
             {sni_fun, fun ?MODULE:sni_fun/1}
             | case WebIp of any -> []; _ -> [{ip, WebIp}] end
         ],
@@ -174,6 +174,7 @@ start_http_listeners() ->
                     % {ipv6_v6only, true},      % Not supported by ranch_tcp
                     {port, SSLPort},
                     {backlog, z_config:get(ssl_backlog)},
+                    {certfile, "via_sni_fun"},
                     {sni_fun, fun ?MODULE:sni_fun/1}
                 ],
                 CowboyOpts);
