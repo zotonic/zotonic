@@ -11,12 +11,14 @@ For example::
    <input type="checkbox" id="accept" name="accept" value="1" />
    {% validate id="accept" type={acceptance} %}
 
-Arguments:
+Arguments
+---------
 
-===============  ===========================================  =======
-Argument         Description                                  Example
-===============  ===========================================  =======
-failure_message  Message to be shown when the input is true.
-                 Defaults to "Must be accepted."              failure_message="Please agree to our TOS."
-===============  ===========================================  =======
+=================== ===========================================  =======
+Argument            Description                                  Example
+=================== ===========================================  =======
+failure_message     Message to be shown when the input is true.
+                    Defaults to "Must be accepted."              ``failure_message="Please agree to our TOS."``
+=================== ===========================================  =======
 
+.. seealso:: :ref:`guide-validators`

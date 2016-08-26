@@ -32,6 +32,7 @@ was triggered by change or focus events then it is ``false``.
 ``submitTrigger`` is the DOM tree node triggering the possible form submit.
 
 Note that this validation does not do any server side validation. Because there
-is no server side validation, the value of the ``input`` element is not 
+is no server side validation, the value of the ``input`` element is not
 available via ``z_context:get_q_validated/2`` but only via ``z_context:get_q/2``.
 
+.. seealso:: :ref:`guide-validators`

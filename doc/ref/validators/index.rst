@@ -12,4 +12,7 @@ Validator types for the tag ``{% validate %}``.
 
    validator_*
 
-.. seealso:: the :ref:`scomp-validate` scomp.
+.. seealso::
+
+    * the :ref:`scomp-validate` tag
+    * :ref:`Forms and validation <guide-validators>` in the Developer Guide

@@ -15,24 +15,25 @@ For example, when the input must be `42`::
 
 And for a number within a certain range::
 
-   <input type="text" id="percent" name="percent" value="" /> 
+   <input type="text" id="percent" name="percent" value="" />
    {% validate id="percent" type={numericality minimum=0 maximum=100} %}
 
-Arguments are:
+Arguments
+---------
 
 +-----------------------+-----------------------------------------------------------+--------------------------------+
 |Argument               |Description                                                |Example                         |
 +=======================+===========================================================+================================+
-|is                     |Tests for equality.                                        |is=42                           |
+|is                     |Tests for equality.                                        |``is=42``                       |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
-|minimum                |Minimum value.                                             |minimum=1                       |
+|minimum                |Minimum value.                                             |``minimum=1``                   |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
-|maximum                |Maximum value.                                             |maximum=100                     |
+|maximum                |Maximum value.                                             |``maximum=100``                 |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
-|is_float               |Boolean flag which tells if the input can be a floating    |is_float                        |
-|                       |point number. Defaults to false.                           |is_float=`true`                 |
+|is_float               |Boolean flag which tells if the input can be a floating    |``is_float``                    |
+|                       |point number. Defaults to false.                           |``is_float=`true``              |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
-|not_a_number_message   |Message to show when the entered value is not a            |not_a_number_message="*"        |
+|not_a_number_message   |Message to show when the entered value is not a            |``not_a_number_message="*"``    |
 |                       |number. Defaults to "Must be a number."                    |                                |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
 |not_an_integer_message |Message to show when the entered number is not an          |                                |
@@ -48,3 +49,4 @@ Arguments are:
 |                       |maximum allowed. Defaults to "Must not be more than .."    |                                |
 +-----------------------+-----------------------------------------------------------+--------------------------------+
 
+.. seealso:: :ref:`guide-validators`

@@ -175,7 +175,11 @@
 
 %% ACL objects
 -record(acl_rsc, {category, mime, size}).
--record(acl_edge, {subject_id, predicate, object_id}).
+-record(acl_edge, {
+    subject_id :: m_rsc:resource(),
+    predicate :: pos_integer() | atom(),
+    object_id :: m_rsc:resource()
+}).
 -record(acl_media, {mime, size}).
 
 %% ACL notifications

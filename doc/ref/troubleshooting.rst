@@ -39,16 +39,22 @@ Sites
 Unable to read boot script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In some cases the Zotonic nodename does not resolve well and you see an error like::
+In some cases the Zotonic nodename does not resolve well and you see an error like:
+
+.. code-block:: none
 
     [error] Unable to read boot script (start_sasl.script): {error,enoent}
 
-or::
+or:
+
+.. code-block:: none
 
     erl_call: can't ei_gethostbyname(MacBook-Pro-Apple)
     Zotonic is not running. You need to start Zotonic first to use this command.
 
-Solution: Add the computer name to ``/etc/hosts``, for instance::
+Solution: Add the computer name to ``/etc/hosts``, for instance:
+
+.. code-block:: none
 
     127.0.0.1 MacBook-Pro-Apple
 

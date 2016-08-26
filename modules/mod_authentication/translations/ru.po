@@ -28,15 +28,6 @@ msgstr ""
 msgid "Already Connected"
 msgstr ""
 
-#: modules/mod_authentication/mod_authentication.erl:71
-msgid "App Keys & Authentication Services"
-msgstr ""
-
-#: modules/mod_authentication/templates/admin_authentication_services.tpl:3
-#: modules/mod_authentication/templates/admin_authentication_services.tpl:7
-msgid "App Keys &amp; Authentication Services"
-msgstr ""
-
 #: modules/mod_authentication/templates/logon_service_done.tpl:5
 msgid "Authenticated"
 msgstr ""
@@ -149,6 +140,12 @@ msgstr ""
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:5
 msgid "Error"
+msgstr ""
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:3
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:7
+#: modules/mod_authentication/mod_authentication.erl:71
+msgid "External Services"
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:20
