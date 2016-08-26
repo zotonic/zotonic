@@ -33,12 +33,9 @@ yesno(undefined, Values, _Context) ->
         [_Yes, No] -> No
     end;
 yesno(B, Values, Context) ->
+    [Yes,No|_Rest] = binary:split(z_convert:to_binary(Values), <<",">>, [global]),
     case z_template_compiler_runtime:to_bool(B, Context) of
-        true ->
-            [Yes|_Rest] = binary:split(z_convert:to_binary(Values), <<",">>, [global]),
-            Yes;
-        false ->
-            [_Yes,No|_Rest] = binary:split(z_convert:to_binary(Values), <<",">>, [global]),
-            No
+        true -> Yes;
+        false -> No
     end.
 
