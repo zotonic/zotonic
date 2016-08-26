@@ -162,7 +162,7 @@ start_http_listeners() ->
                 zotonic_http_listener_ipv6,
                 z_config:get(inet_acceptor_pool_size),
                 [   inet6,
-                    % {ipv6_v6only, true},      % Not supported by ranch_tcp
+                    {ipv6_v6only, true},
                     {port, WebPort},
                     {backlog, z_config:get(inet_backlog)}
                 ],
@@ -171,7 +171,7 @@ start_http_listeners() ->
                 zotonic_https_listener_ipv6,
                 z_config:get(ssl_acceptor_pool_size),
                 [   inet6,
-                    % {ipv6_v6only, true},      % Not supported by ranch_tcp
+                    {ipv6_v6only, true},
                     {port, SSLPort},
                     {backlog, z_config:get(ssl_backlog)},
                     {certfile, "via_sni_fun"},
