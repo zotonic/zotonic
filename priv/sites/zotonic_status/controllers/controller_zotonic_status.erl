@@ -77,7 +77,7 @@ status_page(Context) ->
 %% Handle all events
 %% -----------------------------------------------------------------------------------------------
 
-event(#submit{message=[], form=FormId}, Context) ->
+event(#submit{message= <<>>, form=FormId}, Context) ->
     case z_context:get_q(<<"password">>, Context) =:= z_convert:to_binary(z_config:get(password)) of
         true ->
             {ok, ContextAuth} = z_auth:logon(1, Context),
