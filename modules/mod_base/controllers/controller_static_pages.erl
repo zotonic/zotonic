@@ -34,21 +34,6 @@
 -include_lib("template_compiler/include/template_compiler.hrl").
 -include_lib("zotonic.hrl").
 
-%% These are used for file serving (move to metadata)
--record(state, {
-        root=undefined,                 % Preconfigured media preview directory
-        use_cache=false,
-        multiple_encodings=false,
-        path=undefined,
-        fullpath=undefined,
-        is_cached=false,
-        mime=undefined,
-        last_modified=undefined,
-        body=undefined,
-        context=undefined,
-        allow_directory_index=false
-    }).
-
 -record(cache, {
     path=undefined,
     fullpath=undefined,
@@ -351,7 +336,7 @@ find_file(Root, File, Context) ->
             {error, eacces};
         false ->
             T = [ RelName,
-                  <<RelName/binary, ".tpl"/binary>>,
+                  <<RelName/binary, ".tpl">>,
                   filename:join(RelName, "index.html.tpl"),
                   filename:join(RelName, "index.html")
                 ],
@@ -359,7 +344,7 @@ find_file(Root, File, Context) ->
                 {error, enoent} ->
                     RelName1 = filename:join(Root, RelName),
                     T1 = [  RelName1,
-                            <<RelName/binary, ".tpl"/binary>>,
+                            <<RelName/binary, ".tpl">>,
                             filename:join(RelName1, "index.html.tpl"),
                             filename:join(RelName1, "index.html")
                          ],
