@@ -20,7 +20,6 @@
   [
    testsandbox,
    mod_base,
-   mod_authentication,
    mod_admin,
    mod_mqtt,
    mod_search
