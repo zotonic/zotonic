@@ -37,11 +37,6 @@ modify_rsc_test() ->
     ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, AdminC)),
 
     ?assertEqual(2, m_rsc:p(Id, version, AdminC)),
-    ?assertEqual(true, m_rsc:p(Id, is_published, AdminC)),
-    ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, AdminC)),
-
-    ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, C)), %% also visible for anonymous now
-
 
     %% Delete
     ?assertThrow({error, eacces}, m_rsc:delete(Id, C)),
@@ -66,7 +61,7 @@ page_path_test() ->
 
     ok.
 
-%% @doc Resource namd instead of id as argument.
+%% @doc Resource name instead of id as argument.
 name_rid_test() ->
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),

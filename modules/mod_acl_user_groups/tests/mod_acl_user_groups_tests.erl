@@ -5,9 +5,7 @@
 -include("zotonic.hrl").
 
 person_can_edit_own_resource_test() ->
-    Context = z_context:new(testsandboxdb),
-    ok = z_module_manager:activate_await(mod_content_groups, Context),
-    ok = z_module_manager:activate_await(mod_acl_user_groups, Context),
+    Context = context(),
 
     %% Person must be able to edit person category
     m_acl_rule:replace_managed(
@@ -31,3 +29,20 @@ person_can_edit_own_resource_test() ->
 is_allowed_accepts_rsc_name_object_test() ->
     Context = z_context:new(testsandboxdb),
     false = acl_user_groups_checks:acl_is_allowed(#acl_is_allowed{action = view, object = text}, Context).
+
+publish_test() ->
+    Context = context(),
+    {ok, Id} = m_rsc:insert([{title, <<"Top secret!">>}, {category_id, text}], z_acl:sudo(Context)),
+    ?assertEqual(undefined, m_rsc:p(Id, title, Context)), %% invisible for anonymous
+    {ok, Id} = m_rsc:update(Id, [{is_published, true}], z_acl:sudo(Context)),
+    z:flush(),
+    ?assertEqual(<<"Top secret!">>, m_rsc:p(Id, title, Context)). %% visible for anonymous
+
+context() ->
+    Context = z_context:new(testsandboxdb),
+    start_modules(Context),
+    Context.
+
+start_modules(Context) ->
+    ok = z_module_manager:activate_await(mod_content_groups, Context),
+    ok = z_module_manager:activate_await(mod_acl_user_groups, Context).
