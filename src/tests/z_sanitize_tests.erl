@@ -1,4 +1,4 @@
--module(z_sanitize_test).
+-module(z_sanitize_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 

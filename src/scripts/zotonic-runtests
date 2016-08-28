@@ -43,7 +43,7 @@ case "$1" in
             done
         else
             # Find all tests
-            MODULES=`ls ebin/*_tests.beam|sed 's/.beam//'|sed 's/ebin\///'|grep -v pgsql|grep -v erlydtl`
+            MODULES=`ls ebin/*_tests.beam|sed 's/.beam//'|sed 's/ebin\///'|grep -v pgsql`
             ALL="zotonic"
             ALL=`echo $ALL|sed 's/^,//'`
             for MODULE in $MODULES; do ALL="$ALL,$MODULE"; done

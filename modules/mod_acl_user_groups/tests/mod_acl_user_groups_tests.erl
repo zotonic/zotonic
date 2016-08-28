@@ -17,26 +17,46 @@ person_can_edit_own_resource_test() ->
                 {category_id, person}
             ]}
         ],
-        testsandboxdb,
+        ?MODULE,
         z_acl:sudo(Context)
     ),
+    %% Wait for ACL rules to be rebuilt
+    timer:sleep(100),
 
     {ok, Id} = m_rsc:insert([{category, person}], z_acl:sudo(Context)),
+
+    %% Must be owner
+    ?assertThrow({error, eacces}, m_rsc:update(Id, [{title, <<"Test">>}], Context)),
 
     UserContext = z_acl:logon(Id, Context),
     {ok, Id} = m_rsc:update(Id, [{title, "Test"}], UserContext).
 
-is_allowed_accepts_rsc_name_object_test() ->
-    Context = z_context:new(testsandboxdb),
-    false = acl_user_groups_checks:acl_is_allowed(#acl_is_allowed{action = view, object = text}, Context).
+acl_is_allowed_accepts_rsc_name_object_test() ->
+    ?assertEqual(false, acl_user_groups_checks:acl_is_allowed(#acl_is_allowed{action = insert, object = text}, context())).
 
 publish_test() ->
     Context = context(),
-    {ok, Id} = m_rsc:insert([{title, <<"Top secret!">>}, {category_id, text}], z_acl:sudo(Context)),
+
+    %% Anonymous can view everything
+    m_acl_rule:replace_managed(
+        [
+            {rsc, [
+                {acl_user_group_id, acl_user_group_anonymous},
+                {actions, [view]}
+            ]}
+        ],
+        ?MODULE,
+        z_acl:sudo(Context)
+    ),
+    %% Wait for ACL rules to be rebuilt
+    timer:sleep(100),
+
+    {ok, Id} = m_rsc:insert([{title, <<"Top secret!">>}, {category, text}], z_acl:sudo(Context)),
+    ?assertEqual(<<"Top secret!">>, m_rsc:p(Id, title, z_acl:sudo(Context))),
     ?assertEqual(undefined, m_rsc:p(Id, title, Context)), %% invisible for anonymous
+
     {ok, Id} = m_rsc:update(Id, [{is_published, true}], z_acl:sudo(Context)),
-    z:flush(),
-    ?assertEqual(<<"Top secret!">>, m_rsc:p(Id, title, Context)). %% visible for anonymous
+    ?assertEqual(<<"Top secret!">>, m_rsc:p(Id, title, Context)). %% visible for anonymous when published
 
 context() ->
     Context = z_context:new(testsandboxdb),

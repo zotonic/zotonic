@@ -58,8 +58,7 @@ page_path_test() ->
 
     {ok, Id} = m_rsc:insert([{title, "Hello."}, {category, text}, {page_path, "/foo/bar"}], AdminC),
     ?assertEqual(<<"/foo/bar">>, m_rsc:p(Id, page_path, AdminC)),
-
-    ok.
+    ok = m_rsc:delete(Id, AdminC).
 
 %% @doc Resource name instead of id as argument.
 name_rid_test() ->

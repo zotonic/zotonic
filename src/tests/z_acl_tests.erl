@@ -6,5 +6,3 @@
 name_for_object_test() ->
     Context = z_context:new(testsandbox),
     false = z_acl:is_allowed(update, administrator, Context).
-
-%%is_allowed_test() ->
