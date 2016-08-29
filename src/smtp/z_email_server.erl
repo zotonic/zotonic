@@ -647,7 +647,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                         props=LogEmail#log_email{
                                                 severity=?LOG_ERROR,
                                                 mailer_status=error,
-                                                props=[{reason, Reason}]
+                                                props=[{reason, to_binary(Reason)}]
                                             }
                                       }, Context),
                     %% delete email from the queue and notify the system
@@ -677,6 +677,22 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     end
             end
     end.
+
+to_binary({error, Reason}) ->
+    to_binary(Reason);
+to_binary(Error) when is_atom(Error) ->
+    z_convert:to_binary(Error);
+to_binary(Error) when is_binary(Error) ->
+    Error;
+to_binary(Error) when is_list(Error) ->
+    try
+        iolist_to_binary(Error)
+    catch
+        _:_ ->
+            iolist_to_binary(io_lib:format("~p", [Error]))
+    end;
+to_binary(Error) ->
+     iolist_to_binary(io:format("~p", [Error])).
 
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
