@@ -43,8 +43,8 @@ In short:
   * ``z_context:get_q(<<"arg">>, Context)`` returns ``<<"value">>``
   * ``z_context:get_q(arg, Context)`` returns ``<<"value">>``
   * ``z_context:get_q("arg", Context)`` returns ``"value"``
-   * ``z_context:get_q_all(Context)`` returns ``[ {<<"arg">>,<<"value">>}, ...]``
- 
+  * ``z_context:get_q_all(Context)`` returns ``[ {<<"arg">>,<<"value">>}, ...]``
+
 The binary name is the preferred way to request arguments.
  
 
