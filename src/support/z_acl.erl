@@ -80,8 +80,6 @@ maybe_allowed(_Action, _Object, #context{acl=admin}) ->
     true;
 maybe_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
-maybe_allowed(Action, Object, Context) when is_atom(Object) andalso Object /= undefined andalso Action /= use ->
-    maybe_allowed(Action, m_rsc:rid(Object, Context), Context);
 maybe_allowed(Action, Object, Context) ->
     z_notifier:first(#acl_is_allowed{action=Action, object=Object}, Context).
 
