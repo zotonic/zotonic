@@ -27,6 +27,7 @@ query_hooks_test() ->
     %% Create a new query
     {ok, Query1} = m_rsc:insert([{category, 'query'},
                                  {title, <<"All featured articles">>},
+                                 {is_query_live, true},
                                  {'query', <<"cat=article\nis_featured">>}], C),
 
     %% Create an item which fits the query
@@ -49,13 +50,14 @@ query_hooks_test() ->
 
 
 search_query_notify_test() ->
-    C = z_acl:sudo(z_context:new(testsandbox)),
+    C = z_acl:sudo(z_context:new(testsandboxdb)),
 
     Q = <<"cat=keyword\nis_featured">>,
 
     %% Create a new query
     {ok, Query1} = m_rsc:insert([{category, 'query'},
                                  {title, <<"All featured keywords">>},
+                                 {is_query_live, true},
                                  {'query', Q}], C),
 
     %% There's exactly one query

@@ -1,6 +1,5 @@
-%% Configuration of the test sandbox, used for unit testing. See
+%% Configuration of the test sandbox, used for unit testing.
 %% The testsandbox is only started for testing and ignored otherwise.
-%% doc/UnitTesting.txt on how to use this.
 [
  {enabled, true},
 
@@ -20,9 +19,8 @@
   [
    testsandbox,
    mod_base,
-   mod_authentication,
-   mod_acl_adminonly,
-   mod_admin
+   mod_mqtt,
+   mod_search
   ]}
 
 ].
