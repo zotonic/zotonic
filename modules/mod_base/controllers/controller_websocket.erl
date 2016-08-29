@@ -65,7 +65,8 @@ provide_content(Context) ->
 websocket_start(Context) ->
     Context1 = z_context:continue_session(Context),
     Context2 = z_context:set(ws_request, true, Context1),
-    cowmachine_websocket_upgrade:upgrade(?MODULE, Context2).
+    Handler = z_context:get(ws_handler, Context, ?MODULE),
+    cowmachine_websocket_upgrade:upgrade(Handler, Context2).
 
 %% ---------------------------------------------------------------------------------------------
 %% External entry points
