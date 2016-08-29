@@ -118,11 +118,22 @@ item_url(X, _) ->
 item_visible({_Key, ItemProps}, Context) ->
     case proplists:get_value(visiblecheck, ItemProps) of
         undefined ->
+            %% Always show separators
+            proplists:get_value(separator, ItemProps) =:= true orelse
+
+            %% Always show menu items with an external URL
             proplists:get_value(url, ItemProps) =/= undefined orelse
-                lists:filter(fun(#menu_separator{}) -> false; (_) -> true end, proplists:get_value(items, ItemProps, [])) =/= [];
+
+            %% Show a menu item only if it contains non-separator sub items
+            lists:filter(
+                fun({_SubItemKey, SubItemProps}) ->
+                    proplists:get_value(separator, SubItemProps) =/= true
+                end,
+                proplists:get_value(items, ItemProps, [])
+            ) =/= [];
         F when is_function(F) ->
             F();
-       {acl, Action, Object} ->
+        {acl, Action, Object} ->
             z_acl:is_allowed(Action, Object, Context)
     end.
 
