@@ -723,7 +723,7 @@ name_lookup(Name, Context) ->
 %% @doc Return the id of the resource with a certain uri.
 %% uri_lookup(string(), Context) -> int() | undefined
 uri_lookup(Uri, Context) ->
-    Uri1 = z_convert:to_list(Uri),
+    Uri1 = z_convert:to_binary(Uri),
     case z_depcache:get({rsc_uri, Uri1}, Context) of
         {ok, undefined} ->
             undefined;
