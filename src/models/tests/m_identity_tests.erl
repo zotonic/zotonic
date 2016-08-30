@@ -34,7 +34,7 @@ hash_is_equal_old_hash_test() ->
 
     ok.
 
-check_password_no_user() ->
+check_password_no_user_test() ->
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     ok = delete_user("mr_z", AdminC),
