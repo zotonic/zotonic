@@ -235,7 +235,7 @@ can_see(#context{user_id=?ACL_ANY_USER_ID}) ->
     ?ACL_VIS_COMMUNITY;
 can_see(Context) ->
     case z_notifier:first(#acl_can_see{}, Context) of
-        undefined -> [];
+        undefined -> ?ACL_VIS_PUBLIC;
         CanSee -> CanSee
     end.
 
