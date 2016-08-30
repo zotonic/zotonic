@@ -128,7 +128,7 @@ can_insert_category(_, _, #context{user_id=1}) ->
 can_insert_category(CGId, CatId, Context) ->
     CGId1 = m_rsc:rid(CGId, Context),
     CatId1 = m_rsc:rid(CatId, Context),
-    case lists:member(CGId1, has_collab_groups(Context)) of
+    case is_collab_group_member(CGId1, Context) of
         true ->
             case mod_acl_user_groups:await_lookup({collab, {CatId1, insert, false}, collab}, Context) of
                 true -> true;
@@ -464,6 +464,12 @@ is_collab_group_manager(GroupId, #context{user_id=UserId, acl=#aclug{collab_grou
     lists:member(GroupId, CollabGroups)
     andalso lists:member(GroupId, m_edge:subjects(UserId, hascollabmanager, Context)).
 
+%% @doc Check if the user is a member of the collaboration group
+is_collab_group_member(CGId, #context{acl=#aclug{collab_groups=CollabGroups}}) ->
+    lists:member(CGId, CollabGroups);
+is_collab_group_member(_CGId, _Context) ->
+    false.
+
 %% @doc Check if the user can insert the category in some content group
 can_insert(_Cat, #context{acl=admin}) ->
     true;
@@ -494,14 +500,14 @@ can_insert_with_ug(Cat, Context) ->
 %% @doc Check if the user can view/update/delete/link the resource
 can_rsc(undefined, _Action, _Context) ->
     false;
-can_rsc(Id, view, #context{acl=#aclug{collab_groups=CollabGroups}} = Context) when is_integer(Id) ->
+can_rsc(Id, view, Context) when is_integer(Id) ->
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
     CGId = m_rsc:p_no_acl(Id, content_group_id, Context),
     UGs = user_groups(Context),
     (
         can_rsc_1(Id, view, CGId, CatId, UGs, Context)
         andalso (
-            lists:member(CGId, CollabGroups)
+            is_collab_group_member(CGId, Context)
             orelse m_rsc:p_no_acl(Id, is_published_date, Context)
         )
     )
@@ -513,7 +519,6 @@ can_rsc(Id, Action, Context) when is_integer(Id); Id =:= insert_rsc ->
     can_rsc_1(Id, Action, CGId, CatId, UGs, Context);
 can_rsc(Id, Action, Context) ->
     can_rsc(m_rsc:rid(Id, Context), Action, Context).
-
 
 can_rsc_1(Id, Action, CGId, CatId, UGs, #context{acl=#aclug{collab_groups=CollabGroups}} = Context) ->
     (
