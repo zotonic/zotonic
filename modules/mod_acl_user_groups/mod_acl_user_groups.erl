@@ -53,6 +53,7 @@
 -export([
     event/2,
 
+    observe_acl_is_owner/2,
     observe_acl_is_allowed/2,
     observe_acl_logon/2,
     observe_acl_logoff/2,
@@ -213,6 +214,10 @@ deletable(Ids, Context) ->
     lists:all(fun(Id) -> z_acl:rsc_deletable(Id, Context) end, Ids).
 
 
+% @doc Per default users own their person record and creators own the created content.
+observe_acl_is_owner(#acl_is_owner{id=Id, user_id=Id}, _Context) -> true;
+observe_acl_is_owner(#acl_is_owner{id=Id, creator_id=Id}, _Context) -> true;
+observe_acl_is_owner(#acl_is_owner{}, _Context) -> undefined.
 
 observe_acl_is_allowed(AclIsAllowed, Context) ->
     acl_user_groups_checks:acl_is_allowed(AclIsAllowed, Context).

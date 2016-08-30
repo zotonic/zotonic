@@ -494,13 +494,16 @@ can_insert_with_ug(Cat, Context) ->
 %% @doc Check if the user can view/update/delete/link the resource
 can_rsc(undefined, _Action, _Context) ->
     false;
-can_rsc(Id, view, Context) when is_integer(Id) ->
+can_rsc(Id, view, #context{acl=#aclug{collab_groups=CollabGroups}} = Context) when is_integer(Id) ->
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
     CGId = m_rsc:p_no_acl(Id, content_group_id, Context),
     UGs = user_groups(Context),
     (
         can_rsc_1(Id, view, CGId, CatId, UGs, Context)
-        andalso m_rsc:p_no_acl(Id, is_published_date, Context)
+        andalso (
+            lists:member(CGId, CollabGroups)
+            orelse m_rsc:p_no_acl(Id, is_published_date, Context)
+        )
     )
     orelse can_rsc_1(Id, update, CGId, CatId, UGs, Context);
 can_rsc(Id, Action, Context) when is_integer(Id); Id =:= insert_rsc ->
@@ -620,12 +623,18 @@ can_rsc_ug(CGId, CatId, Action, IsOwner, UGs, Context) ->
 
 is_owner(insert_rsc, _Context) ->
     true;
-is_owner(Id, Context) ->
-    is_owner(Id, m_rsc:p_no_acl(Id, creator_id, Context), Context).
-
-is_owner(Id, _CreatorId, #context{user_id=Id}) -> true;
-is_owner(_Id, CreatorId, #context{user_id=CreatorId}) -> true;
-is_owner(_Id, _CreatorId, _Context) -> false.
+is_owner(Id, #context{user_id=UserId} = Context) ->
+    case z_notifier:first(#acl_is_owner{
+            id=Id, 
+            creator_id=m_rsc:p_no_acl(Id, creator_id, Context),
+            user_id=UserId
+        },
+        Context)
+    of
+        undefined -> false;
+        true -> true;
+        false -> false
+    end.
 
 %% @doc Check if an edge can be made, special checks for the hasusergroup edge
 can_edge(#acl_edge{predicate=hasusergroup, subject_id=MemberId, object_id=UserGroupId}, Context) ->

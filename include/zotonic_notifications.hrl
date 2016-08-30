@@ -323,6 +323,14 @@
     }).
 
 
+%% @doc Check if an user is the owner of a resource (first)
+%% Should return 'undefined', true or false
+-record(acl_is_owner, {
+        id :: integer(),
+        creator_id :: integer(),
+        user_id :: integer()
+    }).
+
 %% @doc Check if an action is allowed (first).
 %% Should return undefined, true or false.
 %% action :: view|update|delete
