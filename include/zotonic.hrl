@@ -21,24 +21,23 @@
 -include("zotonic_notifications.hrl").
 -include("zotonic_events.hrl").
 -include("zotonic_log.hrl").
--include_lib("webzmachine/include/wm_reqdata.hrl").
 
 %% @doc The request context, session information and other
 -record(context, {
+        %% Cowboy request data (only set when this context is used because of a request)
+        req=undefined :: cowboy_req:req() | undefined,
+
         %% The site
         site=default :: atom(),
 
-        %% Webmachine request data (only set when this context is used because of a request)
-        wm_reqdata=undefined :: #wm_reqdata{} | undefined,
-        
         %% The controller responsible for handling this request
         controller_module=undefined :: atom(),
         
         %% The page and session processes associated with the current request
         session_pid=undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
-        session_id=undefined :: string() | undefined,
+        session_id=undefined :: binary() | undefined,
         page_pid=undefined :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
-        page_id=undefined :: string() | undefined,
+        page_id=undefined :: binary() | undefined,
 
         %% Servers and supervisors for the site
         depcache,
@@ -63,7 +62,7 @@
         language=[en] :: [atom()],
 
         %% The timezone for this request
-        tz= <<"UTC">> :: string()|binary(),
+        tz= <<"UTC">> :: binary(),
         
         %% The current logged on person, derived from the session and visitor
         acl=undefined,      %% opaque placeholder managed by the z_acl module
@@ -86,9 +85,6 @@
         props=[]
     }).
     
-    
--define(WM_REQ(ReqData, Context), z_context:set_reqdata(ReqData, Context)).
--define(WM_REPLY(Reply, Context), {Reply, Context#context.wm_reqdata, Context#context{wm_reqdata=undefined}}).
 
 -define(SITE(Context), Context#context.site).
 -define(DBC(Context), Context#context.dbc).
@@ -228,7 +224,7 @@
 -define(SESSION_EXPIRE_N, 3600).
 
 %% The name of the persistent data cookie
--define(PERSIST_COOKIE, "z_pid").
+-define(PERSIST_COOKIE, <<"z_pid">>).
 
 %% Max age of the person cookie, 10 years or so.
 -define(PERSIST_COOKIE_MAX_AGE, 3600*24*3650).
@@ -244,7 +240,7 @@
 -define(YEAR, 31557600).
 
 %% Our default WWW-Authenticate header
--define(WWW_AUTHENTICATE, "OAuth-rsn").
+-define(WWW_AUTHENTICATE, <<"OAuth-1.0">>).
 
 %% Notifier defines
 -define(NOTIFIER_DEFAULT_PRIORITY, 500).

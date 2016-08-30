@@ -19,46 +19,34 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-    init/1,
-	service_available/2,
-    resource_exists/2,
-    previously_existed/2,
-    moved_temporarily/2
+    resource_exists/1,
+    previously_existed/1,
+    moved_temporarily/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
+resource_exists(Context) ->
+    {false, Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-resource_exists(ReqData, Context) ->
-    {false, ReqData, Context}.
-
-previously_existed(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
+previously_existed(Context) ->
     ContextQs = z_context:ensure_qs(
-                    z_context:continue_session(Context1)),
+                    z_context:continue_session(Context)),
     z_context:lager_md(ContextQs),
-    Id = m_rsc:rid(z_context:get_q("id", ContextQs), ContextQs),
+    Id = m_rsc:rid(z_context:get_q(<<"id">>, ContextQs), ContextQs),
     Exists = m_rsc:exists(Id, ContextQs)
              andalso z_acl:rsc_visible(Id, ContextQs),
-    ?WM_REPLY(Exists, ContextQs).
+    {Exists, ContextQs}.
 
-moved_temporarily(ReqData, Context) ->
-    Id = m_rsc:rid(z_context:get_q("id", Context), Context),
+moved_temporarily(Context) ->
+    Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
     case m_rsc:p(Id, website, Context) of
         undefined ->
-            {false, ReqData, Context};
+            {false, Context};
         <<>> ->
-            {false, ReqData, Context};
+            {false, Context};
         Url ->
             AbsUrl = iolist_to_binary(z_context:abs_url(z_html:unescape(Url), Context)),
-            {{true, AbsUrl}, ReqData, Context}
+            {{true, AbsUrl}, Context}
     end.
 

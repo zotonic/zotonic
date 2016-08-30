@@ -21,14 +21,14 @@
 -svc_title("Submit a survey.").
 -svc_needauth(false).
 
--export([process_post/2]).
+-export([process_post/1]).
 
 -include_lib("zotonic.hrl").
 
-process_post(ReqData, Context) ->
-    {B, _} = wrq:req_body(ReqData),
-    case z_context:get_q("id", Context) of
-        Id when Id =:= undefined; Id =:= [] ->
+process_post(Context) ->
+    {B, _} = cowmachine_req:req_body(Context),
+    case z_context:get_q(<<"id">>, Context) of
+        Id when Id =:= undefined; Id =:= <<>> ->
             {error, missing_arg, "id"};
 
         IdStr ->
@@ -40,7 +40,7 @@ process_post(ReqData, Context) ->
                         Questions when is_list(Questions) ->
 
                             {_, Missing} = mod_survey:collect_answers(Questions, Answers, Context),
-                            case Missing =:= [] orelse z_convert:to_bool(z_context:get_q("allow_missing", Context)) of
+                            case Missing =:= [] orelse z_convert:to_bool(z_context:get_q(<<"allow_missing">>, Context)) of
                                 true ->
                                     Result = mod_survey:do_submit(SurveyId, Questions, Answers, Context),
                                     handle_survey_result(Result, Context);

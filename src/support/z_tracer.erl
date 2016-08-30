@@ -13,7 +13,6 @@
 -export([tracefun/2]). % dbg callback function
 
 -include_lib("zotonic.hrl").
--include_lib("webzmachine/include/webmachine_logger.hrl").
 
 -define(TRACED_MOD, z_notifier).
 -define(TRACE_OPTS, []).
@@ -61,11 +60,12 @@ tracefun({trace, Pid, call, {?TRACED_MOD, Fun, Args}}, {DoLog, I}) ->
             [Msg_, Context_] -> {Msg_, Context_};
             [Msg_, _Acc_, Context_] -> {Msg_, Context_}
         end,
-    ReqData = z_context:get_reqdata(Context),
-    ReqId = case ReqData of
-                undefined -> undefined;
-                        _ -> (ReqData#wm_reqdata.log_data)#wm_log_data.req_id
-            end,
+    ReqId = undefined,
+    % ReqData = z_context:get_reqdata(Context),
+    % ReqId = case ReqData of
+    %             undefined -> undefined;
+    %                     _ -> (ReqData#wm_reqdata.log_data)#wm_log_data.req_id
+    %         end,
     EventType = if  is_tuple(Msg) -> element(1, Msg);
                     is_atom(Msg) -> Msg
                 end,

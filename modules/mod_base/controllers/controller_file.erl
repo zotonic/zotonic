@@ -25,123 +25,134 @@
 
 -module(controller_file).
 -export([
-    init/1,
-    service_available/2,
-    allowed_methods/2,
-    resource_exists/2,
-    forbidden/2,
-    last_modified/2,
-    expires/2,
-    content_types_provided/2,
-    charsets_provided/2,
-    content_encodings_provided/2,
-    provide_content/2
+    service_available/1,
+    allowed_methods/1,
+    resource_exists/1,
+    forbidden/1,
+    last_modified/1,
+    expires/1,
+    content_types_provided/1,
+    charsets_provided/1,
+    content_encodings_provided/1,
+    provide_content/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 -include_lib("zotonic_file.hrl").
 
 -define(MAX_AGE, 31536000).
 
 
-init(ConfigProps) ->
-    {ok, ConfigProps}.
-
 %% @doc Initialize the context for the request. Optionally continue the user's session.
-service_available(ReqData, ConfigProps) ->
-    Context = z_context:set_noindex_header(
-                    z_context:set(ConfigProps,
-                        z_context:new(ReqData, ?MODULE))),
+service_available(Context0) ->
+    Context = z_context:set_noindex_header(Context0),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
     z_context:lager_md(Context1),
-    case get_file_info(ConfigProps, Context1) of
+    case get_file_info(Context1) of
         {ok, Info} ->
-            {true, ReqData, {Info, Context1}};
+            {true, z_context:set(?MODULE, Info, Context1)};
         {error, enoent} = Error ->
-            {true, ReqData, {Error, Context1}};
+            {true, z_context:set(?MODULE, Error, Context1)};
         {error, _} = Error ->
-            {false, ReqData, {Error, Context1}}
+            {false, z_context:set(?MODULE, Error, Context1)}
     end.
 
-allowed_methods(ReqData, State) ->
-    {['HEAD', 'GET'], ReqData, State}.
+allowed_methods(Context) ->
+    {[<<"HEAD">>, <<"GET">>], Context}.
 
-resource_exists(ReqData, {{error,enoent},_Context} = State) ->
-    {false, ReqData, State};
-resource_exists(ReqData, {#z_file_info{acls=Acls}, Context} = State) ->
-    {not lists:any(fun(Id) when is_integer(Id) ->
-                            not m_rsc:exists(Id, Context);
-                      ({module, _Module}) ->
-                            false
-                   end,
-                   Acls), ReqData, State}.
-
-forbidden(ReqData, {{error,_},_Context} = State) ->
-    {false, ReqData, State};
-forbidden(ReqData, {#z_file_info{} = FInfo,Context}) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    case z_controller_helper:is_authorized(Context1) of
-        {false, RD1, Context2} ->
-            {true, RD1, {FInfo, Context2}};
-        {true, RD1, Context2} ->
-            {not z_file_request:is_visible(FInfo, Context2), RD1, {FInfo,Context2}}
+resource_exists(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {error, _} ->
+            {false, Context};
+        #z_file_info{acls=Acls} ->
+            {not lists:any(fun(Id) when is_integer(Id) ->
+                                    not m_rsc:exists(Id, Context);
+                              ({module, _Module}) ->
+                                    false
+                           end,
+                           Acls), Context}
     end.
 
-last_modified(ReqData, {{error, _},_} = State) ->
-    {calendar:universal_time(), ReqData, State};
-last_modified(ReqData, {#z_file_info{modifiedUTC=LModUTC},_Context} = State) ->
-    {LModUTC, ReqData, State}.
+forbidden(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {error, _ } ->
+            {false, Context};
+        #z_file_info{} = FInfo ->
+            case z_controller_helper:is_authorized(Context) of
+                {false, Context2} ->
+                    {true, Context2};
+                {true, Context2} ->
+                    {not z_file_request:is_visible(FInfo, Context2), Context2}
+            end
+    end.
 
-expires(ReqData, {_Info,Context} = State) ->
+last_modified(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {error, _} ->
+            {calendar:universal_time(), Context};
+        #z_file_info{modifiedUTC=LModUTC} ->
+            {LModUTC, Context}
+    end.
+
+expires(Context) ->
     Date = calendar:universal_time(),
     case z_context:get(max_age, Context, ?MAX_AGE) of
         N when N >= ?MAX_AGE ->
-            {z_datetime:next_year(Date), ReqData, State};
+            {z_datetime:next_year(Date), Context};
         MaxAge ->
             NowSecs = calendar:datetime_to_gregorian_seconds(Date),
-            {calendar:gregorian_seconds_to_datetime(NowSecs + MaxAge), ReqData, State}
+            {calendar:gregorian_seconds_to_datetime(NowSecs + MaxAge), Context}
     end.
 
-charsets_provided(ReqData, {{error, _},_Context} = State) ->
-    {no_charset, ReqData, State};
-charsets_provided(ReqData, {#z_file_info{mime=Mime},_Context} = State) ->
-    case is_text(Mime) of
-        true -> {["utf-8"], ReqData, State};
-        _ -> {no_charset, ReqData, State}
+charsets_provided(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {error, _} ->
+            {no_charset, Context};
+        #z_file_info{mime=Mime} ->
+            case is_text(Mime) of
+                true -> {[<<"utf-8">>], Context};
+                _ -> {no_charset, Context}
+            end
     end.
 
-content_encodings_provided(ReqData, {{error, _},_Context} = State) ->
-    {["identity"], ReqData, State};
-content_encodings_provided(ReqData, {Info,_Context} = State) ->
-    Encs = z_file_request:content_encodings(Info),
-    {[z_convert:to_list(Enc)||Enc<-Encs], ReqData, State}.
+content_encodings_provided(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {error, _} ->
+            {[<<"identity">>], Context};
+        #z_file_info{} = Info ->
+            Encs = z_file_request:content_encodings(Info),
+            {[z_convert:to_binary(Enc)||Enc<-Encs], Context}
+    end.
 
-content_types_provided(ReqData, {{error, _},_Context} = State) ->
-    {[{"text/plain", provide_content}], ReqData, State};
-content_types_provided(ReqData, {#z_file_info{mime=Mime},_Context} = State) ->
-    {[{z_convert:to_list(Mime), provide_content}], ReqData, State}.
+content_types_provided(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {error, _} ->
+            {[{<<"text/plain">>, provide_content}], Context};
+        #z_file_info{mime=Mime} ->
+            {[{z_convert:to_binary(Mime), provide_content}], Context}
+    end.
 
-
-provide_content(ReqData, {{error, _}, _} = State) ->
-    {<<>>, ReqData, State};
-provide_content(ReqData,  {Info,Context} = State) ->
-    RD1 = set_content_dispostion(z_context:get(content_disposition, Context), ReqData),
-    MaxAge = z_context:get(max_age, Context, ?MAX_AGE),
-    RD2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context), MaxAge, RD1),
-    RD3 = set_allow_origin(RD2),
-    RD4 = set_content_policy(Info, RD3),
-    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD4)), RD4, State}.
-
+provide_content(Context) ->
+    case z_context:get(?MODULE, Context) of
+        {error, _} ->
+            {<<>>, Context};
+        #z_file_info{} = Info ->
+            Context1 = set_content_dispostion(z_context:get(content_disposition, Context), Context),
+            MaxAge = z_context:get(max_age, Context1, ?MAX_AGE),
+            Context2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context1), MaxAge, Context1),
+            Context3 = set_allow_origin(Context2),
+            Context4 = set_content_policy(Info, Context3),
+            {z_file_request:content_stream(Info, cowmachine_req:resp_content_encoding(Context4)), Context4}
+    end.
 
 %%%%% -------------------------- Support functions ------------------------
 
-set_content_dispostion(inline, ReqData) ->
-    wrq:set_resp_header("Content-Disposition", "inline", ReqData);
-set_content_dispostion(attachment, ReqData) ->
-    wrq:set_resp_header("Content-Disposition", "attachment", ReqData);
-set_content_dispostion(undefined, ReqData) ->
-    ReqData.
+set_content_dispostion(inline, Context) ->
+    z_context:set_resp_header(<<"content-disposition">>, <<"inline">>, Context);
+set_content_dispostion(attachment, Context) ->
+    z_context:set_resp_header(<<"content-disposition">>, <<"attachment">>, Context);
+set_content_dispostion(undefined, Context) ->
+    Context.
 
 is_public(Ids, Context) ->
     ContextAnon = z_context:new(Context),
@@ -156,63 +167,99 @@ is_public([{module, Mod}|T], Context, _Answer) ->
 is_public([Id|T], Context, _Answer) ->
     is_public(T, Context, z_acl:rsc_visible(Id, Context)).
 
-set_allow_origin(ReqData) ->
-    wrq:set_resp_header("Access-Control-Allow-Origin", "*", ReqData).
+set_allow_origin(Context) ->
+    z_context:set_resp_header(<<"access-control-allow-origin">>, <<"*">>, Context).
 
-set_content_policy(#z_file_info{acls=[]}, ReqData) ->
-    ReqData;
-set_content_policy(#z_file_info{acls = Acls, mime = <<"application/pdf">>}, ReqData) ->
+set_content_policy(#z_file_info{acls=[]}, Context) ->
+    Context;
+set_content_policy(#z_file_info{acls = Acls, mime = <<"application/pdf">>}, Context) ->
     case lists:any(fun is_integer/1, Acls) of
         true ->
-            RD1 = wrq:set_resp_header("Content-Security-Policy", "object-src 'self'; plugin-types application/pdf", ReqData),
-            wrq:set_resp_header("X-Content-Security-Policy", "plugin-types: application/pdf", RD1);
+            Context1 = z_context:set_resp_header(
+                    <<"content-security-policy">>, 
+                    <<"object-src 'self'; plugin-types application/pdf">>,
+                    Context),
+            z_context:set_resp_header(
+                    <<"x-content-security-policy">>,
+                    <<"plugin-types: application/pdf">>,
+                    Context1);
         false ->
-            ReqData
+            Context
     end;
-set_content_policy(#z_file_info{acls=Acls}, ReqData) ->
+set_content_policy(#z_file_info{acls=Acls}, Context) ->
     case lists:any(fun is_integer/1, Acls) of
         true ->
-            RD1 = wrq:set_resp_header("Content-Security-Policy", "sandbox", ReqData),
+            Context1 = z_context:set_resp_header(<<"content-security-policy">>, <<"sandbox">>, Context),
             % IE11 needs the X- variant, see http://caniuse.com/#feat=contentsecuritypolicy
-            wrq:set_resp_header("X-Content-Security-Policy", "sandbox", RD1);
+            z_context:set_resp_header(<<"x-content-security-policy">>, <<"sandbox">>, Context1);
         false ->
-            ReqData
+            Context
     end.
 
-set_cache_control_public(true, MaxAge, ReqData) ->
-    wrq:set_resp_header("Cache-Control", "public, max-age="++z_convert:to_list(MaxAge), ReqData);
-set_cache_control_public(false, _MaxAge, ReqData) ->
-    wrq:set_resp_header("Cache-Control", "private, max-age=0, must-revalidate, post-check=0, pre-check=0", ReqData).
+set_cache_control_public(true, MaxAge, Context) ->
+    z_context:set_resp_header(
+            <<"cache-control">>,
+            <<"public, max-age=", (z_convert:to_binary(MaxAge))/binary>>,
+            Context);
+set_cache_control_public(false, _MaxAge, Context) ->
+    z_context:set_resp_header(
+            <<"cache-control">>,
+            <<"private, max-age=0, must-revalidate, post-check=0, pre-check=0">>,
+            Context).
 
-get_file_info(ConfigProps, Context) ->
-    get_file_info_cfg(proplists:get_value(path, ConfigProps), ConfigProps, Context).
+get_file_info(Context) ->
+    get_file_info_cfg(z_context:get(path, Context), Context).
 
-get_file_info_cfg(undefined, ConfigProps, Context) ->
-    DispPath = wrq:disp_path(z_context:get_reqdata(Context)),
-    SafePath = mochiweb_util:safe_relative_path(mochiweb_util:unquote(DispPath)),
-    get_file_info_path(binpath(SafePath), ConfigProps, Context);
-get_file_info_cfg(id, _ConfigProps, _Context) ->
+get_file_info_cfg(undefined, Context) ->
+    DispPath = drop_dotdot(maybe_urldecode(rootless(cowmachine_req:disp_path(Context)))),
+    get_file_info_path(DispPath, Context);
+get_file_info_cfg(id, _Context) ->
     lager:error("controller_file does not support the 'id' config, use controller_file_id instead."),
     {error, enoent};
-get_file_info_cfg(ConfiguredPath, ConfigProps, Context) when is_list(ConfiguredPath); is_binary(ConfiguredPath) ->
-    get_file_info_path(binpath(ConfiguredPath), ConfigProps, Context).
+get_file_info_cfg(ConfiguredPath, Context) when is_list(ConfiguredPath); is_binary(ConfiguredPath) ->
+    get_file_info_path(rootless(z_convert:to_binary(ConfiguredPath)), Context).
 
-get_file_info_path(undefined, _ConfigProps, _Context) ->
+get_file_info_path(undefined, _Context) ->
     {error, enoent};
-get_file_info_path(Path, ConfigProps, Context) when is_binary(Path) ->
-    Root = proplists:get_value(root, ConfigProps),
-    OptFilters = proplists:get_value(media_tag_url2props, ConfigProps, undefined),
+get_file_info_path(Path, Context) when is_binary(Path) ->
+    Root = z_context:get(root, Context),
+    OptFilters = z_context:get(media_tag_url2props, Context, undefined),
     z_file_request:lookup_file(Path, Root, OptFilters, z_context:set(path, Path, Context)).
 
-%% @doc Ensure path is binary and non-root
-binpath(undefined) ->
-    <<>>;
-binpath(<<"/", Rest/binary>>) ->
-    binpath(Rest);
-binpath(B) when is_binary(B) ->
-    B;
-binpath(P) ->
-    binpath(z_convert:to_binary(P)).
+%% @doc Ensure path is non-root
+rootless(undefined) -> <<>>;
+rootless(<<"/", Rest/binary>>) -> rootless(Rest);
+rootless(<<"./", Rest/binary>>) -> rootless(Rest);
+rootless(<<"../", Rest/binary>>) -> rootless(Rest);
+rootless(B) when is_binary(B) -> B.
+
+maybe_urldecode(Path) ->
+    case binary:match(Path, <<"%">>) of
+        nomatch -> Path;
+        {_,_} -> rootless(cow_qs:urldecode(Path))
+    end.
+
+drop_dotdot(Path) ->
+    case binary:match(Path, <<"../">>) =/= nomatch
+        orelse binary:match(Path, <<"./">>) =/= nomatch
+    of
+        false ->
+            Path;
+        true ->
+            Parts = binary:split(Path, <<"/">>, [global]),
+            Parts1 = drop_dotdot_1(Parts, []),
+            rootless(iolist_to_binary(z_utils:combine($/, Parts1)))
+    end.
+
+drop_dotdot_1([], Acc) ->
+    lists:reverse(Acc);
+drop_dotdot_1([_Dir,<<"..">>|Rest], Acc) ->
+    drop_dotdot_1(Rest, Acc);
+drop_dotdot_1([<<"..">>|Rest], Acc) ->
+    drop_dotdot_1(Rest, Acc);
+drop_dotdot_1([<<".">>|Rest], Acc) ->
+    drop_dotdot_1(Rest, Acc).
+
 
 %% @doc Check if a file is text based (influences the provided character sets)
 is_text(<<"text/", _/binary>>) -> true;

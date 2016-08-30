@@ -20,13 +20,11 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    upgrades_provided/2,
-    charsets_provided/2,
-    content_types_provided/2,
-    provide_content/2,
-    websocket_start/2,
+    upgrades_provided/1,
+    charsets_provided/1,
+    content_types_provided/1,
+    provide_content/1,
+    websocket_start/1,
     websocket_send_data/2,
     is_websocket_request/1
 ]).
@@ -34,55 +32,47 @@
 % websocket handler exports.
 -export([
     websocket_init/1,
-    websocket_message/3,
-    websocket_info/2,
-    websocket_terminate/2
+    websocket_handle/2,
+    websocket_info/2
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(DispatchArgs) ->
-    {ok, DispatchArgs}.
+%% ---------------------------------------------------------------------------------------------
+%% Cowmachine controller callbacks
+%% ---------------------------------------------------------------------------------------------
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:continue_session(Context1),
-    z_context:lager_md(Context2),
-    ?WM_REPLY(true, Context2).
+upgrades_provided(Context) ->
+    {[{<<"WebSocket">>, websocket_start}], Context}.
 
-%% @doc Possible connection upgrades
-upgrades_provided(ReqData, Context) ->
-    {[
-        {"WebSocket", websocket_start}
-    ], ReqData, Context}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+content_types_provided(Context) ->
+    {[{<<"text/html">>, provide_content}], Context}.
 
-content_types_provided(ReqData, Context) ->
-    {[{"text/html", provide_content}], ReqData, Context}.
-
-provide_content(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context1),
+provide_content(Context) ->
+    Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Rendered = z_template:render("error_websocket.tpl", z_context:get_all(Context2), Context2),
-    {Output, OutputContext} = z_context:output(Rendered, Context2),
-    ?WM_REPLY(Output, OutputContext).
+    z_context:output(Rendered, Context2).
+
+
+%% ---------------------------------------------------------------------------------------------
+%% Upgrade callback, called when starting the websocket connection
+%% ---------------------------------------------------------------------------------------------
 
 %% @doc Initiate the websocket connection upgrade
-websocket_start(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = case z_context:get(ws_handler, Context1) of
-        undefined -> z_context:set(ws_handler, ?MODULE, Context1);
-        _Hdlr -> Context1
-    end,
-    ContextQs = z_context:ensure_qs(z_context:set(ws_request, true, Context2)),
-    PrunedContext = z_context:prune_for_scomp(ContextQs),
-    z_websocket:start(ReqData, PrunedContext).
+websocket_start(Context) ->
+    Context1 = z_context:continue_session(Context),
+    Context2 = z_context:set(ws_request, true, Context1),
+    Handler = z_context:get(ws_handler, Context, ?MODULE),
+    cowmachine_websocket_upgrade:upgrade(Handler, Context2).
 
-%% @doc Returns true if this a websocket request
+%% ---------------------------------------------------------------------------------------------
+%% External entry points
+%% ---------------------------------------------------------------------------------------------
+
+%% @doc Returns true if this process is a websocket request handler
 is_websocket_request(Context) ->
     case z_context:get(ws_request, Context, false) of
         true -> true;
@@ -90,35 +80,54 @@ is_websocket_request(Context) ->
     end.
 
 %% @doc Send Data over websocket Pid to the client.
-websocket_send_data(_Pid, <<>>) ->
+%%      Called by the page session, forwarding queued messages
+websocket_send_data(_WsControllerPid, <<>>) ->
     ok;
-websocket_send_data(Pid, Data) ->
-    Pid ! {send_data, Data}.
+websocket_send_data(WsControllerPid, Data) ->
+    WsControllerPid ! {reply, {text, Data}}.
 
-%% Called during initialization of the websocket.
-websocket_init(_Context) ->
-    ok.
 
-%% Handle a message from the browser, should contain an ubf encoded request. Sends result script back to browser.
-websocket_message(<<>>, _SenderPid, Context) ->
-    {ok, Context};
-websocket_message(Data, SenderPid, Context) ->
+%% ---------------------------------------------------------------------------------------------
+%% Websocket handler callbacks
+%% ---------------------------------------------------------------------------------------------
+
+websocket_init(Context) ->
+    PrunedContext = z_context:prune_for_scomp(Context),
+    {ok, PrunedContext}.
+
+%% @doc Handle a message from the browser, should contain an ubf encoded request.
+websocket_handle({Type, Data}, Context) when Type =:= text; Type =:= binary ->
     try
-        {ok, Term, RestData} = z_transport:data_decode(Data),
-        {ok, Reply, ContextWs} = z_transport:incoming(Term, Context),
-        {ok, ReplyData} = z_transport:data_encode(Reply),
-        z_session_page:websocket_attach(SenderPid, ContextWs),
-        websocket_send_data(SenderPid, ReplyData),
-        websocket_message(RestData, SenderPid, ContextWs)
+        handle_websocket_data(Data, [], Context)
     catch
         Error:X ->
-            ?zWarning(io_lib:format("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]), Context),
+            StackTrace = erlang:get_stacktrace(),
+            lager:warning("[~p] ~p:~p~n~p",
+                          [z_context:site(Context), Error, X, StackTrace]),
             {ok, Context}
-    end.
+    end;
+websocket_handle(_Data, Context) ->
+    {ok, Context}.
 
-websocket_info(_Msg, _Context) ->
-    ok.
+websocket_info(_Msg, Context) ->
+    {ok, Context}.
 
-websocket_terminate(_Reason, _Context) ->
-    ok.
 
+%% ---------------------------------------------------------------------------------------------
+%% Internal
+%% ---------------------------------------------------------------------------------------------
+
+handle_websocket_data(<<>>, [], Context) ->
+    {ok, Context};
+handle_websocket_data(<<>>, Acc, Context) ->
+    Acc1 = lists:reverse([ Reply || Reply <- Acc, Reply =/= <<>> ]),
+    case Acc1 of
+        [] -> {ok, Context};
+        _ -> {reply, {text, Acc1}, Context}
+    end;
+handle_websocket_data(Data, Acc, Context) ->
+    {ok, Term, RestData} = z_transport:data_decode(Data),
+    {ok, Reply, ContextWs} = z_transport:incoming(Term, Context),
+    {ok, ReplyData} = z_transport:data_encode(Reply),
+    z_session_page:websocket_attach(self(), ContextWs),
+    handle_websocket_data(RestData, [ReplyData|Acc], ContextWs).

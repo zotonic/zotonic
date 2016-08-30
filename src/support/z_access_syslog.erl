@@ -24,7 +24,7 @@
 -export([start_link/0, start_link/4, log_access/1]).
 
 -include_lib("zotonic.hrl").
--include_lib("webzmachine/include/webmachine_logger.hrl").
+% -include_lib("webzmachine/include/webmachine_logger.hrl").
 
 %% gen_server exports
 
@@ -52,19 +52,22 @@ start_link() ->
 start_link(Ident, Opts, Facility, Level) ->
     z_buffered_worker:start_link(?MODULE, ?MODULE, [[Ident, Opts, Facility], Level]).
 
-log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
-        method=Method, response_code=Status,
-        path=Path, headers=Headers, response_length=Size}) ->
-    MD = [{start_time, StartTime},
-        {finish_time, FinishTime},
-        {method, Method},
-        {status, Status},
-        {path, z_convert:to_binary(Path)},
-        {size, Size},
-        {user_agent, get_header_value("User-Agent", Headers)},
-        {referer, get_header_value("Referer", Headers)}
-        | lager:md()],
-    z_buffered_worker:push(?MODULE, MD).
+log_access(_LogData) ->
+    ok.
+
+% log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
+%         method=Method, response_code=Status,
+%         path=Path, headers=Headers, response_length=Size}) ->
+%     MD = [{start_time, StartTime},
+%         {finish_time, FinishTime},
+%         {method, Method},
+%         {status, Status},
+%         {path, z_convert:to_binary(Path)},
+%         {size, Size},
+%         {user_agent, get_header_value("User-Agent", Headers)},
+%         {referer, get_header_value("Referer", Headers)}
+%         | lager:md()],
+%     z_buffered_worker:push(?MODULE, MD).
 
 %%
 %% Buffered worker callbacks
@@ -89,11 +92,11 @@ handle_flush_done(_Pid, _State) ->
 %% Helpers
 %%
 
-get_header_value(Name, Headers) ->
-    case mochiweb_headers:get_value(Name, Headers) of
-        undefined -> <<>>;
-	   Value -> z_convert:to_binary(Value)
-    end.
+% get_header_value(Name, Headers) ->
+%     case mochiweb_headers:get_value(Name, Headers) of
+%         undefined -> <<>>;
+% 	   Value -> z_convert:to_binary(Value)
+%     end.
 
 %%
 %% Formats

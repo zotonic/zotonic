@@ -1,4 +1,4 @@
-<table class="table table-striped" style="width: auto">
+<table class="table table-striped">
 	<thead>
 		<tr>
 			<th>{_ Path _}</th>

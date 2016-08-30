@@ -20,13 +20,13 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    is_authorized/2
+    is_authorized/1
 ]).
 
 -include_lib("controller_html_helper.hrl").
 
-is_authorized(ReqData, Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin_modules, ReqData, Context).
+is_authorized(Context) ->
+    z_admin_controller_helper:is_authorized(mod_admin_modules, Context).
 
 html(Context) ->
     Status = z_module_manager:get_modules_status(Context),

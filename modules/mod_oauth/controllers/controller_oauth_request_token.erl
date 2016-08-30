@@ -22,63 +22,50 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-         init/1,
-         resource_exists/2,
-         allowed_methods/2,
-         content_types_provided/2,
-         response/2,
-         process_post/2
+         allowed_methods/1,
+         content_types_provided/1,
+         response/1,
+         process_post/1
         ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
+allowed_methods(Context) ->
+    {[<<"POST">>, <<"GET">>, <<"HEAD">>], Context}.
 
+content_types_provided(Context) ->
+    {[{<<"text/html">>, response}], Context}.
 
-init(_Args) ->
-    {ok, []}.
+process_post(Context) ->
+    response(Context).
 
-
-resource_exists(ReqData, _Context) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:ensure_qs(Context),
-    {true, ReqData, Context1}.
-
-
-allowed_methods(ReqData, Context) ->
-    {['POST', 'GET', 'HEAD'], ReqData, Context}.
-
-
-content_types_provided(ReqData, Context) ->
-    {[{"text/html", response}], ReqData, Context}.
-
-
-process_post(ReqData, Context) ->
-    response(ReqData, Context).
-
-response(ReqData, Context) ->
-    case mod_oauth:request_is_signed(ReqData) of
+response(Context) ->
+    case mod_oauth:request_is_signed(Context) of
         false ->
             % Request was not signed.
-            mod_oauth:authenticate("Not an OAuth request.", ReqData, Context);
+            mod_oauth:authenticate(<<"Not an OAuth request.">>, Context);
         true ->
-            mod_oauth:serve_oauth(ReqData, Context,
-                          fun(URL, Params, Consumer, Signature) ->
-                                  %Token = m_oauth_app:secrets_for_verify(none, Consumer, mod_oauth:oauth_param("oauth_token", ReqData), Context),
-                                  SigMethod = mod_oauth:oauth_param("oauth_signature_method", ReqData),
-                                  case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
-                                                    Params, mod_oauth:to_oauth_consumer(Consumer, SigMethod), "") of
-                                      true ->
-                                          {ok, Token} = m_oauth_app:request_token(Consumer, Context),
-                                          ReqData1 = wrq:set_resp_body(oauth:uri_params_encode(
-                                                                         [{"oauth_token", binary_to_list(proplists:get_value(token, Token))},
-                                                                          {"oauth_token_secret", binary_to_list(proplists:get_value(token_secret, Token))}]), ReqData),
-                                          {{halt, 200}, ReqData1, Context};
-                                      false ->
-                                          mod_oauth:authenticate("Signature verification failed.", ReqData, Context)
-                                  end
+            mod_oauth:serve_oauth(Context,
+                    fun(URL, Params, Consumer, Signature) ->
+                          SigMethod = mod_oauth:oauth_param(<<"oauth_signature_method">>, Context),
+                          case oauth:verify(
+                                    Signature,
+                                    z_convert:to_list(m_req:get(method, Context)),
+                                    URL,
+                                    Params,
+                                    mod_oauth:to_oauth_consumer(Consumer, SigMethod), 
+                                    "")
+                          of
+                              true ->
+                                  {ok, Token} = m_oauth_app:request_token(Consumer, Context),
+                                  Context1 = cowmachine_req:set_resp_body(oauth:uri_params_encode([
+                                            {"oauth_token", binary_to_list(proplists:get_value(token, Token))},
+                                            {"oauth_token_secret", binary_to_list(proplists:get_value(token_secret, Token))}
+                                        ]), Context),
+                                  {{halt, 200}, Context1};
+                              false ->
+                                  mod_oauth:authenticate(<<"Signature verification failed.">>, Context)
                           end
-                         )
+                    end)
     end.
 

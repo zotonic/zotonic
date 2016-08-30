@@ -19,52 +19,38 @@
 -module(controller_admin_media_preview).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--export([init/1,
-         service_available/2,
-         resource_exists/2,
-         content_types_provided/2,
-         to_image/2
+-export([resource_exists/1,
+         content_types_provided/1,
+         to_image/1
         ]).
 
--include_lib("controller_webmachine_helper.hrl").
--include_lib("zotonic.hrl").
-
-init(_Args) -> {ok, []}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_admin_controller_helper:init_session(Context1),
-    ?WM_REPLY(true, Context2).
-
-resource_exists(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_admin_controller_helper:init_session(Context1),
-    case z_context:get_q("id", Context2) of
+resource_exists(Context) ->
+    Context2 = z_admin_controller_helper:init_session(Context),
+    case z_context:get_q(<<"id">>, Context2) of
         undefined ->
-            ?WM_REPLY(false, Context2);
-        [] ->
-            ?WM_REPLY(false, Context2);
+            {false, Context2};
+        <<>> ->
+            {false, Context2};
         Id ->
             case m_rsc:rid(Id, Context2) of
-                undefined ->
-                    ?WM_REPLY(false, Context2);
+                undefined -> 
+                    {false, Context2};
                 RscId ->
-                    case m_rsc:exists(RscId, Context2) andalso m_rsc:is_visible(RscId, Context2) of
+                    case m_rsc:exists(RscId, Context2) andalso m_rsc:is_visible(RscId, Context2) of 
                         true ->
                             Context3 = z_context:set(id, RscId, Context2),
-                            ?WM_REPLY(true, Context3);
+                            {true, Context3};
                         false ->
-                            ?WM_REPLY(true, Context2)
+                            {true, Context2}
                     end
             end
     end.
 
-content_types_provided(ReqData, Context) ->
-    {[{"image/jpeg", to_image}], ReqData, Context}.
+content_types_provided(Context) ->
+    {[{<<"image/jpeg">>, to_image}], Context}.
 
-to_image(ReqData, Context) ->
-    Opts = [{mediaclass, "admin-editor"}],
+to_image(Context) ->
+    Opts = [{mediaclass, <<"admin-editor">>}],
     {ok, Url} = z_media_tag:url(z_context:get(id, Context), Opts, Context),
-    ReqData1 = wrq:set_resp_header("Location", z_context:abs_url(Url, Context), ReqData),
-    {{halt, 303}, ReqData1, Context}.
+    Context1 = z_context:set_resp_header(<<"location">>, z_context:abs_url(Url, Context), Context),
+    {{halt, 303}, Context1}.

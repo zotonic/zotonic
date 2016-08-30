@@ -46,9 +46,7 @@
          logoff/1,
 
          wm_is_authorized/2,
-         wm_is_authorized/3,
-         wm_is_authorized/4,
-         wm_is_authorized/5
+         wm_is_authorized/3
         ]).
 
 -export_type([acl/0]).
@@ -342,48 +340,35 @@ logoff(Context) ->
 
 %% @doc Convenience function, check if the current user has enough permissions, if not then
 %% redirect to the logon page.
--spec wm_is_authorized(boolean() | acl(), #context{}) -> webzmachine:reply().
+-spec wm_is_authorized(boolean() | acl(), #context{}) -> cowmachine:reply().
 wm_is_authorized(true, Context) ->
-    ?WM_REPLY(true, Context);
+    {true, Context};
 wm_is_authorized(false, Context) ->
     wm_is_authorized(false, undefined, Context);
 wm_is_authorized(ACLs, Context) when is_list(ACLs) ->
     wm_is_authorized(ACLs, undefined, Context).
 
--spec wm_is_authorized(boolean() | acl(), Redirect | ReqData, #context{}) -> webzmachine:reply() when
-      Redirect :: atom() | undefined,
-      ReqData :: webzmachine:reqdata().
+-spec wm_is_authorized(boolean() | acl(), Redirect, #context{}) -> cowmachine:reply() when
+      Redirect :: atom() | undefined.
 wm_is_authorized(true, _Redirect, Context) ->
     wm_is_authorized(true, Context);
 wm_is_authorized(false, undefined, _Context) ->
     throw({stop_request, 403});
 wm_is_authorized(false, Redirect, Context) ->
     ContextLocation = wm_set_location(Redirect, Context),
-    ?WM_REPLY({halt, 302}, ContextLocation);
+    {{halt, 302}, ContextLocation};
 wm_is_authorized(ACLs, Redirect, Context) when is_list(ACLs), is_atom(Redirect) ->
     wm_is_authorized(wm_is_allowed(ACLs, Context), Redirect, Context);
-wm_is_authorized(ACLs, ReqData, Context) when is_list(ACLs) ->
-    wm_is_authorized(ACLs, ?WM_REQ(ReqData, Context));
 wm_is_authorized(Action, Object, Context) ->
     wm_is_authorized([{Action, Object}], Context).
 
--spec wm_is_authorized(action(), object(), webzmachine:reqdata(), #context{}) -> webzmachine:reply().
-wm_is_authorized(Action, Object, ReqData, Context) ->
-    wm_is_authorized([{Action, Object}], ?WM_REQ(ReqData, Context)).
-
--spec wm_is_authorized(action(), object(), Redirect, ReqData, #context{}) -> webzmachine:reply() when
-      Redirect :: atom(),
-      ReqData :: webzmachine:reqdata().
-wm_is_authorized(Action, Object, Redirect, ReqData, Context) ->
-    wm_is_authorized([{Action, Object}], Redirect, ?WM_REQ(ReqData, Context)).
-
 -spec wm_set_location(Redirect::atom(), #context{}) -> #context{}.
 wm_set_location(Redirect, Context) ->
-    RequestPath = wrq:raw_path(z_context:get_reqdata(Context)),
+    RequestPath = m_req:get(raw_path, Context),
     Location = z_context:abs_url(
                     z_dispatcher:url_for(Redirect, [{p,RequestPath}], Context),
                     Context),
-    z_context:set_resp_header("Location", Location, Context).
+    z_context:set_resp_header(<<"location">>, Location, Context).
 
 %% Check list of {Action,Object} ACL pairs
 -spec wm_is_allowed(acl(), #context{}) -> boolean().

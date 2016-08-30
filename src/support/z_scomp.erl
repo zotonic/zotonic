@@ -59,7 +59,7 @@ render_all(ScompName, Args, Vars, Context) ->
     end.
 
 render_scomp_module(ModuleName, Args, Vars, ScompContext, Context) ->
-    ScompContextWM = ScompContext#context{wm_reqdata=Context#context.wm_reqdata},
+    ScompContextWM = ScompContext#context{req=Context#context.req},
     case vary(ModuleName, Args, ScompContext) of
         nocache ->
             case ModuleName:render(Args, Vars, ScompContextWM) of

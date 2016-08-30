@@ -22,84 +22,57 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    allowed_methods/2,
-    content_encodings_provided/2,
-	resource_exists/2,
-	last_modified/2,
-	expires/2,
-	content_types_provided/2,
-	charsets_provided/2,
-	provide_content/2
+    allowed_methods/1,
+    content_encodings_provided/1,
+	resource_exists/1,
+	last_modified/1,
+	expires/1,
+	content_types_provided/1,
+	charsets_provided/1,
+	provide_content/1
 ]).
-
--include_lib("controller_webmachine_helper.hrl").
--include_lib("include/zotonic.hrl").
 
 %% Let cached versions expire in an hour.
 -define(MAX_AGE, 3600).
 
+allowed_methods(Context) ->
+    {[<<"HEAD">>, <<"GET">>], Context}.
 
-init(DispatchArgs) ->
-    {ok, DispatchArgs}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:ensure_qs(Context1),
-    ?WM_REPLY(true, Context2).
+content_encodings_provided(Context) ->
+    {[<<"identity">>, <<"gzip">>], Context}.
 
+content_types_provided(Context) ->
+    {[{<<"application/atom+xml">>, provide_content}], Context}.
 
-allowed_methods(ReqData, Context) ->
-    {['HEAD', 'GET'], ReqData, Context}.
+resource_exists(Context) ->
+    {m_rsc:exists(z_context:get_q(cat, Context), Context), Context}.
 
-
-charsets_provided(ReqData, Context) ->
-    {["utf-8"], ReqData, Context}.
-
-
-content_encodings_provided(ReqData, Context) ->
-    {["identity", "gzip"], ReqData, Context}.
-
-
-content_types_provided(ReqData, Context) ->
-    {[{"application/atom+xml", provide_content}], ReqData, Context}.
-
-
-resource_exists(ReqData, Context) ->
-    {m_rsc:exists(z_context:get_q(cat, Context), Context), ReqData, Context}.
-
-
-last_modified(ReqData, Context) ->
-    RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData),
-    Modified = case m_category:last_modified(z_context:get_q(cat, Context), Context) of
+last_modified(Context) ->
+    MaxAge = integer_to_binary(?MAX_AGE),
+    Context1 = z_context:set_resp_header(<<"cache-control">>, <<"public, max-age=", MaxAge/binary>>, Context),
+    Modified = case m_category:last_modified(z_context:get_q(cat, Context1), Context1) of
         {ok, Date} -> Date;
         {error, _Reason} -> {{2008,12,10},{15,30,00}}
     end,
-    Context1 = z_context:set(last_modified, Modified, Context),
-    {Modified, RD1, Context1}.
+    Context2 = z_context:set(last_modified, Modified, Context1),
+    {Modified, Context2}.
 
-
-expires(ReqData, State) ->
+expires(State) ->
     NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
-    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), ReqData, State}.
+    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), State}.
 
-
-provide_content(ReqData, Context) ->
-    Context1 = z_context:set_reqdata(ReqData, Context),
-    CatName = m_category:id_to_name(z_context:get_q(cat, Context1), Context1),
-    F = fun() ->
-        Vars = [
-            {cat, CatName},
-            {upcoming, z_context:get(upcoming, Context1)},
-            {updated, z_context:get(last_modified, Context1)},
-            {site_url, z_context:abs_url("", Context1)}
-        ],
-        {Content, _Context2} = z_template:render_to_iolist("atom_feed_cat.tpl", Vars, Context1),
-        Content
-    end,
-    Content = F(), %%z_depcache:memo(F, {atom_feed, CatName}, ?MAX_AGE, [CatName], Context1),
-    Content1 = wrq:encode_content(Content, ReqData),
-    ?WM_REPLY(Content1, Context1).
+provide_content(Context) ->
+    CatName = m_category:id_to_name(z_context:get_q(cat, Context), Context),
+    Vars = [
+        {cat, CatName},
+        {upcoming, z_context:get(upcoming, Context)},
+        {updated, z_context:get(last_modified, Context)},
+        {site_url, z_context:abs_url("", Context)}
+    ],
+    {Content, Context1} = z_template:render_to_iolist("atom_feed_cat.tpl", Vars, Context),
+    Content1 = cowmachine_req:encode_content(Content, Context1),
+    {Content1, Context1}.
 

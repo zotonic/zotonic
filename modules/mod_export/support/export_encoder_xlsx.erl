@@ -43,10 +43,10 @@
 -include_lib("zotonic.hrl").
 
 extension() ->
-    [ "xlsx" ].
+    [ <<"xlsx">> ].
 
 mime() ->
-    [ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ].
+    [ <<"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">> ].
 
 init(Options, Context) ->
     IsRaw = proplists:get_value(is_raw, Options, false),
