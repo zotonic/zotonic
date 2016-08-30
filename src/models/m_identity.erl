@@ -23,6 +23,11 @@
 
 -behaviour(gen_model).
 
+-type password() :: iodata().
+-type bcrypt_hash() :: {bcrypt, binary()}.
+-type sha1_salted_hash() :: {hash, binary(), binary()}.
+-type hash() :: bcrypt_hash() | sha1_salted_hash().
+
 -export([
     m_find_value/3,
     m_to_list/2,
@@ -552,7 +557,7 @@ get_rsc(Id, Type, Context) ->
 
 
 %% @doc Hash a password, using bcrypt
-%% @spec hash(Password) -> tuple()
+-spec hash(password()) -> bcrypt_hash().
 hash(Pw) ->
     {bcrypt, erlpass:hash(Pw)}.
 
@@ -561,7 +566,7 @@ hash(Pw) ->
 %% @spec bcrypt_hash(Password) -> tuple
 
 %% @doc Compare if a password is the same as a hash.
-%% @spec hash_is_equal(Password, Hash) -> bool()
+-spec hash_is_equal(password(), hash()) -> boolean().
 hash_is_equal(Pw, {bcrypt, Hash}) ->
     erlpass:match(Pw, Hash);
 hash_is_equal(Pw, {hash, Salt, Hash}) ->
