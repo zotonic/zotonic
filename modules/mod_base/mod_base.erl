@@ -77,7 +77,7 @@ observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
 
 %% @doc Part of the {% script %} rendering in templates
 observe_scomp_script_render(#scomp_script_render{is_nostartup=false}, Context) ->
-    DefaultFormPostback = z_render:make_postback_info("", "submit", undefined, undefined, undefined, Context),
+    DefaultFormPostback = z_render:make_postback_info(<<>>, <<"submit">>, undefined, undefined, undefined, Context),
     [<<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $; ];
 observe_scomp_script_render(#scomp_script_render{is_nostartup=true}, _Context) ->
     [].
@@ -94,8 +94,8 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
         {error, _} ->
             Last = last(Path),
             Template= case Last of
-                         $/ -> "static/"++Path++"index.tpl";
-                         _ -> "static/"++Path++".tpl"
+                         $/ -> <<"static/", Path/binary, "index.tpl">>;
+                         _ -> <<"static/", Path/binary, ".tpl">>
                       end,
             case z_module_indexer:find(template, Template, Context) of
                 {ok, _} ->
@@ -112,7 +112,7 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                         $. ->
                             undefined;
                         _ ->
-                            Template1 = "static/"++Path++"/index.tpl",
+                            Template1 = <<"static/", Path/binary, "/index.tpl">>,
                             case z_module_indexer:find(template, Template1, Context) of
                                 {ok, _} ->
                                     {ok, #dispatch_match{
@@ -127,8 +127,8 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
             end
     end.
 
-last([]) -> $/;
-last(Path) -> lists:last(Path).
+last(<<>>) -> $/;
+last(Path) -> binary:last(Path).
 
 
 %%====================================================================

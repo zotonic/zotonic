@@ -144,8 +144,8 @@ compile_zotonic_dirs() ->
 
 compile_user_dirs() ->
     application:load(zotonic),
-    {ok, Modules} = application:get_env(zotonic, user_modules_dir),
-    {ok, Sites} = application:get_env(zotonic, user_sites_dir),
+    Modules = user_modules_dir(),
+    Sites = user_sites_dir(),
     [
      %% External modules
      Modules ++ "/*/*.erl",
@@ -161,12 +161,10 @@ compile_user_dirs() ->
 
 compile_options() ->
     application:load(zotonic),
-    {ok, Sites} = application:get_env(zotonic, user_sites_dir),
-    {ok, Modules} = application:get_env(zotonic, user_modules_dir),
     [{i, filename:join(os:getenv("ZOTONIC"), "include")},
      {i, filename:join(os:getenv("ZOTONIC"), "deps/webzmachine/include")},
-     {i, Modules},
-     {i, Sites},
+     {i, user_modules_dir()},
+     {i, user_sites_dir()},
      {outdir, zotonic_ebin_dir()},
      {parse_transform, lager_transform},
      nowarn_deprecated_type,
@@ -187,6 +185,12 @@ platform_defines_r17up() ->
 
 zotonic_ebin_dir() ->
     "_build/default/lib/zotonic/ebin".
+
+user_modules_dir() ->
+    application:get_env(zotonic, user_modules_dir, "user/modules").
+
+user_sites_dir() ->
+    application:get_env(zotonic, user_sites_dir, "user/sites").
 
 %% @doc For a list of glob patterns, split all patterns which contain
 %% /*/* up in more patterns, so that we can parallelize it even more.

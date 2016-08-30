@@ -22,58 +22,49 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-    init/1,
-    service_available/2,
-    options/2,
-    resource_exists/2,
-    allowed_methods/2,
-    process_post/2,
-    is_authorized/2,
-    content_types_provided/2,
-    to_json/2,
+    service_available/1,
+    options/1,
+    resource_exists/1,
+    allowed_methods/1,
+    process_post/1,
+    is_authorized/1,
+    content_types_provided/1,
+    to_json/1,
     get_q_all/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(DispatchArgs) ->
-    {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    z_context:lager_md(Context1),
-    ReqData1 = set_cors_header(ReqData, Context1),
-    {true, ReqData1, Context1}.
+service_available(Context) ->
+    Context1 = set_cors_header(Context),
+    {true, Context1}.
 
 % Headers where already added in service_available/2
-options(ReqData, Context) ->
-    {[], ReqData, Context}.
+options(Context) ->
+    {[], Context}.
 
-allowed_methods(ReqData, Context) ->
-    Context0 = ?WM_REQ(ReqData, Context),
-    Context1 = z_context:ensure_qs(z_context:continue_session(Context0)),
+allowed_methods(Context) ->
+    Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
     z_context:lager_md(Context1),
-    Module = case z_context:get_q("module", Context1) of
+    Module = case z_context:get_q(<<"module">>, Context1) of
                  undefined -> z_convert:to_binary(z_context:get(module, Context1));
-                 Mod -> z_convert:to_binary(Mod)
+                 Mod -> Mod
              end,
-    Method = case z_context:get_q("method", Context1) of
+    Method = case z_context:get_q(<<"method">>, Context1) of
                  undefined ->
                      case z_convert:to_binary(z_context:get(method, Context1)) of
                          <<>> -> Module;
                          Mtd -> Mtd
                      end;
-                 Mtd -> z_convert:to_binary(Mtd)
+                 Mtd -> Mtd
              end,
     case ensure_existing_module(Module, Method, Context1) of
         {ok, ServiceModule} ->
             Context2 = z_context:set(service_module, ServiceModule, Context1),
-            {['OPTIONS' | z_service:http_methods(ServiceModule)], ReqData, Context2};
+            {[<<"OPTIONS">> | z_service:http_methods(ServiceModule)], Context2};
         {error, enoent} ->
             Context2 = z_context:set(service_module, undefined, Context1),
-            {['OPTIONS', 'GET', 'HEAD', 'POST'], ReqData, Context2}
+            {[<<"OPTIONS">>, <<"GET">>, <<"HEAD">>, <<"POST">>], Context2}
     end.
 
 ensure_existing_module(Module, Method, Context) ->
@@ -84,47 +75,45 @@ ensure_existing_module(Module, Method, Context) ->
             Error
     end.
 
-is_authorized(ReqData, Context) ->
+is_authorized(Context) ->
     %% Check if we are authorized via a regular session.
-    Context0 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_qs(z_context:continue_session(Context0)),
+    Context2 = z_context:ensure_qs(z_context:continue_session(Context)),
     Module = z_context:get(service_module, Context2),
     case z_service:needauth(Module) of
         false ->
-            {true, ReqData, Context2};
+            {true, Context2};
         true ->
             case z_auth:is_auth(Context2) of
                 true ->
-                    ?WM_REPLY(true, Context2);
+                    {true, Context2};
                 false ->
                     case z_notifier:first(#service_authorize{service_module=Module}, Context2) of
                         undefined ->
-                            api_error(500, 0, "No service authorization method available", [], ReqData, Context2);
+                            api_error(500, 0, "No service authorization method available", [], Context2);
                         Reply ->
                             Reply
                     end
             end
     end.
 
-resource_exists(ReqData, Context) ->
+resource_exists(Context) ->
     case z_context:get(service_module, Context) of
-		undefined -> {false, ReqData, Context};
-		_ServiceModule -> {true, ReqData, Context}
+		undefined -> {false, Context};
+		_ServiceModule -> {true, Context}
     end.
 
-content_types_provided(ReqData, Context) ->
-    {[{"application/json", to_json},
-      {"application/javascript", to_json},
-      {"text/javascript", to_json}
-     ], ReqData, Context}.
+content_types_provided(Context) ->
+    {[{<<"application/json">>, to_json},
+      {<<"application/javascript">>, to_json},
+      {<<"text/javascript">>, to_json}
+     ], Context}.
 
 
 %% @doc Called for 'GET' requests
-to_json(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+to_json(Context) ->
     Module = z_context:get(service_module, Context),
     try
-        case Module:process_get(ReqData, Context) of
+        case Module:process_get(Context) of
             {R, C=#context{}} -> api_result(R, C);
             R -> api_result(R, Context)
         end
@@ -134,24 +123,24 @@ to_json(ReqData, Context0) ->
         throw:{error, _, _, _} = R2 ->
             api_result(Context, R2);
         E:R3 ->
-            lager:error("controller_api error: ~p:~p - ~p", [E, R3, erlang:get_stacktrace()]),
+            StackTrace = erlang:get_stacktrace(),
+            lager:error("controller_api error: ~p:~p - ~p", [E, R3, StackTrace]),
             api_result(Context, {error, internal_server_error, []})
     end.
 
 
 
 %% @doc Called for 'POST' requests
-process_post(ReqData, Context0) ->
-    case handle_json_request(ReqData, Context0) of
+process_post(Context0) ->
+    case handle_json_request(Context0) of
         {error, _Reason, Context} ->
             api_result(Context, {error, syntax, "invalid JSON in request body"});
         {ok, Context1} ->
             Module = z_context:get(service_module, Context1),
-            ReqData1 = z_context:get_reqdata(Context1),
             try
-                case Module:process_post(ReqData1, Context1) of
+                case Module:process_post(Context1) of
                     ok ->
-                        {true, ReqData1, Context1};
+                        {true, Context1};
                     {Result, Context2=#context{}} ->
                         api_result(Result, Context2);
                     Result ->
@@ -176,7 +165,7 @@ process_post(ReqData, Context0) ->
 %%   {'Access-Control-Max-Age', undefined},
 %%   {'Access-Control-Allow-Methods', undefined},
 %%   {'Access-Control-Allow-Headers', undefined}]
-set_cors_header(ReqData, Context) ->
+set_cors_header(Context) ->
     case z_convert:to_bool(m_site:get(service_api_cors, Context)) of
         true ->
             lists:foldl(
@@ -187,24 +176,30 @@ set_cors_header(ReqData, Context) ->
                                     undefined ->
                                         Acc;
                                     _ ->
-                                        wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(Def), Acc)
+                                        z_context:set_resp_header(
+                                            z_convert:to_binary(K),
+                                            Def,
+                                            Acc)
                                 end;
                             V ->
-                                wrq:set_resp_header(z_convert:to_list(K), z_convert:to_list(V), Acc)
+                                z_context:set_resp_header(
+                                        z_convert:to_binary(K),
+                                        z_convert:to_binary(V),
+                                        Acc)
                         end
                     end,
-                    ReqData,
-                    [{'Access-Control-Allow-Origin', "*"},
+                    Context,
+                    [{'Access-Control-Allow-Origin', <<"*">>},
                      {'Access-Control-Allow-Credentials', undefined},
                      {'Access-Control-Max-Age', undefined},
                      {'Access-Control-Allow-Methods', undefined},
                      {'Access-Control-Allow-Headers', undefined}]);
         false ->
-            ReqData
+            Context
     end.
 
 
-api_error(HttpCode, ErrCode, Message, ErrData, ReqData, Context) ->
+api_error(HttpCode, ErrCode, Message, ErrData, Context) ->
     GeneralError = [{error, {struct, [{code, ErrCode}, {message, Message}]}}],
     CombinedError = case ErrData of
         [] -> GeneralError;
@@ -212,45 +207,43 @@ api_error(HttpCode, ErrCode, Message, ErrData, ReqData, Context) ->
         Data -> GeneralError ++ Data
     end,
     Body = mochijson2:encode({struct, CombinedError}),
-    {{halt, HttpCode}, wrq:set_resp_body(Body, ReqData), Context}.
+    {{halt, HttpCode}, cowmachine_req:set_resp_body(Body, Context)}.
 
 
+api_result({error, Err, Arg}, Context) ->
+    api_result({error, Err, Arg, []}, Context);
+api_result({error, Err, Arg, ErrData}, Context) when is_list(Arg) ->
+    api_result({error, Err, list_to_binary(Arg), ErrData}, Context);
+api_result({error, Err=missing_arg, Arg, ErrData}, Context) ->
+    api_error(400, Err, <<"Missing argument: ", Arg/binary>>, ErrData, Context);
+api_result({error, Err=unknown_arg, Arg, ErrData}, Context) ->
+    api_error(400, Err, <<"Unknown argument: ", Arg/binary>>, ErrData, Context);
+api_result({error, Err=syntax, Arg, ErrData}, Context) ->
+    api_error(400, Err, <<"Syntax error: ", Arg/binary>>, ErrData, Context);
+api_result({error, Err=unauthorized, _Arg, ErrData}, Context) ->
+    api_error(401, Err, <<"Unauthorized.">>, ErrData, Context);
+api_result({error, Err=not_exists, Arg, ErrData}, Context) ->
+    api_error(404, Err, <<"Resource does not exist: ", Arg/binary>>, ErrData, Context);
+api_result({error, Err=access_denied, _Arg, ErrData}, Context) ->
+    api_error(403, Err, <<"Access denied.">>, ErrData, Context);
+api_result({error, Err=unprocessable, Arg, ErrData}, Context) ->
+    api_error(422, Err, <<"Unprocessable entity: ", Arg/binary>>, ErrData, Context);
+api_result({error, Err, _Arg, ErrData}, Context) ->
+    api_error(500, Err, <<"Generic error.">>, ErrData, Context);
 api_result(Result, Context) ->
-    api_result(Result, z_context:get_reqdata(Context), Context).
-
-api_result({error, Err, Arg}, ReqData, Context) ->
-    api_result({error, Err, Arg, []}, ReqData, Context);
-api_result({error, Err, Arg, ErrData}, ReqData, Context) when is_list(Arg) ->
-    api_result({error, Err, list_to_binary(Arg), ErrData}, ReqData, Context);
-api_result({error, Err=missing_arg, Arg, ErrData}, ReqData, Context) ->
-    api_error(400, Err, <<"Missing argument: ", Arg/binary>>, ErrData, ReqData, Context);
-api_result({error, Err=unknown_arg, Arg, ErrData}, ReqData, Context) ->
-    api_error(400, Err, <<"Unknown argument: ", Arg/binary>>, ErrData, ReqData, Context);
-api_result({error, Err=syntax, Arg, ErrData}, ReqData, Context) ->
-    api_error(400, Err, <<"Syntax error: ", Arg/binary>>, ErrData, ReqData, Context);
-api_result({error, Err=unauthorized, _Arg, ErrData}, ReqData, Context) ->
-    api_error(401, Err, <<"Unauthorized.">>, ErrData, ReqData, Context);
-api_result({error, Err=not_exists, Arg, ErrData}, ReqData, Context) ->
-    api_error(404, Err, <<"Resource does not exist: ", Arg/binary>>, ErrData, ReqData, Context);
-api_result({error, Err=access_denied, _Arg, ErrData}, ReqData, Context) ->
-    api_error(403, Err, <<"Access denied.">>, ErrData, ReqData, Context);
-api_result({error, Err=unprocessable, Arg, ErrData}, ReqData, Context) ->
-    api_error(422, Err, <<"Unprocessable entity: ", Arg/binary>>, ErrData, ReqData, Context);
-api_result({error, Err, _Arg, ErrData}, ReqData, Context) ->
-    api_error(500, Err, <<"Generic error.">>, ErrData, ReqData, Context);
-api_result(Result, ReqData, Context) ->
     try
         JSON = result_to_json(Result),
         Body = case get_callback(Context) of
                    undefined -> JSON;
                    Callback -> [Callback, $(, JSON, $), $;]
                end,
-        {{halt, 200}, wrq:set_resp_body(Body, ReqData), Context}
+        {{halt, 200}, cowmachine_req:set_resp_body(Body, Context)}
     catch
         E:R ->
-            lager:error("controller_api error: ~p:~p - ~p", [E, R, erlang:get_stacktrace()]),
-            ReqData1 = wrq:set_resp_body("Internal JSON encoding error.\n", ReqData),
-            {{halt, 500}, ReqData1, Context}
+            StackTrace = erlang:get_stacktrace(),
+            lager:error("controller_api error: ~p:~p - ~p", [E, R, StackTrace]),
+            Context1 = cowmachine_req:set_resp_body(<<"Internal JSON encoding error.\n">>, Context),
+            {{halt, 500}, Context1}
     end.
 
 result_to_json(B) when is_binary(B) -> B;
@@ -259,20 +252,19 @@ result_to_json(R) -> iolist_to_binary(mochijson2:encode(R)).
 
 
 %% @doc Handle JSON request bodies.
--spec handle_json_request(#wm_reqdata{}, #context{}) -> {ok, #context{}} | {error, string()}.
-handle_json_request(ReqData, Context) ->
-    case wrq:get_req_header("content-type", ReqData) of
-        "application/json" ++ _ ->
-            decode_json_body(ReqData, Context);
+-spec handle_json_request(#context{}) -> {ok, #context{}} | {error, term(), #context{}}.
+handle_json_request(Context) ->
+    case z_context:get_req_header(<<"content-type">>, Context) of
+        <<"application/json", _/binary>> ->
+            decode_json_body(Context);
         _ ->
-            {ok, ?WM_REQ(ReqData, Context)}
+            {ok, Context}
     end.
 
 %% @doc Decode JSON request body.
--spec decode_json_body(#wm_reqdata{}, #context{}) -> {ok, #context{}} | {error, string()}.
-decode_json_body(ReqData0, Context0) ->
-    {ReqBody, ReqData} = wrq:req_body(ReqData0),
-    Context = ?WM_REQ(ReqData, Context0),
+-spec decode_json_body(#context{}) -> {ok, #context{}} | {error, term(), #context{}}.
+decode_json_body(Context0) ->
+    {ReqBody, Context} = cowmachine_req:req_body(Context0),
     case ReqBody of
         <<>> ->
             {ok, Context};
@@ -285,7 +277,7 @@ decode_json_body(ReqData0, Context0) ->
                         %% A JSON object: set key/value pairs in the context
                         Context1 = lists:foldl(
                             fun({Key, Value}, Context2) ->
-                                z_context:set_q(z_convert:to_list(Key), Value, Context2)
+                                z_context:set_q(Key, Value, Context2)
                             end,
                             Context,
                             JsonStruct
@@ -302,10 +294,10 @@ decode_json_body(ReqData0, Context0) ->
     end.
 
 get_callback(Context) ->
-    case z_context:get_q("callback", Context) of
+    case z_context:get_q(<<"callback">>, Context) of
         undefined ->
-            case z_context:get_q("jsonp", Context) of
-                undefined -> filter(z_context:get_q("jsoncallback", Context));
+            case z_context:get_q(<<"jsonp">>, Context) of
+                undefined -> filter(z_context:get_q(<<"jsoncallback">>, Context));
                 Callback -> filter(Callback)
             end;
         Callback ->
@@ -313,17 +305,19 @@ get_callback(Context) ->
     end.
 
 get_q_all(Context) ->
-    proplists:delete("module",
-    proplists:delete("method",
-    proplists:delete("jsoncallback",
-    proplists:delete("callback",
-    proplists:delete("jsonp",
+    proplists:delete(<<"module">>,
+    proplists:delete(<<"method">>,
+    proplists:delete(<<"jsoncallback">>,
+    proplists:delete(<<"callback">>,
+    proplists:delete(<<"jsonp">>,
         z_context:get_q_all_noz(Context)))))).
 
 filter(undefined) ->
     undefined;
-filter(F) ->
-    [ C || C <- F,      (C >= $0 andalso C =< $9)
+filter(F) when is_binary(F) ->
+    F1 = binary_to_list(F),
+    list_to_binary([
+       C || C <- F1,    (C >= $0 andalso C =< $9)
                  orelse (C >= $a andalso C =< $z)
                  orelse (C >= $A andalso C =< $Z)
                  orelse C =:= $_
@@ -331,4 +325,4 @@ filter(F) ->
                  orelse C =:= $[
                  orelse C =:= $]
                  orelse C =:= $$
-    ].
+    ]).

@@ -23,7 +23,7 @@ Make sure that these CSS files are loaded:
 #}
 <div id="z_logon_or_signup">
 {% with
-        1,
+        use_wire|if_undefined:1,
         logon_state|if_undefined:"logon",
         logon_context,
         logon_context|if_undefined:"",

@@ -21,58 +21,42 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    resource_exists/2,
-    previously_existed/2,
-    moved_temporarily/2,
-    content_types_provided/2,
-    see_other/2,
+    resource_exists/1,
+    previously_existed/1,
+    moved_temporarily/1,
+    content_types_provided/1,
+    see_other/1,
     get_rsc_content_types/2
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    z_context:lager_md(Context1),
-    ?WM_REPLY(true, Context1).
-
-resource_exists(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    {Id, ContextQs} = get_id(z_context:ensure_qs(z_context:continue_session(Context1))),
+resource_exists(Context) ->
+    {Id, ContextQs} = get_id(z_context:ensure_qs(z_context:continue_session(Context))),
     z_context:lager_md(ContextQs),
-    ?WM_REPLY(m_rsc:exists(Id, ContextQs), ContextQs).
+    {m_rsc:exists(Id, ContextQs), ContextQs}.
 
-previously_existed(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    {Id, Context2} = get_id(Context1),
-    IsGone = m_rsc_gone:is_gone(Id, Context2),
-    ?WM_REPLY(IsGone, Context2).
+previously_existed(Context) ->
+    {Id, Context2} = get_id(Context),
+    {m_rsc_gone:is_gone(Id, Context2), Context2}.
 
-moved_temporarily(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    {Id, Context2} = get_id(Context1),
+moved_temporarily(Context) ->
+    {Id, Context2} = get_id(Context),
     redirect(m_rsc_gone:get_new_location(Id, Context2), Context2).
 
 redirect(undefined, Context) ->
-    ?WM_REPLY(false, Context);
+    {false, Context};
 redirect(Location, Context) ->
-    ?WM_REPLY({true, Location}, Context).
+    {{true, Location}, Context}.
 
-content_types_provided(ReqData, Context) ->
+content_types_provided(Context) ->
     {CT,Context1} = get_content_types(Context),
     CT1 = [{Mime, see_other} || {Mime, _Dispatch} <- CT],
-    {CT1, ReqData, Context1}.
+    {CT1, Context1}.
 
-see_other(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Mime = wrq:resp_content_type(ReqData),
-    {CT,Context2} = get_content_types(Context1),
+see_other(Context) ->
+    Mime = cowmachine_req:resp_content_type(Context),
+    {CT,Context2} = get_content_types(Context),
     {Id, Context3} = get_id(Context2),
     {Location,Context4} = case proplists:get_value(Mime, CT) of
                             page_url ->
@@ -84,8 +68,8 @@ see_other(ReqData, Context) ->
                                 {z_dispatcher:url_for(Dispatch, [{id,Id}], Context3), Context3}
                           end,
     AbsUrl = z_context:abs_url(Location, Context4),
-    Context5 = z_context:set_resp_header("Location", AbsUrl, Context4),
-    ?WM_REPLY({halt, 303}, Context5).
+    Context5 = z_context:set_resp_header(<<"location">>, AbsUrl, Context4),
+    {{halt, 303}, Context5}.
 
 %% @doc Fetch the list of content types provided, together with their dispatch rule name.
 %% text/html is moved to the front of the list as that is the default mime type to be returned.
@@ -98,8 +82,8 @@ get_content_types(Context) ->
         undefined ->
             {Id, Context1} = get_id(Context),
             CT = get_rsc_content_types(Id, Context),
-            CT1 = case proplists:get_value("text/html", CT) of
-                    undefined -> [{"text/html", page_url}|CT];
+            CT1 = case proplists:get_value(<<"text/html">>, CT) of
+                    undefined -> [{<<"text/html">>, page_url}|CT];
                     Prov -> [Prov|CT]
                   end,
             Context2 = z_context:set(content_types_dispatch, CT1, Context1),
@@ -111,7 +95,7 @@ get_content_types(Context) ->
 get_id(Context) ->
     case z_context:get(id, Context) of
         undefined ->
-            case z_context:get_q("id", Context) of
+            case z_context:get_q(<<"id">>, Context) of
                 undefined ->
                     {undefined, Context};
                 [] ->

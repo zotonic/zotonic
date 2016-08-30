@@ -32,7 +32,7 @@ is_authorized(Context) ->
         undefined ->
             is_authorized_action(Context);
         ignore ->
-            ?WM_REPLY(true, Context);
+            {true, Context};
         is_auth ->
             case z_auth:is_auth(Context) of
                 true -> is_authorized_action(Context);
@@ -54,7 +54,7 @@ is_authorized(Context) ->
 %% @spec get_id(Context) -> int() | undefined
 get_id(Context) ->
     ReqId = case z_context:get(id, Context) of
-        undefined -> z_context:get_q("id", Context);
+        undefined -> z_context:get_q(<<"id">>, Context);
         ConfId -> ConfId
     end,
     case m_rsc:name_to_id(ReqId, Context) of

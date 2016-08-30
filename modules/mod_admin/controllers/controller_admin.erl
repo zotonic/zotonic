@@ -20,13 +20,13 @@
 -author("Tim Benniks <tim@timbenniks.com>").
 
 -export([
-	is_authorized/2
+	is_authorized/1
     ]).
 
 -include_lib("controller_html_helper.hrl").
 
-is_authorized(ReqData, Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin, ReqData, Context).
+is_authorized(Context) ->
+    z_admin_controller_helper:is_authorized(mod_admin, Context).
 
 html(Context) ->
     Template = z_context:get(template, Context, "admin.tpl"),

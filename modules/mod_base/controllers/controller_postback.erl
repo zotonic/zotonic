@@ -20,59 +20,54 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    allowed_methods/2,
-    content_types_provided/2,
-    process_post/2
+    service_available/1,
+    allowed_methods/1,
+    content_types_provided/1,
+    process_post/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:continue_session(z_context:set(DispatchArgs, Context)),
+service_available(Context) ->
+    Context1 = z_context:continue_session(Context),
     z_context:lager_md(Context1),
-    ?WM_REPLY(true, Context1).
+    {true, Context1}.
 
-allowed_methods(ReqData, Context) ->
-    {['POST'], ReqData, Context}.
+allowed_methods(Context) ->
+    {[<<"POST">>], Context}.
 
-content_types_provided(ReqData, Context) ->
+content_types_provided(Context) ->
     % The user-agent won't handle the result of non-ajax form posts.
     % Suppress text/x-ubf as that will give problems with Firefox (issue #1230)
-    case wrq:get_req_header_lc("content-type", ReqData) of
-        "multipart/form-data" ++ _ ->
-            {[{"text/plain", undefined}], ReqData, Context};
-        "application/x-www-form-urlencoded" ++ _ ->
-            {[{"text/plain", undefined}], ReqData, Context};
+    case z_context:get_req_header(<<"content-type">>, Context) of
+        <<"multipart/form-data", _/binary>> ->
+            {[{<<"text/plain">>, undefined}], Context};
+        <<"application/x-www-form-urlencoded", _/binary>> ->
+            {[{<<"text/plain">>, undefined}], Context};
         _ ->
-            {[{"text/x-ubf", undefined},
-              {"text/plain", undefined}], ReqData, Context}
+            {[{<<"text/x-ubf">>, undefined},
+              {<<"text/plain">>, undefined}], Context}
     end.
 
-process_post(ReqData, Context) ->
-    case wrq:get_req_header_lc("content-type", ReqData) of
-        "text/x-ubf" ++ _ ->
-            process_post_ubf(ReqData, Context);
-        "text/plain" ++ _ ->
-            process_post_ubf(ReqData, Context);
-        "application/x-www-form-urlencoded" ++ _ ->
-            process_post_form(ReqData, Context);
-        "multipart/form-data" ++ _ ->
-            process_post_form(ReqData, Context);
+process_post(Context) ->
+    case z_context:get_req_header(<<"content-type">>, Context) of
+        <<"text/x-ubf", _/binary>> ->
+            process_post_ubf(Context);
+        <<"text/plain", _/binary>> ->
+            process_post_ubf(Context);
+        <<"application/x-www-form-urlencoded", _/binary>> ->
+            process_post_form(Context);
+        <<"multipart/form-data", _/binary>> ->
+            process_post_form(Context);
         _ ->
-            {{halt, 415}, ReqData, Context}
+            {{halt, 415}, Context}
     end.
 
 %% @doc AJAX postback, the received data is UBF which can be directly decoded
 %% and handled by the z_transport:incoming/2 routines.
-process_post_ubf(ReqData, Context) ->
-    {Data,RD1} = wrq:req_body(ReqData),
-    Context1 = ?WM_REQ(RD1, Context),
+process_post_ubf(Context) ->
+    {Data, Context1} = cowmachine_req:req_body(Context),
     {ok, Term, _Rest} = z_transport:data_decode(Data),
     {ok, Rs, Context2} = z_transport:incoming(Term, Context1),
     Rs1 = case z_session_page:get_transport_msgs(Context2) of
@@ -86,17 +81,16 @@ mklist(L) when is_list(L) -> L;
 mklist(V) -> [V].
 
 %% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2
-process_post_form(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+process_post_form(Context) ->
     Context1 = z_context:ensure_qs(Context),
-    case z_context:get_q("z_msg", Context1) of
+    case z_context:get_q(<<"z_msg">>, Context1) of
         undefined ->
             % A "nornal" post of a form, no javascript involved
             Event = #submit{
-                        message = z_context:get_q("z_message", Context1),
-                        target = z_context:get_q("z_target_id", Context1)
+                        message = z_context:get_q(<<"z_message">>, Context1),
+                        target = z_context:get_q(<<"z_target_id">>, Context1)
                     },
-            Context2 = notify_submit(z_context:get_q("z_delegate", Context), Event, Context1),
+            Context2 = notify_submit(z_context:get_q(<<"z_delegate">>, Context), Event, Context1),
             {Script, Context3} = z_script:split(Context2),
             case Script of
                 <<>> ->  nop;
@@ -122,8 +116,6 @@ notify_submit(Delegate, Event, Context) ->
     {ok, Module} = z_utils:ensure_existing_module(Delegate),
     Module:event(Event, Context).
 
-
 post_return(Data, Context) ->
-    {x, RD, Context1} = ?WM_REPLY(x, Context),
-    RD1 = wrq:append_to_resp_body(Data, RD),
-    {true, RD1, Context1}.
+    Context1 = cowmachine_req:set_resp_body(Data, Context),
+    {true, Context1}.

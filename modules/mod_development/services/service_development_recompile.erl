@@ -23,12 +23,12 @@
 -svc_title("Remotely code reload / recompile and flush.").
 -svc_needauth(false).
 
--export([process_get/2]).
+-export([process_get/1]).
 
 -include_lib("zotonic.hrl").
 
 
-process_get(_ReqData, Context) ->
+process_get(Context) ->
     case z_convert:to_bool(m_config:get_value(mod_development, enable_api, Context)) of
         false ->
             "DISABLED";

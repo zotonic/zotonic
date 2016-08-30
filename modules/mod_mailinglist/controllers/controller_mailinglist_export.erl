@@ -21,51 +21,40 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-	init/1,
-	service_available/2,
-	forbidden/2,
-	allowed_methods/2,
-	charsets_provided/2,
-	content_types_provided/2,
+	forbidden/1,
+	allowed_methods/1,
+	charsets_provided/1,
+	content_types_provided/1,
 
-	to_text_csv/2
+	to_text_csv/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-forbidden(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
+forbidden(Context) ->
+    Context2 = z_context:ensure_all(Context),
     z_context:lager_md(Context2),
-	Id = z_convert:to_integer(z_context:get_q(id, Context2)),
-	Allowed = z_acl:rsc_editable(Id, Context2),
-	?WM_REPLY(not Allowed, Context2).
+	Id = m_rsc:rid(z_context:get_q(<<"id">>, Context2), Context2),
+	{not z_acl:rsc_editable(Id, Context2), Context2}.
 
-allowed_methods(ReqData, Context) ->
-    {['GET', 'HEAD'], ReqData, Context}.
+allowed_methods(Context) ->
+    {[<<"GET">>, <<"HEAD">>], Context}.
 
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-content_types_provided(ReqData, Context) ->
-    { [{"text/csv", to_text_csv}], ReqData, Context }.
+content_types_provided(Context) ->
+    { [{<<"text/csv">>, to_text_csv}], Context }.
 
-to_text_csv(ReqData, Context) ->
-	Context1 = ?WM_REQ(ReqData, Context),
-	Id = z_convert:to_integer(z_context:get_q(id, Context1)),
+to_text_csv(Context) ->
+	Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
 	%% Fetch all exported email addresses
-	Recipients = m_mailinglist:get_enabled_recipients(Id, Context1),
+	Recipients = m_mailinglist:get_enabled_recipients(Id, Context),
 	Export = z_utils:combine([13,10], Recipients),
 	%% Set the content disposition filename
-	Filename = "mailinglist-"++binary_to_list(z_string:to_slug(m_rsc:p(Id, title, Context1)))++".csv",
-	Context2 = z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename, Context1),
-	?WM_REPLY(Export, Context2).
+	Filename = <<"mailinglist-", (z_string:to_slug(m_rsc:p(Id, title, Context)))/binary, ".csv">>,
+	Context1 = z_context:set_resp_header(
+                <<"content-disposition">>,
+                <<"attachment; filename=", Filename/binary>>,
+                Context),
+	{Export, Context1}.

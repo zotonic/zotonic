@@ -28,13 +28,13 @@ or::
 
 The first example will call::
 
-    z_notifier:first(#submit{message="mymessage"}, Context).
+    z_notifier:first(#submit{message = <<"mymessage">>}, Context).
 
 The second example will call the mentioned module directly::
 
-    MyModule:event(#submit{message="mymessage"}, Context).
+    MyModule:event(#submit{message = <<"mymessage">>}, Context).
 
-All posted query arguments are available via the usual ``z_context:get_q("arg", Context)`` calls.
+All posted query arguments are available via the usual ``z_context:get_q(<<"arg">>, Context)`` calls.
 
 Actions and other generated javascript can only returned to the browser if the ``z_page_id`` was included in the post.
 Body content and headers can be set in the *Context* and will be sent back to the browser.

@@ -263,7 +263,7 @@ generate_preview(false, _Mime, _Path, _OriginalFile, _Filters, _Medium, _Context
 % 1. Find correct error image
 % 2. Redo the resize with the error image as input
 convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
-    case z_module_indexer:find(lib, "images/placeholder.png", Context) of
+    case z_module_indexer:find(lib, <<"images/placeholder.png">>, Context) of
         {ok, #module_index{filepath=Path}} ->
             case z_media_preview:convert(z_convert:to_list(Path), Path, z_convert:to_list(PreviewFilePath), Filters, Context) of
                 ok ->
@@ -307,6 +307,7 @@ make_abs(Path, Context) -> z_path:files_subdir(Path, Context).
 safe_path(<<$/, P/binary>>) ->
     safe_path(P);
 safe_path(P) ->
+    % TODO: replace with binary version
     PS = z_convert:to_list(P),
     case mochiweb_util:safe_relative_path(PS) of
         undefined ->

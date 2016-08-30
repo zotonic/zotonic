@@ -51,7 +51,7 @@
         length :: integer(),
         percentage = 0 :: pos_integer(),
         buffer :: binary(),
-        next_chunk :: done | function(),
+        next_chunk :: more | ok,
         form = #multipart_form{},
         z_msg = undefined :: #z_msg_v1{},
         context :: #context{}
@@ -74,15 +74,13 @@ recv_parse(Context) ->
 
 %% @doc Parse the multipart request
 parse_multipart_request(Context) ->
-    ReqData  = z_context:get_reqdata(Context),
-    Length   = list_to_integer(wrq:get_req_header_lc("content-length", ReqData)),
-    Boundary = iolist_to_binary(get_boundary(wrq:get_req_header_lc("content-type", ReqData))),
+    Length = binary_to_integer(cowmachine_req:get_req_header(<<"content-length">>, Context)),
+    Boundary = get_boundary(cowmachine_req:get_req_header(<<"content-type">>, Context)),
     Prefix = <<"\r\n--", Boundary/binary>>,
     BS = size(Boundary),
-    {{Chunk, Next}, ReqData1} = wrq:stream_req_body(ReqData, ?CHUNKSIZE),
+    {Next, Chunk, Context1} = cowmachine_req:stream_req_body(?CHUNKSIZE, Context),
     case Chunk of
         <<"--", Boundary:BS/binary, "\r\n", Rest/binary>> ->
-            Context1 = z_context:set_reqdata(ReqData1, Context),
             feed_mp(headers, #mp{boundary=Prefix,
                                  length=size(Chunk),
                                  content_length=Length,
@@ -160,14 +158,14 @@ feed_maybe_eof(#mp{} = State) ->
 
 maybe_z_msg_context(#mp{
             z_msg=undefined,
-            form=#multipart_form{args=[{"z_msg",Data}|RestArgs]} = Form,
+            form=#multipart_form{args=[{<<"z_msg">>,Data}|RestArgs]} = Form,
             context=#context{page_pid=undefined} = Context
         } = State) ->
     {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
     #z_msg_v1{page_id=PageId, session_id=SessionId} = ZMsg,
     Context1 = z_transport:maybe_logon(
                     z_transport:maybe_set_sessions(SessionId, PageId, Context)),
-    Form1 = Form#multipart_form{args=[{"z_msg", ZMsg}|RestArgs]},
+    Form1 = Form#multipart_form{args=[{<<"z_msg">>, ZMsg}|RestArgs]},
     State#mp{z_msg=ZMsg, form=Form1, context=Context1};
 maybe_z_msg_context(#mp{} = State) ->
     State.
@@ -202,24 +200,31 @@ is_push_attached(Context) ->
 -spec handle_data({headers, list()}|{body,binary()}|body_end|eof, #multipart_form{}) -> #multipart_form{}.
 handle_data({headers, Headers}, Form) ->
     % Find out if it is a file
-    ContentDisposition = proplists:get_value("content-disposition", Headers),
+    ContentDisposition = proplists:get_value(<<"content-disposition">>, Headers),
     case ContentDisposition of
-        {"form-data", [{"name", Name}, {"filename",Filename}]} ->
-            ContentLength = case proplists:get_value("content-length", Headers) of
-                                undefined -> undefined;
-                                {CL,_} -> z_convert:to_integer(CL)
-                            end,
-            ContentType = case proplists:get_value("content-type", Headers) of
-                                undefined -> undefined;
-                                {Mime,_} -> Mime
-                          end,
-            Form#multipart_form{name=Name,
-                                filename=Filename,
-                                content_length=ContentLength,
-                                content_type=ContentType,
-                                tmpfile=z_tempfile:new()};
-        {"form-data",[{"name",Name}]} ->
-            Form#multipart_form{name=Name, data= <<>>};
+        {<<"form-data">>, Opts} ->
+            Name = proplists:get_value(<<"name">>, Opts),
+            Filename = proplists:get_value(<<"filename">>, Opts),
+            case {Name, Filename} of
+                {undefined, undefined} ->
+                    Form;
+                {Name, undefined} ->
+                    Form#multipart_form{name=Name, data= <<>>};
+                {Name, Filename} ->
+                    ContentLength = case proplists:get_value(<<"content-length">>, Headers) of
+                                        undefined -> undefined;
+                                        CL when is_integer(CL) -> CL
+                                    end,
+                    ContentType = case proplists:get_value(<<"content-type">>, Headers) of
+                                        undefined -> undefined;
+                                        {MimeA, MimeB, _Opts} -> <<MimeA/binary, $/, MimeB/binary>>
+                                  end,
+                    Form#multipart_form{name=Name,
+                                        filename=Filename,
+                                        content_length=ContentLength,
+                                        content_type=ContentType,
+                                        tmpfile=z_tempfile:new()}
+            end;
         _ ->
             Form
     end;
@@ -273,15 +278,15 @@ handle_data(eof, Form) ->
 
 %% @doc Read more data for the feed_mp functions.
 -spec read_more(#mp{}) -> #mp{}.
-read_more(State=#mp{next_chunk=done, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length ->
+read_more(State=#mp{next_chunk=ok, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length ->
     State;
-read_more(State=#mp{next_chunk=done, context=Context} = State) ->
+read_more(State=#mp{next_chunk=ok, context=Context} = State) ->
     lager:info(z_context:lager_md(Context), "Multipart post with wrong content length"),
     throw({error, wrong_content_length});
 read_more(State=#mp{length=Length, content_length=ContentLength,
                 percentage=Percentage,
-                buffer=Buffer, next_chunk=Next, context=Context}) ->
-    {Data, Next1} = Next(),
+                buffer=Buffer, next_chunk=more, context=Context}) ->
+    {Next1, Data, Context1} = cowmachine_req:stream_req_body(?CHUNKSIZE, Context),
     Buffer1 = <<Buffer/binary, Data/binary>>,
     Length1 = Length + size(Data),
     NewPercentage = case ContentLength of
@@ -289,10 +294,10 @@ read_more(State=#mp{length=Length, content_length=ContentLength,
                         _ -> (Length1 * 100) div ContentLength
                     end,
     case NewPercentage > Percentage of
-        true -> progress(NewPercentage, ContentLength, undefined, Context);
+        true -> progress(NewPercentage, ContentLength, undefined, Context1);
         _ -> nop
     end,
-    State#mp{length=Length1, buffer=Buffer1, next_chunk=Next1, percentage=NewPercentage}.
+    State#mp{length=Length1, buffer=Buffer1, next_chunk=Next1, percentage=NewPercentage, context=Context1}.
 
 
 %% @doc Parse the headers of a part in the form data
@@ -311,17 +316,22 @@ parse_headers(Binary, Acc) ->
     end.
 
 split_header(Line) ->
-    {Name, [$: | Value]} = lists:splitwith(fun (C) -> C =/= $: end, binary_to_list(Line)),
-    {string:to_lower(string:strip(Name)), mochiweb_util:parse_header(Value)}.
+    [Name,Value] = binary:split(Line, <<":">>),
+    Name1 = z_string:to_lower(z_string:trim(Name)),
+    {Name1, parse_header(Name1, z_string:trim(Value))}.
 
+parse_header(<<"content-length">>, Value) ->
+    cow_http_hd:parse_content_length(Value);
+parse_header(<<"content-type">>, Value) ->
+    cow_http_hd:parse_content_type(Value);
+parse_header(_Name, Value) ->
+    cowmachine_util:parse_header(Value).
 
 %% @doc Get the request boundary separating the parts in the request body
 get_boundary(ContentType) ->
-    {"multipart/form-data", Opts} = mochiweb_util:parse_header(ContentType),
-    case proplists:get_value("boundary", Opts) of
-        S when is_list(S) ->
-            S
-    end.
+    {<<"multipart">>, <<"form-data">>, Opts} = cow_http_hd:parse_content_type(ContentType),
+    {<<"boundary">>, Boundary} = proplists:lookup(<<"boundary">>, Opts),
+    Boundary.
 
 %% @doc Find the next boundary in the data
 find_boundary(Prefix, Data) ->
@@ -349,8 +359,6 @@ find_boundary(Prefix, Data) ->
         _ ->
             not_found
     end.
-
-
 
 find_in_binary(B, Data) when size(B) > 0 ->
     case size(Data) - size(B) of

@@ -24,18 +24,16 @@
 -svc_title("Upload media items.").
 -svc_needauth(true).
 
--export([process_post/2]).
+-export([process_post/1]).
 
 -include_lib("zotonic.hrl").
 
-process_post(_ReqData, Context) ->
-    Upload = #upload{} = z_context:get_q("file", Context),
-
-    Props
-        = lists:flatten(
+process_post(Context) ->
+    Upload = #upload{} = z_context:get_q(<<"file">>, Context),
+    Props = lists:flatten(
             lists:map(
               fun(Prop) ->
-                      Value = z_context:get_q(atom_to_list(Prop), Context, <<>>),
+                      Value = z_context:get_q(Prop, Context, <<>>),
                       case z_utils:is_empty(Value) of
                           false -> [{Prop, Value}];
                           true -> []

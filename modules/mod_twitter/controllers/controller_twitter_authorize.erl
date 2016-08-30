@@ -21,50 +21,50 @@
 -module(controller_twitter_authorize).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--export([init/1, service_available/2, charsets_provided/2, content_types_provided/2]).
--export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
+-export([
+    service_available/1,
+    charsets_provided/1,
+    content_types_provided/1,
+    resource_exists/1,
+    previously_existed/1,
+    moved_temporarily/1
+]).
 -export([get_args/1]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:ensure_all(Context1),
+service_available(Context) ->
+    Context2 = z_context:ensure_all(Context),
     z_context:lager_md(Context2),
-    ?WM_REPLY(true, Context2).
+    {true, Context2}.
 
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-content_types_provided(ReqData, Context) ->
-    {[{"text/html", provide_content}], ReqData, Context}.
+content_types_provided(Context) ->
+    {[{<<"text/html">>, provide_content}], Context}.
 
-resource_exists(ReqData, Context) ->
-    {false, ReqData, Context}.
+resource_exists(Context) ->
+    {false, Context}.
 
-previously_existed(ReqData, Context) ->
-    {true, ReqData, Context}.
+previously_existed(Context) ->
+    {true, Context}.
 
-moved_temporarily(ReqData, Context) ->
+moved_temporarily(Context) ->
     %% @todo add the redirect page parameter of the logon page to the redirect url
-    Context1 = z_context:ensure_all(?WM_REQ(ReqData, Context)),
-    {ok, {Token, Secret}} = oauth_twitter_client:get_request_token(Context1),
-    Lang = z_convert:to_list(z_context:get_q("lang", Context1, z_context:language(Context1))),
+    {ok, {Token, Secret}} = oauth_twitter_client:get_request_token(Context),
     z_context:set_session(twitter_request_token, {Token, Secret}, Context),
-
     RedirectUrl = z_context:abs_url(
-                            z_dispatcher:url_for(twitter_redirect, Context1),
-                            Context1),
-    Location = oauth_twitter_client:authorize_url(Token)
-        ++ "&oauth_callback=" ++ z_convert:to_list(z_utils:url_encode(RedirectUrl))
-        ++ "&lang=" ++ Lang,
-
-    save_args(Context1),
-    ?WM_REPLY({true, Location}, Context1).
+                            z_dispatcher:url_for(twitter_redirect, Context),
+                            Context),
+    Lang = z_context:get_q(<<"lang">>, z_context:language(Context)),
+    Location = iolist_to_binary([
+        oauth_twitter_client:authorize_url(Token),
+        "&oauth_callback=", z_utils:url_encode(RedirectUrl),
+        "&lang=", Lang
+    ]),
+    save_args(Context),
+    {{true, Location}, Context}.
 
 save_args(Context) ->
     z_context:set_session(?MODULE, z_context:get_q_all_noz(Context), Context).

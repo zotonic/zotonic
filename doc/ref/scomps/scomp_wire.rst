@@ -31,9 +31,9 @@ Wire can post an event back to the server. Use for this the “postback” argum
 
 When the button is clicked the event function of the page controller will be called as::
 
-   event({postback, Postback, TriggerId, TargetId}, Context).
+   event(#postback{message=Postback, trigger=TriggerId, target=TargetId}, Context).
 
-Where “Postback” will be ``{hello, [{world,"round"}]}`` and both “TriggerId” and “TargetId” will be "mybutton".
+Where “Postback” will be ``{hello, [{world,<<"round">>}]}`` and both “TriggerId” and “TargetId” will be ``<<"mybutton">>``.
 
 
 Wire form submit events
@@ -55,13 +55,13 @@ The wire tag redirects the submit of the form to the event routine of the contro
 
 The event routine will be called as::
 
-   event({submit, Tag, FormId, TargetId}, Context).
+   event(#submit{message=Tag, form=FormId, target=TargetId}, Context).
 
 Where Tag will be the postback set by the wire tag (in the example the atom ``some_tag``) and FormId and TargetId are both the HTML id of the submitted form.  The posted input fields can be fetched using ``z_context:get_q/2``, ``z_context:get_q_all/1`` or ``z_context:get_q_validated/2``.
 
 ::
 
-   Title = z_context:get_q("title", Context),
+   Title = z_context:get_q(<<"title">>, Context),
    AllArgs = z_context:get_q_all(Context);
 
 There are some extra arguments added to every form post:
@@ -69,9 +69,9 @@ There are some extra arguments added to every form post:
 +---------------+------------------------------------------------------------+-----------------------+
 |Post argument  |Description                                                 |Example                |
 +===============+============================================================+=======================+
-|z_trigger_id   |Id of the HTML element that triggered the submit.           |"mybutton"             |
+|z_trigger_id   |Id of the HTML element that triggered the submit.           |<<"mybutton" >>        |
 +---------------+------------------------------------------------------------+-----------------------+
-|z_pageid       |Id of the page in the browser, used to connect comet and    |"1uTsbzIsWqmdPmNopF32" |
+|z_pageid       |Id of the page in the browser, used to connect comet and    |<<"1uTsbzIsWqmPpF32">> |
 |               |other communictation between the browser and the server.    |                       |
 +---------------+------------------------------------------------------------+-----------------------+
 |postback       |Signed postback set by the wire tag. Handled internally.    |                       |

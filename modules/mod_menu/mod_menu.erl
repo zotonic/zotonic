@@ -61,9 +61,9 @@ init(Context) ->
     end.
 
 
-event(#postback_notify{message="menuedit", trigger=TriggerId}, Context) ->
+event(#postback_notify{message= <<"menuedit">>, trigger=TriggerId}, Context) ->
     {Kind, RootId, Predicate} = get_kind_root(TriggerId),
-    Tree = unpack(z_context:get_q("tree", Context)),
+    Tree = unpack(z_context:get_q(<<"tree">>, Context)),
     {Tree1, Context1} = create_new(Tree, Context),
     case Kind of
         category ->

@@ -21,9 +21,7 @@
 -svc_title("Test 1: JSON serialization.").
 -svc_needauth(false).
 
--export([process_get/2]).
+-export([process_get/1]).
 
-process_get(_ReqData, _Context) ->
-%    jiffy:encode({[{<<"message">>, <<"Hello, world">>}]}).
-
+process_get(_Context) ->
     {struct, [{message, <<"Hello, World!">>}]}.

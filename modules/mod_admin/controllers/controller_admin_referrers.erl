@@ -19,38 +19,34 @@
 -module(controller_admin_referrers).
 -author("Marc Worrell <marc@worrell.nl").
 
--export([resource_exists/2,
-         previously_existed/2,
-         moved_temporarily/2,
-         is_authorized/2
+-export([resource_exists/1,
+         previously_existed/1,
+         moved_temporarily/1,
+         is_authorized/1
         ]).
 
 -include_lib("controller_html_helper.hrl").
 
-is_authorized(ReqData, Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin, ReqData, Context).
+is_authorized(Context) ->
+    z_admin_controller_helper:is_authorized(mod_admin, Context).
 
-resource_exists(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Id = m_rsc:rid(z_context:get_q("id", Context1), Context1),
-    Context2 = z_context:set(id, Id, Context1),
-    ?WM_REPLY(m_rsc:exists(Id, Context2), Context2).
+resource_exists(Context) ->
+    Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
+    Context2 = z_context:set(id, Id, Context),
+    {m_rsc:exists(Id, Context2), Context2}.
 
-previously_existed(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Id = z_context:get(id, Context1),
-    IsGone = m_rsc_gone:is_gone(Id, Context1),
-    ?WM_REPLY(IsGone, Context1).
+previously_existed(Context) ->
+    Id = z_context:get(id, Context),
+    {m_rsc_gone:is_gone(Id, Context), Context}.
 
-moved_temporarily(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Id = z_context:get(id, Context1),
-    redirect(m_rsc_gone:get_new_location(Id, Context1), Context1).
+moved_temporarily(Context) ->
+    Id = z_context:get(id, Context),
+    redirect(m_rsc_gone:get_new_location(Id, Context), Context).
 
 redirect(undefined, Context) ->
-    ?WM_REPLY(false, Context);
+    {false, Context};
 redirect(Location, Context) ->
-    ?WM_REPLY({true, Location}, Context).
+    {{true, Location}, Context}.
 
 html(Context) ->
     Vars = [
