@@ -288,8 +288,9 @@ merge(WinnerId, LooserId, Context) ->
     end.
 
 %% @doc Duplicate the media item from the id to the new-id. Called by m_rsc:duplicate/3
+-spec duplicate(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok.
 duplicate(FromId, ToId, Context) ->
-    case z_db:assoc_props_row("select * from medium where id = $1", [FromId], Context) of
+    case z_db:assoc_props_row("select * from medium where id = $1", [m_rsc:rid(FromId, Context)], Context) of
         Ms when is_list(Ms) ->
             {ok, Ms1} = maybe_duplicate_file(Ms, Context),
             {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),

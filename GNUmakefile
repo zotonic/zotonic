@@ -54,6 +54,8 @@ clean_logs:
 .PHONY: clean
 clean: clean_logs $(REBAR)
 	@echo "cleaning ebin:"
+	# There could be an ebin directory left by a previous 0.x branch compilation
+	rm -rf ebin
 	$(REBAR) $(REBAR_OPTS) clean
 
 .PHONY: dist-clean

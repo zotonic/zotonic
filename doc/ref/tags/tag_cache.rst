@@ -1,3 +1,4 @@
+.. highlight:: django
 .. index:: tag; cache
 .. _tag-cache:
 

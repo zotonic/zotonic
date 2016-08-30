@@ -3,35 +3,51 @@
 Forms and validation
 ====================
 
-Validators for HTML form fields.
+You `should validate all input data entered in forms`_. In Zotonic you create
+forms by writing plain HTML. You can attach one or more validators to each input
+element. Validators define acceptable values for the input data.
 
-Validators check if form fields have an acceptable value. They check
-*both client side and server side* if the input fields are valid.
-
-Validators check the input element with JavaScript and prevent posting the form
-unless the validation is passed. All validations are also done on the server.
-This prevents people bypassing the validation checks in their browser. When the
-validation does not pass on the server side then the post will fail.
-
-Validated form fields are available to Erlang code using the ``z_context:get_q_validated/2`` function.
-
-When an input field has been verified then it is available to Erlang
-programs via the function ``z_context:get_q_validated/2``.
-
-To check if two fields are equal:
+Let’s say you have a required input field ‘title’. To make sure some text is
+entered in it, attach the :ref:`validator-presence` validator:
 
 .. code-block:: django
 
-    <input type="password" id="password" name="password" value="" />
-    <input type="password" id="password2" name="password2" value="" />
-    {% validate id="password" type={confirmation match="password2"} %}
+    <input type="text" id="title" name="title" />
+    {% validate id="title" type={presence} %}
 
-The password field is now available to the Erlang code with::
+The validated form field is available to Erlang code using the
+``z_context:get_q_validated/2`` function::
 
-   Password = z_context:get_q_validated("password", Context).
+    Title = z_context:get_q_validated("title", Context).
+
+Client- and server-side
+-----------------------
+
+Zotonic’s validators work both client- and server-side:
+
+* JavaScript prevents the form from being submitted until the input data
+  conforms to the validators.
+* All validation is done on the server as well, which protects against users
+  bypassing the validation checks in their browser.
+
+Validators
+----------
+
+Zotonic comes with some commonly needed validators:
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   ../ref/validators/validator_*
+
+If you need to implement custom validation logic, use the
+:ref:`validator-postback` validator. For JavaScript-only custom validation, use
+the :ref:`validator-custom` validator.
 
 .. seealso::
 
-    * listing of :ref:`all validators <validators>`
-    * the :ref:`scomp-validate` tag.
+    * the :ref:`scomp-validate` tag
+    * the :ref:`validator-postback` validator
 
+.. _should validate all input data entered in forms: https://www.owasp.org/index.php/Data_Validation

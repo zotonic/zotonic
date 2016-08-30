@@ -9,12 +9,14 @@ For example when a title must be entered::
    <input type="text" id="title" name="title" value="" />
    {% validate id="title" type={presence} %}
 
-Extra arguments:
+Arguments
+---------
 
 ===============  ========================================  =======
 Argument         Description                               Example
 ===============  ========================================  =======
 failure_message  Message to be shown when field is empty.
-                 Defaults to "*"                           failure_message="Please enter."
+                 Defaults to "*"                           ``failure_message="Please enter."``
 ===============  ========================================  =======
 
+.. seealso:: :ref:`guide-validators`

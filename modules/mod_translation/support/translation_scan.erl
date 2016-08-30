@@ -24,6 +24,8 @@
 -include_lib("zotonic.hrl").
 
 
+-export([parse_erl/2]).
+
 scan(Context) ->
     AllModules = z_module_manager:scan(Context),
     Active = z_module_manager:active(Context),
@@ -48,6 +50,7 @@ dedupl(Trans) ->
 
 insert([], Dict) ->
     Dict;
+
 insert([{Text, Args, Loc}|Trans], Dict) ->
     case dict:find(Text, Dict) of
         {ok, {_Text, Args0, Loc0}} ->
@@ -69,16 +72,34 @@ merge_args([{Lang,Text}|Rest], Args) ->
 
 %% @doc Parse the template or Erlang module. Extract all translation tags.
 scan_file(<<".tpl">>, File) ->
-    template_compiler:translations(File);
+    scan_file(".tpl", File); 
+scan_file(".tpl", File) ->
+    case template_compiler:translations(File) of
+        {ok, Translations} -> normalize_line_info(Translations);
+        {error, Reason} ->
+          lager:error("POT generation, erlang error in ~p: ~p~n", [File, Reason])
+    end;
+    
 scan_file(<<".erl">>, File) ->
+    scan_file(".erl", File);
+scan_file(".erl", File) ->
     case epp:open(File, [z_utils:lib_dir(include)]) of
         {ok, Epp} ->
             parse_erl(File, Epp);
         {error, Reason} ->
             lager:error("POT generation, erlang error in ~p: ~p~n", [File, Reason]),
             []
-    end.
+    end;
+scan_file(_, _) ->
+  [].
 
+normalize_line_info(Translations) ->
+    normalize_line_info(Translations, []).
+  
+normalize_line_info([], Acc) ->
+    lists:reverse(Acc);
+normalize_line_info([{Text, Args, {Filename, LineNr, _ColumnNr}}|Translations], Acc) ->
+    normalize_line_info(Translations, [{Text, Args, {Filename, LineNr}}|Acc]).
 
 %% Scan binary for erlang ?__(..., Context) syntax with either a binary or a string as first arg.
 parse_erl(File, Epp) ->

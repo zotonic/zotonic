@@ -1,10 +1,10 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ App Keys &amp; Authentication Services _}{% endblock %}
+{% block title %}{_ External Services _}{% endblock %}
 
 {% block content %}
 <div class="admin-header">
-    <h2>{_ App Keys &amp; Authentication Services _}</h2>
+    <h2>{_ External Services _}</h2>
 
     {% if not m.acl.use.mod_admin_config %}
         <p class="alert alert-danger">

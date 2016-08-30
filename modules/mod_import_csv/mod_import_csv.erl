@@ -25,9 +25,10 @@
 
 %% interface functions
 -export([
-	observe_dropbox_file/2,
-	can_handle/3,
-	event/2,
+    observe_dropbox_file/2,
+    observe_admin_menu/3,
+    can_handle/3,
+    event/2,
     inspect_file/1,
     manage_schema/2
 ]).
@@ -39,6 +40,7 @@
 
 -include_lib("zotonic.hrl").
 -include_lib("include/import_csv.hrl").
+-include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 %% @doc Handle a dropbox file when it is a tsv/csv file we know.
 observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
@@ -58,6 +60,23 @@ observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
             undefined
     end.
 
+%% @doc Add menu item to 'Content' admin menu
+-spec observe_admin_menu(atom(), list(), #context{}) -> list().
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+        #menu_separator{
+            parent = admin_content,
+            visiblecheck = {acl, use, mod_import_csv}
+        },
+        #menu_item{
+            id = admin_import,
+            parent = admin_content,
+            label = ?__("Import content", Context),
+            url = {admin_import},
+            visiblecheck = {acl, use, mod_import_csv}
+        }|
+        Acc
+    ].
 
 %% @doc Uploading a CSV file through the web interface.
 event(#submit{message={csv_upload, []}}, Context) ->
