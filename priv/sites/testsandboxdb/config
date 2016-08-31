@@ -19,7 +19,12 @@
     {modules, [
         testsandboxdb,
         mod_base,
+        mod_menu,
+        mod_content_groups,
+        mod_mqtt,
+        mod_acl_user_groups,
         mod_authentication,
-        mod_admin
+        mod_admin,
+        mod_admin_identity
     ]}
 ].

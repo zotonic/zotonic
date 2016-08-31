@@ -364,9 +364,9 @@ check_username_pw("admin", Password, Context) ->
             {error, password}
     end;
 check_username_pw(Username, Password, Context) ->
-    Username1 = ?DEBUG(z_string:trim(z_string:to_lower(Username))),
+    Username1 = z_string:trim(z_string:to_lower(Username)),
     Row = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", [Username1], Context),
-    case ?DEBUG(Row) of
+    case Row of
         undefined ->
             % If the Username looks like an e-mail address, try by Email & Password
             case z_email_utils:is_email(Username) of
@@ -561,10 +561,6 @@ get_rsc(Id, Type, Context) ->
 hash(Pw) ->
     {bcrypt, erlpass:hash(Pw)}.
 
-
-%% @doc Hash a password, with bcrypt
-%% @spec bcrypt_hash(Password) -> tuple
-
 %% @doc Compare if a password is the same as a hash.
 -spec hash_is_equal(password(), hash()) -> boolean().
 hash_is_equal(Pw, {bcrypt, Hash}) ->
@@ -577,9 +573,9 @@ hash_is_equal(_, _) ->
 
 
 %% @doc Check if the password hash needs to be rehashed.
-%% @spec needs_rehash(Hash) -> bool()
+-spec needs_rehash(hash()) -> boolean().
 needs_rehash({bcrypt, _}) ->
-   false;
+    false;
 needs_rehash({hash, _, _}) -> 
     true.
 

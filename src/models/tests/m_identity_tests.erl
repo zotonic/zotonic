@@ -48,9 +48,6 @@ check_username_password_test() ->
 
     MrYId = ensure_new_user("mr_y", "secret", AdminC),
 
-    ?DEBUG(z_db:q("select * from identity where type = 'username_pw'", AdminC)),
-    ?DEBUG(z_db:q("select * from identity where type = 'username_pw'", C)),
-
     ?assertEqual({ok, MrYId}, m_identity:check_username_pw("mr_y", "secret", C)),
     ?assertEqual({error, password}, m_identity:check_username_pw("mr_y", "wrong-secret", C)),
 
