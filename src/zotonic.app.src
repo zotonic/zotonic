@@ -21,6 +21,7 @@
                   poolboy, sendfile,
                   filezcache, s3filez,
                   template_compiler,
-                  qdate, syslog
+                  qdate, syslog,
+                  bcrypt, erlpass
   ]}
  ]}.
