@@ -44,6 +44,8 @@ check_password_no_user_test() ->
 
 check_username_password_test() ->
     C = z_context:new(testsandboxdb),
+    start_modules(C),
+
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
 
     MrYId = ensure_new_user("mr_y", "secret", AdminC),
@@ -77,6 +79,13 @@ check_username_password_test() ->
     ?assertEqual({ok, MrYId}, m_identity:check_username_pw("mr_y", "secret", C)),
 
     ok.
+
+start_modules(Context) ->
+    ok = z_module_manager:activate_await(mod_menu, Context),
+    ok = z_module_manager:activate_await(mod_content_groups, Context),
+    ok = z_module_manager:activate_await(mod_acl_user_groups, Context),
+    ok = z_module_manager:activate_await(mod_admin, Context),
+    ok = z_module_manager:activate_await(mod_admin_identity, Context).
 
     
 %% Old hash algorithm copied from m_identity before the change to bcrypt.
