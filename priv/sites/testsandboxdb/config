@@ -18,6 +18,8 @@
 
     {modules, [
         testsandboxdb,
-        mod_base
+        mod_base,
+        mod_authentication,
+        mod_admin
     ]}
 ].

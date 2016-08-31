@@ -81,9 +81,8 @@ check_username_password_test() ->
     ok.
 
 start_modules(Context) ->
-    ok = z_module_manager:activate_await(mod_menu, Context),
-    ok = z_module_manager:activate_await(mod_content_groups, Context),
-    ok = z_module_manager:activate_await(mod_acl_user_groups, Context),
+    ok = z_module_manager:activate_await(mod_acl_mock, Context),
+    ok = z_module_manager:activate_await(mod_authentication, Context),
     ok = z_module_manager:activate_await(mod_admin, Context),
     ok = z_module_manager:activate_await(mod_admin_identity, Context).
 
