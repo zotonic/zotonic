@@ -364,9 +364,9 @@ check_username_pw("admin", Password, Context) ->
             {error, password}
     end;
 check_username_pw(Username, Password, Context) ->
-    Username1 = z_string:trim(z_string:to_lower(Username)),
+    Username1 = ?DEBUG(z_string:trim(z_string:to_lower(Username))),
     Row = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", [Username1], Context),
-    case Row of
+    case ?DEBUG(Row) of
         undefined ->
             % If the Username looks like an e-mail address, try by Email & Password
             case z_email_utils:is_email(Username) of
