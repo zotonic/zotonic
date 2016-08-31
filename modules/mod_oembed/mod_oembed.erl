@@ -516,7 +516,7 @@ type_to_category(_rich) -> document.
 
 
 %% This is a copy from mod_video_embed, should be combined (which is in the works)
-fetch_videoid_from_embed(Service, undefined) ->
+fetch_videoid_from_embed(_Service, undefined) ->
     {<<>>, undefined};
 fetch_videoid_from_embed(Service, EmbedCode) ->
     case re:run(EmbedCode,
