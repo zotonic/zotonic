@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,8 +29,8 @@
 
 %% @doc Final try for dispatch, try to match the request. Called with z_notifier:first/2
 %%      Called when the site is known, but no match is found for the path
-%%      Result:   {ok, RscId::integer()} 
-%%              | {ok, #dispatch_match{}} 
+%%      Result:   {ok, RscId::integer()}
+%%              | {ok, #dispatch_match{}}
 %%              | {ok, #dispatch_redirect{}}
 %%              | undefined.
 -record(dispatch, {
@@ -40,7 +40,7 @@
         protocol = http :: http|https,
         tracer_pid = undefined :: pid()|undefined
     }).
-    
+
 -record(dispatch_redirect, {
         location = <<>> :: binary(),
         is_permanent=false :: boolean()
@@ -130,7 +130,7 @@
 
 
 %% @doc Handle a javascript notification from the postback handler. The 'message' is the z_msg argument of
-%% the request. (first), 'trigger' the id of the element which triggered the postback, and 'target' the 
+%% the request. (first), 'trigger' the id of the element which triggered the postback, and 'target' the
 %% id of the element which should receive possible updates. Note: postback_notify is also used as an event.
 %% Return either 'undefined' or a #context with the result of the postback
 -record(postback_notify, {message, trigger, target, data}).
@@ -184,13 +184,13 @@
 
 
 %% @doc e-mail notification used by z_email and z_email_server.
--record(email, {to=[], cc=[], bcc=[], from=[], reply_to, 
+-record(email, {to=[], cc=[], bcc=[], from=[], reply_to,
                 headers=[], body, raw,
-                subject, text, html, text_tpl, html_tpl, 
+                subject, text, html, text_tpl, html_tpl,
                 vars=[], attachments=[], queue=false}).
 
 %% @doc Notification sent to a site when e-mail for that site is received
--record(email_received, {to, from, localpart, localtags, domain, reference, email, 
+-record(email_received, {to, from, localpart, localtags, domain, reference, email,
                          headers, is_bulk=false, is_auto=false, decoded, raw}).
 
 % E-mail received notification:
@@ -225,7 +225,7 @@
 %% The Context is the depickled z_email:send/2 context.
 -record(email_failed, {
             message_nr :: binary(),
-            recipient :: binary(), 
+            recipient :: binary(),
             is_final :: boolean(),
             reason :: retry | illegal_address | smtphost | error,
             status :: binary()
@@ -352,9 +352,6 @@
 %% A foldr over the update property list.
 -record(acl_rsc_update_check, {id}).
 
-%% @doc Return the maximum visible_for value an user can see. Used for optimizing queries. (first)
--record(acl_can_see, {}).
-
 %% @doc Set the context to a 'typical' authenticated uses. Used by m_acl.erl (first)
 -record(acl_context_authenticated, {}).
 
@@ -456,24 +453,24 @@
 %% @doc Notification to translate or map a file after upload, before insertion into the database (first)
 %% Used in mod_video to queue movies for conversion to mp4.
 %% Your handler should return a modified version of this record.
-%% You can set the post_insert_fun to something like fun(Id, Medium, Context) to receive the 
+%% You can set the post_insert_fun to something like fun(Id, Medium, Context) to receive the
 %% medium record as it is inserted.
 -record(media_upload_preprocess, {
-            id :: integer() | 'insert_rsc', 
-            mime :: binary(), 
-            file :: file:filename(), 
+            id :: integer() | 'insert_rsc',
+            mime :: binary(),
+            file :: file:filename(),
             original_filename :: file:filename(),
             medium :: list(),
             post_insert_fun :: function()
         }).
 
 %% @doc Notification that a medium file has been uploaded.
-%%      This is the moment to change properties, modify the file etc. 
+%%      This is the moment to change properties, modify the file etc.
 %%      The medium record properties are folded over all observers. (foldl)
 -record(media_upload_props, {id, mime, archive_file, options}).
 
 %% @doc Notification that a medium file has been uploaded.
-%%      This is the moment to change resource properties, modify the file etc. 
+%%      This is the moment to change resource properties, modify the file etc.
 %%      The resource properties are folded over all observers. (foldl)
 -record(media_upload_rsc_props, {id, mime, archive_file, options, medium}).
 
@@ -528,7 +525,7 @@
 
 %% @doc Try to find a filename extension for a mime type (example: ".jpg") (first)
 -record(media_identify_extension, {
-                mime :: binary(), 
+                mime :: binary(),
                 preferred :: undefined | binary()
             }).
 
@@ -580,18 +577,18 @@
         topic :: binary(),
         words :: list(binary() | integer()),
         site :: binary(),
-        page_id :: 'undefined' | binary()   
+        page_id :: 'undefined' | binary()
     }).
 
 %% @doc Broadcast notification.
 -record(broadcast, {title=[], message=[], is_html=false, stay=true, type="error"}).
 
 %% @doc Internal message of mod_development. Start a stream with debug information to the user agent.
-%% 'target' is the id of the HTML element where the information is inserted.  
+%% 'target' is the id of the HTML element where the information is inserted.
 %% 'what' is the kind of debug information being streamed to the user-agent.
 -record(debug_stream, {target, what=template}).
 
-%% @doc Push some information to the debug page in the user-agent. 
+%% @doc Push some information to the debug page in the user-agent.
 % Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
 -record(debug, {what, arg=[]}).
 

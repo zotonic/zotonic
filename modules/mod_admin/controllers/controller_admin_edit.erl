@@ -116,10 +116,9 @@ event(#submit{message={rscform, Args}}, Context) ->
                         Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context), Context2),
                         Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
                         Context4a = z_render:set_value("slug",  m_rsc:p(Id, slug, Context), Context4),
-                        Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context)), Context4a),
                         Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context)) of
-                                       true ->  z_render:wire("delete-button", {disable, []}, Context4b);
-                                       false -> z_render:wire("delete-button", {enable, []}, Context4b)
+                                       true ->  z_render:wire("delete-button", {disable, []}, Context4a);
+                                       false -> z_render:wire("delete-button", {enable, []}, Context4a)
                                    end,
                         Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
                         Context6 = z_render:growl([<<"Saved \"">>, Title, <<"\".">>], Context5),

@@ -722,15 +722,6 @@ props_filter([{P, Id}|T], Acc, Context)
             props_filter(T, [{P,RId}|Acc], Context)
     end;
 
-props_filter([{visible_for, Vis}|T], Acc, Context) ->
-    VisibleFor = z_convert:to_integer(Vis),
-    case VisibleFor of
-        N when N >= 0 ->
-            props_filter(T, [{visible_for, N} | Acc], Context);
-        _ ->
-            props_filter(T, Acc, Context)
-    end;
-
 props_filter([{category, CatName}|T], Acc, Context) ->
     props_filter([{category_id, m_category:name_to_id_check(CatName, Context)} | T], Acc, Context);
 props_filter([{category_id, CatId}|T], Acc, Context) ->

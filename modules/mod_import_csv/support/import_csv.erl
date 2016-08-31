@@ -408,8 +408,7 @@ name_lookup_exists(Name, State, Context) ->
 map_fields(Mapping, Row, State) ->
     Defaults = [
         {"is_protected", true},
-        {"is_published", true},
-        {"visible_for", 0}
+        {"is_published", true}
     ],
     Mapped = [map_def(MapOne, Row, State) || MapOne <- Mapping],
     Type = case proplists:get_value("category", Mapped) of

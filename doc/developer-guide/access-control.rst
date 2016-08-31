@@ -138,9 +138,6 @@ allow or deny user access to specific resources.
 |#acl_rsc_update_check{id},  |foldl     |Props'    |Filter properties about to be updated for a resource.    |
 |Props                       |          |          |                                                         |
 +----------------------------+----------+----------+---------------------------------------------------------+
-|#acl_can_see{}              |first     |integer() |Get max :ref:`visible_for <model-rsc>` that the user can |
-|                            |          |          |see.                                                     |
-+----------------------------+----------+----------+---------------------------------------------------------+
 |#acl_logon{id}              |first     |Context   |Initialize context with the access policy for the user.  |
 +----------------------------+----------+----------+---------------------------------------------------------+
 |#acl_logoff{}               |first     |Context   |Clear the associated access policy for the context.      |

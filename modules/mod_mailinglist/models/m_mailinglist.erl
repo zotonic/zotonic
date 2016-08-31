@@ -400,7 +400,6 @@ check_scheduled(Context) ->
 		from mailinglist_scheduled m
 		where (
 		    select r.is_published
-		          and r.visible_for = 0
 		          and r.publication_start <= now()
 		          and r.publication_end >= now()
 		    from rsc r
