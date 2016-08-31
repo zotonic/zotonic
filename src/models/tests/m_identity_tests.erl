@@ -89,7 +89,7 @@ start_modules(Context) ->
 
 %% Old hash algorithm copied from m_identity before the change to bcrypt.
 old_hash(Pw) ->
-    Salt = binary_to_list(z_ids:id(10)),
+    Salt = z_ids:id(10),
     Hash = crypto:hash(sha, [Salt,Pw]),
     {hash, Salt, Hash}.
 
