@@ -127,7 +127,13 @@
                   "55d9d6bc103d42ffc2a6659d1726224ee32d3565"}},
        {twerl,".*",
               {git,"https://github.com/mworrell/twerl.git",
-                   "511187da785903d64f5b284ae1d2888b07199e2f"}}]}.
+                   "511187da785903d64f5b284ae1d2888b07199e2f"}},
+       {bcrypt,".*",
+               {git,"https://github.com/chef/erlang-bcrypt.git",
+                    "5cbe6becbe926739adebc67c6827ac2a2b9e7bbd"}},
+       {erlpass,".*",
+                {git,"https://github.com/ferd/erlpass.git",
+                     "9699bc21f2dfa7652b723ed5279a0b2e7ff19002"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
 {xref_checks,[undefined_function_calls,locals_not_used,

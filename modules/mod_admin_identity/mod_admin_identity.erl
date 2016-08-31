@@ -46,7 +46,12 @@ observe_identity_verified(#identity_verified{user_id=RscId, type=Type, key=Key},
 observe_identity_password_match(#identity_password_match{password=Password, hash=Hash}, _Context) ->
     case m_identity:hash_is_equal(Password, Hash) of
         true ->
-            ok;
+            case m_identity:needs_rehash(Hash) of
+                true ->
+                    {ok, rehash};
+                false ->
+                    ok
+            end;
         false ->
             {error, password}
     end.

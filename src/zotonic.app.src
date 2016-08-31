@@ -18,6 +18,7 @@
                   depcache, mimetypes, webzmachine, z_stdlib,
                   poolboy, sendfile, public_key, ssl,
                   jobs, gproc, filezcache, s3filez,
-                  qdate
+                  qdate,
+                  bcrypt, erlpass
   ]}
  ]}.
