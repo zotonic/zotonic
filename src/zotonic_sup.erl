@@ -26,9 +26,6 @@
 %% External exports
 -export([start_link/0, upgrade/0, upgrade/2]).
 
-%% SNI function
--export([sni_fun/1]).
-
 %% supervisor callbacks
 -export([init/1]).
 
@@ -153,10 +150,3 @@ get_extensions() ->
      end
      || F <- Files].
 
-%% @doc Let sites return their own keys and certificates.
-sni_fun(Hostname) ->
-    case z_sites_dispatcher:get_site_for_hostname(Hostname) of
-        undefined -> undefined;
-        {ok, Host} ->
-            z_notifier:first(#ssl_options{server_name=Hostname}, z_context:new(Host))
-    end.
