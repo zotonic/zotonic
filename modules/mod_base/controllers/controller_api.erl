@@ -166,37 +166,28 @@ process_post(Context0) ->
 %%   {'Access-Control-Allow-Methods', undefined},
 %%   {'Access-Control-Allow-Headers', undefined}]
 set_cors_header(Context) ->
-    case z_convert:to_bool(m_site:get(service_api_cors, Context)) of
-        true ->
-            lists:foldl(
-                    fun ({K, Def}, Acc) ->
-                        case m_site:get(K, Context) of
-                            undefined ->
-                                case Def of
-                                    undefined ->
-                                        Acc;
-                                    _ ->
-                                        z_context:set_resp_header(
-                                            z_convert:to_binary(K),
-                                            Def,
-                                            Acc)
-                                end;
-                            V ->
-                                z_context:set_resp_header(
-                                        z_convert:to_binary(K),
-                                        z_convert:to_binary(V),
-                                        Acc)
-                        end
-                    end,
-                    Context,
-                    [{'Access-Control-Allow-Origin', <<"*">>},
-                     {'Access-Control-Allow-Credentials', undefined},
-                     {'Access-Control-Max-Age', undefined},
-                     {'Access-Control-Allow-Methods', undefined},
-                     {'Access-Control-Allow-Headers', undefined}]);
-        false ->
-            Context
-    end.
+    set_cors_header(z_convert:to_bool(m_site:get(service_api_cors, Context)), Context).
+
+set_cors_header(true, Context) ->
+    lists:foldl(
+            fun ({K, Header, Def}, Ctx) ->
+                case m_site:get(K, Ctx) of
+                    undefined when Def =/= undefined ->
+                        z_context:set_resp_header(Header, Def, Ctx);
+                    undefined when Def =:= undefined ->
+                        ok;
+                    V ->
+                        z_context:set_resp_header(Header, z_convert:to_binary(V), Ctx)
+                end
+            end,
+            Context,
+            [{'Access-Control-Allow-Origin', <<"access-control-allow-origin">>, <<"*">>},
+             {'Access-Control-Allow-Credentials', <<"access-control-allow-credentials">>, undefined},
+             {'Access-Control-Max-Age', <<"access-control-max-age">>, undefined},
+             {'Access-Control-Allow-Methods', <<"access-control-allow-methods">>, undefined},
+             {'Access-Control-Allow-Headers', <<"access-control-allow-headers">>, undefined}]);
+set_cors_header(false, Context) ->
+    Context.
 
 
 api_error(HttpCode, ErrCode, Message, ErrData, Context) ->
