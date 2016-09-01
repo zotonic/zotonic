@@ -51,6 +51,7 @@ get(listen_port) ->
 get(ssl_listen_port) ->
     case os:getenv("ZOTONIC_SSL_PORT") of
         false -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
+        "none" -> none;
         Port -> z_convert:to_integer(Port)
     end;
 get(Key) ->

@@ -68,6 +68,7 @@
 
 %%% Inside listen port zotonic uses to receive HTTPS requests.
 %%% Always overridden by the ZOTONIC_SSL_PORT environment variable.
+%%% Set to the atom 'none' to disable SSL
 %%%   {ssl_listen_port, 8443},
 
 %%% SMTP outbound relay configuration.
