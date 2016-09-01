@@ -106,6 +106,8 @@ websocket_handle({Type, Data}, Context) when Type =:= text; Type =:= binary ->
                           [z_context:site(Context), Error, X, StackTrace]),
             {ok, Context}
     end;
+websocket_handle({reply, Payload}, Context) ->
+    {reply, Payload, Context};
 websocket_handle(_Data, Context) ->
     {ok, Context}.
 

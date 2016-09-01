@@ -18,7 +18,7 @@
   2},
  {<<"cowmachine">>,
   {git,"https://github.com/zotonic/cowmachine.git",
-       {ref,"5400432730fd966f21a4461eaa929503aa81d7ff"}},
+       {ref,"a0047d604c650d4d6e77da46037742092804b495"}},
   0},
  {<<"depcache">>,{pkg,<<"depcache">>,<<"1.2.2">>},0},
  {<<"dh_date">>,

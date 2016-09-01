@@ -52,6 +52,9 @@ Example::
   %% @doc Handle a message from the browser.
   websocket_handle({text, Data}, Context) ->
       {reply, {text, ["You said: ", Data]}, Context};
+  websocket_handle({reply, Payload}, Context) ->
+      % Pass the reply data from controller_websocket:send_data/2
+      {reply, Payload, Context};
   websocket_handle(_Data, Context) ->
       {ok, Context}.
 
