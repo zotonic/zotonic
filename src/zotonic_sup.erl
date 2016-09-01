@@ -103,8 +103,7 @@ init([]) ->
                  | get_extensions()
                 ],
 
-    init_stats(),
-    start_http_listeners(),
+    z_stats:init(),
 
     lager:info(""),
     lager:info("Zotonic starting"),
@@ -112,75 +111,18 @@ init([]) ->
     lager:info("Config files used:"),
     [ lager:info("- ~s", [Cfg]) 
       || [Cfg] <- proplists:get_all_values(config, init:get_arguments()) ],
-    % lager:info(""),
-    % [ lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status])
-    %   || [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status],
+    lager:info(""),
+
+    erlang:spawn(fun() ->
+            timer:sleep(4000),
+            lager:info(""),
+            [ lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status])
+              || [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status],
+            lager:info("")
+        end),
 
     {ok, {{one_for_one, 1000, 10}, Processes}}.
 
-%% @doc Initializes the stats collector.
-init_stats() ->
-    z_stats:init().
-
-%% @doc Start the HTTP listeners
-start_http_listeners() ->
-    application:set_env(cowmachine, server_header, <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>),
-    WebIp = z_config:get(listen_ip),
-    WebPort = z_config:get(listen_port),
-    SSLPort = z_config:get(ssl_listen_port),
-    CowboyOpts = #{
-        middlewares => [ z_sites_dispatcher, z_cowmachine_middleware ],
-        env => #{}
-    },
-
-    lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
-    {ok, _} = cowboy:start_clear(
-        zotonic_http_listener_ipv4,
-        z_config:get(inet_acceptor_pool_size),
-        [   inet,
-            {port, WebPort},
-            {backlog, z_config:get(inet_backlog)}
-            | case WebIp of any -> []; _ -> [{ip, WebIp}] end
-        ],
-        CowboyOpts),
-    {ok, _} = cowboy:start_tls(
-        zotonic_https_listener_ipv4,
-        z_config:get(ssl_acceptor_pool_size),
-        [   inet,
-            {port, SSLPort},
-            {backlog, z_config:get(ssl_backlog)},
-            {certfile, "via_sni_fun"},
-            {sni_fun, fun ?MODULE:sni_fun/1}
-            | case WebIp of any -> []; _ -> [{ip, WebIp}] end
-        ],
-        CowboyOpts),
-
-    case {WebIp, ipv6_supported()} of
-        {any, true} ->
-            lager:info("Web server listening on IPv6 ::~p, SSL ::~p", [WebPort, SSLPort]),
-            {ok, _} = cowboy:start_clear(
-                zotonic_http_listener_ipv6,
-                z_config:get(inet_acceptor_pool_size),
-                [   inet6,
-                    {ipv6_v6only, true},
-                    {port, WebPort},
-                    {backlog, z_config:get(inet_backlog)}
-                ],
-                CowboyOpts),
-            {ok, _} = cowboy:start_tls(
-                zotonic_https_listener_ipv6,
-                z_config:get(ssl_acceptor_pool_size),
-                [   inet6,
-                    {ipv6_v6only, true},
-                    {port, SSLPort},
-                    {backlog, z_config:get(ssl_backlog)},
-                    {certfile, "via_sni_fun"},
-                    {sni_fun, fun ?MODULE:sni_fun/1}
-                ],
-                CowboyOpts);
-        _ ->
-            ok
-    end.
 
 %% @doc Ensure all job queues
 ensure_job_queues() ->
@@ -198,13 +140,6 @@ ensure_job_queues() ->
             ok
     end.
 
-
-%% @todo Exclude platforms that do not support raw ipv6 socket options
-ipv6_supported() ->
-    case (catch inet:getaddr("localhost", inet6)) of
-        {ok, _Addr} -> true;
-        {error, _} -> false
-    end.
 
 %% @doc Scan priv/extensions for ext_ folders and add those as childs to the supervisor.
 get_extensions() ->

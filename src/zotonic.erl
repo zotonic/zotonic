@@ -24,7 +24,9 @@
 
 -compile([{parse_transform, lager_transform}]).
 
--define(MIN_OTP_VERSION, "15B03"). %% note -- *without* the initial R (since OTP 17.0 the R is dropped)
+-include_lib("zotonic.hrl").
+
+-define(MIN_OTP_VERSION, "18"). %% note -- *without* the initial R (since OTP 17.0 the R is dropped)
 
 
 ensure_started(App) ->
@@ -60,7 +62,7 @@ start(_Args) ->
     ensure_mnesia_schema(),
     case ensure_started(zotonic) of
         ok ->
-            ok;
+            start_http_listeners();
         Message ->
             lager:error("Zotonic start error: ~s~n", [Message]),
             init:stop(1)
@@ -69,13 +71,9 @@ start(_Args) ->
 %% @spec stop() -> ok
 %% @doc Stop the zotonic server.
 stop() ->
+    stop_http_listeners(),
     Res = application:stop(zotonic),
     application:stop(emqtt),
-    application:stop(eiconv),
-    application:stop(mnesia),
-    application:stop(lager),
-    application:stop(webzmachine),
-    application:stop(crypto),
     Res.
 
 
@@ -110,13 +108,103 @@ update() ->
     z:m(),
     ok.
 
+%% @doc Stop all HTTP listeners
+-spec stop_http_listeners() -> ok.
+stop_http_listeners() ->
+    lists:foreach(
+            fun cowboy:stop_listener/1,
+            [ zotonic_http_listener_ipv4,
+              zotonic_https_listener_ipv4,
+              zotonic_http_listener_ipv6,
+              zotonic_https_listener_ipv6]).
+
+%% @doc Start the HTTP listeners
+-spec start_http_listeners() -> ok.
+start_http_listeners() ->
+    application:set_env(cowmachine, server_header, <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>),
+    WebIp = z_config:get(listen_ip),
+    WebPort = z_config:get(listen_port),
+    SSLPort = z_config:get(ssl_listen_port),
+    CowboyOpts = #{
+        middlewares => [ z_sites_dispatcher, z_cowmachine_middleware ],
+        env => #{}
+    },
+
+    lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
+    {ok, _} = cowboy:start_clear(
+        zotonic_http_listener_ipv4,
+        z_config:get(inet_acceptor_pool_size),
+        [   inet,
+            {port, WebPort},
+            {backlog, z_config:get(inet_backlog)}
+            | case WebIp of any -> []; _ -> [{ip, WebIp}] end
+        ],
+        CowboyOpts),
+    case SSLPort of
+        none ->
+            ok;
+        _ ->
+            {ok, _} = cowboy:start_tls(
+                zotonic_https_listener_ipv4,
+                z_config:get(ssl_acceptor_pool_size),
+                [   inet,
+                    {port, SSLPort},
+                    {backlog, z_config:get(ssl_backlog)},
+                    {certfile, "via_sni_fun"},
+                    {sni_fun, fun ?MODULE:sni_fun/1}
+                    | case WebIp of any -> []; _ -> [{ip, WebIp}] end
+                ],
+                CowboyOpts)
+    end,
+    case {WebIp, ipv6_supported()} of
+        {any, true} ->
+            lager:info("Web server listening on IPv6 ::~p, SSL ::~p", [WebPort, SSLPort]),
+            {ok, _} = cowboy:start_clear(
+                zotonic_http_listener_ipv6,
+                z_config:get(inet_acceptor_pool_size),
+                [   inet6,
+                    {ipv6_v6only, true},
+                    {port, WebPort},
+                    {backlog, z_config:get(inet_backlog)}
+                ],
+                CowboyOpts),
+
+            case SSLPort of
+                none ->
+                    ok;
+                _ ->
+                    {ok, _} = cowboy:start_tls(
+                        zotonic_https_listener_ipv6,
+                        z_config:get(ssl_acceptor_pool_size),
+                        [   inet6,
+                            {ipv6_v6only, true},
+                            {port, SSLPort},
+                            {backlog, z_config:get(ssl_backlog)},
+                            {certfile, "via_sni_fun"},
+                            {sni_fun, fun ?MODULE:sni_fun/1}
+                        ],
+                        CowboyOpts),
+                    ok
+            end;
+        _ ->
+            ok
+    end.
+
+%% @todo Exclude platforms that do not support raw ipv6 socket options
+ipv6_supported() ->
+    case (catch inet:getaddr("localhost", inet6)) of
+        {ok, _Addr} -> true;
+        {error, _} -> false
+    end.
+
+
 %% @doc Ensure that mnesia has created its schema in the configured mnesia directory.
 ensure_mnesia_schema() ->
     application:load(mnesia),
     case application:get_env(mnesia, dir) of
         undefined ->
-            error_logger:info_msg("No mnesia directory defined, running without persistent email queue and filezcache.~n"
-                                  "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}~n~n"),
+            lager:info("No mnesia directory defined, running without persistent email queue and filezcache.~n"
+                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}~n~n"),
             ok;
         {ok, Dir} ->
             case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir,"schema.DAT")) of
