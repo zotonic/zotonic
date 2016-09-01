@@ -31,10 +31,10 @@
 event(#submit{message=admin_filestore}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            S3Url = noslash(z_convert:to_binary(z_string:trim(z_context:get_q(s3url, Context)))),
-            S3Key = z_convert:to_binary(z_string:trim(z_context:get_q(s3key, Context))),
-            S3Secret = z_convert:to_binary(z_string:trim(z_context:get_q(s3secret, Context))),
-            IsUploadEnabled = z_convert:to_bool(z_context:get_q(is_upload_enabled, Context)),
+            S3Url = noslash(z_string:trim(z_context:get_q(<<"s3url">>, Context))),
+            S3Key = z_string:trim(z_context:get_q(<<"s3key">>, Context)),
+            S3Secret = z_string:trim(z_context:get_q(<<"s3secret">>, Context)),
+            IsUploadEnabled = z_convert:to_bool(z_context:get_q(<<"is_upload_enabled">>, Context)),
             case testcred(S3Url, S3Key, S3Secret) of
                 ok ->
                     m_config:set_value(mod_filestore, s3url, S3Url, Context),
@@ -58,8 +58,8 @@ event(#submit{message=admin_filestore}, Context) ->
 event(#submit{message=admin_filestore_queue}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            case z_context:get_q("queue-local", Context) of
-                [] ->
+            case z_context:get_q(<<"queue-local">>, Context) of
+                <<>> ->
                     queue_local_all(Context);
                 undefined ->
                     queue_upload_all(Context)

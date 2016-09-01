@@ -82,7 +82,7 @@
 
 
 event(#submit{message={delete_move, Args}}, Context) ->
-    ToUGId = z_convert:to_integer(z_context:get_q_validated("acl_user_group_id", Context)),
+    ToUGId = z_convert:to_integer(z_context:get_q_validated(<<"acl_user_group_id">>, Context)),
     {id, Id} = proplists:lookup(id, Args),
     Ids = [ Id | m_hierarchy:children('acl_user_group', Id, Context) ],
     case deletable(Ids, Context) andalso z_acl:rsc_editable(ToUGId, Context) of

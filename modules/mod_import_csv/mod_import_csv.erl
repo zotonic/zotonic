@@ -82,8 +82,8 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 event(#submit{message={csv_upload, []}}, Context) ->
     case z_acl:is_allowed(use, mod_import_csv, Context) of
         true ->
-            #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
-            IsReset = z_convert:to_bool(z_context:get_q("reset", Context)),
+            #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated(<<"upload_file">>, Context),
+            IsReset = z_convert:to_bool(z_context:get_q(<<"reset">>, Context)),
 
             %% Move temporary file to processing directory
             Dir = z_path:files_subdir_ensure("processing", Context),

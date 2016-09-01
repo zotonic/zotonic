@@ -43,8 +43,8 @@ event(#submit{message={contact, Args}, form=FormId}, Context) ->
             false -> Email
          end,
     From = case proplists:get_value(from, Args, m_config:get_value(?MODULE, from, Context)) of
-	undefined -> z_context:get_q_validated("mail", Context);
-	From_ -> From_
+        undefined -> z_context:get_q_validated(<<"mail">>, Context);
+        From_ -> From_
     end,
     Vars = [{email_from, From},
             {name, z_context:get_q(<<"name">>, Context)},
@@ -52,7 +52,7 @@ event(#submit{message={contact, Args}, form=FormId}, Context) ->
             {fields, z_context:get_q_all_noz(Context)}],
     z_email:send_render(To, Template, Vars, Context),
     z_render:wire([ {slide_up, [{target, FormId}]},
-                    {slide_down, [{target,"contact-form-sent"}]}],
+                    {slide_down, [{target, <<"contact-form-sent">>}]}],
                   Context).
 
 

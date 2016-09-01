@@ -133,8 +133,8 @@ event(#postback{message={mailinglist_reset, Args}}, Context) ->
 
 %% @doc Handle upload of a new recipients list
 event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
-    #upload{tmpfile=TmpFile} = z_context:get_q_validated("file", Context),
-    IsTruncate = z_convert:to_bool(z_context:get_q("truncate", Context)),
+    #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"file">>, Context),
+    IsTruncate = z_convert:to_bool(z_context:get_q(<<"truncate">>, Context)),
     case import_file(TmpFile, IsTruncate, Id, Context) of
         ok ->
             z_render:wire([{dialog_close, []}, {reload, []}], Context);
@@ -144,9 +144,9 @@ event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
 
 %% @doc Handle the test-sending of a page to a single address.
 event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
-    Email = z_context:get_q_validated("email", Context),
+    Email = z_context:get_q_validated(<<"email">>, Context),
     z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
-    Context1 = z_render:growl(?__("Sending the page to ", Context) ++ Email ++ "...", Context),
+    Context1 = z_render:growl([?__("Sending the page to ", Context), " ", Email, "..."], Context),
     z_render:wire([{dialog_close, []}], Context1);
 
 

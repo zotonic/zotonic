@@ -109,7 +109,7 @@ event1(#postback{message={publish, _Args}}, Context) ->
     z_render:growl(?__("Publish successful", Context), Context);
 
 event1(#postback{message={set_upload_size, [{id,Id}]}}, Context) ->
-    NewSize = z_convert:to_integer(z_context:get_q("triggervalue", Context)),
+    NewSize = z_convert:to_integer(z_context:get_q(<<"triggervalue">>, Context)),
     case m_rsc:p(Id, acl_upload_size, Context) of
         NewSize ->
             Context;
@@ -119,7 +119,7 @@ event1(#postback{message={set_upload_size, [{id,Id}]}}, Context) ->
     end;
 
 event1(#submit{message={acl_rule_import, []}}, Context) ->
-    #upload{tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
+    #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"upload_file">>, Context),
     {ok, Binary} = file:read_file(TmpFile),
     ContextAsync = z_context:prune_for_async(Context),
     erlang:spawn(fun() ->

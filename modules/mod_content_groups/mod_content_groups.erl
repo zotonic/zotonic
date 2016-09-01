@@ -38,7 +38,7 @@
     ]).
 
 event(#submit{message={delete_move, Args}}, Context) ->
-    ToGroupId = z_convert:to_integer(z_context:get_q_validated("content_group_id", Context)),
+    ToGroupId = z_convert:to_integer(z_context:get_q_validated(<<"content_group_id">>, Context)),
     {id, Id} = proplists:lookup(id, Args),
     Ids = [ Id | m_hierarchy:children('content_group', Id, Context) ],
     case deletable(Ids, Context) andalso z_acl:rsc_editable(ToGroupId, Context) of

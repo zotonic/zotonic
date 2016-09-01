@@ -37,7 +37,7 @@
 
 
 event(#submit{message={delete_move, Args}}, Context) ->
-    ToCatId = z_convert:to_integer(z_context:get_q_validated("category_id", Context)),
+    ToCatId = z_convert:to_integer(z_context:get_q_validated(<<"category_id">>, Context)),
     {id, Id} = proplists:lookup(id, Args),
     Ids = [ Id | m_hierarchy:children('$category', Id, Context) ],
     case deletable(Ids, Context) andalso z_acl:rsc_editable(ToCatId, Context) of

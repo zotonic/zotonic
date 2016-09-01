@@ -60,11 +60,11 @@ event(#submit{message={user_add, Props}}, Context) ->
                 _ -> [ NameFirst, " ", NamePrefix, " ", NameSur ]
             end,
 
-            Email = z_context:get_q_validated("email", Context),
+            Email = z_context:get_q_validated(<<"email">>, Context),
             PersonProps = [
                 {is_published, true},
                 {category, Category},
-                {title, lists:flatten(Title)},
+                {title, iolist_to_binary(Title)},
                 {name_first, NameFirst},
                 {name_surname_prefix, NamePrefix},
                 {name_surname, NameSur},

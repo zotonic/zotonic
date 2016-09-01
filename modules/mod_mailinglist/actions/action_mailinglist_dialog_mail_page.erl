@@ -46,7 +46,7 @@ event(#postback{message={dialog_mail_page, Id, OnSuccess}}, Context) ->
 event(#submit{message={mail_page, Args}}, Context) ->
 	Id = proplists:get_value(id, Args),
 	OnSuccess = proplists:get_all_values(on_success, Args),
-	Email = z_context:get_q_validated("email", Context),
+	Email = z_context:get_q_validated(<<"email">>, Context),
 	z_email:send_page(Email, Id, Context),
 	Context1 = z_render:growl(?__("Sending the e-mail...", Context), Context),
 	z_render:wire(OnSuccess, Context1).
