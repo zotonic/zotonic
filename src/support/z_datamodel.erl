@@ -43,18 +43,6 @@ reset_deleted(Module, Context) ->
 
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
 -spec manage(atom(), #datamodel{}, #context{}) -> ok.
-manage(Module, Datamodel, Context) when is_list(Datamodel) ->
-    %% Backwards compatibility with old datamodel notation.
-    manage(Module,
-           #datamodel{categories=proplists:get_value(categories, Datamodel, []),
-                      predicates=proplists:get_value(predicates, Datamodel, []),
-                      resources=proplists:get_value(resources, Datamodel, []),
-                      media=proplists:get_value(media, Datamodel, []),
-                      edges=proplists:get_value(edges, Datamodel, []),
-                      data=proplists:get_value(data, Datamodel, [])
-                     },
-           Context);
-
 manage(Module, Datamodel, Context) ->
     manage(Module, Datamodel, [], Context).
 
