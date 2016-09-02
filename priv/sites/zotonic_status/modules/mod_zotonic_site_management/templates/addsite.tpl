@@ -58,6 +58,23 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">
+                        Skeleton
+                    </label>
+                    <div class="col-sm-7">
+                        <select id="{{ #skel }}" name="skel" class="form-control">
+                            <option value=""></option>
+                            <option value="basesite">{_ Simple site based on mod_base_site _}</option>
+                            <option value="blog">{_ Basic blogging site _}</option>
+                            <option value="empty">{_ Empty site, no templates etc. _}</option>
+                            <option value="nodb">{_ Empty site without database connection _}</option>
+                        </select>
+                        {% validate id=#skel name="skel" type={presence} %}
+                        <p class="help-block">{_ The skeleton provides templates and content for a site. _}</p>
+                    </div>
+                </div>
+
                 <!-- Git -->
 
                 <fieldset>

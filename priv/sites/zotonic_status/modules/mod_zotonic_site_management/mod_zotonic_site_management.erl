@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2016 Marc Worrell
-%% @doc Add a new site
+%% @doc Site management module
 
 %% Copyright 2016 Marc Worrell
 %%
@@ -21,7 +21,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Zotonic Site Management").
--mod_description("Add and/or manage Zotonic sites.").
+-mod_description("Manage Zotonic sites.").
 -mod_prio(500).
 
 -include("zotonic.hrl").
@@ -32,15 +32,36 @@
 
 event(#submit{message=addsite}, Context) ->
     true = z_auth:is_auth(Context),
-    Sitename = z_context:get_q_validated(<<"sitename">>, Context),
-    Hostname = z_context:get_q_validated(<<"hostname">>, Context),
-    Title = z_context:get_q(<<"title">>, Context),
-    DbDatabase = z_context:get_q_validated(<<"dbdatabase">>, Context),
-    DbSchema = z_context:get_q(<<"dbschema">>, Context),
-    DbHost = z_context:get_q(<<"dbhost">>, Context),
-    DbPort = z_context:get_q(<<"dbport">>, Context),
-    DbUser = z_context:get_q(<<"dbuser">>, Context),
-    DbPassword = z_context:get_q(<<"dbpassword">>, Context),
-    GitUrl = 
-    Context.
+    Site = z_context:get_q_validated(<<"sitename">>, Context),
+    Options = [
+        {hostname, z_context:get_q_validated(<<"hostname">>, Context)},
+        {skeleton, z_context:get_q_validated(<<"skel">>, Context)},
+        {title, z_context:get_q(<<"title">>, Context)},
+        {dbdatabase, z_context:get_q_validated(<<"dbdatabase">>, Context)},
+        {dbschema, z_context:get_q(<<"dbschema">>, Context)},
+        {dbhost, z_context:get_q(<<"dbhost">>, Context)},
+        {dbport, z_context:get_q(<<"dbport">>, Context)},
+        {dbuser, z_context:get_q(<<"dbuser">>, Context)},
+        {dbpassword, z_context:get_q(<<"dbpassword">>, Context)}
+    ],
+    case zotonic_add_site:add_site(Site, Options) of
+        ok ->
+            %% .. Show success and the admin password
+            Context;
+        {error, Msg} when is_list(Msg); is_binary(Msg) ->
+            notice(Site, Msg, Context)
+    end.
+
+
+% @doc Show a notice on the current webpage.
+% show_notice(SiteName, Text, Context) ->
+%     z_session_page:add_script(notice(SiteName, Text, Context)).
+
+% @doc Render a notice.
+notice(SiteName, Text, Context) ->
+    Context1 = z_render:appear_top(
+                        "notices",
+                        #render{template="_notice.tpl", vars=[{site,SiteName},{notice,Text}]},
+                        Context),
+    z_render:wire({fade_out, [{selector, "#notices > p:gt(0)"}, {speed, 2000}]}, Context1).
 
