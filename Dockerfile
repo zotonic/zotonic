@@ -9,7 +9,8 @@ WORKDIR /opt/zotonic
 # includes those packages.
 RUN apk add --virtual build-deps --no-cache ca-certificates wget curl make gcc musl-dev g++ git \
         && apk add --no-cache bash imagemagick \
-	&& apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ dumb-init gosu \
+        && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ dumb-init \
+        && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ gosu \
            erlang erlang-inets erlang-compiler erlang-crypto erlang-mnesia erlang-ssl erlang-stdlib erlang-public-key erlang-tools erlang-dev erlang-asn1 erlang-syntax-tools erlang-eunit erlang-parsetools erlang-snmp erlang-sasl erlang-xmerl erlang-erl-interface \
         && DEBUG=1 make \
         && apk del build-deps
