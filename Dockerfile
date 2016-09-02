@@ -16,9 +16,9 @@ RUN apk add --virtual build-deps --no-cache ca-certificates wget curl make gcc m
         && apk del build-deps
 
 RUN mkdir /etc/zotonic \
-	&& sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.config \
-	&& adduser -S -h /tmp -H -D zotonic \
-	&& chown -R zotonic /opt/zotonic/priv 
+        && sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.config \
+        && adduser -S -h /tmp -H -D zotonic \
+        && chown -R zotonic /opt/zotonic/priv
 
 # Use dumb-init to reap zombies, catch signals, and all the other stuff pid 1 should do.
 ENTRYPOINT ["/usr/bin/dumb-init", "-c", "--", "/opt/zotonic/docker/docker-entrypoint.sh"]
