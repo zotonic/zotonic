@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+    postgres:
+        image: postgres:9.5
+        environment:
+            POSTGRES_USER: zotonic
+        volumes:
+            - ./data:/data
+        working_dir: /data
+
+    zotonic:
+        image: zotonic/zotonic-dev
+        privileged: true
+        links:
+            - postgres
+        volumes:
+            - ./:/opt/zotonic
+        ports:
+            - 80:8000
