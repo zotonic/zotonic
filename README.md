@@ -35,3 +35,13 @@ Contributing
 Zotonic is an open source project, made possible by the community. If you’d like to contribute,
 please read the [Contributing chapter](http://zotonic.com/docs/latest/developer-guide/contributing.html)
 in the documentation.
+
+If you encounter any issues, please report them in our
+[issue tracker](https://github.com/zotonic/zotonic/issues). If you discover
+any security-related issues, please contact us at [security@zotonic.com](mailto:security@zotonic.com).
+
+License 
+-------
+
+Zotonic is released under the Apache 2.0 License. Please refer to the included 
+[LICENSE](LICENSE) file for more information.
