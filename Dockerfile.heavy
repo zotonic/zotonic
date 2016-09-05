@@ -6,7 +6,7 @@ FROM zotonic/zotonic:latest
 # process, and exits if it does.
 
 RUN apk --no-cache add postgresql postgresql-client s6 \
- && gosu postgres initdb -D /var/lib/postgresql -U zotonic 
+    && gosu postgres initdb -D /var/lib/postgresql -U zotonic 
 
 COPY docker/s6-service /service
 COPY docker/docker-entrypoint-heavy.sh /opt/zotonic/docker
