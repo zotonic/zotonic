@@ -38,13 +38,13 @@ event(#submit{message=addsite}, Context) ->
         {skeleton, z_context:get_q_validated(<<"skel">>, Context)},
         {title, z_context:get_q(<<"title">>, Context)},
         {dbdatabase, z_context:get_q_validated(<<"dbdatabase">>, Context)},
-        {dbschema, z_context:get_q(<<"dbschema">>, Context)},
-        {dbhost, z_context:get_q(<<"dbhost">>, Context)},
-        {dbport, z_context:get_q(<<"dbport">>, Context)},
+        {dbschema, z_context:get_q_validated(<<"dbschema">>, Context)},
+        {dbhost, z_context:get_q_validated(<<"dbhost">>, Context)},
+        {dbport, z_context:get_q_validated(<<"dbport">>, Context)},
         {dbuser, z_context:get_q(<<"dbuser">>, Context)},
         {dbpassword, z_context:get_q(<<"dbpassword">>, Context)}
     ],
-    case zotonic_add_site:add_site(Site, Options) of
+    case zotonic_status_addsite:addsite(Site, Options, Context) of
         ok ->
             %% .. Show success and the admin password
             Context;

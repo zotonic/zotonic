@@ -58,7 +58,7 @@ addsite_check_db(Name, Options, Context) ->
         <<"nodb">> ->
             Options = [
                 {dbdatabase, none}
-                | proplists:delete(dbdatabase)
+                | proplists:delete(dbdatabase, Options)
             ],
             addsite_check_git(Name, Options, Context);
         _ ->
@@ -179,7 +179,9 @@ create_gitignore(SiteDir) ->
 copy_skeleton(Name, SkelDir, SiteDir, Options, Context) ->
     Options1 = [
         {site, Name},
-        {admin_password, z_ids:id(12)}
+        {admin_password, z_ids:id(12)},
+        {sign_key, z_ids:id(20)},
+        {sign_key_simple, z_ids:id(12)}
         | Options
     ],
     copy_skeleton_dir(SkelDir, SiteDir, Options1, Context).
@@ -191,13 +193,14 @@ copy_skeleton_dir(From, To, Options, Context) ->
                 case filename:basename(FromPath) of
                     "." -> ok;
                     ".." -> ok;
+                    ".git" -> ok;
                     Basename ->
                         ToPath = filename:join([To, Basename]),
                         case filelib:is_dir(FromPath) of
                             true ->
                                 case filelib:is_file(ToPath) of
                                     false ->
-                                        case filelib:make_dir(ToPath) of
+                                        case file:make_dir(ToPath) of
                                             ok ->
                                                 copy_skeleton_dir(FromPath, ToPath, Options, Context);
                                             {error, _} = Error ->
@@ -236,7 +239,7 @@ copy_file("SITE.erl", FromPath, ToPath, Options) ->
     end;
 copy_file("config.in", FromPath, ToPath, Options) ->
     ToPath1 = filename:join([filename:dirname(ToPath), "config"]),
-    ToConfig = case file_lib:is_file(ToPath1) of
+    ToConfig = case filelib:is_file(ToPath1) of
         true -> file:consult(ToPath1);
         false -> []
     end,
@@ -247,11 +250,18 @@ copy_file("config.in", FromPath, ToPath, Options) ->
     FinalConfig = lists:keymerge(1, lists:sort(Options2), MergedConfigs),
     case file:write_file(ToPath1, io_lib:format("~p.", [FinalConfig])) of
         ok ->
+            % Also copy the config.in file
+            file:copy(FromPath, ToPath),
             ok;
         {error, _} = Error ->
             lager:error("[zotonic_status] Error writing ~p: ~p",
                 [ToPath1, Error]),
             Error
+    end;
+copy_file(_Filename, FromPath, ToPath, _Options) ->
+    case filelib:is_file(ToPath) of
+        true -> ok;
+        false -> file:copy(FromPath, ToPath)
     end.
 
 
@@ -263,13 +273,15 @@ normalize_options(Options) ->
                 ({skeleton, Skel}) ->
                     {skeleton, z_convert:to_atom(Skel)};
                 ({K,V}) when is_binary(V) ->
-                    {K, binary_to_list(V)}
+                    {K, binary_to_list(V)};
+                (KV) ->
+                    KV
             end,
             Options).
 
 
 site_dir(Name) ->
-    z_convert:to_list(filename:join([z_path:site_dir(), Name])).
+    z_convert:to_list(filename:join([z_path:sites_dir(), Name])).
 
 skel_dir(Options) ->
     case z_string:to_name(proplists:get_value(skeleton, Options, <<"empty">>)) of
@@ -315,8 +327,8 @@ map_tag(<<"%%DBPASSWORD%%">>, Options) -> proplists:get_value(dbpassword, Option
 map_tag(<<"%%DBDATABASE%%">>, Options) -> proplists:get_value(dbdatabase, Options);
 map_tag(<<"%%DBSCHEMA%%">>, Options) -> proplists:get_value(dbschema, Options);
 map_tag(<<"%%ADMINPASSWORD%%">>, Options) -> proplists:get_value(admin_password, Options);
-map_tag(<<"%%YEAR%%">>, _Options) ->  z_dateformat:format(calendar:localtime(), "Y", []);
-map_tag(<<"%%DATE%%">>, _Options) -> z_dateformat:format(calendar:localtime(), "Y-m-d", []);
+map_tag(<<"%%YEAR%%">>, _Options) ->  z_dateformat:format(calendar:local_time(), "Y", []);
+map_tag(<<"%%DATE%%">>, _Options) -> z_dateformat:format(calendar:local_time(), "Y-m-d", []);
 map_tag(_, _Options) -> <<>>.
 
 
