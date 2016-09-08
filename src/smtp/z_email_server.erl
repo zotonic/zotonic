@@ -703,7 +703,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     MailHeaders = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- (Headers2 ++ BodyHeaders)
     ],
-    mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts});
+    mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts}, opt_dkim(Context));
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{"From", From},
                {"To", z_convert:to_list(Email#email.to)},
@@ -768,8 +768,8 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     case Attachment of
         [] ->
             case Parts1 of
-                [{T,ST,[],Ps,SubParts}] -> mimemail:encode({T,ST,Headers1,Ps,SubParts});
-                _MultiPart -> mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1})
+                [{T,ST,[],Ps,SubParts}] -> mimemail:encode({T,ST,Headers1,Ps,SubParts}, opt_dkim(Context));
+                _MultiPart -> mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, [], Parts1}, opt_dkim(Context))
             end;
         _ ->
             AttsEncoded = [ encode_attachment(Att, Context) || Att <- Attachment ],
@@ -778,7 +778,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                              Headers1,
                              [],
                              [ {<<"multipart">>, <<"alternative">>, [], [], Parts1} | AttsEncodedOk ]
-                            })
+                            }, opt_dkim(Context))
     end.
 
     encode_attachment(Att, Context) when is_integer(Att) ->
@@ -1074,3 +1074,6 @@ encode_header({Header, Value}) when is_atom(Header), is_list(Value) ->
 
 encode_headers(Headers) ->
     string:join(lists:map(fun encode_header/1, Headers), "\r\n").
+
+opt_dkim(Context) ->
+    z_email_dkim:mimemail_options(Context).
