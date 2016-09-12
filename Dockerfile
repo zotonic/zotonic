@@ -1,13 +1,11 @@
 FROM alpine:3.4
-MAINTAINER Marco Wessel <marco@driebit.nl>
 
 ADD . /opt/zotonic
 WORKDIR /opt/zotonic
 
-
 # Note: dumb-init and gosu are pulled from edge; remove that when upgrading to an alpine release that
 # includes those packages.
-RUN apk add --virtual build-deps --no-cache ca-certificates wget curl make gcc musl-dev g++ git \
+RUN apk add --virtual build-deps --no-cache ca-certificates wget curl make gcc musl-dev g++ bsd-compat-headers git \
     && apk add --no-cache bash imagemagick \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ dumb-init \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ gosu \
