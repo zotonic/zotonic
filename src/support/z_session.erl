@@ -190,13 +190,13 @@ get_persistent(Key, Context, DefaultValue) ->
     gen_server:call(Context#context.session_pid, {get_persistent, Key, DefaultValue}).
 
 
-%% @spec add_script(Script::io_list(), PagePid::pid()) -> none()
 %% @doc Send a script to all session pages
-add_script(Script, Context) ->
-    z_transport:session(javascript, Script, Context).
+-spec add_script(iolist(), #context{}|pid()) -> ok.
+add_script(Script, ContextOrPid) ->
+    z_transport:session(javascript, Script, ContextOrPid).
 
-%% @spec add_script(Context) -> Context1
 %% @doc Split the scripts from the context and add the scripts to the session pages.
+-spec add_script(#context{}) -> ok.
 add_script(Context) ->
     {Scripts, CleanContext} = z_script:split(Context),
     z_transport:session(javascript, Scripts, CleanContext),

@@ -111,6 +111,8 @@ websocket_handle({reply, Payload}, Context) ->
 websocket_handle(_Data, Context) ->
     {ok, Context}.
 
+websocket_info({reply, Payload}, Context) ->
+    {reply, Payload, Context};
 websocket_info(_Msg, Context) ->
     {ok, Context}.
 
