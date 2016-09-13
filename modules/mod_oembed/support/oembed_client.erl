@@ -132,8 +132,3 @@ fixup_protocol(Key, Props) ->
             Value1 = binary:replace(Value, <<"http://">>, <<"//">>, [global]),
             [{Key,Value1}|Props1]
     end.
-
-
-%% @doc Name of the oembed client gen_server for this site
-srv_name(Context) ->
-    z_utils:name_for_site(?MODULE, z_context:site(Context)).
