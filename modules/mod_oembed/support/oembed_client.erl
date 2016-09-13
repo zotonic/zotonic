@@ -110,13 +110,20 @@ oembed_request(RequestUrl) ->
 
 %% @doc Construct extra URL arguments to the OEmbed client request from the oembed module config.
 oembed_url_extra(Context) ->
-    W = m_config:get_value(oembed, maxwidth, 640, Context),
-    X1 =  "&maxwidth=" ++ z_utils:url_encode(z_convert:to_list(W)),
-    X2 = case m_config:get_value(oembed, maxheight, Context) of
+    X1 = ["&maxwidth=", z_utils:url_encode(get_config(maxwidth, 640, Context))],
+    X2 = case get_config(maxheight, undefined, Context) of
              undefined -> X1;
-             H -> X1 ++ "&maxheight=" ++ z_utils:url_encode(z_convert:to_list(H))
+             <<>> -> X1;
+             H -> [X1, "&maxheight=", z_utils:url_encode(H)]
          end,
     X2.
+
+get_config(Cfg, Default, Context) ->
+    case m_config:get_value(mod_oembed, Cfg, Default, Context) of
+        undefined -> m_config:get_value(oembed, Cfg, Default, Context);
+        <<>> -> Default;
+        Value -> Value
+    end.
 
 %% @doc Fix oembed returned HTML, remove http: protocol to ensure that the oembed can also be shown on https: sites.
 fixup_html({ok, Props}) ->
