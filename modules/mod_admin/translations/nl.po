@@ -544,7 +544,7 @@ msgstr "Media op deze pagina"
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:18
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:25
 msgid "Media title"
-msgstr "Media titel"
+msgstr "Mediatitel"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:26
 msgid "Middle"
