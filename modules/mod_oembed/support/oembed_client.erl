@@ -123,8 +123,10 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context
                 F when is_function(F) ->
                     F(Url);
                 undefined ->
-                    RequestUrl = Provider#oembed_provider.endpoint_url
-                        ++ "?format=json&url=" ++ z_utils:url_encode(Url) ++ UrlExtra,
+                    RequestUrl = iolist_to_binary([
+                            Provider#oembed_provider.endpoint_url,
+                            "?format=json&url=", z_utils:url_encode(Url),
+                            UrlExtra]),
                     oembed_request(RequestUrl)
             end;
         nomatch ->
@@ -132,7 +134,7 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context
     end;
 discover_per_provider(Url, UrlExtra, [], Context) ->
     lager:debug("Fallback embed.ly discovery for url: ~p~n", [Url]),
-    Key = m_config:get(oembed, embedly_key, Context),
+    Key = m_config:get(mod_oembed, embedly_key, Context),
     EmbedlyUrl = iolist_to_binary([
             ?EMBEDLY_ENDPOINT,
             z_utils:url_encode(Url),
