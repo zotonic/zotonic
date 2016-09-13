@@ -25,7 +25,6 @@
 
 %% interface functions
 -export([
-    init/1,
     observe_rsc_update/3,
     observe_media_viewer/2,
     observe_media_stillimage/2,
@@ -40,12 +39,6 @@
 
 %% Fantasy mime type to distinguish embeddable html fragments.
 -define(OEMBED_MIME, <<"text/html-oembed">>).
-
-%% @doc Start the oembed client.
-init(Context) ->
-    oembed_client:start_link(Context),
-    ok.
-
 
 %% @doc Check if the update contains video embed information.  If so
 %% then try to get the oembed information from the provider and update
@@ -242,7 +235,7 @@ observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
 
 
 %% @doc Handle the form submit from the "new media" dialog.  The form is defined in templates/_media_upload_panel.tpl.
-%% @spec event(Event, Context1) -> Context2
+event(#submit{message=admin_oembed})
 event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
@@ -355,6 +348,16 @@ event(#postback{message=fix_missing}, Context) ->
             spawn(fun() -> oembed_admin:count_missing(Context) end),
             Msg = ?__("Attempting to fix ~p videos.", Context),
             z_render:growl(lists:flatten(io_lib:format(Msg, [N])), Context)
+    end;
+
+event(#submit{message=admin_oembed}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            EmbedlyKey = z_string:trim(z_context:get_q(<<"embedly_key">>, Context)),
+            m_config:set_value(mod_oembed, embedly_key, EmbedlyKey, Context),
+            z_render:growl(?__("Saved the Embedly settings.", Context), Context);
+        false ->
+            z_render:growl(?__("You don't have permission to change the Embedly settings.", Context), Context)
     end.
 
 
