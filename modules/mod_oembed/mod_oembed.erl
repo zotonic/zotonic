@@ -25,7 +25,6 @@
 
 %% interface functions
 -export([
-    init/1,
     observe_rsc_update/3,
     observe_media_viewer/2,
     observe_media_stillimage/2,
@@ -40,12 +39,6 @@
 
 %% Fantasy mime type to distinguish embeddable html fragments.
 -define(OEMBED_MIME, <<"text/html-oembed">>).
-
-%% @doc Start the oembed client.
-init(Context) ->
-    oembed_client:start_link(Context),
-    ok.
-
 
 %% @doc Check if the update contains video embed information.  If so
 %% then try to get the oembed information from the provider and update
