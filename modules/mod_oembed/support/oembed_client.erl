@@ -113,10 +113,10 @@ code_change(_OldVsn, State, _Extra) ->
 
 do_discover(Url, State) ->
     UrlExtra = oembed_url_extra(State#state.context),
-    fixup_html(discover_per_provider(Url, UrlExtra, oembed_providers:list())).
+    fixup_html(discover_per_provider(Url, UrlExtra, oembed_providers:list(), State#state.context)).
 
 
-discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest]) ->
+discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context) ->
     case re:run(Url, Provider#oembed_provider.url_re) of
         {match, _} ->
             case Provider#oembed_provider.callback of
@@ -128,11 +128,21 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest]) ->
                     oembed_request(RequestUrl)
             end;
         nomatch ->
-            discover_per_provider(Url, UrlExtra, Rest)
+            discover_per_provider(Url, UrlExtra, Rest, Context)
     end;
-discover_per_provider(Url, UrlExtra, []) ->
+discover_per_provider(Url, UrlExtra, [], Context) ->
     lager:debug("Fallback embed.ly discovery for url: ~p~n", [Url]),
-    oembed_request(?EMBEDLY_ENDPOINT ++ z_utils:url_encode(Url) ++ UrlExtra).
+    Key = m_config:get(oembed, embedly_key, Context),
+    EmbedlyUrl = iolist_to_binary([
+            ?EMBEDLY_ENDPOINT,
+            z_utils:url_encode(Url),
+            UrlExtra
+        ]),
+    EmbedlyUrl1 = case z_utils:is_empty(Key) of
+        true -> EmbedlyUrl;
+        false -> <<EmbedlyUrl/binary, "&key=", Key/binary>>
+    end,
+    oembed_request(EmbedlyUrl1).
 
 
 find_providers(Url, _State) ->
@@ -152,7 +162,7 @@ oembed_request(RequestUrl) ->
         {timeout, ?HTTP_GET_TIMEOUT},
         {relaxed, true}
     ],
-    case httpc:request(get, {RequestUrl, []}, HttpOptions, []) of
+    case httpc:request(get, {z_convert:to_list(RequestUrl), []}, HttpOptions, []) of
         {ok, {{_, Code, _}, Headers, Body}} ->
             case Code of
                 200 ->
