@@ -42,7 +42,10 @@ check_password_no_user_test() ->
     ?assertEqual({error, nouser}, m_identity:check_username_pw("mr_z", "does-not-exist", C)),
     ok.
 
-check_username_password_test() ->
+check_username_password_test_() ->
+    {timeout, 20, fun() -> check_username_password() end}.
+
+check_username_password() ->
     C = z_context:new(testsandboxdb),
     start_modules(C),
 
