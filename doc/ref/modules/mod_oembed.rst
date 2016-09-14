@@ -52,14 +52,20 @@ Configuration options
 
 The following :ref:`model-config` options are supported:
 
-``oembed.maxwidth``
+``mod_oembed.embedly_key``
+  
+  The API key for Embedly. This configuration kan be added set in the
+  admin via the menu **Auth -> External Services**.
+ 
+``mod_oembed.maxwidth``
 
   Requests the OEmbed service to return an HTML embed code with the
   requested maximum width. Defaults to 640.
 
-``oembed.maxheight``
+``mod_oembed.maxheight``
 
   Requests the OEmbed service to return an HTML embed code with the
   requested maximum height. Not set by default.
-  
+
+
 .. todo:: Extend documentation

@@ -25,7 +25,6 @@
 
 %% interface functions
 -export([
-    init/1,
     observe_rsc_update/3,
     observe_media_viewer/2,
     observe_media_stillimage/2,
@@ -40,12 +39,6 @@
 
 %% Fantasy mime type to distinguish embeddable html fragments.
 -define(OEMBED_MIME, <<"text/html-oembed">>).
-
-%% @doc Start the oembed client.
-init(Context) ->
-    oembed_client:start_link(Context),
-    ok.
-
 
 %% @doc Check if the update contains video embed information.  If so
 %% then try to get the oembed information from the provider and update
@@ -242,7 +235,6 @@ observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
 
 
 %% @doc Handle the form submit from the "new media" dialog.  The form is defined in templates/_media_upload_panel.tpl.
-%% @spec event(Event, Context1) -> Context2
 event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
@@ -312,38 +304,37 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 event(#postback_notify{message= <<"do_oembed">>}, Context) ->
     case z_string:trim(z_context:get_q(<<"url">>, Context)) of
         <<>> ->
-            z_context:add_script_page([
+            z_render:wire({script, [{script,[
                     "$('#oembed-title').val('""').attr('disabled',true);",
                     "$('#oembed-summary').val('""').attr('disabled',true);",
                     "$('#oembed-save').attr('disabled',true);",
                     "$('#oembed-image').closest('.control-group').hide();"
-                    ], Context),
-            Context;
+                    ]}]}, Context);
         Url ->
             case oembed_request(Url, Context) of
                 {error, _} ->
-                    z_context:add_script_page([
+                    Context1 = z_render:wire({script, [{script, [
                             "$('#oembed-title').val('""').attr('disabled',true);",
                             "$('#oembed-summary').val('""').attr('disabled',true);",
                             "$('#oembed-save').attr('disabled', true);",
                             "$('#oembed-image').closest('.control-group').hide();"
-                            ], Context),
-                    z_render:growl_error(?__("Invalid or unsupported media URL. The item might have been deleted or is not public.", Context), Context);
+                            ]}]}, Context),
+                    z_render:growl_error(?__("Invalid or unsupported media URL. The item might have been deleted or is not public.", Context1), Context1);
                 {ok, Json} ->
                     Title = z_html:unescape(proplists:get_value(title, Json, [])),
                     Descr = z_html:unescape(proplists:get_value(description, Json, [])),
-                    z_context:add_script_page([
-                        "$('#oembed-title').val('", z_utils:js_escape(Title), "').removeAttr('disabled');",
-                        "$('#oembed-summary').val('", z_utils:js_escape(Descr), "').removeAttr('disabled');",
-                        "$('#oembed-save').removeAttr('disabled');"
-                        ], Context),
-                    case preview_url_from_json(proplists:get_value(type, Json), Json) of
-                        undefined ->
-                            z_context:add_script_page(["$('#oembed-image').closest('.control-group').hide();"], Context);
-                        PreviewUrl ->
-                            z_context:add_script_page(["$('#oembed-image').attr('src', '", z_utils:js_escape(PreviewUrl), "').closest('.control-group').show();"], Context)
-                    end,
-                    z_render:growl(?__("Detected media item", Context), Context)
+                    Context1 = z_render:wire({script, [
+                        {script, [
+                            "$('#oembed-title').val('", z_utils:js_escape(Title), "').removeAttr('disabled');",
+                            "$('#oembed-summary').val('", z_utils:js_escape(Descr), "').removeAttr('disabled');",
+                            "$('#oembed-save').removeAttr('disabled');",
+                            case preview_url_from_json(proplists:get_value(type, Json), Json) of
+                                undefined -> ["$('#oembed-image').closest('.control-group').hide();"];
+                                PreviewUrl -> ["$('#oembed-image').attr('src', '", z_utils:js_escape(PreviewUrl), "').closest('.control-group').show();"]
+                            end
+                        ]}]},
+                        Context),
+                    z_render:growl(?__("Detected media item", Context), Context1)
             end
     end;
 
@@ -355,6 +346,16 @@ event(#postback{message=fix_missing}, Context) ->
             spawn(fun() -> oembed_admin:count_missing(Context) end),
             Msg = ?__("Attempting to fix ~p videos.", Context),
             z_render:growl(lists:flatten(io_lib:format(Msg, [N])), Context)
+    end;
+
+event(#submit{message=admin_oembed}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            EmbedlyKey = z_string:trim(z_context:get_q(<<"embedly_key">>, Context)),
+            m_config:set_value(mod_oembed, embedly_key, EmbedlyKey, Context),
+            z_render:growl(?__("Saved the Embedly settings.", Context), Context);
+        false ->
+            z_render:growl(?__("You don't have permission to change the Embedly settings.", Context), Context)
     end.
 
 
