@@ -124,13 +124,9 @@ process_post_form(Context) ->
             post_form_return(Context3);
         #z_msg_v1{} = Msg ->
             Context2 = z_transport:prepare_incoming_context(Msg, Context1),
-            case z_session:sidejob(Msg, Context2) of
-                {ok, _Pid} ->
-                    ok;
-                {error, overload} ->
-                    z_transport:transport(z_transport:maybe_ack(overload, Msg, Context2), Context2)
-            end,
-            post_form_return(Context2)
+            {ok, Reply, Context3} = z_transport:incoming(Msg, Context2),
+            z_transport:transport(Reply, Context3),
+            post_form_return(Context3)
     end.
 
 post_form_return(Context) ->
