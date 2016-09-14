@@ -314,13 +314,13 @@ is_sidejob_overload(#context{session_pid=SessionPid}) ->
         overload -> true
     end.
 
--spec sidejob(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> {ok, pid()} | {error, overload}.
-sidejob(Msg, #context{session_pid=undefined} = Context) ->
-    sidejob(Msg, Context);
-sidejob(Msg, #context{session_pid=SessionPid} = Context) ->
+-spec sidejob(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> {ok, pid()} | {error, overload}.
+sidejob(Job, #context{session_pid=undefined} = Context) ->
+    do_sidejob(Job, Context);
+sidejob(Job, #context{session_pid=SessionPid} = Context) ->
     case gen_server:call(SessionPid, sidejob_check, infinity) of
         ok ->
-            case sidejob_supervisor:spawn(zotonic_sidejobs, {?MODULE, do_sidejob, [Msg, Context]}) of
+            case sidejob_supervisor:spawn(zotonic_sidejobs, {?MODULE, do_sidejob, [Job, Context]}) of
                 {ok, Pid} when is_pid(Pid) ->
                     gen_server:cast(SessionPid, {sidejob, Pid}),
                     {ok, Pid};
@@ -331,7 +331,13 @@ sidejob(Msg, #context{session_pid=SessionPid} = Context) ->
             {error, overload}
     end.
 
--spec do_sidejob(#z_msg_v1{}|list(), #context{}) -> ok.
+-spec do_sidejob(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> ok.
+do_sidejob(Fun, _Context) when is_function(Fun,0) ->
+    Fun();
+do_sidejob(Fun, Context) when is_function(Fun,1) ->
+    Fun(Context);
+do_sidejob({M,F,A}, _Context) ->
+    erlang:apply(M, F, A);
 do_sidejob(Msg, Context) ->
     {ok, Reply, Context1} = z_transport:incoming(Msg, Context),
     z_transport:transport(Reply, Context1),
