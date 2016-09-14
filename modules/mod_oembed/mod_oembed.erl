@@ -391,18 +391,25 @@ preview_create(MediaId, MediaProps, Context) ->
         Url ->
             case oembed_request(Url, Context) of
                 {ok, Json} ->
-                    %% store found properties in the media part of the rsc
-                    {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, proplists:get_value(html, Json)),
-                    ok = m_media:replace(MediaId,
-                                         [
-                                            {oembed, Json},
-                                            {video_embed_service, EmbedService},
-                                            {video_embed_id, EmbedId}
-                                            | MediaProps
-                                         ],
-                                         Context),
-                    _ = preview_create_from_json(MediaId, Json, Context),
-                    proplists:get_value(title, Json);
+                    case proplists:get_value(type, Json) of
+                        <<"link">> ->
+                            % The selected images for "link" are quite bad, so don't
+                            % embed anything for this type.
+                            undefined;
+                        _Type ->
+                            %% store found properties in the media part of the rsc
+                            {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, proplists:get_value(html, Json)),
+                            ok = m_media:replace(MediaId,
+                                                 [
+                                                    {oembed, Json},
+                                                    {video_embed_service, EmbedService},
+                                                    {video_embed_id, EmbedId}
+                                                    | MediaProps
+                                                 ],
+                                                 Context),
+                            _ = preview_create_from_json(MediaId, Json, Context),
+                            proplists:get_value(title, Json)
+                    end;
                 {error, {http, Code, Body}} ->
                     Err = [{error, http_error}, {code, Code}, {body, Body}],
                     ok = m_media:replace(MediaId, [{oembed, Err} | MediaProps], Context),
