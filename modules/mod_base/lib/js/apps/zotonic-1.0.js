@@ -49,6 +49,7 @@ var z_stream_start_timeout;
 var z_default_form_postback = false;
 var z_page_unloading        = false;
 var z_transport_check_timer;
+var z_transport_overload    = false;
 var z_transport_queue       = [];
 var z_transport_acks        = [];
 var z_transport_delegates   = {
@@ -630,11 +631,16 @@ function z_transport_incoming_msg(msg)
         case 'z_msg_ack':
             if (!z_websocket_pong(msg) && typeof z_transport_acks[msg.msg_id] == 'object') {
                 var ack = z_transport_acks[msg.msg_id];
-                delete z_transport_acks[msg.msg_id];
-
-                clearTimeout(ack.timeout_timer);
-                if (typeof ack.options.ack == 'function') {
-                    ack.options.ack(msg, ack.options);
+                if (msg.result == 'overload') {
+                    z_transport_overload = true;
+                    clearTimeout(ack.timeout_timer);
+                    z_transport_timeout(msg.msg_id);
+                } else {
+                    delete z_transport_acks[msg.msg_id];
+                    clearTimeout(ack.timeout_timer);
+                    if (typeof ack.options.ack == 'function') {
+                        ack.options.ack(msg, ack.options);
+                    }
                 }
             }
             break;
@@ -809,10 +815,9 @@ function z_postback_opt_qs(extraParams)
 
 function z_transport_check()
 {
-    if (z_transport_queue.length > 0)
-    {
+    if (z_transport_queue.length > 0) {
         // Delay transport messages till the z_pageid is initialized.
-        if (z_pageid !== '') {
+        if (z_pageid !== '' && !z_transport_overload) {
             var qmsg = z_transport_queue.shift();
 
             if (z_transport_acks[qmsg.msg_id]) {
@@ -820,7 +825,11 @@ function z_transport_check()
             }
             z_do_transport(qmsg);
         } else if (!z_transport_check_timer) {
-            z_transport_check_timer = setTimeout(function() { z_transport_check_timer = undefined; z_transport_check(); }, 50);
+            z_transport_check_timer = setTimeout(function() {
+                z_transport_overload = false;
+                z_transport_check_timer = undefined;
+                z_transport_check();
+            }, 50);
         }
     }
 }
@@ -839,7 +848,7 @@ function z_ajax(options, data)
 {
     z_start_spinner();
     $.ajax({
-        url: '/postback',
+        url: '/postback?transport='+options.transport,
         type: 'post',
         data: data,
         dataType: 'ubf text',

@@ -73,7 +73,13 @@
     clear_cookies/1,
     check_expire/2,
     dump/1,
-    spawn_link/4
+    spawn_link/4,
+    sidejob/2
+]).
+
+%% Callback for start_sidejob/2
+-export([
+    do_sidejob/2
     ]).
 
 
@@ -92,6 +98,7 @@
             props_persist=[],
             cookies=[],
             transport,
+            sidejobs=[],
             context
             }).
 
@@ -100,6 +107,9 @@
             page_id,
             page_pid
             }).
+
+
+-define(SIDEJOBS_PER_SESSION, 10).
 
 
 %%====================================================================
@@ -295,6 +305,29 @@ dump(Pid) ->
 spawn_link(Module, Func, Args, Context) ->
     gen_server:call(Context#context.session_pid, {spawn_link, Module, Func, Args}).
 
+-spec sidejob(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> {ok, pid()} | {error, overload}.
+sidejob(Msg, #context{session_pid=undefined} = Context) ->
+    sidejob(Msg, Context);
+sidejob(Msg, #context{session_pid=SessionPid} = Context) ->
+    case gen_server:call(SessionPid, sidejob_check, infinity) of
+        ok ->
+            case sidejob_supervisor:spawn(zotonic_sidejobs, {?MODULE, do_sidejob, [Msg, Context]}) of
+                {ok, Pid} when is_pid(Pid) ->
+                    gen_server:cast(SessionPid, {sidejob, Pid}),
+                    {ok, Pid};
+                {error, overload} ->
+                    {error, overload}
+            end;
+        overload ->
+            {error, overload}
+    end.
+
+-spec do_sidejob(#z_msg_v1{}|list(), #context{}) -> ok.
+do_sidejob(Msg, Context) ->
+    {ok, Reply, Context1} = z_transport:incoming(Msg, Context),
+    z_transport:transport(Reply, Context1),
+    ok.
+
 
 %%====================================================================
 %% gen_server callbacks
@@ -411,6 +444,10 @@ handle_cast({set, Props}, Session) ->
                          Props),
     {noreply, Session#session{props = Props1}};
 
+handle_cast({sidejob, Pid}, Session) ->
+    _MRef = erlang:monitor(process, Pid),
+    {noreply, Session#session{sidejobs=[Pid|Session#session.sidejobs]}};
+
 handle_cast(dump, Session) ->
     io:format("~p~n", [Session]),
     {noreply, Session};
@@ -507,6 +544,13 @@ handle_call(get_attach_state, _From, Session) ->
 handle_call(get_pages, _From, Session) ->
     {reply, [ Pid ||  #page{page_pid=Pid} <- Session#session.pages], Session};
 
+handle_call(sidejob_check, _From, #session{sidejobs=Sidejobs} = Session) ->
+    Reply = case length(Sidejobs) < ?SIDEJOBS_PER_SESSION of
+        true -> ok;
+        false -> overload
+    end,
+    {reply, Reply, Session};
+
 handle_call(Msg, _From, Session) ->
     {stop, {unknown_cast, Msg}, Session}.
 
@@ -518,8 +562,9 @@ handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, Session) ->
     FIsUp  = fun(Page) -> Page#page.page_pid /= Pid end,
     Pages  = lists:filter(FIsUp, Session#session.pages),
     Linked = lists:delete(Pid, Session#session.linked),
+    Sidejobs = lists:delete(Pid, Session#session.sidejobs),
     exometer:update([zotonic, z_context:site(Session#session.context), session, page_processes], -1),
-    {noreply, Session#session{pages=Pages, linked=Linked}};
+    {noreply, Session#session{pages=Pages, linked=Linked, sidejobs=Sidejobs}};
 
 %% @doc MQTT message, forward it to the page.
 %% TODO: Add all handling

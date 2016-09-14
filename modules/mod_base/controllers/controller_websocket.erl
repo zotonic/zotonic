@@ -38,6 +38,7 @@
 
 -include_lib("zotonic.hrl").
 
+
 %% ---------------------------------------------------------------------------------------------
 %% Cowmachine controller callbacks
 %% ---------------------------------------------------------------------------------------------
@@ -98,7 +99,7 @@ websocket_init(Context) ->
 %% @doc Handle a message from the browser, should contain an ubf encoded request.
 websocket_handle({Type, Data}, Context) when Type =:= text; Type =:= binary ->
     try
-        handle_websocket_data(Data, [], Context)
+        handle_incoming_data(Data, [], Context)
     catch
         Error:X ->
             StackTrace = erlang:get_stacktrace(),
@@ -106,8 +107,6 @@ websocket_handle({Type, Data}, Context) when Type =:= text; Type =:= binary ->
                           [z_context:site(Context), Error, X, StackTrace]),
             {ok, Context}
     end;
-websocket_handle({reply, Payload}, Context) ->
-    {reply, Payload, Context};
 websocket_handle(_Data, Context) ->
     {ok, Context}.
 
@@ -121,17 +120,44 @@ websocket_info(_Msg, Context) ->
 %% Internal
 %% ---------------------------------------------------------------------------------------------
 
-handle_websocket_data(<<>>, [], Context) ->
+handle_incoming_data(<<>>, [], Context) ->
     {ok, Context};
-handle_websocket_data(<<>>, Acc, Context) ->
+handle_incoming_data(<<>>, Acc, Context) ->
     Acc1 = lists:reverse([ Reply || Reply <- Acc, Reply =/= <<>> ]),
     case Acc1 of
         [] -> {ok, Context};
         _ -> {reply, {text, Acc1}, Context}
     end;
-handle_websocket_data(Data, Acc, Context) ->
+handle_incoming_data(Data, Acc, Context) ->
     {ok, Term, RestData} = z_transport:data_decode(Data),
-    {ok, Reply, ContextWs} = z_transport:incoming(Term, Context),
-    {ok, ReplyData} = z_transport:data_encode(Reply),
+    {ControlMsgs, OtherMsgs} = z_transport:partition_control_messages(Term),
+    {ok, Reply, ContextWs} = z_transport:incoming(ControlMsgs, Context),
     z_session_page:websocket_attach(self(), ContextWs),
-    handle_websocket_data(RestData, [ReplyData|Acc], ContextWs).
+    Context1 = maybe_start_sidejob(OtherMsgs, ContextWs),
+    {ok, ReplyData} = z_transport:data_encode(Reply),
+    handle_incoming_data(RestData, [ReplyData|Acc], Context1).
+
+maybe_start_sidejob([], Context) ->
+    Context;
+maybe_start_sidejob(OtherMsgs, Context) ->
+    Context1 = z_transport:prepare_incoming_context(OtherMsgs, Context),
+    lists:foldl(
+        fun(Msg, AccState) -> 
+            start_sidejob(Msg, AccState)
+        end,
+        Context1,
+        OtherMsgs).
+
+start_sidejob(Msg, Context) ->
+    case z_session:sidejob(Msg, Context) of
+        {ok, _Pid} ->
+            Context;
+        {error, overload} ->
+            overload(Msg, Context)
+    end.
+
+overload(Msg, Context) ->
+    Reply = z_transport:maybe_ack(overload, Msg, Context),
+    {ok, ReplyData} = z_transport:data_encode(Reply),
+    websocket_send_data(self(), ReplyData).
+

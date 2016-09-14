@@ -28,6 +28,7 @@
 
 -include_lib("zotonic.hrl").
 
+-define(SIDEJOB_TIMEOUT, 1000).
 
 service_available(Context) ->
     Context1 = z_context:continue_session(Context),
@@ -69,23 +70,47 @@ process_post(Context) ->
 process_post_ubf(Context) ->
     {Data, Context1} = cowmachine_req:req_body(Context),
     {ok, Term, _Rest} = z_transport:data_decode(Data),
-    {ok, Rs, Context2} = z_transport:incoming(Term, Context1),
-    Rs1 = case z_session_page:get_transport_msgs(Context2) of
+    {ok, Rs, ContextRs} = case z_context:get_q(<<"transport">>, Context) of
+        <<"ajax">> ->
+            % Forced an ajax request (probably for cookies) so process this
+            % in the requestor process.
+            z_transport:incoming(Term, Context);
+        _ ->
+            Context2 = z_transport:prepare_incoming_context(Term, Context1),
+            case z_session:sidejob(Term, Context2) of
+                {ok, Pid} ->
+                    % We wait a bit for some quick results, as otherwise the
+                    % comet connection is used to transport the result.
+                    MRef = erlang:monitor(process, Pid),
+                    receive
+                        {'DOWN', MRef, process, _Pid, _Reason} ->
+                            {ok, [], Context2}
+                    after
+                        ?SIDEJOB_TIMEOUT ->
+                            erlang:demonitor(MRef),
+                            {ok, [], Context2}
+                    end;
+                {error, overload} ->
+                    {ok, z_transport:maybe_ack(overload, Term, Context2), Context2}
+            end
+    end,
+    Rs1 = case z_session_page:get_transport_msgs(ContextRs) of
               [] -> Rs;
               Msgs -> mklist(Rs) ++ mklist(Msgs)
           end,
     {ok, ReplyData} = z_transport:data_encode(Rs1),
-    post_return(ReplyData, Context2).
+    post_return(ReplyData, ContextRs).
 
 mklist(L) when is_list(L) -> L;
 mklist(V) -> [V].
 
 %% @doc A HTML form, we have to re-constitute the postback before calling z_transport:incoming/2
+%%      All return data is sent via the comet or subsequent "normal" postback connection.
 process_post_form(Context) ->
     Context1 = z_context:ensure_qs(Context),
     case z_context:get_q(<<"z_msg">>, Context1) of
         undefined ->
-            % A "nornal" post of a form, no javascript involved
+            % A "normal" post of a form, no javascript involved
             Event = #submit{
                         message = z_context:get_q(<<"z_message">>, Context1),
                         target = z_context:get_q(<<"z_target_id">>, Context1)
@@ -98,8 +123,13 @@ process_post_form(Context) ->
             end,
             post_form_return(Context3);
         #z_msg_v1{} = Msg ->
-            {ok, Reply, Context2} = z_transport:incoming(Msg, Context1),
-            ok = z_transport:transport(Reply, Context2),
+            Context2 = z_transport:prepare_incoming_context(Msg, Context1),
+            case z_session:sidejob(Msg, Context2) of
+                {ok, _Pid} ->
+                    ok;
+                {error, overload} ->
+                    z_transport:transport(z_transport:maybe_ack(overload, Msg, Context2), Context2)
+            end,
             post_form_return(Context2)
     end.
 

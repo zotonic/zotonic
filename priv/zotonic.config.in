@@ -160,6 +160,10 @@
 %%% Enabling this will make the system slow, it is not advised on production systems.
    %% {filewatcher_scanner_enabled, false},
 
+%%% Maximum number of concurrent sidejob processes. For example, every request sent over
+%%% Websocket is executed in a sidejob process.
+   %% {sidejobs_limit, 10000},
+
 %%% List with extra dependencies which get fetched and compiled by rebar
    %% {deps,
    %%  [

@@ -14,7 +14,7 @@
   {mod, {zotonic_app, []}},
   {env, []},
   {applications, [kernel, stdlib, crypto, public_key, ssl, inets, lager,
-                  mimetypes, mnesia, emqtt, gproc, jobs,
+                  mimetypes, mnesia, emqtt, gproc, jobs, sidejob,
                   bert, dh_date, eiconv, exometer,
                   epgsql, depcache, z_stdlib,
                   cowboy, cowmachine,

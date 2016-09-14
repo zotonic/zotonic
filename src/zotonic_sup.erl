@@ -62,6 +62,7 @@ upgrade() ->
 %% @doc supervisor callback.
 init([]) ->
     ensure_job_queues(),
+    ensure_sidejobs(),
 
     %% Access Logger
     Logger = {z_access_syslog,
@@ -137,6 +138,10 @@ ensure_job_queues() ->
             ok
     end.
 
+%% @doc The supervisor for websocket requests and other transient processes.
+ensure_sidejobs() ->
+    Limit = z_config:get(sidejobs_limit),
+    sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, Limit).
 
 %% @doc Scan priv/extensions for ext_ folders and add those as childs to the supervisor.
 get_extensions() ->

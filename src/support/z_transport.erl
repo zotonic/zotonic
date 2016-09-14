@@ -37,7 +37,11 @@
     data_decode/1,
     data_encode/1,
 
+    prepare_incoming_context/2,
+    partition_control_messages/1,
     incoming/2,
+
+    maybe_ack/3,
 
     maybe_set_sessions/3,
     maybe_logon/1
@@ -155,8 +159,36 @@ data_encode(Data) ->
     z_ubf:encode(Data).
 
 
+%% @doc Partition the incoming messages into control messages like ping and non-control messages.
+-spec partition_control_messages(Msg) -> {Msg, Msg}
+        when Msg :: list()|#z_msg_v1{}|#z_msg_ack{}.
+partition_control_messages(List) when is_list(List) ->
+    lists:partition(fun is_control_message/1, List);
+partition_control_messages(Msg) ->
+    case is_control_message(Msg) of
+        true -> {[Msg], []};
+        false -> {[], [Msg]}
+    end.
+
+%% @doc Prepare the context of an incoming message, this is needed for handling sidejobs with the controller_postback.
+-spec prepare_incoming_context(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> #context{}.
+prepare_incoming_context([Msg|_], Context) ->
+    prepare_incoming_context(Msg, Context);
+prepare_incoming_context(#z_msg_v1{page_id=undefined}, #context{page_id=undefined} = Context) ->
+    lager:info(z_context:lager_md(Context),
+              "Transport with 'undefined' page_id from ~p",
+              [m_req:get(peer, Context)]),
+    {ok, [msg(undefined, session, <<"page_invalid">>, [])], Context};
+prepare_incoming_context(#z_msg_v1{page_id=PageId, session_id=SessionId}, Context) ->
+    maybe_logon(maybe_set_sessions(SessionId, PageId, Context));
+prepare_incoming_context(#z_msg_ack{page_id=PageId, session_id=SessionId}, Context) ->
+    maybe_set_sessions(SessionId, PageId, Context).
+
+
 %% @doc Handle incoming messages, originates from various sources, like postback, websocket etc
 -spec incoming(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> {ok, list(), #context{}}.
+incoming([], Context) ->
+    {ok, [], Context};
 incoming(Msg, Context) ->
     {ok, Rs, Context1} = incoming_msgs(Msg, Context),
     {ok, maybe_session_status_msg(Rs, Context1), cleanup_context(Context1, Context)}.
@@ -189,6 +221,7 @@ incoming_msgs(#z_msg_v1{page_id=undefined}, #context{page_id=undefined} = Contex
 incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content_type=CT} = Msg, Context) ->
     Context1 = maybe_logon(maybe_set_sessions(SessionId, PageId, Context)),
     try
+        maybe_async_ack(received, Msg, Context1),
         maybe_auth_change(incoming_1(Msg#z_msg_v1{data=decode_data(CT,Data)}, Context1), Context1)
     catch
         throw:Reason ->
@@ -220,6 +253,12 @@ incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) -
 %%% ---------------------------------------------------------------------------------------
 %%% Internal functions
 %%% ---------------------------------------------------------------------------------------
+
+is_control_message(#z_msg_v1{delegate = '$ping'}) -> true;
+is_control_message(#z_msg_v1{delegate = <<"$ping">>}) -> true;
+is_control_message(#z_msg_v1{delegate = session}) -> true;
+is_control_message(#z_msg_ack{}) -> true;
+is_control_message(_) -> false.
 
 incoming_1(#z_msg_v1{delegate='$ping'} = Msg, Context) ->
     {ok, maybe_ack(pong, Msg, Context), Context};
@@ -458,15 +497,22 @@ decode_data(json, Data) when is_binary(Data) ->
 decode_data(_Other, Data) ->
     Data.
 
+
+maybe_async_ack(Result, Msg, Context) ->
+    transport(maybe_ack(Result, Msg, Context), Context).
+
 maybe_ack(Result, #z_msg_v1{qos=N, msg_id=MsgId}, Context) when N > 0; Result =/= undefined ->
     #z_msg_ack{
         qos=N,
         msg_id=MsgId,
         result=Result,
+        session_id=Context#context.session_id,
         page_id=Context#context.page_id
     };
 maybe_ack(_Result, #z_msg_v1{}, _Context) ->
-    [].
+    [];
+maybe_ack(Result, List, Context) when is_list(List) ->
+    lists:flatten([ maybe_ack(Result, Msg, Context) || Msg <- List]).
 
 mklist(L) when is_list(L) -> L;
 mklist(V) -> [V].
