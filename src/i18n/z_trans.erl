@@ -56,7 +56,7 @@ translations(From, Context) when is_binary(From) ->
 			{trans, Trans}
     end;
 translations(From, Context) ->
-    translations(z_convert:to_binary(From), Context).
+    translations(to_binary(From), Context).
 
 merge_trs([], Acc) ->
     lists:reverse(Acc);
@@ -93,19 +93,21 @@ parse_translations(Context) ->
     add_labels(Lang, [{header,_}|Rest],Dict) ->
         add_labels(Lang, Rest,Dict);
     add_labels(Lang, [{Label,Trans}|Rest], Dict) ->
-        LabelB = list_to_binary(Label),
+        LabelB = to_binary(Label),
         case dict:find(LabelB, Dict) of
             {ok, Ts} ->
                 case proplists:get_value(Lang, Ts) of
-                    undefined -> add_labels(Lang, Rest, dict:store(LabelB, [{Lang,list_to_binary(Trans)}|Ts], Dict));
+                    undefined -> add_labels(Lang, Rest, dict:store(LabelB, [{Lang,to_binary(Trans)}|Ts], Dict));
                     _PrevTrans -> add_labels(Lang, Rest, Dict)
                 end;
             error ->
                 add_labels(Lang, Rest, dict:store(LabelB,[{Lang,to_binary(Trans)}],Dict))
         end.
 
-        to_binary(header) -> "";
-        to_binary(L) -> list_to_binary(L).
+to_binary(header) -> <<>>;
+to_binary(undefined) -> <<>>;
+to_binary(B) when is_binary(B) -> B;
+to_binary(L) -> z_convert:to_binary(L).
 
 
 
