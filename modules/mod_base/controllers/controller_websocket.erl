@@ -141,23 +141,20 @@ maybe_start_sidejob([], Context) ->
     Context;
 maybe_start_sidejob(OtherMsgs, Context) ->
     Context1 = z_transport:prepare_incoming_context(OtherMsgs, Context),
-    lists:foldl(
-        fun(Msg, AccState) -> 
-            start_sidejob(Msg, AccState)
+    lists:foreach(
+        fun(Msg) -> 
+            start_sidejob(Msg, Context1)
         end,
-        Context1,
-        OtherMsgs).
+        OtherMsgs),
+    Context1.
 
 start_sidejob(Msg, Context) ->
     case z_session:sidejob(Msg, Context) of
-        {ok, _Pid} ->
-            Context;
-        {error, overload} ->
-            overload(Msg, Context)
+        {ok, _Pid} -> ok;
+        {error, overload} -> overload(Msg, Context)
     end.
 
 overload(Msg, Context) ->
     Reply = z_transport:maybe_ack(overload, Msg, Context),
     {ok, ReplyData} = z_transport:data_encode(Reply),
     websocket_send_data(self(), ReplyData).
-

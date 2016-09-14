@@ -74,6 +74,7 @@
     check_expire/2,
     dump/1,
     spawn_link/4,
+    is_sidejob_overload/1,
     sidejob/2
 ]).
 
@@ -109,7 +110,7 @@
             }).
 
 
--define(SIDEJOBS_PER_SESSION, 10).
+-define(SIDEJOBS_PER_SESSION, 20).
 
 
 %%====================================================================
@@ -304,6 +305,14 @@ dump(Pid) ->
 %% @doc Spawn a new process, linked to the session pid
 spawn_link(Module, Func, Args, Context) ->
     gen_server:call(Context#context.session_pid, {spawn_link, Module, Func, Args}).
+
+
+-spec is_sidejob_overload(#context{}) -> boolean().
+is_sidejob_overload(#context{session_pid=SessionPid}) ->
+    case gen_server:call(SessionPid, sidejob_check, infinity) of
+        ok -> false;
+        overload -> true
+    end.
 
 -spec sidejob(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> {ok, pid()} | {error, overload}.
 sidejob(Msg, #context{session_pid=undefined} = Context) ->

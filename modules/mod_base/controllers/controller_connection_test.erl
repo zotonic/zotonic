@@ -58,13 +58,20 @@ provide_content(Context) ->
 
 event(#postback{message={session_info, []}, target=TargetId}, Context) ->
     Vars = [{session_id, z_session:session_id(Context)}],
-
     Pages = lists:reverse(z_session:get_pages(Context)),
-
     AttachStates = [z_session_page:get_attach_state(Pid) || Pid <- Pages],
     PageIds = [z_session_page:page_id(Pid) || Pid <- Pages],
     Combi = lists:zip(PageIds, AttachStates),
-
     Vars1 = [{pages, Combi} | Vars],
+    z_render:update(TargetId, #render{template = <<"_session_info.tpl">>, vars = Vars1}, Context);
 
-    z_render:update(TargetId, #render{template = <<"_session_info.tpl">>, vars = Vars1}, Context).
+%% Test code for transport, should be moved somewhere else.
+event(#z_msg_v1{msg_id=MsgId, data=Data}, Context) ->
+    case proplists:get_value(<<"cmd">>, Data) of
+        <<"sleep">> ->
+            ?DEBUG({MsgId, Context#context.session_id}),
+            timer:sleep(10000);
+        UnknownCmd ->
+            lager:warning("Unknown connection-test command ~p", [UnknownCmd])
+    end,
+    Context.
