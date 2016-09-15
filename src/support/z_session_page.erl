@@ -61,7 +61,7 @@
     get_transport_data/1,
     get_transport_msgs/1,
     comet_attach/2,
-    comet_detach/1,
+    comet_detach/2,
     websocket_attach/2,
     websocket_attach/3,
 
@@ -173,10 +173,10 @@ comet_attach(CometPid, Pid) ->
     gen_server:call(Pid, {comet_attach, CometPid}).
 
 %% @doc Called when the comet request process closes, we will need to wait for the next connection
-comet_detach(undefined) ->
+comet_detach(_CometPid, undefined) ->
     z_utils:flush_message(script_queued);
-comet_detach(Pid) ->
-    catch gen_server:call(Pid, comet_detach),
+comet_detach(CometPid, PagePid) ->
+    catch gen_server:call(PagePid, {comet_detach, CometPid}),
     z_utils:flush_message(script_queued).
 
 %% @doc Attach the websocket request process to the page session, enabling sending scripts to the user agent
@@ -186,10 +186,10 @@ websocket_attach(_WsPid, undefined, Context) ->
     lager:info(z_context:lager_md(Context),
                "Websocket attach to non-existing page ~p", [Context#context.page_id]).
 
-websocket_attach(WsPid, #context{page_pid=Pid}) when is_pid(Pid) ->
-    websocket_attach(WsPid, Pid);
-websocket_attach(WsPid, Pid) when is_pid(Pid) ->
-    gen_server:cast(Pid, {websocket_attach, WsPid});
+websocket_attach(WsPid, #context{page_pid=PagePid}) when is_pid(PagePid) ->
+    websocket_attach(WsPid, PagePid);
+websocket_attach(WsPid, PagePid) when is_pid(PagePid) ->
+    gen_server:cast(PagePid, {websocket_attach, WsPid});
 websocket_attach(_WsPid, #context{} = Context) ->
     lager:info(z_context:lager_md(Context),
                "Websocket attach to non-existing page ~p", [Context#context.page_id]).
@@ -235,6 +235,7 @@ transport(Msg, PageId, Context) when is_binary(PageId) ->
     transport(Msg, whereis(PageId, Context)).
 
 %% @doc Receive an ack for a sent message
+-spec receive_ack(#z_msg_ack{}, #context{}|pid()) -> ok.
 receive_ack(_Ack, undefined) ->
     ok;
 receive_ack(Ack, #context{page_pid=PagePid}) ->
@@ -245,12 +246,19 @@ receive_ack(Ack, Pid) when is_pid(Pid) ->
 receive_ack(Ack, PageId, Context) when is_binary(PageId) ->
     receive_ack(Ack, whereis(PageId, Context)).
 
-
-
-%% @doc Spawn a new process, linked to the page pid
-spawn_link(Module, Func, Args, Context) ->
-    gen_server:call(Context#context.page_pid, {spawn_link, Module, Func, Args}).
-
+%% @doc Spawn a new process, linked to the session pid, supervised by the sidejobs
+-spec spawn_link(atom(), atom(), list(), #context{}) -> {ok, pid()} | {error, no_page|overload}.
+spawn_link(_Module, _Func, _Args, #context{page_pid=undefined}) ->
+    {error, no_page};
+spawn_link(Module, Func, Args, #context{page_pid=PagePid} = Context) ->
+    Job = {Module, Func, Args},
+    case sidejob_supervisor:spawn(zotonic_spawnjobs, {?MODULE, do_sidejob, [Job, Context]}) of
+        {ok, Pid} when is_pid(Pid) ->
+            gen_server:cast(PagePid, {link, Pid}),
+            {ok, Pid};
+        {error, overload} ->
+            {error, overload}
+    end.
 
 %% @doc Kill this page when timeout has been reached
 check_timeout(Pid) ->
@@ -267,6 +275,7 @@ check_timeout(Pid) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server, initialises the pid lookup dicts
 init({SessionPid, PageId, Site}) ->
+    process_flag(trap_exit, true),
     lager:md([
         {site, Site},
         {module, ?MODULE},
@@ -287,7 +296,7 @@ init({SessionPid, PageId, Site}) ->
 %%                                  {stop, Reason, State}
 
 handle_cast(stop, State) ->
-    {stop, normal, State};
+    {stop, normal, cleanup(State)};
 handle_cast({set, Key, Value}, State) ->
     State1 = State#page_state{vars = z_utils:prop_replace(Key, Value, State#page_state.vars)},
     {noreply, State1};
@@ -305,14 +314,16 @@ handle_cast({websocket_attach, WebsocketPid}, State) ->
     case z_utils:is_process_alive(WebsocketPid) of
         true ->
             %% Close the possibly attached websocket.
-            opt_demonitor(State#page_state.websocket_monitor_ref),
-            opt_close_websocket(State#page_state.websocket_pid),
+            State1 = opt_close_websocket(State),
+            State2 = opt_close_comet(State1),
 
             %% Attach the new websocket.
-            MRef = erlang:monitor(process, WebsocketPid),
-            StateWs = State#page_state{websocket_pid=WebsocketPid, websocket_monitor_ref=MRef},
+            StateWs = State2#page_state{
+                websocket_pid = WebsocketPid, 
+                websocket_monitor_ref = erlang:monitor(process, WebsocketPid)
+            },
             StatePing = ping_comet_ws(StateWs),
-            z_session:keepalive(State#page_state.session_pid),
+            z_session:keepalive(StatePing#page_state.session_pid),
             {noreply, StatePing};
         false ->
             {noreply, State}
@@ -354,6 +365,11 @@ handle_cast(auth_change, #page_state{comet_pid=CometPid, websocket_pid=WsPid} = 
     end,
     {stop, normal, State};
 
+handle_cast({link, Pid}, State) ->
+    MRef = erlang:monitor(process, Pid),
+    Linked = [{Pid,MRef} | State#page_state.linked],
+    {noreply, State#page_state{linked=Linked}};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -372,12 +388,6 @@ handle_call(session_pid, _From, State) ->
 
 handle_call(page_id, _From, State) ->
     {reply, {ok, State#page_state.page_id}, State};
-
-handle_call({spawn_link, Module, Func, Args}, _From, State) ->
-    Pid    = spawn_link(Module, Func, Args),
-    Linked = [Pid | State#page_state.linked],
-    erlang:monitor(process, Pid),
-    {reply, Pid, State#page_state{linked=Linked}};
 
 handle_call(get_transport_data, _From, State) ->
     {Data, State1} = do_transport_data(State),
@@ -399,32 +409,37 @@ handle_call({incr, Key, Delta}, _From, State) ->
     State1 = State#page_state{ vars = z_utils:prop_replace(Key, NV, State#page_state.vars) },
     {reply, NV, State1};
 
-handle_call({comet_attach, CometPid}, _From, #page_state{comet_monitor_ref=OldMRef}=State) ->
+handle_call({comet_attach, _CometPid}, _From, #page_state{websocket_pid=Pid}=State) when is_pid(Pid) ->
+    {reply, {error, websocket_connected}, State};
+handle_call({comet_attach, CometPid}, _From, State) ->
     case z_utils:is_process_alive(CometPid) of
         true ->
-            opt_demonitor(OldMRef),
+            State1 = opt_close_comet(State),
             MRef = erlang:monitor(process, CometPid),
-            StateComet = State#page_state{comet_pid=CometPid, comet_monitor_ref=MRef},
+            StateComet = State1#page_state{comet_pid=CometPid, comet_monitor_ref=MRef},
             StatePing  = ping_comet_ws(StateComet),
-            z_session:keepalive(State#page_state.session_pid),
+            z_session:keepalive(State1#page_state.session_pid),
             {reply, ok, StatePing};
         false ->
             {reply, ok, State}
     end;
-handle_call(comet_detach, _From, #page_state{comet_monitor_ref=OldMRef}=State) ->
-    opt_demonitor(OldMRef),
-    StateNoComet = State#page_state{comet_pid=undefined, comet_monitor_ref=undefined, last_detach=z_utils:now()},
+handle_call({comet_detach, Pid}, _From, #page_state{comet_pid=Pid}=State) ->
+    erlang:demonitor(State#page_state.comet_monitor_ref), 
+    StateNoComet = State#page_state{
+        comet_pid=undefined, 
+        comet_monitor_ref=undefined,
+        last_detach=z_utils:now()
+    },
     {reply, ok, StateNoComet};
+handle_call({comet_detach, _Pid}, _From, State) ->
+    {reply, {error, not_attached}, State};
 
-handle_call(get_attach_state, _From, State) when is_pid(State#page_state.websocket_pid) ->
+handle_call(get_attach_state, _From, #page_state{websocket_pid = Pid} = State) when is_pid(Pid) ->
+    {reply, attached, State};
+handle_call(get_attach_state, _From, #page_state{comet_pid = Pid} = State) when is_pid(Pid) ->
     {reply, attached, State};
 handle_call(get_attach_state, _From, State) ->
-    case State#page_state.comet_pid of
-        undefined ->
-            {reply, {detached, State#page_state.last_detach}, State};
-        _Pid ->
-            {reply, attached, State}
-    end;
+    {reply, {detached, State#page_state.last_detach}, State};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
@@ -435,12 +450,14 @@ handle_call(Message, _From, State) ->
 %%                                   {noreply, State, Timeout} |
 %%                                   {stop, Reason, State}
 
-handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) when Pid == State#page_state.websocket_pid ->
+handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, #page_state{session_pid=Pid} = State) ->
+    {stop, normal, cleanup(State)};
+handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, #page_state{websocket_pid=Pid} = State) ->
     {noreply, State#page_state{websocket_pid=undefined, websocket_monitor_ref=undefined, last_detach=z_utils:now()}};
-handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) when Pid == State#page_state.comet_pid ->
+handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, #page_state{comet_pid=Pid} = State) ->
     {noreply, State#page_state{comet_pid=undefined, comet_monitor_ref=undefined, last_detach=z_utils:now()}};
 handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, State) ->
-    Linked = lists:delete(Pid, State#page_state.linked),
+    Linked = lists:keydelete(Pid, 1, State#page_state.linked),
     {noreply, State#page_state{linked=Linked}};
 
 %% @doc Do not timeout while there is a comet or websocket process attached
@@ -488,7 +505,7 @@ handle_info(_, State) ->
 %% @spec terminate(Reason, State) -> void()
 %% @doc Terminate all processes coupled to the page.
 terminate(_Reason, State) ->
-    lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, State#page_state.linked),
+    cleanup(State),
     ok.
 
 
@@ -502,19 +519,32 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-%% @doc Demonitor the ref if there is one.
-opt_demonitor(undefined) ->
-    ok;
-opt_demonitor(MRef) ->
-    erlang:demonitor(MRef, [flush]).
-
+cleanup(State) ->
+    State1 = opt_close_websocket(State),
+    State2 = opt_close_comet(State1),
+    lists:foreach(
+        fun({Pid,MRef}) ->
+            erlang:demonitor(MRef), 
+            exit(Pid, page)
+        end,
+        State2#page_state.linked),
+    State2#page_state{ linked = [] }.
 
 %% @doc Close the websocket if there is one.
-opt_close_websocket(undefined) ->
-    ok;
-opt_close_websocket(Pid) ->
-    erlang:exit(Pid, kill).
+opt_close_websocket(#page_state{websocket_pid = Pid} = State) when is_pid(Pid) ->
+    erlang:demonitor(State#page_state.websocket_monitor_ref),
+    Pid ! close,
+    State#page_state{websocket_pid = undefined, websocket_monitor_ref = undefined};
+opt_close_websocket(State) ->
+    State.
 
+%% @doc Close the comet connection if there is one.
+opt_close_comet(#page_state{comet_pid = Pid} = State) when is_pid(Pid) ->
+    erlang:demonitor(State#page_state.comet_monitor_ref),
+    Pid ! close,
+    State#page_state{comet_pid = undefined, comet_monitor_ref = undefined};
+opt_close_comet(State) ->
+    State.
 
 %% @doc Trigger sending a check_timeout message.
 trigger_check_timeout() ->
@@ -543,8 +573,8 @@ do_fetch_transport_msgs(State) ->
 
 %% @doc Ping the comet or ws process that we have a message queued
 ping_comet_ws(#page_state{websocket_pid=WsPid, comet_pid=CometPid} = State) when is_pid(WsPid) andalso is_pid(CometPid) ->
-    CometPid ! {final, []},
-    ping_comet_ws(State#page_state{comet_pid=undefined});
+    State1 = opt_close_comet(State),
+    ping_comet_ws(State1);
 ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
     case do_transport_data(State) of
         {<<>>, State1} -> State1;
@@ -555,8 +585,7 @@ ping_comet_ws(#page_state{websocket_pid=WsPid} = State) when is_pid(WsPid) ->
 ping_comet_ws(#page_state{transport=TQ, comet_pid=CometPid} = State) when is_pid(CometPid) ->
     case z_transport_queue:is_empty(TQ) of
         true -> nop;
-        false ->
-            CometPid ! transport
+        false -> CometPid ! transport
     end,
     State;
 ping_comet_ws(State) ->

@@ -302,10 +302,19 @@ dump(Pid) ->
     gen_server:cast(Pid, dump).
 
 
-%% @doc Spawn a new process, linked to the session pid
-spawn_link(Module, Func, Args, Context) ->
-    gen_server:call(Context#context.session_pid, {spawn_link, Module, Func, Args}).
-
+%% @doc Spawn a new process, linked to the session pid, supervised by the sidejobs
+-spec spawn_link(atom(), atom(), list(), #context{}) -> {ok, pid()} | {error, no_session|overload}.
+spawn_link(_Module, _Func, _Args, #context{session_pid=undefined}) ->
+    {error, no_session};
+spawn_link(Module, Func, Args, #context{session_pid=SessionPid} = Context) ->
+    Job = {Module, Func, Args},
+    case sidejob_supervisor:spawn(zotonic_spawnjobs, {?MODULE, do_sidejob, [Job, Context]}) of
+        {ok, Pid} when is_pid(Pid) ->
+            gen_server:cast(SessionPid, {link, Pid}),
+            {ok, Pid};
+        {error, overload} ->
+            {error, overload}
+    end.
 
 -spec is_sidejob_overload(#context{}) -> boolean().
 is_sidejob_overload(#context{session_pid=SessionPid}) ->
@@ -349,6 +358,7 @@ do_sidejob(Msg, Context) ->
 %%====================================================================
 
 init({Host, SessionId, PersistId}) ->
+    process_flag(trap_exit, true),
     lager:md([
         {site, Host},
         {module, ?MODULE}
@@ -459,9 +469,15 @@ handle_cast({set, Props}, Session) ->
                          Props),
     {noreply, Session#session{props = Props1}};
 
+handle_cast({link, Pid}, Session) ->
+    MRef = erlang:monitor(process, Pid),
+    Linked = [{Pid,MRef} | Session#session.linked],
+    {noreply, Session#session{linked=Linked}};
+
 handle_cast({sidejob, Pid}, Session) ->
-    _MRef = erlang:monitor(process, Pid),
-    {noreply, Session#session{sidejobs=[Pid|Session#session.sidejobs]}};
+    MRef = erlang:monitor(process, Pid),
+    erlang:link(Pid),
+    {noreply, Session#session{sidejobs=[{Pid,MRef}|Session#session.sidejobs]}};
 
 handle_cast(dump, Session) ->
     io:format("~p~n", [Session]),
@@ -532,13 +548,6 @@ handle_call({incr, Key, Delta}, _From, Session) ->
     end,
     {reply, NV, Session#session{props = z_utils:prop_replace(Key, NV, Session#session.props)}};
 
-handle_call({spawn_link, Module, Func, Args}, _From, Session) ->
-    Pid    = spawn_link(Module, Func, Args),
-    Linked = [Pid | Session#session.linked],
-    erlang:monitor(process, Pid),
-    exometer:update([zotonic, z_context:site(Session#session.context), session, page_processes], 1),
-    {reply, Pid, Session#session{linked=Linked}};
-
 handle_call(start_page_session, _From, Session) ->
     {Page, Session1} = do_ensure_page_session_new(Session),
     Session2 = transport_all(Session1),
@@ -574,12 +583,24 @@ handle_call(Msg, _From, Session) ->
 %%                                   {stop, Reason, State}
 
 handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, Session) ->
-    FIsUp  = fun(Page) -> Page#page.page_pid /= Pid end,
-    Pages  = lists:filter(FIsUp, Session#session.pages),
-    Linked = lists:delete(Pid, Session#session.linked),
-    Sidejobs = lists:delete(Pid, Session#session.sidejobs),
-    exometer:update([zotonic, z_context:site(Session#session.context), session, page_processes], -1),
-    {noreply, Session#session{pages=Pages, linked=Linked, sidejobs=Sidejobs}};
+    case lists:keytake(Pid, 1, Session#session.sidejobs) of
+        {value, {Pid,_MRef}, Sidejobs} ->
+            {noreply, Session#session{sidejobs=Sidejobs}};
+        false ->
+            case lists:keytake(Pid, 1, Session#session.linked) of
+                {value, {Pid,_MRef}, Linked} ->
+                    {noreply, Session#session{linked=Linked}};
+                false ->
+                    case lists:keytake(Pid, #page.page_pid, Session#session.pages) of
+                        {value, #page{}, Pages} ->
+                            exometer:update([zotonic, z_context:site(Session#session.context), session, page_processes], -1),
+                            {noreply, Session#session{pages=Pages}};
+                        false ->
+                            % Happens after auth-change, where we disconnect all pages.
+                            {noreply, Session}
+                    end
+            end
+    end;
 
 %% @doc MQTT message, forward it to the page.
 %% TODO: Add all handling
@@ -598,7 +619,8 @@ handle_info(_, Session) ->
 %% Terminate all processes coupled to the session.
 terminate(_Reason, Session) ->
     save_persist(Session),
-    lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, Session#session.linked),
+    lists:foreach(fun exit_linked/1, Session#session.linked),
+    lists:foreach(fun exit_linked/1, Session#session.sidejobs),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -610,6 +632,10 @@ code_change(_OldVsn, Session, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+exit_linked({Pid, MRef}) ->
+    erlang:demonitor(MRef),
+    exit(Pid, session).
 
 
 handle_set(Key, Value, Session) ->

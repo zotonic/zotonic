@@ -140,8 +140,8 @@ ensure_job_queues() ->
 
 %% @doc The supervisor for websocket requests and other transient processes.
 ensure_sidejobs() ->
-    Limit = z_config:get(sidejobs_limit),
-    sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, Limit).
+    sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, z_config:get(sidejobs_limit)),
+    sidejob:new_resource(spawnjobs_limit, sidejob_supervisor, z_config:get(spawnjobs_limit)).
 
 %% @doc Scan priv/extensions for ext_ folders and add those as childs to the supervisor.
 get_extensions() ->

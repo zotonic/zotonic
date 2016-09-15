@@ -49,7 +49,6 @@ var z_stream_start_timeout;
 var z_default_form_postback = false;
 var z_page_unloading        = false;
 var z_transport_check_timer;
-var z_transport_overload    = false;
 var z_transport_queue       = [];
 var z_transport_acks        = [];
 var z_transport_delegates   = {
@@ -628,9 +627,9 @@ function z_transport_incoming_msg(msg)
             if (!z_websocket_pong(msg) && typeof z_transport_acks[msg.msg_id] == 'object') {
                 var ack = z_transport_acks[msg.msg_id];
                 if (msg.result == 'overload') {
-                    z_transport_overload = true;
                     clearTimeout(ack.timeout_timer);
                     z_transport_requeue(msg.msg_id);
+                    z_transport_overload();
                 } else {
                     delete z_transport_acks[msg.msg_id];
                     clearTimeout(ack.timeout_timer);
@@ -639,7 +638,7 @@ function z_transport_incoming_msg(msg)
                     }
                 }
             } else if (msg.result == 'overload') {
-                z_transport_overload = true;
+                z_transport_overload();
             }
             break;
         default:
@@ -824,20 +823,32 @@ function z_transport_check()
 {
     if (z_transport_queue.length > 0 && !z_transport_check_timer) {
         // Delay transport messages till the z_pageid is initialized.
-        if (z_pageid !== '' && !z_transport_overload) {
+        if (z_pageid !== '') {
             var qmsg = z_transport_queue.shift();
             if (z_transport_acks[qmsg.msg_id]) {
                 z_transport_acks[qmsg.msg_id].is_queued = false;
             }
             z_do_transport(qmsg);
         } else if (!z_transport_check_timer) {
-            z_transport_check_timer = setTimeout(function() {
-                z_transport_overload = false;
-                z_transport_check_timer = undefined;
-                z_transport_check();
-            }, z_transport_overload ? 1000 : 50);
+            z_transport_check_timer_restart(50);
         }
     }
+}
+
+function z_transport_overload()
+{
+    z_transport_check_timer_restart(1000);
+}
+
+function z_transport_check_timer_restart(timeout)
+{
+    if (z_transport_check_timer) {
+        clearTimeout(z_transport_check_timer);
+    }
+    z_transport_check_timer = setTimeout(function() {
+        z_transport_check_timer = undefined;
+        z_transport_check();
+    }, timeout);
 }
 
 function z_do_transport(qmsg)
