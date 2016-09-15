@@ -230,7 +230,7 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content
                         [Reason, Msg]),
             lager:error(z_context:lager_md(Context1),
                         "Stack: ~p", [Stacktrace]),
-            {ok, maybe_ack(error, Msg, Context1), Context1};
+            {ok, [], Context1};
         error:Reason ->
             Stacktrace = erlang:get_stacktrace(),
             lager:error(z_context:lager_md(Context1),
@@ -238,7 +238,7 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content
                         [Reason, Msg]),
             lager:error(z_context:lager_md(Context1),
                         "Stack: ~p", [Stacktrace]),
-            {ok, maybe_ack(error, Msg, Context1), Context1}
+            {ok, [], Context1}
     end;
 incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
     Context1 = maybe_set_sessions(SessionId, PageId, Context),
