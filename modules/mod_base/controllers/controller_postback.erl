@@ -78,7 +78,7 @@ process_post_ubf(Context) ->
             z_transport:incoming(Term, Context);
         _ ->
             Context2 = z_transport:prepare_incoming_context(Term, Context1),
-            case z_session:sidejob(Term, Context2) of
+            case z_session:job(Term, Context2) of
                 {ok, Pid} ->
                     % We wait a bit for some quick results, as otherwise the
                     % comet connection is used to transport the result.

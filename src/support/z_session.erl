@@ -75,10 +75,10 @@
     dump/1,
     spawn_link/4,
     is_job_overload/1,
-    spawn_job/2
+    job/2
 ]).
 
-%% Callback for spawn_job/2 and spawn_link/2
+%% Callback for job/2 and spawn_link/2
 -export([
     do_spawned_job/2
     ]).
@@ -323,15 +323,15 @@ is_job_overload(#context{session_pid=SessionPid}) ->
         overload -> true
     end.
 
--spec spawn_job(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> {ok, pid()} | {error, overload}.
-spawn_job(Job, #context{session_pid=undefined} = Context) ->
+-spec job(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> {ok, pid()} | {error, overload}.
+job(Job, #context{session_pid=undefined} = Context) ->
     do_spawned_job(Job, Context);
-spawn_job(Job, #context{session_pid=SessionPid} = Context) ->
-    case gen_server:call(SessionPid, spawn_job_check, infinity) of
+job(Job, #context{session_pid=SessionPid} = Context) ->
+    case gen_server:call(SessionPid, job_check, infinity) of
         ok ->
             case sidejob_supervisor:spawn(zotonic_sessionjobs, {?MODULE, do_spawned_job, [Job, Context]}) of
                 {ok, Pid} when is_pid(Pid) ->
-                    gen_server:cast(SessionPid, {spawn_job, Pid}),
+                    gen_server:cast(SessionPid, {job, Pid}),
                     {ok, Pid};
                 {error, overload} ->
                     {error, overload}
@@ -474,7 +474,7 @@ handle_cast({link, Pid}, Session) ->
     Linked = [{Pid,MRef} | Session#session.linked],
     {noreply, Session#session{linked=Linked}};
 
-handle_cast({spawn_job, Pid}, Session) ->
+handle_cast({job, Pid}, Session) ->
     MRef = erlang:monitor(process, Pid),
     erlang:link(Pid),
     {noreply, Session#session{jobs=[{Pid,MRef}|Session#session.jobs]}};
@@ -568,7 +568,7 @@ handle_call(get_attach_state, _From, Session) ->
 handle_call(get_pages, _From, Session) ->
     {reply, [ Pid ||  #page{page_pid=Pid} <- Session#session.pages], Session};
 
-handle_call(spawn_job_check, _From, #session{jobs=Jobs} = Session) ->
+handle_call(job_check, _From, #session{jobs=Jobs} = Session) ->
     Reply = case length(Jobs) < ?SIDEJOBS_PER_SESSION of
         true -> ok;
         false -> overload

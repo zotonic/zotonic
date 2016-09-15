@@ -151,7 +151,7 @@ maybe_start_sidejob(OtherMsgs, Context) ->
     Context1.
 
 start_sidejob(Msg, Context) ->
-    case z_session:sidejob(Msg, Context) of
+    case z_session:job(Msg, Context) of
         {ok, _Pid} -> ok;
         {error, overload} -> overload(Msg, Context)
     end.
