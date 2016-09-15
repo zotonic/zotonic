@@ -30,6 +30,7 @@
 -define(COMET_FLUSH_EMPTY, 55000).
 
 %% Timeout for comet flush when there is data, allow for 100 msec more to gather extra data before flushing
+%% This must be higher than SIDEJOB_TIMEOUT in controlelr_postback.erl
 -define(COMET_FLUSH_DATA,  100).
 
 

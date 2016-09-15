@@ -28,7 +28,8 @@
 
 -include_lib("zotonic.hrl").
 
--define(SIDEJOB_TIMEOUT, 1000).
+% This must be lower than COMET_FLUSH_DATA in z_transport_comet.erl
+-define(SIDEJOB_TIMEOUT, 90).
 
 service_available(Context) ->
     Context1 = z_context:continue_session(Context),
