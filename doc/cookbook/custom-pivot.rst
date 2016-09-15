@@ -53,5 +53,6 @@ this::
                           filter=["pivot1.fieldname", `=`, "hello"]}]
      as result %}
 
-See :ref:`guide-datamodel-query-model` for more details on how to
-filter on custom pivot columns.
+.. seealso::
+
+    :ref:`custompivot` on how to filter on custom pivot columns.

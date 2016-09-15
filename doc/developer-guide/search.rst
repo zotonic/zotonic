@@ -276,6 +276,8 @@ model. Example sorting on modification date, newest first::
 
     sort='-rsc.modified'
 
+.. _custompivot:
+
 custompivot
 ^^^^^^^^^^^
 
