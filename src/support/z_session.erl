@@ -74,13 +74,13 @@
     check_expire/2,
     dump/1,
     spawn_link/4,
-    is_sidejob_overload/1,
-    sidejob/2
+    is_job_overload/1,
+    spawn_job/2
 ]).
 
-%% Callback for start_sidejob/2
+%% Callback for spawn_job/2 and spawn_link/2
 -export([
-    do_sidejob/2
+    do_spawned_job/2
     ]).
 
 
@@ -99,7 +99,7 @@
             props_persist=[],
             cookies=[],
             transport,
-            sidejobs=[],
+            jobs=[],
             context
             }).
 
@@ -302,13 +302,13 @@ dump(Pid) ->
     gen_server:cast(Pid, dump).
 
 
-%% @doc Spawn a new process, linked to the session pid, supervised by the sidejobs
+%% @doc Spawn a new process, linked to the session pid, supervised by sidejob
 -spec spawn_link(atom(), atom(), list(), #context{}) -> {ok, pid()} | {error, no_session|overload}.
 spawn_link(_Module, _Func, _Args, #context{session_pid=undefined}) ->
     {error, no_session};
 spawn_link(Module, Func, Args, #context{session_pid=SessionPid} = Context) ->
     Job = {Module, Func, Args},
-    case sidejob_supervisor:spawn(zotonic_spawnjobs, {?MODULE, do_sidejob, [Job, Context]}) of
+    case sidejob_supervisor:spawn(zotonic_sidejobs, {?MODULE, do_spawned_job, [Job, Context]}) of
         {ok, Pid} when is_pid(Pid) ->
             gen_server:cast(SessionPid, {link, Pid}),
             {ok, Pid};
@@ -316,22 +316,22 @@ spawn_link(Module, Func, Args, #context{session_pid=SessionPid} = Context) ->
             {error, overload}
     end.
 
--spec is_sidejob_overload(#context{}) -> boolean().
-is_sidejob_overload(#context{session_pid=SessionPid}) ->
+-spec is_job_overload(#context{}) -> boolean().
+is_job_overload(#context{session_pid=SessionPid}) ->
     case gen_server:call(SessionPid, sidejob_check, infinity) of
         ok -> false;
         overload -> true
     end.
 
--spec sidejob(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> {ok, pid()} | {error, overload}.
-sidejob(Job, #context{session_pid=undefined} = Context) ->
-    do_sidejob(Job, Context);
-sidejob(Job, #context{session_pid=SessionPid} = Context) ->
-    case gen_server:call(SessionPid, sidejob_check, infinity) of
+-spec spawn_job(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> {ok, pid()} | {error, overload}.
+spawn_job(Job, #context{session_pid=undefined} = Context) ->
+    do_spawned_job(Job, Context);
+spawn_job(Job, #context{session_pid=SessionPid} = Context) ->
+    case gen_server:call(SessionPid, spawn_job_check, infinity) of
         ok ->
-            case sidejob_supervisor:spawn(zotonic_sidejobs, {?MODULE, do_sidejob, [Job, Context]}) of
+            case sidejob_supervisor:spawn(zotonic_sessionjobs, {?MODULE, do_spawned_job, [Job, Context]}) of
                 {ok, Pid} when is_pid(Pid) ->
-                    gen_server:cast(SessionPid, {sidejob, Pid}),
+                    gen_server:cast(SessionPid, {spawn_job, Pid}),
                     {ok, Pid};
                 {error, overload} ->
                     {error, overload}
@@ -340,14 +340,14 @@ sidejob(Job, #context{session_pid=SessionPid} = Context) ->
             {error, overload}
     end.
 
--spec do_sidejob(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> ok.
-do_sidejob(Fun, _Context) when is_function(Fun,0) ->
+-spec do_spawned_job(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> ok.
+do_spawned_job(Fun, _Context) when is_function(Fun,0) ->
     Fun();
-do_sidejob(Fun, Context) when is_function(Fun,1) ->
+do_spawned_job(Fun, Context) when is_function(Fun,1) ->
     Fun(Context);
-do_sidejob({M,F,A}, _Context) ->
+do_spawned_job({M,F,A}, _Context) ->
     erlang:apply(M, F, A);
-do_sidejob(Msg, Context) ->
+do_spawned_job(Msg, Context) ->
     {ok, Reply, Context1} = z_transport:incoming(Msg, Context),
     z_transport:transport(Reply, Context1),
     ok.
@@ -474,10 +474,10 @@ handle_cast({link, Pid}, Session) ->
     Linked = [{Pid,MRef} | Session#session.linked],
     {noreply, Session#session{linked=Linked}};
 
-handle_cast({sidejob, Pid}, Session) ->
+handle_cast({spawn_job, Pid}, Session) ->
     MRef = erlang:monitor(process, Pid),
     erlang:link(Pid),
-    {noreply, Session#session{sidejobs=[{Pid,MRef}|Session#session.sidejobs]}};
+    {noreply, Session#session{jobs=[{Pid,MRef}|Session#session.jobs]}};
 
 handle_cast(dump, Session) ->
     io:format("~p~n", [Session]),
@@ -568,8 +568,8 @@ handle_call(get_attach_state, _From, Session) ->
 handle_call(get_pages, _From, Session) ->
     {reply, [ Pid ||  #page{page_pid=Pid} <- Session#session.pages], Session};
 
-handle_call(sidejob_check, _From, #session{sidejobs=Sidejobs} = Session) ->
-    Reply = case length(Sidejobs) < ?SIDEJOBS_PER_SESSION of
+handle_call(spawn_job_check, _From, #session{jobs=Jobs} = Session) ->
+    Reply = case length(Jobs) < ?SIDEJOBS_PER_SESSION of
         true -> ok;
         false -> overload
     end,
@@ -583,9 +583,9 @@ handle_call(Msg, _From, Session) ->
 %%                                   {stop, Reason, State}
 
 handle_info({'DOWN', _MonitorRef, process, Pid, _Info}, Session) ->
-    case lists:keytake(Pid, 1, Session#session.sidejobs) of
-        {value, {Pid,_MRef}, Sidejobs} ->
-            {noreply, Session#session{sidejobs=Sidejobs}};
+    case lists:keytake(Pid, 1, Session#session.jobs) of
+        {value, {Pid,_MRef}, Jobs} ->
+            {noreply, Session#session{jobs=Jobs}};
         false ->
             case lists:keytake(Pid, 1, Session#session.linked) of
                 {value, {Pid,_MRef}, Linked} ->
@@ -620,7 +620,7 @@ handle_info(_, Session) ->
 terminate(_Reason, Session) ->
     save_persist(Session),
     lists:foreach(fun exit_linked/1, Session#session.linked),
-    lists:foreach(fun exit_linked/1, Session#session.sidejobs),
+    lists:foreach(fun exit_linked/1, Session#session.jobs),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
