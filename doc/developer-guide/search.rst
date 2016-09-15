@@ -278,6 +278,8 @@ model. Example sorting on modification date, newest first::
 
 .. seealso:: :ref:`cookbook-pivot-templates`
 
+.. _custompivot:
+
 custompivot
 ^^^^^^^^^^^
 
