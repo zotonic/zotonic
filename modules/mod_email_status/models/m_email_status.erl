@@ -28,6 +28,7 @@
     get/2,
 
     clear_status/3,
+    clear_status/2,
 
     mark_received/2,
 
