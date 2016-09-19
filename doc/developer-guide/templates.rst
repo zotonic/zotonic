@@ -268,6 +268,14 @@ Besides these variables, all key/value pairs that are set in the
 render the current template are also exposed into the template's
 global scope.
 
+Debugging
+^^^^^^^^^
+
+To print the variables in your template for debugging, you can use the
+:ref:`scomp-debug` tag::
+
+    {% debug %}
+
 .. _guide-tags:
 
 Tags
