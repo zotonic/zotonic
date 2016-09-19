@@ -169,8 +169,8 @@ global scope.
 Debugging
 ^^^^^^^^^
 
-To print the variables in your template for debugging, you can use
-:ref:`_scomp-debug`::
+To print the variables in your template for debugging, you can use the
+:ref:`scomp-debug` tag::
 
     {% debug %}
 
