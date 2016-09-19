@@ -69,9 +69,11 @@ event(#postback{message={session_info, []}, target=TargetId}, Context) ->
 event(#z_msg_v1{msg_id=MsgId, data=Data}, Context) ->
     case proplists:get_value(<<"cmd">>, Data) of
         <<"sleep">> ->
-            ?DEBUG({MsgId, Context#context.session_id}),
+            lager:debug("[~p] connection-test: sleeping 10 secs for msg ~p, session ~p",
+                        [z_context:site(Context), MsgId, Context#context.session_id]),
             timer:sleep(10000);
         UnknownCmd ->
-            lager:warning("Unknown connection-test command ~p", [UnknownCmd])
+            lager:debug("[~p] Unknown connection-test command ~p",
+                        [z_context:site(Context), UnknownCmd])
     end,
     Context.
