@@ -109,7 +109,7 @@
   0},
  {<<"ranch">>,
   {git,"https://github.com/mworrell/ranch.git",
-       {ref,"d61a4bb85cde2b4f93dbd23990c4435a9c701586"}},
+       {ref,"5959cebb6b9ba6bca79b44ed97336e795e08ea80"}},
   0},
  {<<"recon">>,{pkg,<<"recon">>,<<"2.3.1">>},0},
  {<<"s3filez">>,
