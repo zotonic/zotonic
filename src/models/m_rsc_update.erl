@@ -635,7 +635,7 @@ throw_if_category_not_allowed_1(_PrevCatId, CatId, Context) ->
     CategoryName = m_category:id_to_name(CatId, Context),
     case z_acl:is_allowed(insert, #acl_rsc{category=CategoryName}, Context) of
         true -> ok;
-        _False -> throw({error, eaccess})
+        _False -> throw({error, eacces})
     end.
 
 

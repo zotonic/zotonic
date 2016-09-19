@@ -150,7 +150,7 @@ get_username(Id, Context) ->
 
 
 %% @doc Delete an username from a resource.
--spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eaccess}.
+-spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eacces}.
 delete_username(1, _Context) ->
     throw({error, admin_username_cannot_be_deleted});
 delete_username(Id, Context) ->
