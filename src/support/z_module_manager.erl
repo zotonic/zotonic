@@ -577,11 +577,10 @@ handle_restart_module(Module, #state{context=Context, sup=ModuleSup} = State) ->
             ok;
         ok ->
             % Child has been shut down, wait for the notification
-            ChildSpec = module_spec(Module, Context),
             receive
-                {'$gen_cast', {supervisor_child_stopped, ChildSpec, Pid}} ->
+                {'$gen_cast', {supervisor_child_stopped, #child_spec{name=Module}, Pid}} ->
                     remove_observers(Module, Pid, State),
-                    z_supervisor:add_child_async(ModuleSup, ChildSpec)
+                    z_supervisor:add_child_async(ModuleSup, module_spec(Module, Context))
             end
     end,
     handle_upgrade(State).
