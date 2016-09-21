@@ -239,21 +239,39 @@ update([Node]) ->
 
 -spec test_erlang_version() -> ok.
 test_erlang_version() ->
-    case otp_version() of
+    % Check for minimal OTP version
+    case otp_release() of
         Version when Version < ?MIN_OTP_VERSION ->
             io:format("Zotonic needs at least Erlang release ~p; this is ~p~n", [?MIN_OTP_VERSION, erlang:system_info(otp_release)]),
             erlang:exit({minimal_otp_version, ?MIN_OTP_VERSION});
         _ ->
             ok
+    end,
+    % Check on problematic releases
+    case otp_version() of
+        "18.3.2" ->
+            io:format("Erlang version 18.3.2 has a problem with SSL and ranch, please upgrade your Erlang version to 18.3.3 or later~n"),
+            erlang:exit({broken_otp_version, "18.3.2"});
+        _ ->
+            ok
     end.
 
 %% @doc Strip the optional "R" from the OTP release because from 17.0 onwards it is unused
--spec otp_version() -> string().
-otp_version() ->
+-spec otp_release() -> string().
+otp_release() ->
     case erlang:system_info(otp_release) of
         [$R | V] -> V;
         V -> V
     end.
+
+%% @doc Return the specific otp version, 
+-spec otp_version() -> string().
+otp_version() ->
+    case file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])) of
+        {ok, Version} -> binary_to_list(z_string:trim(Version));
+        {error, _} -> erlang:system_info(otp_release)
+    end.
+
 
 run_tests() ->
     z_media_preview_tests:test().
