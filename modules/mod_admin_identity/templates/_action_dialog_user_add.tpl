@@ -2,6 +2,8 @@
 {% wire id=#form type="submit" postback={user_add on_success=on_success} delegate=delegate %}
 <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 
+    {% include "_password_autocomplete_off.tpl" %}
+
     <h4>{_ Name and e-mail address _}</h4>
     <p>
 	    {_ Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user. _}

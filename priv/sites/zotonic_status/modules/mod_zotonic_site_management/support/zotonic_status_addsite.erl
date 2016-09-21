@@ -60,7 +60,7 @@ addsite_check_db(Name, Options, Context) ->
                 {dbdatabase, none}
                 | proplists:delete(dbdatabase, Options)
             ],
-            addsite_check_git(Name, Options, Context);
+            addsite_check_userdir(Name, Options, Context);
         _ ->
             DbDatabase = z_convert:to_list(get_fallback(dbdatabase, Options, z_config:get(dbdatabase))),
             ConnectOptions = [
@@ -76,7 +76,7 @@ addsite_check_db(Name, Options, Context) ->
                     Site = binary_to_atom(Name, utf8),
                     case z_db:ensure_schema(Site, ConnectOptions) of
                         ok ->
-                            addsite_check_git(Name, Options, Context);
+                            addsite_check_userdir(Name, Options, Context);
                         {error, _} ->
                             {error, ?__("Could not create the schema in the database.", Context)}
                     end;
@@ -85,40 +85,49 @@ addsite_check_db(Name, Options, Context) ->
             end
     end.
 
+% Check if the user directory is writeable
+addsite_check_userdir(Name, Options, Context) ->
+    SiteDir = site_dir(Name),
+    case file:make_dir(SiteDir) of
+        ok ->
+            addsite_check_git(Name, Options, Context);
+        {error, Error} ->
+            error(Error, SiteDir, Context)
+    end.
+
 % If Git: checkout from Git
 addsite_check_git(Name, Options, Context) ->
     case z_string:trim(proplists:get_value(git, Options, <<>>)) of
         <<>> ->
             SiteDir = site_dir(Name),
-            case ensure_dir(SiteDir, Context) of
+            Cmd = lists:flatten([
+                "git init -q ",
+                z_utils:os_filename(SiteDir)
+                ]),
+            _ = os:cmd(Cmd),
+            create_gitignore(SiteDir),
+            addsite_check_skel(Name, Options, Context);
+        Git ->
+            case file:del_dir(site_dir(Name)) of
                 ok ->
                     Cmd = lists:flatten([
-                        "git init -q ",
-                        z_utils:os_filename(SiteDir)
+                        "git clone -q --recurse-submodules ",
+                        z_utils:os_filename(Git),
+                        " ",
+                        z_utils:os_filename(site_dir(Name))
                         ]),
-                    _ = os:cmd(Cmd),
-                    create_gitignore(SiteDir),
-                    addsite_check_skel(Name, Options, Context);
-                {error, _} = Error ->
-                    Error
-            end;
-        Git ->
-            Cmd = lists:flatten([
-                "git clone -q --recurse-submodules ",
-                z_utils:os_filename(Git),
-                " ",
-                z_utils:os_filename(site_dir(Name))
-                ]),
-            case os:cmd(Cmd) of
-                [] ->
-                    addsite_check_skel(Name, Options, Context);
-                Error ->
-                    lager:error("[zotonic_status] Could not checkout ~p to ~p: ~p",
-                                [Git, site_dir(Name), Error]),
-                    {error, iolist_to_binary([
-                                ?__("Could not check out Git repository:", Context),
-                                " ",
-                                Error])}
+                    case os:cmd(Cmd) of
+                        [] ->
+                            addsite_check_skel(Name, Options, Context);
+                        Error ->
+                            lager:error("[zotonic_status] Could not checkout ~p to ~p: ~p",
+                                        [Git, site_dir(Name), Error]),
+                            {error, [   ?__("Could not check out Git repository:", Context),
+                                        " ", Error]}
+                    end;
+                {error, Error} ->
+                    {error, [   ?__("Could not delete the site dir for the Git checkout:", Context),
+                                " ", z_convert:to_binary(Error)]}
             end
     end.
 
@@ -366,3 +375,29 @@ is_reserved(<<"mod_", _/binary>>) -> true;
 is_reserved(<<"scomp_", _/binary>>) -> true;
 is_reserved(<<"filter_", _/binary>>) -> true;
 is_reserved(_) -> false.
+
+
+error(eacces, SiteDir, Context) ->
+    {error, [   ?__("No permission to create the site directory at:", Context),
+                " ", SiteDir
+            ]};
+error(eexist, SiteDir, Context) ->
+    {error, [   ?__("The file or directory already exists:", Context),
+                " ", SiteDir
+            ]};
+error(enoent, SiteDir, Context) ->
+    {error, [   ?__("The parent directory does not exist:", Context),
+                " ", SiteDir
+            ]};
+error(enospc, SiteDir, Context) ->
+    {error, [   ?__("Disk full creating:", Context),
+                " ", SiteDir
+            ]};
+error(enotdir, SiteDir, Context) ->
+    {error, [   ?__("A component of the path is not a directory:", Context),
+                " ", SiteDir
+            ]};
+error(Error, SiteDir, Context) ->
+    {error, [   ?__("Could not create the file:", Context),
+                " ", SiteDir, " (", z_convert:to_binary(Error), ")"
+            ]}.

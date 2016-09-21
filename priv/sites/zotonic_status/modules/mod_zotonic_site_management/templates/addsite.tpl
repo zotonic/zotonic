@@ -16,11 +16,13 @@
             %}
             <form id="{{ #addsite }}" method="POST" action="postback" class="form-horizontal">
 
+                {% include "_password_autocomplete_off.tpl" %}
+
                 <!-- Site and host name -->
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">
-                        Site name
+                        {_ Site name _}
                     </label>
                     <div class="col-sm-7">
                         <input class="form-control" type="text" id="{{ #sitename }}" name="sitename" value="" placeholder="sitename" />
@@ -33,7 +35,7 @@
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">
-                        Title
+                        {_ Title _}
                     </label>
                     <div class="col-sm-7">
                         <input class="form-control" type="text" id="{{ #title }}" name="title" value="" placeholder="Descriptive title of your site" />
@@ -42,7 +44,7 @@
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">
-                        Host name
+                        {_ Host name _}
                     </label>
                     <div class="col-sm-7">
                         <input class="form-control" type="text" id="{{ #hostname }}" name="hostname" value="" placeholder="www.example.com" />
@@ -60,7 +62,7 @@
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">
-                        Skeleton
+                        {_ Skeleton _}
                     </label>
                     <div class="col-sm-7">
                         <select id="{{ #skel }}" name="skel" class="form-control">
@@ -83,7 +85,7 @@
                     <div class="form-group">
                         <div class="col-sm-7 col-sm-offset-3">
                             <p class="help-block">
-                                {_ Optionally fill in a Git url to checkout the site. An existing <tt>config</tt> file will be overwritten. _}
+                                {_ Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten. _}
                                 {_ To add config files to your Git repo, place them in the <tt>config.d</tt> directory of your site. _}
                             </p>
                         </div>
@@ -91,7 +93,7 @@
 
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
-                            Git URL
+                            {_ Git URL _}
                         </label>
                         <div class="col-sm-7">
                             <input class="form-control" type="text" id="{{ #giturl }}" name="giturl" value="" placeholder="https://github.com/foo/bar.git" />
@@ -107,75 +109,85 @@
                     <div class="form-group">
                         <div class="col-sm-7 col-sm-offset-3">
                             <p class="help-block">
-                                {_ Optionally fill in the database connection. Leave empty to use the in Zotonic configured database credentials with the site name as the schema. _}
+                                {_ PostgreSQL database connection. The schema defaults to the site name filled in above. _}
                             </p>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Database
-                        </label>
-                        <div class="col-sm-7">
-                            <input class="form-control" type="text" id="{{ #dbdatabase }}" name="dbdatabase" value="" placeholder="" />
-                            {% validate id=#dbdatabase name="dbdatabase"
-                                type={format pattern="^[A-Za-z0-9_]*$" failure_message=_"Please use only a…z and 0…9 characters."}
-                            %}
+                    {% if m.config.zotonic.dbdatabase.value %}
+                        <div class="form-group">
+                            <div class="col-sm-7 col-sm-offset-3">
+                                <a href="#" id="{{ #dba }}">{_ Configure PostgreSQL Database Connection _}</a>
+                                {% wire id=#dba action={toggle target=#db} %}
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Host
-                        </label>
-                        <div class="col-sm-7">
-                            <input class="form-control" type="text" id="{{ #dbhost }}" name="dbhost" value="" placeholder="" />
-                            {% validate id=#dbhost name="dbhost"
-                                type={format pattern="^[a-z0-9-]+(\\.[a-z0-9-]+)*$" failure_message=_"Please use a valid hostname."}
-                            %}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Port
-                        </label>
-                        <div class="col-sm-7">
-                            <input class="form-control" type="text" id="{{ #dbport }}" name="dbport" value="" placeholder="" />
-                            {% validate id=#dbdatabase name="dbdatabase"
-                                type={format pattern="^[0-9]+$" failure_message=_"The port must be numerical."}
-                            %}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Schema
-                        </label>
-                        <div class="col-sm-7">
-                            <input class="form-control" type="text" id="{{ #dbschema }}" name="dbschema" value="" placeholder="" />
-                            {% validate id=#dbschema name="dbschema"
-                                type={format pattern="^[A-Za-z0-9_]*$" failure_message=_"Please use only a…z and 0…9 characters."}
-                            %}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            User
-                        </label>
-                        <div class="col-sm-7">
-                            <input class="form-control" type="text" id="{{ #dbuser }}" name="dbuser" value="" placeholder="" />
-                            {% validate id=#dbuser name="dbuser"
-                                type={format pattern="^[A-Za-z0-9_]*$" failure_message=_"Please use only a…z and 0…9 characters."}
-                            %}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Password
-                        </label>
-                        <div class="col-sm-7">
-                            <input class="form-control" type="password" id="{{ #dbpassword }}" name="dbpassword" value="" placeholder="" />
-                        </div>
-                    </div>
+                    {% endif %}
 
+                    <div id="{{ #db }}" {% if m.config.zotonic.dbdatabase.value %}style="display:none"{% endif %}>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                {_ Database _}
+                            </label>
+                            <div class="col-sm-7">
+                                <input class="form-control" type="text" id="{{ #dbdatabase }}" name="dbdatabase" value="" placeholder="{{ m.config.zotonic.dbdatabase.value|escape }}" />
+                                {% validate id=#dbdatabase name="dbdatabase"
+                                    type={format pattern="^[A-Za-z0-9_]*$" failure_message=_"Please use only a…z and 0…9 characters."}
+                                %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                {_ Host _}
+                            </label>
+                            <div class="col-sm-7">
+                                <input class="form-control" type="text" id="{{ #dbhost }}" name="dbhost" value="" placeholder="{{ m.config.zotonic.dbhost.value|escape }}" />
+                                {% validate id=#dbhost name="dbhost"
+                                    type={format pattern="^[a-z0-9-]+(\\.[a-z0-9-]+)*$" failure_message=_"Please use a valid hostname."}
+                                %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                {_ Port _}
+                            </label>
+                            <div class="col-sm-7">
+                                <input class="form-control" type="text" id="{{ #dbport }}" name="dbport" value="" placeholder="{{ m.config.zotonic.dbport.value|escape }}" />
+                                {% validate id=#dbdatabase name="dbdatabase"
+                                    type={format pattern="^[0-9]+$" failure_message=_"The port must be numerical."}
+                                %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                {_ Schema _}
+                            </label>
+                            <div class="col-sm-7">
+                                <input class="form-control" type="text" id="{{ #dbschema }}" name="dbschema" value="" placeholder="[sitename]" />
+                                {% validate id=#dbschema name="dbschema"
+                                    type={format pattern="^[A-Za-z0-9_]*$" failure_message=_"Please use only a…z and 0…9 characters."}
+                                %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                {_ User _}
+                            </label>
+                            <div class="col-sm-7">
+                                <input class="form-control" type="text" id="{{ #dbuser }}" name="dbuser" value="" placeholder="{{ m.config.zotonic.dbuser.value|escape }}" />
+                                {% validate id=#dbuser name="dbuser"
+                                    type={format pattern="^[A-Za-z0-9_]*$" failure_message=_"Please use only a…z and 0…9 characters."}
+                                %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                {_ Password _}
+                            </label>
+                            <div class="col-sm-7">
+                                <input class="form-control" type="text" id="{{ #dbpassword }}" name="dbpassword" value="" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
+                            </div>
+                        </div>
+                    </div>
                 </fieldset>
 
                 <!-- Submit -->

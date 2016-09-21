@@ -103,6 +103,8 @@ get(Module, Context) when is_atom(Module) ->
 
 %% @doc Get a configuration value for the given module/key combination.
 %% @spec get(Module::atom(), Key::atom(), #context{}) -> Value | undefined
+get(zotonic, Key, _Context) when is_atom(Key) ->
+    [{value,z_config:get(Key)}];
 get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
     Value = case z_depcache:get_subkey(config, Module, Context) of
         {ok, undefined} ->
