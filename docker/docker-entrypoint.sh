@@ -14,14 +14,11 @@ if [ -x "/opt/zotonic/src/scripts/zotonic-$1" ]; then
     # Create the pid file and enable zotonic to write to it
     touch /run/zotonic.pid && chown zotonic /run/zotonic.pid
 
-    # Generate the config file
-    sed -e s/%%GENERATED%%/${ZOTONIC_PASSWORD-changeme}/ \
-        -e s,%%USER_SITES_DIR%%,/opt/zotonic/user/sites, \
-        -e s,%%USER_MODULES_DIR%%,/opt/zotonic/user/modules, \
-        -e s,%%USER_EBIN_DIR%%,/opt/zotonic/user/ebin, /opt/zotonic/priv/zotonic.config.in > /etc/zotonic/zotonic.config 
+    # Insert password from environment variable into zotonic.config
+    sed -i -e "s/{password, \"\"}/{password, \"${ZOTONIC_PASSWORD}\"}/" \
+        /etc/zotonic/zotonic.config
 
     exec /usr/bin/gosu zotonic /opt/zotonic/bin/zotonic "$@"
 else
     exec "$@"
 fi
-
