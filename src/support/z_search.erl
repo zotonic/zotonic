@@ -261,25 +261,13 @@ add_acl_check(_, Args, _Q, _Context) ->
 add_acl_check_rsc(Alias, Args, SearchSql, Context) ->
     case z_notifier:first(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) of
         undefined ->
-            case z_acl:can_see(Context) of
-                ?ACL_VIS_USER ->
-                    % Admin or supervisor, can see everything
+            case z_acl:is_admin(Context) of
+                true ->
+                    % Admin can see all resources
                     {[], Args};
-                ?ACL_VIS_PUBLIC ->
-                    % Anonymous users can only see public published content
-                    Sql = Alias ++ ".visible_for = 0" ++ publish_check(Alias, SearchSql),
-                    {Sql, Args};
-                ?ACL_VIS_COMMUNITY ->
-                    % Only see published public or community content
-                    Sql = Alias ++ ".visible_for in (0,1) " ++ publish_check(Alias, SearchSql),
-                    {Sql, Args};
-                ?ACL_VIS_GROUP ->
-                    % Can see published community and public content or any content from one of the user's groups
-                    Sql = Alias ++ ".visible_for <= 2 " ++ publish_check(Alias, SearchSql),
-                    Sql1 = lists:flatten([
-                            $(, $(, Sql, ") or ", Alias, ".id = $", integer_to_list(length(Args)+1), $)
-                        ]),
-                    {Sql1, Args ++ [z_acl:user(Context)]}
+                false ->
+                    %% Others can only see published resources
+                    {publish_check(Alias, SearchSql), Args}
             end;
         {_NewSql, _NewArgs} = Result ->
             Result

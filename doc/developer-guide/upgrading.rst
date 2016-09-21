@@ -15,13 +15,19 @@ ACL
 
 * mod_acl_adminonly was replaced by :ref:`mod_acl_user_groups`. To create users
   that have access to the admin, add them to the ‘Managers’ user group.
+* The ``visible_for`` property semantics and the the ``acl_can_see``
+  notification were removed. You can get similar functionality by adding users
+  to user and collaboration groups. These are provided by mod_acl_user_groups.
+  The ``visible_for`` ``rsc`` table property has been kept for BC. So if you’re
+  using mod_acl_adminonly, mod_acl_simple_roles or a custom ACL module you can
+  still rely on the property.
 
 
 Erlang code, Controllers, Event handlers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you made a site using custom controllers or request handling then you need to adapt your Erlang code. 
-Zotonic is now using Cowboy under the hood for the http handling, previously this was MochiWeb. 
+If you made a site using custom controllers or request handling then you need to adapt your Erlang code.
+Zotonic is now using Cowboy under the hood for the http handling, previously this was MochiWeb.
 
 The following changes are made:
 
@@ -47,7 +53,7 @@ In short:
   * ``z_context:get_q_all(Context)`` returns ``[ {<<"arg">>,<<"value">>}, ...]``
 
 The binary name is the preferred way to request arguments.
- 
+
 
 Events like submit, postback and postback_notify
 ................................................
@@ -83,8 +89,8 @@ The following callbacks are removed:
 
  * `init`
  * `ping`
- 
- All other callbacks have now a single *Context* argument, the *ReqData* argument has been removed. 
+
+ All other callbacks have now a single *Context* argument, the *ReqData* argument has been removed.
  There is no need anymore for the ``?WM_REQ`` and ``?WM_REPLY`` macros, and they have been removed.
 
 Other controller changes changes are:

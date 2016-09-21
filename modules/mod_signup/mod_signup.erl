@@ -221,10 +221,8 @@ ensure_identity(Id, {Type, Key, IsUnique, IsVerified}, Context) when is_binary(K
 props_to_rsc(Props, IsVerified, Context) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
     ContentGroup = z_convert:to_atom(m_config:get_value(mod_signup, content_group, undefined, Context)),
-    VisibleFor = z_convert:to_integer(m_config:get_value(mod_signup, member_visible_for, 0, Context)),
     Props1 = [
         {is_published, IsVerified},
-        {visible_for, VisibleFor},
         {content_group, ContentGroup},
         {category, Category},
         {is_verified_account, IsVerified},
@@ -286,7 +284,6 @@ manage_schema(install, _Context) ->
         resources=[
             {signup_tos, text, [
                             {is_published, true},
-                            {visible_for, 0},
                             {page_path, "/terms"},
                             {title, "Terms of Service"},
                             {summary, <<"These Terms of Service (\"Terms\") govern your access to and use of the services and COMPANY’s web sites (the \"Services\"), and any information, text, graphics, or other materials uploaded, downloaded or appearing on the Services (collectively referred to as \"Content\"). Your access to and use of the Services is conditioned on your acceptance of and compliance with these Terms. By accessing or using the Services you agree to be bound by these Terms.">>},
@@ -294,7 +291,6 @@ manage_schema(install, _Context) ->
                         ]},
             {signup_privacy, text, [
                             {is_published, true},
-                            {visible_for, 0},
                             {page_path, "/privacy"},
                             {title, "Privacy Policy"},
                             {summary, <<"This Privacy Policy describes COMPANY’s policies and procedures on the collection, use and disclosure of your information. COMPANY receives your information through our various web sites, SMS, APIs, services and third-parties (\"Services\"). When using any of our Services you consent to the collection, transfer, manipulation, storage, disclosure and other uses of your information as described in this Privacy Policy. Irrespective of which country that you reside in or create information from, your information may be used by COMPANY in any country where COMPANY operates.">>},

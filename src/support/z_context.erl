@@ -40,7 +40,6 @@
     prune_for_template/1,
     prune_for_database/1,
     prune_for_scomp/1,
-    prune_for_scomp/2,
     output/2,
 
     abs_url/2,
@@ -360,9 +359,6 @@ prune_for_scomp(Context) ->
         validators=[],
         render=[]
     }.
-
-prune_for_scomp(VisibleFor, Context) ->
-    z_acl:set_visible_for(VisibleFor, prune_for_scomp(Context)).
 
 prune_reqdata(undefined) ->
     undefined;

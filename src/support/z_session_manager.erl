@@ -211,7 +211,7 @@ broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, st
         true -> [ <<"<strong>">>, Title, <<"</strong> ">>, Message ];
         false -> [ <<"<strong>">>, z_html:escape(Title), <<"</strong> ">>, z_html:escape(Message) ]
     end,
-    Context1 = z_context:prune_for_scomp(?ACL_VIS_PUBLIC, Context),
+    Context1 = z_context:prune_for_scomp(Context),
     add_script(z_render:growl(Message1, Type, Stay, Context1)),
     ok.
 

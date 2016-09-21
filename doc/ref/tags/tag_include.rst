@@ -67,13 +67,6 @@ Caching is enabled by defining one of the caching arguments:
 |            |can use category names here.                            |                       |
 |            |                                                        |                       |
 +------------+--------------------------------------------------------+-----------------------+
-|visible_for |Sets the access control user for rendering the included |``visible_for="world"``|
-|            |template.  With this you can for example force to only  |                       |
-|            |show public news for logged on users.  Valid values are |                       |
-|            |"user", 3, "group", 2, "community", 1, "world",         |                       |
-|            |"public", 0                                             |                       |
-|            |                                                        |                       |
-+------------+--------------------------------------------------------+-----------------------+
 |sudo        |If supplied then access control is disabled whilst      |``sudo``               |
 |            |rendering the included template. This will show any     |                       |
 |            |content not visible for the current user.  Use with     |                       |

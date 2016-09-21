@@ -32,7 +32,7 @@
 render(ScompName, Args, Vars, Context) ->
     case z_module_indexer:find(scomp, ScompName, Context) of
         {ok, #module_index{erlang_module=ModuleName}} ->
-            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context),
+            ScompContext = z_context:prune_for_scomp(Context),
             render_scomp_module(ModuleName, Args, Vars, ScompContext, Context);
         {error, enoent} ->
             %% No such scomp, as we can switch on/off functionality we do a quiet skip
@@ -43,7 +43,7 @@ render(ScompName, Args, Vars, Context) ->
 render_optional(ScompName, Args, Vars, Context) ->
     case z_module_indexer:find(scomp, ScompName, Context) of
         {ok, #module_index{erlang_module=ModuleName}} ->
-            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context),
+            ScompContext = z_context:prune_for_scomp(Context),
             render_scomp_module(ModuleName, ['$optional'|Args], Vars, ScompContext, Context);
         {error, enoent} ->
             <<>>
@@ -52,7 +52,7 @@ render_optional(ScompName, Args, Vars, Context) ->
 render_all(ScompName, Args, Vars, Context) ->
     case z_module_indexer:find(scomp, ScompName, Context) of
         {ok, #module_index{erlang_module=ModuleName}} ->
-            ScompContext = z_context:prune_for_scomp(z_acl:args_to_visible_for(Args), Context),
+            ScompContext = z_context:prune_for_scomp(Context),
             render_scomp_module(ModuleName, [{'$all', true}|Args], Vars, ScompContext, Context);
         {error, enoent} ->
             <<>>

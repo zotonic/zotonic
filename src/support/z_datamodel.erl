@@ -142,13 +142,9 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                  undefined -> [{is_published, true} | Props1];
                                  _ -> Props1
                              end,
-                    Props3 = case proplists:get_value(visible_for, Props2) of
-                                 undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
+                    Props4 = case proplists:get_value(is_protected, Props2) of
+                                 undefined -> [{is_protected, true} | Props2];
                                  _ -> Props2
-                             end,
-                    Props4 = case proplists:get_value(is_protected, Props3) of
-                                 undefined -> [{is_protected, true} | Props3];
-                                 _ -> Props3
                              end,
                     Props5 = case proplists:get_value(is_dependent, Props4) of
                                  undefined -> [{is_dependent, false} | Props4];

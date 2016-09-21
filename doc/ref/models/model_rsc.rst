@@ -152,9 +152,7 @@ A resource has the following properties accessible from the templates:
 |                     |`is_visible` to check if a resource is visible for   |                                |
 |                     |the current user.                                    |                                |
 +---------------------+-----------------------------------------------------+--------------------------------+
-|visible_for          |Visibility level. Returns an integer. 0 = world      |0                               |
-|                     |visible, 1 = only for logged on users, 2 = only for  |                                |
-|                     |group members, 3 = only for current user.            |                                |
+|visible_for          |Visibility level. Returns an integer.                |0                               |
 |                     |The actual meaning depends on the active ACL module. |                                |
 +---------------------+-----------------------------------------------------+--------------------------------+
 |content_group_id     |Content group this resource belongs to. Defaults to  |31415                           |

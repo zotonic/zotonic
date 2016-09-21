@@ -207,8 +207,7 @@ insert(Title, Context) ->
         {uri, Uri},
         {category, predicate},
         {group, admins},
-        {is_published, true},
-        {visible_for, 0}
+        {is_published, true}
     ],
     case m_rsc:insert(Props, Context) of
         {ok, Id} ->
