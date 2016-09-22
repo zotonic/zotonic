@@ -58,10 +58,11 @@ install_modules(Context) ->
 %% of modules from the skeleton is installed.
 -spec install_skeleton_modules(#context{}) -> ok.
 install_skeleton_modules(Context) ->
+io:format("~n~nINSTALL SKELETON MODULES~n~n"),
     Site = Context#context.site,
     {ok, Config} = z_sites_manager:get_site_config(Site),
-    case proplists:get_value(install_modules, Config, []) of
-        [] ->
+    case proplists:get_value(install_modules, Config) of
+        None when None =:= []; None =:= undefined ->
             install_module({skeleton, proplists:get_value(skeleton, Config)}, Context),
             ok;
         _ ->
@@ -82,67 +83,68 @@ install_module(M, Context) when is_atom(M); is_binary(M); is_list(M) ->
 
 -spec get_skeleton_modules(Skeleton::atom()) -> list().
 get_skeleton_modules(empty) ->
-    [
-     mod_base,
-     mod_menu,
-     mod_oauth,
-     mod_search,
-     mod_oembed,
-     mod_signal,
-     mod_mqtt,
-     mod_logging,
-     mod_l10n,
-
-     mod_authentication,
-     mod_acl_adminonly,
-     mod_editor_tinymce,
-
-     mod_admin,
-     mod_admin_category,
-     mod_admin_config,
-     mod_admin_identity,
-     mod_admin_modules,
-     mod_admin_predicate,
-
-     mod_media_exif
+    base_modules();
+get_skeleton_modules(basesite) ->
+    base_modules() ++ [
+        mod_base_site
     ];
 get_skeleton_modules(blog) ->
-    [
-     mod_base,
-     mod_base_site,
-     mod_menu,
-     mod_oauth,
-     mod_search,
-     mod_oembed,
-     mod_atom_feed,
-     mod_translation,
-     mod_signal,
-     mod_logging,
-     mod_mqtt,
-     mod_l10n,
-
-     mod_seo,
-     mod_seo_sitemap,
-
-     mod_authentication,
-     mod_acl_adminonly,
-     mod_editor_tinymce,
-
-     mod_admin,
-     mod_admin_category,
-     mod_admin_config,
-     mod_admin_identity,
-     mod_admin_modules,
-     mod_admin_predicate,
-
-     mod_media_exif,
-
-     mod_comment,
-     mod_bootstrap
+    base_modules() ++ [
+        mod_atom_feed,
+        mod_base_site,
+        mod_facebook,
+        mod_twitter,
+        mod_instagram,
+        mod_comment
     ];
 get_skeleton_modules(_) ->
     %% nodb | undefined | OtherUnknown -> []
     [].
+
+%% The basic set of modules for any database based site
+base_modules() ->
+    [
+     mod_base,
+     mod_bootstrap,
+     mod_menu,
+     mod_oauth,
+     mod_search,
+     mod_oembed,
+     mod_logging,
+
+     mod_signal,
+     mod_mqtt,
+
+     mod_translation,
+     mod_l10n,
+
+     mod_authentication,
+     mod_content_groups,
+     mod_acl_user_groups,
+
+     mod_editor_tinymce,
+
+     mod_admin,
+     mod_admin_category,
+     mod_admin_config,
+     mod_admin_identity,
+     mod_admin_modules,
+     mod_admin_predicate,
+     mod_admin_merge,
+
+     mod_seo,
+     mod_seo_sitemap,
+
+     mod_email_status,
+
+     mod_media_exif,
+     mod_video_embed,
+     mod_video,
+     mod_oembed,
+
+     mod_development
+    ].
+
 
 
 install_category(C) ->

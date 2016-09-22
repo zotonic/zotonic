@@ -70,7 +70,7 @@ body {
   text-align: left;
 }
 .footer .zotonic-logo {
-  color: #999999;
+  color: #999;
 }
 .jumbotron h1 {
   font-size: 42px;
@@ -88,17 +88,11 @@ form.error-pw #error-pw {
 form.error-pw #error-pw p {
   margin-bottom: 0;
 }
-form .form-group {
-  margin-bottom: 0;
-}
-form .has-error {
-  margin: 15px 0 0 0;
-}
 form .has-error .help-block {
-  color: #777777;
+  color: #777;
 }
 form .has-error .help-block-error {
-  color: #d84315;
+  color: #D84315;
 }
 .table.sites-overview {
   margin-bottom: 0;
@@ -113,19 +107,19 @@ form .has-error .help-block-error {
   border-color: #eee;
 }
 .table.sites-overview > tbody > tr.running > td {
-  background-color: #e8f5e9;
+  background-color: #E8F5E9;
 }
 .table.sites-overview > tbody > tr.retrying > td {
-  background-color: #fff3e0;
+  background-color: #FFF3E0;
 }
 .table.sites-overview > tbody > tr.stopped > td {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 .table.sites-overview > tbody > tr.waiting > td {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 .table.sites-overview > tbody > tr.failed > td {
-  background-color: #fbe9e7;
+  background-color: #FBE9E7;
 }
 .table.sites-overview span.status {
   display: none;
@@ -144,24 +138,24 @@ form .has-error .help-block-error {
   display: inline-block;
 }
 .table.sites-overview .stopped a {
-  color: #bdbdbd;
-  background: #ffffff;
+  color: #BDBDBD;
+  background: #fff;
 }
 .table.sites-overview span.running {
   color: #fff;
-  background: #4caf50;
+  background: #4CAF50;
 }
 .table.sites-overview span.retrying {
   color: #fff;
-  background: #ef6c00;
+  background: #EF6C00;
 }
 .table.sites-overview span.waiting {
   color: #fff;
-  background: #00bcd4;
+  background: #00BCD4;
 }
 .table.sites-overview span.failed {
   color: #fff;
-  background: #d84315;
+  background: #D84315;
 }
 .table.sites-overview span.stopped {
   color: #fff;
@@ -204,15 +198,15 @@ form .has-error .help-block-error {
 .alert.alert-info {
   background-color: #343434;
   border-color: #343434;
-  color: #ffffff;
+  color: #fff;
 }
 .alert .close {
   opacity: 1;
   text-shadow: none;
-  color: #ffffff;
+  color: #fff;
 }
 .text-muted {
-  color: #999999;
+  color: #999;
 }
 .alert,
 .list-group-item,

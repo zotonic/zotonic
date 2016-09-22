@@ -252,7 +252,7 @@ spawn_link(_Module, _Func, _Args, #context{page_pid=undefined}) ->
     {error, no_page};
 spawn_link(Module, Func, Args, #context{page_pid=PagePid} = Context) ->
     Job = {Module, Func, Args},
-    case sidejob_supervisor:spawn(zotonic_sidejobs, {?MODULE, do_sidejob, [Job, Context]}) of
+    case sidejob_supervisor:spawn(zotonic_sidejobs, {z_session, do_spawned_job, [Job, Context]}) of
         {ok, Pid} when is_pid(Pid) ->
             gen_server:cast(PagePid, {link, Pid}),
             {ok, Pid};

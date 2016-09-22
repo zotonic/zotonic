@@ -91,6 +91,7 @@ default(dbhost) -> "localhost";
 default(dbport) -> 5432;
 default(dbuser) -> "zotonic";
 default(dbpassword) -> "";
+default(dbdatabase) -> "zotonic";
 default(dbschema) -> "public";
 default(filewatcher_enabled) -> true;
 default(filewatcher_scanner_enabled) -> false;

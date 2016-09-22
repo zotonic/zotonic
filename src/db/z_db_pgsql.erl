@@ -165,8 +165,13 @@ disconnect(State) ->
     State#state{conn=undefined}.
 
 get_arg(K, Args) ->
-    proplists:get_value(K, Args, z_config:get(K)).
+    maybe_default(K, proplists:get_value(K, Args)).
 
+maybe_default(dbport, 0) -> z_config:get(dbport);
+maybe_default(K, undefined) -> z_config:get(K);
+maybe_default(K, "") -> z_config:get(K);
+maybe_default(K, <<>>) -> z_config:get(K);
+maybe_default(_K, V) -> V.
 
 
 %%
