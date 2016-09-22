@@ -172,7 +172,7 @@ addsite_copy_skel(Name, Options, Context) ->
     end.
 
 % Compile
-addsite_compile(Name, Options, _Context) ->
+addsite_compile(Name, Options, Context) ->
     mod_zotonic_site_management:progress(Name, ?__("Force compile all Erlang files ...", Context), Context),
     z:compile(),
     Site = binary_to_atom(Name, utf8), 
@@ -348,6 +348,8 @@ map_tag(<<"%%DBPASSWORD%%">>, Options) -> proplists:get_value(dbpassword, Option
 map_tag(<<"%%DBDATABASE%%">>, Options) -> proplists:get_value(dbdatabase, Options);
 map_tag(<<"%%DBSCHEMA%%">>, Options) -> proplists:get_value(dbschema, Options);
 map_tag(<<"%%ADMINPASSWORD%%">>, Options) -> proplists:get_value(admin_password, Options);
+map_tag(<<"%%SIGNKEY%%">>, Options) -> proplists:get_value(sign_key, Options);
+map_tag(<<"%%SIGNKEYSIMPLE%%">>, Options) -> proplists:get_value(sign_key_simple, Options);
 map_tag(<<"%%YEAR%%">>, _Options) ->  z_dateformat:format(calendar:local_time(), "Y", []);
 map_tag(<<"%%DATE%%">>, _Options) -> z_dateformat:format(calendar:local_time(), "Y-m-d", []);
 map_tag(Bin, _Options) -> Bin.
