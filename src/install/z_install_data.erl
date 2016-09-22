@@ -94,7 +94,8 @@ get_skeleton_modules(empty) ->
      mod_l10n,
 
      mod_authentication,
-     mod_acl_adminonly,
+     mod_content_groups,
+     mod_acl_user_groups,
      mod_editor_tinymce,
 
      mod_admin,
@@ -125,7 +126,8 @@ get_skeleton_modules(blog) ->
      mod_seo_sitemap,
 
      mod_authentication,
-     mod_acl_adminonly,
+     mod_content_groups,
+     mod_acl_user_groups,
      mod_editor_tinymce,
 
      mod_admin,

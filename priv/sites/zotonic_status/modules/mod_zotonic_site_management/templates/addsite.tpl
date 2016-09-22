@@ -13,6 +13,7 @@
                     type="submit"
                     postback=`addsite`
                     delegate=`mod_zotonic_site_management`
+                    action={mask target=#addsite}
             %}
             <form id="{{ #addsite }}" method="POST" action="postback" class="form-horizontal">
 
@@ -49,7 +50,7 @@
                     <div class="col-sm-7">
                         <input class="form-control" type="text" id="{{ #hostname }}" name="hostname" value="" placeholder="www.example.com" />
                         {% validate id=#hostname name="hostname"
-                            type={format pattern="^[a-z0-9-]+(\\.[a-z0-9-]+)+($:[0-9]+)?$" failure_message=_"Enter a valid hostname like \"www.example.com\" or \"test.dev:8000\"."}
+                            type={format pattern="^[a-z0-9-]+(\\.[a-z0-9-]+)+(:[0-9]+)?$" failure_message=_"Enter a valid hostname like \"www.example.com\" or \"test.local:8000\"."}
                             type={presence}
                         %}
 
@@ -152,7 +153,7 @@
                             </label>
                             <div class="col-sm-7">
                                 <input class="form-control" type="text" id="{{ #dbport }}" name="dbport" value="" placeholder="{{ m.config.zotonic.dbport.value|escape }}" />
-                                {% validate id=#dbdatabase name="dbdatabase"
+                                {% validate id=#dbport name="dbport"
                                     type={format pattern="^[0-9]+$" failure_message=_"The port must be numerical."}
                                 %}
                             </div>

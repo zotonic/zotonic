@@ -4,16 +4,14 @@
  {enabled, true},
 
  %% Hostname on which this site runs
- {hostname, "%%SITEHOSTNAME%%:8000"},
+ {hostname, "%%SITEHOSTNAME%%"},
 
  %% Aliases which should redirect to the primary hostname
  %%{hostalias, ["www.example.com", "example.com"]},
 
  %% PostgreSQL database connection
  {dbhost, "%%DBHOST%%"},
- {
-   dbport, %%DBPORT%%
- },
+ {dbport, %%DBPORT%% },
  {dbuser, "%%DBUSER%%"},
  {dbpassword, "%%DBPASSWORD%%"},
  {dbdatabase, "%%DBDATABASE%%"},

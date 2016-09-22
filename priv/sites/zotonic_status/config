@@ -26,6 +26,8 @@
             mod_base,
             mod_artwork,
             mod_bootstrap,
+            mod_mqtt,
+            mod_l10n,
             mod_zotonic_status_vcs,
             mod_zotonic_tracer,
             mod_zotonic_statistics,

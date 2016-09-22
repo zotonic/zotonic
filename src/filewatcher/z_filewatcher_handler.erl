@@ -57,12 +57,20 @@ file_changed(Verb, F) ->
     end,
     ok.
 
-file_blacklisted(F) ->
-    case re:run(F, ?FILENAME_BLACKLIST_RE) of
-        {match, _} ->
-             true;
-        nomatch ->
-            false
+file_blacklisted(F) when is_list(F) ->
+    file_blacklisted(unicode:characters_to_binary(F));
+file_blacklisted(<<".", _/binary>>) ->
+    true;
+file_blacklisted(F) when is_binary(F) ->
+    case binary:last(F) of
+        $# -> true;
+        _ ->
+            case re:run(F, ?FILENAME_BLACKLIST_RE) of
+                {match, _} ->
+                     true;
+                nomatch ->
+                    false
+            end
     end.
 
 %% @doc Select the verb to be passed if there are multiple updates to a file.

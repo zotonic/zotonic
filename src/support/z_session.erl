@@ -323,9 +323,21 @@ is_job_overload(#context{session_pid=SessionPid}) ->
         overload -> true
     end.
 
--spec job(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> {ok, pid()} | {error, overload}.
+-spec job(list(#z_msg_v1{})|#z_msg_v1{}|function()|{atom(),atom(),list()}, #context{}) -> {ok, pid()|undefined} | {error, overload}.
 job(Job, #context{session_pid=undefined} = Context) ->
-    do_spawned_job(Job, Context);
+    case Job of
+        Fun when is_function(Fun, 0) ->
+            Fun(),
+            {ok, [], Context};
+        Fun when is_function(Fun, 1) ->
+            Fun(Context),
+            {ok, [], Context};
+        {M,F,A} ->
+            erlang:apply(M, F, A),
+            {ok, [], Context};
+        Msg ->
+            z_transport:incoming(Msg, Context)
+    end;
 job(Job, #context{session_pid=SessionPid} = Context) ->
     case gen_server:call(SessionPid, job_check, infinity) of
         ok ->

@@ -144,15 +144,15 @@ http_methods(Service) ->
 
 %% define the handler mapping for the module.
 handler(<<"POST">>) ->
-    {process_post, 2};
+    {process_post, 1};
 handler(<<"GET">>) ->
-    {process_get, 2};
+    {process_get, 1};
 handler(<<"HEAD">>) ->
-    {process_get, 2};
+    {process_get, 1};
 handler(<<"PUT">>) ->
-    {process_post, 2};
+    {process_post, 1};
 handler(<<"DELETE">>) ->
-    {process_post, 2}.
+    {process_post, 1}.
 
 
 module_attr(Service, Attr, Default, T) ->

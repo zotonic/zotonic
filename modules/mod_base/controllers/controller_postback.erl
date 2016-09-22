@@ -79,7 +79,7 @@ process_post_ubf(Context) ->
         _ ->
             Context2 = z_transport:prepare_incoming_context(Term, Context1),
             case z_session:job(Term, Context2) of
-                {ok, Pid} ->
+                {ok, Pid} when is_pid(Pid) ->
                     % We wait a bit for some quick results, as otherwise the
                     % comet connection is used to transport the result.
                     MRef = erlang:monitor(process, Pid),
@@ -91,6 +91,8 @@ process_post_ubf(Context) ->
                             erlang:demonitor(MRef),
                             {ok, [], Context2}
                     end;
+                {ok, JobMsgs, JobContext} ->
+                    {ok, JobMsgs, JobContext};
                 {error, overload} ->
                     {ok, z_transport:maybe_ack(overload, Term, Context2), Context2}
             end

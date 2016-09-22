@@ -43,6 +43,7 @@ addsite(Name, Options, Context) when is_binary(Name) ->
 
 % Check Hostname (must have DNS resolve)
 addsite_check_hostname(Name, Options, Context) ->
+    mod_zotonic_site_management:progress(Name, ?__("Resolving the hostname ...", Context), Context),
     {hostname, HostPort} = proplists:lookup(hostname, Options),
     [Host|_] = string:tokens(z_convert:to_list(HostPort), ":"),
     case inet:gethostbyname(Host) of
@@ -62,6 +63,7 @@ addsite_check_db(Name, Options, Context) ->
             ],
             addsite_check_userdir(Name, Options, Context);
         _ ->
+            mod_zotonic_site_management:progress(Name, ?__("Checking database ...", Context), Context),
             DbDatabase = z_convert:to_list(get_fallback(dbdatabase, Options, z_config:get(dbdatabase))),
             ConnectOptions = [
                 {dbhost, z_convert:to_list(get_fallback(dbhost, Options, z_config:get(dbhost)))},
@@ -110,6 +112,7 @@ addsite_check_git(Name, Options, Context) ->
         Git ->
             case file:del_dir(site_dir(Name)) of
                 ok ->
+                    mod_zotonic_site_management:progress(Name, ?__("Git checkout ...", Context), Context),
                     Cmd = lists:flatten([
                         "git clone -q --recurse-submodules ",
                         z_utils:os_filename(Git),
@@ -142,6 +145,7 @@ addsite_check_skel(Name, Options, Context) ->
     end.
 
 addsite_copy_skel(Name, Options, Context) ->
+    mod_zotonic_site_management:progress(Name, ?__("Copy skeleton files ...", Context), Context),
     SiteDir = site_dir(Name),
     case skel_dir(Options) of
         undefined ->
@@ -151,9 +155,16 @@ addsite_copy_skel(Name, Options, Context) ->
                 false ->
                     {error, <<"Site skeleton directory could not be found">>};
                 true ->
-                    case copy_skeleton(Name, SkelDir, SiteDir, Options, Context) of
+                    Options1 = [
+                        {site, Name},
+                        {admin_password, z_ids:id(12)},
+                        {sign_key, z_ids:id(20)},
+                        {sign_key_simple, z_ids:id(12)}
+                        | Options
+                    ],
+                    case copy_skeleton_dir(SkelDir, SiteDir, Options1, Context) of
                         ok ->
-                            addsite_compile(Name, Options, Context);
+                            addsite_compile(Name, Options1, Context);
                         {error, _} = Error ->
                             Error
                     end
@@ -161,15 +172,11 @@ addsite_copy_skel(Name, Options, Context) ->
     end.
 
 % Compile
-addsite_compile(Name, Options, Context) ->
+addsite_compile(Name, Options, _Context) ->
+    mod_zotonic_site_management:progress(Name, ?__("Force compile all Erlang files ...", Context), Context),
     z:compile(),
-    addsite_startup(Name, Options, Context).
-
-% Start the new site
-addsite_startup(Name, Options, _Context) ->
     Site = binary_to_atom(Name, utf8), 
-    _ = z_sites_manager:start(Site),
-    {ok, Options}.
+    {ok, {Site, Options}}.
 
 % Add a sample .gitgnore file to the newly created site directory.
 create_gitignore(SiteDir) ->
@@ -184,16 +191,6 @@ create_gitignore(SiteDir) ->
     >>,
     file:write_file(filename:join([SiteDir, ".gitignore"]), GitIgnore).
 
-
-copy_skeleton(Name, SkelDir, SiteDir, Options, Context) ->
-    Options1 = [
-        {site, Name},
-        {admin_password, z_ids:id(12)},
-        {sign_key, z_ids:id(20)},
-        {sign_key_simple, z_ids:id(12)}
-        | Options
-    ],
-    copy_skeleton_dir(SkelDir, SiteDir, Options1, Context).
 
 copy_skeleton_dir(From, To, Options, Context) ->
     Files = filelib:wildcard(z_convert:to_list(filename:join(From,"*"))),
@@ -243,28 +240,34 @@ copy_file("SITE.erl", FromPath, ToPath, Options) ->
             ok;
         false ->
             % Replace the module name, write the site Erlang module.
-            Outfile = replace_tags(file:read_file(FromPath), Options),
+            {ok, SiteErl} = file:read_file(FromPath),
+            Outfile = replace_tags(SiteErl, Options),
             file:write_file(ToPath1, Outfile)
     end;
 copy_file("config.in", FromPath, ToPath, Options) ->
-    ToPath1 = filename:join([filename:dirname(ToPath), "config"]),
-    ToConfig = case filelib:is_file(ToPath1) of
-        true -> file:consult(ToPath1);
-        false -> []
+    % First replace the tags in the config.in, then copy it.
+    {ok, Bin} = file:read_file(FromPath),
+    Outfile = replace_tags(Bin, Options),
+    ok = file:write_file(ToPath, Outfile),
+
+    % Merge the optionally pre-existing config and config.in to a rewritten config.
+    FnConfig = filename:join([filename:dirname(ToPath), "config"]),
+    Cfg = case filelib:is_file(FnConfig) of
+        true ->
+            % Merge config files
+            {ok, [Config]} = file:consult(FnConfig),
+            {ok, [ConfigIn]} = file:consult(ToPath),
+            MergedConfigs = lists:keymerge(1, lists:sort(Config), lists:sort(ConfigIn)),
+            io_lib:format("~p.", [normalize_options(MergedConfigs)]);
+        false ->
+            Outfile
     end,
-    FromConfig = file:consult(FromPath),
-    MergedConfigs = lists:keymerge(1, lists:sort(ToConfig), lists:sort(FromConfig)),
-    Options1 = proplists:delete(site, Options),
-    Options2 = normalize_options(Options1),
-    FinalConfig = lists:keymerge(1, lists:sort(Options2), MergedConfigs),
-    case file:write_file(ToPath1, io_lib:format("~p.", [FinalConfig])) of
+    case file:write_file(FnConfig, Cfg) of
         ok ->
-            % Also copy the config.in file
-            file:copy(FromPath, ToPath),
             ok;
         {error, _} = Error ->
             lager:error("[zotonic_status] Error writing ~p: ~p",
-                [ToPath1, Error]),
+                        [FnConfig, Error]),
             Error
     end;
 copy_file(_Filename, FromPath, ToPath, _Options) ->
@@ -275,9 +278,10 @@ copy_file(_Filename, FromPath, ToPath, _Options) ->
 
 
 normalize_options(Options) ->
-    lists:map(
+    lists:flatten(
+        lists:map(
             fun
-                ({dbdatabase, <<"none">>}) ->
+                ({dbdatabase, "none"}) ->
                     {dbdatabase, none};
                 ({skeleton, Skel}) ->
                     {skeleton, z_convert:to_atom(Skel)};
@@ -286,11 +290,11 @@ normalize_options(Options) ->
                 (KV) ->
                     KV
             end,
-            Options).
+            Options)).
 
 
 site_dir(Name) ->
-    z_convert:to_list(filename:join([z_path:sites_dir(), Name])).
+    z_convert:to_list(filename:join([z_path:user_sites_dir(), Name])).
 
 skel_dir(Options) ->
     case z_string:to_name(proplists:get_value(skeleton, Options, <<"empty">>)) of
@@ -327,10 +331,18 @@ replace_tags(Bin, Options) when is_binary(Bin) ->
 
 map_tag(<<"%%SITE%%">>, Options) -> proplists:get_value(site, Options);
 map_tag(<<"%%SITEHOSTNAME%%">>, Options) -> proplists:get_value(hostname, Options);
-map_tag(<<"%%SKEL%%">>, Options) -> proplists:get_value(skeleton, Options);
+map_tag(<<"%%SKEL%%">>, Options) ->
+    case proplists:get_value(skeleton, Options, <<>>) of
+        <<>> -> "undefined";
+        Skel -> Skel
+    end;  
 map_tag(<<"%%FULLNAME%%">>, _Options) -> <<>>;
 map_tag(<<"%%DBHOST%%">>, Options) -> proplists:get_value(dbhost, Options);
-map_tag(<<"%%DBPORT%%">>, Options) -> proplists:get_value(dbport, Options);
+map_tag(<<"%%DBPORT%%">>, Options) ->
+    case proplists:get_value(dbport, Options, <<>>) of
+        <<>> -> "0";
+        Port -> Port
+    end;  
 map_tag(<<"%%DBUSER%%">>, Options) -> proplists:get_value(dbuser, Options);
 map_tag(<<"%%DBPASSWORD%%">>, Options) -> proplists:get_value(dbpassword, Options);
 map_tag(<<"%%DBDATABASE%%">>, Options) -> proplists:get_value(dbdatabase, Options);
@@ -338,7 +350,7 @@ map_tag(<<"%%DBSCHEMA%%">>, Options) -> proplists:get_value(dbschema, Options);
 map_tag(<<"%%ADMINPASSWORD%%">>, Options) -> proplists:get_value(admin_password, Options);
 map_tag(<<"%%YEAR%%">>, _Options) ->  z_dateformat:format(calendar:local_time(), "Y", []);
 map_tag(<<"%%DATE%%">>, _Options) -> z_dateformat:format(calendar:local_time(), "Y-m-d", []);
-map_tag(_, _Options) -> <<>>.
+map_tag(Bin, _Options) -> Bin.
 
 
 get_fallback(Opt, Options, Default) ->
@@ -353,8 +365,8 @@ check_name(Name, Context) ->
         true ->
             {error, ?__("This name is reserved", Context)};
         false ->
-            Name = binary_to_atom(Name, utf8),
-            case is_module(Name) of
+            Name1 = binary_to_atom(Name, utf8),
+            case is_module(Name1) of
                 true -> {error, ?__("This name is taken by another module", Context)};
                 false -> ok
             end
