@@ -163,6 +163,9 @@ To build the documentation, Erlang must be installed.
 
     $ cd doc/
 
+    # Install dependencies
+    $ pip install -r requirements.txt
+
     # Generate meta-*.rst files:
     $ make stubs
 
