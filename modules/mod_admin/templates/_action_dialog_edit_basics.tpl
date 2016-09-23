@@ -52,7 +52,7 @@
 
                     {% block tab_visible_for %}
 	                    <div class="tab-pane form-horizontal" id="{{ #acl }}">
-	                        {% include "_admin_edit_visible_for.tpl" id=id %}
+	                        {% optional include "_admin_edit_visible_for.tpl" id=id %}
 	                    </div>
                     {% endblock %}
 

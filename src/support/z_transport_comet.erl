@@ -30,15 +30,22 @@
 -define(COMET_FLUSH_EMPTY, 55000).
 
 %% Timeout for comet flush when there is data, allow for 100 msec more to gather extra data before flushing
+%% This must be higher than SIDEJOB_TIMEOUT in controlelr_postback.erl
 -define(COMET_FLUSH_DATA,  100).
 
 
 %% @doc Collect all scripts to be pushed back to the user agent
 comet_delegate(Context) ->
     MRef = erlang:monitor(process, Context#context.page_pid),
-    z_session_page:comet_attach(self(), Context#context.page_pid),
-    TRefFinal = erlang:send_after(?COMET_FLUSH_EMPTY, self(), flush_empty),
-    process_post_loop(Context, TRefFinal, undefined, MRef).
+    case z_session_page:comet_attach(self(), Context#context.page_pid) of
+        ok ->
+            TRefFinal = erlang:send_after(?COMET_FLUSH_EMPTY, self(), flush_empty),
+            process_post_loop(Context, TRefFinal, undefined, MRef);
+        {error, _} = Error ->
+            lager:info("[~p] Comet attach failed due to ~p", 
+                       [z_context:site(Context), Error]),
+            {ok, [], Context}
+    end.
 
 %% @doc Wait for all scripts to be pushed to the user agent.
 process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
@@ -59,6 +66,9 @@ process_post_loop(Context, TRefFinal, TRefData, MPageRef) ->
                             TRefData
                     end,
             ?MODULE:process_post_loop(Context, TRefFinal, TRef1, MPageRef);
+
+        close ->
+            flush(true, [], TRefFinal, TRefData, MPageRef, Context);
 
         {final, Msgs} ->
             flush(true, Msgs, TRefFinal, TRefData, MPageRef, Context);
@@ -81,7 +91,7 @@ flush(_IsFinal, Msgs, TRefFinal, TRefData, MPageRef, Context) ->
     erlang:demonitor(MPageRef, [flush]),
     maybe_cancel_timer(TRefFinal),
     maybe_cancel_timer(TRefData),
-    z_session_page:comet_detach(Context#context.page_pid),
+    z_session_page:comet_detach(self(), Context#context.page_pid),
     {ok, Msgs, Context}.
 
 maybe_cancel_timer(undefined) ->

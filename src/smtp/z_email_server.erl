@@ -721,7 +721,8 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                {"Date", date(Context)},
                {"MIME-Version", "1.0"},
                {"Message-ID", MessageId},
-               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
+               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+                | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->

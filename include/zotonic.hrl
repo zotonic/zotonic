@@ -167,12 +167,6 @@
 -define(ACL_ADMIN_USER_ID, 1).
 -define(ACL_ANY_USER_ID, -1).
 
-%% ACL visibility levels
--define(ACL_VIS_USER, 3).
--define(ACL_VIS_GROUP, 2).
--define(ACL_VIS_COMMUNITY, 1).
--define(ACL_VIS_PUBLIC, 0).
-
 %% ACL objects
 -record(acl_rsc, {category, mime, size}).
 -record(acl_edge, {
@@ -191,7 +185,6 @@
 -record(acl_props, {
     is_published=true,
     is_authoritative=true,
-    visible_for=?ACL_VIS_PUBLIC,
     publication_start={{1900,1,1},{0,0,0}},
     publication_end=?ST_JUTTEMIS
 }).

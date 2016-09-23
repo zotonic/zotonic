@@ -323,17 +323,17 @@ get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
                 Result =
                     z_db:q_row(
-                      "select is_published, is_authoritative, visible_for, "
+                      "select is_published, is_authoritative "
                       "publication_start, publication_end "
                       "from rsc "
                       "where id = $1",
                       [Id], Context),
                 case Result of
-                    {IsPub, IsAuth, Vis, PubS, PubE} ->
-                        #acl_props{is_published=IsPub, is_authoritative=IsAuth,visible_for=Vis,
+                    {IsPub, IsAuth, PubS, PubE} ->
+                        #acl_props{is_published=IsPub, is_authoritative=IsAuth,
                                    publication_start=PubS, publication_end=PubE};
                     undefined ->
-                        #acl_props{is_published=false, visible_for=?ACL_VIS_USER}
+                        #acl_props{is_published=false}
                 end
         end,
     z_depcache:memo(F, {rsc_acl_fields, Id}, ?DAY, [Id], Context);
@@ -342,7 +342,7 @@ get_acl_props(Name, Context) ->
         {ok, Id} ->
             get_acl_props(Id, Context);
         _ ->
-            #acl_props{is_published=false, visible_for=?ACL_VIS_USER}
+            #acl_props{is_published=false}
     end.
 
 
@@ -460,7 +460,6 @@ p(Id, Property, Context)
     orelse Property =:= is_published
     orelse Property =:= exists
     orelse Property =:= id
-    orelse Property =:= visible_for
     orelse Property =:= default_page_url ->
         p_no_acl(rid(Id, Context), Property, Context);
 p(Id, Property, Context) ->

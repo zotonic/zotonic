@@ -9,4 +9,4 @@
         {{ notice|force_escape|linebreaksbr }}
     </p>
 </div>
-{% wire id=" .close" action={hide target=#id} %}
+{% wire id=#id action={hide target=#id} %}

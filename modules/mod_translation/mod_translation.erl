@@ -222,7 +222,7 @@ observe_scomp_script_render(#scomp_script_render{}, Context) ->
 %% @doc Set the current session (and user) language, reload the user agent's page.
 event(#postback{message={set_language, Args}}, Context) ->
     Code = case proplists:get_value(code, Args) of
-               undefined -> z_context:get_q("triggervalue", Context);
+               undefined -> z_context:get_q(<<"triggervalue">>, Context);
                ArgCode -> ArgCode
            end,
     Context1 = set_user_language(Code, Context),
@@ -261,8 +261,9 @@ event(#submit{message={language_edit, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             OldCode = proplists:get_value(code, Args, '$empty'),
-            language_add(OldCode, z_context:get_q("code", Context), z_context:get_q("language", Context), z_context:get_q("fallback", Context),
-                         z_context:get_q("is_enabled", Context), Context),
+            language_add(OldCode, z_context:get_q(<<"code">>, Context),
+                         z_context:get_q(<<"language">>, Context), z_context:get_q(<<"fallback">>, Context),
+                         z_context:get_q(<<"is_enabled">>, Context), Context),
             Context1 = z_render:dialog_close(Context),
             z_render:wire({reload, []}, Context1);
         false ->
@@ -284,7 +285,7 @@ event(#postback{message={language_enable, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             {code, Code} = proplists:lookup(code, Args),
-            language_enable(Code, z_convert:to_bool(z_context:get_q("triggervalue", Context)), Context),
+            language_enable(Code, z_convert:to_bool(z_context:get_q(<<"triggervalue">>, Context)), Context),
             Context;
         false ->
             z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
@@ -381,7 +382,7 @@ language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Conte
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
     Languages2 = lists:usort([{IsoCodeNewAtom,
-                               [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
+                               [{language, z_string:trim(z_html:escape(Language))},
                                 {fallback, FallbackIsoCodeAtom},
                                 {is_enabled, z_convert:to_bool(IsEnabled)}
                                ]} | Languages1]),

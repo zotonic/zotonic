@@ -71,7 +71,7 @@ get(Key, Context) when is_atom(Key) ->
                 undefined;
             {ok, none} when Key == hostname ->
                 case z_context:is_request(Context) of
-                    true -> sanitize_host(z_context:get_req_header("host", Context));
+                    true -> sanitize_host(z_context:get_req_header(<<"host">>, Context));
                     false -> undefined
                 end;
             {ok, Cs} ->
@@ -87,6 +87,10 @@ get(Key, Context) when is_atom(Key) ->
             proplists:get_value(Key, Cfg)
     end.
 
+sanitize_host(undefined) ->
+    undefined;
+sanitize_host(Host) when is_binary(Host) ->
+    sanitize_host(z_convert:to_list(Host));
 sanitize_host(Host) ->
     sanitize_host(Host, []).
 

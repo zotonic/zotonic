@@ -140,7 +140,7 @@ make_copy_title({trans, Ts}, Context) ->
 
 % @doc Sync a hierarchy based on edges (silently ignore ACL errors)
 hierarchy_edge(RootId, Predicate, Tree, Context) ->
-    Predicate = z_context:get_q("z_predicate", Context, Predicate),
+    Predicate = z_context:get_q(<<"z_predicate">>, Context, Predicate),
     {ok, PredId} = m_predicate:name_to_id(Predicate, Context),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
     move_edges(RootId, Tree, PredName, Context),

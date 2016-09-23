@@ -30,9 +30,6 @@
 
          rsc_update_check/3,
 
-         args_to_visible_for/1,
-         set_visible_for/2,
-         can_see/1,
          cache_key/1,
 
          user/1,
@@ -202,62 +199,6 @@ rsc_linkable(RscName, Context) ->
 %% @doc Filter the properties of an update.  This is before any escaping.
 rsc_update_check(Id, Props, Context) ->
     z_notifier:foldl(#acl_rsc_update_check{id=Id}, Props, Context).
-
-
-%% @doc Set the acl fields of the context for the 'visible_for' setting.  Used when rendering scomps.
-%% @spec set_visible_for(integer(), context()) -> context()
-%% @todo Change this for the pluggable ACL
-set_visible_for(_VisibleFor, #context{user_id=undefined} = Context) ->
-    Context;
-set_visible_for(?ACL_VIS_PUBLIC, Context) ->
-    Context#context{user_id=undefined, acl=undefined};
-set_visible_for(?ACL_VIS_COMMUNITY, Context) ->
-    Context#context{user_id=?ACL_ANY_USER_ID, acl=undefined};
-set_visible_for(?ACL_VIS_GROUP, Context) ->
-    Context#context{acl=undefined};
-set_visible_for(_VisibleFor, Context) ->
-    Context.
-
-
-%% @doc Return the max visible_for the current user can see
-%% @todo Change this for the pluggable ACL
-can_see(#context{user_id=undefined}) ->
-    ?ACL_VIS_PUBLIC;
-can_see(#context{user_id=?ACL_ADMIN_USER_ID}) ->
-    ?ACL_VIS_USER;
-can_see(#context{acl=admin}) ->
-    ?ACL_VIS_USER;
-can_see(#context{user_id=?ACL_ANY_USER_ID}) ->
-    ?ACL_VIS_COMMUNITY;
-can_see(Context) ->
-    case z_notifier:first(#acl_can_see{}, Context) of
-        undefined -> ?ACL_VIS_PUBLIC;
-        CanSee -> CanSee
-    end.
-
-
-%% @doc Translate "visible_for" parameter to the appropriate visibility level.
-%% @spec args_to_visible_for(proplist()) -> 0 | 1 | 2 | 3
-args_to_visible_for(Args) when is_map(Args) ->
-    case maps:get(visible_for, Args, undefined) of
-        undefined       -> ?ACL_VIS_USER;
-        <<"user">>      -> ?ACL_VIS_USER;
-        <<"group">>     -> ?ACL_VIS_GROUP;
-        <<"community">> -> ?ACL_VIS_COMMUNITY;
-        <<"world">>     -> ?ACL_VIS_PUBLIC;
-        <<"public">>    -> ?ACL_VIS_PUBLIC;
-        N when is_integer(N), N >= 0 -> N
-    end;
-args_to_visible_for(Args) when is_list(Args) ->
-    case proplists:get_value(visible_for, Args) of
-        undefined   -> ?ACL_VIS_USER;
-        "user"      -> ?ACL_VIS_USER;
-        "group"     -> ?ACL_VIS_GROUP;
-        "community" -> ?ACL_VIS_COMMUNITY;
-        "world"     -> ?ACL_VIS_PUBLIC;
-        "public"    -> ?ACL_VIS_PUBLIC;
-        N when is_integer(N), N >= 0 -> N
-    end.
 
 
 %% @doc Return a term that can be used as the ACL part of cache key.

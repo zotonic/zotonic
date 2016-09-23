@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @doc 'is_visible' filter, filters a list of ids
+%% @doc 'is_visible' filter, filters a list of ids or tuples {id, score}
 
 %% Copyright 2010 Marc Worrell
 %%
@@ -21,7 +21,13 @@
 
 
 is_visible(Arg, Context) ->
-    z_list_of_ids_filter:filter(Arg, fun(Id) -> z_acl:rsc_visible(Id, Context) end, Context).
+    z_list_of_ids_filter:filter(Arg, fun(Id) -> is_rsc_visible(Id, Context) end, Context).
 
 is_visible(List, N, Context) ->
-    z_list_of_ids_filter:filter(List, fun(Id) -> z_acl:rsc_visible(Id, Context) end, N, Context).
+    z_list_of_ids_filter:filter(List, fun(Id) -> is_rsc_visible(Id, Context) end, N, Context).
+
+
+is_rsc_visible({Id, _Score}, Context) when is_integer(Id) ->
+    z_acl:rsc_visible(Id, Context);
+is_rsc_visible(Id, Context) ->
+    z_acl:rsc_visible(Id, Context).

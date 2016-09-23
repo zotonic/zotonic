@@ -84,9 +84,9 @@ child_spec(Host, SiteProps) ->
 %% argument and those are the only arguments that are given to the
 %% database pool worker processes.
 db_opts(SiteProps) ->
-    Kvs = lists:filter(fun({K, _}) ->
+    Kvs = lists:filter(fun({K, V}) ->
                                case atom_to_list(K) of
-                                   "db"++_ -> true;
+                                   "db"++_ -> not z_utils:is_empty(V);
                                    _ -> false
                                end
                        end,
@@ -97,14 +97,7 @@ db_opts(SiteProps) ->
                 {dbuser, z_config:get(dbuser, "zotonic")},
                 {dbdatabase, z_config:get(dbdatabase, "zotonic")},
                 {dbschema, z_config:get(dbschema, "public")}],
-    lists:foldl(fun({K, V}, Acc) ->
-                        case proplists:lookup(K, Acc) of
-                            {K, _} -> Acc;
-                            none -> [{K,V}|Acc]
-                        end
-                end,
-                [],
-                Kvs ++ Defaults).
+    lists:keymerge(1, lists:sort(Kvs), lists:sort(Defaults)).
 
 get_connection(#context{db={Pool,_}}) ->
     poolboy:checkout(Pool).

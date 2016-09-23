@@ -48,9 +48,9 @@ event(#postback{message={config_new_dialog, OnSuccess}}, Context) ->
 event(#submit{message={config_new, Args}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            Module = z_string:to_name(z_context:get_q_validated("module", Context)),
-            Key = z_string:to_name(z_context:get_q_validated("key", Context)),
-            Value = z_context:get_q("val", Context, ""),
+            Module = z_string:to_name(z_context:get_q_validated(<<"module">>, Context)),
+            Key = z_string:to_name(z_context:get_q_validated(<<"key">>, Context)),
+            Value = z_context:get_q(<<"val">>, Context, <<>>),
             OnSuccess = proplists:get_all_values(on_success, Args),
 
             case m_config:get_id(Module, Key, Context) of

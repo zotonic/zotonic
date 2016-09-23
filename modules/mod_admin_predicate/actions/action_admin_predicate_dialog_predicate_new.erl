@@ -48,8 +48,8 @@ event(#postback{message={predicate_new_dialog, Title, Redirect}}, Context) ->
 
 
 event(#submit{message=predicate_new}, Context) ->
-    Title    = z_context:get_q("new_predicate_title", Context),
-    Redirect = z_context:get_q("redirect", Context),
+    Title    = z_context:get_q(<<"new_predicate_title">>, Context),
+    Redirect = z_context:get_q(<<"redirect">>, Context),
     {ok, Id} = m_predicate:insert(Title, Context),
 
     % Close the dialog and optionally redirect to the edit page of the new resource

@@ -43,7 +43,7 @@
 
 
 event(#submit{message={delete_move, Args}}, Context) ->
-    ToPredId = z_convert:to_integer(z_context:get_q_validated("predicate_id", Context)),
+    ToPredId = z_convert:to_integer(z_context:get_q_validated(<<"predicate_id">>, Context)),
     {id, PredId} = proplists:lookup(id, Args),
     case z_acl:rsc_deletable(PredId, Context) of
         true ->

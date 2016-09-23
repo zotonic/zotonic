@@ -76,6 +76,8 @@
     assert_table_name/1,
     prepare_cols/2,
 
+    ensure_database/2,
+    ensure_schema/2,
     schema_exists_conn/2
 ]).
 

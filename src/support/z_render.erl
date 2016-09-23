@@ -586,25 +586,38 @@ css_selector(TargetId) ->
 %% @doc Map a target id to a css selector, check the Args proplist for additional selectors
 css_selector(TargetId, Args) ->
     case proplists:get_value(selector, Args) of
-        Empty when Empty == undefined; Empty == <<>>; Empty == [] ->
+        Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
             case TargetId of
                 window -> window;
-                "window" -> window;
                 undefined -> [];
-                [] -> [];
                 <<>> -> [];
+                "" -> [];
+
+                <<"window">> -> window;
+                <<" ", _/binary>> = Selector -> Selector;
+                <<"#", _/binary>> = Selector -> Selector;
+                Id when is_binary(Id)-> <<$#,Id/binary>>;
+
+                "window" -> window;
+                [] -> [];
                 [32|Selector] -> Selector;
                 [$#|_] = Selector -> Selector;
-                Id when is_list(Id); is_binary(Id)-> [$#|Id]
+                Id when is_list(Id)-> [$#|Id]
             end;
         "window" ->
+            window;
+        <<"window">> ->
             window;
         Selector ->
             Selector
     end.
 
 %% @doc Quote a css selector (assume no escaping needed...)
-quote_css_selector(window) -> "window";
+quote_css_selector(window) -> <<"window">>;
+quote_css_selector(<<>>) -> <<>>;
+quote_css_selector(<<$', _/binary>> = S) -> S;
+quote_css_selector(<<$", _/binary>> = S) -> S;
+quote_css_selector(<<$$, _/binary>> = S) -> S;
 quote_css_selector([]) -> [];
 quote_css_selector([$'|_] = S) -> S;
 quote_css_selector([$"|_] = S) -> S;
@@ -615,6 +628,7 @@ quote_css_selector(S) -> [$", S, $"].
 %% @doc Render a css selector, allow direct expressions like
 render_css_selector(Selector) ->
     case quote_css_selector(Selector) of
+        <<$$, _/binary>> = Sel -> Sel;
         [$$|_] = Sel -> Sel;
         CssSel -> [$$, $(, CssSel, $)]
     end.

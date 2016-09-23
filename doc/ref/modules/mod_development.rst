@@ -57,11 +57,12 @@ With this it is possible to see for a request path which dispatch rules are matc
 .. image:: /img/development_dispatch_debug.png
 
 
+.. _automatic-recompilation:
 
 Automatic recompilation
 -----------------------
 
-The core Zotonic system starts either ``inotify-tools`` or ``fswatch``, depending on 
+The core Zotonic system starts either ``inotify-tools`` or ``fswatch``, depending on
 which one is available. You have to install one of these to enable auto-compile
 and auto-load of changed files.
 
@@ -92,7 +93,7 @@ If a changed file is detected then Zotonic will:
 
 * If a beam file changes then the module will be loaded. If the beam file is
   a Zotonic module then it will be automatically restarted if either the
-  function exports or the ``mod_schema`` changed. 
+  function exports or the ``mod_schema`` changed.
 
 * If the .yrl definition of the template parser changes, then the .erl version
   of the parser is regenerated. (This will trigger a compile, which triggers a
@@ -105,7 +106,7 @@ Linux installation
 On Linux this feature depends on the `inotifywait` tool, which is part
 of the ``inotify-tools`` package. For displaying notifications, it
 uses ``notify-send``::
-  
+
   sudo apt-get install inotify-tools libnotify-bin
 
 
@@ -115,7 +116,7 @@ Mac OS X installation
 On Mac OS X (version 10.8 and higher), we use the external programs ``fswatch`` and
 ``terminal-notifier``::
 
-  sudo brew install fswatch 
+  sudo brew install fswatch
   sudo brew install terminal-notifier
 
 

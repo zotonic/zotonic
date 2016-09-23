@@ -171,7 +171,6 @@ model_pgsql() ->
       CONSTRAINT rsc_name_key UNIQUE (name),
       CONSTRAINT rsc_page_path_key UNIQUE (page_path)
     )",
-    "COMMENT ON COLUMN rsc.visible_for IS '0 = public, 1 = community, 2 = group'",
 
      "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_content_group_id FOREIGN KEY (content_group_id)
       REFERENCES rsc (id)

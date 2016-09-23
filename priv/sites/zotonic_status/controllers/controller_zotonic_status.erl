@@ -69,7 +69,10 @@ status_page(Context) ->
     Vars1 = z_notifier:foldl(zotonic_status_init, Vars, Context),
     Rendered = z_template:render(Template, Vars1, Context),
     {Output, OutputContext} = z_context:output(Rendered, Context),
-    start_stream(SitesStatus, OutputContext),
+    case Template of
+        "home.tpl" -> start_stream(SitesStatus, OutputContext);
+        _ -> ok
+    end,
     {Output, OutputContext}.
 
 

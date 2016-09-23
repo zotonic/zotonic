@@ -49,7 +49,7 @@ event(#submit{message={restore, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            #upload{filename=_Filename, tmpfile=Tmpfile} = z_context:get_q_validated("file", Context),
+            #upload{filename=_Filename, tmpfile=Tmpfile} = z_context:get_q_validated(<<"file">>, Context),
             {ok, Data} = file:read_file(Tmpfile),
             case catch z_notifier:first(#rsc_upload{id=Id, format=bert, data=Data}, Context) of
                 {ok, NewId} ->
@@ -69,7 +69,7 @@ event(#submit{message={restore, Args}}, Context) ->
 set_config(What, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            m_config:set_value(mod_backup, What, z_context:get_q("triggervalue", Context), Context),
+            m_config:set_value(mod_backup, What, z_context:get_q(<<"triggervalue">>, Context), Context),
             z_render:growl(?__("Changed configuration.", Context), Context);
         false ->
             z_render:growl_error(?__("Sorry, you have no permission to change the configuration.", Context), Context)

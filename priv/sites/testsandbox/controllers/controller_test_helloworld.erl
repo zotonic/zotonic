@@ -44,7 +44,7 @@ event(#sort{items=Drags, drop=Drop}, Context) ->
     z_render:wire({growl, [{text,Msg}]}, Context);
 
 event(#submit{}, Context) ->
-    Email = z_context:get_q_validated("email", Context),
+    Email = z_context:get_q_validated(<<"email">>, Context),
     z_render:wire({growl, [{text,["You posted a valid email address \"",Email,"\""]}]}, Context);
 
 event(Event, Context) ->

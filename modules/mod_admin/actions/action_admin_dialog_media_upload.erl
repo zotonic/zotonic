@@ -67,7 +67,7 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
             Props = case proplists:get_value(id, EventProps) of
                         undefined ->
                             Lang = z_context:language(Context),
-                            Title = z_context:get_q("new_media_title", Context),
+                            Title = z_context:get_q(<<"new_media_title">>, Context),
                             NewTitle = case z_utils:is_empty(Title) of
                                            true -> OriginalFilename;
                                            false -> Title
@@ -91,11 +91,11 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
     end;
 
 event(#submit{message={media_url, EventProps}}, Context) ->
-    Url = z_context:get_q("url", Context),
+    Url = z_context:get_q(<<"url">>, Context),
     Props = case proplists:get_value(id, EventProps) of
                 undefined ->
                     Props0 = [
-                        {title, z_context:get_q_validated("new_media_title_url", Context)}
+                        {title, z_context:get_q_validated(<<"new_media_title_url">>, Context)}
                     ],
                     add_content_group(EventProps, Props0, Context);
                 _ ->

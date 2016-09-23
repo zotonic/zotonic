@@ -635,7 +635,7 @@ throw_if_category_not_allowed_1(_PrevCatId, CatId, Context) ->
     CategoryName = m_category:id_to_name(CatId, Context),
     case z_acl:is_allowed(insert, #acl_rsc{category=CategoryName}, Context) of
         true -> ok;
-        _False -> throw({error, eaccess})
+        _False -> throw({error, eacces})
     end.
 
 
@@ -720,15 +720,6 @@ props_filter([{P, Id}|T], Acc, Context)
             props_filter(T, Acc, Context);
         RId ->
             props_filter(T, [{P,RId}|Acc], Context)
-    end;
-
-props_filter([{visible_for, Vis}|T], Acc, Context) ->
-    VisibleFor = z_convert:to_integer(Vis),
-    case VisibleFor of
-        N when N >= 0 ->
-            props_filter(T, [{visible_for, N} | Acc], Context);
-        _ ->
-            props_filter(T, Acc, Context)
     end;
 
 props_filter([{category, CatName}|T], Acc, Context) ->

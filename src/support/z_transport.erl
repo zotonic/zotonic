@@ -37,7 +37,11 @@
     data_decode/1,
     data_encode/1,
 
+    prepare_incoming_context/2,
+    partition_control_messages/1,
     incoming/2,
+
+    maybe_ack/3,
 
     maybe_set_sessions/3,
     maybe_logon/1
@@ -155,8 +159,36 @@ data_encode(Data) ->
     z_ubf:encode(Data).
 
 
+%% @doc Partition the incoming messages into control messages like ping and non-control messages.
+-spec partition_control_messages(Msg) -> {Msg, Msg}
+        when Msg :: list()|#z_msg_v1{}|#z_msg_ack{}.
+partition_control_messages(List) when is_list(List) ->
+    lists:partition(fun is_control_message/1, List);
+partition_control_messages(Msg) ->
+    case is_control_message(Msg) of
+        true -> {[Msg], []};
+        false -> {[], [Msg]}
+    end.
+
+%% @doc Prepare the context of an incoming message, this is needed for handling sidejobs with the controller_postback.
+-spec prepare_incoming_context(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> #context{}.
+prepare_incoming_context([Msg|_], Context) ->
+    prepare_incoming_context(Msg, Context);
+prepare_incoming_context(#z_msg_v1{page_id=undefined}, #context{page_id=undefined} = Context) ->
+    lager:info(z_context:lager_md(Context),
+              "Transport with 'undefined' page_id from ~p",
+              [m_req:get(peer, Context)]),
+    {ok, [msg(undefined, session, <<"page_invalid">>, [])], Context};
+prepare_incoming_context(#z_msg_v1{page_id=PageId, session_id=SessionId}, Context) ->
+    maybe_logon(maybe_set_sessions(SessionId, PageId, Context));
+prepare_incoming_context(#z_msg_ack{page_id=PageId, session_id=SessionId}, Context) ->
+    maybe_set_sessions(SessionId, PageId, Context).
+
+
 %% @doc Handle incoming messages, originates from various sources, like postback, websocket etc
 -spec incoming(list()|#z_msg_v1{}|#z_msg_ack{}, #context{}) -> {ok, list(), #context{}}.
+incoming([], Context) ->
+    {ok, [], Context};
 incoming(Msg, Context) ->
     {ok, Rs, Context1} = incoming_msgs(Msg, Context),
     {ok, maybe_session_status_msg(Rs, Context1), cleanup_context(Context1, Context)}.
@@ -198,7 +230,7 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content
                         [Reason, Msg]),
             lager:error(z_context:lager_md(Context1),
                         "Stack: ~p", [Stacktrace]),
-            {ok, maybe_ack({error, Reason}, Msg, Context1), Context1};
+            {ok, [], Context1};
         error:Reason ->
             Stacktrace = erlang:get_stacktrace(),
             lager:error(z_context:lager_md(Context1),
@@ -206,7 +238,7 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content
                         [Reason, Msg]),
             lager:error(z_context:lager_md(Context1),
                         "Stack: ~p", [Stacktrace]),
-            {ok, maybe_ack({error, error}, Msg, Context1), Context1}
+            {ok, [], Context1}
     end;
 incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
     Context1 = maybe_set_sessions(SessionId, PageId, Context),
@@ -221,6 +253,12 @@ incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) -
 %%% Internal functions
 %%% ---------------------------------------------------------------------------------------
 
+is_control_message(#z_msg_v1{delegate = '$ping'}) -> true;
+is_control_message(#z_msg_v1{delegate = <<"$ping">>}) -> true;
+is_control_message(#z_msg_v1{delegate = session}) -> true;
+is_control_message(#z_msg_ack{}) -> true;
+is_control_message(_) -> false.
+
 incoming_1(#z_msg_v1{delegate='$ping'} = Msg, Context) ->
     {ok, maybe_ack(pong, Msg, Context), Context};
 incoming_1(#z_msg_v1{delegate= <<"$ping">>} = Msg, Context) ->
@@ -230,15 +268,19 @@ incoming_1(#z_msg_v1{delegate=session, data= <<"check">>}, Context) ->
 incoming_1(#z_msg_v1{delegate=session, data= <<"ensure">>}, Context) ->
     {ok, Reply, Context1} = session_status_ensure(Context),
     {ok, Reply, Context1};
+incoming_1(#z_msg_v1{delegate='$comet'}, #context{session_pid=SPid, page_pid=PPid} = Context) when is_pid(SPid), is_pid(PPid) ->
+    z_transport_comet:comet_delegate(Context);
 incoming_1(Msg, #context{session_pid=SPid, page_pid=PPid} = Context) when is_pid(SPid), is_pid(PPid) ->
+    transport(maybe_ack(ok, Msg, Context), Context),
     incoming_with_session(Msg, Context);
 incoming_1(_Msg, Context) ->
     {ok, session_status_message(Context), Context}.
 
 
-incoming_with_session(#z_msg_v1{delegate='$comet'}, Context) ->
-    z_transport_comet:comet_delegate(Context);
-incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
+incoming_with_session(#z_msg_v1{delegate=mqtt, data=Data}, Context) ->
+    _Result = z_mqtt:transport_incoming(Data, Context),
+    {ok, [], Context};
+incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb}, Context) ->
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Pb#postback_event.postback, Context),
     TriggerId1 = case TriggerId of
                     undefined -> Pb#postback_event.trigger;
@@ -253,14 +295,11 @@ incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} 
             Context2 = z_context:set_q(<<"triggervalue">>, Pb#postback_event.triggervalue, Context1),
             ContextRsc = z_context:set_controller_module(Module, Context2),
             ContextRes = incoming_postback_event(is_submit_event(EventType), Module, Tag, TriggerId1, TargetId1, ContextRsc),
-            incoming_context_result(ok, Msg, ContextRes);
+            incoming_context_result(ContextRes);
         {error, ContextValidation} ->
-            incoming_context_result(ok, Msg, ContextValidation)
+            incoming_context_result(ContextValidation)
     end;
-incoming_with_session(#z_msg_v1{delegate=mqtt, data=Data} = Msg, Context) ->
-    Result = z_mqtt:transport_incoming(Data, Context),
-    incoming_context_result(Result, Msg, Context);
-incoming_with_session(#z_msg_v1{delegate=notify, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
+incoming_with_session(#z_msg_v1{delegate=notify, content_type=Type, data=#postback_notify{} = Notify}, Context) ->
     case maybe_set_q(Type, Notify#postback_notify.data, Context) of
         {ok, Context1} ->
             % MochiWeb compatible values...
@@ -273,11 +312,11 @@ incoming_with_session(#z_msg_v1{delegate=notify, content_type=Type, data=#postba
                             undefined -> Context1;
                             #context{} = ContextNotify -> ContextNotify
                        end,
-            incoming_context_result(ok, Msg, Context2);
+            incoming_context_result(Context2);
         {error, ContextValidation} ->
-            incoming_context_result(ok, Msg, ContextValidation)
+            incoming_context_result(ContextValidation)
     end;
-incoming_with_session(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify{} = Notify} = Msg, Context) ->
+incoming_with_session(#z_msg_v1{delegate=Delegate, content_type=Type, data=#postback_notify{} = Notify}, Context) ->
     case maybe_set_q(Type, Notify#postback_notify.data, Context) of
         {ok, Context1} ->
             {ok, Module} = z_utils:ensure_existing_module(Delegate),
@@ -287,13 +326,13 @@ incoming_with_session(#z_msg_v1{delegate=Delegate, content_type=Type, data=#post
                             trigger=Notify#postback_notify.trigger,
                             target=Notify#postback_notify.target
                       },
-            incoming_context_result(ok, Msg, Module:event(Notify1, Context1));
+            incoming_context_result(Module:event(Notify1, Context1));
         {error, ContextValidation} ->
-            incoming_context_result(ok, Msg, ContextValidation)
+            incoming_context_result(ContextValidation)
     end;
 incoming_with_session(#z_msg_v1{delegate=Delegate} = Msg, Context) when is_atom(Delegate); is_binary(Delegate) ->
     {ok, Module} = z_utils:ensure_existing_module(Delegate),
-    incoming_context_result(ok, Msg, Module:event(Msg, Context)).
+    incoming_context_result(Module:event(Msg, Context)).
 
 is_submit_event(<<"submit">>) -> true;
 is_submit_event("submit") -> true;
@@ -311,14 +350,11 @@ incoming_postback_event(true, Module, Tag, Trigger, Target, Context) ->
 incoming_postback_event(false, Module, Tag, Trigger, Target, Context) ->
     Module:event(#postback{message=Tag, trigger=Trigger, target=Target}, Context).
 
-incoming_context_result(Result, Msg, Context) ->
-    OptAck = maybe_ack(Result, Msg, Context),
+incoming_context_result(Context) ->
     {Script, ContextClean} = z_script:split(Context),
     case iolist_to_binary(Script) of
-        <<>> ->
-            {ok, OptAck, ContextClean};
-        ScriptBin ->
-            {ok, lists:flatten([OptAck, msg(page, javascript, ScriptBin, [{qos,0}])]), ContextClean}
+        <<>> -> {ok, [], ContextClean};
+        ScriptBin -> {ok, lists:flatten([msg(page, javascript, ScriptBin, [{qos,0}])]), ContextClean}
     end.
 
 maybe_set_sessions(SessionId, PageId, Context) ->
@@ -458,15 +494,19 @@ decode_data(json, Data) when is_binary(Data) ->
 decode_data(_Other, Data) ->
     Data.
 
-maybe_ack(Result, #z_msg_v1{qos=N, msg_id=MsgId}, Context) when N > 0; Result =/= undefined ->
+
+maybe_ack(Result, #z_msg_v1{qos=N, msg_id=MsgId}, Context) when N > 0; Result =/= ok ->
     #z_msg_ack{
         qos=N,
         msg_id=MsgId,
         result=Result,
+        session_id=Context#context.session_id,
         page_id=Context#context.page_id
     };
 maybe_ack(_Result, #z_msg_v1{}, _Context) ->
-    [].
+    [];
+maybe_ack(Result, List, Context) when is_list(List) ->
+    lists:flatten([ maybe_ack(Result, Msg, Context) || Msg <- List]).
 
 mklist(L) when is_list(L) -> L;
 mklist(V) -> [V].
