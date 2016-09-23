@@ -130,8 +130,6 @@ test_get_properties_8() ->
     Result = z_language:properties(Code),
     [{_ExpectedCode, ExpectedData}|_] = proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES),
     [{_ResultCode, ResultData}|_] = proplists:get_value(sublanguages, Result),
-    lager:info("ExpectedData=~p", [ExpectedData]),
-    lager:info("ResultData=~p", [ResultData]),
     ?assertEqual(
         proplists:get_value(region, ExpectedData),
         proplists:get_value(region, ResultData)
@@ -195,6 +193,3 @@ test_is_rtl_3() ->
     Result = z_language:is_rtl(Code),
     Expected = true,
     ?assertEqual(Expected, Result).
-
-
-
