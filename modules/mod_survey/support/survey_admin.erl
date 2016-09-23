@@ -47,7 +47,8 @@ r_language(Context) ->
             [];
         Ls ->
             Ls1 = binary:split(Ls, <<",">>, [global]),
-            [ binary_to_atom(L, 'utf8') L <- lists:filter(fun z_language:is_valid/1, Ls1) ]
+            [ binary_to_atom(L, 'utf8') || L <- lists:filter(fun z_language:is_valid/1, Ls1) ]
+            
     end.
 
 
