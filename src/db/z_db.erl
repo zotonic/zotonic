@@ -88,6 +88,10 @@
 -compile([{parse_transform, lager_transform}]).
 
 -type table_name() :: atom() | string().
+-type parameters() :: list(tuple() | atom() | string()).
+-type sql() :: string() | iodata().
+-type props() :: proplists:proplist().
+-type id() :: pos_integer().
 
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
 %% @spec transaction(Function, Context) -> FunctionResult | {error, Reason}
@@ -307,7 +311,7 @@ q1(Sql, Parameters, #context{} = Context) ->
 q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q1(Sql, [], Context, Timeout).
 
--spec q1(string(), list(tuple()), #context{}, pos_integer()) -> term() | undefined.
+-spec q1(string(), parameters(), #context{}, pos_integer()) -> term() | undefined.
 q1(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> undefined;
            (C) ->
@@ -353,6 +357,7 @@ equery(Sql, Parameters, #context{} = Context) ->
 equery(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     equery(Sql, [], Context, Timeout).
 
+-spec equery(sql(), parameters(), #context{}, integer()) -> any().
 equery(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
            (C) ->
@@ -363,7 +368,7 @@ equery(Sql, Parameters, Context, Timeout) ->
 
 
 %% @doc Insert a new row in a table, use only default values.
-%% @spec insert(Table, Context) -> {ok, Id}
+-spec insert(table_name(), #context{}) -> boolean().
 insert(Table, Context) when is_atom(Table) ->
     insert(atom_to_list(Table), Context);
 insert(Table, Context) ->
@@ -378,7 +383,7 @@ insert(Table, Context) ->
 
 %% @doc Insert a row, setting the fields to the props.  Unknown columns are serialized in the props column.
 %% When the table has an 'id' column then the new id is returned.
-%% @spec insert(Table::atom(), Props::proplist(), Context) -> {ok, Id} | Error
+-spec insert(table_name(), props(), #context{}) -> boolean().
 insert(Table, [], Context) ->
     insert(Table, Context);
 insert(Table, Props, Context) when is_atom(Table) ->
@@ -424,7 +429,7 @@ insert(Table, Props, Context) ->
 
 
 %% @doc Update a row in a table, merging the props list with any new props values
-%% @spec update(Table, Id, Parameters, Context) -> {ok, RowsUpdated}
+-spec update(table_name(), id(), parameters(), #context{}) -> {ok, integer()}.
 update(Table, Id, Parameters, Context) when is_atom(Table) ->
     update(atom_to_list(Table), Id, Parameters, Context);
 update(Table, Id, Parameters, Context) ->
@@ -837,7 +842,7 @@ assert_table_name1([H|T]) when (H >= $a andalso H =< $z) orelse (H >= $0 andalso
 
 
 %% @doc Merge the contents of the props column into the result rows
--spec merge_props(list() | undefined) -> list().
+-spec merge_props(list() | undefined) -> list() | undefined.
 merge_props(undefined) ->
     undefined;
 merge_props(List) ->
@@ -871,9 +876,7 @@ equery1(DbDriver, C, Sql) ->
     equery1(DbDriver, C, Sql, [], ?TIMEOUT).
 
 equery1(DbDriver, C, Sql, Parameters) when is_list(Parameters); is_tuple(Parameters) ->
-    equery1(DbDriver, C, Sql, Parameters, ?TIMEOUT);
-equery1(DbDriver, C, Sql, Timeout) when is_integer(Timeout) ->
-    equery1(DbDriver, C, Sql, [], Timeout).
+    equery1(DbDriver, C, Sql, Parameters, ?TIMEOUT).
 
 equery1(DbDriver, C, Sql, Parameters, Timeout) ->
     case DbDriver:equery(C, Sql, Parameters, Timeout) of
