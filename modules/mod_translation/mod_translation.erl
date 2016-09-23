@@ -146,15 +146,15 @@ maybe_configuration(Context) ->
 maybe_accept_header(Context) ->
     case z_context:get_req_header(<<"accept-language">>, Context) of
         undefined -> Context;
-        AcceptLanguage -> set_language(list_to_atom(AcceptLanguage), Context)
+        AcceptLanguage -> set_language(binary_to_atom(AcceptLanguage, 'utf8'), Context)
     end.
 
 
 -spec get_q_language(#context{}) -> atom().
 get_q_language(Context) ->
-    case z_context:get_q_all("z_language", Context) of
+    case z_context:get_q_all(<<"z_language">>, Context) of
         [] -> undefined;
-        L -> list_to_atom(lists:last(L))
+        L -> binary_to_atom(lists:last(L), 'utf8')
     end.
 
 
@@ -275,7 +275,10 @@ event(#postback{message={language_default, Args}}, Context) ->
 event(#submit{message={language_add, _Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
-            language_add(z_string:trim(z_context:get_q("code", Context)), z_context:get_q("is_enabled", Context), Context),
+            language_add(
+                    z_string:trim(z_context:get_q(<<"code">>, Context)), 
+                    z_context:get_q(<<"is_enabled">>, Context),
+                    Context),
             z_render:wire({reload, []}, Context);
         false ->
             z_render:growl_error(?__(<<"Sorry, you don't have permission to change the language list.">>, Context), Context)
