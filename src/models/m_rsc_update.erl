@@ -1172,7 +1172,7 @@ recombine_languages(Props, Context) ->
 
 
     append_langprop(P, Lang, V, Acc) ->
-        {ok, Lang1} = z_trans:to_language_atom(Lang),
+        {ok, Lang1} = z_language:to_language_atom(Lang),
         case proplists:get_value(P, Acc) of
             {trans, Tr} ->
                 Tr1 = [{Lang1, z_convert:to_binary(V)}|Tr],
