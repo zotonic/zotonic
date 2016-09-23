@@ -323,7 +323,7 @@ get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
                 Result =
                     z_db:q_row(
-                      "select is_published, is_authoritative "
+                      "select is_published, is_authoritative, "
                       "publication_start, publication_end "
                       "from rsc "
                       "where id = $1",
