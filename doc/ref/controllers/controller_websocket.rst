@@ -3,8 +3,8 @@
 
 Controller which accepts a WebSocket connection from the browser.
 
-The controller provides persistent WebSocket connections between the
-client and the server. Since Zotonic 0.11, a WebSocket connection is automatically started on the page (unless nostream is given in the script tag).
+The controller provides persistent WebSocket connections between the client and the server. 
+A WebSocket connection is automatically started on the page (unless nostream is given in the script tag).
 
 See :ref:`guide-transport` for more information about transporting data between the server and the browser.
 
@@ -16,9 +16,9 @@ containing the name of a websocket handler module in the zotonic context.
 
 Example::
 
-    websocket_start(ReqData, Context) ->
+    websocket_start(Context) ->
         Context1 = z_context:set(ws_handler, ?MODULE, Context),
-        controller_websocket:websocket_start(ReqData, Context).
+        controller_websocket:websocket_start(Context).
 
 When passing a custom handler module, the default handler websocket will not be used, but the specified
 one. Controller websocket contains the code for the default zotonic handler. It attaches itself as
@@ -42,32 +42,27 @@ Example::
   -module(my_ws_handler).
 
   -export([websocket_init/1,
-           websocket_message/3,
-           websocket_info/2,
-           websocket_terminate/2]).
+           websocket_handle/2,
+           websocket_info/2]).
 
-  %% @doc Called when the websocket is initialized.
-  websocket_init(_Context) ->
-      erlang:send_after(1000, self(), <<"Hello!">>),
-      ok.
+  websocket_init(Context) ->
+      PrunedContext = z_context:prune_for_scomp(Context),
+      {ok, PrunedContext}.
 
-  %% @doc Called when a message arrives on the websocket.
-  websocket_message(Msg, From, Context) ->
-      controller_websocket:websocket_send_data(From, ["You said: ", Msg]).
+  %% @doc Handle a message from the browser.
+  websocket_handle({text, Data}, Context) ->
+      {reply, {text, ["You said: ", Data]}, Context};
+  websocket_handle({reply, Payload}, Context) ->
+      % Pass the reply data from controller_websocket:send_data/2
+      {reply, Payload, Context};
+  websocket_handle(_Data, Context) ->
+      {ok, Context}.
 
-  %% @doc Called when another type of message arrives.
-  websocket_info(Msg, _Context) ->
-      controller_websocket:websocket_send_data(self(), Msg),
-      erlang:send_after(5000, self(), <<"Hello again!">>).
+  websocket_info(_Msg, Context) ->
+      controller_websocket:websocket_send_data(self(), <<"Hello from info/2">>}),
+      {ok, Context}.
 
-  %% @doc Called when the websocket terminates.
-  websocket_terminate(Reason, Context) ->
-      ok.
-
-The websocket_init, websocket_info and websocket_terminate callbacks
+The websocket_init, websocket_handle and websocket_info callbacks
 are called from within the controller’s receive loop, so to send a message
-to the websocket, you send it to ``self()``, as in the example above.
-
-The `websocket_message` function however gets a `From` argument passed
-to it because it is called from another process. To send a message to
-the socket, you need to send it to the `From` pid.
+to the websocket, you send it to ``self()``, as in the example above or return
+with ``{reply, {text, Text}, Context}``.

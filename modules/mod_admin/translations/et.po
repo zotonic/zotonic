@@ -213,10 +213,6 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
-msgid "Community members"
-msgstr "Kommuuni liikmed"
-
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:37
 msgid "Confirm block removal"
 msgstr ""
@@ -417,10 +413,6 @@ msgstr "Kellelt"
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
 msgstr "Tagasi"
-
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:9
-msgid "Group members"
-msgstr "Grupi liikmed"
 
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:18
 msgid "Header"
@@ -899,10 +891,6 @@ msgstr ""
 msgid "The page"
 msgstr "Leht"
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
-msgid "The whole world"
-msgstr "Kogu maailm"
-
 #: modules/mod_admin/templates/admin_referrers.tpl:11
 msgid "There are no pages with a connection to the page"
 msgstr "Ei ole √htegi lehte seosega sellele lehele"
@@ -1023,10 +1011,6 @@ msgstr "Vaata k√µiki viitajaid"
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
 msgid "View this page."
 msgstr "Vaata sedea lehte."
-
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:4
-msgid "Visible for"
-msgstr "N√§htav neil"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:21
 msgid "Visible from"

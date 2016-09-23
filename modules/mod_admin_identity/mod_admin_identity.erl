@@ -46,7 +46,12 @@ observe_identity_verified(#identity_verified{user_id=RscId, type=Type, key=Key},
 observe_identity_password_match(#identity_password_match{password=Password, hash=Hash}, _Context) ->
     case m_identity:hash_is_equal(Password, Hash) of
         true ->
-            ok;
+            case m_identity:needs_rehash(Hash) of
+                true ->
+                    {ok, rehash};
+                false ->
+                    ok
+            end;
         false ->
             {error, password}
     end.
@@ -129,7 +134,7 @@ event(#postback{message={identity_verify_check, Args}}, Context) ->
 event(#postback{message={identity_verify_preferred, Args}}, Context) ->
     {id, RscId} = proplists:lookup(id, Args),
     {type, Type} = proplists:lookup(type, Args),
-    Key = z_context:get_q("key", Context),
+    Key = z_context:get_q(<<"key">>, Context),
     case m_rsc:is_editable(RscId, Context) of
         true ->
             case Type of
@@ -183,7 +188,7 @@ event(#postback{message={identity_add, Args}}, Context) ->
     case m_rsc:is_editable(RscId, Context) of
         true ->
             Type = z_convert:to_atom(proplists:get_value(type, Args, email)),
-            case z_convert:to_binary(z_string:trim(z_context:get_q("idn-key", Context, []))) of
+            case z_string:trim(z_context:get_q(<<"idn-key">>, Context, <<>>)) of
                 <<>> ->
                     Context;
                 Key ->

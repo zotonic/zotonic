@@ -20,52 +20,43 @@
 -module(controller_logoff).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([init/1, service_available/2, charsets_provided/2, content_types_provided/2, provide_content/2]).
--export([resource_exists/2, previously_existed/2, moved_temporarily/2]).
+-export([
+    charsets_provided/1,
+    content_types_provided/1,
+    resource_exists/1,
+    previously_existed/1,
+    moved_temporarily/1,
+    provide_content/1
+]).
 -export([reset_rememberme_cookie_and_logoff/1]).
 
--include_lib("controller_webmachine_helper.hrl").
--include_lib("include/zotonic.hrl").
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
+content_types_provided(Context) ->
+    {[{<<"text/html">>, provide_content}], Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:continue_session(Context1),
-    Context3 = reset_rememberme_cookie_and_logoff(Context2),
-    ?WM_REPLY(true, Context3).
-
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
-
-content_types_provided(ReqData, Context) ->
-    {[{"text/html", provide_content}], ReqData, Context}.
-
-resource_exists(ReqData, Context) ->
+resource_exists(Context) ->
     % TODO: when there is javascript in the context, then return the javascript to be executed, together with a
     % redirect action.  This is the case when we have a Facebook connect log off.
-    case lists:flatten(z_script:get_script(Context)) of
-        [] -> {false, ReqData, Context};
-        _Script -> {true, ReqData, Context}
+    Context2 = z_context:continue_session(Context),
+    Context3 = reset_rememberme_cookie_and_logoff(Context2),
+    case lists:flatten(z_script:get_script(Context3)) of
+        [] -> {false, Context};
+        _Script -> {true, Context}
     end.
 
-previously_existed(ReqData, Context) ->
-    {true, ReqData, Context}.
+previously_existed(Context) ->
+    {true, Context}.
 
-moved_temporarily(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_qs(Context1),
-    Location = z_context:get_q("p", Context2, "/"),
-    ?WM_REPLY({true, Location}, Context2).
+moved_temporarily(Context) ->
+    Location = z_context:get_q(<<"p">>, Context, <<"/">>),
+    {{true, Location}, Context}.
 
-provide_content(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_qs(Context1),
-    Context3 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context2),
-    Rendered = z_template:render("logoff.tpl", z_context:get_all(Context3), Context3),
-    {Output, OutputContext} = z_context:output(Rendered, Context3),
-    ?WM_REPLY(Output, OutputContext).
+provide_content(Context) ->
+    Context1 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
+    Rendered = z_template:render("logoff.tpl", z_context:get_all(Context1), Context1),
+    z_context:output(Rendered, Context1).
 
 % @doc Logoff and reset the rememberme cookie.
 reset_rememberme_cookie_and_logoff(Context) ->

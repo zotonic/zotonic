@@ -26,9 +26,6 @@
 %% External exports
 -export([start_link/0, upgrade/0, upgrade/2]).
 
-%% SNI function
--export([sni_fun/1]).
-
 %% supervisor callbacks
 -export([init/1]).
 
@@ -65,6 +62,7 @@ upgrade() ->
 %% @doc supervisor callback.
 init([]) ->
     ensure_job_queues(),
+    ensure_sidejobs(),
 
     %% Access Logger
     Logger = {z_access_syslog,
@@ -99,104 +97,30 @@ init([]) ->
                  SmtpServer, SmtpReceiveServer,
                  FilesSup,
                  SitesSup,
-                 FSWatchSup| get_extensions()
+                 FSWatchSup
+                 | get_extensions()
                 ],
 
-    %% Listen to IP address and Port
-    WebIp = z_config:get(listen_ip),
-    WebPort = z_config:get(listen_port),
-    SSLPort = z_config:get(ssl_listen_port),
+    z_stats:init(),
 
-    WebConfig = [
-                  {dispatcher, z_sites_dispatcher},
-                  {dispatch_list, []},
-                  {backlog, z_config:get(inet_backlog)},
-                  {acceptor_pool_size, z_config:get(inet_acceptor_pool_size)}
-                ],
+    lager:info(""),
+    lager:info("Zotonic starting"),
+    lager:info("================"),
+    lager:info("Config files used:"),
+    [ lager:info("- ~s", [Cfg]) 
+      || [Cfg] <- proplists:get_all_values(config, init:get_arguments()) ],
+    lager:info(""),
 
-    SSLWebConfig = [
-                  {dispatcher, z_sites_dispatcher},
-                  {dispatch_list, []},
-                  {backlog, z_config:get(ssl_backlog)},
-                  {acceptor_pool_size, z_config:get(ssl_acceptor_pool_size)},
-                  {ssl, true},
-                  {ssl_opts, [{sni_fun, fun ?MODULE:sni_fun/1}]}
-              ],
+    erlang:spawn(fun() ->
+            timer:sleep(4000),
+            lager:info(""),
+            [ lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status])
+              || [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status],
+            lager:info("")
+        end),
 
-    %% Listen to the ip address and port for all sites.
-    IPv4Opts = [{port, WebPort}, {ip, WebIp}],
-    IPv4SSLOpts = [{port, SSLPort}, {ip, WebIp}],
-    IPv6Opts = [{port, WebPort}, {ip, any6}],
-    IPv6SSLOpts = [{port, SSLPort}, {ip, any6}],
+    {ok, {{one_for_one, 1000, 10}, Processes}}.
 
-    %% Webmachine/Mochiweb processes
-    [IPv4Proc, IPv4SSLProc, IPv6Proc, IPv6SSLProc] =
-        [[{Name,
-           {webmachine_mochiweb, start,
-            [Name, Opts]},
-           permanent, 5000, worker, dynamic}]
-         || {Name, Opts}
-                <- [{webmachine_mochiweb, IPv4Opts ++ WebConfig},
-                    {webmachine_mochiweb_ssl, IPv4SSLOpts ++ SSLWebConfig},
-                    {webmachine_mochiweb_v6, IPv6Opts ++ WebConfig},
-                    {webmachine_mochiweb_ssl_v6, IPv6SSLOpts ++ SSLWebConfig}]],
-
-    %% When binding to all IP addresses ('any'), bind separately for ipv6 addresses
-    EnableIPv6 = case WebIp of
-                     any -> ipv6_supported();
-                     _ -> false
-                 end,
-
-    Processes1 =
-        case EnableIPv6 of
-            true -> Processes ++ IPv4Proc ++ IPv4SSLProc ++ IPv6Proc ++ IPv6SSLProc;
-            false -> Processes ++ IPv4Proc ++ IPv4SSLProc
-        end,
-
-    init_stats(),
-    init_webmachine(),
-
-    spawn(fun() ->
-                  timer:sleep(4000),
-                  lager:info(""),
-                  lager:info("Zotonic started"),
-                  lager:info("==============="),
-                  lager:info("Config files used:"),
-                  [lager:info("- ~s", [Cfg]) || [Cfg] <- proplists:get_all_values(config, init:get_arguments())],
-                  lager:info(""),
-                  lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
-                  case EnableIPv6 of
-                      true -> lager:info("Web server listening on IPv6 ::~p, SSL ::~p", [WebPort, SSLPort]);
-                      false -> lager:info("IPv6 support disabled.")
-                  end,
-                  lager:info(""),
-                  [lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status]) ||
-                      [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status]
-          end),
-
-    {ok, {{one_for_one, 1000, 10}, Processes1}}.
-
-%% @doc Initializes the stats collector.
-%%
-init_stats() ->
-    z_stats:init().
-
-
-%% @doc Sets the application parameters for webmachine and starts the logger processes.
-%%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid
-%%      messing with application parameters when starting up a new wm-mochiweb process.
-init_webmachine() ->
-    ServerHeader = webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
-    application:set_env(webzmachine, server_header, ServerHeader),
-    set_webzmachine_default(webmachine_logger_module, z_stats),
-    set_webzmachine_default(error_handler, controller),
-    webmachine_sup:start_logger().
-
-set_webzmachine_default(Par, Def) ->
-    case application:get_env(webzmachine, Par) of
-        undefined -> application:set_env(webzmachine, Par, Def);
-        _ -> nop
-    end.
 
 %% @doc Ensure all job queues
 ensure_job_queues() ->
@@ -214,13 +138,10 @@ ensure_job_queues() ->
             ok
     end.
 
-
-%% @todo Exclude platforms that do not support raw ipv6 socket options
-ipv6_supported() ->
-    case (catch inet:getaddr("localhost", inet6)) of
-        {ok, _Addr} -> true;
-        {error, _} -> false
-    end.
+%% @doc The supervisor for websocket requests and other transient processes.
+ensure_sidejobs() ->
+    sidejob:new_resource(zotonic_sessionjobs, sidejob_supervisor, z_config:get(sessionjobs_limit)),
+    sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, z_config:get(sidejobs_limit)).
 
 %% @doc Scan priv/extensions for ext_ folders and add those as childs to the supervisor.
 get_extensions() ->
@@ -234,10 +155,3 @@ get_extensions() ->
      end
      || F <- Files].
 
-%% @doc Let sites return their own keys and certificates.
-sni_fun(ServerName) ->
-    case z_sites_dispatcher:get_host_for_domain(ServerName) of
-        undefined -> undefined;
-        {ok, Host} ->
-            z_notifier:first(#ssl_options{server_name=ServerName}, z_context:new(Host))
-    end.

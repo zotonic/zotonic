@@ -43,18 +43,6 @@ reset_deleted(Module, Context) ->
 
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
 -spec manage(atom(), #datamodel{}, #context{}) -> ok.
-manage(Module, Datamodel, Context) when is_list(Datamodel) ->
-    %% Backwards compatibility with old datamodel notation.
-    manage(Module,
-           #datamodel{categories=proplists:get_value(categories, Datamodel, []),
-                      predicates=proplists:get_value(predicates, Datamodel, []),
-                      resources=proplists:get_value(resources, Datamodel, []),
-                      media=proplists:get_value(media, Datamodel, []),
-                      edges=proplists:get_value(edges, Datamodel, []),
-                      data=proplists:get_value(data, Datamodel, [])
-                     },
-           Context);
-
 manage(Module, Datamodel, Context) ->
     manage(Module, Datamodel, [], Context).
 
@@ -154,13 +142,9 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                  undefined -> [{is_published, true} | Props1];
                                  _ -> Props1
                              end,
-                    Props3 = case proplists:get_value(visible_for, Props2) of
-                                 undefined -> [{visible_for, ?ACL_VIS_PUBLIC} | Props2];
+                    Props4 = case proplists:get_value(is_protected, Props2) of
+                                 undefined -> [{is_protected, true} | Props2];
                                  _ -> Props2
-                             end,
-                    Props4 = case proplists:get_value(is_protected, Props3) of
-                                 undefined -> [{is_protected, true} | Props3];
-                                 _ -> Props3
                              end,
                     Props5 = case proplists:get_value(is_dependent, Props4) of
                                  undefined -> [{is_dependent, false} | Props4];

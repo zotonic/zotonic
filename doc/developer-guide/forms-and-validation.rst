@@ -18,7 +18,7 @@ entered in it, attach the :ref:`validator-presence` validator:
 The validated form field is available to Erlang code using the
 ``z_context:get_q_validated/2`` function::
 
-    Title = z_context:get_q_validated("title", Context).
+    Title = z_context:get_q_validated(<<"title">>, Context).
 
 Client- and server-side
 -----------------------

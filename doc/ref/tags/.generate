@@ -5,7 +5,7 @@ if ! which sed > /dev/null; then
     exit 1
 fi
 
-scanner=$ZOTONIC_SRC/src/erlydtl/erlydtl_scanner.erl
+scanner=$ZOTONIC_SRC/_build/default/lib/template_compiler/src/template_compiler_parser.erl
 dir=${0%/*}
 
 for tag in `$dir/.get_tags $scanner`

@@ -37,11 +37,9 @@
 %%%----------------------------------------------------------------------
 -module(z_gettext).
 
--export([parse_pot/1, parse_po/1, parse_po_bin/1, parse_po_bin/2, test/0]).
-
+-export([parse_pot/1, parse_po/1, parse_po_bin/1, parse_po_bin/2]).
 
 -define(GETTEXT_HEADER_INFO, header).
-
 
 %%% --------------------------------------------------------------------
 %%% Parse a PO-file
@@ -81,8 +79,17 @@ parse_po_part(<<"msgid", T/binary>>) ->
     {Key, R0} = get_po_string(T),
     {Val, Rest} = get_msgstr(R0),
     [{Key,Val} | parse_po_part(Rest)];
-parse_po_part(<<_/utf8, T/binary>>) ->
+parse_po_part(<<"#", T/binary>>) ->
+    parse_po_part(skip_to_eol(T));
+parse_po_part(<<$\r,$\n, T/binary>>) ->
     parse_po_part(T);
+parse_po_part(<<$\n, T/binary>>) ->
+    parse_po_part(T);
+parse_po_part(<<$\r, T/binary>>) ->
+    parse_po_part(T);
+parse_po_part(<<_/utf8, T/binary>>) ->
+    % Some unexpected character, skip this line
+    parse_po_part(skip_to_eol(T));
 parse_po_part(<<>>) ->
     [].
 
@@ -90,6 +97,12 @@ get_msgstr(<<"msgstr", T/binary>>) ->
     get_po_string(T);
 get_msgstr(<<_/utf8, T/binary>>) ->
     get_msgstr(T).
+
+skip_to_eol(<<>>) -> <<>>;
+skip_to_eol(<<"\r\n", T/binary>>) -> T;
+skip_to_eol(<<"\n", T/binary>>) -> T;
+skip_to_eol(<<"\r", T/binary>>) -> T;
+skip_to_eol(<<_/utf8, T/binary>>) -> skip_to_eol(T).
 
 %%%
 %%% A PO-string has the same syntax as a C character string.
@@ -123,33 +136,3 @@ eat_more(<<$\r, T/binary>>, Acc) -> eat_more(T, Acc);
 eat_more(<<$\t, T/binary>>, Acc) -> eat_more(T, Acc);
 eat_more(<<$", T/binary>>, Acc)  -> eat_string(T, Acc);
 eat_more(T, Acc)       -> {Acc, T}.
-
-
-test() ->
-
-    X = parse_po_bin(<<"msgid \"\"
-msgstr \"header value\"">>),
-
-[{header, "header value"}] = X,
-
-    X2 = parse_po_bin(<<"msgid \"\"
-msgstr \"header value\"
-
-msgid \"en\"
-msgstr \"nl\"
-">>),
-
-[{header, <<"header value">>}, {<<"en">>, <<"nl">>}] = X2,
-
-    X3 = parse_po_bin(<<"msgid \"\"
-msgstr \"header value\"
-
-msgid \"en\"
-msgstr \"nl\"
-
-msgid \"empty trans\"
-msgstr \"\"
-">>),
-
-[{header, <<"header value">>}, {<<"en">>, <<"nl">>}, {<<"empty trans">>, <<"empty trans">>}] = X3.
-

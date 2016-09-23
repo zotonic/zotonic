@@ -49,8 +49,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, ObjectId, Predicate, Callback, Actions, Objects}}, Context) ->
     CatId = case Cat of
-                [] -> undefined;
                 undefined -> undefined;
+                "" -> undefined;
                 "*" -> undefined;
                 <<>> -> undefined;
                 <<"*">> -> undefined;
@@ -89,7 +89,7 @@ event(#submit{message={new_page, Args}}, Context) ->
     Actions = proplists:get_value(actions, Args, []),
     Objects = proplists:get_value(objects, Args, []),
 
-    BaseProps = get_base_props(z_context:get_q("new_rsc_title", Context), Context),
+    BaseProps = get_base_props(z_context:get_q(<<"new_rsc_title">>, Context), Context),
     {ok, Id} = m_rsc_update:insert(BaseProps, Context),
 
     % Optionally add an edge from the subject to this new resource
@@ -160,11 +160,11 @@ get_base_props(NewRscTitle, Context) ->
         | Props
     ].
 
-maybe_add_prop("new_rsc_title", _, Acc) ->
+maybe_add_prop(<<"new_rsc_title">>, _, Acc) ->
     Acc;
-maybe_add_prop("category_id", Cat, Acc) ->
+maybe_add_prop(<<"category_id">>, Cat, Acc) ->
     [{category_id, z_convert:to_integer(Cat)} | Acc];
-maybe_add_prop("is_published", IsPublished, Acc) ->
+maybe_add_prop(<<"is_published">>, IsPublished, Acc) ->
     [{is_published, z_convert:to_bool(IsPublished)} | Acc];
 maybe_add_prop(P, V, Acc) ->
     [{P, V} | Acc].

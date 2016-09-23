@@ -23,11 +23,11 @@
 -svc_title("Meta-information about all API calls.").
 -svc_needauth(false).
 
--export([process_get/2]).
+-export([process_get/1]).
 
 -include_lib("zotonic.hrl").
 
 
-process_get(_ReqData, Context) ->
+process_get(Context) ->
     M = z_service:all(info, Context),
     {array, [ {struct, [ {Key, z_convert:to_atom(Value)} || {Key, Value} <- L] } || L <- M]}.

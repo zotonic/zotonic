@@ -86,7 +86,7 @@
 			{% optional include "_translation_edit_languages.tpl" %}
 		</div>
 		<div class="tab-pane" id="meta-acl">
-			{% include "_admin_edit_visible_for.tpl" id=id is_admin_frontend %}
+			{% optional include "_admin_edit_visible_for.tpl" id=id is_admin_frontend %}
 		</div>
 	</div>
 

@@ -21,8 +21,8 @@ initialized and various callback functions on the controller will be
 called, according to the HTTP protocol flow.
 
 Controllers are pretty self-documenting, thanks to the names of the
-webmachine callback functions. For instance, when you define a
-function ``resource_exists/2``, it will be called to decide whether or
+cowmachine callback functions. For instance, when you define a
+function ``resource_exists/1``, it will be called to decide whether or
 not the page should return a 404 page.
 
 The simplest controller uses Zotonic’s ``controller_html_helper.hrl`` include to serve HTML::
@@ -57,14 +57,16 @@ helpful for understanding controllers.
 
 .. _guide-controllers-webzmachine:
 
-Differences between Zotonic’s and Basho’s Webmachine
-----------------------------------------------------
+Differences between Cowmachine and Basho’s Webmachine
+-----------------------------------------------------
 
-Zotonic’s fork has been named ``webzmachine`` and lives in its
-separate repository at https://github.com/zotonic/webzmachine).
+Zotonic’s fork has been named ``cowmachine`` and lives in its
+separate repository at https://github.com/zotonic/cowmachine).
 
 The main differences with Basho’s Webmachine are:
 
+* Used Cowboy instead of MochiWeb
+* All callbacks have a single handler
 * Pluggable dispatch handler
 * Support for the HTTP ``Upgrade:`` header
 * Optional caching of controller callbacks results
@@ -72,9 +74,7 @@ The main differences with Basho’s Webmachine are:
 * Use of process dictionary has been removed
 * ``webmachine_request`` is now a normal (not parametrized) module
 * Extra logging
+* ping and init callbacks are removed
 
-Alltogether, this gave a significant speed boost to Webmachine.
+Together, this gave a significant simplification and speed boost to Cowmachine.
 
-In the specific case of Zotonic the difference was 5 milliseconds (or
-more) per request (on a 2GHz Core 2 Duo). Without these optimizations
-we were not able to use Webmachine.

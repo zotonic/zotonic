@@ -21,15 +21,11 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([
-    init/1,
-    to_html/2
+    to_html/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(_Args) -> {ok, []}.
-
-to_html(ReqData, State) ->
-    ReqData2 = wrq:set_resp_header("Connection", "close", ReqData),
-    {"", ReqData2, State}.
+to_html(Context) ->
+    Context1 = z_context:set_resp_header(<<"connection">>, <<"close">>, Context),
+    {<<>>, Context1}.

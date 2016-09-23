@@ -45,13 +45,13 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     case z_auth:is_auth(Context) of
         false ->
-            Name = z_context:get_q_validated("name", Context),
-            Email = z_context:get_q_validated("mail", Context);
+            Name = z_context:get_q_validated(<<"name">>, Context),
+            Email = z_context:get_q_validated(<<"mail">>, Context);
         true ->
-            Name = "",
-            Email = ""
+            Name = <<"">>,
+            Email = <<"">>
     end,
-    Message = z_context:get_q_validated("message", Context),
+    Message = z_context:get_q_validated(<<"message">>, Context),
     Is_visible = case m_config:get_value(comments, moderate, Context) of <<"1">> -> false; _Else -> true end,
     case m_comment:insert(Id, Name, Email, Message, Is_visible, Context) of
         {ok, CommentId} ->
@@ -69,8 +69,8 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             Context2 = case Is_visible of
 			   true ->
 			       z_render:wire([
-					      {set_value, [{selector, "#"++FormId++" textarea[name=\"message\"]"}, {value, ""}]},
-					      {set_value, [{selector, "#"++FormId++" input[name=\"message\"]"}, {value, ""}]},
+					      {set_value, [{selector, <<"#", FormId/binary, " textarea[name=\"message\"]">>}, {value, <<>>}]},
+					      {set_value, [{selector, <<"#", FormId/binary, " input[name=\"message\"]">>}, {value, <<>>}]},
 					      {fade_in, [{target, "comment-"++integer_to_list(CommentId)}]}
 					     ], Context1);
 			   false ->

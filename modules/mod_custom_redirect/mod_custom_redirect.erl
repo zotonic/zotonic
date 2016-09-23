@@ -92,11 +92,11 @@ select_best([{Path, _, _}=New|Rest], BestSize, Best) ->
 
 
 group_rows(Qs) ->
-    Ids = get_prefix("id", Qs),
-    Hosts = get_prefix("host", Qs),
-    Paths = get_prefix("path", Qs),
-    Redirects = get_prefix("redirect", Qs),
-    Perms = get_prefix("is_permanent", Qs),
+    Ids = get_prefix(<<"id">>, Qs),
+    Hosts = get_prefix(<<"host">>, Qs),
+    Paths = get_prefix(<<"path">>, Qs),
+    Redirects = get_prefix(<<"redirect">>, Qs),
+    Perms = get_prefix(<<"is_permanent">>, Qs),
     zip([Ids, Hosts, Paths, Redirects, Perms]).
 
 zip(Lists) ->
@@ -168,7 +168,7 @@ get_prefix(Prefix, Qs) ->
 get_prefix(_Prefix, Acc, []) ->
     lists:reverse(Acc);
 get_prefix(Prefix, Acc, [{Q,_}=QV|Qs]) ->
-    case lists:prefix(Prefix, Q) of
+    case binary:longest_common_prefix([Prefix, Q]) == size(Prefix) of
         true -> get_prefix(Prefix, [QV|Acc], Qs);
         false -> get_prefix(Prefix, Acc, Qs)
     end.

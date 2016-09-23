@@ -20,32 +20,20 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    charsets_provided/2,
-    content_types_provided/2,
-    do_html/2,
-    do_text/2,
-    do_json/2,
-    do_c_comment/2,
-    do_empty/2,
-    do_image/2
+    charsets_provided/1,
+    content_types_provided/1,
+    do_html/1,
+    do_text/1,
+    do_json/1,
+    do_c_comment/1,
+    do_empty/1,
+    do_image/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    % z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
 %% For the content type we perform multiple checks:
 %% * Original dispatch rule (think controller_file)
@@ -53,17 +41,17 @@ charsets_provided(ReqData, Context) ->
 %% * Accept header (todo)
 %% Idea is to serve a content type as close as possible
 %% to the expected content type.
-content_types_provided(ReqData, Context) ->
-    Ms = case webmachine_request:get_metadata(controller_module_error, ReqData) of
+content_types_provided(Context) ->
+    Ms = case cowmachine_req:get_metadata(controller_module_error, Context) of
             % mod_base
             controller_lib ->
-                provide_extension(ReqData, provide_text());
+                provide_extension(Context, provide_text());
             controller_file ->
-                provide_extension(ReqData, provide_text());
+                provide_extension(Context, provide_text());
             controller_file_id ->
-                provide_extension(ReqData, provide_text());
+                provide_extension(Context, provide_text());
             controller_static_pages ->
-                provide_extension(ReqData, provide_html());
+                provide_extension(Context, provide_html());
             controller_page ->
                 provide_html();
             controller_template ->
@@ -76,9 +64,9 @@ content_types_provided(ReqData, Context) ->
                 provide_any();
             controller_api ->
                 [
-                    {"application/json", do_json},
-                    {"application/x-json", do_json},
-                    {"text/plain", do_text}
+                    {<<"application/json">>, do_json},
+                    {<<"application/x-json">>, do_json},
+                    {<<"text/plain">>, do_text}
                 ];
             % mod_authentication
             controller_logon ->
@@ -104,48 +92,48 @@ content_types_provided(ReqData, Context) ->
             _ ->
                 provide_any()
         end,
-    {Ms, ReqData, Context}.
+    {Ms, Context}.
 
 provide_any() ->
     [
-        {"text/html", do_html},
-        {"application/json", do_json},
-        {"application/x-json", do_json},
-        {"application/javascript", do_c_comment},
-        {"application/x-javascript", do_c_comment},
-        {"text/css", do_c_comment},
-        {"text/plain", do_text},
-        {"application/atom+xml;type=entry", do_empty},
-        {"application/atom+xml", do_empty}
+        {<<"text/html">>, do_html},
+        {<<"application/json">>, do_json},
+        {<<"application/x-json">>, do_json},
+        {<<"application/javascript">>, do_c_comment},
+        {<<"application/x-javascript">>, do_c_comment},
+        {<<"text/css">>, do_c_comment},
+        {<<"text/plain">>, do_text},
+        {<<"application/atom+xml">>, [{<<"type">>, <<"entry">>}], do_empty},
+        {<<"application/atom+xml">>, do_empty}
     ].
 
-provide_extension(ReqData, Default) ->
-    case map_extension(ReqData) of
+provide_extension(Context, Default) ->
+    case map_extension(Context) of
         html ->
             [
-                {"text/html", do_html},
-                {"text/plain", do_text}
+                {<<"text/html">>, do_html},
+                {<<"text/plain">>, do_text}
             ];
         json ->
             [
-                {"application/json", do_json},
-                {"application/x-json", do_json},
-                {"text/plain", do_text}
+                {<<"application/json">>, do_json},
+                {<<"application/x-json">>, do_json},
+                {<<"text/plain">>, do_text}
             ];
         css ->
             [
-                {"text/css", do_c_comment},
-                {"text/plain", do_text}
+                {<<"text/css">>, do_c_comment},
+                {<<"text/plain">>, do_text}
             ];
         javascript ->
             [
-                {"application/javascript", do_c_comment},
-                {"application/x-javascript", do_c_comment},
-                {"text/plain", do_text}
+                {<<"application/javascript">>, do_c_comment},
+                {<<"application/x-javascript">>, do_c_comment},
+                {<<"text/plain">>, do_text}
             ];
         text ->
             [
-                {"text/plain", do_text}
+                {<<"text/plain">>, do_text}
             ];
         image ->
             provide_image();
@@ -155,27 +143,27 @@ provide_extension(ReqData, Default) ->
 
 provide_image() ->
     [
-        {"image/gif", do_image}
+        {<<"image/gif">>, do_image}
     ].
 
 provide_html() ->
     [
-        {"text/html", do_html},
-        {"text/plain", do_text}
+        {<<"text/html">>, do_html},
+        {<<"text/plain">>, do_text}
     ].
 
 provide_text() ->
     [
-        {"text/plain", do_text}
+        {<<"text/plain">>, do_text}
     ].
 
 provide_empty() ->
     [
-        {"text/plain", do_empty}
+        {<<"text/plain">>, do_empty}
     ].
 
-map_extension(ReqData) ->
-    case z_string:to_lower(filename:extension(z_convert:to_binary(wrq:disp_path(ReqData)))) of
+map_extension(Context) ->
+    case z_string:to_lower(filename:extension(z_convert:to_binary(cowmachine_req:disp_path(Context)))) of
         <<>> -> other;
         <<".jpg">> -> image;
         <<".png">> -> image;
@@ -189,14 +177,14 @@ map_extension(ReqData) ->
         _ -> other
     end.
 
-do_html(ReqData, Context0) ->
-    Context = set_headers(ReqData, Context0),
+do_html(Context0) ->
+    Context = set_headers(Context0),
     ContextQs = z_context:ensure_all(z_context:ensure_qs(Context)),
     Vars = [
-        {error_code, webmachine_request:get_metadata(http_status_code, ReqData)}
+        {error_code, cowmachine_req:get_metadata(http_status_code, Context)}
         | z_context:get_all(ContextQs)
     ],
-    Vars1 = case bt_simplify(webmachine_request:get_metadata(error_reason, ReqData)) of
+    Vars1 = case bt_simplify(cowmachine_req:get_metadata(error_reason, Context)) of
                 {reason, ErlangError, Tab} ->
                     [
                         {error_erlang, ErlangError},
@@ -211,51 +199,49 @@ do_html(ReqData, Context0) ->
                 undefined ->
                     Vars
             end,
-    StatusTpl = <<"error.", (z_convert:to_binary(webmachine_request:get_metadata(http_status_code, ReqData)))/binary, ".tpl">>,
+    StatusTpl = <<"error.", (z_convert:to_binary(cowmachine_req:get_metadata(http_status_code, Context)))/binary, ".tpl">>,
     Rendered = case z_module_indexer:find(template, StatusTpl, ContextQs) of
                     {ok, ModuleIndex} -> z_template:render(ModuleIndex, Vars1, ContextQs);
                     {error, enoent} -> z_template:render(<<"error.tpl">>, Vars1, ContextQs)
                end,
-    {Output, OutputContext} = z_context:output(Rendered, ContextQs),
-    ?WM_REPLY(Output, OutputContext).
+    z_context:output(Rendered, ContextQs).
 
-do_text(ReqData, Context0) ->
-    Context = set_headers(ReqData, Context0),
-    Text = httpd_util:reason_phrase(webmachine_request:get_metadata(http_status_code, ReqData)),
-    ?WM_REPLY(Text, Context).
+do_text(Context0) ->
+    Context = set_headers(Context0),
+    Text = httpd_util:reason_phrase(cowmachine_req:get_metadata(http_status_code, Context)),
+    {Text, Context}.
 
-do_json(ReqData, Context0) ->
-    Context = set_headers(ReqData, Context0),
-    StatusCode = webmachine_request:get_metadata(http_status_code, ReqData),
+do_json(Context0) ->
+    Context = set_headers(Context0),
+    StatusCode = cowmachine_req:get_metadata(http_status_code, Context),
     JSON = iolist_to_binary([
             <<"{ code: ">>, z_convert:to_binary(StatusCode),
             <<", status: \"">>, httpd_util:reason_phrase(StatusCode),
             <<"\" }">>
         ]),
-    ?WM_REPLY(JSON, Context).
+    {JSON, Context}.
 
-do_c_comment(ReqData, Context0) ->
-    Context = set_headers(ReqData, Context0),
-    StatusCode = webmachine_request:get_metadata(http_status_code, ReqData),
+do_c_comment(Context0) ->
+    Context = set_headers(Context0),
+    StatusCode = cowmachine_req:get_metadata(http_status_code, Context),
     JSON = iolist_to_binary([
             <<"/* ">>, z_convert:to_binary(StatusCode),
             <<" ">>, httpd_util:reason_phrase(StatusCode),
             <<" */">>
         ]),
-    ?WM_REPLY(JSON, Context).
+    {JSON, Context}.
 
-do_empty(ReqData, Context0) ->
-    Context = set_headers(ReqData, Context0),
-    ?WM_REPLY(<<>>, Context).
+do_empty(Context0) ->
+    Context = set_headers(Context0),
+    {<<>>, Context}.
 
-do_image(ReqData, Context0) ->
-    Context = set_headers(ReqData, Context0),
-    ?WM_REPLY(trans_gif(), Context).
+do_image(Context0) ->
+    Context = set_headers(Context0),
+    {trans_gif(), Context}.
 
-set_headers(ReqData, Context) ->
-    Context2 = ?WM_REQ(ReqData, Context),
-    Context3 = z_context:set_noindex_header(Context2),
-    z_context:set_nocache_headers(Context3).
+set_headers(Context) ->
+    Context1 = z_context:set_noindex_header(Context),
+    z_context:set_nocache_headers(Context1).
 
 %% 1 pixel transparant gif
 trans_gif() ->
@@ -279,6 +265,8 @@ bt_simplify({_E1, {throw, Reason, BT}}) when is_list(BT) ->
     {reason, stringify(Reason), bt_table(BT)};
 bt_simplify({_E, {Reason, BT}}) when is_list(BT) ->
     {reason, stringify(Reason), bt_table(BT)};
+bt_simplify({throw, {Reason, BT}}) when is_list(BT) ->
+    {reason, stringify(Reason), bt_table(BT)};
 bt_simplify(X) ->
     {raw, X}.
 
@@ -291,7 +279,7 @@ stringify(L) when is_list(L) ->
         _:_ -> io_lib:format("~p", [L])
     end;
 stringify(A) when is_atom(A) ->
-    binary_to_list(A);
+    atom_to_binary(A, 'utf8');
 stringify(X) ->
     io_lib:format("~p", [X]).
 

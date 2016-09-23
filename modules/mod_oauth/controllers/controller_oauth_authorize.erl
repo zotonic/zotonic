@@ -21,52 +21,52 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-         is_authorized/2,
-         resource_exists/2,
-         allowed_methods/2,
-         process_post/2
+         is_authorized/1,
+         resource_exists/1,
+         allowed_methods/1,
+         process_post/1
 ]).
 
 -include_lib("controller_html_helper.hrl").
 
 
-allowed_methods(ReqData, Context) ->
-    {['POST', 'GET', 'HEAD'], ReqData, Context}.
+allowed_methods(Context) ->
+    {[<<"POST">>, <<"GET">>, <<"HEAD">>], Context}.
 
 
-is_authorized(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
+is_authorized(Context) ->
+    Context2 = z_context:ensure_all(Context),
     z_acl:wm_is_authorized(z_auth:is_auth(Context2), Context2).
 
 
-resource_exists(ReqData, Context) ->
-    Token = m_oauth_app:get_request_token(z_context:get_q("oauth_token", Context), Context),
+resource_exists(Context) ->
+    Token = m_oauth_app:get_request_token(z_context:get_q(<<"oauth_token">>, Context), Context),
     case Token of
         undefined ->
-            {false, ReqData, Context};
+            {false, Context};
         _ ->
-            Context1 = z_context:set("token", Token, Context),
-            {true, ReqData, Context1}
+            Context1 = z_context:set(token, Token, Context),
+            {true, Context1}
     end.
 
 
 html(Context) ->
-    Vars = [ {token, z_context:get("token", Context)} ],
-    Html = z_template:render("oauth_authorize.tpl", Vars, Context),
+    Vars = [ {token, z_context:get(token, Context)} ],
+    Html = z_template:render(<<"oauth_authorize.tpl">>, Vars, Context),
 	z_context:output(Html, Context).
 
 
-process_post(ReqData, Context) ->
-    Token = z_context:get("token", Context),
-    ?DEBUG(Token),
-    m_oauth_app:authorize_request_token(Token, Context#context.user_id, Context),
-    Redirect = case proplists:get_value(callback_uri, Token) of
-                   <<>> ->
-                       "/oauth/authorize/finished";
-                   X when is_binary(X) ->
-                       binary_to_list(X)
+process_post(Context) ->
+    Token = z_context:get(token, Context),
+    m_oauth_app:authorize_request_token(Token, z_acl:user(Context), Context),
+    Redirect = case proplists:get_value(callback_uri, Token, <<>>) of
+                   <<>> -> <<"/oauth/authorize/finished">>;
+                   X when is_binary(X) -> X
                end,
-    Redirect1 = Redirect ++ "?oauth_token=" ++ z_url:url_encode(binary_to_list(proplists:get_value(token, Token))),
-    ReqData1 = wrq:set_resp_header("Location", Redirect1, ReqData),
-    {{halt, 301}, ReqData1, Context}.
+    Redirect1 = iolist_to_binary([
+                    Redirect,
+                    <<"?oauth_token=">>,
+                    z_url:url_encode(proplists:get_value(token, Token))
+                ]),
+    Context1 = z_context:set_resp_header(<<"location">>, Redirect1, Context),
+    {{halt, 301}, Context1}.

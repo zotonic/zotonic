@@ -61,9 +61,9 @@ observe_session_init_fold(session_init_fold, Context, _Context) ->
     end.
 
 get_q_timezone(Context) ->
-    case z_context:get_q_all("z_timezone", Context) of
+    case z_context:get_q_all(<<"z_timezone">>, Context) of
         [] -> undefined;
-        L -> z_convert:to_binary(lists:last(L))
+        L -> lists:last(L)
     end.
 
 

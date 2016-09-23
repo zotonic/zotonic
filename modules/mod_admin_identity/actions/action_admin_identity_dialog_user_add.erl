@@ -51,20 +51,20 @@ event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
 event(#submit{message={user_add, Props}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
-            NameFirst = z_context:get_q_validated("name_first", Context),
-            NamePrefix = z_context:get_q("surprefix", Context),
-            NameSur = z_context:get_q_validated("name_surname", Context),
-            Category = z_context:get_q(category, Context, person),
+            NameFirst = z_context:get_q_validated(<<"name_first">>, Context),
+            NamePrefix = z_context:get_q(<<"surprefix">>, Context, <<>>),
+            NameSur = z_context:get_q_validated(<<"name_surname">>, Context),
+            Category = z_context:get_q(<<"category">>, Context, person),
             Title = case NamePrefix of
-                [] -> [ NameFirst, " ", NameSur ];
+                <<>> -> [ NameFirst, " ", NameSur ];
                 _ -> [ NameFirst, " ", NamePrefix, " ", NameSur ]
             end,
 
-            Email = z_context:get_q_validated("email", Context),
+            Email = z_context:get_q_validated(<<"email">>, Context),
             PersonProps = [
                 {is_published, true},
                 {category, Category},
-                {title, lists:flatten(Title)},
+                {title, iolist_to_binary(Title)},
                 {name_first, NameFirst},
                 {name_surname_prefix, NamePrefix},
                 {name_surname, NameSur},
@@ -75,13 +75,13 @@ event(#submit{message={user_add, Props}}, Context) ->
             F = fun(Ctx) ->
                 case m_rsc:insert(PersonProps, Ctx) of
                     {ok, PersonId} ->
-                        Username = z_context:get_q_validated("new_username", Ctx),
-                        Password = z_context:get_q_validated("new_password", Ctx),
+                        Username = z_context:get_q_validated(<<"new_username">>, Ctx),
+                        Password = z_context:get_q_validated(<<"new_password">>, Ctx),
                         case m_identity:set_username_pw(PersonId, Username, Password, Ctx) of
                             ok -> ok;
                             {error, PWReason} -> throw({error, PWReason})
                         end,
-                        case z_convert:to_bool(z_context:get_q("send_welcome", Context)) of
+                        case z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
                             true ->
                                 Vars = [{id, PersonId},
                                         {username, Username},

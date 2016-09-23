@@ -26,23 +26,23 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Check if the user agent is probably a bot.
--spec is_crawler(string()|binary()|#context{}|#wm_reqdata{}|undefined) -> boolean().
+-spec is_crawler(string()|binary()|#context{}|cowboy_req:req()|undefined) -> boolean().
 is_crawler(undefined) ->
     false;
 is_crawler(#context{} = Context) ->
     is_crawler(z_context:get_reqdata(Context));
-is_crawler(#wm_reqdata{} = ReqData) ->
-    case wrq:get_req_header_lc("user-agent", ReqData) of
+is_crawler(Req) when is_map(Req) ->
+    case cowmachine_req:get_req_header(<<"user-agent">>, Req) of
         undefined -> false;
-        UserAgent -> is_crawler(UserAgent)
+        UserAgent -> is_crawler_ua(UserAgent)
     end;
-is_crawler(UA) when is_list(UA); is_binary(UA)  ->
+is_crawler(UA) when is_list(UA)  ->
+    is_crawler_ua(z_convert:to_binary(UA));
+is_crawler(UA) when is_binary(UA)  ->
     is_crawler_ua(UA).
 
 %% @doc List of hardcoded crawlers
-is_crawler_ua(UA) when is_list(UA) ->
-    is_crawler_ua(z_convert:to_binary(UA));
-is_crawler_ua(UA) when is_binary(UA) ->
+is_crawler_ua(UA) ->
     UAlower = z_string:to_lower(UA),
     is_bot_prefix(UAlower)
     orelse lists:any(fun(Bot) ->

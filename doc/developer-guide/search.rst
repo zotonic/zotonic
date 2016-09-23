@@ -203,14 +203,6 @@ values are true, false or all::
 
     is_published='all'
 
-is_public
-^^^^^^^^^
-
-Filter on whether an item is publicly visible or not. Valid values
-are 'true', 'false', 'all'::
-
-    is_public='false'
-
 upcoming
 ^^^^^^^^
 
@@ -277,6 +269,8 @@ model. Example sorting on modification date, newest first::
     sort='-rsc.modified'
 
 .. seealso:: :ref:`cookbook-pivot-templates`
+
+.. _custompivot:
 
 custompivot
 ^^^^^^^^^^^

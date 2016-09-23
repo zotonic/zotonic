@@ -28,8 +28,8 @@
 event(#submit{message=explain_tpl}, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
-            CatName = z_context:get_q("tpl_cat", Context),
-            TplName = z_string:trim(z_context:get_q("tpl_name", Context)),
+            CatName = z_context:get_q(<<"tpl_cat">>, Context, <<>>),
+            TplName = z_string:trim(z_context:get_q(<<"tpl_name">>, Context)),
             Tpl = index_props(find_template(CatName, TplName, Context)),
             Vars = [
                 {tpl, Tpl}
@@ -43,7 +43,7 @@ event(#submit{message=explain_tpl}, Context) ->
             z_render:growl(?__("You are not allowed to use the template debugging.", Context), Context)
     end.
 
-find_template(NoCat, TplName, Context) when NoCat =:= ""; NoCat =:= <<>> ->
+find_template(<<>>, TplName, Context) ->
     z_module_indexer:find(template, TplName, Context);
 find_template(CatName, TplName, Context) ->
     IsA = m_category:is_a(CatName, Context),

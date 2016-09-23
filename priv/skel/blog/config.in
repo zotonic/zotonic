@@ -4,16 +4,14 @@
  {enabled, true},
 
  %% Hostname on which this site runs
- {hostname, "%%SITEHOSTNAME%%:8000"},
+ {hostname, "%%SITEHOSTNAME%%"},
 
  %% Aliases which should redirect to the primary hostname
  %%{hostalias, ["www.example.com", "example.com"]},
 
  %% PostgreSQL database connection
  {dbhost, "%%DBHOST%%"},
- {
-   dbport, %%DBPORT%%
- },
+ {dbport, %%DBPORT%%},
  {dbuser, "%%DBUSER%%"},
  {dbpassword, "%%DBPASSWORD%%"},
  {dbdatabase, "%%DBDATABASE%%"},
@@ -26,10 +24,12 @@
  {admin_password, "%%ADMINPASSWORD%%"},
 
  %% What skeleton site this site is based on; for installing the initial data.
- {
-   skeleton, %%SKEL%%
- },
+ {skeleton, %%SKEL%%},
  
+ %% Keys used to request
+ {sign_key, "%%SIGKEY%%"},
+ {sign_key_simple, "%%SIGNKEYSIMPLE%%"},
+
  %% Uncomment to override skeleton defaults
  %%{install_menu, []},
  %%{install_modules, []},
@@ -37,10 +37,10 @@
  %% Specific options
 
  %% Title of your site
- {title, <<"Your first blog">>},
+ %%{title, <<"Your first blog">>},
  %% Subtitle
- {subtitle, <<"built with Zotonic, the Erlang CMS.">>},
+ %%{subtitle, <<"built with Zotonic, the Erlang CMS.">>},
 
  %% Page length
- {pagelen, 5}
+ {pagelen, 10}
 ].

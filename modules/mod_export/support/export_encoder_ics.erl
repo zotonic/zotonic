@@ -35,10 +35,10 @@
 -include_lib("zotonic.hrl").
 
 extension() ->
-    [ "ics" ].
+    [ <<"ics">> ].
 
 mime() ->
-    [ "text/calendar" ].
+    [ <<"text/calendar">> ].
 
 init(Options, _Context) ->
     {ok, #state{

@@ -271,7 +271,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
         _ ->
             % We got a bounce, but we don't have the message anymore.
             % Custom bounce domains make this difficult to process.
-            case z_sites_dispatcher:get_host_for_domain(Domain) of
+            case z_sites_dispatcher:get_site_for_hostname(Domain) of
                 {ok, Host} ->
                     Context = z_context:new(Host),
                     z_notifier:notify(#email_bounced{
@@ -605,10 +605,10 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     z_notifier:notify(#zlog{
                                         user_id=LogEmail#log_email.from_id,
                                         props=LogEmail#log_email{
-                                                severity=?LOG_WARNING,
-                                                mailer_status=retry,
-                                                mailer_message=Message,
-                                                mailer_host=Host
+                                                severity = ?LOG_WARNING,
+                                                mailer_status = retry,
+                                                mailer_message = to_binary(Message),
+                                                mailer_host = Host
                                             }
                                       }, Context),
                     ok;
@@ -626,7 +626,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                         props=LogEmail#log_email{
                                                 severity = ?LOG_ERROR,
                                                 mailer_status = bounce,
-                                                mailer_message = Message,
+                                                mailer_message = to_binary(Message),
                                                 mailer_host = Host
                                             }
                                       }, Context),
@@ -643,9 +643,9 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     z_notifier:notify(#zlog{
                                         user_id=LogEmail#log_email.from_id,
                                         props=LogEmail#log_email{
-                                                severity=?LOG_ERROR,
-                                                mailer_status=error,
-                                                props=[{reason, Reason}]
+                                                severity = ?LOG_ERROR,
+                                                mailer_status = error,
+                                                props = [{reason, to_binary(Reason)}]
                                             }
                                       }, Context),
                     %% delete email from the queue and notify the system
@@ -659,9 +659,9 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     z_notifier:notify(#zlog{
                                         user_id=LogEmail#log_email.from_id,
                                         props=LogEmail#log_email{
-                                                severity=?LOG_INFO,
-                                                mailer_status=sent,
-                                                mailer_message=Receipt
+                                                severity = ?LOG_INFO,
+                                                mailer_status = sent,
+                                                mailer_message = Receipt
                                             }
                                       }, Context),
                     %% email accepted by relay
@@ -675,6 +675,22 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     end
             end
     end.
+
+to_binary({error, Reason}) ->
+    to_binary(Reason);
+to_binary(Error) when is_atom(Error) ->
+    z_convert:to_binary(Error);
+to_binary(Error) when is_binary(Error) ->
+    Error;
+to_binary(Error) when is_list(Error) ->
+    try
+        iolist_to_binary(Error)
+    catch
+        _:_ ->
+            iolist_to_binary(io_lib:format("~p", [Error]))
+    end;
+to_binary(Error) ->
+     iolist_to_binary(io:format("~p", [Error])).
 
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
@@ -705,7 +721,8 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                {"Date", date(Context)},
                {"MIME-Version", "1.0"},
                {"Message-ID", MessageId},
-               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}],
+               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+                | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->

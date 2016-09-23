@@ -82,23 +82,22 @@ event(#submit{message=admin_instagram}, Context) ->
 
 save_settings(Context) ->
     lists:foreach(fun ({Key, Value}) ->
-                        K1 = z_convert:to_list(Key),
-                        case is_setting(K1) of
-                            true -> m_config:set_value(mod_instagram, list_to_atom(K1), Value, Context);
+                        case is_setting(Key) of
+                            true -> m_config:set_value(mod_instagram, binary_to_atom(Key, 'utf8'), Value, Context);
                             false -> ok
                         end
                   end,
                   z_context:get_q_all_noz(Context)),
     check_subscription(Context).
 
-is_setting("consumer_key") -> true;
-is_setting("consumer_secret") -> true;
-is_setting("scope") -> true;
-is_setting("useauth") -> true;
-is_setting("follow") -> true;
-is_setting("access_token") -> true;
-is_setting("import_videos") -> true;
-is_setting("import_photos") -> true;
+is_setting(<<"consumer_key">>) -> true;
+is_setting(<<"consumer_secret">>) -> true;
+is_setting(<<"scope">>) -> true;
+is_setting(<<"useauth">>) -> true;
+is_setting(<<"follow">>) -> true;
+is_setting(<<"access_token">>) -> true;
+is_setting(<<"import_videos">>) -> true;
+is_setting(<<"import_photos">>) -> true;
 is_setting(_) -> false.
 
 

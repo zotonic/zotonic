@@ -23,16 +23,16 @@
 -svc_title("Export a menu resource structure as JSON.").
 -svc_needauth(false).
 
--export([process_get/2, menu_export/2]).
+-export([process_get/1, menu_export/2]).
 
 -include_lib("zotonic.hrl").
 
 
-process_get(_ReqData, Context) ->
-    case z_context:get_q("id", Context) of
+process_get(Context) ->
+    case z_context:get_q(<<"id">>, Context) of
         undefined ->
             {error, missing_arg, "id"};
-        [] ->
+        <<>> ->
             {error, missing_arg, "id"};
         Id ->
             case m_rsc:exists(Id, Context) of

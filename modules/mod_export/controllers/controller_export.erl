@@ -20,61 +20,47 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    forbidden/2,
-    content_types_provided/2,
-    charsets_provided/2,
+    forbidden/1,
+    content_types_provided/1,
+    charsets_provided/1,
 
-    do_export/2
+    do_export/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-forbidden(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_qs(z_context:continue_session(Context1)),
+forbidden(Context) ->
+    Context2 = z_context:ensure_qs(z_context:continue_session(Context)),
     z_context:lager_md(Context2),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_acl:is_allowed(use, mod_export, Context2) of
         true ->
             case z_notifier:first(#export_resource_visible{dispatch=Dispatch}, Context2) of
-                undefined -> ?WM_REPLY(false, Context2);
-                {ok, true} -> ?WM_REPLY(false, Context2);
-                {ok, false} -> ?WM_REPLY(true, Context2)
+                undefined -> {false, Context2};
+                {ok, true} -> {false, Context2};
+                {ok, false} -> {true, Context2}
             end;
         false ->
-            ?WM_REPLY(true, Context2)
+            {true, Context2}
     end.
 
-content_types_provided(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+content_types_provided(Context) ->
     Dispatch = z_context:get(zotonic_dispatch, Context),
     case controller_export_resource:get_content_type(undefined, Dispatch, Context) of
         {ok, ContentType} ->
-            ?WM_REPLY([{ContentType, do_export}], Context);
+            {[{ContentType, do_export}], Context};
         {error, Reason} = Error ->
             lager:error("~p: mod_export error when fetching content type for ~p ~p",
                         [z_context:site(Context), Dispatch, Reason]),
             throw(Error)
     end.
 
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
 
-do_export(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
-    ContentType = wrq:resp_content_type(ReqData),
+do_export(Context) ->
+    ContentType = cowmachine_req:resp_content_type(Context),
     Dispatch = z_context:get(zotonic_dispatch, Context),
     StreamOpts = [
         {dispatch, Dispatch},
@@ -83,7 +69,7 @@ do_export(ReqData, Context0) ->
     ],
     Stream = export_encoder:stream(undefined, ContentType, StreamOpts, Context),
     Context1 = set_filename(ContentType, Dispatch, Context),
-    ?WM_REPLY(Stream, Context1).
+    {Stream, Context1}.
 
 set_filename(ContentType, Dispatch, Context) ->
     controller_export_resource:set_filename(undefined, ContentType, Dispatch, Context).

@@ -15,9 +15,96 @@ ACL
 
 * mod_acl_adminonly was replaced by :ref:`mod_acl_user_groups`. To create users
   that have access to the admin, add them to the ‘Managers’ user group.
+* The ``visible_for`` property semantics and the the ``acl_can_see``
+  notification were removed. You can get similar functionality by adding users
+  to user and collaboration groups. These are provided by mod_acl_user_groups.
+  The ``visible_for`` ``rsc`` table property has been kept for BC. So if you’re
+  using mod_acl_adminonly, mod_acl_simple_roles or a custom ACL module you can
+  still rely on the property.
 
-Upgrading to Zotonic 0.14 (next major release)
-----------------------------------------------
+
+Erlang code, Controllers, Event handlers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you made a site using custom controllers or request handling then you need to adapt your Erlang code.
+Zotonic is now using Cowboy under the hood for the http handling, previously this was MochiWeb.
+
+The following changes are made:
+
+ * Binaries for all request variables and arguments.
+ * Events use binaries for strings in templates.
+ * Cookies are binaries.
+ * Request headers are binaries.
+ * Controllers initialization callbacks are removed.
+ * Controller callbacks have a single *Context* argument.
+ * Custom websocket handlers now use the Cowboy callbacks, see :ref:`controller-websocket`.
+ * The include file ``include/controller_webmachine_helper.hrl`` is removed (and not needed anymore).
+
+Binaries for request variables
+..............................
+
+If you request an argument with ``z_context:get_q/2`` and related functions then you might need to adapt some code. If the you request the query argument using an *atom* or *binary* then the argument will be returned as a *binary*. If you request using a *string* then the result will be a string, this is for backwards compatibility. The function ``get_q_all`` will return all arguments as binaries.
+
+In short:
+
+  * ``z_context:get_q(<<"arg">>, Context)`` returns ``<<"value">>``
+  * ``z_context:get_q(arg, Context)`` returns ``<<"value">>``
+  * ``z_context:get_q("arg", Context)`` returns ``"value"``
+  * ``z_context:get_q_all(Context)`` returns ``[ {<<"arg">>,<<"value">>}, ...]``
+
+The binary name is the preferred way to request arguments.
+
+
+Events like submit, postback and postback_notify
+................................................
+
+Strings in the ``#submit{}``, ``#postback{}``  and ``#postback_notify{}`` events are now binaries. This is especially the case for the message, trigger, target, and form fields.
+
+For example, replace ``#submit{message="hello"}`` with ``#submit{message = <<"hello">>}``.
+Watch the space between ``=`` and the ``<<"...">>``, without the space you will get a syntax error.
+
+
+Cookies
+.......
+
+Use binaries for fetching and setting cookie names and values, don't use strings.
+
+
+Request and response headers
+............................
+
+All request and response headers now use binary names and values, do not use strings.
+
+The request and response header names are normalized to lowercase names, so always use ``<<"x-my-header">>`` and *never* ``<<"X-My-Header">>``.
+
+The header values are passed as-is, and they are always binaries.
+
+
+Controllers
+...........
+
+The controllers are simplified and will need some adaptations.
+
+The following callbacks are removed:
+
+ * `init`
+ * `ping`
+
+ All other callbacks have now a single *Context* argument, the *ReqData* argument has been removed.
+ There is no need anymore for the ``?WM_REQ`` and ``?WM_REPLY`` macros, and they have been removed.
+
+Other controller changes changes are:
+
+ * Content types are now binaries in `content_types_accepted` and `content_types_provided`
+ * Character sets are now binaries in `charsets_provided`
+ * Methods are now binaries in `allowed_methods` and `known_methods`
+ * Encodings are now binaries in `content_encodings_provided`
+ * The return value of `generate_etag` must be a binary
+
+
+
+Upgrading to Zotonic 0.14
+-------------------------
 
 Button type
 ^^^^^^^^^^^

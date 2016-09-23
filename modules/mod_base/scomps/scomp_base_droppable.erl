@@ -34,8 +34,8 @@ vary(_Params, _Context) -> nocache.
 render(Params, _Vars, Context) ->
     Id           = proplists:get_value(id, Params),
     Tag          = proplists:get_value(tag, Params),
-    ActiveClass  = proplists:get_value(active_class, Params, "active"),
-    HoverClass   = proplists:get_value(active_class, Params, "hover"),
+    ActiveClass  = proplists:get_value(active_class, Params, <<"active">>),
+    HoverClass   = proplists:get_value(active_class, Params, <<"hover">>),
     AcceptGroups = proplists:get_all_values(accept, Params),
     Delegate     = proplists:get_value(delegate, Params),
 
@@ -62,7 +62,7 @@ render(Params, _Vars, Context) ->
 
 %% @doc Drops will be delegated to this event handler, which will call the postback resource.
 event(#postback{message={DropTag,DropDelegate}, trigger=TriggerId}, Context) ->
-	DragItem = z_context:get_q("drag_item", Context),
+	DragItem = z_context:get_q(<<"drag_item">>, Context),
 	{DragTag,DragDelegate,DragId} = z_utils:depickle(DragItem, Context),
 
     Drop = #dragdrop{tag=DropTag, delegate=DropDelegate, id=TriggerId},
@@ -87,9 +87,9 @@ event(#postback{message={DropTag,DropDelegate}, trigger=TriggerId}, Context) ->
     end.
 
 
-groups_to_accept([]) -> "*";
-groups_to_accept(["all"]) -> "*";
-groups_to_accept(["none"]) -> "";
+groups_to_accept([]) -> <<"*">>;
+groups_to_accept([<<"all">>]) -> <<"*">>;
+groups_to_accept([<<"none">>]) -> <<>>;
 groups_to_accept(Groups) ->
 	Groups1 = [".drag_group_" ++ z_convert:to_list(X) || X <- Groups],
 	string:join(Groups1, ", ").

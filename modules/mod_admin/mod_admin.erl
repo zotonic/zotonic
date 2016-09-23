@@ -167,7 +167,7 @@ observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 
 
-event(#postback_notify{message="admin-insert-block"}, Context) ->
+event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
     Language = case z_context:get_q("language", Context) of
                     undefined ->
                         [];
@@ -203,17 +203,15 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
 
-event(#postback_notify{message="feedback", trigger="dialog-connect-find", target=TargetId}, Context) ->
+event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-connect-find">>, target=TargetId}, Context) ->
     % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
-    Category = z_context:get_q(find_category, Context),
-    Predicate = z_context:get_q(predicate, Context, ""),
-    Text = z_context:get_q(find_text, Context),
+    Category = z_context:get_q(<<"find_category">>, Context),
+    Predicate = z_context:get_q(<<"predicate">>, Context, <<>>),
+    Text = z_context:get_q(<<"find_text">>, Context),
     Cats = case Category of
-                "p:"++Predicate -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
-                "" -> [];
                 <<>> -> [];
                 CatId -> [{z_convert:to_integer(CatId)}]
            end,
@@ -229,8 +227,8 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
     ], Context);
 
 event(#postback{message={admin_connect_select, Args}}, Context) ->
-    SelectId = z_context:get_q("select_id", Context),
-    IsConnected = z_convert:to_bool(z_context:get_q("is_connected", Context)),
+    SelectId = z_context:get_q(<<"select_id">>, Context),
+    IsConnected = z_convert:to_bool(z_context:get_q(<<"is_connected">>, Context)),
     SubjectId0 = proplists:get_value(subject_id, Args),
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
@@ -270,9 +268,9 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     end;
 
 %% Called when a block connection is done
-event(#postback_notify{message="update", target=TargetId}, Context) ->
-    Id = z_convert:to_integer(z_context:get_q("id", Context)),
-    Predicate = get_predicate(z_context:get_q("predicate", Context), Context),
+event(#postback_notify{message= <<"update">>, target=TargetId}, Context) ->
+    Id = z_convert:to_integer(z_context:get_q(<<"id">>, Context)),
+    Predicate = get_predicate(z_context:get_q(<<"predicate">>, Context), Context),
     Vars = [
         {id, Id},
         {predicate, Predicate}

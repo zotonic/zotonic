@@ -34,10 +34,10 @@
 ]).
 
 extension() ->
-    [ "csv" ].
+    [ <<"csv">> ].
 
 mime() ->
-    [ "text/csv" ].
+    [ <<"text/csv">> ].
 
 init(Options, Context) ->
     IsRaw = proplists:get_value(is_raw, Options, false),

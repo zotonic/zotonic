@@ -2,6 +2,7 @@
 zotonic.pid
 zotonic.tmproj
 erl_crash.dump
+ttb_last_config
 rebar3
 
 *~
@@ -37,3 +38,4 @@ deps/
 _build
 _checkouts
 /log/
+compile_commands.json
