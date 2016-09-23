@@ -108,11 +108,11 @@
   {git,"https://github.com/choptastic/qdate.git",
        {ref,"0d5cd470e643049b7276eb8f4b2ce6b767b4bb3a"}},
   0},
- {<<"qdate_localtime">>,{pkg,<<"qdate_localtime">>,<<"1.1.0">>},1},
  {<<"ranch">>,
   {git,"https://github.com/ninenines/ranch.git",
        {ref,"ad8c04cb721fe911db7c23b6a0d51d4d5dba82af"}},
   0},
+ {<<"qdate_localtime">>,{pkg,<<"qdate_localtime">>,<<"1.1.0">>},1},
  {<<"recon">>,{pkg,<<"recon">>,<<"2.3.1">>},0},
  {<<"s3filez">>,
   {git,"https://github.com/mworrell/s3filez.git",
@@ -161,6 +161,5 @@
  {<<"meck">>, <<"59CA1CD971372AA223138EFCF9B29475BDE299E1953046A0C727184790AB1520">>},
  {<<"poolboy">>, <<"6B46163901CFD0A1B43D692657ED9D7E599853B3B21B95AE5AE0A777CF9B6CA8">>},
  {<<"proper">>, <<"5EEF3FA0CAE017ECB4BF6FD6A144349A048E999223A4F1E98CE372FF1772EDD3">>},
- {<<"qdate_localtime">>, <<"5F6C3ACF10ECC5A7E2EFA3DCD2C863102B962188DBD9E086EC01D29FE029DA29">>},
  {<<"recon">>, <<"281F2CBB439FE3C043773EE6C83172ABD80326DCC6153F6430E4D4E6B14D7E9D">>}]}
 ].
