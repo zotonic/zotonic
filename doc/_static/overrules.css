@@ -1,0 +1,15 @@
+div.version {
+  color: white;
+}
+
+div.version:before {
+  content: "Version";
+}
+
+.wy-nav-side {
+  background-color: #1d6594;
+}
+.wy-menu-vertical a:hover {
+  color: #ffffff;
+  background-color: #195c88;
+}
