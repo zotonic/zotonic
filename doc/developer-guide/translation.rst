@@ -48,9 +48,9 @@ Translate tag::
 
     {_ Translate me _}
 
-Extended translate tag::
+Interpolation trans tag::
 
-    {% _ "Example" nl="Voorbeeld" fr="Exemple" %}
+    {% trans "Hello {foo} World" foo=_"happy" %}
 
 As part of a tag parameter::
 
