@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. index:: tag; all include
 .. _tag-all-include:
 

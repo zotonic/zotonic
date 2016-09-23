@@ -41,16 +41,18 @@ From your terminal command line::
 
   $ erl
 
-(and press enter). You'll see something like::
+(and press enter). You'll see something like:
 
-  Erlang R13B03 (erts-5.7.4) [source] [64-bit] [smp:3:3] [rq:3] [async-threads:0] [hipe] [kernel-poll:false] Eshell V5.7.4 (abort with ^G) 
+.. code-block:: none
+
+  Erlang R13B03 (erts-5.7.4) [source] [64-bit] [smp:3:3] [rq:3] [async-threads:0] [hipe] [kernel-poll:false] Eshell V5.7.4 (abort with ^G)
   1>
 
 ``1>`` is the Erlang shell command line. You are now able to execute Erlang expressions.
 
 `How can I get help?`
 
-help(). -- list of shell functions 
+help(). -- list of shell functions
 How can I execute an expression?
 
 Type now ``now()``. and then hit ENTER.
@@ -64,7 +66,7 @@ terminates the Erlang expression sequence and initiates evaluation.
 * Ctrl+E -- go to end of line
 * ``li`` <Tab> -- tab completiion; for instance, li tab will return ``lists:``
   * ``li`` <Tab> <Tab> -- Erlang terms that contain the characters "li"
-    
+
 For more shell editing commands, refer to Section 1.3.1 in:
 http://www.erlang.org/documentation/doc-5.1/doc/getting_started/getting_started.html
 

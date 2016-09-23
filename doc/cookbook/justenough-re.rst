@@ -30,13 +30,15 @@ Examples have been tested on Ubuntu 11.04.
 HOW
 ---
 
-Bring up an Erlang terminal::
+Bring up an Erlang terminal:
+
+.. code-block:: bash
 
   $ erl
   Erlang R14B03 (erts-5.8.4) [source] [64-bit] [smp:3:3] [rq:3] [async-threads:0] [kernel-poll:false]
 
   Eshell V5.8.4  (abort with ^G)
-  1> 
+  1>
 
 and follow along with the following examples. Modify and re-execute
 each example until you feel comfortable with what’s going on.
@@ -70,7 +72,7 @@ The atom "match" is self-explanatory. The tuple {6,3} in the list provides the s
 
 .. code-block:: erlang
 
-   7> re:run("The brown fox.","ick").          
+   7> re:run("The brown fox.","ick").
    nomatch
 
 re:run/2 will also work with a binary::
@@ -129,7 +131,7 @@ Example::
 
 You'd usually use . in a more elaborate pattern::
 
-  14> re:run("The quick brown fox.", "qu.").                               
+  14> re:run("The quick brown fox.", "qu.").
   {match,[{4,3}]}
 
   15> re:run("The quack brown fox.", "qu.").
@@ -157,7 +159,7 @@ Examples::
   19> re:run("The quick brown fox.", "i*").
   {match,[{0,0}]}
 
-  20> re:run("The quick brown fox.", "T*").   
+  20> re:run("The quick brown fox.", "T*").
   {match,[{0,1}]}
 
   21> re:run("TTTTThe quick brown fox.", "T*").
@@ -201,7 +203,7 @@ Examples::
   24> re:run("The quick brown fox.", "[qui]").
   {match,[{4,1}]}
 
-  25> re:run("The quick brown fox.", "[ui]"). 
+  25> re:run("The quick brown fox.", "[ui]").
   {match,[{5,1}]}
 
   26> re:run("The quick brown fox.", "[qui]", [global]).
@@ -211,7 +213,9 @@ You can combine characters, meta-characters, and other regular
 expression elements into extended patterns that can search, match, and
 replace nearly any substrings you can imagine.
 
-Example::
+Example:
+
+.. code-block:: bash
 
   27> re:run("E-mail: xyz@pdq.com", "[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-z]{2,3}").
   {match,[{8,11}]}
@@ -230,7 +234,9 @@ Examples::
 If you wish to use a pattern multiple times and boost perfomance, you
 can compile it with ``re:compile/1``.
 
-Example::
+Example:
+
+.. code-block:: none
 
   29>  {_, P} = re:compile("[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-z]{2,3}").
   {ok,{re_pattern,0,0,

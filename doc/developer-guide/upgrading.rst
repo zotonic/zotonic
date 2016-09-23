@@ -235,7 +235,9 @@ macro. Unserialization of terms is still done automatically.
 Gotcha's
 ^^^^^^^^
 
-If you get this error on startup::
+If you get this error on startup:
+
+.. code-block:: bash
 
   DTREE: cannot open ''
 

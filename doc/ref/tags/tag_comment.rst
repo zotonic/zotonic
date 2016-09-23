@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. index:: tag; comment
 .. _tag-comment:
 
@@ -18,7 +18,7 @@ This will output::
 
    This will show.
 
-An alternative to the ``{% comment %}`` tag is to use the ``{# ... #}`` construct::
+An alternative to the ``{% comment %}`` tag is to use the ``{# ... #}`` construct:
 
    This will show.
    {# And this will not show #}

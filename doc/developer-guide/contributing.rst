@@ -77,6 +77,8 @@ The Zotonic commit convention are slightly based on `rebar’s README
 
 Structure your commit message like this:
 
+.. code-block:: none
+
     prefix: One line summary (less than 50 characters)
 
     Longer description, multiline text that is supposed to wrap at 72
@@ -232,8 +234,9 @@ reference to its page, though; consequent occurrences can be made
 Add a ``.. seealso::`` section at the bottom to highlight any other
 pages which are closely related to the current one, for example::
 
-  .. seealso:: :ref:`dev-contributing`
+.. code-block:: none
 
+    .. seealso:: :ref:`dev-contributing`
 
 Table styles
 ^^^^^^^^^^^^

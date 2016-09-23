@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. index:: tag; autoescape
 .. _tag-autoescape:
 
