@@ -269,5 +269,7 @@ class NewTocTree(TocTree):
             rst[0][0]['entries'].reverse()
         return rst
 
+def setup(app):
+    app.add_directive('toctree-reversed', NewTocTree)
 
 extlinks = {'issue': ('https://github.com/zotonic/zotonic/issues/%s', '#') }

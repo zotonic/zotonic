@@ -28,7 +28,6 @@ All the nitty gritty details when the big picture has settled.
    cli/index
    transport
    troubleshooting
-   *
 
 EDoc reference
 --------------
