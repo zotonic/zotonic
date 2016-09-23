@@ -395,8 +395,6 @@ cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
 do_cache(Args, Context) ->
     do_cache1(z_convert:to_bool(proplists:get_value('if', Args, true)), Args, Context).
 
-do_cache1(true, _Args, _Context) ->
-    true;
 do_cache1(true, Args, Context) ->
     case z_convert:to_bool(proplists:get_value(if_anonymous, Args, false)) of
         true -> z_acl:user(Context) =:= undefined;
