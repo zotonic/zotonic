@@ -65,5 +65,11 @@
 %%% disabled by default because both erlang and yaws implementations are buggy
    {use_sendfile, disable}
 
+  ]},
+
+ {setup,
+  [
+   {data_dir, "priv/data"},
+   {log_dir,  "priv/log"}
   ]}
 ].
