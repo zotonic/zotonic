@@ -38,7 +38,6 @@ event(#submit{message=addsite, form=Form}, Context) ->
     Options = [
         {hostname, z_context:get_q_validated(<<"hostname">>, Context)},
         {skeleton, z_context:get_q_validated(<<"skel">>, Context)},
-        {title, z_context:get_q(<<"title">>, Context)},
         {dbdatabase, z_context:get_q_validated(<<"dbdatabase">>, Context)},
         {dbschema, case z_context:get_q_validated(<<"dbschema">>, Context) of
                         <<>> -> Sitename;
@@ -61,12 +60,6 @@ event(#submit{message=addsite, form=Form}, Context) ->
                     lager:info("[zotonic_status] Site ~s is running", [Site]),
                     timer:sleep(2000),
                     SiteContext = z_context:new(Site),
-                    case z_db:has_connection(SiteContext) of
-                        true ->
-                            m_config:set_value(site, title, z_context:get_q(<<"title">>, Context), SiteContext);
-                        false ->
-                            ok
-                    end,
                     Vars = [
                         {admin_url, abs_url_for(admin, SiteContext)},
                         {site_url, z_context:abs_url(<<"/">>, SiteContext)},

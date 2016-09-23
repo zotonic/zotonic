@@ -36,15 +36,6 @@
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">
-                        {_ Title _}
-                    </label>
-                    <div class="col-sm-7">
-                        <input class="form-control" type="text" id="{{ #title }}" name="title" value="" placeholder="Descriptive title of your site" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">
                         {_ Host name _}
                     </label>
                     <div class="col-sm-7">
