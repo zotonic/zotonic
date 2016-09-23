@@ -27,7 +27,7 @@ event(#postback{message={admin_connect_select, Args}} = Msg, Context) ->
             event_admin(Msg, Context);
         SubjectId when is_integer(SubjectId) ->
             % Select collab group dialog
-            SelectId = m_rsc:rid(z_context:get_q("select_id", Context), Context),
+            SelectId = m_rsc:rid(z_context:get_q(<<"select_id">>, Context), Context),
             case m_rsc:is_a(SelectId, acl_collaboration_group, Context) of
                 true ->
                     try
@@ -60,10 +60,10 @@ event_admin(Msg, Context) ->
             z_render:growl_error(?__("You are not allowed to perform this action", Context), Context)
     end.
 
-event1(#postback_notify{message="feedback", target=TargetId}, Context) ->
+event1(#postback_notify{message= <<"feedback">>, target=TargetId}, Context) ->
     Vars = [
         {cat, acl_collaboration_group},
-        {text, z_context:get_q("triggervalue", Context)}
+        {text, z_context:get_q(<<"triggervalue">>, Context)}
     ],
     z_render:wire([
         {remove_class, [{target, TargetId}, {class, "loading"}]},
@@ -109,7 +109,7 @@ event1(#postback{message={publish, _Args}}, Context) ->
     z_render:growl(?__("Publish successful", Context), Context);
 
 event1(#postback{message={set_upload_size, [{id,Id}]}}, Context) ->
-    NewSize = z_convert:to_integer(z_context:get_q("triggervalue", Context)),
+    NewSize = z_convert:to_integer(z_context:get_q(<<"triggervalue">>, Context)),
     case m_rsc:p(Id, acl_upload_size, Context) of
         NewSize ->
             Context;
@@ -119,7 +119,7 @@ event1(#postback{message={set_upload_size, [{id,Id}]}}, Context) ->
     end;
 
 event1(#submit{message={acl_rule_import, []}}, Context) ->
-    #upload{tmpfile=TmpFile} = z_context:get_q_validated("upload_file", Context),
+    #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"upload_file">>, Context),
     {ok, Binary} = file:read_file(TmpFile),
     ContextAsync = z_context:prune_for_async(Context),
     erlang:spawn(fun() ->
@@ -138,15 +138,15 @@ event1(#submit{message=acl_collab_config}, Context) ->
 normalize_values(Row) ->
     {Actions, Rest} =
         lists:foldl(
-            fun({"action$" ++ A, "on"}, {Actions, Rest}) ->
+            fun({<<"action$", A/binary>>, <<"on">>}, {Actions, Rest}) ->
                   {[A|Actions], Rest};
-               ({"action$"++ _, _}, Acc) ->
+               ({<<"action$", _/binary>>, _}, Acc) ->
                   Acc;
-               ({"module", M}, {A,Rest}) ->
+               ({<<"module">>, M}, {A,Rest}) ->
                   {A, [{module, M} | Rest]};
-               ({"is_owner", V}, {A, Rest}) ->
+               ({<<"is_owner">>, V}, {A, Rest}) ->
                   {A, [{is_owner,z_convert:to_bool(V)}|Rest]};
-               ({"is_block", V}, {A, Rest}) ->
+               ({<<"is_block">>, V}, {A, Rest}) ->
                   {A, [{is_block,z_convert:to_bool(V)}|Rest]};
                ({K, V}, {A, Rest}) ->
                   {A, [{z_convert:to_atom(K),val(V)}|Rest]}

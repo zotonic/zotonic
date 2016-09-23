@@ -5,7 +5,7 @@ APP       := zotonic
 # Erlang Rebar downloading
 # see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
 REBAR := ./rebar3
-REBAR_URL := https://s3.amazonaws.com/rebar3/rebar3
+REBAR_URL := https://s3-eu-west-1.amazonaws.com/zotonic-rebar/rebar3
 REBAR_OPTS ?=
 # Default target - update sources and call all compile rules in succession
 .PHONY: all
@@ -54,6 +54,8 @@ clean_logs:
 .PHONY: clean
 clean: clean_logs $(REBAR)
 	@echo "cleaning ebin:"
+	# There could be an ebin directory left by a previous 0.x branch compilation
+	rm -rf ebin
 	$(REBAR) $(REBAR_OPTS) clean
 
 .PHONY: dist-clean

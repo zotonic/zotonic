@@ -290,8 +290,8 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Id = proplists:get_value(id, EventProps),
     Callback = proplists:get_value(callback, EventProps),
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
-    EmbedService = z_context:get_q("video_embed_service", Context),
-    EmbedCode = z_context:get_q_validated("video_embed_code", Context),
+    EmbedService = z_context:get_q(<<"video_embed_service">>, Context),
+    EmbedCode = z_context:get_q_validated(<<"video_embed_code">>, Context),
 
     case Id of
         %% Create a new page
@@ -302,7 +302,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                                     CGId -> CGId
                               end,
             Predicate = proplists:get_value(predicate, EventProps, depiction),
-            Title   = z_context:get_q_validated("title", Context),
+            Title   = z_context:get_q_validated(<<"title">>, Context),
             Props = [
                 {title, Title},
                 {is_published, true},

@@ -74,18 +74,7 @@ changed by setting the configuration value
 ``mod_signup.content_group`` to the name of a different content group.
 
 
-Config: setting the visibility of new users
--------------------------------------------
-
-By default, the ``visible_for`` property of the new users’s
-:term:`resource` will be set to 0, meaning world-viewable. To control
-the value of the ``visible_for`` flag on signup, set the configuration
-value ``mod_signup.member_visible_for`` to either 1 (visible for other
-logged in members), 2 (visible for "group members") or 3 (visible only
-for the user itself).
-
-      
 .. todo:: Add more documentation
 
 
-          
+

@@ -59,7 +59,6 @@ this:
 
 .. seealso::
 
-    :ref:`guide-datamodel-query-model` for more details on how to
-    filter on custom pivot columns.
+    :ref:`custompivot` on how to filter on custom pivot columns.
 
     :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.

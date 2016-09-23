@@ -144,7 +144,7 @@ maybe_configuration(Context) ->
 
 
 maybe_accept_header(Context) ->
-    case z_context:get_req_header("accept-language", Context) of
+    case z_context:get_req_header(<<"accept-language">>, Context) of
         undefined -> Context;
         AcceptLanguage -> set_language(list_to_atom(AcceptLanguage), Context)
     end.
@@ -259,7 +259,7 @@ observe_scomp_script_render(#scomp_script_render{}, Context) ->
 %% @doc Set the current session (and user) language, reload the user agent's page. Called from language switch. Reloads the page to reflect the new setting.
 event(#postback{message={set_language, Args}}, Context) ->
     LanguageCode = case proplists:get_value(code, Args) of
-        undefined -> z_context:get_q("triggervalue", Context);
+               undefined -> z_context:get_q(<<"triggervalue">>, Context);
         ArgCode -> ArgCode
     end,
     Context1 = set_user_language(LanguageCode, Context),
@@ -297,7 +297,7 @@ event(#postback{message={language_enable, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             {code, Code} = proplists:lookup(code, Args),
-            case language_enable(Code, z_convert:to_bool(z_context:get_q("triggervalue", Context)), Context) of
+            case language_enable(Code, z_convert:to_bool(z_context:get_q(<<"triggervalue">>, Context)), Context) of
                 {error, Reason} -> z_render:growl_error(Reason, Context);
                 ok -> z_render:wire({reload, []}, Context)
             end;
@@ -307,7 +307,7 @@ event(#postback{message={language_enable, Args}}, Context) ->
 
 %% @doc Toggles the state of the 'rewrite URL' setting. Reloads the page to reflect the new setting.
 event(#postback{message={toggle_url_rewrite, _Args}}, Context) ->
-    Value = z_context:get_q("triggervalue", Context),
+    Value = z_context:get_q(<<"triggervalue">>, Context),
     set_language_url_rewrite(Value, Context),
     reload_page(Context);
 

@@ -212,10 +212,6 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:8
-msgid "Community members"
-msgstr "Topluluk üyeleri"
-
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:37
 msgid "Confirm block removal"
 msgstr "Bloğu kaldırmayı onayla"
@@ -416,10 +412,6 @@ msgstr "Kimden"
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
 msgstr "Geri dön."
-
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:9
-msgid "Group members"
-msgstr "Grup üyeleri"
 
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:18
 msgid "Header"
@@ -901,10 +893,6 @@ msgstr ""
 msgid "The page"
 msgstr "Sayfa"
 
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:7
-msgid "The whole world"
-msgstr "Tüm dünya"
-
 #: modules/mod_admin/templates/admin_referrers.tpl:11
 msgid "There are no pages with a connection to the page"
 msgstr "Bu sayfayla bağlantılı iki sayfa var"
@@ -1027,10 +1015,6 @@ msgstr "Tüm referansları göster"
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
 msgid "View this page."
 msgstr "Bu sayfayı görüntüle."
-
-#: modules/mod_admin/templates/_admin_edit_visible_for.tpl:4
-msgid "Visible for"
-msgstr "Görünür"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:21
 msgid "Visible from"

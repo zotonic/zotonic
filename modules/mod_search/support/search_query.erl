@@ -55,11 +55,8 @@ qargs(Context) ->
     Args = z_context:get_q_all_noz(Context),
     lists:filtermap(
                 fun
-                    ({"qargs", _}) -> false;
                     ({<<"qargs">>, _}) -> false;
-                    ({"qs", V}) -> {true, {"text", V}};
                     ({<<"qs">>, V}) -> {true, {"text", V}};
-                    ({"q"++Term, V}) -> {true, {Term, V}};
                     ({<<"q", Term/binary>>, V}) -> {true, {Term, V}};
                     (_) -> false
                 end,
@@ -70,9 +67,9 @@ parse_request_args(Args) ->
 
 parse_request_args([], Acc) ->
     Acc;
-parse_request_args([{"zotonic_host",_}|Rest], Acc) ->
+parse_request_args([{<<"zotonic_host">>,_}|Rest], Acc) ->
     parse_request_args(Rest, Acc);
-parse_request_args([{"zotonic_dispatch",_}|Rest], Acc) ->
+parse_request_args([{<<"zotonic_dispatch">>,_}|Rest], Acc) ->
     parse_request_args(Rest, Acc);
 parse_request_args([{K,V}|Rest], Acc) ->
     parse_request_args(Rest, [{request_arg(K),z_convert:to_binary(V)}|Acc]).
@@ -338,22 +335,6 @@ parse_query([{is_published, Boolean}|Rest], Context, Result) ->
             parse_query(Rest, Context, Result2)
     end;
 
-
-%% is_public or is_public={false,true,all}
-%% Filter on whether an item is publicly visible or not.
-parse_query([{is_public, Boolean}|Rest], Context, Result) ->
-    case z_convert:to_list(Boolean) of
-        "all" ->
-            parse_query(Rest, Context, Result);
-        _ ->
-            Result2 = case z_convert:to_bool(Boolean) of
-                          true ->
-                              add_where("rsc.visible_for = 0", Result);
-                          false ->
-                              add_where("rsc.visible_for > 0", Result)
-                      end,
-            parse_query(Rest, Context, Result2)
-    end;
 
 %% upcoming
 %% Filter on items whose start date lies in the future

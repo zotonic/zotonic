@@ -500,7 +500,7 @@ handle_cast({start_child_result, _Module, {ok, _}}, State) ->
 handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
     remove_observers(Module, Pid, State),
-    lager:debug("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
+    lager:info("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
     z_notifier:notify(#module_deactivate{module=Module}, State#state.context),
     stop_children_with_missing_depends(State),
     {noreply, State};
@@ -509,22 +509,23 @@ handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
 %%      This is called after a code reload of a module.
 handle_cast({module_reloaded, Module}, State) ->
     lager:debug("[~p] checking observers of (re-)loaded module ~p", [z_context:site(State#state.context), Module]),
-    State1 = refresh_module_exports(Module, refresh_module_schema(Module, State)),
+    TmpState = refresh_module_exports(Module, refresh_module_schema(Module, State)),
     OldExports = proplists:get_value(Module, State#state.module_exports),
-    NewExports = proplists:get_value(Module, State1#state.module_exports),
+    NewExports = proplists:get_value(Module, TmpState#state.module_exports),
     OldSchema = proplists:get_value(Module, State#state.module_schema),
-    NewSchema = proplists:get_value(Module, State1#state.module_schema),
+    NewSchema = proplists:get_value(Module, TmpState#state.module_schema),
     case {OldExports, OldSchema} of
         {NewExports, NewSchema} ->
-            {noreply, State1};
+            {noreply, State};
         {undefined, undefined} ->
             % Assume this load is because of the first start, otherwise there would be some exports known.
-            {noreply, State1};
+            {noreply, State};
         _Changed ->
             % Exports or schema changed, assume the worst and restart the complete module
-            lager:info("[~p] exports or schema of (re-)loaded module ~p changed, restarting module", [z_context:site(State#state.context), Module]),
-            State2 = handle_restart_module(Module, State1),
-            {noreply, State2}
+            lager:info("[~p] exports or schema of (re-)loaded module ~p changed, restarting module",
+                       [z_context:site(State#state.context), Module]),
+            gen_server:cast(self(), {restart_module, Module}),
+            {noreply, State}
     end;
 
 %% @doc Trap unknown casts
@@ -570,10 +571,19 @@ flush(Context) ->
     z_depcache:flush({?MODULE, active, z_context:site(Context)}, Context).
 
 handle_restart_module(Module, #state{context=Context, sup=ModuleSup} = State) ->
-    z_supervisor:delete_child(ModuleSup, Module),
-    z_supervisor:add_child_async(ModuleSup, module_spec(Module, Context)),
+    case z_supervisor:delete_child(ModuleSup, Module) of
+        {error, Err} when Err =:= unknown_child; Err =:= no_process ->
+            % Child was not running
+            ok;
+        ok ->
+            % Child has been shut down, wait for the notification
+            receive
+                {'$gen_cast', {supervisor_child_stopped, #child_spec{name=Module}, Pid}} ->
+                    remove_observers(Module, Pid, State),
+                    z_supervisor:add_child_async(ModuleSup, module_spec(Module, Context))
+            end
+    end,
     handle_upgrade(State).
-
 
 handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     ValidModules = valid_modules(Context),
@@ -756,8 +766,8 @@ stop_children_with_missing_depends(State) ->
         [] ->
             [];
         Unstartable ->
-            lager:warning("[~p] Stopping child modules ~p",
-                          [z_context:site(State#state.context), Unstartable]),
+            lager:debug("[~p] Stopping child modules ~p",
+                        [z_context:site(State#state.context), Unstartable]),
             [ z_supervisor:stop_child(State#state.sup, M) || M <- Unstartable ]
     end.
 

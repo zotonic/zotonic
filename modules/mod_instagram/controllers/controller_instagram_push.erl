@@ -21,58 +21,44 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-        init/1,
-        service_available/2,
-        allowed_methods/2,
-        content_types_provided/2,
-        hubcheck/2,
-        process_post/2
+        allowed_methods/1,
+        content_types_provided/1,
+        hubcheck/1,
+        process_post/1
     ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
+allowed_methods(Context) ->
+    {[<<"POST">>, <<"GET">>], Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:ensure_qs(Context1),
-    ?WM_REPLY(true, Context2).
+content_types_provided(Context) ->
+    {[{<<"text/plain">>, hubcheck}], Context}.
 
-allowed_methods(ReqData, Context) ->
-    {['POST', 'GET'], ReqData, Context}.
-
-content_types_provided(ReqData, Context) ->
-    {[{"text/plain", hubcheck}], ReqData, Context}.
-
-hubcheck(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
-    case z_context:get_q("hub.mode", Context) of
-        "subscribe" ->
+hubcheck(Context) ->
+    case z_context:get_q(<<"hub.mode">>, Context) of
+        <<"subscribe">> ->
             VerifyToken = instagram_api:verify_token(Context),
-            HubVerifyToken = z_convert:to_binary(z_context:get_q("hub.verify_token", Context)),
+            HubVerifyToken = z_context:get_q(<<"hub.verify_token">>, Context),
             case VerifyToken of
                 HubVerifyToken ->
                     lager:info("[instagram] Hub verify of subscription"),
-                    Challenge = z_context:get_q("hub.challenge", Context, ""),
-                    ?WM_REPLY(Challenge, Context);
+                    Challenge = z_context:get_q(<<"hub.challenge">>, Context, <<>>),
+                    {Challenge, Context};
                 _ ->
                     lager:error("[instagram] Hub verify of subscription failed token ~p expected ~p",
                                 [HubVerifyToken, VerifyToken]),
-                    ?WM_REPLY(<<>>, Context)
+                    {<<>>, Context}
             end;
         _ ->
-            ?WM_REPLY(<<>>, Context)
+            {<<>>, Context}
     end.
 
-process_post(ReqData, Context0) ->
-    {Body, ReqData1} = wrq:req_body(ReqData),
-    Context = ?WM_REQ(ReqData1, Context0),
+process_post(Context0) ->
+    {Body, Context} = cowmachine_req:req_body(Context0),
     {_Key, Secret, _Scope} = mod_instagram:get_config(Context),
     XHubSignature = z_convert:to_binary(
-                        z_context:get_req_header("x-hub-signature", Context)),
+                        z_context:get_req_header(<<"x-hub-signature">>, Context)),
     OurSignature = z_string:to_lower(
                         lists:flatten(
                             z_utils:hex_encode(
@@ -85,9 +71,8 @@ process_post(ReqData, Context0) ->
             lager:error("[instagram] Hub post with mismatched X-Hub-Signature ~p expected ~p",
                         [XHubSignature, OurSignature])
     end,
-    {x, RD, Context1} = ?WM_REPLY(x, Context),
-    RD1 = wrq:append_to_resp_body(<<"ok">>, RD),
-    {true, RD1, Context1}.
+    Context1 = cowmachine_req:set_resp_body(<<"ok">>, Context),
+    {true, Context1}.
 
 hmac_sha(Key, Data) ->
     crypto:hmac(sha, Key, Data).

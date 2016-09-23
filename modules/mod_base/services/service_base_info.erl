@@ -23,12 +23,12 @@
 -svc_title("Basic information about the system.").
 -svc_needauth(true).
 
--export([process_get/2]).
+-export([process_get/1]).
 
 -include_lib("zotonic.hrl").
 
 
-process_get(_ReqData, Context) ->
+process_get(Context) ->
     Result = case z_auth:is_auth(Context) of
                  true ->
                      z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Context#context.user_id, title, Context), Context));

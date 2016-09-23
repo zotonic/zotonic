@@ -119,7 +119,7 @@ tagged(Tag, Context) ->
             tagged_1(httpc:request(get, {z_convert:to_list(Url), []}, httpc_http_options(), httpc_options()))
     end.
 
-tagged_nexturl(NextUrl, Context) ->
+tagged_nexturl(NextUrl, _Context) ->
     tagged_1(httpc:request(get, {z_convert:to_list(NextUrl), []}, httpc_http_options(), httpc_options())).
 
 

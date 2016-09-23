@@ -20,71 +20,63 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-	init/1,
-	service_available/2,
-	resource_exists/2,
-	previously_existed/2,
-	moved_temporarily/2,
-	moved_permanently/2
+	service_available/1,
+	resource_exists/1,
+	previously_existed/1,
+	moved_temporarily/1,
+	moved_permanently/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
+service_available(Context) ->
+    Context1 = z_context:ensure_qs(Context),
+    {true, Context1}.
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
+resource_exists(Context) ->
+	{false, Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, z_context:ensure_qs(Context)),
-    ?WM_REPLY(true, Context1).
+previously_existed(Context) ->
+	{true, Context}.
 
-resource_exists(ReqData, Context) ->
-	{false, ReqData, Context}.
-
-previously_existed(ReqData, Context) ->
-	{true, ReqData, Context}.
-
-moved_temporarily(ReqData, Context) ->
+moved_temporarily(Context) ->
     case z_context:get(is_permanent, Context, false) of
-        true -> {false, ReqData, Context};
-        false -> do_redirect(ReqData, Context)
+        true -> {false, Context};
+        false -> do_redirect(Context)
     end.
 
-moved_permanently(ReqData, Context) ->
+moved_permanently(Context) ->
     case z_context:get(is_permanent, Context, false) of
-        true -> do_redirect(ReqData, Context);
-        false -> {false, ReqData, Context}
+        true -> do_redirect(Context);
+        false -> {false, Context}
     end.
 
 
-do_redirect(ReqData, Context) ->
+do_redirect(Context) ->
 	Location = case z_context:get(url, Context) of
 		undefined ->
 			case z_context:get(dispatch, Context) of
 				undefined ->
 					case z_context:get(id, Context) of
-						undefined -> "/";
+						undefined -> <<"/">>;
 						Id -> m_rsc:p(Id, page_url, Context)
 					end;
 				Dispatch ->
                     Args = z_context:get_all(Context),
-
-                    Args1 = case z_context:get(qargs, Context) of
-                                undefined -> Args;
+                    QArgs = case z_context:get(qargs, Context) of
+                                undefined ->
+                                    [];
                                 ArgList when is_list(ArgList) ->
-                                    A = z_context:get_q_all(Context),
-                                    lists:foldl(fun(K, Acc) -> [{K, proplists:get_value(atom_to_list(K), A)}|Acc] end, Args, ArgList)
+                                    [ {K, z_context:get_q(K, Context, <<>>)} || K <- ArgList ]
                             end,
 					Args2 = lists:foldl(fun(K, Acc) ->
 											proplists:delete(K, Acc)
 										end,
-										Args1,
+										QArgs ++ Args,
 										z_dispatcher:dispatcher_args()),
 					z_dispatcher:url_for(Dispatch, Args2, Context)
 			end;
 		Url ->
 			Url
 	end,
-	{{true, z_context:abs_url(Location, Context)}, ReqData, Context}.
+	{{true, z_context:abs_url(Location, Context)}, Context}.

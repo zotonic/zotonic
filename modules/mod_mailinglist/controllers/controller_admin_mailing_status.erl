@@ -20,24 +20,24 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-    resource_exists/2,
-    is_authorized/2
+    resource_exists/1,
+    is_authorized/1
 ]).
 
 -include_lib("controller_html_helper.hrl").
 
 %% @todo Change this into "visible" and add a view instead of edit template.
-is_authorized(ReqData, Context) ->
-    Context1 = z_admin_controller_helper:init_session(?WM_REQ(ReqData, Context)),
+is_authorized(Context) ->
+    Context1 = z_admin_controller_helper:init_session(Context),
     {Context2, Id} = controller_admin_edit:ensure_id(Context1),
     z_acl:wm_is_authorized([{use, mod_mailinglist}, {view, Id}], Context2).
 
 
-resource_exists(ReqData, Context) ->
-    {Context2, Id} = controller_admin_edit:ensure_id(?WM_REQ(ReqData, Context)),
+resource_exists(Context) ->
+    {Context2, Id} = controller_admin_edit:ensure_id(Context),
     case Id of
-        undefined -> ?WM_REPLY(false, Context2);
-        _N -> ?WM_REPLY(m_rsc:exists(Id, Context2), Context2)
+        undefined -> {false, Context2};
+        _N -> {m_rsc:exists(Id, Context2), Context2}
     end.
 
 
@@ -45,5 +45,5 @@ html(Context) ->
     Vars = [
         {id, z_context:get(id, Context)}
     ],
-    Html = z_template:render({cat, "admin_mailing_status.tpl"}, Vars, Context),
+    Html = z_template:render({cat, <<"admin_mailing_status.tpl">>}, Vars, Context),
 	z_context:output(Html, Context).

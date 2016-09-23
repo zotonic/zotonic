@@ -24,7 +24,7 @@
 -behaviour(gen_server).
 
 %% The name of the session cookie
--define(SESSION_COOKIE, "z_sid").
+-define(SESSION_COOKIE, <<"z_sid">>).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -211,7 +211,7 @@ broadcast(#broadcast{title=Title, message=Message, is_html=IsHtml, type=Type, st
         true -> [ <<"<strong>">>, Title, <<"</strong> ">>, Message ];
         false -> [ <<"<strong>">>, z_html:escape(Title), <<"</strong> ">>, z_html:escape(Message) ]
     end,
-    Context1 = z_context:prune_for_scomp(?ACL_VIS_PUBLIC, Context),
+    Context1 = z_context:prune_for_scomp(Context),
     add_script(z_render:growl(Message1, Type, Stay, Context1)),
     ok.
 
@@ -485,7 +485,7 @@ get_session_cookie(Context) ->
     case z_context:get_cookie(get_session_cookie_name(Context), Context) of
         undefined ->
             % Check the z_sid in query or dispatch args
-            case z_context:get_q(z_sid, Context) of
+            case z_context:get_q(?SESSION_COOKIE, Context) of
                 undefined ->
                     % and as last resort check the context to support custom mechanisms
                     to_binary(z_context:get(z_sid, Context));
@@ -497,17 +497,17 @@ get_session_cookie(Context) ->
     end.
 
 %% @doc Fetch the name of the session cookie. Default to "z_sid"
--spec get_session_cookie_name(#context{}) -> string().
+-spec get_session_cookie_name(#context{}) -> binary().
 get_session_cookie_name(Context) ->
     case m_config:get_value(site, session_cookie_name, Context) of
         undefined -> ?SESSION_COOKIE;
-        Cookie -> z_convert:to_list(Cookie)
+        Cookie -> z_convert:to_binary(Cookie)
     end.
 
 %% @doc Save the session id in a cookie on the user agent
--spec set_session_cookie( string(), #context{} ) -> #context{}.
-set_session_cookie(SessionId, Context) ->
-    Options = [{path, "/"},
+-spec set_session_cookie( binary(), #context{} ) -> #context{}.
+set_session_cookie(SessionId, Context) when is_binary(SessionId) ->
+    Options = [{path, <<"/">>},
                {http_only, true}],
     z_context:set_cookie(
                     get_session_cookie_name(Context),
@@ -520,9 +520,9 @@ set_session_cookie(SessionId, Context) ->
 -spec clear_session_cookie( #context{} ) -> #context{}.
 clear_session_cookie(Context) ->
     Options = [{max_age, 0},
-               {path, "/"},
+               {path, <<"/">>},
                {http_only, true}],
-    Context1 = z_context:set_cookie(get_session_cookie_name(Context), "", Options, Context),
+    Context1 = z_context:set_cookie(get_session_cookie_name(Context), <<>>, Options, Context),
     Context1#context{session_id=undefined, session_pid=undefined}.
 
 

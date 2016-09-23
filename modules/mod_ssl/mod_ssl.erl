@@ -67,14 +67,11 @@ observe_cookie_options(#cookie_options{name=Name}, Options, Context) ->
 	end.
 
 is_ssl(Context) ->
-        case z_context:get_reqdata(Context) of
-                undefined -> false;
-                RD -> wrq:is_ssl(RD)
-        end.
+	m_req:get(is_ssl, Context).
 
-is_secure_cookie("z_sid") -> true;
-is_secure_cookie("z_logon") -> true;
-is_secure_cookie(_) -> false.
+is_secure_cookie(<<"z_sid">>) -> true;
+is_secure_cookie(<<"z_logon">>) -> true;
+is_secure_cookie(Cookie) when is_binary(Cookie) -> false.
 
 %% @doc Filter all dispatch rules, set the correct protocol options
 pid_observe_dispatch_rules(_Pid, dispatch_rules, #wm_host_dispatch_list{dispatch_list=Dispatch} = HD, Context) ->

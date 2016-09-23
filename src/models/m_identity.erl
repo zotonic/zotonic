@@ -23,6 +23,11 @@
 
 -behaviour(gen_model).
 
+-type password() :: iodata().
+-type bcrypt_hash() :: {bcrypt, binary()}.
+-type sha1_salted_hash() :: {hash, binary(), binary()}.
+-type hash() :: bcrypt_hash() | sha1_salted_hash().
+
 -export([
     m_find_value/3,
     m_to_list/2,
@@ -37,6 +42,7 @@
     ensure_username_pw/2,
     check_username_pw/3,
     hash/1,
+    needs_rehash/1,
     hash_is_equal/2,
     get/2,
     get_rsc/2,
@@ -144,7 +150,7 @@ get_username(Id, Context) ->
 
 
 %% @doc Delete an username from a resource.
--spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eaccess}.
+-spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eacces}.
 delete_username(1, _Context) ->
     throw({error, admin_username_cannot_be_deleted});
 delete_username(Id, Context) ->
@@ -550,21 +556,29 @@ get_rsc(Id, Type, Context) ->
     z_db:assoc_row("select * from identity where rsc_id = $1 and type = $2", [m_rsc:rid(Id, Context), Type], Context).
 
 
-%% @doc Hash a password, using sha1 and a salt
-%% @spec hash(Password) -> tuple()
+%% @doc Hash a password, using bcrypt
+-spec hash(password()) -> bcrypt_hash().
 hash(Pw) ->
-    Salt = binary_to_list(z_ids:id(10)),
-    Hash = crypto:hash(sha, [Salt,Pw]),
-    {hash, Salt, Hash}.
-
+    {bcrypt, erlpass:hash(Pw)}.
 
 %% @doc Compare if a password is the same as a hash.
-%% @spec hash_is_equal(Password, Hash) -> bool()
+-spec hash_is_equal(password(), hash()) -> boolean().
+hash_is_equal(Pw, {bcrypt, Hash}) ->
+    erlpass:match(Pw, Hash);
 hash_is_equal(Pw, {hash, Salt, Hash}) ->
     NewHash = crypto:hash(sha, [Salt, Pw]),
     Hash =:= NewHash;
 hash_is_equal(_, _) ->
     false.
+
+
+%% @doc Check if the password hash needs to be rehashed.
+-spec needs_rehash(hash()) -> boolean().
+needs_rehash({bcrypt, _}) ->
+    false;
+needs_rehash({hash, _, _}) -> 
+    true.
+
 
 %% @doc Create an identity record.
 -spec insert(m_rsc:resource(), atom(), binary(), #context{}) -> {ok, pos_integer()} | {error, invalid_key}.

@@ -47,14 +47,14 @@ or:
 
 This will trigger a call to::
 
-    z_notifier:first(#postback_notify{message="mymessage"}, Context)
+    z_notifier:first(#postback_notify{message = <<"mymessage">>}, Context)
 
 Which you can handle in any Zotonic module by defining::
 
     -export([observe_postback_notify/2]).
-    observe_postback_notify(#postback_notify{message="mymessage"}, Context) ->
+    observe_postback_notify(#postback_notify{message = <<"mymessage">>}, Context) ->
         Who = z_context:get_q(who, Context),
-        z_render:growl("Hello " ++ Who, Context);
+        z_render:growl(["Hello ", z_html:escape(Who)], Context);
     observe_postback_notify(_, _Context) ->
         undefined.
 

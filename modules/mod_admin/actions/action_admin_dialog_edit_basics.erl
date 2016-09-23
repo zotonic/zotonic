@@ -54,14 +54,14 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
                     _ ->
                         RscId
                end,
-    TargetId1 = z_context:get_q("element_id", Context, TargetId),
+    TargetId1 = z_context:get_q(<<"element_id">>, Context, TargetId),
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {id, ObjectId},
         {edge_id, EdgeId},
         {template, Template},
         {update_element, TargetId1},
-        {is_update, z_convert:to_bool(z_context:get_q("is_update", Context))},
+        {is_update, z_convert:to_bool(z_context:get_q(<<"is_update">>, Context))},
         {actions, Actions},
         {callback, Callback},
         {center, 0}
@@ -77,7 +77,7 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
 
     Post = z_context:get_q_all_noz(Context),
     Props = controller_admin_edit:filter_props(Post),
-    Props1 = maybe_add_language(Id, proplists:delete("id", Props), Context),
+    Props1 = maybe_add_language(Id, proplists:delete(<<"id">>, Props), Context),
 
     case m_rsc:update(Id, Props1, Context) of
         {ok, _} ->
@@ -127,7 +127,7 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
     end.
 
 maybe_add_language(Id, Props, Context) ->
-    case proplists:is_defined("language", Props) of
+    case proplists:is_defined(<<"language">>, Props) of
         true ->
             Props;
         false ->

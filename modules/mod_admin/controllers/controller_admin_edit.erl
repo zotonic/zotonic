@@ -19,10 +19,10 @@
 -module(controller_admin_edit).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([resource_exists/2,
-         previously_existed/2,
-         moved_temporarily/2,
-         is_authorized/2,
+-export([resource_exists/1,
+         previously_existed/1,
+         moved_temporarily/1,
+         is_authorized/1,
          event/2,
          filter_props/1,
          ensure_id/1
@@ -31,33 +31,33 @@
 -include_lib("controller_html_helper.hrl").
 
 %% @todo Change this into "visible" and add a view instead of edit template.
-is_authorized(ReqData, Context) ->
-    ReqData1 = wrq:set_resp_header("X-Frame-Options", "SAMEORIGIN", ReqData),
-    Context1 = z_admin_controller_helper:init_session(?WM_REQ(ReqData1, Context)),
-    {Context2, Id} = ensure_id(Context1),
-    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], admin_logon, Context2).
+is_authorized(Context) ->
+    Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
+    Context2 = z_admin_controller_helper:init_session(Context1),
+    {Context3, Id} = ensure_id(Context2),
+    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], admin_logon, Context3).
 
 
-resource_exists(ReqData, Context) ->
-    {Context2, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+resource_exists(Context) ->
+    {Context2, Id} = ensure_id(Context),
     case Id of
-        undefined -> ?WM_REPLY(false, Context2);
-        _N -> ?WM_REPLY(m_rsc:exists(Id, Context2), Context2)
+        undefined -> {false, Context2};
+        _N -> {m_rsc:exists(Id, Context2), Context2}
     end.
 
-previously_existed(ReqData, Context) ->
-    {Context1, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+previously_existed(Context) ->
+    {Context1, Id} = ensure_id(Context),
     IsGone = m_rsc_gone:is_gone(Id, Context1),
-    ?WM_REPLY(IsGone, Context1).
+    {IsGone, Context1}.
 
-moved_temporarily(ReqData, Context) ->
-    {Context1, Id} = ensure_id(?WM_REQ(ReqData, Context)),
+moved_temporarily(Context) ->
+    {Context1, Id} = ensure_id(Context),
     redirect(m_rsc_gone:get_new_location(Id, Context1), Context1).
 
 redirect(undefined, Context) ->
-    ?WM_REPLY(false, Context);
+    {false, Context};
 redirect(Location, Context) ->
-    ?WM_REPLY({true, Location}, Context).
+    {{true, Location}, Context}.
 
 
 html(Context) ->
@@ -79,7 +79,7 @@ ensure_id(Context) ->
             {Context, N};
         undefined ->
             try
-                {ok, IdN} = m_rsc:name_to_id(z_context:get_q("id", Context), Context),
+                {ok, IdN} = m_rsc:name_to_id(z_context:get_q(<<"id">>, Context), Context),
                 {z_context:set(id, IdN, Context), IdN}
             catch
                 _:_ -> {Context, undefined}
@@ -93,13 +93,13 @@ event(#submit{message=rscform} = Msg, Context) ->
 event(#submit{message={rscform, Args}}, Context) ->
     Post = z_context:get_q_all_noz(Context),
     Props = filter_props(Post),
-    Id = z_convert:to_integer(proplists:get_value("id", Props)),
-    Props1 = proplists:delete("id", Props),
+    Id = z_convert:to_integer(proplists:get_value(<<"id">>, Props)),
+    Props1 = proplists:delete(<<"id">>, Props),
     CatBefore = m_rsc:p(Id, category_id, Context),
     Props2 = z_notifier:foldl(#admin_rscform{id=Id, is_a=m_rsc:is_a(Id, Context)}, Props1, Context),
     try
         {ok, _} = m_rsc:update(Id, Props2, Context),
-        case proplists:is_defined("save_view", Post) of
+        case proplists:is_defined(<<"save_view">>, Post) of
             true ->
                 case proplists:get_value(view_location, Args) of
                     undefined ->
@@ -116,10 +116,9 @@ event(#submit{message={rscform, Args}}, Context) ->
                         Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context), Context2),
                         Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
                         Context4a = z_render:set_value("slug",  m_rsc:p(Id, slug, Context), Context4),
-                        Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context)), Context4a),
                         Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context)) of
-                                       true ->  z_render:wire("delete-button", {disable, []}, Context4b);
-                                       false -> z_render:wire("delete-button", {enable, []}, Context4b)
+                                       true ->  z_render:wire("delete-button", {disable, []}, Context4a);
+                                       false -> z_render:wire("delete-button", {enable, []}, Context4a)
                                    end,
                         Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
                         Context6 = z_render:growl([<<"Saved \"">>, Title, <<"\".">>], Context5),
@@ -182,14 +181,14 @@ event(#postback{message={query_preview, Opts}}, Context) ->
 %% @doc Remove some properties that are part of the postback
 filter_props(Fs) ->
     Remove = [
-              "triggervalue",
-              "postback",
-              "z_trigger_id",
-              "z_pageid",
-              "z_submitter",
-              "trigger_value",
-              "save_view",
-              "save_duplicate",
-              "save_stay"
+              <<"triggervalue">>,
+              <<"postback">>,
+              <<"z_trigger_id">>,
+              <<"z_pageid">>,
+              <<"z_submitter">>,
+              <<"trigger_value">>,
+              <<"save_view">>,
+              <<"save_duplicate">>,
+              <<"save_stay">>
              ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).

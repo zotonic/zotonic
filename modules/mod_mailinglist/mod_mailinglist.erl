@@ -133,8 +133,8 @@ event(#postback{message={mailinglist_reset, Args}}, Context) ->
 
 %% @doc Handle upload of a new recipients list
 event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
-    #upload{tmpfile=TmpFile} = z_context:get_q_validated("file", Context),
-    IsTruncate = z_convert:to_bool(z_context:get_q("truncate", Context)),
+    #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"file">>, Context),
+    IsTruncate = z_convert:to_bool(z_context:get_q(<<"truncate">>, Context)),
     case import_file(TmpFile, IsTruncate, Id, Context) of
         ok ->
             z_render:wire([{dialog_close, []}, {reload, []}], Context);
@@ -144,9 +144,9 @@ event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
 
 %% @doc Handle the test-sending of a page to a single address.
 event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
-    Email = z_context:get_q_validated("email", Context),
+    Email = z_context:get_q_validated(<<"email">>, Context),
     z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
-    Context1 = z_render:growl(?__("Sending the page to ", Context) ++ Email ++ "...", Context),
+    Context1 = z_render:growl([?__("Sending the page to ", Context), " ", Email, "..."], Context),
     z_render:wire([{dialog_close, []}], Context1);
 
 
@@ -165,14 +165,18 @@ event(#postback{message={resend_bounced, [{list_id, ListId}, {id, PageId}]}}, Co
 %% @doc Combine lists
 event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
     lager:warning("Id: ~p", [Id]),
-    TargetId = z_convert:to_integer(z_context:get_q("list_id", Context)),
-    Operation = z_convert:to_atom(z_context:get_q("operation", Context)),
+    TargetId = z_convert:to_integer(z_context:get_q(<<"list_id">>, Context)),
+    Operation = operation(z_context:get_q(<<"operation">>, Context)),
     case m_mailinglist:recipient_set_operation(Operation, Id, TargetId, Context) of
         ok ->
             z_render:wire([{dialog_close, []}, {reload, []}], Context);
         {error, Msg} ->
             z_render:growl(Msg, "error", true, Context)
     end.
+
+operation(<<"union">>) -> union;
+operation(<<"subtract">>) -> subtract;
+operation(<<"intersection">>) -> intersection.
 
 %%====================================================================
 %% API

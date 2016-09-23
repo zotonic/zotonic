@@ -21,50 +21,44 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    allowed_methods/2,
-    forbidden/2,
-    resource_exists/2,
-    content_types_provided/2,
-    content_types_accepted/2,
-    charsets_provided/2,
-    delete_resource/2,
-    put_json/2,
-    get_json/2,
-    put_bert/2,
-    get_bert/2
+    service_available/1,
+    allowed_methods/1,
+    forbidden/1,
+    resource_exists/1,
+    content_types_provided/1,
+    content_types_accepted/1,
+    charsets_provided/1,
+    delete_resource/1,
+    put_json/1,
+    get_json/1,
+    put_bert/1,
+    get_bert/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:ensure_qs(z_context:set(DispatchArgs, Context)),
-    Context2 = z_context:set_noindex_header(z_context:continue_session(Context1)),
+service_available(Context) ->
+    Context2 = z_context:set_noindex_header(
+                    z_context:continue_session(
+                        z_context:ensure_qs(Context))),
     z_context:lager_md(Context2),
-    ?WM_REPLY(true, Context2).
+    {true, Context2}.
+
+allowed_methods(Context) ->
+    {[<<"GET">>, <<"PUT">>, <<"DELETE">>], Context}.
 
 
-allowed_methods(ReqData, Context) ->
-    {['GET', 'PUT', 'DELETE'], ReqData, Context}.
-
-
-forbidden(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+forbidden(Context) ->
     case z_acl:is_allowed(use, mod_rest, Context) of
         true ->
             IsAuthorized = case get_id(Context) of
                                {ok, Id} ->
                                    case m_rsc:exists(Id, Context) of
                                        true ->
-                                            case webmachine_request:method(ReqData) of
-                                                'GET' -> z_acl:rsc_visible(Id, Context);
-                                                'DELETE' -> z_acl:rsc_deletable(Id, Context);
-                                                'PUT' -> z_acl:rsc_editable(Id, Context)
+                                            case cowmachine_req:method(Context) of
+                                                <<"GET">> -> z_acl:rsc_visible(Id, Context);
+                                                <<"DELETE">> -> z_acl:rsc_deletable(Id, Context);
+                                                <<"PUT">> -> z_acl:rsc_editable(Id, Context)
                                             end;
                                         false ->
                                             true
@@ -73,63 +67,67 @@ forbidden(ReqData, Context0) ->
                                     true
                            end,
             case IsAuthorized of
-                false -> ?WM_REPLY(true, Context);
-                true -> ?WM_REPLY(false, Context)
+                false -> {true, Context};
+                true -> {false, Context}
             end;
         false ->
-            ?WM_REPLY(true, Context)
+            {true, Context}
     end.
 
 
-resource_exists(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+resource_exists(Context) ->
     Exists = case get_id(Context) of
                 {ok, Id} -> m_rsc:exists(Id, Context);
                 _ -> false
              end,
-    ?WM_REPLY(Exists, Context).
+    {Exists, Context}.
 
 
-content_types_provided(ReqData, Context) ->
-    Provided = case z_context:get_q("format", Context) of
-        "bert" -> [ {"application/x-bert", get_bert} ];
-        "json" -> [ {"application/json", get_json} ];
-        _ -> [ {"application/json", get_json}, {"application/x-bert", get_bert} ]
+content_types_provided(Context) ->
+    Provided = case z_context:get_q(<<"format">>, Context) of
+        <<"bert">> -> [ {<<"application/x-bert">>, get_bert} ];
+        <<"json">> -> [ {<<"application/json">>, get_json} ];
+        _ ->
+            [ 
+                {<<"application/json">>, get_json},
+                {<<"application/x-bert">>, get_bert}
+            ]
     end,
-    {Provided, ReqData, Context}.
+    {Provided, Context}.
 
-content_types_accepted(ReqData, Context) ->
-    Accepted = case z_context:get_q("format", Context) of
-        "bert" -> [ {"application/x-bert", put_bert} ];
-        "json" -> [ {"application/json", put_json} ];
-        _ -> [ {"application/json", put_json}, {"application/x-bert", put_bert} ]
+content_types_accepted(Context) ->
+    Accepted = case z_context:get_q(<<"format">>, Context) of
+        <<"bert">> -> [ {<<"application/x-bert">>, put_bert} ];
+        <<"json">> -> [ {<<"application/json">>, put_json} ];
+        _ ->
+            [
+                {<<"application/json">>, put_json},
+                {<<"application/x-bert">>, put_bert}
+            ]
     end,
-    {Accepted, ReqData, Context}.
+    {Accepted, Context}.
 
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
 
-delete_resource(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+delete_resource(Context) ->
     {ok, Id} = get_id(Context),
     case m_rsc:delete(Id, Context) of
-        {ok, _} -> ?WM_REPLY(true, Context);
-        {error, _} -> ?WM_REPLY(false, Context)
+        {ok, _} -> {true, Context};
+        {error, _} -> {false, Context}
     end.
 
 
-get_json(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+get_json(Context) ->
     {ok, Id} = get_id(Context),
     Data = mochijson:binary_encode(z_json:to_mochijson(get_rsc(Id, Context), Context)),
-    do_get(Id, Data, ".json", Context).
+    do_get(Id, Data, <<".json">>, Context).
 
-get_bert(ReqData, Context0) ->
-    Context = ?WM_REQ(ReqData, Context0),
+get_bert(Context) ->
     {ok, Id} = get_id(Context),
     Data = bert:encode(get_rsc(Id, Context)),
-    do_get(Id, Data, ".bert", Context).
+    do_get(Id, Data, <<".bert">>, Context).
 
 do_get(Id, Data, Extension, Context) ->
     Modified = m_rsc:p(Id, modified, Context),
@@ -143,32 +141,30 @@ do_get(Id, Data, Extension, Context) ->
                     z_datetime:format(Modified, "YmdHis", Context),
                     Extension
                 ]),
-    Context1 = z_context:set_resp_header("Content-Disposition", z_convert:to_list(Disp), Context),
-    ?WM_REPLY(Data, Context1).
+    Context1 = z_context:set_resp_header(<<"content-disposition">>, Disp, Context),
+    {Data, Context1}.
 
 
 %% @doc Fetch the request body, translate to properties and hand to the update routines.
 %% @todo Handle update errors
-put_json(ReqData, Context0) ->
-    {Body, ReqData1} = wrq:req_body(ReqData),
-    Context = ?WM_REQ(ReqData1, Context0),
-    Parsed = z_json:from_mochijson(mochijson:binary_decode(Body), Context),
-    do_update(Parsed, Context).
+put_json(Context) ->
+    {Body, Context1} = cowmachine_req:req_body(Context),
+    Parsed = z_json:from_mochijson(mochijson:binary_decode(Body), Context1),
+    do_update(Parsed, Context1).
 
-put_bert(ReqData, Context0) ->
-    {Body, ReqData1} = wrq:req_body(ReqData),
-    Context = ?WM_REQ(ReqData1, Context0),
+put_bert(Context) ->
+    {Body, Context1} = cowmachine_req:req_body(Context),
     Parsed = bert:decode(Body),
-    do_update(Parsed, Context).
+    do_update(Parsed, Context1).
 
 
 do_update(Props, Context) ->
     {ok, Id} = get_id(Context),
     case catch mod_rest:rsc_upload(Id, Props, Context) of
         {ok, _} ->
-            ?WM_REPLY(true, Context);
+            {true, Context};
         {error, _Reason} ->
-            ?WM_REPLY(true, Context)
+            {true, Context}
     end.
 
 
@@ -176,7 +172,7 @@ do_update(Props, Context) ->
 get_id(Context) ->
     case erlang:get(rsc_id) of
         undefined ->
-            IdArg = wrq:path_info(id, z_context:get_reqdata(Context)),
+            IdArg = z_context:get_q(<<"id">>, Context),
             Result = case m_rsc:rid(IdArg, Context) of
                         undefined -> {error, not_found};
                         Id -> {ok, Id}

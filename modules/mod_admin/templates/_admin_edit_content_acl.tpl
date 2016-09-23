@@ -14,6 +14,6 @@
 
 {% block widget_content %}
 <fieldset>
-    {% include "_admin_edit_visible_for.tpl" id=id %}
+    {% optional include "_admin_edit_visible_for.tpl" id=id %}
 </fieldset>
 {% endblock %}

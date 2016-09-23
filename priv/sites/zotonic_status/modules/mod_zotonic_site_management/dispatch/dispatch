@@ -1,0 +1,3 @@
+[
+    {zotonic_sites_add, ["sites", "add"], controller_zotonic_status, [{template, "addsite.tpl"}]}
+].

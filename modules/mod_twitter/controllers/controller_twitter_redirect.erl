@@ -30,7 +30,7 @@
 
 
 html(Context) ->
-    case z_utils:is_empty(z_context:get_q("denied", Context)) of
+    case z_utils:is_empty(z_context:get_q(<<"denied">>, Context)) of
         true ->
             RequestToken = z_context:get_session(twitter_request_token, Context),
             z_context:set_session(twitter_request_token, undefined, Context),

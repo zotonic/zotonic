@@ -368,43 +368,41 @@ builtin_tag_1(Tag, _Expr, _Args, _Vars, Context) ->
 
 
 %% @doc Render a block, cache the result for some time. Caching should be implemented by the runtime.
-%% @todo This needs to be updated for the modern ACL modules (see z_acl, args_to_visible_for)
+%% @todo This needs to be updated for the modern ACL modules (see z_acl)
 -spec cache_tag(MaxAge::integer(), Name::binary(), Args::list(), function(), TplVars::map(), Context::term()) ->
                 template_compiler:render_result().
 cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
-    VisibleFor = z_acl:args_to_visible_for(Args),
     FunVars = lists:foldl(
                     fun({K,V}, Acc) ->
                         Acc#{K => V}
                     end,
                     TplVars,
                     Args),
-    case do_cache(VisibleFor, Args, Context) of
+    case do_cache(Args, Context) of
         false ->
             Fun(FunVars, Context);
         true ->
             Varies = lists:flatten(proplists:get_all_values(vary, Args)),
             Cat = proplists:get_all_values(cat, Args),
             Cat1 = lists:map(fun z_convert:to_atom/1, Cat),
-            FuncContext = z_acl:set_visible_for(VisibleFor, Context),
-            Key = {Name, Varies, z_acl:cache_key(FuncContext)},
+            Key = {Name, Varies, z_acl:cache_key(Context)},
             F = fun() ->
-                Fun(FunVars, FuncContext)
+                Fun(FunVars, Context)
             end,
-            z_depcache:memo(F, Key, MaxAge, Varies ++ Cat1, FuncContext)
+            z_depcache:memo(F, Key, MaxAge, Varies ++ Cat1, Context)
     end.
 
-do_cache(VisibleFor, Args, Context) ->
-    do_cache1(z_convert:to_bool(proplists:get_value('if', Args, true)), VisibleFor, Args, Context).
+do_cache(Args, Context) ->
+    do_cache1(z_convert:to_bool(proplists:get_value('if', Args, true)), Args, Context).
 
-do_cache1(true, ?ACL_VIS_PUBLIC, _Args, _Context) ->
+do_cache1(true, _Args, _Context) ->
     true;
-do_cache1(true, _VisibleFor, Args, Context) ->
+do_cache1(true, Args, Context) ->
     case z_convert:to_bool(proplists:get_value(if_anonymous, Args, false)) of
         true -> z_acl:user(Context) =:= undefined;
         false -> true
     end;
-do_cache1(false, _VisibleFor, _Args, _Context) ->
+do_cache1(false, _Args, _Context) ->
     false.
 
 %% @doc Render a script block, for Zotonic this is added to the scripts in the Context

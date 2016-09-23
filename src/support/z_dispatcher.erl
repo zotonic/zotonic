@@ -199,12 +199,13 @@ to_bool(N) -> z_convert:to_bool(N).
 %% @doc Initiates the server, loads the dispatch list into the webmachine dispatcher
 init(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
-    {hostname, Hostname} = proplists:lookup(hostname, SiteProps),
     lager:md([
         {site, Site},
         {module, ?MODULE}
       ]),
-    Smtphost = proplists:get_value(smtphost, SiteProps),
+    {hostname, Hostname0} = proplists:lookup(hostname, SiteProps),
+    Hostname = z_convert:to_binary(Hostname0),
+    Smtphost = z_convert:to_binary(proplists:get_value(smtphost, SiteProps)),
     HostAlias = proplists:get_value(hostalias, SiteProps, []),
     Context = z_context:new(Site),
     process_flag(trap_exit, true),
@@ -216,7 +217,7 @@ init(SiteProps) ->
 				smtphost=drop_port(Smtphost),
                 hostname=drop_port(Hostname),
                 hostname_port=Hostname,
-                hostalias=[ drop_port(Alias) || Alias <- HostAlias ],
+                hostalias=[ drop_port(z_convert:to_binary(Alias)) || Alias <- HostAlias ],
                 redirect=z_convert:to_bool(proplists:get_value(redirect, SiteProps, true))
     },
     z_notifier:observe(module_ready, {?MODULE, reload}, Context),
@@ -228,10 +229,8 @@ drop_port(undefined) ->
     undefined;
 drop_port(none) ->
     undefined;
-drop_port(Hostname) when is_list(Hostname) ->
-    hd(string:tokens(Hostname, ":"));
-drop_port(Hostname) ->
-    drop_port(z_convert:to_list(Hostname)).
+drop_port(Hostname) when is_binary(Hostname) ->
+    hd(binary:split(Hostname, <<":">>)).
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |

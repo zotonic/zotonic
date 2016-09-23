@@ -322,7 +322,7 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
     end,
     case proplists:get_value(uri, NewProps) of
         undefined -> nop;
-        Uri -> z_depcache:flush({rsc_uri, z_convert:to_list(Uri)}, Context)
+        Uri -> z_depcache:flush({rsc_uri, z_convert:to_binary(Uri)}, Context)
     end,
 
     % Flush category caches if a category is inserted.
@@ -635,7 +635,7 @@ throw_if_category_not_allowed_1(_PrevCatId, CatId, Context) ->
     CategoryName = m_category:id_to_name(CatId, Context),
     case z_acl:is_allowed(insert, #acl_rsc{category=CategoryName}, Context) of
         true -> ok;
-        _False -> throw({error, eaccess})
+        _False -> throw({error, eacces})
     end.
 
 
@@ -720,15 +720,6 @@ props_filter([{P, Id}|T], Acc, Context)
             props_filter(T, Acc, Context);
         RId ->
             props_filter(T, [{P,RId}|Acc], Context)
-    end;
-
-props_filter([{visible_for, Vis}|T], Acc, Context) ->
-    VisibleFor = z_convert:to_integer(Vis),
-    case VisibleFor of
-        N when N >= 0 ->
-            props_filter(T, [{visible_for, N} | Acc], Context);
-        _ ->
-            props_filter(T, Acc, Context)
     end;
 
 props_filter([{category, CatName}|T], Acc, Context) ->
@@ -869,11 +860,11 @@ truncate_slug(<<Slug:78/binary, _/binary>>) -> Slug;
 truncate_slug(Slug) -> Slug.
 
 %% @doc Map property names to an atom, fold pivot and computed fields together for later filtering.
-map_property_name(IsImport, P) when not is_list(P) -> map_property_name(IsImport, z_convert:to_list(P));
-map_property_name(_IsImport, "computed_"++_) -> computed_xxx;
-map_property_name(_IsImport, "pivot_"++_) -> pivot_xxx;
-map_property_name(false, P) when is_list(P) -> erlang:list_to_existing_atom(P);
-map_property_name(true,  P) when is_list(P) -> erlang:list_to_atom(P).
+map_property_name(IsImport, P) when not is_binary(P) -> map_property_name(IsImport, z_convert:to_binary(P));
+map_property_name(_IsImport, <<"computed_", _/binary>>) -> computed_xxx;
+map_property_name(_IsImport, <<"pivot_", _/binary>>) -> pivot_xxx;
+map_property_name(false, P) when is_binary(P) -> binary_to_existing_atom(P, utf8);
+map_property_name(true,  P) when is_binary(P) -> binary_to_atom(P, utf8).
 
 
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
@@ -921,8 +912,8 @@ recombine_dates(Id, Props, Context) ->
     Dates4 = lists:foldl(
                     fun({Name, {S, E}}, Acc) ->
                         [
-                            {Name++"_start", S},
-                            {Name++"_end", E}
+                            {<<Name/binary, "_start">>, S},
+                            {<<Name/binary, "_end">>, E}
                             | Acc
                         ]
                     end,
@@ -938,9 +929,9 @@ maybe_dates_to_utc(Id, Dates, Props, Context) ->
     IsAllDay = is_all_day(Id, Props, Context),
     [ maybe_to_utc(IsAllDay, NameDT,Context) || NameDT <- Dates ].
 
-maybe_to_utc(true, {"date_start", _Date} = D, _Context) ->
+maybe_to_utc(true, {<<"date_start">>, _Date} = D, _Context) ->
     D;
-maybe_to_utc(true, {"date_end", _Date} = D, _Context) ->
+maybe_to_utc(true, {<<"date_end">>, _Date} = D, _Context) ->
     D;
 maybe_to_utc(_IsAllDay, {Name, Date}, Context) ->
     {Name, z_datetime:to_utc(Date, Context)}.
@@ -948,7 +939,7 @@ maybe_to_utc(_IsAllDay, {Name, Date}, Context) ->
 is_all_day(Id, Props, Context) ->
     case proplists:get_value(date_is_all_day, Props) of
         undefined ->
-            case proplists:get_value("date_is_all_day", Props) of
+            case proplists:get_value(<<"date_is_all_day">>, Props) of
                 undefined ->
                     case is_integer(Id) of
                         false ->
@@ -966,13 +957,13 @@ is_all_day(Id, Props, Context) ->
 
 collect_empty_date_groups([], Acc, Null) ->
     {Acc, Null};
-collect_empty_date_groups([{"publication", _} = R|T], Acc, Null) ->
+collect_empty_date_groups([{<<"publication">>, _} = R|T], Acc, Null) ->
     collect_empty_date_groups(T, [R|Acc], Null);
 collect_empty_date_groups([{Name, {
                             {{undefined, undefined, undefined}, {undefined, undefined, undefined}},
                             {{undefined, undefined, undefined}, {undefined, undefined, undefined}}
                             }}|T], Acc, Null) ->
-    collect_empty_date_groups(T, Acc, [{Name++"_start", undefined}, {Name++"_end", undefined} | Null]);
+    collect_empty_date_groups(T, Acc, [{<<Name/binary, "_start">>, undefined}, {<<Name/binary, "_end">>, undefined} | Null]);
 collect_empty_date_groups([H|T], Acc, Null) ->
     collect_empty_date_groups(T, [H|Acc], Null).
 
@@ -989,15 +980,15 @@ collect_empty_dates([H|T], Acc, Null) ->
 
 recombine_dates_1([], Dates, Acc) ->
     {Dates, Acc};
-recombine_dates_1([{"dt:"++K,V}|T], Dates, Acc) ->
-    [Part, End, Name] = string:tokens(K, ":"),
+recombine_dates_1([{<<"dt:",K/binary>>,V}|T], Dates, Acc) ->
+    [Part, End, Name] = binary:split(K, <<":">>, [global]),
     Dates1 = recombine_date(Part, End, Name, V, Dates),
     recombine_dates_1(T, Dates1, Acc);
 recombine_dates_1([H|T], Dates, Acc) ->
     recombine_dates_1(T, Dates, [H|Acc]).
 
     recombine_date(Part, End, Name, undefined, Dates) ->
-        recombine_date(Part, End, Name, "", Dates);
+        recombine_date(Part, End, Name, <<>>, Dates);
     recombine_date(Part, _End, Name, V, Dates) ->
         Date = case proplists:get_value(Name, Dates) of
             undefined ->
@@ -1005,27 +996,27 @@ recombine_dates_1([H|T], Dates, Acc) ->
             D ->
                 D
         end,
-        Date1 = recombine_date_part(Date, Part, to_date_value(Part, string:strip(V))),
+        Date1 = recombine_date_part(Date, Part, to_date_value(Part, z_string:trim(V))),
         lists:keystore(Name, 1, Dates, {Name, Date1}).
 
-    recombine_date_part({{_Y,M,D},{H,I,S}}, "y", V) -> {{V,M,D},{H,I,S}};
-    recombine_date_part({{Y,_M,D},{H,I,S}}, "m", V) -> {{Y,V,D},{H,I,S}};
-    recombine_date_part({{Y,M,_D},{H,I,S}}, "d", V) -> {{Y,M,V},{H,I,S}};
-    recombine_date_part({{Y,M,D},{_H,I,S}}, "h", V) -> {{Y,M,D},{V,I,S}};
-    recombine_date_part({{Y,M,D},{H,_I,S}}, "i", V) -> {{Y,M,D},{H,V,S}};
-    recombine_date_part({{Y,M,D},{H,I,_S}}, "s", V) -> {{Y,M,D},{H,I,V}};
-    recombine_date_part({{Y,M,D},{_H,_I,S}}, "hi", {H,I,_S}) -> {{Y,M,D},{H,I,S}};
-    recombine_date_part({{Y,M,D},_Time}, "his", {_,_,_} = V) -> {{Y,M,D},V};
-    recombine_date_part({_Date,{H,I,S}}, "ymd", {_,_,_} = V) -> {V,{H,I,S}}.
+    recombine_date_part({{_Y,M,D},{H,I,S}}, <<"y">>, V) -> {{V,M,D},{H,I,S}};
+    recombine_date_part({{Y,_M,D},{H,I,S}}, <<"m">>, V) -> {{Y,V,D},{H,I,S}};
+    recombine_date_part({{Y,M,_D},{H,I,S}}, <<"d">>, V) -> {{Y,M,V},{H,I,S}};
+    recombine_date_part({{Y,M,D},{_H,I,S}}, <<"h">>, V) -> {{Y,M,D},{V,I,S}};
+    recombine_date_part({{Y,M,D},{H,_I,S}}, <<"i">>, V) -> {{Y,M,D},{H,V,S}};
+    recombine_date_part({{Y,M,D},{H,I,_S}}, <<"s">>, V) -> {{Y,M,D},{H,I,V}};
+    recombine_date_part({{Y,M,D},{_H,_I,S}}, <<"hi">>, {H,I,_S}) -> {{Y,M,D},{H,I,S}};
+    recombine_date_part({{Y,M,D},_Time}, <<"his">>, {_,_,_} = V) -> {{Y,M,D},V};
+    recombine_date_part({_Date,{H,I,S}}, <<"ymd">>, {_,_,_} = V) -> {V,{H,I,S}}.
 
-    to_date_value(Part, V) when Part == "ymd" orelse Part == "his"->
-        case string:tokens(V, "-/: ") of
-            [] -> {undefined, undefined, undefined};
+    to_date_value(Part, V) when Part =:= <<"ymd">>; Part =:= <<"his">> ->
+        case binary:split(V, [<<"-">>,<<"/">>,<<":">>,<<" ">>], [global]) of
+            [<<>>] -> {undefined, undefined, undefined};
             [Y,M,D] -> {to_int(Y), to_int(M), to_int(D)}
         end;
-    to_date_value("hi", V) ->
-        case string:tokens(V, "-/: ") of
-            [] -> {undefined, undefined, undefined};
+    to_date_value(<<"hi">>, V) ->
+        case binary:split(V, [<<"-">>, <<"/">>, <<":">>, <<" ">>], [global]) of
+            [<<>>] -> {undefined, undefined, undefined};
             [H] -> {to_int(H), 0, undefined};
             [H,I] -> {to_int(H), to_int(I), undefined}
         end;
@@ -1038,9 +1029,9 @@ group_dates(Dates) ->
     group_dates([], Groups, Acc) ->
         {Acc, Groups};
     group_dates([{Name,D}|T], Groups, Acc) ->
-        case lists:suffix("_start", Name) of
+        case binary:longest_common_suffix([<<"_start">>, Name]) =:= size(<<"_start">>) of
             true ->
-                Base = lists:sublist(Name, length(Name) - 6),
+                Base = binary:part(Name, 0, size(Name) - size(<<"_start">>)),
                 Range = case proplists:get_value(Base, Groups) of
                     {_Start, End} ->
                         { D, End };
@@ -1051,9 +1042,9 @@ group_dates(Dates) ->
                 group_dates(T, Groups1, Acc);
 
             false ->
-                case lists:suffix("_end", Name) of
+                case binary:longest_common_suffix([<<"_end">>, Name]) =:= size(<<"_end">>) of
                     true ->
-                        Base = lists:sublist(Name, length(Name) - 4),
+                        Base = binary:part(Name, 0, size(Name) - size(<<"_end">>)),
                         Range = case proplists:get_value(Base, Groups) of
                             {Start, _End} ->
                                 { Start, D };
@@ -1127,7 +1118,7 @@ to_int(A) ->
 %% e.g. m_rsc_update:props_languages([{"foo$en", x}, {"bar$nl", x}]) -> ["en", "nl"]
 props_languages(Props) ->
     lists:foldr(fun({Key, _}, Acc) ->
-                        case string:tokens(z_convert:to_list(Key), [$$]) of
+                        case binary:split(z_convert:to_binary(Key), <<"$">>, [global]) of
                             [_, Lang] ->
                                 case lists:member(Lang, Acc) of
                                     true -> Acc;
@@ -1144,21 +1135,21 @@ recombine_languages(Props, Context) ->
         [] ->
             Props;
         L ->
-            Cfg = [ atom_to_list(Code) || Code <- config_langs(Context) ],
+            Cfg = [ atom_to_binary(Code, utf8) || Code <- config_langs(Context) ],
             L1 = filter_langs(edited_languages(Props, L), Cfg),
             {LangProps, OtherProps} = comb_lang(Props, L1, [], []),
-            LangProps ++ [{language, [list_to_atom(Lang) || Lang <- L1]}|proplists:delete("language", OtherProps)]
+            LangProps ++ [{language, [binary_to_atom(Lang, 'utf8') || Lang <- L1]}|proplists:delete(<<"language">>, OtherProps)]
     end.
 
     %% @doc Fetch all the edited languages, from 'language' inputs or a merged 'language' property
     edited_languages(Props, PropLangs) ->
-        case proplists:is_defined("language", Props) of
+        case proplists:is_defined(<<"language">>, Props) of
             true ->
-                proplists:get_all_values("language", Props);
+                proplists:get_all_values(<<"language">>, Props);
             false ->
                 case proplists:get_value(language, Props) of
                     L when is_list(L) ->
-                        [ z_convert:to_list(Lang) || Lang <- L ];
+                        [ z_convert:to_binary(Lang) || Lang <- L ];
                     undefined ->
                         PropLangs
                 end
@@ -1166,8 +1157,8 @@ recombine_languages(Props, Context) ->
 
     comb_lang([], _L1, LAcc, OAcc) ->
         {LAcc, OAcc};
-    comb_lang([{P,V}|Ps], L1, LAcc, OAcc) when is_list(P) ->
-        case string:tokens(P, "$") of
+    comb_lang([{P,V}|Ps], L1, LAcc, OAcc) when is_binary(P) ->
+        case binary:split(P, <<"$">>) of
             [P1,Lang] ->
                 case lists:member(Lang, L1) of
                     true -> comb_lang(Ps, L1, append_langprop(P1, Lang, V, LAcc), OAcc);
@@ -1181,7 +1172,7 @@ recombine_languages(Props, Context) ->
 
 
     append_langprop(P, Lang, V, Acc) ->
-        Lang1 = list_to_atom(Lang),
+        {ok, Lang1} = z_trans:to_language_atom(Lang),
         case proplists:get_value(P, Acc) of
             {trans, Tr} ->
                 Tr1 = [{Lang1, z_convert:to_binary(V)}|Tr],
@@ -1195,7 +1186,7 @@ recombine_blocks(Props, OrgProps, Context) ->
     recombine_blocks_import(Props1, OrgProps, Context).
 
 recombine_blocks_form(Props, OrgProps, Context) ->
-    {BPs, Ps} = lists:partition(fun({"block-"++ _, _}) -> true; (_) -> false end, Props),
+    {BPs, Ps} = lists:partition(fun({<<"block-", _/binary>>, _}) -> true; (_) -> false end, Props),
     case BPs of
         [] ->
             case proplists:get_value(blocks, Props) of
@@ -1208,10 +1199,10 @@ recombine_blocks_form(Props, OrgProps, Context) ->
         _ ->
             Keys = block_ids(OrgProps, []),
             Dict = lists:foldr(
-                            fun ({"block-", _}, Acc) ->
+                            fun ({<<"block-">>, _}, Acc) ->
                                     Acc;
-                                ({"block-"++Name, Val}, Acc) ->
-                                    Ts = string:tokens(Name, "-"),
+                                ({<<"block-", Name/binary>>, Val}, Acc) ->
+                                    Ts = binary:split(Name, <<"-">>, [global]),
                                     BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
                                     BlockField = lists:last(Ts),
                                     dict:append(BlockId, {BlockField, Val}, Acc)
@@ -1223,14 +1214,14 @@ recombine_blocks_form(Props, OrgProps, Context) ->
     end.
 
 recombine_blocks_import(Props, _OrgProps, Context) ->
-    {BPs, Ps} = lists:partition(fun({"blocks."++ _, _}) -> true; (_) -> false end, Props),
+    {BPs, Ps} = lists:partition(fun({<<"blocks.", _/binary>>, _}) -> true; (_) -> false end, Props),
     case BPs of
         [] ->
             Props;
         _ ->
             {Dict,Keys} = lists:foldr(
-                            fun({"blocks."++Name, Val}, {Acc,KeyAcc}) ->
-                                [BlockId,BlockField] = string:tokens(Name, "."),
+                            fun({<<"blocks.", Name/binary>>, Val}, {Acc,KeyAcc}) ->
+                                [BlockId,BlockField] = binary:split(Name, <<".">>, [global]),
                                 KeyAcc1 = case lists:member(BlockId, KeyAcc) of
                                             true -> KeyAcc;
                                             false -> [ BlockId | KeyAcc ]
@@ -1245,8 +1236,8 @@ recombine_blocks_import(Props, _OrgProps, Context) ->
 
 block_ids([], Acc) ->
     lists:reverse(Acc);
-block_ids([{"block-"++Name,_}|Rest], Acc) when Name =/= [] ->
-    Ts = string:tokens(Name, "-"),
+block_ids([{<<"block-", Name/binary>>,_}|Rest], Acc) when Name =/= <<>> ->
+    Ts = binary:split(Name, <<"-">>, [global]),
     BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
     case lists:member(BlockId, Acc) of
         true -> block_ids(Rest, Acc);
@@ -1331,18 +1322,16 @@ update_page_path_log(RscId, OldProps, NewProps, Context) ->
 
 
 test() ->
-    [{"publication_start",{{2009,7,9},{0,0,0}}},
-          {"publication_end",?ST_JUTTEMIS},
-          {"plop","hello"}]
+    [{<<"publication_start">>,{{2009,7,9},{0,0,0}}},
+     {<<"publication_end">>,?ST_JUTTEMIS},
+     {<<"plop">>,<<"hello">>}]
      = recombine_dates(insert_rsc, [
-        {"dt:y:0:publication_start", "2009"},
-        {"dt:m:0:publication_start", "7"},
-        {"dt:d:0:publication_start", "9"},
-        {"dt:y:1:publication_end", ""},
-        {"dt:m:1:publication_end", ""},
-        {"dt:d:1:publication_end", ""},
-        {"plop", "hello"}
+        {<<"dt:y:0:publication_start">>, <<"2009">>},
+        {<<"dt:m:0:publication_start">>, <<"7">>},
+        {<<"dt:d:0:publication_start">>, <<"9">>},
+        {<<"dt:y:1:publication_end">>, <<"">>},
+        {<<"dt:m:1:publication_end">>, <<"">>},
+        {<<"dt:d:1:publication_end">>, <<"">>},
+        {<<"plop">>, <<"hello">>}
     ], z_context:new_tests()),
     ok.
-
-

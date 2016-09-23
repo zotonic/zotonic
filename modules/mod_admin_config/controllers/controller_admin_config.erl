@@ -21,13 +21,13 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    is_authorized/2
+    is_authorized/1
 ]).
 
 -include_lib("controller_html_helper.hrl").
 
-is_authorized(ReqData, Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin_config, ReqData, Context).
+is_authorized(Context) ->
+    z_admin_controller_helper:is_authorized(mod_admin_config, Context).
 
 html(Context) ->
     All = m_config:all(Context),

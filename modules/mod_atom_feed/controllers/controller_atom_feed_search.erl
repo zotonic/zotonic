@@ -18,59 +18,45 @@
 -module(controller_atom_feed_search).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
-
-
 -export([
-    init/1,
-    service_available/2,
-    allowed_methods/2,
-    content_encodings_provided/2,
-	expires/2,
-	content_types_provided/2,
-	charsets_provided/2,
-	provide_content/2
+    allowed_methods/1,
+    content_encodings_provided/1,
+	expires/1,
+	content_types_provided/1,
+	charsets_provided/1,
+	provide_content/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
 %% Let cached versions expire in an hour.
 -define(MAX_AGE, 3600).
 
 
-init(DispatchArgs) ->
-    {ok, DispatchArgs}.
-
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    Context2 = z_context:ensure_qs(Context1),
-    ?WM_REPLY(true, Context2).
+  
+allowed_methods(Context) ->
+    {[<<"HEAD">>, <<"GET">>], Context}.
 
 
-allowed_methods(ReqData, Context) ->
-    {['HEAD', 'GET'], ReqData, Context}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
 
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+content_encodings_provided(Context) ->
+    {[<<"identity">>, <<"gzip">>], Context}.
 
 
-content_encodings_provided(ReqData, Context) ->
-    {["identity", "gzip"], ReqData, Context}.
+content_types_provided(Context) ->
+    {[{<<"application/atom+xml">>, provide_content}], Context}.
 
 
-content_types_provided(ReqData, Context) ->
-    {[{"application/atom+xml", provide_content}], ReqData, Context}.
-
-
-expires(ReqData, State) ->
-    RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData),
+expires(Context) ->
+    Context1 = z_context:set_resp_header(<<"cache-control">>, <<"public, max-age=", (integer_to_binary(?MAX_AGE))/binary>>, Context),
     NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
-    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), RD1, State}.
+    {calendar:gregorian_seconds_to_datetime(NowSecs + ?MAX_AGE), Context1}.
 
 
-provide_content(ReqData, Context) ->
+provide_content(Context) ->
     Query0 = z_context:get_q_all(Context),
     try
         {FeedTitle, Query} = case proplists:get_value("feed_title", Query0) of
@@ -93,16 +79,20 @@ provide_content(ReqData, Context) ->
                     Content
             end,
         Content = z_depcache:memo(F, {atom_feed_search, Q}, ?MAX_AGE, [], Context),
-        Content1 = wrq:encode_content(Content, ReqData),
-        {Content1, ReqData, Context}
+        Content1 = cowmachine_req:encode_content(Content, Context),
+        {Content1, Context}
 
     catch
         _: {error, {unknown_query_term, E}} ->
-            ReqData1 = wrq:set_resp_body(wrq:encode_content("Unknown query term: " ++ E, ReqData), ReqData),
-            {{halt, 400}, ReqData1, Context};
+            Context1 = cowmachine_req:set_resp_body(
+                            cowmachine_req:encode_content("Unknown query term: " ++ E, Context),
+                            Context),
+            {{halt, 400}, Context1};
 
         _: {case_clause, {error, {error, error, _, _E, _}}} ->
-            ReqData1 = wrq:set_resp_body(wrq:encode_content("Unknown error.", ReqData), ReqData),
-            {{halt, 400}, ReqData1, Context}
+            Context1 = cowmachine_req:set_resp_body(
+                            cowmachine_req:encode_content("Unknown error.", Context),
+                            Context),
+            {{halt, 400}, Context1}
     end.
 

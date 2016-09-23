@@ -23,13 +23,13 @@
 -svc_title("Retrieve the list of all objects in the system.").
 -svc_needauth(false).
 
--export([process_get/2]).
+-export([process_get/1]).
 
 -include_lib("zotonic.hrl").
 
 -define(IDS_PAGE_LENGTH, 100).
 
-process_get(_ReqData, Context) ->
+process_get(Context) ->
     PageNr = get_page_nr(Context),
     Ids = get_ids(z_acl:user(Context) =:= undefined, PageNr, Context),
     Ids1 = lists:filter(
@@ -63,8 +63,7 @@ get_ids(false, PageNr, Context) ->
     [ Id || {Id} <- Ids ].
 
 get_page_nr(Context) ->
-    case z_context:get_q("page", Context) of
-        "" -> 1;
+    case z_context:get_q(<<"page">>, Context) of
         <<>> -> 1;
         undefined -> 1;
         N ->

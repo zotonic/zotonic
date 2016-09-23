@@ -23,11 +23,11 @@
 -svc_title("Checks if all sites are running.").
 -svc_needauth(false).
 
--export([process_get/2]).
+-export([process_get/1]).
 
 -include_lib("zotonic.hrl").
 
-process_get(_ReqData, _Context) ->
+process_get(_Context) ->
     {struct, [{status, result(z_sites_manager:all_sites_running())}]}.
 
 result(true) -> ok;

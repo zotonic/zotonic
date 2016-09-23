@@ -84,7 +84,7 @@ notice(SiteName, Text, Context) ->
                         "notices",
                         #render{template="_notice.tpl", vars=[{site,SiteName},{notice,Text}]},
                         Context),
-    z_render:wire({fade_out, [{selector, "#notices > p:gt(0)"}, {speed, 2000}]}, Context1).
+    z_render:wire({fade_out, [{selector, "#notices > div:gt(0)"}, {speed, 2000}]}, Context1).
 
 
 %% @doc Check which sites have a .hgrc directory. Add this info to the template vars.

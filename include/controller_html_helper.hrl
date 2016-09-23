@@ -25,25 +25,14 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--export([init/1, to_html/2, service_available/2, charsets_provided/2]).
+-export([to_html/1, charsets_provided/1]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
-init(DispatchArgs) -> 
-    {ok, DispatchArgs}.
+charsets_provided(Context) ->
+    {[<<"utf-8">>], Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    ?WM_REPLY(true, Context1).
-
-charsets_provided(ReqData, Context) ->
-    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
-
-to_html(ReqData, Context) ->
-    Context1 = ?WM_REQ(ReqData, Context),
-    Context2 = z_context:ensure_all(Context1),
+to_html(Context) ->
+    Context2 = z_context:ensure_all(Context),
     z_context:lager_md(Context2),
-    {Result, ResultContext} = html(Context2),
-    ?WM_REPLY(Result, ResultContext).
+    html(Context2).

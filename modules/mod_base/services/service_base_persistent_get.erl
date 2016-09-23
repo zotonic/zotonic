@@ -10,14 +10,14 @@
 -svc_title("Retrieve a value from the Zotonic persistent record.").
 -svc_needauth(false).
 
--export([process_get/2]).
+-export([process_get/1]).
 
 -include_lib("zotonic.hrl").
 
 
-process_get(_ReqData, Context) ->
-    case z_context:get_q("key", Context) of
-        X when X =:= undefined orelse X =:= [] ->
+process_get(Context) ->
+    case z_context:get_q(<<"key">>, Context) of
+        X when X =:= undefined orelse X =:= <<>> ->
             {error, missing_arg, "key"};
         Key ->
             R = [{key, Key}, {value, z_context:get_persistent(Key, Context)}],

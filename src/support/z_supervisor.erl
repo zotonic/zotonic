@@ -84,7 +84,7 @@ add_child_async(Pid, ChildSpec) ->
 
 %% @doc Delete a child, the child will be terminated and removed.
 delete_child(Pid, Name) ->
-    gen_server:cast(Pid, {delete_child, Name}).
+    gen_server:call(Pid, {delete_child, Name}).
 
 %% @doc Start a child when it is not running (either failed or stopped)
 start_child(Pid, Name) ->
@@ -202,6 +202,17 @@ handle_call(which_children, _From, State) ->
 handle_call(running_children, _From, State) ->
     {reply, [ C#child_state.name || C <- State#state.running ], State};
 
+%% @doc Delete a child and add remove it from any queue, optionally stopping it.
+handle_call({delete_child, Name}, _From, State) ->
+    case do_remove_child(Name, State) of
+        {CS,State1} ->
+            Reply = shutdown_child(CS, State1),
+            {reply, Reply, State1};
+        error ->
+            %% Unknown child
+            {reply, {error, unknown_child}, State}
+    end;
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     ?DEBUG({unknown_call, Message}),
@@ -225,17 +236,6 @@ handle_cast({stop_child, Name}, State) ->
             shutdown_child(CS, State1),
             CS1 = CS#child_state{state=stopped, time=erlang:universaltime(), pid=undefined},
             {noreply, State1#state{stopped=[CS1|State1#state.stopped]}};
-        error ->
-            %% Unknown child
-            {noreply, State}
-    end;
-
-%% @doc Delete a child and add remove it from any queue, optionally stopping it.
-handle_cast({delete_child, Name}, State) ->
-    case do_remove_child(Name, State) of
-        {CS,State1} ->
-            shutdown_child(CS, State1),
-            {noreply, State1};
         error ->
             %% Unknown child
             {noreply, State}

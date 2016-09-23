@@ -20,13 +20,10 @@
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
 
 -export([
-    init/1,
-    service_available/2,
-    allowed_methods/2,
-    process_post/2
+    allowed_methods/1,
+    process_post/1
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 -record(unload_beacon, {
@@ -34,41 +31,32 @@
     page_id
 }).
 
-init(DispatchArgs) ->
-    {ok, DispatchArgs}.
+allowed_methods(Context) ->
+    {[<<"POST">>], Context}.
 
-service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
-    ?WM_REPLY(true, Context).
-
-allowed_methods(ReqData, Context) ->
-    {['POST'], ReqData, Context}.
-
-process_post(ReqData, Context) ->
-    case wrq:get_req_header_lc("content-type", ReqData) of
-        "text/x-ubf" ++ _ ->
-            process_post_ubf(ReqData, Context);
-        "text/plain" ++ _ ->
-            process_post_ubf(ReqData, Context);
+process_post(Context) ->
+    case z_context:get_req_header(<<"content-type">>, Context) of
+        <<"text/x-ubf", _/binary>> ->
+            process_post_ubf(Context);
+        <<"text/plain", _/binary>> ->
+            process_post_ubf(Context);
         _ ->
-            {{halt, 415}, ReqData, Context}
+            {{halt, 415}, Context}
     end.
 
 %% @doc Process beacon, the received data is UBF.
-process_post_ubf(ReqData, Context) ->
-    {Data, RD1} = wrq:req_body(ReqData),
+process_post_ubf(Context) ->
+    {Data, Context1} = cowmachine_req:req_body(Context),
     try
         {ok, #unload_beacon{page_id=PageId}, _Rest} = z_transport:data_decode(Data),
-
         case z_session_page:whereis(PageId, Context) of
             undefined -> ok;
             Pid -> ok = z_session_page:stop(Pid)
         end
-    catch Class:Term ->
- 	%% Log error, but give a correct response anyway
-	lager:error("~p: mod_base error processing unload beacon ~p:~p",
-			[z_context:site(Context), Class, Term])
+    catch
+        Class:Term ->
+            %% Log error, but give a correct response anyway
+            lager:error("[~p] mod_base error processing unload beacon ~p:~p",
+                        [z_context:site(Context), Class, Term])
     end,
-
-    {true, RD1, Context}.
+    {true, Context1}.

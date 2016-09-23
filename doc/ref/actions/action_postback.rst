@@ -15,7 +15,7 @@ After clicking the button the event `go` will be sent to the :term:`controller` 
 
 The `event/2` function in the controller module will be called as::
 
-   event({postback, go, TriggerId, TargetId}, Context)
+   event(#postback{message=go, trigger=TriggerId, target=TargetId}, Context)
 
 This action can have the following arguments:
 

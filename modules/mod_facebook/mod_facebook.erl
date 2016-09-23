@@ -38,7 +38,7 @@
 
 % You have to add your Facebook appid and secret to the config.
 % By default, we only request access to the Facebook user's e-mail address.
--define(FACEBOOK_SCOPE, "email").
+-define(FACEBOOK_SCOPE, <<"email">>).
 
 
 %% @doc Reset the received facebook access token (as set in the session)
@@ -74,18 +74,17 @@ event(#submit{message=admin_facebook}, Context) ->
 
 save_settings(Context) ->
     lists:foreach(fun ({Key, Value}) ->
-                        K1 = z_convert:to_list(Key),
-                        case is_setting(K1) of
-                            true -> m_config:set_value(mod_facebook, list_to_atom(K1), Value, Context);
+                        case is_setting(Key) of
+                            true -> m_config:set_value(mod_facebook, binary_to_atom(Key, 'utf8'), Value, Context);
                             false -> ok
                         end
                   end,
                   z_context:get_q_all_noz(Context)).
 
-is_setting("appid") -> true;
-is_setting("appsecret") -> true;
-is_setting("scope") -> true;
-is_setting("useauth") -> true;
+is_setting(<<"appid">>) -> true;
+is_setting(<<"appsecret">>) -> true;
+is_setting(<<"scope">>) -> true;
+is_setting(<<"useauth">>) -> true;
 is_setting(_) -> false.
 
 

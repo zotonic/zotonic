@@ -18,11 +18,9 @@
 
 -module(z_admin_controller_helper).
 
--include_lib("zotonic.hrl").
-
 -export([
     init_session/1,
-    is_authorized/3
+    is_authorized/2
 ]).
 
 init_session(Context) ->
@@ -30,9 +28,8 @@ init_session(Context) ->
     z_context:lager_md(Context1),
     Context1.
 
-is_authorized(DefaultMod, ReqData, Context) ->
-    ReqData1 = wrq:set_resp_header("X-Frame-Options", "SAMEORIGIN", ReqData),
-    Context1 = ?WM_REQ(ReqData1, Context),
+is_authorized(DefaultMod, Context) ->
+    Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
     Context2 = init_session(Context1),
     z_acl:wm_is_authorized([{use, z_context:get(acl_module, Context, DefaultMod)}], admin_logon, Context2).
 

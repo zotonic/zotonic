@@ -28,6 +28,7 @@
     get/2,
 
     clear_status/3,
+    clear_status/2,
 
     mark_received/2,
 
@@ -75,7 +76,8 @@ clear_status(Email, Context) ->
             set is_valid = true,
                 recent_error_ct = 0,
                 modified = now()
-            where email = $1",
+            where email = $1
+              and (is_valid = false or recent_error_ct > 0)",
             [Email],
             Context),
     ok.

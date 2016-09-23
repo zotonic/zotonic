@@ -68,8 +68,8 @@ watches_remove(Id, Watches, _Context) ->
 %% @spec check_rsc(Id, Watches, Context) -> list()
 check_rsc(Id, Watches, Context) ->
     IsA = m_rsc:p(Id, is_a, Context),
-    Cats   = [ {cat, atom_to_list(A)} || {A,_} <- IsA ],
-    CatsEx = [ {cat_exclude, atom_to_list(A)} || {A,_} <- IsA ],
+    Cats   = [ {cat, z_convert:to_binary(A)} || {A,_} <- IsA ],
+    CatsEx = [ {cat_exclude, z_convert:to_binary(A)} || {A,_} <- IsA ],
     %% Pre-filter the list of queries according to category check
     W = lists:filter(fun({_, Props}) -> cat_matches(Cats, Props) andalso not(cat_matches(CatsEx, Props)) end, Watches),
     %% Filter the list by executing the query

@@ -11,8 +11,8 @@ modify_rsc_test() ->
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     CatId = m_rsc:rid(text, C),
 
-    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}], C)),
-    ?assertThrow({error, eacces}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
+    ?assertThrow({{error, eacces}, _Trace}, m_rsc:insert([{title, "Hello."}], C)),
+    ?assertThrow({{error, eacces}, _Trace}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
 
     {ok, Id} = m_rsc:insert([{title, "Hello."}, {category_id, CatId}], AdminC),
 
@@ -37,11 +37,6 @@ modify_rsc_test() ->
     ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, AdminC)),
 
     ?assertEqual(2, m_rsc:p(Id, version, AdminC)),
-    ?assertEqual(true, m_rsc:p(Id, is_published, AdminC)),
-    ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, AdminC)),
-
-    ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, C)), %% also visible for anonymous now
-
 
     %% Delete
     ?assertThrow({error, eacces}, m_rsc:delete(Id, C)),
@@ -58,22 +53,21 @@ modify_rsc_test() ->
 
 
 page_path_test() ->
-    C = z_context:new(testsandbox),
+    C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
 
     {ok, Id} = m_rsc:insert([{title, "Hello."}, {category, text}, {page_path, "/foo/bar"}], AdminC),
     ?assertEqual(<<"/foo/bar">>, m_rsc:p(Id, page_path, AdminC)),
-
-    ok.
+    ok = m_rsc:delete(Id, AdminC).
 
 %% @doc Resource name instead of id as argument.
 name_rid_test() ->
-    C = z_context:new(testsandbox),
+    C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
-    {ok, Id} = m_rsc:insert([{title, "What’s in a name?"}, {category_id, text}, {name, rose}], AdminC),
+    {ok, Id} = m_rsc:insert([{title, <<"What’s in a name?"/utf8>>}, {category_id, text}, {name, rose}], AdminC),
 
     m_rsc:get_raw(rose, AdminC),
     ok = m_rsc_update:flush(rose, AdminC),
     {ok, Id} = m_rsc:update(rose, [], AdminC),
-    {ok, Id} = m_rsc:duplicate(rose, [], AdminC),
-    {ok, Id} = m_rsc:delete(rose, AdminC).
+    {ok, _DuplicateId} = m_rsc:duplicate(rose, [], AdminC),
+    ok = m_rsc:delete(rose, AdminC).

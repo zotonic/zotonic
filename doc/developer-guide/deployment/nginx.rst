@@ -60,9 +60,10 @@ information on its configuration procedure.
 Use nginx for SSL termination
 -----------------------------
 
-It is possible to use nginx to terminate SSL. If this is done, then the Zotonic configuration
-of your site ``site.protocol`` needs to be set to ``https``, otherwise Zotonic doesn’t know
-that the site is running on https.
+It is possible to use nginx to terminate SSL. If this is done, then the
+:ref:`protocol <site-configuration-protocol>` configuration option needs to be
+set to ``https``. Otherwise Zotonic doesn’t know that the site is running on
+HTTPS.
 
 This is an example configuration for nginx::
 
