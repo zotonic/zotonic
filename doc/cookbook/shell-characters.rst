@@ -15,16 +15,18 @@ Erlang bit syntax is extraordinarily powerful and well worth learning.
 
 Review documenation here: http://www.erlang.org/doc/programming_examples/bit_syntax.html
 
-Here’s an experiment. Follow along in your handy Erlang shell::
+Here’s an experiment. Follow along in your handy Erlang shell:
 
-  1> A = "The cat on the mat". 
-  "The cat on the mat" 
-  2> B = <<"The cat on the mat">>. 
-  <<"The cat on the mat">> 
-  3> io:format(A,[]). 
-  The cat on the matok 
-  4> io:format(B,[]). 
-  The cat on the matok 
+.. code-block:: bash
+
+  1> A = "The cat on the mat".
+  "The cat on the mat"
+  2> B = <<"The cat on the mat">>.
+  <<"The cat on the mat">>
+  3> io:format(A,[]).
+  The cat on the matok
+  4> io:format(B,[]).
+  The cat on the matok
   So, big deal. What’s the difference?
 
 Memory consumption, that’s what. A is represented internally as a
@@ -68,37 +70,37 @@ How
 ---
 Study latexFilter/1 below::
 
-  -module(filterz). 
-  -export([latexFilter/1]). 
+  -module(filterz).
+  -export([latexFilter/1]).
 
-  %% Binary filters 
-  %% with many thanks to Andreas Stenius 
-  latexFilter(B) -> 
-     %% Delete control characters and extended ASCII 
-      B1 = << <<C>> || <<C>> <= B, (C == 10) or (C == 13) or (C >= 31), 
-  (C =< 127) >>, 
-     %% Filter binary for conversion to *.tex format 
-     %% NOTE: Partially tested, but needs more 
-     F = [{"\r","\n"},                         % Convert returns to new lines 
-          {"\n *","\n"},                       % Delete spaces following newline 
-          {"^\\s*", ""},                       % Delete all whitespace 
-  characters at beginning of manuscript 
-          {"^\n*", ""},                        % Delete new lines at 
-  beginning of manuscript 
-          {"\n+$","\n"},                       % Delete excess new lines 
-  at end of manuscript 
-          {"  +"," "},                         % Delete successive spaces 
-          {"\n{3,}","\n\\\\bigskip\n"},        % Convert three or more 
-  newlines to Latex bigskip 
-          {"[&$#%~^{}]", "\\\\&"},             % Escape reserved Latex character 
-          {"<i>", "\\\\emph{"},                % Convert HTML tag to Latex tag 
-          {"</i>", "}"},                       % Convert HTML tag to Latex tag 
-          {"\"(.*\")","``\\1"},                % Convert opening double quotes (") to Latex conventions (``) 
-          {" '"," `\\1"}],                     % Convert opening single quotes (') to Latex conventions (`) 
-     B2 = lists:foldl(fun({Pattern, Replacement}, Subject) -> 
-                         re:replace(Subject, Pattern, Replacement, 
+  %% Binary filters
+  %% with many thanks to Andreas Stenius
+  latexFilter(B) ->
+     %% Delete control characters and extended ASCII
+      B1 = << <<C>> || <<C>> <= B, (C == 10) or (C == 13) or (C >= 31),
+  (C =< 127) >>,
+     %% Filter binary for conversion to *.tex format
+     %% NOTE: Partially tested, but needs more
+     F = [{"\r","\n"},                         % Convert returns to new lines
+          {"\n *","\n"},                       % Delete spaces following newline
+          {"^\\s*", ""},                       % Delete all whitespace
+  characters at beginning of manuscript
+          {"^\n*", ""},                        % Delete new lines at
+  beginning of manuscript
+          {"\n+$","\n"},                       % Delete excess new lines
+  at end of manuscript
+          {"  +"," "},                         % Delete successive spaces
+          {"\n{3,}","\n\\\\bigskip\n"},        % Convert three or more
+  newlines to Latex bigskip
+          {"[&$#%~^{}]", "\\\\&"},             % Escape reserved Latex character
+          {"<i>", "\\\\emph{"},                % Convert HTML tag to Latex tag
+          {"</i>", "}"},                       % Convert HTML tag to Latex tag
+          {"\"(.*\")","``\\1"},                % Convert opening double quotes (") to Latex conventions (``)
+          {" '"," `\\1"}],                     % Convert opening single quotes (') to Latex conventions (`)
+     B2 = lists:foldl(fun({Pattern, Replacement}, Subject) ->
+                         re:replace(Subject, Pattern, Replacement,
                                     [global, {return, binary}]) end,
-                      B1, F), 
+                      B1, F),
      {ok, B2}.
 
 
@@ -106,7 +108,7 @@ The first thing that happens in latexFiler/1 is an Erlang binary
 comprehension to delete pesky control and extended ASCII characters::
 
   B1 = << <<C>> || <<C>> <= B, (C == 10) or (C == 13) or (C >= 31), (C =< 127) >>,
-  
+
 Note that the syntax is very similar to list comprehensions. As you
 can see, a single binary comprehension can chug out a lot of
 work. Define a few binaries in your Erlang shell and play around with

@@ -3,7 +3,7 @@
 
 The mod_ssl_self_signed module adds a basic certificate handling functionality
 to your Zotonic sites. When this module is enabled and there are no certificates
-or keys available it generates new keys and self signed certificates to get started 
+or keys available it generates new keys and self signed certificates to get started
 easily.
 
 
@@ -51,8 +51,8 @@ This is to prevent mixing them up with other sites:
         cat intermediate.crt root.crt > sitename.ca.crt
 
     This file should not be present when using a self signed certificate.
-    
-    
+
+
 Dependencies
 ------------
 
@@ -64,11 +64,15 @@ Format of the private key
 -------------------------
 
 The Erlang SSL implementation uses PKCS#1 format keys. OpenSSL generates (since 2010) PKCS#8
-format keys. The difference can be seen when inspecting the key file. A PKCS#1 key starts with::
+format keys. The difference can be seen when inspecting the key file. A PKCS#1 key starts with:
+
+.. code-block:: none
 
     -----BEGIN RSA PRIVATE KEY-----
 
-Where a PKCS#8 key starts with::
+Where a PKCS#8 key starts with:
+
+.. code-block:: none
 
     -----BEGIN PRIVATE KEY-----
 
@@ -109,14 +113,18 @@ Generating the self signed certificate
 --------------------------------------
 
 For generating the self signed certificate, mod_ssl runs the following commmands (where ``sitename`` should
-be replaced with the name of the site)::
+be replaced with the name of the site):
+
+.. code-block:: bash
 
     openssl req -x509 -nodes -days 3650 -subj '/CN=www.example.com' -newkey rsa:2048 \
          -keyout sitename.key -out sitename.crt
 
 This generates a private key of 2048 bits and a certificate that is valid for 10 years.
 
-Optionally, when the key turns out to be in PKCS#8 format, mod_ssl will run the following command as well::
+Optionally, when the key turns out to be in PKCS#8 format, mod_ssl will run the following command as well:
+
+.. code-block:: bash
 
     openssl rsa -in sitename.key -out sitename.pem
 

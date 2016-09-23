@@ -65,7 +65,9 @@ It is possible to use nginx to terminate SSL. If this is done, then the
 set to ``https``. Otherwise Zotonic doesn’t know that the site is running on
 HTTPS.
 
-This is an example configuration for nginx::
+This is an example configuration for nginx:
+
+.. code-block:: nginx
 
     server {
         listen 443 ssl;

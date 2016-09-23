@@ -1,3 +1,5 @@
+.. highlight:: bash
+
 .. _guide-deployment-privilegedports:
 
 Running on Port 80 and Port 443

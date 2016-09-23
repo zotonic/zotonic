@@ -11,7 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys, os, sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Zotonic'
-copyright = u'2009-2015, The Zotonic Project (zotonic.com)'
+copyright = u'2009–2016, The Zotonic Project (zotonic.com)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -98,36 +98,21 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {
-    'bodyfont': '"Lucida Grande", "Helvetica Neue", Helvetica, Arial, sans-serif',
-    'headfont': '"Lucida Grande", Arial, Helvetica, sans-serif',
-
-    'bgcolor': 'white',
-    'textcolor': '#222',
-    'linkcolor': '#0A8BDF',
-    'visitedlinkcolor': '#0463C1',
-    'headtextcolor': '#0778b0',
-
-    'collapsiblesidebar': 'false',
-    'sidebarbgcolor': 'white',
-    'sidebartextcolor': '#333',
-    'sidebarlinkcolor': '#0778b0',
-
-    'relbarbgcolor': '#039ed4',
-    'relbartextcolor': '#eee',
-    'relbarlinkcolor': '#eee',
-
-    'footerbgcolor': '#eee',
-    'footertextcolor': '#0778b0'
-}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
+html_theme_options = {
+    'collapse_navigation': True,
+    'display_version': True,
+    'logo_only': True
+}
+
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -285,6 +270,6 @@ class NewTocTree(TocTree):
         return rst
 
 def setup(app):
-    app.add_directive('toctree', NewTocTree)
+    app.add_directive('toctree-reversed', NewTocTree)
 
 extlinks = {'issue': ('https://github.com/zotonic/zotonic/issues/%s', '#') }

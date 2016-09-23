@@ -50,8 +50,8 @@ How can I install and learn Rebar?
 ...................................
 Create a root directory for experimentation. Let’s call it "learn."::
 
-  $ mkdir learn 
-  $ cd learn 
+  $ mkdir learn
+  $ cd learn
 
 Download the rebar binary
 .........................
@@ -70,12 +70,12 @@ In the shell::
 
   learn$ ./rebar create-app appid=zzz
   learn$ ls
-  >> rebar rebar-src src 
+  >> rebar rebar-src src
 
 Note that Rebar has created a directory named `src`::
 
-  learn $ ls src 
-  >> zzz_app.erl zzz.app.src zzz_sup.erl 
+  learn $ ls src
+  >> zzz_app.erl zzz.app.src zzz_sup.erl
 
 In `src`, Rebar has created three Erlang modules. Open them up and
 take a look in your favorite code editor:
@@ -88,9 +88,9 @@ How can I add a gen_server template to my new application?
 ..........................................................
 In the shell::
 
-  learn$ ./rebar create template=simplesrv srvid=zzz_srv 
-  learn$ ls src 
-  >> zzz_app.erl zzz.app.src zzz_srv.erl zzz_sup.erl 
+  learn$ ./rebar create template=simplesrv srvid=zzz_srv
+  learn$ ls src
+  >> zzz_app.erl zzz.app.src zzz_srv.erl zzz_sup.erl
 
 Open up ``zzz_svr.erl`` and look it over. For more info, study these ``gen_gerver`` resources:
 
@@ -98,27 +98,27 @@ http://www.erlang.org/doc/design_principles/gen_server_concepts.html
 http://www.erlang.org/doc/man/gen_server.html
 
 .. highlight: erlang
-   
+
 How can I make my new gen_server do something?
 ..............................................
 
 In ``src/zzz_srv.erl``, add two functions to the API ``-export`` directive as follows::
-  
+
   -export([start_link/0, say_hello/0, stop/0]).
 
 Add the say_hello/0 function as follows::
 
-  say_hello() -> 
+  say_hello() ->
     gen_server:call(?MODULE, hello).
 
 Replace handle_call(_Request, _From, State)::
- 
+
   handle_call(hello, _From, State) ->
-    io:format("Hello from zzz_srv!~n", []), 
-    {reply, ok, State}; 
-  handle_call(_Request, _From, State) -> 
-    Reply = ok, 
-    {reply, Reply, State}. 
+    io:format("Hello from zzz_srv!~n", []),
+    {reply, ok, State};
+  handle_call(_Request, _From, State) ->
+    Reply = ok,
+    {reply, Reply, State}.
 
 Add the stop/0 function::
 
@@ -139,29 +139,29 @@ You could compile this code with Rebar now, but let’s defer.
 
 To really get the hang, let’s create TWO applications. We'll put them under a new directory, `apps/`::
 
-  learn$ mkdir apps 
-  learn$ mkdir apps/zzz 
-  learn$ mkdir apps/zzz_lib 
+  learn$ mkdir apps
+  learn$ mkdir apps/zzz
+  learn$ mkdir apps/zzz_lib
   learn$ ls apps
-  >> zzz zzz_lib 
+  >> zzz zzz_lib
   learn$ mv src apps/zzz/
   learn$ ls apps/zzz
-  >> src 
+  >> src
 
 Now we'll create the zzz_lib application::
-    
+
   learn$ ./rebar create-app appid=zzz_lib
   learn$ ls
   >> apps rebar rebar-src src
 
 And let’s make it do something::
 
-  learn$ cd src 
+  learn$ cd src
 
 Create and save a module called ``hello.erl`` that does something::
 
   -module(hello).
-  -export([hello/0]). 
+  -export([hello/0]).
   hello() ->
     io:format("Hello from zzz_lib!~n", []).
 
@@ -169,22 +169,22 @@ Back in the shell move the ``src`` directory to ``apps/zzz_lib``::
 
   src$ cd ..
   learn$ mv src apps/zzz_lib/
-  
+
 How can I compile these two applications?
 .........................................
 
 First, we need to create a ``rebar.config`` file in our project home
 directory. Create the file, add the following directive and save::
 
-  {sub_dirs, ["apps/zzz", "apps/zzz/src", "apps/zzz_lib", "apps/zzz_lib/src" ] }. 
+  {sub_dirs, ["apps/zzz", "apps/zzz/src", "apps/zzz_lib", "apps/zzz_lib/src" ] }.
 
 Back in the shell::
-    
+
   learn$ ls
   >> apps rebar rebar-src rebar.config
 
 Now compile::
-    
+
   learn$ ./rebar compile
 
 If you see the following, pat yourself on the back::
@@ -200,16 +200,16 @@ If you see the following, pat yourself on the back::
   Compiled src/zzz_lib_sup.erl
   ==> src (compile)
   ==> learn (compile)
-  
+
 Check out the ebin directories::
 
-  learn$ ls apps/zzz/ebin 
+  learn$ ls apps/zzz/ebin
   >> zzz.app zzz_app.beam zzz_srv.beam zzz_sup.beam
-  learn$ ls apps/zzz_lib/ebin 
-  >> hello.beam zzz_lib.app zzz_lib_app.beam zzz_lib_sup.beam 
+  learn$ ls apps/zzz_lib/ebin
+  >> hello.beam zzz_lib.app zzz_lib_app.beam zzz_lib_sup.beam
 
 you’re now ready to rock and roll!!
-  
+
 How can I test?
 ...............
 
@@ -217,15 +217,15 @@ Start the Erlang shell::
 
   learn$ erl -pa apps/*/ebin
   1> zzz_srv:start_link().
-  {ok,<0.33.0>} 
+  {ok,<0.33.0>}
   2> zzz_srv:say_hello().
-  Hello from zzz_srv! 
+  Hello from zzz_srv!
   ok
   3> zzz_srv:stop().
-  ok 
+  ok
   4> hello:hello().
   Hello from zzz_lib!
-  ok 
+  ok
 
 Troubleshooting
 ---------------
@@ -234,7 +234,9 @@ I got an error when I compiled. What now?
 
 make sure your ``rebar.config`` directive, as shown above, is correct.
 
-Make sure you have this directory structure::
+Make sure you have this directory structure:
+
+.. code-block:: bash
 
   learn$ tree
   .
@@ -257,7 +259,7 @@ Make sure you have this directory structure::
   └── rebar.config
 
 Fix any source code errors, and recompile::
-    
+
   learn$ ./rebar compile
 
 What you've learned

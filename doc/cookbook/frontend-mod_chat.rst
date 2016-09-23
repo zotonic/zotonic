@@ -20,13 +20,17 @@ Mercurial (the ``hg`` command) installed.
 How
 ---
 
-Install the ``mod_chat`` module using ``zotonic modules install``::
+Install the ``mod_chat`` module using ``zotonic modules install``:
 
-  :~$ zotonic modules install mod_chat
+.. code-block:: bash
+
+  $ zotonic modules install mod_chat
 
 This should download ``mod_chat`` and install it in the
 `priv/modules/` directory. Restart and rebuild zotonic to see the
-effect of these changes::
+effect of these changes:
+
+.. code-block:: bash
 
   $ cd /home/zotonic/zotonic
   $ zotonic stop

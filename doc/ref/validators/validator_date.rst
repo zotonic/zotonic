@@ -10,13 +10,13 @@ A quick guide to validating a date in Zotonic:
 .. code-block:: django
 
    <input type="text" id="my_date" name="my_date" value="" />
-   {% validate id="my_date" type={date separator="\" format="b"} %}
+   {% validate id="my_date" type={date separator="-" format="b"} %}
 
 This code validates when the user enters a date in the following format:
 
 .. code-block:: none
 
-    yyyy\mm\dd
+    yyyy-mm-dd
 
 Arguments
 ---------

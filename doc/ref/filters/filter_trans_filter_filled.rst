@@ -1,4 +1,3 @@
-.. highlight:: django
 .. include:: meta-trans_filter_filled.rst
 
 Filters all empty translations from a property.
@@ -7,11 +6,11 @@ This is used if it is important to show a text, but not all translations are fil
 
 The filter takes as input a resource or other variable and as argumnent the property to be shown.
 
-Example usage::
+Example usage:
+
+.. code-block:: none
 
     {{ id|trans_filter_filled:`body` }}
-
-.. highlight:: erlang
 
 If the resource ``id`` has the body property::
 

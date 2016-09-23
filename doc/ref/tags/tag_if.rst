@@ -9,7 +9,9 @@ Show a block if the condition is true.
 
 The ``{% if %}`` tag evaluates a variable and if the result is true (boolean true, number unequal to zero, non empty string or a non empty list) then the contents of the if-block are output.  When the if-variable test fails then the optional ``{% elif %}`` blocks are evaluated. When the if and all optional elif variable tests fail, the optional ``{% else %}`` block content is output.
 
-Example::
+Example:
+
+.. code-block:: django
 
    {% if genre == "pop" %}
      Popular music.
@@ -39,7 +41,7 @@ The ”not” operator can be used to negate a boolean value::
 
    {% if full_moon or daytime or not clearsky %}
 
-.. note:: 
+.. note::
    Besides the ``{% elif %}`` tag we also support the alias ``{% elseif %}``.
 
 
