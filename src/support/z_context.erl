@@ -188,7 +188,7 @@ new(Req, Module) when is_map(Req) ->
 
 
 set_default_language_tz(Context) ->
-    F = fun() -> {z_trans:default_language(Context), tz_config(Context)} end,
+    F = fun() -> {z_language:default_language(Context), tz_config(Context)} end,
     {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
     Context#context{
         language= [DefaultLang],
@@ -994,7 +994,8 @@ incr(Key, Value, Context) ->
 %% @doc Return the selected language of the Context
 -spec language(#context{}) -> atom().
 language(Context) ->
-    % A check on atom must exist because the language setting may be stored in mnesia and passed to the context when the site starts
+    % A check on atom must exist because the language setting may be stored in mnesia and
+    % passed to the context when the site starts
     case Context#context.language of
         [Language|_] -> Language;
         Language -> Language
@@ -1016,9 +1017,8 @@ set_language(Lang, Context) when is_atom(Lang) ->
 set_language(Langs, Context) when is_list(Langs) ->
     Context#context{language=Langs};
 set_language(Lang, Context) ->
-    Lang1 = z_convert:to_list(Lang),
-    case z_trans:is_language(Lang1) of
-        true -> set_language(list_to_atom(Lang1), Context);
+    case z_language:is_valid(Lang) of
+        true -> set_language(z_convert:to_atom(Lang), Context);
         false -> Context
     end.
 

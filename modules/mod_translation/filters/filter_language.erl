@@ -29,8 +29,8 @@ language(B, Context) when is_binary(B) ->
     z_context:language(Context);
 language(Id, Context) when is_integer(Id) ->
     language(m_rsc:p_no_acl(Id, language, Context), Context);
-language(ISO, _Context) when is_atom(ISO) ->
-    ISO;
+language(LanguageCode, _Context) when is_atom(LanguageCode) ->
+    LanguageCode;
 language({trans, Tr}, Context) ->
     language([ L || {L,_} <- Tr ], Context);
 language([], Context) ->

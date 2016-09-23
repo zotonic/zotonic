@@ -293,7 +293,7 @@ find_value(_Key, #rsc_list{list=[]}, _TplVars, _Context) ->
 find_value(Name, #m{model=Module} = M, _TplVars, Context) ->
     Module:m_find_value(Name, M, Context);
 find_value(IsoAtom, Text, _TplVars, _Context) when is_atom(IsoAtom), is_binary(Text) ->
-    case z_trans:is_language(atom_to_list(IsoAtom)) of
+    case z_language:is_valid(atom_to_list(IsoAtom)) of
         true -> Text;
         false -> undefined
     end;

@@ -1,8 +1,8 @@
-<p>{_ Are you sure you want to delete the language _} <em>{{ lang.language }}</em> ({{code}})?</p>
+<p class="mod_translation-warning">{_ Are you sure you want to remove this language? _}</p>
 
-<p>{_ This will not affect any translations in the database or .po files. This only removes the reference to the language, making it impossible to select or edit content written in the delete language. _}</p>
+<p>{_ Heads up! Removing this language will <strong>not</strong> delete any of the existing translations. But until you add (and activate) the language again, you will not be able to select or edit content written in this language. _}</p>
 
 <div class="modal-footer">
     {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-    {% button class="btn btn-primary" postback={language_delete code=code} delegate="mod_translation" text=_"Delete language" %}
+    {% button class="btn btn-primary" postback={language_delete code=code} delegate="mod_translation" text=_"Remove" %}
 </div>

@@ -1,5 +1,5 @@
 {% with m.config.i18n.language_list.list as languages %}
-    {% with m.rsc[id].language as r_lang %}
+    {% with m.rsc[id].name as r_lang %}
         {% wire id=#form type="submit"
 	        postback={
 	            rsc_edit_basics

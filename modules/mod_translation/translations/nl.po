@@ -19,243 +19,483 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.7.1\n"
 
-#: modules/mod_translation/templates/admin_translation_status.tpl:22
-msgid "Active modules"
-msgstr "Actieve modules"
+#: modules/mod_translation/mod_translation.erl:329
+msgid "Reloading all .po files in the background."
+msgstr "Alle .po bestanden worden opnieuw geladen in een achtergrondproces."
+
+#: modules/mod_translation/mod_translation.erl:475
+msgid "Sorry, you can't disable default language."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:281
+#: modules/mod_translation/mod_translation.erl:292
+#: modules/mod_translation/mod_translation.erl:305
+msgid "Sorry, you don't have permission to change the language list."
+msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
+
+#: modules/mod_translation/mod_translation.erl:331
+msgid "Sorry, you don't have permission to reload translations."
+msgstr "Sorry, je hebt geen toestemming om talen opnieuw te laden."
+
+#: modules/mod_translation/mod_translation.erl:321
+msgid "Sorry, you don't have permission to scan for translations."
+msgstr "Sorry, je hebt geen toestemming om talen te scannen."
+
+#: modules/mod_translation/mod_translation.erl:406
+msgid "Sorry, you don't have permission to set the default language."
+msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
+
+#: modules/mod_translation/mod_translation.erl:319
+msgid "Started building the .pot files. This may take a while..."
+msgstr ""
+"Gestart met het genereren van .pot bestanden. Dit kan enige tijd duren..."
+
+#: modules/mod_translation/mod_translation.erl:599
+msgid "Translation"
+msgstr "Vertalingen"
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:17
+msgid " Active modules "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:21
+msgid " Add "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:24
+msgid " Added "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail.tpl:19
+msgid " All languages "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:1
+msgid " Are you sure you want to remove this language? "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:77
+msgid " Available sub-languages "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:26
+msgid " Code "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:94
+msgid " Configuration "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:1
+msgid " Copy texts from a language to the currently selected language. "
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:19
+msgid " Copy translation "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_sublanguage_note.tpl:2
+msgid " Deciding on a main language or sub-language "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:24
+msgid " Default "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:9
+msgid " Developer Documentation "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:23
+msgid " Enabled "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:53
+msgid " Fallback language "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:177
+msgid " For Developers "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:121
+msgid " For new visitors, set the language to the default language "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:3
+msgid ""
+" Heads up! Removing this language will <strong>not</strong> delete any of "
+"the existing translations. But until you add (and activate) the language "
+"again, you will not be able to select or edit content written in this "
+"language. "
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
+msgid " Help about translations "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:161
+msgid ""
+" If you change the stemmer language then you will need to reindex all data. "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:25
+msgid " Language "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:72
+msgid " Language in URL "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:131
+msgid " Language used for stemming of the search indices "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:7
+#: modules/mod_translation/templates/admin_translation_status.tpl:7
+msgid " Languages overview "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:9
+msgid " More than one language must be active. "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:29
+msgid " Name in menu "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:83
+msgid " No languages configured. "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:9
+msgid " Part of "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:34
+#: modules/mod_translation/templates/admin_translation.tpl:27
+msgid " Region "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:192
+msgid ""
+" Reload all translations from the modules and site. All templates will be "
+"recompiled. "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:185
+msgid ""
+" Scan all templates for translation tags and generate .pot files that can be "
+"used for translating the templates. "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:40
+#: modules/mod_translation/templates/admin_translation.tpl:28
+msgid " Script "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:9
+msgid " See also: "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:5
+msgid " Select the language to copy from: "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:198
+msgid " Show per module how much of the templates are translated. "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:109
+msgid " Show the language in the URL "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
+msgid ""
+" The golden rule when choosing a language is simplicity. Stick to the main "
+"language if you can; use a sub-language (adding region or script) when it "
+"adds useful distinguishing information. "
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
+msgid ""
+" The title, body and other texts can be translated in different languages. "
+"Here you can select which languages will be used. "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:23
+msgid " Title "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:13
+msgid ""
+" To view the up-to-date version of this module, please run \"generate .pot "
+"files\" first from the translation overview. "
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
+msgid " Translate this page in other languages. "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:3
+msgid " Translation "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:197
+#: modules/mod_translation/templates/admin_translation_status.tpl:3
+#: modules/mod_translation/templates/admin_translation_status.tpl:8
+msgid " Translation status "
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:12
+msgid " Translation status per module "
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:6
+msgid " Translations "
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:58
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:63
+msgid " not enabled "
+msgstr ""
 
 #: modules/mod_translation/templates/admin_translation.tpl:14
 #: modules/mod_translation/templates/admin_translation.tpl:15
 msgid "Add language"
 msgstr "Taal toevoegen"
 
-#: modules/mod_translation/templates/admin_translation.tpl:10
-msgid "All languages known to the system. You can add or remove languages."
-msgstr ""
-"Alle in het systeem bekende talen. Je kunt hier talen toevoegen of verwijderen."
-
-#: modules/mod_translation/templates/_dialog_language_delete.tpl:1
-msgid "Are you sure you want to delete the language"
-msgstr "Weet je zeker dat je de deze taal wilt verwijderen: "
-
-#: modules/mod_translation/templates/_dialog_language_copy.tpl:9
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:14
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:6
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:37
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: modules/mod_translation/templates/_dialog_language_copy.tpl:10
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: modules/mod_translation/templates/_dialog_language_copy.tpl:1
-msgid "Copy texts from a language to the currently selected language."
-msgstr "Kopieer teksten in één taal naar de geselecteerde talen."
-
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:19
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:20
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:22
 msgid "Copy translation"
 msgstr "Kopieer vertalingen"
 
-#: modules/mod_translation/templates/admin_translation.tpl:23
-msgid "Default"
-msgstr "Standaard"
-
-#: modules/mod_translation/templates/admin_translation.tpl:47
-msgid "Delete"
-msgstr "Verwijder"
-
-#: modules/mod_translation/templates/_dialog_language_delete.tpl:7
-#: modules/mod_translation/templates/admin_translation.tpl:49
-msgid "Delete language"
-msgstr "Verwijder taal"
-
-#: modules/mod_translation/templates/admin_translation.tpl:54
-msgid "Edit"
-msgstr "Bewerk"
-
-#: modules/mod_translation/templates/admin_translation.tpl:56
-#: modules/mod_translation/templates/admin_translation.tpl:62
-#: modules/mod_translation/templates/admin_translation.tpl:63
-msgid "Edit language"
-msgstr "Taal bewerken"
-
-#: modules/mod_translation/templates/admin_translation.tpl:22
-msgid "Enabled"
-msgstr "Actief"
-
-#: modules/mod_translation/templates/admin_translation.tpl:11
-msgid ""
-"Enabled languages show up in the language selection menu. The default language "
-"is used for new visitors without a selected language."
+#: modules/mod_translation/templates/admin_translation.tpl:140
+msgid "Danish"
 msgstr ""
-"Actieve talen worden getoond in het taalselectie-menu. De\n"
-"standaardtaal is voor nieuwe bezoekers die nog geen voorkeurstaal\n"
-"hebben ingesteld."
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:1
-msgid ""
-"Enter the iso code (for example <em>en</em> or <em>nl</em>), and the title of "
-"the language. Use the native form of the language, for example <em>English</"
-"em>, <em>Türkçe</em> or <em>Français</em>."
-msgstr "Voer de iso-code en de titel van de taal in."
+#: modules/mod_translation/templates/admin_translation.tpl:69
+msgid "Details"
+msgstr ""
 
-#: modules/mod_translation/templates/admin_translation.tpl:85
+#: modules/mod_translation/templates/admin_translation.tpl:142
+msgid "Dutch"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:141
+msgid "English"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:143
+msgid "Finnish"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:144
+msgid "French"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:183
 msgid "Generate .pot files"
 msgstr "Genereer .pot bestanden"
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
-msgid "Help about translations"
-msgstr "Hulp over talen"
+#: modules/mod_translation/templates/admin_translation.tpl:145
+msgid "German"
+msgstr ""
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:6
-#: modules/mod_translation/templates/admin_translation.tpl:24
-msgid "ISO Code"
-msgstr "ISO code"
+#: modules/mod_translation/templates/admin_translation.tpl:146
+msgid "Hungarian"
+msgstr ""
 
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:19
-#: modules/mod_translation/templates/admin_translation.tpl:25
-#: modules/mod_translation/templates/text/_language_switch.tpl:1
+#: modules/mod_translation/templates/admin_translation.tpl:147
+msgid "Italian"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:72
 msgid "Language"
 msgstr "Taal"
 
-#: modules/mod_translation/templates/admin_translation.tpl:8
-msgid "Languages overview"
-msgstr "Taaloverzicht"
+#: modules/mod_translation/templates/admin_translation.tpl:148
+msgid "Norwegian"
+msgstr ""
 
-#: modules/mod_translation/templates/admin_translation.tpl:68
-msgid "No languages configured."
-msgstr "Geen talen geconfigureerd."
+#: modules/mod_translation/templates/admin_translation.tpl:165
+msgid "Rebuild search indices"
+msgstr ""
 
-#: modules/mod_translation/templates/admin_translation.tpl:115
-msgid "Put the current language in the URL"
-msgstr "Toon de taal in de URL"
-
-#: modules/mod_translation/templates/admin_translation.tpl:92
+#: modules/mod_translation/templates/admin_translation.tpl:190
 msgid "Reload Translations"
 msgstr "Talen opnieuw laden"
 
-#: modules/mod_translation/templates/admin_translation.tpl:94
-msgid ""
-"Reload all translations from the modules and site. All templates will be "
-"recompiled."
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:7
+#: modules/mod_translation/templates/admin_translation.tpl:60
+msgid "Remove"
 msgstr ""
-"Herlaad alle vertalingen van de modules en de site. All templates worden "
-"opnieuw gecompileerd."
 
-#: modules/mod_translation/mod_translation.erl:255
-msgid "Reloading all .po files in the background."
-msgstr "Alle .po bestanden worden opnieuw geladen in een achtergrondproces."
-
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:38
-msgid "Save"
-msgstr "Bewaar"
-
-#: modules/mod_translation/templates/admin_translation.tpl:87
-msgid ""
-"Scan all templates for translation tags and generate .pot files that can be "
-"used for translating the templates."
+#: modules/mod_translation/templates/admin_translation.tpl:63
+msgid "Remove language"
 msgstr ""
-"Scan alle templates voor vertaal-tags en genereer de .pot bestanden\n"
-"die gebruikt worden voor het maken van vertalingen."
 
-#: modules/mod_translation/templates/text/language_switch.tpl:3
-msgid "Select language"
-msgstr "Selecteer taal"
-
-#: modules/mod_translation/templates/_dialog_language_copy.tpl:4
-msgid "Select the language to copy from:"
-msgstr "Selecteer de brontaal voor het kopiëren"
-
-#: modules/mod_translation/templates/text/language_switch.tpl:7
-msgid "Select your preferred language."
-msgstr "Selecteer je voorkeurstaal"
-
-#: modules/mod_translation/templates/_dialog_language_edit.tpl:27
-msgid "Show in menu"
-msgstr "Toon in menu"
-
-#: modules/mod_translation/templates/admin_translation.tpl:100
-msgid "Show per module how much of the templates are translated."
-msgstr "Toon per module hoeveel van de vertalingen zijn ingevoerd."
-
-#: modules/mod_translation/mod_translation.erl:269
-#: modules/mod_translation/mod_translation.erl:280
-#: modules/mod_translation/mod_translation.erl:290
-msgid "Sorry, you don't have permission to change the language list."
-msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
-
-#: modules/mod_translation/mod_translation.erl:257
-msgid "Sorry, you don't have permission to reload translations."
-msgstr "Sorry, je hebt geen toestemming om talen opnieuw te laden."
-
-#: modules/mod_translation/mod_translation.erl:249
-msgid "Sorry, you don't have permission to scan for translations."
-msgstr "Sorry, je hebt geen toestemming om talen te scannen."
-
-#: modules/mod_translation/mod_translation.erl:239
-msgid "Sorry, you don't have permission to set the default language."
-msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
-
-#: modules/mod_translation/mod_translation.erl:247
-msgid "Started building the .pot files. This may take a while..."
-msgstr "Gestart met het genereren van .pot bestanden. Dit kan enige tijd duren..."
-
-#: modules/mod_translation/templates/text/_language_switch.tpl:1
-msgid "Switch language"
-msgstr "Verander taal"
-
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
-msgid ""
-"The title, body and other texts can be translated in different languages. Here "
-"you can select which languages will be used."
+#: modules/mod_translation/templates/admin_translation.tpl:149
+msgid "Romanian"
 msgstr ""
-"De titel en tekst kunnen vertaald worden in andere talen. Hier kan je\n"
-"kiezen welke talen daarvoor gebruikt kunnen worden."
 
-#: modules/mod_translation/templates/_dialog_language_delete.tpl:3
-msgid ""
-"This will not affect any translations in the database or .po files. This only "
-"removes the reference to the language, making it impossible to select or edit "
-"content written in the delete language."
+#: modules/mod_translation/templates/admin_translation.tpl:150
+msgid "Russian"
 msgstr ""
-"Dit heeft geen invloed op enige vertalingen in de database of in .po\n"
-"bestanden. Het verwijdert alleen de verwijzing naar de taal, zodat het\n"
-"onmogelijk wordt content in deze taal te vertalen."
 
-#: modules/mod_translation/templates/admin_translation_status.tpl:27
-msgid "Title"
-msgstr "Titel"
-
-#: modules/mod_translation/templates/admin_translation_status.tpl:18
-msgid ""
-"To view the up-to-date version of this module, please run \"generate .pot files"
-"\" first from the translation overview."
+#: modules/mod_translation/templates/admin_translation.tpl:151
+msgid "Spanish"
 msgstr ""
-"Om een up-todate versie van deze module te zien, kies \"genereer .pot\n"
-"bestanden\" eerst vanuit het vertaal-overzicht."
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
-msgid "Translate this page in other languages."
-msgstr "Vertaal deze pagina in andere talen."
+#: modules/mod_translation/templates/admin_translation.tpl:152
+msgid "Swedish"
+msgstr ""
 
-#: modules/mod_translation/templates/admin_translation.tpl:3
-#: modules/mod_translation/mod_translation.erl:501
-msgid "Translation"
-msgstr "Vertalingen"
+#: modules/mod_translation/templates/admin_translation.tpl:153
+msgid "Turkish"
+msgstr ""
 
-#: modules/mod_translation/templates/admin_translation.tpl:79
-msgid "Translation configuration and tools"
-msgstr "Configuratie van talen en hulpmiddelen"
+#~ msgid "Active modules"
+#~ msgstr "Actieve modules"
 
-#: modules/mod_translation/templates/admin_translation.tpl:99
-#: modules/mod_translation/templates/admin_translation_status.tpl:3
-msgid "Translation status"
-msgstr "Status van de vertalingen"
+#~ msgid "All languages known to the system. You can add or remove languages."
+#~ msgstr ""
+#~ "Alle in het systeem bekende talen. Je kunt hier talen toevoegen of "
+#~ "verwijderen."
 
-#: modules/mod_translation/templates/admin_translation_status.tpl:16
-msgid "Translation status per module"
-msgstr "Status van de vertalingen per module"
+#~ msgid "Are you sure you want to delete the language"
+#~ msgstr "Weet je zeker dat je de deze taal wilt verwijderen: "
 
-#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:6
-msgid "Translations"
-msgstr "Vertalingen"
+#~ msgid "Copy texts from a language to the currently selected language."
+#~ msgstr "Kopieer teksten in één taal naar de geselecteerde talen."
+
+#~ msgid "Default"
+#~ msgstr "Standaard"
+
+#~ msgid "Delete"
+#~ msgstr "Verwijder"
+
+#~ msgid "Delete language"
+#~ msgstr "Verwijder taal"
+
+#~ msgid "Edit"
+#~ msgstr "Bewerk"
+
+#~ msgid "Edit language"
+#~ msgstr "Taal bewerken"
+
+#~ msgid "Enabled"
+#~ msgstr "Actief"
+
+#~ msgid ""
+#~ "Enabled languages show up in the language selection menu. The default "
+#~ "language is used for new visitors without a selected language."
+#~ msgstr ""
+#~ "Actieve talen worden getoond in het taalselectie-menu. De\n"
+#~ "standaardtaal is voor nieuwe bezoekers die nog geen voorkeurstaal\n"
+#~ "hebben ingesteld."
+
+#~ msgid ""
+#~ "Enter the iso code (for example <em>en</em> or <em>nl</em>), and the "
+#~ "title of the language. Use the native form of the language, for example "
+#~ "<em>English</em>, <em>Türkçe</em> or <em>Français</em>."
+#~ msgstr "Voer de iso-code en de titel van de taal in."
+
+#~ msgid "Help about translations"
+#~ msgstr "Hulp over talen"
+
+#~ msgid "ISO Code"
+#~ msgstr "ISO code"
+
+#~ msgid "Languages overview"
+#~ msgstr "Taaloverzicht"
+
+#~ msgid "No languages configured."
+#~ msgstr "Geen talen geconfigureerd."
+
+#~ msgid "Put the current language in the URL"
+#~ msgstr "Toon de taal in de URL"
+
+#~ msgid ""
+#~ "Reload all translations from the modules and site. All templates will be "
+#~ "recompiled."
+#~ msgstr ""
+#~ "Herlaad alle vertalingen van de modules en de site. All templates worden "
+#~ "opnieuw gecompileerd."
+
+#~ msgid "Save"
+#~ msgstr "Bewaar"
+
+#~ msgid ""
+#~ "Scan all templates for translation tags and generate .pot files that can "
+#~ "be used for translating the templates."
+#~ msgstr ""
+#~ "Scan alle templates voor vertaal-tags en genereer de .pot bestanden\n"
+#~ "die gebruikt worden voor het maken van vertalingen."
+
+#~ msgid "Select language"
+#~ msgstr "Selecteer taal"
+
+#~ msgid "Select the language to copy from:"
+#~ msgstr "Selecteer de brontaal voor het kopiëren"
+
+#~ msgid "Select your preferred language."
+#~ msgstr "Selecteer je voorkeurstaal"
+
+#~ msgid "Show in menu"
+#~ msgstr "Toon in menu"
+
+#~ msgid "Show per module how much of the templates are translated."
+#~ msgstr "Toon per module hoeveel van de vertalingen zijn ingevoerd."
+
+#~ msgid "Switch language"
+#~ msgstr "Verander taal"
+
+#~ msgid ""
+#~ "The title, body and other texts can be translated in different languages. "
+#~ "Here you can select which languages will be used."
+#~ msgstr ""
+#~ "De titel en tekst kunnen vertaald worden in andere talen. Hier kan je\n"
+#~ "kiezen welke talen daarvoor gebruikt kunnen worden."
+
+#~ msgid ""
+#~ "This will not affect any translations in the database or .po files. This "
+#~ "only removes the reference to the language, making it impossible to "
+#~ "select or edit content written in the delete language."
+#~ msgstr ""
+#~ "Dit heeft geen invloed op enige vertalingen in de database of in .po\n"
+#~ "bestanden. Het verwijdert alleen de verwijzing naar de taal, zodat het\n"
+#~ "onmogelijk wordt content in deze taal te vertalen."
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid ""
+#~ "To view the up-to-date version of this module, please run \"generate .pot "
+#~ "files\" first from the translation overview."
+#~ msgstr ""
+#~ "Om een up-todate versie van deze module te zien, kies \"genereer .pot\n"
+#~ "bestanden\" eerst vanuit het vertaal-overzicht."
+
+#~ msgid "Translate this page in other languages."
+#~ msgstr "Vertaal deze pagina in andere talen."
+
+#~ msgid "Translation configuration and tools"
+#~ msgstr "Configuratie van talen en hulpmiddelen"
+
+#~ msgid "Translation status"
+#~ msgstr "Status van de vertalingen"
+
+#~ msgid "Translation status per module"
+#~ msgstr "Status van de vertalingen per module"
+
+#~ msgid "Translations"
+#~ msgstr "Vertalingen"

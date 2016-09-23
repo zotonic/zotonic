@@ -61,4 +61,3 @@ event(#submit{message={config_save, Args}}, Context) ->
         false ->
             z_render:growl_error("Only administrators can delete configurations.", Context)
     end.
-

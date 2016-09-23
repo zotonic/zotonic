@@ -951,43 +951,76 @@ function z_progress(id, value)
 
 function z_reload(args)
 {
-    var page = $('#logon_form input[name="page"]');
+    var page = $('#logon_form input[name="page"]'),
+        qs = ensure_name_value(args),
+        rewriteUrl,
+        newLanguage,
+        href,
+        re,
+        pathname,
+        parts;
+
     z_start_spinner();
     if (page.length > 0 && page.val() !== "" && page.val() !== '#reload') {
-        window.location.href = window.location.protocol+"//"+window.location.host+page.val();
+        window.location.href = window.location.protocol
+            + "//"
+            + window.location.host
+            + page.val();
     } else {
-        if (typeof args == "undefined")
+        if (typeof args === "undefined") {
             window.location.reload(true);
-        else {
-            var qs = ensure_name_value(args);
-            var href;
-
-            if (qs.length == 1 &&  typeof args.z_language == "string") {
-                if (  window.location.pathname.substring(0,2+z_language.length) == "/"+z_language+"/") {
-                    href = window.location.protocol+"//"+window.location.host
-                            +"/"+args.z_language+"/"
-                            +window.location.pathname.substring(2+args.z_language.length);
-                } else {
-                    href = window.location.protocol+"//"+window.location.host
-                            +"/"+args.z_language
-                            +window.location.pathname;
-                }
-                if (window.location.search == "")
-                    window.location.href = href;
-                else
-                    window.location.href = href + "?" + window.location.search;
+            return;
+        }
+        newLanguage = args.z_language;
+        if (typeof newLanguage === "string") {
+            rewriteUrl = Boolean(args["z_rewrite_url"]);
+            // Add or remove language from URL:
+            pathname = window.location.pathname.substring(1);
+            if (z_language) {
+                // Remove current language
+                re = new RegExp("^" + z_language);
+                pathname = pathname.replace(re, "");
+            }
+            // Get path parts
+            parts = pathname.split("/")
+                .filter(function(p) {
+                    return p !== "";
+                });
+            if (rewriteUrl) {
+                // Add language to start
+                parts.unshift(newLanguage);
+            }
+            href = window.location.protocol
+                + "//"
+                + window.location.host
+                + "/"
+                + parts.join("/")
+                + ((rewriteUrl && (pathname === "" || pathname === "/")) ? "/" : "")
+        } else {
+            href = window.location.protocol
+                + "//"
+                + window.location.host
+                + window.location.pathname;
+        }
+        if (window.location.search == "") {
+            window.location.href = href;
+        } else {
+            // remove z_language and z_rewrite_url, keep other query params
+            var kvs;
+            kvs = window.location.search.substring(1)
+                .split(/[&;]/)
+                .map(function(kv) {
+                    return (kv.match("^z_language") || kv.match("^z_rewrite_url"))
+                        ? ""
+                        : kv;
+                })
+                .filter(function(kv) {
+                    return kv !== "";
+                });
+            if (kvs === "") {
+                window.location.href = href;
             } else {
-                href = window.location.protocol+"//"+window.location.host+window.location.pathname;
-                if (window.location.search == "") {
-                    window.location.href = href + '?' + $.param(qs);
-                } else {
-                    var loc_qs = $.parseQuery();
-                    for (var prop in loc_qs) {
-                        if (typeof loc_qs[prop] != "undefined" && typeof args[prop] == "undefined")
-                            qs.push({name: prop, value: loc_qs[prop]});
-                    }
-                    window.location.href = href+"?" + $.param(qs);
-                }
+                window.location.href = href + "?" + kvs.join("&");
             }
         }
     }
@@ -2280,7 +2313,7 @@ $.extend({
 
 /**
  * A simple querystring parser.
- * Example usage: var q = $.parseQuery(); q.fooreturns  "bar" if query contains "?foo=bar"; multiple values are added to an array.
+ * Example usage: var q = $.parseQuery(); q.foo returns "bar" if query contains "?foo=bar"; multiple values are added to an array.
  * Values are unescaped by default and plus signs replaced with spaces, or an alternate processing function can be passed in the params object .
  * http://actingthemaggot.com/jquery
  *

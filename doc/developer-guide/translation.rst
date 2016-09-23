@@ -30,13 +30,13 @@ Before you can use multiple languages, you first need to enable
 :ref:`mod_translation`.
 
 Next, you need to tell Zotonic which languages you are going to use.
-You can do this in the /admin, following the `Translation` menu item
-in the `Structure` submenu.
+You can do this in admin: Structure > Translation.
 
-On this page you can add and remove languages, enable/disable
-languages and more. Note that a language is always identified by its
-two letter `ISO639-1 language code
-<http://nl.wikipedia.org/wiki/Lijst_van_ISO_639-1-codes>`_.
+On this page you can add and remove languages, enable/disable languages and more.
+
+The selected language can optionally get displayed in the URL of the page - useful if language versions of the page should be accessible as permanent URLs, for instance for search engine indexing.
+
+The language code in the URL is either a 2-letter code (e.g. ``en``), a 2-2 language-territory combination (e.g. ``en-gb``), a 2-4 language-script combination (e.g. ``zh-hant``), or a language-territory-territory combination (e.g. ``zh-hant-hk``).
 
 
 Translation sources
@@ -60,9 +60,17 @@ Texts in ``erl`` files use the ``?__()`` syntax::
 
     ?__("Translate me", Context)
 
-and using string concatenation::
+and with binary strings::
+
+    ?__(<<"Translate me">>, Context)
+
+using string concatenation::
 
     [?__("Edit:", Context), " " ++ Title]
+
+and with binary strings::
+
+    ?__(<<"Edit:"/binary, " ", Title/binary>>, Context)
 
 
 Generation of translations
@@ -79,28 +87,22 @@ static translations live inside the ``translations/`` subdirectory of
 a module (remember: a Zotonic site is just a module!).
 
 In the ``translations/`` directory of the modules you can find the ``.po``
-files containing the translations. They are marked with the their two
-letter language code.  (Optionally you can name your file like:
+files containing the translations. They are marked with the their language code.  (Optionally you can name your file like:
 nl.foobar.po as Zotonic will only look at the part till the first '.'
 for the language code)::
 
-  translations/
-  ├── nl.po
-  ├── template
-  │   └── mod_foo.pot
-  └── tr.po
+    mod_foo
+    └── translations/
+    ├── nl.po
+    ├── template
+    │   └── mod_foo.pot
+    └── tr.po
+    └── zh-hant.po
 
-Here you see that this module, ``mod_foo``, has been translated into
-Dutch (`nl`) and Turkish (`tr`).
+This shows that module ``mod_foo`` has been translated into
+Dutch (`nl`), Turkish (`tr`) and Chinese traditional script (`zh-hant`).
 
-The translations/ directory contains a subdirectory which contains
-``mod_foo.pot``, which is the translation `template`, on which new
-translations will be based.
-
-The basis for these files (the translation `template`), is the ``.pot``
-file which is located in the ``template/`` subdirectory of the translations
-directory. This ``.pot`` file is regenerated when you click on the ‘Generate
-.pot files’ button on the Translation page in the admin. Alternatively,
+The template for translation strings is located in a ``.pot`` file, in ``mod_foo/translations/template/mod_foo.pot``. This pot file is regenerated when you click on the ‘Generate .pot files’ button on the Translation page in the admin. Alternatively,
 from your Zotonic shell:
 
 .. code-block:: erlang
@@ -113,10 +115,10 @@ strings. These strings are then added to the .pot file.
 Creating a new translation for a module
 .......................................
 
-First, add a language in the admin with the 2-letter code for that language.
+First, add a language in the admin with the language code for that language. See the Translation page (or the code in ``src/i18n/languages.erl``) for possible languages.
 
 Say, we're adding Polish, ``pl``. Now copy the ``.pot`` template file
-to the 2-letter code ``.po`` file::
+to the language code ``.po`` file::
 
   $ cd modules/mod_foo
   $ cp translations/template/mod_foo.pot translations/pl.po
@@ -131,9 +133,7 @@ When templates change, often the translatable strings change: more
 strings are added, strings are changed, or removed. When this happens,
 the translation files need to be kept in sync.
 
-The `Translation status` page in the admin gives an overview, per
-module / language combination, of the amount of strings that are
-translated for each language.
+In admin: Structure > Translation > Translation Status you can find the overview of the amount of strings that are translated for each language.
 
 After pressing the `Generate .pot files` button in the translation
 admin the ``.pot`` files are updated, but the existing ``.po`` files
@@ -165,6 +165,9 @@ To remove duplicates (and make a backup first), use::
 
     $ cat nl.po > nl~.po && msguniq nl.po -o nl.po
 
+To do this for all files, without backup::
+
+    $ find . -name "*.po" -print0 | xargs -0 -I file msguniq file -o file
 
 
 Translated content
@@ -190,7 +193,7 @@ is stemmed according to the site’s configured default language.
 All translations are added to the same full text index. This combined text is
 stemmed using a single stemmer. The selected stemmer depends on the configured
 default language (config key ``i18n.language``). The stemmer can be overruled by
-setting the config key ``i18n.language_stemmer`` to the two letter iso code of
+setting the config key ``i18n.language_stemmer`` to the two letter language code of
 the language matching with the stemmer. You have to make sure that the stemmer
 is configured in PostgreSQL otherwise the pivot process will crash with a SQL error.
 

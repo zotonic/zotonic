@@ -46,7 +46,7 @@
 
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
-                    {% all include "_admin_headeritem.tpl" %}
+                    {% all include "_admin_headeritem.tpl" is_nav %}
 
                     {# at the far right is the account menu #}
                     {% with

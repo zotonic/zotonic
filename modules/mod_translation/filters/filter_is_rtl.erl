@@ -31,37 +31,11 @@ is_rtl(Id, Context) when is_integer(Id) ->
 is_rtl([Lang|_] = Langs, Context) when is_atom(Lang) ->
     is_rtl(filter_language:language(Langs, Context), Context);
 
-is_rtl(ar, _Context) -> true;
-is_rtl(dv, _Context) -> true;
-is_rtl(fa, _Context) -> true;
-is_rtl(he, _Context) -> true;
-is_rtl(ku, _Context) -> true;
-is_rtl(ps, _Context) -> true;
-is_rtl(sd, _Context) -> true;
-is_rtl(ug, _Context) -> true;
-is_rtl(ur, _Context) -> true;
-is_rtl(yi, _Context) -> true;
+is_rtl(LanguageCode, _Context) ->
+    is_rtl(LanguageCode).
 
-is_rtl("ar", _Context) -> true;
-is_rtl("dv", _Context) -> true;
-is_rtl("fa", _Context) -> true;
-is_rtl("he", _Context) -> true;
-is_rtl("ku", _Context) -> true;
-is_rtl("ps", _Context) -> true;
-is_rtl("sd", _Context) -> true;
-is_rtl("ug", _Context) -> true;
-is_rtl("ur", _Context) -> true;
-is_rtl("yi", _Context) -> true;
+is_rtl(LanguageCode) when is_binary(LanguageCode) ->
+    z_language:is_rtl(LanguageCode);
+is_rtl(LanguageCode) ->
+    is_rtl(z_convert:to_binary(LanguageCode)).
 
-is_rtl(<<"ar">>, _Context) -> true;
-is_rtl(<<"dv">>, _Context) -> true;
-is_rtl(<<"fa">>, _Context) -> true;
-is_rtl(<<"he">>, _Context) -> true;
-is_rtl(<<"ku">>, _Context) -> true;
-is_rtl(<<"ps">>, _Context) -> true;
-is_rtl(<<"sd">>, _Context) -> true;
-is_rtl(<<"ug">>, _Context) -> true;
-is_rtl(<<"ur">>, _Context) -> true;
-is_rtl(<<"yi">>, _Context) -> true;
-
-is_rtl(_, _Context) -> false.

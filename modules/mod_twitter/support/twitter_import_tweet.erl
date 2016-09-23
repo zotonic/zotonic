@@ -144,11 +144,11 @@ extract_language(Tweet, Context) ->
         undefined ->
             z_context:language(Context);
         Lang ->
-            [Iso|_] = binary:split(Lang, <<"-">>),
-            case z_trans:to_language_atom(Iso) of
+            [LanguageCode|_] = binary:split(Lang, <<"-">>),
+            case z_language:to_language_atom(LanguageCode) of
                 {ok, Code} ->
                     Enabled = m_translation:language_list_enabled(Context),
-                    case proplists:is_defined(Iso, Enabled) of
+                    case proplists:is_defined(LanguageCode, Enabled) of
                         true -> Code;
                         false -> z_context:language(Context)
                     end;

@@ -32,7 +32,7 @@ render(Params, _Vars, Context) ->
     AllDirs = z_module_manager:active_dir(Context),
     BasePath = proplists:get_value(z_convert:to_atom(Module), AllDirs),
 
-    %% First check if module has a translations template file. If not, return "n/a"
+    %% First check if module has a translations template file. If not, return "-"
     PotFile = filename:join([BasePath, "translations", "template", z_convert:to_list(Module) ++ ".pot"]),
     case filelib:is_regular(PotFile) of
         true ->
@@ -41,17 +41,20 @@ render(Params, _Vars, Context) ->
             case filelib:is_regular(PoFile) of
                 true ->
                     C = count_translated(PoFile),
-                    Cls = erlang:min(100, trunc(((C/TotalLines) * 100)/20)*20),
+                    Perc = erlang:min(100, ((C / TotalLines) * 100)),
+                    Cls = erlang:min(100, trunc(Perc / 25) * 25),
                     {ok, [
-                        "<td class=\"perc perc-", z_convert:to_list(Cls), "\"><span>",
-                        z_convert:to_list(C), " / ", z_convert:to_list(TotalLines),
-                        "</span></td>"
+                        "<td class=\"mod_translation-status-perc mod_translation-status-perc-", z_convert:to_list(Cls), "\">",
+                        "<div class='mod_translation-status-bar' style='width:", z_convert:to_list(Perc), "%;'></div>",
+                        "<div><span class='mod_translation-status-count'>",
+                            z_convert:to_list(C), "</span> / ", z_convert:to_list(TotalLines),
+                        "</div></td>"
                     ]};
                 false ->
-                    {ok, ["<td class=\"perc perc-0\"><span>0 / ", z_convert:to_list(TotalLines), "</span></td>"]}
+                    {ok, ["<td class=\"mod_translation-status-perc mod_translation-status-perc-0\"><div class='mod_translation-status-bar'></div><div><span class='mod_translation-status-count'>0</span> / ", z_convert:to_list(TotalLines), "</div></td>"]}
             end;
         false ->
-            {ok, <<"<td class=\"zp-10 perc\"><span>N/A</span></td>">>}
+            {ok, <<"<td class=\"mod_translation-status-perc\"><div class='text-muted'>-</div><div class='mod_translation-status-bar mod_translation-status-bar-hidden'></div></td>">>}
     end.
 
 

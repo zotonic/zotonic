@@ -28,7 +28,6 @@
     m_to_list/2,
     m_value/2,
 
-    language_list/1,
     language_list_enabled/1
 ]).
 
@@ -36,14 +35,18 @@
 
 m_find_value(language, #m{value=undefined}, Context) ->
 	z_context:language(Context);
-m_find_value(default_language, #m{value=undefined}, Context) ->
-	z_trans:default_language(Context);
-m_find_value(language_list, #m{value=undefined}, Context) ->
-	language_list(Context);
+%% mod_translation lookups
+m_find_value(language_list_configured, #m{value=undefined}, Context) ->
+	language_list_configured(Context);
 m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
 	language_list_enabled(Context);
-m_find_value(language_list_all, #m{value=undefined}, Context) ->
-	language_list_all(Context).
+%% z_language lookups
+m_find_value(default_language, #m{value=undefined}, Context) ->
+	default_language(Context);
+m_find_value(main_languages, #m{value=undefined}, _Context) ->
+	main_languages();
+m_find_value(all_languages, #m{value=undefined}, _Context) ->
+	all_languages().
 
 m_to_list(#m{}, _Context) ->
 	[].
@@ -52,23 +55,18 @@ m_value(#m{}, _Context) ->
 	undefined.
 
 
-language_list(Context) ->
-	case m_config:get(i18n, language_list, Context) of
-		undefined ->
-			[];
-		Config ->
-			case proplists:get_value(list, Config, Context) of
-				L when is_list(L) -> L;
-				_ -> []
-			end
-	end.
+default_language(Context) ->
+    z_language:default_language(Context).
+
+language_list_configured(Context) ->
+    z_language:sort_properties(mod_translation:language_config(Context), name_en).
 
 language_list_enabled(Context) ->
-	lists:filter(fun({_Code,Props}) ->
-					proplists:get_value(is_enabled, Props)
-				 end,
-				 language_list(Context)).
+	z_language:sort_properties(mod_translation:enabled_languages(Context), name).
 
-language_list_all(_Context) ->
-	[ {Code, [{language, Title}]} || {Code,Title} <- iso639:all2lang() ].
+main_languages() ->
+    z_language:sort_properties(z_language:main_languages(), name_en).
+
+all_languages() ->
+    z_language:sort_properties(z_language:all_languages(), name_en).
 
