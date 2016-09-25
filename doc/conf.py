@@ -13,6 +13,14 @@
 
 import sys, os, sphinx_rtd_theme
 
+# Read the Docs only runs sphinx directly (not through Makefile commands), so we
+# build the stubs here
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+if on_rtd:
+    print("Building stubs...")
+    os.system('export ZOTONIC_SRC=.. ; for f in `find ref -name .generate`; do $f || exit 1; done')
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -195,12 +203,6 @@ latex_elements = {
 # 'preamble': '',
 }
 
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title, author, documentclass [howto/manual]).
-latex_documents = [
-  ('index-tex', 'Zotonic.tex', u'Zotonic Documentation',
-   u'Andreas Stenius', 'manual'),
-]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
