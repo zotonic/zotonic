@@ -155,7 +155,7 @@ Add comments to learn/apps/zzz/src/zzz_srv.erl as follows::
 And to learn/apps/zzz_lib/src/hello.erl::
 
   %% @spec hello() -> none
-  %% @doc Library test function 
+  %% @doc Library test function
   hello() ->
 
 Now execute::
@@ -193,7 +193,9 @@ make sure rebar.config in ../learn looks like this::
           ]
   }.
 
-Make sure you have this directory structure::
+Make sure you have this directory structure:
+
+.. code-block:: none
 
   learn$ tree
   .

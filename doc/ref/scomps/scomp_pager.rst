@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. include:: meta-pager.rst
 
 Show a pager for search results.

@@ -25,8 +25,8 @@ How
 Now, the most obvious way to implement these backgrounds would be to
 attach a media item to a page and something along the lines of::
 
-  {% if id.medium %} 
-    {% media id.medium %} 
+  {% if id.medium %}
+    {% media id.medium %}
   {% endif %}
 
 Actually, if you create your site using the blog skeleton, you will
@@ -57,7 +57,7 @@ So, if you have an article A, then you can have:
 - a number of tags describing the article
 - several authors who collaborated on it
 - a few images to go with the article
-    
+
 Let’s rephrase that:
 
 - an article has tags
@@ -77,13 +77,13 @@ The greatest thing about predicates is that you can define your own. Here’s ho
 - Go to the "Predicates" section (under `Structure`) and click "Make a new predicate".
 - Name it "Background", since its used to signify a dynamic background on a page.
 - Click "Make predicate".
-    
+
 On the following screen we have to choose the direction of our
 predicate. "From" is the entity that can have relations to other
 objects, and "To" is the entity that can be had . So, our Text has an
 Image as a background. This means that "From" is Text and "To" is
 Image. Click the corresponding checkboxes and then click save.
-  
+
 you’re done!
 
 Now if you create a new text item (an article or news) you will see that in the Page Connections section there’s now a new option, "Background". Let’s try and make a new background:
@@ -111,13 +111,15 @@ see how we should proceed:
 - We need to retrieve the resource associated with the background
 - We need to retrieve path to the image stored on the server
 - We need to make sure that this path is actually accessible from a web browser
-    
+
 The last step is especially important since Zotonic stores uploaded
 files in a directory that is not directly accessible from the
 web. However, for images we can use the :ref:`tag-image_url` tag to
 circumvent that.
 
-So, the code to go with our checklist is as follows::
+So, the code to go with our checklist is as follows:
+
+.. code-block:: django
 
   <div{% if id.background %}{# we check to see if background exists #}
       style="background: url( {% image_url id.background.medium.filename %}{# output web accessible URL to the image #} ) no-repeat"
@@ -127,7 +129,9 @@ So, the code to go with our checklist is as follows::
 
 Now that we know how to retrieve the background image we can use it to
 our advantage. Our dynamic background will now look something like
-this::
+this:
+
+.. code-block:: django
 
   <div{% if id.background %} style="background: url({% image_url id.background.medium.filename %})"{% endif %}>
     &nbsp;

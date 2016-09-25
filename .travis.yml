@@ -14,6 +14,7 @@ install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'
 script:
   - make all edocs
   - make test
+  - pip install --user -r doc/requirements.txt
   - make -C doc/ stubs
   - make -C doc/ SPHINXOPTS='-nW' html
   - ./rebar3 xref

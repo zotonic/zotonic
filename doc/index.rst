@@ -50,8 +50,7 @@ Best practices as formulated by the Zotonic core team.
 .. toctree::
    :maxdepth: 1
 
-   best-practices/creating-sites
-   best-practices/templates
+   best-practices/index
 
 Reference
 ---------
@@ -79,4 +78,3 @@ Indices and tables
    :hidden:
 
    glossary
-   ref/controllers/acl_options

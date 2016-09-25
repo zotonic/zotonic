@@ -380,8 +380,6 @@ called in the specified delegate module ``mysite.erl``, called ``event/2``:
 Trigger browser actions from the server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. todo::
-
 .. seealso:: listing of all :ref:`actions <actions>`.
 
 Named actions

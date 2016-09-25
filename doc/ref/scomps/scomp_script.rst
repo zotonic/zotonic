@@ -1,3 +1,4 @@
+.. highlight:: django
 .. include:: meta-script.rst
 
 This tag is the placeholder where all generated JavaScript scripts
