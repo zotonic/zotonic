@@ -234,11 +234,19 @@ identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
     {error, "'identify' not installed"};
 identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
-    Result    = os:cmd(z_utils:os_filename(Cmd)
+    CmdOutput = os:cmd(z_utils:os_filename(Cmd)
                        ++" -quiet "
                        ++CleanedImageFile
                        ++" 2> " ++ devnull(OsFamily)),
-    case Result of
+    Lines = lists:dropwhile(
+                    fun
+                        ("Warning:" ++ _) -> true;
+                        ("Can't" ++ _) -> true;
+                        ("   ****" ++ _) -> true;
+                        (_) -> false
+                    end,
+                    string:tokens(CmdOutput, "\n")),
+    case Lines of
         [] ->
             Err = os:cmd(z_utils:os_filename(Cmd)
                          ++" -quiet "
@@ -246,26 +254,14 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                          ++" 2>&1"),
             lager:info("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
             {error, "identify error: " ++ Err};
-        _ ->
+        [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
             %% sometimes:
             %% test.jpg[0]=>test.jpg JPEG 2126x1484 2126x1484+0+0 DirectClass 8-bit 836.701kb 0.130u 0:02
 
             %% "/tmp/ztmp-zotonic008prod@miffy.local-1321.452998.868252[0]=>/tmp/ztmp-zotonic008prod@miffy.local-1321.452998.868252 JPEG 1824x1824 1824x1824+0+0 8-bit DirectClass 1.245MB 0.000u 0:00.000"
-
-            Line1 = hd(string:tokens(Result, "\r\n")),
             try
-                Words = string:tokens(Line1, " "),
-                WordCount = length(Words),
-                Words1 = if
-                             WordCount > 4 ->
-                                 {A,_B} = lists:split(4, Words),
-                                 A;
-                             true ->
-                                 Words
-                         end,
-
-                [_Path, Type, Dim, _Dim2] = Words1,
+                [_Path, Type, Dim, _Dim2 | _] = string:tokens(Result, " "),
                 Mime = mime(Type, MimeFile),
                 [Width,Height] = string:tokens(Dim, "x"),
                 {W1,H1} = maybe_sizeup(Mime, list_to_integer(Width), list_to_integer(Height)),
@@ -290,8 +286,8 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
             catch
                 X:B ->
                     ?DEBUG({X,B, erlang:get_stacktrace()}),
-                    lager:info("identify of ~p failed - ~p", [CleanedImageFile, Line1]),
-                    {error, "identify error: unknown result: '"++Line1++"'"}
+                    lager:info("identify of ~p failed - ~p", [CleanedImageFile, CmdOutput]),
+                    {error, "unknown result from 'identify': '"++CmdOutput++"'"}
             end
     end.
 
