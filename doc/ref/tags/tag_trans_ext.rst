@@ -2,8 +2,8 @@
 .. index:: tag; translate
 .. _tag-trans_ext:
 
-translate with variable substitution
-====================================
+trans (variable substitution)
+=============================
 
 Translate a text value using gettext and substitute variables.
 
@@ -18,7 +18,7 @@ If the active language is “en” then the example above will output “Hello 1
 
 If a translation is not available then the text is output as-is without any translation.
 
-If a “{” is needed in the string, then repeat it:
+If a “{” is needed in the string, then repeat it::
 
     {% trans "Hello {{foo}}, and this is {foo}." foo=1234 %}
 
