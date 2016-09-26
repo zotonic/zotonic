@@ -111,18 +111,30 @@ encode_cell([Row, Col, ?ST_JUTTEMIS], IsRaw, Context) ->
 encode_cell([Row, Col, {{Y,M,D},{H,I,S}} = Date], _IsRaw, _Context) when
         is_integer(Y), is_integer(M), is_integer(D),
         is_integer(H), is_integer(I), is_integer(S) ->
-    Secs = z_datetime:datetime_to_timestamp(Date) + 2209161600,
-    iolist_to_binary([
-        <<"<c r=\"">>, number_to_letter(Col), integer_to_list(Row), <<"\" s=\"2\">">>,
-            <<"<v>">>, z_convert:to_binary(Secs / 86400), <<"</v></c>">>
-        ]);
+    try
+        Secs = z_datetime:datetime_to_timestamp(Date) + 2209161600,
+        iolist_to_binary([
+            <<"<c r=\"">>, number_to_letter(Col), integer_to_list(Row), <<"\" s=\"2\">">>,
+                <<"<v>">>, z_convert:to_binary(Secs / 86400), <<"</v></c>">>
+            ])
+    catch
+        error:_if_clause ->
+            lager:warning("[~p] Illegal date in xlsx export: ~p", [Date]),
+            encode_inlinestr(Row, Col, <<>>)
+    end;
 encode_cell([Row, Col, {Y,M,D} = Date], _IsRaw, _Context) when
         is_integer(Y), is_integer(M), is_integer(D) ->
-    Secs = z_datetime:datetime_to_timestamp({Date, {0,0,0}}) + 2209161600,
-    iolist_to_binary([
-        <<"<c r=\"">>, number_to_letter(Col), integer_to_list(Row), <<"\" s=\"2\">">>,
-            <<"<v>">>, z_convert:to_binary(Secs / 86400), <<"</v></c>">>
-        ]);
+    try
+        Secs = z_datetime:datetime_to_timestamp({Date, {0,0,0}}) + 2209161600,
+        iolist_to_binary([
+            <<"<c r=\"">>, number_to_letter(Col), integer_to_list(Row), <<"\" s=\"2\">">>,
+                <<"<v>">>, z_convert:to_binary(Secs / 86400), <<"</v></c>">>
+            ])
+    catch
+        error:_if_clause ->
+            lager:warning("[~p] Illegal date in xlsx export: ~p", [Date]),
+            encode_inlinestr(Row, Col, <<>>)
+    end;
 encode_cell([Row, Col, V], false, _Context) ->
     B = z_xml:escape(
             z_html:unescape(
