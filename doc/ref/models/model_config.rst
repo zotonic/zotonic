@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. include:: meta-config.rst
 
 Zotonic has two places where a site’s configuration is kept. One is in
