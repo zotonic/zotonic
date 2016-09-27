@@ -147,15 +147,21 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 do_check(Site) ->
-    Context = z_acl:sudo(z_context:new(Site)),
-    do_check_1(z_db:q("
-                    select id,op,subject_id,predicate,object_id,edge_id
-                    from edge_log
-                    order by id
-                    limit $1",
-                    [?CLEANUP_BATCH_SIZE],
-                    Context),
-               Context).
+    try
+        Context = z_acl:sudo(z_context:new(Site)),
+        do_check_1(z_db:q("
+                        select id,op,subject_id,predicate,object_id,edge_id
+                        from edge_log
+                        order by id
+                        limit $1",
+                        [?CLEANUP_BATCH_SIZE],
+                        Context),
+                   Context)
+    catch
+        throw:{error, econnrefused} ->
+            {ok, 0}
+    end.
+
 
 do_check_1([], _Context) ->
     {ok, 0};

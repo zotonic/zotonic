@@ -367,8 +367,13 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Poll a database for any queued updates.
 do_poll(Context) ->
-    DidTask = do_poll_task(Context),
-    do_poll_queue(Context) or DidTask.
+    try
+        DidTask = do_poll_task(Context),
+        do_poll_queue(Context) or DidTask
+    catch
+        throw:{error, econnrefused} ->
+            false
+    end.
 
 do_poll_task(Context) ->
     case poll_task(Context) of

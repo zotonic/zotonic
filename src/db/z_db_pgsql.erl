@@ -45,6 +45,9 @@
 
 -define(IDLE_TIMEOUT, 60000).
 
+-define(CONNECT_RETRIES, 10).
+-define(CONNECT_RETRY_SLEEP, 5000).
+
 -record(state, {conn, conn_args}).
 
 
@@ -90,11 +93,11 @@ get_raw_connection(#context{dbc=Worker}) when Worker =/= undefined ->
 
 init(Args) ->
     %% Start disconnected
-    {ok, #state{conn=undefined, conn_args=Args}}.
+    {ok, #state{conn=undefined, conn_args=Args}, ?IDLE_TIMEOUT}.
 
 
-handle_call(Cmd, _From, #state{conn=undefined}=State) ->
-    case connect(State) of
+handle_call(Cmd, _From, #state{conn=undefined, conn_args=Args}=State) ->
+    case connect(Args) of
         {ok, Conn} ->
             handle_call(Cmd, _From, State#state{conn=Conn});
         {error, _} = E ->
@@ -111,22 +114,22 @@ handle_call(get_raw_connection, _From, #state{conn=Conn}=State) ->
     {reply, Conn, State, ?IDLE_TIMEOUT};
 
 handle_call(_Request, _From, State) ->
-    {reply, unknown_call, State}.
+    {reply, unknown_call, State, ?IDLE_TIMEOUT}.
 
 
 handle_cast(_Msg, State) ->
-    {noreply, State}.
+    {noreply, State, ?IDLE_TIMEOUT}.
 
 
 handle_info(timeout, State) ->
     {noreply, disconnect(State)};
 handle_info(_Info, State) ->
-    {noreply, State}.
+    {noreply, State, ?IDLE_TIMEOUT}.
 
 terminate(_Reason, #state{conn=undefined}) ->
     ok;
 terminate(_Reason, #state{conn=Conn}) ->
-    ok = epgsql:close(Conn),
+    _ = epgsql:close(Conn),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
@@ -136,10 +139,12 @@ code_change(_OldVsn, State, _Extra) ->
 %%
 %% Helper functions
 %%
-
-connect(#state{conn_args=Args}) ->
-    connect(Args);
 connect(Args) when is_list(Args) ->
+    connect(Args, 0).
+
+connect(_Args, RetryCt) when RetryCt > ?CONNECT_RETRIES ->
+    {error, econnrefused};
+connect(Args, RetryCt) ->
     Hostname = get_arg(dbhost, Args),
     Port = get_arg(dbport, Args),
     Database = get_arg(dbdatabase, Args),
@@ -156,6 +161,9 @@ connect(Args) when is_list(Args) ->
                     epgsql:close(Conn),
                     {error, Error}
             end;
+        {error, econnrefused} ->
+            timer:sleep(?CONNECT_RETRY_SLEEP),
+            connect(Args, RetryCt+1);
         {error, _} = E ->
             E
     end.
