@@ -6,7 +6,7 @@ the most important changes. This page contains links to the release
 notes for each release so far, dating back to Zotonic’s initial
 release in November 2009.
 
-.. toctree::
+.. toctree-reversed::
    :maxdepth: 1
    :glob:
    :reverse:

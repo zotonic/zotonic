@@ -8,7 +8,7 @@ Included CSS icons
 
 ``lib/material-design/``
 	`Material Design Iconic Font <http://zavoloklom.github.io/material-design-iconic-font/>`_.
-	
+
 ``lib/font-awesome-4/``
 	Font Awesome 4: `fontawesome.io <http://fontawesome.io/>`_.
 
@@ -28,7 +28,7 @@ How to use Font Awesome icons in your templates
 ***********************************************
 
 * Include the CSS file: ``{% lib "font-awesome-4/css/font-awesome.min.css" %}``
-* Follow the `examples <http://fontawesome.io/examples>`_
+* Follow the `icon examples <http://fontawesome.io/examples>`_
 * Find the class names in the `cheatsheet <http://fontawesome.io/cheatsheet/>`_
 
 
@@ -40,7 +40,7 @@ Included images
 	A collection of emoticons. These are from the Tango Icon Library and in the Public Domain.
 
 ``lib/images/flags/``
-	A collection of country flags. They are coded using the two letter ISO-3166 code of the country. 
+	A collection of country flags. They are coded using the two letter ISO-3166 code of the country.
 	For example :file:`lib/images/flags/flag-nl.png` refers to the Dutch flag.
 	This collection is from Wikimedia Commons and in the Public Domain. The PNG files are created by the
 	Open Icon Library.
@@ -57,12 +57,12 @@ Included images
 	A selection of icons from The Noun Project. There are many black&white icons in this directory.
 	This collection is licensed with the Creative Commons Attribution 3.0 Unported (CC BY 3.0) License, though
 	about half of the icons are in the Public Domain or licensed using CC 0.
-	When you use an icon in your project, check the license on http://thenounproject.com/ and the proper 
+	When you use an icon in your project, check the license on http://thenounproject.com/ and the proper
 	attribution as described in http://thenounproject.com/using-symbols/
 
 ``lib/images/social/round/``
-	Round icons for various social sites. Think of Youtube, Twitter, Facebook etc. This collection is 
-	made by Veodesign (http://veodesign.com/) 
+	Round icons for various social sites. Think of Youtube, Twitter, Facebook etc. This collection is
+	made by Veodesign (http://veodesign.com/)
 	It is licensed under the Creative Commons Attribution Share-Alike 3.0 Unported License.
 	This means you are not allowed to sell these icons and you need to properly attribute Veodesign.
 
@@ -79,4 +79,4 @@ Most of the icons are in 256x256 PNG format.  That is too large for normal usage
 For example, to display a 64x64 pixel image::
 
 	{% image "lib/images/social/round/email.png" width=64 %}
-  
+

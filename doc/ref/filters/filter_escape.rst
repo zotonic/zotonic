@@ -1,8 +1,13 @@
 .. highlight:: django
-.. include:: meta-escape.rst
+
+.. index:: filter; escape
+   single: mod_base; filter, escape
+.. _filter-escape:
 
 escape
 ======
+
+* Module: :ref:`mod_base`
 
 HTML escape a text. Escapes all reserved HTML characters in the value.
 Escaped strings are safe to be displayed in a HTML page.  When you
@@ -25,10 +30,8 @@ The following characters are replaced:
 |``&``        |``&amp;``    |
 +-------------+-------------+
 
-The escaping is only applied when the string is output, so it does not
-matter where in a chained sequence of filters you put escape: it will
-always be applied as though it were the last filter. If you want
-escaping to be applied immediately, use the :ref:`filter-force_escape`
+The escaping is only applied if the filter is not within an ``{% autoescape on %}`` block.
+If you always want escaping to be applied, use the :ref:`filter-force_escape`
 filter.
 
 For example::
@@ -38,3 +41,5 @@ For example::
 When the value is ``<hel&lo>`` then the output is ``&lt;hel&amp;lo&gt;``.
 
 Note: this filter is not part of a module, it is built into ErlyDTL.
+
+.. seealso:: :ref:`filter-force_escape`

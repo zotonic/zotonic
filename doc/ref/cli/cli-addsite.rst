@@ -45,7 +45,9 @@ For instance, consider the following addsite command::
 
   zotonic addsite -s blog myfirstblog
 
-Will print out the following::
+Will print out the following:
+
+.. code-block:: none
 
   ************
   Warning!

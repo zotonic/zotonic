@@ -144,6 +144,6 @@ Marc Worrell (55):
     * core: expose pivot_location_lat, pivot_location_lng and pivot_geocode_qhash as m_rsc properties.
     * core: correct identify of MS Visio files.
     * core: allow 'gray' and 'grey' for the grey image filter.
-    * core: set 'Cache-Control-Allow-Origin: *' on all controller_file replies.
+    * core: set ``'Cache-Control-Allow-Origin: *'`` on all controller_file replies.
     * Lock deps. Fixes a problem where the empty url was changed into '/'. Fixes #1066
 

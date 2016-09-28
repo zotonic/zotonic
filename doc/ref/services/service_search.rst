@@ -4,7 +4,9 @@
 Search Zotonic’s :term:`resources <resource>` using the
 :ref:`guide-datamodel-query-model`.
 
-For instance, the API call::
+For instance, the API call:
+
+.. code-block:: none
 
   http://localhost:8000/api/search?cat=text&text=test
 

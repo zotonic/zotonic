@@ -24,12 +24,12 @@ The following m_acl model properties are available in templates:
 |is_allowed          |Perform custom ACL checks which are   |
 |                    |different from the ones mentioned.    |
 +--------------------+--------------------------------------+
-|authenticated       | Used before the other ACL checks to  |
-|                    | check if a *typical* user is allowed |
-|                    | to perform some actions. Example:    |
+|authenticated       |Used before the other ACL checks to   |
+|                    |check if a *typical* user is allowed  |
+|                    |to perform some actions. Example:     |
 |                    |``m.acl.authenticated.insert.article``|
-|                    | If an user is logged on the that     |
-|                    | user’s permissions are used.         |
+|                    |If an user is logged on the that      |
+|                    |user’s permissions are used.          |
 +--------------------+--------------------------------------+
 
 

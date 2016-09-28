@@ -108,7 +108,7 @@ You should see something like::
 **How can I restart the PostgreSQL server?**
 
 In the shell::
-  
+
   /etc/init.d/postgresql restart
 
 You should see something like::
@@ -117,23 +117,31 @@ You should see something like::
 
 **How can I switch to database ‘zotonic_blog’ in psql?**
 
-In the shell::
+In the shell:
+
+.. code-block:: bash
 
   zotonic@host $ psql
   zotonic=# \c zotonic_blog
 
-You should now be on psql for the zotonic_blog database::
+You should now be on psql for the zotonic_blog database:
+
+.. code-block:: bash
 
   You are now connected to database “zotonic_pcc”.
   zotonic_blog=#
 
 **How can I enter the PostgreSQL interactive terminal?**
 
-In the shell::
+In the shell:
+
+.. code-block:: bash
 
   psql
 
-You should now be on the interactive terminal::
+You should now be on the interactive terminal:
+
+.. code-block:: bash
 
   psql (8.4.8)
   Type “help” for help.
@@ -142,39 +150,51 @@ You should now be on the interactive terminal::
 
 **How can I list databases?**
 
-From psql::
+From psql:
+
+.. code-block:: bash
 
   \l
 
-Or directly from the Zotonic User’s shell::
+Or directly from the Zotonic User’s shell:
+
+.. code-block:: bash
 
   psql -l
 
-You should see a list of databases like the following::
+You should see a list of databases like the following:
+
+.. code-block:: none
 
                                      List of databases
-       Name     |  Owner   | Encoding |  Collation  |    Ctype    |   Access privileges   
+       Name     |  Owner   | Encoding |  Collation  |    Ctype    |   Access privileges
   ———————+—————+—————+——————–+——————–+———————————–
-   postgres     | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+   postgres     | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |
    template0    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres
                                                                   : postgres=CTc/postgres
    template1    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres
                                                                   : postgres=CTc/postgres
-   zotonic      | zotonic  | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
-   zotonic_blog | zotonic  | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+   zotonic      | zotonic  | UTF8     | en_US.UTF-8 | en_US.UTF-8 |
+   zotonic_blog | zotonic  | UTF8     | en_US.UTF-8 | en_US.UTF-8 |
   (5 rows)
 
 **How can I see if a database exists?**
 
-In the shell::
+In the shell:
+
+.. code-block:: bash
 
   psql test
 
-If the database doesn’t exist::
+If the database doesn’t exist:
+
+.. code-block:: bash
 
   psql: FATAL: database “test” does not exist
 
-If the database exists, you’ll see something like::
+If the database exists, you’ll see something like:
+
+.. code-block:: bash
 
   psql (8.4.8)
   Type “help” for help.
@@ -183,22 +203,30 @@ If the database exists, you’ll see something like::
 
 **How can I tell if the database for site ‘blog’ exists in the local postgres installation?**
 
-In the shell::
+In the shell:
+
+.. code-block:: bash
 
   psql -l | grep blog
 
-You should see something like::
+You should see something like:
 
-  zotonic_blog | zotonic  | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+.. code-block:: bash
+
+  zotonic_blog | zotonic  | UTF8     | en_US.UTF-8 | en_US.UTF-8 |
 
 **How do I list the relations (tables, views , sequences) in a database?**
 
-In the shell::
+In the shell:
+
+.. code-block:: bash
 
   psql zotonic_blog
   zotonic_blog=# \d
 
-You should see something like::
+You should see something like:
+
+.. code-block:: none
 
                          List of relations
    Schema |               Name                |   Type   |  Owner
@@ -219,19 +247,25 @@ NOTE: Many fine books and tutorials are available to help you learn
 SQL, the standard query language for relational databases. See
 references below.
 
-The follow queries are for illustration only::
+The follow queries are for illustration only:
+
+.. code-block:: sql
 
   postgres=# CREATE TABLE books (
   postgres(# title text NOT NULL);
   CREATE TABLE
 
-How to add a column to a table::
+How to add a column to a table:
+
+.. code-block:: sql
 
   postgres=# ALTER TABLE books
   postgres-# ADD author text NOT NULL;
   ALTER TABLE
 
-How to examine the structure of a table::
+How to examine the structure of a table:
+
+.. code-block:: none
 
   postgres=# \d books
      Table “public.books”
@@ -240,36 +274,46 @@ How to examine the structure of a table::
    title  | text | not null
    author | text | not null
 
-How to insert a record into a table::
+How to insert a record into a table:
+
+.. code-block:: none
 
   postgres=# INSERT INTO books ( title, author )
   postgres-# VALUES (‘Programming Erlang’, ‘Joe Armstrong’);
   INSERT 0 1
 
-How to examine records in a table::
+How to examine records in a table:
+
+.. code-block:: none
 
   postgres=# SELECT * FROM books;
-  
-         title        |    author    
+
+         title        |    author
   ——————————+———————–
    Programming Erlang | Joe Armstrong
   (1 row)
 
-How to select a record from a table::
+How to select a record from a table:
+
+.. code-block:: none
 
   postgres=# SELECT title FROM books
   postgres-# WHERE author = ‘Joe Armstrong’;
-         title        
+         title
   ——————————
    Programming Erlang
   (1 row)
 
-How to create a database user::
+How to create a database user:
+
+.. code-block:: none
 
   postgres=# CREATE USER myuser WITH PASSWORD ‘userpassword’;
   CREATE ROLE
 
-How to create a database::
+How to create a database:
+
+.. code-block:: none
 
   postgres=# CREATE DATABASE testdb WITH OWNER = myuser ENCODING = ‘UTF8’;
   CREATE DATABASE
@@ -319,8 +363,10 @@ In the terminal::
 
 **How can I select records from the Zotonic shell?**
 
-In the zotonic shell::
-  
+In the zotonic shell:
+
+.. code-block:: none
+
   1> m_rsc:get(page_home, z:c(blog)).
   [{category_id,104},
    {created,{{2011,6,8},{22,21,55}}},
@@ -359,11 +405,15 @@ wrong.
 
 **Problem:**
 
-You try to get an psql shell::
+You try to get an psql shell:
+
+.. code-block:: bash
 
   psql
 
-And it refuses to work::
+And it refuses to work:
+
+.. code-block:: bash
 
   psql: FATAL:  Ident authentication failed for user “postgres”
 
@@ -380,8 +430,10 @@ http://www.postgresql.org/docs/8.4/interactive/auth-pg-hba-conf.html
 
 **Problem:**
 
-In postgres, you get the following::
-  
+In postgres, you get the following:
+
+.. code-block:: none
+
   testdb=> CREATE USER testdb WITH PASSWORD ‘testdb’;
   ERROR:  permission denied to create role
 
@@ -391,11 +443,12 @@ You need to create a database user. Retry as the Postgres superuser::
 
   sudo su postgres psql
 
-And it will work::
+And it will work:
+
+.. code-block:: none
 
   postgres=# CREATE USER testdb  WITH PASSWORD ‘testb’;
   CREATE ROLE
-
 
 **Problem:**
 
@@ -407,7 +460,7 @@ Outputs::
   bash: cd: /etc/postgresql: No such file or directory
 
 **Solution:**
-  
+
 This is evidently a bug in certain Debian Lenny installs when
 /etc/postgresql is inadvertently deleted. Uninstalling
 postgresql-client (``apt-get —purge remove postgresql-client``) is

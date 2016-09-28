@@ -65,8 +65,8 @@ The category hierarchy tables have been replaced by *m_hierarchy*.
 This model defines named hierarchies of resources (pages).
 
 If the categories are changed then the system needs to update the
-*pivot_category_nr* field of all resources. With the introduction 
-of *m_hierarchy* this renumbering is much more efficient and will 
+*pivot_category_nr* field of all resources. With the introduction
+of *m_hierarchy* this renumbering is much more efficient and will
 only affect a minimal number of resources.
 
 The *m_hierarchy* module is also used for the content- and user group
@@ -95,7 +95,7 @@ All incoming SMTP connections are now checked against two DNS block lists:
 * ``zen.spamhaus.org`` (http://www.spamhaus.org/zen/)
 * ``dnsbl.sorbs.net`` (http://dnsbl.sorbs.net/general/using.shtml)
 
-The list of DNSBL servers checked can be configured using the ``smtp_dnsbl`` 
+The list of DNSBL servers checked can be configured using the ``smtp_dnsbl``
 key in the ``zotonic.config`` file.
 
 
@@ -165,7 +165,7 @@ depending resources are deleted as well.
 Automatic compile and load of changed files
 -------------------------------------------
 
-The core system now starts either ``inotify-tools`` or ``fswatch``, depending on 
+The core system now starts either ``inotify-tools`` or ``fswatch``, depending on
 which one is available. You have to install one of these to enable auto-compile
 and auto-load of changed files.
 
@@ -191,8 +191,8 @@ Commits since 0.12.0
 
 There were 586 distinct commits (more than 600 in total) since release 0.12.0.
 
-The committers were:  Alain O'Dea, Arjan Scherpenisse, Arthur Clemens, David de Boer, Jeff Bell, 
-Maas-Maarten Zeeman, Marc Worrell, Marco Wessel, Paul Guyot, Paul Monson, Sergei, Witeman Zheng, imagency, and 肥仔. 
+The committers were:  Alain O'Dea, Arjan Scherpenisse, Arthur Clemens, David de Boer, Jeff Bell,
+Maas-Maarten Zeeman, Marc Worrell, Marco Wessel, Paul Guyot, Paul Monson, Sergei, Witeman Zheng, imagency, and 肥仔.
 
 Besides these commits many people contributed to this release.
 
@@ -427,7 +427,7 @@ Arthur Clemens (160):
 * mod_base_site: better defaults
 * Revert "mod_video_embed: add bootstrap responsive class"
 * doc: document 'page_url with' syntax
-* doc: document more use cases for |if
+* doc: document more use cases for if
 * mod_bootstrap: version 3.3.2
 * doc: show css output when extending icons
 * validation: provide message_after param to templates

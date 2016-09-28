@@ -33,7 +33,7 @@ These form fields are expected to have a value::
     signup_tos_agree
 
 
-If you want to hide a part of the form that contains a critical value, for instance the terms and conditions checkbox, you cannot just create an empty file ``_signup_form_fields_tos.tpl`` in your project, because the form value ``signup_tos_agree`` will no longer be passed. 
+If you want to hide a part of the form that contains a critical value, for instance the terms and conditions checkbox, you cannot just create an empty file ``_signup_form_fields_tos.tpl`` in your project, because the form value ``signup_tos_agree`` will no longer be passed.
 
 Instead you need to pass the value through the form using a hidden input field::
 
@@ -53,7 +53,7 @@ By default, two form parts are set to hidden. Make them visible by changing the 
 
     show_signup_name_prefix         // surname prefix ("van" Gogh)
     show_signup_password2           // repeat password
-    
+
 Two other configuration values deal with appearance: ``style_boxed`` and ``style_width`` - see below.
 
 
@@ -62,7 +62,7 @@ Changing appearance
 
 Form fields are displayed using the Bootstrap 3 HTML structure. If you need a radical different layout that cannot be managed with CSS alone, you will need to override the form field templates.
 
-The width of the form can be set with configuration value ``style_width``. This should be a CSS value like "300px". If no value is set, the form will expand to maximum width - in which case the width needs to be set by CSS. 
+The width of the form can be set with configuration value ``style_width``. This should be a CSS value like "300px". If no value is set, the form will expand to maximum width - in which case the width needs to be set by CSS.
 
 A form background can be set with configuration value ``style_boxed``.
 
@@ -105,7 +105,7 @@ A better approach is to use the sign in templates and pass ``logon_state``::
         }
     %}
 
-If the user now clicks on the link to sign in, the new form is shown in the same dialog. 
+If the user now clicks on the link to sign in, the new form is shown in the same dialog.
 
 
 Sign in form
@@ -129,7 +129,7 @@ This makes the template structure more complex than the sign up form.
 Overriding templates
 ....................
 
-The templates are quite minimal and will probably not need structural changes. Most likely candidates for changing are titles and perhaps removing/adding extra links. 
+The templates are quite minimal and will probably not need structural changes. Most likely candidates for changing are titles and perhaps removing/adding extra links.
 
 For details see "Template structure Sign Up form" below.
 
@@ -159,7 +159,9 @@ CSS styles are defined in ``css/logon.css`` (mod_authentication).
 Reference: Template structure Sign up form
 ------------------------------------------
 
-Template tree::
+Template tree:
+
+.. code-block:: none
 
     signup.tpl                                   // sign up page
     `-- _signup_config.tpl                       // template and field configuration
@@ -168,7 +170,9 @@ Template tree::
                 `-- _signup_stage.tpl            // feedback message
 
 
-The central form template ``_signup_box.tpl`` is further populated by sub templates::
+The central form template ``_signup_box.tpl`` is further populated by sub templates:
+
+.. code-block:: none
 
     _signup_box.tpl
     |-- _signup_title.tpl                        // header "Sign up"
@@ -186,7 +190,9 @@ The central form template ``_signup_box.tpl`` is further populated by sub templa
 Reference: Template structure Sign Up form
 ------------------------------------------
 
-Template tree::
+Template tree:
+
+.. code-block:: none
 
     logon.tpl                                    // sign in page
     |-- _logon_config.tpl                        // template and field configuration
@@ -203,7 +209,9 @@ Two mechanisms handle the state to determine which sub templates should be read:
 * For display inside a modal: the ``logon_state`` value
 
 
-Depending on the the state value, ``_logon_box.tpl`` is populated by different sub templates::
+Depending on the the state value, ``_logon_box.tpl`` is populated by different sub templates:
+
+.. code-block:: none
 
     when logon_state is::
     |== logon_reminder:                          // request a pw reset

@@ -120,7 +120,9 @@ Currently, the following subcommands are implemented:
   Compiles and reloads a single :term:`Erlang module` within the
   Zotonic folder. This runs very fast and works very well on a
   save-hook of your text editor. In Emacs, it would be called like
-  this::
+  this:
+
+.. code-block:: emacs
 
     (add-hook 'erlang-mode-hook
           '(lambda ()
