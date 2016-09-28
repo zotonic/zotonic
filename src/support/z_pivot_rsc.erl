@@ -371,8 +371,8 @@ do_poll(Context) ->
         DidTask = do_poll_task(Context),
         do_poll_queue(Context) or DidTask
     catch
-        throw:{error, econnrefused} ->
-            false
+        exit:{timeout, _} -> false;
+        throw:{error, econnrefused} -> false
     end.
 
 do_poll_task(Context) ->

@@ -257,7 +257,7 @@ copy_file("config.in", FromPath, ToPath, Options) ->
             % Merge config files
             {ok, [Config]} = file:consult(FnConfig),
             {ok, [ConfigIn]} = file:consult(ToPath),
-            MergedConfigs = lists:keymerge(1, lists:sort(Config), lists:sort(ConfigIn)),
+            MergedConfigs = lists:ukeymerge(1, lists:sort(Config), lists:sort(ConfigIn)),
             io_lib:format("~p.", [normalize_options(MergedConfigs)]);
         false ->
             Outfile
