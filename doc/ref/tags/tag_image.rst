@@ -13,7 +13,7 @@ For example::
 
    {% image "cow.jpg" width=200 height=200 crop %}
 
-This will generate an image tag for the image “cow.jpg” (in the files/archive directory) of 200x200 pixels. The image will be resized and cropped to the requested size.  The image tag will be something like (the checksum will vary per :term:`sign key`)::
+This will generate an image tag for the image “cow.jpg” (in the files/archive directory) of 200x200 pixels. The image will be resized and cropped to the requested size.  The image tag will be something like (the checksum will vary per sign key)::
 
    <img src="/image/cow.jpg%28200x200%29%28crop%29%28981E1AD8DA60381D00C094F0EE1311F5%29.jpg" width="200" height="200" />
 

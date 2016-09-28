@@ -49,11 +49,13 @@ A typical password_regex should start with ^.* and end with .*$. This allows eve
 - must have at least one lower-case letter (?=.*[a-z])
 - must have at least one upper-case letter (?=.*[A-Z])
 - must have at least one special character (?=.*[@#$%^&+=])
-    
-Putting those rules all together gives the following password_regex::
 
-  ^.*(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$
-  
+Putting those rules all together gives the following password_regex:
+
+.. code-block:: none
+
+    ^.*(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$
+
 To understand the mechanics behind this regular expression see
 `Password validation with regular expressions
 <http://www.zorched.net/2009/05/08/password-strength-validation-with-regular-expressions/>`_.
@@ -68,19 +70,21 @@ users to re-enter their password before they can log in again.
 By implementing the ``identity_password_match`` notification, you can
 have your legacy passwords stored in a custom hashed format, and
 notify the system that it needs to re-hash the password to the
-Zotonic-native format. The notification has the following fields::
+Zotonic-native format. The notification has the following fields:
+
+.. code-block:: none
 
   -record(identity_password_match, {rsc_id, password, hash}).
 
 Your migration script might have set the ``username_pw`` identity with
 a marker tuple which contains a password in MD5 format::
-  
+
   m_identity:set_by_type(AccountId, username_pw, Email, {hash, md5, MD5Password}, Context),
 
 Now, in Zotonic when you want users to log on using this MD5 stored
 password, you implement ``identity_password_match`` and do the md5
 check like this::
-  
+
   observe_identity_password_match(#identity_password_match{password=Password, hash={hash, md5, Hash}}, _Context) ->
     case binary_to_list(erlang:md5(Password)) =:= z_utils:hex_decode(Hash) of
         true ->

@@ -40,6 +40,8 @@ The following options can be configured:
   Zotonic can (currently) listen on one TCP port for HTTP
   connections. For HTTPS, see the :ref:`mod_ssl` chapter.
 
+.. _site-configuration-protocol:
+
 ``{protocol, "http"}``
   This is useful for when the Zotonic is running behind a proxy
   (like Varnish or haproxy) and the proxy translates between

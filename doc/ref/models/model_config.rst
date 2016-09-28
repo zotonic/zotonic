@@ -36,14 +36,16 @@ property) then they would be visible as extra properties and the
 property “props” would not have been present.
 
 When the configuration comes from the site config then the id property
-is not present.  
+is not present.
 
 Fetching all configurations of a module
 ---------------------------------------
 
 This only returns configurations from the config table; configuration
 keys from the site config are not mixed in. This might change in the
-futurre::
+futurr:
+
+.. code-block:: django
 
   {% for key, value in m.config.mod_emailer %}
       …
@@ -54,10 +56,12 @@ Fetching all configurations
 
 This only returns configurations from the config table. Configurations
 from the site config are not mixed in. This might change in the
-future::
+future:
+
+.. code-block:: django
 
   {% for mod,keys in m.config %}
-    {% for key,value in keys %} 
+    {% for key,value in keys %}
       …
     {% endfor %}
   {% endfor %}
@@ -67,13 +71,13 @@ Listening for config changes
 
 m_config uses z_notifier to broadcast events when values are changed or deleted::
 
-  #m_config_update{module=..., key=..., value=...}
+  #m_config_update{module=Module, key=Key, value=Value}
 
 for "complex" property value updates/inserts a slighly different notification is used::
 
-  #m_config_update_prop{module=..., key=..., prop=..., value=...}
+  #m_config_update_prop{module=Module, key=Key, prop=Prop, value=Value}
 
 For config key deletes, the ``#m_config_update{}`` record is broadcast
 with ``undefined`` for the value::
 
-  #m_config_update{module=..., key=..., value=undefined}
+  #m_config_update{module=Module, key=Key, value=undefined}

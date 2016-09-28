@@ -14,9 +14,11 @@ from the Erlang command line.
 How
 ---
 
-First launch the Zotonic EShell::
+First launch the Zotonic EShell:
 
-  ~/zotonic/bin/zotonic shell 
+.. code-block:: bash
+
+  ~/zotonic/bin/zotonic shell
 
 On the Zotonic EShell: Deactivate a module::
 
@@ -24,11 +26,11 @@ On the Zotonic EShell: Deactivate a module::
 
 On the Zotonic EShell: Activate a module::
 
-  z_module_manager:activate(mod_modulename, z:c(yoursitename)). 
+  z_module_manager:activate(mod_modulename, z:c(yoursitename)).
 
 On the Zotonic EShell: Restart a module::
 
-  z_module_manager:restart(mod_modulename, z:c(yoursitename)). 
+  z_module_manager:restart(mod_modulename, z:c(yoursitename)).
 
 Where `mod_modulename` is the name of your module and `yoursitename` is the name of your site.
 

@@ -57,7 +57,9 @@ Replace these assumptions as appropriate in all commands below.
 Ensure the db dump file is available on target machine (see
 pre-requisites).
 
-Create a new database in postgres::
+Create a new database in postgres:
+
+.. code-block:: bash
 
   zotonic:~$ sudo su -l postgres
   postgres:~$ ~Zotonic/zotonic/bin/zotonic createdb yoursite_new
@@ -67,42 +69,52 @@ Create a new database in postgres::
   CREATE LANGUAGE
   postgres:~$
 
-Import the dump file into the newly created db::
+Import the dump file into the newly created db:
+
+.. code-block:: bash
 
   postgres:~$ psql -U zotonic -d zotonic_yoursite_new -f /path/to/zotonic-dump.sql
   […lots of SQL statements…]
-  postgres:~$ 
+  postgres:~$
 
 Note: the final sql commands shown will likely say 'no privileges could be revoked for "public"'. You can ignore this.
 
-Stop Zotonic (if running)::
+Stop Zotonic (if running):
 
-  postgres:~$ ~zotonic/zotonic/bin/zotonic stop 
+.. code-block:: bash
+
+  postgres:~$ ~zotonic/zotonic/bin/zotonic stop
   Stopping zotonic zotonic001@hostname
   Stop:'zotonic001@hostname'
   postgres:~$
 
-Rename the databases::
+Rename the databases:
+
+.. code-block:: bash
 
   postgres:~$ psql
-  postgres=# ALTER DATABASE zotonic_yoursite RENAME TO zotonic_yoursite_old; 
+  postgres=# ALTER DATABASE zotonic_yoursite RENAME TO zotonic_yoursite_old;
   ALTER DATABASE
-  postgres=# ALTER DATABASE zotonic_yoursite_new RENAME TO zotonic_yoursite; 
+  postgres=# ALTER DATABASE zotonic_yoursite_new RENAME TO zotonic_yoursite;
   ALTER DATABASE
   postgres=# \q
   postgres:~$ exit
-  zotonic:~$ 
+  zotonic:~$
 
-Restart Zotonic::
+Restart Zotonic:
+
+.. code-block:: bash
 
   zotonic:~$ ~/zotonic/bin/zotonic start
 
 Browse to your site & test it’s now serving updated content.
 
-(Optional) Drop the old database::
+(Optional) Drop the old database:
+
+.. code-block:: bash
 
   zotonic:~$ sudo -u postgres psql
   postgres=# DROP DATABASE zotonic_yoursite_old;
   DROP DATABASE
   postgres=# \q
-  zotonic:~$  
+  zotonic:~$

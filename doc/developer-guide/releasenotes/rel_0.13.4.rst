@@ -58,7 +58,7 @@ Marc Worrell (16):
     *  mod_video: use the default ffmpeg command if the configured ffmpeg command is empty.
     *  mod_video: use the default ffprobe and ffmpeg_preview command if the configured command is empty.
     *  New dependencies
-    *  mod_acl_user_groups: ACL rules only apply to category 'meta' if either 'meta' or the system content group is *mentioned in the ACL rule. Fixes #1030
+    *  mod_acl_user_groups: ACL rules only apply to category 'meta' if either 'meta' or the system content group is mentioned in the ACL rule. Fixes #1030
     *  mod_l10n: added Kosovo (code xk) to the country list.
     *  mod_acl_user_groups: add 'view-only' option. Fixes #1034
     *  mod_acl_user_groups: show error if access to the ACL rules view is denied.

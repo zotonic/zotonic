@@ -1,4 +1,3 @@
-.. highlight:: django
 .. include:: meta-lazy.rst
 
 Custom tag which adds a 'loader' image to the page and performs
@@ -7,14 +6,16 @@ a one-time action when loader comes into view.
 ``mod_geomap`` uses this to load the map JavaScript once the admin
 widget has been opened by the user.
 
-Example::
+Example:
 
-  <div id="{{ #lazy }}">
-    {% lazy action={update target=#lazy id=id template="_geomap_admin_location_map.tpl"} %}
-  </div>
+.. code-block:: none
+
+    <div id="{{ #lazy }}">
+        {% lazy action={update target=#lazy id=id template="_geomap_admin_location_map.tpl"} %}
+    </div>
 
 
-`lazy` accepts the following arguments:
+``lazy`` accepts the following arguments:
 
 +----------+-------------------------------+-------------------------------+
 |Argument  |Description                    |Example                        |
@@ -27,4 +28,4 @@ Example::
 |          |image. Defaults to `z-lazy`.   |                               |
 |          |                               |                               |
 +----------+-------------------------------+-------------------------------+
-  
+
