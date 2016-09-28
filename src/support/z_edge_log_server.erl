@@ -158,8 +158,8 @@ do_check(Site) ->
                         Context),
                    Context)
     catch
-        throw:{error, econnrefused} ->
-            {ok, 0}
+        exit:{timeout, _} -> {ok, 0};
+        throw:{error, econnrefused} -> false
     end.
 
 

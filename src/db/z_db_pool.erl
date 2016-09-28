@@ -97,7 +97,7 @@ db_opts(SiteProps) ->
                 {dbuser, z_config:get(dbuser, "zotonic")},
                 {dbdatabase, z_config:get(dbdatabase, "zotonic")},
                 {dbschema, z_config:get(dbschema, "public")}],
-    lists:keymerge(1, lists:sort(Kvs), lists:sort(Defaults)).
+    lists:ukeymerge(1, lists:sort(Kvs), lists:sort(Defaults)).
 
 get_connection(#context{db={Pool,_}}) ->
     poolboy:checkout(Pool).
