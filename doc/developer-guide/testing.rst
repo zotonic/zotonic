@@ -20,18 +20,20 @@ modules named ``example_*_sitetest.erl``. These found test modules are
 then run using Erlang's standard `EUnit test framework <http://erlang.org/doc/apps/eunit/chapter.html>`_.
 
 .. note:: The filename pattern of the tests is
-   `(sitename)_(testname)_sitetest.erl`, where `sitename` is the name
+   ``(sitename)_(testname)_sitetest.erl``, where ``sitename`` is the name
    of the site under test (lowercase alphanumerics + underscores), and
-   `testname` is a name for the test suite (lowercase alphanumerics
-   *only*). `testname` **cannot** contain any underscores.
+   ``testname`` is a name for the test suite (lowercase alphanumerics
+   only). ``testname`` *cannot* contain any underscores.
 
 
 Besides running the tests from the Erlang shell, they can also be run
-from the terminal commandline::
+from the terminal :ref:`ref-cli`:
 
-  zotonic sitetest example
+.. code-block:: bash
 
-This is convenient for integration into CI systems. See :ref:`ref-cli`.
+    $ zotonic sitetest example
+
+This is convenient for integration into CI systems.
 
 
 Example ``sitetest`` module

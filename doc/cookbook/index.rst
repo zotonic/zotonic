@@ -13,6 +13,7 @@ Cookbooks
    pivot-templates
    custom-tag
    writing-module
+   overriding
    task-queue
    template-icons
 

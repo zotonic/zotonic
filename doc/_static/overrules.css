@@ -13,3 +13,12 @@ div.version:before {
   color: #ffffff;
   background-color: #195c88;
 }
+
+div.highlight pre {
+    font-size: .8em;
+}
+
+span.pre {
+    border: none;
+    color: #404040;
+}

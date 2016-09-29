@@ -1,4 +1,4 @@
-
+.. highlight:: django
 .. index:: tag; all catinclude
 .. _tag-all-catinclude:
 
@@ -15,9 +15,9 @@ Examples of this mechanism can be found in :ref:`mod_admin`, for example the mai
 
 An example usage::
 
-   {% all catinclude "hello.tpl" id arg="val" %} 
+    {% all catinclude "hello.tpl" id arg="val" %}
 
-Includes all templates with the base name `hello.tpl` for the id’s category hierarchy.  
+Includes all templates with the base name `hello.tpl` for the id’s category hierarchy.
 
 For example, in the case of a *news* article:
 

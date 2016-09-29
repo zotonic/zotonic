@@ -15,6 +15,8 @@ admin is designed to edit a common set of properties.
 
 .. seealso:: :ref:`m_rsc model reference <model-rsc>`
 
+.. _categories:
+
 Categories
 ----------
 
@@ -129,7 +131,7 @@ property, you need to define your own database column in a *custom pivot*.
 
 .. note::
 
-    If you want to find resources on non standard content or texts, then 
+    If you want to find resources on non standard content or texts, then
     you can change the texts that are pivoted. This can be done by adding
     specific ``pivot.tpl`` templates. See :ref:`cookbook-pivot-templates`
 

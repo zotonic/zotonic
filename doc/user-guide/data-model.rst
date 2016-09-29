@@ -61,6 +61,7 @@ Returns the name of the first author of the article with the given
 `id`, by traversing to the first `author` object edge of the
 given id. See the :ref:`model-rsc` model for more details on this.
 
+.. _pages:
 
 Pages
 -----

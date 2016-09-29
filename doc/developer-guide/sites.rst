@@ -1,5 +1,7 @@
 .. highlight:: bash
 
+.. _sites:
+
 Sites
 =====
 

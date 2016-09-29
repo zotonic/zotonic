@@ -4,40 +4,45 @@
 This module presents an interface for letting users register
 themselves.
 
-Notifications
+Configuration
 -------------
 
-``signup_form_fields``
-  Fold for determining which signup fields to validate. This is an
-  array of ``{Fieldname, Validate}`` tuples, defaulting to ``[{email,
-  true}, {name_first, true}, {name_surname_prefix, false},
-  {name_surname, true}]``. Observers can add / remove fields using the
-  accumulator value that is passed into the notification.
+You can adjust this module’s behaviour with the following
+:ref:`dev-configuration-parameters`:
 
-``identify_verification{user_id=UserId, identity=Ident}``
-  Sent verification requests to non verified identities.
+.. attribute:: mod_signup.request_confirm
 
-``signup_check``
-  Fold for the signup preflight check. Allows to add extra user properties or abort the signup.
+    true (default)
+        send a signup confirmation e-mail to new users
 
-  If no ``{ok, _Props1, SignupProps}`` is returned, but ``{error,
-  Reason}``, the signup is aborted.
+    false
+        disable the signup confirmation e-mail
 
-``signup_done{id=Id, is_verified=IsVerified, props=Props, signup_props=SignupProps}``
-  Fired when a signup procedure is done and a user has been created.
+.. attribute:: mod_signup.username_equals_email
 
-``signup_confirm{id=UserId}``
-  Fired when a user has signed up and confirmed his identity (e.g. over email)
+    false (default)
+        users have a username separate from their e-mail address and use that
+        username for logging in
 
-``signup_confirm_redirect{id=UserId}``
-  Decide to which page a user gets redirected to after signup
+    true
+        the user’s e-mail address is also the user’s username, so users can
+        log in with their e-mail address.
 
+.. attribute:: mod_signup.member_category
 
-Config: Disabling confirmation email
-------------------------------------
+    Name of the category that users created through sign up will be placed in.
 
-Set the configuration value ``mod_signup.request_confirm`` to
-``false`` to disable the signup confirmation process.
+    Defaults to ``person``.
+
+.. _mod-signup-new-users-content-group:
+
+.. attribute:: mod_signup.content_group
+
+    Name of the content group that users created through sign up will be placed
+    in.
+
+    Defaults to ``default_content_group``.
+
 
 
 Config: Using the user’s e-mail address as username
@@ -55,26 +60,53 @@ to update the ``{username_pw, {Username, Password}}`` identity as
 well, otherwise the username remains equal to the old email address.
 
 
-Config: setting the category for new users
-------------------------------------------
+Notifications
+-------------
 
-By default, users created through the signup process will become
-:term:`resources <resource>` of the category `person`. This can be
-changed by setting the configuration value
-``mod_signup.member_category`` to the name of a different category.
+``signup_form_fields``
+^^^^^^^^^^^^^^^^^^^^^^
 
-.. _mod-signup-new-users-content-group:
+Fold for determining which signup fields to validate. This is an
+array of ``{Fieldname, Validate}`` tuples, defaulting to::
 
-Config: setting the content group for new users
------------------------------------------------
+    [
+        {email, true},
+        {name_first, true},
+        {name_surname_prefix, false},
+        {name_surname, true}
+    ]
 
-By default, users created through the signup process will become
-:term:`resources <resource>` in the content group `default_content_group `. This can be
-changed by setting the configuration value
-``mod_signup.content_group`` to the name of a different content group.
+Observers can add / remove fields using the accumulator value that is passed
+into the notification.
 
+
+``identify_verification{user_id=UserId, identity=Ident}``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Send verification requests to unverified identities.
+
+``signup_check``
+^^^^^^^^^^^^^^^^
+
+Fold for the signup preflight check. Allows to add extra user properties or
+abort the signup.
+
+If no ``{ok, _Props1, SignupProps}`` is returned, but ``{error, Reason}``, the
+signup is aborted.
+
+``signup_done{id=Id, is_verified=IsVerified, props=Props, signup_props=SignupProps}``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fired when a signup procedure is done and a user has been created.
+
+``signup_confirm{id=UserId}``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fired when a users have signed up and confirmed their identity (e.g. via e-mail).
+
+``signup_confirm_redirect{id=UserId}``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Decide to which page a user gets redirected to after signup.
 
 .. todo:: Add more documentation
-
-
-

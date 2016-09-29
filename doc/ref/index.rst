@@ -1,3 +1,4 @@
+.. _reference:
 
 Reference
 =========
@@ -13,10 +14,10 @@ All the nitty gritty details when the big picture has settled.
    controllers/index
    dispatch/index
    filters/index
+   tags/index
+   global-variables
    models/index
    services/index
-   tags/index
-   scomps/index
    validators/index
    directory-structure
    icons

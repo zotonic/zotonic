@@ -4,226 +4,85 @@
 Templates
 =========
 
-Zotonic’s template syntax is very similar to the Django Template Language (DTL).
+Templates are text files marked up using the Zotonic template language. Zotonic
+interprets that mark-up to dynamically generate HTML pages. Zotonic’s template
+syntax is very similar to the Django Template Language (DTL).
 
-The templates in Zotonic are based on the Django Template Language
-(DTL), using a customized version of the excellent `ErlyDTL
-<https://github.com/evanmiller/erlydtl>`_ library. Over the years,
-Zotonic’s version of ErlyDTL has diverged, adding Zotonic-specific
-features and more powerful expression possibilities. However, the main
-template syntax remains the same:
+.. _template-variables:
 
-The double accolade/brace construct outputs the value of the
-variable::
+Variables
+---------
 
-    {{ foo }}
+Variables are surrounded by ``{{`` and ``}}`` (double braces)::
 
-Optionally, you can pipe these variables through a so-called filter,
-which is applied before output::
+    Hello, I’m {{ first_name }} {{ last_name }}.
 
-    {{ foo|lower }}
+When rendering this template, you need to pass the variables to it. If you pass
+``James`` for ``first_name`` and ``Bond`` for ``last_name``, the template
+renders to::
 
-Template tags allow you to express complex constructs like loops and
-branches::
+    Hello, I’m James Bond.
 
-    {% if username == 'Arjan' %} Hi, Arjan {% endif %}
+Instead of strings, variables can also be objects that contain attributes. To
+access the attributes, use dot notation::
 
+    {{ article.title }} was created by {{ article.author.last_name }}
 
-.. _guide-lookup-system:
+The variables that you add to your templates get their values from thee places:
 
-Template locations and the lookup system
-----------------------------------------
-
-All templates are located in the :file:`templates` directory of
-modules or sites.  Templates are referred to by their full filename. When a
-template is inside a directory then the full path of the template must
-be given.
-
-For example, say we have two templates:
-
-  | mod_example/templates/foobar.tpl
-  | mod_example/templates/email/email_base.tpl
-
-The above are referred to as ``foobar.tpl`` and
-``email/email_base.tpl``; just ``email_base.tpl`` will not find the
-email template.
-
-All templates of all modules are grouped together, regardless of which
-module they are defined in. The module name is never given as part of
-the template name.
-
-Templates for pages
-^^^^^^^^^^^^^^^^^^^
-
-When showing a page, Zotonic looks up templates in order of specificity and
-renders the first template it finds:
-
-1. ``page.name.tpl`` (unique name)
-2. ``page.category.tpl`` (category)
-3. ``page.tpl`` (fallback)
-
-So if you have a page in the category ‘text’ and that page has a :ref:`unique name <model-rsc>`
-‘my_text_page’, Zotonic will look for the following templates:
-
-1. ``page.my_text_page.tpl`` (unique name)
-2. ``page.text.tpl`` (category)
-3. ``page.tpl`` (fallback)
-
-.. seealso::
-
-    * :ref:`controller-page`, :ref:`tag-catinclude`.
-
-Module priority and overriding templates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Templates with the same filename can be defined in multiple
-modules. The actual template which is selected depends on the priority
-of the module.
-
-The :dfn:`module priority` is a number defined in the module’s code
-and is usually a number between 1 and 1000.  A lower number gives a
-higher priority.  Templates in a module with higher priority hide
-templates in a module with lower priority.
-
-When two modules have the same priority then the modules are sorted by
-their name.  That means that, given the same priority number,
-``mod_aloha`` has higher priority than ``mod_hello``.
-
-This mechanism allows any module (or site) to replace every single
-template in the system with its own version.
-
-.. note:: Including all similar named templates
-
-    | The tag ``{% all include "foobar.tpl" %}`` will include all
-      templates named :file:`foobar.tpl`.
-    | Where the tag ``{% include "foobar.tpl" %}`` only includes the
-      highest priority :file:`foobar.tpl`.
-
-    See also :ref:`tag-all-include` and :ref:`tag-all-catinclude`.
-
-Module priority and overriding lib files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Exactly the same module priority is also valid for all files in the
-:file:`lib` directory of modules.
-
-This allows any module to change the static css, javascript, images,
-favicon.ico, robots.txt and other static files with its own version.
-
-.. _guide-template-variables:
-
-Template variables
-------------------
-
-.. _template-magicvalues:
-
-Global variables
-^^^^^^^^^^^^^^^^
-
-The following properties are always available in a template.
-
-zotonic_dispatch
-    The name of the dispatch rule that was applied to render the current page.
-
-zotonic_dispatch_path
-   A list containing the request path used as initial input for the dispatcher.
-   The path is split on ``/`` and after an optional rewrite. This means that the
-   list doesn’t contain the language prefix. For example, the path
-   ``/en/foo/bar?a=b`` will give the list ``["foo", "bar"]``.
-
-zotonic_dispatch_path_rewrite
-  Same as zotonic_dispatch_path, but set to the path after an optional internal
-  request rewrite inside the dispatcher. For example if a resource has its
-  `page_path` set to ``/foo`` and the requested path is ``/en/foo`` then the
-  ``zotonic_dispatch_path`` will be set to ``["foo"]`` and the
-  ``zotonic_dispatch_path_rewrite`` could be set to something like
-  ``["page", "1234", "foo-slug"]``.
-
-z_language
-    The currently selected language. This an atom, for example: ``en``.
-
-q
-    A dictionary containing the current request's query variables. For GET requests, these are the arguments passed from the query string (e.g. ``?foo=bar``); for POST requests, these are the values posted in the POST form. For more access to the raw request data, look at the :ref:`model-req` model.
-
-now
-    The local date and time in Erlang tuple notation, for instance ``{{2014,4,17},{13,50,2}}``.
-
-m
-    ``m`` is not really a value, but it's an indicator to trigger a lookup in one of Zotonic's :ref:`models`. For instance the :ref:`model-rsc` model is always exposed and can be used like this ``{{ m.rsc[123].title }}``.
-
-z_trigger_id
-   Only available in postback contexts. The id of the html element triggering a postback.
-
-z_target_id
-   Only available in postback contexts. The id of the html element that is the target of a postback.
-
-z_delegate
-   Only available in postback contexts. The name of the Erlang module handling the postback event.
-
-
-Besides these variables, all key/value pairs that are set in the
-``#context{}`` record (using ``z_context:set/2``) that was used to
-render the current template are also exposed into the template's
-global scope.
-
-Debugging
-^^^^^^^^^
+* they can be :ref:`passed from controllers <guide-render>` when rendering the
+  template;
+* they can come from :ref:`models <guide-models>`;
+* or they can be :ref:`global variables <ref-global-variables>`.
 
 To print the variables in your template for debugging, you can use the
 :ref:`scomp-debug` tag::
 
     {% debug %}
 
-.. _guide-tags:
-
-Tags
-----
-
-Tags add logic and flexibility to your templates. The general syntax for a tag
-is the following::
-
-    {% tagname param1=value param2=value %}
-
-Some tags are *block tags* and therefore consist of a start and an end
-tag. The name of the end tag is always ``end`` plus the name of the
-opening tag::
-
-    {% tag %}
-        ...
-    {% endtag %}
-
-For instance, use the ``for`` tag to loop over lists::
-
-    {% for article in articles %}
-        {{ article.title }}
-    {% endfor %}
-
-And the ``if`` tag to check conditions::
-
-    {% if article.is_published %}
-        There you go: {{ article.title }}
-    {% else %}
-        Sorry, the article hasn’t been published yet!
-    {% endif %}
-
-.. seealso::
-
-    * List of :ref:`all tags <tags>` reference.
-    * :ref:`Create your own tags cookbook <cookbook-custom-tag>`.
-
 .. _guide-filters:
 
 Filters
 -------
 
-Filters are used to modify values you want to show or use in your templates. For
-example::
+Optionally, you can pipe template variables through filters. Filters transform
+the value before rendering it. To apply a filter, you append ``|`` plus the
+filter’s name to the variable::
 
-    {{ value|lower }}
+    {{ first_name|lower }} {{ last_name|upper }}
 
-will lowercase the input value using the :ref:`filter-lower` filter.
+Renders::
 
-.. seealso:: a listing of all :ref:`filters <filters>`.
+    james BOND
+
+There’s a :ref:`reference of built-in filters <filters>`. If you need to, you
+can also :ref:`create your own filters <cookbook-custom-filter>`.
+
+.. _guide-tags:
+
+Tags
+----
+
+With tags, you can add logic and flexibility to your templates. Tags are
+surrounded by ``{%`` and ``%}``, like this::
+
+    {% tag %}
+
+Some tags have arguments::
+
+    {% tagname id width=200 height=200 crop %}
+
+And some tags are *block tags*, which require both an opening and a closing tag.
+The name of the closing tag is always ``end`` plus the name of the opening tag::
+
+    {% if article.is_published %}
+        There you go:: {{ article.title }}
+    {% else %}
+        Sorry, the article hasn’t been published yet!
+    {% endif %}
+
+See also the reference :ref:`all tags <tags>`. You can also
+:ref:`create your own tags <cookbook-custom-tag>`.
 
 .. _guide-models:
 
@@ -242,262 +101,149 @@ A template model provides data to a template through the syntax:
     {# Fetch the title of the page whose id is the integer 1 #}
     {{ m.rsc[1].title }}
 
-    {# Fetch the title of the page whose id is the template variable id #}
-    {{ m.rsc[id].title }}
-
     {# Perform a search on all persons #}
     {% for p in m.search[{query cat='person'}] %}{{ p.title }}{% endfor %}
 
-.. seealso::
+    {# Fetch the title of the page whose id is the template variable id #}
+    {{ m.rsc[id].title }}
 
-    * list of :ref:`all models <models>` in the reference
-    * :ref:`cookbook-custom-model` cookbook
+You’ll find that you need ``m.rsc[id]`` the most, so there’s a
+:ref:`recommended shortcut <best-practices-shortcut-syntax>` for that::
 
-.. _guide-media:
+    {{ id.title }}
 
-Media
------
+See the reference for a list of :ref:`all models <models>`. You can also add
+:ref:`your own models <cookbook-custom-model>`.
 
-To include a resource’s depiction, use :ref:`tag-image`::
+.. _guide-lookup-system:
 
-    {% image id %}
+Template names
+--------------
 
-You can pass extra parameters to adjust the image on the fly::
+All templates are stored in the :file:`templates/` directory of
+:ref:`sites <sites>` and :ref:`modules <guide-modules>`. They have the
+extension ``.tpl``. Templates are referred to by their filename, including their
+subdirectory name within :file:`templates/` (if any). So if you have these two
+templates:
 
-    {% image id width=200 height=200 crop %}
+* ``modules/mod_example/templates/foobar.tpl``
+* ``modules/mod_example/templates/email/email_base.tpl``
 
-The image will then be resized and cropped to the specified 200x200 pixels.
+you refer to them as:
 
-.. seealso:: :ref:`tag-image` for all parameters
+* ``foobar.tpl``
+* ``email/email_base.tpl``
 
-.. _guide-media-classes:
+The module name itself (``mod_example``) is never part of the template name,
+because all templates are grouped together. This allows you to override
+Zotonic’s templates.
 
-Media classes
-^^^^^^^^^^^^^
+.. _overriding-templates:
 
-Instead of inline image tag parameters, you can use media classes to define
-image transformations. The advantage is that this image definition can then be
-reused amongst templates.
+Overriding templates
+^^^^^^^^^^^^^^^^^^^^
 
-Create a ``templates/mediaclass.config`` file in your site directory:
+If you want to override a template, you create a template with the same name
+in your site (or module). So what if the ``email/email_base.tpl`` template from
+mod_example mentioned above is not to your liking? Just create a
+``email/email_base.tpl`` file in your own site:
+:file:`sites/yoursite/templates/email/email_base.tpl`.
 
-.. code-block:: erlang
+So if multiple templates can have the same name, how does Zotonic know *which*
+template to render: the one from mod_example or the one from yoursite? This depends
+on the :ref:`module priority <module-priority>`. Usually sites have a higher
+priority than modules, so yoursite wins and can serve its template.
 
-    [
-        {"thumb", [
-            {width, 200},
-            {height, 200},
-            crop
-        ]}
-    ].
+If you want to *add* your template instead of overriding, you can use the
+:ref:`tag-all-include` and :ref:`tag-all-catinclude` tags.
 
-This defines a media class called ‘thumb’, which can be used to display a
-120x120 cropped square image. You then only need to refer to this media class in
-your image tag::
+Page templates
+^^^^^^^^^^^^^^
 
-    {% image id mediaclass="thumb" %}
+Most of your templates will :ref:`page <pages>` templates. When showing
+a page, Zotonic’s :ref:`page controller <controller-page>` looks up the
+appropriate template in order of specificity and renders the first template it
+finds:
 
-The image URL will have a checksum embedded in it so that when the contents of
-the media class is changed, all images which use that media class will be
-regenerated to reflect the new media class.
+1. ``page.name.tpl`` (:ref:`unique name <model-rsc>`)
+2. ``page.category.tpl`` (:ref:`category <categories>`)
+3. ``page.tpl`` (fallback)
 
-Raw ImageMagick options
-"""""""""""""""""""""""
+So if you have a page in the category ‘text’ and that page has a unique name
+‘my_text_page’, Zotonic will look for the following templates:
 
-Besides the normal image processing options, as described in :ref:`tag-image`,
-it is possible to add literal ImageMagick convert commands to the mediaclass
-definition.
+1. ``page.my_text_page.tpl`` (unique name)
+2. ``page.text.tpl`` (category)
+3. ``page.tpl`` (fallback)
 
-For example::
+The same lookup mechanism is used for the :ref:`tag-catinclude` tag.
 
-    {magick, "-level 90%,100% +level-colors \\#FE7D18,\\#331575"}
-
-(Note that you have to double any backslashes that were needed for the
-``convert`` command line.)
-
-This command is given *as-is* to the ImageMagick `convert` command, therefore it
-is best to first try it with the command-line `convert` command to find the
-correct options and command line escapes needed.
-
-There are three variations: ``pre_magick``, ``magick``, and ``post_magick``.
-The only difference is that the ``pre_magick`` is added before any other filter
-argument, ``magick`` somewhere between, and `post_magick` after the last filter.
-
-In this way it is possible to pre- or post-process an image before or after
-resizing.
-
-See http://www.imagemagick.org/Usage/ for examples of using ImageMagick from the
-command line.
-
-.. _guide-actions:
-
-Actions
--------
-
-The action defines what should happen when the wire is triggered. Actions can
-be client-side (such as JavaScript animations) or server-side postbacks.
-
-Trigger actions from JavaScript
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To trigger an action from an HTML element, you attach a wire to the element::
-
-    <a href="#" id="link">Click me!</a>
-    {% wire type="click" id="link" action={fade_out target="link"} %}
-
-The wire’s ``id`` value must match the ``id`` value of the HTML element. This
-wires up a link with a :ref:`action-fade_out` action, so that when the link
-is clicked, it fades away.
-
-Actions can be called from the template, but can also be called when some
-server-side event occurs.
-
-.. seealso:: :ref:`guide-template-autoids`, :ref:`cookbook-custom-action`
-
-Server postbacks
-^^^^^^^^^^^^^^^^
-
-Postbacks are server-side actions. For instance, to submit a form asynchronously
-through Ajax, use a postback::
-
-    {% wire type="submit" id="myform" postback="form_submitted" delegate="mysite" %}
-    <form id="myform" method="post" action="postback">
-        <input name="username" />
-        <button>Submit form</button>
-    </form>
-
-This will submit the form over Ajax; the result is that a function will be
-called in the specified delegate module ``mysite.erl``, called ``event/2``:
-
-.. code-block:: erlang
-
-    event(#submit{}, Context) ->
-        io:format("The value of 'username' is: ~s~n", z_context:get("username", Context),
-        Context.
-
-.. seealso:: :ref:`postback reference <action-postback>`
-
-Trigger browser actions from the server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. seealso:: listing of all :ref:`actions <actions>`.
-
-Named actions
-^^^^^^^^^^^^^
-
-If you want to trigger actions from your JavaScript code, give the action a
-name::
-
-    {% wire name="my_action" action={growl text="Hello World"} %}
-
-You can then refer to it in your JavaScript code:
-
-.. code-block:: javascript
-
-    z_event("my_action");
-
-And pass arguments to the action:
-
-.. code-block:: javascript
-
-    z_event("my_action", { foo: bar });
-
-The argument ``foo`` will become a query argument, that you can access in your
-Erlang module with ``z_context:get_q(foo, Context)``.
-
-Adding CSS and JavaScript
--------------------------
-
-JavaScript
-----------
-
-
-
-.. _guide-template-autoids:
-
-Auto-generated identifiers
---------------------------
-
-If you include a template many times (i.e. from a for loop), then having
-fixed element identifiers are no good. Zotonic provides a mechanism to generate
-an identifer which has a unique value within the template.
-
-To prefix the id with a unique value (per invocation of the
-template) prefix the id with a ``#``-sign:
-
-.. code-block:: html
-
-    <div id="{{ #foo }}">
-
-This special notation will replace ``#foo`` with an auto-generated
-identifer, which will expand to something like this:
-
-.. code-block:: html
-
-    <div id="ubifgt-foo">
-
-Unique ids can also be generated inside a ``for`` loop:
-
-.. code-block:: html
-
-    {% for id in mylist %}
-        <li id="{{ #foo.id }}">{{ id.title }}</li>
-    {% endfor %}
-
-This will generate HTML like this:
-
-.. code-block:: html
-
-  <li id="gdjqa-foo-1234">Some great news</li>
-
-When using a :ref:`scomp-wire` tag, that same unique id can be referenced:
-
-.. code-block:: html
-
-    {% for id in mylist %}
-        <li><a id="{{ #list.id }}" href="#">{{ m.rsc[id].title }}</a></li>
-        {% wire id=#list.id action=some_action %}
-    {% endfor %}
-
-.. _guide-icons:
-
-Icons in templates
+Template structure
 ------------------
 
-Zotonic provides a couple of ways to show icons in templates:
+Now you know how Zotonic decides which template to render for a page, let’s go
+into how you can render templates yourself. Usually, you spread template logic
+for a page over multiple template files. This allows you to re-use these files
+in other templates.
 
-* :ref:`mod_artwork` gives access to FontAwesome and Material Design icons.
-  It also has a number of other icon collections, mostly PNG images. Activate
-  the module and follow the instructions on the doc page.
-* Zotonic icons provided by `mod_base`. This is explained on the current page.
+Including templates
+^^^^^^^^^^^^^^^^^^^
 
-To create a certain amount of consistency across modules, Zotonic comes with a
-small set of commonly used icons and CSS classes (edit, help, close, etcetera)
-plus the Zotonic logo.
+You can include other templates using the :ref:`tag-include` tag::
 
-Use cases:
+    This is the main template. To include another template:
 
-* You create your frontend from scratch, but you also have pages in your site
-  that are provided by other modules, for instance the login screens. It would
-  be good if the social login icons show up.
-* You are writing a template or module and like to take advantage of ready
-  available icons.
-* You are writing frontend styles in LESS and you would like to extend Zotonic
-  / FontAwesome / Material Design icons.
+    {% include "other-template.tpl" %}
 
-Include the Zotonic icons CSS file in your template::
+Zotonic will replace the include tag with the output of
+:file:`other-template.tpl`.
 
-    {% lib
-        "css/z.icons.css"
-    %}
+Variants of the include tag are
+:ref:`tag-catinclude`, :ref:`tag-all-include` and :ref:`tag-all-catinclude`:
+following the :ref:`looking mechanism <guide-lookup-system>` described above,
+Zotonic will find the best template based on the page and module priority.
 
-Then use this syntax in your template HTML::
+Inheritance
+^^^^^^^^^^^
 
-    z-icon z-icon-<name>
+To improve template re-use, it is common to inherit from a base template. A
+simple base template might look like this:
 
-For instance::
+.. code-block:: django
+    :caption: templates/base.tpl
 
-    <span class="z-icon z-icon-off"></span>
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Zotonic{% block title %}{% endblock %}</title>
+        </head>
 
-.. seealso:: :ref:`ref-icons` reference
+        <body>
+            {% block content %}This is default content{% endblock %}
+        </body>
+    </html>
 
+You can then extend multiple templates from this single base template using the
+:ref:`tag-extends` tag. The base template contains :ref:`tag-block` tags that
+can be overridden in child templates:
+
+.. code-block:: django
+    :caption: templates/page.tpl
+
+    {% extends "base.tpl %}
+
+    {% block title %}This is the page title{% endblock %}
+
+    {% block content %}
+        This will override the content block from base.tpl
+    {% endblock %}
+
+Using the :ref:`tag-inherit` and :ref:`tag-overrules` tags, you adapt the
+inheritance to your needs.
+
+.. seealso::
+
+    - :ref:`guide-media` on how to include images and other media in your
+      templates.
+    - :ref:`guide-wires` on using JavaScript to add interaction to your
+      templates.

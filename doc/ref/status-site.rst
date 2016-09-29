@@ -55,3 +55,12 @@ interface.
 This API service can be plugged in to a service like
 https://www.pingdom.com/ to monitor the availability of all hosted sites
 at once.
+
+.. _restart-site:
+
+Restarting sites
+----------------
+
+Alternatively, from the :ref:`Zotonic shell <guide-cli-shell>`::
+
+    z_sites_manager:restart(yoursitename).
