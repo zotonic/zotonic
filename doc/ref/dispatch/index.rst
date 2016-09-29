@@ -1,3 +1,5 @@
+:orphan:
+
 .. _all dispatch rules:
 
 All dispatch rules

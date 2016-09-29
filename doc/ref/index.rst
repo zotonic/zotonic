@@ -11,7 +11,6 @@ All the nitty gritty details when the big picture has settled.
    modules/index
    actions/index
    controllers/index
-   dispatch/index
    filters/index
    models/index
    services/index
