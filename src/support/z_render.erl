@@ -587,30 +587,23 @@ css_selector(TargetId) ->
 css_selector(TargetId, Args) ->
     case proplists:get_value(selector, Args) of
         Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
-            case TargetId of
-                window -> window;
-                undefined -> [];
-                <<>> -> [];
-                "" -> [];
-
-                <<"window">> -> window;
-                <<" ", _/binary>> = Selector -> Selector;
-                <<"#", _/binary>> = Selector -> Selector;
-                Id when is_binary(Id)-> <<$#,Id/binary>>;
-
-                "window" -> window;
-                [] -> [];
-                [32|Selector] -> Selector;
-                [$#|_] = Selector -> Selector;
-                Id when is_list(Id)-> [$#|Id]
-            end;
-        "window" ->
-            window;
-        <<"window">> ->
-            window;
-        Selector ->
-            Selector
+            css_selector_1(TargetId);
+        <<"window">> -> window;
+        "window" -> window;
+        Selector -> Selector
     end.
+
+css_selector_1(undefined) -> <<>>;
+css_selector_1(<<>>) -> <<>>;
+css_selector_1("") -> <<>>;
+css_selector_1(window) -> window;
+css_selector_1("window") -> window;
+css_selector_1(<<"window">>) -> window;
+css_selector_1(<<"#", _/binary>> = Sel) -> Sel;
+css_selector_1(<<" ", _/binary>> = Sel) -> Sel;
+css_selector_1(Sel) when is_list(Sel) -> css_selector_1(iolist_to_binary(Sel));
+css_selector_1(Sel) -> <<"#", Sel/binary>>.
+
 
 %% @doc Quote a css selector (assume no escaping needed...)
 quote_css_selector(window) -> <<"window">>;

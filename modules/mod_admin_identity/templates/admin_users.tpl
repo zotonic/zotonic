@@ -75,7 +75,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            {% wire id=" #"|append:#tr.id|append:" td" action={dialog_edit_basics id=id target=undefined} %}
+                            {% wire id=#tr.id|append:" td" action={dialog_edit_basics id=id target=undefined} %}
                         {% empty %}
                             <tr>
                                 <td colspan="4">
