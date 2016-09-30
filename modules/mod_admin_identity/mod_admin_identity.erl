@@ -219,15 +219,10 @@ event(#postback{message={identity_add, Args}}, Context) ->
 event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
     case z_acl:is_admin(Context) of
         true ->
+            % Changing the authenticated will force all connected pages to reload or change.
+            % After this we can't send any replies any more, as the pages are disconnecting.
             {ok, NewContext} = z_auth:switch_user(Id, Context),
-            %% find out redirect URL, if we can stay in the admin or not.
-            Url = case z_acl:is_allowed(use, mod_admin, NewContext) of
-                      true ->
-                          z_dispatcher:url_for(admin, NewContext);
-                      false ->
-                          <<"/">>
-                  end,
-            z_render:wire({redirect, [{location, Url}]}, NewContext);
+            NewContext;
         false ->
             z_render:growl_error(?__("You are not allowed to switch users.", Context), Context)
     end.

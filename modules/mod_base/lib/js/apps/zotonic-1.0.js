@@ -360,7 +360,7 @@ function z_session_restart_check(invalid_page_id)
                 z_session_invalid_reload(z_pageid);
             } else {
                 z_session_restart_count++;
-                z_transport('session', 'ubf', 'ensure', {is_expect_cookie: true});
+                z_transport('session', 'ubf', 'ensure', {transport: "ajax"});
             }
         } else {
             setTimeout(function() { z_session_restart_check(invalid_page_id); }, 200);
