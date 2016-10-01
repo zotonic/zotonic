@@ -61,7 +61,8 @@
 
          init/1,
          event/2,
-         generate/1
+         generate/1,
+         generate_core/1
         ]).
 
 -include("zotonic.hrl").
@@ -276,7 +277,7 @@ event(#submit{message={language_add, _Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             language_add(
-                    z_string:trim(z_context:get_q(<<"code">>, Context)), 
+                    z_string:trim(z_context:get_q(<<"code">>, Context)),
                     z_context:get_q(<<"is_enabled">>, Context),
                     Context),
             z_render:wire({reload, []}, Context);
@@ -590,10 +591,29 @@ language_list_item(Code, IsEnabled) ->
 
 % @doc Generate all .po templates for the given site
 generate(#context{} = Context) ->
-    translation_po:generate(translation_scan:scan(Context));
+    ActiveModules = z_module_manager:active_dir(Context),
+    translation_po:generate(translation_scan:scan(ActiveModules, Context), Context),
+    generate_core(Context);
 generate(Host) when is_atom(Host) ->
-    translation_po:generate(translation_scan:scan(z_context:new(Host))).
+    generate(z_context:new(Host)).
 
+%% @doc Generate consolidated translation file zotonic.pot for all core modules.
+%%      Both active and inactive modules are indexed, so the generated
+%%      translation files are always complete.
+-spec generate_core(#context{}) -> ok.
+generate_core(#context{} = Context) ->
+    CoreModules = z_module_manager:scan_core(Context),
+    translation_po:generate(translation_scan:scan(CoreModules, Context), Context),
+    consolidate(Context).
+
+%% @doc Consolidate translation files for core modules
+consolidate(_Context) ->
+    Command = lists:flatten(["msgcat -o ",
+        z_utils:lib_dir(priv) ++ "/translations/zotonic.pot ",
+        z_utils:lib_dir(priv) ++ "/translations/template/*.pot"
+    ]),
+    [] = os:cmd(Command),
+    ok.
 
 observe_admin_menu(admin_menu, Acc, Context) ->
     [

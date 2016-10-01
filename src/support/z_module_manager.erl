@@ -45,6 +45,7 @@
          whereis/2,
          all/1,
          scan/1,
+         scan_core/1,
          prio/1,
          prio_sort/1,
          dependency_sort/1,
@@ -269,9 +270,18 @@ scan(#context{site=Site}) ->
            [z_utils:lib_dir(priv), "modules", "mod_*"]
 
           ],
-    Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [z_utils:wildcard(filename:join(P)) || P <- All]),
-    [ {z_convert:to_atom(filename:basename(F)), F} ||  F <- Files ].
+    scan_paths(All).
 
+%% @doc Get a list of Zotonic core modules.
+-spec scan_core(#context{}) -> list({ModuleName :: atom(), Path :: string()}).
+scan_core(#context{}) ->
+    scan_paths([
+        [z_utils:lib_dir(modules), "mod_*"]
+    ]).
+
+scan_paths(Paths) ->
+    Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [z_utils:wildcard(filename:join(P)) || P <- Paths]),
+    [ {z_convert:to_atom(filename:basename(F)), F} ||  F <- Files ].
 
 %% @doc Return the priority of a module. Default priority is 500, lower is higher priority.
 %% Never crash on a missing module.

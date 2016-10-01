@@ -78,16 +78,22 @@ Generation of translations
 
 The fixed texts in a Zotonic website are translated using the `GNU
 gettext <http://www.gnu.org/software/gettext/>`_ ``.po`` file format and
-its related tools.
+its related tools. If you’re not using our :ref:`guide-docker` images, you may
+have to install gettext first:
 
-In Zotonic, static translations are organized in each Zotonic
-module. It is the module’s responsibility to provide translations for
-all the texts that it uses in its templates. All files related to
-static translations live inside the ``translations/`` subdirectory of
-a module (remember: a Zotonic site is just a module!).
+.. code-block:: shell
 
-In the ``translations/`` directory of the modules you can find the ``.po``
-files containing the translations. They are marked with the their language code.  (Optionally you can name your file like:
+    $ sudo apt-get install gettext
+
+In Zotonic, translations files are placed in two locations:
+
+- for the core modules, the translation files are consolidated in
+  :file:`priv/translations/`;
+- third-party modules and sites, including your own, have their translation
+  files in a :file:`translations/` subdirectory in the module itself.
+
+In the translations directory you can find the ``.po`` files containing the
+translations. They are marked with the their language code. (Optionally you can name your file like:
 nl.foobar.po as Zotonic will only look at the part till the first '.'
 for the language code)::
 
@@ -102,7 +108,15 @@ for the language code)::
 This shows that module ``mod_foo`` has been translated into
 Dutch (`nl`), Turkish (`tr`) and Chinese traditional script (`zh-hant`).
 
-The template for translation strings is located in a ``.pot`` file, in ``mod_foo/translations/template/mod_foo.pot``. This pot file is regenerated when you click on the ‘Generate .pot files’ button on the Translation page in the admin. Alternatively,
+The ``.po`` translation files are based on translation templates (``.pot``
+files). The templates are located in :file:`translations/templates`:
+
+- :file:`priv/translations/template/zotonic.pot` for the core modules;
+- :file:`mod_foo/translations/template/mod_foo.pot` for custom modules.
+
+This ``.pot`` file is regenerated when you click on the ‘Generate .pot files’
+button on the :ref:`Translation page <mod_translation>` in the admin.
+Alternatively,
 from your Zotonic shell:
 
 .. code-block:: erlang
@@ -110,7 +124,7 @@ from your Zotonic shell:
     mod_translation:generate(Context).
 
 Zotonic will parse all your templates and Erlang modules for translatable
-strings. These strings are then added to the .pot file.
+strings. These strings are then added to the ``.pot`` files.
 
 Creating a new translation for a module
 .......................................

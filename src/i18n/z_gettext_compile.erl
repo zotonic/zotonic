@@ -64,110 +64,62 @@ generate(Filename, Labels) ->
     write_entries(Fd, Labels),
     ok = file:close(Fd).
 
-write_entries(Fd, L) ->
+write_entries(Fd, Labels) ->
     LibDir = z_utils:lib_dir(),
-    F = fun({Id,Trans,Finfo}) ->
+    F = fun({Id, Trans, Finfo}) ->
             io:format(Fd, "~n#: ~s~n", [fmt_fileinfo(Finfo, LibDir)]),
     		file:write(Fd, "msgid \"\"\n"),
-    		write_pretty(to_list(Id), Fd),
+            write_pretty(unicode:characters_to_binary(Id), Fd),
     		file:write(Fd, "msgstr \"\"\n"),
-    		write_pretty(to_list(Trans), Fd)
+    		write_pretty(unicode:characters_to_binary(Trans), Fd)
     	end,
-    lists:foreach(F, L).
+    lists:foreach(F, Labels).
 
 -define(ENDCOL, 72).
 -define(PIVOT, 4).
--define(SEP, $\s).
+-define(SEP, <<" ">>).
 
 write_pretty([], _) ->
     true;
-write_pretty(Str, Fd) when length(Str) =< ?ENDCOL ->
-    write_string(Str, Fd);
-write_pretty(Str, Fd) ->
-    {Line, Rest} = get_line(Str),
-    write_string(Line, Fd),
-    write_pretty(Rest, Fd).
+write_pretty(Binary, Fd) ->
+    file:write(Fd, wrap(escape_chars(Binary))).
 
-write_string(Str, Fd) ->
-    file:write(Fd, "\""),
-    file:write(Fd, escape_chars(Str)),
-    file:write(Fd, "\"\n").
+%% @doc Line-wrap translation strings that exceed the line length
+-spec wrap(binary()) -> binary().
+wrap(Binary) when byte_size(Binary) =< ?ENDCOL ->
+    <<"\"", Binary/binary, "\"\n">>;
+wrap(Binary) ->
+    <<"\"", (wrap(binary:split(Binary, ?SEP, [global]), ?ENDCOL))/binary>>.
 
+wrap(Parts, Length) ->
+    {Line, Acc} = lists:foldl(
+        fun
+            (Part, {<<>>, Acc}) when byte_size(Part) =< Length ->
+                {Part, Acc};
+            (Part, {Line, Acc}) when byte_size(Line) + byte_size(Part) =< Length ->
+                {<<Line/binary, " ", Part/binary>>, Acc};
 
-%%% Split the string into substrings,
-%%% aligned around a specific column.
-get_line(Str) ->
-    get_line(Str, ?SEP, 1, ?ENDCOL, []).
-
-%%% End of string reached.
-get_line([], _Sep, _N, _End, Acc) ->
-    {lists:reverse(Acc), []};
-%%% Eat characters.
-get_line([H|T], Sep, N, End, Acc) when N < End ->
-    get_line(T, Sep, N+1, End, [H|Acc]);
-%%% Ended with a Separator on the End boundary.
-get_line([Sep|T], Sep, End, End, Acc) ->
-    {lists:reverse([Sep|Acc]), T};
-%%% At the end, try to find end of token within
-%%% the given constraint, else backup one token.
-get_line([H|T] = In, Sep, End, End, Acc) ->
-    case find_end(T, Sep) of
-	{true, Racc, Rest} ->
-	    {lists:reverse(Racc ++ [H|Acc]), Rest};
-	false ->
-	    case reverse_tape(Acc, In) of
-		{true, Bacc, Rest} ->
-		    {lists:reverse(Bacc), Rest};
-		{false,Str} ->
-		    %%% Ugh...the word is longer than ENDCOL...
-		    split_string(Str, ?ENDCOL)
-	    end
-    end.
-
-find_end(Str, Sep) ->
-    find_end(Str, Sep, 1, ?PIVOT, []).
-
-find_end([Sep|T], Sep, N, Pivot, Acc) when N =< Pivot ->
-    {true, [Sep|Acc], T};
-find_end(_Str, _Sep, N, Pivot, _Acc) when N > Pivot ->
-    false;
-find_end([H|T], Sep, N, Pivot, Acc) ->
-    find_end(T, Sep, N+1, Pivot, [H|Acc]);
-find_end([], _Sep, _N, _Pivot, Acc) ->
-    {true, Acc, []}.
-
-reverse_tape(Acc, Str) ->
-    reverse_tape(Acc, Str, ?SEP).
-
-reverse_tape([Sep|_T] = In, Str, Sep) ->
-    {true, In, Str};
-reverse_tape([H|T], Str, Sep) ->
-    reverse_tape(T, [H|Str], Sep);
-reverse_tape([], Str, _Sep) ->
-    {false, Str}.
-
-split_string(Str, End) ->
-    split_string(Str, End, 1, []).
-
-split_string(Str, End, End, Acc) ->
-    {lists:reverse(Acc), Str};
-split_string([H|T], End, N, Acc) when N < End ->
-    split_string(T, End, N+1, [H|Acc]);
-split_string([], _End, _N, Acc) ->
-    {lists:reverse(Acc), []}.
-
-
+            %% start a new line
+            (Part, {Line, <<>>}) ->
+                {<<Part/binary>>, <<Line/binary>>};
+            (Part, {Line, Acc}) ->
+                {<<Part/binary>>, <<Acc/binary, " \"\n\"", Line/binary>>}
+        end,
+        {<<>>, <<>>},
+        Parts
+    ),
+    <<Acc/binary, " \"\n\"", Line/binary, "\"\n">>.
 
 fmt_fileinfo(Finfo, LibDir) ->
     F = fun({Fname0,LineNo}, Acc) ->
-        Fname = to_list(Fname0),
+        Fname = z_convert:to_list(Fname0),
         Fname1 = case lists:prefix(LibDir, Fname) of
                     true -> [$.|lists:nthtail(length(LibDir), Fname)];
                     false -> Fname
                  end,
-		Fname1 ++ ":" ++ to_list(LineNo) ++ [$\s|Acc]
+        iolist_to_binary([Fname1, ":", z_convert:to_binary(LineNo), Acc])
 	end,
-    lists:foldr(F,[],Finfo).
+    lists:foldr(F,<<>>,Finfo).
 
 write_header(Fd) ->
     file:write(Fd,
@@ -255,12 +207,12 @@ pt([{call,_,{remote,_,{atom,_,gettext},{atom,_,key2str}},
     [H | pt(T, Opts, Func)];
 %%%
 pt([{attribute,_L,module,Mod} = H | T], Opts, Func) ->
-    put(fname, to_list(Mod) ++ ".erl"),
+    put(fname, <<(z_convert:to_binary(Mod)), ".erl">>),
     ?debug( "++++++ Filename 1 =<~p>~n",[get(fname)]),
     [H | pt(T, Opts, Func)];
 %%%
 pt([{attribute,_L,yawsfile,Fname} = H | T], Opts, Func) ->
-    put(fname, to_list(Fname)),
+    put(fname, z_convert:to_binary(Fname)),
     ?debug( "++++++ Filename 2 =<~p>~n",[get(fname)]),
     [H | pt(T, Opts, Func)];
 %%%
@@ -305,16 +257,16 @@ get_file_info(Key) ->
 	[{_,Finfo}|_] -> Finfo
     end.
 
-escape_chars(Str) ->
-    F = fun($", Acc)  -> [$\\,$"|Acc];
-           ($\\, Acc) -> [$\\,$\\|Acc];
-           ($\n, Acc) -> [$\\,$n|Acc];
-	   (C, Acc)   -> [C|Acc]
-	end,
-    lists:foldr(F, [], Str).
+escape_chars(Binary) ->
+    escape_chars(Binary, <<>>).
 
-
-to_list(A) when is_atom(A)    -> atom_to_list(A);
-to_list(I) when is_integer(I) -> integer_to_list(I);
-to_list(B) when is_binary(B)  -> binary_to_list(B);
-to_list(L) when is_list(L)    -> L.
+escape_chars(<<"\"", T/binary>>, Acc) ->
+    escape_chars(T, <<Acc/binary, "\\\"">>);
+escape_chars(<<"\\", T/binary>>, Acc) ->
+    escape_chars(T, <<Acc/binary, "\\\\">>);
+escape_chars(<<"\n", T/binary>>, Acc) ->
+    escape_chars(T, <<Acc/binary, "\\n">>);
+escape_chars(<<H, T/binary>>, Acc) ->
+    escape_chars(T, <<Acc/binary, H>>);
+escape_chars(<<>>, Acc) ->
+    Acc.

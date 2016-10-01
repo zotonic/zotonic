@@ -26,6 +26,8 @@ installed:
 5. **git** Zotonic comes with a few subprojects which are pulled from
    the web with the ``git`` command.
 
+6. **gettext** For translation support.
+
 If you meet these requirements, head straight on to :ref:`guide-installation`,
 otherwise, read on below for the specifics on these.
 

@@ -20,28 +20,30 @@
 -module(translation_po).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([generate/1]).
+-export([generate/2]).
 
 -include_lib("zotonic.hrl").
 
 
 %% @doc Take the list of found labels per module and generate all po files for those labels in the module directories.
-generate(ModLabs) ->
-    generate1(ModLabs).
+-spec generate([{ModuleName :: atom(), Labels :: list()}], #context{}) -> list().
+generate(ModLabels, Context) ->
+    generate1(ModLabels, Context).
 
-generate1([]) ->
+generate1([], _Context) ->
     ok;
-generate1([{ModDir, Labels}|ModLabs]) ->
-    ModuleName = filename:basename(ModDir),
-    Dir = filename:join([ModDir, "translations", "template"]),
+generate1([{Module, Labels}|ModuleLabels], Context) ->
+    Path = template_path(Module, Context),
+    Dir = filename:dirname(Path),
+
     case filelib:ensure_dir(filename:join([Dir, "empty"])) of
         ok ->
             delete_po_files(Dir),
-            generate_po_files(ModuleName, Dir, Labels),
-            generate1(ModLabs);
+            generate_po_files(Module, Dir, Labels),
+            generate1(ModuleLabels, Context);
         {error, Reason} ->
             lager:warning("Could not create directory for extracted translations: ~p ~p", [{error, Reason}, Dir]),
-            generate1(ModLabs)
+            generate1(ModuleLabels, Context)
     end.
 
 %% Delete all existing po files in a directory
@@ -71,7 +73,7 @@ extract_languages([{_Text, Args, _Pos}|Labels], Acc) ->
 
 
 generate_po_file(ModuleName, Lang, Dir, Labels) ->
-    Filename = filename:join([Dir, ModuleName ++ case Lang of en -> ".pot"; _ -> ".po" end]),
+    Filename = filename:join([Dir, z_convert:to_list(ModuleName) ++ case Lang of en -> ".pot"; _ -> ".po" end]),
     PoLabels = extract_labels(Lang, Labels, []),
     z_gettext_compile:generate(Filename, lists:sort(PoLabels)).
 
@@ -82,3 +84,19 @@ extract_labels(en, [{Lab, _Trans, Pos}|Labels], Acc) ->
     extract_labels(en, Labels, [{Lab, "", Pos}|Acc]);
 extract_labels(Lang, [{Lab, Trans, Pos}|Labels], Acc) ->
     extract_labels(Lang, Labels, [{Lab, proplists:get_value(Lang, Trans, Lab), Pos}|Acc]).
+
+
+%% @doc Get the path to a module's translation template (.pot) file
+-spec template_path(atom(), #context{}) -> string().
+template_path(Module, Context) ->
+    CoreModules = z_module_manager:scan_core(Context),
+    AllModules = z_module_manager:scan(Context),
+    TemplateParentDir = case proplists:lookup(Module, CoreModules) of
+        none ->
+            %% Custom module
+            proplists:get_value(Module, AllModules);
+        {_Module, _Path} ->
+            %% Core module
+            z_utils:lib_dir(priv)
+    end,
+    filename:join([TemplateParentDir, "translations", "template", z_convert:to_list(Module) ++ ".pot"]).
