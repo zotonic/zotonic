@@ -2,7 +2,7 @@
 /mnesia/,/]}/d
 
 # Disbable access logs
-/log_dir/d
+/{log_dir, "priv\/log\/access\/"}/d
 
 # Remove file backend console logs since they go to stdout
 /lager_file_backend/d
