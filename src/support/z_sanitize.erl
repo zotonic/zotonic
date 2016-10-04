@@ -133,7 +133,7 @@ cleanup_microsoft_attrs(Attrs) ->
     lists:filter(fun({_,_}) -> true; (drop) -> false end, Attrs1).
 
 cleanup_microsoft_attr({<<"class">>, Classes}) ->
-    Classes1 = binary:split(Classes, <<" ">>, [global, trim_all]),
+    Classes1 = binary:split(Classes, <<" ">>, [global]),
     case lists:filter(fun is_not_mso_class/1, Classes1) of
         [] -> drop;
         Cs -> iolist_to_binary(z_utils:combine(32, Cs))
