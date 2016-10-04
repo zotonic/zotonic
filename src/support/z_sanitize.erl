@@ -110,8 +110,43 @@ sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts) ->
         false ->
             Element
     end;
+sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack, _Opts) ->
+    % Conditionals by Microsoft Word: <!-- [if (..)] (..) [endif]-->
+    case binary:last(Comment) of
+        $] -> <<>>;
+        _ -> Element
+    end;
+sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts) ->
+    % Inserted by Microsoft Word: <!--StartFragment-->
+    <<>>;
+sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts) ->
+    % Inserted by Microsoft Word: <!--EndFragment-->
+    <<>>;
+sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts) ->
+    Attrs1 = cleanup_microsoft_attrs(Attrs),
+    {Tag, Attrs1, Inner};
 sanitize_element_opts(Element, _Stack, _Opts) ->
     Element.
+
+cleanup_microsoft_attrs(Attrs) ->
+    Attrs1 = lists:map(fun cleanup_microsoft_attr/1, Attrs),
+    lists:filter(fun({_,_}) -> true; (drop) -> false end, Attrs1).
+
+cleanup_microsoft_attr({<<"class">>, Classes}) ->
+    Classes1 = binary:split(Classes, <<" ">>, [global, trim_all]),
+    case lists:filter(fun is_not_mso_class/1, Classes1) of
+        [] -> drop;
+        Cs -> iolist_to_binary(z_utils:combine(32, Cs))
+    end;
+cleanup_microsoft_attr({<<"style">>, <<"mso-", _/binary>>}) ->
+    % This might need some extra parsing of the css.
+    % For now we just drop styles starting with a "mso-" selector.
+    drop;
+cleanup_microsoft_attr(Attr) ->
+    Attr.
+
+is_not_mso_class(<<"Mso", _/binary>>) -> false;
+is_not_mso_class(_) -> true.
 
 
 sanitize_script(Props, Context) ->

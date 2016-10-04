@@ -14,6 +14,23 @@ youtube_object_test() ->
 	Out = <<"<iframe width=\"560\" height=\"315\" allowfullscreen=\"1\" frameborder=\"0\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ\"></iframe>">>,
 	?assertEqual(Out, z_sanitize:html(In, Context)).
 
+mso1_test() ->
+    Context = z_context:new(testsandbox),
+    In = <<"Hello <!-- [if foo]...[endif]--> World">>,
+    Out = <<"Hello  World">>,
+    ?assertEqual(Out, z_sanitize:html(In, Context)).
+
+mso2_test() ->
+    Context = z_context:new(testsandbox),
+    In = <<"Hello <!--StartFragment--> <!--EndFragment--> World">>,
+    Out = <<"Hello   World">>,
+    ?assertEqual(Out, z_sanitize:html(In, Context)).
+
+mso3_test() ->
+    Context = z_context:new(testsandbox),
+    In = <<"<p class=\"MsoNormal\"><span style=\"mso-ansi-language: EN-US;\">Hello</span></p>">>,
+    Out = <<"<p><span>Hello</span></p>">>,
+    ?assertEqual(Out, z_sanitize:html(In, Context)).
 
 svg_imagetragick_test() ->
     A = z_svg:sanitize(<<"
