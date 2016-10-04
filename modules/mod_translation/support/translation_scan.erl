@@ -19,28 +19,26 @@
 -module(translation_scan).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([scan/1, scan_file/2]).
+-export([scan/2, scan_file/2]).
 
 -include_lib("zotonic.hrl").
 
 
 -export([parse_erl/2]).
 
-scan(Context) ->
-    AllModules = z_module_manager:scan(Context),
-    Active = z_module_manager:active(Context),
-    Modules = [{Mod, ModDir} || {Mod, ModDir} <- AllModules, lists:member(Mod, Active)],
+-spec scan([{atom(), string()}], #context{}) -> [{ModuleName :: atom(), Labels :: list()}].
+scan(Modules, Context) ->
     Files = lists:flatten(
               [z_module_indexer:all(What, Context)
                || What <- [template, scomp, action, validator, model, service, erlang]]),
     ModFiles = [{Mod, Path} || #module_index{module=Mod, filepath=Path} <- Files ],
-    Combined = [{ModDir, [ModDir++"/"++z_convert:to_list(Mod)++".erl"
+    Combined = [{Mod, [ModDir++"/"++z_convert:to_list(Mod)++".erl"
                           | proplists:get_all_values(Mod, ModFiles)]}
                 || {Mod, ModDir} <- Modules],
     [ scan_module(Mod) || Mod <- Combined ].
 
-scan_module({Path, Files}) ->
-    {Path, dedupl(lists:flatten([ scan_file(filename:extension(File), File) || File <- Files ]))}.
+scan_module({Module, Files}) ->
+    {Module, dedupl(lists:flatten([ scan_file(filename:extension(File), File) || File <- Files ]))}.
 
 
 dedupl(Trans) ->
@@ -51,6 +49,8 @@ dedupl(Trans) ->
 insert([], Dict) ->
     Dict;
 
+insert([{Text, Args, Loc}|Trans], Dict) when not is_binary(Text) ->
+    insert([{unicode:characters_to_binary(Text), Args, Loc}|Trans], Dict);
 insert([{Text, Args, Loc}|Trans], Dict) ->
     case dict:find(Text, Dict) of
         {ok, {_Text, Args0, Loc0}} ->
@@ -72,14 +72,15 @@ merge_args([{Lang,Text}|Rest], Args) ->
 
 %% @doc Parse the template or Erlang module. Extract all translation tags.
 scan_file(<<".tpl">>, File) ->
-    scan_file(".tpl", File); 
+    scan_file(".tpl", File);
 scan_file(".tpl", File) ->
     case template_compiler:translations(File) of
-        {ok, Translations} -> normalize_line_info(Translations);
+        {ok, Translations} ->
+            normalize_line_info(Translations);
         {error, Reason} ->
           lager:error("POT generation, erlang error in ~p: ~p~n", [File, Reason])
     end;
-    
+
 scan_file(<<".erl">>, File) ->
     scan_file(".erl", File);
 scan_file(".erl", File) ->
@@ -95,7 +96,7 @@ scan_file(_, _) ->
 
 normalize_line_info(Translations) ->
     normalize_line_info(Translations, []).
-  
+
 normalize_line_info([], Acc) ->
     lists:reverse(Acc);
 normalize_line_info([{Text, Args, {Filename, LineNr, _ColumnNr}}|Translations], Acc) ->

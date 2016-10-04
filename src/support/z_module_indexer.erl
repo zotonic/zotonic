@@ -258,8 +258,12 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 translations1(Context) ->
-    ActiveDirs = z_module_manager:active_dir(Context),
-    POs = [{M,F} || #mfile{filepath=F, module=M} <- scan_subdir(translation, "translations", "", ".po", ActiveDirs) ],
+    Dirs = [
+        {priv, z_utils:lib_dir(priv)}          %% core modules translations
+        | z_module_manager:active_dir(Context) %% other module translations
+    ],
+    POs = [{M,F} || #mfile{filepath=F, module=M} <- scan_subdir(translation, "translations", "", ".po", Dirs) ],
+
     ByModule = lists:foldl(fun({M,F}, Acc) ->
                                 dict:append(M, F, Acc)
                            end,

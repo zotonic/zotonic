@@ -1,0 +1,5445 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Michael Connors <michael@bring42.net>, 2010.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2012-10-31 21:43+0100\n"
+"Last-Translator: Michael Connors <michael@bring42.net>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:3
+msgid "ACL rules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_import.tpl:9
+msgid "ACL rules file"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_list_header.tpl:4./modules/mod_acl_user_groups/templates/_admin_acl_rules_list_header.tpl:10./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:41./modules/mod_acl_user_groups/templates/admin_acl_rules_upload.tpl:13
+msgid "ACL user group"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:8
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:21./modules/mod_admin/templates/_admin_edit_content_acl.tpl:6./modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
+#: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:7
+msgid "Access control"
+msgstr "Acceder au control"
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:34./modules/mod_acl_user_groups/mod_acl_user_groups.erl:357
+#, fuzzy
+msgid "Access control rules"
+msgstr "Acceder au control"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_list.tpl:21./modules/mod_acl_user_groups/templates/_admin_acl_rules_list.tpl:24
+msgid "Add Rule"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:57
+msgid "Add links to the collaboration group"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:91./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:109./modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:112
+#: modules/mod_logging/templates/admin_log_email.tpl:74./modules/mod_logging/templates/admin_log_email.tpl:104
+msgid "All"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_row_collab.tpl:5./modules/mod_acl_user_groups/templates/_admin_acl_rule_row_rsc.tpl:35
+#: modules/mod_admin/templates/admin_overview.tpl:44./modules/mod_admin/templates/admin_overview.tpl:69
+msgid "All Categories"
+msgstr "Toutes les catégories"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_row_module.tpl:17
+msgid "All Modules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_row_module.tpl:9./modules/mod_acl_user_groups/templates/_admin_acl_rule_row_rsc.tpl:9
+msgid "All User Groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_collab_select.tpl:29./modules/mod_acl_user_groups/templates/_admin_acl_rule_row_rsc.tpl:18
+msgid "All collaboration groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_collab_select.tpl:17./modules/mod_acl_user_groups/templates/_admin_acl_rule_row_rsc.tpl:15
+msgid "All normal content groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
+#, fuzzy
+msgid "Are you sure you want to delete the following user groups:"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:7
+#, fuzzy
+msgid "Are you sure you want to make all rules permanent?"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:38
+#, fuzzy
+msgid ""
+"Are you sure you want to restore all ACL rules to their currently published "
+"version?"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_change_category.tpl:10./modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:150
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:32./modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:74./modules/mod_admin/templates/_admin_edit_blocks.tpl:39./modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:38./modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:52
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:23
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:51./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:102
+#: modules/mod_admin_merge/templates/_confirm_merge.tpl:130
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:30./modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:46./modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:17
+#: modules/mod_authentication/templates/_logon_stage.tpl:34./modules/mod_authentication/templates/logon_confirm_form.tpl:28
+#: modules/mod_base/templates/_action_dialog_confirm.tpl:6
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:36./modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:50
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:94
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:60./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:94./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:72
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:14./modules/mod_translation/templates/_dialog_language_delete.tpl:6
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:43
+msgid "Cancel"
+msgstr "Annulé"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_list_header.tpl:6./modules/mod_acl_user_groups/templates/_admin_acl_rules_list_header.tpl:8./modules/mod_acl_user_groups/templates/_admin_catcg.tpl:2./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:87
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:27./modules/mod_admin/templates/_admin_overview_list.tpl:14./modules/mod_admin/templates/admin_referrers.tpl:21./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:45
+#: modules/mod_survey/mod_survey.erl:117
+msgid "Category"
+msgstr "Categorie"
+
+#: modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:6./modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:28
+msgid "Category &amp; Content group"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:25
+msgid "Change category and/or content group..."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:22
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47
+#: modules/mod_base_site/templates/_dialog_share_page.tpl:19
+#: modules/mod_editor_tinymce/templates/_admin_configure_module.tpl:31
+#: modules/mod_email_status/templates/_dialog_email_status.tpl:4
+#: modules/mod_l10n/templates/_admin_configure_module.tpl:8
+#: modules/mod_mqtt/templates/_admin_configure_module.tpl:16
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:47
+#: modules/mod_video/templates/_admin_configure_module.tpl:68
+msgid "Close"
+msgstr "Fermer"
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:49
+msgid "Collaboration Groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:353
+msgid "Collaboration groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:34
+msgid "Collaboration groups are added by creating a new page in the category:"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:32
+msgid ""
+"Collaboration groups are user groups where all content belongs to the group."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:46
+#: modules/mod_admin/templates/_admin_edit_body.tpl:4./modules/mod_admin/mod_admin.erl:95
+#: modules/mod_logging/templates/admin_log_email.tpl:55
+msgid "Content"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_list_header.tpl:5./modules/mod_acl_user_groups/templates/_admin_catcg.tpl:14./modules/mod_acl_user_groups/templates/_admin_edit_visible_for.tpl:3./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:58
+msgid "Content group"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_collab_select.tpl:16
+#: modules/mod_content_groups/mod_content_groups.erl:178
+msgid "Content groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:78
+msgid "Content rules for collaboration group members and managers"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
+msgid "Define who can see or edit this page."
+msgstr "Definir qui peut voir et éditer cette page"
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:158
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7./modules/mod_admin/templates/_admin_edit_blocks.tpl:40./modules/mod_admin/templates/_admin_edit_content_publish.tpl:80
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:53
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:8./modules/mod_admin_config/templates/admin_config.tpl:52
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8./modules/mod_admin_identity/templates/_identity_verify_table.tpl:26./modules/mod_admin_identity/mod_admin_identity.erl:162
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:47
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:51
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:30
+msgid "Delete"
+msgstr "Effacer"
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
+msgid "Delete all user groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:115
+msgid "Delete is canceled, there are users in the user groups."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
+msgid "Delete user group and move users"
+msgstr ""
+
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:119./modules/mod_acl_user_groups/mod_acl_user_groups.erl:140
+#: modules/mod_admin_category/mod_admin_category.erl:74./modules/mod_admin_category/mod_admin_category.erl:94
+#: modules/mod_admin_predicate/mod_admin_predicate.erl:84./modules/mod_admin_predicate/mod_admin_predicate.erl:90
+#: modules/mod_content_groups/mod_content_groups.erl:75./modules/mod_content_groups/mod_content_groups.erl:96
+msgid "Deleting..."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:45
+msgid "Edit &amp; link rights on the collaboration groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:5./modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:43./modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:47
+#, fuzzy
+msgid "Edit Rule"
+msgstr "Editer"
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:49
+msgid "Edit the collaboration group"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_change_category.tpl:1
+#, fuzzy
+msgid ""
+"Every page is categorized in exactly one category.  The category defines "
+"what the page represents. For example an event, a product or a person.  The "
+"categories are hierarchically defined. In that way you can have a vehicles "
+"category with subcategories car and bicycle."
+msgstr ""
+"Chaque page est catégorisée dans une catégorie. La catégorie définit ce que "
+"les pages représentent. Par exemple un évenement, un produit ou une "
+"personne. Les catégorie sont définient hierarchiquement. Par exemple; vous "
+"pouvez avoir une catégorie véhicules avec des sous catégories voiture et "
+"bicyclette."
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:22
+msgid "Export edit rules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:55
+#, fuzzy
+msgid "File Uploads"
+msgstr "Télécharger"
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:70
+msgid "Find collaboration group"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:52
+msgid "Group managers can edit"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:60
+msgid "Group managers can link"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:53
+msgid "Group members and managers can edit"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:61
+msgid "Group members and managers can link"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_import.tpl:18
+msgid "Import"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:27
+msgid "Import edit rules..."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:30
+msgid "Import edit version of ACL rules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:40./modules/mod_acl_user_groups/templates/_dialog_acl_rules_import.tpl:17
+msgid "Keep"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_upload.tpl:6
+msgid ""
+"Maximum file upload size per user group. This restricts file uploads for "
+"users."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_upload.tpl:16
+msgid "Maximum upload size"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_list_header.tpl:11./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:105
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:4./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:7./modules/mod_admin_config/templates/admin_config.tpl:19
+#: modules/mod_base/templates/error.tpl:72
+#: modules/mod_development/templates/_development_template.tpl:3
+msgid "Module"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:52
+#: modules/mod_admin/mod_admin.erl:116
+#: modules/mod_admin_modules/templates/admin_modules.tpl:3./modules/mod_admin_modules/templates/admin_modules.tpl:7./modules/mod_admin_modules/mod_admin_modules.erl:88
+msgid "Modules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:15
+msgid "Move all users within these user groups to:"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_catcg.tpl:20./modules/mod_acl_user_groups/templates/_admin_catcg.tpl:27
+msgid "Move to another"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:8
+#: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8./modules/mod_admin/templates/_admin_edit_content_person.tpl:8./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8./modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:6
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:6
+msgid "Need more help?"
+msgstr "Besoin de plus d’aide"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_list.tpl:14
+msgid "No ACL rules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:132
+msgid "Not all user groups could be deleted."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:72
+msgid "Not allowed."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
+msgid ""
+"Or click <strong>Delete all user groups</strong> to disconnect all users and "
+"delete the user groups."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:122
+#, fuzzy
+msgid "Own content"
+msgstr "Seo content"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_list_header.tpl:13./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:135
+msgid "Permissions"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:4
+#, fuzzy
+msgid "Publish"
+msgstr "Publié"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:41
+msgid "Revert"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:35./modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:39
+msgid "Revert back to published version"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_change_category.tpl:11./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:151./modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:66
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:33./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:24
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:53
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:93
+msgid "Save"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:86
+msgid "Show"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:98
+msgid "Show this ACL user group first:"
+msgstr ""
+
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:96./modules/mod_acl_user_groups/mod_acl_user_groups.erl:112
+#: modules/mod_admin_category/mod_admin_category.erl:51./modules/mod_admin_category/mod_admin_category.erl:67
+#: modules/mod_admin_predicate/mod_admin_predicate.erl:62./modules/mod_admin_predicate/mod_admin_predicate.erl:77
+#: modules/mod_content_groups/mod_content_groups.erl:52./modules/mod_content_groups/mod_content_groups.erl:68
+#: modules/mod_menu/mod_menu.erl:125
+#, fuzzy
+msgid "Sorry, you are not allowed to delete this."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_acl_user_groups/templates/_admin_catcg.tpl:41
+#, fuzzy
+msgid ""
+"Sorry, you are not allowed to insert pages of this category into the "
+"selected content group."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_collab_select.tpl:33
+#, fuzzy
+msgid "System content groups"
+msgstr "Status du système"
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:21
+msgid "Test ACL rules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:3./modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:6
+#, fuzzy
+msgid "Test Access Control Rules"
+msgstr "Acceder au control"
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:31
+msgid "The URL is only valid for a day."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:12
+msgid "The URL is valid for one day."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_upload.tpl:7
+msgid "The default upload size is:"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:47
+#, fuzzy
+msgid "There are no users within these user groups."
+msgstr "Il n’y a pas de pages connectée a cette page"
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:33
+msgid "They are managed by their own manager and use the access rules below."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:33
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:35
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:27
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:33
+msgid "This can not be undone."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:18
+msgid "This page is a"
+msgstr "Cette page a"
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:18
+msgid "This rule is managed by module"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:17
+msgid "Try ACL rules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_catcg.tpl:42
+msgid "Try a different combination of category and content group."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:14
+msgid "Try rules..."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_import.tpl:2
+msgid ""
+"Upload the ACL rules file that you previously exported. Note: all current "
+"rules will be <b>replaced</b> by the rule definition file that is uploaded."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:37
+#, fuzzy
+msgid "Use Published Rules"
+msgstr "Publié"
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:22
+msgid "Use published rules"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:2
+msgid ""
+"Use the following URL to test the access control rules before publishing "
+"them."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_edit_basics_user_extra.tpl:3./modules/mod_acl_user_groups/mod_acl_user_groups.erl:348
+msgid "User groups"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:19
+msgid "Which version of the ACL rules do you want to use?"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:73
+#, fuzzy
+msgid "You are not allowed to view this page."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:47
+msgid "You are using the <b>published</b> version of the access control rules."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:45
+msgid "You are using the <b>test</b> version of the access control rules."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:9
+msgid "You can switch back to the published access control rules by:"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:4
+msgid "You can:"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:30
+msgid ""
+"You have to use a special URL, as provided by the an editor or administrator."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:90
+msgid "all"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:12
+msgid "clicking on <b>Use published rules</b> below"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:13
+msgid "closing your browser and waiting till session is expired"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
+msgid "delete (acl action)"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:33
+msgid "deny"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
+msgid "edit (acl action)"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:20
+msgid "in the group"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
+msgid "insert (acl action)"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
+msgid "link (acl action)"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:15
+msgid "logging off."
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:14
+msgid "logging on"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:27./modules/mod_acl_user_groups/templates/_admin_acl_rule_row.tpl:29./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:127
+msgid "manage own"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:9
+msgid "send this URL to somebody else for testing"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:7
+msgid ""
+"use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:8
+msgid "use another browser (eg. Chrome if you are now using Firefox)"
+msgstr ""
+
+#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
+msgid "view (acl action)"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:39
+msgid "+ add"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_addblock.tpl:5
+msgid "+ add block"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+#, fuzzy
+msgid ""
+"<strong>First</strong> also known as given name, forename or Christen name."
+"<br/><strong>Middle</strong> often shortened to an initial like in <em>John "
+"D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch "
+"<em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family "
+"name or last name."
+msgstr ""
+"<strong>Prénom</strong>Votre premier prénom<br/><strong>Autres prénoms</"
+"strong> si applicable<em></em>.<br/><strong>préfixe nom de famille</strong> "
+"comme <em>De, Le, Du...</em>.<br/><strong>Nom de famille</strong>"
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:9
+msgid "About categories"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:45./modules/mod_admin/templates/_admin_edit_depiction.tpl:23
+#, fuzzy
+msgid "Add a connection:"
+msgstr "Créer une nouvelle connection"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:59
+#, fuzzy
+msgid "Add a new media file"
+msgstr "Ajouter un nouveau média"
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:19
+msgid "Add a new media item"
+msgstr "Ajouter un nouveau média"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:60
+msgid "Add media item"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_body.tpl:14
+msgid "Add media to body"
+msgstr "Ajouter un nouveau média au contenu"
+
+#: modules/mod_admin/actions/action_admin_link.erl:80./modules/mod_admin/mod_admin.erl:387
+#, fuzzy
+msgid "Added the connection to"
+msgstr "Créer une nouvelle connection"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:6
+msgid "Address"
+msgstr "Adresse"
+
+#: modules/mod_admin/templates/admin_base.tpl:5
+msgid "Admin"
+msgstr "Admin"
+
+#: modules/mod_admin/templates/admin_logon.tpl:4
+msgid "Admin log on"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:6
+msgid "Advanced"
+msgstr "Avancé"
+
+#: modules/mod_admin/templates/admin_media.tpl:30./modules/mod_admin/templates/admin_overview.tpl:27
+msgid "All Content"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:40
+msgid "All day"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:14./modules/mod_admin/templates/admin_media.tpl:73./modules/mod_admin/templates/admin_overview.tpl:96
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:71
+msgid "All media"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:13./modules/mod_admin/templates/admin_media.tpl:72./modules/mod_admin/templates/admin_overview.tpl:95
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:70
+msgid "All pages"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:33
+msgid "Alternative telephone"
+msgstr "Téléphone"
+
+#: modules/mod_admin/templates/admin_media.tpl:61
+msgid "And media can also be viewed on their own page."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:20
+#: modules/mod_admin_merge/templates/_merge_find.tpl:14
+msgid "Any category"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:2
+msgid "Are you sure you want to delete the page"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:72
+msgid "Are you sure you want to exit the admin interface?"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:11
+msgid "Aside"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:34
+msgid "Ask google to not index this page"
+msgstr "Demander a Google de ne pas indexer cette page"
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:45./modules/mod_admin/templates/_admin_edit_depiction.tpl:4
+msgid "Attached media"
+msgstr "Joindre un média"
+
+#: modules/mod_admin/mod_admin.erl:121
+msgid "Auth"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_basics.tpl:4
+msgid "Basic"
+msgstr ""
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:4./modules/mod_admin/templates/blocks/_admin_edit_block_li_text.tpl:4
+msgid "Block"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:9
+msgid "Block name"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:10
+msgid "Block quote"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_admin_tasks.erl:25
+msgid "Caches have been flushed."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:7
+msgid "Category name:"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:31./modules/mod_admin/templates/_admin_edit_header.tpl:34
+msgid "Category:"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:31
+msgid "Change category"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:26
+msgid "Change the category of this page"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:10
+msgid "Choose a media item from this page to insert in the body text."
+msgstr "Choisir un média de cette page pour l'insérer dans le corps du texte"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:110./modules/mod_admin/templates/_admin_edit_content_address.tpl:172
+msgid "City"
+msgstr "Ville"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:30
+msgid "Click the image to set the cropping center."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:37
+msgid "Confirm block removal"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:48
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:46
+#, fuzzy
+msgid "Confirm delete"
+msgstr "effacer"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:72
+msgid "Confirm logoff"
+msgstr ""
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_page.tpl:10
+msgid "Connect a page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:76./modules/mod_admin/templates/_admin_edit_content_address.tpl:138
+msgid "Country"
+msgstr "Pays"
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:38./modules/mod_admin/templates/_action_dialog_connect.tpl:57./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:9
+msgid "Create Page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:17
+#: modules/mod_admin_identity/templates/admin_users.tpl:52
+msgid "Created on"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:10
+msgid "Created:"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:23
+msgid "Customize page slug"
+msgstr "Personaliser le slug"
+
+#: modules/mod_admin/templates/admin.tpl:4./modules/mod_admin/templates/admin.tpl:8./modules/mod_admin/mod_admin.erl:90
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:36
+#: modules/mod_base/templates/directory_index.tpl:16
+#: modules/mod_logging/templates/admin_log_email.tpl:58
+msgid "Date"
+msgstr "Date"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:6
+msgid "Date range"
+msgstr "Date"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+msgid "Date ranges"
+msgstr "Les dates"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:46
+msgid "Delete if no other page is connected to this page."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:80
+msgid "Delete this page."
+msgstr "Effacer cette page"
+
+#: modules/mod_admin/templates/_admin_edit_js.tpl:20
+msgid "Deleted."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:48
+msgid "Dependent"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:6./modules/mod_admin/templates/_rsc_edge.tpl:18./modules/mod_admin/templates/_rsc_edge_media.tpl:22
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:11
+#: modules/mod_instagram/templates/_logon_extra_instagram.tpl:13
+#: modules/mod_twitter/templates/_logon_extra.tpl:13
+msgid "Disconnect"
+msgstr "Déconnecter"
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:38
+msgid "Do you want to remove this block?"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:34
+msgid "Download"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:4
+msgid "Drag to change position"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:84./modules/mod_admin/templates/_admin_edit_content_publish.tpl:87
+msgid "Duplicate"
+msgstr "Faire une copie"
+
+#: modules/mod_admin/actions/action_admin_dialog_duplicate_rsc.erl:45./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:30
+msgid "Duplicate page"
+msgstr "Copie de page"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:84./modules/mod_admin/templates/_admin_edit_content_publish.tpl:89
+msgid "Duplicate this page."
+msgstr "Faire une copie de cette page"
+
+#: modules/mod_admin/templates/_admin_edit_content_address_email.tpl:2
+#: modules/mod_admin_identity/templates/_admin_identity_email.tpl:2
+msgid "E-mail address"
+msgstr ""
+
+#: modules/mod_admin/templates/_rsc_edge.tpl:15./modules/mod_admin/templates/admin_edit.tpl:3
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:50./modules/mod_admin_config/templates/admin_config.tpl:53
+#: modules/mod_base_site/templates/_meta.tpl:11
+#: modules/mod_menu/templates/_admin_menu_menu_view.collection.tpl:40./modules/mod_menu/templates/_menu_edit_item.tpl:15
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
+msgid "Edit"
+msgstr "Editer"
+
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:70
+msgid "Edit:"
+msgstr "Editer:"
+
+#: modules/mod_admin/mod_admin.erl:160
+#, fuzzy
+msgid "Embed page"
+msgstr "la page"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:40
+msgid "Emergency telephone"
+msgstr "Telephone d'urgence"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:181
+msgid "Error uploading the file."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
+#, fuzzy
+msgid ""
+"Every page can have a date range. For example if the page is an event or "
+"description of someone’s life."
+msgstr ""
+"Chaque page peut avoir une date. Par exemple si une page représente un "
+"évenement ou une description de la vie de quelqun."
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:10
+#, fuzzy
+msgid ""
+"Every page is categorized in exactly one category. The category defines what "
+"the page represents. For example an event, a product or a person. The "
+"categories are hierarchically defined. In that way you can have a vehicles "
+"category with subcategories car and bicycle."
+msgstr ""
+"Chaque page est catégorisée dans une catégorie. La catégorie définit ce que "
+"les pages représentent. Par exemple un évenement, un produit ou une "
+"personne. Les catégorie sont définient hierarchiquement. Par exemple; vous "
+"pouvez avoir une catégorie véhicules avec des sous catégories voiture et "
+"bicyclette."
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:178
+#, fuzzy
+msgid "Failed to download the file."
+msgstr "Télécharger les fichiers"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:38
+msgid "Featured"
+msgstr "Sommaire"
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:4./modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
+msgid "Features"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_media.tpl:6
+msgid "File / media content"
+msgstr "Dossier"
+
+#: modules/mod_admin/templates/admin_overview.tpl:47
+msgid "Filter on category"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_media.tpl:33./modules/mod_admin/templates/admin_overview.tpl:30
+msgid "Filter on content group"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:51
+msgid "Find Page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_blocks.tpl:104
+msgid "Find page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:20
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:13
+msgid "First"
+msgstr "Premier"
+
+#: modules/mod_admin/templates/admin_status.tpl:18
+#, fuzzy
+msgid ""
+"Flush all URL dispatch rules, template- and library caches and other in-"
+"memory cached data."
+msgstr "Rafraichir toutes les URL, maquettes, caches"
+
+#: modules/mod_admin/templates/admin_status.tpl:17
+msgid "Flush system caches"
+msgstr "Rafraichir le systeme cache"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:58
+#: modules/mod_logging/templates/admin_log_email.tpl:54
+msgid "From"
+msgstr "De"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
+msgid "Go back."
+msgstr "Revenir en arrière"
+
+#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:18./modules/mod_admin/mod_admin.erl:158
+msgid "Header"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
+msgid ""
+"Here you can edit the arguments of the search query. Every argument goes on "
+"its own line. For more information, see the <a href=\"http://zotonic.com/"
+"docs/latest/developer-guide/search.html#query-model-arguments"
+"\">documentation on the query arguments</a> on the Zotonic website."
+msgstr ""
+
+#: modules/mod_admin/templates/admin_media.tpl:86
+#: modules/mod_logging/templates/admin_log_email.tpl:67
+msgid "Info"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:8
+msgid "Info link with modal popup"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:6
+msgid "Inline block"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_media.tpl:48./modules/mod_admin/templates/admin_overview.tpl:60
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:39
+msgid "Items per page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_dashboard_events.tpl:3
+msgid "Latest modified events"
+msgstr "Derniers évenements modifiés"
+
+#: modules/mod_admin/templates/_admin_dashboard_locations.tpl:3
+msgid "Latest modified locations"
+msgstr "Derniers lieux modifiés"
+
+#: modules/mod_admin/templates/_admin_dashboard_media.tpl:2
+msgid "Latest modified media items"
+msgstr "Derniers médias modifiés"
+
+#: modules/mod_admin/templates/_admin_dashboard_persons.tpl:2
+msgid "Latest modified persons"
+msgstr "Dernières personnes modifiées"
+
+#: modules/mod_admin/templates/_admin_dashboard_texts.tpl:2
+msgid "Latest modified texts"
+msgstr "Derniers textes modifiés"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:38
+msgid ""
+"Live query, send notifications when matching items are updated or inserted."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_menu.tpl:71
+msgid "Log Off"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_logon.tpl:19
+msgid "Log on to"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:135
+msgid "Mailing address"
+msgstr "Mailing address"
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:20
+#: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:5
+msgid "Main"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:75
+msgid "Make"
+msgstr "Créer"
+
+#: modules/mod_admin/templates/admin_media.tpl:69
+msgid "Make a new media item"
+msgstr "Créer un nouveau média"
+
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:80
+msgid "Make a new page"
+msgstr "Créer une nouvelle page"
+
+#: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:4./modules/mod_admin/templates/admin_overview.tpl:85
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:60
+msgid "Make a new page or media"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:73
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:44
+msgid "Make media item"
+msgstr "Créer un média"
+
+#: modules/mod_admin/templates/admin_media.tpl:3./modules/mod_admin/templates/admin_media.tpl:57./modules/mod_admin/mod_admin.erl:103
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:97
+#: modules/mod_base_site/templates/page.collection.tpl:8
+msgid "Media"
+msgstr "Media"
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:16
+msgid "Media URL"
+msgstr "URL du média"
+
+#: modules/mod_admin/templates/admin_media.tpl:60
+#, fuzzy
+msgid ""
+"Media encompasses all uploaded images, movies and documents. Media can be "
+"attached to pages."
+msgstr ""
+"Media encompasses all uploaded images, movies and documents. Media can be "
+"attached to pages."
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:26
+msgid "Media file"
+msgstr "Fichier du média"
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:152./modules/mod_admin/actions/action_admin_dialog_media_upload.erl:164
+#, fuzzy
+msgid "Media item created."
+msgstr "Titre du média"
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:4
+msgid "Media on this page"
+msgstr "Média sur cette page"
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:18./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:25
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:56
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:16
+msgid "Media title"
+msgstr "Titre du média"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:26
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:56
+msgid "Middle"
+msgstr "Milieu"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:24
+msgid "Mobile"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:23./modules/mod_admin/templates/admin_referrers.tpl:24
+msgid "Modified by"
+msgstr "Modifié par"
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:20./modules/mod_admin/templates/admin_referrers.tpl:23
+#: modules/mod_admin_identity/templates/admin_users.tpl:53
+msgid "Modified on"
+msgstr "Modifié le"
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:15
+msgid "Modified:"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:13
+msgid "More like this"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:55
+#: modules/mod_admin_identity/templates/admin_users.tpl:50
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:25
+#: modules/mod_comment/templates/_comments_form.tpl:24./modules/mod_comment/templates/admin_comments.tpl:22
+msgid "Name"
+msgstr "Nom"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:70
+#, fuzzy
+msgid "Next in category:"
+msgstr "Catégorie suivante"
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:14
+msgid "No connected images."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:18
+msgid "No features are enabled for this meta-resource."
+msgstr ""
+
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:86
+msgid "No items"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_media.tpl:134
+msgid "No media found."
+msgstr "Pas de médias trouvés"
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./modules/mod_admin/templates/_admin_overview_list.tpl:59./modules/mod_admin/templates/admin_referrers.tpl:47
+#: modules/mod_admin_merge/templates/_merge_find_results_loop.tpl:10
+msgid "No pages found."
+msgstr "Pas de pages trouvées"
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:3./modules/mod_admin_predicate/mod_admin_predicate.erl:193
+msgid "Page connections"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:54
+msgid "Page description"
+msgstr "Description de page"
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:47
+msgid "Page keywords"
+msgstr "Mots clés de la page"
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:17
+msgid "Page path"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:18
+msgid "Page slug"
+msgstr "Page slug"
+
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:10./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:18./modules/mod_admin/templates/_admin_edit_content_seo.tpl:40
+msgid "Page title"
+msgstr "Titre de la page"
+
+#: modules/mod_admin/templates/admin_overview.tpl:3./modules/mod_admin/mod_admin.erl:99
+msgid "Pages"
+msgstr "Pages"
+
+#: modules/mod_admin/templates/admin_overview.tpl:69./modules/mod_admin/templates/admin_overview.tpl:69
+msgid "Pages overview"
+msgstr "Ensemble des pages"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:6./modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Personal name"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:8
+msgid "Pivot queue count size:"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:3
+msgid "Please fill in the title of the new page."
+msgstr "Entrez le titre de la nouvelle page"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:117./modules/mod_admin/templates/_admin_edit_content_address.tpl:179
+msgid "Postcode"
+msgstr "Code postal"
+
+#: modules/mod_admin/templates/admin_referrers.tpl:22
+#: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:8
+msgid "Predicate"
+msgstr "Predicate"
+
+#: modules/mod_admin/templates/admin_media.tpl:84
+#: modules/mod_base_site/templates/page.media.tpl:31
+msgid "Preview"
+msgstr "Prévisualisation"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:64
+#, fuzzy
+msgid "Previous in category:"
+msgstr "Catégorie suivante"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:43
+msgid "Protect"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:41
+msgid "Protect from deletion"
+msgstr "Protéger contre l’effacement"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:38
+msgid "Publication date of original article"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+msgid "Publication date range"
+msgstr "La publication des dates"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:6
+msgid "Publication period"
+msgstr "Periode de publication"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:6
+msgid "Publish this page"
+msgstr "Publier cette page"
+
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:41./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64./modules/mod_admin/templates/_admin_edit_content_publish.tpl:33
+msgid "Published"
+msgstr "Publié"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:22
+msgid "Query"
+msgstr "Question"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:42
+msgid "Query preview"
+msgstr "Prévisualisation de question"
+
+#: modules/mod_admin/templates/admin_status.tpl:44
+#, fuzzy
+msgid ""
+"Rebuild all search-indices by putting all pages and data from the database "
+"in the indexer queue. This can take a long time!"
+msgstr ""
+"Rebuild all search-indices by putting all pages and data from the database "
+"in the indexer queue. This can take a long time!"
+
+#: modules/mod_admin/templates/admin_status.tpl:27
+#: modules/mod_translation/templates/admin_translation.tpl:165
+msgid "Rebuild search indices"
+msgstr "Rebuild search indices"
+
+#: modules/mod_admin/templates/admin_status.tpl:52
+msgid ""
+"Recalculate the numbering of the category tree. This can take a long time."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:27
+msgid "Redirect to above website on page view"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:63
+msgid "Redirect to website on page view"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_referrers.tpl:3./modules/mod_admin/templates/admin_referrers.tpl:8
+msgid "Referrers to"
+msgstr "Référé à"
+
+#: modules/mod_admin/templates/admin_status.tpl:58
+msgid "Reinstall site datamodel"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:19
+msgid "Remarks"
+msgstr "Remarques"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:28
+msgid "Remove crop center"
+msgstr ""
+
+#: modules/mod_admin/mod_admin.erl:391
+#, fuzzy
+msgid "Removed the connection to"
+msgstr "Créer une nouvelle connection"
+
+#: modules/mod_admin/templates/admin_status.tpl:51
+msgid "Renumber category tree"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:59
+#, fuzzy
+msgid "Replace current medium"
+msgstr "Remplacer ce média"
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:35
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:73
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:44
+msgid "Replace media item"
+msgstr "Remplacer le média"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:36./modules/mod_admin/templates/_admin_edit_media.tpl:60
+msgid "Replace this media item"
+msgstr "Remplacer ce média"
+
+#: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
+msgid ""
+"Resources in the <i>meta</i> category can have 'features': certain resource "
+"properties that decide what to show or hide on certain pages in the admin. "
+"If this box is empty, no features are enabled for this meta-resource."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:103
+msgid "Retrieving status..."
+msgstr ""
+
+#: modules/mod_admin/templates/admin_status.tpl:59
+msgid "Runs the schema install command from the site's module again."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_seo.tpl:6
+msgid "SEO Content"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:23./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:6
+msgid "Save and View"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:23./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:6
+msgid "Save and view the page."
+msgstr "Enregister et visualiser la page"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
+msgid "Save this page."
+msgstr "Enregistrer cette page"
+
+#: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:68
+msgid "Search indices rebuilt."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:5
+msgid "Search other media"
+msgstr "Chercher un autre média"
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:7
+msgid "Search query"
+msgstr "Chercher une autre question"
+
+#: modules/mod_admin/templates/_admin_menu.tpl:86
+msgid "Search..."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:2
+msgid "Select a connected image"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_overview.tpl:42
+msgid "Selected Categories"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:23
+msgid "Short title"
+msgstr "Titre court"
+
+#: modules/mod_admin/templates/_admin_features.category.tpl:8
+msgid "Show address on edit page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_show_as.tpl:3
+msgid "Show as"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:31
+msgid "Show page on multiple paths"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_edit_basics.erl:126
+msgid "Something went wrong. Sorry."
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_link.erl:86
+msgid "Sorry, you don't have permission to add the connection."
+msgstr ""
+
+#: modules/mod_admin/mod_admin.erl:376
+msgid "Sorry, you have no permission to add the connection."
+msgstr ""
+
+#: modules/mod_admin/mod_admin.erl:378
+msgid "Sorry, you have no permission to delete the connection."
+msgstr ""
+
+#: modules/mod_admin/mod_admin.erl:157
+msgid "Standard"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_sort_header.event.tpl:2
+msgid "Starts"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:126./modules/mod_admin/templates/_admin_edit_content_address.tpl:188
+msgid "State"
+msgstr "Etat"
+
+#: modules/mod_admin/mod_admin.erl:130
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
+#: modules/mod_base/templates/_session_info.tpl:12
+#: modules/mod_logging/templates/admin_log_email.tpl:51
+#, fuzzy
+msgid "Status"
+msgstr "Etat"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:95./modules/mod_admin/templates/_admin_edit_content_address.tpl:157
+msgid "Street Line 1"
+msgstr "Adresse ligne 1"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:102./modules/mod_admin/templates/_admin_edit_content_address.tpl:164
+msgid "Street Line 2"
+msgstr "Adresse ligne 2"
+
+#: modules/mod_admin/mod_admin.erl:111
+msgid "Structure"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:16
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:64
+msgid "Summary"
+msgstr "Résumé"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:32
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:21
+msgid "Sur. prefix"
+msgstr "Sur. prefix"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:38
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:29
+msgid "Surname"
+msgstr "Nom de famille"
+
+#: modules/mod_admin/mod_admin.erl:125
+msgid "System"
+msgstr "Système"
+
+#: modules/mod_admin/templates/admin_status.tpl:3
+msgid "System Status"
+msgstr "Status du système"
+
+#: modules/mod_admin/templates/admin_status.tpl:8
+msgid "System administration"
+msgstr "Administration du système"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:18
+msgid "Telephone"
+msgstr "Téléphone"
+
+#: modules/mod_admin/actions/action_admin_admin_tasks.erl:31
+msgid "Templates will be recompiled."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content.query.tpl:31
+msgid "Test query"
+msgstr ""
+
+#: modules/mod_admin/mod_admin.erl:159
+msgid "Text"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_admin_tasks.erl:50
+msgid "The category tree is rebuilding. This can take a long time."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:15
+msgid "The page"
+msgstr "la page"
+
+#: modules/mod_admin/actions/action_admin_admin_tasks.erl:38
+#, fuzzy
+msgid ""
+"The search index is rebuilding. Depending on the database size, this can "
+"take a long time."
+msgstr ""
+"Rebuild all search-indices by putting all pages and data from the database "
+"in the indexer queue. This can take a long time!"
+
+#: modules/mod_admin/actions/action_admin_admin_tasks.erl:44
+msgid "The site’s data is being reinstalled. Watch the console for messages"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_referrers.tpl:11
+msgid "There are no pages with a connection to the page"
+msgstr "Il n’y a pas de pages connectée a cette page"
+
+#: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
+msgid "This can't be undone. Your page will be lost forever."
+msgstr "Cela ne peut pas être défait. Votre page sera compeletement effacée."
+
+#: modules/mod_admin/actions/action_admin_link.erl:83
+msgid "This connection already exists."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_js.tpl:20
+msgid "This page has been deleted."
+msgstr ""
+
+#: modules/mod_admin/templates/admin_status.tpl:9
+msgid ""
+"This page holds a collection of administrative options to perform certain "
+"tasks on this Zotonic installation."
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
+#, fuzzy
+msgid ""
+"This page is able to connect to others. For example you can connect it to an "
+"actor or a brand."
+msgstr ""
+"Cette page peut se connecter à d’autres pages. Par exemple vous pouvez la "
+"connecter a un acteur ou une marque."
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:50
+msgid "This resource was created by the module"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:66
+msgid "Till"
+msgstr "Till"
+
+#: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5./modules/mod_admin/templates/_admin_overview_list.tpl:11./modules/mod_admin/templates/admin_media.tpl:85./modules/mod_admin/templates/admin_referrers.tpl:20./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
+#: modules/mod_admin_modules/templates/admin_modules.tpl:16
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:9./modules/mod_admin_predicate/templates/admin_predicate.tpl:24
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:4
+#: modules/mod_translation/templates/admin_translation_status.tpl:23
+msgid "Title"
+msgstr "Titre"
+
+#: modules/mod_admin/templates/_admin_edit_content_publish_view.tpl:5
+msgid "Toggle dropdown"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_menu.tpl:6
+#: modules/mod_base_site/templates/_navbar.tpl:7
+msgid "Toggle navigation"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:8
+#: modules/mod_admin_merge/templates/_merge_find.tpl:9
+msgid "Type text to search"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:32./modules/mod_admin/templates/_admin_edit_content_advanced.tpl:38
+msgid "Unique name"
+msgstr "Nom unique"
+
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:56
+msgid "Unique uri"
+msgstr "Unique uri"
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:63./modules/mod_admin/templates/_action_dialog_media_upload.tpl:10./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:14
+msgid "Upload File"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:4
+msgid "Upload a file from your computer."
+msgstr "télécharger un fichier depuis votre ordinateur."
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:3
+msgid "Upload a file which is already on the internet."
+msgstr "Télécharger un fichier qui est déja sur Internet."
+
+#: modules/mod_admin/templates/_action_dialog_connect.tpl:68./modules/mod_admin/templates/_action_dialog_media_upload.tpl:15./modules/mod_admin/templates/_action_dialog_new_rsc.tpl:19
+msgid "Upload by URL"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:35
+msgid "Upload file"
+msgstr "Télécharger un fichier"
+
+#: modules/mod_admin/templates/admin_media.tpl:87
+#: modules/mod_base_site/templates/_media_info.tpl:20
+msgid "Uploaded"
+msgstr "Téléchargé"
+
+#: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:37
+msgid "Use the autocompleter to search the media in this site."
+msgstr "Utilisez l'autocompleter pour chercher un media sur le site"
+
+#: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
+msgid "Use the title of the base content for the display name of this person."
+msgstr ""
+"Ici vous pouvez éditer le nom de la personne. Utiliser le titre de la base "
+"de contenu pour le nom de la personne."
+
+#: modules/mod_admin/templates/_admin_menu.tpl:68
+msgid "User page"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:18
+msgid "Valid for:"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_publish_view.tpl:2./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
+msgid "View"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_change_category.tpl:14
+msgid "View all pages from this category"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:45
+msgid "View all referrers"
+msgstr "Voir tous les referrants"
+
+#: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
+msgid "View this page."
+msgstr "Voir cette page"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:21
+msgid "Visible from"
+msgstr "Visible depuis"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:29
+msgid "Visible till"
+msgstr "Visible jusqu’à"
+
+#: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:67
+msgid "Visit full edit page"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:72
+msgid "Visiting address"
+msgstr "Adresse visitée"
+
+#: modules/mod_admin/templates/_admin_edit_content_address.tpl:51./modules/mod_admin/templates/_admin_edit_content_website.tpl:6
+msgid "Website"
+msgstr "Site Web"
+
+#: modules/mod_admin/templates/_admin_edit_content_website.tpl:16
+msgid "Website for clicks on image"
+msgstr "Website for clicks on image"
+
+#: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
+#, fuzzy
+msgid ""
+"When a page has a publication date range then it will only be visible "
+"between the two dates. Note that when you are allowed to edit the page then "
+"you can always see it."
+msgstr ""
+"Quand une page a été publiée avec un interval de date, cette page sera "
+"seulement visible entre ces deux dates. Mais vous pourrez l’éditer a tout "
+"moment."
+
+#: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
+msgid "You are going to duplicate the page"
+msgstr "Vous allez copier cette page"
+
+#: modules/mod_admin/actions/action_admin_delete_media.erl:52
+#, fuzzy
+msgid "You are not allowed to delete this media."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_admin/actions/action_admin_dialog_delete_rsc.erl:50
+#, fuzzy
+msgid "You are not allowed to delete this page."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_admin/templates/admin_edit.tpl:15
+#: modules/mod_admin_merge/templates/admin_merge.tpl:26
+msgid "You are not allowed to edit this page."
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:174
+msgid "You don't have permission to change this media item."
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:176
+msgid "You don't have the proper permissions to upload this type of file."
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_admin_tasks.erl:60
+msgid "You don’t have permission to perform this action."
+msgstr ""
+
+#: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:6./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:5
+#, fuzzy
+msgid ""
+"You have to specify a description of the file to make it easier to find and "
+"share."
+msgstr ""
+"Vous devez entrer une description de ce fichier pour pouvoir le retrouver "
+"plus facilement plus tard."
+
+#: modules/mod_admin/templates/_admin_edit_depiction.tpl:19
+msgid "add media item"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:5
+msgid "block"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:12./modules/mod_admin/templates/_admin_edit_header.tpl:17
+#: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:33
+msgid "by"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:46./modules/mod_admin/templates/_admin_overview_list.tpl:47./modules/mod_admin/templates/admin_referrers.tpl:34
+#: modules/mod_admin_config/templates/admin_config.tpl:55
+#: modules/mod_admin_identity/templates/admin_users.tpl:67./modules/mod_admin_identity/templates/admin_users.tpl:69
+#: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:29
+#: modules/mod_comment/templates/admin_comments.tpl:31
+#: modules/mod_logging/templates/_admin_log_row.tpl:8
+msgid "d M Y, H:i"
+msgstr ""
+
+#: modules/mod_admin/templates/admin_media.tpl:113
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:39
+#: modules/mod_comment/templates/admin_comments.tpl:39
+msgid "delete"
+msgstr "effacer"
+
+#: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:25
+msgid "e.g. might change"
+msgstr ""
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:52./modules/mod_admin/templates/admin_media.tpl:124./modules/mod_admin/templates/admin_referrers.tpl:39./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
+#: modules/mod_admin_identity/templates/admin_users.tpl:74
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:40
+msgid "edit"
+msgstr "éditer"
+
+#: modules/mod_admin/templates/_edit_button.tpl:7
+msgid "edit this page"
+msgstr "éditer cette page"
+
+#: modules/mod_admin/templates/admin_overview.tpl:69
+msgid "excluding"
+msgstr ""
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:15
+msgid "has been disconnected."
+msgstr "a été déconnecté"
+
+#: modules/mod_admin/templates/admin_overview.tpl:69
+#: modules/mod_admin_identity/templates/admin_users.tpl:15
+msgid "matching"
+msgstr "assembler"
+
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:9
+msgid "name"
+msgstr ""
+
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:61./modules/mod_admin/templates/_admin_view_types.tpl:2
+#, fuzzy
+msgid "page"
+msgstr "la page"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:6
+#: modules/mod_base_site/templates/_media_info.tpl:13
+msgid "pixels"
+msgstr "pixels"
+
+#: modules/mod_admin/templates/admin_overview.tpl:72./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:20./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:22
+msgid "show all"
+msgstr "montrer tout"
+
+#: modules/mod_admin/templates/_action_unlink_undo.tpl:3
+msgid "undo"
+msgstr "défaire"
+
+#: modules/mod_admin/templates/_admin_edit_header.tpl:29./modules/mod_admin/templates/_choose_media.tpl:9./modules/mod_admin/templates/_rsc_edge_item.tpl:9./modules/mod_admin/templates/_rsc_edge_media.tpl:18
+msgid "untitled"
+msgstr "sans titre"
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:13./modules/mod_admin/templates/_admin_edit_media.tpl:55
+msgid "uploaded on"
+msgstr "télécharger le"
+
+#: modules/mod_admin/templates/_admin_overview_list.tpl:51./modules/mod_admin/templates/admin_referrers.tpl:38./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
+#: modules/mod_comment/templates/admin_comments.tpl:36
+msgid "view"
+msgstr "voir"
+
+#: modules/mod_admin/templates/_admin_navbar_brand.tpl:1./modules/mod_admin/templates/admin_logon.tpl:12
+msgid "visit site"
+msgstr "visiter le site"
+
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:1
+#, fuzzy
+msgid "Are you sure you want to delete the following categories:"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:8./modules/mod_admin_category/mod_admin_category.erl:185
+#, fuzzy
+msgid "Categories"
+msgstr "Toutes les catégories"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:10
+msgid ""
+"Categories are used to categorize all pages. Every page belongs to exactly "
+"one category.<br/>The categories are defined in a hierarchy. Here you can "
+"change that hierarchy."
+msgstr ""
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:3
+#, fuzzy
+msgid "Category Hierarchy"
+msgstr "Categorie"
+
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:39
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:37
+msgid "Delete &amp; Move Pages"
+msgstr ""
+
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:42
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:40
+#, fuzzy
+msgid "Delete All Pages"
+msgstr "Effacer cette page"
+
+#: modules/mod_admin_category/mod_admin_category.erl:70
+#, fuzzy
+msgid "Delete is canceled, there are pages in the category."
+msgstr "."
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:25
+msgid "Drag categories to the place where you want them in the hierarchy."
+msgstr ""
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:19
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:35
+msgid "How does this work?"
+msgstr ""
+
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:17
+msgid "Move all pages in these categories to:"
+msgstr ""
+
+#: modules/mod_admin_category/mod_admin_category.erl:86
+#: modules/mod_content_groups/mod_content_groups.erl:88
+msgid "Not all resources could be deleted."
+msgstr ""
+
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:33
+msgid ""
+"Or click <strong>Delete All Pages</strong> to delete all pages in the "
+"categories."
+msgstr ""
+
+#: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:49
+#, fuzzy
+msgid "There are no pages in these categories."
+msgstr "Il n’y a pas de pages connectée a cette page"
+
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:22
+msgid ""
+"Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove "
+"categories."
+msgstr ""
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:45
+msgid "Add configuration key"
+msgstr ""
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:31
+msgid "Add key"
+msgstr ""
+
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:2
+#, fuzzy
+msgid "Are you sure you want to delete the configuration key"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_admin_config/mod_admin_config.erl:44
+msgid "Config"
+msgstr ""
+
+#: modules/mod_admin_config/templates/admin_config.tpl:3
+#: modules/mod_translation/templates/admin_translation.tpl:94
+msgid "Configuration"
+msgstr ""
+
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:10./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:15./modules/mod_admin_config/templates/admin_config.tpl:20
+msgid "Key"
+msgstr ""
+
+#: modules/mod_admin_config/templates/admin_config.tpl:12
+#, fuzzy
+msgid "Make a new config setting"
+msgstr "Créer une nouvelle connection"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:22
+msgid "Modified"
+msgstr "Modifié"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:66
+#, fuzzy
+msgid "No configurations found."
+msgstr "Pas de pages trouvées"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:67
+msgid "Only administrators can change the configuration."
+msgstr ""
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_delete.erl:48
+msgid "Only administrators can delete configurations."
+msgstr ""
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:64
+msgid "Only an administrator can add configuration keys."
+msgstr ""
+
+#: modules/mod_admin_config/templates/_action_dialog_config_new.tpl:1
+#, fuzzy
+msgid "Please fill in the module, key and value for the new configuration key."
+msgstr "Entrez le titre de la nouvelle page"
+
+#: modules/mod_admin_config/templates/admin_config.tpl:8
+#, fuzzy
+msgid "System Configuration"
+msgstr "Administration du système"
+
+#: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:61
+msgid "The config key already exists, please choose another key name."
+msgstr ""
+
+#: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:4
+#, fuzzy
+msgid "This can't be undone. The configuration key will be lost forever."
+msgstr "Cela ne peut pas être défait. Votre page sera compeletement effacée."
+
+#: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:16./modules/mod_admin_config/templates/_action_dialog_config_new.tpl:23./modules/mod_admin_config/templates/admin_config.tpl:21
+msgid "Value"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:65
+msgid "(that's you)"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_identity_email.tpl:11
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:18
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:21
+#, fuzzy
+msgid "Add"
+msgstr "Adresse"
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:44
+#, fuzzy
+msgid "Add a new user"
+msgstr "Ajouter un nouveau média"
+
+#: modules/mod_admin_identity/templates/_admin_identity_email.tpl:9
+#, fuzzy
+msgid "Add e-mail address"
+msgstr "Adresse E-mail"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:103
+msgid "Add user"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:41
+msgid "Also show persons without user account"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:2
+#, fuzzy
+msgid "Are you sure you want to delete the username from"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:161
+#, fuzzy
+msgid "Are you sure you want to delete this entry?"
+msgstr "Êtes vous sûr de vouloir effacer "
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71
+msgid "Changed the username."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
+msgid ""
+"Click OK to log on as this user. You will be redirected to the home page if "
+"this user has no rights to access the admin system."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:16
+#, fuzzy
+msgid ""
+"Click on the link below to confirm that this e-mail address is correct, when "
+"clicking doesn't work then you can copy and paste the complete address to "
+"your browser."
+msgstr ""
+"Cliquez sur le lien ci-dessous pour entrer un nouveau mot de passe, si le "
+"lien ne marche pas, vous pouvez copier puis coller l'adresse dans votre "
+"navigateur"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:10
+msgid ""
+"Click “delete” to remove any existing username/password from the person; "
+"this person will no longer be a user."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53
+#, fuzzy
+msgid "Confirm user deletion"
+msgstr "Protéger contre l’effacement"
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:111
+msgid "Could not create the user. Sorry."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:26
+#, fuzzy
+msgid "Delete this e-mail address"
+msgstr "doit être une adresse e-mail"
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:106
+msgid "Duplicate username, please choose another username."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:37
+#: modules/mod_comment/templates/_comments_form.tpl:32
+#, fuzzy
+msgid "E-mail"
+msgstr "E-mail"
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:35
+#, fuzzy
+msgid "Email Status"
+msgstr "Status du système"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:8
+msgid ""
+"Enter a (unique) username and password. Usernames and passwords are case "
+"sensitive, so be careful when entering them."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:66
+msgid ""
+"Enter a unique username and a password. Usernames and passwords are case "
+"sensitive, so be careful when entering them."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:21
+msgid ""
+"Every page/person can be made into a user on the edit page. The difference "
+"between a user and a normal page is only that the former has logon "
+"credentials attached to its page record."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:9
+msgid ""
+"Give the name and the e-mail address of the new user. A <em>person</em> page "
+"will be created for this user."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:6
+#: modules/mod_authentication/templates/email_password_reset.tpl:6
+msgid "Hello"
+msgstr "Bonjour"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
+#, fuzzy
+msgid "Help about user credentials"
+msgstr "Votre questionnaire"
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:8
+msgid "Hi"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:23./modules/mod_admin_identity/templates/identity_verify.tpl:34
+msgid "Home"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:20
+#, fuzzy
+msgid ""
+"If you don't know this site then you can ignore this e-mail. Maybe someone "
+"made an error typing his or her e-mail address."
+msgstr ""
+"Si vous n'avez pas demander un nouveau mot de passe, ignorez cet email."
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:28
+#: modules/mod_translation/templates/admin_translation.tpl:25./modules/mod_translation/templates/admin_translation.tpl:72
+msgid "Language"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
+#, fuzzy
+msgid "Log on as this user"
+msgstr "Connectez vous en utilisant votre"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:27
+#, fuzzy
+msgid "Make a new user"
+msgstr "Créer une nouvelle page"
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:24
+#, fuzzy
+msgid "My page"
+msgstr "la page"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:7
+#, fuzzy
+msgid "Name and e-mail address"
+msgstr "doit être une adresse e-mail"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:82
+#, fuzzy
+msgid "No users found."
+msgstr "Pas de pages trouvées"
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:44
+msgid "No verified e-mail addresses. Please add one below."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:14
+#, fuzzy
+msgid "One moment, please..."
+msgstr "Patientez s'il vous plait, déconnexion en cours..."
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46./modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:115
+msgid "Only administrators can add users."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:47
+msgid "Only administrators can delete usernames."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:56
+msgid "Only an administrator can delete usernames."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:98
+msgid "Only an administrator or the user him/herself can set a password."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:29./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:84
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11./modules/mod_authentication/templates/_logon_login_form_fields.tpl:11./modules/mod_authentication/templates/_logon_login_form_fields.tpl:12./modules/mod_authentication/templates/logon_confirm_form.tpl:15
+msgid "Password"
+msgstr "Mot de passe"
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:3
+#, fuzzy
+msgid "Please verify your e-mail address"
+msgstr "doit être une adresse e-mail"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:7
+#, fuzzy
+msgid "Search users"
+msgstr "Chercher une autre question"
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:105
+#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:20./modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:20
+#: modules/mod_comment/templates/_comments_form.tpl:50
+msgid "Send"
+msgstr "Envoyé"
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:19
+#, fuzzy
+msgid "Send verification e-mail"
+msgstr "Envoyer un message de verification"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:44./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:95
+msgid "Send welcome e-mail"
+msgstr ""
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:122
+#, fuzzy
+msgid "Sent verification e-mail."
+msgstr "Envoyer un message de verification"
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55./modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:9./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18
+#, fuzzy
+msgid "Set username / password"
+msgstr "Changer de mot de passe"
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:29./modules/mod_admin_identity/templates/identity_verify.tpl:41
+#: modules/mod_authentication/templates/logon_service_error.tpl:10./modules/mod_authentication/templates/logon_service_error.tpl:30./modules/mod_authentication/templates/logon_service_error.tpl:42
+msgid "Sorry"
+msgstr ""
+
+#: modules/mod_admin_identity/validators/validator_admin_identity_username_unique.erl:48
+msgid "Sorry, this username is already in use. Please try another one."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:18
+msgid "Thank you"
+msgstr ""
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:208
+msgid "The address is invalid."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:93
+msgid "The new username/ password has been set."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
+msgid ""
+"The password of the admin user cannot be changed in the database. Please "
+"edit your site's configuration file at"
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:74./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:80
+msgid "The username is already in use, please try another."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:46
+msgid "There is no username coupled to this person."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4
+#, fuzzy
+msgid "This can't be undone. The username and password will be lost forever."
+msgstr "Cela ne peut pas être défait. Le média sera perdu pour toujours."
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:8
+#, fuzzy
+msgid "This e-mail address was added to your personal information on"
+msgstr "L'adresse email associée à votre compte est "
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:148
+#, fuzzy
+msgid "This is not a valid e-mail address."
+msgstr "doit être une adresse e-mail"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:55
+msgid "This person is also a user."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
+msgid "This person is not yet a user."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:31./modules/mod_admin_identity/templates/identity_verify.tpl:43
+msgid "This verification key is unknown."
+msgstr ""
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:102
+msgid "This will send a verification e-mail to "
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:42
+#: modules/mod_l10n/templates/admin_l10n.tpl:14
+msgid "Timezone"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:6
+msgid "User account"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:7
+#, fuzzy
+msgid "User actions"
+msgstr "Actions"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:21./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:76./modules/mod_admin_identity/templates/admin_users.tpl:51./modules/mod_admin_identity/templates/email_admin_new_user.tpl:19
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:80
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2./modules/mod_authentication/templates/_logon_login_form_fields.tpl:2./modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
+msgid "Username"
+msgstr "Identifiant"
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:6
+#, fuzzy
+msgid "Username / password"
+msgstr "Confirmer mot de passe"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:64
+#, fuzzy
+msgid "Username and password"
+msgstr "Confirmer mot de passe"
+
+#: modules/mod_admin_identity/actions/action_admin_identity_delete_username.erl:45
+#, fuzzy
+msgid "Username has been deleted."
+msgstr "a été déconnecté"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:3./modules/mod_admin_identity/templates/admin_users.tpl:15./modules/mod_admin_identity/mod_admin_identity.erl:86
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:29
+#, fuzzy
+msgid "Users"
+msgstr "Identifiant"
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:17
+#, fuzzy
+msgid "Users Overview"
+msgstr "Ensemble des pages"
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:17./modules/mod_admin_identity/templates/_identity_verify_table.tpl:17
+#, fuzzy
+msgid "Verified"
+msgstr "Modifié"
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:19
+msgid "Verify"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:3
+#, fuzzy
+msgid "Verify Address |"
+msgstr "Adresse"
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:12
+msgid "Verifying..."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
+msgid "View email status"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
+msgid ""
+"When you add credentials to a person then the person becomes an user. A "
+"person or machine can log on with those credentials and perform actions on "
+"your Zotonic system.<br/><br/>What an user can do depends on the groups the "
+"user is member of."
+msgstr ""
+
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:108
+#, fuzzy
+msgid "You are not allowed to create the person page."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:155./modules/mod_admin_identity/mod_admin_identity.erl:182./modules/mod_admin_identity/mod_admin_identity.erl:215
+#, fuzzy
+msgid "You are not allowed to edit identities."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_admin_identity/mod_admin_identity.erl:227
+#, fuzzy
+msgid "You are not allowed to switch users."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:10
+msgid "You can now login to the admin, on the following URL:"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:10
+msgid "You have been granted access to"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:30
+msgid "You need to be an administrator to add users."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:25
+#, fuzzy
+msgid ""
+"You receive this e-mail because you or someone else requested verification "
+"of your e-mail address. You or the someone else either entered your e-mail "
+"address. You will not receive any additional e-mails because of this request."
+msgstr ""
+"Vous recevez cet email car vous ou quelqun d'autre avez demandé à changer de "
+"mot de passe. Vous ne receverez qu'un seul email."
+
+#: modules/mod_admin_identity/templates/email_identity_verify.tpl:12
+#: modules/mod_authentication/templates/email_password_reset.tpl:10
+msgid "Your account name is"
+msgstr "Votre nom relié à votre compte est"
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:20
+msgid "Your address is now verified."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/identity_verify.tpl:20
+msgid "Your e-mail address is now verified."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:4
+msgid "Your login details for"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/email_admin_new_user.tpl:15
+msgid "Your user details are:"
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
+#, fuzzy
+msgid "delete username"
+msgstr "Identifiant"
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
+msgid "if you want to change the admin password."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/admin_users.tpl:72
+#, fuzzy
+msgid "set username / password"
+msgstr "Changer de mot de passe"
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:125./modules/mod_admin_merge/templates/admin_merge_compare.tpl:135
+msgid "Confirm merge"
+msgstr ""
+
+#: modules/mod_admin_merge/templates/_confirm_merge.tpl:125
+msgid "Deletion cannot be undone."
+msgstr ""
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:44./modules/mod_admin_merge/templates/admin_merge_compare.tpl:50
+#, fuzzy
+msgid "Edit page"
+msgstr "éditer cette page"
+
+#: modules/mod_admin_merge/templates/admin_merge.tpl:9
+msgid "Find page to merge with:"
+msgstr ""
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:42
+msgid "Left"
+msgstr ""
+
+#: modules/mod_admin_merge/templates/_confirm_merge.tpl:131./modules/mod_admin_merge/templates/admin_merge.tpl:3./modules/mod_admin_merge/templates/admin_merge_compare.tpl:3
+msgid "Merge"
+msgstr ""
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:28
+#, fuzzy
+msgid "Merge Pages"
+msgstr "Pages"
+
+#: modules/mod_admin_merge/templates/_confirm_merge.tpl:63
+msgid "Merge and delete"
+msgstr ""
+
+#: modules/mod_admin_merge/templates/_admin_edit_sidebar.tpl:6
+#, fuzzy
+msgid "Merge pages"
+msgstr "la page"
+
+#: modules/mod_admin_merge/templates/admin_merge.tpl:12
+msgid ""
+"Merge two pages together. You can select with which page to merge and which "
+"page will remain after the merge."
+msgstr ""
+
+#: modules/mod_admin_merge/templates/_admin_edit_sidebar.tpl:13
+msgid "Merge with another page …"
+msgstr ""
+
+#: modules/mod_admin_merge/mod_admin_merge.erl:108
+msgid "Merging the two pages ..."
+msgstr ""
+
+#: modules/mod_admin_merge/mod_admin_merge.erl:113
+msgid "No merge action specified."
+msgstr ""
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:48
+#, fuzzy
+msgid "Right"
+msgstr "minuit"
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:111
+#, fuzzy
+msgid "Select Left"
+msgstr "Choisissez le pays"
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:114
+#, fuzzy
+msgid "Select Right"
+msgstr "Choisissez le pays"
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:30
+msgid ""
+"Select the winner from two pages. The loser will get merged into the winner. "
+"Only the winner remains."
+msgstr ""
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:34
+msgid "Select the winning page"
+msgstr ""
+
+#: modules/mod_admin_merge/mod_admin_merge.erl:59
+msgid "Sorry, you have no permission to edit this page."
+msgstr ""
+
+#: modules/mod_admin_merge/mod_admin_merge.erl:94
+msgid "The loser is protected, unprotect the loser before merging."
+msgstr ""
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:58./modules/mod_admin_merge/templates/admin_merge_compare.tpl:66
+#, fuzzy
+msgid "You are not allowed to edit this page"
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:69
+msgid "You are not allowed to select this page and thereby deleting page Left."
+msgstr ""
+
+#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:61
+msgid ""
+"You are not allowed to select this page and thereby deleting page Right."
+msgstr ""
+
+#: modules/mod_admin_merge/mod_admin_merge.erl:70
+msgid "You cannot remove the admin user."
+msgstr ""
+
+#: modules/mod_admin_merge/mod_admin_merge.erl:96
+msgid "You do not have permission to delete the loser."
+msgstr ""
+
+#: modules/mod_admin_merge/mod_admin_merge.erl:74./modules/mod_admin_merge/mod_admin_merge.erl:98
+msgid "You do not have permission to edit the winner."
+msgstr ""
+
+#: modules/mod_admin_merge/mod_admin_merge.erl:84
+msgid "not implemented yet"
+msgstr ""
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:52
+msgid "Activate"
+msgstr ""
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:19
+msgid "Author"
+msgstr ""
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:43
+msgid "Configure"
+msgstr ""
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:47
+msgid "Deactivate"
+msgstr ""
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:17
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45
+#: modules/mod_seo/templates/admin_seo.tpl:32
+#, fuzzy
+msgid "Description"
+msgstr "Description de page"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:66
+#, fuzzy
+msgid "No modules found"
+msgstr "Pas de pages trouvées"
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:18
+msgid "Prio"
+msgstr ""
+
+#: modules/mod_admin_modules/templates/_admin_status.tpl:3
+msgid "Rescan modules"
+msgstr ""
+
+#: modules/mod_admin_modules/templates/_admin_status.tpl:4
+msgid ""
+"Rescanning will rebuild the index of all modules, actions, templates etc. It "
+"will also reload all dispatch rules."
+msgstr ""
+
+#: modules/mod_admin_modules/templates/admin_modules.tpl:8
+msgid ""
+"Zotonic is a modular web development framework. Most functionality is "
+"encapsulated inside modules. A set of basic modules are shipped with the "
+"Zotonic distribution,\n"
+"            while others are externally developed. This page shows an "
+"overview of all modules which are currently known to this Zotonic "
+"installation."
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:11
+msgid ""
+"A predicate denotes traits or aspects of a page and expresses a relationship "
+"between two pages.\n"
+"    The relation is always directed, from the subject to the object.<br/"
+">Predicates are defined in ontologies like <a href=\"http://sioc-project.org/"
+"\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:23
+#, fuzzy
+msgid "All Predicates"
+msgstr "Predicate"
+
+#: modules/mod_admin_predicate/templates/_admin_extra_buttons.tpl:2
+#, fuzzy
+msgid "All page connections"
+msgstr "Créer une nouvelle connection"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:7./modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:41
+#, fuzzy
+msgid "Are you sure you want to delete"
+msgstr "Êtes vous sûr de vouloir effacer "
+
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:9
+msgid "Change the predicate on all existing page connections to:"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:31
+#, fuzzy
+msgid "Delete &amp; Change Connections"
+msgstr "Créer une nouvelle connection"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:34
+msgid "Delete All Connections"
+msgstr ""
+
+#: modules/mod_admin_predicate/mod_admin_predicate.erl:80
+msgid "Delete is canceled, there are connections with this predicate."
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:60
+msgid "Do not find subjects using this predicate’s object titles."
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:1
+#, fuzzy
+msgid "Enter the title of the new predicate:"
+msgstr "Entrez le titre de la nouvelle page"
+
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:26
+#, fuzzy
+msgid "Filter on predicate"
+msgstr "filtrer sur les catégories"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:20
+#, fuzzy
+msgid "From category"
+msgstr "filtrer sur les catégories"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:6
+#, fuzzy
+msgid "Help about predicates"
+msgstr "Votre questionnaire"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:16
+#, fuzzy
+msgid "Make a new predicate"
+msgstr "Créer un nouveau média"
+
+#: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:18
+#, fuzzy
+msgid "Make predicate"
+msgstr "Créer un média"
+
+#: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:52
+#, fuzzy
+msgid "No page connections found."
+msgstr "Pas de pages trouvées"
+
+#: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:50
+#, fuzzy
+msgid "No page connections with the predicate:"
+msgstr "Une connection vers cette page"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:47
+#, fuzzy
+msgid "No predicates found."
+msgstr "Pas de pages trouvées"
+
+#: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:11
+msgid "Object"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:25
+msgid ""
+"Or click <strong>Delete All Connections</strong> to delete all connections "
+"with this predicate."
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:51
+#, fuzzy
+msgid "Page connections overview"
+msgstr "Ensemble des pages"
+
+#: modules/mod_admin_predicate/templates/admin_edges.tpl:49
+#, fuzzy
+msgid "Page connections with the predicate"
+msgstr "Une connection vers cette page"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:3./modules/mod_admin_predicate/templates/admin_predicate.tpl:9./modules/mod_admin_predicate/mod_admin_predicate.erl:188
+#, fuzzy
+msgid "Predicates"
+msgstr "Predicate"
+
+#: modules/mod_admin_predicate/mod_admin_predicate.erl:59
+msgid "Sorry, you are not allowed to insert connections with this predicate."
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:5
+msgid "Subject"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:54
+msgid ""
+"The direction (from/to) of this predicate is reversed from the normal "
+"definition."
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:43
+#, fuzzy
+msgid "There are no page connections with this predicate."
+msgstr "Il n’y a pas de pages connectée a cette page"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:15
+#, fuzzy
+msgid ""
+" This predicate can be used between two pages of the following categories."
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:35
+#, fuzzy
+msgid "To category"
+msgstr "Categorie"
+
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:26
+#, fuzzy
+msgid "URI"
+msgstr "URL"
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:4
+msgid "Valid between"
+msgstr ""
+
+#: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:6
+msgid ""
+"You can define for which categories the predicate is shown on the edit "
+"page.  You can also define which categories of objects will be found when "
+"searching for a page to connect to. When you don't check anything then all "
+"categories are valid."
+msgstr ""
+
+#: modules/mod_admin_statistics/mod_admin_statistics.erl:54
+msgid "Statistics"
+msgstr ""
+
+#: modules/mod_authentication/actions/action_authentication_auth_disconnect.erl:46
+msgid "Access denied"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:24
+msgid "Already Connected"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_service_done.tpl:5
+msgid "Authenticated"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_service_done.tpl:9
+msgid "Authentication has been done with"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_service.tpl:5
+msgid "Authorizing..."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reminder_support.tpl:4./modules/mod_authentication/templates/_logon_reset_support.tpl:3./modules/mod_authentication/templates/_logon_stage.tpl:7./modules/mod_authentication/templates/_logon_stage.tpl:32
+msgid "Back to sign in"
+msgstr ""
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:8
+msgid "Below are your account details and a link to set a new password."
+msgstr ""
+"Ci dessous, le details de votre compte et un lien pour changer de mot de "
+"passe"
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:45
+msgid "Change password and Sign in"
+msgstr "Changer de mot de passe et d'identifiant"
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:15
+msgid "Change your permissions"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:3./modules/mod_authentication/templates/_logon_stage.tpl:23
+msgid "Check your email"
+msgstr "Vérifiez votre adresse Email!"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:14
+#, fuzzy
+msgid ""
+"Click on the link below to enter a new password, when clicking doesn't work "
+"then you can copy and paste the complete address to your browser."
+msgstr ""
+"Cliquez sur le lien ci-dessous pour entrer un nouveau mot de passe, si le "
+"lien ne marche pas, vous pouvez copier puis coller l'adresse dans votre "
+"navigateur"
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:51
+msgid "Close Window"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:25
+#: modules/mod_base/actions/action_base_confirm.erl:35
+msgid "Confirm"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:20
+msgid "Confirmation failure"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_error.tpl:3
+msgid ""
+"Either the email or the password you entered is incorrect. Please check your "
+"entry and try again."
+msgstr ""
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:29
+msgid "Enable <em>mod_facebook</em> to see Facebook settings."
+msgstr ""
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:32
+msgid "Enable <em>mod_twitter</em> to see Twitter settings."
+msgstr ""
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:23
+msgid ""
+"Enable the signup module to automatically sign up users that are "
+"authenticating via the services below."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:16./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
+msgid "Enter a password"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reset_title.tpl:8
+msgid "Enter the new password for your account"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reminder_title.tpl:2
+#, fuzzy
+msgid ""
+"Enter your email address and we'll send you instructions how to reset your "
+"password."
+msgstr ""
+"Dans cet email vous trouverez les instructions pour confirmer la création de "
+"votre compte."
+
+#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:14./modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
+msgid "Enter your email address or username"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:14
+msgid "Enter your password"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:5
+msgid "Enter your username"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:5
+#: modules/mod_logging/templates/admin_log_email.tpl:65
+msgid "Error"
+msgstr ""
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:3./modules/mod_authentication/templates/admin_authentication_services.tpl:7./modules/mod_authentication/mod_authentication.erl:71
+msgid "External Services"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:20
+#, fuzzy
+msgid ""
+"For security reasons, password reset codes are only kept for a limited "
+"amount of time and can only be used once."
+msgstr ""
+"Pour des raisons de sécurité, les codes de changement de mot de passe, ne "
+"sont valides que pour une durée limitée et ne peuvent être utilisé qu'une "
+"seule fois."
+
+#: modules/mod_authentication/templates/_logon_login_support.tpl:3
+msgid "Forgot your password?"
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:14
+#: modules/mod_base/templates/error.403.tpl:13
+msgid "Go back"
+msgstr ""
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:23./modules/mod_authentication/templates/admin_authentication_services.tpl:29./modules/mod_authentication/templates/admin_authentication_services.tpl:32
+msgid "Go to Modules"
+msgstr ""
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:14
+msgid ""
+"Here you can set all the application keys, secrets and other configurations "
+"to integrate with external services like Facebook and Twitter."
+msgstr ""
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:3
+msgid "How to reset your password"
+msgstr "Comment changer de mot de passe"
+
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:22
+#, fuzzy
+msgid "I forgot my password"
+msgstr "Mot de passe oublié?"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:5./modules/mod_authentication/templates/_logon_stage.tpl:25
+msgid ""
+"If you do not receive the email within a few minutes, please check your spam "
+"folder."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:24
+msgid "In the email you will find instructions on how to confirm your account."
+msgstr ""
+"Dans cet email vous trouverez les instructions pour confirmer la création de "
+"votre compte."
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:40./modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:23./modules/mod_authentication/templates/_logon_login_form_fields.tpl:23./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:34
+msgid "Keep me signed in"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:19./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
+msgid "Minimum characters:"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_error.tpl:6
+msgid "Need help signing in?"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:13./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:7
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+#: modules/mod_authentication/templates/error.403.tpl:3
+#: modules/mod_base/templates/error.403.tpl:3./modules/mod_base/templates/error.403.tpl:18./modules/mod_base/templates/error.tpl:7
+msgid "No Access"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:9
+#: modules/mod_base/templates/_action_dialog_alert.tpl:5./modules/mod_base/templates/_action_dialog_confirm.tpl:7
+msgid "OK"
+msgstr ""
+
+#: modules/mod_authentication/templates/logoff.tpl:10
+msgid "One moment please, signing out..."
+msgstr "Patientez s'il vous plait, déconnexion en cours..."
+
+#: modules/mod_authentication/templates/_logon_error.tpl:19./modules/mod_authentication/templates/_logon_error.tpl:26
+msgid "Passwords should have at least six characters."
+msgstr "Votre mot de passe doit contenir au moins 6 caractères"
+
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:8
+msgid "Please confirm your"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:46
+msgid "Please try again later."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:27./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:21
+msgid "Repeat password"
+msgstr "Confirmer mot de passe"
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:30./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:24
+msgid "Repeat your password"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:41
+msgid "Reset password and Sign in"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reminder_title.tpl:1./modules/mod_authentication/templates/_logon_reset_title.tpl:6
+msgid "Reset your password"
+msgstr "Changer de mot de passe"
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:32
+msgid "Safari 8 has a known problem with handling external authentications."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:17
+msgid "Send Verification Message"
+msgstr "Envoyer un message de verification"
+
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29./modules/mod_authentication/templates/_logon_login_form_fields.tpl:29./modules/mod_authentication/templates/_logon_off.tpl:4./modules/mod_authentication/templates/error.403.tpl:29
+#: modules/mod_base/templates/error.403.tpl:30
+msgid "Sign in"
+msgstr "Connexion"
+
+#: modules/mod_authentication/templates/_logon_login_title.tpl:1./modules/mod_authentication/templates/logon.tpl:11
+#, fuzzy
+msgid "Sign in to"
+msgstr "Connexion"
+
+#: modules/mod_authentication/templates/_logon_off.tpl:2./modules/mod_authentication/templates/logoff.tpl:3
+msgid "Sign out"
+msgstr "Deconnexion"
+
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:21
+msgid "Simply try again:"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:26
+msgid "Somebody else is already connected with this account on"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:29
+msgid "Sorry, could not send the verification message."
+msgstr "Désolé, l'envoi du message de vérification a échoué"
+
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:19
+msgid "Sorry, your password reset code is unknown or expired"
+msgstr ""
+"Désolé, votre code de changement de mot de passe est inconnu ou a expiré"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:10
+msgid "The email address associated with your account is"
+msgstr "L'adresse email associée à votre compte est "
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:21
+msgid ""
+"The signup module is enabled, users authenticating via the services below "
+"are automatically signed up."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_error.tpl:24
+msgid "The two passwords should be equal. Please retype them."
+msgstr ""
+"Les deux mots de passe doivent être indentiques. Merci de retaper votre mot "
+"de passe."
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:44
+msgid "There was a problem authenticating with"
+msgstr ""
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:34
+msgid ""
+"This can be resolved by changing the Cookies and website data settings in "
+"the Safari preferences."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:25
+msgid "This does not match the first password"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_error.tpl:13
+#, fuzzy
+msgid ""
+"To find your account you need to enter either your username or the email "
+"address we have received from you."
+msgstr ""
+"Pour retrouver votre compte, vous devez entrer soit votre identifiant, soit "
+"votre adresse email"
+
+#: modules/mod_authentication/templates/error.403.tpl:23
+#: modules/mod_base/templates/error.403.tpl:25
+msgid "To view this page you must be signed in."
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:20
+#: modules/mod_base/templates/error.403.tpl:22
+msgid "To view this page, you need to have other access rights."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_error.tpl:20./modules/mod_authentication/templates/_logon_error.tpl:27
+#, fuzzy
+msgid ""
+"Use some non alphabetical characters or digits to make it harder to guess."
+msgstr ""
+"Vous pouvez utiliser des caractères spéciaux ou bien des chiffres pour "
+"rendre votre mot de passe plus difficile à deviner."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:14
+msgid "Verify your account"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_error.tpl:12
+#, fuzzy
+msgid ""
+"We can only send you an email when we have the email address of your account."
+msgstr ""
+"Nous ne pouvons vous envoyer d'email, seulement quand votre adresse email "
+"sera enregistrée."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:30
+#, fuzzy
+msgid ""
+"We don’t seem to have any valid email address or other electronic "
+"communication address of you."
+msgstr "Nous n'avons aucune adresse email valide pour votre compte."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+msgid "We have sent you an email with a link to reset your password."
+msgstr ""
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:18
+#, fuzzy
+msgid ""
+"When you didn't request a password reset, you can ignore this email. Maybe "
+"someone made an error typing his or her email address."
+msgstr ""
+"Si vous n'avez pas demander un nouveau mot de passe, ignorez cet email."
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:12
+msgid "You have to share your email address to be able to sign in."
+msgstr ""
+
+#: modules/mod_authentication/templates/error.403.tpl:21
+#: modules/mod_base/templates/error.403.tpl:23
+msgid "You may try to sign in as a different user."
+msgstr ""
+
+#: modules/mod_authentication/templates/admin_authentication_services.tpl:11
+msgid ""
+"You need to be allowed to edit the system configuration to view or change "
+"the configured App Keys."
+msgstr ""
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:23
+#, fuzzy
+msgid ""
+"You receive this email because you or someone else requested a password "
+"reset for your account. You or the someone else either entered your username "
+"or email address. You will not receive any additional emails because of this "
+"request."
+msgstr ""
+"Vous recevez cet email car vous ou quelqun d'autre avez demandé à changer de "
+"mot de passe. Vous ne receverez qu'un seul email."
+
+#: modules/mod_authentication/templates/logoff.tpl:12
+msgid "You will be redirected to the home page."
+msgstr "Vous allez être redirigé vers la page principal"
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:4
+msgid "You'll need to create a new one."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:15
+msgid ""
+"You're almost done! To make sure you are really you, we ask you to confirm "
+"your account from your email address."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_error.tpl:10
+msgid "You've entered an unknown username or email address. Please try again."
+msgstr ""
+"Vous avez entré un identifiant ou adresse email inconnue. Merci de réessayer."
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:8
+msgid "You've requested a new password for"
+msgstr "Vous avez demandé un nouveau mot de passe pour"
+
+#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:2./modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:2
+msgid "Your email or username"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_error.tpl:17
+msgid "Your new password is too short."
+msgstr "Votre nouveau mot de passe est trop court"
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:3
+msgid "Your password has expired"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:19./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
+msgid "Your password is too short."
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_login_extra.tpl:6
+msgid "or"
+msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:8./modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:8
+msgid "user@example.com"
+msgstr ""
+
+#: modules/mod_backup/mod_backup.erl:65
+#, fuzzy
+msgid "Backup"
+msgstr "Sauvegardes"
+
+#: modules/mod_base/templates/_session_info.tpl:5
+#, fuzzy
+msgid "# Pages"
+msgstr "Pages"
+
+#: modules/mod_base/actions/action_base_alert.erl:35
+msgid "Alert"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:74
+msgid "Arguments"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:75
+#, fuzzy
+msgid "File"
+msgstr "Nom du fichier"
+
+#: modules/mod_base/templates/directory_index.tpl:14
+#: modules/mod_base_site/templates/_media_info.tpl:4
+msgid "Filename"
+msgstr "Nom du fichier"
+
+#: modules/mod_base/templates/directory_index.tpl:28
+msgid "Folder"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:73
+#, fuzzy
+msgid "Function/ template"
+msgstr "Modèles de questions"
+
+#: modules/mod_base/templates/error.tpl:10
+msgid "Gone"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:166
+#, fuzzy
+msgid "Got a Comet Connection"
+msgstr "Créer une nouvelle connection"
+
+#: modules/mod_base/templates/connection_test.tpl:160
+msgid "Got a Websocket"
+msgstr ""
+
+#: modules/mod_base/templates/email_base.tpl:4
+msgid "Hello from Zotonic"
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:4./modules/mod_base/templates/directory_index.tpl:8
+msgid "Index of"
+msgstr ""
+
+#: modules/mod_base/templates/email_base.tpl:22
+msgid "Kind regards,"
+msgstr ""
+
+#: modules/mod_base/templates/connection_test.tpl:168
+#, fuzzy
+msgid "No Comet Connection"
+msgstr "Créer une nouvelle connection"
+
+#: modules/mod_base/templates/connection_test.tpl:162
+msgid "No Websocket"
+msgstr ""
+
+#: modules/mod_base/templates/_session_info.tpl:12
+#, fuzzy
+msgid "Page Id"
+msgstr "Page"
+
+#: modules/mod_base/templates/error.tpl:14
+#, fuzzy
+msgid "Return to the homepage"
+msgstr "Une connection vers cette page"
+
+#: modules/mod_base/templates/_session_info.tpl:2
+msgid "Session Id"
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:17
+#: modules/mod_base_site/templates/_media_info.tpl:16
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:46
+msgid "Size"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:11
+msgid "Sorry, this page has been deleted."
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:8
+msgid "Sorry, you don’t have access to this page."
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:23
+msgid "Stack trace"
+msgstr ""
+
+#: modules/mod_base/templates/error.tpl:13
+msgid "That page does not exist"
+msgstr ""
+
+#: modules/mod_base/templates/email_base.tpl:19
+msgid ""
+"This is the base message. When you receive this text then the template "
+"builder did not overrule the <tt>body</tt> block."
+msgstr ""
+
+#: modules/mod_base/templates/directory_index.tpl:15
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:22
+msgid "Type"
+msgstr "Entrer"
+
+#: modules/mod_base/templates/error.tpl:16
+msgid "error"
+msgstr ""
+
+#: modules/mod_base_site/templates/_meta.tpl:3
+msgid "By"
+msgstr "Par"
+
+#: modules/mod_base_site/templates/page.media.tpl:31
+#, fuzzy
+msgid "Click to download"
+msgstr "télécharger"
+
+#: modules/mod_base_site/templates/search.tpl:29
+msgid "Did not find any pages matching"
+msgstr ""
+
+#: modules/mod_base_site/templates/_media_info.tpl:12
+msgid "Dimensions"
+msgstr "Dimensions"
+
+#: modules/mod_base_site/templates/page.collection.tpl:7
+#, fuzzy
+msgid "Documents"
+msgstr "Commentaires"
+
+#: modules/mod_base_site/templates/_media_info.tpl:26
+#, fuzzy
+msgid "Download file"
+msgstr "Télécharger les fichiers"
+
+#: modules/mod_base_site/templates/_media_info.tpl:24
+msgid "Links"
+msgstr ""
+
+#: modules/mod_base_site/templates/_media_info.tpl:8
+msgid "Mime"
+msgstr ""
+
+#: modules/mod_base_site/templates/page.query.tpl:8./modules/mod_base_site/templates/search.tpl:18
+#: modules/mod_comment/templates/admin_comments.tpl:20
+msgid "Page"
+msgstr "Page"
+
+#: modules/mod_base_site/templates/_content_list_item.tpl:22
+msgid "Read more"
+msgstr ""
+
+#: modules/mod_base_site/templates/_search_form.tpl:4./modules/mod_base_site/templates/search.tpl:3
+#, fuzzy
+msgid "Search"
+msgstr "mars"
+
+#: modules/mod_base_site/templates/search.tpl:14
+#, fuzzy
+msgid "Searching for"
+msgstr "Chercher une autre question"
+
+#: modules/mod_base_site/templates/_meta_share.tpl:2
+msgid "Share"
+msgstr ""
+
+#: modules/mod_base_site/templates/_meta_share.tpl:2./modules/mod_base_site/templates/_meta_share.tpl:3
+#, fuzzy
+msgid "Share this page"
+msgstr "Enregistrer cette page"
+
+#: modules/mod_base_site/templates/_address.tpl:13./modules/mod_base_site/templates/_address.tpl:17
+#, fuzzy
+msgid "Show map"
+msgstr "montrer tout"
+
+#: modules/mod_base_site/templates/_media_info.tpl:27
+msgid "View in browser"
+msgstr ""
+
+#: modules/mod_base_site/templates/home.tpl:3
+msgid "Welcome"
+msgstr ""
+
+#: modules/mod_base_site/templates/_meta.tpl:6
+msgid "l, F j, Y"
+msgstr ""
+
+#: modules/mod_comment/templates/admin_comments.tpl:19
+msgid "Added on"
+msgstr "Ajouté le"
+
+#: modules/mod_comment/templates/admin_comments.tpl:40
+#, fuzzy
+msgid "Are you sure you wish to delete that comment?"
+msgstr "Êtes vous sûr de vouloir effacer "
+
+#: modules/mod_comment/templates/admin_comments_settings.tpl:3./modules/mod_comment/templates/admin_comments_settings.tpl:16
+msgid "Comment Form Settings"
+msgstr ""
+
+#: modules/mod_comment/mod_comment.erl:211
+#, fuzzy
+msgid "Comment settings"
+msgstr "Commentaires"
+
+#: modules/mod_comment/templates/_comments.tpl:4./modules/mod_comment/templates/admin_comments_settings.tpl:11./modules/mod_comment/mod_comment.erl:206
+msgid "Comments"
+msgstr "Commentaires"
+
+#: modules/mod_comment/templates/admin_comments.tpl:22
+msgid "Email"
+msgstr "E-mail"
+
+#: modules/mod_comment/templates/admin_comments_settings.tpl:26
+msgid "General Comment Form Settings"
+msgstr ""
+
+#: modules/mod_comment/templates/admin_comments_settings.tpl:17
+msgid ""
+"Here you find settings to configure the comment module to suit your needs."
+msgstr ""
+
+#: modules/mod_comment/templates/_comments_form.tpl:15
+#, fuzzy
+msgid "Leave a comment"
+msgstr "Commentaires récents"
+
+#: modules/mod_comment/templates/_comments_form.tpl:63
+msgid "Log on or sign up to comment"
+msgstr "Connectez-vous ou enregistrez-vous pour poster un commentaire"
+
+#: modules/mod_comment/templates/_comments_form.tpl:41./modules/mod_comment/templates/admin_comments.tpl:21
+msgid "Message"
+msgstr "Message"
+
+#: modules/mod_comment/templates/admin_comments_settings.tpl:33
+#, fuzzy
+msgid "Moderate comments"
+msgstr "Commentaires récents"
+
+#: modules/mod_comment/templates/_comments_form.tpl:17
+msgid "Note: Comments are moderated"
+msgstr ""
+
+#: modules/mod_comment/templates/_comments_comment.tpl:4
+msgid "Posted"
+msgstr "Posté"
+
+#: modules/mod_comment/templates/admin_comments.tpl:4
+msgid "Recent Comments"
+msgstr "Commentaires récents"
+
+#: modules/mod_comment/templates/admin_comments.tpl:9
+msgid "Recent comments"
+msgstr "Commentaires récents"
+
+#: modules/mod_comment/templates/admin_comments_settings.tpl:31
+msgid ""
+"Require all comments to be reviewed by a moderator before displaying them on "
+"the public website"
+msgstr ""
+
+#: modules/mod_comment/templates/admin_comments_settings.tpl:21
+msgid "Save Comment Form settings"
+msgstr ""
+
+#: modules/mod_comment/templates/admin_comments.tpl:13./modules/mod_comment/templates/admin_comments_settings.tpl:12
+#: modules/mod_development/templates/admin_development.tpl:12
+#, fuzzy
+msgid "Settings"
+msgstr "édité"
+
+#: modules/mod_comment/templates/admin_comments.tpl:56
+msgid "There are no comments."
+msgstr "Aucun commentaire."
+
+#: modules/mod_comment/templates/_comments_moderation.tpl:1
+msgid ""
+"Your comment has been saved and will be subject to moderation before it is "
+"displayed on the website"
+msgstr ""
+
+#: modules/mod_comment/templates/_comments_form.tpl:7
+msgid ""
+"Your comment has been saved and will be subject to review before it is "
+"displayed to other visitors of the website. Thank you for your comment!"
+msgstr ""
+
+#: modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:4./modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:15
+#, fuzzy
+msgid "publish"
+msgstr "Publié"
+
+#: modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:9./modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:20
+#, fuzzy
+msgid "unpublish"
+msgstr "Publié"
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:1
+#, fuzzy
+msgid "Are you sure you want to delete the following content groups:"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_content_groups/templates/_admin_edit_sidebar_content_group.tpl:4
+msgid "Content Group"
+msgstr ""
+
+#: modules/mod_content_groups/mod_content_groups.erl:71
+msgid "Delete is canceled, there are pages in this content group."
+msgstr ""
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:15
+msgid "Move all pages in these content groups to:"
+msgstr ""
+
+#: modules/mod_content_groups/templates/_admin_edit_sidebar_content_group.tpl:15
+msgid "None"
+msgstr ""
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:31
+msgid ""
+"Or click <strong>Delete All Pages</strong> to delete all pages in the "
+"content groups."
+msgstr ""
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:47
+#, fuzzy
+msgid "There are no pages in these content groups."
+msgstr "Il n’y a pas de pages connectée a cette page"
+
+#: modules/mod_content_groups/templates/_admin_edit_sidebar_content_group.tpl:12
+#, fuzzy
+msgid "This page is part of the group:"
+msgstr "Cette page a"
+
+#: modules/mod_custom_redirect/mod_custom_redirect.erl:59
+msgid "Domains and redirects"
+msgstr ""
+
+#: modules/mod_custom_redirect/mod_custom_redirect.erl:73
+#, fuzzy
+msgid "You are not allowed to change this."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:5
+#, fuzzy
+msgid "Action"
+msgstr "Actions"
+
+#: modules/mod_development/templates/admin_development_templates.tpl:13
+msgid "Below you see in real time which templates are compiled and included."
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:6
+msgid "Bindings"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:24./modules/mod_development/templates/_development_dispatch_trace.tpl:31./modules/mod_development/templates/_development_dispatch_trace.tpl:58
+msgid "Controller"
+msgstr ""
+
+#: modules/mod_development/mod_development.erl:200
+msgid "Development"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:90
+msgid "Dispatch rule debugging"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:44
+msgid ""
+"Download css and javascript files as separate files (ie. don’t combine them "
+"in one url)."
+msgstr ""
+
+#: modules/mod_development/templates/admin_development_templates.tpl:18
+msgid "Empty log"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:54
+msgid "Enable API to recompile &amp; build Zotonic"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:105
+msgid "Explain"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:30
+msgid "Final dispatch"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:76
+msgid "Find"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:61
+msgid "Find a template, check which template will be selected"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:40
+msgid "Forced switch of protocol to"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:23
+msgid "Found matching dispatch rule"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development_templates.tpl:8./modules/mod_development/templates/admin_development_templates.tpl:12
+#, fuzzy
+msgid "Included templates"
+msgstr "Modèles de questions"
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:67./modules/mod_development/templates/_development_dispatch_trace.tpl:73
+#, fuzzy
+msgid "Location"
+msgstr "Pas de lieux"
+
+#: modules/mod_development/templates/admin_development.tpl:93
+msgid "Match a request url, display matched dispatch rule."
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:38./modules/mod_development/templates/_development_dispatch_trace.tpl:41
+msgid "New host"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:46./modules/mod_development/templates/_development_dispatch_trace.tpl:52
+#, fuzzy
+msgid "New path"
+msgstr "Nouveau mot de passe"
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:43
+msgid "No matching dispatch rule found"
+msgstr ""
+
+#: modules/mod_development/templates/_development_template.tpl:12
+#, fuzzy
+msgid "Not found"
+msgstr "Pas de médias trouvés"
+
+#: modules/mod_development/templates/admin_development.tpl:69
+msgid "Optional category for catinclude"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:26./modules/mod_development/templates/_development_dispatch_trace.tpl:33./modules/mod_development/templates/_development_dispatch_trace.tpl:60
+msgid "Options"
+msgstr "Options"
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:4
+msgid "Path"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:69./modules/mod_development/templates/_development_dispatch_trace.tpl:75
+msgid "Permanent redirect"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development_templates.tpl:17
+#, fuzzy
+msgid "Recompile Templates"
+msgstr "Modèles de questions"
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:72
+msgid "Redirect"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:33
+msgid "Show defined blocks in generated templates"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:22
+msgid "Show paths to included template files in generated templates"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:7./modules/mod_development/templates/admin_development_templates.tpl:7
+msgid "Site Development"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:21
+msgid "Start matching dispatch rules"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:37
+msgid "Switch protocol to"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:59
+msgid "Template debugging"
+msgstr ""
+
+#: modules/mod_development/templates/_development_template.tpl:4
+msgid "Template path"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:54
+msgid "This is resource is unknown or does not have an uri"
+msgstr ""
+
+#: modules/mod_development/templates/admin_development.tpl:9
+msgid "Tools and settings that are useful for site development."
+msgstr ""
+
+#: modules/mod_development/support/z_development_dispatch.erl:57
+#, fuzzy
+msgid "You are not allowed to use the dispatch debugging."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_development/support/z_development_template.erl:43
+#, fuzzy
+msgid "You are not allowed to use the template debugging."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:57
+msgid "found dispatch rule"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:64
+msgid "found no match"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:50
+msgid "found resource id"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:45
+msgid "notification"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:48
+msgid "notification, checking first return"
+msgstr ""
+
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:66
+#, fuzzy
+msgid "redirects"
+msgstr "Predicate"
+
+#: modules/mod_editor_tinymce/templates/_editor.tpl:27
+msgid "Add link"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:21
+msgid "Aligned left"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:27
+msgid "Aligned right"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:10
+msgid "Alignment"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:15
+msgid "Between text"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:83
+#, fuzzy
+msgid "Caption"
+msgstr "Options"
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:33
+msgid "Crop"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:38
+msgid "Crop image"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_admin_configure_module.tpl:3
+msgid "Editor version"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_editor.tpl:12
+msgid "Insert image"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:62
+msgid "Large"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:68
+msgid "Link"
+msgstr ""
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:73
+#, fuzzy
+msgid "Make link"
+msgstr "Créer"
+
+#: modules/mod_editor_tinymce/mod_editor_tinymce.erl:40
+#, fuzzy
+msgid "Media Properties"
+msgstr "Ensemble des médias"
+
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:51
+msgid "Small"
+msgstr ""
+
+#: modules/mod_email_dkim/mod_email_dkim.erl:43
+msgid "DKIM e-mail setup"
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:83
+msgid "Bounces"
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:31
+msgid "Clear error flag for this email address."
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:69
+msgid "Errors since last clear"
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:4
+msgid "Information about"
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:79
+#, fuzzy
+msgid "Last error status"
+msgstr "Status du système"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:56
+msgid "Most Recent"
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:59
+msgid "Received from this address"
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:64
+#, fuzzy
+msgid "Sent to this address"
+msgstr "Adresse Electronique"
+
+#: modules/mod_email_status/mod_email_status.erl:54
+#, fuzzy
+msgid "Sorry, you are not allowed to reset this email address."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:41
+msgid "The email address has been cleared, new emails will be sent."
+msgstr ""
+
+#: modules/mod_email_status/mod_email_status.erl:49
+msgid "The email error flag has been cleared."
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_flag.tpl:9
+#, fuzzy
+msgid "There are email problems."
+msgstr "Aucun commentaire."
+
+#: modules/mod_email_status/templates/_email_status_flag.tpl:6./modules/mod_email_status/templates/_email_status_view.tpl:25
+msgid "There are problems with this email address."
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:14
+msgid ""
+"There have been some problems but they have been cleared. This message will "
+"disappear as soon as an email has been received succesfully."
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:48
+msgid "This email address is not valid."
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:13
+msgid "This email address is now ok."
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:19
+#, fuzzy
+msgid "This email address is ok."
+msgstr "Adresse E-mail"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:74
+msgid "Total send errors"
+msgstr ""
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:55
+msgid "Total/Status"
+msgstr ""
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:13
+msgid "App ID."
+msgstr ""
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:20
+msgid "App Secret"
+msgstr ""
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:9
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:10
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:9
+msgid "Application keys can be found in"
+msgstr ""
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:16
+msgid "Connect with Facebook"
+msgstr ""
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:7./modules/mod_facebook/templates/_facebook_login_link.tpl:9
+msgid "Disconnect from Facebook"
+msgstr ""
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:10
+msgid "Do you want to disconnect your Facebook account?"
+msgstr ""
+
+#: modules/mod_facebook/templates/_facebook_login_link.tpl:16
+msgid "Log in with Facebook"
+msgstr ""
+
+#: modules/mod_facebook/templates/_logon_service.facebook.tpl:1
+#: modules/mod_instagram/templates/_logon_service.instagram.tpl:1
+#: modules/mod_twitter/templates/_logon_service.twitter.tpl:1
+#, fuzzy
+msgid "One moment please"
+msgstr "Patientez s'il vous plait, déconnexion en cours..."
+
+#: modules/mod_facebook/templates/_logon_service.facebook.tpl:2
+msgid "Redirecting to Facebook."
+msgstr ""
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:46
+msgid "Save Facebook Settings"
+msgstr ""
+
+#: modules/mod_facebook/mod_facebook.erl:70
+msgid "Saved the Facebook settings."
+msgstr ""
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:27
+msgid "Scope"
+msgstr ""
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:38
+msgid "Use Facebook authentication"
+msgstr ""
+
+#: modules/mod_facebook/mod_facebook.erl:72
+msgid "You don't have permission to change the Facebook settings."
+msgstr ""
+
+#: modules/mod_facebook/templates/_logon_extra_email_reset.tpl:2
+msgid "You have coupled your <strong>Facebook</strong> account."
+msgstr ""
+
+#: modules/mod_facebook/templates/_admin_authentication_service.tpl:9
+msgid "Your Facebook Developer Dashboard"
+msgstr ""
+
+#: modules/mod_filestore/mod_filestore.erl:115
+msgid "Cloud File Store"
+msgstr ""
+
+#: modules/mod_import_csv/mod_import_csv.erl:74
+#, fuzzy
+msgid "Import content"
+msgstr "Seo content"
+
+#: modules/mod_import_csv/mod_import_csv.erl:107
+msgid "Only admins can import CSV files."
+msgstr ""
+
+#: modules/mod_import_csv/mod_import_csv.erl:98./modules/mod_import_csv/mod_import_csv.erl:100
+msgid ""
+"Please hold on while the file is importing. You will get a notification when "
+"it is ready."
+msgstr ""
+
+#: modules/mod_import_csv/mod_import_csv.erl:103
+msgid "This file cannot be imported."
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:45
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:45
+#, fuzzy
+msgid "Access Token"
+msgstr "Acceder au control"
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:15
+msgid "Client ID"
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:22
+msgid "Client Secret"
+msgstr ""
+
+#: modules/mod_instagram/templates/_logon_extra_instagram.tpl:18
+msgid "Connect with Instagram"
+msgstr ""
+
+#: modules/mod_instagram/templates/_logon_extra_instagram.tpl:9./modules/mod_instagram/templates/_logon_extra_instagram.tpl:11
+msgid "Disconnect from Instagram"
+msgstr ""
+
+#: modules/mod_instagram/templates/_logon_extra_instagram.tpl:12
+msgid "Do you want to disconnect your Instagram account?"
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:53
+msgid "Follow tags"
+msgstr ""
+
+#: modules/mod_instagram/templates/_logon_extra_instagram.tpl:18
+msgid "Log in with Instagram"
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:68
+msgid "Photo import"
+msgstr ""
+
+#: modules/mod_instagram/templates/_logon_service.instagram.tpl:2
+msgid "Redirecting to Instagram."
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:84
+msgid "Save Instagram Settings"
+msgstr ""
+
+#: modules/mod_instagram/mod_instagram.erl:78
+msgid "Saved the Instagram settings."
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:58
+msgid "Separate tags with commas or newlines."
+msgstr ""
+
+#: modules/mod_instagram/templates/_instagram_access_token.tpl:10
+msgid "To obtain an access token you need to connect with Instagram."
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:33
+msgid "Use Instagram authentication"
+msgstr ""
+
+#: modules/mod_instagram/templates/_instagram_access_token.tpl:5
+msgid "Use the access token for the Instagram account"
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:74
+msgid "Video import"
+msgstr ""
+
+#: modules/mod_instagram/mod_instagram.erl:80
+msgid "You don't have permission to change the Instagram settings."
+msgstr ""
+
+#: modules/mod_instagram/templates/_logon_extra_email_reset.tpl:2
+msgid "You have coupled your <strong>Instagram</strong> account."
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:10
+msgid "Your Instagram Manage Clients page"
+msgstr ""
+
+#: modules/mod_instagram/templates/_admin_authentication_service.tpl:42
+msgid "Zotonic can import photos and videos with specific tags."
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:53
+#, fuzzy
+msgid "Apr"
+msgstr "avril"
+
+#: modules/mod_l10n/support/l10n_date.erl:38
+msgid "April"
+msgstr "avril"
+
+#: modules/mod_l10n/support/l10n_date.erl:57
+#, fuzzy
+msgid "Aug"
+msgstr "août"
+
+#: modules/mod_l10n/support/l10n_date.erl:42
+msgid "August"
+msgstr "août"
+
+#: modules/mod_l10n/support/l10n_date.erl:61
+msgid "Dec"
+msgstr "déc"
+
+#: modules/mod_l10n/support/l10n_date.erl:46
+msgid "December"
+msgstr "décembre"
+
+#: modules/mod_l10n/support/l10n_date.erl:51
+msgid "Feb"
+msgstr "févr"
+
+#: modules/mod_l10n/support/l10n_date.erl:36
+msgid "February"
+msgstr "février"
+
+#: modules/mod_l10n/templates/_admin_l10n_config.tpl:23
+msgid "Fix timezone, show all dates in the above timezone."
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:29
+msgid "Friday"
+msgstr "vendredi"
+
+#: modules/mod_l10n/templates/admin_l10n.tpl:8
+msgid "Here you can set the default localization configurations."
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:50
+#, fuzzy
+msgid "Jan"
+msgstr "janv"
+
+#: modules/mod_l10n/support/l10n_date.erl:35
+msgid "January"
+msgstr "janvier"
+
+#: modules/mod_l10n/support/l10n_date.erl:56
+#, fuzzy
+msgid "Jul"
+msgstr "juil"
+
+#: modules/mod_l10n/support/l10n_date.erl:41
+msgid "July"
+msgstr "juillet"
+
+#: modules/mod_l10n/support/l10n_date.erl:55
+#, fuzzy
+msgid "Jun"
+msgstr "juin"
+
+#: modules/mod_l10n/support/l10n_date.erl:40
+msgid "June"
+msgstr "juin"
+
+#: modules/mod_l10n/templates/admin_l10n.tpl:3
+msgid "L10N Configuration"
+msgstr ""
+
+#: modules/mod_l10n/templates/admin_l10n.tpl:7./modules/mod_l10n/mod_l10n.erl:189
+msgid "Localization"
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:52
+#, fuzzy
+msgid "Mar"
+msgstr "mars"
+
+#: modules/mod_l10n/support/l10n_date.erl:37
+msgid "March"
+msgstr "mars"
+
+#: modules/mod_l10n/support/l10n_date.erl:39./modules/mod_l10n/support/l10n_date.erl:54
+msgid "May"
+msgstr "mai"
+
+#: modules/mod_l10n/support/l10n_date.erl:25
+msgid "Monday"
+msgstr "lundi"
+
+#: modules/mod_l10n/support/l10n_date.erl:60
+msgid "Nov"
+msgstr "nov"
+
+#: modules/mod_l10n/support/l10n_date.erl:45
+msgid "November"
+msgstr "novembre"
+
+#: modules/mod_l10n/support/l10n_date.erl:59
+#, fuzzy
+msgid "Oct"
+msgstr "oct"
+
+#: modules/mod_l10n/support/l10n_date.erl:44
+msgid "October"
+msgstr "octobre"
+
+#: modules/mod_l10n/support/l10n_date.erl:30
+msgid "Saturday"
+msgstr "samedi"
+
+#: modules/mod_l10n/support/l10n_date.erl:58
+msgid "Sep"
+msgstr "sept"
+
+#: modules/mod_l10n/support/l10n_date.erl:43
+msgid "September"
+msgstr "septembre"
+
+#: modules/mod_l10n/support/l10n_date.erl:31
+msgid "Sunday"
+msgstr "dimanche"
+
+#: modules/mod_l10n/templates/_admin_l10n_config.tpl:31
+msgid ""
+"This forces the timezone to the configured timezone. Irrespective of the "
+"timezone selected by the user or user-agent."
+msgstr ""
+
+#: modules/mod_l10n/templates/_admin_l10n_config.tpl:12
+msgid ""
+"This sets the default timezone. This timezone is used for the initial "
+"request by an user-agent or when the timezone is not known."
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:28
+msgid "Thursday"
+msgstr "jeudi"
+
+#: modules/mod_l10n/support/l10n_date.erl:26
+msgid "Tuesday"
+msgstr "mardi"
+
+#: modules/mod_l10n/support/l10n_date.erl:27
+msgid "Wednesday"
+msgstr "mercredi"
+
+#: modules/mod_l10n/support/l10n_date.erl:20
+msgid "midnight"
+msgstr "minuit"
+
+#: modules/mod_l10n/support/l10n_date.erl:22
+msgid "noon"
+msgstr "midi"
+
+#: modules/mod_linkedin/mod_linkedin.erl:47
+msgid "Saved the LinkedIn settings."
+msgstr ""
+
+#: modules/mod_linkedin/mod_linkedin.erl:49
+msgid "You don't have permission to change the LinkedIn settings."
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:77
+msgid "Bounce"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:68
+msgid "Debug"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_base.tpl:12./modules/mod_logging/mod_logging.erl:229
+#, fuzzy
+msgid "Email log"
+msgstr "E-mail"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:79
+msgid "Failed"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:64
+msgid "Fatal"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:103
+msgid "Filter"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_base.tpl:3./modules/mod_logging/mod_logging.erl:224
+#, fuzzy
+msgid "Log"
+msgstr "Connection"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:3
+msgid "Log email"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:5
+msgid "Log incoming/outgoing e-mail"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log.tpl:3./modules/mod_logging/templates/admin_log.tpl:5./modules/mod_logging/templates/admin_log_base.tpl:7
+#, fuzzy
+msgid "Log messages"
+msgstr "Message"
+
+#: modules/mod_logging/templates/admin_log_base.tpl:11
+#, fuzzy
+msgid "Message log"
+msgstr "Message"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:52
+#, fuzzy
+msgid "Message nr"
+msgstr "Message"
+
+#: modules/mod_logging/templates/admin_log.tpl:12./modules/mod_logging/templates/admin_log_email.tpl:30
+msgid "Most recent messages"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log.tpl:22./modules/mod_logging/templates/admin_log_email.tpl:121
+msgid "No log messages."
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:56
+msgid "Other"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:78
+msgid "Received"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:80
+msgid "Retry"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:75
+#, fuzzy
+msgid "Sending"
+msgstr "Envoyé"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:76
+msgid "Sent"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:50
+msgid "Severity"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:57
+#, fuzzy
+msgid "Template"
+msgstr "Modèles de questions"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:53
+msgid "To"
+msgstr ""
+
+#: modules/mod_logging/templates/admin_log_email.tpl:66
+msgid "Warning"
+msgstr ""
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:384
+#, fuzzy
+msgid "Mailing lists"
+msgstr "Mailing address"
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:158
+msgid "No addresses selected"
+msgstr ""
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:160
+msgid "Resending bounced addresses..."
+msgstr ""
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:149
+#, fuzzy
+msgid "Sending the page to "
+msgstr "Enregister et visualiser la page"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:21
+msgid "Add after"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:19
+msgid "Add before"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:20
+msgid "Add below"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12./modules/mod_menu/templates/admin_menu_hierarchy.tpl:22
+msgid "Add bottom"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_scripts.tpl:7
+#, fuzzy
+msgid "Add category"
+msgstr "Categorie"
+
+#: modules/mod_menu/templates/_menu_edit_scripts.tpl:22
+msgid "Add item"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:8./modules/mod_menu/templates/_menu_edit_scripts.tpl:36
+#, fuzzy
+msgid "Add menu item"
+msgstr "Ajouter un nouveau média"
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:11./modules/mod_menu/templates/admin_menu_hierarchy.tpl:21
+msgid "Add top"
+msgstr ""
+
+#: modules/mod_menu/mod_menu.erl:132
+msgid "COPY"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
+msgid ""
+"Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add "
+"pages."
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:23
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:15
+msgid "Copy"
+msgstr ""
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:38
+msgid "Create an (optionally) nested navigation menu for this site."
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_trash.tpl:1
+msgid "Drag elements here to remove them"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:18
+msgid ""
+"Drag menu items in the menu up, down, left or right to structure the menu."
+msgstr ""
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:41
+msgid "Drag pages to the place where you want them in the hierarchy."
+msgstr ""
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:52
+msgid "Empty hierarchy"
+msgstr ""
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:64
+msgid "Hierarchies can be defined for any existing category."
+msgstr ""
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:8
+msgid "Hierarchy for"
+msgstr ""
+
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3./modules/mod_menu/mod_menu.erl:474
+msgid "Menu"
+msgstr ""
+
+#: modules/mod_menu/mod_menu.erl:243
+#, fuzzy
+msgid "New page"
+msgstr "la page"
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:24
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:7./modules/mod_translation/templates/admin_translation.tpl:60
+msgid "Remove"
+msgstr ""
+
+#: modules/mod_menu/mod_menu.erl:103
+msgid "Sorry, can’t copy that page."
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_scripts.tpl:154
+msgid "This item is already in the hierarchy. Every item can only occur once."
+msgstr ""
+
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:63
+#: modules/mod_search/support/search_query.erl:760
+#, fuzzy
+msgid "Unknown category"
+msgstr "filtrer sur les catégories"
+
+#: modules/mod_mqtt/templates/_admin_configure_module.tpl:9
+msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
+msgstr ""
+
+#: modules/mod_oauth/mod_oauth.erl:364
+msgid "API access"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:5
+#, fuzzy
+msgid "Access to"
+msgstr "Acceder au control"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:98
+msgid "Add application"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:14
+msgid "Add new application"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:7
+msgid "Allow"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:75
+msgid "Allow users of this application access to the following API calls:"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:30
+msgid "Allow!"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:31
+msgid "Application title"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:8
+msgid "Authorization"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:3
+msgid "Authorization finished"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:3
+msgid "Authorize this request"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:7
+msgid "Authorized!"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:52
+msgid "Callback URL"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
+msgid ""
+" Change the title, description and access permissions of this application."
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:6./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:16
+msgid "Consumer key"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:7./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:23
+msgid "Consumer secret"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:43
+#, fuzzy
+msgid "Delete this application!"
+msgstr "Effacer cette page"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:7
+#: modules/mod_translation/templates/admin_translation.tpl:69
+msgid "Details"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:31
+msgid "Disallow"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:40
+#, fuzzy
+msgid "Do you really want to delete this application?"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:38
+#, fuzzy
+msgid "Homepage"
+msgstr "la page"
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:21
+msgid "In use since"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:16
+msgid "More information about this program"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:63
+#, fuzzy
+msgid "Next step"
+msgstr "Question suivante"
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:42
+msgid "No applications registered yet."
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:3
+msgid "OAuth applications"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:7
+msgid "Registered OAuth applications"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_apps_list.tpl:29
+msgid "Show applications/users that are using this key"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "The application"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:8
+msgid ""
+"The following users are still using this application. If you delete this "
+"application, you will revoke access and most likely their applications will "
+"break."
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:12
+msgid "The following users are using this application:"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:19
+msgid "This application wants access to the following services:"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_apps.tpl:9
+msgid ""
+"This page allows you to register API keys with which 3rd parties can gain "
+"access to specific parts of the API and database."
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:36
+msgid "This token is not yet used by anybody."
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:7./modules/mod_oauth/templates/oauth_authorize.tpl:9
+#, fuzzy
+msgid "Untitled"
+msgstr "sans titre"
+
+#: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:61./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:96
+msgid "Update"
+msgstr ""
+
+#: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:20
+#, fuzzy
+msgid "User"
+msgstr "Identifiant"
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:11
+msgid "You can now safely close this window."
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:9
+msgid "You have granted the application"
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize_finished.tpl:9
+msgid "access your account."
+msgstr ""
+
+#: modules/mod_oauth/templates/oauth_authorize.tpl:9
+msgid "wants to access your account."
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_authentication_service.tpl:13
+msgid "API Key"
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_authentication_service.tpl:9
+msgid "API Key can be found on"
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_status.tpl:5
+msgid ""
+"Attempt to fix embedded videos for which OEmbed embedding has failed "
+"previously."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:347
+msgid "Attempting to fix ~p videos."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:287
+#, fuzzy
+msgid "Could not create the media page."
+msgstr "Faire une copie de cette page"
+
+#: modules/mod_oembed/mod_oembed.erl:299
+msgid "Could not update the page with the new embed code."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:337
+#, fuzzy
+msgid "Detected media item"
+msgstr "Remplacer le média"
+
+#: modules/mod_oembed/templates/_admin_edit_media.tpl:3./modules/mod_oembed/templates/_media_upload_panel.tpl:17./modules/mod_oembed/templates/_media_upload_tab.tpl:3
+#, fuzzy
+msgid "Embed URL"
+msgstr "URL du média"
+
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:7
+msgid ""
+"Embed a video or other media URL. Here you can paste any URL from YouTube, "
+"Vimeo or other services."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:196
+msgid "Embedded Content"
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_edit_media.tpl:9
+msgid "Embedding of media item failed with HTTP code"
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_status.tpl:4
+msgid "Fix embedded videos"
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:322
+msgid ""
+"Invalid or unsupported media URL. The item might have been deleted or is not "
+"public."
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:283
+#, fuzzy
+msgid "Made the media page."
+msgstr "Créer un nouveau média"
+
+#: modules/mod_oembed/mod_oembed.erl:344
+msgid "No embedded videos found which need fixing."
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_authentication_service.tpl:21
+msgid "Save Embedly Key"
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:356
+msgid "Saved the Embedly settings."
+msgstr ""
+
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:42
+msgid "The media title will be automatically detected from its URL."
+msgstr ""
+
+#: modules/mod_oembed/templates/_media_upload_panel.tpl:23
+msgid "Try URL"
+msgstr ""
+
+#: modules/mod_oembed/mod_oembed.erl:358
+msgid "You don't have permission to change the Embedly settings."
+msgstr ""
+
+#: modules/mod_oembed/templates/_admin_authentication_service.tpl:9
+msgid "your Embedly app dashboard"
+msgstr ""
+
+#: modules/mod_search/support/search_query.erl:935
+#, fuzzy
+msgid "Unknown predicate"
+msgstr "Predicate"
+
+#: modules/mod_search/support/search_query.erl:766
+#, fuzzy
+msgid "is not a category"
+msgstr "filtrer sur les catégories"
+
+#: modules/mod_seo/templates/admin_seo.tpl:43
+msgid "Add a noindex, nofollow element to all pages."
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:87
+msgid "Bing Webmaster"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:83
+msgid "Bing Webmaster validation id"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:72
+msgid ""
+"Copy the value of the content attribute in the meta tag provided by Google."
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:36
+msgid "Description to include on every page"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:72./modules/mod_seo/templates/admin_seo.tpl:87
+msgid "Enter here the verification code for"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:45
+msgid "Exclude this site from search engines"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:19
+msgid "General SEO Optimization"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:57
+msgid "Google Analytics tracking id"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:68./modules/mod_seo/templates/admin_seo.tpl:72
+msgid "Google Webmaster Tools"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:9
+msgid ""
+"Here you find settings to optimize the indexing of your site by search "
+"engines."
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:22
+#, fuzzy
+msgid "Keywords"
+msgstr "Mots clés de la page"
+
+#: modules/mod_seo/templates/admin_seo.tpl:26
+msgid "Keywords to include on every page. Separate keywords with a \",\""
+msgstr ""
+
+#: modules/mod_seo/mod_seo.erl:42
+msgid "SEO"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:101
+msgid "Save SEO settings"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:3./modules/mod_seo/templates/admin_seo.tpl:8
+msgid "Search Engine Optimization"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:62
+msgid "Where can I find my tracking script?"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:88
+msgid ""
+"You find this id in the content attribute of the meta tag, it has the format"
+msgstr ""
+
+#: modules/mod_seo/templates/admin_seo.tpl:61
+msgid "You find this id in the tracking script, it has the format"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:34
+msgid "Always"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:30
+msgid "Change frequency for sitemap"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:36
+msgid "Daily"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:35
+msgid "Hourly"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:38
+msgid "Monthly"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:40
+msgid "Never"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:9
+msgid "Priority in sitemap"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:2
+msgid "Sitemap settings"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:4
+msgid ""
+"These settings apply to all pages of this category. They define hints for "
+"search engines indexing the site."
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:37
+msgid "Weekly (default)"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:39
+msgid "Yearly"
+msgstr ""
+
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:18
+msgid "default"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:123
+msgid "Button"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:122
+msgid "Country select"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:96./modules/mod_survey/mod_survey.erl:101
+#, fuzzy
+msgid "E-mail addresses"
+msgstr "Adresse E-mail"
+
+#: modules/mod_survey/mod_survey.erl:126
+msgid "File upload"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:115
+msgid "Likert"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:121
+msgid "Long answer"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:118
+msgid "Matching"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:127
+msgid "Multiple choice"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:119
+msgid "Narrative"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:124
+msgid "Page break"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:120
+msgid "Short answer"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:125
+msgid "Stop"
+msgstr "Cesser"
+
+#: modules/mod_survey/mod_survey.erl:112
+msgid "Survey Questions"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:88
+msgid "Survey result deleted."
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:116
+msgid "Thurstone"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:113
+msgid "True/False"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:114
+msgid "Yes/No"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:655
+#, fuzzy
+msgid "You are not allowed to change these results."
+msgstr "Vous n’êtes pas autorisé à éditer ce"
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:17
+msgid "Active modules"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:14./modules/mod_translation/templates/admin_translation.tpl:15
+msgid "Add language"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:24
+#, fuzzy
+msgid "Added"
+msgstr "Ajouté le"
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail.tpl:19
+msgid "All languages"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:1
+#, fuzzy
+msgid "Are you sure you want to remove this language?"
+msgstr "Êtes vous sûr de vouloir effacer cette page"
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:77
+msgid "Available sub-languages"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:26
+msgid "Code"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:1
+msgid "Copy texts from a language to the currently selected language."
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:19./modules/mod_translation/templates/_admin_edit_sidebar.tpl:22
+msgid "Copy translation"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:140
+msgid "Danish"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_sublanguage_note.tpl:2
+msgid "Deciding on a main language or sub-language"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:24
+msgid "Default"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:9
+msgid "Developer Documentation"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:142
+msgid "Dutch"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:23
+msgid "Enabled"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:141
+msgid "English"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:53
+msgid "Fallback language"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:143
+msgid "Finnish"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:177
+msgid "For Developers"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:121
+msgid "For new visitors, set the language to the default language"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:144
+msgid "French"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:183
+msgid "Generate .pot files"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:145
+msgid "German"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_delete.tpl:3
+msgid ""
+"Heads up! Removing this language will <strong>not</strong> delete any of the "
+"existing translations. But until you add (and activate) the language again, "
+"you will not be able to select or edit content written in this language."
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
+#, fuzzy
+msgid "Help about translations"
+msgstr "Votre questionnaire"
+
+#: modules/mod_translation/templates/admin_translation.tpl:146
+msgid "Hungarian"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:161
+msgid ""
+"If you change the stemmer language then you will need to reindex all data."
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:147
+msgid "Italian"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:72
+msgid "Language in URL"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:131
+msgid "Language used for stemming of the search indices"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:7./modules/mod_translation/templates/admin_translation_status.tpl:7
+#, fuzzy
+msgid "Languages overview"
+msgstr "Ensemble des pages"
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:9
+msgid "More than one language must be active."
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:29
+msgid "Name in menu"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:83
+#, fuzzy
+msgid "No languages configured."
+msgstr "Pas de pages trouvées"
+
+#: modules/mod_translation/templates/admin_translation.tpl:148
+msgid "Norwegian"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:9
+msgid "Part of"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:34./modules/mod_translation/templates/admin_translation.tpl:27
+msgid "Region"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:190
+msgid "Reload Translations"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:192
+msgid ""
+"Reload all translations from the modules and site. All templates will be "
+"recompiled."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:333
+msgid "Reloading all .po files in the background."
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:63
+msgid "Remove language"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:149
+msgid "Romanian"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:150
+msgid "Russian"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:185
+msgid ""
+"Scan all templates for translation tags and generate .pot files that can be "
+"used for translating the templates."
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:40./modules/mod_translation/templates/admin_translation.tpl:28
+msgid "Script"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:9
+msgid "See also:"
+msgstr ""
+
+#: modules/mod_translation/templates/language_switch.tpl:3
+msgid "Select language"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_copy.tpl:5
+msgid "Select the language to copy from:"
+msgstr ""
+
+#: modules/mod_translation/templates/language_switch.tpl:7
+msgid "Select your preferred language."
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:198
+msgid "Show per module how much of the templates are translated."
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:109
+msgid "Show the language in the URL"
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:479
+msgid "Sorry, you can't disable default language."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:285./modules/mod_translation/mod_translation.erl:296./modules/mod_translation/mod_translation.erl:309
+msgid "Sorry, you don't have permission to change the language list."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:335
+msgid "Sorry, you don't have permission to reload translations."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:325
+msgid "Sorry, you don't have permission to scan for translations."
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:410
+msgid "Sorry, you don't have permission to set the default language."
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:151
+msgid "Spanish"
+msgstr ""
+
+#: modules/mod_translation/mod_translation.erl:323
+msgid "Started building the .pot files. This may take a while..."
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:152
+msgid "Swedish"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
+msgid ""
+"The golden rule when choosing a language is simplicity. Stick to the main "
+"language if you can; use a sub-language (adding region or script) when it "
+"adds useful distinguishing information."
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
+msgid ""
+"The title, body and other texts can be translated in different languages. "
+"Here you can select which languages will be used."
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:13
+msgid ""
+"To view the up-to-date version of this module, please run \"generate .pot "
+"files\" first from the translation overview."
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
+msgid "Translate this page in other languages."
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:3./modules/mod_translation/mod_translation.erl:622
+msgid "Translation"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:197./modules/mod_translation/templates/admin_translation_status.tpl:3./modules/mod_translation/templates/admin_translation_status.tpl:8
+msgid "Translation status"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation_status.tpl:12
+msgid "Translation status per module"
+msgstr ""
+
+#: modules/mod_translation/templates/_admin_edit_sidebar.tpl:6
+msgid "Translations"
+msgstr ""
+
+#: modules/mod_translation/templates/admin_translation.tpl:153
+msgid "Turkish"
+msgstr ""
+
+#: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:58./modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:63
+msgid "not enabled"
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:51
+#, fuzzy
+msgid "Access Token Secret"
+msgstr "Acceder au control"
+
+#: modules/mod_twitter/templates/_logon_extra.tpl:18
+msgid "Connect with Twitter"
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:15
+msgid "Consumer Key"
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:22
+msgid "Consumer Secret"
+msgstr ""
+
+#: modules/mod_twitter/templates/_logon_extra.tpl:9./modules/mod_twitter/templates/_logon_extra.tpl:11
+#, fuzzy
+msgid "Disconnect from Twitter"
+msgstr "Déconnecter"
+
+#: modules/mod_twitter/templates/_logon_extra.tpl:12
+msgid "Do you want to disconnect your Twitter account?"
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:18
+msgid ""
+"Fill in the <strong>numeric</strong> Twitter id. To map a Twitter account "
+"name to this number go to:"
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:6
+msgid "Finding a Twitter ID."
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:57
+msgid "Follow tags/accounts"
+msgstr ""
+
+#: modules/mod_twitter/templates/_logon_extra.tpl:18
+msgid "Log in with Twitter"
+msgstr ""
+
+#: modules/mod_twitter/templates/_logon_service.twitter.tpl:2
+msgid "Redirecting to Twitter."
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:70
+msgid "Save Twitter Settings"
+msgstr ""
+
+#: modules/mod_twitter/mod_twitter.erl:73
+msgid "Saved the Twitter settings."
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:62
+msgid "Separate #tags, @usernames and phrases with commas or newlines."
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:6
+msgid ""
+"The (numeric) Twitter ID of a user can be found on the twitter page of the "
+"user: it is the number that is contained in the URL to the RSS feed for the "
+"user's updates."
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:42
+msgid ""
+"To import tweets, Zotonic needs an access token and secret. You can find "
+"these on the <b>Keys and Access Tokens</b> tab on your Twitter application "
+"page."
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:4
+msgid "Twitter ID"
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:33
+msgid "Use Twitter authentication"
+msgstr ""
+
+#: modules/mod_twitter/mod_twitter.erl:75
+msgid "You don't have permission to change the Twitter settings."
+msgstr ""
+
+#: modules/mod_twitter/templates/_logon_extra_email_reset.tpl:2
+msgid "You have coupled your <strong>Twitter</strong> account."
+msgstr ""
+
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:9
+msgid "Your Twitter Application Management page"
+msgstr ""
+
+#: modules/mod_video/templates/_video_viewer.tpl:5
+msgid "Converting"
+msgstr ""
+
+#: modules/mod_video/templates/_admin_configure_module.tpl:60
+msgid "Log every transcoding command in the Zotonic console"
+msgstr ""
+
+#: modules/mod_video/templates/_video_viewer.tpl:25
+msgid "No video playback capabilities"
+msgstr ""
+
+#: modules/mod_video/templates/_admin_configure_module.tpl:30
+msgid ""
+"Please specify the commandline to the <tt>ffmpeg</tt> (or <tt>avconv</tt>) "
+"command for generating the video preview image (poster frame). Put the "
+"marker <b>~s</b> on the place where the input filename should go. The output "
+"filename is appended automatically to the commandline before execution, as "
+"is a correction for fixing the video's orientation. Example value:"
+msgstr ""
+
+#: modules/mod_video/templates/_admin_configure_module.tpl:13
+msgid ""
+"Please specify the commandline to the <tt>ffmpeg</tt> (or <tt>avconv</tt>) "
+"command. Put the marker <b>~s</b> on the place where the input filename "
+"should go. The output filename is appended automatically to the commandline "
+"before execution, as is a correction for fixing the video's orientation. "
+"Example value:"
+msgstr ""
+
+#: modules/mod_video/templates/_admin_configure_module.tpl:47
+msgid ""
+"Please specify the commandline to the <tt>ffprobe</tt> (or <tt>avprobe</tt>) "
+"command. The input filename is appended automatically to the commandline "
+"before execution. Example value:"
+msgstr ""
+
+#: modules/mod_video/templates/_admin_configure_module.tpl:4
+msgid "ffmpeg video conversion command line"
+msgstr ""
+
+#: modules/mod_video/templates/_admin_configure_module.tpl:21
+msgid "ffmpeg video preview command line"
+msgstr ""
+
+#: modules/mod_video/templates/_admin_configure_module.tpl:38
+msgid "ffprobe command line"
+msgstr ""
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:7
+msgid ""
+"Embed a video or other media. Here you can paste embed code from YouTube, "
+"Vimeo or other services."
+msgstr ""
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:34./modules/mod_video_embed/templates/_media_upload_tab.tpl:3
+msgid "Embed code"
+msgstr ""
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:25
+#, fuzzy
+msgid "From site"
+msgstr "De"
+
+#: modules/mod_video_embed/templates/_media_upload_panel.tpl:38
+msgid "The embed code will be sanitized. Only whitelisted sites are allowed."
+msgstr ""
+
+#: modules/mod_video_embed/mod_video_embed.erl:186
+msgid "Vimeo Video"
+msgstr ""
+
+#: modules/mod_video_embed/mod_video_embed.erl:184
+msgid "Youtube Video"
+msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "<strong>First</strong> also known as given name, forename or Christenname."
+#~ "<br/><strong>Middle</strong> often shortened to an initial like "
+#~ "in<em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> "
+#~ "likethe Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> "
+#~ "alsoknown as family name or last name."
+#~ msgstr ""
+#~ "<strong>Prénom</strong>Votre premier prénom<br/><strong>Autres prénoms</"
+#~ "strong> si applicable<em></em>.<br/><strong>préfixe nom de famille</"
+#~ "strong> comme <em>De, Le, Du...</em>.<br/><strong>Nom de famille</strong>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Every page is categorized in exactly one category. The category "
+#~ "defineswhat the page represents. For example an event, a product or a "
+#~ "person.The categories are hierarchically defined. In that way you can "
+#~ "have avehicles category with subcategories car and bicycle."
+#~ msgstr ""
+#~ "Chaque page est catégorisée dans une catégorie. La catégorie définit ce "
+#~ "que les pages représentent. Par exemple un évenement, un produit ou une "
+#~ "personne. Les catégorie sont définient hierarchiquement. Par exemple; "
+#~ "vous pouvez avoir une catégorie véhicules avec des sous catégories "
+#~ "voiture et bicyclette."
+
+#, fuzzy
+#~ msgid ""
+#~ "When a page has a publication date range then it will only be "
+#~ "visiblebetween the two dates. Note that when you are allowed to edit the "
+#~ "pagethen you can always see it."
+#~ msgstr ""
+#~ "Quand une page a été publiée avec un interval de date, cette page sera "
+#~ "seulement visible entre ces deux dates. Mais vous pourrez l’éditer a tout "
+#~ "moment."
+
+#, fuzzy
+#~ msgid ""
+#~ "You receive this email because you or someone else requested a "
+#~ "passwordreset for your account. You or the someone else either entered "
+#~ "yourusername or email address. You will not receive any additional "
+#~ "emailsbecause of this request."
+#~ msgstr ""
+#~ "Vous recevez cet email car vous ou quelqun d'autre avez demandé à changer "
+#~ "de mot de passe. Vous ne receverez qu'un seul email."

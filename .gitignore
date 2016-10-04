@@ -28,6 +28,8 @@ deps/
 /priv/mnesia/
 /priv/sites/default/files/
 /priv/modules/
+/priv/translations/template/
+/priv/translations/zotonic.pot
 
 /modules/*/translations/template/*.pot
 
