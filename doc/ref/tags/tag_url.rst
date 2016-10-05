@@ -32,6 +32,8 @@ Please note that the best way to generate the URL of a page (resource) is to use
 
    {{ m.rsc[myid].page_url }}
 
+.. _tag-url-absolute:
+
 Generate absolute URLs
 ----------------------
 
@@ -49,5 +51,5 @@ Finding out the current dispatch rule
 The name of the current dispatch rule is always available in a
 template under the name ``zotonic_dispatch``.
 
-Check :ref:`template-magicvalues` for a full overview of variables
+Check :ref:`ref-global-variables` for a full overview of variables
 that are always available in the templates.

@@ -3,9 +3,9 @@
 Global configuration
 ====================
 
-This section describes the location and contents of Zotonic's `global`
-configuration files.
-
+This section describes the location and contents of Zotonic’s global
+configuration files ``erlang.config`` and ``zotonic.config``. There’s also
+:ref:`site-specific configuration <ref-site-configuration>`.
 
 Config file locations
 ---------------------
@@ -21,33 +21,32 @@ places for these files:
  - ``/etc/zotonic/(version)/``
  - ``/etc/zotonic/``
 
-Where `(nodename)` is the name of the Zotonic Erlang node, which
-defaults to `zotonic001` (and can be set with `$NODENAME` environment
+Where ``(nodename)`` is the name of the Zotonic Erlang node, which
+defaults to ``zotonic001`` (and can be set with ``$NODENAME`` environment
 variable). Using the node name in the configuration path comes in
 handy when you want to run multiple Zotonic instances simultaneously.
 
-`(version)` is the `minor` version number of Zotonic, e.g. ``0.11``
-for all Zotonic ``0.11.x`` variants. This way, you can have separate
-configuration files for different versions of Zotonic which are
-running simultaneously.
+``(version)`` is the ``minor`` version number of Zotonic, e.g. ``1.0.0``. This
+way, you can have separate configuration files for different versions of Zotonic
+which are running simultaneously.
 
 When the Zotonic startup script finds a config file in one of the
 directories, it stops looking, so files in the other directories are
 ignored.
 
-.. highlight:: none
-
 In the course of Zotonic starting up, it will print the locations of
-the global config files that it is using::
+the global config files that it is using:
 
-  17:03:54.766 [info] Zotonic started
-  17:03:54.766 [info] ===============
-  17:03:54.766 [info] Config files used:
-  17:03:54.768 [info] - /home/user/.zotonic/0.11/erlang.config
-  17:03:54.768 [info] - /home/user/.zotonic/zotonic001/zotonic.config
+.. code-block:: none
+
+    17:03:54.766 [info] Zotonic started
+    17:03:54.766 [info] ===============
+    17:03:54.766 [info] Config files used:
+    17:03:54.768 [info] - /home/user/.zotonic/0.11/erlang.config
+    17:03:54.768 [info] - /home/user/.zotonic/zotonic001/zotonic.config
 
 
-The `zotonic.config` file
+The ``zotonic.config`` file
 ---------------------------
 
 When installed for the first time, the ``zotonic.config`` file is well
@@ -55,8 +54,8 @@ annoted with comments about what each setting does. When in doubt,
 consult the stock ``zotonic.config`` file for explanation about all
 config settings.
 
-`user_sites_dir`, `user_modules_dir` and `user_ebin_dir`
-.............................................................
+``user_sites_dir``, ``user_modules_dir`` and ``user_ebin_dir``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Since version 0.11, Zotonic keeps sites and modules that are
 `external` to Zotonic, e.g. installed by website developers, outside
@@ -79,6 +78,11 @@ erlang code in the user sites and module directories. The default location
 for these files is ``ebin`` in Zotonic's installation directory. This is
 configured with the ``user_ebin_dir`` config parameter. This makes it possible
 to separate the beam files of user defined code from Zotonic's beam files.
+
+.. _configuration-listen_port:
+
+listen_port
+^^^^^^^^^^^
 
 `deps`
 ......

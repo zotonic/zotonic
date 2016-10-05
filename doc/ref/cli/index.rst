@@ -6,11 +6,13 @@ Command-line
 The ``zotonic`` command runs a number of utility commands which all
 operate on a Zotonic instance.
 
-The ``zotonic`` command lives in the bin/ folder of the Zotonic
-source. Putting this path into your PATH variable makes working with
-Zotonic a lot easier::
+.. tip::
 
-  export PATH=$HOME/zotonic/bin:$PATH
+    The ``zotonic`` command lives in the bin/ folder of the Zotonic
+    source. Putting this path into your PATH variable makes working with
+    Zotonic a lot easier::
+
+        export PATH=$HOME/zotonic/bin:$PATH
 
 The command determines where the Zotonic base dir is by looking at its path; it always assumes that its zotonic basedir is one dir up from where the binary itself is.
 

@@ -1,3 +1,5 @@
+.. _cookbook-custom-module:
+
 Writing your own module
 =======================
 

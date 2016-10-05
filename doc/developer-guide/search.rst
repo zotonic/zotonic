@@ -447,3 +447,11 @@ edit page an extra text field in which you can add search terms. Each
 search term goes on its own line, and the possible search terms are
 equal to the ones described on this page (the `Query-model
 arguments`).
+
+.. seealso::
+
+    - :ref:`mod_search` reference: Zotonic’s built-in search module.
+    - `mod_elasticsearch <https://github.com/driebit/mod_elasticsearch>`_
+      on using Elasticsearch with Zotonic.
+    - `mod_search_solr <https://github.com/arjan/mod_search_solr>`_ on
+      using Solr for search.

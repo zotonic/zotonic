@@ -1,6 +1,6 @@
-.. index:: notifications
-
 .. _notifications reference:
+
+.. index:: notifications
 
 Notifications
 =============

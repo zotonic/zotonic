@@ -34,6 +34,11 @@ The simplest controller uses Zotonic’s ``controller_html_helper.hrl`` include 
    html(Context) ->
        {<<"<h1>Hello</h1>">>, Context}.
 
+.. _guide-render:
+
+Rendering templates
+-------------------
+
 To return the rendered output of a template file in the module's
 ``templates`` directory, use ``z_template:render/3``::
 

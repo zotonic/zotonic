@@ -7,6 +7,23 @@ all include
 
 Call all modules to include a certain template.
 
+
+    | The tag ``{% all include "foobar.tpl" %}`` will include all
+      templates named :file:`foobar.tpl`.
+    | Where the tag ``{% include "foobar.tpl" %}`` only includes the
+      highest priority :file:`foobar.tpl`.
+
+
+Exactly the same module priority is also valid for all files in the
+:file:`lib/` directory of modules.
+
+This allows any module to change the static css, javascript, images,
+favicon.ico, robots.txt and other static files with its own version.
+
+
+
+
+
 This is an extension on the :ref:`tag-include` tag. It will include all templates with the given name, instead of the first one found.  Templates are defined in modules, because of that multiple modules can define a template with the same name.
 
 For example when you have two modules (`mod_a` and `mod_b`), both with the template `_name.tpl`.  When the template in `mod_a` is defined as::

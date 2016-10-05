@@ -3,195 +3,248 @@
 Site configuration
 ==================
 
-The ``config`` file is the central configuration file for your
-site. Its syntax is the Erlang term format, essentially it is a big
-`proplist` with different configuration options.
+This chapter describes the configuration options for your sites. There’s also
+:ref:`global configuration <guide-configuration>`.
 
-.. versionadded:: 0.10
-   Each option must be specified at most once (per file).
-   Using a option key multiple times are no longer supported (was only
-   used by the `hostalias` option) and any duplicates will be silently
-   dropped. Additional config options are read from files under
-   ``config.d/``.
+Site config locations
+---------------------
 
-All files under the ``config.d/`` folder in the site’s folder are
-loaded to extend/override config options from the site ``config``
-file. So if the same key is present in both `config` and
-``config.d/some-file``, then the value from the latter will be used.
+Configuration for sites is stored:
 
-The files under ``config.d/`` are read in alphabetical order.
+- in a ``config`` file in the site directory
+- optionally, in files in the site’s ``config.d/`` directory. This is so that
+  automated provisioning tools can easily override site configuration.
 
+The ``config.d`` files will extend and/or override the configuration options
+from the ``config`` file. So if the same key is present in both ``config``
+and ``config.d/some-file``, the value from ``some-file`` will be used. The files
+under ``config.d/`` are read in alphabetical order.
 
-The following options can be configured:
+Parameters
+----------
 
-``{hostname, "127.0.0.1:8000"}``
-  This config key specifies the hostname+port part of the site’s URL,
-  to determine to which site an incoming request belongs to (since
-  they all come in on the same port).
+.. important::
 
-  If you run Zotonic on port 80, or if you put a web-frontend like
-  varnish in front of your zotonic, you can leave out the port number,
-  and just put the hostname in there. See the :ref:`guide-deployment`
-  chapter on how to set up Zotonic for production environments.
+    After changing any of these configuration parameters,
+    :ref:`restart the site <restart-site>` for the change to take effect.
 
-  **Note:** The hostname does `not` specify on which port Zotonic will
-  listen! That information comes from the ``ZOTONIC_PORT``
-  environment variable, which, when absent, default to port 8000.
-  Zotonic can (currently) listen on one TCP port for HTTP
-  connections. For HTTPS, see the :ref:`mod_ssl` chapter.
+admin_password
+^^^^^^^^^^^^^^
 
-.. _site-configuration-protocol:
+The password for the admin user::
 
-``{protocol, "http"}``
-  This is useful for when the Zotonic is running behind a proxy
-  (like Varnish or haproxy) and the proxy translates between
-  HTTPS (as seen by the browser) and HTTP (as seen by Zotonic).
-  Setting this config key to "https" ensures that redirect locations
-  have the correct HTTPS protocol.
-
-.. versionadded:: 0.10
-   The ``hostalias`` option now holds a list of aliases.
-
-``{hostalias, ["www.example.com"]}``
-  The host aliases allow you to specify extra aliases for your
-  site. This comes in handy if you have registered yoursite.com,
-  yoursite.net and yoursite.org, and all want them to be served the
-  same site. Mind you that Zotonic will always redirect from a
-  hostalias to the real hostname of the site. This is done to prevent
-  content duplication: it is good web practice to let your content
-  live on a single URL only.
-
-  You can specify multiple host aliases; for that, just add the
-  different `hostalias` options to the list::
-
-    {hostalias, ["example.com", "www.example.com",
-                 "example.net", "www.example.net"]},
-
-``{admin_password, "test123"}``
-  This setting specifies the password for the ``admin`` user. Unlike
-  passwords for other users, the admin password is not stored in the
-  database, but is set in the site’s config file.
-
-``{depcache_memory_max, 100}``
-  The maximum amount of memory a site may take. The `depcache` caches
-  various results of function calls and database queries in memory. This
-  setting determines the maximum size of it, in megabytes.
-
-``{redirect, true}``
-  Whether or not to redirect the host-aliases (listed by the
-  ``hostalias`` directives) to the main hostname. This defaults to true.
-
-``{skeleton, blog}``
-  Set by the ``zotonic addsite`` command, this settings tells Zotonic
-  which skeleton site to use.
-
-``{install_menu, [<menu-item>...]}``
-  Creates the initial main menu when installing mod_menu. A `menu-item`
-  is a erlang tuple with a resource id and a list of child menu-items,
-  if any: ``{rsc_name, []}``. This overrides the default menu provided
-  by the skeleton.
-
-``{install_modules, [<modules>...]}``
-  List all modules that should be enabled when installing the site data.
-  This overrides the default list of modules installed by the
-  skeleton.
-
-.. versionadded:: 0.16
-   To inherit the list of modules from a skeleton, add a ``{skeleton,
-   <name>}`` and it will install the list of modules from that skeleton
-   as well.
-
-  The list of installed modules will be updated on each site start,
-  e.g. when you add a module to the ``install_modules`` list, it will
-  be installed automatically when you restart the site.
-
-``{ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8"}``
-  List of TCP/IP addresses and their netmasks.
-  The admin user password *admin* will only be accepted if logging in
-  from a host matching the whitelisted IP addresses. This for protecting
-  development systems that are exposed to the Internet.
-  This can also be configured in the :ref:`guide-configuration`.
-
-``{smtphost, "..."}``
-  Hostname you want e-mail messages to appear from. See :ref:`guide-email`.
-
-``{websockethost, "..."}``
-  The hostname that will be used for websocket requests. This hostname
-  will be used in the browser for setting up the websocket connection.
-  It can be used to configure a different port number for the websocket
-  connection. For example::
-
-    {websockethost, "example.com:443"}
-
-``{cookie_domain, "..."}``
-  The domain the Zotonic session-id and page-id cookies will be set
-  on. Defaults to the main hostname.
-
-.. versionadded:: 0.10
-
-``{installer, <module>}``
-  Override the default zotonic installer (``z_installer``). ``<module>`` should
-  make sure that the database, if used, is setup properly along with any
-  required data. Note that it is ``z_installer`` that is processing the
-  ``install_modules`` and ``install_menu`` options, so if this module is not used
-  then those menus and modules will not be installed unless the new module
-  performs those operations.
-
-``{service_api_cors, false}``
-  See :ref:`guide-services-cors`.
-
+    {admin_password, "top_secret"},
 
 .. _ref-site-configuration-database:
 
-Database connection options
-...........................
+dbhost
+^^^^^^
 
-The following options for your site config specify how it connects to the database:
+Database host that the site connects to. Example::
 
-- dbhost
-- dbport
-- dbuser
-- dbpassword
-- dbdatabase
-- dbschema
-- dbdriver
+    {dbhost, "127.0.0.1"},
 
-These properties mostly speak for themselves, hopefully.
+dbport
+^^^^^^
 
-The `dbschema` is the name of the database schema (which is kind of a
-namespace for tables in Postgres); see `Tip: multiple sites using one
-database` below for an explanation. By default, ``public`` is used as
-the schema name.
+Port of the database server. Example::
 
-The `dbdriver` is the name of the database driver module. Currently
-this defaults to ``z_db_pgsql``. Other driver options are not yet
-implemented.
+    {dbport, 5432},
 
+dbuser
+^^^^^^
+
+Database user.
+
+dbpassword
+^^^^^^^^^^
+
+Database password.
+
+dbdatabase
+^^^^^^^^^^
+
+Database name.
+
+dbschema
+^^^^^^^^
+
+PostgreSQL Database schema. Defaults to ``public``. Example::
+
+    {dbschema, "some_site"},
+
+In Zotonic, a single PostgreSQL database can host the data of multiple sites.
+This does not work using table prefixing, but instead, Zotonic uses PostgreSQL’s
+native feature of database schemas.
+
+A database schema is basically another database inside your database. You need
+to create any schema other than “public” first:
+
+.. code-block:: sql
+
+    CREATE SCHEMA some_site;
+    GRANT ALL ON SCHEMA some_site TO some_db_user;
+
+And restart Zotonic.
+
+depcache_memory_max
+^^^^^^^^^^^^^^^^^^^
+
+The maximum amount of memory a site may take (in MB). The depcache caches
+various results of function calls and database queries in memory. Example::
+
+    {depcache_memory_max, 100},
+
+
+hostname
+^^^^^^^^
+
+The hostname and port part of the site URL. This is used to determine to which
+site an incoming request should be routed. Example::
+
+    {hostname, "127.0.0.1:8000"},
+
+If you run Zotonic on port 80, you can leave out the port number.
+
+Note that the hostname does *not* specify on which port Zotonic will listen;
+this is :ref:`configured globally <configuration-listen_port>`.
+
+hostalias
+^^^^^^^^^
+
+A list of alias hostnames for the site. By default, Zotonic redirects these
+to ``hostname`` (see ``redirect``). Example::
+
+    {hostalias, [
+        "example.com",
+        "www.example.com",
+        "example.net",
+        "www.example.net"
+    ]},
+
+.. _site-configuration-protocol:
+
+redirect
+^^^^^^^^
+
+Whether or not to redirect the host-aliases (listed by the ``hostalias``
+directives) to the main hostname. Defaults to ``true``, to prevent
+content duplication: it is good web practice to let your content live on a
+single URL only::
+
+    {redirect, true},
+
+protocol
+^^^^^^^^
+
+This is useful for when the Zotonic is running behind a proxy that terminates
+SSL (such as HAProxy). Setting this option to “https” ensures that redirect
+locations get the HTTPS protocol. Example::
+
+    {protocol, "https"},
+
+skeleton
+^^^^^^^^
+
+Set by the ``zotonic addsite`` command, this settings tells Zotonic
+which skeleton site to use. Example::
+
+    {skeleton, blog},
+
+install_menu
+^^^^^^^^^^^^
+
+Creates the initial main menu when installing :ref:`mod_menu`. A menu item
+is an Erlang tuple with a resource name and list of child menu items (if any):
+``{name, []}``. This overrides the default menu provided by the skeleton.
+Example::
+
+    {install_menu, [
+        {page_some_thing, []},
+        {page_some_other_thing, []},
+        {page_one_more_thing, []}
+    ]},
+
+.. _site-configuration-modules:
+
+install_modules
+^^^^^^^^^^^^^^^
+
+List of all modules that are :ref:`activated <activating-modules>` when the
+site is started. This overrides the default list of modules installed by the
+skeleton. After adding a module here, :ref:`restart the site <restart-site>`
+to load the module. Example::
+
+    {install_modules, [
+        mod_admin,
+        mod_menu,
+        mod_your_custom_module
+    ]},
+
+
+To inherit the list of modules from a skeleton, add a
+``{skeleton, <name>}`` and it will install the list of modules from that
+skeleton as well.
+
+ip_whitelist
+^^^^^^^^^^^^
+List of TCP/IP addresses and their netmasks. The default admin user password
+(“admin”) will only be accepted for an IP in thie whitelist. This protects
+development systems that are exposed to the internet. This can also be
+configured :ref:`globally <guide-configuration>`. Default::
+
+    {ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8"}
+
+smtphost
+^^^^^^^^
+
+Hostname you want e-mail messages to appear from. See :ref:`guide-email`.
+
+websockethost
+^^^^^^^^^^^^^
+
+The hostname that will be used for websocket requests. This hostname will be
+used in the browser for setting up the websocket connection. It can be used to
+configure a different port number for the websocket connection. For example::
+
+    {websockethost, "example.com:443"},
+
+cookie_domain
+^^^^^^^^^^^^^
+
+The domain the Zotonic session-id and page-id cookies will be set on. Defaults
+to the main hostname.
+
+installer
+^^^^^^^^^
+
+Override the default zotonic installer (``z_installer``). ``<module>`` should
+make sure that the database, if used, is setup properly along with any
+required data. Note that it is ``z_installer`` that is processing the
+``install_modules`` and ``install_menu`` options, so if this module is not used
+then those menus and modules will not be installed unless the new module
+performs those operations. Example::
+
+    {installer, your_installer_erlang_module},
+
+service_api_cors
+^^^^^^^^^^^^^^^^
+
+See :ref:`guide-services-cors`.
 
 Setting module-specific config values in the site config
-........................................................
+--------------------------------------------------------
 
 It is also possible to add :ref:`model-config` values for modules to
 the site's ``user/sitename/config`` file. To do this, add clauses like
 this to the site's config::
 
-  {mod_foo, [{key, value}, ...]}
+    {mod_foo, [{key, value}, ...]}
 
 For instance, to set the ``mod_ssl.is_secure`` configuration options
 from :ref:`mod_ssl`, do::
 
-  {mod_ssl, [{is_secure, true}]}
-
-
-Reloading the site config
-.........................
-
-After you make changes to the site config you have to restart your
-site for them to have effect. From the Zotonic shell, do::
-
-  z_sites_manager:restart(yoursitename).
-
-to restart your site.
+    {mod_ssl, [{is_secure, true}]}
 
 
 Using environment variables in the site config
@@ -203,42 +256,20 @@ OS environment variables. To do so, wrap the config value in a ``{env,
 variable as the database host, put the following as the ``dbhost``
 config value::
 
-  {dbhost, {env, "DB_HOST"}},
+    {dbhost, {env, "DB_HOST"}},
 
 Besides ``{env, "NAME"}`` tuple, you can also specify ``{env, "NAME",
 "default value"}`` for the case the environment variable is not set::
 
-  {dbhost, {env, "DB_HOST", "localhost"}},
+    {dbhost, {env, "DB_HOST", "localhost"}},
 
 To convert environment variables to integer (e.g. for the database
 port), use ``env_int``::
 
-  {dbhost, {env_int, "DB_PORT"}},
+    {dbhost, {env_int, "DB_PORT"}},
 
 or, with default value::
 
-  {dbhost, {env_int, "DB_PORT", "5432"}},
+    {dbhost, {env_int, "DB_PORT", "5432"}},
 
-(note that the default value needs to be a string in this case, not an
-int).
-
-
-Tip: multiple sites using one database
---------------------------------------
-
-In Zotonic, a single PostgreSQL database can host the data of multiple
-web sites. This does not work using table prefixing (like Wordpress
-does for example), but instead, Zotonic uses Postgres' native feature
-`database schemas` to support this.
-
-A database schema is basically another database inside your database:
-it’s a namespace in which tables live. By default, your tables live in
-the namespace called `PUBLIC`, but it’s quite easy to create another
-schema::
-
-  CREATE SCHEMA anothersite;
-  GRANT ALL ON SCHEMA anothersite TO yourdatabaseuser;
-
-And then in your site config put a ``{dbschema, "anothersite"}`` entry
-next to the regular database config keys. Restart zotonic and off you
-go.
+Note that the default value needs to be a string in this case, not an int.

@@ -3,44 +3,78 @@
 Modules
 =======
 
-Modules are the building blocks of Zotonic.
+Modules are the building blocks of Zotonic. They add functionality to your
+Zotonic website such as:
 
-Examples of modules are the ``/admin`` site, Atom feeds, the
-``sitemap.xml``, video embed code handling and SEO optimization.
-Modules also augment the functionality of other modules by adding
-extra :ref:`templates` and accompanying logic or adding handlers for
-internal Zotonic events. Good examples are the modules extending the
-:ref:`mod_admin`.
+* the admin web interface
+* embedding videos in your content
+* search engine optimization (SEO)
+* social media integration.
 
-A module is a directory containing the module’s Erlang code,
+Structurally, a module is a directory containing the module’s Erlang code,
 :ref:`templates <guide-templates>`, :ref:`controllers
 <guide-controllers>`, :ref:`dispatch rules <guide-dispatch>` and
-more, all contained in a single module directory tree.
+more.
 
-.. seealso:: listing of all :ref:`ref-modules`.
+.. seealso::
 
-**Looking for more modules?**
+    * The reference for a list of :ref:`all modules <ref-modules>`.
+    * The `Zotonic Module Index <http://modules.zotonic.com>`_ lists
+      third-party modules.
+    * You can also :ref:`roll your own <cookbook-custom-module>`.
 
-Check out the `Zotonic Module Index <http://modules.zotonic.com>`_:,
-an index with additional user-contributed modules which are not part
-of the core Zotonic distribution.
+.. _activating-modules:
+
+Activating modules
+------------------
+
+Before you can use a module, you need to activate it. You can do so in two ways.
+
+1. For testing, you can enable the module in the
+   :ref:`admin interface <mod_admin_modules>`, under System > Modules.
+2. If you decide to use the module in your site, it’s best to declare so in your
+   :ref:`site configuration <site-configuration-modules>`. This ensures that
+   the module is activated not only for you but also for other developers and
+   on other servers that the website may run on (e.g. a production server). Add
+   the module name to the :file:`sites/yoursite/config` file, under the
+   ``install_modules`` key::
+
+    [
+        % ...
+        {install_modules, [
+            % ...,
+            mod_example
+        ]}
+        %...
+    ].
+
+   Then :ref:`restart the site <ref-status-site>` for the changes to be picked
+   up.
+
+.. _dev-configuration-parameters:
+
+Module configuration
+--------------------
+
+Some modules can be configured to influence their behaviour. The module’s
+documentation will tell you about its configuration parameters.
 
 .. _guide-module-structure:
 
-Structure
----------
+Directory structure
+-------------------
 
 A module groups related functions together into a single directory.
 It contains an Erlang module (from here on called the ‘module file’)
-and subdirectories for templates, actions, scomps, dispatch rules and
+and subdirectories for templates, actions, tags, dispatch rules and
 more.
 
 The generic structure is::
 
     mod_example/
         mod_example.erl
-        templates/
         actions/
+        templates/
         etcetera.../
 
 .. _module-file:
@@ -48,11 +82,10 @@ The generic structure is::
 The module file
 ^^^^^^^^^^^^^^^
 
-The name of the module file is an Erlang file that *must* be the same
-as the name of the module’s directory. Zotonic scans this file for
-metadata about the module and uses it to start the module.
-
-The code of the smallest possible module is below::
+At the very minimum, a Zotonic module must have a module file. The name of the
+module file is an Erlang file that must be the same as the name of the module’s
+directory. Zotonic scans this file for metadata about the module and uses it to
+start the module::
 
     -module(mod_example).
     -author("Nomen Nescio <nomen@example.com>").
@@ -67,11 +100,8 @@ often little need to write custom code.
 
 The ``mod_title`` and ``mod_description`` properties describe your
 module in natural language: these properties will be visible on the
-admin modules page. The ``mod_prio`` property defines the priority of
-the module. The highest :ref:`module-priority` is 1, the default
-is 500. Modules with higher priority are checked first for templates,
-actions, custom tags, etc. Modules with the same priority are sorted
-by ascending module name.
+admin modules page. The ``mod_prio`` property defines the
+:ref:`priority <module-priority>` of the module.
 
 In cases where you need to execute code when the module starts, you
 can export an optional ``init/1`` function. The parameter is a context
@@ -101,7 +131,7 @@ actions/
 
 This directory holds the :ref:`actions <guide-actions>` defined by the
 module. Every action name must be prefixed with the word “action” and
-the module name (without the `mod_`). For example the filename for the
+the module name (without the ``mod_``). For example the filename for the
 action ``dialog_open`` in the module ``mod_base`` will be
 ``action_base_dialog_open.erl``
 
@@ -122,16 +152,14 @@ lib/
 
 The `lib` (short for `library`) directory contains static images, css
 and javascript files. These files will be served with via the
-:ref:`tag-lib` tag using the `lib` dispatch rule. The usual layout of
-the lib directory is::
+:ref:`tag-lib`. The usual layout of the lib directory is::
 
-  lib/css/
-  lib/images/
-  lib/js/
-  lib/misc/
+    lib/css/
+    lib/images/
+    lib/js/
+    lib/misc/
 
 .. seealso:: the :ref:`tag-lib` template tag.
-
 
 scomps/
 """""""
@@ -174,7 +202,7 @@ prevent name clashes with other models and Erlang modules.
 templates/
 ..........
 
-This directory contains all :ref:`guide-templates`. Templates do not
+This directory contains all :ref:`templates <guide-templates>`. Templates do not
 have any prefix in their name, as they are not (directly) compiled as
 Erlang modules.
 
@@ -251,9 +279,18 @@ the admin. Changes to templates are directly visible.
 Priority
 --------
 
-A site’s mod_prio metadata attribute is usually set to 1, to make sure that it
-is the first module where Zotonic looks for
-:ref:`template lookups <guide-lookup-system>` and the like.
+The :dfn:`module priority` is a number defined in the module’s code and is
+usually a number between 1 and 1000; the default is 500. A lower number gives a
+higher priority. Modules with higher priority are checked first for
+:ref:`templates <guide-lookup-system>`, actions, custom tags etc.
+
+The priority is defined by ``mod_prio`` in the :ref:`module file <module-file>`.
+For a site, the priority is usually set to 1, to make sure that its templates
+etc override the ones from the Zotonic mouules.
+
+When two modules have the same priority then the modules are sorted by
+their name.  That means that, given the same priority number,
+``mod_aloha`` has higher priority than ``mod_hello``.
 
 .. _guide-module-dependencies:
 
@@ -266,13 +303,13 @@ via the module’s metadata, as follows::
     -mod_depends([mod_admin]).
 
 This states that the current module is dependent on ``mod_admin`` to
-be installed.
+be activated.
 
 Sometimes, explicitly depending on a module name is not a good idea:
 there might be more modules that perform the same functions but are
 competing in implementation. In that case, such modules can export a
-``mod_provides`` meta tag, so that dependent modules can `depend` on
-what one of these modules `provide`.
+``mod_provides`` meta tag, so that dependent modules can depend on
+what one of these modules provides.
 
 Example: ``mod_a`` and ``mod_b`` both provide some functionality, ``foo``::
 
@@ -293,22 +330,22 @@ Now, the module manager will require either (or both!) of the
 ``mod_a`` and ``mod_b`` modules to be activated, before ``mod_bar``
 can be activated.
 
-A module automatically `provides` its own module name, as well as its
+A module automatically provides its own module name, as well as its
 name minus the ``mod_``. So, ``mod_bar`` has implicitly the
-following `provides` constructs::
+following provides constructs::
 
     -module(mod_bar).
     -mod_provides([mod_bar, bar]).
 
 These two provides are there even when a module adds its own
-``provides`` clauses.
+provides clauses.
 
 .. _guide-module-startup-order:
 
 Module startup order
 --------------------
 
-Note that when a site start, its modules are started up in order of
+Note that when a site starts, its modules are started in order of
 module dependency, in such a way that a module's dependencies are
 always started before the module itsef starts.
 
@@ -394,21 +431,20 @@ to ``mod_menu``, which creates the ``menu`` category for you::
 gen_server based modules
 ------------------------
 
-When you need a running process, e.g., a module that does something in
-the background, then it is possible to implement your module as a
-gen_server. A gen_server is a standard way to implement a reliable
+When you need a running process, i.e., a module that does something in the
+background, then it is possible to implement your module as a
+`gen_server`_. A gen_server is a standard way to implement a reliable
 Erlang worker process.
 
 In that case you will need to add the behaviour and gen_server
 functions. You also need to change the ``init/1`` function to accept
-an property list, which contains the site definition and a ``{context,
+a property list, which contains the site definition and a ``{context,
 Context}`` property.
 
 This server module will be started for every site in a Zotonic system
 where the module is enabled, so it can’t be a named server.
 
-
-.. seealso:: `Erlang gen_server principles <http://www.erlang.org/doc/design_principles/gen_server_concepts.html>`_
+.. seealso:: `gen_server`_ in the Erlang documentation.
 
 A minimal example
 ^^^^^^^^^^^^^^^^^
@@ -428,3 +464,5 @@ The ``init/1`` function contains some more boilerplate for getting the
 ``context{}`` argument from the arguments, and storing this context
 into the server’s state. This way, you'll always have access to the
 current context of the site in the rest of the gen_server’s functions.
+
+.. _gen_server: http://erlang.org/doc/design_principles/gen_server_concepts.html

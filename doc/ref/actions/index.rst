@@ -3,8 +3,7 @@
 Actions
 =======
 
-.. seealso::
-    :ref:`guide-actions` in the :ref:`guide-templates` Developer Guide chapter
+An overview of all :ref:wire actions <guide-actions>`.
 
 .. toctree::
    :maxdepth: 2
