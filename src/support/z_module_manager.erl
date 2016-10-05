@@ -34,6 +34,7 @@
          deactivate/2,
          activate/2,
          activate_await/2,
+         await_upgrade/1,
          restart/2,
          module_reloaded/2,
          active/1,
@@ -42,6 +43,7 @@
          get_provided/1,
          get_modules/1,
          get_modules_status/1,
+         get_upgrade_status/1,
          whereis/2,
          all/1,
          scan/1,
@@ -160,6 +162,21 @@ activate(Module, IsSync, Context) ->
             {error, not_found}
     end.
 
+%% @doc Wait till all modules are started, used when starting up a new or test site.
+-spec await_upgrade(#context{}) -> ok | {error, timeout}.
+await_upgrade(Context) ->
+    await_upgrade(Context, 20).
+
+await_upgrade(_Context, 0) ->
+    {error, timeout};
+await_upgrade(Context, RetryCt) ->
+    case erlang:whereis(name(Context)) of
+        undefined ->
+            timer:sleep(500),
+            await_upgrade(Context, RetryCt-1);
+        Pid ->
+            gen_server:call(Pid, await_upgrade, infinity)
+    end.
 
 %% @doc Restart a module, activates the module if it was not activated.
 -spec restart(Module::atom(), #context{}) -> ok | {error, not_found}.
@@ -234,6 +251,11 @@ get_provided(Context) ->
 %% @doc Return the status of all running modules.
 get_modules_status(Context) ->
     gen_server:call(name(Context), get_modules_status).
+
+
+%% @doc Return the status of any ongoing upgrade
+get_upgrade_status(Context) ->
+    gen_server:call(name(Context), get_upgrade_status).
 
 
 %% @doc Return the pid of a running module
@@ -466,6 +488,20 @@ handle_call(upgrade, From, State) ->
     State1 = State#state{upgrade_waiters=[From|State#state.upgrade_waiters]},
     State2 = handle_upgrade(State1),
     {noreply, State2};
+
+handle_call(get_upgrade_status, _From, State) ->
+    Reply = [
+        {start_wait, State#state.start_wait},
+        {start_queue, State#state.start_queue},
+        {start_error, State#state.start_error},
+        {upgrade_waiters, State#state.upgrade_waiters}
+    ],
+    {reply, {ok, Reply}, State};
+
+handle_call(await_upgrade, _From, #state{start_wait=none, start_queue=[]} = State) ->
+    {reply, ok, State};
+handle_call(await_upgrade, From, State) ->
+    {noreply, State#state{upgrade_waiters=[From|State#state.upgrade_waiters]}};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
