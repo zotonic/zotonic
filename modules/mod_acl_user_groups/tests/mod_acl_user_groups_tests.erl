@@ -65,4 +65,6 @@ context() ->
 
 start_modules(Context) ->
     ok = z_module_manager:activate_await(mod_content_groups, Context),
-    ok = z_module_manager:activate_await(mod_acl_user_groups, Context).
+    ok = z_module_manager:activate_await(mod_acl_user_groups, Context),
+    ok = z_module_manager:await_upgrade(Context).
+

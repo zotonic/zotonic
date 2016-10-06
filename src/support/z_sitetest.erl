@@ -134,9 +134,7 @@ close_connection(Connection) ->
 %% @doc Start the site, and wait for it to be fully booted.
 start_site(Site) ->
     ok = z_sites_manager:start(Site),
-    timer:sleep(100), %% Sleep is needed to ensure the translation server has started
-    Context = z_context:new(Site),
-    ok = z_sites_manager:await_startup(Context).
+    z_sites_manager:await_startup(Site).
 
 
 %% @doc Filter the list of beam files to find all sitetest modules

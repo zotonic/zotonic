@@ -54,6 +54,7 @@ event(#submit{message=addsite, form=Form}, Context) ->
             progress(Sitename, ?__("Starting the new site ...", Context), Context),
             ok = z_sites_manager:upgrade(),
             ok = z_sites_manager:start(Site),
+            ok = z_sites_manager:await_startup(Site),
             lager:info("[zotonic_status] Success creating site ~s", [Site]),
             case await(Site) of
                 ok ->

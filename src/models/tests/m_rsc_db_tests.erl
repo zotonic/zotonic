@@ -7,6 +7,7 @@
 -include_lib("zotonic.hrl").
 
 modify_rsc_test() ->
+    ok = z_sites_manager:await_startup(testsandboxdb),
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     CatId = m_rsc:rid(text, C),
@@ -53,6 +54,7 @@ modify_rsc_test() ->
 
 
 page_path_test() ->
+    ok = z_sites_manager:await_startup(testsandboxdb),
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
 
@@ -62,6 +64,7 @@ page_path_test() ->
 
 %% @doc Resource name instead of id as argument.
 name_rid_test() ->
+    ok = z_sites_manager:await_startup(testsandboxdb),
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     {ok, Id} = m_rsc:insert([{title, <<"What’s in a name?"/utf8>>}, {category_id, text}, {name, rose}], AdminC),

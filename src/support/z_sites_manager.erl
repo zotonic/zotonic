@@ -85,9 +85,9 @@ get_sites_all() ->
     gen_server:call(?MODULE, get_sites_all).
 
 %% @doc Get the status of a particular site
-get_site_status(Site) when is_atom(Site) ->
-    gen_server:call(?MODULE, {site_status, Site});
 get_site_status(#context{site=Site}) ->
+    get_site_status(Site);
+get_site_status(Site) when is_atom(Site) ->
     gen_server:call(?MODULE, {site_status, Site}).
 
 %% @doc Return a list of all sites and their status.
@@ -188,6 +188,31 @@ restart(Site) ->
 %%      changes to observers, schema.
 module_loaded(Module) ->
     gen_server:cast(?MODULE, {module_loaded, Module}).
+
+
+%% @doc Wait for a site to complete its startup sequence. Note - due
+%% to the way the site startup works currently, we cannot know whether
+%% the site has already started or not. Therefore, this function
+%% should only be called when you are certain the site has not
+%% completed starting up, otherwise it will block infinitely.
+await_startup(Context = #context{}) ->
+    await_startup(z_context:site(Context));
+await_startup(Site) when is_atom(Site) ->
+    case get_site_status(Site) of
+        {ok, running} ->
+            % Now wait for the sites modules to be started
+            Context = z_context:new(Site),
+            z_module_manager:await_upgrade(Context);
+        {ok, failed} ->
+            {error, failed};
+        {ok, stopped} ->
+            {error, stopped};
+        {ok, retrying} ->
+            timer:sleep(1000),
+            await_startup(Site);
+        {error, _} = Error ->
+            Error
+    end.
 
 
 %%====================================================================
@@ -534,18 +559,6 @@ is_module(Module) ->
     case atom_to_list(Module) of
         "mod_"++_ -> true;
         _ -> false
-    end.
-
-%% @doc Wait for a site to complete its startup sequence. Note - due
-%% to the way the site startup works currently, we cannot know whether
-%% the site has already started or not. Therefore, this function
-%% should only be called when you are certain the site has not
-%% completed starting up, otherwise it will block infinitely.
-await_startup(Context = #context{}) ->
-    case z_notifier:await(module_ready, 30*1000, Context) of
-        {ok, _} ->
-            ok;
-        E -> E
     end.
 
 get_site_config_overrides(Site) when is_atom(Site) ->

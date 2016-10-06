@@ -35,6 +35,7 @@ hash_is_equal_old_hash_test() ->
     ok.
 
 check_password_no_user_test() ->
+    ok = z_sites_manager:await_startup(testsandboxdb),
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     ok = delete_user("mr_z", AdminC),
@@ -46,6 +47,7 @@ check_username_password_test_() ->
     {timeout, 20, fun() -> check_username_password() end}.
 
 check_username_password() ->
+    ok = z_sites_manager:await_startup(testsandboxdb),
     C = z_context:new(testsandboxdb),
     start_modules(C),
 
@@ -87,7 +89,8 @@ start_modules(Context) ->
     ok = z_module_manager:activate_await(mod_acl_mock, Context),
     ok = z_module_manager:activate_await(mod_authentication, Context),
     ok = z_module_manager:activate_await(mod_admin, Context),
-    ok = z_module_manager:activate_await(mod_admin_identity, Context).
+    ok = z_module_manager:activate_await(mod_admin_identity, Context),
+    ok = z_module_manager:await_upgrade(Context).
 
     
 %% Old hash algorithm copied from m_identity before the change to bcrypt.
