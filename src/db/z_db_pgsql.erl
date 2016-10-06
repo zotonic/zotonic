@@ -47,6 +47,7 @@
 
 -define(CONNECT_RETRIES, 5).
 -define(CONNECT_RETRY_SLEEP, 10000).
+-define(CONNECT_RETRY_SHORT, 10).
 
 -record(state, {conn, conn_args}).
 
@@ -184,7 +185,7 @@ connect(Args, RetryCt) ->
                 lager:warning("psql connection to ~p:~p refused (too many connections), retrying in ~p sec (~p)",
                               [Hostname, Port, ?CONNECT_RETRY_SLEEP div 1000, self()]),
                 z_db_pool:close_connections(),
-                timer:sleep(?CONNECT_RETRY_SLEEP),
+                timer:sleep(?CONNECT_RETRY_SHORT),
                 connect(Args, RetryCt+1);
             {error, _} = E ->
                 lager:warning("psql connection to ~p:~p returned error ~p",
