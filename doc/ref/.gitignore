@@ -1,2 +1,3 @@
 *~
 meta-*
+!notifications/includes/*
