@@ -122,7 +122,13 @@ handle_call(_Request, _From, State) ->
 handle_cast(_Msg, State) ->
     {noreply, State, ?IDLE_TIMEOUT}.
 
-
+handle_info(disconnect, #state{conn=undefined} = State) ->
+    {noreply, State};
+handle_info(disconnect, State) ->
+    Database = get_arg(dbdatabase, State#state.conn_args),
+    Schema = get_arg(dbschema, State#state.conn_args),
+    lager:info("Closing connection to ~s/~s", [Database, Schema]),
+    {noreply, disconnect(State)};
 handle_info(timeout, State) ->
     {noreply, disconnect(State)};
 handle_info({'EXIT', _Pid, econnrefused}, State) ->
@@ -170,8 +176,14 @@ connect(Args, RetryCt) ->
                         {error, Error}
                 end;
             {error, econnrefused} ->
-                lager:warning("psql connection to ~p:~p refused, retrying in ~p sec (~p)",
+                lager:warning("psql connection to ~p:~p refused (econnrefused), retrying in ~p sec (~p)",
                               [Hostname, Port, ?CONNECT_RETRY_SLEEP div 1000, self()]),
+                timer:sleep(?CONNECT_RETRY_SLEEP),
+                connect(Args, RetryCt+1);
+            {error, {error,fatal,<<"53300">>,_ErrorMsg,_ErrorArgs}} ->
+                lager:warning("psql connection to ~p:~p refused (too many connections), retrying in ~p sec (~p)",
+                              [Hostname, Port, ?CONNECT_RETRY_SLEEP div 1000, self()]),
+                z_db_pool:close_connections(),
                 timer:sleep(?CONNECT_RETRY_SLEEP),
                 connect(Args, RetryCt+1);
             {error, _} = E ->
@@ -181,7 +193,8 @@ connect(Args, RetryCt) ->
         end
     catch
         A:B ->
-            ?DEBUG({A,B}),
+            lager:error("psql connection to ~p:~p failed (exception ~p:~p), retrying in ~p sec (~p)",
+                        [Hostname, Port, A, B, ?CONNECT_RETRY_SLEEP div 1000, self()]),
             timer:sleep(?CONNECT_RETRY_SLEEP),
             connect(Args, RetryCt+1)
     end.

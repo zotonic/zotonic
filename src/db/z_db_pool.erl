@@ -24,6 +24,10 @@
 -define(DEFAULT_DB_DRIVER, z_db_pgsql).
 
 -export([
+         status/0,
+         status/1,
+         close_connections/0,
+         close_connections/1,
          child_spec/2,
          get_database_options/1,
          test_connection/1,
@@ -34,9 +38,62 @@
          return_connection/2
         ]).
 
+status() ->
+    Ctxs = z_sites_manager:get_site_contexts(),
+    lists:map(fun status/1, Ctxs).
 
-db_pool_name(Host) ->
-    list_to_atom("z_db_pool" ++ [$$ | atom_to_list(Host)]).
+status(Context) ->
+    case m_site:get(dbdatabase, Context) of
+        none ->
+            {z_context:site(Context), {0,0}};
+        _Db ->
+            PoolName = db_pool_name(Context),
+            case erlang:whereis(PoolName) of
+                Pid when is_pid(Pid) ->
+                    {_StateName, Workers, _Overflow, Working} = poolboy:status(Pid),
+                    {z_context:site(Context), {Workers,Working}};
+                undefined ->
+                    {z_context:site(Context), {0,0}}
+            end
+    end.
+
+close_connections() ->
+    Ctxs = z_sites_manager:get_site_contexts(),
+    lists:foreach(fun close_connections/1, Ctxs).
+
+close_connections(Context) ->
+    case m_site:get(dbdatabase, Context) of
+        none -> ok;
+        _Db ->
+            PoolName = db_pool_name(Context),
+            close_workers(erlang:whereis(PoolName))
+    end.
+
+close_workers(undefined) ->
+    ok;
+close_workers(Pid) when is_pid(Pid) ->
+    case poolboy:status(Pid) of
+        {_StateName, Workers, _Overflow, _Working} when Workers > 1 ->
+            WorkerPids = lists:map(
+                                fun(_N) -> poolboy:checkout(Pid) end,
+                                lists:seq(2,Workers)),
+            WorkerPids1 = lists:filter(fun erlang:is_pid/1, WorkerPids),
+            lists:foreach(
+                        fun(WorkerPid) ->
+                            WorkerPid ! disconnect,
+                            poolboy:checkin(Pid, WorkerPid)
+                        end,
+                        WorkerPids1);
+        {_StateName, _Avail, _Overflow, _Working} ->
+            ok
+    end.
+
+
+
+db_pool_name(#context{} = Context) ->
+    db_pool_name(z_context:site(Context));
+db_pool_name(Site) ->
+    list_to_atom("z_db_pool" ++ [$$ | atom_to_list(Site)]).
 
 db_driver(SiteProps) when is_list(SiteProps) ->
     proplists:get_value(dbdriver, SiteProps, ?DEFAULT_DB_DRIVER);
