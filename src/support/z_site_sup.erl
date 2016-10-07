@@ -27,23 +27,27 @@
 %% supervisor callbacks
 -export([init/1]).
 
+%% Called when the installer is done for a certain Site.
+-export([install_done/1]).
+
 -include_lib("zotonic.hrl").
 
-%% @spec start_link(Host) -> ServerRet
+%% @spec start_link(Site) -> ServerRet
 %% @doc API for starting the site supervisor.
-start_link(Host) ->
-    supervisor:start_link(?MODULE, Host).
+start_link(Site) ->
+    Name = z_utils:name_for_site(?MODULE, Site),
+    supervisor:start_link({local, Name}, ?MODULE, Site).
 
 
-%% @spec init(Host) -> SupervisorTree
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
-init(Host) ->
+-spec init(atom()) -> {ok, {{one_for_all, integer(), integer()}, list()}}.
+init(Site) ->
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
-    ok = z_stats:init_site(Host),
-    {ok, SiteProps} = z_sites_manager:get_site_config(Host),
+    ok = z_stats:init_site(Site),
+    {ok, SiteProps} = z_sites_manager:get_site_config(Site),
 
     Notifier = {z_notifier,
                 {z_notifier, start_link, [SiteProps]},
@@ -63,7 +67,19 @@ init(Host) ->
                 {InstallerModule, start_link, [SiteProps]},
                 permanent, 1, worker, dynamic},
 
-    % Continue with the normal per-site servers
+    Processes = [
+        Notifier, Depcache, Translation, Installer
+    ],
+    Processes1 = case z_db_pool:child_spec(Site, SiteProps) of
+                     undefined -> Processes;
+                     DbSpec when is_tuple(DbSpec) ->
+                         [DbSpec | Processes ]
+                 end,
+    {ok, {{one_for_all, 2, 1}, Processes1}}.
+
+%% @doc Called when the site installation is done, we can not add all other processes.
+-spec install_done(list()) -> ok.
+install_done(SiteProps) when is_list(SiteProps) ->
     Session = {z_session_manager,
                 {z_session_manager, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
@@ -109,16 +125,17 @@ init(Host) ->
                     permanent, 5000, worker, dynamic},
 
     Processes = [
-            Notifier, Depcache, Translation, Installer, Session,
+            Session,
             Dispatcher, Template, MediaClass, Pivot, DropBox,
             MediaCleanup, EdgeLog,
             ModuleIndexer, Modules,
             PostStartup
         ],
 
-    Processes1 = case z_db_pool:child_spec(Host, SiteProps) of
-                     undefined -> Processes;
-                     DbSpec when is_tuple(DbSpec) ->
-                         [DbSpec | Processes ]
-                 end,
-    {ok, {{one_for_all, 2, 1}, Processes1}}.
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
+    lists:foreach(
+            fun(Child) ->
+                supervisor:start_child(Name, Child)
+            end,
+            Processes).

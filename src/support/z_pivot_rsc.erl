@@ -72,7 +72,7 @@
 -define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
 
 
--record(state, {site, is_pivot_delay = false}).
+-record(state, {site, is_initial_delay=true, is_pivot_delay = false}).
 
 
 %% @doc Poll the pivot queue for the database in the context
@@ -294,7 +294,7 @@ init(Site) ->
         {module, ?MODULE}
       ]),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {ok, #state{site=Site, is_pivot_delay=false}}.
+    {ok, #state{site=Site, is_initial_delay=true, is_pivot_delay=false}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -312,12 +312,17 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Poll the queue for the default host
+handle_cast(poll, #state{is_initial_delay=true} = State) ->
+    {noreply, State};
 handle_cast(poll, State) ->
     do_poll(z_context:new(State#state.site)),
     {noreply, State};
 
 
 %% @doc Poll the queue for a particular database
+handle_cast({pivot, Id}, #state{is_initial_delay=true} = State) ->
+    insert_queue(Id, z_context:new(State#state.site)),
+    {noreply, State};
 handle_cast({pivot, Id}, State) ->
     do_pivot(Id, z_context:new(State#state.site)),
     {noreply, State};
@@ -342,7 +347,7 @@ handle_info(poll, State) ->
         true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
         false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
     end,
-    {noreply, State};
+    {noreply, State#state{is_initial_delay = false}};
 
 handle_info(_Info, State) ->
     {noreply, State}.
@@ -518,68 +523,73 @@ pivot_resource(Id, Context0) ->
                 props => RscProps,
                 z_language => Lang
             },
-            {ok, Template} = z_template_compiler_runtime:map_template({cat, <<"pivot/pivot.tpl">>}, Vars, Context),
-            TextA = render_block(a, Template, Vars, Context),
-            TextB = render_block(b, Template, Vars, Context),
-            TextC = render_block(c, Template, Vars, Context),
-            TextD = render_block(d, Template, Vars, Context),
-            TsvIds = render_block(related_ids, Template, Vars, Context),
-            Title = render_block(title, Template, Vars, Context),
-            Street = render_block(address_street, Template, Vars, Context),
-            City = render_block(address_city, Template, Vars, Context),
-            Postcode = render_block(address_postcode, Template, Vars, Context),
-            State = render_block(address_state, Template, Vars, Context),
-            Country = render_block(address_country, Template, Vars, Context),
-            NameFirst = render_block(name_first, Template, Vars, Context),
-            NameSurname = render_block(name_surname, Template, Vars, Context),
-            Gender = render_block(gender, Template, Vars, Context),
-            DateStart = to_datetime(render_block(date_start, Template, Vars, Context)),
-            DateEnd = to_datetime(render_block(date_end, Template, Vars, Context)),
-            DateStartMonthDay = to_integer(render_block(date_start_month_day, Template, Vars, Context)),
-            DateEndMonthDay = to_integer(render_block(date_end_month_day, Template, Vars, Context)),
-            LocationLat = to_float(render_block(location_lat, Template, Vars, Context)),
-            LocationLng = to_float(render_block(location_lng, Template, Vars, Context)),
+            case z_template_compiler_runtime:map_template({cat, <<"pivot/pivot.tpl">>}, Vars, Context) of
+                {ok, Template} ->
+                    TextA = render_block(a, Template, Vars, Context),
+                    TextB = render_block(b, Template, Vars, Context),
+                    TextC = render_block(c, Template, Vars, Context),
+                    TextD = render_block(d, Template, Vars, Context),
+                    TsvIds = render_block(related_ids, Template, Vars, Context),
+                    Title = render_block(title, Template, Vars, Context),
+                    Street = render_block(address_street, Template, Vars, Context),
+                    City = render_block(address_city, Template, Vars, Context),
+                    Postcode = render_block(address_postcode, Template, Vars, Context),
+                    State = render_block(address_state, Template, Vars, Context),
+                    Country = render_block(address_country, Template, Vars, Context),
+                    NameFirst = render_block(name_first, Template, Vars, Context),
+                    NameSurname = render_block(name_surname, Template, Vars, Context),
+                    Gender = render_block(gender, Template, Vars, Context),
+                    DateStart = to_datetime(render_block(date_start, Template, Vars, Context)),
+                    DateEnd = to_datetime(render_block(date_end, Template, Vars, Context)),
+                    DateStartMonthDay = to_integer(render_block(date_start_month_day, Template, Vars, Context)),
+                    DateEndMonthDay = to_integer(render_block(date_end_month_day, Template, Vars, Context)),
+                    LocationLat = to_float(render_block(location_lat, Template, Vars, Context)),
+                    LocationLng = to_float(render_block(location_lng, Template, Vars, Context)),
 
-            % Make psql tsv texts from the A..D blocks
-            StemmerLanguage = stemmer_language(Context),
-            {SqlA, ArgsA} = to_tsv(TextA, $A, [], StemmerLanguage),
-            {SqlB, ArgsB} = to_tsv(TextB, $B, ArgsA, StemmerLanguage),
-            {SqlC, ArgsC} = to_tsv(TextC, $C, ArgsB, StemmerLanguage),
-            {SqlD, ArgsD} = to_tsv(TextD, $D, ArgsC, StemmerLanguage),
+                    % Make psql tsv texts from the A..D blocks
+                    StemmerLanguage = stemmer_language(Context),
+                    {SqlA, ArgsA} = to_tsv(TextA, $A, [], StemmerLanguage),
+                    {SqlB, ArgsB} = to_tsv(TextB, $B, ArgsA, StemmerLanguage),
+                    {SqlC, ArgsC} = to_tsv(TextC, $C, ArgsB, StemmerLanguage),
+                    {SqlD, ArgsD} = to_tsv(TextD, $D, ArgsC, StemmerLanguage),
 
-            % Make the text and object-ids vectors for the pivot
-            TsvSql = [SqlA, " || ", SqlB, " || ", SqlC, " || ", SqlD],
-            Tsv  = z_db:q1(iolist_to_binary(["select ", TsvSql]), ArgsD, Context),
-            Rtsv = z_db:q1("select to_tsvector($1)", [TsvIds], Context),
+                    % Make the text and object-ids vectors for the pivot
+                    TsvSql = [SqlA, " || ", SqlB, " || ", SqlC, " || ", SqlD],
+                    Tsv  = z_db:q1(iolist_to_binary(["select ", TsvSql]), ArgsD, Context),
+                    Rtsv = z_db:q1("select to_tsvector($1)", [TsvIds], Context),
 
-            KVs = [
-                {pivot_tsv, Tsv},
-                {pivot_rtsv, Rtsv},
-                {pivot_street, truncate(Street, 120)},
-                {pivot_city, truncate(City, 100)},
-                {pivot_postcode, truncate(Postcode, 30)},
-                {pivot_state, truncate(State, 50)},
-                {pivot_country, truncate(Country, 80)},
-                {pivot_first_name, truncate(NameFirst, 100)},
-                {pivot_surname, truncate(NameSurname, 100)},
-                {pivot_gender, truncate(Gender, 1)},
-                {pivot_date_start, DateStart},
-                {pivot_date_end, DateEnd},
-                {pivot_date_start_month_day, DateStartMonthDay},
-                {pivot_date_end_month_day, DateEndMonthDay},
-                {pivot_title, truncate(Title, 100)},
-                {pivot_location_lat, LocationLat},
-                {pivot_location_lng, LocationLng}
-            ],
-            KVs1= z_notifier:foldr(#pivot_fields{id=Id, rsc=RscProps}, KVs, Context),
-            update_changed(Id, KVs1, RscProps, Context),
-            pivot_resource_custom(Id, Context),
+                    KVs = [
+                        {pivot_tsv, Tsv},
+                        {pivot_rtsv, Rtsv},
+                        {pivot_street, truncate(Street, 120)},
+                        {pivot_city, truncate(City, 100)},
+                        {pivot_postcode, truncate(Postcode, 30)},
+                        {pivot_state, truncate(State, 50)},
+                        {pivot_country, truncate(Country, 80)},
+                        {pivot_first_name, truncate(NameFirst, 100)},
+                        {pivot_surname, truncate(NameSurname, 100)},
+                        {pivot_gender, truncate(Gender, 1)},
+                        {pivot_date_start, DateStart},
+                        {pivot_date_end, DateEnd},
+                        {pivot_date_start_month_day, DateStartMonthDay},
+                        {pivot_date_end_month_day, DateEndMonthDay},
+                        {pivot_title, truncate(Title, 100)},
+                        {pivot_location_lat, LocationLat},
+                        {pivot_location_lng, LocationLng}
+                    ],
+                    KVs1= z_notifier:foldr(#pivot_fields{id=Id, rsc=RscProps}, KVs, Context),
+                    update_changed(Id, KVs1, RscProps, Context),
+                    pivot_resource_custom(Id, Context),
 
-            case to_datetime(render_block(date_repivot, Template, Vars, Context)) of
-                undefined -> ok;
-                DateRepivot -> insert_queue(Id, DateRepivot, Context)
-            end,
-            ok;
+                    case to_datetime(render_block(date_repivot, Template, Vars, Context)) of
+                        undefined -> ok;
+                        DateRepivot -> insert_queue(Id, DateRepivot, Context)
+                    end,
+                    ok;
+                {error, enoent} ->
+                    lager:error("[~p] Missing 'pivot/pivot.tpl' template", [z_context:site(Context)]),
+                    ok
+            end;
         false ->
             {error, eexist}
     end.

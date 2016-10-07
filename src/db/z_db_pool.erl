@@ -71,23 +71,13 @@ close_connections(Context) ->
 
 close_workers(undefined) ->
     ok;
-close_workers(Pid) when is_pid(Pid) ->
-    case poolboy:status(Pid) of
-        {_StateName, Workers, _Overflow, _Working} when Workers > 1 ->
-            WorkerPids = lists:map(
-                                fun(_N) -> poolboy:checkout(Pid) end,
-                                lists:seq(2,Workers)),
-            WorkerPids1 = lists:filter(fun erlang:is_pid/1, WorkerPids),
-            lists:foreach(
-                        fun(WorkerPid) ->
-                            WorkerPid ! disconnect,
-                            poolboy:checkin(Pid, WorkerPid)
-                        end,
-                        WorkerPids1);
-        {_StateName, _Avail, _Overflow, _Working} ->
-            ok
-    end.
-
+close_workers(PoolPid) when is_pid(PoolPid) ->
+    WorkerPids = gen_server:call(PoolPid, get_avail_workers),
+    lists:foreach(
+                fun(WorkerPid) ->
+                    WorkerPid ! disconnect
+                end,
+                WorkerPids).
 
 
 db_pool_name(#context{} = Context) ->
