@@ -58,7 +58,6 @@ install_modules(Context) ->
 %% of modules from the skeleton is installed.
 -spec install_skeleton_modules(#context{}) -> ok.
 install_skeleton_modules(Context) ->
-io:format("~n~nINSTALL SKELETON MODULES~n~n"),
     Site = Context#context.site,
     {ok, Config} = z_sites_manager:get_site_config(Site),
     case proplists:get_value(install_modules, Config) of
