@@ -1,0 +1,117 @@
+#!/usr/bin/env escript
+
+main([]) ->
+    File = "../../../include/zotonic_notifications.hrl",
+    {ok, Epp} = epp:open(File, []),
+    {ok, _} = epp:parse_erl_form(Epp),
+    Comments = erl_comment_scan:file(File),
+    Records = parse(Epp, Comments, []),
+
+    lists:foreach(
+        fun({Name, Doc, Fields}) ->
+
+            %% Always overwrite the generated meta file
+            MetaFilename = filename:join(["includes", "meta-" ++ Name ++ ".rst"]),
+            {ok, MetaFile} = file:open(MetaFilename, [write]),
+            write_record_to_rst(MetaFile, {Name, Doc, Fields}),
+            ok = file:close(MetaFile),
+
+            %% Only write the include file if it doesn't yet exist
+            NotificationFilename = filename:join(["includes", Name ++ ".rst"]),
+            case filelib:is_file(NotificationFilename) of
+                true ->
+                    noop;
+                false ->
+                    ok = file:write_file(NotificationFilename, [
+                        ".. include:: includes/meta-", Name, ".rst", "\n\n"
+                    ])
+            end
+        end,
+        Records
+    ).
+
+parse({ok, {attribute, Line, record, {RecordName, Fields}}}, Epp, Comments, Acc) ->
+    ParsedFields = lists:map(
+        fun (Field) ->
+            parse_record_field(Field)
+        end,
+        Fields
+    ),
+    Record = {atom_to_list(RecordName), find_comment(Line, Comments), ParsedFields},
+    parse(Epp, Comments, [Record|Acc]);
+parse({eof,_}, _Epp, _Comments, Acc) ->
+    lists:sort(Acc).
+
+
+parse(Epp, Comments, Acc) ->
+    parse(epp:parse_erl_form(Epp), Epp, Comments, Acc).
+
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}}, {type, _Line, union, Props}}) ->
+    {Name, [parse_type(Prop) || Prop <- Props]};
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}}, {remote_type, _Line, Parts}}) ->
+    {Name, list_to_binary(lists:join(":", [atom_to_list(V) || {atom, _L, V} <- Parts]) ++ "()")};
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}}, {type, _Line, Type, _L}}) ->
+    {Name, Type};
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}, {_, _, _Default}}, {type, _Line, Type, _L}}) ->
+    {Name, Type};
+parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name}, {nil, _}}, {type, _Line, Type, _L}}) ->
+    {Name, Type};
+parse_record_field({record_field, _Line, {atom, _Line, Name}}) ->
+    {Name, unknown};
+parse_record_field(Dunno) ->
+    io:format("dunno ~p\n", [Dunno]),
+    {unknown, unknown}.
+
+parse_type({atom, _Line, Type}) ->
+    atom_to_list(Type);
+parse_type({type, _Line, Type, _Props}) ->
+    atom_to_list(Type).
+
+find_comment(MatchLine, [{_PreviousLine, 1, 0, Previous}, {Line, 1, 0, _Comment}|_Comments]) when Line >= MatchLine ->
+    Previous;
+find_comment(MatchLine, [_Comment|Comments]) ->
+    find_comment(MatchLine, Comments);
+find_comment(MatchLine, []) ->
+    MatchLine.
+
+field_output({Name, Type}) when is_binary(Name) and is_binary(Type) ->
+    <<"    - ", Name/binary, ": ``", Type/binary, "``\n">>;
+field_output({Name, Types}) when is_list(Types) ->
+    field_output({atom_to_binary(Name, utf8), list_to_binary(lists:join("|", Types))});
+field_output({Name, Type}) when is_binary(Type) ->
+    field_output({atom_to_binary(Name, utf8), Type});
+field_output({Name, Type}) ->
+    field_output({atom_to_binary(Name, utf8), atom_to_binary(Type, utf8)}).
+
+write_record_to_rst(File, {Name, Doc, Fields}) ->
+    {ParsedDoc, Type, Return} =  parse_doc(Doc, [], "first", ""), "\n",
+
+    FieldsOutput = case lists:map(fun(Field) -> field_output(Field) end, Fields) of
+        [] -> <<"none">>;
+        List -> List
+    end,
+
+    file:write(
+        File,
+        [
+            ".. _", Name, ":\n\n",
+            Name, "\n",
+            lists:duplicate(length(Name), $^), "\n\n",
+            ParsedDoc, "\n\n",
+            "Type: \n", "    :ref:`notification-", Type, "`\n\n",
+            "Return: \n    ", Return, "\n\n",
+            "``#", Name, "{}`` properties:\n" ++ FieldsOutput
+
+        ]
+    ).
+
+parse_doc(["% @doc " ++ Doc|Docs], Acc, Type, Return) ->
+    parse_doc(Docs, [Doc ++ " \n"|Acc], Type, Return);
+parse_doc(["% Type: " ++ Type|Docs], Acc, _Type, Return) ->
+    parse_doc(Docs, Acc, Type, Return);
+parse_doc(["% Return: " ++ Return|Docs], Acc, Type, _Return) ->
+    parse_doc(Docs, Acc, Type, Return);
+parse_doc(["% " ++ Doc|Docs], Acc, Type, Return) ->
+    parse_doc(Docs, [Doc ++ " \n"|Acc], Type, Return);
+parse_doc([], Acc, Type, Return) ->
+    {lists:reverse(Acc), Type, Return}.

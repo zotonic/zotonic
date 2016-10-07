@@ -21,7 +21,7 @@ All the nitty gritty details when the big picture has settled.
    validators/index
    directory-structure
    icons
-   notifications
+   notifications/index
    installation/requirements
    configuration/zotonic-configuration
    configuration/site-configuration

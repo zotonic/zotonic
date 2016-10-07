@@ -44,6 +44,8 @@ back. They can do this in various ways described in the methods below.
 Notification types
 ------------------
 
+.. _notification-notify:
+
 notify
 ^^^^^^
 
@@ -69,16 +71,27 @@ This is used to get information from one of the observers. By
 using the notification system it makes sure that modules are
 decoupled.
 
+.. _notification-map:
+
 map
-  Call all observers and get a list of all answers.
+^^^
+
+Call all observers and get a list of all answers.
+
+.. _notification-foldl:
 
 foldl
-  Do a fold over all observers, high prio observers first.
+^^^^^
+
+Do a fold over all observers, high prio observers first.
+
+.. _notification-foldr:
 
 foldr
-  Do a fold over all observers, low prio observers first.
+^^^^^
 
-You can also send notifications from JavaScript.
+Do a fold over all observers, low prio observers first.
+
 
 .. _guide-notifications-observe:
 
