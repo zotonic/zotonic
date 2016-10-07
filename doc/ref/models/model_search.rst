@@ -22,43 +22,9 @@ Another example, searching for a text and requesting the second page with 20 res
       {{ m.rsc[id].title }}
   {% endfor %}
 
-.. seealso:: :ref:`guide-datamodel-query-model`, the :ref:`scomp-pager` scomp, and the :ref:`mod_search` module.
+.. seealso::
 
-
-
-Implementing a custom search
-----------------------------
-
-Like stated, any module can implement a search by observing the
-``search_query`` notification:
-
-.. code-block:: erlang
-
-   observe_search_query({search_query, Req, OffsetLimit}, Context) ->
-       search(Req, OffsetLimit, Context).
-
-  search({foo_table, [{bar, Bar}]}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="f.id",
-        from="foo f",
-        where="f.bar = $1",
-        order="f.baz desc",
-        args=[Bar],
-        tables=[{foo,"f"}]
-    };
-
-  search(_Other, _OffsetLimit, _Context) ->
-      undefined.
-
-Do not forget to add the last function that matches and returns
-``undefined`` for any other search request. If you forget this, the
-notification fold will crash when using any other search query.
-
-.. highlight:: django
-
-This can then be used in your template like this::
-
-  {% for id in m.search[{foo bar=123}] %}
-  ... looping over all ids in the 'foo' table for which bar = 123
-  {% endfor %}
-
+    * :ref:`guide-datamodel-query-model`
+    * :ref:`scomp-pager` tag
+    * :ref:`mod_search` module
+    * :ref:`cookbook-custom-search`

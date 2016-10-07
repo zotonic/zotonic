@@ -10,6 +10,7 @@ Cookbooks
    custom-filter
    custom-model
    custom-pivot
+   custom-search
    pivot-templates
    custom-tag
    writing-module

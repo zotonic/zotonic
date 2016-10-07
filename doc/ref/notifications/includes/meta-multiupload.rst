@@ -14,5 +14,5 @@ Return:
     ``#context{}`` with the result or ``undefined``
 
 ``#multiupload{}`` properties:
-    - upload: ``record|string``
+    - upload: ``term|string``
     - query_args: ``list``

@@ -569,7 +569,7 @@
 
 %% @doc Handle custom named search queries in your function.
 %% Type: first
-%% Return:: ``#search_sql{}``, ``#search_result{}`` or ``undefined``
+%% Return: ``#search_sql{}``, ``#search_result{}`` or ``undefined``
 -record(search_query, {
     search :: {
         SearchName :: atom(),

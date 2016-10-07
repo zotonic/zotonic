@@ -59,7 +59,6 @@ parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name
 parse_record_field({record_field, _Line, {atom, _Line, Name}}) ->
     {Name, unknown};
 parse_record_field(Dunno) ->
-    io:format("dunno ~p\n", [Dunno]),
     {unknown, unknown}.
 
 parse_type({atom, _Line, Type}) ->

@@ -96,6 +96,9 @@ implemented in `mod_search`:
 +------------------------+---------------------------------------------------------------+-------------------+
 
 
-.. seealso:: :ref:`guide-datamodel-query-model`
+.. seealso::
+
+    * :ref:`guide-datamodel-query-model`
+    * :ref:`cookbook-custom-search`
 
 

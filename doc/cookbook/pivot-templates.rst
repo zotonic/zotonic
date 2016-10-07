@@ -10,7 +10,7 @@ These columns and text fields are extracted in a process called *pivoting*.
 This is done a short period after a resource has been updated.
 
 The content of the pivot columns is determined by a template. This template is
-called ``pivot/pivot.tpl`` (in ``mod_base``) and is rendered using a *catinclude*. 
+called ``pivot/pivot.tpl`` (in ``mod_base``) and is rendered using a *catinclude*.
 This makes it possible to have your own unique indexing per category.
 
 The ``pivot/pivot.tpl`` template consists of multiple blocks. Each block corresponds
@@ -36,11 +36,11 @@ The following blocks are defined:
 **title**
 
   The title used for database sorting etc. Per default the lowercased title in the selected
-  pivot language or the default site language. 
+  pivot language or the default site language.
 
 **related_ids**
 
-  The ids of all related resources and categories. This is a full text index used for 
+  The ids of all related resources and categories. This is a full text index used for
   finding resources that are similar to some other resource.
   All matching resource ids should be prefixed with ``zpo`` and category ids with ``zpc``
   (for example ``zpo1234``).
@@ -51,7 +51,7 @@ The following blocks are defined:
 **address_street, address_city, address_postcode, address_state, address_country**
 
   The address to be used for searches. Defaults to the related ``address_…`` properties
-  with a fallback to the ``mail_address_…`` properties. 
+  with a fallback to the ``mail_address_…`` properties.
 
   The country should be the two letter ISO code, not the country’s descriptive text.
 

@@ -59,6 +59,5 @@ this:
 
 .. seealso::
 
-    :ref:`custompivot` on how to filter on custom pivot columns.
-
-    :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.
+    * :ref:`custompivot` search argument for filtering on custom pivot columns.
+    * :ref:`cookbook-pivot-templates` to change the content of regular pivot columns and search texts.
