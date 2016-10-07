@@ -16,7 +16,7 @@ command::
 
 Docker will download and boot the container. Zotonic will be available on port
 8000 on your machine. So, after Docker has booted, open your browser and go to
-http://localhost:8080 to view the Zotonic Status page. If you wish to quit
+http://localhost:8000 to view the Zotonic Status page. If you wish to quit
 the container, press Ctrl+C.
 
 You can now move on to :ref:`creating your first site <guide-create-site>`.
