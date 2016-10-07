@@ -220,6 +220,8 @@ The following naming conventions for templates are used:
 
 .. seealso:: :ref:`guide-templates`
 
+.. _module-directory-filters:
+
 filters/
 ........
 
