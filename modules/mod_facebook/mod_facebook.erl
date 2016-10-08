@@ -42,7 +42,7 @@
 
 
 %% @doc Reset the received facebook access token (as set in the session)
-observe_auth_logoff(auth_logoff, AccContext, _Context) ->
+observe_auth_logoff(#auth_logoff{}, AccContext, _Context) ->
     z_context:set_session(facebook_logon, false, AccContext),
     z_context:set_session(facebook_access_token, undefined, AccContext).
 

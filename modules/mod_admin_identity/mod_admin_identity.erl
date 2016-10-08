@@ -79,7 +79,7 @@ observe_rsc_update(#rsc_update{}, Acc, _Context) ->
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->
     search(Req, OffsetLimit, Context).
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_user,
                 parent=admin_auth,

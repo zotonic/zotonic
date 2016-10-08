@@ -44,7 +44,7 @@
 
 
 %% @doc Check if the user has a prefered timezone (in the user's persistent data).
-observe_session_init_fold(session_init_fold, Context, _Context) ->
+observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
     case is_fixed_timezone(Context) of
         true ->
             Context;
@@ -67,7 +67,7 @@ get_q_timezone(Context) ->
     end.
 
 
-observe_session_context(session_context, Context, _Context) ->
+observe_session_context(#session_context{}, Context, _Context) ->
     case is_fixed_timezone(Context) of
         true ->
             Context;
@@ -82,7 +82,7 @@ observe_session_context(session_context, Context, _Context) ->
             end
     end.
 
-observe_auth_logon(auth_logon, Context, _Context) ->
+observe_auth_logon(#auth_logon{}, Context, _Context) ->
     case is_fixed_timezone(Context) of
         true ->
             Context;
@@ -182,7 +182,7 @@ set_timezone(Tz, Context) ->
     end.
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_l10n,
                 parent=admin_modules,

@@ -9,7 +9,6 @@
 ``post_props``
     List of properties after the update.
 
-
 Example
 """""""
 

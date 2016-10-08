@@ -69,7 +69,7 @@ menu(Context) ->
         false -> [];
         true ->
             F = fun() ->
-                        Menu = z_notifier:foldl(admin_menu, [], Context),
+                        Menu = z_notifier:foldl(#admin_menu{}, [], Context),
                         hierarchize(Menu, Context)
                 end,
             z_depcache:memo(F,

@@ -3,7 +3,8 @@
 acl_is_allowed_prop
 ^^^^^^^^^^^^^^^^^^^
 
-Check if an action on a property is allowed. 
+Check if a user is authorizded to perform an action on a property. 
+Defaults to ``true``. 
 
 
 Type: 

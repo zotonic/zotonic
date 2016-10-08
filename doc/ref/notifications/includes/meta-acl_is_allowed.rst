@@ -3,10 +3,10 @@
 acl_is_allowed
 ^^^^^^^^^^^^^^
 
-Check if a user is authorized to perform an operation on a an object. Observe 
-this notification to do complex or more fine-grained authorization checks than 
-you can do through the ACL rules admin interface. 
-``object`` is a ``m_rsc:resource()`` or a module name atom. 
+Check if a user is authorized to perform an operation on a an object 
+(some resource or module). Observe this notification to do complex or more 
+fine-grained authorization checks than you can do through the ACL rules admin 
+interface. Defaults to ``false``. 
 
 
 Type: 

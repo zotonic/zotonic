@@ -394,7 +394,7 @@ maybe_set_session(SessionId, #context{session_id=SessionId} = Context) ->
     Context;
 maybe_set_session(SessionId, Context) ->
     {ok, Context1} = z_session_manager:start_session(optional, SessionId, Context),
-    z_notifier:foldl(session_context, Context1, Context1).
+    z_notifier:foldl(#session_context{}, Context1, Context1).
 
 maybe_set_page_session(undefined, Context) ->
     Context;

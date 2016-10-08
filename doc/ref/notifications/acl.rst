@@ -1,3 +1,5 @@
+.. _ref-acl-notifications:
+
 ACL notifications
 -----------------
 
