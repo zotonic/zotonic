@@ -76,14 +76,13 @@
                                         </span>
                                     </td>
                                 {% endif %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-            <div class="widget-content widget-content-full"><div class="table-like"><span class="text-muted">{_ No items _}</span></div></div>
-        {% endif %}
-{% endwith %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <div class="widget-content widget-content-full"><div class="table-like"><span class="text-muted">{_ No items _}</span></div></div>
+            {% endif %}
+    {% endwith %}
 {% endblock %}
