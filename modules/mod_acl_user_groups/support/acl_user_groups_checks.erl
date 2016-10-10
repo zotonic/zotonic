@@ -35,7 +35,6 @@
         acl_logon/2,
         acl_logoff/2,
         acl_context_authenticated/1,
-        acl_rsc_update_check/3,
         acl_add_sql_check/2
     ]).
 
@@ -241,70 +240,6 @@ acl_context_authenticated(#context{user_id=undefined} = Context) ->
     };
 acl_context_authenticated(#context{} = Context) ->
     Context.
-
-%% @doc Restrict the content group being updated, possible set default content group.
-%%      If the content-group or category is changed then we need insert permission.
-%%      If it is not changed (for existing rsc) then we need update permission.
-acl_rsc_update_check(#acl_rsc_update_check{}, {error, Reason}, _Context) ->
-    {error, Reason};
-acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) when is_integer(Id); Id =:= insert_rsc ->
-    CatId = fetch_category_id(Id, Props, Context),
-    CGId = fetch_content_group_id(Id, CatId, Props, Context),
-    case acl_rsc_update_check_1(Id, CGId, CatId, Context) of
-        true ->
-            Props1 = proplists:delete(category_id, Props),
-            Props2 = proplists:delete(content_group_id, Props1),
-            [{category_id, CatId}, {content_group_id, CGId} | Props2];
-        false ->
-            lager:debug("[acl_user_group] denied user ~p insert/update on ~p of category ~p in content-group ~p",
-                        [z_acl:user(Context), Id, CatId, CGId]),
-            {error, eacces}
-    end.
-
-acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{acl=admin}) ->
-    true;
-acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{user_id=1}) ->
-    true;
-acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) ->
-    can_insert_category(CGId, CatId, Context);
-acl_rsc_update_check_1(Id, CGId, CatId, Context) when is_integer(Id) ->
-    OldCGId = m_rsc:p_no_acl(Id, content_group_id, Context),
-    OldCatId = m_rsc:p_no_acl(Id, category_id, Context),
-    case {OldCGId, OldCatId} of
-        {CGId, CatId} ->
-            UGs = user_groups(Context),
-            can_rsc_1(Id, update, CGId, CatId, UGs, Context);
-        _Changed ->
-            can_insert_category(CGId, CatId, Context)
-    end.
-
-
-fetch_content_group_id(Id, CatId, Props, Context) ->
-    case proplists:get_value(content_group_id, Props) of
-        N when is_integer(N) ->
-            N;
-        undefined ->
-            case Id of
-                insert_rsc ->
-                    default_content_group(CatId, Context);
-                Id when is_integer(Id) ->
-                    m_rsc:p_no_acl(Id, content_group_id, Context)
-            end
-    end.
-
-fetch_category_id(Id, Props, Context) ->
-    case proplists:get_value(category_id, Props) of
-        N when is_integer(N) ->
-            N;
-        undefined ->
-            case Id of
-                rsc_insert ->
-                    {ok, CatId} = m_category:name_to_id(other, Context),
-                    CatId;
-                Id ->
-                    m_rsc:p_no_acl(Id, category_id, Context)
-            end
-    end.
 
 default_content_group(CatId, Context) ->
     case m_category:is_a(CatId, meta, Context) of
@@ -630,7 +565,7 @@ is_owner(insert_rsc, _Context) ->
     true;
 is_owner(Id, #context{user_id=UserId} = Context) ->
     case z_notifier:first(#acl_is_owner{
-            id=Id, 
+            id=Id,
             creator_id=m_rsc:p_no_acl(Id, creator_id, Context),
             user_id=UserId
         },

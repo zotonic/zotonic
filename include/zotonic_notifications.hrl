@@ -501,12 +501,6 @@
     prop :: atom()
 }).
 
-%% @doc Filter the properties of a resource update. this is done on the raw data.
-%% Type: foldr
--record(acl_rsc_update_check, {
-    id :: m_rsc:resource()
-}).
-
 %% @doc Set the context to a typical authenticated uses. Used by m_acl.erl
 %% Type: first
 %% Return: authenticated ``#context{}`` or ``undefined``

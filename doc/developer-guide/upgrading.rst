@@ -21,6 +21,7 @@ ACL
   The ``visible_for`` ``rsc`` table property has been kept for BC. So if you’re
   using mod_acl_adminonly, mod_acl_simple_roles or a custom ACL module you can
   still rely on the property.
+* The ``acl_rsc_update_check`` notification was removed.
 
 
 Erlang code, Controllers, Event handlers

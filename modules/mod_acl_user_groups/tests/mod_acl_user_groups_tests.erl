@@ -4,6 +4,8 @@
 -include_lib("eunit/include/eunit.hrl").
 -include("zotonic.hrl").
 
+-export([is_allowed_always_true/2]).
+
 person_can_edit_own_resource_test() ->
     Context = context(),
 
@@ -33,6 +35,16 @@ person_can_edit_own_resource_test() ->
 
 acl_is_allowed_accepts_rsc_name_object_test() ->
     ?assertEqual(false, acl_user_groups_checks:acl_is_allowed(#acl_is_allowed{action = insert, object = text}, context())).
+
+%% @doc See https://github.com/zotonic/zotonic/issues/1306
+acl_is_allowed_override_test() ->
+    Context = context(),
+
+    %% Priority (10) must be before mod_acl_user_group's acl_is_allowed observer.
+    z_notifier:observe(acl_is_allowed, {?MODULE, is_allowed_always_true}, 10, Context),
+    {ok, Id} = m_rsc:insert([{category_id, text}], Context),
+    ?assertEqual(m_rsc:rid(default_content_group, Context), m_rsc:p(Id, content_group_id, Context)),
+    z_notifier:detach(acl_is_allowed, {?MODULE, is_allowed_always_true}, Context).
 
 publish_test() ->
     Context = context(),
@@ -68,3 +80,5 @@ start_modules(Context) ->
     ok = z_module_manager:activate_await(mod_acl_user_groups, Context),
     ok = z_module_manager:await_upgrade(Context).
 
+is_allowed_always_true(#acl_is_allowed{}, _Context) ->
+    true.
