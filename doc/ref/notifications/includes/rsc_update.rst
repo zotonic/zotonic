@@ -4,7 +4,7 @@ An updated resource is about to be persisted. Observe this notification to
 change the resource properties before they are persisted.
 
 Arguments
-.........
+"""""""""
 
 ``#rsc_update``
     ``action``
@@ -22,7 +22,7 @@ Arguments
     Site context
 
 Example
-.......
+"""""""
 
 Add a property before the resource is persisted::
 

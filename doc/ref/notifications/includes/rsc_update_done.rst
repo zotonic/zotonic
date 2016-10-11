@@ -11,7 +11,7 @@
 
 
 Example
-^^^^^^^
+"""""""
 
 Add some default edges when a resource is created::
 
