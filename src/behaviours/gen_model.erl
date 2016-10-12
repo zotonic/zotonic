@@ -21,13 +21,8 @@
 -module(gen_model).
 -author("Marc Worrell <marc@worrell.nl").
 
--export([behaviour_info/1]).
+-include_lib("zotonic.hrl").
 
-behaviour_info(callbacks) ->
-    [
-        {m_find_value, 3},
-        {m_value, 2},
-        {m_to_list, 2}
-     ];
-behaviour_info(_Other) ->
-    undefined.
+-callback m_find_value(Value :: term(), #m{}, Context :: #context{}) -> term().
+-callback m_value(Model :: #m{}, Context :: #context{}) -> term().
+-callback m_to_list(Model :: #m{}, Context :: #context{}) -> list().

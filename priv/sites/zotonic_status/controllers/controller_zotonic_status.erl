@@ -27,7 +27,7 @@
 	updater/2
 ]).
 
--include_lib("include/zotonic.hrl").
+-include_lib("zotonic.hrl").
 
 
 charsets_provided(Context) ->
@@ -132,6 +132,7 @@ start_stream(SitesStatus, Context) ->
 
 
 % @todo Instead of polling we should observe the system wide notifications (that will be implemented)
+-spec updater(any(), z:context()) -> z:context().
 updater(SitesStatus, Context) ->
     Context1 = z_auth:logon_from_session(Context),
     timer:sleep(1000),
@@ -146,6 +147,7 @@ updater(SitesStatus, Context) ->
     end.
 
 
+-spec render_update(list(), z:context()) -> z:context().
 render_update(SitesStatus, Context) ->
     Vars = [
         {has_user, z_acl:user(Context)},

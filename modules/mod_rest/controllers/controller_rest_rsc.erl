@@ -88,7 +88,7 @@ content_types_provided(Context) ->
         <<"bert">> -> [ {<<"application/x-bert">>, get_bert} ];
         <<"json">> -> [ {<<"application/json">>, get_json} ];
         _ ->
-            [ 
+            [
                 {<<"application/json">>, get_json},
                 {<<"application/x-bert">>, get_bert}
             ]
@@ -113,8 +113,9 @@ charsets_provided(Context) ->
 
 delete_resource(Context) ->
     {ok, Id} = get_id(Context),
-    case m_rsc:delete(Id, Context) of
-        {ok, _} -> {true, Context};
+    try m_rsc:delete(Id, Context) of
+        {ok, _} -> {true, Context}
+    catch
         {error, _} -> {false, Context}
     end.
 

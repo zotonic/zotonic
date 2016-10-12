@@ -112,11 +112,19 @@ event(#postback{message={delete_all, Args}}, Context) ->
                     z_render:growl(?__("Sorry, you are not allowed to delete this.", Context), Context)
             end;
         false ->
-            z_render:wire({alert, [{message, ?__("Delete is canceled, there are users in the user groups.", Context)}]}, Context)
+            z_render:wire(
+                {alert, [
+                    {message, ?__("Delete is canceled, there are users in the user groups.", Context)}
+                ]},
+                Context
+            )
     end.
 
+-spec ug_delete(list(m_rsc:resource_id()), z:context()) -> any().
 ug_delete(Ids, Context) ->
-    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    z_session_page:add_script(
+        z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)
+    ),
     UGUserIds = in_user_groups(Ids, Context),
     Total = lists:sum([length(UIds) || {_, UIds} <- UGUserIds]),
     case unlink_all(UGUserIds, 0, Total, Context) of
@@ -136,6 +144,7 @@ ug_delete(Ids, Context) ->
 
     end.
 
+-spec ug_move_and_delete([pos_integer()], m_rsc:resource_id(), #context{}) -> ok.
 ug_move_and_delete(Ids, ToGroupId, Context) ->
     z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
     UGUserIds = in_user_groups(Ids, Context),

@@ -90,6 +90,7 @@ terminate(_Reason, _State) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
+-spec do_convert(file:filename_all(), #state{}) -> ok.
 do_convert(QueuePath, State) ->
     Context = z_context:depickle(State#state.pickled_context),
     Upload = State#state.upload,
@@ -100,8 +101,9 @@ do_convert(QueuePath, State) ->
             lager:warning("ffmpeg conversion error on ~p: ~p", [State#state.id, Error]),
             insert_broken(State)
     end,
-    mod_signal:emit({medium_update, [{id,State#state.id}]}, Context).
+    mod_signal:emit({medium_update, [{id, State#state.id}]}, Context).
 
+-spec insert_movie(file:filename_all(), #state{}) -> {ok, m_rsc:resource_id()} | {error, atom()}.
 insert_movie(Filename, State) ->
     Context = z_context:depickle(State#state.pickled_context),
     case is_current_upload(State, Context) of
@@ -166,6 +168,8 @@ video_convert(QueuePath, Mime, Context) ->
         " -preset medium "
         " -metadata:s:v:0 rotate=0 ").
 
+-spec video_convert_1(file:filename(), integer(), string(), z:context()) ->
+    {ok, file:filename_all()} | term().
 video_convert_1(QueuePath, Orientation, _Mime, Context) ->
     Cmdline = case m_config:get_value(mod_video, ffmpeg_cmdline, Context) of
                   undefined -> ?CMDLINE;

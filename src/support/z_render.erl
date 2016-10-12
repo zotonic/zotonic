@@ -259,6 +259,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
 %%% AJAX UPDATES %%%
 
 %% @doc Set the contents of an element to the the html fragment
+-spec update(string(), #render{} | string(), z:context()) -> z:context().
 update(TargetId, Html, Context) ->
     update_selector(css_selector(TargetId), Html, Context).
 
@@ -556,6 +557,7 @@ make_validation_postback(Validator, Args, Context) ->
 
 %% Add to the queue of wired actions. These will be rendered in get_script().
 
+-spec wire(tuple() | [tuple()], z:context()) -> z:context().
 wire(Actions, Context) ->
     wire(<<>>, <<>>, Actions, Context).
 

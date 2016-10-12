@@ -88,7 +88,7 @@
 -compile([{parse_transform, lager_transform}]).
 
 -type table_name() :: atom() | string().
--type parameters() :: list(tuple() | atom() | string()).
+-type parameters() :: list(tuple() | atom() | string() | binary() | integer()).
 -type sql() :: string() | iodata().
 -type props() :: proplists:proplist().
 -type id() :: pos_integer().
@@ -174,7 +174,7 @@ transaction_clear(Context) ->
 
 
 %% @doc Check if we have database connection
--spec has_connection(#context{}) -> boolean().
+-spec has_connection(z:context()) -> boolean().
 has_connection(Context) ->
     is_pid(erlang:whereis(z_context:db_pool(Context))).
 
@@ -198,7 +198,7 @@ return_connection(_C, _Context) ->
 
 %% @doc Apply function F with a connection as parameter. Make sure the
 %% connection is returned after usage.
--spec with_connection(fun(), #context{}) -> any().
+-spec with_connection(fun(), z:context()) -> any().
 with_connection(F, Context) ->
     with_connection(F, get_connection(Context), Context).
 
@@ -215,11 +215,11 @@ with_connection(F, Connection, Context) when is_pid(Connection) ->
 end.
 
 
--spec assoc_row(string(), #context{}) -> list(tuple()).
+-spec assoc_row(string(), z:context()) -> list(tuple()).
 assoc_row(Sql, Context) ->
     assoc_row(Sql, [], Context).
 
--spec assoc_row(string(), list(tuple()), #context{}) -> list(tuple()).
+-spec assoc_row(string(), parameters(), z:context()) -> proplists:proplist() | undefined.
 assoc_row(Sql, Parameters, Context) ->
     case assoc(Sql, Parameters, Context) of
         [Row|_] -> Row;
@@ -237,7 +237,7 @@ assoc_props_row(Sql, Parameters, Context) ->
 
 
 %% @doc Return property lists of the results of a query on the database in the Context
--spec assoc(string(), #context{}) -> list().
+-spec assoc(sql(), z:context()) -> list().
 assoc(Sql, Context) ->
     assoc(Sql, [], Context).
 
@@ -312,7 +312,7 @@ q1(Sql, Parameters, #context{} = Context) ->
 q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q1(Sql, [], Context, Timeout).
 
--spec q1(string(), parameters(), #context{}, pos_integer()) -> term() | undefined.
+-spec q1(sql(), parameters(), #context{}, pos_integer()) -> term() | undefined.
 q1(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> undefined;
@@ -359,7 +359,7 @@ equery(Sql, Parameters, #context{} = Context) ->
 equery(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     equery(Sql, [], Context, Timeout).
 
--spec equery(sql(), parameters(), #context{}, integer()) -> any().
+-spec equery(sql(), parameters(), z:context(), integer()) -> any().
 equery(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
            (C) ->
@@ -370,7 +370,7 @@ equery(Sql, Parameters, Context, Timeout) ->
 
 
 %% @doc Insert a new row in a table, use only default values.
--spec insert(table_name(), #context{}) -> boolean().
+-spec insert(table_name(), z:context()) -> {ok, pos_integer()}.
 insert(Table, Context) when is_atom(Table) ->
     insert(atom_to_list(Table), Context);
 insert(Table, Context) ->
@@ -383,9 +383,10 @@ insert(Table, Context) ->
       Context).
 
 
-%% @doc Insert a row, setting the fields to the props.  Unknown columns are serialized in the props column.
-%% When the table has an 'id' column then the new id is returned.
--spec insert(table_name(), props(), #context{}) -> boolean().
+%% @doc Insert a row, setting the fields to the props. Unknown columns are
+%% serialized in the props column. When the table has an 'id' column then the
+%% new id is returned.
+-spec insert(table_name(), props(), #context{}) -> {ok, pos_integer()}.
 insert(Table, [], Context) ->
     insert(Table, Context);
 insert(Table, Props, Context) when is_atom(Table) ->
@@ -431,7 +432,7 @@ insert(Table, Props, Context) ->
 
 
 %% @doc Update a row in a table, merging the props list with any new props values
--spec update(table_name(), id(), parameters(), #context{}) -> {ok, integer()}.
+-spec update(table_name(), id(), parameters(), #context{}) -> {ok, pos_integer()}.
 update(Table, Id, Parameters, Context) when is_atom(Table) ->
     update(atom_to_list(Table), Id, Parameters, Context);
 update(Table, Id, Parameters, Context) ->
@@ -493,7 +494,7 @@ delete(Table, Id, Context) ->
 
 %% @doc Read a row from a table, the row must have a column with the name 'id'.
 %% The props column contents is merged with the other properties returned.
-%% @spec select(Table, Id, Context) -> {ok, Row}
+-spec select(table_name(), any(), z:context()) -> {ok, Row :: proplists:proplist()}.
 select(Table, Id, Context) when is_atom(Table) ->
     select(atom_to_list(Table), Id, Context);
 select(Table, Id, Context) ->
@@ -762,7 +763,7 @@ create_schema(_Site, Connection, Schema) ->
     end.
 
 %% @doc Check the information schema if a certain table exists in the context database.
--spec table_exists(table_name(), #context{}) -> boolean().
+-spec table_exists(table_name(), z:context()) -> boolean().
 table_exists(Table, Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
@@ -779,12 +780,12 @@ table_exists(Table, Context) ->
 
 
 %% @doc Make sure that a table is dropped, only when the table exists
--spec drop_table(table_name(), #context{}) -> ok.
+-spec drop_table(table_name(), z:context()) -> ok.
 drop_table(Name, Context) when is_atom(Name) ->
     drop_table(atom_to_list(Name), Context);
 drop_table(Name, Context) ->
     case table_exists(Name, Context) of
-        true -> q("drop table \""++Name++"\"", Context), ok;
+        true -> q("drop table \"" ++ Name ++ "\"", Context), ok;
         false -> ok
     end.
 
@@ -792,13 +793,14 @@ drop_table(Name, Context) ->
 %% @doc Ensure that a table with the given columns exists, alter any existing table
 %% to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
 %% when creating the table.
--spec create_table(table_name(), list(), #context{}) -> ok.
+-spec create_table(table_name(), list(), z:context()) -> ok.
 create_table(Table, Cols, Context) when is_atom(Table)->
     create_table(atom_to_list(Table), Cols, Context);
 create_table(Table, Cols, Context) ->
     assert_table_name(Table),
     ColsSQL = ensure_table_create_cols(Cols, []),
-    z_db:q("CREATE TABLE \""++Table++"\" ("++string:join(ColsSQL, ",") ++ table_create_primary_key(Cols) ++ ")", Context),
+    z_db:q("CREATE TABLE \""++Table++"\" ("++string:join(ColsSQL, ",")
+        ++ table_create_primary_key(Cols) ++ ")", Context),
     ok.
 
 
@@ -844,9 +846,7 @@ assert_table_name1([H|T]) when (H >= $a andalso H =< $z) orelse (H >= $0 andalso
 
 
 %% @doc Merge the contents of the props column into the result rows
--spec merge_props(list() | undefined) -> list() | undefined.
-merge_props(undefined) ->
-    undefined;
+-spec merge_props([proplists:proplist()]) -> list() | undefined.
 merge_props(List) ->
     merge_props(List, []).
 
@@ -863,7 +863,7 @@ merge_props([R|Rest], Acc) ->
     end.
 
 
--spec assoc1(atom(), #context{}, string(), [tuple()], pos_integer()) -> {ok, [[tuple()]]}.
+-spec assoc1(atom(), z:context(), sql(), parameters(), pos_integer()) -> {ok, [proplists:proplist()]}.
 assoc1(DbDriver, C, Sql, Parameters, Timeout) ->
     case DbDriver:equery(C, Sql, Parameters, Timeout) of
         {ok, Columns, Rows} ->

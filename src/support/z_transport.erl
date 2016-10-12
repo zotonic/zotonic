@@ -59,6 +59,7 @@
 %%% ---------------------------------------------------------------------------------------
 
 %% @doc Convenience function to send data to the current page
+-spec page(atom(), proplists:proplist(), z:context()) -> z:context().
 page(Delegate, Data, Context) ->
     page(Delegate, Data, [], Context).
 

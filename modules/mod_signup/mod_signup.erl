@@ -120,10 +120,8 @@ check_signup(Props, SignupProps, Context) ->
             UserId = proplists:get_value(user_id, SignupProps),
             case check_identity(UserId, SignupProps1, Context) of
                 ok ->
-                    case check_props(Props1, Context) of
-                        ok -> {ok, Props1, SignupProps1};
-                        {error, _} = Error -> Error
-                    end;
+                    ok = check_props(Props1, Context),
+                    {ok, Props1, SignupProps1};
                 {error, _} = Error ->
                     Error
             end;

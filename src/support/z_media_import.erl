@@ -87,7 +87,8 @@ url_inspect(Url, _Context) ->
 
 
 %% @doc Find possible rsc/medium mappings for the url or fetched url metadata
--spec url_import_props(#url_metadata{} | string() | binary(), #context{}) -> {ok, list(#media_import_props{})} | {error, term()}.
+-spec url_import_props(#url_metadata{} | string() | binary(), #context{}) ->
+    {ok, list(#media_import_props{})} | {error, term()}.
 url_import_props(#url_metadata{} = MD, Context) ->
     Url = z_url_metadata:p(url, MD),
     MI = #media_import{

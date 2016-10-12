@@ -129,14 +129,10 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
                 {ip_address, IPAddress},
                 {user_agent, UserAgent}
             ],
-            case z_db:insert(comment, Props, Context) of
-                {ok, CommentId} = Result ->
-                    z_depcache:flush({comment_rsc, RscId}, Context),
-                    z_notifier:notify(#comment_insert{comment_id=CommentId, id=RscId}, Context),
-                    Result;
-                {error, _} = Error ->
-                    Error
-            end;
+            {ok, CommentId} = Result = z_db:insert(comment, Props, Context),
+            z_depcache:flush({comment_rsc, RscId}, Context),
+            z_notifier:notify(#comment_insert{comment_id = CommentId, id = RscId}, Context),
+            Result;
         false ->
             {error, eacces}
     end.

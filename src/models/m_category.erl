@@ -408,10 +408,7 @@ get_range(Id, Context) ->
             {1,0}; % empty range
         C when is_list(C) ->
             {proplists:get_value(left, C),
-             proplists:get_value(right, C)};
-        Other ->
-            io:format("~n~n~p~n~n", [Other]),
-            1 = Other
+             proplists:get_value(right, C)}
     end.
 
 get_range_by_name(Name, Context) ->
@@ -563,7 +560,7 @@ name_to_id(Name, Context) when is_atom(Name); is_binary(Name); is_list(Name) ->
     end.
 
 %% @doc Map a category name to an id, be flexible with the input
--spec name_to_id_check(binary()|list()|integer()|{integer()}, #context{}) -> integer().
+-spec name_to_id_check(atom()|binary()|list()|integer()|{integer()}, #context{}) -> integer().
 name_to_id_check(Name, Context) ->
     {ok, Id} = name_to_id(Name, Context),
     Id.
@@ -669,7 +666,7 @@ set_tree_dirty(Flag, Context) when Flag =:= true; Flag =:= false ->
 
 %% @doc Ensure that all categories are present in the $category hierarchy.
 %%      This appends any newly found categories to the end of the category tree.
--spec ensure_hierarchy(#context{}) -> ok | {error, renumbering}.
+-spec ensure_hierarchy(z:context()) -> ok | {error, renumbering}.
 ensure_hierarchy(Context) ->
     case is_tree_dirty(Context) of
         false ->
@@ -679,9 +676,7 @@ ensure_hierarchy(Context) ->
                     lager:warning("Ensure category found ~p new categories.", [N]),
                     flush(Context);
                 {ok, 0} ->
-                    ok;
-                {error, _} = Error ->
-                    Error
+                    ok
             end;
         true ->
             lager:warning("Ensure category requested while renumbering."),

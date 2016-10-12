@@ -79,7 +79,6 @@
     prop_replace/3,
     props_merge/2,
     randomize/1,
-    randomize/2,
     replace1/3,
     split/2,
     split_in/2,
@@ -87,8 +86,7 @@
     now/0,
     now_msec/0,
     flush_message/1,
-    ensure_existing_module/1,
-    generate_username/2
+    ensure_existing_module/1
 ]).
 
 
@@ -618,22 +616,17 @@ randomize(List) ->
     {_, D1} = lists:unzip(lists:keysort(1, D)),
     D1.
 
-%% @doc Take randomly max N elements from a list.
--spec randomize(integer(), list()) -> list().
-randomize(N, List) ->
-    split(N, randomize(List)).
-
 %% @doc Take max N elements from a list.
--spec split(integer(), list()) -> list().
+-spec split(integer(), list()) -> {list(), list()}.
 split(N, L) ->
-    split(N,L,[]).
+    split(N, L, []).
 
 split(_N, [], Acc) ->
     {lists:reverse(Acc), []};
 split(N, Rest, Acc) when N =< 0 ->
     {lists:reverse(Acc), Rest};
-split(N, [A|Rest], Acc) ->
-    split(N-1, Rest, [A|Acc]).
+split(N, [A | Rest], Acc) ->
+    split(N - 1, Rest, [A | Acc]).
 
 
 split_in(L, N) when N =< 1 ->
@@ -845,29 +838,4 @@ flush_message(Msg) ->
         Msg -> flush_message(Msg)
     after 0 ->
             ok
-    end.
-
-
-%% @doc Generate a unique user name from a proplist.
-generate_username(Props, Context) ->
-    case proplists:get_value(title, Props) of
-        [] ->
-            First = proplists:get_value(name_first, Props),
-            Last = proplists:get_value(name_surname, Props),
-            generate_username1(z_string:nospaces(z_string:to_lower(First) ++ "." ++ z_string:to_lower(Last)), Context);
-        Title ->
-            generate_username1(z_string:nospaces(z_string:to_lower(Title)), Context)
-    end.
-
-generate_username1(Name, Context) ->
-    case m_identity:lookup_by_username(Name, Context) of
-        undefined -> Name;
-        _ -> generate_username2(Name, Context)
-    end.
-
-generate_username2(Name, Context) ->
-    N = integer_to_list(z_ids:number(999)),
-    case m_identity:lookup_by_username(Name++N, Context) of
-        undefined -> Name;
-        _ -> generate_username2(Name, Context)
     end.

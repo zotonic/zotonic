@@ -278,7 +278,7 @@ event(#submit{message={language_add, _Args}}, Context) ->
         true ->
             language_add(
                     z_string:trim(z_context:get_q(<<"code">>, Context)),
-                    z_context:get_q(<<"is_enabled">>, Context),
+                    z_convert:to_bool(z_context:get_q(<<"is_enabled">>, Context)),
                     Context),
             z_render:wire({reload, []}, Context);
         false ->
@@ -311,7 +311,7 @@ event(#postback{message={language_enable, Args}}, Context) ->
 
 %% @doc Toggles the state of the 'rewrite URL' setting. Reloads the page to reflect the new setting.
 event(#postback{message={toggle_url_rewrite, _Args}}, Context) ->
-    Value = z_context:get_q(<<"triggervalue">>, Context),
+    Value = z_convert:to_bool(z_context:get_q(<<"triggervalue">>, Context)),
     set_language_url_rewrite(Value, Context),
     reload_page(Context);
 
@@ -344,29 +344,18 @@ event(#postback{message={translation_reload, _Args}}, Context) ->
 
 %% @doc Strip the language code from the location (if the language code is recognized).
 %%      For instance: `<<"/nl-nl/admin/translation">>' becomes `<<"/admin/translation">>'
-url_strip_language([$/,A,B,$/ | Rest] = Url) ->
-    url_strip_language1(Url, [A,B], Rest);
-url_strip_language([$/,A,B,$-,C,D,$/ | Rest] = Url) ->
-    url_strip_language1(Url, [A,B,"-",C,D], Rest);
-url_strip_language(<<$/,A,B,$/, Rest/binary>> = Url) ->
-    url_strip_language1(Url, [A,B], Rest);
-url_strip_language(<<$/,A,B,$-,C,D,$/, Rest/binary>> = Url) ->
-    url_strip_language1(Url, [A,B,<<"-">>,C,D], Rest);
+url_strip_language(<<$/, A, B, $/, Rest/binary>> = Url) ->
+    url_strip_language1(Url, [A, B], Rest);
+url_strip_language(<<$/, A, B, $-, C, D, $/, Rest/binary>> = Url) ->
+    url_strip_language1(Url, [A, B, <<"-">>, C, D], Rest);
 url_strip_language(Url) ->
     Url.
 
-url_strip_language1(Url, LanguageCode, Rest) when is_list(Url) ->
-    case z_language:is_valid(LanguageCode) of
-        true -> [$/|Rest];
-        false -> Url
-    end;
 url_strip_language1(Url, LanguageCode, Rest) when is_binary(Url) ->
     case z_language:is_valid(LanguageCode) of
         true -> <<$/, Rest/binary>>;
         false -> Url
-    end;
-url_strip_language1(Url, _LanguageCode, _Rest) ->
-    Url.
+    end.
 
 
 %% @doc Set the language, as selected by the user. Persist this choice.
@@ -437,7 +426,7 @@ valid_config_language(Code, Context) ->
 
 
 %% @doc Add a language to the i18n configuration
--spec language_add(atom(), boolean(), #context{}) -> #context{}.
+-spec language_add(atom() | binary(), boolean(), #context{}) -> #context{}.
 language_add(NewLanguageCode, IsEnabled, Context) ->
     NewCode = z_convert:to_atom(NewLanguageCode),
     NewCodeBin = z_convert:to_binary(NewCode),
@@ -449,7 +438,7 @@ language_add(NewLanguageCode, IsEnabled, Context) ->
         true ->
             Props = proplists:get_value(NewCodeBin, Languages),
             Props1 = [
-                {is_enabled, z_convert:to_bool(IsEnabled)},
+                {is_enabled, IsEnabled},
                 {fallback, proplists:get_value(language, Props)}
             | Props],
             ConfigLanguages = language_config(Context),
@@ -471,7 +460,7 @@ language_delete(LanguageCode, Context) ->
     end.
 
 %% @doc Remove a language from the i18n configuration
--spec remove_from_config(atom(), #context{}) -> undefined.
+-spec remove_from_config(atom(), z:context()) -> ok.
 remove_from_config(LanguageCode, Context) ->
     ConfigLanguages = language_config(Context),
     ConfigLanguages1 = proplists:delete(LanguageCode, ConfigLanguages),
@@ -494,9 +483,9 @@ language_enable(Code, IsEnabled, Context) ->
 
 
 %% @doc Set/reset the state of the 'rewrite URL' setting.
--spec set_language_url_rewrite(boolean(), #context{}) -> undefined.
+-spec set_language_url_rewrite(boolean(), #context{}) -> #context{}.
 set_language_url_rewrite(Value, Context) ->
-    m_config:set_value("mod_translation", "rewrite_url", Value, Context),
+    m_config:set_value(mod_translation, rewrite_url, Value, Context),
     reload_page(Context).
 
 

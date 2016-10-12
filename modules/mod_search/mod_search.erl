@@ -384,7 +384,7 @@ search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             case TsQuery of
-                A when A == undefined orelse A == [] ->
+                A when A == <<>> ->
                     #search_result{};
                 _ ->
                     #search_sql{
@@ -529,11 +529,9 @@ search(_, _, _) ->
 %% @doc Expand a search string like "hello wor" to a PostgreSQL tsquery string.
 %%      If the search string ends in a word character then a wildcard is appended
 %%      to the last search term.
--spec to_tsquery(binary()|string(), #context{}) -> binary().
+-spec to_tsquery(binary(), #context{}) -> binary().
 to_tsquery(undefined, _Context) ->
     <<>>;
-to_tsquery(Text, Context) when is_list(Text) ->
-    to_tsquery(z_convert:to_binary(Text), Context);
 to_tsquery(<<>>, _Context) ->
     <<>>;
 to_tsquery(Text, Context) when is_binary(Text) ->

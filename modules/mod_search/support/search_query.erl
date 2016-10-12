@@ -707,6 +707,7 @@ assure_categories(Name, Context) ->
                 Cats1).
 
 %% Flatten eventual lists of categories
+-spec assure_cat_flatten(any() | list()) -> list().
 assure_cat_flatten(Name) when not is_list(Name) ->
     assure_cat_flatten([Name]);
 assure_cat_flatten(Names) when is_list(Names) ->

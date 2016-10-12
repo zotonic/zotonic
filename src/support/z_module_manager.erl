@@ -744,6 +744,7 @@ is_module(Module) ->
 
 %% @doc Try to add and start the child, do not crash on missing modules. Run as a separate process.
 %% @todo Add some preflight tests
+-spec start_child(pid(), atom(), any(), any(), any(), any()) -> {ok, pid()} | {error, string()}.
 start_child(ManagerPid, Module, ModuleSup, Spec, Exports, Context) ->
     StartPid = spawn_link(
                  fun() ->

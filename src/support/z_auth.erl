@@ -46,7 +46,7 @@
 
 
 %% @doc Check if the visitor has been authenticated. Assumes a completely initalized context.
-%% @spec is_auth(#context{}) -> bool()
+-spec is_auth(z:context()) -> boolean().
 is_auth(#context{user_id=undefined}) ->
     false;
 is_auth(_) ->
