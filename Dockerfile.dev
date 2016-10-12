@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM zotonic/erlang:18.3
 
 COPY docker/zotonic.config /etc/zotonic/zotonic.config
 COPY docker/erlang.config.sed /opt/zotonic/docker/erlang.config.sed
@@ -8,9 +8,8 @@ WORKDIR /opt/zotonic
 
 RUN sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.config
 
-RUN apk add --no-cache ca-certificates bash curl make gcc musl-dev g++ bsd-compat-headers git imagemagick inotify-tools wget \
-    && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ \
-        erlang erlang-inets erlang-compiler erlang-crypto erlang-mnesia erlang-ssl erlang-stdlib erlang-public-key erlang-tools erlang-dev erlang-asn1 erlang-syntax-tools erlang-eunit erlang-parsetools erlang-snmp erlang-sasl erlang-xmerl erlang-erl-interface
+RUN apk add --no-cache ca-certificates bash curl make gcc musl-dev g++ bsd-compat-headers gettext git imagemagick inotify-tools wget \
+    && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ openssl-dev
 
 VOLUME /opt/zotonic
 VOLUME /etc/zotonic

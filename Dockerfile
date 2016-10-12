@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM zotonic/erlang:18.3
 
 ADD . /opt/zotonic
 WORKDIR /opt/zotonic
@@ -16,7 +16,6 @@ RUN apk add --no-cache --virtual build-deps $BUILD_APKS \
     && apk add --no-cache bash bsd-compat-headers file imagemagick \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ dumb-init \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ gosu \
-       erlang erlang-inets erlang-compiler erlang-crypto erlang-mnesia erlang-ssl erlang-stdlib erlang-public-key erlang-tools erlang-dev erlang-asn1 erlang-syntax-tools erlang-eunit erlang-parsetools erlang-snmp erlang-sasl erlang-xmerl erlang-erl-interface \
     && DEBUG=1 make \
     && apk del build-deps
 
