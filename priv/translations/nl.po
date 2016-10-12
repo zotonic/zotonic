@@ -1140,7 +1140,7 @@ msgstr "Geen gekoppelde afbeeldingen."
 msgid "No features are enabled for this meta-resource."
 msgstr "Deze meta-resource bevat geen geactiveerde features."
 
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:86
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:85
 msgid "No items"
 msgstr "Geen items"
 
@@ -4501,7 +4501,6 @@ msgid "API Key can be found on"
 msgstr ""
 
 #: modules/mod_oembed/templates/_admin_status.tpl:5
-#, fuzzy
 msgid ""
 "Attempt to fix embedded videos for which OEmbed embedding has failed "
 "previously."
@@ -4827,6 +4826,14 @@ msgstr ""
 msgid "Available sub-languages"
 msgstr ""
 
+#: modules/mod_translation/mod_translation.erl:328
+msgid ""
+"Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
+"en/latest/developer-guide/translation.html\">gettext is not installed</a>."
+msgstr ""
+"Kan de vertaalbestanden niet genereren omdat <a href=\"http://docs.zotonic.com/"
+"en/latest/developer-guide/translation.html\">gettext niet is geïnstalleerd</a>."
+
 #: modules/mod_translation/templates/admin_translation.tpl:26
 msgid "Code"
 msgstr ""
@@ -4965,7 +4972,7 @@ msgid ""
 "recompiled."
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:333
+#: modules/mod_translation/mod_translation.erl:339
 msgid "Reloading all .po files in the background."
 msgstr "Alle .po bestanden worden opnieuw geladen in een achtergrondproces."
 
@@ -4984,8 +4991,14 @@ msgstr ""
 #: modules/mod_translation/templates/admin_translation.tpl:185
 msgid ""
 "Scan all templates for translation tags and generate .pot files that can be "
-"used for translating the templates."
+"used for translating the templates. The <a href=\"http://docs.zotonic.com/en/"
+"latest/developer-guide/translation.html\">gettext package must be installed</"
+"a>."
 msgstr ""
+"Vind alle vertaaltags in templates en gerereer .pot-bestanden die je kunt "
+"gebruiken om de templates te vertalen. Het <a href=\"http://docs.zotonic.com/"
+"en/latest/developer-guide/translation.html\">gettext-pakket moet zijn "
+"geïnstalleerd</a>."
 
 #: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:40./modules/mod_translation/templates/admin_translation.tpl:28
 msgid "Script"
@@ -5015,7 +5028,7 @@ msgstr "Toon per module hoeveel van de vertalingen zijn ingevoerd."
 msgid "Show the language in the URL"
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:479
+#: modules/mod_translation/mod_translation.erl:485
 msgid "Sorry, you can't disable default language."
 msgstr ""
 
@@ -5023,15 +5036,15 @@ msgstr ""
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
 
-#: modules/mod_translation/mod_translation.erl:335
+#: modules/mod_translation/mod_translation.erl:341
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Sorry, je hebt geen toestemming om talen opnieuw te laden."
 
-#: modules/mod_translation/mod_translation.erl:325
+#: modules/mod_translation/mod_translation.erl:331
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Sorry, je hebt geen toestemming om talen te scannen."
 
-#: modules/mod_translation/mod_translation.erl:410
+#: modules/mod_translation/mod_translation.erl:416
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
 
@@ -5039,7 +5052,7 @@ msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
 msgid "Spanish"
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:323
+#: modules/mod_translation/mod_translation.erl:325
 msgid "Started building the .pot files. This may take a while..."
 msgstr ""
 "Gestart met het genereren van .pot bestanden. Dit kan enige tijd duren..."
@@ -5071,7 +5084,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr "Vertaal deze pagina in andere talen."
 
-#: modules/mod_translation/templates/admin_translation.tpl:3./modules/mod_translation/mod_translation.erl:622
+#: modules/mod_translation/templates/admin_translation.tpl:3./modules/mod_translation/mod_translation.erl:628
 msgid "Translation"
 msgstr "Vertalingen"
 

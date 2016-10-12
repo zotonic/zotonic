@@ -319,8 +319,14 @@ event(#postback{message={toggle_url_rewrite, _Args}}, Context) ->
 event(#postback{message={translation_generate, _Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
-            spawn(fun() -> generate(Context) end),
-            z_render:growl(?__(<<"Started building the .pot files. This may take a while...">>, Context), Context);
+            case gettext_installed() of
+                true ->
+                    spawn(fun() -> generate(Context) end),
+                    z_render:growl(?__(<<"Started building the .pot files. This may take a while...">>, Context), Context);
+                false ->
+                    ?zError("Cannot generate translation files because gettext is not installed. See http://docs.zotonic.com/en/latest/developer-guide/translation.html.", Context),
+                    z_render:growl_error(?__(<<"Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>.">>, Context), Context)
+            end;
         false ->
             z_render:growl_error(?__(<<"Sorry, you don't have permission to scan for translations.">>, Context), Context)
     end;
@@ -625,3 +631,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
 
      |Acc].
 
+%% @doc Are the gettext tools available?
+-spec gettext_installed() -> boolean().
+gettext_installed() ->
+    os:find_executable("msgcat") =/= false andalso os:find_executable("msgmerge") =/= false.
