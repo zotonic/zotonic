@@ -35,7 +35,7 @@ Params:
 %}
 {% endwith %}
 
-{% if is_editable %}
+{% if m.acl.is_allowed.link[id] %}
   <a id="{{ #connect.predicate }}" href="#connect" class="{{ button_class|default:"" }}">{{ button_label|default:_"+ add" }}</a>
     {% wire
        id=#connect.predicate
