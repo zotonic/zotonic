@@ -49,8 +49,8 @@ forbidden(ReqData, Context) ->
         true ->
             case z_notifier:first(#export_resource_visible{dispatch=Dispatch}, Context2) of
                 undefined -> ?WM_REPLY(false, Context2);
-                {ok, true} -> ?WM_REPLY(false, Context2);
-                {ok, false} -> ?WM_REPLY(true, Context2)
+                true -> ?WM_REPLY(false, Context2);
+                false -> ?WM_REPLY(true, Context2)
             end;
         false ->
             ?WM_REPLY(true, Context2)
