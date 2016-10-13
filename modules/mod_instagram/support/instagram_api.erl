@@ -38,8 +38,8 @@
 subscriptions(Context) ->
     {ConsumerKey, ConsumerSecret, _Scope} = mod_instagram:get_config(Context),
     Url = "https://api.instagram.com/v1/subscriptions"
-            ++ "?client_secret=" ++ z_utils:url_encode(ConsumerSecret)
-            ++ "&client_id=" ++ z_utils:url_encode(ConsumerKey),
+            ++ "?client_secret=" ++ z_url:url_encode(ConsumerSecret)
+            ++ "&client_id=" ++ z_url:url_encode(ConsumerKey),
     case httpc:request(get, {Url, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_Version, 200, _OK}, _Hs, Data}} ->
             {struct, MD} = mochijson:binary_decode(Data),
@@ -89,17 +89,17 @@ subscribe_tag(Tag, Context) ->
 unsubscribe(SubscriptionId, Context) ->
     {ConsumerKey, ConsumerSecret, _Scope} = mod_instagram:get_config(Context),
     Url = "https://api.instagram.com/v1/subscriptions"
-            ++ "?client_secret=" ++ z_utils:url_encode(ConsumerSecret)
-            ++ "&client_id=" ++ z_utils:url_encode(ConsumerKey)
-            ++ "&id=" ++ z_utils:url_encode(z_convert:to_binary(SubscriptionId)),
+            ++ "?client_secret=" ++ z_url:url_encode(ConsumerSecret)
+            ++ "&client_id=" ++ z_url:url_encode(ConsumerKey)
+            ++ "&id=" ++ z_url:url_encode(z_convert:to_binary(SubscriptionId)),
     httpc:request(delete, {Url, []}, httpc_http_options(), httpc_options()).
 
 %% @doc Delete al tag subscriptions
 unsubscribe_tags(Context) ->
     {ConsumerKey, ConsumerSecret, _Scope} = mod_instagram:get_config(Context),
     Url = "https://api.instagram.com/v1/subscriptions"
-            ++ "?client_secret=" ++ z_utils:url_encode(ConsumerSecret)
-            ++ "&client_id=" ++ z_utils:url_encode(ConsumerKey)
+            ++ "?client_secret=" ++ z_url:url_encode(ConsumerSecret)
+            ++ "&client_id=" ++ z_url:url_encode(ConsumerKey)
             ++ "&object=tag",
     httpc:request(delete, {Url, []}, httpc_http_options(), httpc_options()).
 
@@ -112,9 +112,9 @@ tagged(Tag, Context) ->
         AccessToken ->
             Url = iolist_to_binary([
                         "https://api.instagram.com/v1/tags/",
-                        z_utils:url_encode(Tag),
+                        z_url:url_encode(Tag),
                         "/media/recent",
-                        "?access_token=", z_utils:url_encode(AccessToken)
+                        "?access_token=", z_url:url_encode(AccessToken)
                     ]),
             tagged_1(httpc:request(get, {z_convert:to_list(Url), []}, httpc_http_options(), httpc_options()))
     end.

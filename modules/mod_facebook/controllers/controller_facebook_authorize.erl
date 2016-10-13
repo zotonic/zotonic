@@ -62,10 +62,10 @@ redirect_location(Context) ->
                             Context)),
     iolist_to_binary([
         <<"https://www.facebook.com/v2.0/dialog/oauth?client_id=">>,
-        z_utils:url_encode(AppId),
-        "&redirect_uri=", z_utils:url_encode(RedirectUrl),
+        z_url:url_encode(AppId),
+        "&redirect_uri=", z_url:url_encode(RedirectUrl),
         "&display=popup",
-        "&scope=", z_utils:url_encode(Scope)
+        "&scope=", z_url:url_encode(Scope)
     ]).
 
 save_args(Context) ->

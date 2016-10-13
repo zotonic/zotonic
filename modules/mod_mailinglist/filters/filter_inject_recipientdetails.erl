@@ -40,7 +40,7 @@ inject_recipientdetails(Body, Recipient, _Context) ->
                           [{email, proplists:get_value(email, Recipient)}]
                   end,
             Val1 = lists:filter(fun({_, V}) -> not(z_utils:is_empty(V)) end, Val),
-            Part = [$?, [ [z_utils:url_encode(z_convert:to_list(K)), $=, z_utils:url_encode(z_convert:to_list(V)), $\\, $&] || {K, V} <- Val1] ],
+            Part = [$?, [ [z_url:url_encode(z_convert:to_list(K)), $=, z_url:url_encode(z_convert:to_list(V)), $\\, $&] || {K, V} <- Val1] ],
             Part1 = lists:flatten(Part),
             Part2 = lists:reverse(tl(lists:reverse(Part1))),
             iolist_to_binary(re:replace(Body, "##\"", Part2 ++ "\"", [global]));

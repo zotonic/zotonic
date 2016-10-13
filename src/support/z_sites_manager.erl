@@ -401,8 +401,7 @@ parse_config(CfgFile) ->
     SitePath = filename:dirname(CfgFile),
     Site = z_convert:to_atom(filename:basename(SitePath)),
     ConfigFiles = [ CfgFile | config_d_files(SitePath) ],
-    % For 0.x sites, also add the deprecated {host, ...}.
-    parse_config(ConfigFiles, [{site,Site}, {host,Site}]).
+    parse_config(ConfigFiles, [{site, Site}]).
 
 %% @doc Parse configurations from multiple files, merging results. The last file wins.
 parse_config([], SiteConfig) ->

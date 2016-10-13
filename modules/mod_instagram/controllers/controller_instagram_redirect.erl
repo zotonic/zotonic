@@ -113,11 +113,11 @@ fetch_access_token(Code, Context) ->
     RedirectUrl = controller_instagram_authorize:redirect_uri(Context),
     InstagramUrl = "https://api.instagram.com/oauth/access_token",
     FormData = iolist_to_binary([
-            "client_id=", z_utils:url_encode(AppId),
-            "&client_secret=", z_utils:url_encode(AppSecret),
-            "&redirect_uri=", z_utils:url_encode(RedirectUrl),
+            "client_id=", z_url:url_encode(AppId),
+            "&client_secret=", z_url:url_encode(AppSecret),
+            "&redirect_uri=", z_url:url_encode(RedirectUrl),
             "&grant_type=authorization_code",
-            "&code=", z_utils:url_encode(Code)
+            "&code=", z_url:url_encode(Code)
         ]),
     case httpc:request(post,
                        {InstagramUrl, [], "application/x-www-form-urlencoded", FormData},
@@ -136,7 +136,7 @@ fetch_access_token(Code, Context) ->
 % Given the access token, fetch data about the user
 fetch_user_data(_AccessToken, UserData) ->
     {ok, UserData}.
-    % FacebookUrl = "https://graph.facebook.com/v2.0/me?access_token=" ++ z_utils:url_encode(AccessToken),
+    % FacebookUrl = "https://graph.facebook.com/v2.0/me?access_token=" ++ z_url:url_encode(AccessToken),
     % case httpc:request(FacebookUrl) of
     %     {ok, {{_, 200, _}, _Headers, Payload}} ->
     %         {struct, Props} = mochijson:binary_decode(Payload),
