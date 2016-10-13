@@ -37,8 +37,8 @@ forbidden(Context) ->
         true ->
             case z_notifier:first(#export_resource_visible{dispatch=Dispatch}, Context2) of
                 undefined -> {false, Context2};
-                {ok, true} -> {false, Context2};
-                {ok, false} -> {true, Context2}
+                true -> {false, Context2};
+                false -> {true, Context2}
             end;
         false ->
             {true, Context2}
