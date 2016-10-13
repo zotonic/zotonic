@@ -120,7 +120,7 @@ when queueing the task::
     z_pivot_rsc:insert_task(
         external_api_client,
         update_external_rsc,
-        UniqueKey
-        [RscId]
+        UniqueKey,
+        [RscId],
         Context
     ).
