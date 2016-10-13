@@ -38,9 +38,9 @@
    {crash_log, "priv/log/crash.log"}
   ]},
 
- {ssl, 
+ {ssl,
   [
-%%% The number of maximum number of ssl sessions cached by the server. Increase if you 
+%%% The number of maximum number of ssl sessions cached by the server. Increase if you
 %%% of a lot of incoming connections.
    {session_cache_server_max, 20000},
 %%% The maximum time the client side information is stored in the cache (in seconds)
@@ -68,11 +68,7 @@
    %% {perf_log_dir, "priv/log/perf/"},
 
 %%% Location of wmtrace logs (defaults to "priv/wmtrace" if not specified).
-   {wmtrace_dir, "priv/log/wmtrace/"},
-
-%%% Which sendfile command to use: disable, yaws, erlang;
-%%% disabled by default because both erlang and yaws implementations are buggy
-   {use_sendfile, disable}
+   {wmtrace_dir, "priv/log/wmtrace/"}
 
   ]},
 
