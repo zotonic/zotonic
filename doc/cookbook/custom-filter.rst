@@ -30,7 +30,7 @@ The custom ``uniquesort`` filter is then available in your templates:
 
 .. code-block:: django
 
-    {% for thing in list_of_things|unique %}
+    {% for thing in list_of_things|uniquesort %}
         {{ thing }} is now sorted and unique!
     {% endfor %}
 
