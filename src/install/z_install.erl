@@ -582,14 +582,15 @@ edge_log_table() ->
         predicate character varying (80),
         object_id int not null,
         seq integer not null,
-        created timestamp with time zone NOT NULL default now(),
+        logged timestamp with time zone NOT NULL default now(),
+        created timestamp with time zone,
 
         CONSTRAINT edge_log_pkey PRIMARY KEY (id)
     )".
 
 edge_log_function() ->
     "
-    CREATE FUNCTION edge_update() RETURNS trigger AS $$
+    CREATE OR REPLACE FUNCTION edge_update() RETURNS trigger AS $$
     declare
         new_predicate character varying(80);
     begin
@@ -603,8 +604,8 @@ edge_log_function() ->
             values (tg_op, new.id, new.subject_id, new.object_id, new.predicate_id, new_predicate, new.seq);
         elseif (tg_op = 'DELETE') then
             select into new_predicate r.name from rsc r where r.id = old.predicate_id;
-            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq)
-            values (tg_op, old.id, old.subject_id, old.object_id, old.predicate_id, new_predicate, old.seq);
+            insert into edge_log (op, edge_id, subject_id, object_id, predicate_id, predicate, seq, created)
+            values (tg_op, old.id, old.subject_id, old.object_id, old.predicate_id, new_predicate, old.seq, old.created);
         end if;
         return null;
     end;
