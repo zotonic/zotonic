@@ -18,7 +18,7 @@
                   bert, dh_date, eiconv, exometer,
                   epgsql, depcache, z_stdlib,
                   cowboy, cowmachine,
-                  poolboy, sendfile,
+                  poolboy,
                   filezcache, s3filez,
                   template_compiler,
                   qdate, syslog,
