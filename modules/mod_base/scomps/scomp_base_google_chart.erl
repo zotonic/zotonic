@@ -67,7 +67,7 @@ render(Params, _Vars, Context) ->
             "grouped_vertical_bar" -> "bvg";
             "pie" -> "p";
             "pie3d" -> "p3";
-            OtherType -> z_utils:url_encode(OtherType)
+            OtherType -> z_url:url_encode(OtherType)
         end
     ],
 
@@ -76,7 +76,7 @@ render(Params, _Vars, Context) ->
                     undefined -> [];
                     []        -> [];
                     <<>>      -> <<>>;
-                    OtherTitle -> ["&chtt=", z_utils:url_encode(OtherTitle)]
+                    OtherTitle -> ["&chtt=", z_url:url_encode(OtherTitle)]
                 end,
 
     % Title Color and Font Size...
@@ -87,16 +87,16 @@ render(Params, _Vars, Context) ->
 
     % Grid...
     Grid = io_lib:format("&chg=~s,~s,~b,~b", [
-                z_utils:url_encode(z_convert:to_list(z_utils:coalesce([GridX, 0]))),
-                z_utils:url_encode(z_convert:to_list(z_utils:coalesce([GridY, 0]))),
+                z_url:url_encode(z_convert:to_list(z_utils:coalesce([GridX, 0]))),
+                z_url:url_encode(z_convert:to_list(z_utils:coalesce([GridY, 0]))),
                 GridLineLength,
                 GridBlankLength
             ]),
 
     % Background Colors...
     BGColors = io_lib:format("&chf=bg,s,~s|c,s,~s", [
-                z_utils:url_encode(z_convert:to_list(BGColor)),
-                z_utils:url_encode(z_convert:to_list(ChartColor))
+                z_url:url_encode(z_convert:to_list(BGColor)),
+                z_url:url_encode(z_convert:to_list(ChartColor))
             ]),
 
     % Legend Location...
@@ -121,9 +121,9 @@ render(Params, _Vars, Context) ->
                 AxesScaling0   =             [X || [_, X, _] <- ProcessedAxes],
                 AxesColors0    = string:join([X || [_, _, X] <- ProcessedAxes], "|"),
 
-                AxesPositions = "&chxt=" ++ z_utils:url_encode(AxesPositions0),
+                AxesPositions = "&chxt=" ++ z_url:url_encode(AxesPositions0),
                 AxesScaling   = AxesScaling0,  % Already urlencode in process_axis/2
-                AxesColors    = "&chxs=" ++ z_utils:url_encode(AxesColors0),
+                AxesColors    = "&chxs=" ++ z_url:url_encode(AxesColors0),
                 AxesPositions ++ AxesScaling ++ AxesColors
         end,
 
@@ -141,11 +141,11 @@ render(Params, _Vars, Context) ->
                     DataStyles0  = string:join([X || [_, _, _, X, _, _] <- ProcessedData], "|"),
                     DataValues0  = string:join([X || [_, _, _, _, X, _] <- ProcessedData], "|"),
 
-                    DataColors  = "&chco="  ++ z_utils:url_encode(DataColors0),
-                    DataLegends = "&chdl="  ++ z_utils:url_encode(DataLegends0),
-                    DataScales  = "&chds="  ++ z_utils:url_encode(DataScales0),
-                    DataStyles  = "&chls="  ++ z_utils:url_encode(DataStyles0),
-                    DataValues  = "&chd=t:" ++ z_utils:url_encode(DataValues0),
+                    DataColors  = "&chco="  ++ z_url:url_encode(DataColors0),
+                    DataLegends = "&chdl="  ++ z_url:url_encode(DataLegends0),
+                    DataScales  = "&chds="  ++ z_url:url_encode(DataScales0),
+                    DataStyles  = "&chls="  ++ z_url:url_encode(DataStyles0),
+                    DataValues  = "&chd=t:" ++ z_url:url_encode(DataValues0),
 
                     DataLegends1 = case string:strip(DataLegends, both, $|) of
                         "&chdl=" -> [];
@@ -207,11 +207,11 @@ process_axis(N, {axis, Axis}, Context) ->
                         {LabelsP, []} when is_list(LabelsP) ->
                             StringLabels = [make_label(X, Context) || X <- LabelsP],
                             Labels       = integer_to_list(N) ++ ":|" ++ string:join(StringLabels, "|"),
-                            "&chxl=" ++ z_utils:url_encode(Labels);
+                            "&chxl=" ++ z_url:url_encode(Labels);
 
                         {[],  Range} when is_list(Range)  ->
                             Format = string:join(["~p" || _X <- [c | Range] ], ","),
-                            "&chxr=" ++ z_utils:url_encode(
+                            "&chxr=" ++ z_url:url_encode(
                                             lists:flatten(io_lib:format(Format, [N | Range])));
 
                         _ ->

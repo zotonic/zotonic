@@ -62,7 +62,7 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context
                 undefined ->
                     RequestUrl = iolist_to_binary([
                             Provider#oembed_provider.endpoint_url,
-                            "?format=json&url=", z_utils:url_encode(Url),
+                            "?format=json&url=", z_url:url_encode(Url),
                             UrlExtra]),
                     oembed_request(RequestUrl)
             end;
@@ -74,7 +74,7 @@ discover_per_provider(Url, UrlExtra, [], Context) ->
     Key = m_config:get(mod_oembed, embedly_key, Context),
     EmbedlyUrl = iolist_to_binary([
             ?EMBEDLY_ENDPOINT,
-            z_utils:url_encode(Url),
+            z_url:url_encode(Url),
             UrlExtra
         ]),
     EmbedlyUrl1 = case z_utils:is_empty(Key) of
@@ -110,11 +110,11 @@ oembed_request(RequestUrl) ->
 
 %% @doc Construct extra URL arguments to the OEmbed client request from the oembed module config.
 oembed_url_extra(Context) ->
-    X1 = ["&maxwidth=", z_utils:url_encode(get_config(maxwidth, 640, Context))],
+    X1 = ["&maxwidth=", z_url:url_encode(get_config(maxwidth, 640, Context))],
     X2 = case get_config(maxheight, undefined, Context) of
              undefined -> X1;
              <<>> -> X1;
-             H -> [X1, "&maxheight=", z_utils:url_encode(H)]
+             H -> [X1, "&maxheight=", z_url:url_encode(H)]
          end,
     X2.
 

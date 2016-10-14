@@ -62,10 +62,10 @@ redirect_location(Context) ->
                             Context),
     iolist_to_binary([
         <<"https://www.linkedin.com/uas/oauth2/authorization?response_type=code">>,
-        "&client_id=", z_utils:url_encode(AppId),
-        "&redirect_uri=", z_utils:url_encode(RedirectUrl),
-        "&state=", z_utils:url_encode(LinkedInState),
-        "&scope=", z_utils:url_encode(Scope)
+        "&client_id=", z_url:url_encode(AppId),
+        "&redirect_uri=", z_url:url_encode(RedirectUrl),
+        "&state=", z_url:url_encode(LinkedInState),
+        "&scope=", z_url:url_encode(Scope)
     ]).
 
 save_args(Context) ->

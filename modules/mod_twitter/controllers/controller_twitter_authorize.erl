@@ -60,7 +60,7 @@ moved_temporarily(Context) ->
     Lang = z_context:get_q(<<"lang">>, z_context:language(Context)),
     Location = iolist_to_binary([
         oauth_twitter_client:authorize_url(Token),
-        "&oauth_callback=", z_utils:url_encode(RedirectUrl),
+        "&oauth_callback=", z_url:url_encode(RedirectUrl),
         "&lang=", Lang
     ]),
     save_args(Context),

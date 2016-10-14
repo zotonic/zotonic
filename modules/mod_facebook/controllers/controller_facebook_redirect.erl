@@ -114,10 +114,10 @@ fetch_access_token(Code, Context) ->
     {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
     RedirectUrl = z_context:abs_url(z_dispatcher:url_for(facebook_redirect, Context), Context),
     FacebookUrl = "https://graph.facebook.com/oauth/access_token?client_id="
-                ++ z_utils:url_encode(AppId)
-                ++ "&redirect_uri=" ++ z_convert:to_list(z_utils:url_encode(RedirectUrl))
-                ++ "&client_secret=" ++ z_utils:url_encode(AppSecret)
-                ++ "&code=" ++ z_utils:url_encode(Code),
+                ++ z_url:url_encode(AppId)
+                ++ "&redirect_uri=" ++ z_convert:to_list(z_url:url_encode(RedirectUrl))
+                ++ "&client_secret=" ++ z_url:url_encode(AppSecret)
+                ++ "&code=" ++ z_url:url_encode(Code),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             Qs = mochiweb_util:parse_qs(Payload),
@@ -129,7 +129,7 @@ fetch_access_token(Code, Context) ->
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.0/me?access_token=" ++ z_utils:url_encode(AccessToken),
+    FacebookUrl = "https://graph.facebook.com/v2.0/me?access_token=" ++ z_url:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),

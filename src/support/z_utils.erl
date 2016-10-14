@@ -22,8 +22,8 @@
 -module(z_utils).
 -include("zotonic.hrl").
 
--export (
-   [get_value/2,
+-export([
+    get_value/2,
     get_value/3,
     are_equal/2,
     assert/2,
@@ -60,14 +60,12 @@
     js_object/1,
     js_object/2,
     js_object/3,
-    json_escape/1,
     lib_dir/0,
     lib_dir/1,
     wildcard/1,
     wildcard/2,
     filter_dot_files/1,
     list_dir_recursive/1,
-    name_for_host/2,
     name_for_site/2,
     only_digits/1,
     only_letters/1,
@@ -90,17 +88,8 @@
     now_msec/0,
     flush_message/1,
     ensure_existing_module/1,
-    generate_username/2,
-
-    %% Deprecated, see z_url.erl
-    url_path_encode/1,
-    url_encode/1,
-    url_decode/1,
-    percent_encode/1,
-    url_reserved_char/1,
-    url_unreserved_char/1,
-    url_valid_char/1
-   ]).
+    generate_username/2
+]).
 
 
 get_value(Key, Map) when is_map(Map) ->
@@ -253,17 +242,6 @@ depickle(Data, Context) ->
 %%% HEX ENCODE and HEX DECODE
 hex_encode(Value) -> z_url:hex_encode(Value).
 hex_decode(Value) -> z_url:hex_decode(Value).
-
-
-%%% URL ENCODE %%%
-url_encode(S) -> z_url:url_encode(S).
-url_decode(S) -> z_url:url_decode(S).
-url_path_encode(L) -> z_url:url_path_encode(L).
-percent_encode(S) -> z_url:percent_encode(S).
-
-url_valid_char(C) -> z_url:url_valid_char(C).
-url_reserved_char(C) -> z_url:url_reserved_char(C).
-url_unreserved_char(C) -> z_url:url_unreserved_char(C).
 
 
 %% @spec os_filename(String) -> String
@@ -428,11 +406,6 @@ js_prop_value(pattern, [$/|T]=List, OptContext) ->
 js_prop_value(_, Int, _OptContext) when is_integer(Int) -> integer_to_list(Int);
 js_prop_value(_, {trust, Value}, _OptContext) -> Value;
 js_prop_value(_, Value, OptContext) -> [$",js_escape(Value, OptContext),$"].
-
-
-%% @doc Deprecated: moved to z_json.
-json_escape(A) ->
-    z_json:json_escape(A).
 
 
 only_letters([]) ->
@@ -821,12 +794,6 @@ are_equal(Arg1, Arg2) when is_integer(Arg2) ->
 are_equal(_Arg1, _Arg2) ->
     false.
 
-
-%% @doc Return the name used in the context of a hostname
-%% @deprecated Please use the function {@link name_for_site/2} instead.
--spec name_for_host(Name :: atom(), atom() | #context{}) -> atom().
-name_for_host(Name, SiteOrContext) ->
-    name_for_site(Name, SiteOrContext).
 
 %% @doc Return the name used in the context of a hostname
 -spec name_for_site(Name :: atom(), atom() | #context{}) -> atom().

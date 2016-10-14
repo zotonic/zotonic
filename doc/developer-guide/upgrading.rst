@@ -36,6 +36,16 @@ Authentication
 
     observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
+Removed deprecated functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Deprecated functions have been removed from ``z_utils``. Use the ``z_url`` and
+  ``z_json`` modules instead.
+* Deprecated function ``z_utils:name_for_host/2`` has been removed; use
+  ``z_utils:name_for_site/2`` instead.
+* The ``{% stream %}`` tag was removed.
+* Removed older TinyMCE versions 3.5.0 and 4.2.4.
+
 Erlang code, Controllers, Event handlers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

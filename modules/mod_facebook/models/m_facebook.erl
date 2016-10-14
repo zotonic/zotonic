@@ -112,7 +112,7 @@ do_graph_call(Method, Id, Connection, Args, Context)
 	      end,
     Query = mochiweb_util:urlencode(ReqArgs),
 
-    Path = [$/, string:join([z_utils:url_encode(C) || C <- [Id, Connection], C =/= undefined], "/")],
+    Path = [$/, string:join([z_url:url_encode(C) || C <- [Id, Connection], C =/= undefined], "/")],
 
     Request = make_httpc_request(Method, "https", "graph.facebook.com", Path, Query),
 
@@ -140,10 +140,10 @@ make_httpc_request(Method, Scheme, Server, Path, Query) when Method == get;
 %%
 %%
 fql_url(Query, Context) ->
-    Fql = "https://api.facebook.com/method/fql.query?format=json&query=" ++ z_utils:url_encode(Query),
+    Fql = "https://api.facebook.com/method/fql.query?format=json&query=" ++ z_url:url_encode(Query),
     case z_context:get_session(facebook_access_token, Context) of
         undefined -> Fql;
-        AccessToken -> Fql ++ "&access_token=" ++ z_utils:url_encode(AccessToken)
+        AccessToken -> Fql ++ "&access_token=" ++ z_url:url_encode(AccessToken)
     end.
 
 

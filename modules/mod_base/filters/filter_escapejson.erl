@@ -24,7 +24,7 @@
 escapejson(undefined, _Context) ->
     <<>>;
 escapejson(Input, _Context) when is_binary(Input) ->
-    z_utils:json_escape(Input);
+    z_json:json_escape(Input);
 escapejson(Input, _Context) when is_list(Input) ->
-    z_utils:json_escape(Input).
+    z_json:json_escape(Input).
 

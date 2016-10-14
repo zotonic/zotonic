@@ -54,15 +54,15 @@ redirect_location(Context) ->
     {AppId, _AppSecret, Scope} = mod_instagram:get_config(Context),
     Url = iolist_to_binary([
         <<"https://api.instagram.com/oauth/authorize/?client_id=">>,
-        z_utils:url_encode(AppId),
-        "&redirect_uri=", z_utils:url_encode(redirect_uri(Context)),
+        z_url:url_encode(AppId),
+        "&redirect_uri=", z_url:url_encode(redirect_uri(Context)),
         "&response_type=code"
     ]),
     case Scope of
         [] -> Url;
         <<>> -> Url;
         undefined -> Url;
-        _ -> <<Url/binary, "&scope=", (z_convert:to_binary(z_utils:url_encode(Scope)))/binary>>
+        _ -> <<Url/binary, "&scope=", (z_convert:to_binary(z_url:url_encode(Scope)))/binary>>
     end.
 
 redirect_uri(Context) ->

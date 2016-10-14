@@ -164,10 +164,10 @@ fetch_access_token(Code, Context) ->
     LinkedInUrl = "https://www.linkedin.com/uas/oauth2/accessToken",
     Body = iolist_to_binary([
             "grant_type=authorization_code",
-            "&client_id=", z_utils:url_encode(AppId),
-            "&redirect_uri=", z_convert:to_list(z_utils:url_encode(RedirectUrl)),
-            "&client_secret=", z_utils:url_encode(AppSecret),
-            "&code=", z_utils:url_encode(Code)
+            "&client_id=", z_url:url_encode(AppId),
+            "&redirect_uri=", z_convert:to_list(z_url:url_encode(RedirectUrl)),
+            "&client_secret=", z_url:url_encode(AppSecret),
+            "&code=", z_url:url_encode(Code)
         ]),
     case httpc:request(post, {LinkedInUrl, [], "application/x-www-form-urlencoded", Body}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->

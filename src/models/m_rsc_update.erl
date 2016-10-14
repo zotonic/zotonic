@@ -679,7 +679,7 @@ props_filter([{page_path, Path}|T], Acc, Context) ->
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                     props_filter(T, [{page_path, undefined} | Acc], Context);
                 _ ->
-                    P = [ $/ | string:strip(z_utils:url_path_encode(Path), both, $/) ],
+                    P = [ $/ | string:strip(z_url:url_path_encode(Path), both, $/) ],
                     props_filter(T, [{page_path, P} | Acc], Context)
             end;
         false ->
