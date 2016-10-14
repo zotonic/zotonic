@@ -148,6 +148,9 @@ upgrade(C, Database, Schema) ->
     % 0.12.5
     ok = install_content_group_dependent(C, Database, Schema),
     ok = convert_category_hierarchy(C, Database, Schema),
+
+    % 0.22.0
+    ok = add_edge_log_details(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -492,5 +495,16 @@ convert_category_hierarchy(C, Database, Schema) ->
             _ = epgsql:squery(C, "drop table category cascade"),
             ok;
         true ->
+            ok
+    end.
+
+add_edge_log_details(C, Database, Schema) ->
+    {ok, [], []} = epgsql:squery(C, z_install:edge_log_function()),
+    case has_column(C, "edge_log", "logged", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            {ok, [], []} = epgsql:squery(C, "drop table edge_log"),
+            {ok, [], []} = epgsql:squery(C, z_install:edge_log_table()),
             ok
     end.
