@@ -45,6 +45,7 @@
     observe_manage_data/2,
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
+    observe_rsc_insert/3,
     name/1,
     manage_schema/2
 ]).
@@ -58,7 +59,6 @@
     observe_acl_logon/2,
     observe_acl_logoff/2,
     observe_acl_context_authenticated/2,
-    observe_acl_rsc_update_check/3,
     observe_acl_add_sql_check/2,
 
     observe_hierarchy_updated/2
@@ -231,9 +231,6 @@ observe_acl_logoff(AclLogoff, Context) ->
 observe_acl_context_authenticated(_AclAuthenticated, Context) ->
     acl_user_groups_checks:acl_context_authenticated(Context).
 
-observe_acl_rsc_update_check(AclRscUpdateCheck, Props, Context) ->
-    acl_user_groups_checks:acl_rsc_update_check(AclRscUpdateCheck, Props, Context).
-
 observe_acl_add_sql_check(AclAddSQLCheck, Context) ->
     acl_user_groups_checks:acl_add_sql_check(AclAddSQLCheck, Context).
 
@@ -250,6 +247,18 @@ observe_manage_data(#manage_data{module = Module, props = {acl_rules, Rules}}, C
     m_acl_rule:replace_managed(Rules, Module, Context);
 observe_manage_data(#manage_data{}, _Context) ->
     undefined.
+
+%% @doc Add default content group when resource is inserted without one
+-spec observe_rsc_insert(#rsc_insert{}, list(), #context{}) -> list().
+observe_rsc_insert(#rsc_insert{}, Props, Context) ->
+    case proplists:get_value(content_group_id, Props) of
+        undefined ->
+            CategoryId = proplists:get_value(category_id, Props),
+            ContentGroupId = acl_user_groups_checks:default_content_group(CategoryId, Context),
+            [{content_group_id, ContentGroupId} | Props];
+        _ ->
+            Props
+    end.
 
 observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->
     check_hasusergroup(Id, M#rsc_update_done.post_props, Context),

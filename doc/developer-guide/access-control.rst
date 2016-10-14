@@ -135,9 +135,6 @@ allow or deny user access to specific resources.
 |#acl_is_allowed_prop{action,|first     |boolean() |Check if user is authorized to perform operation on      |
 |object, prop}               |          |          |property of object. Default is ``true``.                 |
 +----------------------------+----------+----------+---------------------------------------------------------+
-|#acl_rsc_update_check{id},  |foldl     |Props'    |Filter properties about to be updated for a resource.    |
-|Props                       |          |          |                                                         |
-+----------------------------+----------+----------+---------------------------------------------------------+
 |#acl_logon{id}              |first     |Context   |Initialize context with the access policy for the user.  |
 +----------------------------+----------+----------+---------------------------------------------------------+
 |#acl_logoff{}               |first     |Context   |Clear the associated access policy for the context.      |
