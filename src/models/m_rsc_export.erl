@@ -142,8 +142,9 @@ privacy_filter(Export) ->
         fun(P, Acc) ->
             proplists:delete(P, Acc)
         end,
-        Drop,
-        Export).
+        Export,
+        Drop
+    ).
 
 %% @doc Given an edge record, add the resource uris for the object and the predicate.
 edge_details(Edge, Context) ->
