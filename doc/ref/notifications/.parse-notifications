@@ -58,7 +58,7 @@ parse_record_field({typed_record_field, {record_field, _Line, {atom, _Line, Name
     {Name, Type};
 parse_record_field({record_field, _Line, {atom, _Line, Name}}) ->
     {Name, unknown};
-parse_record_field(Dunno) ->
+parse_record_field(_) ->
     {unknown, unknown}.
 
 parse_type({atom, _Line, Type}) ->

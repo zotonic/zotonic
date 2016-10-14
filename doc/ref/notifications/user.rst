@@ -8,6 +8,10 @@ User notifications
 .. include:: includes/logon_ready_page.rst
 .. include:: includes/logon_submit.rst
 .. include:: includes/set_user_language.rst
+.. include:: includes/request_context.rst
+.. include:: includes/session_context.rst
+.. include:: includes/session_init.rst
+.. include:: includes/session_init_fold.rst
 .. include:: includes/signup.rst
 .. include:: includes/signup_check.rst
 .. include:: includes/signup_confirm.rst

@@ -611,7 +611,7 @@ ensure_session(Context) ->
 %% @doc After ensuring a session, try to log on from the user-id stored in the session
 maybe_logon_from_session(#context{user_id=undefined} = Context) ->
     Context1 = z_auth:logon_from_session(Context),
-    Context2 = z_notifier:foldl(session_context, Context1, Context1),
+    Context2 = z_notifier:foldl(#session_context{}, Context1, Context1),
     set_nocache_headers(Context2);
 maybe_logon_from_session(Context) ->
     Context.
@@ -638,7 +638,7 @@ ensure_qs(Context) ->
             {Body, ContextParsed} = parse_post_body(Context#context{props=QPropsUrl}),
             QPropsAll = z_utils:prop_replace('q', PathArgs++Body++Query, ContextParsed#context.props),
             ContextQs = ContextParsed#context{props=QPropsAll},
-            z_notifier:foldl(request_context, ContextQs, ContextQs)
+            z_notifier:foldl(#request_context{}, ContextQs, ContextQs)
     end.
 
 

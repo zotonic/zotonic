@@ -350,7 +350,7 @@ lookup1(TId, Key) ->
     end.
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_acl_user_groups,
                 parent=admin_auth,

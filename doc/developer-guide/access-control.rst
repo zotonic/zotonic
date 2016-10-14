@@ -36,44 +36,13 @@ place until a session is ensured (or continued) for the request :term:`context`.
 This is commonly done by the :term:`controller` handling the request by a call
 to ``z_context:ensure_all/1``.
 
-Notifications
-^^^^^^^^^^^^^
+Customizing authentication
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Zotonic relies on a number of :ref:`notifications <guide-notification>` to
-perform authentication. You can observe any of these notifications to customise
-Zotonic’s authentication behaviour.
-
-+--------------------+----------+----------+------------------------------------------+
-|Notification        |Type      |Return    |Description                               |
-+====================+==========+==========+==========================================+
-|auth_confirm        |foldl     |Context   |Sent when a user id has been confirmed.   |
-+--------------------+----------+----------+                                          |
-|auth_confirm_done   |notify    |          |                                          |
-+--------------------+----------+----------+------------------------------------------+
-|auth_logon          |foldl     |Context   |Sent when a user has been authenticated.  |
-+--------------------+----------+----------+                                          |
-|auth_logon_done     |notify    |          |                                          |
-+--------------------+----------+----------+------------------------------------------+
-|auth_logoff         |foldl     |Context   |Sent when a user is about to log out,     |
-|                    |          |          |removing the authentication from the      |
-|                    |          |          |current session.                          |
-+--------------------+----------+----------+------------------------------------------+
-|auth_logoff_done    |notify    |          |Sent when a user has been logged out.     |
-+--------------------+----------+----------+------------------------------------------+
-|auth_autologon      |first     |{ok,      |Sent for new sessions from                |
-|                    |          |UserId}   |``z_auth:logon_from_session/1``. Will     |
-|                    |          |          |attempt to authenticate the session as    |
-|                    |          |          |UserId (if there was any observer         |
-|                    |          |          |responding to the notification).          |
-+--------------------+----------+----------+------------------------------------------+
-|#user_is_enabled{id}|first     |boolean() |Ask observers if the user is enabled      |
-|                    |          |          |(allowed to login, to be                  |
-|                    |          |          |authenticated). If the result is          |
-|                    |          |          |``undefined``, the resource               |
-|                    |          |          |``is_published``, ``publication_start``   |
-|                    |          |          |and ``publication_end`` is checked        |
-|                    |          |          |instead.                                  |
-+--------------------+----------+----------+------------------------------------------+
+Zotonic relies on a number of notifications to perform authentication. Observe
+any of the authentication notifications to customize Zotonic’s authentication
+behaviour. See the reference for a list of all
+:ref:`authentication notifications <ref-authentication-notifications>`.
 
 .. _guide-authorization:
 
@@ -110,36 +79,11 @@ determine which user groups are allowed to access which groups of content.
 
     :ref:`mod_acl_user_groups`
 
-Custom authorization
-^^^^^^^^^^^^^^^^^^^^
+Customizing authorization
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 No matter what authorization module you use, you can always override Zotonic’s
-behaviour by observing the authorization notifications. This is especially
-useful if your application has some authorization logic that is not easily
-expressed in ACL rules.
-
-.. seealso:: :ref:`acl_is_allowed`
-
-Notifications
-^^^^^^^^^^^^^
-
-The authorization system sends several notifications that you can hook into to
-allow or deny user access to specific resources.
-
-+----------------------------+----------+----------+---------------------------------------------------------+
-|Notification                |Type      |Return    |Description                                              |
-+============================+==========+==========+=========================================================+
-|#acl_is_allowed{action,     |first     |boolean() |Check if user is authorized to perform operation on      |
-|object}                     |          |          |object. Default is ``false``.                            |
-+----------------------------+----------+----------+---------------------------------------------------------+
-|#acl_is_allowed_prop{action,|first     |boolean() |Check if user is authorized to perform operation on      |
-|object, prop}               |          |          |property of object. Default is ``true``.                 |
-+----------------------------+----------+----------+---------------------------------------------------------+
-|#acl_logon{id}              |first     |Context   |Initialize context with the access policy for the user.  |
-+----------------------------+----------+----------+---------------------------------------------------------+
-|#acl_logoff{}               |first     |Context   |Clear the associated access policy for the context.      |
-+----------------------------+----------+----------+---------------------------------------------------------+
-|#acl_context_authenticated{}|first     |Context   |Set the context to a typical user’s permissions, do not  |
-|                            |          |          |change the context if an user is logged on. Used by      |
-|                            |          |          |(for example) ``m.acl.authenticated.insert.article``     |
-+----------------------------+----------+----------+---------------------------------------------------------+
+behaviour by observing the authorization or ACL notifications. This is
+especially useful if your application has some authorization logic that is not
+easily expressed in ACL rules. See the reference for a full list of
+:ref:`ref-acl-notifications`.

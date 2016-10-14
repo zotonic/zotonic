@@ -23,6 +23,18 @@ ACL
   still rely on the property.
 * The ``acl_rsc_update_check`` notification was removed.
 
+Authentication
+^^^^^^^^^^^^^^
+
+* All auth notifications values were converted to records.
+
+  Before::
+
+    observe_auth_logon(auth_logon, Context, _Context) ->
+
+  After::
+
+    observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
 Erlang code, Controllers, Event handlers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

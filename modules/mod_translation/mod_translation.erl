@@ -115,7 +115,7 @@ default_languages() ->
 
 %% @doc Check if the user has a prefered language (in the user's persistent data). If not
 %%      then check the accept-language header (if any) against the available languages.
-observe_session_init_fold(session_init_fold, Context, _Context) ->
+observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
     case get_q_language(Context) of
         undefined -> maybe_persistent(Context);
         QsLang -> set_language(QsLang, Context)
@@ -159,7 +159,7 @@ get_q_language(Context) ->
     end.
 
 
-observe_session_context(session_context, Context, _Context) ->
+observe_session_context(#session_context{}, Context, _Context) ->
     Context1 = case z_context:get_session(language, Context) of
         undefined -> Context;
         Language -> Context#context{language=Language}
@@ -179,7 +179,7 @@ observe_user_context(#user_context{id=UserId}, Context, _Context) ->
     end.
 
 
-observe_auth_logon(auth_logon, Context, _Context) ->
+observe_auth_logon(#auth_logon{}, Context, _Context) ->
     UserId = z_acl:user(Context),
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
         undefined ->
@@ -615,7 +615,7 @@ consolidate(_Context) ->
     [] = os:cmd(Command),
     ok.
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_translation,
                 parent=admin_structure,

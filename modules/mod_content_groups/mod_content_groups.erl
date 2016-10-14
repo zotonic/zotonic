@@ -171,7 +171,7 @@ observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
     end.
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_content_groups,
                 parent=admin_structure,

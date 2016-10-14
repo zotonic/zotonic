@@ -14,6 +14,7 @@ in your code to add custom functionality.
     :glob:
 
     acl
+    auth
     dispatch-url
     email
     import-export

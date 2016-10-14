@@ -3,8 +3,9 @@
 user_is_enabled
 ^^^^^^^^^^^^^^^
 
-Check if a user is enabled 
-Return ``true``, ``false`` or ``undefined`` 
+Check if a user is enabled. Enabled users are allowed to log in. 
+Return ``true``, ``false`` or ``undefined``. If ``undefined`` is returned, 
+the user is considered enabled if the user resource is published. 
 
 
 Type: 

@@ -462,8 +462,8 @@ start_session(Action, CurrentSessionId, Context) ->
             z_session:set(Props, Context2),
             Context3 = case SessionState of
                            new ->
-                               z_notifier:notify(session_init, Context2),
-                               z_notifier:foldl(session_init_fold, Context2, Context2);
+                               z_notifier:notify(#session_init{}, Context2),
+                               z_notifier:foldl(#session_init_fold{}, Context2, Context2);
                            restart ->
                                Context2;
                            alive ->

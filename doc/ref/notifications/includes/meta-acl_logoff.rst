@@ -3,7 +3,7 @@
 acl_logoff
 ^^^^^^^^^^
 
-Log a user off. Clean the acl fields from the context. 
+Clear the associated access policy for the context. 
 
 
 Type: 

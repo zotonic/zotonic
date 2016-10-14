@@ -465,7 +465,7 @@ manage_schema(_Version, _Context) ->
 
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     case m_rsc:name_to_id(main_menu, Context) of
         {ok, Id} ->
             [

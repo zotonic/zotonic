@@ -3,7 +3,7 @@
 acl_logon
 ^^^^^^^^^
 
-Log a user on. Fill the acl fields of the context. 
+Initialize context with the access policy for the user. 
 
 
 Type: 

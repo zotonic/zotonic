@@ -227,8 +227,10 @@
 %% @doc Used in the admin to process a submitted resource form
 -record(admin_rscform, {id, is_a}).
 
-%% Used for fetching the menu in the admin (foldl)
-% admin_menu
+%% @doc Used for fetching the menu in the admin.
+%% Type: foldl
+%% Return: list of admin menu items
+-record(admin_menu, {}).
 
 %% @doc Fetch the menu id belonging to a certain resource
 %% Type: first
@@ -481,10 +483,10 @@
     user_id :: integer()
 }).
 
-%% @doc Check if a user is authorized to perform an operation on a an object. Observe
-%% this notification to do complex or more fine-grained authorization checks than
-%% you can do through the ACL rules admin interface.
-%% ``object`` is a ``m_rsc:resource()`` or a module name atom.
+%% @doc Check if a user is authorized to perform an operation on a an object
+%% (some resource or module). Observe this notification to do complex or more
+%% fine-grained authorization checks than you can do through the ACL rules admin
+%% interface. Defaults to ``false``.
 %% Type: first
 %% Return: ``true`` to allow the operation, ``false`` to deny it or ``undefined`` to let the next observer decide
 -record(acl_is_allowed, {
@@ -492,7 +494,8 @@
     object :: term()
 }).
 
-%% @doc Check if an action on a property is allowed.
+%% @doc Check if a user is authorizded to perform an action on a property.
+%% Defaults to ``true``.
 %% Type: first
 %% Return: ``true`` to grant access, ``false`` to deny it, ``undefined`` to let the next observer decide
 -record(acl_is_allowed_prop, {
@@ -508,32 +511,49 @@
 
 }).
 
-%% @doc Log a user on. Fill the acl fields of the context.
+%% @doc Initialize context with the access policy for the user.
 %% Type: first
 %% Return: updated ``#context`` or ``undefined``
 -record(acl_logon, {id}).
 
-%% @doc Log a user off. Clean the acl fields from the context.
+%% @doc Clear the associated access policy for the context.
 %% Type: first
 %% Return: updated ``#context{}`` or ``undefined``
 -record(acl_logoff, {}).
 
+%% @doc Confirm a user id.
+%% Type: foldl
+%% Return: ``context{}``
+-record(auth_confirm, {}).
 
-% Handle the confirm of a user.
-% 'auth_confirm' - foldl over the #context
-% 'auth_confirm_done' - notifications at the end of the confirmation
-% 'auth_logon' - foldl over the #context (after setting the user_id)
-% 'auth_logon_done' - notification that the logon of an user is done
-% 'auth_logoff' - foldl over the #context before logging off
-% 'auth_logoff_done' - notification before logging off, but after 'auth_logoff' and resetting the session user id
-% 'auth_autologon' - (first) check if there is an automatic log on enabled for this session/user-agent
-%                    returns {ok, UserId} when an user should be logged on.
-%                    Called for every single request!
-% 'request_context' - Called after parsing the query arguments (by z_context:ensure_qs/1) (foldl)
-% 'session_context' - Initialize a context from the current session (foldl).
-%                     Called on every request with a session.
-% 'session_init'    - Notification that a new session has been initialized (session_pid is in the context)
-% 'session_init_fold' - foldl over the context containing a new session (after session_init)
+%% @doc A user id has been confirmed.
+%% Type: notify
+-record(auth_confirm_done, {}).
+
+%% @doc User logs on. Add user-related properties to the session.
+%% Type: foldl
+%% Return: ``context{}``
+-record(auth_logon, {}).
+
+%% @doc User has logged on.
+%% Type: notify
+-record(auth_logon_done, {}).
+
+%% @doc User is about to log off. Remove authentication from the current session.
+%% Type: foldl
+%% Return: ``context{}``
+-record(auth_logoff, {}).
+
+%% @doc User has logged off.
+%% Type: notify
+-record(auth_logoff_done, {}).
+
+%% @doc Check if automatic logon is enabled for this session. Sent for new
+%% sessions from ``z_auth:logon_from_session/1``. Please note this notification
+%% is sent for every single request.
+%% Type: first
+%% Return: ``{ok, UserId}`` when a user should be logged on.
+-record(auth_autologon, {}).
 
 %% @doc Authentication against some (external or internal) service was validated
 -record(auth_validated, {
@@ -544,9 +564,33 @@
     is_connect = false :: boolean()
 }).
 
-%% @doc Check if a user is enabled
+%% @doc Called after parsing the query arguments
+%% Type: foldl
+%% Return: ``#context{}``
+-record(request_context, {}).
+
+%% @doc Initialize a context from the current session.
+%% Called for every request that has a session.
+%% Type: foldl
+%% Return: ``#context{}``
+-record(session_context, {}).
+
+%% @doc A new session has been intialized: session_pid is in the context.
+%% Called for every request that has a session.
+%% Type: notify
+%% Return: ``#context{}``
+-record(session_init, {}).
+
+%% @doc Foldl over the context containing a new session.
+%% Called for every request that has a session.
+%% Type: foldl
+%% Return: ``#context{}``
+-record(session_init_fold, {}).
+
+%% @doc Check if a user is enabled. Enabled users are allowed to log in.
 %% Type: first
-%% Return ``true``, ``false`` or ``undefined``
+%% Return ``true``, ``false`` or ``undefined``. If ``undefined`` is returned,
+%% the user is considered enabled if the user resource is published.
 -record(user_is_enabled, {id}).
 
 %% @doc Set #context fields depending on the user and/or the preferences of the user.

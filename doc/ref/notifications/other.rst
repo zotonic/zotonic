@@ -5,8 +5,8 @@ Other notifications
 .. include:: includes/activity.rst
 .. include:: includes/activity_send.rst
 .. include:: includes/admin_edit_blocks.rst
+.. include:: includes/admin_menu.rst
 .. include:: includes/admin_rscform.rst
-.. include:: includes/auth_validated.rst
 .. include:: includes/broadcast.rst
 .. include:: includes/category_hierarchy_save.rst
 .. include:: includes/comment_insert.rst
