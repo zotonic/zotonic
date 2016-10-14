@@ -182,7 +182,7 @@
             <div>
                 {% button class="btn btn-default" text=_"Generate .pot files"
                     postback={translation_generate} delegate="mod_translation" %}
-                <span class="help-block">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. _}</span>
+                <span class="help-block">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href="http://docs.zotonic.com/en/latest/developer-guide/translation.html">gettext package must be installed</a>._}</span>
             </div>
         </div>
         <div class="form-group">
