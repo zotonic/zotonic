@@ -62,7 +62,7 @@ observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
 
 %% @doc Add menu item to 'Content' admin menu
 -spec observe_admin_menu(atom(), list(), #context{}) -> list().
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
         #menu_separator{
             parent = admin_content,

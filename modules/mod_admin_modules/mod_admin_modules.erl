@@ -81,7 +81,7 @@ descr(Module) ->
     end.
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_modules_,
                 parent=admin_system,

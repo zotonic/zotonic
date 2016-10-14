@@ -225,7 +225,7 @@ to_oauth_params(Context) ->
 
 oauth_param_auth_header(Param, AuthHeader) ->
     case re:run(
-            AuthHeader, 
+            AuthHeader,
             z_convert:to_list(Param) ++ "=\"(.*?)\"",
             [{capture, all_but_first, binary}])
     of
@@ -294,7 +294,7 @@ to_oauth_consumer(Consumer, "RSA-SHA1") ->
 authenticate(Reason, Context) ->
     Context1 = cowmachine_req:set_resp_body([Reason,"\n"], Context),
     Context2 = z_context:set_resp_header(
-                    <<"www-authenticate">>, 
+                    <<"www-authenticate">>,
                     <<"OAuth realm=\"\"">>,
                     Context1),
     {{halt, 401}, Context2}.
@@ -336,7 +336,7 @@ observe_service_authorize(#service_authorize{service_module=Module}, Context) ->
                     ": ",
                     z_service:title(Module),
                     "\n\nThis API call requires authentication."
-                ]), 
+                ]),
                 Context);
 
         {true, AuthorizedContext} ->
@@ -357,7 +357,7 @@ observe_service_authorize(#service_authorize{service_module=Module}, Context) ->
     end.
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_oauth,
                 parent=admin_auth,

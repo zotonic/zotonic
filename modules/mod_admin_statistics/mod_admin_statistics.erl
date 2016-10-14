@@ -47,7 +47,7 @@ observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_statistics,
                 parent=admin_system,

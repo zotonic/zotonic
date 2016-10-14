@@ -217,7 +217,7 @@ opt_user(undefined) -> [];
 opt_user(Id) -> [" (", integer_to_list(Id), ")"].
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_log,
                 parent=admin_system,

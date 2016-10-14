@@ -52,7 +52,7 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
     end.
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_custom_redirect,
                 parent=admin_modules,

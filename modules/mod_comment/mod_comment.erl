@@ -199,7 +199,7 @@ remove_old_comment_rsc_fields(Context) ->
     end.
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_comments,
                 parent=admin_content,

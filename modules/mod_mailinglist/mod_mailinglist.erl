@@ -377,7 +377,7 @@ as_upload(Id, Context) ->
              filename=proplists:get_value(original_filename, M)
            }.
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_mailinglist,
                 parent=admin_content,

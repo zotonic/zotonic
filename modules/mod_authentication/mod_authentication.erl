@@ -64,7 +64,7 @@ event(#submit{message={reset, _Args}}, Context) ->
     Args = z_context:get_q_all(Context),
     controller_logon:reset(Args, Context).
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_authentication_services,
                 parent=admin_auth,

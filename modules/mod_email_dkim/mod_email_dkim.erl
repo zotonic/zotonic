@@ -36,7 +36,7 @@ init(Context) ->
     z_email_dkim:ensure_configured(Context),
     ok.
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_dkim,
                 parent=admin_modules,

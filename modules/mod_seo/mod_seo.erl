@@ -35,7 +35,7 @@
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_seo,
                 parent=admin_modules,
