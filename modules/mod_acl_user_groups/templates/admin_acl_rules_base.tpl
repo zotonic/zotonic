@@ -46,13 +46,13 @@
                 <a href="{% url admin_acl_rules_rsc %}">{_ Content _}</a>
             </li>
             <li class="{% if kind == `collab` %}active{% endif %}">
-                <a href="{% url admin_acl_rules_collab %}">{_ Collaboration Groups _}</a>
+                <a href="{% url admin_acl_rules_collab %}">{_ Collaboration groups _}</a>
             </li>
             <li class="{% if kind == `module` %}active{% endif %}">
                 <a href="{% url admin_acl_rules_module %}">{_ Modules _}</a>
             </li>
             <li class="{% if kind == `upload` %}active{% endif %}">
-                <a href="{% url admin_acl_rules_upload %}">{_ File Uploads _}</a>
+                <a href="{% url admin_acl_rules_upload %}">{_ File uploads _}</a>
             </li>
         </ul>
 

@@ -25,7 +25,7 @@
     selectable2
 %}
     <div class="admin-header">
-        <h2>{_ Merge Pages _}</h2>
+        <h2>{_ Merge pages _}</h2>
         <p>
             {_ Select the winner from two pages. The loser will get merged into the winner. Only the winner remains. _}
         </p>

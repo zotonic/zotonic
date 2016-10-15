@@ -12,7 +12,7 @@
                     <fieldset>
 
                         <div class="form-group row">
-                            <label class="control-label col-md-3" for="twitter_consumer_key">{_ Consumer Key _}</label>
+                            <label class="control-label col-md-3" for="twitter_consumer_key">{_ Consumer key _}</label>
                             <div class="col-md-9">
                                 <input type="text" id="twitter_consumer_key" name="consumer_key" value="{{ m.config.mod_twitter.consumer_key.value|escape }}" class="form-control" />
                             </div>

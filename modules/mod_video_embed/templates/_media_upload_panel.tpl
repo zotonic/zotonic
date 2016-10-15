@@ -4,7 +4,7 @@
 {% with id.medium as medium %}
 {% with medium.mime == "text/html-video-embed" as is_video_embed %}
 <div class="tab-pane" id="{{ tab }}-embed">
-    <p>{_ Embed a video or other media. Here you can paste embed code from YouTube, Vimeo or other services. _}</p>
+    <p>{_ Embed a video or other media. Here you can paste an embed code from YouTube, Vimeo or other services. _}</p>
 
     {% wire id=#form type="submit"
     		postback={add_video_embed predicate=predicate actions=actions id=id subject_id=subject_id callback=callback stay=stay}

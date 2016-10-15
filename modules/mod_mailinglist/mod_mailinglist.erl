@@ -146,7 +146,7 @@ event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
 event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
     Email = z_context:get_q_validated(<<"email">>, Context),
     z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
-    Context1 = z_render:growl([?__("Sending the page to ", Context), " ", Email, "..."], Context),
+    Context1 = z_render:growl([?__("Sending the page to", Context), " ", Email, "..."], Context),
     z_render:wire([{dialog_close, []}], Context1);
 
 

@@ -28,13 +28,13 @@
 		{% if q.code %}
 			<p class="alert alert-warning">
 				{_ You have to use a special URL, as provided by the an editor or administrator. _}<br/>
-				{_ The URL is only valid for a day. _}
+				{_ The URL is only valid for one day. _}
 			</p>
 		{% endif %}
 
 		{% if m.session.acl_user_groups_state == `edit` %}
 			<p>
-				<a href="#" role="button" id="{{ #acl_publish }}" class="btn btn-success">{_ Use Published Rules _}</a>
+				<a href="#" role="button" id="{{ #acl_publish }}" class="btn btn-success">{_ Use published rules _}</a>
 				{% wire id=#acl_publish postback={switch_rule_state code=q.code state=`publish`} delegate=`admin_acl_rules_rsc` %}
 			</p>
 		{% endif %}
