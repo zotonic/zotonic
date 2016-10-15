@@ -5,7 +5,7 @@
 
 {% else %}
     <p>
-	    {_ Enter a (unique) username and password. Usernames and passwords are case sensitive, so be careful when entering them. _}
+	    {_ Enter a unique username and password. Usernames and passwords are case sensitive, so be careful when entering them. _}
 	    {% if username %}
 	        {_ Click “delete” to remove any existing username/password from the person; this person will no longer be a user. _}
 	    {% endif %}

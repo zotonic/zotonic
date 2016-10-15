@@ -41,7 +41,7 @@
         %}
         <label class="checkbox-inline">
             <input type="checkbox" id="libsep" value="1" {% if m.config.mod_development.libsep.value %}checked="checked"{% endif %} />
-            {_ Download css and javascript files as separate files (ie. don’t combine them in one url). _}
+            {_ Download CSS and JavaScript files as separate files. Don’t combine them in one URL. _}
         </label>
     </div>
 
@@ -51,7 +51,7 @@
         %}
         <label class="checkbox-inline">
             <input type="checkbox" id="devapi" value="1" {% if m.config.mod_development.enable_api.value %}checked="checked"{% endif %} />
-            {_ Enable API to recompile &amp; build Zotonic _}
+            {_ Enable API to recompile and build Zotonic _}
         </label>
     </div>
 </div>
@@ -90,7 +90,7 @@
 <h3>{_ Dispatch rule debugging _}</h3>
 <div class="well">
 
-    <p>{_ Match a request url, display matched dispatch rule. _}</p>
+    <p>{_ Match a request URL, display matched dispatch rule. _}</p>
 
     {% wire id="explain-dispatch" type="submit"
             postback=`explain_dispatch`

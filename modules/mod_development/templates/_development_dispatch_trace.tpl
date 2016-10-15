@@ -51,7 +51,7 @@
 				{% if args.path %}
 					{_ New path _}: <tt>{{ args.path }}</tt>
 				{% else %}
-					{_ This is resource is unknown or does not have an uri _}
+					{_ This resource is unknown or does not have a URI _}
 				{% endif %}
 			{% elseif what == `rewrite_match` %}
 				<tt>#dispatch{}</tt> {_ found dispatch rule _}: <tt>{{ args.dispatch }}</tt><br/>

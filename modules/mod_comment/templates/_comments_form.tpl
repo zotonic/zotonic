@@ -4,7 +4,7 @@
         {% if m.config.comments.moderate.value %}
             <div id='comments-moderation-notice' style='display: none'>
     	        <h2>Your comment</h2>
-    	        <p>{_ Your comment has been saved and will be subject to review before it is displayed to other visitors of the website. Thank you for your comment! _}</p>
+                <p>{_ Your comment has been saved and will be subject to moderation before it is displayed on the website _}</p>
             </div>
             {% wire id="comments-form" type="submit" postback={newcomment id=id} delegate="mod_comment" action={fade_out target="comments-area"} action={slide_fade_in target="comments-moderation-notice"} %}
         {% else %}
