@@ -103,7 +103,6 @@ get(CommentId, Context) ->
 
 
 %% @doc Insert a new comment. Fetches the submitter information from the Context.
-%% @todo Insert external ip address and user agent string
 -spec insert(m_rsc:resource(), Name::string(), Email::string(), Message::string(), Is_visible::boolean(), #context{}) -> {ok, pos_integer()} | {error, any()}.
 insert(RscId, Name, Email, Message, Is_visible, Context) ->
     case z_acl:rsc_visible(RscId, Context)
@@ -129,16 +128,19 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
                 {ip_address, IPAddress},
                 {user_agent, UserAgent}
             ],
-            case z_db:insert(comment, Props, Context) of
-                {ok, CommentId} = Result ->
-                    z_depcache:flush({comment_rsc, RscId}, Context),
-                    z_notifier:notify(#comment_insert{comment_id=CommentId, id=RscId}, Context),
-                    Result;
-                {error, _} = Error ->
-                    Error
-            end;
+            insert_comment(RscId, Props, Context);
         false ->
             {error, eacces}
+    end.
+    
+insert_comment(RscId, Props, Context) ->
+    Id = m_rsc:rid(RscId, Context),
+    case z_db:insert(comment, Props, Context) of
+        {ok, CommentId} = Result ->
+            z_depcache:flush({comment_rsc, Id}, Context),
+            z_notifier:notify(#comment_insert{comment_id=CommentId, id=Id}, Context),
+            Result;
+        {error, _} = Error -> Error
     end.
 
 peer(undefined) ->
