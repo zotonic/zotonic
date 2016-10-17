@@ -31,7 +31,7 @@
 
     list_rsc/2,
     get/2,
-    insert/6,
+    insert/6, insert/7,
     delete/2,
     toggle/2,
     gravatar_code/1,
@@ -44,6 +44,9 @@
 
 %% Cache time for comment listings and comment counts.
 -define(MAXAGE_COMMENT, 7200).
+
+-type rating_value() :: 1..5.
+-type rating() :: undefined | rating_value().
 
 
 %% @doc Fetch the value for the key from a model source
@@ -105,6 +108,11 @@ get(CommentId, Context) ->
 %% @doc Insert a new comment. Fetches the submitter information from the Context.
 -spec insert(m_rsc:resource(), Name::string(), Email::string(), Message::string(), Is_visible::boolean(), #context{}) -> {ok, pos_integer()} | {error, any()}.
 insert(RscId, Name, Email, Message, Is_visible, Context) ->
+    insert(RscId, Name, Email, Message, Is_visible, undefined, Context) .
+
+%% @doc Insert a new comment. Fetches the submitter information from the Context.
+-spec insert(m_rsc:resource(), Name::string(), Email::string(), Message::string(), Is_visible::boolean(), Rating::rating(), #context{}) -> {ok, pos_integer()} | {error, any()}.
+insert(RscId, Name, Email, Message, Is_visible, Rating, Context) ->  
     case z_acl:rsc_visible(RscId, Context)
         and (z_auth:is_auth(Context)
             orelse z_convert:to_bool(m_config:get_value(mod_comment, anonymous, true, Context))) of
@@ -122,6 +130,7 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
                 {persistent_id, z_context:persistent_id(Context)},
                 {name, Name1},
                 {message, Message1},
+                {rating, Rating},
                 {email, Email},
                 {gravatar_code, gravatar_code(Email)},
                 {keep_informed, KeepInformed},

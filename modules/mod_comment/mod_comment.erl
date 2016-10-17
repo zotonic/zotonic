@@ -52,8 +52,9 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             Email = <<"">>
     end,
     Message = z_context:get_q_validated(<<"message">>, Context),
+    Rating = get_rating(Context),
     Is_visible = case m_config:get_value(comments, moderate, Context) of <<"1">> -> false; _Else -> true end,
-    case m_comment:insert(Id, Name, Email, Message, Is_visible, Context) of
+    case m_comment:insert(Id, Name, Email, Message, Is_visible, Rating, Context) of
         {ok, CommentId} ->
             CommentsListElt = proplists:get_value(comments_list, Args, "comments-list"),
             CommentTemplate = proplists:get_value(comment_template, Args, "_comments_comment.tpl"),
@@ -84,6 +85,15 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             Context
     end.
 
+get_rating(Context) ->
+    case z_context:get_q(<<"rating">>, Context) of
+        undefined -> undefined;
+        RatingString -> 
+            Rating = z_convert:to_integer(RatingString),
+            true = 0 =< Rating andalso Rating =< 5,
+            Rating
+     end.
+        
 
 %% @doc Return the list of recent comments.  Returned values are the complete records.
 observe_search_query(#search_query{search={recent_comments, []}, offsetlimit=OffsetLimit}, Context) ->
