@@ -46,23 +46,17 @@ event(#submit{message=admin_comments_settings}, Context) ->
     end.
 
 
-save_settings([], Context) ->
-    Context;
-save_settings([{"comments" ++ _ = Key, Value} | T], Context) ->
-    Value1 = clean(string:strip(Value, both), []),
-    [Key1, Key2] = string:tokens(Key, "-"),
-    m_config:set_value(list_to_atom(Key1), list_to_atom(Key2), Value1, Context),
-    m_config:set_prop(list_to_atom(Key1), list_to_atom(Key2), no_config_edit, true, Context),
+save_settings([], Context) -> Context;
+save_settings([{<<"comments-moderate">>,  Value}|T], Context) ->
+    set_value(moderate, Value, Context),
     save_settings(T, Context);
-save_settings([_|T], Context) ->
+save_settings([{<<"comments-rating">>,  Value}|T], Context) ->
+    set_value(rating, Value, Context),
+    save_settings(T, Context);
+save_settings([_|T], Context) -> 
     save_settings(T, Context).
+    
+    
+set_value(Key, Value, Context) ->
+    m_config:set_value(comments, Key, Value, Context).
 
-
-clean([], Acc) ->
-    lists:reverse(Acc);
-clean([H|T], Acc) when
-    H =:= 10 orelse H =:= 13 orelse H =:= $" orelse H =:= $' orelse
-    H =:= $& orelse H =:= $< orelse H =:= $> ->
-        clean(T, [32|Acc]);
-clean([H|T], Acc) ->
-    clean(T, [H|Acc]).

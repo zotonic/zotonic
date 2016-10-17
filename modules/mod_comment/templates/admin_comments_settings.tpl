@@ -34,6 +34,15 @@
                     </label>
                 </div>
             </div>
+            
+            <div class="form-group">
+                <div>
+                    <label class="checkbox-inline" for="comments-rating" title="{_ Enables the possibility to add a 0-5 star rating to comments. _}">
+                        <input type="checkbox" id="comments-rating" name="comments-rating" value="1" {% if m.config.comments.rating.value %}checked="checked"{% endif %} />
+                        {_ Enable Rating  _}
+                    </label>
+                </div>
+            </div>
 
         </div>
     </div>
