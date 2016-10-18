@@ -48,15 +48,15 @@ event(#submit{message=admin_comments_settings}, Context) ->
 
 save_settings([], Context) -> Context;
 save_settings([{<<"comments-moderate">>,  Value}|T], Context) ->
-    set_value(moderate, Value, Context),
+    set_config_value(moderate, Value, Context),
     save_settings(T, Context);
 save_settings([{<<"comments-rating">>,  Value}|T], Context) ->
-    set_value(rating, Value, Context),
+    set_config_value(rating, Value, Context),
     save_settings(T, Context);
 save_settings([_|T], Context) -> 
     save_settings(T, Context).
     
     
-set_value(Key, Value, Context) ->
-    m_config:set_value(comments, Key, Value, Context).
-
+set_config_value(Key, Value, Context) ->
+    m_config:set_value(comments, Key, Value, Context),
+    m_config:set_prop(comments, Key, no_config_edit, true, Context).

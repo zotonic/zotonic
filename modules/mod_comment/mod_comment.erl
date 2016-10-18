@@ -34,7 +34,6 @@
     observe_search_query/2,
     observe_rsc_merge/2,
     observe_admin_menu/3,
-    observe_custom_pivot/2,
     observe_comment_insert/2
 ]).
 
@@ -107,26 +106,19 @@ observe_search_query(_, _Context) ->
 observe_rsc_merge(#rsc_merge{looser_id=LooserId, winner_id=WinnerId}, Context) ->
     m_comment:merge(WinnerId, LooserId, Context).
     
-%% @doc Get the average rating of this resource and add it to the search index.
-observe_custom_pivot(#custom_pivot{id=Id}, Context) ->
-    case m_rsc:p(Id, rating_average, Context) of
-        undefined -> none;
-        Average -> {?MODULE, [{rating_average, Average}]}
-    end.
-    
 observe_comment_insert(#comment_insert{comment_id=Id}, Context) ->
     Comment = m_comment:get(Id, Context),
     case proplists:get_value(rating, Comment) of
         undefined -> ok;
         _Rating ->
            {rsc_id, RscId} = proplists:lookup(rsc_id, Comment),
-           update_rating(RscId, z_acl:sudo(Context))
+           update_rating_pivot(RscId, z_acl:sudo(Context))
     end.
     
-update_rating(RscId, Context) ->
+update_rating_pivot(RscId, Context) ->
     Ratings = [R || R <- [proplists:get_value(rating, C) || C <- m_comment:list_rsc(RscId, Context)], R =/= undefined],
     Average = lists:sum(Ratings) / length(Ratings),
-    m_rsc:update(RscId, [{rating_average, Average}], Context),
+    {ok, _} = z_pivot_rsc:update_custom_pivot(RscId, {?MODULE, [{rating_average, Average}]}, Context),
     ok.
 
 
