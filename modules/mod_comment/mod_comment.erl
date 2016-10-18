@@ -71,14 +71,13 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             Context2 = case Is_visible of
                            true ->
                                z_render:wire([
-                                              {set_value, [{selector, <<"#", FormId/binary, " textarea[name=\"message\"]">>}, {value, <<>>}]},
-                                              {set_value, [{selector, <<"#", FormId/binary, " input[name=\"message\"]">>}, {value, <<>>}]},
-                                              {fade_in, [{target, "comment-" ++ integer_to_list(CommentId)}]}
-                                             ], Context1);
+                                   {set_value, [{selector, <<"#", FormId/binary, " textarea[name=\"message\"]">>}, {value, <<>>}]},
+                                   {set_value, [{selector, <<"#", FormId/binary, " input[name=\"message\"]">>}, {value, <<>>}]},
+                                   {fade_in, [{target, "comment-" ++ integer_to_list(CommentId)}]}
+                               ], Context1);
                            false ->
                                Context1
                        end,
-
 
             case z_convert:to_bool(proplists:get_value(do_redirect, Args, true)) of
                 true -> z_render:wire({redirect, [{location, "#comment-" ++ integer_to_list(CommentId)}]}, Context2);
