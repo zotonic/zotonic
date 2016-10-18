@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% Date: 2010-01-15
+%% Date: 2010-01-1
 %% @doc Simple comment module. Adds comments to any rsc.
 
 %% Copyright 2010 Marc Worrell
@@ -54,7 +54,7 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
     end,
     Message = z_context:get_q_validated(<<"message">>, Context),
     Rating = get_rating(Context),
-    Is_visible = case m_config:get_value(comments, moderate, Context) of <<"1">> -> false; _Else -> true end,
+    Is_visible = is_visible(Context),
     case m_comment:insert(Id, Name, Email, Message, Is_visible, Rating, Context) of
         {ok, CommentId} ->
             CommentsListElt = proplists:get_value(comments_list, Args, "comments-list"),
@@ -69,32 +69,39 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             Html = z_template:render(CommentTemplate, Props, Context),
             Context1 = z_render:insert_bottom(CommentsListElt, Html, Context),
             Context2 = case Is_visible of
-			   true ->
-			       z_render:wire([
-					      {set_value, [{selector, <<"#", FormId/binary, " textarea[name=\"message\"]">>}, {value, <<>>}]},
-					      {set_value, [{selector, <<"#", FormId/binary, " input[name=\"message\"]">>}, {value, <<>>}]},
-					      {fade_in, [{target, "comment-"++integer_to_list(CommentId)}]}
-					     ], Context1);
-			   false ->
-			       Context1
-		       end,
+                           true ->
+                               z_render:wire([
+                                              {set_value, [{selector, <<"#", FormId/binary, " textarea[name=\"message\"]">>}, {value, <<>>}]},
+                                              {set_value, [{selector, <<"#", FormId/binary, " input[name=\"message\"]">>}, {value, <<>>}]},
+                                              {fade_in, [{target, "comment-" ++ integer_to_list(CommentId)}]}
+                                             ], Context1);
+                           false ->
+                               Context1
+                       end,
+
+
             case z_convert:to_bool(proplists:get_value(do_redirect, Args, true)) of
-                true -> z_render:wire({redirect, [{location, "#comment-"++integer_to_list(CommentId)}]}, Context2);
+                true -> z_render:wire({redirect, [{location, "#comment-" ++ integer_to_list(CommentId)}]}, Context2);
                 false -> Context2
             end;
         {error, _} ->
             Context
     end.
 
+is_visible(Context) ->
+    case m_config:get_value(comments, moderate, Context) of
+        <<"1">> -> false;
+        _Else -> true
+    end.
+
 get_rating(Context) ->
     case z_context:get_q(<<"rating">>, Context) of
         undefined -> undefined;
-        RatingString -> 
+        RatingString ->
             Rating = z_convert:to_integer(RatingString),
             true = 0 =< Rating andalso Rating =< 5,
             Rating
      end.
-        
 
 %% @doc Return the list of recent comments.  Returned values are the complete records.
 observe_search_query(#search_query{search={recent_comments, []}, offsetlimit=OffsetLimit}, Context) ->
@@ -105,7 +112,7 @@ observe_search_query(_, _Context) ->
 %% @doc Move all comments from one resource to another
 observe_rsc_merge(#rsc_merge{looser_id=LooserId, winner_id=WinnerId}, Context) ->
     m_comment:merge(WinnerId, LooserId, Context).
-    
+
 observe_comment_insert(#comment_insert{comment_id=Id}, Context) ->
     Comment = m_comment:get(Id, Context),
     case proplists:get_value(rating, Comment) of
@@ -114,7 +121,7 @@ observe_comment_insert(#comment_insert{comment_id=Id}, Context) ->
            {rsc_id, RscId} = proplists:lookup(rsc_id, Comment),
            update_rating_pivot(RscId, z_acl:sudo(Context))
     end.
-    
+
 update_rating_pivot(RscId, Context) ->
     Ratings = [R || R <- [proplists:get_value(rating, C) || C <- m_comment:list_rsc(RscId, Context)], R =/= undefined],
     Average = lists:sum(Ratings) / length(Ratings),
@@ -142,7 +149,7 @@ remove_old_rating_table(Context) ->
             ok;
         true ->
             case z_db:column_names(rating, Context) of
-                [comment_id,created,id,ip_address,rsc_id,visitor_id] ->
+                [comment_id, created, id, ip_address, rsc_id, visitor_id] ->
                     z_db:q("drop table rating", Context),
                     ok;
                 _ ->
@@ -153,11 +160,11 @@ remove_old_rating_table(Context) ->
 install_comment_table(true, Context) ->
     % Check for old table
     case z_db:column_names(comment, Context) of
-        [created,creator_id,id,ip_address,notify_id,props,rating,rsc_id] ->
+        [created, creator_id, id, ip_address, notify_id, props, rating, rsc_id] ->
             z_db:q("drop table comment", Context),
             install_comment_table(false, Context);
-        [created,id,email,gravatar_code,ip_address,is_visible,keep_informed,
-         name,props,rsc_id,user_agent,user_id,visitor_id] ->
+        [created, id, email, gravatar_code, ip_address, is_visible, keep_informed,
+         name, props, rsc_id, user_agent, user_id, visitor_id] ->
             z_db:q("alter table comment drop column visitor_id cascade, "
                    "add column persistent_id character varying (32), "
                    "add constraint fk_comment_persistent_id foreign key (persistent_id) "
@@ -205,7 +212,7 @@ install_comment_table(false, Context) ->
         {"comment_rsc_created_key", "rsc_id, created"},
         {"comment_created_key", "created"}
     ],
-    [ z_db:q("create index "++Name++" on comment ("++Cols++")", Context) || {Name, Cols} <- Indices ],
+    [ z_db:q("create index " ++ Name ++ " on comment (" ++ Cols ++ ")", Context) || {Name, Cols} <- Indices ],
     ok.
 
 
@@ -234,9 +241,10 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 url={admin_comments},
                 visiblecheck={acl, use, ?MODULE}},
      #menu_item{id=admin_comments_settings,
-		parent=admin_modules,
-		label=?__("Comment settings", Context),
-		url={admin_comments_settings},
-		visiblecheck={acl, use, ?MODULE}}
+                parent=admin_modules,
+                label=?__("Comment settings", Context),
+                url={admin_comments_settings},
+                visiblecheck={acl, use, ?MODULE}}
      |Acc].
+
 
