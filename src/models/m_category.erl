@@ -130,7 +130,7 @@ m_to_list(_, _Context) ->
 %% @spec m_value(Source, Context) -> term()
 m_value(#m{value=undefined}, Context) ->
     tree(Context);
-m_value(#m{value=#m{value={cat, Id}}}, Context) ->
+m_value(#m{value={cat, Id}}, Context) ->
     get(Id, Context).
 
 
