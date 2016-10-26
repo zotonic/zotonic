@@ -39,6 +39,8 @@ belongs to the group. Each collaboration group has one or more managers. So if
 you have groups of students working together and being supervised by teachers,
 you can define them as collaboration groups with the teachers as managers.
 
+.. todo:: Explain collaboration group rules
+
 .. _content groups:
 
 Managing content groups
@@ -168,7 +170,7 @@ record::
             %% your resources...
             data = [
                 {acl_rules, [
-                    %% A resource ACL rule is defined as {rsc, Properties}.
+                    %% A resource ACL rule is defined as {rsc, Properties}
                     {rsc, [
                         {acl_user_group_id, acl_user_group_members},
                         {actions, [view, link]},
@@ -182,13 +184,20 @@ record::
                             {actions, [use]},
                             {module, mod_ginger_base}
                         ]
-                    }
+                    },
+
+                    %% A collaboration group rule is defined as {collab, Properties}
+                    {collab, [
+                        {is_owner, true},
+                        {actions, [view, insert, update, link]},
+                        {category_id, text]
+                    ]}
                 ]
             ]
         }.
 
     manage_schema({upgrade, 2}, Context) ->
-        %% code to upgrade from 1 to 2
+        %% code to upgrade from version 1 to 2
         ok;
 
 Compile the code and restart your module to load the managed rules. They will be
