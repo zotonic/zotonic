@@ -296,7 +296,8 @@ replace_managed(Rules, Module, Context) ->
     delete_managed(Module, Context),
     [manage_acl_rule(Rule, Module, Context) || Rule <- Rules],
     m_acl_rule:publish(rsc, Context),
-    m_acl_rule:publish(module, Context).
+    m_acl_rule:publish(module, Context),
+    m_acl_rule:publish(collab, Context).
 
 manage_acl_rule({Type, Props}, Module, Context) ->
     insert(Type, [{managed_by, Module} | Props], Context).
@@ -612,7 +613,9 @@ implode_actions(L) ->
 %% @doc Delete ACL rules that are managed by a module
 -spec delete_managed(atom(), #context{}) -> integer().
 delete_managed(Module, Context) ->
-    delete_managed(Module, rsc, Context) + delete_managed(Module, module, Context).
+    delete_managed(Module, rsc, Context)
+        + delete_managed(Module, module, Context)
+        + delete_managed(Module, collab, Context).
 
 -spec delete_managed(atom(), atom(), #context{}) -> integer().
 delete_managed(Module, Kind, Context) ->
