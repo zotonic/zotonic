@@ -39,8 +39,6 @@ belongs to the group. Each collaboration group has one or more managers. So if
 you have groups of students working together and being supervised by teachers,
 you can define them as collaboration groups with the teachers as managers.
 
-.. todo:: Explain collaboration group rules
-
 .. _content groups:
 
 Managing content groups
@@ -94,6 +92,13 @@ content group to other resources.
 Some rules may be greyed out and have a note saying ‘This rule is managed by
 module …’. These are :ref:`managed rules` that you cannot edit in the web
 interface.
+
+Collaboration group rules
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Collaboration rules are special content access rules that apply to content in
+:ref:`collaboration groups <collaboration groups>` only. Each rule applies to
+all collaboration groups.
 
 Module access rules
 ^^^^^^^^^^^^^^^^^^^
