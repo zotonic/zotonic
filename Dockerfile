@@ -12,7 +12,7 @@ RUN sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.
 # Note: dumb-init and gosu are pulled from edge; remove that when upgrading to an alpine release that
 # includes those packages.
 RUN apk add --virtual build-deps --no-cache ca-certificates wget curl make gcc musl-dev g++ git \
-    && apk add --no-cache bash bsd-compat-headers gettext imagemagick \
+    && apk add --no-cache bash bsd-compat-headers file gettext imagemagick \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ dumb-init \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ gosu \
     && DEBUG=1 make \
