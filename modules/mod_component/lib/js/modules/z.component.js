@@ -57,20 +57,11 @@ function z_load_component(name) {
  * Queue view initialization
  *
  */
-function z_mount_view(view_controller, name, controller_options) {
+function z_mount_view(id, view_controller, name, controller_options) {
     var component = z_components[name];
 
     function mount() {
-        var component = z_components[name];
-
-        m.startComputation();
-        try {
-            view_controller.component_view = component.view;
-            view_controller.component_controller = new component.controller(controller_options);
-            view_controller.mounted(true);
-        } finally {
-            m.endComputation();
-        }
+        view_controller.mount(z_components[name], controller_options);
     }
     
     if(!component) 
@@ -83,6 +74,7 @@ function z_mount_view(view_controller, name, controller_options) {
         case "pending":
         case "loading":
             component.on_load.push(mount);
+            pubzub.publish("~pagesession/component/" + id + "/loading", name);
             break;
         default:
             throw "Unknown state";
@@ -91,7 +83,7 @@ function z_mount_view(view_controller, name, controller_options) {
 
 function z_load_view(id, view_controller, component_name, controller_options) {
     z_load_component(component_name);
-    z_mount_view(view_controller, component_name, controller_options);
+    z_mount_view(id, view_controller, component_name, controller_options);
     z_views[id] = view_controller;
 }
 
@@ -99,37 +91,65 @@ function z_start_view(id, component_name, controller_options) {
     var view_component = {}
 
     view_component.controller = function() {
+        this.loaded = m.prop(false);
         this.mounted = m.prop(false);
-        this.timeout = m.prop(false);
 
         this.component_view =  undefined;
         this.component_controller = undefined;
+        
+        this.mount = function(component, controller_options) {
+            if(this.mounted()) return;
+
+            m.startComputation();
+            this.component_view = component.view;
+            this.component_controller = new component.controller(controller_options, this);
+            this.loaded(true);
+            this.mounted(true);
+            m.endComputation();
+
+            pubzub.publish("~pagesession/component/" + id + "/mounted", component_name);
+        }.bind(this);
+        
+        this.unmount = function() {
+             if(!this.loaded()) return;
+             if(!this.mounted()) return;
+             
+             m.startComputation();
+             this.mounted(false);
+             m.endComputation();
+                  
+             pubzub.publish("~pagesession/component/" + id + "/unmounted", component_name);
+        }.bind(this);
 
         this.onunload = function(e) {
             if(this.component_controller && this.component_controller.onunload) {
                 this.component_controller.onunload(e);
             }
-        }
+                
+            this.component_view = undefined;
+            this.component_controller = undefined;
+                
+            pubzub.publish("~pagesession/component/"  + id + "/unloaded", component_name);
+        }.bind(this);
 
         /* Load the view */
         z_load_view(id, this, component_name, controller_options);
     }
 
     view_component.view = function(ctrl) {
-        /* When the view is not mounted yet, display a loading div */
-        if(!ctrl.mounted()) {
-            if(ctrl.timeout()) 
-                return m("div.timeout", {}, "Loading failed.");
+        if(!ctrl.loaded()) 
             return m("div.loading", {}, "Loading....");
-        }
 
-        return ctrl.component_view(ctrl.component_controller);
+        if(!ctrl.mounted()) 
+            return m("div");
+
+        return ctrl.component_view(ctrl.component_controller, ctrl);
     }
 
     m.module(document.getElementById(id), view_component);
 }
 
-function z_check_loaded(component) {
+function z_check_loaded(name, component) {
     if(component.wait_for.length != 0) 
         return;
 
@@ -143,7 +163,7 @@ function z_check_loaded(component) {
     component.on_load = undefined;
 
     /* Notify that this component is loaded, other components could be waiting. */
-    pubzub.publish("~pagesession/loaded", component.name);
+    pubzub.publish("~pagesession/loaded", name);
 }
 
 /**
@@ -165,7 +185,7 @@ function z_load(name, init, wait_for) {
     component.wait_for = wait_for;
 
     /* Check if the component is loaded */
-    z_check_loaded(component);
+    z_check_loaded(name, component);
 }
 
 function z_lazy_load(url, name) {
@@ -185,7 +205,7 @@ pubzub.subscribe("~pagesession/loaded", function(topic, msg) {
         i = c.wait_for.indexOf(msg) 
         if(i > -1) {
             c.wait_for.splice(i, 1);
-            z_check_loaded(c);
+            z_check_loaded(name, c);
         }
     }
 });
