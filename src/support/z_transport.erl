@@ -400,8 +400,8 @@ maybe_set_page_session(undefined, Context) ->
     Context;
 maybe_set_page_session(<<>>, Context) ->
     Context;
-maybe_set_page_session(_PageId, #context{session_pid=undefined, session_id=SessionId} = Context) ->
-    lager:info("PageId without page session (session_id ~p)", [SessionId]),
+maybe_set_page_session(_PageId, #context{session_pid=undefined, session_id=_SessionId} = Context) ->
+    % Unknown session (session id without a session process)
     Context;
 maybe_set_page_session(PageId, #context{page_id=PageId} = Context) ->
     Context;

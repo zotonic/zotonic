@@ -180,19 +180,21 @@ comet_detach(CometPid, PagePid) ->
     z_utils:flush_message(script_queued).
 
 %% @doc Attach the websocket request process to the page session, enabling sending scripts to the user agent
+-spec websocket_attach(pid(), binary()|undefined, #context{}) -> ok.
 websocket_attach(WsPid, PageId, Context) when is_binary(PageId) ->
     websocket_attach(WsPid, whereis(PageId, Context));
-websocket_attach(_WsPid, undefined, Context) ->
-    lager:info(z_context:lager_md(Context),
-               "Websocket attach to non-existing page ~p", [Context#context.page_id]).
+websocket_attach(_WsPid, undefined, _Context) ->
+    % No page id, ignore attach.
+    ok.
 
-websocket_attach(WsPid, #context{page_pid=PagePid}) when is_pid(PagePid) ->
+-spec websocket_attach(pid(), #context{}|pid()|undefined) -> ok.
+websocket_attach(WsPid, #context{page_pid=PagePid}) ->
     websocket_attach(WsPid, PagePid);
 websocket_attach(WsPid, PagePid) when is_pid(PagePid) ->
     gen_server:cast(PagePid, {websocket_attach, WsPid});
-websocket_attach(_WsPid, #context{} = Context) ->
-    lager:info(z_context:lager_md(Context),
-               "Websocket attach to non-existing page ~p", [Context#context.page_id]).
+websocket_attach(_WsPid, undefined) ->
+    % No page process, ignore attach
+    ok.
 
 %% @doc Called by the comet process or the page request to fetch any queued transport messages
 get_transport_data(Pid) when is_pid(Pid) ->
