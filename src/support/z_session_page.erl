@@ -187,9 +187,10 @@ websocket_attach(WsPid, #context{page_pid=Pid}) when is_pid(Pid) ->
     websocket_attach(WsPid, Pid);
 websocket_attach(WsPid, Pid) when is_pid(Pid) ->
     gen_server:cast(Pid, {websocket_attach, WsPid});
-websocket_attach(_WsPid, #context{} = Context) ->
-    lager:info(z_context:lager_md(Context),
-               "Websocket attach to non-existing page ~p", [Context#context.page_id]).
+websocket_attach(_WsPid, #context{} = _Context) ->
+    ok.
+    % lager:info(z_context:lager_md(Context),
+    %            "Websocket attach to non-existing page ~p", [Context#context.page_id]).
 
 %% @doc Called by the comet process or the page request to fetch any queued transport messages
 get_transport_data(Pid) ->
