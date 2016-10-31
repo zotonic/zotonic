@@ -306,6 +306,9 @@ delete_ready(Id, Path, Context, _Ref, ok) ->
 delete_ready(Id, Path, Context, _Ref, {error, enoent}) ->
     lager:debug("Delete remote file for ~p was not found (~p)", [Path, z_context:site(Context)]),
     m_filestore:purge_deleted(Id, Context);
+delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
+    lager:debug("Delete remote file for ~p was forbidden (~p)", [Path, z_context:site(Context)]),
+    m_filestore:purge_deleted(Id, Context);
 delete_ready(_Id, Path, Context, _Ref, {error, _} = Error) ->
     lager:error("Could not delete remote file. Path ~p (~p) error ~p", [Path, z_context:site(Context), Error]).
 
