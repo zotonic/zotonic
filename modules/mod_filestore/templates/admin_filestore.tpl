@@ -56,8 +56,23 @@
                                 <div class="checkbox col-md-12">
                                     <label for="is_upload_enabled">
                                         <input type="checkbox" id="is_upload_enabled" name="is_upload_enabled" {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
-                                        {_ Upload new media files to the cloud by default _}
+                                        {_ Upload new media files to the cloud file store _}
                                     </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-inline">
+                                    <label for="delete_interval" class="control-label">{_ Delete files from the cloud file store _}&nbsp;</label>
+                                    {% with m.config.mod_filestore.delete_interval.value|default:"0" as value %}
+                                         <select class="form-control input-sm" id="delete_interval" name="delete_interval">
+                                             <option value="0"{% if value == "0" %} selected{% endif %}>{_ Immediately _}</option>
+                                             <option value="1 week"{% if value == "1 week" %} selected{% endif %}>{_ After 1 week _}</option>
+                                             <option value="1 month"{% if value == "1 month" %} selected{% endif %}>{_ After 1 month _}</option>
+                                             <option value="3 months"{% if value == "3 months" %} selected{% endif %}>{_ After 3 months _}</option>
+                                             <option value="false"{% if value == false %} selected{% endif %}>{_ Never _}</option>
+                                         </select>
+                                     {% endwith %}
                                 </div>
                             </div>
 
