@@ -71,7 +71,7 @@
 -define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
 
 
--record(state, {site, is_pivot_delay = false}).
+-record(state, {site, is_initial_delay=true, is_pivot_delay = false}).
 
 
 %% @doc Poll the pivot queue for the database in the context
@@ -274,7 +274,7 @@ init(Host) ->
         {module, ?MODULE}
       ]),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {ok, #state{site=Host, is_pivot_delay=false}}.
+    {ok, #state{site=Host, is_initial_delay=true, is_pivot_delay=false}}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -292,12 +292,17 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Poll the queue for the default host
+handle_cast(poll, #state{is_initial_delay=true} = State) ->
+    {noreply, State};
 handle_cast(poll, State) ->
     do_poll(z_context:new(State#state.site)),
     {noreply, State};
 
 
 %% @doc Poll the queue for a particular database
+handle_cast({pivot, Id}, #state{is_initial_delay=true} = State) ->
+    insert_queue(Id, z_context:new(State#state.site)),
+    {noreply, State};
 handle_cast({pivot, Id}, State) ->
     do_pivot(Id, z_context:new(State#state.site)),
     {noreply, State};
@@ -322,7 +327,7 @@ handle_info(poll, State) ->
         true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
         false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
     end,
-    {noreply, State};
+    {noreply, State#state{is_initial_delay = false}};
 
 handle_info(_Info, State) ->
     {noreply, State}.
