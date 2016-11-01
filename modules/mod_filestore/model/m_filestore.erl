@@ -26,7 +26,7 @@
     dequeue/2,
     mark_error/3,
     mark_deleted/2,
-    fetch_deleted/1,
+    fetch_deleted/2,
     purge_deleted/2,
 
     mark_move_to_local_all/1,
@@ -119,20 +119,22 @@ mark_error(Id, Error, Context) ->
 mark_deleted({prefix, Path}, Context) when is_binary(Path) ->
     z_db:q("update filestore
             set is_deleted = true,
-                modified = now()
+                modified = now(),
+                deleted = now()
             where path like $1",
             [<<Path/binary, $%>>],
             Context);
 mark_deleted(Path, Context) when is_binary(Path) ->
     z_db:q("update filestore
             set is_deleted = true,
-                modified = now()
+                modified = now(),
+                deleted = now()
             where path = $1",
             [Path],
             Context).
 
-fetch_deleted(Context) ->
-    z_db:assoc("select * from filestore where is_deleted limit 200", Context).
+fetch_deleted(Interval, Context) when is_binary(Interval) ->
+    z_db:assoc(<<"select * from filestore where is_deleted and deleted < now() - interval '", Interval/binary, "' limit 200">>, Context).
 
 purge_deleted(Id, Context) ->
     z_db:q("delete from filestore where id = $1 and is_deleted", [Id], Context).
@@ -252,6 +254,7 @@ stats(Context) ->
 
 install(install, Context) ->
     ok = install_filestore(Context),
+    ok = ensure_column_deleted(Context),
     ok = install_filequeue(Context).
 
 install_filestore(Context) ->
@@ -300,5 +303,17 @@ install_filequeue(Context) ->
             z_db:flush(Context),
             ok;
         true ->
+            ok
+    end.
+
+ensure_column_deleted(Context) ->
+    Columns = z_db:column_names(filestore, Context),
+    case lists:member(deleted, Columns) of
+        true ->
+            ok;
+        false ->
+            [] = z_db:q("alter table filestore add column deleted timestamp with time zone", Context),
+            {ok, _, _} = z_db:equery("create index filestore_deleted on filestore(deleted)", Context),
+            z_db:flush(Context),
             ok
     end.

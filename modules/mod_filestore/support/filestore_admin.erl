@@ -35,12 +35,14 @@ event(#submit{message=admin_filestore}, Context) ->
             S3Key = z_string:trim(z_context:get_q(<<"s3key">>, Context)),
             S3Secret = z_string:trim(z_context:get_q(<<"s3secret">>, Context)),
             IsUploadEnabled = z_convert:to_bool(z_context:get_q(<<"is_upload_enabled">>, Context)),
+            DeleteInterval = z_context:get_q(<<"delete_interval">>, Context),
             case testcred(S3Url, S3Key, S3Secret) of
                 ok ->
                     m_config:set_value(mod_filestore, s3url, S3Url, Context),
                     m_config:set_value(mod_filestore, s3key, S3Key, Context),
                     m_config:set_value(mod_filestore, s3secret, S3Secret, Context),
                     m_config:set_value(mod_filestore, is_upload_enabled, IsUploadEnabled, Context),
+                    m_config:set_value(mod_filestore, delete_interval, DeleteInterval, Context),
                     z_render:wire([
                             {hide, [{target, "s3error"}]},
                             {hide, [{target, "s3error-queue"}]},
