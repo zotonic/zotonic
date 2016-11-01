@@ -29,7 +29,7 @@
                         <h3 class="widget-header">{_ S3 Cloud Location and Credentials _}</h3>
                         <div class="widget-content">
                             <div class="form-group row">
-                                <label class="control-label col-md-12" for="s3url">{_ Base Url _}</label>
+                                <label class="control-label col-md-12" for="s3url">{_ Base URL _}</label>
                                 <div class="col-md-12">
                                     <input type="text" id="s3url" name="s3url"
                                         value="{{ m.config.mod_filestore.s3url.value|escape }}" class="form-control"
@@ -64,7 +64,7 @@
                             <p class="help-block">{_ Before the settings are saved they will be checked by uploading (and removing) a small file. _}</p>
 
                             <p id="s3ok" class="alert alert-success" style="display:none">{_ Settings are working fine and are saved. _}</p>
-                            <p id="s3error" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
+                            <p id="s3error" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file. _}</p>
 
                             <div class="form-group">
                                 <div>
