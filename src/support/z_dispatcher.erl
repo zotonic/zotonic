@@ -101,26 +101,44 @@ url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
             Name, Args1, Context)).
 
 
-%% @spec hostname(Context) -> iolist()
 %% @doc Fetch the preferred hostname for this site
+-spec hostname(#context{}) -> iolist() | undefined.
 hostname(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'hostname', infinity).
+    try
+        gen_server:call(Dispatcher, 'hostname', infinity)
+    catch
+        exit:{noproc, {gen_server, call, _}} ->
+            undefined
+    end.
 
-%% @spec hostname_port(Context) -> iolist()
 %% @doc Fetch the preferred hostname, including port, for this site
+-spec hostname_port(#context{}) -> iolist() | undefined.
 hostname_port(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'hostname_port', infinity).
+    try
+        gen_server:call(Dispatcher, 'hostname_port', infinity)
+    catch
+        exit:{noproc, {gen_server, call, _}} ->
+            undefined
+    end.
 
 %% @doc Make the url an absolute url
 abs_url(Url, Context) ->
     abs_url(Url, undefined, [], Context).
 
-%% @spec dispatchinfo(Context) -> {host, hostname, smtphost, hostaliases, redirect, dispatchlist}
 %% @doc Fetch the dispatchlist for the site.
+-spec dispatchinfo(#context{}|pid()|atom()) ->
+              {ok, atom(), binary()|string(), binary()|string(), list(), boolean(), list()}
+            | {error, noproc}.
 dispatchinfo(#context{dispatcher=Dispatcher}) ->
-    gen_server:call(Dispatcher, 'dispatchinfo', infinity);
+    dispatchinfo(Dispatcher);
 dispatchinfo(Server) when is_pid(Server) orelse is_atom(Server) ->
-    gen_server:call(Server, 'dispatchinfo', infinity).
+    try
+        DispatchInfo = gen_server:call(Server, 'dispatchinfo', infinity),
+        {ok, DispatchInfo}
+    catch
+        exit:{noproc, {gen_server, call, _}} ->
+            {error, noproc}
+    end.
 
 
 %% @doc Update the dispatch list but don't reload it yet. Used when flushing all sites, see z:flush/0

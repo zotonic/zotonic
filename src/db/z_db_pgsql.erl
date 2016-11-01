@@ -45,6 +45,10 @@
 
 -define(IDLE_TIMEOUT, 60000).
 
+-define(CONNECT_RETRIES, 50).
+-define(CONNECT_RETRY_SLEEP, 10000).
+-define(CONNECT_RETRY_SHORT, 10).
+
 -record(state, {conn, conn_args}).
 
 
@@ -93,8 +97,8 @@ init(Args) ->
     {ok, #state{conn=undefined, conn_args=Args}}.
 
 
-handle_call(Cmd, _From, #state{conn=undefined}=State) ->
-    case connect(State) of
+handle_call(Cmd, _From, #state{conn=undefined, conn_args=Args}=State) ->
+    case connect(Args) of
         {ok, Conn} ->
             handle_call(Cmd, _From, State#state{conn=Conn});
         {error, _} = E ->
@@ -117,9 +121,21 @@ handle_call(_Request, _From, State) ->
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
-
+handle_info(disconnect, #state{conn=undefined} = State) ->
+    {noreply, State};
+handle_info(disconnect, State) ->
+    Database = get_arg(dbdatabase, State#state.conn_args),
+    Schema = get_arg(dbschema, State#state.conn_args),
+    lager:debug("Closing connection to ~s/~s (~p)", [Database, Schema, self()]),
+    {noreply, disconnect(State)};
 handle_info(timeout, State) ->
     {noreply, disconnect(State)};
+handle_info({'EXIT', Pid, _Reason}, #state{conn=Pid} = State) ->
+    % Unexpected EXIT from the connection
+    {noreply, State#state{conn=undefined}};
+handle_info({'EXIT', _Pid, _Reason}, #state{conn=undefined} = State) ->
+    % Expected EXIT after disconnect
+    {noreply, State, hibernate};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -137,31 +153,66 @@ code_change(_OldVsn, State, _Extra) ->
 %% Helper functions
 %%
 
-connect(#state{conn_args=Args}) ->
-    connect(Args);
 connect(Args) when is_list(Args) ->
+    connect(Args, 0).
+
+connect(_Args, RetryCt) when RetryCt >= ?CONNECT_RETRIES ->
+    {error, econnrefused};
+connect(Args, RetryCt) ->
     Hostname = get_arg(dbhost, Args),
     Port = get_arg(dbport, Args),
     Database = get_arg(dbdatabase, Args),
     Username = get_arg(dbuser, Args),
     Password = get_arg(dbpassword, Args),
     Schema = get_arg(dbschema, Args),
-    case pgsql:connect(Hostname, Username, Password,
-                       [{database, Database}, {port, Port}]) of
-        {ok, Conn} ->
-            case pgsql:squery(Conn, "SET search_path TO " ++ Schema) of
-                {ok, [], []} ->
-                    {ok, Conn};
-                Error ->
-                    pgsql:close(Conn),
-                    {error, Error}
-            end;
-        {error, _} = E ->
-            E
+    try
+        case pgsql:connect(Hostname, Username, Password,
+                           [{database, Database}, {port, Port}]) of
+            {ok, Conn} ->
+                case pgsql:squery(Conn, "SET search_path TO " ++ Schema) of
+                    {ok, [], []} ->
+                        {ok, Conn};
+                    Error ->
+                        catch pgsql:close(Conn),
+                        {error, Error}
+                end;
+            {error, econnrefused} ->
+                lager:warning("psql connection to ~p:~p refused (econnrefused), retrying in ~p sec (~p)",
+                              [Hostname, Port, ?CONNECT_RETRY_SLEEP div 1000, self()]),
+                timer:sleep(?CONNECT_RETRY_SLEEP),
+                connect(Args, RetryCt+10);
+            {error, {error,fatal,<<"53300">>,_ErrorMsg,_ErrorArgs}} ->
+                too_many_connections(Args, RetryCt);
+            {error, <<"53300">>} ->
+                too_many_connections(Args, RetryCt);
+            {error, _} = E ->
+                lager:warning("psql connection to ~p:~p returned error ~p",
+                              [Hostname, Port, E]),
+                E
+        end
+    catch
+        A:B ->
+            Trace = erlang:get_stacktrace(),
+            lager:error("psql connection to ~p:~p failed (exception ~p:~p), retrying in ~p sec (~p) in ~p",
+                        [Hostname, Port, A, B, ?CONNECT_RETRY_SLEEP div 1000, self(), Trace]),
+            timer:sleep(?CONNECT_RETRY_SLEEP),
+            connect(Args, RetryCt+1)
     end.
 
-disconnect(State) ->
-    pgsql:close(State#state.conn),
+too_many_connections(Args, RetryCt) ->
+    Hostname = get_arg(dbhost, Args),
+    Port = get_arg(dbport, Args),
+    lager:warning("psql connection to ~p:~p refused (too many connections), retrying in ~p msec (~p)",
+                  [Hostname, Port, ?CONNECT_RETRY_SHORT, self()]),
+    z_db_pool:close_connections(),
+    timer:sleep(?CONNECT_RETRY_SHORT),
+    connect(Args, RetryCt+1).
+
+
+disconnect(#state{conn=undefined} = State) ->
+    State;
+disconnect(#state{conn=Conn} = State) ->
+    _ = pgsql:close(Conn),
     State#state{conn=undefined}.
 
 get_arg(K, Args) ->

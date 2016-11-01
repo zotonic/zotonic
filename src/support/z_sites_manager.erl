@@ -56,6 +56,7 @@
 -record(state, {sup}).
 
 -define(SITES_START_TIMEOUT,  3600000).  % 1 hour
+-define(SITES_SUPERVISOR, 'z_sites_manager$supervisor').
 
 -type site_status() :: waiting | running | retrying | failed | stopped.
 
@@ -77,12 +78,16 @@ upgrade() ->
 %% @doc Return a list of active site names.
 -spec get_sites() -> [ atom() ].
 get_sites() ->
-    gen_server:call(?MODULE, get_sites).
+    z_supervisor:running_children(?SITES_SUPERVISOR).
 
 %% @doc Return a list of all site names.
 -spec get_sites_all() -> [ atom() ].
 get_sites_all() ->
-    gen_server:call(?MODULE, get_sites_all).
+    lists:flatten(
+        lists:map(fun({_State,Children}) ->
+                    [ Name || {Name,_Spec,_RunState,_Time} <- Children ]
+                  end,
+                  z_supervisor:which_children(?SITES_SUPERVISOR))).
 
 %% @doc Get the status of a particular site
 get_site_status(Site) when is_atom(Site) ->
@@ -200,7 +205,7 @@ module_loaded(Module) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init([]) ->
-    {ok, Sup} = z_supervisor:start_link([]),
+    {ok, Sup} = z_supervisor:start_link({local, ?SITES_SUPERVISOR}, []),
     z_supervisor:set_manager_pid(Sup, self()),
     ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]),
     ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]),
@@ -214,20 +219,6 @@ init([]) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
-%% @doc Return the active sites
-handle_call(get_sites, _From, State) ->
-    {reply, z_supervisor:running_children(State#state.sup), State};
-
-%% @doc Return all sites
-handle_call(get_sites_all, _From, State) ->
-    All = lists:flatten(
-                lists:map(fun({_State,Children}) ->
-                            [ Name || {Name,_Spec,_RunState,_Time} <- Children ]
-                          end,
-                          z_supervisor:which_children(State#state.sup))),
-    {reply, All, State};
-
-
 %% @doc Return all sites
 handle_call(get_sites_status, _From, State) ->
     Grouped = z_supervisor:which_children(State#state.sup),

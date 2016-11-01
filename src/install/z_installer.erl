@@ -21,30 +21,75 @@
 -module(z_installer).
 -author("Marc Worrell <marc@worrell.nl").
 
+-behaviour(gen_server).
+
 %% gen_server exports
--export([start_link/1]).
+-export([
+    start_link/1, init/1,
+    handle_call/3, handle_cast/2,
+    handle_info/2, code_change/3,
+    terminate/2]).
 
 -include_lib("zotonic.hrl").
+
+-record(state, { site :: atom(), site_props :: list() }).
 
 %%====================================================================
 %% API
 %%====================================================================
+
 -spec start_link(list()) -> ignore | {error, database|term()}.
 %% @doc Install zotonic on the databases in the PoolOpts, skips when already installed.
 start_link(SiteProps) when is_list(SiteProps) ->
-    install_check(SiteProps, 1).
+    gen_server:start_link(?MODULE, SiteProps, []).
+
+
+%%====================================================================
+%% gen_server callbacks
+%%====================================================================
+
+init(SiteProps) ->
+    {host, Site} = proplists:lookup(host, SiteProps),
+    self() ! install_check,
+    {ok, #state{ site = Site, site_props = SiteProps }}.
+
+handle_call(Msg, _From, State) ->
+    {reply, {unknown_call, Msg}, State}.
+
+handle_cast(_Msg, State) ->
+    {noreply, State}.
+
+handle_info(install_check, State) ->
+    case install_check(State#state.site_props) of
+        ok ->
+            ok = z_site_sup:install_done(State#state.site_props),
+            {noreply, State, hibernate};
+        {error, _} ->
+            {stop, installfail, State}
+    end.
+
+code_change(_Vsn, State, _Extra) ->
+    {noreply, State}.
+
+terminate(_Reason, _State) ->
+    ok.
+
+
+%%====================================================================
+%% Internal
+%%====================================================================
 
 %% Check if the config table exists, if so then assume that all is ok
-install_check(SiteProps, RetryCt) when RetryCt =< 2 ->
-    {host, Host} = proplists:lookup(host, SiteProps),
+install_check(SiteProps) ->
+    {host, Site} = proplists:lookup(host, SiteProps),
     lager:md([
-        {site, Host},
+        {site, Site},
         {module, ?MODULE}
       ]),
-    Context = z_context:new(Host),
+    Context = z_context:new(Site),
     case z_db:has_connection(Context) of
         true -> check_db_and_upgrade(Context, 1);
-        false -> ignore
+        false -> ok
     end.
 
 check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
@@ -52,12 +97,14 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
         ok ->
             DbOptions = proplists:delete(dbpassword, z_db_pool:get_database_options(Context)),
             case {z_db:table_exists(config, Context), z_config:get(dbinstall)} of
-                {false, false} -> lager:warning("[~p] config table does not exist and dbinstall is false; not installing", [z_context:site(Context)]);
+                {false, false} ->
+                    lager:error("[~p] config table does not exist and dbinstall is false; not installing", [z_context:site(Context)]),
+                    {error, nodbinstall};
                 {false, _} ->
                     %% Install database
-                    lager:warning("[~p] Installing database with db options: ~p", [z_context:site(Context), DbOptions]),
+                    lager:info("[~p] Installing database with db options: ~p", [z_context:site(Context), DbOptions]),
                     z_install:install(Context),
-                    ignore;
+                    ok;
                 {true, _} ->
                     %% Normal startup, do upgrade / check
                     ok = z_db:transaction(
@@ -69,22 +116,24 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                                    ok = sanity_check(C, Database, Schema)
                            end,
                            Context),
-                    ignore
+                    ok
             end;
         {error, Reason} ->
             lager:warning("[~p] Database connection failure: ~p", [z_context:site(Context), Reason]),
-	    case z_config:get(dbcreate) of
-		false -> lager:warning("[~p] Database does not exist and dbcreate is false; not creating", [z_context:site(Context)]);
-		_Else ->
-		    case z_db:prepare_database(Context) of
-			ok ->
-			    lager:info("[~p] Retrying install check after db creation.", [z_context:site(Context)]),
-			    check_db_and_upgrade(Context, Tries+1);
-			{error, _PrepReason} = Error ->
-			    lager:error("[~p] Could not create the database and schema.", [z_context:site(Context)]),
-			    Error
-		    end
-		end
+            case z_config:get(dbcreate) of
+                false ->
+                    lager:warning("[~p] Database does not exist and dbcreate is false; not creating", [z_context:site(Context)]),
+                    {error, nodbcreate};
+                _Else ->
+                    case z_db:prepare_database(Context) of
+                        ok ->
+                            lager:info("[~p] Retrying install check after db creation.", [z_context:site(Context)]),
+                            check_db_and_upgrade(Context, Tries+1);
+                        {error, _PrepReason} = Error ->
+                            lager:error("[~p] Could not create the database and schema.", [z_context:site(Context)]),
+                            Error
+                    end
+                end
     end;
 check_db_and_upgrade(Context, _Tries) ->
     lager:error("[~p] Could not connect to database and db creation failed", [z_context:site(Context)]),
