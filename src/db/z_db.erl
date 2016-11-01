@@ -200,17 +200,17 @@ return_connection(_C, _Context) ->
 with_connection(F, Context) ->
     with_connection(F, get_connection(Context), Context).
 
-    with_connection(F, none, _Context) ->
-        F(none);
-    with_connection(F, Connection, Context) when is_pid(Connection) ->
-        exometer:update([zotonic, z_context:site(Context), db, requests], 1),
-        try
-            {Time, Result} = timer:tc(F, [Connection]),
-            exometer:update([zotonic, z_context:site(Context), db, duration], Time),
-            Result
-        after
-            return_connection(Connection, Context)
-	end.
+with_connection(F, none, _Context) ->
+    F(none);
+with_connection(F, Connection, Context) when is_pid(Connection) ->
+    exometer:update([zotonic, z_context:site(Context), db, requests], 1),
+    try
+        {Time, Result} = timer:tc(F, [Connection]),
+        exometer:update([zotonic, z_context:site(Context), db, duration], Time),
+        Result
+    after
+        return_connection(Connection, Context)
+end.
 
 
 assoc_row(Sql, Context) ->
@@ -244,10 +244,13 @@ assoc(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
 
 assoc(Sql, Parameters, Context, Timeout) ->
     DbDriver = z_context:db_driver(Context),
-    F = fun(C) when C =:= none -> [];
+    F = fun
+       (none) -> [];
 	   (C) ->
-                {ok, Result} = assoc1(DbDriver, C, Sql, Parameters, Timeout),
-                Result
+            case assoc1(DbDriver, C, Sql, Parameters, Timeout) of
+                {ok, Result} when is_list(Result) ->
+                    Result
+            end
 	end,
     with_connection(F, Context).
 
@@ -262,10 +265,13 @@ assoc_props(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
 
 assoc_props(Sql, Parameters, Context, Timeout) ->
     DbDriver = z_context:db_driver(Context),
-    F = fun(C) when C =:= none -> [];
-	   (C) ->
-                {ok, Result} = assoc1(DbDriver, C, Sql, Parameters, Timeout),
-                merge_props(Result)
+    F = fun
+        (none) -> [];
+	    (C) ->
+            case assoc1(DbDriver, C, Sql, Parameters, Timeout) of
+                {ok, Result} when is_list(Result) ->
+                    merge_props(Result)
+            end
 	end,
     with_connection(F, Context).
 
@@ -279,17 +285,18 @@ q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q(Sql, [], Context, Timeout).
 
 q(Sql, Parameters, Context, Timeout) ->
-    F = fun(C) when C =:= none -> [];
-	   (C) ->
-                DbDriver = z_context:db_driver(Context),
-                case DbDriver:equery(C, Sql, Parameters, Timeout) of
-                    {ok, _Affected, _Cols, Rows} -> Rows;
-                    {ok, _Cols, Rows} -> Rows;
-                    {ok, Rows} -> Rows;
-                    {error, Reason} = Error ->
-                        lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, Parameters]),
-                        throw(Error)
-                end
+    F = fun
+        (none) -> [];
+	    (C) ->
+            DbDriver = z_context:db_driver(Context),
+            case DbDriver:equery(C, Sql, Parameters, Timeout) of
+                {ok, _Affected, _Cols, Rows} when is_list(Rows) -> Rows;
+                {ok, _Cols, Rows} when is_list(Rows) -> Rows;
+                {ok, Value} when is_list(Value); is_integer(Value) -> Value;
+                {error, Reason} = Error ->
+                    lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, Parameters]),
+                    throw(Error)
+            end
 	end,
     with_connection(F, Context).
 
@@ -302,16 +309,17 @@ q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q1(Sql, [], Context, Timeout).
 
 q1(Sql, Parameters, Context, Timeout) ->
-    F = fun(C) when C =:= none -> undefined;
-           (C) ->
-                DbDriver = z_context:db_driver(Context),
-                case equery1(DbDriver, C, Sql, Parameters, Timeout) of
-                    {ok, Value} -> Value;
-                    {error, noresult} -> undefined;
-                    {error, Reason} = Error ->
-                        lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, Parameters]),
-                        throw(Error)
-                end
+    F = fun
+        (none) -> undefined;
+        (C) ->
+            DbDriver = z_context:db_driver(Context),
+            case equery1(DbDriver, C, Sql, Parameters, Timeout) of
+                {ok, Value} -> Value;
+                {error, noresult} -> undefined;
+                {error, Reason} = Error ->
+                    lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, Parameters]),
+                    throw(Error)
+            end
     end,
     with_connection(F, Context).
 

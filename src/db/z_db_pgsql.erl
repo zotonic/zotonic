@@ -45,8 +45,9 @@
 
 -define(IDLE_TIMEOUT, 60000).
 
--define(CONNECT_RETRIES, 5).
+-define(CONNECT_RETRIES, 50).
 -define(CONNECT_RETRY_SLEEP, 10000).
+-define(CONNECT_RETRY_SHORT, 10).
 
 -record(state, {conn, conn_args}).
 
@@ -122,14 +123,21 @@ handle_call(_Request, _From, State) ->
 handle_cast(_Msg, State) ->
     {noreply, State, ?IDLE_TIMEOUT}.
 
-
+handle_info(disconnect, #state{conn=undefined} = State) ->
+    {noreply, State};
+handle_info(disconnect, State) ->
+    Database = get_arg(dbdatabase, State#state.conn_args),
+    Schema = get_arg(dbschema, State#state.conn_args),
+    lager:debug("Closing connection to ~s/~s (~p)", [Database, Schema, self()]),
+    {noreply, disconnect(State)};
 handle_info(timeout, State) ->
     {noreply, disconnect(State)};
-handle_info({'EXIT', _Pid, econnrefused}, State) ->
-    % Handled in the connect retry loop
-    {noreply, State};
-handle_info({'EXIT', _Pid, _Reason}, State) ->
-    {stop, normal, State};
+handle_info({'EXIT', Pid, _Reason}, #state{conn=Pid} = State) ->
+    % Unexpected EXIT from the connection
+    {noreply, State#state{conn=undefined}};
+handle_info({'EXIT', _Pid, _Reason}, #state{conn=undefined} = State) ->
+    % Expected EXIT after disconnect
+    {noreply, State, hibernate};
 handle_info(_Info, State) ->
     {noreply, State, ?IDLE_TIMEOUT}.
 
@@ -170,10 +178,14 @@ connect(Args, RetryCt) ->
                         {error, Error}
                 end;
             {error, econnrefused} ->
-                lager:warning("psql connection to ~p:~p refused, retrying in ~p sec (~p)",
+                lager:warning("psql connection to ~p:~p refused (econnrefused), retrying in ~p sec (~p)",
                               [Hostname, Port, ?CONNECT_RETRY_SLEEP div 1000, self()]),
                 timer:sleep(?CONNECT_RETRY_SLEEP),
-                connect(Args, RetryCt+1);
+                connect(Args, RetryCt+10);
+            {error, {error,fatal,<<"53300">>,_ErrorMsg,_ErrorArgs}} ->
+                too_many_connections(Args, RetryCt);
+            {error, <<"53300">>} ->
+                too_many_connections(Args, RetryCt);
             {error, _} = E ->
                 lager:warning("psql connection to ~p:~p returned error ~p",
                               [Hostname, Port, E]),
@@ -181,10 +193,21 @@ connect(Args, RetryCt) ->
         end
     catch
         A:B ->
-            ?DEBUG({A,B}),
+            lager:error("psql connection to ~p:~p failed (exception ~p:~p), retrying in ~p sec (~p)",
+                        [Hostname, Port, A, B, ?CONNECT_RETRY_SLEEP div 1000, self()]),
             timer:sleep(?CONNECT_RETRY_SLEEP),
             connect(Args, RetryCt+1)
     end.
+
+too_many_connections(Args, RetryCt) ->
+    Hostname = get_arg(dbhost, Args),
+    Port = get_arg(dbport, Args),
+    lager:warning("psql connection to ~p:~p refused (too many connections), retrying in ~p msec (~p)",
+                  [Hostname, Port, ?CONNECT_RETRY_SHORT, self()]),
+    z_db_pool:close_connections(),
+    timer:sleep(?CONNECT_RETRY_SHORT),
+    connect(Args, RetryCt+1).
+
 
 disconnect(#state{conn=undefined} = State) ->
     State;

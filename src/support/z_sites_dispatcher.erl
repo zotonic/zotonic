@@ -735,20 +735,36 @@ first_site_match([Site|Sites], DispHost) ->
 
 %% @doc Collect all dispatch rules for all sites, normalize and filter them.
 collect_dispatchrules() ->
-    [ filter_rules(fetch_dispatchinfo(Site), Site) || Site <- z_sites_manager:get_sites() ].
+    [ collect_dispatchrules(Site) || Site <- z_sites_manager:get_sites() ].
 
 %% @doc Collect all dispatch rules for all sites, normalize and filter them.
 collect_dispatchrules(Site) ->
-    filter_rules(fetch_dispatchinfo(Site), Site).
+    case fetch_dispatchinfo(Site) of
+        {ok, DispatchInfo} ->
+            filter_rules(DispatchInfo, Site);
+        {error, _} ->
+            #site_dispatch_list{
+                site=Site,
+                hostname="localhost",
+                smtphost="localhost",
+                hostalias=[],
+                redirect=false,
+                dispatch_list=[]
+            }
+    end.
 
 %% @doc Fetch dispatch rules for a specific site.
 fetch_dispatchinfo(Site) ->
     Name = z_utils:name_for_site(z_dispatcher, Site),
-    {Site, Hostname, SmtpHost, Hostalias, Redirect, DispatchList} = z_dispatcher:dispatchinfo(Name),
-    #site_dispatch_list{
-        site=Site, hostname=Hostname, smtphost=SmtpHost, hostalias=Hostalias,
-        redirect=Redirect, dispatch_list=DispatchList
-    }.
+    case z_dispatcher:dispatchinfo(Name) of
+        {ok, {Site, Hostname, SmtpHost, Hostalias, Redirect, DispatchList}} ->
+            {ok, #site_dispatch_list{
+                site=Site, hostname=Hostname, smtphost=SmtpHost, hostalias=Hostalias,
+                redirect=Redirect, dispatch_list=DispatchList
+            }};
+        {error, _} = Error ->
+            Error
+    end.
 
 
 % @doc Split the optional port number from the host name
