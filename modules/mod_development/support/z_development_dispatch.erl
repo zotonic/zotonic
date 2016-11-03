@@ -23,7 +23,6 @@
     ]).
 
 -include_lib("zotonic.hrl").
--include_lib("wm_host_dispatch_list.hrl").
 
 event(#submit{message=explain_dispatch}, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of

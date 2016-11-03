@@ -167,8 +167,23 @@ site_configs() ->
 
 site_config(Site) ->
     case z_sites_manager:get_site_config(Site) of
-        {ok, Config} -> Config;
-        {error, _} = Error -> [{host,Site}, Error]
+        {ok, Config} -> fix_hostname_port_config(Config);
+        {error, _} = Error -> [{site,Site}, Error]
+    end.
+
+fix_hostname_port_config(Config) ->
+    Hostname = proplists:get_value(hostname, Config),
+    [ {hostname, fix_hostname_port(Hostname)} | proplists:delete(hostname, Config)].
+
+fix_hostname_port(undefined) ->
+    fix_hostname_port("localhost");
+fix_hostname_port(Hostname) when is_binary(Hostname) ->
+    fix_hostname_port(binary_to_list(Hostname));
+fix_hostname_port(Hostname) ->
+    [ Host | _ ] = string:tokens(Hostname, ":"),
+    case z_config:get(port) of
+        80 -> Host;
+        Port -> lists:flatten([Host, $:, integer_to_list(Port)])
     end.
 
 get_sites() ->

@@ -43,12 +43,17 @@
     location = <<>> :: binary(),
     is_permanent = false :: boolean()
 }).
+
 -record(dispatch_match, {
     dispatch_name = undefined :: atom(),
     mod :: atom(),
     mod_opts = [] :: list(),
     path_tokens = [] :: list(binary()),
     bindings = [] :: list({atom(), binary()})
+}).
+
+-record(dispatch_rules, {
+    rules :: #site_dispatch_list{} | undefined
 }).
 
 

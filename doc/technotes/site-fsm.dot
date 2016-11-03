@@ -1,8 +1,8 @@
 digraph site_fsm {
 
-	disabled -> enabled;
-	enabled -> start;
-	enabled -> disabled;
+	disabled -> start;
+	start -> disabled;
+	stopped -> disabled;
 
 	start -> db_connect_check;
 	db_connect_check -> datamodel_check;
@@ -20,8 +20,9 @@ digraph site_fsm {
 	stopped -> start;
 
 	crashed -> retry;
-	retry -> start [label="timeout"];
+	retry -> start [label="timeout", style=dotted];
+	retry -> stopped;
 
-	db_connect_check -> retry;
-	datamodel_check -> retry;
+	db_connect_check -> retry [style=dashed];
+	datamodel_check -> retry [style=dashed];
 }

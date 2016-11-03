@@ -18,9 +18,6 @@
 
 %% The release information
 -include("zotonic_release.hrl").
--include("zotonic_notifications.hrl").
--include("zotonic_events.hrl").
--include("zotonic_log.hrl").
 
 %% @doc The request context, session information and other
 -record(context, {
@@ -137,6 +134,16 @@
 -record(search_sql, {select, from, where="", order="", group_by="", limit, tables=[], args=[],
                      cats=[], cats_exclude=[], cats_exact=[], run_func, extra=[], assoc=false}).
 
+%% Used for fetching the site dispatch rules (see also )
+-record(site_dispatch_list, {
+            site,
+            hostname,
+            smtphost,
+            hostalias,
+            redirect,
+            dispatch_list
+        }).
+
 %% For z_supervisor, process definitions.
 -record(child_spec, {name, mfa, status, pid, crashes=5, period=60,
                      period_retry=600, period_retries=10, eternal_retry=7200,
@@ -245,4 +252,8 @@
 %% Wrapper macro to put Erlang terms in a bytea database column.
 %% Extraction is automatic, based on a magic marker prefixed to the serialized term.
 -define(DB_PROPS(N), {term, N}).
+
+-include("zotonic_notifications.hrl").
+-include("zotonic_events.hrl").
+-include("zotonic_log.hrl").
 

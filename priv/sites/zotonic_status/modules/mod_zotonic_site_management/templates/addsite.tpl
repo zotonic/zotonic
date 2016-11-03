@@ -41,7 +41,7 @@
                     <div class="col-sm-7">
                         <input class="form-control" type="text" id="{{ #hostname }}" name="hostname" value="" placeholder="www.example.com" />
                         {% validate id=#hostname name="hostname"
-                            type={format pattern="^[a-z0-9-]+(\\.[a-z0-9-]+)+(:[0-9]+)?$" failure_message=_"Enter a valid hostname like \"www.example.com\" or \"test.local:8000\"."}
+                            type={format pattern="^[a-z0-9-]+(\\.[a-z0-9-]+)+$" failure_message=_"Enter a valid hostname like \"www.example.com\" or \"test.local\"."}
                             type={presence}
                         %}
 

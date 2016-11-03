@@ -22,7 +22,7 @@
     survey_as_pages/2
 ]).
 
--include("zotonic_notifications.hrl").
+-include("zotonic.hrl").
 
 survey_as_pages(undefined, _Context) ->
 	[];

@@ -28,7 +28,9 @@
     site/1,
     hostname/1,
     hostname_port/1,
+    hostname_ssl_port/1,
     site_protocol/1,
+    is_ssl_site/1,
 
     db_pool/1,
     db_driver/1,
@@ -258,24 +260,39 @@ site(Req) when is_map(Req) ->
 -spec hostname(#context{}) -> binary().
 hostname(Context) ->
     case z_dispatcher:hostname(Context) of
-        Empty when Empty == undefined; Empty == <<>> ->
-            <<"localhost">>;
-        Hostname ->
-            Hostname
+        undefined -> <<"localhost">>;
+        <<>> -> <<"localhost">>;
+        Hostname -> Hostname
     end.
 
-%% @doc Return the preferred hostname, including port, from the site configuration
+%% @doc Return the hostname (and port) for http from the site configuration
 -spec hostname_port(#context{}) -> binary().
 hostname_port(Context) ->
     case z_dispatcher:hostname_port(Context) of
         Empty when Empty =:= undefined; Empty =:= <<>> ->
-            <<"localhost">>;
+            case z_config:get(port) of
+                80 -> <<"localhost">>;
+                Port -> <<"localhost:", (integer_to_binary(Port))/binary>>
+            end;
         Hostname ->
             Hostname
     end.
 
+%% @doc Return the hostname (and port) for https from the site configuration
+-spec hostname_ssl_port(#context{}) -> binary().
+hostname_ssl_port(Context) ->
+    case z_dispatcher:hostname_ssl_port(Context) of
+        Empty when Empty =:= undefined; Empty =:= <<>> ->
+            case z_config:get(ssl_port) of
+                443 -> <<"localhost">>;
+                Port -> <<"localhost:", (integer_to_binary(Port))/binary>>
+            end;
+        Hostname ->
+            Hostname
+    end.
 
 %% @doc Check if the current context is a request context
+-spec is_request(#context{}) -> boolean().
 is_request(#context{req=undefined}) -> false;
 is_request(_Context) -> true.
 
@@ -384,36 +401,65 @@ prune_reqdata(Req) ->
     % }.
 
 %% @doc Make the url an absolute url by prepending the hostname.
-%% @spec abs_url(iolist(), Context) -> binary()
-abs_url(<<"http:", _/binary>> = Url, _Context) ->
-    Url;
-abs_url(<<"https", _/binary>> = Url, _Context) ->
-    Url;
-abs_url(<<"//", _/binary>> = Url, Context) ->
-    <<(site_protocol(Context))/binary, $:, Url/binary>>;
+-spec abs_url(iolist(), #context{}) -> binary().
 abs_url(Url, Context) when is_list(Url) ->
     abs_url(iolist_to_binary(Url), Context);
+abs_url(<<"//", _/binary>> = Url, Context) ->
+    case m_req:scheme(Context) of
+        undefined ->
+            case is_ssl_site(Context) of
+                true -> <<"https:", Url/binary>>;
+                false -> <<"http:", Url/binary>>
+            end;
+        https -> <<"https:", Url/binary>>;
+        http -> <<"http:", Url/binary>>
+    end;
+abs_url(<<$/, _/binary>> = Url, Context) ->
+    case z_notifier:first(#url_abs{url=Url}, Context) of
+        undefined ->
+            Hostname = hostname(Context),
+            case request_scheme_port(Context) of
+                {https, 443} -> <<"https://", Hostname/binary, Url/binary>>;
+                {http, 80} -> <<"http://", Hostname/binary, Url/binary>>;
+                {https, Port} -> <<"https://", Hostname/binary, $:, (integer_to_binary(Port))/binary, Url/binary>>;
+                {http, Port} -> <<"http://", Hostname/binary, $:, (integer_to_binary(Port))/binary, Url/binary>>
+            end;
+        AbsUrl ->
+            AbsUrl
+    end;
 abs_url(Url, Context) ->
     case has_url_protocol(Url) of
-        true ->
-            Url;
-        false ->
-            case z_notifier:first(#url_abs{url=Url}, Context) of
-                undefined ->
-                    z_convert:to_binary([site_protocol(Context), "://", hostname_port(Context), Url]);
-                AbsUrl ->
-                    AbsUrl
+        true -> Url;
+        false -> abs_url(<<$/, Url/binary>>, Context)
+    end.
+
+request_scheme_port(Context) ->
+    case m_req:scheme(Context) of
+        https ->
+            {https, z_config:get(ssl_port)};
+        _ ->
+            case is_ssl_site(Context) of
+                true -> {https, z_config:get(ssl_port)};
+                false -> {http, z_config:get(port)}
             end
     end.
 
-    has_url_protocol(<<>>) ->
-        false;
-    has_url_protocol(<<H, T/binary>>) when H >= $a andalso H =< $z ->
-        has_url_protocol(T);
-    has_url_protocol(<<$:, _/binary>>) ->
-        true;
-    has_url_protocol(_) ->
-        false.
+has_url_protocol(<<"http:">>) -> true;
+has_url_protocol(<<"https:">>) -> true;
+has_url_protocol(<<"ws:">>) -> true;
+has_url_protocol(<<"wss:">>) -> true;
+has_url_protocol(<<"ftp:">>) -> true;
+has_url_protocol(<<"email:">>) -> true;
+has_url_protocol(<<"file:">>) -> true;
+has_url_protocol(<<H, T/binary>>) when H >= $a andalso H =< $z ->
+    has_url_protocol_1(T);
+has_url_protocol(_) ->
+    false.
+
+has_url_protocol_1(<<H, T/binary>>) when H >= $a andalso H =< $z ->
+    has_url_protocol_1(T);
+has_url_protocol_1(<<$:, _/binary>>) -> true;
+has_url_protocol_1(_) -> false.
 
 
 %% @doc Fetch the pid of the database worker pool for this site
@@ -428,10 +474,25 @@ db_driver(#context{db={_Pool, Driver}}) ->
 
 %% @doc Fetch the protocol for absolute urls referring to the site (defaults to http).
 %%      Useful when the site is behind a https proxy.
+-spec site_protocol(#context{}) -> binary().
 site_protocol(Context) ->
-    case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
-        <<>> -> <<"http">>;
-        P -> P
+    case is_ssl_site(Context) of
+        true -> <<"https">>;
+        false -> <<"http">>
+    end.
+
+%% @doc Check if the preferred protocol of the site is https
+%% @todo Refactor mod_ssl so that we don't need to check the mod_ssl config here 
+-spec is_ssl_site(#context{}) -> boolean().
+is_ssl_site(Context) ->
+    case z_config:get(port_ssl) of
+        none ->
+            false;
+        _ -> 
+            case z_config:get(ssl_only) of
+                true -> true;
+                false -> z_convert:to_bool(m_config:get_value(site, ssl_only, Context))
+            end
     end.
 
 %% @doc Pickle a context for storing in the database
@@ -1084,7 +1145,7 @@ get_req_path(#context{req=Req} = Context) when is_map(Req) ->
 -spec cookie_domain(#context{}) -> binary() | undefined.
 cookie_domain(Context) ->
     case m_site:get(cookie_domain, Context) of
-        Empty when Empty == undefined; Empty == []; Empty =:= <<>> ->
+        Empty when Empty =:= undefined; Empty =:= []; Empty =:= <<>> ->
             undefined;
         Domain ->
             z_convert:to_binary(Domain)
@@ -1094,8 +1155,11 @@ cookie_domain(Context) ->
 -spec websockethost(#context{}) -> binary().
 websockethost(Context) ->
     case m_site:get(websockethost, Context) of
-        Empty when Empty == undefined; Empty == []; Empty == <<>> ->
-            hostname_port(Context);
+        Empty when Empty =:= undefined; Empty =:= []; Empty =:= <<>> ->
+            case m_req:get(is_ssl, Context) of
+                true -> hostname_ssl_port(Context);
+                false -> hostname_port(Context)
+            end;
         Domain ->
             Domain
     end.
@@ -1168,7 +1232,7 @@ set_cookie(Key, Value, Context) ->
 set_cookie(Key, Value, Options, Context) ->
     case controller_websocket:is_websocket_request(Context) of
         true ->
-            %% Store the cookie in the session and trigger an ajax cookie fetch.
+            % Store the cookie in the session and trigger an ajax cookie fetch.
             z_session:add_cookie(Key, Value, Options, Context),
             add_script_page(<<"z_fetch_cookies();">>, Context),
             Context;
@@ -1179,9 +1243,33 @@ set_cookie(Key, Value, Options, Context) ->
                            {domain, _} -> Options;
                            none -> [{domain, z_context:cookie_domain(Context)}|Options]
                        end,
-            Options2 = z_notifier:foldl(#cookie_options{name=Key, value=ValueBin}, Options1, Context),
-            cowmachine_req:set_resp_cookie(Key, ValueBin, Options2, Context)
+            Options2 = secure_cookie_options(Key, Options1, Context),
+            Options3 = z_notifier:foldl(#cookie_options{name=Key, value=ValueBin}, Options2, Context),
+            cowmachine_req:set_resp_cookie(Key, ValueBin, Options3, Context)
     end.
+
+%% @doc Ensure that the session and autologon cookies are set to 'secure' (ssl only).
+secure_cookie_options(Name, Options, Context) ->
+    case is_ssl_site(Context) of
+        true ->
+            secure_cookie(Options);
+        false ->
+            case m_req:get(is_ssl, Context) 
+                andalso is_session_cookie(Name, Context)
+                andalso z_convert:to_bool(m_config:get(site, secure_session_cookie, Context))
+            of
+                true -> secure_cookie(Options);
+                false -> Options
+            end
+    end.
+
+secure_cookie(Options) ->
+    [{secure, true} | proplists:delete(secure, Options)].
+
+is_session_cookie(<<"z_sid">>, _Context) -> true;
+is_session_cookie(<<"z_logon">>, _Context) -> true;
+is_session_cookie(Cookie, Context) when is_binary(Cookie) ->
+    z_session_manager:get_session_cookie_name(Context) =:= Cookie.
 
 
 %% @doc Read a cookie value from the current request.

@@ -134,15 +134,6 @@ single URL only::
 
     {redirect, true},
 
-protocol
-^^^^^^^^
-
-This is useful for when the Zotonic is running behind a proxy that terminates
-SSL (such as HAProxy). Setting this option to “https” ensures that redirect
-locations get the HTTPS protocol. Example::
-
-    {protocol, "https"},
-
 skeleton
 ^^^^^^^^
 

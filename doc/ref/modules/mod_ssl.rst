@@ -6,8 +6,7 @@ and other secure pages will be served using HTTPS.
 
 SSL support can be switched on for each site separately. Virtual hosting of sites via
 HTTPS is possible. In order to get working SSL connections you need to enable a module
-providing SSL certificates. Module :ref:`mod_ssl_self_signed` is an example of such a 
-module. The role of this module is secure dispatching.
+providing SSL certificates. The role of this module is secure dispatching.
 
 
 Configuration
@@ -33,15 +32,15 @@ and will be either set or replaced with a default when not set.
     Use this in combination with ``mod_ssl.is_secure`` to ensure serving a site over HTTPS.
 
 ``mod_ssl.is_permanent``
-  When set to ``true`` it makes http to HTTPS protocol redirects for dispatch rules which
-  use ``{ssl, true}`` to be permanent redirects. The default setting is ``false`` which will
-  make redirects temporary redirects. 
+    When set to ``true`` it makes http to HTTPS protocol redirects for dispatch rules which
+    use ``{ssl, true}`` to be permanent redirects. The default setting is ``false`` which will
+    make redirects temporary redirects. 
 
 
 Erlang SSL Configuration
 ------------------------
 
-The erlang ssl application is configured in the :file:`priv/erlang.config`. If this file is 
+The erlang ssl application is configured in the :file:`~/zotonic/erlang.config`. If this file is 
 missing then it can be copied from :file:`priv/erlang.config.in`.  It contains a couple of 
 important settings which we recommend you to change. The reason for this is that the default 
 settings Erlang uses are unsuitable for web servers. The most important settings are listed 
@@ -101,9 +100,9 @@ you can want to implement automated certificate handling for a specific certific
 authority.
 
 ``ssl_options{server_name=ServerName}``
-  Sent back the certificate, key or other ssl options. ``ServerName`` is the
+  Sent back the certificate, key or other ssl options. ``ServerName`` is a string with the
   name of the server found in the SSL handshake. Expects a proplist with Erlang 
-  ``ssl:ssloptions()``. This proplist will override the default ssl options for this 
+  ``ssl:ssl_option()``. This proplist will override the default ssl options for this 
   connection. For more information about the possible properties see `Erlang SSL`_. 
   When ``undefined`` is returned the SSL handshake will fail and the connection wil 
   be dropped.

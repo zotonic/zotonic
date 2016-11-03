@@ -21,13 +21,12 @@
 -author('Marc Worrell <marc@worrell.nl>').
 
 -export([start/0, start/1, stop/0, stop/1, ping/0, status/0, status/1, update/0, update/1, run_tests/0, ensure_started/1]).
--export([sni_fun/1]).
 
 -compile([{parse_transform, lager_transform}]).
 
 -include_lib("zotonic.hrl").
 
--define(MIN_OTP_VERSION, "18"). %% note -- *without* the initial R (since OTP 17.0 the R is dropped)
+-define(MIN_OTP_VERSION, "18").
 
 -spec ensure_started(atom()) -> ok | {error, term()}.
 ensure_started(App) ->
@@ -45,7 +44,9 @@ ensure_started(App) ->
             {error, lists:flatten(io_lib:format("~s: ~s", [Tag, Msg]))};
         {error, {bad_return, {{M, F, Args}, Return}}} ->
             A = string:join([io_lib:format("~p", [A])|| A <- Args], ", "),
-            {error, lists:flatten(io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p", [App, M, F, A, Return]))};
+            {error, lists:flatten(
+                        io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p",
+                                      [App, M, F, A, Return]))};
         {error, Reason} ->
             {error, Reason}
     end.
@@ -121,39 +122,42 @@ stop_http_listeners() ->
 %% @doc Start the HTTP listeners
 -spec start_http_listeners() -> ok.
 start_http_listeners() ->
+    z_ssl_certs:ensure_dhfile(),
     application:set_env(cowmachine, server_header, <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>),
     WebIp = z_config:get(listen_ip),
     WebPort = z_config:get(listen_port),
-    SSLPort = z_config:get(ssl_listen_port),
+    SSLPort = ssl_listen_port(),
+    lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
     CowboyOpts = #{
-        middlewares => [ z_sites_dispatcher, z_cowmachine_middleware ],
+        middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
         env => #{}
     },
-
-    lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
+    WebIP4Opt = case WebIp of
+        any -> [];
+        _ -> [{ip, WebIp}]
+    end,
     {ok, _} = cowboy:start_clear(
         zotonic_http_listener_ipv4,
         z_config:get(inet_acceptor_pool_size),
         [   inet,
             {port, WebPort},
             {backlog, z_config:get(inet_backlog)}
-            | case WebIp of any -> []; _ -> [{ip, WebIp}] end
+            | WebIP4Opt
         ],
         CowboyOpts),
     case SSLPort of
         none ->
             ok;
         _ ->
-            {ok, _} = cowboy:start_tls(
+            {ok, _} = start_tls(
                 zotonic_https_listener_ipv4,
                 z_config:get(ssl_acceptor_pool_size),
                 [   inet,
                     {port, SSLPort},
-                    {backlog, z_config:get(ssl_backlog)},
-                    {certfile, "via_sni_fun"},
-                    {sni_fun, fun ?MODULE:sni_fun/1}
-                    | case WebIp of any -> []; _ -> [{ip, WebIp}] end
-                ],
+                    {backlog, z_config:get(ssl_backlog)}
+                ]
+                ++ z_ssl_certs:ssl_listener_options()
+                ++ WebIP4Opt,
                 CowboyOpts)
     end,
     case {WebIp, ipv6_supported()} of
@@ -173,16 +177,15 @@ start_http_listeners() ->
                 none ->
                     ok;
                 _ ->
-                    {ok, _} = cowboy:start_tls(
+                    {ok, _} = start_tls(
                         zotonic_https_listener_ipv6,
                         z_config:get(ssl_acceptor_pool_size),
                         [   inet6,
                             {ipv6_v6only, true},
                             {port, SSLPort},
-                            {backlog, z_config:get(ssl_backlog)},
-                            {certfile, "via_sni_fun"},
-                            {sni_fun, fun ?MODULE:sni_fun/1}
-                        ],
+                            {backlog, z_config:get(ssl_backlog)}
+                        ]
+                        ++ z_ssl_certs:ssl_listener_options(),
                         CowboyOpts),
                     ok
             end;
@@ -190,15 +193,32 @@ start_http_listeners() ->
             ok
     end.
 
-%% @doc Let sites return their own keys and certificates.
--spec sni_fun(string()) -> [ssl:ssl_option()] | undefined.
-sni_fun(Hostname) ->
-    HostnameBin = z_convert:to_binary(Hostname),
-    case z_sites_dispatcher:get_site_for_hostname(HostnameBin) of
-        undefined -> undefined;
-        {ok, Host} ->
-            z_notifier:first(#ssl_options{server_name=HostnameBin}, z_context:new(Host))
+%% @doc Check if we need to listen on SSL.
+%%      SSL will be disabled if ssl_listen_port is set to 'none'
+%%      A non-secure proxy might still want to connect forward securely, so this
+%%      setting is independent from ssl_port.
+ssl_listen_port() ->
+    case z_config:get(ssl_listen_port) of
+        none -> none;
+        Port when is_integer(Port) -> Port
     end.
+
+% @doc Copied from cowboy.erl, disable http2 till the cipher problems are resolved.
+-spec start_tls(ranch:ref(), non_neg_integer(), ranch_ssl:opts(), list()) -> {ok, pid()} | {error, any()}.
+start_tls(Ref, NbAcceptors, TransOpts0, ProtoOpts)
+        when is_integer(NbAcceptors), NbAcceptors > 0 ->
+    TransOpts = [
+        connection_type(ProtoOpts)
+        % {next_protocols_advertised, [<<"h2">>, <<"http/1.1">>]},
+        % {alpn_preferred_protocols, [<<"h2">>, <<"http/1.1">>]}
+    |TransOpts0],
+    ranch:start_listener(Ref, NbAcceptors, ranch_ssl, TransOpts, cowboy_tls, ProtoOpts).
+
+-spec connection_type(list()) -> {connection_type, worker | supervisor}.
+connection_type(ProtoOpts) ->
+    {_, Type} = maps:get(stream_handler, ProtoOpts, {cowboy_stream_h, supervisor}),
+    {connection_type, Type}.
+
 
 %% @todo Exclude platforms that do not support raw ipv6 socket options
 -spec ipv6_supported() -> boolean().

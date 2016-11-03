@@ -75,16 +75,6 @@
     context :: #context{}
 }).
 
--record(site_dispatch_list, {
-    site,
-    hostname,
-    smtphost,
-    hostalias,
-    redirect,
-    dispatch_list
-}).
-
-
 -type dispatch() :: #dispatch_controller{}
                     | #dispatch_nomatch{}
                     | {redirect, Site :: atom()}
@@ -116,6 +106,7 @@ update_dispatchinfo() ->
 
 %% @doc Cowboy middleware, route the new request. Continue with the cowmachine,
 %%      requests a redirect or return a 400 on an unknown host.
+%%      The cowmachine_proxy middleware must have been called before this.
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req :: cowboy_req:req(), Env :: cowboy_middleware:env().
 execute(Req, Env) ->
@@ -160,18 +151,15 @@ execute(Req, Env) ->
 %% @doc Match the host and path to a dispatch rule.
 -spec dispatch(cowboy_req:req()) -> dispatch().
 dispatch(Req) ->
-    Host = cowboy_req:host(Req),
+    Host = cowmachine_req:host(Req),
+    Scheme = cowmachine_req:scheme(Req),
     Path = cowboy_req:path(Req),
     Method = cowboy_req:method(Req),
-    Scheme = cowboy_req:scheme(Req),
     DispReq = #dispatch{
                     host=Host,
                     path=Path,
                     method=Method,
-                    protocol=case Scheme of
-                                <<"https">> -> https;
-                                <<"http">> -> http
-                             end,
+                    protocol=Scheme,
                     tracer_pid=undefined
               },
     z_depcache:in_process(true),
@@ -548,29 +536,29 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
             {controller_options, Props},
             {bindings, Bindings1}
           ]),
-    case proplists:get_value(protocol, Props) of
-        % Force switch to normal http protocol
-        % MW: always use 'keep' (switching back to http was nice some years ago)
-        % undefined when Protocol =/= http ->
-        %     {Host1, HostPort} = split_host(z_context:hostname_port(Context)),
-        %     Host2 = add_port(http, Host1, HostPort),
-        %     trace(TracerPid, Tokens, protocol_switch, [{protocol, http}, {host, Host2}]),
-        %     {redirect_protocol, http, Host2, false};
-
-        % Force switch to other (eg. https) protocol
-        {NewProtocol, NewPort} when NewProtocol =/= Protocol ->
-            {Host1, _Port} = split_host(Hostname),
-            Host2 = add_port(NewProtocol, Host1, NewPort),
-            trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, NewProtocol}, {host,Host2}]),
-            IsPermanent = case NewProtocol of
-                https -> z_convert:to_bool(m_config:get(mod_ssl, is_permanent, Context));
-                _ -> false
-            end,
-            {redirect_protocol, NewProtocol, Host2, IsPermanent};
-
-        % 'keep', undefined, or correct protocol
+    SslPort = z_config:get(ssl_port),
+    % Maybe switch between http and https
+    case proplists:get_value(ssl, Props, any) of
+        false when Protocol =:= https ->
+            redirect_protocol(http, Hostname, TracerPid, Tokens, Context);
+        true when Protocol =:= http, is_integer(SslPort) ->
+            redirect_protocol(https, Hostname, TracerPid, Tokens, Context);
+        any when Protocol =:= http, is_integer(SslPort)  ->
+            case z_context:is_ssl_site(Context) of
+                true ->
+                    redirect_protocol(https, Hostname, TracerPid, Tokens, Context);
+                false ->
+                    #dispatch_controller{
+                        dispatch_rule=DispatchName,
+                        controller=Mod,
+                        controller_options=Props,
+                        path_tokens=Tokens,
+                        bindings=Bindings1,
+                        context=maybe_set_language(Bindings1, Context)
+                    }
+            end;
         _ ->
-            % {Mod, ModOpts, HostTokens, Port, PathTokens, Bindings, AppRoot, StringPath}
+            % 'any', correct protocol, or no SSL port defined
             #dispatch_controller{
                 dispatch_rule=DispatchName,
                 controller=Mod,
@@ -581,7 +569,21 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
             }
     end.
 
+<<<<<<< b03e71b78e69f0156d3c8f6b6a52cd979839ef93
 -spec do_dispatch_fail(any(), any(), any(), any(), any()) -> #dispatch_controller{} | #dispatch_nomatch{}.
+=======
+redirect_protocol(https, Hostname, TracerPid, Tokens, Context) ->
+    NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
+    trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
+    IsPermanent = z_convert:to_bool(m_config:get(site, ssl_permanent, Context)),
+    {redirect_protocol, https, NewHostname, IsPermanent};
+redirect_protocol(http, Hostname, TracerPid, Tokens, _Context) ->
+    NewHostname = add_port(http, Hostname, z_config:get(port)),
+    trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, http}, {host, NewHostname}]),
+    {redirect_protocol, http, NewHostname, false}.
+
+
+>>>>>>> Changed to handling of SSL and self signed certs.
 do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, Context0) ->
     TokenPath = tokens_to_path(Tokens),
     trace(DispReq#dispatch.tracer_pid, DispReq#dispatch.path, notify_dispatch, []),
@@ -752,8 +754,8 @@ collect_dispatchrules(Site) ->
         {error, _} ->
             #site_dispatch_list{
                 site=Site,
-                hostname="localhost",
-                smtphost="localhost",
+                hostname= <<"localhost">>,
+                smtphost= <<"localhost">>,
                 hostalias=[],
                 redirect=false,
                 dispatch_list=[]
@@ -796,7 +798,7 @@ split_host(Host) when is_binary(Host) ->
 
 %% @doc Filter all rules, also used to set/reset protocol (https) options.
 filter_rules(Rules, Site) ->
-    z_notifier:foldl(dispatch_rules, Rules, z_context:new(Site)).
+    z_notifier:foldl(#dispatch_rules{rules=Rules}, Rules, z_context:new(Site)).
 
 trace(undefined, _PathTokens, _What, _Args) ->
     ok;
