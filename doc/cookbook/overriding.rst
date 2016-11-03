@@ -16,6 +16,8 @@ Overriding templates
 :ref:`Override templates <overriding-templates>` by adding a template with
 the same name to your module/site.
 
+.. seealso:: :ref:`cookbook-error-pages`
+
 Overriding assets
 -----------------
 
