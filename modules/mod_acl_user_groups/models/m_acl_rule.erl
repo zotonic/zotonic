@@ -407,7 +407,6 @@ ensure_acl_rule_collab(Context) ->
                               Context),
             fk_setnull("acl_rule_collab", "creator_id", Context),
             fk_setnull("acl_rule_collab", "modifier_id", Context),
-            fk_cascade("acl_rule_collab", "acl_user_group_id", Context),
             fk_cascade("acl_rule_collab", "category_id", Context),
             ok;
         true ->
