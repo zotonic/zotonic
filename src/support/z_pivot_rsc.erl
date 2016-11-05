@@ -56,6 +56,7 @@
     % get_pivot_data/2,
 
     define_custom_pivot/3,
+    update_custom_pivot/3,
     lookup_custom_pivot/4
 ]).
 
@@ -900,7 +901,8 @@ custom_columns([{Name, Spec}|Rest], Acc) ->
 custom_columns([{Name, Spec, _Opts}|Rest], Acc) ->
     custom_columns(Rest, [ [z_convert:to_list(Name), " ", Spec, ","] |  Acc]).
 
-
+%% @doc Update a custom pivot directly.
+-spec update_custom_pivot(integer(), {module(), list()}, #context{}) -> {ok, integer()}.
 update_custom_pivot(Id, {Module, Columns}, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
     case z_db:select(TableName, Id, Context) of

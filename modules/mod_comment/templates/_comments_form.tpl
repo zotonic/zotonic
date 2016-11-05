@@ -36,6 +36,19 @@
 	                        </div>
 	                    </div>
 	                {% endif %}
+	                
+	                {% if m.config.comments.rating.value %}
+	                    <div class="form-group row">
+    	                    <label class="control-label col-md-3" for="rating">{_ Rating _}</label>
+    	                    <span class="col-md-9 star-rating">
+                                <input type="radio" name="rating" value="1"><i></i>
+                                <input type="radio" name="rating" value="2"><i></i>
+                                <input type="radio" name="rating" value="3"><i></i>
+                                <input type="radio" name="rating" value="4"><i></i>
+                                <input type="radio" name="rating" value="5"><i></i>
+                            </span>
+                         </div>
+	                {% endif %}
 
                     <div class="form-group row">
 	                    <label class="control-label col-md-3" for="message">{_ Message _}</label>
