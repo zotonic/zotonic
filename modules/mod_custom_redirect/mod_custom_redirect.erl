@@ -137,9 +137,9 @@ do_save_rows([{Id,Host,Path,Redirect,IsPermanent}|Rows], Acc, Context) ->
     end.
 
 
-do_save_redirect(_Id, "", "", _Props, _Context) ->
+do_save_redirect(_Id, <<>>, <<>>, _Props, _Context) ->
     skip;
-do_save_redirect("", Host, Path, Props, Context) ->
+do_save_redirect(<<>>, Host, Path, Props, Context) ->
     case m_custom_redirect:get(Host, Path, Context) of
         undefined ->
             m_custom_redirect:insert(Props, Context);
