@@ -51,22 +51,11 @@ event(#submit{message=admin_seo}, Context) ->
 
 save_settings([], Context) ->
     Context;
-save_settings([{"seo" ++ _ = Key, Value} | T], Context) ->
-    Value1 = clean(string:strip(Value, both), []),
-    [Key1, Key2] = string:tokens(Key, "-"),
-    m_config:set_value(list_to_atom(Key1), list_to_atom(Key2), Value1, Context),
-    m_config:set_prop(list_to_atom(Key1), list_to_atom(Key2), no_config_edit, true, Context),
+save_settings([{<<"seo", _/binary>> = Key, Value} | T], Context) ->
+    Value1 = z_string:trim(Value),
+    [Key1, Key2] = [z_convert:to_atom(K) || K <- binary:split(Key, <<"-">>)],
+    ok = m_config:set_value(Key1, Key2, Value1, Context),
+    m_config:set_prop(Key1, Key2, no_config_edit, true, Context),
     save_settings(T, Context);
 save_settings([_|T], Context) ->
     save_settings(T, Context).
-
-
-clean([], Acc) ->
-    lists:reverse(Acc);
-clean([H|T], Acc) when
-    H =:= 10 orelse H =:= 13 orelse H =:= $" orelse H =:= $' orelse
-    H =:= $& orelse H =:= $< orelse H =:= $> ->
-        clean(T, [32|Acc]);
-clean([H|T], Acc) ->
-    clean(T, [H|Acc]).
-

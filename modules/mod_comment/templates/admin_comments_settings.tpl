@@ -28,8 +28,8 @@
 
             <div class="form-group">
                 <div>
-                    <label class="checkbox-inline" for="comments-moderate" title="{_ Require all comments to be reviewed by a moderator before displaying them on the public website _}">
-                        <input type="checkbox" id="comments-moderate" name="comments-moderate" value="1" {% if m.config.comments.moderate.value %}checked="checked"{% endif %} />
+                    <label class="checkbox-inline" for="moderate" title="{_ Require all comments to be reviewed by a moderator before displaying them on the public website _}">
+                        <input type="checkbox" id="moderate" name="moderate" value="1" {% if m.config.comments.moderate.value %}checked="checked"{% endif %} />
                         {_ Moderate comments _}
                     </label>
                 </div>
