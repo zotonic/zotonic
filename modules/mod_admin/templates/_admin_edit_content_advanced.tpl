@@ -37,8 +37,9 @@
 	        {% if m.acl.use.mod_admin_config %}
 	            <label class="control-label col-md-3" for="field-name">{_ Unique name _}</label>
                 <div class="col-md-9">
-	                <input class="form-control" type="text" id="field-name" name="name" value="{{ r.name }}" {% if not is_editable or id == 1 %}disabled="disabled"{% endif %} {% include "_language_attrs.tpl" language=`en` %}/>
+	                <input class="form-control" type="text" id="name" name="name" value="{{ r.name }}" {% if not is_editable or id == 1 %}disabled="disabled"{% endif %} {% include "_language_attrs.tpl" language=`en` %}/>
                 </div>
+                {% validate id="name" type={name_unique id=id failure_message=_"This name is in use by another page."} %}
 	        {% else %}
 	            &nbsp;
 	        {% endif %}
@@ -53,9 +54,9 @@
     {% if m.acl.use.mod_admin_config %}
 	    {% if r.is_a.meta or not r.is_authoritative %}
 	        <div class="form-group row">
-                <label class="control-label col-md-3" for="field-name">{_ Unique uri _}</label>
+                <label class="control-label col-md-3" for="field-uri">{_ Unique uri _}</label>
                 <div class="col-md-9">
-                    <input class="form-control" type="text" id="field-name" name="uri" value="{{ r.uri }}" {% if not is_editable %}disabled="disabled"{% endif %} />
+                    <input class="form-control" type="text" id="field-uri" name="uri" value="{{ r.uri }}" {% if not is_editable %}disabled="disabled"{% endif %} />
                 </div>
             </div>
 	    {% endif %}
