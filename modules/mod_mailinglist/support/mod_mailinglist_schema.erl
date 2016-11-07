@@ -27,32 +27,32 @@
 
 
 datamodel() ->
-    [
-        {categories, [
+    #datamodel{
+        categories = [
             {mailinglist, undefined, [
                             {title, "Mailing list"},
                             {summary, "Mailing lists are used to send pages to groups of people."}
                         ]}
-        ]},
+        ],
 
         % Any resource with an e-mail address can be a subscriber of a mailinglist
-        {predicates, [
+        predicates = [
             {subscriberof,
                  [{title, <<"Subscriber of">>}],
                  [{person, mailinglist}, {location, mailinglist}]},
              {exsubscriberof,
                   [{title, <<"Ex-subscriber of">>}],
                   [{person, mailinglist}, {location, mailinglist}]}
-        ]},
+        ],
 
-        {resources, [
+        resources = [
             {mailinglist_test, mailinglist, [
                             {visible_for, 1},
                             {title, "Test mailing list"},
                             {summary, "This list is used for testing. Anyone who can see this mailing list can post to it. It should not be visible for the world."}
                         ]}
-        ]}
-    ].
+        ]
+    }.
 
 
 
