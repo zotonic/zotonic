@@ -256,7 +256,7 @@ The following section defines the Zotonic authentication module, access control,
 .. code-block:: erlang
 
    {emqtt, [
-      {auth, {z_mqtt_auth, []}},
+      {auth, {zotonic, []}},
       {access_control, {zotonic, []}},
       {listeners, [
           {1883,  [
