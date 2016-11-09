@@ -22,7 +22,7 @@
 -mod_title("File Storage").
 -mod_description("Store files on cloud storage services like Amazon S3 and GreenQloud").
 -mod_prio(500).
--mod_schema(1).
+-mod_schema(2).
 -mod_provides([filestore]).
 
 -behaviour(supervisor).
@@ -148,8 +148,8 @@ pid_observe_tick_1m(Pid, tick_1m, Context) ->
     end.
 
 
-manage_schema(What, Context) ->
-    m_filestore:install(What, Context).
+manage_schema(Version, Context) ->
+    m_filestore:install(Version, Context).
 
 lookup(Path, Context) ->
     case m_filestore:lookup(Path, Context) of

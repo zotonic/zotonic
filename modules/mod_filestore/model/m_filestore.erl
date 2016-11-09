@@ -252,7 +252,7 @@ stats(Context) ->
 
 
 
-install(install, Context) ->
+install(_Version, Context) ->
     ok = install_filestore(Context),
     ok = ensure_column_deleted(Context),
     ok = install_filequeue(Context).
