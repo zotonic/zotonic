@@ -221,8 +221,8 @@ actions(module, Context) ->
 
 update(Kind, Id, Props, Context) ->
     lager:debug(
-        "[~p] ACL user groups update by ~p of ~p:~p with ~p",
-       [z_context:site(Context), z_acl:user(Context), Kind, Id, Props]
+        "ACL user groups update by ~p of ~p:~p with ~p",
+       [z_acl:user(Context), Kind, Id, Props]
     ),
     Result = z_db:update(
                table(Kind), Id,
@@ -242,8 +242,8 @@ get(Kind, Id, Context) ->
 
 insert(Kind, Props, Context) ->
     lager:debug(
-        "[~p] ACL user groups insert by ~p of ~p with ~p",
-       [z_context:site(Context), z_acl:user(Context), Kind, Props]
+        "ACL user groups insert by ~p of ~p with ~p",
+       [z_acl:user(Context), Kind, Props]
     ),
 
     Result = z_db:insert(
@@ -282,8 +282,8 @@ map_prop(Prop, _Context) ->
 
 delete(Kind, Id, Context) ->
     lager:debug(
-        "[~p] ACL user groups delete by ~p of ~p:~p",
-       [z_context:site(Context), z_acl:user(Context), Kind, Id]
+        "ACL user groups delete by ~p of ~p:~p",
+       [z_acl:user(Context), Kind, Id]
     ),
     %% Assertion, can only delete edit version of a rule
     {ok, Row} = z_db:select(table(Kind), Id, Context),
@@ -304,8 +304,8 @@ manage_acl_rule({Type, Props}, Module, Context) ->
 
 %% Remove all edit versions, add edit versions of published rules
 revert(Kind, Context) ->
-    lager:warning("[~p] ACL user groups revert by ~p of ~p",
-                  [z_context:site(Context), z_acl:user(Context), Kind]),
+    lager:warning("ACL user groups revert by ~p of ~p",
+                  [z_acl:user(Context), Kind]),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
                fun(Ctx) ->
@@ -324,8 +324,8 @@ revert(Kind, Context) ->
 %% Remove all publish versions, add published versions of unpublished rules
 publish(Kind, Context) ->
     lager:debug(
-        "[~p] ACL user groups publish by ~p",
-        [z_context:site(Context), z_acl:user(Context)]
+        "ACL user groups publish by ~p",
+        [z_acl:user(Context)]
     ),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
@@ -571,8 +571,8 @@ names_to_ids_row(R, Context) ->
                                 true ->
                                     z_utils:prop_replace(K, undefined, Acc);
                                 false ->
-                                    lager:notice("[~p] ACL import dropping rule, due to missing ~p ~p: ~p",
-                                                 [z_context:site(Context), K, Value, R]),
+                                    lager:notice("ACL import dropping rule, due to missing ~p ~p: ~p",
+                                                 [K, Value, R]),
                                     []
                             end;
                         Id ->
@@ -589,8 +589,8 @@ names_to_ids_row(R, Context) ->
                                 true ->
                                     z_utils:prop_replace(K, undefined, Acc);
                                 false ->
-                                    lager:notice("[~p] ACL import dropping rule, due to missing ~p ~p: ~p",
-                                                 [z_context:site(Context), K, Id, R]),
+                                    lager:notice("ACL import dropping rule, due to missing ~p ~p: ~p",
+                                                 [K, Id, R]),
                                     []
                             end
                     end;

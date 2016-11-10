@@ -569,8 +569,8 @@ preflight_check(Id, [{name, Name}|T], Context) when Name =/= undefined ->
         0 ->
             preflight_check(Id, T, Context);
         _N ->
-            lager:warning("[~p] Trying to insert duplicate name ~p",
-                          [z_context:site(Context), Name]),
+            lager:warning("Trying to insert duplicate name ~p",
+                          [Name]),
             throw({error, duplicate_name})
     end;
 preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
@@ -578,8 +578,7 @@ preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
         0 ->
             preflight_check(Id, T, Context);
         _N ->
-            lager:warning("[~p] Trying to insert duplicate page_path ~p",
-                          [z_context:site(Context), Path]),
+            lager:warning("Trying to insert duplicate page_path ~p", [Path]),
             throw({error, duplicate_page_path})
     end;
 preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
@@ -587,8 +586,7 @@ preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
         0 ->
             preflight_check(Id, T, Context);
         _N ->
-            lager:warning("[~p] Trying to insert duplicate uri ~p",
-                          [z_context:site(Context), Uri]),
+            lager:warning("Trying to insert duplicate uri ~p", [Uri]),
             throw({error, duplicate_uri})
     end;
 preflight_check(Id, [{'query', Query}|T], Context) ->
@@ -739,8 +737,8 @@ props_filter([{category_id, CatId}|T], Acc, Context) ->
         true ->
             props_filter(T, [{category_id, CatId1}|Acc], Context);
         false ->
-            lager:error("[~p] Ignoring unknown category '~p' in update, using 'other' instead.",
-                        [z_context:site(Context), CatId]),
+            lager:error("Ignoring unknown category '~p' in update, using 'other' instead.",
+                        [CatId]),
             props_filter(T, [{category_id,m_rsc:rid(other, Context)}|Acc], Context)
     end;
 
@@ -749,8 +747,7 @@ props_filter([{content_group, undefined}|T], Acc, Context) ->
 props_filter([{content_group, CgName}|T], Acc, Context) ->
     case m_rsc:rid(CgName, Context) of
         undefined ->
-            lager:error("[~p] Ignoring unknown content group '~p' in update.",
-                        [z_context:site(Context), CgName]),
+            lager:error("Ignoring unknown content group '~p' in update.", [CgName]),
             props_filter(T, Acc, Context);
         CgId ->
             props_filter([{content_group_id, CgId}|T], Acc, Context)
@@ -765,8 +762,7 @@ props_filter([{content_group_id, CgId}|T], Acc, Context) ->
         true ->
             props_filter(T, [{content_group_id, CgId1}|Acc], Context);
         false ->
-            lager:error("[~p] Ignoring unknown content group '~p' in update.",
-                        [z_context:site(Context), CgId]),
+            lager:error("Ignoring unknown content group '~p' in update.", [CgId]),
             props_filter(T, Acc, Context)
     end;
 

@@ -67,8 +67,8 @@ process_post_ubf(ReqData, Context) ->
         end
     catch Class:Term ->
  	%% Log error, but give a correct response anyway
-	lager:error("~p: mod_base error processing unload beacon ~p:~p",
-			[z_context:site(Context), Class, Term])
+	lager:error("mod_base error processing unload beacon ~p:~p",
+			[Class, Term])
     end,
 
     {true, RD1, Context}.

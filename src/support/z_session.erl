@@ -248,7 +248,7 @@ keepalive(PageId, Pid) ->
 ensure_page_session(#context{wm_reqdata=undefined} = Context) ->
     Context;
 ensure_page_session(#context{session_pid=undefined} = Context) ->
-    lager:debug("[~p] ensure page session without a session_pid", [z_context:site(Context)]),
+    lager:debug("ensure page session without a session_pid"),
     Context;
 ensure_page_session(Context) ->
     Context1 = z_context:ensure_qs(Context),
@@ -690,9 +690,7 @@ page_start(Context) ->
             exometer:update([zotonic, Context#context.host, session, page_processes], 1),
             {ok, #page{page_pid=PagePid, page_id=PageId}};
         {error, {already_started, _PagePid}} ->
-            lager:error(z_context:lager_md(Context),
-                        "Page-session process already running ~p",
-                        [PageId]),
+            lager:error("Page-session process already running ~p", [PageId]),
             {error, already_started}
     end.
 

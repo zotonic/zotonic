@@ -360,7 +360,7 @@ pg_dump(Name, Context) ->
                  [] ->
                      ok;
                  Output ->
-                     ?zWarning(Output, Context),
+                     lager:warning(Output),
                      z_session_manager:broadcast(#broadcast{type="error", message=Output, title="mod_backup", stay=false}, Context),
                      {error, Output}
              end,

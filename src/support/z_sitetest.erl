@@ -101,7 +101,7 @@ ensure_drop_test_schema(Site) ->
 
 %% @doc Drop a schema
 -spec drop_schema(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
-drop_schema(Site, Connection, Schema) ->
+drop_schema(_Site, Connection, Schema) ->
     case pgsql:equery(
            Connection,
            "DROP SCHEMA \"" ++ Schema ++ "\" CASCADE"
@@ -111,7 +111,7 @@ drop_schema(Site, Connection, Schema) ->
         {error, {error, error, <<"3F000">>, _, _}} ->
             ok;
         {error, Reason} = Error ->
-            lager:error("[~p] z_sitetest: error while dropping schema ~p: ~p", [Site, Schema, Reason]),
+            lager:error("z_sitetest: error while dropping schema ~p: ~p", [Schema, Reason]),
             Error
     end.
 

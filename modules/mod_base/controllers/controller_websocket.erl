@@ -112,7 +112,7 @@ websocket_message(Data, SenderPid, Context) ->
         websocket_message(RestData, SenderPid, ContextWs)
     catch
         Error:X ->
-            ?zWarning(io_lib:format("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]), Context),
+            lager:warning("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]),
             {ok, Context}
     end.
 

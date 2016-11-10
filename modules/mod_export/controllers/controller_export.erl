@@ -63,8 +63,7 @@ content_types_provided(ReqData, Context0) ->
         {ok, ContentType} ->
             ?WM_REPLY([{ContentType, do_export}], Context);
         {error, Reason} = Error ->
-            lager:error("~p: mod_export error when fetching content type for ~p ~p",
-                        [z_context:site(Context), Dispatch, Reason]),
+            lager:error("mod_export error when fetching content type for ~p ~p", [Dispatch, Reason]),
             throw(Error)
     end.
 

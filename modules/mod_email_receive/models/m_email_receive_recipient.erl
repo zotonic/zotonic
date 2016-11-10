@@ -99,9 +99,7 @@ insert(Notification, UserId, ResourceId, Context) ->
 				{ok, Recipient}
 			catch
 				throw:{error, {error,error,<<"23503">>,_Msg,_Detail} = Error} ->
-					lager:warning(z_context:lager_md(Context),
-								  "[~p] Error on creating a new e-mail address ~p",
-								  [z_context:site(Context), Error]),
+					lager:warning("Error on creating a new e-mail address ~p", [Error]),
 					{error, notfound}
 			end
 	end.

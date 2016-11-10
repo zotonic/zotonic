@@ -219,12 +219,12 @@ checksum([], State, _Context) ->
 checksum([File|Files], State, Context) ->
     case z_module_indexer:find(lib, File, Context) of
         {ok, #module_index{filepath=FilePath}} ->
-	    State1 = dt_checksum(filelib:last_modified(FilePath), State),
-	    checksum(Files, State1, Context);
-        {error, enoent} ->
-            %% Not found, skip the file
-            ?zWarning("lib file not found: ~s", [File], Context),
-            checksum(Files, State, Context)
+	        State1 = dt_checksum(filelib:last_modified(FilePath), State),
+        checksum(Files, State1, Context);
+            {error, enoent} ->
+                %% Not found, skip the file
+                lager:warning("lib file not found: ~s", [File]),
+                checksum(Files, State, Context)
     end.
 
 dt_checksum({{Year, Month, Day}, {Hour, Minute, Second}}, State) ->
