@@ -1,4 +1,4 @@
-<li class="dropdown pull-right" id="languages">
+<li class="dropdown" id="languages">
     {% with m.config.i18n.language_list.list as list %}
         {% if list %}
             <a class="dropdown-toggle" data-toggle="dropdown" href="#languages">
