@@ -2,7 +2,7 @@
 {% if list %}
 {% if is_nav %}
     {# Bootstrap nav item #}
-    <li class="dropdown pull-right" id="languages">
+    <li class="dropdown" id="languages">
         {% with m.translation.language_list_enabled as list %}
             {% if list %}
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#languages">
