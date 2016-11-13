@@ -1,4 +1,4 @@
-{% with m.acl.is_allowed.update['category'] as editable %}
+{% with m.acl.is_allowed.update.category as editable %}
 
 <ul id="category" class="tree-list categories {% if editable %}do_menuedit{% endif %}">
     {% for mid, path, action in m.category.menu|menu_flat %}
