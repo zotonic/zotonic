@@ -184,7 +184,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 parent=admin_structure,
                 label=?__("Categories", Context),
                 url={admin_category_sorter},
-                visiblecheck={acl, insert, category}}
+                visiblecheck={acl, use, mod_admin_category}}
 
      |Acc].
 

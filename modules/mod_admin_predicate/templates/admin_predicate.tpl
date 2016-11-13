@@ -12,7 +12,7 @@
     The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href="http://sioc-project.org/">SIOC</a>.  On this page you can define the predicates known to Zotonic. _}</p>
 </div>
 
-{% if editable %}
+{% if m.acl.insert.predicate %}
 <div class="well">
     {% button class="btn btn-primary" text=_"Make a new predicate" action={dialog_predicate_new title=""} %}
 </div>
@@ -37,8 +37,12 @@
                 <td>{{ p.uri|default:"&nbsp;" }}</td>
                 <td>
                     <div class="pull-right buttons">
-                        {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=p.id} %}
-                        <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                        {% if m.acl.is_allowed.delete[p.id] %}
+                            {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=p.id} %}
+                        {% endif %}
+                        {% if m.acl.is_allowed.update[p.id] %}
+                            <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                        {% endif %}
                     </div>
                     {{ p.reversed|yesno:"reversed,&nbsp;" }}
                 </td>

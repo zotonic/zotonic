@@ -187,7 +187,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 parent=admin_structure,
                 label=?__("Predicates", Context),
                 url={admin_predicate},
-                visiblecheck={acl, insert, predicate}},
+                visiblecheck={acl, use, mod_admin_predicate}},
      #menu_item{id=admin_edges,
                 parent=admin_content,
                 label=?__("Page connections", Context),
