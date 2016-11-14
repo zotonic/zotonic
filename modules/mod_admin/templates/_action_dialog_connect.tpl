@@ -47,7 +47,7 @@ find params:
                     {% endif %}
                 {% endif %}
                 {% if not tabs_enabled or "find"|member:tabs_enabled %}
-                    <li {% if tab == "find" and not q.is_zmedia %}class="active"{% endif %}>
+                    <li {% if tab == "find" %}class="active"{% endif %}>
                         <a data-toggle="tab" href="#{{ #tab }}-find">{_ Find Page _}</a>
                     </li>
                 {% endif %}
@@ -59,7 +59,7 @@ find params:
                     {% endif %}
                 {% endif %}
                 {% if not tabs_enabled or "upload"|member:tabs_enabled %}
-                    <li {% if tab == "upload" and not q.is_zmedia %}class="active"{% endif %}>
+                    <li {% if tab == "upload" %}class="active"{% endif %}>
                         <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload File _}</a>
                     </li>
                 {% endif %}
@@ -122,7 +122,7 @@ find params:
                     delegate=delegate
                     subject_id=subject_id
                     object_id=object_id
-                    is_active=(not q.is_zmedia and tab == "find")
+                    is_active=(tab == "find")
                     title=""
                     cat=cat
                 %}
@@ -149,7 +149,7 @@ find params:
                         subject_id=subject_id
                         object_id=object_id
                         title=""
-                        is_active=(not q.is_zmedia and tab == "upload")
+                        is_active=(tab == "upload")
                     %}
                 {% endif %}
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
