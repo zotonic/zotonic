@@ -87,8 +87,8 @@ search({SearchName, Props}, Context) ->
         #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props}
     catch
         throw:Error ->
-            lager:error("[~p] Error in m.search[~p] error: ~p",
-                        [z_context:site(Context), {SearchName, Props}, Error]),
+            lager:error("Error in m.search[~p] error: ~p",
+                        [{SearchName, Props}, Error]),
             empty_result(SearchName, Props, PageLen)
     end;
 search(SearchName, Context) ->
@@ -108,8 +108,8 @@ search_pager({SearchName, Props}, Context) ->
         #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props1}
     catch
         throw:Error ->
-            lager:error("[~p] Error in m.search[~p] error: ~p",
-                        [z_context:site(Context), {SearchName, Props}, Error]),
+            lager:error("Error in m.search[~p] error: ~p",
+                        [{SearchName, Props}, Error]),
             empty_result(SearchName, Props, PageLen)
     end;
 search_pager(SearchName, Context) ->

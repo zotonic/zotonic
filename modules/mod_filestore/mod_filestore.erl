@@ -75,7 +75,7 @@ observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
     ok;
 observe_filestore(#filestore{action=delete, path=Path}, Context) ->
     Count = m_filestore:mark_deleted(Path, Context),
-    lager:debug("filestore: marked ~p entries as deleted for ~p (~p)", [Count, Path, z_context:site(Context)]),
+    lager:debug("filestore: marked ~p entries as deleted for ~p", [Count, Path]),
     ok.
 
 observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, Context) ->
@@ -174,19 +174,19 @@ load_cache(Props, Context) ->
     Id = proplists:get_value(id, Props),
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
-            lager:debug("[~p] File store cache load of ~p", [z_context:site(Context), Location]),
+            lager:debug("File store cache load of ~p", [Location]),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
                             s3filez:stream(Cred,
                                            Location1,
                                            fun({error, enoent}) ->
-                                                    lager:error("[~p] File store remote file is gone ~p", [z_context:site(Ctx), Location]),
+                                                    lager:error("File store remote file is gone ~p", [Location]),
                                                     ok = m_filestore:mark_error(Id, enoent, Ctx),
                                                     exit(normal);
                                               ({error, _} = Error) ->
                                                     % Abnormal exit when receiving an error.
                                                     % This takes down the cache entry.
-                                                    lager:error("[~p] File store error ~p on cache load of ~p", [z_context:site(Ctx), Error, Location]),
+                                                    lager:error("File store error ~p on cache load of ~p", [Error, Location]),
                                                     exit(Error);
                                               (T) when is_tuple(T) ->
                                                     nop;
@@ -222,7 +222,7 @@ task_queue_all(Offset, Max, Context) when Offset =< Max ->
                     offset $2",
                     [?BATCH_SIZE, Offset],
                     Context),
-    lager:info("[~p] Ensuring ~p files are queued for remote upload.", [z_context:site(Context), length(Media)]),
+    lager:info("Ensuring ~p files are queued for remote upload.", [length(Media)]),
     lists:foreach(fun(M) ->
                     queue_medium(M, Context)
                   end,
@@ -301,16 +301,16 @@ start_deleter(R, Context) ->
     end.
 
 delete_ready(Id, Path, Context, _Ref, ok) ->
-    lager:debug("Delete remote file for ~p (~p)", [Path, z_context:site(Context)]),
+    lager:debug("Delete remote file for ~p", [Path]),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, enoent}) ->
-    lager:debug("Delete remote file for ~p was not found (~p)", [Path, z_context:site(Context)]),
+    lager:debug("Delete remote file for ~p was not found", [Path]),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
-    lager:debug("Delete remote file for ~p was forbidden (~p)", [Path, z_context:site(Context)]),
+    lager:debug("Delete remote file for ~p was forbidden", [Path]),
     m_filestore:purge_deleted(Id, Context);
-delete_ready(_Id, Path, Context, _Ref, {error, _} = Error) ->
-    lager:error("Could not delete remote file. Path ~p (~p) error ~p", [Path, z_context:site(Context), Error]).
+delete_ready(_Id, Path, _Context, _Ref, {error, _} = Error) ->
+    lager:error("Could not delete remote file. Path ~p error ~p", [Path, Error]).
 
 
 start_downloaders(Rs, Context) ->
@@ -332,19 +332,19 @@ start_downloader(R, Context) ->
             lager:debug("No credentials for ~p", [R])
     end.
 
-download_stream(_Id, _Path, LocalPath, Context, {content_type, _}) ->
-    lager:debug("Download remote file ~p started (~p)", [LocalPath, z_context:site(Context)]),
+download_stream(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
+    lager:debug("Download remote file ~p started", [LocalPath]),
     file:delete(temp_path(LocalPath));
 download_stream(_Id, _Path, LocalPath, _Context, Data) when is_binary(Data) ->
     file:write_file(temp_path(LocalPath), Data, [append,raw,binary]);
 download_stream(Id, Path, LocalPath, Context, eof) ->
-    lager:debug("Download remote file ~p ready (~p)", [LocalPath, z_context:site(Context)]),
+    lager:debug("Download remote file ~p ready", [LocalPath]),
     ok = file:rename(temp_path(LocalPath), LocalPath),
     m_filestore:purge_move_to_local(Id, Context),
     filezcache:delete({z_context:site(Context), Path}),
     filestore_uploader:force_stale(Path, Context);
 download_stream(Id, _Path, LocalPath, Context, {error, _} = Error) ->
-    lager:debug("Download error ~p file ~p (~p)", [Error, LocalPath, z_context:site(Context)]),
+    lager:debug("Download error ~p file ~p", [Error, LocalPath]),
     file:delete(temp_path(LocalPath)),
     m_filestore:unmark_move_to_local(Id, Context);
 download_stream(_Id, _Path, _LocalPath, _Context, _Other) ->

@@ -154,8 +154,7 @@ activate(Module, IsSync, Context) ->
             1 = z_db:transaction(F, Context),
             upgrade(IsSync, Context);
         none ->
-            lager:error("[~p] Could not find module '~p'",
-                        [z_context:site(Context), Module]),
+            lager:error("Could not find module '~p'", [Module]),
             {error, not_found}
     end.
 
@@ -484,14 +483,14 @@ handle_cast({restart_module, Module}, State) ->
 %% @todo When this is an automatic restart, start all depending modules
 handle_cast({supervisor_child_started, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
-    lager:debug("[~p] Module ~p started", [z_context:site(State#state.context), Module]),
+    lager:debug("Module ~p started", [Module]),
     State1 = handle_start_child_result(Module, {ok, Pid}, State),
     {noreply, State1};
 
 %% @doc Handle errors, success is handled by the supervisor_child_started above.
 handle_cast({start_child_result, Module, {error, _} = Error}, State) ->
     State1 = handle_start_child_result(Module, Error, State),
-    lager:error("[~p] Module ~p start error ~p", [z_context:site(State#state.context), Module, Error]),
+    lager:error("Module ~p start error ~p", [Module, Error]),
     {noreply, State1};
 handle_cast({start_child_result, _Module, {ok, _}}, State) ->
     {noreply, State};
@@ -500,7 +499,7 @@ handle_cast({start_child_result, _Module, {ok, _}}, State) ->
 handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
     Module = ChildSpec#child_spec.name,
     remove_observers(Module, Pid, State),
-    lager:info("[~p] Module ~p stopped", [z_context:site(State#state.context), Module]),
+    lager:info("Module ~p stopped", [Module]),
     z_notifier:notify(#module_deactivate{module=Module}, State#state.context),
     stop_children_with_missing_depends(State),
     {noreply, State};
@@ -508,7 +507,7 @@ handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
 %% @doc Check all observers of a module. Add new ones, remove non-existing ones.
 %%      This is called after a code reload of a module.
 handle_cast({module_reloaded, Module}, State) ->
-    lager:debug("[~p] checking observers of (re-)loaded module ~p", [z_context:site(State#state.context), Module]),
+    lager:debug("checking observers of (re-)loaded module ~p", [Module]),
     TmpState = refresh_module_exports(Module, refresh_module_schema(Module, State)),
     OldExports = proplists:get_value(Module, State#state.module_exports),
     NewExports = proplists:get_value(Module, TmpState#state.module_exports),
@@ -522,8 +521,8 @@ handle_cast({module_reloaded, Module}, State) ->
             {noreply, State};
         _Changed ->
             % Exports or schema changed, assume the worst and restart the complete module
-            lager:info("[~p] exports or schema of (re-)loaded module ~p changed, restarting module",
-                       [z_context:site(State#state.context), Module]),
+            lager:info("exports or schema of (re-)loaded module ~p changed, restarting module",
+                       [Module]),
             gen_server:cast(self(), {restart_module, Module}),
             {noreply, State}
     end;
@@ -598,8 +597,8 @@ handle_upgrade(#state{context=Context, sup=ModuleSup} = State) ->
     Running = z_supervisor:running_children(State#state.sup),
     Start = sets:to_list(sets:subtract(New, sets:from_list(Running))),
     {ok, StartList} = dependency_sort(Start),
-    lager:debug("[~p] Stopping modules: ~p", [z_context:site(Context), sets:to_list(Kill)]),
-    lager:debug("[~p] Starting modules: ~p", [z_context:site(Context), Start]),
+    lager:debug("Stopping modules: ~p", [sets:to_list(Kill)]),
+    lager:debug("Starting modules: ~p", [Start]),
     sets:fold(fun (Module, ok) ->
                       z_supervisor:delete_child(ModuleSup, Module),
                       ok
@@ -633,7 +632,7 @@ signal_upgrade_waiters(#state{upgrade_waiters = Waiters} = State) ->
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
     z_notifier:notify(module_ready, Context),
-    lager:debug("[~p] Finished starting modules", [z_context:site(Context)]),
+    lager:debug("Finished starting modules"),
     spawn_link(fun() -> z_trans_server:load_translations(Context) end),
     signal_upgrade_waiters(State);
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
@@ -646,7 +645,7 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
                  StartErrorReason = get_start_error_reason(startable(M, Provided)),
                  Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
                  z_session_manager:broadcast(#broadcast{type="error", message=Msg, title="Module manager", stay=false}, z_acl:sudo(Context)),
-                 lager:error("[~p] ~s", [z_context:site(Context), Msg])
+                 lager:error("~s", [Msg])
              end || M <- Starting
             ],
 
@@ -707,8 +706,8 @@ start_child(ManagerPid, Module, ModuleSup, Spec, Exports, Context) ->
                                                 % Try to start it
                                           z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
                                       Error ->
-                                          lager:error("[~p] Error starting module ~p, Schema initialization error:~n~p~n",
-                                                      [z_context:site(Context), Module, Error]),
+                                          lager:error("Error starting module ~p, Schema initialization error:~n~p~n",
+                                                      [Module, Error]),
                                           {error, {schema_init, Error}}
                                   end,
                          gen_server:cast(ManagerPid, {start_child_result, Module, Result})
@@ -766,8 +765,7 @@ stop_children_with_missing_depends(State) ->
         [] ->
             [];
         Unstartable ->
-            lager:debug("[~p] Stopping child modules ~p",
-                        [z_context:site(State#state.context), Unstartable]),
+            lager:debug("Stopping child modules ~p", [Unstartable]),
             [ z_supervisor:stop_child(State#state.sup, M) || M <- Unstartable ]
     end.
 

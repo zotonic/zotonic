@@ -180,12 +180,12 @@ maybe_add_depiction(Id, Props, Context) ->
                 Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
                     case m_media:insert_url(Url, z_acl:logon(Id, Context)) of
                         {ok, MediaId} ->
-                            lager:info("[~p] Added depiction from depiction_url for ~p: ~p",
-                                       [z_context:site(Context), Id, Url]),
+                            lager:info("Added depiction from depiction_url for ~p: ~p",
+                                       [Id, Url]),
                             m_edge:insert(Id, depiction, MediaId, Context);
                         {error, _} = Error ->
-                            lager:warning("[~p] Could not insert depiction_url for ~p: ~p",
-                                          [z_context:site(Context), Id, Url]),
+                            lager:warning("Could not insert depiction_url for ~p: ~p",
+                                          [Id, Url]),
                             Error
                     end;
                 _ ->

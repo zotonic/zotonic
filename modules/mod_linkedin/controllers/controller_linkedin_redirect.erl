@@ -31,8 +31,7 @@ html(Context) ->
     QState = z_context:get_q("state", Context),
     case z_context:get_session(linkedin_state, Context) of
         undefined ->
-            lager:warning("[~p] LinkedIn OAuth redirect with missing session state",
-                          [z_context:site(Context)]),
+            lager:warning("LinkedIn OAuth redirect with missing session state"),
             html_error(missing_secret, Context);
         QState ->
             case z_context:get_q("code", Context) of
@@ -43,8 +42,8 @@ html(Context) ->
                     access_token(fetch_access_token(Code, Context), Context)
             end;
         SessionState ->
-            lager:warning("[~p] LinkedIn OAuth redirect with state mismatch, expected ~p, got ~p",
-                          [z_context:site(Context), SessionState, QState]),
+            lager:warning("LinkedIn OAuth redirect with state mismatch, expected ~p, got ~p",
+                          [SessionState, QState]),
             Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
             html_error(wrong_secret, Context1)
     end.

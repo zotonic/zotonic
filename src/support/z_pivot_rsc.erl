@@ -387,14 +387,12 @@ do_poll_task(Context) ->
                 end
             catch
                 error:undef ->
-                    ?zWarning(io_lib:format("Undefined task, aborting: ~p:~p(~p) ~p~n",
+                    lager:warning("Undefined task, aborting: ~p:~p(~p) ~p~",
                                 [Module, Function, Args, erlang:get_stacktrace()]),
-                                Context),
                     z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context);
                 Error:Reason ->
-                    ?zWarning(io_lib:format("Task failed(~p:~p): ~p:~p(~p) ~p~n",
-                                [Error, Reason, Module, Function, Args, erlang:get_stacktrace()]),
-                                Context)
+                    lager:warning("Task failed(~p:~p): ~p:~p(~p) ~p",
+                                [Error, Reason, Module, Function, Args, erlang:get_stacktrace()])
             end,
             true;
         empty ->
@@ -411,8 +409,8 @@ do_poll_queue(Context) ->
                 end,
             case z_db:transaction(F, Context) of
                 {rollback, PivotError} ->
-                    lager:error("[~p] Pivot error: ~p: ~p~n",
-                                [z_context:site(Context), PivotError, Qs]);
+                    lager:error("Pivot error: ~p: ~p",
+                                [PivotError, Qs]);
                 L when is_list(L) ->
                     lists:map(fun({Id, _Serial}) ->
                                     IsA = m_rsc:is_a(Id, Context),
@@ -429,8 +427,8 @@ do_poll_queue(Context) ->
             true
     end.
 
-log_error(Id, Error, Context) ->
-    ?zWarning(io_lib:format("Pivot error ~p: ~p", [Id, Error]), Context).
+log_error(Id, Error, _Context) ->
+    lager:warning("Pivot error ~p: ~p", [Id, Error]).
 
 %% @doc Fetch the next task uit de task queue, if any.
 poll_task(Context) ->
@@ -565,8 +563,8 @@ pivot_resource(Id, Context) ->
                 (undefined) -> ok;
                 (none) -> ok;
                 ({error, _} = Error) ->
-                    lager:error("[~p] Error return from custom pivot of ~p, error: ~p",
-                                [z_context:site(Context), Id, Error]);
+                    lager:error("Error return from custom pivot of ~p, error: ~p",
+                                [Id, Error]);
                 (Res) ->
                     update_custom_pivot(Id, Res, Context)
             end,

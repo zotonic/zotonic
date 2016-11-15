@@ -229,7 +229,7 @@ code_change(_OldVsn, State, _Extra) ->
 reindex(#state{context=Context, last=Last} = State) ->
     case collect_files(z_user_agent:classes(), [], Context) of
         {error, timeout} ->
-            lager:warning("[~p] timeout on module indexer", [z_context:site(Context)]),
+            lager:warning("timeout on module indexer"),
             State;
         {ok, Last} ->
             State;
@@ -238,7 +238,7 @@ reindex(#state{context=Context, last=Last} = State) ->
             Files1 = lists:flatten([ Fs || {Fs, MaxMod} <- Files, MaxMod =/= undefined ]),
             Site = z_context:site(State#state.context),
             ok = reindex_files(Files1, Site),
-            lager:debug("Re-indexed mediaclass definitions for ~p", [Site]),
+            lager:debug("Re-indexed mediaclass definitions"),
             State#state{last=Files}
     end.
 

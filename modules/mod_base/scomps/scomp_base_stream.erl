@@ -25,6 +25,6 @@
 
 vary(_Params, _Context) -> nocache.
 
-render(_Params, _Vars, Context) ->
-    lager:warning("[~p] {% stream %} tag has been deprecated.", [z_context:site(Context)]),
+render(_Params, _Vars, _Context) ->
+    lager:warning("{% stream %} tag has been deprecated."),
     {ok, []}.

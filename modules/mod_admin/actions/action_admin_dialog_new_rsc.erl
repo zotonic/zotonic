@@ -127,9 +127,8 @@ maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
     [m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];
 maybe_add_objects(_Id, undefined, _Context) ->
     ok;
-maybe_add_objects(_Id, Objects, Context) ->
-    lager:warning("[~p] action_admin_dialog_new_rsc: objects are not a list: ~p",
-                  [z_context:site(Context), Objects]),
+maybe_add_objects(_Id, Objects, _Context) ->
+    lager:warning("action_admin_dialog_new_rsc: objects are not a list: ~p", [Objects]),
     ok.
 
 dispatch(true) ->

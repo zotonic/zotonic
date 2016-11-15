@@ -436,8 +436,8 @@ notify_observer(Msg, {_Prio, Pid}, IsCall, Context) when is_pid(Pid) ->
     catch EM:E ->
         case z_utils:is_process_alive(Pid) of
             false ->
-                lager:error("~p: Error notifying ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
-                            [z_context:site(Context), Pid, Msg, EM, E, erlang:get_stacktrace()]),
+                lager:error("Error notifying ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
+                            [Pid, Msg, EM, E, erlang:get_stacktrace()]),
                 detach(msg_event(Msg), Pid, Context);
             true ->
                 % Assume transient error
@@ -453,8 +453,8 @@ notify_observer(Msg, {_Prio, {M,F,[Pid]}}, _IsCall, Context) when is_pid(Pid) ->
     catch EM:E ->
         case z_utils:is_process_alive(Pid) of
             false ->
-                lager:error("~p: Error notifying ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
-                            [z_context:site(Context), {M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()]),
+                lager:error("Error notifying ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
+                            [{M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()]),
                 detach(msg_event(Msg), {M,F,[Pid]}, Context);
             true ->
                 % Assume transient error
@@ -476,13 +476,13 @@ notify_observer_fold(Msg, {_Prio, Pid}, Acc, Context) when is_pid(Pid) ->
     catch EM:E ->
         case z_utils:is_process_alive(Pid) of
             false ->
-                lager:error("~p: Error folding ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
-                            [z_context:site(Context), Pid, Msg, EM, E, erlang:get_stacktrace()]),
+                lager:error("Error folding ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
+                            [Pid, Msg, EM, E, erlang:get_stacktrace()]),
                 detach(msg_event(Msg), Pid, Context);
             true ->
                 % Assume transient error
-                lager:error("~p: Error folding ~p with event ~p. Error ~p:~p (~p)",
-                            [z_context:site(Context), Pid, Msg, EM, E, erlang:get_stacktrace()])
+                lager:error("Error folding ~p with event ~p. Error ~p:~p (~p)",
+                            [Pid, Msg, EM, E, erlang:get_stacktrace()])
         end,
         Acc
     end;
@@ -494,13 +494,13 @@ notify_observer_fold(Msg, {_Prio, {M,F,[Pid]}}, Acc, Context) when is_pid(Pid) -
     catch EM:E ->
         case z_utils:is_process_alive(Pid) of
             false ->
-                lager:error("~p: Error folding ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
-                            [z_context:site(Context), {M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()]),
+                lager:error("Error folding ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
+                            [{M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()]),
                 detach(msg_event(Msg), {M,F,[Pid]}, Context);
             true ->
                 % Assume transient error
-                lager:error("~p: Error folding ~p with event ~p. Error ~p:~p (~p)",
-                            [z_context:site(Context), {M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()])
+                lager:error("Error folding ~p with event ~p. Error ~p:~p (~p)",
+                            [{M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()])
         end,
         Acc
     end;

@@ -403,8 +403,7 @@ preview_vimeo(MediaId, InsertProps, Context) ->
                             m_media:save_preview_url(MediaId, ImgUrl, Context)
                     end;
                 {ok, {StatusCode, _Header, Data}} ->
-                    lager:warning("[~p] Vimeo metadata fetch returns ~p ~p",
-                                  [z_context:site(Context), StatusCode, Data]),
+                    lager:warning("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),
                     static_preview(MediaId, "images/vimeo.jpg", Context);
                 {error, _Reason} ->
                     %% Too bad - no preview available - ignore for now (see todo above)
