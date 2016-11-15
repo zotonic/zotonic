@@ -9,30 +9,20 @@ Params:
 - callback (optional) (string) JavaScript function to be called after connecting
 - action (optional) action to be called after succesful connecting
 - unlink_action (optional) action to be called after succesful disconnecting
+- undo_message_id (opional) id of the div for the unlink message, defaults to "unlink-undo-message"
 - list_id (optional) (string) connection list identifier
 #}
-{% with list_id|default:("links-" ++ id ++ "-" ++ predicate) as list_id %}
+{% with list_id|default:#list_id as list_id %}
 <div class="unlink-wrapper">
-    {% sorter id=["links",id|format_integer,predicate]|join:"-"
+    {% sorter id=list_id
               tag={object_sorter predicate=predicate id=id}
               group="edges"
               delegate=delegate|default:`controller_admin_edit`
     %}
     <ul id="{{ list_id }}" class="tree-list connections-list">
-      {% include "_rsc_edge_list.tpl" id=id predicate=predicate unlink_action=unlink_action %}
+      {% include "_rsc_edge_list.tpl" id=id predicate=predicate unlink_action=unlink_action undo_message_id=undo_message_id %}
     </ul>
 </div>
-
-{% wire
-    name=list_id
-    action={update
-        target=list_id
-        template="_rsc_edge_list.tpl"
-        id=id
-        predicate=predicate
-        unlink_action=unlink_action
-    }
-%}
 {% endwith %}
 
 {% if m.acl.is_allowed.link[id] %}
@@ -49,6 +39,7 @@ Params:
           callback=callback
           action=action
           unlink_action=unlink_action
+          undo_message_id=undo_message_id|default:"unlink-undo-message"
           center=0
         }
     %}

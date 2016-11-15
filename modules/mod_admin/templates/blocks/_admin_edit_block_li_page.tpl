@@ -9,7 +9,9 @@
 <fieldset class="block-page">
     <a class="btn btn-default page-connect pull-right" href="#connect">{_ Connect a page _}</a>
     <div class="rsc-item-wrapper" id="{{ #wrap }}">
-		{% catinclude "_rsc_item.tpl" blk.rsc_id %}
+        {% if blk.rsc_id %}
+    		{% catinclude "_rsc_block_item.tpl" blk.rsc_id %}
+        {% endif %}
 	</div>
 	<input type="hidden" id="block-{{name}}-rsc_id" name="block-{{name}}-rsc_id" value="{{ blk.rsc_id }}" />
 </fieldset>
