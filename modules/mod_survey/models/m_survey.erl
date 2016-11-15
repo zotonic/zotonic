@@ -251,8 +251,8 @@ prep_chart(_Type, _Block, undefined, _Context) ->
 prep_chart(Type, Block, Stats, Context) ->
     case mod_survey:module_name(Type) of
         undefined ->
-            lager:warning("[~p] Not preparing chart for ~p because there is no known handler (~p)",
-                         [z_context:site(Context), Type, Stats]),
+            lager:warning("Not preparing chart for ~p because there is no known handler (~p)",
+                         [Type, Stats]),
             undefined;
         M ->
             M:prep_chart(Block, Stats, Context)

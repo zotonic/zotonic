@@ -156,7 +156,7 @@ maybe_filter_meta(_ContentGroupName, _Prop, PropId, Cs, _NonMetaCs, _Context) ->
     proplists:get_value(PropId, Cs, [PropId]).
 
 %% @doc Given two id lists, return all possible combinations.
-expand_rules(TreeA, Rules, TreeB, Context) ->
+expand_rules(TreeA, Rules, TreeB, _Context) ->
     As = [{undefined, tree_ids(TreeA)} | tree_expand(TreeA) ],
     Bs = tree_expand(TreeB),
     lists:flatten(
@@ -168,8 +168,8 @@ expand_rules(TreeA, Rules, TreeB, Context) ->
                                 % acl_collaboration_groups are not part of the group hierarchy
                                 expand_rule([A], Pred, B1);
                             Other ->
-                                lager:warning("[~p] Tree expand of {~p, ~p, ~p} returned ~p",
-                                              [z_context:site(Context), A, Pred, B, Other]),
+                                lager:warning("Tree expand of {~p, ~p, ~p} returned ~p",
+                                              [A, Pred, B, Other]),
                                 []
                         end
                   end,

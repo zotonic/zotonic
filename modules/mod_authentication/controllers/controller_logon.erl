@@ -167,7 +167,7 @@ event(#submit{message={logon_confirm, Args}, form= <<"logon_confirm_form">>}, Co
         {error, _Reason} ->
             z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
         undefined ->
-            ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
+            lager:warning("Auth module error: #logon_submit{} returned undefined."),
             z_render:growl_error("Configuration error: please enable a module for #logon_submit{}", Context)
     end;
 
@@ -200,7 +200,7 @@ logon(Args, WireArgs, Context) ->
         {expired, UserId} when is_integer(UserId) ->
             logon_stage("password_expired", [{user_id, UserId}, {secret, set_reminder_secret(UserId, Context)}], Context);
         undefined ->
-            ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
+            lager:warning("Auth module error: #logon_submit{} returned undefined."),
             logon_error("pw", Context)
     end.
 

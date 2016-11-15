@@ -45,9 +45,9 @@
 observe_module_activate(#module_activate{module=?MODULE}, Context) ->
     case check_certs(Context) of
         {ok, _Certs} ->
-            ?zInfo("SSL: Certificates ready.", Context);
+            lager:info("SSL: Certificates ready.");
         {error, Reason} ->
-            ?zWarning("SSL: Problem with certificates: ~p", [Reason], Context)
+            lager:warning("SSL: Problem with certificates: ~p", [Reason])
     end;
 observe_module_activate(#module_activate{}, _Context) ->
     ok.

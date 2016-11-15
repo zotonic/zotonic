@@ -216,8 +216,8 @@ set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
             z_depcache:flush(Id, Context),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
-            lager:error("[~p] set_username_pw error for ~p, setting username ~p: ~p",
-                        [z_context:site(Context), Username, ErrTrace]),
+            lager:error("set_username_pw error for ~p, setting username ~p: ~p",
+                        [Username, ErrTrace]),
             Error;
         {error, _} = Error ->
             Error
@@ -353,8 +353,10 @@ check_username_pw("admin", Password, Context) ->
                     z_db:q("update identity set visited = now() where id = 1", Context),
                     {ok, 1};
                 false ->
-                    lager:error("[~p] admin login with default password from non whitelisted ip address ~p",
-                                [z_context:site(Context), m_req:get(peer, Context)]),
+                    lager:error(
+                        "admin login with default password from non whitelisted ip address ~p",
+                        [m_req:get(peer, Context)]
+                    ),
                     {error, peer_not_whitelisted}
             end;
         Password1 ->

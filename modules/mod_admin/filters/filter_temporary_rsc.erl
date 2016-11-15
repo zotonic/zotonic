@@ -51,8 +51,7 @@ task_delete_inactive(RscId, SessionId, Context) ->
         true ->
             case is_session_alive(SessionId, Context) of
                 false ->
-                    lager:debug("[~p] Deleting unmodified temporary resource ~p",
-                                [z_context:site(Context), RscId]),
+                    lager:debug("Deleting unmodified temporary resource ~p", [RscId]),
                     ok = m_rsc:delete(RscId, z_acl:sudo(Context)),
                     ok;
                 true ->
@@ -80,8 +79,7 @@ make_temporary_rsc(SessionId, PageId, Props, Context) ->
     {Cat, Props1} = ensure_category(Props, Context),
     case m_rsc:rid(Cat, Context) of
         undefined ->
-            lager:warning("[~p] filter_temporary_rsc: could not find category '~p'",
-                          [z_context:site(Context), Cat]),
+            lager:warning("filter_temporary_rsc: could not find category '~p'", [Cat]),
             undefined;
         CatId ->
             make_rsc(
@@ -110,14 +108,12 @@ make_rsc({error, notfound}, SessionId, CatId, Props, Context) ->
                             Context),
                 RscId;
             {error, _} = Error ->
-                lager:error("[~p] Can not make temporary resource error ~p on ~p",
-                            [z_context:site(Context), Error, Props]),
+                lager:error("Can not make temporary resource error ~p on ~p", [Error, Props]),
                 undefined
         end
     catch
         throw:{{error, Err}, _Trace} ->
-            lager:error("[~p] Can not make temporary resource error ~p on ~p",
-                        [z_context:site(Context), Err, Props]),
+            lager:error("Can not make temporary resource error ~p on ~p", [Err, Props]),
             undefined
     end.
 
@@ -139,8 +135,7 @@ session_monitor(RscId, SessionPid, Context) ->
 delete_if_unmodified(RscId, Context) ->
     case is_unmodified_rsc(RscId, Context) of
         true ->
-            lager:debug("[~p] Deleting temporary resource ~p due to stopped page session",
-                        [z_context:site(Context), RscId]),
+            lager:debug("Deleting temporary resource ~p due to stopped page session", [RscId]),
             m_rsc:delete(RscId, z_acl:sudo(Context));
         false ->
             ok

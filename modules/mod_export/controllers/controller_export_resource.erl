@@ -69,8 +69,7 @@ content_types_provided(Context) ->
             Accepted = [ {Mime, do_export} || Mime <- ContentTypes ],
             {Accepted, Context};
         {error, Reason} = Error ->
-            lager:error("~p: mod_export error when fetching content type for ~p:~p: ~p",
-                        [z_context:site(Context1), Dispatch, Id, Reason]),
+            lager:error("mod_export error when fetching content type for ~p:~p: ~p", [Dispatch, Id, Reason]),
             throw(Error)
     end.
 

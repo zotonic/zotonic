@@ -161,7 +161,7 @@ set_user_timezone(Tz, Context) ->
 try_set_timezone(Tz, Context) ->
     case localtime:tz_name({{2008,12,10},{15,30,0}}, z_convert:to_list(Tz)) of
         {error, _} ->
-            lager:warning("~p: Unknown timezone ~p", [z_context:site(Context), Tz]),
+            lager:warning("Unknown timezone ~p", [Tz]),
             Context;
         Tz when is_list(Tz) ->
             set_timezone(Tz, Context);

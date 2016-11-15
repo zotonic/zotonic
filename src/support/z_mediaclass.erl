@@ -220,7 +220,7 @@ code_change(_OldVsn, State, _Extra) ->
 reindex(#state{context=Context, last=Last} = State) ->
     case collect_files(Context) of
         {error, timeout} ->
-            lager:warning("[~p] timeout on module indexer", [z_context:site(Context)]),
+            lager:warning("timeout on module indexer"),
             State;
         {ok, Last} ->
             State;
@@ -228,7 +228,7 @@ reindex(#state{context=Context, last=Last} = State) ->
             % Something changed, parse and update all classes in the files.
             Site = z_context:site(State#state.context),
             ok = reindex_files(Fs, Site),
-            lager:debug("Re-indexed mediaclass definitions for ~p", [Site]),
+            lager:debug("Re-indexed mediaclass definitions"),
             State#state{last=New}
     end.
 

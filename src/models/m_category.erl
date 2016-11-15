@@ -676,7 +676,7 @@ ensure_hierarchy(Context) ->
             {ok, CatId} = name_to_id(category, Context),
             case m_hierarchy:ensure('$category', CatId, Context) of
                 {ok, N} when N > 0 ->
-                    lager:warning("[~p] Ensure category found ~p new categories.", [z_context:site(Context), N]),
+                    lager:warning("Ensure category found ~p new categories.", [N]),
                     flush(Context);
                 {ok, 0} ->
                     ok;
@@ -684,7 +684,7 @@ ensure_hierarchy(Context) ->
                     Error
             end;
         true ->
-            lager:warning("[~p] Ensure category requested while renumbering.", [z_context:site(Context)]),
+            lager:warning("Ensure category requested while renumbering."),
             {error, renumbering}
     end.
 
@@ -787,7 +787,7 @@ renumber_pivot_task(Context) ->
                 limit 1000", Context, 60000),
     case Nrs of
         [] ->
-            ?zInfo("Category renumbering completed.", Context),
+            lager:info("Category renumbering completed", Context),
             set_tree_dirty(false, Context),
             ok;
         Ids ->

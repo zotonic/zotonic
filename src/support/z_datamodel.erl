@@ -167,8 +167,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                     {ok, Id}
             end;
         {error, _} ->
-            Msg = io_lib:format("Resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),
-            ?zWarning(Msg, Context),
+            lager:warning("Resource '~p' could not be handled because the category ~p does not exist.", [Name, Category]),
             ok
     end.
 

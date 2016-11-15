@@ -152,7 +152,7 @@ install(blog, Context) ->
       ]
      },
 
-    ?DEBUG("Installing blog data"),
+    lager:info("Installing blog data"),
     z_datamodel:manage(?MODULE, Datamodel, Context);
 
 
