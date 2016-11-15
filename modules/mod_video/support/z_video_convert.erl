@@ -188,7 +188,7 @@ video_convert_1(QueuePath, Orientation, _Mime, Context) ->
                      lager:debug("Video convert: ~p", [FfmpegCmd]),
                      case Logging of
                          true ->
-                             ?zInfo(FfmpegCmd, Context);
+                             lager:info(FfmpegCmd);
                          false ->
                              nop
                      end,

@@ -38,28 +38,9 @@
          ld/0,
          ld/1,
 
-         log_level/1,
-
          shell_stopsite/1,
          shell_startsite/1,
-         shell_restartsite/1,
-
-         debug_msg/3,
-
-         log/3,
-
-         debug/2,
-         debug/3,
-         debug/4,
-         info/2,
-         info/3,
-         info/4,
-         warning/2,
-         warning/3,
-         warning/4,
-         error/2,
-         error/3,
-         error/4
+         shell_restartsite/1
         ]).
 
 -include("zotonic.hrl").
@@ -117,11 +98,6 @@ restart() ->
 restart(Site) ->
     z_sites_manager:restart(Site).
 
-%% @doc Shortcut to set the lager console log level
-log_level(Level) ->
-    lager:set_loglevel(lager_console_backend, Level).
-
-
 %% @doc Reload all changed Erlang modules
 ld() ->
     zotonic_compile:ld().
@@ -156,60 +132,3 @@ shell_stopsite(Site) ->
 shell_restartsite(Site) ->
     z_sites_manager:stop(Site),
     shell_startsite(Site).
-
-
-%% @doc Echo and return a debugging value
-debug_msg(Module, Line, Msg) ->
-	error_logger:info_msg("DEBUG: ~p:~p  ~p~n", [Module, Line, Msg]),
-	Msg.
-
-%% @doc Log a debug message, with extra props.
-debug(Msg, Context)        -> log(debug, Msg, [], Context).
-debug(Msg, Props, Context) -> log(debug, Msg, Props, Context).
-debug(Msg, Args, Props, Context) -> log(debug, Msg, Args, Props, Context).
-
-%% @doc Log an informational message.
-info(Msg, Context)         -> log(info, Msg, [], Context).
-info(Msg, Props, Context)  -> log(info, Msg, Props, Context).
-info(Msg, Args, Props, Context)  -> log(info, Msg, Args, Props, Context).
-
-%% @doc Log a warning.
-warning(Msg, Context)         -> log(warning, Msg, [], Context).
-warning(Msg, Props, Context)  -> log(warning, Msg, Props, Context).
-warning(Msg, Args, Props, Context)  -> log(warning, Msg, Args, Props, Context).
-
-%% @doc Log a error.
-error(Msg, Context)         -> log(error, Msg, [], Context).
-error(Msg, Props, Context)  -> log(error, Msg, Props, Context).
-error(Msg, Args, Props, Context)  -> log(error, Msg, Args, Props, Context).
-
-
-log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
-    z_notifier:notify(
-        #zlog{
-            type=Type,
-            user_id=z_acl:user(Context),
-            timestamp=os:timestamp(),
-            props=Props
-        },
-        Context).
-
-log(Type, Msg, Args, Props, Context) ->
-    Msg1 = lists:flatten(io_lib:format(Msg, Args)),
-    log(Type, Msg1, Props, Context).
-
-log(Type, Msg, Props, Context) ->
-    Msg1 = erlang:iolist_to_binary(Msg),
-    Line = proplists:get_value(line, Props, 0),
-    Module = proplists:get_value(module, Props, unknown),
-    lager:log(Type, Props, "[~p] ~p @ ~p:~p  ~s~n",
-             [z_context:site(Context), Type, Module, Line, binary_to_list(Msg1)]),
-    z_notifier:notify(
-        #zlog{
-            type=Type,
-            user_id=z_acl:user(Context),
-            timestamp=os:timestamp(),
-            props=#log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}
-        },
-        Context).
-
