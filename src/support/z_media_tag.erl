@@ -406,7 +406,7 @@ props2url([{use_absolute_url,_}|Rest], Width, Height, Acc, Context) ->
 props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
     case z_mediaclass:get(Class, Context) of
         {ok, [], <<>>} ->
-            lager:warning("~p: unknown mediaclass ~p", [z_context:site(Context), Class]),
+            lager:warning("unknown mediaclass ~p", [Class]),
             props2url(Rest, Width, Height, Acc, Context);
         {ok, _Props, Checksum} ->
             MC = [
@@ -417,7 +417,7 @@ props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
             ],
             props2url(Rest, Width, Height, [MC|Acc], Context);
         {error, _Reason} = Error ->
-            lager:info("~p: error looking up mediaclass ~p: ~p", [z_context:site(Context), Class, Error]),
+            lager:info("error looking up mediaclass ~p: ~p", [Class, Error]),
             props2url(Rest, Width, Height, Acc, Context)
     end;
 props2url([{Prop}|Rest], Width, Height, Acc, Context) ->

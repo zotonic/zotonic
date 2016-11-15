@@ -756,13 +756,13 @@ assure_category_1(Name, Context) ->
         _ ->
             case m_rsc:rid(Name, Context) of
                 undefined ->
-                    lager:warning("[~p] Query: unknown category '~p'", [z_context:site(Context), Name]),
+                    lager:warning("Query: unknown category '~p'", [Name]),
                     display_error([ ?__("Unknown category", Context), 32, $", z_html:escape(z_convert:to_binary(Name)), $" ], Context),
                     error;
                 CatId ->
                     case m_category:id_to_name(CatId, Context) of
                         undefined ->
-                            lager:warning("[~p] Query: '~p' is not a category", [z_context:site(Context), Name]),
+                            lager:warning("Query: '~p' is not a category", [Name]),
                             display_error([ $", z_html:escape(z_convert:to_binary(Name)), $", 32, ?__("is not a category", Context) ], Context),
                             error;
                         Name1 ->
@@ -931,7 +931,7 @@ predicate_to_id_1(Pred, Context) ->
         {ok, Id} ->
             Id;
         {error, _} ->
-            lager:warning("[~p] Query: unknown predicate '~p'", [z_context:site(Context), Pred]),
+            lager:warning("Query: unknown predicate '~p'", [Pred]),
             display_error([ ?__("Unknown predicate", Context), 32, $", z_html:escape(z_convert:to_binary(Pred)), $" ], Context),
             0
     end.

@@ -177,7 +177,7 @@ error_message(file_not_allowed, Context) ->
 error_message(download_failed, Context) ->
     ?__("Failed to download the file.", Context);
 error_message(_R, Context) ->
-    ?zWarning(io_lib:format("Unknown upload error: ~p", [_R]), Context),
+    lager:warning("Unknown upload error: ~p", [_R]),
     ?__("Error uploading the file.", Context).
 
 % Add an extra argument to a postback / submit action.

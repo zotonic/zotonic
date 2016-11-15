@@ -31,9 +31,9 @@
  {lager,
   [{handlers,
     [
-      {lager_console_backend, info},
-      {lager_file_backend, [{file, "priv/log/error.log"},   {level, error}]},
-      {lager_file_backend, [{file, "priv/log/console.log"}, {level, info}]}
+      {lager_console_backend, [info, {lager_default_formatter, [time, color, " [", severity, "] ", {site, [site, " "], ""}, {module, [module, ":", line, " "], ""}, message, "\n"]}]},
+      {lager_file_backend, [{file, "priv/log/error.log"}, {level, error}, {formatter_config, [date, " ", time, " [", severity, "] ", {site, [site, " "], ""}, {pid, ""}, {module, [{pid, ["@"], ""}, module, {function, [":", function], ""}, {line, [":", line], ""}], ""}, " ", message, "\n"] }]},
+      {lager_file_backend, [{file, "priv/log/console.log"}, {level, info}, {formatter_config, [date, " ", time, " [", severity, "] ", {site, [site, " "], ""}, {pid, ""}, {module, [{pid, ["@"], ""}, module, {function, [":", function], ""}, {line, [":", line], ""}], ""}, " ", message, "\n"] }]}
     ]},
    {crash_log, "priv/log/crash.log"}
   ]},

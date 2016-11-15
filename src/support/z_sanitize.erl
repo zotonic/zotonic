@@ -155,7 +155,7 @@ sanitize_script(Props, Context) ->
         {ok, Url} ->
             {<<"script">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
         false ->
-            lager:info("[~p] Dropped script with url ~p", [z_context:site(Context), Src]),
+            lager:info("Dropped script with url ~p", [Src]),
             <<>>
     end.
 
@@ -165,7 +165,7 @@ sanitize_iframe(Props, Context) ->
         {ok, Url} ->
             {<<"iframe">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
         false ->
-            lager:info("[~p] Dropped iframe url ~p", [z_context:site(Context), Src]),
+            lager:info("Dropped iframe url ~p", [Src]),
             <<>>
     end.
 
@@ -179,7 +179,7 @@ sanitize_object(Props, Context) ->
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"data">>, Props)], []};
                 false ->
-                    lager:info("[~p] Dropped object url ~p", [z_context:site(Context), Src]),
+                    lager:info("Dropped object url ~p", [Src]),
                     <<>>
             end
     end.
@@ -194,7 +194,7 @@ sanitize_embed(Props, Context) ->
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
                 false ->
-                    lager:info("[~p] Dropped embed url ~p", [z_context:site(Context), Src]),
+                    lager:info("Dropped embed url ~p", [Src]),
                     <<>>
             end
     end.

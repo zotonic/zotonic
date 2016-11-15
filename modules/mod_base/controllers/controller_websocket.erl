@@ -102,9 +102,7 @@ websocket_handle({Type, Data}, Context) when Type =:= text; Type =:= binary ->
         handle_incoming_data(Data, [], Context)
     catch
         Error:X ->
-            StackTrace = erlang:get_stacktrace(),
-            lager:warning("[~p] ~p:~p~n~p",
-                          [z_context:site(Context), Error, X, StackTrace]),
+            lager:warning("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]),
             {ok, Context}
     end;
 websocket_handle(_Data, Context) ->
@@ -144,7 +142,7 @@ maybe_start_sidejob([], Context) ->
 maybe_start_sidejob(OtherMsgs, Context) ->
     Context1 = z_transport:prepare_incoming_context(OtherMsgs, Context),
     lists:foreach(
-        fun(Msg) -> 
+        fun(Msg) ->
             start_sidejob(Msg, Context1)
         end,
         OtherMsgs),

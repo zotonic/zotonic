@@ -53,10 +53,8 @@ process_post_ubf(Context) ->
             undefined -> ok;
             Pid -> ok = z_session_page:stop(Pid)
         end
-    catch
-        Class:Term ->
-            %% Log error, but give a correct response anyway
-            lager:error("[~p] mod_base error processing unload beacon ~p:~p",
-                        [z_context:site(Context), Class, Term])
+    catch Class:Term ->
+ 	%% Log error, but give a correct response anyway
+	lager:error("mod_base error processing unload beacon ~p:~p", [Class, Term])
     end,
     {true, Context1}.

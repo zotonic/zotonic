@@ -151,7 +151,7 @@ task_file_to_local(Context) ->
         {ok, 0} ->
             ok;
         {ok, N} ->
-            lager:info("[~p] Marked ~p files for move to local.", [z_context:site(Context), N]),
+            lager:info("Marked ~p files for move to local.", [N]),
             {delay, 1};
         _Other ->
             {delay, 10}
@@ -162,7 +162,7 @@ task_file_to_remote(Context) ->
         {ok, 0} ->
             ok;
         {ok, N} ->
-            lager:info("[~p] Unmarked ~p files for move to local.", [z_context:site(Context), N]),
+            lager:info("Unmarked ~p files for move to local.", [N]),
             {delay, 1};
         _Other ->
             {delay, 10}

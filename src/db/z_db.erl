@@ -108,16 +108,10 @@ transaction(Function, Options, Context) ->
         {rollback, {deadlock, Trace}} = DeadlockError ->
             case proplists:get_value(noretry_on_deadlock, Options) of
                 true ->
-                    ?zWarning(
-                        io_lib:format("DEADLOCK on database transaction, NO RETRY '~p'", [Trace]),
-                        Context
-                    ),
+                    lager:warning("DEADLOCK on database transaction, NO RETRY '~p'", [Trace]),
                     DeadlockError;
                 _False ->
-                    ?zWarning(
-                        io_lib:format("DEADLOCK on database transaction, will retry '~p'", [Trace]),
-                        Context
-                    ),
+                    lager:warning("DEADLOCK on database transaction, will retry '~p'", [Trace]),
                     % Sleep random time, then retry transaction
                     timer:sleep(z_ids:number(100)),
                     transaction(Function, Options, Context)
@@ -294,7 +288,7 @@ q(Sql, Parameters, Context, Timeout) ->
                 {ok, _Cols, Rows} when is_list(Rows) -> Rows;
                 {ok, Value} when is_list(Value); is_integer(Value) -> Value;
                 {error, Reason} = Error ->
-                    lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, Parameters]),
+                    lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
                     throw(Error)
             end
 	end,
@@ -317,7 +311,7 @@ q1(Sql, Parameters, Context, Timeout) ->
                 {ok, Value} -> Value;
                 {error, noresult} -> undefined;
                 {error, Reason} = Error ->
-                    lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, Parameters]),
+                    lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
                     throw(Error)
             end
     end,
@@ -416,7 +410,7 @@ insert(Table, Props, Context) ->
 			 {ok, IdVal} -> IdVal;
 			 {error, noresult} -> undefined;
              {error, Reason} = Error ->
-                lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, FinalSql, Parameters]),
+                lager:error("z_db error ~p in query ~p with ~p", [Reason, FinalSql, Parameters]),
                 throw(Error)
 		     end,
 		{ok, Id}
@@ -458,7 +452,7 @@ update(Table, Id, Parameters, Context) ->
         case equery1(DbDriver, C, Sql, [Id | Params]) of
             {ok, _RowsUpdated} = Ok -> Ok;
             {error, Reason} = Error ->
-                lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, [Id | Params]]),
+                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id | Params]]),
                 throw(Error)
         end
     end,
@@ -477,7 +471,7 @@ delete(Table, Id, Context) ->
         case equery1(DbDriver, C, Sql, [Id]) of
             {ok, _RowsDeleted} = Ok -> Ok;
             {error, Reason} = Error ->
-                lager:error("[~p] z_db error ~p in query ~p with ~p", [z_context:site(Context), Reason, Sql, [Id]]),
+                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id]]),
                 throw(Error)
         end
 	end,
@@ -657,14 +651,14 @@ ensure_database(Site, Options) ->
                     ok;
                 false ->
                     AnonOptions = proplists:delete(dbpassword, Options),
-                    lager:warning("[~p] Creating database ~p with options: ~p", [Site, Database, AnonOptions]),
+                    lager:warning("Creating database ~p with options: ~p", [Database, AnonOptions]),
                     create_database(Site, PgConnection, Database)
             end,
             close_connection(PgConnection),
             Result;
         {error, Reason} = Error ->
-            lager:error("[~p] Cannot create database ~p because user ~p cannot connect to the 'postgres' database: ~p",
-                        [Site, Database, proplists:get_value(dbuser, Options), Reason]),
+            lager:error("Cannot create database ~p because user ~p cannot connect to the 'postgres' database: ~p",
+                        [Database, proplists:get_value(dbuser, Options), Reason]),
             Error
     end.
 
@@ -676,7 +670,7 @@ ensure_schema(Site, Options) ->
         true ->
             ok;
         false ->
-            lager:warning("[~p] Creating schema ~p in database ~p", [Site, Schema, Database]),
+            lager:warning("Creating schema ~p in database ~p", [Schema, Database]),
             create_schema(Site, DbConnection, Schema)
     end,
     close_connection(DbConnection),
@@ -712,7 +706,7 @@ database_exists(Connection, Database) ->
 
 %% @doc Create a database
 -spec create_database(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
-create_database(Site, Connection, Database) ->
+create_database(_Site, Connection, Database) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
     case epgsql:equery(
@@ -720,7 +714,7 @@ create_database(Site, Connection, Database) ->
         "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0"
     ) of
         {error, Reason} = Error ->
-            lager:error("[~p] z_db error ~p when creating database ~p", [Site, Reason, Database]),
+            lager:error("z_db error ~p when creating database ~p", [Reason, Database]),
             Error;
         {ok, _, _} ->
             ok
@@ -738,7 +732,7 @@ schema_exists_conn(Connection, Schema) ->
 
 %% @doc Create a schema
 -spec create_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
-create_schema(Site, Connection, Schema) ->
+create_schema(_Site, Connection, Schema) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
     case epgsql:equery(
@@ -748,10 +742,10 @@ create_schema(Site, Connection, Schema) ->
         {ok, _, _} ->
             ok;
         {error, {error, error, <<"42P06">>, _Msg, []}} ->
-            lager:warning("[~p] schema already exists ~p", [Site, Schema]),
+            lager:warning("schema already exists ~p", [Schema]),
             ok;
         {error, Reason} = Error ->
-            lager:error("[~p] z_db error ~p when creating schema ~p", [Site, Reason, Schema]),
+            lager:error("z_db error ~p when creating schema ~p", [Reason, Schema]),
             Error
     end.
 

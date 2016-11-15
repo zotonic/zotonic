@@ -225,19 +225,13 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content
     catch
         throw:Reason ->
             Stacktrace = erlang:get_stacktrace(),
-            lager:error(z_context:lager_md(Context1),
-                        "Throw '~p' for transport message ~p",
-                        [Reason, Msg]),
-            lager:error(z_context:lager_md(Context1),
-                        "Stack: ~p", [Stacktrace]),
+            lager:error("Throw '~p' for transport message ~p", [Reason, Msg]),
+            lager:error("Stack: ~p", [Stacktrace]),
             {ok, [], Context1};
         error:Reason ->
             Stacktrace = erlang:get_stacktrace(),
-            lager:error(z_context:lager_md(Context1),
-                        "Error '~p' for transport message ~p",
-                        [Reason, Msg]),
-            lager:error(z_context:lager_md(Context1),
-                        "Stack: ~p", [Stacktrace]),
+            lager:error("Error '~p' for transport message ~p", [Reason, Msg]),
+            lager:error("Stack: ~p", [Stacktrace]),
             {ok, [], Context1}
     end;
 incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->

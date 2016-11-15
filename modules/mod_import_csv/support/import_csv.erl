@@ -170,12 +170,12 @@ import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
         true ->
            import_def_rsc_2_name(RscId, State2, Name, CategoryName, NormalizedRow, Callbacks, Context);
         false ->
-            lager:info("[~p] import_csv: missing required attributes for ~p", [z_context:site(Context), Name]),
+            lager:info("import_csv: missing required attributes for ~p", [Name]),
             {State2, ignore}
     end.
 
 import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRow, Callbacks, Context) ->
-    lager:debug("[~p] import_csv: importing ~p", [z_context:site(Context), Name]),
+    lager:debug("import_csv: importing ~p", [Name]),
     case rsc_insert(NormalizedRow, Context) of
         {ok, NewId} ->
             RawRscFinal = get_updated_props(NewId, NormalizedRow, Context),
@@ -188,7 +188,7 @@ import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRow, Call
             end,
             {flush_add(NewId, State), {new, CategoryName, NewId, Name}};
         {error, _} = E ->
-            lager:warning("[~p] import_csv: could not insert ~p: ~p", [z_context:site(Context), Name, E]),
+            lager:warning("import_csv: could not insert ~p: ~p", [Name, E]),
             {State, {error, CategoryName, E}}
     end;
 import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, Context) when is_integer(Id) ->
@@ -197,10 +197,10 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, C
     PrevChecksum = get_value(checksum, PrevImportData),
     case checksum(NormalizedRow) of
         PrevChecksum when not State#importstate.is_reset ->
-            lager:info("[~p] import_csv: skipping ~p (importing same values)", [z_context:site(Context), Name]),
+            lager:info("import_csv: skipping ~p (importing same values)", [Name]),
             {State, {equal, CategoryName, Id}};
         Checksum ->
-            lager:info("[~p] import_csv: updating ~p", [z_context:site(Context), Name]),
+            lager:info("import_csv: updating ~p", [Name]),
 
             % 2. Some properties might have been overwritten by an editor.
             %    For this we will update a second time with all the changed values

@@ -801,7 +801,7 @@ page_url(Id, IsAbs, Context) ->
 page_url_path([], Args, Context) ->
     case z_dispatcher:url_for(page, Args, Context) of
         undefined ->
-            ?zWarning("Failed to get page url path. Is the `page' dispatch rule missing?", Context),
+            lager:warning("Failed to get page url path. Is the 'page' dispatch rule missing?"),
             undefined;
         Url -> Url
     end;

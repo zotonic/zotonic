@@ -349,8 +349,7 @@ maybe_duplicate_preview(Ms, Context) ->
                             ],
                             {ok, Ms2};
                         {error, _} = Error ->
-                            lager:error(z_context:lager_md(Context),
-                                        "Duplicate preview: error ~p for preview file ~p",
+                            lager:error("Duplicate preview: error ~p for preview file ~p",
                                         [Error, Filename]),
                             Ms1 = proplists:delete(preview_filename,
                                     proplists:delete(is_deletable_preview, Ms)),
@@ -790,8 +789,8 @@ save_preview_url(RscId, Url, Context) ->
                         {ok, FileUnique}
                     catch
                         _:Error ->
-                            lager:warning("[~p] Error importing preview for ~p, url ~p, mediainfo ~p",
-                                          [z_context:site(Context), RscId, Url, MediaInfo]),
+                            lager:warning("Error importing preview for ~p, url ~p, mediainfo ~p",
+                                          [RscId, Url, MediaInfo]),
                             file:delete(TmpFile),
                             {error, Error}
                     end;

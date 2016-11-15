@@ -223,7 +223,7 @@ checksum([File|Files], State, Context) ->
             checksum(Files, State1, Context);
         {error, enoent} ->
             %% Not found, skip the file
-            lager:warning("[~s] lib file not found: ~s", [z_context:site(Context), File]),
+            lager:warning("lib file not found: ~s", [File]),
             checksum(Files, State, Context)
     end.
 

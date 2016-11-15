@@ -42,14 +42,14 @@ check(_, undefined) ->
 check(Username, Password) when is_binary(Username), is_binary(Password) ->
     case map_user_site(Username) of
         {ok, SiteUser, Context} ->
-            lager:debug("MQTT mapped user ~p to ~p on site ~p", [Username, SiteUser, z_context:site(Context)]),
+            lager:debug("MQTT mapped user ~p to ~p on site", [Username, SiteUser]),
             case m_identity:check_username_pw(SiteUser, Password, Context) of
                 {error, _} ->
-                    lager:info("MQTT logon failed for ~p on ~p", [SiteUser, z_context:site(Context)]),
+                    lager:info("MQTT logon failed for ~p", [SiteUser]),
                     false;
                 {ok, UserId} ->
                     UserContext = z_acl:logon(UserId, Context),
-                    lager:debug("MQTT logon success for ~p on ~p", [SiteUser, z_context:site(UserContext)]),
+                    lager:debug("MQTT logon success for ~p", [SiteUser]),
                     {true, {zauth, z_acl:user(UserContext), z_context:site(UserContext)}}
             end;
         {error, _} ->
