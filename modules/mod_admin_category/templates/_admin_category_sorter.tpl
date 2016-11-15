@@ -1,9 +1,9 @@
-{% with m.acl.is_admin as editable %}
+{% with m.acl.is_allowed.update.category as editable %}
 
 <ul id="category" class="tree-list categories {% if editable %}do_menuedit{% endif %}">
     {% for mid, path, action in m.category.menu|menu_flat %}
     {% with forloop.counter as c %}
-        {% include "_menu_edit_item.tpl" c=forloop.counter id=mid %}
+        {% include "_menu_edit_item.tpl" c=forloop.counter id=mid editable=editable %}
     {% endwith %}
     {% endfor %}
 </ul>
