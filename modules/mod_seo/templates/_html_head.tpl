@@ -41,17 +41,13 @@
 {% with m.config.seo_google.webmaster_verify.value as wmv %}{% if wmv %}
 	<meta name="google-site-verification" content="{{ wmv }}" />
 {% endif %}{% endwith %}
-{% if m.acl.user /= 1 and not notrack %}
-	{% with m.config.seo_google.analytics.value as ga %}{% if ga %}
-	<script>
-		window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-		{% if m.acl.user %}
-			ga('create', "{{ ga|escapejs }}", 'auto', { userId: "{{ m.acl.user|escapejs }}" });
-		{% else %}
-			ga('create', "{{ ga|escapejs }}", 'auto');
-		{% endif %}
-		ga('send', 'pageview');
-	</script>
-	<script async src='https://www.google-analytics.com/analytics.js'></script>
-	{% endif %}{% endwith %}
+{% if not m.acl.is_admin and not notrack %}
+    {% if m.config.seo_google.analytics.value as ga %}
+        <script>
+            window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+            ga('create', "{{ ga|escapejs }}", 'auto', {% include "_ga_params.tpl" %});
+            ga('send', 'pageview');
+        </script>
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+    {% endif %}
 {% endif %}
