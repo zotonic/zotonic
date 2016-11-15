@@ -3,7 +3,6 @@
 {% block title %}{_ Category Hierarchy _}{% endblock %}
 
 {% block content %}
-{% with m.acl.is_admin as editable %}
 <div class="admin-header">
     <h2>{_ Categories _}</h2>
 
@@ -29,5 +28,4 @@
     </div>
 </div>
 </div>
-{% endwith %}
 {% endblock %}

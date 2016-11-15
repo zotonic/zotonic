@@ -55,7 +55,7 @@ authentication, the authorization is cleared by sending a ``#acl_logoff{}``
 notification.
 
 Once authorization has been initialized for a request :term:`context`,
-operations against objects can be checked by the ``z_acl`` module from erlang
+operations against objects can be checked by the ``z_acl`` module from Erlang
 code, and by the :ref:`model-acl` model from :ref:`templates <guide-templates>`.
 
 Protecting access to controllers

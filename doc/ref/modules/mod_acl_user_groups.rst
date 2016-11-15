@@ -64,6 +64,8 @@ You can add ACL rules in two ways:
 
 Let’s start by defining rules in the web interface.
 
+.. _content-acl:
+
 Content access rules
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -99,6 +101,8 @@ Collaboration group rules
 Collaboration rules are special content access rules that apply to content in
 :ref:`collaboration groups <collaboration groups>` only. Each rule applies to
 all collaboration groups.
+
+.. _module-acl:
 
 Module access rules
 ^^^^^^^^^^^^^^^^^^^
