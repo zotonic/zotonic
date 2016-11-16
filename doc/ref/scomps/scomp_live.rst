@@ -24,6 +24,8 @@ will be replaced with a freshly rendered template.
 
 The scomp can subscribe to multiple topics at once.
 
+Add the argument ``catinclude`` to do a *catinclude* instead of a normal *include*. For a *catinclude* the argument *id* must be present.
+
 
 Live topics
 -----------

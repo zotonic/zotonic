@@ -6,6 +6,7 @@ Params:
 - subject_id (integer) resource where id is connected to
 - edge_id (integer) connection resource
 - unlink_action (optional) action to be called after disconnecting
+- undo_message_id (optional) id of element for unlink/undo message
 #}
 {% with m.rsc[object_id].title as title %}
 {% sortable id=#unlink_wrapper tag=edge_id %}
@@ -25,6 +26,7 @@ Params:
         subject_id=subject_id
         edge_id=edge_id
         hide=#unlink_wrapper
+        undo_message_id=undo_message_id
         action=unlink_action
     }
 %}

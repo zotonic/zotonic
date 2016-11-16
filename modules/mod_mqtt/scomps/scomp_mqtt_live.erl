@@ -68,6 +68,7 @@ render_template(Template, Params, Context) ->
     {LiveVars,TplVars} = lists:partition(
                 fun({topic,_}) -> true;
                    ({template,_}) -> true;
+                   ({catinclude,_}) -> true;
                    ({element, _}) -> true;
                    ({where, _}) -> true;
                    (_) -> false
@@ -75,14 +76,24 @@ render_template(Template, Params, Context) ->
                 Params),
     case Where of
         <<"update">> ->
+            Template1 = case z_convert:to_bool(proplists:get_value(catinclude, LiveVars)) of
+                            true when is_list(Template); is_binary(Template) ->
+                                {cat, Template};
+                            _ -> Template
+                        end,
+            LiveVars1 = case Template1 of
+                            Template -> LiveVars;
+                            _ ->
+                                [{template, Template1} | proplists:delete(template, LiveVars)]
+                        end,
             TplVars1 = [ {target, Target} | TplVars ],
             Html = opt_wrap_element(
                         proplists:get_value(element, LiveVars, "div"),
                         Target,
-                        z_template:render(Template, TplVars1, Context)),
+                        z_template:render(Template1, TplVars1, Context)),
             {ok, [
                     Html,
-                    {javascript, script(Target, Where, LiveVars, TplVars, Context)}
+                    {javascript, script(Target, Where, LiveVars1, TplVars, Context)}
                 ]};
         _ ->
             {ok, {javascript, script(Target, Where, LiveVars, TplVars, Context)}}

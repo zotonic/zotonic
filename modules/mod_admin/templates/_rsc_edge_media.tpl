@@ -31,7 +31,7 @@
         predicate="depiction"
         object_id=object_id
         hide=#unlink_wrapper
-        undo_message_id=unlink_message
+        undo_message_id=undo_message_id
         undo_action={
             postback
             postback={
