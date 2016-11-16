@@ -278,7 +278,7 @@ event(#postback_notify{message="update", target=TargetId}, Context) ->
         {predicate, Predicate}
     ],
     Context1 = z_render:wire({unmask, [{target_id, TargetId}]}, Context),
-    z_render:update(TargetId, #render{template="_rsc_item.tpl", vars=Vars}, Context1);
+    z_render:update(TargetId, #render{template={cat, "_rsc_block_item.tpl"}, vars=Vars}, Context1);
 
 event(_E, Context) ->
     Context.
