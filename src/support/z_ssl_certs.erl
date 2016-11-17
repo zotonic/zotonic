@@ -122,10 +122,11 @@ is_valid_hostname_char(_) -> false.
 
 %% @doc Check if all certificates are available in the site's ssl directory
 %% @todo Disentangle use of the fallback site and zotonic_status
--spec ensure_self_signed(atom(), #context{}|undefined) ->  {ok, list()} | {error, term()}.
+-spec ensure_self_signed(atom()) ->  {ok, list()} | {error, term()}.
 ensure_self_signed(Site) ->
     ensure_self_signed(Site, undefined).
 
+-spec ensure_self_signed(atom(), #context{}|undefined) ->  {ok, list()} | {error, term()}.
 ensure_self_signed(Site, Context) ->
     {ok, Certs} = get_self_signed_files(Site),
     CertFile = proplists:get_value(certfile, Certs),
