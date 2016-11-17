@@ -32,6 +32,12 @@ mso3_test() ->
     Out = <<"<p><span>Hello</span></p>">>,
     ?assertEqual(Out, z_sanitize:html(In, Context)).
 
+mso4_test() ->
+    Context = z_context:new(testsandbox),
+    In = <<"<p class=\"MsoNormal other-class\"><span style=\"mso-ansi-language: EN-US;\">Hello</span></p>">>,
+    Out = <<"<p class=\"other-class\"><span>Hello</span></p>">>,
+    ?assertEqual(Out, z_sanitize:html(In, Context)).
+
 svg_imagetragick_test() ->
     A = z_svg:sanitize(<<"
 <?xml version=\"1.0\" standalone=\"no\"?>
