@@ -405,7 +405,7 @@ prune_reqdata(Req) ->
 abs_url(Url, Context) when is_list(Url) ->
     abs_url(iolist_to_binary(Url), Context);
 abs_url(<<"//", _/binary>> = Url, Context) ->
-    case m_req:scheme(Context) of
+    case m_req:get(scheme, Context) of
         undefined ->
             case is_ssl_site(Context) of
                 true -> <<"https:", Url/binary>>;
@@ -434,7 +434,7 @@ abs_url(Url, Context) ->
     end.
 
 request_scheme_port(Context) ->
-    case m_req:scheme(Context) of
+    case m_req:get(scheme, Context) of
         https ->
             {https, z_config:get(ssl_port)};
         _ ->
