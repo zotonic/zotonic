@@ -271,11 +271,11 @@ translations1(Context) ->
                            POs),
     [{M,tag_with_lang(POFiles)} || {M,POFiles} <- z_module_manager:prio_sort(dict:to_list(ByModule))].
 
-    tag_with_lang(POFiles) ->
-        [{pofile_to_lang(POFile), POFile} || POFile <- POFiles].
+tag_with_lang(POFiles) ->
+    [{pofile_to_lang(POFile), POFile} || POFile <- POFiles].
 
-    pofile_to_lang(POFile) ->
-        list_to_atom(hd(string:tokens(filename:basename(POFile), "."))).
+pofile_to_lang(POFile) ->
+    binary_to_atom(hd(binary:split(filename:basename(POFile), <<".">>)), 'utf8').
 
 %% @doc Find all scomps etc in a lookup list
 lookup_all(true, List) ->
@@ -366,7 +366,7 @@ scan_moddir(What, Module, Dir, Subdir, _Prefix, _Extension, _ExtensionRe, Acc)
             Prio = z_module_manager:prio(Module),
             [[
                 #mfile{
-                    filepath=filename:join([Dir, Subdir, F]),
+                    filepath=iolist_to_binary(filename:join([Dir, Subdir, F])),
                     name=convert_name(What, F),
                     module=Module,
                     erlang_module=undefined,
@@ -391,7 +391,7 @@ scan_moddir(What, Module, Dir, Subdir, Prefix, Extension, ExtensionRe, Acc) ->
         _  ->
             [[
                 #mfile{
-                    filepath=F,
+                    filepath=iolist_to_binary(F),
                     name=convert_name(What, scan_remove_prefix_ext(F, PrefixLen, Extension)),
                     module=Module,
                     erlang_module=opt_erlang_module(F, Extension),
