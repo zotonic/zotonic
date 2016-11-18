@@ -68,8 +68,12 @@
    %% {port, 80},
 
 %%% Outside port zotonic uses to receive incoming HTTPS requests.
+%%% Set to the atom 'none' to disable SSL for sites.
 %%% Default set to ssl_listen_port.
    %% {ssl_port, 443},
+
+%%% Force sites to use SSL. Redirects http requests to https.
+   %% {ssl_only, false},
 
 %%% If you are running Zotonic behind a proxy then set this to the proxy's internal ip addresses.
 %%% The proxy must terminate SSL.
