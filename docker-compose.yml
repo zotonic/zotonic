@@ -2,7 +2,7 @@ version: '2'
 
 services:
     postgres:
-        image: postgres:9.5
+        image: postgres:9.5-alpine
         environment:
             POSTGRES_USER: zotonic
         volumes:
