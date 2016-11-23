@@ -44,14 +44,6 @@ http://zotonic.com/feed/search?cat=documentation&text=filter
 Query arguments
 ---------------
 
-authoritative
-^^^^^^^^^^^^^
-
-Boolean, filters whether a resource is considered authoritative
-(belonging on this site) or not::
-
-    authoritative=1
-
 cat
 ^^^
 
@@ -187,6 +179,14 @@ objects ids will be returned first::
     match_objects=1234
 
 An ``id_exlude=...`` is automatically added for the resource in the argument.
+
+is_authoritative
+^^^^^^^^^^^^^^^^
+
+Boolean, filters whether a resource is considered authoritative
+(originating from this site) or not::
+
+    is_authoritative
 
 is_featured
 ^^^^^^^^^^^
