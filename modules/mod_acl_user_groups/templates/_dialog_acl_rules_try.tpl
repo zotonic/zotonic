@@ -11,7 +11,7 @@
 
 	<p>{_ The URL is valid for one day. _}</p>
 
-	<input id="{{ #url }}" class="form-control" value="{% url acl_rule_test code=m.acl_rule.generate_code use_absolute_url %}" readonly>
+	<input id="{{ #url }}" class="form-control" value="{% url acl_rule_test code=m.acl_rule.generate_code absolute_url %}" readonly>
 </div>
 
 {% javascript %}

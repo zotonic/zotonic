@@ -179,8 +179,8 @@ The text for the ``class="..."`` attribute of the ``<img>``. Example::
 
     class="figure"
 
-use_absolute_url
-^^^^^^^^^^^^^^^^
+absolute_url
+^^^^^^^^^^^^
 
 Ensure that the generated URL contains the
 :ref:`hostname and port <tag-url-absolute>`.

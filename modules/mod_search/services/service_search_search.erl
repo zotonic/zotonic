@@ -59,7 +59,7 @@ convert_result(F, _, _) ->
 
 
 format_simple(Id, Context) ->
-    Preview = case z_media_tag:url(Id, [{width, 800}, {height, 800}, {upscale, true}, {use_absolute_url, true}], Context) of
+    Preview = case z_media_tag:url(Id, [{width, 800}, {height, 800}, {upscale, true}, {absolute_url, true}], Context) of
                   {ok, P} -> [{preview_url, P}];
                   _ -> []
               end,

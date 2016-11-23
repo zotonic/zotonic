@@ -8,7 +8,7 @@
 	<p>{_ The following survey has been filled in: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
 	{% block edit_answer %}
 		{% if is_result_email %}
-			<p><a href="{% url admin_edit_rsc id=id use_absolute_url %}">{_ Check the answer in the admin. _}</a></p>
+			<p><a href="{% url admin_edit_rsc id=id absolute_url %}">{_ Check the answer in the admin. _}</a></p>
 		{% endif %}
 	{% endblock %}
 {% endif %}

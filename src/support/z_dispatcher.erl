@@ -186,15 +186,15 @@ return_url(#dispatch_url{url=Url}) -> Url.
 
 %% @doc Check if an url should be made an absolute url
 use_absolute_url(Args, Options, Context) ->
-    case to_bool(proplists:get_value(use_absolute_url, Args)) of
+    case to_bool(proplists:get_value(absolute_url, Args)) of
         false -> false;
         true -> true;
         undefined ->
-            case to_bool(proplists:get_value(use_absolute_url, Options)) of
+            case to_bool(proplists:get_value(absolute_url, Options)) of
                 false -> false;
                 true -> true;
                 undefined ->
-                    case to_bool(z_context:get(use_absolute_url, Context)) of
+                    case to_bool(z_context:get(absolute_url, Context)) of
                         false -> false;
                         true -> true;
                         undefined -> false
@@ -425,8 +425,8 @@ filter_empty_args(Args) ->
           ({_, <<>>}) -> false;
           ({_, []}) -> false;
           ({_, undefined}) -> false;
-          ({use_absolute_url, _}) -> false;
-          (use_absolute_url) -> false;
+          ({absolute_url, _}) -> false;
+          (absolute_url) -> false;
           (_) -> true
       end, Args).
 

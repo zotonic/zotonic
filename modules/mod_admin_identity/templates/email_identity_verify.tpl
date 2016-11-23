@@ -15,7 +15,7 @@
 
 <p>{_ Click on the link below to confirm that this e-mail address is correct, when clicking doesn't work then you can copy and paste the complete address to your browser. _}</p>
 
-<p><a href="{% url identity_verify idn_id=idn.id verify_key=verify_key use_absolute_url %}">{% url identity_verify idn_id=idn.id verify_key=verify_key use_absolute_url %}</a></p>
+<p><a href="{% url identity_verify idn_id=idn.id verify_key=verify_key absolute_url %}">{% url identity_verify idn_id=idn.id verify_key=verify_key absolute_url %}</a></p>
 
 <p>{_ If you don't know this site then you can ignore this e-mail. Maybe someone made an error typing his or her e-mail address. _}</p>
 {% endblock %}

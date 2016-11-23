@@ -13,7 +13,7 @@ request, saving multiple roundtrips to the server.
 
 Example::
 
-  {% lib 
+  {% lib
 	"css/zp-compressed.css"
 	"css/zp-admin.css"
 	"css/zp-wysiwyg.css"
@@ -34,7 +34,7 @@ The `lib` tag supports optional arguments to control the resulting html tag:
 +-----------------+-------------+---------------------------------------------------------+
 |Option           |Default      |Description                                              |
 +=================+=============+=========================================================+
-|use_absolute_url |false        |If true, prefix the generated URL with                   |
+|absolute_url     |false        |If true, prefix the generated URL with                   |
 |                 |             |"http://{hostname}/".                                    |
 +-----------------+-------------+---------------------------------------------------------+
 |title            |<empty>      |Specify a value for the title attribute of the link tag. |

@@ -103,9 +103,9 @@ script_element(Js, JsPath, Args, Context) ->
     iolist_to_binary([<<"<script src=\"">>, JsUrl, <<"\" type=\"text/javascript\"></script>">>]).
 
 url_for_args(Files, JoinedPath, Extension, Args, Context) ->
-    AbsUrlArg = case proplists:get_value(use_absolute_url, Args, false) of
+    AbsUrlArg = case proplists:get_value(absolute_url, Args, false) of
         false -> [];
-        true -> [use_absolute_url]
+        true -> [absolute_url]
     end,
     Checksum = checksum(Files, Context),
     <<$/,Path/binary>> = iolist_to_binary(JoinedPath),

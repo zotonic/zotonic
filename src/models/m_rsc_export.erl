@@ -84,7 +84,7 @@ full(Id, Context) when is_integer(Id) ->
             Edges = [ edge_details(E, Context) || E <- Edges0],
             Medium = m_media:get(Id, Context),
 
-            PreviewUrl = case z_media_tag:url(Id, [{width, 800}, {height, 800}, {upscale, true}, {use_absolute_url, true}], Context) of
+            PreviewUrl = case z_media_tag:url(Id, [{width, 800}, {height, 800}, {upscale, true}, {absolute_url, true}], Context) of
                             {ok, P} -> P;
                             _ -> undefined
                          end,

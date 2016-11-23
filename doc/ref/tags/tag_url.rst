@@ -38,10 +38,10 @@ Generate absolute URLs
 ----------------------
 
 By default, the ``{% url %}`` tag generates relative URLs. Add the argument
-``use_absolute_url`` to generate absolute URLs that include the scheme and
+``absolute_url`` to generate absolute URLs that include the scheme and
 hostname::
 
-   {% url admin_edit_rsc id=42 foo="bar" use_absolute_url %}
+   {% url admin_edit_rsc id=42 foo="bar" absolute_url %}
 
 will return a URL like “http://example.com/admin/edit/42?foo=bar”.
 
