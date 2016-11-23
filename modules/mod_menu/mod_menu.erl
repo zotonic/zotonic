@@ -92,7 +92,7 @@ handle_cmd(<<"copy">>, Data, Context) ->
             NewTitle = make_copy_title(m_rsc:p(FromId, title, Context), Context),
             case m_rsc:duplicate(FromId, [{title, NewTitle}], Context) of
                 {ok, NewId} ->
-                    {Html, Context1} = z_template:render_to_iolist({cat, "_menu_edit_item.tpl"}, [{id,NewId}], Context),
+                    {Html, Context1} = z_template:render_to_iolist({cat, "_menu_edit_item.tpl"}, [{id, NewId}, {editable, true}], Context),
                     z_render:wire({script, [{script, [
                                     <<"window.zMenuInsertAfter(\"">>,
                                             integer_to_list(FromId), $",$,,
@@ -108,7 +108,7 @@ handle_cmd(<<"copy">>, Data, Context) ->
 handle_cmd(<<"menu-item-render">>, Data, Context) ->
     Id = z_convert:to_integer(proplists:get_value(<<"id">>, Data)),
     Callback = proplists:get_value(<<"callback">>, Data),
-    {Html, Context2} = z_template:render_to_iolist({cat, "_menu_edit_item.tpl"}, [{id,Id}], Context),
+    {Html, Context2} = z_template:render_to_iolist({cat, "_menu_edit_item.tpl"}, [{id, Id}, {editable, true}], Context),
     z_render:wire({script, [{script, [
                     Callback, $(,
                         $", integer_to_list(Id), $",$,,
