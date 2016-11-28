@@ -218,6 +218,7 @@ add_script(Script, Context) ->
     z_transport:page(javascript, Script, Context).
 
 %% @doc Split the scripts from the context and add the scripts to the page.
+-spec add_script(z:context()) -> z:context().
 add_script(Context) ->
     {Scripts, CleanContext} = z_script:split(Context),
     z_transport:page(javascript, Scripts, CleanContext),
@@ -321,7 +322,7 @@ handle_cast({websocket_attach, WebsocketPid}, State) ->
 
             %% Attach the new websocket.
             StateWs = State2#page_state{
-                websocket_pid = WebsocketPid, 
+                websocket_pid = WebsocketPid,
                 websocket_monitor_ref = erlang:monitor(process, WebsocketPid)
             },
             StatePing = ping_comet_ws(StateWs),
@@ -426,9 +427,9 @@ handle_call({comet_attach, CometPid}, _From, State) ->
             {reply, ok, State}
     end;
 handle_call({comet_detach, Pid}, _From, #page_state{comet_pid=Pid}=State) ->
-    erlang:demonitor(State#page_state.comet_monitor_ref), 
+    erlang:demonitor(State#page_state.comet_monitor_ref),
     StateNoComet = State#page_state{
-        comet_pid=undefined, 
+        comet_pid=undefined,
         comet_monitor_ref=undefined,
         last_detach=z_utils:now()
     },
@@ -526,7 +527,7 @@ cleanup(State) ->
     State2 = opt_close_comet(State1),
     lists:foreach(
         fun({Pid,MRef}) ->
-            erlang:demonitor(MRef), 
+            erlang:demonitor(MRef),
             exit(Pid, page)
         end,
         State2#page_state.linked),

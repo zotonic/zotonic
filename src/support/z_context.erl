@@ -187,6 +187,7 @@ new(Req, Module) when is_map(Req) ->
     Context#context{controller_module=Module}.
 
 
+-spec set_default_language_tz(z:context()) -> z:context().
 set_default_language_tz(Context) ->
     F = fun() -> {z_language:default_language(Context), tz_config(Context)} end,
     {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
@@ -243,7 +244,7 @@ set_server_names(#context{site=Site} = Context) ->
 
 
 %% @doc Maps the site in the request to a site in the sites folder.
--spec site(#context{}|cowboy_req:req()) -> atom().
+-spec site(z:context() | cowboy_req:req()) -> atom().
 site(#context{site=Site}) ->
     Site;
 site(Req) when is_map(Req) ->
@@ -416,10 +417,12 @@ abs_url(Url, Context) ->
 
 
 %% @doc Fetch the pid of the database worker pool for this site
+-spec db_pool(z:context()) -> atom().
 db_pool(#context{db={Pool, _Driver}}) ->
     Pool.
 
 %% @doc Fetch the database driver module for this site
+-spec db_driver(#context{}) -> atom().
 db_driver(#context{db={_Pool, Driver}}) ->
     Driver.
 

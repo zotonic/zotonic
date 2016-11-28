@@ -92,6 +92,7 @@ is_setting(<<"access_token_secret">>) -> true;
 is_setting(<<"follow">>) -> true;
 is_setting(_) -> false.
 
+-spec observe_rsc_update_done(#rsc_update_done{}, z:context()) -> ok.
 observe_rsc_update_done(#rsc_update_done{id=Id}, Context) ->
     case m_rsc:p_no_acl(Id, twitter_id, Context) of
         Empty when Empty =:= <<>>; Empty =:= undefined; Empty =:= [] ->

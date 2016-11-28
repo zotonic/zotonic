@@ -141,11 +141,12 @@ queue_all(Context) ->
         end.
 
 %% @doc Insert a rsc_id in the pivot queue
+-spec insert_queue(m_rsc:resource(), #context{}) -> ok | {error, eexist}.
 insert_queue(Id, Context) ->
     insert_queue(Id, calendar:universal_time(), Context).
 
 %% @doc Insert a rsc_id in the pivot queue for a certain date
--spec insert_queue(integer(), calendar:date(), #context{}) -> ok | {error, eexist}.
+-spec insert_queue(integer(), {calendar:date(), calendar:time()}, #context{}) -> ok | {error, eexist}.
 insert_queue(Id, Date, Context) when is_integer(Id), is_tuple(Date) ->
     z_db:transaction(
         fun(Ctx) ->
@@ -678,6 +679,7 @@ to_tsv(Text, Level, Args, StemmingLanguage) when is_binary(Text) ->
         {["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"], Args1}
     end.
 
+-spec to_float(term()) -> float().
 to_float(undefined) ->
     undefined;
 to_float(Text) ->

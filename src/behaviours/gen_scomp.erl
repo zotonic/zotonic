@@ -29,12 +29,5 @@
 
 -module(gen_scomp).
 
--export([behaviour_info/1]).
-
-behaviour_info(callbacks) ->
-    [
-        {render, 3},
-        {vary, 2}
-     ];
-behaviour_info(_Other) ->
-    undefined.
+-callback render(Params :: list(), Vars :: list(), Context :: z:context()) -> term().
+-callback vary(Params :: list(), Context :: z:context()) -> atom().

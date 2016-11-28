@@ -74,13 +74,14 @@
     common_properties/1
 ]).
 
--export_type([resource/0, resource_id/0, resource_name/0]).
+-export_type([resource/0, resource_id/0, resource_name/0, props/0]).
 
 -include_lib("zotonic.hrl").
 
 -type resource() :: resource_id() | resource_name().
 -type resource_id() :: integer() | list(digits()).
 -type resource_name() :: string() | binary() | atom().
+-type props() :: proplists:proplist().
 -type digits() :: 16#30..16#39.
 
 %% @doc Fetch the value for the key from a model source
@@ -191,7 +192,7 @@ page_path_to_id(Path, Context) ->
 
 
 %% @doc Read a whole resource, check all properties for access rights
--spec get_visible(resource(), #context{}) -> list() | undefined.
+-spec get_visible(resource(), #context{}) -> props() | undefined.
 get_visible(RId, Context) ->
     case rid(RId, Context) of
         undefined ->
@@ -215,7 +216,7 @@ get_visible(RId, Context) ->
     end.
 
 %% @doc Read a whole resource
--spec get(resource(), #context{}) -> list() | undefined.
+-spec get(resource(), #context{}) -> props() | undefined.
 get(Id, Context) ->
     case rid(Id, Context) of
         Rid when is_integer(Rid) ->
@@ -235,7 +236,7 @@ get(Id, Context) ->
     end.
 
 %% @doc Get the resource from the database, do not fetch the pivot fields.
--spec get_raw(resource(), #context{}) -> list().
+-spec get_raw(resource(), #context{}) -> props().
 get_raw(Id, Context) ->
     get_raw(Id, false, Context).
 
@@ -347,7 +348,7 @@ get_acl_props(Name, Context) ->
 
 
 %% @doc Insert a new resource
-%% @spec insert(Props, Context) -> {ok, Id} | {error, Reason}
+-spec insert(Props :: props(), #context{}) -> {ok, resource_id()}.
 insert(Props, Context) ->
     m_rsc_update:insert(Props, Context).
 
@@ -362,11 +363,11 @@ merge_delete(WinnerId, LoserId, Context) ->
     m_rsc_update:merge_delete(WinnerId, LoserId, Context).
 
 %% @doc Update a resource
--spec update(resource(), list(), #context{}) -> {ok, resource()} | {error, term()}.
+-spec update(resource(), props(), #context{}) -> {ok, resource()}.
 update(Id, Props, Context) ->
     m_rsc_update:update(Id, Props, Context).
 
--spec update(resource(), list(), list(), #context{}) -> {ok, resource()} | {error, term()}.
+-spec update(resource(), props(), list(), #context{}) -> {ok, resource()}.
 update(Id, Props, Options, Context) ->
     m_rsc_update:update(Id, Props, Options, Context).
 
@@ -374,7 +375,7 @@ update(Id, Props, Options, Context) ->
 
 
 %% @doc Duplicate a resource.
--spec duplicate(resource(), list(), #context{}) -> {ok, NewId :: resource_id()} | {error, Reason :: string()}.
+-spec duplicate(resource(), props(), #context{}) -> {ok, NewId :: resource_id()} | {error, Reason :: string()}.
 duplicate(Id, Props, Context) ->
     m_rsc_update:duplicate(Id, Props, Context).
 
@@ -760,8 +761,9 @@ is_a(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     m_category:is_a(RscCatId, Context).
 
-%% @doc Return the categories and the inherited categories of the resource. Returns a list with category ids
--spec is_a_id(resource(), #context{}) -> list(atom()).
+%% @doc Return the categories and the inherited categories of the resource. Returns a list with
+%% category ids
+-spec is_a_id(resource(), #context{}) -> list(pos_integer()).
 is_a_id(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     [ RscCatId | m_category:get_path(RscCatId, Context)].

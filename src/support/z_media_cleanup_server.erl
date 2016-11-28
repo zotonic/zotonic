@@ -171,7 +171,7 @@ do_cleanup_file({_Id, Filename, Date}, Context) ->
     % Remove from the file store
     PreviewStore = iolist_to_binary([filename:basename(PreviewPath), $/, Filename, $( ]),
     ArchiveStore = iolist_to_binary([filename:basename(ArchivePath), $/, Filename ]),
-    z_notifier:first(#filestore{action=delete, path={prefix, PreviewStore}}, Context),
+    z_notifier:first(#filestore{action=delete, path=PreviewStore}, Context),
     z_notifier:first(#filestore{action=delete, path=ArchiveStore}, Context),
     lager:debug("Medium cleanup: ~p (from ~p)", [Filename, Date]),
     ok.

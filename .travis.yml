@@ -1,8 +1,17 @@
 language: erlang
-otp_release:
-  - 19.0
-  - 18.3
-  - 18.0
+matrix:
+  include:
+    - otp_release: 19.0
+      env: BUILD_DOCS=true
+    - otp_release: 18.3
+    - otp_release: 18.0
+    - otp_release: 19.0
+      env: DIALYZER=true
+  allow_failures:
+    - otp_release: 19.0
+      env: DIALYZER=true
+  fast_finish: true
+
 addons:
   apt:
     packages:
@@ -12,12 +21,14 @@ before_script:
   - psql -c 'CREATE USER zotonic; ALTER USER zotonic CREATEDB;' -U postgres
 install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'
 script:
-  - make all edocs
+  - make all
   - make test
-  - pip install --user -r doc/requirements.txt
-  - make -C doc/ stubs
-  - make -C doc/ SPHINXOPTS='-nW' html
+  - if [[ "$BUILD_DOCS" = true ]]; then make edocs; fi
+  - if [[ "$BUILD_DOCS" = true ]]; then pip install --user -r doc/requirements.txt; fi
+  - if [[ "$BUILD_DOCS" = true ]]; then make -C doc/ stubs; fi
+  - if [[ "$BUILD_DOCS" = true ]]; then make -C doc/ SPHINXOPTS='-nW' html; fi
   - ./rebar3 xref
+  - if [[ "$DIALYZER" = true ]]; then ./rebar3 dialyzer; fi
 sudo: false
 branches:
   only:

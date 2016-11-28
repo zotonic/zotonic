@@ -214,6 +214,7 @@ part_file(Filename, Opts) ->
             Error
     end.
 
+-spec render(#module_index{}, #context{}) -> #part_data{}.
 render(ModuleIndex, Context) ->
     {Data, _Context} = z_template:render_to_iolist(ModuleIndex, [], Context),
     #part_data{
@@ -234,7 +235,7 @@ generate_preview(true, _Mime, Path, OriginalFile, Filters, Medium, Context) ->
             PreviewFilePath = filename:join(PreviewDir, Path),
             case z_media_preview:convert(z_convert:to_list(Filename), OriginalFile, z_convert:to_list(PreviewFilePath), Filters, Context) of
                 ok ->
-                    FileStorePath = filename:join([filename:basename(PreviewDir), Path]),
+                    FileStorePath = z_convert:to_binary(filename:join([filename:basename(PreviewDir), Path])),
                     z_notifier:first(#filestore{action=upload, path=FileStorePath}, Context),
                     case proplists:get_value(id, Medium) of
                         undefined ->

@@ -149,7 +149,7 @@ properties(Code, Data) ->
 
 
 %% @doc Sorts a properties list.
--spec sort_properties(List::list(), SortKey::string()) -> list().
+-spec sort_properties(List :: list(), SortKey :: atom()) -> list().
 sort_properties(List, SortKey) ->
     lists:sort(fun({_, PropsA}, {_, PropsB}) ->
         z_string:to_lower(proplists:get_value(SortKey, PropsA)) =< z_string:to_lower(proplists:get_value(SortKey, PropsB))
@@ -163,6 +163,7 @@ sort_properties(List, SortKey) ->
 -spec all_languages() -> list().
 all_languages() ->
     all_languages1(languages()).
+
 all_languages1(List) ->
     lists:foldl(fun({Code, Data}, Acc) ->
         Language1 = {Code, properties(Code, Data)},

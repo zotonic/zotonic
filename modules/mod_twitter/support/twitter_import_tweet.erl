@@ -29,6 +29,7 @@
     ]).
 
 -include("zotonic.hrl").
+-include_lib("z_stdlib/include/z_url_metadata.hrl").
 
 import_tweet(Tweet, Context) ->
     import_tweet_1(proplists:get_value(<<"user">>, Tweet), Tweet, Context).
@@ -127,6 +128,7 @@ extract_import_rsc(TweetId, UniqueName, User, Tweet, Context) ->
 first_link([Url|_], _) -> Url;
 first_link(_, Url) -> Url.
 
+-spec first_media_props([#url_metadata{} | string() | binary()], #context{}) -> {error, nomedia} | {ok, pos_integer()}.
 first_media_props([], _Context) ->
     {error, nomedia};
 first_media_props([Url|Urls], Context) ->

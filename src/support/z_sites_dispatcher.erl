@@ -54,42 +54,43 @@
 -include_lib("zotonic.hrl").
 
 -record(state, {
-            rules = [],
-            fallback_site = zotonic_status
-        }).
+    rules = [],
+    fallback_site = zotonic_status
+}).
 
 -record(dispatch_nomatch, {
-            site = undefined :: atom(),
-            host = <<>> ::binary(),
-            path_tokens = [] :: [binary()],
-            bindings = [] :: [{atom(), binary()}],
-            context = undefined :: #context{}
-        }).
+    site = undefined :: atom(),
+    host = <<>> :: binary(),
+    path_tokens = [] :: [binary()],
+    bindings = [] :: [{atom(), binary()}],
+    context = undefined :: #context{} | undefined
+}).
 
 -record(dispatch_controller, {
-            dispatch_rule = undefined :: atom(), 
-            controller = undefined :: atom(),
-            controller_options = [] :: list(),
-            path_tokens = [] :: [binary()],
-            bindings :: [{atom(), binary()}],
-            context :: #context{}
-        }).
+    dispatch_rule = undefined :: atom(),
+    controller = undefined :: atom(),
+    controller_options = [] :: list(),
+    path_tokens = [] :: [binary()],
+    bindings :: [{atom(), binary()}],
+    context :: #context{}
+}).
 
 -record(site_dispatch_list, {
-            site,
-            hostname,
-            smtphost,
-            hostalias,
-            redirect,
-            dispatch_list
-        }).
+    site,
+    hostname,
+    smtphost,
+    hostalias,
+    redirect,
+    dispatch_list
+}).
 
 
 -type dispatch() :: #dispatch_controller{}
-                  | #dispatch_nomatch{}
-                  | {redirect, Site::atom()}
-                  | {redirect, Site::atom(), NewPathOrURI::binary(), IsPermanent::boolean()}
-                  | {redirect_protocol, http|https, Site::atom(), IsPermanent::boolean()}.
+                    | #dispatch_nomatch{}
+                    | {redirect, Site :: atom()}
+                    | {redirect, Site :: atom(), NewPathOrURI :: binary(), IsPermanent :: boolean()}
+                    | {redirect_protocol, http|https, Site :: atom(), IsPermanent :: boolean()}
+                    | {stop_request, pos_integer()}.
 
 
 %%====================================================================
@@ -106,8 +107,8 @@ start_link(Args) when is_list(Args) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
 
 
-%% @doc Update the webmachine dispatch information. Collects dispatch information from all sites and 
-%% recompiles the dispatch rules.
+%% @doc Update the webmachine dispatch information. Collects dispatch
+%% information from all sites and recompiles the dispatch rules.
 update_dispatchinfo() ->
     gen_server:cast(?MODULE, update_dispatchinfo).
 
@@ -116,7 +117,7 @@ update_dispatchinfo() ->
 %% @doc Cowboy middleware, route the new request. Continue with the cowmachine,
 %%      requests a redirect or return a 400 on an unknown host.
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
-    when Req::cowboy_req:req(), Env::cowboy_middleware:env().
+    when Req :: cowboy_req:req(), Env :: cowboy_middleware:env().
 execute(Req, Env) ->
     case dispatch(Req) of
         #dispatch_controller{} = Match ->
@@ -132,7 +133,7 @@ execute(Req, Env) ->
                 bindings => Match#dispatch_controller.bindings,
                 context => Context
             }};
-        #dispatch_nomatch{site=Site, bindings=Bindings, context=Context} ->
+        #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
             handle_404(cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
         {redirect, Site} ->
             % trace(DispReq#dispatch.tracer_pid, undefined, redirect, [{location, Uri},{permanent,true}]),
@@ -142,17 +143,22 @@ execute(Req, Env) ->
             % trace(DispReq#dispatch.tracer_pid, undefined, redirect, [{location, AbsURI},{permanent,IsPermanent}]),
             Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
             redirect(Uri, IsPermanent, Req);
-        {redirect_protocol, Protocol, Host, IsPermanent} ->
-            Uri = iolist_to_binary([
-                        z_convert:to_binary(Protocol),
-                        <<"://">>,
-                        Host,
-                        raw_path(Req)]),
-            redirect(Uri, IsPermanent, Req)
+        {stop_request, RespCode} ->
+            {stop, cowboy_req:reply(RespCode, Req)}
+
+%%        Not yet implemented as there's no protocol property in the dispatch
+%%        rule props from dispatch_match (reported by Dialyzer)
+%%        {redirect_protocol, Protocol, Host, IsPermanent} ->
+%%            Uri = iolist_to_binary([
+%%                        z_convert:to_binary(Protocol),
+%%                        <<"://">>,
+%%                        Host,
+%%                        raw_path(Req)]),
+%%            redirect(Uri, IsPermanent, Req)
     end.
 
 %% @doc Match the host and path to a dispatch rule.
--spec dispatch(Req::cowboy_req:req()) -> {dispatch(), cowboy_req:req()}.
+-spec dispatch(cowboy_req:req()) -> dispatch().
 dispatch(Req) ->
     Host = cowboy_req:host(Req),
     Path = cowboy_req:path(Req),
@@ -214,7 +220,6 @@ get_site_for_hostname(Hostname) ->
 raw_path(Req) ->
     Path = cowboy_req:path(Req),
     case cowboy_req:qs(Req) of
-        undefined -> Path;
         <<>> -> Path;
         Qs -> <<Path/binary, $?, Qs/binary>>
     end.
@@ -265,7 +270,8 @@ dispatch_1(DispReq, OptReq) ->
             {redirect, Site}
     end.
 
-dispatch_site(#dispatch{tracer_pid=TracerPid, path=Path, host=Hostname} = DispReq, Context) ->
+-spec dispatch_site(#dispatch{}, #context{}) -> dispatch().
+dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context) ->
     % {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, Site, ReqData),
     count_request(z_context:site(Context)),
     try
@@ -347,6 +353,7 @@ unescape(P) ->
         _ -> cow_qs:urldecode(P)
     end.
 
+-spec dispatch_rewrite(binary(), binary(), list(), boolean(), pid(), #context{}) -> tuple().
 dispatch_rewrite(Hostname, Path, Tokens, IsDir, TracerPid, Context) ->
     {Tokens1, Bindings} = z_notifier:foldl(
                             #dispatch_rewrite{is_dir=IsDir, path=Path, host=Hostname},
@@ -529,6 +536,7 @@ map_z_language_2(z_language) -> {z_language, {?MODULE, is_bind_language}};
 map_z_language_2(X) -> X.
 
 
+-spec do_dispatch_rule(tuple(), any(), any(), any(), any(), any()) -> #dispatch_controller{}.
 do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, Context) ->
     #dispatch{tracer_pid=TracerPid, host=Hostname, protocol=Protocol} = DispReq,
     Bindings1 = [ {zotonic_dispatch, DispatchName} | Bindings ],
@@ -573,6 +581,7 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
             }
     end.
 
+-spec do_dispatch_fail(any(), any(), any(), any(), any()) -> #dispatch_controller{} | #dispatch_nomatch{}.
 do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, Context0) ->
     TokenPath = tokens_to_path(Tokens),
     trace(DispReq#dispatch.tracer_pid, DispReq#dispatch.path, notify_dispatch, []),
@@ -647,8 +656,8 @@ handle_rewrite({ok, #dispatch_match{
     Bindings1 = [{zotonic_dispatch, SDispatchName},{zotonic_site, MatchedSite}|SBindings] ++ Bindings,
     #dispatch_controller{
         dispatch_rule=SDispatchName,
-        controller=SMod, 
-        controller_options=SModOpts, 
+        controller=SMod,
+        controller_options=SModOpts,
         path_tokens=SPathTokens,
         bindings=Bindings1,
         context=maybe_set_language(Bindings1,Context)
@@ -667,17 +676,15 @@ handle_rewrite(undefined, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, 
     }.
 
 
-set_dispatch_path(Match, undefined) ->
+set_dispatch_path(Match, []) ->
     Match;
-set_dispatch_path({{Mod, ModOpts, X, Y, PathTokens, Bindings, AppRoot, StringPath}, Host}, DispatchPath) ->
+set_dispatch_path(#dispatch_controller{bindings = Bindings} = DispatchController, DispatchPath) ->
     Bindings1 = [
         {zotonic_dispatch_path, DispatchPath},
         {zotonic_dispatch_path_rewrite, proplists:get_value(zotonic_dispatch_path, Bindings)}
         | proplists:delete(zotonic_dispatch_path, Bindings)
     ],
-    {{Mod, ModOpts, X, Y, PathTokens, Bindings1, AppRoot, StringPath}, Host};
-set_dispatch_path(Match, _DispatchPath) ->
-    Match.
+    DispatchController#dispatch_controller{bindings = Bindings1}.
 
 
 maybe_set_language(Bindings, Context) ->
@@ -796,14 +803,20 @@ trace(undefined, _PathTokens, _What, _Args) ->
 trace(TracerPid, PathTokens, What, Args) ->
     TracerPid ! {trace, PathTokens, What, Args}.
 
-trace_final(undefined, Match) ->
-    Match;
-trace_final(TracerPid, {{Mod, ModOpts, _X, _Y, _PathTokens, Bindings, _AppRoot, _StringPath}, _Host} = Match) ->
-    trace(TracerPid,
-          undefined,
-          dispatch,
-          [ {controller, Mod},
-            {controller_options, ModOpts},
+trace_final(undefined, R) ->
+    R;
+trace_final(TracerPid, #dispatch_controller{
+    controller = Controller,
+    controller_options = ControllerOptions,
+    bindings = Bindings
+} = Match) ->
+    trace(
+        TracerPid,
+        undefined,
+        dispatch,
+        [
+            {controller, Controller},
+            {controller_options, ControllerOptions},
             {bindings, Bindings}
           ]),
     Match;
@@ -815,7 +828,7 @@ add_port(http, Hostname, 80) ->
     Hostname;
 add_port(https, Hostname, 443) ->
     Hostname;
-add_port(_, Hostname, Port) -> 
+add_port(_, Hostname, Port) ->
     PortBin = z_convert:to_binary(Port),
     <<Hostname/binary, $:, PortBin/binary>>.
 

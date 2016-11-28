@@ -49,8 +49,9 @@
 -record(state, {context}).
 
 %% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
-manage_schema(What, Context) ->
-    mod_mailinglist_schema:manage_schema(What, Context).
+-spec manage_schema(install | pos_integer(), z:context()) -> ok.
+manage_schema(install, Context) ->
+    mod_mailinglist_schema:manage_schema(install, Context).
 
 
 observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->

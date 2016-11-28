@@ -56,7 +56,7 @@
 }).
 
 -record(child, {
-    pid = undefined,  % pid is undefined when child is not running
+    pid = undefined :: 'undefined' | pid() | 'undefined',  % pid is undefined when child is not running
     name,
     mfa,
     restart_type,

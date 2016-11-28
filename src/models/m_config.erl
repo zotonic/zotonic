@@ -148,7 +148,7 @@ get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Ke
 
 
 %% @doc Set a "simple" config value.
-%% @spec set_value(Module::atom(), Key::atom(), Value::string(), #context{}) -> ok
+-spec set_value(atom(), atom(), term(), #context{}) -> ok.
 set_value(Module, Key, Value, Context) ->
     case z_db:q("update config set value = $1, modified = now() where module = $2 and key = $3", [Value, Module, Key], Context) of
         0 -> z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Context);

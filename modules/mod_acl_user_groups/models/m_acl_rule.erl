@@ -93,10 +93,8 @@ m_find_value(actions, #m{value=T}, Context) when ?valid_acl_kind(T) ->
 m_find_value(S, M=#m{value=T}, _) when ?valid_acl_kind(T), ?valid_acl_kind(T), ?valid_acl_state(S) ->
     M#m{value={list, T, S}};
 m_find_value(Id, #m{value=T}, Context) when ?valid_acl_kind(T), is_integer(Id) ->
-    case get(T, Id, Context) of
-        {ok, Props} -> Props;
-        {error, _} -> undefined
-    end;
+    {ok, Props} = get(T, Id, Context),
+    Props;
 m_find_value(undefined, #m{value=T}, _Context) when ?valid_acl_kind(T) ->
     undefined;
 m_find_value({all, Opts}, #m{value={list, T, S}}, Context) ->
@@ -235,10 +233,8 @@ update(Kind, Id, Props, Context) ->
     Result.
 
 get(Kind, Id, Context) ->
-    case z_db:select(table(Kind), Id, Context) of
-        {ok, Row} -> {ok, normalize_action(Row)};
-        {error, _} = Error -> Error
-    end.
+    {ok, Row} = z_db:select(table(Kind), Id, Context),
+    {ok, normalize_action(Row)}.
 
 insert(Kind, Props, Context) ->
     lager:debug(

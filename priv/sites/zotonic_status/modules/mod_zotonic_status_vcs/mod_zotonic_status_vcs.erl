@@ -34,6 +34,7 @@
 -include("zotonic.hrl").
 
 
+-spec event(#postback{}, z:context()) -> z:context().
 event(#postback{message={vcs_up, Args}}, Context) ->
     true = z_auth:is_auth(Context),
     case proplists:get_value(zotonic, Args) of
@@ -68,17 +69,19 @@ event(#postback{message={vcs_up, Args}}, Context) ->
 event(#postback{message=make}, Context) ->
     true = z_auth:is_auth(Context),
     spawn(fun() ->
-            z:m(),
-            show_notice('Zotonic', "Finished rebuilding Zotonic.", Context)
-          end),
+                z:m(),
+                show_notice('Zotonic', "Finished rebuilding Zotonic.", Context)
+              end),
     notice('Zotonic', "Building Zotonic in the background…", Context).
 
 
 % @doc Show a notice on the current webpage.
+-spec show_notice(atom(), string(), z:context()) -> z:context().
 show_notice(SiteName, Text, Context) ->
     z_session_page:add_script(notice(SiteName, Text, Context)).
 
 % @doc Render a notice.
+-spec notice(atom(), string(), z:context()) -> z:context().
 notice(SiteName, Text, Context) ->
     Context1 = z_render:appear_top(
                         "notices",

@@ -24,11 +24,12 @@
 
 -include_lib("zotonic.hrl").
 
--spec addsite(binary(), list(), #context{}) -> ok | {error, binary()|string()}.
+-spec addsite(binary(), list(), z:context()) ->
+    {ok, {Site :: atom(), Options :: list()}} | {error, Reason :: list()}.
 addsite(Name, Options, Context) when is_binary(Name) ->
     % Check if name can used for the site (not z_, zotonic_, existing site, or existing module)
     case check_name(Name, Context) of
-        ok -> 
+        ok ->
             case filelib:is_file(site_dir(Name)) of
                 true ->
                     {error, iolist_to_binary([
@@ -54,6 +55,9 @@ addsite_check_hostname(Name, Options, Context) ->
     end.
 
 % Check if we can connect to the database
+
+-spec addsite_check_db(binary(), proplists:proplist(), z:context()) ->
+    {ok, Site :: atom(), Options :: list()} | {error, Reason :: list()}.
 addsite_check_db(Name, Options, Context) ->
     case proplists:lookup(skeleton, Options) of
         <<"nodb">> ->
@@ -88,6 +92,8 @@ addsite_check_db(Name, Options, Context) ->
     end.
 
 % Check if the user directory is writeable
+-spec addsite_check_userdir(binary(), proplists:proplist(), z:context()) ->
+    {ok, {atom(), list()}} | {error, list()}.
 addsite_check_userdir(Name, Options, Context) ->
     SiteDir = site_dir(Name),
     case file:make_dir(SiteDir) of
@@ -172,10 +178,15 @@ addsite_copy_skel(Name, Options, Context) ->
     end.
 
 % Compile
+-spec addsite_compile(binary(), proplists:proplist(), z:context()) -> {ok, {atom(), list()}}.
 addsite_compile(Name, Options, Context) ->
-    mod_zotonic_site_management:progress(Name, ?__("Force compile all Erlang files ...", Context), Context),
+    mod_zotonic_site_management:progress(
+        Name,
+        ?__("Force compile all Erlang files ...", Context),
+        Context
+    ),
     z:compile(),
-    Site = binary_to_atom(Name, utf8), 
+    Site = binary_to_atom(Name, utf8),
     {ok, {Site, Options}}.
 
 % Add a sample .gitgnore file to the newly created site directory.
@@ -192,6 +203,7 @@ create_gitignore(SiteDir) ->
     file:write_file(filename:join([SiteDir, ".gitignore"]), GitIgnore).
 
 
+-spec copy_skeleton_dir(any(), any(), list(), #context{}) -> ok | {error, Reason :: binary()}.
 copy_skeleton_dir(From, To, Options, Context) ->
     Files = filelib:wildcard(z_convert:to_list(filename:join(From,"*"))),
     lists:foreach(
@@ -321,28 +333,26 @@ ensure_dir(Dir, Context) ->
                     Dir])}
     end.
 
+-spec replace_tags(binary(), proplists:proplist()) -> list(binary()).
 replace_tags(Bin, Options) when is_binary(Bin) ->
     Parts = re:split(Bin, "(%%[A-Z]+%%)", [{return,binary}]),
-    lists:map(
-            fun(P) -> 
-                z_convert:to_binary(map_tag(P, Options))
-            end,
-            Parts).
+    [map_tag(P, Options) || P <- Parts].
 
+-spec map_tag(term(), list()) -> term().
 map_tag(<<"%%SITE%%">>, Options) -> proplists:get_value(site, Options);
 map_tag(<<"%%SITEHOSTNAME%%">>, Options) -> proplists:get_value(hostname, Options);
 map_tag(<<"%%SKEL%%">>, Options) ->
     case proplists:get_value(skeleton, Options, <<>>) of
         <<>> -> "undefined";
         Skel -> Skel
-    end;  
+    end;
 map_tag(<<"%%FULLNAME%%">>, _Options) -> <<>>;
 map_tag(<<"%%DBHOST%%">>, Options) -> proplists:get_value(dbhost, Options);
 map_tag(<<"%%DBPORT%%">>, Options) ->
     case proplists:get_value(dbport, Options, <<>>) of
         <<>> -> "0";
         Port -> Port
-    end;  
+    end;
 map_tag(<<"%%DBUSER%%">>, Options) -> proplists:get_value(dbuser, Options);
 map_tag(<<"%%DBPASSWORD%%">>, Options) -> proplists:get_value(dbpassword, Options);
 map_tag(<<"%%DBDATABASE%%">>, Options) -> proplists:get_value(dbdatabase, Options);

@@ -55,7 +55,7 @@
         dbc=undefined :: pid() | undefined,
 
         %% The pid of the database pool of this site and the db driver in use (usually z_db_pgsql)
-        db=undefined :: {pid(), atom()} | undefined,
+        db=undefined :: {atom(), atom()} | undefined,
 
         %% The language selected, used by z_trans and others
         %% The first language in the list is the selected language, the tail are the fallback languages
@@ -193,7 +193,11 @@
 -record(dragdrop, {tag, delegate, id}).
 
 %% @doc Template definition for z_render:update/insert (and others)
--record(render, {template, is_all=false, vars=[]}).
+-record(render, {
+    template :: string(),
+    is_all = false :: boolean(),
+    vars = [] :: proplists:proplist()
+}).
 
 %% @doc Data import definition. See also mod_import_csv.
 -record(import_data_def, {colsep=$\t, skip_first_row=true, columns=[], importdef}).

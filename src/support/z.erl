@@ -64,6 +64,10 @@
 
 -include("zotonic.hrl").
 
+-type context() :: #context{}.
+
+-export_type([context/0]).
+
 % @doc Return a new context
 c(Site) ->
     z_context:new(Site).

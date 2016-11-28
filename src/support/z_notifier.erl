@@ -65,7 +65,7 @@
                           {43200, tick_12h},
                           {86400, tick_24h} ]).
 
--record(state, {observers :: list(), timers :: list(), site :: atom()}).
+-record(state, {observers :: undefined | list(), timers :: list(), site :: atom()}).
 
 %%====================================================================
 %% API
@@ -85,7 +85,7 @@ start_link(SiteProps) when is_list(SiteProps) ->
         {ok, P} ->
             ets:give_away(ObserverTable, P, observer_table),
             {ok, P};
-        {already_started, P} ->
+        {error, {already_started, P}} ->
             ets:give_away(ObserverTable, P, observer_table),
             {already_started, P};
         R -> R
@@ -192,7 +192,8 @@ notify1(Msg, Context) ->
     end.
 
 
-%% @doc Call all observers till one returns something else than undefined. The prototype of the observer is: f(Msg, Context)
+%% @doc Call all observers till one returns something else than undefined.
+%% The prototype of the observer is: f(Msg, Context)
 first(Msg, Context) ->
     Observers = get_observers(Msg, Context),
     first1(Observers, Msg, Context).
@@ -210,13 +211,15 @@ first(Msg, Context) ->
         end.
 
 
-%% @doc Call all observers, return the list of answers. The prototype of the observer is: f(Msg, Context)
+%% @doc Call all observers, return the list of answers. The prototype of the
+%% observer is: f(Msg, Context)
 map(Msg, Context) ->
     Observers = get_observers(Msg, Context),
     lists:map(fun(Obs) -> notify_observer(Msg, Obs, true, Context) end, Observers).
 
 
-%% @doc Do a fold over all observers, prio 1 observers first. The prototype of the observer is: f(Msg, Acc, Context)
+%% @doc Do a fold over all observers, prio 1 observers first. The prototype of
+%% the observer is: f(Msg, Acc, Context)
 foldl(Msg, Acc0, Context) ->
     Observers = get_observers(Msg, Context),
     lists:foldl(
@@ -300,10 +303,6 @@ await_exact(Msg, Timeout, Context) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server, creates a new observer list
 init(Args) ->
     {site, Site} = proplists:lookup(site, Args),

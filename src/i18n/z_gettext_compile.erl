@@ -79,8 +79,6 @@ write_entries(Fd, Labels) ->
 -define(PIVOT, 4).
 -define(SEP, <<" ">>).
 
-write_pretty([], _) ->
-    true;
 write_pretty(Binary, Fd) ->
     file:write(Fd, wrap(escape_chars(Binary))).
 

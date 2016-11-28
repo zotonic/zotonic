@@ -93,7 +93,7 @@ local_topic(Topic) -> Topic.
 observe_rsc_update_done(#rsc_update_done{id=Id} = UpdateDone, Context) ->
     z_mqtt:publish(
         <<"~site/rsc/",(z_convert:to_binary(Id))/binary>>,
-        UpdateDone#rsc_update_done{pre_props=undefined, post_props=undefined},
+        UpdateDone#rsc_update_done{pre_props=[], post_props=[]},
         Context).
 
 observe_media_replace_file(#media_replace_file{id=Id} = MediaReplace, Context) ->
