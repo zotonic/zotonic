@@ -1,9 +1,30 @@
 
 .. include:: meta-mod_search.rst
 
-`mod_search` implements various ways of searching through the main
-resource table using :ref:`model-search`.  The following searches are
-implemented in `mod_search`:
+mod_search implements various ways of searching through the main
+resource table using :ref:`model-search`.
+
+Configuration
+-------------
+
+There are two :ref:`site configuration variables <ref-site-configuration>` to
+tweak `PostgreSQL text search settings`_.
+
+mod_search.rank_behaviour
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+An integer representation to influence PostgreSQL search behaviour.
+
+Default: ``37`` (``1 | 4 | 32``)
+
+mod_search.rank_weight
+^^^^^^^^^^^^^^^^^^^^^^
+
+A set of four numbers to override relative weights for the ABCD categories.
+
+Default: ``{0.05, 0.25, 0.5, 1.0}``
+
+The following searches are implemented in mod_search:
 
 +------------------------+---------------------------------------------------------------+-------------------+
 |Name                    |Description                                                    |Required arguments |
@@ -101,4 +122,4 @@ implemented in `mod_search`:
     * :ref:`guide-datamodel-query-model`
     * :ref:`cookbook-custom-search`
 
-
+.. _PostgreSQL text search settings: https://www.postgresql.org/docs/current/static/textsearch-controls.html
