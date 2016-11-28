@@ -70,7 +70,7 @@ msgid "Add media to body"
 msgstr "Mediabestand toevoegen aan pagina"
 
 #: modules/mod_admin/actions/action_admin_link.erl:80
-#: modules/mod_admin/mod_admin.erl:376
+#: modules/mod_admin/mod_admin.erl:389
 msgid "Added the connection to"
 msgstr "Connectie gemaakt naar"
 
@@ -296,16 +296,16 @@ msgstr "Bepaal wie deze pagina mag bekijken en bewerken."
 
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:40
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:81
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:80
 msgid "Delete"
 msgstr "Verwijder"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:47
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:46
 msgid "Delete if no other page is connected to this page."
 msgstr ""
 "Verwijder als geen andere pagina's een connectie met deze pagina hebben."
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:81
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:80
 msgid "Delete this page."
 msgstr "Verwijder deze pagina."
 
@@ -313,7 +313,7 @@ msgstr "Verwijder deze pagina."
 msgid "Deleted."
 msgstr "Verwijderd."
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:49
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:48
 msgid "Dependent"
 msgstr "Afhankelijk"
 
@@ -335,8 +335,8 @@ msgstr "Download"
 msgid "Drag to change position"
 msgstr "Sleep om de positie te wijzigen"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:85
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:88
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:84
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:87
 msgid "Duplicate"
 msgstr "Dupliceer"
 
@@ -345,8 +345,8 @@ msgstr "Dupliceer"
 msgid "Duplicate page"
 msgstr "Dupliceer pagina"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:85
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:90
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:84
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:89
 msgid "Duplicate this page."
 msgstr "Dupliceer deze pagina."
 
@@ -399,7 +399,7 @@ msgstr ""
 msgid "Failed to download the file."
 msgstr "Het downloaden van het mediabestand is mislukt."
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:39
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:38
 msgid "Featured"
 msgstr "Prominent"
 
@@ -634,7 +634,7 @@ msgstr "Naam"
 msgid "Need more help?"
 msgstr "Meer hulp nodig?"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:71
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:70
 msgid "Next in category: "
 msgstr "Volgende in categorie:"
 
@@ -646,7 +646,7 @@ msgstr "Geen gekoppelde afbeeldingen."
 msgid "No features are enabled for this meta-resource."
 msgstr "Deze meta-resource bevat geen geactiveerde features."
 
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:86
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:85
 msgid "No items"
 msgstr "Geen items"
 
@@ -654,7 +654,7 @@ msgstr "Geen items"
 msgid "No media found."
 msgstr "Geen media gevonden."
 
-#: modules/mod_admin/templates/_action_dialog_connect_tab_find_results_loop.tpl:12
+#: modules/mod_admin/templates/_action_dialog_connect_tab_find_results_loop.tpl:16
 #: modules/mod_admin/templates/_admin_overview_list.tpl:59
 #: modules/mod_admin/templates/admin_referrers.tpl:47
 msgid "No pages found."
@@ -722,15 +722,15 @@ msgstr "Predicaat"
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:65
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:64
 msgid "Previous in category: "
 msgstr "Vorige in categorie: "
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:44
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:43
 msgid "Protect"
 msgstr "Bescherm"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:42
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:41
 msgid "Protect from deletion"
 msgstr "Bescherm"
 
@@ -753,7 +753,7 @@ msgstr "Publiceer deze pagina"
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:41
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:34
+#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:33
 msgid "Published"
 msgstr "Gepubliceerd"
 
@@ -917,7 +917,7 @@ msgstr "Er ging iets mis, onze excuses."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: modules/mod_admin/mod_admin.erl:380
+#: modules/mod_admin/mod_admin.erl:378
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
@@ -1009,6 +1009,10 @@ msgstr ""
 msgid "This connection already exists."
 msgstr "Deze connectie bestaat al"
 
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:42
+msgid "This name is in use by another page."
+msgstr "Deze naam wordt al gebruikt door een andere pagina."
+
 #: modules/mod_admin/templates/_admin_edit_js.tpl:20
 msgid "This page has been deleted."
 msgstr "Deze pagina is verwijderd."
@@ -1029,7 +1033,7 @@ msgstr ""
 "Deze pagina kan verbindingen hebben naar andere pagina's. Bijvoorbeeld kun "
 "je het een auteur geven of een gerelateerd document."
 
-#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:50
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:51
 msgid "This resource was created by the module"
 msgstr "Deze resource is aangemaakt door de module"
 
@@ -1059,7 +1063,7 @@ msgstr "Typ een tekst om te zoeken"
 msgid "Unique name"
 msgstr "Unieke naam"
 
-#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:56
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:57
 msgid "Unique uri"
 msgstr "Unieke URI"
 
@@ -1110,7 +1114,7 @@ msgstr "Gebruikerspagina"
 msgid "Valid for:"
 msgstr "Geldig voor:"
 
-#: modules/mod_admin/templates/_admin_edit_content_publish.tpl:25
+#: modules/mod_admin/templates/_admin_edit_content_publish_view.tpl:2
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
 msgid "View"
 msgstr "Bekijken"
@@ -1255,6 +1259,7 @@ msgid "name"
 msgstr "Achternaam"
 
 #: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:61
+#: modules/mod_admin/templates/_admin_view_types.tpl:2
 msgid "page"
 msgstr "pagina"
 
