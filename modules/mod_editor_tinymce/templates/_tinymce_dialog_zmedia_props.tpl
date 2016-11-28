@@ -53,7 +53,7 @@
                                    </div>
                                    <div class="radio">
                                         <label>
-                                             <input type="radio" name="size" {% if options.size == 'middle' %}checked{% endif %} value="middle" id="a-middle"> {_ Middle _}
+                                             <input type="radio" name="size" {% if options.size == 'middle' %}checked{% endif %} value="middle" id="a-middle"> {_ Medium _}
                                         </label>
                                    </div>
                                    <div class="radio">
