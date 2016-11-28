@@ -648,6 +648,5 @@ rank_weight(Context) ->
         Empty when Empty =:= undefined; Empty =:= <<>> ->
             "'{0.05, 0.25, 0.5, 1.0}'";
         Weight ->
-            binary_to_list(Weight)
+            lists:flatten(io_lib:format("\'~s\'", [Weight]))
     end.
-
