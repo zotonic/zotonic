@@ -36,7 +36,7 @@
     observe_search_query/2,
     observe_module_activate/2,
     to_tsquery/2,
-    rank_weight/0,
+    rank_weight/1,
     rank_behaviour/1,
     find_by_id/2,
     find_by_id/3
@@ -388,7 +388,7 @@ search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
                     #search_result{};
                 _ ->
                     #search_sql{
-                        select="r.id, ts_rank_cd("++rank_weight()++", pivot_tsv, $1, $2) AS rank",
+                        select="r.id, ts_rank_cd("++rank_weight(Context)++", pivot_tsv, $1, $2) AS rank",
                         from="rsc r",
                         where=" $1 @@ r.pivot_tsv",
                         order="rank desc",
@@ -417,7 +417,7 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
-                select="r.id, ts_rank_cd("++rank_weight()++", pivot_tsv, $1, $2) AS rank",
+                select="r.id, ts_rank_cd("++rank_weight(Context)++", pivot_tsv, $1, $2) AS rank",
                 from="rsc r",
                 where=" $1 @@ r.pivot_tsv",
                 order="rank desc",
@@ -441,7 +441,7 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
-                select="r.id, ts_rank_cd("++rank_weight()++", pivot_tsv, $1, $2) AS rank",
+                select="r.id, ts_rank_cd("++rank_weight(Context)++", pivot_tsv, $1, $2) AS rank",
                 from="rsc r",
                 where=" $1 @@ pivot_tsv",
                 order="rank desc",
@@ -640,7 +640,12 @@ rank_behaviour(Context) ->
 
 %% @doc The weights for the ranking of the ABCD indexing categories.
 %% See also: http://www.postgresql.org/docs/9.3/static/textsearch-controls.html
--spec rank_weight() -> string().
-rank_weight() ->
-    "'{0.05, 0.25, 0.5, 1.0}'".
+-spec rank_weight(#context{}) -> string().
+rank_weight(Context) ->
+    case m_config:get_value(mod_search, rank_weight, Context) of
+        Empty when Empty =:= undefined; Empty =:= <<>> ->
+            "'{0.05, 0.25, 0.5, 1.0}'";
+        Weight ->
+            binary_to_list(Weight)
+    end.
 
