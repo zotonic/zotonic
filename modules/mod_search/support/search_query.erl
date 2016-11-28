@@ -461,7 +461,7 @@ parse_query([{text, Text}|Rest], Context, Result) ->
             Result2 = add_where(QArg++" @@ rsc.pivot_tsv", Result1a),
             Result3 = add_order_unsafe(
                               "ts_rank_cd("
-                                ++mod_search:rank_weight()
+                                ++mod_search:rank_weight(Context)
                                 ++", rsc.pivot_tsv, "
                                 ++QArg++", "
                                 ++BArg++") desc", Result2),
