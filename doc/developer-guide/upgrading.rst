@@ -110,8 +110,8 @@ The controllers are simplified and will need some adaptations.
 
 The following callbacks are removed:
 
- * `init`
- * `ping`
+ * ``init``
+ * ``ping``
 
  All other callbacks have now a single *Context* argument, the *ReqData* argument has been removed.
  There is no need anymore for the ``?WM_REQ`` and ``?WM_REPLY`` macros, and they have been removed.
@@ -124,7 +124,10 @@ Other controller changes changes are:
  * Encodings are now binaries in `content_encodings_provided`
  * The return value of `generate_etag` must be a binary
 
+Search
+^^^^^^
 
+* Search argument ``authoritative`` was renamed to ``is_authoritative``.
 
 Upgrading to Zotonic 0.14
 -------------------------

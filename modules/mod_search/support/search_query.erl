@@ -97,7 +97,6 @@ split_arg(B) ->
 
                                                 % Convert request arguments to atom. Doing it this way avoids atom
                                                 % table overflows.
-request_arg("authoritative")       -> authoritative;
 request_arg("content_group")       -> content_group;
 request_arg("cat")                 -> cat;
 request_arg("cat_exact")           -> cat_exact;
@@ -112,6 +111,7 @@ request_arg("hasobjectpredicate")  -> hasobjectpredicate;
 request_arg("hassubject")          -> hassubject;
 request_arg("hassubjectpredicate") -> hassubjectpredicate;
 request_arg("hasanyobject")        -> hasanyobject;
+request_arg("is_authoritative")    -> is_authoritative;
 request_arg("is_featured")         -> is_featured;
 request_arg("is_published")        -> is_published;
 request_arg("is_public")           -> is_public;
@@ -381,7 +381,7 @@ parse_query([{unfinished_or_nodate, Boolean}|Rest], Context, Result) ->
 
 %% authoritative={true|false}
 %% Filter on items which are authoritative or not
-parse_query([{authoritative, Boolean}|Rest], Context, Result) ->
+parse_query([{is_authoritative, Boolean}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(z_convert:to_bool(Boolean), Result),
     Result2 = add_where("rsc.is_authoritative = " ++ Arg, Result1),
     parse_query(Rest, Context, Result2);
