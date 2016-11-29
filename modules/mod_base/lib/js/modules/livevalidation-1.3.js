@@ -120,6 +120,11 @@ LiveValidation.prototype = {
       this.validMessage = options.validMessage || '';
       var node = options.insertAfterWhatNode || this.element;
       this.insertAfterWhatNode = node.nodeType ? node : document.getElementById(node);
+      
+      //if document.getElementById(node) returned null, then set the original element
+      if(!this.insertAfterWhatNode) 
+          this.insertAfterWhatNode = this.element;
+        
       this.validationAsync = false;
       
       // Initialize the form hooks, remember the LiveValidationForm object.
