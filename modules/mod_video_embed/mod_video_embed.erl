@@ -75,6 +75,8 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
                     ok = m_media:replace(Id, MediaProps, Context),
                     spawn_preview_create(Id, MediaProps, Context);
                 false ->
+                    lager:info("Denied user ~p to embed ~p: ~p",
+                               [z_acl:user(Context), ?EMBED_MIME, EmbedCodeRaw]),
                     ok
             end,
             Props1 = proplists:delete(video_embed_code,

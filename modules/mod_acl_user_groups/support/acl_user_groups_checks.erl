@@ -595,6 +595,8 @@ can_edge(#acl_edge{predicate=P, subject_id=SubjectId, object_id=ObjectId}, Conte
     andalso can_rsc(ObjectId, view, Context).
 
 %% @doc Check if the user can upload a file of the given mime type and size
+can_media(Mime, undefined, Context) ->
+    can_media(Mime, 0, Context);
 can_media(Mime, Size, Context) ->
     MaxSize = max_upload_size(Context) * 1024 * 1024,
     case MaxSize >= Size of

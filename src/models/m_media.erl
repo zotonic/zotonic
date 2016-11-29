@@ -666,11 +666,13 @@ mime_to_category(Mime) ->
     case Mime of
         "image/" ++ _ -> image;
         "video/" ++ _ -> video;
+        "text/html-video-embed" -> video;
         "audio/" ++ _ -> audio;
         "application/" ++ _ -> document;
         "text/" ++ _ -> document;
         <<"image/", _/binary>> -> image;
         <<"video/", _/binary>> -> video;
+        <<"text/html-video-embed">> -> video;
         <<"audio/", _/binary>> -> audio;
         <<"application/", _/binary>> -> document;
         <<"text/", _/binary>> -> document;
