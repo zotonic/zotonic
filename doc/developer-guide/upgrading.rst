@@ -46,6 +46,12 @@ Removed deprecated functions
 * The ``{% stream %}`` tag was removed.
 * Removed older TinyMCE versions 3.5.0 and 4.2.4.
 
+Templates
+^^^^^^^^^
+
+* The ``use_absolute_url`` argument of the ``url``, ``image`` and ``lib`` tags
+  was renamed to ``absolute_url``.
+
 Erlang code, Controllers, Event handlers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

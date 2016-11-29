@@ -820,7 +820,7 @@ opt_url_abs(undefined, _IsAbs, _Context) ->
 opt_url_abs(Url, true, Context) ->
     z_dispatcher:abs_url(Url, Context);
 opt_url_abs(Url, false, Context) ->
-    case z_context:get(use_absolute_url, Context) of
+    case z_context:get(absolute_url, Context) of
         true -> z_dispatcher:abs_url(Url, Context);
         _ -> Url
     end.

@@ -304,10 +304,10 @@ mediaprops_filename(Id, Props, Context) ->
     end.
 
 use_absolute_url(Options, Context) ->
-    case use_absolute(proplists:get_value(use_absolute_url, Options)) of
+    case use_absolute(proplists:get_value(absolute_url, Options)) of
         false -> false;
         true -> true;
-        undefined -> z_convert:to_bool(z_context:get(use_absolute_url, Context))
+        undefined -> z_convert:to_bool(z_context:get(absolute_url, Context))
     end.
 
 use_absolute(undefined) -> undefined;
@@ -401,7 +401,7 @@ props2url([{width,Width}|Rest], _Width, Height, Acc, Context) ->
     props2url(Rest, z_convert:to_integer(Width), Height, Acc, Context);
 props2url([{height,Height}|Rest], Width, _Height, Acc, Context) ->
     props2url(Rest, Width, z_convert:to_integer(Height), Acc, Context);
-props2url([{use_absolute_url,_}|Rest], Width, Height, Acc, Context) ->
+props2url([{absolute_url,_}|Rest], Width, Height, Acc, Context) ->
     props2url(Rest, Width, Height, Acc, Context);
 props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
     case z_mediaclass:get(Class, Context) of
