@@ -55,7 +55,7 @@ init(Context) ->
         Props ->
             %% upgrade from previous menu
             OldMenu = proplists:get_value(menu, Props, []),
-            ?zInfo("Upgrading old menu structure", Context),
+            lager:info("Upgrading old menu structure"),
             set_menu(OldMenu, Context),
             m_config:delete(menu, menu_default, Context)
     end.

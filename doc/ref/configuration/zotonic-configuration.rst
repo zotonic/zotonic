@@ -84,6 +84,8 @@ to separate the beam files of user defined code from Zotonic's beam files.
 listen_port
 ^^^^^^^^^^^
 
+.. _deps:
+
 `deps`
 ......
 
@@ -101,11 +103,12 @@ On compile time, these deps are added to the list of the standard deps
 from Zotonic's ``rebar.config`` file, and cloned and compiled in the
 same way.
 
+.. _erlang-config:
 
 The `erlang.config` file
 --------------------------
 
 The ``erlang.config`` file contains application environment variables
 for the Erlang applications that Zotonic depends on. Here you can
-configure for instance the paths for the log files (in the ``lager``
-section), emqtt ports, et cetera.
+configure for instance the paths for the :ref:`log files <dev-testing>` (in
+the ``lager`` section), emqtt ports, et cetera.

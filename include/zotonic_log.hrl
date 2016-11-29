@@ -7,9 +7,9 @@
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
-%% 
+%%
 %%     http://www.apache.org/licenses/LICENSE-2.0
-%% 
+%%
 %% Unless required by applicable law or agreed to in writing, software
 %% distributed under the License is distributed on an "AS IS" BASIS,
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,25 +57,7 @@
 
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
-%%% LOGGING %%%
-
-
-%% Log notifications
--define(zDebug(Msg, Context), z:debug(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zInfo(Msg, Context), z:info(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zWarning(Msg, Context), z:warning(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zError(Msg, Context), z:error(Msg, [{module, ?MODULE}, {line, ?LINE}], Context)).
-
--define(zDebug(Msg, Args, Context), z:debug(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zInfo(Msg, Args, Context), z:info(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zWarning(Msg, Args, Context), z:warning(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
--define(zError(Msg, Args, Context), z:error(Msg, Args, [{module, ?MODULE}, {line, ?LINE}], Context)).
-
 %% Easy to use macros for debugging/development
 -define(PRINT(Var), lager:info("DEBUG: ~p:~p - ~p: ~p~n", [?MODULE, ?LINE, ??Var, Var])).
 -define(STACKTRACE, erlang:display(try throw(a) of _ -> a catch _:_ -> erlang:get_stacktrace() end)).
--define(DEBUG(Msg), z:debug_msg(?MODULE, ?LINE, Msg)).
-
-%% Deprecated shortcuts
--define(LOG(Msg, Args), lager:info(Msg, Args)).
--define(ERROR(Msg, Args), lager:error("~p:~p "++Msg, [?MODULE, ?LINE|Args])).
+-define(DEBUG(Msg), lager:debug("DEBUG: ~p:~p: ~p~n", [?MODULE, ?LINE, Msg]), Msg).

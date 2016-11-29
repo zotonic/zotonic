@@ -324,7 +324,7 @@ event(#postback{message={translation_generate, _Args}}, Context) ->
                     spawn(fun() -> generate(Context) end),
                     z_render:growl(?__(<<"Started building the .pot files. This may take a while...">>, Context), Context);
                 false ->
-                    ?zError("Cannot generate translation files because gettext is not installed. See http://docs.zotonic.com/en/latest/developer-guide/translation.html.", Context),
+                    lager:error("Cannot generate translation files because gettext is not installed. See http://docs.zotonic.com/en/latest/developer-guide/translation.html."),
                     z_render:growl_error(?__(<<"Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>.">>, Context), Context)
             end;
         false ->

@@ -31,6 +31,7 @@ you through all aspects of the framework.
    services
    email
    shell
+   logging
    testing
    deployment/index
    contributing
