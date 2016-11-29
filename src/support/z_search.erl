@@ -54,8 +54,9 @@ pager(#search_result{pagelen=undefined} = SearchResult, Page, Context) ->
 pager(SearchResult, Page, Context) ->
     pager(SearchResult, Page, SearchResult#search_result.pagelen, Context).
 
-pager(#search_result{result=Result} = SearchResult, Page, PageLen, _Context) ->
-    Total = length(Result),
+pager(#search_result{result = Result, total = undefined} = SearchResult, Page, PageLen, Context) ->
+    pager(SearchResult#search_result{total = length(Result)}, Page, PageLen, Context);
+pager(#search_result{result = Result, total = Total} = SearchResult, Page, PageLen, _Context) ->
     Pages = mochinum:int_ceil(Total / PageLen),
     Offset = (Page-1) * PageLen + 1,
     OnPage = case Offset =< Total of
