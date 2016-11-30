@@ -45,4 +45,5 @@ this:
 
 .. seealso::
 
-    To log messages to the database, you can use :ref:`mod_logging`.
+    * :ref:`cookbook-logstash` cookbook
+    * To log messages to the database, you can use :ref:`mod_logging`.
