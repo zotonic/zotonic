@@ -30,9 +30,6 @@
 
 -include_lib("zotonic.hrl").
 
-%% Non routable LAN IP addresses.
--define(LOCAL_IPS, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10").
-
 %%====================================================================
 %% API
 %%====================================================================
@@ -117,7 +114,7 @@ default(syslog_level) -> info;
 default(user_sites_dir) -> "user/sites";
 default(user_modules_dir) -> "user/modules";
 default(proxy_whitelist) -> local;
-default(ip_whitelist) -> ?LOCAL_IPS;
+default(ip_whitelist) -> local;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
 default(_) -> undefined.

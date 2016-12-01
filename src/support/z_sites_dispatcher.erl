@@ -255,7 +255,13 @@ dispatch_1(DispReq, OptReq) ->
             Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
             dispatch_site(DispReq, Context);
         [{_,Site,_Redirect}] ->
-            {redirect, Site}
+            case DispReq#dispatch.path of
+                <<"/.well-known/", _/binary>> ->
+                    Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
+                    dispatch_site(DispReq, Context);
+                _ ->
+                    {redirect, Site}
+            end
     end.
 
 -spec dispatch_site(#dispatch{}, #context{}) -> dispatch().
@@ -539,11 +545,11 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
     SslPort = z_config:get(ssl_port),
     % Maybe switch between http and https
     case proplists:get_value(ssl, Props, any) of
-        false when Protocol =:= https ->
+        false when Protocol =:= https, Hostname =/= undefined ->
             redirect_protocol(http, Hostname, TracerPid, Tokens, Context);
-        true when Protocol =:= http, is_integer(SslPort) ->
+        true when Protocol =:= http, is_integer(SslPort), Hostname =/= undefined  ->
             redirect_protocol(https, Hostname, TracerPid, Tokens, Context);
-        any when Protocol =:= http, is_integer(SslPort)  ->
+        any when Protocol =:= http, is_integer(SslPort), Hostname =/= undefined   ->
             case z_context:is_ssl_site(Context) of
                 true ->
                     redirect_protocol(https, Hostname, TracerPid, Tokens, Context);
@@ -558,7 +564,7 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
                     }
             end;
         _ ->
-            % 'any', correct protocol, or no SSL port defined
+            % 'any', correct protocol, or no SSL port defined, or no host name
             #dispatch_controller{
                 dispatch_rule=DispatchName,
                 controller=Mod,

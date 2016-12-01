@@ -37,8 +37,12 @@
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(hostname_no_port, #m{value=undefined}, Context) ->
-    z_dispatcher:drop_port(get(hostname, Context));
+m_find_value(hostname, #m{value=undefined}, Context) ->
+    z_context:hostname(Context);
+m_find_value(hostname_port, #m{value=undefined}, Context) ->
+    z_context:hostname_port(Context);
+m_find_value(hostname_ssl_port, #m{value=undefined}, Context) ->
+    z_context:hostname_ssl_port(Context);
 m_find_value(protocol, #m{value=undefined}, Context) ->
     z_context:site_protocol(Context);
 m_find_value(Key, #m{value=undefined}, Context) ->

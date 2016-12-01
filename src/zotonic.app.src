@@ -22,6 +22,7 @@
                   filezcache, s3filez,
                   template_compiler,
                   qdate, syslog,
-                  bcrypt, erlpass
+                  bcrypt, erlpass,
+                  letsencrypt
   ]}
  ]}.

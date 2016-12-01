@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012-2016 Marc Worrell, Maas-Maarten Zeeman
 %%
-%% @doc SSL pages for Zotonic.
+%% @doc CA supplied certificate handling
 
 %% Copyright 2012 - 2016 Marc Worrell, Maas-Maarten Zeeman
 %%
@@ -17,11 +17,11 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(mod_ssl).
+-module(mod_ssl_ca).
 
--mod_title("HTTPS / SSL").
--mod_description("Provides https/ssl connectivity.").
--mod_provides([ssl]).
+-mod_title("SSL - CA").
+-mod_description("Use SSL Certificate from a Certificiate Authority.").
+-mod_provides([]).
 -mod_depends([]).
 -mod_prio(100).
 
@@ -33,30 +33,48 @@
 
 -include_lib("zotonic.hrl").
 
+-define(SNI_CACHE_TIME, 60).
 
 %% @doc Return the certificates of this site.
-%% @todo check for keys in a directory for the hostname (optional)
-%% @todo cache the result of these checks for 1 minute (or so)
 observe_ssl_options(#ssl_options{server_name=_NormalizedHostnameBin}, Context) ->
+    z_depcache:memo(fun() -> ssl_options(Context) end, sni_ssl_ca, ?SNI_CACHE_TIME, Context).
+
+ssl_options(Context) ->
     {ok, CertFiles} = cert_files(Context),
     CertFile = proplists:get_value(certfile, CertFiles),
     KeyFile = proplists:get_value(keyfile, CertFiles),
     case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
         {false, false} ->
+            lager:info("[~p] mod_ssl_ca: no ~p and ~p files, skipping.",
+                       [z_context:site(Context), CertFile, KeyFile]),
             undefined;
         {false, true} ->
-            lager:info("[~p] mod_ssl: no ~p file (though there is a key file), skipping.",
+            lager:info("[~p] mod_ssl_ca: no ~p file (though there is a key file), skipping.",
                        [z_context:site(Context), CertFile]),
             undefined;
         {true, false} ->
-            lager:info("[~p] mod_ssl: no ~p file (though there is a crt file), skipping.",
+            lager:info("[~p] mod_ssl_ca: no ~p file (though there is a crt file), skipping.",
                        [z_context:site(Context), KeyFile]),
             undefined;
         {true, true} ->
             case check_keyfile(KeyFile, Context) of
-                ok -> CertFiles;
+                ok -> {ok, CertFiles};
                 {error, _} -> undefined
             end
+    end.
+
+cert_files(Context) ->
+    SSLDir = filename:join(z_path:site_dir(Context), "ssl"),
+    Sitename = z_convert:to_list(z_context:site(Context)),
+    Files = [
+        {certfile, filename:join(SSLDir, Sitename++".crt")},
+        {keyfile, filename:join(SSLDir, Sitename++".pem")},
+        {password, z_convert:to_list(m_config:get_value(mod_ssl, password, "", Context))}
+    ] ++ z_ssl_certs:dh_options(),
+    CaCertFile = filename:join(SSLDir, Sitename++".ca.crt"),
+    case filelib:is_file(CaCertFile) of
+        false -> {ok, Files};
+        true -> {ok, [{cacertfile, CaCertFile} | Files]}
     end.
 
 check_keyfile(KeyFile, Context) ->
@@ -79,18 +97,3 @@ check_keyfile(KeyFile, Context) ->
                         [Site, KeyFile, Error]),
             Error
     end.
-
-cert_files(Context) ->
-    SSLDir = filename:join(z_path:site_dir(Context), "ssl"),
-    Sitename = z_convert:to_list(z_context:site(Context)),
-    Files = [
-        {certfile, filename:join(SSLDir, Sitename++".crt")},
-        {keyfile, filename:join(SSLDir, Sitename++".pem")},
-        {password, m_config:get_value(mod_ssl, password, "", Context)}
-    ] ++ z_ssl_certs:dh_options(),
-    CaCertFile = filename:join(SSLDir, Sitename++".ca.crt"),
-    case filelib:is_file(CaCertFile) of
-        false -> {ok, Files};
-        true -> {ok, [{cacertfile, CaCertFile} | Files]}
-    end.
-

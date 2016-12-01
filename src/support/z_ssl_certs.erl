@@ -30,10 +30,12 @@
 
     ciphers/0,
 
-    ensure_self_signed/2
+    ensure_self_signed/2,
+    decode_cert/1
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("public_key/include/public_key.hrl").
 
 -define(BITS, "4096").
 -define(DHBITS, "2048").
@@ -257,3 +259,66 @@ ensure_dhfile(Filename) ->
 %% https://github.com/tatsuhiro-t/lucid/blob/ce8654a75108c15cc786424b3faf1a8e945bfd53/README.rst#current-status
 ciphers() ->
     ssl:cipher_suites().
+
+
+%% @doc Decode a certificate, return common_name, not_after etc.
+-spec decode_cert(filename:filename()) -> list().
+decode_cert(CertFile) ->
+    {ok, CertData} = file:read_file(CertFile),
+    PemEntries = public_key:pem_decode(CertData),
+    case public_key:pem_entry_decode(hd(PemEntries)) of
+        {'Certificate', #'TBSCertificate'{} = TBS, _, _} ->
+            #'Validity'{notAfter = NotAfter} = TBS#'TBSCertificate'.validity,
+            Subject = decode_subject(TBS#'TBSCertificate'.subject),
+            SANs = decode_sans(TBS#'TBSCertificate'.extensions),
+            {ok, [
+                {not_after, decode_time(NotAfter)},
+                {common_name, proplists:get_value(cn, Subject)},
+                {subject_alt_names, SANs}
+            ]};
+        _ ->
+            {error, not_a_certificate}            
+    end.
+
+decode_time({utcTime, [Y1,Y2,_M1,_M2,_D1,_D2,_H1,_H2,_M3,_M4,_S1,_S2,$Z] = T}) ->
+    case list_to_integer([Y1,Y2]) of
+        N when N >= 50 ->
+            decode_time({generalTime, [$1,$9|T]});
+        _ ->
+            decode_time({generalTime, [$2,$0|T]})
+    end;
+decode_time({_,[Y1,Y2,Y3,Y4,M1,M2,D1,D2,H1,H2,M3,M4,S1,S2,$Z]}) ->
+    Year  = list_to_integer([Y1, Y2, Y3, Y4]),
+    Month = list_to_integer([M1, M2]),
+    Day   = list_to_integer([D1, D2]),
+    Hour  = list_to_integer([H1, H2]),
+    Min   = list_to_integer([M3, M4]),
+    Sec   = list_to_integer([S1, S2]),
+    {{Year, Month, Day}, {Hour, Min, Sec}}.
+
+decode_subject({rdnSequence, _} = R) ->
+    {rdnSequence, List} = pubkey_cert_records:transform(R, decode),
+    lists:foldl(
+            fun
+                (#'AttributeTypeAndValue'{type=?'id-at-commonName', value=CN}, Acc) ->
+                    [{cn, decode_value(CN)}|Acc];
+                (_, Acc) ->
+                    Acc
+            end,
+            [],
+            lists:flatten(List)).
+
+decode_sans([]) ->
+    [];
+decode_sans([#'Extension'{extnID=?'id-ce-subjectAltName', extnValue=V} | _]) ->
+    case 'OTP-PUB-KEY':decode('SubjectAltName', iolist_to_binary(V)) of
+        {ok, Vs} -> lists:map(fun decode_value/1, Vs);
+        _ -> []
+    end;
+decode_sans([_|Exts]) ->
+    decode_sans(Exts).
+
+decode_value({dNSName, Name}) -> iolist_to_binary(Name);
+decode_value({printableString, P}) -> iolist_to_binary(P);
+decode_value({utf8String, B}) -> B.
+
