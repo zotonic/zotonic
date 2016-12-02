@@ -31,7 +31,9 @@ This is to prevent mixing them up with other sites:
     The certificate authority will supply these. All supplied certificates are
     concatenated, with the root certificate last.
 
-    The concatenation is a literal command, like::
+    The concatenation is a literal command, like:
+
+.. code-block:: bash
 
         cat intermediate.crt root.crt > sitename.ca.crt
 
@@ -55,7 +57,9 @@ Where a PKCS#8 key starts with:
     -----BEGIN PRIVATE KEY-----
 
 If mod_ssl sees that the key file is a PKCS#8 file then it will stop and log the following
-error::
+error:
+
+.. code-block:: none
 
     Need RSA private key file. Use: `openssl rsa -in ssl/ca/sitename.key -out ssl/ca/sitename.pem`
 
@@ -72,13 +76,17 @@ Using SSL certificates
 
 If you order a SSL certificate, the signing authority will ask you which kind of web server you are using and a CSR file.
 For the web server, select *other*. For the CSR, use the following command (replace ``sitename`` with
-the name of your site)::
+the name of your site):
+
+.. code-block:: bash
 
     openssl req -out sitename.csr -new -newkey rsa:2048 -nodes -keyout sitename.key
 
 When OpenSSL asks for the *Common Name* then fill in the site’s hostname (e.g. *www.example.com*).
 
-The resulting ``.key`` file can be converted to a ``.pem`` file::
+The resulting ``.key`` file can be converted to a ``.pem`` file:
+
+.. code-block:: bash
 
     openssl rsa -in sitename.key -out sitename.pem
 
