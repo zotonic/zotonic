@@ -575,9 +575,8 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
             }
     end.
 
-<<<<<<< b03e71b78e69f0156d3c8f6b6a52cd979839ef93
--spec do_dispatch_fail(any(), any(), any(), any(), any()) -> #dispatch_controller{} | #dispatch_nomatch{}.
-=======
+-spec redirect_protocol(https|http, binary()|undefined, pid()|undefined, list(), #context{}) ->
+            {redirect_protocol, http|https, binary()|undefined, boolean()}.
 redirect_protocol(https, Hostname, TracerPid, Tokens, Context) ->
     NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
     trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
@@ -588,8 +587,7 @@ redirect_protocol(http, Hostname, TracerPid, Tokens, _Context) ->
     trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, http}, {host, NewHostname}]),
     {redirect_protocol, http, NewHostname, false}.
 
-
->>>>>>> Changed to handling of SSL and self signed certs.
+-spec do_dispatch_fail(any(), any(), any(), any(), any()) -> #dispatch_controller{} | #dispatch_nomatch{}.
 do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, Context0) ->
     TokenPath = tokens_to_path(Tokens),
     trace(DispReq#dispatch.tracer_pid, DispReq#dispatch.path, notify_dispatch, []),
