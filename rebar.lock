@@ -19,7 +19,7 @@
   2},
  {<<"cowmachine">>,
   {git,"https://github.com/zotonic/cowmachine.git",
-       {ref,"ad9ea54f8b1c8742d8d231228a826c18d74ac05c"}},
+       {ref,"94826508d3fe572eff3020b76ac00367a6bb782e"}},
   0},
  {<<"depcache">>,
   {git,"https://github.com/zotonic/depcache.git",
