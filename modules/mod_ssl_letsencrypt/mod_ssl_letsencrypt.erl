@@ -274,16 +274,17 @@ handle_cast({complete, Ret, LetsPid}, #state{request_letsencrypt_pid = LetsPid} 
     }};
 handle_cast(renewal_check, #state{cert_is_valid = false} = State) ->
     {noreply, State};
-handle_cast(renewal_check, #state{cert_is_valid = true} = State) ->
+handle_cast(renewal_check, #state{cert_is_valid = true, cert_hostname = Hostname, cert_san = SANs} = State) ->
     % We try renewal during the last month of validity
-    % After this we stop, as there is clearly something wrong.
+    % After the last validity we stop trying, as there is clearly something wrong.
     Now = calendar:universal_time(),
     NextMonth = z_datetime:next_month(Now),
     case NextMonth > State#state.cert_valid_till
         andalso Now < State#state.cert_valid_till
     of
         true ->
-            case start_cert_request(State#state.cert_hostname, State#state.cert_san, State) of
+            SANs1 = lists:usort(SANs) -- [Hostname],
+            case start_cert_request(Hostname, SANs1, State) of
                 {ok, State1} ->
                     z_mqtt:publish(<<"~site/letsencrypt">>, <<"started">>, z_acl:sudo(z_context:new(State#state.site))),
                     {noreply, State1};
