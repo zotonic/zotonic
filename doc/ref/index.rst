@@ -23,6 +23,7 @@ All the nitty gritty details when the big picture has settled.
    notifications/index
    installation/requirements
    configuration/zotonic-configuration
+   configuration/port-ssl-configuration
    configuration/site-configuration
    status-site
    cli/index

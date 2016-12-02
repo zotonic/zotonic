@@ -102,12 +102,10 @@ hostname
 The hostname and port part of the site URL. This is used to determine to which
 site an incoming request should be routed. Example::
 
-    {hostname, "127.0.0.1:8000"},
-
-If you run Zotonic on port 80, you can leave out the port number.
+    {hostname, "127.0.0.1"},
 
 Note that the hostname does *not* specify on which port Zotonic will listen;
-this is :ref:`configured globally <configuration-listen_port>`.
+this is :ref:`configured globally <ref-port-ssl-configuration>`.
 
 hostalias
 ^^^^^^^^^
@@ -231,11 +229,6 @@ the site's ``user/sitename/config`` file. To do this, add clauses like
 this to the site's config::
 
     {mod_foo, [{key, value}, ...]}
-
-For instance, to set the ``mod_ssl.is_secure`` configuration options
-from :ref:`mod_ssl`, do::
-
-    {mod_ssl, [{is_secure, true}]}
 
 
 Using environment variables in the site config
