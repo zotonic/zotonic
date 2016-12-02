@@ -45,16 +45,16 @@ ssl_options(Context) ->
     KeyFile = proplists:get_value(keyfile, CertFiles),
     case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
         {false, false} ->
-            lager:info("[~p] mod_ssl_ca: no ~p and ~p files, skipping.",
-                       [z_context:site(Context), CertFile, KeyFile]),
+            lager:info("mod_ssl_ca: no ~p and ~p files, skipping.",
+                       [CertFile, KeyFile]),
             undefined;
         {false, true} ->
-            lager:info("[~p] mod_ssl_ca: no ~p file (though there is a key file), skipping.",
-                       [z_context:site(Context), CertFile]),
+            lager:info("mod_ssl_ca: no ~p file (though there is a key file), skipping.",
+                       [CertFile]),
             undefined;
         {true, false} ->
-            lager:info("[~p] mod_ssl_ca: no ~p file (though there is a crt file), skipping.",
-                       [z_context:site(Context), KeyFile]),
+            lager:info("mod_ssl_ca: no ~p file (though there is a crt file), skipping.",
+                       [KeyFile]),
             undefined;
         {true, true} ->
             case check_keyfile(KeyFile, Context) of
@@ -64,7 +64,7 @@ ssl_options(Context) ->
     end.
 
 cert_files(Context) ->
-    SSLDir = filename:join(z_path:site_dir(Context), "ssl"),
+    SSLDir = filename:join([z_path:site_dir(Context), "ssl", "ca"]),
     Sitename = z_convert:to_list(z_context:site(Context)),
     Files = [
         {certfile, filename:join(SSLDir, Sitename++".crt")},
@@ -81,19 +81,19 @@ check_keyfile(KeyFile, Context) ->
     Site = z_context:site(Context),
     case file:read_file(KeyFile) of
         {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-            lager:error("[~p] Need RSA private key file. Use: `openssl rsa -in ssl/~p.key -out ssl/~p.pem`",
-                        [Site, Site, Site]),
+            lager:error("Need RSA private key file. Use: `openssl rsa -in ssl/ca/~p.key -out ssl/ca/~p.pem`",
+                        [Site, Site]),
             {error, need_rsa_private_key};
         {ok, Bin} ->
             case public_key:pem_decode(Bin) of
                 [] ->
-                    lager:error("[~p] No private keys found in ~p", [Site, KeyFile]),
+                    lager:error("No private keys found in ~p", [KeyFile]),
                     {error, no_private_keys_found};
                 _ ->
                     ok
             end;
         {error, _} = Error ->
-            lager:error("[~p] Cannot read key file ~p, error: ~p",
-                        [Site, KeyFile, Error]),
+            lager:error("Cannot read key file ~p, error: ~p",
+                        [KeyFile, Error]),
             Error
     end.
