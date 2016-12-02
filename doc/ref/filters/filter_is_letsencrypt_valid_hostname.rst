@@ -12,6 +12,8 @@ Criteria are:
 
 The site must listen on port 80 for connections.
 
+For example, check if the current site is reachable as *example.com*::
+
   {% if "example.com"|is_letsencrypt_valid_hostname %}
       Wow, this site is example.com!?!
   {% endif %}
