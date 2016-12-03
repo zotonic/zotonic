@@ -74,8 +74,8 @@ get_req(port, RD) ->
         true -> cowmachine_req:port(RD);
         false ->
             case cowmachine_req:is_ssl(RD) of
-                true -> z_config:get(port);
-                false -> z_config:get(ssl_port)
+                true -> z_config:get(ssl_port);
+                false -> z_config:get(port)
             end
     end;
 get_req(raw_path, RD) -> cowmachine_req:raw_path(RD);

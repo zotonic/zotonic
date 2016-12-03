@@ -31,18 +31,20 @@ on ports 80 and/or 443.
 
 The port configurations would be:
 
-+---------------+------------+-----------------+------+------------+-----------+
-|Method         |listen_port | ssl_listen_port | port | ssl_port   | listen_ip |
-+===============+============+=================+======+============+===========+
-|authbind       |80          | 443             | 80   | 443        | any       |
-+---------------+------------+-----------------+------+------------+-----------+
-|setcap         |80          | 443             | 80   | 443        | any       |
-+---------------+------------+-----------------+------+------------+-----------+
-|iptables       |8000        | 8443            | 80   | 443        | 127.0.0.1 |
-+---------------+------------+-----------------+------+------------+-----------+
-|http only      |8000        | none            | 80   | none       | 127.0.0.1 |
-+---------------+------------+-----------------+------+------------+-----------+
++---------------+------------+-----------------+------+------------+-----------+-----------------+
+|Method         |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_whitelist |
++===============+============+=================+======+============+===========+=================+
+|authbind       |80          | 443             | 80   | 443        | any       | none            |
++---------------+------------+-----------------+------+------------+-----------+-----------------+
+|setcap         |80          | 443             | 80   | 443        | any       | none            |
++---------------+------------+-----------------+------+------------+-----------+-----------------+
+|iptables       |8000        | 8443            | 80   | 443        | 127.0.0.1 | none            |
++---------------+------------+-----------------+------+------------+-----------+-----------------+
+|http only      |8000        | none            | 80   | none       | 127.0.0.1 | none            |
++---------------+------------+-----------------+------+------------+-----------+-----------------+
 
+For *Network Address Translation* (NAT), see the next section. The *proxy_whitelist* is explained
+in the section about proxies below.
 
 In the case of *iptables* we restrict Zotonic to listen on the local 127.0.0.1 address.
 This to prevent that people can connect on port 8000 from their browsers.
@@ -52,15 +54,29 @@ to use Let’s Encrypt certificates for SSL (as they require the server to run o
 http and https ports).
 
 
-Server behind a proxy like haproxy or nginx
+Server accessed via NAT
+.......................
+
+With *Network Address Translation* (NAT) the traffic is routed straight to the server using port
+mappings. This is typical for a situation where Zotonic runs on a local server behind a modem.
+
++---------------+------------+-----------------+------+------------+-----------+-----------------+
+|Proxy method   |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_whitelist |
++===============+============+=================+======+============+===========+=================+
+|NAT (eg. modem)|8000        | 8443            | 80   | 443        | any       | none            |
++---------------+------------+-----------------+------+------------+-----------+-----------------+
+
+The *proxy_whitelist* is explained in the section about proxies below.
+
+
+Server behind a proxy line nginx or haproxy
 ...........................................
 
-The proxy could be *haproxy* or *nginx*. In all cases the proxy will terminate the https
-connection and handle all certificates.
+A proxy could be *haproxy* or *nginx*. The proxy terminates the https connection and handles
+the SSL certificates.
 
-Typically the proxy will connect to the default ports 8000 and 8443 on the Zotonic server.
-The proxy itself could be running on the local server or another server in the local area network.
-
+Typically the proxy connects to the default ports 8000 and 8443 on the Zotonic server.
+The proxy itself could be running on the local server or another server.
 
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
 |Proxy method   |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_whitelist |
