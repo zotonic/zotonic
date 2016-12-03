@@ -1,3 +1,5 @@
+.. highlight:: erlang
+
 .. _ref-port-ssl-configuration:
 
 Port configurations can be tricky, especially in combination with SSL.
@@ -10,7 +12,7 @@ Port configurations
 There are basically two sets of port configurations:
 
  1. The ports Zotonic *listens* on
- 2. The ports an *outside* user *connects to*
+ 2. The ports an *outside* visitor *connects to*
 
 The listen ports are configured with ``listen_port`` and ``ssl_listen_port``.
 
@@ -18,9 +20,6 @@ The outside ports are configured with ``port`` and ``ssl_port``. They default to
 the *listen_* variations if not defined.
 
 Below are examples how to configure these.
-
-Note that usually you need special permissions to listen on ports below 1024.
-See :ref:`guide-deployment-privilegedports` for 
 
 
 Server direct on the Internet
@@ -88,9 +87,9 @@ The proxy itself could be running on the local server or another server.
 |proxy on WAN   |8000        | none            | 80   | 443        | any       | *see below*     |
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
 
-The proxy adds the hostname of the site, the address of the visitor and the protocol information
-(http or https) to a HTTP header. Zotonic reads this header to know which site to serve and if the
-visitor was using https or not.
+The proxy adds the hostname, address of the visitor and protocol information (http or https) to a
+HTTP header. Zotonic reads this header to know which site to serve and if the visitor was using https
+or not.
 
 Everybody could add this header and then connect directly to the Zotonic server, which can then make
 wrong assumptions about the IP address of the visitor and if the visitor is on a secure connection.
@@ -178,12 +177,10 @@ Secure cookies
 
 If the ``ssl_only`` option is set then all session cookies will be set to *secure*.
 
-This can also be enforced for non ssl-only sites, which will force a new session
-when switching between http and https. This is useful for http sites with a secure
-admin part that is https only.
-
-Set the site configuration ``site.secure_cookie`` to ``true`` to force secure session
-on https connections.
+Secure cookies can also be enforced for non ssl-only sites. Setting the option
+``site.secure_cookie``  to ``true`` will force a new session when switching between
+protocols between http and https. This is useful for http sites with a secure admin part
+that is https only.
 
 
 Erlang SSL Configuration
@@ -211,19 +208,20 @@ For more information on configuration options, please see `Erlang SSL App`_.
 Adding your own SSL options or certificates
 -------------------------------------------
 
-When you want to implement your own certificate handling you have to implement a 
-notification handler which returns the certificates to the underlying 
-HTTPS server. This can be needed when you have a site with different aliases, or when 
-you can want to implement automated certificate handling for a specific certificate 
-authority.
+If you want to implement your own certificate handling you have to add a 
+notification observer which returns the certificates to the underlying 
+HTTPS server. This can be needed if you have a site with special hostname aliases, or if 
+you want to implement automated certificate handling for a specific certificate authority.
+
+The notification use by the SNI (Server Name Indication) handler is:
 
 ``ssl_options{server_name=ServerName}``
-  Sent back the certificate, key or other ssl options. ``ServerName`` is a string with the
-  name of the server found in the SSL handshake. Expects a proplist with Erlang 
-  ``ssl:ssl_option()``. This proplist will override the default ssl options for this 
+  Return the certificate, key or other ssl options. ``ServerName`` is a string (list) with the
+  name of the server from the SSL handshake. You shoudl return a proplist with Erlang 
+  ``ssl:ssl_option()`` terms. The proplist will override the default ssl options for this 
   connection. For more information about the possible properties see `Erlang SSL`_. 
   If ``undefined`` is returned the SSL handshake will try the next SSL module. If all
-  modules return ``undefined`` then self-signed certificates will be used.
+  modules return ``undefined`` then a self-signed certificate will be used.
 
 
 
