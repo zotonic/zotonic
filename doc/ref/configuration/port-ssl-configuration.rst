@@ -2,12 +2,12 @@
 
 .. _ref-port-ssl-configuration:
 
+Port configurations
+-------------------
+
 Port configurations can be tricky, especially in combination with SSL.
 Here we explain all steps to come to a correctly configured installation
 with working SSL connectivity.
-
-Port configurations
--------------------
 
 There are basically two sets of port configurations:
 
