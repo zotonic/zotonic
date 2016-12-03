@@ -23,7 +23,7 @@ Below are examples how to configure these.
 
 
 Server direct on the Internet
-.............................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here you can use the methods described in :ref:`guide-deployment-privilegedports` to get your server
 on ports 80 and/or 443.
@@ -52,9 +52,8 @@ Alternatively you can run your server on the *outside* port 8000, though then it
 to use Let’s Encrypt certificates for SSL (as they require the server to run on the default
 http and https ports).
 
-
 Server accessed via NAT
-.......................
+^^^^^^^^^^^^^^^^^^^^^^^
 
 With *Network Address Translation* (NAT) the traffic is routed straight to the server using port
 mappings. This is typical for a situation where Zotonic runs on a local server behind a modem.
@@ -67,9 +66,8 @@ mappings. This is typical for a situation where Zotonic runs on a local server b
 
 The *proxy_whitelist* is explained in the section about proxies below.
 
-
-Server behind a proxy line nginx or haproxy
-...........................................
+Server behind a proxy like Nginx or HAProxy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A proxy could be *haproxy* or *nginx*. The proxy terminates the https connection and handles
 the SSL certificates.
@@ -107,19 +105,18 @@ This whitelist is specified in ``proxy_whitelist`` and can have the following va
 
 The ``local`` check is hardcoded and very fast.
 
-
 SSL certificates
-----------------
+^^^^^^^^^^^^^^^^
 
 After the server’s listen ports are correctly configured then the SSL connection can be tested.
 
-Per default Zotonic will generate a self-signed certificate for all sites. Instead of the self-signed 
+Per default Zotonic will generate a self-signed certificate for all sites. Instead of the self-signed
 certificate a real certificate can be used. Check for these the modules :ref:`mod_ssl_letsencrypt` and
 :ref:`mod_ssl_ca`
 
 
 HTTPS and security
-------------------
+^^^^^^^^^^^^^^^^^^
 
 It is possible to force use of https only, all incoming http connection will then redirect to HTTPS
 before they are handled further.
@@ -133,7 +130,7 @@ This will also force all session cookies to be *secure*, i.e. HTTPS-only.
 
 
 Per site configuration
-......................
+""""""""""""""""""""""
 
 Per site the configuration can be changed using the site’s configuration file or config table.
 
@@ -142,7 +139,7 @@ Remove the site configuration key to use the Zotonic configuration.
 
 
 Per dispatch configuration
-..........................
+""""""""""""""""""""""""""
 
 If ``ssl_only`` is not enforced then it is possible to specify per :ref:`dispatch rule <guide-dispatch>`
 if the request should be using https, http, or any of both.
@@ -173,7 +170,7 @@ will be redirected to https.
 
 
 Secure cookies
-..............
+""""""""""""""
 
 If the ``ssl_only`` option is set then all session cookies will be set to *secure*.
 
@@ -184,19 +181,19 @@ that is https only.
 
 
 Erlang SSL Configuration
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-The erlang ssl application is configured in the :file:`~/zotonic/erlang.config`. If this file is 
-missing then it can be copied from :file:`priv/erlang.config.in`.  It contains a couple of 
-important settings which we recommend you to change. The reason for this is that the default 
-settings Erlang uses are unsuitable for web servers. The most important settings are listed 
+The erlang ssl application is configured in the :file:`~/zotonic/erlang.config`. If this file is
+missing then it can be copied from :file:`priv/erlang.config.in`.  It contains a couple of
+important settings which we recommend you to change. The reason for this is that the default
+settings Erlang uses are unsuitable for web servers. The most important settings are listed
 below.
 
 ``session_lifetime``
-  Sets the maximum lifetime of session data in seconds. 
+  Sets the maximum lifetime of session data in seconds.
 
 ``session_cache_server_max``
-  Sets the maximum number of client sessions cached by the server. 
+  Sets the maximum number of client sessions cached by the server.
 
 For more information on configuration options, please see `Erlang SSL App`_.
 
@@ -206,24 +203,22 @@ For more information on configuration options, please see `Erlang SSL App`_.
 
 
 Adding your own SSL options or certificates
--------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you want to implement your own certificate handling you have to add a 
-notification observer which returns the certificates to the underlying 
-HTTPS server. This can be needed if you have a site with special hostname aliases, or if 
+If you want to implement your own certificate handling you have to add a
+notification observer which returns the certificates to the underlying
+HTTPS server. This can be needed if you have a site with special hostname aliases, or if
 you want to implement automated certificate handling for a specific certificate authority.
 
 The notification use by the SNI (Server Name Indication) handler is:
 
 ``ssl_options{server_name=ServerName}``
   Return the certificate, key or other ssl options. ``ServerName`` is a string (list) with the
-  name of the server from the SSL handshake. You shoudl return a proplist with Erlang 
-  ``ssl:ssl_option()`` terms. The proplist will override the default ssl options for this 
-  connection. For more information about the possible properties see `Erlang SSL`_. 
+  name of the server from the SSL handshake. You shoudl return a proplist with Erlang
+  ``ssl:ssl_option()`` terms. The proplist will override the default ssl options for this
+  connection. For more information about the possible properties see `Erlang SSL`_.
   If ``undefined`` is returned the SSL handshake will try the next SSL module. If all
   modules return ``undefined`` then a self-signed certificate will be used.
 
 
-
 .. seealso:: :ref:`mod_ssl_letsencrypt`, :ref:`mod_ssl_ca`, :ref:`guide-deployment-privilegedports`
-

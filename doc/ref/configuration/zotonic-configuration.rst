@@ -1,14 +1,14 @@
 .. _guide-configuration:
 
 Global configuration
-====================
+--------------------
 
 This section describes the location and contents of Zotonic’s global
 configuration files ``erlang.config`` and ``zotonic.config``. There’s also
 :ref:`site-specific configuration <ref-site-configuration>`.
 
 Config file locations
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 Zotonic depends on two global config files, called ``zotonic.config``
 and ``erlang.config``. On startup, Zotonic looks in the following
@@ -47,7 +47,7 @@ the global config files that it is using:
 
 
 The ``zotonic.config`` file
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When installed for the first time, the ``zotonic.config`` file is well
 annoted with comments about what each setting does. When in doubt,
@@ -55,9 +55,9 @@ consult the stock ``priv/zotonic.config.in`` file for explanation about all
 config settings.
 
 ``user_sites_dir``, ``user_modules_dir`` and ``user_ebin_dir``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Zotonic keeps sites and modules that are `external` to Zotonic, e.g. 
+Zotonic keeps sites and modules that are `external` to Zotonic, e.g.
 installed by website developers, outside the Zotonic source tree.
 
 The directory under which Zotonic expects to find all sites is called
@@ -100,7 +100,7 @@ same way.
 .. _erlang-config:
 
 The `erlang.config` file
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``erlang.config`` file contains application environment variables
 for the Erlang applications that Zotonic depends on. Here you can
