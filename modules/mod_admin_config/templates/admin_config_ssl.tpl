@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ SSL/https Certificates _}{% endblock %}
+{% block title %}{_ SSL Certificates _}{% endblock %}
 
 {% block content %}
 
