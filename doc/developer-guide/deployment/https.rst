@@ -1,3 +1,5 @@
+.. _https-support:
+
 HTTPS support
 =============
 

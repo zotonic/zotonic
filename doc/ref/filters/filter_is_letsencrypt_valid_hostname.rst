@@ -6,7 +6,7 @@ Test if a hostname can be used for a Let’s Encrypt certificate.
 Criteria are:
 
  1. Does resolve using DNS
- 2. The resolved address in not a LAN address
+ 2. The resolved address is not a LAN address
  3. The address is reachable
  4. And the current site is listening for the hostname on that address
 
