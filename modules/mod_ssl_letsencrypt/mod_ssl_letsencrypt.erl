@@ -31,7 +31,6 @@
 
 -export([
     observe_ssl_options/2,
-    observe_admin_menu/3,
     observe_tick_24h/2,
     event/2,
 
@@ -55,7 +54,6 @@
 ]).
 
 -include_lib("zotonic.hrl").
--include_lib("modules/mod_admin/include/admin_menu.hrl").
 -include_lib("public_key/include/public_key.hrl").
 
 -define(SNI_CACHE_TIME, 60).
@@ -87,16 +85,6 @@
 }).
 
 
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id=admin_ssl_letsencrypt,
-                parent=admin_modules,
-                label=?__(<<"SSL Let’s Encrypt Certificate"/utf8>>, Context),
-                url={admin_ssl_letsencrypt},
-                visiblecheck={acl, use, mod_admin_config}}
-
-     |Acc].
-
 %% @doc Return the certificates of this site.
 observe_ssl_options(#ssl_options{server_name=_NormalizedHostnameBin}, Context) ->
     z_depcache:memo(
@@ -111,7 +99,7 @@ observe_ssl_options(#ssl_options{server_name=_NormalizedHostnameBin}, Context) -
                     undefined
             end
         end, 
-        sni_ssl_ca, 
+        sni_ssl_letsencrypt, 
         ?SNI_CACHE_TIME,
         Context).
 

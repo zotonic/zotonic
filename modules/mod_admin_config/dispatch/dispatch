@@ -1,5 +1,6 @@
 %% -*- mode: erlang -*-
 %% Dispatch rule for overview of configuration settings.
 [
- {admin_config, ["admin", "config"], controller_admin_config, [{ssl,true}]}
+ {admin_config,     ["admin", "config"], controller_admin_config, [{ssl,true}]},
+ {admin_config_ssl, ["admin", "ssl"],    controller_admin,        [{template, "admin_config_ssl.tpl"}, {ssl,true}]}
 ].

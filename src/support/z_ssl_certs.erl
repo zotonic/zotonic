@@ -30,6 +30,7 @@
 
     ciphers/0,
 
+    sni_self_signed/1,
     ensure_self_signed/2,
     decode_cert/1
 ]).
@@ -70,6 +71,10 @@ sni_fun(Hostname) ->
                     sni_self_signed(Site, Context)
             end
     end.
+
+-spec sni_self_signed(z:context()) -> list(ssl:ssl_option()) | undefined.
+sni_self_signed(Context) ->
+    sni_self_signed(z_context:site(Context), Context).
 
 sni_self_signed(Site, Context) ->
     {ok, SSLOptions} = get_self_signed_files(Site),
@@ -261,7 +266,7 @@ ciphers() ->
     ssl:cipher_suites().
 
 
-%% @doc Decode a certificate, return common_name, not_after etc.
+%% @doc Decode a certificate file, return common_name, not_after etc.
 -spec decode_cert(filename:filename()) -> list().
 decode_cert(CertFile) ->
     {ok, CertData} = file:read_file(CertFile),

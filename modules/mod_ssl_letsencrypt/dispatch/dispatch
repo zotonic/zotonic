@@ -1,9 +1,4 @@
 [
     {letsencrypt_challenge, [".well-known", "acme-challenge", token], controller_letsencrypt_challenge, [{ssl,false}]},
-    {letsencrypt_ping, [".zotonic", "letsencrypt-self-ping"], controller_letsencrypt_ping, [{ssl,false}]},
-
-    {admin_ssl_letsencrypt, 
-            ["admin", "ssl-letsencrypt"], 
-            controller_admin, 
-            [{template, "admin_ssl_letsencrypt.tpl"}, {acl_module, mod_admin_config}, {ssl, true}]}
+    {letsencrypt_ping, [".zotonic", "letsencrypt-self-ping"], controller_letsencrypt_ping, [{ssl,false}]}
 ].

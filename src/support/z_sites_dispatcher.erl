@@ -134,25 +134,20 @@ execute(Req, Env) ->
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
             handle_404(cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
         {redirect, Site} ->
-            % trace(DispReq#dispatch.tracer_pid, undefined, redirect, [{location, Uri},{permanent,true}]),
             Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
             redirect(Uri, true, Req);
         {redirect, Site, NewPathOrURI, IsPermanent} ->
-            % trace(DispReq#dispatch.tracer_pid, undefined, redirect, [{location, AbsURI},{permanent,IsPermanent}]),
             Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
             redirect(Uri, IsPermanent, Req);
         {stop_request, RespCode} ->
-            {stop, cowboy_req:reply(RespCode, Req)}
-
-%%        Not yet implemented as there's no protocol property in the dispatch
-%%        rule props from dispatch_match (reported by Dialyzer)
-%%        {redirect_protocol, Protocol, Host, IsPermanent} ->
-%%            Uri = iolist_to_binary([
-%%                        z_convert:to_binary(Protocol),
-%%                        <<"://">>,
-%%                        Host,
-%%                        raw_path(Req)]),
-%%            redirect(Uri, IsPermanent, Req)
+            {stop, cowboy_req:reply(RespCode, Req)};
+        {redirect_protocol, Protocol, Host, IsPermanent} ->
+            Uri = iolist_to_binary([
+                        z_convert:to_binary(Protocol),
+                        <<"://">>,
+                        Host,
+                        raw_path(Req)]),
+            redirect(Uri, IsPermanent, Req)
     end.
 
 %% @doc Match the host and path to a dispatch rule.
