@@ -13,7 +13,7 @@ RUN sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.
 # includes those packages.
 ENV BUILD_APKS="ca-certificates wget curl make gcc musl-dev g++ git"
 RUN apk add --no-cache --virtual build-deps $BUILD_APKS \
-    && apk add --no-cache bash bsd-compat-headers file gettext imagemagick \
+    && apk add --no-cache bash bsd-compat-headers file gettext imagemagick openssl \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ dumb-init \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ gosu \
     && DEBUG=1 make \
