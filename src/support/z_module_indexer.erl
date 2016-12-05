@@ -38,20 +38,24 @@
     all/2
 ]).
 
+-include("zotonic.hrl").
+
+-type key_type() :: template  | lib | filter | scomp | action | validator | model.
+
 -record(state, {
-    context,
-    scomps=[],
-    actions=[],
-    validators=[],
-    models=[],
-    templates=[],
-    lib=[],
-    services=[],
-    scanner_pid=undefined
+    context :: z:context(),
+    scomps = [],
+    actions = [],
+    validators = [],
+    models = [],
+    templates = [],
+    lib = [],
+    services = [],
+    scanner_pid = undefined :: pid() | undefined
 }).
 -record(mfile, {name, filepath, module, erlang_module, prio}).
 
--include("zotonic.hrl").
+-export_type([ key_type/0 ]).
 
 -define(TIMEOUT, infinity).
 
@@ -67,8 +71,9 @@ start_link(SiteProps) ->
 
 
 %% @doc Reindex the list of all scomps, etc for the site in the context.
-reindex(Context) ->
-    gen_server:cast(Context#context.module_indexer, {module_ready, Context}).
+-spec reindex(z:context()) -> ok.
+reindex(#context{ module_indexer = ModuleIndexer } = Context) ->
+    gen_server:cast(ModuleIndexer, {module_ready, Context}).
 
 index_ref(#context{} = Context) ->
     z_depcache:get(module_index_ref, Context).
@@ -76,8 +81,7 @@ index_ref(#context{} = Context) ->
 
 %% @doc Find all .po files in all modules and the active site.
 %% This is an active scan, not designed to be fast.
-%% @spec translations(#context{}) -> [ {module, {ModuleDirectory, [{Language,File}]}} ]
--spec translations(#context{}) -> [ {Module :: atom(), [{Language :: atom(), filelib:filename()}]}].
+-spec translations(z:context()) -> [ {Module :: atom(), [{Language :: atom(), filelib:filename()}]}].
 translations(Context) ->
     translations1(Context).
 
@@ -441,14 +445,14 @@ flush() ->
 %% @doc Re-index the ets table holding all module indices
 reindex_ets_lookup(State) ->
     Site = z_context:site(State#state.context),
-    Now = os:timestamp(),
-    templates_to_ets(State#state.templates, Now, Site),
-    to_ets(State#state.lib, lib, Now, Site),
-    to_ets(State#state.scomps, scomp, Now, Site),
-    to_ets(State#state.actions, action, Now, Site),
-    to_ets(State#state.validators, validator, Now, Site),
-    to_ets(State#state.services, service, Now, Site),
-    cleanup_ets(Now, Site).
+    Tag = erlang:unique_integer(),
+    templates_to_ets(State#state.templates, Tag, Site),
+    to_ets(State#state.lib, lib, Tag, Site),
+    to_ets(State#state.scomps, scomp, Tag, Site),
+    to_ets(State#state.actions, action, Tag, Site),
+    to_ets(State#state.validators, validator, Tag, Site),
+    to_ets(State#state.services, service, Tag, Site),
+    cleanup_ets(Tag, Site).
 
 
 %% @doc Re-index all non-templates

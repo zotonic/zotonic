@@ -285,8 +285,9 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                 {ok, Props2}
             catch
                 X:B ->
-                    ?DEBUG({X,B, erlang:get_stacktrace()}),
-                    lager:info("identify of ~p failed - ~p", [CleanedImageFile, CmdOutput]),
+                    StackTrace= erlang:get_stacktrace(),
+                    lager:info("identify of ~p failed - ~p with ~p:~p in ~p", 
+                              [CleanedImageFile, CmdOutput, X, B, StackTrace]),
                     {error, "unknown result from 'identify': '"++CmdOutput++"'"}
             end
     end.

@@ -53,8 +53,11 @@
 
 -include_lib("zotonic.hrl").
 
+-type dispatch_rule() :: {atom(), list(binary()), list()}.
+-type hostname() :: binary() | string().
+
 -record(state, {
-    rules = [],
+    rules :: list(dispatch_rule()),
     fallback_site = zotonic_status
 }).
 
@@ -82,6 +85,10 @@
                     | {redirect_protocol, http|https, Site :: atom(), IsPermanent :: boolean()}
                     | {stop_request, pos_integer()}.
 
+-export_type([
+    dispatch_rule/0,
+    hostname/0
+]).
 
 %%====================================================================
 %% API
