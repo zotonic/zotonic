@@ -57,8 +57,8 @@
 -type hostname() :: binary() | string().
 
 -record(state, {
-    rules :: list(dispatch_rule()),
-    fallback_site = zotonic_status
+    rules = [] :: list(dispatch_rule()),
+    fallback_site = zotonic_status :: atom()
 }).
 
 -record(dispatch_nomatch, {

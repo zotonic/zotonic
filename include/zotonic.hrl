@@ -138,12 +138,12 @@
 
 %% Used for fetching the site dispatch rules (see also )
 -record(site_dispatch_list, {
-            site          :: atom(),
-            hostname      :: z_sites_dispatcher:hostname(),
-            smtphost      :: z_sites_dispatcher:hostname() | undefined,
-            hostalias     :: list(z_sites_dispatcher:hostname()),
-            redirect      :: boolean(),
-            dispatch_list :: list(z_sites_dispatcher:dispatch_rule())
+            site                       :: atom(),
+            hostname = <<"localhost">> :: z_sites_dispatcher:hostname(),
+            smtphost = undefined       :: z_sites_dispatcher:hostname() | undefined,
+            hostalias = []             :: list(z_sites_dispatcher:hostname()),
+            redirect = false           :: boolean(),
+            dispatch_list = []         :: list(z_sites_dispatcher:dispatch_rule())
         }).
 
 %% For z_supervisor, process definitions.
