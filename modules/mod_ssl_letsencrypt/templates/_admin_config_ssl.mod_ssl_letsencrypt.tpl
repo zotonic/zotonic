@@ -16,14 +16,14 @@
                     {% if m.sysconfig.port /= 80 %}
                         <p class="alert alert-danger">
                             {_ The port for HTTP requests must be 80, it is now _} {{ m.sysconfig.port }}<br/>
-                            {_ You can change this by setting <tt>port</tt> in the zotonic configuration file located in <tt>~/.zotonic/</tt>. _}
+                            {_ You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file. _}
                         </p>
                     {% endif %}
 
                     {% if m.sysconfig.ssl_port /= 443 %}
                         <p class="alert alert-danger">
                             {_ The port for HTTPS requests must be 443, it is now _} {{ m.sysconfig.ssl_port }}<br/>
-                            {_ You can change this by setting <tt>ssl_port</tt> in the zotonic configuration file located in <tt>~/.zotonic/</tt>. _}
+                            {_ You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file. _}
                         </p>
                     {% endif %}
 

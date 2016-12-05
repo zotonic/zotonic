@@ -3,9 +3,10 @@
 HTTPS support
 =============
 
-Zotonic has built-in support for https and certificate handling.
+Zotonic has built-in support for HTTPS and TLS (previously SSL) certificate
+handling.
 
-All sites share a single ssl port using Server Name Indication for 
+All sites share a single TLS port using Server Name Indication for
 virtual hosting and certificate selection.
 
 The following guides are useful:
