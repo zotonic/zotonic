@@ -60,4 +60,4 @@
 %% Easy to use macros for debugging/development
 -define(PRINT(Var), lager:info("DEBUG: ~p:~p - ~p: ~p~n", [?MODULE, ?LINE, ??Var, Var])).
 -define(STACKTRACE, erlang:display(try throw(a) of _ -> a catch _:_ -> erlang:get_stacktrace() end)).
--define(DEBUG(Msg), lager:debug("DEBUG: ~p:~p: ~p~n", [?MODULE, ?LINE, Msg]), Msg).
+-define(DEBUG(Msg), z:debug_msg(?MODULE, ?LINE, Msg)).

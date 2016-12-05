@@ -40,7 +40,9 @@
 
          shell_stopsite/1,
          shell_startsite/1,
-         shell_restartsite/1
+         shell_restartsite/1,
+
+         debug_msg/3
         ]).
 
 -include("zotonic.hrl").
@@ -136,3 +138,8 @@ shell_stopsite(Site) ->
 shell_restartsite(Site) ->
     z_sites_manager:stop(Site),
     shell_startsite(Site).
+
+%% @doc Echo and return a debugging value
+debug_msg(Module, Line, Msg) ->
+    error_logger:info_msg("DEBUG: ~p:~p  ~p~n", [Module, Line, Msg]),
+    Msg.

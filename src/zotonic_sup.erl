@@ -34,6 +34,7 @@
 %% @spec start_link() -> ServerRet
 %% @doc API for starting the supervisor.
 start_link() ->
+    z_config:init_app_env(),
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 %% @spec upgrade(Name, NewSpecs) -> ok

@@ -20,6 +20,8 @@
  {sign_key_simple, <<>>},
  {sign_key, <<>>},
 
+ {ssl_only, true},
+ 
  %% Installed modules, defined here as there is no database connection
  {modules, [
             zotonic_status,
@@ -28,6 +30,7 @@
             mod_bootstrap,
             mod_mqtt,
             mod_l10n,
+            mod_ssl,
             mod_zotonic_status_vcs,
             mod_zotonic_tracer,
             mod_zotonic_statistics,

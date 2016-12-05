@@ -89,6 +89,8 @@ content_types_provided(Context) ->
                 provide_empty();
             controller_atom_feed_search ->
                 provide_empty();
+            controller_letsencrypt_challenge ->
+                provide_text();
             _ ->
                 provide_any()
         end,

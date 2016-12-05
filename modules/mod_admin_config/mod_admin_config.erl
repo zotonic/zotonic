@@ -39,6 +39,11 @@
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
+     #menu_item{id=admin_config_ssl,
+                parent=admin_system,
+                label=?__("SSL Certificates", Context),
+                url={admin_config_ssl},
+                visiblecheck={acl, use, mod_admin_config}},
      #menu_item{id=admin_config,
                 parent=admin_system,
                 label=?__("Config", Context),

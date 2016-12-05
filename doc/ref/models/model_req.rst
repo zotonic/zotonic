@@ -30,7 +30,7 @@ This will show something like::
    {version,{1,1}},
    {peer,<<"127.0.0.1">>},
    {is_ssl,false},
-   {host,<<"test.dev:8000">>},
+   {host,<<"test.dev">>},
    {raw_path,<<"/en/page/1234?foo=bar">>},
    {path,<<"/en/page/1234">>},
    {qs,[{<<"foo">>,<<"bar">>}]},

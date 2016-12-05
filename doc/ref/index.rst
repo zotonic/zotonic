@@ -22,8 +22,7 @@ All the nitty gritty details when the big picture has settled.
    icons
    notifications/index
    installation/requirements
-   configuration/zotonic-configuration
-   configuration/site-configuration
+   configuration/index
    status-site
    cli/index
    transport

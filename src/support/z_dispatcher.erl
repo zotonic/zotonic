@@ -28,24 +28,25 @@
 %% z_dispatch exports
 -export([
     dispatcher_args/0,
-	url_for/2,
-	url_for/3,
-	url_for/4,
-	hostname/1,
-	hostname_port/1,
+    url_for/2,
+    url_for/3,
+    url_for/4,
+    hostname/1,
+    hostname_port/1,
+    hostname_ssl_port/1,
     abs_url/2,
-	dispatchinfo/1,
-	update/1,
-	reload/1,
-	reload/2,
-	drop_port/1
+    dispatchinfo/1,
+    update/1,
+    reload/1,
+    reload/2,
+    drop_port/1
 ]).
 
 -include_lib("zotonic.hrl").
 
 -record(state, {dispatchlist=undefined, lookup=undefined, context,
-                site, hostname, hostname_port, smtphost, hostalias,
-				redirect=true}).
+                site, hostname, hostname_port, hostname_ssl_port, smtphost, hostalias,
+                redirect=true}).
 
 -record(dispatch_url, {url, dispatch_options}).
 
@@ -116,6 +117,16 @@ hostname(#context{dispatcher=Dispatcher}) ->
 hostname_port(#context{dispatcher=Dispatcher}) ->
     try
         gen_server:call(Dispatcher, 'hostname_port', infinity)
+    catch
+        exit:{noproc, {gen_server, call, _}} ->
+            undefined
+    end.
+
+%% @doc Fetch the preferred hostname for SSL, including port, for this site
+-spec hostname_ssl_port(#context{}) -> iolist() | undefined.
+hostname_ssl_port(#context{dispatcher=Dispatcher}) ->
+    try
+        gen_server:call(Dispatcher, 'hostname_ssl_port', infinity)
     catch
         exit:{noproc, {gen_server, call, _}} ->
             undefined
@@ -222,7 +233,7 @@ init(SiteProps) ->
         {module, ?MODULE}
       ]),
     {hostname, Hostname0} = proplists:lookup(hostname, SiteProps),
-    Hostname = z_convert:to_binary(Hostname0),
+    Hostname = drop_port(z_convert:to_binary(Hostname0)),
     Smtphost = z_convert:to_binary(proplists:get_value(smtphost, SiteProps)),
     HostAlias = proplists:get_value(hostalias, SiteProps, []),
     Context = z_context:new(Site),
@@ -232,9 +243,10 @@ init(SiteProps) ->
                 lookup=dict:new(),
                 context=Context,
                 site=Site,
-				smtphost=drop_port(Smtphost),
-                hostname=drop_port(Hostname),
-                hostname_port=Hostname,
+                smtphost=drop_port(Smtphost),
+                hostname=Hostname,
+                hostname_port=add_port(Hostname, http, z_config:get(port)),
+                hostname_ssl_port=add_port(Hostname, https, z_config:get(ssl_port)),
                 hostalias=[ drop_port(z_convert:to_binary(Alias)) || Alias <- HostAlias ],
                 redirect=z_convert:to_bool(proplists:get_value(redirect, SiteProps, true))
     },
@@ -250,6 +262,10 @@ drop_port(none) ->
 drop_port(Hostname) when is_binary(Hostname) ->
     hd(binary:split(Hostname, <<":">>)).
 
+add_port(Hostname, http, 80) -> Hostname;
+add_port(Hostname, https, 443) -> Hostname;
+add_port(Hostname, _, Port) ->
+    iolist_to_binary([Hostname, $:, integer_to_list(Port) ]). 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -269,6 +285,10 @@ handle_call('hostname', _From, State) ->
 %% @doc Return the preferred hostname, and port, for the site
 handle_call('hostname_port', _From, State) ->
     {reply, State#state.hostname_port, State};
+
+%% @doc Return the preferred hostname for ssl, and port, for the site
+handle_call('hostname_ssl_port', _From, State) ->
+    {reply, State#state.hostname_ssl_port, State};
 
 %% @doc Return the dispatchinfo for the site  {site, hostname, smtphost, hostaliases, redirect, dispatchlist}
 handle_call('dispatchinfo', _From, State) ->

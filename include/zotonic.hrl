@@ -18,77 +18,76 @@
 
 %% The release information
 -include("zotonic_release.hrl").
--include("zotonic_notifications.hrl").
--include("zotonic_events.hrl").
--include("zotonic_log.hrl").
 
 %% @doc The request context, session information and other
 -record(context, {
         %% Cowboy request data (only set when this context is used because of a request)
-        req=undefined :: cowboy_req:req() | undefined,
+        req = undefined :: cowboy_req:req() | undefined,
 
         %% The site
-        site=default :: atom(),
+        site = default :: atom(),
 
         %% The controller responsible for handling this request
-        controller_module=undefined :: atom(),
+        controller_module = undefined :: atom() | undefined,
 
         %% The page and session processes associated with the current request
-        session_pid=undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
-        session_id=undefined :: binary() | undefined,
-        page_pid=undefined :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
-        page_id=undefined :: binary() | undefined,
+        session_pid = undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
+        session_id = undefined  :: binary() | undefined,
+        page_pid = undefined    :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
+        page_id = undefined     :: binary() | undefined,
 
         %% Servers and supervisors for the site
-        depcache,
-        notifier,
-        session_manager,
-        dispatcher,
-        template_server,
-        scomp_server,
-        dropbox_server,
-        pivot_server,
-        module_indexer,
-        translation_table,
+        depcache            :: pid() | atom(),
+        notifier            :: pid() | atom(),
+        session_manager     :: pid() | atom(),
+        dispatcher          :: pid() | atom(),
+        template_server     :: pid() | atom(),
+        scomp_server        :: pid() | atom(),
+        dropbox_server      :: pid() | atom(),
+        pivot_server        :: pid() | atom(),
+        module_indexer      :: pid() | atom(),
+        translation_table   :: pid() | atom(),
 
         %% The database connection used for (nested) transactions, see z_db
-        dbc=undefined :: pid() | undefined,
+        dbc = undefined     :: pid() | undefined,
 
         %% The pid of the database pool of this site and the db driver in use (usually z_db_pgsql)
-        db=undefined :: {atom(), atom()} | undefined,
+        db = undefined      :: {atom(), atom()} | undefined,
 
         %% The language selected, used by z_trans and others
         %% The first language in the list is the selected language, the tail are the fallback languages
-        language=[en] :: [atom()],
+        language = [en]     :: [atom()],
 
         %% The timezone for this request
-        tz= <<"UTC">> :: binary(),
+        tz = <<"UTC">>      :: binary(),
 
         %% The current logged on person, derived from the session and visitor
-        acl=undefined,      %% opaque placeholder managed by the z_acl module
-        user_id=undefined :: integer() | undefined,
+        acl = undefined     :: term() | undefined,      %% opaque placeholder managed by the z_acl module
+        user_id = undefined :: integer() | undefined,
 
         %% The state below is the render state, can be cached and/or merged
 
         %% State of the current rendered template/scomp/page
-        updates=[],
-        actions=[],
-        content_scripts=[],
-        scripts=[],
-        wire=[],
-        validators=[],
+        updates = []         :: list(),
+        actions = []         :: list(),
+        content_scripts = [] :: list(),
+        scripts = []         :: list(),
+        wire = []            :: list(),
+        validators = []      :: list(),
 
-        %% iolist with the accumulated html, xml or whatever output
-        render=[],
+        %% nested list with the accumulated html, xml or whatever output (mixed values)
+        render = []          :: list(),
 
         %% Property list with context specific metadata
-        props=[]
+        props = []           :: proplists:proplist()
     }).
 
 
 -define(SITE(Context), Context#context.site).
 -define(DBC(Context), Context#context.dbc).
 
+%% A date in the far future which will never happen.
+%% This date is used as the "no end date" value.
 -define(ST_JUTTEMIS, {{9999,8,17}, {12,0,0}}).
 
 %% Record used for parsing multipart body (see z_parse_multipart)
@@ -137,6 +136,16 @@
 -record(search_sql, {select, from, where="", order="", group_by="", limit, tables=[], args=[],
                      cats=[], cats_exclude=[], cats_exact=[], run_func, extra=[], assoc=false}).
 
+%% Used for fetching the site dispatch rules (see also )
+-record(site_dispatch_list, {
+            site                       :: atom(),
+            hostname = <<"localhost">> :: z_sites_dispatcher:hostname(),
+            smtphost = undefined       :: z_sites_dispatcher:hostname() | undefined,
+            hostalias = []             :: list(z_sites_dispatcher:hostname()),
+            redirect = false           :: boolean(),
+            dispatch_list = []         :: list(z_sites_dispatcher:dispatch_rule())
+        }).
+
 %% For z_supervisor, process definitions.
 -record(child_spec, {name, mfa, status, pid, crashes=5, period=60,
                      period_retry=600, period_retries=10, eternal_retry=7200,
@@ -144,8 +153,18 @@
 
 
 %% Used for storing templates/scomps etc. in the lookup ets table
--record(module_index_key, {site, type, name}).
--record(module_index, {key, filepath, module, erlang_module, tag}).
+-record(module_index_key, {
+        site :: atom(),
+        type :: z_module_indexer:key_type(),
+        name :: binary()
+    }).
+-record(module_index, {
+        key           :: #module_index_key{},
+        filepath      :: filename:filename(),
+        module        :: atom() | undefined,
+        erlang_module :: atom() | undefined,
+        tag           :: integer()
+    }).
 
 %% Name of the global module index table
 -define(MODULE_INDEX, 'zotonic$module_index').
@@ -245,4 +264,8 @@
 %% Wrapper macro to put Erlang terms in a bytea database column.
 %% Extraction is automatic, based on a magic marker prefixed to the serialized term.
 -define(DB_PROPS(N), {term, N}).
+
+-include("zotonic_notifications.hrl").
+-include("zotonic_events.hrl").
+-include("zotonic_log.hrl").
 

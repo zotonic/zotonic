@@ -1,13 +1,13 @@
 .. _ref-site-configuration:
 
 Site configuration
-==================
+------------------
 
 This chapter describes the configuration options for your sites. There’s also
 :ref:`global configuration <guide-configuration>`.
 
 Site config locations
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 Configuration for sites is stored:
 
@@ -21,7 +21,7 @@ and ``config.d/some-file``, the value from ``some-file`` will be used. The files
 under ``config.d/`` are read in alphabetical order.
 
 Parameters
-----------
+^^^^^^^^^^
 
 .. important::
 
@@ -29,7 +29,7 @@ Parameters
     :ref:`restart the site <restart-site>` for the change to take effect.
 
 admin_password
-^^^^^^^^^^^^^^
+""""""""""""""
 
 The password for the admin user::
 
@@ -38,36 +38,36 @@ The password for the admin user::
 .. _ref-site-configuration-database:
 
 dbhost
-^^^^^^
+""""""
 
 Database host that the site connects to. Example::
 
     {dbhost, "127.0.0.1"},
 
 dbport
-^^^^^^
+""""""
 
 Port of the database server. Example::
 
     {dbport, 5432},
 
 dbuser
-^^^^^^
+""""""
 
 Database user.
 
 dbpassword
-^^^^^^^^^^
+""""""""""
 
 Database password.
 
 dbdatabase
-^^^^^^^^^^
+""""""""""
 
 Database name.
 
 dbschema
-^^^^^^^^
+""""""""
 
 PostgreSQL Database schema. Defaults to ``public``. Example::
 
@@ -88,7 +88,7 @@ to create any schema other than “public” first:
 And restart Zotonic.
 
 depcache_memory_max
-^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""
 
 The maximum amount of memory a site may take (in MB). The depcache caches
 various results of function calls and database queries in memory. Example::
@@ -97,20 +97,18 @@ various results of function calls and database queries in memory. Example::
 
 
 hostname
-^^^^^^^^
+""""""""
 
 The hostname and port part of the site URL. This is used to determine to which
 site an incoming request should be routed. Example::
 
-    {hostname, "127.0.0.1:8000"},
-
-If you run Zotonic on port 80, you can leave out the port number.
+    {hostname, "127.0.0.1"},
 
 Note that the hostname does *not* specify on which port Zotonic will listen;
-this is :ref:`configured globally <configuration-listen_port>`.
+this is :ref:`configured globally <ref-port-ssl-configuration>`.
 
 hostalias
-^^^^^^^^^
+"""""""""
 
 A list of alias hostnames for the site. By default, Zotonic redirects these
 to ``hostname`` (see ``redirect``). Example::
@@ -125,7 +123,7 @@ to ``hostname`` (see ``redirect``). Example::
 .. _site-configuration-protocol:
 
 redirect
-^^^^^^^^
+""""""""
 
 Whether or not to redirect the host-aliases (listed by the ``hostalias``
 directives) to the main hostname. Defaults to ``true``, to prevent
@@ -134,17 +132,8 @@ single URL only::
 
     {redirect, true},
 
-protocol
-^^^^^^^^
-
-This is useful for when the Zotonic is running behind a proxy that terminates
-SSL (such as HAProxy). Setting this option to “https” ensures that redirect
-locations get the HTTPS protocol. Example::
-
-    {protocol, "https"},
-
 skeleton
-^^^^^^^^
+""""""""
 
 Set by the ``zotonic addsite`` command, this settings tells Zotonic
 which skeleton site to use. Example::
@@ -152,7 +141,7 @@ which skeleton site to use. Example::
     {skeleton, blog},
 
 install_menu
-^^^^^^^^^^^^
+""""""""""""
 
 Creates the initial main menu when installing :ref:`mod_menu`. A menu item
 is an Erlang tuple with a resource name and list of child menu items (if any):
@@ -168,7 +157,7 @@ Example::
 .. _site-configuration-modules:
 
 install_modules
-^^^^^^^^^^^^^^^
+"""""""""""""""
 
 List of all modules that are :ref:`activated <activating-modules>` when the
 site is started. This overrides the default list of modules installed by the
@@ -187,7 +176,8 @@ To inherit the list of modules from a skeleton, add a
 skeleton as well.
 
 ip_whitelist
-^^^^^^^^^^^^
+""""""""""""
+
 List of TCP/IP addresses and their netmasks. The default admin user password
 (“admin”) will only be accepted for an IP in thie whitelist. This protects
 development systems that are exposed to the internet. This can also be
@@ -196,12 +186,12 @@ configured :ref:`globally <guide-configuration>`. Default::
     {ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8"}
 
 smtphost
-^^^^^^^^
+""""""""
 
 Hostname you want e-mail messages to appear from. See :ref:`guide-email`.
 
 websockethost
-^^^^^^^^^^^^^
+"""""""""""""
 
 The hostname that will be used for websocket requests. This hostname will be
 used in the browser for setting up the websocket connection. It can be used to
@@ -210,13 +200,13 @@ configure a different port number for the websocket connection. For example::
     {websockethost, "example.com:443"},
 
 cookie_domain
-^^^^^^^^^^^^^
+"""""""""""""
 
 The domain the Zotonic session-id and page-id cookies will be set on. Defaults
 to the main hostname.
 
 installer
-^^^^^^^^^
+"""""""""
 
 Override the default zotonic installer (``z_installer``). ``<module>`` should
 make sure that the database, if used, is setup properly along with any
@@ -228,12 +218,12 @@ performs those operations. Example::
     {installer, your_installer_erlang_module},
 
 service_api_cors
-^^^^^^^^^^^^^^^^
+""""""""""""""""
 
 See :ref:`guide-services-cors`.
 
 Setting module-specific config values in the site config
---------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is also possible to add :ref:`model-config` values for modules to
 the site's ``user/sitename/config`` file. To do this, add clauses like
@@ -241,14 +231,9 @@ this to the site's config::
 
     {mod_foo, [{key, value}, ...]}
 
-For instance, to set the ``mod_ssl.is_secure`` configuration options
-from :ref:`mod_ssl`, do::
-
-    {mod_ssl, [{is_secure, true}]}
-
 
 Using environment variables in the site config
-----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Any variable in your site's ``config`` file can be retrieved from the
 OS environment variables. To do so, wrap the config value in a ``{env,

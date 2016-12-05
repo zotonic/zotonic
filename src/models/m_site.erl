@@ -37,8 +37,12 @@
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(hostname_no_port, #m{value=undefined}, Context) ->
-    z_dispatcher:drop_port(get(hostname, Context));
+m_find_value(hostname, #m{value=undefined}, Context) ->
+    z_context:hostname(Context);
+m_find_value(hostname_port, #m{value=undefined}, Context) ->
+    z_context:hostname_port(Context);
+m_find_value(hostname_ssl_port, #m{value=undefined}, Context) ->
+    z_context:hostname_ssl_port(Context);
 m_find_value(protocol, #m{value=undefined}, Context) ->
     z_context:site_protocol(Context);
 m_find_value(Key, #m{value=undefined}, Context) ->
@@ -64,21 +68,27 @@ all(Context) ->
     z_depcache:memo(F, site_config, Context).
 
 %% @doc Fetch a key from the site configuration
+-spec get(atom(), #context{}) -> term() | undefined.
 get(Key, Context) when is_atom(Key) ->
     try
-        case z_depcache:get(site_config, Key, Context) of
+        case z_depcache:get({site_config, Key}, Context) of
             {ok, undefined} ->
                 undefined;
-            {ok, none} when Key == hostname ->
+            {ok, none} when Key =:= hostname ->
                 case z_context:is_request(Context) of
-                    true -> sanitize_host(z_context:get_req_header(<<"host">>, Context));
+                    true -> cowmachine_req:host(Context);
                     false -> undefined
                 end;
-            {ok, Cs} ->
-                Cs;
+            {ok, Value} ->
+                Value;
             undefined ->
                 All = all(Context),
-                proplists:get_value(Key, All)
+                z_depcache:memo(
+                        fun() ->
+                            proplists:get_value(Key, All)
+                        end,
+                        {site_config, Key},
+                        Context)
         end
     catch
         error:badarg ->
@@ -87,27 +97,8 @@ get(Key, Context) when is_atom(Key) ->
             proplists:get_value(Key, Cfg)
     end.
 
-sanitize_host(undefined) ->
-    undefined;
-sanitize_host(Host) when is_binary(Host) ->
-    sanitize_host(z_convert:to_list(Host));
-sanitize_host(Host) ->
-    sanitize_host(Host, []).
-
-sanitize_host([], Acc) ->
-    lists:reverse(Acc);
-sanitize_host([C|Rest], Acc)
-    when (C >= $a andalso C =< $z)
-    orelse (C >= $A andalso C =< $Z)
-    orelse (C >= $0 andalso C =< $9)
-    orelse C =:= $-
-    orelse C =:= $: ->
-        sanitize_host(Rest, [C|Acc]);
-sanitize_host(_, _Acc) ->
-    [].
-
-
 %% @doc Fetch a nested key from the site configuration
+-spec get(atom(), atom(), #context{}) -> term() | undefined.
 get(site, Key, Context) when is_atom(Key) ->
     get(Key, Context);
 get(Module, Key, Context) when is_atom(Key) ->

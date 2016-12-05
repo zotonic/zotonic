@@ -22,7 +22,7 @@
     survey_is_submit/2
 ]).
 
--include("zotonic_notifications.hrl").
+-include("zotonic.hrl").
 
 survey_is_submit(Qs, Context) ->
 	find_first_question(lists:reverse(Qs), Context).

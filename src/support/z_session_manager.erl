@@ -48,7 +48,9 @@
     tick/1,
     foreach/2,
     broadcast/2,
-    fold/3
+    fold/3,
+
+    get_session_cookie_name/1
 ]).
 
 -include_lib("zotonic.hrl").

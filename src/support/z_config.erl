@@ -22,21 +22,30 @@
 %% API export
 -export([
          get/1,
-         get/2
+         get/2,
+
+         init_app_env/0
         ]).
 
 
 -include_lib("zotonic.hrl").
 
-
 %%====================================================================
 %% API
 %%====================================================================
+
+%% @doc Copy some zotonic config settings over to other applications
+-spec init_app_env() -> ok.
+init_app_env() ->
+    application:set_env(cowmachine, proxy_whitelist, ?MODULE:get(proxy_whitelist)),
+    application:set_env(cowmachine, ip_whitelist, ?MODULE:get(ip_whitelist)),
+    ok.
 
 
 %% @doc Get value from config file (cached)
 %%
 %% Some config settings can be overruled by environment settings.
+-spec get(atom()) -> any().
 get(listen_ip) ->
     case os:getenv("ZOTONIC_IP") of
         false -> ?MODULE:get(listen_ip, default(listen_ip));
@@ -58,6 +67,7 @@ get(Key) ->
     ?MODULE:get(Key, default(Key)).
 
 %% @doc Get value from config file, returning default value when not set (cached).
+-spec get(atom(), any()) -> any().
 get(Key, Default) ->
 	case application:get_env(zotonic, Key) of
 		undefined ->
@@ -67,16 +77,17 @@ get(Key, Default) ->
 	end.
 
 default(timezone) -> <<"UTC">>;
-default(listen_port) -> 8000;
-default(port) -> ?MODULE:get(listen_port);
-default(ssl_listen_port) -> 8443;
-default(ssl_port) -> ?MODULE:get(ssl_listen_port);
 default(listen_ip) -> any;
+default(listen_port) -> 8000;
+default(ssl_listen_port) -> 8443;
+default(port) -> ?MODULE:get(listen_port);
+default(ssl_port) -> ?MODULE:get(ssl_listen_port);
+default(ssl_only) -> false;
 default(smtp_verp_as_from) -> false;
 default(smtp_no_mx_lookups) -> false;
 default(smtp_relay) -> false;
 default(smtp_host) -> "localhost";
-default(smtp_port) -> 2525;
+default(smtp_port) -> 25;
 default(smtp_ssl) -> false;
 default(smtp_listen_ip) -> "127.0.0.1";
 default(smtp_listen_port) -> 2525;
@@ -87,6 +98,7 @@ default(inet_backlog) -> 500;
 default(inet_acceptor_pool_size) -> 100;
 default(ssl_backlog) -> ?MODULE:get(inet_backlog);
 default(ssl_acceptor_pool_size) -> ?MODULE:get(inet_acceptor_pool_size);
+default(ssl_dhfile) -> undefined;
 default(dbhost) -> "localhost";
 default(dbport) -> 5432;
 default(dbuser) -> "zotonic";
@@ -101,7 +113,8 @@ default(syslog_facility) -> local0;
 default(syslog_level) -> info;
 default(user_sites_dir) -> "user/sites";
 default(user_modules_dir) -> "user/modules";
-default(ip_whitelist) -> "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10";
+default(proxy_whitelist) -> local;
+default(ip_whitelist) -> local;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
 default(_) -> undefined.

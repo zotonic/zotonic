@@ -65,16 +65,26 @@ get_req(_, undefined) -> undefined;
 get_req(method, RD) -> cowmachine_req:method(RD);
 get_req(version, RD) -> cowmachine_req:version(RD);
 get_req(peer, RD) -> cowmachine_req:peer(RD);
+get_req(peer_ip, RD) -> cowmachine_req:peer_ip(RD);
 get_req(is_ssl, RD) -> cowmachine_req:is_ssl(RD);
-get_req(host, RD) -> cowmachine_req:get_req_header(<<"host">>, RD);
+get_req(scheme, RD) -> cowmachine_req:scheme(RD);
+get_req(host, RD) -> cowmachine_req:host(RD);
+get_req(port, RD) ->
+    case cowmachine_req:is_proxy(RD) of
+        true -> cowmachine_req:port(RD);
+        false ->
+            case cowmachine_req:is_ssl(RD) of
+                true -> z_config:get(ssl_port);
+                false -> z_config:get(port)
+            end
+    end;
 get_req(raw_path, RD) -> cowmachine_req:raw_path(RD);
 get_req(path, RD) -> cowmachine_req:path(RD);
 get_req(qs, RD) -> cowmachine_req:req_qs(RD);
 get_req(headers, RD) -> cowmachine_req:get_req_headers(RD);
 get_req(user_agent, RD) -> cowmachine_req:get_req_header(<<"user-agent">>, RD);
 get_req(referer, RD) -> cowmachine_req:get_req_header(<<"referer">>, RD);
-get_req(referrer, RD) -> cowmachine_req:get_req_header(<<"referer">>, RD);
-% get_req(req_id, #wm_reqdata{log_data=#wm_log_data{req_id=ReqId}}) -> ReqId;
+get_req(referrer, RD) -> get_req(referer, RD);
 get_req(is_crawler, RD) -> z_user_agent:is_crawler(RD);
 get_req(_Key, _RD) -> undefined.
 
@@ -82,8 +92,7 @@ get_req(_Key, _RD) -> undefined.
 -spec values(#context{}) -> list({atom(), any()}).
 values(Context) ->
     [ {K, get(K, Context)} || K <- [
-            method, version, peer, is_ssl, host, raw_path, path, qs, referrer, user_agent, is_crawler,
-            % req_id,
+            method, version, peer, is_ssl, host, port, raw_path, path, qs, referrer, user_agent, is_crawler,
             headers, timezone, language
         ]
     ].

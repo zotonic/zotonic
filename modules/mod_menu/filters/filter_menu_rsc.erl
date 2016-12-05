@@ -19,7 +19,7 @@
 -module(filter_menu_rsc).
 -export([menu_rsc/2]).
 
--include("zotonic_notifications.hrl").
+-include("zotonic.hrl").
 
 menu_rsc(RscId, Context) ->
 	case z_notifier:first(#menu_rsc{id=RscId}, Context) of

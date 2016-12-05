@@ -46,8 +46,8 @@
 %%% By default, Zotonic will create a postgres database for you if it doesn't
 %%% already exist, and install tables in it. Uncomment the options below
 %%% to prevent that.
- % {dbcreate, false},
- % {dbinstall, false},
+   %% {dbcreate, false},
+   %% {dbinstall, false},
 
 %%% IP address on which Zotonic will listen for HTTP requests.
 %%% Always overridden by the ZOTONIC_IP environment variable.
@@ -58,24 +58,37 @@
 %%% Always overridden by the ZOTONIC_PORT environment variable.
    {listen_port, 8000},
 
-%%% Outside port on which Zotonic will listen for HTTP requests.
-%%% Default set to listen_port.
-%%%   {port, 80},
-
-%%% Outside port zotonic uses to receive incoming HTTPS requests.
-%%% Default set to ssl_listen_port.
-%%%   {ssl_port, 443},
-
-%%% Inside listen port zotonic uses to receive HTTPS requests.
+%%% Port on which Zotonic will listen for HTTPS requests.
 %%% Always overridden by the ZOTONIC_SSL_PORT environment variable.
 %%% Set to the atom 'none' to disable SSL
-%%%   {ssl_listen_port, 8443},
+   %% {ssl_listen_port, 8443},
+
+%%% Outside port on which Zotonic will listen for HTTP requests.
+%%% Default set to listen_port.
+   %% {port, 80},
+
+%%% Outside port zotonic uses to receive incoming HTTPS requests.
+%%% Set to the atom 'none' to disable SSL for sites.
+%%% Default set to ssl_listen_port.
+   %% {ssl_port, 443},
+
+%%% Force sites to use SSL. Redirects http requests to https.
+   %% {ssl_only, false},
+
+%%% If you are running Zotonic behind a proxy then set this to the proxy's internal ip addresses.
+%%% The proxy must terminate SSL.
+%%% If the proxy does not terminate SSL then set 'ssl_port' to 'none', this will disable SSL support.
+%%% Possible values: none, local, any, ip_whitelist, or string with netmasks: "127.0.0.0/8,10.0.0.0/8"
+   %% {proxy_whitelist, local},
 
 %%% SMTP outbound relay configuration.
-   %% {smtp_relay, true},
+%%% Zotonic will send email itself, enable a relay if outgoing port 25 traffic is blocked.
+   %% {smtp_relay, false},
    %% {smtp_host, "localhost"},
-   %% {smtp_port, 2525},
-   %% {smtp_ssl, true},
+   %% {smtp_port, 25},
+   %% {smtp_ssl, false},
+   %% {smtp_username, undefined},
+   %% {smtp_password, undefined},
 
 %%% SMTP extra relay options:
 %%% some picky/buggy/misconfigured relays might need one of these to be enabled.

@@ -52,6 +52,20 @@ Templates
 * The ``use_absolute_url`` argument of the ``url``, ``image`` and ``lib`` tags
   was renamed to ``absolute_url``.
 
+
+Port, proxies and SSL certificates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+SSL/https support has been completely refactored.
+
+ * SSL self signed certificates have been moved into the core
+ * New modules :ref:`mod_ssl_ca` and :ref:`mod_ssl_letsencrypt`
+ * Deleted module ``mod_ssl``
+ * Port configuration has been changed, see :ref:`ref-port-ssl-configuration`
+
+For an overview of https support, see :ref:`https-support`
+
+
 Erlang code, Controllers, Event handlers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -134,6 +148,8 @@ Search
 ^^^^^^
 
 * Search argument ``authoritative`` was renamed to ``is_authoritative``.
+
+
 
 Upgrading to Zotonic 0.14
 -------------------------
@@ -370,11 +386,11 @@ The following include files have been renamed:
 HTTPS support
 ^^^^^^^^^^^^^
 
-HTTPS support was moved from the core into a new module, :ref:`mod_ssl`.
+HTTPS support was moved from the core into a new module, *mod_ssl*.
 
 The global ``priv/config`` options ``ssl``, ``ssl_certfile``,
 ``ssl_keyfile`` and ``ssl_password`` do no longer have an effect. See
-:ref:`mod_ssl` on how to configure HTTPS support for Zotonic from 0.9
+*mod_ssl* on how to configure HTTPS support for Zotonic from 0.9
 and up.
 
 

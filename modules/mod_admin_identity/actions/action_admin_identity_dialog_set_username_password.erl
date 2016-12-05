@@ -28,7 +28,7 @@
 
 -include("zotonic.hrl").
 
--define(PASSWORD_DOTS, <<"••••••">>).
+-define(PASSWORD_DOTS, <<"••••••"/utf8>>).
 
 render_action(TriggerId, TargetId, Args, Context) ->
     Id = z_convert:to_integer(proplists:get_value(id, Args)),
