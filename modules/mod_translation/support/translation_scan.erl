@@ -27,19 +27,17 @@
 -export([parse_erl/2]).
 
 -spec scan([{atom(), string()}], #context{}) -> [{ModuleName :: atom(), Labels :: list()}].
-scan(Modules, Context) ->
+scan(Modules, _Context) ->
+    [scan_module(Module) || Module <- Modules].
+
+scan_module({Module, Dir}) ->
     Files = lists:flatten(
-              [z_module_indexer:all(What, Context)
-               || What <- [template, scomp, action, validator, model, service, erlang]]),
-    ModFiles = [{Mod, Path} || #module_index{module=Mod, filepath=Path} <- Files ],
-    Combined = [{Mod, [ModDir++"/"++z_convert:to_list(Mod)++".erl"
-                          | proplists:get_all_values(Mod, ModFiles)]}
-                || {Mod, ModDir} <- Modules],
-    [ scan_module(Mod) || Mod <- Combined ].
-
-scan_module({Module, Files}) ->
-    {Module, dedupl(lists:flatten([ scan_file(filename:extension(File), File) || File <- Files ]))}.
-
+        [z_module_indexer:all_files(Type, {Module, Dir})
+            || Type <- [template, scomp, action, validator, model, service, erlang]
+        ]
+    ),
+    Files1 = [File || #module_index{filepath = File} <- Files],
+    {Module, dedupl(lists:flatten([scan_file(filename:extension(File), File) || File <- Files1]))}.
 
 dedupl(Trans) ->
     Dict = dict:new(),
@@ -72,19 +70,14 @@ merge_args([{Lang,Text}|Rest], Args) ->
 
 %% @doc Parse the template or Erlang module. Extract all translation tags.
 scan_file(<<".tpl">>, File) ->
-    scan_file(".tpl", File);
-scan_file(".tpl", File) ->
     case template_compiler:translations(File) of
         {ok, Translations} ->
             normalize_line_info(Translations);
         {error, Reason} ->
           lager:error("POT generation, erlang error in ~p: ~p~n", [File, Reason])
     end;
-
 scan_file(<<".erl">>, File) ->
-    scan_file(".erl", File);
-scan_file(".erl", File) ->
-    case epp:open(File, [z_utils:lib_dir(include)]) of
+    case epp:open(binary_to_list(File), [z_utils:lib_dir(include)]) of
         {ok, Epp} ->
             parse_erl(File, Epp);
         {error, Reason} ->

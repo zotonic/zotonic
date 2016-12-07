@@ -35,7 +35,8 @@
     translations/1,
     find/3,
     find_all/3,
-    all/2
+    all/2,
+    all_files/2
 ]).
 
 -record(state, {
@@ -115,7 +116,7 @@ find_all(What, Name, Context) ->
     gen_server:call(Context#context.module_indexer, {find_all, What, Name}, ?TIMEOUT).
 
 %% @doc Return a list of all templates, scomps etc per module
-all(What, Context) ->
+all(What, #context{} = Context) ->
     ActiveDirs = z_module_manager:active_dir(Context),
     [
         #module_index{
@@ -125,6 +126,31 @@ all(What, Context) ->
             erlang_module=F#mfile.erlang_module
         }
         || F <- scan_all(What, ActiveDirs)
+    ].
+
+all_files(erlang, {Module, ModuleDir}) ->
+    Filename = <<(z_convert:to_binary(Module))/binary, ".erl">>,
+    [
+        #module_index{
+            key = #module_index_key{name = Filename},
+            module = Module,
+            filepath = filename:join(ModuleDir, Filename),
+            erlang_module = Module
+        }
+        | all_files1(erlang, {Module, ModuleDir})
+    ];
+all_files(Type, {Module, ModuleDir}) ->
+    all_files1(Type, {Module, ModuleDir}).
+
+all_files1(Type, {Module, ModuleDir}) ->
+    [
+        #module_index{
+            key = #module_index_key{name = F#mfile.name},
+            module = F#mfile.module,
+            filepath = F#mfile.filepath,
+            erlang_module = F#mfile.erlang_module
+        }
+        || F <- scan_all(Type, [{Module, ModuleDir}])
     ].
 
 
