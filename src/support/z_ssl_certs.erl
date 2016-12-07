@@ -28,6 +28,10 @@
     is_dhfile/1,
     ensure_dhfile/0,
 
+    sign/2,
+    get_ssl_options/1,
+    get_ssl_options/2,
+
     ciphers/0,
 
     sni_self_signed/1,
@@ -63,13 +67,7 @@ sni_fun(Hostname) ->
             %% @todo Serve the correct cert for sites that are down or disabled
             sni_self_signed(zotonic_status, z_context:new(zotonic_status));
         {ok, Site} ->
-            Context = z_context:new(Site),
-            case z_notifier:first(#ssl_options{server_name=NormalizedHostnameBin}, Context) of
-                {ok, SSLOptions} ->
-                    SSLOptions;
-                undefined ->
-                    sni_self_signed(Site, Context)
-            end
+            get_ssl_options(NormalizedHostnameBin, z_context:new(Site))
     end.
 
 -spec sni_self_signed(z:context()) -> list(ssl:ssl_option()) | undefined.
@@ -88,6 +86,38 @@ sni_self_signed(Site, Context) ->
                 {ok, SSLOptionsNew} -> SSLOptionsNew;
                 {error, _} -> undefined
             end
+    end.
+
+%% @doc Sign data using the current private key and sha256
+%% @todo If needed more often then cache the decoded private key.
+-spec sign(iolist(), z:context()) -> {ok, binary()} | {error, term()}.
+sign(Data, Context) ->
+    Hostname = z_context:hostname(Context),
+    case get_ssl_options(Hostname, Context) of
+        SSLOptions when is_list(SSLOptions) ->
+            KeyFile = proplists:get_value(keyfile, SSLOptions),
+            {ok, PemKeyBin} = file:read_file(KeyFile),
+            [PemKeyData] = public_key:pem_decode(PemKeyBin),
+            PemKey = public_key:pem_entry_decode(PemKeyData),
+            {ok, public_key:sign(Data, sha256, PemKey)};
+        undefined ->
+            {error, nocerts}
+    end.
+
+%% @doc Fetch the ssi options for the site context.
+-spec get_ssl_options(z:context()) -> list(ssl:ssl_option()) | undefined.
+get_ssl_options(Context) ->
+    get_ssl_options(z_context:hostname(Context), Context).
+
+%% @doc Fetch the ssl options for the given hostname and site context. If there is
+%%      is no module observing ssl_options, then return the self signed certificates.
+-spec get_ssl_options(binary(), z:context()) -> list(ssl:ssl_option()) | undefined.
+get_ssl_options(Hostname, Context) ->
+    case z_notifier:first(#ssl_options{server_name=Hostname}, Context) of
+        {ok, SSLOptions} ->
+            SSLOptions;
+        undefined ->
+            sni_self_signed(z_context:site(Context), Context)
     end.
 
 
