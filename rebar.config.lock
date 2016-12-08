@@ -5,7 +5,7 @@
            {platform_define,"^([0-9]+)",namespaced_dicts},
            {platform_define,"^([0-9]+|R16)",coding_utf8},
            {platform_define,"^(R16|17)",no_ssl},
-           {platform_define, "^R16", lists_nofiltermap}]}.
+           {platform_define,"^R16",lists_nofiltermap}]}.
 {deps,[{goldrush,".*",
                  {git,"git://github.com/DeadZen/goldrush.git",
                       "71e63212f12c25827e0c1b4198d37d5d018a7fec"}},
@@ -125,13 +125,13 @@
                    "3ad509d487a72f9437fef31a379bf3cfeeb166a2"}},
        {exif,".*",
              {git,"git://github.com/nlfiedler/erlang-exif.git",
-                  "55d9d6bc103d42ffc2a6659d1726224ee32d3565"}},
+                  "89ddef1e0a9d14a386c0a1d01e6654bef74fee55"}},
        {twerl,".*",
               {git,"https://github.com/mworrell/twerl.git",
                    "511187da785903d64f5b284ae1d2888b07199e2f"}},
        {bcrypt,".*",
-               {git,"https://github.com/smarkets/erlang-bcrypt",
-                    "a63df34d4957dbb70a703c67c75ed9fee2c78971"}},
+               {git,"https://github.com/chef/erlang-bcrypt.git",
+                    "5cbe6becbe926739adebc67c6827ac2a2b9e7bbd"}},
        {erlpass,".*",
                 {git,"https://github.com/ferd/erlpass.git",
                      "9699bc21f2dfa7652b723ed5279a0b2e7ff19002"}}]}.
