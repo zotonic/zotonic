@@ -78,8 +78,14 @@ to_dt(undefined) ->
     undefined;
 to_dt(<<Y:4/binary, $:, M:2/binary, $:, D:2/binary, " ", H:2/binary, $:, I:2/binary, $:, S:2/binary>>) ->
     % <<"2015:12:04 18:05:05">>
-    {{z_convert:to_integer(Y), z_convert:to_integer(M), z_convert:to_integer(D)},
-     {z_convert:to_integer(H), z_convert:to_integer(I), z_convert:to_integer(S)}};
+    try
+        {{z_convert:to_integer(Y), z_convert:to_integer(M), z_convert:to_integer(D)},
+         {z_convert:to_integer(H), z_convert:to_integer(I), z_convert:to_integer(S)}}
+    catch
+        _:_ ->
+            % Issue #1557: empty dates with <<"    :  :     :  :  ">>
+            undefined
+    end;
 to_dt(DT) ->
     try
         qdate:to_date(DT)
