@@ -529,7 +529,7 @@ msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
 msgid "insert (acl action)"
-msgstr "insert"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
 msgid "link (acl action)"
@@ -2221,7 +2221,7 @@ msgstr ""
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:7
 #, fuzzy
 msgid "User actions"
-msgstr "insert"
+msgstr ""
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:21./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:76./modules/mod_admin_identity/templates/admin_users.tpl:51./modules/mod_admin_identity/templates/email_admin_new_user.tpl:19
 #: modules/mod_admin_merge/templates/admin_merge_compare.tpl:80
@@ -3579,7 +3579,7 @@ msgstr ""
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17
 #, fuzzy
 msgid "Actions"
-msgstr "insert"
+msgstr ""
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:3
 msgid "Admin Custom Redirects"
@@ -5004,7 +5004,7 @@ msgstr ""
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:9
 #, fuzzy
 msgid "Operation"
-msgstr "insert"
+msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:22
 msgid "Our excuses for the inconvenience."
