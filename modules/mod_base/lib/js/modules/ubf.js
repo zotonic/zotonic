@@ -19,9 +19,8 @@ limitations under the License.
 
 */
 
-;(function(window, $) {
+;(function(window) {
     var window = window;
-    var $ = $;
     var ubf = {};
     var specs = {};
 
@@ -69,11 +68,15 @@ limitations under the License.
             var buf = buffer || [];
             var inner = [];
             buf.push('{');
-            if (spec)
-                $.each(spec, function(_i, k) { encode(value[k], inner); });
-            else
-                $.each(value, function(_i, v) { encode(v, inner); });
-
+            if (spec) {
+                for (var i; i<spec.length; i++) {
+                    encode(value[spec[i]], inner);
+                }
+            } else {
+                for (var k in value) {
+                    encode(value[k], inner);
+                }
+            }
             buf.push(inner.join(","));
             buf.push('}');
 
@@ -109,14 +112,13 @@ limitations under the License.
         var i;
 
         buf.push("#");
-        $.each(value, function(k, v) {
-                buf.push('{');
-                encode(k, buf);
-                buf.push(' ');
-                encode(v, buf);
-                buf.push('}&');
-            });
-
+        for (var k in value) {
+            buf.push('{');
+            encode(k, buf);
+            buf.push(' ');
+            encode(value[k], buf);
+            buf.push('}&');
+        }
         if(!buffer) {
             buf.push("$");
             return buf.join("");
@@ -132,13 +134,13 @@ limitations under the License.
         buf.push('{');
         if(spec) {
             encode_as_constant(record_name, inner);
-            $.each(spec, function(_i, k) {
-                encode(value[k], inner);
-            });
+            for (var i in spec) {
+                encode(value[spec[i]], inner);
+            }
         } else {
-            $.each(value, function(_i, v) {
-                encode(v, inner);
-            });
+            for (var k in value) {
+                encode(value[k], inner);
+            }
         }
         buf.push(inner.join(","));
         buf.push('}');
@@ -201,19 +203,25 @@ limitations under the License.
                 break;
             case ubf.OPCODE:
                 buf.push(value);
+                break;
             default:
-                if($.isArray(value)) {
+                if(typeof value == "object" && value instanceof Array) {
                     encode_as_list(value, buf);
                 } else if(typeof(value) == "number") {
-                    // floats are not possible in UBF...
-                    buf.push(Math.floor(value));
+                    if (Math.floor(value) == value) {
+                        buf.push(Math.floor(value));
+                    } else {
+                        buf.push('"'+value+'"`f`');
+                    }
                 } else if(typeof(value) == "string") {
                     // Per default encode strings as binary - better on the server
                     encode_as_binary(value, buf);
+                } else if (typeof(value) == "object" && value instanceof Date) {
+                    buf.push(""+Math.round((new Date()).getTime() / 1000)+"`dt`");
                 } else if (typeof(value) == "object" && value._record) {
                     encode_as_record(value, value._record, specs[value._record], buf);
                 } else if(typeof(value) == "object") {
-                    var keys = $.keys(value).sort();
+                    var keys = get_keys(value).sort();
                     if (keys.length == 2 && keys[0] == 'name' && keys[1] == 'value') {
                         encode_as_tuple([value.name, value.value], undefined, buf);
                     } else {
@@ -314,13 +322,11 @@ limitations under the License.
                                 case 'true':      obj = true; break;
                                 case 'undefined': break;
                                 default:
-                                    obj = new String(buf_s);
-                                    obj.ubf_type = type;
+                                    obj = buf_s;
                                     break;
                             }
                         } else {
-                            obj = new String(buf_s);
-                            obj.ubf_type = type;
+                            obj = buf_s;
                         }
                     }
                     stack.push(obj);
@@ -331,6 +337,14 @@ limitations under the License.
             buf.push(current);
             i += 1;
         }
+    }
+
+    function get_keys(value) {
+        var ks = [];
+        for (var k in value) {
+            ks.push(k);
+        }
+        return ks;
     }
 
     function skip_ws(bytes) {
@@ -393,14 +407,22 @@ limitations under the License.
             tuple.unshift(obj);
         }
         if (tuple[0] &&
-            tuple[0].ubf_type == ubf.CONSTANT &&
+            typeof tuple[0] == "string" &&
             typeof specs[tuple[0].valueOf()] !== 'undefined')
         {
-            var rec = { _record: tuple[0].valueOf() };
-            $.each(specs[tuple[0]], function(i, k) {
-                rec[k] = tuple[i+1];
-            });
-            stack.push(rec);
+            var rec_name = tuple[0].valueOf();
+            var rec  = { _record: rec_name };
+            var spec = specs[rec_name];
+            var n    = spec.length;
+            if (n in tuple && !((n+1) in tuple)) {
+                for (var i=0; i<n; i++) {
+                    rec[spec[i]] = tuple[i+1];
+                }
+                stack.push(rec);
+            } else {
+                // Length mismatch - leave as tuple
+                stack.push(tuple);
+            }
         } else {
             stack.push(tuple);
         }
@@ -446,6 +468,42 @@ limitations under the License.
         throw "The stack should contain one item";
     }
 
+    function _type(bytes, stack) {
+        var n = _read(bytes.slice(1), '`', ubf.STRING, stack) + 1;
+        switch (stack.pop()) {
+            case "map":
+            case "plist":
+                var list = stack.pop();
+                var map = {};
+                if (list.ubf_type != ubf.LIST) throw "Type error: not a list (for map)";
+                for (var k in list) {
+                    if (k != 'ubf_type') {
+                        var elt = list[k];
+                        if (typeof elt == "object" && 1 in elt) {
+                            map[elt[0]] = elt[1];
+                        } else {
+                            map[elt] = true;
+                        }
+                    }
+                }
+                stack.push(map);
+                break;
+            case "f":
+                var f = stack.pop();
+                if (typeof f != "string") throw "Type error: not a string (for float)";
+                stack.push(parseFloat(f));
+                break;
+            case "dt":
+                var dt = stack.pop();
+                if (typeof dt != "number") throw "Type error: not a number (for dt)";
+                stack.push(new Date(dt*1000));
+                break;
+            default:
+                break;
+        }
+        return n;
+    }
+
     function _operation(opcode, bytes, env, stack) {
         switch(opcode) {
         case " ":case "\r":case"\n":case"\t":case",": return skip_ws(bytes);
@@ -461,6 +519,7 @@ limitations under the License.
         case "%": return _comment(bytes);
         case ">": return _pop(bytes, env, stack);
         case "$": return _return(stack);
+        case "`": return _type(bytes, stack);
         default: return _push(bytes, env, stack);
         }
     }
@@ -501,4 +560,4 @@ limitations under the License.
     }
 
     window.ubf = ubf;
-})(window, jQuery);
+})(window);
