@@ -38,6 +38,7 @@
 
     wrap_payload/2,
     payload_data/1,
+    payload_user/1,
     encode_packet_payload/1
     ]).
 
@@ -224,6 +225,13 @@ payload_data(Bin) when is_binary(Bin) ->
     {ok, Bin};
 payload_data(#z_mqtt_payload{payload=Data}) ->
     {ok, Data}.
+
+payload_user(#mqtt_msg{payload=Payload}) ->
+    payload_user(Payload);
+payload_user(#z_mqtt_payload{user_id=UserId}) ->
+    {ok, UserId};
+payload_user(_) ->
+    {ok, undefined}.
 
 %% @doc UBF encode the data to be sent to a client over a TCP/IP connection.
 -spec encode_packet_payload(#z_mqtt_payload{} | undefined | binary()) -> binary().
