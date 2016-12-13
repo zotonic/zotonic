@@ -431,7 +431,7 @@ gzip_compress_1([#part_file{filepath=Filename}|Ps], Z, Acc) ->
     Acc1 = compress_file(Filename, Z, Acc),
     gzip_compress_1(Ps, Z, Acc1);
 gzip_compress_1([#part_cache{cache_pid=Pid}|Ps], Z, Acc) ->
-    {ok, {filename, _, Filename}} = filezcache:lookup_file(Pid),
+    {ok, {file, _, Filename}} = filezcache:lookup_file(Pid),
     Acc1 = compress_file(Filename, Z, Acc),
     gzip_compress_1(Ps, Z, Acc1);
 gzip_compress_1([#part_missing{}|Ps], Z, Acc) ->
