@@ -263,7 +263,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
             try
                 [_Path, Type, Dim, _Dim2 | _] = string:tokens(Result, " "),
                 Mime = mime(Type, MimeFile),
-                [Width,Height] = string:tokens(Dim, "x"),
+                [Width,Height] = string:tokens(hd(string:tokens(Dim, "=>")), "x"),
                 {W1,H1} = maybe_sizeup(Mime, list_to_integer(Width), list_to_integer(Height)),
                 Props1 = [{width, W1},
                           {height, H1},
@@ -403,11 +403,18 @@ guess_mime(File) ->
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
 exif(File) ->
-    case exif:read(File) of
-        {ok, Dict} ->
-            List = dict:to_list(Dict),
-            proplists:delete(maker_note, List);
-        {error, _} ->
+    try
+        case exif:read(File) of
+            {ok, Dict} ->
+                List = dict:to_list(Dict),
+                proplists:delete(maker_note, List);
+            {error, _} ->
+                []
+        end
+    catch
+        A:B ->
+            Trace = erlang:get_stacktrace(),
+            lager:error("Error reading exif ~p:~p in ~p", [A,B,Trace]),
             []
     end.
 
