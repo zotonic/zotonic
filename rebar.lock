@@ -55,7 +55,7 @@
  {<<"erlware_commons">>,{pkg,<<"erlware_commons">>,<<"0.21.0">>},0},
  {<<"exif">>,
   {git,"https://github.com/nlfiedler/erlang-exif.git",
-       {ref,"89ddef1e0a9d14a386c0a1d01e6654bef74fee55"}},
+       {ref,"2d5314e24ce3f36156500dea90a2c42c0cae0456"}},
   0},
  {<<"exometer">>,
   {git,"https://github.com/Feuerlabs/exometer.git",
