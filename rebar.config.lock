@@ -125,7 +125,7 @@
                    "3ad509d487a72f9437fef31a379bf3cfeeb166a2"}},
        {exif,".*",
              {git,"git://github.com/nlfiedler/erlang-exif.git",
-                  "89ddef1e0a9d14a386c0a1d01e6654bef74fee55"}},
+                  "2d5314e24ce3f36156500dea90a2c42c0cae0456"}},
        {twerl,".*",
               {git,"https://github.com/mworrell/twerl.git",
                    "511187da785903d64f5b284ae1d2888b07199e2f"}},
