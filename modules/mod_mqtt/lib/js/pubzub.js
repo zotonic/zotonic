@@ -18,12 +18,12 @@ TODO:
 
 function Pubzub ()
 {
-    this._new_matcher = function() { 
+    this._new_matcher = function() {
         return new Qlobber({
-        	separator: '/',
-	        wildcard_one: '+',
-	        wildcard_some: '#'
-	    });
+            separator: '/',
+            wildcard_one: '+',
+            wildcard_some: '#'
+        });
     };
     this._matcher = this._new_matcher();
     this._subs = {};
@@ -75,7 +75,7 @@ Pubzub.prototype.subscribe = function (topic, fun, ack) {
     } else {
         this.handle_retained(topic, fun, id);
     }
-    if(ack && !async_ack) { setTimeout(ack, 0) }; 
+    if(ack && !async_ack) { setTimeout(ack, 0); }
     return id;
 };
 
@@ -100,7 +100,7 @@ Pubzub.prototype.publish = function (topic, message, options) {
     options = options || {retained: false};
     
     if (this.is_local_topic(topic)) {
-        if (message == undefined && options.retained) {
+        if (message === undefined && options.retained) {
              delete this._retained[topic];
              return;
         }
@@ -126,6 +126,16 @@ Pubzub.prototype.publish = function (topic, message, options) {
 
 Pubzub.prototype.subscribers = function (topic) {
     return this._matcher.match(topic);
+};
+
+Pubzub.prototype.reply_topic = function (sub_topic) {
+    if (!sub_topic) {
+        return "~site/reply/"+this.unique_id();
+    } else if (sub_topic.substr(0,1) == "/") {
+        return "~site/reply/"+this.unique_id()+sub_topic;
+    } else {
+        return "~site/reply/"+this.unique_id()+"/"+sub_topic;
+    }
 };
 
 Pubzub.prototype.lastwill = function (topic, message) {
@@ -172,7 +182,7 @@ Pubzub.prototype.handle_retained = function(topic, fun, id) {
             }
         }
     }
-}
+};
 
 Pubzub.prototype.transport = function (cmd, topic, payload, extra, ack) {
     var msg = {
@@ -199,7 +209,7 @@ Pubzub.prototype.unique_id = function () {
 
 Pubzub.prototype.make_zEvtArgs = function (topic, msg, sub_id) {
     if(typeof msg == 'object') {
-        var args = ensure_name_value(msg)
+        var args = ensure_name_value(msg);
         args.unshift({name: "topic", value: topic});
         args.unshift({name: "sub_id", value: sub_id});
         return args;

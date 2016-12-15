@@ -503,14 +503,12 @@ function z_transport_session_status(data, msg)
 // Queue any data to be transported to the server
 function z_transport(delegate, content_type, data, options)
 {
-    var msg_id;
+    var msg_id = z_unique_id(true);
 
     if (!z_pageid) {
-        msg_id = z_unique_id(true) + z_unique_id(true);
         z_transport_wait(msg_id, delegate, content_type, data, options);
         return msg_id;
     } else {
-        msg_id = z_pageid + z_unique_id(true);
         return z_transport_do(msg_id, delegate, content_type, data, options);
     }
 }
@@ -522,7 +520,7 @@ function z_transport_wait(msg_id, delegate, content_type, data, options)
                 z_transport_wait(msg_id, delegate, content_type, data, options);
             }, 100);
     } else {
-        return z_transport_do(undefined, delegate, content_type, data, options);
+        return z_transport_do(msg_id, delegate, content_type, data, options);
     }
 }
 
