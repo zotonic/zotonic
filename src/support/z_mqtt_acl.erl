@@ -87,6 +87,8 @@ is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User], Site, Context)
                 _ -> false
             end
     end;
+is_allowed(_Action, _Topic, [<<"site">>, Site, <<"reply">>, Unique | _], Site, _Context) when is_binary(Unique) ->
+    true;
 is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"pagesession">>], Site, _Context) ->
     true;
 is_allowed(publish, _Topic, [<<"site">>, Site, <<"rsc">>, RscId | _], Site, Context) ->
