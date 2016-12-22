@@ -122,7 +122,7 @@ of a services which handles a GET request is listed below::
 
     -include_lib("zotonic.hrl").
 
-    process_get(_Context) ->
+    process_get(_ReqData, _Context) ->
         Stats = [{count, 12310}, {uptime, 399}],
         z_convert:to_json(Stats).
 
@@ -134,7 +134,7 @@ Of course, you would write real code there which retrieves actual stats. If your
 module ``something`` contains the function ``stats_data/1``, call it from the
 process function like this::
 
-    process_get(Context) ->
+    process_get(_ReqData, Context) ->
         Stats = mod_something:stats_data(Context),
         z_convert:to_json(Stats).
 
@@ -178,7 +178,7 @@ Setting response headers
 You can set response headers by returning a ``{Result, #context{}}``
 tuple from the ``process_get/1`` and ``process_post/1`` calls::
 
-    process_get(Context) ->
+    process_get(_ReqData, Context) ->
         Stats = mod_something:stats_data(Context),
         Result = {struct, [{count, 100}]},
         Context1 = z_context:set_resp_header(<<"cache-control">>, <<"max-age=3600">>, Context),
