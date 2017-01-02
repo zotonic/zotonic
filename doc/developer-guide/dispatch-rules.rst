@@ -14,6 +14,7 @@ When an URL is requested by the web browser, the dispatch system looks
 at that URL and matches it agains all dispatch rules that are
 loaded. Based on the match, it will call a :ref:`controller <controllers>` to handle the request.
 
+.. _defining-dispatch-rules:
 
 Defining dispatch rules
 -----------------------

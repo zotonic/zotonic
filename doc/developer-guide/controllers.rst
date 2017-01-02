@@ -55,6 +55,8 @@ The `Webmachine documentation
 <http://wiki.basho.com/Webmachine-Demo.html>`_ itself is also very
 helpful for understanding controllers.
 
+.. seealso:: :ref:`cookbook-custom-controller`
+
 .. _guide-controllers-webzmachine:
 
 Differences between Zotonic’s and Basho’s Webmachine
