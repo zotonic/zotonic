@@ -7,6 +7,7 @@ Cookbooks
    :maxdepth: 1
 
    custom-action
+   custom-controller
    custom-model
    custom-pivot
    custom-tag
