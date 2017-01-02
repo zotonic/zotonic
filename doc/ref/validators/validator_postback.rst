@@ -1,44 +1,43 @@
 .. include:: meta-postback.rst
 
+Performs a custom server side validation of an input value. This allows you to
+add your own validation logic to HTML form fields.
 
-Server side validation.
+Start by adding a validator of the type ``postback`` to your form field in
+your template:
 
-Performs a server side validation of an input value.
+.. code-block:: django
 
-For example::
+    <input type="text" id="username" name="username" value="" />
+    {% validate id="username" type={postback event="validate_username"} %}
 
-   <input type="text" id="username" name="username" value="" />
-   {% validate id="username" type={postback delegate="mod_useradmin"} %}
+The ``event`` argument declares the name of the event that will be
+:ref:`notified <guide-notification>`.
+:ref:`Handle this event <handling-notifications>` in your site or module:
 
-The validation is either done by a function or by an event handler.
+.. code-block:: erlang
+    :caption: sites/yoursite/yoursite.erl
 
-The module of the function is defined by the argument ``delegate``. The name of
-the event is defined by the argument ``event``.
+    -export([
+        observe_validate_username/2
+    ]).
 
-Example of a validator function::
+    %% The event name passed in your template as event="validate_username",
+    %% prefixed with observe_
+    observe_validate_username({validate_username, {postback, Id, Value, _Args}}, Context) ->
+        case is_valid(Value) of
+            true ->
+                {{ok, Value, Context};
+            false ->
+                %% The validation message will be shown in the form
+                {{error, Id, "Sorry, that's not valid. Try again!"}, Context}
+        end.
 
-    validate(postback, Id, Value, Args, Context) ->
-        {{ok, Value}, Context}.
+    %% Some function that returns true or false depending on the validity of the
+    %% input value
+    is_valid(Value) ->
+        %% ...
 
-Example of an event handler function, which will be called by ``z_notifier:first/2``::
+.. seealso::
 
-    validate_event({validate_username, {postback, Id, Value, Args}}, Context) ->
-        {{ok, Value}, Context}.
-
-Both should have the following return type::
-
-   {{ok, AcceptedValue}, NewContext} | {{error, Id, Error}, NewContext}
-   Error -> invalid | novalue | {script, Script} | novalidator | string()
-
-Arguments
----------
-
-+---------+------------------------------------------------------------------------------------------+-----------------------------+
-|Argument |Description                                                                               |Example                      |
-+=========+==========================================================================================+=============================+
-|delegate |The module to handle the validation.  Must implement and export the function validate/5.  |``delegate="myvalidator"``   |
-+---------+------------------------------------------------------------------------------------------+-----------------------------+
-|event    |Name of an event to be broadcast with z_notifier:first/2 for handling the validation.     |``event="validate_username"``|
-+---------+------------------------------------------------------------------------------------------+-----------------------------+
-
-.. seealso:: :ref:`guide-validators`
+    * :ref:`guide-validators`
