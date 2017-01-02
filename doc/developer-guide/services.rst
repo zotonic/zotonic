@@ -108,7 +108,7 @@ OAuth (1.0a) token.
 Creating a GET service
 ----------------------
 
-By implementing the ``process_get/2`` function in your service module,
+By implementing the ``process_get/1`` function in your service module,
 it indicates that it is able to handle GET requests.  A full example
 of a services which handles a GET request is listed below::
 
@@ -118,7 +118,7 @@ of a services which handles a GET request is listed below::
     -svc_title("Retrieve uptime statistics of the system.").
     -svc_needauth(true).
 
-    -export([process_get/2]).
+    -export([process_get/1]).
 
     -include_lib("zotonic.hrl").
 
