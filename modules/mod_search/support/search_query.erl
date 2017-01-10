@@ -128,6 +128,7 @@ request_arg("publication_before")  -> publication_before;
 request_arg("qargs")               -> qargs;
 request_arg("query_id")            -> query_id;
 request_arg("rsc_id")              -> rsc_id;
+request_arg("name")                -> name;
 request_arg("sort")                -> sort;
 request_arg("text")                -> text;
 request_arg("match_objects")       -> match_objects;
@@ -431,6 +432,20 @@ parse_query([{rsc_id, Id}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(Id, Result),
     Result2 = add_where("rsc.id = " ++ Arg, Result1),
     parse_query(Rest, Context, Result2);
+
+%% name=<name-pattern>
+%% Filter on the unique name of a resource.
+parse_query([{name, Name}|Rest], Context, Result) ->
+    case z_string:to_lower(z_string:trim(z_convert:to_binary(Name))) of
+        All when All =:= <<>>; All =:= <<"*">>; All =:= <<"%">> ->
+            Result2 = add_where("rsc.name is not null", Result),
+            parse_query(Rest, Context, Result2);
+        Name1 ->
+            Name2 = binary:replace(Name1, <<"*">>, <<"%">>, [global]),
+            {Arg, Result1} = add_arg(Name2, Result),
+            Result2 = add_where("rsc.name like " ++ Arg, Result1),
+            parse_query(Rest, Context, Result2)
+    end;
 
 %% sort=fieldname
 %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.
