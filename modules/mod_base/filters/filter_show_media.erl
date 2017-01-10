@@ -63,7 +63,7 @@ show_media1_id(Input, Index, Context) ->
 show_media1_opts(Id, Input, Index, Context) ->
     case Input of
         <<Opts:Index/binary, "} -->", Post/binary>> ->
-            Opts2 = mochijson:decode("{" ++ binary_to_list(Opts) ++ "}"),
+            Opts2 = mochijson:binary_decode(<<"{", Opts/binary, "}">>),
             Html = show_media_html(Id, Opts2, Context),
             process_binary_match(<<>>, Html, size(Post), show_media1(Post, 0, Context));
         <<_:Index/binary, _/binary>> ->
@@ -72,57 +72,59 @@ show_media1_opts(Id, Input, Index, Context) ->
             Input
     end.
 
-
-
 show_media_html(Id, Context) ->
     show_media_html(Id, {struct, []}, Context).
 
 show_media_html(Id, {struct, Args}, Context) ->
-    Args2 = [ {list_to_atom(A), B} || {A,B} <- Args],
+    Args2 = [ {to_atom(A), B} || {A,B} <- Args],
     Args3 = filter_args(Args2, false, [], Context),
-    Id1 = try
-              list_to_integer(z_convert:to_list(Id))
-          catch
-              _:_ -> Id
-          end,
+    Id1 = try z_convert:to_integer(Id) catch _:_ -> z_html:escape(Id) end,
     Tpl = z_context:get(show_media_template, Context),
     z_template:render({cat, Tpl}, [ {id, Id1} | Args3 ++ z_context:get_all(Context) ], Context).
+
+to_atom(<<"id">>) -> id;
+to_atom(<<"size">>) -> size;
+to_atom(<<"sizename">>) -> sizename;
+to_atom(<<"caption">>) -> caption;
+to_atom(<<"crop">>) -> crop;
+to_atom(<<"link">>) -> link;
+to_atom(<<"align">>) -> align;
+to_atom(A) -> binary_to_existing_atom(A, 'utf8'). 
 
 filter_args([], true, Acc, _Context) ->
     Acc;
 filter_args([], false, Acc, Context) ->
     [_S,M,_L] = get_sizes(Context),
-    [{size,M},{sizename,"medium"}|Acc];
+    [{size, M}, {sizename, <<"medium">>}|Acc];
 filter_args([{size,Size}|Args], _, Acc, Context) ->
     [S,M,L] = get_sizes(Context),
     {P,SizeName} = case Size of
-                        "large" -> {L,"large"};
-                        "small" -> {S,"small"};
-                        _ -> {M,"medium"}
+                        <<"large">> -> {L,<<"large">>};
+                        <<"small">> -> {S,<<"small">>};
+                        _ -> {M,<<"medium">>}
                    end,
     filter_args(Args, true, [{size,P},{sizename,SizeName}|Acc], Context);
-filter_args([{crop,"crop"}|Args], HasSize, Acc, Context) ->
+filter_args([{crop, <<"crop">>}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{crop,true}|Acc], Context);
-filter_args([{crop,_}|Args], HasSize, Acc, Context) ->
+filter_args([{crop, _}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{crop,undefined}|Acc], Context);
-filter_args([{link,"link"}|Args], HasSize, Acc, Context) ->
+filter_args([{link, <<"link">>}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{link,true}|Acc], Context);
-filter_args([{link,_}|Args], HasSize, Acc, Context) ->
+filter_args([{link, _}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{link,undefined}|Acc], Context);
-filter_args([{caption,Caption}|Args], HasSize, Acc, Context) ->
+filter_args([{caption, Caption}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{caption,z_html:escape(Caption)}|Acc], Context);
 filter_args([P|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [P|Acc], Context).
 
 
-
 get_sizes(Context) ->
-    Int = fun(S) -> z_convert:to_integer(z_string:trim(S)) end,
-    %% Get sizes from site.media_dimensions
+    % Get sizes from site.media_dimensions
     WidthHeightString = z_convert:to_list(m_config:get_value(site, media_dimensions, "200x200,300x300,500x500", Context)),
-    [   [{width, Int(W)}, {height, Int(H)}] ||
+    [   [{width, to_int(W)}, {height, to_int(H)}] ||
         [W,H] <- [string:tokens(P, "x") || P <- string:tokens(WidthHeightString, ",")] ].
 
+to_int(S) -> z_convert:to_integer(z_string:trim(S)).
 
 process_binary_match(Pre, Insertion, SizePost, Post) ->
     case {size(Pre), SizePost} of
