@@ -107,7 +107,7 @@ transport(L, Context) when is_list(L) ->
                   end,
                   L);
 transport(#z_msg_v1{} = Msg, Context) ->
-    case Msg#z_msg_v1.push_queue of
+    case push_queue(Msg#z_msg_v1.push_queue) of
         session -> z_session:transport(Msg, Context);
         page -> z_session_page:transport(Msg, Context);
         user -> transport_user(Msg, z_acl:user(Context), Context);
@@ -237,7 +237,7 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content
     end;
 incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) ->
     Context1 = maybe_set_sessions(SessionId, PageId, Context),
-    case Ack#z_msg_ack.push_queue of
+    case push_queue(Ack#z_msg_ack.push_queue) of
         page -> z_session_page:receive_ack(Ack, Context);
         session -> z_session:receive_ack(Ack, Context)
     end,
@@ -509,3 +509,8 @@ mklist(V) -> [V].
 now_msec() ->
     {A,B,C} = os:timestamp(),
     (A*1000000+B)*1000 + C div 1000.
+
+push_queue(A) when is_atom(A) -> A;
+push_queue(<<"page">>) -> page;
+push_queue(<<"session">>) -> session;
+push_queue(<<"user">>) -> user.
