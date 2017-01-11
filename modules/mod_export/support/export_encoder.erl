@@ -92,7 +92,8 @@ encoders() ->
     [
         export_encoder_csv,
         export_encoder_xlsx,
-        export_encoder_ics
+        export_encoder_ics,
+        export_encoder_atom
     ].
 
 do_header(StreamState, Context) ->
