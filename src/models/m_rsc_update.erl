@@ -788,6 +788,16 @@ props_filter([{crop_center, CropCenter}|T], Acc, Context) ->
     end,
     props_filter(T, [{crop_center, CropCenter1}|Acc], Context);
 
+props_filter([{privacy, undefined}|T], Acc, Context) ->
+    props_filter(T, [{privacy, undefined}|Acc], Context);
+props_filter([{privacy, Privacy}|T], Acc, Context) ->
+    P = try
+            z_convert:to_integer(Privacy)
+        catch
+            _:_ -> undefined
+        end,
+    props_filter(T, [{privacy, P}|Acc], Context);
+
 props_filter([{_Prop, _V}=H|T], Acc, Context) ->
     props_filter(T, [H|Acc], Context).
 

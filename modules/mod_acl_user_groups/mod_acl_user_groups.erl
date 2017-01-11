@@ -56,6 +56,7 @@
 
     observe_acl_is_owner/2,
     observe_acl_is_allowed/2,
+    observe_acl_is_allowed_prop/2,
     observe_acl_logon/2,
     observe_acl_logoff/2,
     observe_acl_context_authenticated/2,
@@ -230,6 +231,13 @@ observe_acl_is_owner(#acl_is_owner{}, _Context) -> undefined.
 
 observe_acl_is_allowed(AclIsAllowed, Context) ->
     acl_user_groups_checks:acl_is_allowed(AclIsAllowed, Context).
+
+observe_acl_is_allowed_prop(#acl_is_allowed_prop{action=view, object=undefined}, _Context) ->
+    true;
+observe_acl_is_allowed_prop(#acl_is_allowed_prop{action=view, object=Id, prop=Property}, #context{} = Context) when is_integer(Id) ->
+    acl_user_groups_checks:acl_is_allowed_prop(Id, Property, Context);
+observe_acl_is_allowed_prop(#acl_is_allowed_prop{}, #context{user_id=undefined}) ->
+    undefined.
 
 observe_acl_logon(AclLogon, Context) ->
     acl_user_groups_checks:acl_logon(AclLogon, Context).
