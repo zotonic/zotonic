@@ -32,9 +32,9 @@
     </div>
 
     <div class="form-group">
-        <label class="control-label">{_ Show private details to _}</label>
+        <label class="control-label">{_ Show private properties to _}</label>
         <div>
-            {% with id.privacy|if_undefined:(id.is_a.person|if:30:0) as privacy %}
+            {% with id.privacy as privacy %}
             <select class="form-control" id="{{ #privacy }}" name="privacy">
                 <option value="0">{_ Everybody _}</option>
                 <option value="10" {% if privacy == 10 %}selected{% endif %}>{_ Members _}</option>
@@ -47,7 +47,7 @@
             </select>
             {% endwith %}
             <p class="help-block">
-                {_ Private details are email, phone, visiting address, and date range. _}
+                {_ Private properties are email, phone, visiting address, and date range. _}
             </p>
         </div>
     </div>

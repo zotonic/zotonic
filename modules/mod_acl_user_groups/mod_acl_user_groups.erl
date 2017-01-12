@@ -1,7 +1,7 @@
-%% @copyright 2015 Arjan Scherpenisse
+%% @copyright 2015-2017 Arjan Scherpenisse
 %% @doc Adds content groups to enable access-control rules on resources.
 
-%% Copyright 2015 Arjan Scherpenisse
+%% Copyright 2015-2017 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
 -behaviour(gen_server).
 
 -include_lib("zotonic.hrl").
+-include("support/acl_user_groups.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 % API
@@ -46,6 +47,7 @@
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
     observe_rsc_insert/3,
+    observe_rsc_get/3,
     name/1,
     manage_schema/2
 ]).
@@ -297,6 +299,25 @@ observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
         false ->
             ok
     end.
+
+%% @doc Ensure that the privacy property is set.
+observe_rsc_get(#rsc_get{}, [], _Context) ->
+    [];
+observe_rsc_get(#rsc_get{}, Props, Context) ->
+    case proplists:get_value(privacy, Props) of
+        undefined ->
+            [
+                {privacy,
+                    case m_category:is_a_prim(proplists:get_value(category_id, Props), person, Context) of
+                        true -> ?ACL_PRIVACY_COLLAB_MEMBER;
+                        false -> ?ACL_PRIVACY_PUBLIC
+                    end}
+                | proplists:delete(privacy, Props)
+            ];
+        _ ->
+            Props
+    end.
+
 
 status(Context) ->
     gen_server:call(name(Context), status).

@@ -51,6 +51,7 @@
     ]).
 
 -include_lib("zotonic.hrl").
+-include("acl_user_groups.hrl").
 
 -define(MAX_UPLOAD_SIZE_MB, 50).
 
@@ -222,9 +223,9 @@ acl_is_allowed_prop(Id, Prop, Context) ->
     case is_private_property(Prop) of
         true ->
             case privacy(Id, Context) of
-                0 -> true;
-                10 -> z_acl:user(Context) =/= undefined;
-                50 -> can_rsc(Id, update, Context);
+                ?ACL_PRIVACY_PUBLIC -> true;
+                ?ACL_PRIVACY_MEMBER -> z_acl:user(Context) =/= undefined;
+                ?ACL_PRIVACY_PRIVATE -> can_rsc(Id, update, Context);
                 N ->
                     privacy_check(N, m_rsc:is_a(Id, person, Context), Id, Context)
                     orelse can_rsc(Id, update, Context)
@@ -246,34 +247,34 @@ privacy(Id, Context) ->
             N;
         _OtherOrUndefined ->
             case m_rsc:is_a(Id, person, Context) of
-                true -> 30;
-                false -> 0
+                true -> ?ACL_PRIVACY_COLLAB_MEMBER;
+                false -> ?ACL_PRIVACY_PUBLIC
             end
     end.
 
 
 % Things - check only their content group
-privacy_check(20, false, Id, Context) ->
+privacy_check(?ACL_PRIVACY_USER_GROUP, false, Id, Context) ->
     % Same user group, but not a person -- apply collaboration group semantics
-    privacy_check(30, false, Id, Context);
-privacy_check(30, false, Id, Context) ->
+    privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, false, Id, Context);
+privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, false, Id, Context) ->
     is_collab_group_member(m_rsc:p_no_acl(Id, content_group_id, Context), Context);
-privacy_check(40, false, Id, Context) ->
+privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, false, Id, Context) ->
     is_collab_group_manager(m_rsc:p_no_acl(Id, content_group_id, Context), Context);
 % People - check their memberships *and* their content group
-privacy_check(20, true, _Id, #context{acl=#aclug{user_groups=[]}}) ->
+privacy_check(?ACL_PRIVACY_USER_GROUP, true, _Id, #context{acl=#aclug{user_groups=[]}}) ->
     false;
-privacy_check(20, true, Id, #context{acl=#aclug{user_groups=UGs}} = Context) ->
+privacy_check(?ACL_PRIVACY_USER_GROUP, true, Id, #context{acl=#aclug{user_groups=UGs}} = Context) ->
     case has_user_groups(Id, Context) of
         [] -> false;
         Other ->
             Other1 = Other -- [ m_rsc:rid(acl_user_group_members, Context) ],
             lists:any(fun(UgId) -> lists:member(UgId, UGs) end, Other1)
     end
-    orelse privacy_check(30, true, Id, Context);
-privacy_check(30, true, _Id, #context{acl=#aclug{collab_groups=[]}}) ->
+    orelse privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, true, Id, Context);
+privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, true, _Id, #context{acl=#aclug{collab_groups=[]}}) ->
     false;
-privacy_check(30, true, Id, #context{acl=#aclug{collab_groups=CGs}} = Context) ->
+privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, true, Id, #context{acl=#aclug{collab_groups=CGs}} = Context) ->
     case has_collab_groups(Id, Context) of
         [] -> false;
         Other ->
@@ -281,9 +282,9 @@ privacy_check(30, true, Id, #context{acl=#aclug{collab_groups=CGs}} = Context) -
             orelse lists:member(m_rsc:p_no_acl(Id, content_group_id, Context), CGs)
     end
     orelse lists:member(m_rsc:p_no_acl(Id, content_group_id, Context), CGs);
-privacy_check(40, true, _Id, #context{acl=#aclug{collab_groups=[]}}) ->
+privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, true, _Id, #context{acl=#aclug{collab_groups=[]}}) ->
     false;
-privacy_check(40, true, Id, #context{user_id=UserId} = Context) ->
+privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, true, Id, #context{user_id=UserId} = Context) ->
     case m_edge:subjects(UserId, hascollabmanager, Context) of
         [] -> false;
         ManagerOf ->

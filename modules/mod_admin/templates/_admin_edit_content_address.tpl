@@ -139,9 +139,9 @@
 
 	<div class="form-group">
 		<div class="form-group">
-			<label class="control-label" for="mail_email">{_ Email _} {_ (public) _}</label>
+			<label class="control-label" for="mail_email">{_ Email address for public display _}</label>
 			<div>
-				<input class="form-control" id="mail_email" type="text" name="mail_email" value="{{ r.mail_email }}" />
+				<input class="form-control" id="mail_email" type="text" name="mail_email" value="{{ r.mail_email }}" placeholder="{_ Email address _}" />
 				{% validate id="mail_email" type={email} %}
 			</div>
 		</div>
