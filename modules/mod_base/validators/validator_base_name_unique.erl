@@ -48,9 +48,9 @@ event(#postback{message = {validate, Args}, trigger = TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     {IsValid, ContextValidated} = case validate(name_unique, TriggerId, Value, Args, Context) of
         {{ok, _}, ContextOk} ->
-            {"true", z_render:wire({fade_out, [{target, TriggerId ++ "_name_unique_error"}]}, ContextOk)};
+            {"true", z_render:wire({fade_out, [{target, <<TriggerId/binary, "_name_unique_error">>}]}, ContextOk)};
         {{error, Id, _} = Error, ContextScript} ->
-            {"false", z_render:wire({fade_in, [{target, TriggerId ++ "_name_unique_error"}]},
+            {"false", z_render:wire({fade_in, [{target, <<TriggerId/binary, "_name_unique_error">>}]},
                 z_validation:report_errors([{Id, Error}], ContextScript))}
     end,
     z_script:add_script(
