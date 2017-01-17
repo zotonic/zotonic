@@ -42,8 +42,8 @@ resource_exists(Context) ->
     Context2 = z_context:continue_session(Context),
     Context3 = reset_rememberme_cookie_and_logoff(Context2),
     case lists:flatten(z_script:get_script(Context3)) of
-        [] -> {false, Context};
-        _Script -> {true, Context}
+        [] -> {false, Context3};
+        _Script -> {true, Context3}
     end.
 
 previously_existed(Context) ->
