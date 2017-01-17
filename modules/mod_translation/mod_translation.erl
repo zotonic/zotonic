@@ -1,11 +1,10 @@
 %% -*- coding: utf-8 -*-
 
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2011 Marc Worrell
-%% Date: 2010-05-19
+%% @copyright 2010-2017 Marc Worrell, Arthur Clemens
 %% @doc Translation support. Generates .po files by scanning templates.
 
-%% Copyright 2010-2016 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %% Copyright 2016 Arthur Clemens
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,6 +64,7 @@
          generate_core/1
         ]).
 
+
 -include("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
@@ -118,7 +118,8 @@ default_languages() ->
 observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
     case get_q_language(Context) of
         undefined -> maybe_persistent(Context);
-        QsLang -> set_language(QsLang, Context)
+        QsLang -> 
+            set_language(QsLang, Context)
     end.
 
 
@@ -147,15 +148,46 @@ maybe_configuration(Context) ->
 maybe_accept_header(Context) ->
     case z_context:get_req_header(<<"accept-language">>, Context) of
         undefined -> Context;
-        AcceptLanguage -> set_language(binary_to_atom(AcceptLanguage, 'utf8'), Context)
+        AcceptHeader ->
+            Enabled = acceptable_languages(Context),
+            case cowmachine_accept_language:accept_header(Enabled, AcceptHeader) of
+                {ok, Lang} -> set_language(binary_to_atom(Lang, utf8), Context);
+                {error, _} -> Context
+            end
     end.
+
+% Fetch a list of acceptable languages and their fallback languages
+% Store this in the depcache (and memo) for quick(er) lookups.
+acceptable_languages(Context) ->
+    z_depcache:memo(
+        fun() ->
+            Enabled = enabled_languages(Context),
+            lists:map(
+                fun({LangAtom,Opts}) ->
+                    Lang = atom_to_binary(LangAtom, utf8), 
+                    case lists:keyfind(fallback, 1, Opts) of
+                        {fallback, Fallback} -> {Lang,[Fallback]};
+                        false -> {Lang,[]}
+                    end
+                end,
+                Enabled)
+        end,
+        acceptable_languages,
+        3600,
+        [config],
+        Context).
 
 
 -spec get_q_language(#context{}) -> atom().
 get_q_language(Context) ->
     case z_context:get_q_all(<<"z_language">>, Context) of
         [] -> undefined;
-        L -> binary_to_atom(lists:last(L), 'utf8')
+        L ->
+            Enabled = acceptable_languages(Context),
+            case cowmachine_accept_language:accept_list(Enabled, [lists:last(L)]) of
+                {ok, Lang} -> binary_to_atom(Lang, utf8);
+                {error, _} -> undefined
+            end
     end.
 
 
@@ -390,8 +422,10 @@ set_language(Code0, Context) when is_atom(Code0) ->
             z_context:set_session(language, Langs, Context1),
             Context1
     end;
-set_language(Code, Context) ->
-    set_language(z_convert:to_atom(Code), Context).
+set_language(Code, Context) when is_binary(Code) ->
+    set_language(erlang:binary_to_existing_atom(Code, utf8), Context);
+set_language(Code, Context) when is_list(Code) ->
+    set_language(erlang:list_to_existing_atom(Code, utf8), Context).
 
 
 %% @doc Set the default language.
@@ -529,9 +563,11 @@ is_multiple_languages_config(Context) ->
 %% @private
 -spec is_enabled_language(binary(), #context{}) -> boolean().
 is_enabled_language(LanguageCode, Context) ->
-    case lists:keyfind(binary_to_atom(LanguageCode, latin1), 1, enabled_languages(Context)) of
-        false -> false;
-        _ -> true
+    Enabled = enabled_languages(Context),
+    try
+        lists:keymember(erlang:binary_to_existing_atom(LanguageCode, utf8), 1, Enabled)
+    catch
+        erlang:badarg -> false
     end.
 
 
