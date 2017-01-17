@@ -423,9 +423,9 @@ set_language(Code0, Context) when is_atom(Code0) ->
             Context1
     end;
 set_language(Code, Context) when is_binary(Code) ->
-    set_language(erlang:binary_to_existing_atom(Code, utf8), Context);
+    set_language(binary_to_existing_atom(Code, utf8), Context);
 set_language(Code, Context) when is_list(Code) ->
-    set_language(erlang:list_to_existing_atom(Code, utf8), Context).
+    set_language(list_to_existing_atom(Code), Context).
 
 
 %% @doc Set the default language.
