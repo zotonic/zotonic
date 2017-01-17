@@ -153,7 +153,7 @@
   0},
  {<<"z_stdlib">>,
   {git,"https://github.com/zotonic/z_stdlib.git",
-       {ref,"92c79b9cb0382b4362bd33fe61b5fb03078b6e29"}},
+       {ref,"c70bf64cb7d1ecc4693dab21c4b3a664a422aa9d"}},
   0}]}.
 [
 {pkg_hash,[
