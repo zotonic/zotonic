@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2011 Marc Worrell
-%% Date: 2009-11-02
+%% @copyright 2009-2017 Marc Worrell
 %%
 %% @doc Send e-mail to a recipient. Optionally queue low priority messages.
 
-%% Copyright 2009-2011 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -53,31 +52,35 @@
 
 
 % The email domain depends on the site sending the e-mail
+-spec email_domain(z:context()) -> binary().
 email_domain(Context) ->
     case m_config:get_value(site, smtphost, Context) of
         undefined -> z_context:hostname(Context);
-        SmtpHost -> z_convert:to_list(SmtpHost)
+        SmtpHost -> z_convert:to_binary(SmtpHost)
     end.
 
 % Ensure that the sites's domain is attached to the email address.
-ensure_domain(Email, Context) when is_list(Email) ->
-    case lists:member($@, Email) of
-        true -> Email;
-        false -> Email ++ [$@|email_domain(Context)]
+-spec ensure_domain(binary()|string(), z:context()) -> binary().
+ensure_domain(Email, Context) when is_binary(Email) ->
+    case binary:match(Email, <<"@">>) of
+        {_,_} -> Email;
+        nomatch -> <<Email/binary, "$@", (email_domain(Context))/binary>>
     end;
 ensure_domain(Email, Context) ->
-    ensure_domain(z_convert:to_list(Email), Context).
+    ensure_domain(z_convert:to_binary(Email), Context).
 
 
 % Bounces can be forced to a different e-mail server altogether
+-spec bounce_domain(z:context()) -> binary().
 bounce_domain(Context) ->
     case z_config:get('smtp_bounce_domain') of
         undefined -> email_domain(Context);
-        BounceDomain -> BounceDomain
+        BounceDomain -> z_convert:to_binary(BounceDomain)
     end.
 
 
 %% @doc Fetch the e-mail address of the site administrator
+-spec get_admin_email(z:context()) -> binary().
 get_admin_email(Context) ->
 	case m_config:get_value(zotonic, admin_email, Context) of
 		undefined ->
@@ -85,15 +88,18 @@ get_admin_email(Context) ->
 				undefined ->
 					case m_rsc:p_no_acl(1, email_raw, Context) of
 						Empty when Empty == undefined orelse Empty == <<>> ->
-							hd(string:tokens("wwwadmin@" ++ z_convert:to_list(m_site:get(hostname, Context)), ":"));
+                            <<"wwwadmin@", (z_context:hostname(Context))/binary>>;
 						Email -> Email
 					end;
-				Email -> Email
+				Email -> z_convert:to_binary(Email)
 			end;
-		Email -> Email
+		Email -> z_convert:to_binary(Email)
 	end.
 
 %% @doc Send a simple text message to the administrator
+-spec send_admin(iolist(), iolist(), z:context()) ->
+          {ok, MsgId::binary()}
+        | {error, no_admin_email|sender_disabled|term()}.
 send_admin(Subject, Message, Context) ->
 	case get_admin_email(Context) of
 		undefined ->
@@ -176,58 +182,63 @@ sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
 
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
+-spec combine_name_email(Name::binary()|string(), Email::binary()|string()) -> binary().
 combine_name_email(Name, Email) ->
-    Name1 = z_convert:to_list(Name),
-    Email1 = z_convert:to_list(Email),
+    Name1 = z_convert:to_binary(Name),
+    Email1 = z_convert:to_binary(Email),
     case Name1 of
-        [] -> Email1;
-        _ -> [$"|rfc2047:encode(filter_name(Name1))] ++ "\" <" ++ Email1 ++ ">"
+        <<>> -> Email1;
+        _ ->
+            iolist_to_binary([
+                $",rfc2047:encode(z_string:trim(filter_name(Name1))),$",
+                " <", Email1, ">"
+            ])
     end.
 
-    filter_name(Name) ->
-        filter_name(Name, []).
-    filter_name([], Acc) ->
-        lists:reverse(Acc);
-    filter_name([$"|T], Acc) ->
-        filter_name(T, [32|Acc]);
-    filter_name([$<|T], Acc) ->
-        filter_name(T, [32|Acc]);
-    filter_name([H|T], Acc) when H < 32 ->
-        filter_name(T, [32|Acc]);
-    filter_name([H|T], Acc) ->
-        filter_name(T, [H|Acc]).
+filter_name(Name) ->
+    filter_name(Name, <<>>).
+
+filter_name(<<>>, Acc) -> Acc;
+filter_name(<<$", N/binary>>, Acc) -> filter_name(N, <<Acc/binary, " ">>);
+filter_name(<<$<, N/binary>>, Acc) -> filter_name(N, <<Acc/binary, " ">>);
+filter_name(<<$>, N/binary>>, Acc) -> filter_name(N, <<Acc/binary, " ">>);
+filter_name(<<C, N/binary>>, Acc) when C < 32 -> filter_name(N, <<Acc/binary, " ">>);
+filter_name(<<C/utf8, N/binary>>, Acc) -> filter_name(N, <<Acc/binary, C/utf8>>).
+
 
 %% @doc Split the name and email from the format `jan janssen <jan@example.com>'
+-spec split_name_email(binary()|string()) -> {binary(), binary()}.
 split_name_email(Email) ->
-    Email1 = string:strip(rfc2047:decode(Email)),
-    case split_ne(Email1, in_name, [], []) of
+    Email1 = z_string:trim(rfc2047:decode(Email)),
+    case split_ne(Email1, in_name, <<>>, <<>>) of
         {ends_in_name, E} ->
 			% Only e-mail
-            {[], z_string:trim(E)};
+            {<<>>, z_string:trim(z_convert:to_binary(E))};
         {N, E} ->
 			% E-mail and name
-            {z_string:trim(N), z_string:trim(E)}
+            {z_string:trim(z_convert:to_binary(N)), z_string:trim(z_convert:to_binary(E))}
     end.
 
-split_ne([], in_name, [], Acc) ->
-    {ends_in_name, lists:reverse(Acc)};
-split_ne([], in_qname, [], Acc) ->
-    {ends_in_name, lists:reverse(Acc)};
-split_ne([], to_email, [], Acc) ->
-    {ends_in_name, lists:reverse(Acc)};
-split_ne([], _, Name, Acc) ->
-    {Name, lists:reverse(Acc)};
-split_ne([$<|T], to_email, Name, Acc) ->
-    split_ne(T, in_email, Name++lists:reverse(Acc), []);
-split_ne([$<|T], in_name, Name, Acc) ->
-    split_ne(T, in_email, Name++lists:reverse(Acc), []);
-split_ne([$>|_], in_email, Name, Acc) ->
-    {Name, lists:reverse(Acc)};
-split_ne([$"|T], in_name, [], Acc) ->
-    split_ne(T, in_qname, [], Acc);
-split_ne([$"|T], in_qname, [], Acc) ->
-    split_ne(T, to_email, lists:reverse(Acc), []);
-split_ne([H|T], to_email, Name, Acc) ->
-    split_ne(T, to_email, Name, [H|Acc]);
-split_ne([H|T], State, Name, Acc) ->
-    split_ne(T, State, Name, [H|Acc]).
+split_ne(<<>>, in_name, <<>>, Acc) ->
+    {ends_in_name, Acc};
+split_ne(<<>>, in_qname, <<>>, Acc) ->
+    {ends_in_name, Acc};
+split_ne(<<>>, to_email, <<>>, Acc) ->
+    {ends_in_name, Acc};
+split_ne(<<>>, _, Name, Acc) ->
+    {Name, Acc};
+split_ne(<<$<,T/binary>>, to_email, Name, Acc) ->
+    split_ne(T, in_email, <<Name/binary, Acc/binary>>, <<>>);
+split_ne(<<$<,T/binary>>, in_name, Name, Acc) ->
+    split_ne(T, in_email, <<Name/binary, Acc/binary>>, <<>>);
+split_ne(<<$>,_/binary>>, in_email, Name, Acc) ->
+    {Name, Acc};
+split_ne(<<$",T/binary>>, in_name, <<>>, Acc) ->
+    split_ne(T, in_qname, <<>>, Acc);
+split_ne(<<$",T/binary>>, in_qname, <<>>, Acc) ->
+    split_ne(T, to_email, Acc, <<>>);
+split_ne(<<H/utf8,T/binary>>, to_email, Name, Acc) ->
+    split_ne(T, to_email, Name, <<Acc/binary,H/utf8>>);
+split_ne(<<H/utf8,T/binary>>, State, Name, Acc) ->
+    split_ne(T, State, Name, <<Acc/binary,H/utf8>>).
+
