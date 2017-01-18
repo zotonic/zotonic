@@ -567,7 +567,7 @@ is_enabled_language(LanguageCode, Context) ->
     try
         lists:keymember(erlang:binary_to_existing_atom(LanguageCode, utf8), 1, Enabled)
     catch
-        erlang:badarg -> false
+        error:badarg -> false
     end.
 
 
