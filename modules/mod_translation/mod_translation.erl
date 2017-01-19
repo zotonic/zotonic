@@ -563,12 +563,22 @@ is_multiple_languages_config(Context) ->
 %% @private
 -spec is_enabled_language(binary(), #context{}) -> boolean().
 is_enabled_language(LanguageCode, Context) ->
-    Enabled = enabled_languages(Context),
-    try
-        lists:keymember(erlang:binary_to_existing_atom(LanguageCode, utf8), 1, Enabled)
-    catch
-        error:badarg -> false
+    case maybe_language_code(LanguageCode) of
+        true ->
+            Enabled = enabled_languages(Context),
+            try
+                lists:keymember(erlang:binary_to_existing_atom(LanguageCode, utf8), 1, Enabled)
+            catch
+                error:badarg -> false
+            end;
+        false ->
+            false
     end.
+
+maybe_language_code(<<A,B>>) when A >= $a, A =< $z, B >= $a, B =< $z -> true;
+maybe_language_code(<<A,B,$-,_/binary>>) when A >= $a, A =< $z, B >= $a, B =< $z -> true;
+maybe_language_code(<<$x,$-,_/binary>>) -> true;
+maybe_language_code(_) -> false.
 
 
 %% @private
