@@ -29,6 +29,6 @@ render_validator(acceptance, TriggerId, _TargetId, Args, Context)  ->
 %%          Error = invalid | novalue
 validate(acceptance, Id, Value, _Args, Context) ->
     case z_utils:is_true(Value) of
-        true  -> {{ok, "1"}, Context};
+        true  -> {{ok, <<"1">>}, Context};
         false -> {{error, Id, invalid}, Context}
     end.

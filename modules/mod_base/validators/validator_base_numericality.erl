@@ -41,8 +41,8 @@ render_validator(numericality, TriggerId, _TargetId, Args, Context)  ->
 %%          Error = invalid | novalue | {script, Script}
 validate(numericality, Id, Value, [IsFloat,Min,Max], Context) ->
     Result = case z_string:trim(Value) of
-                 [] ->
-                     {ok, []};
+                 [] -> {ok, <<>>};
+                 <<>> -> {ok, <<>>};
                  Trimmed ->
                      ConvertFun = case IsFloat of
                                       true -> fun z_convert:to_float/1;
@@ -65,13 +65,7 @@ validate_minmax(Value, Num, Min, Max, Id) ->
         false -> {error, Id, invalid}
     end.
 
-
-to_number(undefined) ->
-    -1;
-to_number(N) when is_float(N) ->
-    round(N);
-to_number(N) when is_integer(N) ->
-    N;
-to_number(N) ->
-    {I,_Rest} = string:to_integer(N),
-    I.
+to_number(undefined) -> -1;
+to_number(N) when is_float(N) -> round(N);
+to_number(N) when is_integer(N) -> N;
+to_number(N) -> z_convert:to_integer(N).

@@ -10,7 +10,7 @@
 
 
 render_action(_TriggerId, _TargetId, Args, Context) ->
-	Text   = z_utils:js_escape(proplists:get_value(text,Args,"")),
+	Text   = z_utils:js_escape(proplists:get_value(text,Args,<<>>)),
 	Script = [
 		    <<"var v = new LiveValidation(obj('me'), { onlyOnSubmit: true }); ">>,
 		    <<"v.add(Validate.Custom, { against: wf_return_false, failureMessage: \"">>,Text,<<"~s\" }); ">>,

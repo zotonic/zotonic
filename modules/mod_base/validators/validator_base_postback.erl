@@ -50,15 +50,13 @@ validate(postback, Id, Value, Args, Context) ->
     end.
 
 
-%% @spec event(Event, Context) -> Context
 %% @doc Handle the validation during form entry.
 event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
-    IsValid = case validate(postback, TriggerId, Value, Args, Context) of
-        {{ok, _},ContextValidated} ->
-            "true";
-        {{error, Id, _} = Error, ContextScript} ->
-            ContextValidated = z_validation:report_errors([{Id,Error}], ContextScript),
-            "false"
+    {IsValid,ContextValidated} = case validate(postback, TriggerId, Value, Args, Context) of
+        {{ok, _},Context1} ->
+            {<<"true">>, Context1};
+        {{error, Id, _} = Error, Context1} ->
+            {<<"false">>, z_validation:report_errors([{Id,Error}], Context1)}
     end,
     z_script:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).
