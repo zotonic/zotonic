@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html lang="{{ z_language|default:"en"|escape }}">
-  <head>
-    <meta charset="utf-8" />
-    <title>Zotonic{% block title %}{% endblock %}</title>
+{% extends "base_noscript.tpl" %}
 
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+{% block _html_head %}
+  {% lib
+      "bootstrap/css/bootstrap.css"
+      "css/jquery.loadmask.css"
+      "css/z.growl.css"
+      "css/z.modal.css"
+  %}
+{% endblock %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Arjan Scherpenisse, Marc Worrell" />
-  </head>
-
-  <body>
-    {% block content_area %}
-       {% block content %}
-          {% block main %}{% endblock %}
-       {% endblock %}
-    {% endblock %}
-  </body>
-</html>
+{% block js_include %}
+  {% include "_js_include.tpl" %}
+  {% script %}
+{% endblock%}
