@@ -233,7 +233,7 @@ identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
     lager:error("Please install ImageMagick 'identify' for identifying the type of uploaded files."),
     {error, "'identify' not installed"};
 identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
-    CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
+    CleanedImageFile = z_utils:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
     CmdOutput = os:cmd(z_utils:os_filename(Cmd)
                        ++" -quiet "
                        ++CleanedImageFile
