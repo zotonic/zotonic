@@ -1,11 +1,10 @@
 {% extends "base_simple.tpl" %}
-{% block title %}Connection Test{% endblock %}
+
+{% block title %}{_ Connection Test _}{% endblock %}
 
 {% block content %}
 
-{% lib
-    "js/modules/http_ping.js"
-%}
+{% lib "js/modules/http_ping.js" %}
 
 <div class="container">
 

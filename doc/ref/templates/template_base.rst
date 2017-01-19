@@ -1,4 +1,6 @@
 
 .. include:: meta-base.rst
 
-.. todo:: Not yet documented.
+Basic template to extend other pages from.
+
+Extends on the ``base_noscript.tpl`` by including some basic css and javascripts.
