@@ -32,7 +32,7 @@
 
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE,
-        "_flymake|\\.#|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/").
+        "_flymake|\\.#|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/|/log/\\.log$").
 
 
 %% @doc Called when a file is changed on disk. Decides what to do.
