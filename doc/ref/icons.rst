@@ -156,7 +156,7 @@ This will generate the following CSS::
 
 The ``:before`` pseudo-class can be extended to further style the icon. For instance to add a plus icon to a link:
 
-.. code-block:: css
+.. code-block::
 
     .my-plus-link {
         position: relative;
