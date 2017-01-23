@@ -154,14 +154,16 @@ This will generate the following CSS::
         content: "\e600";
     }
 
-The ``:before`` pseudo-class can be extended to further style the icon. For instance to add a plus icon to a link::
+The ``:before`` pseudo-class can be extended to further style the icon. For instance to add a plus icon to a link:
+
+.. code-block:: less
 
     .my-plus-link {
         position: relative;
         padding-left: 16px;
-
+        
         .extend_icon(z, icon-plus);
-
+        
         &:before {
             position: absolute;
             top: 4px;
