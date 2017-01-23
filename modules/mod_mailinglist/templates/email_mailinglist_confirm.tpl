@@ -10,7 +10,7 @@
 
 	<p>{_ Please follow _} <a href="{% url mailinglist_confirm confirm_key=recipient.confirm_key absolute_url %}">{_ this link to confirm _}</a>, {_ or copy and paste the address below in your browser. _}</p>
 
-	<p><a href="{% url mailinglist_confirm confirm_key=recipient.confirm_key absolute_url %}">{% url mailinglist_confirm confirm_key=recipient.confirm_key use_absolute_url %}</a></p>
+	<p><a href="{% url mailinglist_confirm confirm_key=recipient.confirm_key absolute_url %}">{% url mailinglist_confirm confirm_key=recipient.confirm_key absolute_url %}</a></p>
 
 	<p>{_ When you don’t want to receive any mail then please ignore this message. _}</p>
 {% endblock %}

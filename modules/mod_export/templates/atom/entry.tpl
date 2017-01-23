@@ -12,10 +12,10 @@
             {% if medium.filename %}
                 <link rel="enclosure" type="{{ medium.mime }}" href="{% url media_attachment star=medium.filename use_abolute_url %}" />
             {% elseif medium %}
-                <link rel="enclosure" type="image/jpeg" href="{% image_url id width=400 height=400 use_absolute_url %}" />
+                <link rel="enclosure" type="image/jpeg" href="{% image_url id width=400 height=400 absolute_url %}" />
             {% endif %}
             {% for media_id in id.media %}
-                <link rel="enclosure" type="image/jpeg" href="{% image_url media_id width=400 height=400 use_absolute_url %}" />
+                <link rel="enclosure" type="image/jpeg" href="{% image_url media_id width=400 height=400 absolute_url %}" />
             {% endfor %}
             <title>{{ id.title|escapexml }}</title>
             {% if id.body %}
@@ -25,7 +25,7 @@
                 <content type="text">{{ id.summary|escapexml }}</content>
             {% endif %}
             {% if medium.filename %}
-                <content type="{{ medium.mime }}" src="{% url media_attachment star=medium.filename use_absolute_url %}" />
+                <content type="{{ medium.mime }}" src="{% url media_attachment star=medium.filename absolute_url %}" />
             {% endif %}
             {% if id.is_a.event and id.date_start %}
                 {# http://code.google.com/apis/gdata/docs/2.0/elements.html#gdEventKind #}
