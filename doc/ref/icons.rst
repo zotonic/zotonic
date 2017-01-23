@@ -161,9 +161,7 @@ The ``:before`` pseudo-class can be extended to further style the icon. For inst
     .my-plus-link {
         position: relative;
         padding-left: 16px;
-        
         .extend_icon(z, icon-plus);
-        
         &:before {
             position: absolute;
             top: 4px;
