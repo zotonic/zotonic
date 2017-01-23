@@ -67,14 +67,16 @@ limitations under the License.
         } else {
             var buf = buffer || [];
             var inner = [];
+            var i;
             buf.push('{');
             if (spec) {
-                for (var i; i<spec.length; i++) {
+                for (i = 0; i<spec.length; i++) {
                     encode(value[spec[i]], inner);
                 }
             } else {
-                for (var k in value) {
-                    encode(value[k], inner);
+                var ks = Object.keys(value);
+                for (i = 0; i<ks.length; i++) {
+                    encode(value[ks[i]], inner);
                 }
             }
             buf.push(inner.join(","));
@@ -109,10 +111,11 @@ limitations under the License.
     // Encode as proplist with {key,value} tuples.
     function encode_as_proplist(value, buffer) {
         var buf = buffer || [];
-        var i;
+        var ks = Object.keys(value);
 
         buf.push("#");
-        for (var k in value) {
+        for (var i = 0; i<ks.length; i++) {
+            var k = ks[i];
             buf.push('{');
             encode(k, buf);
             buf.push(' ');
@@ -128,18 +131,21 @@ limitations under the License.
 
     // Encode as record
     function encode_as_record(value, record_name, spec, buffer) {
-        var buf = buffer || [], inner = [];
+        var buf = buffer || [];
+        var inner = [];
+        var i;
         spec = spec || specs[record_name];
 
         buf.push('{');
         if(spec) {
             encode_as_constant(record_name, inner);
-            for (var i in spec) {
+            for (i = 0; i<spec.length; i++) {
                 encode(value[spec[i]], inner);
             }
         } else {
-            for (var k in value) {
-                encode(value[k], inner);
+            ks = Object.keys(value);
+            for (i = 0; i<ks.length; i++) {
+                encode(value[ks[i]], inner);
             }
         }
         buf.push(inner.join(","));
@@ -221,8 +227,8 @@ limitations under the License.
                 } else if (typeof(value) == "object" && value._record) {
                     encode_as_record(value, value._record, specs[value._record], buf);
                 } else if(typeof(value) == "object") {
-                    var keys = get_keys(value).sort();
-                    if (keys.length == 2 && keys[0] == 'name' && keys[1] == 'value') {
+                    var keys = Object.keys(value);
+                    if (keys.length == 2 && ('name' in value) && ('value' in value)) {
                         encode_as_tuple([value.name, value.value], undefined, buf);
                     } else {
                         encode_as_proplist(value, buf);
@@ -337,14 +343,6 @@ limitations under the License.
             buf.push(current);
             i += 1;
         }
-    }
-
-    function get_keys(value) {
-        var ks = [];
-        for (var k in value) {
-            ks.push(k);
-        }
-        return ks;
     }
 
     function skip_ws(bytes) {
@@ -474,9 +472,11 @@ limitations under the License.
             case "map":
             case "plist":
                 var list = stack.pop();
+                var ks = Object.keys(list);
                 var map = {};
                 if (list.ubf_type != ubf.LIST) throw "Type error: not a list (for map)";
-                for (var k in list) {
+                for (var i; i<ks.length; i++) {
+                    var k = ks[i];
                     if (k != 'ubf_type') {
                         var elt = list[k];
                         if (typeof elt == "object" && 1 in elt) {
@@ -523,7 +523,7 @@ limitations under the License.
         default: return _push(bytes, env, stack);
         }
     }
-    
+
     function _utf8len ( s )
     {
         var n = 0;
