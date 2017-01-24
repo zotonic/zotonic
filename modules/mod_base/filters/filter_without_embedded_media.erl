@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse
-%% @doc 'show_media' filter, show the media inserted with the html editor.
+%% @copyright 2010-2017 Arjan Scherpenisse
+%% @doc 'without_embedded_media' filter, remove media ids embedded in texts.
 
-%% Copyright 2010 Arjan Scherpenisse
+%% Copyright 2010-2017 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,22 +17,24 @@
 %% limitations under the License.
 
 -module(filter_without_embedded_media).
--export([without_embedded_media/3]).
+-export([
+    without_embedded_media/3,
+    without_embedded_media/4
+    ]).
 
 -include_lib("zotonic.hrl").
 
 
-without_embedded_media(undefined, _Id, _Context) ->
-    undefined;
 without_embedded_media(Input, Id, Context) ->
+    without_embedded_media(Input, Id, true, Context).
+
+without_embedded_media(undefined, _Id, _IsCheckBlocks, _Context) ->
+    undefined;
+without_embedded_media(Input, undefined, _IsCheckBlocks, Context) ->
+    z_template_compiler_runtime:to_list(Input, Context);
+without_embedded_media(Input, Id, IsCheckBlocks, Context) ->
     case z_template_compiler_runtime:to_list(Input, Context) of
         [] -> [];
         Ids ->
-            Body = z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Id, body, Context), Context)),
-            case re:run(Body, "\<\!-- z-media ([0-9]+) ", [global, {capture, all_but_first, list}]) of
-                nomatch -> Ids;
-                {match, L} ->
-                    S = [z_convert:to_integer(I) || [I] <- L],
-                    lists:filter(fun(I) -> not(lists:member(I, S)) end, Ids)
-            end
+            Ids -- filter_embedded_media:embedded_media(Id, IsCheckBlocks, Context)
     end.
