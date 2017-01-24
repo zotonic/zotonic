@@ -31,8 +31,10 @@ render_validator(name_unique, TriggerId, TargetId, Args, Context)  ->
     {{ok, []}, #context{}} | {{error, m_rsc:resource(), atom() | binary()}, #context{}}.
 validate(name_unique, Id, Value, Args, Context) ->
     Message = proplists:get_value(failure_message, Args, invalid),
-    case z_string:to_lower(z_string:trim(Value)) of
+    case z_string:to_name(Value) of
         <<>> ->
+            {{error, Id, Message}, Context};
+        <<"_">> ->
             {{error, Id, Message}, Context};
         Name ->
             RscId = proplists:get_value(id, Args),
