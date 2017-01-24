@@ -659,11 +659,15 @@ props_filter([{uri, Uri}|T], Acc, Context) ->
 props_filter([{name, Name}|T], Acc, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
-            case Name of
-                Empty when Empty == undefined; Empty == []; Empty == <<>> ->
+            case z_utils:is_empty(Name) of
+                true ->
                     props_filter(T, [{name, undefined} | Acc], Context);
-                _ ->
-                    props_filter(T, [{name, z_string:to_name(Name)} | Acc], Context)
+                false ->
+                    Name1 = case z_string:to_name(Name) of
+                        <<"_">> -> undefined;
+                        N -> N
+                    end,
+                    props_filter(T, [{name, Name1} | Acc], Context)
             end;
         false ->
             props_filter(T, Acc, Context)
