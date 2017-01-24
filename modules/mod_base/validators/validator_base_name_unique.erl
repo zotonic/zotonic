@@ -31,12 +31,15 @@ render_validator(name_unique, TriggerId, TargetId, Args, Context)  ->
     {{ok, []}, #context{}} | {{error, m_rsc:resource(), atom() | string()}, #context{}}.
 validate(name_unique, Id, Value, Args, Context) ->
     Message = proplists:get_value(failure_message, Args, invalid),
-    case z_string:to_name(Value) of
-        <<>> ->
+    Value1 = z_string:trim(Value),
+    case {z_utils:is_empty(Value1), z_string:to_name(Value1)} of
+        {true, _} ->
+            {{ok, <<>>}, Context};
+        {false, <<>>} ->
             {{error, Id, Message}, Context};
-        <<"_">> ->
+        {false, <<"_">>} ->
             {{error, Id, Message}, Context};
-        Name ->
+        {false, Name} ->
             RscId = proplists:get_value(id, Args),
             case m_rsc:name_lookup(Name, Context) of
                 undefined ->
