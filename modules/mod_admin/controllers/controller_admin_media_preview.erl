@@ -51,6 +51,11 @@ content_types_provided(Context) ->
 
 to_image(Context) ->
     Opts = [{mediaclass, <<"admin-editor">>}],
-    {ok, Url} = z_media_tag:url(z_context:get(id, Context), Opts, Context),
-    Context1 = z_context:set_resp_header(<<"location">>, z_context:abs_url(Url, Context), Context),
-    {{halt, 303}, Context1}.
+    case z_media_tag:url(z_context:get(id, Context), Opts, Context) of
+        {ok, Url} ->
+            Context1 = z_context:set_resp_header(<<"location">>, z_context:abs_url(Url, Context), Context),
+            {{halt, 303}, Context1};
+        {error, enoent} ->
+            {{halt, 404}, Context}
+    end.
+
