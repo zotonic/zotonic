@@ -475,7 +475,7 @@ limitations under the License.
                 var ks = Object.keys(list);
                 var map = {};
                 if (list.ubf_type != ubf.LIST) throw "Type error: not a list (for map)";
-                for (var i; i<ks.length; i++) {
+                for (var i = 0; i<ks.length; i++) {
                     var k = ks[i];
                     if (k != 'ubf_type') {
                         var elt = list[k];
