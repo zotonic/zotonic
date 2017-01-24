@@ -30,16 +30,23 @@ render_validator(name_unique, TriggerId, TargetId, Args, Context)  ->
 -spec validate(name_unique, string(), term(), list(), #context{}) ->
     {{ok, []}, #context{}} | {{error, m_rsc:resource(), atom() | string()}, #context{}}.
 validate(name_unique, Id, Value, Args, Context) ->
-    Name = z_string:to_lower(z_string:trim(Value)),
-    RscId = proplists:get_value(id, Args),
-    case m_rsc:name_lookup(Name, Context) of
-        undefined ->
-            {{ok, []}, Context};
-        RscId ->
-            {{ok, []}, Context};
-        _ ->
-            Message = proplists:get_value(failure_message, Args, invalid),
-            {{error, Id, Message}, Context}
+    Message = proplists:get_value(failure_message, Args, invalid),
+    case z_string:to_name(Value) of
+        <<>> ->
+            {{error, Id, Message}, Context};
+        <<"_">> ->
+            {{error, Id, Message}, Context};
+        Name ->
+            RscId = proplists:get_value(id, Args),
+            case m_rsc:name_lookup(Name, Context) of
+                undefined ->
+                    {{ok, ""}, Context};
+                RscId ->
+                    {{ok, ""}, Context};
+                _ ->
+                    Message = proplists:get_value(failure_message, Args, invalid),
+                    {{error, Id, Message}, Context}
+            end
     end.
 
 %% @doc Handle the validation during form entry.
