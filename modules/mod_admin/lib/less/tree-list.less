@@ -19,7 +19,8 @@ ul.tree-list {
         @_side_spacing: (@_toggle_width - @_icon_size) / 2;
         
         line-height: @_line_height;
-        
+        border: none;
+
         // nested:
         li.menu-item:last-child {
             margin: 0;
@@ -47,6 +48,7 @@ ul.tree-list {
             position: relative;
             margin: -1px 0 0 0;
             padding: 0;
+            overflow: hidden;
             #3L > .gradient(#ffffff, @backgroundColorLightest);
 
             &:hover {
@@ -105,15 +107,9 @@ ul.tree-list {
 		@_img_height: 24px / 3 * 2;
 
 		img.admin-list-dashboard {
-			position: absolute;
 			width: @_img_width;
 			height: @_img_height;
-			left: @_left_spacing;
-			top: 50%;
-			margin-top: -@_img_height / 2;
-		}
-		img + span {
-			padding-left: @_img_width + 10px;
+			margin-bottom: 2px;
 		}
         &.has-submenu {
             > div {
@@ -171,4 +167,8 @@ ul.tree-list {
         }
     }
 
+}
+
+ul.tree-list.connections-list {
+    min-height: 12px;
 }
