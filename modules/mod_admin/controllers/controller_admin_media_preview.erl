@@ -65,6 +65,10 @@ content_types_provided(ReqData, Context) ->
 
 to_image(ReqData, Context) ->
     Opts = [{mediaclass, "admin-editor"}],
-    {ok, Url} = z_media_tag:url(z_context:get(id, Context), Opts, Context),
-    ReqData1 = wrq:set_resp_header("Location", z_context:abs_url(Url, Context), ReqData),
-    {{halt, 303}, ReqData1, Context}.
+    case z_media_tag:url(z_context:get(id, Context), Opts, Context) of
+        {ok, Url} ->
+            ReqData1 = wrq:set_resp_header("Location", z_context:abs_url(Url, Context), ReqData),
+            {{halt, 303}, ReqData1, Context};
+        {error, enoent} ->
+            {{halt, 404}, ReqData, Context}
+    end.
