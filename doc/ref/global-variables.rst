@@ -6,10 +6,15 @@ Global variables
 These variables are always available for
 :ref:`rendering in templates <template-variables>`.
 
+zotonic_version
+----------------
+
+The version of Zotonic, for example ``"1.0-dev"``.
+
 zotonic_dispatch
 ----------------
 
-The name of the dispatch rule that was applied to render the current page.
+An atom with the name of the dispatch rule that was applied to render the current page.
 
 zotonic_dispatch_path
 ---------------------
@@ -49,23 +54,3 @@ m
 
 ``m`` is not really a value, but it's an indicator to trigger a lookup in one of Zotonic's :ref:`models`. For instance the :ref:`model-rsc` model is always exposed and can be used like this ``{{ m.rsc[123].title }}``.
 
-z_trigger_id
-------------
-
-Only available in postback contexts. The id of the html element triggering a postback.
-
-z_target_id
------------
-
-Only available in postback contexts. The id of the html element that is the target of a postback.
-
-z_delegate
-----------
-
-Only available in postback contexts. The name of the Erlang module handling the postback event.
-
-
-Besides these variables, all key/value pairs that are set in the
-``#context{}`` record (using ``z_context:set/2``) that was used to
-render the current template are also exposed into the template's
-global scope.
