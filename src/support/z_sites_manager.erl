@@ -532,7 +532,7 @@ is_module(Module) ->
 %% should only be called when you are certain the site has not
 %% completed starting up, otherwise it will block infinitely.
 await_startup(Context = #context{}) ->
-    case z_notifier:await(module_ready, 30*1000, Context) of
+    case z_notifier:await(module_ready, 60*1000, Context) of
         {ok, _} ->
             ok;
         E -> E
