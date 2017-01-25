@@ -775,6 +775,19 @@ props_filter([{pref_language, Lang}|T], Acc, Context) ->
 props_filter([{language, Langs}|T], Acc, Context) ->
     props_filter(T, [{language, filter_languages(Langs)}|Acc], Context);
 
+props_filter([{crop_center, undefined}=H|T], Acc, Context) ->
+    props_filter(T, [H|Acc], Context);
+props_filter([{crop_center, CropCenter}|T], Acc, Context) ->
+    CropCenter1 = case z_string:trim(CropCenter) of
+        <<>> -> undefined;
+        Trimmed ->
+            case re:run(Trimmed, "^\\+[0-9]+\\+[0-9]+$") of
+                nomatch -> undefined;
+                {match, _} -> Trimmed
+            end
+    end,
+    props_filter(T, [{crop_center, CropCenter1}|Acc], Context);
+
 props_filter([{_Prop, _V}=H|T], Acc, Context) ->
     props_filter(T, [H|Acc], Context).
 
