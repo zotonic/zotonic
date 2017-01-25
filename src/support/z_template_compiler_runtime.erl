@@ -223,6 +223,8 @@ compile_map_nested_value([{identifier, _, <<"zotonic_dispatch_path">>}], Context
     get_z_context(zotonic_dispatch_path, ContextVar);
 compile_map_nested_value([{identifier, _, <<"zotonic_dispatch_path_rewrite">>}], ContextVar, _Context) ->
     get_z_context(zotonic_dispatch_path_rewrite, ContextVar);
+compile_map_nested_value([{identifier, _, <<"zotonic_version">>}], _ContextVar, _Context) ->
+    [{ast, erl_syntax:abstract(z_convert:to_binary(?ZOTONIC_VERSION))}];
 compile_map_nested_value(Ts, _ContextVar, _Context) ->
     Ts.
 
