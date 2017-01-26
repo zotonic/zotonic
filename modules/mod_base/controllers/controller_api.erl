@@ -175,7 +175,7 @@ set_cors_header(true, Context) ->
                     undefined when Def =/= undefined ->
                         z_context:set_resp_header(Header, Def, Ctx);
                     undefined when Def =:= undefined ->
-                        ok;
+                        Ctx;
                     V ->
                         z_context:set_resp_header(Header, z_convert:to_binary(V), Ctx)
                 end
