@@ -100,8 +100,11 @@ handle_MAIL(From, State) ->
 
 check_dnsbl(State) ->
     DNSBL = z_config:get(smtp_dnsbl, z_email_dnsbl:dnsbl_list()),
-    case z_email_dnsbl:status(State#state.peer, DNSBL) of
+    DNSWL = z_config:get(smtp_dnswl, z_email_dnsbl:dnswl_list()),
+    case z_email_dnsbl:status(State#state.peer, DNSBL, DNSWL) of
         {ok, notlisted} ->
+            {ok, State};
+        {ok, whitelisted} ->
             {ok, State};
         {ok, {blocked, Service}} ->
             lager:info("SMTP DNSBL check for ~s blocked by ~p -- closing connection with a 451",
