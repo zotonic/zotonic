@@ -1100,6 +1100,9 @@ fallback_language(Context) ->
 
 %% @doc Set the language of the context, either an atom (language) or a list (language and fallback languages)
 -spec set_language(atom()|binary()|string()|list(), z:context()) -> z:context().
+set_language('x-default', Context) ->
+    Lang = z_language:default_language(Context),
+    Context#context{language=[Lang,'x-default']};
 set_language(Lang, Context) when is_atom(Lang) ->
     Context#context{language=[Lang]};
 set_language(Langs, Context) when is_list(Langs) ->

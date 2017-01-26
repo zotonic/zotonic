@@ -235,6 +235,8 @@ observe_set_user_language(#set_user_language{}, Context, _Context) ->
     Context.
 
 
+observe_url_rewrite(#url_rewrite{}, Url, #context{language=[_,'x-default']}) ->
+    Url;
 observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
     case z_context:language(Context) of
         undefined ->
@@ -409,6 +411,8 @@ set_user_language(Code, Context) ->
 
 %% @doc Set the language of the current user/session. Sets to the given language if the language exists in the config language and is enabled; otherwise tries the language's fallback language; if this fails too, sets language to the site's default language.
 -spec set_language(atom(), #context{}) -> #context{}.
+set_language('x-default', Context) ->
+    z_context:set_language('x-default', Context);
 set_language(Code0, Context) when is_atom(Code0) ->
     {Code, LanguageData} = valid_config_language(Code0, Context),
     FallbackCode = proplists:get_value(fallback, LanguageData),
