@@ -713,7 +713,7 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                           <<>>;
                       {_Html, undefined} ->
                           {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*?)</title>", [dotall, caseless]),
-                          string:strip(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len))));
+                          string:strip(z_convert:to_list(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len)))));
                       {_Html, Sub} ->
                           Sub
                   end,
