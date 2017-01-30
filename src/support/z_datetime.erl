@@ -343,7 +343,7 @@ prev_year({{Y,M,D},T}) ->
 
 %% @doc Return the date one month earlier.
 prev_month({{Y,1,D},T}) -> {{Y-1,12,D},T};
-prev_month({{Y,M,D},T}) -> {{Y,M-1,D}, T}.
+prev_month({{Y,M,D},T}) -> move_day_if_undefined({{Y,M-1,D}, T}, fun prev_day/1).
 
 %% @doc Return the date one day earlier.
 prev_day({{_,_,1},_} = Date) ->
@@ -382,14 +382,15 @@ next_year({{Y,2,29},T})  ->
 next_year({{Y,M,D},T}) ->
     {{Y+1,M,D}, T}.
 
-%% @doc Return the date one month later.
+%% @doc Return the date one month later. Gives unpredictable results if the
+%%      day doesn't exist in the next month. (eg. feb 30 will become feb 28).
 next_month({{Y,12,D},T}) -> {{Y+1,1,D},T};
-next_month({{Y,M,D},T}) -> {{Y,M+1,D}, T}.
+next_month({{Y,M,D},T}) -> move_day_if_undefined({{Y,M+1,D}, T}, fun prev_day/1).
 
 %% @doc Return the date one day later.
 next_day({{Y,M,D},T} = Date) ->
     case calendar:last_day_of_the_month(Y,M) of
-        D ->
+        D1 when D1 =< D ->
             {{Y1,M1,_},T1} = next_month(Date),
             {{Y1,M1,1},T1};
         _ ->
@@ -544,3 +545,9 @@ undefined_if_invalid_date({{Y,M,D},{H,I,S}} = Date) when
         end;
 undefined_if_invalid_date(_) ->
     undefined.
+
+move_day_if_undefined(Date, Fun) ->
+    case undefined_if_invalid_date(Date) of
+        undefined -> move_day_if_undefined(Fun(Date), Fun);
+        _ -> Date
+    end.
