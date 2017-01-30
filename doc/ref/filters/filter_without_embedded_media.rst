@@ -8,7 +8,7 @@ This filter lets you loop over every image that is not included in the
 embedded ``body`` texts of the given page. This makes it easy to only
 show images that have not been shown already::
 
-  {% for media_id in m.rsc[id].media|without_embedded_media:id %} 
+  {% for media_id in m.rsc[id].media|without_embedded_media:id %}
       {% media media_id width=315 extent %}
   {% endfor %}
 
@@ -18,8 +18,8 @@ consider for filtering from the body text.
 There is an optional second argument to only consider media ids in the
 ``body`` and ``body_extra`` properties::
 
-  {% for media_id in m.rsc[id].media|without_embedded_media:id:0 %} 
-      {% media media_id width=315 extent %}
-  {% endfor %}
+    {% for media_id in m.rsc[id].media|without_embedded_media:id:0 %}
+        {% media media_id width=315 extent %}
+    {% endfor %}
 
-.. seealso:: :ref:`filter-show_media`, :ref:`filter-embedded_media
+.. seealso:: :ref:`filter-show_media`, :ref:`filter-embedded_media`
