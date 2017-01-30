@@ -35,4 +35,5 @@ Images that are inlined in the body text can have these parameters:
 
 These parameters can be set in the editor dialog ‘Insert a Zotonic media item’.
 
-.. seealso:: :ref:`filter-without_embedded_media`
+.. seealso::
+    :ref:`filter-embedded_media`, :ref:`filter-without_embedded_media`
