@@ -169,8 +169,8 @@ connect(Args, RetryCt) ->
         case pgsql:connect(Hostname, Username, Password,
                            [{database, Database}, {port, Port}]) of
             {ok, Conn} ->
-                case pgsql:squery(Conn, "SET search_path TO " ++ Schema) of
-                    {ok, [], []} ->
+                case pgsql:squery(Conn, "SET TIME ZONE 'UTC'; SET search_path TO " ++ Schema) of
+                    [{ok, [], []}, {ok, [],[]}] ->
                         {ok, Conn};
                     Error ->
                         catch pgsql:close(Conn),
