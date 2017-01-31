@@ -170,8 +170,8 @@ connect(Args, RetryCt) ->
         case epgsql:connect(Hostname, Username, Password,
                            [{database, Database}, {port, Port}]) of
             {ok, Conn} ->
-                case epgsql:squery(Conn, "SET search_path TO " ++ Schema) of
-                    {ok, [], []} ->
+                case epgsql:squery(Conn, "SET TIME ZONE 'UTC'; SET search_path TO " ++ Schema) of
+                    [{ok, [], []}, {ok, [], []}] ->
                         {ok, Conn};
                     Error ->
                         catch epgsql:close(Conn),
