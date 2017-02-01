@@ -39,8 +39,8 @@ Where m.config.mod_emailer.email_from returns a property list which is much like
     ]
 
 If the database does not contain a ``mod_email.email_from`` configuration
-parameter, Zotonic falls back to the site configuration file and tries to find
-the parameter there.
+parameter, Zotonic falls back to the :ref:`site config file <ref-site-configuration>`
+and tries to find the parameter there.
 
 When the config key would have any extra value (besides the value
 property) then they would be visible as extra properties and the
