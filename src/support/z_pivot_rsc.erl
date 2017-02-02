@@ -934,7 +934,7 @@ define_custom_pivot(Module, Columns, Context) ->
                         Idx = [
                                 begin
                                     K = element(1,Col),
-                                    "CREATE INDEX " ++ z_convert:to_list(K) ++ "_key ON "
+                                    "CREATE INDEX " ++ TableName ++ "_" ++ z_convert:to_list(K) ++ "_key ON "
                                     ++ TableName ++ "(" ++ z_convert:to_list(K) ++ ")"
                                 end
                                 || Col <- Indexable
