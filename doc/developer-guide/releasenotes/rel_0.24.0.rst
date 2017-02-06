@@ -3,7 +3,7 @@
 Release 0.24.0
 ==============
 
-Welcome to Zotonic 0.24.0, released on 2 January, 2016.
+Welcome to Zotonic 0.24.0, released on 2 January, 2017.
 
 Main changes are:
 
