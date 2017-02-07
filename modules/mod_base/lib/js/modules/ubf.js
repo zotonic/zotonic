@@ -223,7 +223,7 @@ limitations under the License.
                     // Per default encode strings as binary - better on the server
                     encode_as_binary(value, buf);
                 } else if (typeof(value) == "object" && value instanceof Date) {
-                    buf.push(""+Math.round((new Date()).getTime() / 1000)+"`dt`");
+                    buf.push(""+Math.round(value.getTime() / 1000)+"`dt`");
                 } else if (typeof(value) == "object" && value._record) {
                     encode_as_record(value, value._record, specs[value._record], buf);
                 } else if(typeof(value) == "object") {
