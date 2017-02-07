@@ -411,7 +411,10 @@ replace_medium(Medium, RscId, RscProps, Options, Context) ->
 
 update_medium_1(RscId, Medium, RscProps, Options, Context) ->
     {mime, Mime} = proplists:lookup(mime, Medium),
-    {category, Category} = proplists:lookup(category, RscProps),
+    Category = case proplists:get_value(category, RscProps) of
+                    undefined -> tl(m_rsc:is_a(RscId, Context));
+                    Cat -> Cat
+               end, 
     case z_acl:is_allowed(insert, #acl_rsc{category=Category}, Context) andalso
          z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context) of
         true ->

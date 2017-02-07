@@ -30,6 +30,8 @@
 -include_lib("z_stdlib/include/z_url_metadata.hrl").
 
 
+-define(EMPTY(A), ((A =:= undefined) orelse (A =:= "") orelse (A =:= <<>>))).
+
 %% @doc Insert a selected #media_import_props{}
 insert(#media_import_props{medium_props=[]} = MI, Context) ->
     Props = z_utils:props_merge(
@@ -39,7 +41,7 @@ insert(#media_import_props{medium_props=[]} = MI, Context) ->
         undefined ->  m_rsc:insert(Props, Context);
         PreviewUrl -> m_media:insert_url(PreviewUrl, Props, Context)
     end;
-insert(#media_import_props{medium_url=undefined} = MI, Context) ->
+insert(#media_import_props{medium_url=MediumUrl} = MI, Context) when ?EMPTY(MediumUrl) ->
     RscProps = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI)),
     MediumProps = MI#media_import_props.medium_props,
     Options = [ {preview_url, MI#media_import_props.preview_url} ],
@@ -57,10 +59,12 @@ default_rsc_props(#media_import_props{category=Cat}) ->
 
 
 %% @doc Update a resource with the selected #media_import_props()
-update(RscId, #media_import_props{medium_props=[], preview_url=undefined, medium_url=undefined}, _Context) ->
+update(RscId, #media_import_props{medium_props=[], preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
+    when ?EMPTY(PreviewUrl), ?EMPTY(MediumUrl) ->
     % Nothing to do
     {ok, RscId};
-update(RscId, #media_import_props{medium_props=MP, medium_url=undefined} = MI, Context) when MP =/= [] ->
+update(RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context) 
+    when MP =/= [], ?EMPTY(MediumUrl) ->
     % Embedded, with optional preview_url
     RscProps = [
         {original_filename, proplists:get_value(original_filename, MP)}

@@ -382,7 +382,7 @@ get_raw_lock(Id, Context) -> m_rsc:get_raw_lock(Id, Context).
 update_transaction_fun_insert(#rscupd{id=insert_rsc} = RscUpd, Props, _Raw, UpdateProps, Context) ->
      % Allow the initial insertion props to be modified.
     CategoryId = z_convert:to_integer(proplists:get_value(category_id, Props)),
-    InsProps = z_notifier:foldr(#rsc_insert{}, [{category_id, CategoryId}, {version, 0}], Context),
+    InsProps = z_notifier:foldr(#rsc_insert{props=Props}, [{category_id, CategoryId}, {version, 0}], Context),
 
     % Check if the user is allowed to create the resource
     InsertId = case proplists:get_value(creator_id, UpdateProps) of

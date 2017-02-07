@@ -211,7 +211,8 @@ media_import(Service, Descr, MD, MI) ->
                     {height, H},
                     {video_embed_service, z_convert:to_binary(Service)},
                     {video_embed_code, embed_code(Service, H, W, VideoId)},
-                    {video_embed_id, z_convert:to_binary(VideoId)}
+                    {video_embed_id, z_convert:to_binary(VideoId)},
+                    {media_import, MI#media_import.url}
                 ],
                 preview_url = z_url_metadata:p(image, MD)
             };

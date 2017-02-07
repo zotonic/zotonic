@@ -23,7 +23,9 @@
 %% interface functions
 -export([
     render_action/4,
-    event/2
+    event/2,
+
+    do_new_page_actions/3
 ]).
 
 -include("zotonic.hrl").
@@ -79,9 +81,13 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
     ],
     z_render:dialog(?__("Make a new page", Context), "_action_dialog_new_rsc.tpl", Vars, Context);
 
-
 event(#submit{message={new_page, Args}}, Context) ->
-    Redirect = proplists:get_value(redirect, Args),
+    BaseProps = get_base_props(z_context:get_q(<<"new_rsc_title">>, Context), Context),
+    {ok, Id} = m_rsc_update:insert(BaseProps, Context),
+    do_new_page_actions(Id, Args, Context).
+
+do_new_page_actions(Id, Args, Context) ->
+    Redirect = proplists:get_value(redirect, Args, true),
     SubjectId = z_convert:to_integer(proplists:get_value(subject_id, Args)),
     ObjectId = z_convert:to_integer(proplists:get_value(object_id, Args)),
     Predicate = proplists:get_value(predicate, Args),
@@ -89,8 +95,6 @@ event(#submit{message={new_page, Args}}, Context) ->
     Actions = proplists:get_value(actions, Args, []),
     Objects = proplists:get_value(objects, Args, []),
 
-    BaseProps = get_base_props(z_context:get_q(<<"new_rsc_title">>, Context), Context),
-    {ok, Id} = m_rsc_update:insert(BaseProps, Context),
 
     % Optionally add an edge from the subject to this new resource
     {_,Context1} = case {is_integer(SubjectId), is_integer(ObjectId)} of
