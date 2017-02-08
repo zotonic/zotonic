@@ -259,14 +259,16 @@ observe_manage_data(#manage_data{}, _Context) ->
 
 %% @doc Add default content group when resource is inserted without one
 -spec observe_rsc_insert(#rsc_insert{}, list(), #context{}) -> list().
-observe_rsc_insert(#rsc_insert{}, Props, Context) ->
-    case proplists:get_value(content_group_id, Props) of
+observe_rsc_insert(#rsc_insert{props=RscProps}, InsertProps, Context) ->
+    case proplists:get_value(content_group_id, RscProps,
+            proplists:get_value(content_group_id, InsertProps))
+    of
         undefined ->
-            CategoryId = proplists:get_value(category_id, Props),
+            CategoryId = proplists:get_value(category_id, InsertProps),
             ContentGroupId = acl_user_groups_checks:default_content_group(CategoryId, Context),
-            [{content_group_id, ContentGroupId} | Props];
+            [{content_group_id, ContentGroupId} | InsertProps];
         _ ->
-            Props
+            InsertProps
     end.
 
 observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->

@@ -43,12 +43,22 @@ event(#submit{message={media_url_import, Args}}, Context) ->
     {media, MediaImport} = proplists:lookup(media, Args),
     Result = case proplists:get_value(id, ArgsEmbed) of
                 undefined->
-                    z_media_import:insert(MediaImport, Context);
+                    RscProps = media_insert_rsc_props(ArgsEmbed, Context),
+                    z_media_import:insert(MediaImport, RscProps, Context);
                 Id when is_integer(Id) ->
                     z_media_import:update(Id, MediaImport, Context)
              end,
     handle_media_upload_args(Result, ArgsEmbed, Context).
 
+
+media_insert_rsc_props(ArgsEmbed, Context) ->
+    case proplists:get_value(subject_id, ArgsEmbed) of
+        undefined ->
+            [];
+        SubjectId when is_integer(SubjectId) ->
+            ContentGroupdId = m_rsc:p_no_acl(SubjectId, content_group_id, Context),
+            [ {content_group_id, ContentGroupdId} ]
+    end.
 
 %% Handling the media upload (Slightly adapted from action_admin_dialog_media_upload)
 handle_media_upload_args(Result, EventProps, Context) ->
@@ -142,7 +152,7 @@ try_url({ok, <<"ftp:", _/binary>>}, _Context) ->
 try_url({ok, <<"email:", _/binary>>}, _Context) ->
     % Make an user for this email address?
     {error, todo};
-try_url(_, Context) ->
+try_url(_, _Context) ->
     {error, unknown}.
 
 try_url_http(Url, Context) ->

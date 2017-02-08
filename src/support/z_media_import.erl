@@ -21,6 +21,7 @@
 
 -export([
     insert/2,
+    insert/3,
     update/3,
     url_inspect/2,
     url_import_props/2
@@ -33,28 +34,34 @@
 -define(EMPTY(A), ((A =:= undefined) orelse (A =:= "") orelse (A =:= <<>>))).
 
 %% @doc Insert a selected #media_import_props{}
-insert(#media_import_props{medium_props=[]} = MI, Context) ->
-    Props = z_utils:props_merge(
-                MI#media_import_props.rsc_props,
-                default_rsc_props(MI)),
-    case MI#media_import_props.preview_url of
-        undefined ->  m_rsc:insert(Props, Context);
-        PreviewUrl -> m_media:insert_url(PreviewUrl, Props, Context)
-    end;
-insert(#media_import_props{medium_url=MediumUrl, medium_props=MediumProps} = MI, Context) when ?EMPTY(MediumUrl) ->
-    RscProps = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI)),
-    Options = [ {preview_url, MI#media_import_props.preview_url} ],
-    m_media:insert_medium(MediumProps, RscProps, Options, Context);
-insert(#media_import_props{medium_url=MediumUrl} = MI, Context) ->
-    RscProps = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI)),
-    RscProps1 = [
-        {original_filename, proplists:get_value(original_filename, MI#media_import_props.medium_props)}
-        | RscProps
-    ],
-    m_media:insert_url(MediumUrl, RscProps1, Context).
+insert(MI, Context) ->
+    insert(MI, [], Context).
 
-default_rsc_props(#media_import_props{category=Cat}) ->
-    [ {is_published, true}, {category, Cat} ].
+insert(#media_import_props{medium_props=[]} = MI, RscProps, Context) ->
+    RscProps1 = z_utils:props_merge(
+                    MI#media_import_props.rsc_props,
+                    default_rsc_props(MI, RscProps)),
+    case MI#media_import_props.preview_url of
+        undefined ->  m_rsc:insert(RscProps1, Context);
+        PreviewUrl -> m_media:insert_url(PreviewUrl, RscProps1, Context)
+    end;
+insert(#media_import_props{medium_url=MediumUrl, medium_props=MediumProps} = MI, RscProps, Context)
+    when ?EMPTY(MediumUrl) ->
+    RscProps1 = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI, RscProps)),
+    Options = [ {preview_url, MI#media_import_props.preview_url} ],
+    m_media:insert_medium(MediumProps, RscProps1, Options, Context);
+insert(#media_import_props{medium_url=MediumUrl} = MI, RscProps, Context) ->
+    RscProps1 = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI, RscProps)),
+    RscProps2 = [
+        {original_filename, proplists:get_value(original_filename, MI#media_import_props.medium_props)}
+        | RscProps1
+    ],
+    m_media:insert_url(MediumUrl, RscProps2, Context).
+
+default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
+    z_utils:props_merge(
+        RscProps,
+        [ {is_published, true}, {category, Cat} ]).
 
 
 %% @doc Update a resource with the selected #media_import_props()
