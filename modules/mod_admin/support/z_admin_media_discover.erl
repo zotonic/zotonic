@@ -129,7 +129,23 @@ try_embed(<<$<, _/binary>> = Html, Context) ->
 try_embed(Url, Context) ->
     try_url(url(Url), Context).
 
-try_url({ok, <<"http", _/binary>> = Url}, Context) ->
+try_url({ok, <<"http:", _/binary>> = Url}, Context) ->
+    try_url_http(Url, Context);
+try_url({ok, <<"https:", _/binary>> = Url}, Context) ->
+    try_url_http(Url, Context);
+try_url({ok, <<"data:", _/binary>>}, _Context) ->
+    % Use the z_url routines to decode, then save to tempfile and handle as file upload
+    {error, todo};
+try_url({ok, <<"ftp:", _/binary>>}, _Context) ->
+    % Use anonymous ftp
+    {error, todo};
+try_url({ok, <<"email:", _/binary>>}, _Context) ->
+    % Make an user for this email address?
+    {error, todo};
+try_url(_, Context) ->
+    {error, unknown}.
+
+try_url_http(Url, Context) ->
     case z_url_metadata:fetch(Url) of
         {ok, MD} ->
             case z_media_import:url_import_props(MD, Context) of
@@ -140,15 +156,7 @@ try_url({ok, <<"http", _/binary>> = Url}, Context) ->
             end;
         {error, _} = Error ->
             Error
-    end;
-try_url({ok, <<"data:", _/binary>> = Data}, Context) ->
-    % Use the z_url routines to decode, then save to tempfile and handle as file upload
-    {error, todo};
-try_url({ok, <<"ftp:", _/binary>> = Data}, Context) ->
-    {error, todo};
-try_url(_, Context) ->
-    {error, unknown}.
-
+    end.
 
 url(<<"www.", _/binary>> = Url) -> {ok, <<"http://", Url/binary>>};
 url(<<"//", _/binary>> = Url) -> {ok, <<"http:", Url/binary>>};
