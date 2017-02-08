@@ -119,33 +119,35 @@ name(Context) ->
 %% @doc Recognize youtube and vimeo URLs, generate the correct embed code
 observe_media_import(#media_import{host_rev=[<<"com">>, <<"instagram">> | _], metadata=MD} = _MI, Context) ->
     case z_url_metadata:p(<<"og:type">>, MD) of
-        <<"instapp:photo">> ->
-            case z_url_metadata:p(image, MD) of
-                undefined ->
-                    undefined;
-                ImgUrl ->
-                    case decode_shared_data(MD#url_metadata.partial_data) of
-                        {ok, {struct, Props}} ->
-                            try
-                                media_import_shared_data(Props, MD, Context)
-                            catch
-                                ErrType:Err ->
-                                    Trace = erlang:get_stacktrace(),
-                                    lager:error("Error in instagram json decoding ~p:~p @ ~p",
-                                                [ErrType, Err, Trace]),
-                                    media_import_md(ImgUrl, MD, Context)
-                            end;
-                        _ ->
-                            lager:error("Error in fetching & decoding the instagram shared data for ~s data ~p",
-                                        [z_url_metadata:p(url, MD), MD#url_metadata.partial_data]),
-                            media_import_md(ImgUrl, MD, Context)
-                    end
-            end;
-        _ ->
-            undefined
+        <<"instapp:photo">> -> media_import(MD, Context);
+        <<"video">> -> media_import(MD, Context);
+        _ -> undefined
     end;
 observe_media_import(#media_import{}, _Context) ->
     undefined.
+
+media_import(MD, Context) ->
+    case z_url_metadata:p(image, MD) of
+        undefined ->
+            undefined;
+        ImgUrl ->
+            case decode_shared_data(MD#url_metadata.partial_data) of
+                {ok, {struct, Props}} ->
+                    try
+                        media_import_shared_data(Props, MD, Context)
+                    catch
+                        ErrType:Err ->
+                            Trace = erlang:get_stacktrace(),
+                            lager:error("Error in instagram json decoding ~p:~p @ ~p",
+                                        [ErrType, Err, Trace]),
+                            media_import_md(ImgUrl, MD, Context)
+                    end;
+                _ ->
+                    lager:error("Error in fetching & decoding the instagram shared data for ~s",
+                                [z_url_metadata:p(url, MD)]),
+                    media_import_md(ImgUrl, MD, Context)
+            end
+    end.
 
 media_import_md(ImgUrl, MD, Context) ->
     #media_import_props{
@@ -173,7 +175,7 @@ media_import_shared_data(Props, MD, Context) ->
     CaptionTruncated = z_string:truncate(Caption, 80),
     Summary = case CaptionTruncated of
         Caption -> Title;
-        _ -> <<Caption/binary, "\n", Title/binary>>
+        _ -> <<Caption/binary, " — "/utf8, Title/binary>>
     end,
     case proplists:get_value(<<"is_video">>, Media) of
         false ->
@@ -195,7 +197,25 @@ media_import_shared_data(Props, MD, Context) ->
                 medium_url = ImgUrl
             };
         true ->
-            undefined
+            VideoUrl = proplists:get_value(<<"video_url">>, Media),
+            PreviewImgUrl = proplists:get_value(<<"display_src">>, Media),
+            #media_import_props{
+                prio = 1,
+                category = video,
+                description = m_rsc:p_no_acl(video, title, Context),
+                rsc_props = [
+                    {title, CaptionTruncated},
+                    {summary, Summary},
+                    {website, z_url_metadata:p(url, MD)}
+                ],
+                medium_props = [
+                    {mime, <<"video/mp4">>},
+                    {width, W},
+                    {height, H}
+                ],
+                medium_url = VideoUrl,
+                preview_url = PreviewImgUrl
+            }
     end.
 
 media_dimensions(Media) ->

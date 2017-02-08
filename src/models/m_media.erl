@@ -513,7 +513,7 @@ replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context) ->
     end.
 
 replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
-    Mime = proplists:get_value(mime, Medium),
+    Mime = z_convert:to_binary(proplists:get_value(mime, Medium)),
     PreProc = #media_upload_preprocess{
                     id=RscId,
                     mime=Mime,
@@ -532,7 +532,7 @@ replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
 replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     SafeRootName = z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),
     PreferExtension = z_convert:to_binary(filename:extension(PreProc#media_upload_preprocess.original_filename)),
-    Mime = PreProc#media_upload_preprocess.mime,
+    Mime = z_convert:to_binary(PreProc#media_upload_preprocess.mime),
     SafeFilename = iolist_to_binary([SafeRootName, z_media_identify:extension(Mime, PreferExtension, Context)]),
     ArchiveFile = case PreProc#media_upload_preprocess.file of
                     undefined -> undefined;
@@ -543,7 +543,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                     _ -> filename:rootname(filename:basename(ArchiveFile))
                end,
     Medium0 = [
-        {mime, PreProc#media_upload_preprocess.mime},
+        {mime, Mime},
         {filename, ArchiveFile},
         {rootname, RootName},
         {is_deletable_file, is_deletable_file(PreProc#media_upload_preprocess.file, Context)}
@@ -667,18 +667,20 @@ rsc_is_media_cat(Id, Context) ->
 
 mime_to_category(Mime) ->
     case Mime of
-        "image/" ++ _ -> image;
-        "video/" ++ _ -> video;
-        "text/html-video-embed" -> video;
-        "audio/" ++ _ -> audio;
-        "application/" ++ _ -> document;
-        "text/" ++ _ -> document;
         <<"image/", _/binary>> -> image;
         <<"video/", _/binary>> -> video;
         <<"text/html-video-embed">> -> video;
         <<"audio/", _/binary>> -> audio;
         <<"application/", _/binary>> -> document;
         <<"text/", _/binary>> -> document;
+
+        "image/" ++ _ -> image;
+        "video/" ++ _ -> video;
+        "text/html-video-embed" -> video;
+        "audio/" ++ _ -> audio;
+        "application/" ++ _ -> document;
+        "text/" ++ _ -> document;
+
         _ -> media
     end.
 
