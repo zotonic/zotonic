@@ -50,18 +50,6 @@
         <p><small><pre>ffprobe -loglevel quiet -show_format -show_streams -print_format json</pre></small></p>
     </div>
 
-    <div class="form-group row">
-        {% wire id="tpldbg"
-            action={config_toggle module="mod_video" key="logging"}
-            action={admin_tasks task='flush'}
-        %}
-        <label class="checkbox-inline">
-            <input type="checkbox" id="tpldbg" value="1" {% if m.config.mod_video.logging.value %}checked="checked"{% endif %} />
-            {_ Log every transcoding command in the Zotonic console _}
-        </label>
-    </div>
-
-
 </div>
 
 <div class="modal-footer">

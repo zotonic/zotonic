@@ -4,8 +4,8 @@
 Makes media :term:`resources <resource>` from embeddable URLs through
 the `OEmbed <http://www.oembed.com/>`_ protocol.
 
-When activated, in the "create media / page" dialog, an extra tab is
-added which allows you to paste a media URL from services like
+This module, if activated, checks the pasted URLs in the *create media / page*
+dialog of the admin. It will show an embed option for services like
 YouTube, Vimeo or any other service which supports OEmbed.
 
 A saved media resource has a thumbnail image which is downloaded from

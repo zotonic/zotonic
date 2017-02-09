@@ -125,33 +125,12 @@ add_content_group(EventProps, Props, Context) ->
 handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
-    Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
-    Callback = proplists:get_value(callback, EventProps),
     case Id of
         %% Create a new media page
         undefined ->
-            SubjectId = proplists:get_value(subject_id, EventProps),
-            Predicate = proplists:get_value(predicate, EventProps, depiction),
-
             case InsertFun(Context) of
                 {ok, MediaId} ->
-                    {_, ContextCb} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, MediaId, Callback, Context),
-
-                    ContextRedirect =
-                            case SubjectId of
-                              undefined ->
-                                  case Stay of
-                                      true -> ContextCb;
-                                      false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, ContextCb)
-                                  end;
-                              _ ->
-                                  ContextCb
-                            end,
-                    Actions2 = [add_arg_to_action({id, MediaId}, A) || A <- Actions],
-                    z_render:wire([
-                            {growl, [{text, ?__("Media item created.", ContextRedirect)}]},
-                            {dialog_close, []}
-                            | Actions2], ContextRedirect);
+                    action_admin_dialog_new_rsc:do_new_page_actions(MediaId, EventProps, Context);
                 {error, R} ->
                     z_render:growl_error(error_message(R, Context), Context)
             end;
@@ -179,9 +158,3 @@ error_message(download_failed, Context) ->
 error_message(_R, Context) ->
     lager:warning("Unknown upload error: ~p", [_R]),
     ?__("Error uploading the file.", Context).
-
-% Add an extra argument to a postback / submit action.
-add_arg_to_action(Arg, {postback, [{postback, {Action, ArgList}} | Rest]}) ->
-    {postback, [{postback, {Action, [Arg | ArgList]}} | Rest]};
-add_arg_to_action(_A, B) ->
-    B.

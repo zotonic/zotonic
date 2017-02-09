@@ -61,11 +61,11 @@
         ]).
 
 %% @doc If a video file is uploaded, queue it for conversion to video/mp4
-observe_media_upload_preprocess(#media_upload_preprocess{mime="video/mp4", file=undefined}, _Context) ->
+observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/mp4">>, file=undefined}, _Context) ->
     undefined;
-observe_media_upload_preprocess(#media_upload_preprocess{mime="video/x-mp4-broken"}, Context) ->
+observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/x-mp4-broken">>}, Context) ->
     do_media_upload_broken(Context);
-observe_media_upload_preprocess(#media_upload_preprocess{mime="video/"++_, medium=Medium} = Upload, Context) ->
+observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/binary>>, medium=Medium} = Upload, Context) ->
     case proplists:get_value(is_video_ok, Medium) of
         true ->
             undefined;
@@ -80,25 +80,25 @@ do_media_upload_preprocess(Upload, Context) ->
         {ok, #module_index{filepath=Filename}} ->
             ProcessNr = z_ids:identifier(20),
             PostFun = fun(InsId, InsMedium, InsContext) ->
-                              ?MODULE:post_insert_fun(InsId, InsMedium, Upload, ProcessNr, InsContext)
+                          ?MODULE:post_insert_fun(InsId, InsMedium, Upload, ProcessNr, InsContext)
                       end,
             {ok, MInfo} = z_media_identify:identify_file(Filename, Context),
             #media_upload_preprocess{
-               mime = "video/mp4",
-               file = undefined,
-               post_insert_fun = PostFun,
-               original_filename = undefined,
-               medium = [
-                         {preview_filename, "lib/"++?TEMP_IMAGE},
-                         {preview_width, proplists:get_value(width, MInfo)},
-                         {preview_height, proplists:get_value(height, MInfo)},
-                         {width, proplists:get_value(width, MInfo)},
-                         {height, proplists:get_value(height, MInfo)},
-                         {is_deletable_preview, false},
-                         {is_video_processing, true},
-                         {video_processing_nr, ProcessNr}
-                        ]
-              };
+                mime = <<"video/mp4">>,
+                file = undefined,
+                post_insert_fun = PostFun,
+                original_filename = undefined,
+                medium = [
+                    {preview_filename, "lib/"++?TEMP_IMAGE},
+                    {preview_width, proplists:get_value(width, MInfo)},
+                    {preview_height, proplists:get_value(height, MInfo)},
+                    {width, proplists:get_value(width, MInfo)},
+                    {height, proplists:get_value(height, MInfo)},
+                    {is_deletable_preview, false},
+                    {is_video_processing, true},
+                    {video_processing_nr, ProcessNr}
+                ]
+            };
         {error, enoent} ->
             undefined
     end.
@@ -108,7 +108,7 @@ do_media_upload_broken(Context) ->
         {ok, #module_index{filepath=Filename}} ->
             {ok, MInfo} = z_media_identify:identify_file(Filename, Context),
             #media_upload_preprocess{
-               mime = "video/mp4",
+               mime = <<"video/mp4">>,
                file = undefined,
                original_filename = undefined,
                medium = [
@@ -126,9 +126,9 @@ do_media_upload_broken(Context) ->
     end.
 
 %% @doc After a video file is processed, generate a preview image.
-observe_media_upload_props(#media_upload_props{archive_file=undefined, mime="video/" ++ _}, Medium, _Context) ->
+observe_media_upload_props(#media_upload_props{archive_file=undefined, mime= <<"video/", _/binary>>}, Medium, _Context) ->
     Medium;
-observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime="video/" ++ _}, Medium, Context) ->
+observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <<"video/", _/binary>>}, Medium, Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
     Info = video_info(FileAbs, Context),
     Info2 = case video_preview(FileAbs, Info, Context) of
@@ -138,11 +138,11 @@ observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime="v
                     ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
                     _ = file:delete(TmpFile),
                     [
-                     {preview_filename, PreviewFilename},
-                     {preview_width, proplists:get_value(width, Info)},
-                     {preview_height, proplists:get_value(height, Info)},
-                     {is_deletable_preview, true}
-                     | Info
+                        {preview_filename, PreviewFilename},
+                        {preview_width, proplists:get_value(width, Info)},
+                        {preview_height, proplists:get_value(height, Info)},
+                        {is_deletable_preview, true}
+                        | Info
                     ];
                 {error, _} ->
                     Info
@@ -186,26 +186,26 @@ ensure_job_queues() ->
     case jobs:queue_info(video_jobs) of
         undefined ->
             jobs:add_queue(video_jobs, [
-                                        {regulators, [
-                                                      {counter, [
-                                                                 {limit, 1},
-                                                                 {modifiers, [{cpu, 1}]}
-                                                                ]}
-                                                     ]}
-                                       ]);
+                {regulators, [
+                    {counter, [
+                        {limit, 1},
+                        {modifiers, [{cpu, 1}]}
+                    ]}
+                ]}
+            ]);
         {queue, _} ->
             ok
     end,
     case jobs:queue_info(media_preview_jobs) of
         undefined ->
             jobs:add_queue(media_preview_jobs, [
-                                                {regulators, [
-                                                              {counter, [
-                                                                         {limit, 3},
-                                                                         {modifiers, [{cpu, 1}]}
-                                                                        ]}
-                                                             ]}
-                                               ]);
+                {regulators, [
+                    {counter, [
+                        {limit, 3},
+                        {modifiers, [{cpu, 1}]}
+                    ]}
+                ]}
+            ]);
         {queue, _} ->
             ok
     end.
@@ -221,7 +221,7 @@ init([]) ->
 
 %% @doc The medium record has been inserted, queue a conversion
 post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
-                                                % Move the temp file to the video_queue in the files folder
+    % Move the temp file to the video_queue in the files folder
     UploadedFile = Upload#media_upload_preprocess.file,
     QueueFilename = lists:flatten([integer_to_list(Id), $-, z_convert:to_list(ProcessNr)]),
     QueuePath = queue_path(QueueFilename, Context),
@@ -267,7 +267,7 @@ video_info(Path, Context) ->
                                 Cmdline, " ",
                                 z_utils:os_filename(Path)
                                ]),
-    lager:warning("Video info: ~p", [FfprobeCmd]),
+    lager:debug("Video info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
         {struct, Ps} = decode_json(JSONText),
@@ -337,7 +337,6 @@ orientation({struct, Tags}) ->
 orientation(_) ->
     1.
 
-
 video_preview(MovieFile, Props, Context) ->
     Duration = proplists:get_value(duration, Props),
     Start = case Duration of
@@ -366,12 +365,14 @@ video_preview(MovieFile, Props, Context) ->
                    )),
     jobs:run(media_preview_jobs,
              fun() ->
-                     lager:debug("Video preview: ~p", [FfmpegCmd]),
+                     lager:info("Video preview: ~p", [FfmpegCmd]),
                      case os:cmd(FfmpegCmd) of
                          [] ->
-                             {ok, TmpFile};
+                            lager:info("Preview ok, file: ~p", [TmpFile]),
+                            {ok, TmpFile};
                          Other ->
-                             {error, Other}
+                            lager:warning("Video preview error: ~p", [Other]),
+                            {error, Other}
                      end
              end).
 

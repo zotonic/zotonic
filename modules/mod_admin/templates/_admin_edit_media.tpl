@@ -1,9 +1,21 @@
 {% if medium.mime %}
+
+    {% if medium.media_import %}
+    <p class="clear">
+        <span class="label label-info">{_ Embed _}</span>
+        {% if medium.media_import|match:'^https?:' %}
+            <a href="{{ medium.media_import|escape }}">{{ medium.media_import|truncate:80:'…'|escape }}</a>
+        {% else %}
+            <span class="text-muted">{{ medium.media_import|truncate:80:'…'|escape }}</span>
+        {% endif %}
+    </p>
+    {% endif %}
+
     <p>
         {{ medium.mime }}
         {% if medium.filename %}
             {% if medium.width and medium.height %}
-            &ndash; {{ medium.width }} x {{ medium.height }} {_ pixels _}
+                &ndash; {{ medium.width }} x {{ medium.height }} {_ pixels _}
             {% endif %}
             {% if medium.size %}
                 &ndash; {{ medium.size|filesizeformat }}
@@ -31,7 +43,9 @@
         {% endif %}
 
         <div class="pull-right">
-            <a class="btn btn-default" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
+            {% if medium.filename %}
+                <a class="btn btn-default" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
+            {% endif %}
             {% button
                 text=_"Replace this media item"
                 class="btn btn-primary"

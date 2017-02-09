@@ -5,7 +5,7 @@
 		<span>{_ Converting _} …</span>
 	</div>
     {% javascript %}
-        {% wire type={mqtt topic=props.id}
+        {% wire type={mqtt topic=["~site", "rsc", props.id, "medium"]}
                 action={replace template="_video_viewer.tpl" target=#video options=options id=props.id}
         %}
     {% endjavascript %}
@@ -25,11 +25,5 @@
 			<img src="{% image_url props.id width=props.width height=props.height %}" width="{{ props.width }}" height="{{ props.height }}" title="{_ No video playback capabilities _}" />
 		</object>
 	</video>
-	{#
-		MW - mediaelementjs is confused by the video's size, disable for now.
-		{% javascript %}
-			$('#{{ #video }}').mediaelementplayer();
-		{% endjavascript %}
-	#}
 {% endif %}
 {% endwith %}

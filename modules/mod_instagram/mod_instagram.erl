@@ -29,11 +29,14 @@
     event/2,
     poll/2,
     poll/3,
-    check_subscription/1
+    check_subscription/1,
+    observe_media_import/2
 ]).
 -export([
     get_config/1
 ]).
+
+-include_lib("z_stdlib/include/z_url_metadata.hrl").
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -112,6 +115,126 @@ poll(Tag, Time, Context) when is_binary(Tag) ->
 
 name(Context) ->
     z_utils:name_for_site(?MODULE, Context).
+
+%% @doc Recognize youtube and vimeo URLs, generate the correct embed code
+observe_media_import(#media_import{host_rev=[<<"com">>, <<"instagram">> | _], metadata=MD} = _MI, Context) ->
+    case z_url_metadata:p(<<"og:type">>, MD) of
+        <<"instapp:photo">> -> media_import(MD, Context);
+        <<"video">> -> media_import(MD, Context);
+        _ -> undefined
+    end;
+observe_media_import(#media_import{}, _Context) ->
+    undefined.
+
+media_import(MD, Context) ->
+    case z_url_metadata:p(image, MD) of
+        undefined ->
+            undefined;
+        ImgUrl ->
+            case decode_shared_data(MD#url_metadata.partial_data) of
+                {ok, {struct, Props}} ->
+                    try
+                        media_import_shared_data(Props, MD, Context)
+                    catch
+                        ErrType:Err ->
+                            Trace = erlang:get_stacktrace(),
+                            lager:error("Error in instagram json decoding ~p:~p @ ~p",
+                                        [ErrType, Err, Trace]),
+                            media_import_md(ImgUrl, MD, Context)
+                    end;
+                _ ->
+                    lager:error("Error in fetching & decoding the instagram shared data for ~s",
+                                [z_url_metadata:p(url, MD)]),
+                    media_import_md(ImgUrl, MD, Context)
+            end
+    end.
+
+media_import_md(ImgUrl, MD, Context) ->
+    #media_import_props{
+        prio = 1,
+        category = image,
+        description = m_rsc:p_no_acl(image, title, Context),
+        rsc_props = [
+            {title, z_url_metadata:p(title, MD)},
+            {summary, z_url_metadata:p(summary, MD)},
+            {website, z_url_metadata:p(url, MD)}
+        ],
+        medium_props = [
+            {mime, <<"image/jpeg">>}
+        ],
+        medium_url = ImgUrl
+    }.
+
+media_import_shared_data(Props, MD, Context) ->
+    {struct, EntryData} = proplists:get_value(<<"entry_data">>, Props),
+    PostPage = proplists:get_value(<<"PostPage">>, EntryData),
+    Media = find_media(PostPage),
+    {W,H} = media_dimensions(Media),
+    Title = z_url_metadata:p(title, MD),
+    Caption = proplists:get_value(<<"caption">>, Media),
+    CaptionTruncated = z_string:truncate(Caption, 80),
+    Summary = case CaptionTruncated of
+        Caption -> Title;
+        _ -> <<Caption/binary, " — "/utf8, Title/binary>>
+    end,
+    case proplists:get_value(<<"is_video">>, Media) of
+        false ->
+            ImgUrl = proplists:get_value(<<"display_src">>, Media),
+            #media_import_props{
+                prio = 1,
+                category = image,
+                description = m_rsc:p_no_acl(image, title, Context),
+                rsc_props = [
+                    {title, CaptionTruncated},
+                    {summary, Summary},
+                    {website, z_url_metadata:p(url, MD)}
+                ],
+                medium_props = [
+                    {mime, <<"image/jpeg">>},
+                    {width, W},
+                    {height, H}
+                ],
+                medium_url = ImgUrl
+            };
+        true ->
+            VideoUrl = proplists:get_value(<<"video_url">>, Media),
+            PreviewImgUrl = proplists:get_value(<<"display_src">>, Media),
+            #media_import_props{
+                prio = 1,
+                category = video,
+                description = m_rsc:p_no_acl(video, title, Context),
+                rsc_props = [
+                    {title, CaptionTruncated},
+                    {summary, Summary},
+                    {website, z_url_metadata:p(url, MD)}
+                ],
+                medium_props = [
+                    {mime, <<"video/mp4">>},
+                    {width, W},
+                    {height, H}
+                ],
+                medium_url = VideoUrl,
+                preview_url = PreviewImgUrl
+            }
+    end.
+
+media_dimensions(Media) ->
+    {struct, Dim} = proplists:get_value(<<"dimensions">>, Media),
+    Height = proplists:get_value(<<"height">>, Dim),
+    Width = proplists:get_value(<<"width">>, Dim),
+    {Width,Height}.
+
+decode_shared_data(Data) ->
+    case re:run(Data, "window._sharedData\s*=(.*);\s*</script>", [{capture,all_but_first,binary}]) of
+        {match, [JSON]} -> {ok, mochijson2:decode(JSON)};
+        nomatch -> {error, nojson}
+    end.
+
+find_media([{struct, List}|Rest]) ->
+    case proplists:get_value(<<"media">>, List) of
+        {struct, Media} -> Media;
+        _ -> find_media(Rest)
+    end.
 
 %%====================================================================
 %% API
