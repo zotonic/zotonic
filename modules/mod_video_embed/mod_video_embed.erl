@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Enables embedding video's as media pages.  Handles the embed information for showing video's.
 %% The embed information is stored in the medium table associated with the page. You can not have embed
 %% information and a medium file. Either one or the other.
 
-%% Copyright 2009-2014 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -165,7 +165,6 @@ observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
                             case proplists:get_value(video_embed_service, Props) of
                                 <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
                                 <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
-                                <<"yandex">> -> {ok, "lib/images/yandex.jpg"};
                                 _ -> {ok, "lib/images/embed.jpg"}
                             end;
                         PreviewFile -> {ok, PreviewFile}
@@ -183,43 +182,73 @@ observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
 
 %% @doc Recognize youtube and vimeo URLs, generate the correct embed code
 observe_media_import(#media_import{host_rev=[<<"com">>, <<"youtube">> | _], metadata=MD} = MI, Context) ->
-    media_import(youtube, ?__("Youtube Video", Context), MD, MI);
+    media_import(youtube, ?__("Youtube Video", Context), MD, MI, Context);
 observe_media_import(#media_import{host_rev=[<<"com">>, <<"vimeo">> | _], metadata=MD} = MI, Context) ->
-    media_import(vimeo, ?__("Vimeo Video", Context), MD, MI);
+    media_import(vimeo, ?__("Vimeo Video", Context), MD, MI, Context);
 observe_media_import(#media_import{}, _Context) ->
     undefined.
 
-media_import(Service, Descr, MD, MI) ->
+media_import(Service, Descr, MD, MI, Context) ->
     H = z_convert:to_integer(z_url_metadata:p([<<"og:video:height">>, <<"twitter:player:height">>], MD)),
     W = z_convert:to_integer(z_url_metadata:p([<<"og:video:width">>, <<"twitter:player:width">>], MD)),
-    VideoId = fetch_videoid(Service, MI#media_import.url),
+    VideoId = fetch_videoid_from_url(Service, MI#media_import.url),
     case is_integer(H) andalso is_integer(W) andalso VideoId =/= <<>> of
         true ->
-            #media_import_props{
-                prio = 1,
-                category = video,
-                module = ?MODULE,
-                description = Descr,
-                rsc_props = [
-                    {title, z_url_metadata:p(title, MD)},
-                    {summary, z_url_metadata:p(summary, MD)},
-                    {website, MI#media_import.url}
-                ],
-                medium_props = [
-                    {mime, ?EMBED_MIME},
-                    {width, W},
-                    {height, H},
-                    {video_embed_service, z_convert:to_binary(Service)},
-                    {video_embed_code, embed_code(Service, H, W, VideoId)},
-                    {video_embed_id, z_convert:to_binary(VideoId)}
-                ],
-                preview_url = z_url_metadata:p(image, MD)
-            };
+            [
+                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId),
+                media_import_props_image(Service, MD, VideoId, Context)
+            ];
         false ->
             undefined
     end.
 
+media_import_props_video(Service, Descr, MD, MI, H, W, VideoId) ->
+    #media_import_props{
+        prio = 1,
+        category = video,
+        module = ?MODULE,
+        description = Descr,
+        rsc_props = [
+            {title, z_url_metadata:p(title, MD)},
+            {summary, z_url_metadata:p(summary, MD)},
+            {website, MI#media_import.url}
+        ],
+        medium_props = [
+            {mime, ?EMBED_MIME},
+            {width, W},
+            {height, H},
+            {video_embed_service, z_convert:to_binary(Service)},
+            {video_embed_code, embed_code(Service, H, W, VideoId)},
+            {video_embed_id, z_convert:to_binary(VideoId)},
+            {media_import, MI#media_import.url}
+        ],
+        preview_url = z_url_metadata:p(image, MD)
+    }.
+
+media_import_props_image(Service, MD, VideoId, Context) ->
+    case videoid_to_image(Service, VideoId) of
+        undefined ->
+            undefined;
+        ImgUrl ->
+            #media_import_props{
+                prio = 10,
+                category = image,
+                description = m_rsc:p_no_acl(image, title, Context),
+                rsc_props = [
+                    {title, z_url_metadata:p(title, MD)},
+                    {summary, z_url_metadata:p(summary, MD)},
+                    {website, z_url_metadata:p(url, MD)}
+                ],
+                medium_props = [
+                    {mime, z_convert:to_binary(z_media_identify:guess_mime(ImgUrl))}
+                ],
+                medium_url = z_convert:to_binary(ImgUrl)
+            }
+    end.
+
 fetch_videoid_from_embed(_Service, undefined) ->
+    {<<>>, undefined};
+fetch_videoid_from_embed(_Service, <<>>) ->
     {<<>>, undefined};
 fetch_videoid_from_embed(Service, EmbedCode) ->
     case re:run(EmbedCode,
@@ -231,13 +260,13 @@ fetch_videoid_from_embed(Service, EmbedCode) ->
                 undefined ->
                     {Service, <<>>};
                 UrlService ->
-                    {z_convert:to_binary(UrlService), fetch_videoid(UrlService, Url)}
+                    {z_convert:to_binary(UrlService), fetch_videoid_from_url(UrlService, Url)}
             end;
         nomatch ->
             {Service, <<>>}
     end.
 
-fetch_videoid(youtube, Url) ->
+fetch_videoid_from_url(youtube, Url) ->
     [Url1|_] = binary:split(Url, <<"?">>),
     case binary:split(Url1, <<"/embed/">>) of
         [_, Code] ->
@@ -247,14 +276,14 @@ fetch_videoid(youtube, Url) ->
             Qs1 = mochiweb_util:parse_qs(Qs),
             z_convert:to_binary(proplists:get_value("v", Qs1))
     end;
-fetch_videoid(vimeo, Url) ->
+fetch_videoid_from_url(vimeo, Url) ->
     {_Protocol, _Host, Path, _Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
     P1 = lists:last(string:tokens(Path, "/")),
     case z_utils:only_digits(P1) of
         true -> z_convert:to_binary(P1);
         false -> <<>>
     end;
-fetch_videoid(_Service, _Url) ->
+fetch_videoid_from_url(_Service, _Url) ->
     <<>>.
 
 url_to_service(<<"https://", Url/binary>>) -> url_to_service(Url);
@@ -265,8 +294,6 @@ url_to_service(<<"youtube.com/", _/binary>>) -> youtube;
 url_to_service(<<"www.vimeo.com/", _/binary>>) -> vimeo;
 url_to_service(<<"vimeo.com/", _/binary>>) -> vimeo;
 url_to_service(<<"player.vimeo.com/", _/binary>>) -> vimeo;
-url_to_service(<<"flv.video.yandex.ru/", _/binary>>) -> yandex;
-url_to_service(<<"static.video.yandex.ru/", _/binary>>) -> yandex;
 url_to_service(_) -> undefined.
 
 
@@ -373,8 +400,6 @@ spawn_preview_create(MediaId, InsertProps, Context) ->
             spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
         <<"vimeo">> ->
             spawn(fun() -> preview_vimeo(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
-        <<"yandex">> ->
-            spawn(fun() -> preview_yandex(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
         _ -> nop
     end.
 
@@ -389,7 +414,6 @@ preview_youtube(MediaId, InsertProps, Context) ->
             m_media:save_preview_url(MediaId, Url, Context)
     end.
 
-
 % @doc Fetch the preview image of a vimeo video. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
 % @todo Make this more robust wrt http errors.
 preview_vimeo(MediaId, InsertProps, Context) ->
@@ -397,42 +421,30 @@ preview_vimeo(MediaId, InsertProps, Context) ->
         <<>> ->
             static_preview(MediaId, "images/vimeo.jpg", Context);
         EmbedId ->
-            JsonUrl = "http://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
-            case httpc:request(JsonUrl) of
-                {ok, {{_Http, 200, _Ok}, _Header, Data}} ->
-                    {array, [{struct, Props}]} = mochijson:decode(Data),
-                    case proplists:get_value("thumbnail_large", Props) of
-                        undefined ->
-                            static_preview(MediaId, "images/vimeo.jpg", Context);
-                        ImgUrl ->
-                            m_media:save_preview_url(MediaId, ImgUrl, Context)
-                    end;
-                {ok, {StatusCode, _Header, Data}} ->
-                    lager:warning("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),
+            case videoid_to_image(vimeo, EmbedId) of
+                undefined ->
                     static_preview(MediaId, "images/vimeo.jpg", Context);
-                {error, _Reason} ->
-                    %% Too bad - no preview available - ignore for now (see todo above)
-                    static_preview(MediaId, "images/vimeo.jpg", Context)
+                ImgUrl ->
+                    m_media:save_preview_url(MediaId, ImgUrl, Context)
             end
     end.
 
-
-%% @doc Fetch the preview image of a yandex video. The preview is located at:
-%% http://static.video.yandex.ru/get/[user]/[code]/1.m450x334.jpg
-%% @todo Make this more robust wrt http errors.
-preview_yandex(MediaId, InsertProps, Context) ->
-    case z_convert:to_binary(proplists:get_value(video_embed_code, InsertProps)) of
-        <<>> ->
-            static_preview(MediaId, "images/yandex.jpg", Context);
-        Embed ->
-            case re:run(Embed, "flv\\.video\\.yandex\\.ru/lite/([^/]+)/([^\"'&/#]+)", [{capture, [1, 2], list}]) of
-                {match, [User, Code]} ->
-                    Url = lists:flatten(["http://static.video.yandex.ru/get/", User, $/, Code, "/1.m450x334.jpg"]),
-                    m_media:save_preview_url(MediaId, Url, Context);
-                _ ->
-                    static_preview(MediaId, "images/yandex.jpg", Context)
-            end
-    end.
+videoid_to_image(youtube, EmbedId) ->
+    "http://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg";
+videoid_to_image(vimeo, EmbedId) ->
+    JsonUrl = "http://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
+    case httpc:request(JsonUrl) of
+        {ok, {{_Http, 200, _Ok}, _Header, Data}} ->
+            {array, [{struct, Props}]} = mochijson:decode(Data),
+            proplists:get_value("thumbnail_large", Props);
+        {ok, {StatusCode, _Header, Data}} ->
+            lager:warning("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),
+            undefined;
+        _ ->
+            undefined
+    end;
+videoid_to_image(_Service, _EmbedId) ->
+    undefined.
 
 static_preview(MediaId, LibFile, Context) ->
     case z_module_indexer:find(lib, LibFile, Context) of

@@ -679,7 +679,7 @@
 -record(media_import, {
     url :: binary(),
     host_rev :: list(binary()),
-    mime :: binary,
+    mime :: binary(),
     metadata :: tuple()
 }).
 
@@ -702,7 +702,7 @@
 %% Return: modified ``#media_upload_preprocess{}``
 -record(media_upload_preprocess, {
     id = insert_rsc :: m_rsc:resource_id() | insert_rsc,
-    mime :: string(),
+    mime :: binary(),
     file :: file:filename() | undefined,
     original_filename :: file:filename() | undefined,
     medium :: list(),
@@ -715,7 +715,7 @@
 %% Return: modified ``#media_upload_props{}``
 -record(media_upload_props, {
     id :: integer() | 'insert_rsc',
-    mime :: string(),
+    mime :: binary(),
     archive_file :: file:filename() | undefined,
     options :: list()
 }).

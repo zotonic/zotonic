@@ -205,7 +205,8 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
                     {height, proplists:get_value(height, Json)},
                     {oembed_service, proplists:get_value(provider_name, Json)},
                     {oembed_url, Url},
-                    {oembed, Json}
+                    {oembed, Json},
+                    {media_import, Url}
                 ],
                 preview_url = proplists:get_value(thumbnail_url, Json)
             };
@@ -232,111 +233,6 @@ observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
         _ ->
             undefined
     end.
-
-
-%% @doc Handle the form submit from the "new media" dialog.  The form is defined in templates/_media_upload_panel.tpl.
-event(#submit{message={add_video_embed, EventProps}}, Context) ->
-    Actions = proplists:get_value(actions, EventProps, []),
-    Id = proplists:get_value(id, EventProps),
-    Callback = proplists:get_value(callback, EventProps),
-    Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
-    EmbedUrl = z_context:get_q_validated(<<"oembed_url">>, Context),
-
-    case Id of
-        %% Create a new page
-        undefined ->
-            SubjectId = proplists:get_value(subject_id, EventProps),
-            ContentGroupdId = case proplists:get_value(content_group_id, EventProps) of
-                                    undefined -> m_rsc:p_no_acl(SubjectId, content_group_id, Context);
-                                    CGId -> CGId
-                              end,
-            Predicate = proplists:get_value(predicate, EventProps, depiction),
-            Title   = z_context:get_q_validated(<<"title">>, Context),
-            Summary = z_context:get_q(<<"summary">>, Context),
-            Props = [
-                {title, Title},
-                {summary, Summary},
-                {is_published, true},
-                {category, media},
-                {mime, ?OEMBED_MIME},
-                {oembed_url, EmbedUrl},
-                {content_group_id, ContentGroupdId}
-            ],
-
-            case m_rsc:insert(Props, Context) of
-                {ok, MediaId} ->
-                    spawn(fun() -> preview_create(MediaId, Props, Context) end),
-
-                    {_, ContextLink} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate,
-                                                         MediaId, Callback, Context),
-
-                    ContextRedirect = case SubjectId of
-                        undefined ->
-                            case Stay of
-                                false -> z_render:wire({redirect, [{dispatch, "admin_edit_rsc"}, {id, MediaId}]}, ContextLink);
-                                true -> ContextLink
-                            end;
-                        _ -> ContextLink
-                    end,
-                    z_render:wire([
-                                {dialog_close, []},
-                                {growl, [{text, ?__("Made the media page.", ContextRedirect)}]}
-                                | Actions], ContextRedirect);
-                {error, _} = Error ->
-                    lager:error("[mod_oembed] Error in add_video_embed: ~p on ~p", [Error, Props]),
-                    z_render:growl_error(?__("Could not create the media page.", Context), Context)
-            end;
-
-        %% Update the current page
-        N when is_integer(N) ->
-            Props = [
-                {oembed_url, EmbedUrl}
-            ],
-            case m_rsc:update(Id, Props, Context) of
-                {ok, _} ->
-                    z_render:wire([{dialog_close, []} | Actions], Context);
-                {error, _} ->
-                    z_render:growl_error(?__("Could not update the page with the new embed code.", Context), Context)
-            end
-    end;
-
-%% @doc When entering the embed URL for a new media item, we trigger the detecting early to guess title/description.
-event(#postback_notify{message= <<"do_oembed">>}, Context) ->
-    case z_string:trim(z_context:get_q(<<"url">>, Context)) of
-        <<>> ->
-            z_render:wire({script, [{script,[
-                    "$('#oembed-title').val('""').attr('disabled',true);",
-                    "$('#oembed-summary').val('""').attr('disabled',true);",
-                    "$('#oembed-save').attr('disabled',true);",
-                    "$('#oembed-image').closest('.control-group').hide();"
-                    ]}]}, Context);
-        Url ->
-            case oembed_request(Url, Context) of
-                {error, _} ->
-                    Context1 = z_render:wire({script, [{script, [
-                            "$('#oembed-title').val('""').attr('disabled',true);",
-                            "$('#oembed-summary').val('""').attr('disabled',true);",
-                            "$('#oembed-save').attr('disabled', true);",
-                            "$('#oembed-image').closest('.control-group').hide();"
-                            ]}]}, Context),
-                    z_render:growl_error(?__("Invalid or unsupported media URL. The item might have been deleted or is not public.", Context1), Context1);
-                {ok, Json} ->
-                    Title = z_html:unescape(proplists:get_value(title, Json, [])),
-                    Descr = z_html:unescape(proplists:get_value(description, Json, [])),
-                    Context1 = z_render:wire({script, [
-                        {script, [
-                            "$('#oembed-title').val('", z_utils:js_escape(Title), "').removeAttr('disabled');",
-                            "$('#oembed-summary').val('", z_utils:js_escape(Descr), "').removeAttr('disabled');",
-                            "$('#oembed-save').removeAttr('disabled');",
-                            case preview_url_from_json(proplists:get_value(type, Json), Json) of
-                                undefined -> ["$('#oembed-image').closest('.control-group').hide();"];
-                                PreviewUrl -> ["$('#oembed-image').attr('src', '", z_utils:js_escape(PreviewUrl), "').closest('.control-group').show();"]
-                            end
-                        ]}]},
-                        Context),
-                    z_render:growl(?__("Detected media item", Context), Context1)
-            end
-    end;
 
 event(#postback{message=fix_missing}, Context) ->
     case oembed_admin:count_missing(Context) of

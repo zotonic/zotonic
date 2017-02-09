@@ -75,8 +75,9 @@ handle_cast(convert, State) ->
             file:delete(QueuePath),
             remove_task(State);
         false ->
-                                                % Queue file was deleted, remove our task
-            lager:debug("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)", [State#state.id, State#state.queue_filename]),
+            % Queue file was deleted, remove our task
+            lager:info("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)",
+                       [State#state.id, State#state.queue_filename]),
             remove_task(State)
     end,
     {stop, normal, State}.
@@ -100,8 +101,7 @@ do_convert(QueuePath, State) ->
         Error ->
             lager:warning("ffmpeg conversion error on ~p: ~p", [State#state.id, Error]),
             insert_broken(State)
-    end,
-    mod_signal:emit({medium_update, [{id, State#state.id}]}, Context).
+    end.
 
 -spec insert_movie(file:filename_all(), #state{}) -> {ok, m_rsc:resource_id()} | {error, atom()}.
 insert_movie(Filename, State) ->
@@ -110,11 +110,11 @@ insert_movie(Filename, State) ->
         true ->
             OrgFile = original_filename(State#state.upload),
             PropsMedia = [
-                          {is_video_ok, true}
-                         ],
+                {is_video_ok, true}
+            ],
             m_media:replace_file(#upload{filename=OrgFile, tmpfile=Filename}, State#state.id, [], PropsMedia, [no_touch], Context);
         false ->
-            lager:debug("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
+            lager:info("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
     end.
 
 original_filename(#media_upload_preprocess{original_filename=undefined}) ->
@@ -127,11 +127,11 @@ insert_broken(State) ->
     case is_current_upload(State, Context) of
         true ->
             PropsMedia = [
-                          {mime, "video/x-mp4-broken"}
-                         ],
+                {mime, <<"video/x-mp4-broken">>}
+            ],
             m_media:replace_file(undefined, State#state.id, [], PropsMedia, [no_touch], Context);
         false ->
-            lager:debug("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
+            lager:info("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
     end.
 
 is_current_upload(State, Context) ->
@@ -177,7 +177,6 @@ video_convert_1(QueuePath, Orientation, _Mime, Context) ->
                   [] -> ?CMDLINE;
                   CmdLineCfg -> z_convert:to_list(CmdLineCfg)
               end,
-    Logging = z_convert:to_bool(m_config:get_value(mod_video, logging, Context)),
     TmpFile = z_tempfile:new(),
     FfmpegCmd = z_convert:to_list(
                   iolist_to_binary(
@@ -188,25 +187,22 @@ video_convert_1(QueuePath, Orientation, _Mime, Context) ->
                      z_utils:os_filename(TmpFile)
                     ])),
     jobs:run(video_jobs,
-             fun() ->
-                     lager:debug("Video convert: ~p", [FfmpegCmd]),
-                     case Logging of
-                         true ->
-                             lager:info(FfmpegCmd);
-                         false ->
-                             nop
-                     end,
-                     case os:cmd(FfmpegCmd) of
-                         [] ->
-                             case filelib:file_size(TmpFile) of
-                                 0 ->
-                                     lager:warning("Video convert error: (empty result file)  [queue: ~p]", [QueuePath]),
-                                     {error, convert};
-                                 _ ->
-                                     {ok, TmpFile}
-                             end;
-                         Other ->
-                             lager:warning("Video convert error: ~p [queue: ~p]", [Other, QueuePath]),
-                             {error, Other}
-                     end
-             end).
+            fun() ->
+                    lager:debug("Video convert: ~p", [FfmpegCmd]),
+                    case os:cmd(FfmpegCmd) of
+                        [] ->
+                            case filelib:file_size(TmpFile) of
+                                0 ->
+                                    lager:warning("Video convert error: (empty result file)  [queue: ~p] command ~p",
+                                                  [QueuePath, FfmpegCmd]),
+                                    {error, convert};
+                                _ ->
+                                    lager:debug("Video convert ok: ~p", [TmpFile]),
+                                    {ok, TmpFile}
+                            end;
+                        Other ->
+                            lager:warning("Video convert error: ~p [queue: ~p] command ~p",
+                                          [Other, QueuePath, FfmpegCmd]),
+                            {error, Other}
+                    end
+            end).
