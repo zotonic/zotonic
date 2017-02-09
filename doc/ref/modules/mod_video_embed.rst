@@ -1,7 +1,7 @@
 
 .. include:: meta-mod_video_embed.rst
 
-This module, if activated, checks the pasted URLs in the *create media / page"
+This module, if activated, checks the pasted URLs in the *create media / page*
 dialog of the admin. It will show an embed option for Youtube and Vimeo URLs.
 It will also cleanup pasted embed code for these and other services.
 
