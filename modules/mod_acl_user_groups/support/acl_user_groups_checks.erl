@@ -32,6 +32,7 @@
         has_collab_groups/1,
 
         acl_is_allowed/2,
+        acl_is_allowed_prop/3,
         acl_logon/2,
         acl_logoff/2,
         acl_context_authenticated/1,
@@ -45,12 +46,12 @@
         can_update_category/3,
         can_rsc_insert/3,
         can_move/3,
-        default_content_group/2
-
-    ,can_rsc/3
+        default_content_group/2,
+        can_rsc/3
     ]).
 
 -include_lib("zotonic.hrl").
+-include("acl_user_groups.hrl").
 
 -define(MAX_UPLOAD_SIZE_MB, 50).
 
@@ -211,6 +212,110 @@ acl_is_allowed(#acl_is_allowed{action=Action, object=ModuleName}, Context) when 
     can_module(Action, ModuleName, Context);
 acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
+
+acl_is_allowed_prop(_Id, _Prop, #context{acl=admin}) ->
+    true;
+acl_is_allowed_prop(_Id, _Prop, #context{user_id=1}) ->
+    true;
+acl_is_allowed_prop(Id, _Prop, #context{user_id=Id}) ->
+    true;
+acl_is_allowed_prop(Id, Prop, Context) ->
+    case is_private_property(Prop) of
+        true ->
+            case privacy(Id, Context) of
+                ?ACL_PRIVACY_PUBLIC -> true;
+                ?ACL_PRIVACY_MEMBER -> z_acl:user(Context) =/= undefined;
+                ?ACL_PRIVACY_PRIVATE -> can_rsc(Id, update, Context);
+                N ->
+                    privacy_check(N, m_rsc:is_a(Id, person, Context), Id, Context)
+                    orelse can_rsc(Id, update, Context)
+            end;
+        false ->
+            undefined
+    end.
+
+%% The privacy levels are:
+%%  0 - public
+%% 10 - members
+%% 20 - same user group (except for generic members group)
+%% 30 - collaboration group members
+%% 40 - collaboration group managers
+%% 50 - private (only for editors)
+privacy(Id, Context) ->
+    case m_rsc:p_no_acl(Id, privacy, Context) of
+        N when is_integer(N) ->
+            N;
+        _OtherOrUndefined ->
+            case m_rsc:is_a(Id, person, Context) of
+                true -> ?ACL_PRIVACY_COLLAB_MEMBER;
+                false -> ?ACL_PRIVACY_PUBLIC
+            end
+    end.
+
+
+% Things - check only their content group
+privacy_check(?ACL_PRIVACY_USER_GROUP, false, Id, Context) ->
+    % Same user group, but not a person -- apply collaboration group semantics
+    privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, false, Id, Context);
+privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, false, Id, Context) ->
+    is_collab_group_member(m_rsc:p_no_acl(Id, content_group_id, Context), Context);
+privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, false, Id, Context) ->
+    is_collab_group_manager(m_rsc:p_no_acl(Id, content_group_id, Context), Context);
+% People - check their memberships *and* their content group
+privacy_check(?ACL_PRIVACY_USER_GROUP, true, _Id, #context{acl=#aclug{user_groups=[]}}) ->
+    false;
+privacy_check(?ACL_PRIVACY_USER_GROUP, true, Id, #context{acl=#aclug{user_groups=UGs}} = Context) ->
+    case has_user_groups(Id, Context) of
+        [] -> false;
+        Other ->
+            Other1 = Other -- [ m_rsc:rid(acl_user_group_members, Context) ],
+            lists:any(fun(UgId) -> lists:member(UgId, UGs) end, Other1)
+    end
+    orelse privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, true, Id, Context);
+privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, true, _Id, #context{acl=#aclug{collab_groups=[]}}) ->
+    false;
+privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, true, Id, #context{acl=#aclug{collab_groups=CGs}} = Context) ->
+    case has_collab_groups(Id, Context) of
+        [] -> false;
+        Other ->
+            lists:any(fun(UgId) -> lists:member(UgId, CGs) end, Other)
+            orelse lists:member(m_rsc:p_no_acl(Id, content_group_id, Context), CGs)
+    end
+    orelse lists:member(m_rsc:p_no_acl(Id, content_group_id, Context), CGs);
+privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, true, _Id, #context{acl=#aclug{collab_groups=[]}}) ->
+    false;
+privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, true, Id, #context{user_id=UserId} = Context) ->
+    case m_edge:subjects(UserId, hascollabmanager, Context) of
+        [] -> false;
+        ManagerOf ->
+            case has_collab_groups(Id, Context) of
+                [] -> false;
+                Other ->
+                    lists:any(fun(UgId) -> lists:member(UgId, ManagerOf) end, Other)
+                    orelse lists:member(m_rsc:p_no_acl(Id, content_group_id, Context), ManagerOf)
+            end
+    end;
+privacy_check(_Privacy, _IsPerson, _Id, _Context) ->
+    false.
+
+
+is_private_property(email) -> true;
+is_private_property(phone) -> true;
+is_private_property(phone_mobile) -> true;
+is_private_property(phone_alt) -> true;
+is_private_property(address_street_1) -> true;
+is_private_property(address_street_2) -> true;
+is_private_property(address_postcode) -> true;
+is_private_property(address_city) -> true;
+is_private_property(date_start) -> true;
+is_private_property(date_end) -> true;
+is_private_property(location_lat) -> true;
+is_private_property(location_lng) -> true;
+is_private_property(pivot_location_lat) -> true;
+is_private_property(pivot_location_lng) -> true;
+is_private_property(pivot_geocode) -> true;
+is_private_property(pivot_geocode_qhash) -> true;
+is_private_property(_) -> false.
 
 
 acl_logon(#acl_logon{id=UserId}, Context) ->
