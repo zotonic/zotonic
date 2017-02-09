@@ -18,6 +18,8 @@
     <div id="{{ #panel.index}}" class="panel panel-default" {% if index > 1 %}style="display:none"{% endif %}>
     <form id="{{ #import.index }}" method="POST" class="form" action="postback">
         <div class="panel-body">
+            <span class="pull-right text-muted">{{ m.rsc[mi.category].title }}</span>
+
             {% if mi.props.title %}
                 <h4>{{ mi.props.title|escape }}</h4>
             {% elseif not id %}
