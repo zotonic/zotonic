@@ -48,7 +48,6 @@ ul.tree-list {
             position: relative;
             margin: -1px 0 0 0;
             padding: 0;
-            overflow: hidden;
             #3L > .gradient(#ffffff, @backgroundColorLightest);
 
             &:hover {
@@ -171,4 +170,8 @@ ul.tree-list {
 
 ul.tree-list.connections-list {
     min-height: 12px;
+
+    li.menu-item > div {
+        overflow: hidden;
+    }
 }
