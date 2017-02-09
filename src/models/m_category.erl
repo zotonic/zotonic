@@ -58,6 +58,7 @@
     is_a/2,
     is_a/3,
     is_meta/2,
+    is_a_prim/3,
     name_to_id/2,
     name_to_id_check/2,
     id_to_name/2,
@@ -506,6 +507,12 @@ is_a(Id, Cat, Context) ->
 %%      used to determine the default content group during the m_rsc:get/2
 -spec is_meta(integer(), #context{}) -> boolean().
 is_meta(CatId, Context) when is_integer(CatId) ->
+    is_a_prim(CatId, <<"meta">>, Context).
+
+%% @doc Check if a category is within another category. This can be used within primitive rsc
+%%      routines that are not able to use the rsc caching (due to recursion).
+-spec is_a_prim(integer(), binary()|string()|atom(), #context{}) -> boolean().
+is_a_prim(CatId, Name, Context) ->
     z_depcache:memo(
         fun() ->
              1 =:= z_db:q1("
@@ -514,14 +521,14 @@ is_meta(CatId, Context) when is_integer(CatId) ->
                          hierarchy b
                     where a.name = '$category'
                       and b.name = '$category'
-                      and a.id = (select id from rsc where name = 'meta')
+                      and a.id = (select id from rsc where name = $2)
                       and b.id = $1
                       and b.lft >= a.lft
                       and b.rght <= a.rght",
-                    [CatId],
+                    [CatId, Name],
                     Context)
         end,
-        {is_category_meta, CatId},
+        {is_category_prim, Name, CatId},
         ?WEEK,
         [{hierarchy, <<"$category">>}],
         Context).
