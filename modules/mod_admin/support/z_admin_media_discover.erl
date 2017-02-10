@@ -99,8 +99,8 @@ error_message(file_not_allowed, Context) ->
 error_message(download_failed, Context) ->
     ?__("Failed to download the file.", Context);
 error_message(R, Context) ->
-    lager:warning("Unknown upload error: ~p", [R]),
-    ?__("Error uploading the file.", Context).
+    lager:warning("Unknown media discover error: ~p", [R]),
+    ?__("Error checking the website.", Context).
 
 
 as_proplist(#media_import_props{} = MI) ->
