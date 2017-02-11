@@ -145,6 +145,9 @@ get_result(props, Result, _Context) ->
     Result#m_search_result.search_props;
 get_result(total, Result, _Context) ->
     Result#m_search_result.total;
+get_result(facets, Result, _Context) ->
+    #search_result{facets = Facets} = Result#m_search_result.result,
+    Facets;
 get_result(pages, Result, _Context) ->
     case Result#m_search_result.result of
         #search_result{pages=Pages} -> Pages;
