@@ -20,10 +20,11 @@
 
 -include("zotonic.hrl").
 
--export([create_empty/2,
-         create_empty/3,
-         import/2
-         ]).
+-export([
+    create_empty/2,
+    create_empty/3,
+    import/2
+]).
 
 
 %% @doc Create an empty, non-authoritative resource, with the given uri.
@@ -33,10 +34,10 @@ create_empty(Uri, Context) ->
 
 create_empty(Uri, Props, Context) ->
     Props1 = [{category_id, m_category:name_to_id_check(other, Context)},
-              {note, "Pending import"},
-              {is_published, false},
-              {uri, Uri},
-              {is_authoritative, false}] ++ Props,
+        {note, "Pending import"},
+        {is_published, false},
+        {uri, Uri},
+        {is_authoritative, false}] ++ Props,
     m_rsc:insert(Props1, Context).
 
 
@@ -49,10 +50,10 @@ import(RscImport, Context) ->
              undefined -> throw({error, {unknown_rsc, Uri}});
              TheId -> TheId
          end,
-	case z_acl:rsc_editable(Id, Context) of
-		false -> throw({error, eacces});
-		true -> ok
-	end,
+    case z_acl:rsc_editable(Id, Context) of
+        false -> throw({error, eacces});
+        true -> ok
+    end,
     case m_rsc:p(Id, is_authoritative, Context) of
         false ->
             %% Import rsc
@@ -60,7 +61,7 @@ import(RscImport, Context) ->
 
             Props1 = case proplists:get_value(is_published, Props) of
                          true -> Props;
-                         _ -> [{is_published, true}|proplists:delete(is_published, Props)]
+                         _ -> [{is_published, true} | proplists:delete(is_published, Props)]
                      end,
 
             Opts = [{escape_texts, false}],

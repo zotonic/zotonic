@@ -39,26 +39,25 @@
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(_Key, #m{value=undefined}, _Context) ->
+m_find_value(_Key, #m{value = undefined}, _Context) ->
     undefined.
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value=undefined}, _Context) ->
+m_to_list(#m{value = undefined}, _Context) ->
     [].
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
 %% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
+m_value(#m{value = undefined}, _Context) ->
     undefined.
-
 
 
 %% @doc Get the possible 'rsc_gone' resource for the id.
 get(Id, Context) when is_integer(Id) ->
     F = fun() ->
-            z_db:assoc_row("select * from rsc_gone where id = $1", [Id], Context)
-        end,
+        z_db:assoc_row("select * from rsc_gone where id = $1", [Id], Context)
+    end,
     z_depcache:memo(F, {rsc_gone, Id}, Context).
 
 
@@ -77,19 +76,18 @@ get_new_location(Id, Context) when is_integer(Id) ->
             undefined;
         {NewId, _} when is_integer(NewId) ->
             NewUri = case z_context:get(zotonic_dispatch, Context) of
-                        undefined ->
-                            z_dispatcher:url_for(id, [{id,NewId}], Context);
-                        Dispatch ->
-                            case z_dispatcher:url_for(Dispatch, [{id,NewId}], Context) of
-                                undefined -> z_dispatcher:url_for(id, [{id,NewId}], Context);
-                                DispUri -> DispUri
-                            end
+                         undefined ->
+                             z_dispatcher:url_for(id, [{id, NewId}], Context);
+                         Dispatch ->
+                             case z_dispatcher:url_for(Dispatch, [{id, NewId}], Context) of
+                                 undefined -> z_dispatcher:url_for(id, [{id, NewId}], Context);
+                                 DispUri -> DispUri
+                             end
                      end,
             z_context:abs_url(NewUri, Context);
         {undefined, NewUri} ->
             z_context:abs_url(NewUri, Context)
     end.
-
 
 
 %% @doc Check if the resource used to exist.
@@ -120,23 +118,22 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
             {error, notfound};
         Props when is_list(Props) ->
             z_db:transaction(
-                    fun(Ctx) ->
-                        Props1 = [
-                            {new_id, NewId},
-                            {new_uri, undefined},
-                            {modifier_id, z_acl:user(Ctx)}
-                            | Props
-                        ],
-                        case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Ctx) of
-                            1 ->
-                                lager:warning(z_context:lager_md(Ctx),
-                                              "[~p] Second rsc_gone entry for id ~p",
-                                              [z_context:site(Ctx), Id]),
-                                z_db:update(rsc_gone, Id, Props1, Ctx);
-                            0 ->
-                                z_db:insert(rsc_gone, Props1, Ctx)
-                        end
-                    end,
-                    Context)
+                fun(Ctx) ->
+                    Props1 = [
+                        {new_id, NewId},
+                        {new_uri, undefined},
+                        {modifier_id, z_acl:user(Ctx)}
+                        | Props
+                    ],
+                    case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Ctx) of
+                        1 ->
+                            lager:warning(z_context:lager_md(Ctx),
+                                "[~p] Second rsc_gone entry for id ~p",
+                                [z_context:site(Ctx), Id]),
+                            z_db:update(rsc_gone, Id, Props1, Ctx);
+                        0 ->
+                            z_db:insert(rsc_gone, Props1, Ctx)
+                    end
+                end,
+                Context)
     end.
-

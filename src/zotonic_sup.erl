@@ -108,7 +108,7 @@ init([]) ->
     lager:info("Zotonic starting"),
     lager:info("================"),
     lager:info("Config files used:"),
-    [ lager:info("- ~s", [Cfg]) 
+    [lager:info("- ~s", [Cfg])
       || [Cfg] <- proplists:get_all_values(config, init:get_arguments()) ],
     lager:info(""),
 
@@ -121,7 +121,7 @@ init([]) ->
                       ok;
                   ([Site, Status|_]) ->
                       Ctx = z_context:new(Site),
-                      lager:info("~-40s ~p ~s~n", 
+                      lager:info("~-40s ~p ~s~n",
                                  [z_context:abs_url(<<"/">>, Ctx), Site, Status])
                 end,
                 z_sites_manager:get_sites_status()),

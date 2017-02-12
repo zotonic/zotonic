@@ -38,7 +38,7 @@ start(_Type, _StartArgs) ->
     ensure_started(public_key),
     ensure_started(ssl),
     ensure_started(inets),
-    inets:start(httpc,[{profile,zotonic}]),
+    inets:start(httpc, [{profile, zotonic}]),
     ensure_started(mimetypes),
     ensure_started(emqtt),
     ensure_started(gproc),

@@ -67,7 +67,8 @@ name_rid_test() ->
     ok = z_sites_manager:await_startup(testsandboxdb),
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
-    {ok, Id} = m_rsc:insert([{title, <<"What’s in a name?"/utf8>>}, {category_id, text}, {name, rose}], AdminC),
+    {ok, Id} = m_rsc:insert([{title, <<"What’s in a name?"/utf8>>}, {category_id, text}, {name, rose}],
+        AdminC),
 
     m_rsc:get_raw(rose, AdminC),
     ok = m_rsc_update:flush(rose, AdminC),
