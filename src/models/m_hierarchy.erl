@@ -35,51 +35,51 @@
     save/3,
     save_nocheck/3,
     flush/2
-    ]).
+]).
 
 % For testing
 -export([
     assign_nrs/2
-    ]).
+]).
 
 -include_lib("zotonic.hrl").
 
 % Default delta between hierarchy items to minimize renumbering
--define(DELTA,     1000000).
+-define(DELTA, 1000000).
 -define(DELTA_MIN, 1000).
 -define(DELTA_MAX, 2000000000). % ~ 1^31
 
 
-m_find_value(Name, #m{value=undefined} = M, _Context) ->
-    M#m{value=Name};
-m_find_value(tree, #m{value=Name}, Context) ->
+m_find_value(Name, #m{value = undefined} = M, _Context) ->
+    M#m{value = Name};
+m_find_value(tree, #m{value = Name}, Context) ->
     tree(Name, Context);
-m_find_value(tree1, #m{value=Name}, Context) ->
+m_find_value(tree1, #m{value = Name}, Context) ->
     tree1(Name, Context);
-m_find_value(tree_flat, #m{value=Name}, Context) ->
+m_find_value(tree_flat, #m{value = Name}, Context) ->
     tree_flat(Name, Context);
 
-m_find_value(menu_ensured, #m{value=Name}, Context) ->
+m_find_value(menu_ensured, #m{value = Name}, Context) ->
     {ok, _} = ensure(Name, Context),
     menu(Name, Context);
-m_find_value(menu, #m{value=Name}, Context) ->
+m_find_value(menu, #m{value = Name}, Context) ->
     menu(Name, Context);
-m_find_value(Id, #m{value=Name} = M, Context) ->
+m_find_value(Id, #m{value = Name} = M, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined -> undefined;
-        RId -> M#m{value={sub, Name, RId}}
+        RId -> M#m{value = {sub, Name, RId}}
     end;
 m_find_value(_Key, _Value, _Context) ->
     undefined.
 
-m_to_list(#m{value=undefined}, _Context) ->
+m_to_list(#m{value = undefined}, _Context) ->
     [];
-m_to_list(#m{value=Category}, Context) ->
+m_to_list(#m{value = Category}, Context) ->
     tree(Category, Context);
 m_to_list(_, _Context) ->
     [].
 
-m_value(#m{value=#m{value=Name}}, Context) ->
+m_value(#m{value = #m{value = Name}}, Context) ->
     tree(Name, Context).
 
 
@@ -102,11 +102,11 @@ tree(Name, Context) when is_binary(Name) ->
                 from hierarchy h
                 where name = $1
                 order by nr",
-                [Name],
-                Context),
+            [Name],
+            Context),
         build_tree(CatTuples, [], [])
     end,
-    z_depcache:memo(F, {hierarchy, Name}, ?DAY, [hierarchy, {hierarchy,Name}], Context);
+    z_depcache:memo(F, {hierarchy, Name}, ?DAY, [hierarchy, {hierarchy, Name}], Context);
 tree(Name, Context) ->
     tree(z_convert:to_binary(Name), Context).
 
@@ -123,8 +123,9 @@ tree1(Name, Context) ->
 %% @doc Return a list of all this id's ancestor nodes
 parents(Name, Id, Context) when is_binary(Name), is_integer(Id) ->
     case z_depcache:memo(
-                 fun() -> z_db:q1("SELECT parent_id FROM hierarchy WHERE name = $1 AND id = $2", [Name, Id], Context)
-                 end, {hierarchy_parent, Name, Id}, ?DAY, [hierarchy, {hierarchy,Name}], Context) of
+        fun() ->
+            z_db:q1("SELECT parent_id FROM hierarchy WHERE name = $1 AND id = $2", [Name, Id], Context)
+        end, {hierarchy_parent, Name, Id}, ?DAY, [hierarchy, {hierarchy, Name}], Context) of
         undefined ->
             [];
         P ->
@@ -148,8 +149,8 @@ ids(Ns) ->
 
 ids([], Acc) ->
     Acc;
-ids([N|Ns], Acc) ->
-    Acc1 = [proplists:get_value(id,N) | ids(proplists:get_value(children, N), Acc)],
+ids([N | Ns], Acc) ->
+    Acc1 = [proplists:get_value(id, N) | ids(proplists:get_value(children, N), Acc)],
     ids(Ns, Acc1).
 
 %% @doc Return the list of ids contained within (and including) the id.
@@ -158,15 +159,25 @@ contains(_Name, undefined, _Context) ->
 contains(Name0, Id, Context) when is_integer(Id) ->
     Name = z_convert:to_binary(Name0),
     z_depcache:memo(
-            fun() ->
-                [{Lft, Rght}] = z_db:q("SELECT lft, rght FROM hierarchy WHERE name = 'content_group' AND id = $1", [Id], Context),
-                R = z_db:q("SELECT id FROM hierarchy WHERE name = 'content_group' AND lft >= $1 AND rght <= $2", [Lft, Rght], Context),
-                [CId || {CId} <- R]
-            end,
-            {hierarchy_contains, Name, Id},
-            3600,
-            [{hierarchy, Name}, Id],
-            Context);
+        fun() ->
+            [{Lft, Rght}] = z_db:q(
+                "SELECT lft, rght FROM hierarchy "
+                "WHERE name = 'content_group' AND id = $1",
+                [Id],
+                Context
+            ),
+            R = z_db:q(
+                "SELECT id FROM hierarchy "
+                "WHERE name = 'content_group' AND lft >= $1 AND rght <= $2",
+                [Lft, Rght],
+                Context
+            ),
+            [CId || {CId} <- R]
+        end,
+        {hierarchy_contains, Name, Id},
+        3600,
+        [{hierarchy, Name}, Id],
+        Context);
 contains(Name, Id, Context) ->
     contains(Name, m_rsc:rid(Id, Context), Context).
 
@@ -175,7 +186,7 @@ contains(Name, Id, Context) ->
 tree_flat(Name, Context) ->
     List = flatten_tree(tree(Name, Context)),
     [
-        [{indent,indent(proplists:get_value(level, E, 0))} | E ]
+        [{indent, indent(proplists:get_value(level, E, 0))} | E]
         || E <- List
     ].
 
@@ -188,15 +199,16 @@ menu(Name, Context) ->
 
 tree_to_menu([], Acc) ->
     lists:reverse(Acc);
-tree_to_menu([E|Rest], Acc) ->
+tree_to_menu([E | Rest], Acc) ->
     {id, Id} = proplists:lookup(id, E),
     {children, Cs} = proplists:lookup(children, E),
     Cs1 = tree_to_menu(Cs, []),
-    tree_to_menu(Rest, [{Id,Cs1}|Acc]).
+    tree_to_menu(Rest, [{Id, Cs1} | Acc]).
 
 
 %% @doc Ensure that all resources are present in a hierarchy.
--spec ensure(atom()|binary()|string()|integer(), #context{}) -> {ok, integer()} | {error, term()}.
+-spec ensure(atom()|binary()|string()|integer(), #context{}) ->
+    {ok, integer()} | {error, term()}.
 ensure(Category, Context) ->
     case m_category:name_to_id(Category, Context) of
         {ok, CatId} ->
@@ -207,30 +219,31 @@ ensure(Category, Context) ->
     end.
 
 %% @doc Ensure that all resources of a certain category are present in a hierarchy.
--spec ensure(atom()|binary()|string(), atom()|integer()|string(), #context{}) -> {ok, integer()}.
+-spec ensure(atom()|binary()|string(), atom()|integer()|string(), #context{}) ->
+    {ok, integer()}.
 ensure(Name, CatId, Context) when is_binary(Name), is_integer(CatId) ->
     {ok, Total} = z_db:transaction(
-                fun(Ctx) ->
-                    Ids0 = z_db:q("select id from hierarchy where name = $1", [Name], Ctx),
-                    Ids = [ Id || {Id} <- Ids0 ],
-                    F = fun(Id, {All,Acc}, _Ctx) ->
-                            case lists:member(Id, Ids) of
-                                true -> {[Id|All], Acc};
-                                false -> {[Id|All], [Id|Acc]}
-                            end
-                        end,
-                    {All, Missing} = m_category:fold(CatId, F, {[],[]}, Ctx),
-                    {ok, N1} = append(Name, Missing, Ctx),
-                    {ok, N2} = remove(Name, Ids -- All, Ctx),
-                    {ok, N1+N2}
-                end,
-                Context),
+        fun(Ctx) ->
+            Ids0 = z_db:q("select id from hierarchy where name = $1", [Name], Ctx),
+            Ids = [Id || {Id} <- Ids0],
+            F = fun(Id, {All, Acc}, _Ctx) ->
+                case lists:member(Id, Ids) of
+                    true -> {[Id | All], Acc};
+                    false -> {[Id | All], [Id | Acc]}
+                end
+            end,
+            {All, Missing} = m_category:fold(CatId, F, {[], []}, Ctx),
+            {ok, N1} = append(Name, Missing, Ctx),
+            {ok, N2} = remove(Name, Ids -- All, Ctx),
+            {ok, N1 + N2}
+        end,
+        Context),
     flush(Name, Context),
     case Total of
         0 ->
             {ok, 0};
         _ ->
-            z_notifier:notify(#hierarchy_updated{root_id=Name, predicate=undefined}, Context),
+            z_notifier:notify(#hierarchy_updated{root_id = Name, predicate = undefined}, Context),
             {ok, Total}
     end;
 ensure(Name, Category, Context) when not is_integer(Category) ->
@@ -259,18 +272,18 @@ save(Name, Tree, Context) ->
 save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
     NewFlat = flatten_save_tree(NewTree),
     {ok, New, Del} = z_db:transaction(
-                        fun(Ctx) ->
-                            save_nocheck_trans(Name, NewFlat, Ctx)
-                        end,
-                        Context),
+        fun(Ctx) ->
+            save_nocheck_trans(Name, NewFlat, Ctx)
+        end,
+        Context),
     flush(Name, Context),
     z_notifier:notify(
-                #hierarchy_updated{
-                    root_id=z_convert:to_binary(Name),
-                    predicate=undefined,
-                    inserted_ids=New,
-                    deleted_ids=Del
-                }, Context),
+        #hierarchy_updated{
+            root_id = z_convert:to_binary(Name),
+            predicate = undefined,
+            inserted_ids = New,
+            deleted_ids = Del
+        }, Context),
     ok.
 
 save_nocheck_trans(Name, NewFlat, Context) ->
@@ -280,34 +293,34 @@ save_nocheck_trans(Name, NewFlat, Context) ->
                 where name = $1
                 order by nr
                 for update",
-                [Name],
-                Context),
-    OldFlat = [ {Id,P,Lvl} || {Id,P,Lvl,_Nr} <- OldFlatNr ],
+        [Name],
+        Context),
+    OldFlat = [{Id, P, Lvl} || {Id, P, Lvl, _Nr} <- OldFlatNr],
     Diff = diffy_term:diff(OldFlat, NewFlat),
     NewFlatNr = assign_nrs(Diff, OldFlatNr),
 
-    OldIds = [ Id || {Id, _P, _Lvl, _Nr} <- OldFlatNr ],
-    NewIds = [ Id || {Id, _P, _Lvl, _Nr} <- NewFlatNr ],
+    OldIds = [Id || {Id, _P, _Lvl, _Nr} <- OldFlatNr],
+    NewIds = [Id || {Id, _P, _Lvl, _Nr} <- NewFlatNr],
     InsIds = NewIds -- OldIds,
     UpdIds = NewIds -- InsIds,
     DelIds = OldIds -- NewIds,
 
     lists:foreach(fun(Id) ->
-                    {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
-                    {Left,Right} = range(Id, NewFlatNr),
-                    z_db:q("
+        {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
+        {Left, Right} = range(Id, NewFlatNr),
+        z_db:q("
                             insert into hierarchy
                                 (name, id, parent_id, lvl, nr, lft, rght)
                             values
                                 ($1, $2, $3, $4, $5, $6, $7)",
-                           [Name, Id, P, Lvl, Nr, Left, Right],
-                           Context)
-                  end,
-                  InsIds),
+            [Name, Id, P, Lvl, Nr, Left, Right],
+            Context)
+    end,
+        InsIds),
     lists:foreach(fun(Id) ->
-                    {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
-                    {Left,Right} = range(Id, NewFlatNr),
-                    z_db:q("
+        {Id, P, Lvl, Nr} = lists:keyfind(Id, 1, NewFlatNr),
+        {Left, Right} = range(Id, NewFlatNr),
+        z_db:q("
                             update hierarchy
                             set parent_id = $3,
                                 lvl = $4,
@@ -321,51 +334,51 @@ save_nocheck_trans(Name, NewFlat, Context) ->
                                   or nr <> $5
                                   or lft <> $6
                                   or rght <> $7)",
-                           [Name, Id, P, Lvl, Nr, Left, Right],
-                           Context)
-                  end,
-                  UpdIds),
+            [Name, Id, P, Lvl, Nr, Left, Right],
+            Context)
+    end,
+        UpdIds),
     lists:foreach(fun(Id) ->
-                    z_db:q("delete from hierarchy
+        z_db:q("delete from hierarchy
                             where name = $1 and id = $2",
-                           [Name,Id],
-                           Context)
-                  end,
-                  DelIds),
+            [Name, Id],
+            Context)
+    end,
+        DelIds),
     {ok, InsIds, DelIds}.
 
-range(Id, [{Id,_P,Lvl,Nr}|Rest]) ->
-    Right = range_1(Lvl, Nr, Rest),
-    {Nr,Right};
-range(Id, [_|Rest]) ->
+range(Id, [{Id, _P, Lvl, Nr} | Rest]) ->
+    Right = range1(Lvl, Nr, Rest),
+    {Nr, Right};
+range(Id, [_ | Rest]) ->
     range(Id, Rest).
 
-range_1(Lvl, _Max, [{_Id,_P,Lvl1,Nr}|Rest]) when Lvl < Lvl1 ->
-    range_1(Lvl, Nr, Rest);
-range_1(_Lvl, Max, _Rest) ->
+range1(Lvl, _Max, [{_Id, _P, Lvl1, Nr} | Rest]) when Lvl < Lvl1 ->
+    range1(Lvl, Nr, Rest);
+range1(_Lvl, Max, _Rest) ->
     Max.
 
 %% @doc Go through the flattened tree and assign the range nrs
 assign_nrs(Diff, OldFlatNr) ->
-    IdNr = lists:foldl(fun({Id,_,_,Nr}, D) ->
-                            dict:store(Id, Nr, D)
-                       end,
-                       dict:new(),
-                       OldFlatNr),
+    IdNr = lists:foldl(fun({Id, _, _, Nr}, D) ->
+        dict:store(Id, Nr, D)
+    end,
+        dict:new(),
+        OldFlatNr),
     assign_nrs_1(Diff, [], 0, IdNr).
 
 assign_nrs_1([], Acc, _LastNr, _IdNr) ->
     lists:reverse(Acc);
-assign_nrs_1([{_Op, []}|Rest], Acc, LastNr, IdNr) ->
+assign_nrs_1([{_Op, []} | Rest], Acc, LastNr, IdNr) ->
     assign_nrs_1(Rest, Acc, LastNr, IdNr);
-assign_nrs_1([{equal, [{Id,P,Lvl}|Rs]}|Rest], Acc, LastNr, IdNr) ->
+assign_nrs_1([{equal, [{Id, P, Lvl} | Rs]} | Rest], Acc, LastNr, IdNr) ->
     PrevNr = dict:fetch(Id, IdNr),
-    case erlang:max(PrevNr,LastNr+1) of
+    case erlang:max(PrevNr, LastNr + 1) of
         PrevNr ->
-            Acc1 = [{Id,P,Lvl,PrevNr} | Acc],
-            assign_nrs_1([{equal, Rs}|Rest], Acc1, PrevNr, IdNr);
+            Acc1 = [{Id, P, Lvl, PrevNr} | Acc],
+            assign_nrs_1([{equal, Rs} | Rest], Acc1, PrevNr, IdNr);
         _ ->
-            Diff1 = [{equal, Rs}|Rest],
+            Diff1 = [{equal, Rs} | Rest],
             NewNr = case next_equal_nr(Diff1, IdNr) of
                         undefined ->
                             LastNr + ?DELTA;
@@ -374,33 +387,32 @@ assign_nrs_1([{equal, [{Id,P,Lvl}|Rs]}|Rest], Acc, LastNr, IdNr) ->
                         _ ->
                             LastNr + ?DELTA_MIN
                     end,
-            Acc1 = [{Id,P,Lvl,NewNr} | Acc],
+            Acc1 = [{Id, P, Lvl, NewNr} | Acc],
             assign_nrs_1(Diff1, Acc1, NewNr, IdNr)
     end;
-assign_nrs_1([{insert, [{Id,P,Lvl}|Rs]}|Rest], Acc, LastNr, IdNr) ->
+assign_nrs_1([{insert, [{Id, P, Lvl} | Rs]} | Rest], Acc, LastNr, IdNr) ->
     CurrNr = case dict:find(Id, IdNr) of
-                {ok, Nr} -> Nr;
-                error -> undefined
-             end,
+        {ok, Nr} -> Nr;
+        error -> undefined
+    end,
     NextEq = next_equal_nr(Rest, IdNr),
-    NewNr = if
-                CurrNr =:= undefined, NextEq =:= undefined ->
-                    LastNr + ?DELTA;
-                NextEq =:= undefined, CurrNr > LastNr ->
-                    CurrNr;
-                NextEq =/= undefined, CurrNr > LastNr, NextEq > CurrNr ->
-                    CurrNr;
-                NextEq =/= undefined, NextEq >= LastNr + 2 ->
-                    erlang:min(LastNr+?DELTA, LastNr + (NextEq-LastNr) div 2);
-                true ->
-                    % We have to shift the NextEq, as it is =< LastNr+2
-                    LastNr + ?DELTA_MIN
-            end,
-    Acc1 = [{Id,P,Lvl,NewNr} | Acc],
-    assign_nrs_1([{insert, Rs}|Rest], Acc1, NewNr, IdNr);
+    NewNr = new_nr(LastNr, CurrNr, NextEq),
+    Acc1 = [{Id, P, Lvl, NewNr} | Acc],
+    assign_nrs_1([{insert, Rs} | Rest], Acc1, NewNr, IdNr);
 assign_nrs_1([{delete, _}|Rest], Acc, LastNr, IdNr) ->
     assign_nrs_1(Rest, Acc, LastNr, IdNr).
 
+new_nr(Last, undefined, undefined) ->
+    Last + ?DELTA;
+new_nr(Last, Current, undefined) when Current > Last ->
+    Current;
+new_nr(Last, Current, Next) when Next =/= undefined, Current > Last, Next > Current ->
+    Current;
+new_nr(Last, _Current, Next) when Next =/= undefined, Next >= Last + 2 ->
+    erlang:min(Last + ?DELTA, Last + (Next - Last) div 2);
+new_nr(Last, _, _) ->
+    % We have to shift the NextEq, as it is =< LastNr+2
+    Last + ?DELTA_MIN.
 
 next_equal_nr(Diff, IdNr) ->
     case next_equal(Diff) of
@@ -409,16 +421,16 @@ next_equal_nr(Diff, IdNr) ->
     end.
 
 next_equal([]) -> undefined;
-next_equal([{equal, [{Id,_,_}|_]}|_]) -> Id;
-next_equal([_|Ds]) -> next_equal(Ds).
+next_equal([{equal, [{Id, _, _} | _]} | _]) -> Id;
+next_equal([_ | Ds]) -> next_equal(Ds).
 
 flatten_save_tree(Tree) ->
     lists:reverse(flatten_save_tree(Tree, undefined, 1, [])).
 
 flatten_save_tree([], _ParentId, _Lvl, Acc) ->
     Acc;
-flatten_save_tree([{Id, Cs}|Ts], ParentId, Lvl, Acc) ->
-    Acc1 = flatten_save_tree(Cs, Id, Lvl+1, [{Id,ParentId,Lvl}|Acc]),
+flatten_save_tree([{Id, Cs} | Ts], ParentId, Lvl, Acc) ->
+    Acc1 = flatten_save_tree(Cs, Id, Lvl + 1, [{Id, ParentId, Lvl} | Acc]),
     flatten_save_tree(Ts, ParentId, Lvl, Acc1).
 
 append(Name0, Missing, Context) ->
@@ -426,7 +438,7 @@ append(Name0, Missing, Context) ->
     case append_1(Name, Missing, Context) of
         {ok, N} when N > 0 ->
             flush(Name, Context),
-            z_notifier:notify(#hierarchy_updated{root_id=Name, predicate=undefined}, Context),
+            z_notifier:notify(#hierarchy_updated{root_id = Name, predicate = undefined}, Context),
             {ok, N};
         {ok, 0} ->
             {ok, 0}
@@ -471,16 +483,16 @@ flush(Name, Context) ->
 indent(Level) when Level =< 0 ->
     <<>>;
 indent(Level) when is_integer(Level) ->
-    iolist_to_binary(string:copies("&nbsp;&nbsp;&nbsp;&nbsp;", Level-1)).
+    iolist_to_binary(string:copies("&nbsp;&nbsp;&nbsp;&nbsp;", Level - 1)).
 
 flatten_tree(Tree) ->
     lists:reverse(flatten_tree(Tree, [], [])).
 
 flatten_tree([], _Path, Acc) ->
     Acc;
-flatten_tree([E|Ts], Path, Acc) ->
-    Acc1 = [ [{path,Path}|E] | Acc ],
-    Path1 = [ proplists:get_value(id, E) | Path ],
+flatten_tree([E | Ts], Path, Acc) ->
+    Acc1 = [[{path, Path} | E] | Acc],
+    Path1 = [proplists:get_value(id, E) | Path],
     Acc2 = flatten_tree(proplists:get_value(children, E, []), Path1, Acc1),
     flatten_tree(Ts, Path, Acc2).
 
@@ -488,29 +500,33 @@ flatten_tree([E|Ts], Path, Acc) ->
 %% @doc Build a tree from the queried arguments
 build_tree([], _Stack, Acc) ->
     lists:reverse(Acc);
-build_tree([{Id, _Parent, _Lvl, _Left, _Right} = C|Rest], Stack, Acc) ->
-    {C1, Rest1} = build_tree(C, [Id|Stack], [], Rest),
-    build_tree(Rest1, Stack, [C1|Acc]).
+build_tree([{Id, _Parent, _Lvl, _Left, _Right} = C | Rest], Stack, Acc) ->
+    {C1, Rest1} = build_tree(C, [Id | Stack], [], Rest),
+    build_tree(Rest1, Stack, [C1 | Acc]).
 
-build_tree({Id, _Parent, _Lvl, _Left, _Right} = P, Stack, Acc, [{Id2, Id, _Lvl2, _Left2, _Right2} = C|Rest]) ->
-    {C1, Rest1} = build_tree(C, [Id2|Stack], [], Rest),
-    build_tree(P, Stack, [C1|Acc], Rest1);
+build_tree(
+    {Id, _Parent, _Lvl, _Left, _Right} = P,
+    Stack,
+    Acc,
+    [{Id2, Id, _Lvl2, _Left2, _Right2} = C | Rest]) ->
+    {C1, Rest1} = build_tree(C, [Id2 | Stack], [], Rest),
+    build_tree(P, Stack, [C1 | Acc], Rest1);
 build_tree({Id, Parent, Lvl, Left, Right}, Stack, Acc, Rest) ->
-    {[  {id,Id},
-        {parent_id,Parent},
-        {level,Lvl},
+    {[{id, Id},
+        {parent_id, Parent},
+        {level, Lvl},
         {children, lists:reverse(Acc)},
         {path, lists:reverse(Stack)},
         {left, Left},
         {right, Right}
-     ],
-     Rest}.
+    ],
+        Rest}.
 
 
 %% @doc Find a id and sub-tree in a tree (tree nodes are proplists)
 find_tree_node([], _Id) ->
     undefined;
-find_tree_node([Node|Ns], Id) ->
+find_tree_node([Node | Ns], Id) ->
     case lists:keyfind(id, 1, Node) of
         {id, Id} ->
             {ok, Node};

@@ -34,20 +34,20 @@
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(session_id, #m{value=undefined}, Context) ->
+m_find_value(session_id, #m{value = undefined}, Context) ->
     Context#context.session_id;
-m_find_value(page_id, #m{value=undefined}, Context) ->
+m_find_value(page_id, #m{value = undefined}, Context) ->
     Context#context.page_id;
-m_find_value(Key, #m{value=undefined}, Context) ->
+m_find_value(Key, #m{value = undefined}, Context) ->
     z_context:get_session(Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value=undefined}, _Context) ->
-	[].
+m_to_list(#m{value = undefined}, _Context) ->
+    [].
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
 %% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-	undefined.
+m_value(#m{value = undefined}, _Context) ->
+    undefined.
 

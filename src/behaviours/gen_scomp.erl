@@ -21,9 +21,9 @@
 %%
 %%      vary(Params, Context) -> {EssentialParams, MaxAge, Vary} | nocache | default
 %%
-%%      	Params = proplist()
+%%          Params = proplist()
 %%          EssentialParams = proplist()  (proplist with params that make differences in the cache key)
-%%      	MaxAge = integer()
+%%          MaxAge = integer()
 %%          Vary = TermList  (used as dependencies for the depcache)
 
 

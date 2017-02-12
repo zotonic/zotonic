@@ -5,11 +5,12 @@ matrix:
       env: BUILD_DOCS=true
     - otp_release: 18.3
     - otp_release: 18.0
-    # - otp_release: 19.0
+    - otp_release: 19.0
+      env: ELVIS=true
     #  env: DIALYZER=true
-  allow_failures:
-    # - otp_release: 19.0
-    #  env: DIALYZER=true
+#  allow_failures:
+#     - otp_release: 19.0
+#       env: DIALYZER=true
   fast_finish: true
 
 addons:
@@ -28,6 +29,7 @@ script:
   - if [[ "$BUILD_DOCS" = true ]]; then make -C doc/ stubs; fi
   - if [[ "$BUILD_DOCS" = true ]]; then make -C doc/ SPHINXOPTS='-nW' html; fi
   - ./rebar3 xref
+  - if [[ "$ELVIS" = true ]]; then wget https://github.com/inaka/elvis/releases/download/0.2.12/elvis && chmod +x elvis && ./elvis rock; fi
   - if [[ "$DIALYZER" = true ]]; then ./rebar3 dialyzer; fi
 sudo: false
 branches:
