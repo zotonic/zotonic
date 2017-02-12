@@ -100,14 +100,14 @@ map_user_site(Username) when is_binary(Username) ->
                                     lager:info("MQTT: no site found for ~p, using fallback", [Hostname]),
                                     fallback_site(Username)
                             end;
-                        {'EXIT',_} ->
+                        {'EXIT', _} ->
                             lager:info("MQTT: no site found for ~p, using fallback", [Hostname]),
                             fallback_site(Username)
                     end;
                 {ok, Host} ->
                     {ok, local_username(Parts), z_context:new(Host)}
             end
-        end.
+    end.
 
 fallback_site(Username) ->
     {ok, Username, z_context:new(z_sites_dispatcher:get_fallback_site())}.
@@ -120,6 +120,6 @@ local_username(Parts) ->
 
 test() ->
     Fallback = z_sites_dispatcher:get_fallback_site(),
-    {ok, <<"admin">>, #context{site=Fallback}} = map_user_site(<<"admin">>),
-    {ok, <<"admin@foo.bar.not.exist">>, #context{site=Fallback}} = map_user_site(<<"admin@foo.bar.not.exist">>),
+    {ok, <<"admin">>, #context{site = Fallback}} = map_user_site(<<"admin">>),
+    {ok, <<"admin@foo.bar.not.exist">>, #context{site = Fallback}} = map_user_site(<<"admin@foo.bar.not.exist">>),
     ok.

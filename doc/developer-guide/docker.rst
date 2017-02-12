@@ -47,7 +47,7 @@ on Zotonic. Start the container from your local Zotonic clone::
 
 To start the container, use Docker Compose::
 
-    $ docker-compose run --service-ports zotonic bash
+    $ docker-compose run --service-ports zotonic sh
 
 This opens a shell prompt in the Zotonic container. A PostgreSQL container will
 be started automatically as well. In the Zotonic container, you can enter any
