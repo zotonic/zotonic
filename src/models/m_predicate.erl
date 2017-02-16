@@ -149,15 +149,21 @@ get(Pred, Context) ->
 
 %% @doc Return the category ids that are valid as objects
 objects(Id, Context) ->
-    Objects = z_db:q("select category_id from predicate_category where predicate_id = $1 "
-        "and is_subject = false",
+    Objects = z_db:q("
+        select category_id
+        from predicate_category
+        where predicate_id = $1
+          and is_subject = false",
         [Id], Context),
     [R || {R} <- Objects].
 
 %% @doc Return the category ids that are valid as subjects
 subjects(Id, Context) ->
-    Subjects = z_db:q("select category_id from predicate_category where predicate_id $1 "
-        "and is_subject = true",
+    Subjects = z_db:q("
+        select category_id
+        from predicate_category
+        where predicate_id = $1
+          and is_subject = true",
         [Id], Context),
     [R || {R} <- Subjects].
 
