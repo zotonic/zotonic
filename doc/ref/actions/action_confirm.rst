@@ -43,6 +43,8 @@ postback       Event to be sent back to the server
 delegate       Erlang module handling the postback. 
                Defaults to the controller 
                generating the page.                  delegate="my_event_module"
+is_danger      If the 'ok' button should be flagged  is_danger
+               as dangerous.
 =============  ====================================  =====================================
 
 .. seealso:: actions :ref:`action-alert` and :ref:`action-growl`.
