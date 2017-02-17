@@ -8,7 +8,12 @@ Show a JavaScript confirm message and on confirmation triggers one or more actio
 
 Example::
 
-   {% button action={confirm text="Format hard disk?" action={growl text="Better not"}} %}
+   {% button action={confirm 
+                     text="Format hard disk?" 
+                     ok="Go Ahead!"
+                     action={growl text="Better not"}
+                     is_danger}
+   %}
 
 Shows a JavaScript dialog with the question "Format hard disk?".  When this dialog is confirmed then the growl message "Better not" will appear. When the dialog is denied or canceled then nothing happens.
 
