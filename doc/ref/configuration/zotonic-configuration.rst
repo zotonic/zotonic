@@ -103,6 +103,6 @@ The `erlang.config` file
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``erlang.config`` file contains application environment variables
-for the Erlang applications that Zotonic depends on. Here you can
+for the :ref:`erlang-applications` that Zotonic depends on. Here you can
 configure for instance the paths for the :ref:`log files <dev-testing>` (in
 the ``lager`` section), emqtt ports, et cetera.
