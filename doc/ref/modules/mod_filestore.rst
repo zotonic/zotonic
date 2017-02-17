@@ -13,20 +13,42 @@ If a file is added then the file is queued in an upload queue. After a delay a s
 polls this queue and will upload the file to the external service.
 
 If a file is needed and not locally available then the mod_filestore module will check its
-file registry to see if the file is stored on an external service. If so then then a `filezcache`
+file registry to see if the file is stored on an external service. If so then then a *filezcache*
 process is added and a download of the file is started.
 
 The file is served from the filezcache whilst it is being downloaded.
 
-The `filezcache` will stop the entry after a random amount of time—if the entry was not recently
+The filezcache will stop the entry after a random amount of time—if the entry was not recently
 used.
-
 
 Configuration
 -------------
 
-After the `mod_filestore` is enabled an extra menu entry `Cloud File Store` is added
-to the `System` menu in the admin.
+S3 configuration
+^^^^^^^^^^^^^^^^
+
+Configure the following permissions on your S3 service for mod_filestore to work correctly:
+
+================================== ===============
+Resource                           Permissions
+---------------------------------- ---------------
+``/``                              - s3:ListBucket
+``/-zotonic-filestore-test-file-`` - s3:GetObject
+                                   - s3:PutObject
+                                   - s3:DeleteObject
+``/preview/*``                     - s3:GetObject
+                                   - s3:PutObject
+                                   - s3:DeleteObject (if file deletion is enabled)
+``/archive/*``                     - s3:GetObject
+                                   - s3:PutObject
+                                   - s3:DeleteObject (if file deletion is enabled)
+================================== ===============
+
+mod_filestore configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After the mod_filestore is enabled an extra menu entry ‘Cloud File Store’ is added
+to the ‘System’ menu in the admin.
 
 Selecting the menu will show the configuration panel for the Could File Store.
 
@@ -56,17 +78,17 @@ Statistics
 The system shows statistics:
 
 Media
-   All `medium` records and a sum of the sizes. A single medium record can have 0, 1 or 2 files attached.
+   All medium records and a sum of the sizes. A single medium record can have 0, 1 or 2 files attached.
 
 Local Files
-   These are all files found in the `files` directory, this includes files that won’t ever be uploaded.
+   These are all files found in the ``files`` directory, this includes files that won’t ever be uploaded.
 
 Cloud Files
    All files registered to be on any cloud service. This is extracted from the database and not by scanning
    the remote cloud service.
 
 Queues
-   These are the queues being processed by `mod_filestore`. On a quiet (stable) system they are usually empty.
+   These are the queues being processed by mod_filestore. On a quiet (stable) system they are usually empty.
 
 
 Moving files
@@ -86,7 +108,7 @@ probable that a freshly uploaded file vanishes (to the cache) whilst a preview-g
 Notifications
 -------------
 
-The `mod_filestore` hooks into the following notifications, whose definitions can be found in ``zotonic_file.hrl``:
+The mod_filestore hooks into the following notifications, whose definitions can be found in ``zotonic_file.hrl``:
 
 
 ``#filestore{}``
