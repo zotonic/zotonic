@@ -2,7 +2,7 @@
 .. include:: meta-confirm.rst
 
 
-Show a JavaScript confirm message and on confirmation triggers one or more actions and/or send a postback to the server.
+Show a JavaScript confirm message and on confirmation triggers one or more actions and/or sends a postback to the server.
 
 .. highlight:: django
 
@@ -15,11 +15,11 @@ Example::
                      is_danger}
    %}
 
-Shows a JavaScript dialog with the question "Format hard disk?".  When this dialog is confirmed then the growl message "Better not" will appear. When the dialog is denied or canceled then nothing happens.
+Shows a JavaScript dialog with the question "Format hard disk?".  If this dialog is confirmed then the growl message "Better not" will appear. If the dialog is denied or canceled then nothing happens.
 
 .. highlight:: erlang
 
-When there is a postback defined then the event handler for the postback will be called like::
+If there is a postback defined then the event handler for the postback will be called like::
 
    event(#postback{message=Message, trigger=TriggerId, target=TargetId}, Context).
 
