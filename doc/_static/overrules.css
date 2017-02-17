@@ -22,3 +22,12 @@ span.pre {
     border: none;
     color: #404040;
 }
+
+.section .wy-table-responsive table td,
+.section .wy-table-responsive table th {
+    white-space: inherit;
+}
+
+.section .wy-table-responsive table td {
+    vertical-align: top;
+}
