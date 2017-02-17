@@ -8,7 +8,7 @@ WORKDIR /opt/zotonic
 
 RUN sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.config
 
-RUN apk add --no-cache ca-certificates bash curl make gcc musl-dev g++ bsd-compat-headers gettext git imagemagick inotify-tools wget \
+RUN apk add --no-cache ca-certificates bash curl make gcc musl-dev g++ bsd-compat-headers gettext git imagemagick inotify-tools openssl wget \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ openssl-dev
 
 VOLUME /opt/zotonic
