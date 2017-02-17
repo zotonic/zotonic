@@ -44,6 +44,7 @@ event(#postback{message={confirm, Args}}, Context) ->
         {title, Title},
         {text, Text},
         {is_template, IsTemplate},
+        {is_danger, proplists:get_value(is_danger, Args, false)},
         {ok, proplists:get_value(ok, Args)},
         {cancel, proplists:get_value(cancel, Args)},
         {action, proplists:get_all_values(action, Args)},
