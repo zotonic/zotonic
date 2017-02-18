@@ -53,6 +53,7 @@ start_link(Ident, Opts, Facility, Level) ->
     z_buffered_worker:start_link(?MODULE, ?MODULE, [[Ident, Opts, Facility], Level]).
 
 log_access(_LogData) ->
+    %% TODO Do access logging here?
     ok.
 
 % log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
