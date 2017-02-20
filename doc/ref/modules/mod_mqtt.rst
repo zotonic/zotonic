@@ -132,7 +132,7 @@ to allow access to MQTT topics:
 .. code-block:: erlang
     :caption: your_site.erl
 
-    observe_acl_is_allowed(#acl_is_allowed{object = #acl_mqtt{topic = <<"site/some/topic">>}}, _Context) ->
+    observe_acl_is_allowed(#acl_is_allowed{object = #acl_mqtt{topic = <<"site/your_site/topic">>}}, _Context) ->
         %% Allow anonymous access on this topic
         true;
     observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
