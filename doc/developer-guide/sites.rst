@@ -73,14 +73,14 @@ contains at least:
 * a ``sitename.erl`` file: initialises the site.
 
 In fact, a site is a special type of :ref:`module <guide-modules>`.
-Like modules, sites usually contain additional resources such as templates and
-dispatch rules. Unlike modules, however, sites have their own hostname and
-database connection.
-
+Like modules, sites usually contain additional resources such as
+:ref:`templates <guide-templates>`,
+:ref:`dispatch rules <guide-dispatch>` and
+:ref:`data <guide-modules-versioning>` . Unlike modules, however, sites have
+their own hostname and database connection.
 
 Next steps
 ----------
 
 * Consult the reference for all site :ref:`configuration parameters <ref-site-configuration>`.
 * If something goes wrong, consult the :ref:`troubleshooting reference <ref-troubleshooting-sites>`.
-

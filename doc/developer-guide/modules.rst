@@ -345,7 +345,7 @@ provides clauses.
 .. _guide-module-startup-order:
 
 Module startup order
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 Note that when a site starts, its modules are started in order of
 module dependency, in such a way that a module's dependencies are
@@ -359,33 +359,106 @@ Module versioning
 Modules can export a ``-module_schema()`` attribute which contains an
 integer number, denoting the current module’s version. On module
 initialization, ``Module:manage_schema/2`` is called which handles
-installation and upgrade of data.
+installation and upgrade of data. You can define:
 
-Minimal example::
+- categories
+- predicates
+- resources
+- edges
+- :ref:`ACL rules <managed rules>`.
+
+For example:
+
+.. code-block:: erlang
+    :caption: mod_twitter.erl
 
     -module(mod_twitter).
     -mod_title("Twitter module").
     -mod_schema(3).  %% we are currently at revision 3
 
-    -export([manage_schema/2]).
-    .... more code here...
+    -export([
+        manage_schema/2
+    ]).
+
+    %% ...
 
     manage_schema(install, Context) ->
-    % .. code to install your stuff here, for instance:
-    #datamodel{categories=
-                 [
-                  {tweet,
-                   text,
-                   [{title, <<"Tweet">>}]}
-                 ]};
+        %% Return a #datamodel{} record with items that will be created when
+        %% the module starts.
+
+        #datamodel{
+            categories = [
+                {
+                    tweet,  %% unique category name
+                    text,   %% parent category (can be undefined)
+
+                    %% category properties
+                    [
+                        {title, <<"Tweet">>}
+                    ]
+                }
+            ],
+            predicates = [
+                {
+                    tweets,  %% unique predicate name
+
+                    %% predicate properties
+                    [
+                        {title, {trans, [
+                            {en, <<"Tweets">>},
+                            {nl, <<"Twittert">>}
+                        ]}}
+                    ],
+
+                    %% predicate from/to categories:
+                    [
+                        {person, tweet}
+                    ]
+                }
+            ],
+            resources = [
+                {
+                    person_tweeter,  %% resource’s unique name
+                    person,          %% category
+
+                    %% resource properties
+                    [
+                        {title, <<"Test Tweeter">>},
+                        {name_first, <<"Sir">>},
+                        {name_surname, <<"Tweetalot">>
+                    ]
+                },
+                {
+                    silly_tweet,
+                    tweet,
+                    [
+                        {body, <<"What’s your favourite colour?"/utf8>>}
+                    ]
+                }
+            ],
+            edges = [
+                %% subject       predicate     object
+                {person_tweeter, tweets,       silly_tweet}
+            ]
+        };
 
     manage_schema({upgrade, 2}, Context) ->
-    %% code to upgrade from 1 to 2
-    ok;
+        %% code to upgrade from 1 to 2
+        ok;
 
     manage_schema({upgrade, 3}, Context) ->
-    %% code to upgrade from 2 to 3
-    ok.
+        %% code to upgrade from 2 to 3: update the person_tweeter resource
+        #datamodel{
+            resources = [
+                {
+                    person_tweeter,
+                    person,
+                    [
+                        {name_surname, <<"Tweetalot the Second">>}
+                    ]
+                }
+            ]
+        }.
 
 Note that the install function should always be kept up-to-date
 according to the latest schema version. When you install a module for
@@ -398,8 +471,8 @@ Data model notification
 
 In the ``#datamodel`` record you can manage categories, predicates, resources,
 media and edges. You can also set the ``data`` property, which will send out
-a first :ref:`notification <guide-notification>`. To subscribe to that
-notification, export ``observe_manage_data/2`` in your site or module.
+a :ref:`manage_data` notification. To subscribe to that notification, export
+``observe_manage_data/2`` in your site or module.
 
 Using categories defined by other modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
