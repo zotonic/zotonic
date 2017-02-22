@@ -130,8 +130,19 @@
 %% Default page length for search
 -define(SEARCH_PAGELEN, 20).
 
-%% Used for search results
--record(search_result, {result=[], page=1, pagelen, total, all, pages, next, prev}).
+%% @doc A set of search results
+-record(search_result, {
+    result = [] :: list(),
+    page = 1 :: pos_integer(),
+    pagelen :: pos_integer(),
+    total :: non_neg_integer(),
+    all :: non_neg_integer(),
+    pages :: non_neg_integer(),
+    next,
+    prev,
+    facets = [] :: list()
+}).
+
 -record(m_search_result, {search_name, search_props, result, page, pagelen, total, pages, next, prev}).
 -record(search_sql, {select, from, where="", order="", group_by="", limit, tables=[], args=[],
                      cats=[], cats_exclude=[], cats_exact=[], run_func, extra=[], assoc=false}).
