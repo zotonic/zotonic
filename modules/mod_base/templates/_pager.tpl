@@ -1,6 +1,3 @@
-{% lib
-    "css/scomp_base_pager.css"
-%}
 <ul class="pagination pagination-centered">
     <li {% if not prev_url %}class="disabled"{% endif %}><a href="{{ prev_url }}#content-pager">←</a></li>
     {% for nr, url in pages %}
