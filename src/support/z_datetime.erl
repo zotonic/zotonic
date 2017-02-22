@@ -46,6 +46,7 @@
 
     prev_year/1,
     prev_month/1,
+    prev_week/1,
     prev_day/1,
     prev_hour/1,
     prev_minute/1,
@@ -53,6 +54,7 @@
 
     next_year/1,
     next_month/1,
+    next_week/1,
     next_day/1,
     next_hour/1,
     next_minute/1,
@@ -345,6 +347,15 @@ prev_year({{Y,M,D},T}) ->
 prev_month({{Y,1,D},T}) -> {{Y-1,12,D},T};
 prev_month({{Y,M,D},T}) -> move_day_if_undefined({{Y,M-1,D}, T}, fun prev_day/1).
 
+%% @doc Return the date one week earlier.
+prev_week(DT) ->
+    prev_week_1(DT, 7).
+
+prev_week_1(DT, 0) -> DT;
+prev_week_1(DT, N) ->
+    DT1 = prev_day(DT),
+    prev_week_1(DT1, N-1).
+
 %% @doc Return the date one day earlier.
 prev_day({{_,_,1},_} = Date) ->
     {{Y1,M1,_},T1} = prev_month(Date),
@@ -386,6 +397,15 @@ next_year({{Y,M,D},T}) ->
 %%      day doesn't exist in the next month. (eg. feb 30 will become feb 28).
 next_month({{Y,12,D},T}) -> {{Y+1,1,D},T};
 next_month({{Y,M,D},T}) -> move_day_if_undefined({{Y,M+1,D}, T}, fun prev_day/1).
+
+%% @doc Return the date one week later.
+next_week(DT) ->
+    next_week_1(DT, 7).
+
+next_week_1(DT, 0) -> DT;
+next_week_1(DT, N) ->
+    DT1 = next_day(DT),
+    next_week_1(DT1, N-1).
 
 %% @doc Return the date one day later.
 next_day({{Y,M,D},T} = Date) ->
