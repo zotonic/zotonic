@@ -29,6 +29,9 @@ show_media(undefined, _Template, _Context) ->
 show_media(Input, Template, Context) when is_binary(Input) ->
     Context1 = z_context:set(show_media_template, Template, Context),
     show_media1(Input, 0, Context1);
+show_media({trans, _} = Tr, Template, Context) ->
+    Text = z_trans:lookup_fallback(Tr, Context),
+    show_media(Text, Template, Context);
 show_media(Input, _Template, _Context) ->
     Input.
 
