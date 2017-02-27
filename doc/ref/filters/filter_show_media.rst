@@ -14,7 +14,7 @@ be overruled with your own.
 
 Images that are inlined in the body text can have these parameters:
 
-``alignment``
+``align``
   Either ``between``, ``left`` or ``right``.
 
 ``size``
