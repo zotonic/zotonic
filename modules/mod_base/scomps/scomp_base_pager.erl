@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
-%% Date: 2009-04-18
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Show the pager for the search result
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,18 +33,19 @@ vary(_Params, _Context) -> nocache.
 
 
 render(Params, _Vars, Context) ->
-    Result       = proplists:get_value(result, Params),
-    Dispatch     = case proplists:get_value(dispatch, Params) of
-                        undefined -> z_context:get(zotonic_dispatch, Context, search);
-                        Dp -> Dp
-                   end,
-    HideSinglePage  = proplists:get_value(hide_single_page, Params),
-    CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
-
-    DispatchArgs = case proplists:is_defined(qargs, CleanedArgs) of
-        true -> CleanedArgs;
-        false -> [{qargs,true}|CleanedArgs]
-    end,
+    Result = proplists:get_value(result, Params),
+    Dispatch = case proplists:get_value(dispatch, Params) of
+                   undefined -> z_context:get(zotonic_dispatch, Context, search);
+                   Dp -> Dp
+               end,
+    HideSinglePage = proplists:get_value(hide_single_page, Params),
+    Template = proplists:get_value(template, Params, "_pager.tpl"),
+    DispatchArgs  = lists:foldl(
+        fun(Arg, Acc) ->
+            proplists:delete(Arg, Acc)
+        end,
+        Params,
+        [dispatch, result, hide_single_page, template]),
 
     Result1 = case Result of
         #m{model=m_search, value=MResult} -> MResult;
@@ -64,24 +64,24 @@ render(Params, _Vars, Context) ->
                 true ->
                     {ok, []};
                 false ->
-                    {ok, build_html(Page, 1, Dispatch, DispatchArgs, Context)}
+                    {ok, build_html(Template, Page, 1, Dispatch, DispatchArgs, Context)}
             end;
         #m_search_result{result=#search_result{page=Page, pages=Pages}} ->
-            Html = build_html(Page, Pages, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context),
             {ok, Html};
         #search_result{result=[]} ->
             {ok, ""};
         #search_result{pages=undefined} ->
             {ok, ""};
         #search_result{page=Page, pages=Pages} ->
-            Html = build_html(Page, Pages, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context),
             {ok, Html};
         _ ->
             {error, "scomp_pager: search result is not a #search_result{}"}
     end.
 
 
-build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
+build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
     Props = [
@@ -94,9 +94,11 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
                         false ->  url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context)
                    end},
         {pages, Urls},
-        {page, Page}
+        {page, Page},
+        {dispatch, Dispatch}
+        | DispatchArgs
     ],
-    {Html, _} = z_template:render_to_iolist("_pager.tpl", Props, Context),
+    {Html, _} = z_template:render_to_iolist(Template, Props, Context),
     Html.
 
 url_for(page, Args, Context) ->
