@@ -15,7 +15,7 @@ be overruled with your own.
 Images that are inlined in the body text can have these parameters:
 
 ``align``
-  Either ``between``, ``left`` or ``right``.
+  Either ``block``, ``left`` or ``right``.
 
 ``size``
   Choose between ``small``, ``middle``, ``large``. The actual sizes that are
