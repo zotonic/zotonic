@@ -1,3 +1,4 @@
+%% @doc Cowboy stream handler for access logging.
 -module(z_cowboy_log_stream_handler).
 -author("David de Boer <david@ddeboer.nl>").
 
@@ -10,30 +11,36 @@
     terminate/3
 ]).
 
--type state() :: any().
+-record(state, {
+	next :: any(),
+    request :: map()
+}).
+
+-type state() :: #state{}.
 
 -spec init(cowboy_stream:streamid(), cowboy_req:req(), cowboy:opts())
 	-> {cowboy_stream:commands(), {module(), state()} | undefined}.
 init(StreamID, Req, Opts) ->
-    z:debug_msg(?MODULE, ?LINE, Req),   %% Map with request headers and properties
-    cowboy_stream:init(StreamID, Req, Opts).
+    {Commands, Next} = cowboy_stream:init(StreamID, Req, Opts),
+    {Commands, #state{next = Next, request = Req}}.
 
 -spec data(cowboy_stream:streamid(), cowboy_stream:fin(), binary(), {Handler, State} | undefined)
 	-> {cowboy_stream:commands(), {Handler, State} | undefined}
 	when Handler::module(), State::state().
-data(StreamID, IsFin, Data, {Handler, State0}) ->
+data(StreamID, IsFin, Data, State) ->
     z:debug_msg(?MODULE, ?LINE, Data),  %% Response body
-    cowboy_stream:data(StreamID, IsFin, Data, {Handler, State0}).
+    cowboy_stream:data(StreamID, IsFin, Data, State).
 
 -spec info(cowboy_stream:streamid(), any(), {Handler, State} | undefined)
 	-> {cowboy_stream:commands(), {Handler, State} | undefined}
 	when Handler::module(), State::state().
-info(StreamID, Info, {Handler, State}) ->
-    z:debug_msg(?MODULE, ?LINE, Info),  %% Response status code, headers and body
-    cowboy_stream:info(StreamID, Info, {Handler, State}).
+info(StreamID, {response, _, _, _} = Response, #state{request = Request, next = Next}) ->
+    z_access_syslog:log_access(Request, Response),
+    cowboy_stream:info(StreamID, Response, Next);
+info(StreamID, Info, #state{next = Next}) ->
+    cowboy_stream:info(StreamID, Info, Next).
 
 -spec terminate(cowboy_stream:streamid(), cowboy_stream:reason(), {module(), state()} | undefined) -> ok.
-terminate(StreamID, Reason, {Handler, State}) ->
-    z:debug_msg(?MODULE, ?LINE, {StreamID, Reason}), %% Termination reason
-    cowboy_stream:terminate(StreamID, Reason, {Handler, State}).
+terminate(StreamID, Reason, State) ->
+    cowboy_stream:terminate(StreamID, Reason, State).
 

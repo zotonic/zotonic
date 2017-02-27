@@ -21,10 +21,9 @@
 
 %% Api
 
--export([start_link/0, start_link/4, log_access/1]).
+-export([start_link/0, start_link/4, log_access/2]).
 
 -include_lib("zotonic.hrl").
-% -include_lib("webzmachine/include/webmachine_logger.hrl").
 
 %% gen_server exports
 
@@ -52,97 +51,68 @@ start_link() ->
 start_link(Ident, Opts, Facility, Level) ->
     z_buffered_worker:start_link(?MODULE, ?MODULE, [[Ident, Opts, Facility], Level]).
 
-log_access(_LogData) ->
-    %% TODO Do access logging here?
-    ok.
-
-% log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
-%         method=Method, response_code=Status,
-%         path=Path, headers=Headers, response_length=Size}) ->
-%     MD = [{start_time, StartTime},
-%         {finish_time, FinishTime},
-%         {method, Method},
-%         {status, Status},
-%         {path, z_convert:to_binary(Path)},
-%         {size, Size},
-%         {user_agent, get_header_value("User-Agent", Headers)},
-%         {referer, get_header_value("Referer", Headers)}
-%         | lager:md()],
-%     z_buffered_worker:push(?MODULE, MD).
+log_access(Request, {response, StatusCode, Headers, _Body}) ->
+    LogData = Request#{status_code => StatusCode, response_headers => Headers},
+    z_buffered_worker:push(?MODULE, LogData).
 
 %%
 %% Buffered worker callbacks
 %%
 
-% @doc Initialize the logger.
+%% @doc Initialize the logger.
 init(_Pid, [[Name, Opts, Facility], Priority]) ->
     {ok, Log} = syslog:open(Name, Opts, Facility),
     {ok, ?FLUSH_INTERVAL, #state{priority=Priority, format=alog, log=Log}}.
 
-% @doc Log one entry
+%% @doc Log one entry
 handle_value(_Pid, _Count, MD, #state{log=Log, priority=Priority, format=Format}) ->
     Msg = format(Format, MD),
-    syslog:log(Log, Priority, Msg).
+    ok = syslog:log(Log, Priority, Msg).
 
-% @doc Flush operation done.
+%% @doc Flush operation done.
 handle_flush_done(_Pid, _State) ->
     ok.
 
-
-%%
-%% Helpers
-%%
-
-% get_header_value(Name, Headers) ->
-%     case mochiweb_headers:get_value(Name, Headers) of
-%         undefined -> <<>>;
-% 	   Value -> z_convert:to_binary(Value)
-%     end.
-
-%%
-%% Formats
-%%
-
-format(alog, MD) ->
-    StartTime = proplists:get_value(start_time, MD),
-    RequestId = proplists:get_value(req_id, MD),
-    Path = proplists:get_value(path, MD),
-    Method = proplists:get_value(method, MD),
-    Status = proplists:get_value(status, MD),
-    Size = proplists:get_value(size, MD),
-    User = z_convert:to_binary(proplists:get_value(user, MD, <<"-">>)),
-    RemoteIP = proplists:get_value(remote_ip, MD),
-    Referer = proplists:get_value(referer, MD),
-    UserAgent = proplists:get_value(user_agent, MD),
-
+format(alog, #{
+    streamid := StreamId, peer := {RemoteIP, _RemotePort}, method := Method, path := Path, version := Version,
+    headers := Headers, status_code := StatusCode
+}) ->
     fmt_alog(
-        fmt_time(StartTime),
-        RequestId,
+        <<>>,   %%        fmt_time(StartTime),
+        StreamId,
         RemoteIP,
-        z_convert:to_binary(User),
-        z_convert:to_binary(Method),
+        <<>>,
+        Method,
         Path,
-        {1,1},
-        z_convert:to_binary(Status),
-        z_convert:to_binary(Size),
-        Referer,
-        UserAgent).
+        Version,
+        StatusCode,  %% z_convert:to_binary(Status),
+        <<>>,  %% z_convert:to_binary(Size),
+        maps:get(<<"referer">>, Headers, <<>>),
+        maps:get(<<"user-agent">>, Headers, <<>>)
+    ).
 
 
-fmt_time({_MegaSecs, _Secs, _MicroSecs}=Ts) ->
-    fmt_time(calendar:now_to_universal_time(Ts));
-fmt_time({{Year, Month, Date}, {Hour, Min, Sec}}) ->
-    io_lib:format("[~2..0w/~s/~4..0w:~2..0w:~2..0w:~2..0w ~s]",
-        [Date, month(Month), Year, Hour, Min, Sec, "+0000"]).
+%%fmt_time({_MegaSecs, _Secs, _MicroSecs}=Ts) ->
+%%    fmt_time(calendar:now_to_universal_time(Ts));
+%%fmt_time({{Year, Month, Date}, {Hour, Min, Sec}}) ->
+%%    io_lib:format("[~2..0w/~s/~4..0w:~2..0w:~2..0w:~2..0w ~s]",
+%%        [Date, month(Month), Year, Hour, Min, Sec, "+0000"]).
 
-fmt_alog(Time, ReqId, Ip, User, Method, Path, {VM,Vm}, Status,  Length, Referrer, UserAgent) ->
-    [fmt_ip(Ip), " - ", sanitize(User), $\s, Time, $\s, $", sanitize(Method), " ", sanitize(Path),
-     " HTTP/", z_convert:to_binary(VM), $., z_convert:to_binary(Vm), $",$\s,
-     Status, $\s, Length, $\s,$", sanitize(Referrer),
-     $",$\s,$", sanitize(UserAgent), $",$\s, z_convert:to_binary(ReqId)].
+fmt_alog(Time, StreamId, IP, User, Method, Path, Version, StatusCode, Length, Referrer, UserAgent) ->
+    <<(fmt_ip(IP))/binary, " - ",
+        User/binary, " ",
+        Time/binary,  " ",
+        (sanitize(Method))/binary, " ",
+        (sanitize(Path))/binary, " ",
+        (z_convert:to_binary(Version))/binary, " ",
+        (z_convert:to_binary(StatusCode))/binary, " ",
+        Length/binary, " ",
+        (sanitize(Referrer))/binary, " ",
+        (sanitize(UserAgent))/binary, " ",
+        (z_convert:to_binary(StreamId))/binary>>.
 
 fmt_ip(IP) when is_tuple(IP) ->
-    inet_parse:ntoa(IP);
+    z_convert:to_binary(inet_parse:ntoa(IP));
 fmt_ip(undefined) ->
     <<"0.0.0.0">>;
 fmt_ip(HostName) ->
@@ -160,15 +130,15 @@ sanitize(<<C, Rest/binary>>, Acc) when C < 32 ->
 sanitize(<<C, Rest/binary>>, Acc) ->
     sanitize(Rest, <<Acc/binary, C>>).
 
-month(1) -> <<"Jan">>;
-month(2) -> <<"Feb">>;
-month(3) -> <<"Mar">>;
-month(4) -> <<"Apr">>;
-month(5) -> <<"May">>;
-month(6) -> <<"Jun">>;
-month(7) -> <<"Jul">>;
-month(8) -> <<"Aug">>;
-month(9) -> <<"Sep">>;
-month(10) -> <<"Oct">>;
-month(11) -> <<"Nov">>;
-month(12) -> <<"Dec">>.
+%%month(1) -> <<"Jan">>;
+%%month(2) -> <<"Feb">>;
+%%month(3) -> <<"Mar">>;
+%%month(4) -> <<"Apr">>;
+%%month(5) -> <<"May">>;
+%%month(6) -> <<"Jun">>;
+%%month(7) -> <<"Jul">>;
+%%month(8) -> <<"Aug">>;
+%%month(9) -> <<"Sep">>;
+%%month(10) -> <<"Oct">>;
+%%month(11) -> <<"Nov">>;
+%%month(12) -> <<"Dec">>.

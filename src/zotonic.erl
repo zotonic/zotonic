@@ -143,10 +143,10 @@ start_http_listeners() ->
     WebIp = z_config:get(listen_ip),
     WebPort = z_config:get(listen_port),
     SSLPort = ssl_listen_port(),
-    lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
+    lager:info("Web server listening on IPv4 ~p:~p, SSL ~p:~p", [WebIp, WebPort, WebIp, SSLPort]),
     CowboyOpts = #{
         middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
-        env => #{}
+        stream_handlers => [z_cowboy_log_stream_handler, cowboy_stream_h]
     },
     WebIP4Opt = case WebIp of
         any -> [];
