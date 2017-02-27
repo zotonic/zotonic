@@ -5679,23 +5679,23 @@ msgstr "als je voortaan geen berichten van deze lijst wilt ontvangen."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
-msgstr "mey je emailadres"
+msgstr "met je emailadres"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:22
 msgid "Add after"
-msgstr "Hierna invoegen"
+msgstr "Hierna toevoegen"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:20
 msgid "Add before"
-msgstr "Hiervoor invoegen"
+msgstr "Hiervoor toevoegen"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:21
 msgid "Add below"
-msgstr "Als sub-item invoegen"
+msgstr "Hieronder toevoegen"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:14./modules/mod_menu/templates/admin_menu_hierarchy.tpl:24
 msgid "Add bottom"
-msgstr "Onderaan invoegen"
+msgstr "Onderaan toevoegen"
 
 #: modules/mod_menu/templates/_menu_edit_scripts.tpl:7
 msgid "Add category"
@@ -5711,7 +5711,7 @@ msgstr "Voeg menu-item toe"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:13./modules/mod_menu/templates/admin_menu_hierarchy.tpl:23
 msgid "Add top"
-msgstr "Bovenaan invoegen"
+msgstr "Bovenaan toevoegen"
 
 #: modules/mod_menu/mod_menu.erl:132
 msgid "COPY"
@@ -6212,7 +6212,7 @@ msgstr "Toon mijn profielpagina"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
-msgstr ""
+msgstr "Raadpleeg de algemene voorwaarden en privacy policy"
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:10
 msgid "Choose a username and password"
@@ -6220,7 +6220,7 @@ msgstr "Kies een gebruikersnaam / wachtwoord"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:26
 msgid "Confirm key"
-msgstr "Bevestigingssleutel"
+msgstr "Bevestig code"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:3./modules/mod_signup/templates/signup_confirm.tpl:15./modules/mod_signup/templates/signup_confirm.tpl:30
 msgid "Confirm my account"
@@ -6279,6 +6279,8 @@ msgid ""
 "In your e-mail you received a confirmation key. Please copy it in the input "
 "field below."
 msgstr ""
+"Je hebt per e-mail een bevestigingscode ontvangen. Kopieer de code in het "
+"veld hieronder."
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:38
 msgid "Last name"
@@ -6302,29 +6304,31 @@ msgstr "Volg de onderstaande link"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:23
 msgid "Privacy policies"
-msgstr ""
+msgstr "Privacy reglement"
 
 #: modules/mod_signup/templates/_signup_form_fields.tpl:5./modules/mod_signup/templates/signup.tpl:3
 msgid "Sign Up"
-msgstr "Schrijf in"
+msgstr "Registreer"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2./modules/mod_signup/templates/_signup_title.tpl:1
 msgid "Sign up"
-msgstr "Schrijf in"
+msgstr "Registreer"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:11
 msgid "Sign up with your e-mail address"
-msgstr "Meld je aan met je emailadres"
+msgstr "Registreer je met je emailadres"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:20
 msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
-msgstr ""
+msgstr "Sorry, de bevestigingscode is onbekend. Is hij correct gekopiëerd?"
 
 #: modules/mod_signup/templates/_signup_box.tpl:24
 msgid ""
 "Sorry, there is already an account coupled to your account at your service "
 "provider. Maybe your account here was suspended."
 msgstr ""
+"Sorry, er is hier al een account gekoppeld aan het account van de service "
+"provider. Misschien is het account hier geblokkeerd."
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
 msgid "Terms of Service"
@@ -6335,11 +6339,15 @@ msgid ""
 "Thank you for registering at our site. We request you to confirm your "
 "account before you can use it."
 msgstr ""
+"Bedank voor het registreren bij onze website.  Wij verzoeken je om je "
+"account te bevestigen voordat je het kan gebruiken."
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:14
 msgid ""
 " To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr ""
+"Om te registreren moet je akkoord gaan met de gebruiksvoorwaarden en het "
+"privacy reglement."
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:49
 msgid "Verify password"
@@ -6351,6 +6359,9 @@ msgid ""
 "give your name or address away without your permission. We do have some "
 "rules that we need you to agree with."
 msgstr ""
+"We zijn erg zorgvuldig met alle persoonlijk informatie die ons wordt "
+"verstrekt en zullen nooit je naam of adres weggeven zonder je toestemming.\n"
+"We hebben wel een aantal regels waarmee je moet instemmen."
 
 #: modules/mod_signup/templates/_signup_extra.tpl:2
 msgid "You can also"
@@ -6358,32 +6369,31 @@ msgstr "Je kunt ook"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
-msgstr ""
+msgstr "Je moet akkoord gaan met de voorwaarden."
 
 #: modules/mod_signup/templates/signup_confirm.tpl:10
 msgid "Your account is confirmed. You can now continue on our site."
-msgstr ""
+msgstr "Je account is bevestigd en je kunt nu verder gaan."
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "and enter the key"
-msgstr ""
+msgstr "en vul de code in"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
-msgstr ""
+msgstr "en de"
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "in the input field."
-msgstr ""
+msgstr "in het veld"
 
 #: modules/mod_signup/templates/_signup_outside.tpl:1
 msgid "sign in"
 msgstr "Inloggen"
 
 #: modules/mod_signup/templates/_signup_extra.tpl:2
-#, fuzzy
 msgid "sign up for a username and password"
-msgstr "Gebruikersnaam en wachtwoord"
+msgstr "registreer voor een gebruikersnaam en wachtwoord"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:23
 msgid "Add a question or block"
