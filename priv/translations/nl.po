@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2016-10-15 15:38+0200\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2017-02-27 17:14+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -85,12 +85,8 @@ msgid "Are you sure you want to make all rules permanent?"
 msgstr "Weet je zeker dat je alle regels wilt publiceren?"
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:38
-msgid ""
-"Are you sure you want to restore all ACL rules to their currently published "
-"version?"
-msgstr ""
-"Weet je zeker dat je alle regels wilt terugzetten naar de gepubliceerde "
-"versie?"
+msgid "Are you sure you want to restore all ACL rules to their currently published version?"
+msgstr "Weet je zeker dat je alle regels wilt terugzetten naar de gepubliceerde versie?"
 
 #: modules/mod_acl_user_groups/templates/_action_dialog_change_category.tpl:10./modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:150
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:32./modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:74./modules/mod_admin/templates/_admin_edit_blocks.tpl:39./modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
@@ -150,16 +146,11 @@ msgstr "Samenwerkingsgroepen"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:34
 msgid "Collaboration groups are added by creating a new page in the category:"
-msgstr ""
-"Samenwerkingsgroepen worden toegevoegd door een pagina te maken in de "
-"categorie:"
+msgstr "Samenwerkingsgroepen worden toegevoegd door een pagina te maken in de categorie:"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:32
-msgid ""
-"Collaboration groups are user groups where all content belongs to the group."
-msgstr ""
-"Samenwerkingsgroepen zijn gebruikersgroepen waarvan alle inhoud toebehoort "
-"aan de groep."
+msgid "Collaboration groups are user groups where all content belongs to the group."
+msgstr "Samenwerkingsgroepen zijn gebruikersgroepen waarvan alle inhoud toebehoort aan de groep."
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:46
 #: modules/mod_admin/mod_admin.erl:95./modules/mod_admin/templates/_admin_edit_body.tpl:4
@@ -206,9 +197,7 @@ msgstr "Verwijder alle gebruikersgroepen"
 
 #: modules/mod_acl_user_groups/mod_acl_user_groups.erl:117
 msgid "Delete is canceled, there are users in the user groups."
-msgstr ""
-"Het verwijderen is afgebroken: er zijn nog gebruikers in de "
-"gebruikersgroepen."
+msgstr "Het verwijderen is afgebroken: er zijn nog gebruikers in de gebruikersgroepen."
 
 #: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
 msgid "Delete user group and move users"
@@ -234,16 +223,8 @@ msgid "Edit the collaboration group"
 msgstr "Bewerk de samenwerkingsgroep"
 
 #: modules/mod_acl_user_groups/templates/_action_dialog_change_category.tpl:1
-msgid ""
-"Every page is categorized in exactly one category.  The category defines "
-"what the page represents. For example an event, a product or a person.  The "
-"categories are hierarchically defined. In that way you can have a vehicles "
-"category with subcategories car and bicycle."
-msgstr ""
-"Elke pagina valt onder één categorie. De categorie bepaalt wat de pagina "
-"betekent op de site. Bijvoorbeeld een evenement, product of persoon. De "
-"categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een "
-"categorie voertuig hebben met daarin subcategorieën auto en fiets."
+msgid "Every page is categorized in exactly one category.  The category defines what the page represents. For example an event, a product or a person.  The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
+msgstr "Elke pagina valt onder één categorie. De categorie bepaalt wat de pagina betekent op de site. Bijvoorbeeld een evenement, product of persoon. De categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een categorie voertuig hebben met daarin subcategorieën auto en fiets."
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
@@ -290,12 +271,8 @@ msgid "Keep"
 msgstr "Behoud mijn regels"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_upload.tpl:6
-msgid ""
-"Maximum file upload size per user group. This restricts file uploads for "
-"users."
-msgstr ""
-"Maximum bestandsgrootte per gebruikersgroep. Dit beperkt uploads voor "
-"gebruikers."
+msgid "Maximum file upload size per user group. This restricts file uploads for users."
+msgstr "Maximum bestandsgrootte per gebruikersgroep. Dit beperkt uploads voor gebruikers."
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_upload.tpl:16
 msgid "Maximum upload size"
@@ -347,12 +324,8 @@ msgid "Not allowed."
 msgstr "Niet toegestaan."
 
 #: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
-msgid ""
-"Or click <strong>Delete all user groups</strong> to disconnect all users and "
-"delete the user groups."
-msgstr ""
-"Of klik <strong>Verwijder alle gebruikersgroepen</strong> om alle gebruikers "
-"los te koppelen en de gebruikersgroepen te verwijderen."
+msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
+msgstr "Of klik <strong>Verwijder alle gebruikersgroepen</strong> om alle gebruikers los te koppelen en de gebruikersgroepen te verwijderen."
 
 #: modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:122
 msgid "Own content"
@@ -402,12 +375,8 @@ msgid "Sorry, you are not allowed to delete this."
 msgstr "Sorry, je hebt geen rechten om dit te verwijderen."
 
 #: modules/mod_acl_user_groups/templates/_admin_catcg.tpl:41
-msgid ""
-"Sorry, you are not allowed to insert pages of this category into the "
-"selected content group."
-msgstr ""
-"Sorry, je hebt geen rechten om pagina’s in deze categorie en paginagroep toe "
-"te voegen."
+msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
+msgstr "Sorry, je hebt geen rechten om pagina’s in deze categorie en paginagroep toe te voegen."
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
@@ -439,9 +408,7 @@ msgstr "Deze gebruikersgroepen bevatten geen gebruikers"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:33
 msgid "They are managed by their own manager and use the access rules below."
-msgstr ""
-"Ze worden beheerd door hun eigen beheerder en gebruiken de onderstaande "
-"toegangsregels."
+msgstr "Ze worden beheerd door hun eigen beheerder en gebruiken de onderstaande toegangsregels."
 
 #: modules/mod_acl_user_groups/templates/_action_dialog_delete_rsc.acl_user_group.tpl:33
 #: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:35
@@ -471,24 +438,16 @@ msgid "Try rules..."
 msgstr "Regels uitproberen..."
 
 #: modules/mod_acl_user_groups/templates/_dialog_acl_rules_import.tpl:2
-msgid ""
-"Upload the ACL rules file that you previously exported. Note: all current "
-"rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr ""
-"Upload de toegangsregels die je eerder hebt geëxporteerd. Alle huidige "
-"regels worden <b>vervangen</b> door de geüploade regels."
+msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
+msgstr "Upload de toegangsregels die je eerder hebt geëxporteerd. Alle huidige regels worden <b>vervangen</b> door de geüploade regels."
 
 #: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:22./modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:37
 msgid "Use published rules"
 msgstr "Gebruik gepubliceerde regels"
 
 #: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:2
-msgid ""
-"Use the following URL to test the access control rules before publishing "
-"them."
-msgstr ""
-"Gebruik de volgende URL om de regels uit te proberen voordat je ze "
-"publiceert."
+msgid "Use the following URL to test the access control rules before publishing them."
+msgstr "Gebruik de volgende URL om de regels uit te proberen voordat je ze publiceert."
 
 #: modules/mod_acl_user_groups/mod_acl_user_groups.erl:366./modules/mod_acl_user_groups/templates/_admin_edit_basics_user_extra.tpl:3
 msgid "User groups"
@@ -519,11 +478,8 @@ msgid "You can:"
 msgstr "Je kunt:"
 
 #: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:30
-msgid ""
-"You have to use a special URL, as provided by the an editor or administrator."
-msgstr ""
-"Je moet een speciale URL gebruiken, die je van een redacteur of beheerder "
-"hebt ontvangen."
+msgid "You have to use a special URL, as provided by the an editor or administrator."
+msgstr "Je moet een speciale URL gebruiken, die je van een redacteur of beheerder hebt ontvangen."
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:90
 msgid "all"
@@ -578,14 +534,12 @@ msgid "send this URL to somebody else for testing"
 msgstr "naar iemand anders sturen."
 
 #: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:7
-msgid ""
-"use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
+msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
 msgstr "gebruik <b>Nieuw privévenster</b>"
 
 #: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
-msgstr ""
-"openen in een andere browser (bijvoorbeeld Chrome als je nu in Firefox zit)"
+msgstr "openen in een andere browser (bijvoorbeeld Chrome als je nu in Firefox zit)"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
 msgid "view (acl action)"
@@ -600,12 +554,7 @@ msgid "+ add block"
 msgstr "+ nieuw blok"
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
-msgid ""
-"<strong>First</strong> also known as given name, forename or Christen name."
-"<br/><strong>Middle</strong> often shortened to an initial like in <em>John "
-"D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch "
-"<em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family "
-"name or last name."
+msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
 msgstr ""
 "Naamgegevens zijn <strong>Voornaam</strong> (bv. Jan),<br>\n"
 "<strong>Tweede naam</strong> (bv. Hendricus)<br>\n"
@@ -820,8 +769,7 @@ msgstr "Datumreeksen"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:46
 msgid "Delete if no other page is connected to this page."
-msgstr ""
-"Verwijder als geen andere pagina’s een connectie met deze pagina hebben."
+msgstr "Verwijder als geen andere pagina’s een connectie met deze pagina hebben."
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:80
 msgid "Delete this page."
@@ -900,24 +848,12 @@ msgid "Error uploading the file."
 msgstr "Fout bij uploaden van bestand."
 
 #: modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8
-msgid ""
-"Every page can have a date range. For example if the page is an event or "
-"description of someone’s life."
-msgstr ""
-"Elke pagina kan een begin- en einddatum hebben. Bijvoorbeeld als de pagina "
-"een evenement is of een biografie.  "
+msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
+msgstr "Elke pagina kan een begin- en einddatum hebben. Bijvoorbeeld als de pagina een evenement is of een biografie.  "
 
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:10
-msgid ""
-"Every page is categorized in exactly one category. The category defines what "
-"the page represents. For example an event, a product or a person. The "
-"categories are hierarchically defined. In that way you can have a vehicles "
-"category with subcategories car and bicycle."
-msgstr ""
-"Elke pagina valt onder één categorie. De categorie bepaalt wat de pagina "
-"betekent op de site. Bijvoorbeeld een evenement, product of persoon. De "
-"categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een "
-"categorie voertuig hebben met daarin subcategorieën auto en fiets."
+msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
+msgstr "Elke pagina valt onder één categorie. De categorie bepaalt wat de pagina betekent op de site. Bijvoorbeeld een evenement, product of persoon. De categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een categorie voertuig hebben met daarin subcategorieën auto en fiets."
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:178
 msgid "Failed to download the file."
@@ -958,9 +894,7 @@ msgid "First"
 msgstr "Eerste"
 
 #: modules/mod_admin/templates/admin_status.tpl:18
-msgid ""
-"Flush all URL dispatch rules, template- and library caches and other in-"
-"memory cached data."
+msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
 msgstr "Ververs alle dispatch-regels, templates en andere gecachete data."
 
 #: modules/mod_admin/templates/admin_status.tpl:17
@@ -982,16 +916,8 @@ msgid "Header"
 msgstr "Kop"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
-msgid ""
-"Here you can edit the arguments of the search query. Every argument goes on "
-"its own line. For more information, see the <a href=\"http://zotonic.com/"
-"docs/latest/developer-guide/search.html#query-model-arguments"
-"\">documentation on the query arguments</a> on the Zotonic website."
-msgstr ""
-"Hier kan je de argumenten van de zoekopdracht invoeren. Elk argument moet op "
-"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://"
-"zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments"
-"\">documentatie over zoekopdrachten</a> op de Zotonic website."
+msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"http://zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
+msgstr "Hier kan je de argumenten van de zoekopdracht invoeren. Elk argument moet op zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentatie over zoekopdrachten</a> op de Zotonic website."
 
 #: modules/mod_admin/templates/admin_media.tpl:86
 #: modules/mod_logging/templates/admin_log_email.tpl:67
@@ -1032,11 +958,8 @@ msgid "Latest modified texts"
 msgstr "Laatste teksten"
 
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:38
-msgid ""
-"Live query, send notifications when matching items are updated or inserted."
-msgstr ""
-"Live zoekvraag: verzend notificaties wanneer overeenkomstige pagina’s worden "
-"gemaakt of bewerkt."
+msgid "Live query, send notifications when matching items are updated or inserted."
+msgstr "Live zoekvraag: verzend notificaties wanneer overeenkomstige pagina’s worden gemaakt of bewerkt."
 
 #: modules/mod_admin/templates/_admin_menu.tpl:71
 msgid "Log Off"
@@ -1090,12 +1013,8 @@ msgid "Media URL"
 msgstr "URL van media"
 
 #: modules/mod_admin/templates/admin_media.tpl:60
-msgid ""
-"Media encompasses all uploaded images, movies and documents. Media can be "
-"attached to pages."
-msgstr ""
-"Media bevat alle geüploade bestanden, video’s en documenten. Media kan "
-"worden gekoppeld aan pagina’s."
+msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
+msgstr "Media bevat alle geüploade bestanden, video’s en documenten. Media kan worden gekoppeld aan pagina’s."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:26
 msgid "Media file"
@@ -1274,12 +1193,8 @@ msgid "Query preview"
 msgstr "Zoekvraag voorbeeld"
 
 #: modules/mod_admin/templates/admin_status.tpl:44
-msgid ""
-"Rebuild all search-indices by putting all pages and data from the database "
-"in the indexer queue. This can take a long time!"
-msgstr ""
-"Vernieuw alle zoekindexen door alle pagina’s en data van de database in de "
-"index-wachtrij te zetten. Dit kan lang duren!"
+msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
+msgstr "Vernieuw alle zoekindexen door alle pagina’s en data van de database in de index-wachtrij te zetten. Dit kan lang duren!"
 
 #: modules/mod_admin/templates/admin_status.tpl:27
 #: modules/mod_translation/templates/admin_translation.tpl:165
@@ -1287,8 +1202,7 @@ msgid "Rebuild search indices"
 msgstr "Zoekindex opnieuw maken"
 
 #: modules/mod_admin/templates/admin_status.tpl:52
-msgid ""
-"Recalculate the numbering of the category tree. This can take a long time."
+msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Herbereken de telling van de categorieboom. Dit kan lang duren."
 
 #: modules/mod_admin/templates/_admin_edit_content_website.tpl:27
@@ -1338,10 +1252,7 @@ msgid "Replace this media item"
 msgstr "Vervang dit media-item"
 
 #: modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
-msgid ""
-"Resources in the <i>meta</i> category can have 'features': certain resource "
-"properties that decide what to show or hide on certain pages in the admin. "
-"If this box is empty, no features are enabled for this meta-resource."
+msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr ""
 "Resources in de <em>meta</em> categorie kunnen ‘features’ hebben:\n"
 "eigenschappen die bepalen wat te tonen op de editpagina van de admin."
@@ -1512,16 +1423,12 @@ msgid "The page"
 msgstr "De pagina"
 
 #: modules/mod_admin/actions/action_admin_admin_tasks.erl:38
-msgid ""
-"The search index is rebuilding. Depending on the database size, this can "
-"take a long time."
+msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "De zoekindex wordt opnieuw gemaakt. Dit kan lang duren."
 
 #: modules/mod_admin/actions/action_admin_admin_tasks.erl:44
 msgid "The site’s data is being reinstalled. Watch the console for messages"
-msgstr ""
-"De sitedata wordt opnieuw geïnstalleerd. Houd de console in de gaten voor "
-"berichten."
+msgstr "De sitedata wordt opnieuw geïnstalleerd. Houd de console in de gaten voor berichten."
 
 #: modules/mod_admin/templates/admin_referrers.tpl:11
 msgid "There are no pages with a connection to the page"
@@ -1529,15 +1436,13 @@ msgstr "Er zijn geen andere pagina's die een connectie hebben naar de pagina"
 
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:3
 msgid "This can't be undone. Your page will be lost forever."
-msgstr ""
-"Dit kan niet ongedaan worden gemaakt. Je pagina is voor altijd verloren."
+msgstr "Dit kan niet ongedaan worden gemaakt. Je pagina is voor altijd verloren."
 
 #: modules/mod_admin/actions/action_admin_link.erl:83
 msgid "This connection already exists."
 msgstr "Deze connectie bestaat al"
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:42
-#, fuzzy
 msgid "This name is in use by another page."
 msgstr "Deze gebruikersnaam bestaat al, kies a.u.b. een andere."
 
@@ -1546,18 +1451,12 @@ msgid "This page has been deleted."
 msgstr "Deze pagina is verwijderd."
 
 #: modules/mod_admin/templates/admin_status.tpl:9
-msgid ""
-"This page holds a collection of administrative options to perform certain "
-"tasks on this Zotonic installation."
+msgid "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
 msgstr "Deze pagina bevat een collectie van administratie taken."
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
-msgid ""
-"This page is able to connect to others. For example you can connect it to an "
-"actor or a brand."
-msgstr ""
-"Deze pagina kan aan andere pagina’s worden gekoppeld. Je kunt de pagina "
-"bijvoorbeeld koppelen aan een acteur of een merk."
+msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
+msgstr "Deze pagina kan aan andere pagina’s worden gekoppeld. Je kunt de pagina bijvoorbeeld koppelen aan een acteur of een merk."
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:51
 msgid "This resource was created by the module"
@@ -1626,14 +1525,11 @@ msgstr "geüpload"
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:37
 msgid "Use the autocompleter to search the media in this site."
-msgstr ""
-"Gebruik het zoekvak om mediabestanden te zoeken die al in het systeem zitten."
+msgstr "Gebruik het zoekvak om mediabestanden te zoeken die al in het systeem zitten."
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:8
 msgid "Use the title of the base content for the display name of this person."
-msgstr ""
-"Gebruik de titel van de basisgegevens voor de naam zoals die wordt "
-"weergegeven op pagina's."
+msgstr "Gebruik de titel van de basisgegevens voor de naam zoals die wordt weergegeven op pagina's."
 
 #: modules/mod_admin/templates/_admin_menu.tpl:68
 msgid "User page"
@@ -1687,14 +1583,8 @@ msgid "Website for clicks on image"
 msgstr "Website voor kliks op de afbeelding"
 
 #: modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8
-msgid ""
-"When a page has a publication date range then it will only be visible "
-"between the two dates. Note that when you are allowed to edit the page then "
-"you can always see it."
-msgstr ""
-"Wanneer een pagina een publicatiestart- en einddatum heeft, is deze alleen "
-"zichtbaar in die periode. Als je rechten hebt om de pagina te bewerken, is "
-"hij voor jou altijd zichtbaar."
+msgid "When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it."
+msgstr "Wanneer een pagina een publicatiestart- en einddatum heeft, is deze alleen zichtbaar in die periode. Als je rechten hebt om de pagina te bewerken, is hij voor jou altijd zichtbaar."
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "You are going to duplicate the page"
@@ -1726,12 +1616,8 @@ msgid "You don’t have permission to perform this action."
 msgstr "Je hebt geen rechten om deze handeling uit te voeren."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:6./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:5
-msgid ""
-"You have to specify a description of the file to make it easier to find and "
-"share."
-msgstr ""
-"Je moet een beschrijving van het bestand toevoegen om het makkelijker vind- "
-"en deelbaar te maken."
+msgid "You have to specify a description of the file to make it easier to find and share."
+msgstr "Je moet een beschrijving van het bestand toevoegen om het makkelijker vind- en deelbaar te maken."
 
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
@@ -1840,15 +1726,10 @@ msgid "Categories"
 msgstr "Categorieën"
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:9
-msgid ""
-"Categories are used to categorize all pages. Every page belongs to exactly "
-"one category.<br/>The categories are defined in a hierarchy. Here you can "
-"change that hierarchy."
+msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
 msgstr ""
-"Categorieën worden gebruikt om pagina’s in te delen. Elke pagina behoort tot "
-"één categorie.<br>\n"
-"De categorieën zelf zijn ondergebracht in een hiërarchie. Hier kun je die "
-"hiërarchie aanpassen. "
+"Categorieën worden gebruikt om pagina’s in te delen. Elke pagina behoort tot één categorie.<br>\n"
+"De categorieën zelf zijn ondergebracht in een hiërarchie. Hier kun je die hiërarchie aanpassen. "
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"
@@ -1866,14 +1747,11 @@ msgstr "Verwijder alle pagina’s"
 
 #: modules/mod_admin_category/mod_admin_category.erl:70
 msgid "Delete is canceled, there are pages in the category."
-msgstr ""
-"Het verwijderen is afgebroken, want er zijn nog pagina’s in de categorie."
+msgstr "Het verwijderen is afgebroken, want er zijn nog pagina’s in de categorie."
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:24
 msgid "Drag categories to the place where you want them in the hierarchy."
-msgstr ""
-"Versleep categorieën naar de plaats waar je deze in de hierarchie wilt "
-"hebben."
+msgstr "Versleep categorieën naar de plaats waar je deze in de hierarchie wilt hebben."
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:18
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:39
@@ -1890,24 +1768,16 @@ msgid "Not all resources could be deleted."
 msgstr "Niet alle pagina’s konden worden verwijderd."
 
 #: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:33
-msgid ""
-"Or click <strong>Delete All Pages</strong> to delete all pages in the "
-"categories."
-msgstr ""
-"Of klik <strong>Verwijder alle pagina’s</strong> om alle pagina’s in de "
-"categorieën te verwijderen."
+msgid "Or click <strong>Delete All Pages</strong> to delete all pages in the categories."
+msgstr "Of klik <strong>Verwijder alle pagina’s</strong> om alle pagina’s in de categorieën te verwijderen."
 
 #: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:49
 msgid "There are no pages in these categories."
 msgstr "Er zijn geen pagina’s in deze categorieën. "
 
 #: modules/mod_admin_category/templates/admin_category_sorter.tpl:21
-msgid ""
-"Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove "
-"categories."
-msgstr ""
-"Gebruik de knop <i class=\"glyphicon glyphicon-cog\"></i> om categorieën toe "
-"te voegen of te verwijderen."
+msgid "Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove categories."
+msgstr "Gebruik de knop <i class=\"glyphicon glyphicon-cog\"></i> om categorieën toe te voegen of te verwijderen."
 
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
@@ -1980,7 +1850,7 @@ msgstr "Waarde"
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
-msgstr ""
+msgstr "Voeg pagina’s toe of klik op een pagina om het menu."
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:59
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:28
@@ -1990,22 +1860,20 @@ msgstr "Taal"
 
 #: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:31./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:42
 msgid "Loading ..."
-msgstr ""
+msgstr "Laden ..."
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:109./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:73
-#, fuzzy
 msgid "Save &amp; view"
 msgstr "Opslaan en Bekijken"
 
 #: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:67
-#, fuzzy
 msgid "This page"
-msgstr "De pagina"
+msgstr "Deze pagina"
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:43
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:11
 msgid "till"
-msgstr ""
+msgstr "tot"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:65
 msgid "(that's you)"
@@ -2046,26 +1914,15 @@ msgid "Changed the username."
 msgstr "Gebruikersnaam veranderd."
 
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
-msgid ""
-"Click OK to log on as this user. You will be redirected to the home page if "
-"this user has no rights to access the admin system."
-msgstr ""
-"Klik OK om te inloggen als deze gebruiker. Je wordt doorgestuurd naar de "
-"homepage als deze gebruiker geen beheerdersrechten heeft."
+msgid "Click OK to log on as this user. You will be redirected to the home page if this user has no rights to access the admin system."
+msgstr "Klik OK om te inloggen als deze gebruiker. Je wordt doorgestuurd naar de homepage als deze gebruiker geen beheerdersrechten heeft."
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:16
-msgid ""
-"Click on the link below to confirm that this e-mail address is correct, when "
-"clicking doesn't work then you can copy and paste the complete address to "
-"your browser."
-msgstr ""
-"Klik op de link hieronder om te bevestigen dat dit e-mailadres correct is. "
-"Wanneer je niet kan klikken, kopieer dan het volledige adres in je browser."
+msgid "Click on the link below to confirm that this e-mail address is correct, when clicking doesn't work then you can copy and paste the complete address to your browser."
+msgstr "Klik op de link hieronder om te bevestigen dat dit e-mailadres correct is. Wanneer je niet kan klikken, kopieer dan het volledige adres in je browser."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:10
-msgid ""
-"Click “delete” to remove any existing username/password from the person; "
-"this person will no longer be a user."
+msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
 msgstr "Klik ‘Verwijderen’ "
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_delete_username.erl:53
@@ -2097,38 +1954,20 @@ msgid "Email Status"
 msgstr "E-mailstatus"
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:66
-msgid ""
-"Enter a unique username and a password. Usernames and passwords are case "
-"sensitive, so be careful when entering them."
-msgstr ""
-"Stel een unieke gebruikersnaam en wachtwoord in. Let op: gebruikersnamen en "
-"wachtwoorden zijn hoofdlettergevoelig."
+msgid "Enter a unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them."
+msgstr "Stel een unieke gebruikersnaam en wachtwoord in. Let op: gebruikersnamen en wachtwoorden zijn hoofdlettergevoelig."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:8
-msgid ""
-"Enter a unique username and password. Usernames and passwords are case "
-"sensitive, so be careful when entering them."
-msgstr ""
-"Geef een unieke gebruikersnaam en wachtwoord op. Let op: gebruikersnamen en "
-"wachtwoorden zijn hoofdlettergevoelig."
+msgid "Enter a unique username and password. Usernames and passwords are case sensitive, so be careful when entering them."
+msgstr "Geef een unieke gebruikersnaam en wachtwoord op. Let op: gebruikersnamen en wachtwoorden zijn hoofdlettergevoelig."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:21
-msgid ""
-"Every page/person can be made into a user on the edit page. The difference "
-"between a user and a normal page is only that the former has logon "
-"credentials attached to its page record."
-msgstr ""
-"Van elke persoon kan een gebruiker worden gemaakt op de bewerkpagina. Het "
-"verschil tussen een gebruiker en een normale pagina is slechts dat een "
-"gebruikers een gebruikersnaam/wachtwoord hebben waarmee ze kunnen inloggen."
+msgid "Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record."
+msgstr "Van elke persoon kan een gebruiker worden gemaakt op de bewerkpagina. Het verschil tussen een gebruiker en een normale pagina is slechts dat een gebruikers een gebruikersnaam/wachtwoord hebben waarmee ze kunnen inloggen."
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:9
-msgid ""
-"Give the name and the e-mail address of the new user. A <em>person</em> page "
-"will be created for this user."
-msgstr ""
-"Geef de naam en het e-mailadres van de nieuwe gebruiker. Voor deze gebruiker "
-"wordt een pagina in de categorie <em>persoon</em> gemaakt."
+msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
+msgstr "Geef de naam en het e-mailadres van de nieuwe gebruiker. Voor deze gebruiker wordt een pagina in de categorie <em>persoon</em> gemaakt."
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:6
 #: modules/mod_authentication/templates/email_password_reset.tpl:6
@@ -2148,12 +1987,8 @@ msgid "Home"
 msgstr "Home"
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:20
-msgid ""
-"If you don't know this site then you can ignore this e-mail. Maybe someone "
-"made an error typing his or her e-mail address."
-msgstr ""
-"Als je deze site niet kent, kun je deze e-mail negeren. Misschien heeft "
-"iemand zich vergist toen hij zijn e-mailadres invulde."
+msgid "If you don't know this site then you can ignore this e-mail. Maybe someone made an error typing his or her e-mail address."
+msgstr "Als je deze site niet kent, kun je deze e-mail negeren. Misschien heeft iemand zich vergist toen hij zijn e-mailadres invulde."
 
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
 msgid "Log on as this user"
@@ -2197,8 +2032,7 @@ msgstr "Alleen administrators kunnen gebruikers verwijderen."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:98
 msgid "Only an administrator or the user him/herself can set a password."
-msgstr ""
-"Alleen de administrator of de gebruiker zelf kan het wachtwoord instellen."
+msgstr "Alleen de administrator of de gebruiker zelf kan het wachtwoord instellen."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:29./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:84
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11./modules/mod_authentication/templates/_logon_login_form_fields.tpl:11./modules/mod_authentication/templates/_logon_login_form_fields.tpl:12./modules/mod_authentication/templates/logon_confirm_form.tpl:15
@@ -2261,12 +2095,8 @@ msgid "The new username/ password has been set."
 msgstr "De nieuwe gebruikersnaam / het wachtwoord is ingesteld."
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:3
-msgid ""
-"The password of the admin user cannot be changed in the database. Please "
-"edit your site's configuration file at"
-msgstr ""
-"Het wachtwoord van de admingebruiker kan niet worden veranderd in de "
-"database. Pas daarvoor je siteconfiguratie aan in"
+msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
+msgstr "Het wachtwoord van de admingebruiker kan niet worden veranderd in de database. Pas daarvoor je siteconfiguratie aan in"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:74./modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:80
 msgid "The username is already in use, please try another."
@@ -2278,9 +2108,7 @@ msgstr "Er is geen gebruikersnaam aan deze persoon gekoppeld."
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
-msgstr ""
-"Dit kan niet ongedaan worden gemaakt. Gebruikersnaam en wachtwoord zullen "
-"definitief worden verwijderd."
+msgstr "Dit kan niet ongedaan worden gemaakt. Gebruikersnaam en wachtwoord zullen definitief worden verwijderd."
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:8
 msgid "This e-mail address was added to your personal information on"
@@ -2368,16 +2196,8 @@ msgid "View email status"
 msgstr "Bekijk e-mail status"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
-msgid ""
-"When you add credentials to a person then the person becomes an user. A "
-"person or machine can log on with those credentials and perform actions on "
-"your Zotonic system.<br/><br/>What an user can do depends on the groups the "
-"user is member of."
-msgstr ""
-"Wanneer je een gebruikersnaam/wachtwoord aan een persoon toevoegt, wordt "
-"deze persoon een gebruiker. Een gebruiker kan inloggen met die gegevens en "
-"acties uitvoeren op het Zotonic systeem.<br /><br />Wat een gebruiker "
-"precies kan doen hangt samen met de groepen waar de gebruiker lid van is."
+msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
+msgstr "Wanneer je een gebruikersnaam/wachtwoord aan een persoon toevoegt, wordt deze persoon een gebruiker. Een gebruiker kan inloggen met die gegevens en acties uitvoeren op het Zotonic systeem.<br /><br />Wat een gebruiker precies kan doen hangt samen met de groepen waar de gebruiker lid van is."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:108
 msgid "You are not allowed to create the person page."
@@ -2404,15 +2224,8 @@ msgid "You need to be an administrator to add users."
 msgstr "Je moet een administrator zijn om gebruikers toe te voegen."
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:25
-msgid ""
-"You receive this e-mail because you or someone else requested verification "
-"of your e-mail address. You or the someone else either entered your e-mail "
-"address. You will not receive any additional e-mails because of this request."
-msgstr ""
-"Je ontvangt deze e-mail omdat jij of iemand anders heeft verzocht dit e-"
-"mailadres te verifiëren. Jij of iemand anders heeft jouw e-mailadres "
-"ingevoerd. Je krijgt geen andere e-mails als gevolg van dit "
-"verificatieverzoek."
+msgid "You receive this e-mail because you or someone else requested verification of your e-mail address. You or the someone else either entered your e-mail address. You will not receive any additional e-mails because of this request."
+msgstr "Je ontvangt deze e-mail omdat jij of iemand anders heeft verzocht dit e-mailadres te verifiëren. Jij of iemand anders heeft jouw e-mailadres ingevoerd. Je krijgt geen andere e-mails als gevolg van dit verificatieverzoek."
 
 #: modules/mod_admin_identity/templates/email_identity_verify.tpl:12
 #: modules/mod_authentication/templates/email_password_reset.tpl:10
@@ -2480,12 +2293,8 @@ msgid "Merge pages"
 msgstr "Pagina’s samenvoegen"
 
 #: modules/mod_admin_merge/templates/admin_merge.tpl:12
-msgid ""
-"Merge two pages together. You can select with which page to merge and which "
-"page will remain after the merge."
-msgstr ""
-"Voeg twee pagina’s samen. Je kunt selecteren met welke pagina je wilt "
-"samenvoegen en welke pagina blijft bestaan."
+msgid "Merge two pages together. You can select with which page to merge and which page will remain after the merge."
+msgstr "Voeg twee pagina’s samen. Je kunt selecteren met welke pagina je wilt samenvoegen en welke pagina blijft bestaan."
 
 #: modules/mod_admin_merge/templates/_admin_edit_sidebar.tpl:13
 msgid "Merge with another page …"
@@ -2512,12 +2321,8 @@ msgid "Select Right"
 msgstr "Selecteer rechts"
 
 #: modules/mod_admin_merge/templates/admin_merge_compare.tpl:30
-msgid ""
-"Select the winner from two pages. The loser will get merged into the winner. "
-"Only the winner remains."
-msgstr ""
-"Selecteer de winnaar uit de twee pagina’s. De verliezer wordt in de winnaar "
-"samengevoegd. Alleen de winnaar blijft over."
+msgid "Select the winner from two pages. The loser will get merged into the winner. Only the winner remains."
+msgstr "Selecteer de winnaar uit de twee pagina’s. De verliezer wordt in de winnaar samengevoegd. Alleen de winnaar blijft over."
 
 #: modules/mod_admin_merge/templates/admin_merge_compare.tpl:34
 msgid "Select the winning page"
@@ -2529,8 +2334,7 @@ msgstr "Je hebt geen rechten om deze pagina te bewerken."
 
 #: modules/mod_admin_merge/mod_admin_merge.erl:94
 msgid "The loser is protected, unprotect the loser before merging."
-msgstr ""
-"De verliezer is beveiligd. Verwijder de beveiliging voor het samenvoegen."
+msgstr "De verliezer is beveiligd. Verwijder de beveiliging voor het samenvoegen."
 
 #: modules/mod_admin_merge/templates/admin_merge_compare.tpl:58./modules/mod_admin_merge/templates/admin_merge_compare.tpl:66
 msgid "You are not allowed to edit this page"
@@ -2538,16 +2342,11 @@ msgstr "Je hebt geen rechten om deze pagina te bewerken."
 
 #: modules/mod_admin_merge/templates/admin_merge_compare.tpl:69
 msgid "You are not allowed to select this page and thereby deleting page Left."
-msgstr ""
-"Je hebt geen rechten deze pagina te selecteren en daarmee de linkerpagina te "
-"verwijderen."
+msgstr "Je hebt geen rechten deze pagina te selecteren en daarmee de linkerpagina te verwijderen."
 
 #: modules/mod_admin_merge/templates/admin_merge_compare.tpl:61
-msgid ""
-"You are not allowed to select this page and thereby deleting page Right."
-msgstr ""
-"Je hebt geen rechten deze pagina te selecteren en daarmee de rechterpagina "
-"te verwijderen."
+msgid "You are not allowed to select this page and thereby deleting page Right."
+msgstr "Je hebt geen rechten deze pagina te selecteren en daarmee de rechterpagina te verwijderen."
 
 #: modules/mod_admin_merge/mod_admin_merge.erl:70
 msgid "You cannot remove the admin user."
@@ -2602,41 +2401,20 @@ msgid "Rescan modules"
 msgstr "Modules scannen"
 
 #: modules/mod_admin_modules/templates/_admin_status.tpl:4
-msgid ""
-"Rescanning will rebuild the index of all modules, actions, templates etc. It "
-"will also reload all dispatch rules."
-msgstr ""
-"Opnieuw scannen zal de index van alle modules, acties, templates etc. "
-"opnieuw opbouwen. Het zal ook alle dispatchregels herladen."
+msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
+msgstr "Opnieuw scannen zal de index van alle modules, acties, templates etc. opnieuw opbouwen. Het zal ook alle dispatchregels herladen."
 
 #: modules/mod_admin_modules/templates/admin_modules.tpl:8
 msgid ""
-"Zotonic is a modular web development framework. Most functionality is "
-"encapsulated inside modules. A set of basic modules are shipped with the "
-"Zotonic distribution,\n"
-"            while others are externally developed. This page shows an "
-"overview of all modules which are currently known to this Zotonic "
-"installation."
-msgstr ""
-"Zotonic is een modulair web development framework. De meeste functionaliteit "
-"is opgenomen in modules. Een reeks basismodules wordt geleverd met de "
-"Zotonic-distributie, terwijl andere extern worden ontwikkeld. Deze pagina "
-"toont een overzicht van alle modules die op dit moment bekend zijn bij deze "
-"Zotonic installatie."
+"Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
+"            while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
+msgstr "Zotonic is een modulair web development framework. De meeste functionaliteit is opgenomen in modules. Een reeks basismodules wordt geleverd met de Zotonic-distributie, terwijl andere extern worden ontwikkeld. Deze pagina toont een overzicht van alle modules die op dit moment bekend zijn bij deze Zotonic installatie."
 
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:11
 msgid ""
-"A predicate denotes traits or aspects of a page and expresses a relationship "
-"between two pages.\n"
-"    The relation is always directed, from the subject to the object.<br/"
-">Predicates are defined in ontologies like <a href=\"http://sioc-project.org/"
-"\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
-msgstr ""
-"Een predicaat drukt een relatie uit tussen twee pagina’s. Deze relatie heeft "
-"altijd een richting, van het onderwerp (subject) naar het voorwerp (object)."
-"<br />Predicaten worden gedefinieerd in ontologieën  zoals <a href=\\"
-"\"http://sioc-project.org/\\\">SIOC</a>. Op deze pagina kan je predicaten "
-"definiëren die Zotonic kent."
+"A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
+"    The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
+msgstr "Een predicaat drukt een relatie uit tussen twee pagina’s. Deze relatie heeft altijd een richting, van het onderwerp (subject) naar het voorwerp (object).<br />Predicaten worden gedefinieerd in ontologieën  zoals <a href=\\\"http://sioc-project.org/\\\">SIOC</a>. Op deze pagina kan je predicaten definiëren die Zotonic kent."
 
 #: modules/mod_admin_predicate/templates/admin_edges.tpl:23
 msgid "All Predicates"
@@ -2711,12 +2489,8 @@ msgid "Object"
 msgstr "Object"
 
 #: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:25
-msgid ""
-"Or click <strong>Delete All Connections</strong> to delete all connections "
-"with this predicate."
-msgstr ""
-"Of klik <strong>Verwijder alle connecties</strong> om alle connecties met "
-"dit predicaat te verwijderen."
+msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
+msgstr "Of klik <strong>Verwijder alle connecties</strong> om alle connecties met dit predicaat te verwijderen."
 
 #: modules/mod_admin_predicate/templates/admin_edges.tpl:51
 msgid "Page connections overview"
@@ -2732,31 +2506,23 @@ msgstr "Predicaten"
 
 #: modules/mod_admin_predicate/mod_admin_predicate.erl:59
 msgid "Sorry, you are not allowed to insert connections with this predicate."
-msgstr ""
-"Sorry, je hebt geen rechten connecties met dit predicaat toe te voegen."
+msgstr "Sorry, je hebt geen rechten connecties met dit predicaat toe te voegen."
 
 #: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:5
 msgid "Subject"
 msgstr "Subject"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:54
-msgid ""
-"The direction (from/to) of this predicate is reversed from the normal "
-"definition."
-msgstr ""
-"De richting (van/naar) van dit predicaat wordt omgedraaid ten opzichte van "
-"de normale definitie."
+msgid "The direction (from/to) of this predicate is reversed from the normal definition."
+msgstr "De richting (van/naar) van dit predicaat wordt omgedraaid ten opzichte van de normale definitie."
 
 #: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:43
 msgid "There are no page connections with this predicate."
 msgstr "Er zijn geen paginaconnecties met dit predicaat."
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:15
-msgid ""
-" This predicate can be used between two pages of the following categories."
-msgstr ""
-"Dit predicaat wordt gebruikt tussen twee pagina’s van de volgende "
-"categorieën."
+msgid " This predicate can be used between two pages of the following categories."
+msgstr "Dit predicaat wordt gebruikt tussen twee pagina’s van de volgende categorieën."
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:35
 msgid "To category"
@@ -2771,16 +2537,8 @@ msgid "Valid between"
 msgstr "Geldig tussen"
 
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:6
-msgid ""
-"You can define for which categories the predicate is shown on the edit "
-"page.  You can also define which categories of objects will be found when "
-"searching for a page to connect to. When you don't check anything then all "
-"categories are valid."
-msgstr ""
-"Je kan instellen voor welke categorieën dit predicaat wordt getoond op de "
-"bewerkpagina. Je kan ook instellen welke pagina’s worden gevonden wanneer je "
-"zoekt een pagina om te verbinden met de huidige. Wanneer er niets wordt "
-"ingesteld, wordt er in alle categorieën gezocht."
+msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."
+msgstr "Je kan instellen voor welke categorieën dit predicaat wordt getoond op de bewerkpagina. Je kan ook instellen welke pagina’s worden gevonden wanneer je zoekt een pagina om te verbinden met de huidige. Wanneer er niets wordt ingesteld, wordt er in alle categorieën gezocht."
 
 #: modules/mod_admin_statistics/mod_admin_statistics.erl:54./modules/mod_admin_statistics/templates/admin_statistics.tpl:3
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:20
@@ -2813,8 +2571,7 @@ msgstr "Terug naar login"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:8
 msgid "Below are your account details and a link to set a new password."
-msgstr ""
-"Hieronder staan je account details en een link om je wachtwoord te resetten."
+msgstr "Hieronder staan je account details en een link om je wachtwoord te resetten."
 
 #: modules/mod_authentication/templates/_logon_expired_form.tpl:45
 msgid "Change password and Sign in"
@@ -2829,12 +2586,8 @@ msgid "Check your email"
 msgstr "Controleer je e-mail"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:14
-msgid ""
-"Click on the link below to enter a new password, when clicking doesn't work "
-"then you can copy and paste the complete address to your browser."
-msgstr ""
-"Klik op de link hieronder om een nieuw wachtwoord op te geven. Wanneer je "
-"niet kan klikken kopieer dan het volledige adres in je browser."
+msgid "Click on the link below to enter a new password, when clicking doesn't work then you can copy and paste the complete address to your browser."
+msgstr "Klik op de link hieronder om een nieuw wachtwoord op te geven. Wanneer je niet kan klikken kopieer dan het volledige adres in je browser."
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:51
 msgid "Close Window"
@@ -2851,12 +2604,8 @@ msgid "Confirmation failure"
 msgstr "Fout bij bevestiging"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:3
-msgid ""
-"Either the email or the password you entered is incorrect. Please check your "
-"entry and try again."
-msgstr ""
-"Het opgegeven e-mailadres of wachtwoord is onjuist. Controleer de velden en "
-"probeer het opnieuw."
+msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
+msgstr "Het opgegeven e-mailadres of wachtwoord is onjuist. Controleer de velden en probeer het opnieuw."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
@@ -2867,12 +2616,8 @@ msgid "Enable <em>mod_twitter</em> to see Twitter settings."
 msgstr "Activeer <em>mod_twitter</em> om Twitter instellingen te zien."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
-msgid ""
-"Enable the signup module to automatically sign up users that are "
-"authenticating via the services below."
-msgstr ""
-"Activeer de registratiemodule om gebruikers automatisch te registreren "
-"wanneer zij zich via onderstaande diensten aanmelden."
+msgid "Enable the signup module to automatically sign up users that are authenticating via the services below."
+msgstr "Activeer de registratiemodule om gebruikers automatisch te registreren wanneer zij zich via onderstaande diensten aanmelden."
 
 #: modules/mod_authentication/templates/_logon_expired_form.tpl:16./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:35
@@ -2884,9 +2629,7 @@ msgid "Enter the new password for your account"
 msgstr "Vul het nieuwe wachtwoord van je account in"
 
 #: modules/mod_authentication/templates/_logon_reminder_title.tpl:2
-msgid ""
-"Enter your email address and we'll send you instructions how to reset your "
-"password."
+msgid "Enter your email address and we'll send you instructions how to reset your password."
 msgstr "In de e-mail staan instructies om je wachtwoord opnieuw in te stellen."
 
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:14./modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
@@ -2912,12 +2655,8 @@ msgid "External Services"
 msgstr "Externe diensten"
 
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:20
-msgid ""
-"For security reasons, password reset codes are only kept for a limited "
-"amount of time and can only be used once."
-msgstr ""
-"Om veiligheidsredenen zijn codes om het wachtwoord opnieuw in te stellen "
-"beperkt geldig en kunnen zij slechts eenmaal gebruikt worden."
+msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
+msgstr "Om veiligheidsredenen zijn codes om het wachtwoord opnieuw in te stellen beperkt geldig en kunnen zij slechts eenmaal gebruikt worden."
 
 #: modules/mod_authentication/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
@@ -2933,13 +2672,8 @@ msgid "Go to Modules"
 msgstr "Ga naar Modules"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:14
-msgid ""
-"Here you can set all the application keys, secrets and other configurations "
-"to integrate with external services like Facebook and Twitter."
-msgstr ""
-"Hier kan je alle applicatiesleutels, geheugem en andere "
-"configuratieparameters instellen die nodig zijn om met externe diensten "
-"zoals Facebook en Twitter te integreren."
+msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
+msgstr "Hier kan je alle applicatiesleutels, geheugem en andere configuratieparameters instellen die nodig zijn om met externe diensten zoals Facebook en Twitter te integreren."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
@@ -2950,12 +2684,8 @@ msgid "I forgot my password"
 msgstr "Wachtwoord vergeten?"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:5./modules/mod_authentication/templates/_logon_stage.tpl:25
-msgid ""
-"If you do not receive the email within a few minutes, please check your spam "
-"folder."
-msgstr ""
-"Als je deze e-email niet in een paar minuten ontvangt, controleer dan je "
-"spamfolder."
+msgid "If you do not receive the email within a few minutes, please check your spam folder."
+msgstr "Als je deze e-email niet in een paar minuten ontvangt, controleer dan je spamfolder."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:24
 msgid "In the email you will find instructions on how to confirm your account."
@@ -3025,8 +2755,7 @@ msgstr "Verander je wachtwoord"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:32
 msgid "Safari 8 has a known problem with handling external authentications."
-msgstr ""
-"Safari 8 heeft een bekend probleem met het omgaan van externe authenticatie."
+msgstr "Safari 8 heeft een bekend probleem met het omgaan van externe authenticatie."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:17
 msgid "Send Verification Message"
@@ -3059,21 +2788,15 @@ msgstr "Sorry, het verificatie bericht kon niet worden verstuurd"
 
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:19
 msgid "Sorry, your password reset code is unknown or expired"
-msgstr ""
-"Sorry de code waarmee je wachtwoord kan worden veranderd is onbekend of "
-"verlopen"
+msgstr "Sorry de code waarmee je wachtwoord kan worden veranderd is onbekend of verlopen"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:10
 msgid "The email address associated with your account is"
 msgstr "Het e-mailadres verbonden aan je account is"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:21
-msgid ""
-"The signup module is enabled, users authenticating via the services below "
-"are automatically signed up."
-msgstr ""
-"De registratiemodule is actief. Gebruikers die inloggen via onderstaande "
-"diensten worden automatisch geregistreerd."
+msgid "The signup module is enabled, users authenticating via the services below are automatically signed up."
+msgstr "De registratiemodule is actief. Gebruikers die inloggen via onderstaande diensten worden automatisch geregistreerd."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:24
 msgid "The two passwords should be equal. Please retype them."
@@ -3084,12 +2807,8 @@ msgid "There was a problem authenticating with"
 msgstr "Er was een probleem met de authenticatie met"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:34
-msgid ""
-"This can be resolved by changing the Cookies and website data settings in "
-"the Safari preferences."
-msgstr ""
-"Dit kan worden opgelost door de Cookies and instellingen over websitedata "
-"aan te passen in de Safari-instellingen."
+msgid "This can be resolved by changing the Cookies and website data settings in the Safari preferences."
+msgstr "Dit kan worden opgelost door de Cookies and instellingen over websitedata aan te passen in de Safari-instellingen."
 
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:25
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:53
@@ -3097,12 +2816,8 @@ msgid "This does not match the first password"
 msgstr "Dit komt niet overeen met het eerste wachtwoord"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:13
-msgid ""
-"To find your account you need to enter either your username or the email "
-"address we have received from you."
-msgstr ""
-"Om de account te vinden moet je de gebruikersnaam of het e-mailadres opgeven "
-"dat we van je hebben ontvangen."
+msgid "To find your account you need to enter either your username or the email address we have received from you."
+msgstr "Om de account te vinden moet je de gebruikersnaam of het e-mailadres opgeven dat we van je hebben ontvangen."
 
 #: modules/mod_authentication/templates/error.403.tpl:23
 #: modules/mod_base/templates/error.403.tpl:25
@@ -3115,8 +2830,7 @@ msgid "To view this page, you need to have other access rights."
 msgstr "Om deze pagina te bekijken heb je andere toegangsrechten nodig."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:20./modules/mod_authentication/templates/_logon_error.tpl:27
-msgid ""
-"Use some non alphabetical characters or digits to make it harder to guess."
+msgid "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "Gebruik vreemde tekens of cijfers zodat het moeilijker te raden is."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:14
@@ -3124,16 +2838,11 @@ msgid "Verify your account"
 msgstr "Bevestig je account"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:12
-msgid ""
-"We can only send you an email when we have the email address of your account."
-msgstr ""
-"We kunnen je alleen een e-mail sturen wanneer we een e-mailadres van je "
-"hebben."
+msgid "We can only send you an email when we have the email address of your account."
+msgstr "We kunnen je alleen een e-mail sturen wanneer we een e-mailadres van je hebben."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:30
-msgid ""
-"We don’t seem to have any valid email address or other electronic "
-"communication address of you."
+msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "Het lijkt erop dat we geen geldig e-mailadres van je hebben."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:4
@@ -3141,13 +2850,8 @@ msgid "We have sent you an email with a link to reset your password."
 msgstr "Volg de instructies in de e-mail."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:18
-msgid ""
-"When you didn't request a password reset, you can ignore this email. Maybe "
-"someone made an error typing his or her email address."
-msgstr ""
-"Als je niet hebt aangegeven dat je je wachtwoord opnieuw wilt instellen kun "
-"je deze e-mail negeren. Misschien heeft iemand zich vergist toen hij zijn e-"
-"mailadres typte."
+msgid "When you didn't request a password reset, you can ignore this email. Maybe someone made an error typing his or her email address."
+msgstr "Als je niet hebt aangegeven dat je je wachtwoord opnieuw wilt instellen kun je deze e-mail negeren. Misschien heeft iemand zich vergist toen hij zijn e-mailadres typte."
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
 msgid "You have to share your email address to be able to sign in."
@@ -3159,24 +2863,12 @@ msgid "You may try to sign in as a different user."
 msgstr "Je kunt proberen om als een andere gebruiker in te loggen."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:11
-msgid ""
-"You need to be allowed to edit the system configuration to view or change "
-"the configured App Keys."
-msgstr ""
-"Om de applicatiesleutels te veranderen, moet je rechten hebben om de "
-"systeemconfiguratie te bewerken."
+msgid "You need to be allowed to edit the system configuration to view or change the configured App Keys."
+msgstr "Om de applicatiesleutels te veranderen, moet je rechten hebben om de systeemconfiguratie te bewerken."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:23
-msgid ""
-"You receive this email because you or someone else requested a password "
-"reset for your account. You or the someone else either entered your username "
-"or email address. You will not receive any additional emails because of this "
-"request."
-msgstr ""
-"Je ontvangt deze e-mail omdat jij of iemand anders heeft aangevraagd om het "
-"wachtwoord dat bij jou account hoort opnieuw in te stellen. Jij of iemand "
-"anders heeft jou gebruikersnaam of e-mailadres ingevuld. Je ontvangt geen "
-"aanvullende e-mailberichten over deze aanvraag."
+msgid "You receive this email because you or someone else requested a password reset for your account. You or the someone else either entered your username or email address. You will not receive any additional emails because of this request."
+msgstr "Je ontvangt deze e-mail omdat jij of iemand anders heeft aangevraagd om het wachtwoord dat bij jou account hoort opnieuw in te stellen. Jij of iemand anders heeft jou gebruikersnaam of e-mailadres ingevuld. Je ontvangt geen aanvullende e-mailberichten over deze aanvraag."
 
 #: modules/mod_authentication/templates/logoff.tpl:12
 msgid "You will be redirected to the home page."
@@ -3187,18 +2879,12 @@ msgid "You'll need to create a new one."
 msgstr "Maak hier een nieuw wachtwoord aan."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:15
-msgid ""
-"You're almost done! To make sure you are really you, we ask you to confirm "
-"your account from your email address."
-msgstr ""
-"Bijna klaar! Om er zeker van te zijn dat jij hebt bent, vragen we je je e-"
-"mailadres te bevestigen."
+msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
+msgstr "Bijna klaar! Om er zeker van te zijn dat jij hebt bent, vragen we je je e-mailadres te bevestigen."
 
 #: modules/mod_authentication/templates/_logon_error.tpl:10
 msgid "You've entered an unknown username or email address. Please try again."
-msgstr ""
-"Je hebt een onbekende gebruikersnaam of e-mailadres ingevuld. Probeer het "
-"nogmaals."
+msgstr "Je hebt een onbekende gebruikersnaam of e-mailadres ingevuld. Probeer het nogmaals."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:8
 msgid "You've requested a new password for"
@@ -3231,23 +2917,20 @@ msgid "user@example.com"
 msgstr "gebruiker@voorbeeld.nl"
 
 #: modules/mod_backup/templates/admin_backup.tpl:3
-#, fuzzy
 msgid "Admin Backups"
-msgstr "Backup"
+msgstr "Admin Backups"
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:28
-#, fuzzy
 msgid "Are you sure you want to revert to this version?"
-msgstr "Weet je zeker dat je dit wilt verwijderen?"
+msgstr "Weet je zeker dat je deze versie wilt terugzetten?"
 
 #: modules/mod_backup/templates/admin_backup.tpl:41
 msgid "At any moment you can make a backup of your system."
-msgstr ""
+msgstr "Op elk moment kan je een backup van je systeem maken."
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:44
-#, fuzzy
 msgid "Back to the edit page"
-msgstr "Mediapagina gemaakt."
+msgstr "Terug naar de edit pagina."
 
 #: modules/mod_backup/mod_backup.erl:65
 msgid "Backup"
@@ -3255,128 +2938,107 @@ msgstr "Backup"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:11
 msgid "Backup &amp; Restore"
-msgstr ""
+msgstr "Backup &amp; Terugzetten"
 
 #: modules/mod_backup/templates/admin_backup.tpl:11
 msgid "Backup and restore options for your content."
-msgstr ""
+msgstr "Backup- en terugzetopties voor je gegevens"
 
 #: modules/mod_backup/templates/admin_backup.tpl:9
-#, fuzzy
 msgid "Backups"
-msgstr "Backup"
+msgstr "Backups"
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:10
-#, fuzzy
 msgid "Changes since"
-msgstr "Verander categorie"
+msgstr "Veranderingen sinds"
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:42
 msgid "Check and possibly restore an earlier version of your page."
-msgstr ""
+msgstr "Controleer en optioneel herstel een eerdere versie van je pagina."
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:13
-msgid ""
-"Click on <b>List and restore an earlier version</b> to get an overview of "
-"earlier saved versions of this page.<br/>You can also save the complete "
-"contents of a page to a file. Later you can reload this file, replacing the "
-"current page contents. Note that the file does not contain your unsaved "
-"changes. Connections and media are not saved as well."
-msgstr ""
+msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
+msgstr "Klik op <b>Bekijk en herstel een eerdere versie</b> voor een overzicht van eerdere versies van deze pagina.<br/>Je kan ook de volledige inhoud van je pagina in een bestand bewaren. Later kan je dat bestand inladen, wat de huidige paginainhoud vervangt. Let op dat dit bestand alleen je bewaarde veranderingen bevat. Pagina connecties en media worden niet bewaard."
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:38
-#, fuzzy
 msgid "Deleted"
-msgstr "Verwijderd."
+msgstr "Verwijderd"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:27
-#, fuzzy
 msgid "Download backup file"
-msgstr "Bestand downloaden"
+msgstr "Backup bestand downloaden"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:13
-#, fuzzy
 msgid "Help about backup &amp; restore"
-msgstr "Hulp over predicaten"
+msgstr "Hulp over backup &amp; herstel"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:23
 msgid "List and restore an earlier version"
-msgstr ""
+msgstr "Bekijk en herstel een eerdere versie."
 
 #: modules/mod_backup/templates/admin_backup.tpl:33
 msgid "Make a daily backup of the database and uploaded files."
-msgstr ""
+msgstr "Maak een dagelijkse backup van de database en alle geüploade bestanden."
 
 #: modules/mod_backup/templates/_admin_backup_list.tpl:29
 msgid "No backups present."
-msgstr ""
+msgstr "Er zijn geen backups."
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:67
-#, fuzzy
 msgid "Previous"
-msgstr "Voorbeeld"
+msgstr "Vorige"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:29./modules/mod_backup/templates/_admin_edit_sidebar.tpl:32./modules/mod_backup/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
-msgstr ""
+msgstr "Herstel vanaf backup"
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:26
-#, fuzzy
 msgid "Revert to this version…"
-msgstr "Terug naar gepubliceerde versie"
+msgstr "Herstel deze versie..."
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:3./modules/mod_backup/templates/admin_backup_revision.tpl:36./modules/mod_backup/templates/admin_backup_revision.tpl:38
 msgid "Revisions for"
-msgstr ""
+msgstr "Versies voor"
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:3
-msgid ""
-" Select the backup file you want to upload. The file must be a .bert file."
-msgstr ""
+msgid " Select the backup file you want to upload. The file must be a .bert file."
+msgstr "Selecteer de backup die je wilt terugzetten. Het bestand moet extensie .bert hebben."
 
 #: modules/mod_backup/templates/admin_backup.tpl:26
-#, fuzzy
 msgid "Show import/export panel in the admin."
-msgstr "Controlleer het antwoord in de admin."
+msgstr "Toon import/export paneel in de admin"
 
 #: modules/mod_backup/templates/admin_backup.tpl:45
 msgid "Start backup now"
-msgstr ""
+msgstr "Backup nu"
 
 #: modules/mod_backup/templates/admin_backup.tpl:46
 msgid "Start database-only backup now"
-msgstr ""
+msgstr "Backup alleen de database"
 
 #: modules/mod_backup/templates/admin_backup.tpl:51
-msgid ""
-"The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" "
-"config key to the path to pg_dump and return to this page."
+msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr ""
 
 #: modules/mod_backup/templates/admin_backup.tpl:52
-msgid ""
-"The \"tar\" command was not found in the path. Set the \"tar\" config key to "
-"the path to tar and return to this page."
+msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr ""
 
 #: modules/mod_backup/templates/admin_backup.tpl:41
 msgid "The backup comprises two parts, the database and the uploaded files."
-msgstr ""
+msgstr "Een backup bestaat uit twee delen, de database en alle geüploade bestanden."
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:5./modules/mod_backup/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
-msgstr ""
+msgstr "Deze versie is bewaard op"
 
 #: modules/mod_backup/templates/admin_backup.tpl:63
-msgid ""
-"This site has cloud file store enabled, and there are <strong>$1</strong> "
-"media files on this system that are only stored in the cloud and not on this "
-"machine. These files will not backed up!"
+msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr ""
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
-msgstr ""
+msgstr "Dit vervangt je pagina met de inhoud van het backup bestand."
 
 #: modules/mod_backup/templates/admin_backup.tpl:61
 #: modules/mod_logging/templates/admin_log_email.tpl:66
@@ -3385,42 +3047,36 @@ msgid "Warning"
 msgstr "Waarschuwing"
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
-#, fuzzy
 msgid "Warning!"
-msgstr "Waarschuwing"
+msgstr "Waarschuwing!"
 
 #: modules/mod_backup/templates/admin_backup.tpl:49
-#, fuzzy
 msgid "Warning:"
-msgstr "Waarschuwing"
+msgstr "Waarschuwing:"
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:74
 msgid "Y-m-d H:i"
-msgstr ""
+msgstr "Y-m-d H:i"
 
 #: modules/mod_backup/templates/admin_backup.tpl:42
 msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr ""
+msgstr "Je kan 10 backups bewaren. Oudere worden automatisch verwijderd."
 
 #: modules/mod_backup/templates/admin_backup.tpl:49
-msgid ""
-"Your backup is not correctly configured. The backup module will not work "
-"until the problem(s) below have been resolved:"
+msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr ""
 
 #: modules/mod_backup/templates/_admin_backup_list.tpl:17
-#, fuzzy
 msgid "download database"
-msgstr "Bestand downloaden"
+msgstr "database downloaden"
 
 #: modules/mod_backup/templates/_admin_backup_list.tpl:19
-#, fuzzy
 msgid "download files"
-msgstr "Bestand downloaden"
+msgstr "bestanden downloaden"
 
 #: modules/mod_backup/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
-msgstr ""
+msgstr "deze backup is bezig"
 
 #: modules/mod_base/templates/_session_info.tpl:5
 msgid "# Pages"
@@ -3518,12 +3174,8 @@ msgid "That page does not exist"
 msgstr "Die pagina bestaat niet"
 
 #: modules/mod_base/templates/email_base.tpl:19
-msgid ""
-"This is the base message. When you receive this text then the template "
-"builder did not overrule the <tt>body</tt> block."
-msgstr ""
-"Dit is het basisbericht. Wanneer je deze tekst ontvangt dan heeft de "
-"template builder het blok <tt>body</tt> niet overschreven."
+msgid "This is the base message. When you receive this text then the template builder did not overrule the <tt>body</tt> block."
+msgstr "Dit is het basisbericht. Wanneer je deze tekst ontvangt dan heeft de template builder het blok <tt>body</tt> niet overschreven."
 
 #: modules/mod_base/templates/directory_index.tpl:15
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:22
@@ -3639,8 +3291,7 @@ msgid "General Comment Form Settings"
 msgstr "Algemene formulier instellingen"
 
 #: modules/mod_comment/templates/admin_comments_settings.tpl:17
-msgid ""
-"Here you find settings to configure the comment module to suit your needs."
+msgid "Here you find settings to configure the comment module to suit your needs."
 msgstr "Hier vind je de instellingen voor de comment-module."
 
 #: modules/mod_comment/templates/_comments_form.tpl:15
@@ -3677,12 +3328,8 @@ msgid "Recent comments"
 msgstr "Recente reacties"
 
 #: modules/mod_comment/templates/admin_comments_settings.tpl:31
-msgid ""
-"Require all comments to be reviewed by a moderator before displaying them on "
-"the public website"
-msgstr ""
-"Alle commentaren moeten worden goedgekeurd door een moderator voordat ze "
-"zichtbaar zijn op de publieke website"
+msgid "Require all comments to be reviewed by a moderator before displaying them on the public website"
+msgstr "Alle commentaren moeten worden goedgekeurd door een moderator voordat ze zichtbaar zijn op de publieke website"
 
 #: modules/mod_comment/templates/admin_comments_settings.tpl:21
 msgid "Save Comment Form settings"
@@ -3699,12 +3346,8 @@ msgid "There are no comments."
 msgstr "Er zijn geen reacties"
 
 #: modules/mod_comment/templates/_comments_form.tpl:7./modules/mod_comment/templates/_comments_moderation.tpl:1
-msgid ""
-"Your comment has been saved and will be subject to moderation before it is "
-"displayed on the website"
-msgstr ""
-"Je commentaar is opgeslagen en zal worden bekeken door een moderator voordat "
-"zichtbaar wordt op de website"
+msgid "Your comment has been saved and will be subject to moderation before it is displayed on the website"
+msgstr "Je commentaar is opgeslagen en zal worden bekeken door een moderator voordat zichtbaar wordt op de website"
 
 #: modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:4./modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:15
 msgid "publish"
@@ -3716,26 +3359,23 @@ msgstr "ongepubliceerd"
 
 #: modules/mod_contact/templates/email_contact.tpl:6
 msgid "Hello, the contact form of"
-msgstr ""
+msgstr "Hallo, het contactformulier van"
 
 #: modules/mod_contact/templates/contact.tpl:32
-#, fuzzy
 msgid "Thank you!"
-msgstr "Bedankt"
+msgstr "Bedankt!"
 
 #: modules/mod_contact/templates/contact.tpl:33
 msgid "Your message has been submitted! We’ll get in touch soon."
-msgstr ""
+msgstr "Je bericht is ingestuurd! We reageren spoedig."
 
 #: modules/mod_contact/templates/email_contact.tpl:3
-#, fuzzy
 msgid "contact form on"
-msgstr "Bescherm tegen verwijderen"
+msgstr "contactformulier op"
 
 #: modules/mod_contact/templates/email_contact.tpl:6
-#, fuzzy
 msgid "has been submitted."
-msgstr "is ontkoppeld."
+msgstr "is ingestuurd."
 
 #: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
@@ -3747,8 +3387,7 @@ msgstr "Paginagroep"
 
 #: modules/mod_content_groups/mod_content_groups.erl:71
 msgid "Delete is canceled, there are pages in this content group."
-msgstr ""
-"Verwijderen is afgebroken, want er zijn nog pagina’s in deze paginagroep."
+msgstr "Verwijderen is afgebroken, want er zijn nog pagina’s in deze paginagroep."
 
 #: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:15
 msgid "Move all pages in these content groups to:"
@@ -3759,12 +3398,8 @@ msgid "None"
 msgstr "Geen"
 
 #: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:31
-msgid ""
-"Or click <strong>Delete All Pages</strong> to delete all pages in the "
-"content groups."
-msgstr ""
-"Of klik <strong>Verwijder alle pagina’s</strong> om alle pagina’s in de "
-"paginagroepen te verwijderen."
+msgid "Or click <strong>Delete All Pages</strong> to delete all pages in the content groups."
+msgstr "Of klik <strong>Verwijder alle pagina’s</strong> om alle pagina’s in de paginagroepen te verwijderen."
 
 #: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:47
 msgid "There are no pages in these content groups."
@@ -3777,18 +3412,16 @@ msgstr "Deze pagina maakt deel uit van de groep:"
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:25
 #: modules/mod_filestore/templates/admin_filestore.tpl:150
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17
-#, fuzzy
 msgid "Actions"
-msgstr "Actie"
+msgstr "Acties"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:3
-#, fuzzy
 msgid "Admin Custom Redirects"
 msgstr "Domeinnamen en doorverwijzingen"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:21
 msgid "Domain"
-msgstr ""
+msgstr "Domein"
 
 #: modules/mod_custom_redirect/mod_custom_redirect.erl:59./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:7
 msgid "Domains and redirects"
@@ -3800,24 +3433,20 @@ msgid "Path"
 msgstr "Pad"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:24./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:45./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:67./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:88
-#, fuzzy
 msgid "Permanent"
-msgstr "Permanente redirect"
+msgstr "Permanent"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:23
-#, fuzzy
 msgid "Redirect to"
-msgstr "Doorsturen"
+msgstr "Stuur door naar"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:8
 msgid "Redirect unknown domains and paths to known pages or locations."
-msgstr ""
+msgstr "Stuur onbekende domeinen en paden naar bekende pagina’s of locaties."
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:9
-msgid ""
-"The new location can be a local path or a complete URL. Leave the host empty "
-"for redirects within this site."
-msgstr ""
+msgid "The new location can be a local path or a complete URL. Leave the host empty for redirects within this site."
+msgstr "De nieuwe locatie kan een lokaal pad of complete URL zijn. Laat de domeinnaam leeg voor doorverwijzingen binnen de site."
 
 #: modules/mod_custom_redirect/mod_custom_redirect.erl:73
 msgid "You are not allowed to change this."
@@ -3829,9 +3458,7 @@ msgstr "Actie"
 
 #: modules/mod_development/templates/admin_development_templates.tpl:13
 msgid "Below you see in real time which templates are compiled and included."
-msgstr ""
-"Hieronder zie je in realtime welke templates worden gecompileerd en "
-"ingevoegd."
+msgstr "Hieronder zie je in realtime welke templates worden gecompileerd en ingevoegd."
 
 #: modules/mod_development/templates/_development_dispatch_trace.tpl:6
 msgid "Bindings"
@@ -3850,12 +3477,8 @@ msgid "Dispatch rule debugging"
 msgstr "Dispatchregels debuggen"
 
 #: modules/mod_development/templates/admin_development.tpl:44
-msgid ""
-"Download CSS and JavaScript files as separate files. Don’t combine them in "
-"one URL."
-msgstr ""
-"Download CSS- en JavaScript-bestanden afzonderlijk. Voeg ze niet samen in "
-"één URL."
+msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
+msgstr "Download CSS- en JavaScript-bestanden afzonderlijk. Voeg ze niet samen in één URL."
 
 #: modules/mod_development/templates/admin_development_templates.tpl:18
 msgid "Empty log"
@@ -4062,9 +3685,8 @@ msgid "Media Properties"
 msgstr "Mediaeigenschappen"
 
 #: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:56
-#, fuzzy
 msgid "Medium"
-msgstr "Media"
+msgstr "Medium"
 
 #: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:51
 msgid "Small"
@@ -4075,36 +3697,28 @@ msgid "DKIM e-mail setup"
 msgstr "DKIM e-mailinstellingen"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:6
-#, fuzzy
 msgid "DKIM e-mail signing setup"
 msgstr "DKIM e-mailinstellingen"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:17
 msgid "The DNS entry should contain the following information:"
-msgstr ""
+msgstr "De DNS ingang moet de volgende informatie bevatten:"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:10
-#, fuzzy
 msgid "The location of these key files are the following:"
-msgstr "Deze applicatie wil toegang tot de volgende diensten:"
+msgstr "De locaties van deze sleutelbestanden zijn:"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:9
-msgid ""
-"The module has generated an RSA keypair for you which will be used when "
-"signing outgoing emails."
-msgstr ""
+msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
+msgstr "De module heeft een RSA sleutel gegenereerd voor het tekenen van uitgaande emails."
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:16
-msgid ""
-"To finalize the DKIM configuration, you need to add an DNS entry TXT record "
-"to the following domain:"
-msgstr ""
+msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
+msgstr "Om de DKIM configuratie te completeren, moet je in de DNS een TXT regel toevoegen voor het volgende domein:"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:22
-msgid ""
-"When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck"
-"\">DKIM keycheck</a> website to verify your domain's DKIM record."
-msgstr ""
+msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
+msgstr "Als alles is opgezet, kan je de <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website gebruiken om de DKIM van jouw domein te controleren."
 
 #: modules/mod_email_status/templates/_email_status_view.tpl:83
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:35
@@ -4160,12 +3774,8 @@ msgid "There are problems with this email address."
 msgstr "Er zijn problemen met dit emailadres."
 
 #: modules/mod_email_status/templates/_email_status_view.tpl:14
-msgid ""
-"There have been some problems but they have been cleared. This message will "
-"disappear as soon as an email has been received succesfully."
-msgstr ""
-"Er waren problemen maar die zijn opgelost. Dit bericht zal verdwijnen zo "
-"gauw een e-mail succesvol is ontvangen."
+msgid "There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
+msgstr "Er waren problemen maar die zijn opgelost. Dit bericht zal verdwijnen zo gauw een e-mail succesvol is ontvangen."
 
 #: modules/mod_email_status/templates/_email_status_view.tpl:48
 msgid "This email address is not valid."
@@ -4188,55 +3798,46 @@ msgid "Total/Status"
 msgstr "Totaal/status"
 
 #: modules/mod_export/templates/_vcalendar_header.tpl:7
-#, fuzzy
 msgid "Calendar"
-msgstr "Standaard"
+msgstr "Kalender"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:19./modules/mod_export/templates/_admin_edit_sidebar.tpl:31./modules/mod_export/templates/_admin_edit_sidebar.tpl:39
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:94./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:38
-#, fuzzy
 msgid "Download CSV"
-msgstr "Download"
+msgstr "Download CSV"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:21./modules/mod_export/templates/_admin_edit_sidebar.tpl:34./modules/mod_export/templates/_admin_edit_sidebar.tpl:42
-#, fuzzy
 msgid "Download Event"
-msgstr "Bestand downloaden"
+msgstr "Download Evenement"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:20./modules/mod_export/templates/_admin_edit_sidebar.tpl:32./modules/mod_export/templates/_admin_edit_sidebar.tpl:40
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:98./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:42
-#, fuzzy
 msgid "Download Excel"
-msgstr "Bestand downloaden"
+msgstr "Download Excel"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:28
-#, fuzzy
 msgid "Download all the pages in the collection"
-msgstr "Verplaats alle pagina’s in deze categorie naar:"
+msgstr "Download alle pagina’s in de collectie"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:16
 msgid "Download all the pages matching the query"
-msgstr ""
+msgstr "Download all pagina’s die overeenkomen met de zoekvraag"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:25
-msgid ""
-"Download as Event if the query returns events and you want export for a "
-"calendar program."
-msgstr ""
+msgid "Download as Event if the query returns events and you want export for a calendar program."
+msgstr "Download als een Evenement als de zoekvraag evenementen teruggeeft en je wilt exporteren voor een kalender programma."
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:6
 msgid "Download this page or the query as a spreadsheet or in another format."
-msgstr ""
+msgstr "Download deze pagina of zoekvraag als een spreadsheet of in een ander formaat."
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:4
-#, fuzzy
 msgid "Export"
-msgstr "Importeer regels"
+msgstr "Exporteer"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:6
-#, fuzzy
 msgid "Help about export"
-msgstr "Hulp over predicaten"
+msgstr "Hulp over exporteren"
 
 #: modules/mod_facebook/templates/_admin_authentication_service.tpl:13
 msgid "App ID."
@@ -4314,30 +3915,27 @@ msgid "API Key"
 msgstr "API-sleutel"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:49
-#, fuzzy
 msgid "API Secret"
-msgstr "App Secret"
+msgstr "API Secret"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:71
 msgid "After 1 month"
-msgstr ""
+msgstr "Na 1 maand"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:70
 msgid "After 1 week"
-msgstr ""
+msgstr "Na 1 week"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:72
 msgid "After 3 months"
-msgstr ""
+msgstr "Na 3 maanden"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:159
 msgid "All cloud files will be queued for download."
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:158
-msgid ""
-"All files will be queued, uploads will start in the background within 10 "
-"minutes."
+msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:153
@@ -4346,12 +3944,10 @@ msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:32
 msgid "Base URL"
-msgstr ""
+msgstr "Basis URL"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:79
-msgid ""
-"Before the settings are saved they will be checked by uploading (and "
-"removing) a small file."
+msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr ""
 
 #: modules/mod_filestore/mod_filestore.erl:115
@@ -4359,59 +3955,48 @@ msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:3./modules/mod_filestore/templates/admin_filestore.tpl:7
-#, fuzzy
 msgid "Cloud File Store Configuration"
-msgstr "Cloud File Store"
+msgstr "Cloud File Opslag Configuratie"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:112
-#, fuzzy
 msgid "Cloud Files"
-msgstr "Cloud File Store"
+msgstr "Cloud Bestanden"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:157
 msgid "Could not access the service, double check your settings and try again."
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:82
-msgid ""
-"Could not access the service, double check your settings and try again. Make "
-"sure that API key has access rights to create and remove a (temporary) "
-"<code>-zotonic-filestore-test-file-</code> file."
+msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:11
-msgid ""
-"Currently Zotonic supports services that are compatible with the S3 file "
-"services API. These include:"
+msgid "Currently Zotonic supports services that are compatible with the S3 file services API. These include:"
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:136
-#, fuzzy
 msgid "Delete Queue"
-msgstr "Verwijder"
+msgstr "Verwijder wachtrij"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:66
 msgid "Delete files from the cloud file store"
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:135
-#, fuzzy
 msgid "Download Queue"
-msgstr "Bestand downloaden"
+msgstr "Download wachtrij"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:117
-#, fuzzy
 msgid "Files"
-msgstr "Bestand"
+msgstr "Bestanden"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:69
 msgid "Immediately"
-msgstr ""
+msgstr "Meteen"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:111
-#, fuzzy
 msgid "Local Files"
-msgstr "Bestand uploaden"
+msgstr "Lokale bestanden"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:164
 msgid "Move all S3 files to local"
@@ -4435,9 +4020,8 @@ msgid "S3 Cloud Utilities and Statistics"
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:86
-#, fuzzy
 msgid "Save Settings"
-msgstr "Bewaar SEO instellingen"
+msgstr "Bewaar instellingen"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:81
 msgid "Settings are working fine and are saved."
@@ -4445,104 +4029,90 @@ msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:123
 msgid "Storage"
-msgstr ""
+msgstr "Opslag"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:154
 msgid "This will queue the files for later asynchronous upload."
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:134
-#, fuzzy
 msgid "Upload Queue"
-msgstr "geüpload"
+msgstr "Upload wachtrij"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:59
 msgid "Upload new media files to the cloud file store"
 msgstr ""
 
 #: modules/mod_filestore/support/filestore_admin.erl:58./modules/mod_filestore/support/filestore_admin.erl:70./modules/mod_filestore/templates/admin_filestore.tpl:175
-#, fuzzy
 msgid "You are not allowed to change these settings."
-msgstr "Je hebt geen rechten om de resultaten te veranderen."
+msgstr "Je hebt geen rechten om de instellingen te veranderen."
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:9
-msgid ""
-"Zotonic can store uploaded and resized files in the cloud. Here you can "
-"configure the location and access keys for the cloud service."
+msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr ""
 
 #: modules/mod_import_csv/templates/_admin_import_button.tpl:4./modules/mod_import_csv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
-msgstr ""
+msgstr "Importeer CSV bestand"
 
 #: modules/mod_import_csv/mod_import_csv.erl:74./modules/mod_import_csv/templates/_admin_import.tpl:3./modules/mod_import_csv/templates/_admin_import.tpl:8
 msgid "Import content"
 msgstr "Inhoud importeren"
 
 #: modules/mod_import_csv/templates/_admin_import_button.tpl:5
-#, fuzzy
 msgid "Import data from a CSV file."
-msgstr "Regels importeren"
+msgstr "Importeer data uit een CSV bestand"
 
 #: modules/mod_import_csv/templates/_dialog_import_csv.tpl:20
 #: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:19
 msgid "Import previously deleted items again"
-msgstr ""
+msgstr "Importeer de voorheen verwijderde items opnieuw"
 
 #: modules/mod_import_csv/mod_import_csv.erl:107
 msgid "Only admins can import CSV files."
 msgstr "Alleen admins kunnen CSV-bestanden importeren."
 
 #: modules/mod_import_csv/mod_import_csv.erl:98./modules/mod_import_csv/mod_import_csv.erl:100
-msgid ""
-"Please hold on while the file is importing. You will get a notification when "
-"it is ready."
-msgstr ""
-"Een moment geduld terwijl het bestand wordt geïmporteerd. Je krijgt een "
-"notificatie wanneer het klaar is."
+msgid "Please hold on while the file is importing. You will get a notification when it is ready."
+msgstr "Een moment geduld terwijl het bestand wordt geïmporteerd. Je krijgt een notificatie wanneer het klaar is."
 
 #: modules/mod_import_csv/templates/_dialog_import_csv.tpl:9
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
-#, fuzzy
 msgid "Select file"
-msgstr "Selecteer links"
+msgstr "Selecteer bestand"
 
 #: modules/mod_import_csv/templates/_dialog_import_csv.tpl:27
 #: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:26
-#, fuzzy
 msgid "Start import"
-msgstr "Importeer foto"
+msgstr "Begin import"
 
 #: modules/mod_import_csv/mod_import_csv.erl:103
 msgid "This file cannot be imported."
 msgstr "Dit bestand kan niet worden geïmporteerd."
 
 #: modules/mod_import_csv/templates/_dialog_import_csv.tpl:2
-#, fuzzy
 msgid "Upload a CSV file from your computer."
-msgstr "Upload een bestand van je computer."
+msgstr "Upload een CSV bestand van je computer."
 
 #: modules/mod_import_wordpress/templates/_admin_status.tpl:4
 msgid "Import WXR file"
-msgstr ""
+msgstr "Importeer WXR bestand"
 
 #: modules/mod_import_wordpress/templates/_admin_status.tpl:5
 msgid "Import a Wordpress WXR export file into Zotonic."
-msgstr ""
+msgstr "Importeer een Wordpress WXR bestand in Zotonic"
 
 #: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:2
-#, fuzzy
 msgid "Upload a wordpress WXR file from your computer."
-msgstr "Upload een bestand van je computer."
+msgstr "Upload een Wordpress WXR bestand van je computer."
 
 #: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
-msgstr ""
+msgstr "WXR bestand"
 
 #: modules/mod_import_wordpress/templates/_admin_status.tpl:4
-#, fuzzy
 msgid "Wordpress import"
-msgstr "Importeer video"
+msgstr "Wordpress import"
 
 #: modules/mod_instagram/templates/_admin_authentication_service.tpl:45
 #: modules/mod_twitter/templates/_admin_authentication_service.tpl:45
@@ -4766,20 +4336,12 @@ msgid "Sunday"
 msgstr "zondag"
 
 #: modules/mod_l10n/templates/_admin_l10n_config.tpl:31
-msgid ""
-"This forces the timezone to the configured timezone. Irrespective of the "
-"timezone selected by the user or user-agent."
-msgstr ""
-"Dit forceert de tijdzone naar de geconfigureerde tijdzone, onafhankelijk van "
-"de tijdzone geselecteerd door de gebruiker of browser."
+msgid "This forces the timezone to the configured timezone. Irrespective of the timezone selected by the user or user-agent."
+msgstr "Dit forceert de tijdzone naar de geconfigureerde tijdzone, onafhankelijk van de tijdzone geselecteerd door de gebruiker of browser."
 
 #: modules/mod_l10n/templates/_admin_l10n_config.tpl:12
-msgid ""
-"This sets the default timezone. This timezone is used for the initial "
-"request by an user-agent or when the timezone is not known."
-msgstr ""
-"Hiermee stel je de standaard tijdzone is. Deze tijdzone wordt gebruikt voor "
-"eerste requests door een browser of wanneer de tijdzone onbekend is."
+msgid "This sets the default timezone. This timezone is used for the initial request by an user-agent or when the timezone is not known."
+msgstr "Hiermee stel je de standaard tijdzone is. Deze tijdzone wordt gebruikt voor eerste requests door een browser of wanneer de tijdzone onbekend is."
 
 #: modules/mod_l10n/support/l10n_date.erl:28
 msgid "Thursday"
@@ -4802,32 +4364,26 @@ msgid "noon"
 msgstr "middag"
 
 #: modules/mod_linkedin/templates/_logon_extra.tpl:18
-#, fuzzy
 msgid "Connect with LinkedIn"
-msgstr "Verbinden met Twitter"
+msgstr "Verbinden met LinkedIn"
 
 #: modules/mod_linkedin/templates/_logon_extra.tpl:9./modules/mod_linkedin/templates/_logon_extra.tpl:11
-#, fuzzy
 msgid "Disconnect from LinkedIn"
-msgstr "Ontkoppelen van Twitter"
+msgstr "Ontkoppelen van LinkedIn"
 
 #: modules/mod_linkedin/templates/_logon_extra.tpl:12
-#, fuzzy
 msgid "Do you want to disconnect your LinkedIn account?"
-msgstr "Wil je je Twitter-account ontkoppelen?"
+msgstr "Wil je je LinkedIn-account ontkoppelen?"
 
 #: modules/mod_linkedin/templates/_logon_extra.tpl:18
-#, fuzzy
 msgid "Log in with LinkedIn"
-msgstr "Inloggen met Twitter"
+msgstr "Inloggen met LinkedIn"
 
 #: modules/mod_linkedin/templates/_logon_service.linkedin.tpl:2
-#, fuzzy
 msgid "Redirecting to LinkedIn."
-msgstr "We sturen je door naar Twitter."
+msgstr "We sturen je door naar LinkedIn."
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:40
-#, fuzzy
 msgid "Save LinkedIn Settings"
 msgstr "LinkedIn-instellingen opgeslagen."
 
@@ -4836,28 +4392,24 @@ msgid "Saved the LinkedIn settings."
 msgstr "LinkedIn-instellingen opgeslagen."
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:21
-#, fuzzy
 msgid "Secret Key"
-msgstr "App Secret"
+msgstr "Secret Key"
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:32
-#, fuzzy
 msgid "Use LinkedIn authentication"
-msgstr "Authenticeren met Twitter."
+msgstr "Authenticeren met LinkedIn."
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:10
-#, fuzzy
 msgid "You can find the application keys in"
-msgstr "Je hebt de applicatie "
+msgstr "Je kan de applicatie sleutels vinden in"
 
 #: modules/mod_linkedin/mod_linkedin.erl:49
 msgid "You don't have permission to change the LinkedIn settings."
 msgstr "Je hebt geen rechten om de LinkedIn-instellingen te bewerken."
 
 #: modules/mod_linkedin/templates/_logon_extra_email_reset.tpl:2
-#, fuzzy
 msgid "You have coupled your <strong>LinkedIn</strong> account."
-msgstr "Je hebt je <strong>Twitter</strong>-account gekoppeld."
+msgstr "Je hebt je <strong>LinkedIn</strong>-account gekoppeld."
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:10
 msgid "Your LinkedIn Developer Network"
@@ -4956,24 +4508,11 @@ msgid "<em>Add</em> all recipients to this list that are on the target list"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:20
-msgid ""
-" <em>Remove</em> all recipients from this list that are on the target list"
+msgid " <em>Remove</em> all recipients from this list that are on the target list"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:6
-msgid ""
-"<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
-"click on the “show all recipients” link.</p><h3>Sender name and e-mail "
-"address</h3><p>The sender name and e-mail address can be set per mailing "
-"list. This defaults to the config key <tt>site.email_from</tt>.  The "
-"<i>From</i> of the sent e-mails will be set to the sender name and address.</"
-"p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is "
-"used for the automatic upload of complete recipients list. The filename must "
-"match the filename of the uploaded recipient list. The complete list of "
-"recipients will be replaced with the recipients in the dropbox file.</"
-"p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
-"allowed to send a page to the mailing list. Everybody who can view the "
-"mailing list is allowed to add an e-mail address to the mailing list.</p>"
+msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:16
@@ -4993,86 +4532,67 @@ msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:47
-#, fuzzy
 msgid "Act"
-msgstr "okt"
+msgstr "Act"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
-#, fuzzy
 msgid "Add a new recipient."
-msgstr "Voeg een mediabestand toe."
+msgstr "Voeg een ontvanger toe."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
 msgid "Add recipient"
-msgstr ""
+msgstr "Voeg ontvanger toe"
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
-#, fuzzy
 msgid "Added the recipient."
-msgstr "Connectie gemaakt naar"
+msgstr "Ontvanger toegevoegd."
 
 #: modules/mod_mailinglist/templates/mailinglist.tpl:14
-#, fuzzy
 msgid "All mailing lists"
-msgstr "Mailinglijsten"
+msgstr "Alle mailinglijsten"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
-#, fuzzy
 msgid "All processed"
-msgstr "Alle pagina’s"
+msgstr "Alles verwerkt"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:19
-msgid ""
-"All recipients of the mailing list. You can upload or download this list, "
-"which must be a file with one e-mail address per line."
+msgid "All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:9
-msgid ""
-"Any page can be sent as a mailing. You can send a mailing from any edit "
-"page. On this page you can add or remove mailing lists and their recipients."
+msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:1
-#, fuzzy
 msgid "Are you sure you want to cancel the mailing to"
-msgstr "Weet je zeker dat je de pagina wilt verwijderen"
+msgstr "Weet je zeker dat je de mailing wilt stoppen, hij gaat naar"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:2
-#, fuzzy
 msgid "Are you sure you want to delete the mailing list"
-msgstr "Weet je zeker dat je de pagina wilt verwijderen"
+msgstr "Weet je zeker dat je de mailinglijst wilt verwijderen"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
-msgid ""
-"Are you sure you want to reset the statistics for this mailing? This means "
-"that if you send the mailing again afterwards, recipients might have gotten "
-"the mailing twice."
+msgid "Are you sure you want to reset the statistics for this mailing? This means that if you send the mailing again afterwards, recipients might have gotten the mailing twice."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:9
-msgid ""
-"Before you will receive any further mail you need to confirm your "
-"subscription."
+msgid "Before you will receive any further mail you need to confirm your subscription."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:5
-#, fuzzy
 msgid "Cancel mailing"
-msgstr "Annuleren"
+msgstr "Annuleer mailing"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:55
-#, fuzzy
 msgid "Check to activate the e-mail address."
-msgstr "Naam en e-mailadres verwijderen"
+msgstr "Vink aan om het email adres te activeren"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:30
 msgid "Clear"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:10
-msgid ""
-"Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
+msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/mailing_page.tpl:29
@@ -5080,8 +4600,7 @@ msgid "Click here when you can’t read the message below."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:14
-msgid ""
-" Click the button below to confirm your subscription to this mailing list."
+msgid " Click the button below to confirm your subscription to this mailing list."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:53./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
@@ -5089,53 +4608,47 @@ msgid "Click to view log entries"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:31
-#, fuzzy
 msgid "Combine mailing list"
-msgstr "Mailinglijsten"
+msgstr "Combineer mailinglijsten"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:31
 msgid "Combine…"
-msgstr ""
+msgstr "Voeg samen…"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
 msgid "Confirm sending to mailinglist"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:3
-#, fuzzy
 msgid "Confirm subscription"
-msgstr "Bevestig verwijderen van gebruiker"
+msgstr "Bevestig inschrijving"
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
-#, fuzzy
 msgid "Could not add the recipient."
-msgstr "Aanmaken van media-pagina niet gelukt."
+msgstr "Kon de ontvanger niet toevoegen"
 
 #: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:4
 #: modules/mod_signup/templates/email_verify.tpl:6
 msgid "Dear"
-msgstr ""
+msgstr "Beste"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:19
 msgid "Delete all current recipients before adding the file."
-msgstr ""
+msgstr "Verwijder alle huidige ontvangers voordat het bestand wordt toegevoegd"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:30
-#, fuzzy
 msgid "Delete all recipients from this list?"
-msgstr "Bekijk alle pagina's binnen deze categorie"
+msgstr "Alle ontvangers van deze lijst verwijderen?"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
-#, fuzzy
 msgid "Download all"
-msgstr "Bestand downloaden"
+msgstr "Alles downloaden"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
 msgid "Download list of all active recipients."
-msgstr ""
+msgstr "Download een lijst van alle actieve ontvangers"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
-#, fuzzy
 msgid "Downloading active recipients list. Check your download window."
 msgstr "De download start op de achtergrond, controleer je downloadvenster."
 
@@ -5144,28 +4657,23 @@ msgid "Dropbox filename (optional)"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_mail_page_button.tpl:3
-#, fuzzy
 msgid "E-mail page"
-msgstr "E-mailadres"
+msgstr "Email pagina"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42./modules/mod_mailinglist/templates/phone/_share_page_email.tpl:1
-#, fuzzy
 msgid "E-mail this page"
-msgstr "bewerk deze pagina"
+msgstr "Email deze pagina"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
-#, fuzzy
 msgid "Edit recipient"
-msgstr "Pagina bewerken"
+msgstr "Bewerk ontvanger"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
 msgid "Edit the mailing list &raquo;"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
-msgid ""
-"Enter the e-mail address of the recipient. The name of the recipient is "
-"optional."
+msgid "Enter the e-mail address of the recipient. The name of the recipient is optional."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:35
@@ -5174,41 +4682,36 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:29
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:16
-#, fuzzy
 msgid "First name"
-msgstr "Eerste"
+msgstr "Voornaam"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "From now on you will receive mail from our mailing list."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:6
-#, fuzzy
 msgid "Give your e-mail address to subscribe to"
-msgstr "Vul je e-mailadres of gebruikersnaam in"
+msgstr "Geef je email adres om in te schrijven voor"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:16
 msgid "Go to mailinglist page"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:6
-#, fuzzy
 msgid "Hello,"
-msgstr "Hallo"
+msgstr "Hallo,"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:6
-#, fuzzy
 msgid "Help about mailing lists"
-msgstr "Hulp over talen"
+msgstr "Hulp over mailingslijsten"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
-#, fuzzy
 msgid "Help about the mailing page"
-msgstr "Selecteer de winnaar"
+msgstr "Hulp over mailing pagina"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
 msgid "Hope to see you again."
-msgstr ""
+msgstr "Hopelijk tot ziens"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
 msgid ""
@@ -5220,61 +4723,54 @@ msgid ""
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:4
-#, fuzzy
 msgid "Keep mailing"
-msgstr "Hou me ingelogd"
+msgstr "Bewaar mailing"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:26
 msgid "Mail"
-msgstr ""
+msgstr "Email"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
-#, fuzzy
 msgid "Mailing Lists"
 msgstr "Mailinglijsten"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:4./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:4
-#, fuzzy
 msgid "Mailing list"
-msgstr "Mailinglijsten"
+msgstr "Mailinglijst"
 
 #: modules/mod_mailinglist/mod_mailinglist.erl:385./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10./modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
 msgid "Mailing lists"
 msgstr "Mailinglijsten"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:3
-#, fuzzy
 msgid "Mailing status"
-msgstr "Mailinglijsten"
+msgstr "Mailing status"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:14
-#, fuzzy
 msgid "New mailing list"
-msgstr "Mailinglijsten"
+msgstr "Nieuwe mailinglijst"
 
 #: modules/mod_mailinglist/mod_mailinglist.erl:159
 msgid "No addresses selected"
 msgstr "Geen adres geselecteerd"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:79./modules/mod_mailinglist/templates/admin_mailinglist.tpl:54
-#, fuzzy
 msgid "No items found"
-msgstr "Niet gevonden"
+msgstr "Niets gevonden"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:70
 msgid "No recipients"
-msgstr ""
+msgstr "Geen ontvangers"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:35
 msgid "Number of recipients on this list:"
-msgstr ""
+msgstr "Aantal ontvangers op deze lijst:"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:3
 msgid ""
 "On this page you see the addresses that have bounced. They have\n"
 "    been disabled by default. Please correct each address and check the\n"
-"    checkbox in front of the address to re-enable it. If an address is "
-"invalid, you can delete it."
+"    checkbox in front of the address to re-enable it. If an address is invalid, you can delete it."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:26
@@ -5282,86 +4778,77 @@ msgid "Only keep recipients on this list that appear <em>on both lists</em>"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:9
-#, fuzzy
 msgid "Operation"
-msgstr "Opties"
+msgstr "Operatie"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:22
 msgid "Our excuses for the inconvenience."
-msgstr ""
+msgstr "Onze excuses voor het ongemak."
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:47
-#, fuzzy
 msgid "Perform operation"
-msgstr "Informeel"
+msgstr "Voer operatie uit"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
-#, fuzzy
 msgid "Please confirm that you want to send the page"
-msgstr "Weet je zeker dat je de pagina wilt verwijderen"
+msgstr "Bevestig of je de pagina wilt versturen"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:12
-#, fuzzy
 msgid "Please confirm your subscription"
-msgstr "Bevestig je"
+msgstr "Bevestig je inschrijving"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:3
-#, fuzzy
 msgid "Please confirm your subscription on"
-msgstr "Bevestig je"
+msgstr "Bevestig je inschrijving voor"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:5
 msgid "Please enter the e-mail address you want to send a test mail to."
-msgstr ""
+msgstr "Vul het email adres voor de test email in."
 
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:5
 msgid "Please enter the e-mail address you want to send this page to."
-msgstr ""
+msgstr "Vul het email adres om deze pagina heen te sturen in."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
-msgstr ""
+msgstr "Volg"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
 msgid "Please note:"
-msgstr ""
+msgstr "Let op:"
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
 msgid "Please unsubscribe"
-msgstr ""
+msgstr "Schrijf uit"
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:36
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:31
 msgid "Prefix"
-msgstr ""
+msgstr "Voorvoegsel"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:21./modules/mod_mailinglist/templates/admin_mailing_status.tpl:15
-#, fuzzy
 msgid "Preview mailing"
-msgstr "Voorbeeld"
+msgstr "Voorbeeld mailing"
 
 #: modules/mod_mailinglist/templates/mailing_page.collection.tpl:52
-#, fuzzy
 msgid "Read this page on the web."
-msgstr "Vertaal deze pagina in andere talen."
+msgstr "Lees deze pagina op het web."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18./modules/mod_mailinglist/templates/admin_mailinglist.tpl:23./modules/mod_mailinglist/templates/admin_mailinglist.tpl:38./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
 msgid "Recipients"
-msgstr ""
+msgstr "Ontvangers"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:10
-msgid ""
-"Recipients are subscribed either as email-only (via a simple signup form), "
-"or as subscribed persons in the system."
+msgid "Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:7
 msgid "Recipients for"
-msgstr ""
+msgstr "Ontvangers voor"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:58
 msgid "Remove this recipient. No undo possible."
-msgstr ""
+msgstr "Verwijder ontvanger. Herstel is niet mogelijk."
 
 #: modules/mod_mailinglist/mod_mailinglist.erl:161
 msgid "Resending bounced addresses..."
@@ -5369,50 +4856,42 @@ msgstr "Deze adressen opnieuw aan het versturen..."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:24
 msgid "Scheduled"
-msgstr ""
+msgstr "Ingeroosterd"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22
 msgid "See the"
-msgstr ""
+msgstr "Zie de"
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:36
-#, fuzzy
 msgid "Select..."
-msgstr "Selecteer links"
+msgstr "Selecteer…"
 
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:17./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:18
-#, fuzzy
 msgid "Send e-mail"
-msgstr "Stuur welkomstemail"
+msgstr "Verstuur email"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:29
-#, fuzzy
 msgid "Send mailing"
-msgstr "Versturen"
+msgstr "Verstuur mailing"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
-#, fuzzy
 msgid "Send test mailing"
-msgstr "Stuur welkomstemail"
+msgstr "Stuur test mailing"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:28./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
-#, fuzzy
 msgid "Send test to address"
-msgstr "Verstuurd naar dit adres"
+msgstr "Verstuurd naar test adres"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
 msgid "Send the mailing automatically after the publication start date of"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:20
-msgid ""
-"Send the mailing immediately after the \"published\" checkbox has been "
-"checked in the edit page."
+msgid "Send the mailing immediately after the \"published\" checkbox has been checked in the edit page."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:17
-msgid ""
-"Send the mailing right now, but do not include a link back to the website."
+msgid "Send the mailing right now, but do not include a link back to the website."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:14
@@ -5420,16 +4899,14 @@ msgid "Send this page to a mailinglist and view mailinglist statistics."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:24./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
-#, fuzzy
 msgid "Send this page to a single address"
-msgstr "Naam en e-mailadres verwijderen"
+msgstr "Verstuur deze pagina naar een email adres"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
 msgid "Send this page to the test mailing list."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:57
-#, fuzzy
 msgid "Send welcome"
 msgstr "Stuur welkomstemail"
 
@@ -5442,32 +4919,27 @@ msgid "Sender name for e-mails (optional)"
 msgstr ""
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:51
-#, fuzzy
 msgid "Sending the e-mail..."
-msgstr "Bezig met de pagina te versturen naar"
+msgstr "Email wordt verstuurd..."
 
 #: modules/mod_mailinglist/mod_mailinglist.erl:150
 msgid "Sending the page to"
 msgstr "Bezig met de pagina te versturen naar"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:47
-#, fuzzy
 msgid "Sending the page to the test mailing list..."
-msgstr "Deze pagina verstuurd naar"
+msgstr "De pagina wordt verstuurd naar de mailinglijst..."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:19
-#, fuzzy
 msgid "Sent on"
-msgstr "Verstuurd"
+msgstr "Verstuurd op"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:13
 msgid "Show all recipients &raquo;"
-msgstr ""
+msgstr "Alle ontvangers &raquo;"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:29
-msgid ""
-"Sorry, I could not subscribe you to the mailing list. Please try again later "
-"or with another e-mail address."
+msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:25
@@ -5480,51 +4952,42 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:14./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:73./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:18
 msgid "Subscribe"
-msgstr ""
+msgstr "Abonneer"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:3./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
-msgstr ""
+msgstr "Abonneer op"
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:33
-#, fuzzy
 msgid "Target mailing list"
-msgstr "Mailinglijsten"
+msgstr "Doel mailinglijst"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:27
-msgid ""
-"The confirmation key is unknown. Either you already confirmed or something "
-"else went wrong."
-msgstr ""
+msgid "The confirmation key is unknown. Either you already confirmed or something else went wrong."
+msgstr "De bevestigingscode is onbekend. Je bent al bevestigd of er ging iets mis."
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:57
 msgid "The e-mails are being sent..."
-msgstr ""
+msgstr "De emails worden verstuurd..."
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
-msgid ""
-"The key in your link does not match any subscription. Either you already "
-"unsubscribed, or the mailing list has been deleted."
+msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr ""
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:61
 msgid "The mailing will be send when the page becomes visible."
-msgstr ""
+msgstr "De mailing wordt verstuurd wanneer de pagina zichtbaar wordt."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15
-msgid ""
-"The page you are trying to e-mail is not yet published. What do you want to "
-"do?"
-msgstr ""
+msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
+msgstr "De pagina die je wilt versturen is niet gepubliceerd. Wat wil je doen?"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:50
-msgid ""
-"There are no addresses eligible for re-sending. You seem to have already "
-"processed all bouncing addresses."
+msgid "There are no addresses eligible for re-sending. You seem to have already processed all bouncing addresses."
 msgstr ""
 
 #: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:53
@@ -5532,32 +4995,19 @@ msgid "There is no mailing list with the name ‘mailinglist_test’."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
-#, fuzzy
 msgid "This can not be undone"
-msgstr "Dit kan niet ongedaan worden gemaakt."
+msgstr "Dit kan niet ongedaan worden gemaakt"
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:2
-msgid ""
-"This dialog lets you combine the recipients of this list with the recipients "
-"of another list. The result of this combination will be stored inside the "
-"current list, with the name"
+msgid "This dialog lets you combine the recipients of this list with the recipients of another list. The result of this combination will be stored inside the current list, with the name"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
-msgid ""
-"This is a \"private\", externally managed list. Recipients will not receive "
-"any subscribe/unsubscribe messages."
+msgid "This is a \"private\", externally managed list. Recipients will not receive any subscribe/unsubscribe messages."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
-msgid ""
-"This overview allows you to send the current page to a group of recipients, "
-"grouped into mailing lists. Choose 'preview mailing' to open a popup window "
-"which shows how the mailing will look like when it is sent; choose 'send "
-"test mailing' to send it to the predefined list of test e-mail addresses. "
-"Choose 'edit' to go back to editing the page.  Each mailinglist is listed in "
-"the table below, together with statistics on when it was sent and to how "
-"many recipients."
+msgid "This overview allows you to send the current page to a group of recipients, grouped into mailing lists. Choose 'preview mailing' to open a popup window which shows how the mailing will look like when it is sent; choose 'send test mailing' to send it to the predefined list of test e-mail addresses. Choose 'edit' to go back to editing the page.  Each mailinglist is listed in the table below, together with statistics on when it was sent and to how many recipients."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
@@ -5565,19 +5015,16 @@ msgid "This page can be sent to different mailing lists."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:6
-msgid ""
-"Tick the checkbox if you want the recipient to receive a welcome e-mail "
-"message."
+msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Uitschrijven"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
-#, fuzzy
 msgid "Unsubscribe from"
-msgstr "Zichtbaar vanaf"
+msgstr "Schrijf uit van"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
@@ -5588,9 +5035,7 @@ msgid "Updated the recipient."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:4
-msgid ""
-"Upload a file with recipients. The file must contain a single e-mail address "
-"per line. The file’s character set must be utf-8."
+msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
@@ -5602,18 +5047,15 @@ msgid "View and edit the bounced addresses and re-send the mailing."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:19
-#, fuzzy
 msgid "View this page as mailing."
-msgstr "Bekijk deze pagina."
+msgstr "Bekijk deze pagina als mailing"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:3
-#, fuzzy
 msgid "Welcome to"
-msgstr "Welkom"
+msgstr "Welkom op"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
-msgid ""
-"When you don’t want to receive any mail then please ignore this message."
+msgid "When you don’t want to receive any mail then please ignore this message."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
@@ -5621,24 +5063,19 @@ msgid "When you don’t want to receive any more mail then"
 msgstr ""
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
-#, fuzzy
 msgid "You are not allowed to add or enable recipients."
-msgstr "Je mag geen identiteiten toevoegen of verwijderen."
+msgstr "Je mag geen ontvanger toevoegen of verwijderen."
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:106
-#, fuzzy
 msgid "You are not allowed to edit recipients."
-msgstr "Je mag geen identiteiten toevoegen of verwijderen."
+msgstr "Je mag geen ontvangers toevoegen of verwijderen."
 
 #: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:50
-#, fuzzy
 msgid "You are not allowed to send mail to the test mailing list."
-msgstr "Je hebt geen rechten om deze pagina te bewerken."
+msgstr "Je hebt geen rechten om deze pagina naar de test mailinglijst te sturen"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:9
-msgid ""
-"You are not allowed to view or edit the recipients list. You need to have "
-"edit permission on the mailing list to change and view the recipients."
+msgid "You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
@@ -5654,21 +5091,12 @@ msgid "You are now unsubscribed from the mailing list"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:28
-msgid ""
-"You can try to re-subscribe to one of our mailing lists in the side column."
+msgid "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:2
-#, fuzzy
-msgid ""
-"You received this mail because someone wanted to send you this information. "
-"We did not store your e-mail address and will not send you any other mail "
-"because of this mail."
-msgstr ""
-"Je ontvangt deze e-mail omdat jij of iemand anders heeft verzocht dit e-"
-"mailadres te verifiëren. Jij of iemand anders heeft jouw e-mailadres "
-"ingevoerd. Je krijgt geen andere e-mails als gevolg van dit "
-"verificatieverzoek."
+msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
+msgstr "Je ontvangt deze email omdat je deze informatie wilde sturen. We hebben je email adres niet bewaard en je krijgt geen andere emails als gevolg van deze email."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
@@ -5679,26 +5107,20 @@ msgid "You will receive a confirmation in your e-mail."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:8
-#, fuzzy
 msgid "You, or someone else, added your e-mail address to our mailing list"
-msgstr "Je moet je e-mailadres delen om in te kunnen loggen."
+msgstr "Jij, of iemand anders, heeft je email adres toegevoegd aan onze mailinglijst"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:24
-msgid ""
-"Your e-mail address is added to the mailing list. A confirmation mail is "
-"sent to your e-mail address and will arrive shortly. When you don’t receive "
-"it, then please check your spam folder."
+msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
-#, fuzzy
 msgid "bounced"
-msgstr "Bounce"
+msgstr "teruggestuurd"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:38./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:15
-#, fuzzy
 msgid "cancel"
-msgstr "Annuleren"
+msgstr "annuleer"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
 msgid "clear"
@@ -5706,52 +5128,47 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
 msgid "click here to unsubscribe."
-msgstr ""
+msgstr "klik hier om uit te schrijven"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:6
-#, fuzzy
 msgid "has been sent to the following lists:"
-msgstr "Deze applicatie wil toegang tot de volgende diensten:"
+msgstr "is naar de volgende lijsten verstuurd:"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:8
-#, fuzzy
 msgid "has never been sent yet."
-msgstr "is ontkoppeld."
+msgstr "is nog nooit verstuurd."
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
-#, fuzzy
 msgid "mailing list"
-msgstr "Mailinglijsten"
+msgstr "mailinglijst"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:8
-#, fuzzy
 msgid "mailinglist status page"
-msgstr "Mailinglijsten"
+msgstr "mailinglijst status pagina"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "or copy and paste the address below in your browser."
-msgstr ""
+msgstr "of kopieer en plak het adres in je browser"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
 msgid "processed"
-msgstr ""
+msgstr "verwerkt"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:54./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
 msgid "scheduled"
-msgstr ""
+msgstr "ingepland"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
 msgid "send mailing"
-msgstr ""
+msgstr "verstuur mailing"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:45
-#, fuzzy
 msgid "send mailing again to corrected addresses"
-msgstr "Deze adressen opnieuw aan het versturen..."
+msgstr "verstuur de mailing opnieuw aan de gecorrigeerde adressen"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
 msgid "send to"
-msgstr ""
+msgstr "verstuur aan"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22
 msgid "subscribing persons &raquo;"
@@ -5759,20 +5176,19 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"
-msgstr ""
+msgstr "deze link om te bevestigen"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
 msgid "to the list"
-msgstr ""
+msgstr "aan de lijst"
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
 msgid "when you don't want to receive any further mail from this list."
-msgstr ""
+msgstr "als je voortaan geen berichten van deze lijst wilt ontvangen."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
-#, fuzzy
 msgid "with your e-mail address"
-msgstr "Bevestig je e-mailadres"
+msgstr "mey je emailadres"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:22
 msgid "Add after"
@@ -5811,12 +5227,8 @@ msgid "COPY"
 msgstr "KOPIEER"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:20
-msgid ""
-"Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add "
-"pages."
-msgstr ""
-"Klik <strong>Menu-item toevoegen</strong> of <strong>Menu-item</strong> om "
-"pagina’s toe te voegen."
+msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
+msgstr "Klik <strong>Menu-item toevoegen</strong> of <strong>Menu-item</strong> om pagina’s toe te voegen."
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:25
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:15
@@ -5832,11 +5244,8 @@ msgid "Drag elements here to remove them"
 msgstr "Sleep elementen hier om ze te verwijderen"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:21
-msgid ""
-"Drag menu items in the menu up, down, left or right to structure the menu."
-msgstr ""
-"Sleep menu-items naar boven, beneden, links of rechts om het menu te "
-"structureren."
+msgid "Drag menu items in the menu up, down, left or right to structure the menu."
+msgstr "Sleep menu-items naar boven, beneden, links of rechts om het menu te structureren."
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:45
 msgid "Drag pages to the place where you want them in the hierarchy."
@@ -5873,8 +5282,7 @@ msgstr "Sorry, pagina kan niet gekopieerd worden."
 
 #: modules/mod_menu/templates/_menu_edit_scripts.tpl:154
 msgid "This item is already in the hierarchy. Every item can only occur once."
-msgstr ""
-"Dit item staat al in de hiërarchie. Items kunnen maar 1 keer voor komen."
+msgstr "Dit item staat al in de hiërarchie. Items kunnen maar 1 keer voor komen."
 
 #: modules/mod_menu/templates/admin_menu_hierarchy.tpl:68
 #: modules/mod_search/support/search_query.erl:761
@@ -5907,8 +5315,7 @@ msgstr "Toestaan"
 
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:75
 msgid "Allow users of this application access to the following API calls:"
-msgstr ""
-"Geef gebruikers van deze applicatie toegang tot de volgende API-aanroepen:"
+msgstr "Geef gebruikers van deze applicatie toegang tot de volgende API-aanroepen:"
 
 #: modules/mod_oauth/templates/oauth_authorize.tpl:30
 msgid "Allow!"
@@ -5939,10 +5346,8 @@ msgid "Callback URL"
 msgstr "Callback-URL"
 
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
-msgid ""
-" Change the title, description and access permissions of this application."
-msgstr ""
-"Verander de titel, beschrijving en toegangsrechten van deze applicatie."
+msgid " Change the title, description and access permissions of this application."
+msgstr "Verander de titel, beschrijving en toegangsrechten van deze applicatie."
 
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:6./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:16
 #: modules/mod_twitter/templates/_admin_authentication_service.tpl:15
@@ -6007,13 +5412,8 @@ msgid "The application"
 msgstr "De applicatie"
 
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:8
-msgid ""
-"The following users are still using this application. If you delete this "
-"application, you will revoke access and most likely their applications will "
-"break."
-msgstr ""
-"De volgende gebruikers gebruiken deze applicatie nog. Als je deze applicatie "
-"verwijdert, ontneem je hun de toegang en gaan hun clients stuk."
+msgid "The following users are still using this application. If you delete this application, you will revoke access and most likely their applications will break."
+msgstr "De volgende gebruikers gebruiken deze applicatie nog. Als je deze applicatie verwijdert, ontneem je hun de toegang en gaan hun clients stuk."
 
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:12
 msgid "The following users are using this application:"
@@ -6024,12 +5424,8 @@ msgid "This application wants access to the following services:"
 msgstr "Deze applicatie wil toegang tot de volgende diensten:"
 
 #: modules/mod_oauth/templates/oauth_apps.tpl:9
-msgid ""
-"This page allows you to register API keys with which 3rd parties can gain "
-"access to specific parts of the API and database."
-msgstr ""
-"Op deze pagina kun je API-sleutels beheren waarmee derde partijen toegang "
-"krijgen tot delen van de API en de database."
+msgid "This page allows you to register API keys with which 3rd parties can gain access to specific parts of the API and database."
+msgstr "Op deze pagina kun je API-sleutels beheren waarmee derde partijen toegang krijgen tot delen van de API en de database."
 
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:36
 msgid "This token is not yet used by anybody."
@@ -6068,12 +5464,8 @@ msgid "API Key can be found on"
 msgstr "De API-sleutel kan gevonden worden op"
 
 #: modules/mod_oembed/templates/_admin_status.tpl:5
-msgid ""
-"Attempt to fix embedded videos for which OEmbed embedding has failed "
-"previously."
-msgstr ""
-"Probeer ingebedde video’s te corrigeren waarbij de vorige keer inbedden is "
-"mislukt."
+msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
+msgstr "Probeer ingebedde video’s te corrigeren waarbij de vorige keer inbedden is mislukt."
 
 #: modules/mod_oembed/mod_oembed.erl:347
 msgid "Attempting to fix ~p videos."
@@ -6096,12 +5488,8 @@ msgid "Embed URL"
 msgstr "Embed-URL"
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:7
-msgid ""
-"Embed a video or other media URL. Here you can paste any URL from YouTube, "
-"Vimeo or other services."
-msgstr ""
-"Voeg een URL van een video of andere media in. Hier kun je een URL van "
-"YouTube en andere websites plakken.."
+msgid "Embed a video or other media URL. Here you can paste any URL from YouTube, Vimeo or other services."
+msgstr "Voeg een URL van een video of andere media in. Hier kun je een URL van YouTube en andere websites plakken.."
 
 #: modules/mod_oembed/mod_oembed.erl:196
 msgid "Embedded Content"
@@ -6116,12 +5504,8 @@ msgid "Fix embedded videos"
 msgstr "Repareer geëmbedde videos"
 
 #: modules/mod_oembed/mod_oembed.erl:322
-msgid ""
-"Invalid or unsupported media URL. The item might have been deleted or is not "
-"public."
-msgstr ""
-"Ongeldige of niet ondersteunde media-URL. Het item is mogelijk verwijderd of "
-"is niet publiek."
+msgid "Invalid or unsupported media URL. The item might have been deleted or is not public."
+msgstr "Ongeldige of niet ondersteunde media-URL. Het item is mogelijk verwijderd of is niet publiek."
 
 #: modules/mod_oembed/mod_oembed.erl:283
 msgid "Made the media page."
@@ -6141,9 +5525,7 @@ msgstr "Embedly-instellingen opgeslagen."
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:42
 msgid "The media title will be automatically detected from its URL."
-msgstr ""
-"De titel van het medium wordt automatisch gedetecteerd aan de hand van het "
-"adres."
+msgstr "De titel van het medium wordt automatisch gedetecteerd aan de hand van het adres."
 
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:23
 msgid "Try URL"
@@ -6178,11 +5560,8 @@ msgid "Bing Webmaster validation id"
 msgstr "Bing Webmaster validatie-id"
 
 #: modules/mod_seo/templates/admin_seo.tpl:72
-msgid ""
-"Copy the value of the content attribute in the meta tag provided by Google."
-msgstr ""
-"Kopieer de waarde van het content-attribuut in de meta tag verschaft door "
-"Google."
+msgid "Copy the value of the content attribute in the meta tag provided by Google."
+msgstr "Kopieer de waarde van het content-attribuut in de meta tag verschaft door Google."
 
 #: modules/mod_seo/templates/admin_seo.tpl:36
 msgid "Description to include on every page"
@@ -6209,12 +5588,8 @@ msgid "Google Webmaster Tools"
 msgstr "Google Webmaster Tools"
 
 #: modules/mod_seo/templates/admin_seo.tpl:9
-msgid ""
-"Here you find settings to optimize the indexing of your site by search "
-"engines."
-msgstr ""
-"Hier vind je instellingen om te optimaliseren hoe zoekmachines je website "
-"indexeren."
+msgid "Here you find settings to optimize the indexing of your site by search engines."
+msgstr "Hier vind je instellingen om te optimaliseren hoe zoekmachines je website indexeren."
 
 #: modules/mod_seo/templates/admin_seo.tpl:22
 msgid "Keywords"
@@ -6241,11 +5616,8 @@ msgid "Where can I find my tracking script?"
 msgstr "Waar kan ik mijn tracking script vinden?"
 
 #: modules/mod_seo/templates/admin_seo.tpl:88
-msgid ""
-"You find this id in the content attribute of the meta tag, it has the format"
-msgstr ""
-"Je vindt dit id in het content-attribuut van de meta tag. Het heeft het "
-"formaat"
+msgid "You find this id in the content attribute of the meta tag, it has the format"
+msgstr "Je vindt dit id in het content-attribuut van de meta tag. Het heeft het formaat"
 
 #: modules/mod_seo/templates/admin_seo.tpl:61
 msgid "You find this id in the tracking script, it has the format"
@@ -6280,12 +5652,8 @@ msgid "Sitemap settings"
 msgstr "Sitemap-instellingen"
 
 #: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:4
-msgid ""
-"These settings apply to all pages of this category. They define hints for "
-"search engines indexing the site."
-msgstr ""
-"Deze instellingen gelden voor alle pagina’s in deze categorie. Ze betreffen "
-"hints voor zoekmachines die deze site indexeren."
+msgid "These settings apply to all pages of this category. They define hints for search engines indexing the site."
+msgstr "Deze instellingen gelden voor alle pagina’s in deze categorie. Ze betreffen hints voor zoekmachines die deze site indexeren."
 
 #: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:37
 msgid "Weekly (default)"
@@ -6301,40 +5669,35 @@ msgstr "standaard"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:12
 msgid "Bring me to my profile page"
-msgstr ""
+msgstr "Toon mijn profielpagina"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:10
-#, fuzzy
 msgid "Choose a username and password"
-msgstr "gebruikersnaam / wachtwoord instellen"
+msgstr "Kies een gebruikersnaam / wachtwoord"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:26
-#, fuzzy
 msgid "Confirm key"
-msgstr "Bevestig"
+msgstr "Bevestigingssleutel"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:3./modules/mod_signup/templates/signup_confirm.tpl:15./modules/mod_signup/templates/signup_confirm.tpl:30
-#, fuzzy
 msgid "Confirm my account"
-msgstr "Gebruikersaccount"
+msgstr "Bevestig mijn account"
 
 #: modules/mod_signup/templates/email_verify.tpl:12
 msgid "Confirm my account."
-msgstr ""
+msgstr "Bevestig mijn account"
 
 #: modules/mod_signup/templates/_signup_stage.tpl:1
-#, fuzzy
 msgid "Confirm your account by email"
-msgstr "Bevestig verwijderen van dit blok"
+msgstr "Bevestig je account via email"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:22./modules/mod_signup/templates/_signup_form_fields_email.tpl:44
-#, fuzzy
 msgid "Enter a name"
-msgstr "Vul je gebruikersnaam in"
+msgstr "Vul je naam in"
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:19
 #, fuzzy
@@ -6352,51 +5715,40 @@ msgid "Enter an e-mail address"
 msgstr "moet een e-mail adres zijn"
 
 #: modules/mod_signup/templates/email_verify.tpl:14
-#, fuzzy
 msgid "Hope to see you soon."
-msgstr "Een wachtwoord opnieuw instellen"
+msgstr "Hoop je snel weer te zien."
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
 msgid "I agree to the"
-msgstr ""
+msgstr "Ik ga akkoord met de"
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "If the link does not work then you can go to"
-msgstr ""
+msgstr "Als de link niet werkt, ga dan naar de"
 
 #: modules/mod_signup/templates/_signup_stage.tpl:5
-#, fuzzy
-msgid ""
-"If you do not receive the e-mail within a few minutes, please check your "
-"spam folder."
-msgstr ""
-"Als je deze e-email niet in een paar minuten ontvangt, controleer dan je "
-"spamfolder."
+msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
+msgstr "Als je deze email niet in een paar minuten ontvangt, controleer dan je spamfolder."
 
 #: modules/mod_signup/templates/_signup_outside.tpl:1
 msgid "If you have already an account,"
-msgstr ""
+msgstr "Als je al een account hebt,"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:17
-msgid ""
-"In your e-mail you received a confirmation key. Please copy it in the input "
-"field below."
+msgid "In your e-mail you received a confirmation key. Please copy it in the input field below."
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:38
-#, fuzzy
 msgid "Last name"
 msgstr "Achternaam"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2
-#, fuzzy
 msgid "No account yet?"
-msgstr "Je gebruikersnaam is"
+msgstr "Nog geen account?"
 
 #: modules/mod_signup/templates/email_verify.tpl:3
-#, fuzzy
 msgid "Please confirm your account"
-msgstr "Bevestig je"
+msgstr "Bevestig je account"
 
 #: modules/mod_signup/templates/_signup_stage.tpl:3
 msgid "Please follow the instructions in the email we've sent you."
@@ -6411,14 +5763,12 @@ msgid "Privacy policies"
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_form_fields.tpl:5./modules/mod_signup/templates/signup.tpl:3
-#, fuzzy
 msgid "Sign Up"
-msgstr "Inloggen"
+msgstr "Schrijf in"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2./modules/mod_signup/templates/_signup_title.tpl:1
-#, fuzzy
 msgid "Sign up"
-msgstr "Uitloggen"
+msgstr "Schrijf in"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:11
 #, fuzzy
@@ -6430,43 +5780,32 @@ msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_box.tpl:24
-msgid ""
-"Sorry, there is already an account coupled to your account at your service "
-"provider. Maybe your account here was suspended."
+msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
-#, fuzzy
 msgid "Terms of Service"
-msgstr "Externe diensten"
+msgstr "Gebruiksvoorwaarden"
 
 #: modules/mod_signup/templates/email_verify.tpl:8
-msgid ""
-"Thank you for registering at our site. We request you to confirm your "
-"account before you can use it."
+msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:14
-msgid ""
-" To sign up you must agree with the Terms of Service and Privacy policies."
+msgid " To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:49
-#, fuzzy
 msgid "Verify password"
-msgstr "Nieuw wachtwoord"
+msgstr "Wachtwoord bevestigen"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:13
-msgid ""
-"We will be very careful with all the information given to us and will never "
-"give your name or address away without your permission. We do have some "
-"rules that we need you to agree with."
+msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_extra.tpl:2
-#, fuzzy
 msgid "You can also"
-msgstr "Je kunt:"
+msgstr "Je kunt ook"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
@@ -6489,7 +5828,6 @@ msgid "in the input field."
 msgstr ""
 
 #: modules/mod_signup/templates/_signup_outside.tpl:1
-#, fuzzy
 msgid "sign in"
 msgstr "Inloggen"
 
@@ -6500,44 +5838,39 @@ msgstr "Gebruikersnaam en wachtwoord"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:23
 msgid "Add a question or block"
-msgstr ""
+msgstr "Voeg een vraag of blok toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:13
-#, fuzzy
 msgid "Add page"
-msgstr "Zoek pagina"
+msgstr "Voeg pagina toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:9
-#, fuzzy
 msgid "Add page above"
-msgstr "Taal toevoegen"
+msgstr "Voeg pagina hierboven toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:10
-#, fuzzy
 msgid "Add page below"
-msgstr "Als sub-item invoegen"
+msgstr "Voeg pagina hieronder toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:51
 msgid "Add page jump"
-msgstr ""
+msgstr "Voeg pagina sprong toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:7./modules/mod_survey/templates/_admin_survey_question_page.tpl:27
-#, fuzzy
 msgid "Add question"
-msgstr "Naar vraag"
+msgstr "Voeg vraag toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_q.tpl:22
-#, fuzzy
 msgid "Add question after"
-msgstr "Hierna invoegen"
+msgstr "Voeg een vraag toe na"
 
 #: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:8
 msgid "Add questions by adding blocks with the menu."
-msgstr ""
+msgstr "Voeg vragen toe met behulp van het blok menu."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:67
 msgid "Agree"
-msgstr ""
+msgstr "Akkoord"
 
 #: modules/mod_survey/templates/survey_results_printable.tpl:37
 msgid "All survey entries up until"
@@ -6552,9 +5885,8 @@ msgid "Answer"
 msgstr "Antwoord"
 
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:19
-#, fuzzy
 msgid "Answering"
-msgstr "Antwoord"
+msgstr "Invullen"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:28
 msgid "Answers, one per line"
@@ -6573,21 +5905,16 @@ msgstr ""
 "Vliegende Hollander = Wagner."
 
 #: modules/mod_survey/templates/page_admin_frontend_edit.tpl:21
-#, fuzzy
 msgid "Are you sure you want to delete this page jump?"
-msgstr "Weet je zeker dat je de pagina wilt verwijderen"
+msgstr "Weet je zeker dat je deze pagina sprong wilt verwijderen?"
 
 #: modules/mod_survey/templates/page_admin_frontend_edit.tpl:19
-#, fuzzy
-msgid ""
-"Are you sure you want to delete this page?<br/>This also deletes all "
-"questions on this page."
-msgstr "Weet je zeker dat je de volgende paginagroepen wilt verwijderen?"
+msgid "Are you sure you want to delete this page?<br/>This also deletes all questions on this page."
+msgstr "Weet je zeker dat je deze pagina wilt verwijderen?<br/>Alle vragen op de pagina worden ook verwijderd."
 
 #: modules/mod_survey/templates/page_admin_frontend_edit.tpl:20
-#, fuzzy
 msgid "Are you sure you want to delete this question?"
-msgstr "Weet je zeker dat je dit wilt verwijderen?"
+msgstr "Weet je zeker dat je deze vraag wilt verwijderen?"
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:43
 msgid "Are you sure you want to stop?"
@@ -6623,7 +5950,7 @@ msgstr "Controlleer het antwoord in de admin."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:74
 msgid "Chinese food is best for money"
-msgstr ""
+msgstr "Chinees eten is het beste waar voor het geld"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:33
 msgid "Choices"
@@ -6651,38 +5978,32 @@ msgid "Default"
 msgstr "Standaard"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:12
-#, fuzzy
 msgid "Delete page"
-msgstr "Verwijder deze pagina."
+msgstr "Verwijder pagina"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:7
-#, fuzzy
 msgid "Delete page jump"
-msgstr "Verwijder deze pagina."
+msgstr "Verwijder pagina sprong"
 
 #: modules/mod_survey/templates/_admin_survey_question_q.tpl:23
-#, fuzzy
 msgid "Delete question"
-msgstr "Naar vraag"
+msgstr "Verwijder vraag"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:61
-#, fuzzy
 msgid "Disagree"
-msgstr "Helemaal mee oneens"
+msgstr "Oneens"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:17
 msgid "Do you like pea soup?"
 msgstr "Houd je van erwtensoep?"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:96./modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:100./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:40./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:44./modules/mod_survey/templates/_survey_results.tpl:10
-#, fuzzy
-msgid ""
-" Download will start in the background. Please check your download window."
+msgid " Download will start in the background. Please check your download window."
 msgstr "De download start op de achtergrond, controleer je downloadvenster."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:40
 msgid "Drop-down menu"
-msgstr ""
+msgstr "Menu"
 
 #: modules/mod_survey/mod_survey.erl:96./modules/mod_survey/mod_survey.erl:101
 msgid "E-mail addresses"
@@ -6693,9 +6014,8 @@ msgid "Edit survey result"
 msgstr "Toon/bewerk resultaten"
 
 #: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:20
-#, fuzzy
 msgid "End of questions"
-msgstr "Naar vraag"
+msgstr "Einde van de vragenlijst"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:24./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:23
 msgid "Example:"
@@ -6715,17 +6035,15 @@ msgstr "Bestandsupload"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:17
 msgid "Fill in the missing parts."
-msgstr ""
+msgstr "Vul de ontbrekende gedeeltes in"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:127
-#, fuzzy
 msgid "First page in category"
-msgstr "Filter op categorie"
+msgstr "Eerste pagina van de categorie"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:6
-#, fuzzy
 msgid "Go to question"
-msgstr "Naar vraag"
+msgstr "Ga naar vraag"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:79./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:91
 msgid "Handle this survey with"
@@ -6733,7 +6051,7 @@ msgstr "Laat survey afhandelen door"
 
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:71
 msgid "Handling"
-msgstr ""
+msgstr "Afhandeling"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Help about surveys"
@@ -6745,32 +6063,29 @@ msgstr "Verberg voortgangsindicator"
 
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:40
 msgid "Hide the user’s id or browser-id from result exports"
-msgstr ""
+msgstr "Verberg de gebruiker’s id of browser-id in de exports"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:75
 msgid "I always eat with others"
-msgstr ""
+msgstr "Ik eet altijd met anderen"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:90
 msgid "I am"
-msgstr ""
+msgstr "Ik ben"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:23
-msgid ""
-"I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] "
-"ice cream and my favorite color is [color      ]."
+msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]."
 msgstr ""
 "Ik ben [leeftijd] jaar oud. Ik houd van\n"
-"[ijs=vanille|aardbei|chocolade|anders] ijs en mijn favoriete kleur is "
-"[kleur      ]."
+"[ijs=vanille|aardbei|chocolade|anders] ijs en mijn favoriete kleur is [kleur      ]."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:73
 msgid "I like Chinese restaurants"
-msgstr ""
+msgstr "Ik hou van Chinese restaurants"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
-msgstr ""
+msgstr "Begin direct met de vragen, geen “Start” knop."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
 msgid "Informational"
@@ -6778,11 +6093,11 @@ msgstr "Informeel"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:27
 msgid "Input value placeholder text"
-msgstr ""
+msgstr "Invoer waarde hulp tekst"
 
 #: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:3./modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:8
 msgid "Introduction for confirmation email"
-msgstr ""
+msgstr "Introductie voor de bevestigingsmail"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
 msgid "Inverse"
@@ -6794,29 +6109,23 @@ msgstr "Doen van sprong"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:52
 msgid "Jump to a question on a next page."
-msgstr ""
+msgstr "Spring naar een vraag op een volgende pagina."
 
 #: modules/mod_survey/mod_survey.erl:115
 msgid "Likert"
 msgstr "Likert"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
-msgid ""
-"List of possible answers, one per line. Use <em>value#answer</em> for "
-"selecting values."
-msgstr ""
-"Kies mogelijke antwoorden, één per regel. Gebruik <em>waarde#antwoord</em> "
-"om waardes te selecteren."
+msgid "List of possible answers, one per line. Use <em>value#answer</em> for selecting values."
+msgstr "Kies mogelijke antwoorden, één per regel. Gebruik <em>waarde#antwoord</em> om waardes te selecteren."
 
 #: modules/mod_survey/mod_survey.erl:121
 msgid "Long answer"
 msgstr "Lang antwoord"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:117
-msgid ""
-"Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do "
-"eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
-msgstr ""
+msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
+msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:71./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:74
 msgid "Mail filled in surveys to"
@@ -6855,9 +6164,8 @@ msgid "Next"
 msgstr "Volgende"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:129
-#, fuzzy
 msgid "Next page in category"
-msgstr "Volgende in categorie:"
+msgstr "Volgende pagina van de categorie"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:43./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:13./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:20
 msgid "No"
@@ -6865,16 +6173,15 @@ msgstr "Nee"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:45
 msgid "Numeric input, show totals for this field in the survey results."
-msgstr ""
+msgstr "Nummerinvoer, toon totalen voor dit veld in de resultaten."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:34
 msgid "Only accept images."
 msgstr "Sta alleen afbeeldingen toe."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:125
-#, fuzzy
 msgid "Options from a page category"
-msgstr "is geen categorie"
+msgstr "Opties van een pagina categorie"
 
 #: modules/mod_survey/mod_survey.erl:124
 msgid "Page break"
@@ -6885,28 +6192,24 @@ msgid "Page jump condition"
 msgstr "Paginasprong voorwaarde"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:28
-#, fuzzy
 msgid "Please enter your information."
-msgstr "Voer je naam in."
+msgstr "Voer je informatie in."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:17
 msgid "Please enter your name."
 msgstr "Voer je naam in."
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:30
-#, fuzzy
 msgid "Please fill in all the required fields."
-msgstr "Vul de titel in van de nieuwe pagina."
+msgstr "Gelieve alle verplichte velden in te vullen."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:17
-#, fuzzy
 msgid "Please make a choice."
-msgstr "Wezels zijn leuke huisdieren."
+msgstr "Maak een keuze."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:133
-#, fuzzy
 msgid "Please upload your file."
-msgstr "Upload een afbeelding."
+msgstr "Upload een bestand."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:21
 msgid "Please upload your image."
@@ -6926,7 +6229,7 @@ msgstr "Afdrukbare lijst"
 
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:47
 msgid "Progress"
-msgstr ""
+msgstr "Voortgang"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:17./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:17
 msgid "Prompt"
@@ -6937,13 +6240,12 @@ msgid "Question"
 msgstr "Vraag"
 
 #: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:7./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:8
-#, fuzzy
 msgid "Questions"
-msgstr "Vraag"
+msgstr "Vragen"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:82
 msgid "Red"
-msgstr ""
+msgstr "Rood"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:30./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:53./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:33./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:42./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:53./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:52./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:38./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:55
 msgid "Required, this question must be answered."
@@ -6954,9 +6256,8 @@ msgid "Results"
 msgstr "Resultaten"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:128
-#, fuzzy
 msgid "Second page in category"
-msgstr "Volgende in categorie:"
+msgstr "Tweede pagina van de category"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
 msgid "Select country"
@@ -6964,16 +6265,15 @@ msgstr "Selecteer land"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:71
 msgid "Select which you agree with."
-msgstr ""
+msgstr "Kies waar je het mee eens bent."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:98./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:14
 msgid "Select your country"
 msgstr "Selecteer uw land"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:84
-msgid ""
-"Send confirmation to respondent (please add a question named <i>email</i>)"
-msgstr ""
+msgid "Send confirmation to respondent (please add a question named <i>email</i>)"
+msgstr "Stuur een bevestiging naar de invuller (voeg een vraag met naam <i>email</i> toe)"
 
 #: modules/mod_survey/mod_survey.erl:120
 msgid "Short answer"
@@ -6992,9 +6292,7 @@ msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Toon voortgang als <em>Vraag 3/10</em>"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:37./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:29
-msgid ""
-"Show results to user after completion (only results for multiple choice "
-"questions are shown)"
+msgid "Show results to user after completion (only results for multiple choice questions are shown)"
 msgstr "Toon de resultaten van de vragenlijst aan de gebruiker aan het eind."
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:103./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:47
@@ -7019,7 +6317,7 @@ msgstr "Stoppen"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:36
 msgid "Stop the survey after this page. No questions are submitted."
-msgstr ""
+msgstr "Stop met de vragenlijst na deze vraag. De antwoorden worden niet bewaard."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:20
 msgid "Strongly Agree"
@@ -7050,7 +6348,6 @@ msgid "Survey Questions"
 msgstr "Vragen"
 
 #: modules/mod_survey/templates/admin_survey_editor.tpl:12./modules/mod_survey/templates/admin_survey_editor.tpl:17
-#, fuzzy
 msgid "Survey Results Editor"
 msgstr "Resultaten bewerken"
 
@@ -7071,9 +6368,8 @@ msgid "Thank you for filling in our survey."
 msgstr "Bedankt voor het invullen van de vragenlijst."
 
 #: modules/mod_survey/templates/email_survey_result.tpl:21
-#, fuzzy
 msgid "Thank you for filling in:"
-msgstr "Bedankt voor het invullen van de vragenlijst."
+msgstr "Bedankt voor het invullen:"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:17
 msgid "The earth is flat."
@@ -7084,18 +6380,11 @@ msgid "The following survey has been filled in:"
 msgstr "De volgende survey is ingevuld:"
 
 #: modules/mod_survey/templates/_survey_error.tpl:3
-msgid ""
-"There was an error while handling your answers. We are terribly sorry about "
-"this."
-msgstr ""
-"Er is een fout opgetreden tijdens het afhandelen van de antwoorden. Dit "
-"spijt ons ten zeerste."
+msgid "There was an error while handling your answers. We are terribly sorry about this."
+msgstr "Er is een fout opgetreden tijdens het afhandelen van de antwoorden. Dit spijt ons ten zeerste."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:15
-msgid ""
-"This block show a file upload field. This can only be used as the last "
-"question of a survey. The default survey routines can’t handle file upload, "
-"you will need to add your own survey handler to your site or module."
+msgid "This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module."
 msgstr ""
 "Dit blok toont een veld met een bestandsupload. Dit veld kan alleen\n"
 "worden gebruikt als de laatste vraag van een survey. De standaard\n"
@@ -7103,19 +6392,16 @@ msgstr ""
 "survey-afhandelroutine worden gebruikt."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_stop.tpl:10
-msgid ""
-"This block signals a stop in the flow. The user can't continue further and "
-"it is counted as a page break."
-msgstr ""
-"Dit blok geeft aan dat de survey ten einde is. De gebruiker kan niet verder."
+msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
+msgstr "Dit blok geeft aan dat de survey ten einde is. De gebruiker kan niet verder."
 
 #: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:13
 msgid "This text is shown after the survey has been submitted."
-msgstr ""
+msgstr "Deze tekst wordt getoond aan het einde van de vragenlijst."
 
 #: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:17
 msgid "This text is shown as an introduction to the survey."
-msgstr ""
+msgstr "Deze tekst wordt getoond als introductie."
 
 #: modules/mod_survey/mod_survey.erl:116
 msgid "Thurstone"
@@ -7127,12 +6413,11 @@ msgstr "Naar vraag"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:14
 msgid "Toggle outline view"
-msgstr ""
+msgstr "Wissel weergave"
 
 #: modules/mod_survey/templates/_survey_result_chart.tpl:28./modules/mod_survey/templates/survey_results_printable.tpl:61
-#, fuzzy
 msgid "Totals"
-msgstr "Totaal/status"
+msgstr "Totalen"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:50./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:24./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:10./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:17
 msgid "True"
@@ -7148,19 +6433,15 @@ msgstr "Validatie"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:81
 msgid "Wagner"
-msgstr ""
+msgstr "Wagner"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:59./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:17
 msgid "Weasels make great pets."
 msgstr "Wezels zijn leuke huisdieren."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
-msgid ""
-"When no condition is true then the question following this break will be the "
-"next page."
-msgstr ""
-"Wanneer aan geen conditie is voldaan, is de vraag na deze onderbreking de "
-"volgende pagina."
+msgid "When no condition is true then the question following this break will be the next page."
+msgstr "Wanneer aan geen conditie is voldaan, is de vraag na deze onderbreking de volgende pagina."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:42./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:25./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:10./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:17
 msgid "Yes"
@@ -7179,10 +6460,8 @@ msgid "You are not allowed to see the results of this survey."
 msgstr "Het is U niet toegestaan de resultaten van de vragenlijst te zien."
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
-msgid ""
-"You can create your survey by adding blocks with questions below the body."
-msgstr ""
-"Je kan je vragenlijst samenstellen door blokken toe te voegen via het menu."
+msgid "You can create your survey by adding blocks with questions below the body."
+msgstr "Je kan je vragenlijst samenstellen door blokken toe te voegen via het menu."
 
 #: modules/mod_survey/templates/_survey_block_name_check.tpl:2
 msgid "You need to give a name to every question."
@@ -7190,19 +6469,19 @@ msgstr "Elke vraag moet een naam hebben."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:93
 msgid "chocolate"
-msgstr ""
+msgstr "chocolade"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:3
 msgid "goto"
-msgstr ""
+msgstr "ga naar"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:94
 msgid "ice cream and my favorite color is"
-msgstr ""
+msgstr "ijs en mij favoriete kleur is"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:2
 msgid "if"
-msgstr ""
+msgstr "als"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:45
 msgid "must be a date"
@@ -7225,19 +6504,16 @@ msgid "name >= 2"
 msgstr "naam >= 2"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:33
-#, fuzzy
 msgid "one per line"
 msgstr "Antwoorden, één per regel"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:3./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:49
-#, fuzzy
 msgid "question"
-msgstr "Naar vraag"
+msgstr "vraag"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:2
-#, fuzzy
 msgid "question == 1"
-msgstr "Naar vraag"
+msgstr "vraag == 1"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_multiple_choice.tpl:10./modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:16
 msgid "select…"
@@ -7245,7 +6521,7 @@ msgstr "kies…"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:92
 msgid "years old. I like"
-msgstr ""
+msgstr "jaar oud. Ik hou van"
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:17
 msgid "Active modules"
@@ -7272,13 +6548,8 @@ msgid "Available sub-languages"
 msgstr "Beschikbare subtalen"
 
 #: modules/mod_translation/mod_translation.erl:328
-msgid ""
-"Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
-"en/latest/developer-guide/translation.html\">gettext is not installed</a>."
-msgstr ""
-"Kan de vertaalbestanden niet genereren omdat <a href=\"http://docs.zotonic."
-"com/en/latest/developer-guide/translation.html\">gettext niet is "
-"geïnstalleerd</a>."
+msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
+msgstr "Kan de vertaalbestanden niet genereren omdat <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext niet is geïnstalleerd</a>."
 
 #: modules/mod_translation/templates/admin_translation.tpl:26
 msgid "Code"
@@ -7345,14 +6616,8 @@ msgid "German"
 msgstr "Duits"
 
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:3
-msgid ""
-"Heads up! Removing this language will <strong>not</strong> delete any of the "
-"existing translations. But until you add (and activate) the language again, "
-"you will not be able to select or edit content written in this language."
-msgstr ""
-"Let op! Met het verwijderen van deze taal zullen bestaande vertalingen "
-"<em>niet</em> worden verwijderd. Maar totdat je de taal weer activeert, zul "
-"je content niet in deze taal kunnen bewerken."
+msgid "Heads up! Removing this language will <strong>not</strong> delete any of the existing translations. But until you add (and activate) the language again, you will not be able to select or edit content written in this language."
+msgstr "Let op! Met het verwijderen van deze taal zullen bestaande vertalingen <em>niet</em> worden verwijderd. Maar totdat je de taal weer activeert, zul je content niet in deze taal kunnen bewerken."
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid "Help about translations"
@@ -7363,8 +6628,7 @@ msgid "Hungarian"
 msgstr "Hongaars"
 
 #: modules/mod_translation/templates/admin_translation.tpl:161
-msgid ""
-"If you change the stemmer language then you will need to reindex all data."
+msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Als je de stamtaal verandert, moet je de zoekindex opnieuw indexeren."
 
 #: modules/mod_translation/templates/admin_translation.tpl:147
@@ -7412,12 +6676,8 @@ msgid "Reload Translations"
 msgstr "Talen opnieuw laden"
 
 #: modules/mod_translation/templates/admin_translation.tpl:192
-msgid ""
-"Reload all translations from the modules and site. All templates will be "
-"recompiled."
-msgstr ""
-"Alle vertalingen van modules en de site herladen. Alle templates worden "
-"opnieuw gecompileerd."
+msgid "Reload all translations from the modules and site. All templates will be recompiled."
+msgstr "Alle vertalingen van modules en de site herladen. Alle templates worden opnieuw gecompileerd."
 
 #: modules/mod_translation/mod_translation.erl:339
 msgid "Reloading all .po files in the background."
@@ -7436,16 +6696,8 @@ msgid "Russian"
 msgstr "Russisch"
 
 #: modules/mod_translation/templates/admin_translation.tpl:185
-msgid ""
-"Scan all templates for translation tags and generate .pot files that can be "
-"used for translating the templates. The <a href=\"http://docs.zotonic.com/en/"
-"latest/developer-guide/translation.html\">gettext package must be installed</"
-"a>."
-msgstr ""
-"Vind alle vertaaltags in templates en gerereer .pot-bestanden die je kunt "
-"gebruiken om de templates te vertalen. Het <a href=\"http://docs.zotonic.com/"
-"en/latest/developer-guide/translation.html\">gettext-pakket moet zijn "
-"geïnstalleerd</a>."
+msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
+msgstr "Vind alle vertaaltags in templates en gerereer .pot-bestanden die je kunt gebruiken om de templates te vertalen. Het <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext-pakket moet zijn geïnstalleerd</a>."
 
 #: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:40./modules/mod_translation/templates/admin_translation.tpl:28
 msgid "Script"
@@ -7501,38 +6753,23 @@ msgstr "Spaans"
 
 #: modules/mod_translation/mod_translation.erl:325
 msgid "Started building the .pot files. This may take a while..."
-msgstr ""
-"Gestart met het genereren van .pot bestanden. Dit kan enige tijd duren..."
+msgstr "Gestart met het genereren van .pot bestanden. Dit kan enige tijd duren..."
 
 #: modules/mod_translation/templates/admin_translation.tpl:152
 msgid "Swedish"
 msgstr "Zweeds"
 
 #: modules/mod_translation/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
-msgid ""
-"The golden rule when choosing a language is simplicity. Stick to the main "
-"language if you can; use a sub-language (adding region or script) when it "
-"adds useful distinguishing information."
-msgstr ""
-"De gouden regel is eenvoud. Houd het bij de hoofdtaal als je kunt; gebruik "
-"een subtaal (door regio of script toe te voegen) wanneer dat bruikbaar "
-"onderscheiden informatie toevoegt."
+msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
+msgstr "De gouden regel is eenvoud. Houd het bij de hoofdtaal als je kunt; gebruik een subtaal (door regio of script toe te voegen) wanneer dat bruikbaar onderscheiden informatie toevoegt."
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
-msgid ""
-"The title, body and other texts can be translated in different languages. "
-"Here you can select which languages will be used."
-msgstr ""
-"De titel en teksten kunnen worden vertaald in meerder talen. Hier kun je "
-"kiezen welke talen worden gebruikt."
+msgid "The title, body and other texts can be translated in different languages. Here you can select which languages will be used."
+msgstr "De titel en teksten kunnen worden vertaald in meerder talen. Hier kun je kiezen welke talen worden gebruikt."
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:13
-msgid ""
-"To view the up-to-date version of this module, please run \"generate .pot "
-"files\" first from the translation overview."
-msgstr ""
-"Om de up-to-date versie van deze module te zien, klik op ‘Genereer .pot-"
-"bestanden’ in het Vertaaloverzicht."
+msgid "To view the up-to-date version of this module, please run \"generate .pot files\" first from the translation overview."
+msgstr "Om de up-to-date versie van deze module te zien, klik op ‘Genereer .pot-bestanden’ in het Vertaaloverzicht."
 
 #: modules/mod_translation/templates/_admin_edit_sidebar.tpl:8
 msgid "Translate this page in other languages."
@@ -7583,12 +6820,8 @@ msgid "Do you want to disconnect your Twitter account?"
 msgstr "Wil je je Twitter-account ontkoppelen?"
 
 #: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:18
-msgid ""
-"Fill in the <strong>numeric</strong> Twitter id. To map a Twitter account "
-"name to this number go to:"
-msgstr ""
-"Vul het <strong>numerieke</strong> Twitter ID in. Om het Twitter ID bij een "
-"Twitternaam te vinden, ga je naar:"
+msgid "Fill in the <strong>numeric</strong> Twitter id. To map a Twitter account name to this number go to:"
+msgstr "Vul het <strong>numerieke</strong> Twitter ID in. Om het Twitter ID bij een Twitternaam te vinden, ga je naar:"
 
 #: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:6
 msgid "Finding a Twitter ID."
@@ -7619,24 +6852,12 @@ msgid "Separate #tags, @usernames and phrases with commas or newlines."
 msgstr "Scheid #tags, @gebruikersnamen en zitten met komma’s of witregels."
 
 #: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:6
-msgid ""
-"The (numeric) Twitter ID of a user can be found on the twitter page of the "
-"user: it is the number that is contained in the URL to the RSS feed for the "
-"user's updates."
-msgstr ""
-"Het (numerieke) Twitter ID van de gebruiker kun je vinden op de "
-"Twitterpagina van de gebruiker: het is het nummer dat is opgenomen in de URL "
-"naar de RSS-feed met de updates van de gebruiker."
+msgid "The (numeric) Twitter ID of a user can be found on the twitter page of the user: it is the number that is contained in the URL to the RSS feed for the user's updates."
+msgstr "Het (numerieke) Twitter ID van de gebruiker kun je vinden op de Twitterpagina van de gebruiker: het is het nummer dat is opgenomen in de URL naar de RSS-feed met de updates van de gebruiker."
 
 #: modules/mod_twitter/templates/_admin_authentication_service.tpl:42
-msgid ""
-"To import tweets, Zotonic needs an access token and secret. You can find "
-"these on the <b>Keys and Access Tokens</b> tab on your Twitter application "
-"page."
-msgstr ""
-"Om tweets te importeren heeft Zotonic een access token en secret nodig. Je "
-"kunt die vinden op de tab <b>Keys and Access Tokens</b> op je Twitter "
-"applicatiepagina. "
+msgid "To import tweets, Zotonic needs an access token and secret. You can find these on the <b>Keys and Access Tokens</b> tab on your Twitter application page."
+msgstr "Om tweets te importeren heeft Zotonic een access token en secret nodig. Je kunt die vinden op de tab <b>Keys and Access Tokens</b> op je Twitter applicatiepagina. "
 
 #: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:4
 msgid "Twitter ID"
@@ -7671,41 +6892,16 @@ msgid "No video playback capabilities"
 msgstr "Geen mogelijkheid om video af te spelen"
 
 #: modules/mod_video/templates/_admin_configure_module.tpl:30
-msgid ""
-"Please specify the commandline to the <tt>ffmpeg</tt> (or <tt>avconv</tt>) "
-"command for generating the video preview image (poster frame). Put the "
-"marker <b>~s</b> on the place where the input filename should go. The output "
-"filename is appended automatically to the commandline before execution, as "
-"is a correction for fixing the video's orientation. Example value:"
-msgstr ""
-"Geef het commando op om met <tt>ffprobe</tt> (of <tt>avprobe</tt>) het "
-"previewbestand te genereren . Voeg de parking <b>~s</b> in op de plaats waar "
-"de bestandsnaam van het inputbestand moet komen te staan. De bestandsnaam "
-"van het outputbestand wordt automatisch toegevoegd aan het commando, net als "
-"een correctie voor de oriëntatie van de video. Bijvoorbeeld:"
+msgid "Please specify the commandline to the <tt>ffmpeg</tt> (or <tt>avconv</tt>) command for generating the video preview image (poster frame). Put the marker <b>~s</b> on the place where the input filename should go. The output filename is appended automatically to the commandline before execution, as is a correction for fixing the video's orientation. Example value:"
+msgstr "Geef het commando op om met <tt>ffprobe</tt> (of <tt>avprobe</tt>) het previewbestand te genereren . Voeg de parking <b>~s</b> in op de plaats waar de bestandsnaam van het inputbestand moet komen te staan. De bestandsnaam van het outputbestand wordt automatisch toegevoegd aan het commando, net als een correctie voor de oriëntatie van de video. Bijvoorbeeld:"
 
 #: modules/mod_video/templates/_admin_configure_module.tpl:13
-msgid ""
-"Please specify the commandline to the <tt>ffmpeg</tt> (or <tt>avconv</tt>) "
-"command. Put the marker <b>~s</b> on the place where the input filename "
-"should go. The output filename is appended automatically to the commandline "
-"before execution, as is a correction for fixing the video's orientation. "
-"Example value:"
-msgstr ""
-"Geef het pad op naar het commando <tt>ffprobe</tt> (of <tt>avprobe</tt>). "
-"Voeg de markering <b>~s</b> in op de plaats waar de bestandsnaam van het "
-"inputbestand moet komen te staan. De bestandsnaam van het outputbestand "
-"wordt automatisch toegevoegd aan het commando, net als een correctie voor de "
-"oriëntatie van de video. Bijvoorbeeld:"
+msgid "Please specify the commandline to the <tt>ffmpeg</tt> (or <tt>avconv</tt>) command. Put the marker <b>~s</b> on the place where the input filename should go. The output filename is appended automatically to the commandline before execution, as is a correction for fixing the video's orientation. Example value:"
+msgstr "Geef het pad op naar het commando <tt>ffprobe</tt> (of <tt>avprobe</tt>). Voeg de markering <b>~s</b> in op de plaats waar de bestandsnaam van het inputbestand moet komen te staan. De bestandsnaam van het outputbestand wordt automatisch toegevoegd aan het commando, net als een correctie voor de oriëntatie van de video. Bijvoorbeeld:"
 
 #: modules/mod_video/templates/_admin_configure_module.tpl:47
-msgid ""
-"Please specify the commandline to the <tt>ffprobe</tt> (or <tt>avprobe</tt>) "
-"command. The input filename is appended automatically to the commandline "
-"before execution. Example value:"
-msgstr ""
-"Geef het pad op naar het commando <tt>ffprobe</tt> (of <tt>avprobe</tt>). De "
-"bestandsnaam wordt automatisch toegevoegd aan het commando. Bijvoorbeeld:"
+msgid "Please specify the commandline to the <tt>ffprobe</tt> (or <tt>avprobe</tt>) command. The input filename is appended automatically to the commandline before execution. Example value:"
+msgstr "Geef het pad op naar het commando <tt>ffprobe</tt> (of <tt>avprobe</tt>). De bestandsnaam wordt automatisch toegevoegd aan het commando. Bijvoorbeeld:"
 
 #: modules/mod_video/templates/_admin_configure_module.tpl:4
 msgid "ffmpeg video conversion command line"
@@ -7720,12 +6916,8 @@ msgid "ffprobe command line"
 msgstr "ffprobe commandoregel"
 
 #: modules/mod_video_embed/templates/_media_upload_panel.tpl:7
-msgid ""
-"Embed a video or other media. Here you can paste an embed code from YouTube, "
-"Vimeo or other services."
-msgstr ""
-"Embed een video of andere media. Hier kun je een embedcode plakken van "
-"YouTube, Vimeo of een andere dienst."
+msgid "Embed a video or other media. Here you can paste an embed code from YouTube, Vimeo or other services."
+msgstr "Embed een video of andere media. Hier kun je een embedcode plakken van YouTube, Vimeo of een andere dienst."
 
 #: modules/mod_video_embed/templates/_media_upload_panel.tpl:34./modules/mod_video_embed/templates/_media_upload_tab.tpl:3
 msgid "Embed code"
@@ -7737,8 +6929,7 @@ msgstr "Van site"
 
 #: modules/mod_video_embed/templates/_media_upload_panel.tpl:38
 msgid "The embed code will be sanitized. Only whitelisted sites are allowed."
-msgstr ""
-"De embedcode wordt gecontroleerd. Alleen geselecteerde sites zijn toegestaan."
+msgstr "De embedcode wordt gecontroleerd. Alleen geselecteerde sites zijn toegestaan."
 
 #: modules/mod_video_embed/mod_video_embed.erl:186
 msgid "Vimeo Video"
