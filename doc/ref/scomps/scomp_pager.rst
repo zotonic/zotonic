@@ -67,8 +67,8 @@ The pager is rendered using a template. The default template for the pager is ``
 
 The pager template receives the following variables:
 
- * ``prev_url`` The url to the previous page, ``undefined``if at first page.
- * ``next_url`` The url to the next page, ``undefined``if at last page.
+ * ``prev_url`` The url to the previous page, ``undefined`` if at first page.
+ * ``next_url`` The url to the next page, ``undefined`` if at last page.
  * ``pages`` A list of tuples. Either ``{PageNumber, Url}`` or ``{undefined, sep}`` (*sep* is an atom).
  * ``page`` The current page number
  * All other arguments passed to the scomp (**attention:** these are also used as dispatch arguments)
