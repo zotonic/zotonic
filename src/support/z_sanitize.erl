@@ -190,11 +190,11 @@ sanitize_z_media_arg({<<"align">>, <<"right">>} = S) -> S;
 sanitize_z_media_arg({<<"align">>, _}) -> {<<"align">>, <<"block">>};
 sanitize_z_media_arg({<<"crop">>, Crop}) -> {<<"crop">>, z_convert:to_bool(Crop)};
 sanitize_z_media_arg({<<"link">>, Link}) -> {<<"link">>, z_convert:to_bool(Link)};
-sanitize_z_media_arg({<<"caption">>, Caption}) -> 
-    Caption1 = binary:replace(Caption, <<"-->">>, <<"→"/utf8>>, [global]),
+sanitize_z_media_arg({<<"caption">>, Caption}) ->
+    Caption1 = binary:replace(Caption, <<"-->">>, <<226,134,146>>, [global]),
     {<<"caption">>, Caption1};
 sanitize_z_media_arg({Arg, Val}) when is_binary(Val) ->
-    Val1 = binary:replace(Val, <<"-->">>, <<"→"/utf8>>, [global]),
+    Val1 = binary:replace(Val, <<"-->">>, <<226,134,146>>, [global]),
     {z_string:to_name(Arg), Val1};
 sanitize_z_media_arg({Arg, Val}) when is_integer(Val); is_boolean(Val) ->
     {z_string:to_name(Arg), Val}.
