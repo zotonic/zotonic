@@ -67,6 +67,11 @@
 
   ]},
 
+    {filezcache, [
+        {data_dir, "priv/filezcache/data"},
+        {journal_dir, "priv/filezcache/journal"}
+    ]},
+
  {setup,
   [
    {data_dir, "priv/data"},
