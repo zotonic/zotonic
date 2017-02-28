@@ -37,6 +37,7 @@ show_media(Input, _Template, _Context) ->
 
 
 % scanning for media start marker
+% The z-media tag is very strict with spaces, this must stay so for the sanitizer.
 show_media1(Input, Index, Context) when is_binary(Input) ->
     case Input of
         <<Pre:Index/binary, "<!-- z-media ", Post/binary>> ->
