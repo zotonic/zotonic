@@ -142,7 +142,7 @@ get_triple(Id, Context) ->
 
 %% @doc Get the edge id of a subject/pred/object combination
 -spec get_id(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), #context{}) -> pos_integer() | undefined.
-get_id(SubjectId, PredId, ObjectId, Context) 
+get_id(SubjectId, PredId, ObjectId, Context)
     when is_integer(SubjectId), is_integer(PredId), is_integer(ObjectId) ->
     z_db:q1(
         "select id from edge where subject_id = $1 and object_id = $3 and predicate_id = $2",
