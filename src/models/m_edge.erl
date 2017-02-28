@@ -141,12 +141,25 @@ get_triple(Id, Context) ->
     {SubjectId, z_convert:to_atom(Predicate), ObjectId}.
 
 %% @doc Get the edge id of a subject/pred/object combination
--spec get_id(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), #context{}) -> pos_integer() | undefined.
-get_id(SubjectId, PredId, ObjectId, Context) when is_integer(PredId) ->
-    z_db:q1("select id from edge where subject_id = $1 and object_id = $3 and predicate_id = $2", [m_rsc:rid(SubjectId, Context), PredId, m_rsc:rid(ObjectId, Context)], Context);
-get_id(SubjectId, Pred, ObjectId, Context) ->
-    PredId = m_predicate:name_to_id_check(Pred, Context),
-    get_id(SubjectId, PredId, ObjectId, Context).
+get_id(SubjectId, PredId, ObjectId, Context) 
+    when is_integer(SubjectId), is_integer(PredId), is_integer(ObjectId) ->
+    z_db:q1(
+        "select id from edge where subject_id = $1 and object_id = $3 and predicate_id = $2",
+        [SubjectId, PredId, ObjectId],
+        Context
+    );
+get_id(undefined, _PredId, _ObjectId, _Context) -> undefined;
+get_id(_SubjectId, undefined, _ObjectId, _Context) -> undefined;
+get_id(_SubjectId, _PredId, undefined, _Context) -> undefined;
+get_id(Subject, Pred, ObjectId, Context) when not is_integer(Subject) ->
+    get_id(m_rsc:rid(Subject, Context), Pred, ObjectId, Context);
+get_id(SubjectId, Pred, ObjectId, Context) when not is_integer(Pred) ->
+    case m_predicate:name_to_id(Pred, Context) of
+        {ok, PredId} -> get_id(SubjectId, PredId, ObjectId, Context);
+        {error, _} -> undefined
+    end;
+get_id(SubjectId, Pred, Object, Context) when not is_integer(Object) ->
+    get_id(SubjectId, Pred, m_rsc:rid(Object, Context), Context).
 
 %% @doc Return the full description of all edges from a subject, grouped by predicate
 get_edges(SubjectId, Context) ->
