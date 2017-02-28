@@ -38,6 +38,12 @@ mso4_test() ->
     Out = <<"<p class=\"other-class\"><span>Hello</span></p>">>,
     ?assertEqual(Out, z_sanitize:html(In, Context)).
 
+zmedia_test() ->
+    Context = z_context:new(testsandbox),
+    In = <<"<!-- z-media 123 { \"align\":\"leftx\", \"caption\":\"&--\\u003e\" } -->">>,
+    Out = <<"<!-- z-media 123 {\"align\":\"block\",\"caption\":\"&\\u2192\"} -->">>,
+    ?assertEqual(Out, z_sanitize:html(In, Context)).
+
 svg_imagetragick_test() ->
     A = z_svg:sanitize(<<"
 <?xml version=\"1.0\" standalone=\"no\"?>
