@@ -62,9 +62,13 @@ function find_enabled_sites {
 export -f find_enabled_sites
 
 function find_config {
+    # Allow admin to override default behaviour
+    [ ! -z "$ZOTONIC_CONFIG_DIR" ] && { echo "${ZOTONIC_CONFIG_DIR}/$1"; return 0; }
+
     filename="$1"
     vsn_minor=$(minor_version)
     vsn_major=$(major_version)
+  
     for file in "$HOME/.zotonic/$NODENAME/$filename" "$HOME/.zotonic/$vsn_minor/$filename" "$HOME/.zotonic/$vsn_major/$filename" "$HOME/.zotonic/$filename" \
                 "/etc/zotonic/$NODENAME/$filename" "/etc/zotonic/$vsn_minor/$filename" "/etc/zotonic/$vsn_major/$filename" "/etc/zotonic/$filename"
     do
@@ -82,8 +86,6 @@ function consult_config {
 export -f consult_config
 
 function find_config_arg {
-    [ ! -z "$ZOTONIC_CONFIG_DIR" ] && { echo "-config ${ZOTONIC_CONFIG_DIR}/$1"; return 0; }
-
     file=$(find_config $1)
     if [ "$file" == "" ]; then
         break
