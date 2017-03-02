@@ -55,7 +55,7 @@ the following data:
 +--------------------------+----------------------------------------------+
 |size                      |The size, ``small``, ``medium`` or ``large``  |
 +--------------------------+----------------------------------------------+
-|mediaclass                |Mediaclass, for example ``body-image-large``  |
+|mediaclass                |Mediaclass, for example ``body-media-large``  |
 +--------------------------+----------------------------------------------+
 |align                     |Alignment, ``block``, ``left`` or ``right``   |
 +--------------------------+----------------------------------------------+
