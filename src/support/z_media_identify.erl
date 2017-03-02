@@ -211,6 +211,11 @@ identify_file_os(unix, File, OriginalFilename) ->
                         "audio/" ++ _ = M -> {ok, [{mime,M}]};
                         _ -> {ok, [{mime, "video/x-ms-asf"}]}
                     end;
+                "video/mp4" -> 
+                    case guess_mime(OriginalFilename) of
+                        "audio/" ++ _ = M -> {ok, [{mime,M}]};
+                        _ -> {ok, [{mime, "video/mp4"}]}
+                    end;
                 _ ->
                     {ok, [{mime, Mime}]}
             end
