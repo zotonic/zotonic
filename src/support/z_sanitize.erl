@@ -184,7 +184,7 @@ sanitize_z_media_arg({<<"id">>, Id}) when is_binary(Id) -> {<<"id">>, z_string:t
 sanitize_z_media_arg({<<"id">>, Id}) when is_integer(Id) -> {<<"id">>, Id};
 sanitize_z_media_arg({<<"size">>, <<"large">>} = S) -> S;
 sanitize_z_media_arg({<<"size">>, <<"small">>} = S) -> S;
-sanitize_z_media_arg({<<"size">>, _}) -> {<<"size">>, <<"medium">>};
+sanitize_z_media_arg({<<"size">>, _}) -> {<<"size">>, <<"middle">>};
 sanitize_z_media_arg({<<"align">>, <<"left">>} = S) -> S;
 sanitize_z_media_arg({<<"align">>, <<"right">>} = S) -> S;
 sanitize_z_media_arg({<<"align">>, _}) -> {<<"align">>, <<"block">>};
