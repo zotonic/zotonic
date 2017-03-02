@@ -153,25 +153,6 @@ p.keywords {
     text-transform: none;
 }
 
-p img, li img {
-    margin: 6px 6px 0 0;
-}
-
-p img.left, li img.left {
-    float: left;
-}
-
-p img.right, li img.right {
-    margin: 6px 0 0 9px;
-    float: right;
-}
-
-p img.block {
-    display: block;
-    float: none;
-    margin: 0 0 18px 0;
-}
-
 
 /* Grid
    ---------------------------------------------------------- */
@@ -340,22 +321,28 @@ header {
 /* Images
    ---------------------------------------------------------- */
 
-figure.image-wrapper {
-    margin: 0;
+figure.inline-image {
+    display: inline-block;
+    margin: 6px 6px 0 0;
 }
 
-.block-level-image img {
+figure.inline-image.pull-right {
+    margin: 6px 0 0 9px;
+}
+
+figure.block-level-image {
     display: block;
+    float: none;
+    margin: 0 0 18px 0;
 }
 
-p.image-caption {
+figcaption {
     display: block;
     padding-top: 6px;
     font: 12px/18px arial, helvetica, sans-serif;
     margin: 0;
     color: #666;
 }
-
 
 /* Misc
    ---------------------------------------------------------- */

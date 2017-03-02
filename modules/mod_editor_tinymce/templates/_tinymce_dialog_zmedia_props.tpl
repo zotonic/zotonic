@@ -34,7 +34,7 @@
                               <div class="controls">
                                    <div class="checkbox">
                                         <label>
-                                             <input type="checkbox" name="crop" {% if options.crop == 'crop' %}checked{% endif %} value="crop" id="a-crop">
+                                             <input type="checkbox" name="crop" {% if options.crop %}checked{% endif %} value="crop" id="a-crop">
                                              {_ Crop image _}
                                         </label>
                                    </div>
