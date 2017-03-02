@@ -1,0 +1,14 @@
+[
+    {"body-image-large", [
+        {width, 500},
+        {height, 500}
+    ]},
+    {"body-image-medium", [
+        {width, 300},
+        {height, 300}
+    ]},
+    {"body-image-small", [
+        {width, 200},
+        {height, 200}
+    ]}
+].
