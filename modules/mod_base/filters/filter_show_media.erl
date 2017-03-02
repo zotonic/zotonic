@@ -125,6 +125,7 @@ filter_args([{size, Size}|Args], Acc) ->
         <<"large">> -> <<"large">>;
         <<"small">> -> <<"small">>;
         <<"medium">> -> <<"medium">>;
+        <<"middle">> -> <<"medium">>;
         _ -> <<"large">>
     end,
     Acc1 = [
@@ -137,8 +138,7 @@ filter_args([{align, Align}|Args], Acc) ->
     Align1 = case Align of
         <<"left">> -> <<"left">>;
         <<"right">> -> <<"right">>;
-        <<"middle">> -> <<"middle">>;
-        _ -> <<"middle">>
+        _ -> <<"block">>
     end,
     filter_args(Args, [{align, Align1}|Acc]);
 filter_args([{crop, Crop}|Args], Acc) when Crop =:= true; Crop =:= <<"crop">> ->

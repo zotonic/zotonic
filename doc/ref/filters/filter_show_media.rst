@@ -18,7 +18,7 @@ Images that are inlined in the body text can have these parameters:
   Either ``block``, ``left`` or ``right``. Default is ``block``.
 
 ``size``
-  Choose between ``small``, ``middle``, ``large``. These are used
+  Choose between ``small``, ``medium``, ``large``. These are used
   for selecting the mediaclass of the image. Which will be like
   ``body-media-large``. The default size is ``large``, displayed
   as a block (see align above).
