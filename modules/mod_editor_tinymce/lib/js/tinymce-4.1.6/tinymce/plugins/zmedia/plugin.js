@@ -63,8 +63,15 @@ tinymce.PluginManager.requireLangPack('zmedia');
             });
 
             ed.on("click", function (o) {
-                if (o.srcElement.nodeName === "IMG") {
-                    ed.execCommand("mceZotonicMedia", o.srcElement);
+                var target;
+
+                if (typeof o.srcElement !== 'undefined') {
+                    target = o.srcElement;
+                } else {
+                    target = o.target;
+                }
+                if (target.nodeName === "IMG") {
+                    ed.execCommand("mceZotonicMedia", target);
                 }
             });
 
