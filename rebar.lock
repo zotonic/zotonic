@@ -67,7 +67,7 @@
   1},
  {<<"filezcache">>,
   {git,"https://github.com/mworrell/filezcache.git",
-       {ref,"ae683917dc099c3a7ae0fb07fa8b215608a6614e"}},
+       {ref,"94de44ceb4c93440f412f017fae35c31a015f728"}},
   0},
  {<<"folsom">>,
   {git,"git://github.com/boundary/folsom.git",
