@@ -36,7 +36,11 @@ Images that are inlined in the body text can have these parameters:
   of the media item is used for the caption. If the caption is empty, then no
   caption is added.
 
-These parameters can be set in the editor dialog ‘Insert a Zotonic media item’.
+These parameters can be set in the editor dialog ‘Media Properties’.
+This dialog is shown after clicking on an image in the wysiwyg editor.
+
+.. image:: /img/show_media_properties.png
+
 
 Template arguments
 ------------------
