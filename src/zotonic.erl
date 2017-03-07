@@ -39,6 +39,7 @@
 -include_lib("zotonic.hrl").
 
 -define(MIN_OTP_VERSION, "18").
+-define(HTTP_REQUEST_TIMEOUT, 60000).
 
 -spec ensure_started(atom()) -> ok | {error, term()}.
 ensure_started(App) ->
@@ -146,6 +147,7 @@ start_http_listeners() ->
     lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
     CowboyOpts = #{
         middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
+        request_timeout => ?HTTP_REQUEST_TIMEOUT,
         env => #{}
     },
     WebIP4Opt = case WebIp of
