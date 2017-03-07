@@ -12,7 +12,7 @@
                                    <div class="radio">
                                         <label>
                                              <input type="radio" name="align" {% if options.align == 'block' %}checked{% endif %} value="block" id="a-block">
-                                             {_ Between text _}
+                                             {_ Block _}
                                         </label>
                                    </div>
                                    <div class="radio">
