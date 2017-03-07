@@ -7,35 +7,23 @@
                <div class="row">
                     <div class="col-md-6">
                          <div class="form-group">
-                              <label class="control-label">{_ Alignment _}</label>
                               <div class="controls">
                                    <div class="radio">
                                         <label>
                                              <input type="radio" name="align" {% if options.align == 'block' %}checked{% endif %} value="block" id="a-block">
-                                             {_ Between text _}
+                                             {% image "lib/images/img-align-block.png" mediaclass="tinymce-img-align" alt=_"Block" class="thumbnail" %}
                                         </label>
                                    </div>
                                    <div class="radio">
                                         <label>
                                              <input type="radio" name="align" {% if options.align == 'left' %}checked{% endif %} value="left" id="a-left">
-                                             {_ Aligned left _}
+                                             {% image "lib/images/img-align-left.png" mediaclass="tinymce-img-align" alt=_"Aligned left" class="thumbnail" %}
                                         </label>
                                    </div>
                                    <div class="radio">
                                         <label>
                                              <input type="radio" name="align" {% if options.align == 'right' %}checked{% endif %} value="right" id="a-right">
-                                             {_ Aligned right _}
-                                        </label>
-                                   </div>
-                              </div>
-                         </div>
-                         <div class="form-group">
-                              <label class="control-label">{_ Crop _}</label>
-                              <div class="controls">
-                                   <div class="checkbox">
-                                        <label>
-                                             <input type="checkbox" name="crop" {% if options.crop == 'crop' %}checked{% endif %} value="crop" id="a-crop">
-                                             {_ Crop image _}
+                                             {% image "lib/images/img-align-right.png" mediaclass="tinymce-img-align" alt=_"Aligned right" class="thumbnail" %}
                                         </label>
                                    </div>
                               </div>
@@ -53,7 +41,7 @@
                                    </div>
                                    <div class="radio">
                                         <label>
-                                             <input type="radio" name="size" {% if options.size == 'middle' %}checked{% endif %} value="middle" id="a-middle"> {_ Medium _}
+                                             <input type="radio" name="size" {% if options.size == 'middle' or options.size == 'medium' %}checked{% endif %} value="medium" id="a-medium"> {_ Medium _}
                                         </label>
                                    </div>
                                    <div class="radio">
@@ -65,12 +53,23 @@
                               </div>
                          </div>
                          <div class="form-group">
+                              <label class="control-label">{_ Crop _}</label>
+                              <div class="controls">
+                                   <div class="checkbox">
+                                        <label>
+                                             <input type="checkbox" name="crop" {% if options.crop %}checked{% endif %} value="crop" id="a-crop">
+                                             {_ Crop image _}
+                                        </label>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="form-group">
                               <label class="control-label">{_ Link _}</label>
                               <div class="controls">
                                    <div class="checkbox">
                                         <label>
                                              <input type="checkbox" name="link" {% if options.link %}checked{% endif %} value="link" id="a-link">
-                                             {_ Make link _}
+                                             {_ Link to media _}
                                         </label>
                                    </div>
                               </div>
