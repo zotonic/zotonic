@@ -42,6 +42,8 @@
 -include_lib("include/import_csv.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
+-define(CSV_INSPECT_SIZE, 32000).
+
 %% @doc Handle a dropbox file when it is a tsv/csv file we know.
 observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
     case filename:extension(F) of
@@ -179,7 +181,7 @@ inspect_file(Filename) ->
     case file:open(Filename, [read, binary]) of
         {ok, Device} ->
             FSize = filelib:file_size(Filename),
-            case file:read(Device, min(4096,FSize)) of
+            case file:read(Device, min(?CSV_INSPECT_SIZE,FSize)) of
                 {ok, Data0} ->
                     file:close(Device),
                     Data = utf8(Data0),
@@ -234,6 +236,7 @@ fetch_column_defs(B) ->
                                 ])),
             {ok, [ z_convert:to_list(z_string:trim(C)) || C <- Cols ], Sep};
         _ ->
+            lager:info("Invalid CSV file, could not fetch line with column defs (is there a LF or CR at the end?)"),
             {error, invalid_csv_file}
     end.
 
