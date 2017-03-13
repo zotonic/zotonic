@@ -207,7 +207,7 @@ update_new_props(Module, Id, NewProps, Options, Context) ->
     end.
 
 
-maybe_force_update(K, V, Props, Module, Id, Options, Context) ->
+maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
     case lists:member(force_update, Options) of
         true ->
             lager:info("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
