@@ -135,7 +135,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                     end
                 end
     end;
-check_db_and_upgrade(Context, _Tries) ->
+check_db_and_upgrade(_Context, _Tries) ->
     lager:error("Could not connect to database and db creation failed"),
     {error, database}.
 
