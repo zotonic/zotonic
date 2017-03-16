@@ -32,6 +32,8 @@
          m_value/2,
 
          consumer_tokens/2,
+         consumer_access_tokens/2,
+         delete_consumer_token/2,
 
          consumer_lookup/2,
          secrets_for_verify/4,
@@ -39,6 +41,8 @@
          request_token/2,
          authorize_request_token/3,
          exchange_request_for_access/2,
+
+         ensure_anonymous_token/2,
 
          get_request_token/2,
 
@@ -50,7 +54,8 @@
          create_consumer/5,
          update_consumer/3,
          get_consumer/2,
-         delete_consumer/2
+         delete_consumer/2,
+         reset_consumer_secret/2
          ]).
 
 -define(TS_SKEW, 600).
@@ -68,7 +73,9 @@ m_find_value(Id, #m{value=info}, Context) ->
 m_find_value(tokens, #m{value=undefined} = M, _Context) ->
     M#m{value=tokens};
 m_find_value(Id, #m{value=tokens}, Context) ->
-    consumer_tokens(Id, Context).
+    consumer_tokens(Id, Context);
+m_find_value(Id, #m{value=access_tokens}, Context) ->
+    consumer_access_tokens(Id, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> list()
@@ -77,11 +84,8 @@ m_to_list(#m{value=undefined}, Context) ->
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
 %% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined;
-m_value(#m{value=_Module}, _Context) ->
+m_value(#m{value=_}, _Context) ->
     undefined.
-
 
 
 all_apps(Context) ->
@@ -89,11 +93,39 @@ all_apps(Context) ->
                      [Context#context.user_id], Context).
 
 consumer_tokens(Id, Context) ->
-    z_db:assoc_props("SELECT * FROM oauth_application_token
-                        WHERE application_id = $1 ORDER BY timestamp DESC",
-                     [Id], Context).
+    z_db:assoc_props("
+        SELECT *
+        FROM oauth_application_token
+        WHERE application_id = $1 ORDER BY timestamp DESC",
+        [Id],
+        Context).
 
+consumer_access_tokens(Id, Context) ->
+    Tks = z_db:assoc_props("
+        SELECT *
+        FROM oauth_application_token
+        WHERE application_id = $1
+          AND token_type = 'access'
+        ORDER BY timestamp DESC",
+        [Id],
+        Context),
+    {Anon, Other} = lists:partition(
+        fun(Token) ->
+            z_utils:is_empty(proplists:get_value(token_secret, Token))
+        end,
+        Tks),
+    Anon ++ Other.
 
+delete_consumer_token(Id, Context) ->
+    case z_db:q("
+        delete from oauth_application_token
+        where id = $1",
+        [Id],
+        Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
 %%
 %% Lookup a application in the application registry.
@@ -113,6 +145,27 @@ secrets_for_verify(none, Consumer, _Token, Context) ->
                 WHERE consumer_key	= $1
                 AND enabled = true", [proplists:get_value(consumer_key, Consumer)], Context);
 
+
+secrets_for_verify(access, Consumer, undefined, Context) ->
+    z_db:assoc_props_row("
+        SELECT  tok.id AS id,
+           application_id,
+           NULL as user_id,
+           consumer_key,
+           consumer_secret,
+           '' as token,
+           '' as token_secret,
+           '' as callback_uri
+        FROM oauth_application_registry app
+           JOIN oauth_application_token tok
+           ON app.id = tok.application_id
+               WHERE token_type = 'access'
+                 AND consumer_key   = $1
+                 AND token like '- - %'
+                 AND enabled        = true
+                 AND token_ttl     >= NOW()",
+        [proplists:get_value(consumer_key, Consumer)],
+        Context);
 secrets_for_verify(Type, Consumer, Token, Context) ->
     z_db:assoc_props_row("
         SELECT	tok.id AS id,
@@ -134,7 +187,6 @@ secrets_for_verify(Type, Consumer, Token, Context) ->
 
 
 check_nonce(Consumer, Token, Timestamp, Nonce, Context) ->
-
     CKey = proplists:get_value(consumer_key, Consumer),
     TK = proplists:get_value(token, Token),
     TS = z_convert:to_integer(Timestamp),
@@ -169,10 +221,8 @@ check_nonce1(CKey, TK, TS, Nonce, Context) ->
     end.
 
 
-
 generate_key() ->
-    base64:encode_to_string(crypto:hash(sha, z_ids:rand_bytes(100))).
-
+    z_convert:to_list(z_ids:id(30)).
 
 %%
 %% Create a request token for given consumer.
@@ -190,7 +240,6 @@ request_token(Consumer, Context) ->
         _ ->
             undefined
     end.
-
 
 authorize_request_token(Token, UserId, Context) ->
     z_db:update("oauth_application_token", proplists:get_value(id, Token), [{authorized, true}, {user_id, UserId}], Context).
@@ -213,6 +262,42 @@ exchange_request_for_access(Token, Context) ->
 
         _ ->
             {false, "Failed to exchange request token for access token.\n"}
+    end.
+
+%%
+%% Create an anonymous request token for given consumer.
+%%
+ensure_anonymous_token(ConsumerId, Context) when is_integer(ConsumerId) ->
+    case z_db:q1("
+        select id
+        from oauth_application_token
+        where application_id = $1
+          and token like '- - %'",
+        [ConsumerId],
+        Context)
+    of
+        undefined ->
+            z_db:insert("oauth_application_token",
+                [ {application_id, ConsumerId},
+                  {authorized, true},
+                  {user_id, 1},
+                  {token, "- - "++generate_key()},
+                  {token_secret, ""},
+                  {token_type, "access"},
+                  {callback_uri, ""}], 
+                Context);
+        Id -> 
+            {ok, Id}
+    end;
+ensure_anonymous_token(ConsumerKey, Context) ->
+    case z_db:q1("
+        select id from oauth_application_registry
+        where consumer_key = $1",
+        [ConsumerKey],
+        Context)
+    of
+        undefined -> {error, notfound};
+        ConsumerId -> ensure_anonymous_token(ConsumerId, Context)
     end.
 
 %%
@@ -247,7 +332,7 @@ get_app_tokens(AppId, Context) ->
                 Context).
 
 %%
-%% Get a token from the database.
+%% Get a token from the database.oauth_application_registry
 %%
 get_request_token(Tok, Context) ->
     z_db:assoc_props_row("SELECT * FROM oauth_application_token tok JOIN oauth_application_registry app
@@ -285,3 +370,8 @@ get_consumer(Id, Context) ->
 delete_consumer(Id, Context) ->
     {ok, _} = z_db:delete("oauth_application_registry", Id, Context).
 
+
+reset_consumer_secret(Id, Context) ->
+    Secret = generate_key(),
+    _ = z_db:update("oauth_application_registry", Id, [{consumer_secret, Secret}], Context),
+    {ok, Secret}.

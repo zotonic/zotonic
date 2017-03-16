@@ -130,29 +130,27 @@ check_request_logon(ReqData, Context) ->
         true ->
             case serve_oauth(ReqData, Context,
                 fun(URL, Params, Consumer, Signature) ->
-                        case oauth_param("oauth_token", ReqData) of
+                        ParamToken = oauth_param("oauth_token", ReqData),
+                        case m_oauth_app:secrets_for_verify(access, Consumer, ParamToken, Context) of
                             undefined ->
-                                {false, authenticate("Missing OAuth token.", ReqData, Context)};
-                            ParamToken ->
-                                case m_oauth_app:secrets_for_verify(access, Consumer, ParamToken, Context) of
-                                    undefined ->
-                                        {false, authenticate("Access token not found.", ReqData, Context)};
-                                    Token ->
-                                        case m_oauth_app:check_nonce(Consumer, Token, oauth_param("oauth_timestamp", ReqData), oauth_param("oauth_nonce", ReqData), Context) of
-                                            {false, Reason} ->
-                                                {false, authenticate(Reason, ReqData, Context)};
+                                {false, authenticate("Access token not found.", ReqData, Context)};
+                            Token ->
+                                case m_oauth_app:check_nonce(Consumer, Token, oauth_param("oauth_timestamp", ReqData), oauth_param("oauth_nonce", ReqData), Context) of
+                                    {false, Reason} ->
+                                        {false, authenticate(Reason, ReqData, Context)};
+                                    true ->
+                                        SigMethod = oauth_param("oauth_signature_method", ReqData),
+                                        case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
+                                                          Params, to_oauth_consumer(Consumer, SigMethod), str_value(token_secret, Token)) of
                                             true ->
-                                                SigMethod = oauth_param("oauth_signature_method", ReqData),
-                                                case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
-                                                                  Params, to_oauth_consumer(Consumer, SigMethod), str_value(token_secret, Token)) of
-                                                    true ->
-                                                        UID = int_value(user_id, Token),
-                                                        Context1 = z_acl:logon(UID, Context),
-                                                        Context2 = z_context:set("oauth_consumer", Consumer, Context1),
-                                                        {true, Context2};
-                                                    false ->
-                                                        {false, authenticate("Signature verification failed.", ReqData, Context)}
-                                                end
+                                                Context1 = case int_value(user_id, Token) of
+                                                    undefined -> Context;
+                                                    UID -> z_acl:logon(UID, Context)
+                                                end,
+                                                Context2 = z_context:set("oauth_consumer", Consumer, Context1),
+                                                {true, Context2};
+                                            false ->
+                                                {false, authenticate("Signature verification failed.", ReqData, Context)}
                                         end
                                 end
                         end
