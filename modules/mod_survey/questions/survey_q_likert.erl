@@ -50,17 +50,23 @@ prep_chart(Block, [{_, Vals}], Context) ->
     Labels = [
         <<"5">>,<<"4">>,<<"3">>,<<"2">>,<<"1">>
     ],
-    LabelsDisplay0 = [
-        <<"Strongly agree">>,
-        <<"Agree">>,
-        <<"Neutral">>,
-        <<"Disagree">>,
-        <<"Strongly disagree">>
-    ],
+    Agree = case proplists:get_value(agree, Block) of
+        undefined -> ?__("Strongly Agree", Context);
+        <<>> -> ?__("Strongly Agree", Context);
+        Ag -> Ag
+    end,
+    DisAgree = case proplists:get_value(disagree, Block) of
+        undefined -> ?__("Strongly Disagree", Context);
+        <<>> -> ?__("Strongly Disagree", Context);
+        DisAg -> DisAg
+    end,
     LabelsDisplay = [
-        z_trans:trans(Lb, Context) || Lb <- LabelsDisplay0
+        z_trans:lookup_fallback(Agree, Context),
+        <<"4">>,
+        <<"3">>,
+        <<"2">>,
+        z_trans:lookup_fallback(DisAgree, Context)
     ],
-
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
