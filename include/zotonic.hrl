@@ -1,4 +1,4 @@
-%cl_rs/ac% @author Marc Worrell <marc@worrell.nl>
+%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2016 Marc Worrell
 %% @doc Main definitions for zotonic
 
