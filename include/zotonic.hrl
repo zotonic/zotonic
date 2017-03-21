@@ -1,4 +1,4 @@
-%% @author Marc Worrell <marc@worrell.nl>
+%cl_rs/ac% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2016 Marc Worrell
 %% @doc Main definitions for zotonic
 
@@ -198,7 +198,7 @@
 -define(ACL_ANY_USER_ID, -1).
 
 %% ACL objects
--record(acl_rsc, {category, mime, size}).
+-record(acl_rsc, {category, mime, size, props}).
 -record(acl_edge, {
     subject_id :: m_rsc:resource(),
     predicate :: pos_integer() | atom(),

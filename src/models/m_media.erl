@@ -394,7 +394,7 @@ insert_file(File, Props, Options, Context) ->
 
 insert_file(File, Props, PropsMedia, Options, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime)}, Context) andalso
+    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = Props}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
         true ->
             insert_file_mime_ok(File, Props, PropsMedia, Options, Context);
@@ -418,7 +418,7 @@ update_medium_1(RscId, Medium, RscProps, Options, Context) ->
                     undefined -> tl(m_rsc:is_a(RscId, Context));
                     Cat -> Cat
                end,
-    case z_acl:is_allowed(insert, #acl_rsc{category=Category}, Context) andalso
+    case z_acl:is_allowed(insert, #acl_rsc{category = Category, props = RscProps}, Context) andalso
          z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context) of
         true ->
             case replace_file_acl_ok(undefined, RscId, RscProps, Medium, Options, Context) of
@@ -503,7 +503,7 @@ replace_file(File, RscId, Props, MInfo, Opts, Context) ->
 
 replace_file_mime_check(File, RscId, Props, PropsMedia, Opts, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime)}, Context) andalso
+    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = Props}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
         true ->
             replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context);
