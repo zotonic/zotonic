@@ -1124,6 +1124,8 @@ to_int("") ->
     undefined;
 to_int(<<>>) ->
     undefined;
+to_int(<< A/binary >>) ->
+    to_int(binary_to_list(A));
 to_int(A) ->
     try
         list_to_integer(A)
