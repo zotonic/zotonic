@@ -614,7 +614,7 @@ throw_if_category_not_allowed(insert_rsc, SafeProps, _True, Context) ->
         undefined ->
             throw({error, nocategory});
         CatId ->
-            throw_if_category_not_allowed_1(undefined, CatId, Context)
+            throw_if_category_not_allowed_1(undefined, SafeProps, CatId, Context)
     end;
 throw_if_category_not_allowed(Id, SafeProps, _True, Context) ->
     case proplists:get_value(category_id, SafeProps) of
@@ -622,14 +622,14 @@ throw_if_category_not_allowed(Id, SafeProps, _True, Context) ->
             ok;
         CatId ->
             PrevCatId = z_db:q1("select category_id from rsc where id = $1", [Id], Context),
-            throw_if_category_not_allowed_1(PrevCatId, CatId, Context)
+            throw_if_category_not_allowed_1(PrevCatId, SafeProps, CatId, Context)
     end.
 
-throw_if_category_not_allowed_1(CatId, CatId, _Context) ->
+throw_if_category_not_allowed_1(CatId, _SafeProps, CatId, _Context) ->
     ok;
-throw_if_category_not_allowed_1(_PrevCatId, CatId, Context) ->
+throw_if_category_not_allowed_1(_PrevCatId, SafeProps, CatId, Context) ->
     CategoryName = m_category:id_to_name(CatId, Context),
-    case z_acl:is_allowed(insert, #acl_rsc{category = CategoryName}, Context) of
+    case z_acl:is_allowed(insert, #acl_rsc{category = CategoryName, props = SafeProps}, Context) of
         true -> ok;
         _False -> throw({error, eacces})
     end.
