@@ -64,7 +64,6 @@ ol,
 p {
   margin: 0 0 15px 0;
 }
-
 table td,
 table th {
   vertical-align: top;
@@ -1214,6 +1213,9 @@ textarea.tinyMCE {
 #zmedia-props-form .control-label {
   font-weight: bold;
 }
+#zmedia-props-form .radio .thumbnail {
+  max-width: 90%;
+}
 .z-tinymce-media-left {
   border: 1px solid #e5e5e5;
 }
@@ -1252,6 +1254,7 @@ ul.tree-list > li:last-child {
 }
 ul.tree-list li.menu-item {
   line-height: 1.2;
+  border: none;
 }
 ul.tree-list li.menu-item li.menu-item:last-child {
   margin: 0;
@@ -1331,15 +1334,9 @@ ul.tree-list li.menu-item > div .label {
   color: #999;
 }
 ul.tree-list li.menu-item img.admin-list-dashboard {
-  position: absolute;
   width: 21.33333333px;
   height: 16px;
-  left: 40px;
-  top: 50%;
-  margin-top: -8px;
-}
-ul.tree-list li.menu-item img + span {
-  padding-left: 31.33333333px;
+  margin-bottom: 2px;
 }
 ul.tree-list li.menu-item.has-submenu > div a.menu-toggle {
   display: block;
@@ -1376,6 +1373,12 @@ ul.tree-list.categories {
 ul.tree-list.categories li.menu-item span.category,
 ul.tree-list.tree-list-menu li.menu-item span.category {
   display: none;
+}
+ul.tree-list.connections-list {
+  min-height: 12px;
+}
+ul.tree-list.connections-list li.menu-item > div {
+  overflow: hidden;
 }
 .widget {
   margin-bottom: 15px;

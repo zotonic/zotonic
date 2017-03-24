@@ -59,24 +59,28 @@ check_username_password() ->
     ?assertEqual({error, password}, m_identity:check_username_pw("mr_y", "wrong-secret", C)),
 
     %% Make sure stored hashes don't need to be upgraded.
-    {MrYId, Hash} = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
+    {MrYId, Hash} = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1",
+        ["mr_y"], C),
     ?assert(not m_identity:needs_rehash(Hash)),
 
     %% update the hash value in the database and set the old hash algorithm.
     OldHash = old_hash("secret"),
-    z_db:q("update identity set propb = $2 where type = 'username_pw' and key = $1", ["mr_y", {term, OldHash}], C),
+    z_db:q("update identity set propb = $2 where type = 'username_pw' and key = $1",
+        ["mr_y", {term, OldHash}], C),
 
-    {MrYId, CurrentHash} = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
+    {MrYId, CurrentHash} = z_db:q_row(
+        "select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
     ?assert(m_identity:needs_rehash(CurrentHash)),
 
-    %% Logging in with the wrong password still does not work. 
+    %% Logging in with the wrong password still does not work.
     ?assertEqual({error, password}, m_identity:check_username_pw("mr_y", "wrong-secret", C)),
-    
+
     %% And with the correct password you can login.
     ?assertEqual({ok, MrYId}, m_identity:check_username_pw("mr_y", "secret", C)),
 
     %% But now hash of the user has been replaced with one which does not need a rehash
-    {MrYId, NewHash} = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
+    {MrYId, NewHash} = z_db:q_row(
+        "select rsc_id, propb from identity where type = 'username_pw' and key = $1", ["mr_y"], C),
     ?assert(not m_identity:needs_rehash(NewHash)),
 
     %% And afterwards the user can still logon
@@ -92,13 +96,13 @@ start_modules(Context) ->
     ok = z_module_manager:activate_await(mod_admin_identity, Context),
     ok = z_module_manager:await_upgrade(Context).
 
-    
+
 %% Old hash algorithm copied from m_identity before the change to bcrypt.
 old_hash(Pw) ->
     Salt = binary_to_list(z_ids:id(10)),
-    Hash = crypto:hash(sha, [Salt,Pw]),
+    Hash = crypto:hash(sha, [Salt, Pw]),
     {hash, Salt, Hash}.
-    
+
 
 ensure_new_user(Name, Password, Context) ->
     z_db:transaction(fun(Ctx) ->
@@ -115,7 +119,7 @@ ensure_new_user(Name, Password, Context) ->
 delete_user(Name, Context) ->
     case m_identity:lookup_by_username(Name, Context) of
         undefined -> ok;
-        Props -> 
+        Props ->
             {rsc_id, Id} = proplists:lookup(rsc_id, Props),
             m_rsc:delete(Id, Context)
     end.

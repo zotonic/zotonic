@@ -516,10 +516,34 @@ url2props1([P|Rest], Acc) ->
 
 
 opt_crop_center(Id, Options, Context) ->
-    case {proplists:get_value(crop, Options), m_rsc:p(Id, crop_center, Context)} of
-        {true, <<"+",_/binary>> = C} ->
-            z_utils:prop_replace(crop, C, Options);
-        {_, _} ->
+    Crop = proplists:get_value(crop, Options),
+    case is_crop_center(Crop) of
+        true -> maybe_add_crop_center(Id, Options, Context);
+        false when Crop =:= undefined ->
+            opt_crop_center_mediaclass(proplists:get_value(mediaclass, Options), Id, Options, Context);
+        false -> Options
+    end.
+
+opt_crop_center_mediaclass(undefined, _Id, Options, _Context) ->
+    Options;
+opt_crop_center_mediaclass(Mediaclass, Id, Options, Context) ->
+    {ok, Props, _Hash} = z_mediaclass:get(Mediaclass, Context),
+    case is_crop_center(proplists:get_value(crop, Props)) of
+        true -> maybe_add_crop_center(Id, Options, Context);
+        false -> Options
+    end.
+
+maybe_add_crop_center(Id, Options, Context) ->
+    case m_rsc:p_no_acl(Id, crop_center, Context) of
+        <<"+", _/binary>> = Center ->
+            z_utils:prop_replace(crop, Center, Options);
+        _ ->
             Options
     end.
+
+is_crop_center(true) -> true;
+is_crop_center(center) -> true;
+is_crop_center(<<"center">>) -> true;
+is_crop_center("center") -> true;
+is_crop_center(_) -> false.
 

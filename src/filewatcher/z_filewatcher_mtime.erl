@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell <marc@worrell.nl>
+%% @copyright 2015-2017 Marc Worrell <marc@worrell.nl>
 %% @doc Keep a registration of file modification times, especially for z_template
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,8 +57,13 @@
     file_mtime/1
 ]).
 
+-export([
+    simplify/1
+    ]).
+
 -define(MTIME, z_filewatcher_mtime_tab).
 -define(FILE_TEMPLATE, z_filewatcher_file_template_tab).
+-define(SIMPLE_TO_FILES, z_filewatcher_simple_to_files_tab).
 -define(TEMPLATE_FILES, z_filewatcher_template_files_tab).
 -define(TEMPLATE_MODIFIED, z_filewatcher_template_modified_tab).
 
@@ -72,7 +77,7 @@ mtime(File) when is_list(File) ->
 mtime(File) when is_binary(File) ->
     case ets:lookup(?MTIME, File) of
         [] ->
-            modified(File);
+            gen_server:call(?MODULE, {mtime, File});
         [{_, 0}] ->
             {error, notfound};
         [{_, MTime}] ->
@@ -80,6 +85,7 @@ mtime(File) when is_binary(File) ->
     end.
 
 %% @doc Mark a file as modified
+-spec modified(string()|binary()) -> ok.
 modified(File) when is_list(File) ->
     modified(unicode:characters_to_binary(File));
 modified(File) when is_binary(File) ->
@@ -119,7 +125,8 @@ insert_template(Module, CompileTime) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @doc Starts the server
+%% @doc Starts the server. IsScannerEnabled is set if inotify, fswatch or the periodic
+%% directory scanner is enabled. If not then the cached mtimes are periodically flushed.
 -spec start_link(boolean()) -> {ok, pid()} | ignore | {error, term()}.
 start_link(IsScannerEnabled) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [z_convert:to_bool(IsScannerEnabled)], []).
@@ -136,25 +143,43 @@ start_link(IsScannerEnabled) ->
 init([IsScannerEnabled]) ->
     ets:new(?MTIME, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     ets:new(?FILE_TEMPLATE, [named_table, bag, {keypos, 1}, protected, {read_concurrency, true}]),
+    ets:new(?SIMPLE_TO_FILES, [named_table, bag, {keypos, 1}, protected, {read_concurrency, true}]),
     ets:new(?TEMPLATE_FILES, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     ets:new(?TEMPLATE_MODIFIED, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     timer:send_after(?FLUSH_INTERVAL, flush),
     {ok, #state{is_scanner_enabled = IsScannerEnabled}}.
 
-handle_call({modified, File}, _From, State) ->
+handle_call({mtime, File}, _From, State) when is_binary(File) ->
+    % Ensure that the simple to full path mappings are set
+    ensure_simple_file(File),
+    % Set the mtime of the full path
     MTime = file_mtime(File),
-    case ets:lookup(?MTIME, File) of
-        [{_, MTime}] ->
-            ok;
-        _ ->
-            ets:insert(?MTIME, {File, MTime}),
-            do_dependencies(File, MTime)
-    end,
+    set_modified(File, MTime),
     Reply = case MTime of
-                0 -> {error, notfound};
-                _ -> {ok, MTime}
-            end,
+        0 -> {error, notfound};
+        _ -> {ok, MTime}
+    end,
     {reply, Reply, State};
+
+handle_call({modified, File}, _From, State) when is_binary(File) ->
+    % Update the modification time of the file and of the matching "simple" paths
+    MTime = file_mtime(File),
+    set_modified(File, MTime),
+    case simplify(File) of
+        File -> ok;
+        Simple ->
+            Other = ets:lookup(?SIMPLE_TO_FILES, Simple),
+            lists:foreach(
+                fun
+                    ({_Simple, OtherFile}) when OtherFile =/= File ->
+                        MTime1 = file_mtime(OtherFile),
+                        set_modified(OtherFile, MTime1);
+                    ({_Simple, _File}) ->
+                        ok
+                end,
+                Other)
+    end,
+    {reply, ok, State};
 
 handle_call({insert_template, Module, CompileTime}, _From, State) ->
     try
@@ -168,6 +193,7 @@ handle_call({insert_template, Module, CompileTime}, _From, State) ->
                 end,
                 DelDeps),
         ets:insert(?FILE_TEMPLATE, [ {File, Module} || File <- NewDeps ]),
+        lists:foreach(fun ensure_simple_file/1, NewDeps),
         case ets:lookup(?TEMPLATE_MODIFIED, Module) of
             [{_, 0}] ->
                 ets:insert(?TEMPLATE_MODIFIED, {Module, CompileTime});
@@ -218,6 +244,38 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+simplify(Path) when is_binary(Path) ->
+    case filename:extension(Path) of
+        <<".erl">> -> filename:basename(Path);
+        <<".beam">> -> filename:basename(Path);
+        _ ->
+            case re:run(
+                Path, 
+                "^.*/([a-z0-9_]+/("
+                "support|templates|lib|actions|filters|services|"
+                "validators|scomps|models|services|translations|"
+                "dispatch)/.*)$",
+                [{capture, all_but_first, binary}])
+            of
+                {match, [SimplePath|_]} -> SimplePath;
+                nomatch -> Path
+            end
+    end.
+
+ensure_simple_file(Path) ->
+    case simplify(Path) of
+        Path -> ok;
+        Simple -> ets:insert(?SIMPLE_TO_FILES, [{Simple, Path}])
+    end.
+
+set_modified(File, MTime) ->
+    case ets:lookup(?MTIME, File) of
+        [{_, MTime}] -> ok;
+        _ ->
+            ets:insert(?MTIME, {File, MTime}),
+            do_dependencies(File, MTime)
+    end.
 
 do_dependencies(File, 0) ->
     lists:foreach(

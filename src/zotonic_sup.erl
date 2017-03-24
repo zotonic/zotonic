@@ -108,15 +108,23 @@ init([]) ->
     lager:info("Zotonic starting"),
     lager:info("================"),
     lager:info("Config files used:"),
-    [ lager:info("- ~s", [Cfg]) 
+    [lager:info("- ~s", [Cfg])
       || [Cfg] <- proplists:get_all_values(config, init:get_arguments()) ],
     lager:info(""),
 
     erlang:spawn(fun() ->
             timer:sleep(4000),
             lager:info(""),
-            [ lager:info("http://~-40s- ~s~n", [z_context:hostname_port(z:c(Site)), Status])
-              || [Site,Status|_] <- z_sites_manager:get_sites_status(), Site =/= zotonic_status],
+            lists:map(
+                fun
+                  ([zotonic_status|_]) ->
+                      ok;
+                  ([Site, Status|_]) ->
+                      Ctx = z_context:new(Site),
+                      lager:info("~-40s ~p ~s~n",
+                                 [z_context:abs_url(<<"/">>, Ctx), Site, Status])
+                end,
+                z_sites_manager:get_sites_status()),
             lager:info("")
         end),
 

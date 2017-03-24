@@ -20,13 +20,26 @@
 -module(zotonic).
 -author('Marc Worrell <marc@worrell.nl>').
 
--export([start/0, start/1, stop/0, stop/1, ping/0, status/0, status/1, update/0, update/1, run_tests/0, ensure_started/1]).
+-export([
+    start/0,
+    start/1,
+    stop/0,
+    stop/1,
+    ping/0,
+    status/0,
+    status/1,
+    update/0,
+    update/1,
+    run_tests/0,
+    ensure_started/1
+]).
 
 -compile([{parse_transform, lager_transform}]).
 
 -include_lib("zotonic.hrl").
 
 -define(MIN_OTP_VERSION, "18").
+-define(HTTP_REQUEST_TIMEOUT, 60000).
 
 -spec ensure_started(atom()) -> ok | {error, term()}.
 ensure_started(App) ->
@@ -80,7 +93,7 @@ stop() ->
 %% @doc Stop a zotonic server on a specific node
 -spec stop([node()]) -> any().
 stop([Node]) ->
-    io:format("Stopping:~p~n",[Node]),
+    io:format("Stopping:~p~n", [Node]),
     case net_adm:ping(Node) of
         pong -> rpc:cast(Node, init, stop, []);
         pang -> io:format("There is no node with this name~n")
@@ -100,10 +113,13 @@ status() ->
 %% @doc Get server status.  Prints the state of sites running.
 -spec status([node()]) -> ok.
 status([Node]) ->
-    [io:format("~-20s- ~s~n", [Site, Status]) || [Site,Status|_] <- rpc:call(Node, z_sites_manager, get_sites_status, [])],
+    [io:format(
+        "~-20s- ~s~n",
+        [Site, Status]
+    ) || [Site, Status | _] <- rpc:call(Node, z_sites_manager, get_sites_status, [])],
     ok.
 
-%% @doc Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
+%% @doc Update the server. Compiles and loads any new code, flushes caches and rescans all modules.
 -spec update() -> ok.
 update() ->
     z:m(),
@@ -123,13 +139,15 @@ stop_http_listeners() ->
 -spec start_http_listeners() -> ok.
 start_http_listeners() ->
     z_ssl_certs:ensure_dhfile(),
-    application:set_env(cowmachine, server_header, <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>),
+    application:set_env(cowmachine, server_header,
+        <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>),
     WebIp = z_config:get(listen_ip),
     WebPort = z_config:get(listen_port),
     SSLPort = ssl_listen_port(),
     lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
     CowboyOpts = #{
         middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
+        request_timeout => ?HTTP_REQUEST_TIMEOUT,
         env => #{}
     },
     WebIP4Opt = case WebIp of
@@ -239,7 +257,7 @@ ensure_mnesia_schema() ->
                        "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}~n~n"),
             ok;
         {ok, Dir} ->
-            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir,"schema.DAT")) of
+            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir, "schema.DAT")) of
                 true ->
                     ok;
                 false ->
@@ -250,7 +268,7 @@ ensure_mnesia_schema() ->
 %% @doc Update the server on a specific node with new code on disk and flush the caches.
 -spec update([node()]) -> ok.
 update([Node]) ->
-    io:format("Update:~p~n",[Node]),
+    io:format("Update:~p~n", [Node]),
     case net_adm:ping(Node) of
         pong -> rpc:cast(Node, zotonic, update, []);
         pang -> io:format("There is no node with this name~n")
@@ -262,7 +280,10 @@ test_erlang_version() ->
     % Check for minimal OTP version
     case otp_release() of
         Version when Version < ?MIN_OTP_VERSION ->
-            io:format("Zotonic needs at least Erlang release ~p; this is ~p~n", [?MIN_OTP_VERSION, erlang:system_info(otp_release)]),
+            io:format(
+                "Zotonic needs at least Erlang release ~p; this is ~p~n",
+                [?MIN_OTP_VERSION, erlang:system_info(otp_release)]
+            ),
             erlang:exit({minimal_otp_version, ?MIN_OTP_VERSION});
         _ ->
             ok
@@ -270,7 +291,10 @@ test_erlang_version() ->
     % Check on problematic releases
     case otp_version() of
         "18.3.2" ->
-            io:format("Erlang version 18.3.2 has a problem with SSL and ranch, please upgrade your Erlang version to 18.3.3 or later~n"),
+            io:format(
+                "Erlang version 18.3.2 has a problem with SSL and ranch, please upgrade your "
+                "Erlang version to 18.3.3 or later~n"
+            ),
             erlang:exit({broken_otp_version, "18.3.2"});
         _ ->
             ok
@@ -284,10 +308,14 @@ otp_release() ->
         V -> V
     end.
 
-%% @doc Return the specific otp version, 
+%% @doc Return the specific otp version,
 -spec otp_version() -> string().
 otp_version() ->
-    case file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])) of
+    case file:read_file(
+        filename:join([
+            code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"]
+        )
+    ) of
         {ok, Version} -> binary_to_list(z_string:trim(Version));
         {error, _} -> erlang:system_info(otp_release)
     end.

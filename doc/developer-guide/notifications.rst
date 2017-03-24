@@ -137,6 +137,8 @@ Zotonic module exports a function with the prefix ``observe_`` or
 For example exporting ``observe_acl_logon/2`` will register that function as
 an observer. It will be triggered when the ``acl_logon`` notification is fired.
 
+.. _handling-notifications:
+
 Handling notifications
 ----------------------
 

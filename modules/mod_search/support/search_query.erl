@@ -1,9 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2010 Arjan Scherpenisse
-%% Date: 2009-04-12
+%% @copyright 2009-2017 Arjan Scherpenisse
 %% @doc Handler for m.search[{query, Args..}]
 
-%%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
@@ -67,12 +65,17 @@ parse_request_args(Args) ->
 
 parse_request_args([], Acc) ->
     Acc;
-parse_request_args([{<<"zotonic_host">>,_}|Rest], Acc) ->
-    parse_request_args(Rest, Acc);
-parse_request_args([{<<"zotonic_dispatch">>,_}|Rest], Acc) ->
-    parse_request_args(Rest, Acc);
+parse_request_args([{K,V}|Rest], Acc) when is_binary(K) ->
+    case z_context:is_zotonic_arg(K) of
+        true -> parse_request_args(Rest, Acc);
+        false ->
+            case request_arg(K) of
+                undefined -> parse_request_args(Rest, Acc);
+                Arg -> parse_request_args(Rest, [{Arg,z_convert:to_binary(V)}|Acc])
+            end
+    end;
 parse_request_args([{K,V}|Rest], Acc) ->
-    parse_request_args(Rest, [{request_arg(K),z_convert:to_binary(V)}|Acc]).
+    parse_request_args([{z_convert:to_binary(K), V}|Rest], Acc).
 
 %% Parses a query text. Every line is an argument; of which the first
 %% '=' separates argument key from argument value.
@@ -84,7 +87,8 @@ parse_query_text(Text) when is_list(Text) ->
 parse_query_text(Text) when is_binary(Text) ->
     Lines = binary:split(Text, <<"\n">>, [global]),
     KVs = [ split_arg(z_string:trim(Line)) || Line <- Lines],
-    [ {request_arg(binary_to_list(K)), V} || {K,V} <- KVs, K =/= <<>> ].
+    Args = [ {request_arg(K), V} || {K,V} <- KVs, K =/= <<>> ],
+    [ {K,V} || {K,V} <- Args, K =/= undefined ].
 
 split_arg(<<>>) ->
     {<<>>, <<>>};
@@ -95,59 +99,62 @@ split_arg(B) ->
     end.
 
 
-                                                % Convert request arguments to atom. Doing it this way avoids atom
-                                                % table overflows.
-request_arg("content_group")       -> content_group;
-request_arg("cat")                 -> cat;
-request_arg("cat_exact")           -> cat_exact;
-request_arg("cat_exclude")         -> cat_exclude;
-request_arg("creator_id")          -> creator_id;
-request_arg("modifier_id")         -> modifier_id;
-request_arg("custompivot")         -> custompivot;
-request_arg("filter")              -> filter;
-request_arg("id_exclude")          -> id_exclude;
-request_arg("hasobject")           -> hasobject;
-request_arg("hasobjectpredicate")  -> hasobjectpredicate;
-request_arg("hassubject")          -> hassubject;
-request_arg("hassubjectpredicate") -> hassubjectpredicate;
-request_arg("hasanyobject")        -> hasanyobject;
-request_arg("is_authoritative")    -> is_authoritative;
-request_arg("is_featured")         -> is_featured;
-request_arg("is_published")        -> is_published;
-request_arg("is_public")           -> is_public;
-request_arg("date_start_after")    -> date_start_after;
-request_arg("date_start_before")   -> date_start_before;
-request_arg("date_start_year")     -> date_start_year;
-request_arg("date_end_after")      -> date_end_after;
-request_arg("date_end_before")     -> date_end_before;
-request_arg("date_end_year")       -> date_end_year;
-request_arg("publication_month")   -> publication_month;
-request_arg("publication_year")    -> publication_year;
-request_arg("publication_after")   -> publication_after;
-request_arg("publication_before")  -> publication_before;
-request_arg("qargs")               -> qargs;
-request_arg("query_id")            -> query_id;
-request_arg("rsc_id")              -> rsc_id;
-request_arg("sort")                -> sort;
-request_arg("text")                -> text;
-request_arg("match_objects")       -> match_objects;
-request_arg("upcoming")            -> upcoming;
-request_arg("ongoing")             -> ongoing;
-request_arg("finished")            -> finished;
-request_arg("unfinished")          -> unfinished;
-request_arg("unfinished_or_nodate")-> unfinished_or_nodate;
-request_arg(Term)                  -> throw({error, {unknown_query_term, Term}}).
+% Convert known request arguments to atoms.
+request_arg(Arg) when is_list(Arg) -> request_arg(list_to_binary(Arg));
+request_arg(<<"content_group">>)       -> content_group;
+request_arg(<<"cat">>)                 -> cat;
+request_arg(<<"cat_exact">>)           -> cat_exact;
+request_arg(<<"cat_exclude">>)         -> cat_exclude;
+request_arg(<<"creator_id">>)          -> creator_id;
+request_arg(<<"modifier_id">>)         -> modifier_id;
+request_arg(<<"custompivot">>)         -> custompivot;
+request_arg(<<"filter">>)              -> filter;
+request_arg(<<"id_exclude">>)          -> id_exclude;
+request_arg(<<"hasobject">>)           -> hasobject;
+request_arg(<<"hasobjectpredicate">>)  -> hasobjectpredicate;
+request_arg(<<"hassubject">>)          -> hassubject;
+request_arg(<<"hassubjectpredicate">>) -> hassubjectpredicate;
+request_arg(<<"hasanyobject">>)        -> hasanyobject;
+request_arg(<<"is_authoritative">>)    -> is_authoritative;
+request_arg(<<"is_featured">>)         -> is_featured;
+request_arg(<<"is_published">>)        -> is_published;
+request_arg(<<"is_public">>)           -> is_public;
+request_arg(<<"date_start_after">>)    -> date_start_after;
+request_arg(<<"date_start_before">>)   -> date_start_before;
+request_arg(<<"date_start_year">>)     -> date_start_year;
+request_arg(<<"date_end_after">>)      -> date_end_after;
+request_arg(<<"date_end_before">>)     -> date_end_before;
+request_arg(<<"date_end_year">>)       -> date_end_year;
+request_arg(<<"publication_month">>)   -> publication_month;
+request_arg(<<"publication_year">>)    -> publication_year;
+request_arg(<<"publication_after">>)   -> publication_after;
+request_arg(<<"publication_before">>)  -> publication_before;
+request_arg(<<"qargs">>)               -> qargs;
+request_arg(<<"query_id">>)            -> query_id;
+request_arg(<<"rsc_id">>)              -> rsc_id;
+request_arg(<<"name">>)                -> name;
+request_arg(<<"sort">>)                -> sort;
+request_arg(<<"text">>)                -> text;
+request_arg(<<"match_objects">>)       -> match_objects;
+request_arg(<<"upcoming">>)            -> upcoming;
+request_arg(<<"ongoing">>)             -> ongoing;
+request_arg(<<"finished">>)            -> finished;
+request_arg(<<"unfinished">>)          -> unfinished;
+request_arg(<<"unfinished_or_nodate">>)-> unfinished_or_nodate;
+request_arg(Term) ->
+    lager:error("Unknown query term: ~p", [Term]),
+    undefined.
 
 
 %% Private methods start here
 filter_empty(Q) ->
     lists:filter(fun({_, X}) -> not(empty_term(X)) end, Q).
 
-empty_term(X) when X =:= [] orelse X =:= undefined orelse X =:= <<>> -> true;
-empty_term([X, _]) ->
-    empty_term(X);
-empty_term(_) ->
-    false.
+empty_term([]) -> true;
+empty_term(<<>>) -> true;
+empty_term(undefined) -> true;
+empty_term([X, _]) -> empty_term(X);
+empty_term(_) -> false.
 
 parse_query([], _Context, Result) ->
     Result;
@@ -431,6 +438,20 @@ parse_query([{rsc_id, Id}|Rest], Context, Result) ->
     {Arg, Result1} = add_arg(Id, Result),
     Result2 = add_where("rsc.id = " ++ Arg, Result1),
     parse_query(Rest, Context, Result2);
+
+%% name=<name-pattern>
+%% Filter on the unique name of a resource.
+parse_query([{name, Name}|Rest], Context, Result) ->
+    case z_string:to_lower(z_string:trim(z_convert:to_binary(Name))) of
+        All when All =:= <<>>; All =:= <<"*">>; All =:= <<"%">> ->
+            Result2 = add_where("rsc.name is not null", Result),
+            parse_query(Rest, Context, Result2);
+        Name1 ->
+            Name2 = binary:replace(Name1, <<"*">>, <<"%">>, [global]),
+            {Arg, Result1} = add_arg(Name2, Result),
+            Result2 = add_where("rsc.name like " ++ Arg, Result1),
+            parse_query(Rest, Context, Result2)
+    end;
 
 %% sort=fieldname
 %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.

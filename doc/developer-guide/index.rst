@@ -27,7 +27,6 @@ you through all aspects of the framework.
    modules
    notifications
    server-browser-interaction
-   publish-subscribe
    services
    email
    shell

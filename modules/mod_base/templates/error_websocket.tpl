@@ -1,4 +1,4 @@
-{% extends "base.tpl" %}
+{% extends "base_noscript.tpl" %}
 
 {% block title %} WebSocket Error {% endblock %}
 

@@ -23,26 +23,28 @@
 render_validator(format, TriggerId, _TargetId, Args, Context)  ->
     Pattern  = proplists:get_value(pattern, Args),
     Negate   = proplists:get_value(negate, Args, false),
-	JsObject = z_utils:js_object(z_validation:rename_args(Args)),
-	Script   = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"format\", ">>, JsObject, <<");\n">>],
-	{[z_utils:is_true(Negate),Pattern], Script, Context}.
+    JsObject = z_utils:js_object(z_validation:rename_args(Args)),
+    Script   = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"format\", ">>, JsObject, <<");\n">>],
+    {{z_utils:is_true(Negate),Pattern}, Script, Context}.
 
 
 %% @spec validate(Type, TriggerId, Value, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
 %%          Error = invalid | novalue | {script, Script}
 validate(format, _Id, [], _, Context) ->
-    {{ok, []}, Context};
-validate(format, Id, Value, [Negate,Pattern], Context) ->
+    {{ok, <<>>}, Context};
+validate(format, _Id, <<>>, _, Context) ->
+    {{ok, <<>>}, Context};
+validate(format, Id, Value, {Negate,Pattern}, Context) ->
     PcrePattern = javascript_to_pcre_pattern(Pattern),
     {Re,Options} = pattern_to_re(PcrePattern),
 
     %% If a unicode pattern is given, convert the utf8 list into a unicode char list
-    {Value1, Options1} = case z_string:contains("\\u", Pattern) of
-			     true ->
-				 {unicode:characters_to_list(erlang:list_to_binary(Value)), [unicode|Options]};
-			     false ->
-				 {Value, Options}
-			 end,
+    {Value1, Options1} = case binary:match(<<"\\u">>, Pattern) of
+        {_,_} ->
+            {unicode:characters_to_list(Value), [unicode|Options]};
+        nomatch ->
+            {Value, Options}
+    end,
 
     Ok = not Negate,
     Match = case re:run(Value1, Re, Options1) of
@@ -56,6 +58,8 @@ validate(format, Id, Value, [Negate,Pattern], Context) ->
     end.
 
 %% @doc Translate a regular expression in javascript format to erlang re module format
+pattern_to_re(Pattern) when is_binary(Pattern) ->
+    pattern_to_re(unicode:characters_to_list(Pattern));
 pattern_to_re([$/|Rest]=Pattern) ->
     case string:rchr(Rest, $/) of
         0 ->

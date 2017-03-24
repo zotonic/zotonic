@@ -102,6 +102,47 @@ Collaboration rules are special content access rules that apply to content in
 :ref:`collaboration groups <collaboration groups>` only. Each rule applies to
 all collaboration groups.
 
+
+Access control on properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Some private sensitive resource properties are protected by the ACL rules.
+The *privacy* property defines who can see these properties.
+
+The default privacy for category *person* is *collaboration group members*.
+For other categories the default is *public*.
+
+The privacy property can have the following values:
+
+ * 0 public
+ * 10 members
+ * 20 member of same user group (except default members group)
+ * 30 collaboration group members
+ * 40 collaboration group managers
+ * 50 private
+
+Increments are 10 so that more refined options can be added by custom modules.
+
+The protected properties are:
+
+ * email
+ * phone
+ * phone_mobile
+ * phone_alt
+ * address_street_1
+ * address_street_2
+ * address_postcode
+ * address_city
+ * date_start
+ * date_end
+ * location_lat
+ * location_lng
+ * pivot_location_lat
+ * pivot_location_lng
+ * pivot_geocode
+ * pivot_geocode_qhash
+
+
 .. _module-acl:
 
 Module access rules

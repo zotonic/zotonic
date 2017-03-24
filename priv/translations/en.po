@@ -33,11 +33,12 @@ msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_edit_content_acl.tpl:8
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:21./modules/mod_admin/templates/_admin_edit_content_acl.tpl:6./modules/mod_admin/templates/_admin_edit_content_acl.tpl:8
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:61
 #: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr ""
 
-#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:34./modules/mod_acl_user_groups/mod_acl_user_groups.erl:357
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:375./modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:34
 msgid "Access control rules"
 msgstr ""
 
@@ -93,15 +94,20 @@ msgstr ""
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:32./modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47./modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6./modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65./modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34./modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:34./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:74./modules/mod_admin/templates/_admin_edit_blocks.tpl:39./modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
 #: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:38./modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:52
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:7./modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:23
+#: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:77
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7./modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:51./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:102
 #: modules/mod_admin_merge/templates/_confirm_merge.tpl:130
 #: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:30./modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:46./modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:17
 #: modules/mod_authentication/templates/_logon_stage.tpl:34./modules/mod_authentication/templates/logon_confirm_form.tpl:28
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:13
 #: modules/mod_base/templates/_action_dialog_confirm.tpl:6
 #: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:36./modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:50
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:100
 #: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:94
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:46./modules/mod_mailinglist/templates/_dialog_mail_page.tpl:16./modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:28./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:17./modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:9./modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:26./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:67
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:60./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:94./modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:42
 #: modules/mod_oembed/templates/_media_upload_panel.tpl:72
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:146./modules/mod_survey/templates/page_admin_frontend_edit.tpl:16
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:14./modules/mod_translation/templates/_dialog_language_delete.tpl:6
 #: modules/mod_video_embed/templates/_media_upload_panel.tpl:43
 msgid "Cancel"
@@ -124,21 +130,19 @@ msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:22
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find.tpl:47
+#: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:63
 #: modules/mod_base_site/templates/_dialog_share_page.tpl:19
-#: modules/mod_editor_tinymce/templates/_admin_configure_module.tpl:31
+#: modules/mod_editor_tinymce/templates/_admin_configure_module.tpl:29
 #: modules/mod_email_status/templates/_dialog_email_status.tpl:4
 #: modules/mod_l10n/templates/_admin_configure_module.tpl:8
 #: modules/mod_mqtt/templates/_admin_configure_module.tpl:16
 #: modules/mod_oauth/templates/_oauth_consumer_tokens.tpl:47
+#: modules/mod_survey/templates/_dialog_survey_email_addresses.tpl:7
 #: modules/mod_video/templates/_admin_configure_module.tpl:68
 msgid "Close"
 msgstr ""
 
-#: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:49
-msgid "Collaboration Groups"
-msgstr ""
-
-#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:353
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:371./modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:49
 msgid "Collaboration groups"
 msgstr ""
 
@@ -152,7 +156,8 @@ msgid ""
 msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:46
-#: modules/mod_admin/templates/_admin_edit_body.tpl:4./modules/mod_admin/mod_admin.erl:95
+#: modules/mod_admin/mod_admin.erl:95./modules/mod_admin/templates/_admin_edit_body.tpl:4
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:56
 #: modules/mod_logging/templates/admin_log_email.tpl:55
 msgid "Content"
 msgstr ""
@@ -179,10 +184,13 @@ msgstr ""
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:7./modules/mod_admin/templates/_admin_edit_blocks.tpl:40./modules/mod_admin/templates/_admin_edit_content_publish.tpl:80
 #: modules/mod_admin_category/templates/_action_dialog_delete_rsc.category.tpl:53
 #: modules/mod_admin_config/templates/_action_dialog_config_delete.tpl:8./modules/mod_admin_config/templates/admin_config.tpl:52
-#: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8./modules/mod_admin_identity/templates/_identity_verify_table.tpl:26./modules/mod_admin_identity/mod_admin_identity.erl:162
+#: modules/mod_admin_identity/mod_admin_identity.erl:162./modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8./modules/mod_admin_identity/templates/_identity_verify_table.tpl:26
 #: modules/mod_admin_predicate/templates/_action_dialog_delete_rsc.predicate.tpl:47
 #: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:51
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:49./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:71./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:92
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:10./modules/mod_mailinglist/templates/admin_mailinglist.tpl:44
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:30
+#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:27./modules/mod_survey/templates/page_admin_frontend_edit.tpl:17
 msgid "Delete"
 msgstr ""
 
@@ -190,7 +198,7 @@ msgstr ""
 msgid "Delete all user groups"
 msgstr ""
 
-#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:115
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:117
 msgid "Delete is canceled, there are users in the user groups."
 msgstr ""
 
@@ -198,7 +206,7 @@ msgstr ""
 msgid "Delete user group and move users"
 msgstr ""
 
-#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:119./modules/mod_acl_user_groups/mod_acl_user_groups.erl:140
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:126./modules/mod_acl_user_groups/mod_acl_user_groups.erl:149
 #: modules/mod_admin_category/mod_admin_category.erl:74./modules/mod_admin_category/mod_admin_category.erl:94
 #: modules/mod_admin_predicate/mod_admin_predicate.erl:84./modules/mod_admin_predicate/mod_admin_predicate.erl:90
 #: modules/mod_content_groups/mod_content_groups.erl:75./modules/mod_content_groups/mod_content_groups.erl:96
@@ -230,7 +238,7 @@ msgid "Export edit rules"
 msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:55
-msgid "File Uploads"
+msgid "File uploads"
 msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:70
@@ -288,7 +296,7 @@ msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:52
 #: modules/mod_admin/mod_admin.erl:116
-#: modules/mod_admin_modules/templates/admin_modules.tpl:3./modules/mod_admin_modules/templates/admin_modules.tpl:7./modules/mod_admin_modules/mod_admin_modules.erl:88
+#: modules/mod_admin_modules/mod_admin_modules.erl:88./modules/mod_admin_modules/templates/admin_modules.tpl:3./modules/mod_admin_modules/templates/admin_modules.tpl:7
 msgid "Modules"
 msgstr ""
 
@@ -304,6 +312,10 @@ msgstr ""
 #: modules/mod_admin/templates/_admin_edit_content_acl.tpl:8./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:8./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8./modules/mod_admin/templates/_admin_edit_content_person.tpl:8./modules/mod_admin/templates/_admin_edit_content_pub_period.tpl:8./modules/mod_admin/templates/_admin_edit_meta_features.tpl:6
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:8
 #: modules/mod_admin_predicate/templates/_admin_edit_content.predicate.tpl:6
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:13
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:6
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:6./modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
 #: modules/mod_twitter/templates/_admin_edit_sidebar_twitter.tpl:6
 msgid "Need more help?"
 msgstr ""
@@ -312,7 +324,7 @@ msgstr ""
 msgid "No ACL rules"
 msgstr ""
 
-#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:132
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:140
 msgid "Not all user groups could be deleted."
 msgstr ""
 
@@ -339,6 +351,7 @@ msgid "Publish"
 msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_admin_acl_rules_publish_buttons.tpl:41
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:29
 msgid "Revert"
 msgstr ""
 
@@ -349,7 +362,9 @@ msgstr ""
 #: modules/mod_acl_user_groups/templates/_action_dialog_change_category.tpl:11./modules/mod_acl_user_groups/templates/_dialog_acl_rule_edit.tpl:151./modules/mod_acl_user_groups/templates/admin_acl_rules.tpl:66
 #: modules/mod_admin/templates/_action_dialog_change_category.tpl:33./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:69./modules/mod_admin/templates/_admin_edit_content_publish.tpl:20./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
 #: modules/mod_admin_config/templates/_action_dialog_config_edit.tpl:24
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:106./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:69
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:53
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:99
 #: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:93
 msgid "Save"
 msgstr ""
@@ -389,7 +404,7 @@ msgid "Test Access Control Rules"
 msgstr ""
 
 #: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:31
-msgid "The URL is only valid for a day."
+msgid "The URL is only valid for one day."
 msgstr ""
 
 #: modules/mod_acl_user_groups/templates/_dialog_acl_rules_try.tpl:12
@@ -441,11 +456,7 @@ msgid ""
 "rules will be <b>replaced</b> by the rule definition file that is uploaded."
 msgstr ""
 
-#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:37
-msgid "Use Published Rules"
-msgstr ""
-
-#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:22
+#: modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:22./modules/mod_acl_user_groups/templates/page_acl_user_group_try.tpl:37
 msgid "Use published rules"
 msgstr ""
 
@@ -455,7 +466,7 @@ msgid ""
 "them."
 msgstr ""
 
-#: modules/mod_acl_user_groups/templates/_admin_edit_basics_user_extra.tpl:3./modules/mod_acl_user_groups/mod_acl_user_groups.erl:348
+#: modules/mod_acl_user_groups/mod_acl_user_groups.erl:366./modules/mod_acl_user_groups/templates/_admin_edit_basics_user_extra.tpl:3
 msgid "User groups"
 msgstr ""
 
@@ -518,7 +529,7 @@ msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
 msgid "insert (acl action)"
-msgstr "insert"
+msgstr ""
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:68
 msgid "link (acl action)"
@@ -553,7 +564,7 @@ msgstr ""
 msgid "view (acl action)"
 msgstr "view"
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:39
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:29
 msgid "+ add"
 msgstr ""
 
@@ -574,7 +585,7 @@ msgstr ""
 msgid "About categories"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:45./modules/mod_admin/templates/_admin_edit_depiction.tpl:23
+#: modules/mod_admin/templates/_admin_edit_content_page_connections_list.tpl:35./modules/mod_admin/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
 msgstr ""
 
@@ -594,7 +605,7 @@ msgstr ""
 msgid "Add media to body"
 msgstr ""
 
-#: modules/mod_admin/actions/action_admin_link.erl:80./modules/mod_admin/mod_admin.erl:387
+#: modules/mod_admin/mod_admin.erl:387./modules/mod_admin/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr ""
 
@@ -674,6 +685,7 @@ msgid "Basic"
 msgstr ""
 
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:4./modules/mod_admin/templates/blocks/_admin_edit_block_li_text.tpl:4
+#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
 msgid "Block"
 msgstr ""
 
@@ -735,6 +747,7 @@ msgid "Connect a page"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:76./modules/mod_admin/templates/_admin_edit_content_address.tpl:138
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:101
 msgid "Country"
 msgstr ""
 
@@ -755,11 +768,12 @@ msgstr ""
 msgid "Customize page slug"
 msgstr ""
 
-#: modules/mod_admin/templates/admin.tpl:4./modules/mod_admin/templates/admin.tpl:8./modules/mod_admin/mod_admin.erl:90
+#: modules/mod_admin/mod_admin.erl:90./modules/mod_admin/templates/admin.tpl:4./modules/mod_admin/templates/admin.tpl:8
 msgid "Dashboard"
 msgstr ""
 
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:36
+#: modules/mod_backup/templates/_admin_backup_list.tpl:5
 #: modules/mod_base/templates/directory_index.tpl:16
 #: modules/mod_logging/templates/admin_log_email.tpl:58
 msgid "Date"
@@ -789,9 +803,10 @@ msgstr ""
 msgid "Dependent"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_block_li.tpl:6./modules/mod_admin/templates/_rsc_edge.tpl:18./modules/mod_admin/templates/_rsc_edge_media.tpl:22
+#: modules/mod_admin/templates/_admin_edit_block_li.tpl:6./modules/mod_admin/templates/_rsc_edge.tpl:19./modules/mod_admin/templates/_rsc_edge_media.tpl:22
 #: modules/mod_facebook/templates/_facebook_login_link.tpl:11
 #: modules/mod_instagram/templates/_logon_extra_instagram.tpl:13
+#: modules/mod_linkedin/templates/_logon_extra.tpl:13
 #: modules/mod_twitter/templates/_logon_extra.tpl:13
 msgid "Disconnect"
 msgstr ""
@@ -825,11 +840,14 @@ msgstr ""
 msgid "E-mail address"
 msgstr ""
 
-#: modules/mod_admin/templates/_rsc_edge.tpl:15./modules/mod_admin/templates/admin_edit.tpl:3
+#: modules/mod_admin/templates/_rsc_edge.tpl:16./modules/mod_admin/templates/admin_edit.tpl:3
 #: modules/mod_admin_config/actions/action_admin_config_dialog_config_edit.erl:50./modules/mod_admin_config/templates/admin_config.tpl:53
+#: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:3
 #: modules/mod_base_site/templates/_meta.tpl:11
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:71./modules/mod_mailinglist/templates/admin_mailing_status.tpl:14./modules/mod_mailinglist/templates/admin_mailinglist.tpl:40
 #: modules/mod_menu/templates/_admin_menu_menu_view.collection.tpl:40./modules/mod_menu/templates/_menu_edit_item.tpl:15
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:28
+#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:26
 msgid "Edit"
 msgstr ""
 
@@ -892,6 +910,7 @@ msgid "Find Page"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:104
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:201
 msgid "Find page"
 msgstr ""
 
@@ -919,7 +938,8 @@ msgstr ""
 msgid "Go back."
 msgstr ""
 
-#: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:18./modules/mod_admin/mod_admin.erl:158
+#: modules/mod_admin/mod_admin.erl:158./modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:18
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:114
 msgid "Header"
 msgstr ""
 
@@ -1014,9 +1034,10 @@ msgstr ""
 msgid "Make media item"
 msgstr ""
 
-#: modules/mod_admin/templates/admin_media.tpl:3./modules/mod_admin/templates/admin_media.tpl:57./modules/mod_admin/mod_admin.erl:103
+#: modules/mod_admin/mod_admin.erl:103./modules/mod_admin/templates/admin_media.tpl:3./modules/mod_admin/templates/admin_media.tpl:57
 #: modules/mod_admin_merge/templates/admin_merge_compare.tpl:97
 #: modules/mod_base_site/templates/page.collection.tpl:8
+#: modules/mod_filestore/templates/admin_filestore.tpl:110
 msgid "Media"
 msgstr ""
 
@@ -1049,7 +1070,6 @@ msgid "Media title"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:26
-#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:56
 msgid "Middle"
 msgstr ""
 
@@ -1078,6 +1098,7 @@ msgstr ""
 #: modules/mod_admin_identity/templates/admin_users.tpl:50
 #: modules/mod_admin_predicate/templates/admin_predicate.tpl:25
 #: modules/mod_comment/templates/_comments_form.tpl:24./modules/mod_comment/templates/admin_comments.tpl:22
+#: modules/mod_contact/templates/contact.tpl:11./modules/mod_contact/templates/email_contact.tpl:10
 msgid "Name"
 msgstr ""
 
@@ -1093,7 +1114,7 @@ msgstr ""
 msgid "No features are enabled for this meta-resource."
 msgstr ""
 
-#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:86
+#: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:85
 msgid "No items"
 msgstr ""
 
@@ -1107,7 +1128,7 @@ msgid "No pages found."
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:6./modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:8
-#: modules/mod_admin_predicate/templates/admin_edges.tpl:3./modules/mod_admin_predicate/mod_admin_predicate.erl:193
+#: modules/mod_admin_predicate/mod_admin_predicate.erl:193./modules/mod_admin_predicate/templates/admin_edges.tpl:3
 msgid "Page connections"
 msgstr ""
 
@@ -1131,7 +1152,7 @@ msgstr ""
 msgid "Page title"
 msgstr ""
 
-#: modules/mod_admin/templates/admin_overview.tpl:3./modules/mod_admin/mod_admin.erl:99
+#: modules/mod_admin/mod_admin.erl:99./modules/mod_admin/templates/admin_overview.tpl:3
 msgid "Pages"
 msgstr ""
 
@@ -1194,6 +1215,7 @@ msgid "Publish this page"
 msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18./modules/mod_admin/templates/_action_dialog_edit_basics.tpl:41./modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:64./modules/mod_admin/templates/_admin_edit_content_publish.tpl:33
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:38
 msgid "Published"
 msgstr ""
 
@@ -1291,10 +1313,12 @@ msgid "Save and View"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:23./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:6
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:109./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:73
 msgid "Save and view the page."
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:2
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:106./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:69
 msgid "Save this page."
 msgstr ""
 
@@ -1397,6 +1421,7 @@ msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_person.tpl:38
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:29
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:43
 msgid "Surname"
 msgstr ""
 
@@ -1458,6 +1483,10 @@ msgstr ""
 msgid "This connection already exists."
 msgstr ""
 
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:42
+msgid "This name is in use by another page."
+msgstr ""
+
 #: modules/mod_admin/templates/_admin_edit_js.tpl:20
 msgid "This page has been deleted."
 msgstr ""
@@ -1474,7 +1503,7 @@ msgid ""
 "actor or a brand."
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:50
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:51
 msgid "This resource was created by the module"
 msgstr ""
 
@@ -1485,6 +1514,7 @@ msgstr ""
 #: modules/mod_admin/templates/_admin_edit_basics_form.tpl:5./modules/mod_admin/templates/_admin_overview_list.tpl:11./modules/mod_admin/templates/admin_media.tpl:85./modules/mod_admin/templates/admin_referrers.tpl:20./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
 #: modules/mod_admin_modules/templates/admin_modules.tpl:16
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_new.tpl:9./modules/mod_admin_predicate/templates/admin_predicate.tpl:24
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:16./modules/mod_mailinglist/templates/admin_mailinglist.tpl:21
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:4
 #: modules/mod_translation/templates/admin_translation_status.tpl:23
 msgid "Title"
@@ -1508,7 +1538,7 @@ msgstr ""
 msgid "Unique name"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:56
+#: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:57
 msgid "Unique uri"
 msgstr ""
 
@@ -1529,6 +1559,7 @@ msgid "Upload by URL"
 msgstr ""
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:35
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:27./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
 msgid "Upload file"
 msgstr ""
 
@@ -1554,6 +1585,8 @@ msgid "Valid for:"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_content_publish_view.tpl:2./modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:111
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:42
 msgid "View"
 msgstr ""
 
@@ -1561,11 +1594,12 @@ msgstr ""
 msgid "View all pages from this category"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:45
+#: modules/mod_admin/templates/_admin_edit_content_page_connections.tpl:46
 msgid "View all referrers"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:111
 msgid "View this page."
 msgstr ""
 
@@ -1645,6 +1679,7 @@ msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_header.tpl:12./modules/mod_admin/templates/_admin_edit_header.tpl:17
 #: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:33
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:6./modules/mod_backup/templates/_admin_backup_diff.tpl:16
 msgid "by"
 msgstr ""
 
@@ -1654,12 +1689,14 @@ msgstr ""
 #: modules/mod_admin_predicate/templates/_admin_edges_list.tpl:29
 #: modules/mod_comment/templates/admin_comments.tpl:31
 #: modules/mod_logging/templates/_admin_log_row.tpl:8
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
 msgid "d M Y, H:i"
 msgstr ""
 
 #: modules/mod_admin/templates/admin_media.tpl:113
-#: modules/mod_admin_predicate/templates/admin_predicate.tpl:39
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:40
 #: modules/mod_comment/templates/admin_comments.tpl:39
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:27./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:58
 msgid "delete"
 msgstr ""
 
@@ -1669,7 +1706,8 @@ msgstr ""
 
 #: modules/mod_admin/templates/_admin_overview_list.tpl:52./modules/mod_admin/templates/admin_media.tpl:124./modules/mod_admin/templates/admin_referrers.tpl:39./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67./modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
 #: modules/mod_admin_identity/templates/admin_users.tpl:74
-#: modules/mod_admin_predicate/templates/admin_predicate.tpl:40
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:43
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:26
 msgid "edit"
 msgstr ""
 
@@ -1691,6 +1729,7 @@ msgid "matching"
 msgstr ""
 
 #: modules/mod_admin/templates/_admin_edit_block_li.tpl:9
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:19./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29
 msgid "name"
 msgstr ""
 
@@ -1711,7 +1750,7 @@ msgstr ""
 msgid "undo"
 msgstr ""
 
-#: modules/mod_admin/templates/_admin_edit_header.tpl:29./modules/mod_admin/templates/_choose_media.tpl:9./modules/mod_admin/templates/_rsc_edge_item.tpl:9./modules/mod_admin/templates/_rsc_edge_media.tpl:18
+#: modules/mod_admin/templates/_admin_edit_header.tpl:29./modules/mod_admin/templates/_choose_media.tpl:9./modules/mod_admin/templates/_rsc_edge_item.tpl:9./modules/mod_admin/templates/_rsc_edge_media.tpl:18./modules/mod_admin/templates/_rsc_item.tpl:10
 msgid "untitled"
 msgstr ""
 
@@ -1732,11 +1771,11 @@ msgstr ""
 msgid "Are you sure you want to delete the following categories:"
 msgstr ""
 
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:8./modules/mod_admin_category/mod_admin_category.erl:185
+#: modules/mod_admin_category/mod_admin_category.erl:185./modules/mod_admin_category/templates/admin_category_sorter.tpl:7
 msgid "Categories"
 msgstr ""
 
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:10
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:9
 msgid ""
 "Categories are used to categorize all pages. Every page belongs to exactly "
 "one category.<br/>The categories are defined in a hierarchy. Here you can "
@@ -1761,12 +1800,12 @@ msgstr ""
 msgid "Delete is canceled, there are pages in the category."
 msgstr ""
 
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:25
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:24
 msgid "Drag categories to the place where you want them in the hierarchy."
 msgstr ""
 
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:19
-#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:35
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:18
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:39
 msgid "How does this work?"
 msgstr ""
 
@@ -1789,7 +1828,7 @@ msgstr ""
 msgid "There are no pages in these categories."
 msgstr ""
 
-#: modules/mod_admin_category/templates/admin_category_sorter.tpl:22
+#: modules/mod_admin_category/templates/admin_category_sorter.tpl:21
 msgid ""
 "Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove "
 "categories."
@@ -1864,12 +1903,39 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
+#: modules/mod_admin_frontend/templates/_admin_frontend_nopage.tpl:2
+msgid "Add pages or click on a page in the menu."
+msgstr ""
+
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:59
+#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:28
+#: modules/mod_translation/templates/admin_translation.tpl:25./modules/mod_translation/templates/admin_translation.tpl:72
+msgid "Language"
+msgstr ""
+
+#: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:31./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:42
+msgid "Loading ..."
+msgstr ""
+
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:109./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:73
+msgid "Save &amp; view"
+msgstr ""
+
+#: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:67
+msgid "This page"
+msgstr ""
+
+#: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:43
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:11
+msgid "till"
+msgstr ""
+
 #: modules/mod_admin_identity/templates/admin_users.tpl:65
 msgid "(that's you)"
 msgstr ""
 
 #: modules/mod_admin_identity/templates/_admin_identity_email.tpl:11
-#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:18
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:20
 #: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:21
 msgid "Add"
 msgstr ""
@@ -1939,6 +2005,9 @@ msgstr ""
 
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:37
 #: modules/mod_comment/templates/_comments_form.tpl:32
+#: modules/mod_contact/templates/contact.tpl:16./modules/mod_contact/templates/email_contact.tpl:13
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:8./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:9./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:20
+#: modules/mod_signup/templates/_signup_form_fields_email.tpl:53
 msgid "E-mail"
 msgstr ""
 
@@ -1946,15 +2015,15 @@ msgstr ""
 msgid "Email Status"
 msgstr ""
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:8
-msgid ""
-"Enter a (unique) username and password. Usernames and passwords are case "
-"sensitive, so be careful when entering them."
-msgstr ""
-
 #: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:66
 msgid ""
 "Enter a unique username and a password. Usernames and passwords are case "
+"sensitive, so be careful when entering them."
+msgstr ""
+
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:8
+msgid ""
+"Enter a unique username and password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
 msgstr ""
 
@@ -1992,11 +2061,6 @@ msgstr ""
 msgid ""
 "If you don't know this site then you can ignore this e-mail. Maybe someone "
 "made an error typing his or her e-mail address."
-msgstr ""
-
-#: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:28
-#: modules/mod_translation/templates/admin_translation.tpl:25./modules/mod_translation/templates/admin_translation.tpl:72
-msgid "Language"
 msgstr ""
 
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14./modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
@@ -2045,6 +2109,7 @@ msgstr ""
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:29./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:84
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11./modules/mod_authentication/templates/_logon_login_form_fields.tpl:11./modules/mod_authentication/templates/_logon_login_form_fields.tpl:12./modules/mod_authentication/templates/logon_confirm_form.tpl:15
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:32
 msgid "Password"
 msgstr ""
 
@@ -2059,6 +2124,7 @@ msgstr ""
 #: modules/mod_admin_identity/mod_admin_identity.erl:105
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:20./modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:20
 #: modules/mod_comment/templates/_comments_form.tpl:50
+#: modules/mod_contact/templates/contact.tpl:27
 msgid "Send"
 msgstr ""
 
@@ -2088,6 +2154,8 @@ msgid "Sorry, this username is already in use. Please try another one."
 msgstr ""
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:18
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:22
+#: modules/mod_survey/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr ""
 
@@ -2153,11 +2221,12 @@ msgstr ""
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:7
 #, fuzzy
 msgid "User actions"
-msgstr "insert"
+msgstr ""
 
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:21./modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:76./modules/mod_admin_identity/templates/admin_users.tpl:51./modules/mod_admin_identity/templates/email_admin_new_user.tpl:19
 #: modules/mod_admin_merge/templates/admin_merge_compare.tpl:80
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2./modules/mod_authentication/templates/_logon_login_form_fields.tpl:2./modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
 msgstr ""
 
@@ -2173,7 +2242,7 @@ msgstr ""
 msgid "Username has been deleted."
 msgstr ""
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:3./modules/mod_admin_identity/templates/admin_users.tpl:15./modules/mod_admin_identity/mod_admin_identity.erl:86
+#: modules/mod_admin_identity/mod_admin_identity.erl:86./modules/mod_admin_identity/templates/admin_users.tpl:3./modules/mod_admin_identity/templates/admin_users.tpl:15
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:29
 msgid "Users"
 msgstr ""
@@ -2298,15 +2367,11 @@ msgstr ""
 msgid "Merge"
 msgstr ""
 
-#: modules/mod_admin_merge/templates/admin_merge_compare.tpl:28
-msgid "Merge Pages"
-msgstr ""
-
 #: modules/mod_admin_merge/templates/_confirm_merge.tpl:63
 msgid "Merge and delete"
 msgstr ""
 
-#: modules/mod_admin_merge/templates/_admin_edit_sidebar.tpl:6
+#: modules/mod_admin_merge/templates/_admin_edit_sidebar.tpl:6./modules/mod_admin_merge/templates/admin_merge_compare.tpl:28
 msgid "Merge pages"
 msgstr ""
 
@@ -2404,8 +2469,10 @@ msgid "Deactivate"
 msgstr ""
 
 #: modules/mod_admin_modules/templates/admin_modules.tpl:17
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:22
 #: modules/mod_oauth/templates/_oauth_consumer_edit.tpl:45
 #: modules/mod_seo/templates/admin_seo.tpl:32
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
 msgstr ""
 
@@ -2511,7 +2578,7 @@ msgstr ""
 msgid "No page connections with the predicate:"
 msgstr ""
 
-#: modules/mod_admin_predicate/templates/admin_predicate.tpl:47
+#: modules/mod_admin_predicate/templates/admin_predicate.tpl:51
 msgid "No predicates found."
 msgstr ""
 
@@ -2533,7 +2600,7 @@ msgstr ""
 msgid "Page connections with the predicate"
 msgstr ""
 
-#: modules/mod_admin_predicate/templates/admin_predicate.tpl:3./modules/mod_admin_predicate/templates/admin_predicate.tpl:9./modules/mod_admin_predicate/mod_admin_predicate.erl:188
+#: modules/mod_admin_predicate/mod_admin_predicate.erl:188./modules/mod_admin_predicate/templates/admin_predicate.tpl:3./modules/mod_admin_predicate/templates/admin_predicate.tpl:9
 msgid "Predicates"
 msgstr ""
 
@@ -2580,7 +2647,8 @@ msgid ""
 "categories are valid."
 msgstr ""
 
-#: modules/mod_admin_statistics/mod_admin_statistics.erl:54
+#: modules/mod_admin_statistics/mod_admin_statistics.erl:54./modules/mod_admin_statistics/templates/admin_statistics.tpl:3
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:20
 msgid "Statistics"
 msgstr ""
 
@@ -2636,6 +2704,7 @@ msgstr ""
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:25
 #: modules/mod_base/actions/action_base_confirm.erl:35
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:18
 msgid "Confirm"
 msgstr ""
 
@@ -2664,6 +2733,7 @@ msgid ""
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_expired_form.tpl:16./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:35
 msgid "Enter a password"
 msgstr ""
 
@@ -2691,10 +2761,11 @@ msgstr ""
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:5
 #: modules/mod_logging/templates/admin_log_email.tpl:65
+#: modules/mod_survey/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr ""
 
-#: modules/mod_authentication/templates/admin_authentication_services.tpl:3./modules/mod_authentication/templates/admin_authentication_services.tpl:7./modules/mod_authentication/mod_authentication.erl:71
+#: modules/mod_authentication/mod_authentication.erl:71./modules/mod_authentication/templates/admin_authentication_services.tpl:3./modules/mod_authentication/templates/admin_authentication_services.tpl:7
 msgid "External Services"
 msgstr ""
 
@@ -2746,6 +2817,7 @@ msgid "Keep me signed in"
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_expired_form.tpl:19./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:38./modules/mod_signup/templates/_signup_form_fields_username.tpl:42
 msgid "Minimum characters:"
 msgstr ""
 
@@ -2764,6 +2836,8 @@ msgstr ""
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:9
 #: modules/mod_base/templates/_action_dialog_alert.tpl:5./modules/mod_base/templates/_action_dialog_confirm.tpl:7
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:15
 msgid "OK"
 msgstr ""
 
@@ -2788,6 +2862,7 @@ msgid "Repeat password"
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_expired_form.tpl:30./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:24
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:52
 msgid "Repeat your password"
 msgstr ""
 
@@ -2861,6 +2936,7 @@ msgid ""
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:25
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:53
 msgid "This does not match the first password"
 msgstr ""
 
@@ -2968,10 +3044,12 @@ msgid "Your password has expired"
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_expired_form.tpl:19./modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:38
 msgid "Your password is too short."
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_login_extra.tpl:6
+#: modules/mod_signup/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr ""
 
@@ -2979,8 +3057,181 @@ msgstr ""
 msgid "user@example.com"
 msgstr ""
 
+#: modules/mod_backup/templates/admin_backup.tpl:3
+msgid "Admin Backups"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:28
+msgid "Are you sure you want to revert to this version?"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:41
+msgid "At any moment you can make a backup of your system."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:44
+msgid "Back to the edit page"
+msgstr ""
+
 #: modules/mod_backup/mod_backup.erl:65
 msgid "Backup"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:11
+msgid "Backup &amp; Restore"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:11
+msgid "Backup and restore options for your content."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:9
+msgid "Backups"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:10
+msgid "Changes since"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:42
+msgid "Check and possibly restore an earlier version of your page."
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:13
+msgid ""
+"Click on <b>List and restore an earlier version</b> to get an overview of "
+"earlier saved versions of this page.<br/>You can also save the complete "
+"contents of a page to a file. Later you can reload this file, replacing the "
+"current page contents. Note that the file does not contain your unsaved "
+"changes. Connections and media are not saved as well."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:38
+msgid "Deleted"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:27
+msgid "Download backup file"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:13
+msgid "Help about backup &amp; restore"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:23
+msgid "List and restore an earlier version"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:33
+msgid "Make a daily backup of the database and uploaded files."
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_backup_list.tpl:29
+msgid "No backups present."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:67
+msgid "Previous"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_edit_sidebar.tpl:29./modules/mod_backup/templates/_admin_edit_sidebar.tpl:32./modules/mod_backup/templates/_dialog_backup_upload.tpl:14
+msgid "Restore backup"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:26
+msgid "Revert to this version…"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:3./modules/mod_backup/templates/admin_backup_revision.tpl:36./modules/mod_backup/templates/admin_backup_revision.tpl:38
+msgid "Revisions for"
+msgstr ""
+
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:3
+msgid ""
+" Select the backup file you want to upload. The file must be a .bert file."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:26
+msgid "Show import/export panel in the admin."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:45
+msgid "Start backup now"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:46
+msgid "Start database-only backup now"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:51
+msgid ""
+"The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" "
+"config key to the path to pg_dump and return to this page."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:52
+msgid ""
+"The \"tar\" command was not found in the path. Set the \"tar\" config key to "
+"the path to tar and return to this page."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:41
+msgid "The backup comprises two parts, the database and the uploaded files."
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_backup_diff.tpl:5./modules/mod_backup/templates/_admin_backup_diff.tpl:15
+msgid "This is the version saved on"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:63
+msgid ""
+"This site has cloud file store enabled, and there are <strong>$1</strong> "
+"media files on this system that are only stored in the cloud and not on this "
+"machine. These files will not backed up!"
+msgstr ""
+
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
+msgid "This will overwrite your page with the contents of the backup file."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:61
+#: modules/mod_logging/templates/admin_log_email.tpl:66
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
+msgid "Warning"
+msgstr ""
+
+#: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
+msgid "Warning!"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:49
+msgid "Warning:"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup_revision.tpl:74
+msgid "Y-m-d H:i"
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:42
+msgid "You can have 10 backups, older ones will be deleted automatically."
+msgstr ""
+
+#: modules/mod_backup/templates/admin_backup.tpl:49
+msgid ""
+"Your backup is not correctly configured. The backup module will not work "
+"until the problem(s) below have been resolved:"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_backup_list.tpl:17
+msgid "download database"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_backup_list.tpl:19
+msgid "download files"
+msgstr ""
+
+#: modules/mod_backup/templates/_admin_backup_list.tpl:15
+msgid "this backup is in progress"
 msgstr ""
 
 #: modules/mod_base/templates/_session_info.tpl:5
@@ -3090,6 +3341,7 @@ msgid "Type"
 msgstr ""
 
 #: modules/mod_base/templates/error.tpl:16
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
 msgid "error"
 msgstr ""
 
@@ -3159,6 +3411,7 @@ msgid "View in browser"
 msgstr ""
 
 #: modules/mod_base_site/templates/home.tpl:3
+#: modules/mod_signup/templates/signup_confirm.tpl:8
 msgid "Welcome"
 msgstr ""
 
@@ -3182,11 +3435,12 @@ msgstr ""
 msgid "Comment settings"
 msgstr ""
 
-#: modules/mod_comment/templates/_comments.tpl:4./modules/mod_comment/templates/admin_comments_settings.tpl:11./modules/mod_comment/mod_comment.erl:206
+#: modules/mod_comment/mod_comment.erl:206./modules/mod_comment/templates/_comments.tpl:4./modules/mod_comment/templates/admin_comments_settings.tpl:11
 msgid "Comments"
 msgstr ""
 
 #: modules/mod_comment/templates/admin_comments.tpl:22
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:8./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:48
 msgid "Email"
 msgstr ""
 
@@ -3208,6 +3462,7 @@ msgid "Log on or sign up to comment"
 msgstr ""
 
 #: modules/mod_comment/templates/_comments_form.tpl:41./modules/mod_comment/templates/admin_comments.tpl:21
+#: modules/mod_contact/templates/contact.tpl:22./modules/mod_contact/templates/email_contact.tpl:16
 msgid "Message"
 msgstr ""
 
@@ -3243,6 +3498,7 @@ msgstr ""
 
 #: modules/mod_comment/templates/admin_comments.tpl:13./modules/mod_comment/templates/admin_comments_settings.tpl:12
 #: modules/mod_development/templates/admin_development.tpl:12
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:7
 msgid "Settings"
 msgstr ""
 
@@ -3250,16 +3506,10 @@ msgstr ""
 msgid "There are no comments."
 msgstr ""
 
-#: modules/mod_comment/templates/_comments_moderation.tpl:1
+#: modules/mod_comment/templates/_comments_form.tpl:7./modules/mod_comment/templates/_comments_moderation.tpl:1
 msgid ""
 "Your comment has been saved and will be subject to moderation before it is "
 "displayed on the website"
-msgstr ""
-
-#: modules/mod_comment/templates/_comments_form.tpl:7
-msgid ""
-"Your comment has been saved and will be subject to review before it is "
-"displayed to other visitors of the website. Thank you for your comment!"
 msgstr ""
 
 #: modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:4./modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:15
@@ -3268,6 +3518,26 @@ msgstr ""
 
 #: modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:9./modules/mod_comment/templates/_admin_comments_toggledisplay.tpl:20
 msgid "unpublish"
+msgstr ""
+
+#: modules/mod_contact/templates/email_contact.tpl:6
+msgid "Hello, the contact form of"
+msgstr ""
+
+#: modules/mod_contact/templates/contact.tpl:32
+msgid "Thank you!"
+msgstr ""
+
+#: modules/mod_contact/templates/contact.tpl:33
+msgid "Your message has been submitted! We’ll get in touch soon."
+msgstr ""
+
+#: modules/mod_contact/templates/email_contact.tpl:3
+msgid "contact form on"
+msgstr ""
+
+#: modules/mod_contact/templates/email_contact.tpl:6
+msgid "has been submitted."
 msgstr ""
 
 #: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:1
@@ -3304,8 +3574,46 @@ msgstr ""
 msgid "This page is part of the group:"
 msgstr ""
 
-#: modules/mod_custom_redirect/mod_custom_redirect.erl:59
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:25
+#: modules/mod_filestore/templates/admin_filestore.tpl:150
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17
+#, fuzzy
+msgid "Actions"
+msgstr ""
+
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:3
+msgid "Admin Custom Redirects"
+msgstr ""
+
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:21
+msgid "Domain"
+msgstr ""
+
+#: modules/mod_custom_redirect/mod_custom_redirect.erl:59./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:7
 msgid "Domains and redirects"
+msgstr ""
+
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:22
+#: modules/mod_development/templates/_development_dispatch_trace.tpl:4
+msgid "Path"
+msgstr ""
+
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:24./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:45./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:67./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:88
+msgid "Permanent"
+msgstr ""
+
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:23
+msgid "Redirect to"
+msgstr ""
+
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:8
+msgid "Redirect unknown domains and paths to known pages or locations."
+msgstr ""
+
+#: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:9
+msgid ""
+"The new location can be a local path or a complete URL. Leave the host empty "
+"for redirects within this site."
 msgstr ""
 
 #: modules/mod_custom_redirect/mod_custom_redirect.erl:73
@@ -3328,7 +3636,7 @@ msgstr ""
 msgid "Controller"
 msgstr ""
 
-#: modules/mod_development/mod_development.erl:200
+#: modules/mod_development/mod_development.erl:190
 msgid "Development"
 msgstr ""
 
@@ -3338,8 +3646,8 @@ msgstr ""
 
 #: modules/mod_development/templates/admin_development.tpl:44
 msgid ""
-"Download css and javascript files as separate files (ie. don’t combine them "
-"in one url)."
+"Download CSS and JavaScript files as separate files. Don’t combine them in "
+"one URL."
 msgstr ""
 
 #: modules/mod_development/templates/admin_development_templates.tpl:18
@@ -3347,7 +3655,7 @@ msgid "Empty log"
 msgstr ""
 
 #: modules/mod_development/templates/admin_development.tpl:54
-msgid "Enable API to recompile &amp; build Zotonic"
+msgid "Enable API to recompile and build Zotonic"
 msgstr ""
 
 #: modules/mod_development/templates/admin_development.tpl:105
@@ -3383,7 +3691,7 @@ msgid "Location"
 msgstr ""
 
 #: modules/mod_development/templates/admin_development.tpl:93
-msgid "Match a request url, display matched dispatch rule."
+msgid "Match a request URL, display matched dispatch rule."
 msgstr ""
 
 #: modules/mod_development/templates/_development_dispatch_trace.tpl:38./modules/mod_development/templates/_development_dispatch_trace.tpl:41
@@ -3408,10 +3716,6 @@ msgstr ""
 
 #: modules/mod_development/templates/_development_dispatch_trace.tpl:26./modules/mod_development/templates/_development_dispatch_trace.tpl:33./modules/mod_development/templates/_development_dispatch_trace.tpl:60
 msgid "Options"
-msgstr ""
-
-#: modules/mod_development/templates/_development_dispatch_trace.tpl:4
-msgid "Path"
 msgstr ""
 
 #: modules/mod_development/templates/_development_dispatch_trace.tpl:69./modules/mod_development/templates/_development_dispatch_trace.tpl:75
@@ -3455,7 +3759,7 @@ msgid "Template path"
 msgstr ""
 
 #: modules/mod_development/templates/_development_dispatch_trace.tpl:54
-msgid "This is resource is unknown or does not have an uri"
+msgid "This resource is unknown or does not have a URI"
 msgstr ""
 
 #: modules/mod_development/templates/admin_development.tpl:9
@@ -3550,6 +3854,10 @@ msgstr ""
 msgid "Media Properties"
 msgstr ""
 
+#: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:56
+msgid "Medium"
+msgstr ""
+
 #: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:51
 msgid "Small"
 msgstr ""
@@ -3558,7 +3866,38 @@ msgstr ""
 msgid "DKIM e-mail setup"
 msgstr ""
 
+#: modules/mod_email_dkim/templates/admin_email_dkim.tpl:6
+msgid "DKIM e-mail signing setup"
+msgstr ""
+
+#: modules/mod_email_dkim/templates/admin_email_dkim.tpl:17
+msgid "The DNS entry should contain the following information:"
+msgstr ""
+
+#: modules/mod_email_dkim/templates/admin_email_dkim.tpl:10
+msgid "The location of these key files are the following:"
+msgstr ""
+
+#: modules/mod_email_dkim/templates/admin_email_dkim.tpl:9
+msgid ""
+"The module has generated an RSA keypair for you which will be used when "
+"signing outgoing emails."
+msgstr ""
+
+#: modules/mod_email_dkim/templates/admin_email_dkim.tpl:16
+msgid ""
+"To finalize the DKIM configuration, you need to add an DNS entry TXT record "
+"to the following domain:"
+msgstr ""
+
+#: modules/mod_email_dkim/templates/admin_email_dkim.tpl:22
+msgid ""
+"When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck"
+"\">DKIM keycheck</a> website to verify your domain's DKIM record."
+msgstr ""
+
 #: modules/mod_email_status/templates/_email_status_view.tpl:83
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:35
 msgid "Bounces"
 msgstr ""
 
@@ -3636,6 +3975,50 @@ msgstr ""
 msgid "Total/Status"
 msgstr ""
 
+#: modules/mod_export/templates/_vcalendar_header.tpl:7
+msgid "Calendar"
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:19./modules/mod_export/templates/_admin_edit_sidebar.tpl:31./modules/mod_export/templates/_admin_edit_sidebar.tpl:39
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:94./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:38
+msgid "Download CSV"
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:21./modules/mod_export/templates/_admin_edit_sidebar.tpl:34./modules/mod_export/templates/_admin_edit_sidebar.tpl:42
+msgid "Download Event"
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:20./modules/mod_export/templates/_admin_edit_sidebar.tpl:32./modules/mod_export/templates/_admin_edit_sidebar.tpl:40
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:98./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:42
+msgid "Download Excel"
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:28
+msgid "Download all the pages in the collection"
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:16
+msgid "Download all the pages matching the query"
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:25
+msgid ""
+"Download as Event if the query returns events and you want export for a "
+"calendar program."
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:6
+msgid "Download this page or the query as a spreadsheet or in another format."
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:4
+msgid "Export"
+msgstr ""
+
+#: modules/mod_export/templates/_admin_edit_sidebar.tpl:6
+msgid "Help about export"
+msgstr ""
+
 #: modules/mod_facebook/templates/_admin_authentication_service.tpl:13
 msgid "App ID."
 msgstr ""
@@ -3668,6 +4051,7 @@ msgstr ""
 
 #: modules/mod_facebook/templates/_logon_service.facebook.tpl:1
 #: modules/mod_instagram/templates/_logon_service.instagram.tpl:1
+#: modules/mod_linkedin/templates/_logon_service.linkedin.tpl:1
 #: modules/mod_twitter/templates/_logon_service.twitter.tpl:1
 msgid "One moment please"
 msgstr ""
@@ -3704,12 +4088,175 @@ msgstr ""
 msgid "Your Facebook Developer Dashboard"
 msgstr ""
 
+#: modules/mod_filestore/templates/admin_filestore.tpl:42
+#: modules/mod_linkedin/templates/_admin_authentication_service.tpl:14
+#: modules/mod_oembed/templates/_admin_authentication_service.tpl:13
+msgid "API Key"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:49
+msgid "API Secret"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:71
+msgid "After 1 month"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:70
+msgid "After 1 week"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:72
+msgid "After 3 months"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:159
+msgid "All cloud files will be queued for download."
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:158
+msgid ""
+"All files will be queued, uploads will start in the background within 10 "
+"minutes."
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:153
+msgid "All local uploaded and preview files can be moved to the cloud."
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:32
+msgid "Base URL"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:79
+msgid ""
+"Before the settings are saved they will be checked by uploading (and "
+"removing) a small file."
+msgstr ""
+
 #: modules/mod_filestore/mod_filestore.erl:115
 msgid "Cloud File Store"
 msgstr ""
 
-#: modules/mod_import_csv/mod_import_csv.erl:74
+#: modules/mod_filestore/templates/admin_filestore.tpl:3./modules/mod_filestore/templates/admin_filestore.tpl:7
+msgid "Cloud File Store Configuration"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:112
+msgid "Cloud Files"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:157
+msgid "Could not access the service, double check your settings and try again."
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:82
+msgid ""
+"Could not access the service, double check your settings and try again. Make "
+"sure that API key has access rights to create and remove a (temporary) "
+"<code>-zotonic-filestore-test-file-</code> file."
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:11
+msgid ""
+"Currently Zotonic supports services that are compatible with the S3 file "
+"services API. These include:"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:136
+msgid "Delete Queue"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:66
+msgid "Delete files from the cloud file store"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:135
+msgid "Download Queue"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:117
+msgid "Files"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:69
+msgid "Immediately"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:111
+msgid "Local Files"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:164
+msgid "Move all S3 files to local"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:163
+msgid "Move all local files to S3"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:73
+#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:40
+msgid "Never"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:29
+msgid "S3 Cloud Location and Credentials"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:96
+msgid "S3 Cloud Utilities and Statistics"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:86
+msgid "Save Settings"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:81
+msgid "Settings are working fine and are saved."
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:123
+msgid "Storage"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:154
+msgid "This will queue the files for later asynchronous upload."
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:134
+msgid "Upload Queue"
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:59
+msgid "Upload new media files to the cloud file store"
+msgstr ""
+
+#: modules/mod_filestore/support/filestore_admin.erl:58./modules/mod_filestore/support/filestore_admin.erl:70./modules/mod_filestore/templates/admin_filestore.tpl:175
+msgid "You are not allowed to change these settings."
+msgstr ""
+
+#: modules/mod_filestore/templates/admin_filestore.tpl:9
+msgid ""
+"Zotonic can store uploaded and resized files in the cloud. Here you can "
+"configure the location and access keys for the cloud service."
+msgstr ""
+
+#: modules/mod_import_csv/templates/_admin_import_button.tpl:4./modules/mod_import_csv/templates/_admin_import_button.tpl:4
+msgid "Import CSV file"
+msgstr ""
+
+#: modules/mod_import_csv/mod_import_csv.erl:74./modules/mod_import_csv/templates/_admin_import.tpl:3./modules/mod_import_csv/templates/_admin_import.tpl:8
 msgid "Import content"
+msgstr ""
+
+#: modules/mod_import_csv/templates/_admin_import_button.tpl:5
+msgid "Import data from a CSV file."
+msgstr ""
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:20
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:19
+msgid "Import previously deleted items again"
 msgstr ""
 
 #: modules/mod_import_csv/mod_import_csv.erl:107
@@ -3722,8 +4269,42 @@ msgid ""
 "it is ready."
 msgstr ""
 
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:9
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
+msgid "Select file"
+msgstr ""
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:27
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:26
+msgid "Start import"
+msgstr ""
+
 #: modules/mod_import_csv/mod_import_csv.erl:103
 msgid "This file cannot be imported."
+msgstr ""
+
+#: modules/mod_import_csv/templates/_dialog_import_csv.tpl:2
+msgid "Upload a CSV file from your computer."
+msgstr ""
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:4
+msgid "Import WXR file"
+msgstr ""
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:5
+msgid "Import a Wordpress WXR export file into Zotonic."
+msgstr ""
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:2
+msgid "Upload a wordpress WXR file from your computer."
+msgstr ""
+
+#: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:9
+msgid "WXR file"
+msgstr ""
+
+#: modules/mod_import_wordpress/templates/_admin_status.tpl:4
+msgid "Wordpress import"
 msgstr ""
 
 #: modules/mod_instagram/templates/_admin_authentication_service.tpl:45
@@ -3816,6 +4397,7 @@ msgid "Apr"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:38
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:23
 msgid "April"
 msgstr ""
 
@@ -3824,6 +4406,7 @@ msgid "Aug"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:42
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:27
 msgid "August"
 msgstr ""
 
@@ -3832,6 +4415,7 @@ msgid "Dec"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:46
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:31
 msgid "December"
 msgstr ""
 
@@ -3840,6 +4424,7 @@ msgid "Feb"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:36
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:21
 msgid "February"
 msgstr ""
 
@@ -3860,6 +4445,7 @@ msgid "Jan"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:35
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:20
 msgid "January"
 msgstr ""
 
@@ -3868,6 +4454,7 @@ msgid "Jul"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:41
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:26
 msgid "July"
 msgstr ""
 
@@ -3876,6 +4463,7 @@ msgid "Jun"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:40
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:25
 msgid "June"
 msgstr ""
 
@@ -3883,7 +4471,7 @@ msgstr ""
 msgid "L10N Configuration"
 msgstr ""
 
-#: modules/mod_l10n/templates/admin_l10n.tpl:7./modules/mod_l10n/mod_l10n.erl:189
+#: modules/mod_l10n/mod_l10n.erl:189./modules/mod_l10n/templates/admin_l10n.tpl:7
 msgid "Localization"
 msgstr ""
 
@@ -3892,10 +4480,12 @@ msgid "Mar"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:37
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:22
 msgid "March"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:39./modules/mod_l10n/support/l10n_date.erl:54
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:24
 msgid "May"
 msgstr ""
 
@@ -3908,6 +4498,7 @@ msgid "Nov"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:45
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:30
 msgid "November"
 msgstr ""
 
@@ -3916,6 +4507,7 @@ msgid "Oct"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:44
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:29
 msgid "October"
 msgstr ""
 
@@ -3928,6 +4520,7 @@ msgid "Sep"
 msgstr ""
 
 #: modules/mod_l10n/support/l10n_date.erl:43
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:28
 msgid "September"
 msgstr ""
 
@@ -3967,12 +4560,56 @@ msgstr ""
 msgid "noon"
 msgstr ""
 
+#: modules/mod_linkedin/templates/_logon_extra.tpl:18
+msgid "Connect with LinkedIn"
+msgstr ""
+
+#: modules/mod_linkedin/templates/_logon_extra.tpl:9./modules/mod_linkedin/templates/_logon_extra.tpl:11
+msgid "Disconnect from LinkedIn"
+msgstr ""
+
+#: modules/mod_linkedin/templates/_logon_extra.tpl:12
+msgid "Do you want to disconnect your LinkedIn account?"
+msgstr ""
+
+#: modules/mod_linkedin/templates/_logon_extra.tpl:18
+msgid "Log in with LinkedIn"
+msgstr ""
+
+#: modules/mod_linkedin/templates/_logon_service.linkedin.tpl:2
+msgid "Redirecting to LinkedIn."
+msgstr ""
+
+#: modules/mod_linkedin/templates/_admin_authentication_service.tpl:40
+msgid "Save LinkedIn Settings"
+msgstr ""
+
 #: modules/mod_linkedin/mod_linkedin.erl:47
 msgid "Saved the LinkedIn settings."
 msgstr ""
 
+#: modules/mod_linkedin/templates/_admin_authentication_service.tpl:21
+msgid "Secret Key"
+msgstr ""
+
+#: modules/mod_linkedin/templates/_admin_authentication_service.tpl:32
+msgid "Use LinkedIn authentication"
+msgstr ""
+
+#: modules/mod_linkedin/templates/_admin_authentication_service.tpl:10
+msgid "You can find the application keys in"
+msgstr ""
+
 #: modules/mod_linkedin/mod_linkedin.erl:49
 msgid "You don't have permission to change the LinkedIn settings."
+msgstr ""
+
+#: modules/mod_linkedin/templates/_logon_extra_email_reset.tpl:2
+msgid "You have coupled your <strong>LinkedIn</strong> account."
+msgstr ""
+
+#: modules/mod_linkedin/templates/_admin_authentication_service.tpl:10
+msgid "Your LinkedIn Developer Network"
 msgstr ""
 
 #: modules/mod_logging/templates/admin_log_email.tpl:77
@@ -3983,7 +4620,7 @@ msgstr ""
 msgid "Debug"
 msgstr ""
 
-#: modules/mod_logging/templates/admin_log_base.tpl:12./modules/mod_logging/mod_logging.erl:229
+#: modules/mod_logging/mod_logging.erl:229./modules/mod_logging/templates/admin_log_base.tpl:12
 msgid "Email log"
 msgstr ""
 
@@ -3999,7 +4636,7 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: modules/mod_logging/templates/admin_log_base.tpl:3./modules/mod_logging/mod_logging.erl:224
+#: modules/mod_logging/mod_logging.erl:224./modules/mod_logging/templates/admin_log_base.tpl:3
 msgid "Log"
 msgstr ""
 
@@ -4063,39 +4700,775 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-#: modules/mod_logging/templates/admin_log_email.tpl:66
-msgid "Warning"
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:14
+msgid "<em>Add</em> all recipients to this list that are on the target list"
 msgstr ""
 
-#: modules/mod_mailinglist/mod_mailinglist.erl:384
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:20
+msgid ""
+" <em>Remove</em> all recipients from this list that are on the target list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:6
+msgid ""
+"<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, "
+"click on the “show all recipients” link.</p><h3>Sender name and e-mail "
+"address</h3><p>The sender name and e-mail address can be set per mailing "
+"list. This defaults to the config key <tt>site.email_from</tt>.  The "
+"<i>From</i> of the sent e-mails will be set to the sender name and address.</"
+"p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is "
+"used for the automatic upload of complete recipients list. The filename must "
+"match the filename of the uploaded recipient list. The complete list of "
+"recipients will be replaced with the recipients in the dropbox file.</"
+"p><h3>Access control</h3><p>Everybody who can edit a mailing list is also "
+"allowed to send a page to the mailing list. Everybody who can view the "
+"mailing list is allowed to add an e-mail address to the mailing list.</p>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:16
+msgid "<p>Sorry, something went wrong. Please try again later.</p>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:21
+msgid "<p>Sorry, something went wrong. Please try to re-subscribe.</p>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:20
+msgid "<p>Thank you. You are now subscribed.</p>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:15
+msgid "<p>Thank you. You are now unsubscribed.</p>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:47
+msgid "Act"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
+msgid "Add a new recipient."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
+msgid "Add recipient"
+msgstr ""
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
+msgid "Added the recipient."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist.tpl:14
+msgid "All mailing lists"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
+msgid "All processed"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:19
+msgid ""
+"All recipients of the mailing list. You can upload or download this list, "
+"which must be a file with one e-mail address per line."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:9
+msgid ""
+"Any page can be sent as a mailing. You can send a mailing from any edit "
+"page. On this page you can add or remove mailing lists and their recipients."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:1
+msgid "Are you sure you want to cancel the mailing to"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:2
+msgid "Are you sure you want to delete the mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
+msgid ""
+"Are you sure you want to reset the statistics for this mailing? This means "
+"that if you send the mailing again afterwards, recipients might have gotten "
+"the mailing twice."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:9
+msgid ""
+"Before you will receive any further mail you need to confirm your "
+"subscription."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:5
+msgid "Cancel mailing"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:55
+msgid "Check to activate the e-mail address."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:30
+msgid "Clear"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:10
+msgid ""
+"Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailing_page.tpl:29
+msgid "Click here when you can’t read the message below."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:14
+msgid ""
+" Click the button below to confirm your subscription to this mailing list."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:53./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:67./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:69
+msgid "Click to view log entries"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:31
+msgid "Combine mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:31
+msgid "Combine…"
+msgstr ""
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
+msgid "Confirm sending to mailinglist"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:3
+msgid "Confirm subscription"
+msgstr ""
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
+msgid "Could not add the recipient."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:4
+#: modules/mod_signup/templates/email_verify.tpl:6
+msgid "Dear"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:19
+msgid "Delete all current recipients before adding the file."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:30
+msgid "Delete all recipients from this list?"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
+msgid "Download all"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
+msgid "Download list of all active recipients."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
+msgid "Downloading active recipients list. Check your download window."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:42
+msgid "Dropbox filename (optional)"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mail_page_button.tpl:3
+msgid "E-mail page"
+msgstr ""
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42./modules/mod_mailinglist/templates/phone/_share_page_email.tpl:1
+msgid "E-mail this page"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
+msgid "Edit recipient"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
+msgid "Edit the mailing list &raquo;"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
+msgid ""
+"Enter the e-mail address of the recipient. The name of the recipient is "
+"optional."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:35
+msgid "Externally managed list &mdash; no (un)subscribe links"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:29
+#: modules/mod_signup/templates/_signup_form_fields_email.tpl:16
+msgid "First name"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "From now on you will receive mail from our mailing list."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:6
+msgid "Give your e-mail address to subscribe to"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:16
+msgid "Go to mailinglist page"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:6
+msgid "Hello,"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:6
+msgid "Help about mailing lists"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
+msgid "Help about the mailing page"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
+msgid "Hope to see you again."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
+msgid ""
+"It appears you have sent\n"
+"    this page once already to this list. If you send it again, only\n"
+"    the recipients that did not yet receive the mail will get it. As a\n"
+"    safety-caution, it is impossible to send the same page twice to\n"
+"    the same e-mail address."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:4
+msgid "Keep mailing"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:26
+msgid "Mail"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
+msgid "Mailing Lists"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:4./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:4
+msgid "Mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:385./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10./modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
 msgid "Mailing lists"
 msgstr ""
 
-#: modules/mod_mailinglist/mod_mailinglist.erl:158
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:3
+msgid "Mailing status"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:14
+msgid "New mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:159
 msgid "No addresses selected"
 msgstr ""
 
-#: modules/mod_mailinglist/mod_mailinglist.erl:160
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:79./modules/mod_mailinglist/templates/admin_mailinglist.tpl:54
+msgid "No items found"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:70
+msgid "No recipients"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:35
+msgid "Number of recipients on this list:"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:3
+msgid ""
+"On this page you see the addresses that have bounced. They have\n"
+"    been disabled by default. Please correct each address and check the\n"
+"    checkbox in front of the address to re-enable it. If an address is "
+"invalid, you can delete it."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:26
+msgid "Only keep recipients on this list that appear <em>on both lists</em>"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:9
+#, fuzzy
+msgid "Operation"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:22
+msgid "Our excuses for the inconvenience."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:47
+msgid "Perform operation"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
+msgid "Please confirm that you want to send the page"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:12
+msgid "Please confirm your subscription"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:3
+msgid "Please confirm your subscription on"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:5
+msgid "Please enter the e-mail address you want to send a test mail to."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:5
+msgid "Please enter the e-mail address you want to send this page to."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "Please follow"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
+msgid "Please note:"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
+msgid "Please unsubscribe"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:36
+#: modules/mod_signup/templates/_signup_form_fields_email.tpl:31
+msgid "Prefix"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:21./modules/mod_mailinglist/templates/admin_mailing_status.tpl:15
+msgid "Preview mailing"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailing_page.collection.tpl:52
+msgid "Read this page on the web."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18./modules/mod_mailinglist/templates/admin_mailinglist.tpl:23./modules/mod_mailinglist/templates/admin_mailinglist.tpl:38./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
+msgid "Recipients"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:10
+msgid ""
+"Recipients are subscribed either as email-only (via a simple signup form), "
+"or as subscribed persons in the system."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:7
+msgid "Recipients for"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:58
+msgid "Remove this recipient. No undo possible."
+msgstr ""
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:161
 msgid "Resending bounced addresses..."
 msgstr ""
 
-#: modules/mod_mailinglist/mod_mailinglist.erl:149
-msgid "Sending the page to "
+#: modules/mod_mailinglist/templates/admin_mailinglist.tpl:24
+msgid "Scheduled"
 msgstr ""
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:21
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22
+msgid "See the"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:36
+msgid "Select..."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:17./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:18
+msgid "Send e-mail"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:29
+msgid "Send mailing"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
+msgid "Send test mailing"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:28./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
+msgid "Send test to address"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
+msgid "Send the mailing automatically after the publication start date of"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:20
+msgid ""
+"Send the mailing immediately after the \"published\" checkbox has been "
+"checked in the edit page."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:17
+msgid ""
+"Send the mailing right now, but do not include a link back to the website."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:14
+msgid "Send this page to a mailinglist and view mailinglist statistics."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:24./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
+msgid "Send this page to a single address"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
+msgid "Send this page to the test mailing list."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:57
+msgid "Send welcome"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:25
+msgid "Sender address for e-mails (optional)"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:18
+msgid "Sender name for e-mails (optional)"
+msgstr ""
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:51
+msgid "Sending the e-mail..."
+msgstr ""
+
+#: modules/mod_mailinglist/mod_mailinglist.erl:150
+msgid "Sending the page to"
+msgstr ""
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:47
+msgid "Sending the page to the test mailing list..."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:19
+msgid "Sent on"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:13
+msgid "Show all recipients &raquo;"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:29
+msgid ""
+"Sorry, I could not subscribe you to the mailing list. Please try again later "
+"or with another e-mail address."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:25
+msgid "Sorry, can’t confirm your subscription"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:20
+msgid "Sorry, can’t find your subscription"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:14./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:73./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:18
+msgid "Subscribe"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:3./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:8
+msgid "Subscribe to"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:33
+msgid "Target mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:27
+msgid ""
+"The confirmation key is unknown. Either you already confirmed or something "
+"else went wrong."
+msgstr ""
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:57
+msgid "The e-mails are being sent..."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
+msgid ""
+"The key in your link does not match any subscription. Either you already "
+"unsubscribed, or the mailing list has been deleted."
+msgstr ""
+
+#: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:61
+msgid "The mailing will be send when the page becomes visible."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15
+msgid ""
+"The page you are trying to e-mail is not yet published. What do you want to "
+"do?"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3
+msgid "The recipients list of the mailing list will be deleted as well."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:50
+msgid ""
+"There are no addresses eligible for re-sending. You seem to have already "
+"processed all bouncing addresses."
+msgstr ""
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:53
+msgid "There is no mailing list with the name ‘mailinglist_test’."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
+msgid "This can not be undone"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:2
+msgid ""
+"This dialog lets you combine the recipients of this list with the recipients "
+"of another list. The result of this combination will be stored inside the "
+"current list, with the name"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:4
+msgid ""
+"This is a \"private\", externally managed list. Recipients will not receive "
+"any subscribe/unsubscribe messages."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
+msgid ""
+"This overview allows you to send the current page to a group of recipients, "
+"grouped into mailing lists. Choose 'preview mailing' to open a popup window "
+"which shows how the mailing will look like when it is sent; choose 'send "
+"test mailing' to send it to the predefined list of test e-mail addresses. "
+"Choose 'edit' to go back to editing the page.  Each mailinglist is listed in "
+"the table below, together with statistics on when it was sent and to how "
+"many recipients."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
+msgid "This page can be sent to different mailing lists."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:6
+msgid ""
+"Tick the checkbox if you want the recipient to receive a welcome e-mail "
+"message."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:13
+msgid "Unsubscribe"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
+msgid "Unsubscribe from"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:3
+msgid "Unsubscribe from mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:100
+msgid "Updated the recipient."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:4
+msgid ""
+"Upload a file with recipients. The file must contain a single e-mail address "
+"per line. The file’s character set must be utf-8."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:29
+msgid "Upload a list of recipients."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34
+msgid "View and edit the bounced addresses and re-send the mailing."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:19
+msgid "View this page as mailing."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:3
+msgid "Welcome to"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
+msgid ""
+"When you don’t want to receive any mail then please ignore this message."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
+msgid "When you don’t want to receive any more mail then"
+msgstr ""
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
+msgid "You are not allowed to add or enable recipients."
+msgstr ""
+
+#: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:106
+msgid "You are not allowed to edit recipients."
+msgstr ""
+
+#: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:50
+msgid "You are not allowed to send mail to the test mailing list."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:9
+msgid ""
+"You are not allowed to view or edit the recipients list. You need to have "
+"edit permission on the mailing list to change and view the recipients."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "You are now subscribed to our mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:3
+msgid "You are now unsubscribed from"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
+msgid "You are now unsubscribed from the mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:28
+msgid ""
+"You can try to re-subscribe to one of our mailing lists in the side column."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:2
+msgid ""
+"You received this mail because someone wanted to send you this information. "
+"We did not store your e-mail address and will not send you any other mail "
+"because of this mail."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
+msgid "You received this mail because you are subscribed to the mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:7
+msgid "You will receive a confirmation in your e-mail."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:8
+msgid "You, or someone else, added your e-mail address to our mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:24
+msgid ""
+"Your e-mail address is added to the mailing list. A confirmation mail is "
+"sent to your e-mail address and will arrive shortly. When you don’t receive "
+"it, then please check your spam folder."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
+msgid "bounced"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:38./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:15
+msgid "cancel"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
+msgid "clear"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
+msgid "click here to unsubscribe."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:6
+msgid "has been sent to the following lists:"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:8
+msgid "has never been sent yet."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
+msgid "mailing list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailing_status.tpl:8
+msgid "mailinglist status page"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "or copy and paste the address below in your browser."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
+msgid "processed"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:54./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
+msgid "scheduled"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
+msgid "send mailing"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:45
+msgid "send mailing again to corrected addresses"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
+msgid "send to"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22
+msgid "subscribing persons &raquo;"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
+msgid "this link to confirm"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
+msgid "to the list"
+msgstr ""
+
+#: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
+msgid "when you don't want to receive any further mail from this list."
+msgstr ""
+
+#: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
+msgid "with your e-mail address"
+msgstr ""
+
+#: modules/mod_menu/templates/_menu_edit_item.tpl:22
 msgid "Add after"
 msgstr ""
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:19
+#: modules/mod_menu/templates/_menu_edit_item.tpl:20
 msgid "Add before"
 msgstr ""
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:20
+#: modules/mod_menu/templates/_menu_edit_item.tpl:21
 msgid "Add below"
 msgstr ""
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:12./modules/mod_menu/templates/admin_menu_hierarchy.tpl:22
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:14./modules/mod_menu/templates/admin_menu_hierarchy.tpl:24
 msgid "Add bottom"
 msgstr ""
 
@@ -4107,11 +5480,11 @@ msgstr ""
 msgid "Add item"
 msgstr ""
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:8./modules/mod_menu/templates/_menu_edit_scripts.tpl:36
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:10./modules/mod_menu/templates/_menu_edit_scripts.tpl:36
 msgid "Add menu item"
 msgstr ""
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:11./modules/mod_menu/templates/admin_menu_hierarchy.tpl:21
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:13./modules/mod_menu/templates/admin_menu_hierarchy.tpl:23
 msgid "Add top"
 msgstr ""
 
@@ -4119,18 +5492,18 @@ msgstr ""
 msgid "COPY"
 msgstr ""
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:17
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:20
 msgid ""
 "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add "
 "pages."
 msgstr ""
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:23
+#: modules/mod_menu/templates/_menu_edit_item.tpl:25
 #: modules/mod_translation/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr ""
 
-#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:38
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:42
 msgid "Create an (optionally) nested navigation menu for this site."
 msgstr ""
 
@@ -4138,20 +5511,20 @@ msgstr ""
 msgid "Drag elements here to remove them"
 msgstr ""
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:18
+#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:21
 msgid ""
 "Drag menu items in the menu up, down, left or right to structure the menu."
 msgstr ""
 
-#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:41
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:45
 msgid "Drag pages to the place where you want them in the hierarchy."
 msgstr ""
 
-#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:52
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:57
 msgid "Empty hierarchy"
 msgstr ""
 
-#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:64
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:69
 msgid "Hierarchies can be defined for any existing category."
 msgstr ""
 
@@ -4159,7 +5532,7 @@ msgstr ""
 msgid "Hierarchy for"
 msgstr ""
 
-#: modules/mod_menu/templates/_admin_menu_menu_view.tpl:3./modules/mod_menu/mod_menu.erl:474
+#: modules/mod_menu/mod_menu.erl:474./modules/mod_menu/templates/_admin_menu_menu_view.tpl:3
 msgid "Menu"
 msgstr ""
 
@@ -4167,7 +5540,7 @@ msgstr ""
 msgid "New page"
 msgstr ""
 
-#: modules/mod_menu/templates/_menu_edit_item.tpl:24
+#: modules/mod_menu/templates/_menu_edit_item.tpl:27
 #: modules/mod_translation/templates/_dialog_language_delete.tpl:7./modules/mod_translation/templates/admin_translation.tpl:60
 msgid "Remove"
 msgstr ""
@@ -4180,8 +5553,8 @@ msgstr ""
 msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr ""
 
-#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:63
-#: modules/mod_search/support/search_query.erl:760
+#: modules/mod_menu/templates/admin_menu_hierarchy.tpl:68
+#: modules/mod_search/support/search_query.erl:761
 msgid "Unknown category"
 msgstr ""
 
@@ -4247,6 +5620,7 @@ msgid ""
 msgstr ""
 
 #: modules/mod_oauth/templates/_oauth_apps_list.tpl:6./modules/mod_oauth/templates/_oauth_consumer_edit.tpl:16
+#: modules/mod_twitter/templates/_admin_authentication_service.tpl:15
 msgid "Consumer key"
 msgstr ""
 
@@ -4361,10 +5735,6 @@ msgstr ""
 msgid "wants to access your account."
 msgstr ""
 
-#: modules/mod_oembed/templates/_admin_authentication_service.tpl:13
-msgid "API Key"
-msgstr ""
-
 #: modules/mod_oembed/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
 msgstr ""
@@ -4451,11 +5821,11 @@ msgstr ""
 msgid "your Embedly app dashboard"
 msgstr ""
 
-#: modules/mod_search/support/search_query.erl:935
+#: modules/mod_search/support/search_query.erl:936
 msgid "Unknown predicate"
 msgstr ""
 
-#: modules/mod_search/support/search_query.erl:766
+#: modules/mod_search/support/search_query.erl:767
 msgid "is not a category"
 msgstr ""
 
@@ -4559,10 +5929,6 @@ msgstr ""
 msgid "Monthly"
 msgstr ""
 
-#: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:40
-msgid "Never"
-msgstr ""
-
 #: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:9
 msgid "Priority in sitemap"
 msgstr ""
@@ -4589,68 +5955,803 @@ msgstr ""
 msgid "default"
 msgstr ""
 
+#: modules/mod_signup/templates/signup_confirm.tpl:12
+msgid "Bring me to my profile page"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:9
+msgid "Check our Terms of Service and Privacy policies"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:10
+msgid "Choose a username and password"
+msgstr ""
+
+#: modules/mod_signup/templates/signup_confirm.tpl:26
+msgid "Confirm key"
+msgstr ""
+
+#: modules/mod_signup/templates/signup_confirm.tpl:3./modules/mod_signup/templates/signup_confirm.tpl:15./modules/mod_signup/templates/signup_confirm.tpl:30
+msgid "Confirm my account"
+msgstr ""
+
+#: modules/mod_signup/templates/email_verify.tpl:12
+msgid "Confirm my account."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_stage.tpl:1
+msgid "Confirm your account by email"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_email.tpl:22./modules/mod_signup/templates/_signup_form_fields_email.tpl:44
+msgid "Enter a name"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:19
+msgid "Enter a username"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_email.tpl:59
+msgid "Enter a valid address"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_email.tpl:60
+msgid "Enter an e-mail address"
+msgstr ""
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "Hope to see you soon."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
+msgid "I agree to the"
+msgstr ""
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "If the link does not work then you can go to"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_stage.tpl:5
+msgid ""
+"If you do not receive the e-mail within a few minutes, please check your "
+"spam folder."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_outside.tpl:1
+msgid "If you have already an account,"
+msgstr ""
+
+#: modules/mod_signup/templates/signup_confirm.tpl:17
+msgid ""
+"In your e-mail you received a confirmation key. Please copy it in the input "
+"field below."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_email.tpl:38
+msgid "Last name"
+msgstr ""
+
+#: modules/mod_signup/templates/_logon_link.tpl:2
+msgid "No account yet?"
+msgstr ""
+
+#: modules/mod_signup/templates/email_verify.tpl:3
+msgid "Please confirm your account"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_stage.tpl:3
+msgid "Please follow the instructions in the email we've sent you."
+msgstr ""
+
+#: modules/mod_signup/templates/email_verify.tpl:10
+msgid "Please follow the link below."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:23
+msgid "Privacy policies"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields.tpl:5./modules/mod_signup/templates/signup.tpl:3
+msgid "Sign Up"
+msgstr ""
+
+#: modules/mod_signup/templates/_logon_link.tpl:2./modules/mod_signup/templates/_signup_title.tpl:1
+msgid "Sign up"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_email.tpl:11
+msgid "Sign up with your e-mail address"
+msgstr ""
+
+#: modules/mod_signup/templates/signup_confirm.tpl:20
+msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_box.tpl:24
+msgid ""
+"Sorry, there is already an account coupled to your account at your service "
+"provider. Maybe your account here was suspended."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
+msgid "Terms of Service"
+msgstr ""
+
+#: modules/mod_signup/templates/email_verify.tpl:8
+msgid ""
+"Thank you for registering at our site. We request you to confirm your "
+"account before you can use it."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:14
+msgid ""
+" To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_username.tpl:49
+msgid "Verify password"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:13
+msgid ""
+"We will be very careful with all the information given to us and will never "
+"give your name or address away without your permission. We do have some "
+"rules that we need you to agree with."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_extra.tpl:2
+msgid "You can also"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:26
+msgid "You must agree to the Terms in order to sign up."
+msgstr ""
+
+#: modules/mod_signup/templates/signup_confirm.tpl:10
+msgid "Your account is confirmed. You can now continue on our site."
+msgstr ""
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "and enter the key"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_form_fields_tos.tpl:23
+msgid "and the"
+msgstr ""
+
+#: modules/mod_signup/templates/email_verify.tpl:14
+msgid "in the input field."
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_outside.tpl:1
+msgid "sign in"
+msgstr ""
+
+#: modules/mod_signup/templates/_signup_extra.tpl:2
+msgid "sign up for a username and password"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:23
+msgid "Add a question or block"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:13
+msgid "Add page"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:9
+msgid "Add page above"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:10
+msgid "Add page below"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:51
+msgid "Add page jump"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:7./modules/mod_survey/templates/_admin_survey_question_page.tpl:27
+msgid "Add question"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_q.tpl:22
+msgid "Add question after"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:8
+msgid "Add questions by adding blocks with the menu."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:67
+msgid "Agree"
+msgstr ""
+
+#: modules/mod_survey/templates/survey_results_printable.tpl:37
+msgid "All survey entries up until"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:43./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:35
+msgid "Allow multiple entries per user/browser"
+msgstr ""
+
+#: modules/mod_survey/templates/email_survey_result.tpl:29
+msgid "Answer"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:19
+msgid "Answering"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:28
+msgid "Answers, one per line"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:24
+msgid ""
+"Apple = Red<br/>\n"
+"Milk = White<br/>\n"
+"Vienna = Austria<br/>\n"
+"Flying dutchman = Wagner."
+msgstr ""
+
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:21
+msgid "Are you sure you want to delete this page jump?"
+msgstr ""
+
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:19
+msgid ""
+"Are you sure you want to delete this page?<br/>This also deletes all "
+"questions on this page."
+msgstr ""
+
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:20
+msgid "Are you sure you want to delete this question?"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:43
+msgid "Are you sure you want to stop?"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:35
+msgid "Back"
+msgstr ""
+
 #: modules/mod_survey/mod_survey.erl:123
 msgid "Button"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:34
+msgid "Button style"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:107./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
+msgid "Button text"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:22
+msgid "Cat = Picture"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:55
+msgid "Category to choose from"
+msgstr ""
+
+#: modules/mod_survey/templates/email_survey_result.tpl:11
+msgid "Check the answer in the admin."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:74
+msgid "Chinese food is best for money"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:33
+msgid "Choices"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_results.tpl:8
+msgid "Click here to download the results as a CSV file."
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:43
+msgid "Continue"
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:122
 msgid "Country select"
 msgstr ""
 
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
+msgid "Danger"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
+#: modules/mod_translation/templates/admin_translation.tpl:24
+msgid "Default"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:12
+msgid "Delete page"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:7
+msgid "Delete page jump"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_q.tpl:23
+#, fuzzy
+msgid "Delete question"
+msgstr "delete"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:61
+msgid "Disagree"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:17
+msgid "Do you like pea soup?"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:96./modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:100./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:40./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:44./modules/mod_survey/templates/_survey_results.tpl:10
+msgid ""
+" Download will start in the background. Please check your download window."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:40
+msgid "Drop-down menu"
+msgstr ""
+
 #: modules/mod_survey/mod_survey.erl:96./modules/mod_survey/mod_survey.erl:101
 msgid "E-mail addresses"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:26
+msgid "Edit survey result"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:20
+msgid "End of questions"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:24./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:23
+msgid "Example:"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:23./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:21./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:18./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:21./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:29./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:22./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:28./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:22./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:22./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:35./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:37
+msgid "Explanation"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:51./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:29./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:13./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:20
+msgid "False"
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:126
 msgid "File upload"
 msgstr ""
 
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:17
+msgid "Fill in the missing parts."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:127
+msgid "First page in category"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:6
+msgid "Go to question"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:79./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:91
+msgid "Handle this survey with"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:71
+msgid "Handling"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
+msgid "Help about surveys"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:57./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:52
+msgid "Hide progress information"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:40
+msgid "Hide the user’s id or browser-id from result exports"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:75
+msgid "I always eat with others"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:90
+msgid "I am"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:23
+msgid ""
+"I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] "
+"ice cream and my favorite color is [color      ]."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:73
+msgid "I like Chinese restaurants"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:26
+msgid "Immediately start with the questions, no “Start” button"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
+msgid "Informational"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:27
+msgid "Input value placeholder text"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:3./modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:8
+msgid "Introduction for confirmation email"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
+msgid "Inverse"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
+msgid "Jump target"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:52
+msgid "Jump to a question on a next page."
+msgstr ""
+
 #: modules/mod_survey/mod_survey.erl:115
 msgid "Likert"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
+msgid ""
+"List of possible answers, one per line. Use <em>value#answer</em> for "
+"selecting values."
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:121
 msgid "Long answer"
 msgstr ""
 
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:117
+msgid ""
+"Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do "
+"eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:71./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:74
+msgid "Mail filled in surveys to"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:79./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:17
+msgid "Match which answer fits best."
+msgstr ""
+
 #: modules/mod_survey/mod_survey.erl:118
 msgid "Matching"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:39./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:41
+msgid "Multiple answers possible"
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:127
 msgid "Multiple choice"
 msgstr ""
 
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:34
+msgid "Multiple page break blocks are merged into one."
+msgstr ""
+
 #: modules/mod_survey/mod_survey.erl:119
 msgid "Narrative"
+msgstr ""
+
+#: modules/mod_survey/templates/email_survey_result.tpl:3
+msgid "New survey result:"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:47
+msgid "Next"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:129
+msgid "Next page in category"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:43./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:13./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:20
+msgid "No"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:45
+msgid "Numeric input, show totals for this field in the survey results."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:34
+msgid "Only accept images."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:125
+msgid "Options from a page category"
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:124
 msgid "Page break"
 msgstr ""
 
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:12
+msgid "Page jump condition"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:28
+msgid "Please enter your information."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:17
+msgid "Please enter your name."
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:30
+msgid "Please fill in all the required fields."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:17
+msgid "Please make a choice."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:133
+msgid "Please upload your file."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:21
+msgid "Please upload your image."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:34./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:17
+msgid "Please write an essay."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
+msgid "Primary"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:106./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:50
+msgid "Printable list"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:47
+msgid "Progress"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:17./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:17
+msgid "Prompt"
+msgstr ""
+
+#: modules/mod_survey/templates/email_survey_result.tpl:28
+msgid "Question"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:7./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:8
+msgid "Questions"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:82
+msgid "Red"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:30./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:53./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:33./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:42./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:53./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:52./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:38./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:55
+msgid "Required, this question must be answered."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:9./modules/mod_survey/templates/_survey_results.tpl:4./modules/mod_survey/templates/_survey_start.tpl:15./modules/mod_survey/templates/survey_results_printable.tpl:37
+msgid "Results"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:128
+msgid "Second page in category"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
+msgid "Select country"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:71
+msgid "Select which you agree with."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:98./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:14
+msgid "Select your country"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:84
+msgid ""
+"Send confirmation to respondent (please add a question named <i>email</i>)"
+msgstr ""
+
 #: modules/mod_survey/mod_survey.erl:120
 msgid "Short answer"
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:125
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:104./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:48
+msgid "Show email addresses"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:65./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:64
+msgid "Show progress bar"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:61./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:58
+msgid "Show progress information as “<em>Question 3/10</em>”"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:37./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:29
+msgid ""
+"Show results to user after completion (only results for multiple choice "
+"questions are shown)"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:103./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:47
+msgid "Show survey results"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:35./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:39
+msgid "Single answer possible"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_error.tpl:1
+msgid "Something went wrong"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_start.tpl:8
+msgid "Start"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:125./modules/mod_survey/templates/_survey_question_page.tpl:42./modules/mod_survey/templates/_survey_question_page.tpl:43
 msgid "Stop"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:36
+msgid "Stop the survey after this page. No questions are submitted."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:20
+msgid "Strongly Agree"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:24./modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:12
+msgid "Strongly Disagree"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:47
+msgid "Submit"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:43./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:42./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:47./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:50
+msgid "Submit on clicking an option"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
+msgid "Success"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:6
+msgid "Survey"
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:112
 msgid "Survey Questions"
 msgstr ""
 
+#: modules/mod_survey/templates/admin_survey_editor.tpl:12./modules/mod_survey/templates/admin_survey_editor.tpl:17
+msgid "Survey Results Editor"
+msgstr ""
+
+#: modules/mod_survey/templates/admin_survey_editor.tpl:7
+msgid "Survey editor"
+msgstr ""
+
 #: modules/mod_survey/mod_survey.erl:88
 msgid "Survey result deleted."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:107./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:51
+msgid "Survey results editor"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_end.tpl:7
+msgid "Thank you for filling in our survey."
+msgstr ""
+
+#: modules/mod_survey/templates/email_survey_result.tpl:21
+msgid "Thank you for filling in:"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:17
+msgid "The earth is flat."
+msgstr ""
+
+#: modules/mod_survey/templates/email_survey_result.tpl:8
+msgid "The following survey has been filled in:"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_error.tpl:3
+msgid ""
+"There was an error while handling your answers. We are terribly sorry about "
+"this."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:15
+msgid ""
+"This block show a file upload field. This can only be used as the last "
+"question of a survey. The default survey routines can’t handle file upload, "
+"you will need to add your own survey handler to your site or module."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_stop.tpl:10
+msgid ""
+"This block signals a stop in the flow. The user can't continue further and "
+"it is counted as a page break."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:13
+msgid "This text is shown after the survey has been submitted."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:17
+msgid "This text is shown as an introduction to the survey."
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:116
 msgid "Thurstone"
 msgstr ""
 
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:17
+msgid "To question"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:14
+msgid "Toggle outline view"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_result_chart.tpl:28./modules/mod_survey/templates/survey_results_printable.tpl:61
+msgid "Totals"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:50./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:24./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:10./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:17
+msgid "True"
+msgstr ""
+
 #: modules/mod_survey/mod_survey.erl:113
 msgid "True/False"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:38
+msgid "Validation"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:81
+msgid "Wagner"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:59./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:17
+msgid "Weasels make great pets."
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
+msgid ""
+"When no condition is true then the question following this break will be the "
+"next page."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:42./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:25./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:10./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:17
+msgid "Yes"
 msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:114
@@ -4659,6 +6760,75 @@ msgstr ""
 
 #: modules/mod_survey/mod_survey.erl:655
 msgid "You are not allowed to change these results."
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_results.tpl:39
+msgid "You are not allowed to see the results of this survey."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
+msgid ""
+"You can create your survey by adding blocks with questions below the body."
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_block_name_check.tpl:2
+msgid "You need to give a name to every question."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:93
+msgid "chocolate"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:3
+msgid "goto"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:94
+msgid "ice cream and my favorite color is"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:2
+msgid "if"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:45
+msgid "must be a date"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43./modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:23./modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:33
+msgid "must be a number"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:44./modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:25./modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:35
+msgid "must be a phone number"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:42./modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:21./modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:31
+msgid "must be an e-mail address"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:14./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:25
+msgid "name >= 2"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:33
+msgid "one per line"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:3./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:49
+msgid "question"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:2
+msgid "question == 1"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_block_view_survey_multiple_choice.tpl:10./modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:16
+msgid "select…"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:92
+msgid "years old. I like"
 msgstr ""
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:17
@@ -4685,6 +6855,12 @@ msgstr ""
 msgid "Available sub-languages"
 msgstr ""
 
+#: modules/mod_translation/mod_translation.erl:328
+msgid ""
+"Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
+"en/latest/developer-guide/translation.html\">gettext is not installed</a>."
+msgstr ""
+
 #: modules/mod_translation/templates/admin_translation.tpl:26
 msgid "Code"
 msgstr ""
@@ -4703,10 +6879,6 @@ msgstr ""
 
 #: modules/mod_translation/templates/_dialog_language_edit_detail_sublanguage_note.tpl:2
 msgid "Deciding on a main language or sub-language"
-msgstr ""
-
-#: modules/mod_translation/templates/admin_translation.tpl:24
-msgid "Default"
 msgstr ""
 
 #: modules/mod_translation/templates/admin_translation.tpl:9
@@ -4823,7 +6995,7 @@ msgid ""
 "recompiled."
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:333
+#: modules/mod_translation/mod_translation.erl:339
 msgid "Reloading all .po files in the background."
 msgstr ""
 
@@ -4842,7 +7014,9 @@ msgstr ""
 #: modules/mod_translation/templates/admin_translation.tpl:185
 msgid ""
 "Scan all templates for translation tags and generate .pot files that can be "
-"used for translating the templates."
+"used for translating the templates. The <a href=\"http://docs.zotonic.com/en/"
+"latest/developer-guide/translation.html\">gettext package must be installed</"
+"a>."
 msgstr ""
 
 #: modules/mod_translation/templates/_dialog_language_edit_detail_item.tpl:40./modules/mod_translation/templates/admin_translation.tpl:28
@@ -4873,7 +7047,7 @@ msgstr ""
 msgid "Show the language in the URL"
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:479
+#: modules/mod_translation/mod_translation.erl:474
 msgid "Sorry, you can't disable default language."
 msgstr ""
 
@@ -4881,15 +7055,15 @@ msgstr ""
 msgid "Sorry, you don't have permission to change the language list."
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:335
+#: modules/mod_translation/mod_translation.erl:341
 msgid "Sorry, you don't have permission to reload translations."
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:325
+#: modules/mod_translation/mod_translation.erl:331
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:410
+#: modules/mod_translation/mod_translation.erl:405
 msgid "Sorry, you don't have permission to set the default language."
 msgstr ""
 
@@ -4897,7 +7071,7 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
-#: modules/mod_translation/mod_translation.erl:323
+#: modules/mod_translation/mod_translation.erl:325
 msgid "Started building the .pot files. This may take a while..."
 msgstr ""
 
@@ -4928,7 +7102,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr ""
 
-#: modules/mod_translation/templates/admin_translation.tpl:3./modules/mod_translation/mod_translation.erl:622
+#: modules/mod_translation/mod_translation.erl:617./modules/mod_translation/templates/admin_translation.tpl:3
 msgid "Translation"
 msgstr ""
 
@@ -4958,10 +7132,6 @@ msgstr ""
 
 #: modules/mod_twitter/templates/_logon_extra.tpl:18
 msgid "Connect with Twitter"
-msgstr ""
-
-#: modules/mod_twitter/templates/_admin_authentication_service.tpl:15
-msgid "Consumer Key"
 msgstr ""
 
 #: modules/mod_twitter/templates/_admin_authentication_service.tpl:22
@@ -5095,7 +7265,7 @@ msgstr ""
 
 #: modules/mod_video_embed/templates/_media_upload_panel.tpl:7
 msgid ""
-"Embed a video or other media. Here you can paste embed code from YouTube, "
+"Embed a video or other media. Here you can paste an embed code from YouTube, "
 "Vimeo or other services."
 msgstr ""
 

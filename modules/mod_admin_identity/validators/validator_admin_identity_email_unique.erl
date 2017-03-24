@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2017 Marc Worrell
 %% @doc Check if an entered username is unique
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,11 +34,10 @@ render_validator(email_unique, TriggerId, TargetId, Args, Context)  ->
 %%          Error = invalid | novalue | {script, Script} | novalidator | string()
 validate(email_unique, Id, Value, Args, Context) ->
     UserId = z_convert:to_integer(proplists:get_value(id, Args)),
-    Email = z_string:to_lower(z_string:trim(Value)),
-    case Email of
-        [] ->
-            {{ok, []}, Context};
-        _ ->
+    case z_string:to_lower(z_string:trim(Value)) of
+        [] -> {{ok, <<>>}, Context};
+        <<>> -> {{ok, <<>>}, Context};
+        Email ->
             case m_identity:lookup_by_type_and_key_multi(email, Email, Context) of
                 [] ->
                     {{ok, Email}, Context};
@@ -56,9 +55,9 @@ event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     {IsValid, ContextValidated} = case validate(email_unique, TriggerId, Value, Args, Context) of
         {{ok, _}, ContextOk} ->
-            {"true", z_render:wire({fade_out, [{target, TriggerId ++ "_email_unique_error"}]}, ContextOk)};
+            {<<"true">>, z_render:wire({fade_out, [{target, <<TriggerId/binary, "_email_unique_error">>}]}, ContextOk)};
         {{error, Id, _} = Error, ContextScript} ->
-            {"false", z_render:wire({fade_in, [{target, TriggerId ++ "_email_unique_error"}]},
+            {<<"false">>, z_render:wire({fade_in, [{target, <<TriggerId/binary, "_email_unique_error">>}]},
                                     z_validation:report_errors([{Id,Error}], ContextScript))}
     end,
     z_script:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).

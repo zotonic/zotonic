@@ -10,7 +10,7 @@ modify_rsc_test() ->
     C = z_context:new(testsandboxdb),
     ok = z_module_manager:await_upgrade(C),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
-	SudoC = z_acl:sudo(C),
+    SudoC = z_acl:sudo(C),
 
     %% cleanup eventual remains of earlier failed tests
     case m_rsc:uri_lookup("http://foo.com/id/333", AdminC) of
@@ -26,7 +26,8 @@ modify_rsc_test() ->
     ?assertEqual(Id, m_rsc:uri_lookup("http://foo.com/id/333", C)),
     ?assertEqual(Id, m_rsc:uri_lookup(<<"http://foo.com/id/333">>, C)),
 
-    ?assertThrow({{error, duplicate_uri}, _Trace}, m_rsc_import:create_empty("http://foo.com/id/333", AdminC)),
+    ?assertThrow({{error, duplicate_uri}, _Trace},
+        m_rsc_import:create_empty("http://foo.com/id/333", AdminC)),
 
     %% Existence check
     ?assertEqual(true, m_rsc:exists(Id, AdminC)),

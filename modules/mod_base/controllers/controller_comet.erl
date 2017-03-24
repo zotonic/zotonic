@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Handles comet long polls from the user agent
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -50,7 +50,10 @@ allowed_methods(Context) ->
     {[<<"POST">>], Context}.
 
 content_types_provided(Context) ->
-    {[<<"text/x-ubf">>], Context}.
+    {[
+        {<<"text/x-ubf">>, process_post},
+        {<<"text/plain">>, process_post}
+    ], Context}.
 
 %% @doc Collect all data to be pushed back to the user agent
 process_post(Context) ->

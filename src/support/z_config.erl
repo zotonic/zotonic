@@ -93,6 +93,7 @@ default(smtp_listen_ip) -> "127.0.0.1";
 default(smtp_listen_port) -> 2525;
 default(smtp_spamd_port) -> 783;
 default(smtp_dnsbl) -> z_email_dnsbl:dnsbl_list();
+default(smtp_dnswl) -> z_email_dnsbl:dnswl_list();
 default(smtp_delete_sent_after) -> 240;
 default(inet_backlog) -> 500;
 default(inet_acceptor_pool_size) -> 100;

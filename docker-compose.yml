@@ -18,3 +18,4 @@ services:
             - ./:/opt/zotonic
         ports:
             - 80:8000
+            - 443:8443

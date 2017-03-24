@@ -21,6 +21,7 @@
 
 -export([
     insert/2,
+    insert/3,
     update/3,
     url_inspect/2,
     url_import_props/2
@@ -30,37 +31,46 @@
 -include_lib("z_stdlib/include/z_url_metadata.hrl").
 
 
-%% @doc Insert a selected #media_import_props{}
-insert(#media_import_props{medium_props=[]} = MI, Context) ->
-    Props = z_utils:props_merge(
-                MI#media_import_props.rsc_props,
-                default_rsc_props(MI)),
-    case MI#media_import_props.preview_url of
-        undefined ->  m_rsc:insert(Props, Context);
-        PreviewUrl -> m_media:insert_url(PreviewUrl, Props, Context)
-    end;
-insert(#media_import_props{medium_url=undefined} = MI, Context) ->
-    RscProps = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI)),
-    MediumProps = MI#media_import_props.medium_props,
-    Options = [ {preview_url, MI#media_import_props.preview_url} ],
-    m_media:insert_medium(MediumProps, RscProps, Options, Context);
-insert(#media_import_props{medium_url=MediumUrl} = MI, Context) ->
-    RscProps = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI)),
-    RscProps1 = [
-        {original_filename, proplists:get_value(original_filename, MI#media_import_props.medium_props)}
-        | RscProps
-    ],
-    m_media:insert_url(MediumUrl, RscProps1, Context).
+-define(EMPTY(A), ((A =:= undefined) orelse (A =:= "") orelse (A =:= <<>>))).
 
-default_rsc_props(#media_import_props{category=Cat}) ->
-    [ {is_published, true}, {category, Cat} ].
+%% @doc Insert a selected #media_import_props{}
+insert(MI, Context) ->
+    insert(MI, [], Context).
+
+insert(#media_import_props{medium_props=[]} = MI, RscProps, Context) ->
+    RscProps1 = z_utils:props_merge(
+                    MI#media_import_props.rsc_props,
+                    default_rsc_props(MI, RscProps)),
+    case MI#media_import_props.preview_url of
+        undefined ->  m_rsc:insert(RscProps1, Context);
+        PreviewUrl -> m_media:insert_url(PreviewUrl, RscProps1, Context)
+    end;
+insert(#media_import_props{medium_url=MediumUrl, medium_props=MediumProps} = MI, RscProps, Context)
+    when ?EMPTY(MediumUrl) ->
+    RscProps1 = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI, RscProps)),
+    Options = [ {preview_url, MI#media_import_props.preview_url} ],
+    m_media:insert_medium(MediumProps, RscProps1, Options, Context);
+insert(#media_import_props{medium_url=MediumUrl} = MI, RscProps, Context) ->
+    RscProps1 = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI, RscProps)),
+    RscProps2 = [
+        {original_filename, proplists:get_value(original_filename, MI#media_import_props.medium_props)}
+        | RscProps1
+    ],
+    m_media:insert_url(MediumUrl, RscProps2, Context).
+
+default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
+    z_utils:props_merge(
+        RscProps,
+        [ {is_published, true}, {category, Cat} ]).
 
 
 %% @doc Update a resource with the selected #media_import_props()
-update(RscId, #media_import_props{medium_props=[], preview_url=undefined, medium_url=undefined}, _Context) ->
+update(RscId, #media_import_props{medium_props=[], preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
+    when ?EMPTY(PreviewUrl), ?EMPTY(MediumUrl) ->
     % Nothing to do
     {ok, RscId};
-update(RscId, #media_import_props{medium_props=MP, medium_url=undefined} = MI, Context) when MP =/= [] ->
+update(RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context) 
+    when MP =/= [], ?EMPTY(MediumUrl) ->
     % Embedded, with optional preview_url
     RscProps = [
         {original_filename, proplists:get_value(original_filename, MP)}
@@ -97,11 +107,11 @@ url_import_props(#url_metadata{} = MD, Context) ->
         mime = z_url_metadata:p(mime, MD),
         metadata = MD
     },
-    Ms = [
+    Ms = lists:flatten([
         import_as_website(MD, Context),
         import_as_media(MD, Context)
         | z_notifier:map(MI, Context)
-    ],
+    ]),
     Ms1 = [ M || M <- Ms, M =/= undefined ],
     {ok, lists:sort(Ms1)};
 url_import_props(Url, Context) when is_list(Url); is_binary(Url) ->
@@ -120,7 +130,7 @@ host_parts(Url) ->
 
 
 
-%% @doc Some default handlers (should these be in mod_base ? )
+%% @doc Import the url as a link to a website
 import_as_website(MD, Context) ->
     #media_import_props{
         prio = 10,
@@ -135,35 +145,71 @@ import_as_website(MD, Context) ->
         preview_url = z_url_metadata:p(image, MD)
     }.
 
-%% @doc Id the URL refers to a file of some sorts, try to
+%% @doc The url refers to some (non-html) file, import it as-is.
 import_as_media(MD, Context) ->
     Mime = z_url_metadata:p(mime, MD),
     case is_html(Mime) of
         false ->
-            #media_import_props{
-                prio = 4,
-                category = mime_to_category(Mime),
-                description = ?__("Media", Context),
-                rsc_props = [
-                    {title, z_url_metadata:p(title, MD)},
-                    {summary, z_url_metadata:p(summary, MD)},
-                    {website, z_url_metadata:p(url, MD)}
-                ],
-                medium_props = [
-                    {mime, Mime},
-                    {original_filename, z_url_metadata:p(filename, MD)}
-                ],
-                medium_url = z_url_metadata:p(url, MD)
-            };
+            Category = m_media:mime_to_category(Mime),
+            case m_rsc:exists(Category, Context) of
+                true ->
+                    #media_import_props{
+                        prio = 3,
+                        category = Category,
+                        description = m_rsc:p_no_acl(Category, title, Context),
+                        rsc_props = [
+                            {title, z_url_metadata:p(title, MD)},
+                            {summary, z_url_metadata:p(summary, MD)},
+                            {website, z_url_metadata:p(url, MD)}
+                        ],
+                        medium_props = [
+                            {mime, Mime},
+                            {original_filename, z_url_metadata:p(filename, MD)}
+                        ],
+                        medium_url = z_url_metadata:p(url, MD)
+                    };
+                false ->
+                    undefined
+            end;
         true ->
+            import_as_referred_image(MD, Context)
+    end.
+
+import_as_referred_image(MD, Context) ->
+    Width = z_convert:to_integer(z_url_metadata:p(<<"og:image:width">>, MD)),
+    Height = z_convert:to_integer(z_url_metadata:p(<<"og:image:height">>, MD)),
+    case        is_integer(Width) 
+        andalso is_integer(Height)
+        andalso Width > 32
+        andalso Height > 32
+    of
+        true ->
+            case z_url_metadata:p(<<"og:image">>, MD) of
+                undefined -> undefined;
+                <<>> -> undefined;
+                ImageUrl ->
+                    #media_import_props{
+                        prio = 4,
+                        category = image,
+                        description = m_rsc:p_no_acl(image, title, Context),
+                        rsc_props = [
+                            {title, z_url_metadata:p(title, MD)},
+                            {summary, z_url_metadata:p(summary, MD)},
+                            {website, z_url_metadata:p(url, MD)}
+                        ],
+                        medium_props = [
+                            {mime, <<"image/unknown">>},
+                            {original_filename, z_url_metadata:p(filename, MD)},
+                            {width, Width},
+                            {height, Height}
+                        ],
+                        medium_url = ImageUrl
+                    }
+            end;
+        false ->
             undefined
     end.
 
-mime_to_category(<<"image/", _/binary>>) -> image;
-mime_to_category(<<"video/", _/binary>>) -> video;
-mime_to_category(<<"audio/", _/binary>>) -> audio;
-mime_to_category(<<"application/", _/binary>>) -> document;
-mime_to_category(_) -> media.
 
 is_html(<<"text/html">>) -> true;
 is_html(<<"application/xhtml">>) -> true;

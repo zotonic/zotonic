@@ -84,7 +84,6 @@ render_block(OptBlock, #module_index{filepath=Filename, key=Key}, Vars, Context)
     render_block(OptBlock, Template, Vars, Context);
 render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
     OldCaching = z_depcache:in_process(true),
-    Vars1 = ensure_zotonic_vars(Vars, Context),
     Opts =  [
         {runtime, z_template_compiler_runtime},
         {context_name, z_context:site(Context)},
@@ -96,9 +95,9 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
     ],
     Result = case OptBlock of
                 undefined ->
-                    template_compiler:render(Template, Vars1, Opts, Context);
+                    template_compiler:render(Template, Vars, Opts, Context);
                 Block when is_atom(Block) ->
-                    template_compiler:render_block(Block, Template, Vars1, Opts, Context)
+                    template_compiler:render_block(Block, Template, Vars, Opts, Context)
              end,
     z_depcache:in_process(OldCaching),
     case Result of
@@ -137,12 +136,6 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
         {error, _} = Error ->
             lager:info("template render of ~p returns ~p", [Template, Error]),
             <<>>
-    end.
-
-ensure_zotonic_vars(Vars, Context) ->
-    case maps:get(z_language, Vars, undefined) of
-        undefined -> Vars#{z_language => z_context:language(Context)};
-        _ -> Vars
     end.
 
 props_to_map([], Map) ->

@@ -31,7 +31,7 @@
 
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(pivot_queue_count, #m{value=undefined}, Context) ->
-    pivot_queue_count(Context).
+    z_pivot_rsc:queue_count(Context).
 
 %% @spec m_to_list(Source, Context) -> List
 m_to_list(_, _Context) ->
@@ -41,6 +41,3 @@ m_to_list(_, _Context) ->
 m_value(#m{value=undefined}, _Context) ->
     undefined.
 
-
-pivot_queue_count(Context) ->
-    z_db:q1("SELECT COUNT(*) FROM rsc_pivot_queue", Context).

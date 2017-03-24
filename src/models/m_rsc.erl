@@ -87,25 +87,25 @@
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
 -spec m_find_value(resource()|atom(), #m{}, #context{}) -> #m{} | undefined | any().
-m_find_value(Id, #m{value=undefined} = M, Context) ->
+m_find_value(Id, #m{value = undefined} = M, Context) ->
     case rid(Id, Context) of
         undefined -> undefined;
-        RId -> M#m{value=RId}
+        RId -> M#m{value = RId}
     end;
-m_find_value(is_cat, #m{value=Id} = M, _Context) when is_integer(Id) ->
-    M#m{value={is_cat, Id}};
-m_find_value(Key, #m{value={is_cat, Id}}, Context) ->
+m_find_value(is_cat, #m{value = Id} = M, _Context) when is_integer(Id) ->
+    M#m{value = {is_cat, Id}};
+m_find_value(Key, #m{value = {is_cat, Id}}, Context) ->
     is_cat(Id, Key, Context);
-m_find_value(Key, #m{value=Id}, Context) when is_integer(Id) ->
+m_find_value(Key, #m{value = Id}, Context) when is_integer(Id) ->
     p(Id, Key, Context).
 
 %% @doc Transform a m_config value to a list, used for template loops
 -spec m_to_list(#m{}, #context{}) -> list().
-m_to_list(#m{value=#rsc_list{list=List}}, _Context) ->
+m_to_list(#m{value = #rsc_list{list = List}}, _Context) ->
     List;
-m_to_list(#m{value=undefined}, _Context) ->
+m_to_list(#m{value = undefined}, _Context) ->
     [];
-m_to_list(#m{value=Id}, Context) ->
+m_to_list(#m{value = Id}, Context) ->
     case get_visible(Id, Context) of
         undefined ->
             [];
@@ -115,9 +115,9 @@ m_to_list(#m{value=Id}, Context) ->
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
 -spec m_value(#m{}, #context{}) -> undefined | any().
-m_value(#m{value=undefined}, _Context) ->
+m_value(#m{value = undefined}, _Context) ->
     undefined;
-m_value(#m{value=Id}, Context) ->
+m_value(#m{value = Id}, Context) ->
     get_visible(Id, Context).
 
 %% @doc Return the id of the resource with the name
@@ -204,8 +204,8 @@ get_visible(RId, Context) ->
                         undefined ->
                             undefined;
                         Props ->
-                            {id,Id} = proplists:lookup(id, Props),
-                            lists:filter(fun({K,_V}) ->
+                            {id, Id} = proplists:lookup(id, Props),
+                            lists:filter(fun({K, _V}) ->
                                             z_acl:rsc_prop_visible(Id, K, Context)
                                          end,
                                          Props)
@@ -246,26 +246,26 @@ get_raw_lock(Id, Context) ->
 
 get_raw(Id, IsLock, Context) ->
     SQL = case z_memo:get(rsc_raw_sql) of
-            undefined ->
-                AllCols = [ z_convert:to_list(C) || C <- z_db:column_names(rsc, Context) ],
-                DataCols = lists:filter(
-                                    fun("pivot_geocode") -> true;
-                                       ("pivot_geocode_qhash") -> true;
-                                       ("pivot_location_lat") -> true;
-                                       ("pivot_location_lng") -> true;
-                                       ("pivot_" ++ _) -> false;
-                                       (_) -> true
-                                    end,
-                                    AllCols),
-                Query = "select "++string:join(DataCols, ",") ++ " from rsc where id = $1",
-                z_memo:set(rsc_raw_sql, Query),
-                Query;
-            Memo ->
-                Memo
+              undefined ->
+                  AllCols = [z_convert:to_list(C) || C <- z_db:column_names(rsc, Context)],
+                  DataCols = lists:filter(
+                      fun("pivot_geocode") -> true;
+                          ("pivot_geocode_qhash") -> true;
+                          ("pivot_location_lat") -> true;
+                          ("pivot_location_lng") -> true;
+                          ("pivot_" ++ _) -> false;
+                          (_) -> true
+                      end,
+                      AllCols),
+                  Query = "select " ++ string:join(DataCols, ",") ++ " from rsc where id = $1",
+                  z_memo:set(rsc_raw_sql, Query),
+                  Query;
+              Memo ->
+                  Memo
           end,
     SQL1 = case IsLock of
-              true -> SQL ++ " for update";
-              false -> SQL
+               true -> SQL ++ " for update";
+               false -> SQL
            end,
     case z_db:assoc_props_row(SQL1, [m_rsc:rid(Id, Context)], Context) of
         undefined ->
@@ -284,9 +284,8 @@ ensure_utc_dates(Props, Context) ->
             % Convert dates, assuming the system's default timezone
             DateStart = lists:keyfind(date_start, 1, Props),
             DateEnd = lists:keyfind(date_end, 1, Props),
-            IsAllDay = case {DateStart,DateEnd} of
-                {{date_start, {_, { 0, 0,_StartSec}}},
-                 {date_end,   {_, {23,59,_EndSec}}}} ->
+            IsAllDay = case {DateStart, DateEnd} of
+                {{date_start, {_, {0, 0, _StartSec}}}, {date_end, {_, {23, 59, _EndSec}}}} ->
                     true;
                 _ ->
                     false
@@ -294,7 +293,7 @@ ensure_utc_dates(Props, Context) ->
             [
                 {tz, z_context:tz(Context)},
                 {date_is_all_day, IsAllDay}
-                | [ ensure_utc_date(P, IsAllDay) || P <- Props ]
+                | [ensure_utc_date(P, IsAllDay) || P <- Props]
             ]
     end.
 
@@ -319,23 +318,23 @@ ensure_utc_date_1(P, _IsAllDay) ->
 
 %% @doc Get the ACL fields for the resource with the id.
 %% Will always return a valid record, even if the resource does not exist.
--spec get_acl_props(Id::resource(), #context{}) -> #acl_props{}.
+-spec get_acl_props(Id :: resource(), #context{}) -> #acl_props{}.
 get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
-                Result =
-                    z_db:q_row(
-                      "select is_published, is_authoritative, "
-                      "publication_start, publication_end "
-                      "from rsc "
-                      "where id = $1",
-                      [Id], Context),
-                case Result of
-                    {IsPub, IsAuth, PubS, PubE} ->
-                        #acl_props{is_published=IsPub, is_authoritative=IsAuth,
-                                   publication_start=PubS, publication_end=PubE};
-                    undefined ->
-                        #acl_props{is_published=false}
-                end
+        Result =
+            z_db:q_row(
+                "select is_published, is_authoritative, "
+                "publication_start, publication_end "
+                "from rsc "
+                "where id = $1",
+                [Id], Context),
+        case Result of
+            {IsPub, IsAuth, PubS, PubE} ->
+                #acl_props{is_published = IsPub, is_authoritative = IsAuth,
+                    publication_start   = PubS, publication_end = PubE};
+            undefined ->
+                #acl_props{is_published = false}
+        end
         end,
     z_depcache:memo(F, {rsc_acl_fields, Id}, ?DAY, [Id], Context);
 get_acl_props(Name, Context) ->
@@ -343,7 +342,7 @@ get_acl_props(Name, Context) ->
         {ok, Id} ->
             get_acl_props(Id, Context);
         _ ->
-            #acl_props{is_published=false}
+            #acl_props{is_published = false}
     end.
 
 
@@ -372,10 +371,9 @@ update(Id, Props, Options, Context) ->
     m_rsc_update:update(Id, Props, Options, Context).
 
 
-
-
 %% @doc Duplicate a resource.
--spec duplicate(resource(), props(), #context{}) -> {ok, NewId :: resource_id()} | {error, Reason :: string()}.
+-spec duplicate(resource(), props(), #context{}) ->
+    {ok, NewId :: resource_id()} | {error, Reason :: string()}.
 duplicate(Id, Props, Context) ->
     m_rsc_update:duplicate(Id, Props, Context).
 
@@ -385,7 +383,11 @@ duplicate(Id, Props, Context) ->
 %% and does not check the ACL.  After "touching" the resource will be re-pivoted.
 -spec touch(resource(), #context{}) -> {ok, resource_id()} | {error, Reason :: string()}.
 touch(Id, Context) ->
-    case z_db:q("update rsc set version = version + 1, modifier_id = $1, modified = now() where id = $2", [z_acl:user(Context), rid(Id, Context)], Context) of
+    case z_db:q(
+        "update rsc set version = version + 1, modifier_id = $1, modified = now() where id = $2",
+        [z_acl:user(Context), rid(Id, Context)],
+        Context
+    ) of
         1 -> {ok, Id};
         0 -> {error, {unknown_rsc, Id}}
     end.
@@ -434,7 +436,7 @@ is_published_date(Id, Context) ->
                 true ->
                     Date = erlang:universaltime(),
                     m_rsc:p_no_acl(RscId, publication_start, Context) =< Date
-                      andalso m_rsc:p_no_acl(RscId, publication_end, Context) >= Date;
+                        andalso m_rsc:p_no_acl(RscId, publication_end, Context) >= Date;
                 false ->
                     false;
                 undefined ->
@@ -451,7 +453,7 @@ is_published_date(Id, Context) ->
 p(Id, Property, Context) when is_list(Property); is_binary(Property) ->
     p(Id, z_convert:to_atom(Property), Context);
 p(Id, Property, Context)
-    when   Property =:= category_id
+    when Property =:= category_id
     orelse Property =:= page_url
     orelse Property =:= page_url_abs
     orelse Property =:= category
@@ -461,8 +463,9 @@ p(Id, Property, Context)
     orelse Property =:= is_published
     orelse Property =:= exists
     orelse Property =:= id
+    orelse Property =:= privacy
     orelse Property =:= default_page_url ->
-        p_no_acl(rid(Id, Context), Property, Context);
+    p_no_acl(rid(Id, Context), Property, Context);
 p(Id, Property, Context) ->
     case rid(Id, Context) of
         undefined ->
@@ -494,8 +497,8 @@ p_no_acl(Id, Prop, Context) when not is_integer(Id) ->
         Rid when is_integer(Rid) -> p_no_acl(Rid, Prop, Context);
         undefined -> undefined
     end;
-p_no_acl(Id, o, Context)  -> o(Id, Context);
-p_no_acl(Id, s, Context)  -> s(Id, Context);
+p_no_acl(Id, o, Context) -> o(Id, Context);
+p_no_acl(Id, s, Context) -> s(Id, Context);
 p_no_acl(Id, op, Context) -> op(Id, Context);
 p_no_acl(Id, sp, Context) -> sp(Id, Context);
 p_no_acl(Id, is_me, Context) -> is_me(Id, Context);
@@ -504,23 +507,26 @@ p_no_acl(Id, is_editable, Context) -> is_editable(Id, Context);
 p_no_acl(Id, is_deletable, Context) -> is_deletable(Id, Context);
 p_no_acl(Id, is_linkable, Context) -> is_linkable(Id, Context);
 p_no_acl(Id, is_published_date, Context) -> is_published_date(Id, Context);
-p_no_acl(Id, is_a, Context) -> [ {C,true} || C <- is_a(Id, Context) ];
+p_no_acl(Id, is_a, Context) -> [{C, true} || C <- is_a(Id, Context)];
 p_no_acl(Id, exists, Context) -> exists(Id, Context);
 p_no_acl(Id, page_url_abs, Context) ->
     case p_no_acl(Id, page_path, Context) of
         undefined -> page_url(Id, true, Context);
-        PagePath -> opt_url_abs(z_notifier:foldl(#url_rewrite{args=[{id,Id}]}, PagePath, Context), true, Context)
+        PagePath ->
+            opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, PagePath, Context), true, Context)
     end;
 p_no_acl(Id, page_url, Context) ->
     case p_no_acl(Id, page_path, Context) of
         undefined -> page_url(Id, false, Context);
-        PagePath -> opt_url_abs(z_notifier:foldl(#url_rewrite{args=[{id,Id}]}, PagePath, Context), false, Context)
+        PagePath ->
+            opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, PagePath, Context), false, Context)
     end;
 p_no_acl(Id, translation, Context) ->
     fun(Code) ->
         fun(Prop) ->
             case p_no_acl(Id, Prop, Context) of
-                {trans, _} = Translated -> z_trans:lookup(Translated, Code, Context);
+                {trans, _} = Translated ->
+                    z_trans:lookup(Translated, Code, Context);
                 Value -> Value
             end
         end
@@ -541,12 +547,12 @@ p_no_acl(Id, depiction, Context) -> m_media:depiction(Id, Context);
 p_no_acl(Id, predicates_edit, Context) -> predicates_edit(Id, Context);
 p_no_acl(Id, day_start, Context) ->
     case p_cached(Id, date_start, Context) of
-        {{_,_,_} = Date, _} -> Date;
+        {{_, _, _} = Date, _} -> Date;
         _Other -> undefined
     end;
 p_no_acl(Id, day_end, Context) ->
     case p_cached(Id, date_end, Context) of
-        {{_,_,_} = Date, _} -> Date;
+        {{_, _, _} = Date, _} -> Date;
         _Other -> undefined
     end;
 p_no_acl(Id, email_raw, Context) ->
@@ -564,26 +570,27 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
     p_cached(Id, Predicate, Context).
 
 
-    p_cached(Id, Predicate, Context) ->
-        Value = case z_depcache:get(Id, Predicate, Context) of
-            {ok, V} ->
-                V;
-            undefined ->
-                case get(Id, Context) of
-                    undefined -> undefined;
-                    PropList ->  proplists:get_value(Predicate, PropList)
-                end
-        end,
-        case Value of
-            undefined ->
-                % Unknown properties will be checked against the predicates, returns o(Predicate).
-                case m_predicate:is_predicate(Predicate, Context) of
-                    true -> o(Id, Predicate, Context);
-                    false -> undefined % z_notifier:first(#rsc_property{id=Id, property=Predicate}, Context)
-                end;
-            _ ->
-                Value
-        end.
+p_cached(Id, Predicate, Context) ->
+    Value = case z_depcache:get(Id, Predicate, Context) of
+        {ok, V} ->
+            V;
+        undefined ->
+            case get(Id, Context) of
+                undefined -> undefined;
+                PropList -> proplists:get_value(Predicate, PropList)
+            end
+    end,
+    case Value of
+        undefined ->
+            % Unknown properties will be checked against the predicates, returns o(Predicate).
+            case m_predicate:is_predicate(Predicate, Context) of
+                true -> o(Id, Predicate, Context);
+                false ->
+                    undefined % z_notifier:first(#rsc_property{id=Id, property=Predicate}, Context)
+            end;
+        _ ->
+            Value
+    end.
 
 
 non_informational_uri(Id, Context) ->
@@ -612,9 +619,9 @@ o(Id, _Context) ->
 %% @doc Return the list of objects with a certain predicate
 -spec o(resource(), atom(), #context{}) -> list().
 o(Id, Predicate, Context) when is_integer(Id) ->
-    #rsc_list{list=m_edge:objects(Id, Predicate, Context)};
+    #rsc_list{list = m_edge:objects(Id, Predicate, Context)};
 o(undefined, _Predicate, _Context) ->
-    #rsc_list{list=[]};
+    #rsc_list{list = []};
 o(Id, Predicate, Context) ->
     o(rid(Id, Context), Predicate, Context).
 
@@ -649,9 +656,9 @@ s(Id, _Context) ->
 %% Return the list of subjects with a certain predicate
 -spec s(resource(), atom(), #context{}) -> list().
 s(Id, Predicate, Context) when is_integer(Id) ->
-    #rsc_list{list=m_edge:subjects(Id, Predicate, Context)};
+    #rsc_list{list = m_edge:subjects(Id, Predicate, Context)};
 s(undefined, _Predicate, _Context) ->
-    #rsc_list{list=[]};
+    #rsc_list{list = []};
 s(Id, Predicate, Context) ->
     s(rid(Id, Context), Predicate, Context).
 
@@ -684,9 +691,9 @@ rid(Id, _Context) when is_integer(Id) ->
     Id;
 rid({Id}, _Context) when is_integer(Id) ->
     Id;
-rid(#rsc_list{list=[R|_]}, _Context) ->
+rid(#rsc_list{list = [R | _]}, _Context) ->
     R;
-rid(#rsc_list{list=[]}, _Context) ->
+rid(#rsc_list{list = []}, _Context) ->
     undefined;
 rid(undefined, _Context) ->
     undefined;
@@ -766,7 +773,7 @@ is_a(Id, Context) ->
 -spec is_a_id(resource(), #context{}) -> list(pos_integer()).
 is_a_id(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
-    [ RscCatId | m_category:get_path(RscCatId, Context)].
+    [RscCatId | m_category:get_path(RscCatId, Context)].
 
 %% @doc Check if the resource is in a category.
 %% @spec is_a(int(), atom(), Context) -> bool()
@@ -785,11 +792,13 @@ page_url(Id, IsAbs, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
             CatPath = lists:reverse(is_a(Id, Context)),
-            case z_notifier:first(#page_url{id=RscId, is_a=CatPath}, Context) of
+            case z_notifier:first(#page_url{id = RscId, is_a = CatPath}, Context) of
                 {ok, Url} ->
                     opt_url_abs(Url, IsAbs, Context);
                 undefined ->
-                    Args = [{id,RscId}, {slug, p(RscId, slug, Context)} | z_context:get(extra_args, Context, [])],
+                    Args = [
+                        {id, RscId}, {slug, p(RscId, slug, Context)} | z_context:get(extra_args, Context, [])
+                    ],
                     Url = page_url_path(CatPath, Args, Context),
                     case IsAbs of
                         true -> z_dispatcher:abs_url(Url, Context);
@@ -807,7 +816,7 @@ page_url_path([], Args, Context) ->
             undefined;
         Url -> Url
     end;
-page_url_path([CatName|Rest], Args, Context) ->
+page_url_path([CatName | Rest], Args, Context) ->
     case z_dispatcher:url_for(CatName, Args, Context) of
         undefined -> page_url_path(Rest, Args, Context);
         Url -> Url
@@ -825,7 +834,8 @@ opt_url_abs(Url, false, Context) ->
         _ -> Url
     end.
 
-%% @doc Return the predicates that are valid combined with the predicates that are actually used by the subject.
+%% @doc Return the predicates that are valid combined with the predicates that
+%% are actually used by the subject.
 %% This list is to show which predicates are editable for the subject rsc.
 %% @spec predicates_edit(Id, Context) -> [Predicate]
 predicates_edit(Id, Context) ->
@@ -872,7 +882,7 @@ ensure_name_unique(BaseName, N, Context) ->
     Name = iolist_to_binary([BaseName, postfix(N)]),
     case z_db:q1("select id from rsc where name = $1", [Name], Context) of
         undefined -> Name;
-        _Id -> ensure_name_unique(BaseName, N+1, Context)
+        _Id -> ensure_name_unique(BaseName, N + 1, Context)
     end.
 
 postfix(0) -> <<>>;

@@ -53,5 +53,29 @@ The pager tag accepts the following arguments:
 |hide_single_page|When this argument is true, do not show the pager when the result |hide_single_page=1      |
 |                |fits on one page (e.g. the pager will be useless).                |                        |
 +----------------+------------------------------------------------------------------+------------------------+
+|template        |Name of the template for rendering the pager. Defaults to         |template="_pager.tpl"   |
+|                |``_pager.tpl``. See below for specific arguments passed.          |                        |
++----------------+------------------------------------------------------------------+------------------------+
 |\*              |Any other argument is used as an argument for the dispatch rule.  |                        |
 +----------------+------------------------------------------------------------------+------------------------+
+
+
+Pager template
+--------------
+
+The pager is rendered using a template. The default template for the pager is ``_pager.tpl``.
+
+The pager template receives the following variables:
+
+ * ``prev_url`` The url to the previous page, ``undefined`` if at first page.
+ * ``next_url`` The url to the next page, ``undefined`` if at last page.
+ * ``pages`` A list of tuples. Either ``{PageNumber, Url}`` or ``{undefined, sep}`` (*sep* is an atom).
+ * ``page`` The current page number
+ * All other arguments passed to the scomp (**attention:** these are also used as dispatch arguments)
+
+The default ``_pager.tpl`` displays an ellipsis for the ``sep`` entry.
+
+If the result set is empty then the template is not rendered. The template is also not rendered if there
+is a single page *and* ``hide_single_page`` is set.
+
+

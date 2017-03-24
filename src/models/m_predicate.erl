@@ -48,38 +48,28 @@
 
 -include_lib("zotonic.hrl").
 
-
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(all, #m{value=undefined}, Context) ->
-    all(Context);
-m_find_value(is_used, #m{value=undefined} = M, _Context) ->
-    M#m{value=is_used};
-m_find_value(Pred, #m{value=is_used}, Context) ->
-    is_used(Pred, Context);
-m_find_value(object_category, #m{value=undefined} = M, _Context) ->
-    M#m{value=object_category};
-m_find_value(subject_category, #m{value=undefined} = M, _Context) ->
-    M#m{value=subject_category};
-m_find_value(Key, #m{value=object_category}, Context) ->
-    object_category(Key, Context);
-m_find_value(Key, #m{value=subject_category}, Context) ->
+m_find_value(all, #m{value = undefined}, Context) -> all(Context);
+m_find_value(is_used, #m{value = undefined} = M, _Context) -> M#m{value = is_used};
+m_find_value(Pred, #m{value = is_used}, Context) -> is_used(Pred, Context);
+m_find_value(object_category, #m{value = undefined} = M, _Context) ->
+    M#m{value = object_category};
+m_find_value(subject_category, #m{value = undefined} = M, _Context) ->
+    M#m{value = subject_category};
+m_find_value(Key, #m{value = object_category}, Context) -> object_category(Key, Context);
+m_find_value(Key, #m{value = subject_category}, Context) ->
     subject_category(Key, Context);
-m_find_value(Key, #m{value=undefined}, Context) ->
-    get(Key, Context).
+m_find_value(Key, #m{value = undefined}, Context) -> get(Key, Context).
 
 %% @doc Transform a model value to a list, used for template loops
 %% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value=undefined}, Context) ->
-    all(Context);
-m_to_list(#m{}, _Context) ->
-    [].
+m_to_list(#m{value = undefined}, Context) -> all(Context);
+m_to_list(#m{}, _Context) -> [].
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
 %% @spec m_value(Source, Context) -> term()
-m_value(#m{}, Context) ->
-    all(Context).
-
+m_value(#m{}, Context) -> all(Context).
 
 %% @doc Test if the property is the name of a predicate
 %% @spec is_predicate(Pred, Context) -> bool()
@@ -89,7 +79,6 @@ is_predicate(Id, Context) when is_integer(Id) ->
         CatId ->
             m_category:is_a(CatId, predicate, Context)
     end;
-
 is_predicate(Pred, Context) ->
     case m_rsc:name_to_id(Pred, Context) of
         {ok, Id} ->
@@ -107,7 +96,7 @@ is_used(Predicate, Context) ->
 %% @spec id_to_name(Id, Context) -> {ok, atom()} | {error, Reason}
 id_to_name(Id, Context) when is_integer(Id) ->
     F = fun() ->
-                {L,R} = cat_bounds(Context),
+                {L, R} = cat_bounds(Context),
                 case z_db:q1("
                             select r.name
                             from rsc r
@@ -121,7 +110,6 @@ id_to_name(Id, Context) when is_integer(Id) ->
                 end
         end,
     z_depcache:memo(F, {predicate_name, Id}, ?DAY, [predicate], Context).
-
 
 %% @doc Return the id of the predicate
 %% @spec name_to_id(Pred, Context) -> {ok, int()} | {error, Reason}
@@ -145,7 +133,7 @@ name_to_id_check(Name, Context) ->
 get(PredId, Context) when is_integer(PredId) ->
     case id_to_name(PredId, Context) of
         {error, _} -> undefined;
-		{ok, Name} -> get(Name, Context)
+        {ok, Name} -> get(Name, Context)
     end;
 get(Pred, Context) when is_list(Pred) orelse is_binary(Pred) ->
     get(list_to_atom(z_string:to_lower(Pred)), Context);
@@ -161,21 +149,30 @@ get(Pred, Context) ->
 
 %% @doc Return the category ids that are valid as objects
 objects(Id, Context) ->
-    Objects = z_db:q("select category_id from predicate_category where predicate_id = $1 and is_subject = false", [Id], Context),
-    [ R || {R} <- Objects  ].
+    Objects = z_db:q("
+        select category_id
+        from predicate_category
+        where predicate_id = $1
+          and is_subject = false",
+        [Id], Context),
+    [R || {R} <- Objects].
 
 %% @doc Return the category ids that are valid as subjects
 subjects(Id, Context) ->
-    Subjects = z_db:q("select category_id from predicate_category where predicate_id = $1 and is_subject = true", [Id], Context),
-    [ R || {R} <- Subjects  ].
-
+    Subjects = z_db:q("
+        select category_id
+        from predicate_category
+        where predicate_id = $1
+          and is_subject = true",
+        [Id], Context),
+    [R || {R} <- Subjects].
 
 %% @doc Return the list of all predicates
 %% @spec all(Context) -> PropList
 all(Context) ->
     F = fun() ->
-                {L,R} = cat_bounds(Context),
-                Preds = z_db:assoc_props("
+        {L, R} = cat_bounds(Context),
+        Preds = z_db:assoc_props("
                                 select *
                                 from rsc r
                                     join hierarchy c
@@ -183,18 +180,17 @@ all(Context) ->
                                 where $1 <= c.nr
                                   and c.nr <= $2
                                 order by r.name", [L, R], Context),
-                FSetPred = fun(Pred) ->
-                                   Id = proplists:get_value(id, Pred),
-                                   Atom = case proplists:get_value(name, Pred) of
-                                              undefined -> undefined;
-                                              B -> list_to_atom(binary_to_list(B))
-                                          end,
-                                   {Atom, [{pred, Atom},{subject,subjects(Id,Context)},{object,objects(Id,Context)}|Pred]}
-                           end,
-                [ FSetPred(Pred) || Pred <- Preds]
-        end,
+        FSetPred = fun(Pred) ->
+            Id = proplists:get_value(id, Pred),
+            Atom = case proplists:get_value(name, Pred) of
+                       undefined -> undefined;
+                       B -> list_to_atom(binary_to_list(B))
+                   end,
+            {Atom, [{pred, Atom}, {subject, subjects(Id, Context)}, {object, objects(Id, Context)} | Pred]}
+                   end,
+        [FSetPred(Pred) || Pred <- Preds]
+    end,
     z_depcache:memo(F, predicate, ?DAY, Context).
-
 
 %% @doc Insert a new predicate, sets some defaults.
 -spec insert(binary()|list(), #context{}) -> {ok, integer()} | {error, any()}.
@@ -226,9 +222,9 @@ flush(Context) ->
 %% @doc Reset the list of valid subjects and objects.
 -spec update_noflush(integer(), list(), list(), #context{}) -> ok.
 update_noflush(Id, Subjects, Objects, Context) ->
-    SubjectIds0 = [ m_rsc:rid(N, Context) || N <- Subjects, N /= [], N /= <<>> ],
-    ObjectIds0 = [ m_rsc:rid(N, Context) || N <- Objects, N /= [], N /= <<>> ],
-    SubjectIds = [ N || N <- SubjectIds0, N =/= undefined ],
+    SubjectIds0 = [m_rsc:rid(N, Context) || N <- Subjects, N /= [], N /= <<>>],
+    ObjectIds0 = [m_rsc:rid(N, Context) || N <- Objects, N /= [], N /= <<>>],
+    SubjectIds = [N || N <- SubjectIds0, N =/= undefined],
     ObjectIds = [ N || N <- ObjectIds0, N =/= undefined ],
     ok = z_db:transaction(
         fun(Ctx) ->
@@ -238,53 +234,65 @@ update_noflush(Id, Subjects, Objects, Context) ->
         end,
         Context).
 
-
 update_predicate_category(Id, IsSubject, CatIds, Context) ->
-    OldIdsR = z_db:q("select category_id from predicate_category where predicate_id = $1 and is_subject = $2", [Id, IsSubject], Context),
-    OldIds  = [ N || {N} <- OldIdsR ],
+    OldIdsR = z_db:q("select category_id from predicate_category where predicate_id = $1 and is_subject = $2",
+        [Id, IsSubject], Context),
+    OldIds = [N || {N} <- OldIdsR],
     % Delete the ones that are not there anymore
-    [ z_db:q("delete from predicate_category where predicate_id = $1 and category_id = $2 and is_subject = $3", [Id, OldId, IsSubject], Context)
-    || OldId <- OldIds, not lists:member(OldId, CatIds)
+    [z_db:q("delete from predicate_category where predicate_id = $1 and category_id = $2 and is_subject = $3",
+        [Id, OldId, IsSubject], Context)
+        || OldId <- OldIds, not lists:member(OldId, CatIds)
     ],
-    [ z_db:insert(predicate_category, [{predicate_id, Id}, {category_id, NewId}, {is_subject, IsSubject}], Context)
-    || NewId <- CatIds, not lists:member(NewId, OldIds)
+    [z_db:insert(predicate_category, [{predicate_id, Id}, {category_id, NewId}, {is_subject, IsSubject}],
+        Context)
+        || NewId <- CatIds, not lists:member(NewId, OldIds)
     ],
     ok.
 
 
-%% @doc Return all the valid categories for objects.  Return the empty list when there is no constraint.  Note that the resulting array
-%% is a bit strangely formatted [{id}, {id2}, ...], this is compatible with the category name lookup and prevents mixups with strings (lists of integers).
+%% @doc Return all the valid categories for objects.
+%% Return the empty list when there is no constraint.
+%% Note that the resulting array is a bit strangely formatted
+%% [{id}, {id2}, ...], this is compatible with the category name lookup and
+%% prevents mixups with strings (lists of integers).
 %% @spec object_category(Id, Context) -> List
 object_category(Id, Context) ->
     F = fun() ->
         case name_to_id(Id, Context) of
             {ok, PredId} ->
-                z_db:q("select category_id from predicate_category where predicate_id = $1 and is_subject = false", [PredId], Context);
+                z_db:q(
+                    "select category_id from predicate_category where predicate_id = $1 and "
+                        ++ "is_subject = false",
+                    [PredId], Context);
             _ ->
                 []
         end
-    end,
+        end,
     z_depcache:memo(F, {object_category, Id}, ?WEEK, [predicate], Context).
 
-
-%% @doc Return all the valid categories for subjects.  Return the empty list when there is no constraint.  Note that the resulting array
-%% is a bit strangely formatted [{id}, {id2}, ...], this is compatible with the category name lookup and prevents mixups with strings (lists of integers).
+%% @doc Return all the valid categories for subjects.
+%% Return the empty list when there is no constraint.
+%% Note that the resulting array is a bit strangely formatted [{id}, {id2}, ...],
+%% this is compatible with the category name lookup and prevents mixups with
+%% strings (lists of integers).
 %% @spec subject_category(Id, Context) -> List
 subject_category(Id, Context) ->
     F = fun() ->
         case name_to_id(Id, Context) of
             {ok, PredId} ->
-                z_db:q("select category_id from predicate_category where predicate_id = $1 and is_subject = true", [PredId], Context);
+                z_db:q("select category_id from predicate_category where predicate_id = $1 "
+                    "and is_subject = true",
+                    [PredId], Context);
             _ ->
                 []
         end
-    end,
+        end,
     z_depcache:memo(F, {subject_category, Id}, ?WEEK, [predicate], Context).
 
-
-%% @doc Return the list of predicates that are valid for the given resource id. Append all predicates that have no restrictions.
+%% @doc Return the list of predicates that are valid for the given resource id.
+%% Append all predicates that have no restrictions.
 for_subject(Id, Context) ->
-    {L,R} = cat_bounds(Context),
+    {L, R} = cat_bounds(Context),
     ValidIds = z_db:q("
                 select p.predicate_id
                 from predicate_category p,
@@ -300,7 +308,7 @@ for_subject(Id, Context) ->
                   and r.id = $1
                   and is_subject = true
                 ", [Id], Context),
-    Valid = [ ValidId || {ValidId} <- ValidIds ],
+    Valid = [ValidId || {ValidId} <- ValidIds],
     NoRestrictionIds = z_db:q("
                     select r.id
                     from rsc r left join predicate_category p on p.predicate_id = r.id and p.is_subject = true
@@ -308,18 +316,12 @@ for_subject(Id, Context) ->
                     where p.predicate_id is null
                       and $1 <= c.nr and c.nr <= $2
                 ", [L, R], Context),
-    NoRestriction = [ NoRestrictionId || {NoRestrictionId} <- NoRestrictionIds ],
+    NoRestriction = [NoRestrictionId || {NoRestrictionId} <- NoRestrictionIds],
     Valid ++ NoRestriction.
-
-
-
 
 %% @doc Return the id of the predicate category
 -spec cat_id(#context{}) -> integer().
-cat_id(Context) ->
-    m_category:name_to_id_check(predicate, Context).
+cat_id(Context) -> m_category:name_to_id_check(predicate, Context).
 
--spec cat_bounds(#context{}) -> {integer(),integer()}.
-cat_bounds(Context) ->
-    m_category:get_range(cat_id(Context), Context).
-
+-spec cat_bounds(#context{}) -> {integer(), integer()}.
+cat_bounds(Context) -> m_category:get_range(cat_id(Context), Context).

@@ -211,8 +211,29 @@ compile_map_nested_value([{identifier, _, <<"z_language">>}], ContextVar, _Conte
                 erl_syntax:atom(language),
                 [ erl_syntax:variable(ContextVar) ]),
     [{ast, Ast}];
+compile_map_nested_value([{identifier, _, <<"zotonic_site">>}], ContextVar, _Context) ->
+    Ast = erl_syntax:application(
+                erl_syntax:atom(z_context),
+                erl_syntax:atom(site),
+                [ erl_syntax:variable(ContextVar) ]),
+    [{ast, Ast}];
+compile_map_nested_value([{identifier, _, <<"zotonic_dispatch">>}], ContextVar, _Context) ->
+    get_z_context(zotonic_dispatch, ContextVar);
+compile_map_nested_value([{identifier, _, <<"zotonic_dispatch_path">>}], ContextVar, _Context) ->
+    get_z_context(zotonic_dispatch_path, ContextVar);
+compile_map_nested_value([{identifier, _, <<"zotonic_dispatch_path_rewrite">>}], ContextVar, _Context) ->
+    get_z_context(zotonic_dispatch_path_rewrite, ContextVar);
+compile_map_nested_value([{identifier, _, <<"zotonic_version">>}], _ContextVar, _Context) ->
+    [{ast, erl_syntax:abstract(z_convert:to_binary(?ZOTONIC_VERSION))}];
 compile_map_nested_value(Ts, _ContextVar, _Context) ->
     Ts.
+
+get_z_context(Var, ContextVar) ->
+    Ast = erl_syntax:application(
+                erl_syntax:atom(z_context),
+                erl_syntax:atom(get),
+                [ erl_syntax:atom(Var), erl_syntax:variable(ContextVar) ]),
+    [{ast, Ast}].
 
 
 %% @doc Find a list of values at once, easier and more efficient than a nested find_value/4

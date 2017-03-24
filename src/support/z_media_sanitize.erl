@@ -28,9 +28,11 @@
 
 
 %% @doc Sanitize uploaded media (SVG) files.
-sanitize(#media_upload_preprocess{mime="image/svg+xml"} = PP, _Context) ->
+sanitize(#media_upload_preprocess{mime=Mime} = PP, Context) when is_list(Mime) ->
+    sanitize(PP#media_upload_preprocess{mime=z_convert:to_binary(Mime)}, Context);
+sanitize(#media_upload_preprocess{mime= <<"image/svg+xml">>} = PP, _Context) ->
     sanitize_svg(PP);
-sanitize(#media_upload_preprocess{mime=Mime} = PP, _Context) when is_list(Mime) ->
+sanitize(#media_upload_preprocess{mime=Mime} = PP, _Context) when is_binary(Mime)  ->
     PP.
 
 sanitize_svg(#media_upload_preprocess{file=File} = PP) ->

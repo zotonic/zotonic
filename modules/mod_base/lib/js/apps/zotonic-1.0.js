@@ -503,7 +503,30 @@ function z_transport_session_status(data, msg)
 // Queue any data to be transported to the server
 function z_transport(delegate, content_type, data, options)
 {
-    var msg_id = z_pageid + z_unique_id(true);
+    var msg_id = z_unique_id(true);
+
+    if (!z_pageid) {
+        z_transport_wait(msg_id, delegate, content_type, data, options);
+        return msg_id;
+    } else {
+        return z_transport_do(msg_id, delegate, content_type, data, options);
+    }
+}
+
+function z_transport_wait(msg_id, delegate, content_type, data, options)
+{
+    if (!z_pageid) {
+        setTimeout(function() {
+                z_transport_wait(msg_id, delegate, content_type, data, options);
+            }, 100);
+    } else {
+        return z_transport_do(msg_id, delegate, content_type, data, options);
+    }
+}
+
+
+function z_transport_do(msg_id, delegate, content_type, data, options)
+{
     var timestamp = new Date().getTime();
 
     options = options || {};
@@ -827,6 +850,9 @@ function z_transport_check()
             var qmsg = z_transport_queue.shift();
             if (z_transport_acks[qmsg.msg_id]) {
                 z_transport_acks[qmsg.msg_id].is_queued = false;
+            }
+            if (!qmsg.page_id) {
+                qmsg.page_id = z_pageid;
             }
             z_do_transport(qmsg);
         } else if (!z_transport_check_timer) {
@@ -2017,11 +2043,21 @@ function urlencode(s)
 // HTML escape a string so it is safe to concatenate when making tags.
 function html_escape(s)
 {
-    return s.replace(/&/, "&amp;")
-            .replace(/</, "&lt;")
-            .replace(/>/, "&gt;")
-            .replace(/"/, "&quot;")
-            .replace(/'/, "&#39;");
+    return s.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+}
+
+// HTML unescape a string.
+function html_unescape(s)
+{
+    return s.replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&quot;/g, "\"")
+            .replace(/&#39;/g, "'")
+            .replace(/&amp;/g, "&");
 }
 
 

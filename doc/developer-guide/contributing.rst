@@ -38,14 +38,18 @@ how you can help improve Zotonic.
 Coding standards
 ----------------
 
-.. note::
-   As these conventions were established only after a large
-   part of the code base has been written, the code style described here
-   is not yet in effect in all parts of the Zotonic code base. We're
-   trying to gradually adapt to it, however.
+The Zotonic code follows `Inaka’s Erlang Coding Guidelines`_. This is enforced
+using the `Elvis`_ code checking tool. You can check the code locally with:
 
-When writing code, do not introduce trailing whitespace and try to keep lines
-of code shorter than 80 characters.
+.. code-block:: bash
+
+    $ elvis rock
+
+When contributing, simply try to follow the coding style as you find it in the
+existing code.
+
+Emacs
+^^^^^
 
 Provided with the Zotonic distribution is a Zotonic template mode,
 ``zotonic-tpl-mode``, which supports the Zotonic flavor of ErlyDtl.
@@ -59,15 +63,6 @@ file:
    (require 'zotonic-tpl-mode)
    ;; optional, for associating .tpl files with zotonic-tpl-mode
    (add-to-list 'auto-mode-alist '("\\.tpl$" . zotonic-tpl-mode))
-
-Indents
-^^^^^^^
-
-We use the "Emacs-style" indenting (using ``erlang-mode`` provided with the
-Erlang distribution). This indenting style seems to be a convention in much
-of the Erlang world.
-
-The indent is 4 spaces (no tabs).
 
 Writing commit messages
 -----------------------
@@ -350,3 +345,5 @@ hotfix, incrementing the patch number (for instance, ``0.16.1``).
 
 .. _Dutch test siren: http://www.invadingholland.com/guides-to-holland/emergency-alarm
 .. _Semantic versioning: http://semver.org/
+.. _Inaka’s Erlang Coding Guidelines: https://github.com/inaka/erlang_guidelines
+.. _Elvis: https://github.com/inaka/elvis

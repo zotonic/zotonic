@@ -122,6 +122,18 @@ sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts) ->
 sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts) ->
     % Inserted by Microsoft Word: <!--EndFragment-->
     <<>>;
+sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) ->
+    % The z-media tag is very strict with spaces
+    try
+        [Id, Opts] = binary:split(ZMedia, <<" {">>),
+        Opts1 = sanitize_z_media(<<${, Opts/binary>>),
+        Id1 = z_string:to_name(z_string:trim(Id)),
+        {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>}
+    catch
+        _:_ ->
+            lager:info("Dropping illegal z-media tag: ~p", [ZMedia]),
+            {comment, <<" ">>}
+    end;
 sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts) ->
     Attrs1 = cleanup_element_attrs(Attrs),
     {Tag, Attrs1, Inner};
@@ -147,6 +159,32 @@ cleanup_element_attr(_Attr) ->
 is_acceptable_classname(<<"Mso", _/binary>>) -> false;
 is_acceptable_classname(<<>>) -> false;
 is_acceptable_classname(_) -> true.
+
+
+sanitize_z_media(Data) ->
+    {struct, Args} = mochijson:binary_decode(Data),
+    Args2 = [ sanitize_z_media_arg(Arg) || Arg <- Args ],
+    iolist_to_binary(mochijson:binary_encode({struct, Args2})).
+
+sanitize_z_media_arg({<<"id">>, Id}) when is_binary(Id) -> {<<"id">>, z_string:to_name(Id)};
+sanitize_z_media_arg({<<"id">>, Id}) when is_integer(Id) -> {<<"id">>, Id};
+sanitize_z_media_arg({<<"size">>, <<"large">>} = S) -> S;
+sanitize_z_media_arg({<<"size">>, <<"small">>} = S) -> S;
+sanitize_z_media_arg({<<"size">>, <<"middle">>} = S) -> S;
+sanitize_z_media_arg({<<"size">>, _}) -> {<<"size">>, <<"medium">>};
+sanitize_z_media_arg({<<"align">>, <<"left">>} = S) -> S;
+sanitize_z_media_arg({<<"align">>, <<"right">>} = S) -> S;
+sanitize_z_media_arg({<<"align">>, _}) -> {<<"align">>, <<"block">>};
+sanitize_z_media_arg({<<"crop">>, Crop}) -> {<<"crop">>, z_convert:to_bool(Crop)};
+sanitize_z_media_arg({<<"link">>, Link}) -> {<<"link">>, z_convert:to_bool(Link)};
+sanitize_z_media_arg({<<"caption">>, Caption}) -> 
+    Caption1 = binary:replace(Caption, <<"-->">>, <<"→"/utf8>>, [global]),
+    {<<"caption">>, Caption1};
+sanitize_z_media_arg({Arg, Val}) when is_binary(Val) ->
+    Val1 = binary:replace(Val, <<"-->">>, <<"→"/utf8>>, [global]),
+    {z_string:to_name(Arg), Val1};
+sanitize_z_media_arg({Arg, Val}) when is_integer(Val); is_boolean(Val) ->
+    {z_string:to_name(Arg), Val}.
 
 
 sanitize_script(Props, Context) ->
@@ -302,6 +340,7 @@ wl(<<"assets.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"static.issuu.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"e.issuu.com/",  _/binary>> = Url) -> {ok, Url};
 wl(<<"cdn.embedly.com/", _/binary>> = Url) -> {ok, Url};
+wl(<<"vk.com/video_ext",  _/binary>> = Url) -> {ok, Url};
 wl(Url) ->
     case lists:dropwhile(fun(Re) ->
                             re:run(Url, Re) =:= nomatch

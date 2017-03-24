@@ -27,19 +27,29 @@ render_validator(name_unique, TriggerId, TargetId, Args, Context)  ->
     Script = [<<"z_add_validator(\"">>, TriggerId, <<"\", \"postback\", ">>, JsObject, <<");\n">>],
     {Args, Script, Context}.
 
--spec validate(name_unique, string(), term(), list(), #context{}) ->
-    {{ok, []}, #context{}} | {{error, m_rsc:resource(), atom() | string()}, #context{}}.
+-spec validate(name_unique, binary(), term(), list(), #context{}) ->
+    {{ok, []}, #context{}} | {{error, m_rsc:resource(), atom() | binary()}, #context{}}.
 validate(name_unique, Id, Value, Args, Context) ->
-    Name = z_string:to_lower(z_string:trim(Value)),
-    RscId = proplists:get_value(id, Args),
-    case m_rsc:name_lookup(Name, Context) of
-        undefined ->
-            {{ok, []}, Context};
-        RscId ->
-            {{ok, []}, Context};
-        _ ->
-            Message = proplists:get_value(failure_message, Args, invalid),
-            {{error, Id, Message}, Context}
+    Message = proplists:get_value(failure_message, Args, invalid),
+    Value1 = z_string:trim(Value),
+    case {z_utils:is_empty(Value1), z_string:to_name(Value1)} of
+        {true, _} ->
+            {{ok, <<>>}, Context};
+        {false, <<>>} ->
+            {{error, Id, Message}, Context};
+        {false, <<"_">>} ->
+            {{error, Id, Message}, Context};
+        {false, Name} ->
+            RscId = proplists:get_value(id, Args),
+            case m_rsc:name_lookup(Name, Context) of
+                undefined ->
+                    {{ok, <<>>}, Context};
+                RscId ->
+                    {{ok, <<>>}, Context};
+                _ ->
+                    Message = proplists:get_value(failure_message, Args, invalid),
+                    {{error, Id, Message}, Context}
+            end
     end.
 
 %% @doc Handle the validation during form entry.
@@ -48,9 +58,9 @@ event(#postback{message = {validate, Args}, trigger = TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     {IsValid, ContextValidated} = case validate(name_unique, TriggerId, Value, Args, Context) of
         {{ok, _}, ContextOk} ->
-            {"true", z_render:wire({fade_out, [{target, TriggerId ++ "_name_unique_error"}]}, ContextOk)};
+            {"true", z_render:wire({fade_out, [{target, <<TriggerId/binary, "_name_unique_error">>}]}, ContextOk)};
         {{error, Id, _} = Error, ContextScript} ->
-            {"false", z_render:wire({fade_in, [{target, TriggerId ++ "_name_unique_error"}]},
+            {"false", z_render:wire({fade_in, [{target, <<TriggerId/binary, "_name_unique_error">>}]},
                 z_validation:report_errors([{Id, Error}], ContextScript))}
     end,
     z_script:add_script(

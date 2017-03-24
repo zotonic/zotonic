@@ -17,6 +17,7 @@ Cookbooks
    overriding
    task-queue
    template-icons
+   logstash
    error-pages
 
 Frontend cookbook

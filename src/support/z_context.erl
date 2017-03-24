@@ -74,6 +74,8 @@
     get_q_all_noz/1,
     get_q_validated/2,
 
+    is_zotonic_arg/1,
+
     add_script_session/1,
     add_script_page/1,
     add_script_session/2,
@@ -173,7 +175,7 @@ new(Req) when is_map(Req) ->
     z_memo:enable(),
     z_depcache:in_process(true),
     Context = set_server_names(#context{req=Req, site=site(Req)}),
-    set_dispatch_from_path(set_default_language_tz(Context)).
+    set_default_language_tz(Context).
 
 %% @doc Create a new context record for a site with a certain language
 -spec new( atom() | cowboy_req:req(), atom() ) -> z:context().
@@ -216,14 +218,6 @@ new_tests() ->
     end,
     Context.
 
-
-%% @doc Set the dispatch rule for this request to the context var 'zotonic_dispatch'
-set_dispatch_from_path(Context) ->
-    Bindings = cowmachine_req:path_info(Context),
-    case lists:keyfind(zotonic_dispatch, 1, Bindings) of
-        {zotonic_dispatch, Dispatch} -> set(zotonic_dispatch, Dispatch, Context);
-        false -> Context
-    end.
 
 %% @doc Set all server names for the given site.
 -spec set_server_names( z:context() ) -> z:context().
@@ -1032,17 +1026,41 @@ set(PropList, Context) when is_list(PropList) ->
 %% @spec get(Key, Context) -> Value | undefined
 %% @doc Fetch the value of the context variable Key, return undefined when Key is not found.
 get(Key, Context) ->
-    case proplists:lookup(Key, Context#context.props) of
-        {Key, Value} -> Value;
-        none -> undefined
-    end.
+    get(Key, Context, undefined).
 
 %% @spec get(Key, Context, Default) -> Value | Default
 %% @doc Fetch the value of the context variable Key, return Default when Key is not found.
 get(Key, Context, Default) ->
-    case proplists:lookup(Key, Context#context.props) of
+    get_1(Key, Context, Default).
+
+get_1(Key, #context{props=Props} = Context, Default) ->
+    case lists:keyfind(Key, 1, Props) of
         {Key, Value} -> Value;
-        none -> Default
+        false -> get_maybe_path_info(Key, Context, Default)
+    end.
+
+get_maybe_path_info(z_language, Context, _Default) ->
+    z_context:language(Context);
+get_maybe_path_info(zotonic_site, Context, _Default) ->
+    z_context:site(Context);
+get_maybe_path_info(zotonic_dispatch, Context, Default) ->
+    get_path_info(zotonic_dispatch, Context, Default);
+get_maybe_path_info(zotonic_dispatch_path, Context, Default) ->
+    get_path_info(zotonic_dispatch_path, Context, Default);
+get_maybe_path_info(zotonic_dispatch_path_rewrite, Context, Default) ->
+    get_path_info(zotonic_dispatch_path_rewrite, Context, Default);
+get_maybe_path_info(_, _Context, Default) ->
+    Default.
+
+get_path_info(Key, Context, Default) ->
+    case cowmachine_req:req(Context) of
+        undefined ->
+            Default;
+        Req ->
+            case lists:keyfind(Key, 1, cowmachine_req:path_info(Req)) of
+                {Key, Value} -> Value;
+                false -> Default
+            end
     end.
 
 
@@ -1082,6 +1100,9 @@ fallback_language(Context) ->
 
 %% @doc Set the language of the context, either an atom (language) or a list (language and fallback languages)
 -spec set_language(atom()|binary()|string()|list(), z:context()) -> z:context().
+set_language('x-default', Context) ->
+    Lang = z_language:default_language(Context),
+    Context#context{language=[Lang,'x-default']};
 set_language(Lang, Context) when is_atom(Lang) ->
     Context#context{language=[Lang]};
 set_language(Langs, Context) when is_list(Langs) ->

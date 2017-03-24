@@ -21,8 +21,8 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([resource_to_atom/2,
-         atom_to_resource/1
-        ]).
+    atom_to_resource/1
+]).
 
 
 -include_lib("xmerl/include/xmerl.hrl").
@@ -71,10 +71,13 @@ author_element(Export) ->
         X when X =:= undefined orelse X =:= [] ->
             [];
         Edges ->
-            [#xmlElement{name=author, content=[
-                         #xmlElement{name=name, content=[#xmlText{value=proplists:get_value(object_title, E)}]},
-                         #xmlElement{name=uri, content=[#xmlText{value=proplists:get_value(object_uri, E)}]}]}
-             || E <- filter_edges(Edges, <<"author">>)]
+            [#xmlElement{
+                name = author,
+                content = [
+                    #xmlElement{name = name, content = [#xmlText{value = proplists:get_value(object_title, E)}]},
+                    #xmlElement{name = uri, content = [#xmlText{value = proplists:get_value(object_uri, E)}]}
+                ]
+            } || E <- filter_edges(Edges, <<"author">>)]
     end.
 
 
@@ -91,7 +94,7 @@ atom_to_resource(Xml) when is_binary(Xml) ->
     atom_to_resource(binary_to_list(Xml));
 
 atom_to_resource(Xml) ->
-    {RootElem,_} = xmerl_scan:string(Xml),
+    {RootElem, _} = xmerl_scan:string(Xml),
 
     %% Atom required elements
     RscUri = case xmerl_xpath:string("/entry/id", RootElem) of
@@ -147,12 +150,13 @@ atom_to_resource(Xml) ->
            end,
 
     %% Combine all into rsc_export() structure
-    Import = [{uri, RscUri},
-              {rsc, RscProps5},
-              {medium, Medium},
-              {edges, Edges2}
-             ],
-    lists:filter(fun({_,L}) -> not(L == []) end, Import).
+    Import = [
+        {uri, RscUri},
+        {rsc, RscProps5},
+        {medium, Medium},
+        {edges, Edges2}
+    ],
+    lists:filter(fun({_, L}) -> not(L == []) end, Import).
 
 
 %% @doc Given an Atom entry, get a list of all the authors formatted as author edges.
@@ -162,20 +166,22 @@ find_author(Elem) ->
         [] -> []; % no author found
         Authors ->
             lists:map(fun(A) ->
-                              Name = case xmerl_xpath:string("/author/name", A) of
-                                         [] -> <<>>;
-                                         [#xmlElement{content=[#xmlText{value=N}]}] ->
-                                             list_to_binary(N)
-                                     end,
-                              Uri = case xmerl_xpath:string("/author/uri", A) of
-                                        [] -> <<>>;
-                                        [#xmlElement{content=[#xmlText{value=U}]}] ->
-                                            list_to_binary(U)
-                                    end,
-                              [{predicate_name, <<"author">>},
-                               {object_uri, Uri},
-                               {object_title, Name}]
-                      end, Authors)
+                Name = case xmerl_xpath:string("/author/name", A) of
+                    [] -> <<>>;
+                    [#xmlElement{content = [#xmlText{value = N}]}] ->
+                        list_to_binary(N)
+                end,
+                Uri = case xmerl_xpath:string("/author/uri", A) of
+                    [] -> <<>>;
+                    [#xmlElement{content = [#xmlText{value = U}]}] ->
+                        list_to_binary(U)
+                end,
+                [{predicate_name, <<"author">>},
+                    {object_uri, Uri},
+                    {object_title, Name}]
+            end,
+            Authors
+            )
     end.
 
 
@@ -184,11 +190,11 @@ find_author(Elem) ->
 find_depiction(Elem) ->
     case xmerl_xpath:string("/entry/link[@rel=\"enclosure\"]", Elem) of
         [] -> []; % no depiction found
-        [Enclosure|_] ->
-            [ [{predicate_name, <<"depiction">>},
-               {object_uri, xml_attrib(href, Enclosure)},
-               {object_title, xml_attrib(title, Enclosure)}
-               ] ]
+        [Enclosure | _] ->
+            [[{predicate_name, <<"depiction">>},
+                {object_uri, xml_attrib(href, Enclosure)},
+                {object_title, xml_attrib(title, Enclosure)}
+            ]]
     end.
 
 %% @doc Given an XML element, get the value of an attribute.
@@ -196,7 +202,7 @@ find_depiction(Elem) ->
 xml_attrib(Name, #xmlElement{attributes=Attrs}) ->
     case lists:filter(fun(#xmlAttribute{name=Nm}) -> Nm =:= Name end, Attrs) of
         [] -> undefined;
-        [#xmlAttribute{value=Value}|_] ->
+        [#xmlAttribute{value = Value} | _] ->
             list_to_binary(Value)
     end.
 
@@ -209,7 +215,7 @@ collapse_xmltext(Content) ->
 %% @doc Given an element, get its XML text. If "strip" attribute is
 %% set, text is stripped of (x)html constructs if type attribute is
 %% html or xhtml.
-get_xmltext(Element=#xmlElement{content=Content}, Strip) ->
+get_xmltext(Element = #xmlElement{content = Content}, Strip) ->
     Text = collapse_xmltext(Content),
     Text2 = case Strip of
                 false -> Text;
@@ -227,6 +233,6 @@ get_xmltext(Element=#xmlElement{content=Content}, Strip) ->
 
 
 empty(<<>>) -> true;
-empty([])  -> true;
+empty([]) -> true;
 empty(undefined) -> true;
 empty(_) -> false.

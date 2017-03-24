@@ -26,7 +26,8 @@
 %% {% for id in m.search[{featured cat="accessoiries"}] %}
 %%
 %% Paging is done by fetching the first ?SEARCH_LIMIT rows and then return a slice from those rows.
-%% This result set should be cached for a short while (depending on writes by the user_id associated with the visitor).
+%% This result set should be cached for a short while (depending on writes by
+%% the user_id associated with the visitor).
 
 -module(m_search).
 -author("Marc Worrell <marc@worrell.nl").
@@ -79,7 +80,7 @@ m_value(#m{value=#m_search_result{result=Result}}, _Context) ->
 search({SearchName, Props}, Context) ->
     {Page, PageLen, Props1} = get_optional_paging_props(Props),
     try
-        Result = z_search:search({SearchName, Props1}, {(Page-1)*PageLen+1,PageLen}, Context),
+        Result = z_search:search({SearchName, Props1}, {(Page - 1) * PageLen + 1, PageLen}, Context),
         Total1 = case Result#search_result.total of
             undefined -> length(Result#search_result.result);
             Total -> Total
@@ -145,6 +146,9 @@ get_result(props, Result, _Context) ->
     Result#m_search_result.search_props;
 get_result(total, Result, _Context) ->
     Result#m_search_result.total;
+get_result(facets, Result, _Context) ->
+    #search_result{facets = Facets} = Result#m_search_result.result,
+    Facets;
 get_result(pages, Result, _Context) ->
     case Result#m_search_result.result of
         #search_result{pages=Pages} -> Pages;

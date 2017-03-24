@@ -218,6 +218,11 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         "audio/" ++ _ = M -> {ok, [{mime,M}]};
                         _ -> {ok, [{mime, "video/x-ms-asf"}]}
                     end;
+                "video/mp4" -> 
+                    case guess_mime(OriginalFilename) of
+                        "audio/" ++ _ = M -> {ok, [{mime,M}]};
+                        _ -> {ok, [{mime, "video/mp4"}]}
+                    end;
                 _ ->
                     {ok, [{mime, Mime}]}
             end
@@ -233,7 +238,7 @@ identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
     lager:error("Please install ImageMagick 'identify' for identifying the type of uploaded files."),
     {error, "'identify' not installed"};
 identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
-    CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
+    CleanedImageFile = z_utils:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
     CmdOutput = os:cmd(z_utils:os_filename(Cmd)
                        ++" -quiet "
                        ++CleanedImageFile
@@ -263,7 +268,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
             try
                 [_Path, Type, Dim, _Dim2 | _] = string:tokens(Result, " "),
                 Mime = mime(Type, MimeFile),
-                [Width,Height] = string:tokens(Dim, "x"),
+                [Width,Height] = string:tokens(hd(string:tokens(Dim, "=>")), "x"),
                 {W1,H1} = maybe_sizeup(Mime, list_to_integer(Width), list_to_integer(Height)),
                 Props1 = [{width, W1},
                           {height, H1},
@@ -404,11 +409,18 @@ guess_mime(File) ->
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
 exif(File) ->
-    case exif:read(File) of
-        {ok, Dict} ->
-            List = dict:to_list(Dict),
-            proplists:delete(maker_note, List);
-        {error, _} ->
+    try
+        case exif:read(File) of
+            {ok, Dict} ->
+                List = dict:to_list(Dict),
+                proplists:delete(maker_note, List);
+            {error, _} ->
+                []
+        end
+    catch
+        A:B ->
+            Trace = erlang:get_stacktrace(),
+            lager:error("Error reading exif ~p:~p in ~p", [A,B,Trace]),
             []
     end.
 

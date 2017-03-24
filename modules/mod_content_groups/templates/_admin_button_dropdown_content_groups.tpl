@@ -9,14 +9,16 @@
     </li>
 {% endfor %}
 
-{% with m.search[{query cat=`acl_collaboration_group`}] as collaboration_groups %}
-    <li class="divider"></li>
-    <li role="presentation" class="dropdown-header">
-        {{ m.rsc.acl_collaboration_group.title }}
-    </li>
-    {% for id in collaboration_groups %}
-        <li class="{% if id == selected_value %}active{% endif %}">
-            <a href="#" class="{{ option_class }}" data-value="{{ id }}">{{ id.title }}</a>
+{% if m.rsc.acl_collaboration_group %}
+    {% with m.search[{query cat=`acl_collaboration_group`}] as collaboration_groups %}
+        <li class="divider"></li>
+        <li role="presentation" class="dropdown-header">
+            {{ m.rsc.acl_collaboration_group.title }}
         </li>
-    {% endfor %}
-{% endwith %}
+        {% for id in collaboration_groups %}
+            <li class="{% if id == selected_value %}active{% endif %}">
+                <a href="#" class="{{ option_class }}" data-value="{{ id }}">{{ id.title }}</a>
+            </li>
+        {% endfor %}
+    {% endwith %}
+{% endif %}

@@ -83,6 +83,8 @@ insert_all([], _Id, _Context) ->
     ok;
 insert_all([[] | Rest], Id, Context) ->
     insert_all(Rest, Id, Context);
+insert_all([<<>> | Rest], Id, Context) ->
+    insert_all(Rest, Id, Context);
 insert_all([Perm | Rest], Id, Context) ->
     z_db:q("INSERT INTO oauth_application_perm (application_id, perm) VALUES ($1, $2)", [Id, Perm], Context),
     insert_all(Rest, Id, Context).
@@ -116,15 +118,16 @@ all_services_for(Id, Context) ->
 %% collapsed with respect to "*" syntax notation.
 %%
 humanreadable(Id, Context) ->
-    [[{desc, D}] || D <- human([string:tokens(binary_to_list(proplists:get_value(perm, R)), "/") || R <- get(Id, Context)])].
+    Split = [ binary:split(proplists:get_value(perm, R), <<"/">>) || R <- get(Id, Context) ],
+    [ [{desc, D}] || D <- human(Split) ].
 
 
 human([]) ->
     [];
-human([["*"]|_Rest]) ->
-    ["Access to every aspect of your account"];
-human([[Module, "*"]|Rest]) ->
+human([ [<<"*">>] | _Rest]) ->
+    [ "Access to every aspect of your account" ];
+human([ [Module, <<"*">>] | Rest]) ->
     Rest2 = lists:filter(fun([M,_]) -> not(M == Module) end, Rest),
-    [ "Access to the " ++ z_module_manager:title(z_service:api_prefix_to_module(Module)) ++ " module" | human(Rest2)];
+    [ "Access to the " ++ z_module_manager:title(z_service:api_prefix_to_module(Module)) ++ " module" | human(Rest2) ];
 human([[Module, Part]|Rest]) ->
-    [z_service:title(list_to_atom("service_" ++ Module ++ "_" ++ Part)) | human(Rest)].
+    [ z_service:title(binary_to_atom(<<"service_",Module/binary,"_",Part/binary>>, utf8)) | human(Rest) ].

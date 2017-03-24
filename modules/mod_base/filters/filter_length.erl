@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @doc 'length' filter, return the number of elements
+%% @copyright 2010-2017 Marc Worrell
+%% @doc 'length' filter, return the number of elements or length of a string
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,15 +20,10 @@
 -export([length/2]).
 
 
-length(undefined, _Context) ->
-    undefined;
-length([], _Context) ->
-    "0";
-length(<<>>, _Context) ->
-    "0";
-length(Input, _Context) when is_list(Input) ->
-    integer_to_list(erlang:length(Input));
-length(Input, _Context) when is_binary(Input) ->
-    integer_to_list(size(Input));
+length(undefined, _Context) -> undefined;
+length([], _Context) -> 0;
+length(<<>>, _Context) -> 0;
+length(Input, _Context) when is_binary(Input) -> z_string:len(Input);
+length(Input, _Context) when is_list(Input) -> erlang:length(Input);
 length(Input, Context) ->
     erlang:length(z_template_compiler_runtime:to_list(Input, Context)).

@@ -65,7 +65,7 @@ find params:
                 {% endif %}
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
                     <li {% if tab == "url" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-url">{_ Upload by URL _}</a>
+                        <a data-toggle="tab" href="#{{ #tab }}-url">{_ Website or Embed _}</a>
                     </li>
                 {% endif %}
                 {% all include "_media_upload_tab.tpl" tab=#tab %}
@@ -146,6 +146,7 @@ find params:
                     {% include "_action_dialog_media_upload_tab_upload.tpl"
                         tab=#tab
                         predicate=predicate
+                        delegate=delegate
                         subject_id=subject_id
                         object_id=object_id
                         title=""
@@ -156,7 +157,6 @@ find params:
                     {% include "_action_dialog_media_upload_tab_url.tpl"
                         tab=#tab
                         predicate=predicate
-                        delegate=delegate
                         subject_id=subject_id
                         object_id=object_id
                         is_active=(tab == "url")

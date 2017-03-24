@@ -91,6 +91,7 @@ bounced(Peer, NoReplyEmail) ->
 
 
 %% @doc Generate a new message id
+-spec generate_message_id() -> binary().
 generate_message_id() ->
     z_ids:random_id('az09', 20).
 
@@ -240,7 +241,7 @@ handle_cast({send, Id, #email{} = Email, Context}, State) ->
 %%@ doc Handle a bounced email
 handle_cast({bounced, Peer, BounceEmail}, State) ->
     % Fetch the MsgId from the bounce address
-    [BounceLocalName,Domain] = binstr:split(z_convert:to_binary(BounceEmail), <<"@">>),
+    [BounceLocalName,Domain] = binary:split(z_convert:to_binary(BounceEmail), <<"@">>),
     <<"noreply+", MsgId/binary>> = BounceLocalName,
 
     % Find the original message in our database of recent sent e-mail
@@ -387,19 +388,23 @@ update_config(State) ->
 
 
 %% @doc Get the bounce email address. Can be overridden per site in config setting site.bounce_email_override.
-bounce_email(MessageId, Context) ->
+-spec bounce_email(binary(), z:context()) -> binary().
+bounce_email(MessageId, Context) when is_binary(MessageId) ->
     case m_config:get_value(site, bounce_email_override, Context) of
         undefined ->
             case z_config:get(smtp_bounce_email_override) of
-                undefined -> "noreply+"++MessageId;
-                VERP -> z_convert:to_list(VERP)
+                undefined -> <<"noreply+", MessageId/binary>>;
+                VERP -> z_convert:to_binary(VERP)
             end;
         VERP ->
-            z_convert:to_list(VERP)
+            z_convert:to_binary(VERP)
     end.
 
-reply_email(MessageId, Context) ->
-    "reply+"++z_convert:to_list(MessageId)++[$@ | z_email:email_domain(Context)].
+
+-spec reply_email(binary(), z:context()) -> binary().
+reply_email(MessageId, Context) when is_binary(MessageId) ->
+    EmailDomain = z_email:email_domain(Context),
+    <<"reply+",MessageId/binary, $@, EmailDomain/binary>>.
 
 
 % The 'From' is either the message id (and bounce domain) or the set from.
@@ -412,12 +417,13 @@ get_email_from(EmailFrom, VERP, State, Context) ->
     case State#state.smtp_verp_as_from of
         true ->
             {FromName, _FromEmail} = z_email:split_name_email(From),
-            string:strip(FromName ++ " " ++ VERP);
+            z_email:combine_name_email(FromName, VERP);
         _ ->
-            {FromName, FromEmail} = z_email:split_name_email(From),
-            case FromEmail of
-                [] -> string:strip(FromName ++ " <" ++ get_email_from(Context) ++ ">");
-                _ -> From
+            case z_email:split_name_email(From) of
+                {FromName, <<>>} -> 
+                    z_email:combine_name_email(FromName, get_email_from(Context));
+                _ ->
+                    From
             end
     end.
 
@@ -425,13 +431,17 @@ get_email_from(EmailFrom, VERP, State, Context) ->
 get_email_from(Context) ->
     %% Let the default be overruled by the config setting
     case m_config:get_value(site, email_from, Context) of
-        undefined -> "noreply@" ++ z_email:email_domain(Context);
-        EmailFrom -> z_convert:to_list(EmailFrom)
+        undefined ->
+            EmailDomain = z_email:email_domain(Context),
+            <<"noreply@", EmailDomain/binary>>;
+        EmailFrom ->
+            z_convert:to_binary(EmailFrom)
     end.
 
 % Unique message-id, depends on bounce domain
-message_id(MessageId, Context) ->
-    z_convert:to_list(MessageId)++[$@ | z_email:bounce_domain(Context)].
+message_id(MessageId, Context) when is_binary(MessageId) ->
+    BounceDomain = z_email:bounce_domain(Context),
+    <<MessageId/binary, $@, BounceDomain/binary>>.
 
 %% @doc Remove a worker Pid from the server state.
 remove_worker(Pid, State) ->
@@ -514,15 +524,15 @@ delete_email(Error, Id, Recipient, Email, Context) ->
 % Start a worker, prevent too many workers per domain.
 spawn_send_checked(Id, Recipient, Email, Context, State) ->
     Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
-    Recipient2 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(Recipient1)))),
+    Recipient2 = z_string:trim(z_string:line(z_convert:to_binary(Recipient1))),
     {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
-    [_RcptLocalName, RecipientDomain] = string:tokens(RecipientEmail, "@"),
+    [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
     SmtpOpts = [
         {no_mx_lookups, State#state.smtp_no_mx_lookups},
-        {hostname, z_email:email_domain(Context)}
+        {hostname, z_convert:to_list(z_email:email_domain(Context))}
         | case State#state.smtp_relay of
             true -> State#state.smtp_relay_opts;
-            false -> [{relay, RecipientDomain}]
+            false -> [{relay, z_convert:to_list(RecipientDomain)}]
           end
     ],
     BccSmtpOpts = case z_utils:is_empty(State#state.smtp_bcc) of
@@ -530,18 +540,18 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
                             [];
                       false ->
                             {_BccName, BccEmail} = z_email:split_name_email(State#state.smtp_bcc),
-                            [_BccLocalName, BccDomain] = string:tokens(BccEmail, "@"),
+                            [_BccLocalName, BccDomain] = binary:split(BccEmail, <<"@">>),
                             [
                                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                                {hostname, z_email:email_domain(Context)}
+                                {hostname, z_convert:to_list(z_email:email_domain(Context))}
                                 | case State#state.smtp_relay of
                                     true -> State#state.smtp_relay_opts;
-                                    false -> [{relay, BccDomain}]
+                                    false -> [{relay, z_convert:to_list(BccDomain)}]
                                   end
                             ]
                   end,
     MessageId = message_id(Id, Context),
-    VERP = "<"++bounce_email(MessageId, Context)++">",
+    VERP = <<"<", (bounce_email(MessageId, Context))/binary, ">">>,
     From = get_email_from(Email#email.from, VERP, State, Context),
     SenderPid = erlang:spawn_link(
                     fun() ->
@@ -558,7 +568,7 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
 
 spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                      Bcc, Email, SmtpOpts, BccSmtpOpts, Context) ->
-    EncodedMail = encode_email(Id, Email, "<"++MessageId++">", From, Context),
+    EncodedMail = encode_email(Id, Email, <<"<", MessageId/binary, ">">>, From, Context),
     spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                               Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, Context).
 
@@ -567,7 +577,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
         {error, wait} ->
-            lager:debug("[smtp] Delaying email to ~p (~p), too many parallel senders for relay ~p",
+            lager:debug("[smtp] Delaying email to \"~s\" (~s), too many parallel senders for relay \"~s\"",
                         [RecipientEmail, Id, Relay]),
             timer:sleep(1000),
             spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
@@ -588,7 +598,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                 props=LogEmail#log_email{severity=?LOG_INFO, mailer_status=sending}
                               }, Context),
 
-            lager:info("[smtp] Sending email to ~p (~p), via relay ~p",
+            lager:info("[smtp] Sending email to \"~s\" (~s), via relay \"~s\"",
                        [RecipientEmail, Id, Relay]),
 
             %% use the unique id as 'envelope sender' (VERP)
@@ -695,7 +705,7 @@ to_binary(Error) ->
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary([
-        "X-Mailer: Zotonic ", ?ZOTONIC_VERSION, " (http://zotonic.com)\r\n",
+        "X-Mailer: ", x_mailer(), "\r\n",
         Raw
     ]);
 encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
@@ -711,17 +721,17 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                           <<>>;
                       {_Html, undefined} ->
                           {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*?)</title>", [dotall, caseless]),
-                          string:strip(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len))));
+                          z_string:trim(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len))));
                       {_Html, Sub} ->
                           Sub
                   end,
-    Headers = [{"From", From},
-               {"To", z_convert:to_list(Email#email.to)},
-               {"Subject", z_convert:to_flatlist(Subject)},
-               {"Date", date(Context)},
-               {"MIME-Version", "1.0"},
-               {"Message-ID", MessageId},
-               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+    Headers = [{<<"From">>, From},
+               {<<"To">>, Email#email.to},
+               {<<"Subject">>, iolist_to_binary(Subject)},
+               {<<"Date">>, date(Context)},
+               {<<"MIME-Version">>, <<"1.0">>},
+               {<<"Message-ID">>, MessageId},
+               {<<"X-Mailer">>, x_mailer()}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
@@ -729,7 +739,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     Headers = [{<<"From">>, From},
                {<<"To">>, Email#email.to},
                {<<"Message-ID">>, MessageId},
-               {<<"X-Mailer">>, "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+               {<<"X-Mailer">>, x_mailer()}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     {BodyType, BodySubtype, BodyHeaders, BodyParams, BodyParts} = Body,
@@ -738,35 +748,35 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     ],
     mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts}, opt_dkim(Context));
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
-    Headers = [{"From", From},
-               {"To", z_convert:to_list(Email#email.to)},
-               {"Message-ID", MessageId},
-               {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
+    Headers = [{<<"From">>, From},
+               {<<"To">>, Email#email.to},
+               {<<"Message-ID">>, MessageId},
+               {<<"X-Mailer">>, x_mailer()}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ]).
 
-    date(Context) ->
-        z_convert:to_list(z_datetime:format("r", z_context:set_language(en, Context))).
+date(Context) ->
+    iolist_to_binary(z_datetime:format("r", z_context:set_language(en, Context))).
 
+x_mailer() ->
+    iolist_to_binary(["Zotonic ", ?ZOTONIC_VERSION, " (http://zotonic.com)"]).
 
-    add_cc(#email{cc=undefined}, Headers) ->
-        Headers;
-    add_cc(#email{cc=[]}, Headers) ->
-        Headers;
-    add_cc(#email{cc=Cc}, Headers) ->
-        Headers ++ [{"Cc", Cc}].
+add_cc(#email{cc = undefined}, Headers) -> Headers;
+add_cc(#email{cc = []}, Headers) -> Headers;
+add_cc(#email{cc = <<>>}, Headers) -> Headers;
+add_cc(#email{cc = Cc}, Headers) ->
+    Headers ++ [{<<"Cc">>, Cc}].
 
-    add_reply_to(_Id, #email{reply_to=undefined}, Headers, _Context) ->
-        Headers;
-    add_reply_to(_Id, #email{reply_to = <<>>}, Headers, _Context) ->
-        [{"Reply-To", "<>"} | Headers];
-    add_reply_to(Id, #email{reply_to=message_id}, Headers, Context) ->
-        [{"Reply-To", reply_email(Id, Context)} | Headers];
-    add_reply_to(_Id, #email{reply_to=ReplyTo}, Headers, Context) ->
-        {Name, Email} = z_email:split_name_email(ReplyTo),
-        ReplyTo1 = string:strip(Name ++ " <" ++ z_email:ensure_domain(Email, Context) ++ ">"),
-        [{"Reply-To", ReplyTo1} | Headers].
+add_reply_to(_Id, #email{reply_to=undefined}, Headers, _Context) -> Headers;
+add_reply_to(_Id, #email{reply_to = <<>>}, Headers, _Context) ->
+    [{<<"Reply-To">>, <<"<>">>} | Headers];
+add_reply_to(Id, #email{reply_to = message_id}, Headers, Context) ->
+    [{<<"Reply-To">>, reply_email(Id, Context)} | Headers];
+add_reply_to(_Id, #email{reply_to=ReplyTo}, Headers, Context) ->
+    {Name, Email} = z_email:split_name_email(ReplyTo),
+    ReplyTo1 = z_email:combine_name_email(Name, z_email:ensure_domain(Email, Context)),
+    [{<<"Reply-To">>, ReplyTo1} | Headers].
 
 
 build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
@@ -814,55 +824,55 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                             }, opt_dkim(Context))
     end.
 
-    encode_attachment(Att, Context) when is_integer(Att) ->
-        case m_media:get(Att, Context) of
-            undefined ->
-                {error, no_medium};
-            Props ->
-                Upload = #upload{
-                            tmpfile=filename:join(z_path:media_archive(Context),
-                                                   proplists:get_value(filename, Props)),
-                            mime=proplists:get_value(mime, Props)
-                        },
-                encode_attachment(Upload, Context)
-        end;
-    encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=File, filename=Filename} = Att, Context) ->
-        case z_media_identify:identify(File, Filename, Context) of
-            {ok, Ps} ->
-                Mime = proplists:get_value(mime, Ps, <<"application/octet-stream">>),
-                encode_attachment(Att#upload{mime=Mime}, Context);
-            {error, _} ->
-                encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
-        end;
-    encode_attachment(#upload{mime=undefined, filename=Filename} = Att, Context) ->
-        Mime = z_media_identify:guess_mime(Filename),
-        encode_attachment(Att#upload{mime=Mime}, Context);
-    encode_attachment(#upload{} = Att, _Context) ->
-        Data = case Att#upload.data of
-                    undefined ->
-                        {ok, FileData} = file:read_file(Att#upload.tmpfile),
-                        FileData;
-                    AttData ->
-                       AttData
-               end,
-        [Type, Subtype] = binstr:split(z_convert:to_binary(Att#upload.mime), <<"/">>, 2),
-        {
-            Type, Subtype,
-            [],
-            [
-                {<<"transfer-encoding">>, <<"base64">>},
-                {<<"disposition">>, <<"attachment">>},
-                {<<"disposition-params">>, [{<<"filename">>, filename(Att)}]}
-            ],
-            Data
-        }.
+encode_attachment(Att, Context) when is_integer(Att) ->
+    case m_media:get(Att, Context) of
+        undefined ->
+            {error, no_medium};
+        Props ->
+            Upload = #upload{
+                        tmpfile=filename:join(z_path:media_archive(Context),
+                                               proplists:get_value(filename, Props)),
+                        mime=proplists:get_value(mime, Props)
+                    },
+            encode_attachment(Upload, Context)
+    end;
+encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=File, filename=Filename} = Att, Context) ->
+    case z_media_identify:identify(File, Filename, Context) of
+        {ok, Ps} ->
+            Mime = proplists:get_value(mime, Ps, <<"application/octet-stream">>),
+            encode_attachment(Att#upload{mime=Mime}, Context);
+        {error, _} ->
+            encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
+    end;
+encode_attachment(#upload{mime=undefined, filename=Filename} = Att, Context) ->
+    Mime = z_media_identify:guess_mime(Filename),
+    encode_attachment(Att#upload{mime=Mime}, Context);
+encode_attachment(#upload{} = Att, _Context) ->
+    Data = case Att#upload.data of
+                undefined ->
+                    {ok, FileData} = file:read_file(Att#upload.tmpfile),
+                    FileData;
+                AttData ->
+                   AttData
+           end,
+    [Type, Subtype] = binstr:split(z_convert:to_binary(Att#upload.mime), <<"/">>, 2),
+    {
+        Type, Subtype,
+        [],
+        [
+            {<<"transfer-encoding">>, <<"base64">>},
+            {<<"disposition">>, <<"attachment">>},
+            {<<"disposition-params">>, [{<<"filename">>, filename(Att)}]}
+        ],
+        Data
+    }.
 
-        filename(#upload{filename=undefined, tmpfile=undefined}) ->
-            <<"untitled">>;
-        filename(#upload{filename=undefined, tmpfile=Tmpfile}) ->
-            z_convert:to_binary(filename:basename(z_convert:to_list(Tmpfile)));
-        filename(#upload{filename=Filename}) ->
-            z_convert:to_binary(Filename).
+filename(#upload{filename=undefined, tmpfile=undefined}) ->
+    <<"untitled">>;
+filename(#upload{filename=undefined, tmpfile=Tmpfile}) ->
+    z_convert:to_binary(filename:basename(z_convert:to_list(Tmpfile)));
+filename(#upload{filename=Filename}) ->
+    z_convert:to_binary(Filename).
 
 
 
@@ -1064,53 +1074,68 @@ inc_timestamp({MegaSec, Sec, MicroSec}, MinToAdd) when is_integer(MinToAdd) ->
 
 %% @doc Check if an e-mail address is valid
 is_valid_email(Recipient) ->
-    Recipient1 = string:strip(z_string:line(binary_to_list(z_convert:to_binary(Recipient)))),
+    Recipient1 = z_string:trim(z_string:line(z_convert:to_binary(Recipient))),
     {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient1),
     case re:run(RecipientEmail, [$^|re()]++"$", [extended]) of
         nomatch   -> false;
         {match,_} -> true
     end.
 
-    re() ->
-        "(
-                (\"[^\"\\f\\n\\r\\t\\v\\b]+\")
-            |   ([\\w\\!\\#\\$\\%\\&\'\\*\\+\\-\\~\\/\\^\\`\\|\\{\\}]+
-                    (\\.[\\w\\!\\#\\$\\%\\&\\'\\*\\+\\-\\~\\/\^\`\\|\\{\\}]+)*
-                )
-        )
-        @
+re() ->
+    "(
+            (\"[^\"\\f\\n\\r\\t\\v\\b]+\")
+        |   ([\\w\\!\\#\\$\\%\\&\'\\*\\+\\-\\~\\/\\^\\`\\|\\{\\}]+
+                (\\.[\\w\\!\\#\\$\\%\\&\\'\\*\\+\\-\\~\\/\^\`\\|\\{\\}]+)*
+            )
+    )
+    @
+    (
         (
-            (
-                ([A-Za-z0-9\\-])+\\.
-            )+
-            [A-Za-z\\-]{2,}
-        )".
+            ([A-Za-z0-9\\-])+\\.
+        )+
+        [A-Za-z\\-]{2,}
+    )".
 
 %% @doc Simple header encoding.
-encode_header({Header, [V|Vs]}) when is_list(V) ->
-    Hdr = lists:map(fun ({K, Value}) when is_list(K), is_list(Value) ->
-                            K ++ "=" ++ Value;
-                        ({K, Value}) when is_atom(K), is_list(Value) ->
-                            atom_to_list(K) ++ "=" ++ Value;
-                        (Value) when is_list(Value) -> Value
+encode_header({Header, Value}) when is_list(Header)->
+    encode_header({list_to_binary(Header), Value});
+encode_header({Header, [V|_] = Vs}) when is_list(V); is_binary(V); is_tuple(V) ->
+    Hdr = lists:map(fun ({K, Value}) when is_list(K); is_binary(K) ->
+                            [ K, "=", filter_ascii(Value) ];
+                        ({K, Value}) when is_atom(K) ->
+                            [ atom_to_list(K), "=", filter_ascii(Value) ];
+                        (Value) when is_list(Value); is_binary(Value) ->
+                            filter_ascii(Value)
                     end,
-                    [V|Vs]),
-    Header ++ ": " ++ string:join(Hdr, ";\r\n  ");
+                    Vs),
+    [ Header, ": ", z_utils:combine(";\r\n  ", Hdr) ];
 encode_header({Header, Value})
-    when Header =:= "To"; Header =:= "From"; Header =:= "Reply-To";
-         Header =:= "Cc"; Header =:= "Bcc"; Header =:= "Date";
-         Header =:= "Content-Type"; Header =:= "Mime-Version"; Header =:= "MIME-Version";
-         Header =:= "Content-Transfer-Encoding" ->
-    Value1 = lists:filter(fun(H) -> H >= 32 andalso H =< 126 end, Value),
-    Header ++ ": " ++ Value1;
-encode_header({Header, Value}) when is_list(Header), is_list(Value) ->
+    when Header =:= <<"To">>; 
+         Header =:= <<"From">>; 
+         Header =:= <<"Reply-To">>;
+         Header =:= <<"Cc">>;
+         Header =:= <<"Bcc">>;
+         Header =:= <<"Date">>;
+         Header =:= <<"Content-Type">>;
+         Header =:= <<"Mime-Version">>;
+         Header =:= <<"MIME-Version">>;
+         Header =:= <<"Content-Transfer-Encoding">> ->
+    [ Header, ": ", filter_ascii(Value) ];
+encode_header({Header, Value}) when is_binary(Header)->
     % Encode all other headers according to rfc2047
-    Header ++ ": " ++ rfc2047:encode(Value);
-encode_header({Header, Value}) when is_atom(Header), is_list(Value) ->
-    atom_to_list(Header) ++ ": " ++ rfc2047:encode(Value).
+    [ Header, ": ", rfc2047:encode(Value) ];
+encode_header({Header, Value}) when is_atom(Header) ->
+    [ atom_to_list(Header), ": ", rfc2047:encode(Value) ].
 
 encode_headers(Headers) ->
-    string:join(lists:map(fun encode_header/1, Headers), "\r\n").
+    iolist_to_binary([
+        z_utils:combine("\r\n", lists:map(fun encode_header/1, Headers))
+    ]).
+
+filter_ascii(Value) when is_list(Value) ->
+    lists:filter(fun(H) -> H >= 32 andalso H =< 126 end, Value);
+filter_ascii(Value) when is_binary(Value) ->
+    << <<C>> || <<C>> <= Value, C >= 32, C =< 126 >>.
 
 %% @doc Copy all tempfiles in the #mail attachments, to prevent automatic deletion while
 %% the email is queued.
