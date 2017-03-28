@@ -61,7 +61,7 @@ redirect_location(Context) ->
                             z_dispatcher:url_for(facebook_redirect, Context),
                             Context)),
     iolist_to_binary([
-        <<"https://www.facebook.com/v2.0/dialog/oauth?client_id=">>,
+        <<"https://www.facebook.com/v2.3/dialog/oauth?client_id=">>,
         z_url:url_encode(AppId),
         "&redirect_uri=", z_url:url_encode(RedirectUrl),
         "&display=popup",

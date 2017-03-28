@@ -119,17 +119,23 @@ fetch_access_token(Code, Context) ->
                 ++ "&client_secret=" ++ z_url:url_encode(AppSecret)
                 ++ "&code=" ++ z_url:url_encode(Code),
     case httpc:request(FacebookUrl) of
-        {ok, {{_, 200, _}, _Headers, Payload}} ->
-            Qs = mochiweb_util:parse_qs(Payload),
+        {ok, {{_, 200, _}, Headers, Payload}} ->
+            Qs = decode_access_token(proplists:get_value("content-type", Headers), Payload),
             {ok, proplists:get_value("access_token", Qs), z_convert:to_integer(proplists:get_value("expires", Qs))};
         Other ->
             lager:error("[facebook] error fetching access token [code ~p] ~p", [Code, Other]),
             {error, {http_error, FacebookUrl, Other}}
     end.
 
+decode_access_token("application/json"++_, Payload) ->
+    {struct, Props} = mochijson:decode(Payload),
+    Props;
+decode_access_token(_ContentType, Payload) ->
+    mochiweb_util:parse_qs(Payload).
+
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.0/me?access_token=" ++ z_url:url_encode(AccessToken),
+    FacebookUrl = "https://graph.facebook.com/v2.3/me?access_token=" ++ z_url:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
