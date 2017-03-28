@@ -14,23 +14,26 @@
 <div class="row-fluid">
 	<div class="span6">
 		<div class="control-group">
-			<label class="checkbox">
-				{% if id.is_a.poll %}
-					<input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />
-					<input type="checkbox" disabled="disabled" checked="checked" />
-				{% else %}
-					<input type="checkbox" name="survey_show_results" id="survey_show_results" value="1" {% if id.survey_show_results %}checked="checked"{% endif %} />
-				{% endif %}
-				{_ Show results to user after completion (only results for multiple choice questions are shown) _}
-			</label>
+            <div class="checkbox">
+            	<label>
+		            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked="checked"{% endif %} />
+		            {_ Immediately start with the questions, no “Start” button _}
+	            </label>
+	        </div>
 			<label class="checkbox">
 				<input type="checkbox" name="survey_multiple" id="survey_multiple" value="1" {% if id.survey_multiple or id.survey_multiple|is_undefined %}checked="checked"{% endif %} />
 				{_ Allow multiple entries per user/browser _}
 			</label>
-
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="survey_redo" id="survey_redo" value="1" {% if id.survey_redo %}checked="checked"{% endif %} /> {_ Allow respondents to change their answers _}
+                </label>
+            </div>
 			<div class="checkbox">
-				<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %} />
-				{_ Send confirmation to respondent (please add a question named <i>email</i>) _}
+				<label>
+					<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %} />
+					{_ Send confirmation to respondent (please add a question named <i>email</i>) _}
+				</label>
 			</div>
 		</div>
 	</div>
@@ -56,6 +59,36 @@
 		</div>
 	</div>
 </div>
+
+{% if not id.is_a.poll %}
+	<div class="control-group">
+		<label class="control-label">{_ After survey show _}</label>
+		<div class="controls">
+			<select name="survey_show_results" id="survey_show_results">
+				<option value="">{_ Thank you text _}</option>
+				<option value="1" {% if id.survey_show_results == 1 %}selected{% endif %}>
+					{_ Aggregated results from all respondents (only results for multiple choice questions are shown) _}
+				</option>
+				<option value="2" {% if id.survey_show_results == 2 %}selected{% endif %}>
+					{_ Results from this respondent _}
+				</option>
+			</select>
+		</div>
+	</div>
+	<div class="control-group">
+	    <label class="control-label">{_ Test pass percentage _}</label>
+	    <div class="controls">
+	        <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
+	               class="input-small" value="{{ id.survey_test_percentage }}" placeholder="" /> %
+	        {% validate id=#survey_test_percentage name="survey_test_percentage"
+	        			type={numericality minimum=0 maximum=100}
+	        %}
+	        <p class="help-block muted">{_ Leave empty if there are no test questions. _}</p>
+	    </div>
+	</div>
+{% else %}
+	<input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />
+{% endif %}
 
 <div class="control-group">
 	<label class="control-label">{_ Mail filled in surveys to _}</label>

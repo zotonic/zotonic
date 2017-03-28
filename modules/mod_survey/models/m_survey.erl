@@ -33,11 +33,13 @@
     get_handlers/1,
     insert_survey_submission/3,
     insert_survey_submission/5,
+    replace_survey_submission/4,
     survey_stats/2,
     survey_results/2,
     survey_results_prompts/2,
     survey_results_sorted/3,
     prepare_results/2,
+    single_result/3,
     single_result/4,
     delete_result/4,
     get_questions/2
@@ -84,7 +86,7 @@ m_find_value(Id, #m{value=did_survey}, Context) ->
 m_find_value(Id, #m{value=did_survey_results}, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
-                                    {undefined, z_session:persistent_id(Context)};
+                                    {undefined, persistent_id(Context)};
                                 UId ->
                                     {UId, undefined}
                             end,
@@ -93,7 +95,7 @@ m_find_value(Id, #m{value=did_survey_results}, Context) ->
 m_find_value(Id, #m{value=did_survey_results_readable}, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
-                                    {undefined, z_session:persistent_id(Context)};
+                                    {undefined, persistent_id(Context)};
                                 UId ->
                                     {UId, undefined}
                             end,
@@ -128,90 +130,99 @@ get_handlers(Context) ->
 %% @doc Check if the current user/browser did the survey
 %% @private
 did_survey(SurveyId, Context) ->
-    case z_acl:user(Context) of
-        undefined ->
-            PersistentId = z_context:persistent_id(Context),
-            case z_db:q1("select id 
-                          from survey_answer
-                          where survey_id = $1 
-                            and persistent = $2
-                          limit 1", [z_convert:to_integer(SurveyId), PersistentId], Context) of
-                undefined -> false;
-                _ -> true
-            end;
-        UserId ->
-            case z_db:q1("select id 
-                          from survey_answer
-                          where survey_id = $1 
-                            and user_id = $2
-                          limit 1", [z_convert:to_integer(SurveyId), UserId], Context) of
-                undefined -> false;
-                _ -> true
-            end
+    find_answer_id(SurveyId, z_acl:user(Context), persistent_id(Context), Context) /= undefined.
+
+
+persistent_id(#context{session_id = undefined}) -> undefined;
+persistent_id(Context) -> z_context:persistent_id(Context).
+
+%% @doc Replace a survey answer
+replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
+    case z_db:q("
+        update survey_answers
+        set props = $1,
+            modifier_id = $2,
+            modified = now()
+        where id = $3
+          and survey_id = $4
+        ",
+        [
+            ?DB_PROPS([{answers, Answers}]),
+            z_acl:user(Context),
+            AnswerId,
+            SurveyId
+        ],
+        Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
     end.
 
 
 %% @doc Save a survey, connect to the current user (if any)
+-spec insert_survey_submission(integer(), list(), #context{}) -> {ok, integer()} | {error, term()}.
 insert_survey_submission(SurveyId, Answers, Context) ->
-    {UserId, SubmissionId} = case z_convert:to_bool(m_rsc:p(SurveyId, survey_multiple, Context)) of
-                                 true ->
-                                     {undefined, z_ids:id(30)};
-                                 false ->
-                                     case z_acl:user(Context) of
-                                         undefined ->
-                                             {undefined, z_context:persistent_id(Context)};
-                                         U ->
-                                             {U, undefined}
-                                     end
-                             end,
-    insert_survey_submission(SurveyId, UserId, SubmissionId, Answers, undefined, Context).
-
-%% @doc Replace a survey for the given userid/persistent_id combination
-insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
-    Created = case UserId of
-                  undefined ->
-                      z_db:q1("select created from survey_answer where survey_id = $1 and persistent = $2", [z_convert:to_integer(SurveyId), PersistentId], Context);
-                  _Other ->
-                      z_db:q1("select created from survey_answer where survey_id = $1 and user_id = $2", [z_convert:to_integer(SurveyId), UserId], Context)
-              end,
-    insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Created, Context).
+    case z_acl:user(Context) of
+        undefined ->
+            insert_survey_submission(SurveyId, undefined, persistent_id(Context), Answers, Context);
+        UserId ->
+            insert_survey_submission(SurveyId, UserId, undefined, Answers, Context)
+    end.
 
 %% @doc Save or replace a survey, resetting the created if needed.
-insert_survey_submission(SurveyId, UserId, PersistentId, Answers, undefined, Context) ->
-    insert_survey_submission(SurveyId, UserId, PersistentId, Answers, calendar:universal_time(), Context);
-insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Created, Context) ->
-    case UserId of
-        undefined ->
-            z_db:q("delete from survey_answer where survey_id = $1 and persistent = $2", [z_convert:to_integer(SurveyId), PersistentId], Context);
-        _Other ->
-            z_db:q("delete from survey_answer where survey_id = $1 and user_id = $2", [z_convert:to_integer(SurveyId), UserId], Context)
-    end,
-    insert_questions(SurveyId, UserId, PersistentId, Answers, Created, Context),
-    {ok, PersistentId}.
+insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
+    case z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_multiple, Context)) of
+        true ->
+            insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context);
+        false ->
+            % Check if answer exists, if so update the answer
+            case find_answer_id(SurveyId, UserId, PersistentId, Context) of
+                undefined ->
+                    insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context);
+                AnsId ->
+                    replace_survey_submission(SurveyId, AnsId, Answers, Context)
+            end
+    end.
 
-%% @private
-insert_questions(_SurveyId, _UserId, _PersistentId, [], _Created, _Context) ->
-    ok;
-insert_questions(SurveyId, UserId, PersistentId, [{QuestionId, Answers}|Rest], Created, Context) ->
-    insert_answers(SurveyId, UserId, PersistentId, QuestionId, Answers, Created, Context),
-    insert_questions(SurveyId, UserId, PersistentId, Rest, Created, Context).
+find_answer_id(SurveyId, undefined, PersistentId, Context) ->
+    z_db:q1("select id 
+             from survey_answers
+             where survey_id = $1
+               and persistent = $2",
+            [SurveyId, PersistentId],
+            Context);
+find_answer_id(SurveyId, UserId, _PersistendId, Context) ->
+    z_db:q1("select id 
+             from survey_answers
+             where survey_id = $1
+               and user_id = $2",
+            [SurveyId, UserId],
+            Context).
 
-%% @private
-insert_answers(_SurveyId, _UserId, _PersistentId, _QuestionId, [], _Created, _Context) ->
-    ok;
-insert_answers(SurveyId, UserId, PersistentId, QuestionId, [{Name, Answer}|As], Created, Context) ->
-    IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
-    Args = case Answer of
-               {text, Text} -> 
-                  [SurveyId, UserId, PersistentId, IsAnonymous, QuestionId, Name, undefined, Text, Created];
-               Value ->
-                  [SurveyId, UserId, PersistentId, IsAnonymous, QuestionId, Name, z_convert:to_list(Value), undefined, Created]
-           end,
-    z_db:q("insert into survey_answer (survey_id, user_id, persistent, is_anonymous, question, name, value, text, created) 
-                values ($1, $2, $3, $4, $5, $6, $7, $8, $9)", 
-               Args,
-           Context),
-    insert_answers(SurveyId, UserId, PersistentId, QuestionId, As, Created, Context).
+insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) ->
+    z_db:insert(
+        survey_answers,
+        [
+            {survey_id, SurveyId},
+            {user_id, undefined},
+            {persistent, PersistentId},
+            {is_anonymous, z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context))},
+            {points, 0},
+            {answers, Answers}
+        ],
+        Context);
+insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
+    z_db:insert(
+        survey_answers,
+        [
+            {survey_id, SurveyId},
+            {user_id, UserId},
+            {persistent, undefined},
+            {is_anonymous, z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context))},
+            {points, 0},
+            {answers, Answers}
+        ],
+        Context).
 
 
 %% @private
@@ -328,7 +339,7 @@ split_values_1([{V,Text}|Vs], Acc) ->
 %% @doc Get survey results, sorted by the given sort column.
 survey_results_sorted(SurveyId, SortColumn, Context) ->
     [Headers|Data] = survey_results(SurveyId, Context),
-    case string:str(Headers, [list_to_binary(SortColumn)]) of
+    case string:str(Headers, [z_convert:to_binary(SortColumn)]) of
         0 ->
             %% column not found, do not sort
             [Headers|Data];
@@ -342,7 +353,7 @@ survey_results_sorted(SurveyId, SortColumn, Context) ->
 
 
 %% @doc get prepared questions from the blocks
--spec get_questions(integer(), #context{}) -> [term()] | undefined.
+-spec get_questions(integer(), #context{}) -> [{BlockName::binary(),list()}] | undefined.
 get_questions(SurveyId, Context) ->
     case m_rsc:p(SurveyId, blocks, Context) of
         Blocks when is_list(Blocks) ->
@@ -353,105 +364,69 @@ get_questions(SurveyId, Context) ->
 
 %% @doc Return all results of a survey
 survey_results(SurveyId, Context) ->
-    {Hs, _Promps, Data} = survey_results_prompts(SurveyId, Context),
+    {Hs, _Prompts, Data} = survey_results_prompts(SurveyId, Context),
     [ Hs | Data ].
 
 %% @doc Return all results of a survey with separate names, prompts and data
-survey_results_prompts(SurveyId, Context) ->
+survey_results_prompts(undefined, _Context) ->
+    {[], [], []};
+survey_results_prompts(SurveyId, Context) when is_integer(SurveyId) ->
     case get_questions(SurveyId, Context) of
         NQs when is_list(NQs) ->
-            Rows = z_db:q("select user_id, persistent, is_anonymous, question, name, value, text, created
-                           from survey_answer 
-                           where survey_id = $1
-                           order by user_id, persistent", [z_convert:to_integer(SurveyId)], Context),
-            Grouped = group_users(Rows),
-            IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)), 
-            UnSorted = [ user_answer_row(IsAnonymous, User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
-            Sorted = lists:sort(fun([_,_,A|_], [_,_,B|_]) -> A < B end, UnSorted), %% sort by created date
-            Hs = lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
-                                 | [ answer_header(B, Context) || {_,B} <- NQs ]
-                               ]),
-            Prompts = lists:flatten([ <<>>, <<>>, <<>> 
-                        | [ z_trans:lookup_fallback(answer_prompt(B), Context) || {_,B} <- NQs ]
-                      ]),
-            {Hs, Prompts, Sorted};
+            IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            Rows = z_db:assoc_props("
+                        select *
+                        from survey_answers
+                        where survey_id = $1
+                        order by created asc",
+                        [SurveyId],
+                        Context),
+            Rows1 = anonymize(IsAnonymous, Rows),
+            Answers = [ user_answer_row(Row, NQs, Context) || Row <- Rows1 ],
+            Hs = lists:flatten([ answer_header(B, Context) || {_,B} <- NQs ]),
+            Prompts = lists:flatten([ z_trans:lookup_fallback(answer_prompt(B), Context) || {_,B} <- NQs ]),
+            {Hs, Prompts, Answers};
         undefined ->
             {[], [], []}
-    end.
-    
-%% @doc private
-group_users([]) ->
-    [];
-group_users([R|Rs]) ->
-    {User, Q, Created} = unpack_user_row(R),
-    group_users(User, Created, Rs, [Q], []).
+    end;
+survey_results_prompts(SurveyId, Context) ->
+    survey_results_prompts(m_rsc:rid(SurveyId, Context), Context).
 
-%% @doc private
-group_users(User, Created, [], UserAcc, Acc) ->
-    [{User, Created, UserAcc} | Acc];
-group_users(User, Created, [R|Rs], UserAcc, Acc) ->
-    {U, Q, Crtd} = unpack_user_row(R),
-    case User of
-        U -> group_users(User, Created, Rs, [Q|UserAcc], Acc);
-        _ -> group_users(U, Crtd, Rs, [Q], [{User,Created,UserAcc}|Acc])
-    end.
+anonymize(IsAnonymous, Rows) ->
+    lists:map(
+        fun(Row) ->
+            case IsAnonymous
+                orelse proplists:get_value(is_anonymous, Row)
+            of
+                true ->
+                    Row1 = proplists:delete(user_id,
+                        proplists:delete(persistent, Row)),
+                    [
+                        {user_id, undefined},
+                        {persistent, undefined}
+                        | Row1
+                    ];
+                false ->
+                    Row
+            end
+        end,
+        Rows).
 
-%% @doc private
-question_prepare(B, Context) ->
-    case mod_survey:module_name(proplists:get_value(type, B)) of
-        undefined -> B;
-        M -> M:prep_block(B, Context)
-    end.
-
-%% @doc private
-unpack_user_row({UserId, Persistent, IsAnonymous, Question, Name, Value, Text, Created}) ->
-    {
-      {user, UserId, Persistent, IsAnonymous},
-      {Question, {Name, {Value, Text}}},
-      Created
-    }.
-
-%% @doc private
-user_answer_row(false, {user, User, Persistent, false}, Created, Answers, Questions, Context) ->
-    [
-        User,
-        Persistent
-        | user_answer_row_1(Created, Answers, Questions, Context)
-    ];
-user_answer_row(_IsAnonymous, {user, _User, _Persistent, _UserAnonymous}, Created, Answers, Questions, Context) ->
-    [
-        undefined,
-        undefined
-        | user_answer_row_1(Created, Answers, Questions, Context)
-    ].
-
-user_answer_row_1(Created, Answers, Questions, Context) ->
-    [
-        case Created of 
-           undefined -> <<>>;
-           _ -> erlydtl_dateformat:format(Created, "Y-m-d H:i", Context)
-        end
-        | answer_row(Answers, Questions, Created, Context)
-    ].
-
-%% @doc private
-answer_row(Answers, Questions, Created, Context) ->
-    Answers1 = case Created =:= undefined orelse Created >= {{2012,12,1},{0,0,0}} of
-                   true ->
-                       Answers;
-                   false ->
-                       %% Convert answers to proper format if old format is discovered and survey was filled before 2012-12-01
-                       [case A of
-                            {X, {X, _}} -> A;
-                            {_, {X, Y}} -> {X, {X, Y}}
-                        end || A <- Answers]
-               end,
-    lists:flatten([
-                   answer_row_question(proplists:get_all_values(QId, Answers1), 
-                                       Question,
-                                       Context)
-                   || {QId, Question} <- Questions
-                  ]).
+user_answer_row(Row, Questions, Context) ->
+    Answers = proplists:get_value(answers, Row),
+    % TODO: change this for the points
+    %       also need to change all prep_answer functions in the questions.
+    ByBlock = [
+        {proplists:get_value(block, Vs), {Name, proplists:get_value(answer, Vs)}}
+        || {Name, Vs} <- Answers
+    ],
+    {proplists:get_value(id, Row),
+     lists:flatten([
+        answer_row_question(proplists:get_all_values(QId, ByBlock),
+                               Question,
+                               Context)
+        || {QId, Question} <- Questions
+     ])}.
 
 %% @doc private
 answer_row_question(_Answer, undefined, _Context) ->
@@ -461,6 +436,13 @@ answer_row_question(Answer, Q, Context) ->
     case mod_survey:module_name(Type) of
         undefined -> [];
         M -> M:prep_answer(Q, Answer, Context)
+    end.
+
+%% @doc private
+question_prepare(B, Context) ->
+    case mod_survey:module_name(proplists:get_value(type, B)) of
+        undefined -> B;
+        M -> M:prep_block(B, Context)
     end.
 
 %% @doc private
@@ -478,6 +460,34 @@ answer_prompt(Block) ->
         _M -> proplists:get_value(prompt, Block, <<>>)
     end.
 
+
+-spec single_result(integer(), integer(), #context{}) -> list().
+single_result(SurveyId, AnswerId, Context) when is_integer(SurveyId), is_integer(AnswerId) ->
+    case z_db:assoc_props_row("
+            select *
+            from survey_answers
+            where survey_id = $1 and id = $2",
+            [SurveyId, AnswerId],
+            Context)
+    of
+        undefined -> [];
+        Row ->
+            Answers = proplists:get_value(answers, Row, []),
+            lists:foldl(
+                fun ({Name, Ans}, Acc) ->
+                    Block = proplists:get_value(block, Ans),
+                    Value = proplists:get_value(answer, Ans),
+                    z_utils:prop_replace(
+                        Block,
+                        z_utils:prop_replace(
+                            Name,
+                            Value,
+                            proplists:get_value(Block, Acc, [])),
+                        Acc)
+                end,
+                [],
+                Answers)
+    end.
 
 %% @doc Retrieve a single survey result for a user or persistent id.
 single_result(SurveyId, UserId, PersistentId, Context) ->

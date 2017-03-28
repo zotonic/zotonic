@@ -40,3 +40,9 @@ form.z_form_invalid .alert.z_invalid {
     display: block;
 }
 
+.survey-test-feedback.survey-q-ok:after {
+    content: "<span class='icon-ok'></span>";
+}
+.survey-test-feedback.survey-q-not-ok:after {
+    content: "<span class='icon-remove'></span>";
+}

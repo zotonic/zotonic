@@ -76,7 +76,7 @@ prep_answer_header(Q, _Context) ->
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
-prep_answer(_Q, [{_Name, {Value, _Text}}|_], _Context) ->
+prep_answer(_Q, [{_Name, Value}|_], _Context) ->
     Value.
 
 prep_block(B, _Context) ->

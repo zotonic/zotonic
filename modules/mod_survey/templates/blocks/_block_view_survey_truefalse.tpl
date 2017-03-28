@@ -5,7 +5,7 @@
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
     <div class="controls">
-{% if blk.input_type == 'submit' %}
+{% if blk.input_type == 'submit' and not editing %}
         <button id="{{ #yes }}" name="{{ blk.name}}" class="btn" type="submit" value="1">
             <span></span>{{ blk.yes|default:_"True" }}
         </button>

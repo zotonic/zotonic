@@ -38,7 +38,7 @@ answer(Block, Answers, _Context) ->
         Value -> 
             case z_string:trim(Value) of
                 [] -> {error, missing};
-                V -> {ok, [{Name, {text, z_convert:to_binary(V)}}]}
+                V -> {ok, [{Name, z_convert:to_binary(V)}]}
             end
     end.
 
@@ -50,8 +50,8 @@ prep_answer_header(Q, _Context) ->
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
-prep_answer(_Q, [{_Name, {_Value, Text}}|_], _Context) ->
-    z_convert:to_binary(Text).
+prep_answer(_Q, [{_Name, Ans}|_], _Context) ->
+    z_convert:to_binary(Ans).
 
 prep_block(B, _Context) ->
     B.

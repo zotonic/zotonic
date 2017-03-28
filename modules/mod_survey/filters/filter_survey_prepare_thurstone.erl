@@ -25,11 +25,58 @@ survey_prepare_thurstone(Blk, Context) ->
     Answers = z_trans:lookup_fallback(
                     proplists:get_value(answers, Blk, <<>>), 
                     Context),
-    Qs1 = filter_survey_prepare_matching:split_markers(split_lines(Answers)),
-    [
-        {answers, Qs1}
-    ].
+    Qs = maybe_randomize(
+                z_convert:to_bool(proplists:get_value(is_random, Blk)),
+                split_markers(split_lines(Answers))),
+    case z_convert:to_bool(proplists:get_value(is_test, Blk)) of
+        true ->
+            [
+                {is_test, true},
+                {is_test_direct, z_convert:to_bool(proplists:get_value(is_test_direct, Blk))},
+                {answers, Qs}
+            ];
+        false ->
+            [
+                {is_test, false},
+                {answers, Qs}
+            ]
+    end.
+
+maybe_randomize(false, List) -> List;
+maybe_randomize(true, List) -> z_utils:randomize(List).
 
 split_lines(Text) ->
-    Options = string:tokens(z_string:trim(z_convert:to_list(Text)), "\n"),
+    Options = binary:split(z_string:trim(Text), <<"\n">>, [global]),
     [ z_string:trim(Option) || Option <- Options ].
+
+
+split_markers(Qs) ->
+    split_markers(Qs, 1, []).
+
+split_markers([], _N, Acc) ->
+    lists:reverse(Acc);
+split_markers([[]|Qs], N, Acc) ->
+    split_markers(Qs, N, Acc);
+split_markers([Opt|Qs], N, Acc) ->
+    split_markers(Qs, N+1, [split_marker(Opt, N)|Acc]).
+
+split_marker(<<$*,Line/binary>>, N) ->
+    split_marker_1(true, z_string:trim(Line), N);
+split_marker(Line, N) ->
+    split_marker_1(false, Line, N).
+
+split_marker_1(IsCorrect, Line, N) ->
+    case binary:split(Line, <<"#">>) of
+        [Value,Option] ->
+            [
+                {value, Value},
+                {option, Option},
+                {is_correct, IsCorrect}
+            ];
+        [Option] ->
+            [
+                {value, z_convert:to_binary(N)},
+                {option, Option},
+                {is_correct, IsCorrect}
+            ]
+    end.

@@ -22,7 +22,7 @@
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
 -mod_prio(400).
--mod_schema(3).
+-mod_schema(4).
 -mod_depends([admin]).
 -mod_provides([survey, poll]).
 
@@ -53,7 +53,7 @@
 
 %% @doc Schema for mod_survey lives in separate module
 manage_schema(What, Context) ->
-    mod_survey_schema:manage_schema(What, Context).
+    survey_schema:manage_schema(What, Context).
 
 event(#postback{message={survey_start, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
@@ -220,7 +220,7 @@ render_update(#render{} = Render, Args, Context) ->
 
 
 %% @doc Fetch the next page from the survey, update the page view
--spec render_next_page(integer(), integer(), exact|forward, list(), list(), list()|undefined, #context{}) -> #render{} | #context{}.
+-spec render_next_page(integer(), integer(), exact|forward, list(), list(), term()|undefined, #context{}) -> #render{} | #context{}.
 render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Context) when is_integer(Id) ->
     z_render:wire({redirect, [{id, Id}]}, Context);
 render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when is_integer(Id) ->
@@ -514,7 +514,8 @@ do_submit(SurveyId, Questions, Answers, Context) ->
                           Context)
     of
         undefined ->
-            m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
+            StorageAnswers = survey_answers_to_storage(FoundAnswers),
+            {ok, _} = m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context),
             maybe_mail(SurveyId, Answers, Context),
             ok;
         ok ->
@@ -544,15 +545,26 @@ probably_email(SurveyId, Context) ->
 %% @doc mail the survey result to an e-mail address
 mail_result(SurveyId, PrepAnswers, Context) ->
     case m_rsc:p_no_acl(SurveyId, survey_email, Context) of
-        undefined ->
-            skip;
+        undefined -> skip;
+        <<>> -> skip;
         Email ->
-            Vars = [
-                {is_result_email, true},
-                {id, SurveyId},
-                {answers, PrepAnswers}
-            ],
-            z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
+            EmailS = z_convert:to_list(Email),
+            Es = string:tokens(EmailS, ",; "),
+            lists:foreach(
+                fun(E) ->
+                    case z_email_utils:is_email(E) of
+                        true ->
+                            Vars = [
+                                {is_result_email, true},
+                                {id, SurveyId},
+                                {answers, PrepAnswers}
+                            ],
+                            z_email:send_render(E, "email_survey_result.tpl", Vars, Context);
+                        false ->
+                            ok
+                    end
+                end,
+                Es),
             ok
     end.
 
@@ -619,11 +631,12 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
     end.
 
 %% @doc Save the modified survey results
-admin_edit_survey_result(Id, Questions, Answers, {editing, UserId, PersistentId, Actions}, Context) ->
-    case z_acl:rsc_editable(Id, Context) of
+admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actions}, Context) ->
+    case z_acl:rsc_editable(SurveyId, Context) of
         true ->
             {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
-            m_survey:insert_survey_submission(Id, UserId, PersistentId, FoundAnswers, Context),
+            StorageAnswers = survey_answers_to_storage(FoundAnswers),
+            m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context),
             case Actions of
                 [] ->
                     Context1 = z_render:dialog_close(Context),
@@ -632,7 +645,7 @@ admin_edit_survey_result(Id, Questions, Answers, {editing, UserId, PersistentId,
                             #render{
                                 template="_admin_survey_editor_results.tpl",
                                 vars=[
-                                    {id, Id}
+                                    {id, SurveyId}
                                 ]
                             },
                             Context1);
@@ -642,6 +655,22 @@ admin_edit_survey_result(Id, Questions, Answers, {editing, UserId, PersistentId,
         false ->
             z_render:growl(?__("You are not allowed to change these results.", Context), Context)
     end.
+
+
+survey_answers_to_storage(AnsPerBlock) ->
+    lists:flatten(
+        lists:map(
+            fun({BlockName, Ans}) ->
+                [
+                    {Name, [
+                        {block, BlockName},
+                        {answer, Vs}
+                    ]}
+                    ||
+                    {Name, Vs} <- Ans
+                ]
+            end,
+            AnsPerBlock)).
 
 
 

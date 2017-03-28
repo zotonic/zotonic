@@ -1,6 +1,12 @@
 {% block question_page %}
+	{% if page_nr == 1 and id.survey_is_autostart and not editing %}
+		{% block autostart_body %}
+			{% include "_survey_autostart_body.tpl" %}
+		{% endblock %}
+	{% endif %}
+
 	{% wire id=#q type="submit" 
-		postback={survey_next id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
+		postback={survey_next id=id page_nr=page_nr answers=answers history=history editing=editing element_id=element_id|default:"survey-question"}
 		delegate="mod_survey" 
 	%}
 	<form class="form-survey survey-{{ id.name }}" id="{{ #q }}" method="post" action="postback">
@@ -20,15 +26,17 @@
 			{% endfor %}
 		</fieldset>
 
-		<div class="alert alert-error z_invalid">
-			{_ Please fill in all the required fields. _}
-		</div>
+		{% if not editing %}
+			<div class="alert alert-error z_invalid">
+				{_ Please fill in all the required fields. _}
+			</div>
+		{% endif %}
 
 		<div class="form-actions">
 			{% if page_nr > 1 %}
 				<a id="{{ #back }}" href="#" class="btn">{_ Back _}</a>
 				{% wire id=#back 
-						postback={survey_back id=id page_nr=page_nr answers=answers history=history element_id=element_id|default:"survey-question"}
+						postback={survey_back id=id page_nr=page_nr answers=answers history=history editing=editing element_id=element_id|default:"survey-question"}
 						delegate="mod_survey"
 				%}
 			{% endif %}
@@ -37,7 +45,7 @@
 				{% wire id=#cancel action={confirm text=_"Are you sure you want to stop?" ok=_"Stop" cancel=_"Continue" action={redirect id=id}} %}
 			{% endif %}
 			{% with questions|last as last_q %}
-			{% if not questions|survey_is_submit and last_q.type /= "survey_stop" %}
+			{% if not editing and not questions|survey_is_submit and last_q.type /= "survey_stop" %}
 				<button type="submit" class="btn btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
 			{% endif %}
 			{% endwith %}
@@ -51,6 +59,12 @@
 			$(window).scrollTop(pos+100);
 		}
 	{% endjavascript %}
+
+	{% if page_nr == 1 and id.survey_is_autostart %}
+		{% block autostart_footer %}
+			{% include "_survey_autostart_footer.tpl" %}
+		{% endblock %}
+	{% endif %}
 {% endblock %}
 
 {% block question_page_after %}

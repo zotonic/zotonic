@@ -44,8 +44,8 @@ answer(Block, Answers, Context) ->
             end;
         Value when is_list(Value) -> 
             Defined = lists:filter(fun(Lab) -> proplists:is_defined(Lab, Options) end, Value),
-            Flattened = string:join([ z_convert:to_list(V) || V <- Defined ], "#"),
-            {ok, [{Name, {text, list_to_binary(Flattened)}}]}
+            Vs = [ z_convert:to_binary(V) || V <- Defined ],
+            {ok, [{Name, Vs}]}
     end.
 
 
@@ -77,9 +77,9 @@ prep_answer_header(Q, _Context) ->
 
 prep_answer(Q, [], _Context) ->
     prep(Q, []);
-prep_answer(Q, [{_Name, {undefined, Text}}|_], _Context) ->
-    prep(Q, binary:split(Text, <<$#>>, [global]));
-prep_answer(Q, [{_Name, {Value, _Text}}|_], _Context) ->
+prep_answer(Q, [{_Name, Ans}|_], _Context) when is_list(Ans) ->
+    prep(Q, Ans);
+prep_answer(Q, [{_Name, Value}|_], _Context) ->
     prep(Q, [Value]).
 
 prep(Q, Vs) ->
