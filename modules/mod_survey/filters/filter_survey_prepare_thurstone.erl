@@ -18,15 +18,24 @@
 -module(filter_survey_prepare_thurstone).
 
 -export([
-    survey_prepare_thurstone/2
+    survey_prepare_thurstone/2,
+    survey_prepare_thurstone/3
 ]).
 
 survey_prepare_thurstone(Blk, Context) ->
+    survey_prepare_thurstone(Blk, undefined, Context).
+
+survey_prepare_thurstone(Blk, undefined, Context) ->
+    survey_prepare_thurstone_1(Blk, proplists:get_value(is_random, Blk, false), Context);
+survey_prepare_thurstone(Blk, IsRandom, Context) ->
+    survey_prepare_thurstone_1(Blk, IsRandom, Context).
+
+survey_prepare_thurstone_1(Blk, IsRandom, Context) ->
     Answers = z_trans:lookup_fallback(
                     proplists:get_value(answers, Blk, <<>>), 
                     Context),
     Qs = maybe_randomize(
-                z_convert:to_bool(proplists:get_value(is_random, Blk)),
+                z_convert:to_bool(IsRandom),
                 split_markers(split_lines(Answers))),
     case z_convert:to_bool(proplists:get_value(is_test, Blk)) of
         true ->

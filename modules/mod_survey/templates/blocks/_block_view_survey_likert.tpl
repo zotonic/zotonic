@@ -1,4 +1,26 @@
 {% include "_survey_block_name_check.tpl" %}
+{% if is_survey_answer_view %}
+    <div class="control-group survey-likert">
+        <label class="control-label">{{ blk.prompt }}</label>
+        {% with result.answers[blk.name].answer as ans %}
+            <div class="controls">
+                <span>
+                    {{ blk.disagree|default:_"Strongly Disagree" }}
+                </span>
+                &nbsp;
+                {% for a in [1,2,3,4,5] %}
+                    {% if ans == a %}<span class="fa fa-check-circle"></span>
+                    {% else %}<span class="fa fa-circle-o"></span>
+                    {% endif %}
+                    &nbsp;
+                {% endfor %}
+                <span>
+                    {{ blk.agree|default:_"Strongly Agree" }}
+                </span>
+            </div>
+        {% endwith %}
+    </div>
+{% else %}
 {% with answers[blk.name] as value %}
 <div class="control-group survey-likert question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
@@ -23,3 +45,4 @@
 </div>
 {% endwith %}
 {% if blk.is_required %}{% validate id=#q1 name=blk.name type={presence} %}{% endif %}
+{% endif %}

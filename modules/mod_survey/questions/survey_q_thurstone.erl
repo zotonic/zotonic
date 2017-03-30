@@ -23,7 +23,9 @@
     prep_answer_header/2,
     prep_answer/3,
     prep_block/2,
-    to_block/1
+    to_block/1,
+    is_multiple/1,
+    test_max_points/1
 ]).
 
 -include("zotonic.hrl").
@@ -32,32 +34,38 @@
 
 answer(Block, Answers, Context) ->
     Name = proplists:get_value(name, Block),
-    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
+    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
     Options = proplists:get_value(answers, Props),
     case proplists:get_value(Name, Answers) of
         undefined -> 
             {error, missing};
         Label when is_binary(Label) ->
-            case proplists:is_defined(Label, Options) of
-                true -> {ok, [{Name, Label}]};
+            case is_defined_value(Label, Options) of
+                true -> {ok, [{Name, [Label]}]};
                 false -> {error, missing}
             end;
-        Value when is_list(Value) -> 
-            Defined = lists:filter(fun(Lab) -> proplists:is_defined(Lab, Options) end, Value),
-            Vs = [ z_convert:to_binary(V) || V <- Defined ],
-            {ok, [{Name, Vs}]}
+        Value when is_list(Value) ->
+            Defined = lists:filter(fun(V) -> is_defined_value(V, Options) end, Value),
+            {ok, [{Name, Defined}]}
     end.
 
+is_defined_value(_Val, []) -> false;
+is_defined_value(Val, [Opt|Options]) ->
+    case proplists:get_value(value, Opt) of
+        Val -> true;
+        _ -> is_defined_value(Val, Options)
+    end.
 
 prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, [{Name, {text, Vals0}}], Context) ->
     prep_chart(Block, [{Name, Vals0}], Context);
 prep_chart(Block, [{_, Vals}], Context) ->
-    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
+    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
     Answers = proplists:get_value(answers, Props),
-    Labels = [ Lab || {Lab,_} <- Answers ],
-    Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
+    Labels = [ proplists:get_value(option, Ans) || Ans <- Answers ],
+    ValueLabels = [ proplists:get_value(value, Ans) || Ans <- Answers ],
+    Values = [ proplists:get_value(C, Vals, 0) || C <- ValueLabels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
     [
@@ -112,7 +120,7 @@ is_multiple(Q) ->
     
     
 prep_block(Block, Context) ->
-    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
+    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
     Props ++ Block.
 
 
@@ -125,4 +133,28 @@ to_block(Q) ->
         {prompt, z_convert:to_binary(Q#survey_question.question)},
         {answers, z_convert:to_binary(Q#survey_question.text)}
     ].
+
+test_max_points(Block) ->
+    case z_convert:to_integer(proplists:get_value(test_points, Block)) of
+        undefined -> 0;
+        Points ->
+           OkAnswers = lists:filter(
+                fun is_ok_answer/1,
+                thurstone_options(Block)),
+           length(OkAnswers) * Points
+    end.
+
+is_ok_answer(<<"*", _/binary>>) -> true;
+is_ok_answer(<<" ", Rest/binary>>) -> is_ok_answer(Rest);
+is_ok_answer(_) -> false.
+
+
+thurstone_options(Block) ->
+    case proplists:get_value(answers, Block, <<>>) of
+        {trans, [{_,Text}|_]} ->
+            binary:split(Text, <<"\n">>, [global]);
+        Text when is_binary(Text) ->
+            binary:split(Text, <<"\n">>, [global]);
+        _ -> []
+    end.
 

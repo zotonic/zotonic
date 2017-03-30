@@ -1,4 +1,16 @@
 {% include "_survey_block_name_check.tpl" %}
+
+{% if is_survey_answer_view %}
+    <div class="control-group survey-yesno">
+        <label class="control-label">{{ blk.prompt }}</label>
+        <b>
+            {% if result.answers[blk.name].answer == 'yes' %}{{ blk.yes|default:_"True" }}
+            {% elseif result.answers[blk.name].answer == 'no' %}{{ blk.no|default:_"False" }}
+            {% else %}-
+            {% endif %}
+        </b>
+    </div>
+{% else %}
 <div class="control-group survey-yesno question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
 {% if blk.explanation %}
@@ -14,10 +26,10 @@
         </button>
 {% else %}
         <label class="radio inline">
-            <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name] == "yes" %}checked="checked"{% endif %} value="1" /> {{ blk.yes|default:_"Yes" }}
+            <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name] == "1" %}checked="checked"{% endif %} value="1" /> {{ blk.yes|default:_"Yes" }}
         </label>
         <label class="radio inline">
-            <input type="radio" id="{{ #no }}" name="{{ blk.name}}" {% if answers[blk.name] == "no" %}checked="checked"{% endif %} value="0" /> {{ blk.no|default:_"No" }}
+            <input type="radio" id="{{ #no }}" name="{{ blk.name}}" {% if answers[blk.name] == "0" %}checked="checked"{% endif %} value="0" /> {{ blk.no|default:_"No" }}
         </label>
         {% if blk.is_required %}
             {% validate id=#yes name=blk.name type={presence} %}
@@ -25,3 +37,4 @@
 {% endif %}
     </div>
 </div>
+{% endif %}

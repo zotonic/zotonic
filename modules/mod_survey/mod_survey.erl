@@ -616,7 +616,7 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
             case Module:answer(Q, Answers, Context) of
                 {ok, none} ->
                     collect_answers(Qs, Answers, FoundAnswers, Missing, Context);
-                {ok, AnswerList} -> 
+                {ok, AnswerList} ->
                     collect_answers(Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
                 {error, missing} -> 
                     case z_convert:to_bool(proplists:get_value(is_required, Q)) of

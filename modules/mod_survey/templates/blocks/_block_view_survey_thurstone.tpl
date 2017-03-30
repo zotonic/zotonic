@@ -1,6 +1,41 @@
 {% include "_survey_block_name_check.tpl" %}
 
-{% if blk.is_test %}
+{% if is_survey_answer_view %}
+    {% with blk|survey_prepare_thurstone:0 as props %}
+        <div class="control-group survey-thurstone">
+            <label class="control-label">{{ blk.prompt }}</label>
+            {% with result.answers[blk.name].answer as ans %}
+            <ul>
+                {% for option in props.answers %}
+                    {% if blk.is_test %}
+                        {% if option.value|member:ans and option.is_correct %}
+                            <li class="survey-test-feedback survey-q-ok">
+                                <span class='survey-test-feedback-icon'>
+                                    <span class='fa fa-check'></span>
+                                    {{ option.option }}
+                                </span>
+                            </li>
+                        {% elseif option.value|member:ans and not option.is_correct %}
+                            <li class="survey-test-feedback survey-q-not-ok">
+                                <span class='survey-test-feedback-icon'>
+                                    <span class='fa fa-remove'></span>
+                                    {{ option.option }}
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>{{ option.option }}</li>
+                        {% endif %}
+                    {% elseif option.value|member:ans %}
+                        <li><b>{{ option.option }}</b></li>
+                    {% else %}
+                        <li>{{ option.option }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            {% endwith %}
+        </div>
+    {% endwith %}
+{% elseif blk.is_test %}
     {% include "blocks/_block_view_survey_thurstone_test.tpl" %}
 {% else %}
     {% with blk|survey_prepare_thurstone as props %}

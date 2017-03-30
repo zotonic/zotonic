@@ -32,10 +32,21 @@ survey_prepare_matching(Blk, Context) ->
     {Qs,As} = lists:unzip(Pairs),
     Qs1 = split_markers(Qs),
     As1 = split_markers(As),
-    [
-        {items, Qs1},
-        {options, z_utils:randomize(As1)}
-    ].
+    case z_convert:to_bool(proplists:get_value(is_test, Blk)) of
+        true ->
+            [
+                {is_test, true},
+                {is_test_direct, z_convert:to_bool(proplists:get_value(is_test_direct, Blk))},
+                {items, Qs1},
+                {options, z_utils:randomize(As1)}
+            ];
+        false ->
+            [
+                {is_test, false},
+                {items, Qs1},
+                {options, z_utils:randomize(As1)}
+            ]
+    end.
 
 maybe_randomize(false, List) -> List;
 maybe_randomize(true, List) -> z_utils:randomize(List).

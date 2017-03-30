@@ -327,5 +327,3 @@ question_to_block(#survey_question{type=textblock, name=Name, question=Q}) ->
         {body, z_convert:to_binary(["<p>",Q,"</p>"])}
     ].
 
-
-

@@ -24,11 +24,6 @@ $.widget("ui.survey_test_feedback",
         var self = this;
         var obj  = this.element;
 
-        function feedback($elt) {
-        }
-
-        console.log(obj);
-
         $(obj).on(
             'click',
             'input',
@@ -36,6 +31,8 @@ $.widget("ui.survey_test_feedback",
                 $(this)
                     .closest('label')
                     .removeClass("survey-test-feedback")
+                    .removeClass("survey-q-ok")
+                    .removeClass("survey-q-not-ok")
                     .find(".survey-test-feedback-icon")
                     .remove();
 
@@ -54,7 +51,34 @@ $.widget("ui.survey_test_feedback",
                         .append("<span class='survey-test-feedback-icon'><span class='"+icn+"'></span></span>");
                 }
             });
-    }
+        $(obj).on(
+            'click',
+            'select',
+            function(ev) {
+                var val = $(this).val();
+                $(this)
+                    .closest('div')
+                    .removeClass("survey-test-feedback")
+                    .removeClass("survey-q-ok")
+                    .removeClass("survey-q-not-ok")
+                    .find(".survey-test-feedback-icon")
+                    .remove();
+
+                if (val !== '') {
+                    var cls = 'survey-q-ok';
+                    var icn = 'fa fa-check';
+
+                    if ($(this).attr('data-is-correct') != val) {
+                        cls = 'survey-q-not-ok';
+                        icn = 'fa fa-remove';
+                    }
+                    $(this)
+                        .closest('div')
+                        .addClass("survey-test-feedback")
+                        .addClass(cls)
+                        .append("<span class='survey-test-feedback-icon'><span class='"+icn+"'></span></span>");
+                }
+            });    }
 });
 
 $.fn.tooltip.destroy = function()

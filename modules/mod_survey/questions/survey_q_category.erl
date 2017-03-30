@@ -34,10 +34,10 @@ answer(Block, Answers, _Context) ->
     case proplists:get_value(Name, Answers) of
         undefined -> 
             {error, missing};
-        CatId when is_binary(CatId) ->
-            {ok, [{Name, CatId}]};
+        RscId when is_binary(RscId) ->
+            {ok, [{Name, [RscId]}]};
         List when is_list(List) -> 
-            Flattened = [ z_convert:to_binary(V) || V <- List, V /= <<>> ],
+            Flattened = [ V || V <- List, V /= <<>> ],
             {ok, [{Name, Flattened}]}
     end.
 

@@ -12,6 +12,11 @@
         {_ Direct feedback on selecting answer _}
     </label>
 
+    <label class="checkbox test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
+        <input type="checkbox" value="1" name="block-{{name}}-is_test_neg" id="{{ #is_test_neg }}" {% if blk.is_test_neg %}checked{% endif %} />
+        {_ Subtract points for wrong answers _}
+    </label>
+
 </div>
 
 <div class="control-group view-expanded test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
