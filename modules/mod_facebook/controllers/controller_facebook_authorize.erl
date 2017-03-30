@@ -61,7 +61,7 @@ redirect_location(Context) ->
                         z_context:abs_url(
                             z_dispatcher:url_for(facebook_redirect, Context),
                             Context)),
-    "https://www.facebook.com/v2.0/dialog/oauth?client_id="
+    "https://www.facebook.com/v2.3/dialog/oauth?client_id="
         ++ z_utils:url_encode(AppId)
         ++ "&redirect_uri=" ++ z_utils:url_encode(RedirectUrl)
         ++ "&display=popup"
