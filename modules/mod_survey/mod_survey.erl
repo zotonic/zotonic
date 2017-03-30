@@ -81,27 +81,40 @@ event(#postback{message={survey_back, Args}}, Context) ->
             render_update(render_next_page(SurveyId, 0, exact, Answers, [], Editing, Context), Args, Context)
     end;
 
-event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, PersistentId}, {user_id, UserId}]}}, Context) ->
-    m_survey:delete_result(SurveyId, UserId, PersistentId, Context),
-    Target = "survey-result-"++z_convert:to_list(UserId)++"-"++z_convert:to_list(PersistentId),
-    z_render:wire([ 
-            {growl, [{text, ?__("Survey result deleted.", Context)}]},
-            {slide_fade_out, [{target, Target}]}
-        ], Context);
+event(#postback{message={survey_remove_result, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            m_survey:delete_result(SurveyId, AnswerId, Context),
+            Target = "survey-result-"++z_convert:to_list(AnswerId),
+            z_render:wire([ 
+                    {growl, [{text, ?__("Survey result deleted.", Context)}]},
+                    {slide_fade_out, [{target, Target}]}
+                ], Context);
+        false ->
+            z_render:growl(?__("You are not allowed to change these results.", Context), Context)
+    end;
 
-event(#postback{message={admin_show_emails, [{id, SurveyId}]}}, Context) ->
-    case m_survey:survey_results(SurveyId, Context) of
-        [Headers|Data] ->
-            All = [lists:zip(Headers, Row) || {_Id,Row} <- Data],
-            z_render:dialog(?__("E-mail addresses", Context),
-                            "_dialog_survey_email_addresses.tpl",
-                            [{id, SurveyId}, {all, All}],
-                            Context);
-        [] ->
-            z_render:dialog(?__("E-mail addresses", Context),
-                            "_dialog_survey_email_addresses.tpl",
-                            [{id, SurveyId}, {all, []}],
-                            Context)
+event(#postback{message={admin_show_emails, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    case m_survey:is_allowed_results_download(SurveyId, Context) of
+        true ->
+            case m_survey:survey_results(SurveyId, true, Context) of
+                [Headers|Data] ->
+                    All = [lists:zip(Headers, Row) || {_Id,Row} <- Data],
+                    z_render:dialog(?__("E-mail addresses", Context),
+                                    "_dialog_survey_email_addresses.tpl",
+                                    [{id, SurveyId}, {all, All}],
+                                    Context);
+                [] ->
+                    z_render:dialog(?__("E-mail addresses", Context),
+                                    "_dialog_survey_email_addresses.tpl",
+                                    [{id, SurveyId}, {all, []}],
+                                    Context)
+            end;
+        false ->
+            Context
     end.
 
 %% @doc Append the possible blocks for a survey's edit page.
@@ -172,7 +185,7 @@ observe_export_resource_filename(#export_resource_filename{}, _Context) ->
 observe_export_resource_header(#export_resource_header{dispatch=survey_results_download, id=Id}, Context) ->
     case m_survey:is_allowed_results_download(Id, Context) of
         true ->
-            {Hs, Promps, Data} = m_survey:survey_results_prompts(Id, Context),
+            {Hs, Promps, Data} = m_survey:survey_results_prompts(Id, false, Context),
             Data1 = [ Row || {_Id, Row} <- Data ],
             {ok, Hs, [ Promps | Data1 ]};
         false ->

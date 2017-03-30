@@ -56,7 +56,9 @@ Flying dutchman = Wagner._}</p>
             </div>
         </div>
         <div class="span6">
-            {% include "_admin_block_test_checkbox.tpl" %}
+            {#
+              {% include "_admin_block_test_checkbox.tpl" %}
+            #}
         </div>
     </div>
 {% endblock %}

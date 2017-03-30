@@ -1,4 +1,4 @@
-<div class="control-group view-expanded">
+<div class="control-group view-expanded survey-test-checkbox">
     <label class="checkbox">
         <input type="checkbox" value="1" name="block-{{name}}-is_test" id="{{ #is_test }}" {% if blk.is_test %}checked{% endif %} />
         {_ Quiz or test question _}

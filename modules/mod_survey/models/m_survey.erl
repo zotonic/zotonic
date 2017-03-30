@@ -35,8 +35,8 @@
     insert_survey_submission/5,
     replace_survey_submission/4,
     survey_stats/2,
-    survey_results/2,
-    survey_results_prompts/2,
+    survey_results/3,
+    survey_results_prompts/3,
     survey_results_sorted/3,
     prepare_results/2,
     single_result/3,
@@ -77,7 +77,7 @@ m_find_value(Id, #m{value=results}, Context) ->
 m_find_value([Id, SortColumn], #m{value=all_results}, Context) ->
     survey_results_sorted(m_rsc:rid(Id, Context), SortColumn, Context);
 m_find_value(Id, #m{value=all_results}, Context) ->
-    survey_results(m_rsc:rid(Id, Context), Context);
+    survey_results(m_rsc:rid(Id, Context), true, Context);
 m_find_value(Id, #m{value=captions}, Context) ->
     survey_captions(m_rsc:rid(Id, Context), Context);
 m_find_value(Id, #m{value=totals}, Context) ->
@@ -334,7 +334,7 @@ make_list(V) -> [V].
 
 %% @doc Get survey results, sorted by the given sort column.
 survey_results_sorted(SurveyId, SortColumn, Context) ->
-    [Headers|Data] = survey_results(SurveyId, Context),
+    [Headers|Data] = survey_results(SurveyId, true, Context),
     case string:str(Headers, [z_convert:to_binary(SortColumn)]) of
         0 ->
             %% column not found, do not sort
@@ -359,18 +359,18 @@ get_questions(SurveyId, Context) ->
     end.
 
 %% @doc Return all results of a survey
-survey_results(SurveyId, Context) ->
-    {Hs, _Prompts, Data} = survey_results_prompts(SurveyId, Context),
+survey_results(SurveyId, IsAnonymous, Context) ->
+    {Hs, _Prompts, Data} = survey_results_prompts(SurveyId, IsAnonymous, Context),
     [ Hs | Data ].
 
 %% @doc Return all results of a survey with separate names, prompts and data
-survey_results_prompts(undefined, _Context) ->
+survey_results_prompts(undefined, _IsAnonymous, _Context) ->
     {[], [], []};
-survey_results_prompts(SurveyId, Context) when is_integer(SurveyId) ->
+survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(SurveyId) ->
     case get_questions(SurveyId, Context) of
         NQs when is_list(NQs) ->
             {MaxPoints, PassPercent} = test_pass_values(SurveyId, Context),
-            IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            IsAnonymous = IsForceAnonymous orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
             Rows = z_db:assoc_props("
                         select *
                         from survey_answers
@@ -378,11 +378,19 @@ survey_results_prompts(SurveyId, Context) when is_integer(SurveyId) ->
                         order by created asc",
                         [SurveyId],
                         Context),
-            Rows1 = anonymize(IsAnonymous, Rows),
-            Answers = [ user_answer_row(Row, NQs, MaxPoints, PassPercent, Context) || Row <- Rows1 ],
+            Answers = [ user_answer_row(Row, NQs, MaxPoints, PassPercent, IsAnonymous, Context) || Row <- Rows ],
             Hs = [ {B, answer_header(B, MaxPoints, Context)} || {_,B} <- NQs ],
             Prompts = [ {B, z_trans:lookup_fallback(answer_prompt(B), Context)} || {_,B} <- NQs ],
             Hs1 = lists:flatten([
+                case IsForceAnonymous of
+                    true -> [ ?__(<<"Date">>, Context) ];
+                    false ->
+                        [
+                            ?__(<<"Date">>, Context),
+                            ?__(<<"User Id">>, Context),
+                            ?__(<<"Name">>, Context)
+                        ]
+                end,
                 case MaxPoints of
                     0 -> [];
                     _ -> [
@@ -394,6 +402,10 @@ survey_results_prompts(SurveyId, Context) when is_integer(SurveyId) ->
                 [ H || {_,H} <- Hs ]
             ]),
             Prompts1 = lists:flatten([
+                case IsForceAnonymous of
+                    true -> [ <<>> ];
+                    false -> [ <<>>, <<>>, <<>> ]
+                end,
                 case MaxPoints of
                     0 -> [];
                     _ -> [ <<>>, <<>>, <<>> ]
@@ -404,8 +416,8 @@ survey_results_prompts(SurveyId, Context) when is_integer(SurveyId) ->
         undefined ->
             {[], [], []}
     end;
-survey_results_prompts(SurveyId, Context) ->
-    survey_results_prompts(m_rsc:rid(SurveyId, Context), Context).
+survey_results_prompts(SurveyId, IsForceAnonymous, Context) ->
+    survey_results_prompts(m_rsc:rid(SurveyId, Context), IsForceAnonymous, Context).
 
 maybe_length(L) when is_list(L) -> length(L);
 maybe_length(_) -> 1.
@@ -421,27 +433,7 @@ test_pass_values(SurveyId, Context) ->
             {survey_test_results:max_points(SurveyId, Context), z_convert:to_integer(Percentage)}
     end.
 
-anonymize(IsAnonymous, Rows) ->
-    lists:map(
-        fun(Row) ->
-            case IsAnonymous
-                orelse proplists:get_value(is_anonymous, Row)
-            of
-                true ->
-                    Row1 = proplists:delete(user_id,
-                        proplists:delete(persistent, Row)),
-                    [
-                        {user_id, undefined},
-                        {persistent, undefined}
-                        | Row1
-                    ];
-                false ->
-                    Row
-            end
-        end,
-        Rows).
-
-user_answer_row(Row, Questions, MaxPoints, PassPercent, Context) ->
+user_answer_row(Row, Questions, MaxPoints, PassPercent, IsAnonymous, Context) ->
     Points = proplists:get_value(points, Row),
     Answers = proplists:get_value(answers, Row),
     ByBlock = [
@@ -450,6 +442,7 @@ user_answer_row(Row, Questions, MaxPoints, PassPercent, Context) ->
     ],
     {proplists:get_value(id, Row),
      lists:flatten([
+        opt_userinfo(IsAnonymous, Row, Context),
         opt_totals(Points, MaxPoints, PassPercent),
         [
             answer_row_question(proplists:get_all_values(QId, ByBlock),
@@ -459,6 +452,35 @@ user_answer_row(Row, Questions, MaxPoints, PassPercent, Context) ->
             || {QId, Question} <- Questions
         ]
      ])}.
+
+opt_userinfo(true, Row, _Context) ->
+    [
+        proplists:get_value(created, Row)
+    ];
+opt_userinfo(false, Row, Context) ->
+    IsAnonymous = proplists:get_value(is_anonymous, Row),
+    UserId = proplists:get_value(user_id, Row),
+    case {IsAnonymous, UserId} of
+        {true, _} ->
+            [
+                proplists:get_value(created, Row),
+                <<>>,
+                <<>>
+            ];
+        {_, undefined} ->
+            [
+                proplists:get_value(created, Row),
+                <<>>,
+                <<>>
+            ];
+        _ ->
+            {Name, _Context} = z_template:render_to_iolist("_name.tpl", [{id, UserId}], z_acl:sudo(Context)),
+            [
+                proplists:get_value(created, Row),
+                UserId,
+                iolist_to_binary(Name)
+            ]
+    end.
 
 opt_totals(_Points, 0, _PassPercent) -> [];
 opt_totals(Points, MaxPoints, PassPercent) ->
