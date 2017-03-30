@@ -92,7 +92,7 @@ event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, 
 event(#postback{message={admin_show_emails, [{id, SurveyId}]}}, Context) ->
     case m_survey:survey_results(SurveyId, Context) of
         [Headers|Data] ->
-            All = [lists:zip(Headers, Row) || Row <- Data],
+            All = [lists:zip(Headers, Row) || {_Id,Row} <- Data],
             z_render:dialog(?__("E-mail addresses", Context),
                             "_dialog_survey_email_addresses.tpl",
                             [{id, SurveyId}, {all, All}],
@@ -173,7 +173,8 @@ observe_export_resource_header(#export_resource_header{dispatch=survey_results_d
     case m_survey:is_allowed_results_download(Id, Context) of
         true ->
             {Hs, Promps, Data} = m_survey:survey_results_prompts(Id, Context),
-            {ok, Hs, [Promps | Data]};
+            Data1 = [ Row || {_Id, Row} <- Data ],
+            {ok, Hs, [ Promps | Data1 ]};
         false ->
             throw({stop_request, 403})
     end;

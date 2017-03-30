@@ -22,6 +22,7 @@
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
+    prep_answer_score/3,
     prep_block/2,
     to_block/1,
     is_multiple/1,
@@ -79,33 +80,73 @@ prep_chart(Block, [{_, Vals}], Context) ->
 prep_answer_header(Q, _Context) ->
     Name = proplists:get_value(name, Q),
     case is_multiple(Q) of
-        true -> [ <<Name/binary, $:, K/binary>> || {K,_} <- proplists:get_value(answers, Q) ];
+        true -> [ 
+                <<Name/binary, $:, (proplists:get_value(value, Ans))/binary>>
+                || Ans <- proplists:get_value(answers, Q)
+            ];
         false -> Name
     end.
 
-prep_answer(Q, [], _Context) ->
-    prep(Q, []);
-prep_answer(Q, [{_Name, Ans}|_], _Context) when is_list(Ans) ->
-    prep(Q, Ans);
-prep_answer(Q, [{_Name, Value}|_], _Context) ->
-    prep(Q, [Value]).
+prep_answer(PreppedBlock, [], Context) ->
+    prep(PreppedBlock, [], Context);
+prep_answer(PreppedBlock, [{_Name, Ans}|_], Context) when is_list(Ans) ->
+    prep(PreppedBlock, Ans, Context);
+prep_answer(PreppedBlock, [{_Name, Value}|_], Context) ->
+    prep(PreppedBlock, [Value], Context).
 
-prep(Q, Vs) ->
-    case is_multiple(Q) of
+prep(PreppedBlock, Vs, _Context) ->
+    case is_multiple(PreppedBlock) of
         false ->
             case Vs of 
                 [V|_] -> V;
-                [] -> undefined
+                [] -> <<>>
             end;
         true ->
             [
-                case lists:member(K, Vs) of
-                    true -> K;
-                    false -> <<>>
+                begin
+                    K = proplists:get_value(value, Ans),
+                    case lists:member(K, Vs) of
+                        true -> K;
+                        false -> <<>>
+                    end
                 end
-                || {K, _} <- proplists:get_value(answers, Q)
+                || Ans <- proplists:get_value(answers, PreppedBlock, [])
             ]
     end.
+
+prep_answer_score(PreppedBlock, [], Context) ->
+    prep_score(PreppedBlock, [], Context);
+prep_answer_score(PreppedBlock, [{_Name,Ans}|_], Context) when is_list(Ans) ->
+    prep_score(PreppedBlock, Ans, Context).
+
+prep_score(PreppedBlock, StoredAnswer, _Context) ->
+    Answer = ensure_list(proplists:get_value(answer, StoredAnswer, [])),
+    Points = ensure_list(proplists:get_value(answer_points, StoredAnswer, [])),
+    case is_multiple(PreppedBlock) of
+        false ->
+            K = case Answer of 
+                [Ans|_] -> Ans;
+                Ans when is_binary(Ans) -> Ans;
+                _ -> <<>>
+            end,
+            {K, proplists:get_value(K, Points, 0)};
+        true ->
+            lists:flatten([
+                begin
+                    K = proplists:get_value(value, Ans),
+                    case lists:member(K, Answer) of
+                        true ->
+                            [K, proplists:get_value(K, Points, 0)];
+                        false ->
+                            [<<>>, proplists:get_value(K, Points, 0)]
+                    end
+                end
+                || Ans <- proplists:get_value(answers, PreppedBlock, [])
+            ])
+    end.
+
+ensure_list(L) when is_list(L) -> L;
+ensure_list(V) -> [V].
 
 is_multiple(Q) ->
     case proplists:get_value(input_type, Q) of
@@ -135,13 +176,19 @@ to_block(Q) ->
     ].
 
 test_max_points(Block) ->
+    IsCountAll = is_multiple(Block)
+            andalso z_convert:to_bool(proplists:get_value(is_test_neg, Block, false)),
     case z_convert:to_integer(proplists:get_value(test_points, Block)) of
         undefined -> 0;
-        Points ->
+        Points when not IsCountAll ->
            OkAnswers = lists:filter(
                 fun is_ok_answer/1,
                 thurstone_options(Block)),
-           length(OkAnswers) * Points
+           length(OkAnswers) * Points;
+        Points when IsCountAll ->
+            Options = thurstone_options(Block),
+            Options1 = [ z_string:trim(Opt) || Opt <- Options ],
+            length([ Opt || Opt <- Options1, Opt /= <<>> ]) * Points
     end.
 
 is_ok_answer(<<"*", _/binary>>) -> true;

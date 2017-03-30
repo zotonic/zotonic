@@ -11,7 +11,43 @@
 	%}
 {% endif %}
 
-{% if id.survey_show_results or m.survey.is_allowed_results_download[id] %}
+{% if id.survey_show_results == 2 and not is_aggregated %}
+    {% with m.survey.did_survey_results[id] as result %}
+        {% if id.survey_test_percentage %}
+            {% with id|survey_test_max_points as max_points %}
+                <h2>
+                    {% if result.points > max_points * (id.survey_test_percentage / 100) %}
+                        {_ Passed _}
+                    {% else %}
+                        {_ Failed _}
+                    {% endif %}
+                    &ndash; {{ (result.points / max_points * 100)|round }}%
+                </h2>
+
+                <table class="table" style="width: auto">
+                    <tr>
+                        <td>{_ Points _}</td>
+                        <th style="text-align: right">{{ result.points }} / {{ max_points }}</th>
+                    </tr>
+                    <tr>
+                        <td>{_ Needed for pass _}</td>
+                        <th style="text-align: right">{{ id.survey_test_percentage }}%</th>
+                    </tr>
+                    <tr>
+                        <td>{_ Your result _}</td>
+                        <th style="text-align: right">{{ (result.points / max_points * 100)|round }}%</th>
+                    </tr>
+                </table>
+            {% endwith %}
+        {% endif %}
+
+        {% print result %}
+
+        {% for blk in id.blocks %}
+            {% optional include "blocks/_block_view_"++blk.type++".tpl" blk=blk is_survey_answer_view result=result %}
+        {% endfor %}
+    {% endwith %}
+{% elseif id.survey_show_results or m.survey.is_allowed_results_download[id] %}
 	{% for result, chart, question in m.survey.results[id] %}
 	<div class="survey_result">
 		{% if not result %}

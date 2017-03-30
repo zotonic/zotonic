@@ -136,12 +136,26 @@ persistent_id(#context{session_id = undefined}) -> undefined;
 persistent_id(Context) -> z_context:persistent_id(Context).
 
 %% @doc Replace a survey answer
+replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
+    case z_db:q1("
+        select id
+        from survey_answers
+        where survey_id = $1
+          and user_id = $2",
+        [SurveyId, UserId],
+        Context)
+    of
+        undefined when is_integer(UserId) ->
+            insert_survey_submission(SurveyId, UserId, undefined, Answers, Context);
+        AnswerId when is_integer(AnswerId) ->
+            replace_survey_submission(SurveyId, AnswerId, Answers, Context)
+    end;
 replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
     case z_db:q("
         update survey_answers
         set props = $1,
-            points = $2
+            points = $2,
             modifier_id = $3,
             modified = now()
         where id = $4
@@ -297,19 +311,26 @@ count_answers([], Dict) -> Dict;
 count_answers([{Row}|Rows], Dict) ->
     {answers, Answers} = proplists:lookup(answers, Row),
     Dict1 = lists:foldl(
-        fun({QName, QAnswer}, Acc) ->
-            As = proplists:get_value(answer, QAnswer),
-            Block = proplists:get_value(block, QAnswer),
-            lists:foldl(
-                fun(Ans, QAcc) ->
-                    dict:update_counter({Block, QName, Ans}, 1, QAcc)
-                end,
-                Acc,
-                As)
+        fun
+            ({QName, QAnswer}, Acc) ->
+                As = proplists:get_value(answer, QAnswer, []),
+                Block = proplists:get_value(block, QAnswer),
+                lists:foldl(
+                    fun(Ans, QAcc) ->
+                        dict:update_counter({Block, QName, Ans}, 1, QAcc)
+                    end,
+                    Acc,
+                    make_list(As));
+            (_Error, Acc) ->
+                Acc
         end,
         Dict,
         Answers),
     count_answers(Rows, Dict1).
+
+make_list(undefined) -> [];
+make_list(L) when is_list(L) -> L;
+make_list(V) -> [V].
 
 %% @doc Get survey results, sorted by the given sort column.
 survey_results_sorted(SurveyId, SortColumn, Context) ->
@@ -348,6 +369,7 @@ survey_results_prompts(undefined, _Context) ->
 survey_results_prompts(SurveyId, Context) when is_integer(SurveyId) ->
     case get_questions(SurveyId, Context) of
         NQs when is_list(NQs) ->
+            {MaxPoints, PassPercent} = test_pass_values(SurveyId, Context),
             IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
             Rows = z_db:assoc_props("
                         select *
@@ -357,15 +379,47 @@ survey_results_prompts(SurveyId, Context) when is_integer(SurveyId) ->
                         [SurveyId],
                         Context),
             Rows1 = anonymize(IsAnonymous, Rows),
-            Answers = [ user_answer_row(Row, NQs, Context) || Row <- Rows1 ],
-            Hs = lists:flatten([ answer_header(B, Context) || {_,B} <- NQs ]),
-            Prompts = lists:flatten([ z_trans:lookup_fallback(answer_prompt(B), Context) || {_,B} <- NQs ]),
-            {Hs, Prompts, Answers};
+            Answers = [ user_answer_row(Row, NQs, MaxPoints, PassPercent, Context) || Row <- Rows1 ],
+            Hs = [ {B, answer_header(B, MaxPoints, Context)} || {_,B} <- NQs ],
+            Prompts = [ {B, z_trans:lookup_fallback(answer_prompt(B), Context)} || {_,B} <- NQs ],
+            Hs1 = lists:flatten([
+                case MaxPoints of
+                    0 -> [];
+                    _ -> [
+                            ?__(<<"Passed">>, Context),
+                            ?__(<<"Score">>, Context),
+                            ?__(<<"Percent">>, Context)
+                        ]
+                end,
+                [ H || {_,H} <- Hs ]
+            ]),
+            Prompts1 = lists:flatten([
+                case MaxPoints of
+                    0 -> [];
+                    _ -> [ <<>>, <<>>, <<>> ]
+                end,
+                [ [ P, repeat(<<>>, maybe_length(proplists:get_value(B, Hs, []))-1) ] || {B,P} <- Prompts ]
+            ]),
+            {Hs1, Prompts1, Answers};
         undefined ->
             {[], [], []}
     end;
 survey_results_prompts(SurveyId, Context) ->
     survey_results_prompts(m_rsc:rid(SurveyId, Context), Context).
+
+maybe_length(L) when is_list(L) -> length(L);
+maybe_length(_) -> 1.
+
+repeat(_B, N) when N =< 0 -> [];
+repeat(B, N) -> [ B | repeat(B,N-1) ].
+
+test_pass_values(SurveyId, Context) ->
+    case m_rsc:p_no_acl(SurveyId, survey_test_percentage, Context) of
+        undefined -> {0,0};
+        <<>> -> {0,0};
+        Percentage ->
+            {survey_test_results:max_points(SurveyId, Context), z_convert:to_integer(Percentage)}
+    end.
 
 anonymize(IsAnonymous, Rows) ->
     lists:map(
@@ -387,30 +441,61 @@ anonymize(IsAnonymous, Rows) ->
         end,
         Rows).
 
-user_answer_row(Row, Questions, Context) ->
+user_answer_row(Row, Questions, MaxPoints, PassPercent, Context) ->
+    Points = proplists:get_value(points, Row),
     Answers = proplists:get_value(answers, Row),
-    % TODO: change this for the points
-    %       also need to change all prep_answer functions in the questions.
     ByBlock = [
-        {proplists:get_value(block, Vs), {Name, proplists:get_value(answer, Vs)}}
-        || {Name, Vs} <- Answers
+        {proplists:get_value(block, Ans), {Name, Ans}}
+        || {Name, Ans} <- Answers
     ],
     {proplists:get_value(id, Row),
      lists:flatten([
-        answer_row_question(proplists:get_all_values(QId, ByBlock),
-                               Question,
-                               Context)
-        || {QId, Question} <- Questions
+        opt_totals(Points, MaxPoints, PassPercent),
+        [
+            answer_row_question(proplists:get_all_values(QId, ByBlock),
+                                Question,
+                                MaxPoints > 0,
+                                Context)
+            || {QId, Question} <- Questions
+        ]
      ])}.
 
+opt_totals(_Points, 0, _PassPercent) -> [];
+opt_totals(Points, MaxPoints, PassPercent) ->
+    Perc = Points/MaxPoints * 100,
+    [
+        case Perc >= PassPercent of
+            true -> <<"+">>;
+            false -> <<"-">>
+        end,
+        z_convert:to_binary(Points),
+        z_convert:to_binary(Perc)
+    ].
+
 %% @doc private
-answer_row_question(_Answer, undefined, _Context) ->
+answer_row_question(_QAnswers, undefined, _IsTest, _Context) ->
     [];
-answer_row_question(Answer, Q, Context) ->
+answer_row_question(QAnswers, Q, false, Context) ->
     Type = proplists:get_value(type, Q),
     case mod_survey:module_name(Type) of
         undefined -> [];
-        M -> M:prep_answer(Q, Answer, Context)
+        M ->
+            Answers = [
+                {Name, proplists:get_value(answer, Ans)}
+                || {Name,Ans} <- QAnswers
+            ],
+            M:prep_answer(Q, Answers, Context)
+    end;
+answer_row_question(QAnswers, Q, true, Context) ->
+    case z_convert:to_bool(proplists:get_value(is_test, Q, false)) of
+        false ->
+            answer_row_question(QAnswers, Q, false, Context);
+        true ->
+            Type = proplists:get_value(type, Q),
+            case mod_survey:module_name(Type) of
+                undefined -> [];
+                M -> M:prep_answer_score(Q, QAnswers, Context)
+            end
     end.
 
 %% @doc private
@@ -421,12 +506,25 @@ question_prepare(B, Context) ->
     end.
 
 %% @doc private
-answer_header(Block, Context) ->
+answer_header(Block, MaxPoints, Context) ->
     Type = proplists:get_value(type, Block),
     case mod_survey:module_name(Type) of
         undefined -> [];
-        M -> M:prep_answer_header(Block, Context)
+        M ->
+            Hs = M:prep_answer_header(Block, Context),
+            case z_convert:to_bool(proplists:get_value(is_test, Block)) of
+                true when MaxPoints > 0 ->
+                    lists:flatten([
+                            [H,<<"#">>]
+                            || H <- ensure_list(Hs)
+                        ]);
+                _ ->
+                    Hs
+            end
     end.
+
+ensure_list(L) when is_list(L) -> L;
+ensure_list(V) -> [V].
 
 answer_prompt(Block) ->
     Type = proplists:get_value(type, Block),

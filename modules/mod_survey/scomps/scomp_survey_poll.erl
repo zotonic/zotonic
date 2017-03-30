@@ -33,11 +33,25 @@ render(Args, _Vars, Context) ->
     Actions1 = [ Action || Action <- Actions, Action =/= undefined ],
     Render = case z_acl:rsc_editable(SurveyId, Context) of
         true when is_integer(AnswerId) ->
-            Answers = m_survey:single_result(SurveyId, AnswerId, Context),
-            Answers1 = lists:flatten([ Vs || {_,Vs} <- Answers ]),
+            Answers = single_result(SurveyId, AnswerId, Context),
             Editing = {editing, AnswerId, Actions1},
-            mod_survey:render_next_page(SurveyId, 1, exact, Answers1, [], Editing, Context);
+            mod_survey:render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context);
         _NotEditing ->
             mod_survey:render_next_page(SurveyId, 1, exact, [], [], undefined, Context)
     end,
     {ok, z_template:render(Render#render{vars=[{element_id, ElementId}|Render#render.vars]}, Context)}.
+
+single_result(SurveyId, AnswerId, Context) ->
+    case m_survey:single_result(SurveyId, AnswerId, Context) of
+        None when None =:= undefined; None =:= [] ->
+            [];
+        Result ->
+            Answers = proplists:get_value(answers, Result, []),
+            lists:map(
+                fun({_QName, Ans}) ->
+                    Block = proplists:get_value(block, Ans),
+                    Answer = proplists:get_value(answer, Ans),
+                    {Block, Answer}
+                end,
+                Answers)
+    end.
