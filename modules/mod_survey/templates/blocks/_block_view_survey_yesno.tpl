@@ -26,10 +26,10 @@
         </button>
 {% else %}
         <label class="radio inline">
-            <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name] == "1" %}checked="checked"{% endif %} value="1" /> {{ blk.yes|default:_"Yes" }}
+            <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name] == "yes" %}checked="checked"{% endif %} value="1" /> {{ blk.yes|default:_"Yes" }}
         </label>
         <label class="radio inline">
-            <input type="radio" id="{{ #no }}" name="{{ blk.name}}" {% if answers[blk.name] == "0" %}checked="checked"{% endif %} value="0" /> {{ blk.no|default:_"No" }}
+            <input type="radio" id="{{ #no }}" name="{{ blk.name}}" {% if answers[blk.name] == "no" %}checked="checked"{% endif %} value="0" /> {{ blk.no|default:_"No" }}
         </label>
         {% if blk.is_required %}
             {% validate id=#yes name=blk.name type={presence} %}
