@@ -39,6 +39,8 @@
     survey_results_prompts/3,
     survey_results_sorted/3,
     prepare_results/2,
+
+    list_results/2,
     single_result/3,
     single_result/4,
     delete_result/3,
@@ -55,6 +57,10 @@ m_find_value(questions, #m{value=undefined} = M, _Context) ->
     M#m{value=questions};
 m_find_value(results, #m{value=undefined} = M, _Context) ->
     M#m{value=results};
+m_find_value(list_results, #m{value=undefined} = M, _Context) ->
+    M#m{value=list_results};
+m_find_value(get_result, #m{value=undefined} = M, _Context) ->
+    M#m{value=get_result};
 m_find_value(all_results, #m{value=undefined} = M, _Context) ->
     M#m{value=all_results};
 m_find_value(captions, #m{value=undefined} = M, _Context) ->
@@ -72,10 +78,17 @@ m_find_value(is_allowed_results_download, #m{value=undefined} = M, _Context) ->
 m_find_value(handlers, #m{value=undefined}, Context) ->
     get_handlers(Context);
 
+m_find_value(SurveyId, #m{value=get_result} = M, _Context) ->
+    M#m{value={get_result, SurveyId}};
+m_find_value(AnswerId, #m{value={get_result, SurveyId}}, Context) ->
+    single_result(SurveyId, AnswerId, Context);
+
 m_find_value(Id, #m{value=results}, Context) ->
     prepare_results(m_rsc:rid(Id, Context), Context);
 m_find_value([Id, SortColumn], #m{value=all_results}, Context) ->
     survey_results_sorted(m_rsc:rid(Id, Context), SortColumn, Context);
+m_find_value(Id, #m{value=list_results}, Context) ->
+    list_results(m_rsc:rid(Id, Context), Context);
 m_find_value(Id, #m{value=all_results}, Context) ->
     survey_results(m_rsc:rid(Id, Context), true, Context);
 m_find_value(Id, #m{value=captions}, Context) ->
@@ -264,14 +277,18 @@ prepare_results(SurveyId, Context) ->
     end.
 
 %% @private
-prepare_result(_Block, undefined, _Context) ->
-    {undefined, undefined, undefined};
+prepare_result(Block, undefined, _Context) ->
+    Type = proplists:get_value(type, Block),
+    case mod_survey:module_name(Type) of
+        undefined -> {undefined, undefined, Block};
+        _ -> {undefined, undefined, undefined}
+    end;
 prepare_result(Block, Stats, Context) ->
     Type = proplists:get_value(type, Block),
     {
       Stats,
       prep_chart(Type, Block, Stats, Context),
-      [] % mod_survey:question_to_props(Question)
+      Block
     }.
 
 %% @private
@@ -555,6 +572,16 @@ answer_prompt(Block) ->
         _M -> proplists:get_value(prompt, Block, <<>>)
     end.
 
+-spec list_results(integer(), #context{}) -> list().
+list_results(SurveyId, Context) when is_integer(SurveyId) ->
+    z_db:assoc("
+        select *
+        from survey_answers
+        where survey_id = $1
+        order by created
+        ",
+        [SurveyId],
+        Context).
 
 -spec single_result(integer(), integer(), #context{}) -> list().
 single_result(SurveyId, AnswerId, Context) when is_integer(SurveyId), is_integer(AnswerId) ->

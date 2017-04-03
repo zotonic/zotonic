@@ -81,6 +81,22 @@ event(#postback{message={survey_back, Args}}, Context) ->
             render_update(render_next_page(SurveyId, 0, exact, Answers, [], Editing, Context), Args, Context)
     end;
 
+event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    {answer_id, _AnswerId} = proplists:lookup(answer_id, Args),
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            z_render:wire({confirm, [
+                    {text, ?__("Are you sure you want to delete this result?", Context)},
+                    {ok, ?__("Delete", Context)},
+                    {postback, {survey_remove_result, Args}},
+                    {delegate, ?MODULE}
+                ]},
+                Context);
+        false ->
+            z_render:growl(?__("You are not allowed to change these results.", Context), Context)
+    end;
+
 event(#postback{message={survey_remove_result, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
@@ -529,25 +545,29 @@ do_submit(SurveyId, Questions, Answers, Context) ->
     of
         undefined ->
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
-            {ok, _} = m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context),
-            maybe_mail(SurveyId, Answers, Context),
+            {ok, ResultId} = m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context),
+            maybe_mail(SurveyId, Answers, ResultId, Context),
             ok;
         ok ->
-            maybe_mail(SurveyId, Answers, Context),
+            maybe_mail(SurveyId, Answers, undefined, Context),
             ok;
         {ok, _Context1} = Handled ->
-            maybe_mail(SurveyId, Answers, Context),
+            maybe_mail(SurveyId, Answers, undefined, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
     end.
 
-maybe_mail(SurveyId, Answers, Context) ->
+maybe_mail(SurveyId, Answers, ResultId, Context) ->
     case probably_email(SurveyId, Context) of
         true ->
             PrepAnswers = survey_answer_prep:readable(SurveyId, Answers, Context),
-            mail_respondent(SurveyId, Answers, PrepAnswers, Context),
-            mail_result(SurveyId, PrepAnswers, Context);
+            SurveyResult = case ResultId of
+                undefined -> undefined;
+                _ -> m_survey:single_result(SurveyId, ResultId, Context)
+            end,
+            mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context),
+            mail_result(SurveyId, PrepAnswers, SurveyResult, Context);
         false ->
             nop
     end.
@@ -557,7 +577,7 @@ probably_email(SurveyId, Context) ->
     orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)).
 
 %% @doc mail the survey result to an e-mail address
-mail_result(SurveyId, PrepAnswers, Context) ->
+mail_result(SurveyId, PrepAnswers, SurveyResult, Context) ->
     case m_rsc:p_no_acl(SurveyId, survey_email, Context) of
         undefined -> skip;
         <<>> -> skip;
@@ -571,7 +591,8 @@ mail_result(SurveyId, PrepAnswers, Context) ->
                             Vars = [
                                 {is_result_email, true},
                                 {id, SurveyId},
-                                {answers, PrepAnswers}
+                                {answers, PrepAnswers},
+                                {result, SurveyResult}
                             ],
                             z_email:send_render(E, "email_survey_result.tpl", Vars, Context);
                         false ->
@@ -582,7 +603,7 @@ mail_result(SurveyId, PrepAnswers, Context) ->
             ok
     end.
 
-mail_respondent(SurveyId, Answers, PrepAnswers, Context) ->
+mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context) ->
     case z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)) of
         true ->
             case find_email_respondent(Answers, Context) of
@@ -593,7 +614,8 @@ mail_respondent(SurveyId, Answers, PrepAnswers, Context) ->
                 Email ->
                     Vars = [
                         {id, SurveyId},
-                        {answers, PrepAnswers}
+                        {answers, PrepAnswers},
+                        {result, SurveyResult}
                     ],
                     z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
                     ok

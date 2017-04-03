@@ -17,10 +17,9 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
-$.widget("ui.survey_test_feedback", 
+$.widget("ui.survey_test_feedback",
 {
-    _init: function() 
-    {
+    _init: function() {
         var self = this;
         var obj  = this.element;
 
@@ -28,27 +27,16 @@ $.widget("ui.survey_test_feedback",
             'click',
             'input',
             function(ev) {
-                $(this)
-                    .closest('label')
-                    .removeClass("survey-test-feedback")
-                    .removeClass("survey-q-ok")
-                    .removeClass("survey-q-not-ok")
-                    .find(".survey-test-feedback-icon")
-                    .remove();
-
+                var $wrap;
+                if ($(this).attr('type') == 'radio') {
+                    $wrap = $(this).closest('div').find('label');
+                } else {
+                    $wrap = $(this).closest('label');
+                }
+                self.reset_feedback_icons($wrap);
                 if ($(this).is(':checked')) {
-                    var cls = 'survey-q-ok';
-                    var icn = 'fa fa-check';
-
-                    if ($(this).attr('data-is-correct') != 'true') {
-                        cls = 'survey-q-not-ok';
-                        icn = 'fa fa-remove';
-                    }
-                    $(this)
-                        .closest('label')
-                        .addClass("survey-test-feedback")
-                        .addClass(cls)
-                        .append("<span class='survey-test-feedback-icon'><span class='"+icn+"'></span></span>");
+                    var $icon_wrap = $(this).closest('label');
+                    self.show_feedback($(this), obj, $icon_wrap, 'true');
                 }
             });
         $(obj).on(
@@ -56,41 +44,47 @@ $.widget("ui.survey_test_feedback",
             'select',
             function(ev) {
                 var val = $(this).val();
-                $(this)
-                    .closest('div')
-                    .removeClass("survey-test-feedback")
-                    .removeClass("survey-q-ok")
-                    .removeClass("survey-q-not-ok")
-                    .find(".survey-test-feedback-icon")
-                    .remove();
+                var $wrap = $(this).closest('div');
+                self.reset_feedback_icons($wrap);
 
                 if (val !== '') {
                     var cls = 'survey-q-ok';
                     var icn = 'fa fa-check';
-
-                    if ($(this).attr('data-is-correct') != val) {
-                        cls = 'survey-q-not-ok';
-                        icn = 'fa fa-remove';
-                    }
-                    $(this)
-                        .closest('div')
-                        .addClass("survey-test-feedback")
-                        .addClass(cls)
-                        .append("<span class='survey-test-feedback-icon'><span class='"+icn+"'></span></span>");
+                    self.show_feedback($(this), obj, $wrap, val);
                 }
-            });    }
+            });
+    },
+
+    reset_feedback_icons: function ($wrap) {
+        $wrap
+            .removeClass("survey-test-feedback")
+            .removeClass("survey-q-ok")
+            .removeClass("survey-q-not-ok")
+            .find(".survey-test-feedback-icon")
+            .remove();
+    },
+
+    show_feedback: function ($elt, obj, $icon_wrap, value) {
+        var cls = 'survey-q-ok';
+        var icn = 'fa fa-check';
+
+        if ($elt.attr('data-is-correct') != value) {
+            cls = 'survey-q-not-ok';
+            icn = 'fa fa-remove';
+            $(obj)
+                .removeClass('survey-test-correct')
+                .addClass('survey-test-wrong');
+        } else {
+            $(obj)
+                .addClass('survey-test-correct')
+                .removeClass('survey-test-wrong');
+        }
+        $icon_wrap
+            .addClass("survey-test-feedback")
+            .addClass(cls)
+            .append("<span class='survey-test-feedback-icon'><span class='"+icn+"'></span></span>");
+    }
 });
 
-$.fn.tooltip.destroy = function()
-{
-    $('.tooltip').tooltip('destroy');
-};
-
-$.ui.tooltip.defaults = {
-    offsetY:    0,
-    offsetX:    0,
-    inevent:    'mouseover',
-    outevent:   'mouseout',
-    width:      'auto',
-    maxwidth:   '330px'
+$.ui.survey_test_feedback.defaults = {
 };

@@ -4,24 +4,17 @@
 	<h2>{_ Results _}</h2>
 {% endif %}
 
-{% if m.survey.is_allowed_results_download[id] %}
-	<p><a id="{{ #download }}" href="{% url survey_results_download id=id %}">{_ Click here to download the results as a CSV file. _}</a></p>
-	{% wire id=#download propagate 
-			action={alert text=_"Download will start in the background. Please check your download window."}
-	%}
-{% endif %}
-
 {% if id.survey_show_results == 2 and not is_aggregated %}
     {% with m.survey.did_survey_results[id] as result %}
         {% if id.survey_test_percentage %}
             {% with id|survey_test_max_points as max_points %}
                 <h2>
+                    {{ (result.points / max_points * 100)|round }}% &ndash;
                     {% if result.points > max_points * (id.survey_test_percentage / 100) %}
                         {_ Passed _}
                     {% else %}
                         {_ Failed _}
                     {% endif %}
-                    &ndash; {{ (result.points / max_points * 100)|round }}%
                 </h2>
 
                 <table class="table" style="width: auto">
@@ -41,10 +34,10 @@
             {% endwith %}
         {% endif %}
 
-        {% print result %}
-
         {% for blk in id.blocks %}
-            {% optional include "blocks/_block_view_"++blk.type++".tpl" blk=blk is_survey_answer_view result=result %}
+            {% if blk.name != 'survey_feedback' %}
+                {% optional include "blocks/_block_view_"++blk.type++".tpl" blk=blk is_survey_answer_view result=result %}
+            {% endif %}
         {% endfor %}
     {% endwith %}
 {% elseif id.survey_show_results or m.survey.is_allowed_results_download[id] %}

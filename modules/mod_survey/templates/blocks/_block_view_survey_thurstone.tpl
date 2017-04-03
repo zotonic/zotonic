@@ -32,6 +32,18 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+
+            {% if blk.test_correct and ans|survey_any_correct_answer:props %}
+                <p class="help-block survey-test-feedback-correct">
+                    {{ blk.test_correct }}
+                </p>
+            {% endif %}
+            {% if blk.test_wrong and ans|survey_any_wrong_answer:props %}
+                <p class="help-block survey-test-feedback-wrong">
+                    {{ blk.test_wrong }}
+                </p>
+            {% endif %}
+
             {% endwith %}
         </div>
     {% endwith %}

@@ -129,7 +129,7 @@ prep_score(PreppedBlock, StoredAnswer, _Context) ->
                 Ans when is_binary(Ans) -> Ans;
                 _ -> <<>>
             end,
-            {K, proplists:get_value(K, Points, 0)};
+            [K, proplists:get_value(K, Points, 0)];
         true ->
             lists:flatten([
                 begin

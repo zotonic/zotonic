@@ -1,8 +1,3 @@
-TODO:
-
-1. On storing, extract the points
-2. Result screen with ok/not-ok icons
-
 {% with blk|survey_prepare_thurstone as props %}
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
 <div class="{% if blk.is_test_direct %}do_survey_test_feedback {% endif %}control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
@@ -58,6 +53,20 @@ TODO:
     {% endfor %}
 {% endif %}
     </div>
+
+{% if blk.is_test_direct %}
+    {% if blk.test_correct %}
+        <p class="help-block survey-test-feedback-correct">
+            {{ blk.test_correct }}
+        </p>
+    {% endif %}
+    {% if blk.test_wrong %}
+        <p class="help-block survey-test-feedback-wrong">
+            {{ blk.test_wrong }}
+        </p>
+    {% endif %}
+{% endif %}
+
 {% if blk.explanation %}
     <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
