@@ -87,6 +87,7 @@ event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
     case z_acl:rsc_editable(SurveyId, Context) of
         true ->
             z_render:wire({confirm, [
+                    {is_dangerous_action, true},
                     {text, ?__("Are you sure you want to delete this result?", Context)},
                     {ok, ?__("Delete", Context)},
                     {postback, {survey_remove_result, Args}},
