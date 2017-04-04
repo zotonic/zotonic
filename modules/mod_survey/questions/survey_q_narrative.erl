@@ -47,15 +47,17 @@ answer(Block, Answers, Context) ->
 
 answer_inputs([], _Answers, Acc) ->
     {ok, Acc};
-answer_inputs([{IsSelect,Name}|Rest], Answers, Acc) ->
-    case proplists:get_value(z_convert:to_binary(Name), Answers) of
+answer_inputs([{_IsSelect,Name}|Rest], Answers, Acc) ->
+    NameB = z_convert:to_binary(Name),
+    case proplists:get_value(NameB, Answers) of
         undefined -> {error, missing};
-        Value -> case z_string:trim(Value) of
-                    [] -> {error, missing};
-                    V ->
-                        V1 = case IsSelect of true -> V; false -> {text, V} end, 
-                        answer_inputs(Rest, Answers, [{Name,V1}|Acc])
-                 end
+        Value ->
+            case z_string:trim(Value) of
+                [] -> {error, missing};
+                <<>> -> {error, missing};
+                V ->
+                    answer_inputs(Rest, Answers, [{NameB,z_convert:to_binary(V)}|Acc])
+            end
     end.
 
 
@@ -102,9 +104,8 @@ is_answerable({html, _, _}) -> false;
 is_answerable(_) -> true.
 
 value(_, undefined, _) -> <<>>;
-value(_, {undefined, X}, _) -> X;
-value(select, {V, _}, T) -> proplists:get_value(V, T, V);
-value(_, {X, _}, _) -> X.
+value(select, V, Options) -> proplists:get_value(V, Options, V);
+value(_, X, _) -> X.
 
 prep_block(Block, Context) ->
     Narrative = z_trans:lookup_fallback(

@@ -22,7 +22,7 @@
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
 -mod_prio(400).
--mod_schema(3).
+-mod_schema(4).
 -mod_depends([admin]).
 -mod_provides([survey, poll]).
 
@@ -53,7 +53,7 @@
 
 %% @doc Schema for mod_survey lives in separate module
 manage_schema(What, Context) ->
-    mod_survey_schema:manage_schema(What, Context).
+    survey_schema:manage_schema(What, Context).
 
 event(#postback{message={survey_start, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
@@ -81,27 +81,57 @@ event(#postback{message={survey_back, Args}}, Context) ->
             render_update(render_next_page(SurveyId, 0, exact, Answers, [], Editing, Context), Args, Context)
     end;
 
-event(#postback{message={survey_remove_result, [{id, SurveyId}, {persistent_id, PersistentId}, {user_id, UserId}]}}, Context) ->
-    m_survey:delete_result(SurveyId, UserId, PersistentId, Context),
-    Target = "survey-result-"++z_convert:to_list(UserId)++"-"++z_convert:to_list(PersistentId),
-    z_render:wire([ 
-            {growl, [{text, ?__("Survey result deleted.", Context)}]},
-            {slide_fade_out, [{target, Target}]}
-        ], Context);
+event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    {answer_id, _AnswerId} = proplists:lookup(answer_id, Args),
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            z_render:wire({confirm, [
+                    {is_dangerous_action, true},
+                    {text, ?__("Are you sure you want to delete this result?", Context)},
+                    {ok, ?__("Delete", Context)},
+                    {postback, {survey_remove_result, Args}},
+                    {delegate, ?MODULE}
+                ]},
+                Context);
+        false ->
+            z_render:growl(?__("You are not allowed to change these results.", Context), Context)
+    end;
 
-event(#postback{message={admin_show_emails, [{id, SurveyId}]}}, Context) ->
-    case m_survey:survey_results(SurveyId, Context) of
-        [Headers|Data] ->
-            All = [lists:zip(Headers, Row) || Row <- Data],
-            z_render:dialog(?__("E-mail addresses", Context),
-                            "_dialog_survey_email_addresses.tpl",
-                            [{id, SurveyId}, {all, All}],
-                            Context);
-        [] ->
-            z_render:dialog(?__("E-mail addresses", Context),
-                            "_dialog_survey_email_addresses.tpl",
-                            [{id, SurveyId}, {all, []}],
-                            Context)
+event(#postback{message={survey_remove_result, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            m_survey:delete_result(SurveyId, AnswerId, Context),
+            Target = "survey-result-"++z_convert:to_list(AnswerId),
+            z_render:wire([ 
+                    {growl, [{text, ?__("Survey result deleted.", Context)}]},
+                    {slide_fade_out, [{target, Target}]}
+                ], Context);
+        false ->
+            z_render:growl(?__("You are not allowed to change these results.", Context), Context)
+    end;
+
+event(#postback{message={admin_show_emails, Args}}, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    case m_survey:is_allowed_results_download(SurveyId, Context) of
+        true ->
+            case m_survey:survey_results(SurveyId, true, Context) of
+                [Headers|Data] ->
+                    All = [lists:zip(Headers, Row) || {_Id,Row} <- Data],
+                    z_render:dialog(?__("E-mail addresses", Context),
+                                    "_dialog_survey_email_addresses.tpl",
+                                    [{id, SurveyId}, {all, All}],
+                                    Context);
+                [] ->
+                    z_render:dialog(?__("E-mail addresses", Context),
+                                    "_dialog_survey_email_addresses.tpl",
+                                    [{id, SurveyId}, {all, []}],
+                                    Context)
+            end;
+        false ->
+            Context
     end.
 
 %% @doc Append the possible blocks for a survey's edit page.
@@ -172,8 +202,9 @@ observe_export_resource_filename(#export_resource_filename{}, _Context) ->
 observe_export_resource_header(#export_resource_header{dispatch=survey_results_download, id=Id}, Context) ->
     case m_survey:is_allowed_results_download(Id, Context) of
         true ->
-            {Hs, Promps, Data} = m_survey:survey_results_prompts(Id, Context),
-            {ok, Hs, [Promps | Data]};
+            {Hs, Promps, Data} = m_survey:survey_results_prompts(Id, false, Context),
+            Data1 = [ Row || {_Id, Row} <- Data ],
+            {ok, Hs, [ Promps | Data1 ]};
         false ->
             throw({stop_request, 403})
     end;
@@ -220,7 +251,7 @@ render_update(#render{} = Render, Args, Context) ->
 
 
 %% @doc Fetch the next page from the survey, update the page view
--spec render_next_page(integer(), integer(), exact|forward, list(), list(), list()|undefined, #context{}) -> #render{} | #context{}.
+-spec render_next_page(integer(), integer(), exact|forward, list(), list(), term()|undefined, #context{}) -> #render{} | #context{}.
 render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Context) when is_integer(Id) ->
     z_render:wire({redirect, [{id, Id}]}, Context);
 render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when is_integer(Id) ->
@@ -514,25 +545,30 @@ do_submit(SurveyId, Questions, Answers, Context) ->
                           Context)
     of
         undefined ->
-            m_survey:insert_survey_submission(SurveyId, FoundAnswers, Context),
-            maybe_mail(SurveyId, Answers, Context),
+            StorageAnswers = survey_answers_to_storage(FoundAnswers),
+            {ok, ResultId} = m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context),
+            maybe_mail(SurveyId, Answers, ResultId, Context),
             ok;
         ok ->
-            maybe_mail(SurveyId, Answers, Context),
+            maybe_mail(SurveyId, Answers, undefined, Context),
             ok;
         {ok, _Context1} = Handled ->
-            maybe_mail(SurveyId, Answers, Context),
+            maybe_mail(SurveyId, Answers, undefined, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
     end.
 
-maybe_mail(SurveyId, Answers, Context) ->
+maybe_mail(SurveyId, Answers, ResultId, Context) ->
     case probably_email(SurveyId, Context) of
         true ->
             PrepAnswers = survey_answer_prep:readable(SurveyId, Answers, Context),
-            mail_respondent(SurveyId, Answers, PrepAnswers, Context),
-            mail_result(SurveyId, PrepAnswers, Context);
+            SurveyResult = case ResultId of
+                undefined -> undefined;
+                _ -> m_survey:single_result(SurveyId, ResultId, Context)
+            end,
+            mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context),
+            mail_result(SurveyId, PrepAnswers, SurveyResult, Context);
         false ->
             nop
     end.
@@ -542,21 +578,33 @@ probably_email(SurveyId, Context) ->
     orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)).
 
 %% @doc mail the survey result to an e-mail address
-mail_result(SurveyId, PrepAnswers, Context) ->
+mail_result(SurveyId, PrepAnswers, SurveyResult, Context) ->
     case m_rsc:p_no_acl(SurveyId, survey_email, Context) of
-        undefined ->
-            skip;
+        undefined -> skip;
+        <<>> -> skip;
         Email ->
-            Vars = [
-                {is_result_email, true},
-                {id, SurveyId},
-                {answers, PrepAnswers}
-            ],
-            z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
+            EmailS = z_convert:to_list(Email),
+            Es = string:tokens(EmailS, ",; "),
+            lists:foreach(
+                fun(E) ->
+                    case z_email_utils:is_email(E) of
+                        true ->
+                            Vars = [
+                                {is_result_email, true},
+                                {id, SurveyId},
+                                {answers, PrepAnswers},
+                                {result, SurveyResult}
+                            ],
+                            z_email:send_render(E, "email_survey_result.tpl", Vars, Context);
+                        false ->
+                            ok
+                    end
+                end,
+                Es),
             ok
     end.
 
-mail_respondent(SurveyId, Answers, PrepAnswers, Context) ->
+mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context) ->
     case z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)) of
         true ->
             case find_email_respondent(Answers, Context) of
@@ -567,7 +615,8 @@ mail_respondent(SurveyId, Answers, PrepAnswers, Context) ->
                 Email ->
                     Vars = [
                         {id, SurveyId},
-                        {answers, PrepAnswers}
+                        {answers, PrepAnswers},
+                        {result, SurveyResult}
                     ],
                     z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
                     ok
@@ -604,7 +653,7 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
             case Module:answer(Q, Answers, Context) of
                 {ok, none} ->
                     collect_answers(Qs, Answers, FoundAnswers, Missing, Context);
-                {ok, AnswerList} -> 
+                {ok, AnswerList} ->
                     collect_answers(Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
                 {error, missing} -> 
                     case z_convert:to_bool(proplists:get_value(is_required, Q)) of
@@ -619,11 +668,12 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
     end.
 
 %% @doc Save the modified survey results
-admin_edit_survey_result(Id, Questions, Answers, {editing, UserId, PersistentId, Actions}, Context) ->
-    case z_acl:rsc_editable(Id, Context) of
+admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actions}, Context) ->
+    case z_acl:rsc_editable(SurveyId, Context) of
         true ->
             {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
-            m_survey:insert_survey_submission(Id, UserId, PersistentId, FoundAnswers, Context),
+            StorageAnswers = survey_answers_to_storage(FoundAnswers),
+            m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context),
             case Actions of
                 [] ->
                     Context1 = z_render:dialog_close(Context),
@@ -632,7 +682,7 @@ admin_edit_survey_result(Id, Questions, Answers, {editing, UserId, PersistentId,
                             #render{
                                 template="_admin_survey_editor_results.tpl",
                                 vars=[
-                                    {id, Id}
+                                    {id, SurveyId}
                                 ]
                             },
                             Context1);
@@ -642,6 +692,22 @@ admin_edit_survey_result(Id, Questions, Answers, {editing, UserId, PersistentId,
         false ->
             z_render:growl(?__("You are not allowed to change these results.", Context), Context)
     end.
+
+
+survey_answers_to_storage(AnsPerBlock) ->
+    lists:flatten(
+        lists:map(
+            fun({BlockName, Ans}) ->
+                [
+                    {Name, [
+                        {block, BlockName},
+                        {answer, Vs}
+                    ]}
+                    ||
+                    {Name, Vs} <- Ans
+                ]
+            end,
+            AnsPerBlock)).
 
 
 

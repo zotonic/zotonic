@@ -1,7 +1,7 @@
 {% extends "page.tpl" %}
 
 {% block main %}
-<div id="survey-question">
+<div id="survey-question" class="survey-results">
 	{% include "_survey_results.tpl" hide_headers %}
 </div>
 {% endblock %}
