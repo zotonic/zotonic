@@ -57,9 +57,17 @@ manage_schema(What, Context) ->
 
 event(#postback{message={survey_start, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
-    Answers = normalize_answers(proplists:get_value(answers, Args)),
-    Editing = proplists:get_value(editing, Args),
-    render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context), Args, Context);
+    AnswerId = z_convert:to_integer(proplists:get_value(answer_id, Args)),
+    case is_integer(AnswerId) andalso z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            Answers = scomp_survey_poll:single_result(SurveyId, AnswerId, Context),
+            Editing = {editing, AnswerId, undefined},
+            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context), Args, Context);
+        false ->
+            Answers = normalize_answers(proplists:get_value(answers, Args)),
+            Editing = proplists:get_value(editing, Args),
+            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context), Args, Context)
+    end;
 
 event(#submit{message={survey_next, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
@@ -706,7 +714,14 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
                                 ]
                             },
                             Context1);
-                _ ->
+                undefined ->
+                    #render{
+                        template="_survey_end_edit.tpl", 
+                        vars=[
+                            {id, SurveyId}, {inline, true}, {is_editing, true}
+                        ]
+                    };
+                _ when is_list(Actions); is_tuple(Actions) ->
                     z_render:wire(Actions, Context)
             end;
         false ->

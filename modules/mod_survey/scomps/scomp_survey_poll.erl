@@ -19,6 +19,7 @@
 
 -behaviour(gen_scomp).
 -export([vary/2, render/3]).
+-export([single_result/3]).
 
 -include("zotonic.hrl").
 -include("../survey.hrl").

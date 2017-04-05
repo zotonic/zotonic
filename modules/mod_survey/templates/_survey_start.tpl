@@ -1,4 +1,9 @@
-{% if id.survey_multiple == 1 %}
+{% if q.answer_id and id.is_editable %}
+    {% wire
+        postback={survey_start id=id answer_id=q.answer_id}
+        delegate="mod_survey"
+    %}
+{% elseif id.survey_multiple == 1 %}
     {% include "_survey_start_button.tpl" id=id answers=answers %}
 {% else %}
     {% with m.survey.did_survey[id] as did_survey %}
