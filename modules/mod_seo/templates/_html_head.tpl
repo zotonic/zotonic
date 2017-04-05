@@ -1,5 +1,5 @@
 {% if id %}
-	<link rel="shorturl" href="{% url id id=id %}" />
+	<link rel="shortlink" href="{% url id id=id %}" />
 	<link rel="canonical" href="{{ m.rsc[id].page_url }}" />
 {% endif %}
 
