@@ -91,7 +91,7 @@ convert_2(EndWidth, _EndHeight, _CmdArgs, _ConvertCmd, _InFile, _OutFile, _Mime,
 convert_2(_EndWidth, EndHeight, _CmdArgs, _ConvertCmd, _InFile, _OutFile, _Mime, _FileProps) 
     when EndHeight > ?MAX_HEIGHT ->
     {error, image_too_wide};
-convert_2(EndWidth, EndHeight, CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
+convert_2(_EndWidth, _EndHeight, CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
     file:delete(OutFile),
     ok = filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
