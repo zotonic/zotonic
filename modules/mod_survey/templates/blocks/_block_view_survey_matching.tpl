@@ -2,7 +2,6 @@
 
 {% if is_survey_answer_view %}
     {% with blk|survey_prepare_matching as props %}
-        {% print props %}
         <div class="control-group survey-matching">
             <label class="control-label">{{ blk.prompt }}</label>
             <ul>

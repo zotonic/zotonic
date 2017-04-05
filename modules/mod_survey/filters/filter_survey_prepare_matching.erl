@@ -73,7 +73,15 @@ split_markers(Qs) ->
         split_markers(Qs, N+1, [split_marker(Opt, N)|Acc]).
 
 split_marker(X, N) ->
-    case lists:splitwith(fun(C) -> C /= $# end, X) of
-        {Opt, []} -> {z_convert:to_binary(N), z_convert:to_binary(Opt)};
-        {Opt, [$#|Rest]} -> {z_convert:to_binary(Opt), z_convert:to_binary(Rest)}
+    case split_kv(z_convert:to_binary(X)) of
+        [Opt] -> {z_convert:to_binary(N), Opt};
+        [Val,Opt] -> {Val,Opt}
     end.
+
+split_kv(Line) ->
+    split_kv(Line, <<>>).
+
+split_kv(<<>>, Acc) -> [Acc];
+split_kv(<<"&#", Rest/binary>>, Acc) -> split_kv(Rest, <<Acc/binary, "&#">>);
+split_kv(<<"#", Rest/binary>>, Acc) -> [Acc,Rest];
+split_kv(<<C/utf8, Rest/binary>>, Acc) -> split_kv(Rest, <<Acc/binary, C/utf8>>).

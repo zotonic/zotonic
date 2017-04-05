@@ -546,7 +546,7 @@ do_submit(SurveyId, Questions, Answers, Context) ->
     of
         undefined ->
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
-            {ok, ResultId} = m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context),
+            {ok, ResultId} = insert_survey_submission(SurveyId, StorageAnswers, Context),
             maybe_mail(SurveyId, Answers, ResultId, Context),
             ok;
         ok ->
@@ -558,6 +558,26 @@ do_submit(SurveyId, Questions, Answers, Context) ->
         {error, _Reason} = Error ->
             Error
     end.
+
+insert_survey_submission(SurveyId, StorageAnswers, Context) ->
+    {UserId, PersistentId} = case z_acl:user(Context) of
+                                undefined ->
+                                    {undefined, persistent_id(Context)};
+                                UId ->
+                                    {UId, undefined}
+                            end,
+    case m_survey:single_result(SurveyId, UserId, PersistentId, Context) of
+        None when None =:= undefined; None =:= [] ->
+            m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context);
+        Result ->
+            ResultId = proplists:get_value(id, Result),
+            ok = m_survey:replace_survey_submission(SurveyId, ResultId, StorageAnswers, Context),
+            {ok, ResultId}
+    end.
+
+persistent_id(#context{session_id = undefined}) -> undefined;
+persistent_id(Context) -> z_context:persistent_id(Context).
+
 
 maybe_mail(SurveyId, Answers, ResultId, Context) ->
     case probably_email(SurveyId, Context) of

@@ -178,7 +178,7 @@ to_block(Q) ->
 test_max_points(Block) ->
     IsCountAll = is_multiple(Block)
             andalso z_convert:to_bool(proplists:get_value(is_test_neg, Block, false)),
-    case z_convert:to_integer(proplists:get_value(test_points, Block)) of
+    case survey_test_results:block_test_points(Block) of
         undefined -> 0;
         Points when not IsCountAll ->
            OkAnswers = lists:filter(

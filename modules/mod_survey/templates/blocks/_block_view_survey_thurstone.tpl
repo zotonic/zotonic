@@ -11,14 +11,14 @@
                         {% if option.value|member:ans and option.is_correct %}
                             <li class="survey-test-feedback survey-q-ok">
                                 <span class='survey-test-feedback-icon'>
-                                    <span class='fa fa-check'></span>
+                                    &#10004;
                                     {{ option.option }}
                                 </span>
                             </li>
                         {% elseif option.value|member:ans and not option.is_correct %}
                             <li class="survey-test-feedback survey-q-not-ok">
                                 <span class='survey-test-feedback-icon'>
-                                    <span class='fa fa-remove'></span>
+                                    &#10006;
                                     {{ option.option }}
                                 </span>
                             </li>
@@ -34,13 +34,13 @@
             </ul>
 
             {% if blk.test_correct and ans|survey_any_correct_answer:props %}
-                <p class="help-block survey-test-feedback-correct">
-                    {{ blk.test_correct }}
+                <p class="survey-test-feedback-correct text-success">
+                    &#10140; {{ blk.test_correct }}
                 </p>
             {% endif %}
             {% if blk.test_wrong and ans|survey_any_wrong_answer:props %}
-                <p class="help-block survey-test-feedback-wrong">
-                    {{ blk.test_wrong }}
+                <p class="survey-test-feedback-wrong text-error">
+                    &#10140; {{ blk.test_wrong }}
                 </p>
             {% endif %}
 

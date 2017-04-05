@@ -75,7 +75,7 @@ split_marker(Line, N) ->
     split_marker_1(false, Line, N).
 
 split_marker_1(IsCorrect, Line, N) ->
-    case binary:split(Line, <<"#">>) of
+    case split_kv(Line) of
         [Value,Option] ->
             [
                 {value, Value},
@@ -89,3 +89,12 @@ split_marker_1(IsCorrect, Line, N) ->
                 {is_correct, IsCorrect}
             ]
     end.
+
+split_kv(Line) ->
+    split_kv(Line, <<>>).
+
+split_kv(<<>>, Acc) -> [Acc];
+split_kv(<<"&#", Rest/binary>>, Acc) -> split_kv(Rest, <<Acc/binary, "&#">>);
+split_kv(<<"#", Rest/binary>>, Acc) -> [Acc,Rest];
+split_kv(<<C/utf8, Rest/binary>>, Acc) -> split_kv(Rest, <<Acc/binary, C/utf8>>).
+

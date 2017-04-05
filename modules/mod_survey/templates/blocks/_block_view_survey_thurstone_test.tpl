@@ -56,13 +56,13 @@
 
 {% if blk.is_test_direct %}
     {% if blk.test_correct %}
-        <p class="help-block survey-test-feedback-correct">
-            {{ blk.test_correct }}
+        <p class="survey-test-feedback-correct text-success">
+            &#10140; {{ blk.test_correct }}
         </p>
     {% endif %}
     {% if blk.test_wrong %}
-        <p class="help-block survey-test-feedback-wrong">
-            {{ blk.test_wrong }}
+        <p class="survey-test-feedback-wrong text-error">
+            &#10140; {{ blk.test_wrong }}
         </p>
     {% endif %}
 {% endif %}

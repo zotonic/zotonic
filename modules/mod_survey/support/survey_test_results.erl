@@ -2,7 +2,8 @@
 
 -export([
     calc_test_results/3,
-    max_points/2
+    max_points/2,
+    block_test_points/1
 ]).
 
 -include("zotonic.hrl").
@@ -51,7 +52,7 @@ count_points([{Name,A}|As], Blocks, PtAcc, AsAcc, Context) ->
     end.
 
 question_points(<<"survey_thurstone">>, A, Block, Context) ->
-    case z_convert:to_integer(proplists:get_value(test_points, Block)) of
+    case block_test_points(Block) of
         GoodPoints when is_integer(GoodPoints) ->
             Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
             QuestionOptions = proplists:get_value(answers, Props),
@@ -88,6 +89,17 @@ question_points(<<"survey_matching">>, A, _Block, _Context) ->
     {0, A};
 question_points(_Type, A, _Block, _Context) ->
     {0, A}.
+
+block_test_points(Block) ->
+    case z_convert:to_bool(proplists:get_value(is_test, Block)) of
+        false -> undefined;
+        true ->
+            case proplists:get_value(test_points, Block) of
+                undefined -> 1;
+                <<>> -> 1;
+                TestPoints -> z_convert:to_integer(TestPoints)
+            end
+    end.
 
 sum([]) -> 0;
 sum(L) -> lists:sum([Pt || {_,Pt} <- L]).

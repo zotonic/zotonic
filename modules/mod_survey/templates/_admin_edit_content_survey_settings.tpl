@@ -20,20 +20,26 @@
 		            {_ Immediately start with the questions, no “Start” button _}
 	            </label>
 	        </div>
-			<label class="checkbox">
-				<input type="checkbox" name="survey_multiple" id="survey_multiple" value="1" {% if id.survey_multiple or id.survey_multiple|is_undefined %}checked="checked"{% endif %} />
-				{_ Allow multiple entries per user/browser _}
-			</label>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="survey_redo" id="survey_redo" value="1" {% if id.survey_redo %}checked="checked"{% endif %} /> {_ Allow respondents to change their answers _}
-                </label>
-            </div>
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %} />
 					{_ Send confirmation to respondent (please add a question named <i>email</i>) _}
 				</label>
+			</div>
+		</div>
+
+		<div class="control-group">
+        	<label class="control-label">{_ Fill in _}</label>
+        	<div class="controls">
+				<select name="survey_multiple" id="survey_multiple">
+					<option value="0">{_ Once only per user/browser _}</option>
+					<option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
+						{_ Multiple entries per user/browser _}
+					</option>
+					<option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
+						{_ Once and allow editing afterwards _}
+					</option>
+				</select>
 			</div>
 		</div>
 	</div>

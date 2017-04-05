@@ -4,7 +4,6 @@
     {% if blk.explanation %}
          <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
     {% endif %}
-        {% print props %}
         <div class="controls">
         {% for val,item in props.items %}
             {% with forloop.counter as index %}

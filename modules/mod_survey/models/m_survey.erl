@@ -69,6 +69,8 @@ m_find_value(totals, #m{value=undefined} = M, _Context) ->
     M#m{value=totals};
 m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
     M#m{value=did_survey};
+m_find_value(did_survey_answers, #m{value=undefined} = M, _Context) ->
+    M#m{value=did_survey_answers};
 m_find_value(did_survey_results, #m{value=undefined} = M, _Context) ->
     M#m{value=did_survey_results};
 m_find_value(did_survey_results_readable, #m{value=undefined} = M, _Context) ->
@@ -97,6 +99,26 @@ m_find_value(Id, #m{value=totals}, Context) ->
     survey_totals(m_rsc:rid(Id, Context), Context);
 m_find_value(Id, #m{value=did_survey}, Context) ->
     did_survey(m_rsc:rid(Id, Context), Context);
+m_find_value(Id, #m{value=did_survey_answers}, Context) ->
+    {UserId, PersistentId} = case z_acl:user(Context) of
+                                undefined ->
+                                    {undefined, persistent_id(Context)};
+                                UId ->
+                                    {UId, undefined}
+                            end,
+    case m_survey:single_result(m_rsc:rid(Id, Context), UserId, PersistentId, Context) of
+        None when None =:= undefined; None =:= [] ->
+            [];
+        Result ->
+            Answers = proplists:get_value(answers, Result, []),
+            lists:map(
+                fun({_QName, Ans}) ->
+                    Block = proplists:get_value(block, Ans),
+                    Answer = proplists:get_value(answer, Ans),
+                    {Block, Answer}
+                end,
+                Answers)
+    end;
 m_find_value(Id, #m{value=did_survey_results}, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
@@ -140,7 +162,7 @@ get_handlers(Context) ->
 
 
 %% @doc Check if the current user/browser did the survey
-%% @private
+% @private
 did_survey(SurveyId, Context) ->
     find_answer_id(SurveyId, z_acl:user(Context), persistent_id(Context), Context) /= undefined.
 
