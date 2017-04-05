@@ -378,8 +378,10 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
     count_pages([Q|L], N) ->
         case is_page_end(Q) of
             true ->
-                L1 = lists:dropwhile(fun is_page_end/1, L),
-                count_pages(L1, N+1);
+                case lists:dropwhile(fun is_page_end/1, L) of
+                    [] -> N;
+                    L1 -> count_pages(L1, N+1)
+                end;
             false ->
                 count_pages(L, N)
         end.
