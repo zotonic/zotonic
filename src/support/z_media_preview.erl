@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
 %% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
 
-%% Copyright 2009-2014 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@
     calc_size/7
 ]).
 
--define(MAX_WIDTH,  10000).
--define(MAX_HEIGHT, 10000).
+-define(MAX_WIDTH,  20000).
+-define(MAX_HEIGHT, 20000).
 
 % Low and max image size (in total pixels) for quality 99 and 55.
 % A small thumbnail needs less compression to keep image quality.
@@ -83,8 +83,15 @@ convert_1(false, _InFile, _OutFile, _Mime, _FileProps, _Filters) ->
 convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters, OutMime),
-    z_utils:assert(EndWidth  < ?MAX_WIDTH, image_too_wide),
-    z_utils:assert(EndHeight < ?MAX_HEIGHT, image_too_high),
+    convert_2(EndWidth, EndHeight, CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps).
+
+convert_2(EndWidth, _EndHeight, _CmdArgs, _ConvertCmd, _InFile, _OutFile, _Mime, _FileProps) 
+    when EndWidth > ?MAX_WIDTH ->
+    {error, image_too_wide};
+convert_2(_EndWidth, EndHeight, _CmdArgs, _ConvertCmd, _InFile, _OutFile, _Mime, _FileProps) 
+    when EndHeight > ?MAX_HEIGHT ->
+    {error, image_too_wide};
+convert_2(EndWidth, EndHeight, CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
     file:delete(OutFile),
     ok = filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
