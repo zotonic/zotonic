@@ -13,7 +13,7 @@
 		{% else %}
 			</a>
 		{% endif %}
-		{% wire id=#status action={dialog_open title=email|escape template="_dialog_email_status.tpl" id=id} %}
+		{% wire id=#status action={dialog_open title=email template="_dialog_email_status.tpl" id=id} %}
 	{% endwith %}
 	{% endif %}
 {% endwith %}
