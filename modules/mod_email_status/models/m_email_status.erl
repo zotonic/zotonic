@@ -102,6 +102,7 @@ is_valid(Email, Context) ->
     {IsValid, _IsOkToSend} = is_valid_cached(Email, Context),
     IsValid.
 
+-spec is_valid_cached(Email::binary(), #context{}) -> {IsValid::boolean(), IsOkToSend::boolean()}.
 is_valid_cached(Email0, Context) ->
     Email = normalize(Email0),
     z_depcache:memo(fun() -> is_valid_nocache(Email, Context) end,
@@ -109,16 +110,17 @@ is_valid_cached(Email0, Context) ->
                     ?DAY,
                     Context).
 
+-spec is_valid_nocache(Email::binary(), #context{}) -> {IsValid::boolean(), IsOkToSend::boolean()}.
 is_valid_nocache(Email, Context) ->
-    case z_db:q("select is_valid, recent_error, recent_error_ct
+    case z_db:q("select is_valid, recent_error, recent_error_ct, error_is_final
                  from email_status where email = $1", 
                 [Email],
                 Context)
     of
         [] -> {true, true};
-        [{true, _, _}] -> {true, true};
-        [{false, undefined, _}] -> {false, true};
-        [{false, _, RecentErrorCt}] -> {false, RecentErrorCt < 5}
+        [{true, _, _, _}] -> {true, true};
+        [{false, undefined, _, _}] -> {false, true};
+        [{false, _, RecentErrorCt, IsFinal}] -> {false, IsFinal andalso RecentErrorCt < 5}
     end.
 
 
