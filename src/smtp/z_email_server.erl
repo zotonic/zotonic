@@ -57,6 +57,9 @@
 % Extension of files with queued copies of tmpfile attachments
 -define(TMPFILE_EXT, ".mailspool").
 
+% Timeout (in msec) for the connect to external SMTP server (default is 5000)
+-define(SMTP_CONNECT_TIMEOUT, 15000).
+
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override,
@@ -529,7 +532,8 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
     [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
     SmtpOpts = [
         {no_mx_lookups, State#state.smtp_no_mx_lookups},
-        {hostname, z_convert:to_list(z_email:email_domain(Context))}
+        {hostname, z_convert:to_list(z_email:email_domain(Context))},
+        {timeout, ?SMTP_CONNECT_TIMEOUT}
         | case State#state.smtp_relay of
             true -> State#state.smtp_relay_opts;
             false -> [{relay, z_convert:to_list(RecipientDomain)}]
@@ -543,7 +547,8 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
                             [_BccLocalName, BccDomain] = binary:split(BccEmail, <<"@">>),
                             [
                                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                                {hostname, z_convert:to_list(z_email:email_domain(Context))}
+                                {hostname, z_convert:to_list(z_email:email_domain(Context))},
+                                {timeout, ?SMTP_CONNECT_TIMEOUT}
                                 | case State#state.smtp_relay of
                                     true -> State#state.smtp_relay_opts;
                                     false -> [{relay, z_convert:to_list(BccDomain)}]

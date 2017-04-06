@@ -75,7 +75,7 @@
   1},
  {<<"gen_smtp">>,
   {git,"https://github.com/Vagabond/gen_smtp.git",
-       {ref,"3219b8f3b6393a7dddd3dbafb0295755abb59dfc"}},
+       {ref,"a97dfa39fb2cd749b7a0d9ce054fbda52f551733"}},
   0},
  {<<"goldrush">>,{pkg,<<"goldrush">>,<<"0.1.8">>},1},
  {<<"gproc">>,{pkg,<<"gproc">>,<<"0.5.0">>},0},
