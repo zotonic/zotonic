@@ -302,14 +302,14 @@ embed_code(youtube, H, W, V) ->
         <<"<iframe width=\"">>,integer_to_list(W),
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//www.youtube.com/embed/">>, z_url:url_encode(V),
-        <<"\" frameborder=\"0\" allowfullscreen></iframe>">>
+        <<"\" style=\"border:none;\" allowfullscreen></iframe>">>
         ]);
 embed_code(vimeo, H, W, V) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//player.vimeo.com/video/">>, z_url:url_encode(V),
-        <<"\" frameborder=\"0\" allowfullscreen></iframe>">>
+        <<"\" style=\"border:none;\" allowfullscreen></iframe>">>
         ]).
 
 %% @doc Handle the form submit from the "new media" dialog.  The form is defined in templates/_media_upload_panel.tpl.
