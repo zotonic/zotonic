@@ -120,7 +120,8 @@ is_valid_nocache(Email, Context) ->
         [] -> {true, true};
         [{true, _, _, _}] -> {true, true};
         [{false, undefined, _, _}] -> {false, true};
-        [{false, _, RecentErrorCt, IsFinal}] -> {false, IsFinal andalso RecentErrorCt < 5}
+        [{false, _, _RecentErrorCt, false}] -> {false, true};
+        [{false, _, RecentErrorCt, true}] -> {false, RecentErrorCt < 5}
     end.
 
 
