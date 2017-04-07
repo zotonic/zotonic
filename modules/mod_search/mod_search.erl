@@ -529,11 +529,13 @@ search(_, _, _) ->
 %% @doc Expand a search string like "hello wor" to a PostgreSQL tsquery string.
 %%      If the search string ends in a word character then a wildcard is appended
 %%      to the last search term.
--spec to_tsquery(binary(), #context{}) -> binary().
+-spec to_tsquery(binary()|string()|{trans, list()}|undefined, #context{}) -> binary().
 to_tsquery(undefined, _Context) ->
     <<>>;
 to_tsquery(<<>>, _Context) ->
     <<>>;
+to_tsquery({trans, _} = Tr, Context) ->
+    to_tsquery(z_trans:lookup_fallback(Tr, Context), Context);
 to_tsquery(Text, Context) when is_binary(Text) ->
     case to_tsquery_1(Text, Context) of
         <<>> ->
@@ -548,7 +550,10 @@ to_tsquery(Text, Context) when is_binary(Text) ->
             end;
         TsQuery ->
             TsQuery
-    end.
+    end;
+to_tsquery(Text, Context) when is_list(Text) ->
+    to_tsquery(z_convert:to_binary(Text), Context).
+
 
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
