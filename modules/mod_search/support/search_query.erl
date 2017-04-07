@@ -442,7 +442,7 @@ parse_query([{rsc_id, Id}|Rest], Context, Result) ->
 %% name=<name-pattern>
 %% Filter on the unique name of a resource.
 parse_query([{name, Name}|Rest], Context, Result) ->
-    case z_string:to_lower(z_string:trim(z_convert:to_binary(Name))) of
+    case z_string:to_lower(mod_search:trim(Name, Context)) of
         All when All =:= <<>>; All =:= <<"*">>; All =:= <<"%">> ->
             Result2 = add_where("rsc.name is not null", Result),
             parse_query(Rest, Context, Result2);
@@ -470,11 +470,9 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
 %% text=...
 %% Perform a fulltext search
 parse_query([{text, Text}|Rest], Context, Result) when is_list(Text); is_binary(Text) ->
-    case z_string:trim(Text) of
-        "id:"++ S -> mod_search:find_by_id(S, Context);
-        "" -> parse_query(Rest, Context, Result);
-        <<"id:", S/binary>> -> mod_search:find_by_id(S, Context);
+    case mod_search:trim(Text, Context) of
         <<>> -> parse_query(Rest, Context, Result);
+        <<"id:", S/binary>> -> mod_search:find_by_id(S, Context);
         _ ->
             TsQuery = mod_search:to_tsquery(Text, Context),
             {QArg, Result1} = add_arg(TsQuery, Result),
@@ -488,10 +486,6 @@ parse_query([{text, Text}|Rest], Context, Result) when is_list(Text); is_binary(
                                 ++BArg++") desc", Result2),
             parse_query(Rest, Context, Result3)
     end;
-parse_query([{text, undefined}|Rest], Context, Result) ->
-    parse_query(Rest, Context, Result);
-parse_query([{text, Text}|Rest], Context, Result) ->
-    parse_query([{text, z_convert:to_binary(Text, Context)}|Rest], Context, Result);
 
 %% match_objects=<id>
 %% Match on the objects of the resource, best matching return first.
