@@ -4,7 +4,7 @@
     <p>{_ Enter your e-mail address or username below and we will send you an e-mail with password reset instructions. _}</p>
 
     <div class="control-group">
-        <label for="reminder_address" class="control-label">{_ E-mail address or username _}</label>
+        <label for="reminder_address" class="control-label">{_ Email address or username _}</label>
         <div class="controls">
 	    <input type="text" id="reminder_address"
                    autofocus="autofocus="

@@ -59,7 +59,7 @@ event(#postback{message={recipient_is_enabled_toggle, [{recipient_id, RcptId}]},
 event(#postback{message={recipient_change_email, [{recipient_id, RcptId}]}}, Context) ->
     Email = z_context:get_q("triggervalue", Context),
     m_mailinglist:update_recipient(RcptId, [{email, Email}], Context),
-    z_render:growl(?__("E-mail address updated", Context), Context);
+    z_render:growl(?__("Email address updated", Context), Context);
 
 event(#postback{message={recipient_delete, [{recipient_id, RcptId}, {target, Target}]}}, Context) ->
 	m_mailinglist:recipient_delete_quiet(RcptId, Context),
