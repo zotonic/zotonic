@@ -23,8 +23,12 @@
 
 match(undefined, _Re, _Context) ->
     false;
-match(S, Re, _Context) ->
-    case re:run(S, Re) of
+match(_, undefined, _Context) ->
+    false;
+match(S, Re, Context) ->
+    S1 = z_convert:to_binary(S, Context),
+    Re1 = z_convert:to_binary(Re, Context),
+    case re:run(S1, Re1) of
 	match ->
 	    true;
 	nomatch ->
