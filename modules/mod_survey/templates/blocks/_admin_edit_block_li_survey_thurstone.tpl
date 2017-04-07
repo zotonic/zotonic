@@ -16,9 +16,9 @@
 
     <div class="control-group view-expanded">
        <label>
-            {_ List of possible answers, one per line. Use <em>value#answer</em> for selecting values. _}
+            {_ List of possible answers, one per line. Use <em>value#answer</em> to store “value” but to show “answer”. E.g.  “2029#The year 2029”. _}
             <span class="test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
-                {_ Mark correct answers with a ‘*’, e.g. “*value#answer” _}
+                {_ For quiz or test, mark correct answers with a “*””. E.g. “*value#answer” _}
             </span>
        </label>
        <textarea id="block-{{name}}-answers{{ lang_code_for_id }}" name="block-{{name}}-answers{{ lang_code_with_dollar }}" 

@@ -40,15 +40,15 @@
 
 		{% if not id.is_a.poll %}
 			<div class="control-group">
-				<label class="control-label">{_ After survey show _}</label>
+				<label class="control-label">{_ When finished show _}</label>
 				<div class="controls">
 					<select name="survey_show_results" id="survey_show_results">
-						<option value="">{_ Thank you text _}</option>
+						<option value="">{_ Thank you text only _}</option>
 						<option value="1" {% if id.survey_show_results == 1 %}selected{% endif %}>
 							{_ Aggregated results from all respondents (only results for multiple choice questions are shown) _}
 						</option>
 						<option value="2" {% if id.survey_show_results == 2 %}selected{% endif %}>
-							{_ Results from this respondent _}
+							{_ Results from the respondent _}
 						</option>
 					</select>
 				</div>
