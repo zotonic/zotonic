@@ -36,8 +36,7 @@
     calc_size/7
 ]).
 
--define(MAX_WIDTH,  20000).
--define(MAX_HEIGHT, 20000).
+-define(MAX_PIXSIZE,  20000).
 
 % Low and max image size (in total pixels) for quality 99 and 55.
 % A small thumbnail needs less compression to keep image quality.
@@ -47,8 +46,8 @@
 -include_lib("zotonic.hrl").
 
 
-%% @spec convert(InFile, OutFile, Filters, Context) -> ok | {error, Reason}
 %% @doc Convert the Infile to an outfile with a still image using the filters.
+-spec convert(file:filename_all(), file:filename_all(), list(), #context{}) -> ok | {error, term()}.
 convert(InFile, InFile, _, _Context) ->
     lager:error("Image convert will overwrite input file ~p", [InFile]),
     {error, will_overwrite_infile};
@@ -79,19 +78,17 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
 
 convert_1(false, _InFile, _OutFile, _Mime, _FileProps, _Filters) ->
     lager:error("Install ImageMagick 'convert' to generate previews of images."),
-    {error, "'convert' not installed"};
+    {error, convert_missing};
 convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
     OutMime = z_media_identify:guess_mime(OutFile),
-    {EndWidth, EndHeight, CmdArgs} = cmd_args(FileProps, Filters, OutMime),
-    convert_2(EndWidth, EndHeight, CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps).
+    case cmd_args(FileProps, Filters, OutMime) of
+        {EndWidth, EndHeight, _CmdArgs} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
+            {error, image_too_big};
+        {_, _, CmdArgs} ->
+            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps)
+    end.
 
-convert_2(EndWidth, _EndHeight, _CmdArgs, _ConvertCmd, _InFile, _OutFile, _Mime, _FileProps) 
-    when EndWidth > ?MAX_WIDTH ->
-    {error, image_too_wide};
-convert_2(_EndWidth, EndHeight, _CmdArgs, _ConvertCmd, _InFile, _OutFile, _Mime, _FileProps) 
-    when EndHeight > ?MAX_HEIGHT ->
-    {error, image_too_wide};
-convert_2(_EndWidth, _EndHeight, CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
+convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
     file:delete(OutFile),
     ok = filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
