@@ -20,7 +20,7 @@
 				</p>
 			{% endif %}
 		{% else %}
-			<p class="alert alert-error" style="margin-bottom: 20px">
+			<p class="alert {% if status.error_is_final %}alert-error{% else %}alert-warning{% endif %}" style="margin-bottom: 20px">
 				<span class="icon-envelope"></span>
 				<strong>
 					{_ There are problems with this email address. _}
