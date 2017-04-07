@@ -853,7 +853,7 @@ msgid "Submit on clicking an option"
 msgstr "Versturen bij aanklikken van keuze"
 
 #: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:17
-msgid "Subtract points for wrong answers (never less than 0)"
+msgid "Subtract points for wrong answers (total never less than 0)"
 msgstr ""
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:37

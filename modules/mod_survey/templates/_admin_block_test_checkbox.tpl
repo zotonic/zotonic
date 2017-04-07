@@ -14,7 +14,7 @@
 
     <label class="checkbox test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
         <input type="checkbox" value="1" name="block-{{name}}-is_test_neg" id="{{ #is_test_neg }}" {% if blk.is_test_neg %}checked{% endif %} />
-        {_ Subtract points for wrong answers (never less than 0) _}
+        {_ Subtract points for wrong answers (total never less than 0) _}
     </label>
 
 </div>
