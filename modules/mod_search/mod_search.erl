@@ -39,7 +39,8 @@
     rank_weight/1,
     rank_behaviour/1,
     find_by_id/2,
-    find_by_id/3
+    find_by_id/3,
+    trim/2
 ]).
 
 -include("zotonic.hrl").
@@ -378,8 +379,8 @@ search({finished, [{cat, Cat}]}, OffsetLimit, Context) ->
 search({autocomplete, [{text,QueryText}]}, OffsetLimit, Context) ->
     search({autocomplete, [{cat,[]}, {text,QueryText}]}, OffsetLimit, Context);
 search({autocomplete, [{cat,Cat}, {text,QueryText}]}, _OffsetLimit, Context) ->
-    case z_string:trim(QueryText) of
-        "id:" ++ S ->
+    case trim(QueryText, Context) of
+        <<"id:", S/binary>> ->
             find_by_id(S, true, Context);
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
@@ -403,8 +404,8 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, OffsetLimit, Context) when Cat 
     search({fulltext, [{text,QueryText}]}, OffsetLimit, Context);
 
 search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
-    case z_string:trim(QueryText) of
-        A when A == undefined orelse A == "" orelse A == <<>> ->
+    case trim(QueryText, Context) of
+        <<>> ->
             #search_sql{
                 select="r.id, 1 AS rank",
                 from="rsc r",
@@ -412,7 +413,7 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
                 args=[],
                 tables=[{rsc,"r"}]
             };
-        "id:" ++ S ->
+        <<"id:", S/binary>> ->
             find_by_id(S, true, Context);
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
@@ -427,8 +428,8 @@ search({fulltext, [{text,QueryText}]}, _OffsetLimit, Context) ->
     end;
 
 search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
-    case z_string:trim(QueryText) of
-        A when A == undefined orelse A == "" orelse A == <<>> ->
+    case trim(QueryText, Context) of
+        <<>> ->
             #search_sql{
                 select="r.id, 1 AS rank",
                 from="rsc r",
@@ -436,7 +437,7 @@ search({fulltext, [{cat,Cat},{text,QueryText}]}, _OffsetLimit, Context) ->
                 cats=[{"r", Cat}],
                 tables=[{rsc,"r"}]
             };
-        "id:" ++ S ->
+        <<"id:", S/binary>> ->
             find_by_id(S, true, Context);
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
@@ -525,6 +526,10 @@ search(_, _, _) ->
     undefined.
 
 
+trim(undefined, _Context) -> <<>>;
+trim(S, _Context) when is_binary(S) -> z_string:trim(S);
+trim({trans, _} = Tr, Context) -> trim(z_trans:lookup_fallback(Tr, Context), Context);
+trim(S, Context) -> trim(z_convert:to_binary(S), Context).
 
 %% @doc Expand a search string like "hello wor" to a PostgreSQL tsquery string.
 %%      If the search string ends in a word character then a wildcard is appended
