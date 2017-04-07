@@ -36,6 +36,12 @@ Authentication
 
     observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
+Export
+^^^^^^
+
+* Modules mod_atom and mod_atom_feed were removed. You can export data in a
+  variety of formats using :ref:`mod_export`.
+
 Removed deprecated functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
