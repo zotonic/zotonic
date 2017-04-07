@@ -22,7 +22,14 @@
 		{% else %}
 			<p class="alert {% if status.error_is_final %}alert-error{% else %}alert-warning{% endif %}" style="margin-bottom: 20px">
 				<span class="icon-envelope"></span>
-				<strong>{_ There are problems with this email address. _}</strong>
+				<strong>
+					{_ There are problems with this email address. _}
+					{% if not status.error_is_final or status.recent_error_ct < 5  %}
+						{_ We are retrying email delivery. _}
+					{% else %}
+						{_ We stopped email delivery. _}
+					{% endif %}
+				</strong>
 			</p>
 
 			{% if (id and id.is_editable) or m.acl.use.mod_email_status %}
