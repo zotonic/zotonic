@@ -50,20 +50,27 @@ msgstr "跳转到问题"
 msgid "Add question after"
 msgstr "将题目拖动到这里。"
 
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:8
+msgid "Add questions by adding blocks with the menu."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:76
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:48
+#, fuzzy
+msgid ""
+"Aggregated results from all respondents (only results for multiple choice "
+"questions are shown)"
+msgstr "完成问卷调查后显示结果"
+
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:67
 msgid "Agree"
 msgstr ""
 
-#: modules/mod_survey/templates/survey_results_printable.tpl:37
+#: modules/mod_survey/templates/survey_results_printable.tpl:42
 msgid "All survey entries up until"
 msgstr "所有问卷调查条目直到"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:28
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:28
-msgid "Allow multiple entries per user/browser"
-msgstr "允许每用户/浏览器填写多个条目"
-
-#: modules/mod_survey/templates/email_survey_result.tpl:12
+#: modules/mod_survey/templates/email_survey_result.tpl:65
 msgid "Answer"
 msgstr "回答"
 
@@ -72,21 +79,13 @@ msgstr "回答"
 msgid "Answering"
 msgstr "回答"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "Answers, one per line"
 msgstr "答案，每行一个"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:22
-msgid ""
-"Apple = Red<br/>\n"
-"Milk = White<br/>\n"
-"Vienna = Austria<br/>\n"
-"Flying dutchman = Wagner."
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:20
+msgid "Apple = Red"
 msgstr ""
-"苹果 = 红色<br/>\n"
-"牛奶 = 白色<br/>\n"
-"维也纳 = 奥地利<br/>\n"
-"最炫民族风 = 凤凰传奇。"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:19
 msgid "April"
@@ -108,7 +107,12 @@ msgstr ""
 msgid "Are you sure you want to delete this question?"
 msgstr "你确认需要中止？"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:37
+#: modules/mod_survey/mod_survey.erl:99
+#, fuzzy
+msgid "Are you sure you want to delete this result?"
+msgstr "你确认需要中止？"
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:45
 msgid "Are you sure you want to stop?"
 msgstr "你确认需要中止？"
 
@@ -116,7 +120,9 @@ msgstr "你确认需要中止？"
 msgid "August"
 msgstr "八月"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:29
+#: modules/mod_survey/templates/_survey_end_edit.tpl:7
+#: modules/mod_survey/templates/_survey_end_edit.tpl:8
+#: modules/mod_survey/templates/_survey_question_page.tpl:37
 msgid "Back"
 msgstr "返回"
 
@@ -136,7 +142,7 @@ msgstr "返回"
 msgid "Block"
 msgstr "块"
 
-#: modules/mod_survey/mod_survey.erl:117
+#: modules/mod_survey/mod_survey.erl:161
 msgid "Button"
 msgstr "按钮"
 
@@ -154,11 +160,7 @@ msgstr "按钮文本"
 msgid "Cancel"
 msgstr ""
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:20
-msgid "Cat = Picture"
-msgstr "猫 = 图片"
-
-#: modules/mod_survey/mod_survey.erl:111
+#: modules/mod_survey/mod_survey.erl:155
 msgid "Category"
 msgstr "分类"
 
@@ -166,7 +168,7 @@ msgstr "分类"
 msgid "Category to choose from"
 msgstr "从中选择一个分类"
 
-#: modules/mod_survey/templates/email_survey_result.tpl:33
+#: modules/mod_survey/templates/email_survey_result.tpl:11
 msgid "Check the answer in the admin."
 msgstr "在管理页面中检查答案。"
 
@@ -178,11 +180,8 @@ msgstr ""
 msgid "Choices"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_results.tpl:8
-msgid "Click here to download the results as a CSV file."
-msgstr "点击这里将结果做为 CSV 文件下载。"
-
 #: modules/mod_survey/templates/_dialog_survey_email_addresses.tpl:7
+#: modules/mod_survey/templates/_survey_end_edit.tpl:6
 msgid "Close"
 msgstr "关闭"
 
@@ -190,7 +189,7 @@ msgstr "关闭"
 msgid "Confirm"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:37
+#: modules/mod_survey/templates/_survey_question_page.tpl:45
 msgid "Continue"
 msgstr "继续"
 
@@ -199,7 +198,7 @@ msgstr "继续"
 msgid "Country"
 msgstr "国家选择"
 
-#: modules/mod_survey/mod_survey.erl:116
+#: modules/mod_survey/mod_survey.erl:160
 msgid "Country select"
 msgstr "国家选择"
 
@@ -215,8 +214,9 @@ msgstr "十二月"
 msgid "Default"
 msgstr "默认"
 
-#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:27
+#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:29
 #: modules/mod_survey/templates/page_admin_frontend_edit.tpl:17
+#: modules/mod_survey/mod_survey.erl:100
 msgid "Delete"
 msgstr "删除"
 
@@ -249,23 +249,31 @@ msgstr "强烈不同意"
 msgid "Do you like pea soup?"
 msgstr "你喜欢喝紫菜汤么？"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:78
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:34
-msgid "Download CSV results"
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:122
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:43
+#, fuzzy
+msgid "Download CSV"
 msgstr "下载 CSV 结果"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:80
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:36
-#: modules/mod_survey/templates/_survey_results.tpl:10
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:126
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:47
+#, fuzzy
+msgid "Download Excel"
+msgstr "下载 CSV 结果"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:124
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:128
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:45
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:49
 msgid ""
 "Download will start in the background. Please check your download window."
 msgstr "下载将在后台启动。请检查你的下载窗口。"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:39
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Drop-down menu"
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:90 modules/mod_survey/mod_survey.erl:95
+#: modules/mod_survey/mod_survey.erl:131 modules/mod_survey/mod_survey.erl:136
 msgid "E-mail addresses"
 msgstr "E-mail 地址"
 
@@ -273,15 +281,19 @@ msgstr "E-mail 地址"
 msgid "Edit"
 msgstr "编辑"
 
-#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:26
+#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:27
 msgid "Edit survey result"
 msgstr "编辑问卷调查结果"
+
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:20
+#, fuzzy
+msgid "End of questions"
+msgstr "跳转到问题"
 
 #: modules/mod_survey/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr "错误"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:22
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
 msgid "Example:"
 msgstr "例如："
@@ -291,20 +303,27 @@ msgstr "例如："
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:20
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:38
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:19
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:28
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:33
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:20
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:20
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:27
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:32
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:33
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 msgid "Explanation"
 msgstr "解释说明"
 
+#: modules/mod_survey/templates/_survey_results.tpl:16
+#: modules/mod_survey/templates/email_survey_result.tpl:35
+msgid "Failed"
+msgstr ""
+
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:51
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:26
-#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:13
-#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:20
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:8
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:25
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:32
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:8
 msgid "False"
 msgstr "否"
 
@@ -312,9 +331,22 @@ msgstr "否"
 msgid "February"
 msgstr "二月"
 
-#: modules/mod_survey/mod_survey.erl:120
+#: modules/mod_survey/templates/_admin_block_test_feedback.tpl:4
+msgid "Feedback if correct"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_block_test_feedback.tpl:11
+msgid "Feedback if wrong"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:164
 msgid "File upload"
 msgstr "文件上传"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:32
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:27
+msgid "Fill in"
+msgstr ""
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:14
 msgid "Fill in the missing parts."
@@ -328,17 +360,22 @@ msgstr ""
 msgid "First page in category"
 msgstr ""
 
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21
+msgid ""
+"For quiz or test, mark correct answers with a “*””. E.g. “*value#answer”"
+msgstr ""
+
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:6
 #, fuzzy
 msgid "Go to question"
 msgstr "跳转到问题"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:64
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:66
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:108
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:111
 msgid "Handle this survey with"
 msgstr "处理问卷调查使用"
 
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:55
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:91
 msgid "Handling"
 msgstr ""
 
@@ -346,16 +383,16 @@ msgstr ""
 msgid "Header"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:35
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49
 msgid "Help about surveys"
 msgstr "问卷调查帮助"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:41
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:41
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:55
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:77
 msgid "Hide progress information"
 msgstr "隐藏进度信息"
 
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:31
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:22
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr ""
 
@@ -379,6 +416,11 @@ msgstr ""
 msgid "I like Chinese restaurants"
 msgstr ""
 
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:20
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:19
+msgid "Immediately start with the questions, no “Start” button"
+msgstr ""
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:36
 msgid "Informational"
 msgstr "提示"
@@ -386,6 +428,20 @@ msgstr "提示"
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:26
 msgid "Input value placeholder text"
 msgstr ""
+
+#: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:12
+msgid "Instant feedback (Learning Mode)"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:3
+#: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:8
+msgid "Introduction for confirmation email"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:18
+#, fuzzy
+msgid "Introduction text."
+msgstr "按钮文本"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Inverse"
@@ -411,17 +467,23 @@ msgstr ""
 msgid "June"
 msgstr "六月"
 
-#: modules/mod_survey/mod_survey.erl:109
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:92
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:64
+msgid "Leave empty if there are no test questions."
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:153
 msgid "Likert"
 msgstr "李克特量表"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:18
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:19
+#, fuzzy
 msgid ""
-"List of possible answers, one per line. Use <em>value#answer</em> for "
-"selecting values."
+"List of possible answers, one per line. Use <em>value#answer</em> to store "
+"“value” but to show “answer”. E.g.  “2029#The year 2029”."
 msgstr "列出可能的回答，每行一个。使用 <em>value#answer</em> 格式化选项。"
 
-#: modules/mod_survey/mod_survey.erl:115
+#: modules/mod_survey/mod_survey.erl:159
 msgid "Long answer"
 msgstr "长答案"
 
@@ -431,10 +493,14 @@ msgid ""
 "eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:56
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:58
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:100
 msgid "Mail filled in surveys to"
 msgstr "将填好的调查结果发送到"
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:93
+#, fuzzy
+msgid "Mail results to"
+msgstr "问卷调查结果编辑器"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:18
 msgid "March"
@@ -445,7 +511,7 @@ msgstr "三月"
 msgid "Match which answer fits best."
 msgstr "选择最合适的答案。"
 
-#: modules/mod_survey/mod_survey.erl:112
+#: modules/mod_survey/mod_survey.erl:156
 msgid "Matching"
 msgstr "匹配"
 
@@ -454,32 +520,46 @@ msgid "May"
 msgstr "五月"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:37
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:40
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:50
 msgid "Multiple answers possible"
 msgstr "允许选择多个答案"
 
-#: modules/mod_survey/mod_survey.erl:121
+#: modules/mod_survey/mod_survey.erl:165
 #, fuzzy
 msgid "Multiple choice"
 msgstr "允许选择多个答案"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:37
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:32
+#, fuzzy
+msgid "Multiple entries per user/browser"
+msgstr "允许每用户/浏览器填写多个条目"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:38
 msgid "Multiple page break blocks are merged into one."
 msgstr "多个页面块会被合成一个。"
 
-#: modules/mod_survey/mod_survey.erl:113
+#: modules/mod_survey/mod_survey.erl:157
 msgid "Narrative"
 msgstr "陈述"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:35
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49
 msgid "Need more help?"
 msgstr "需要更多帮助？"
 
+#: modules/mod_survey/templates/_survey_results.tpl:26
+#: modules/mod_survey/templates/email_survey_result.tpl:45
+#, fuzzy
+msgid "Needed for pass"
+msgstr "需要更多帮助？"
+
 #: modules/mod_survey/templates/email_survey_result.tpl:3
-msgid "New survey result:"
+#, fuzzy
+msgid "New result:"
 msgstr "新问卷调查结果："
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:41
+#: modules/mod_survey/templates/_survey_question_page.tpl:48
+#: modules/mod_survey/templates/_survey_question_page.tpl:52
 msgid "Next"
 msgstr ""
 
@@ -489,8 +569,8 @@ msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:43
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:27
-#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:13
-#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:20
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:25
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:32
 msgid "No"
 msgstr "否"
 
@@ -510,6 +590,17 @@ msgstr ""
 msgid "October"
 msgstr "十月"
 
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:40
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:35
+msgid "Once and allow editing afterwards"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:35
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:30
+#, fuzzy
+msgid "Once only per user/browser"
+msgstr "允许每用户/浏览器填写多个条目"
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:31
 msgid "Only accept images."
 msgstr "只接受图片。"
@@ -518,13 +609,18 @@ msgstr "只接受图片。"
 msgid "Options from a page category"
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:118
+#: modules/mod_survey/mod_survey.erl:162
 msgid "Page break"
 msgstr "页面中断"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:12
 msgid "Page jump condition"
 msgstr "页面跳转条件"
+
+#: modules/mod_survey/templates/_survey_results.tpl:14
+#: modules/mod_survey/templates/email_survey_result.tpl:33
+msgid "Passed"
+msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:28
 #, fuzzy
@@ -535,7 +631,7 @@ msgstr "请输入你的名字。"
 msgid "Please enter your name."
 msgstr "请输入你的名字。"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:24
+#: modules/mod_survey/templates/_survey_question_page.tpl:31
 msgid "Please fill in all the required fields."
 msgstr "请填写所有必填项目。"
 
@@ -558,16 +654,26 @@ msgstr "请上传图片。"
 msgid "Please write an essay."
 msgstr "请写个随笔。"
 
+#: modules/mod_survey/templates/_survey_results.tpl:22
+#: modules/mod_survey/templates/email_survey_result.tpl:41
+msgid "Points"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:23
+#, fuzzy
+msgid "Points per answer"
+msgstr "长答案"
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:35
 msgid "Primary"
 msgstr "主要"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:86
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:42
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:134
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:55
 msgid "Printable list"
 msgstr "可打印列表"
 
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:37
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:73
 msgid "Progress"
 msgstr ""
 
@@ -576,14 +682,25 @@ msgstr ""
 msgid "Prompt"
 msgstr "提示"
 
-#: modules/mod_survey/templates/email_survey_result.tpl:11
+#: modules/mod_survey/templates/email_survey_result.tpl:64
 msgid "Question"
 msgstr "问题"
 
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:7
 #: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:8
 #, fuzzy
 msgid "Questions"
 msgstr "问题"
+
+#: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:4
+#, fuzzy
+msgid "Quiz or test question"
+msgstr "跳转到问题"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:50
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
+msgid "Randomize answers"
+msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:82
 msgid "Red"
@@ -593,11 +710,11 @@ msgstr ""
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:32
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:51
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:31
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:41
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:54
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:38
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:47
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:61
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:50
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:35
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:53
@@ -606,16 +723,24 @@ msgstr "必须填写"
 
 #: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:9
 #: modules/mod_survey/templates/_survey_results.tpl:4
-#: modules/mod_survey/templates/_survey_start.tpl:9
-#: modules/mod_survey/templates/survey_results_printable.tpl:37
+#: modules/mod_survey/templates/survey_results_printable.tpl:42
 msgid "Results"
 msgstr "查看结果"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:79
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:51
+msgid "Results from the respondent"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_end_edit.tpl:1
+msgid "Saved"
+msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:128
 msgid "Second page in category"
 msgstr ""
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
+#: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:23
 msgid "Select country"
 msgstr "选择国家"
 
@@ -628,45 +753,64 @@ msgstr ""
 msgid "Select your country"
 msgstr "选择你的国家"
 
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:26
+msgid ""
+"Send confirmation to respondent (please add a question named <i>email</i>)"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:105
+msgid ""
+"Send confirmation with the results to the email address entered in this form "
+"(you must include a question labeled “email”)."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:97
+msgid "Separate multiple email addresses with a comma."
+msgstr ""
+
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:24
 msgid "September"
 msgstr "九月"
 
 #: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:7
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:5
 msgid "Settings"
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:114
+#: modules/mod_survey/mod_survey.erl:158
 msgid "Short answer"
 msgstr "短答案"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:84
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:40
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:132
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:53
 msgid "Show email addresses"
 msgstr "显示 e-mail 地址"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:49
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:49
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:63
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:85
 msgid "Show progress bar"
 msgstr "显示进度条"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:45
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:45
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:59
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:81
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:24
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:24
-msgid "Show results to user after completion (only results for multiple choice questions are shown)"
-msgstr "完成问卷调查后显示结果"
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:52
+#, fuzzy
+msgid "Show results"
+msgstr "显示问卷调查结果"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:83
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:39
+#: modules/mod_survey/templates/_survey_start.tpl:29
+msgid "Show results (admin only)"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:131
 msgid "Show survey results"
 msgstr "显示问卷调查结果"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:33
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:38
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
 msgid "Single answer possible"
 msgstr "只允许选择一个答案"
 
@@ -674,13 +818,13 @@ msgstr "只允许选择一个答案"
 msgid "Something went wrong"
 msgstr "出错"
 
-#: modules/mod_survey/templates/_survey_start.tpl:2
+#: modules/mod_survey/templates/_survey_start_button.tpl:8
 msgid "Start"
 msgstr "开始"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:36
-#: modules/mod_survey/templates/_survey_question_page.tpl:37
-#: modules/mod_survey/mod_survey.erl:119
+#: modules/mod_survey/templates/_survey_question_page.tpl:44
+#: modules/mod_survey/templates/_survey_question_page.tpl:45
+#: modules/mod_survey/mod_survey.erl:163
 msgid "Stop"
 msgstr "中止"
 
@@ -689,35 +833,42 @@ msgid "Stop the survey after this page. No questions are submitted."
 msgstr ""
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:31
-#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:20
+#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:18
+#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:42
 msgid "Strongly Agree"
 msgstr "强烈同意"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:21
-#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:12
+#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:8
+#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:34
 msgid "Strongly Disagree"
 msgstr "强烈不同意"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:41
+#: modules/mod_survey/templates/_survey_question_page.tpl:48
+#: modules/mod_survey/templates/_survey_question_page.tpl:52
 msgid "Submit"
 msgstr "提交"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:41
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:41
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:51
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:45
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:48
 msgid "Submit on clicking an option"
 msgstr "点击选项时提交"
 
+#: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:17
+msgid "Subtract points for wrong answers (never less than 0)"
+msgstr ""
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
 msgid "Success"
 msgstr "成功"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:5
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:5
 msgid "Survey"
 msgstr "问卷调查"
 
-#: modules/mod_survey/mod_survey.erl:106
+#: modules/mod_survey/mod_survey.erl:150
 msgid "Survey Questions"
 msgstr "问卷调查问题"
 
@@ -725,32 +876,51 @@ msgstr "问卷调查问题"
 msgid "Survey editor"
 msgstr "问卷调查编辑器"
 
-#: modules/mod_survey/mod_survey.erl:81
+#: modules/mod_survey/mod_survey.erl:117
 msgid "Survey result deleted."
 msgstr "问卷调查结果已经删除。"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:87
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:43
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:135
 msgid "Survey results editor"
 msgstr "问卷调查结果编辑器"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:85
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:57
+msgid "Test pass percentage"
+msgstr ""
 
 #: modules/mod_survey/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "谢谢"
 
 #: modules/mod_survey/templates/_survey_end.tpl:7
-msgid ""
-"Thank you for filling in our survey."
+msgid "Thank you for filling in our survey."
 msgstr "谢谢你填写我们的问卷调查。"
+
+#: modules/mod_survey/templates/email_survey_result.tpl:21
+#, fuzzy
+msgid "Thank you for filling in:"
+msgstr "谢谢你填写我们的问卷调查。"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:74
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:46
+#, fuzzy
+msgid "Thank you text only"
+msgstr "谢谢"
+
+#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:10
+#, fuzzy
+msgid "Thank you text."
+msgstr "谢谢"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:48
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:14
 msgid "The earth is flat."
 msgstr "地球是方的。"
 
-#: modules/mod_survey/templates/email_survey_result.tpl:7
-msgid "The following survey has been filled in:"
-msgstr "问卷调查填写结果如下："
+#: modules/mod_survey/templates/_survey_end_edit.tpl:3
+msgid "The results have been saved."
+msgstr ""
 
 #: modules/mod_survey/templates/_survey_error.tpl:3
 msgid ""
@@ -773,15 +943,19 @@ msgid ""
 "it is counted as a page break."
 msgstr "这个块表示流程暂停，用户只有"
 
-#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:9
+#: modules/mod_survey/templates/email_survey_result.tpl:8
+msgid "This is a result for:"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:10
 msgid "This text is shown after the survey has been submitted."
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:17
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:20
 msgid "This text is shown as an introduction to the survey."
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:110
+#: modules/mod_survey/mod_survey.erl:154
 msgid "Thurstone"
 msgstr "瑟斯顿量表"
 
@@ -793,19 +967,21 @@ msgstr "跳转到问题"
 msgid "Toggle outline view"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_result_chart.tpl:28
-#: modules/mod_survey/templates/survey_results_printable.tpl:61
+#: modules/mod_survey/templates/_survey_result_chart.tpl:29
+#: modules/mod_survey/templates/survey_results_printable.tpl:66
 msgid "Totals"
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:50
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:21
-#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:10
-#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:17
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:7
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:22
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:29
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:7
 msgid "True"
 msgstr "真"
 
-#: modules/mod_survey/mod_survey.erl:107
+#: modules/mod_survey/mod_survey.erl:151
 msgid "True/False"
 msgstr "真/假"
 
@@ -826,6 +1002,11 @@ msgstr "警告"
 msgid "Weasels make great pets."
 msgstr "猫是人类最好的朋友。"
 
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:71
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:43
+msgid "When finished show"
+msgstr ""
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:37
 msgid ""
 "When no condition is true then the question following this break will be the "
@@ -834,33 +1015,57 @@ msgstr "当没有条件成立时，所有此中断后面的问题将成为下个
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:42
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:22
-#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:10
-#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:17
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:22
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:29
 msgid "Yes"
 msgstr "是"
 
-#: modules/mod_survey/mod_survey.erl:108
+#: modules/mod_survey/mod_survey.erl:152
 msgid "Yes/No"
 msgstr "是/否"
 
-#: modules/mod_survey/templates/_survey_results.tpl:39
+#: modules/mod_survey/templates/_survey_start.tpl:11
+msgid "You already filled this in, but you can change your previous answers."
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_start.tpl:21
+msgid "You already filled this in."
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:106 modules/mod_survey/mod_survey.erl:121
+#: modules/mod_survey/mod_survey.erl:730
+#, fuzzy
+msgid "You are not allowed to change these results."
+msgstr "不允许查看问卷调查的结果。"
+
+#: modules/mod_survey/templates/_survey_results.tpl:68
 msgid "You are not allowed to see the results of this survey."
 msgstr "不允许查看问卷调查的结果。"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:35
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49
 msgid ""
 "You can create your survey by adding blocks with questions below the body."
 msgstr "请通过在正文后添加块来创建问卷调查。"
+
+#: modules/mod_survey/templates/admin_survey_editor.tpl:27
+msgid "You must have edit permission on the survey to edit its results."
+msgstr ""
 
 #: modules/mod_survey/templates/_survey_block_name_check.tpl:2
 msgid "You need to give a name to every question."
 msgstr "你需要给每个问题指定一个名字。"
 
+#: modules/mod_survey/templates/_survey_results.tpl:30
+#: modules/mod_survey/templates/email_survey_result.tpl:49
+#, fuzzy
+msgid "Your result"
+msgstr "显示问卷调查结果"
+
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:93
 msgid "chocolate"
 msgstr ""
 
-#: modules/mod_survey/templates/admin_survey_editor.tpl:15
+#: modules/mod_survey/templates/admin_survey_editor.tpl:16
 msgid "edit"
 msgstr "编辑"
 
@@ -881,20 +1086,20 @@ msgid "must be a date"
 msgstr "必须是日期"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:42
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:23
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:33
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:29
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:39
 msgid "must be a number"
 msgstr "必须是数字"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:25
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:35
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:31
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:41
 msgid "must be a phone number"
 msgstr "必须是电话号码"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:41
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:21
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:31
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:27
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:37
 msgid "must be an e-mail address"
 msgstr "必须是 e-mail 地址"
 
@@ -924,18 +1129,38 @@ msgstr "问题"
 msgid "question == 1"
 msgstr "跳转到问题"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_multiple_choice.tpl:11
-#: modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:15
+#: modules/mod_survey/templates/blocks/_block_view_survey_multiple_choice.tpl:17
+#: modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:22
 msgid "select…"
 msgstr "选择..."
 
-#: modules/mod_survey/templates/admin_survey_editor.tpl:12
+#: modules/mod_survey/templates/admin_survey_editor.tpl:13
 msgid "survey results editor"
 msgstr "问卷调查结果编辑器"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:92
 msgid "years old. I like"
 msgstr ""
+
+#~ msgid ""
+#~ "Apple = Red<br/>\n"
+#~ "Milk = White<br/>\n"
+#~ "Vienna = Austria<br/>\n"
+#~ "Flying dutchman = Wagner."
+#~ msgstr ""
+#~ "苹果 = 红色<br/>\n"
+#~ "牛奶 = 白色<br/>\n"
+#~ "维也纳 = 奥地利<br/>\n"
+#~ "最炫民族风 = 凤凰传奇。"
+
+#~ msgid "Cat = Picture"
+#~ msgstr "猫 = 图片"
+
+#~ msgid "Click here to download the results as a CSV file."
+#~ msgstr "点击这里将结果做为 CSV 文件下载。"
+
+#~ msgid "The following survey has been filled in:"
+#~ msgstr "问卷调查填写结果如下："
 
 #~ msgid "Explanation text (optional)"
 #~ msgstr "解释文本（可选）"

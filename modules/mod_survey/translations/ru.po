@@ -51,20 +51,27 @@ msgstr "К вопросу"
 msgid "Add question after"
 msgstr "Перетащите вопросы сюда."
 
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:8
+msgid "Add questions by adding blocks with the menu."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:76
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:48
+#, fuzzy
+msgid ""
+"Aggregated results from all respondents (only results for multiple choice "
+"questions are shown)"
+msgstr "Показывать результаты пользователю после завершения анкетирования"
+
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:67
 msgid "Agree"
 msgstr ""
 
-#: modules/mod_survey/templates/survey_results_printable.tpl:37
+#: modules/mod_survey/templates/survey_results_printable.tpl:42
 msgid "All survey entries up until"
 msgstr "Все заполненные анкеты до"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:28
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:28
-msgid "Allow multiple entries per user/browser"
-msgstr "Разрешить многократное анкетирование для пользователя/браузера"
-
-#: modules/mod_survey/templates/email_survey_result.tpl:12
+#: modules/mod_survey/templates/email_survey_result.tpl:65
 msgid "Answer"
 msgstr "Ответ"
 
@@ -73,21 +80,13 @@ msgstr "Ответ"
 msgid "Answering"
 msgstr "Ответ"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "Answers, one per line"
 msgstr "Ответы, по одному на строку"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:22
-msgid ""
-"Apple = Red<br/>\n"
-"Milk = White<br/>\n"
-"Vienna = Austria<br/>\n"
-"Flying dutchman = Wagner."
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:20
+msgid "Apple = Red"
 msgstr ""
-"Яблоко = Красный<br/>\n"
-"Молоко = Белый<br/>\n"
-"Вена = Австрия<br/>\n"
-"Летучий голландец = Вагнер."
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:19
 msgid "April"
@@ -109,7 +108,12 @@ msgstr ""
 msgid "Are you sure you want to delete this question?"
 msgstr "Вы уверены, что желаете остановиться?"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:37
+#: modules/mod_survey/mod_survey.erl:99
+#, fuzzy
+msgid "Are you sure you want to delete this result?"
+msgstr "Вы уверены, что желаете остановиться?"
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:45
 msgid "Are you sure you want to stop?"
 msgstr "Вы уверены, что желаете остановиться?"
 
@@ -117,7 +121,9 @@ msgstr "Вы уверены, что желаете остановиться?"
 msgid "August"
 msgstr "Август"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:29
+#: modules/mod_survey/templates/_survey_end_edit.tpl:7
+#: modules/mod_survey/templates/_survey_end_edit.tpl:8
+#: modules/mod_survey/templates/_survey_question_page.tpl:37
 msgid "Back"
 msgstr "Назад"
 
@@ -137,7 +143,7 @@ msgstr "Назад"
 msgid "Block"
 msgstr "Блок"
 
-#: modules/mod_survey/mod_survey.erl:117
+#: modules/mod_survey/mod_survey.erl:161
 msgid "Button"
 msgstr "Кнопка"
 
@@ -155,11 +161,7 @@ msgstr "Текст кнопки"
 msgid "Cancel"
 msgstr ""
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:20
-msgid "Cat = Picture"
-msgstr "Кошка = Изображение"
-
-#: modules/mod_survey/mod_survey.erl:111
+#: modules/mod_survey/mod_survey.erl:155
 msgid "Category"
 msgstr "Категория"
 
@@ -167,7 +169,7 @@ msgstr "Категория"
 msgid "Category to choose from"
 msgstr "Категория для выбора"
 
-#: modules/mod_survey/templates/email_survey_result.tpl:33
+#: modules/mod_survey/templates/email_survey_result.tpl:11
 msgid "Check the answer in the admin."
 msgstr "Проверить ответ в панели администратора."
 
@@ -179,11 +181,8 @@ msgstr ""
 msgid "Choices"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_results.tpl:8
-msgid "Click here to download the results as a CSV file."
-msgstr "Нажмите здесь, чтобы скачать результаты в виде файла CSV."
-
 #: modules/mod_survey/templates/_dialog_survey_email_addresses.tpl:7
+#: modules/mod_survey/templates/_survey_end_edit.tpl:6
 msgid "Close"
 msgstr "Закрыть"
 
@@ -191,7 +190,7 @@ msgstr "Закрыть"
 msgid "Confirm"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:37
+#: modules/mod_survey/templates/_survey_question_page.tpl:45
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -200,7 +199,7 @@ msgstr "Продолжить"
 msgid "Country"
 msgstr "Выбор страны"
 
-#: modules/mod_survey/mod_survey.erl:116
+#: modules/mod_survey/mod_survey.erl:160
 msgid "Country select"
 msgstr "Выбор страны"
 
@@ -216,8 +215,9 @@ msgstr "Декабрь"
 msgid "Default"
 msgstr "По умолчанию"
 
-#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:27
+#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:29
 #: modules/mod_survey/templates/page_admin_frontend_edit.tpl:17
+#: modules/mod_survey/mod_survey.erl:100
 msgid "Delete"
 msgstr "Удалить"
 
@@ -250,24 +250,32 @@ msgstr "Полностью не согласен(на)"
 msgid "Do you like pea soup?"
 msgstr "Вы любите гороховый суп?"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:78
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:34
-msgid "Download CSV results"
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:122
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:43
+#, fuzzy
+msgid "Download CSV"
 msgstr "Скачать результаты в CSV"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:80
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:36
-#: modules/mod_survey/templates/_survey_results.tpl:10
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:126
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:47
+#, fuzzy
+msgid "Download Excel"
+msgstr "Скачать результаты в CSV"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:124
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:128
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:45
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:49
 msgid ""
 "Download will start in the background. Please check your download window."
 msgstr ""
 "Скачивание начнется в фоновом режиме. Пожалуйста, проверьте окно скачивания."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:39
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Drop-down menu"
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:90 modules/mod_survey/mod_survey.erl:95
+#: modules/mod_survey/mod_survey.erl:131 modules/mod_survey/mod_survey.erl:136
 msgid "E-mail addresses"
 msgstr "Адреса e-mail"
 
@@ -275,15 +283,19 @@ msgstr "Адреса e-mail"
 msgid "Edit"
 msgstr "Изменить"
 
-#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:26
+#: modules/mod_survey/templates/_admin_survey_editor_results.tpl:27
 msgid "Edit survey result"
 msgstr "Изменить результат анкетирования"
+
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:20
+#, fuzzy
+msgid "End of questions"
+msgstr "К вопросу"
 
 #: modules/mod_survey/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr "Ошибка"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:22
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
 msgid "Example:"
 msgstr "Например:"
@@ -293,20 +305,27 @@ msgstr "Например:"
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:20
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:38
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:19
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:28
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:33
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:20
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:20
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:27
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:32
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:33
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 msgid "Explanation"
 msgstr "Объяснение"
 
+#: modules/mod_survey/templates/_survey_results.tpl:16
+#: modules/mod_survey/templates/email_survey_result.tpl:35
+msgid "Failed"
+msgstr ""
+
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:51
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:26
-#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:13
-#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:20
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:8
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:25
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:32
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:8
 msgid "False"
 msgstr "Ложь"
 
@@ -314,9 +333,22 @@ msgstr "Ложь"
 msgid "February"
 msgstr "Февраль"
 
-#: modules/mod_survey/mod_survey.erl:120
+#: modules/mod_survey/templates/_admin_block_test_feedback.tpl:4
+msgid "Feedback if correct"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_block_test_feedback.tpl:11
+msgid "Feedback if wrong"
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:164
 msgid "File upload"
 msgstr "Загрузка файла"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:32
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:27
+msgid "Fill in"
+msgstr ""
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:14
 msgid "Fill in the missing parts."
@@ -330,17 +362,22 @@ msgstr ""
 msgid "First page in category"
 msgstr ""
 
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21
+msgid ""
+"For quiz or test, mark correct answers with a “*””. E.g. “*value#answer”"
+msgstr ""
+
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:6
 #, fuzzy
 msgid "Go to question"
 msgstr "К вопросу"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:64
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:66
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:108
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:111
 msgid "Handle this survey with"
 msgstr "Обрабатывать эту анкету с помощью"
 
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:55
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:91
 msgid "Handling"
 msgstr ""
 
@@ -348,16 +385,16 @@ msgstr ""
 msgid "Header"
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:35
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49
 msgid "Help about surveys"
 msgstr "Справка об анкетах"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:41
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:41
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:55
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:77
 msgid "Hide progress information"
 msgstr "Прятать информацию о прогрессе"
 
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:31
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:22
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr ""
 
@@ -382,6 +419,11 @@ msgstr ""
 msgid "I like Chinese restaurants"
 msgstr ""
 
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:20
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:19
+msgid "Immediately start with the questions, no “Start” button"
+msgstr ""
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:36
 msgid "Informational"
 msgstr "Информационный"
@@ -389,6 +431,20 @@ msgstr "Информационный"
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:26
 msgid "Input value placeholder text"
 msgstr ""
+
+#: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:12
+msgid "Instant feedback (Learning Mode)"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:3
+#: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:8
+msgid "Introduction for confirmation email"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:18
+#, fuzzy
+msgid "Introduction text."
+msgstr "Текст кнопки"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Inverse"
@@ -414,19 +470,25 @@ msgstr ""
 msgid "June"
 msgstr "Июнь"
 
-#: modules/mod_survey/mod_survey.erl:109
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:92
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:64
+msgid "Leave empty if there are no test questions."
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:153
 msgid "Likert"
 msgstr "Шкала Лайкерта"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:18
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:19
+#, fuzzy
 msgid ""
-"List of possible answers, one per line. Use <em>value#answer</em> for "
-"selecting values."
+"List of possible answers, one per line. Use <em>value#answer</em> to store "
+"“value” but to show “answer”. E.g.  “2029#The year 2029”."
 msgstr ""
 "Список вариантов ответа, по одному на строку. Используйте <em>балл#ответ</"
 "em> для указания оценки."
 
-#: modules/mod_survey/mod_survey.erl:115
+#: modules/mod_survey/mod_survey.erl:159
 msgid "Long answer"
 msgstr "Длинный ответ"
 
@@ -436,10 +498,14 @@ msgid ""
 "eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:56
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:58
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:100
 msgid "Mail filled in surveys to"
 msgstr "Отправить заполненные анкеты по e-mail"
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:93
+#, fuzzy
+msgid "Mail results to"
+msgstr "Редактор результатов анкетирования"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:18
 msgid "March"
@@ -450,7 +516,7 @@ msgstr "Март"
 msgid "Match which answer fits best."
 msgstr "Сопоставьте наиболее подходящий вариант."
 
-#: modules/mod_survey/mod_survey.erl:112
+#: modules/mod_survey/mod_survey.erl:156
 msgid "Matching"
 msgstr "Сопоставление"
 
@@ -459,32 +525,46 @@ msgid "May"
 msgstr "Май"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:37
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:40
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:50
 msgid "Multiple answers possible"
 msgstr "Возможно несколько ответов"
 
-#: modules/mod_survey/mod_survey.erl:121
+#: modules/mod_survey/mod_survey.erl:165
 #, fuzzy
 msgid "Multiple choice"
 msgstr "Возможно несколько ответов"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:37
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:32
+#, fuzzy
+msgid "Multiple entries per user/browser"
+msgstr "Разрешить многократное анкетирование для пользователя/браузера"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:38
 msgid "Multiple page break blocks are merged into one."
 msgstr "Идущие подряд разрывы страницы объединяются в один."
 
-#: modules/mod_survey/mod_survey.erl:113
+#: modules/mod_survey/mod_survey.erl:157
 msgid "Narrative"
 msgstr "Изложение"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:35
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49
 msgid "Need more help?"
 msgstr "Нужна помощь?"
 
+#: modules/mod_survey/templates/_survey_results.tpl:26
+#: modules/mod_survey/templates/email_survey_result.tpl:45
+#, fuzzy
+msgid "Needed for pass"
+msgstr "Нужна помощь?"
+
 #: modules/mod_survey/templates/email_survey_result.tpl:3
-msgid "New survey result:"
+#, fuzzy
+msgid "New result:"
 msgstr "Новый результат анкетирования:"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:41
+#: modules/mod_survey/templates/_survey_question_page.tpl:48
+#: modules/mod_survey/templates/_survey_question_page.tpl:52
 msgid "Next"
 msgstr ""
 
@@ -494,8 +574,8 @@ msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:43
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:27
-#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:13
-#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:20
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:25
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:32
 msgid "No"
 msgstr "Нет"
 
@@ -515,6 +595,17 @@ msgstr ""
 msgid "October"
 msgstr "Октябрь"
 
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:40
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:35
+msgid "Once and allow editing afterwards"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:35
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:30
+#, fuzzy
+msgid "Once only per user/browser"
+msgstr "Разрешить многократное анкетирование для пользователя/браузера"
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:31
 msgid "Only accept images."
 msgstr "Принимать только изображения."
@@ -523,13 +614,18 @@ msgstr "Принимать только изображения."
 msgid "Options from a page category"
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:118
+#: modules/mod_survey/mod_survey.erl:162
 msgid "Page break"
 msgstr "Разрыв страницы"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:12
 msgid "Page jump condition"
 msgstr "Условие перехода"
+
+#: modules/mod_survey/templates/_survey_results.tpl:14
+#: modules/mod_survey/templates/email_survey_result.tpl:33
+msgid "Passed"
+msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:28
 #, fuzzy
@@ -540,7 +636,7 @@ msgstr "Пожалуйста, введите ваше имя."
 msgid "Please enter your name."
 msgstr "Пожалуйста, введите ваше имя."
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:24
+#: modules/mod_survey/templates/_survey_question_page.tpl:31
 msgid "Please fill in all the required fields."
 msgstr ""
 
@@ -563,16 +659,26 @@ msgstr "Пожалуйста, загрузите изображение."
 msgid "Please write an essay."
 msgstr "Пожалуйста, напишите эссе."
 
+#: modules/mod_survey/templates/_survey_results.tpl:22
+#: modules/mod_survey/templates/email_survey_result.tpl:41
+msgid "Points"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:23
+#, fuzzy
+msgid "Points per answer"
+msgstr "Длинный ответ"
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:35
 msgid "Primary"
 msgstr "Основной"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:86
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:42
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:134
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:55
 msgid "Printable list"
 msgstr "Версия списка для печати"
 
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:37
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:73
 msgid "Progress"
 msgstr ""
 
@@ -581,14 +687,25 @@ msgstr ""
 msgid "Prompt"
 msgstr "Подсказка"
 
-#: modules/mod_survey/templates/email_survey_result.tpl:11
+#: modules/mod_survey/templates/email_survey_result.tpl:64
 msgid "Question"
 msgstr "Вопрос"
 
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:7
 #: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:8
 #, fuzzy
 msgid "Questions"
 msgstr "Вопрос"
+
+#: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:4
+#, fuzzy
+msgid "Quiz or test question"
+msgstr "К вопросу"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:50
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
+msgid "Randomize answers"
+msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:82
 msgid "Red"
@@ -598,11 +715,11 @@ msgstr ""
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:32
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:51
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:31
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:41
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:54
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:38
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:47
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:61
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:50
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:35
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:53
@@ -611,16 +728,24 @@ msgstr "Ответ на вопрос обязателен."
 
 #: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:9
 #: modules/mod_survey/templates/_survey_results.tpl:4
-#: modules/mod_survey/templates/_survey_start.tpl:9
-#: modules/mod_survey/templates/survey_results_printable.tpl:37
+#: modules/mod_survey/templates/survey_results_printable.tpl:42
 msgid "Results"
 msgstr "Результаты"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:79
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:51
+msgid "Results from the respondent"
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_end_edit.tpl:1
+msgid "Saved"
+msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:128
 msgid "Second page in category"
 msgstr ""
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
+#: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:23
 msgid "Select country"
 msgstr "Укажите страну"
 
@@ -633,45 +758,64 @@ msgstr ""
 msgid "Select your country"
 msgstr "Укажите вашу страну"
 
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:26
+msgid ""
+"Send confirmation to respondent (please add a question named <i>email</i>)"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:105
+msgid ""
+"Send confirmation with the results to the email address entered in this form "
+"(you must include a question labeled “email”)."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:97
+msgid "Separate multiple email addresses with a comma."
+msgstr ""
+
 #: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:24
 msgid "September"
 msgstr "Сентябрь"
 
 #: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:7
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:5
 msgid "Settings"
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:114
+#: modules/mod_survey/mod_survey.erl:158
 msgid "Short answer"
 msgstr "Короткий ответ"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:84
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:40
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:132
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:53
 msgid "Show email addresses"
 msgstr "Показать адреса e-mail"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:49
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:49
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:63
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:85
 msgid "Show progress bar"
 msgstr "Показывать индикатор"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:45
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:45
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:59
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:81
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Показывать информацию о прогрессе как «<em>Вопрос 3/10</em>»"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:24
-#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:24
-msgid "Show results to user after completion (only results for multiple choice questions are shown)"
-msgstr "Показывать результаты пользователю после завершения анкетирования"
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:52
+#, fuzzy
+msgid "Show results"
+msgstr "Показать результаты анкетирования"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:83
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:39
+#: modules/mod_survey/templates/_survey_start.tpl:29
+msgid "Show results (admin only)"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:131
 msgid "Show survey results"
 msgstr "Показать результаты анкетирования"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:33
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:38
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
 msgid "Single answer possible"
 msgstr "Возможен один ответ"
 
@@ -679,13 +823,13 @@ msgstr "Возможен один ответ"
 msgid "Something went wrong"
 msgstr "Что-то пошло не так"
 
-#: modules/mod_survey/templates/_survey_start.tpl:2
+#: modules/mod_survey/templates/_survey_start_button.tpl:8
 msgid "Start"
 msgstr "Начать"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:36
-#: modules/mod_survey/templates/_survey_question_page.tpl:37
-#: modules/mod_survey/mod_survey.erl:119
+#: modules/mod_survey/templates/_survey_question_page.tpl:44
+#: modules/mod_survey/templates/_survey_question_page.tpl:45
+#: modules/mod_survey/mod_survey.erl:163
 msgid "Stop"
 msgstr "Остановить"
 
@@ -694,35 +838,42 @@ msgid "Stop the survey after this page. No questions are submitted."
 msgstr ""
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:31
-#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:20
+#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:18
+#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:42
 msgid "Strongly Agree"
 msgstr "Полностью согласен(на)"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:21
-#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:12
+#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:8
+#: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:34
 msgid "Strongly Disagree"
 msgstr "Полностью не согласен(на)"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:41
+#: modules/mod_survey/templates/_survey_question_page.tpl:48
+#: modules/mod_survey/templates/_survey_question_page.tpl:52
 msgid "Submit"
 msgstr "Отправить"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:41
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:41
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:51
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:45
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:48
 msgid "Submit on clicking an option"
 msgstr "Отправить при нажатии на вариант"
 
+#: modules/mod_survey/templates/_admin_block_test_checkbox.tpl:17
+msgid "Subtract points for wrong answers (never less than 0)"
+msgstr ""
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
 msgid "Success"
 msgstr "Успех"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:5
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:5
 msgid "Survey"
 msgstr "Анкетирование"
 
-#: modules/mod_survey/mod_survey.erl:106
+#: modules/mod_survey/mod_survey.erl:150
 msgid "Survey Questions"
 msgstr "Вопросы анкеты"
 
@@ -730,33 +881,51 @@ msgstr "Вопросы анкеты"
 msgid "Survey editor"
 msgstr "Редактор анкет"
 
-#: modules/mod_survey/mod_survey.erl:81
+#: modules/mod_survey/mod_survey.erl:117
 msgid "Survey result deleted."
 msgstr "Результат анкетирования удален."
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:87
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:43
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:135
 msgid "Survey results editor"
 msgstr "Редактор результатов анкетирования"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:85
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:57
+msgid "Test pass percentage"
+msgstr ""
 
 #: modules/mod_survey/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "Спасибо"
 
 #: modules/mod_survey/templates/_survey_end.tpl:7
-msgid ""
-"Thank you for filling in our survey."
-msgstr ""
-"Спасибо за заполнение нашей анкеты."
+msgid "Thank you for filling in our survey."
+msgstr "Спасибо за заполнение нашей анкеты."
+
+#: modules/mod_survey/templates/email_survey_result.tpl:21
+#, fuzzy
+msgid "Thank you for filling in:"
+msgstr "Спасибо за заполнение нашей анкеты."
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:74
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:46
+#, fuzzy
+msgid "Thank you text only"
+msgstr "Спасибо"
+
+#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:10
+#, fuzzy
+msgid "Thank you text."
+msgstr "Спасибо"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:48
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:14
 msgid "The earth is flat."
 msgstr "Земля плоская."
 
-#: modules/mod_survey/templates/email_survey_result.tpl:7
-msgid "The following survey has been filled in:"
-msgstr "Следующая анкета была заполнена на сайте:"
+#: modules/mod_survey/templates/_survey_end_edit.tpl:3
+msgid "The results have been saved."
+msgstr ""
 
 #: modules/mod_survey/templates/_survey_error.tpl:3
 msgid ""
@@ -784,15 +953,19 @@ msgstr ""
 "Этот блок сигнализирует останов выполнения. Пользователь не сможет "
 "продолжать далее, блок считается разрывом страницы."
 
-#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:9
+#: modules/mod_survey/templates/email_survey_result.tpl:8
+msgid "This is a result for:"
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:10
 msgid "This text is shown after the survey has been submitted."
 msgstr ""
 
-#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:17
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:20
 msgid "This text is shown as an introduction to the survey."
 msgstr ""
 
-#: modules/mod_survey/mod_survey.erl:110
+#: modules/mod_survey/mod_survey.erl:154
 msgid "Thurstone"
 msgstr "Шкала Терстоуна"
 
@@ -804,19 +977,21 @@ msgstr "К вопросу"
 msgid "Toggle outline view"
 msgstr ""
 
-#: modules/mod_survey/templates/_survey_result_chart.tpl:28
-#: modules/mod_survey/templates/survey_results_printable.tpl:61
+#: modules/mod_survey/templates/_survey_result_chart.tpl:29
+#: modules/mod_survey/templates/survey_results_printable.tpl:66
 msgid "Totals"
 msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:50
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:21
-#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:10
-#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:17
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:7
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:22
+#: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:29
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:7
 msgid "True"
 msgstr "Истина"
 
-#: modules/mod_survey/mod_survey.erl:107
+#: modules/mod_survey/mod_survey.erl:151
 msgid "True/False"
 msgstr "Истина/Ложь"
 
@@ -837,6 +1012,11 @@ msgstr "Предупреждающий"
 msgid "Weasels make great pets."
 msgstr "Ласки — отличные питомцы."
 
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:71
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:43
+msgid "When finished show"
+msgstr ""
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:37
 msgid ""
 "When no condition is true then the question following this break will be the "
@@ -847,34 +1027,58 @@ msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:42
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:22
-#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:10
-#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:17
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:22
+#: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:29
 msgid "Yes"
 msgstr "Да"
 
-#: modules/mod_survey/mod_survey.erl:108
+#: modules/mod_survey/mod_survey.erl:152
 msgid "Yes/No"
 msgstr "Да/Нет"
 
-#: modules/mod_survey/templates/_survey_results.tpl:39
+#: modules/mod_survey/templates/_survey_start.tpl:11
+msgid "You already filled this in, but you can change your previous answers."
+msgstr ""
+
+#: modules/mod_survey/templates/_survey_start.tpl:21
+msgid "You already filled this in."
+msgstr ""
+
+#: modules/mod_survey/mod_survey.erl:106 modules/mod_survey/mod_survey.erl:121
+#: modules/mod_survey/mod_survey.erl:730
+#, fuzzy
+msgid "You are not allowed to change these results."
+msgstr "У вас нет прав для просмотра результатов этой анкеты."
+
+#: modules/mod_survey/templates/_survey_results.tpl:68
 msgid "You are not allowed to see the results of this survey."
 msgstr "У вас нет прав для просмотра результатов этой анкеты."
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:35
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49
 msgid ""
 "You can create your survey by adding blocks with questions below the body."
 msgstr ""
 "Вы можете создать анкету путем добавления блоков с вопросами под телом."
 
+#: modules/mod_survey/templates/admin_survey_editor.tpl:27
+msgid "You must have edit permission on the survey to edit its results."
+msgstr ""
+
 #: modules/mod_survey/templates/_survey_block_name_check.tpl:2
 msgid "You need to give a name to every question."
 msgstr "Нужно указать название для каждого вопроса."
+
+#: modules/mod_survey/templates/_survey_results.tpl:30
+#: modules/mod_survey/templates/email_survey_result.tpl:49
+#, fuzzy
+msgid "Your result"
+msgstr "Показать результаты анкетирования"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:93
 msgid "chocolate"
 msgstr ""
 
-#: modules/mod_survey/templates/admin_survey_editor.tpl:15
+#: modules/mod_survey/templates/admin_survey_editor.tpl:16
 msgid "edit"
 msgstr "изменить"
 
@@ -895,20 +1099,20 @@ msgid "must be a date"
 msgstr "должно быть датой"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:42
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:23
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:33
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:29
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:39
 msgid "must be a number"
 msgstr "должно быть числом"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:25
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:35
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:31
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:41
 msgid "must be a phone number"
 msgstr "должно быть телефонным номером"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:41
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:21
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:31
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:27
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:37
 msgid "must be an e-mail address"
 msgstr "должно быть адресом e-mail"
 
@@ -938,18 +1142,38 @@ msgstr "Вопрос"
 msgid "question == 1"
 msgstr "К вопросу"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_multiple_choice.tpl:11
-#: modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:15
+#: modules/mod_survey/templates/blocks/_block_view_survey_multiple_choice.tpl:17
+#: modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:22
 msgid "select…"
 msgstr "выберите…"
 
-#: modules/mod_survey/templates/admin_survey_editor.tpl:12
+#: modules/mod_survey/templates/admin_survey_editor.tpl:13
 msgid "survey results editor"
 msgstr "редактор результатов анкетирования"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:92
 msgid "years old. I like"
 msgstr ""
+
+#~ msgid ""
+#~ "Apple = Red<br/>\n"
+#~ "Milk = White<br/>\n"
+#~ "Vienna = Austria<br/>\n"
+#~ "Flying dutchman = Wagner."
+#~ msgstr ""
+#~ "Яблоко = Красный<br/>\n"
+#~ "Молоко = Белый<br/>\n"
+#~ "Вена = Австрия<br/>\n"
+#~ "Летучий голландец = Вагнер."
+
+#~ msgid "Cat = Picture"
+#~ msgstr "Кошка = Изображение"
+
+#~ msgid "Click here to download the results as a CSV file."
+#~ msgstr "Нажмите здесь, чтобы скачать результаты в виде файла CSV."
+
+#~ msgid "The following survey has been filled in:"
+#~ msgstr "Следующая анкета была заполнена на сайте:"
 
 #~ msgid "Explanation text (optional)"
 #~ msgstr "Текст объяснения (необязательно)"
