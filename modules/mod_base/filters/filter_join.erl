@@ -21,12 +21,13 @@
 
 
 join(Input, Context) ->
-    join(Input, "", Context).
+    join(Input, <<>>, Context).
 
-join(Input, Separator, Context) when is_binary(Input) ->
-    join(binary_to_list(Input), Separator, Context);
-join(Input, Separator, _Context) when is_list(Input) ->
-    List1 = lists:map(fun(X) -> z_convert:to_list(X) end, Input),
-    string:join(List1, z_convert:to_list(Separator));
+join(Input, Separator, Context) when is_list(Input) ->
+    List1 = [ z_convert:to_binary(X, Context) || X <- Input ],
+    iolist_to_binary(
+        z_utils:combine(
+            List1,
+            z_convert:to_binary(Separator, Context)));
 join(Input, _, _Context) ->
     Input.

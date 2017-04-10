@@ -22,5 +22,5 @@
 
 sha1(undefined, _Context) ->
     undefined;
-sha1(Input, _Context) ->
-    erlang:iolist_to_binary(z_utils:hex_encode(crypto:hash(sha, z_convert:to_binary(Input)))).
+sha1(Input, Context) ->
+    erlang:iolist_to_binary(z_utils:hex_encode(crypto:hash(sha, z_convert:to_binary(Input, Context)))).

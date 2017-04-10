@@ -25,5 +25,7 @@ length([], _Context) -> 0;
 length(<<>>, _Context) -> 0;
 length(Input, _Context) when is_binary(Input) -> z_string:len(Input);
 length(Input, _Context) when is_list(Input) -> erlang:length(Input);
+length({trans, _} = Tr, Context) ->
+    length(z_trans:lookup_fallback(Tr, Context), Context);
 length(Input, Context) ->
     erlang:length(z_template_compiler_runtime:to_list(Input, Context)).

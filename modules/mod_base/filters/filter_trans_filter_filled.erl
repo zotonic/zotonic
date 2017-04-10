@@ -33,7 +33,6 @@ filled_in({trans, Tr}) ->
     Tr1 = lists:filter(fun({_,T}) -> is_filled_in(T) end, Tr),
     {trans, Tr1};
 filled_in(A) ->
-    io:format("~p~n", [A]),
     A.
 
 is_filled_in(<<>>) ->

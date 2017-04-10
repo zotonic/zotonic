@@ -22,6 +22,8 @@
 
 urlize(undefined, _Context) ->
     undefined;
+urlize({trans, _} = Tr, Context) ->
+    urlize(z_trans:lookup_fallback(Tr, Context), Context);
 urlize(Input, _Context) when is_list(Input) or is_binary(Input) ->
     do_urlize(Input);
 urlize(Input, _Context) ->

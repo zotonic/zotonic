@@ -26,6 +26,10 @@ split(<<>>, _Sep, _Context) ->
 	[];
 split([], _Sep, _Context) ->
 	[];
+split({trans, _} = Tr, Sep, Context) ->
+    split(z_trans:lookup_fallback(Tr, Context), Sep, Context);
+split(String, {trans, _} = Tr, Context) ->
+    split(String, z_trans:lookup_fallback(Tr, Context), Context);
 split(String, Sep, _Context) when is_binary(String), is_binary(Sep) ->
 	binary:split(String, Sep, [global]);
 split(String, Sep, _Context) ->

@@ -21,6 +21,8 @@
 
 to_integer(undefined, _Context) ->
     undefined;
+to_integer({trans, _} = Tr, Context) ->
+    to_integer(z_trans:lookup_fallback(Tr, Context), Context);
 to_integer(N, _Context) ->
 	try
 	    z_convert:to_integer(N)

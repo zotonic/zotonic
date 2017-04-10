@@ -19,5 +19,6 @@
 -module(filter_brlinebreaks).
 -export([brlinebreaks/2]).
 
-brlinebreaks(S, _Context) -> z_html:br2nl(S).
+brlinebreaks(S, Context) ->
+    z_html:br2nl(z_convert:to_binary(S, Context)).
 

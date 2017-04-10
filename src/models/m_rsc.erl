@@ -686,7 +686,7 @@ media(Id, Context) ->
 
 
 %% @doc Fetch a resource id from any input
--spec rid(resource(), #context{}) -> resource_id() | undefined.
+-spec rid(resource()|{trans, _}, #context{}) -> resource_id() | undefined.
 rid(Id, _Context) when is_integer(Id) ->
     Id;
 rid({Id}, _Context) when is_integer(Id) ->
@@ -701,6 +701,8 @@ rid(<<>>, _Context) ->
     undefined;
 rid([], _Context) ->
     undefined;
+rid({trans, _} = Tr, Context) ->
+    rid(z_trans:lookup_fallback(Tr, Context), Context);
 rid(UniqueName, Context) ->
     case z_utils:only_digits(UniqueName) of
         true -> z_convert:to_integer(UniqueName);
