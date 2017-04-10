@@ -23,6 +23,10 @@ min(undefined, _Arg, _Context) ->
     undefined;
 min(Value, undefined, _Context) ->
     Value;
+min({trans, _} = Tr, Arg, Context) ->
+    min(z_trans:lookup_fallback(Tr, Context), Arg, Context);
+min(Value, {trans, _} = Tr, Context) ->
+    min(Value, z_trans:lookup_fallback(Tr, Context), Context);
 min(Value, Arg, _Context) ->
     case Value < Arg of
         true -> Value;

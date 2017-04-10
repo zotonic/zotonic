@@ -3,5 +3,7 @@
 
 -export([trim/2]).
 
+trim({trans, _} = Tr, Context) ->
+    trim(z_trans:lookup_fallback(Tr, Context), Context);
 trim(Input, _Context) ->
     z_string:trim(Input).

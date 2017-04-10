@@ -24,6 +24,12 @@ append(Input, undefined, _Context) ->
     Input;
 append(undefined, Append, _Context) ->
     Append;
+append({trans, _} = Tr, Append, Context) ->
+    append(z_trans:lookup_fallback(Tr, Context), Append, Context);
+append(Input, {trans, _} = Tr, Context) ->
+    append(Input, z_trans:lookup_fallback(Tr, Context), Context);
+append(Input, Append, _Context) when is_binary(Input), is_binary(Append) ->
+    <<Input/binary, Append/binary>>;
 append(Input, Append, Context) ->
     z_template_compiler_runtime:to_list(Input, Context)
     ++ z_template_compiler_runtime:to_list(Append, Context).

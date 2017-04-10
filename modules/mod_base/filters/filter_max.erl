@@ -23,6 +23,10 @@ max(undefined, _Arg, _Context) ->
     undefined;
 max(Value, undefined, _Context) ->
     Value;
+max({trans, _} = Tr, Arg, Context) ->
+    max(z_trans:lookup_fallback(Tr, Context), Arg, Context);
+max(Value, {trans, _} = Tr, Context) ->
+    max(Value, z_trans:lookup_fallback(Tr, Context), Context);
 max(Value, Arg, _Context) ->
     case Value > Arg of
         true -> Value;

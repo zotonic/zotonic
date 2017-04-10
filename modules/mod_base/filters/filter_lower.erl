@@ -22,6 +22,8 @@
 
 lower(undefined, _Context) ->
     undefined;
+lower({trans, _} = Tr, Context) ->
+    lower(z_trans:lookup_fallback(Tr, Context), Context);
 lower(Input, _Context) when is_list(Input) or is_binary(Input) ->
     z_string:to_lower(Input);
 lower(Input, Context) ->

@@ -20,5 +20,9 @@
 -export([tokens/3]).
 
 
+tokens({trans, _} = Tr, Sep, Context) ->
+    tokens(z_trans:lookup_fallback(Tr, Context), Sep, Context);
+tokens(String, {trans, _} = Sep, Context) ->
+    tokens(String, z_trans:lookup_fallback(Sep, Context), Context);
 tokens(String, Sep, _Context) ->
     string:tokens(z_convert:to_list(String), z_convert:to_list(Sep)).
