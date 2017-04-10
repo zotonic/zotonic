@@ -469,7 +469,7 @@ parse_query([{custompivot, Table}|Rest], Context, Result) ->
 
 %% text=...
 %% Perform a fulltext search
-parse_query([{text, Text}|Rest], Context, Result) when is_list(Text); is_binary(Text) ->
+parse_query([{text, Text}|Rest], Context, Result) ->
     case mod_search:trim(Text, Context) of
         <<>> -> parse_query(Rest, Context, Result);
         <<"id:", S/binary>> -> mod_search:find_by_id(S, Context);
