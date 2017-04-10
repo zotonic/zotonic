@@ -49,20 +49,35 @@ init_app_env() ->
 get(listen_ip) ->
     case os:getenv("ZOTONIC_IP") of
         false -> ?MODULE:get(listen_ip, default(listen_ip));
-        Any when Any == []; Any == "*"; Any == "any" -> any;
-        Ip -> Ip
+        IP -> maybe_map_value(listen_ip, IP)
     end;
 get(listen_port) ->
     case os:getenv("ZOTONIC_PORT") of
         false -> ?MODULE:get(listen_port, default(listen_port));
-        Port -> z_convert:to_integer(Port)
+        "" -> ?MODULE:get(listen_port, default(listen_port));
+        Port -> list_to_integer(Port)
     end;
 get(ssl_listen_port) ->
     case os:getenv("ZOTONIC_SSL_PORT") of
         false -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
-        none -> none;
+        "" -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
         "none" -> none;
-        Port -> z_convert:to_integer(Port)
+        Port -> list_to_integer(Port)
+    end;
+get(smtp_listen_domain) ->
+    case os:getenv("ZOTONIC_SMTP_LISTEN_DOMAIN") of
+        false -> get(smtp_listen_domain, default(smtp_listen_domain));
+        SmtpListenDomain_ -> SmtpListenDomain_
+    end;
+get(smtp_listen_ip) ->
+    case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
+        false -> z_config:get(smtp_listen_ip, default(smtp_listen_ip));
+        SmtpListenIp -> maybe_map_value(smtp_listen_ip, SmtpListenIp)
+    end;
+get(smtp_listen_port) ->
+    case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
+        false -> z_config:get(smtp_listen_port, default(smtp_listen_port));
+        SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
     end;
 get(Key) ->
     ?MODULE:get(Key, default(Key)).
@@ -72,10 +87,37 @@ get(Key) ->
 get(Key, Default) ->
 	case application:get_env(zotonic, Key) of
 		undefined ->
-			Default;
+			maybe_map_value(Key, Default);
 		{ok, Value} ->
-			Value
+			maybe_map_value(Key, Value)
 	end.
+
+
+%% @doc Map some values to their internal type (like )
+-spec maybe_map_value(atom(), term()) -> term().
+maybe_map_value(listen_ip, IP) -> map_ip_address(listen_ip, IP);
+maybe_map_value(smtp_listen_ip, IP) -> map_ip_address(smtp_listen_ip, IP);
+maybe_map_value(_Key, Value) ->
+    Value.
+
+map_ip_address(_Name, any) -> any;
+map_ip_address(_Name, "any") -> any;
+map_ip_address(_Name, "") -> any;
+map_ip_address(_Name, "*") -> any;
+map_ip_address(_Name, IP) when is_tuple(IP) -> IP;
+map_ip_address(Name, IP) when is_list(IP) -> 
+    case inet:getaddr(IP, inet) of
+        {ok, IpN} -> IpN;
+        {error, _} ->
+            lager:error("Invalid '~p' address: ~p, assuming 'any' instead",
+                        [Name, IP]),
+            any
+    end;
+map_ip_address(Name, IP) ->
+    lager:error("Invalid ~p address: ~p, assuming 'any' instead",
+                [Name, IP]),
+    any.
+
 
 default(timezone) -> <<"UTC">>;
 default(listen_ip) -> any;
@@ -90,7 +132,7 @@ default(smtp_relay) -> false;
 default(smtp_host) -> "localhost";
 default(smtp_port) -> 25;
 default(smtp_ssl) -> false;
-default(smtp_listen_ip) -> "127.0.0.1";
+default(smtp_listen_ip) -> {127,0,0,1};
 default(smtp_listen_port) -> 2525;
 default(smtp_spamd_port) -> 783;
 default(smtp_dnsbl) -> z_email_dnsbl:dnsbl_list();

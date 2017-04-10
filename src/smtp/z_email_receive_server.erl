@@ -46,22 +46,23 @@
 
 start_link() ->
     %% Collect the configuration args of the bounce server
-    Args1 = case get_listen_domain() of
+    IP = z_config:get(smtp_listen_ip),
+    Port = z_config:get(smtp_listen_port),
+    Args1 = case z_config:get(smtp_listen_domain) of
         undefined -> [];
-        ListenDomain -> [{domain, ListenDomain}]
+        "" -> [];
+        Domain -> [{domain, Domain}]
     end,
-    Args2 = case get_listen_ip() of
-        undefined -> [];
+    Args2 = case IP of
         any -> [{address, {0,0,0,0}} | Args1];
-        ListenIp ->
-            {ok, Address} = inet:getaddr(ListenIp, inet),
-            [{address, Address} | Args1]
+        _ when is_tuple(IP) ->
+            [{address, IP} | Args1]
     end,
-    Args3 = case get_listen_port() of
-        undefined -> Args2;
-        ListenPort -> [{port, ListenPort} | Args2]
+    case IP of
+        any -> lager:info("SMTP server listening on any:~p", [Port]);
+        _ -> lager:info("SMTP server listening on ~s:~p", [inet:ntoa(IP), Port])
     end,
-    start_link([Args3]).
+    start_link([ [{port, Port} | Args2] ]).
 
 start_link(Args) when is_list(Args) ->
     gen_smtp_server:start_link({local, ?MODULE}, ?MODULE, Args).
@@ -256,27 +257,6 @@ find_bounce_email([To|Other]) ->
         true -> {ok, To};
         false -> find_bounce_email(Other)
     end.
-
-%% Smtp listen to IP address, Domain and Port
-get_listen_domain() ->
-    case os:getenv("ZOTONIC_SMTP_LISTEN_DOMAIN") of
-        false -> z_config:get(smtp_listen_domain);
-        SmtpListenDomain_ -> SmtpListenDomain_
-    end.
-
-get_listen_ip() ->
-    case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
-        false -> z_config:get(smtp_listen_ip);
-        SmtpListenAny when SmtpListenAny == []; SmtpListenAny == "*"; SmtpListenAny == "any" -> any;
-        SmtpListenIp_-> SmtpListenIp_
-    end.
-
-get_listen_port() ->
-    case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
-        false -> z_config:get(smtp_listen_port);
-        SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
-    end.
-
 
 decode(Data) ->
     try
