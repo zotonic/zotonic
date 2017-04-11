@@ -38,8 +38,8 @@
  {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}, {ssl, any} ]},
  
  %% API access
- {api,     ["api",module,method], controller_api, [{ssl, any}]},
- {api,     ["api",module],        controller_api, [{ssl, any}]},
+ {api,     ["api", api_module, api_method], controller_api, [{ssl, any}]},
+ {api,     ["api", api_module],             controller_api, [{ssl, any}]},
  
  %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
  {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}, {ssl, any} ]},

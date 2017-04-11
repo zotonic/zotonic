@@ -1,4 +1,6 @@
 
 .. include:: meta-oauth_perms.rst
 
-Not yet documented.
+Stores which APIs an OAuth token can use.
+
+This can be configured using :ref:`mod_oauth`.

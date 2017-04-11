@@ -60,11 +60,8 @@ m_to_list(#m{value=undefined}, Context) ->
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
 %% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined;
-m_value(#m{value=_Module}, _Context) ->
+m_value(#m{value=_}, _Context) ->
     undefined.
-
 
 %%
 %% Get permissions for consumer <Id>.
@@ -105,9 +102,11 @@ set(Id, Perms, Context) ->
 %% TODO: Refactor: Should be done via z_notifier
 all_services_for(Id, Context) ->
     F = fun() ->
-                All = [ binary_to_list(proplists:get_value(perm, R)) || R <- get(Id, Context)],
-                lists:filter(fun(S) -> z_service:applies(All, proplists:get_value(method, S)) end, z_service:all(info, Context))
-        end,
+        All = [ proplists:get_value(perm, R) || R <- get(Id, Context)],
+        lists:filter(
+            fun(S) -> z_service:applies(All, proplists:get_value(method, S)) end,
+            z_service:all(info, Context))
+    end,
     z_depcache:memo(F, {z_services_for, Id}, ?WEEK, [z_services, {oauth_consumer, Id}], Context).
 
 
