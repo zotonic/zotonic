@@ -3,9 +3,10 @@
 [
  {oauth_request_token, ["oauth", "request_token"],         controller_oauth_request_token, []},
  {oauth_access_token,  ["oauth", "access_token"],          controller_oauth_access_token,  []},
- 
+
  {oauth_authorize,     ["oauth", "authorize"],             controller_oauth_authorize,     []},
  {oauth_finish,        ["oauth", "authorize", "finished"], controller_template,            [ {template, "oauth_authorize_finished.tpl"} ]},
- 
- {admin_oauth,         ["admin", "oauth", "apps"],         controller_oauth_apps,          [{ssl,true}]}
+
+ {admin_oauth,         ["admin", "oauth", "apps"],         controller_oauth_apps,          [{ssl,true}]},
+ {admin_oauth_tokens,  ["admin", "oauth", "apps", app_id], controller_oauth_apps,          [{ssl,true}]}
 ].

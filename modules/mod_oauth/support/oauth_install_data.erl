@@ -23,17 +23,9 @@
 -export([install/1]).
 
 install(Context) ->
-    z_acl:sudo(fun(Ctx) -> install1(Ctx) end, Context).
-
-install1(Context) ->
-    F = fun(Ctx) ->
-                ok = install_tables(Ctx)
-        end,
-    ok = z_db:transaction(F, Context),
-    z_depcache:flush(Context),
+    ok = z_db:transaction(fun install_tables/1, Context),
+    z_db:flush(Context),
     ok.
-
-
 
 install_tables(Context) ->
     [ [] = z_db:q(Sql, Context) || Sql <- tables_sql() ],

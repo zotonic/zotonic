@@ -44,13 +44,14 @@ options(Context) ->
     {[], Context}.
 
 allowed_methods(Context) ->
+    % Continue session for API calls from a web page
     Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
     z_context:lager_md(Context1),
-    Module = case z_context:get_q(<<"module">>, Context1) of
+    Module = case z_context:get_q(<<"api_module">>, Context1) of
                  undefined -> z_convert:to_binary(z_context:get(module, Context1));
                  Mod -> Mod
              end,
-    Method = case z_context:get_q(<<"method">>, Context1) of
+    Method = case z_context:get_q(<<"api_method">>, Context1) of
                  undefined ->
                      case z_convert:to_binary(z_context:get(method, Context1)) of
                          <<>> -> Module;
@@ -76,22 +77,23 @@ ensure_existing_module(Module, Method, Context) ->
     end.
 
 is_authorized(Context) ->
-    %% Check if we are authorized via a regular session.
-    Context2 = z_context:ensure_qs(z_context:continue_session(Context)),
-    Module = z_context:get(service_module, Context2),
-    case z_service:needauth(Module) of
-        false ->
-            {true, Context2};
-        true ->
-            case z_auth:is_auth(Context2) of
-                true ->
-                    {true, Context2};
+    case z_context:get(service_module, Context) of
+        undefined -> {true, Context};
+        Module ->
+            case z_service:needauth(Module) of
                 false ->
-                    case z_notifier:first(#service_authorize{service_module=Module}, Context2) of
-                        undefined ->
-                            api_error(500, 0, "No service authorization method available", [], Context2);
-                        Reply ->
-                            Reply
+                    {true, Context};
+                true ->
+                    case z_auth:is_auth(Context) of
+                        true ->
+                            {true, Context};
+                        false ->
+                            case z_notifier:first(#service_authorize{service_module=Module}, Context) of
+                                undefined ->
+                                    api_error(500, 0, "No service authorization method available", [], Context);
+                                Reply ->
+                                    Reply
+                            end
                     end
             end
     end.

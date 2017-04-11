@@ -174,10 +174,14 @@ module_attr(Service, Attr, Default, T) ->
 %%
 %% Whether a services applies to a pattern.  applies(Pattern, Service).
 %%
+applies([], _ServiceMethod) ->
+    false;
 applies([Pattern|Rest], ServiceMethod) when is_binary(Pattern) ->
     applies(Pattern, ServiceMethod) orelse applies(Rest, ServiceMethod);
-applies(Pattern, ServiceMethod) ->
-    applies1(binary:split(Pattern, <<"/">>), binary:split(ServiceMethod, <<"/">>)).
+applies(Pattern, ServiceMethod) when is_binary(Pattern), is_binary(ServiceMethod) ->
+    applies1(
+        binary:split(Pattern, <<"/">>),
+        binary:split(ServiceMethod, <<"/">>)).
 
 applies1([<<"*">>], _) ->
     true;
