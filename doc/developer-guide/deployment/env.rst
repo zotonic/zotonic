@@ -7,22 +7,34 @@ The following environment variables influence how Zotonic starts up.
 
 
 ``ZOTONIC_IP``
-  Which IP address to bind the web server to. By default, it binds to
-  any IP address. When running Zotonic behind a proxy like nginx or
-  varnish, it is wise to put ``127.0.0.1`` here.
+  The IPv4 address to bind the web server to. By default, it binds to
+  any IP address. If Zotonic runs behind a proxy like nginx or
+  Varnish, it is wise to put ``127.0.0.1`` or ``localhost`` here.
+  Use ``any`` to bind to all IPv4 addresses, ``none`` to disable the IPv4
+  web server.
+
+``ZOTONIC_IP6``
+  The IPv6 address to bind the web server to. By default it binds to
+  the ZOTONIC_IP address. If Zotonic runs behind a proxy like nginx or
+  Varnish, it is wise to put `::1`` here.
+  Use ``any`` to bind to all IPv6 addresses, ``none`` to disable the IPv6
+  web server.
 
 ``ZOTONIC_PORT``
   The port number to bind the web server to. Defaults to port 8000.
   
 ``ZOTONIC_SSL_PORT``
   The port number to bind the ssl web server to. Defaults to port 8443.
+  Use ``none`` to disable the ssl web server.
 
 ``ZOTONIC_SMTP_LISTEN_IP``
-  The IP address to bind the SMTP server to. Binds to any IP address
-  by default.
+  The IPv4 address to bind the SMTP server to. Binds to any IP address
+  by default. Use ``none`` to disable the SMTP server.
+  Use ``any`` to bind to all IP addresses.
 
 ``ZOTONIC_SMTP_LISTEN_PORT``
   The port number to bind the SMTP server to. Defaults to port 2525.
+  Use ``none`` to disable the SMTP server.
 
 ``ZOTONIC_SMTP_LISTEN_DOMAIN``
   The domain to bind the SMTP server to, if any.
@@ -32,6 +44,6 @@ The following environment variables influence how Zotonic starts up.
   resizing or URL downloading.
 
 
-.. note:: When the variables do not seem to have effect, check
+.. note:: If the variables do not seem to have effect, then check
           ``~/.zotonic/zotonic.config``. The above variables are
           overridden by the ones in that file.

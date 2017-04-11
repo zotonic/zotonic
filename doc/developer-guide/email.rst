@@ -132,15 +132,22 @@ optionally using Spamassassin.
 +--------------------------+--------------------------------------------+
 |smtp_listen_ip            |IP address to listen on for incoming        |
 |                          |SMTP connections. Defaults to               |
-|                          |``"127.0.0.1"``                             |
+|                          |``"127.0.0.1"``  Set to ``none`` to disable |
+|                          |the smtp server.                            |
 +--------------------------+--------------------------------------------+
 |smtp_listen_port          |IP address to listen on for incoming        |
-|                          |SMTP connections. Defaults to 2525.         |
+|                          |SMTP connections. Defaults to 2525. Set to  |
+|                          |``none`` to disable the smtp server.        |
 +--------------------------+--------------------------------------------+
 |smtp_dnsbl                |List for the DNS block lists used for       |
 |                          |checking incoming email connections.        |
 |                          |Defaults to                                 |
-|                          |``["zen.spamhaus.org","dnsbl.sorbs.net"]``  |
+|                          |``["zen.spamhaus.org", "dnsbl.sorbs.net"]`` |
++--------------------------+--------------------------------------------+
+|smtp_dnswl                |List for the DNS white lists used for       |
+|                          |checking incoming email connections.        |
+|                          |Defaults to                                 |
+|                          |``["list.dnswl.org", "swl.spamhaus.org"]``  |
 +--------------------------+--------------------------------------------+
 |smtp_spamd_ip             |Optional IP address for a spamassassin      |
 |                          |host                                        |
