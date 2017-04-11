@@ -19,97 +19,73 @@
 
 -module(mod_oauth).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
--behaviour(gen_server).
 
 -mod_title("OAuth").
 -mod_description("Provides authentication over OAuth.").
 -mod_prio(900).
+-mod_schema(1).
 
-
-%% gen_server exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/1]).
-
-%% interface functions
 -export([
-         serve_oauth/2,
-         request_is_signed/1,
-         oauth_param/2,
-         to_oauth_consumer/2,
-         str_value/2,
-         test/0,
-         authenticate/2,
-         observe_service_authorize/2,
-         observe_admin_menu/3
+     observe_service_authorize/2,
+     observe_admin_menu/3,
+     manage_schema/2,
+
+     serve_oauth/2,
+     request_is_signed/1,
+     oauth_param/2,
+     to_oauth_consumer/2,
+     str_value/2,
+     authenticate/2
 ]).
 
 -include_lib("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
+%% Main authorization hook, called from controller_api
+observe_service_authorize(#service_authorize{service_module=Module}, Context) ->
+    case check_request_logon(Context) of
+        {none, Context} ->
+            %% No OAuth; Authentication is required for this module...
+            ServiceInfo = z_service:serviceinfo(Module, Context),
+            authenticate(
+                iolist_to_binary([
+                    proplists:get_value(method, ServiceInfo),
+                    ": ",
+                    z_service:title(Module),
+                    "\n\nThis API call requires authentication."
+                ]),
+                Context);
 
-%%====================================================================
-%% API
-%%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
-%% @doc Starts the server
-start_link(Args) when is_list(Args) ->
-    gen_server:start_link(?MODULE, Args, []).
+        {true, AuthorizedContext} ->
+            %% OAuth succeeded; check whether we are allowed to exec this module
+            ConsumerId = proplists:get_value(id, z_context:get(oauth_consumer, AuthorizedContext)),
+            case is_allowed(ConsumerId, Module, AuthorizedContext) of
+                true ->
+                    {true, AuthorizedContext};
+                false ->
+                    AuthorizedContext1 = cowmachine_req:set_resp_body(
+                                    <<"You are not authorized to execute this API call.\n">>,
+                                    AuthorizedContext),
+                    {{halt, 403}, AuthorizedContext1}
+            end;
 
-%%====================================================================
-%% gen_server callbacks
-%%====================================================================
+        {false, Response} ->
+            Response
+    end.
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
-%% @doc Initiates the server.
-init(Args) ->
-    process_flag(trap_exit, true),
-    {context, Context} = proplists:lookup(context, Args),
+
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
+    [
+     #menu_item{id=admin_oauth,
+                parent=admin_auth,
+                label=?__("API access", Context),
+                url={admin_oauth},
+                visiblecheck={acl, use, ?MODULE}}
+     |Acc].
+
+manage_schema(_, Context) ->
     install_check(Context),
-    {ok, []}.
-
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
-%% @doc Trap unknown calls
-handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
-
-
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
-%% @doc Trap unknown casts
-handle_cast(Message, State) ->
-    {stop, {unknown_cast, Message}, State}.
-
-
-
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% @doc Handling all non call/cast messages
-handle_info(_Info, State) ->
-    {noreply, State}.
-
-%% @spec terminate(Reason, State) -> void()
-%% @doc This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
-terminate(_Reason, _State) ->
     ok.
-
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% @doc Convert process state when code is changed
-
-code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
 
 
 %%====================================================================
@@ -130,43 +106,41 @@ check_request_logon(Context) ->
         true ->
             case serve_oauth(Context,
                 fun(URL, Params, Consumer, Signature) ->
-                        case oauth_param(<<"oauth_token">>, Context) of
-                            undefined ->
-                                {false, authenticate(<<"Missing OAuth token.">>, Context)};
-                            ParamToken ->
-                                case m_oauth_app:secrets_for_verify(access, Consumer, ParamToken, Context) of
-                                    undefined ->
-                                        {false, authenticate(<<"Access token not found.">>, Context)};
-                                    Token ->
-                                        case m_oauth_app:check_nonce(
-                                                Consumer,
-                                                Token,
-                                                oauth_param(<<"oauth_timestamp">>, Context),
-                                                oauth_param(<<"oauth_nonce">>, Context),
-                                                Context)
-                                        of
-                                            {false, Reason} ->
-                                                {false, authenticate(Reason, Context)};
-                                            true ->
-                                                SigMethod = oauth_param(<<"oauth_signature_method">>, Context),
-                                                case oauth:verify(z_convert:to_list(Signature),
-                                                                  z_convert:to_list(m_req:get(method, Context)),
-                                                                  URL,
-                                                                  Params,
-                                                                  to_oauth_consumer(Consumer, SigMethod),
-                                                                  str_value(token_secret, Token))
-                                                of
-                                                    true ->
-                                                        UID = int_value(user_id, Token),
-                                                        Context1 = z_acl:logon(UID, Context),
-                                                        Context2 = z_context:set(oauth_consumer, Consumer, Context1),
-                                                        {true, Context2};
-                                                    false ->
-                                                        {false, authenticate(<<"Signature verification failed.">>, Context)}
-                                                end
-                                        end
-                                end
-                        end
+                    ParamToken = oauth_param(<<"oauth_token">>, Context),
+                    case m_oauth_app:secrets_for_verify(access, Consumer, ParamToken, Context) of
+                        undefined ->
+                            {false, authenticate(<<"Access token not found.">>, Context)};
+                        Token ->
+                            case m_oauth_app:check_nonce(
+                                        Consumer,
+                                        Token,
+                                        oauth_param(<<"oauth_timestamp">>, Context),
+                                        oauth_param(<<"oauth_nonce">>, Context),
+                                        Context)
+                            of
+                                {false, Reason} ->
+                                    {false, authenticate(Reason, Context)};
+                                true ->
+                                    SigMethod = oauth_param(<<"oauth_signature_method">>, Context),
+                                    case oauth:verify(z_convert:to_list(Signature),
+                                                      z_convert:to_list(m_req:get(method, Context)),
+                                                      URL,
+                                                      Params,
+                                                      to_oauth_consumer(Consumer, SigMethod),
+                                                      str_value(token_secret, Token))
+                                    of
+                                        true ->
+                                            Context1 = case int_value(user_id, Token) of
+                                                undefined -> Context;
+                                                UID -> z_acl:logon(UID, Context)
+                                            end,
+                                            Context2 = z_context:set(oauth_consumer, Consumer, Context1),
+                                            {true, Context2};
+                                        false ->
+                                            {false, authenticate(<<"Signature verification failed.">>, Context)}
+                                    end
+                            end
+                    end
                 end)
             of
                 {{halt, Code}, Context2} ->
@@ -207,7 +181,7 @@ strip_params([H|T]) ->
 %% are considered for OAuth signature verification.
 %%
 to_oauth_params(Context) ->
-    Req = z_context:get_q_all(Context),
+    Req = z_context:get_q_all_noz(Context),
     AuthHeader = z_context:get_req_header(<<"authorization">>, Context),
     Params = case AuthHeader of
         <<"OAuth ", OAuthHeader/binary>> ->
@@ -215,7 +189,12 @@ to_oauth_params(Context) ->
         _ ->
             Req
     end,
-    Params1 = [ {z_convert:to_list(K), z_convert:to_list(V)} || {K,V} <- Params ],
+    PathInfo = cowmachine_req:path_info(Context),
+    PathKeys = [ z_convert:to_binary(K) || {K,_} <- PathInfo ],
+    Params1 = [
+        {z_convert:to_list(K), z_convert:to_list(V)}
+        || {K,V} <- Params, not lists:member(K, PathKeys)
+    ],
     strip_params(Params1).
 
 
@@ -303,17 +282,10 @@ authenticate(Reason, Context) ->
 %% @doc Check is the shop module has been installed.  If not then install all db tables and rscs.
 install_check(Context) ->
     case z_db:table_exists(oauth_application_registry, Context) of
-        true ->
-            ok;
+        true -> ok;
         false ->
             oauth_install_data:install(Context)
     end.
-
-test() ->
-    Ctx  = z_context:new(default),
-    ?DEBUG(m_oauth_app:consumer_lookup("Foo", Ctx)),
-    ok.
-
 
 %%
 %% Whether consumer with this Id is allowed to execute Service.
@@ -324,44 +296,4 @@ is_allowed(Id, Service, Context) ->
                                || S <- m_oauth_perms:all_services_for(Id, Context)]).
 
 
-%% Main authorization hook, called from controller_api
-observe_service_authorize(#service_authorize{service_module=Module}, Context) ->
-    case check_request_logon(Context) of
-        {none, Context} ->
-            %% No OAuth; Authentication is required for this module...
-            ServiceInfo = z_service:serviceinfo(Module, Context),
-            authenticate(
-                iolist_to_binary([
-                    proplists:get_value(method, ServiceInfo),
-                    ": ",
-                    z_service:title(Module),
-                    "\n\nThis API call requires authentication."
-                ]),
-                Context);
 
-        {true, AuthorizedContext} ->
-            %% OAuth succeeded; check whether we are allowed to exec this module
-            ConsumerId = proplists:get_value(id, z_context:get(oauth_consumer, AuthorizedContext)),
-            case is_allowed(ConsumerId, Module, AuthorizedContext) of
-                true ->
-                    {true, AuthorizedContext};
-                false ->
-                    AuthorizedContext1 = cowmachine_req:set_resp_body(
-                                    <<"You are not authorized to execute this API call.\n">>,
-                                    AuthorizedContext),
-                    {{halt, 403}, AuthorizedContext1}
-            end;
-
-        {false, Response} ->
-            Response
-    end.
-
-
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id=admin_oauth,
-                parent=admin_auth,
-                label=?__("API access", Context),
-                url={admin_oauth},
-                visiblecheck={acl, use, ?MODULE}}
-     |Acc].

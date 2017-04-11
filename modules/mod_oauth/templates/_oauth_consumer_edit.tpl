@@ -30,28 +30,28 @@
                 <div class="form-group row">
                     <label for="zp-title" class="control-label col-md-3">{_ Application title _}</label>
                     <div class="col-md-9">
-                        <input class="form-control" type="text" name="zp-title" id="zp-title" value="{{ consumer.application_title }}" />
+                        <input class="form-control" type="text" name="zp-title" id="zp-title" value="{{ consumer.application_title|escape }}" />
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="zp-url" class="control-label col-md-3">{_ Homepage _}</label>
                     <div class="col-md-9">
-                        <input class="form-control" type="text" name="zp-url" id="zp-url" value="{{ consumer.application_uri }}" />
+                        <input class="form-control" type="text" name="zp-url" id="zp-url" value="{{ consumer.application_uri|escape }}" />
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="zp-text" class="control-label col-md-3">{_ Description _}</label>
                     <div class="col-md-9">
-                        <textarea class="form-control" name="zp-text" id="zp-text">{{ consumer.application_descr }}</textarea>
+                        <textarea class="form-control" name="zp-text" id="zp-text">{{ consumer.application_descr|escape }}</textarea>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="zp-callback" class="control-label col-md-3">{_ Callback URL _}</label>
                     <div class="col-md-9">
-                        <input class="form-control" type="text" name="zp-callback" id="zp-callback" value="{{ consumer.callback_uri }}" />
+                        <input class="form-control" type="text" name="zp-callback" id="zp-callback" value="{{ consumer.callback_uri|escape }}" />
                     </div>
                 </div>
 
@@ -61,11 +61,11 @@
                         {% button class="btn btn-primary" type="submit" text=_"Update" %}
                     {% else %}
                         <a href="#" data-link="tab-auth" class="btn btn-primary">{_ Next step _}</a>
-{% javascript %}
-$("a[data-link='tab-auth']").on("click", function() {
-    $('a[href="#{{ #tab }}-auth"]').tab('show');
-});
-{% endjavascript %}
+                        {% javascript %}
+                            $("a[data-link='tab-auth']").on("click", function() {
+                                $('a[href="#{{ #tab }}-auth"]').tab('show');
+                            });
+                        {% endjavascript %}
                     {% endif %}
                 </div>
             </div>
