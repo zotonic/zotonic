@@ -135,22 +135,32 @@ stop_http_listeners() ->
               zotonic_http_listener_ipv6,
               zotonic_https_listener_ipv6]).
 
-%% @doc Start the HTTP listeners
+%% @doc Start the HTTP/S listeners
 -spec start_http_listeners() -> ok.
 start_http_listeners() ->
     z_ssl_certs:ensure_dhfile(),
     application:set_env(cowmachine, server_header,
         <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>),
-    WebIp = z_config:get(listen_ip),
-    WebPort = z_config:get(listen_port),
-    SSLPort = ssl_listen_port(),
-    lager:info("Web server listening on IPv4 ~p:~p, SSL ~p::~p", [WebIp, WebPort, WebIp, SSLPort]),
-    CowboyOpts = #{
-        middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
-        request_timeout => ?HTTP_REQUEST_TIMEOUT,
-        env => #{}
-    },
-    WebIP4Opt = case WebIp of
+    start_http_listeners_ip4(z_config:get(listen_ip), z_config:get(listen_port)),
+    start_https_listeners_ip4(z_config:get(listen_ip), z_config:get(ssl_listen_port)),
+    case ipv6_supported() of
+        true ->
+            start_http_listeners_ip6(z_config:get(listen_ip6), z_config:get(listen_port)),
+            start_https_listeners_ip6(z_config:get(listen_ip6), z_config:get(ssl_listen_port));
+        false ->
+            ok
+    end.
+
+%% @doc Start IPv4 HTTP listeners
+start_http_listeners_ip4(none, _Port) ->
+    lager:warning("HTTP server disabled: 'listen_ip' is set to 'none'"),
+    ignore;
+start_http_listeners_ip4(_WebIp, none) ->
+    lager:warning("HTTP server disabled: listen_port is set to 'none'"),
+    ignore;
+start_http_listeners_ip4(WebIp, WebPort) ->
+    lager:info("HTTP server listening on IPv4 ~s:~p", [ip_to_string(WebIp), WebPort]),
+    WebOpt = case WebIp of
         any -> [];
         _ -> [{ip, WebIp}]
     end,
@@ -160,66 +170,83 @@ start_http_listeners() ->
         [   inet,
             {port, WebPort},
             {backlog, z_config:get(inet_backlog)}
-            | WebIP4Opt
+            | WebOpt
         ],
-        CowboyOpts),
-    case SSLPort of
-        none ->
-            ok;
-        _ ->
-            {ok, _} = start_tls(
-                zotonic_https_listener_ipv4,
-                z_config:get(ssl_acceptor_pool_size),
-                [   inet,
-                    {port, SSLPort},
-                    {backlog, z_config:get(ssl_backlog)}
-                ]
-                ++ z_ssl_certs:ssl_listener_options()
-                ++ WebIP4Opt,
-                CowboyOpts)
+        cowboy_options()).
+
+%% @doc Start IPv4 HTTPS listeners
+start_https_listeners_ip4(none, _SSLPort) -> ignore;
+start_https_listeners_ip4(_WebIp, none) ->
+    lager:info("HTTPS server disabled: 'ssl_listen_port' is set to 'none'"),
+    ignore;
+start_https_listeners_ip4(WebIp, SSLPort) ->
+    lager:info("HTTPS server listening on IPv4 ~s:~p", [ip_to_string(WebIp), SSLPort]),
+    WebOpt = case WebIp of
+        any -> [];
+        _ -> [{ip, WebIp}]
     end,
-    case {WebIp, ipv6_supported()} of
-        {any, true} ->
-            lager:info("Web server listening on IPv6 ::~p, SSL ::~p", [WebPort, SSLPort]),
-            {ok, _} = cowboy:start_clear(
-                zotonic_http_listener_ipv6,
-                z_config:get(inet_acceptor_pool_size),
-                [   inet6,
-                    {ipv6_v6only, true},
-                    {port, WebPort},
-                    {backlog, z_config:get(inet_backlog)}
-                ],
-                CowboyOpts),
+    {ok, _} = start_tls(
+        zotonic_https_listener_ipv4,
+        z_config:get(ssl_acceptor_pool_size),
+        [   inet,
+            {port, SSLPort},
+            {backlog, z_config:get(ssl_backlog)}
+        ]
+        ++ z_ssl_certs:ssl_listener_options()
+        ++ WebOpt,
+        cowboy_options()).
 
-            case SSLPort of
-                none ->
-                    ok;
-                _ ->
-                    {ok, _} = start_tls(
-                        zotonic_https_listener_ipv6,
-                        z_config:get(ssl_acceptor_pool_size),
-                        [   inet6,
-                            {ipv6_v6only, true},
-                            {port, SSLPort},
-                            {backlog, z_config:get(ssl_backlog)}
-                        ]
-                        ++ z_ssl_certs:ssl_listener_options(),
-                        CowboyOpts),
-                    ok
-            end;
-        _ ->
-            ok
-    end.
+%% @doc As we don't have a separate listen_ipv6 config yet, only start ip6 on 'any'
+start_http_listeners_ip6(none, _WebPort) -> ignore;
+start_http_listeners_ip6(_WebIp, none) -> ignore;
+start_http_listeners_ip6(WebIp, WebPort) ->
+    lager:info("HTTP server listening on IPv6 ~s:~p", [ip_to_string(WebIp), WebPort]),
+    WebOpt = case WebIp of
+        any -> [];
+        _ -> [{ip, WebIp}]
+    end,
+    {ok, _} = cowboy:start_clear(
+        zotonic_http_listener_ipv6,
+        z_config:get(inet_acceptor_pool_size),
+        [   inet6,
+            {ipv6_v6only, true},
+            {port, WebPort},
+            {backlog, z_config:get(inet_backlog)}
+        ]
+        ++ WebOpt,
+        cowboy_options()).
 
-%% @doc Check if we need to listen on SSL.
-%%      SSL will be disabled if ssl_listen_port is set to 'none'
-%%      A non-secure proxy might still want to connect forward securely, so this
-%%      setting is independent from ssl_port.
-ssl_listen_port() ->
-    case z_config:get(ssl_listen_port) of
-        none -> none;
-        Port when is_integer(Port) -> Port
-    end.
+%% @doc Start the ip6 HTTPS listener
+start_https_listeners_ip6(none, _SSLPort) -> ignore;
+start_https_listeners_ip6(_WebIp, none) -> ignore;
+start_https_listeners_ip6(WebIp, SSLPort) ->
+    lager:info("HTTPS server listening on IPv6 ~s:~p", [ip_to_string(WebIp), SSLPort]),
+    WebOpt = case WebIp of
+        any -> [];
+        _ -> [{ip, WebIp}]
+    end,
+    {ok, _} = start_tls(
+        zotonic_https_listener_ipv6,
+        z_config:get(ssl_acceptor_pool_size),
+        [   inet6,
+            {ipv6_v6only, true},
+            {port, SSLPort},
+            {backlog, z_config:get(ssl_backlog)}
+        ]
+        ++ z_ssl_certs:ssl_listener_options()
+        ++ WebOpt,
+        cowboy_options()).
+
+ip_to_string(any) -> "any";
+ip_to_string(IP) -> inet:ntoa(IP).
+
+cowboy_options() ->
+    #{
+        middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
+        request_timeout => ?HTTP_REQUEST_TIMEOUT,
+        env => #{}
+    }.
+
 
 % @doc Copied from cowboy.erl, disable http2 till the cipher problems are resolved.
 -spec start_tls(ranch:ref(), non_neg_integer(), ranch_ssl:opts(), list()) -> {ok, pid()} | {error, any()}.

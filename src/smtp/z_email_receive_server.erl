@@ -1,4 +1,4 @@
-%% @doc SMTP server for handling bounced messages.
+%% @doc SMTP server for handling incoming and bounced messages.
 %%      Code based on the example callback module supplied
 %%      with gen_smtp.
 %%      Original author: Andrew Thompson (andrew@hijacked.us)
@@ -45,24 +45,30 @@
 
 
 start_link() ->
-    %% Collect the configuration args of the bounce server
-    IP = z_config:get(smtp_listen_ip),
-    Port = z_config:get(smtp_listen_port),
-    Args1 = case z_config:get(smtp_listen_domain) of
-        undefined -> [];
-        "" -> [];
-        Domain -> [{domain, Domain}]
-    end,
-    Args2 = case IP of
-        any -> [{address, {0,0,0,0}} | Args1];
-        _ when is_tuple(IP) ->
-            [{address, IP} | Args1]
-    end,
-    case IP of
-        any -> lager:info("SMTP server listening on any:~p", [Port]);
-        _ -> lager:info("SMTP server listening on ~s:~p", [inet:ntoa(IP), Port])
-    end,
-    start_link([ [{port, Port} | Args2] ]).
+    case {z_config:get(smtp_listen_ip),z_config:get(smtp_listen_port)} of
+        {none, _} ->
+            lager:warning("SMTP server disabled: 'smtp_listen_ip' is set to 'none'"),
+            ignore;
+        {_, none} ->
+            lager:warning("SMTP server disabled: 'smtp_listen_port' is set to 'none'"),
+            ignore;
+        {IP, Port} ->
+            Args1 = case z_config:get(smtp_listen_domain) of
+                undefined -> [];
+                "" -> [];
+                Domain -> [{domain, Domain}]
+            end,
+            Args2 = case IP of
+                any -> [{address, {0,0,0,0}} | Args1];
+                _ when is_tuple(IP) ->
+                    [{address, IP} | Args1]
+            end,
+            case IP of
+                any -> lager:info("SMTP server listening on any:~p", [Port]);
+                _ -> lager:info("SMTP server listening on ~s:~p", [inet:ntoa(IP), Port])
+            end,
+            start_link([ [{port, Port} | Args2] ])
+    end.
 
 start_link(Args) when is_list(Args) ->
     gen_smtp_server:start_link({local, ?MODULE}, ?MODULE, Args).

@@ -34,14 +34,7 @@
 
 -spec spam_check(binary()) -> {ok, {ham|spam, SpamdStatus::list({binary(),binary()}), SpamdHeaders::list({binary(),binary()})}} | {error, term()}.
 spam_check(EncodedMail) ->
-    SmtpSpamdIp = z_config:get(smtp_spamd_ip),
-    SmtpSpamdPort = z_config:get(smtp_spamd_port, 783),
-    case {SmtpSpamdIp, SmtpSpamdPort} of
-        {Addr, _Port} when Addr =:= [] orelse Addr =:= undefined ->
-            {ok, {ham, [], []}};
-        {Addr, Port} ->
-            spamcheck(EncodedMail, Addr, Port)
-    end.
+    spamcheck(EncodedMail, z_config:get(smtp_spamd_ip), z_config:get(smtp_spamd_port)).
 
 
 %% TODO: check the spam status to give a specific message.
@@ -49,8 +42,7 @@ smtp_status(_SpamStatus, _From, _To, Peer) ->
     io_lib:format("451 Your message was classified as spam. Check if your mail server [~s] is black listed.",
                   [inet_parse:ntoa(Peer)]).
 
-
-spamcheck(EncodedMail, SpamDServer, SpamDPort) ->
+spamcheck(EncodedMail, SpamDServer, SpamDPort) when is_tuple(SpamDServer), is_integer(SpamDPort) ->
     case gen_tcp:connect(SpamDServer, SpamDPort, [binary]) of
         {ok, Socket} ->
             gen_tcp:send(Socket, [
@@ -72,7 +64,10 @@ spamcheck(EncodedMail, SpamDServer, SpamDPort) ->
         {error, Reason} = Err ->
             lager:error("SMTP spam check: can not connect to spamd on ~p:~p (~p)", [SpamDServer, SpamDPort, Reason]),
             Err
-    end.
+    end;
+spamcheck(_EncodedMail, _SpamDServer, _SpamDPort) ->
+    {ok, {ham, [], []}}.
+
 
 
 check_status({true, Args}, Headers) ->
