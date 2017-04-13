@@ -27,7 +27,7 @@ join(Input, Separator, Context) when is_list(Input) ->
     List1 = [ z_convert:to_binary(X, Context) || X <- Input ],
     iolist_to_binary(
         z_utils:combine(
-            List1,
-            z_convert:to_binary(Separator, Context)));
+            z_convert:to_binary(Separator, Context),
+            List1));
 join(Input, _, _Context) ->
     Input.
