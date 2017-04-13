@@ -587,7 +587,7 @@ find_dispatch_fallback() ->
 first_site_match([], _DispHost, _ReqData) ->
     no_host_match;
 first_site_match([Site|Sites], DispHost, ReqData) ->
-    case catch z_notifier:first(DispHost, z_context:new(Site)) of
+    case catch z_notifier:first(DispHost, z_context:set_reqdata(ReqData, z_context:new(Site))) of
         {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
             {redirect, Site, z_convert:to_list(PathOrURI), IsPermanent};
         undefined ->
@@ -708,4 +708,3 @@ add_port(_, Host, Port) -> Host++[$:|z_convert:to_list(Port)].
 
 count_request(Host) ->
     exometer:update([zotonic, Host, webzmachine, requests], 1).
-
