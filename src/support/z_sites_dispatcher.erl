@@ -587,8 +587,7 @@ find_dispatch_fallback() ->
 first_site_match([], _DispHost, _ReqData) ->
     no_host_match;
 first_site_match([Site|Sites], DispHost, ReqData) ->
-    NewSiteContext = z_context:new(Site),
-    case catch z_notifier:first(DispHost, NewSiteContext#context{wm_reqdata=ReqData}) of
+    case catch z_notifier:first(DispHost, z_context:set_reqdata(ReqData, z_context:new(Site))) of
         {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
             {redirect, Site, z_convert:to_list(PathOrURI), IsPermanent};
         undefined ->
