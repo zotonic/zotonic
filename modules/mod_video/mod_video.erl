@@ -267,7 +267,7 @@ video_info(Path, Context) ->
                                 Cmdline, " ",
                                 z_utils:os_filename(Path)
                                ]),
-    lager:warning("Video info: ~p", [FfprobeCmd]),
+    lager:debug("Video info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
         {struct, Ps} = decode_json(JSONText),
