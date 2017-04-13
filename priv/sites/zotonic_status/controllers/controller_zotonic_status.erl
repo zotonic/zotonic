@@ -173,17 +173,31 @@ site_config(Site) ->
 
 fix_hostname_port_config(Config) ->
     Hostname = proplists:get_value(hostname, Config),
-    [ {hostname, fix_hostname_port(Hostname)} | proplists:delete(hostname, Config)].
+    [ {absurl, fetch_absurl(Hostname)} ].
 
-fix_hostname_port(undefined) ->
-    fix_hostname_port("localhost");
-fix_hostname_port(Hostname) when is_binary(Hostname) ->
-    fix_hostname_port(binary_to_list(Hostname));
-fix_hostname_port(Hostname) ->
+fetch_absurl(undefined) ->
+    fetch_absurl("localhost");
+fetch_absurl(Hostname) when is_binary(Hostname) ->
+    fetch_absurl(binary_to_list(Hostname));
+fetch_absurl(Hostname) ->
     [ Host | _ ] = string:tokens(Hostname, ":"),
-    case z_config:get(port) of
-        80 -> Host;
-        Port -> lists:flatten([Host, $:, integer_to_list(Port)])
+    case get_protocol_port() of
+        none -> "";
+        {Protocol, ""} -> lists:flatten([Protocol, "://", Host, "/"]);
+        {Protocol, Port} -> lists:flatten([Protocol, "://", Host, ":", Port, "/"])
+    end.
+
+%% @doc Return the preferred protocol and port.
+get_protocol_port() ->
+    case z_config:get(ssl_port) of
+        none ->
+            case z_config:get(port) of
+                none -> none;
+                80 -> {"http", ""};
+                Port -> {"http", integer_to_list(Port)}
+            end;
+        443 -> {"https", ""};
+        Port ->  {"https", integer_to_list(Port)}
     end.
 
 get_sites() ->

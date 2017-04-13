@@ -262,6 +262,7 @@ drop_port(none) ->
 drop_port(Hostname) when is_binary(Hostname) ->
     hd(binary:split(Hostname, <<":">>)).
 
+add_port(_Hostname, _Protocol, none) -> undefined;
 add_port(Hostname, http, 80) -> Hostname;
 add_port(Hostname, https, 443) -> Hostname;
 add_port(Hostname, _, Port) ->
