@@ -480,7 +480,7 @@ add_redirect(HS, {_, false, _, _}) ->
     HS;
 add_redirect({Host, Site}, {Site, true, Host, _Redirect}) ->
     {Host, Site};
-add_redirect({Host, Site}, {Site, true, _Host, none}) ->
+add_redirect({Host, Site}, {Site, true, _Host, undefined}) ->
     {Host, Site};
 add_redirect({Host, Site}, {Site, true, _Host, Redirect}) ->
     {Host, Site, Redirect}.
