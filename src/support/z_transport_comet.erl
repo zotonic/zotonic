@@ -41,6 +41,10 @@ comet_delegate(Context) ->
         ok ->
             TRefFinal = erlang:send_after(?COMET_FLUSH_EMPTY, self(), flush_empty),
             process_post_loop(Context, TRefFinal, undefined, MRef);
+        {error, websocket_connected} ->
+            lager:debug("[~p] Comet attach failed due to websocket_connected", 
+                       [z_context:site(Context)]),
+            {ok, [], Context};
         {error, _} = Error ->
             lager:info("[~p] Comet attach failed due to ~p", 
                        [z_context:site(Context), Error]),
