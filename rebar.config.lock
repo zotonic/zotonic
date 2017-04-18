@@ -83,7 +83,7 @@
                   "81480a8386ca9f4a7e102a3261530b08f1e7451b"}},
        {s3filez,".*",
                 {git,"git://github.com/mworrell/s3filez.git",
-                     "f11d32b2d407da6d2dfc989bf3205f71cdf9d592"}},
+                     "6517a02ccfb44c2e8f8d7ed024a87872ee8490d3"}},
        {proper,".*",
                {git,"git://github.com/manopapad/proper.git",
                     "2b93ff12d8caa8e23e207b04a6aff04bc2d47a63"}},
