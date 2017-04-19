@@ -8,7 +8,7 @@
         {% if id.summary %}
             <p class="summary">{{ id.summary }}</p>
         {% endif %}
-        {{ id.body|showmedia }}
+        {{ id.body|show_media }}
     {% endif %}
 
     {% include "_content_list.tpl" list=id.o.hasfeatured %}

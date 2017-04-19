@@ -22,7 +22,7 @@
 
 		{% block body %}
 		<div class="body">
-			{{ m.rsc[id].body|showmedia }}
+			{{ m.rsc[id].body|show_media }}
 			{% include "_blocks.tpl" %}
 		</div>
 		{% endblock %}
