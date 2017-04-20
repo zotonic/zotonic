@@ -54,6 +54,7 @@ manage(Module, Datamodel, Options, Context) ->
     [manage_predicate(Module, Pred, Options, AdminContext) || Pred <- Datamodel#datamodel.predicates],
     [manage_resource(Module, R, Options, AdminContext) || R <- Datamodel#datamodel.resources],
     [manage_medium(Module, Medium, Options, AdminContext) || Medium <- Datamodel#datamodel.media],
+    z_depcache:flush(Context),
     [manage_edge(Module, Edge, Options, AdminContext) || Edge <- Datamodel#datamodel.edges],
     [manage_data(Module, Data, AdminContext) || Data <- Datamodel#datamodel.data],
     ok.
