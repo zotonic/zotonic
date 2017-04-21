@@ -466,6 +466,9 @@ is_empty(undefined) -> true;
 is_empty([]) -> true;
 is_empty(<<>>) -> true;
 is_empty({{9999,_,_},{_,_,_}}) -> true;
+is_empty({trans, []}) -> true;
+is_empty({trans, Tr}) ->
+    lists:all(fun({_,Text}) -> Text =:= <<>> end, Tr);
 is_empty(_) -> false.
 
 
@@ -478,11 +481,11 @@ is_true("on") -> true;
 is_true("ON") -> true;
 is_true("1") -> true;
 
-is_true(<<"true">>) -> true;
-is_true(<<"yes">>) -> true;
+is_true(<<"t", _/binary>>) -> true;
+is_true(<<"y", _/binary>>) -> true;
+is_true(<<"T", _/binary>>) -> true;
+is_true(<<"Y", _/binary>>) -> true;
 is_true(<<"on">>) -> true;
-is_true(<<"TRUE">>) -> true;
-is_true(<<"YES">>) -> true;
 is_true(<<"ON">>) -> true;
 is_true(<<"1">>) -> true;
 
@@ -490,7 +493,8 @@ is_true(true) -> true;
 is_true(yes) -> true;
 is_true(on) -> true;
 
-is_true(N) when is_integer(N) andalso N /= 0 -> true;
+is_true(N) when is_integer(N) andalso N =/= 0 -> true;
+is_true(N) when is_float(N) andalso N =/= 0.0 -> true;
 
 is_true(_) -> false.
 
