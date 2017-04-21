@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Perform a redirect to another page.
-%% @todo Make this a better redirect by including the host name of the site
-%% @todo Allow the location/id types of redirect to have extra arguments
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,14 +18,17 @@
 
 -module(action_base_redirect).
 -include("zotonic.hrl").
--export([render_action/4]).
+-export([
+    render_action/4,
+    redirect_location/2
+]).
 
 render_action(_TriggerId, _TargetId, Args, Context) ->
     Script = case proplists:get_value(back, Args) of
         true ->
             case get_location(proplists:delete(back, Args), Context) of
                 undefined ->
-                    "history.go(-1);";
+                    <<"history.go(-1);">>;
                 Location ->
                     [<<"if (history.length > 1) history.go(-1); else window.location = \"">>,z_utils:js_escape(Location),$",$;]
             end;
@@ -47,7 +48,7 @@ get_location(Args, Context) ->
         undefined ->
             case proplists:lookup(id, Args) of
                 none ->
-                    proplists:get_value(location, Args, "/");
+                    proplists:get_value(location, Args, <<"/">>);
                 {id, undefined} ->
                     undefined;
                 {id, Id} ->
@@ -57,5 +58,13 @@ get_location(Args, Context) ->
             Dispatch = z_convert:to_atom(DispatchString),
             Args1 = proplists:delete(dispatch, Args),
             z_dispatcher:url_for(Dispatch, Args1, none, Context)
+    end.
+
+%% @doc Return the location for the redirect, iff the location is an url
+-spec redirect_location({redirect, list()}, z:context()) -> {ok, binary()} | false.
+redirect_location({redirect, Args}, Context) ->
+    case get_location(Args, Context) of
+        undefined -> false;
+        Location -> {ok, iolist_to_binary(Location)}
     end.
 
