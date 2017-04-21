@@ -889,9 +889,14 @@ function z_do_transport(qmsg)
 
 function z_ajax(options, data)
 {
+    var url_transport = '';
+
     z_start_spinner();
+    if (typeof options.transport !== "undefined") {
+        url_transport = '/transport/'+options.transport;
+    }
     $.ajax({
-        url: '/postback?transport='+options.transport,
+        url: '/postback' + url_transport,
         type: 'post',
         data: data,
         dataType: 'ubf text',

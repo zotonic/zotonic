@@ -71,7 +71,7 @@ process_post(Context) ->
 process_post_ubf(Context) ->
     {Data, Context1} = cowmachine_req:req_body(Context),
     {ok, Term, _Rest} = z_transport:data_decode(Data),
-    {ok, Rs, ContextRs} = case z_context:get_q(<<"transport">>, Context) of
+    {ok, Rs, ContextRs} = case z_context:get_q(<<"z_transport">>, Context) of
         <<"ajax">> ->
             % Forced an ajax request (probably for cookies) so process this
             % in the requestor process.
@@ -119,12 +119,7 @@ process_post_form(Context) ->
                         target = z_context:get_q(<<"z_target_id">>, Context1)
                     },
             Context2 = notify_submit(z_context:get_q(<<"z_delegate">>, Context), Event, Context1),
-            {Script, Context3} = z_script:split(Context2),
-            case Script of
-                <<>> ->  nop;
-                _JS -> z_transport:page(javascript, Script, Context3)
-            end,
-            post_form_return(Context3);
+            post_form_opt_redirect(Context2);
         #z_msg_v1{} = Msg ->
             Context2 = z_transport:prepare_incoming_context(Msg, Context1),
             {ok, Reply, Context3} = z_transport:incoming(Msg, Context2),
@@ -132,9 +127,43 @@ process_post_form(Context) ->
             post_form_return(Context3)
     end.
 
+%% @doc Allow for a 'Location' header to be returned, in this way we can process posts from
+%%      non-javascript forms posted to "/postback/message/delegate"
+post_form_opt_redirect(Context) ->
+    case optional_redirect_action(Context) of
+        {ok, RedirectAction} ->
+            case action_base_redirect:redirect_location(RedirectAction, Context) of
+                {ok, Location} ->
+                    Url = z_context:abs_url(Location, Context),
+                    ContextLocation = z_context:set_resp_header(<<"location">>, Url, Context),
+                    {true, ContextLocation};
+                false ->
+                    post_form_opt_script(Context)
+            end;
+        false ->
+            post_form_opt_script(Context)
+    end.
+
+post_form_opt_script(Context) ->
+    {Script, Context1} = z_script:split(Context),
+    case Script of
+        <<>> ->  nop;
+        _JS -> z_transport:page(javascript, Script, Context1)
+    end,
+    post_form_return(Context1).
+
 post_form_return(Context) ->
     % Make sure that we return 200, otherwise the form onload is not triggered.
     post_return(<<"#$">>, Context).
+
+optional_redirect_action(#context{actions=[]}) ->
+    false;
+optional_redirect_action(#context{actions=Actions}) ->
+    Actions1 = lists:flatten([ As || {<<>>, <<>>, As} <- Actions ]),
+    case [ A || {redirect, _} = A <- Actions1 ] of
+        [Redirect] -> {ok, Redirect};
+        _ -> false
+    end.
 
 notify_submit(None, Event, Context) when None =:= undefined; None =:= <<>>; None =:= [] ->
     case z_notifier:first(Event, Context) of
