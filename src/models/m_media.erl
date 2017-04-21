@@ -464,13 +464,18 @@ insert_file_mime_ok(File, Props1, PropsMedia, Options, Context) ->
         undefined -> [{is_published, true} | Props1];
         _ -> Props1
     end,
-    Props3 = case proplists:get_value(title, Props2) of
-        undefined ->
-            [{title, proplists:get_value(original_filename, Props2)} | Props2];
-        _ -> Props2
+    Props3 = case z_utils:is_empty(proplists:get_value(title, Props2)) of
+        true ->
+            [{title, filename_basename(proplists:get_value(original_filename, PropsMedia))} | Props2];
+        false -> Props2
     end,
     replace_file_mime_ok(File, insert_rsc, Props3, PropsMedia, Options, Context).
 
+filename_basename(undefined) -> <<>>;
+filename_basename(Filename) ->
+    F1 = z_convert:to_binary(Filename),
+    F2 = lists:last(binary:split(F1, <<"/">>, [global])),
+    lists:last(binary:split(F2, <<"\\">>, [global])).
 
 %% @doc Replaces a medium file, when the file is not in archive then a copy is
 %% made in the archive. When the resource is in the media category, then the
