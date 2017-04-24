@@ -23,6 +23,9 @@
 join(Input, Context) ->
     join(Input, <<>>, Context).
 
+join(Input, <<>>, Context) when is_list(Input) ->
+    List1 = [ z_convert:to_binary(X, Context) || X <- Input ],
+    iolist_to_binary(List1);
 join(Input, Separator, Context) when is_list(Input) ->
     List1 = [ z_convert:to_binary(X, Context) || X <- Input ],
     iolist_to_binary(
