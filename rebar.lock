@@ -23,7 +23,7 @@
   0},
  {<<"depcache">>,
   {git,"https://github.com/zotonic/depcache.git",
-       {ref,"af0eec9a01bba694d996bb492cfec8e67cbfd670"}},
+       {ref,"8ff8cdbaae2562b04716b94957e4755bc2212043"}},
   0},
  {<<"dh_date">>,
   {git,"https://github.com/zotonic/dh_date.git",
