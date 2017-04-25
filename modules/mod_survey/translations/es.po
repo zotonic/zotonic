@@ -458,7 +458,7 @@ msgstr "Muy en Desacuerdo"
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:36
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:54
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:47
