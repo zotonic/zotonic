@@ -118,7 +118,6 @@ request_arg(<<"hasanyobject">>)        -> hasanyobject;
 request_arg(<<"is_authoritative">>)    -> is_authoritative;
 request_arg(<<"is_featured">>)         -> is_featured;
 request_arg(<<"is_published">>)        -> is_published;
-request_arg(<<"is_public">>)           -> is_public;
 request_arg(<<"date_start_after">>)    -> date_start_after;
 request_arg(<<"date_start_before">>)   -> date_start_before;
 request_arg(<<"date_start_year">>)     -> date_start_year;
