@@ -425,8 +425,8 @@ model_pgsql() ->
     "CREATE TABLE pivot_task_queue
     (
         id serial NOT NULL,
-        module character varying(30) NOT NULL,
-        function character varying(30) NOT NULL,
+        module character varying(80) NOT NULL,
+        function character varying(64) NOT NULL,
         key character varying(100) NOT NULL DEFAULT ''::character varying,
         due timestamp with time zone ,
         props bytea,
