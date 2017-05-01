@@ -175,8 +175,9 @@ get_edges(SubjectId, Context) ->
                 where e.subject_id = $1
                 order by e.predicate_id, e.seq, e.id", [SubjectId], Context),
             Edges1 = z_utils:group_proplists(name, Edges),
-            z_depcache:set({edges, SubjectId}, Edges1, ?DAY, [SubjectId], Context),
-            Edges1
+            Edges2 = [ {z_convert:to_atom(Pred), Es} || {Pred,Es} <- Edges1 ],
+            z_depcache:set({edges, SubjectId}, Edges2, ?DAY, [SubjectId], Context),
+            Edges2
     end.
 
 %% @doc Insert a new edge
