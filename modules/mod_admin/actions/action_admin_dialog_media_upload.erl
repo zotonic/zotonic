@@ -109,17 +109,21 @@ event(#submit{message={media_url, EventProps}}, Context) ->
 
 
 add_content_group(EventProps, Props, Context) ->
-    case proplists:get_value(subject_id, EventProps) of
+    case content_group_id(
+        proplists:get_value(content_group_id, EventProps),
+        proplists:get_value(subject_id, EventProps),
+        Context
+    ) of
         undefined ->
-            [ {content_group_id, proplists:get_value(content_group_id, EventProps)} | Props ];
-        SubjectId when is_integer(SubjectId) ->
-            ContentGroupdId = case proplists:get_value(content_group_id, EventProps) of
-                                    undefined -> m_rsc:p_no_acl(SubjectId, content_group_id, Context);
-                                    CGId -> CGId
-                              end,
-            [ {content_group_id, ContentGroupdId} | Props ]
+            Props;
+        ContentGroupId ->
+            [{content_group_id, ContentGroupId} | Props]
     end.
 
+content_group_id(undefined, SubjectId, Context) when is_integer(SubjectId) ->
+    m_rsc:p_no_acl(SubjectId, content_group_id, Context);
+content_group_id(ContentGroupId, _SubjectId, _Context) ->
+    ContentGroupId.
 
 %% Handling the media upload.
 handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
