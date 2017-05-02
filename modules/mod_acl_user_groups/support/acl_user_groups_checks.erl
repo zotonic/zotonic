@@ -198,6 +198,9 @@ acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer
     can_rsc(Id, view, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) ->
     can_media(Mime, Size, Context);
+acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat, props=undefined}}, Context) ->
+    % No properties, check default content group of the user.
+    can_insert(Cat, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat, props=Props}}, Context) ->
     case proplists:lookup(content_group_id, Props) of
         none ->
