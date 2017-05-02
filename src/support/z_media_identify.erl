@@ -208,10 +208,11 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         "application/vnd.openxmlformats" ++ _ = M -> {ok, [{mime,M}]};
                         _ -> {ok, [{mime, Excel}]}
                     end;
-                "audio/x-wav" ->
+                Wav when Wav =:= "audio/x-wav"; Wav =:= "audio/wav" ->
                     case guess_mime(OriginalFilename) of
+                        "audio/x-wav" -> {ok, [{mime, "audio/wav"}]};
                         "audio/" ++ _ = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, "audio/x-wav"}]}
+                        _ -> {ok, [{mime, "audio/wav"}]}
                     end;
                 "video/x-ms-asf" ->
                     case guess_mime(OriginalFilename) of
@@ -220,6 +221,7 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                     end;
                 "video/mp4" -> 
                     case guess_mime(OriginalFilename) of
+                        "audio/x-wav" -> {ok, [{mime, "audio/wav"}]};
                         "audio/" ++ _ = M -> {ok, [{mime,M}]};
                         _ -> {ok, [{mime, "video/mp4"}]}
                     end;
@@ -369,6 +371,8 @@ extension("application/vnd.ms-excel", _) -> ".xls";
 extension(<<"application/vnd.ms-excel">>, _) -> ".xls";
 extension("text/plain", _PreferExtension) -> ".txt";
 extension(<<"text/plain">>, _PreferExtension) -> ".txt";
+extension("audio/wav", _PreferExtension) -> ".wav";
+extension(<<"audio/wav">>, _PreferExtension) -> ".wav";
 extension(Mime, PreferExtension) ->
     Extensions = mimetypes:extensions(z_convert:to_binary(Mime)),
     case PreferExtension of
@@ -513,6 +517,7 @@ is_mime_compressed("image/svg"++_)                           -> false;
 is_mime_compressed("image/"++_)                              -> true;
 is_mime_compressed("video/"++_)                              -> true;
 is_mime_compressed("audio/x-wav")                            -> false;
+is_mime_compressed("audio/wav")                              -> false;
 is_mime_compressed("audio/"++_)                              -> true;
 is_mime_compressed("application/x-compres"++_)               -> true;
 is_mime_compressed("application/zip")                        -> true;
