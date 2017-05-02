@@ -19,6 +19,7 @@ Cookbooks
    template-icons
    logstash
    error-pages
+   exometer
 
 Frontend cookbook
 -----------------
