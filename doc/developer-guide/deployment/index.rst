@@ -27,6 +27,7 @@ Table of contents
    :maxdepth: 1
 
    startup
+   server-configuration
    privilegedports
    https
    varnish
