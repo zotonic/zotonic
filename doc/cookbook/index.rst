@@ -13,6 +13,7 @@ Cookbooks
    custom-tag
    writing-module
    task-queue
+   exometer
 
 Frontend cookbook
 -----------------
