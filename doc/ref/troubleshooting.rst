@@ -58,3 +58,12 @@ Solution: Add the computer name to ``/etc/hosts``, for instance:
 
     127.0.0.1 MacBook-Pro-Apple
 
+Erlang crashes
+--------------
+
+Here we list some common causes of Erlang crashes.
+
+``{{badmatch,{error,emfile}}`` or ``{reason, emfile}``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You need to raise the :ref:`file-descriptors` limit.
