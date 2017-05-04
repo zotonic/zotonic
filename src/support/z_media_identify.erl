@@ -208,17 +208,17 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         "application/vnd.openxmlformats" ++ _ = M -> {ok, [{mime,M}]};
                         _ -> {ok, [{mime, Excel}]}
                     end;
-                "audio/x-wav" ->
+                Wav when Wav =:= "audio/x-wav"; Wav =:= "audio/wav" ->
                     case guess_mime(OriginalFilename) of
                         "audio/" ++ _ = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, "audio/x-wav"}]}
+                        _ -> {ok, [{mime, "audio/wav"}]}
                     end;
                 "video/x-ms-asf" ->
                     case guess_mime(OriginalFilename) of
                         "audio/" ++ _ = M -> {ok, [{mime,M}]};
                         _ -> {ok, [{mime, "video/x-ms-asf"}]}
                     end;
-                "video/mp4" -> 
+                "video/mp4" ->
                     case guess_mime(OriginalFilename) of
                         "audio/" ++ _ = M -> {ok, [{mime,M}]};
                         _ -> {ok, [{mime, "video/mp4"}]}
@@ -353,7 +353,12 @@ extension(Mime) -> extension(Mime, undefined).
 %% the first extension.
 -spec extension(string()|binary(), string()|binary()|undefined, #context{}) -> string().
 extension(Mime, PreferExtension, Context) ->
-    case z_notifier:first(#media_identify_extension{mime=maybe_binary(Mime), preferred=maybe_binary(PreferExtension)}, Context) of
+    case z_notifier:first(
+                #media_identify_extension{
+                    mime=maybe_binary(Mime),
+                    preferred=maybe_binary(PreferExtension)},
+                Context)
+    of
         undefined ->
             extension(Mime, PreferExtension);
         Extension ->
@@ -370,6 +375,8 @@ extension("application/vnd.ms-excel", _) -> ".xls";
 extension(<<"application/vnd.ms-excel">>, _) -> ".xls";
 extension("text/plain", _PreferExtension) -> ".txt";
 extension(<<"text/plain">>, _PreferExtension) -> ".txt";
+extension("audio/wav", _PreferExtension) -> ".wav";
+extension(<<"audio/wav">>, _PreferExtension) -> ".wav";
 extension(Mime, PreferExtension) ->
     Extensions = mimetypes:extensions(z_convert:to_binary(Mime)),
     case PreferExtension of
@@ -402,10 +409,12 @@ first_extension(Extensions) ->
 -spec guess_mime(string() | binary()) -> string().
 guess_mime(File) ->
 	case mimetypes:filename(z_convert:to_binary(z_string:to_lower(File))) of
-		[Mime|_] -> z_convert:to_list(Mime);
+		[Mime|_] -> maybe_map_mime(z_convert:to_list(Mime));
 		[] -> "application/octet-stream"
 	end.
 
+maybe_map_mime("audio/x-wav") -> "audio/wav";
+maybe_map_mime(Mime) -> Mime.
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
 exif(File) ->
@@ -514,6 +523,7 @@ is_mime_compressed("image/svg"++_)                           -> false;
 is_mime_compressed("image/"++_)                              -> true;
 is_mime_compressed("video/"++_)                              -> true;
 is_mime_compressed("audio/x-wav")                            -> false;
+is_mime_compressed("audio/wav")                              -> false;
 is_mime_compressed("audio/"++_)                              -> true;
 is_mime_compressed("application/x-compres"++_)               -> true;
 is_mime_compressed("application/zip")                        -> true;
