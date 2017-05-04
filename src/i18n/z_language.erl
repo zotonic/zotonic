@@ -162,7 +162,14 @@ sort_properties(List, SortKey) ->
 %%      For each language a property list is returned - see properties/1.
 -spec all_languages() -> list().
 all_languages() ->
-    all_languages1(languages()).
+    case mochiglobal:get(?MODULE) of
+        undefined ->
+            Languages = all_languages1(languages()),
+            ok = mochiglobal:put(?MODULE, Languages),
+            Languages;
+        Languages ->
+            Languages
+    end.
 
 all_languages1(List) ->
     lists:foldl(fun({Code, Data}, Acc) ->
