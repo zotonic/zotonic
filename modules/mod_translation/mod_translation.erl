@@ -549,19 +549,23 @@ reload_page(Context) ->
     z_render:wire({reload, [{z_language, Language}, {z_rewrite_url, RewriteUrl}]}, Context).
 
 
-%% @doc Get the list of condigured languages that are enabled.
+%% @doc Get the list of configured languages that are enabled.
 -spec enabled_languages(#context{}) -> list().
 enabled_languages(Context) ->
     case z_memo:get('mod_translation$enabled_languages') of
-        V when is_boolean(V) ->
+        V when is_list(V) ->
             V;
         _ ->
-            ConfigLanguages = lists:filter(fun({_,Props}) -> proplists:get_value(is_enabled, Props) =:= true end, language_config(Context)),
+            ConfigLanguages = lists:filter(
+                fun({_,Props}) ->
+                    proplists:get_value(is_enabled, Props) =:= true
+                end,
+                language_config(Context)),
             z_memo:set('mod_translation$enabled_languages', ConfigLanguages)
     end.
 
 
-%% @doc Get the list of condigured languages.
+%% @doc Get the list of configured languages.
 -spec language_config(#context{}) -> list().
 language_config(Context) ->
     case m_config:get(i18n, language_list, Context) of
