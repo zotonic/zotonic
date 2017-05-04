@@ -475,7 +475,7 @@ valid_config_language(Code, Context, Tries) ->
 
 
 %% @doc Add a language to the i18n configuration
--spec language_add(atom() | binary(), boolean(), #context{}) -> #context{}.
+-spec language_add(atom() | binary(), boolean(), #context{}) -> ok | {error, not_a_language}.
 language_add(NewLanguageCode, IsEnabled, Context) ->
     NewCode = z_convert:to_atom(NewLanguageCode),
     NewCodeBin = z_convert:to_binary(NewCode),
@@ -483,7 +483,7 @@ language_add(NewLanguageCode, IsEnabled, Context) ->
     case proplists:is_defined(NewCodeBin, Languages) of
         false ->
             lager:warning("mod_translation error. language_add: language ~p does not exist", [NewLanguageCode]),
-            Context;
+            {error, not_a_language};
         true ->
             Props = proplists:get_value(NewCodeBin, Languages),
             Props1 = [
@@ -492,7 +492,8 @@ language_add(NewLanguageCode, IsEnabled, Context) ->
             | Props],
             ConfigLanguages = language_config(Context),
             ConfigLanguages1 = lists:usort([{NewCode, Props1} | ConfigLanguages]),
-            set_language_config(ConfigLanguages1, Context)
+            set_language_config(ConfigLanguages1, Context),
+            ok
     end.
 
 
@@ -602,7 +603,8 @@ maybe_language_code(_) -> false.
 
 %% @private
 set_language_config(NewConfig, Context) ->
-    m_config:set_prop(i18n, language_list, list, NewConfig, Context).
+    m_config:set_prop(i18n, language_list, list, NewConfig, Context),
+    z_memo:delete('mod_translation$enabled_languages').
 
 
 %% @private
