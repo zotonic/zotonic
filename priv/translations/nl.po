@@ -6339,7 +6339,7 @@ msgid ""
 "Thank you for registering at our site. We request you to confirm your "
 "account before you can use it."
 msgstr ""
-"Bedank voor het registreren bij onze website.  Wij verzoeken je om je "
+"Bedankt voor het registreren bij onze website.  Wij verzoeken je om je "
 "account te bevestigen voordat je het kan gebruiken."
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:14
