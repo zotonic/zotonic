@@ -213,10 +213,12 @@
 %% ACL fields for an acl check. Fields are initialized for the visible resource.
 %% This is used for fetching the acl fields from a resource record.
 -record(acl_props, {
-    is_published=true,
-    is_authoritative=true,
-    publication_start={{1900,1,1},{0,0,0}},
-    publication_end=?ST_JUTTEMIS
+    is_published = true :: boolean(),
+    is_authoritative = true :: boolean(),
+    publication_start ={{1900,1,1},{0,0,0}} :: calendar:datetime(),
+    publication_end = ?ST_JUTTEMIS, %% :: calendar::datetime(),
+    content_group_id = undefined :: undefined | m_rsc:resource_id(),
+    visible_for = 0 :: non_neg_integer()
 }).
 
 %% @doc drag and drop event message
