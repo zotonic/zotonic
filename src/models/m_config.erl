@@ -84,7 +84,7 @@ all(Context) ->
                 || {M, CMs} <- z_utils:group_proplists(module, Cs)
             ],
             Indexed1 = [
-                {z_convert:to_atom(M), [{z_convert:to_atom(K), Vs} || {K,Vs} <- CMs]}
+                {z_convert:to_atom(M), [{z_convert:to_atom(K), Vs} || {K, Vs} <- CMs]}
                 || {M, CMs} <- Indexed
             ],
             z_depcache:set(config, Indexed1, ?DAY, Context),
