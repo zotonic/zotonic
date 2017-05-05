@@ -171,8 +171,32 @@ find_value(Key, F, _Context) when is_function(F, 1) ->
 %% Any subvalue of a non-existant value is undefined
 find_value(_Key, undefined, _Context) ->
     undefined;
-find_value(_Key, _Other, _Context) ->
-    undefined.
+find_value(Key, Map, _Context) ->
+    case erlang:is_builtin(erlang, is_map, 1) andalso erlang:is_map(Map) of
+        true  -> find_map_value(Key, Map);
+        false -> undefined
+    end.
+
+find_map_value(Key, Map) when is_atom(Key) ->
+    case maps:find(Key, Map) of
+        error           -> find_map_value(atom_to_list(Key), Map);
+        {ok, Value}     -> Value
+    end;
+find_map_value(Key, Map) when is_list(Key) ->
+    case maps:find(Key, Map) of
+        error           -> find_map_value(list_to_binary(Key), Map);
+        {ok, Value}     -> Value
+    end;
+find_map_value(Key, Map) when is_binary(Key) ->
+    case maps:find(Key, Map) of
+        error           -> undefined;
+        {ok, Value}     -> Value
+    end;
+find_map_value(Key, Map) ->
+    case maps:find(Key, Map) of
+        error           -> undefined;
+        {ok, Value}     -> Value
+    end.
 
 %% This used to translate undefined into <<>>, this translation is now done by z_render:render/2
 fetch_value(Key, Data, Context) ->
