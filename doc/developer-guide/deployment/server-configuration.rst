@@ -61,12 +61,18 @@ Compare the current number of connections with the limit::
     # sysctl net.netfilter.nf_conntrack_max
     # sysctl net.netfilter.nf_conntrack_count
 
+When you increase the maximum number of connections in the connection tracking
+table it is important to increase the size of the table which stores the 
+connections. 
+The rule of the thumb for this is: ``nf_conntrack_buckets = nf_conntrack_max / 8``.
+
 If you need to raise the limit, edit ``/etc/sysctl.conf``:
 
 .. code-block:: none
     :caption: /etc/sysctl.conf
 
     net.netfilter.nf_conntrack_max = some_number
+    net.netfilter.nf_conntrack_buckets = some_other_number
 
 Moreover, to reduce the number of open connections, you can decrease their
 time-out values so they get closed sooner. By default, inactive connections can
