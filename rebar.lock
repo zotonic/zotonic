@@ -91,7 +91,7 @@
  {<<"lager">>,{pkg,<<"lager">>,<<"3.2.1">>},0},
  {<<"letsencrypt">>,
   {git,"https://github.com/zotonic/letsencrypt-erlang.git",
-       {ref,"1e27df29a05f2f03daff1da56db8fd0538d80d44"}},
+       {ref,"9eb5ff98a6261cc379a6b7d3a4df04086aa4e342"}},
   0},
  {<<"meck">>,{pkg,<<"meck">>,<<"0.8.4">>},0},
  {<<"mimetypes">>,
