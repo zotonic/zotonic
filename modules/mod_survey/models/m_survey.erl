@@ -317,8 +317,10 @@ prepare_result(Block, Stats, Context) ->
 prep_chart(_Type, _Block, undefined, _Context) ->
     undefined;
 prep_chart(Type, Block, Stats, Context) ->
-    M = mod_survey:module_name(Type),
-    M:prep_chart(Block, Stats, Context).
+    case mod_survey:module_name(Type) of
+        undefined -> undefined;
+        M -> M:prep_chart(Block, Stats, Context)
+    end.
 
 
 %% @doc Fetch the aggregate answers of a survey. 
