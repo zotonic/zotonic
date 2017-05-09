@@ -34,5 +34,5 @@ echo "Running sitetest for site: $SITE"
 echo
 
 # Run the sitetests
-$ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_sitetest@$NODEHOST $(find_config_arg zotonic.config) -noshell -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(8000),init:stop(case z_sitetest:run($SITE) of error -> 1; ok -> 0 end)"
+$ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_sitetest@$NODEHOST $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -noshell -boot start_sasl -sasl errlog_type error -s zotonic -eval "timer:sleep(8000),init:stop(case z_sitetest:run($SITE) of error -> 1; ok -> 0 end)"
 EXIT=$?
