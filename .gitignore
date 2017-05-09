@@ -24,6 +24,7 @@ deps/
 
 /priv/*.config
 
+/priv/filezcache
 /priv/log/
 /priv/mnesia/
 /priv/sites/default/files/
