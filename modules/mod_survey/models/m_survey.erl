@@ -205,7 +205,7 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
         ],
         Context)
     of
-        1 -> ok;
+        1 -> {ok, AnswerId};
         0 -> {error, enoent}
     end.
 
@@ -222,7 +222,7 @@ insert_survey_submission(SurveyId, Answers, Context) ->
 
 %% @doc Save or replace a survey, resetting the created if needed.
 insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
-    case z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_multiple, Context)) of
+    case is_survey_multiple(SurveyId, Context) of
         true ->
             insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context);
         false ->
@@ -233,6 +233,13 @@ insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
                 AnsId ->
                     replace_survey_submission(SurveyId, AnsId, Answers, Context)
             end
+    end.
+
+is_survey_multiple(SurveyId, Context) ->
+    case m_rsc:p_no_acl(SurveyId, survey_multiple, Context) of
+        1 -> true;
+        <<"1">> -> true;
+        _ -> false
     end.
 
 find_answer_id(SurveyId, undefined, PersistentId, Context) ->

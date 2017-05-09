@@ -571,19 +571,10 @@ do_submit(SurveyId, Questions, Answers, Context) ->
 
 insert_survey_submission(SurveyId, StorageAnswers, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
-                                undefined ->
-                                    {undefined, persistent_id(Context)};
-                                UId ->
-                                    {UId, undefined}
+                                undefined -> {undefined, persistent_id(Context)};
+                                UId -> {UId, undefined}
                             end,
-    case m_survey:single_result(SurveyId, UserId, PersistentId, Context) of
-        None when None =:= undefined; None =:= [] ->
-            m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context);
-        Result ->
-            ResultId = proplists:get_value(id, Result),
-            ok = m_survey:replace_survey_submission(SurveyId, ResultId, StorageAnswers, Context),
-            {ok, ResultId}
-    end.
+    m_survey:insert_survey_submission(SurveyId, UserId, PersistentId, StorageAnswers, Context).
 
 persistent_id(#context{session_id = undefined}) -> undefined;
 persistent_id(Context) -> z_context:persistent_id(Context).
