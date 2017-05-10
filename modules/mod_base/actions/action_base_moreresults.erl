@@ -118,7 +118,8 @@ to_id({Id,_}) when is_integer(Id) -> Id;
 to_id({_,Id}) when is_integer(Id) -> Id;
 to_id(T) when is_tuple(T) -> element(1, T);
 to_id([{_,_}|_] = L) -> proplists:get_value(id, L);
-to_id(M) when is_map(M) -> maps:get(id, M, undefined).
+to_id(M) when is_map(M) -> maps:get(id, M, undefined);
+to_id(_) -> undefined.
 
 
 make_postback(SearchName, SearchProps, Page, PageLen, MorePageLen, Args, TriggerId, TargetId, Context) ->
