@@ -138,7 +138,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     end,
                     Context),
             case Result of
-                {error,{error,error,<<"23505">>, _ErrMsg, _ErrProps}} ->
+                {error, {error, error, <<"23505">>, _ErrMsg, _ErrProps}} ->
                     % Duplicate key - ignore (race condition)
                     {ok, Id};
                 Other -> Other
