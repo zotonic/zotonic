@@ -119,7 +119,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
         undefined ->
             {error, notfound};
         Props when is_list(Props) ->
-            z_db:transaction(
+            Result = z_db:transaction(
                     fun(Ctx) ->
                         Props1 = [
                             {new_id, NewId},
@@ -132,11 +132,18 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                                 lager:warning(z_context:lager_md(Ctx),
                                               "[~p] Second rsc_gone entry for id ~p",
                                               [z_context:site(Ctx), Id]),
-                                z_db:update(rsc_gone, Id, Props1, Ctx);
+                                {ok, _} = z_db:update(rsc_gone, Id, Props1, Ctx),
+                                {ok, Id};
                             0 ->
                                 z_db:insert(rsc_gone, Props1, Ctx)
                         end
                     end,
-                    Context)
+                    Context),
+            case Result of
+                {error,{error,error,<<"23505">>, _ErrMsg, _ErrProps}} ->
+                    % Duplicate key - ignore (race condition)
+                    {ok, Id};
+                Other -> Other
+            end
     end.
 
