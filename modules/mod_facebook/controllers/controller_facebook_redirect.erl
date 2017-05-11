@@ -135,7 +135,7 @@ decode_access_token(_ContentType, Payload) ->
 
 % Given user id
 fetch_user_id(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.9/me?access_token=" ++ z_utils:url_encode(AccessToken),
+    FacebookUrl = "https://graph.facebook.com/v2.9/me?access_token=" ++ z_url:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
@@ -154,7 +154,7 @@ fetch_user_id(AccessToken) ->
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
     {ok, User_id} = fetch_user_id(AccessToken),
-    FacebookUrl = "https://graph.facebook.com/v2.9/" ++ z_utils:url_encode(User_id) ++ "?fields=email,name&access_token=" ++ z_utils:url_encode(AccessToken),
+    FacebookUrl = "https://graph.facebook.com/v2.9/" ++ z_url:url_encode(User_id) ++ "?fields=email,name&access_token=" ++ z_url:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
