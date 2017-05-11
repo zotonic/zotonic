@@ -133,9 +133,28 @@ decode_access_token("application/json"++_, Payload) ->
 decode_access_token(_ContentType, Payload) ->
     mochiweb_util:parse_qs(Payload).
 
+% Given user id
+fetch_user_id(AccessToken) ->
+    FacebookUrl = "https://graph.facebook.com/v2.9/me?access_token=" ++ z_utils:url_encode(AccessToken),
+    case httpc:request(FacebookUrl) of
+        {ok, {{_, 200, _}, _Headers, Payload}} ->
+            {struct, Props} = mochijson:binary_decode(Payload),
+            case proplists:get_value(<<"id">>, Props) of
+                undefined ->
+                    lager:error("[facebook] missing param id ~p", [Props]),
+                    {error, {http_error, FacebookUrl}};
+                _id ->
+                    {ok, jiffy:decode(_id)}
+            end;
+        Other ->
+            lager:error("[facebook] error fetching user id [token ~p] ~p", [AccessToken, Other]),
+            {error, {http_error, FacebookUrl, Other}}
+    end.
+
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.3/me?access_token=" ++ z_url:url_encode(AccessToken),
+    {ok, User_id} = fetch_user_id(AccessToken),
+    FacebookUrl = "https://graph.facebook.com/v2.9/" ++ z_utils:url_encode(User_id) ++ "?fields=email,name&access_token=" ++ z_utils:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
