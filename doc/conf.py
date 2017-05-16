@@ -122,7 +122,7 @@ html_theme_options = {
 }
 
 html_context = {
-    'css_files': [
+    'extra_css_files': [
         '_static/overrules.css'
     ]
 }
