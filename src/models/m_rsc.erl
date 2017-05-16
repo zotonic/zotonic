@@ -324,25 +324,35 @@ get_acl_props(Id, Context) when is_integer(Id) ->
         Result =
             z_db:q_row(
                 "select is_published, is_authoritative, "
-                "publication_start, publication_end "
+                "publication_start, publication_end, "
+                "content_group_id, visible_for "
                 "from rsc "
                 "where id = $1",
                 [Id], Context),
         case Result of
-            {IsPub, IsAuth, PubS, PubE} ->
-                #acl_props{is_published = IsPub, is_authoritative = IsAuth,
-                    publication_start   = PubS, publication_end = PubE};
+            {IsPub, IsAuth, PubS, PubE, CGId, VisFor} ->
+                #acl_props{
+                    is_published = IsPub,
+                    is_authoritative = IsAuth,
+                    publication_start = PubS,
+                    publication_end = PubE,
+                    content_group_id = CGId,
+                    visible_for = VisFor
+                };
             undefined ->
-                #acl_props{is_published = false}
+                #acl_props{
+                    is_published = false
+                }
         end
-        end,
+    end,
     z_depcache:memo(F, {rsc_acl_fields, Id}, ?DAY, [Id], Context);
 get_acl_props(Name, Context) ->
-    case name_to_id(Name, Context) of
-        {ok, Id} ->
-            get_acl_props(Id, Context);
-        _ ->
-            #acl_props{is_published = false}
+    case rid(Name, Context) of
+        undefined ->
+            #acl_props{
+                is_published = false
+            };
+        Id -> get_acl_props(Id, Context)
     end.
 
 
