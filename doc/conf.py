@@ -121,6 +121,11 @@ html_theme_options = {
     'logo_only': True
 }
 
+html_context = {
+    'css_files': [
+        '_static/overrules.css'
+    ]
+}
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".

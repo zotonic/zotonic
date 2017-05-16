@@ -1,16 +1,5 @@
 {% extends "!layout.html" %}
 
-{% set css_files = css_files + ["_static/overrules.css"] %}
-
-{% block rootrellink %}
-<li class="link-home"><a href="http://zotonic.com">Zotonic Home</a>{{ reldelim1 }}</li>
-{{ super() }}
-{% endblock %}
-
-{%- block doctype -%}
-<!doctype html>
-{% endblock %}
-
 {% block linktags %}
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="mobile-web-app-capable" content="yes">
@@ -32,15 +21,3 @@
 	})();
 </script>
 {% endblock %}
-
-{# Under Construction Notice #}
-{#
-{% block document %}
-<div class="admonition note">
-<p class="first admonition-title">Under Construction</p>
-<p class="last">This documentation is under development. Please refer to the <a href="http://zotonic.com/documentation">official documentation</a> if you don't find what you are looking for here.</p>
-</div>
-
-{{ super() }}
-{% endblock %}
-#}
