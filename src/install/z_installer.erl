@@ -200,6 +200,9 @@ upgrade(C, Database, Schema) ->
 
     % 0.22.0
     ok = add_edge_log_details(C, Database, Schema),
+
+    % 1.0
+    ok = set_default_visible_for(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -557,3 +560,23 @@ add_edge_log_details(C, Database, Schema) ->
             {ok, [], []} = epgsql:squery(C, z_install:edge_log_table()),
             ok
     end.
+
+set_default_visible_for(C, Database, Schema) ->
+    {ok, _, [{Default}]} = epgsql:equery(C, "
+            select column_default
+            from information_schema.columns
+            where table_catalog = $1
+              and table_schema = $2
+              and table_name = 'rsc'
+              and column_name = 'visible_for'
+            ", [Database, Schema]),
+    case Default of
+        <<"1">> ->
+            {ok, [], []} = epgsql:squery(C,
+                  "ALTER TABLE rsc "
+                  "ALTER COLUMN visible_for SET DEFAULT 0"),
+            ok;
+        <<"0">> ->
+            ok
+    end.
+
