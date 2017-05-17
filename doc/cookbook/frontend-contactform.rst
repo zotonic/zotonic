@@ -152,3 +152,5 @@ Zotonic, please see the mod_emailer documentation.
 Finally, this contact-form handler replaces the contact form with a
 ``<p>`` tag with a success message, using the ``z_render:update``
 function.
+
+.. seealso:: :ref:`send-email`
