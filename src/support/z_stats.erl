@@ -38,6 +38,8 @@ init_site(Host) ->
     exometer:re_register([zotonic, Host, webzmachine, duration], histogram, []),
     exometer:re_register([zotonic, Host, webzmachine, data_out], counter, []),
 
+    exometer:re_register([zotonic, Host, depcache, evictions], counter, []),
+
     %% Database metrics
     exometer:re_register([zotonic, Host, db, requests], counter, []),
     exometer:re_register([zotonic, Host, db, duration], histogram, []),
