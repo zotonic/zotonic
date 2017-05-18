@@ -170,7 +170,7 @@ secrets_for_verify(Type, Consumer, Token, Context) ->
     z_db:assoc_props_row("
         SELECT	tok.id AS id,
            application_id,
-           app.user_id as user_id,
+           tok.user_id as user_id,
            consumer_key,
            consumer_secret,
            token,
