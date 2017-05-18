@@ -19,15 +19,14 @@ modify_rsc_test() ->
     end,
 
     %% perform the tests
-    ?assertThrow({{error, eacces}, _Trace}, m_rsc_import:create_empty("http://foo.com/id/333", C)),
+    ?assertEqual({error, eacces}, m_rsc_import:create_empty("http://foo.com/id/333", C)),
 
     {ok, Id} = m_rsc_import:create_empty("http://foo.com/id/333", AdminC),
 
     ?assertEqual(Id, m_rsc:uri_lookup("http://foo.com/id/333", C)),
     ?assertEqual(Id, m_rsc:uri_lookup(<<"http://foo.com/id/333">>, C)),
 
-    ?assertThrow({{error, duplicate_uri}, _Trace},
-        m_rsc_import:create_empty("http://foo.com/id/333", AdminC)),
+    ?assertEqual({error, duplicate_uri}, m_rsc_import:create_empty("http://foo.com/id/333", AdminC)),
 
     %% Existence check
     ?assertEqual(true, m_rsc:exists(Id, AdminC)),
@@ -46,7 +45,7 @@ modify_rsc_test() ->
     ?assertEqual(true, z_acl:rsc_editable(Id, AdminC)),
 
     %% Context must not be admin context, as admins are allowed to update non-authoritative resources
-    ?assertThrow({error, non_authoritative}, m_rsc:update(Id, [{title, <<"foo">>}], C)),
+    ?assertEqual({error, non_authoritative}, m_rsc:update(Id, [{title, <<"foo">>}], C)),
 
     RscImport = [{uri, <<"http://foo.com/id/333">>},
                  {rsc, [{title, <<"Hello!">>},
@@ -54,7 +53,7 @@ modify_rsc_test() ->
                         {body, <<"This is a <strong>statement</strong>.">>}
                        ]}
                 ],
-    ?assertThrow({error, eacces}, m_rsc_import:import(RscImport, C)),
+    ?assertEqual({error, eacces}, m_rsc_import:import(RscImport, C)),
 
     {ok, NewId} = m_rsc_import:import(RscImport, SudoC),
     ?assertEqual(Id, NewId),

@@ -86,22 +86,17 @@ allowed_content_groups(CatId, ExtraIds, CGMenu, Context) ->
                  CGIds).
 
 update(Id, CatId, CGId, Context, ErrorContext) ->
-    try
-        Props = [
+    Props = [
             {category_id,CatId},
             {content_group_id,CGId}
         ],
-        {ok, _} = m_rsc:update(Id, Props, Context),
-        z_render:wire([{dialog_close, []}, {reload, []}], Context)
-    catch
-        throw:{error, eacces} ->
+    case  m_rsc:update(Id, Props, Context) of
+        {ok, _} ->
+            z_render:wire([{dialog_close, []}, {reload, []}], Context);
+        {error, eacces} ->
             z_render:growl_error("You don't have permission to edit this page.", ErrorContext);
-        throw:{error, Message} when is_list(Message); is_binary(Message) ->
-            z_render:growl_error(Message, ErrorContext);
-        X:Y ->
-            Stacktrace = erlang:get_stacktrace(),
-            lager:error("Rsc update error: ~p:~p stacktrace: ~p", [X, Y, Stacktrace]),
-            z_render:growl_error("Something went wrong. Sorry.", ErrorContext)
+        {error, Message} when is_list(Message); is_binary(Message) ->
+            z_render:growl_error(Message, ErrorContext)
     end.
 
 check_catcg(CGId, CatId, ErrorDiv, Context) ->

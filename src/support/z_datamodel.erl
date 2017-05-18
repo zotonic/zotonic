@@ -275,7 +275,7 @@ manage_edge(_Module, {SubjectName, PredicateName, ObjectName, EdgeOptions}, _Opt
     Object = m_rsc:name_to_id(ObjectName, Context),
     case {Subject, Predicate, Object} of
         {{ok, SubjectId}, {ok, PredicateId}, {ok,ObjectId}} ->
-            m_edge:insert(SubjectId, PredicateId, ObjectId, EdgeOptions, Context);
+            {ok, _} = m_edge:insert(SubjectId, PredicateId, ObjectId, EdgeOptions, Context);
         _ ->
             skip %% One part of the triple was MIA
     end.
