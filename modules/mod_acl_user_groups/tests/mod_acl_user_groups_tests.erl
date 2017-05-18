@@ -108,7 +108,7 @@ publish_test() ->
     ?assertEqual(<<"Top secret!">>, m_rsc:p(Id, title, Context)). %% visible for anonymous when published
 
 context() ->
-    Context = z_context:new(testsandboxdb),
+    Context = z_context:new(testsandbox),
     start_modules(Context),
     Context.
 

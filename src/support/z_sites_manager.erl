@@ -169,7 +169,7 @@ get_fallback_site() ->
 %% @doc The list of builtin sites, they are located in the priv/sites directory.
 -spec get_builtin_sites() -> [ atom() ].
 get_builtin_sites() ->
-    [zotonic_status, testsandbox, testsandboxdb].
+    [zotonic_status, testsandbox].
 
 %% @doc Stop a site or multiple sites.
 stop([Node, Site]) ->
@@ -374,12 +374,12 @@ scan_sites() ->
     scan_sites(is_testsandbox()).
 
 scan_sites(true) ->
-    Sites = [testsandbox, testsandboxdb],
+    Sites = [testsandbox],
     ConfigFiles = [get_site_config_file(Site) || Site <- Sites],
     ParsedConfigs = [parse_config(CfgFile) || CfgFile <- ConfigFiles],
     [SiteConfig || {ok, SiteConfig} <- ParsedConfigs];
 scan_sites(false) ->
-    BuiltinSites = get_builtin_sites() -- [testsandbox, testsandboxdb],
+    BuiltinSites = get_builtin_sites() -- [testsandbox],
     Builtin = [ parse_config(get_site_config_file(Builtin)) || Builtin <- BuiltinSites ],
     [ BuiltinCfg || {ok, BuiltinCfg} <- Builtin ] ++ scan_directory(z_path:user_sites_dir()).
 
@@ -509,7 +509,6 @@ is_testsandbox() ->
     [Base|_] = string:tokens(atom_to_list(node()), "@"),
     case lists:last(string:tokens(Base, "_")) of
         "testsandbox" -> true;
-        "testsandboxdb" -> true;
         _ -> false
     end.
 

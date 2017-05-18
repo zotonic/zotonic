@@ -4,7 +4,8 @@
 -include("zotonic.hrl").
 
 oauth_request_test() ->
-    Context = z_context:new(testsandboxdb),
+    ok = z_sites_manager:await_startup(testsandbox),
+    Context = z_context:new(testsandbox),
     ok = z_module_manager:activate_await(mod_oauth, Context),
     ok = z_module_manager:await_upgrade(Context),
 

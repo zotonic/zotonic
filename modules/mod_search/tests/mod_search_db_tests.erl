@@ -20,8 +20,8 @@ wait_for(QueryId, ItemId) ->
 
 
 query_hooks_test() ->
-    ok = z_sites_manager:await_startup(testsandboxdb),
-    C = z_acl:sudo(z_context:new(testsandboxdb)),
+    ok = z_sites_manager:await_startup(testsandbox),
+    C = z_acl:sudo(z_context:new(testsandbox)),
 
     z_notifier:observe(rsc_query_item, self(), C),
 
@@ -51,8 +51,8 @@ query_hooks_test() ->
 
 
 search_query_notify_test() ->
-    ok = z_sites_manager:await_startup(testsandboxdb),
-    C = z_acl:sudo(z_context:new(testsandboxdb)),
+    ok = z_sites_manager:await_startup(testsandbox),
+    C = z_acl:sudo(z_context:new(testsandbox)),
 
     Q = <<"cat=keyword\nis_featured">>,
 
