@@ -7,9 +7,9 @@
  {site, testsandbox},
 
  %% Hostname for the test sandbox. Do NOT change this! It will break the tests.
- {hostname, "localhost:8040"},
+ {hostname, "localhost"},
 
- {dbdatabase, none},
+ {dbschema, "testsandboxdb"},
  {skeleton, empty},
 
  %% Admin password, used during installation. You can change it later
@@ -20,7 +20,10 @@
    testsandbox,
    mod_base,
    mod_mqtt,
-   mod_search
+   mod_search,
+   mod_acl_mock,
+   mod_admin,
+   mod_oauth
   ]}
 
 ].

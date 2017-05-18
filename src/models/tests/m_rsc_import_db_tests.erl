@@ -7,7 +7,7 @@
 -include_lib("zotonic.hrl").
 
 modify_rsc_test() ->
-    C = z_context:new(testsandboxdb),
+    C = z_context:new(testsandbox),
     ok = z_module_manager:await_upgrade(C),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     SudoC = z_acl:sudo(C),

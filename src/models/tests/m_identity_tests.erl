@@ -35,8 +35,8 @@ hash_is_equal_old_hash_test() ->
     ok.
 
 check_password_no_user_test() ->
-    ok = z_sites_manager:await_startup(testsandboxdb),
-    C = z_context:new(testsandboxdb),
+    ok = z_sites_manager:await_startup(testsandbox),
+    C = z_context:new(testsandbox),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     ok = delete_user("mr_z", AdminC),
 
@@ -47,8 +47,8 @@ check_username_password_test_() ->
     {timeout, 20, fun() -> check_username_password() end}.
 
 check_username_password() ->
-    ok = z_sites_manager:await_startup(testsandboxdb),
-    C = z_context:new(testsandboxdb),
+    ok = z_sites_manager:await_startup(testsandbox),
+    C = z_context:new(testsandbox),
     start_modules(C),
 
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
