@@ -180,7 +180,7 @@ maybe_add_depiction(Id, Props, Context) ->
                         {ok, MediaId} ->
                             lager:info("Added depiction from depiction_url for ~p: ~p",
                                        [Id, Url]),
-                            m_edge:insert(Id, depiction, MediaId, Context);
+                            {ok, _} = m_edge:insert(Id, depiction, MediaId, Context);
                         {error, _} = Error ->
                             lager:warning("Could not insert depiction_url for ~p: ~p",
                                           [Id, Url]),

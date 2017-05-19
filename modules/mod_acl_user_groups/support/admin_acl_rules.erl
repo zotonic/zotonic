@@ -30,16 +30,15 @@ event(#postback{message={admin_connect_select, Args}} = Msg, Context) ->
             SelectId = m_rsc:rid(z_context:get_q(<<"select_id">>, Context), Context),
             case m_rsc:is_a(SelectId, acl_collaboration_group, Context) of
                 true ->
-                    try
-                        {ok, _} = m_rsc:update(SubjectId, [{content_group_id, SelectId}], Context),
+                    case m_rsc:update(SubjectId, [{content_group_id, SelectId}], Context) of
+                    {ok, _} ->
                         z_render:wire([
                                 {dialog_close, []},
                                 {reload, []}
-                            ], Context)
-                    catch
-                        throw:{error, eacces} ->
-                            z_render:growl(?__("You are not allowed to move to this collaboration group.", Context), Context);
-                        throw:{error, _} ->
+                            ], Context);
+                    {error, eacces} ->
+                        z_render:growl(?__("You are not allowed to move to this collaboration group.", Context), Context);
+                    {error, _} ->
                             z_render:growl(?__("Could not move to collaboration group.", Context), Context)
                     end;
                 false ->

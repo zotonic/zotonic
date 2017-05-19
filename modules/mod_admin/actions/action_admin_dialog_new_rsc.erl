@@ -128,7 +128,7 @@ do_new_page_actions(Id, Args, Context) ->
     end.
 
 maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
-    [m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];
+    [{ok, _} = m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];
 maybe_add_objects(_Id, undefined, _Context) ->
     ok;
 maybe_add_objects(_Id, Objects, _Context) ->

@@ -159,7 +159,7 @@ get_username(Id, Context) ->
 %% @doc Delete an username from a resource.
 -spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eacces}.
 delete_username(1, _Context) ->
-    throw({error, admin_username_cannot_be_deleted});
+    {error, admin_username_cannot_be_deleted};
 delete_username(Id, Context) ->
     case z_acl:is_allowed(delete, Id, Context) orelse z_acl:is_allowed(update, Id, Context) of
         true ->
@@ -220,7 +220,7 @@ set_username(Id, Username, Context) ->
 %% @doc Set the username/password of a resource.  Replaces any existing username/password.
 -spec set_username_pw(m_rsc:resource(), string(), string(), #context{}) -> ok | {error, Reason :: term()}.
 set_username_pw(1, _, _, _) ->
-    throw({error, admin_password_cannot_be_set});
+    {error, admin_password_cannot_be_set};
 set_username_pw(Id, Username, Password, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
         true ->
@@ -295,7 +295,7 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
 %% @spec ensure_username_pw(RscId, Context) -> ok | {error, Reason}
 -spec ensure_username_pw(m_rsc:resource(), #context{}) -> ok | {error, term()}.
 ensure_username_pw(1, _Context) ->
-    throw({error, admin_password_cannot_be_set});
+    {error, admin_password_cannot_be_set};
 ensure_username_pw(Id, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->

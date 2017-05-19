@@ -341,7 +341,7 @@ get_acl_props(Name, Context) ->
 
 
 %% @doc Insert a new resource
--spec insert(Props :: props(), #context{}) -> {ok, resource_id()}.
+-spec insert(Props :: props(), #context{}) -> {ok, resource_id()} | {error, term()}.
 insert(Props, Context) ->
     m_rsc_update:insert(Props, Context).
 
