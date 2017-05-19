@@ -57,7 +57,7 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
                 <<>> -> undefined;
                 <<"*">> -> undefined;
                 X when is_integer(X) -> X;
-                X -> m_category:name_to_id_check(X, Context)
+                X -> {ok, Id} = m_category:name_to_id(X, Context), Id
             end,
     CatName = case CatId of
         undefined -> z_convert:to_list(?__("page", Context));
