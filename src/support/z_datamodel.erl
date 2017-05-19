@@ -50,12 +50,14 @@ manage(Module, Datamodel, Context) ->
 -spec manage(atom(), #datamodel{}, datamodel_options(), #context{}) -> ok.
 manage(Module, Datamodel, Options, Context) ->
     AdminContext = z_acl:sudo(Context),
-    [manage_category(Module, Cat, Options, AdminContext) || Cat <- Datamodel#datamodel.categories],
-    [manage_predicate(Module, Pred, Options, AdminContext) || Pred <- Datamodel#datamodel.predicates],
-    [manage_resource(Module, R, Options, AdminContext) || R <- Datamodel#datamodel.resources],
-    [manage_medium(Module, Medium, Options, AdminContext) || Medium <- Datamodel#datamodel.media],
-    [manage_edge(Module, Edge, Options, AdminContext) || Edge <- Datamodel#datamodel.edges],
-    [manage_data(Module, Data, AdminContext) || Data <- Datamodel#datamodel.data],
+    jobs:run(manage_module_jobs, fun() ->
+        [manage_category(Module, Cat, Options, AdminContext) || Cat <- Datamodel#datamodel.categories],
+        [manage_predicate(Module, Pred, Options, AdminContext) || Pred <- Datamodel#datamodel.predicates],
+        [manage_resource(Module, R, Options, AdminContext) || R <- Datamodel#datamodel.resources],
+        [manage_medium(Module, Medium, Options, AdminContext) || Medium <- Datamodel#datamodel.media],
+        [manage_edge(Module, Edge, Options, AdminContext) || Edge <- Datamodel#datamodel.edges],
+        [manage_data(Module, Data, AdminContext) || Data <- Datamodel#datamodel.data]
+    end),
     ok.
 
 manage_medium(Module, {Name, Props}, Options, Context) ->

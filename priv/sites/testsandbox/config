@@ -9,7 +9,7 @@
  %% Hostname for the test sandbox. Do NOT change this! It will break the tests.
  {hostname, "localhost"},
 
- {dbschema, "testsandboxdb"},
+ %% {dbschema, "testsandbox"},
  {skeleton, empty},
 
  %% Admin password, used during installation. You can change it later
