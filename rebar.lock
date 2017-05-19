@@ -157,7 +157,7 @@
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.4.0">>},1},
  {<<"z_stdlib">>,
   {git,"https://github.com/zotonic/z_stdlib.git",
-       {ref,"1bab2c6908c1bf0b2e44934effa3005f197ce99d"}},
+       {ref,"e4e68d066f95b770f9b8f24582fcc9c931ed17a1"}},
   0}]}.
 [
 {pkg_hash,[
