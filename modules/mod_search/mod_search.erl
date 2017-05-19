@@ -219,7 +219,7 @@ search({keyword_cloud, Props}, _OffsetLimit, Context) ->
     KeywordCatName = proplists:get_value(keywordcat, Props, "keyword"),
     KeywordCat = list_to_atom(KeywordCatName),
     KeywordPredName = proplists:get_value(keywordpred, Props, "subject"),
-    Subject = m_predicate:name_to_id_check(KeywordPredName, Context),
+    {ok, Subject} = m_predicate:name_to_id(KeywordPredName, Context),
     #search_sql{
         select="kw.id as id, count(*) as count",
         from="rsc kw, edge e, rsc r",
@@ -472,7 +472,7 @@ search({media_category_image, [{cat,Cat}]}, _OffsetLimit, _Context) ->
     };
 
 search({media_category_depiction, [{cat,Cat}]}, _OffsetLimit, Context) ->
-    PredDepictionId = m_predicate:name_to_id_check(depiction, Context),
+    {ok, PredDepictionId} = m_predicate:name_to_id(depiction, Context),
     #search_sql{
         select="m.filename",
         from="rsc r, rsc ro, medium m, edge e",

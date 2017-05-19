@@ -33,7 +33,8 @@ create_empty(Uri, Context) ->
     create_empty(Uri, [], Context).
 
 create_empty(Uri, Props, Context) ->
-    Props1 = [{category_id, m_category:name_to_id_check(other, Context)},
+    {ok, CategoryId} = m_category:name_to_id(other, Context),
+    Props1 = [{category_id, CategoryId},
         {note, "Pending import"},
         {is_published, false},
         {uri, Uri},

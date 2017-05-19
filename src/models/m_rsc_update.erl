@@ -265,8 +265,9 @@ update(Id, Props, Options, Context) when is_integer(Id) orelse Id =:= insert_rsc
         expected = proplists:get_value(expected, Options, [])
     },
     update_imported_check(RscUpd, Props, Context);
-update(Id, Props, Options, Context) ->
-    update(m_rsc:name_to_id_check(Id, Context), Props, Options, Context).
+update(Name, Props, Options, Context) ->
+    {ok, Id} = m_rsc:name_to_id(Name, Context),
+    update(Id, Props, Options, Context).
 
 update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, Props, Context) when is_integer(Id) ->
     case m_rsc:exists(Id, Context) of
@@ -723,7 +724,8 @@ props_filter([{P, Id} | T], Acc, Context)
     end;
 
 props_filter([{category, CatName} | T], Acc, Context) ->
-    props_filter([{category_id, m_category:name_to_id_check(CatName, Context)} | T], Acc, Context);
+    {ok, CategoryId} = m_category:name_to_id(CatName, Context),
+    props_filter([{category_id, CategoryId} | T], Acc, Context);
 props_filter([{category_id, CatId} | T], Acc, Context) ->
     CatId1 = m_rsc:rid(CatId, Context),
     case m_rsc:is_a(CatId1, category, Context) of

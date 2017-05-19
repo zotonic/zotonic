@@ -430,7 +430,7 @@ handle_author_edges_upgrade(C) ->
     case m_rsc:name_to_id_cat(tweeted, predicate, Context) of
         {ok, Tweeted} ->
             lager:info("Twitter: Found old 'tweeted' predicate, upgrading..."),
-            Author = m_rsc:name_to_id_cat_check(author, predicate, Context),
+            {ok, Author} = m_rsc:name_to_id_cat(author, predicate, Context),
             z_db:q("update edge set subject_id = object_id, object_id = subject_id, predicate_id = $1 where predicate_id = $2",
                    [Author, Tweeted],
                    Context),

@@ -194,13 +194,13 @@ insert(SubjectId, PredId, ObjectId, Opts, Context)
     end;
 insert(SubjectId, Pred, ObjectId, Opts, Context)
     when is_integer(SubjectId), is_integer(ObjectId) ->
-    PredId = m_predicate:name_to_id_check(Pred, Context),
+    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
     insert1(SubjectId, PredId, ObjectId, Opts, Context);
 insert(SubjectId, Pred, Object, Opts, Context) when is_integer(SubjectId) ->
-    ObjectId = m_rsc:name_to_id_check(Object, Context),
+    {ok, ObjectId} = m_rsc:name_to_id(Object, Context),
     insert(SubjectId, Pred, ObjectId, Opts, Context);
 insert(Subject, Pred, Object, Opts, Context) ->
-    SubjectId = m_rsc:name_to_id_check(Subject, Context),
+    {ok, SubjectId} = m_rsc:name_to_id(Subject, Context),
     insert(SubjectId, Pred, Object, Opts, Context).
 
 insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
@@ -284,7 +284,7 @@ delete(SubjectId, Pred, ObjectId, Context) ->
     delete(SubjectId, Pred, ObjectId, [], Context).
 
 delete(SubjectId, Pred, ObjectId, Options, Context) ->
-    PredId = m_predicate:name_to_id_check(Pred, Context),
+    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
     case z_acl:is_allowed(
         delete,
@@ -314,7 +314,13 @@ delete(SubjectId, Pred, ObjectId, Options, Context) ->
 
 %% @doc Delete multiple edges between the subject and the object
 delete_multiple(SubjectId, Preds, ObjectId, Context) ->
-    PredIds = [m_predicate:name_to_id_check(Pred, Context) || Pred <- Preds],
+    PredIds = lists:map(
+        fun(Predicate) ->
+            {ok, Id} = m_predicate:name_to_id(Predicate, Context),
+            Id
+        end,
+        Preds
+    ),
     PredNames = [m_predicate:id_to_name(PredId, Context) || PredId <- PredIds],
     Allowed = [z_acl:is_allowed(
         delete,
@@ -359,7 +365,7 @@ replace(SubjectId, PredId, NewObjects, Context) when is_integer(PredId) ->
         false -> throw({error, {unknown_predicate, PredId}})
     end;
 replace(SubjectId, Pred, NewObjects, Context) ->
-    PredId = m_predicate:name_to_id_check(Pred, Context),
+    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
     replace1(SubjectId, PredId, NewObjects, Context).
 
 
@@ -532,7 +538,7 @@ merge(WinnerId, LooserId, Context) ->
 %% When there are not enough edges then an error is returned. The first edge is nr 1.
 %% @spec update_nth(int(), Predicate, int(), ObjectId, Context) -> {ok, EdgeId} | {error, Reason}
 update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
-    PredId = m_predicate:name_to_id_check(Predicate, Context),
+    {ok, PredId} = m_predicate:name_to_id(Predicate, Context),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
     F = fun(Ctx) ->
         case z_db:q(
@@ -608,11 +614,12 @@ objects(Id, Pred, Context) when is_integer(Pred) ->
         {ok, Objects} ->
             Objects;
         undefined ->
+            {ok, SubjectId} = m_rsc:name_to_id(Id, Context),
             Ids = z_db:q(
                 "select object_id from edge "
                 "where subject_id = $1 and predicate_id = $2 "
                 "order by seq,id",
-                [m_rsc:name_to_id_check(Id, Context), Pred],
+                [SubjectId, Pred],
                 Context
             ),
             Objects = [ObjId || {ObjId} <- Ids],
@@ -770,7 +777,7 @@ subject_edge_props(Id, Predicate, Context) ->
 update_sequence(Id, Pred, ObjectIds, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            PredId = m_predicate:name_to_id_check(Pred, Context),
+            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
             F = fun(Ctx) ->
                 All = z_db:q("
                             select object_id, id
@@ -809,13 +816,14 @@ update_sequence(Id, Pred, ObjectIds, Context) ->
 set_sequence(Id, Pred, ObjectIds, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            PredId = m_predicate:name_to_id_check(Pred, Context),
+            {ok, SubjectId} = m_rsc:name_to_id(Id, Context),
+            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
             F = fun(Ctx) ->
                 All = z_db:q("
                             select object_id, id
                             from edge
                             where predicate_id = $1
-                              and subject_id = $2", [PredId, m_rsc:name_to_id_check(Id, Context)], Ctx),
+                              and subject_id = $2", [PredId, SubjectId], Ctx),
 
                 [delete(EdgeId, Context) || {ObjectId, EdgeId} <- All, not lists:member(ObjectId, ObjectIds)],
                 NewEdges = [begin
@@ -846,7 +854,7 @@ set_sequence(Id, Pred, ObjectIds, Context) ->
 update_sequence_edge_ids(Id, Pred, EdgeIds, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            PredId = m_predicate:name_to_id_check(Pred, Context),
+            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
             F = fun(Ctx) ->
                 % Figure out which edge ids need to be renamed to this predicate.
                 Current = z_db:q("

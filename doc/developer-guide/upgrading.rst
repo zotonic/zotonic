@@ -52,6 +52,20 @@ Removed deprecated functions
 * The ``{% stream %}`` tag was removed.
 * Removed older TinyMCE versions 3.5.0 and 4.2.4.
 
+Resources
+^^^^^^^^^
+
+* The ``name_to_id_check/2`` functions were removed from ``m_category``,
+  ``m_predicate`` and ``m_rsc``.
+
+  Before::
+
+    Id = m_rsc:name_to_id_check(Value, Context).
+
+  After::
+
+    {ok, Id} = m_rsc:name_to_id(Value, Context).
+
 Templates
 ^^^^^^^^^
 
