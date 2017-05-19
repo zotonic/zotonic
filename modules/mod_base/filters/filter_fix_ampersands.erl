@@ -34,6 +34,8 @@
 
 fix_ampersands(undefined, _Context) ->
     undefined;
+fix_ampersands({trans, _} = Tr, Context) ->
+    fix_ampersands1(z_trans:lookup_fallback(Tr, Context), Context);
 fix_ampersands(Input, _Context) when is_binary(Input) ->
     fix_ampersands1(Input, 0);
 fix_ampersands(Input, _Context) when is_list(Input) ->

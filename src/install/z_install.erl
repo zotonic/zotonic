@@ -135,7 +135,7 @@ model_pgsql() ->
       modifier_id int,
       version int NOT NULL DEFAULT 1,
       category_id int NOT NULL,
-      visible_for int NOT NULL DEFAULT 1, -- 0 = public, 1 = community, 2 = group
+      visible_for int NOT NULL DEFAULT 0, -- 0 = public, > 1 defined by ACL module
       slug character varying(80) NOT NULL DEFAULT ''::character varying,
       props bytea,
       created timestamp with time zone NOT NULL DEFAULT now(),
@@ -425,8 +425,8 @@ model_pgsql() ->
     "CREATE TABLE pivot_task_queue
     (
         id serial NOT NULL,
-        module character varying(30) NOT NULL,
-        function character varying(30) NOT NULL,
+        module character varying(80) NOT NULL,
+        function character varying(64) NOT NULL,
         key character varying(100) NOT NULL DEFAULT ''::character varying,
         due timestamp with time zone ,
         props bytea,

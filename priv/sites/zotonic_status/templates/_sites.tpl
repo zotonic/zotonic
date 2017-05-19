@@ -18,7 +18,7 @@
             </td>
 
             <td>
-                <a href="http://{{ configs[name].hostname|escape }}/">http://{{ configs[name].hostname|escape }}/</a>
+                <a href="{{ configs[name].absurl|escape }}">{{ configs[name].absurl|escape }}</a>
                 <small>({{ name }})</small>
             </td>
 

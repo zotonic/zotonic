@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2017 Marc Worrell
 %% @doc Handles comet long polls from the user agent
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@
 
 -include_lib("zotonic.hrl").
 
-%% Timeout for comet flush when there is no data, webmachine 0.x had a timeout of 60 seconds, so leave after 55
+%% Timeout for comet flush when there is no data, we use a cowboy request_timeout of 60 seconds, so leave after 55
 -define(COMET_FLUSH_EMPTY, 55000).
 
 %% Timeout for comet flush when there is data, allow for 100 msec more to gather extra data before flushing
-%% This must be higher than SIDEJOB_TIMEOUT in controlelr_postback.erl
+%% This must be higher than SIDEJOB_TIMEOUT in controller_postback.erl
 -define(COMET_FLUSH_DATA,  100).
 
 
@@ -41,6 +41,10 @@ comet_delegate(Context) ->
         ok ->
             TRefFinal = erlang:send_after(?COMET_FLUSH_EMPTY, self(), flush_empty),
             process_post_loop(Context, TRefFinal, undefined, MRef);
+        {error, websocket_connected} ->
+            lager:debug("[~p] Comet attach failed due to websocket_connected", 
+                       [z_context:site(Context)]),
+            {ok, [], Context};
         {error, _} = Error ->
             lager:info("[~p] Comet attach failed due to ~p", 
                        [z_context:site(Context), Error]),

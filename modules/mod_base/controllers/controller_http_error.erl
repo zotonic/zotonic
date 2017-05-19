@@ -73,7 +73,6 @@ content_types_provided(Context) ->
                 provide_html();
             controller_logoff ->
                 provide_html();
-            % mod_admin
             controller_admin ->
                 provide_html();
             controller_admin_edit ->
@@ -82,13 +81,6 @@ content_types_provided(Context) ->
                 provide_html();
             controller_media_preview ->
                 provide_image();
-            % mod_atom
-            controller_atom_entry ->
-                provide_empty();
-            controller_atom_feed_cat ->
-                provide_empty();
-            controller_atom_feed_search ->
-                provide_empty();
             controller_letsencrypt_challenge ->
                 provide_text();
             _ ->
@@ -157,11 +149,6 @@ provide_html() ->
 provide_text() ->
     [
         {<<"text/plain">>, do_text}
-    ].
-
-provide_empty() ->
-    [
-        {<<"text/plain">>, do_empty}
     ].
 
 map_extension(Context) ->

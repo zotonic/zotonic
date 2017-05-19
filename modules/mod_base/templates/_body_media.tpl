@@ -1,16 +1,16 @@
-{% ifequal align "block" %}
-	{% ifequal m.rsc[id].medium.mime "text/html-oembed" %}
-		<section class="oembed-wrapper">
-			{% media m.rsc[id].medium %}
-		</section>
-	{% else %}
-		<figure class="image-wrapper block-level-image">
-			{% media m.rsc[id].medium width=size.width height=size.height crop=crop class=align link=link alt=m.rsc[id].title %}
-			{% if caption|default:m.rsc[id].summary as caption %}
-				<figcaption class="image-caption">{{ caption }}</figcaption>
+{% if id.medium as medium %}
+	<figure class="image-wrapper {% if align == 'block' %}block-level-image{% else %}pull-{{align}} inline-image{% endif %} category-{{ id.category_id.name }} {{ mediaclass }} {% if not medium.filename %}embed{% endif %}">
+		{% if medium.mime == "text/html-oembed" %}
+			<div class="oembed-wrapper">
+				{% media medium mediaclass=mediaclass %}
+			</div>
+		{% else %}
+			{% media medium mediaclass=mediaclass crop=crop link=link alt=id.title %}
+			{% if caption /= '-' %}
+				{% if caption|default:(id|summary) as caption %}
+					<figcaption class="image-caption">{{ caption }}</figcaption>
+				{% endif %}
 			{% endif %}
-		</figure>
-	{% endifequal %}
-{% else %}
-	{% media m.rsc[id].medium width=size.width height=size.height crop=crop class=align link=link alt=caption|default:m.rsc[id].title %}
-{% endifequal %}
+		{% endif %}
+	</figure>
+{% endif %}

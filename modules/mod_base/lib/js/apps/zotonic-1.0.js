@@ -889,9 +889,14 @@ function z_do_transport(qmsg)
 
 function z_ajax(options, data)
 {
+    var url_transport = '';
+
     z_start_spinner();
+    if (typeof options.transport !== "undefined") {
+        url_transport = '/transport/'+options.transport;
+    }
     $.ajax({
-        url: '/postback?transport='+options.transport,
+        url: '/postback' + url_transport,
         type: 'post',
         data: data,
         dataType: 'ubf text',
@@ -2043,11 +2048,21 @@ function urlencode(s)
 // HTML escape a string so it is safe to concatenate when making tags.
 function html_escape(s)
 {
-    return s.replace(/&/, "&amp;")
-            .replace(/</, "&lt;")
-            .replace(/>/, "&gt;")
-            .replace(/"/, "&quot;")
-            .replace(/'/, "&#39;");
+    return s.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+}
+
+// HTML unescape a string.
+function html_unescape(s)
+{
+    return s.replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&quot;/g, "\"")
+            .replace(/&#39;/g, "'")
+            .replace(/&amp;/g, "&");
 }
 
 

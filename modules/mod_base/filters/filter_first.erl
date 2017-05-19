@@ -26,6 +26,8 @@
 
 first(undefined, _Context) ->
     undefined;
+first({trans, _} = Tr, Context) ->
+    first(z_trans:lookup_fallback(Tr, Context), Context);
 first(<<First/utf8, _/binary>>, _Context) ->
     First;
 first(Other, Context) ->

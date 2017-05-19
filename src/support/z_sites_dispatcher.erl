@@ -246,7 +246,7 @@ dispatch_1(DispReq, OptReq) ->
         [] ->
             % TODO: maybe lowercase the host and recheck
             % Check for fallback sites or other site handling this hostname
-            case find_no_host_match(DispReq) of
+            case find_no_host_match(DispReq, OptReq) of
                 {ok, Site} ->
                     Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
                     dispatch_site(DispReq, Context);
@@ -480,7 +480,7 @@ add_redirect(HS, {_, false, _, _}) ->
     HS;
 add_redirect({Host, Site}, {Site, true, Host, _Redirect}) ->
     {Host, Site};
-add_redirect({Host, Site}, {Site, true, _Host, none}) ->
+add_redirect({Host, Site}, {Site, true, _Host, undefined}) ->
     {Host, Site};
 add_redirect({Host, Site}, {Site, true, _Host, Redirect}) ->
     {Host, Site, Redirect}.
@@ -711,7 +711,7 @@ language_from_bindings_1(false) ->
 
 %% @doc Try to find a site which says it can handle the host.
 %%      This enables to have special (short) urls for deep pages.
-find_no_host_match(DispReq) ->
+find_no_host_match(DispReq, OptReq) ->
     Sites = z_sites_manager:get_sites(),
     DispHost = #dispatch_host{
                     host=DispReq#dispatch.host,
@@ -719,7 +719,7 @@ find_no_host_match(DispReq) ->
                     method=DispReq#dispatch.method,
                     protocol=DispReq#dispatch.protocol
                 },
-    case first_site_match(Sites, DispHost) of
+    case first_site_match(Sites, DispHost, OptReq) of
         no_host_match -> find_dispatch_fallback();
         Redirect-> Redirect
     end.
@@ -733,17 +733,17 @@ find_dispatch_fallback() ->
     end.
 
 
-first_site_match([], _DispHost) ->
+first_site_match([], _DispHost, _OptReq) ->
     no_host_match;
-first_site_match([Site|Sites], DispHost) ->
-    case catch z_notifier:first(DispHost, z_context:new(Site)) of
+first_site_match([Site|Sites], DispHost, OptReq) ->
+    case catch z_notifier:first(DispHost, z_context:set_reqdata(OptReq, z_context:new(Site))) of
         {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
             {redirect, Site, PathOrURI, IsPermanent};
         undefined ->
-            first_site_match(Sites, DispHost);
+            first_site_match(Sites, DispHost, OptReq);
         Unexpected ->
             lager:error("dispatch_host for ~p returned ~p on ~p", [Site, Unexpected, DispHost]),
-            first_site_match(Sites, DispHost)
+            first_site_match(Sites, DispHost, OptReq)
     end.
 
 

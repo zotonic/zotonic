@@ -8,8 +8,8 @@
 	{% if status or email|is_valid_email %}
 		{% if not status or status.is_valid %}
 			{% if status.error_ct or status.bounce_ct %}
-				<p class="alert alert-warning">
-					<span class="glyphicon glyphicon-envelope"></span>
+				<p class="alert alert-info">
+					<span class="icon-envelope"></span>
 					<strong>{_ This email address is now ok. _}</strong>
 					{_ There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully. _}
 				</p>
@@ -20,9 +20,16 @@
 				</p>
 			{% endif %}
 		{% else %}
-			<p class="alert alert-error" style="margin-bottom: 20px">
+			<p class="alert {% if status.error_is_final %}alert-error{% else %}alert-warning{% endif %}" style="margin-bottom: 20px">
 				<span class="icon-envelope"></span>
-				<strong>{_ There are problems with this email address. _}</strong>
+				<strong>
+					{_ There are problems with this email address. _}
+					{% if not status.error_is_final or status.recent_error_ct < 5  %}
+						{_ We are retrying email delivery. _}
+					{% else %}
+						{_ We stopped email delivery. _}
+					{% endif %}
+				</strong>
 			</p>
 
 			{% if (id and id.is_editable) or m.acl.use.mod_email_status %}

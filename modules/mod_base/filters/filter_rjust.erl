@@ -38,5 +38,7 @@ rjust(Input, Number, Context) when is_binary(Input) ->
     list_to_binary(rjust(binary_to_list(Input), Number, Context));
 rjust(Input, Number, _Context) when is_list(Input) ->
     string:right(Input, z_convert:to_integer(Number));
+rjust({trans, _} = Tr, Number, Context) ->
+    rjust(z_trans:lookup_fallback(Tr, Context), Number, Context);
 rjust(Input, _Number, _Context) ->
     Input.

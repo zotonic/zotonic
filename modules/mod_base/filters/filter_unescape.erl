@@ -22,6 +22,8 @@
 
 unescape(undefined, _Context) ->
 	<<>>;
+unescape({trans, _} = Tr, Context) ->
+    unescape(z_trans:lookup_fallback(Tr, Context), Context);
 unescape(In, _Context) ->
 	z_html:unescape(In).
 

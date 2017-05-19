@@ -22,7 +22,7 @@
 -mod_title("Email Status").
 -mod_description("Track bounce and receive status of email recipients.").
 -mod_prio(10).
--mod_schema(1).
+-mod_schema(2).
 
 -export([
     event/2,
@@ -83,5 +83,5 @@ observe_email_received(#email_received{from=From}, Context) when is_binary(From)
     m_email_status:mark_received(From, Context),
     undefined.
 
-manage_schema(install, Context) ->
+manage_schema(_InstallOrUpgrade, Context) ->
     m_email_status:install(Context).

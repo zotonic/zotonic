@@ -207,7 +207,7 @@ update_new_props(Module, Id, NewProps, Options, Context) ->
     end.
 
 
-maybe_force_update(K, V, Props, Module, Id, Options, Context) ->
+maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
     case lists:member(force_update, Options) of
         true ->
             lager:info("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
@@ -233,12 +233,14 @@ manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Options, Context
     case SubjectCat of
         undefined -> nop;
         _ ->
-            F(Id, true, m_rsc:name_to_id_check(SubjectCat, Context))
+            {ok, SubjectCatId} = m_rsc:name_to_id(SubjectCat, Context),
+            F(Id, true, SubjectCatId)
     end,
     case ObjectCat of
         undefined -> nop;
         _ ->
-            F(Id, false, m_rsc:name_to_id_check(ObjectCat, Context))
+            {ok, ObjectCatId} = m_rsc:name_to_id(ObjectCat, Context),
+            F(Id, false, ObjectCatId)
     end,
     manage_predicate_validfor(Id, Rest, Options, Context).
 
@@ -273,7 +275,7 @@ manage_edge(_Module, {SubjectName, PredicateName, ObjectName, EdgeOptions}, _Opt
     Object = m_rsc:name_to_id(ObjectName, Context),
     case {Subject, Predicate, Object} of
         {{ok, SubjectId}, {ok, PredicateId}, {ok,ObjectId}} ->
-            m_edge:insert(SubjectId, PredicateId, ObjectId, EdgeOptions, Context);
+            {ok, _} = m_edge:insert(SubjectId, PredicateId, ObjectId, EdgeOptions, Context);
         _ ->
             skip %% One part of the triple was MIA
     end.

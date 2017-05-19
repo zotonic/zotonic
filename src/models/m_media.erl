@@ -394,7 +394,7 @@ insert_file(File, Props, Options, Context) ->
 
 insert_file(File, Props, PropsMedia, Options, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime)}, Context) andalso
+    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = Props}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
         true ->
             insert_file_mime_ok(File, Props, PropsMedia, Options, Context);
@@ -418,7 +418,7 @@ update_medium_1(RscId, Medium, RscProps, Options, Context) ->
                     undefined -> tl(m_rsc:is_a(RscId, Context));
                     Cat -> Cat
                end,
-    case z_acl:is_allowed(insert, #acl_rsc{category=Category}, Context) andalso
+    case z_acl:is_allowed(insert, #acl_rsc{category = Category, props = RscProps}, Context) andalso
          z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context) of
         true ->
             case replace_file_acl_ok(undefined, RscId, RscProps, Medium, Options, Context) of
@@ -464,13 +464,18 @@ insert_file_mime_ok(File, Props1, PropsMedia, Options, Context) ->
         undefined -> [{is_published, true} | Props1];
         _ -> Props1
     end,
-    Props3 = case proplists:get_value(title, Props2) of
-        undefined ->
-            [{title, proplists:get_value(original_filename, Props2)} | Props2];
-        _ -> Props2
+    Props3 = case z_utils:is_empty(proplists:get_value(title, Props2)) of
+        true ->
+            [{title, filename_basename(proplists:get_value(original_filename, PropsMedia))} | Props2];
+        false -> Props2
     end,
     replace_file_mime_ok(File, insert_rsc, Props3, PropsMedia, Options, Context).
 
+filename_basename(undefined) -> <<>>;
+filename_basename(Filename) ->
+    F1 = z_convert:to_binary(Filename),
+    F2 = lists:last(binary:split(F1, <<"/">>, [global])),
+    lists:last(binary:split(F2, <<"\\">>, [global])).
 
 %% @doc Replaces a medium file, when the file is not in archive then a copy is
 %% made in the archive. When the resource is in the media category, then the
@@ -503,7 +508,7 @@ replace_file(File, RscId, Props, MInfo, Opts, Context) ->
 
 replace_file_mime_check(File, RscId, Props, PropsMedia, Opts, Context) ->
     Mime = proplists:get_value(mime, PropsMedia),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime)}, Context) andalso
+    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = Props}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
         true ->
             replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context);

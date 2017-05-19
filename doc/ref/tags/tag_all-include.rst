@@ -14,8 +14,8 @@ Call all modules to include a certain template.
       highest priority :file:`foobar.tpl`.
 
 
-Exactly the same module priority is also valid for all files in the
-:file:`lib/` directory of modules.
+Exactly the same :ref:`module priority <module-priority>` is also valid for all
+files in the :file:`lib/` directory of modules.
 
 This allows any module to change the static css, javascript, images,
 favicon.ico, robots.txt and other static files with its own version.

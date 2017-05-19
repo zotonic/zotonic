@@ -29,11 +29,15 @@ show_media(undefined, _Template, _Context) ->
 show_media(Input, Template, Context) when is_binary(Input) ->
     Context1 = z_context:set(show_media_template, Template, Context),
     show_media1(Input, 0, Context1);
+show_media({trans, _} = Tr, Template, Context) ->
+    Text = z_trans:lookup_fallback(Tr, Context),
+    show_media(Text, Template, Context);
 show_media(Input, _Template, _Context) ->
     Input.
 
 
 % scanning for media start marker
+% The z-media tag is very strict with spaces, this must stay so for the sanitizer.
 show_media1(Input, Index, Context) when is_binary(Input) ->
     case Input of
         <<Pre:Index/binary, "<!-- z-media ", Post/binary>> ->
@@ -76,55 +80,86 @@ show_media_html(Id, Context) ->
     show_media_html(Id, {struct, []}, Context).
 
 show_media_html(Id, {struct, Args}, Context) ->
-    Args2 = [ {to_atom(A), B} || {A,B} <- Args],
-    Args3 = filter_args(Args2, false, [], Context),
-    Id1 = try z_convert:to_integer(Id) catch _:_ -> z_html:escape(Id) end,
-    Tpl = z_context:get(show_media_template, Context),
-    z_template:render({cat, Tpl}, [ {id, Id1} | Args3 ++ z_context:get_all(Context) ], Context).
+    case m_rsc:rid(Id, Context) of
+        undefined -> <<>>;
+        RscId ->
+            case z_acl:rsc_visible(RscId, Context) of
+                true -> show_media_html_1(RscId, Args, Context);
+                false -> <<>>
+            end
+    end.
 
-to_atom(<<"id">>) -> id;
+show_media_html_1(Id, Args, Context) ->
+    Args2 = [ {to_atom(A), B} || {A,B} <- Args],
+    Args3 = filter_args(Args2, []),
+    Args4 = filter_defaults(Args3),
+    Tpl = z_context:get(show_media_template, Context),
+    z_template:render({cat, Tpl}, [ {id, Id} | Args4 ++ z_context:get_all(Context) ], Context).
+
 to_atom(<<"size">>) -> size;
-to_atom(<<"sizename">>) -> sizename;
 to_atom(<<"caption">>) -> caption;
 to_atom(<<"crop">>) -> crop;
 to_atom(<<"link">>) -> link;
 to_atom(<<"align">>) -> align;
 to_atom(A) -> binary_to_existing_atom(A, 'utf8'). 
 
-filter_args([], true, Acc, _Context) ->
-    Acc;
-filter_args([], false, Acc, Context) ->
-    [_S,M,_L] = get_sizes(Context),
-    [{size, M}, {sizename, <<"medium">>}|Acc];
-filter_args([{size,Size}|Args], _, Acc, Context) ->
-    [S,M,L] = get_sizes(Context),
-    {P,SizeName} = case Size of
-                        <<"large">> -> {L,<<"large">>};
-                        <<"small">> -> {S,<<"small">>};
-                        _ -> {M,<<"medium">>}
-                   end,
-    filter_args(Args, true, [{size,P},{sizename,SizeName}|Acc], Context);
-filter_args([{crop, <<"crop">>}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{crop,true}|Acc], Context);
-filter_args([{crop, _}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{crop,undefined}|Acc], Context);
-filter_args([{link, <<"link">>}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{link,true}|Acc], Context);
-filter_args([{link, _}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{link,undefined}|Acc], Context);
-filter_args([{caption, Caption}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{caption,z_html:escape(Caption)}|Acc], Context);
-filter_args([P|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [P|Acc], Context).
+filter_defaults(Args) ->
+    Args1 = case proplists:is_defined(size, Args) of
+        false ->
+            [   {mediaclass, <<"body-media-large">>},
+                {size, <<"large">>}
+                |Args
+            ];
+        true ->
+            Args
+    end,
+    case proplists:is_defined(align, Args1) of
+        false -> [ {align, <<"middle">>} | Args1 ];
+        true -> Args1
+    end.
 
-
-get_sizes(Context) ->
-    % Get sizes from site.media_dimensions
-    WidthHeightString = z_convert:to_list(m_config:get_value(site, media_dimensions, "200x200,300x300,500x500", Context)),
-    [   [{width, to_int(W)}, {height, to_int(H)}] ||
-        [W,H] <- [string:tokens(P, "x") || P <- string:tokens(WidthHeightString, ",")] ].
-
-to_int(S) -> z_convert:to_integer(z_string:trim(S)).
+filter_args([], Acc) ->
+    lists:reverse(Acc);
+filter_args([{size, Size}|Args], Acc) ->
+    SizeName = case Size of
+        <<"large">> -> <<"large">>;
+        <<"small">> -> <<"small">>;
+        <<"medium">> -> <<"medium">>;
+        <<"middle">> -> <<"medium">>;
+        _ -> <<"large">>
+    end,
+    Acc1 = [
+        {mediaclass,<<"body-media-",SizeName/binary>>},
+        {size, SizeName}
+        |Acc
+    ],
+    filter_args(Args, Acc1);
+filter_args([{align, Align}|Args], Acc) ->
+    Align1 = case Align of
+        <<"left">> -> <<"left">>;
+        <<"right">> -> <<"right">>;
+        _ -> <<"block">>
+    end,
+    filter_args(Args, [{align, Align1}|Acc]);
+filter_args([{crop, Crop}|Args], Acc) when Crop =:= true; Crop =:= <<"crop">> ->
+    filter_args(Args, [{crop, true}|Acc]);
+filter_args([{crop, _}|Args], Acc) ->
+    filter_args(Args, Acc);
+filter_args([{link, Link}|Args], Acc) when Link =:= true; Link =:= <<"link">> ->
+    filter_args(Args, [{link,true}|Acc]);
+filter_args([{link, _}|Args], Acc) ->
+    filter_args(Args, Acc);
+filter_args([{caption, Caption}|Args], Acc) ->
+    filter_args(Args, [{caption,z_html:escape(Caption)}|Acc]);
+filter_args([{K, V}|Args], Acc) when is_binary(V) ->
+    % Escape unknown arguments
+    filter_args(Args, [{K,z_html:escape_check(V)}|Acc]);
+filter_args([{_, V} = Arg|Args], Acc)
+    when is_integer(V); is_float(V); is_boolean(V); V =:= undefined ->
+    filter_args(Args, [Arg|Acc]);
+filter_args([_|Args], Acc) ->
+    % Drop complex data types
+    filter_args(Args, Acc).
 
 process_binary_match(Pre, Insertion, SizePost, Post) ->
     case {size(Pre), SizePost} of

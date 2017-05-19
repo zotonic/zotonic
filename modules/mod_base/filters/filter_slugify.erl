@@ -22,5 +22,7 @@
 
 slugify(undefined, _Context) ->
     undefined;
+slugify({trans, _} = Tr, Context) ->
+    slugify(z_trans:lookup_fallback(Tr, Context), Context);
 slugify(Input, _Context) ->
     z_string:to_slug(Input).

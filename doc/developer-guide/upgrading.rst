@@ -36,6 +36,39 @@ Authentication
 
     observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
+Errors
+^^^^^^
+
+* ``m_edge``, ``m_identity``, ``m_rsc``, ``m_rsc_import`` and ``m_rsc_update``
+  no longer throw exceptions. Instead, they return an ``{error, atom()}`` tuple
+  on failure.
+
+  Before::
+
+    m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context).
+    %% crashes with an exception
+
+  After::
+
+    m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context).
+    %% fails silently, so to make it crash:
+
+    {ok, _EdgeId} = m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context).
+
+    %% alternatively:
+    case m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context) of
+        {ok, _EdgeId} ->
+            "Everything fine!";
+        {error, Reason} ->
+            "Something went wrong!"
+    end.
+
+Export
+^^^^^^
+
+* Modules mod_atom and mod_atom_feed were removed. You can export data in a
+  variety of formats using :ref:`mod_export`.
+
 Removed deprecated functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -45,6 +78,20 @@ Removed deprecated functions
   ``z_utils:name_for_site/2`` instead.
 * The ``{% stream %}`` tag was removed.
 * Removed older TinyMCE versions 3.5.0 and 4.2.4.
+
+Resources
+^^^^^^^^^
+
+* The ``name_to_id_check/2`` functions were removed from ``m_category``,
+  ``m_predicate`` and ``m_rsc``.
+
+  Before::
+
+    Id = m_rsc:name_to_id_check(Value, Context).
+
+  After::
+
+    {ok, Id} = m_rsc:name_to_id(Value, Context).
 
 Templates
 ^^^^^^^^^

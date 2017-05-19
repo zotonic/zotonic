@@ -57,7 +57,7 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
                 <<>> -> undefined;
                 <<"*">> -> undefined;
                 X when is_integer(X) -> X;
-                X -> m_category:name_to_id_check(X, Context)
+                X -> {ok, Id} = m_category:name_to_id(X, Context), Id
             end,
     CatName = case CatId of
         undefined -> z_convert:to_list(?__("page", Context));
@@ -128,7 +128,7 @@ do_new_page_actions(Id, Args, Context) ->
     end.
 
 maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
-    [m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];
+    [{ok, _} = m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];
 maybe_add_objects(_Id, undefined, _Context) ->
     ok;
 maybe_add_objects(_Id, Objects, _Context) ->

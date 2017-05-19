@@ -250,12 +250,12 @@ assoc(Sql, Parameters, Context, Timeout) ->
     DbDriver = z_context:db_driver(Context),
     F = fun
        (none) -> [];
-	   (C) ->
+       (C) ->
             case assoc1(DbDriver, C, Sql, Parameters, Timeout) of
                 {ok, Result} when is_list(Result) ->
                     Result
             end
-	end,
+    end,
     with_connection(F, Context).
 
 
@@ -271,12 +271,12 @@ assoc_props(Sql, Parameters, Context, Timeout) ->
     DbDriver = z_context:db_driver(Context),
     F = fun
         (none) -> [];
-	    (C) ->
+        (C) ->
             case assoc1(DbDriver, C, Sql, Parameters, Timeout) of
                 {ok, Result} when is_list(Result) ->
                     merge_props(Result)
             end
-	end,
+    end,
     with_connection(F, Context).
 
 
@@ -291,7 +291,7 @@ q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
 q(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> [];
-	    (C) ->
+        (C) ->
             DbDriver = z_context:db_driver(Context),
             case DbDriver:equery(C, Sql, Parameters, Timeout) of
                 {ok, _Affected, _Cols, Rows} when is_list(Rows) -> Rows;
@@ -301,7 +301,7 @@ q(Sql, Parameters, Context, Timeout) ->
                     lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
                     throw(Error)
             end
-	end,
+    end,
     with_connection(F, Context).
 
 q1(Sql, Context) ->
@@ -370,7 +370,7 @@ equery(Sql, Parameters, Context, Timeout) ->
 
 
 %% @doc Insert a new row in a table, use only default values.
--spec insert(table_name(), z:context()) -> {ok, pos_integer()}.
+-spec insert(table_name(), z:context()) -> {ok, pos_integer()|undefined} | {error, term()}.
 insert(Table, Context) when is_atom(Table) ->
     insert(atom_to_list(Table), Context);
 insert(Table, Context) ->
@@ -386,7 +386,7 @@ insert(Table, Context) ->
 %% @doc Insert a row, setting the fields to the props. Unknown columns are
 %% serialized in the props column. When the table has an 'id' column then the
 %% new id is returned.
--spec insert(table_name(), props(), #context{}) -> {ok, pos_integer()}.
+-spec insert(table_name(), props(), #context{}) -> {ok, integer()|undefined} | {error, term()}.
 insert(Table, [], Context) ->
     insert(Table, Context);
 insert(Table, Props, Context) when is_atom(Table) ->
@@ -416,23 +416,21 @@ insert(Table, Props, Context) ->
         false -> Sql
     end,
 
-    F =
-        fun(C) ->
-             DbDriver = z_context:db_driver(Context),
-             Id = case equery1(DbDriver, C, FinalSql, Parameters) of
-			 {ok, IdVal} -> IdVal;
-			 {error, noresult} -> undefined;
+    F = fun(C) ->
+         DbDriver = z_context:db_driver(Context),
+         case equery1(DbDriver, C, FinalSql, Parameters) of
+             {ok, Id} -> {ok, Id};
+             {error, noresult} -> {ok, undefined};
              {error, Reason} = Error ->
                 lager:error("z_db error ~p in query ~p with ~p", [Reason, FinalSql, Parameters]),
-                throw(Error)
-		     end,
-		{ok, Id}
-	end,
+                Error
+         end
+    end,
     with_connection(F, Context).
 
 
 %% @doc Update a row in a table, merging the props list with any new props values
--spec update(table_name(), id(), parameters(), #context{}) -> {ok, pos_integer()}.
+-spec update(table_name(), id(), parameters(), #context{}) -> {ok, RowsUpdated::integer()} | {error, term()}.
 update(Table, Id, Parameters, Context) when is_atom(Table) ->
     update(atom_to_list(Table), Id, Parameters, Context);
 update(Table, Id, Parameters, Context) ->
@@ -466,14 +464,14 @@ update(Table, Id, Parameters, Context) ->
             {ok, _RowsUpdated} = Ok -> Ok;
             {error, Reason} = Error ->
                 lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id | Params]]),
-                throw(Error)
+                Error
         end
     end,
     with_connection(F, Context).
 
 
 %% @doc Delete a row from a table, the row must have a column with the name 'id'
-%% @spec delete(Table, Id, Context) -> {ok, RowsDeleted}
+-spec delete(Table::atom(), Id::integer(), #context{}) -> {ok, RowsDeleted::integer()} | {error, term()}.
 delete(Table, Id, Context) when is_atom(Table) ->
     delete(atom_to_list(Table), Id, Context);
 delete(Table, Id, Context) ->
@@ -485,9 +483,9 @@ delete(Table, Id, Context) ->
             {ok, _RowsDeleted} = Ok -> Ok;
             {error, Reason} = Error ->
                 lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id]]),
-                throw(Error)
+                Error
         end
-	end,
+    end,
     with_connection(F, Context).
 
 
@@ -501,9 +499,9 @@ select(Table, Id, Context) ->
     assert_table_name(Table),
     DbDriver = z_context:db_driver(Context),
     F = fun(C) ->
-		Sql = "select * from \""++Table++"\" where id = $1 limit 1",
-		assoc1(DbDriver, C, Sql, [Id], ?TIMEOUT)
-	end,
+        Sql = "select * from \""++Table++"\" where id = $1 limit 1",
+        assoc1(DbDriver, C, Sql, [Id], ?TIMEOUT)
+    end,
     {ok, Row} = with_connection(F, Context),
 
     Props = case Row of
@@ -637,10 +635,10 @@ update_sequence(Table, Ids, Context) ->
     DbDriver = z_context:db_driver(Context),
     Args = lists:zip(Ids, lists:seq(1, length(Ids))),
     F = fun(C) when C =:= none ->
-		[];
-	   (C) ->
-		[ {ok, _} = equery1(DbDriver, C, "update \""++Table++"\" set seq = $2 where id = $1", tuple_to_list(Arg)) || Arg <- Args ]
-	   end,
+        [];
+       (C) ->
+        [ {ok, _} = equery1(DbDriver, C, "update \""++Table++"\" set seq = $2 where id = $1", tuple_to_list(Arg)) || Arg <- Args ]
+       end,
     with_connection(F, Context).
 
 %% @doc Create database and schema if they do not yet exist

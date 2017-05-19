@@ -22,6 +22,8 @@
 
 upper(undefined, _Context) ->
     undefined;
+upper({trans, _} = Tr, Context) ->
+    upper(z_trans:lookup_fallback(Tr, Context), Context);
 upper(Input, _Context) when is_list(Input) or is_binary(Input) ->
     z_string:to_upper(Input);
 upper(Input, Context) ->

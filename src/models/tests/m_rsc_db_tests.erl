@@ -12,8 +12,8 @@ modify_rsc_test() ->
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     CatId = m_rsc:rid(text, C),
 
-    ?assertThrow({{error, nocategory}, _Trace}, m_rsc:insert([{title, "Hello."}], C)),
-    ?assertThrow({{error, eacces}, _Trace}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
+    ?assertEqual({error, nocategory}, m_rsc:insert([{title, "Hello."}], C)),
+    ?assertEqual({error, eacces}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
 
     {ok, Id} = m_rsc:insert([{title, "Hello."}, {category_id, CatId}], AdminC),
 
@@ -32,7 +32,7 @@ modify_rsc_test() ->
     ?assertEqual(undefined, m_rsc:p(Id, title, C)), %% not visible for anonymous yet
 
     %% Update
-    ?assertThrow({error, eacces}, m_rsc:update(Id, [{title, "Bye."}, {is_published, true}], C)),
+    ?assertEqual({error, eacces}, m_rsc:update(Id, [{title, "Bye."}, {is_published, true}], C)),
 
     {ok, Id} = m_rsc:update(Id, [{title, "Bye."}, {is_published, true}], AdminC),
     ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, AdminC)),
@@ -40,7 +40,7 @@ modify_rsc_test() ->
     ?assertEqual(2, m_rsc:p(Id, version, AdminC)),
 
     %% Delete
-    ?assertThrow({error, eacces}, m_rsc:delete(Id, C)),
+    ?assertEqual({error, eacces}, m_rsc:delete(Id, C)),
     ?assertEqual(ok, m_rsc:delete(Id, AdminC)),
 
     %% verify that it's gone

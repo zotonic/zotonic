@@ -51,13 +51,23 @@ m_find_value(is_allowed, #m{value=Auth} = M, _Context) when Auth =:= undefined; 
 m_find_value(Action, #m{value={is_allowed, Auth}} = M, _Context) ->
     M#m{value={is_allowed, Action, Auth}};
 m_find_value(Object, #m{value={is_allowed, Action, authenticated}}, Context) when is_binary(Object) ->
-    Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
-                    undefined -> Context;
-                    Ctx -> Ctx
-               end,
-    z_acl:is_allowed(Action, z_convert:to_atom(Object), Context1);
+    try
+        ObjectAtom = erlang:binary_to_existing_atom(Object, utf8),
+        Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
+                        undefined -> Context;
+                        Ctx -> Ctx
+                   end,
+        z_acl:is_allowed(Action, ObjectAtom, Context1)
+    catch
+        error:badarg -> false
+    end;
 m_find_value(Object, #m{value={is_allowed, Action, undefined}}, Context) when is_binary(Object) ->
-    z_acl:is_allowed(Action, z_convert:to_atom(Object), Context);
+    try
+        ObjectAtom = erlang:binary_to_existing_atom(Object, utf8),
+        z_acl:is_allowed(Action, ObjectAtom, Context)
+    catch
+        error:badarg -> false
+    end;
 m_find_value(Object, #m{value={is_allowed, Action, authenticated}}, Context) ->
     Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
                     undefined -> Context;

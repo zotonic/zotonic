@@ -3,11 +3,11 @@
 
 Enables MQTT support in a site.
 
-MQTT is a machine-to-machine (M2M)/“Internet of Things” connectivity protocol. 
-It was designed as an extremely lightweight publish/subscribe messaging transport. 
+MQTT is a machine-to-machine (M2M)/“Internet of Things” connectivity protocol.
+It was designed as an extremely lightweight publish/subscribe messaging transport.
 It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium. For example, it has been used in sensors communicating to a broker via satellite link, over occasional dial-up connections with healthcare providers, and in a range of home automation and small device scenarios (source and more information: `MQTT.org <http://mqtt.org>`_)
 
-MQTT uses a simple message broker to route messages from publishers to multiple subscribers. 
+MQTT uses a simple message broker to route messages from publishers to multiple subscribers.
 
 A quick overview of MQTT
 ------------------------
@@ -19,7 +19,7 @@ With MQTT messages are published to topics. All subscribers to a topic will then
 A topic is a string, much like a file-path, for example: ``truck/0001/temperature``
 
 A subscriber can directly subscribe to a topic, or can use wildcards to subscribe to related topics.
-For this the wildcards ``+`` and ``#`` can be used.  ``+`` matches exactly one word between the slashes, 
+For this the wildcards ``+`` and ``#`` can be used.  ``+`` matches exactly one word between the slashes,
 and ``#`` can be used at the end of a pattern to match all sub-topics.
 
 Examples of subscription patterns:
@@ -102,11 +102,12 @@ Currently the following topics are defined:
 Topics and namespaces
 ^^^^^^^^^^^^^^^^^^^^^
 
-To make it easier to write generic software, without changing topic names, some namespace conventions and mappings are introduced.
+To make it easier to write generic software, without changing topic names, some
+namespace conventions and mappings are introduced.
 
-The following topics are expanded
+The following topics are expanded:
 
-+--------------------------+------------------------------------------------------------------------------------------------------------+
++--------------------------+-----------------------------------------------------+------------------------------------------------------+
 |Topic                     | Expansion                                           | Description                                          |
 +==========================+=====================================================+======================================================+
 | ~site                    | site/mysite                                         | The context’s site root topic                        |
@@ -120,13 +121,22 @@ The following topics are expanded
 
 Note that there are not automatic subscriptions for session, pagesession and user topics. All subscriptions need to be added explicitly.
 
-
 Access control
 ^^^^^^^^^^^^^^
 
-All topics have access control added. For this an extra ACL object ``#acl_mqtt{}`` defined, with the actions ``publish`` and ``subscribe``.
-Modules can observe the usual ``#acl_is_allowed{}`` notification to add access control to topics.
+All topics have access control added. For this an extra ACL object
+:ref:`#acl_mqtt{} <acl_mqtt>` is defined, with the actions ``publish`` and
+``subscribe``. Modules can observe the usual :ref:`acl_is_allowed` notification
+to allow access to MQTT topics:
 
+.. code-block:: erlang
+    :caption: your_site.erl
+
+    observe_acl_is_allowed(#acl_is_allowed{object = #acl_mqtt{topic = <<"site/your_site/topic">>}}, _Context) ->
+        %% Allow anonymous access on this topic
+        true;
+    observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
+        undefined.
 
 Subscribing modules
 ^^^^^^^^^^^^^^^^^^^
@@ -275,9 +285,9 @@ Authentication
 
 All connections must authenticat themselves using an username and password.
 The username is postfixed with the hostname of the user’s site, for example: ``jantje@foobar.com``.
-In this way Zotonic knows which site the user belongs to. 
+In this way Zotonic knows which site the user belongs to.
 
-If no matching site can be found, or if no hostname is given, then Zotonic 
+If no matching site can be found, or if no hostname is given, then Zotonic
 will try to authenticate against the default site.
 
 

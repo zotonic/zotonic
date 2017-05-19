@@ -130,8 +130,19 @@
 %% Default page length for search
 -define(SEARCH_PAGELEN, 20).
 
-%% Used for search results
--record(search_result, {result=[], page=1, pagelen, total, all, pages, next, prev}).
+%% @doc A set of search results
+-record(search_result, {
+    result = [] :: list(),
+    page = 1 :: pos_integer(),
+    pagelen :: pos_integer(),
+    total :: non_neg_integer(),
+    all :: non_neg_integer(),
+    pages :: non_neg_integer(),
+    next,
+    prev,
+    facets = [] :: list()
+}).
+
 -record(m_search_result, {search_name, search_props, result, page, pagelen, total, pages, next, prev}).
 -record(search_sql, {select, from, where="", order="", group_by="", limit, tables=[], args=[],
                      cats=[], cats_exclude=[], cats_exact=[], run_func, extra=[], assoc=false}).
@@ -187,7 +198,7 @@
 -define(ACL_ANY_USER_ID, -1).
 
 %% ACL objects
--record(acl_rsc, {category, mime, size}).
+-record(acl_rsc, {category, mime, size, props}).
 -record(acl_edge, {
     subject_id :: m_rsc:resource(),
     predicate :: pos_integer() | atom(),
@@ -202,10 +213,12 @@
 %% ACL fields for an acl check. Fields are initialized for the visible resource.
 %% This is used for fetching the acl fields from a resource record.
 -record(acl_props, {
-    is_published=true,
-    is_authoritative=true,
-    publication_start={{1900,1,1},{0,0,0}},
-    publication_end=?ST_JUTTEMIS
+    is_published = true :: boolean(),
+    is_authoritative = true :: boolean(),
+    publication_start ={{1900,1,1},{0,0,0}} :: calendar:datetime(),
+    publication_end = ?ST_JUTTEMIS, %% :: calendar::datetime(),
+    content_group_id = undefined :: undefined | m_rsc:resource_id(),
+    visible_for = 0 :: non_neg_integer()
 }).
 
 %% @doc drag and drop event message

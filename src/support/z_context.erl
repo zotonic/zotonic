@@ -260,11 +260,12 @@ hostname(Context) ->
     end.
 
 %% @doc Return the hostname (and port) for http from the site configuration
--spec hostname_port( z:context() ) -> binary().
+-spec hostname_port( z:context() ) -> binary() | undefined.
 hostname_port(Context) ->
     case z_dispatcher:hostname_port(Context) of
         Empty when Empty =:= undefined; Empty =:= <<>> ->
             case z_config:get(port) of
+                none -> undefined;
                 80 -> <<"localhost">>;
                 Port -> <<"localhost:", (integer_to_binary(Port))/binary>>
             end;
@@ -273,11 +274,12 @@ hostname_port(Context) ->
     end.
 
 %% @doc Return the hostname (and port) for https from the site configuration
--spec hostname_ssl_port( z:context() ) -> binary().
+-spec hostname_ssl_port( z:context() ) -> binary() | undefined.
 hostname_ssl_port(Context) ->
     case z_dispatcher:hostname_ssl_port(Context) of
         Empty when Empty =:= undefined; Empty =:= <<>> ->
             case z_config:get(ssl_port) of
+                none -> undefined;
                 443 -> <<"localhost">>;
                 Port -> <<"localhost:", (integer_to_binary(Port))/binary>>
             end;
@@ -481,16 +483,19 @@ site_protocol(Context) ->
     end.
 
 %% @doc Check if the preferred protocol of the site is https
-%% @todo Refactor mod_ssl so that we don't need to check the mod_ssl config here 
 -spec is_ssl_site(z:context()) -> boolean().
 is_ssl_site(Context) ->
-    case z_config:get(port_ssl) of
-        none ->
-            false;
-        _ -> 
-            case z_config:get(ssl_only) of
-                true -> true;
-                false -> z_convert:to_bool(m_config:get_value(site, ssl_only, Context))
+    case z_config:get(ssl_port) of
+        none -> false;
+        _PortSsl ->
+            case z_config:get(port) of
+                none -> true;
+                _Port ->
+                    case z_config:get(ssl_only) of
+                        true -> true;
+                        false ->
+                            z_convert:to_bool(m_config:get_value(site, ssl_only, Context))
+                    end
             end
     end.
 
@@ -814,6 +819,8 @@ is_zotonic_arg(<<"triggervalue">>) -> true;
 is_zotonic_arg(<<"z_trigger_id">>) -> true;
 is_zotonic_arg(<<"z_target_id">>) -> true;
 is_zotonic_arg(<<"z_delegate">>) -> true;
+is_zotonic_arg(<<"z_message">>) -> true;
+is_zotonic_arg(<<"z_transport">>) -> true;
 is_zotonic_arg(<<"z_sid">>) -> true;
 is_zotonic_arg(<<"z_pageid">>) -> true;
 is_zotonic_arg(<<"z_v">>) -> true;

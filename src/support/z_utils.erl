@@ -466,6 +466,9 @@ is_empty(undefined) -> true;
 is_empty([]) -> true;
 is_empty(<<>>) -> true;
 is_empty({{9999,_,_},{_,_,_}}) -> true;
+is_empty({trans, []}) -> true;
+is_empty({trans, Tr}) ->
+    lists:all(fun({_,Text}) -> Text =:= <<>> end, Tr);
 is_empty(_) -> false.
 
 
@@ -478,11 +481,11 @@ is_true("on") -> true;
 is_true("ON") -> true;
 is_true("1") -> true;
 
-is_true(<<"true">>) -> true;
-is_true(<<"yes">>) -> true;
+is_true(<<"t", _/binary>>) -> true;
+is_true(<<"y", _/binary>>) -> true;
+is_true(<<"T", _/binary>>) -> true;
+is_true(<<"Y", _/binary>>) -> true;
 is_true(<<"on">>) -> true;
-is_true(<<"TRUE">>) -> true;
-is_true(<<"YES">>) -> true;
 is_true(<<"ON">>) -> true;
 is_true(<<"1">>) -> true;
 
@@ -490,7 +493,8 @@ is_true(true) -> true;
 is_true(yes) -> true;
 is_true(on) -> true;
 
-is_true(N) when is_integer(N) andalso N /= 0 -> true;
+is_true(N) when is_integer(N) andalso N =/= 0 -> true;
+is_true(N) when is_float(N) andalso N =/= 0.0 -> true;
 
 is_true(_) -> false.
 
@@ -521,7 +525,7 @@ props_merge(Ps, [{K,_}=P|Xs]) ->
 %% with the same property.  Assumes the list is sorted on the property you are splitting on
 %% For example:  [[{a,b}{x}], [{a,b}{z}], [{a,c}{y}]] gives:
 %%   [ {b, [[{a,b}{x}], [{a,b}{z}]]},  {c, [[{a,c}{y}]]} ]
-%% @spec group_proplists(Property, [PropList]) -> PropList
+-spec group_proplists(atom(), [{atom(), term()}]) -> list({term(), list()}).
 group_proplists(_Prop, []) ->
     [];
 group_proplists(Prop, [Item|Rest]) ->
@@ -532,28 +536,27 @@ group_proplists(_Prop, _PropValue, [], [], Result) ->
     lists:reverse(Result);
 group_proplists(Prop, PropValue, [], Acc, Result) ->
     lists:reverse(Acc),
-    group_proplists(Prop, PropValue, [], [], [{z_convert:to_atom(PropValue),Acc}|Result]);
+    group_proplists(Prop, PropValue, [], [], [{PropValue,Acc}|Result]);
 group_proplists(Prop, PropValue, [C|Rest], Acc, Result) ->
     case proplists:get_value(Prop, C) of
         PropValue ->
             group_proplists(Prop, PropValue, Rest, [C|Acc], Result);
         Other ->
-            group_proplists(Prop, Other, Rest, [C], [{z_convert:to_atom(PropValue),Acc}|Result])
+            group_proplists(Prop, Other, Rest, [C], [{PropValue,Acc}|Result])
     end.
 
 
 %% @doc Make a property list based on the value of a property
 %% For example:  [  [{a,b}], [{a,c}] ]  gives  [{a, [{a,b}]}, {c, [[{a,c}]]}]
-%% @spec index_proplist(Property, [PropList]) -> PropList
-index_proplist(_Prop, []) ->
-    [];
+-spec index_proplist(term(), list({term(), term()})) -> list({term(), term()}).
+index_proplist(_Prop, []) -> [];
 index_proplist(Prop, List) ->
     index_proplist(Prop, List, []).
 
 index_proplist(_Prop, [], Acc) ->
     lists:reverse(Acc);
 index_proplist(Prop, [L|Rest], Acc) ->
-    index_proplist(Prop, Rest, [{z_convert:to_atom(proplists:get_value(Prop,L)),L}|Acc]).
+    index_proplist(Prop, Rest, [{proplists:get_value(Prop,L),L}|Acc]).
 
 
 %% @doc Scan the props of a proplist, when the prop is a list with a $. characters in it then split the prop.
@@ -567,13 +570,18 @@ nested_proplist([{K,V}|T], Acc) when is_list(K) ->
         [K0] -> nested_proplist(T, [{K0,V}|Acc]);
         List -> nested_proplist(T, nested_props_assign(List, V, Acc))
     end;
+nested_proplist([{K,V}|T], Acc) when is_binary(K) ->
+    case binary:split(K, <<".">>, [global]) of
+        [K0] -> nested_proplist(T, [{K0,V}|Acc]);
+        List -> nested_proplist(T, nested_props_assign(List, V, Acc))
+    end;
 nested_proplist([H|T], Acc) ->
     nested_proplist(T, [H|Acc]).
 
 nested_props_assign([K], V, Acc) ->
     case only_digits(K) of
         true ->  set_nth(list_to_integer(K), V, Acc);
-        false -> prop_replace(z_convert:to_atom(K), V, Acc)
+        false -> prop_replace(K, V, Acc)
     end;
 nested_props_assign([H|T], V, Acc) ->
     case only_digits(H) of
@@ -585,12 +593,11 @@ nested_props_assign([H|T], V, Acc) ->
                    end,
             set_nth(Index, NewV, Acc);
         false ->
-            K = z_convert:to_atom(H),
-            NewV = case proplists:get_value(K, Acc) of
+            NewV = case proplists:get_value(H, Acc) of
                        L when is_list(L) -> nested_props_assign(T, V, L);
                        _ -> nested_props_assign(T, V, [])
                    end,
-            prop_replace(K, NewV, Acc)
+            prop_replace(H, NewV, Acc)
     end.
 
 get_nth(N, L) when N >= 1 ->

@@ -419,7 +419,7 @@ do_poll_task(Context) ->
                 end
             catch
                 error:undef ->
-                    lager:warning("Undefined task, aborting: ~p:~p(~p) ~p~",
+                    lager:warning("Undefined task, aborting: ~p:~p(~p) ~p",
                                 [Module, Function, Args, erlang:get_stacktrace()]),
                     z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context);
                 Error:Reason ->
@@ -909,11 +909,19 @@ custom_columns([{Name, Spec, _Opts}|Rest], Acc) ->
 
 update_custom_pivot(Id, {Module, Columns}, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
-    case z_db:select(TableName, Id, Context) of
+    Result = case z_db:select(TableName, Id, Context) of
         {ok, []} ->
-            {ok, _} = z_db:insert(TableName, [{id, Id}|Columns], Context);
-        {ok, _}  ->
-            {ok, _} = z_db:update(TableName, Id, Columns, Context)
+            z_db:insert(TableName, [{id, Id}|Columns], Context);
+        {ok, _Row}  ->
+            z_db:update(TableName, Id, Columns, Context);
+        {error, _} = Error ->
+            Error
+    end,
+    case Result of
+        {ok, _} -> ok;
+        {error, Reason} ->
+            lager:error("Error updating custom pivot ~p for ~p (~p): ~p", 
+                        [Module, Id, z_context:site(Context), Reason])
     end.
 
 

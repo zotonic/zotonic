@@ -25,7 +25,7 @@
 -export([start_link/1]).
 
 %% depcache exports
--export([set/3, set/4, set/5, get/2, get_wait/2, get/3, get_subkey/3, flush/2, flush/1, size/1]).
+-export([set/3, set/4, set/5, get/2, get_wait/2, get/3, get_subkey/3, flush/2, flush/1, size/1, record_depcache_event/2]).
 -export([memo/2, memo/3, memo/4, memo/5]).
 -export([in_process_server/1, in_process/1, flush_process_dict/0]).
 
@@ -37,7 +37,13 @@
 start_link(SiteProps) ->
     Site = proplists:get_value(site, SiteProps),
     Name = z_utils:name_for_site(?MODULE, Site),
-    depcache:start_link(Name, [{memory_max, proplists:get_value(depcache_memory_max, SiteProps)}]).
+    depcache:start_link(
+        Name,
+        [
+            {memory_max, proplists:get_value(depcache_memory_max, SiteProps)},
+            {callback, {?MODULE, record_depcache_event, [Site]}}
+        ]
+    ).
 
 
 memo(Function, #context{depcache=Server}) ->
@@ -126,3 +132,8 @@ in_process(Flag) ->
 %% @doc Flush all items memoized in the process dictionary.
 flush_process_dict() ->
     depcache:flush_process_dict().
+
+record_depcache_event({eviction, _DepcacheName}, Host) ->
+    exometer:update([zotonic, Host, depcache, evictions], 1);
+record_depcache_event(_Event, _Metadata) ->
+    ok.

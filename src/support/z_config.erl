@@ -47,22 +47,51 @@ init_app_env() ->
 %% Some config settings can be overruled by environment settings.
 -spec get(atom()) -> any().
 get(listen_ip) ->
-    case os:getenv("ZOTONIC_IP") of
+    IPv4 = case os:getenv("ZOTONIC_IP") of
         false -> ?MODULE:get(listen_ip, default(listen_ip));
-        Any when Any == []; Any == "*"; Any == "any" -> any;
-        Ip -> Ip
-    end;
+        IP -> IP
+    end,
+    maybe_map_value(listen_ip, IPv4);
+get(listen_ip6) ->
+    IPv6 = case os:getenv("ZOTONIC_IP6") of
+        false -> get(listen_ip6, default(listen_ip6));
+        IP -> IP
+    end,
+    maybe_map_value(listen_ip6, IPv6);
 get(listen_port) ->
     case os:getenv("ZOTONIC_PORT") of
         false -> ?MODULE:get(listen_port, default(listen_port));
-        Port -> z_convert:to_integer(Port)
+        "" -> ?MODULE:get(listen_port, default(listen_port));
+        "none" -> none;
+        Port -> list_to_integer(Port)
     end;
 get(ssl_listen_port) ->
     case os:getenv("ZOTONIC_SSL_PORT") of
         false -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
+        "" -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
         "none" -> none;
-        Port -> z_convert:to_integer(Port)
+        Port -> list_to_integer(Port)
     end;
+get(smtp_listen_domain) ->
+    case os:getenv("ZOTONIC_SMTP_LISTEN_DOMAIN") of
+        false -> get(smtp_listen_domain, default(smtp_listen_domain));
+        SmtpListenDomain_ -> SmtpListenDomain_
+    end;
+get(smtp_listen_ip) ->
+    SmtpIp = case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
+        false -> z_config:get(smtp_listen_ip, default(smtp_listen_ip));
+        "none" -> none;
+        SmtpListenIp -> SmtpListenIp
+    end,
+    maybe_map_value(smtp_listen_ip, SmtpIp);
+get(smtp_listen_port) ->
+    case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
+        false -> z_config:get(smtp_listen_port, default(smtp_listen_port));
+        "none" -> none;
+        SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
+    end;
+get(smtp_spamd_ip) ->
+    maybe_map_value(smtp_spamd_ip, z_config:get(smtp_spamd_ip, default(smtp_spamd_ip)));
 get(Key) ->
     ?MODULE:get(Key, default(Key)).
 
@@ -71,13 +100,71 @@ get(Key) ->
 get(Key, Default) ->
 	case application:get_env(zotonic, Key) of
 		undefined ->
-			Default;
+			maybe_map_value(Key, Default);
 		{ok, Value} ->
-			Value
+			maybe_map_value(Key, Value)
 	end.
+
+
+%% @doc Translate IP addresses to a tuple(), 'any', or 'none'
+-spec maybe_map_value(atom(), term()) -> term().
+maybe_map_value(listen_ip, IP) -> map_ip_address(listen_ip, IP);
+maybe_map_value(listen_ip6, IP) -> map_ip_address(listen_ip6, IP);
+maybe_map_value(smtp_listen_ip, IP) -> map_ip_address(smtp_listen_ip, IP);
+maybe_map_value(smtp_spamd_ip, IP) -> map_ip_address(smtp_spamd_ip, IP);
+maybe_map_value(_Key, Value) ->
+    Value.
+
+map_ip_address(_Name, any) -> any;
+map_ip_address(_Name, "any") -> any;
+map_ip_address(_Name, "") -> any;
+map_ip_address(_Name, "*") -> any;
+map_ip_address(_Name, none) -> none;
+map_ip_address(_Name, "none") -> none;
+map_ip_address(_Name, IP) when is_tuple(IP) -> IP;
+map_ip_address(Name, IP) when is_list(IP) -> 
+    case getaddr(Name, IP) of
+        {ok, IpN} -> IpN;
+        {error, Reason} ->
+            lager:error("Invalid '~p' address: ~p, assuming 'none' instead (~p)",
+                        [Name, IP, Reason]),
+            none
+    end;
+map_ip_address(smtp_spamd_ip, undefined) ->
+    none;
+map_ip_address(Name, IP) ->
+    lager:error("Invalid ~p address: ~p, assuming 'any' instead",
+                [Name, IP]),
+    any.
+
+getaddr(listen_ip6, IP) -> inet:getaddr(IP, inet6);
+getaddr(_Name, IP) -> inet:getaddr(IP, inet).
 
 default(timezone) -> <<"UTC">>;
 default(listen_ip) -> any;
+default(listen_ip6) ->
+    % Default to the listen_ip configuration iff that configuration
+    % is not a IPv4 address
+    ListenIP4 = case os:getenv("ZOTONIC_IP") of
+        false -> ?MODULE:get(listen_ip, default(listen_ip));
+        IP -> IP
+    end,
+    case ListenIP4 of
+        any -> any;
+        "any" -> any;
+        "" -> any;
+        "*" -> any;
+        none -> none;
+        "none" -> none;
+        {127,0,0,1} -> "::1";
+        {_,_,_,_} -> none;
+        Domain when is_list(Domain) ->
+            % Only use the domain if it is not a dotted ip4 number 
+            case re:run(Domain, "^[0-9]{1,3}(\\.[0-9]{1,3}){3}$") of
+                {match, _} -> none;
+                _ -> Domain
+            end
+    end;
 default(listen_port) -> 8000;
 default(ssl_listen_port) -> 8443;
 default(port) -> ?MODULE:get(listen_port);
@@ -89,8 +176,9 @@ default(smtp_relay) -> false;
 default(smtp_host) -> "localhost";
 default(smtp_port) -> 25;
 default(smtp_ssl) -> false;
-default(smtp_listen_ip) -> "127.0.0.1";
+default(smtp_listen_ip) -> {127,0,0,1};
 default(smtp_listen_port) -> 2525;
+default(smtp_spamd_ip) -> none;
 default(smtp_spamd_port) -> 783;
 default(smtp_dnsbl) -> z_email_dnsbl:dnsbl_list();
 default(smtp_dnswl) -> z_email_dnsbl:dnswl_list();

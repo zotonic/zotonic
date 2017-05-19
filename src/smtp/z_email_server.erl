@@ -57,6 +57,9 @@
 % Extension of files with queued copies of tmpfile attachments
 -define(TMPFILE_EXT, ".mailspool").
 
+% Timeout (in msec) for the connect to external SMTP server (default is 5000)
+-define(SMTP_CONNECT_TIMEOUT, 15000).
+
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override,
@@ -199,7 +202,7 @@ handle_call({is_sending_allowed, Pid, Relay}, _From, State) ->
                                     IsConnected andalso Relay =:= Domain
                                 end,
                                 State#state.sending)),
-    case DomainWorkers < ?EMAIL_MAX_DOMAIN of
+    case DomainWorkers < email_max_domain(Relay) of
         true ->
             Workers = [
                     case E#email_sender.sender_pid of
@@ -529,7 +532,8 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
     [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
     SmtpOpts = [
         {no_mx_lookups, State#state.smtp_no_mx_lookups},
-        {hostname, z_convert:to_list(z_email:email_domain(Context))}
+        {hostname, z_convert:to_list(z_email:email_domain(Context))},
+        {timeout, ?SMTP_CONNECT_TIMEOUT}
         | case State#state.smtp_relay of
             true -> State#state.smtp_relay_opts;
             false -> [{relay, z_convert:to_list(RecipientDomain)}]
@@ -543,7 +547,8 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
                             [_BccLocalName, BccDomain] = binary:split(BccEmail, <<"@">>),
                             [
                                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                                {hostname, z_convert:to_list(z_email:email_domain(Context))}
+                                {hostname, z_convert:to_list(z_email:email_domain(Context))},
+                                {timeout, ?SMTP_CONNECT_TIMEOUT}
                                 | case State#state.smtp_relay of
                                     true -> State#state.smtp_relay_opts;
                                     false -> [{relay, z_convert:to_list(BccDomain)}]
@@ -1095,6 +1100,14 @@ re() ->
         )+
         [A-Za-z\\-]{2,}
     )".
+
+email_max_domain(Domain) ->
+    email_max_domain_1(lists:reverse(binary:split(z_convert:to_binary(Domain), <<".">>, [global]))).
+
+%% Some mail providers 
+email_max_domain_1([<<"net">>, <<"upcmail">> | _]) -> 2;
+email_max_domain_1([<<"nl">>, <<"timing">> | _]) -> 2;
+email_max_domain_1(_) -> ?EMAIL_MAX_DOMAIN.
 
 %% @doc Simple header encoding.
 encode_header({Header, Value}) when is_list(Header)->

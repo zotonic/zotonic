@@ -38,5 +38,7 @@ ljust(Input, Number, Context) when is_binary(Input) ->
     list_to_binary(ljust(binary_to_list(Input), Number, Context));
 ljust(Input, Number, _Context) when is_list(Input) ->
     string:left(Input, z_convert:to_integer(Number));
+ljust({trans, _} = Tr, Number, Context) ->
+    ljust(z_trans:lookup_fallback(Tr, Context), Number, Context);
 ljust(Input, _Number, _Context) ->
     Input.

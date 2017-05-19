@@ -79,9 +79,15 @@ all(Context) ->
                              end;
                      false -> []
                  end,
-            Indexed = [{M, z_utils:index_proplist(key, CMs)} || {M, CMs} <- z_utils:group_proplists(module,
-                Cs)],
-            z_depcache:set(config, Indexed, ?DAY, Context),
+            Indexed = [
+                {M, z_utils:index_proplist(key, CMs)}
+                || {M, CMs} <- z_utils:group_proplists(module, Cs)
+            ],
+            Indexed1 = [
+                {z_convert:to_atom(M), [{z_convert:to_atom(K), Vs} || {K, Vs} <- CMs]}
+                || {M, CMs} <- Indexed
+            ],
+            z_depcache:set(config, Indexed1, ?DAY, Context),
             Indexed
     end.
 
@@ -172,7 +178,8 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
     case get_id(Module, Key, Context) of
         undefined ->
             z_db:insert(config, [{module, Module}, {key, Key}, {Prop, PropValue}], Context);
-        Id -> z_db:update(config, Id, [{Prop, PropValue}], Context)
+        Id ->
+            z_db:update(config, Id, [{Prop, PropValue}], Context)
     end,
     z_depcache:flush(config, Context),
     z_notifier:notify(

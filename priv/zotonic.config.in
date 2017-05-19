@@ -51,8 +51,15 @@
 
 %%% IP address on which Zotonic will listen for HTTP requests.
 %%% Always overridden by the ZOTONIC_IP environment variable.
+%%% This can be a tuple, or a (domain) string ("localhost" or "127.0.0.1")
 %%% Use 'any' for all IP addresses.
    {listen_ip, any},
+
+%%% IPv6 address on which Zotonic will listen for HTTP requests.
+%%% Always overridden by the ZOTONIC_IP6 environment variable.
+%%% Defaults to 'listen_ip' (if listen_ip is a hostname or "127.0.0.1")
+%%% use 'any' for all IPv6 addresses, 'none' to disable
+   %% {listen_ip6, any},
 
 %%% Port on which Zotonic will listen for HTTP requests.
 %%% Always overridden by the ZOTONIC_PORT environment variable.

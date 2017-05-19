@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2016-10-15 15:38+0200\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2017-02-27 17:43+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: modules/mod_acl_user_groups/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
@@ -1537,7 +1537,6 @@ msgid "This connection already exists."
 msgstr "Deze connectie bestaat al"
 
 #: modules/mod_admin/templates/_admin_edit_content_advanced.tpl:42
-#, fuzzy
 msgid "This name is in use by another page."
 msgstr "Deze gebruikersnaam bestaat al, kies a.u.b. een andere."
 
@@ -1980,7 +1979,7 @@ msgstr "Waarde"
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
-msgstr ""
+msgstr "Voeg pagina’s toe of klik op een pagina om het menu."
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:59
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:28
@@ -1990,22 +1989,20 @@ msgstr "Taal"
 
 #: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:31./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:42
 msgid "Loading ..."
-msgstr ""
+msgstr "Laden ..."
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:109./modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:73
-#, fuzzy
 msgid "Save &amp; view"
 msgstr "Opslaan en Bekijken"
 
 #: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:67
-#, fuzzy
 msgid "This page"
-msgstr "De pagina"
+msgstr "Deze pagina"
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:43
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:11
 msgid "till"
-msgstr ""
+msgstr "tot"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:65
 msgid "(that's you)"
@@ -3231,23 +3228,20 @@ msgid "user@example.com"
 msgstr "gebruiker@voorbeeld.nl"
 
 #: modules/mod_backup/templates/admin_backup.tpl:3
-#, fuzzy
 msgid "Admin Backups"
-msgstr "Backup"
+msgstr "Admin Backups"
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:28
-#, fuzzy
 msgid "Are you sure you want to revert to this version?"
-msgstr "Weet je zeker dat je dit wilt verwijderen?"
+msgstr "Weet je zeker dat je deze versie wilt terugzetten?"
 
 #: modules/mod_backup/templates/admin_backup.tpl:41
 msgid "At any moment you can make a backup of your system."
-msgstr ""
+msgstr "Op elk moment kan je een backup van je systeem maken."
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:44
-#, fuzzy
 msgid "Back to the edit page"
-msgstr "Mediapagina gemaakt."
+msgstr "Terug naar de edit pagina."
 
 #: modules/mod_backup/mod_backup.erl:65
 msgid "Backup"
@@ -3255,25 +3249,23 @@ msgstr "Backup"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:11
 msgid "Backup &amp; Restore"
-msgstr ""
+msgstr "Backup &amp; Terugzetten"
 
 #: modules/mod_backup/templates/admin_backup.tpl:11
 msgid "Backup and restore options for your content."
-msgstr ""
+msgstr "Backup- en terugzetopties voor je gegevens"
 
 #: modules/mod_backup/templates/admin_backup.tpl:9
-#, fuzzy
 msgid "Backups"
-msgstr "Backup"
+msgstr "Backups"
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:10
-#, fuzzy
 msgid "Changes since"
-msgstr "Verander categorie"
+msgstr "Veranderingen sinds"
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:42
 msgid "Check and possibly restore an earlier version of your page."
-msgstr ""
+msgstr "Controleer en optioneel herstel een eerdere versie van je pagina."
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:13
 msgid ""
@@ -3283,69 +3275,71 @@ msgid ""
 "current page contents. Note that the file does not contain your unsaved "
 "changes. Connections and media are not saved as well."
 msgstr ""
+"Klik op <b>Bekijk en herstel een eerdere versie</b> voor een overzicht van "
+"eerdere versies van deze pagina.<br/>Je kan ook de volledige inhoud van je "
+"pagina in een bestand bewaren. Later kan je dat bestand inladen, wat de "
+"huidige paginainhoud vervangt. Let op dat dit bestand alleen je bewaarde "
+"veranderingen bevat. Pagina connecties en media worden niet bewaard."
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:38
-#, fuzzy
 msgid "Deleted"
-msgstr "Verwijderd."
+msgstr "Verwijderd"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:27
-#, fuzzy
 msgid "Download backup file"
-msgstr "Bestand downloaden"
+msgstr "Backup bestand downloaden"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:13
-#, fuzzy
 msgid "Help about backup &amp; restore"
-msgstr "Hulp over predicaten"
+msgstr "Hulp over backup &amp; herstel"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:23
 msgid "List and restore an earlier version"
-msgstr ""
+msgstr "Bekijk en herstel een eerdere versie."
 
 #: modules/mod_backup/templates/admin_backup.tpl:33
 msgid "Make a daily backup of the database and uploaded files."
 msgstr ""
+"Maak een dagelijkse backup van de database en alle geüploade bestanden."
 
 #: modules/mod_backup/templates/_admin_backup_list.tpl:29
 msgid "No backups present."
-msgstr ""
+msgstr "Er zijn geen backups."
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:67
-#, fuzzy
 msgid "Previous"
-msgstr "Voorbeeld"
+msgstr "Vorige"
 
 #: modules/mod_backup/templates/_admin_edit_sidebar.tpl:29./modules/mod_backup/templates/_admin_edit_sidebar.tpl:32./modules/mod_backup/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
-msgstr ""
+msgstr "Herstel vanaf backup"
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:26
-#, fuzzy
 msgid "Revert to this version…"
-msgstr "Terug naar gepubliceerde versie"
+msgstr "Herstel deze versie..."
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:3./modules/mod_backup/templates/admin_backup_revision.tpl:36./modules/mod_backup/templates/admin_backup_revision.tpl:38
 msgid "Revisions for"
-msgstr ""
+msgstr "Versies voor"
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:3
 msgid ""
 " Select the backup file you want to upload. The file must be a .bert file."
 msgstr ""
+"Selecteer de backup die je wilt terugzetten. Het bestand moet extensie .bert "
+"hebben."
 
 #: modules/mod_backup/templates/admin_backup.tpl:26
-#, fuzzy
 msgid "Show import/export panel in the admin."
-msgstr "Controlleer het antwoord in de admin."
+msgstr "Toon import/export paneel in de admin"
 
 #: modules/mod_backup/templates/admin_backup.tpl:45
 msgid "Start backup now"
-msgstr ""
+msgstr "Backup nu"
 
 #: modules/mod_backup/templates/admin_backup.tpl:46
 msgid "Start database-only backup now"
-msgstr ""
+msgstr "Backup alleen de database"
 
 #: modules/mod_backup/templates/admin_backup.tpl:51
 msgid ""
@@ -3362,10 +3356,11 @@ msgstr ""
 #: modules/mod_backup/templates/admin_backup.tpl:41
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr ""
+"Een backup bestaat uit twee delen, de database en alle geüploade bestanden."
 
 #: modules/mod_backup/templates/_admin_backup_diff.tpl:5./modules/mod_backup/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
-msgstr ""
+msgstr "Deze versie is bewaard op"
 
 #: modules/mod_backup/templates/admin_backup.tpl:63
 msgid ""
@@ -3376,7 +3371,7 @@ msgstr ""
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
-msgstr ""
+msgstr "Dit vervangt je pagina met de inhoud van het backup bestand."
 
 #: modules/mod_backup/templates/admin_backup.tpl:61
 #: modules/mod_logging/templates/admin_log_email.tpl:66
@@ -3385,22 +3380,20 @@ msgid "Warning"
 msgstr "Waarschuwing"
 
 #: modules/mod_backup/templates/_dialog_backup_upload.tpl:10
-#, fuzzy
 msgid "Warning!"
-msgstr "Waarschuwing"
+msgstr "Waarschuwing!"
 
 #: modules/mod_backup/templates/admin_backup.tpl:49
-#, fuzzy
 msgid "Warning:"
-msgstr "Waarschuwing"
+msgstr "Waarschuwing:"
 
 #: modules/mod_backup/templates/admin_backup_revision.tpl:74
 msgid "Y-m-d H:i"
-msgstr ""
+msgstr "Y-m-d H:i"
 
 #: modules/mod_backup/templates/admin_backup.tpl:42
 msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr ""
+msgstr "Je kan 10 backups bewaren. Oudere worden automatisch verwijderd."
 
 #: modules/mod_backup/templates/admin_backup.tpl:49
 msgid ""
@@ -3409,18 +3402,16 @@ msgid ""
 msgstr ""
 
 #: modules/mod_backup/templates/_admin_backup_list.tpl:17
-#, fuzzy
 msgid "download database"
-msgstr "Bestand downloaden"
+msgstr "database downloaden"
 
 #: modules/mod_backup/templates/_admin_backup_list.tpl:19
-#, fuzzy
 msgid "download files"
-msgstr "Bestand downloaden"
+msgstr "bestanden downloaden"
 
 #: modules/mod_backup/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
-msgstr ""
+msgstr "deze backup is bezig"
 
 #: modules/mod_base/templates/_session_info.tpl:5
 msgid "# Pages"
@@ -3716,26 +3707,23 @@ msgstr "ongepubliceerd"
 
 #: modules/mod_contact/templates/email_contact.tpl:6
 msgid "Hello, the contact form of"
-msgstr ""
+msgstr "Hallo, het contactformulier van"
 
 #: modules/mod_contact/templates/contact.tpl:32
-#, fuzzy
 msgid "Thank you!"
-msgstr "Bedankt"
+msgstr "Bedankt!"
 
 #: modules/mod_contact/templates/contact.tpl:33
 msgid "Your message has been submitted! We’ll get in touch soon."
-msgstr ""
+msgstr "Je bericht is ingestuurd! We reageren spoedig."
 
 #: modules/mod_contact/templates/email_contact.tpl:3
-#, fuzzy
 msgid "contact form on"
-msgstr "Bescherm tegen verwijderen"
+msgstr "contactformulier op"
 
 #: modules/mod_contact/templates/email_contact.tpl:6
-#, fuzzy
 msgid "has been submitted."
-msgstr "is ontkoppeld."
+msgstr "is ingestuurd."
 
 #: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
@@ -3777,18 +3765,16 @@ msgstr "Deze pagina maakt deel uit van de groep:"
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:25
 #: modules/mod_filestore/templates/admin_filestore.tpl:150
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:17
-#, fuzzy
 msgid "Actions"
-msgstr "Actie"
+msgstr "Acties"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:3
-#, fuzzy
 msgid "Admin Custom Redirects"
 msgstr "Domeinnamen en doorverwijzingen"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:21
 msgid "Domain"
-msgstr ""
+msgstr "Domein"
 
 #: modules/mod_custom_redirect/mod_custom_redirect.erl:59./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:7
 msgid "Domains and redirects"
@@ -3800,24 +3786,24 @@ msgid "Path"
 msgstr "Pad"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:24./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:45./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:67./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:88
-#, fuzzy
 msgid "Permanent"
-msgstr "Permanente redirect"
+msgstr "Permanent"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:23
-#, fuzzy
 msgid "Redirect to"
-msgstr "Doorsturen"
+msgstr "Stuur door naar"
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:8
 msgid "Redirect unknown domains and paths to known pages or locations."
-msgstr ""
+msgstr "Stuur onbekende domeinen en paden naar bekende pagina’s of locaties."
 
 #: modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:9
 msgid ""
 "The new location can be a local path or a complete URL. Leave the host empty "
 "for redirects within this site."
 msgstr ""
+"De nieuwe locatie kan een lokaal pad of complete URL zijn. Laat de "
+"domeinnaam leeg voor doorverwijzingen binnen de site."
 
 #: modules/mod_custom_redirect/mod_custom_redirect.erl:73
 msgid "You are not allowed to change this."
@@ -4062,9 +4048,8 @@ msgid "Media Properties"
 msgstr "Mediaeigenschappen"
 
 #: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:56
-#, fuzzy
 msgid "Medium"
-msgstr "Media"
+msgstr "Medium"
 
 #: modules/mod_editor_tinymce/templates/_tinymce_dialog_zmedia_props.tpl:51
 msgid "Small"
@@ -4075,36 +4060,41 @@ msgid "DKIM e-mail setup"
 msgstr "DKIM e-mailinstellingen"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:6
-#, fuzzy
 msgid "DKIM e-mail signing setup"
 msgstr "DKIM e-mailinstellingen"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:17
 msgid "The DNS entry should contain the following information:"
-msgstr ""
+msgstr "De DNS ingang moet de volgende informatie bevatten:"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:10
-#, fuzzy
 msgid "The location of these key files are the following:"
-msgstr "Deze applicatie wil toegang tot de volgende diensten:"
+msgstr "De locaties van deze sleutelbestanden zijn:"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:9
 msgid ""
 "The module has generated an RSA keypair for you which will be used when "
 "signing outgoing emails."
 msgstr ""
+"De module heeft een RSA sleutel gegenereerd voor het tekenen van uitgaande "
+"emails."
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:16
 msgid ""
 "To finalize the DKIM configuration, you need to add an DNS entry TXT record "
 "to the following domain:"
 msgstr ""
+"Om de DKIM configuratie te completeren, moet je in de DNS een TXT regel "
+"toevoegen voor het volgende domein:"
 
 #: modules/mod_email_dkim/templates/admin_email_dkim.tpl:22
 msgid ""
 "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck"
 "\">DKIM keycheck</a> website to verify your domain's DKIM record."
 msgstr ""
+"Als alles is opgezet, kan je de <a href=\"http://dkimcore.org/c/keycheck"
+"\">DKIM keycheck</a> website gebruiken om de DKIM van jouw domein te "
+"controleren."
 
 #: modules/mod_email_status/templates/_email_status_view.tpl:83
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:34./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:35
@@ -4188,55 +4178,52 @@ msgid "Total/Status"
 msgstr "Totaal/status"
 
 #: modules/mod_export/templates/_vcalendar_header.tpl:7
-#, fuzzy
 msgid "Calendar"
-msgstr "Standaard"
+msgstr "Kalender"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:19./modules/mod_export/templates/_admin_edit_sidebar.tpl:31./modules/mod_export/templates/_admin_edit_sidebar.tpl:39
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:94./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:38
-#, fuzzy
 msgid "Download CSV"
-msgstr "Download"
+msgstr "Download CSV"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:21./modules/mod_export/templates/_admin_edit_sidebar.tpl:34./modules/mod_export/templates/_admin_edit_sidebar.tpl:42
-#, fuzzy
 msgid "Download Event"
-msgstr "Bestand downloaden"
+msgstr "Download Evenement"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:20./modules/mod_export/templates/_admin_edit_sidebar.tpl:32./modules/mod_export/templates/_admin_edit_sidebar.tpl:40
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:98./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:42
-#, fuzzy
 msgid "Download Excel"
-msgstr "Bestand downloaden"
+msgstr "Download Excel"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:28
-#, fuzzy
 msgid "Download all the pages in the collection"
-msgstr "Verplaats alle pagina’s in deze categorie naar:"
+msgstr "Download alle pagina’s in de collectie"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:16
 msgid "Download all the pages matching the query"
-msgstr ""
+msgstr "Download all pagina’s die overeenkomen met de zoekvraag"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:25
 msgid ""
 "Download as Event if the query returns events and you want export for a "
 "calendar program."
 msgstr ""
+"Download als een Evenement als de zoekvraag evenementen teruggeeft en je "
+"wilt exporteren voor een kalender programma."
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:6
 msgid "Download this page or the query as a spreadsheet or in another format."
 msgstr ""
+"Download deze pagina of zoekvraag als een spreadsheet of in een ander "
+"formaat."
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:4
-#, fuzzy
 msgid "Export"
-msgstr "Importeer regels"
+msgstr "Exporteer"
 
 #: modules/mod_export/templates/_admin_edit_sidebar.tpl:6
-#, fuzzy
 msgid "Help about export"
-msgstr "Hulp over predicaten"
+msgstr "Hulp over exporteren"
 
 #: modules/mod_facebook/templates/_admin_authentication_service.tpl:13
 msgid "App ID."
@@ -4314,39 +4301,41 @@ msgid "API Key"
 msgstr "API-sleutel"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:49
-#, fuzzy
 msgid "API Secret"
-msgstr "App Secret"
+msgstr "API Secret"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:71
 msgid "After 1 month"
-msgstr ""
+msgstr "Na 1 maand"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:70
 msgid "After 1 week"
-msgstr ""
+msgstr "Na 1 week"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:72
 msgid "After 3 months"
-msgstr ""
+msgstr "Na 3 maanden"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:159
 msgid "All cloud files will be queued for download."
-msgstr ""
+msgstr "Alle cloud bestanden worden in een download-wachtrij geplaatst."
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:158
 msgid ""
 "All files will be queued, uploads will start in the background within 10 "
 "minutes."
 msgstr ""
+"Alle bestanden worden in een wachtrij geplaatst, uploads starten over 10 "
+"minuten op de achtergrond."
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:153
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr ""
+"Alle geuploade en voorbeeldbestanden kunnen naar de Cloud worden verplaatst."
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:32
 msgid "Base URL"
-msgstr ""
+msgstr "Basis URL"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:79
 msgid ""
@@ -4359,14 +4348,12 @@ msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:3./modules/mod_filestore/templates/admin_filestore.tpl:7
-#, fuzzy
 msgid "Cloud File Store Configuration"
-msgstr "Cloud File Store"
+msgstr "Cloud File Opslag Configuratie"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:112
-#, fuzzy
 msgid "Cloud Files"
-msgstr "Cloud File Store"
+msgstr "Cloud Bestanden"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:157
 msgid "Could not access the service, double check your settings and try again."
@@ -4386,40 +4373,36 @@ msgid ""
 msgstr ""
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:136
-#, fuzzy
 msgid "Delete Queue"
-msgstr "Verwijder"
+msgstr "Verwijder wachtrij"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:66
 msgid "Delete files from the cloud file store"
-msgstr ""
+msgstr "Verwijder bestanden uit de cloud"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:135
-#, fuzzy
 msgid "Download Queue"
-msgstr "Bestand downloaden"
+msgstr "Download wachtrij"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:117
-#, fuzzy
 msgid "Files"
-msgstr "Bestand"
+msgstr "Bestanden"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:69
 msgid "Immediately"
-msgstr ""
+msgstr "Meteen"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:111
-#, fuzzy
 msgid "Local Files"
-msgstr "Bestand uploaden"
+msgstr "Lokale bestanden"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:164
 msgid "Move all S3 files to local"
-msgstr ""
+msgstr "Verplaats alle bestanden naar de server"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:163
 msgid "Move all local files to S3"
-msgstr ""
+msgstr "Verplaats alle bestanden naar S3"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:73
 #: modules/mod_seo_sitemap/templates/_admin_edit_content_seo_extra.category.tpl:40
@@ -4428,66 +4411,65 @@ msgstr "Nooit"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:29
 msgid "S3 Cloud Location and Credentials"
-msgstr ""
+msgstr "S3 Cloud locatie en toegangssleutels"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:96
 msgid "S3 Cloud Utilities and Statistics"
-msgstr ""
+msgstr "S3 Cloud utilities en statistieken"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:86
-#, fuzzy
 msgid "Save Settings"
-msgstr "Bewaar SEO instellingen"
+msgstr "Bewaar instellingen"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:81
 msgid "Settings are working fine and are saved."
-msgstr ""
+msgstr "De instellingen werken goed en zijn bewaard."
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:123
 msgid "Storage"
-msgstr ""
+msgstr "Opslag"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:154
 msgid "This will queue the files for later asynchronous upload."
 msgstr ""
+"Dit plaatst alle bestanden in een wachtrij voor later asynchrone upload."
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:134
-#, fuzzy
 msgid "Upload Queue"
-msgstr "geüpload"
+msgstr "Upload wachtrij"
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:59
 msgid "Upload new media files to the cloud file store"
-msgstr ""
+msgstr "Upload nieuwe mediabestanden naar de cloud"
 
 #: modules/mod_filestore/support/filestore_admin.erl:58./modules/mod_filestore/support/filestore_admin.erl:70./modules/mod_filestore/templates/admin_filestore.tpl:175
-#, fuzzy
 msgid "You are not allowed to change these settings."
-msgstr "Je hebt geen rechten om de resultaten te veranderen."
+msgstr "Je hebt geen rechten om de instellingen te veranderen."
 
 #: modules/mod_filestore/templates/admin_filestore.tpl:9
 msgid ""
 "Zotonic can store uploaded and resized files in the cloud. Here you can "
 "configure the location and access keys for the cloud service."
 msgstr ""
+"Zotonic kun geuploade en bewerkte bestanden opslaan in de cloud. Hier kan je "
+"de locatie en toegang sleutels voor de cloud-dienst instellen."
 
 #: modules/mod_import_csv/templates/_admin_import_button.tpl:4./modules/mod_import_csv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
-msgstr ""
+msgstr "Importeer CSV bestand"
 
 #: modules/mod_import_csv/mod_import_csv.erl:74./modules/mod_import_csv/templates/_admin_import.tpl:3./modules/mod_import_csv/templates/_admin_import.tpl:8
 msgid "Import content"
 msgstr "Inhoud importeren"
 
 #: modules/mod_import_csv/templates/_admin_import_button.tpl:5
-#, fuzzy
 msgid "Import data from a CSV file."
-msgstr "Regels importeren"
+msgstr "Importeer data uit een CSV bestand"
 
 #: modules/mod_import_csv/templates/_dialog_import_csv.tpl:20
 #: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:19
 msgid "Import previously deleted items again"
-msgstr ""
+msgstr "Importeer de voorheen verwijderde items opnieuw"
 
 #: modules/mod_import_csv/mod_import_csv.erl:107
 msgid "Only admins can import CSV files."
@@ -4503,46 +4485,41 @@ msgstr ""
 
 #: modules/mod_import_csv/templates/_dialog_import_csv.tpl:9
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:7
-#, fuzzy
 msgid "Select file"
-msgstr "Selecteer links"
+msgstr "Selecteer bestand"
 
 #: modules/mod_import_csv/templates/_dialog_import_csv.tpl:27
 #: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:26
-#, fuzzy
 msgid "Start import"
-msgstr "Importeer foto"
+msgstr "Begin import"
 
 #: modules/mod_import_csv/mod_import_csv.erl:103
 msgid "This file cannot be imported."
 msgstr "Dit bestand kan niet worden geïmporteerd."
 
 #: modules/mod_import_csv/templates/_dialog_import_csv.tpl:2
-#, fuzzy
 msgid "Upload a CSV file from your computer."
-msgstr "Upload een bestand van je computer."
+msgstr "Upload een CSV bestand van je computer."
 
 #: modules/mod_import_wordpress/templates/_admin_status.tpl:4
 msgid "Import WXR file"
-msgstr ""
+msgstr "Importeer WXR bestand"
 
 #: modules/mod_import_wordpress/templates/_admin_status.tpl:5
 msgid "Import a Wordpress WXR export file into Zotonic."
-msgstr ""
+msgstr "Importeer een Wordpress WXR bestand in Zotonic"
 
 #: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:2
-#, fuzzy
 msgid "Upload a wordpress WXR file from your computer."
-msgstr "Upload een bestand van je computer."
+msgstr "Upload een Wordpress WXR bestand van je computer."
 
 #: modules/mod_import_wordpress/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
-msgstr ""
+msgstr "WXR bestand"
 
 #: modules/mod_import_wordpress/templates/_admin_status.tpl:4
-#, fuzzy
 msgid "Wordpress import"
-msgstr "Importeer video"
+msgstr "Wordpress import"
 
 #: modules/mod_instagram/templates/_admin_authentication_service.tpl:45
 #: modules/mod_twitter/templates/_admin_authentication_service.tpl:45
@@ -4802,32 +4779,26 @@ msgid "noon"
 msgstr "middag"
 
 #: modules/mod_linkedin/templates/_logon_extra.tpl:18
-#, fuzzy
 msgid "Connect with LinkedIn"
-msgstr "Verbinden met Twitter"
+msgstr "Verbinden met LinkedIn"
 
 #: modules/mod_linkedin/templates/_logon_extra.tpl:9./modules/mod_linkedin/templates/_logon_extra.tpl:11
-#, fuzzy
 msgid "Disconnect from LinkedIn"
-msgstr "Ontkoppelen van Twitter"
+msgstr "Ontkoppelen van LinkedIn"
 
 #: modules/mod_linkedin/templates/_logon_extra.tpl:12
-#, fuzzy
 msgid "Do you want to disconnect your LinkedIn account?"
-msgstr "Wil je je Twitter-account ontkoppelen?"
+msgstr "Wil je je LinkedIn-account ontkoppelen?"
 
 #: modules/mod_linkedin/templates/_logon_extra.tpl:18
-#, fuzzy
 msgid "Log in with LinkedIn"
-msgstr "Inloggen met Twitter"
+msgstr "Inloggen met LinkedIn"
 
 #: modules/mod_linkedin/templates/_logon_service.linkedin.tpl:2
-#, fuzzy
 msgid "Redirecting to LinkedIn."
-msgstr "We sturen je door naar Twitter."
+msgstr "We sturen je door naar LinkedIn."
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:40
-#, fuzzy
 msgid "Save LinkedIn Settings"
 msgstr "LinkedIn-instellingen opgeslagen."
 
@@ -4836,28 +4807,24 @@ msgid "Saved the LinkedIn settings."
 msgstr "LinkedIn-instellingen opgeslagen."
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:21
-#, fuzzy
 msgid "Secret Key"
-msgstr "App Secret"
+msgstr "Secret Key"
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:32
-#, fuzzy
 msgid "Use LinkedIn authentication"
-msgstr "Authenticeren met Twitter."
+msgstr "Authenticeren met LinkedIn."
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:10
-#, fuzzy
 msgid "You can find the application keys in"
-msgstr "Je hebt de applicatie "
+msgstr "Je kan de applicatie sleutels vinden in"
 
 #: modules/mod_linkedin/mod_linkedin.erl:49
 msgid "You don't have permission to change the LinkedIn settings."
 msgstr "Je hebt geen rechten om de LinkedIn-instellingen te bewerken."
 
 #: modules/mod_linkedin/templates/_logon_extra_email_reset.tpl:2
-#, fuzzy
 msgid "You have coupled your <strong>LinkedIn</strong> account."
-msgstr "Je hebt je <strong>Twitter</strong>-account gekoppeld."
+msgstr "Je hebt je <strong>LinkedIn</strong>-account gekoppeld."
 
 #: modules/mod_linkedin/templates/_admin_authentication_service.tpl:10
 msgid "Your LinkedIn Developer Network"
@@ -4993,33 +4960,28 @@ msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:47
-#, fuzzy
 msgid "Act"
-msgstr "okt"
+msgstr "Act"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
-#, fuzzy
 msgid "Add a new recipient."
-msgstr "Voeg een mediabestand toe."
+msgstr "Voeg een ontvanger toe."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:27
 msgid "Add recipient"
-msgstr ""
+msgstr "Voeg ontvanger toe"
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
-#, fuzzy
 msgid "Added the recipient."
-msgstr "Connectie gemaakt naar"
+msgstr "Ontvanger toegevoegd."
 
 #: modules/mod_mailinglist/templates/mailinglist.tpl:14
-#, fuzzy
 msgid "All mailing lists"
-msgstr "Mailinglijsten"
+msgstr "Alle mailinglijsten"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:65
-#, fuzzy
 msgid "All processed"
-msgstr "Alle pagina’s"
+msgstr "Alles verwerkt"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:19
 msgid ""
@@ -5034,14 +4996,12 @@ msgid ""
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:1
-#, fuzzy
 msgid "Are you sure you want to cancel the mailing to"
-msgstr "Weet je zeker dat je de pagina wilt verwijderen"
+msgstr "Weet je zeker dat je de mailing wilt stoppen, hij gaat naar"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:2
-#, fuzzy
 msgid "Are you sure you want to delete the mailing list"
-msgstr "Weet je zeker dat je de pagina wilt verwijderen"
+msgstr "Weet je zeker dat je de mailinglijst wilt verwijderen"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
 msgid ""
@@ -5057,14 +5017,12 @@ msgid ""
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:5
-#, fuzzy
 msgid "Cancel mailing"
-msgstr "Annuleren"
+msgstr "Annuleer mailing"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:55
-#, fuzzy
 msgid "Check to activate the e-mail address."
-msgstr "Naam en e-mailadres verwijderen"
+msgstr "Vink aan om het email adres te activeren"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:30
 msgid "Clear"
@@ -5089,78 +5047,69 @@ msgid "Click to view log entries"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:31
-#, fuzzy
 msgid "Combine mailing list"
-msgstr "Mailinglijsten"
+msgstr "Combineer mailinglijsten"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:31
 msgid "Combine…"
-msgstr ""
+msgstr "Voeg samen…"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:45
 msgid "Confirm sending to mailinglist"
-msgstr ""
+msgstr "Bevestig versturen naar mailinglijst"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:3
-#, fuzzy
 msgid "Confirm subscription"
-msgstr "Bevestig verwijderen van gebruiker"
+msgstr "Bevestig inschrijving"
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:71
-#, fuzzy
 msgid "Could not add the recipient."
-msgstr "Aanmaken van media-pagina niet gelukt."
+msgstr "Kon de ontvanger niet toevoegen"
 
 #: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:4
 #: modules/mod_signup/templates/email_verify.tpl:6
 msgid "Dear"
-msgstr ""
+msgstr "Beste"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipients_upload.tpl:19
 msgid "Delete all current recipients before adding the file."
-msgstr ""
+msgstr "Verwijder alle huidige ontvangers voordat het bestand wordt toegevoegd"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:30
-#, fuzzy
 msgid "Delete all recipients from this list?"
-msgstr "Bekijk alle pagina's binnen deze categorie"
+msgstr "Alle ontvangers van deze lijst verwijderen?"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
-#, fuzzy
 msgid "Download all"
-msgstr "Bestand downloaden"
+msgstr "Alles downloaden"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
 msgid "Download list of all active recipients."
-msgstr ""
+msgstr "Download een lijst van alle actieve ontvangers"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:28
-#, fuzzy
 msgid "Downloading active recipients list. Check your download window."
 msgstr "De download start op de achtergrond, controleer je downloadvenster."
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:42
 msgid "Dropbox filename (optional)"
-msgstr ""
+msgstr "Dropbox filenaam (optioneel)"
 
 #: modules/mod_mailinglist/templates/_mail_page_button.tpl:3
-#, fuzzy
 msgid "E-mail page"
-msgstr "E-mailadres"
+msgstr "Email pagina"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:42./modules/mod_mailinglist/templates/phone/_share_page_email.tpl:1
-#, fuzzy
 msgid "E-mail this page"
-msgstr "bewerk deze pagina"
+msgstr "Email deze pagina"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:56
-#, fuzzy
 msgid "Edit recipient"
-msgstr "Pagina bewerken"
+msgstr "Bewerk ontvanger"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:20
 msgid "Edit the mailing list &raquo;"
-msgstr ""
+msgstr "Bewerk de mailinglijst &raquo;"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_recipient.tpl:2
 msgid ""
@@ -5174,41 +5123,36 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:29
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:16
-#, fuzzy
 msgid "First name"
-msgstr "Eerste"
+msgstr "Voornaam"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
 msgid "From now on you will receive mail from our mailing list."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:6
-#, fuzzy
 msgid "Give your e-mail address to subscribe to"
-msgstr "Vul je e-mailadres of gebruikersnaam in"
+msgstr "Geef je email adres om in te schrijven voor"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:16
 msgid "Go to mailinglist page"
-msgstr ""
+msgstr "Ga naar mailinglijst pagina"
 
 #: modules/mod_mailinglist/templates/_email_mailinglist_hello.tpl:6
-#, fuzzy
 msgid "Hello,"
-msgstr "Hallo"
+msgstr "Hallo,"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:6
-#, fuzzy
 msgid "Help about mailing lists"
-msgstr "Hulp over talen"
+msgstr "Hulp over mailingslijsten"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:11
-#, fuzzy
 msgid "Help about the mailing page"
-msgstr "Selecteer de winnaar"
+msgstr "Hulp over mailing pagina"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_goodbye.tpl:8
 msgid "Hope to see you again."
-msgstr ""
+msgstr "Hopelijk tot ziens"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
 msgid ""
@@ -5220,54 +5164,48 @@ msgid ""
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_cancel_confirm.tpl:4
-#, fuzzy
 msgid "Keep mailing"
-msgstr "Hou me ingelogd"
+msgstr "Bewaar mailing"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:26
 msgid "Mail"
-msgstr ""
+msgstr "Email"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:3
-#, fuzzy
 msgid "Mailing Lists"
 msgstr "Mailinglijsten"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:4./modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:4
-#, fuzzy
 msgid "Mailing list"
-msgstr "Mailinglijsten"
+msgstr "Mailinglijst"
 
 #: modules/mod_mailinglist/mod_mailinglist.erl:385./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:10./modules/mod_mailinglist/templates/admin_mailinglist.tpl:7
 msgid "Mailing lists"
 msgstr "Mailinglijsten"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:3
-#, fuzzy
 msgid "Mailing status"
-msgstr "Mailinglijsten"
+msgstr "Mailing status"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:14
-#, fuzzy
 msgid "New mailing list"
-msgstr "Mailinglijsten"
+msgstr "Nieuwe mailinglijst"
 
 #: modules/mod_mailinglist/mod_mailinglist.erl:159
 msgid "No addresses selected"
 msgstr "Geen adres geselecteerd"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:79./modules/mod_mailinglist/templates/admin_mailinglist.tpl:54
-#, fuzzy
 msgid "No items found"
-msgstr "Niet gevonden"
+msgstr "Niets gevonden"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:70
 msgid "No recipients"
-msgstr ""
+msgstr "Geen ontvangers"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:35
 msgid "Number of recipients on this list:"
-msgstr ""
+msgstr "Aantal ontvangers op deze lijst:"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:3
 msgid ""
@@ -5282,72 +5220,65 @@ msgid "Only keep recipients on this list that appear <em>on both lists</em>"
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:9
-#, fuzzy
 msgid "Operation"
-msgstr "Opties"
+msgstr "Operatie"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:22
 msgid "Our excuses for the inconvenience."
-msgstr ""
+msgstr "Onze excuses voor het ongemak."
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:47
-#, fuzzy
 msgid "Perform operation"
-msgstr "Informeel"
+msgstr "Voer operatie uit"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
-#, fuzzy
 msgid "Please confirm that you want to send the page"
-msgstr "Weet je zeker dat je de pagina wilt verwijderen"
+msgstr "Bevestig of je de pagina wilt versturen"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:12
-#, fuzzy
 msgid "Please confirm your subscription"
-msgstr "Bevestig je"
+msgstr "Bevestig je inschrijving"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:3
-#, fuzzy
 msgid "Please confirm your subscription on"
-msgstr "Bevestig je"
+msgstr "Bevestig je inschrijving voor"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:5
 msgid "Please enter the e-mail address you want to send a test mail to."
-msgstr ""
+msgstr "Vul het email adres voor de test email in."
 
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:5
 msgid "Please enter the e-mail address you want to send this page to."
-msgstr ""
+msgstr "Vul het email adres om deze pagina heen te sturen in."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
-msgstr ""
+msgstr "Volg"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:6
 msgid "Please note:"
-msgstr ""
+msgstr "Let op:"
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
 msgid "Please unsubscribe"
-msgstr ""
+msgstr "Schrijf uit"
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:36
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:31
 msgid "Prefix"
-msgstr ""
+msgstr "Voorvoegsel"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:21./modules/mod_mailinglist/templates/admin_mailing_status.tpl:15
-#, fuzzy
 msgid "Preview mailing"
-msgstr "Voorbeeld"
+msgstr "Voorbeeld mailing"
 
 #: modules/mod_mailinglist/templates/mailing_page.collection.tpl:52
-#, fuzzy
 msgid "Read this page on the web."
-msgstr "Vertaal deze pagina in andere talen."
+msgstr "Lees deze pagina op het web."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:18./modules/mod_mailinglist/templates/admin_mailinglist.tpl:23./modules/mod_mailinglist/templates/admin_mailinglist.tpl:38./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:43
 msgid "Recipients"
-msgstr ""
+msgstr "Ontvangers"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:10
 msgid ""
@@ -5357,11 +5288,11 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:3./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:7
 msgid "Recipients for"
-msgstr ""
+msgstr "Ontvangers voor"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:58
 msgid "Remove this recipient. No undo possible."
-msgstr ""
+msgstr "Verwijder ontvanger. Herstel is niet mogelijk."
 
 #: modules/mod_mailinglist/mod_mailinglist.erl:161
 msgid "Resending bounced addresses..."
@@ -5369,36 +5300,31 @@ msgstr "Deze adressen opnieuw aan het versturen..."
 
 #: modules/mod_mailinglist/templates/admin_mailinglist.tpl:24
 msgid "Scheduled"
-msgstr ""
+msgstr "Ingeroosterd"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22
 msgid "See the"
-msgstr ""
+msgstr "Zie de"
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:36
-#, fuzzy
 msgid "Select..."
-msgstr "Selecteer links"
+msgstr "Selecteer…"
 
 #: modules/mod_mailinglist/templates/_dialog_mail_page.tpl:17./modules/mod_mailinglist/templates/_dialog_mailing_testaddress.tpl:18
-#, fuzzy
 msgid "Send e-mail"
-msgstr "Stuur welkomstemail"
+msgstr "Verstuur email"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:29
-#, fuzzy
 msgid "Send mailing"
-msgstr "Versturen"
+msgstr "Verstuur mailing"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
-#, fuzzy
 msgid "Send test mailing"
-msgstr "Stuur welkomstemail"
+msgstr "Stuur test mailing"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:28./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
-#, fuzzy
 msgid "Send test to address"
-msgstr "Verstuurd naar dit adres"
+msgstr "Verstuurd naar test adres"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:22
 msgid "Send the mailing automatically after the publication start date of"
@@ -5420,86 +5346,83 @@ msgid "Send this page to a mailinglist and view mailinglist statistics."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:24./modules/mod_mailinglist/templates/admin_mailing_status.tpl:17
-#, fuzzy
 msgid "Send this page to a single address"
-msgstr "Naam en e-mailadres verwijderen"
+msgstr "Verstuur deze pagina naar een email adres"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:16
 msgid "Send this page to the test mailing list."
-msgstr ""
+msgstr "Verstuur deze pagina naar de test mailinglijst"
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:57
-#, fuzzy
 msgid "Send welcome"
 msgstr "Stuur welkomstemail"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:25
 msgid "Sender address for e-mails (optional)"
-msgstr ""
+msgstr "Afzender email adres voor de emails (optioneel)"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:18
 msgid "Sender name for e-mails (optional)"
-msgstr ""
+msgstr "Afzendernaam voor de emails (optioneel)"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mail_page.erl:51
-#, fuzzy
 msgid "Sending the e-mail..."
-msgstr "Bezig met de pagina te versturen naar"
+msgstr "Email wordt verstuurd..."
 
 #: modules/mod_mailinglist/mod_mailinglist.erl:150
 msgid "Sending the page to"
 msgstr "Bezig met de pagina te versturen naar"
 
 #: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:47
-#, fuzzy
 msgid "Sending the page to the test mailing list..."
-msgstr "Deze pagina verstuurd naar"
+msgstr "De pagina wordt verstuurd naar de mailinglijst..."
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:19
-#, fuzzy
 msgid "Sent on"
-msgstr "Verstuurd"
+msgstr "Verstuurd op"
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.mailinglist.tpl:13
 msgid "Show all recipients &raquo;"
-msgstr ""
+msgstr "Alle ontvangers &raquo;"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:29
 msgid ""
 "Sorry, I could not subscribe you to the mailing list. Please try again later "
 "or with another e-mail address."
 msgstr ""
+"Sorry, kon je niet inschrijven op de mailinglijst. Probeer het later nog "
+"eens of gebruik een ander emailadres."
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:25
 msgid "Sorry, can’t confirm your subscription"
-msgstr ""
+msgstr "Sorry, kan je inschrijving niet bevestigen"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:20
 msgid "Sorry, can’t find your subscription"
-msgstr ""
+msgstr "Sorry, kan je inschrijving niet vinden"
 
 #: modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:14./modules/mod_mailinglist/templates/_mailinglist_subscribe_form.tpl:73./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:18
 msgid "Subscribe"
-msgstr ""
+msgstr "Abonneer"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:3./modules/mod_mailinglist/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
-msgstr ""
+msgstr "Abonneer op"
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:33
-#, fuzzy
 msgid "Target mailing list"
-msgstr "Mailinglijsten"
+msgstr "Doel mailinglijst"
 
 #: modules/mod_mailinglist/templates/mailinglist_confirm.tpl:27
 msgid ""
 "The confirmation key is unknown. Either you already confirmed or something "
 "else went wrong."
 msgstr ""
+"De bevestigingscode is onbekend. Je bent al bevestigd of er ging iets mis."
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:57
 msgid "The e-mails are being sent..."
-msgstr ""
+msgstr "De emails worden verstuurd..."
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:21
 msgid ""
@@ -5509,13 +5432,13 @@ msgstr ""
 
 #: modules/mod_mailinglist/actions/action_mailinglist_dialog_mailing_page.erl:61
 msgid "The mailing will be send when the page becomes visible."
-msgstr ""
+msgstr "De mailing wordt verstuurd wanneer de pagina zichtbaar wordt."
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:15
 msgid ""
 "The page you are trying to e-mail is not yet published. What do you want to "
 "do?"
-msgstr ""
+msgstr "De pagina die je wilt versturen is niet gepubliceerd. Wat wil je doen?"
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
@@ -5532,9 +5455,8 @@ msgid "There is no mailing list with the name ‘mailinglist_test’."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_dialog_mailinglist_delete_confirm.tpl:6
-#, fuzzy
 msgid "This can not be undone"
-msgstr "Dit kan niet ongedaan worden gemaakt."
+msgstr "Dit kan niet ongedaan worden gemaakt"
 
 #: modules/mod_mailinglist/templates/_admin_dialog_mailinglist_combine.tpl:2
 msgid ""
@@ -5572,12 +5494,11 @@ msgstr ""
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Uitschrijven"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
-#, fuzzy
 msgid "Unsubscribe from"
-msgstr "Zichtbaar vanaf"
+msgstr "Schrijf uit van"
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
@@ -5602,14 +5523,12 @@ msgid "View and edit the bounced addresses and re-send the mailing."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_edit_sidebar.tpl:19
-#, fuzzy
 msgid "View this page as mailing."
-msgstr "Bekijk deze pagina."
+msgstr "Bekijk deze pagina als mailing"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:3
-#, fuzzy
 msgid "Welcome to"
-msgstr "Welkom"
+msgstr "Welkom op"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:15
 msgid ""
@@ -5621,19 +5540,17 @@ msgid "When you don’t want to receive any more mail then"
 msgstr ""
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
-#, fuzzy
 msgid "You are not allowed to add or enable recipients."
-msgstr "Je mag geen identiteiten toevoegen of verwijderen."
+msgstr "Je mag geen ontvanger toevoegen of verwijderen."
 
 #: modules/mod_mailinglist/scomps/scomp_mailinglist_mailinglist_subscribe.erl:106
-#, fuzzy
 msgid "You are not allowed to edit recipients."
-msgstr "Je mag geen identiteiten toevoegen of verwijderen."
+msgstr "Je mag geen ontvangers toevoegen of verwijderen."
 
 #: modules/mod_mailinglist/actions/action_mailinglist_mailing_page_test.erl:50
-#, fuzzy
 msgid "You are not allowed to send mail to the test mailing list."
-msgstr "Je hebt geen rechten om deze pagina te bewerken."
+msgstr ""
+"Je hebt geen rechten om deze pagina naar de test mailinglijst te sturen"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:9
 msgid ""
@@ -5659,16 +5576,14 @@ msgid ""
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:2
-#, fuzzy
 msgid ""
 "You received this mail because someone wanted to send you this information. "
 "We did not store your e-mail address and will not send you any other mail "
 "because of this mail."
 msgstr ""
-"Je ontvangt deze e-mail omdat jij of iemand anders heeft verzocht dit e-"
-"mailadres te verifiëren. Jij of iemand anders heeft jouw e-mailadres "
-"ingevoerd. Je krijgt geen andere e-mails als gevolg van dit "
-"verificatieverzoek."
+"Je ontvangt deze email omdat je deze informatie wilde sturen. We hebben je "
+"email adres niet bewaard en je krijgt geen andere emails als gevolg van deze "
+"email."
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
@@ -5679,9 +5594,9 @@ msgid "You will receive a confirmation in your e-mail."
 msgstr ""
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:8
-#, fuzzy
 msgid "You, or someone else, added your e-mail address to our mailing list"
-msgstr "Je moet je e-mailadres delen om in te kunnen loggen."
+msgstr ""
+"Jij, of iemand anders, heeft je email adres toegevoegd aan onze mailinglijst"
 
 #: modules/mod_mailinglist/templates/_scomp_mailinglist_subscribe.tpl:24
 msgid ""
@@ -5691,104 +5606,96 @@ msgid ""
 msgstr ""
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:68
-#, fuzzy
 msgid "bounced"
-msgstr "Bounce"
+msgstr "teruggestuurd"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:38./modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:15
-#, fuzzy
 msgid "cancel"
-msgstr "Annuleren"
+msgstr "annuleer"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:43
 msgid "clear"
-msgstr ""
+msgstr "wis"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:9
 msgid "click here to unsubscribe."
-msgstr ""
+msgstr "klik hier om uit te schrijven"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:6
-#, fuzzy
 msgid "has been sent to the following lists:"
-msgstr "Deze applicatie wil toegang tot de volgende diensten:"
+msgstr "is naar de volgende lijsten verstuurd:"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:8
-#, fuzzy
 msgid "has never been sent yet."
-msgstr "is ontkoppeld."
+msgstr "is nog nooit verstuurd."
 
 #: modules/mod_mailinglist/templates/mailinglist_unsubscribe.tpl:9
-#, fuzzy
 msgid "mailing list"
-msgstr "Mailinglijsten"
+msgstr "mailinglijst"
 
 #: modules/mod_mailinglist/templates/admin_mailing_status.tpl:8
-#, fuzzy
 msgid "mailinglist status page"
-msgstr "Mailinglijsten"
+msgstr "mailinglijst status pagina"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "or copy and paste the address below in your browser."
-msgstr ""
+msgstr "of kopieer en plak het adres in je browser"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:63
 msgid "processed"
-msgstr ""
+msgstr "verwerkt"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:54./modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:56
 msgid "scheduled"
-msgstr ""
+msgstr "ingepland"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
 msgid "send mailing"
-msgstr ""
+msgstr "verstuur mailing"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:45
-#, fuzzy
 msgid "send mailing again to corrected addresses"
-msgstr "Deze adressen opnieuw aan het versturen..."
+msgstr "verstuur de mailing opnieuw aan de gecorrigeerde adressen"
 
 #: modules/mod_mailinglist/templates/_admin_mailing_status_overview.tpl:41
 msgid "send to"
-msgstr ""
+msgstr "verstuur aan"
 
 #: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:22
 msgid "subscribing persons &raquo;"
-msgstr ""
+msgstr "schrijf personen in &raquo;"
 
 #: modules/mod_mailinglist/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"
-msgstr ""
+msgstr "deze link om te bevestigen"
 
 #: modules/mod_mailinglist/templates/_dialog_mailing_page.tpl:3
 msgid "to the list"
-msgstr ""
+msgstr "aan de lijst"
 
 #: modules/mod_mailinglist/templates/_mailing_footer.tpl:19
 msgid "when you don't want to receive any further mail from this list."
-msgstr ""
+msgstr "als je voortaan geen berichten van deze lijst wilt ontvangen."
 
 #: modules/mod_mailinglist/templates/email_mailinglist_welcome.tpl:7
-#, fuzzy
 msgid "with your e-mail address"
-msgstr "Bevestig je e-mailadres"
+msgstr "met je emailadres"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:22
 msgid "Add after"
-msgstr "Hierna invoegen"
+msgstr "Hierna toevoegen"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:20
 msgid "Add before"
-msgstr "Hiervoor invoegen"
+msgstr "Hiervoor toevoegen"
 
 #: modules/mod_menu/templates/_menu_edit_item.tpl:21
 msgid "Add below"
-msgstr "Als sub-item invoegen"
+msgstr "Hieronder toevoegen"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:14./modules/mod_menu/templates/admin_menu_hierarchy.tpl:24
 msgid "Add bottom"
-msgstr "Onderaan invoegen"
+msgstr "Onderaan toevoegen"
 
 #: modules/mod_menu/templates/_menu_edit_scripts.tpl:7
 msgid "Add category"
@@ -5804,7 +5711,7 @@ msgstr "Voeg menu-item toe"
 
 #: modules/mod_menu/templates/_admin_menu_menu_view.tpl:13./modules/mod_menu/templates/admin_menu_hierarchy.tpl:23
 msgid "Add top"
-msgstr "Bovenaan invoegen"
+msgstr "Bovenaan toevoegen"
 
 #: modules/mod_menu/mod_menu.erl:132
 msgid "COPY"
@@ -6301,160 +6208,150 @@ msgstr "standaard"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:12
 msgid "Bring me to my profile page"
-msgstr ""
+msgstr "Toon mijn profielpagina"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
-msgstr ""
+msgstr "Raadpleeg de algemene voorwaarden en privacy policy"
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:10
-#, fuzzy
 msgid "Choose a username and password"
-msgstr "gebruikersnaam / wachtwoord instellen"
+msgstr "Kies een gebruikersnaam / wachtwoord"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:26
-#, fuzzy
 msgid "Confirm key"
-msgstr "Bevestig"
+msgstr "Bevestig code"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:3./modules/mod_signup/templates/signup_confirm.tpl:15./modules/mod_signup/templates/signup_confirm.tpl:30
-#, fuzzy
 msgid "Confirm my account"
-msgstr "Gebruikersaccount"
+msgstr "Bevestig mijn account"
 
 #: modules/mod_signup/templates/email_verify.tpl:12
 msgid "Confirm my account."
-msgstr ""
+msgstr "Bevestig mijn account"
 
 #: modules/mod_signup/templates/_signup_stage.tpl:1
-#, fuzzy
 msgid "Confirm your account by email"
-msgstr "Bevestig verwijderen van dit blok"
+msgstr "Bevestig je account via email"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:22./modules/mod_signup/templates/_signup_form_fields_email.tpl:44
-#, fuzzy
 msgid "Enter a name"
-msgstr "Vul je gebruikersnaam in"
+msgstr "Vul je naam in"
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:19
-#, fuzzy
 msgid "Enter a username"
-msgstr "Vul je gebruikersnaam in"
+msgstr "Vul een gebruikersnaam in"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:59
-#, fuzzy
 msgid "Enter a valid address"
-msgstr "moet een e-mail adres zijn"
+msgstr "Voer een geldig emailadres in"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:60
-#, fuzzy
 msgid "Enter an e-mail address"
-msgstr "moet een e-mail adres zijn"
+msgstr "Vul een emailadres in"
 
 #: modules/mod_signup/templates/email_verify.tpl:14
-#, fuzzy
 msgid "Hope to see you soon."
-msgstr "Een wachtwoord opnieuw instellen"
+msgstr "Hoop je snel weer te zien."
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
 msgid "I agree to the"
-msgstr ""
+msgstr "Ik ga akkoord met de"
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "If the link does not work then you can go to"
-msgstr ""
+msgstr "Als de link niet werkt, ga dan naar de"
 
 #: modules/mod_signup/templates/_signup_stage.tpl:5
-#, fuzzy
 msgid ""
 "If you do not receive the e-mail within a few minutes, please check your "
 "spam folder."
 msgstr ""
-"Als je deze e-email niet in een paar minuten ontvangt, controleer dan je "
+"Als je deze email niet in een paar minuten ontvangt, controleer dan je "
 "spamfolder."
 
 #: modules/mod_signup/templates/_signup_outside.tpl:1
 msgid "If you have already an account,"
-msgstr ""
+msgstr "Als je al een account hebt,"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:17
 msgid ""
 "In your e-mail you received a confirmation key. Please copy it in the input "
 "field below."
 msgstr ""
+"Je hebt per e-mail een bevestigingscode ontvangen. Kopieer de code in het "
+"veld hieronder."
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:38
-#, fuzzy
 msgid "Last name"
 msgstr "Achternaam"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2
-#, fuzzy
 msgid "No account yet?"
-msgstr "Je gebruikersnaam is"
+msgstr "Nog geen account?"
 
 #: modules/mod_signup/templates/email_verify.tpl:3
-#, fuzzy
 msgid "Please confirm your account"
-msgstr "Bevestig je"
+msgstr "Bevestig je account"
 
 #: modules/mod_signup/templates/_signup_stage.tpl:3
 msgid "Please follow the instructions in the email we've sent you."
-msgstr ""
+msgstr "Volg de instructies in de email die we je net gestuurd hebben."
 
 #: modules/mod_signup/templates/email_verify.tpl:10
 msgid "Please follow the link below."
-msgstr ""
+msgstr "Volg de onderstaande link"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:23
 msgid "Privacy policies"
-msgstr ""
+msgstr "Privacy reglement"
 
 #: modules/mod_signup/templates/_signup_form_fields.tpl:5./modules/mod_signup/templates/signup.tpl:3
-#, fuzzy
 msgid "Sign Up"
-msgstr "Inloggen"
+msgstr "Registreer"
 
 #: modules/mod_signup/templates/_logon_link.tpl:2./modules/mod_signup/templates/_signup_title.tpl:1
-#, fuzzy
 msgid "Sign up"
-msgstr "Uitloggen"
+msgstr "Registreer"
 
 #: modules/mod_signup/templates/_signup_form_fields_email.tpl:11
-#, fuzzy
 msgid "Sign up with your e-mail address"
-msgstr "Bevestig je e-mailadres"
+msgstr "Registreer je met je emailadres"
 
 #: modules/mod_signup/templates/signup_confirm.tpl:20
 msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
-msgstr ""
+msgstr "Sorry, de bevestigingscode is onbekend. Is hij correct gekopiëerd?"
 
 #: modules/mod_signup/templates/_signup_box.tpl:24
 msgid ""
 "Sorry, there is already an account coupled to your account at your service "
 "provider. Maybe your account here was suspended."
 msgstr ""
+"Sorry, er is hier al een account gekoppeld aan het account van de service "
+"provider. Misschien is het account hier geblokkeerd."
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:22
-#, fuzzy
 msgid "Terms of Service"
-msgstr "Externe diensten"
+msgstr "Gebruiksvoorwaarden"
 
 #: modules/mod_signup/templates/email_verify.tpl:8
 msgid ""
 "Thank you for registering at our site. We request you to confirm your "
 "account before you can use it."
 msgstr ""
+"Bedankt voor het registreren bij onze website.  Wij verzoeken je om je "
+"account te bevestigen voordat je het kan gebruiken."
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:14
 msgid ""
 " To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr ""
+"Om te registreren moet je akkoord gaan met de gebruiksvoorwaarden en het "
+"privacy reglement."
 
 #: modules/mod_signup/templates/_signup_form_fields_username.tpl:49
-#, fuzzy
 msgid "Verify password"
-msgstr "Nieuw wachtwoord"
+msgstr "Wachtwoord bevestigen"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:13
 msgid ""
@@ -6462,82 +6359,77 @@ msgid ""
 "give your name or address away without your permission. We do have some "
 "rules that we need you to agree with."
 msgstr ""
+"We zijn erg zorgvuldig met alle persoonlijk informatie die ons wordt "
+"verstrekt en zullen nooit je naam of adres weggeven zonder je toestemming.\n"
+"We hebben wel een aantal regels waarmee je moet instemmen."
 
 #: modules/mod_signup/templates/_signup_extra.tpl:2
-#, fuzzy
 msgid "You can also"
-msgstr "Je kunt:"
+msgstr "Je kunt ook"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
-msgstr ""
+msgstr "Je moet akkoord gaan met de voorwaarden."
 
 #: modules/mod_signup/templates/signup_confirm.tpl:10
 msgid "Your account is confirmed. You can now continue on our site."
-msgstr ""
+msgstr "Je account is bevestigd en je kunt nu verder gaan."
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "and enter the key"
-msgstr ""
+msgstr "en vul de code in"
 
 #: modules/mod_signup/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
-msgstr ""
+msgstr "en de"
 
 #: modules/mod_signup/templates/email_verify.tpl:14
 msgid "in the input field."
-msgstr ""
+msgstr "in het veld"
 
 #: modules/mod_signup/templates/_signup_outside.tpl:1
-#, fuzzy
 msgid "sign in"
 msgstr "Inloggen"
 
 #: modules/mod_signup/templates/_signup_extra.tpl:2
-#, fuzzy
 msgid "sign up for a username and password"
-msgstr "Gebruikersnaam en wachtwoord"
+msgstr "registreer voor een gebruikersnaam en wachtwoord"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:23
 msgid "Add a question or block"
-msgstr ""
+msgstr "Voeg een vraag of blok toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:13
-#, fuzzy
 msgid "Add page"
-msgstr "Zoek pagina"
+msgstr "Voeg pagina toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:9
-#, fuzzy
 msgid "Add page above"
-msgstr "Taal toevoegen"
+msgstr "Voeg pagina hierboven toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:10
-#, fuzzy
 msgid "Add page below"
-msgstr "Als sub-item invoegen"
+msgstr "Voeg pagina hieronder toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:51
 msgid "Add page jump"
-msgstr ""
+msgstr "Voeg pagina sprong toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:7./modules/mod_survey/templates/_admin_survey_question_page.tpl:27
-#, fuzzy
 msgid "Add question"
-msgstr "Naar vraag"
+msgstr "Voeg vraag toe"
 
 #: modules/mod_survey/templates/_admin_survey_question_q.tpl:22
-#, fuzzy
 msgid "Add question after"
-msgstr "Hierna invoegen"
+msgstr "Voeg een vraag toe na"
 
 #: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:8
 msgid "Add questions by adding blocks with the menu."
-msgstr ""
+msgstr "Voeg vragen toe met behulp van het blok menu."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:67
 msgid "Agree"
-msgstr ""
+msgstr "Akkoord"
 
 #: modules/mod_survey/templates/survey_results_printable.tpl:37
 msgid "All survey entries up until"
@@ -6552,9 +6444,8 @@ msgid "Answer"
 msgstr "Antwoord"
 
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:19
-#, fuzzy
 msgid "Answering"
-msgstr "Antwoord"
+msgstr "Invullen"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:28
 msgid "Answers, one per line"
@@ -6573,21 +6464,20 @@ msgstr ""
 "Vliegende Hollander = Wagner."
 
 #: modules/mod_survey/templates/page_admin_frontend_edit.tpl:21
-#, fuzzy
 msgid "Are you sure you want to delete this page jump?"
-msgstr "Weet je zeker dat je de pagina wilt verwijderen"
+msgstr "Weet je zeker dat je deze pagina sprong wilt verwijderen?"
 
 #: modules/mod_survey/templates/page_admin_frontend_edit.tpl:19
-#, fuzzy
 msgid ""
 "Are you sure you want to delete this page?<br/>This also deletes all "
 "questions on this page."
-msgstr "Weet je zeker dat je de volgende paginagroepen wilt verwijderen?"
+msgstr ""
+"Weet je zeker dat je deze pagina wilt verwijderen?<br/>Alle vragen op de "
+"pagina worden ook verwijderd."
 
 #: modules/mod_survey/templates/page_admin_frontend_edit.tpl:20
-#, fuzzy
 msgid "Are you sure you want to delete this question?"
-msgstr "Weet je zeker dat je dit wilt verwijderen?"
+msgstr "Weet je zeker dat je deze vraag wilt verwijderen?"
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:43
 msgid "Are you sure you want to stop?"
@@ -6623,7 +6513,7 @@ msgstr "Controlleer het antwoord in de admin."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:74
 msgid "Chinese food is best for money"
-msgstr ""
+msgstr "Chinees eten is het beste waar voor het geld"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:33
 msgid "Choices"
@@ -6651,38 +6541,33 @@ msgid "Default"
 msgstr "Standaard"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:12
-#, fuzzy
 msgid "Delete page"
-msgstr "Verwijder deze pagina."
+msgstr "Verwijder pagina"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:7
-#, fuzzy
 msgid "Delete page jump"
-msgstr "Verwijder deze pagina."
+msgstr "Verwijder pagina sprong"
 
 #: modules/mod_survey/templates/_admin_survey_question_q.tpl:23
-#, fuzzy
 msgid "Delete question"
-msgstr "Naar vraag"
+msgstr "Verwijder vraag"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:61
-#, fuzzy
 msgid "Disagree"
-msgstr "Helemaal mee oneens"
+msgstr "Oneens"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:17
 msgid "Do you like pea soup?"
 msgstr "Houd je van erwtensoep?"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:96./modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:100./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:40./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:44./modules/mod_survey/templates/_survey_results.tpl:10
-#, fuzzy
 msgid ""
 " Download will start in the background. Please check your download window."
 msgstr "De download start op de achtergrond, controleer je downloadvenster."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:40
 msgid "Drop-down menu"
-msgstr ""
+msgstr "Menu"
 
 #: modules/mod_survey/mod_survey.erl:96./modules/mod_survey/mod_survey.erl:101
 msgid "E-mail addresses"
@@ -6693,9 +6578,8 @@ msgid "Edit survey result"
 msgstr "Toon/bewerk resultaten"
 
 #: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:20
-#, fuzzy
 msgid "End of questions"
-msgstr "Naar vraag"
+msgstr "Einde van de vragenlijst"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:24./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:23
 msgid "Example:"
@@ -6715,17 +6599,15 @@ msgstr "Bestandsupload"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:17
 msgid "Fill in the missing parts."
-msgstr ""
+msgstr "Vul de ontbrekende gedeeltes in"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:127
-#, fuzzy
 msgid "First page in category"
-msgstr "Filter op categorie"
+msgstr "Eerste pagina van de categorie"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:6
-#, fuzzy
 msgid "Go to question"
-msgstr "Naar vraag"
+msgstr "Ga naar vraag"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:79./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:91
 msgid "Handle this survey with"
@@ -6733,7 +6615,7 @@ msgstr "Laat survey afhandelen door"
 
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:71
 msgid "Handling"
-msgstr ""
+msgstr "Afhandeling"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Help about surveys"
@@ -6745,15 +6627,15 @@ msgstr "Verberg voortgangsindicator"
 
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:40
 msgid "Hide the user’s id or browser-id from result exports"
-msgstr ""
+msgstr "Verberg de gebruiker’s id of browser-id in de exports"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:75
 msgid "I always eat with others"
-msgstr ""
+msgstr "Ik eet altijd met anderen"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:90
 msgid "I am"
-msgstr ""
+msgstr "Ik ben"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:23
 msgid ""
@@ -6766,11 +6648,11 @@ msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:73
 msgid "I like Chinese restaurants"
-msgstr ""
+msgstr "Ik hou van Chinese restaurants"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
-msgstr ""
+msgstr "Begin direct met de vragen, geen “Start” knop."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
 msgid "Informational"
@@ -6778,11 +6660,11 @@ msgstr "Informeel"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:27
 msgid "Input value placeholder text"
-msgstr ""
+msgstr "Invoer waarde hulp tekst"
 
 #: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:3./modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:8
 msgid "Introduction for confirmation email"
-msgstr ""
+msgstr "Introductie voor de bevestigingsmail"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
 msgid "Inverse"
@@ -6794,7 +6676,7 @@ msgstr "Doen van sprong"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:52
 msgid "Jump to a question on a next page."
-msgstr ""
+msgstr "Spring naar een vraag op een volgende pagina."
 
 #: modules/mod_survey/mod_survey.erl:115
 msgid "Likert"
@@ -6817,6 +6699,8 @@ msgid ""
 "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do "
 "eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 msgstr ""
+"Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do "
+"eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:71./modules/mod_survey/templates/_admin_survey_settings_tab.tpl:74
 msgid "Mail filled in surveys to"
@@ -6855,9 +6739,8 @@ msgid "Next"
 msgstr "Volgende"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:129
-#, fuzzy
 msgid "Next page in category"
-msgstr "Volgende in categorie:"
+msgstr "Volgende pagina van de categorie"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:43./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:13./modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:20
 msgid "No"
@@ -6865,16 +6748,15 @@ msgstr "Nee"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:45
 msgid "Numeric input, show totals for this field in the survey results."
-msgstr ""
+msgstr "Nummerinvoer, toon totalen voor dit veld in de resultaten."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:34
 msgid "Only accept images."
 msgstr "Sta alleen afbeeldingen toe."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:125
-#, fuzzy
 msgid "Options from a page category"
-msgstr "is geen categorie"
+msgstr "Opties van een pagina categorie"
 
 #: modules/mod_survey/mod_survey.erl:124
 msgid "Page break"
@@ -6885,28 +6767,24 @@ msgid "Page jump condition"
 msgstr "Paginasprong voorwaarde"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:28
-#, fuzzy
 msgid "Please enter your information."
-msgstr "Voer je naam in."
+msgstr "Voer je informatie in."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:17
 msgid "Please enter your name."
 msgstr "Voer je naam in."
 
 #: modules/mod_survey/templates/_survey_question_page.tpl:30
-#, fuzzy
 msgid "Please fill in all the required fields."
-msgstr "Vul de titel in van de nieuwe pagina."
+msgstr "Gelieve alle verplichte velden in te vullen."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:17
-#, fuzzy
 msgid "Please make a choice."
-msgstr "Wezels zijn leuke huisdieren."
+msgstr "Maak een keuze."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:133
-#, fuzzy
 msgid "Please upload your file."
-msgstr "Upload een afbeelding."
+msgstr "Upload een bestand."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:21
 msgid "Please upload your image."
@@ -6926,7 +6804,7 @@ msgstr "Afdrukbare lijst"
 
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:47
 msgid "Progress"
-msgstr ""
+msgstr "Voortgang"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:17./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:17
 msgid "Prompt"
@@ -6937,13 +6815,12 @@ msgid "Question"
 msgstr "Vraag"
 
 #: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:7./modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:8
-#, fuzzy
 msgid "Questions"
-msgstr "Vraag"
+msgstr "Vragen"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:82
 msgid "Red"
-msgstr ""
+msgstr "Rood"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:30./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:53./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:33./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:42./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:53./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:52./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:38./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:55
 msgid "Required, this question must be answered."
@@ -6954,9 +6831,8 @@ msgid "Results"
 msgstr "Resultaten"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:128
-#, fuzzy
 msgid "Second page in category"
-msgstr "Volgende in categorie:"
+msgstr "Tweede pagina van de category"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
 msgid "Select country"
@@ -6964,7 +6840,7 @@ msgstr "Selecteer land"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:71
 msgid "Select which you agree with."
-msgstr ""
+msgstr "Kies waar je het mee eens bent."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:98./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:14
 msgid "Select your country"
@@ -6974,6 +6850,8 @@ msgstr "Selecteer uw land"
 msgid ""
 "Send confirmation to respondent (please add a question named <i>email</i>)"
 msgstr ""
+"Stuur een bevestiging naar de invuller (voeg een vraag met naam <i>email</i> "
+"toe)"
 
 #: modules/mod_survey/mod_survey.erl:120
 msgid "Short answer"
@@ -7020,6 +6898,7 @@ msgstr "Stoppen"
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:36
 msgid "Stop the survey after this page. No questions are submitted."
 msgstr ""
+"Stop met de vragenlijst na deze vraag. De antwoorden worden niet bewaard."
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:20
 msgid "Strongly Agree"
@@ -7050,7 +6929,6 @@ msgid "Survey Questions"
 msgstr "Vragen"
 
 #: modules/mod_survey/templates/admin_survey_editor.tpl:12./modules/mod_survey/templates/admin_survey_editor.tpl:17
-#, fuzzy
 msgid "Survey Results Editor"
 msgstr "Resultaten bewerken"
 
@@ -7071,9 +6949,8 @@ msgid "Thank you for filling in our survey."
 msgstr "Bedankt voor het invullen van de vragenlijst."
 
 #: modules/mod_survey/templates/email_survey_result.tpl:21
-#, fuzzy
 msgid "Thank you for filling in:"
-msgstr "Bedankt voor het invullen van de vragenlijst."
+msgstr "Bedankt voor het invullen:"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:48./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:17
 msgid "The earth is flat."
@@ -7111,11 +6988,11 @@ msgstr ""
 
 #: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:13
 msgid "This text is shown after the survey has been submitted."
-msgstr ""
+msgstr "Deze tekst wordt getoond aan het einde van de vragenlijst."
 
 #: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:17
 msgid "This text is shown as an introduction to the survey."
-msgstr ""
+msgstr "Deze tekst wordt getoond als introductie."
 
 #: modules/mod_survey/mod_survey.erl:116
 msgid "Thurstone"
@@ -7127,12 +7004,11 @@ msgstr "Naar vraag"
 
 #: modules/mod_survey/templates/_admin_survey_question_page.tpl:14
 msgid "Toggle outline view"
-msgstr ""
+msgstr "Wissel weergave"
 
 #: modules/mod_survey/templates/_survey_result_chart.tpl:28./modules/mod_survey/templates/survey_results_printable.tpl:61
-#, fuzzy
 msgid "Totals"
-msgstr "Totaal/status"
+msgstr "Totalen"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:50./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:24./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:10./modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:17
 msgid "True"
@@ -7148,7 +7024,7 @@ msgstr "Validatie"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:81
 msgid "Wagner"
-msgstr ""
+msgstr "Wagner"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:59./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:17
 msgid "Weasels make great pets."
@@ -7190,19 +7066,19 @@ msgstr "Elke vraag moet een naam hebben."
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:93
 msgid "chocolate"
-msgstr ""
+msgstr "chocolade"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:3
 msgid "goto"
-msgstr ""
+msgstr "ga naar"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:94
 msgid "ice cream and my favorite color is"
-msgstr ""
+msgstr "ijs en mij favoriete kleur is"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:2
 msgid "if"
-msgstr ""
+msgstr "als"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:45
 msgid "must be a date"
@@ -7225,19 +7101,16 @@ msgid "name >= 2"
 msgstr "naam >= 2"
 
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:33
-#, fuzzy
 msgid "one per line"
 msgstr "Antwoorden, één per regel"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:3./modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:49
-#, fuzzy
 msgid "question"
-msgstr "Naar vraag"
+msgstr "vraag"
 
 #: modules/mod_survey/templates/_admin_survey_question_j.tpl:2
-#, fuzzy
 msgid "question == 1"
-msgstr "Naar vraag"
+msgstr "vraag == 1"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_multiple_choice.tpl:10./modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:16
 msgid "select…"
@@ -7245,7 +7118,7 @@ msgstr "kies…"
 
 #: modules/mod_survey/templates/_admin_survey_question_editor.tpl:92
 msgid "years old. I like"
-msgstr ""
+msgstr "jaar oud. Ik hou van"
 
 #: modules/mod_translation/templates/admin_translation_status.tpl:17
 msgid "Active modules"
