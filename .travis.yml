@@ -7,10 +7,11 @@ matrix:
     - otp_release: 18.0
     - otp_release: 19.0
       env: ELVIS=true
-    #  env: DIALYZER=true
-#  allow_failures:
-#     - otp_release: 19.0
-#       env: DIALYZER=true
+    - otp_release: 19.0
+      env: DIALYZER=true
+  allow_failures:
+    - otp_release: 19.0
+      env: DIALYZER=true
   fast_finish: true
 
 addons:
