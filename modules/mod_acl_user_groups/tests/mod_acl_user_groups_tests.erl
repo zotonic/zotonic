@@ -28,7 +28,7 @@ person_can_edit_own_resource_test() ->
     {ok, Id} = m_rsc:insert([{category, person}], z_acl:sudo(Context)),
 
     %% Must be owner
-    ?assertThrow({error, eacces}, m_rsc:update(Id, [{title, <<"Test">>}], Context)),
+    ?assertEqual({error, eacces}, m_rsc:update(Id, [{title, <<"Test">>}], Context)),
 
     UserContext = z_acl:logon(Id, Context),
     {ok, Id} = m_rsc:update(Id, [{title, "Test"}], UserContext).
@@ -64,7 +64,7 @@ person_can_insert_text_in_default_content_group_only_test() ->
 
     %% But not in the system content group
     SystemContentGroupId = m_rsc:p(system_content_group, id, Context),
-    ?assertThrow({{error, eacces}, _}, m_rsc:insert([{category, article}, {content_group_id, SystemContentGroupId}], UserContext)),
+    ?assertEqual({error, eacces}, m_rsc:insert([{category, article}, {content_group_id, SystemContentGroupId}], UserContext)),
 
     ok.
 

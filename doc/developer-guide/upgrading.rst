@@ -36,6 +36,33 @@ Authentication
 
     observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
+Errors
+^^^^^^
+
+* ``m_edge``, ``m_identity``, ``m_rsc``, ``m_rsc_import`` and ``m_rsc_update``
+  no longer throw exceptions. Instead, they return an ``{error, atom()}`` tuple
+  on failure.
+
+  Before::
+
+    m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context).
+    %% crashes with an exception
+
+  After::
+
+    m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context).
+    %% fails silently, so to make it crash:
+
+    {ok, _EdgeId} = m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context).
+
+    %% alternatively:
+    case m_edge:insert(Id, this_predicate_does_not_exist, UserId, Context) of
+        {ok, _EdgeId} ->
+            "Everything fine!";
+        {error, Reason} ->
+            "Something went wrong!"
+    end.
+
 Export
 ^^^^^^
 

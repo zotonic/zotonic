@@ -79,7 +79,7 @@ do_import_rsc(TweetId, ImportRsc, Context) ->
     Result.
 
 maybe_author({ok, RscId}, UserId, Context) ->
-    _ = m_edge:insert(RscId, author, UserId, Context).
+    {ok, _} = m_edge:insert(RscId, author, UserId, Context).
 
 
 extract_import_rsc(TweetId, UniqueName, User, Tweet, Context) ->

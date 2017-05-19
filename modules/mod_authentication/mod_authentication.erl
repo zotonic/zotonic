@@ -169,7 +169,7 @@ maybe_signup(Auth, Context) ->
                 undefined -> insert_identity(NewUserId, Auth, Context);
                 _ -> nop
             end,
-            _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
+            ok = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
             z_auth:logon(NewUserId, Context);
         {error, _Reason} = Error ->
             Error;

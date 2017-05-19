@@ -748,7 +748,7 @@ is_module(Module) ->
 start_child(ManagerPid, Module, ModuleSup, Spec, Exports, Context) ->
     StartPid = spawn_link(
                  fun() ->
-                         Result = case catch manage_schema(Module, Exports, Context) of
+                         Result = case manage_schema(Module, Exports, Context) of
                                       ok ->
                                                 % Try to start it
                                           z_supervisor:start_child(ModuleSup, Spec#child_spec.name, ?MODULE_START_TIMEOUT);
@@ -880,7 +880,7 @@ manage_schema(Module, Exports, Context) ->
         {undefined, false} ->
             ok; %% No manage_schema function, and no target schema
         {undefined, true} ->
-            throw({error, {"Schema version defined in module but no manage_schema/2 function.", Module}});
+            {error, {"Schema version defined in module but no manage_schema/2 function.", Module}};
         {2, _} ->
             %% Module has manage_schema function
             manage_schema_if_db(z_db:has_connection(Context), Module, Current, Target, Context)
@@ -936,7 +936,7 @@ manage_schema(Module, undefined, Target, Context) ->
 manage_schema(Module, Current, Target, _Context) when
       is_integer(Current) andalso is_integer(Target)
       andalso Current > Target ->
-    throw({error, {"Module downgrades currently not supported.", Module}});
+    {error, {"Module downgrades currently not supported.", Module}};
 
 %% @doc Do a single upgrade step.
 manage_schema(Module, Current, Target, Context) when
@@ -958,7 +958,7 @@ manage_schema(Module, Current, Target, Context) when
 
 %% @doc Invalid version numbering
 manage_schema(_, Current, Target, _) ->
-    throw({error, {"Invalid schema version numbering", Current, Target}}).
+    {error, {"Invalid schema version numbering", Current, Target}}.
 
 
 %% @doc Add the observers for a module, called after module has been activated

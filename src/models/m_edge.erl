@@ -190,7 +190,7 @@ insert(SubjectId, PredId, ObjectId, Opts, Context)
     when is_integer(SubjectId), is_integer(PredId), is_integer(ObjectId) ->
     case m_predicate:is_predicate(PredId, Context) of
         true -> insert1(SubjectId, PredId, ObjectId, Opts, Context);
-        false -> throw({error, {unknown_predicate, PredId}})
+        false -> {error, {unknown_predicate, PredId}}
     end;
 insert(SubjectId, Pred, ObjectId, Opts, Context)
     when is_integer(SubjectId), is_integer(ObjectId) ->
@@ -362,7 +362,7 @@ is_allowed([Error | _]) -> Error.
 replace(SubjectId, PredId, NewObjects, Context) when is_integer(PredId) ->
     case m_predicate:is_predicate(PredId, Context) of
         true -> replace1(SubjectId, PredId, NewObjects, Context);
-        false -> throw({error, {unknown_predicate, PredId}})
+        false -> {error, {unknown_predicate, PredId}}
     end;
 replace(SubjectId, Pred, NewObjects, Context) ->
     {ok, PredId} = m_predicate:name_to_id(Pred, Context),
