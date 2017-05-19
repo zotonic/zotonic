@@ -133,18 +133,31 @@ init([]) ->
 
 %% @doc Ensure all job queues
 ensure_job_queues() ->
-    case jobs:queue_info(media_preview_jobs) of
-        undefined ->
-            jobs:add_queue(media_preview_jobs, [
-                    {regulators, [
-                          {counter, [
-                                {limit, 3},
-                                {modifiers, [{cpu, 1}]}
-                          ]}
-                    ]}
-                ]);
-        {queue, _Props} ->
-            ok
+    ensure_job_queue(
+        media_preview_jobs,
+        [
+            {regulators, [
+                {counter, [
+                    {limit, 3},
+                    {modifiers, [{cpu, 1}]}
+                ]}
+            ]}
+        ]),
+    ensure_job_queue(
+        manage_module_jobs,
+        [
+            {regulators, [
+                {counter, [
+                    {limit, 1}
+                ]}
+            ]}
+        ]),
+    ok.
+
+ensure_job_queue(Name, Options) ->
+    case jobs:queue_info(Name) of
+        undefined -> jobs:add_queue(Name, Options);
+        {queue, _Props} -> ok
     end.
 
 %% @doc The supervisor for websocket requests and other transient processes.
