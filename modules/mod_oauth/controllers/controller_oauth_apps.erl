@@ -33,7 +33,7 @@ is_authorized(Context) ->
 
 
 html(Context) ->
-    case z_convert:to_integer(z_context:get_q("app_id", Context)) of
+    case z_convert:to_integer(z_context:get_q(<<"app_id">>, Context)) of
         undefined ->
             Html = z_template:render("oauth_apps.tpl", [{page_admin_oauth, true}], Context),
         	z_context:output(Html, Context);
@@ -58,7 +58,7 @@ event(Event, Context) ->
         true ->
             do_event(Event, Context);
         false ->
-            lager:error("Refused access to oauth events."),
+            lager:error("Refused access to oauth events ~p", [Event]),
             Context
     end.
 
@@ -78,11 +78,11 @@ do_event(#postback{message={start_edit_app, Arg}}, Context) ->
 %% Consumer save handler
 %%
 do_event(#submit{message={consumer_save, Arg}}, Context) ->
-    Title = z_context:get_q("zp-title", Context),
-    Descr = z_context:get_q("zp-text", Context),
-    URL = z_context:get_q("zp-url", Context),
-    Callback = z_context:get_q("zp-callback", Context),
-    Perms = z_context:get_q_all("zp-perm", Context),
+    Title = z_context:get_q(<<"zp-title">>, Context),
+    Descr = z_context:get_q(<<"zp-text">>, Context),
+    URL = z_context:get_q(<<"zp-url">>, Context),
+    Callback = z_context:get_q(<<"zp-callback">>, Context),
+    Perms = z_context:get_q_all(<<"zp-perm">>, Context),
     Context1 = case proplists:get_value(id, Arg) of
         undefined ->
             Consumer = m_oauth_app:create_consumer(Title, URL, Descr, Callback, Context),

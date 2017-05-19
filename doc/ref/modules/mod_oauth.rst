@@ -48,7 +48,7 @@ User access
 ...........
 
 To give an user access, the user will need to register the consumer key and secret with their
-client and then perform the *OAuth authentication" using the web redirects.
+client and then perform the *OAuth authentication* using the web redirects.
 
 The client needs to use the follwing URLs:
 
