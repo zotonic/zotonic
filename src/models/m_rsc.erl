@@ -28,9 +28,7 @@
     m_value/2,
 
     name_to_id/2,
-    name_to_id_check/2,
     name_to_id_cat/3,
-    name_to_id_cat_check/3,
 
     page_path_to_id/2,
 
@@ -131,25 +129,15 @@ name_to_id(<<>>, _Context) ->
 name_to_id([], _Context) ->
     {error, {unknown_rsc, []}};
 name_to_id(Name, Context) ->
-    case z_utils:only_digits(Name) of
-        true ->
-            {ok, z_convert:to_integer(Name)};
-        false ->
-            case name_lookup(Name, Context) of
-                Id when is_integer(Id) -> {ok, Id};
-                _ -> {error, {unknown_rsc, Name}}
-            end
+    case name_lookup(Name, Context) of
+        Id when is_integer(Id) -> {ok, Id};
+        _ -> {error, {unknown_rsc, Name}}
     end.
-
--spec name_to_id_check(resource_name(), #context{}) -> resource_id().
-name_to_id_check(Name, Context) ->
-    {ok, Id} = name_to_id(Name, Context),
-    Id.
 
 -spec name_to_id_cat(resource_name(), resource_name(), any()) -> any().
 name_to_id_cat(Name, Cat, Context) when is_integer(Name) ->
     F = fun() ->
-        CatId = m_category:name_to_id_check(Cat, Context),
+        {ok, CatId} = m_category:name_to_id(Cat, Context),
         case z_db:q1("select id from rsc where id = $1 and category_id = $2", [Name, CatId], Context) of
             undefined -> {error, {unknown_rsc_cat, Name, Cat}};
             Id -> {ok, Id}
@@ -158,17 +146,13 @@ name_to_id_cat(Name, Cat, Context) when is_integer(Name) ->
     z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat], Context);
 name_to_id_cat(Name, Cat, Context) ->
     F = fun() ->
-        CatId = m_category:name_to_id_check(Cat, Context),
+        {ok, CatId} = m_category:name_to_id(Cat, Context),
         case z_db:q1("select id from rsc where Name = $1 and category_id = $2", [Name, CatId], Context) of
             undefined -> {error, {unknown_rsc_cat, Name, Cat}};
             Id -> {ok, Id}
         end
     end,
     z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat], Context).
-
-name_to_id_cat_check(Name, Cat, Context) ->
-    {ok, Id} = name_to_id_cat(Name, Cat, Context),
-    Id.
 
 %% @doc Given a page path, return {ok, Id} with the id of the found
 %% resource. When the resource does not have the page path, but did so

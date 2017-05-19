@@ -33,7 +33,6 @@
     is_used/2,
     id_to_name/2,
     name_to_id/2,
-    name_to_id_check/2,
     objects/2,
     subjects/2,
     all/1,
@@ -122,11 +121,6 @@ name_to_id(Name, Context) ->
             end;
         _ -> {error, {unknown_predicate, Name}}
     end.
-
-name_to_id_check(Name, Context) ->
-    {ok, Id} = name_to_id(Name, Context),
-    Id.
-
 
 %% @doc Return the definition of the predicate
 %% @spec get(PredId, Context) -> PredicatePropList | undefined
@@ -321,7 +315,9 @@ for_subject(Id, Context) ->
 
 %% @doc Return the id of the predicate category
 -spec cat_id(#context{}) -> integer().
-cat_id(Context) -> m_category:name_to_id_check(predicate, Context).
+cat_id(Context) ->
+    {ok, Id} = m_category:name_to_id(predicate, Context),
+    Id.
 
 -spec cat_bounds(#context{}) -> {integer(), integer()}.
 cat_bounds(Context) -> m_category:get_range(cat_id(Context), Context).

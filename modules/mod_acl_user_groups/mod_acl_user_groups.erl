@@ -683,7 +683,7 @@ check_hasusergroup(UserId, P, Context) ->
         _ ->
             GroupIds = lists:map(fun z_convert:to_integer/1, lists:filter(fun(<<>>) -> false; (_) -> true end,
                                                                           HasUserGroup)),
-            PredId = m_predicate:name_to_id_check(hasusergroup, Context),
+            {ok, PredId} = m_predicate:name_to_id(hasusergroup, Context),
             m_edge:replace(UserId, PredId, GroupIds, Context)
     end.
 

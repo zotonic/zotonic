@@ -60,7 +60,6 @@
     is_meta/2,
     is_a_prim/3,
     name_to_id/2,
-    name_to_id_check/2,
     id_to_name/2,
     foreach/3,
     fold/4,
@@ -283,7 +282,7 @@ tree(Context) ->
 %% @doc Return the flattened category tree, every entry is a proplist. Used for select lists.
 -spec tree_flat(#context{}) -> list(list()).
 tree_flat(Context) ->
-    MetaId = name_to_id_check(meta, Context),
+    {ok, MetaId} = name_to_id(meta, Context),
     lists:filter(fun(Cat) ->
                     case proplists:get_value(id, Cat) of
                         MetaId ->
@@ -587,13 +586,6 @@ name_to_id(Name, Context) when is_atom(Name); is_binary(Name); is_list(Name) ->
             Result
     end.
 
-%% @doc Map a category name to an id, be flexible with the input
--spec name_to_id_check(category()|{integer()}, #context{}) -> integer().
-name_to_id_check(Name, Context) ->
-    {ok, Id} = name_to_id(Name, Context),
-    Id.
-
-
 %% @doc Perform a function on all resource ids in a category. Order of the ids
 %% is unspecified.
 -spec foreach(Category :: integer()|atom(), function(), #context{})
@@ -731,7 +723,7 @@ ensure_hierarchy(Context) ->
 %% @doc Move a category below another category (or the root set if undefined)
 -spec move_below(integer(), integer(), #context{}) -> ok.
 move_below(Cat, Parent, Context) ->
-    Id = name_to_id_check(Cat, Context),
+    {ok, Id} = name_to_id(Cat, Context),
     ParentId = maybe_name_to_id(Parent, Context),
     Tree = menu(Context),
     {ok, {Tree1, Node, PrevParentId}} = remove_node(Tree, Id, undefined),
@@ -750,7 +742,8 @@ maybe_name_to_id(undefined, _Context) ->
 maybe_name_to_id(Id, _Context) when is_integer(Id) ->
     Id;
 maybe_name_to_id(Name, Context) ->
-    name_to_id_check(Name, Context).
+    {ok, Id} = name_to_id(Name, Context),
+    Id.
 
 insert_node(undefined, Node, Tree, []) ->
     Tree ++ [Node];
