@@ -258,7 +258,9 @@ drop_dotdot_1([_Dir,<<"..">>|Rest], Acc) ->
 drop_dotdot_1([<<"..">>|Rest], Acc) ->
     drop_dotdot_1(Rest, Acc);
 drop_dotdot_1([<<".">>|Rest], Acc) ->
-    drop_dotdot_1(Rest, Acc).
+    drop_dotdot_1(Rest, Acc);
+drop_dotdot_1([Other|Rest], Acc) ->
+    drop_dotdot_1(Rest, [Other|Acc]).
 
 
 %% @doc Check if a file is text based (influences the provided character sets)
