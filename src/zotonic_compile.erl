@@ -173,7 +173,7 @@ compile_options() ->
 compile_user_options() ->
     application:load(zotonic),
     Outdir = application:get_env(zotonic, user_ebin_dir, zotonic_ebin_dir()),
-    [ {outdir, Outdir} | compile_options()].
+    [{outdir, Outdir} | proplists:delete(outdir, compile_options())].
 
 platform_defines_r17up() ->
     case re:run(erlang:system_info(otp_release), "^[0-9].*") of
