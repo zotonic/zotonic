@@ -126,9 +126,8 @@ handle_file(_Verb, _Basename, ".hrl", F) ->
           end),
     "Rebuilding due to change header file: " ++ filename:basename(F);
 
-handle_file(_Verb, "erlydtl_parser.yrl", ".yrl", F) ->
-    TargetDir = filename:join(os:getenv("ZOTONIC"), "src"),
-    os:cmd("erlc -o "++z_utils:os_escape(TargetDir)++" "++z_utils:os_escape(F)),
+handle_file(_Verb, _Basename, ".yrl", F) ->
+    os:cmd("erlc -o "++z_utils:os_escape(filename:dirname(F))++" "++z_utils:os_escape(F)),
     "Rebuilding yecc file: " ++ filename:basename(F);
 
 handle_file(_Verb, Basename, ".erl", F) ->
@@ -139,7 +138,7 @@ handle_file(_Verb, Basename, ".erl", F) ->
              _ -> F
          end,
     try
-        case make:files([F], zotonic_compile:compile_options()) of
+        case zotonic_compile:recompile(F) of
             up_to_date ->
                 check_run_sitetest(Basename, F),
                 "Recompile " ++ FileBase;
