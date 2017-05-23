@@ -228,7 +228,7 @@ mark_sent(Email0, true, Context) ->
             recent_error = null,
             modified = now()
         where email = $1
-          and bounce < sent
+          and (bounce is null or bounce < sent)
           and (error < sent or not error_is_final)",
         [Email],
         Context)

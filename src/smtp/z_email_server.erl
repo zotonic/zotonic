@@ -467,25 +467,25 @@ send_email(Id, Recipient, Email, Context, State) ->
     {atomic, ok} = mnesia:transaction(QEmailTransFun),
     case Email#email.queue orelse length(State#state.sending) > ?EMAIL_MAX_SENDING of
         true -> State;
-        false -> spawn_send(Id, Recipient, Email, Context, State)
+        false -> spawn_send(Id, Recipient, Email, QEmail#email_queue.retry, Context, State)
     end.
 
 
-spawn_send(Id, Recipient, Email, Context, State) ->
+spawn_send(Id, Recipient, Email, RetryCt, Context, State) ->
     case lists:keyfind(Id, #email_sender.id, State#state.sending) =/= false of
         false ->
-            spawn_send_check_email(Id, Recipient, Email, Context, State);
+            spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State);
         _ ->
             %% Is already being sent. Do nothing, it will retry later
             State
     end.
 
-spawn_send_check_email(Id, Recipient, Email, Context, State) ->
+spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
     case is_sender_enabled(Email, Context) of
         true ->
             case is_valid_email(Recipient) of
                 true ->
-                    spawn_send_checked(Id, Recipient, Email, Context, State);
+                    spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State);
                 false ->
                     %% delete email from the queue and notify the system
                     delete_email(illegal_address, Id, Recipient, Email, Context),
@@ -525,7 +525,7 @@ delete_email(Error, Id, Recipient, Email, Context) ->
 
 
 % Start a worker, prevent too many workers per domain.
-spawn_send_checked(Id, Recipient, Email, Context, State) ->
+spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
     Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
     Recipient2 = z_string:trim(z_string:line(z_convert:to_binary(Recipient1))),
     {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
@@ -563,7 +563,7 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
                         spawned_email_sender(
                                 Id, MessageId, Recipient, RecipientEmail, VERP,
                                 From, State#state.smtp_bcc, Email, SmtpOpts, BccSmtpOpts,
-                                Context)
+                                RetryCt, Context)
                     end),
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     State#state{
@@ -572,13 +572,13 @@ spawn_send_checked(Id, Recipient, Email, Context, State) ->
             ]}.
 
 spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
-                     Bcc, Email, SmtpOpts, BccSmtpOpts, Context) ->
+                     Bcc, Email, SmtpOpts, BccSmtpOpts, RetryCt, Context) ->
     EncodedMail = encode_email(Id, Email, <<"<", MessageId/binary, ">">>, From, Context),
     spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
-                              Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, Context).
+                              Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, RetryCt, Context).
 
 spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
-                          Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, Context) ->
+                          Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, RetryCt, Context) ->
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
         {error, wait} ->
@@ -586,7 +586,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                         [RecipientEmail, Id, Relay]),
             timer:sleep(1000),
             spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
-                                 Bcc, Email, SmtpOpts, BccSmtpOpts, Context);
+                                 Bcc, Email, SmtpOpts, BccSmtpOpts, RetryCt, Context);
         ok ->
             LogEmail = #log_email{
                 message_nr=Id,
@@ -615,6 +615,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             recipient=Recipient,
                             is_final=false,
                             reason=retry,
+                            retry_ct=RetryCt,
                             status=Message
                         }, Context),
                     z_notifier:notify(#zlog{
@@ -634,6 +635,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             recipient=Recipient,
                             is_final=true,
                             reason=smtphost,
+                            retry_ct=RetryCt,
                             status=Message
                         }, Context),
                     z_notifier:notify(#zlog{
@@ -653,7 +655,8 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             message_nr=Id,
                             recipient=Recipient,
                             is_final=true,
-                            reason=error
+                            reason=error,
+                            retry_ct=RetryCt
                         }, Context),
                     z_notifier:notify(#zlog{
                                         user_id=LogEmail#log_email.from_id,
@@ -997,17 +1000,19 @@ poll_queued(State) ->
                                     mnesia:delete_object(QEmail),
                                     {QEmail#email_queue.id,
                                      QEmail#email_queue.recipient,
+                                     QEmail#email_queue.retry,
                                      QEmail#email_queue.pickled_context}
                                 end || QEmail <- PollQueryRes ]
                       end,
     {atomic, NotifyList2} = mnesia:transaction(SetFailTransFun),
     %% notify the system that these emails were failed to be sent
-    lists:foreach(fun({Id, Recipient, PickledContext}) ->
+    lists:foreach(fun({Id, Recipient, RetryCt, PickledContext}) ->
                       z_notifier:first(#email_failed{
                                 message_nr=Id,
                                 recipient=Recipient,
                                 is_final=true,
                                 reason=retry,
+                                retry_ct=RetryCt,
                                 status= <<"Retries exceeded">>
                             }, z_context:depickle(PickledContext))
                   end,
@@ -1044,6 +1049,7 @@ poll_queued(State) ->
                           spawn_send(QEmail#email_queue.id,
                                      QEmail#email_queue.recipient,
                                      QEmail#email_queue.email,
+                                     QEmail#email_queue.retry,
                                      z_context:depickle(QEmail#email_queue.pickled_context),
                                      St)
                       end,
