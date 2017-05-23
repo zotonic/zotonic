@@ -208,6 +208,7 @@
             recipient :: binary(), 
             is_final :: boolean(),
             reason :: retry | illegal_address | smtphost | error,
+            retry_ct :: non_neg_integer(),
             status :: binary()
         }).
 
