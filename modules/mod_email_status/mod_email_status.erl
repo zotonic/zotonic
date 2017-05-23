@@ -68,6 +68,9 @@ observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) 
 
 observe_email_failed(#email_failed{reason=sender_disabled}, _Context) ->
     undefined;
+observe_email_failed(#email_failed{is_final=false, retry_ct=RetryCt} = EF, _Context) when RetryCt < 2 ->
+    lager:info("[mod_email_status] email failed (ignored, as first retries) ~p", [EF]),
+    undefined;
 observe_email_failed(#email_failed{recipient=Recipient, is_final=IsFinal, status=Status} = EF, Context) ->
     lager:info("[mod_email_status] email failed ~p", [EF]),
     m_email_status:mark_failed(Recipient, IsFinal, Status, Context).
