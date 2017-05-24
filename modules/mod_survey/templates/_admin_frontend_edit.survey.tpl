@@ -49,10 +49,10 @@
 							action={alert text=_"Download will start in the background. Please check your download window."}
 					%}
 				{% endif %}
-				<a class="btn" href="{% url survey_results id=id %}" target="_blank">{_ Show results _}</a>
+				<a class="btn" href="{% url survey_results id=id %}" target="_blank">{_ Show results _} <i class="fa fa-external-link"></i></a>
 				<a class="btn" href="#" id="{{ #email_addresses }}">{_ Show email addresses _}</a>
 				{% wire id=#email_addresses postback={admin_show_emails id=id} delegate="mod_survey" %}
-				<a class="btn" href="{% url survey_results_printable id=id %}" target="_blank">{_ Printable list _}</a>
+				<a class="btn" href="{% url survey_results_printable id=id %}" target="_blank">{_ Printable list _}  <i class="fa fa-external-link"></i></a>
 
 				{#
 					The result editor now opens in the admin template, this needs to be changed for frontend-admin

@@ -51,7 +51,7 @@ ol.pages > li:before {
 .page-header {
     cursor: move;
     border-color: #0F93D5;
-    border-width: 2px;
+    border-width: 3px;
 }
 .page-header:hover {
     background-color: #eee;
