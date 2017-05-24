@@ -35,7 +35,9 @@
         {% endif %}
 
         {% for blk in id.blocks %}
-            {% if blk.name != 'survey_feedback' %}
+            {% if blk.is_hide_result %}
+                {# nothing #}
+            {% elseif blk.name != 'survey_feedback' %}
                 {% optional include "blocks/_block_view_"++blk.type++".tpl" blk=blk is_survey_answer_view result=result %}
             {% endif %}
         {% endfor %}
@@ -43,10 +45,12 @@
 {% elseif id.survey_show_results or m.survey.is_allowed_results_download[id] %}
 	{% for result, chart, question in m.survey.results[id] %}
 	<div class="survey_result">
-		{% if not result %}
-{#
+        {% if question.is_hide_result %}
+            {# nothing #}
+		{% elseif not result %}
+            {#
     			{% optional include ["blocks/_block_view_",question.type,".tpl"]|join id=id blk=question answers=answers %}
-#}
+            #}
 		{% else %}
 			{% if chart.question %}
 				<h4>{{ chart.question }}</h4>

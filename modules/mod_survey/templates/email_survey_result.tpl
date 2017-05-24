@@ -65,6 +65,7 @@
 		<th style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd;">{_ Answer _}</th>
 	</tr>
 {% for name, ans in answers %}
+	{% if not id.blocks[name].is_hide_result %}
 	<tr style="border-top: 1px solid #ccc">
 		<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd;">
 			{% if ans.question.prompt %}
@@ -83,6 +84,7 @@
 			{% endif %}
 		</td>
 	</tr>
+	{% endif %}
 {% endfor %}
 </table>
 

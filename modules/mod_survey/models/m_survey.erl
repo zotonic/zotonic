@@ -416,7 +416,8 @@ survey_results_prompts(undefined, _IsAnonymous, _Context) ->
     {[], [], []};
 survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(SurveyId) ->
     case get_questions(SurveyId, Context) of
-        NQs when is_list(NQs) ->
+        NQs0 when is_list(NQs0) ->
+            NQs = drop_hidden_results(NQs0),
             {MaxPoints, PassPercent} = test_pass_values(SurveyId, Context),
             IsAnonymous = IsForceAnonymous orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
             Rows = z_db:assoc_props("
@@ -466,6 +467,13 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
     end;
 survey_results_prompts(SurveyId, IsForceAnonymous, Context) ->
     survey_results_prompts(m_rsc:rid(SurveyId, Context), IsForceAnonymous, Context).
+
+drop_hidden_results(NQs) ->
+    lists:filter(
+        fun ({_, Block}) ->
+            not z_convert:to_bool(proplists:get_value(is_hide_result, Block))
+        end,
+        NQs).
 
 maybe_length(L) when is_list(L) -> length(L);
 maybe_length(_) -> 1.

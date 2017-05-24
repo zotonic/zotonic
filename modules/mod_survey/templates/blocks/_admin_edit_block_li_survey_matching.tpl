@@ -45,14 +45,22 @@ Flying dutchman = Wagner._}</p>
     <div class="row-fluid">
         <div class="span6">
             <div class="control-group view-expanded">
-                <label class="checkbox">
-                    <input type="checkbox" id="block-{{name}}-is_random" name="block-{{name}}-is_random" value="1" {% if blk.is_random %}checked="checked"{% endif %} />
-                    {_ Randomize answers _}
-                </label>
-                <label class="checkbox">
-                    <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
-                    {_ Required, this question must be answered. _}
-                </label>
+                <div class="controls">
+                    <label class="checkbox">
+                        <input type="checkbox" id="block-{{name}}-is_random" name="block-{{name}}-is_random" value="1" {% if blk.is_random %}checked="checked"{% endif %} />
+                        {_ Randomize answers _}
+                    </label>
+
+                    <label class="checkbox">
+                        <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
+                        {_ Required, this question must be answered. _}
+                    </label>
+
+                    <label class="checkbox">
+                        <input type="checkbox" id="block-{{name}}-is_hide_result" name="block-{{name}}-is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
+                        {_ Hide from results _}
+                    </label>
+                </div>
             </div>
         </div>
         <div class="span6">

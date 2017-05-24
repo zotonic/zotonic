@@ -27,26 +27,38 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-<div class="control-group view-expanded">
-    <label class="control-label" for="block-{{name}}-style">{_ Button style _}</label>
-    <div class="controls">
-      <select id="block-{{name}}-style" name="block-{{name}}-style">
-           <option value="">{_ Default _}</option>
-           <option value="btn-primary" {% if blk.style == "btn-primary" %}selected="selected"{% endif %}>{_ Primary _}</option>
-           <option value="btn-info" {% if blk.style == "btn-info" %}selected="selected"{% endif %}>{_ Informational _}</option>
-           <option value="btn-success" {% if blk.style == "btn-success" %}selected="selected"{% endif %}>{_ Success _}</option>
-           <option value="btn-warning" {% if blk.style == "btn-warning" %}selected="selected"{% endif %}>{_ Warning _}</option>
-           <option value="btn-danger" {% if blk.style == "btn-danger" %}selected="selected"{% endif %}>{_ Danger _}</option>
-           <option value="btn-inverse" {% if blk.style == "btn-inverse" %}selected="selected"{% endif %}>{_ Inverse _}</option>
-      </select>
-    </div>
-</div>
+<div class="row">
+    <div class="span6">
+        <div class="control-group view-expanded">
+            <label class="control-label" for="block-{{name}}-style">{_ Button style _}</label>
+            <div class="controls">
+              <select id="block-{{name}}-style" name="block-{{name}}-style">
+                   <option value="">{_ Default _}</option>
+                   <option value="btn-primary" {% if blk.style == "btn-primary" %}selected="selected"{% endif %}>{_ Primary _}</option>
+                   <option value="btn-info" {% if blk.style == "btn-info" %}selected="selected"{% endif %}>{_ Informational _}</option>
+                   <option value="btn-success" {% if blk.style == "btn-success" %}selected="selected"{% endif %}>{_ Success _}</option>
+                   <option value="btn-warning" {% if blk.style == "btn-warning" %}selected="selected"{% endif %}>{_ Warning _}</option>
+                   <option value="btn-danger" {% if blk.style == "btn-danger" %}selected="selected"{% endif %}>{_ Danger _}</option>
+                   <option value="btn-inverse" {% if blk.style == "btn-inverse" %}selected="selected"{% endif %}>{_ Inverse _}</option>
+              </select>
+            </div>
+        </div>
 
-<div class="control-group view-expanded">
-    <label class="control-label" for="block-{{name}}-target">{_ question _}</label>
-    <div class="controls">
-      <input type="text" id="block-{{name}}-target" name="block-{{name}}-target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
-      <p class="help-block">{_ Jump to a question on a next page. _}</p>
+        <div class="control-group view-expanded">
+            <label class="control-label" for="block-{{name}}-target">{_ question _}</label>
+            <div class="controls">
+              <input type="text" id="block-{{name}}-target" name="block-{{name}}-target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
+              <p class="help-block">{_ Jump to a question on a next page. _}</p>
+            </div>
+        </div>
+    </div>
+    <div class="span6">
+        <div class="control-group view-expanded">
+            <label class="checkbox">
+                <input type="checkbox" id="block-{{name}}-is_hide_result" name="block-{{name}}-is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
+                {_ Hide from results _}
+            </label>
+        </div>
     </div>
 </div>
 {% endblock %}
