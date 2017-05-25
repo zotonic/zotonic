@@ -78,12 +78,8 @@ ensure_id(Context) ->
         N when is_integer(N) ->
             {Context, N};
         undefined ->
-            try
-                {ok, IdN} = m_rsc:name_to_id(z_context:get_q(<<"id">>, Context), Context),
-                {z_context:set(id, IdN, Context), IdN}
-            catch
-                _:_ -> {Context, undefined}
-            end
+            MaybeId = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
+            {z_context:set(id, MaybeId, Context), MaybeId}
     end.
 
 
