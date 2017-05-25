@@ -51,16 +51,13 @@ is_authorized(Context) ->
     end.
 
 %% @doc Fetch the id from the request or the dispatch configuration.
-%% @spec get_id(Context) -> int() | undefined
+-spec get_id(z:context()) -> m_rsc:resource_id() | undefined.
 get_id(Context) ->
     ReqId = case z_context:get(id, Context) of
         undefined -> z_context:get_q(<<"id">>, Context);
         ConfId -> ConfId
     end,
-    case m_rsc:name_to_id(ReqId, Context) of
-        {ok, RscId} -> RscId;
-        _ -> undefined
-    end.
+    m_rsc:rid(ReqId, Context).
 
 %%
 %% Helpers
