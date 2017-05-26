@@ -44,3 +44,5 @@ _build
 _checkouts
 /log/
 compile_commands.json
+.idea/
+zotonic.iml
