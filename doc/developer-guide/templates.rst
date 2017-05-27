@@ -200,7 +200,7 @@ Zotonic will replace the include tag with the output of
 
 Variants of the include tag are
 :ref:`tag-catinclude`, :ref:`tag-all-include` and :ref:`tag-all-catinclude`:
-following the :ref:`looking mechanism <guide-lookup-system>` described above,
+following the :ref:`lookup mechanism <guide-lookup-system>` described above,
 Zotonic will find the best template based on the page and module priority.
 
 Inheritance
