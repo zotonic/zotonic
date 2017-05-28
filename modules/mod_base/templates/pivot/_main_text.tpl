@@ -40,6 +40,4 @@
 
 {{ id.website }}
 
-{{ id.seo_title }}
-{{ id.seo_keywords }}
 {{ id.seo_desc }}

@@ -9,30 +9,16 @@
 	{# Take one of the alternative urls, provided by mod_translation #}
 	<meta name="robots" content="noindex" />
 {% else %}
-	{% with m.config.seo.keywords.value as keywords %}
 	{% with m.config.seo.description.value as description %}
 		{% if id %}
 			{% if m.rsc[id].seo_noindex %}
 				{% if not m.config.seo.noindex.value %}<meta name="robots" content="noindex" />{% endif %}
 			{% else %}
-				{% with m.rsc[id].seo_keywords as seo_keywords %}
-					{% if seo_keywords %}
-						<meta name="keywords" content="{{ seo_keywords }}, {{ keywords }}" />
-					{% else %}
-						<meta name="keywords" content="{% for predicate in id.op %}{% if predicate /= "depiction" %}{% for oid in id.o[predicate] %}{{ oid.title }}, {% endfor %}{% endif %}{% endfor %}{{ keywords }}" />
-					{% endif %}
-					<meta name="description" content="{{ id.seo_desc|default:id.summary|default:description|escape }}" />
-				{% endwith %}
+                <meta name="description" content="{{ id.seo_desc|default:id.summary|default:description|escape }}" />
 			{% endif %}
-		{% else %}
-			{% if keywords %}
-				<meta name="keywords" content="{{ keywords }}" />
-			{% endif %}
-			{% if description %}
-				<meta name="description" content="{{ description }}" />
-			{% endif %}
+		{% elseif description %}
+            <meta name="description" content="{{ description }}" />
 		{% endif %}
-	{% endwith %}
 	{% endwith %}
 {% endif %}
 {% with m.config.seo_bing.webmaster_verify.value as wmv %}{% if wmv %}

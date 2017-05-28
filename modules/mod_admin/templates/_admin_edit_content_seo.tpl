@@ -37,20 +37,6 @@
         </div>
 
         <div class="form-group row">
-            <label class="control-label col-md-3" for="seo_title">{_ Page title _}</label>
-            <div class="col-md-9">
-                <input class="form-control" type="text" id="seo_title" name="seo_title" value="{{ r.seo_title }}"/>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="control-label col-md-3" for="seo_keywords">{_ Page keywords _}</label>
-            <div class="col-md-9">
-                <input class="form-control" type="text" id="seo_keywords" name="seo_keywords" value="{{ r.seo_keywords }}"/>
-            </div>
-        </div>
-
-        <div class="form-group row">
             <label class="control-label col-md-3" for="seo_desc">{_ Page description _}</label>
             <div class="col-md-9">
                 <textarea rows="5" cols="10" id="seo_desc" name="seo_desc" class="seo-desc form-control">{{ r.seo_desc }}</textarea>
