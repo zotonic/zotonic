@@ -50,6 +50,8 @@ slice(undefined, _, _Context) ->
 
 slice(List, Slice, _Context) when is_list(List) ->
     slice1(List, Slice);
+slice(Binary, Slice, _Context) when is_binary(Binary) ->
+    slice1(z_convert:to_list(Binary), Slice);
 slice(MaybeList, Slice, Context) ->
     slice1(z_template_compiler_runtime:to_list(MaybeList, Context), Slice).
 
