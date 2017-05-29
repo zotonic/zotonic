@@ -44,8 +44,8 @@ For production release of your new Zotonic site you need to:
   (e.g. `www.mysite.com`) to point to your server’s IP address.
 
 - Ensure ``{hostname, "mysite"}`` is set to ``{hostname, "www.mysite.com"}``
-  in ``user/sites/mysite/config``.  This last change enables the virtual 
-  hosting: it makes sure that Zotonic knows which site is being requested 
+  in ``user/sites/mysite/config``.  This last change enables the virtual
+  hosting: it makes sure that Zotonic knows which site is being requested
   when somebody visits `www.mysite.com`.
 
    .. note:: Your actual site location might be different, see the :term:`User sites directory`.
@@ -90,8 +90,8 @@ will cause Zotonic to crash on startup.
 
 Add the following entries to ``/home/zotonic/.profile``, then save file & exit::
 
-  export ZOTONIC_PORT=80
-  export ZOTONIC_SSL_PORT=443
+  export ZOTONIC_LISTEN_PORT=80
+  export ZOTONIC_SSL_LISTEN_PORT=443
   public_interface=eth0
   export ZOTONIC_IP=`/sbin/ifconfig $public_interface | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
   export ERL="authbind --deep erl"

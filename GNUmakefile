@@ -30,6 +30,9 @@ compile: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) compile
 	bin/zotonic compile
 
+dev:
+	docker-compose run --rm --service-ports zotonic sh
+
 test: compile
 	bin/zotonic runtests
 
