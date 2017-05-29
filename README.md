@@ -46,3 +46,12 @@ License
 
 Zotonic is released under the Apache 2.0 License. Please refer to the included
 [LICENSE](LICENSE) file for more information.
+
+Thanks
+------
+
+Thanks to the following services for supporting Open Source:
+
+<a href="https://browserstack.com/"><img rel="Thanks to BrowserStack" src="https://raw.githubusercontent.com/zotonic/zotonic/master/doc/img/browserstack-logo.png" height="64" /></a>
+
+<a href="https://travis-ci.com/">&nbsp;&nbsp;<img rel="Thanks to Travis-CI" src="https://cdn.travis-ci.com/images/logos/TravisCI-Full-Color-45e242791b7752b745a7ae53f265acd4.png" height="40" style="padding-left: 20px"></a>
