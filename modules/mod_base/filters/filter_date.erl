@@ -51,6 +51,8 @@ date([[Y,M,D],[H,I,S]], FormatStr, Context) ->
          FormatStr, Context);
 date(Input, FormatStr, Context) when is_binary(FormatStr) ->
     date(Input, binary_to_list(FormatStr), Context);
+date(<<_:4/binary, "-", _:2/binary, "-", _:2/binary, _/binary>> = Input, FormatStr, Context) ->
+    date(z_datetime:to_datetime(Input), FormatStr, Context);
 date(Input, FormatStr, Context) when is_binary(Input) ->
     z_convert:to_binary(date(binary_to_list(Input), FormatStr, Context));
 date({{_,_,_} = Date,{_,_,_} = Time} = DT, FormatStr, Context) ->
