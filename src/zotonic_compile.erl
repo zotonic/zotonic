@@ -20,23 +20,34 @@
 
 -export([
     all/0, all/1,
+    recompile/1,
+    compile_options/1,
     compile_options/0,
+    compile_user_options/0,
     ld/0, ld/1
 ]).
 
 -include_lib("zotonic.hrl").
 
-%% @doc Load all changed beam files
+%% @doc Load all changed beam files, return list of reloaded modules.
+-spec ld() -> list( code:load_ret() ).
 ld() ->
     Ms = reloader:all_changed(),
     [ ld(M) || M <- Ms ].
 
 %% @doc Load a specific beam file, reattach any observers etc.
+-spec ld(module()) -> code:load_ret().
 ld(Module) when is_atom(Module) ->
     code:purge(Module),
-    Ret = code:load_file(Module),
-    z_sites_manager:module_loaded(Module),
-    Ret.
+    case code:load_file(Module) of
+        {error, _} = Error ->
+            lager:error("Error loading module ~p: ~p",
+                        [Module, Error]),
+            Error;
+        {module, _} = Ok ->
+            z_sites_manager:module_loaded(Module),
+            Ok
+    end.
 
 
 %% @doc Compile all files
@@ -50,6 +61,105 @@ all(Options0) ->
         error -> error
     end.
 
+-spec recompile(file:filename_all()) -> up_to_date | error.
+recompile(File) ->
+    make:files([File], compile_options(File)).
+
+-spec compile_options(filename:filename_all()) -> list().
+compile_options(Filename) ->
+    case previous_compile_options(Filename) of
+        undefined ->
+            % Probably a new file, guess if it is a 'user', 'zotonic' or 'deps' file
+            % For deps files we compile with similar options as a beam in the closest 'ebin'
+            guess_compile_options(Filename);
+        Options ->
+            Options
+    end.
+
+guess_compile_options(Filename) ->
+    case is_zotonic_core_file(Filename) of
+        true ->
+            {ok, compile_options()};
+        false ->
+            case is_zotonic_user_file(Filename) of
+                true -> {ok, compile_user_options()};
+                false -> guess_compile_options_ebin(Filename)
+            end
+    end.
+
+guess_compile_options_ebin(Filename) ->
+    case find_ebin_on_path(filename:dirname(Filename)) of
+        {ok, Dir} ->
+            case filelib:wildcard(filename:join(Dir, "*.beam")) of
+                [] -> {ok, compile_options()};
+                BeamFiles ->
+                    case previous_compile_options_any(BeamFiles) of
+                        undefined -> {ok, compile_options()};
+                        Options -> {ok, Options}
+                    end
+            end;
+        {error, _} ->
+            % No ebin dir on the path, assume it is a new user file
+            % TODO: need to check if typical zotonic-directories/files
+            %       are on the path.
+            {ok, compile_user_options()}
+    end.
+
+find_ebin_on_path(Path) ->
+    Ebin = filename:join(Path, "ebin"),
+    case filelib:is_dir(Ebin) of
+        true -> {ok, Ebin};
+        false ->
+            case filename:dirname(Path) of
+                Path -> {error, notfound};
+                Path1 -> find_ebin_on_path(Path1)
+            end
+    end.
+
+-spec is_matching(Path::list(string()), Patterns::list(string())) -> boolean().
+is_matching(_Parts, []) -> false;
+is_matching(Parts, [Path|Rest]) ->
+    PathParts = lists:reverse(filename:split(Path)),
+    case is_matching_1(tl(Parts), tl(PathParts)) of
+        true -> true;
+        false -> is_matching(Parts, Rest)
+    end.
+
+is_zotonic_core_file(Filename) ->
+    Parts = lists:reverse(filename:split(z_convert:to_list(Filename))),
+    Dirs = filelib:wildcard("src/*"),
+    Dirs1 = lists:filter(fun filelib:is_dir/1, Dirs),
+    Dirs2 = [ filename:join(D, "*.erl") || D <- Dirs1, hd(D) =/= $. ],
+    ZotonicDirs = Dirs2 ++ compile_zotonic_dirs(),
+    is_matching(Parts, ZotonicDirs).
+
+is_zotonic_user_file(Filename) ->
+    Parts = lists:reverse(filename:split(z_convert:to_list(Filename))),
+    is_matching(Parts, compile_user_dirs()).
+
+
+is_matching_1(_, []) -> true;
+is_matching_1([A|As], [A|Bs]) -> is_matching_1(As, Bs);
+is_matching_1([_|As], ["*"|Bs]) -> is_matching_1(As, Bs);
+is_matching_1(["ext_" ++ _|As], ["ext_*"|Bs]) -> is_matching_1(As, Bs);
+is_matching_1(_, _) -> false.
+
+previous_compile_options(Filename) ->
+    Module = z_convert:to_atom(filename:rootname(filename:basename(Filename))),
+    try
+        MInfo = Module:module_info(compile),
+        proplists:get_value(options, MInfo)
+    catch
+        error:undef -> undefined
+    end.
+
+previous_compile_options_any([]) -> undefined;
+previous_compile_options_any([BeamFile|BeamFiles]) ->
+    case previous_compile_options(BeamFile) of
+        undefined -> previous_compile_options_any(BeamFiles);
+        Options -> Options
+    end.
+
 compile_stage(zotonic, Options0) ->
     Options = Options0 ++ compile_options(),
     Work = unglob(compile_zotonic_dirs()),
@@ -60,19 +170,10 @@ compile_stage(user, Options0) ->
     compile(Options, Work).
 
 compile(Options, Work) ->
-    Ref = make_ref(),
-    Self = self(),
-
-    spawn_link(fun() -> compile(Self, Ref, Work, Options) end),
-    receive
-        {Ref, Result} ->
-            z:ld(),
-            Result
-    end.
-
-compile(Parent, Ref, Work, Options) ->
     Workers = spawn_compile_workers(Options, self()),
-    Parent ! {Ref, compile_loop(Work, Workers, up_to_date)}.
+    Result = compile_loop(Work, Workers, up_to_date),
+    z:ld(),
+    Result.
 
 %% No work, and no workers, we are done.
 compile_loop([], [], Result) ->
@@ -128,12 +229,10 @@ compile_zotonic_dirs() ->
     [
      "modules/*/*.erl",
      "modules/*/*/*.erl",
-     "modules/*/deps/*/src/*.erl",
+
+     %% zotonic extensions
      "priv/extensions/ext_*/*.erl",
      "priv/extensions/ext_*/*/*.erl",
-     %% legacy external modules location
-     "priv/modules/*/*.erl",
-     "priv/modules/*/*/*.erl",
 
      %% builtin sites
      "priv/sites/*/*.erl",
@@ -159,38 +258,42 @@ compile_user_dirs() ->
     ].
 
 
+%% @doc Default compile options for Zotonic Erlang files.
 compile_options() ->
-    application:load(zotonic),
-    [{i, filename:join(os:getenv("ZOTONIC"), "include")},
-     {i, filename:join(os:getenv("ZOTONIC"), "deps/webzmachine/include")},
-     {i, user_modules_dir()},
-     {i, user_sites_dir()},
-     {outdir, zotonic_ebin_dir()},
-     {parse_transform, lager_transform},
-     nowarn_deprecated_type,
-     debug_info] ++ platform_defines_r17up().
+    _ = application:load(zotonic),
+    [
+        {i, zotonic_subdir(["include"])},
+        {i, zotonic_subdir(["modules", "*", "include"])},
+        {outdir, zotonic_ebin_dir()},
+        {parse_transform, lager_transform},
+        nowarn_deprecated_type,
+        debug_info,
+        {d, namespaced_dicts}      % OTP 17+
+    ].
 
+%% @doc Default compile options for user (sites) files that need to stay separate from the
+%%      Zotonic core files.
 compile_user_options() ->
-    application:load(zotonic),
+    _ = application:load(zotonic),
     Outdir = application:get_env(zotonic, user_ebin_dir, zotonic_ebin_dir()),
-    [ {outdir, Outdir} | compile_options()].
-
-platform_defines_r17up() ->
-    case re:run(erlang:system_info(otp_release), "^[0-9].*") of
-        {match, _} ->
-            [{d, namespaced_dicts}];
-        nomatch ->
-            []
-    end.
+    [
+        {i, user_modules_dir()},
+        {i, user_sites_dir()},
+        {outdir, Outdir}
+        | proplists:delete(outdir, compile_options())
+    ].
 
 zotonic_ebin_dir() ->
-    "_build/default/lib/zotonic/ebin".
+     zotonic_subdir(["_build", "default", "lib", "zotonic", "ebin"]).
 
 user_modules_dir() ->
-    application:get_env(zotonic, user_modules_dir, "user/modules").
+    application:get_env(zotonic, user_modules_dir, zotonic_subdir(["user", "modules"])).
 
 user_sites_dir() ->
-    application:get_env(zotonic, user_sites_dir, "user/sites").
+    application:get_env(zotonic, user_sites_dir, zotonic_subdir(["user", "sites"])).
+
+zotonic_subdir(Path) when is_list(Path) ->
+    filename:join([os:getenv("ZOTONIC") | Path]).
 
 %% @doc For a list of glob patterns, split all patterns which contain
 %% /*/* up in more patterns, so that we can parallelize it even more.

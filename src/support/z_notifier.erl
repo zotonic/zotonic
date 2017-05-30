@@ -38,6 +38,8 @@
     get_observers/2,
     notify/2,
     notify_sync/2,
+    notify_queue/1,
+    notify_queue_flush/1,
     notify1/2,
     first/2,
     map/2,
@@ -160,17 +162,18 @@ get_observers(Event, #context{site=Site}) ->
 %%====================================================================
 
 %% @doc Cast the event to all observers. The prototype of the observer is: f(Msg, Context) -> void
-notify(Msg, Context) ->
+notify(Msg, #context{dbc = undefined} = Context) ->
     case get_observers(Msg, Context) of
         [] -> ok;
         Observers ->
-            AsyncContext = z_context:prune_for_async(Context),
             F = fun() ->
-                    lists:foreach(fun(Obs) -> notify_observer(Msg, Obs, false, AsyncContext) end, Observers)
+                    lists:foreach(fun(Obs) -> notify_observer(Msg, Obs, false, Context) end, Observers)
             end,
             spawn(F),
             ok
-    end.
+    end;
+notify(Msg, _Context) ->
+    delay_notification({notify, Msg}).
 
 %% @doc Cast the event to all observers. The prototype of the observer is: f(Msg, Context) -> void
 notify_sync(Msg, Context) ->
@@ -182,15 +185,15 @@ notify_sync(Msg, Context) ->
     end.
 
 %% @doc Cast the event to the first observer. The prototype of the observer is: f(Msg, Context) -> void
-notify1(Msg, Context) ->
+notify1(Msg, #context{dbc = undefined} = Context) ->
     case get_observers(Msg, Context) of
         [] -> ok;
         [Obs|_] ->
-            AsyncContext = z_context:prune_for_async(Context),
-            F = fun() -> notify_observer(Msg, Obs, false, AsyncContext) end,
+            F = fun() -> notify_observer(Msg, Obs, false, Context) end,
             spawn(F)
-    end.
-
+    end;
+notify1(Msg, _Context) ->
+    delay_notification({notify1, Msg}).
 
 %% @doc Call all observers till one returns something else than undefined.
 %% The prototype of the observer is: f(Msg, Context)
@@ -239,6 +242,29 @@ foldr(Msg, Acc0, Context) ->
             Acc0,
             Observers).
 
+%% @doc Notify delayed notifications.
+notify_queue(#context{dbc = undefined} = Context) ->
+    case erlang:get(notify_queue) of
+        undefined ->
+            nop;
+        Queue ->
+            lists:foreach(
+                fun
+                    ({notify, Msg}) ->
+                        notify(Msg, Context);
+                    ({notify1, Msg}) ->
+                        notify1(Msg, Context)
+                end,
+                lists:reverse(Queue)
+            )
+    end,
+    erlang:erase(notify_queue),
+    ok.
+
+%% @doc Erase queued notifications
+notify_queue_flush(#context{dbc = undefined}) ->
+    erlang:erase(notify_queue),
+    ok.
 
 %% @doc Subscribe once to a notification, detach after receiving the notification.
 -spec await(tuple()|atom(), #context{}) ->
@@ -510,4 +536,12 @@ notify_observer_fold(Msg, {_Prio, {M,F,Args}}, Acc, Context) ->
 
 msg_event(E) when is_atom(E) -> E;
 msg_event(Msg) -> element(1, Msg).
+
+delay_notification(Msg) ->
+    case erlang:get(notify_queue) of
+        undefined ->
+            erlang:put(notify_queue, [Msg]);
+        Queue ->
+            erlang:put(notify_queue, [Msg | Queue])
+    end.
 

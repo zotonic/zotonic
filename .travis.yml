@@ -14,11 +14,6 @@ matrix:
       env: DIALYZER=true
   fast_finish: true
 
-addons:
-  apt:
-    packages:
-      - python-sphinx
-      - enchant
 before_script:
   - psql -c 'CREATE USER zotonic; ALTER USER zotonic CREATEDB;' -U postgres
 install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'
