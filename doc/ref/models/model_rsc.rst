@@ -80,16 +80,9 @@ A resource has the following properties accessible from the templates:
 |seo_noindex          |Whether to let search engines index this             |false                           |
 |                     |page. Returns a boolean or undefined.                |                                |
 +---------------------+-----------------------------------------------------+--------------------------------+
-|seo_title            |Title for on top of the browser window. Returns a    |<<"Welcome Title">>             |
-|                     |binary or undefined.                                 |                                |
-+---------------------+-----------------------------------------------------+--------------------------------+
 |slug                 |Slug used for url generation, appended to page       |<<"the-world-is-flat">>         |
 |                     |urls. Binary or undefined. Valid characters are a-z, |                                |
 |                     |0-9 and -                                            |                                |
-+---------------------+-----------------------------------------------------+--------------------------------+
-|seo_keywords         |Keywords for search engine optimization. List of     |<<"world, model, flat">>        |
-|                     |keywords separated with commas. Returns a binary or  |                                |
-|                     |undefined.                                           |                                |
 +---------------------+-----------------------------------------------------+--------------------------------+
 |seo_desc             |Page description for search engines. Returns a binary|<<"The truth about the world's  |
 |                     |or undefined.                                        |shape">>                        |

@@ -19,16 +19,6 @@
                     <h3 class="widget-header">{_ General SEO Optimization _}</h3>
                     <div class="widget-content">
                         <div class="form-group row">
-                            <label class="control-label col-md-4" for="seo-keywords">{_ Keywords _}</label>
-                            <div class="col-md-8">
-                                <input type="text" id="seo-keywords" name="seo-keywords" value="{{ m.config.seo.keywords.value|escape }}" class="form-control" />
-                                <p class="help-block">
-                                    {_ Keywords to include on every page. Separate keywords with a "," _}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
                             <label class="control-label col-md-4" for="seo-description">{_ Description _}</label>
                             <div class="col-md-8">
                                 <input type="text" id="seo-description" name="seo-description" value="{{ m.config.seo.description.value|escape }}" class="form-control" />
