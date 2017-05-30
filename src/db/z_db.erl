@@ -131,7 +131,7 @@ transaction(Function, Options, Context) ->
 transaction1(Function, #context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
-            with_connection(
+            case with_connection(
               fun(C) ->
                     Context1 = Context#context{dbc=C},
                     DbDriver = z_context:db_driver(Context),
@@ -147,7 +147,9 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                             R ->
                                 case DbDriver:squery(C, "COMMIT", ?TIMEOUT) of
                                     {ok, [], []} -> ok;
-                                    {error, _} = ErrorCommit -> throw(ErrorCommit)
+                                    {error, _} = ErrorCommit ->
+                                        z_notifier:notify_queue_flush(Context),
+                                        throw(ErrorCommit)
                                 end,
                                R
                         end
@@ -157,7 +159,15 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                             {rollback, {Why, erlang:get_stacktrace()}}
                     end
               end,
-              Context);
+              Context)
+            of
+                {rollback, _} = Result ->
+                    z_notifier:notify_queue_flush(Context),
+                    Result;
+                Result ->
+                    z_notifier:notify_queue(Context),
+                    Result
+            end;
         false ->
             {rollback, {no_database_connection, erlang:get_stacktrace()}}
     end;
