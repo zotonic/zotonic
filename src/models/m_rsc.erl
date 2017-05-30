@@ -951,9 +951,7 @@ common_properties(_Context) ->
         name,
 
         seo_noindex,
-        seo_title,
         slug,
         custom_slug,
-        seo_keywords,
         seo_desc
     ].
