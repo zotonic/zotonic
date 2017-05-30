@@ -59,16 +59,30 @@ get(listen_ip6) ->
     end,
     maybe_map_value(listen_ip6, IPv6);
 get(listen_port) ->
-    case os:getenv("ZOTONIC_PORT") of
+    case os:getenv("ZOTONIC_LISTEN_PORT") of
         false -> ?MODULE:get(listen_port, default(listen_port));
         "" -> ?MODULE:get(listen_port, default(listen_port));
         "none" -> none;
         Port -> list_to_integer(Port)
     end;
+get(port) ->
+    case os:getenv("ZOTONIC_PORT") of
+        false -> get(port, default(port));
+        "" -> get(port, default(port));
+        "none" -> none;
+        Port -> list_to_integer(Port)
+    end;
 get(ssl_listen_port) ->
-    case os:getenv("ZOTONIC_SSL_PORT") of
+    case os:getenv("ZOTONIC_SSL_LISTEN_PORT") of
         false -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
         "" -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
+        "none" -> none;
+        Port -> list_to_integer(Port)
+    end;
+get(ssl_port) ->
+    case os:getenv("ZOTONIC_SSL_PORT") of
+        false -> get(ssl_port, default(ssl_port));
+        "" -> get(ssl_port, default(ssl_port));
         "none" -> none;
         Port -> list_to_integer(Port)
     end;
@@ -122,7 +136,7 @@ map_ip_address(_Name, "*") -> any;
 map_ip_address(_Name, none) -> none;
 map_ip_address(_Name, "none") -> none;
 map_ip_address(_Name, IP) when is_tuple(IP) -> IP;
-map_ip_address(Name, IP) when is_list(IP) -> 
+map_ip_address(Name, IP) when is_list(IP) ->
     case getaddr(Name, IP) of
         {ok, IpN} -> IpN;
         {error, Reason} ->
@@ -159,7 +173,7 @@ default(listen_ip6) ->
         {127,0,0,1} -> "::1";
         {_,_,_,_} -> none;
         Domain when is_list(Domain) ->
-            % Only use the domain if it is not a dotted ip4 number 
+            % Only use the domain if it is not a dotted ip4 number
             case re:run(Domain, "^[0-9]{1,3}(\\.[0-9]{1,3}){3}$") of
                 {match, _} -> none;
                 _ -> Domain

@@ -20,7 +20,9 @@ require_zotonic_not_running
 set -e
 
 export ZOTONIC_PORT=8040
+export ZOTONIC_LISTEN_PORT=8040
 export ZOTONIC_PORT_SSL=8043
+export ZOTONIC_SSL_LISTEN_PORT=8043
 export ZOTONIC_SMTP_BOUNCE_PORT=2535
 
 EBIN_DIR=_build/default/lib/zotonic/ebin
