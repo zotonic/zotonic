@@ -62,21 +62,23 @@
    %% {listen_ip6, any},
 
 %%% Port on which Zotonic will listen for HTTP requests.
-%%% Always overridden by the ZOTONIC_PORT environment variable.
+%%% Always overridden by the ZOTONIC_LISTEN_PORT environment variable.
    {listen_port, 8000},
 
 %%% Port on which Zotonic will listen for HTTPS requests.
-%%% Always overridden by the ZOTONIC_SSL_PORT environment variable.
+%%% Always overridden by the ZOTONIC_SSL_LISTEN_PORT environment variable.
 %%% Set to the atom 'none' to disable SSL
    %% {ssl_listen_port, 8443},
 
-%%% Outside port on which Zotonic will listen for HTTP requests.
-%%% Default set to listen_port.
+%%% Outside port that clients send HTTP requests to.
+%%% Always overridden by the ZOTONIC_PORT environment variable.
+%%% Defaults to listen_port.
    %% {port, 80},
 
-%%% Outside port zotonic uses to receive incoming HTTPS requests.
+%%% Outside port that clients send HTTPS requests to.
 %%% Set to the atom 'none' to disable SSL for sites.
-%%% Default set to ssl_listen_port.
+%%% Always overridden by the ZOTONIC_SSL_PORT environment variable.
+%%% Defaults to ssl_listen_port.
    %% {ssl_port, 443},
 
 %%% Force sites to use SSL. Redirects http requests to https.
@@ -186,7 +188,7 @@
    %% {sessionjobs_limit, 20000},
 
 %%% Maximum number of concurrent spawned sidejobs. This includes processes spawned and linked
-%%% to the session and page-sessions. Default is 50% of the process_limit. 
+%%% to the session and page-sessions. Default is 50% of the process_limit.
    %% {sidejobs_limit, 100000},
 
 %%% List with extra dependencies which get fetched and compiled by rebar
