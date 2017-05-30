@@ -1,4 +1,4 @@
-%% @doc Cowboy stream handler for access logging.
+%% @doc Cowboy stream handler for access and error logging.
 -module(z_cowboy_log_stream_handler).
 -author("David de Boer <david@ddeboer.nl>").
 
@@ -8,7 +8,8 @@
     init/3,
     data/4,
     info/3,
-    terminate/3
+    terminate/3,
+    early_error/5
 ]).
 
 -record(state, {
@@ -21,26 +22,39 @@
 -spec init(cowboy_stream:streamid(), cowboy_req:req(), cowboy:opts())
 	-> {cowboy_stream:commands(), {module(), state()} | undefined}.
 init(StreamID, Req, Opts) ->
+    %% TODO: can we pass a Zotonic logging callback fun in opts?
     {Commands, Next} = cowboy_stream:init(StreamID, Req, Opts),
     {Commands, #state{next = Next, request = Req}}.
 
 -spec data(cowboy_stream:streamid(), cowboy_stream:fin(), binary(), {Handler, State} | undefined)
 	-> {cowboy_stream:commands(), {Handler, State} | undefined}
 	when Handler::module(), State::state().
-data(StreamID, IsFin, Data, State) ->
-    z:debug_msg(?MODULE, ?LINE, Data),  %% Response body
-    cowboy_stream:data(StreamID, IsFin, Data, State).
+data(StreamID, IsFin, Data, #state{next = Next} = State) ->
+%%    z:debug_msg(?MODULE, ?LINE, Data),  %% Response body
+    {Commands, Next1} = cowboy_stream:data(StreamID, IsFin, Data, Next),
+    {Commands, State#state{next = Next1}}.
 
 -spec info(cowboy_stream:streamid(), any(), {Handler, State} | undefined)
 	-> {cowboy_stream:commands(), {Handler, State} | undefined}
 	when Handler::module(), State::state().
-info(StreamID, {response, _, _, _} = Response, #state{request = Request, next = Next}) ->
+info(StreamID, {response, _, _, _} = Response, #state{request = Request, next = Next} = State) ->
+    z:debug_msg(?MODULE, ?LINE, Request),
+    z:debug_msg(?MODULE, ?LINE, Response),
     z_access_syslog:log_access(Request, Response),
-    cowboy_stream:info(StreamID, Response, Next);
-info(StreamID, Info, #state{next = Next}) ->
-    cowboy_stream:info(StreamID, Info, Next).
+
+    {Commands, Next1} = cowboy_stream:info(StreamID, Response, Next),
+    {Commands, State#state{next = Next1}};
+info(StreamID, Info, #state{next = Next} = State) ->
+    {Commands, Next1} = cowboy_stream:info(StreamID, Info, Next),
+    {Commands, State#state{next = Next1}}.
 
 -spec terminate(cowboy_stream:streamid(), cowboy_stream:reason(), {module(), state()} | undefined) -> ok.
-terminate(StreamID, Reason, State) ->
-    cowboy_stream:terminate(StreamID, Reason, State).
+terminate(StreamID, Reason, #state{next = Next}) ->
+    cowboy_stream:terminate(StreamID, Reason, Next).
 
+-spec early_error(cowboy_stream:streamid(), cowboy_stream:reason(), cowboy_stream:partial_req(), Resp, cowboy:opts())
+	-> Resp when Resp::cowboy_stream:resp_command().
+early_error(StreamID, Reason, PartialReq, Resp, Opts) ->
+    z:debug_msg(?MODULE, ?LINE, Reason),
+    z:debug_msg(?MODULE, ?LINE, Resp),
+    cowboy_stream:early_error(StreamID, Reason, PartialReq, Resp, Opts).
