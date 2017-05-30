@@ -40,7 +40,7 @@ Rendering templates
 -------------------
 
 To return the rendered output of a template file in the module's
-``templates`` directory, use ``z_template:render/3``::
+:file:`priv/templates` directory, use ``z_template:render/3``::
 
    -module(controller_example).
 

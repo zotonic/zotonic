@@ -1,0 +1,11 @@
+{application, zotonic_mod_logging, [
+    {description, "Logs debug/info/warning messages into the site's database."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

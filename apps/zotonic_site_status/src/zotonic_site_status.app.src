@@ -1,0 +1,11 @@
+{application, zotonic_site_status, [
+    {description, "Default Zotonic site, used when no other site can handle the supplied Host."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

@@ -29,7 +29,7 @@ scomp that does `absolutely nothing` is implemented as follows::
   -module(scomp_facebook_likebutton).
   -behaviour(gen_scomp).
   -export([vary/2, render/3]).
-  -include("zotonic.hrl").
+  -include_lib("zotonic_core/include/zotonic.hrl").
 
   vary(_Params, _Context) -> nocache.
   render(Params, _Vars, Context) ->

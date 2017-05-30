@@ -19,7 +19,7 @@ First, you need to install a Logstash handler for Lager, for instance
 .. code-block:: erlang
     :caption: zotonic.config
 
-    [{zotonic,
+    [{zotonic_core,
         [
             {deps, [
                 {lager_logstash, "", {git, "https://github.com/rpt/lager_logstash.git", {tag, "0.1.3"}}},

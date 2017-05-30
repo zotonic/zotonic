@@ -7,28 +7,19 @@ Erlang application::
     zotonic/
         _build
         _checkouts
+        apps/
+            zotonic_core/
+            zotonic_mod_acl_user_groups/
+            zotonic_mod...
+            zotonic_site_status
+            zotonic_site_testsandbox
         bin/
         doc/
         docker/
-        ebin/
-        include/
-        modules/
         priv/
             log/
             sites/
             skel/
-        src/
-            behaviours/
-            db/
-            filewacher/
-            i18n/
-            install/
-            markdown/
-            models/
-            scripts/
-            smtp/
-            support/
-            tests/
         user/
             models/
             sites/
@@ -47,15 +38,11 @@ Erlang application::
 
     Documentation sources files.
 
-``zotonic/ebin/``
-
-    All compiled erlang beam files are placed here.
-
-``zotonic/include/``
+``zotonic/apps/zotonic_core/include/``
 
     The main zotonic include files.
 
-``zotonic/modules/``
+``zotonic/apps/zotonic_mod_.../``
 
     All core modules of Zotonic. See the modules documentation for more
     information.
@@ -68,22 +55,24 @@ Erlang application::
 
     Here all the http access logs are written.
 
-``zotonic/priv/sites/``
-
-    The directory containing sites which are internal to Zotonic. These
-    are the ``zotonic_status`` site (see :ref:`ref-status-site`), and the
-    ``testsandbox`` and ``testsandboxdb`` sites for running the unit tests.
-
-``zotonic/src/``
+``zotonic/apps/zotonic_core/src/``
 
     The Erlang source for the core Zotonic system.
 
-``zotonic/src/behaviours/``
+``zotonic/apps/zotonic_site_status``
+
+    The Zotonic :ref:`status site <ref-status-site>`.
+
+``zotonic/apps/zotonic_site_testsandbox``
+
+    The Zotonic testsandbox site that tests are run against.
+
+``zotonic/apps/zotonic_core/src/behaviours/``
 
     Currently there are two behaviours defined. One for scomps and one
     for models.
 
-``zotonic/src/db/``
+``zotonic/apps/zotonic_core/src/db/``
 
     The database drivers. Currently, only PostgreSQL is supported as
     DBMS. As the modules and models sometimes use database specific
@@ -91,29 +80,29 @@ Erlang application::
     substitute an alternative database. Read this article why Zotonic
     only supports PostgreSQL.
 
-``zotonic/src/i18n/``
+``zotonic/apps/zotonic_core/src/i18n/``
 
     Internationalization support.
 
-``zotonic/src/install/``
+``zotonic/apps/zotonic_core/src/install/``
 
     The database model and basic installation for sites. The files here
     are used when an empty database is found and needs to be installed.
 
-``zotonic/src/models/``
+``zotonic/apps/zotonic_core/src/models/``
 
     The data model access files. Implements internal APIs for the
     different data models for use in Erlang modules and
     templates. Examples of datamodels are m_rsc, m_config and
     m_category.
 
-``zotonic/src/support/``
+``zotonic/apps/zotonic_core/src/support/``
 
     All base Zotonic source code. Here you will find the source code for
     site supervisors, module supervisors, image resize server, context
     routines, and much more.
 
-``zotonic/src/tests/``
+``zotonic/apps/zotonic_core/test/``
 
     Contains the EUnit tests for Zotonic.
 

@@ -1,0 +1,11 @@
+{application, zotonic_mod_admin_identity, [
+    {description, "Adds support for handling and verification of user identities."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

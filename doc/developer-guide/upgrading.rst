@@ -111,12 +111,39 @@ Resources
 
     {ok, Id} = m_rsc:name_to_id(Value, Context).
 
+Sites and modules
+^^^^^^^^^^^^^^^^^
+
+* Both sites and modules now follow the standard `OTP directory structure`_,
+  which means all Erlang files should reside in :file:`src/` and all other files
+  (templates, dispatch rules etc.) in :file:`priv`/.
+
+  Before::
+
+    yoursite/
+        models/
+            m_some_model.erl
+        templates/
+            some_template.tpl
+        yoursite.erl
+        ...
+
+  After::
+
+    yoursite/
+        priv/
+            templates/some_template.tpl
+        src/
+            models/m_some_model.erl
+            yoursite.erl
+
 Templates
 ^^^^^^^^^
 
 * The ``use_absolute_url`` argument of the ``url``, ``image`` and ``lib`` tags
   was renamed to ``absolute_url``.
-
+* Templates are now stored in :file:`yoursite/templates/priv/` instead of
+  :file:`yoursite/templates/`.
 
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -651,3 +678,5 @@ denied. Use this query to enable every user in the database::
 If you have an overruled base template, make sure that a {% block
 content_area %} that spans the full width if your site is in there,
 because this is used to render the logon dialog for the admin.
+
+.. _OTP directory structure: http://erlang.org/doc/design_principles/applications.html#id82228

@@ -22,7 +22,7 @@
 -mod_description("A simple weblog, used as an example of how to create a Zotonic site.").
 -mod_prio(10).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 
 %%====================================================================

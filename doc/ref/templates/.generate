@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/templates/{device/}template_name.tpl
-for f in `find $ZOTONIC_SRC/modules -name [^_]\*.tpl`
+for f in `find $ZOTONIC_SRC -name [^_]\*.tpl`
 do
     read -r mod templatepath <<EOF
-`echo $f | sed -e 's/^.*\/\(mod_[^\/]*\)\/templates\/\(.*\)\.tpl$/\1 \2/'`
+`echo $f | sed -e 's/^.*\/\(zotonic_mod_[^\/]*\)\/templates\/\(.*\)\.tpl$/\1 \2/'`
 EOF
     template=`basename $templatepath`
     read -r device <<EOF
@@ -33,7 +33,7 @@ ${device:+
 
 EOF
 
-    if [ ! -e $doc ]; then 
+    if [ ! -e $doc ]; then
         echo "New doc: $doc"
         cat <<EOF > $doc
 
