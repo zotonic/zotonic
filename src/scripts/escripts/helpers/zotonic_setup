@@ -31,14 +31,7 @@
     get_user_ebin_dir/0,
     main/1]).
 
--define(ZOTONIC_BIN, "ZOTONIC/bin").
--define(MAKE, "make").
--define(ERL, "erl").
--define(MAX_PORTS, "ulimit -n|sed 's/unlimited/100000/'").
--define(MAX_PROCESSES, 10000000).
--define(KERNEL_POLL, true).
--define(NODENAME, "zotonic001").
-
+-include("zotonic_escript_helper.hrl").
 
 main(_Arg) ->
     erlang:error(not_implemented).
