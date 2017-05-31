@@ -176,58 +176,19 @@ sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
 
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
+%% @todo do we need rfc2047:encode/1 call here?
+combine_name_email(undefined, Email) -> Email;
 combine_name_email(Name, Email) ->
-    Name1 = z_convert:to_list(Name),
+    Name1 = z_convert:to_list(z_string:trim(Name)),
     Email1 = z_convert:to_list(Email),
-    case Name1 of
-        [] -> Email1;
-        _ -> [$"|rfc2047:encode(filter_name(Name1))] ++ "\" <" ++ Email1 ++ ">"
-    end.
+    smtp_util:combine_rfc822_addresses([{Name1, Email1}]).
 
-    filter_name(Name) ->
-        filter_name(Name, []).
-    filter_name([], Acc) ->
-        lists:reverse(Acc);
-    filter_name([$"|T], Acc) ->
-        filter_name(T, [32|Acc]);
-    filter_name([$<|T], Acc) ->
-        filter_name(T, [32|Acc]);
-    filter_name([H|T], Acc) when H < 32 ->
-        filter_name(T, [32|Acc]);
-    filter_name([H|T], Acc) ->
-        filter_name(T, [H|Acc]).
 
 %% @doc Split the name and email from the format `jan janssen <jan@example.com>'
 split_name_email(Email) ->
     Email1 = string:strip(rfc2047:decode(Email)),
-    case split_ne(Email1, in_name, [], []) of
-        {ends_in_name, E} ->
-			% Only e-mail
-            {[], z_string:trim(E)};
-        {N, E} ->
-			% E-mail and name
-            {z_string:trim(N), z_string:trim(E)}
+    case smtp_util:parse_rfc822_addresses(Email1) of
+        {ok, [{undefined, E}|_]} -> {"", E};
+        {ok, [{N,E}|_]} -> {z_string:trim(N), E};
+        {error, _} -> {z_string:trim(Email1), ""}
     end.
-
-split_ne([], in_name, [], Acc) ->
-    {ends_in_name, lists:reverse(Acc)};
-split_ne([], in_qname, [], Acc) ->
-    {ends_in_name, lists:reverse(Acc)};
-split_ne([], to_email, [], Acc) ->
-    {ends_in_name, lists:reverse(Acc)};
-split_ne([], _, Name, Acc) ->
-    {Name, lists:reverse(Acc)};
-split_ne([$<|T], to_email, Name, Acc) ->
-    split_ne(T, in_email, Name++lists:reverse(Acc), []);
-split_ne([$<|T], in_name, Name, Acc) ->
-    split_ne(T, in_email, Name++lists:reverse(Acc), []);
-split_ne([$>|_], in_email, Name, Acc) ->
-    {Name, lists:reverse(Acc)};
-split_ne([$"|T], in_name, [], Acc) ->
-    split_ne(T, in_qname, [], Acc);
-split_ne([$"|T], in_qname, [], Acc) ->
-    split_ne(T, to_email, lists:reverse(Acc), []);
-split_ne([H|T], to_email, Name, Acc) ->
-    split_ne(T, to_email, Name, [H|Acc]);
-split_ne([H|T], State, Name, Acc) ->
-    split_ne(T, State, Name, [H|Acc]).
