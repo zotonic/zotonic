@@ -1061,7 +1061,7 @@ is_valid_email(Recipient) ->
 email_max_domain(Domain) ->
     email_max_domain_1(lists:reverse(binary:split(z_convert:to_binary(Domain), <<".">>, [global]))).
 
-%% Some mail providers 
+%% Some mail providers
 email_max_domain_1([<<"net">>, <<"upcmail">> | _]) -> 2;
 email_max_domain_1([<<"nl">>, <<"timing">> | _]) -> 2;
 email_max_domain_1(_) -> ?EMAIL_MAX_DOMAIN.
