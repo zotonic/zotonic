@@ -182,63 +182,21 @@ sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
 
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
+%% @todo do we need rfc2047:encode/1 call here?
 -spec combine_name_email(Name::binary()|string(), Email::binary()|string()) -> binary().
+combine_name_email(undefined, Email) -> Email;
 combine_name_email(Name, Email) ->
-    Name1 = z_convert:to_binary(Name),
-    Email1 = z_convert:to_binary(Email),
-    case Name1 of
-        <<>> -> Email1;
-        _ ->
-            iolist_to_binary([
-                $",rfc2047:encode(z_string:trim(filter_name(Name1))),$",
-                " <", Email1, ">"
-            ])
-    end.
-
-filter_name(Name) ->
-    filter_name(Name, <<>>).
-
-filter_name(<<>>, Acc) -> Acc;
-filter_name(<<$", N/binary>>, Acc) -> filter_name(N, <<Acc/binary, " ">>);
-filter_name(<<$<, N/binary>>, Acc) -> filter_name(N, <<Acc/binary, " ">>);
-filter_name(<<$>, N/binary>>, Acc) -> filter_name(N, <<Acc/binary, " ">>);
-filter_name(<<C, N/binary>>, Acc) when C < 32 -> filter_name(N, <<Acc/binary, " ">>);
-filter_name(<<C/utf8, N/binary>>, Acc) -> filter_name(N, <<Acc/binary, C/utf8>>).
+    Name1 = z_convert:to_list(z_string:trim(Name)),
+    Email1 = z_convert:to_list(Email),
+    z_convert:to_binary(smtp_util:combine_rfc822_addresses([{Name1, Email1}])).
 
 
 %% @doc Split the name and email from the format `jan janssen <jan@example.com>'
 -spec split_name_email(binary()|string()) -> {binary(), binary()}.
 split_name_email(Email) ->
-    Email1 = z_string:trim(rfc2047:decode(Email)),
-    case split_ne(Email1, in_name, <<>>, <<>>) of
-        {ends_in_name, E} ->
-			% Only e-mail
-            {<<>>, z_string:trim(z_convert:to_binary(E))};
-        {N, E} ->
-			% E-mail and name
-            {z_string:trim(z_convert:to_binary(N)), z_string:trim(z_convert:to_binary(E))}
+    Email1 = string:strip(rfc2047:decode(Email)),
+    case smtp_util:parse_rfc822_addresses(Email1) of
+        {ok, [{undefined, E}|_]} -> {<<>>, z_convert:to_binary(E)};
+        {ok, [{N,E}|_]} -> {z_string:trim(z_convert:to_binary(N)), z_convert:to_binary(E)};
+        {error, _} -> {z_string:trim(z_convert:to_binary(Email1)), <<>>}
     end.
-
-split_ne(<<>>, in_name, <<>>, Acc) ->
-    {ends_in_name, Acc};
-split_ne(<<>>, in_qname, <<>>, Acc) ->
-    {ends_in_name, Acc};
-split_ne(<<>>, to_email, <<>>, Acc) ->
-    {ends_in_name, Acc};
-split_ne(<<>>, _, Name, Acc) ->
-    {Name, Acc};
-split_ne(<<$<,T/binary>>, to_email, Name, Acc) ->
-    split_ne(T, in_email, <<Name/binary, Acc/binary>>, <<>>);
-split_ne(<<$<,T/binary>>, in_name, Name, Acc) ->
-    split_ne(T, in_email, <<Name/binary, Acc/binary>>, <<>>);
-split_ne(<<$>,_/binary>>, in_email, Name, Acc) ->
-    {Name, Acc};
-split_ne(<<$",T/binary>>, in_name, <<>>, Acc) ->
-    split_ne(T, in_qname, <<>>, Acc);
-split_ne(<<$",T/binary>>, in_qname, <<>>, Acc) ->
-    split_ne(T, to_email, Acc, <<>>);
-split_ne(<<H/utf8,T/binary>>, to_email, Name, Acc) ->
-    split_ne(T, to_email, Name, <<Acc/binary,H/utf8>>);
-split_ne(<<H/utf8,T/binary>>, State, Name, Acc) ->
-    split_ne(T, State, Name, <<Acc/binary,H/utf8>>).
-
