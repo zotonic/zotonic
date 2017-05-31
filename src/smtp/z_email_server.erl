@@ -695,7 +695,6 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
-    ?DEBUG(Headers2),
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
@@ -708,7 +707,6 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     MailHeaders = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- (Headers2 ++ BodyHeaders)
     ],
-    ?DEBUG(MailHeaders),
     mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts}, opt_dkim(Context));
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{"From", From},
@@ -717,7 +715,6 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
-    ?DEBUG(Headers2),
     iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ]).
 
     date(Context) ->
