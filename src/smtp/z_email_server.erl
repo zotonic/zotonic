@@ -370,15 +370,14 @@ get_email_from(EmailFrom, VERP, State, Context) ->
             get_email_from(Context);
         _ -> EmailFrom
     end,
+    {FromName, FromEmail} = z_email:split_name_email(From),
     case State#state.smtp_verp_as_from of
         true ->
-            {FromName, _FromEmail} = z_email:split_name_email(From),
-            string:strip(FromName ++ " " ++ VERP);
+            z_email:combine_name_email(FromName, VERP);
         _ ->
-            {FromName, FromEmail} = z_email:split_name_email(From),
             case FromEmail of
-                [] -> string:strip(FromName ++ " <" ++ get_email_from(Context) ++ ">");
-                _ -> From
+                "" -> z_email:combine_name_email(FromName, get_email_from(Context));
+                _ -> z_email:combine_name_email(FromName, FromEmail)
             end
     end.
 
@@ -508,12 +507,12 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                             ]
                   end,
     MessageId = message_id(Id, Context),
-    VERP = "<"++bounce_email(MessageId, Context)++">",
+    VERP = bounce_email(MessageId, Context),
     From = get_email_from(Email#email.from, VERP, State, Context),
     SenderPid = erlang:spawn_link(
                     fun() ->
                         spawned_email_sender(
-                                Id, MessageId, Recipient, RecipientEmail, VERP,
+                                Id, MessageId, Recipient, RecipientEmail, "<"++VERP++">",
                                 From, State#state.smtp_bcc, Email, SmtpOpts, BccSmtpOpts,
                                 RetryCt, Context)
                     end),
@@ -696,6 +695,7 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
+    ?DEBUG(Headers2),
     build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
@@ -708,6 +708,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     MailHeaders = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- (Headers2 ++ BodyHeaders)
     ],
+    ?DEBUG(MailHeaders),
     mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts}, opt_dkim(Context));
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{"From", From},
@@ -716,6 +717,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
                {"X-Mailer", "Zotonic " ++ ?ZOTONIC_VERSION ++ " (http://zotonic.com)"}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
+    ?DEBUG(Headers2),
     iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ]).
 
     date(Context) ->
@@ -737,7 +739,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
         [{"Reply-To", reply_email(Id, Context)} | Headers];
     add_reply_to(_Id, #email{reply_to=ReplyTo}, Headers, Context) ->
         {Name, Email} = z_email:split_name_email(ReplyTo),
-        ReplyTo1 = string:strip(Name ++ " <" ++ z_email:ensure_domain(Email, Context) ++ ">"),
+        ReplyTo1 = z_email:combine_name_email(Name, z_email:ensure_domain(Email, Context)),
         [{"Reply-To", ReplyTo1} | Headers].
 
 
