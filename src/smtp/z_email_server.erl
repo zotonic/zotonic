@@ -200,7 +200,7 @@ handle_call({is_sending_allowed, Pid, Relay}, _From, State) ->
                                     IsConnected andalso Relay =:= Domain
                                 end,
                                 State#state.sending)),
-    case DomainWorkers < ?EMAIL_MAX_DOMAIN of
+    case DomainWorkers < email_max_domain(Relay) of
         true ->
             Workers = [
                     case E#email_sender.sender_pid of
@@ -1092,6 +1092,15 @@ is_valid_email(Recipient) ->
             )+
             [A-Za-z\\-]{2,}
         )".
+
+email_max_domain(Domain) ->
+    email_max_domain_1(lists:reverse(binary:split(z_convert:to_binary(Domain), <<".">>, [global]))).
+
+%% Some mail providers
+email_max_domain_1([<<"net">>, <<"upcmail">> | _]) -> 2;
+email_max_domain_1([<<"nl">>, <<"timing">> | _]) -> 2;
+email_max_domain_1(_) -> ?EMAIL_MAX_DOMAIN.
+
 
 %% @doc Simple header encoding.
 encode_header({Header, [V|Vs]}) when is_list(V) ->
