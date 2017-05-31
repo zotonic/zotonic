@@ -40,4 +40,4 @@ heart_arg="-heart"
 # By default, do nothing and just kill the VM.
 [ -z "$HEART_COMMAND" ] && export HEART_COMMAND="/bin/true"
 
-exec $ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL +t 2000000 -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -s zotonic -noshell $heart_arg
+exec $ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -s zotonic -noshell $heart_arg
