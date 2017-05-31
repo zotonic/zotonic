@@ -18,3 +18,59 @@
 %%
 %% usage zotonic generate-edoc
 %%
+
+-export([require_zotonic_running/0,
+    require_zotonic_not_running/0,
+    major_version/0,
+    minor_version/0,
+    find_enabled_sites/0,
+    find_config/0,
+    consult_config/0,
+    find_config_arg/0,
+    get_user_modules_dir/0,
+    get_user_ebin_dir/0,
+    main/1]).
+
+-define(ZOTONIC_BIN, "ZOTONIC/bin").
+-define(MAKE, "make").
+-define(ERL, "erl").
+-define(MAX_PORTS, "ulimit -n|sed 's/unlimited/100000/'").
+-define(MAX_PROCESSES, 10000000).
+-define(KERNEL_POLL, true).
+-define(NODENAME, "zotonic001").
+
+
+main(_Arg) ->
+    erlang:error(not_implemented).
+
+
+require_zotonic_running() ->
+    erlang:error(not_implemented).
+
+
+require_zotonic_not_running() ->
+    erlang:error(not_implemented).
+
+major_version() ->
+    erlang:error(not_implemented).
+
+minor_version() ->
+    erlang:error(not_implemented).
+
+find_enabled_sites() ->
+    erlang:error(not_implemented).
+
+find_config() ->
+    erlang:error(not_implemented).
+
+consult_config() ->
+    erlang:error(not_implemented).
+
+find_config_arg() ->
+    erlang:error(not_implemented).
+
+get_user_modules_dir() ->
+    erlang:error(not_implemented).
+
+get_user_ebin_dir() ->
+    erlang:error(not_implemented).
