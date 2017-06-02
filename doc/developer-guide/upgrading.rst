@@ -36,6 +36,24 @@ Authentication
 
     observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
+Configuration
+^^^^^^^^^^^^^
+
+* Port configuration :ref:`environment variables <guide-deployment-env>` were
+  changed.
+
+  Before:
+
+  .. code-block:: bash
+
+    ZOTONIC_PORT=80 ZOTONIC_SSL_PORT=443 bin/zotonic start
+
+  After:
+
+  .. code-block:: bash
+
+    ZOTONIC_LISTEN_PORT=80 ZOTONIC_SSL_LISTEN_PORT=443 bin/zotonic start
+
 Errors
 ^^^^^^
 

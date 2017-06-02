@@ -417,17 +417,14 @@ get_email_from(EmailFrom, VERP, State, Context) ->
             get_email_from(Context);
         _ -> EmailFrom
     end,
+    {FromName, FromEmail} = z_email:split_name_email(From),
     case State#state.smtp_verp_as_from of
         true ->
-            {FromName, _FromEmail} = z_email:split_name_email(From),
             z_email:combine_name_email(FromName, VERP);
+        _ when FromEmail =:= <<>> ->
+            z_email:combine_name_email(FromName, get_email_from(Context));
         _ ->
-            case z_email:split_name_email(From) of
-                {FromName, <<>>} -> 
-                    z_email:combine_name_email(FromName, get_email_from(Context));
-                _ ->
-                    From
-            end
+            z_email:combine_name_email(FromName, FromEmail)
     end.
 
 % When the 'From' is not the VERP then the 'From' is derived from the site
@@ -556,12 +553,12 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                             ]
                   end,
     MessageId = message_id(Id, Context),
-    VERP = <<"<", (bounce_email(MessageId, Context))/binary, ">">>,
+    VERP = bounce_email(MessageId, Context),
     From = get_email_from(Email#email.from, VERP, State, Context),
     SenderPid = erlang:spawn_link(
                     fun() ->
                         spawned_email_sender(
-                                Id, MessageId, Recipient, RecipientEmail, VERP,
+                                Id, MessageId, Recipient, RecipientEmail, <<"<", VERP/binary, ">">>,
                                 From, State#state.smtp_bcc, Email, SmtpOpts, BccSmtpOpts,
                                 RetryCt, Context)
                     end),
@@ -887,15 +884,15 @@ filename(#upload{filename=Filename}) ->
 % Make sure that loose \n characters are expanded to \r\n
 expand_cr(B) -> expand_cr(B, <<>>).
 
-    expand_cr(<<>>, Acc) -> Acc;
-    expand_cr(<<13, 10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
-    expand_cr(<<10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
-    expand_cr(<<13, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
-    expand_cr(<<C, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C>>).
+expand_cr(<<>>, Acc) -> Acc;
+expand_cr(<<13, 10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
+expand_cr(<<10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
+expand_cr(<<13, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
+expand_cr(<<C, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C>>).
 
 
 
-check_override(EmailAddr, _SiteOverride, _State) when EmailAddr == undefined; EmailAddr == []; EmailAddr == <<>> ->
+check_override(EmailAddr, _SiteOverride, _State) when EmailAddr =:= undefined; EmailAddr =:= []; EmailAddr =:= <<>> ->
     undefined;
 check_override(EmailAddr, SiteOverride, #state{override=ZotonicOverride}) ->
     UseOverride = case z_utils:is_empty(ZotonicOverride) of
@@ -904,20 +901,13 @@ check_override(EmailAddr, SiteOverride, #state{override=ZotonicOverride}) ->
     end,
     case z_utils:is_empty(UseOverride) of
         true ->
-            z_convert:to_list(EmailAddr);
+            EmailAddr;
         false ->
-            escape_email(z_convert:to_list(EmailAddr)) ++ " (override) <" ++ z_convert:to_list(UseOverride) ++ ">"
+            z_email:combine_name_email(
+                iolist_to_binary([EmailAddr, " (override)"]),
+                UseOverride)
     end.
 
-
-escape_email(Email) ->
-   escape_email(Email, []).
-escape_email([], Acc) ->
-    lists:reverse(Acc);
-escape_email([$@|T], Acc) ->
-    escape_email(T, [$-,$t,$a,$-|Acc]);
-escape_email([H|T], Acc) ->
-    escape_email(T, [H|Acc]).
 
 optional_render(undefined, undefined, _Vars, _Context) ->
     [];
