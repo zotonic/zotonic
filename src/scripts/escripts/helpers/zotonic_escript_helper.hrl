@@ -37,7 +37,5 @@
 -endif.
 
 -define(ZOTONIC_PIDFILE, "$ZOTONIC/zotonic.pid").
--define(ERL_CALL, "").
--define(ZOTONIC_CALL, "").
 -define(MODULES, "").
 -define(SITES, "").
