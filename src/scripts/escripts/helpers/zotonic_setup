@@ -43,7 +43,7 @@ require_zotonic_running() ->
             halt();
         else ->
             io:format("Failed to connect to ~s@~s", [?NODENAME, ?NODEHOST]),
-            io:format("Zotonic is not running. You need to start Zotonic to use this command."),
+            io:format("Zotonic is not running. You need to start Zotonic to use this command"),
             halt(0)
     end.
 
