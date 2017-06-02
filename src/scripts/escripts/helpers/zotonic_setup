@@ -38,11 +38,22 @@ main(_Arg) ->
 
 
 require_zotonic_running() ->
-    erlang:error(not_implemented).
+    case net_adm:ping(?NODENAME) of
+        ping ->
+            halt();
+        else ->
+            io:format("Failed to connect to ~s@~s", [?NODENAME, ?NODEHOST]),
+            io:format("Zotonic is not running. You need to start Zotonic to use this command."),
+            halt(0)
+    end.
 
 
 require_zotonic_not_running() ->
-    erlang:error(not_implemented).
+    case net_adm:ping(?NODENAME) of
+          ping ->
+              io:format("Zotonic is already running as ~s@~s", [?NODENAME, ?NODEHOST]),
+              io:format("You cannot start two Zotonic instances with the same node name.")
+    end.
 
 major_version() ->
     erlang:error(not_implemented).
