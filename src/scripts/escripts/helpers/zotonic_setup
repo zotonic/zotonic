@@ -21,8 +21,7 @@
 
 -export([require_zotonic_running/0,
     require_zotonic_not_running/0,
-    major_version/0,
-    minor_version/0,
+    get_zotonic_version/1,
     find_enabled_sites/0,
     find_config/0,
     consult_config/0,
@@ -43,7 +42,7 @@ require_zotonic_running() ->
             halt();
         else ->
             io:format("Failed to connect to ~s@~s", [?NODENAME, ?NODEHOST]),
-            io:format("Zotonic is not running. You need to start Zotonic to use this command"),
+            io:format("Zotonic is not running. You need to start Zotonic to use this command."),
             halt(0)
     end.
 
@@ -55,11 +54,8 @@ require_zotonic_not_running() ->
               io:format("You cannot start two Zotonic instances with the same node name.")
     end.
 
-major_version() ->
-    erlang:error(not_implemented).
-
-minor_version() ->
-    erlang:error(not_implemented).
+get_zotonic_version(VSN) ->
+    {ok, VSN} = application:get_key(zotonic, vsn).
 
 find_enabled_sites() ->
     erlang:error(not_implemented).
