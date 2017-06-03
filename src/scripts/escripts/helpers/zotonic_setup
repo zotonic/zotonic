@@ -24,8 +24,8 @@
     get_zotonic_version/1,
     find_enabled_sites/0,
     find_config/0,
-    consult_config/0,
-    find_config_arg/0,
+    consult_config/1,
+    find_config_arg/1,
     get_user_modules_dir/0,
     get_user_ebin_dir/0,
     main/1]).
@@ -63,11 +63,22 @@ find_enabled_sites() ->
 find_config() ->
     erlang:error(not_implemented).
 
-consult_config() ->
-    erlang:error(not_implemented).
+consult_config([FileName, App, Key]) ->
+    zotonic_consult_config:main([FileName, App, Key]).
 
-find_config_arg() ->
-    erlang:error(not_implemented).
+find_config_arg([FileName, App, Key]) ->
+    try
+        case file:consult(FileName) of
+            {error, Reason} ->
+                io:format("error: Could not consult ~p: ~p", [FileName, Reason]);
+            {ok, [Terms]} ->
+                AppTerms = proplists:get_value(list_to_atom(App), Terms, []),
+                io:format(proplists:get_value(list_to_atom(Key), AppTerms))
+        end
+    catch
+        E:V ->
+            io:format("error: Could not consult ~p, ~p:~p", [FileName, E, V])
+    end.
 
 get_user_modules_dir() ->
     erlang:error(not_implemented).
