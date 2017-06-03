@@ -16,6 +16,8 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+-export([main/1]).
+
 main([FileName, App, Key]) ->
     try
         case file:consult(FileName) of
