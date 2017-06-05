@@ -558,7 +558,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                               }, Context),
             
             %% use the unique id as 'envelope sender' (VERP)
-            case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+            case send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
                 {error, retries_exceeded, {_FailureType, Host, Message}} ->
                     lager:info("[smtp] Error sending email to ~p (~p), via relay ~p: retries exceeded", 
                                [RecipientEmail, Id, Relay]),
@@ -661,6 +661,12 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             end
     end.
 
+send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
+    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+        {error, closed} ->
+            gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, [{tls,false}|SmtpOpts]);
+        Other -> Other
+    end.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary([
