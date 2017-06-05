@@ -663,7 +663,8 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
 
 send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
     case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
-        {error, closed} ->
+        {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
+            lager:info("Send blocking with TLS (closed) for ~p", [RecipientEmail]),
             gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, [{tls,false}|SmtpOpts]);
         Other -> Other
     end.
