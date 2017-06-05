@@ -21,11 +21,12 @@
 
 -export([require_zotonic_running/0,
     require_zotonic_not_running/0,
-    get_zotonic_version/1,
-    find_enabled_sites/0,
-    find_config/0,
+    get_zotonic_version/0,
+    find_enabled_sites/1,
+    find_config/1,
     consult_config/1,
     find_config_arg/1,
+    get_user_sites_dir/0,
     get_user_modules_dir/0,
     get_user_ebin_dir/0,
     main/1]).
@@ -54,14 +55,36 @@ require_zotonic_not_running() ->
               io:format("You cannot start two Zotonic instances with the same node name.")
     end.
 
-get_zotonic_version(VSN) ->
-    {ok, VSN} = application:get_key(zotonic, vsn).
+get_zotonic_version() ->
+    {ok, VSN} = application:get_key(zotonic, vsn),
+    io:format("Zotonic version is ~s~n", [VSN]).
 
-find_enabled_sites() ->
-    erlang:error(not_implemented).
+find_enabled_sites(SiteDir) ->
+    EnabledSites = [],
+    case  filelib:is_dir(SiteDir) of
+          true ->
+              Path = list_to_atom("priv/sites" + SiteDir),
+              case file:path_consult(Path, "config") of
+                  {ok, Terms, "config"}  ->
+                      Enabled = proplists:get_value("enabled", Terms),
+                      case Enabled == true of
+                           true ->
+                               Site = SiteDir,
+                               lists:append(EnabledSites, Site)
+                      end
+              end
+    end.
 
-find_config() ->
-    erlang:error(not_implemented).
+find_config(FileName) ->
+    VSN = get_zotonic_version(),
+    File = list_to_atom(filename:absname(FileName)),
+    FilePaths = ["$HOME/.zotonic/" + ?NODENAME + "/" + File, "$HOME/.zotonic/" + VSN + "/" + File,
+        "$HOME/.zotonic/" + File, "/etc/zotonic/" + ?NODENAME + "/" +File,
+        "/etc/zotonic/" + VSN + "/" + File, "/etc/zotonic/" + File],
+    case lists:member(File, FilePaths) of
+         true ->
+             io:format("~s~n", [FileName])
+    end.
 
 consult_config([FileName, App, Key]) ->
     zotonic_consult_config:main([FileName, App, Key]).
@@ -80,8 +103,14 @@ find_config_arg([FileName, App, Key]) ->
             io:format("error: Could not consult ~p, ~p:~p", [FileName, E, V])
     end.
 
+get_user_sites_dir() ->
+    File = find_config("zotonic.config"),
+    consult_config([File, "zotonic", "user_sites_dir"]).
+
 get_user_modules_dir() ->
-    erlang:error(not_implemented).
+    File = find_config("zotonic.config"),
+    consult_config([File, "zotonic", "user_modules_dir"]).
 
 get_user_ebin_dir() ->
-    erlang:error(not_implemented).
+    File = find_config("zotonic.config"),
+    consult_config([File, "zotonic", "user_ebin_dir"]).
