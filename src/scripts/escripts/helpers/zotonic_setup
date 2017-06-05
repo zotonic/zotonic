@@ -63,7 +63,7 @@ find_enabled_sites(SiteDir) ->
     EnabledSites = [],
     case  filelib:is_dir(SiteDir) of
           true ->
-              Path = list_to_atom("priv/sites" + SiteDir),
+              Path = list_to_atom("priv/sites/" ++ SiteDir),
               case file:path_consult(Path, "config") of
                   {ok, Terms, "config"}  ->
                       Enabled = proplists:get_value("enabled", Terms),
@@ -78,9 +78,9 @@ find_enabled_sites(SiteDir) ->
 find_config(FileName) ->
     VSN = get_zotonic_version(),
     File = list_to_atom(filename:absname(FileName)),
-    FilePaths = ["$HOME/.zotonic/" + ?NODENAME + "/" + File, "$HOME/.zotonic/" + VSN + "/" + File,
-        "$HOME/.zotonic/" + File, "/etc/zotonic/" + ?NODENAME + "/" +File,
-        "/etc/zotonic/" + VSN + "/" + File, "/etc/zotonic/" + File],
+    FilePaths = ["$HOME/.zotonic/" ++ ?NODENAME ++ "/" ++ File, "$HOME/.zotonic/" ++ VSN ++ "/" ++ File,
+        "$HOME/.zotonic/" ++ File, "/etc/zotonic/" ++ ?NODENAME ++ "/" +File,
+        "/etc/zotonic/" ++ VSN ++ "/" ++ File, "/etc/zotonic/" ++ File],
     case lists:member(File, FilePaths) of
          true ->
              io:format("~s~n", [FileName])
