@@ -21,7 +21,8 @@
 
 -export([require_zotonic_running/0,
     require_zotonic_not_running/0,
-    get_zotonic_version/0,
+    major_version/0,
+    minor_version/0,
     find_enabled_sites/1,
     find_config/1,
     consult_config/1,
@@ -33,7 +34,11 @@
 
 -include("zotonic_escript_helper.hrl").
 
-main(_Arg) ->
+main(HostName) ->
+    VSN_Major = major_version(),
+    VSN_Minor = minor_version(),
+    DefaultDir = "$HOME/.zotonic/" ++ VSN_Major,
+
     erlang:error(not_implemented).
 
 
@@ -55,9 +60,17 @@ require_zotonic_not_running() ->
               io:format("You cannot start two Zotonic instances with the same node name.")
     end.
 
-get_zotonic_version() ->
-    {ok, VSN} = application:get_key(zotonic, vsn),
-    io:format("Zotonic version is ~s~n", [VSN]).
+major_version() ->
+    {ok, VsnStr} = application:get_key(zotonic, vsn),
+    {match, VList} = re:run(VsnStr, "(\\d{1})", [{capture, first, list}]),
+    VSN = list_to_atom(lists:concat(VList)).
+
+
+
+minor_version() ->
+    {ok, VsnStr} = application:get_key(zotonic, vsn),
+    {match, VList} = re:run(VsnStr, "(\\d{1}\\.{1}\\d{1})", [{capture, first, list}]),
+    VSN = list_to_atom(lists:concat(VList)).
 
 find_enabled_sites(SiteDir) ->
     EnabledSites = [],
@@ -76,11 +89,15 @@ find_enabled_sites(SiteDir) ->
     end.
 
 find_config(FileName) ->
-    VSN = get_zotonic_version(),
+    VSN_Major = major_version(),
+    VSN_Minor = minor_version(),
+
     File = list_to_atom(filename:absname(FileName)),
-    FilePaths = ["$HOME/.zotonic/" ++ ?NODENAME ++ "/" ++ File, "$HOME/.zotonic/" ++ VSN ++ "/" ++ File,
-        "$HOME/.zotonic/" ++ File, "/etc/zotonic/" ++ ?NODENAME ++ "/" +File,
-        "/etc/zotonic/" ++ VSN ++ "/" ++ File, "/etc/zotonic/" ++ File],
+    FilePaths = ["$HOME/.zotonic/" ++ ?NODENAME ++ "/" ++ File, "$HOME/.zotonic/" ++ VSN_Minor ++ "/" ++ File,
+            "$HOME/.zotonic/" ++ VSN_Major ++ "/" ++ File, "$HOME/.zotonic/" ++ File,
+            "/etc/zotonic/" ++ ?NODENAME ++ "/" +File, "/etc/zotonic/" ++ VSN_Minor ++ "/" ++ File,
+            "/etc/zotonic/" ++ VSN_Major ++ "/" ++ File, "/etc/zotonic/" ++ File],
+
     case lists:member(File, FilePaths) of
          true ->
              io:format("~s~n", [FileName])
