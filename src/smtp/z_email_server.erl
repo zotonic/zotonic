@@ -666,15 +666,21 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
 send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
     case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
         {error, no_more_hosts, {permanent_failure, _Host, <<105,103,110,32,82,111,111,116,32, _/binary>>}} ->
-            lager:info("Bounce error for ~p, retrying with tlsv1, 1.1 and 1.2", [RecipientEmail]),
-            SmtpOpts1 = [
-                {tls_options, [{versions, ['tlsv1', 'tlsv1.1', 'tlsv1.2']}]}
-                | proplists:delete(tls_options, SmtpOpts)
-            ],
-            gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1);
+            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
+        {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
+            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
         Other ->
             Other
     end.
+
+send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
+    lager:info("Bounce error for ~p, retrying without TLS", [RecipientEmail]),
+    SmtpOpts1 = [
+        {tls, never}
+        | proplists:delete(tls, SmtpOpts)
+    ],
+    gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1).
+
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary([
