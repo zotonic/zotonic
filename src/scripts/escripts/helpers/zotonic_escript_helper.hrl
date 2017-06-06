@@ -24,9 +24,7 @@
 -define(MAX_PROCESSES, 10000000).
 -define(KERNEL_POLL, true).
 -define(USER_EBIN_DIR, "").
--define(PA, "$ZOTONIC/_checkouts/*/ebin $ZOTONIC/_build/default/lib/*/ebin $USER_EBIN_DIR $ZOTONIC/modules/*/deps/*/ebin $ZOTONIC/priv/modules/*/deps/*/ebin $ZOTONIC/priv/sites/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin").
 -define(NODENAME, "zotonic001").
--define(ZOTONIC_DISTRIBUTED, "").
 
 -ifdef(ZOTONIC_DISTRIBUTED).
 -define(NAME_ARG, "-name").
@@ -37,5 +35,5 @@
 -endif.
 
 -define(ZOTONIC_PIDFILE, "$ZOTONIC/zotonic.pid").
--define(MODULES, "").
--define(SITES, "").
+-define(Modules, zotonic_setup:get_user_modules_dir()).
+-define(Sites, zotonic_setup:get_user_sites_dir()).

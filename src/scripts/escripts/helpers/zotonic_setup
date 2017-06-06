@@ -16,7 +16,7 @@
 %% limitations under the License.
 
 %%
-%% usage zotonic generate-edoc
+%% usage zotonic setup
 %%
 
 -export([require_zotonic_running/0,

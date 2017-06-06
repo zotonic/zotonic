@@ -16,7 +16,7 @@
 %% limitations under the License.
 
 %%
-%% usage zotonic generate-edoc
+%% usage zotonic configfile -- prints the name of the zotonic.config file
 %%
 
 -include("zotonic_escript_helper.hrl").
