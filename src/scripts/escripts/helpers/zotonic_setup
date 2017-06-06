@@ -34,14 +34,6 @@
 
 -include("zotonic_escript_helper.hrl").
 
-main(HostName) ->
-    VSN_Major = major_version(),
-    VSN_Minor = minor_version(),
-    DefaultDir = "$HOME/.zotonic/" ++ VSN_Major,
-
-    erlang:error(not_implemented).
-
-
 require_zotonic_running() ->
     case net_adm:ping(?NODENAME) of
         ping ->
@@ -131,3 +123,37 @@ get_user_modules_dir() ->
 get_user_ebin_dir() ->
     File = find_config("zotonic.config"),
     consult_config([File, "zotonic", "user_ebin_dir"]).
+
+main(HostName) ->
+    VSN_Major = major_version(),
+    VSN_Minor = minor_version(),
+    DefaultDir = "$HOME/.zotonic/" ++ VSN_Major,
+    ErlangConfig = find_config("erlang.config"),
+    ZotonicConfig = find_config("zotonic.config"),
+
+    ?NAME_ARG = -name,
+    ?NODEHOST = HostName,
+
+    case filelib:is_dir(?Modules) of
+        true ->
+            halt();
+        _ ->
+            file:make_dir(?Modules)
+    end,
+
+    case filelib:is_dir(?Sites) of
+        true ->
+            halt();
+        _ ->
+            file:make_dir(?Sites)
+    end,
+
+    if ErlangConfig == "" ->
+        io:format("Installing default erlang.config file"),
+        file:make_dir(DefaultDir),
+        file:copy("$ZOTONIC/priv/erlang.config.in", DefaultDir ++ "/erlang.config")
+    end,
+
+    if ZotonicConfig == "" ->
+        io:format("Installing global Zotonic config file")
+    end.
