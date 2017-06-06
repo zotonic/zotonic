@@ -124,7 +124,7 @@ get_user_ebin_dir() ->
     File = find_config("zotonic.config"),
     consult_config([File, "zotonic", "user_ebin_dir"]).
 
-main(HostName) ->
+main([HostName]) ->
     VSN_Major = major_version(),
     VSN_Minor = minor_version(),
     DefaultDir = "$HOME/.zotonic/" ++ VSN_Major,
