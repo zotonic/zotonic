@@ -23,6 +23,6 @@
 
 -export([main/1]).
 
-main(["zotonic.config"]) ->
+main([]) ->
     ConfigFile = zotonic_setup:find_config("zotonic.config"),
     io:format(ConfigFile).
