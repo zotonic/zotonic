@@ -485,7 +485,8 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
     [_RcptLocalName, RecipientDomain] = string:tokens(RecipientEmail, "@"),
     SmtpOpts = [
         {no_mx_lookups, State#state.smtp_no_mx_lookups},
-        {hostname, z_email:email_domain(Context)}
+        {hostname, z_email:email_domain(Context)},
+        {tls_options, [{versions, ['tlsv1.2']}]}
         | case State#state.smtp_relay of
             true -> State#state.smtp_relay_opts;
             false -> [{relay, RecipientDomain}]
@@ -499,7 +500,8 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                             [_BccLocalName, BccDomain] = string:tokens(BccEmail, "@"),
                             [
                                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                                {hostname, z_email:email_domain(Context)}
+                                {hostname, z_email:email_domain(Context)},
+                                {tls_options, [{versions, ['tlsv1.2']}]}
                                 | case State#state.smtp_relay of
                                     true -> State#state.smtp_relay_opts;
                                     false -> [{relay, BccDomain}]
@@ -558,7 +560,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                               }, Context),
             
             %% use the unique id as 'envelope sender' (VERP)
-            case send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+            case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
                 {error, retries_exceeded, {_FailureType, Host, Message}} ->
                     lager:info("[smtp] Error sending email to ~p (~p), via relay ~p: retries exceeded", 
                                [RecipientEmail, Id, Relay]),
@@ -659,14 +661,6 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             catch gen_smtp_client:send({VERP, [Bcc], EncodedMail}, BccSmtpOpts)
                     end
             end
-    end.
-
-send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
-    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
-        {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
-            lager:info("Send blocking with TLS (closed) for ~p", [RecipientEmail]),
-            gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, [{tls,false}|SmtpOpts]);
-        Other -> Other
     end.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
