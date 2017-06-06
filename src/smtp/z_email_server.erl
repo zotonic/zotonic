@@ -560,7 +560,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                               }, Context),
             
             %% use the unique id as 'envelope sender' (VERP)
-            case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+            case send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
                 {error, retries_exceeded, {_FailureType, Host, Message}} ->
                     lager:info("[smtp] Error sending email to ~p (~p), via relay ~p: retries exceeded", 
                                [RecipientEmail, Id, Relay]),
@@ -661,6 +661,19 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             catch gen_smtp_client:send({VERP, [Bcc], EncodedMail}, BccSmtpOpts)
                     end
             end
+    end.
+
+send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
+    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+        {error, no_more_hosts, {permanent_failure, _Host, <<105,103,110,32,82,111,111,116,32, _/binary>>}} ->
+            lager:info("Bounce error for ~p, retrying with tlsv1, 1.1 and 1.2", [RecipientEmail]),
+            SmtpOpts1 = [
+                {tls_options, [{versions, ['tlsv1', 'tlsv1.1', 'tlsv1.2']}]}
+                | proplists:delete(tls_options, SmtpOpts)
+            ],
+            gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1);
+        Other ->
+            Other
     end.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
