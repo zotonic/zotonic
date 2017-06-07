@@ -13,7 +13,8 @@
 ]).
 
 -record(state, {
-	next :: any(),
+    next :: any(),
+    t_init :: any(),
     request :: map()
 }).
 
@@ -24,7 +25,7 @@
 init(StreamID, Req, Opts) ->
     %% TODO: can we pass a Zotonic logging callback fun in opts?
     {Commands, Next} = cowboy_stream:init(StreamID, Req, Opts),
-    {Commands, #state{next = Next, request = Req}}.
+    {Commands, #state{next = Next, t_init = os:timestamp(), request = Req}}.
 
 -spec data(cowboy_stream:streamid(), cowboy_stream:fin(), binary(), {Handler, State} | undefined)
 	-> {cowboy_stream:commands(), {Handler, State} | undefined}
