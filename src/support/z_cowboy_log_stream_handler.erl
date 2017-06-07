@@ -37,16 +37,18 @@ data(StreamID, IsFin, Data, #state{next = Next} = State) ->
 -spec info(cowboy_stream:streamid(), any(), {Handler, State} | undefined)
 	-> {cowboy_stream:commands(), {Handler, State} | undefined}
 	when Handler::module(), State::state().
-info(StreamID, {response, _, _, _} = Response, #state{request = Request, next = Next} = State) ->
-    z:debug_msg(?MODULE, ?LINE, Request),
-    z:debug_msg(?MODULE, ?LINE, Response),
-    z_access_syslog:log_access(Request, Response),
+info(StreamID, Response, #state{request = Request, next = Next} = State) ->
+    case Response of
+        {response, _Status, _Headers, _Body} -> 
+            z_access_syslog:log_access(Request, Response);
+        {headers, _Status, _Headers} -> 
+            z_access_syslog:log_access(Request, Response);
+        _ -> ignore
+    end,
 
     {Commands, Next1} = cowboy_stream:info(StreamID, Response, Next),
-    {Commands, State#state{next = Next1}};
-info(StreamID, Info, #state{next = Next} = State) ->
-    {Commands, Next1} = cowboy_stream:info(StreamID, Info, Next),
     {Commands, State#state{next = Next1}}.
+
 
 -spec terminate(cowboy_stream:streamid(), cowboy_stream:reason(), {module(), state()} | undefined) -> ok.
 terminate(StreamID, Reason, #state{next = Next}) ->
@@ -58,3 +60,5 @@ early_error(StreamID, Reason, PartialReq, Resp, Opts) ->
     z:debug_msg(?MODULE, ?LINE, Reason),
     z:debug_msg(?MODULE, ?LINE, Resp),
     cowboy_stream:early_error(StreamID, Reason, PartialReq, Resp, Opts).
+
+

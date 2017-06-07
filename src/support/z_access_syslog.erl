@@ -51,8 +51,14 @@ start_link() ->
 start_link(Ident, Opts, Facility, Level) ->
     z_buffered_worker:start_link(?MODULE, ?MODULE, [[Ident, Opts, Facility], Level]).
 
+log_access(Request, {headers, StatusCode, Headers}) ->
+    LogData = Request#{status_code => StatusCode, response_headers => Headers},
+    z:debug_msg(?MODULE, ?LINE, LogData),
+    z_buffered_worker:push(?MODULE, LogData);
+
 log_access(Request, {response, StatusCode, Headers, _Body}) ->
     LogData = Request#{status_code => StatusCode, response_headers => Headers},
+    z:debug_msg(?MODULE, ?LINE, LogData),
     z_buffered_worker:push(?MODULE, LogData).
 
 %%
