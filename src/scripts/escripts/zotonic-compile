@@ -28,9 +28,5 @@ main([]) ->
     ZotonicConfig = zotonic_setup:find_config("zotonic.config"),
     ShellCmd = ?ERL ++ " -pa " + ?PA ++ " " ++ ErlangConfig ++ " " + ZotonicConfig ++ " -noinput",
 
-    case os:cmd(ShellCmd) of
-         _ ->
-             halt()
-    end.
-
+    os:cmd(ShellCmd).
 
