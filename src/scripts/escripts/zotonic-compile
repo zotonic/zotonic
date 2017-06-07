@@ -26,5 +26,11 @@ main([]) ->
     zotonic_setup:require_zotonic_not_running(),
     ErlangConfig = zotonic_setup:find_config("erlang.config"),
     ZotonicConfig = zotonic_setup:find_config("zotonic.config"),
+    ShellCmd = ?ERL ++ " -pa " + ?PA ++ " " ++ ErlangConfig ++ " " + ZotonicConfig ++ " -noinput",
 
-    erlang:error(not_implemented).
+    case os:cmd(ShellCmd) of
+         _ ->
+             halt()
+    end.
+
+
