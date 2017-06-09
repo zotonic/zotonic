@@ -12,11 +12,11 @@ Docker
 First `download and install Docker`_ . Then start Zotonic with a single
 command::
 
-    $ docker run -v `pwd`:/opt/zotonic/user/sites -p 8000:8000 zotonic/zotonic-heavy
+    $ docker run -v `pwd`:/opt/zotonic/user/sites -p 8443:8443 zotonic/zotonic-heavy
 
 Docker will download and boot the container. Zotonic will be available on port
-8000 on your machine. So, after Docker has booted, open your browser and go to
-http://localhost:8000 to view the Zotonic Status page. If you wish to quit
+8443 on your machine. So, after Docker has booted, open your browser and go to
+https://localhost:8443 to view the Zotonic Status page. If you wish to quit
 the container, press Ctrl+C.
 
 You can now move on to :ref:`creating your first site <guide-create-site>`.
@@ -102,7 +102,7 @@ Getting Zotonic
 
     $ bin/zotonic debug
 
-4. Now point your browser to: http://localhost:8000/.  You should see
+4. Now point your browser to: https://localhost:8443/.  You should see
    a welcome message, ‘Powered by Zotonic’. This is the so-called
    :ref:`status website <ref-status-site>`. So far, so good! Now it's
    time to :ref:`create your first site <guide-create-site>`.
