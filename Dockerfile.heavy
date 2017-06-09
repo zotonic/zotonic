@@ -5,11 +5,14 @@ FROM zotonic/zotonic:latest
 # process supervision. When run, it considers Zotonic the "main"
 # process, and exits if it does.
 
-RUN apk --no-cache add postgresql postgresql-client s6 \
-    && gosu postgres initdb -D /var/lib/postgresql -U zotonic 
+RUN apk --no-cache add inotify-tools postgresql postgresql-client s6 \
+    && gosu postgres initdb -D /var/lib/postgresql -U zotonic
+
+RUN mkdir /run/postgresql && chown postgres /run/postgresql
 
 COPY docker/s6-service /service
 COPY docker/docker-entrypoint-heavy.sh /opt/zotonic/docker
+COPY docker/zotonic-heavy.config /etc/zotonic/zotonic.config
 
 VOLUME /var/lib/postgresql
 
