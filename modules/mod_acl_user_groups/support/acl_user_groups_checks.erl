@@ -202,12 +202,12 @@ acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat, prop
     % No properties, check default content group of the user.
     can_insert(Cat, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat, props=Props}}, Context) ->
-    case proplists:lookup(content_group_id, Props) of
-        none ->
+    case proplists:get_value(content_group_id, Props) of
+        undefined ->
             % No explicit content group given, the resource will end up in the default
             % content group of the user.
             can_insert(Cat, Context);
-        {content_group_id, CGId} ->
+        CGId ->
             can_insert_category(CGId, Cat, Context)
     end;
 acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) ->
