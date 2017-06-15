@@ -16,18 +16,18 @@
 %% limitations under the License.
 
 %%
-%% usage zotonic-createdb [site_name]
+%% usage zotonic-crateschema [schema_name]
 %%
 
 -export([main/1]).
 
 -include("zotonic_escript_helper.hrl").
 
-main([Site]) ->
-    case Site of
+main([Schema]) ->
+    case Schema of
         ""  ->
-            io:format("USAGE: ~s", [list_to_atom(Site)]),
+            io:format("USAGE: ~s", [list_to_atom(Schema)]),
             io:format("USAGE: See ZotonicCommands.txt");
         _ ->
-            os:cmd("sed s/yoursite/" ++ Site ++ "/g \ < $ZOTONIC_SCRIPTS/helpers/zotonic-createdb_sql.in \ | psql")
+            os:cmd("sed s/%schema/" ++ Schema ++ "/g \< $ZOTONIC_SCRIPTS/helpers/zotonic-createschema_sql.in \ | ${PSQL:=psql}")
     end.
