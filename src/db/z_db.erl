@@ -691,7 +691,7 @@ ensure_schema(Site, Options) ->
         true ->
             ok;
         false ->
-            lager:warning("Creating schema ~p in database ~p", [Schema, Database]),
+            lager:info("Creating schema ~p in database ~p", [Schema, Database]),
             create_schema(Site, DbConnection, Schema)
     end,
     close_connection(DbConnection),
