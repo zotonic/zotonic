@@ -215,13 +215,12 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
     end.
 
 
-publish(SurveyId, UserId, Persistent, Context) ->
+publish(_SurveyId, undefined, _Persistent, _Context) ->
+    ok;
+publish(SurveyId, UserId, _Persistent, Context) ->
     Topic = iolist_to_binary([
             <<"~site/user/">>,
-            case UserId of
-                undefined -> Persistent;
-                _ -> integer_to_binary(UserId)
-            end,
+            z_convert:to_binary(UserId),
             <<"/survey-submission/">>,
             z_convert:to_binary(SurveyId)
         ]),
