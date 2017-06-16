@@ -20,6 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([scan/1, scan_file/2]).
+-export([parse/1]).
 
 -include_lib("zotonic.hrl").
 
@@ -172,10 +173,12 @@ parse_erl_form_part({'case', _, Expr, Exprs}, File, Acc) ->
 
 parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},
                      [{string, Line, S}, _]}, File, Acc) ->
-    [{S, [], {File,Line}}|Acc];
+    S1 = binary_to_list(unicode:characters_to_binary(S)),
+    [{S1, [], {File,Line}}|Acc];
 parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},
                      [{bin, _, [{bin_element, _, {string, Line, S}, _, _}|_]}|_]}, File, Acc) ->
-    [{S, [], {File,Line}}|Acc];
+    S1 = binary_to_list(unicode:characters_to_binary(S)),
+    [{S1, [], {File,Line}}|Acc];
 
 parse_erl_form_part({call, _, _, Expressions}, File, Acc) ->
     lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);
