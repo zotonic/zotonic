@@ -45,6 +45,7 @@
     single_result/4,
     delete_result/3,
     delete_result/4,
+    delete_results/2,
     get_questions/2
    ]).
 
@@ -205,10 +206,32 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
         ],
         Context)
     of
-        1 -> {ok, AnswerId};
-        0 -> {error, enoent}
+        1 ->
+            {UserId,Persistent} = z_db:q_row("select user_id, persistent from survey_answers where id = $4", [AnswerId], Context),
+            publish(SurveyId, UserId, Persistent, Context),
+            {ok, AnswerId};
+        0 ->
+            {error, enoent}
     end.
 
+
+publish(SurveyId, UserId, Persistent, Context) ->
+    Topic = iolist_to_binary([
+            <<"~site/user/">>,
+            case UserId of
+                undefined -> Persistent;
+                _ -> integer_to_binary(UserId)
+            end,
+            <<"/survey-submission/">>,
+            z_convert:to_binary(SurveyId)
+        ]),
+    z_mqtt:publish(
+        Topic,
+        [
+            {survey_id,SurveyId},
+            {user_id, UserId}
+        ],
+        Context).
 
 %% @doc Save a survey, connect to the current user (if any)
 -spec insert_survey_submission(integer(), list(), #context{}) -> {ok, integer()} | {error, term()}.
@@ -259,7 +282,7 @@ find_answer_id(SurveyId, UserId, _PersistendId, Context) ->
 
 insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-    z_db:insert(
+    Result = z_db:insert(
         survey_answers,
         [
             {survey_id, SurveyId},
@@ -269,10 +292,12 @@ insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) 
             {points, Points},
             {answers, AnswersPoints}
         ],
-        Context);
+        Context),
+    publish(SurveyId, undefined, PersistentId, Context),
+    Result;
 insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-    z_db:insert(
+    Result = z_db:insert(
         survey_answers,
         [
             {survey_id, SurveyId},
@@ -282,7 +307,9 @@ insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
             {points, Points},
             {answers, AnswersPoints}
         ],
-        Context).
+        Context),
+    publish(SurveyId, UserId, undefined, Context),
+    Result.
 
 
 %% @private
@@ -655,14 +682,29 @@ single_result(SurveyId, UserId, PersistentId, Context) ->
         Row -> Row
     end.
 
-%% @doc Delete a specific survey results
-delete_result(SurveyId, ResultId, Context) ->
+%% @doc Delete all survey results
+delete_results(SurveyId, Context) ->
     z_db:q("
         DELETE FROM survey_answers
-        WHERE id = $2
-          AND survey_id = $1",
-        [SurveyId, ResultId],
+        WHERE id = $2",
+        [SurveyId],
         Context).
+
+%% @doc Delete a specific survey results
+delete_result(SurveyId, ResultId, Context) ->
+    case z_db:q_row("select user_id, persistent from survey_answers where id = $4", [ResultId], Context) of
+        {UserId, Persistent} ->
+            Result = z_db:q("
+                DELETE FROM survey_answers
+                WHERE id = $2
+                  AND survey_id = $1",
+                [SurveyId, ResultId],
+                Context),
+            publish(SurveyId, UserId, Persistent, Context),
+            Result;
+        undefined ->
+            0
+    end.
 
 %% @doc Delete all survey results for a user or persistent id.
 delete_result(SurveyId, UserId, PersistentId, Context) ->
@@ -670,12 +712,14 @@ delete_result(SurveyId, UserId, PersistentId, Context) ->
                         true -> {"persistent = $2", PersistentId};
                         false -> {"user_id = $2", UserId}
                     end,
-    z_db:q("
+    Result = z_db:q("
         DELETE FROM survey_answers
         WHERE " ++ Clause ++ "
           AND survey_id = $1",
         [SurveyId, Arg],
-        Context).
+        Context),
+    publish(SurveyId, UserId, PersistentId, Context),
+    Result.
 
 
 %% @private
