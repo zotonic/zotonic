@@ -207,7 +207,7 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
         Context)
     of
         1 ->
-            {UserId,Persistent} = z_db:q_row("select user_id, persistent from survey_answers where id = $4", [AnswerId], Context),
+            {UserId,Persistent} = z_db:q_row("select user_id, persistent from survey_answers where id = $1", [AnswerId], Context),
             publish(SurveyId, UserId, Persistent, Context),
             {ok, AnswerId};
         0 ->
@@ -691,7 +691,7 @@ delete_results(SurveyId, Context) ->
 
 %% @doc Delete a specific survey results
 delete_result(SurveyId, ResultId, Context) ->
-    case z_db:q_row("select user_id, persistent from survey_answers where id = $4", [ResultId], Context) of
+    case z_db:q_row("select user_id, persistent from survey_answers where id = $1", [ResultId], Context) of
         {UserId, Persistent} ->
             Result = z_db:q("
                 DELETE FROM survey_answers
