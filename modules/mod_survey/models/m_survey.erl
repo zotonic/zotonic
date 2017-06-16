@@ -740,21 +740,25 @@ survey_totals(Id, Context) ->
     Stats = survey_stats(Id, Context),
     case m_rsc:p(Id, blocks, Context) of
         Blocks when is_list(Blocks) ->
-            All = lists:map(fun(Block) ->
+            All = lists:map(
+                fun(Block) ->
                     Name = proplists:get_value(name, Block),
                     Type = proplists:get_value(type, Block),
-                    M = mod_survey:module_name(Type),
-                    Value = case proplists:get_value(prep_totals, erlang:get_module_info(M, exports)) of
-                                3 ->
-                                    % lager:warning("Name: ~p", [Name]),
-                                    Vals = proplists:get_value(Name, Stats),
-                                    M:prep_totals(Block, Vals, Context);
-                                undefined ->
-                                    undefined
-                            end,
-                    {Name, Value}
-            end,
-            Blocks),
+                    case mod_survey:module_name(Type) of
+                        undefined -> undefined;
+                        M ->
+                            Value = case proplists:get_value(prep_totals, erlang:get_module_info(M, exports)) of
+                                        3 ->
+                                            % lager:warning("Name: ~p", [Name]),
+                                            Vals = proplists:get_value(Name, Stats),
+                                            M:prep_totals(Block, Vals, Context);
+                                        undefined ->
+                                            undefined
+                                    end,
+                            {Name, Value}
+                    end
+                end,
+                Blocks),
             AllEmpty = lists:foldl(
                 fun(Total, Acc) ->
                     Acc andalso z_utils:is_empty(Total)
@@ -763,7 +767,7 @@ survey_totals(Id, Context) ->
                 All),
             case AllEmpty of
                 true -> undefined;
-                false -> All
+                false -> [ A || A <- All, A =/= undefined ]
             end;
         _ ->
             []
