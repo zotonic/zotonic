@@ -224,6 +224,16 @@
 %% @doc Data import definition. See also mod_import_csv.
 -record(import_data_def, {colsep=$\t, skip_first_row=true, columns=[], importdef}).
 
+-record(task, {
+    id :: pos_integer(),
+    batch = undefined :: integer | undefined,
+    prio = low :: low | high,
+    key = undefined :: term(),
+    due = erlang:universaltime() :: calendar:datetime() | non_neg_integer(),
+    data :: term(),
+    callback :: {term(), term()} | term()
+}).
+
 %% @doc Check if an assumption is true
 -define(ASSERT(A,E), z_utils:assert(A,E)).
 
