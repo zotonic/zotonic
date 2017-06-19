@@ -71,7 +71,8 @@ compile_options(Filename) ->
         undefined ->
             % Probably a new file, guess if it is a 'user', 'zotonic' or 'deps' file
             % For deps files we compile with similar options as a beam in the closest 'ebin'
-            guess_compile_options(Filename);
+            {ok, Options} = guess_compile_options(Filename),
+            Options;
         Options ->
             Options
     end.
