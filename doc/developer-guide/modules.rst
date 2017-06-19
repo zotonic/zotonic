@@ -519,6 +519,22 @@ Context}`` property.
 This server module will be started for every site in a Zotonic system
 where the module is enabled, so it can’t be a named server.
 
+If you want to observe Zotonic’s :ref:`notifications <guide-notification>` and
+handle them through your module’s gen_server, export ``pid_observe_...``
+functions (instead of the regular ``observe_...`` ones). These function will
+then be passed the gen_server’s PID::
+
+    export([
+        pid_observe_custom_pivot/3
+    ]).
+
+    pid_observe_custom_pivot(Pid, #custom_pivot{} = Msg, _Context) ->
+        gen_server:cast(Pid, Msg).
+
+    handle_cast(#custom_pivot{id = Id}, State)
+        %% Do things here...
+        {noreply, State}.
+
 .. seealso:: `gen_server`_ in the Erlang documentation.
 
 A minimal example
