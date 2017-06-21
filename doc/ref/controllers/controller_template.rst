@@ -49,7 +49,7 @@ The following options can be given to the dispatch rule:
 |                     |dispatch rule. Defaults to            |"application/json"}     |
 |                     |“text/html”.                          |                        |
 +---------------------+--------------------------------------+------------------------+
-|maxage               |The number of seconds of how long to  |{maxage, 3600}          |
+|max_age              |The number of seconds of how long to  |{max_age, 3600}          |
 |                     |cache this file in the browser. Sets  |                        |
 |                     |the response header: `Cache-control:  |                        |
 |                     |public; maxage=X`.                    |                        |
