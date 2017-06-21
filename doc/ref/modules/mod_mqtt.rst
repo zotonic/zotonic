@@ -211,7 +211,7 @@ You will need to include the following JavaScript files:
 .. code-block:: django
 
 	{% lib
-		 "js/qlobber.js"
+		 "js/qlobber.min.js"
 		 "js/pubzub.js"
 	%}
 
