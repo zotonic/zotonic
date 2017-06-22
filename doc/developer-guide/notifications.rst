@@ -136,6 +136,9 @@ Zotonic module exports a function with the prefix ``observe_`` or
 
 For example exporting ``observe_acl_logon/2`` will register that function as
 an observer. It will be triggered when the ``acl_logon`` notification is fired.
+Functions prefixed with ``pid_observe_`` are for
+:ref:`guide-modules-gen_server`: they get passed the gen_server’s PID as the
+first argument.
 
 .. _handling-notifications:
 

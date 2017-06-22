@@ -5,7 +5,7 @@
 	"js/apps/z.widgetmanager.js"
 
     "js/modules/ubf.js"
-    "js/qlobber.js"
+    "js/qlobber.min.js"
     "js/pubzub.js"
 
     "js/modules/z.live.js"

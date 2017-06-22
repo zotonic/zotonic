@@ -3,11 +3,24 @@
 
 Provides a generic framework to export :term:`resources <resource>`.
 
-Currently, when installed, the module exposes a url
-``/export/csv/:id`` which exports the resource with the given ID to a
-CSV (Comma Separated Value) format. Only the following resource fields
-are currently exported: title, summary, created, modified,
-page_url_abs.
+Admin interface
+---------------
 
-Currently, CSV is the only supported export format, but the module is
-set up in such a way that other export formats are easy to add.
+.. image:: /img/admin_view.png
+    :scale: 50%
+    :align: right
+
+When :ref:`enabled <activating-modules>`, this module adds two things to each
+admin edit page:
+
+- extra content types to the ‘View’ dropdown menu
+- an ‘Export’ block.
+
+Both single pages and :ref:`query resources <guide-query-resources>` can be
+exported. For a query, all resources matching it will be included in the export.
+
+Customizing exports
+-------------------
+
+To customize data selection and the properties that are exported, observe one or
+several of the :ref:`export notifications <export-notifications>`.

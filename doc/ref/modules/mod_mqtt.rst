@@ -1,11 +1,13 @@
 
 .. include:: meta-mod_mqtt.rst
 
-Enables MQTT support in a site.
-
-MQTT is a machine-to-machine (M2M)/“Internet of Things” connectivity protocol.
-It was designed as an extremely lightweight publish/subscribe messaging transport.
-It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium. For example, it has been used in sensors communicating to a broker via satellite link, over occasional dial-up connections with healthcare providers, and in a range of home automation and small device scenarios (source and more information: `MQTT.org <http://mqtt.org>`_)
+`MQTT <http://mqtt.org>`_ is a machine-to-machine (M2M)/“Internet of Things”
+connectivity protocol. It was designed as an extremely lightweight
+publish/subscribe messaging transport. It is useful for connections with remote
+locations where a small code footprint is required and/or network bandwidth
+is at a premium. For example, it has been used in sensors communicating to a
+broker via satellite link, over occasional dial-up connections with healthcare
+providers, and in a range of home automation and small device scenarios
 
 MQTT uses a simple message broker to route messages from publishers to multiple subscribers.
 
@@ -121,6 +123,8 @@ The following topics are expanded:
 
 Note that there are not automatic subscriptions for session, pagesession and user topics. All subscriptions need to be added explicitly.
 
+.. _mqtt-access-control:
+
 Access control
 ^^^^^^^^^^^^^^
 
@@ -221,7 +225,7 @@ You will need to include the following JavaScript files:
 .. code-block:: django
 
 	{% lib
-		 "js/qlobber.js"
+		 "js/qlobber.min.js"
 		 "js/pubzub.js"
 	%}
 
@@ -304,3 +308,6 @@ the row in the right and tick the checkbox to enable these debug
 messages.
 
 .. image:: /img/mod_mqtt_config.png
+
+.. seealso::
+    :ref:`live tag <scomp-live>`, which uses MQTT topics.
