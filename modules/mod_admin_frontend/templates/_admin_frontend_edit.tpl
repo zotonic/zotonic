@@ -24,12 +24,14 @@
 	<div class="meta-data row-fluid">
 		<div class="span10">
 			{% block meta_data_first %}{% endblock %}
-			<p>
-				{% if id %}
-					{{ id.category_id.title }}
-				{% else %}
-					{{ m.rsc[cat].title }}
-				{% endif %}
+			<div>
+				<h3>
+					{% if id %}
+						{{ id.category_id.title }}
+					{% else %}
+						{{ m.rsc[cat].title }}
+					{% endif %}
+				</h3>
 
 				<span class="publication-dates">
 					<label for="is_published" class="checkbox inline">
@@ -44,7 +46,7 @@
 					{% endif %}
 					{{ m.req.timezone }}
 				</span>
-			</p>
+			</div>
 		</div>
 	</div>
 

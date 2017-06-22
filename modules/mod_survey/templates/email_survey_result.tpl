@@ -26,35 +26,37 @@
 {% block test_result %}
 	{% if id.survey_test_percentage and result %}
 	    {% with id|survey_test_max_points as max_points %}
-	        <h2>
-	        	<br/>
-	            {{ (result.points / max_points * 100)|round }}% &ndash;
-	            {% if result.points > max_points * (id.survey_test_percentage / 100) %}
-	                {_ Passed _}
-	            {% else %}
-	                {_ Failed _}
-	            {% endif %}
-	        </h2>
+	    	{% if max_points %}
+		        <h2>
+		        	<br/>
+		            {{ (result.points / max_points * 100)|round }}% &ndash;
+		            {% if result.points > max_points * (id.survey_test_percentage / 100) %}
+		                {_ Passed _}
+		            {% else %}
+		                {_ Failed _}
+		            {% endif %}
+		        </h2>
 
-	        <table class="table" style="width: auto">
-	            <tr style="border-top: 1px solid #ccc">
-	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Points _}</td>
-	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ result.points }} / {{ max_points }}</th>
-	            </tr>
-	            <tr style="border-top: 1px solid #ccc">
-	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Needed for pass _}</td>
-	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ id.survey_test_percentage }}%</th>
-	            </tr>
-	            <tr style="border-top: 1px solid #ccc">
-	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Your result _}</td>
-	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ (result.points / max_points * 100)|round }}%</th>
-	            </tr>
-	        </table>
+		        <table class="table" style="width: auto">
+		            <tr style="border-top: 1px solid #ccc">
+		                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Points _}</td>
+		                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ result.points }} / {{ max_points }}</th>
+		            </tr>
+		            <tr style="border-top: 1px solid #ccc">
+		                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Needed for pass _}</td>
+		                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ id.survey_test_percentage }}%</th>
+		            </tr>
+		            <tr style="border-top: 1px solid #ccc">
+		                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Your result _}</td>
+		                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ (result.points / max_points * 100)|round }}%</th>
+		            </tr>
+		        </table>
 
-	        <p>
-	        	<br/>
-	        	<br/>
-	        </p>
+		        <p>
+		        	<br/>
+		        	<br/>
+		        </p>
+		    {% endif %}
 	    {% endwith %}
 	{% endif %}
 {% endblock %}

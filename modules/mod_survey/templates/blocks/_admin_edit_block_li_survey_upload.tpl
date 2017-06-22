@@ -30,10 +30,13 @@
                 <input type="checkbox" id="block-{{name}}-is_image" name="block-{{name}}-is_image" value="1" {% if blk.is_image or is_new %}checked="checked"{% endif %} />
                 {_ Only accept images. _}
             </label>
-            <label class="checkbox">
-                <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
-                {_ Required, this question must be answered. _}
-            </label>
+
+            <div class="question-options">
+                <label class="checkbox">
+                    <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
+                    {_ Required, this question must be answered. _}
+                </label>
+            </div>
         </div>
     </div>
 {% endblock %}

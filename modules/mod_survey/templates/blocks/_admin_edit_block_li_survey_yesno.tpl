@@ -42,7 +42,7 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-    <div class="control-group view-expanded">
+    <div class="control-group view-expanded question-options">
         <div class="controls">
             <label class="checkbox">
                 <input type="checkbox" id="block-{{name}}-input_type" name="block-{{name}}-input_type" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />

@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="control-group view-expanded">
+        <div class="control-group view-expanded question-options">
             <label class="control-label" for="block-{{name}}-target">{_ question _}</label>
             <div class="controls">
               <input type="text" id="block-{{name}}-target" name="block-{{name}}-target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
@@ -53,7 +53,7 @@
         </div>
     </div>
     <div class="span6">
-        <div class="control-group view-expanded">
+        <div class="control-group view-expanded question-options">
             <label class="checkbox">
                 <input type="checkbox" id="block-{{name}}-is_hide_result" name="block-{{name}}-is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
                 {_ Hide from results _}

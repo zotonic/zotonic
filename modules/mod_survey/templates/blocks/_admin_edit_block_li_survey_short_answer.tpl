@@ -33,7 +33,7 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-    <div class="control-group view-expanded">
+    <div class="control-group view-expanded question-validation">
         <label class="control-label" for="block-{{name}}-validation">{_ Validation _}</label>
         <div class="controls">
             <select id="block-{{name}}-validation" name="block-{{name}}-validation">
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <div class="control-group view-expanded">
+    <div class="control-group view-expanded question-options">
         <div class="controls">
             <label class="checkbox">
                 <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />

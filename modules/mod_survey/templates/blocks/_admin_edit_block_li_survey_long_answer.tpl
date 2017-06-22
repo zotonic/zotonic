@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-    <div class="control-group view-expanded">
+    <div class="control-group view-expanded question-options">
         <div class="controls">
             <label class="checkbox">
                 <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />

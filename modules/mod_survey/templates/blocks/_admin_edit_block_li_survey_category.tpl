@@ -26,7 +26,7 @@
 
 {% block widget_content_nolang %}
 <div class="row-fluid view-expanded">
-    <div class="span6">
+    <div class="span6 question-options">
       <div class="control-group">
           <label class="radio">
               <input type="radio" id="block-{{name}}-input_type" name="block-{{name}}-input_type" value="" {% if not blk.input_type %}checked="checked"{% endif %} />

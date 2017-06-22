@@ -32,7 +32,7 @@
         <textarea id="block-{{name}}-choices" name="block-{{name}}-choices" class="input-block-level" rows="4">{{ blk.choices }}</textarea>
     </div>
 
-    <div class="control-group view-expanded">
+    <div class="control-group view-expanded question-options">
         <label class="checkbox">
             <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
             {_ Required, this question must be answered. _}
