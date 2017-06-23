@@ -55,7 +55,7 @@ require_zotonic_not_running() ->
 
 get_zotonic_path() ->
     {ok, CurrentDir} = file:get_cwd(),
-    ZotonicDir = list_to_atom(CurrentDir).
+    ZotonicDir = CurrentDir.
 
 major_version() ->
     {ok, VsnStr} = application:get_key(zotonic, vsn),
