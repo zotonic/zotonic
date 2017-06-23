@@ -38,3 +38,6 @@
 -define(ZOTONIC_PIDFILE, "$ZOTONIC/zotonic.pid").
 -define(Modules, zotonic_setup:get_user_modules_dir()).
 -define(Sites, zotonic_setup:get_user_sites_dir()).
+
+-define(ZOTONIC_SCRIPTS, "").
+-define(ZOTONIC, "").

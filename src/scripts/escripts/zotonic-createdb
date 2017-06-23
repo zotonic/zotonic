@@ -29,5 +29,5 @@ main([Site]) ->
             io:format("USAGE: ~s", [list_to_atom(Site)]),
             io:format("USAGE: See ZotonicCommands.txt");
         _ ->
-            os:cmd("sed s/yoursite/" ++ Site ++ "/g \ < $ZOTONIC_SCRIPTS/helpers/zotonic-createdb_sql.in \ | psql")
+            os:cmd("sed s/yoursite/" ++ Site ++ "/g \ < " ++ ?ZOTONIC_SCRIPTS ++ "/helpers/zotonic-createdb_sql.in \ | psql")
     end.

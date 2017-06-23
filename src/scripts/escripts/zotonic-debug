@@ -27,7 +27,7 @@ main([]) ->
     ErlangConfig = list_to_atom(zotonic_setup:find_config_arg("erlang.config")),
     ZotonicConfig = list_to_atom(zotonic_setup:find_config_arg("zotonic.config")),
 
-    ZotonicAppFile = "$ZOTONIC/_build/default/lib/zotonic/ebin/zotonic.app",
+    ZotonicAppFile = ?ZOTONIC ++ "/_build/default/lib/zotonic/ebin/zotonic.app",
 
     case filelib:is_file(ZotonicAppFile) of
         true ->
@@ -39,7 +39,7 @@ main([]) ->
 
     zotonic_setup:require_zotonic_not_running(),
 
-    case file:set_cwd("$ZOTONIC") of
+    case file:set_cwd(?ZOTONIC) of
          ok ->
              os:cmd(?ERL ++ " -env ERL_MAX_PORTS " ++ ?MAX_PORTS ++ " +P " ++ ?MAX_PROCESSES ++ " +k " ++
                  ?KERNEL_POLL + " -pa " ++ ?PA ++ " " ++ ?NAME_ARG ++ " " ++ ?NODENAME ++ "@" ++ ?NODEHOST ++
