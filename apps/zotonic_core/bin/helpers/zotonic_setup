@@ -38,12 +38,12 @@ function require_zotonic_not_running {
 export -f require_zotonic_not_running
 
 function major_version {
-    cat $ZOTONIC/apps/zotonic_core/src/zotonic_core.app.src |grep vsn,|sed 's/[^"]*\"\([0-9]*\).*/\1/'
+    cat $ZOTONIC/apps/zotonic_core/include/zotonic_release.hrl |grep ZOTONIC_VERSION|sed 's/[^"]*\"\([0-9]*\).*/\1/'
 }
 export -f major_version
 
 function minor_version {
-    cat $ZOTONIC/apps/zotonic_core/src/zotonic_core.app.src |grep vsn,|sed 's/[^"]*\"\([0-9]\.[0-9]*\).*/\1/'
+    cat $ZOTONIC/apps/zotonic_core/include/zotonic_release.hrl |grep ZOTONIC_VERSION|sed 's/[^"]*\"\([0-9]\.[0-9]*\).*/\1/'
 }
 export -f minor_version
 

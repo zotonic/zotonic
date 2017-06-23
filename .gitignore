@@ -22,19 +22,19 @@ rebar3
 ebin/
 deps/
 
-/priv/*.config
+priv/*.config
 
-/priv/filezcache
-/priv/log/
-/priv/mnesia/
-/priv/sites/default/files/
-/priv/modules/
-/priv/translations/template/
-/priv/translations/zotonic.pot
+priv/filezcache
+priv/log/
+priv/ssl/
+priv/mnesia/
+priv/sites/default/files/
+priv/modules/
+priv/translations/template/
+priv/translations/zotonic.pot
 
-/priv/ssl/
-
-/modules/*/translations/template/*.pot
+apps/*/priv/ssl/
+apps/*/priv/translations/template/*.pot
 
 /user
 /user/*

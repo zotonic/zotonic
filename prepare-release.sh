@@ -13,7 +13,7 @@ MINOR=$(echo $VERSION | sed -e 's/.[^.]*$//')
 
 sed -e "s/^version = .*/version = '$MINOR'/" -i doc/conf.py
 sed -e "s/^release = .*/release = '$VERSION'/" -i doc/conf.py
-sed -e "s/{vsn, .*/{vsn, \"$VERSION\"},/" -i src/zotonic.app.src
-sed -e "s/ZOTONIC_VERSION, .*)./ZOTONIC_VERSION, \"$VERSION\")./" -i include/zotonic_release.hrl
+sed -e "s/{vsn, .*/{vsn, \"$VERSION\"},/" -i apps/zotonic_core/src/zotonic_core.app.src
+sed -e "s/ZOTONIC_VERSION, .*)./ZOTONIC_VERSION, \"$VERSION\")./" -i apps/zotonic_core/include/zotonic_release.hrl
 
 git status

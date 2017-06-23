@@ -4,5 +4,5 @@
 [
     {from, "z.icons.less"},
     {to, "../css/z.icons.css"},
-    {params, "-include-path='../../../mod_artwork/lib/font-awesome-4/less:../../../mod_artwork/lib/material-design/less'"}
+    {params, "-include-path='../../../../zotonic_mod_artwork/priv/lib/font-awesome-4/less:../../../../zotonic_mod_artwork/priv/lib/material-design/less'"}
 ].

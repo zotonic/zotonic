@@ -41,11 +41,10 @@ site_dir(Context=#context{site=Site}) ->
     F = fun() -> site_dir(Site) end,
     z_depcache:memo(F, {site_dir, Site}, ?HOUR, Context);
 site_dir(Site) when is_atom(Site) ->
-    find_first_path(
-      [
-       filename:join([z_path:user_sites_dir(), Site]),
-       filename:join([z_utils:lib_dir(priv), "sites", Site])
-      ]).
+    find_first_path([
+        code:lib_dir(Site),
+        filename:join([z_path:user_sites_dir(), Site])
+    ]).
 
 %% @doc Return the path to the given module in the given context.
 %% @spec module_dir(atom(), #context{}) -> string()
@@ -53,24 +52,28 @@ module_dir(Module, Context=#context{site=Site}) ->
     F = fun() -> module_dir(Module, Site) end,
     z_depcache:memo(F, {module_dir, Module}, ?HOUR, Context);
 module_dir(Module, Site) when is_atom(Site) ->
-    find_first_path(
-      [
-       filename:join([z_path:user_sites_dir(), Site, "modules", Module]),
-       filename:join([z_path:user_modules_dir(), Module]),
-       filename:join([z_utils:lib_dir(modules)])
-      ]).
+    find_first_path([
+        code:lib_dir(Module),
+        filename:join([user_sites_dir(), Site, "modules", Module]),
+        filename:join([user_modules_dir(), Module]),
+        filename:join([z_utils:lib_dir(modules), Module])
+    ]).
 
 
 find_first_path(Paths) ->
-    lists:foldl(fun(Dir, undefined) ->
-                        case filelib:is_dir(Dir) of
-                            true -> Dir;
-                            false -> undefined
-                        end;
-                   (_, Acc) -> Acc
-                end,
-                undefined,
-                Paths).
+    lists:foldl(
+        fun
+            (undefined, Acc) -> Acc;
+            ({error, _}, Acc) -> Acc;
+            (Dir, undefined) ->
+                case filelib:is_dir(Dir) of
+                    true -> Dir;
+                    false -> undefined
+                end;
+            (_, Acc) -> Acc
+        end,
+        undefined,
+        Paths).
 
 %% @doc Return the path to the media preview directory
 %% @spec media_preview(#context{}) -> filename()
@@ -89,7 +92,7 @@ abspath(Path, Context) ->
 %% @doc Return the path to a files subdirectory
 %% @spec files_subdir(SubDir::filename(), #context{}) -> filename()
 files_subdir(SubDir, #context{site=Site}) ->
-    filename:join([z_path:site_dir(Site), "priv", "files", SubDir]).
+    filename:join([site_dir(Site), "priv", "files", SubDir]).
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
 %% @spec files_subdir_ensure(SubDir::filename(), #context{}) -> filename()

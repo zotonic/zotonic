@@ -4,5 +4,5 @@
 [
     {from, "mod_translation.less"},
     {to, "../css/mod_translation.css"},
-    {params, "--include-path='../../../mod_admin/lib/less'"}
+    {params, "--include-path='../../../../zotonic_mod_admin/priv/lib/less'"}
 ].

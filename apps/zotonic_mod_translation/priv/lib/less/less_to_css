@@ -1,1 +1,1 @@
-lessc --include-path="../../../mod_admin/lib/less" mod_translation.less ../css/mod_translation.css
+lessc --include-path="../../../../zotonic_mod_admin/priv/lib/less" mod_translation.less ../css/mod_translation.css
