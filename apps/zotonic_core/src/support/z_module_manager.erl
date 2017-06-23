@@ -279,11 +279,11 @@ scan(#context{site=Site}) ->
            [z_path:zotonic_modules_dir(), "zotonic_mod_*"],
 
            %% Zotonic built-in sites
-           [z_path:zotonic_sites_dir(), Site, "modules", "mod_"],
+           [z_path:zotonic_sites_dir(), Site, "src", "modules", "mod_*"],
            [z_path:zotonic_sites_dir(), Site],
 
            %% User-installed Zotonic sites
-           [z_path:user_sites_dir(), Site, "modules", "mod_*"],
+           [z_path:user_sites_dir(), Site, "src", "modules", "mod_*"],
            [z_path:user_sites_dir(), Site],
 
            %% User-installed modules
