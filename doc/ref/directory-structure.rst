@@ -1,10 +1,8 @@
 Directory structure
 ===================
 
-All Zotonic components follow the Erlang OTP directory structure. O
-
-Zotonic’s directory structure is somewhat different from a regular
-Erlang application::
+Zotonic is a set of regular OTP applications. These can be found in the
+repository’s `apps/` directory::
 
     zotonic/
         _build
@@ -22,6 +20,7 @@ Erlang application::
             log/
             sites/
             skel/
+            ssl/
         user/
             models/
             sites/
@@ -34,7 +33,7 @@ Erlang application::
 
 ``zotonic/_build/``
 
-    Zotonic’s dependencies as defined in ``rebar.config``.
+    The Rebar3 build directory.
 
 ``zotonic/doc/``
 
@@ -57,17 +56,13 @@ Erlang application::
 
     Here all the http access logs are written.
 
+``zotonic/priv/ssl/``
+
+    Holds the :ref:`SSL certificates <https-support>`.
+
 ``zotonic/apps/zotonic_core/src/``
 
     The Erlang source for the core Zotonic system.
-
-``zotonic/apps/zotonic_site_status``
-
-    The Zotonic :ref:`status site <ref-status-site>`.
-
-``zotonic/apps/zotonic_site_testsandbox``
-
-    The Zotonic testsandbox site that tests are run against.
 
 ``zotonic/apps/zotonic_core/src/behaviours/``
 
@@ -107,6 +102,14 @@ Erlang application::
 ``zotonic/apps/zotonic_core/test/``
 
     Contains the EUnit tests for Zotonic.
+
+``zotonic/apps/zotonic_site_status``
+
+    The Zotonic :ref:`status site <ref-status-site>`.
+
+``zotonic/apps/zotonic_site_testsandbox``
+
+    The Zotonic testsandbox site that tests are run against.
 
 ``zotonic/user``
 

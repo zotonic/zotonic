@@ -11,7 +11,7 @@ Site doesn’t start
 
 Check your database connection configuration in the ``config`` file which is
 located in the :term:`user sites directory`. By default this is
-``zotonic/user/sites/yoursite/config``.
+``zotonic/user/sites/yoursite/priv/config``.
 
 Browsers can’t connect to http://yoursite:8000
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
