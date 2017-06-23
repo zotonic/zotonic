@@ -3,7 +3,7 @@
 all=${0%/*}/meta-all-dispatch.csv
 rm -f $all
 
-for d in `find $ZOTONIC_SRC/apps/zotonic_mod* -name dispatch -type d | sort`
+for d in `find $MODULES -name dispatch -type d | sort`
 do
     for f in $d/*
     do
