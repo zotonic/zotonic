@@ -5,7 +5,7 @@ WORKDIR /opt/zotonic
 
 COPY docker/zotonic.config /etc/zotonic/zotonic.config
 
-RUN sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.config \
+RUN sed -f docker/erlang.config.sed apps/zotonic_core/priv/config/erlang.config.in > /etc/zotonic/erlang.config \
     && adduser -S -h /tmp -H -D zotonic \
     && chown -R zotonic /opt/zotonic/priv
 
