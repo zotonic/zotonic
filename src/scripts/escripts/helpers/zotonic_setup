@@ -21,6 +21,7 @@
 
 -export([require_zotonic_running/0,
     require_zotonic_not_running/0,
+    get_zotonic_path/0,
     major_version/0,
     minor_version/0,
     find_enabled_sites/1,
@@ -52,12 +53,14 @@ require_zotonic_not_running() ->
               io:format("You cannot start two Zotonic instances with the same node name.")
     end.
 
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    ZotonicDir = list_to_atom(CurrentDir).
+
 major_version() ->
     {ok, VsnStr} = application:get_key(zotonic, vsn),
     {match, VList} = re:run(VsnStr, "(\\d{1})", [{capture, first, list}]),
     VSN = list_to_atom(lists:concat(VList)).
-
-
 
 minor_version() ->
     {ok, VsnStr} = application:get_key(zotonic, vsn),
@@ -151,7 +154,7 @@ main([HostName]) ->
     if ErlangConfig == "" ->
         io:format("Installing default erlang.config file"),
         file:make_dir(DefaultDir),
-        file:copy("$ZOTONIC/priv/erlang.config.in", DefaultDir ++ "/erlang.config")
+        file:copy(?ZOTONIC ++ "/priv/erlang.config.in", DefaultDir ++ "/erlang.config")
     end,
 
     if ZotonicConfig == "" ->
