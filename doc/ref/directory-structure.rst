@@ -1,6 +1,8 @@
 Directory structure
 ===================
 
+All Zotonic components follow the Erlang OTP directory structure. O
+
 Zotonic’s directory structure is somewhat different from a regular
 Erlang application::
 
