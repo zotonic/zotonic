@@ -40,6 +40,9 @@
     survey_results_sorted/3,
     prepare_results/2,
 
+    is_answer_user/2,
+    is_answer_user/3,
+
     list_results/2,
     single_result/3,
     single_result/4,
@@ -636,6 +639,23 @@ answer_prompt(Block) ->
         undefined -> [];
         _M -> proplists:get_value(prompt, Block, <<>>)
     end.
+
+
+-spec is_answer_user(integer(), #context{}) -> boolean().
+is_answer_user(AnsId, Context) ->
+    is_answer_user(AnsId, z_acl:user(Context), Context).
+
+-spec is_answer_user(integer(), integer(), #context{}) -> boolean().
+is_answer_user(AnsId, UserId, Context) when is_integer(UserId) ->
+    AnsUserId = z_db:q1("
+        select user_id
+        from survey_answers
+        where id = $1",
+        [AnsId],
+        Context),
+    AnsUserId =:= UserId;
+is_answer_user(_AnsId, _UserId, _Context) ->
+    false.
 
 -spec list_results(integer(), #context{}) -> list().
 list_results(SurveyId, Context) when is_integer(SurveyId) ->

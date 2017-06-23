@@ -690,7 +690,11 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
 
 %% @doc Save the modified survey results
 admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actions}, Context) ->
-    case z_acl:rsc_editable(SurveyId, Context) of
+    case z_acl:rsc_editable(SurveyId, Context) 
+        orelse (
+            z_convert:to_integer(m_rsc:p(SurveyId, survey_multiple, Context)) =:= 2
+            andalso is_answer_user(AnswerId, Context))
+    of
         true ->
             {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
@@ -721,6 +725,16 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
             z_render:growl(?__("You are not allowed to change these results.", Context), Context)
     end.
 
+is_answer_user({user, UserId}, Context) when is_integer(UserId) ->
+    UserId =:= z_acl:user(Context);
+is_answer_user(AnswerId, Context) when is_integer(AnswerId) ->
+    case z_acl:user(Context) of
+        UserId when is_integer(UserId) ->
+            m_survey:is_answer_user(AnswerId, UserId, Context);
+        _ -> false
+    end;
+is_answer_user(_, _Context) ->
+    false.
 
 survey_answers_to_storage(AnsPerBlock) ->
     lists:flatten(
