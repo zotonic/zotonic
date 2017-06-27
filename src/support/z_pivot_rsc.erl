@@ -913,7 +913,24 @@ define_custom_pivot(Module, Columns, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
     case z_db:table_exists(TableName, Context) of
         true ->
-            ok;
+            % Compare column name/type pairs to see if table needs an update
+            DbColumns = [ {Name, Type} || #column_def{name=Name, type=Type} <- z_db:columns(TableName, Context), not(Name == id)],
+            SpecColumns = lists:map(
+                fun(ColumnDef) ->
+                    [Name, TypeDef|_] = tuple_to_list(ColumnDef),
+                    [Type | _] = z_string:split(TypeDef, " "),
+                    {Name, Type}
+                end,
+                Columns
+            ),
+            case lists:usort(SpecColumns) == lists:usort(DbColumns) of
+                false ->
+                    % TODO: Retain or reindex data in table
+                    z_db:drop_table(TableName, Context),
+                    define_custom_pivot(Module, Columns, Context);
+                true ->
+                    ok
+            end;
         false ->
             ok = z_db:transaction(
                     fun(Ctx) ->
@@ -976,7 +993,7 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
     case Result of
         {ok, _} -> ok;
         {error, Reason} ->
-            lager:error("Error updating custom pivot ~p for ~p (~p): ~p", 
+            lager:error("Error updating custom pivot ~p for ~p (~p): ~p",
                         [Module, Id, z_context:site(Context), Reason])
     end.
 
@@ -991,4 +1008,3 @@ lookup_custom_pivot(Module, Column, Value, Context) ->
         [] -> undefined;
         [{Id}|_] -> Id
     end.
-
