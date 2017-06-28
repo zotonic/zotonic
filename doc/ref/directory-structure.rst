@@ -111,12 +111,13 @@ repository’s `apps/` directory::
 
     The Zotonic testsandbox site that tests are run against.
 
-``zotonic/user``
+``zotonic/_checkouts``
 
     This directory contains user-modifiable source code which runs in
-    Zotonic, namely user-defined sites and modules.
+    Zotonic, namely user-defined sites, modules and other Erlang/OTP
+    applications.
 
-``zotonic/user/sites/``
+``zotonic/_checkouts`` - sites
 
     A single Zotonic installation is capable of virtually hosting
     serving multiple sites. This directory holds the sites which are
@@ -125,7 +126,7 @@ repository’s `apps/` directory::
     This directory is the default location of the ``user_sites_dir``
     configuration variable. See :ref:`guide-configuration`.
 
-``zotonic/user/modules/``
+``zotonic/_checkouts`` - modules
 
     This directory holds modules which are not part of the core Zotonic
     modules, but which are also not site-specific. All modules installed

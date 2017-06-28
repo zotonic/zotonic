@@ -60,8 +60,8 @@ consult the stock ``apps/zotonic_launcher/priv/config/zotonic.config.in`` file f
 explanation about all config settings.
 
 
-``user_sites_dir``, ``user_modules_dir`` and ``user_ebin_dir``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+``user_sites_dir``, ``user_modules_dir``
+""""""""""""""""""""""""""""""""""""""""
 
 Zotonic keeps sites and modules that are `external` to Zotonic, e.g.
 installed by website developers, outside the Zotonic source tree.
@@ -69,20 +69,14 @@ installed by website developers, outside the Zotonic source tree.
 The directory under which Zotonic expects to find all sites is called
 the :term:`User sites directory`. This is configured with the config
 parameter ``user_sites_dir``. This directory defaults to
-``user/sites``, relative to Zotonic's installation directory.
+``_checkouts``, relative to Zotonic's installation directory.
 
 The directory under which Zotonic expects to find all external
 modules, e.g. those installed with ``zotonic modules install
 mod_....``, is called the User modules directory. This is configured
 with the config parameter ``user_modules_dir``. This directory
-defaults to ``user/modules``, relative to Zotonic's installation
+defaults to ``_checkouts``, relative to Zotonic's installation
 directory.
-
-Optionally it is possible to change the location of the compiled
-erlang code in the user sites and module directories. The default location
-for these files is ``ebin`` in Zotonic's installation directory. This is
-configured with the ``user_ebin_dir`` config parameter. This makes it possible
-to separate the beam files of user defined code from Zotonic's beam files.
 
 .. _deps:
 
