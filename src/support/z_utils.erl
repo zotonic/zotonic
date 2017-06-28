@@ -618,7 +618,7 @@ set_nth(N, V, L) when N >= 1 ->
 -spec randomize(list()) -> list().
 randomize(List) ->
     D = lists:map(fun(A) ->
-                     {crypto:rand_uniform(1,1000000), A}
+                     {rand:uniform(1000000), A}
                   end, List),
     {_, D1} = lists:unzip(lists:keysort(1, D)),
     D1.
