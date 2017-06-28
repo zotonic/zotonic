@@ -219,8 +219,8 @@ if [ -z "$ZOTONIC_CONFIG_DIR" ]; then
         # Generate a password for zotonic_status
         PW=$(openssl rand -hex 10)
         sed -e "s/%%GENERATED%%/${PW}/" \
-	    -e "s,%%USER_SITES_DIR%%,${ZOTONIC}/user/sites", \
-	    -e "s,%%USER_MODULES_DIR%%,${ZOTONIC}/user/modules", \
+	    -e "s,%%USER_SITES_DIR%%,${ZOTONIC}/_checkouts", \
+	    -e "s,%%USER_MODULES_DIR%%,${ZOTONIC}/_checkouts", \
 	    -e "s,%%USER_EBIN_DIR%%,${ZOTONIC}/user/ebin," \
 	    "${config_in}" > "${default_dir}/zotonic.config"
     fi
