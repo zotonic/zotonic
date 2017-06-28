@@ -18,7 +18,7 @@ function parse_zotonic_options {
     while getopts "v" optionName; do
         case "$optionName" in
             v)
-                erl -noinput -eval "{ok, [{application,zotonic,P}]} = file:consult(\"$ZOTONIC/apps/zotonic_core/src/zotonic.app.src\"),io:format(\"Zotonic ~s~n\", [proplists:get_value(vsn,P)]),halt(0)"
+                erl -noinput -eval "{ok, [{application,zotonic,P}]} = file:consult(\"$ZOTONIC/apps/zotonic_core/src/zotonic_core.app.src\"),io:format(\"Zotonic ~s~n\", [proplists:get_value(vsn,P)]),halt(0)"
                 exit 0
         esac
     done
@@ -27,7 +27,7 @@ function parse_zotonic_options {
 #
 # usage zotonic [command] [arguments...]
 #
-export ZOTONIC_SCRIPTS="$ZOTONIC/apps/zotonic_core/bin"
+export ZOTONIC_SCRIPTS="$ZOTONIC/apps/zotonic_launcher/bin"
 
 . $ZOTONIC_SCRIPTS/helpers/zotonic_setup
 parse_zotonic_options $@

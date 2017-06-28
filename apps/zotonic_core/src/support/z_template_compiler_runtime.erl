@@ -187,7 +187,7 @@ map_template_1(Template, Context) when is_binary(Template) ->
 %% @todo Profile this and consider the memo cache to speed this up
 -spec is_modified(filename:filename(), calendar:datetime(), term()) -> boolean().
 is_modified(Filename, Mtime, _Context) ->
-    case z_filewatcher_mtime:mtime(Filename) of
+    case z_file_mtime:mtime(Filename) of
         {ok, Mtime} -> false;
         {ok, _} -> true;
         {error, _} -> true

@@ -16,7 +16,7 @@
 %% The given values are the defaults for the options.
 %%
 %% Be careful with the comma after each option, exclude it after the last option.
-[{zotonic_core,
+[{zotonic,
   [
 
 %%% Path configuration

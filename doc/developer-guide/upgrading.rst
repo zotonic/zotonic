@@ -285,7 +285,7 @@ global configuration file, ``~/.zotonic/zotonic.config``.
 To upgrade your config file, do the following:
 
  * Make a directory in your home folder, called ``~/.zotonic``.
- * Copy ``priv/zotonic.config.in`` to ``~/.zotonic/zotonic.config``
+ * Copy ``priv/config/otonic.config.in`` to ``~/.zotonic/zotonic.config``
  * Copy any settings from ``priv/config`` into the new ``priv/zotonic.config`` (IP addresses, etc)
  * Remove the old file ``priv/config``, as it is no longer in use.
  * Also, move ``priv/erlang.config`` to ``~/.zotonic/erlang.config``.
@@ -416,8 +416,9 @@ dependencies now being managed with the ``rebar`` tool.
 Misc changes
 ^^^^^^^^^^^^
 
-All configuration options regarding logging are now in set in the ``priv/erlang.config`` file,
-which is created by default if missing from ``priv/erlang.config.in``.
+All configuration options regarding logging are now in set in the
+``apps/zotonic_launcher/priv/erlang.config`` file, which is created by
+default if missing from ``apps/zotonic_launcher/priv/erlang.config.in``.
 
 
 Upgrading to Zotonic 0.9

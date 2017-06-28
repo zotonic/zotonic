@@ -31,17 +31,17 @@
 %% Then the FILE_TEMPLATE is checked, and all the corresponding templates are
 %% set to the new timestamp.
 
--module(z_filewatcher_mtime).
+-module(z_file_mtime).
 -author("Marc Worrell <marc@worrell.nl>").
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("kernel/include/file.hrl").
 
 -behaviour(gen_server).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--export([start_link/1]).
+-export([start_link/0, start_link/1]).
 
 -record(state, {
     is_scanner_enabled = true :: boolean()
@@ -125,9 +125,14 @@ insert_template(Module, CompileTime) ->
 %%====================================================================
 %% API
 %%====================================================================
+
+-spec start_link() -> {ok, pid()} | {error, term()}.
+start_link() ->
+    start_link(z_config:get(filewatcher_scanner_enabled, false)).
+
 %% @doc Starts the server. IsScannerEnabled is set if inotify, fswatch or the periodic
 %% directory scanner is enabled. If not then the cached mtimes are periodically flushed.
--spec start_link(boolean()) -> {ok, pid()} | ignore | {error, term()}.
+-spec start_link(boolean()) -> {ok, pid()} | {error, term()}.
 start_link(IsScannerEnabled) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [z_convert:to_bool(IsScannerEnabled)], []).
 
@@ -135,11 +140,8 @@ start_link(IsScannerEnabled) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
+-spec init(list()) -> {ok, #state{}}.
 init([IsScannerEnabled]) ->
     ets:new(?MTIME, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     ets:new(?FILE_TEMPLATE, [named_table, bag, {keypos, 1}, protected, {read_concurrency, true}]),
@@ -229,7 +231,6 @@ handle_info(flush, #state{is_scanner_enabled = true} = State) ->
     {noreply, State};
 
 handle_info(_Info, State) ->
-    ?DEBUG(_Info),
     {noreply, State}.
 
 terminate(_Reason, #state{}) ->
@@ -251,7 +252,7 @@ simplify(Path) when is_binary(Path) ->
         <<".beam">> -> filename:basename(Path);
         _ ->
             case re:run(
-                Path, 
+                Path,
                 "^.*/([a-z0-9_]+/("
                 "support|templates|lib|actions|filters|services|"
                 "validators|scomps|models|services|translations|"

@@ -1,11 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-11-01
+%% @copyright 2009-2017 Marc Worrell
 %%
 %% @doc Periodically loads modules whose beam file have been updated.
-%% This server is started by the mod_development.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,7 +32,7 @@
     reload_module/1
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("kernel/include/file.hrl").
 
 % The state record for this server

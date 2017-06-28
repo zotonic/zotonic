@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2017 Marc Worrell
 %% @doc Handle received e-mail.
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_email_receive).
+-module(zotonic_listen_smtp_receive).
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
@@ -28,7 +28,7 @@
       parse_file/1
     ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Handle a received e-mail
 received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Body, Data) ->
@@ -72,8 +72,8 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
                          raw=Data
                      },
              Email1 = Email#email_received{
-                        is_bulk=z_email_receive_check:is_bulk(Email),
-                        is_auto=z_email_receive_check:is_auto(Email)
+                        is_bulk = zotonic_listen_smtp_check:is_bulk(Email),
+                        is_auto = zotonic_listen_smtp_check:is_auto(Email)
                       },
              z_notifier:first(Email1, Context);
          undefined ->

@@ -27,7 +27,7 @@
     watch_dirs/0
     ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc API for starting the site supervisor.
 start_link() ->
@@ -49,9 +49,6 @@ children(true) ->
 children(false) ->
     lager:error("FILEWATCHER: disabled"),
     [
-        {z_filewatcher_mtime,
-          {z_filewatcher_mtime, start_link, [false]},
-          permanent, 5000, worker, [z_filewatcher_mtime]},
         {z_code_reloader,
           {z_code_reloader, start_link, [false]},
           permanent, 5000, worker, [z_code_reloader]}
@@ -66,9 +63,6 @@ which_watcher([]) ->
             lager:error("FILEWATCHER: please install fswatch or inotify-tools to automatically load changed files")
     end,
     [
-        {z_filewatcher_mtime,
-          {z_filewatcher_mtime, start_link, [IsScannerEnabled]},
-          permanent, 5000, worker, [z_filewatcher_mtime]},
         {z_filewatcher_monitor,
           {z_filewatcher_monitor, start_link, []},
           permanent, 5000, worker, [z_filewatcher_monitor]},
@@ -80,9 +74,6 @@ which_watcher([M|Ms]) ->
     case M:is_installed() of
         true ->
             [
-                {z_filewatcher_mtime,
-                  {z_filewatcher_mtime, start_link, [true]},
-                  permanent, 5000, worker, [z_filewatcher_mtime]},
                 {z_code_reloader,
                   {z_code_reloader, start_link, [false]},
                   permanent, 5000, worker, [z_code_reloader]},
@@ -95,21 +86,21 @@ which_watcher([M|Ms]) ->
     end.
 
 %% @doc Return the list of all directories to watch
-%% @TODO: do not watch the 'files' directories of files.
+%% @todo do not watch the 'files' directories of files.
+%% @todo check this for the OTP-ification - should use better scanning for the OTP app directories
 -spec watch_dirs() -> list(string()).
 watch_dirs() ->
     ZotonicDirs = [
-        filename:join(os:getenv("ZOTONIC"), "src"),
-        filename:join(os:getenv("ZOTONIC"), "modules"),
-
-        filename:join(os:getenv("ZOTONIC"), "_build/default"),
-
-        filename:join(os:getenv("ZOTONIC"), "priv/sites"),
-        filename:join(os:getenv("ZOTONIC"), "priv/modules"),
+        filename:join(z_path:get_path(), "apps"),
+        filename:join(z_path:get_path(), "_build/default"),
 
         z_path:user_sites_dir(),
         z_path:user_modules_dir()
     ],
-    LinkedDirs = string:tokens(os:cmd("find " ++ z_utils:os_escape(os:getenv("ZOTONIC")) ++ " -type l"), "\n"),
-    lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs ++ LinkedDirs).
+
+    % Exclude links in the build directories, as they link back to the apps dir
+    LinkedDirs1 = string:tokens(os:cmd("find " ++ z_utils:os_escape(z_path:user_sites_dir()) ++ " -type l"), "\n"),
+    LinkedDirs2 = string:tokens(os:cmd("find " ++ z_utils:os_escape(z_path:user_modules_dir()) ++ " -type l"), "\n"),
+    lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs ++ LinkedDirs1 ++ LinkedDirs2).
+
 

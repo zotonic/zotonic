@@ -3,9 +3,9 @@
 %%      with gen_smtp.
 %%      Original author: Andrew Thompson (andrew@hijacked.us)
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2013 Maximonster Interactive Things
+%% @copyright 2010-2017 Maximonster Interactive Things
 
-%% Copyright 2010-2013 Maximonster Interactive Things
+%% Copyright 2010-2017 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,12 +20,13 @@
 %% limitations under the License.
 
 
--module(z_email_receive_server).
+-module(zotonic_listen_smtp).
+
 -behaviour(gen_smtp_server_session).
 
 -compile([{parse_transform, lager_transform}]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([start_link/0]).
 
@@ -186,7 +187,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                 {ok, MessageId} ->
                     % The e-mail server knows about the messages sent from our system.
                     % Only report fatal bounces, silently ignore delivery warnings
-                    case z_email_receive_check:is_nonfatal_bounce({Type, Subtype}, Headers, Body) of
+                    case zotonic_listen_smtp_check:is_nonfatal_bounce({Type, Subtype}, Headers, Body) of
                         true -> nop;
                         false -> z_email_server:bounced(State#state.peer, MessageId)
                     end,
@@ -198,7 +199,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                     % Sent to a bounce address, but not a bounce (accept & silently drop the message)
                     {ok, MsgId, reset_state(State)};
                 no_bounce ->
-                    receive_data(z_email_spam:spam_check(DataRcvd),
+                    receive_data(zotonic_listen_smtp_spam:spam_check(DataRcvd),
                                  Decoded, MsgId, From, To, DataRcvd, State)
             end;
         {error, Reason} ->
@@ -209,13 +210,13 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
 receive_data({ok, {ham, SpamStatus, _SpamHeaders}}, {Type, Subtype, Headers, Params, Body}, MsgId, From, To, DataRcvd, State) ->
     lager:debug("Handling email from ~s to ~p (id ~s) (peer ~s) [~p]",
                 [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
-    Received = z_email_receive:received(To, From, State#state.peer, MsgId,
+    Received = zotonic_listen_smtp_receive:received(To, From, State#state.peer, MsgId,
                                         {Type, Subtype}, Headers, Params, Body, DataRcvd),
     reply_handled_status(Received, MsgId, reset_state(State));
 receive_data({ok, {spam, SpamStatus, _SpamHeaders}}, _Decoded, MsgId, From, To, _DataRcvd, State) ->
     lager:info("Refusing spam from ~s to ~p (id ~s) (peer ~s) [~p]",
                [From, To, MsgId, inet_parse:ntoa(State#state.peer), SpamStatus]),
-    {error, z_email_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)};
+    {error, zotonic_listen_smtp_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)};
 receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
     lager:debug("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
     receive_data({ok, {ham, [], []}}, Decoded, MsgId, From, To, DataRcvd, State).
@@ -241,7 +242,7 @@ reply_handled_status(Received, MsgId, State) ->
 %% @doc A message is classified as a bounce if the Return-Path is set to an empty address
 %%      and other appropriate headers are present. Try to match noreply+MSGID@@example.org
 find_bounce_id(Type, Recipients, Headers) ->
-    case z_email_receive_check:is_bounce(Type, Headers) of
+    case zotonic_listen_smtp_check:is_bounce(Type, Headers) of
         true ->
             case find_bounce_email(Recipients) of
                 {ok, _MessageId} = M -> M;

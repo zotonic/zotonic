@@ -30,7 +30,7 @@
 
 -type verb() :: create|modify|delete.
 
--include("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE,
@@ -47,7 +47,7 @@ file_changed(Verb, F) ->
         true ->
             nop;
         false ->
-            z_filewatcher_mtime:modified(F),
+            z_file_mtime:modified(F),
             Message = handle_file(
                             check_deleted(F, Verb),
                             filename:basename(F),

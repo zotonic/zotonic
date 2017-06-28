@@ -1,5 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2014, 2016 Arjan Scherpenisse
+%% @copyright 2014-2017 Arjan Scherpenisse
 %%
 %% @doc Compilation of Zotonic files
 
@@ -27,7 +27,7 @@
     ld/0, ld/1
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Load all changed beam files, return list of reloaded modules.
 -spec ld() -> list( code:load_ret() ).
@@ -55,11 +55,12 @@ all() ->
     all([]).
 
 %% @doc Does a parallel compile of the files in the different Zotonic directories.
-all(Options0) ->
-    case compile_stage(zotonic, Options0) of
-        ok -> compile_stage(user, Options0);
-        error -> error
-    end.
+all(Options) ->
+    compile_stage(user, Options).
+    % case compile_stage(zotonic, Options) of
+    %     ok -> compile_stage(user, Options);
+    %     error -> error
+    % end.
 
 -spec recompile(file:filename_all()) -> up_to_date | error.
 recompile(File) ->
@@ -228,22 +229,25 @@ compile_worker_process(Options, Parent) ->
 
 compile_zotonic_dirs() ->
     [
-     "modules/*/*.erl",
-     "modules/*/*/*.erl",
+        "apps/*/src/*.erl",
+        "apps/*/src/*/*.erl"
 
-     %% zotonic extensions
-     "priv/extensions/ext_*/*.erl",
-     "priv/extensions/ext_*/*/*.erl",
+        % "modules/*/*.erl",
+        % "modules/*/*/*.erl",
 
-     %% builtin sites
-     "priv/sites/*/*.erl",
-     "priv/sites/*/*/*.erl",
-     "priv/sites/*/modules/*/*.erl",
-     "priv/sites/*/modules/*/*/*.erl"
+        % %% zotonic extensions
+        % "priv/extensions/ext_*/*.erl",
+        % "priv/extensions/ext_*/*/*.erl",
+
+        % %% builtin sites
+        % "priv/sites/*/*.erl",
+        % "priv/sites/*/*/*.erl",
+        % "priv/sites/*/modules/*/*.erl",
+        % "priv/sites/*/modules/*/*/*.erl"
     ].
 
+%% @todo Shouldn't the user files and modules be OTP apps as well?
 compile_user_dirs() ->
-    application:load(zotonic_core),
     Modules = user_modules_dir(),
     Sites = user_sites_dir(),
     [
@@ -253,18 +257,20 @@ compile_user_dirs() ->
 
      %% External sites
      Sites ++ "/*/*.erl",
-     Sites ++ "/*/*/*.erl",
-     Sites ++ "/*/modules/*/*.erl",
-     Sites ++ "/*/modules/*/*/*.erl"
+     Sites ++ "/*/*/*.erl"
+     % Sites ++ "/*/modules/*/*.erl",
+     % Sites ++ "/*/modules/*/*/*.erl"
     ].
 
 
 %% @doc Default compile options for Zotonic Erlang files.
+%% @todo The default ebin dir doesn't exist anymore, it is now per application
 compile_options() ->
-    _ = application:load(zotonic_core),
     [
         {i, zotonic_subdir(["include"])},
-        {i, zotonic_subdir(["modules", "*", "include"])},
+        {i, zotonic_subdir(["apps", "zotonic_core", "include"])},
+        {i, zotonic_subdir(["apps", "zotonic_core"])},
+        {i, zotonic_subdir(["apps"])},
         {outdir, zotonic_ebin_dir()},
         {parse_transform, lager_transform},
         nowarn_deprecated_type,
@@ -275,8 +281,7 @@ compile_options() ->
 %% @doc Default compile options for user (sites) files that need to stay separate from the
 %%      Zotonic core files.
 compile_user_options() ->
-    _ = application:load(zotonic_core),
-    Outdir = application:get_env(zotonic_core, user_ebin_dir, zotonic_ebin_dir()),
+    Outdir = get_env(user_ebin_dir, zotonic_ebin_dir()),
     [
         {i, user_modules_dir()},
         {i, user_sites_dir()},
@@ -288,10 +293,16 @@ zotonic_ebin_dir() ->
      zotonic_subdir(["_build", "default", "lib", "zotonic_core", "ebin"]).
 
 user_modules_dir() ->
-    application:get_env(zotonic_core, user_modules_dir, zotonic_subdir(["user", "modules"])).
+    get_env(user_modules_dir, zotonic_subdir(["user", "modules"])).
 
 user_sites_dir() ->
-    application:get_env(zotonic_core, user_sites_dir, zotonic_subdir(["user", "sites"])).
+    get_env(user_sites_dir, zotonic_subdir(["user", "sites"])).
+
+get_env(K, Default) ->
+    case application:get_env(zotonic, K) of
+        {ok, V} -> V;
+        undefined -> application:get_env(zotonic_core, K, Default)
+    end.
 
 zotonic_subdir(Path) when is_list(Path) ->
     filename:join([os:getenv("ZOTONIC") | Path]).
@@ -299,13 +310,14 @@ zotonic_subdir(Path) when is_list(Path) ->
 %% @doc For a list of glob patterns, split all patterns which contain
 %% /*/* up in more patterns, so that we can parallelize it even more.
 unglob(Patterns) ->
-    lists:foldl(fun(Pattern, All) ->
-                        case re:split(Pattern, "/\\*/\\*", [{return, list}, {parts, 2}]) of
-                            [_] -> [Pattern | All];
-                            [Start, End] ->
-                                Dirs = lists:filter(fun filelib:is_dir/1, z_utils:wildcard(Start ++ "/*")),
-                                [Dir ++ "/*" ++ End || Dir <- Dirs] ++ All
-                        end
-                end,
-                [],
-                Patterns).
+    lists:foldl(
+        fun(Pattern, All) ->
+            case re:split(Pattern, "/\\*/\\*", [{return, list}, {parts, 2}]) of
+                [_] -> [Pattern | All];
+                [Start, End] ->
+                    Dirs = lists:filter(fun filelib:is_dir/1, z_utils:wildcard(Start ++ "/*")),
+                    [Dir ++ "/*" ++ End || Dir <- Dirs] ++ All
+            end
+        end,
+        [],
+        Patterns).

@@ -30,13 +30,14 @@
          zotonic_sites_dir/0,
          zotonic_modules_dir/0,
          user_sites_dir/0,
-         user_modules_dir/0
+         user_modules_dir/0,
+         get_path/0
         ]).
 
 -include("zotonic.hrl").
 
 %% @doc Return the path to the site folder of the given context.
-%% @spec site_dir(#context{}) -> filename()
+-spec site_dir(z:context()) -> file:filename().
 site_dir(Context=#context{site=Site}) ->
     F = fun() -> site_dir(Site) end,
     z_depcache:memo(F, {site_dir, Site}, ?HOUR, Context);
@@ -47,7 +48,7 @@ site_dir(Site) when is_atom(Site) ->
     ]).
 
 %% @doc Return the path to the given module in the given context.
-%% @spec module_dir(atom(), #context{}) -> string()
+-spec module_dir(atom(), z:context()) -> file:filename().
 module_dir(Module, Context=#context{site=Site}) ->
     F = fun() -> module_dir(Module, Site) end,
     z_depcache:memo(F, {module_dir, Module}, ?HOUR, Context);
@@ -76,12 +77,12 @@ find_first_path(Paths) ->
         Paths).
 
 %% @doc Return the path to the media preview directory
-%% @spec media_preview(#context{}) -> filename()
+-spec media_preview(z:context()) -> file:filename().
 media_preview(Context) ->
     files_subdir("preview", Context).
 
 %% @doc Return the path to the media archive directory
-%% @spec media_archive(#context{}) -> filename()
+-spec media_archive(z:context()) -> file:filename().
 media_archive(Context) ->
     files_subdir("archive", Context).
 
@@ -90,22 +91,22 @@ abspath(Path, Context) ->
     files_subdir(Path, Context).
 
 %% @doc Return the path to a files subdirectory
-%% @spec files_subdir(SubDir::filename(), #context{}) -> filename()
+-spec files_subdir(file:filename(), z:context()) -> file:filename().
 files_subdir(SubDir, #context{site=Site}) ->
     filename:join([site_dir(Site), "priv", "files", SubDir]).
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
-%% @spec files_subdir_ensure(SubDir::filename(), #context{}) -> filename()
+-spec files_subdir_ensure(file:filename(), z:context()) -> file:filename().
 files_subdir_ensure(SubDir, Context) ->
     Dir = files_subdir(SubDir, Context),
     ok = filelib:ensure_dir(filename:join([Dir, ".empty"])),
     Dir.
 
 zotonic_sites_dir() ->
-    filename:join([zotonic_app:get_path(), "apps"]).
+    filename:join([get_path(), "apps"]).
 
 zotonic_modules_dir() ->
-    filename:join([zotonic_app:get_path(), "apps"]).
+    filename:join([get_path(), "apps"]).
 
 %% @doc The directory of the user-defined sites
 user_sites_dir() ->
@@ -114,5 +115,15 @@ user_sites_dir() ->
 %% @doc The directory of the user-defined modules
 user_modules_dir() ->
     z_config:get(user_modules_dir).
+
+-spec get_path() -> file:filename().
+get_path() ->
+    case os:getenv("ZOTONIC") of
+        false ->
+            {ok, Cwd} = file:get_cwd(),
+            Cwd;
+        ZotonicDir ->
+            ZotonicDir
+    end.
 
 

@@ -228,7 +228,7 @@ checksum([File|Files], State, Context) ->
     end.
 
 last_modified(FilePath) ->
-    case z_filewatcher_mtime:mtime(FilePath) of
+    case z_file_mtime:mtime(FilePath) of
         {ok, MTime} -> MTime;
         {error, notfound} -> {{0,0,0},{0,0,0}}
     end.

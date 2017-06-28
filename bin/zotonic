@@ -2,4 +2,4 @@
 
 export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/..;pwd)}
 
-$ZOTONIC/apps/zotonic_core/bin/zotonic $@
+$ZOTONIC/apps/zotonic_launcher/bin/zotonic $@

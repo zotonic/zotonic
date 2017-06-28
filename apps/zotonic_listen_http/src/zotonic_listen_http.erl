@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2017 Marc Worrell
+%% @doc Start the HTTP listener.
 
-%% @doc Start/stop functions for Zotonic
-
-%% Copyright 2009 Marc Worrell
+%% Copyright 2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,113 +16,66 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(zotonic).
--author('Marc Worrell <marc@worrell.nl>').
+-module(zotonic_listen_http).
+
+-behaviour(gen_server).
+
+-export([start_link/0]).
 
 -export([
-    start/0,
-    start/1,
-    stop/0,
-    stop/1,
-    ping/0,
-    status/0,
-    status/1,
-    update/0,
-    update/1,
-    run_tests/0,
-    ensure_started/1
-]).
+    init/1,
+    handle_call/3,
+    handle_cast/2,
+    handle_info/2,
+    code_change/3,
+    terminate/2
+    ]).
 
--compile([{parse_transform, lager_transform}]).
+-export([
+    start_http_listeners/0,
+    stop_http_listeners/0
+    ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
--define(MIN_OTP_VERSION, "19").
 -define(HTTP_REQUEST_TIMEOUT, 60000).
 
--spec ensure_started(atom()) -> ok | {error, term()}.
-ensure_started(App) ->
-    case application:start(App) of
-        ok ->
-            ok;
-        {error, {not_started, Dep}} ->
-            case ensure_started(Dep) of
-                ok -> ensure_started(App);
-                {error, _} = Error -> Error
-            end;
-        {error, {already_started, App}} ->
-            ok;
-        {error, {Tag, Msg}} when is_list(Tag), is_list(Msg) ->
-            {error, lists:flatten(io_lib:format("~s: ~s", [Tag, Msg]))};
-        {error, {bad_return, {{M, F, Args}, Return}}} ->
-            A = string:join([io_lib:format("~p", [A])|| A <- Args], ", "),
-            {error, lists:flatten(
-                        io_lib:format("~s failed to start due to a bad return value from call ~s:~s(~s):~n~p",
-                                      [App, M, F, A, Return]))};
-        {error, Reason} ->
-            {error, Reason}
-    end.
+%%====================================================================
+%% API functions
+%%====================================================================
 
-%% @doc Start the zotonic server.
--spec start() -> ok.
-start() -> start([]).
+-spec start_link() -> {ok, pid()}.
+start_link() ->
+    gen_server:start_link(?MODULE, [], []).
 
-%% @doc Start the zotonic server.
--spec start(list()) -> ok.
-start(_Args) ->
-    test_erlang_version(),
-    ensure_mnesia_schema(),
-    case ensure_started(zotonic_core) of
-        ok ->
-            start_http_listeners();
-        {error, Reason} ->
-            lager:error("Zotonic start error: ~p~n", [Reason]),
-            init:stop(1)
-    end.
+init([]) ->
+    % Set trap_exit, so that terminate is called
+    process_flag(trap_exit, true),
+    self() ! start,
+    {ok, init}.
 
-%% @doc Stop the zotonic server.
--spec stop() -> ok.
-stop() ->
-    stop_http_listeners(),
-    Res = application:stop(zotonic),
-    application:stop(emqtt),
-    Res.
+handle_call(_Msg, _From, State) ->
+    {reply, {error, unknown_call}, State}.
 
+handle_cast(_Msg, State) ->
+    {noreply, State}.
 
-%% @doc Stop a zotonic server on a specific node
--spec stop([node()]) -> any().
-stop([Node]) ->
-    io:format("Stopping:~p~n", [Node]),
-    case net_adm:ping(Node) of
-        pong -> rpc:cast(Node, init, stop, []);
-        pang -> io:format("There is no node with this name~n")
-    end,
-    init:stop().
+handle_info(start, init) ->
+    ok = start_http_listeners(),
+    {noreply, started}.
 
-%% @doc Just returns 'pong'; used by shell scripts to determine if node is alive.
--spec ping() -> pong.
-ping() ->
-    pong.
+code_change(_Version, State, _Extra) ->
+    {noreply, State}.
 
-%% @doc Print the status of the current node.
--spec status() -> ok.
-status() ->
-    status([node()]).
-
-%% @doc Get server status.  Prints the state of sites running.
--spec status([node()]) -> ok.
-status([Node]) ->
-    [io:format(
-        "~-20s- ~s~n",
-        [Site, Status]
-    ) || [Site, Status | _] <- rpc:call(Node, z_sites_manager, get_sites_status, [])],
+terminate(_Why, started) ->
+    stop_http_listeners();
+terminate(_Why, init) ->
     ok.
 
-%% @doc Update the server. Compiles and loads any new code, flushes caches and rescans all modules.
--spec update() -> ok.
-update() ->
-    z:m(),
-    ok.
+
+%%====================================================================
+%% Internal functions
+%%====================================================================
 
 %% @doc Stop all HTTP listeners
 -spec stop_http_listeners() -> ok.
@@ -134,7 +86,6 @@ stop_http_listeners() ->
               zotonic_https_listener_ipv4,
               zotonic_http_listener_ipv6,
               zotonic_https_listener_ipv6]).
-
 %% @doc Start the HTTP/S listeners
 -spec start_http_listeners() -> ok.
 start_http_listeners() ->
@@ -146,7 +97,8 @@ start_http_listeners() ->
     case ipv6_supported() of
         true ->
             start_http_listeners_ip6(z_config:get(listen_ip6), z_config:get(listen_port)),
-            start_https_listeners_ip6(z_config:get(listen_ip6), z_config:get(ssl_listen_port));
+            start_https_listeners_ip6(z_config:get(listen_ip6), z_config:get(ssl_listen_port)),
+            ok;
         false ->
             ok
     end.
@@ -272,82 +224,3 @@ ipv6_supported() ->
         {ok, _Addr} -> true;
         {error, _} -> false
     end.
-
-
-%% @doc Ensure that mnesia has created its schema in the configured mnesia directory.
--spec ensure_mnesia_schema() -> ok.
-ensure_mnesia_schema() ->
-    application:load(mnesia),
-    case application:get_env(mnesia, dir) of
-        undefined ->
-            lager:info("No mnesia directory defined, running without persistent email queue and filezcache.~n"
-                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}~n~n"),
-            ok;
-        {ok, Dir} ->
-            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir, "schema.DAT")) of
-                true ->
-                    ok;
-                false ->
-                    ok = mnesia:create_schema([node()])
-            end
-    end.
-
-%% @doc Update the server on a specific node with new code on disk and flush the caches.
--spec update([node()]) -> ok.
-update([Node]) ->
-    io:format("Update:~p~n", [Node]),
-    case net_adm:ping(Node) of
-        pong -> rpc:cast(Node, zotonic, update, []);
-        pang -> io:format("There is no node with this name~n")
-    end,
-    init:stop().
-
--spec test_erlang_version() -> ok.
-test_erlang_version() ->
-    % Check for minimal OTP version
-    case otp_release() of
-        Version when Version < ?MIN_OTP_VERSION ->
-            io:format(
-                "Zotonic needs at least Erlang release ~p; this is ~p~n",
-                [?MIN_OTP_VERSION, erlang:system_info(otp_release)]
-            ),
-            erlang:exit({minimal_otp_version, ?MIN_OTP_VERSION});
-        _ ->
-            ok
-    end,
-    % Check on problematic releases
-    case otp_version() of
-        "18.3.2" ->
-            io:format(
-                "Erlang version 18.3.2 has a problem with SSL and ranch, please upgrade your "
-                "Erlang version to 18.3.3 or later~n"
-            ),
-            erlang:exit({broken_otp_version, "18.3.2"});
-        _ ->
-            ok
-    end.
-
-%% @doc Strip the optional "R" from the OTP release because from 17.0 onwards it is unused
--spec otp_release() -> string().
-otp_release() ->
-    case erlang:system_info(otp_release) of
-        [$R | V] -> V;
-        V -> V
-    end.
-
-%% @doc Return the specific otp version,
--spec otp_version() -> string().
-otp_version() ->
-    case file:read_file(
-        filename:join([
-            code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"]
-        )
-    ) of
-        {ok, Version} -> binary_to_list(z_string:trim(Version));
-        {error, _} -> erlang:system_info(otp_release)
-    end.
-
-
-run_tests() ->
-    z_media_preview_tests:test().
-

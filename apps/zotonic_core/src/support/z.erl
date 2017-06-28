@@ -101,8 +101,8 @@ flush(Context) ->
 
 %% @doc Full restart of Zotonic
 restart() ->
-    zotonic:stop(),
-    zotonic:start().
+    application:stop(zotonic),
+    application:start(zotonic).
 
 %% @doc Restart a site
 restart(Site) ->

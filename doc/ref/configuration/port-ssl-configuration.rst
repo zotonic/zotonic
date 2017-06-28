@@ -183,8 +183,8 @@ that is https only.
 Erlang SSL Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-The erlang ssl application is configured in the :file:`~/zotonic/erlang.config`. If this file is
-missing then it can be copied from :file:`priv/erlang.config.in`.  It contains a couple of
+The erlang ssl application is configured in the :file:`~/.zotonic/erlang.config`. If this file is
+missing then it can be copied from :file:`apps/zotonic_launcher/priv/erlang.config.in`.  It contains a couple of
 important settings which we recommend you to change. The reason for this is that the default
 settings Erlang uses are unsuitable for web servers. The most important settings are listed
 below.

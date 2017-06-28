@@ -16,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_email_receive_check).
+-module(zotonic_listen_smtp_check).
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
@@ -26,7 +26,7 @@
          is_nonfatal_bounce/3
         ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 
 %% @doc Check if an e-mail message is a bulk message

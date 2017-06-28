@@ -51,7 +51,7 @@ start_link(SiteProps) ->
 %% @doc Force a reset of all templates, used after a module has been activated or deactivated.
 -spec reset(atom()|#context{}) -> ok.
 reset(Site) when is_atom(Site) ->
-    z_filewatcher_mtime:flush_site(Site),
+    z_file_mtime:flush_site(Site),
     template_compiler:flush_context_name(Site);
 reset(Context) ->
     reset(z_context:site(Context)).

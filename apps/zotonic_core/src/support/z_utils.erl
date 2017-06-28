@@ -108,7 +108,7 @@ f(S, Args) -> lists:flatten(io_lib:format(S, Args)).
 
 %% @doc Return an abspath to a directory relative to the application root.
 lib_dir() ->
-    zotonic_app:get_path().
+    z_path:get_path().
 
 lib_dir(modules) ->
     filename:join([lib_dir(), "apps"]);

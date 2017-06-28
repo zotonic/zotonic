@@ -476,15 +476,11 @@ is_site_redirect(Context) ->
 add_redirects(HostSites, Redirects) ->
     [ add_redirect({Host, Site}, lists:keyfind(Site, 1, Redirects)) || {Host, Site} <- HostSites ].
 
-add_redirect(HS, {_, false, _, _}) ->
-    HS;
-add_redirect({Host, Site}, {Site, true, Host, _Redirect}) ->
-    {Host, Site};
-add_redirect({Host, Site}, {Site, true, _Host, undefined}) ->
-    {Host, Site};
-add_redirect({Host, Site}, {Site, true, _Host, Redirect}) ->
-    {Host, Site, Redirect}.
-
+add_redirect(HS, false) -> HS;
+add_redirect(HS, {_, false, _, _}) -> HS;
+add_redirect({Host, Site}, {Site, true, Host, _Redirect}) -> {Host, Site};
+add_redirect({Host, Site}, {Site, true, _Host, undefined}) -> {Host, Site};
+add_redirect({Host, Site}, {Site, true, _Host, Redirect}) -> {Host, Site, Redirect}.
 
 strip_port(H) ->
     {H1, _} = split_host(H),

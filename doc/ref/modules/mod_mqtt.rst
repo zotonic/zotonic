@@ -262,8 +262,8 @@ MQTT can listen on a port for incoming connections. Per default the listener is 
 Configuration
 ^^^^^^^^^^^^^
 
-The MQTT listener is configured in the :file:`priv/erlang.config`.
-If this file is missing then it can be copied from :file:`priv/erlang.config.in`.
+The MQTT listener is configured in the :file:`~.zotonic/erlang.config`.
+If this file is missing then it can be copied from :file:`~apps/zotonic_launcher/priv/erlang.config.in`.
 
 The following section defines the Zotonic authentication module, access control, and a listener on the standard MQTT port 1883:
 

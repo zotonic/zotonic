@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_email_spam).
+-module(zotonic_listen_smtp_spam).
 -author("Atilla Erdodi <atilla.erdodi@gmail.com>").
 -author("Marc Worrell <marc@worrell.nl>").
 
