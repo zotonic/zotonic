@@ -126,16 +126,21 @@ Sites and modules
         templates/
             some_template.tpl
         yoursite.erl
+        config
         ...
+
 
   After::
 
     yoursite/
         priv/
+            config
             templates/some_template.tpl
+            ...
         src/
             models/m_some_model.erl
             yoursite.erl
+            ...
 
 Templates
 ^^^^^^^^^
