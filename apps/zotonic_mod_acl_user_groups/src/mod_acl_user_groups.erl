@@ -328,10 +328,8 @@ rebuild(Context) ->
     rebuild(edit, Context).
 
 rebuild(edit, Context) ->
-    z_mqtt:publish(<<"~site/acl-rules/edit-rebuild">>, [], Context),
     gen_server:cast(name(Context), rebuild_edit);
 rebuild(publish, Context) ->
-    z_mqtt:publish(<<"~site/acl-rules/publish-rebuild">>, [], Context),
     gen_server:cast(name(Context), rebuild_publish).
 
 -spec table(#context{}) -> ets:tab() | undefined.
@@ -468,7 +466,7 @@ handle_info(rebuild, #state{rebuilder_pid=undefined} = State) ->
 handle_info(rebuild, #state{rebuilder_pid=Pid} = State) when is_pid(Pid) ->
     {noreply, State};
 
-handle_info({'DOWN', MRef, process, _Pid, normal}, #state{rebuilder_mref=MRef} = State) ->
+handle_info({'DOWN', MRef, process, _Pid, normal}, #state{rebuilder_mref = MRef, site = Site} = State) ->
     lager:debug("[mod_acl_user_groups] rebuilder for ~p finished.",
                 [State#state.rebuilding]),
     State1 = State#state{
@@ -477,6 +475,12 @@ handle_info({'DOWN', MRef, process, _Pid, normal}, #state{rebuilder_mref=MRef} =
                     rebuilder_mref=undefined
                 },
     State2 = maybe_rebuild(State1),
+    Context = z_context:new(Site),
+    z_mqtt:publish(
+        <<"~site/acl-rules/", (z_convert:to_binary(State#state.rebuilding))/binary, "-rebuild">>,
+        [],
+        z_acl:sudo(Context)
+    ),
     {noreply, State2};
 
 handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{rebuilder_mref=MRef} = State) ->
