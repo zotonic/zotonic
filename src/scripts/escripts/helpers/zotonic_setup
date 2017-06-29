@@ -23,6 +23,7 @@
     require_zotonic_not_running/0,
     get_zotonic_path/0,
     major_version/0,
+    distributed_detected/0,
     minor_version/0,
     find_enabled_sites/1,
     find_config/1,
@@ -31,6 +32,7 @@
     get_user_sites_dir/0,
     get_user_modules_dir/0,
     get_user_ebin_dir/0,
+    get_home_path/0,
     main/1]).
 
 -include("zotonic_escript_helper.hrl").
@@ -56,6 +58,21 @@ require_zotonic_not_running() ->
 get_zotonic_path() ->
     {ok, CurrentDir} = file:get_cwd(),
     ZotonicDir = CurrentDir.
+
+%%get_node_host() ->
+%%    {ok, HostName} = inet:gethostname(),
+%%    NodeHost = HostName.
+
+distributed_detected() ->
+    {ok, Nodes} = net_adm:names(),
+    NodeNumber = length(Nodes),
+    case NodeNumber > 1 of
+        true  ->
+            io:format("Zotonic is running in distributed mode"),
+            halt();
+        false ->
+            io:format("Zotonic is not running in distributed mode")
+    end.
 
 major_version() ->
     {ok, VsnStr} = application:get_key(zotonic, vsn),
@@ -87,13 +104,12 @@ find_config(FileName) ->
     VSN_Major = major_version(),
     VSN_Minor = minor_version(),
 
-    File = list_to_atom(filename:absname(FileName)),
-    FilePaths = ["$HOME/.zotonic/" ++ ?NODENAME ++ "/" ++ File, "$HOME/.zotonic/" ++ VSN_Minor ++ "/" ++ File,
-            "$HOME/.zotonic/" ++ VSN_Major ++ "/" ++ File, "$HOME/.zotonic/" ++ File,
-            "/etc/zotonic/" ++ ?NODENAME ++ "/" +File, "/etc/zotonic/" ++ VSN_Minor ++ "/" ++ File,
-            "/etc/zotonic/" ++ VSN_Major ++ "/" ++ File, "/etc/zotonic/" ++ File],
+    FilePaths = [?HOME ++ "/.zotonic/" ++ ?NODENAME ++ "/" ++ FileName, ?HOME ++ "/.zotonic/" ++ VSN_Minor ++ "/" ++ FileName,
+            ?HOME ++ "/.zotonic/" ++ VSN_Major ++ "/" ++ FileName, ?HOME ++ "/.zotonic/" ++ FileName,
+            "/etc/zotonic/" ++ ?NODENAME ++ "/" +FileName, "/etc/zotonic/" ++ VSN_Minor ++ "/" ++ FileName,
+            "/etc/zotonic/" ++ VSN_Major ++ "/" ++ FileName, "/etc/zotonic/" ++ FileName],
 
-    case lists:member(File, FilePaths) of
+    case lists:member(FileName, FilePaths) of
          true ->
              io:format("~s~n", [FileName])
     end.
@@ -127,15 +143,26 @@ get_user_ebin_dir() ->
     File = find_config("zotonic.config"),
     consult_config([File, "zotonic", "user_ebin_dir"]).
 
-main([HostName]) ->
+get_home_path() ->
+    {ok, [[Home]]} = init:get_argument(home),
+    HomeDir = Home.
+
+main([]) ->
     VSN_Major = major_version(),
     VSN_Minor = minor_version(),
-    DefaultDir = "$HOME/.zotonic/" ++ VSN_Major,
+    DefaultDir = ?HOME ++ "/.zotonic/" ++ VSN_Major,
     ErlangConfig = find_config("erlang.config"),
     ZotonicConfig = find_config("zotonic.config"),
 
-    ?NAME_ARG = -name,
-    ?NODEHOST = HostName,
+    if ErlangConfig == "" ->
+        io:format("Installing default erlang.config file"),
+        filelib:ensure_dir(DefaultDir),
+        file:copy(?ZOTONIC ++ "/priv/erlang.config.in", DefaultDir ++ "/erlang.config")
+    end,
+
+    if ZotonicConfig == "" ->
+        io:format("Installing global Zotonic config file")
+    end,
 
     case filelib:is_dir(?Modules) of
         true ->
@@ -149,14 +176,5 @@ main([HostName]) ->
             halt();
         _ ->
             file:make_dir(?Sites)
-    end,
-
-    if ErlangConfig == "" ->
-        io:format("Installing default erlang.config file"),
-        file:make_dir(DefaultDir),
-        file:copy(?ZOTONIC ++ "/priv/erlang.config.in", DefaultDir ++ "/erlang.config")
-    end,
-
-    if ZotonicConfig == "" ->
-        io:format("Installing global Zotonic config file")
     end.
+

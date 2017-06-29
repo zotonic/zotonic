@@ -17,6 +17,7 @@
 %% usage zotonic generate-edoc
 %%%-------------------------------------------------------------------
 
+-define(HOME, zotonic_setup:get_home_path()).
 -define(ZOTONIC, zotonic_setup:get_zotonic_path()).
 -define(ZOTONIC_BIN, ?ZOTONIC ++ "/bin").
 -define(ZOTONIC_SCRIPTS, ?ZOTONIC ++ "/src/scripts").
@@ -27,16 +28,16 @@
 -define(KERNEL_POLL, true).
 -define(USER_EBIN_DIR, zotonic_setup:get_user_ebin_dir()).
 -define(NODENAME, "zotonic001").
+-define(NODEHOST, net_adm:localhost()).
 -define(PA, ?ZOTONIC ++ "/_checkouts/*/ebin " ++ ?ZOTONIC ++ "/_build/default/lib/*/ebin " ++ ?USER_EBIN_DIR ++ " " ++
     ?ZOTONIC ++ "/modules/*/deps/*/ebin " ++ ?ZOTONIC ++ "/priv/modules/*/deps/*/ebin " ++
     ?ZOTONIC ++ "/priv/sites/*/deps/*/ebin " ++ ?ZOTONIC ++ "/priv/sites/*/modules/*/deps/*/ebin").
 
+-define(ZOTONIC_DISTRIBUTED, zotonic_setup:distributed_detected()).
 -ifdef(ZOTONIC_DISTRIBUTED).
 -define(NAME_ARG, "-name").
--define(NODEHOST, "").
 -else.
 -define(NAME_ARG, "-sname").
--define(NODEHOST, "").
 -endif.
 
 -define(ZOTONIC_PIDFILE, ?ZOTONIC ++ "/zotonic.pid").
