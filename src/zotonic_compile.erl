@@ -74,6 +74,14 @@ compile_options(Filename) ->
             {ok, Options} = guess_compile_options(Filename),
             Options;
         Options ->
+            previous_options(Options)
+    end.
+
+previous_options(Options) ->
+    case proplists:lookup(outdir, Options) of
+        none ->
+            [{outdir, zotonic_ebin_dir()} | Options];
+        _ ->
             Options
     end.
 

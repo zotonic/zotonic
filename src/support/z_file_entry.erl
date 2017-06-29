@@ -89,7 +89,7 @@
 -define(SERVING_TIMEOUT, 3600000).
 
 %% Inactivity timeout for entries that are not found (60 secs)
--define(SERVING_ENOENT_TIMEOUT, 6000).
+-define(SERVING_ENOENT_TIMEOUT, 60000).
 
 %% Period between stale checks (in usec, 2 seconds)
 -define(STALE_TIMER_DIFF, 2000000).
