@@ -10,6 +10,11 @@ major Zotonic version.
 Upgrading from 0.x to 1.0
 -------------------------
 
+Erlang/OTP
+^^^^^^^^^^
+
+* Support for Erlang 18 was dropped.
+
 ACL
 ^^^
 
