@@ -68,10 +68,10 @@ distributed_detected() ->
     NodeNumber = length(Nodes),
     case NodeNumber > 1 of
         true  ->
-            io:format("Zotonic is running in distributed mode"),
+            io:format("Zotonic is configured to run in distributed mode"),
             halt();
         false ->
-            io:format("Zotonic is not running in distributed mode")
+            io:format("Zotonic is not configured to run in distributed mode")
     end.
 
 major_version() ->
@@ -156,25 +156,33 @@ main([]) ->
 
     if ErlangConfig == "" ->
         io:format("Installing default erlang.config file"),
-        filelib:ensure_dir(DefaultDir),
+        filelib:ensure_dir(DefaultDir ++ "/"),
         file:copy(?ZOTONIC ++ "/priv/erlang.config.in", DefaultDir ++ "/erlang.config")
     end,
 
     if ZotonicConfig == "" ->
-        io:format("Installing global Zotonic config file")
+        io:format("Installing global Zotonic config file"),
+        PW = os:cmd("echo -n $(openssl rand -hex 10)"),
+        {ok, ZotonicFile} = file:read_file(?ZOTONIC ++ "/priv/zotonic.config.in"),
+        Content = binary_to_list(ZotonicFile),
+        TempFile = re:replace(Content, "%%USER_SITES_DIR%%", ?ZOTONIC ++ "/user/sites", [global, {return, list}]),
+        TempFile1 = re:replace(TempFile, "%%USER_MODULES_DIR%%", ?ZOTONIC ++ "/user/modules", [global, {return, list}]),
+        TempFile2 = re:replace(TempFile1, "%%USER_EBIN_DIR%%", ?ZOTONIC ++ "/user/ebin", [global, {return, list}]),
+        ConfigFile = re:replace(TempFile2, "%%GENERATED%%", PW, [global, {return, list}]),
+        file:write_file(DefaultDir ++ "/zotonic.config", [ConfigFile])
     end,
 
     case filelib:is_dir(?Modules) of
         true ->
             halt();
         _ ->
-            file:make_dir(?Modules)
+            filelib:ensure_dir(?Modules)
     end,
 
     case filelib:is_dir(?Sites) of
         true ->
             halt();
         _ ->
-            file:make_dir(?Sites)
+            filelib:ensure_dir(?Sites)
     end.
 
