@@ -26,7 +26,7 @@
 main(Schema) ->
     case Schema of
         " "  ->
-            io:format("USAGE: Schema_name"),
+            io:format("USAGE: ~s", [escript:script_name()]),
             io:format("USAGE: See ZotonicCommands.txt");
         _ ->
             os:cmd("sed s/%schema/" ++ Schema ++ "/g \< " ++ ?ZOTONIC_SCRIPTS ++ "/helpers/zotonic-createschema_sql.in \ | ${PSQL:=psql}")

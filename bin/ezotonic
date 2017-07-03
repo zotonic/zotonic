@@ -1,0 +1,58 @@
+#!/usr/bin/env escript
+%%
+%% @author M, <tantemelki@gmail.com>
+%% @copyright 2017
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%	 http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+
+-export([main/1,
+    parse_zotonic_options/0]).
+
+-include("zotonic_escript_helper.hrl").
+
+parse_zotonic_options() ->
+    {ok, Version} = application:get_key(zotonic, vsn),
+    io:format("Zotonic ~s~n", Version).
+%%    OptSpecList = [
+%%        {v, $v, "version", undefined, "Zotonic Version"}
+%%    ],
+%%    case getopt:parse(OptSpecList, Version) of
+%%        {ok, Options}  ->
+%%            {ok, Version} = application:get_key(zotonic, vsn),
+%%            io:format("Zotonic ~s~n", Version)
+%%    end.
+
+main([Command]) ->
+    zotonic_setup:main([]),
+
+    case Command of
+        "-v" ->
+            parse_zotonic_options();
+        " "  ->
+            io:format("Usage: ~s (options) ~s~n", [escript:script_name(), Command]),
+            io:format("Where ~s is one of: ~n", [Command]),
+            io:format("~s~n", [os:cmd("find src/scripts/zotonic-* -perm -a+x | sed 's/.*zotonic-//g'")]),
+            io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n"),
+            io:format("Options: ~n"),
+            io:format("  -v : Prints Zotonic version");
+        _ ->
+            SubScript = ?ZOTONIC_SCRIPTS ++ "/zotonic-" ++ Command,
+            case SubScript of
+                " " ->
+                    io:format("Command not found: ~s~n", [Command]),
+                    halt();
+                _ ->
+                    SubScript
+            end
+    end.
