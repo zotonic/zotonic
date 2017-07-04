@@ -31,7 +31,8 @@
     update/0,
     update/1,
     run_tests/0,
-    ensure_started/1
+    ensure_started/1,
+    await/0
 ]).
 
 -compile([{parse_transform, lager_transform}]).
@@ -77,6 +78,12 @@ start(_Args) ->
             lager:error("Zotonic start error: ~p~n", [Reason]),
             init:stop(1)
     end.
+
+%% @doc Await till all parts are started - useful for testing
+-spec await() -> ok.
+await() ->
+    zotonic_listen_http:await(),
+    ok.
 
 %% @doc Stop the zotonic server.
 -spec stop() -> ok.

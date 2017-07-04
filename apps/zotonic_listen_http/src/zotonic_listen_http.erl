@@ -33,7 +33,8 @@
 
 -export([
     start_http_listeners/0,
-    stop_http_listeners/0
+    stop_http_listeners/0,
+    await/0
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -46,13 +47,30 @@
 
 -spec start_link() -> {ok, pid()}.
 start_link() ->
-    gen_server:start_link(?MODULE, [], []).
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+
+-spec await() -> ok.
+await() ->
+    case gen_server:call(?MODULE, status) of
+        started -> ok;
+        init ->
+            timer:sleep(10),
+            await()
+    end.
+
+%%====================================================================
+%% gen_server functions
+%%====================================================================
+
 
 init([]) ->
     % Set trap_exit, so that terminate is called
     process_flag(trap_exit, true),
     self() ! start,
     {ok, init}.
+
+handle_call(status, _From, State) ->
+    {reply, State, State};
 
 handle_call(_Msg, _From, State) ->
     {reply, {error, unknown_call}, State}.
