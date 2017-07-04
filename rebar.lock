@@ -20,7 +20,7 @@
   2},
  {<<"cowmachine">>,
   {git,"https://github.com/zotonic/cowmachine.git",
-       {ref,"3eee11dd50eda87c57e6fe5fa198dc32573f0da6"}},
+       {ref,"659076db0a1f0559b68202c74c0cd3bdb2e081ce"}},
   0},
  {<<"depcache">>,
   {git,"https://github.com/zotonic/depcache.git",
@@ -148,17 +148,14 @@
   0},
  {<<"template_compiler">>,
   {git,"https://github.com/zotonic/template_compiler.git",
-       {ref,"c18ea322f15aa7b5dc7c4b7a271b3503a78b238c"}},
+       {ref,"76656ae0c35665d4e14dce0b1ec9c338b7e894b4"}},
   0},
  {<<"twerl">>,
   {git,"https://github.com/mworrell/twerl.git",
        {ref,"511187da785903d64f5b284ae1d2888b07199e2f"}},
   0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.4.0">>},1},
- {<<"z_stdlib">>,
-  {git,"https://github.com/zotonic/z_stdlib.git",
-       {ref,"46b2cf0c67fcadc33977d48b57b20d135a2fcdaf"}},
-  0}]}.
+ {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.0-alpha2">>},0}]}.
 [
 {pkg_hash,[
  {<<"bert">>, <<"A87D6693515070A9B287C1043CB7E5B2406BE0357685022764BFBD2609703555">>},
@@ -180,5 +177,6 @@
  {<<"qdate_localtime">>, <<"5F6C3ACF10ECC5A7E2EFA3DCD2C863102B962188DBD9E086EC01D29FE029DA29">>},
  {<<"recon">>, <<"281F2CBB439FE3C043773EE6C83172ABD80326DCC6153F6430E4D4E6B14D7E9D">>},
  {<<"shotgun">>, <<"54EA3C243B65A935A3491A079A573C9D119A5EAF28BC2673893F8EEF66FDC053">>},
- {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>}]}
+ {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>},
+ {<<"zotonic_stdlib">>, <<"62625C995D0ED0DF4DA314BEFA47605D78FEF121A0CAF65521557D6725D40B0A">>}]}
 ].
