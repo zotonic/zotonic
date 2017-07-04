@@ -136,10 +136,10 @@ start_http_listeners_ip4(WebIp, WebPort) ->
     end,
     {ok, _} = cowboy:start_clear(
         zotonic_http_listener_ipv4,
-        z_config:get(inet_acceptor_pool_size),
         [   inet,
             {port, WebPort},
-            {backlog, z_config:get(inet_backlog)}
+            {backlog, z_config:get(inet_backlog)},
+            {num_acceptors, z_config:get(inet_acceptor_pool_size)}
             | WebOpt
         ],
         cowboy_options()).
@@ -157,10 +157,10 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
     end,
     {ok, _} = start_tls(
         zotonic_https_listener_ipv4,
-        z_config:get(ssl_acceptor_pool_size),
         [   inet,
             {port, SSLPort},
-            {backlog, z_config:get(ssl_backlog)}
+            {backlog, z_config:get(ssl_backlog)},
+            {num_acceptors, z_config:get(ssl_acceptor_pool_size)}
         ]
         ++ z_ssl_certs:ssl_listener_options()
         ++ WebOpt,
@@ -177,11 +177,11 @@ start_http_listeners_ip6(WebIp, WebPort) ->
     end,
     {ok, _} = cowboy:start_clear(
         zotonic_http_listener_ipv6,
-        z_config:get(inet_acceptor_pool_size),
         [   inet6,
             {ipv6_v6only, true},
             {port, WebPort},
-            {backlog, z_config:get(inet_backlog)}
+            {backlog, z_config:get(inet_backlog)},
+            {num_acceptors, z_config:get(inet_acceptor_pool_size)}
         ]
         ++ WebOpt,
         cowboy_options()).
@@ -197,11 +197,11 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
     end,
     {ok, _} = start_tls(
         zotonic_https_listener_ipv6,
-        z_config:get(ssl_acceptor_pool_size),
         [   inet6,
             {ipv6_v6only, true},
             {port, SSLPort},
-            {backlog, z_config:get(ssl_backlog)}
+            {backlog, z_config:get(ssl_backlog)},
+            {num_acceptors, z_config:get(ssl_acceptor_pool_size)}
         ]
         ++ z_ssl_certs:ssl_listener_options()
         ++ WebOpt,
@@ -219,15 +219,14 @@ cowboy_options() ->
 
 
 % @doc Copied from cowboy.erl, disable http2 till the cipher problems are resolved.
--spec start_tls(ranch:ref(), non_neg_integer(), ranch_ssl:opts(), list()) -> {ok, pid()} | {error, any()}.
-start_tls(Ref, NbAcceptors, TransOpts0, ProtoOpts)
-        when is_integer(NbAcceptors), NbAcceptors > 0 ->
+-spec start_tls(ranch:ref(), ranch_ssl:opts(), list()) -> {ok, pid()} | {error, any()}.
+start_tls(Ref, TransOpts0, ProtoOpts) ->
     TransOpts = [
         connection_type(ProtoOpts)
         % {next_protocols_advertised, [<<"h2">>, <<"http/1.1">>]},
         % {alpn_preferred_protocols, [<<"h2">>, <<"http/1.1">>]}
     |TransOpts0],
-    ranch:start_listener(Ref, NbAcceptors, ranch_ssl, TransOpts, cowboy_tls, ProtoOpts).
+    ranch:start_listener(Ref, ranch_ssl, TransOpts, cowboy_tls, ProtoOpts).
 
 -spec connection_type(list()) -> {connection_type, worker | supervisor}.
 connection_type(ProtoOpts) ->
