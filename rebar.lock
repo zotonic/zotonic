@@ -154,7 +154,7 @@
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.4.0">>},1},
  {<<"z_stdlib">>,
   {git,"git://github.com/zotonic/z_stdlib.git",
-       {ref,"37b2b4c93338ff0bb5389f07fa27f7eab7f7b93c"}},
+       {ref,"b7c4a670b553b5d2e54273e9fbdacb72dfc425b3"}},
   1},
  {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.0-alpha2">>},0}]}.
 [
