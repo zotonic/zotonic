@@ -1,5 +1,5 @@
-{application, zotonic_mod_admin_statistics, [
-    {description, "Allow admins to view system statistics."},
+{application, zotonic_mod_zotonic_site_management, [
+    {description, "Manage Zotonic sites. Used by zotonic_site_status."},
     {vsn, "git"},
     {registered, []},
     {applications, [zotonic_core]},

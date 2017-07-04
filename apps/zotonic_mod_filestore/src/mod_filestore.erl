@@ -327,7 +327,7 @@ start_downloader(R, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
             LocalPath = z_path:files_subdir(Path, Context),
-            ok = filelib:ensure_dir(LocalPath),
+            ok = z_filelib:ensure_dir(LocalPath),
             lager:debug("Queue move to local for ~p", [Location1]),
             ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]});

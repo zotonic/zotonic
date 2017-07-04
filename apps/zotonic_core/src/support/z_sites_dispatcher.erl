@@ -721,7 +721,7 @@ find_no_host_match(DispReq, OptReq) ->
     end.
 
 
-%% @doc Try to find the fallback site (usually zotonic_status).
+%% @doc Try to find the fallback site (usually zotonic_site_status).
 find_dispatch_fallback() ->
     case get_fallback_site() of
         undefined -> #dispatch_nomatch{};

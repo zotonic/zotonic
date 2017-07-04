@@ -19,25 +19,30 @@
 -module(translation_scan).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([scan/2, scan_file/2]).
+-export([scan/1, scan_file/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
 -export([parse_erl/2]).
 
--spec scan([{atom(), string()}], #context{}) -> [{ModuleName :: atom(), Labels :: list()}].
-scan(Modules, _Context) ->
-    [scan_module(Module) || Module <- Modules].
+-spec scan([{App :: atom(), Dir :: file:filename_all()}]) ->
+        [{App :: atom(), Dir :: file:filename_all(), Labels :: list()}].
+scan(Apps) ->
+    [scan_module(App) || App <- Apps].
 
-scan_module({Module, Dir}) ->
-    Files = lists:flatten(
-        [z_module_indexer:all_files(Type, {Module, Dir})
-            || Type <- [template, scomp, action, validator, model, service, erlang]
-        ]
-    ),
-    Files1 = [File || #module_index{filepath = File} <- Files],
-    {Module, dedupl(lists:flatten([scan_file(filename:extension(File), File) || File <- Files1]))}.
+scan_module({App, Dir}) ->
+    Scanned = lists:map(
+        fun(File) ->
+            Ext = z_convert:to_list(filename:extension(File)),
+            scan_file(Ext, File)
+        end,
+        collect_all_files(Dir)),
+    {App, Dir, dedupl(lists:flatten(Scanned))}.
+
+collect_all_files(Dir) ->
+    z_utils:wildcard_recursive("*.erl", filename:join(Dir, "src"))
+    ++ z_utils:wildcard_recursive("*.tpl", filename:join([Dir, "priv", "templates"])).
 
 dedupl(Trans) ->
     Dict = dict:new(),
@@ -69,23 +74,27 @@ merge_args([{Lang,Text}|Rest], Args) ->
 
 
 %% @doc Parse the template or Erlang module. Extract all translation tags.
-scan_file(<<".tpl">>, File) ->
+scan_file(".tpl", File) ->
     case template_compiler:translations(File) of
         {ok, Translations} ->
             normalize_line_info(Translations);
         {error, Reason} ->
-          lager:error("POT generation, erlang error in ~p: ~p~n", [File, Reason])
+          lager:error("POT generation, erlang error in \"~s\": ~p~n", [File, Reason])
     end;
-scan_file(<<".erl">>, File) ->
-    case epp:open(binary_to_list(File), [z_utils:lib_dir(include)]) of
+scan_file(".erl", File) ->
+    IncludeDirs = case zotonic_compile:compile_options(File) of
+        {ok, Options} -> proplists:get_all_values(i, Options);
+        false -> []
+    end,
+    case epp:open(z_convert:to_list(File), [z_utils:lib_dir(include) | IncludeDirs]) of
         {ok, Epp} ->
             parse_erl(File, Epp);
         {error, Reason} ->
-            lager:error("POT generation, erlang error in ~p: ~p~n", [File, Reason]),
+            lager:error("POT generation, erlang error in \"~s\": ~p~n", [File, Reason]),
             []
     end;
 scan_file(_, _) ->
-  [].
+    [].
 
 normalize_line_info(Translations) ->
     normalize_line_info(Translations, []).
@@ -126,10 +135,10 @@ parse_erl_form_part({'case', _, Expr, Exprs}, File, Acc) ->
 
 parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},
                      [{string, Line, S}, _]}, File, Acc) ->
-    [{S, [], {File,Line}}|Acc];
+    [{unicode:characters_to_binary(S), [], {File,Line}}|Acc];
 parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},
                      [{bin, _, [{bin_element, _, {string, Line, S}, _, _}|_]}|_]}, File, Acc) ->
-    [{S, [], {File,Line}}|Acc];
+    [{unicode:characters_to_binary(S), [], {File,Line}}|Acc];
 
 parse_erl_form_part({call, _, _, Expressions}, File, Acc) ->
     lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Expressions);

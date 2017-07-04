@@ -41,5 +41,5 @@ generate(InputDir, OutputDir) ->
 
 outpath(Component) ->
     Path = filename:join([os:getenv("ZOTONIC"), "doc", "_build", "edoc", Component]),
-    filelib:ensure_dir(filename:join([Path, ".empty"])),
+    z_filelib:ensure_dir(filename:join([Path, ".empty"])),
     Path.

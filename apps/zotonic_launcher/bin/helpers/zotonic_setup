@@ -47,6 +47,11 @@ function minor_version {
 }
 export -f minor_version
 
+function full_version {
+    cat $ZOTONIC/{apps,_build/default/lib}/zotonic_core/include/zotonic_release.hrl 2>/dev/null|grep ZOTONIC_VERSION|head -1|sed 's/[^"]*\"\([^"]*\)\".*/\1/'
+}
+export -f full_version
+
 function find_enabled_sites {
     # find enabled sites
     enabled_sites=""

@@ -134,12 +134,13 @@ Sites and modules
 
     yoursite/
         priv/
-            config
+            zotonic_site.config
             templates/some_template.tpl
             ...
         src/
             models/m_some_model.erl
             yoursite.erl
+            yoursite.app.src
             ...
 
 Templates
@@ -290,8 +291,8 @@ global configuration file, ``~/.zotonic/zotonic.config``.
 To upgrade your config file, do the following:
 
  * Make a directory in your home folder, called ``~/.zotonic``.
- * Copy ``priv/config/otonic.config.in`` to ``~/.zotonic/zotonic.config``
- * Copy any settings from ``priv/config`` into the new ``priv/zotonic.config`` (IP addresses, etc)
+ * Copy ``priv/config/zotonic.config.in`` to ``~/.zotonic/zotonic.config``
+ * Copy any settings from ``priv/config`` into the new ``~/.zotonic/zotonic.config`` (IP addresses, etc)
  * Remove the old file ``priv/config``, as it is no longer in use.
  * Also, move ``priv/erlang.config`` to ``~/.zotonic/erlang.config``.
 

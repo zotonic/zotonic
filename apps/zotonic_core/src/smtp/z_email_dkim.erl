@@ -37,12 +37,12 @@ ensure_configured(Context) ->
 %% @doc Return a {Priv, Pub} tuple listing the paths to the private
 %% and public key files
 cert_files(Context) ->
-	KeyDir = filename:join(z_path:site_dir(Context), "dkim"),
-	Sitename = z_convert:to_list(z_context:site(Context)),
-    {
+	 KeyDir = filename:join([z_path:site_dir(Context), "priv", "dkim"]),
+	 Sitename = z_convert:to_list(z_context:site(Context)),
+   {
       filename:join(KeyDir, Sitename++".dkim.key"),
       filename:join(KeyDir, Sitename++".dkim.pub")
-    }.
+   }.
 
 %% @doc Return the DNS domain that is used to place the TXT record in
 dns_entry_domain(Context) ->
@@ -59,8 +59,8 @@ dns_entry(Context) ->
 %% @doc Generate an RSA key using the openssl utility
 generate_key(Context) ->
     {PrivKeyFile, PubKeyFile} = cert_files(Context),
-    ok = filelib:ensure_dir(PrivKeyFile),
-    ok = filelib:ensure_dir(PubKeyFile),
+    ok = z_filelib:ensure_dir(PrivKeyFile),
+    ok = z_filelib:ensure_dir(PubKeyFile),
     PrivKeyCmd = "openssl genrsa -out " ++ z_utils:os_filename(PrivKeyFile) ++ " 1024",
     os:cmd(PrivKeyCmd),
     PubKeyCmd = "openssl rsa -in " ++ z_utils:os_filename(PrivKeyFile)

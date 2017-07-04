@@ -51,6 +51,12 @@
     put_site_config_overrides/2
 ]).
 
+-export([
+    scan_sites/0,
+    scan_sites/1
+]).
+
+-define(CONFIG_FILE, "zotonic_site.config").
 
 -include_lib("zotonic.hrl").
 
@@ -140,12 +146,7 @@ get_site_contexts() ->
 %% @doc Get a site's directory.
 -spec get_site_dir(atom()) -> file:filename_all().
 get_site_dir(Site) ->
-    case is_built_in(Site) of
-        true ->
-            filename:join(["_build", "default", "lib", Site]);
-        false ->
-            filename:join([z_path:user_sites_dir(), Site])
-    end.
+    z_path:site_dir(Site).
 
 %% @doc Fetch the configuration of a specific site.
 -spec get_site_config(atom()) -> {ok, list()} | {error, term()}.
@@ -177,13 +178,10 @@ get_fallback_site() ->
         false -> get_fallback_site(Sites)
     end.
 
-%% @doc The list of builtin sites, they are located in the priv/sites directory.
+%% @doc The list of builtin sites, they are located in the zotonic/apps/ directory.
 -spec get_builtin_sites() -> [ atom() ].
 get_builtin_sites() ->
-    [zotonic_site_status, zotonic_site_testsandbox].
-
-is_built_in(Site) ->
-    lists:member(Site, get_builtin_sites()).
+    [ zotonic_site_status, zotonic_site_testsandbox ].
 
 %% @doc Stop a site or multiple sites.
 stop([Node, Site]) ->
@@ -374,15 +372,7 @@ handle_site_status_1(Site, [{Status, Sites}|Statuses]) ->
 
 %% @doc Get the file path of the config file for a site.
 get_site_config_file(Site) ->
-    Dir = get_site_dir(Site),
-    Path = filename:join([Dir, "priv", "config"]),
-    case filelib:is_file(Path) of
-        true ->
-            Path;
-        false ->
-            %% BC: fall back to old site structure
-            filename:join([z_path:user_sites_dir(), Site, "config"])
-    end.
+    filename:join([get_site_dir(Site), "priv", ?CONFIG_FILE]).
 
 %% @doc Scan all sites subdirectories for the site configurations.
 -spec scan_sites() -> [ list() ].
@@ -390,25 +380,24 @@ scan_sites() ->
     scan_sites(is_testsandbox()).
 
 scan_sites(true) ->
-    Sites = [zotonic_site_testsandbox],
-    ConfigFiles = [get_site_config_file(Site) || Site <- Sites],
-    ParsedConfigs = [parse_config(CfgFile) || CfgFile <- ConfigFiles],
-    [SiteConfig || {ok, SiteConfig} <- ParsedConfigs];
+    CfgFile = get_site_config_file(zotonic_site_testsandbox),
+    {ok, SiteConfig} = parse_config(CfgFile),
+    [SiteConfig];
 scan_sites(false) ->
-    BuiltinSites = get_builtin_sites() -- [zotonic_site_testsandbox],
-    Builtin = [ parse_config(get_site_config_file(Builtin)) || Builtin <- BuiltinSites ],
-    [ BuiltinCfg || {ok, BuiltinCfg} <- Builtin ] ++ scan_directory(z_path:user_sites_dir()).
+    lists:filter(
+        fun(Cfg) ->
+            proplists:get_value(site, Cfg) =/= zotonic_site_testsandbox
+        end,
+        scan_directory(z_path:build_lib_dir())).
 
 scan_directory(Directory) ->
-    ConfigFiles = z_utils:wildcard(filename:join([Directory, "*", "priv", "config"])),
+    Configs = z_utils:wildcard(filename:join([Directory, "*", "priv", ?CONFIG_FILE])),
+    ConfigFiles = lists:filter(fun filelib:is_regular/1, Configs),
     ParsedConfigs = [ parse_config(CfgFile) || CfgFile <- ConfigFiles ],
     [ SiteConfig || {ok, SiteConfig} <- ParsedConfigs ].
 
 parse_config(CfgFile) ->
-    PrivPath = filename:dirname(CfgFile),
-    %% drop priv/
-    Parts = lists:droplast(filename:split(PrivPath)),
-    SitePath = filename:join(Parts),
+    SitePath = filename:dirname(filename:dirname(CfgFile)),
     Site = z_convert:to_atom(filename:basename(SitePath)),
     ConfigFiles = [ CfgFile | config_d_files(SitePath) ],
     parse_config(ConfigFiles, [{site, Site}]).

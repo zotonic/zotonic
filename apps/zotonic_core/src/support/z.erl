@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %%
 %% @doc Some easy shortcut functions.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,9 +27,7 @@
     n/2,
     n1/2,
     m/0,
-    m/1,
     compile/0,
-    compile/1,
     flush/0,
     flush/1,
     restart/0,
@@ -65,27 +63,19 @@ n(Msg, Context) ->
 
 %% @doc Send a notification to the first observer
 n1(Msg, Context) ->
-    z_notifier:notify1(Msg, Context).
+    z_notifier:first(Msg, Context).
 
 %% @doc (Re)make all erlang source modules and reset the caches.
 m() ->
-    m([]).
-
-%% @doc (Re)make all erlang source modules with the supplied compile
-%% options and reset the caches.
-m(Options) ->
-    case compile(Options) of
-        ok -> flush();
-        error -> error
+    case compile() of
+        ok -> flush(), ok;
+        Other -> Other
     end.
 
 %% @doc (Re)make all erlang source modules with the supplied compile
 %% options. Do not reset the caches.
 compile() ->
     zotonic_compile:all().
-
-compile(Options) ->
-    zotonic_compile:all(Options).
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
 flush() ->
@@ -101,8 +91,8 @@ flush(Context) ->
 
 %% @doc Full restart of Zotonic
 restart() ->
-    application:stop(zotonic),
-    application:start(zotonic).
+    application:stop(zotonic_core),
+    application:start(zotonic_core).
 
 %% @doc Restart a site
 restart(Site) ->

@@ -21,7 +21,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Mercurial support").
--mod_description("Allows to update and rebuild sites and zotonic installs from mercurial.").
+-mod_description("Allows to update and rebuild sites and zotonic installs from git or mercurial.").
 -mod_prio(500).
 
 -export([

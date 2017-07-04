@@ -30,33 +30,33 @@
 
 %% API exports
 -export([
-         upgrade/1,
-         deactivate/2,
-         activate/2,
-         activate_await/2,
-         await_upgrade/1,
-         restart/2,
-         module_reloaded/2,
-         active/1,
-         active/2,
-         active_dir/1,
-         get_provided/1,
-         get_modules/1,
-         get_modules_status/1,
-         get_upgrade_status/1,
-         whereis/2,
-         all/1,
-         scan/1,
-         scan_core/1,
-         prio/1,
-         prio_sort/1,
-         dependency_sort/1,
-         dependencies/1,
-         startable/2,
-         module_exists/1,
-         title/1,
-         reinstall/2
-        ]).
+    upgrade/1,
+    deactivate/2,
+    activate/2,
+    activate_await/2,
+    await_upgrade/1,
+    restart/2,
+    module_reloaded/2,
+    active/1,
+    active/2,
+    active_dir/1,
+    lib_dir/1,
+    get_provided/1,
+    get_modules/1,
+    get_modules_status/1,
+    get_upgrade_status/1,
+    whereis/2,
+    all/1,
+    scan/0,
+    prio/1,
+    prio_sort/1,
+    dependency_sort/1,
+    dependencies/1,
+    startable/2,
+    module_exists/1,
+    title/1,
+    reinstall/2
+]).
 
 -include_lib("zotonic.hrl").
 
@@ -68,15 +68,15 @@
 
 %% Module manager state
 -record(state, {
-          context :: #context{},
-          sup :: pid(),
-          module_exports = [] :: list({atom(), list()}),
-          module_schema = [] :: list({atom(), integer()|undefined}),
-          start_wait  = none :: none | {atom(), pid(), erlang:timestamp()},
-          start_queue = [] :: list(),
-          start_error = [] :: list(),
-          upgrade_waiters = [] :: list()
-      }).
+    context :: #context{},
+    sup :: pid(),
+    module_exports = [] :: list({atom(), list()}),
+    module_schema = [] :: list({atom(), integer()|undefined}),
+    start_wait  = none :: none | {atom(), pid(), erlang:timestamp()},
+    start_queue = [] :: list(),
+    start_error = [] :: list(),
+    upgrade_waiters = [] :: list()
+}).
 
 
 %%====================================================================
@@ -136,30 +136,36 @@ activate_await(Module, Context) when is_atom(Module) ->
             Error
     end.
 
+activate(Module, IsSync, #context{site=Module} = Context) ->
+    flush(Context),
+    activate_1(Module, IsSync, Context);
 activate(Module, IsSync, Context) ->
     flush(Context),
-    case proplists:lookup(Module, scan(Context)) of
-        {Module, _Dirname} ->
-            F = fun(Ctx) ->
-                        case z_db:q("update module
-                                     set is_active = true,
-                                         modified = now()
-                                     where name = $1",
-                                    [Module], Ctx)
-                        of
-                            0 ->
-                                z_db:q("insert into module (name, is_active)
-                                        values ($1, true)",
-                                       [Module], Ctx);
-                            1 -> 1
-                        end
-                end,
-            1 = z_db:transaction(F, Context),
-            upgrade(IsSync, Context);
-        none ->
+    case proplists:is_defined(Module, scan()) of
+        true -> activate_1(Module, IsSync, Context);
+        false ->
             lager:error("Could not find module '~p'", [Module]),
             {error, not_found}
     end.
+
+activate_1(Module, IsSync, Context) ->
+    F = fun(Ctx) ->
+                case z_db:q("update module
+                             set is_active = true,
+                                 modified = now()
+                             where name = $1",
+                            [Module], Ctx)
+                of
+                    0 ->
+                        z_db:q("insert into module (name, is_active)
+                                values ($1, true)",
+                               [Module], Ctx);
+                    1 -> 1
+                end
+        end,
+    1 = z_db:transaction(F, Context),
+    upgrade(IsSync, Context).
+
 
 %% @doc Wait till all modules are started, used when starting up a new or test site.
 -spec await_upgrade(#context{}) -> ok | {error, timeout}.
@@ -230,12 +236,26 @@ active(Module, Context) ->
 
 
 %% @doc Return the list of all active modules and their directories
-%% @spec active_dir(#context{}) -> [ {atom, Dir} ]
+-spec active_dir(z:context()) -> [ {Module::atom(), Dir::file:filename_all()} ].
 active_dir(Context) ->
-    Active = active(Context),
-    All    = scan(Context),
-    [ {M, proplists:get_value(M, All)} || M <- Active ].
+    lists:foldr(
+        fun(Module, Acc) ->
+            case lib_dir(Module) of
+                {error, bad_name} -> Acc;
+                Dirname when is_list(Dirname) -> [ {Module, Dirname} | Acc ]
+            end
+        end,
+        [],
+        active(Context)).
 
+-spec lib_dir(atom()) -> {error, bad_name} | file:filename().
+lib_dir(Module) when is_atom(Module) ->
+    case atom_to_list(Module) of
+        "mod_" ++ _ = M ->
+            code:lib_dir("zotonic_"++M);
+        _ ->
+            code:lib_dir(Module)
+    end.
 
 %% @doc Return the list of all modules running.
 get_modules(Context) ->
@@ -264,7 +284,7 @@ whereis(Module, Context) ->
 
 
 %% @doc Return the list of all modules in the database.
-%% @spec all(#context{}) -> [ atom() ]
+-spec all(z:context()) -> [ atom() ].
 all(Context) ->
     Modules = z_db:q("select name from module order by name", Context),
     [ z_convert:to_atom(M) || {M} <- Modules ].
@@ -272,41 +292,23 @@ all(Context) ->
 
 %% @doc Scan for a list of modules present in the site's module directories. A module is always a directory,
 %% the name of the directory is the same as the name of the module.
-%% @spec scan(#context{}) -> [ {atom(), dirname()} ]
-scan(#context{site=Site}) ->
-    All = [
-           %% Zotonic modules
-           [z_path:zotonic_modules_dir(), "zotonic_mod_*"],
-
-           %% Zotonic built-in sites
-           [z_path:zotonic_sites_dir(), Site, "src", "modules", "mod_*"],
-           [z_path:zotonic_sites_dir(), Site],
-
-           %% User-installed Zotonic sites
-           [z_path:user_sites_dir(), Site, "src", "modules", "mod_*"],
-           [z_path:user_sites_dir(), Site],
-
-           %% User-installed modules
-           [z_path:user_modules_dir(), "mod_*"]
-          ],
-    scan_paths(All).
-
-%% @doc Get a list of Zotonic core modules.
--spec scan_core(#context{}) -> list({ModuleName :: atom(), Path :: string()}).
-scan_core(#context{}) ->
+-spec scan() -> [ {atom(), Dir::file:filename_all()} ].
+scan() ->
     scan_paths([
-        [z_path:zotonic_modules_dir(), "zotonic_mod_*"]
+           % Zotonic core modules
+           filename:join(z_path:build_lib_dir(), "zotonic_mod_*"),
+
+           % User installed modules
+           filename:join(z_path:build_lib_dir(), "mod_*")
     ]).
 
 scan_paths(Paths) ->
-    Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [z_utils:wildcard(filename:join(P)) || P <- Paths]),
+    Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [z_utils:wildcard(P) || P <- Paths]),
     [ {module(filename:basename(F)), F} ||  F <- Files ].
 
 %% @doc Strip zotonic_ prefix from core module names.
-module("zotonic_mod_" ++ Name) ->
-    z_convert:to_atom("mod_" ++ Name);
-module(Name) ->
-    z_convert:to_atom(Name).
+module("zotonic_mod_" ++ Name) -> list_to_atom("mod_" ++ Name);
+module(Name) -> list_to_atom(Name).
 
 %%z_convert:to_atom(
 
@@ -840,9 +842,12 @@ handle_get_modules_pid(State) ->
                 z_supervisor:which_children(State#state.sup))).
 
 %% @doc Get a list of all valid modules
-valid_modules(Context) ->
+valid_modules(#context{site=Site} = Context) ->
+    Scan = scan(),
     Ms0 = lists:filter(fun module_exists/1, active(Context)),
-    lists:filter(fun(Mod) -> valid(Mod, Context) end, Ms0).
+    lists:filter(
+        fun (Mod) -> Mod =:= Site orelse proplists:is_defined(Mod, Scan) end,
+        Ms0).
 
 
 %% @doc Return the z_supervisor child spec for a module
@@ -870,12 +875,6 @@ has_behaviour(M, Behaviour) ->
         undefined ->
             false
     end.
-
-
-%% @doc Check whether given module is valid for the given site
-%% @spec valid(atom(), #context{}) -> bool()
-valid(M, Context) ->
-    lists:member(M, [Mod || {Mod,_} <- scan(Context)]).
 
 
 %% @doc Manage the upgrade/install of this module.

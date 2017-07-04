@@ -235,7 +235,7 @@ move_file(BaseDir, File, DeleteTarget, ToDir) ->
     end,
     case filelib:is_regular(Target) of
         false ->
-            case filelib:ensure_dir(Target) of
+            case z_filelib:ensure_dir(Target) of
                 ok ->
                     case file:rename(File,Target) of
                         ok -> {ok, Target};

@@ -37,32 +37,32 @@
 -mod_provides([translation]).
 
 -export([
-         observe_session_init_fold/3,
-         observe_session_context/3,
-         observe_auth_logon/3,
-         observe_user_context/3,
-         observe_set_user_language/3,
-         observe_url_rewrite/3,
-         observe_dispatch_rewrite/3,
-         observe_scomp_script_render/2,
-         observe_admin_menu/3,
+    observe_session_init_fold/3,
+    observe_session_context/3,
+    observe_auth_logon/3,
+    observe_user_context/3,
+    observe_set_user_language/3,
+    observe_url_rewrite/3,
+    observe_dispatch_rewrite/3,
+    observe_scomp_script_render/2,
+    observe_admin_menu/3,
 
-         set_user_language/2,
-         set_default_language/2,
-         language_add/3,
-         language_delete/2,
-         language_enable/3,
-         set_language_url_rewrite/2,
-         language_config/1,
-         enabled_languages/1,
-         url_strip_language/1,
-         valid_config_language/2,
+    set_user_language/2,
+    set_default_language/2,
+    language_add/3,
+    language_delete/2,
+    language_enable/3,
+    set_language_url_rewrite/2,
+    language_config/1,
+    enabled_languages/1,
+    url_strip_language/1,
+    valid_config_language/2,
 
-         init/1,
-         event/2,
-         generate/1,
-         generate_core/1
-        ]).
+    init/1,
+    event/2,
+    generate/1,
+    generate_core/0
+]).
 
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -653,26 +653,49 @@ language_list_item(Code, IsEnabled) ->
 
 % @doc Generate all .po templates for the given site
 generate(#context{} = Context) ->
-    ActiveModules = z_module_manager:active_dir(Context),
-    translation_po:generate(translation_scan:scan(ActiveModules, Context), Context),
-    generate_core(Context);
+    ActiveModules = lists:foldl(
+        fun({App, _}, Acc) ->
+            lists:keydelete(core_app_to_module_name(App), 1, Acc)
+        end,
+        z_module_manager:active_dir(Context),
+        core_apps()),
+    Result = translation_po:generate(translation_scan:scan(ActiveModules)),
+    _ = generate_core(),
+    Result;
 generate(Host) when is_atom(Host) ->
     generate(z_context:new(Host)).
 
 %% @doc Generate consolidated translation file zotonic.pot for all core modules.
 %%      Both active and inactive modules are indexed, so the generated
 %%      translation files are always complete.
--spec generate_core(#context{}) -> ok.
-generate_core(#context{} = Context) ->
-    CoreModules = z_module_manager:scan_core(Context),
-    translation_po:generate(translation_scan:scan(CoreModules, Context), Context),
-    consolidate(Context).
+-spec generate_core() -> ok | {error, needs_core_zotonic}.
+generate_core() ->
+    case zotonic_core:is_zotonic_project() of
+        true ->
+            translation_po:generate(translation_scan:scan(core_apps())),
+            consolidate_core();
+        false ->
+            {error, needs_core_zotonic}
+    end.
+
+%% @doc Return a list of all core modules and sites - only for the zotonic git project.
+core_apps() ->
+    Apps = filelib:wildcard(filename:join([z_path:get_path(), "apps", "zotonic_*"])),
+    [ {z_convert:to_atom(filename:basename(Dir)), Dir} || Dir <- Apps ].
+
+core_app_to_module_name(App) when is_atom(App) ->
+    case atom_to_list(App) of
+        "zotonic_mod_"++Rest -> list_to_atom("mod_"++Rest);
+        _ -> App
+    end.
 
 %% @doc Consolidate translation files for core modules
-consolidate(_Context) ->
-    Command = lists:flatten(["msgcat -o ",
-        z_utils:lib_dir(priv) ++ "/translations/zotonic.pot ",
-        z_utils:lib_dir(priv) ++ "/translations/template/*.pot"
+consolidate_core() ->
+    Command = lists:flatten([
+        "msgcat -o ",
+        code:priv_dir(zotonic_core) ++ "/translations/zotonic.pot",
+        " ",
+        filename:join([z_path:get_path(), "apps", "zotonic_*/priv/translations/template/*.pot"])
     ]),
     [] = os:cmd(Command),
     ok.

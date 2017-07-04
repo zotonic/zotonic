@@ -72,7 +72,6 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 do_startup(Context) ->
-
     case z_db:has_connection(Context) of
         true ->
             z_install_data:install_modules(Context),

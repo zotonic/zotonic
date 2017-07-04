@@ -18,10 +18,6 @@ Zotonic is built on Erlang/OTP. An understanding of Erlang/OTP
 conventions is essential if you wish to read Zotonic source code,
 develop Zotonic modules, or contribute code or patches to Zotonic.
 
-As yet, Zotonic is not maintained under Rebar (external dependencies in `deps` are). But developing a
-skeletal Erlang/OTP application under Rebar is a great way to dip your
-feet into Erlang/OTP development.
-
 By following each step in this tutorial carefully, and referring back
 to the many excellent on-line Erlang documentation resources, you will
 accelerate your progress up the daunting Erlang/OTP learning

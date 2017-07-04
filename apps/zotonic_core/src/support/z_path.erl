@@ -31,6 +31,7 @@
          zotonic_modules_dir/0,
          user_sites_dir/0,
          user_modules_dir/0,
+         build_lib_dir/0,
          get_path/0
         ]).
 
@@ -99,7 +100,7 @@ files_subdir(SubDir, #context{site=Site}) ->
 -spec files_subdir_ensure(file:filename(), z:context()) -> file:filename().
 files_subdir_ensure(SubDir, Context) ->
     Dir = files_subdir(SubDir, Context),
-    ok = filelib:ensure_dir(filename:join([Dir, ".empty"])),
+    ok = z_filelib:ensure_dir(filename:join([Dir, ".empty"])),
     Dir.
 
 zotonic_sites_dir() ->
@@ -126,4 +127,8 @@ get_path() ->
             ZotonicDir
     end.
 
+%% @doc Return the _build/default/lib directory
+-spec build_lib_dir() -> file:filename().
+build_lib_dir() ->
+    filename:dirname(filename:dirname(code:priv_dir(zotonic))).
 

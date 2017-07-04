@@ -35,8 +35,8 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Check if an user is enabled.
-observe_user_is_enabled(#user_is_enabled{id=UserId}, _Context) ->
-    UserId == 1.
+observe_user_is_enabled(#user_is_enabled{id=1}, _Context) -> true;
+observe_user_is_enabled(#user_is_enabled{}, _Context) -> false.
 
 %% @doc Let the user log on, this is the moment to start caching information.
 observe_acl_logon(#acl_logon{id=UserId}, Context) ->

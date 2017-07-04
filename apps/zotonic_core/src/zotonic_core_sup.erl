@@ -157,7 +157,7 @@ mnesia_dir() ->
                 ZotonicPrivDir when is_list(ZotonicPrivDir) -> ZotonicPrivDir
             end,
             MnesiaDir = filename:join([ PrivDir, "mnesia", atom_to_list(node()) ]),
-            case filelib:ensure_dir(MnesiaDir) of
+            case z_filelib:ensure_dir(MnesiaDir) of
                 ok -> {ok, MnesiaDir};
                 {error, _} = Error ->
                     lager:error("Could not create mnesia dir \"~s\": ~p",

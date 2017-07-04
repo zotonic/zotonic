@@ -189,13 +189,7 @@
 
 %%% Maximum number of concurrent spawned sidejobs. This includes processes spawned and linked
 %%% to the session and page-sessions. Default is 50% of the process_limit.
-   %% {sidejobs_limit, 100000},
-
-%%% List with extra dependencies which get fetched and compiled by rebar
-   %% {deps,
-   %%  [
-   %%   {jsx, "1.4", {git, "git://github.com/talentdeficit/jsx", {tag, "v1.4"}}}
-   %%  ]},
+   %% {sidejobs_limit, 100000}
 
   ]
  }

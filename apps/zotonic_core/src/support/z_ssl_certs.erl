@@ -146,7 +146,7 @@ is_valid_hostname_char(_) -> false.
 
 
 %% @doc Check if all certificates are available in the site's ssl directory
-%% @todo Disentangle use of the fallback site and zotonic_status
+%% @todo Disentangle use of the fallback site and zotonic_site_status
 -spec ensure_self_signed(atom()) ->  {ok, list()} | {error, term()}.
 ensure_self_signed(Site) ->
     ensure_self_signed(Site, undefined).
@@ -201,7 +201,7 @@ check_keyfile(Filename) ->
 generate_self_signed(NormalizedHostname, Opts) ->
     PemFile = proplists:get_value(keyfile, Opts),
     lager:info("Generating self-signed ssl keys for ~s in ~s", [NormalizedHostname, PemFile]),
-    case filelib:ensure_dir(PemFile) of
+    case z_filelib:ensure_dir(PemFile) of
         ok ->
             KeyFile = filename:rootname(PemFile) ++ ".key",
             CertFile = proplists:get_value(certfile, Opts),
@@ -256,7 +256,7 @@ ensure_dhfile(Filename) ->
         true ->
             ok;
         false ->
-            ok = filelib:ensure_dir(Filename),
+            ok = z_filelib:ensure_dir(Filename),
             % Maybe use the -dsaparam, maybe we shouldn't https://www.openssl.org/news/secadv/20160128.txt
             % Though without this the generation will take a long time indeed...
             lager:info("Generating ~s bits DH key, this will take a long time (saving to ~p)",

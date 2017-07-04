@@ -76,7 +76,7 @@ archive_file(Filename, NewBasename, Context) ->
         false ->
             NewFile = archive_filename(NewBasename, Context),
             AbsPath = abspath(NewFile, Context),
-            ok = filelib:ensure_dir(AbsPath),
+            ok = z_filelib:ensure_dir(AbsPath),
             case file:rename(Fileabs, AbsPath) of
                 %% cross-fs rename is not supported by erlang, so copy and delete the file
                 {error, exdev} ->
@@ -106,7 +106,7 @@ archive_copy(preview, Filename, NewBasename, Context) ->
 archive_copy_1(Filename, NewFile, Context) ->
     Fileabs = filename:absname(Filename),
     AbsPath = abspath(NewFile, Context),
-    ok = filelib:ensure_dir(AbsPath),
+    ok = z_filelib:ensure_dir(AbsPath),
     {ok, _Bytes} = file:copy(Fileabs, AbsPath),
     NewFile.
 
@@ -122,7 +122,7 @@ archive_copy_opt(Filename, NewBasename, Context) ->
         false ->
             NewFile = archive_filename(NewBasename, Context),
             AbsPath = abspath(NewFile, Context),
-            ok = filelib:ensure_dir(AbsPath),
+            ok = z_filelib:ensure_dir(AbsPath),
             {ok, _Bytes} = file:copy(Fileabs, AbsPath),
             NewFile;
         true ->

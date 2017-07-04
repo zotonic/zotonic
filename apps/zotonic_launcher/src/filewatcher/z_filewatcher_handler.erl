@@ -34,11 +34,15 @@
 
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE,
-        "_flymake|\\.#|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/|/log/\\.log$|/mnesia/").
+        "_flymake|\\.#|/priv/files/"
+        "|/\\.git/|/\\.gitignore|\\.hg/"
+        "|/log/\\.log$"
+        "|/mnesia/"
+        "|/\\.rebar3").
 
 
 %% @doc Called when a file is changed on disk. Decides what to do.
-%% @spec file_changed(modify | create, string()) -> ok
+-spec file_changed(verb(), file:filename_all()) -> ok.
 file_changed(Verb, F) when is_binary(F) ->
     file_changed(Verb, z_convert:to_list(F));
 file_changed(Verb, F) ->

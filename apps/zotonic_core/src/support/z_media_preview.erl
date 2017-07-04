@@ -90,7 +90,7 @@ convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
 
 convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
     file:delete(OutFile),
-    ok = filelib:ensure_dir(OutFile),
+    ok = z_filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
         z_utils:os_filename(ConvertCmd), " ",
         opt_density(FileProps),

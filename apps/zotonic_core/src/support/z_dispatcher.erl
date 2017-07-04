@@ -356,7 +356,7 @@ reload_dispatch_list(#state{context=Context} = State) ->
 collect_dispatch_lists(Context) ->
     Files      = z_utils:wildcard(filename:join([z_path:site_dir(Context), "priv", "dispatch", "*"])),
     Modules    = z_module_manager:active(Context),
-    ModuleDirs = z_module_manager:scan(Context),
+    ModuleDirs = z_module_manager:scan(),
     ModDisp    = [ {M, z_utils:wildcard(filename:join([proplists:get_value(M, ModuleDirs), "priv", "dispatch", "*"]))} || M <- Modules ],
     ModDispOnPrio = lists:concat([ ModFiles || {_Mod, ModFiles} <- z_module_manager:prio_sort(ModDisp) ]),
     Dispatch   = lists:map(fun get_file_dispatch/1, ModDispOnPrio++Files),

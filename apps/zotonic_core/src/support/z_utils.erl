@@ -64,6 +64,7 @@
     lib_dir/1,
     wildcard/1,
     wildcard/2,
+    wildcard_recursive/2,
     filter_dot_files/1,
     list_dir_recursive/1,
     name_for_site/2,
@@ -107,6 +108,7 @@ f(S, Args) -> lists:flatten(io_lib:format(S, Args)).
 
 
 %% @doc Return an abspath to a directory relative to the application root.
+%% @todo OTP check the "apps", that is wrong in the context of non zotonic-git projects
 lib_dir() ->
     z_path:get_path().
 
@@ -122,16 +124,85 @@ wildcard(Wildcard) ->
 wildcard(Wildcard, DirName) ->
     filter_dot_files(filelib:wildcard(Wildcard, DirName)).
 
+wildcard_recursive(WildCard, DirName) ->
+    wildcard_recursive_1(WildCard, DirName, []).
+
+wildcard_recursive_1(WildCard, Dirname, Found) ->
+    Files = wildcard(WildCard, Dirname),
+    All = wildcard("*", Dirname),
+    Found1 = lists:foldl(
+        fun (File, Acc) ->
+            Path = filename:join(Dirname, File),
+            case filelib:is_regular(Path) of
+                true -> [ Path | Acc ];
+                false -> Acc
+            end
+        end,
+        Found,
+        Files),
+    lists:foldl(
+        fun(MaybeDir, Acc) ->
+            MaybeDirPath = filename:join(Dirname, MaybeDir),
+            case filelib:is_dir(MaybeDirPath) of
+                true ->
+                    wildcard_recursive_1(WildCard, MaybeDirPath, Acc);
+                false ->
+                    Acc
+            end
+        end,
+        Found1,
+        All).
+
 %% @doc Filter all filenames which start with a dot.
 filter_dot_files(Names) ->
     [NoDotName || NoDotName <- Names, no_dot_file(NoDotName)].
 
-    no_dot_file(Name) ->
-        no_dot_file1(filename:split(Name)).
+no_dot_file(Name) ->
+    no_dot_file1(filename:split(Name)).
 
-    no_dot_file1([]) -> true;
-    no_dot_file1([[$.|_] | _]) -> false;
-    no_dot_file1([_|Rest]) -> no_dot_file1(Rest).
+no_dot_file1([]) -> true;
+no_dot_file1([[$.|_] | _]) -> false;
+no_dot_file1([_|Rest]) -> no_dot_file1(Rest).
+
+
+%% @doc Return a list of all files in a directory, recursive depth first search for files not starting with a '.'
+list_dir_recursive(Dir) ->
+    Sep = separator(element(1, os:type())),
+    AbsDir = filename:absname(Dir),
+    case file:list_dir(AbsDir) of
+        {ok, Files} ->
+            list_dir_recursive(Files, AbsDir, Sep, []);
+        {error, _} ->
+            []
+    end.
+
+list_dir_recursive([], _BaseDir, _Sep, Acc) ->
+    Acc;
+list_dir_recursive([[$.|_]|OtherFiles], BaseDir, Sep, Acc) ->
+    list_dir_recursive(OtherFiles, BaseDir, Sep, Acc);
+list_dir_recursive([File|OtherFiles], BaseDir, Sep, Acc) ->
+    Path = [BaseDir, Sep, File],
+    case filelib:is_regular(Path) of
+        true ->
+            list_dir_recursive(OtherFiles, BaseDir, Sep, [File|Acc]);
+        false ->
+            case filelib:is_dir(Path) of
+                true ->
+                    Acc1 = case file:list_dir(Path) of
+                               {ok, Files} ->
+                                   RelFiles = [ [File, Sep, F] || [H|_]=F <- Files, H /= $.],
+                                   list_dir_recursive(RelFiles, BaseDir, Sep, Acc);
+                               {error, _} ->
+                                   Acc
+                           end,
+                    list_dir_recursive(OtherFiles, BaseDir, Sep, Acc1);
+                false ->
+                    list_dir_recursive(OtherFiles, BaseDir, Sep, Acc)
+            end
+    end.
+
+separator(win32) -> $\\;
+separator(_) -> $/.
 
 
 %% @doc Return the current tick count
@@ -731,46 +802,6 @@ replace1(F, T, [F|R], Acc) ->
     replace1(F, T, R, [T|Acc]);
 replace1(F, T, [C|R], Acc) ->
     replace1(F, T, R, [C|Acc]).
-
-
-%% @doc Return a list of all files in a directory, recursive depth first search for files not starting with a '.'
-list_dir_recursive(Dir) ->
-    Sep = separator(element(1, os:type())),
-    AbsDir = filename:absname(Dir),
-    case file:list_dir(AbsDir) of
-        {ok, Files} ->
-            list_dir_recursive(Files, AbsDir, Sep, []);
-        {error, _} ->
-            []
-    end.
-
-list_dir_recursive([], _BaseDir, _Sep, Acc) ->
-    Acc;
-list_dir_recursive([[$.|_]|OtherFiles], BaseDir, Sep, Acc) ->
-    list_dir_recursive(OtherFiles, BaseDir, Sep, Acc);
-list_dir_recursive([File|OtherFiles], BaseDir, Sep, Acc) ->
-    Path = [BaseDir, Sep, File],
-    case filelib:is_regular(Path) of
-        true ->
-            list_dir_recursive(OtherFiles, BaseDir, Sep, [File|Acc]);
-        false ->
-            case filelib:is_dir(Path) of
-                true ->
-                    Acc1 = case file:list_dir(Path) of
-                               {ok, Files} ->
-                                   RelFiles = [ [File, Sep, F] || [H|_]=F <- Files, H /= $.],
-                                   list_dir_recursive(RelFiles, BaseDir, Sep, Acc);
-                               {error, _} ->
-                                   Acc
-                           end,
-                    list_dir_recursive(OtherFiles, BaseDir, Sep, Acc1);
-                false ->
-                    list_dir_recursive(OtherFiles, BaseDir, Sep, Acc)
-            end
-    end.
-
-separator(win32) -> $\\;
-separator(_) -> $/.
 
 
 %% @doc Check if two arguments are equal, optionally converting them

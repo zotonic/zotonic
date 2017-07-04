@@ -20,31 +20,30 @@
 -module(translation_po).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([generate/2]).
+-export([generate/1]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
 %% @doc Take the list of found labels per module and generate all po files for those labels in the module directories.
--spec generate([{ModuleName :: atom(), Labels :: list()}], #context{}) -> ok.
-generate(ModLabels, Context) ->
-    generate1(ModLabels, Context).
+-spec generate([{ModuleName :: atom(), Dirname :: file:filename_all(), Labels :: list()}]) -> ok.
+generate(ModLabels) ->
+    generate1(ModLabels).
 
--spec generate1([{atom(), list()}], #context{}) -> ok.
-generate1([], _Context) ->
+-spec generate1([{atom(), file:filename_all(), list()}]) -> ok.
+generate1([]) ->
     ok;
-generate1([{Module, Labels}|ModuleLabels], Context) ->
-    Path = template_path(Module, Context),
+generate1([{Module, Dirname, Labels}|ModuleLabels]) ->
+    Path = template_path(Module, Dirname),
     Dir = filename:dirname(Path),
-
-    case filelib:ensure_dir(filename:join([Dir, "empty"])) of
+    case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
         ok ->
             delete_po_files(Dir),
             generate_po_files(Module, Dir, Labels),
-            generate1(ModuleLabels, Context);
+            generate1(ModuleLabels);
         {error, Reason} ->
             lager:warning("Could not create directory for extracted translations: ~p ~p", [{error, Reason}, Dir]),
-            generate1(ModuleLabels, Context)
+            generate1(ModuleLabels)
     end.
 
 %% Delete all existing po files in a directory
@@ -88,16 +87,22 @@ extract_labels(Lang, [{Lab, Trans, Pos}|Labels], Acc) ->
 
 
 %% @doc Get the path to a module's translation template (.pot) file
--spec template_path(atom(), #context{}) -> string().
-template_path(Module, Context) ->
-    CoreModules = z_module_manager:scan_core(Context),
-    AllModules = z_module_manager:scan(Context),
-    TemplateParentDir = case proplists:lookup(Module, CoreModules) of
-        none ->
-            %% Custom module
-            proplists:get_value(Module, AllModules);
-        {_Module, _Path} ->
-            %% Core module
-            z_utils:lib_dir(priv)
+-spec template_path(atom(), file:filename_all()) -> file:filename_all().
+template_path(App, Dirname) ->
+    AppsDir = filename:join([ z_path:get_path(), "apps", App ]),
+    PrivDir = case filelib:is_dir(AppsDir) of
+        true ->
+            filename:join(AppsDir, "priv");
+        false ->
+            CheckoutDir = filename:join([ z_path:get_path(), "_checkouts", App ]),
+            case filelib:is_dir(CheckoutDir) of
+                true ->
+                    filename:join(CheckoutDir, "priv");
+                false ->
+                    case code:priv_dir(App) of
+                        {error, _} -> filename:join(Dirname, "priv");
+                        Priv -> Priv
+                    end
+            end
     end,
-    filename:join([TemplateParentDir, "translations", "template", z_convert:to_list(Module) ++ ".pot"]).
+    filename:join([ PrivDir, "translations", "template", z_convert:to_list(App) ++ ".pot" ]).

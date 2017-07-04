@@ -797,7 +797,7 @@ save_preview_url(RscId, Url, Context) ->
 
                         FileUnique = make_preview_unique(RscId, z_media_identify:extension(Mime), Context),
                         FileUniqueAbs = z_media_archive:abspath(FileUnique, Context),
-                        ok = filelib:ensure_dir(FileUniqueAbs),
+                        ok = z_filelib:ensure_dir(FileUniqueAbs),
                         case file:rename(TmpFile, FileUniqueAbs) of
                             %% cross-fs rename is not supported by erlang, so copy and delete the file
                             {error, exdev} ->
@@ -835,7 +835,7 @@ save_preview(RscId, Data, Mime, Context) ->
         true ->
             FileUnique = make_preview_unique(RscId, z_media_identify:extension(Mime), Context),
             FileUniqueAbs = z_media_archive:abspath(FileUnique, Context),
-            ok = filelib:ensure_dir(FileUniqueAbs),
+            ok = z_filelib:ensure_dir(FileUniqueAbs),
             ok = file:write_file(FileUniqueAbs, Data),
 
             try

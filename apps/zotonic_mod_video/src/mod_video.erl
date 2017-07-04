@@ -225,7 +225,7 @@ post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
     UploadedFile = Upload#media_upload_preprocess.file,
     QueueFilename = lists:flatten([integer_to_list(Id), $-, z_convert:to_list(ProcessNr)]),
     QueuePath = queue_path(QueueFilename, Context),
-    ok = filelib:ensure_dir(QueuePath),
+    ok = z_filelib:ensure_dir(QueuePath),
     case z_tempfile:is_tempfile(UploadedFile) of
         true ->
             case file:rename(UploadedFile, QueuePath) of

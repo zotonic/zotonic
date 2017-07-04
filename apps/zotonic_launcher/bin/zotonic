@@ -14,11 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+export ZOTONIC_SCRIPTS=`dirname $0`
+
 function parse_zotonic_options {
     while getopts "v" optionName; do
         case "$optionName" in
             v)
-                erl -noinput -eval "{ok, [{application,zotonic,P}]} = file:consult(\"$ZOTONIC/apps/zotonic_core/src/zotonic_core.app.src\"),io:format(\"Zotonic ~s~n\", [proplists:get_value(vsn,P)]),halt(0)"
+                vsn=$(full_version)
+                echo "Zotonic ${vsn}"
                 exit 0
         esac
     done
@@ -27,9 +30,9 @@ function parse_zotonic_options {
 #
 # usage zotonic [command] [arguments...]
 #
-export ZOTONIC_SCRIPTS="$ZOTONIC/apps/zotonic_launcher/bin"
 
 . $ZOTONIC_SCRIPTS/helpers/zotonic_setup
+
 parse_zotonic_options $@
 
 if [ ! $1 ]

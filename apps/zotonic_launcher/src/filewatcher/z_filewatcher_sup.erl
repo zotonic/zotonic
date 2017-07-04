@@ -86,21 +86,21 @@ which_watcher([M|Ms]) ->
     end.
 
 %% @doc Return the list of all directories to watch
-%% @todo do not watch the 'files' directories of files.
-%% @todo check this for the OTP-ification - should use better scanning for the OTP app directories
+%% @todo do not watch the 'priv/files' directories
+%% @todo check if need to follow softlinks in the _checkouts directory
 -spec watch_dirs() -> list(string()).
 watch_dirs() ->
     ZotonicDirs = [
         filename:join(z_path:get_path(), "apps"),
-        filename:join(z_path:get_path(), "_build/default"),
+        filename:join(z_path:get_path(), "_checkouts"),
+        filename:join(z_path:get_path(), "priv/translations"),
+        z_path:build_lib_dir()
 
-        z_path:user_sites_dir(),
-        z_path:user_modules_dir()
+        % These we have to scan to pick up any new apps, so that they can be linked in _checkouts
+        % Actually, we might hold off of scanning, as _checkouts will need to change (and the compiled
+        % files if rebar3 has been run)
+        %
+        % z_path:user_sites_dir(),
+        % z_path:user_modules_dir()
     ],
-
-    % Exclude links in the build directories, as they link back to the apps dir
-    LinkedDirs1 = string:tokens(os:cmd("find " ++ z_utils:os_escape(z_path:user_sites_dir()) ++ " -type l"), "\n"),
-    LinkedDirs2 = string:tokens(os:cmd("find " ++ z_utils:os_escape(z_path:user_modules_dir()) ++ " -type l"), "\n"),
-    lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs ++ LinkedDirs1 ++ LinkedDirs2).
-
-
+    lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs).

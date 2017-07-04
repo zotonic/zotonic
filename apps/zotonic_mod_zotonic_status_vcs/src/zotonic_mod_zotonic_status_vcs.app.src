@@ -1,5 +1,5 @@
-{application, zotonic_mod_admin_statistics, [
-    {description, "Allow admins to view system statistics."},
+{application, zotonic_mod_zotonic_status_vcs, [
+    {description, "Allows to update and rebuild sites and zotonic installs from git or mercurial. Used by zotonic_site_status."},
     {vsn, "git"},
     {registered, []},
     {applications, [zotonic_core]},

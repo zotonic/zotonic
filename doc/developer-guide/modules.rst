@@ -126,17 +126,6 @@ scan through different folders.
 
 This section describes what each of the module folders hold.
 
-priv/actions/
-"""""""""""""
-
-This directory holds the :ref:`actions <guide-actions>` defined by the
-module. Every action name must be prefixed with the word “action” and
-the module name (without the ``mod_``). For example the filename for the
-action ``dialog_open`` in the module ``mod_base`` will be
-``action_base_dialog_open.erl``
-
-.. seealso:: :ref:`guide-actions`
-
 priv/dispatch/
 """"""""""""""
 
@@ -181,6 +170,17 @@ The following naming conventions for templates are used:
 - Templates for displaying resources are called "page.tpl"
 
 .. seealso:: :ref:`guide-templates`
+
+src/actions/
+""""""""""""
+
+This directory holds the :ref:`actions <guide-actions>` defined by the
+module. Every action name must be prefixed with the word “action” and
+the module name (without the ``mod_``). For example the filename for the
+action ``dialog_open`` in the module ``mod_base`` will be
+``action_base_dialog_open.erl``
+
+.. seealso:: :ref:`guide-actions`
 
 src/scomps/
 """""""""""

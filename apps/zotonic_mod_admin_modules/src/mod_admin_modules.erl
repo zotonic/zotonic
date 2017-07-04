@@ -41,7 +41,7 @@
 %% on the name of the module.
 all(Context) ->
     Active  = z_module_manager:active(Context),
-    Modules = z_module_manager:scan(Context),
+    Modules = z_module_manager:scan(),
     Descrs  = [ add_sort_key({z_module_manager:prio(M), M, [{is_active, lists:member(M, Active)}, {path, Path} | descr(M)]}) || {M, Path} <- Modules ],
     lists:sort(Descrs).
 
