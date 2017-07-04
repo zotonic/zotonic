@@ -4,7 +4,7 @@ for f in `find $APPS -name zotonic_mod_\* -type d`
 do
 
     dir=${0%/*}
-    mod=`echo $f | sed -n 's/.*zotonic_//p'`
+    mod=`echo $f | sed -n 's/.*zotonic_mod_/mod_/p'`
     stub=$dir/meta-$mod.rst
     doc=$dir/$mod.rst
 
