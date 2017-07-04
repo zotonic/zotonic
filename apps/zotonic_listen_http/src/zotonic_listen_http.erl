@@ -51,7 +51,7 @@ start_link() ->
 
 -spec await() -> ok.
 await() ->
-    case gen_server:call(?MODULE, status) of
+    case gen_server:call(?MODULE, status, infinity) of
         started -> ok;
         init ->
             timer:sleep(10),
