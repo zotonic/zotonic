@@ -22,22 +22,15 @@
 -behaviour(supervisor).
 
 %% External exports
--export([start_link/0, upgrade/0]).
+-export([start_link/0]).
 
 %% supervisor callbacks
 -export([init/1]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-%% @spec upgrade() -> ok
-%% @doc Add processes if necessary.
-upgrade() ->
-    {ok, {_, Specs}} = init([]),
-    zotonic_sup:upgrade(?MODULE, Specs),
-    z_sites_sup:upgrade().
-
-%% @spec start_link() -> ServerRet
 %% @doc API for starting the sites dispatcher and manager
+-spec start_link() -> {ok, pid()} | {error, term()}.
 start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 

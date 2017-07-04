@@ -140,8 +140,8 @@ ensure_mnesia_schema() ->
                 false -> ok = mnesia:create_schema([node()])
             end;
         undefined ->
-            lager:info("No mnesia directory defined, running without persistent email queue and filezcache.~n"
-                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}~n~n"),
+            lager:info("No mnesia directory defined, running without persistent email queue and filezcache. "
+                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}"),
             ok
     end.
 
