@@ -143,7 +143,7 @@ handle_file(_Verb, Basename, ".erl", F) ->
          end,
     try
         case zotonic_compile:recompile(F) of
-            up_to_date ->
+            ok ->
                 check_run_sitetest(Basename, F),
                 "Recompile " ++ FileBase;
             error ->

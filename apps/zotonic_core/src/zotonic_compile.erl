@@ -73,7 +73,10 @@ recompile(File) ->
     case compile_options(File) of
         {ok, Options} ->
             lager:debug("Recompiling '~s' using make", [File]),
-            make:files([File], Options);
+            case make:files([File], Options) of
+                up_to_date -> ok;
+                Other -> Other
+            end;
         false ->
             % Might be some new OTP app, recompile with rebar3
             % Output can be anything ... no error checking for now :(

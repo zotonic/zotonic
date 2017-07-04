@@ -147,6 +147,12 @@ ensure_mnesia_schema() ->
 
 mnesia_dir() ->
     application:load(mnesia),
+    case zotonic_core:is_testsandbox() of
+        true -> undefined;
+        false -> mnesia_dir_config()
+    end.
+
+mnesia_dir_config() ->
     case application:get_env(mnesia, dir) of
         {ok, none} -> undefined;
         {ok, ""} -> undefined;

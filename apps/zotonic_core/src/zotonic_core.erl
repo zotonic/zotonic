@@ -23,8 +23,17 @@
 
 -export([
     is_zotonic_project/0,
+    is_testsandbox/0,
     is_app_available/1
     ]).
+
+%% @doc Check if the current site is running the testsandbox
+-spec is_testsandbox() -> boolean().
+is_testsandbox() ->
+    case atom_to_list(node()) of
+        "zotonic001_testsandbox@" ++ _ -> true;
+        _ -> false
+    end.
 
 %% @doc Check if this running Zotonic is the main Git project.
 %%      This is used for e.g. the .pot generation.
