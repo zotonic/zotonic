@@ -28,6 +28,8 @@
     m_find_value/3,
     m_to_list/2,
     m_value/2,
+    load_config/1,
+    load_config/2,
     all/1,
     get/2,
     get/3
@@ -58,20 +60,40 @@ m_to_list(#m{value=undefined}, Context) ->
 m_value(#m{value=undefined}, Context) ->
     all(Context).
 
+-spec load_config(atom()|z:context()) -> ok | {error, term()}.
+load_config(#context{} = Context) ->
+    load_config(z_context:site(Context));
+load_config(Site) when is_atom(Site) ->
+    case z_sites_manager:get_site_config(Site) of
+        {ok, Config} ->
+            load_config(Site, Config);
+        {error, _} = Error -> Error
+    end.
+
+-spec load_config(atom()|z:context(), list()) -> ok.
+load_config(#context{} = Context, Config) ->
+    load_config(z_context:site(Context), Config);
+load_config(Site, Config) when is_atom(Site) ->
+    application:load(Site),
+    lists:foreach(
+        fun({K,V}) ->
+            application:set_env(Site, K, V)
+        end,
+        Config).
 
 %% @doc Return the complete site configuration
-all(Context) ->
-    F = fun() ->
-        {ok, Cfg} = z_sites_manager:get_site_config(z_context:site(Context)),
-        Cfg
-    end,
-    z_depcache:memo(F, site_config, Context).
+-spec all(atom()|z:context()) -> list().
+all(#context{} = Context) ->
+    all(z_context:site(Context));
+all(Site) when is_atom(Site) ->
+    application:get_all_env(Site).
 
 %% @doc Fetch a key from the site configuration
 -spec get(atom(), #context{}) -> term() | undefined.
 get(Key, Context) when is_atom(Key) ->
     try
-        case z_depcache:get({site_config, Key}, Context) of
+        Site = z_context:site(Context),
+        case application:get_env(Site, Key) of
             {ok, undefined} ->
                 undefined;
             {ok, none} when Key =:= hostname ->
@@ -82,13 +104,7 @@ get(Key, Context) when is_atom(Key) ->
             {ok, Value} ->
                 Value;
             undefined ->
-                All = all(Context),
-                z_depcache:memo(
-                        fun() ->
-                            proplists:get_value(Key, All)
-                        end,
-                        {site_config, Key},
-                        Context)
+                undefined
         end
     catch
         error:badarg ->

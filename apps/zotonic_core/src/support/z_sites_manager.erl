@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2010 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Server managing all sites running inside Zotonic.  Starts the sites
 %% according to the config files in the sites subdirectories.
 
-%% Copyright 2009-2010 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -161,12 +161,10 @@ get_site_config(Site) ->
 %% @doc Resolve {env, "ENV_NAME"} tuples from site config into the site configuration.
 merge_os_env(SiteConfig) ->
     lists:map(
-      fun({K, {env, Name}}) -> {K, os:getenv(Name)};
-         ({K, {env, Name, Default}}) -> {K, os:getenv(Name, Default)};
-         ({K, {env_int, Name}}) -> {K, z_convert:to_integer(os:getenv(Name))};
-         ({K, {env_int, Name, Default}}) -> {K, z_convert:to_integer(os:getenv(Name, Default))};
-         ({K, V}) -> {K, V}
-      end, SiteConfig).
+        fun({K, V}) ->
+            {K, z_config:maybe_map_env(V)}
+        end,
+        SiteConfig).
 
 
 %% @doc Return the name of the site to handle unknown Host requests

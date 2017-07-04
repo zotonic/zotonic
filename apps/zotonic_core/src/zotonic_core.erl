@@ -24,7 +24,9 @@
 -export([
     is_zotonic_project/0,
     is_testsandbox/0,
-    is_app_available/1
+    is_app_available/1,
+
+    setup/0
     ]).
 
 %% @doc Check if the current site is running the testsandbox
@@ -47,3 +49,54 @@ is_app_available(App) ->
         Path when is_list(Path) -> true
     end.
 
+%% @doc Initial setup before starting Zotonic
+-spec setup() -> ok.
+setup() ->
+    ensure_mnesia_schema().
+
+%% @doc Ensure that mnesia has created its schema in the configured priv/data/mnesia directory.
+-spec ensure_mnesia_schema() -> ok.
+ensure_mnesia_schema() ->
+    case mnesia_dir() of
+        {ok, Dir} ->
+            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir, "schema.DAT")) of
+                true -> ok;
+                false -> ok = mnesia:create_schema([node()])
+            end;
+        undefined ->
+            lager:info("No mnesia directory defined, running without persistent email queue and filezcache. "
+                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}"),
+            ok
+    end.
+
+mnesia_dir() ->
+    application:load(mnesia),
+    case is_testsandbox() of
+        true ->
+            application:unset_env(mnesia, dir),
+            undefined;
+        false ->
+            mnesia_dir_config()
+    end.
+
+mnesia_dir_config() ->
+    case application:get_env(mnesia, dir) of
+        {ok, none} -> undefined;
+        {ok, ""} -> undefined;
+        {ok, Dir} -> {ok, Dir};
+        undefined ->
+            PrivDir = case code:priv_dir(zotonic) of
+                {error, bad_name} -> code:priv_dir(zotonic_core);
+                ZotonicPrivDir when is_list(ZotonicPrivDir) -> ZotonicPrivDir
+            end,
+            MnesiaDir = filename:join([ PrivDir, "mnesia", atom_to_list(node()) ]),
+            case z_filelib:ensure_dir(MnesiaDir) of
+                ok ->
+                    application:set_env(mnesia, dir, MnesiaDir),
+                    {ok, MnesiaDir};
+                {error, _} = Error ->
+                    lager:error("Could not create mnesia dir \"~s\": ~p",
+                                [MnesiaDir, Error]),
+                    undefined
+            end
+    end.

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2015 Marc Worrell, 2014 Arjan Scherpenisse
+%% @copyright 2010-2017 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 
-%% Copyright 2010-2015 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2010-2017 Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,11 +21,12 @@
 
 %% API export
 -export([
-         get/1,
-         get/2,
+    get/1,
+    get/2,
 
-         init_app_env/0
-        ]).
+    init_app_env/0,
+    maybe_map_env/1
+]).
 
 
 -include_lib("zotonic.hrl").
@@ -93,19 +94,19 @@ get(smtp_listen_domain) ->
     end;
 get(smtp_listen_ip) ->
     SmtpIp = case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
-        false -> z_config:get(smtp_listen_ip, default(smtp_listen_ip));
+        false -> ?MODULE:get(smtp_listen_ip, default(smtp_listen_ip));
         "none" -> none;
         SmtpListenIp -> SmtpListenIp
     end,
     maybe_map_value(smtp_listen_ip, SmtpIp);
 get(smtp_listen_port) ->
     case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
-        false -> z_config:get(smtp_listen_port, default(smtp_listen_port));
+        false -> ?MODULE:get(smtp_listen_port, default(smtp_listen_port));
         "none" -> none;
         SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
     end;
 get(smtp_spamd_ip) ->
-    maybe_map_value(smtp_spamd_ip, z_config:get(smtp_spamd_ip, default(smtp_spamd_ip)));
+    maybe_map_value(smtp_spamd_ip, ?MODULE:get(smtp_spamd_ip, default(smtp_spamd_ip)));
 get(Key) ->
     ?MODULE:get(Key, default(Key)).
 
@@ -114,11 +115,16 @@ get(Key) ->
 get(Key, Default) ->
 	case application:get_env(zotonic_core, Key) of
 		undefined ->
-			maybe_map_value(Key, Default);
+			maybe_map_value(Key, maybe_map_env(Default));
 		{ok, Value} ->
-			maybe_map_value(Key, Value)
+			maybe_map_value(Key, maybe_map_env(Value))
 	end.
 
+maybe_map_env({env, Name}) -> os:getenv(Name);
+maybe_map_env({env, Name, Default}) -> os:getenv(Name, Default);
+maybe_map_env({env_int, Name}) -> z_convert:to_integer(os:getenv(Name));
+maybe_map_env({env_int, Name, Default}) -> z_convert:to_integer(os:getenv(Name, Default));
+maybe_map_env(V) -> V.
 
 %% @doc Translate IP addresses to a tuple(), 'any', or 'none'
 -spec maybe_map_value(atom(), term()) -> term().

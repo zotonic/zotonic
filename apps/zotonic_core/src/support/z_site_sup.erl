@@ -46,8 +46,9 @@ init(Site) ->
         {site, Site},
         {module, ?MODULE}
       ]),
+    ok = m_site:load_config(Site),
     ok = z_stats:init_site(Site),
-    {ok, SiteProps} = z_sites_manager:get_site_config(Site),
+    SiteProps = m_site:all(Site),
 
     Notifier = {z_notifier,
                 {z_notifier, start_link, [SiteProps]},

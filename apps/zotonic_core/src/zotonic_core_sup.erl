@@ -24,10 +24,10 @@
 -compile([{parse_transform, lager_transform}]).
 
 %% External exports
--export([start_link/1]).
+-export([ start_link/1 ]).
 
 %% supervisor callbacks
--export([init/1]).
+-export([ init/1 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -38,35 +38,17 @@ start_link(Options) ->
         fun({K,V}) -> application:set_env(zotonic_core, K, V) end,
         Options),
     z_config:init_app_env(),
+    zotonic_core:setup(),
     z_stats:init(),
     z_tempfile_cleanup:start(),
     ensure_job_queues(),
-    ensure_mnesia_schema(),
     ensure_sidejobs(),
     inets:start(httpc, [{profile, zotonic}]),
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
-%% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    erlang:spawn(fun() ->
-            timer:sleep(4000),
-            lager:info("================"),
-            lager:info("Sites Status"),
-            lager:info("================"),
-            lists:map(
-                fun
-                  ([Site, running|_]) when Site =/= zotonic_site_status ->
-                      Ctx = z_context:new(Site),
-                      lager:info("~p ~s ~-40s~n",
-                                 [Site, running, z_context:abs_url(<<"/">>, Ctx)]);
-                  ([Site, Status|_]) ->
-                      lager:info("~p - ~s~n", [Site, Status])
-                end,
-                z_sites_manager:get_sites_status()),
-            lager:info("================")
-        end),
-
+    spawn_delayed_status(),
     Processes = [
         % Access Logger
         {z_access_syslog,
@@ -94,6 +76,24 @@ init([]) ->
     ],
     {ok, {{one_for_one, 1000, 10}, Processes}}.
 
+spawn_delayed_status() ->
+    erlang:spawn(fun() ->
+            timer:sleep(4000),
+            lager:info("================"),
+            lager:info("Sites Status"),
+            lager:info("================"),
+            lists:map(
+                fun
+                  ([Site, running|_]) when Site =/= zotonic_site_status ->
+                      Ctx = z_context:new(Site),
+                      lager:info("~p ~s ~-40s~n",
+                                 [Site, running, z_context:abs_url(<<"/">>, Ctx)]);
+                  ([Site, Status|_]) ->
+                      lager:info("~p - ~s~n", [Site, Status])
+                end,
+                z_sites_manager:get_sites_status()),
+            lager:info("================")
+        end).
 
 %% @doc Ensure all job queues
 ensure_job_queues() ->
@@ -128,52 +128,4 @@ ensure_job_queue(Name, Options) ->
 ensure_sidejobs() ->
     sidejob:new_resource(zotonic_sessionjobs, sidejob_supervisor, z_config:get(sessionjobs_limit)),
     sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, z_config:get(sidejobs_limit)).
-
-
-%% @doc Ensure that mnesia has created its schema in the configured priv/data/mnesia directory.
--spec ensure_mnesia_schema() -> ok.
-ensure_mnesia_schema() ->
-    case mnesia_dir() of
-        {ok, Dir} ->
-            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir, "schema.DAT")) of
-                true -> ok;
-                false -> ok = mnesia:create_schema([node()])
-            end;
-        undefined ->
-            lager:info("No mnesia directory defined, running without persistent email queue and filezcache. "
-                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}"),
-            ok
-    end.
-
-mnesia_dir() ->
-    application:load(mnesia),
-    case zotonic_core:is_testsandbox() of
-        true ->
-            application:unset_env(mnesia, dir),
-            undefined;
-        false ->
-            mnesia_dir_config()
-    end.
-
-mnesia_dir_config() ->
-    case application:get_env(mnesia, dir) of
-        {ok, none} -> undefined;
-        {ok, ""} -> undefined;
-        {ok, Dir} -> {ok, Dir};
-        undefined ->
-            PrivDir = case code:priv_dir(zotonic) of
-                {error, bad_name} -> code:priv_dir(zotonic_core);
-                ZotonicPrivDir when is_list(ZotonicPrivDir) -> ZotonicPrivDir
-            end,
-            MnesiaDir = filename:join([ PrivDir, "mnesia", atom_to_list(node()) ]),
-            case z_filelib:ensure_dir(MnesiaDir) of
-                ok ->
-                    application:set_env(mnesia, dir, MnesiaDir),
-                    {ok, MnesiaDir};
-                {error, _} = Error ->
-                    lager:error("Could not create mnesia dir \"~s\": ~p",
-                                [MnesiaDir, Error]),
-                    undefined
-            end
-    end.
 
