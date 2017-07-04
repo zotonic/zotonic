@@ -22,7 +22,8 @@
     load_configs/0,
     config_files/0,
     zotonic_config_file/0,
-    erlang_config_file/0
+    erlang_config_file/0,
+    locate_config_file/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic_release.hrl").
@@ -36,7 +37,7 @@ load_configs() ->
     ok.
 
 config_files() ->
-    Files = proplists:get_all_values(config, init:get_arguments()),
+    Files = [ F || [F] <- proplists:get_all_values(config, init:get_arguments()) ],
     Files1 = add_erlang_config_file(Files),
     add_zotonic_config_file(Files1).
 
@@ -142,10 +143,10 @@ locate_config_file(ConfigFile) ->
     {MajorVersion, MinorVersion} = split_version(?ZOTONIC_VERSION),
     Locations = [
         filename:join([Home, ".zotonic", atom_to_list(node()), ConfigFile]),
-        filename:join([Home, ".zotonic", ?ZOTONIC_VERSION], ConfigFile),
-        filename:join([Home, ".zotonic", MinorVersion], ConfigFile),
-        filename:join([Home, ".zotonic", MajorVersion], ConfigFile),
-        filename:join([Home, ".zotonic"]),
+        filename:join([Home, ".zotonic", ?ZOTONIC_VERSION, ConfigFile]),
+        filename:join([Home, ".zotonic", MinorVersion, ConfigFile]),
+        filename:join([Home, ".zotonic", MajorVersion, ConfigFile]),
+        filename:join([Home, ".zotonic", ConfigFile]),
 
         filename:join(["/etc/zotonic", atom_to_list(node()), ConfigFile]),
         filename:join(["/etc/zotonic", ?ZOTONIC_VERSION, ConfigFile]),
@@ -155,7 +156,7 @@ locate_config_file(ConfigFile) ->
     ],
     case lists:dropwhile(
         fun(Path) ->
-            not filelib:is_file(Path)
+            not filelib:is_regular(Path)
         end,
         Locations)
     of

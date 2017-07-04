@@ -148,8 +148,11 @@ ensure_mnesia_schema() ->
 mnesia_dir() ->
     application:load(mnesia),
     case zotonic_core:is_testsandbox() of
-        true -> undefined;
-        false -> mnesia_dir_config()
+        true ->
+            application:unset_env(mnesia, dir),
+            undefined;
+        false ->
+            mnesia_dir_config()
     end.
 
 mnesia_dir_config() ->
@@ -164,7 +167,9 @@ mnesia_dir_config() ->
             end,
             MnesiaDir = filename:join([ PrivDir, "mnesia", atom_to_list(node()) ]),
             case z_filelib:ensure_dir(MnesiaDir) of
-                ok -> {ok, MnesiaDir};
+                ok ->
+                    application:set_env(mnesia, dir, MnesiaDir),
+                    {ok, MnesiaDir};
                 {error, _} = Error ->
                     lager:error("Could not create mnesia dir \"~s\": ~p",
                                 [MnesiaDir, Error]),
