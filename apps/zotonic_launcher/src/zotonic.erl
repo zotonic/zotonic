@@ -32,7 +32,7 @@
     update/1,
     run_tests/0,
     ensure_started/1,
-    await/0
+    await_startup/0
 ]).
 
 -compile([{parse_transform, lager_transform}]).
@@ -80,8 +80,8 @@ start(_Args) ->
     end.
 
 %% @doc Await till all parts are started - useful for testing
--spec await() -> ok.
-await() ->
+-spec await_startup() -> ok.
+await_startup() ->
     zotonic_listen_http:await(),
     ok.
 
