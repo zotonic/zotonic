@@ -87,6 +87,20 @@ Export
 * Modules mod_atom and mod_atom_feed were removed. You can export data in a
   variety of formats using :ref:`mod_export`.
 
+OTP
+^^^
+
+* Zotonic modules are now separately published as packages to `Hex.pm`_, which
+  allows you to build your own Zotonic distribution and to have each of your
+  sites depend on the Zotonic modules (and other Erlang packages) it needs.
+* This was done by restructuring Zotonic into an `umbrella application`_. The
+  ``src/`` directory was moved to new ``zotonic_core`` app.
+* The HTTP and SMTP listeners were moved to a new ``zotonic_listen_http`` and
+  ``zotonic_listen_smtp`` app respectively.
+* A ``zotonic_launcher`` app was introduced for starting Zotonic.
+* All built-in modules, the testsandbox and the status sites are now to be found
+  in the ``apps/`` directory.
+
 Removed deprecated functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -142,6 +156,7 @@ Sites and modules
             yoursite.erl
             yoursite.app.src
             ...
+        rebar.config
 
 Templates
 ^^^^^^^^^
@@ -687,3 +702,5 @@ content_area %} that spans the full width if your site is in there,
 because this is used to render the logon dialog for the admin.
 
 .. _OTP directory structure: http://erlang.org/doc/design_principles/applications.html#id82228
+.. _umbrella application: https://www.rebar3.org/v3/docs/from-rebar-2x-to-rebar3#section-required-directory-structure
+.. _Hex.pm: https://hex.pm
