@@ -292,25 +292,34 @@ all(Context) ->
 
 %% @doc Scan for a list of modules present in the site's module directories. A module is always a directory,
 %% the name of the directory is the same as the name of the module.
--spec scan() -> [ {atom(), Dir::file:filename_all()} ].
+%% @todo Cache this
+-spec scan() -> [ {Module :: atom(), Dir :: file:filename_all()} ].
 scan() ->
-    scan_paths([
-           % Zotonic core modules
-           filename:join(z_path:build_lib_dir(), "zotonic_mod_*"),
+    lists:flatten(
+        lists:map(
+            fun scan_path/1,
+            [
+                % All compiled modules
+                filename:join(z_path:build_lib_dir(), "*zotonic_mod_*")
+            ])
+        ).
 
-           % User installed modules
-           filename:join(z_path:build_lib_dir(), "mod_*")
-    ]).
+scan_path(Path) ->
+    [ {module_name(Dir), Dir} ||  Dir <- filelib:wildcard(Path), filelib:is_dir(Dir), hd(Dir) =/= $. ].
 
-scan_paths(Paths) ->
-    Files = lists:foldl(fun(L, Acc) -> L ++ Acc end, [], [z_utils:wildcard(P) || P <- Paths]),
-    [ {module(filename:basename(F)), F} ||  F <- Files ].
+%% @doc Strip prefix from module names iff there is a src/mod_thing.erl file.
+-spec module_name(file:filename_all()) -> atom().
+module_name(Dir) ->
+    ModName = filename:basename(Dir),
+    SimpleModName = strip_module_namespace(z_convert:to_list(ModName)),
+    case filelib:is_regular(filename:join([Dir, "src", SimpleModName++".erl"])) of
+        true -> list_to_atom(SimpleModName);
+        false -> list_to_atom(ModName)
+    end.
 
-%% @doc Strip zotonic_ prefix from core module names.
-module("zotonic_mod_" ++ Name) -> list_to_atom("mod_" ++ Name);
-module(Name) -> list_to_atom(Name).
+strip_module_namespace("zotonic_mod_"++Name) -> "mod_"++Name;
+strip_module_namespace([_C|Name]) -> strip_module_namespace(Name).
 
-%%z_convert:to_atom(
 
 %% @doc Return the priority of a module. Default priority is 500, lower is higher priority.
 %% Never crash on a missing module.
