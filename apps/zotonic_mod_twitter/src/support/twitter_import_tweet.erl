@@ -29,7 +29,7 @@
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("z_stdlib/include/z_url_metadata.hrl").
+-include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 import_tweet(Tweet, Context) ->
     import_tweet_1(proplists:get_value(<<"user">>, Tweet), Tweet, Context).

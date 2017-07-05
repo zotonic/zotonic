@@ -28,7 +28,7 @@
     ]).
 
 -include_lib("zotonic.hrl").
--include_lib("z_stdlib/include/z_url_metadata.hrl").
+-include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 
 -define(EMPTY(A), ((A =:= undefined) orelse (A =:= "") orelse (A =:= <<>>))).

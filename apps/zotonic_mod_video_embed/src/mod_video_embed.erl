@@ -43,7 +43,7 @@
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("z_stdlib/include/z_url_metadata.hrl").
+-include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 
 %% Fantasy mime type to distinguish embeddable html fragments.

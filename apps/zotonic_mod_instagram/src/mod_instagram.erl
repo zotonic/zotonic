@@ -36,7 +36,7 @@
     get_config/1
 ]).
 
--include_lib("z_stdlib/include/z_url_metadata.hrl").
+-include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
