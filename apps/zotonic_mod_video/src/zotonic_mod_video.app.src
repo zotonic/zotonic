@@ -1,0 +1,11 @@
+{application, zotonic_mod_video, [
+    {description, "Play and convert uploaded videos. Requires ffmpeg."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

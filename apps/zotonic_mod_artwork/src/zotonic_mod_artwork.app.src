@@ -1,0 +1,11 @@
+{application, zotonic_mod_artwork, [
+    {description, "Art work for your site. Social icons, file icons etc."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

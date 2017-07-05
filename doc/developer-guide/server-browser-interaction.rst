@@ -97,7 +97,7 @@ And then on the server, use Erlang to process the message::
 
     -export([event/2]).
 
-    -include_lib("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
 
     event(#z_msg_v1{data=Data}, Context) ->
         io:format("~p", [Data]),

@@ -1,12 +1,10 @@
 *
 !bin/
 !docker/
-!include/
-!modules/
+!apps/
 !priv/*config.in
 !priv/sites/
 !priv/skel/
-!src/
 !GNUmakefile
 !Makefile
 !rebar*

@@ -21,7 +21,7 @@ it:
 
     -module(filter_uniquesort).
     -export([uniquesort/2]).
-    -include("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
 
     uniquesort(List, _Context) ->
         lists:usort(List).

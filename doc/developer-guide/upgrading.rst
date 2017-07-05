@@ -92,6 +92,20 @@ Export
 * Modules mod_atom and mod_atom_feed were removed. You can export data in a
   variety of formats using :ref:`mod_export`.
 
+OTP
+^^^
+
+* Zotonic modules are now separately published as packages to `Hex.pm`_, which
+  allows you to build your own Zotonic distribution and to have each of your
+  sites depend on the Zotonic modules (and other Erlang packages) it needs.
+* This was done by restructuring Zotonic into an `umbrella application`_. The
+  ``src/`` directory was moved to new ``zotonic_core`` app.
+* The HTTP and SMTP listeners were moved to a new ``zotonic_listen_http`` and
+  ``zotonic_listen_smtp`` app respectively.
+* A ``zotonic_launcher`` app was introduced for starting Zotonic.
+* All built-in modules, the testsandbox and the status sites are now to be found
+  in the ``apps/`` directory.
+
 Removed deprecated functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -116,12 +130,46 @@ Resources
 
     {ok, Id} = m_rsc:name_to_id(Value, Context).
 
+Sites and modules
+^^^^^^^^^^^^^^^^^
+
+* Both sites and modules now follow the standard `OTP directory structure`_,
+  which means all Erlang files should reside in :file:`src/` and all other files
+  (templates, dispatch rules etc.) in :file:`priv`/.
+
+  Before::
+
+    yoursite/
+        models/
+            m_some_model.erl
+        templates/
+            some_template.tpl
+        yoursite.erl
+        config
+        ...
+
+
+  After::
+
+    yoursite/
+        priv/
+            zotonic_site.config
+            templates/some_template.tpl
+            ...
+        src/
+            models/m_some_model.erl
+            yoursite.erl
+            yoursite.app.src
+            ...
+        rebar.config
+
 Templates
 ^^^^^^^^^
 
 * The ``use_absolute_url`` argument of the ``url``, ``image`` and ``lib`` tags
   was renamed to ``absolute_url``.
-
+* Templates are now stored in :file:`yoursite/templates/priv/` instead of
+  :file:`yoursite/templates/`.
 
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -263,8 +311,8 @@ global configuration file, ``~/.zotonic/zotonic.config``.
 To upgrade your config file, do the following:
 
  * Make a directory in your home folder, called ``~/.zotonic``.
- * Copy ``priv/zotonic.config.in`` to ``~/.zotonic/zotonic.config``
- * Copy any settings from ``priv/config`` into the new ``priv/zotonic.config`` (IP addresses, etc)
+ * Copy ``priv/config/zotonic.config.in`` to ``~/.zotonic/zotonic.config``
+ * Copy any settings from ``priv/config`` into the new ``~/.zotonic/zotonic.config`` (IP addresses, etc)
  * Remove the old file ``priv/config``, as it is no longer in use.
  * Also, move ``priv/erlang.config`` to ``~/.zotonic/erlang.config``.
 
@@ -394,8 +442,9 @@ dependencies now being managed with the ``rebar`` tool.
 Misc changes
 ^^^^^^^^^^^^
 
-All configuration options regarding logging are now in set in the ``priv/erlang.config`` file,
-which is created by default if missing from ``priv/erlang.config.in``.
+All configuration options regarding logging are now in set in the
+``apps/zotonic_launcher/priv/erlang.config`` file, which is created by
+default if missing from ``apps/zotonic_launcher/priv/erlang.config.in``.
 
 
 Upgrading to Zotonic 0.9
@@ -656,3 +705,7 @@ denied. Use this query to enable every user in the database::
 If you have an overruled base template, make sure that a {% block
 content_area %} that spans the full width if your site is in there,
 because this is used to render the logon dialog for the admin.
+
+.. _OTP directory structure: http://erlang.org/doc/design_principles/applications.html#id82228
+.. _umbrella application: https://www.rebar3.org/v3/docs/from-rebar-2x-to-rebar3#section-required-directory-structure
+.. _Hex.pm: https://hex.pm

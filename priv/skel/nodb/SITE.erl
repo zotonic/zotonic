@@ -22,7 +22,7 @@
 -mod_description("A Zotonic site without database.").
 -mod_prio(10).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 
 %%====================================================================

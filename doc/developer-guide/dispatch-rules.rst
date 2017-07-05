@@ -19,17 +19,20 @@ Defining dispatch rules
 -----------------------
 
 Dispatch rules are defined in a `dispatch` file. The dispatch file
-must be placed inside the ``dispatch/`` directory of a module or your
+must be placed inside the ``priv/dispatch/`` directory of a module or your
 site.
 
 A module or site can have multiple dispatch files, and they can have
-`any` filename. The file may not have the extension
+any filename. The file may not have the extension
 ``.erl``. Otherwise it will be compiled by the Emakefile, which will
 result in errors as a dispatch file is not a valid Erlang module.
 
 The content of a dispatch file is an Erlang list of dispatch rules.
 
-An example ``dispatch`` file looks like this::
+An example ``dispatch`` file looks like this:
+
+.. code-block:: erlang
+    :caption: sites/yoursite/priv/dispatch
 
     %% Example dispatch rules
     [

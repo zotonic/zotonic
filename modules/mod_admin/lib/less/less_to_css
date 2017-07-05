@@ -1,1 +1,0 @@
-lessc --include-path="../../../mod_artwork/lib/font-awesome-4/less:../../../mod_artwork/lib/material-design/less" zotonic-admin.less ../css/zotonic-admin.css

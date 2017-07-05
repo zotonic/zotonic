@@ -2,8 +2,7 @@
 
 # Get core models
 
-# /path/to/zotonic/src/models/m_model_name.erl
-for f in $ZOTONIC_SRC/src/models/m_*.erl
+for f in $CORE/src/models/m_*.erl
 do
     dir=${0%/*}
     mod=core
@@ -50,12 +49,11 @@ done
 # Get models from modules
 
 # /path/to/zotonic/modules/<mod>/models/m_model_name.erl
-for f in `find $ZOTONIC_SRC/modules -name m_\*`
+for f in `find $MODULES -name m_\*`
 do
     read -r mod model <<EOF
-`echo $f | sed -e 's,.*/\(mod_[^/]*\).*/m_\(.*\).erl,\1 \2,'`
+`echo $f | sed -e 's,.*/\zotonic_\(mod_[^/]*\).*/m_\(.*\).erl,\1 \2,'`
 EOF
-
     dir=${0%/*}
     base=$model
     title="m_$model"

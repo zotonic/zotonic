@@ -1,0 +1,327 @@
+/* zotonic_status styles 2014
+----------------------------------------------------------
+
+@Author: 	Arjan Scherpenisse
+@Created: 	2009-02-01
+@Changed:	2012-05-03
+@Changed:	2014-12-19
+
+Copyright 2009 Tim Benniks
+Copyright 2012 Arjan Scherpenisse
+Copyright 2014 Arthur Clemens
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---------------------------------------------------------- */
+
+
+// Lots of Love for LESS: http://mateuszkocz.github.io/3l/
+#3L {@import "3L/3L";}
+@import "../../../../zotonic_mod_admin/priv/lib/less/variables";
+
+@main_color: @brand-primary;
+@main_color_hover: darken(@main_color, 5%);
+@color_palette_dark: rgba(0,0,0,0.87);
+@color_running: #4CAF50;
+@color_running_background: #E8F5E9;
+@color_retrying: #EF6C00;
+@color_retrying_background: #FFF3E0;
+@color_stopped: #BDBDBD;
+@color_stopped_background: #fff;
+@color_waiting: #00BCD4;
+@color_waiting_background: #fff;
+@color_failed: #D84315;
+@color_failed_background: #FBE9E7;
+@color_info_background: #343434;
+@color_info_text: #fff;
+@textColorError: #D84315;
+@block_border_radius: 4px;
+@info_block_border_radius: 2px;
+
+body {
+    background: #eee;
+    color: @color_palette_dark;
+}
+
+// MAIN SECTIONS
+
+.navbar {
+    #3L > .border-radius(0);
+    margin-bottom: 0;
+    background-color: @main_color;
+    border: none;
+    
+    > a,
+    .navbar-brand,
+    .navbar-nav > li > a {
+        &, &:hover {
+            color: #fff;
+        }
+        &:hover {
+            background-color: @main_color_hover;
+        }
+    }
+    .navbar-brand {
+        font-size: 15px;
+        line-height: 15px;
+        padding: 17px 15px;
+    }
+    .zotonic-logo {
+        height: 15px;
+        width: 87px;
+        margin-right: .4em;
+    }
+    .navbar-nav > li > a {
+        font-size: 16px;
+    }
+}
+
+.content {
+    padding: 50px 0;
+}
+
+.footer {
+    padding: 20px 0;
+    border-top: 1px solid #d7d7d7;
+    text-align: left;
+    
+    .zotonic-logo {
+        color: @textColorMuted;
+    }
+}
+
+// LOGIN FORM
+
+.jumbotron {
+    @_size: 42px;
+    
+    h1 {
+        font-size: @_size;
+    }
+    .zotonic-logo {
+        height: @_size;
+    }
+}
+
+form {
+    #error-pw {
+        display: none;
+    }
+    &.error-pw #error-pw {
+        display: block;
+        text-align: center;
+        
+        p {
+            margin-bottom: 0;
+        }
+    }
+    .has-error .help-block {
+        color: @textColorMedium;
+    }
+    .has-error .help-block-error {
+        color: @textColorError;
+    }
+}
+
+// SITES OVERVIEW
+
+.table.sites-overview {
+    margin-bottom: 0;
+    
+    a {
+        color: @color_palette_dark;
+    }
+    > tbody {
+        > tr {
+            > td {
+                border-color: #fff;
+            }
+        }
+        > tr.stopped + tr.stopped {
+            > td {
+                border-color: #eee;
+            }
+        }
+    }
+    
+    > tbody > tr {
+        &.running > td {
+            background-color: @color_running_background;
+        }
+        &.retrying > td {
+            background-color: @color_retrying_background;
+        }
+        &.stopped > td {
+            background-color: @color_stopped_background;
+        }
+        &.waiting > td {
+            background-color: @color_waiting_background;
+        }
+        &.failed > td {
+            background-color: @color_failed_background;
+        }
+    }
+    
+    span.status {
+        display: none;
+        #3L > .border-radius(0);
+    }
+    .running button.start {
+        display: none;
+    }
+    .waiting span.waiting,
+    .running span.running,
+    .retrying span.retrying,
+    .failed span.failed,
+    .stopped span.stopped {
+        display: inline-block;
+    }
+    .stopped a {
+        color: @color_stopped;
+        background: @color_stopped_background;
+    }
+    span.running {
+        color: #fff;
+        background: @color_running;
+    }
+    span.retrying {
+        color: #fff;
+        background: @color_retrying;
+    }
+    span.waiting {
+        color: #fff;
+        background: @color_waiting;
+    }
+    span.failed {
+        color: #fff;
+        background: @color_failed;
+    }
+    span.stopped {
+        color: #fff;
+        background: #999;
+    }
+    .retrying button.restart,
+    .retrying button.admin,
+    .retrying button.flush,
+    .failed button.restart,
+    .failed button.admin,
+    .failed button.flush,
+    .stopped button.stop,
+    .stopped button.restart,
+    .stopped button.admin,
+    .stopped button.flush {
+        display: none;
+    }
+}
+
+// Bootstrap overrides
+
+.control-label {
+    font-weight: normal;
+}
+
+.panel-title,
+.list-group-item-heading {
+    font-size: 16px;
+}
+    
+.panel {
+    .panel-body > :last-child {
+        margin-bottom: 0;
+    }
+}
+
+.list-group {
+    a {
+        cursor: pointer;
+    }
+    
+    .list-group-item-text {
+        font-size: 13px;
+    }
+}
+
+.alert {
+    #3L > .border-radius(@info_block_border_radius);
+    margin-bottom: 10px;
+    
+    &.alert-info {
+        background-color: @color_info_background;
+        border-color: @color_info_background;
+        color: @color_info_text;
+    }
+    .close {
+        opacity: 1;
+        text-shadow: none;
+        color: @color_info_text;
+    }
+}
+
+.text-muted {
+    color: @textColorMuted;
+}
+
+// Synchronize sizes
+
+.alert,
+.list-group-item,
+.table > tbody > tr > td,
+.table > tbody > tr > th {
+    padding: 10px 15px;
+}
+
+.list-group,
+.container .jumbotron,
+.panel {
+    #3L > .border-radius(@block_border_radius);
+}
+
+.btn,
+a.list-group-item {
+    &:hover {
+        &, * {
+            cursor: pointer;
+            background-color: @main_color;
+            color: #fff;
+            border-color: @main_color;
+        }
+    }
+}
+
+.container {
+    .jumbotron {
+        background-color: @main_color;
+        padding: 40px;
+        color: #fff;
+        
+        & > :last-child {
+            margin-bottom: 0;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin: 0 0 .5em 0;
+        }
+    
+        p {
+            font-size: 19px;
+        }
+    }
+}
+
+.panel-default > .panel-heading {
+    background-color: #fff;
+    padding: 15px;
+    text-align: center;
+}
+

@@ -20,15 +20,11 @@ $(REBAR):
 # Use Rebar to get, update and compile dependencies
 .PHONY: upgrade-deps compile-zotonic compile test
 
-compile-zotonic:
-	bin/zotonic compile
-
 upgrade-deps: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) upgrade
 
 compile: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) compile
-	bin/zotonic compile
 
 dev:
 	docker-compose run --rm --service-ports zotonic sh

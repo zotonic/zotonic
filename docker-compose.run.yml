@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+    postgres:
+        image: postgres:9.5-alpine
+        environment:
+            POSTGRES_USER: zotonic
+        working_dir: /data
+
+    zotonic:
+        image: zotonic/zotonic-dev
+        environment:
+            ZOTONIC_PORT: 80
+            ZOTONIC_SSL_PORT: 443
+        links:
+            - postgres
+        volumes:
+            - ./sites:/opt/zotonic/user/sites
+            - ./modules:/opt/zotonic/user/modules
+        ports:
+            - 80:8000
+            - 443:8443

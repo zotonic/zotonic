@@ -9,7 +9,7 @@ Logging messages to the database
 To persist a log message in the database, enable mod_logging in your Zotonic
 site. Then, in your code, send the ``#zlog{}`` notification::
 
-    include_lib("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
 
     some_function() ->
         %% do some things
