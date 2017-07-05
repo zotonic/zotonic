@@ -2,11 +2,11 @@ FROM zotonic/erlang
 
 COPY docker/zotonic.config /etc/zotonic/zotonic.config
 COPY docker/erlang.config.sed /opt/zotonic/docker/erlang.config.sed
-COPY priv/erlang.config.in /opt/zotonic/priv/erlang.config.in
+COPY apps/zotonic_launcher/priv/config/erlang.config.in /opt/zotonic/apps/zotonic_launcher/priv/config/erlang.config.in
 
 WORKDIR /opt/zotonic
 
-RUN sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.config
+RUN sed -f docker/erlang.config.sed /opt/zotonic/apps/zotonic_launcher/priv/config/erlang.config.in > /etc/zotonic/erlang.config
 
 RUN apk add --no-cache ca-certificates bash curl make gcc musl-dev g++ bsd-compat-headers gettext git imagemagick inotify-tools openssl wget \
     && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ openssl-dev
