@@ -78,7 +78,7 @@ provide_content(Context) ->
 
 	%% EXPERIMENTAL:
 	%%
-	%% When the 'cache_anonymous_maxage' flag is set then we enable simple page caching.
+	%% When the 'cache_anonymous_max_age' flag is set then we enable simple page caching.
 	%% This does not take into account any query args and vary headers.
 	%% @todo Add the 'vary' headers to the cache key
 	RenderArgs = [ {id, Id} | z_context:get_all(Context1) ],
@@ -87,7 +87,7 @@ provide_content(Context) ->
 	    z_template:render(Template, RenderArgs, Context1)
 	end,
 
-	MaxAge = z_context:get(cache_anonymous_maxage, Context1),
+	MaxAge = z_context:get(cache_anonymous_max_age, Context1),
 	Html = case not z_auth:is_auth(Context1) of
 		true when is_integer(MaxAge), MaxAge > 0 ->
 			QueryArgs = z_context:get_q_all(Context1),
