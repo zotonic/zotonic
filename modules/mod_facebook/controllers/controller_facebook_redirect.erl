@@ -135,7 +135,7 @@ decode_access_token(_ContentType, Payload) ->
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.3/me?access_token=" ++ z_url:url_encode(AccessToken),
+    FacebookUrl = "https://graph.facebook.com/v2.9/me?fields=id,name,email&access_token=" ++ z_url:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
@@ -143,7 +143,8 @@ fetch_user_data(AccessToken) ->
         Other ->
             lager:error("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),
             {error, {http_error, FacebookUrl, Other}}
-    end.
+end.
+
 
 % [{"id","10000123456789"},
 % {"name","Jane Doe"},
