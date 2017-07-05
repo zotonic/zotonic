@@ -36,7 +36,7 @@
 -define(FILENAME_BLACKLIST_RE,
         "_flymake|\\.#|/priv/files/"
         "|/\\.git/|/\\.gitignore|\\.hg/"
-        "|/log/\\.log$"
+        "|/log/|\\.log$"
         "|/mnesia/"
         "|/\\.rebar3").
 
