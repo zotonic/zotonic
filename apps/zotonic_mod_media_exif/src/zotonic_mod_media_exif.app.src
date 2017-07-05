@@ -1,0 +1,11 @@
+{application, zotonic_mod_media_exif, [
+    {description, "Extract EXIF information from photos when uploading"},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

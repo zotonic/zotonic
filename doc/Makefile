@@ -172,5 +172,5 @@ xelatex:
 
 .PHONY: stubs
 stubs:
-	export ZOTONIC_SRC=.. ; for f in `find ref -name .generate`; do $$f || exit 1; done
-	export ZOTONIC_SRC=.. ; for f in `find ref -name .generate-erlang`; do $$f || exit 1; done
+	export APPS=../apps CORE=../apps/zotonic_core MODULES=../apps/zotonic_mod* ; for f in `find ref -name .generate`; do $$f || exit 1; done
+	export ZOTONIC_SRC=../ MODULES=../apps/zotonic_mod* ; for f in `find ref -name .generate-erlang`; do $$f || exit 1; done

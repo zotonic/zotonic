@@ -1,0 +1,245 @@
+#!/usr/bin/env bash
+#
+# Copyright 2011 Lloyd R. Prentice
+# Copyright 2012 Arjan Scherpenisse
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+function require_zotonic_running {
+    PONG=$($ZOTONIC_CALL -a "zotonic ping" 2>&1)
+    if [ "$PONG" != "pong" ]; then
+        echo "$PONG" 1>&2
+        echo "Zotonic is not running. You need to start Zotonic first to use this command." 1>&2
+        echo 1>&2
+        exit 1
+    fi
+}
+export -f require_zotonic_running
+
+function require_zotonic_not_running {
+    PONG=$($ZOTONIC_CALL -a "zotonic ping" 2>&1)
+    if [ "$PONG" = "pong" ]; then
+        echo "Zotonic is already running as $NODENAME@$NODEHOST." 1>&2
+        echo "You cannot start two Zotonic instances with the same node name." 1>&2
+        echo 1>&2
+        exit 1
+    fi
+}
+export -f require_zotonic_not_running
+
+function major_version {
+    cat $ZOTONIC/{apps,_build/default/lib}/zotonic_core/include/zotonic_release.hrl 2>/dev/null|grep ZOTONIC_VERSION|head -1|sed 's/[^"]*\"\([0-9]*\).*/\1/'
+}
+export -f major_version
+
+function minor_version {
+    cat $ZOTONIC/{apps,_build/default/lib}/zotonic_core/include/zotonic_release.hrl 2>/dev/null|grep ZOTONIC_VERSION|head -1|sed 's/[^"]*\"\([0-9]\.[0-9]*\).*/\1/'
+}
+export -f minor_version
+
+function full_version {
+    cat $ZOTONIC/{apps,_build/default/lib}/zotonic_core/include/zotonic_release.hrl 2>/dev/null|grep ZOTONIC_VERSION|head -1|sed 's/[^"]*\"\([^"]*\)\".*/\1/'
+}
+export -f full_version
+
+function find_enabled_sites {
+    # find enabled sites
+    enabled_sites=""
+    for sitedir in priv/sites/*; do
+        if [ -f $sitedir/config ]; then
+            if grep -q 'enabled, true' $sitedir/config; then
+                site=$(basename $sitedir)
+                enabled_sites="$enabled_sites $site"
+            fi
+        fi
+    done
+}
+export -f find_enabled_sites
+
+function find_config {
+    # Allow admin to override default behaviour
+    [ ! -z "$ZOTONIC_CONFIG_DIR" ] && { echo "${ZOTONIC_CONFIG_DIR}/$1"; return 0; }
+
+    filename="$1"
+    vsn_minor=$(minor_version)
+    vsn_major=$(major_version)
+
+    for file in "$HOME/.zotonic/$NODENAME/$filename" "$HOME/.zotonic/$vsn_minor/$filename" "$HOME/.zotonic/$vsn_major/$filename" "$HOME/.zotonic/$filename" \
+                "/etc/zotonic/$NODENAME/$filename" "/etc/zotonic/$vsn_minor/$filename" "/etc/zotonic/$vsn_major/$filename" "/etc/zotonic/$filename"
+    do
+        if [ -e "$file" ]; then
+            echo "$file"
+            break
+        fi
+    done
+}
+export -f find_config
+
+function find_config_in {
+    filename="$1"
+
+    for file in "priv/config/$filename" "apps/zotonic_launcher/priv/config/$filename" "_build/default/lib/zotonic_launcher/priv/config/$filename"
+    do
+        if [ -e "$file" ]; then
+            echo "$file"
+            break
+        fi
+    done
+}
+export -f find_config_in
+
+function consult_config {
+    $ZOTONIC_SCRIPTS/helpers/zotonic_consult_config $1 $2 $3
+}
+export -f consult_config
+
+function find_config_arg {
+    file=$(find_config $1)
+    if [ "$file" == "" ]; then
+        break
+    fi
+    echo "-config $file"
+}
+export -f find_config_arg
+
+function get_user_sites_dir {
+    file=$(find_config zotonic.config)
+    [ -z "$file" ] && return 1
+    consult_config $file zotonic user_sites_dir
+}
+export -f get_user_sites_dir
+
+function get_user_modules_dir {
+    file=$(find_config zotonic.config)
+    [ -z "$file" ] && return 1
+    consult_config $file zotonic user_modules_dir
+}
+export -f get_user_modules_dir
+
+function get_user_ebin_dir {
+    file=$(find_config zotonic.config)
+    [ -z "$file" ] && return 1
+    consult_config $file zotonic user_ebin_dir
+}
+export -f get_user_modules_dir
+
+export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
+
+# Path to the Erlang VM
+export ERL=${ERL:=erl}
+
+if make --version 2>&1 | grep "^GNU Make" >& /dev/null
+then
+  export MAKE=${MAKE:=make}
+else
+  export MAKE=${MAKE:=gmake}
+fi
+
+# Increase this if you expect a lot of concurrent connections. For example
+# if you use comet on popular pages.
+# Please check the documentation of your system on how to increase
+# the maximum number of open files your operating system.
+export MAX_PORTS=${MAX_PORTS:=$(ulimit -n|sed 's/unlimited/100000/')}
+
+# The maximum number of Erlang processes. Must be in the range
+# 16..134217727.
+export MAX_PROCESSES=${MAX_PROCESSES:=10000000}
+
+# Whether or not to use kernel polling (+K argument); either 'true' or
+# 'false'
+export KERNEL_POLL=${KERNEL_POLL:=true}
+
+export USER_EBIN_DIR=$(get_user_ebin_dir)
+
+# The include path for the erlang vm, add when needed for your application.
+export PA=${PA:="$ZOTONIC/_checkouts/*/ebin $ZOTONIC/_build/default/lib/*/test $ZOTONIC/_build/default/lib/*/ebin $USER_EBIN_DIR $ZOTONIC/priv/sites/*/deps/*/ebin $ZOTONIC/priv/sites/*/modules/*/deps/*/ebin"}
+
+# The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
+export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
+
+# For zotonic-addsite et. al. we require Zotonic to be already
+# running. In that case, check if Zotonic is already running with the
+# -name parameter.
+PSCMD=`which /usr/ucb/ps 2>/dev/null || which ps`
+DISTRIBUTED_DETECTED=$($PSCMD u |grep beam.smp|grep $NODENAME@$HOSTNAME|grep \\-name>/dev/null&&echo true||echo false)
+export ZOTONIC_DISTRIBUTED=${ZOTONIC_DISTRIBUTED:=$DISTRIBUTED_DETECTED}
+
+# The ZOTONIC_DISTRIBUTED flag tells Zotonic to start a (potentially)
+# distributed node. In that case, we require the hostname to be a FQDN.
+if [ "$ZOTONIC_DISTRIBUTED" = "true" ]; then
+    HOSTNAME=$(hostname -f)
+    if [ "`echo $HOSTNAME|grep '\.'`" != "$HOSTNAME" ]; then
+        echo Zotonic is configured to run as distributed node, but your hostname is 1>&2
+        echo not configured to be a fully qualified domain name. Please configure  1>&2
+        echo your system so the output of \"hostname -f\" returns a FQDN. 1>&2
+        echo 1>&2
+        exit 1
+    fi
+    export NAME_ARG=-name
+    export NODEHOST="$HOSTNAME"
+else
+    # Only use the part for the dot of the hostname.
+    export NODEHOST=`echo $HOSTNAME|sed 's/\..*//'`
+    export NAME_ARG=-sname
+fi
+
+# The filename where zotonic writes its unix process Id to, for monitoring applications.
+[ -z $ZOTONIC_PIDFILE ] && export ZOTONIC_PIDFILE=$ZOTONIC/zotonic.pid
+
+# Locate the path to the erl_call binary
+ERL_CALL=$($ERL -noshell -noinput  -eval "io:format(\"~s\", [code:priv_dir(erl_interface)])" -s erlang halt|sed 's~priv$~bin/erl_call~')
+export ZOTONIC_CALL="$ERL_CALL $NAME_ARG $NODENAME@$NODEHOST"
+
+
+# If a config dir was set by the user, don't interfere with that.
+# If not, and if no configuration is found, install a default config file.
+if [ -z "$ZOTONIC_CONFIG_DIR" ]; then
+    default_dir=${HOME}/.zotonic/$(major_version)
+
+    # Make sure the erlang.config file exists
+    if [ "$(find_config erlang.config)" == "" ]; then
+        echo "Installing default erlang.config file" 1>&2
+        mkdir -p $default_dir
+        config_in="$(find_config_in erlang.config.in)"
+        cp "${config_in}" "${default_dir}/erlang.config"
+    fi
+
+    # Make sure the zotonic.config file exists
+    if [ "$(find_config zotonic.config)" == "" ]; then
+        echo "Installing global Zotonic config file" 1>&2
+        mkdir -p $default_dir || true
+
+        config_in="$(find_config_in zotonic.config.in)"
+
+        # Generate a password for zotonic_status
+        PW=$(openssl rand -hex 10)
+        sed -e "s/%%GENERATED%%/${PW}/" \
+	    -e "s,%%USER_SITES_DIR%%,${ZOTONIC}/_checkouts", \
+	    -e "s,%%USER_MODULES_DIR%%,${ZOTONIC}/_checkouts", \
+	    -e "s,%%USER_EBIN_DIR%%,${ZOTONIC}/user/ebin," \
+	    "${config_in}" > "${default_dir}/zotonic.config"
+    fi
+fi
+
+export MODULES=$(get_user_modules_dir)
+export SITES=$(get_user_sites_dir)
+
+if [ ! -d "$SITES" ]; then
+    # Try to make the user sites directory
+    mkdir -p "$SITES" 2>/dev/null
+fi
+
+if [ ! -d "$MODULES" ]; then
+    # Try to make the user modules directory
+    mkdir -p "$MODULES" 2>/dev/null
+fi

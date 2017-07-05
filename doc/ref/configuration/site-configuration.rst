@@ -11,14 +11,14 @@ Site config locations
 
 Configuration for sites is stored:
 
-- in a ``config`` file in the site directory
-- optionally, in files in the site’s ``config.d/`` directory. This is so that
+- in a ``priv/zotonic_site.config`` file in the site directory
+- optionally, in files in the site’s ``priv/config.d/`` directory. This is so that
   automated provisioning tools can easily override site configuration.
 
 The ``config.d`` files will extend and/or override the configuration options
-from the ``config`` file. So if the same key is present in both ``config``
-and ``config.d/some-file``, the value from ``some-file`` will be used. The files
-under ``config.d/`` are read in alphabetical order.
+from the ``zotonic_site.config`` file. So if the same key is present in both
+``zotonic_site.config`` and ``config.d/some-file``, the value from ``some-file``
+will be used. The files under ``config.d/`` are read in alphabetical order.
 
 Parameters
 ^^^^^^^^^^
@@ -226,8 +226,8 @@ Setting module-specific config values in the site config
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is also possible to add :ref:`model-config` values for modules to
-the site's ``user/sitename/config`` file. To do this, add clauses like
-this to the site's config::
+the site's ``sitename/priv/zotonic_site.config`` file. To do this, add
+clauses like this to the site's config::
 
     {mod_foo, [{key, value}, ...]}
 
@@ -235,7 +235,7 @@ this to the site's config::
 Using environment variables in the site config
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Any variable in your site's ``config`` file can be retrieved from the
+Any variable in your site's ``zotonic_site.config`` file can be retrieved from the
 OS environment variables. To do so, wrap the config value in a ``{env,
 ...}`` tuple. For instance, to use the ``DB_HOST`` environment
 variable as the database host, put the following as the ``dbhost``

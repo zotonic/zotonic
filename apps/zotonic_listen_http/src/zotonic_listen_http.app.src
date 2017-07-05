@@ -1,0 +1,15 @@
+%% -*- mode: erlang -*-
+{application, zotonic_listen_http,
+ [{description, "Zotonic HTTP Listener"},
+  {vsn, "git"},
+  {registered, []},
+  {applications, [
+      lager, cowmachine,
+      zotonic_core
+  ]},
+  {env, []},
+  {modules,
+   [
+    zotonic_listen_http
+   ]}
+ ]}.

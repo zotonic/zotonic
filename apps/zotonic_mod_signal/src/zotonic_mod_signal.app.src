@@ -1,0 +1,11 @@
+{application, zotonic_mod_signal, [
+    {description, "Signal and slot mechanism for use in templates."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

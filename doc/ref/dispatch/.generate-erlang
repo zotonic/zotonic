@@ -3,14 +3,13 @@
 all=${0%/*}/meta-all-dispatch.csv
 rm -f $all
 
-# /path/to/zotonic/modules/<mod>/dispatch/*
-for d in `find $ZOTONIC_SRC/modules -name dispatch -type d | sort`
+for d in `find $MODULES -name dispatch -type d | sort`
 do
     for f in $d/*
     do
 
         read -r mod dispatch <<EOF
-`echo $f | sed -e 's,.*/\(mod_[^/]*\).*/dispatch/\(.*\),\1 \2,'`
+`echo $f | sed -e 's,.*/zotonic_\(mod_[^/]*\).*/dispatch/\(.*\),\1 \2,'`
 EOF
 
         dir=${0%/*}
@@ -59,6 +58,6 @@ EOF
 .. Not yet documented. (no todo item, as this is not a major issue)
 EOF
         fi
-        
+
     done
 done

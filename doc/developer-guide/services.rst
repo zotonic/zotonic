@@ -27,9 +27,9 @@ On these URLs, a lookup is done to find the corresponding Zotonic module inside
 the services subdirectory of the module::
 
     mod_modulename/
-        mod_modulename.erl
-            services/
-                service_modulename_methodname.erl
+        src/mod_modulename.erl
+        src/services/
+            service_modulename_methodname.erl
 
 If no method name is used in the ``/api/:module`` URL, the method name will be
 equal to the module name - see ``/api/search`` in the table below.
@@ -39,9 +39,9 @@ Examples of URLs that correspond to service handlers:
 =================  ==========   ========   ====================================
 URL                Module       Method     Located in service .erl file
 =================  ==========   ========   ====================================
-/api/base/export   mod_base     export     mod_base/services/service_base_export.erl
-/api/base/info     mod_base     info       mod_base/services/service_base_info.erl
-/api/search        mod_search   search     mod_search/services/service_search_search.erl
+/api/base/export   mod_base     export     mod_base/src/services/service_base_export.erl
+/api/base/info     mod_base     info       mod_base/src/services/service_base_info.erl
+/api/search        mod_search   search     mod_search/src/services/service_search_search.erl
 =================  ==========   ========   ====================================
 
 For creating services at alternative URLs, see
@@ -66,7 +66,7 @@ this::
 
     mod_something/
         mod_something.erl
-            services/
+            src/services/
                 service_something_stats.erl
 
 The url for this service will be ``http://<site_addr>/api/something/stats``
@@ -120,7 +120,7 @@ of a services which handles a GET request is listed below::
 
     -export([process_get/1]).
 
-    -include_lib("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
 
     process_get(_Context) ->
         Stats = [{count, 12310}, {uptime, 399}],
@@ -157,7 +157,7 @@ is listed below::
 
     -export([process_post/1]).
 
-    -include_lib("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
 
     process_post(Context) ->
         Id = z_context:get_q(<<"id">>, Context),

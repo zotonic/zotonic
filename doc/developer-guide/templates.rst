@@ -89,7 +89,7 @@ See also the reference :ref:`all tags <tags>`. You can also
 Models
 ------
 
-A template model provides data to a template through the syntax:
+A template model provides data to templates through the syntax:
 ``m.modelname.property``. For example::
 
     {# Get the site's title #}
@@ -120,14 +120,14 @@ See the reference for a list of :ref:`all models <models>`. You can also add
 Template names
 --------------
 
-All templates are stored in the :file:`templates/` directory of
+All templates are stored in the :file:`priv/templates/` directory of
 :ref:`sites <sites>` and :ref:`modules <guide-modules>`. They have the
 extension ``.tpl``. Templates are referred to by their filename, including their
-subdirectory name within :file:`templates/` (if any). So if you have these two
+subdirectory name within :file:`priv/templates/` (if any). So if you have these two
 templates:
 
-* ``modules/mod_example/templates/foobar.tpl``
-* ``modules/mod_example/templates/email/email_base.tpl``
+* ``modules/mod_example/priv/templates/foobar.tpl``
+* ``modules/mod_example/priv/templates/email/email_base.tpl``
 
 you refer to them as:
 
@@ -147,7 +147,7 @@ If you want to override a template, you create a template with the same name
 in your site (or module). So what if the ``email/email_base.tpl`` template from
 mod_example mentioned above is not to your liking? Just create a
 ``email/email_base.tpl`` file in your own site:
-:file:`sites/yoursite/templates/email/email_base.tpl`.
+:file:`sites/yoursite/priv/templates/email/email_base.tpl`.
 
 So if multiple templates can have the same name, how does Zotonic know *which*
 template to render: the one from mod_example or the one from yoursite? This depends

@@ -10,8 +10,8 @@ allowing each callback to add and remove menu items as they wish.
 For example, this add a menu separator and an "edit homepage" button
 to the "content" submenu::
 
-    -include_lib("zotonic.hrl").
-    -include_lib("modules/mod_admin/include/admin_menu.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
+    -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
     observe_admin_menu(#admin_menu{}, Acc, _Context) ->
     [

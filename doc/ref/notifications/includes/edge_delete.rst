@@ -5,7 +5,7 @@ Example
 
 Perform some action when an edge is deleted::
 
-    -include_lib("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
     -export([observe_edge_delete/2]).
 
     observe_edge_delete(#edge_delete{edge_id = Id}, Context) ->

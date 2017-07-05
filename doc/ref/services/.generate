@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/services/service_service_name.erl
-for f in `find $ZOTONIC_SRC/modules -name service_\*.erl`
+for f in `find $MODULES -name service_\*.erl`
 do
     read -r mod service <<EOF
-`echo $f | sed -e 's,.*/mod_\([^/]*\).*/service_\1_\(.*\).erl,mod_\1 \2,'`
+`echo $f | sed -e 's,.*/zotonic_mod_\([^/]*\).*/service_\1_\(.*\).erl,mod_\1 \2,'`
 EOF
 
     dir=${0%/*}

@@ -1,0 +1,11 @@
+{application, zotonic_mod_authentication, [
+    {description, "Handles authentication and identification of users."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core, zotonic_mod_admin]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

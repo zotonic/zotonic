@@ -109,11 +109,11 @@ Writing LESS
 
 If you are writing frontend styles in LESS, Zotonic icons can be extended using mixins (found in ``extend.less``).
 
-NOTE: The less files have a dependency with ``mod_artwork/lib/font-awesome-4``,
+NOTE: The less files have a dependency with ``zotonic_mod_artwork/priv/lib/font-awesome-4``,
 so you need to include the path to its LESS folder when using
 the ``lessc`` command. For example::
 
-    lessc --include-path="../../../mod_artwork/lib/font-awesome-4/less"
+    lessc --include-path="../../../../zotonic_mod_artwork/priv/lib/font-awesome-4/less"
     my_input.less my_output.css
 
 Or for easier access, create a symlink to the `font-awesome-4` LESS folder
@@ -198,4 +198,4 @@ Extending FontAwesome 4 icons
          .extend_icon(fa, fa-var-bookmark);
      }
 
-The icon (variable) names can be found in ``mod_artwork/lib/font-awesome-4/less/variables.less``.
+The icon (variable) names can be found in ``zotonic_mod_artwork/priv/lib/font-awesome-4/less/variables.less``.

@@ -154,7 +154,7 @@ We will write our model in module ``models/m_omdb.erl``. Let's first get the man
         m_value/2
     ]).
 
-    -include_lib("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
 
     % ... We will add our m_find_value functions here
 

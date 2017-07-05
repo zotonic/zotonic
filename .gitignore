@@ -1,11 +1,15 @@
-.DS_Store
 zotonic.pid
-zotonic.tmproj
-erl_crash.dump
+
 ttb_last_config
+erl_crash.dump
+
+.rebar
 rebar3
+rebar3.crashdump
+compile_commands.json
 
 *~
+*#
 
 *.orig
 *.beam
@@ -19,28 +23,22 @@ rebar3
 *.swp
 *.mo
 
-ebin/
-deps/
+priv/*.config
+priv/filezcache
+priv/log/
+priv/ssl/
+priv/mnesia/
+priv/translations/template/*.pot
 
-/priv/*.config
+apps/*/priv/files/
+apps/*/priv/ssl/
+apps/*/priv/translations/template/*.pot
 
-/priv/filezcache
-/priv/log/
-/priv/mnesia/
-/priv/sites/default/files/
-/priv/modules/
-/priv/translations/template/
-/priv/translations/zotonic.pot
-
-/priv/ssl/
-
-/modules/*/translations/template/*.pot
-
-/user
 /user/*
 
-.rebar
 _build
 _checkouts
 /log/
-compile_commands.json
+
+.DS_Store
+zotonic.tmproj

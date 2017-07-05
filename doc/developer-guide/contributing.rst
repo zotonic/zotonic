@@ -93,8 +93,8 @@ Structure your commit message like this:
  * ``skel:`` for the skeleton sites.
  * ``zotonic_status:`` for the default site.
  * ``translation:`` for new/updated translations.
- * ``core:`` For changes in the `src`, `include` or `deps` folder;
-   e.g. anything not covered by another tag.
+ * ``core:`` For changes in the `apps/zotonic_core` directory; i.e., anything
+   not covered by another tag.
 
 * The **summary** should be less than 50 characters, and tell what was
   changed. Use the imperative present tense (fix, add, change). For

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% @doc Callbacks for the zotonic application.
+%% @copyright 2017 Marc Worrell
+%% @doc Zotonic umbrella application (empty, see zotonic_launcher)
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,58 +17,23 @@
 %% limitations under the License.
 
 -module(zotonic_app).
--author('Marc Worrell <marc@worrell.nl>').
 
 -behaviour(application).
--export([start/2, stop/1, get_path/0]).
 
-ensure_started(App) ->
-    case application:start(App) of
-        ok ->
-            ok;
-        {error, {already_started, App}} ->
-            ok
-    end.
+%% Application callbacks
+-export([start/2, stop/1]).
 
-%% @spec start(_Type, _StartArgs) -> ServerRet
-%% @doc application start callback for zotonic.
-start(_Type, _StartArgs) ->
-    write_pidfile(),
-    ensure_started(crypto),
-    ensure_started(public_key),
-    ensure_started(ssl),
-    ensure_started(inets),
-    inets:start(httpc, [{profile, zotonic}]),
-    ensure_started(mimetypes),
-    ensure_started(emqtt),
-    ensure_started(gproc),
-    ensure_started(jobs),
-    z_tempfile_cleanup:start(),
+%%====================================================================
+%% API
+%%====================================================================
+
+start(_StartType, _StartArgs) ->
     zotonic_sup:start_link().
 
-%% @spec stop(_State) -> ServerRet
-%% @doc application stop callback for zotonic.
+%%--------------------------------------------------------------------
 stop(_State) ->
-    remove_pidfile(),
     ok.
 
-%% @doc Return the applications lib_dir from the applications environment.
-get_path() ->
-    os:getenv("ZOTONIC").
-
-%% Pid-file handling
-
-get_pidfile() ->
-    case os:getenv("ZOTONIC_PIDFILE") of
-        false -> {ok, Cwd} = file:get_cwd(),
-                 filename:join(Cwd, "zotonic.pid");
-        File -> File
-    end.
-
-write_pidfile() ->
-    {ok, F} = file:open(get_pidfile(), [write]),
-    ok = file:write(F, os:getpid()),
-    ok = file:close(F).
-
-remove_pidfile() ->
-    ok = file:delete(get_pidfile()).
+%%====================================================================
+%% Internal functions
+%%====================================================================

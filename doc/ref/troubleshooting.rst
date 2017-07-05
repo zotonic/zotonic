@@ -9,9 +9,10 @@ Installation
 Site doesn’t start
 ^^^^^^^^^^^^^^^^^^
 
-Check your database connection configuration in the ``config`` file which is
-located in the :term:`user sites directory`. By default this is
-``zotonic/user/sites/yoursite/config``.
+Check your database connection configuration in the ``zotonic_site.config``
+file which is located in the :term:`user sites directory`. This can be found
+in ``yoursite/priv/zotonic_site.config``. The priv directory should also be
+soft linked in the ``_build`` directory: ``_build/default/lib/yoursite/priv/zotonic_site.config``
 
 Browsers can’t connect to http://yoursite:8000
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

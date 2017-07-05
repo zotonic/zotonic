@@ -1,0 +1,196 @@
+%% -*- mode: erlang -*-
+%% This is the global config file for Zotonic.
+%%
+%% The configurations are for the Zotonic system itself.
+%% Site configuration is found in each site's config file.
+%% The site config files are in the subdirectories of priv/sites/.
+%%
+%% To use this configuration file:
+%% 0. Do NOT modify 'config.in', but change the file called 'config',
+%%    which is a copy of config.in.
+%% 1. Stop Zotonic
+%% 2. Change (and uncomment) any setting you want to modify, in the file 'config'
+%% 3. Start Zotonic again.
+%%
+%% Rarely used configurations are commented out, change at your own risk.
+%% The given values are the defaults for the options.
+%%
+%% Be careful with the comma after each option, exclude it after the last option.
+[{zotonic,
+  [
+
+%%% Path configuration
+
+   %% Where the Zotonic sites are located
+   {user_sites_dir, "%%USER_SITES_DIR%%"},
+
+   %% Where the extra Zotonic modules are located (those installed with 'zotonic modules install mod_...')
+   {user_modules_dir, "%%USER_MODULES_DIR%%"},
+
+   %% Optionally define the ebin directory of the user sites and modules. Default
+   %% location is zotonic's ebin director.
+   % {user_ebin_dir, "%%USER_EBIN_DIR%%"},
+
+%%% Default timezone (for example: <<"Europe/Berlin">>)
+   %% {timezone, <<"UTC">>},
+
+%%% PostgreSQL database defaults.
+%%% These are the defaults for the equally named options in your site's config file.
+   {dbdatabase, "zotonic"},
+   {dbschema, "public"},
+   {dbpassword, []},
+   {dbuser, "zotonic"},
+   {dbport, 5432},
+   {dbhost, "localhost"},
+
+%%% By default, Zotonic will create a postgres database for you if it doesn't
+%%% already exist, and install tables in it. Uncomment the options below
+%%% to prevent that.
+   %% {dbcreate, false},
+   %% {dbinstall, false},
+
+%%% IP address on which Zotonic will listen for HTTP requests.
+%%% Always overridden by the ZOTONIC_IP environment variable.
+%%% This can be a tuple, or a (domain) string ("localhost" or "127.0.0.1")
+%%% Use 'any' for all IP addresses.
+   {listen_ip, any},
+
+%%% IPv6 address on which Zotonic will listen for HTTP requests.
+%%% Always overridden by the ZOTONIC_IP6 environment variable.
+%%% Defaults to 'listen_ip' (if listen_ip is a hostname or "127.0.0.1")
+%%% use 'any' for all IPv6 addresses, 'none' to disable
+   %% {listen_ip6, any},
+
+%%% Port on which Zotonic will listen for HTTP requests.
+%%% Always overridden by the ZOTONIC_LISTEN_PORT environment variable.
+   {listen_port, 8000},
+
+%%% Port on which Zotonic will listen for HTTPS requests.
+%%% Always overridden by the ZOTONIC_SSL_LISTEN_PORT environment variable.
+%%% Set to the atom 'none' to disable SSL
+   %% {ssl_listen_port, 8443},
+
+%%% Outside port that clients send HTTP requests to.
+%%% Always overridden by the ZOTONIC_PORT environment variable.
+%%% Defaults to listen_port.
+   %% {port, 80},
+
+%%% Outside port that clients send HTTPS requests to.
+%%% Set to the atom 'none' to disable SSL for sites.
+%%% Always overridden by the ZOTONIC_SSL_PORT environment variable.
+%%% Defaults to ssl_listen_port.
+   %% {ssl_port, 443},
+
+%%% Force sites to use SSL. Redirects http requests to https.
+   %% {ssl_only, false},
+
+%%% If you are running Zotonic behind a proxy then set this to the proxy's internal ip addresses.
+%%% The proxy must terminate SSL.
+%%% If the proxy does not terminate SSL then set 'ssl_port' to 'none', this will disable SSL support.
+%%% Possible values: none, local, any, ip_whitelist, or string with netmasks: "127.0.0.0/8,10.0.0.0/8"
+   %% {proxy_whitelist, local},
+
+%%% SMTP outbound relay configuration.
+%%% Zotonic will send email itself, enable a relay if outgoing port 25 traffic is blocked.
+   %% {smtp_relay, false},
+   %% {smtp_host, "localhost"},
+   %% {smtp_port, 25},
+   %% {smtp_ssl, false},
+   %% {smtp_username, undefined},
+   %% {smtp_password, undefined},
+
+%%% SMTP extra relay options:
+%%% some picky/buggy/misconfigured relays might need one of these to be enabled.
+   %% {smtp_no_mx_lookups, false},
+   %% {smtp_verp_as_from, false},
+   %% {smtp_bounce_email_override, "me@example.com"},
+
+%%% SMTP mail queue.
+%%% How long to keep sent messages in the mail queue (in minutes).
+%%% Leave it long enough to receive any bounce message.
+   %% {smtp_delete_sent_after, 240},
+
+%%% SMTP debug options.
+%%% Send a copy of outgoing mail to this address:
+   %% {smtp_bcc, "bcc@localhost"},
+%%% Send all mail to this address instead of the original recipient:
+   %% {email_override, "override@localhost"},
+
+%%% SMTP Inbound Server Options.
+%%% Always overridden by the environment variables:
+%%% ZOTONIC_SMTP_LISTEN_DOMAIN, ZOTONIC_SMTP_LISTEN_IP and ZOTONIC_SMTP_LISTEN_PORT.
+   %% {smtp_listen_domain, undefined},
+   %% {smtp_listen_ip, "127.0.0.1"},
+   %% {smtp_listen_port, 2525},
+
+%%% SMTP Spamassassin options
+%%% Enable SMTP incoming message filtering by setting the listening address of spamd
+   %% {smtp_spamd_ip, {127,0,0,1}},
+   %% {smtp_spamd_port, 783},
+
+%%% SMTP DNSBL Realtime DNS Block Lists and White Lists
+%%% These services are checked for DNSBL listings upon receiving email, set to an
+%%% empty list to disable the DNSBL checks. The default list is defined in
+%%% deps/z_stdlib/src/z_email_dnsbl.erl
+   %% {smtp_dnsbl, ["zen.spamhaus.org", "dnsbl.sorbs.net"]},
+   %% {smtp_dnswl, ["list.dnswl.org", "swl.spamhaus.org"]},
+
+%%% Password for the sites administration site (zotonic_status). Will
+%%% be generated on first Zotonic startup, if the config file does not yet exist.
+   {password, "%%GENERATED%%"}
+
+%%% IP whitelist, used for accessing sites with a default "admin" password
+   %% {ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10"},
+
+%%% Inet request backlog, increase when requests are being dropped.
+   %% {inet_backlog, 500},
+
+%%% Inet acceptor pool size. Configure the number of processes waiting for incoming requests. Increase when
+%%% request take long to be accepted and you hit the backlog.
+   %% {inet_acceptor_pool_size, 75},
+
+%%% SSL request backlog, increase when requests are being dropped.
+%%% When this value is not set, the inet_backlog setting is used.
+   %% {ssl_backlog, 500},
+
+%%% SSL acceptor pool size. Configure the number of processes waiting for incoming ssl requests. Increase when
+%%% request take long to be accepted and you hit the backlog. Note that the ssl acceptor pool is bigger. The
+%%% reason for this is that accepting ssl requests is much slower than normal request. Especially if you have
+%%% slow clients.
+%%% When this value is not set, the inet_acceptor_pool_size setting is used.
+   %% {ssl_acceptor_pool_size, 75},
+
+%%% The access log is sent to syslog. The collection of access logs to files must be configured
+%%% by configuring syslog on the system. See syslogd(8) on Linux, or the appropriate documentation
+%%% of your host system.
+   %% {syslog_ident, "zotonic"},
+   %% {syslog_opts, [ndelay]},
+   %% {syslog_facility, local0},
+   %% {syslog_level, info}, % OSX shows messages from level notice and higer.
+
+%%% Default ImageMagick color space. Some ImageMagick versions (like 6.7.0 and above)
+%%% use the RGB colorspace, so all images are darker than the original.
+%%% Possible Values:
+%%% CMY, CMYK, Grey, HCL, HSB, HSL, HWB, Lab, LCH, LMS, Log, Luv, OHTA,
+%%% Rec601Luma, Rec601YCbCr, Rec709Luma, Rec709YCbCr, RGB, sRGB, Transparent,
+%%% XYZ, YCbCr, YCC, YIQ, YCbCr, YUV.
+   %% {default_colorspace, "sRGB"},
+
+%%% Automatically compile and load changed files. You must have inotify or fswatch installed.
+   %% {filewatcher_enabled, true},
+
+%%% Scan for changed files beam files if inotify and fswatch are not enabled
+%%% Enabling this will make the system slow, it is not advised on production systems.
+   %% {filewatcher_scanner_enabled, false},
+
+%%% Maximum number of concurrent sidejob processes. Every client request sent over
+%%% Websocket is executed in a sidejob process. Default is 10% of the process_limit
+   %% {sessionjobs_limit, 20000},
+
+%%% Maximum number of concurrent spawned sidejobs. This includes processes spawned and linked
+%%% to the session and page-sessions. Default is 50% of the process_limit.
+   %% {sidejobs_limit, 100000}
+
+  ]
+ }
+].

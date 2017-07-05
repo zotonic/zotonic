@@ -1,0 +1,15 @@
+%% -*- mode: erlang -*-
+{application, zotonic_listen_smtp,
+ [{description, "Zotonic SMTP Listener"},
+  {vsn, "git"},
+  {registered, []},
+  {applications, [
+      lager, gen_smtp,
+      zotonic_core
+  ]},
+  {env, []},
+  {modules,
+   [
+    zotonic_listen_smtp
+   ]}
+ ]}.
