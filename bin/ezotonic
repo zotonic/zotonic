@@ -33,16 +33,21 @@ parse_zotonic_options() ->
 %%            io:format("Zotonic ~s~n", Version)
 %%    end.
 
-main([Command]) ->
+main([Command, SubCommand]) ->
     zotonic_setup:main([]),
 
     case Command of
         "-v" ->
             parse_zotonic_options();
         " "  ->
+            {ok, ListItems} = file:list_dir(?ZOTONIC_SCRIPTS),
+            FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 8],
+            Names = string:split(FileNames, "zotonic-", all),
+            [_|CommandNames] = Names,
+
             io:format("Usage: ~s (options) ~s~n", [escript:script_name(), Command]),
             io:format("Where ~s is one of: ~n", [Command]),
-            io:format("~s~n", [os:cmd("find src/scripts/zotonic-* -perm -a+x | sed 's/.*zotonic-//g'")]),
+            io:format("~p ~n", [CommandNames]),
             io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n"),
             io:format("Options: ~n"),
             io:format("  -v : Prints Zotonic version");
@@ -53,6 +58,6 @@ main([Command]) ->
                     io:format("Command not found: ~s~n", [Command]),
                     halt();
                 _ ->
-                    SubScript
+                    apply(SubScript, main, [SubCommand])
             end
     end.
