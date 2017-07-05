@@ -167,7 +167,7 @@ make_unique() ->
     <<"t", Unique/binary>>.
 
 make_number(Max) ->
-    crypto:rand_uniform(1, Max+1).
+    rand:uniform(Max+1).
 
 -spec make_any_char_id(Length::integer()) -> binary().
 %% @doc Generate a random key consisting of numbers and upper and lower case
@@ -224,5 +224,5 @@ rand_bytes(N) when N > 0 ->
     catch
         error:low_entropy ->
             lager:info("Crypto is low on entropy"),
-            list_to_binary([ crypto:rand_uniform(0,256) || _X <- lists:seq(1, N) ])
+            list_to_binary([ rand:uniform(256) || _X <- lists:seq(1, N) ])
     end.

@@ -23,7 +23,7 @@
 
 -module(z_file_entry).
 
--behaviour(gen_fsm).
+-behaviour(gen_statem).
 
 -include_lib("zotonic.hrl").
 -include_lib("zotonic_file.hrl").
@@ -40,23 +40,20 @@
     force_stale/2
     ]).
 
-%% gen_fsm exports
+%% gen_statem exports
 -export([
     start_link/4,
     init/1,
-    handle_sync_event/4,
-    handle_event/3,
-    handle_info/3,
-    code_change/4,
+    callback_mode/0,
     terminate/3
     ]).
 
-%% FSM states
+%% states
 -export([
-    locate/2,
-    content_encoding_gzip/2,
-    serving/2,
-    stopping/2
+    locate/3,
+    content_encoding_gzip/3,
+    serving/3,
+    stopping/3
     ]).
 
 -record(state, {
@@ -103,7 +100,7 @@
 
 start_link(RequestPath, Root, OptFilterProps, Context) when is_binary(RequestPath) ->
     Args = [ RequestPath, Root, OptFilterProps, z_context:site(Context) ],
-    gen_fsm:start_link({via, z_proc, {reg_name(RequestPath), Context}}, ?MODULE, Args, []).
+    gen_statem:start_link({via, z_proc, {reg_name(RequestPath), Context}}, ?MODULE, Args, []).
 
 reg_name(RequestPath) ->
     {?MODULE, RequestPath}.
@@ -112,7 +109,7 @@ where(Path, Context) ->
     z_proc:whereis(reg_name(Path), Context).
 
 stop(Pid) when is_pid(Pid) ->
-    gen_fsm:send_all_state_event(Pid, stop);
+    gen_statem:call(Pid, stop);
 stop(undefined) ->
     ok.
 
@@ -123,7 +120,7 @@ force_stale(undefined) ->
     {error, noproc};
 force_stale(Pid) ->
     try
-        gen_fsm:sync_send_all_state_event(Pid, force_stale, infinity)
+        gen_statem:call(Pid, force_stale)
     catch
         exit:{noproc, _} ->
             {error, noproc}
@@ -134,7 +131,7 @@ force_stale(RequestPath, Context) when is_binary(RequestPath) ->
 
 lookup(Pid) when is_pid(Pid) ->
     try
-        gen_fsm:sync_send_all_state_event(Pid, lookup, infinity)
+        gen_statem:call(Pid, lookup)
     catch
         exit:{noproc, _} ->
             {error, noproc}
@@ -146,7 +143,7 @@ lookup(RequestPath, Context) when is_binary(RequestPath) ->
     lookup(where(RequestPath, Context)).
 
 %%% ------------------------------------------------------------------------------------
-%%% gen_fsm callbacks
+%%% gen_statem callbacks
 %%% ------------------------------------------------------------------------------------
 
 init([RequestPath, Root, OptFilterProps, Site]) ->
@@ -162,11 +159,16 @@ init([RequestPath, Root, OptFilterProps, Site]) ->
     },
     {ok, locate, State, 0}.
 
-%%% ------------------------------------------------------------------------------------
-%%% gen_fsm states
-%%% ------------------------------------------------------------------------------------
+callback_mode() ->
+    state_functions.
 
-locate(timeout, State) ->
+
+%%% ------------------------------------------------------------------------------------
+%%% gen_statem states
+%%% ------------------------------------------------------------------------------------
+locate({call, From}, lookup, State) ->
+    {next_state, locate, State#state{waiting = [From | State#state.waiting]}};
+locate(timeout, _, State) ->
     Context = z_context:new(State#state.site),
     IndexRef = z_module_indexer:index_ref(Context),
     Mime = z_convert:to_binary(z_media_identify:guess_mime(State#state.request_path)),
@@ -198,21 +200,13 @@ locate(timeout, State) ->
             locate_enoent(State, IndexRef, Mime);
         throw:preview_source_gone ->
             {next_state, locate, State, 0}
-    end.
-
-locate_enoent(State, IndexRef, Mime) ->
-    State1 = State#state{
-        is_found = false,
-        mime=Mime,
-        parts=[],
-        index_ref=IndexRef
-    },
-    lager:debug("~p: File not found ~p", [State#state.site, State#state.request_path]),
-    {next_state, serving, reply_waiting(State1), ?SERVING_ENOENT_TIMEOUT}.
+    end;
+locate(EventType, EventContent, Data) ->
+    handle_event(EventType, EventContent, locate, Data).
 
 %% Add and cache the gzip content-encoded data (for now in memory)
 %% This streams all parts to the linked process, accumulating them in gzip buffer
-content_encoding_gzip(timeout, State) ->
+content_encoding_gzip(timeout, _, State) ->
     case is_compressable(State#state.mime) andalso State#state.size < ?MAX_GZIP_SIZE of
         true ->
             % Start compression in separate process
@@ -220,66 +214,58 @@ content_encoding_gzip(timeout, State) ->
             {next_state, serving, State1, ?SERVING_TIMEOUT};
         false ->
             {next_state, serving, State, ?SERVING_TIMEOUT}
-    end.
+    end;
+content_encoding_gzip(EventType, EventContent, Data) ->
+    handle_event(EventType, EventContent, content_encoding_gzip, Data).
 
-serving(timeout, State) ->
+serving(timeout, _, State) ->
     unreg(State),
-    {next_state, stopping, State, ?STOP_TIMEOUT}.
+    {next_state, stopping, State, ?STOP_TIMEOUT};
+serving(EventType, EventContent, Data) ->
+    handle_event(EventType, EventContent, serving, Data).
 
-stopping(timeout, State) ->
-    lager:debug("Stop file entry ~p:~p", [State#state.site, State#state.request_path]),
-    {stop, normal, State}.
-
-%%% ------------------------------------------------------------------------------------
-%%% gen_fsm events
-%%% ------------------------------------------------------------------------------------
-
-handle_sync_event(lookup, From, locate, State) ->
-    {next_state, locate, State#state{waiting=[From|State#state.waiting]}, 0};
-handle_sync_event(lookup, _From, stopping, State) ->
+stopping({call, _From}, lookup, State) ->
     {next_state, stopping, lookup_file_info(State), ?STOP_TIMEOUT};
-handle_sync_event(lookup, From, StateName, State) ->
+stopping(timeout, _, State) ->
+    lager:debug("Stop file entry ~p:~p", [State#state.site, State#state.request_path]),
+    {stop, normal, State};
+stopping(EventType, EventContent, Data) ->
+    handle_event(EventType, EventContent, stopping, Data).
+
+%%% ------------------------------------------------------------------------------------
+%%% gen_statem events
+%%% ------------------------------------------------------------------------------------
+handle_event({call, From}, lookup, StateName, State) ->
     case check_current(State) of
         {ok, State1} ->
             Reply = lookup_file_info(State1),
-            {reply, Reply, StateName, State1, timeout(StateName, State1#state.is_found)};
+            gen_statem:reply(From, Reply),
+            {next_state, StateName, State1, timeout(StateName, State1#state.is_found)};
         stale ->
             State1 = State#state{waiting=[From|State#state.waiting]},
             {next_state, locate, State1, 0}
     end;
-handle_sync_event(force_stale, _From, _StateName, State) ->
-    {reply, ok, locate, State, 0};
-handle_sync_event(Msg, _From, StateName, State) ->
-    lager:error("Unexpected sync-event ~p in state ~p", [Msg, StateName]),
-    {next_state, StateName, State, ?SERVING_TIMEOUT}.
-
-
-handle_event(stop, _StateName, State) ->
+handle_event({call, From}, force_stale, _StateName, State) ->
+    {next_state, locate, State, [{timeout, 0}, {reply, From, ok}]};
+handle_event({call, _From}, stop, _StateName, State) ->
     unreg(State),
     {next_state, stopping, State, ?STOP_TIMEOUT};
-handle_event(Msg, StateName, State) ->
-    lager:error("Unexpected event ~p in state ~p", [Msg, StateName]),
-    {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
-
-handle_info({gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
+handle_event(info, {gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
     State1 = State#state{
         gzip_part=#part_data{data=Data},
         gzip_size=size(Data),
         gzipper=undefined
     },
     {next_state, StateName, State1, timeout(StateName, State1#state.is_found)};
-handle_info({'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
+handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
     case is_mref_part(MRef, State#state.parts) of
         true ->
             {next_state, locate, State, 0};
         false ->
             {next_state, StateName, State, timeout(StateName, State#state.is_found)}
     end;
-handle_info(Info, StateName, State) ->
-    lager:info("Unexpected info ~p in state ~p", [Info, StateName]),
-    {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
-
-code_change(_OldVsn, StateName, State, _Extra) ->
+handle_event(EventType, EventContent, StateName, State) ->
+    lager:error("Unexpected event ~p ~p in state ~p", [EventType, EventContent, StateName]),
     {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
 
 terminate(_Reason, _StateName, _State) ->
@@ -336,7 +322,7 @@ is_stale_part(_Part) ->
 reply_waiting(State) ->
     Reply = lookup_file_info(State),
     lists:foreach(fun(From) ->
-                        gen_fsm:reply(From, Reply)
+                        gen_statem:reply(From, Reply)
                   end, State#state.waiting),
     State#state{waiting=[], last_stale_check=os:timestamp()}.
 
@@ -454,3 +440,16 @@ compress_file_1(Z, IO, Acc) ->
         {ok, Data} ->
             compress_file_1(Z, IO, [zlib:deflate(Z, Data)|Acc])
     end.
+
+locate_enoent(State, IndexRef, Mime) ->
+    State1 = State#state{
+        is_found = false,
+        mime=Mime,
+        parts=[],
+        index_ref=IndexRef
+    },
+    lager:debug("~p: File not found ~p", [State#state.site, State#state.request_path]),
+    {next_state, serving, reply_waiting(State1), ?SERVING_ENOENT_TIMEOUT}.
+
+
+

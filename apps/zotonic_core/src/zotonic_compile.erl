@@ -162,7 +162,7 @@ previous_compile_options(Module) when is_atom(Module) ->
         MInfo = Module:module_info(compile),
         case proplists:get_value(options, MInfo) of
             undefined -> false;
-            Options -> {ok, Options}
+            Options -> {ok, with_outdir(Options, Module)}
         end
     catch
         error:undef -> false
@@ -173,6 +173,17 @@ previous_compile_options_any([BeamFile|BeamFiles]) ->
     case previous_compile_options(BeamFile) of
         false -> previous_compile_options_any(BeamFiles);
         {ok, Options} -> {ok, Options}
+    end.
+
+%% @doc Add outdir if it's missing
+%%      This seems to be the case after rebar3's first compile.
+with_outdir(Options, Module) ->
+    case proplists:lookup(outdir, Options) of
+        none ->
+            Outdir = filename:dirname(code:which(Module)),
+            [{outdir, Outdir} | Options];
+        _ ->
+            Options
     end.
 
 % zotonic_ebin_dir() ->

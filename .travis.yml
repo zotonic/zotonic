@@ -1,9 +1,9 @@
 language: erlang
 matrix:
   include:
-    - otp_release: 19.3
+    - otp_release: 20.0
       env: BUILD_DOCS=true
-    - otp_release: 19.0
+    - otp_release: 19.3
       env: ELVIS=true
     - otp_release: 19.0
       env: DIALYZER=true
