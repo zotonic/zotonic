@@ -2,9 +2,7 @@
 !bin/
 !docker/
 !apps/
-!priv/*config.in
-!priv/sites/
-!priv/skel/
 !GNUmakefile
 !Makefile
 !rebar*
+!src/
