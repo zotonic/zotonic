@@ -47,7 +47,7 @@ convert(Html, Options) when is_list(Html) ->
     convert1(iolist_to_binary(["<sanitize>", Html, "</sanitize>"]), Options).
 
 convert1(Html, Options) ->
-    Parsed = mochiweb_html:parse(Html),
+    Parsed = z_html_parse:parse(Html),
     {Text, M} = to_md(Parsed, #md{}, set_options(Options, #ms{})),
     list_to_binary([trimnl(iolist_to_binary(Text)), expand_anchors(M)]).
 

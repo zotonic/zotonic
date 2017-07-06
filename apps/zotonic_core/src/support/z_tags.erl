@@ -85,7 +85,7 @@ optional_escape(S) when is_list(S) ->
         0 -> S;
         _ ->
             case string:str(S, "&amp;") of
-                0 -> mochiweb_html:escape(S);
+                0 -> z_html_parse:escape(S);
                 _ -> S
             end
     end;
