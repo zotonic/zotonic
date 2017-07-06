@@ -2,6 +2,7 @@
 -module(mod_acl_user_groups_tests).
 
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("emqtt/include/emqtt.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([is_allowed_always_true/2]).
@@ -10,7 +11,7 @@ person_can_edit_own_resource_test() ->
     Context = context(),
 
     %% Person must be able to edit person category
-    m_acl_rule:replace_managed(
+    replace_managed(
         [
             {rsc, [
                 {acl_user_group_id, acl_user_group_anonymous},
@@ -19,11 +20,8 @@ person_can_edit_own_resource_test() ->
                 {category_id, person}
             ]}
         ],
-        ?MODULE,
-        z_acl:sudo(Context)
+        Context
     ),
-    %% Wait for ACL rules to be rebuilt
-    timer:sleep(100),
 
     {ok, Id} = m_rsc:insert([{category, person}], z_acl:sudo(Context)),
 
@@ -38,7 +36,7 @@ person_can_insert_text_in_default_content_group_only_test() ->
     Context = context(),
 
     %% Person must be able to insert text into the default user group
-    m_acl_rule:replace_managed(
+    replace_managed(
         [
             {rsc, [
                 {acl_user_group_id, acl_user_group_anonymous},
@@ -48,11 +46,8 @@ person_can_insert_text_in_default_content_group_only_test() ->
                 {category_id, article}
             ]}
         ],
-        ?MODULE,
-        z_acl:sudo(Context)),
-
-    %% Wait for ACL rules to be rebuilt
-    timer:sleep(100),
+        Context
+    ),
 
     % Make a new user
     {ok, Id} = m_rsc:insert([{category, person}], z_acl:sudo(Context)),
@@ -87,18 +82,15 @@ publish_test() ->
     Context = context(),
 
     %% Anonymous can view everything
-    m_acl_rule:replace_managed(
+    replace_managed(
         [
             {rsc, [
                 {acl_user_group_id, acl_user_group_anonymous},
                 {actions, [view]}
             ]}
         ],
-        ?MODULE,
-        z_acl:sudo(Context)
+        Context
     ),
-    %% Wait for ACL rules to be rebuilt
-    timer:sleep(100),
 
     {ok, Id} = m_rsc:insert([{title, <<"Top secret!">>}, {category, text}], z_acl:sudo(Context)),
     ?assertEqual(<<"Top secret!">>, m_rsc:p(Id, title, z_acl:sudo(Context))),
@@ -119,3 +111,18 @@ start_modules(Context) ->
 
 is_allowed_always_true(#acl_is_allowed{}, _Context) ->
     true.
+
+replace_managed(Rules, Context) ->
+    z_mqtt:subscribe(<<"~site/acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
+
+    m_acl_rule:replace_managed(
+        Rules,
+        ?MODULE,
+        z_acl:sudo(Context)
+    ),
+
+    receive
+        {route, #mqtt_msg{}} -> ok
+    end,
+
+    z_mqtt:unsubscribe(<<"~site/acl-rules/publish-rebuild">>, z_acl:sudo(Context)).
