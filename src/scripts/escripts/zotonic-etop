@@ -24,9 +24,9 @@
 
 -include("zotonic_escript_helper.hrl").
 
-main([]) ->
+main(_) ->
     CONSOLE_LINES = list_to_integer(os:cmd("echo -n $(tput lines)")),
     LINES = CONSOLE_LINES - 11,
     os:cmd(?ERL ++ " " ++ ?NAME_ARG ++ " " ++ ?NODENAME ++ "_etop@" ++ ?NODEHOST ++
-        " -hidden -s etop -s erlang halt - lines " ++ LINES ++ " -tracing off -output text -node "
+        " -hidden -s etop -s erlang halt - lines " ++ integer_to_list(LINES) ++ " -tracing off -output text -node "
         ++ ?NODENAME ++ "@" ++ ?NODEHOST).
