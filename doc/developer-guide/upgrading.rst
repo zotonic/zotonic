@@ -170,6 +170,7 @@ Templates
   was renamed to ``absolute_url``.
 * Templates are now stored in :file:`yoursite/templates/priv/` instead of
   :file:`yoursite/templates/`.
+* The ``maxage`` caching argument was renamed to ``max-age``.
 
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
