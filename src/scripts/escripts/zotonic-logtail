@@ -25,5 +25,7 @@
 
 main(_) ->
     zotonic_setup:require_zotonic_running(),
-    
+    LogPath = ?ZOTONIC ++ "/priv/log",
+    {ok, LOGS} = file:list_dir(LogPath),
+
     erlang:error(not_implemented).
