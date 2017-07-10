@@ -29,6 +29,12 @@ main([Site]) ->
          " " ->
              io:format("USAGE: ~s [site_name] ~n", [escript:script_name()]);
         _ ->
-            io:format("Restarting site ~s on zotonic ~s@~s", [Site, ?NODENAME, ?NODEHOST]),
-            net_adm:ping(?NODENAME) ! {pong, Site}
+            SitePath = ?ZOTONIC ++ "/user/sites/" ++ Site,
+            case filelib:is_dir(SitePath) of
+                true   ->
+                    io:format("Restarting site ~s on zotonic ~s@~s", [Site, ?NODENAME, ?NODEHOST]),
+                    init:restart();
+                false ->
+                    io:format("Site not found. Please make sure zotonic site exist.")
+            end
     end.
