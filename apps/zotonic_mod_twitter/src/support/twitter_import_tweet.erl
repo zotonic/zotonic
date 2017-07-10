@@ -230,7 +230,7 @@ url({UrlProps}) ->
 %% Interactive test code
 extract_test(Filename, Context) ->
     {ok, Data} = file:read_file("modules/mod_twitter/testdata/"++Filename),
-    [{Decoded}] = jiffy:decode(Data),
+    Decoded = z_json:decode(Data),
     extract_test_tweet(Decoded, Context).
 
 extract_test_tweet(Tweet, Context) ->

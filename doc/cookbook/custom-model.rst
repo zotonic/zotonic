@@ -145,7 +145,7 @@ The ``fetch_data`` function::
                         [{error, Error}];
                     Json ->
                         % Turn JSON into a property list
-                        {struct, JsonData} = mochijson2:decode(Json),
+                        JsonData = z_json:decode(Json),
                         lists:map(fun(D) ->
                             convert_data_prop(D)
                         end, JsonData)

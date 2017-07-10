@@ -162,30 +162,32 @@ is_acceptable_classname(_) -> true.
 
 
 sanitize_z_media(Data) ->
-    {struct, Args} = mochijson:binary_decode(Data),
-    Args2 = [ sanitize_z_media_arg(Arg) || Arg <- Args ],
-    iolist_to_binary(mochijson:binary_encode({struct, Args2})).
+    Sanitized = maps:fold(
+        fun(Key, Value, Acc) ->
+            maps:merge(Acc, sanitize_z_media_arg(Key, Value))
+        end,
+        #{},
+        z_json:decode(Data)
+    ),
+    z_json:encode(Sanitized).
 
-sanitize_z_media_arg({<<"id">>, Id}) when is_binary(Id) -> {<<"id">>, z_string:to_name(Id)};
-sanitize_z_media_arg({<<"id">>, Id}) when is_integer(Id) -> {<<"id">>, Id};
-sanitize_z_media_arg({<<"size">>, <<"large">>} = S) -> S;
-sanitize_z_media_arg({<<"size">>, <<"small">>} = S) -> S;
-sanitize_z_media_arg({<<"size">>, <<"middle">>} = S) -> S;
-sanitize_z_media_arg({<<"size">>, _}) -> {<<"size">>, <<"medium">>};
-sanitize_z_media_arg({<<"align">>, <<"left">>} = S) -> S;
-sanitize_z_media_arg({<<"align">>, <<"right">>} = S) -> S;
-sanitize_z_media_arg({<<"align">>, _}) -> {<<"align">>, <<"block">>};
-sanitize_z_media_arg({<<"crop">>, Crop}) -> {<<"crop">>, z_convert:to_bool(Crop)};
-sanitize_z_media_arg({<<"link">>, Link}) -> {<<"link">>, z_convert:to_bool(Link)};
-sanitize_z_media_arg({<<"caption">>, Caption}) -> 
-    Caption1 = binary:replace(Caption, <<"-->">>, <<"→"/utf8>>, [global]),
-    {<<"caption">>, Caption1};
-sanitize_z_media_arg({Arg, Val}) when is_binary(Val) ->
-    Val1 = binary:replace(Val, <<"-->">>, <<"→"/utf8>>, [global]),
-    {z_string:to_name(Arg), Val1};
-sanitize_z_media_arg({Arg, Val}) when is_integer(Val); is_boolean(Val) ->
-    {z_string:to_name(Arg), Val}.
-
+sanitize_z_media_arg(<<"id">>, Id) when is_binary(Id) -> #{<<"id">> => z_string:to_name(Id)};
+sanitize_z_media_arg(<<"id">>, Id) when is_integer(Id) -> #{<<"id">> => Id};
+sanitize_z_media_arg(<<"size">>, <<"large">>) -> #{<<"size">> => <<"large">>};
+sanitize_z_media_arg(<<"size">>, <<"small">>) -> #{<<"size">> => <<"small">>};
+sanitize_z_media_arg(<<"size">>, <<"middle">>) -> #{<<"size">> => <<"middle">>};
+sanitize_z_media_arg(<<"size">>, _) -> #{<<"size">> => <<"medium">>};
+sanitize_z_media_arg(<<"align">>, <<"left">>) -> #{<<"align">> => <<"left">>};
+sanitize_z_media_arg(<<"align">>, <<"right">>) -> #{<<"align">> => <<"right">>};
+sanitize_z_media_arg(<<"align">>, _) -> #{<<"align">> => <<"block">>};
+sanitize_z_media_arg(<<"crop">>, Crop) -> #{<<"crop">> => z_convert:to_bool(Crop)};
+sanitize_z_media_arg(<<"link">>, Link) -> #{<<"link">> => z_convert:to_bool(Link)};
+sanitize_z_media_arg(<<"caption">>, Caption) ->
+    #{<<"caption">> => binary:replace(Caption, <<"-->">>, <<"→"/utf8>>, [global])};
+sanitize_z_media_arg(Key, Value) when is_binary(Value) ->
+    #{z_string:to_name(Key) => binary:replace(Value, <<"-->">>, <<"→"/utf8>>, [global])};
+sanitize_z_media_arg(Key, Value) when is_integer(Value); is_boolean(Value) ->
+    #{z_string:to_name(Key) => Value}.
 
 sanitize_script(Props, Context) ->
     Src = proplists:get_value(<<"src">>, Props),

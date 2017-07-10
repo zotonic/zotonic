@@ -54,9 +54,8 @@ oauth_request_test() ->
                     Consumer),
 
 
-    {ok, {{_, 200, _}, _AnonGetHs, AnonGetBody}} = AnonGet,
-    {struct, AnonGetJSON} = mochijson:binary_decode(AnonGetBody),
-    ?assertEqual(<<"anon">>, proplists:get_value(<<"user">>, AnonGetJSON)),
+        {ok, {{_, 200, _}, _AnonGetHs, AnonGetBody}} = AnonGet,
+        ?assertEqual(#{<<"user">> => <<"anon">>}, z_json:decode(list_to_binary(AnonGetBody))),
 
     % 6. Make a GET request with the user tokens
     UserGet = oauth:get(
@@ -66,9 +65,8 @@ oauth_request_test() ->
                     z_convert:to_list(proplists:get_value(token, UserToken)),
                     z_convert:to_list(proplists:get_value(token_secret, UserToken))),
 
-    {ok, {{_, 200, _}, _UserGetHs, UserGetBody}} = UserGet,
-    {struct, UserGetJSON} = mochijson:binary_decode(UserGetBody),
-    ?assertEqual(<<"auth">>, proplists:get_value(<<"user">>, UserGetJSON)),
+        {ok, {{_, 200, _}, _UserGetHs, UserGetBody}} = UserGet,
+        ?assertEqual(#{<<"user">> => <<"auth">>}, z_json:decode(list_to_binary(UserGetBody))),
 
     % 7. Make a POST request with the user tokens
     UserPost = oauth:post(
@@ -78,9 +76,5 @@ oauth_request_test() ->
                     z_convert:to_list(proplists:get_value(token, UserToken)),
                     z_convert:to_list(proplists:get_value(token_secret, UserToken))),
 
-    {ok, {{_, 200, _}, _UserPostHs, UserPostBody}} = UserPost,
-    {struct, UserPostJSON} = mochijson:binary_decode(UserPostBody),
-    ?assertEqual(<<"auth">>, proplists:get_value(<<"user">>, UserPostJSON)),
-
-    ok.
-
+        {ok, {{_, 200, _}, _UserPostHs, UserPostBody}} = UserPost,
+        ?assertEqual(#{<<"user">> => <<"auth">>}, z_json:decode(list_to_binary(UserPostBody))).

@@ -132,7 +132,7 @@ media_import(MD, Context) ->
             undefined;
         ImgUrl ->
             case decode_shared_data(MD#url_metadata.partial_data) of
-                {ok, {struct, Props}} ->
+                {ok, Props} ->
                     try
                         media_import_shared_data(Props, MD, Context)
                     catch
@@ -165,9 +165,7 @@ media_import_md(ImgUrl, MD, Context) ->
         medium_url = ImgUrl
     }.
 
-media_import_shared_data(Props, MD, Context) ->
-    {struct, EntryData} = proplists:get_value(<<"entry_data">>, Props),
-    PostPage = proplists:get_value(<<"PostPage">>, EntryData),
+media_import_shared_data(#{<<"entry_data">> := #{<<"PostPage">> := PostPage}}, MD, Context) ->
     Media = find_media(PostPage),
     {W,H} = media_dimensions(Media),
     Title = z_url_metadata:p(title, MD),
@@ -218,23 +216,19 @@ media_import_shared_data(Props, MD, Context) ->
             }
     end.
 
-media_dimensions(Media) ->
-    {struct, Dim} = proplists:get_value(<<"dimensions">>, Media),
-    Height = proplists:get_value(<<"height">>, Dim),
-    Width = proplists:get_value(<<"width">>, Dim),
-    {Width,Height}.
+media_dimensions(#{<<"dimensions">> := #{<<"height">> := Height, <<"width">> := Width}}) ->
+    {Width, Height}.
 
 decode_shared_data(Data) ->
     case re:run(Data, "window._sharedData\s*=(.*);\s*</script>", [{capture,all_but_first,binary}]) of
-        {match, [JSON]} -> {ok, mochijson2:decode(JSON)};
+        {match, [JSON]} -> {ok, z_json:decode(JSON)};
         nomatch -> {error, nojson}
     end.
 
-find_media([{struct, List}|Rest]) ->
-    case proplists:get_value(<<"media">>, List) of
-        {struct, Media} -> Media;
-        _ -> find_media(Rest)
-    end.
+find_media([#{<<"media">> := Media} | _]) ->
+    Media;
+find_media([_ | Rest]) ->
+    find_media(Rest).
 
 %%====================================================================
 %% API

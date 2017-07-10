@@ -94,7 +94,7 @@ oembed_request(RequestUrl) ->
         {ok, {{_, Code, _}, Headers, Body}} ->
             case Code of
                 200 ->
-                    {ok, z_convert:convert_json(mochijson2:decode(Body))};
+                    {ok, z_json:decode(Body)};
                 404 ->
                     {error, {http, 404, <<>>}};
                 NoAccess when NoAccess =:= 401; NoAccess =:= 403 ->
