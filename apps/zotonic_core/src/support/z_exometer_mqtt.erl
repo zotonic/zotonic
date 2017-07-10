@@ -32,7 +32,7 @@
 ]).
 
 -include("zotonic.hrl").
--include_lib("exometer/include/exometer.hrl").
+-include_lib("exometer_core/include/exometer.hrl").
 -include_lib("emqtt/include/emqtt.hrl").
 
 exometer_init(_Opts) ->
