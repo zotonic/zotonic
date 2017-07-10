@@ -88,13 +88,13 @@ vary(ModuleName, Args, ScompContext) ->
     case ModuleName:vary(Args, ScompContext) of
         default ->
             %% Scomp asks default behaviour, check the arguments for caching args
-            MaxAge = proplists:get_value(maxage, Args),
+            MaxAge = proplists:get_value(max_age, Args),
             case z_convert:to_integer(MaxAge) of
                 undefined ->
                     nocache;
                 Max ->
                     Vary  = proplists:get_all_values(vary, Args),
-                    Args1 = proplists:delete(maxage, Args),
+                    Args1 = proplists:delete(max_age, Args),
                     Args2 = proplists:delete(vary, Args1),
                     {Args2, Max, Vary}
             end;

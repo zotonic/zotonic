@@ -47,14 +47,14 @@ the template takes considerable time, for example when the template shows a list
 of recent news items, which comprises a query, fetching and rendering a list of
 news items. To cache such a list::
 
-    {% include "recent_news_items.tpl" maxage=3600 %}
+    {% include "recent_news_items.tpl" max_age=3600 %}
 
 Caching is enabled by defining one of the caching arguments:
 
 +------------+--------------------------------------------------------+-----------------------+
 |Argument    |Description                                             |Example                |
 +============+========================================================+=======================+
-|maxage      |The maximum time the output can be cached, in seconds.  |``maxage=3600``        |
+|max_age     |The maximum time the output can be cached, in seconds.  |``max_age=3600``       |
 |            |Specifying ``0`` for the maximum age does not cache the |                       |
 |            |output but does protect agains slam dunks, multiple     |                       |
 |            |requests rendering the same template at the same time   |                       |

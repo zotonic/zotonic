@@ -64,7 +64,7 @@ provide_content(Context) ->
     z_context:output(Rendered, Context4).
 
 set_optional_cache_header(Context) ->
-    case z_context:get(maxage, Context) of
+    case z_context:get(max_age, Context) of
         undefined ->
             Context;
         MaxAge when is_integer(MaxAge) ->
