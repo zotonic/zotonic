@@ -37,7 +37,7 @@ start_link() ->
     lager:info("Zotonic starting"),
     lager:info("================"),
     lager:info("Config files used:"),
-    [ lager:info("- ~s", [Cfg]) || [Cfg] <- zotonic_launcher_config:config_files() ],
+    [lager:info("- ~s", [Cfg]) || Cfg <- zotonic_launcher_config:config_files()],
     lager:info("================"),
     zotonic_launcher_config:load_configs(),
     supervisor:start_link({local, ?SERVER}, ?MODULE, []).
