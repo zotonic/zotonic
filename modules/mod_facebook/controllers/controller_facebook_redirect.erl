@@ -27,13 +27,16 @@
 -include_lib("controller_html_helper.hrl").
 
 html(Context) ->
-    case z_context:get_q("code", Context) of
-        undefined ->
-            Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
-            html_error(cancel, Context1);
-        Code ->
-            access_token(fetch_access_token(Code, Context), Context)
-    end.
+    State = z_context:get_q("state", Context),
+    Code = z_context:get_q("code", Context),
+    SessionState = z_context:get_session(facebook_state, Context),
+    html_1(Code, State, SessionState, Context).
+
+html_1(Code, State, State, Context) when Code =/= undefined, Code =/= <<>>, Code =/= "" ->
+    access_token(fetch_access_token(Code, Context), Context);
+html_1(_Code, _State, _SessionState, Context) ->
+    Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
+    html_error(cancel, Context1).
 
 access_token({ok, AccessToken, Expires}, Context) ->
     Data = [
@@ -45,25 +48,19 @@ access_token({error, _Reason}, Context) ->
     html_error(access_token, Context).
 
 user_data({ok, UserProps}, AccessData, Context) ->
-    case proplists:get_value(<<"email">>, UserProps) of
+    case auth_user(UserProps, AccessData, Context) of
         undefined ->
-            lager:info("[facebook] No email returned for user with props ~p", [UserProps]),
-            html_error(email_required, Context);
-        _Email ->
-            case auth_user(UserProps, AccessData, Context) of
-                undefined ->
-                    % No handler for signups, or signup not accepted
-                    lager:warning("[facebook] Undefined auth_user return for user with props ~p", [UserProps]),
-                    html_error(auth_user_undefined, Context);
-                {error, duplicate} ->
-                    lager:info("[facebook] Duplicate connection for user with props ~p", [UserProps]),
-                    html_error(duplicate, Context);
-                {error, _} = Err ->
-                    lager:warning("[facebook] Error return ~p for user with props ~p", [Err, UserProps]),
-                    html_error(auth_user_error, Context);
-                {ok, Context1} ->
-                    html_ok(Context1)
-            end
+            % No handler for signups, or signup not accepted
+            lager:warning("[facebook] Undefined auth_user return for user with props ~p", [UserProps]),
+            html_error(auth_user_undefined, Context);
+        {error, duplicate} ->
+            lager:info("[facebook] Duplicate connection for user with props ~p", [UserProps]),
+            html_error(duplicate, Context);
+        {error, _} = Err ->
+            lager:warning("[facebook] Error return ~p for user with props ~p", [Err, UserProps]),
+            html_error(auth_user_error, Context);
+        {ok, Context1} ->
+            html_ok(Context1)
     end;
 user_data({error, _Reason}, _AccessData, Context) ->
     html_error(service_user_data, Context).
@@ -91,7 +88,7 @@ auth_user(FBProps, AccessTokenData, Context) ->
         {name_first, proplists:get_value(<<"first_name">>, FBProps)},
         {name_surname, proplists:get_value(<<"last_name">>, FBProps)},
         {website, proplists:get_value(<<"link">>, FBProps)},
-        {email, proplists:get_value(<<"email">>, FBProps, [])},
+        {email, proplists:get_value(<<"email">>, FBProps, <<>>)},
         {depiction_url, iolist_to_binary([
                 <<"https://graph.facebook.com/">>,
                 FacebookUserId,
@@ -113,7 +110,7 @@ auth_user(FBProps, AccessTokenData, Context) ->
 fetch_access_token(Code, Context) ->
     {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
     RedirectUrl = z_context:abs_url(z_dispatcher:url_for(facebook_redirect, Context), Context),
-    FacebookUrl = "https://graph.facebook.com/oauth/access_token?client_id="
+    FacebookUrl = "https://graph.facebook.com/v2.9/oauth/access_token?client_id="
                 ++ z_utils:url_encode(AppId)
                 ++ "&redirect_uri=" ++ z_convert:to_list(z_utils:url_encode(RedirectUrl))
                 ++ "&client_secret=" ++ z_utils:url_encode(AppSecret)
@@ -135,7 +132,7 @@ decode_access_token(_ContentType, Payload) ->
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.3/me?access_token=" ++ z_utils:url_encode(AccessToken),
+    FacebookUrl = "https://graph.facebook.com/v2.9/me?access_token=" ++ z_utils:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
