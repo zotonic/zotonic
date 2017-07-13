@@ -12,7 +12,7 @@ the argument ``id`` (and possibly any other arguments). The rendered html will t
 inside the overlay.
 
 The overlay template is a ``div`` with the class ``modal-overlay``. Extra classes can be added using
-the ``class` argument::
+the ``class`` argument::
 
    {% wire action={overlay_open template="_splash.tpl" class="splash"} %}
 
