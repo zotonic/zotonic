@@ -132,7 +132,7 @@ decode_access_token(_ContentType, Payload) ->
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.9/me?access_token=" ++ z_utils:url_encode(AccessToken),
+    FacebookUrl = "https://graph.facebook.com/v2.9/me?fields=id,name,email&access_token=" ++ z_utils:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
