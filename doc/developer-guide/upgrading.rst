@@ -14,6 +14,25 @@ Erlang/OTP
 ^^^^^^^^^^
 
 * Support for Erlang 18 was dropped.
+* Zotonic modules are now separately published as packages to `Hex.pm`_, which
+  allows you to build your own Zotonic distribution and to have each of your
+  sites depend on the Zotonic modules (and other Erlang packages) it needs.
+* This was done by restructuring Zotonic into an `umbrella application`_. The
+  ``src/`` directory was moved to new ``zotonic_core`` app.
+
+  Before::
+
+    -include_lib("zotonic.hrl").
+
+  After::
+
+    -include_lib("zotonic_core/include/zotonic.hrl").
+
+* The HTTP and SMTP listeners were moved to a new ``zotonic_listen_http`` and
+  ``zotonic_listen_smtp`` app respectively.
+* A ``zotonic_launcher`` app was introduced for starting Zotonic.
+* All built-in modules, the testsandbox and the status sites are now to be found
+  in the ``apps/`` directory.
 
 ACL
 ^^^
@@ -91,29 +110,6 @@ Export
 
 * Modules mod_atom and mod_atom_feed were removed. You can export data in a
   variety of formats using :ref:`mod_export`.
-
-OTP
-^^^
-
-* Zotonic modules are now separately published as packages to `Hex.pm`_, which
-  allows you to build your own Zotonic distribution and to have each of your
-  sites depend on the Zotonic modules (and other Erlang packages) it needs.
-* This was done by restructuring Zotonic into an `umbrella application`_. The
-  ``src/`` directory was moved to new ``zotonic_core`` app.
-
-  Before::
-
-    -include_lib("zotonic.hrl").
-
-  After::
-
-    -include_lib("zotonic_core/include/zotonic.hrl").
-
-* The HTTP and SMTP listeners were moved to a new ``zotonic_listen_http`` and
-  ``zotonic_listen_smtp`` app respectively.
-* A ``zotonic_launcher`` app was introduced for starting Zotonic.
-* All built-in modules, the testsandbox and the status sites are now to be found
-  in the ``apps/`` directory.
 
 Removed deprecated functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
