@@ -47,8 +47,8 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-production-html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+html-with-stubs:
+	READTHEDOCS=True $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
@@ -171,6 +171,8 @@ xelatex:
 	@echo "xelatex finished; the PDF files are in $(BUILDDIR)/latex."
 
 .PHONY: stubs
-stubs:
+stubs: erlang-stubs
 	export APPS=../apps CORE=../apps/zotonic_core MODULES=../apps/zotonic_mod* ; for f in `find ref -name .generate`; do $$f || exit 1; done
+
+erlang-stubs:
 	export ZOTONIC_SRC=../ MODULES=../apps/zotonic_mod* ; for f in `find ref -name .generate-erlang`; do $$f || exit 1; done

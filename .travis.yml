@@ -20,8 +20,8 @@ script:
   - make test
   - if [[ "$BUILD_DOCS" = true ]]; then make edocs; fi
   - if [[ "$BUILD_DOCS" = true ]]; then pip install --user -r doc/requirements.txt; fi
-  - if [[ "$BUILD_DOCS" = true ]]; then make -C doc/ stubs; fi
-  - if [[ "$BUILD_DOCS" = true ]]; then make -C doc/ SPHINXOPTS='-nW' html; fi
+  - if [[ "$BUILD_DOCS" = true ]]; then make -C doc/ erlang-stubs; fi
+  - if [[ "$BUILD_DOCS" = true ]]; then make -C doc/ SPHINXOPTS='-nW' html-with-stubs; fi
   - ./rebar3 xref
   - if [[ "$ELVIS" = true ]]; then wget https://github.com/inaka/elvis/releases/download/0.2.12/elvis && chmod +x elvis && ./elvis rock; fi
   - if [[ "$DIALYZER" = true ]]; then ./rebar3 dialyzer; fi

@@ -15,11 +15,11 @@ import sys, os, sphinx_rtd_theme
 
 # Read the Docs only runs sphinx directly (not through Makefile commands), so we
 # build the stubs here
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 if on_rtd:
     print("Building stubs...")
-    os.system('export ZOTONIC_SRC=.. ; for f in `find ref -name .generate`; do $f || exit 1; done')
+    os.system('export APPS=../apps CORE=../apps/zotonic_core MODULES=../apps/zotonic_mod* ; for f in `find ref -name .generate`; do $f || exit 1; done')
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
