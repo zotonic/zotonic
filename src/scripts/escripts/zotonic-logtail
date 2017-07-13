@@ -27,5 +27,8 @@ main(_) ->
     zotonic_setup:require_zotonic_running(),
     LogPath = ?ZOTONIC ++ "/priv/log",
     {ok, LOGS} = file:list_dir(LogPath),
-
-    erlang:error(not_implemented).
+    lists:foreach(fun(Log) ->
+        {ok, Bin} = file:open(Log, [read]),
+        io:format("~p~n", [Bin])
+                  end,
+        LOGS).
