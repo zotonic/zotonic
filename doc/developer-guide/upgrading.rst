@@ -100,6 +100,15 @@ OTP
   sites depend on the Zotonic modules (and other Erlang packages) it needs.
 * This was done by restructuring Zotonic into an `umbrella application`_. The
   ``src/`` directory was moved to new ``zotonic_core`` app.
+
+  Before::
+
+    -include_lib("zotonic.hrl").
+
+  After::
+
+    -include_lib("zotonic_core/include/zotonic.hrl").
+
 * The HTTP and SMTP listeners were moved to a new ``zotonic_listen_http`` and
   ``zotonic_listen_smtp`` app respectively.
 * A ``zotonic_launcher`` app was introduced for starting Zotonic.
