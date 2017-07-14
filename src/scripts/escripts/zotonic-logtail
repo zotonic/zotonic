@@ -28,7 +28,8 @@ main(_) ->
     LogPath = ?ZOTONIC ++ "/priv/log",
     {ok, LOGS} = file:list_dir(LogPath),
     lists:foreach(fun(Log) ->
-        {ok, Bin} = file:open(Log, [read]),
+        {ok, Bin} = file:open(Log, [read, raw]),
         io:format("~p~n", [Bin])
+        %%TODO:
                   end,
         LOGS).
