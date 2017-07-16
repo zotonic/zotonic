@@ -186,14 +186,27 @@ addsite_compile(Name, Options, Context) ->
         Context
     ),
     z:compile(),
-    Site = binary_to_atom(Name, utf8),
-    {ok, {Site, Options}}.
+    EbinPath =  os:cmd("./rebar3 path --app " ++ binary_to_list(Name)),
+    case code:add_path(EbinPath) of
+	true ->
+	    Site = binary_to_atom(Name, utf8),
+	    case application:load(Site) of
+		ok ->
+		    {ok, {Site, Options}};
+		{error, {already_loaded, Site}} ->
+		    {ok, {Site, Options}};
+		Error ->
+		    Error
+	    end;
+	Error ->
+	    Error
+    end.
 
 % Add a sample .gitgnore file to the newly created site directory.
 create_gitignore(SiteDir) ->
     GitIgnore = <<
         "files\n"
-        "config\n"
+        "zotonic_site.config\n"
         ".eunit\n"
         ".rebar3\n"
         "*.beam\n",
@@ -241,11 +254,11 @@ copy_skeleton_dir(From, To, Options, Context) ->
             end,
             Files).
 
-copy_file("SITE.erl", FromPath, ToPath, Options) ->
+copy_file("SITE" ++ Ext, FromPath, ToPath, Options) when Ext == ".erl"; Ext == ".app.src" ->
     % Replace with the site name
     ToPath1 = filename:join([
                     filename:dirname(ToPath),
-                    z_convert:to_list(proplists:get_value(site, Options))++".erl"
+                    z_convert:to_list(proplists:get_value(site, Options)) ++ Ext
                 ]),
     case filelib:is_file(ToPath1) of
         true ->
@@ -256,14 +269,14 @@ copy_file("SITE.erl", FromPath, ToPath, Options) ->
             Outfile = replace_tags(SiteErl, Options),
             file:write_file(ToPath1, Outfile)
     end;
-copy_file("config.in", FromPath, ToPath, Options) ->
+copy_file("zotonic_site.config.in", FromPath, ToPath, Options) ->
     % First replace the tags in the config.in, then copy it.
     {ok, Bin} = file:read_file(FromPath),
     Outfile = replace_tags(Bin, Options),
     ok = file:write_file(ToPath, Outfile),
 
     % Merge the optionally pre-existing config and config.in to a rewritten config.
-    FnConfig = filename:join([filename:dirname(ToPath), "config"]),
+    FnConfig = filename:join([filename:dirname(ToPath), "zotonic_site.config"]),
     Cfg = case filelib:is_file(FnConfig) of
         true ->
             % Merge config files

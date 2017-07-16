@@ -1,0 +1,10 @@
+{application, %%SITE%%, [
+    {description, "Default Zotonic basesite"},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]}
+]}.
