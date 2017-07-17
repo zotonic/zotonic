@@ -43,3 +43,11 @@
 -define(ZOTONIC_PIDFILE, ?ZOTONIC ++ "/zotonic.pid").
 -define(Modules, zotonic_setup:get_user_modules_dir()).
 -define(Sites, zotonic_setup:get_user_sites_dir()).
+
+-define(ZOTONIC_PORT, 8040).
+-define(ZOTONIC_LISTEN_PORT, 8040).
+-define(ZOTONIC_PORT_SSL, 8043).
+-define(ZOTONIC_SSL_LISTEN_PORT, 8043).
+-define(ZOTONIC_SMTP_BOUNCE_PORT, 2535).
+
+-define(EBIN_DIR, ?ZOTONIC ++ "/_build/default/lib/zotonic/ebin").
