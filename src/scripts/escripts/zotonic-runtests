@@ -25,5 +25,4 @@
 
 main([]) ->
     zotonic_setup:require_zotonic_not_running(),
-    %%TODO:
-    erlang:error(not_implemented).
+    zotonic:run_tests().
