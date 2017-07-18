@@ -16,25 +16,17 @@
 %% limitations under the License.
 
 %%
-%% usage zotonic-restartsite [site_name]
+%% usage zotonic status
 %%
 
 -export([main/1]).
 
 -include("zotonic_escript_helper.hrl").
 
-main([Site]) ->
+main([]) ->
     zotonic_setup:require_zotonic_running(),
-    case Site of
-         " " ->
-             io:format("USAGE: ~s [site_name] ~n", [escript:script_name()]);
-        _ ->
-            SitePath = ?ZOTONIC ++ "/user/sites/" ++ Site,
-            case filelib:is_dir(SitePath) of
-                true   ->
-                    io:format("Restarting site ~s on zotonic ~s@~s", [Site, ?NODENAME, ?NODEHOST]),
-                    z_sites_manager:restart(Site);
-                false ->
-                    io:format("Site not found. Please make sure zotonic site exist.")
-            end
-    end.
+    io:format("Running: ~p@~p~n~n", [?NODENAME, ?NODEHOST]),
+    io:format("Sites Status: ~n"),
+    io:format("============="),
+    zotonic:status(),
+    z_sites_manager:get_sites().

@@ -31,5 +31,5 @@ main([Site]) ->
              halt();
         _ ->
             io:format("Starting site ~p on zotonic ~p@~p", [Site, ?NODENAME, ?NODEHOST]),
-            init:restart()
+            z_sites_manager:start(Site)
     end.
