@@ -26,7 +26,7 @@ function usage {
     echo "  -s <skel>    Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: $SKEL)" 1>&2
     if [ "$SITEHOSTNAME" == "" ]; then
         echo "  -H <host>    Site's hostname (default: <sitename>.dev)" 1>&2
-    else 
+    else
         echo "  -H <host>    Site's hostname (default: $SITEHOSTNAME)" 1>&2
     fi
     echo "  -L           Create the site in the current directory and symlink it into $SITES" 1>&2
@@ -60,11 +60,12 @@ function do_addsite {
     # Remove placeholder .empty files
     rm `find . -name .empty`
 
-    # move site module in place
-    mv SITE.erl $SITE.erl
+    # move site app and module in place
+    mv src/SITE.app.src src/$SITE.app.src
+    mv src/SITE.erl src/$SITE.erl
 
     # move config in place
-    mv config.in config
+    mv priv/zotonic_site.config.in priv/zotonic_site.config
 
     # Some handy variables
     if [ `uname -s` = Darwin ]
@@ -81,20 +82,20 @@ function do_addsite {
     for var in SITE SITEHOSTNAME SKEL FULLNAME DBHOST DBPORT DBUSER DBPASSWORD DBDATABASE DBSCHEMA ADMINPASSWORD YEAR DATE; do
         seds="s/%%$var%%/${!var}/g;$seds"
     done
-    sed -i -e "$seds" $SITE.erl config
+    sed -i -e "$seds" src/$SITE.app.src src/$SITE.erl priv/zotonic_site.config
 
     # Do the git stuff
     if [ "$GITREMOTE" != "" ]; then
         # add the config to the repo
-        cp config config.in
+        cp priv/zotonic_site.config priv/zotonic_site.config.in
         $GIT init
         $GIT remote add origin "$GITREMOTE"
-        printf "files\nconfig\n" > .gitignore
+        printf "files\nzotonic_site.config\n" > .gitignore
         $GIT add -A .
         $GIT commit -m "Initial commit of $SITE"
         $GIT push -u origin master || :
     fi
-    
+
     popd
 
     if [ "$DO_LINK" = "1" ]; then
@@ -105,14 +106,15 @@ function do_addsite {
 
     # Make the new site
     echo "Building site..."
-    $ZOTONIC_CALL -a "make all [[load]]"  > /dev/null
+    $ZOTONIC/rebar3 compile  > /dev/null
+    SITE_EBINDIR=$($ZOTONIC/rebar3 path --app $SITE)
+    $ZOTONIC_CALL -a "code add_path [\"$SITE_EBINDIR\"]" > /dev/null
+    $ZOTONIC_CALL -a "application load [$SITE]" > /dev/null
 
     echo "Starting..."
-    curl -s $TARGETURL > /dev/null
-    sleep 1
-    
+    $ZOTONIC_CALL -a "z_sites_manager upgrade" > /dev/null
     $ZOTONIC_CALL -a "z_sites_manager start [$SITE]" > /dev/null
-    
+
     echo
     echo "Added site $SITE. Now go to $TARGETURL to view it."
 }
@@ -166,7 +168,7 @@ function check_options {
 }
 
 function check_preconditions {
-    
+
     if [ "$SITE" == "" ]; then
         usage
     fi
@@ -179,10 +181,10 @@ function check_preconditions {
     if [ "$SITEHOSTNAME" == "" ]; then
         SITEHOSTNAME="${SITE}.dev"
     fi
-    
-    
+
+
     # allow %%SITE%% syntax in some values
-    DBDATABASE=`echo $DBDATABASE|sed "s/%%SITE%%/$SITE/g"` 
+    DBDATABASE=`echo $DBDATABASE|sed "s/%%SITE%%/$SITE/g"`
     DBSCHEMA=`echo $DBSCHEMA|sed "s/%%SITE%%/$SITE/g"`
     SITEHOSTNAME=`echo $SITEHOSTNAME|sed "s/%%SITE%%/$SITE/g"`
     GITREMOTE=`echo $GITREMOTE|sed "s/%%SITE%%/$SITE/g"`
@@ -200,7 +202,7 @@ function check_preconditions {
         echo "127.0.0.1         $SITEHOSTNAME"
         echo
     fi
-    
+
     if [ -e $SITES/$SITE ]; then
         echo `basename $0`: cannot add site "\`$SITE'": $SITES/$SITE already exists 1>&2
         exit 1
@@ -229,13 +231,13 @@ function check_preconditions {
             exit 1
         fi
     fi
-    
+
     if [ "$ZOTONIC_PORT" == "80" ]; then
         TARGETURL="http://$SITEHOSTNAME/"
     else
         TARGETURL="http://$SITEHOSTNAME:${ZOTONIC_PORT:=8000}/"
     fi
-    
+
     echo 1>&2
     echo "==== Add site ====" 1>&2
     echo 1>&2
@@ -257,7 +259,7 @@ function check_preconditions {
         echo " With git repository: $GITREMOTE" 1>&2
         echo 1>&2
     fi
-    
+
     read -p '>>> Hit return to proceed...'
 }
 
@@ -265,4 +267,3 @@ function check_preconditions {
 check_options $*
 check_preconditions
 do_addsite
-

@@ -5,7 +5,7 @@
 -module(controller_default_contact).
 -export([event/2]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 event(#submit{message={contact, []}}, Context) ->
     Vars = [{mail, z_context:get_q("mail", Context)},
