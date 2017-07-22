@@ -65,6 +65,7 @@
     fold/4,
 
     move_below/3,
+    move_after/3,
     is_tree_dirty/1,
     renumber/1,
     renumber_pivot_task/1
@@ -737,6 +738,22 @@ move_below(Cat, Parent, Context) ->
             renumber(Context)
     end.
 
+%% @doc Move a category after another category (on the same level).
+-spec move_after(pos_integer(), pos_integer(), z:context()) -> ok.
+move_after(Cat, After, Context) ->
+    {ok, Id} = name_to_id(Cat, Context),
+    AfterId = maybe_name_to_id(After, Context),
+    Tree = menu(Context),
+    {ok, {Tree1, Node, _}} = remove_node(Tree, Id, undefined),
+    case insert_after(AfterId, Node, Tree1, []) of
+        Tree1 ->
+            ok;
+        NewTree ->
+            m_hierarchy:save_nocheck('$category', NewTree, Context),
+            flush(Context),
+            renumber(Context)
+    end.
+
 maybe_name_to_id(undefined, _Context) ->
     undefined;
 maybe_name_to_id(Id, _Context) when is_integer(Id) ->
@@ -754,6 +771,14 @@ insert_node(ParentId, Node, [{ParentId, TCs} | Tree], Acc) ->
 insert_node(ParentId, Node, [{TId, TCs} | Tree], Acc) ->
     T1 = {TId, insert_node(ParentId, Node, TCs, [])},
     insert_node(ParentId, Node, Tree, [T1 | Acc]).
+
+insert_after(_AfterId, _Node, [], Acc) ->
+    lists:reverse(Acc);
+insert_after(AfterId, Node, [{AfterId, Children} | Tree], Acc) ->
+    lists:reverse(Acc, [{AfterId, Children}] ++ [Node | Tree]);
+insert_after(AfterId, Node, [{CurrId, Children} | Tree], Acc) ->
+    Tree1 = {CurrId, insert_after(AfterId, Node, Children, [])},
+    insert_after(AfterId, Node, Tree, [Tree1 | Acc]).
 
 remove_node([], _Id, _ParentId) ->
     notfound;

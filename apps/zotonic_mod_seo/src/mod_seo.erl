@@ -20,8 +20,8 @@
 -module(mod_seo).
 -author("Marc Worrell <marc@worrell.nl>").
 
--mod_title("SEO Search Engine Optimization").
--mod_description("Provides admin interface for the SEO modules.").
+-mod_title("Search Engine Optimization (SEO)").
+-mod_description("Structured data, Google Analytics").
 -mod_prio(600).
 -mod_depends([base, admin]).
 -mod_provides([seo]).

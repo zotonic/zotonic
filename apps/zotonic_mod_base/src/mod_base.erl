@@ -27,13 +27,19 @@
 -mod_provides([base]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-mod_schema(1).
 
 %% interface functions
 -export([
     observe_media_stillimage/2,
     observe_scomp_script_render/2,
-    observe_dispatch/2
+    observe_dispatch/2,
+    manage_schema/2
 ]).
+
+manage_schema(install, Context) ->
+    ok = z_datamodel:manage(?MODULE, datamodel(), Context),
+    m_category:move_after(organization, person, Context).
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
@@ -130,8 +136,14 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
 last(<<>>) -> $/;
 last(Path) -> binary:last(Path).
 
-
-%%====================================================================
-%% support functions
-%%====================================================================
-
+datamodel() ->
+    #datamodel{
+        categories = [
+            {organization, undefined, [
+                {title, {trans, [
+                    {en, <<"Organization">>},
+                    {nl, <<"Organisatie">>}
+                ]}}
+            ]}
+        ]
+    }.
