@@ -37,7 +37,15 @@ main([File]) ->
                 1  ->
                     ok;
                 _ ->
-                    string:concat("/", File)
-                    %%TODO:
-            end
+                    File = string:concat("/", File)
+            end,
+            F = ?ZOTONIC ++ File,
+            case filelib:is_file(F) of
+                true  ->
+                    ok;
+                false ->
+                    io:format("~p is not under the Zotonic basedir.", [F])
+            end,
+            io:format("Compiling ~p~n", [File]),
+            compile:file(F)
     end.
