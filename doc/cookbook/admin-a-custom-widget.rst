@@ -12,7 +12,8 @@ For an imaginary webshop edit page, we want to add 2 more data fields: the affil
 Assumptions
 ```````````
 
-Readers are expected to have experience with Zotonic templates. For reference, look at the Zotonic admin template directory ``modules/mod_admin/templates/``.
+Readers are expected to have experience with Zotonic templates.
+For reference, look at the Zotonic admin template directory ``apps/zotonic_mod_admin/priv/templates/``.
 
 
 Custom widget
@@ -43,7 +44,7 @@ Add these block definitions::
                 <label class="control-label col-md-3">{_ Affiliate URL _}</label>
                 <div class="col-md-9">
                     <input type="text"
-                        name="affiliate_url" 
+                        name="affiliate_url"
                         class="form-control"
                         value="{{ id.affiliate_url }}"
                         {% if not is_editable %}disabled="disabled"{% endif %}
@@ -54,7 +55,7 @@ Add these block definitions::
                 <label class="control-label col-md-3">{_ Free shipping note _}</label>
                 <div class="col-md-9">
                     <input type="text"
-                        name="free_shipping_note" 
+                        name="free_shipping_note"
                         class="form-control"
                         value="{{ id.free_shipping_note }}"
                         {% if not is_editable %}disabled="disabled"{% endif %}

@@ -5,9 +5,9 @@ WORKDIR /opt/zotonic
 
 COPY docker/zotonic.config /etc/zotonic/zotonic.config
 
-RUN sed -f docker/erlang.config.sed priv/erlang.config.in > /etc/zotonic/erlang.config \
+RUN sed -f docker/erlang.config.sed apps/zotonic_launcher/priv/config/erlang.config.in > /etc/zotonic/erlang.config \
     && adduser -S -h /tmp -H -D zotonic \
-    && chown -R zotonic /opt/zotonic/priv
+    && chown -R zotonic /opt/zotonic/apps/zotonic_launcher/priv
 
 # Note: dumb-init and gosu are pulled from edge; remove that when upgrading to an alpine release that
 # includes those packages.

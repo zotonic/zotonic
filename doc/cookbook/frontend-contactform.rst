@@ -87,7 +87,7 @@ with the following contents::
   -module(my_contactform).
   -export([event/2]).
 
-  -include_lib("zotonic.hrl").
+  -include_lib("zotonic_core/include/zotonic.hrl").
 
   event(#submit{message={contact, []}}, Context) ->
     ?DEBUG(z_context:get_q_all(Context)),

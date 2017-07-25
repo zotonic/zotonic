@@ -1,0 +1,11 @@
+{application, zotonic_mod_admin_merge, [
+    {description, "User interface to merge resources in the admin."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

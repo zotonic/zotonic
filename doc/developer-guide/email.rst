@@ -272,7 +272,7 @@ After you’ve created the template, you can send the e-mail. You can provide
 the template variables (we had ``id`` and ``sender_name`` in the template) as
 ``vars``::
 
-    -include_lib("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
 
     some_function(SomeId, Sender, Context) ->
         %% Create an e-mail record

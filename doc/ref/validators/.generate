@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/validators/validator_validator_name.erl
-for f in `find $ZOTONIC_SRC/modules -name validator_\*.erl`
+for f in `find $MODULES -name validator_\*.erl`
 do
     read -r mod validator <<EOF
-`echo $f | sed -e 's,.*/mod_\([^/]*\).*/validator_\1_\(.*\).erl,mod_\1 \2,'`
+`echo $f | sed -e 's,.*/zotonic_mod_\([^/]*\).*/validator_\1_\(.*\).erl,mod_\1 \2,'`
 EOF
 
     dir=${0%/*}

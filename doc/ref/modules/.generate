@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-for f in `find $ZOTONIC_SRC/modules -name mod_\* -type d` 
+for f in `find $APPS -name zotonic_mod_\* -type d`
 do
 
     dir=${0%/*}
-    mod=${f##*/}
+    mod=`echo $f | sed -n 's/.*zotonic_mod_/mod_/p'`
     stub=$dir/meta-$mod.rst
     doc=$dir/$mod.rst
 

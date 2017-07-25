@@ -32,6 +32,8 @@ The file argument can be one of the following:
 
 * property list of a resource’s medium record
 
+.. _tag-image-arguments:
+
 Arguments
 ---------
 

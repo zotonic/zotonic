@@ -1,0 +1,11 @@
+{application, zotonic_mod_backup, [
+    {description, "Make a backup of the database and files."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core, zotonic_mod_admin]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

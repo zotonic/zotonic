@@ -16,21 +16,26 @@ places for these files:
 
  - ``$HOME/.zotonic/(nodename)/``
  - ``$HOME/.zotonic/(version)/``
+ - ``$HOME/.zotonic/(major-version)/``
  - ``$HOME/.zotonic/``
  - ``/etc/zotonic/(nodename)/``
  - ``/etc/zotonic/(version)/``
+ - ``/etc/zotonic/(major-version)/``
  - ``/etc/zotonic/``
 
-Where ``(nodename)`` is the name of the Zotonic Erlang node, which
+The ``(nodename)`` is the name of the Zotonic Erlang node, which
 defaults to ``zotonic001`` (and can be set with ``$NODENAME`` environment
 variable). Using the node name in the configuration path comes in
 handy when you want to run multiple Zotonic instances simultaneously.
 
-``(version)`` is the ``minor`` version number of Zotonic, e.g. ``1.0``. This
+``(version)`` is the *minor* version number of Zotonic, e.g. ``1.0``. This
 way, you can have separate configuration files for different versions of Zotonic
 which are running simultaneously.
 
-When the Zotonic startup script finds a config file in one of the
+For example, if the version is 1.2 then ``(version)`` will be ``1.2`` and
+``(major-version)`` will be ``1``.
+
+If the Zotonic startup script finds a config file in one of the
 directories, it stops looking, so files in the other directories are
 ignored.
 
@@ -49,13 +54,14 @@ the global config files that it is using:
 The ``zotonic.config`` file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When installed for the first time, the ``zotonic.config`` file is well
+After installed for the first time, the ``~/.zotonic/zotonic.config`` file is well
 annoted with comments about what each setting does. When in doubt,
-consult the stock ``priv/zotonic.config.in`` file for explanation about all
-config settings.
+consult the stock ``apps/zotonic_launcher/priv/config/zotonic.config.in`` file for
+explanation about all config settings.
 
-``user_sites_dir``, ``user_modules_dir`` and ``user_ebin_dir``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+``user_sites_dir``, ``user_modules_dir``
+""""""""""""""""""""""""""""""""""""""""
 
 Zotonic keeps sites and modules that are `external` to Zotonic, e.g.
 installed by website developers, outside the Zotonic source tree.
@@ -63,20 +69,14 @@ installed by website developers, outside the Zotonic source tree.
 The directory under which Zotonic expects to find all sites is called
 the :term:`User sites directory`. This is configured with the config
 parameter ``user_sites_dir``. This directory defaults to
-``user/sites``, relative to Zotonic's installation directory.
+``_checkouts``, relative to Zotonic's installation directory.
 
 The directory under which Zotonic expects to find all external
 modules, e.g. those installed with ``zotonic modules install
 mod_....``, is called the User modules directory. This is configured
 with the config parameter ``user_modules_dir``. This directory
-defaults to ``user/modules``, relative to Zotonic's installation
+defaults to ``_checkouts``, relative to Zotonic's installation
 directory.
-
-Optionally it is possible to change the location of the compiled
-erlang code in the user sites and module directories. The default location
-for these files is ``ebin`` in Zotonic's installation directory. This is
-configured with the ``user_ebin_dir`` config parameter. This makes it possible
-to separate the beam files of user defined code from Zotonic's beam files.
 
 .. _deps:
 

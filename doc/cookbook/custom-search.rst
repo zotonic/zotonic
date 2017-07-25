@@ -7,7 +7,7 @@ Implement a custom search by observing the :ref:`search_query` notification
 in your module. Imagine you want to search cookies in your database that
 either have chocolate or do not::
 
-    -include_lib("zotonic.hrl").
+    -include_lib("zotonic_core/include/zotonic.hrl").
 
     -export([
         observe_search_query/2

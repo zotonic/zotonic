@@ -44,7 +44,7 @@ For production release of your new Zotonic site you need to:
   (e.g. `www.mysite.com`) to point to your server’s IP address.
 
 - Ensure ``{hostname, "mysite"}`` is set to ``{hostname, "www.mysite.com"}``
-  in ``user/sites/mysite/config``.  This last change enables the virtual
+  in ``mysite/priv/zotonic_site.config``.  This last change enables the virtual
   hosting: it makes sure that Zotonic knows which site is being requested
   when somebody visits `www.mysite.com`.
 

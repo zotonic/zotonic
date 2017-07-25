@@ -5,7 +5,7 @@ APP       := zotonic
 # Erlang Rebar downloading
 # see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
 REBAR := ./rebar3
-REBAR_URL := https://s3-eu-west-1.amazonaws.com/zotonic-rebar/rebar3
+REBAR_URL := https://s3.amazonaws.com/rebar3/rebar3
 REBAR_OPTS ?=
 # Default target - update sources and call all compile rules in succession
 .PHONY: all
@@ -20,15 +20,11 @@ $(REBAR):
 # Use Rebar to get, update and compile dependencies
 .PHONY: upgrade-deps compile-zotonic compile test
 
-compile-zotonic:
-	bin/zotonic compile
-
 upgrade-deps: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) upgrade
 
 compile: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) compile
-	bin/zotonic compile
 
 dev:
 	docker-compose run --rm --service-ports zotonic sh

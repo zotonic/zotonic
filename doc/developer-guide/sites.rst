@@ -56,8 +56,8 @@ Create a site
 
 5. Finally, point your browser to http://yoursite:8000 to see your new site.
    You can log into the admin at http://yoursite:8000/admin with the password
-   that you can find in your site’s configuration file: ``yoursite/config`` in
-   the :term:`user sites directory`.
+   that you can find in your site’s configuration file:
+   :file:`yoursite/priv/zotonic_site.config` in the :term:`user sites directory`.
 
    .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
 
@@ -69,8 +69,9 @@ Anatomy of a site
 A Zotonic site is a folder which lives in the :term:`user sites directory` and
 contains at least:
 
-* a ``config`` file: sets the site’s hostname and other parameters
-* a ``sitename.erl`` file: initialises the site.
+* a ``priv/zotonic_site.config`` file: sets the site’s hostname and other parameters
+* a ``src/sitename.erl`` file: initialises the site.
+* a ``src/sitename.app.src`` file: an OTP app source file
 
 In fact, a site is a special type of :ref:`module <guide-modules>`.
 Like modules, sites usually contain additional resources such as

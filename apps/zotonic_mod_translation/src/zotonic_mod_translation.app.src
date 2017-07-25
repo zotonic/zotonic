@@ -1,0 +1,11 @@
+{application, zotonic_mod_translation, [
+    {description, "Handle user’s language and generate .pot files with translatable texts."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

@@ -1,28 +1,18 @@
 %% -*- mode: erlang -*-
 {application, zotonic,
- [{description, "zotonic"},
-  {vsn, "1.0-dev"},
-  {modules,
-   [
-    zotonic,
-    zotonic_app,
-    zotonic_sup,
-    zotonic_deps,
-    z
-   ]},
+ [{description, "Zotonic (Umbrella)"},
+  {vsn, "git"},
   {registered, []},
   {mod, {zotonic_app, []}},
+  {applications, [
+      kernel, stdlib, crypto, public_key, ssl, inets,
+      lager, cowboy, cowmachine,
+      zotonic_launcher
+  ]},
   {env, []},
-  {applications, [kernel, stdlib, crypto, public_key, ssl, inets, lager,
-                  mimetypes, mnesia, emqtt, gproc, jobs, sidejob,
-                  bert, dh_date, eiconv, exometer,
-                  epgsql, depcache, z_stdlib,
-                  cowboy, cowmachine,
-                  poolboy,
-                  filezcache, s3filez,
-                  template_compiler,
-                  qdate, syslog,
-                  bcrypt, erlpass,
-                  letsencrypt
-  ]}
+  {modules,
+   [
+    zotonic_app,
+    zotonic_sup
+   ]}
  ]}.

@@ -90,7 +90,7 @@ In Zotonic, translations files are placed in two locations:
 - for the core modules, the translation files are consolidated in
   :file:`priv/translations/`;
 - third-party modules and sites, including your own, have their translation
-  files in a :file:`translations/` subdirectory in the module itself.
+  files in a :file:`priv/translations/` subdirectory in the module itself.
 
 In the translations directory you can find the ``.po`` files containing the
 translations. They are marked with the their language code. (Optionally you can name your file like:
@@ -98,12 +98,10 @@ nl.foobar.po as Zotonic will only look at the part till the first '.'
 for the language code)::
 
     mod_foo
-    └── translations/
-    ├── nl.po
-    ├── template
-    │   └── mod_foo.pot
-    └── tr.po
-    └── zh-hant.po
+        priv/translations/
+            template/mod_foo.pot
+            tr.po
+            zh-hant.po
 
 This shows that module ``mod_foo`` has been translated into
 Dutch (`nl`), Turkish (`tr`) and Chinese traditional script (`zh-hant`).

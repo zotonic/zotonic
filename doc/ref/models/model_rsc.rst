@@ -298,4 +298,5 @@ And also using the :ref:`tag-print` tag::
 
 
 
-.. seealso:: :ref:`guide-datamodel`, :ref:`model-edge`, :ref:`model-media`, :ref:`model-rsc_gone`.
+.. seealso:: :ref:`guide-datamodel-resources`, :ref:`guide-datamodel`,
+    :ref:`model-edge`, :ref:`model-media`, :ref:`model-rsc_gone`.

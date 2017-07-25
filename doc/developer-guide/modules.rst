@@ -72,10 +72,10 @@ more.
 The generic structure is::
 
     mod_example/
-        mod_example.erl
-        actions/
-        templates/
-        etcetera.../
+        priv/dispatch/
+        priv/templates/
+        src/mod_example.erl
+        src/actions/...
 
 .. _module-file:
 
@@ -126,19 +126,8 @@ scan through different folders.
 
 This section describes what each of the module folders hold.
 
-actions/
-""""""""
-
-This directory holds the :ref:`actions <guide-actions>` defined by the
-module. Every action name must be prefixed with the word “action” and
-the module name (without the ``mod_``). For example the filename for the
-action ``dialog_open`` in the module ``mod_base`` will be
-``action_base_dialog_open.erl``
-
-.. seealso:: :ref:`guide-actions`
-
-dispatch/
-"""""""""
+priv/dispatch/
+""""""""""""""
 
 This directory contains files with :ref:`dispatch rules
 <guide-dispatch>`. You can name your files however you want, just
@@ -147,60 +136,22 @@ try to compile them.
 
 .. seealso:: :ref:`guide-dispatch`
 
-lib/
-""""
+priv/lib/
+"""""""""
 
-The `lib` (short for `library`) directory contains static images, css
+The :file:`lib` (short for `library`) directory contains static images, CSS
 and javascript files. These files will be served with via the
 :ref:`tag-lib`. The usual layout of the lib directory is::
 
-    lib/css/
-    lib/images/
-    lib/js/
-    lib/misc/
+    priv/lib/css/
+    priv/lib/images/
+    priv/lib/js/
+    priv/lib/misc/
 
 .. seealso:: the :ref:`tag-lib` template tag.
 
-scomps/
-"""""""
-
-Any custom tags that you define yourself go into the ``scomps/``
-directory.
-
-Scomps are prefixed in the same way as actions, except that the word
-"scomp" is used. For example the scomp ``button`` in the module
-``mod_base`` has as file name ``scomp_base_button.erl``.
-
-.. seealso:: :ref:`guide-tags`
-
-controllers/
-............
-
-This directory contains Erlang modules which define controllers which
-are called from the dispatch system to handle incoming HTTP requests.
-
-Controllers must have unique names, as they are compiled and loaded in
-the Erlang system. The convention is to prefix every controller with
-``controller_`` and the name of the module, for example
-``controller_admin_edit.erl``.
-
-.. seealso:: :ref:`guide-controllers`
-
-models/
-.......
-
-This directory contains Erlang modules, each of which is a :ref:`model
-<guide-models>`.
-
-The module name of a model always starts with ``m_``, for example
-``m_comment``. This model is then to be used in the templates as
-``m.comment``.  Be careful to give your models a unique name to
-prevent name clashes with other models and Erlang modules.
-
-.. seealso:: :ref:`guide-models`
-
-templates/
-..........
+priv/templates/
+"""""""""""""""
 
 This directory contains all :ref:`templates <guide-templates>`. Templates do not
 have any prefix in their name, as they are not (directly) compiled as
@@ -220,10 +171,59 @@ The following naming conventions for templates are used:
 
 .. seealso:: :ref:`guide-templates`
 
+src/actions/
+""""""""""""
+
+This directory holds the :ref:`actions <guide-actions>` defined by the
+module. Every action name must be prefixed with the word “action” and
+the module name (without the ``mod_``). For example the filename for the
+action ``dialog_open`` in the module ``mod_base`` will be
+``action_base_dialog_open.erl``
+
+.. seealso:: :ref:`guide-actions`
+
+src/scomps/
+"""""""""""
+
+Any custom tags that you define yourself go into the ``src/scomps/``
+directory.
+
+Scomps are prefixed in the same way as actions, except that the word
+"scomp" is used. For example the scomp ``button`` in the module
+``mod_base`` has as file name ``scomp_base_button.erl``.
+
+.. seealso:: :ref:`guide-tags`
+
+src/controllers/
+""""""""""""""""
+
+This directory contains Erlang modules which define controllers which
+are called from the dispatch system to handle incoming HTTP requests.
+
+Controllers must have unique names, as they are compiled and loaded in
+the Erlang system. The convention is to prefix every controller with
+``controller_`` and the name of the module, for example
+``controller_admin_edit.erl``.
+
+.. seealso:: :ref:`guide-controllers`
+
+src/models/
+"""""""""""
+
+This directory contains Erlang modules, each of which is a :ref:`model
+<guide-models>`.
+
+The module name of a model always starts with ``m_``, for example
+``m_comment``. This model is then to be used in the templates as
+``m.comment``.  Be careful to give your models a unique name to
+prevent name clashes with other models and Erlang modules.
+
+.. seealso:: :ref:`guide-models`
+
 .. _module-directory-filters:
 
-filters/
-........
+src/filters/
+""""""""""""
 
 This directory holds Erlang modules, each of which defines a
 :ref:`template filter <guide-filters>`.
@@ -238,8 +238,8 @@ missing filter will result in a crash of the compiled template.
 .. seealso:: :ref:`guide-filters`
 
 
-validators/
-...........
+src/validators/
+"""""""""""""""
 
 This directory holds Erlang modules, each of which defines a
 :ref:`validator <guide-validators>`.
@@ -250,8 +250,8 @@ in the module “mod_base” has the file name: “validator_base_email.erl”
 
 .. seealso:: :ref:`guide-validators`
 
-services/
-.........
+src/services/
+"""""""""""""
 
 The services folder holds Erlang modules, each of which functions as
 an API method that you can use to access Zotonic from another
@@ -265,9 +265,9 @@ particular service can then be found at
 
 .. seealso:: :ref:`guide-services` and :ref:`controller-api`
 
-
 Changing / recompiling files
 ----------------------------
+
 Changes to the Erlang files in a module are visible after issuing the
 ``zotonic update`` CLI command, or ``z:m().`` from the Zotonic
 shell. Any new lib or template files, or changes in the dispatch rules
@@ -518,6 +518,22 @@ Context}`` property.
 
 This server module will be started for every site in a Zotonic system
 where the module is enabled, so it can’t be a named server.
+
+If you want to observe Zotonic’s :ref:`notifications <guide-notification>` and
+handle them through your module’s gen_server, export ``pid_observe_...``
+functions (instead of the regular ``observe_...`` ones). These function will
+then be passed the gen_server’s PID::
+
+    export([
+        pid_observe_custom_pivot/3
+    ]).
+
+    pid_observe_custom_pivot(Pid, #custom_pivot{} = Msg, _Context) ->
+        gen_server:cast(Pid, Msg).
+
+    handle_cast(#custom_pivot{id = Id}, State)
+        %% Do things here...
+        {noreply, State}.
 
 .. seealso:: `gen_server`_ in the Erlang documentation.
 

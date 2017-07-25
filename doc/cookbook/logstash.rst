@@ -14,19 +14,15 @@ Step 1: install a Logstash handler
 
 First, you need to install a Logstash handler for Lager, for instance
 `this one`_. To do so, add it (and the jsx JSON library) as a
-:ref:`dependency <deps>` in your Zotonic project:
+:ref:`dependency <deps>` in the ``rebar.config`` of your Zotonic site or module:
 
 .. code-block:: erlang
-    :caption: zotonic.config
+    :caption: rebar.config
 
-    [{zotonic,
-        [
-            {deps, [
-                {lager_logstash, "", {git, "https://github.com/rpt/lager_logstash.git", {tag, "0.1.3"}}},
-                {jsx, ".*", {git, "https://github.com/talentdeficit/jsx.git", {tag, "2.8.0"}}}
-            ]}
-        ]
-    }].
+    {deps, [
+        {lager_logstash, {git, "https://github.com/rpt/lager_logstash.git", {tag, "0.1.3"}}},
+        {jsx, {git, "https://github.com/talentdeficit/jsx.git", {tag, "2.8.0"}}}
+    ]}
 
 And recompile Zotonic to install the dependencies.
 

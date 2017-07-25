@@ -12,14 +12,15 @@ After having created a custom widget (see :ref:`admin-a-custom-widget`), we want
 Assumptions
 ```````````
 
-Readers are expected to have experience with Zotonic templates. For reference, look at the Zotonic admin template directory ``modules/mod_admin/templates/``.
+Readers are expected to have experience with Zotonic templates.
+For reference, look at the Zotonic admin template directory ``apps/zotonic_mod_admin/priv/templates/``.
 
 
 
 Page structure
 --------------
 
-To hide default widgets from the page, we need to change the template that loads these widgets. 
+To hide default widgets from the page, we need to change the template that loads these widgets.
 
 The edit page widgets are grouped into 2 main areas, main and sidebar. These groups are created by the files ``_admin_edit_main_parts.tpl`` and ``_admin_edit_sidebar_parts.tpl``.
 

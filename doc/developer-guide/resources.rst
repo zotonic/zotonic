@@ -10,10 +10,10 @@ Resource properties
 -------------------
 
 Resources are very flexible data units: they can have any property
-that the developer needs them to have. However, by default, Zotonic's
-admin is designed to edit a common set of properties.
-
-.. seealso:: :ref:`m_rsc model reference <model-rsc>`
+that the developer needs them to have. However, by default, Zotonic’s
+admin is designed to edit a common set of properties. The
+:ref:`m_rsc model <model-rsc>` is used to edit resources and display them in
+templates.
 
 .. _categories:
 
@@ -24,13 +24,13 @@ Every resource belongs to a single category.
 
 There is no real distinction between rsc records that are a person, a
 news item, a video or something else. The only difference is the
-`category` of the rsc record, which can easily be changed. Even
+*category* of the rsc record, which can easily be changed. Even
 categories and predicates themselves are represented as rsc records
 and can, subsequently, have their own page on the web site.
 
 Categories are organized in a hierarchical fashion, and used to
 organize the resources into meaningful groups. Zotonic has a standard
-set of categories (see :ref:`guide-domain-model`, but it is
+set of categories (see :ref:`guide-domain-model`), but it is
 very usual to define your own in your own site, resulting in a custom
 :term:`domain model`.
 
@@ -83,17 +83,20 @@ create a list of questions which a user has to answer.
 
 .. todo:: Fix blocks documentation
 
+Manipulating resources
+----------------------
+
 How resources are stored
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Each :term:`resource` on a site is stored in the ``rsc`` database table. The
 resource’s properties are stored in two ways.
 
-* The core properties are persisted in separate columns. They include id, name,
+* The *core properties* are persisted in separate columns. They include id, name,
   category, modification date, path, publication period. These properties are
   used for searching, filtering and sorting resources. As they can have unique
   or foreign key constraints, they help in preserving data sanity.
-* All other properties are serialized together into one binary blob column
+* All *other properties* are serialized together into one binary blob column
   named ``props``. This includes any custom properties that you set on the
   resource. These serialized properties cannot be used for finding or sorting
   data, but only for later retrieval.
@@ -101,8 +104,12 @@ resource’s properties are stored in two ways.
 Storing properties in a serialized form is a flexible approach. You can save any
 property on a resource without having to make changes to your database schema.
 
-Imagine you wish to store whether resources are liked by users. Just update the
-resource and set a custom ``is_liked`` property::
+Changing resources
+^^^^^^^^^^^^^^^^^^
+
+Imagine you wish to store whether resources are liked by users. No need to
+change the database schema, define the property or whatsoever. Just update the
+resource and set a custom ``is_liked`` property (using :ref:`model-rsc`)::
 
     m_rsc:update(123, [{is_liked, true}], Context).
 
@@ -111,6 +118,20 @@ you can retrieve it like you would any other property::
 
     ?DEBUG(m_rsc:p(123, is_liked, Context)).
     %% prints: true
+
+Or, in a template:
+
+.. code-block:: django
+
+    {{ id.is_liked }}
+
+    which is equivalent to:
+
+    {{ m.rsc[id].is_liked }}
+
+To remove the property, just store it as ``undefined``::
+
+    m_rsc:update(123, [{is_liked, undefined}], Context).
 
 This flexible approach is fine for custom properties that you only want to
 retrieve and display. However, if you need to *find* all liked resources, you
@@ -124,16 +145,11 @@ Pivots
 Pivot columns
 ^^^^^^^^^^^^^
 
-If you want to search by or order on any custom defined
-property, you need to define your own database column in a *custom pivot*.
-
-.. seealso:: :ref:`cookbook-custom-pivots`, :ref:`cookbook-pivot-templates`
-
-.. note::
-
-    If you want to find resources on non standard content or texts, then
-    you can change the texts that are pivoted. This can be done by adding
-    specific ``pivot.tpl`` templates. See :ref:`cookbook-pivot-templates`
+If you want to *filter* or *sort* on any custom defined property, you need to store
+that property in a separate database column using a
+:ref:`custom pivot <cookbook-custom-pivots>`. If you want to *find* resources
+based on text values in custom properties, you can change the texts that are
+pivoted with :ref:`pivot templates <cookbook-pivot-templates>`.
 
 The pivot queue
 ^^^^^^^^^^^^^^^
