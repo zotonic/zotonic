@@ -1031,6 +1031,11 @@ recombine_dates_1([H|T], Dates, Acc) ->
     recombine_date_part({{Y,M,D},_Time}, "his", {_,_,_} = V) -> {{Y,M,D},V};
     recombine_date_part({_Date,{H,I,S}}, "ymd", {_,_,_} = V) -> {V,{H,I,S}}.
 
+    to_date_value(Part, "-" ++ V) when Part == "ymd" ->
+        case to_date_value(Part, V) of
+            {Y, M, D} when is_integer(Y) -> {-Y, M, D};
+            YMD -> YMD
+        end;
     to_date_value(Part, V) when Part == "ymd" orelse Part == "his"->
         case string:tokens(V, "-/: ") of
             [] -> {undefined, undefined, undefined};
