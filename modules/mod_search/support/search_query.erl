@@ -133,6 +133,8 @@ request_arg("query_id")            -> query_id;
 request_arg("rsc_id")              -> rsc_id;
 request_arg("name")                -> name;
 request_arg("sort")                -> sort;
+request_arg("zsort")               -> zsort;
+request_arg("asort")               -> asort;
 request_arg("text")                -> text;
 request_arg("match_objects")       -> match_objects;
 request_arg("upcoming")            -> upcoming;
@@ -469,6 +471,10 @@ parse_query([{name, Name}|Rest], Context, Result) ->
 %% sort=fieldname
 %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.
 parse_query([{sort, Sort}|Rest], Context, Result) ->
+    parse_query(Rest, Context, add_order(Sort,Result));
+parse_query([{asort, Sort}|Rest], Context, Result) ->
+    parse_query(Rest, Context, add_order(Sort,Result));
+parse_query([{zsort, Sort}|Rest], Context, Result) ->
     parse_query(Rest, Context, add_order(Sort,Result));
 
 %% custompivot=tablename
