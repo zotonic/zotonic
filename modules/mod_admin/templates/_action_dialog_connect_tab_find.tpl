@@ -4,11 +4,11 @@
         <input type="hidden" name="object_id" value="{{ object_id }}" />
 		<input type="hidden" name="predicate" value="{{ predicate|default:'' }}" />
 
-        <div class="col-md-8">
+        <div class="col-md-6">
 		    <input name="find_text" type="text" value="{{ text|default:'' }}" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
 		    {% block category_select %}
                 {% if nocatselect %}
                     <input type="hidden" name="find_category" value="{{ cat.id }}" />
@@ -35,6 +35,35 @@
     		        </select>
                 {% endif %}
 	        {% endblock %}
+        </div>
+
+        <div class="col-md-3">
+            {% with m.acl.user.s.hascollabmanager as cmgr %}
+            {% with m.acl.user.s.hascollabmember as cmbr %}
+                <select class="form-control" name="find_cg">
+                    <option value="">{_ Anybody’s _}</option>
+                    <option value="me"  {% if cid == 'me' %}selected{% endif %}>{_ Mine _}</option>
+                    {% if cmgr or cmbr %}
+                        <optgroup label="{_ Collaboration groups _}">
+                            {% for cid in cmgr ++ (cmbr -- cmgr) %}
+                                {% if cid.is_visible %}
+                                    <option value="{{ cid }}" {% if cid == content_group %}selected{% endif %}>{{ cid.title }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </optgroup>
+                    {% endif %}
+                    <optgroup label="{_ Content groups _}">
+                        {% for c in m.hierarchy.content_group.tree_flat %}
+                            {% if c.id.is_visible %}
+                                <option value="{{ c.id }}"  {% if c.id == content_group %}selected{% endif %}>
+                                    {{ c.indent }} {{ c.id.title }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </optgroup>
+                </select>
+            {% endwith %}
+            {% endwith %}
         </div>
 	</form>
 

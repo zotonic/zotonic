@@ -222,7 +222,14 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
         {cat, Cats},
         {predicate, Predicate},
         {text, Text}
-    ],
+    ] ++ case z_context:get_q(find_cg, Context) of
+        <<>> -> [];
+        "" -> [];
+        undefined -> [];
+        <<"me">> -> [ {creator_id, z_acl:user(Context)} ];
+        "me" -> [ {creator_id, z_acl:user(Context)} ];
+        CgId -> [ {content_group, z_convert:to_integer(CgId)}]
+    end,
     z_render:wire([
         {remove_class, [{target, TargetId}, {class, "loading"}]},
         {update, [{target, TargetId}, {template, "_action_dialog_connect_tab_find_results.tpl"} | Vars]}
