@@ -111,6 +111,9 @@ to_local({_Y, _M, _D} = Date, Tz) ->
     to_local({Date, {0,0,0}}, Tz);
 to_local({{9999, _, _}, _} = DT, _Tz) ->
     DT;
+to_local({{Y, M, D}, T}, Tz) when Y =< 1 ->
+    {{Y1, M1, D1}, T1} = to_local({{10, M, D}, T}, Tz),
+    {{Y1 - 10 + Y, M1, D1}, T1};
 to_local(DT, <<"UTC">>) ->
     DT;
 to_local(DT, <<"GMT">>) ->
@@ -145,6 +148,9 @@ to_utc({_Y, _M, _D} = Date, Tz) ->
     to_utc({Date, {0,0,0}}, Tz);
 to_utc({{9999, _, _}, _} = DT, _Tz) ->
     DT;
+to_utc({{Y, M, D}, T}, Tz) when Y =< 1 ->
+    {{Y1, M1, D1}, T1} = to_utc({{10, M, D}, T}, Tz),
+    {{Y1 - 10 + Y, M1, D1}, T1};
 to_utc(DT, <<"UTC">>) ->
     DT;
 to_utc(DT, <<"GMT">>) ->
