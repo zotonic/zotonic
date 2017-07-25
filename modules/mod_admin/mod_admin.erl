@@ -215,7 +215,7 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
                 <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 "" -> [];
                 <<>> -> [];
-                CatId -> [{z_convert:to_integer(CatId)}]
+                CatId -> [{m_rsc:rid(CatId, Context)}]
            end,
     Vars = [
         {subject_id, SubjectId},
@@ -228,7 +228,7 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
         undefined -> [];
         <<"me">> -> [ {creator_id, z_acl:user(Context)} ];
         "me" -> [ {creator_id, z_acl:user(Context)} ];
-        CgId -> [ {content_group, z_convert:to_integer(CgId)}]
+        CgId -> [ {content_group, m_rsc:rid(CgId, Context)}]
     end,
     z_render:wire([
         {remove_class, [{target, TargetId}, {class, "loading"}]},
