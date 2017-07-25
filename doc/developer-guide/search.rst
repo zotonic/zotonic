@@ -245,13 +245,16 @@ have an end date which lies in the future or no start date::
 
      unfinished_or_nodate
 
-sort
-^^^^
+sort / asort / zsort
+^^^^^^^^^^^^^^^^^^^^
 
 Sort the result on a field. The name of the field is a string which
 directly refers to the SQL join that is being used. If you specify a
 dash (``-``) in front of the field, the order is descending. Leaving
 this out or specifying a ``+`` means ascending.
+
+As all search terms are sorted, the ``asort`` will be the first sort
+term, and the ``zsort`` will be the last sort term.
 
 Some sort fields:
 

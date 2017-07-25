@@ -14,6 +14,7 @@ find params:
 - predicate (optional) (atom)
 - delegate (optional) (atom)
 - category (optional) (string/id) preselect the category dropdown
+- content_group (optional) can also be the string "me" to search on user created content
 #}
 {% with
     callback|default:q.callback,
@@ -125,6 +126,7 @@ find params:
                     is_active=(tab == "find")
                     title=""
                     cat=cat
+                    content_group=content_group
                 %}
             {% endif %}
             {% if not tabs_enabled or "new"|member:tabs_enabled %}
