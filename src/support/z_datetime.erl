@@ -71,7 +71,6 @@
 
 -include_lib("zotonic.hrl").
 
--define(NO_DST_DATE, {1,1,1}).
 
 %% @doc Convert a time to the local context time using the current timezone.
 -spec to_local(calendar:datetime()|undefined|time_not_exists, string()|binary()|#context{}) -> calendar:datetime() | undefined.
@@ -83,8 +82,9 @@ to_local({_Y, _M, _D} = Date, Tz) ->
     to_local({Date, {0,0,0}}, Tz);
 to_local({{9999, _, _}, _} = DT, _Tz) ->
     DT;
-to_local({D,_} = DT, _Tz) when D =< ?NO_DST_DATE ->
-    DT;
+to_local({{Y, M, D}, T}, Tz) when Y =< 1 ->
+    {{Y1, M1, D1}, T1} = to_local({{10, M, D}, T}, Tz),
+    {{Y1 - 10 + Y, M1, D1}, T1};
 to_local(DT, <<"UTC">>) ->
     DT;
 to_local(DT, <<"GMT">>) ->
@@ -105,8 +105,6 @@ to_local(DT, Tz) ->
             Daylight;
         time_not_exists ->
             undefined;
-        {D, _} when D  =< ?NO_DST_DATE ->
-            DT;
         NewDT ->
             NewDT
     end.
@@ -121,8 +119,9 @@ to_utc({_Y, _M, _D} = Date, Tz) ->
     to_utc({Date, {0,0,0}}, Tz);
 to_utc({{9999, _, _}, _} = DT, _Tz) ->
     DT;
-to_utc({D, _} = DT, _Tz) when D =< ?NO_DST_DATE ->
-    DT;
+to_utc({{Y, M, D}, T}, Tz) when Y =< 1 ->
+    {{Y1, M1, D1}, T1} = to_utc({{10, M, D}, T}, Tz),
+    {{Y1 - 10 + Y, M1, D1}, T1};
 to_utc(DT, <<"UTC">>) ->
     DT;
 to_utc(DT, <<"GMT">>) ->
@@ -143,8 +142,6 @@ to_utc(DT, Tz) ->
             Daylight;
         time_not_exists ->
             undefined;
-        {D, _} when D =< ?NO_DST_DATE ->
-            DT;
         NewDT ->
             NewDT
     end.
