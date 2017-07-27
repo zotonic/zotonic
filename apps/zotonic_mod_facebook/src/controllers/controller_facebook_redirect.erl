@@ -133,7 +133,7 @@ decode_access_token(_ContentType, Payload) ->
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.9/me?fields=id,name,email&access_token="
+    FacebookUrl = "https://graph.facebook.com/v2.9/me?fields=id,name,first_name,last_name,email&access_token="
                     ++ z_url:url_encode(AccessToken),
     case httpc:request(FacebookUrl) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
