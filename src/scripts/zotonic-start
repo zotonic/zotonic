@@ -39,9 +39,15 @@ main(_) ->
     ZotonicApp = string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
     case filelib:is_file(ZotonicApp) of
          true ->
-             io:format("Starting Zotonic ~s@~s..~n", [?NODENAME, ?NODEHOST]),
-             io:format(code:get_path()),
-             zotonic:start();
+             io:format("Starting Zotonic ~s@~s..", [?NODENAME, ?NODEHOST]),
+             zotonic:start(),
+             case zotonic:ping() of
+                 pong ->
+                     io:format("OK~n");
+                 pang ->
+                     io:format("Something went wrong while starting Zotonic. Please check the log files ~s~n",
+                         [string:concat(?ZOTONIC, "/priv/log")])
+             end;
         false ->
             io:format("Building Zotonic for the first time.~n")
     end.
