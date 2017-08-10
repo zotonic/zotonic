@@ -1,4 +1,5 @@
 #!/usr/bin/env escript
+%%! -pa zotonic/zotonic/_build/default/lib/zotonic_core/ebin
 %%
 %% @author M, <tantemelki@gmail.com>
 %% @copyright 2017
@@ -21,5 +22,26 @@
 
 -export([main/1]).
 
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
+-define(ZOTONIC_SCRIPTS, ?ZOTONIC ++ "/src/scripts").
+
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
 main(_) ->
-    io:format("Starting Zotonic ").
+    ZotonicApp = string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
+    case filelib:is_file(ZotonicApp) of
+         true ->
+             io:format("Starting Zotonic ~s@~s..~n", [?NODENAME, ?NODEHOST]),
+             io:format(code:get_path()),
+             zotonic:start();
+        false ->
+            io:format("Building Zotonic for the first time.~n")
+    end.
