@@ -28,5 +28,4 @@ main([]) ->
     io:format("Running: ~p@~p~n~n", [?NODENAME, ?NODEHOST]),
     io:format("Sites Status: ~n"),
     io:format("============="),
-    zotonic:status(),
-    z_sites_manager:get_sites().
+    zotonic:status().

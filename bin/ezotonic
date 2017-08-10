@@ -1,4 +1,5 @@
 #!/usr/bin/env escript
+%%! -pa zotonic/zotonic/ebin/ -Wall
 %%
 %% @author M, <tantemelki@gmail.com>
 %% @copyright 2017
@@ -15,49 +16,52 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 %%
+-export([main/1]).
 
--export([main/1,
-    parse_zotonic_options/0]).
+-define(HOME, zotonic_setup:get_home_path()).
+-define(ZOTONIC, get_zotonic_path()).
+-define(ZOTONIC_SCRIPTS, ?ZOTONIC ++ "/src/scripts").
 
--include("zotonic_escript_helper.hrl").
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+usage() ->
+    {ok, ListItems} = file:list_dir(?ZOTONIC_SCRIPTS),
+    FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 8],
+    Names = string:split(FileNames, "zotonic-", all),
+    [_|CommandNames] = Names,
+
+    io:format("Usage: ~s (options) [command] ~n~n", [escript:script_name()]),
+    io:format("Where [command] is one of: ~n"),
+    io:format("~n~p ~n~n", [CommandNames]),
+    io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n~n"),
+    io:format("Options: ~n"),
+    io:format("  -v : Prints Zotonic version ~n~n").
 
 parse_zotonic_options() ->
     {ok, Version} = application:get_key(zotonic, vsn),
     io:format("Zotonic ~s~n", Version).
-%%    OptSpecList = [
-%%        {v, $v, "version", undefined, "Zotonic Version"}
-%%    ],
-%%    case getopt:parse(OptSpecList, Version) of
-%%        {ok, Options}  ->
-%%            {ok, Version} = application:get_key(zotonic, vsn),
-%%            io:format("Zotonic ~s~n", Version)
-%%    end.
 
-main([Command, SubCommand]) ->
-    zotonic_setup:main([]),
+main(Command) ->
+    case string:is_empty(Command) of
+        true ->
+            usage();
+        false ->
+            case string:equal(Command, "-v") of
+                true  ->
+                    parse_zotonic_options();
+                false ->
+                    SubScript = string:concat("zotonic-", Command),
+                    ScriptPath = string:concat(?ZOTONIC_SCRIPTS, "/" ++ SubScript),
+                    io:format("~s~n", [ScriptPath]),
+                    case filelib:is_file(ScriptPath) of
+                        true  ->
+                            io:format("~s~n", [Command]),
+                            apply(SubScript, main, []);
+                        false ->
+                            io:format("Command not found: ~s~n", [Command])
+                    end
 
-    case Command of
-        "-v" ->
-            parse_zotonic_options();
-        " "  ->
-            {ok, ListItems} = file:list_dir(?ZOTONIC_SCRIPTS),
-            FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 8],
-            Names = string:split(FileNames, "zotonic-", all),
-            [_|CommandNames] = Names,
-
-            io:format("Usage: ~s (options) ~s~n", [escript:script_name(), Command]),
-            io:format("Where ~s is one of: ~n", [Command]),
-            io:format("~p ~n", [CommandNames]),
-            io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n"),
-            io:format("Options: ~n"),
-            io:format("  -v : Prints Zotonic version");
-        _ ->
-            SubScript = ?ZOTONIC_SCRIPTS ++ "/zotonic-" ++ Command,
-            case SubScript of
-                " " ->
-                    io:format("Command not found: ~s~n", [Command]),
-                    halt();
-                _ ->
-                    apply(SubScript, main, [SubCommand])
             end
     end.

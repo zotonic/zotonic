@@ -16,15 +16,10 @@
 %% limitations under the License.
 
 %%
-%% usage zotonic shell
+%% usage zotonic-start
 %%
 
 -export([main/1]).
 
--include("zotonic_escript_helper.hrl").
--define(RPC_NODE, rpc_node).
-main([Module, Function, Args]) ->
-    zotonic_setup:require_zotonic_running(),
-    net_kernel:start([?RPC_NODE, shortnames]),
-
-    rpc:call(?NODENAME, Module, Function, Args).
+main(_) ->
+    io:format("Starting Zotonic ").

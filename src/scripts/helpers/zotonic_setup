@@ -19,7 +19,8 @@
 %% usage zotonic setup
 %%
 
--export([require_zotonic_running/0,
+-export([main/1,
+    require_zotonic_running/0,
     require_zotonic_not_running/0,
     get_zotonic_path/0,
     major_version/0,
@@ -32,10 +33,42 @@
     get_user_sites_dir/0,
     get_user_modules_dir/0,
     get_user_ebin_dir/0,
-    get_home_path/0,
-    main/1]).
+    get_home_path/0]).
 
--include("zotonic_escript_helper.hrl").
+-define(HOME, zotonic_setup:get_home_path()).
+-define(ZOTONIC, zotonic_setup:get_zotonic_path()).
+-define(ZOTONIC_BIN, ?ZOTONIC ++ "/bin").
+-define(ZOTONIC_SCRIPTS, ?ZOTONIC ++ "/src/scripts").
+-define(ERL, "erl").
+-define(MAKE, "make").
+-define(MAX_PORTS, "ulimit -n|sed 's/unlimited/100000/'").
+-define(MAX_PROCESSES, 10000000).
+-define(KERNEL_POLL, true).
+-define(USER_EBIN_DIR, zotonic_setup:get_user_ebin_dir()).
+-define(NODENAME, "zotonic001").
+-define(NODEHOST, net_adm:localhost()).
+-define(PA, ?ZOTONIC ++ "/_checkouts/*/ebin " ++ ?ZOTONIC ++ "/_build/default/lib/*/ebin " ++ ?USER_EBIN_DIR ++ " " ++
+    ?ZOTONIC ++ "/modules/*/deps/*/ebin " ++ ?ZOTONIC ++ "/priv/modules/*/deps/*/ebin " ++
+    ?ZOTONIC ++ "/priv/sites/*/deps/*/ebin " ++ ?ZOTONIC ++ "/priv/sites/*/modules/*/deps/*/ebin").
+
+-define(ZOTONIC_DISTRIBUTED, zotonic_setup:distributed_detected()).
+-ifdef(ZOTONIC_DISTRIBUTED).
+-define(NAME_ARG, "-name").
+-else.
+-define(NAME_ARG, "-sname").
+-endif.
+
+-define(ZOTONIC_PIDFILE, ?ZOTONIC ++ "/zotonic.pid").
+-define(Modules, zotonic_setup:get_user_modules_dir()).
+-define(Sites, zotonic_setup:get_user_sites_dir()).
+
+-define(ZOTONIC_PORT, 8040).
+-define(ZOTONIC_LISTEN_PORT, 8040).
+-define(ZOTONIC_PORT_SSL, 8043).
+-define(ZOTONIC_SSL_LISTEN_PORT, 8043).
+-define(ZOTONIC_SMTP_BOUNCE_PORT, 2535).
+
+-define(EBIN_DIR, ?ZOTONIC ++ "/_build/default/lib/zotonic/ebin").
 
 require_zotonic_running() ->
     case net_adm:ping(?NODENAME) of
@@ -145,9 +178,9 @@ get_user_ebin_dir() ->
 
 get_home_path() ->
     {ok, [[Home]]} = init:get_argument(home),
-    HomeDir = Home.
+    _HomeDir = Home.
 
-main([]) ->
+main(_) ->
     VSN_Major = major_version(),
     VSN_Minor = minor_version(),
     DefaultDir = ?HOME ++ "/.zotonic/" ++ VSN_Major,
@@ -185,4 +218,3 @@ main([]) ->
         _ ->
             filelib:ensure_dir(?Sites)
     end.
-
