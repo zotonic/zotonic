@@ -1,5 +1,4 @@
 #!/usr/bin/env escript
-%%! -pa zotonic/zotonic/_build/default/lib/zotonic_core/ebin
 %%
 %% @author M, <tantemelki@gmail.com>
 %% @copyright 2017
@@ -35,16 +34,24 @@ get_node_host() ->
     {ok, HostName} = inet:gethostname(),
     _NodeHost = HostName.
 
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+
 main(_) ->
+    load_mod_paths(),
     ZotonicApp = string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
     case filelib:is_file(ZotonicApp) of
          true ->
              io:format("Starting Zotonic ~s@~s..", [?NODENAME, ?NODEHOST]),
-             zotonic:start(),
-             case zotonic:ping() of
-                 pong ->
+             zotonic_launcher_config:load_configs(),
+             os:cmd("erl -sname " ++ ?NODENAME ++ " -boot start_sasl -heart -detached -s "),
+             case zotonic:start() of
+                 ok ->
                      io:format("OK~n");
-                 pang ->
+                 _ ->
                      io:format("Something went wrong while starting Zotonic. Please check the log files ~s~n",
                          [string:concat(?ZOTONIC, "/priv/log")])
              end;

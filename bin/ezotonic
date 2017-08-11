@@ -18,7 +18,6 @@
 %%
 -export([main/1]).
 
--define(HOME, zotonic_setup:get_home_path()).
 -define(ZOTONIC, get_zotonic_path()).
 -define(ZOTONIC_SCRIPTS, ?ZOTONIC ++ "/src/scripts").
 
@@ -40,7 +39,7 @@ usage() ->
     io:format("  -v : Prints Zotonic version ~n~n").
 
 parse_zotonic_options() ->
-    {ok, Version} = application:get_key(zotonic, vsn),
+    {ok, Version} = application:get_key(zotonic_core, vsn),
     io:format("Zotonic ~s~n", Version).
 
 main(Command) ->
@@ -53,11 +52,9 @@ main(Command) ->
                     parse_zotonic_options();
                 false ->
                     SubScript = string:concat("zotonic-", Command),
-                    ScriptPath = string:concat(?ZOTONIC_SCRIPTS, "/" ++ SubScript),
-                    io:format("~s~n", [ScriptPath]),
-                    case filelib:is_file(ScriptPath) of
+                    ScriptFile = string:concat(?ZOTONIC_SCRIPTS, "/" ++ SubScript),
+                    case filelib:is_file(ScriptFile) of
                         true  ->
-                            io:format("~s~n", [Command]),
                             apply(SubScript, main, []);
                         false ->
                             io:format("Command not found: ~s~n", [Command])
