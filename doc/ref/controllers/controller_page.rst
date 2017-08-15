@@ -11,7 +11,7 @@ The user will be redirected to the ``logon`` URL when the current user
 is not allowed to view the page.
 
 This controller also adds a ``noindex`` response header when the page’s
-“seo_noindex” flag is set.
+:ref:`seo_noindex <mod_seo>` flag is set.
 
 Example dispatch rule::
 

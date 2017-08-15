@@ -20,6 +20,11 @@
             <meta name="description" content="{{ description }}" />
 		{% endif %}
 	{% endwith %}
+
+    {% if zotonic_dispatch == 'home' %}
+        {% include "schema_org/types/website.tpl" %}
+    {% endif %}
+    {% catinclude "schema_org/schema.tpl" id %}
 {% endif %}
 {% with m.config.seo_bing.webmaster_verify.value as wmv %}{% if wmv %}
 	<meta name="msvalidate.01" content="{{ wmv }}" />
