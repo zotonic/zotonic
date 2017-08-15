@@ -1,4 +1,5 @@
-FROM zotonic/zotonic:latest
+ARG ZOTONIC_VERSION=latest
+FROM zotonic/zotonic:${ZOTONIC_VERSION}
 
 # This Docker image extends the regular Zotonic image to add
 # a PostgresQL database and, since multiple processes are run,

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build --build-arg ZOTONIC_VERSION=$CACHE_TAG -t $IMAGE_NAME -f $DOCKERFILE_PATH .
