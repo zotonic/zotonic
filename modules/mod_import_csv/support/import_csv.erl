@@ -317,61 +317,80 @@ import_def_edges(Id, ConnectionMapping, Row, State, Context) ->
 
 import_do_edge(Id, Row, F, State, Context) when is_function(F) ->
     [ import_do_edge(Id, Row, E, State, Context) || E <- F(Id, Row, State, Context) ];
-import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Context) ->
-    % Find the predicate
-    case map_one_normalize(name, PredCat, map_one(PredRowField, Row, State)) of
-        <<>> ->
-            fail;
-        Name ->
-            case name_lookup(Name, State, Context) of
-                {undefined, _State1} ->
-                    lager:warning("Import CSV: ddge predicate does not exist: '~p'", [Name]),
-                    fail;
-                {PredId, State1} ->
-                    import_do_edge(Id, Row, {PredId, ObjectDefinition}, State1, Context)
-            end
-    end;
-import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context) ->
-    % Find the object
-    Name = map_one_normalize(name, ObjectCat, map_one(ObjectRowField, Row, State)),
-    case Name of
-        <<>> -> fail;
-        Name ->
-            case name_lookup(Name, State, Context) of
-                %% Object doesn't exist
-                {undefined, _State1} ->
-                    fail;
-                %% Object exists
-                {RscId, _State1} ->
-                    {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),
+import_do_edge(Id, Row, {object, PredicateDef, ObjectDef}, State, Context) ->
+    case map_predicate(Row, PredicateDef, State, Context) of
+        undefined -> fail;
+        PredId ->
+            case map_object_subject(Row, ObjectDef, State, Context) of
+                undefined -> fail;
+                ObjectId ->
+                    {ok, EdgeId} = m_edge:insert(Id, PredId, ObjectId, [no_touch], Context),
                     EdgeId
             end
     end;
-import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, State, Context) ->
+import_do_edge(Id, Row, {subject, PredicateDef, SubjectDef}, State, Context) ->
+    case map_predicate(Row, PredicateDef, State, Context) of
+        undefined -> fail;
+        PredId ->
+            case map_object_subject(Row, SubjectDef, State, Context) of
+                undefined -> fail;
+                SubjectId ->
+                    {ok, EdgeId} = m_edge:insert(SubjectId, PredId, Id, [no_touch], Context),
+                    EdgeId
+            end
+    end;
+import_do_edge(Id, Row, {PredicateDef, SubjectDef}, State, Context) ->
+    import_do_edge(Id, Row, {object, PredicateDef, SubjectDef}, State, Context);
+import_do_edge(_, _, Def, _State, _Context) ->
+    throw({import_error, {invalid_edge_definition, Def}}).
+
+
+map_predicate(Row, {PredCat, PredRowField}, State, Context) ->
+    case map_one_normalize(name, PredCat, map_one(PredRowField, Row, State)) of
+        <<>> -> undefined;
+        Name ->
+            case name_lookup(Name, State, Context) of
+                {undefined, _State1} ->
+                    lager:warning("Import CSV: edge predicate does not exist: '~p'", [Name]),
+                    undefined;
+                {PredId, _State1} ->
+                    PredId
+            end
+    end;
+map_predicate(_Row, Predicate, _State, Context) ->
+    m_rsc:rid(Predicate, Context).
+
+
+map_object_subject(Row, {ObjectCat, ObjectRowField}, State, Context) ->
     Name = map_one_normalize(name, ObjectCat, map_one(ObjectRowField, Row, State)),
     case Name of
-        <<>> ->
-            fail;
+        <<>> -> undefined;
+        Name ->
+            {RscId, _State1} = name_lookup(Name, State, Context),
+            RscId
+    end;
+map_object_subject(Row, {ObjectCat, ObjectRowField, ObjectProps}, State, Context) ->
+    Name = map_one_normalize(name, ObjectCat, map_one(ObjectRowField, Row, State)),
+    case Name of
+        <<>> -> undefined;
         Name ->
             case name_lookup(Name, State, Context) of
                 %% Object doesn't exist, create it using the objectprops
                 {undefined, _State1} ->
-                    lager:debug("Import CSV: creating object: ~p", [[{category, ObjectCat}, {name, Name} | ObjectProps]]),
-                    case m_rsc:insert([{category, ObjectCat}, {name, Name} | ObjectProps], Context) of
-                        {ok, RscId} ->
-                            {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),
-                            EdgeId;
-                        {error, _Reason} ->
-                            fail
+                    Props = [{category, ObjectCat}, {name, Name} | ObjectProps],
+                    lager:debug("Import CSV: creating object: ~p", [Props]),
+                    case m_rsc:insert(Props, Context) of
+                        {ok, RscId} -> RscId;
+                        {error, _Reason} -> undefined
                     end;
                 %% Object exists
                 {RscId, _State1} ->
-                    {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),
-                    EdgeId
+                    RscId
             end
     end;
-import_do_edge(_, _, Def, _State, _Context) ->
-    throw({import_error, {invalid_edge_definition, Def}}).
+map_object_subject(_, ObjectDef, _State, _Context) ->
+    throw({import_error, {invalid_object_definition, ObjectDef}}).
+
 
 
 %% Adds a resource Id to the list of managed resources, if the import definition allows it.
