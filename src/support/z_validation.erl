@@ -130,7 +130,7 @@ report_errors([{_Id, {error, ErrId, Error}}|T], Context) ->
 
 %% @doc Perform all validations
 validate(Val, Context) ->
-    [Name,Pickled] = string:tokens(Val, ":"),
+    [Name,Pickled] = split_name_pickled(Val),
     {Id,Name1,Validations} = z_utils:depickle(Pickled, Context),
     Name = z_convert:to_list(Name1),
     Value = case [ V || V <- z_context:get_q_all(Name, Context), V =/= [], V =/= <<>> ] of
@@ -150,6 +150,10 @@ validate(Val, Context) ->
     {Validated, Context1} = lists:foldl(ValidateF, {{ok,Value}, Context}, Validations),
     {{Name, Validated}, Context1}.
 
+split_name_pickled(Val) ->
+    [Pickled|Name] = lists:reverse(string:tokens(Val, ":")),
+    Name1 = lists:flatten(z_utils:combine($,, lists:reverse(Name))),
+    {Name1, Pickled}.
 
 %% @doc Simple utility function to get the 'q' value of an argument. When the argument has a generated unique prefix then
 %% the prefix is stripped.
