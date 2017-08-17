@@ -130,7 +130,7 @@ report_errors([{_Id, {error, ErrId, Error}}|T], Context) ->
 
 %% @doc Perform all validations
 validate(Val, Context) ->
-    [Name,Pickled] = binary:split(Val, <<":">>),
+    [Name,Pickled] = split_name_pickled(Val),
     {Id,Name,Validations} = z_utils:depickle(Pickled, Context),
     Value = case [ V || V <- z_context:get_q_all(Name, Context), V =/= [], V =/= <<>> ] of
                 [A] -> A;
@@ -149,6 +149,10 @@ validate(Val, Context) ->
     {Validated, Context1} = lists:foldl(ValidateF, {{ok,Value}, Context}, Validations),
     {{Name, Validated}, Context1}.
 
+split_name_pickled(Val) ->
+    [Pickled|Name] = lists:reverse(binary:split(Val, <<":">>, [global])),
+    Name1 = iolist_to_binary(z_utils:combine($,, lists:reverse(Name))),
+    {Name1, Pickled}.
 
 %% @doc Simple utility function to get the 'q' value of an argument. When the argument has a generated unique prefix then
 %% the prefix is stripped.
