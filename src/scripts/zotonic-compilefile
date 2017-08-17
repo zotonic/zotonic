@@ -22,30 +22,40 @@
 -export([main/1,
     usage/0]).
 
--include("zotonic_escript_helper.hrl").
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
+
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
 
 usage() ->
     io:format("Usage: ~s [files...] ~n", escript:script_name()),
     halt().
 
 main([File]) ->
-    case File of
-        " "  ->
+    load_mod_paths(),
+    FileName = list_to_atom(File),
+
+    case string:is_empty(File) of
+        true  ->
             usage();
-        _ ->
-            case string:str(File, "/") of
-                1  ->
-                    ok;
-                _ ->
-                    File = string:concat("/", File)
-            end,
-            F = ?ZOTONIC ++ File,
-            case filelib:is_file(F) of
-                true  ->
-                    ok;
-                false ->
-                    io:format("~p is not under the Zotonic basedir.", [F])
-            end,
-            io:format("Compiling ~p~n", [File]),
-            compile:file(F)
+        false ->
+            net_kernel:start([zotonic_compilefile, shortnames]),
+            erlang:set_cookie(node(), erlang:get_cookie()),
+            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+
+            Res = rpc:call(Target, zotonic_compile, compile_options, [FileName]),
+            io:format("~p~n", [Res])
     end.

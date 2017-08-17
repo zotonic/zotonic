@@ -1,4 +1,3 @@
-#!/usr/bin/env escript
 %%
 %% @author M, <tantemelki@gmail.com>
 %% @copyright 2017
@@ -18,14 +17,35 @@
 %%
 %% usage zotonic status
 %%
-
+-mode(compile).
 -export([main/1]).
 
--include("zotonic_escript_helper.hrl").
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
+-define(ZOTONIC_SCRIPTS, ?ZOTONIC ++ "/src/scripts").
 
-main([]) ->
-    zotonic_setup:require_zotonic_running(),
-    io:format("Running: ~p@~p~n~n", [?NODENAME, ?NODEHOST]),
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+
+main(_) ->
+    load_mod_paths(),
+    net_kernel:start([zotonic_status, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+    io:format("Running: ~p~n~n", [Target]),
     io:format("Sites Status: ~n"),
-    io:format("============="),
-    zotonic:status().
+    io:format("============= ~n"),
+    rpc:call(Target, zotonic, status, []),
+    io:format("~n").

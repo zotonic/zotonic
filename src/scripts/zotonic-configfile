@@ -19,10 +19,31 @@
 %% usage zotonic configfile -- prints the name of the zotonic.config file
 %%
 
--include("zotonic_escript_helper.hrl").
-
 -export([main/1]).
 
-main([]) ->
-    ConfigFile = zotonic_setup:find_config("zotonic.config"),
-    io:format(ConfigFile).
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
+
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+
+main(_) ->
+    load_mod_paths(),
+    net_kernel:start([zotonic_comfigfile, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+
+    [Res] = rpc:call(Target, zotonic_launcher_config, zotonic_config_file, []),
+    io:format("~p~n", [list_to_atom(Res)]).

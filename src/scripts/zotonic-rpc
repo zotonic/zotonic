@@ -21,10 +21,30 @@
 
 -export([main/1]).
 
--include("zotonic_escript_helper.hrl").
--define(RPC_NODE, rpc_node).
-main([Module, Function, Args]) ->
-    zotonic_setup:require_zotonic_running(),
-    net_kernel:start([?RPC_NODE, shortnames]),
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
 
-    rpc:call(?NODENAME, Module, Function, Args).
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+
+main([Module, Func, Args]) ->
+    load_mod_paths(),
+    net_kernel:start([zotonic_rpc, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+    ModuleName = list_to_atom(Module),
+    FuncName = list_to_atom(Func),
+
+    rpc:call(Target, ModuleName, FuncName, [Args]).

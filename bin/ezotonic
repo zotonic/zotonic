@@ -1,5 +1,4 @@
 #!/usr/bin/env escript
-%%! -pa zotonic/zotonic/ebin/ -Wall
 %%
 %% @author M, <tantemelki@gmail.com>
 %% @copyright 2017
@@ -25,6 +24,12 @@ get_zotonic_path() ->
     {ok, CurrentDir} = file:get_cwd(),
     _Dir = CurrentDir.
 
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+
 usage() ->
     {ok, ListItems} = file:list_dir(?ZOTONIC_SCRIPTS),
     FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 8],
@@ -42,7 +47,9 @@ parse_zotonic_options() ->
     {ok, Version} = application:get_key(zotonic_core, vsn),
     io:format("Zotonic ~s~n", Version).
 
-main(Command) ->
+main([Command]) ->
+    load_mod_paths(),
+
     case string:is_empty(Command) of
         true ->
             usage();
@@ -55,7 +62,8 @@ main(Command) ->
                     ScriptFile = string:concat(?ZOTONIC_SCRIPTS, "/" ++ SubScript),
                     case filelib:is_file(ScriptFile) of
                         true  ->
-                            apply(SubScript, main, []);
+                            ScriptCmd = list_to_atom(SubScript),
+                            apply(ScriptCmd, main, []);
                         false ->
                             io:format("Command not found: ~s~n", [Command])
                     end

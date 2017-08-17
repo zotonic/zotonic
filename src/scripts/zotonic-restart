@@ -16,7 +16,7 @@
 %% limitations under the License.
 
 %%
-%% usage zotonic sitetest [Site]
+%% usage zotonic-restart
 %%
 
 -export([main/1]).
@@ -39,20 +39,14 @@ load_mod_paths() ->
     code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
     code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
 
-
-main([Site]) ->
+main(_) ->
     load_mod_paths(),
-    SiteName = list_to_atom(Site),
+    net_kernel:start([zotonic_restart, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
 
-    case string:is_empty(Site) of
-        true  ->
-            io:format("Usage: zotonic sitetest [Sitename]"),
-            halt();
-        false ->
-            net_kernel:start([zotonic_sitetest, shortnames]),
-            erlang:set_cookie(node(), erlang:get_cookie()),
-            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-            io:format("Stopping site ~p on zotonic ~p~n", [SiteName, Target]),
-            rpc:call(Target, z_sitetest, run, [SiteName]),
-            io:format("~n")
-    end.
+    io:format("Restarting Zotonic ~n"),
+    Stop = rpc:call(Target, zotonic, stop, []),
+    io:format("Stopping Zotonic ~p..~p~n", [Target, Stop]),
+    Start = rpc:call(Target, zotonic, start, []),
+    io:format("Starting Zotonic ~p.. ~p~n", [Target, Start]).

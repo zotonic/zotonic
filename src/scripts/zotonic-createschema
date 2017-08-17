@@ -21,20 +21,37 @@
 
 -export([main/1]).
 
--include("zotonic_escript_helper.hrl").
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
 
-main([Schema]) ->
-    IsFile = ?HOME ++ "/.zotonic-defaults",
-    if IsFile == true
-        ->
-        os:cmd("source " ++ IsFile)
-    end,
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
 
-    case Schema of
-        " "  ->
-            io:format("USAGE: ~s", [escript:script_name()]),
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+
+main([Site]) ->
+    load_mod_paths(),
+    SiteName = list_to_atom(Site),
+
+    case string:is_empty(Site) of
+        true  ->
+            io:format("USAGE: ~s", [list_to_atom(escript:script_name())]),
             io:format("USAGE: See ZotonicCommands.txt");
-        _ ->
-            os:cmd("sed s/%schema/" ++ Schema ++ "/g \< " ++ ?ZOTONIC_SCRIPTS ++
-                "/helpers/zotonic-createschema_sql.in \ | ${PSQL:=psql}")
+        false ->
+            net_kernel:start([zotonic_createschema, shortnames]),
+            erlang:set_cookie(node(), erlang:get_cookie()),
+            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+
+            Res = rpc:call(Target, z_db, prepare_database, [SiteName]),
+            io:format("~p~n", [Res])
     end.

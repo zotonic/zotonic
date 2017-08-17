@@ -43,15 +43,17 @@ load_mod_paths() ->
 main(_) ->
     load_mod_paths(),
     ZotonicApp = string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
     case filelib:is_file(ZotonicApp) of
          true ->
              io:format("Starting Zotonic ~s@~s..", [?NODENAME, ?NODEHOST]),
+             net_kernel:start([Target, shortnames]),
              zotonic_launcher_config:load_configs(),
-             os:cmd("erl -sname " ++ ?NODENAME ++ " -boot start_sasl -heart -detached -s "),
-             case zotonic:start() of
-                 ok ->
-                     io:format("OK~n");
-                 _ ->
+             rpc:call(Target, zotonic, start, []),
+             case net_adm:ping(Target) of
+                 pong ->
+                     io:format("OK ~n");
+                 pang ->
                      io:format("Something went wrong while starting Zotonic. Please check the log files ~s~n",
                          [string:concat(?ZOTONIC, "/priv/log")])
              end;

@@ -21,8 +21,31 @@
 
 -export([main/1]).
 
--include("zotonic_escript_helper.hrl").
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
+-define(ZOTONIC_SCRIPTS, ?ZOTONIC ++ "/src/scripts").
 
-main([]) ->
-    zotonic_setup:require_zotonic_not_running(),
-    zotonic:run_tests().
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_listen_http/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+
+
+main(_) ->
+    load_mod_paths(),
+    net_kernel:start([zotonic_testsandbox, shortnames]),
+
+    io:format("Running the following tests in the testsandbox ~n"),
+    apply(zotonic, await_startup, []),
+    io:format("~n").

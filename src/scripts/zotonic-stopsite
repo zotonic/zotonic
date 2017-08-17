@@ -21,14 +21,38 @@
 
 -export([main/1]).
 
--include("zotonic_escript_helper.hrl").
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
+
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+
 
 main([Site]) ->
-    zotonic_setup:require_zotonic_running(),
-    case Site of
-        ""  ->
-            io:format("USAGE: ~p [site_name] ~n", [escript:script_name()]);
-        _ ->
-            io:format("Stopping site ~p on zotonic ~p@~p", [Site, ?NODENAME, ?NODEHOST]),
-            z_sites_manager:stop(Site)
+    load_mod_paths(),
+    SiteName = list_to_atom(Site),
+
+    case string:is_empty(Site) of
+        true  ->
+            io:format("USAGE: ~p [site_name] ~n", [list_to_atom(escript:script_name())]),
+            halt();
+        false ->
+            net_kernel:start([zotonic_stopsite, shortnames]),
+            erlang:set_cookie(node(), erlang:get_cookie()),
+            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+            io:format("Stopping site ~p on zotonic ~p~n", [SiteName, Target]),
+            rpc:call(Target, z, shell_stopsite, [SiteName]),
+            io:format("~n")
     end.

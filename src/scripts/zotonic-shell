@@ -21,10 +21,36 @@
 
 -export([main/1]).
 
--include("zotonic_escript_helper.hrl").
+-define(NODENAME, "zotonic001").
+-define(ZOTONIC, get_zotonic_path()).
+-define(NODEHOST, get_node_host()).
+
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+get_node_host() ->
+    {ok, HostName} = inet:gethostname(),
+    _NodeHost = HostName.
+
+load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
 
 main([]) ->
-    zotonic_setup:require_zotonic_running(),
-    ShellCommand = ?ERL ++ " " ++ ?NAME_ARG ++ " " ++ ?NODENAME ++ "_shell_"
-        ++ ?NODEHOST ++ " -remsh " ++ ?NODENAME ++ "@" ++ ?NODEHOST,
-    os:cmd(ShellCommand).
+    load_mod_paths(),
+    net_kernel:start([zotonic_shell, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+
+    case zotonic:ping() of
+        pong ->
+            Shell = user_drv:start(['tty_sl -c -e', {Target, shell, start, []}]),
+            true = erlang:link(Shell),
+            receive
+                {'EXIT', Shell, _} ->
+                    ok
+            end
+    end.
