@@ -46,7 +46,5 @@ main(_) ->
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
 
     io:format("Restarting Zotonic ~n"),
-    Stop = rpc:call(Target, zotonic, stop, []),
-    io:format("Stopping Zotonic ~p..~p~n", [Target, Stop]),
-    Start = rpc:call(Target, zotonic, start, []),
-    io:format("Starting Zotonic ~p.. ~p~n", [Target, Start]).
+    Res = rpc:call(Target, z, restart, []),
+    io:format("~p~n", [Res]).

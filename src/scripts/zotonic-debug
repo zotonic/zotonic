@@ -21,27 +21,5 @@
 
 -export([main/1]).
 
--include("zotonic_escript_helper.hrl").
-
 main([]) ->
-    ErlangConfig = list_to_atom(zotonic_setup:find_config_arg("erlang.config")),
-    ZotonicConfig = list_to_atom(zotonic_setup:find_config_arg("zotonic.config")),
-
-    ZotonicAppFile = ?ZOTONIC ++ "/_build/default/lib/zotonic/ebin/zotonic.app",
-
-    case filelib:is_file(ZotonicAppFile) of
-        true ->
-            halt();
-        false ->
-            io:format("Building Zotonic for the first time."),
-            os:cmd(?MAKE)
-    end,
-
-    zotonic_setup:require_zotonic_not_running(),
-
-    case file:set_cwd(?ZOTONIC) of
-         ok ->
-             os:cmd(?ERL ++ " -env ERL_MAX_PORTS " ++ ?MAX_PORTS ++ " +P " ++ ?MAX_PROCESSES ++ " +k " ++
-                 ?KERNEL_POLL + " -pa " ++ ?PA ++ " " ++ ?NAME_ARG ++ " " ++ ?NODENAME ++ "@" ++ ?NODEHOST ++
-                 " -boot start_sasl " ++ ErlangConfig ++ " " ++ ZotonicConfig ++ " -sasl errlog_type error -s zotonic")
-    end.
+    erlang:error(not_implemented).

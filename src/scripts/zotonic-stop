@@ -47,7 +47,7 @@ main([]) ->
     io:format("Stopping Zotonic ~p..", [Target]),
     case net_adm:ping(Target) of
         pong  ->
-            rpc:call(Target, zotonic, stop, []),
+            rpc:call(Target, init, stop, []),
             io:format("Ok~n");
         pang ->
             halt()

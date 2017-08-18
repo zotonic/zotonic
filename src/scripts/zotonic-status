@@ -18,6 +18,7 @@
 %% usage zotonic status
 %%
 -mode(compile).
+
 -export([main/1]).
 
 -define(NODENAME, "zotonic001").

@@ -47,10 +47,10 @@ main(_) ->
     case filelib:is_file(ZotonicApp) of
          true ->
              io:format("Starting Zotonic ~s@~s..", [?NODENAME, ?NODEHOST]),
-             net_kernel:start([Target, shortnames]),
              zotonic_launcher_config:load_configs(),
-             rpc:call(Target, zotonic, start, []),
-             case net_adm:ping(Target) of
+             net_kernel:start([Target, shortnames]),
+             zotonic:start(),
+             case zotonic:ping() of
                  pong ->
                      io:format("OK ~n");
                  pang ->
