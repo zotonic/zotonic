@@ -130,7 +130,7 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) ->
     UserGroupId = proplists:get_value(acl_user_group_id, Row),
     IsOwner = proplists:get_value(is_owner, Row, false),
     PropId = proplists:get_value(Prop, Row),
-    ContentGroupName = m_rsc:p_no_acl(ContentGroupId, name, Context),
+    ContentGroupName = m_rsc:p(ContentGroupId, name, z_acl:sudo(Context)),
     CIdsEdit = maybe_filter_meta(ContentGroupName, Prop, PropId, Cs, NonMetaCs, Context),
     CIdsView = proplists:get_value(PropId, Cs, [PropId]),
     lists:flatten(

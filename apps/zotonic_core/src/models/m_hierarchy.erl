@@ -103,7 +103,7 @@ tree(undefined, _Context) ->
 tree(<<>>, _Context) ->
     [];
 tree(Id, Context) when is_integer(Id) ->
-    tree(m_rsc:p_no_acl(Id, name, Context), Context);
+    tree(m_rsc:p(Id, name, z_acl:sudo(Context)), Context);
 tree(Name, Context) when is_binary(Name) ->
     F = fun() ->
         CatTuples = z_db:q("
@@ -221,7 +221,7 @@ tree_to_menu([E | Rest], Acc) ->
 ensure(Category, Context) ->
     case m_category:name_to_id(Category, Context) of
         {ok, CatId} ->
-            Name = m_rsc:p_no_acl(CatId, name, Context),
+            Name = m_rsc:p(CatId, name, z_acl:sudo(Context)),
             ensure(Name, CatId, Context);
         {error, _} = Error ->
             Error
@@ -268,7 +268,7 @@ save(Name, Tree, Context) ->
         true ->
             case m_category:name_to_id(Name, Context) of
                 {ok, CatId} ->
-                    Name1 = m_rsc:p_no_acl(CatId, name, Context),
+                    Name1 = m_rsc:p(CatId, name, z_acl:sudo(Context)),
                     save_nocheck(Name1, Tree, Context);
                 {error, _} = Error ->
                     lager:warning("[m_hierarchy] Hierarchy save for unknown category ~p", [Name]),

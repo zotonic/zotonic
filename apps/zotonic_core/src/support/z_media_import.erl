@@ -65,11 +65,11 @@ default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
 
 
 %% @doc Update a resource with the selected #media_import_props()
-update(RscId, #media_import_props{medium_props=[], preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
+update(RscId, #media_import_props{medium_props=[], preview_url=PreviewUrl, medium_url=MediumUrl}, _Context)
     when ?EMPTY(PreviewUrl), ?EMPTY(MediumUrl) ->
     % Nothing to do
     {ok, RscId};
-update(RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context) 
+update(RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context)
     when MP =/= [], ?EMPTY(MediumUrl) ->
     % Embedded, with optional preview_url
     RscProps = [
@@ -156,7 +156,7 @@ import_as_media(MD, Context) ->
                     #media_import_props{
                         prio = 3,
                         category = Category,
-                        description = m_rsc:p_no_acl(Category, title, Context),
+                        description = m_rsc:p(Category, title, z_acl:sudo(Context)),
                         rsc_props = [
                             {title, z_url_metadata:p(title, MD)},
                             {summary, z_url_metadata:p(summary, MD)},
@@ -178,7 +178,7 @@ import_as_media(MD, Context) ->
 import_as_referred_image(MD, Context) ->
     Width = z_convert:to_integer(z_url_metadata:p(<<"og:image:width">>, MD)),
     Height = z_convert:to_integer(z_url_metadata:p(<<"og:image:height">>, MD)),
-    case        is_integer(Width) 
+    case        is_integer(Width)
         andalso is_integer(Height)
         andalso Width > 32
         andalso Height > 32
@@ -191,7 +191,7 @@ import_as_referred_image(MD, Context) ->
                     #media_import_props{
                         prio = 4,
                         category = image,
-                        description = m_rsc:p_no_acl(image, title, Context),
+                        description = m_rsc:p(image, title, z_acl:sudo(Context)),
                         rsc_props = [
                             {title, z_url_metadata:p(title, MD)},
                             {summary, z_url_metadata:p(summary, MD)},

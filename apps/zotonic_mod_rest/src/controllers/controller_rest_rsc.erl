@@ -188,7 +188,7 @@ get_id(Context) ->
 %% @doc Make sure that we do an ACL check for all props before pushing them out.
 %% @todo Move this to the m_rsc module
 get_rsc(Id, Context) ->
-    Props = m_rsc:get_visible(Id, Context),
+    Props = m_rsc:get(Id, Context),
     IsA = m_rsc:is_a(Id, Context),
     Complete = [
         {category, hd(IsA)},
@@ -226,8 +226,9 @@ medium(Id, Context) ->
     end.
 
 content_group(Id, Context) ->
-    CGId = m_rsc:p_no_acl(Id, content_group_id, Context),
-    case m_rsc:p_no_acl(CGId, name, Context) of
+    Sudo = z_acl:sudo(Context),
+    CGId = m_rsc:p(Id, content_group_id, Sudo),
+    case m_rsc:p(CGId, name, Sudo) of
         undefined -> CGId;
         Name -> Name
     end.

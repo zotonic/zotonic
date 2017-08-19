@@ -534,7 +534,7 @@ opt_crop_center_mediaclass(Mediaclass, Id, Options, Context) ->
     end.
 
 maybe_add_crop_center(Id, Options, Context) ->
-    case m_rsc:p_no_acl(Id, crop_center, Context) of
+    case m_rsc:p(Id, crop_center, z_acl:sudo(Context)) of
         <<"+", _/binary>> = Center ->
             z_utils:prop_replace(crop, Center, Options);
         _ ->

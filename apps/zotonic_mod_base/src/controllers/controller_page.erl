@@ -74,7 +74,7 @@ is_authorized(Context) ->
 %% @doc Show the page.  Add a noindex header when requested by the editor.
 provide_content(Context) ->
     Id = z_controller_helper:get_id(Context),
-    Context1 = z_context:set_noindex_header(m_rsc:p_no_acl(Id, seo_noindex, Context), Context),
+    Context1 = z_context:set_noindex_header(m_rsc:p(Id, seo_noindex, z_acl:sudo(Context)), Context),
 
 	%% EXPERIMENTAL:
 	%%
@@ -105,8 +105,8 @@ provide_content(Context) ->
 
 maybe_redirect(Id, Context) ->
     maybe_redirect_website(
-          m_rsc:p_no_acl(Id, website, Context),
-          m_rsc:p_no_acl(Id, is_website_redirect, Context),
+          m_rsc:p(Id, website, z_acl:sudo(Context)),
+          m_rsc:p(Id, is_website_redirect, z_acl:sudo(Context)),
           Id, Context).
 
 maybe_redirect_website(undefined, _IsRedirect, Id, Context) ->
@@ -124,7 +124,7 @@ maybe_redirect_website(_Website, _False, Id, Context) ->
     maybe_redirect_canonical(Id, Context).
 
 maybe_redirect_canonical(Id, Context) ->
-    maybe_redirect_page_path(m_rsc:p_no_acl(Id, page_path, Context), Id, Context).
+    maybe_redirect_page_path(m_rsc:p(Id, page_path, z_acl:sudo(Context)), Id, Context).
 
 maybe_redirect_page_path(undefined, Id, Context) ->
     maybe_exists(Id, Context);
@@ -159,7 +159,7 @@ current_path(Context) ->
     end.
 
 is_canonical(Id, Context) ->
-    case m_rsc:p_no_acl(Id, is_page_path_multiple, Context) of
+    case m_rsc:p(Id, is_page_path_multiple, z_acl:sudo(Context)) of
         true -> false;
         _False -> z_context:get(is_canonical, Context, true)
     end.

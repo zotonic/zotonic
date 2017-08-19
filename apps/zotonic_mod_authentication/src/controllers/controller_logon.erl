@@ -284,7 +284,7 @@ logon_user(UserId, WireArgs, Context) ->
 
 
 check_verified(UserId, Context) ->
-    case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
+    case m_rsc:p(UserId, is_verified_account, z_acl:sudo(Context)) of
         false ->
             % The account is awaiting verification
             logon_stage("verification_pending", [{user_id, UserId}], Context);
@@ -436,7 +436,7 @@ send_reminder([Id|Ids], Context, Acc) ->
 
 %% @doc Find the preferred e-mail address of an user.
 find_email(Id, Context) ->
-    m_rsc:p_no_acl(Id, email_raw, Context).
+    m_rsc:p(Id, email_raw, z_acl:sudo(Context)).
 
 %% @doc Sent the reminder e-mail to the user.
 send_email(Email, Vars, Context) ->

@@ -30,11 +30,10 @@
 
     page_path_to_id/2,
 
-    get_visible/2,
     get/2,
-    get_raw/2,
-    get_raw_lock/2,
+    get/3,
     get_acl_props/2,
+    get_db/3,
     insert/2,
     delete/2,
     merge_delete/3,
@@ -88,7 +87,7 @@ m_get([ Id, is_cat, Key | Rest ], Context) ->
 m_get([ Id, Key | Rest ], Context) ->
     {p(Id, Key, Context), Rest};
 m_get([ Id ], Context) ->
-    {get_visible(Id, Context), []};
+    {get(Id, Context), []};
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
@@ -151,16 +150,22 @@ page_path_to_id(Path, Context) ->
     end.
 
 
-%% @doc Read a whole resource, check all properties for access rights
--spec get_visible(resource(), #context{}) -> props() | undefined.
-get_visible(RId, Context) ->
-    case rid(RId, Context) of
+%% @doc Read a whole resource, checking all properties for access rights.
+-spec get(resource(), z:context()) -> props() | undefined.
+get(Rsc, Context) ->
+    get(Rsc, [], Context).
+
+%% @doc Read a whole resource, checking all properties for access rights.
+%%      For Options you can pass 'skip_cache', 'lock'.
+-spec get(resource(), list(), z:context()) -> props() | undefined.
+get(Rsc, Options, Context) ->
+    case rid(Rsc, Context) of
         undefined ->
             undefined;
         Id ->
             case z_acl:rsc_visible(Id, Context) of
                 true ->
-                    case get(Id, Context) of
+                    case get_1(Id, Options, Context) of
                         undefined ->
                             undefined;
                         Props ->
@@ -175,36 +180,34 @@ get_visible(RId, Context) ->
             end
     end.
 
-%% @doc Read a whole resource
--spec get(resource(), #context{}) -> props() | undefined.
-get(Id, Context) ->
-    case rid(Id, Context) of
-        Rid when is_integer(Rid) ->
-            z_depcache:memo(fun() ->
-                                case get_raw(Rid, Context) of
-                                    undefined ->
-                                        undefined;
-                                    Props ->
-                                        z_notifier:foldr(#rsc_get{id=Rid}, Props, Context)
-                                end
-                            end,
-                            Rid,
-                            ?WEEK,
-                            Context);
-        undefined ->
-            undefined
-    end.
+get_1(Rid, Options, Context) ->
+    get_1(Rid, lists:member(skip_cache, Options), Options, Context).
 
-%% @doc Get the resource from the database, do not fetch the pivot fields.
--spec get_raw(resource(), #context{}) -> props().
-get_raw(Id, Context) ->
-    get_raw(Id, false, Context).
+get_1(Rid, true, Options, Context) ->
+    get_db(Rid, Options, Context);
+get_1(Rid, false, Options, Context) ->
+    get_cached(Rid, Options, Context).
 
-get_raw_lock(Id, Context) ->
-    get_raw(Id, true, Context).
+%% @doc Fetch a resource from the cache if possible
+-spec get_cached(resource_id(), list(), z:context()) -> props() | undefined.
+get_cached(Rid, Options, Context) when is_integer(Rid) ->
+    z_depcache:memo(fun() ->
+                        case get_db(Rid, Options, Context) of
+                            undefined ->
+                                undefined;
+                            Props ->
+                                z_notifier:foldr(#rsc_get{id=Rid}, Props, Context)
+                        end
+                    end,
+                    Rid,
+                    ?WEEK,
+                    Context).
 
-
-get_raw(Id, IsLock, Context) ->
+%% @doc Get the resource from the database
+-spec get_db(resource_id(), list(), z:context()) -> props().
+get_db(Id, Options, Context) when is_list(Options) ->
+    get_db(Id, lists:member(lock, Options), Context);
+get_db(Id, IsLock, Context) ->
     SQL = case z_memo:get(rsc_raw_sql) of
               undefined ->
                   AllCols = [z_convert:to_list(C) || C <- z_db:column_names(rsc, Context)],
@@ -367,7 +370,7 @@ touch(Id, Context) ->
 exists(Id, Context) ->
     case rid(Id, Context) of
         Rid when is_integer(Rid) ->
-            case m_rsc:p_no_acl(Rid, id, Context) of
+            case m_rsc:p(Rid, id, Context) of
                 Rid -> true;
                 undefined -> false
             end;
@@ -402,11 +405,12 @@ is_me(Id, Context) ->
 is_published_date(Id, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
-            case m_rsc:p_no_acl(RscId, is_published, Context) of
+            case m_rsc:p(RscId, is_published, Context) of
                 true ->
                     Date = erlang:universaltime(),
-                    m_rsc:p_no_acl(RscId, publication_start, Context) =< Date
-                        andalso m_rsc:p_no_acl(RscId, publication_end, Context) >= Date;
+                    Sudo = z_acl:sudo(Context),
+                    m_rsc:p(RscId, publication_start, Sudo) =< Date
+                        andalso m_rsc:p(RscId, publication_end, Sudo) >= Date;
                 false ->
                     false;
                 undefined ->
@@ -419,7 +423,7 @@ is_published_date(Id, Context) ->
 
 %% @doc Fetch a property from a resource. When the rsc does not exist, the property does not
 %% exist or the user does not have access rights to the property then return 'undefined'.
--spec p(resource(), atom(), #context{}) -> term() | undefined.
+-spec p(resource(), atom(), z:context()) -> term() | undefined.
 p(Id, Property, Context) when is_list(Property); is_binary(Property) ->
     p(Id, z_convert:to_atom(Property), Context);
 p(Id, Property, Context)
@@ -819,10 +823,10 @@ predicates_edit(Id, Context) ->
 %% @doc Ensure that a resource has a name, caller must have update rights.
 -spec ensure_name(integer(), #context{}) -> ok.
 ensure_name(Id, Context) ->
-    case m_rsc:p_no_acl(Id, name, Context) of
+    case m_rsc:p(Id, name, Context) of
         undefined ->
-            CatId = m_rsc:p_no_acl(Id, category_id, Context),
-            CatName = m_rsc:p_no_acl(CatId, name, Context),
+            CatId = m_rsc:p(Id, category_id, Context),
+            CatName = m_rsc:p(CatId, name, z_acl:sudo(Context)),
             BaseName = z_string:to_name(iolist_to_binary([CatName, $_, english_title(Id, Context)])),
             BaseName1 = ensure_name_maxlength(BaseName),
             Name = ensure_name_unique(BaseName1, 0, Context),
@@ -836,7 +840,7 @@ ensure_name_maxlength(<<Name:70/binary, _/binary>>) -> Name;
 ensure_name_maxlength(Name) -> Name.
 
 english_title(Id, Context) ->
-    case m_rsc:p_no_acl(Id, title, Context) of
+    case m_rsc:p(Id, title, z_acl:sudo(Context)) of
         Title when is_binary(Title) -> Title;
         {trans, []} -> <<>>;
         undefined -> <<>>;

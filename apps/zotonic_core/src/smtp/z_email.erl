@@ -86,7 +86,7 @@ get_admin_email(Context) ->
 		undefined ->
 			case m_site:get(admin_email, Context) of
 				undefined ->
-					case m_rsc:p_no_acl(1, email_raw, Context) of
+					case m_rsc:p(1, email_raw, z_acl:sudo(Context)) of
 						Empty when Empty == undefined orelse Empty == <<>> ->
                             <<"wwwadmin@", (z_context:hostname(Context))/binary>>;
 						Email -> Email

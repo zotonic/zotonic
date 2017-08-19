@@ -110,7 +110,7 @@ set_filename(Id, ContentType, Dispatch, Context) ->
             Context)
     of
         undefined ->
-            Cat = m_rsc:p_no_acl(Id, category, Context),
+            Cat = m_rsc:p(Id, category, Context),
             iolist_to_binary([
                         "export-",
                         z_convert:to_binary(proplists:get_value(name, Cat)),

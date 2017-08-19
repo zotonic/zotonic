@@ -88,7 +88,7 @@ observe_auth_logon(#auth_logon{}, Context, _Context) ->
             Context;
         false ->
             UserId = z_acl:user(Context),
-            case m_rsc:p_no_acl(UserId, pref_tz, Context) of
+            case m_rsc:p(UserId, pref_tz, z_acl:sudo(Context)) of
                 Tz when is_binary(Tz), Tz =/= <<>> ->
                     % Switch the session to the default timezone of the user
                     Context1 = try_set_timezone(Tz, Context),
@@ -106,7 +106,7 @@ observe_user_context(#user_context{id=UserId}, Context, _Context) ->
         true ->
             Context;
         false ->
-            case m_rsc:p_no_acl(UserId, pref_tz, Context) of
+            case m_rsc:p(UserId, pref_tz, z_acl:sudo(Context)) of
                 Tz when is_binary(Tz), Tz =/= <<>> ->
                     z_context:set_tz(Tz, Context);
                 _Undefined ->
@@ -149,7 +149,7 @@ set_user_timezone(Tz, Context) ->
         undefined ->
             nop;
         UserId ->
-            case m_rsc:p_no_acl(UserId, pref_tz, Context1) of
+            case m_rsc:p(UserId, pref_tz, z_acl:sudo(Context1)) of
                 Tz -> nop;
                 _ -> catch m_rsc:update(UserId, [{pref_tz, z_context:tz(Context1)}], Context1)
             end

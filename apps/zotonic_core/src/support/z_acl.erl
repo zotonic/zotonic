@@ -194,9 +194,9 @@ rsc_deletable(undefined, _Context) ->
 rsc_deletable(_Id, #context{user_id=undefined}) ->
     false;
 rsc_deletable(Id, #context{acl=admin} = Context) ->
-    not z_convert:to_bool(m_rsc:p_no_acl(Id, is_protected, Context));
+    not z_convert:to_bool(m_rsc:p(Id, is_protected, z_acl:sudo(Context)));
 rsc_deletable(Id, Context) when is_integer(Id) ->
-    not z_convert:to_bool(m_rsc:p_no_acl(Id, is_protected, Context))
+    not z_convert:to_bool(m_rsc:p(Id, is_protected, z_acl:sudo(Context)))
         andalso is_allowed(delete, Id, Context);
 rsc_deletable(RscName, Context) ->
     case m_rsc:rid(RscName, Context) of

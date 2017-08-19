@@ -121,7 +121,7 @@ add_content_group(EventProps, Props, Context) ->
     end.
 
 content_group_id(undefined, SubjectId, Context) when is_integer(SubjectId) ->
-    m_rsc:p_no_acl(SubjectId, content_group_id, Context);
+    m_rsc:p(SubjectId, content_group_id, z_acl:sudo(Context));
 content_group_id(ContentGroupId, _SubjectId, _Context) ->
     ContentGroupId.
 

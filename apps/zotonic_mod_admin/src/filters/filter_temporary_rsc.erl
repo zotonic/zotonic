@@ -153,7 +153,7 @@ find_existing(_PageId, _SessionId, CatId, Context) ->
     end.
 
 is_unmodified_rsc(Id, Context) ->
-    m_rsc:exists(Id, Context) andalso m_rsc:p_no_acl(Id, version, Context) =:= 1.
+    m_rsc:exists(Id, Context) andalso m_rsc:p(Id, version, z_acl:sudo(Context)) =:= 1.
 
 is_session_alive(SessionId, Context) ->
     case z_session_manager:whereis(SessionId, Context) of

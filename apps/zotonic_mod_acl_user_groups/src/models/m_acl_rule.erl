@@ -511,7 +511,7 @@ ids_to_names_row(R, Context) ->
         fun(K, Acc) ->
             case proplists:get_value(K, Acc) of
                 Id when is_integer(Id) ->
-                    case m_rsc:p_no_acl(Id, name, Context) of
+                    case m_rsc:p(Id, name, z_acl:sudo(Context)) of
                         undefined ->
                             % Problem this rule might be skipped on import
                             z_utils:prop_replace(K,

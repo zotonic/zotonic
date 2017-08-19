@@ -543,12 +543,12 @@ uploads(Context) ->
     [ Upload || {_, #upload{} = Upload} <- Qs ].
 
 probably_email(SurveyId, Context) ->
-    not z_utils:is_empty(m_rsc:p_no_acl(SurveyId, survey_email, Context))
-    orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)).
+    not z_utils:is_empty(m_rsc:p(SurveyId, survey_email, z_acl:sudo(Context)))
+    orelse z_convert:to_bool(m_rsc:p(SurveyId, survey_email_respondent, z_acl:sudo(Context))).
 
 %% @doc mail the survey result to an e-mail address
 mail_result(SurveyId, PrepAnswers, Attachments, Context) ->
-    case m_rsc:p_no_acl(SurveyId, survey_email, Context) of
+    case m_rsc:p(SurveyId, survey_email, z_acl:sudo(Context)) of
         undefined ->
             skip;
         Email ->
@@ -573,7 +573,7 @@ mail_result(SurveyId, PrepAnswers, Attachments, Context) ->
     end.
 
 mail_respondent(SurveyId, Answers, PrepAnswers, Context) ->
-    case z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)) of
+    case z_convert:to_bool(m_rsc:p(SurveyId, survey_email_respondent, z_acl:sudo(Context))) of
         true ->
             case find_email_respondent(Answers, Context) of
                 <<>> ->
@@ -593,7 +593,7 @@ mail_respondent(SurveyId, Answers, PrepAnswers, Context) ->
     end.
 
 find_email_respondent([], Context) ->
-    m_rsc:p_no_acl(z_acl:user(Context), email, Context);
+    m_rsc:p(z_acl:user(Context), email, Context);
 find_email_respondent([{<<"email">>, Ans}|As], Context) ->
     Ans1 = z_string:trim(Ans),
     case z_utils:is_empty(Ans1) of

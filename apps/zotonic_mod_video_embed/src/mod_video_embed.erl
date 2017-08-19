@@ -233,7 +233,7 @@ media_import_props_image(Service, MD, VideoId, Context) ->
             #media_import_props{
                 prio = 10,
                 category = image,
-                description = m_rsc:p_no_acl(image, title, Context),
+                description = m_rsc:p(image, title, z_acl:sudo(Context)),
                 rsc_props = [
                     {title, z_url_metadata:p(title, MD)},
                     {summary, z_url_metadata:p(summary, MD)},
@@ -327,7 +327,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
         undefined ->
             SubjectId = proplists:get_value(subject_id, EventProps),
             ContentGroupdId = case proplists:get_value(content_group_id, EventProps) of
-                                    undefined -> m_rsc:p_no_acl(SubjectId, content_group_id, Context);
+                                    undefined -> m_rsc:p(SubjectId, content_group_id, z_acl:sudo(Context));
                                     CGId -> CGId
                               end,
             Predicate = proplists:get_value(predicate, EventProps, depiction),

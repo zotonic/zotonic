@@ -208,7 +208,7 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, C
             RawRscPre = get_updated_props(Id, NormalizedRow, Context),
             Edited = diff_raw_props(RawRscPre,
                                     get_value(rsc_data, PrevImportData, []),
-                                    m_rsc:p_no_acl(Id, import_csv_original, Context)),
+                                    m_rsc:p(Id, import_csv_original, z_acl:sudo(Context))),
 
             % Cleanup old import_csv data on update
             Row1 = [ {import_csv_original, undefined}, {import_csv_touched, undefined} | NormalizedRow ],
@@ -256,7 +256,7 @@ diff_raw_props(Current, LastImport, undefined) ->
     end.
 
 get_updated_props(Id, Row, Context) ->
-    Raw = m_rsc:get_raw(Id, Context),
+    Raw = m_rsc:get(Id, Context, [skip_cache]),
     sort_props([ {K, proplists:get_value(K, Raw)} || {K, _} <- Row ]).
 
 sort_props(Props) ->

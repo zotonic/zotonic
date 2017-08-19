@@ -131,7 +131,7 @@ maybe_add_language(Id, Props, Context) ->
         true ->
             Props;
         false ->
-            case m_rsc:p_no_acl(Id, language, Context) of
+            case m_rsc:p(Id, language, z_acl:sudo(Context)) of
                 undefined -> Props;
                 Language -> [ {language, Language} | Props ]
             end

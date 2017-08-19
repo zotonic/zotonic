@@ -174,7 +174,7 @@ insert_questions(SurveyId, UserId, PersistentId, [{QuestionId, Answers}|Rest], C
 insert_answers(_SurveyId, _UserId, _PersistentId, _QuestionId, [], _Created, _Context) ->
     ok;
 insert_answers(SurveyId, UserId, PersistentId, QuestionId, [{Name, Answer}|As], Created, Context) ->
-    IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+    IsAnonymous = z_convert:to_bool(m_rsc:p(SurveyId, survey_anonymous, z_acl:sudo(Context))),
     Args = case Answer of
                {text, Text} ->
                   [SurveyId, UserId, PersistentId, IsAnonymous, QuestionId, Name, undefined, Text, Created];
@@ -345,7 +345,7 @@ survey_results_prompts(SurveyId, Context) ->
                            where survey_id = $1
                            order by user_id, persistent", [z_convert:to_integer(SurveyId)], Context),
             Grouped = group_users(Rows),
-            IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            IsAnonymous = z_convert:to_bool(m_rsc:p(SurveyId, survey_anonymous, z_acl:sudo(Context))),
             UnSorted = [ user_answer_row(IsAnonymous, User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
             Sorted = lists:sort(fun([_,_,A|_], [_,_,B|_]) -> A < B end, UnSorted), %% sort by created date
             Hs = lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>

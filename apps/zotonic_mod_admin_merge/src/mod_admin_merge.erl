@@ -86,7 +86,7 @@ merge(WinnerId, _LoserId, <<"merge_only">>, Context)  ->
                 ], Context)
     end;
 merge(WinnerId, LoserId, <<"merge_delete">>, Context) ->
-    case {m_rsc:p_no_acl(LoserId, is_protected, Context),
+    case {m_rsc:p(LoserId, is_protected, z_acl:sudo(Context)),
           z_acl:rsc_deletable(LoserId, Context),
           z_acl:rsc_editable(WinnerId, Context)}
     of

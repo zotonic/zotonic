@@ -649,7 +649,7 @@ tokens_to_path(Ts) ->
 %% Handle possible request rewrite; used when no dispatch rule matched
 handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, Context) when is_integer(Id) ->
     %% Retry with the resource's default page uri
-    case m_rsc:p_no_acl(Id, default_page_url, Context) of
+    case m_rsc:p(Id, default_page_url, Context) of
         undefined ->
             trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id}]),
             #dispatch_nomatch{

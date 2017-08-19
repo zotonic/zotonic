@@ -94,7 +94,7 @@ is_setting(_) -> false.
 
 -spec observe_rsc_update_done(#rsc_update_done{}, z:context()) -> ok.
 observe_rsc_update_done(#rsc_update_done{id=Id}, Context) ->
-    case m_rsc:p_no_acl(Id, twitter_id, Context) of
+    case m_rsc:p(Id, twitter_id, z_acl:sudo(Context)) of
         Empty when Empty =:= <<>>; Empty =:= undefined; Empty =:= [] ->
             case m_identity:get_rsc(Id, twitter_id, Context) of
                 undefined ->

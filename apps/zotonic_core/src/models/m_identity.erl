@@ -327,14 +327,15 @@ username_unique_x(U, X, Context) ->
 
 
 base_username(Id, Context) ->
+    Sudo = Context,
     T1 = iolist_to_binary([
-        z_convert:to_binary(m_rsc:p_no_acl(Id, name_first, Context)),
+        z_convert:to_binary(m_rsc:p(Id, name_first, Sudo)),
         " ",
-        z_convert:to_binary(m_rsc:p_no_acl(Id, name_surname, Context))
+        z_convert:to_binary(m_rsc:p(Id, name_surname, Sudo))
     ]),
     case nospace(z_string:trim(T1)) of
         <<>> ->
-            case nospace(m_rsc:p_no_acl(Id, title, Context)) of
+            case nospace(m_rsc:p(Id, title, Sudo)) of
                 <<>> -> z_ids:identifier(6);
                 Title -> Title
             end;
@@ -523,7 +524,7 @@ get_rsc_types(Id, Context) ->
 -spec get_rsc_by_type(m_rsc:resource(), atom(), #context{}) -> list().
 get_rsc_by_type(Id, email, Context) ->
     Idns = get_rsc_by_type_1(Id, email, Context),
-    case normalize_key(email, m_rsc:p_no_acl(Id, email, Context)) of
+    case normalize_key(email, m_rsc:p(Id, email, z_acl:sudo(Context))) of
         undefined ->
             Idns;
         Email ->
@@ -809,7 +810,7 @@ is_unique_identity_type(_) -> false.
 
 %% @doc If an email identity is deleted, then ensure that the 'email' property is reset accordingly.
 maybe_reset_email_property(Id, <<"email">>, Email, Context) when is_binary(Email) ->
-    case normalize_key(email, m_rsc:p_no_acl(Id, email_raw, Context)) of
+    case normalize_key(email, m_rsc:p(Id, email_raw, z_acl:sudo(Context))) of
         Email ->
             NewEmail = z_db:q1("
                     select key

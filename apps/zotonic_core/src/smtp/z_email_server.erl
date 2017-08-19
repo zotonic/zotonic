@@ -160,13 +160,13 @@ is_sender_enabled(1, _RecipientEmail, _Context) ->
 is_sender_enabled(Id, RecipientEmail, Context) when is_list(RecipientEmail) ->
     is_sender_enabled(Id, z_convert:to_binary(RecipientEmail), Context);
 is_sender_enabled(Id, RecipientEmail, Context) when is_integer(Id) ->
-    (m_rsc:exists(Id, Context) andalso z_convert:to_bool(m_rsc:p_no_acl(Id, is_published, Context)))
+    (m_rsc:exists(Id, Context) andalso z_convert:to_bool(m_rsc:p(Id, is_published, Context)))
     orelse recipient_is_user_or_admin(Id, RecipientEmail, Context).
 
 recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
     m_config:get_value(zotonic, admin_email, Context) =:= RecipientEmail
-    orelse m_rsc:p_no_acl(1, email, Context) =:= RecipientEmail
-    orelse m_rsc:p_no_acl(Id, email, Context) =:= RecipientEmail
+    orelse m_rsc:p(1, email, z_acl:sudo(Context)) =:= RecipientEmail
+    orelse m_rsc:p(Id, email, z_acl:sudo(Context)) =:= RecipientEmail
     orelse lists:any(fun(Idn) ->
                         proplists:get_value(key, Idn) =:= RecipientEmail
                      end,

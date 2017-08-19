@@ -61,7 +61,7 @@ see_other(Context) ->
     {Location,Context4} = case proplists:get_value(Mime, CT) of
                             page_url ->
                                 ContextSession = z_context:continue_session(Context3),
-                                {m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
+                                {m_rsc:p(Id, page_url, ContextSession), ContextSession};
                             {Dispatch, DispatchArgs} when is_list(DispatchArgs) ->
                                 {z_dispatcher:url_for(Dispatch, [{id,Id} | DispatchArgs], Context3), Context3};
                             Dispatch ->

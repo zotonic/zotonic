@@ -83,7 +83,7 @@ fetch_all(Category, Context) ->
                         Ps1 = cleanup_rsc(Ps),
                         Rsc = {rsc,
                                m_rsc:is_a(Id, Ctx),
-                               m_rsc:p_no_acl(proplists:get_value(content_group_id, Ps), name, Ctx),
+                               m_rsc:p(proplists:get_value(content_group_id, Ps), name, Ctx),
                                Ps1},
                         [Rsc | Acc]
                     end,

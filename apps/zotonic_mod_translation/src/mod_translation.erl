@@ -203,7 +203,7 @@ observe_session_context(#session_context{}, Context, _Context) ->
 
 
 observe_user_context(#user_context{id=UserId}, Context, _Context) ->
-    case m_rsc:p_no_acl(UserId, pref_language, Context) of
+    case m_rsc:p(UserId, pref_language, z_acl:sudo(Context)) of
         Code when Code /= undefined ->
             set_language(Code, Context);
         _ ->
@@ -213,7 +213,7 @@ observe_user_context(#user_context{id=UserId}, Context, _Context) ->
 
 observe_auth_logon(#auth_logon{}, Context, _Context) ->
     UserId = z_acl:user(Context),
-    case m_rsc:p_no_acl(UserId, pref_language, Context) of
+    case m_rsc:p(UserId, pref_language, z_acl:sudo(Context)) of
         undefined ->
             % Ensure that the user has a default language
             catch m_rsc:update(UserId, [{pref_language, z_context:language(Context)}], Context),
@@ -227,7 +227,7 @@ observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
 
 observe_set_user_language(#set_user_language{id=UserId}, Context, _Context) when is_integer(UserId) ->
-    case m_rsc:p_no_acl(UserId, pref_language, Context) of
+    case m_rsc:p(UserId, pref_language, z_acl:sudo(Context)) of
         Code when Code /= undefined -> set_language(Code, Context);
         _ -> Context
     end;
@@ -401,7 +401,7 @@ set_user_language(Code, Context) ->
         undefined ->
             nop;
         UserId ->
-            case m_rsc:p_no_acl(UserId, pref_language, Context2) of
+            case m_rsc:p(UserId, pref_language, z_acl:sudo(Context)) of
                 Code -> nop;
                 _ -> catch m_rsc:update(UserId, [{pref_language, z_context:language(Context2)}], Context2)
             end

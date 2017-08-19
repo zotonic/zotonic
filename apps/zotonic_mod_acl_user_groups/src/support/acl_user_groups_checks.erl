@@ -551,8 +551,8 @@ can_insert_with_ug(Cat, Context) ->
 can_rsc(undefined, _Action, _Context) ->
     false;
 can_rsc(Id, view, Context) when is_integer(Id) ->
-    CatId = m_rsc:p_no_acl(Id, category_id, Context),
-    CGId = m_rsc:p_no_acl(Id, content_group_id, Context),
+    CatId = m_rsc:p(Id, category_id, Context),
+    CGId = m_rsc:p(Id, content_group_id, z_acl:sudo(Context)),
     UGs = user_groups(Context),
     (
         can_rsc_1(Id, view, CGId, CatId, UGs, Context)

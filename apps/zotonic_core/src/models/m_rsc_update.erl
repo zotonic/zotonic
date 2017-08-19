@@ -189,7 +189,7 @@ merge_copy_props(WinnerId, [{_, Empty} | Ps], Acc, Context)
     when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
     merge_copy_props(WinnerId, Ps, Acc, Context);
 merge_copy_props(WinnerId, [{P, _} = PV | Ps], Acc, Context) ->
-    case m_rsc:p_no_acl(WinnerId, P, Context) of
+    case m_rsc:p(WinnerId, P, z_acl:sudo(Context)) of
         Empty when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
             merge_copy_props(WinnerId, Ps, [PV | Acc], Context);
         _Value ->
@@ -213,7 +213,7 @@ flush(Id, CatList, Context) ->
 duplicate(Id, DupProps, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
-            Props = m_rsc:get_raw(Id, Context),
+            Props = m_rsc:get(Id, Context, [skip_cache]),
             FilteredProps = props_filter_protected(Props, #rscupd{id = insert_rsc, is_escape_texts = false}),
             SafeDupProps = z_sanitize:escape_props(DupProps, Context),
             InsProps = lists:foldl(
@@ -381,7 +381,7 @@ update_transaction_fun_props(#rscupd{id = Id} = RscUpd, Func, Context) ->
     end.
 
 get_raw_lock(insert_rsc, _Context) -> [];
-get_raw_lock(Id, Context) -> m_rsc:get_raw_lock(Id, Context).
+get_raw_lock(Id, Context) -> m_rsc:get_db(Id, [lock], Context).
 
 update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, UpdateProps, Context) ->
     % Allow the initial insertion props to be modified.
@@ -971,7 +971,7 @@ is_all_day(Id, Props, Context) ->
                         false ->
                             false;
                         true ->
-                            z_convert:to_bool(m_rsc:p_no_acl(Id, date_is_all_day, Context))
+                            z_convert:to_bool(m_rsc:p(Id, date_is_all_day, z_acl:sudo(Context)))
                     end;
                 IsAllDay ->
                     z_convert:to_bool(IsAllDay)

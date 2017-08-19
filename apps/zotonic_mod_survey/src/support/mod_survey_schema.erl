@@ -96,7 +96,7 @@ install_survey_answer_table(Context) ->
 
 
 survey_to_blocks(Id, Context) ->
-    case m_rsc:p_no_acl(Id, survey, Context) of
+    case m_rsc:p(Id, survey, z_acl:sudo(Context)) of
         undefined ->
             ok;
         {survey, QIds, Qs} ->
@@ -104,7 +104,7 @@ survey_to_blocks(Id, Context) ->
                 question_to_block(proplists:get_value(QId, Qs))
                 || QId <- QIds
             ],
-            CurrBlocks = to_list(m_rsc:p_no_acl(Id, blocks, Context)),
+            CurrBlocks = to_list(m_rsc:p(Id, blocks, z_acl:sudo(Context))),
             m_rsc_update:update(Id,
                                 [
                                     {survey, undefined},

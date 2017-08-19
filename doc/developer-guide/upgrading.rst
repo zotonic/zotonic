@@ -60,7 +60,6 @@ Authentication
 
     observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
-
 Configuration
 ^^^^^^^^^^^^^
 
@@ -135,6 +134,60 @@ Resources
   After::
 
     {ok, Id} = m_rsc:name_to_id(Value, Context).
+
+* ``m_rsc:get/2`` now checks for access rights; ``m_rsc:get_visible/2`` was
+   removed.
+
+  Before::
+
+    %% Get all props
+    Props = m_rsc:get(Id, Context).
+
+    %% Get visible props
+    Props = m_rsc:get_visible(Id, Context).
+
+  After::
+
+    %% Get all props
+    Sudo = z_acl:sudo(Context),
+    Props = m_rsc:get(Id, Sudo).
+
+    %% Get visible props
+    Props = m_rsc:get(Id, Context).
+
+* ``m_rsc:get_raw/2`` was removed and replaced by the ``skip_cache`` option
+  passed to ``m_rsc:get/3``.
+
+  Before::
+
+    m_rsc:get_raw(Id, Context).
+
+  After::
+
+    m_rsc:get(Id, [skip_cache], Context).
+
+* ``m_rsc:get_raw_lock/2`` was removed and replaced by the ``lock`` option
+  passed to ``m_rsc:get/3``.
+
+  Before::
+
+    m_rsc:get_raw_lock(Id, Context).
+
+  After::
+
+    m_rsc:get(Id, [skip_cache, lock], Context).
+
+
+* ``m_rsc:p_no_acl/3`` is no longer exported. You should explicitly switch to
+  a sudo context to make all properties visible.
+
+  Before::
+
+    m_rsc:p_no_acl(Id, title, Context).
+
+  After::
+
+    m_rsc:p(Id, title, z_acl:sudo(Context)).
 
 * Inserting or deleting an edge no longer modifies the last modified and
   modifier properties of the edge’s subject resource.

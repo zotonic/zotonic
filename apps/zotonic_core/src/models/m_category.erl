@@ -379,7 +379,7 @@ prune(N, CS) ->
 
 
 %% @doc Get the basic properties of a category
--spec get(m_rsc:resource(), #context{}) -> list() | undefined.
+-spec get(m_rsc:resource(), z:context()) -> list() | undefined.
 get(undefined, _Context) ->
     undefined;
 get(Id, Context) when is_integer(Id) ->
@@ -393,8 +393,8 @@ get(Id, Context) when is_integer(Id) ->
                     undefined;
                 [C|_] ->
                     {path, PathIds} = proplists:lookup(path, C),
-                    PathNames = [ z_convert:to_atom(m_rsc:p_no_acl(CId, name, Context)) || CId <- PathIds ],
-                    Name = z_convert:to_atom(m_rsc:p_no_acl(Id, name, Context)),
+                    PathNames = [ z_convert:to_atom(m_rsc:p(CId, name, z_acl:sudo(Context))) || CId <- PathIds ],
+                    Name = z_convert:to_atom(m_rsc:p(Id, name, z_acl:sudo(Context))),
                     IsA = lists:reverse([Name|PathNames]),
                     [
                         {name, Name},

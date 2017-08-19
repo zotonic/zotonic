@@ -62,7 +62,7 @@ save_revision(Id, Props, Context) ->
                     UserId,
                     z_string:truncate(
                         z_trans:lookup_fallback(
-                            m_rsc:p_no_acl(UserId, title, Context),
+                            m_rsc:p(UserId, title, z_acl:sudo(Context)),
                             Context),
                         60),
                     "erlang",

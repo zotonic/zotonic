@@ -153,7 +153,7 @@ media_import_md(ImgUrl, MD, Context) ->
     #media_import_props{
         prio = 1,
         category = image,
-        description = m_rsc:p_no_acl(image, title, Context),
+        description = m_rsc:p(image, title, z_acl:sudo(Context)),
         rsc_props = [
             {title, z_url_metadata:p(title, MD)},
             {summary, z_url_metadata:p(summary, MD)},
@@ -183,7 +183,7 @@ media_import_shared_data(Props, MD, Context) ->
             #media_import_props{
                 prio = 1,
                 category = image,
-                description = m_rsc:p_no_acl(image, title, Context),
+                description = m_rsc:p(image, title, z_acl:sudo(Context)),
                 rsc_props = [
                     {title, CaptionTruncated},
                     {summary, Summary},
@@ -202,7 +202,7 @@ media_import_shared_data(Props, MD, Context) ->
             #media_import_props{
                 prio = 1,
                 category = video,
-                description = m_rsc:p_no_acl(video, title, Context),
+                description = m_rsc:p(video, title, Context),
                 rsc_props = [
                     {title, CaptionTruncated},
                     {summary, Summary},

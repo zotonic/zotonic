@@ -347,7 +347,7 @@ send_mailing_process(ListId, Recipients, PageId, Context) ->
     send(undefined, _From, _Options, _Context) ->
         skip;
     send(Id, From, Options, Context) when is_integer(Id) ->
-        send(m_rsc:p_no_acl(Id, email_raw, Context), From, [{recipient_id,Id}|Options], Context);
+        send(m_rsc:p(Id, email_raw, z_acl:sudo(Context)), From, [{recipient_id,Id}|Options], Context);
     send(Email, From, Options, Context) ->
         case z_convert:to_list(z_string:trim(Email)) of
             [] ->

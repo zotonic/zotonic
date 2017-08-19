@@ -56,7 +56,7 @@ media_insert_rsc_props(ArgsEmbed, Context) ->
         undefined ->
             [];
         SubjectId when is_integer(SubjectId) ->
-            ContentGroupdId = m_rsc:p_no_acl(SubjectId, content_group_id, Context),
+            ContentGroupdId = m_rsc:p(SubjectId, content_group_id, z_acl:sudo(Context)),
             [ {content_group_id, ContentGroupdId} ]
     end.
 
