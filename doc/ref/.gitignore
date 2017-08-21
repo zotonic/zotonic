@@ -1,3 +1,4 @@
 *~
 meta-*
+!meta-default.rst
 !notifications/includes/*
