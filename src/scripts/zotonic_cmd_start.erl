@@ -19,7 +19,7 @@ run(_) ->
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
     case filelib:is_file(ZotonicApp) of
         true ->
-            io:format("Starting Zotonic ~s@~s..", [?NODENAME, ?NODEHOST]),
+            io:format("Starting Zotonic ~s..", [Target]),
             zotonic_launcher_config:load_configs(),
             net_kernel:start([Target, shortnames]),
             zotonic:start(),
