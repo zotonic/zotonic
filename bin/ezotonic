@@ -25,6 +25,7 @@ get_zotonic_path() ->
     _Dir = CurrentDir.
 
 load_mod_paths() ->
+    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic/ebin")),
     code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
     code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
     code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
@@ -32,38 +33,36 @@ load_mod_paths() ->
 
 usage() ->
     {ok, ListItems} = file:list_dir(?ZOTONIC_SCRIPTS),
-    FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 8],
-    Names = string:split(FileNames, "zotonic-", all),
+    FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 12],
+    Names1 = string:split(FileNames, "zotonic_cmd_", all),
+    Names = string:split(Names1, ".erl", all),
     [_|CommandNames] = Names,
 
     io:format("Usage: ~s (options) [command] ~n~n", [escript:script_name()]),
     io:format("Where [command] is one of: ~n"),
-    io:format("~n~p ~n~n", [CommandNames]),
+    io:format("~n~s ~n~n", [CommandNames]),
     io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n~n"),
     io:format("Options: ~n"),
     io:format("  -v : Prints Zotonic version ~n~n").
 
-parse_zotonic_options() ->
-    {ok, Version} = application:get_key(zotonic_core, vsn),
-    io:format("Zotonic ~s~n", Version).
-
-main([Command]) ->
+main([Command|T]) ->
+    SecCmd = lists:flatten(T),
     load_mod_paths(),
-
     case string:is_empty(Command) of
         true ->
             usage();
         false ->
             case string:equal(Command, "-v") of
                 true  ->
-                    parse_zotonic_options();
+                    zotonic_release:run();
                 false ->
-                    SubScript = string:concat("zotonic-", Command),
+                    CmdName = string:concat("zotonic_cmd_", Command),
+                    SubScript = string:concat(CmdName, ".erl"),
                     ScriptFile = string:concat(?ZOTONIC_SCRIPTS, "/" ++ SubScript),
+
                     case filelib:is_file(ScriptFile) of
                         true  ->
-                            ScriptCmd = list_to_atom(SubScript),
-                            apply(ScriptCmd, main, []);
+                            apply(list_to_atom(CmdName), run, [SecCmd]);
                         false ->
                             io:format("Command not found: ~s~n", [Command])
                     end

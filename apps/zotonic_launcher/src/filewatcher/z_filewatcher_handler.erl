@@ -121,12 +121,12 @@ handle_file(_Verb, _Basename, ".bea#", _F) ->
 
 handle_file(_Verb, _Basename, ".beam", F) ->
     Module = z_convert:to_atom(filename:rootname(filename:basename(F))),
-    zotonic_compile:ld(Module),
+    zotonic_cmd_compile:ld(Module),
     "Reload module " ++ z_convert:to_list(Module);
 
 handle_file(_Verb, _Basename, ".hrl", F) ->
     spawn(fun() ->
-             zotonic_compile:all()
+             zotonic_cmd_compile:all()
           end),
     "Rebuilding due to change header file: " ++ filename:basename(F);
 
@@ -142,7 +142,7 @@ handle_file(_Verb, Basename, ".erl", F) ->
              _ -> F
          end,
     try
-        case zotonic_compile:recompile(F) of
+        case zotonic_cmd_compile:recompile(F) of
             ok ->
                 check_run_sitetest(Basename, F),
                 "Recompile " ++ FileBase;
@@ -343,7 +343,7 @@ check_run_sitetest(Basename, F) ->
     %% check run individual test
     case re:run(Basename, "^((.+)_.*_sitetest).erl$", [{capture, [1, 2], list}]) of
         {match, [Module, SiteStr]} ->
-            zotonic_compile:ld(z_convert:to_atom(Module)),
+            zotonic_cmd_compile:ld(z_convert:to_atom(Module)),
             z_sitetest:run(z_convert:to_atom(SiteStr), [z_convert:to_atom(Module)]);
         nomatch ->
             %% check whether compiled file is part of a site; if so, run its sitetests when we're watching it.
@@ -352,7 +352,7 @@ check_run_sitetest(Basename, F) ->
                     nop;
                 {match, [SiteStr]} ->
                     Module = z_convert:to_atom(filename:basename(Basename, ".erl")),
-                    zotonic_compile:ld(z_convert:to_atom(Module)),
+                    zotonic_cmd_compile:ld(z_convert:to_atom(Module)),
                     Site = z_convert:to_atom(SiteStr),
                     z_sitetest:is_watching(Site) andalso z_sitetest:run(Site)
             end
