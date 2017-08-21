@@ -130,7 +130,7 @@ report_errors([{_Id, {error, ErrId, Error}}|T], Context) ->
 
 %% @doc Perform all validations
 validate(Val, Context) ->
-    [Name,Pickled] = split_name_pickled(Val),
+    {Name,Pickled} = split_name_pickled(Val),
     {Id,Name,Validations} = z_utils:depickle(Pickled, Context),
     Value = case [ V || V <- z_context:get_q_all(Name, Context), V =/= [], V =/= <<>> ] of
                 [A] -> A;
